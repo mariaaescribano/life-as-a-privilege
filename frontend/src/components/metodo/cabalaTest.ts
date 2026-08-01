@@ -32,6 +32,35 @@ export interface DimensionTest {
 
 export const NUM_PREGUNTAS = 5;
 
+/** Tope de la escala de la sefirá. Es 10 para que sea la MISMA nota que la
+ *  autoevaluación: dos escalas distintas en la misma página se confundían. */
+export const TEST_MAX = 10;
+
+/**
+ * Las primeras respuestas se guardaron en escala 1-5. Se distinguen porque su
+ * fila lleva `escalaTest: 10` solo desde el cambio; sin esa marca, se reescalan
+ * al leerlas (1→1, 2→3, 3→6, 4→8, 5→10) para que el diagnóstico de quien ya
+ * había contestado no cambie de sentido.
+ */
+export function testAEscala10(respuestas?: number[], escalaGuardada?: number): number[] | undefined {
+  if (!Array.isArray(respuestas)) return respuestas;
+  if (escalaGuardada === TEST_MAX) return respuestas;
+  return respuestas.map((v) => (v >= 1 && v <= 5 ? Math.round(((v - 1) * 9) / 4 + 1) : v));
+}
+
+/** Lo mismo para el mapa entero { sefira: respuestas } que guarda `data.test`. */
+export function testsAEscala10(
+  test?: Record<string, number[]>,
+  escalaGuardada?: number,
+): Record<string, number[]> {
+  const out: Record<string, number[]> = {};
+  for (const [k, v] of Object.entries(test ?? {})) {
+    const conv = testAEscala10(v, escalaGuardada);
+    if (conv) out[k] = conv;
+  }
+  return out;
+}
+
 // Escala 1-5 (index 0 → valor 1).
 export const ESCALA: { valor: number; label: string }[] = [
   { valor: 1, label: "Nunca" },
@@ -173,37 +202,37 @@ export const CABALA_TEST: Record<CabalaPageKey, DimensionTest> = {
 export type Tendencia = "bajo" | "moderado" | "alto";
 export type Integracion = "fuerte" | "parcial" | "fragil";
 
-/** ¿Están las 5 respuestas contestadas (1-5)? */
+/** ¿Están las 5 respuestas contestadas (1-10)? */
 export function testCompleto(respuestas?: number[]): boolean {
-  return Array.isArray(respuestas) && respuestas.length === NUM_PREGUNTAS && respuestas.every((v) => v >= 1 && v <= 5);
+  return Array.isArray(respuestas) && respuestas.length === NUM_PREGUNTAS && respuestas.every((v) => v >= 1 && v <= TEST_MAX);
 }
 
-/** Déficit = P1 + P2 (2-10). */
+/** Déficit = P1 + P2 (2-20). */
 export function puntuacionDeficit(r: number[]): number {
   return (r[0] ?? 0) + (r[1] ?? 0);
 }
 
-/** Exceso = P4 + P5 (2-10). */
+/** Exceso = P4 + P5 (2-20). */
 export function puntuacionExceso(r: number[]): number {
   return (r[3] ?? 0) + (r[4] ?? 0);
 }
 
-/** Modulador de integración = P3 (1-5). */
+/** Modulador de integración = P3 (1-10). */
 export function puntuacionEquilibrio(r: number[]): number {
   return r[2] ?? 0;
 }
 
-/** Nivel de una tendencia (déficit/exceso), sobre la suma 2-10. */
+/** Nivel de una tendencia (déficit/exceso), sobre la suma 2-20. */
 export function nivelTendencia(score: number): Tendencia {
-  if (score >= 8) return "alto";
-  if (score >= 5) return "moderado";
+  if (score >= 16) return "alto";
+  if (score >= 10) return "moderado";
   return "bajo";
 }
 
-/** Fuerza de la integración a partir de P3. */
+/** Fuerza de la integración a partir de P3 (1-10). */
 export function nivelIntegracion(q3: number): Integracion {
-  if (q3 >= 4) return "fuerte";
-  if (q3 === 3) return "parcial";
+  if (q3 >= 8) return "fuerte";
+  if (q3 >= 5) return "parcial";
   return "fragil";
 }
 

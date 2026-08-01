@@ -17,10 +17,9 @@ import {
   CABALA_SEFIROT_ORDEN,
   CABALA_TOTAL_PAGINAS,
   type SefiraContenido,
-  type Ejercicio,
   type CabalaPageKey,
 } from "../../components/metodo/cabalaSefirot";
-import { CABALA_TEST, ESCALA, NUM_PREGUNTAS, type DimensionTest } from "../../components/metodo/cabalaTest";
+import { CABALA_TEST, NUM_PREGUNTAS, TEST_MAX, testAEscala10, type DimensionTest } from "../../components/metodo/cabalaTest";
 import { sefirotContenidoCompleto } from "../../components/metodo/cabalaDiagnostico";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
@@ -146,199 +145,7 @@ function EscalaAutoeval({ statement, value, onChange, max = 10 }: { statement: s
   );
 }
 
-/* ── Box "Ejercicio": interactivo — columnas editables y/o prompts con respuesta ── */
-function EjercicioBox({ ejercicio }: { ejercicio: Ejercicio }) {
-  const columnas = ejercicio.columnas ?? [];
-  const prompts = ejercicio.prompts ?? [];
-  const cierre = ejercicio.cierrePreguntas ?? [];
-
-  // Modo columnas: una lista de filas editables por columna (empieza con una vacía).
-  const [cols, setCols] = useState<string[][]>(() => columnas.map(() => [""]));
-  // Modo prompts: una respuesta por prompt.
-  const [answers, setAnswers] = useState<string[]>(() => prompts.map(() => ""));
-
-  const setCell = (ci: number, ri: number, v: string) =>
-    setCols((prev) => prev.map((c, i) => (i === ci ? c.map((x, j) => (j === ri ? v : x)) : c)));
-  const addRow = (ci: number) =>
-    setCols((prev) => prev.map((c, i) => (i === ci ? [...c, ""] : c)));
-  const removeRow = (ci: number, ri: number) =>
-    setCols((prev) => prev.map((c, i) => (i === ci ? (c.length > 1 ? c.filter((_, j) => j !== ri) : c) : c)));
-
-  return (
-    <Caja>
-      <TituloCaja>Ejercicio</TituloCaja>
-      <Divisor mt={3} mb={4} />
-
-      <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
-        {ejercicio.titulo}
-      </Text>
-      <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" mb={5} style={{ textShadow: INK_SHADOW }}>
-        {ejercicio.intro}
-      </Text>
-
-      {columnas.length > 0 && (
-      <RevealStagger inView display="flex" flexDirection={{ base: "column", md: "row" }} gap={{ base: 4, md: 5 }}>
-        {columnas.map((col, ci) => (
-          <RevealItem key={ci} flex="1" minW={0}>
-          <Box flex="1" minW={0}
-               bg={`${cabalaTxt}0a`} border={`1px solid ${cabalaTxt}2a`} borderRadius="xl"
-               p={{ base: 4, md: 5 }}>
-            <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
-                  letterSpacing="0.08em" textTransform="uppercase" mb={1} style={{ textShadow: INK_SHADOW }}>
-              {col.titulo}
-            </Text>
-            <Text color={`${cabalaTxt}99`} fontSize="xs" fontStyle="italic" lineHeight="1.55" mb={3.5} style={{ textShadow: INK_SHADOW }}>
-              {col.descripcion}
-            </Text>
-
-            <Flex direction="column" gap={2}>
-              {cols[ci].map((val, ri) => (
-                <Flex key={ri} align="center" gap={2}>
-                  <Box
-                    as="input"
-                    value={val}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCell(ci, ri, e.target.value)}
-                    placeholder="Escribe aquí…"
-                    flex="1"
-                    minW={0}
-                    px={3}
-                    py={2}
-                    borderRadius="lg"
-                    bg={cabalaBg}
-                    color={cabalaTxt}
-                    border={`1px solid ${cabalaTxt}33`}
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "sm", md: "md" }}
-                    sx={{
-                      "::placeholder": { color: `${cabalaTxt}55` },
-                      ":focus": { outline: "none", borderColor: cabalaTxt, boxShadow: `0 0 0 1px ${cabalaTxt}66` },
-                    }}
-                  />
-                  <Box
-                    as="button"
-                    onClick={() => removeRow(ci, ri)}
-                    flexShrink={0}
-                    w="28px"
-                    h="28px"
-                    borderRadius="md"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    color={`${cabalaTxt}88`}
-                    bg={`${cabalaTxt}10`}
-                    border={`1px solid ${cabalaTxt}22`}
-                    cursor="pointer"
-                    transition="all 0.15s"
-                    _hover={{ color: cabalaTxt, bg: `${cabalaTxt}22` }}
-                    aria-label="Quitar fila"
-                  >
-                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
-                      <path d="M280-440v-80h400v80H280Z" />
-                    </Box>
-                  </Box>
-                </Flex>
-              ))}
-            </Flex>
-
-            <Box
-              as="button"
-              onClick={() => addRow(ci)}
-              mt={3}
-              display="inline-flex"
-              alignItems="center"
-              gap={1.5}
-              px={3.5}
-              py={1.5}
-              borderRadius="full"
-              bg={`${cabalaTxt}14`}
-              border={`1px solid ${cabalaTxt}44`}
-              color={cabalaTxt}
-              fontSize="sm"
-              fontWeight="600"
-              cursor="pointer"
-              transition="all 0.15s"
-              _hover={{ bg: `${cabalaTxt}26`, borderColor: cabalaTxt }}
-            >
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
-                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-              </Box>
-              Añadir
-            </Box>
-          </Box>
-          </RevealItem>
-        ))}
-      </RevealStagger>
-      )}
-
-      {/* Modo B — prompts con campo de respuesta */}
-      {prompts.length > 0 && (
-        <>
-          {ejercicio.promptsIntro && (
-            <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-              {ejercicio.promptsIntro}
-            </Text>
-          )}
-          <RevealStagger inView display="flex" flexDirection="column" gap={4}>
-            {prompts.map((p, i) => (
-              <RevealItem key={i}>
-                <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} fontWeight="600" lineHeight="1.55" mb={2} style={{ textShadow: INK_SHADOW }}>
-                  {p}
-                </Text>
-                <Box
-                  as="textarea"
-                  value={answers[i] ?? ""}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                    setAnswers((prev) => { const n = [...prev]; n[i] = e.target.value; return n; })}
-                  placeholder="Escribe tu respuesta…"
-                  rows={2}
-                  w="100%"
-                  px={3}
-                  py={2}
-                  borderRadius="lg"
-                  bg={`${cabalaTxt}0a`}
-                  color={cabalaTxt}
-                  border={`1px solid ${cabalaTxt}33`}
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "sm", md: "md" }}
-                  lineHeight="1.6"
-                  sx={{
-                    resize: "vertical",
-                    "::placeholder": { color: `${cabalaTxt}55` },
-                    ":focus": { outline: "none", borderColor: cabalaTxt, boxShadow: `0 0 0 1px ${cabalaTxt}66` },
-                  }}
-                />
-              </RevealItem>
-            ))}
-          </RevealStagger>
-        </>
-      )}
-
-      {(cierre.length > 0 || ejercicio.footer) && <Divisor mt={6} mb={4} />}
-
-      {ejercicio.cierreIntro && (
-        <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-          {ejercicio.cierreIntro}
-        </Text>
-      )}
-      {cierre.length > 0 && (
-        <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={ejercicio.footer ? 5 : 0}>
-          {cierre.map((q, i) => <ItemLista key={i}>{q}</ItemLista>)}
-        </RevealStagger>
-      )}
-      {ejercicio.footer && (
-        <Flex direction="column" gap={2.5}>
-          {(Array.isArray(ejercicio.footer) ? ejercicio.footer : [ejercicio.footer]).map((f, i) => (
-            <Text key={i} color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>
-              {f}
-            </Text>
-          ))}
-        </Flex>
-      )}
-    </Caja>
-  );
-}
-
-/* ── Test de la sefirá (Escala de Equilibrio, 1-5) ── */
+/* ── Test de la sefirá (Escala de Equilibrio, 1-10 como la autoevaluación) ── */
 function TestBox({ dim, answers, onAnswer }: { dim: DimensionTest; answers: number[]; onAnswer: (idx: number, valor: number) => void }) {
   return (
     <Caja>
@@ -350,14 +157,11 @@ function TestBox({ dim, answers, onAnswer }: { dim: DimensionTest; answers: numb
       </Flex>
       <Divisor mt={3} mb={4} />
 
-      {/* Leyenda 1-5 */}
-      <Flex gap={2} mb={5} wrap="wrap">
-        {ESCALA.map((op) => (
-          <Text key={op.valor} color={`${cabalaTxt}bb`} fontSize="sm" style={{ textShadow: INK_SHADOW }}>
-            <Box as="span" fontWeight="800" color={cabalaTxt}>{op.valor}</Box> {op.label}
-          </Text>
-        ))}
-      </Flex>
+      {/* Con diez notas, la lista de etiquetas no cabe: se dicen los extremos. */}
+      <Text color={`${cabalaTxt}bb`} fontSize="sm" mb={5} style={{ textShadow: INK_SHADOW }}>
+        Puntúa cada frase del <Box as="span" fontWeight="800" color={cabalaTxt}>1</Box> (nunca) al{" "}
+        <Box as="span" fontWeight="800" color={cabalaTxt}>10</Box> (siempre).
+      </Text>
 
       <RevealStagger inView display="flex" flexDirection="column" gap={5}>
         {dim.preguntas.map((p, qi) => (
@@ -365,7 +169,7 @@ function TestBox({ dim, answers, onAnswer }: { dim: DimensionTest; answers: numb
             <EscalaAutoeval
               statement={p.texto}
               value={answers[qi] ?? 0}
-              max={5}
+              max={TEST_MAX}
               onChange={(v) => onAnswer(qi, v)}
             />
           </RevealItem>
@@ -420,14 +224,11 @@ export default function MetodoCabalaSefira() {
   const [ilusOpen, setIlusOpen] = useState(false);
   const [carruselIdx, setCarruselIdx] = useState(0);
   const [autoeval, setAutoeval] = useState<number[]>([]);
-  const [preguntasResp, setPreguntasResp] = useState<string[]>([]); // respuestas locales a las preguntas de reflexión
   const [notaOpen, setNotaOpen] = useState(false);
   // Estado del guardado, para poder cerrar la página diciendo si está a salvo.
   const [guardando, setGuardando] = useState(false);
   const [guardadoOk, setGuardadoOk] = useState(false);
   const [errorGuardado, setErrorGuardado] = useState(false);
-  /** Ha escrito en una respuesta y todavía no se ha guardado (sigue en el campo). */
-  const [sinGuardar, setSinGuardar] = useState(false);
   const [testAnswers, setTestAnswers] = useState<number[]>(() => new Array(NUM_PREGUNTAS).fill(0));
   // Copia local del `data` de metodo_cabala para poder mergear al guardar el test.
   const dataRef = useRef<any>({});
@@ -447,7 +248,6 @@ export default function MetodoCabalaSefira() {
     setTestAnswers(new Array(NUM_PREGUNTAS).fill(0));
     if (sefira) {
       setAutoeval(new Array(sefira.autoevaluacion.items.length).fill(0));
-      setPreguntasResp(new Array(sefira.preguntas.items.length).fill(""));
     }
 
     const userId = localStorage.getItem("userId");
@@ -467,18 +267,15 @@ export default function MetodoCabalaSefira() {
           const prevData = res.data?.data ?? {};
           dataRef.current = prevData;
 
-          // Respuestas del test ya guardadas para esta dimensión.
-          const saved = prevData?.test?.[sefira.key];
+          // Respuestas del test ya guardadas para esta dimensión. Las de antes
+          // del cambio venían en escala 1-5 y se reescalan al leerlas.
+          const saved = testAEscala10(prevData?.test?.[sefira.key], prevData?.escalaTest);
           if (Array.isArray(saved) && saved.length === NUM_PREGUNTAS) setTestAnswers(saved.map((n: any) => Number(n) || 0));
 
-          // Autoevaluación y respuestas de reflexión guardadas.
+          // Autoevaluación guardada.
           const savedAuto = prevData?.autoeval?.[sefira.key];
           if (Array.isArray(savedAuto) && savedAuto.length === sefira.autoevaluacion.items.length) {
             setAutoeval(savedAuto.map((n: any) => Number(n) || 0));
-          }
-          const savedPreg = prevData?.preguntas?.[sefira.key];
-          if (Array.isArray(savedPreg) && savedPreg.length === sefira.preguntas.items.length) {
-            setPreguntasResp(savedPreg.map((s: any) => (typeof s === "string" ? s : "")));
           }
 
           const vistas: string[] = Array.isArray(prevData.sefirotVistas) ? prevData.sefirotVistas : [];
@@ -513,10 +310,11 @@ export default function MetodoCabalaSefira() {
     try {
       await axios.patch(
         `${API_URL}/metodo-cabala/${userId}`,
-        { data: nextData },
+        // `escalaTest` marca que lo guardado va en 1-10. Sin esa marca, al leer
+        // se entiende que son respuestas viejas (1-5) y se reescalan.
+        { data: { ...nextData, escalaTest: TEST_MAX } },
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      setSinGuardar(false);
       setGuardadoOk(true);
     } catch {
       setErrorGuardado(true);
@@ -551,16 +349,6 @@ export default function MetodoCabalaSefira() {
     });
   };
 
-  // Guarda las respuestas de reflexión (merge en data.preguntas[key]). Se llama
-  // al salir del campo (onBlur) para no lanzar una petición por cada tecla.
-  const guardarPreguntas = async () => {
-    if (!key) return;
-    const prevData = dataRef.current ?? {};
-    const nextData = { ...prevData, preguntas: { ...(prevData.preguntas ?? {}), [key]: preguntasResp } };
-    dataRef.current = nextData;
-    await persistir(nextData);
-  };
-
   if (loading || !sefira) {
     return <CabalaLoading />;
   }
@@ -568,16 +356,12 @@ export default function MetodoCabalaSefira() {
   const tieneContenido = sefira.intro.length > 0;
   const nIntro = sefira.intro.length;
 
-  // ¿Está TODO lo que se pide en la dimensión relleno? (preguntas de reflexión +
-  // autoevaluación + test). El Ejercicio no entra (su estado vive dentro de su
-  // propio componente EjercicioBox).
-  const preguntasCompletas = sefira.preguntas.items.length === 0
-    || (preguntasResp.length === sefira.preguntas.items.length && preguntasResp.every((r) => r.trim().length > 0));
+  // ¿Está relleno todo lo que se pide en la dimensión? (autoevaluación + escala).
   const autoevalCompleta = sefira.autoevaluacion.items.length === 0
     || (autoeval.length === sefira.autoevaluacion.items.length && autoeval.every((v) => v >= 1));
   const testDim = CABALA_TEST[sefira.key];
-  const testCompletado = !testDim || (testAnswers.length === NUM_PREGUNTAS && testAnswers.every((v) => v >= 1 && v <= 5));
-  const dimensionCompleta = preguntasCompletas && autoevalCompleta && testCompletado;
+  const testCompletado = !testDim || (testAnswers.length === NUM_PREGUNTAS && testAnswers.every((v) => v >= 1 && v <= TEST_MAX));
+  const dimensionCompleta = autoevalCompleta && testCompletado;
   const bloquearSiguiente = SEFIROT_GATE && !dimensionCompleta;
 
   // En la última sefirá (malkuth) el botón «Diagnóstico →» sólo se habilita
@@ -609,7 +393,6 @@ export default function MetodoCabalaSefira() {
 
   /** Lo que falta para poder seguir, dicho con nombres, no con un «completa todo». */
   const queFalta = [
-    !preguntasCompletas && "las preguntas para la reflexión",
     !autoevalCompleta && "la autoevaluación",
     !testCompletado && "la escala de equilibrio",
   ].filter(Boolean) as string[];
@@ -617,7 +400,6 @@ export default function MetodoCabalaSefira() {
   /** Guarda lo que quede pendiente y solo entonces navega (ver flushSaves). */
   const seguir = async () => {
     if (siguiente.disabled) return;
-    if (sinGuardar) await guardarPreguntas();
     siguiente.onClick();
   };
 
@@ -817,84 +599,10 @@ export default function MetodoCabalaSefira() {
             </Reveal>
           )}
 
-          {/* Preguntas para la reflexión */}
-          {sefira.preguntas.items.length > 0 && (
-            <Reveal direction="up" distance={22} delay={0.2} duration={0.65} w="100%">
-              <Caja>
-                <TituloCaja>Preguntas para la reflexión</TituloCaja>
-                <Divisor mt={3} mb={4} />
-                {sefira.preguntas.intro && (
-                  <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                    {sefira.preguntas.intro}
-                  </Text>
-                )}
-                {/* El box mantiene una altura acotada: la lista de preguntas
-                    (cada una con su campo de respuesta) tiene scroll vertical. */}
-                <Box
-                  maxH={{ base: "360px", md: "420px" }}
-                  overflowY="auto"
-                  // La barra se pinta en el borde derecho de ESTE box, así que
-                  // para que quede al fondo de la caja hay que estirarlo por
-                  // encima del padding de `Caja` (6/9) con margen negativo. El
-                  // `pr` recupera ese mismo hueco para el texto, así que las
-                  // preguntas no se mueven: solo se va la barra hacia fuera.
-                  mr={{ base: -6, md: -9 }}
-                  pr={{ base: 7, md: 12 }}
-                  sx={{
-                    "&::-webkit-scrollbar": { width: "6px" },
-                    "&::-webkit-scrollbar-track": { background: "transparent" },
-                    "&::-webkit-scrollbar-thumb": { background: `${cabalaTxt}55`, borderRadius: "3px" },
-                    scrollbarWidth: "thin",
-                    scrollbarColor: `${cabalaTxt}55 transparent`,
-                  }}
-                >
-                  <RevealStagger inView display="flex" flexDirection="column" gap={5}>
-                    {sefira.preguntas.items.map((q, i) => (
-                      <RevealItem key={i}>
-                        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7" fontStyle="italic" mb={2.5} style={{ textShadow: INK_SHADOW }}>
-                          {q}
-                        </Text>
-                        <Box
-                          as="textarea"
-                          value={preguntasResp[i] ?? ""}
-                          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                            setSinGuardar(true);
-                            setPreguntasResp((prev) => { const n = [...prev]; n[i] = e.target.value; return n; });
-                          }}
-                          onBlur={() => void guardarPreguntas()}
-                          placeholder="Escribe tu respuesta…"
-                          rows={2}
-                          w="100%"
-                          px={3}
-                          py={2}
-                          borderRadius="lg"
-                          bg={`${cabalaBg}e6`}
-                          color={cabalaTxt}
-                          border={`1px solid ${cabalaTxt}33`}
-                          fontFamily="'EB Garamond', serif"
-                          fontSize={{ base: "sm", md: "md" }}
-                          lineHeight="1.6"
-                          sx={{
-                            resize: "vertical",
-                            "::placeholder": { color: `${cabalaTxt}55` },
-                            ":focus": { outline: "none", borderColor: cabalaTxt, boxShadow: `0 0 0 1px ${cabalaTxt}66` },
-                          }}
-                        />
-                      </RevealItem>
-                    ))}
-                  </RevealStagger>
-                </Box>
-              </Caja>
-            </Reveal>
-          )}
-
-          {/* Ejercicio interactivo */}
-          {sefira.ejercicio && (
-            <Reveal direction="up" distance={22} delay={0.24} duration={0.65} w="100%">
-              <EjercicioBox ejercicio={sefira.ejercicio} />
-            </Reveal>
-          )}
-
+          {/* Aquí iban «Preguntas para la reflexión» y «Ejercicio». Se han
+              quitado del recorrido: la dimensión se cierra con la
+              autoevaluación y la escala. El contenido sigue en cabalaSefirot.ts
+              porque de él vive la página «Diez días» (una jornada por sefirá). */}
           {/* Autoevaluación (1-10) */}
           {sefira.autoevaluacion.items.length > 0 && (
             <Reveal direction="up" distance={22} delay={0.24} duration={0.65} w="100%">
@@ -934,10 +642,14 @@ export default function MetodoCabalaSefira() {
               <Caja>
                 <TituloCaja>Clave de desarrollo</TituloCaja>
                 <Divisor mt={3} mb={4} />
-                <RevealStagger inView display="flex" flexDirection="column" gap={3.5}>
+                {/* Cascada corta y que arranca en cuanto asoma el box: si no,
+                    el párrafo largo reserva su alto pero se queda invisible y
+                    la caja parece medio vacía. */}
+                <RevealStagger inView amount={0.05} stagger={0.06} delayChildren={0}
+                               display="flex" flexDirection="column" gap={3}>
                   {sefira.clave.map((p, i) => (
                     <RevealItem key={i}>
-                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" style={{ textShadow: INK_SHADOW }}>
+                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
                         {p}
                       </Text>
                     </RevealItem>
@@ -965,11 +677,6 @@ export default function MetodoCabalaSefira() {
                           style={{ textShadow: INK_SHADOW }}>
                       No se ha podido guardar. Revisa tu conexión y vuelve a intentarlo.
                     </Text>
-                  ) : sinGuardar ? (
-                    <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                          style={{ textShadow: INK_SHADOW }}>
-                      Tienes cambios sin guardar.
-                    </Text>
                   ) : (
                     <Flex align="center" gap={2}>
                       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
@@ -985,9 +692,9 @@ export default function MetodoCabalaSefira() {
                 </Flex>
 
                 <Flex gap={3} wrap="wrap">
-                  {(sinGuardar || errorGuardado) && (
+                  {errorGuardado && (
                     <Box as="button"
-                         onClick={guardando ? undefined : () => void guardarPreguntas()}
+                         onClick={guardando ? undefined : () => void persistir(dataRef.current ?? {})}
                          px={6} py={2.5} borderRadius="full"
                          border={`1.5px solid ${cabalaTxt}88`} color={cabalaTxt}
                          fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
@@ -995,7 +702,7 @@ export default function MetodoCabalaSefira() {
                          boxShadow={CAJA_GLOW} transition="all 0.2s"
                          _hover={{ bg: `${cabalaTxt}1a`, borderColor: cabalaTxt }}
                          style={{ textShadow: INK_SHADOW }}>
-                      {errorGuardado ? "Reintentar" : "Salvar"}
+                      Reintentar
                     </Box>
                   )}
                   <Box as="button"

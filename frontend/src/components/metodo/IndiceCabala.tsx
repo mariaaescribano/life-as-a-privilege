@@ -2,8 +2,9 @@
 // numeradas y pulsables, resaltando la actual. Las páginas que aún no están
 // desbloqueadas (según el progreso del usuario) salen con un candado y no son
 // pulsables. Se coloca encima de «Mis notas», igual que el resto de disciplinas.
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+import { flushSaves } from "../../utils/flushSaves";
 import { IndiceRecorrido } from "./IndiceRecorrido";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 import { CABALA_SEFIROT } from "./cabalaSefirot";
@@ -15,15 +16,33 @@ import { API_URL, cabalaBg, cabalaNom, cabalaTxt } from "../../GlobalVariables";
 export function IndiceCabala() {
   // Progreso guardado (null = aún cargando: no bloqueamos nada para no parpadear).
   const [data, setData] = useState<any>(null);
+  const [releyendo, setReleyendo] = useState(false);
 
-  useEffect(() => {
+  // Releer el progreso de BD. Antes de leer, esperamos a que terminen los
+  // guardados en vuelo de la página actual (flushSaves): si no, el índice leería
+  // el progreso de ANTES de la última respuesta y enseñaría un candado de más.
+  const cargar = useCallback(async () => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) { setData({}); return; }
-    axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => setData(res.data?.data ?? {}))
-      .catch(() => setData({}));
+    await flushSaves();
+    try {
+      const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+      setData(res.data?.data ?? {});
+    } catch {
+      // Si falla, nos quedamos con lo que ya teníamos (mejor que re-bloquearlo todo).
+      setData((prev: any) => prev ?? {});
+    }
   }, []);
+
+  useEffect(() => { void cargar(); }, [cargar]);
+
+  // Cada vez que se ABRE el índice, se vuelve a leer: así lo que la usuaria
+  // acaba de responder en esta misma página ya cuenta para los desbloqueos.
+  const alAbrir = useCallback(() => {
+    setReleyendo(true);
+    void cargar().finally(() => setReleyendo(false));
+  }, [cargar]);
 
   const cargado = data !== null;
   const d = data ?? {};
@@ -31,6 +50,10 @@ export function IndiceCabala() {
   const ilus = asSet(d.ilustracionesVistas);
   const senderoIlus = asSet(d.senderoIlustracionesVistas);
   const diagnosticoVisto = !!d.diagnosticoVisto;
+  // Suelo del índice: una página por la que YA se ha pasado no se vuelve a
+  // cerrar, aunque su contenido esté a medias. Poder releer lo que ya has
+  // andado no es saltarse el recorrido.
+  const sefirotVistas = asSet(d.sefirotVistas);
 
   // Desbloqueos secuenciales del recorrido:
   const arbolIlusAll = CABALA_ILUSTRACIONES_KEYS.every((k) => ilus.has(k)); // vistas todas las ilustraciones del Árbol
@@ -44,7 +67,7 @@ export function IndiceCabala() {
 
   // Bloqueo SECUENCIAL de las sefirot: cada sefirá se abre cuando se han visto
   // las ilustraciones del Árbol Y todas las sefirot ANTERIORES están rellenas
-  // (preguntas + autoevaluación + test). No se puede saltar de una a otra sin
+  // (autoevaluación + escala de equilibrio). No se puede saltar de una a otra sin
   // haber completado la anterior (mismo criterio que el botón «siguiente»).
   const sefiraUnlockedAt = (i: number): boolean =>
     arbolIlusAll && CABALA_SEFIROT.slice(0, i).every((s) => sefiraDimensionCompleta(s.key, d));
@@ -76,9 +99,9 @@ export function IndiceCabala() {
     ...CABALA_SEFIROT.map((s, i) => ({
       titulo: s.titulo,
       path: `/metodo/cabala/sefira/${s.key}`,
-      bloqueado: lock(sefiraUnlockedAt(i)),
+      bloqueado: lock(sefiraUnlockedAt(i) || sefirotVistas.has(s.key)),
     })),
-    { titulo: "Diagnóstico", path: "/metodo/cabala/diagnostico", bloqueado: lock(diagnosticoUnlocked) },
+    { titulo: "Diagnóstico", path: "/metodo/cabala/diagnostico", bloqueado: lock(diagnosticoUnlocked || diagnosticoVisto) },
     { titulo: "Los Senderos", path: "/metodo/cabala/senderos", bloqueado: lock(senderosUnlocked) },
     // Los 22 senderos, uno a uno: forman parte de la misma cuenta del índice
     // (no reinician la numeración), justo detrás de «Los Senderos».
@@ -107,7 +130,8 @@ export function IndiceCabala() {
       bg={cabalaBg}
       nom={cabalaNom}
       luz={false}
-      cargando={!cargado}
+      onOpen={alAbrir}
+      cargando={!cargado || releyendo}
     />
   );
 }

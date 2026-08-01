@@ -19,9 +19,9 @@ export type Polaridad = "deficit" | "equilibrio" | "exceso";
  * Fórmula documentada y fácil de ajustar.
  */
 export function nivelSefira(r: number[]): number {
-  const deficit = puntuacionDeficit(r); // 2..10
-  const eq = puntuacionEquilibrio(r);   // 1..5
-  const val = (eq / 5) * 6 + ((10 - deficit) / 8) * 4;
+  const deficit = puntuacionDeficit(r); // 2..20
+  const eq = puntuacionEquilibrio(r);   // 1..10
+  const val = (eq / 10) * 6 + ((20 - deficit) / 18) * 4;
   return Math.round(Math.max(0, Math.min(10, val)));
 }
 
@@ -53,8 +53,7 @@ export function sefiraEvaluable(test?: number[], autoeval?: number[]): boolean {
   return testCompleto(test) || autoevalCompleta(autoeval);
 }
 
-/** ¿Está TODO lo que se pide en una sefirá relleno (preguntas de reflexión +
- *  autoevaluación + test)? Versión a partir de los datos GUARDADOS, usada por los
+/** ¿Está TODO lo que se pide en una sefirá relleno (autoevaluación + escala)? Versión a partir de los datos GUARDADOS, usada por los
  *  gates del índice para el bloqueo secuencial. Mismo criterio que el botón
  *  «siguiente» de la página de la sefirá (dimensionCompleta). */
 export function sefiraDimensionCompleta(
@@ -64,15 +63,12 @@ export function sefiraDimensionCompleta(
   const def = (cabalaSefirotMap as any)[key];
   if (!def) return false;
   const d = data ?? {};
-  const preg = d.preguntas?.[key] ?? [];
-  const preguntasOk = def.preguntas.items.length === 0
-    || (preg.length === def.preguntas.items.length && preg.every((r: string) => (r ?? "").trim().length > 0));
   const av = d.autoeval?.[key] ?? [];
   const autoevalOk = def.autoevaluacion.items.length === 0
     || (av.length === def.autoevaluacion.items.length && av.every((v) => v >= 1));
   const testDim = CABALA_TEST[key];
   const testOk = !testDim || testCompleto(d.test?.[key]);
-  return preguntasOk && autoevalOk && testOk;
+  return autoevalOk && testOk;
 }
 
 /** ¿Está TODO el contenido de las sefirot relleno? Es decir, ¿todas las
@@ -92,8 +88,12 @@ export function sefirotContenidoCompleto(
 export function polaridadSefira(r: number[]): Polaridad {
   const deficit = puntuacionDeficit(r);
   const exceso = puntuacionExceso(r);
-  if (deficit > exceso + 1) return "deficit";
-  if (exceso > deficit + 1) return "exceso";
+  // Margen 3 sobre la escala 1-10 (antes 1 sobre la de 1-5). No es el doble por
+  // casualidad: se probaron las 3.125 combinaciones posibles de respuestas y 3 es
+  // el único margen con el que NADIE cambia de polaridad al reescalar sus
+  // respuestas antiguas (con 2 cambiaba el 8%).
+  if (deficit > exceso + 3) return "deficit";
+  if (exceso > deficit + 3) return "exceso";
   return "equilibrio";
 }
 

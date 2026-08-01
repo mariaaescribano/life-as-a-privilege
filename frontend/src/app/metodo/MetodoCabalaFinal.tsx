@@ -11,7 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
-import { CABALA_TEST, testCompleto } from "../../components/metodo/cabalaTest";
+import { CABALA_TEST, testCompleto, testsAEscala10 } from "../../components/metodo/cabalaTest";
 import {
   calcularTransiciones, nivelCombinado, sefiraEvaluable, sefirotContenidoCompleto, polaridadSefira,
   POLARIDAD_LABEL, TIPO_LABEL, esBloqueo,
@@ -73,7 +73,10 @@ export default function MetodoCabalaFinal() {
           // Puerta: el Diagnóstico final necesita TODO el contenido relleno —
           // el de las sefirot y el de los 22 senderos—. Si falta algo, se manda
           // a completarlo (sefirot → Árbol; senderos → Los Senderos).
-          if (!sefirotContenidoCompleto(dt.test, dt.autoeval)) {
+          // Igual que en el Diagnóstico: lo guardado antes del cambio de escala
+          // viene en 1-5 y se reescala a 1-10 antes de mirar nada.
+          const testEscalado = testsAEscala10(dt.test, dt.escalaTest);
+          if (!sefirotContenidoCompleto(testEscalado, dt.autoeval)) {
             navigate("/metodo/cabala/arbol");
             return;
           }
@@ -81,7 +84,7 @@ export default function MetodoCabalaFinal() {
             navigate("/metodo/cabala/senderos");
             return;
           }
-          if (dt.test && typeof dt.test === "object") setTest(dt.test);
+          setTest(testEscalado);
           if (dt.autoeval && typeof dt.autoeval === "object") setAutoeval(dt.autoeval);
           if (dt.senderos && typeof dt.senderos === "object") setSenderos(dt.senderos);
         } catch { /* sin datos */ }

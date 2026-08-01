@@ -10,7 +10,7 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
-import { CABALA_TEST, testCompleto } from "../../components/metodo/cabalaTest";
+import { CABALA_TEST, testCompleto, testsAEscala10 } from "../../components/metodo/cabalaTest";
 import {
   calcularTransiciones,
   nivelCombinado,
@@ -81,12 +81,15 @@ export default function MetodoCabalaDiagnostico() {
           // Puerta: no se puede entrar al Diagnóstico sin haber rellenado el
           // contenido (test/autoevaluación) de TODAS las sefirot. Si falta algo,
           // se vuelve al Árbol para completarlo.
-          if (!sefirotContenidoCompleto(prev.test, prev.autoeval)) {
+          // Las respuestas anteriores al cambio de escala vienen en 1-5: se
+          // reescalan a 1-10 ANTES de la puerta y del cálculo, o el diagnóstico
+          // de quien ya había contestado saldría distorsionado.
+          const testEscalado = testsAEscala10(prev.test, prev.escalaTest);
+          if (!sefirotContenidoCompleto(testEscalado, prev.autoeval)) {
             navigate("/metodo/cabala/arbol");
             return;
           }
-          const t = prev.test;
-          if (t && typeof t === "object") setTest(t);
+          setTest(testEscalado);
           const a = prev.autoeval;
           if (a && typeof a === "object") setAutoeval(a);
           // Marca el Diagnóstico como visitado: Los Senderos se desbloquean en el
