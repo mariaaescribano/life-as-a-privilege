@@ -378,10 +378,14 @@ const encender = keyframes`
   18%      { fill-opacity: 1; filter: drop-shadow(0 0 6px currentColor); }
   40%      { fill-opacity: 0.12; filter: none; }
 `;
+// El Árbol es alto y estrecho (solo ocupa de x=32 a x=88), así que al tamaño
+// común se veía más pequeño que el resto de loaders: va un punto más grande.
+const CABALA_SVG_W = { base: "96px", md: "118px" };
+
 export function CabalaLoader({ color, size }: LoaderProps = {}) {
   const c = color ?? cabalaTxt;
   return (
-    <Shell size={size}>
+    <Shell size={size ?? CABALA_SVG_W}>
       {SENDEROS.map(([a, b], i) => (
         <line key={i} x1={SEFIROT[a].x} y1={SEFIROT[a].y} x2={SEFIROT[b].x} y2={SEFIROT[b].y}
               stroke={c} strokeWidth={1.4} opacity={0.22} />

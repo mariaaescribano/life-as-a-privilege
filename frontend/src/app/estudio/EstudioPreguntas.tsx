@@ -163,7 +163,7 @@ export default function EstudioPreguntas() {
             <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700"
                   letterSpacing="0.06em" textTransform="uppercase" lineHeight="1.15"
                   textShadow="0 0 14px rgba(255,255,255,0.55), 0 0 32px rgba(180,255,245,0.3)">
-              Tu cielo, planeta a planeta
+              Tus planetas y sus preguntas
             </Text>
             <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }} maxW="680px" lineHeight="1.75">
               Ahí tienes tu carta. Pincha cada planeta y responde a sus preguntas: solo Sí o No, sin

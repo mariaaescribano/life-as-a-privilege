@@ -550,16 +550,10 @@ export function ComicViewer({
       {!flechasEnBox && prevArrow}
       {!flechasEnBox && nextArrow}
 
-      {/* Contenido scrollable — el scroll vertical ocurre DENTRO del popup
-          (h fija a 100vh + overflowY:auto), nunca a nivel de página. El py
-          asegura un mt/mb visible siempre (incluso al hacer scroll hasta el
-          extremo) para que el contenido nunca se pegue a los bordes y dé
-          sensación de "popup que se mueve" y no de pantalla rígida. */}
-      {/* Contenedor del contenido: SIN altura fija ni scroll interno. El
-          scroll lo gestiona el contenedor exterior del Modal (Chakra con
-          scrollBehavior="outside") usando la scrollbar real del navegador.
-          pt/pb generosos para que SIEMPRE haya un mt/mb visible por arriba
-          y por abajo, también justo al abrir el popup. */}
+      {/* Contenido: ocupa la pantalla justa y NUNCA la desborda, así que el
+          cómic no saca barra de scroll de página (no aportaba nada: el texto ya
+          scrollea dentro de la caja). El py deja un margen visible arriba y
+          abajo para que la caja no se pegue a los bordes. */}
       <ModalBody
         position="relative"
         zIndex={2}
@@ -567,7 +561,12 @@ export function ComicViewer({
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        minH="100vh"
+        // Exactamente la pantalla, ni un píxel más: la caja de abajo se ajusta a
+        // lo que quede libre y hace su propio scroll por dentro, así que la
+        // página NO necesita barra de scroll. `dvh` para que en móvil no cuente
+        // de más la franja de la barra del navegador.
+        h="100dvh"
+        overflow="hidden"
         // Móvil: px = 5 para que el box quede EXACTAMENTE del ancho del header de
         // la disciplina (la página usa px base 5). py más corto para que el box +
         // las flechas quepan juntos en el viewport sin scroll.
@@ -589,8 +588,11 @@ export function ComicViewer({
           // caben las flechas fijas al viewport, en vez de que estas se le
           // monten encima. Así la caja es más pequeña y se lee mejor.
           maxW={{ base: "calc(100vw - 104px)", md: "940px" }}
-          h={{ base: "auto", md: "540px" }}
-          maxH={{ base: "calc(100dvh - 72px)" }}
+          // Los 540px de siempre… salvo que la ventana sea baja: entonces la
+          // caja se encoge a lo que hay (descontando el py del ModalBody) en vez
+          // de desbordar y sacarle una barra de scroll a la página entera.
+          h={{ base: "auto", md: "min(540px, calc(100dvh - 112px))" }}
+          maxH={{ base: "calc(100dvh - 72px)", md: "calc(100dvh - 112px)" }}
           display="flex"
           flexDirection="column"
           position="relative"

@@ -126,14 +126,19 @@ export default function MetodoCabalaSenderos() {
               boxShadow={CAJA_GLOW}
               border={`1.5px solid ${cabalaTxt}55`}
               borderRadius="3xl"
-              px={{ base: 6, md: 10 }}
-              pt={{ base: 8, md: 10 }}
-              pb={{ base: 8, md: 10 }}
+              // Padding corto a propósito: el Árbol es el contenido del box, así
+              // que se le deja casi todo el hueco en vez de rodearlo de aire.
+              px={{ base: 2, md: 5 }}
+              pt={{ base: 4, md: 6 }}
+              pb={{ base: 4, md: 6 }}
             >
               {/* Fondo del box = imagen de la disciplina (cabala.png). */}
               <DisciplinaBgLayer nom={cabalaNom} borderRadius="3xl" overlay="rgba(6,3,1,0.5)" />
               <Box position="relative" zIndex={1}>
                 <ArbolDeLaVida
+                  // Más ancho que el 520px por defecto: con el padding corto, el
+                  // Árbol llena el box en vez de quedarse pequeño en el centro.
+                  maxWidth="620px"
                   variant="senderos"
                   readSenderos={readNums}
                   onSenderoClick={(s) => setModalNum(s.num)}

@@ -33,14 +33,15 @@ const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 
 // Sin líneas divisorias: se muestran los boxes sin ningún "border line".
 const Divisor = (_props?: { mb?: any; mt?: any }) => null;
 
-// Todos los boxes llevan de fondo la imagen de Cábala (cabala.png) con un velo
-// marrón oscuro (cabalaBg) que sube el contraste del texto ámbar sobre la
-// acuarela para que se lea bien.
-const CAJA_OVERLAY = `${cabalaBg}cc`;
+// Todos los boxes llevan de fondo la imagen de Cábala (cabala.png) con EL MISMO
+// velo que el header (el de DisciplinaBgLayer para Cábala: un negro al 40 %), no
+// un velo marrón casi opaco: así la acuarela se ve igual de nítida en el header
+// y en las cajas, en vez de quedar lavada. El contraste del texto ámbar lo pone
+// INK_SHADOW, no el velo.
 const Caja = ({ children }: { children: React.ReactNode }) => (
   <Box position="relative" overflow="hidden" w="100%"
        borderRadius="2xl" boxShadow={CAJA_GLOW}>
-    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay={CAJA_OVERLAY} />
+    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" />
     <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
       {children}
     </Box>
@@ -173,7 +174,7 @@ export default function MetodoCabalaSendero() {
           <Reveal direction="up" distance={18} delay={0.08} duration={0.65} w="100%">
             <Box w="100%" position="relative" overflow="hidden"
                  borderRadius="3xl" boxShadow={CAJA_GLOW}>
-              <DisciplinaBgLayer nom={cabalaNom} borderRadius="3xl" overlay={CAJA_OVERLAY} />
+              <DisciplinaBgLayer nom={cabalaNom} borderRadius="3xl" />
               <Flex position="relative" zIndex={1} align="center" gap={{ base: 5, md: 8 }} direction={{ base: "column", sm: "row" }}
                     textAlign={{ base: "center", sm: "left" }} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
                 <Text fontSize={{ base: "72px", md: "96px" }} lineHeight="1" color={cabalaTxt}

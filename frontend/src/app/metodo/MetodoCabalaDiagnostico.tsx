@@ -23,12 +23,39 @@ import {
   type TransicionResultado,
   type Polaridad,
 } from "../../components/metodo/cabalaDiagnostico";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
-import { CAJA_GLOW, CAJA_GLOW_FUERTE } from "../../components/metodo/cabalaGlow";
+import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
+
+// Velo de las cajas: EL MISMO que el header (el que pone DisciplinaBgLayer para
+// Cábala, un negro al 40 %). Nada de velo marrón casi opaco: la acuarela tiene
+// que verse igual de nítida en la caja que en el header. El contraste del texto
+// ámbar lo pone INK_SHADOW.
+
+/**
+ * Caja ÚNICA de esta página: la acuarela de Cábala de fondo (la misma del
+ * header), SIN línea de contorno y con el halo suave del header (CAJA_GLOW).
+ * Todos los boxes del diagnóstico pasan por aquí, así que se ven como piezas
+ * del mismo material y no como recuadros sueltos.
+ */
+function Caja({
+  children,
+  radius = "2xl",
+  px = { base: 6, md: 8 },
+  py = { base: 6, md: 7 },
+  ...rest
+}: React.ComponentProps<typeof Box> & { radius?: any }) {
+  return (
+    <Box position="relative" overflow="hidden" w="100%" borderRadius={radius} boxShadow={CAJA_GLOW} {...rest}>
+      <DisciplinaBgLayer nom={cabalaNom} borderRadius={radius} />
+      <Box position="relative" zIndex={1} px={px} py={py}>{children}</Box>
+    </Box>
+  );
+}
 
 const nombre = (k: string) => cabalaSefirotMap[k as keyof typeof cabalaSefirotMap]?.titulo ?? k;
 const etiquetaDe = (k: string) => CABALA_TEST[k as keyof typeof CABALA_TEST]?.etiqueta ?? "";
@@ -178,16 +205,16 @@ export default function MetodoCabalaDiagnostico() {
           </Reveal>
 
           <Reveal direction="up" distance={14} delay={0.14} duration={0.5} display="flex" justifyContent="center">
-            <Text color={`${cabalaTxt}cc`} fontSize="sm" letterSpacing="0.1em" textTransform="uppercase"
-                  bg={`${cabalaBg}cc`} border={`1px solid ${cabalaTxt}44`} borderRadius="full" px={4} py={1.5}>
-              {respondidas}/{total} dimensiones respondidas
-            </Text>
+            <Caja radius="full" w="auto" px={4} py={1.5}>
+              <Text color={`${cabalaTxt}cc`} fontSize="sm" letterSpacing="0.1em" textTransform="uppercase">
+                {respondidas}/{total} dimensiones respondidas
+              </Text>
+            </Caja>
           </Reveal>
 
           {respondidas < 2 ? (
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%">
-              <Box w="100%" bg={cabalaBg} border={`1px dashed ${cabalaTxt}55`} borderRadius="2xl" boxShadow={CAJA_GLOW}
-                   px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }} textAlign="center">
+              <Caja px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }} textAlign="center">
                 <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                   Aún faltan respuestas
                 </Text>
@@ -195,16 +222,14 @@ export default function MetodoCabalaDiagnostico() {
                   Completa la «Escala de equilibrio» de al menos dos dimensiones consecutivas para empezar a ver tus
                   transiciones. Cuantas más completes, más preciso será tu mapa.
                 </Text>
-              </Box>
+              </Caja>
             </Reveal>
           ) : (
             <>
               {/* ── Cuello de botella principal ── */}
               {principal ? (
                 <Reveal direction="up" distance={22} delay={0.18} duration={0.7} w="100%">
-                  <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}`} borderRadius="2xl"
-                       boxShadow={CAJA_GLOW_FUERTE}
-                       px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }}>
+                  <Caja px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }}>
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={2}>
                       Tu paso evolutivo prioritario
                     </Text>
@@ -235,10 +260,12 @@ export default function MetodoCabalaDiagnostico() {
                       </Box>
                     </Flex>
 
-                    <Text color="rgba(255,255,255,0.95)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9"
-                          bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}22`} borderRadius="xl" p={{ base: 4, md: 5 }} style={{ textShadow: INK_SHADOW }}>
-                      {narrativaTransicion(principal)}
-                    </Text>
+                    <Caja radius="xl" px={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }}>
+                      <Text color="rgba(255,255,255,0.95)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9"
+                            style={{ textShadow: INK_SHADOW }}>
+                        {narrativaTransicion(principal)}
+                      </Text>
+                    </Caja>
 
                     {/* Siguiente paso concreto */}
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" mt={5} mb={2}>
@@ -248,12 +275,11 @@ export default function MetodoCabalaDiagnostico() {
                       <BotonSefira label={`Repasar ${nombre(principal.from)}`} onClick={() => navigate(`/metodo/cabala/sefira/${principal.from}`)} />
                       <BotonSefira label={`Trabajar ${nombre(principal.to)}`} onClick={() => navigate(`/metodo/cabala/sefira/${principal.to}`)} />
                     </Flex>
-                  </Box>
+                  </Caja>
                 </Reveal>
               ) : (
                 <Reveal direction="up" distance={18} delay={0.18} duration={0.6} w="100%">
-                  <Box w="100%" bg={cabalaBg} border={`1.5px solid ${cabalaTxt}55`} borderRadius="2xl" boxShadow={CAJA_GLOW}
-                       px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }} textAlign="center">
+                  <Caja px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }} textAlign="center">
                     <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                       Tus transiciones fluyen
                     </Text>
@@ -261,7 +287,7 @@ export default function MetodoCabalaDiagnostico() {
                       En las dimensiones que has respondido no aparece un bloqueo claro entre una capacidad y la
                       siguiente. Sigue completando el resto para afinar el mapa.
                     </Text>
-                  </Box>
+                  </Caja>
                 </Reveal>
               )}
 
@@ -275,8 +301,7 @@ export default function MetodoCabalaDiagnostico() {
                     </Text>
                     <Flex direction="column" gap={3}>
                       {secundarios.map((t) => (
-                        <Box key={`${t.from}-${t.to}`} bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="xl"
-                             boxShadow={CAJA_GLOW} px={{ base: 5, md: 6 }} py={{ base: 4, md: 5 }}>
+                        <Caja key={`${t.from}-${t.to}`} radius="xl" px={{ base: 5, md: 6 }} py={{ base: 4, md: 5 }}>
                           <Flex align="baseline" justify="space-between" gap={3} wrap="wrap" mb={2}>
                             <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
                               {nombre(t.from)} → {nombre(t.to)}
@@ -288,7 +313,7 @@ export default function MetodoCabalaDiagnostico() {
                           <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
                             {narrativaTransicion(t)}
                           </Text>
-                        </Box>
+                        </Caja>
                       ))}
                     </Flex>
                   </Box>
@@ -309,8 +334,7 @@ export default function MetodoCabalaDiagnostico() {
 
               {/* ── Tus capacidades (niveles + polaridad) ── */}
               <Reveal direction="up" distance={18} delay={0.3} duration={0.6} w="100%">
-                <Box w="100%" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl" boxShadow={CAJA_GLOW}
-                     px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
+                <Caja px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
                   <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={3} style={{ textShadow: INK_SHADOW }}>
                     Tus capacidades
                   </Text>
@@ -355,7 +379,7 @@ export default function MetodoCabalaDiagnostico() {
                       </Box>
                     ))}
                   </Flex>
-                </Box>
+                </Caja>
               </Reveal>
             </>
           )}
@@ -395,8 +419,7 @@ function BotonSefira({ label, onClick }: { label: string; onClick: () => void })
 
 function ListaChips({ titulo, items, vacio }: { titulo: string; items: string[]; vacio: string }) {
   return (
-    <Box flex="1" bg={cabalaBg} border={`1px solid ${cabalaTxt}44`} borderRadius="2xl" boxShadow={CAJA_GLOW}
-         px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }}>
+    <Caja flex="1" px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }}>
       <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={3} style={{ textShadow: INK_SHADOW }}>
         {titulo}
       </Text>
@@ -405,13 +428,13 @@ function ListaChips({ titulo, items, vacio }: { titulo: string; items: string[];
       ) : (
         <Flex wrap="wrap" gap={2}>
           {items.map((it, i) => (
-            <Text key={i} color={`${cabalaTxt}dd`} fontSize="sm" bg={`${cabalaTxt}14`} border={`1px solid ${cabalaTxt}33`}
+            <Text key={i} color={`${cabalaTxt}dd`} fontSize="sm" bg={`${cabalaTxt}24`}
                   borderRadius="full" px={3} py={1}>
               {it}
             </Text>
           ))}
         </Flex>
       )}
-    </Box>
+    </Caja>
   );
 }

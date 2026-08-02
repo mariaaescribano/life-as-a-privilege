@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { SpaceBg } from "../metodo/SpaceBg";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 void React;
 
 interface Props {
@@ -22,15 +23,32 @@ const LADO = "560px";
  *
  * La forma es lo importante: la altura la manda el CONTENIDO (no hay `h` fija).
  * Si el texto es corto, la caja se encoge y queda un popup pequeño y centrado;
- * si es largo, crece hasta el lado máximo (cuadrado) y a partir de ahí el
- * contenido hace scroll vertical dentro. Antes se estiraba a toda la altura de
- * la pantalla (móvil) o a 560px fijos (escritorio) y el texto se quedaba flotando
- * en el centro con medio popup vacío.
+ * si es largo, crece. Antes se estiraba a toda la altura de la pantalla (móvil)
+ * o a 560px fijos (escritorio) y el texto se quedaba flotando en el centro con
+ * medio popup vacío.
+ *
+ * Hasta dónde crece, según pantalla:
+ *   · Escritorio/tablet: hasta el lado del cuadrado (560×560) y luego scroll.
+ *   · Móvil: hasta donde dé la pantalla, para que el contenido se vea ENTERO
+ *     sin scroll siempre que quepa (aquí manda leerlo de una, no el cuadrado).
+ *
+ * OJO: esto es SOLO de /estudio. Ningún popup de fuera usa esta caja, así que
+ * nada de lo de aquí (ni el tamaño, ni el bloqueo del fondo) afecta al resto de
+ * la web.
  *
  * Los hijos maquetan así: cabecera y pie con `flexShrink={0}`, y el cuerpo con
  * `flex="1"`, `minH={0}` y `overflowY="auto"` (el que hace el scroll).
  */
 export function EstudioPopup({ onClose, color, overlay = "rgba(8,13,30,0.75)", children }: Props) {
+  // Con el popup abierto, la página de detrás se queda quieta: ni rueda del
+  // ratón, ni arrastre con el dedo, ni salto al desaparecer la barra de scroll.
+  // El componente solo se monta cuando el popup está abierto, así que al
+  // cerrarlo (desmontar) el fondo vuelve a moverse solo.
+  // `fijarFondo`: el fondo se queda CLAVADO (position: fixed) mientras el popup
+  // está abierto, así que ni el scroll de dentro del popup al llegar al final,
+  // ni iOS (que se salta el overflow del body), pueden moverlo.
+  useLockBodyScroll(true, { fijarFondo: true });
+
   return (
     <Box
       position="fixed"
@@ -39,10 +57,19 @@ export function EstudioPopup({ onClose, color, overlay = "rgba(8,13,30,0.75)", c
       display="flex"
       alignItems="center"
       justifyContent="center"
-      px={{ base: 4, md: 10 }}
-      py={{ base: 6, md: 10 }}
+      // En móvil, aire mínimo alrededor: cada píxel que no se gasta en margen es
+      // alto que gana el popup para que quepa el contenido sin scroll.
+      px={{ base: 3, md: 10 }}
+      py={{ base: 3, md: 10 }}
       bg="rgba(0,0,0,0.82)"
-      sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+      // `touchAction: none` en el velo: arrastrar con el dedo FUERA del popup no
+      // mueve nada (en móvil el `overflow: hidden` del body no siempre basta).
+      sx={{
+        backdropFilter: "blur(14px)",
+        WebkitBackdropFilter: "blur(14px)",
+        touchAction: "none",
+        overscrollBehavior: "none",
+      }}
       onClick={onClose}
     >
       <Box
@@ -50,10 +77,13 @@ export function EstudioPopup({ onClose, color, overlay = "rgba(8,13,30,0.75)", c
         position="relative"
         w="100%"
         maxW={LADO}
-        // El tope de alto es el lado del cuadrado y, en pantallas pequeñas, lo
-        // que quepa (ancho o alto disponible): nunca una sábana de punta a punta.
+        // MÓVIL: la caja crece lo que haga falta (hasta lo que dé la pantalla)
+        // para que el contenido se vea ENTERO sin scroll; como la altura la manda
+        // el contenido, si es corto la caja se queda pequeña igualmente. Nada de
+        // cuadrado forzado aquí: el cuadrado dejaría fuera medio texto.
+        // ESCRITORIO/TABLET: cuadrado, tope del lado.
         maxH={{
-          base: `min(calc(100dvh - 48px), calc(100vw - 32px), ${LADO})`,
+          base: "calc(100dvh - 24px)",
           md: `min(calc(100vh - 80px), ${LADO})`,
         }}
         borderRadius="2xl"
@@ -63,6 +93,15 @@ export function EstudioPopup({ onClose, color, overlay = "rgba(8,13,30,0.75)", c
         fontFamily="'EB Garamond', serif"
         display="flex"
         flexDirection="column"
+        // Dentro del popup SÍ se scrollea (pan-y), pero al llegar al final el
+        // scroll no se «contagia» a la página de detrás. El `& *` es lo que de
+        // verdad lo corta: `overscroll-behavior` lo tiene que llevar el elemento
+        // QUE SCROLLEA (el cuerpo del popup), no solo la caja de fuera.
+        sx={{
+          touchAction: "pan-y",
+          overscrollBehavior: "contain",
+          "& *": { overscrollBehavior: "contain" },
+        }}
       >
         <SpaceBg overlay={overlay} />
 
