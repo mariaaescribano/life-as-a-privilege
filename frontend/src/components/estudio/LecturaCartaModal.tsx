@@ -4,41 +4,43 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { SpaceBg } from "../metodo/SpaceBg";
 import { EstudioPopup } from "./EstudioPopup";
+import { PRECIO_DISCIPLINA_EUR, STRIPE_LINK_DISCIPLINAS } from "../metodo/pagoDisciplinaLink";
 import { API_URL, AstrologiaIcon, astrologiaTxt } from "../../GlobalVariables";
 
 /* ─────────────────────────────────────────────────────────────────────────────
  *  «Quiero una lectura de mi carta» — la salida de pago del estudio.
  *
- *  Dos opciones, nunca tres: con dos, la barata hace de ancla y la otra parece
- *  razonable. La de 30 € NO es un producto nuevo: es exactamente la primera
- *  disciplina de El Mapa (Astrología), que ya cuesta 30 € en Stripe y ya incluye
- *  la lectura. Por eso lleva a /elMetodo (la página de El Mapa, con su propio
- *  botón de compra) en lugar de duplicar precio en otro sitio: dos puertas al
- *  mismo sitio con tarifas distintas es como se acaba cobrando de más a alguien.
+ *  Dos opciones, nunca tres. La de El Mapa NO es un producto nuevo: es
+ *  exactamente la primera disciplina de El Mapa (Astrología), que ya cuesta
+ *  30 € en Stripe y ya incluye la lectura. Por eso lleva a /elMetodo (la página
+ *  de El Mapa, con su propio botón de compra) en lugar de duplicar precio en
+ *  otro sitio: dos puertas al mismo sitio con tarifas distintas es como se
+ *  acaba cobrando de más a alguien.
  *
- *  La de 15 € es una lectura escrita a mano en PDF: no hay pago instantáneo
- *  porque hay trabajo detrás. Se pide aquí y llega como correo; María responde
- *  con el enlace de pago y la carta.
+ *  La del PDF es una lectura escrita a mano: no hay pago instantáneo porque hay
+ *  trabajo detrás. Se pide aquí y llega como correo; María responde con el
+ *  enlace de pago y la carta.
  * ───────────────────────────────────────────────────────────────────────────── */
 
-/** Precio del PDF. El del Mapa vive en el servidor (payment.service.ts), que es
- *  quien cobra: aquí solo se enseña, y por eso se anota de dónde sale. */
-const PRECIO_PDF = 15;
+/** Precio del PDF: el mismo que una disciplina, porque se cobra por el mismo
+ *  Payment Link. Sale de `pagoDisciplinaLink` para que no haya dos cifras
+ *  distintas; el importe real lo fija ese enlace en el panel de Stripe. */
+const PRECIO_PDF = PRECIO_DISCIPLINA_EUR;
 /** Debe coincidir con `unit_amount: 3000` de createMetodoCheckout. */
-const PRECIO_MAPA = 30;
+const PRECIO_MAPA = PRECIO_DISCIPLINA_EUR;
 
 /**
- * Payment Link de Stripe para la lectura en PDF (15 €).
+ * Payment Link de Stripe para la lectura en PDF: el MISMO que el de las
+ * disciplinas de El Mapa, porque ahora las dos opciones valen lo mismo (30 €).
+ * Un solo enlace = una sola cifra que mantener en Stripe.
  *
- * LA VUELTA A LA WEB NO DEPENDE DE STRIPE. Un Payment Link solo sabe volver a
- * tu sitio si se le configura la redirección en el panel, y eso no siempre está
- * a mano. Así que el pago se abre en OTRA PESTAÑA: la web se queda intacta
- * detrás y, al terminar, se cierra la de Stripe y ya se está de vuelta. Nada
- * que configurar y nadie se queda tirado en una pantalla de Stripe.
- *
- * (Si algún día configuras en Stripe → «Después del pago» → redirigir a
- *  …/estudio/resultados?lectura=ok, esa pantalla ya sabe recibirlo y enseña un
- *  «Pago recibido ✓». Es un extra, no un requisito.)
+ * LA VUELTA A LA WEB NO DEPENDE DE STRIPE. El pago se abre en OTRA PESTAÑA: la
+ * web se queda intacta detrás y, al terminar, se cierra la de Stripe y ya se
+ * está de vuelta. (Ese enlace tiene configurada su redirección a
+ * /home?disciplina_pagada=…, que es lo que necesita El Mapa; quien pague desde
+ * aquí acabará en esa pestaña, no en /estudio. No desbloquea nada: sin un
+ * `client_reference_id` con la forma «scope__userId», el verify no concede
+ * ninguna disciplina.)
  *
  * En este mismo enlace puedes activar BIZUM como método de pago (Stripe →
  * Configuración → Métodos de pago → Bizum): quien pulse el botón elige tarjeta
@@ -46,7 +48,7 @@ const PRECIO_MAPA = 30;
  *
  * Vacío = no se enseña ningún botón de pago.
  */
-const LECTURA_PDF_LINK = "https://buy.stripe.com/8x27sE6Hd9De4jJcaM2VG05";
+const LECTURA_PDF_LINK = STRIPE_LINK_DISCIPLINAS;
 
 /**
  * El enlace, con quién paga colgado detrás. Sirve para lo que iba a servir la
@@ -367,7 +369,7 @@ export function BotonLecturaCarta({
             whiteSpace="nowrap"
             style={{ textShadow: `0 0 12px rgba(255,255,255,0.45), 0 0 28px ${astrologiaTxt}55` }}
           >
-            Quiero mi carta
+            Quiero profundizar en mi carta
           </Text>
         </Flex>
       </Box>

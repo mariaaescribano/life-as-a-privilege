@@ -212,14 +212,13 @@ export default function MetodoAstrologiaLectura() {
               box: el box de las estrellas queda solo para las estrellas. */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%"
                   display="flex" flexDirection="column" alignItems="center" gap={3}>
-            <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px"
-                  style={{ textShadow: `0 0 10px rgba(255,255,255,0.4)` }}>
+            {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
+            <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px">
               Pulsa sobre cada estrella para descubrir tus puntos clave.
             </Text>
             {retos.length > 0 && (
               <Text color={todosRetosLeidos ? astrologiaTxt : `${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }}
-                    fontWeight="600" letterSpacing="0.04em" textAlign="center"
-                    style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}>
+                    fontWeight="600" letterSpacing="0.04em" textAlign="center">
                 {todosRetosLeidos
                   ? "Has leído todos tus puntos clave. Ya puedes continuar a Casas."
                   : `Has leído ${retos.filter((r) => retosLeidos.has(r.id)).length} de ${retos.length} puntos clave.`}

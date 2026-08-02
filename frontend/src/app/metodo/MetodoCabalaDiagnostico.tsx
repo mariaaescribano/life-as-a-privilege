@@ -197,8 +197,9 @@ export default function MetodoCabalaDiagnostico() {
 
           {/* Filosofía */}
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
+            {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.85" maxW="660px" style={{ textShadow: INK_SHADOW }}>
+                  lineHeight="1.85" maxW="660px">
               Las sefirot son estados; los senderos, transiciones. El crecimiento no ocurre en una capacidad aislada,
               sino en el paso de una a la siguiente. Este mapa busca qué transición evolutiva está bloqueada.
             </Text>

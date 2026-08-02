@@ -58,6 +58,10 @@ interface MetodoStepHeaderProps {
   prev?: StepButton;
   next?: StepButton;
   extra?: StepButton;  // botón opcional adicional (ej: "Cómic")
+  /** Segundo botón central, a la derecha de `extra`. Lo usan las páginas que
+   *  necesitan DOS atajos en medio (p.ej. Cábala: «El Árbol» + «Ilustraciones»,
+   *  que nunca debe faltar en sus headers). */
+  extra2?: StepButton;
   /** Título más pequeño (p.ej. en los tests, cuyos nombres son largos y deben
    *  caber en el header). */
   compact?: boolean;
@@ -200,6 +204,7 @@ export function MetodoStepHeader({
   prev,
   next,
   extra,
+  extra2,
   compact = false,
   step,
   pageLabel,
@@ -230,61 +235,57 @@ export function MetodoStepHeader({
   // queremos solo #RRGGBB y aplicar nuestras propias alphas.
   const bgHex = bgColor.length >= 7 ? bgColor.slice(0, 7) : bgColor;
 
-  // Auto-shrink del título: el título va SIEMPRE en una sola línea
-  // (whiteSpace:nowrap). Si su ancho natural supera el ancho del wrapper,
-  // bajamos un escalón de fontSize para que quepa entero sin truncar.
-  // Solo cambiamos a true (nunca volvemos atrás) para evitar el loop infinito
-  // que hubo cuando medíamos sobre el propio <Text> y el observer disparaba
-  // con cada cambio de fontSize.
+  // ── Ajuste del título (TODOS los headers) ─────────────────────────────
+  // Regla de la casa: el título va SIEMPRE en UNA sola línea, entero y sin
+  // «…». Se pinta a su tamaño natural (el token de Chakra de más abajo) y solo
+  // si no cabe se encoge píxel a píxel hasta que quepa. Ni dos líneas, ni
+  // recortes: el tamaño se adapta al hueco, no al revés.
+  //
+  // La medición es imperativa (se escribe `style.fontSize` en el nodo) y NO
+  // guarda estado: así no hay re-render por cada píxel ni el bucle infinito de
+  // «mido → cambio tamaño → el observer vuelve a medir» que hubo antes.
   const titleWrapperRef = useRef<HTMLDivElement>(null);
-  const [titleWraps, setTitleWraps] = useState(false);
+  const headerBoxRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    if (fitTitle) return; // en modo fitTitle manda la medición px de abajo
-    setTitleWraps(false); // empezamos midiendo con el tamaño grande
     const wrapper = titleWrapperRef.current;
     if (!wrapper) return;
-    const id = requestAnimationFrame(() => {
-      const el = titleWrapperRef.current?.querySelector("p, .chakra-text") as HTMLElement | null;
-      if (!el) return;
-      // overflow horizontal: el texto natural es más ancho que su contenedor.
-      const overflows = el.scrollWidth > el.clientWidth + 1;
-      if (overflows) setTitleWraps(true);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [title, fitTitle]);
-  // ── Modo `fitTitle` (página de lección) ────────────────────────────────
-  // El título va SIEMPRE en una sola línea y, SOLO si a su tamaño natural no
-  // cabe, lo encogemos px a px hasta que quepa. Nunca dos líneas, nunca "…".
-  // Es un fontSize numérico controlado por medición (no los tokens de Chakra),
-  // así que ignora `tituloUniforme`/`compact`. Solo se activa donde se pide.
-  const [fitPx, setFitPx] = useState<number | null>(null);
-  useLayoutEffect(() => {
-    if (!fitTitle) { setFitPx(null); return; }
-    const wrapper = titleWrapperRef.current;
-    if (!wrapper) return;
-    const fit = () => {
+    const ajustar = () => {
       const el = wrapper.querySelector("p, .chakra-text") as HTMLElement | null;
       if (!el) return;
-      const desktop = window.innerWidth >= 768;
-      const max = tallTitle ? (desktop ? 60 : 34) : (desktop ? 48 : 30);
-      const min = desktop ? 22 : 18;
-      let size = max;
-      el.style.fontSize = `${size}px`;
-      // Encogemos mientras el ancho natural supere el del contenedor (una línea).
+      el.style.fontSize = ""; // se vuelve al tamaño natural antes de medir
+      const natural = parseFloat(window.getComputedStyle(el).fontSize);
+      if (!natural) return;
+      // Suelo: por muy largo que sea el título no baja de aquí (mejor un pelín
+      // apretado que ilegible). Con el 45 % nunca se ha llegado a tocar.
+      const min = Math.max(14, Math.round(natural * 0.45));
+      let size = natural;
       while (size > min && el.scrollWidth > el.clientWidth + 1) {
-        size -= 1;
+        size = Math.max(min, size - 1);
         el.style.fontSize = `${size}px`;
       }
-      setFitPx(size);
     };
-    const raf = requestAnimationFrame(fit);
-    window.addEventListener("resize", fit);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", fit); };
-  }, [fitTitle, title, tallTitle]);
-
-  // Con título uniforme (TCM) no encogemos nunca: el título mantiene su tamaño
-  // grande y, si hace falta, envuelve a dos líneas (whiteSpace:normal).
-  const titleWrapsEff = tituloUniforme ? false : titleWraps;
+    const raf = requestAnimationFrame(ajustar);
+    // Segunda pasada en diferido: en el primer frame los botones del header
+    // («Volver al curso», el número de página…) pueden no haber ocupado aún su
+    // sitio, así que el hueco del título todavía no es el definitivo. Medir solo
+    // una vez es justo lo que dejaba títulos cortados con «…».
+    const tardia = window.setTimeout(ajustar, 300);
+    // Al cambiar el ancho del header (girar el móvil, redimensionar) se vuelve a
+    // medir. Se mira SOLO el ancho: el alto cambia al encoger la letra y
+    // reaccionar a eso sería morderse la cola.
+    let anchoPrev = headerBoxRef.current?.getBoundingClientRect().width ?? 0;
+    const ro = new ResizeObserver((entries) => {
+      const ancho = entries[0]?.contentRect.width ?? 0;
+      if (Math.abs(ancho - anchoPrev) < 1) return;
+      anchoPrev = ancho;
+      ajustar();
+    });
+    if (headerBoxRef.current) ro.observe(headerBoxRef.current);
+    // La tipografía (EB Garamond) suele cargar DESPUÉS del primer pintado y el
+    // texto cambia de ancho: se mide otra vez cuando esté lista.
+    document.fonts?.ready.then(ajustar).catch(() => {});
+    return () => { cancelAnimationFrame(raf); window.clearTimeout(tardia); ro.disconnect(); };
+  }, [title, fitTitle, tallTitle, compact, dense, tituloUniforme]);
   // TCM quiere sus títulos igual de GRANDES que el resto de disciplinas, así que
   // ignoramos el `compact` que traen sus páginas (era el que los encogía). Fuera
   // de TCM, `compact` sigue funcionando igual (tests con nombres largos).
@@ -292,6 +293,7 @@ export function MetodoStepHeader({
   return (
     <>
     <Box
+      ref={headerBoxRef}
       position="relative"
       w="100%"
       maxW={maxW}
@@ -324,30 +326,28 @@ export function MetodoStepHeader({
             <Box ref={titleWrapperRef} minW={0} flexShrink={1}>
               <Text
                 color={color}
+                // Tamaño NATURAL del título (el de «cabe de sobra»). Si no
+                // cabe, la medición de arriba lo baja px a px; aquí no hay
+                // variantes «por si envuelve»: nunca envuelve.
                 fontSize={
                   fitTitle
-                    // En modo fitTitle el tamaño lo controla la medición (px);
-                    // hasta la 1ª medición usamos el tamaño grande como base.
                     ? (tallTitle ? { base: "34px", md: "60px" } : { base: "30px", md: "48px" })
                     : dense
                     // Modo denso: título contenido. Manda sobre `tituloUniforme`,
                     // que es lo que anula el `compact` en estas disciplinas.
-                    ? (titleWraps ? { base: "lg", md: "2xl" } : { base: "xl", md: "3xl" })
+                    ? { base: "xl", md: "3xl" }
                     : tallTitle
-                    ? (compactEff
-                        ? (titleWrapsEff ? { base: "xl", md: "3xl" } : { base: "3xl", md: "4xl" })
-                        : (titleWrapsEff ? { base: "2xl", md: "5xl" } : { base: "4xl", md: "6xl" }))
-                    : (compactEff
-                        ? (titleWrapsEff ? { base: "lg", md: "2xl" } : { base: "2xl", md: "3xl" })
-                        : (titleWrapsEff ? { base: "xl", md: "4xl" } : { base: "3xl", md: "5xl" }))
+                    ? (compactEff ? { base: "3xl", md: "4xl" } : { base: "4xl", md: "6xl" })
+                    : (compactEff ? { base: "2xl", md: "3xl" } : { base: "3xl", md: "5xl" })
                 }
                 fontWeight="700"
                 letterSpacing="0.05em"
                 lineHeight={tallTitle ? "1.75" : "1.3"}
                 textAlign="center"
-                whiteSpace={fitTitle ? "nowrap" : tituloUniforme ? "normal" : "nowrap"}
+                // SIEMPRE una línea: el ajuste de tamaño se encarga de que
+                // quepa, así que ni envuelve ni hace falta cortar con «…».
+                whiteSpace="nowrap"
                 overflow="hidden"
-                textOverflow="ellipsis"
                 // El rabito de la "g" (descendente) baja por debajo de la línea
                 // base; con overflow:hidden se recortaría. Este padding inferior
                 // entra dentro de la zona visible y deja espacio para que se vea
@@ -357,8 +357,6 @@ export function MetodoStepHeader({
                   textShadow: useDiscBg
                     ? `0 1px 3px ${bgHex}f5, 0 0 8px ${bgHex}cc, 0 2px 16px ${bgHex}88`
                     : `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
-                  // fitTitle: el tamaño medido (px) manda sobre el token de Chakra.
-                  ...(fitTitle && fitPx != null ? { fontSize: `${fitPx}px` } : {}),
                 }}
               >
                 {title}
@@ -380,13 +378,13 @@ export function MetodoStepHeader({
         </Flex>
 
         {/* Espacio entre título y botones (antes había una raya separadora) */}
-        {(prev || next || extra || showPsicoCursos) && <Box h={dense ? { base: 3, md: 4 } : { base: 5, md: 7 }} />}
+        {(prev || next || extra || extra2 || showPsicoCursos) && <Box h={dense ? { base: 3, md: 4 } : { base: 5, md: 7 }} />}
 
         {/* Botones contextuales — siempre en una sola fila horizontal,
             tanto en móvil como en desktop. Si no caben, los botones se
             encogen (gracias al flex:0 1 auto + minW:0 del StepBtn) en lugar
             de saltar a una segunda fila. */}
-        {(prev || next || extra || showPsicoCursos) && (
+        {(prev || next || extra || extra2 || showPsicoCursos) && (
           <Flex
             justify="center"
             align="center"
@@ -396,6 +394,7 @@ export function MetodoStepHeader({
           >
             {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra && <StepBtn {...extra} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {showPsicoCursos && <StepBtn label="Cursos" onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
           </Flex>

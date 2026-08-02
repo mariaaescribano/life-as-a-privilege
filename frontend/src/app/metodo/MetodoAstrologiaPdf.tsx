@@ -203,7 +203,6 @@ export default function MetodoAstrologiaPdf() {
               fontStyle="italic"
               textAlign="center"
               lineHeight="1.8"
-              style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
             >
               Tu lectura entera, en un archivo que ya es tuyo para siempre.
             </Text>

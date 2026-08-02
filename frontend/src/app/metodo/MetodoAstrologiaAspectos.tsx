@@ -229,8 +229,9 @@ export default function MetodoAstrologiaAspectos() {
           {/* Título + subtítulo centrados */}
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6}
                   display="flex" flexDirection="column" alignItems="center" textAlign="center" mb={{ base: 2, md: 4 }}>
+            {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
             <Text color={astrologiaTxt} fontSize={{ base: "md", md: "lg" }} mb={2} fontStyle="italic"
-                  letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
+                  letterSpacing="0.04em">
               Cada aspecto es una relación entre dos planetas. Pulsa para leer.
             </Text>
             {/* <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} maxW="560px">

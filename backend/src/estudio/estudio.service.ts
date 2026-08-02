@@ -325,7 +325,121 @@ export class EstudioService {
     return { participante, items, participantesTotales: count ?? 0 };
   }
 
+  /* ── Panel de administración ──────────────────────────────────────────────
+   * Dos listados sin filtro: quién ha participado y cómo van los resultados. El
+   * cruce fino se hace en memoria (son decenas o cientos de filas) para no
+   * pedirle a PostgREST agrupaciones que no sabe hacer. */
+
+  /** Todos los participantes, del más reciente al más antiguo, con su recuento. */
+  async getAdminParticipantes(): Promise<{
+    participantes: {
+      id: string;
+      email: string;
+      creado: string;
+      actualizado: string;
+      nacimiento: { fecha: string; hora: string; lugar: string };
+      signos: Record<string, string>;
+      respuestas: number;
+      /** Tenía sesión abierta al participar. */
+      conCuenta: boolean;
+    }[];
+    totales: { participantes: number; respuestas: number; conRespuestas: number; ultimos7dias: number };
+  }> {
+    const filas = await this.traerTodo(
+      'estudio_participante',
+      'id, email, created_at, updated_at, fecha_nacimiento, hora_nacimiento, pais, region, lugar, signos, user_id',
+      { columna: 'created_at', ascendente: false },
+    );
+    const respuestas = await this.traerTodo('estudio_respuesta', 'participante_id');
+
+    const porParticipante = new Map<string, number>();
+    for (const r of respuestas) {
+      const k = r.participante_id as string;
+      porParticipante.set(k, (porParticipante.get(k) ?? 0) + 1);
+    }
+
+    const haceUnaSemana = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const participantes = filas.map((p) => ({
+      id: p.id as string,
+      email: (p.email as string) ?? '',
+      creado: String(p.created_at ?? ''),
+      actualizado: String(p.updated_at ?? ''),
+      nacimiento: {
+        fecha: String(p.fecha_nacimiento ?? '').slice(0, 10),
+        hora: String(p.hora_nacimiento ?? '').slice(0, 5),
+        lugar: [p.lugar, p.region, p.pais].filter(Boolean).join(', '),
+      },
+      signos: (p.signos ?? {}) as Record<string, string>,
+      respuestas: porParticipante.get(p.id as string) ?? 0,
+      conCuenta: !!p.user_id,
+    }));
+
+    return {
+      participantes,
+      totales: {
+        participantes: participantes.length,
+        respuestas: respuestas.length,
+        conRespuestas: participantes.filter((p) => p.respuestas > 0).length,
+        ultimos7dias: participantes.filter(
+          (p) => p.creado && new Date(p.creado).getTime() >= haceUnaSemana,
+        ).length,
+      },
+    };
+  }
+
+  /** El agregado entero: cada (planeta, eje, posición, pregunta) con su % de sí. */
+  async getAdminResultados(): Promise<{ items: ItemEstadistica[] }> {
+    const data = await this.traerTodo('estudio_stats', 'planeta, eje, posicion, pregunta_id, total, si');
+
+    const items: ItemEstadistica[] = data
+      .map((s) => {
+        const total = Number(s.total) || 0;
+        const si = Number(s.si) || 0;
+        return {
+          planeta: s.planeta as string,
+          eje: (s.eje as Eje) ?? 'signo',
+          posicion: String(s.posicion ?? ''),
+          preguntaId: s.pregunta_id as string,
+          // En el agregado no hay «su» respuesta: el campo se conserva para
+          // compartir tipo con las estadísticas del participante.
+          respuesta: si * 2 >= total,
+          total,
+          si,
+          porcentajeSi: total > 0 ? Math.round((si / total) * 100) : 0,
+        };
+      })
+      .sort((a, b) => b.total - a.total || a.planeta.localeCompare(b.planeta));
+
+    return { items };
+  }
+
   /* ─────────────────────────── Interno ─────────────────────────── */
+
+  /**
+   * Todas las filas de una tabla o vista, de mil en mil.
+   *
+   * PostgREST devuelve como mucho 1.000 filas por petición y NO avisa de que ha
+   * cortado: sin paginar, en cuanto el estudio pase de mil respuestas los
+   * recuentos del panel empezarían a mentir por lo bajo sin que nadie lo note.
+   */
+  private async traerTodo(
+    tabla: string,
+    columnas: string,
+    orden?: { columna: string; ascendente: boolean },
+  ): Promise<Record<string, any>[]> {
+    const client = this.databaseService.getClient();
+    const PAGINA = 1000;
+    const filas: Record<string, any>[] = [];
+    for (let desde = 0; ; desde += PAGINA) {
+      let q = client.from(tabla).select(columnas).range(desde, desde + PAGINA - 1);
+      if (orden) q = q.order(orden.columna, { ascending: orden.ascendente });
+      const { data, error } = await q;
+      if (error) throw new BadRequestException(`No se ha podido leer ${tabla}: ${error.message}`);
+      const lote = (data ?? []) as unknown as Record<string, any>[];
+      filas.push(...lote);
+      if (lote.length < PAGINA) return filas;
+    }
+  }
 
   private async buscarPorEmail(email: string): Promise<Record<string, any> | null> {
     const { data } = await this.databaseService.getClient()

@@ -261,7 +261,7 @@ export const NUTRIENTES: Nutriente[] = [
         parrafos: [
           "Es necesaria para fabricar las moléculas que permiten obtener energía a partir de los alimentos.",
           "Es decir, se transforma en NAD⁺ y NADP⁺, moléculas que transportan electrones entre enzimas durante cientos de reacciones metabólicas.",
-          "Además, participa en la reparación del ADN y en el funcionamiento normal del sistema nervioso y la piel.",
+          "Además, participa en la reparación del ADN (viendo cuándo está roto, activando el sistema de reparación y usando el NAD como 'combustible' para arreglar los genes rotos) y en el funcionamiento normal del sistema nervioso (ayudando a transformar los alimentos en la energía que el cerebro necesita, protegiendo a las neuronas del estrés oxidativo -activa al glutatión, el principal antioxidante- y fabricando neurotransmisores) y la piel (al mantener su barrera de humedad mediante la producción de ceramidas -lípidos naturales (grasas) que forman la mayor parte de la barrera protectora de la piel-, reducir la inflamación y prevenir el daño celular causado por los rayos ultravioleta del sol).",
         ],
       },
       {
@@ -275,7 +275,7 @@ export const NUTRIENTES: Nutriente[] = [
         key: "b6", sigla: "B6", titulo: "Vitamina B6 (Piridoxina)", color: "#efc94c",
         foto: "/recorrido/nutricion/moleculas/vitb6.webp",
         parrafos: [
-          "Activa a las enzimas que participan en la transformación de los aminoácidos y en la fabricación de neurotransmisores, hemoglobina y anticuerpos.",
+          "Activa a las enzimas que participan en la transformación de los aminoácidos y en la fabricación de neurotransmisores, hemoglobina (la proteína de los glóbulos rojos que transporta oxígeno) y anticuerpos.",
           "Debido a esto, es fundamental para el sistema nervioso y el sistema inmunitario.",
         ],
       },
@@ -292,13 +292,14 @@ export const NUTRIENTES: Nutriente[] = [
         parrafos: [
           "Activa a la enzima que transporta pequeños fragmentos de carbono necesarios para fabricar ADN y ARN. Sin ella, las células no podrían dividirse correctamente.",
           "Durante el embarazo es especialmente importante porque participa en el correcto desarrollo del sistema nervioso del bebé. Sin esta vitamina, el bebé podría fallecer.",
+          "El folato se queda atrapado porque su transformación en la forma de almacenamiento es irreversible, y la vitamina B12 es la única capaz de retirar el grupo químico que lo bloquea para devolverlo a su estado activo: Ácido fólico (suplemento) o Folato (comida) → Forma atrapada → Vitamina B12 → Folato activo.",
         ],
       },
       {
         key: "b12", sigla: "B12", titulo: "Vitamina B12 (Cobalamina)", color: "#c99a32",
         foto: "/recorrido/nutricion/moleculas/vitb12.webp",
         parrafos: [
-          "Activa a las enzimas que regeneran el folato activo y participan en la formación de ADN, glóbulos rojos y mielina, la capa que recubre muchas neuronas.",
+          "La vitamina B12 funciona como una coenzima esencial que activa a la metionina sintasa, una enzima que libera el folato atrapado, permitiendo la síntesis de ADN necesaria para la producción de glóbulos rojos, y activa también a la metilmalonil-CoA mutasa, la enzima que procesa grasas, evitando la acumulación de compuestos tóxicos que destruyen la capa protectora de mielina en las neuronas.",
           "Solo la producen ciertos microorganismos, por lo que se obtiene principalmente de alimentos de origen animal o de alimentos suplementados.",
         ],
       },
@@ -365,7 +366,7 @@ export const NUTRIENTES: Nutriente[] = [
         parrafos: [
           "Es el principal electrolito fuera de las células.",
           "Regula la cantidad de agua del organismo y permite que los nervios transmitan impulsos eléctricos.",
-          "El sodio sube la presión arterial porque retiene agua y por eso, aumenta el volumen de la sangre.",
+          "El sodio sube la presión arterial porque retiene agua y, por eso, aumenta el volumen de la sangre, debido a que el plasma sigue al sodio, manteniéndose en los vasos sanguíneos en lugar de entrar a las células.",
           "Profundiza: La bomba sodio-potasio (Na⁺/K⁺-ATPasa) utiliza ATP para expulsar sodio de la célula e introducir potasio, creando lo necesario para la transmisión de impulsos nerviosos, la contracción muscular y el transporte de muchas moléculas, como la glucosa o algunos aminoácidos.",
         ],
       },
@@ -419,7 +420,8 @@ export const NUTRIENTES: Nutriente[] = [
         parrafos: [
           "El fosfato es uno de los componentes más importantes de la Vida.",
           "Forma parte del ATP, donde almacena la energía química; del ADN y el ARN, donde une los nucleótidos formando su estructura; y de los fosfolípidos, que construyen las membranas celulares.",
-          "Además, muchas enzimas regulan la actividad de otras proteínas añadiéndoles o retirándoles un grupo fosfato, un proceso llamado fosforilación, que actúa como un auténtico interruptor molecular.",
+          "Además, las enzimas cambian completamente de rol o misión si se le añade un fosfato. Por eso, también se considera un interruptor molecular.",
+          "Esto lo logra gracias a los 'dedos de zinc', unas estructuras que se acoplan directamente al ADN para activar o desactivar su lectura, y a su capacidad para actuar como un director de orquesta en nuestras defensas, regulando la maduración de los linfocitos T y frenando la inflamación exagerada.",
         ],
       },
       {
@@ -691,7 +693,7 @@ export const NUTRIENTES: Nutriente[] = [
           "Son los pigmentos que dan el color morado, azul y rojo intenso a alimentos como los arándanos, las moras, las cerezas o la col lombarda.",
           "En las plantas ayudan a proteger frente a la radiación ultravioleta y al estrés ambiental.",
           "En nuestro organismo actúan como antioxidantes, es decir, donan electrones a radicales libres (moléculas que buscan electrones) antes de que dañen proteínas, grasas o ADN.",
-          "Además, pueden mejorar la función del endotelio, la capa que recubre el interior de los vasos sanguíneos, favoreciendo una buena salud cardiovascular.",
+          "Además, pueden mejorar la función del endotelio, la capa que recubre el interior de los vasos sanguíneos, favoreciendo una buena salud cardiovascular. Lo hacen porque estimulan una enzima que eleva la disponibilidad de óxido nítrico, un gas que relaja y dilata los vasos sanguíneos.",
         ],
       },
       {

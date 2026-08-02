@@ -75,27 +75,28 @@ export default function MetodoAstrologiaSolAscLuna() {
         // Solo claves de planeta (no arrastrar el progreso de lectura del JSONB).
         let d: Data = soloClavesPlaneta<Valor>(rowRes.data?.data);
 
-        // Fallback: si falta signo/casa de algún cuerpo del trío, lo derivamos de la carta.
-        const faltan = TRIO.some((k) => !d[k]?.signo);
-        if (faltan) {
-          const cartaRes = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const carta = cartaRes.data;
-          if (carta && Array.isArray(carta.planetas)) {
-            const next: Data = { ...d };
-            for (const k of TRIO) {
-              const p = carta.planetas.find((x) => x.planeta === k);
-              if (p && !next[k]?.signo) {
-                next[k] = {
-                  ...next[k],
-                  signo: ZODIAC_SIGNS[p.signoIdx]?.name,
-                  ...(k !== "ascendente" ? { casa: p.casa } : {}),
-                };
-              }
-            }
-            d = next;
+        // La CARTA manda para signo y casa: si se corrige la fecha (o la hora, o
+        // el lugar) la carta se recalcula, pero el `data` guardado conserva los
+        // valores viejos, así que leyéndolo de ahí esta página seguiría
+        // enseñando el signo anterior mientras el mapa ya enseña el nuevo. Del
+        // `data` nos quedamos solo con lo leído (profundizadoSigno/Casa).
+        const cartaRes = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const carta = cartaRes.data;
+        if (carta && Array.isArray(carta.planetas)) {
+          const next: Data = { ...d };
+          for (const k of TRIO) {
+            const p = carta.planetas.find((x) => x.planeta === k);
+            if (!p) continue;
+            next[k] = {
+              ...next[k],
+              signo: ZODIAC_SIGNS[p.signoIdx]?.name,
+              // El ascendente es la cúspide de la casa 1: no lleva casa.
+              ...(k !== "ascendente" ? { casa: p.casa } : {}),
+            };
           }
+          d = next;
         }
         setData(d);
       } catch {

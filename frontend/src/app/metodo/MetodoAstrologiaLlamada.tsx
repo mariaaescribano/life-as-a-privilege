@@ -59,7 +59,6 @@ export default function MetodoAstrologiaLlamada() {
               fontStyle="italic"
               textAlign="center"
               lineHeight="1.8"
-              style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
             >
               Integra tus arquetipos: agenda una llamada y no te quedes con dudas.
             </Text>

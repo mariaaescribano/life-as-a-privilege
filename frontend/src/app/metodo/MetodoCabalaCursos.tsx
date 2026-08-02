@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
 import { CabalaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { Reveal } from "../../components/global/Reveal";
+import { useCursosData } from "../../data/cursosApi";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL,
   cabalaBg,
@@ -19,29 +23,22 @@ import {
   CabalaIcon,
   noSelectSx,
 } from "../../GlobalVariables";
-import { CAJA_GLOW, CAJA_GLOW_HOVER } from "../../components/metodo/cabalaGlow";
-
-// Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
-// texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
-const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
+import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 // ── Cursos para profundizar (Cábala) ────────────────────────────────────────
 // Página-hub que va DESPUÉS de «10 días con tus dimensiones» (última página del
-// recorrido). Aquí se listarán los cursos avanzados de Cábala. De momento no hay
-// ninguno: se deja el enrutado y el diseño listos; basta con ir añadiendo objetos
-// a CURSOS y el resto funciona solo. Su «siguiente» arranca la 8ª disciplina:
-// Cultura (aún bloqueada → candado blanco).
-interface Curso {
-  key: string;
-  titulo: string;
-  resumen: string;
-  foto?: string;
-  ruta?: string;
-  proximamente?: boolean;
-}
+// recorrido). Los cursos NO se escriben aquí: salen del catálogo real
+// (`useCursosData` → tabla `curso`, modalidad «Cábala»), igual que en la página
+// de cursos de Astrología. Así lo que se publique desde el admin aparece solo.
+// Su «siguiente» arranca la 8ª disciplina: Cultura (aún bloqueada → candado).
 
-// Aún no hay cursos de Cábala. Al añadir objetos aquí, aparecerán solos.
-const CURSOS: Curso[] = [];
+// Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
+const EyeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"
+       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))", flexShrink: 0 }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </svg>
+);
 
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
 const Candado = ({ size }: { size: any }) => (
@@ -52,70 +49,12 @@ const Candado = ({ size }: { size: any }) => (
   </Box>
 );
 
-// ── Tarjeta de un curso ──────────────────────────────────────────────────────
-function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
-  const [imgErr, setImgErr] = useState(false);
-  const bloqueado = !!curso.proximamente || !curso.ruta;
-  return (
-    <Box
-      as={bloqueado ? "div" : "button"}
-      onClick={bloqueado ? undefined : onEnter}
-      position="relative"
-      w="100%"
-      h="100%"
-      borderRadius="2xl"
-      overflow="hidden"
-      cursor={bloqueado ? "default" : "pointer"}
-      aria-disabled={bloqueado}
-      opacity={bloqueado ? 0.78 : 1}
-      boxShadow={CAJA_GLOW}
-      transition="all 0.25s ease"
-      _hover={bloqueado ? undefined : {
-        transform: "translateY(-6px)",
-        boxShadow: CAJA_GLOW_HOVER,
-      }}
-      _active={bloqueado ? undefined : { transform: "translateY(-2px)" }}
-    >
-      <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl"
-                         overlay={bloqueado ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.45)"} />
-
-      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
-            p={{ base: 4, md: 5 }} h="100%">
-        <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-             bg="rgba(255,255,255,0.14)" boxShadow={CAJA_GLOW}
-             display="flex" alignItems="center" justifyContent="center">
-          {curso.foto && !imgErr ? (
-            <Image src={encodeURI(curso.foto)} alt={curso.titulo} w="100%" h="100%" objectFit="cover"
-                   onError={() => setImgErr(true)} />
-          ) : (
-            <Text color="white" fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-              {curso.titulo.charAt(0)}
-            </Text>
-          )}
-        </Box>
-        <Text color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }} textAlign="center"
-              lineHeight="1.25" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
-          {curso.titulo}
-        </Text>
-        <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
-              textAlign="center" lineHeight="1.5" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-          {curso.resumen}
-        </Text>
-        <Box flex="1" minH={{ base: 1, md: 2 }} />
-        <Text color="rgba(255,255,255,0.9)" fontSize="2xs" fontWeight={700} letterSpacing="0.12em"
-              textTransform="uppercase">
-          {bloqueado ? "Próximamente" : "Entrar →"}
-        </Text>
-      </Flex>
-    </Box>
-  );
-}
-
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoCabalaCursos() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [accesoOk, setAccesoOk] = useState(false);
+  const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
+  const { cursosData, loading } = useCursosData();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -128,16 +67,25 @@ export default function MetodoCabalaCursos() {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
+        setAccesoOk(true);
       } catch {
         navigate("/metodo/cabala");
-        return;
-      } finally {
-        setLoading(false);
       }
     })();
   }, [navigate]);
 
-  if (loading) {
+  // Cursos de Cábala del catálogo, en orden de publicación (los primeros,
+  // primero). Aquí NO se ordena por «más reciente» como en /aprendizaje: esta
+  // página acompaña «paso a paso», y los cursos se publicaron en ese mismo
+  // orden (Introducción → El Árbol de la Vida → El Mal en la Cábala).
+  const cursos = [...(cursosData[cabalaNom]?.cursos ?? [])].sort(
+    (a, b) => (a.createdAt ?? "").localeCompare(b.createdAt ?? ""),
+  );
+  // No se enseña la página hasta tener descargadas las portadas, para que las
+  // tarjetas no se rellenen de golpe después.
+  const fotosListas = usePrecargarImagenes(cursos.map((c) => c.foto));
+
+  if (!accesoOk || loading || !fotosListas) {
     return <CabalaLoading />;
   }
 
@@ -146,7 +94,7 @@ export default function MetodoCabalaCursos() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1100px" gap={7}>
+        <Flex direction="column" align="center" w="100%" maxW="1280px" gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
@@ -159,34 +107,50 @@ export default function MetodoCabalaCursos() {
               mb={0}
               prev={{ label: "← 10 días", onClick: () => navigate("/metodo/cabala/dias") }}
               extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
+              // "Ilustraciones" nunca falta en los headers de Cábala. En móvil se
+              // queda solo el ojo, para que los cuatro botones sigan en una fila.
+              extra2={{
+                label: <Box as="span" display={{ base: "none", md: "inline" }}>Ilustraciones</Box>,
+                onClick: () => setIlustracionesOpen(true),
+                icon: <EyeIcon />,
+              }}
               next={{ label: "Cultura →", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cultura") }}
             />
           </Reveal>
 
           {/* Texto introductorio bajo el header */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
+            {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "lg", md: "xl" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="680px" style={{ textShadow: INK_SHADOW }}>
+                  textAlign="center" lineHeight="1.8" maxW="680px">
               Si quieres profundizar en la Cábala, estos cursos te acompañan paso a paso.
             </Text>
           </Reveal>
 
-          {CURSOS.length > 0 ? (
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {CURSOS.map((c, i) => (
-                <Reveal key={c.key} direction="up" distance={20} delay={0.06 * i} duration={0.55} w="100%" display="flex">
-                  <CursoBox curso={c} onEnter={() => { if (c.ruta) { recordarOrigenCurso(); navigate(c.ruta); } }} />
-                </Reveal>
-              ))}
-            </SimpleGrid>
+          {cursos.length > 0 ? (
+            cursos.length === 1 ? (
+              <Flex w="100%" justify="center">
+                <Box w="100%" maxW="520px">
+                  <CursoCardDetalle curso={cursos[0]} bgColor={cabalaBg} color={cabalaTxt} nom={cabalaNom} />
+                </Box>
+              </Flex>
+            ) : (
+              <CursosGrid
+                items={cursos.map((curso) => ({
+                  curso,
+                  color: cabalaTxt,
+                  bgColor: cabalaBg,
+                  nom: cabalaNom,
+                }))}
+              />
+            )
           ) : (
-            /* ── Aún no hay cursos: estado vacío elegante ── */
+            /* ── Aún no hay cursos publicados: estado vacío elegante ── */
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
               <Flex direction="column" align="center" gap={3} maxW="560px" textAlign="center"
                     position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                    border={`1px dashed ${cabalaTxt}44`} px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }}>
+                    boxShadow={CAJA_GLOW} px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }}>
                 <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay="rgba(0,0,0,0.5)" />
-                <Text position="relative" zIndex={1} fontSize="4xl">🎓</Text>
                 <Text position="relative" zIndex={1} color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
                   Estamos preparando los cursos
@@ -202,6 +166,8 @@ export default function MetodoCabalaCursos() {
 
         </Flex>
       </Flex>
+
+      <CabalaIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
       <IndiceCabala />
       <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />

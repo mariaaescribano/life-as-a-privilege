@@ -3,7 +3,8 @@ import type { SefiraKey } from "../global/ArbolDeLaVida";
 // ─────────────────────────────────────────────────────────────────────────
 // Los 22 SENDEROS del Árbol de la Vida (letras hebreas Aleph→Tav = caminos
 // 11-32). Cada uno es una página con la MISMA plantilla:
-//   cabecera · pregunta de reflexión · ¿qué une? · test (1-5, algunas invertidas)
+//   cabecera · pregunta de reflexión · ¿qué une? · test (1-5, todas en el mismo
+//     sentido: más alto = más resistencia, y el total es la suma tal cual)
 //   · interpretación por bandas · señales de práctica · «has cruzado este
 //     umbral cuando…» · frase de integración.
 // Cada sendero tiene además una PALABRA CLAVE fácil de recordar.
@@ -27,8 +28,6 @@ export const NOMBRE_SEFIRA: Record<SefiraKey, string> = {
 
 export interface SenderoTestPregunta {
   texto: string;
-  /** Si true, puntúa invertido (6 - respuesta). */
-  invertida?: boolean;
 }
 
 export interface SenderoInterpretacion {
@@ -91,15 +90,15 @@ const ALEPH: SenderoContenido = {
   test: [
     { texto: "Cuando la realidad contradice mis planes, me cuesta aceptarlo." },
     { texto: "Suelo interpretar los acontecimientos de forma que confirmen lo que ya pensaba." },
-    { texto: "Cuando descubro información nueva, reviso mis ideas antes de seguir adelante.", invertida: true },
+    { texto: "Cuando descubro información nueva, sigo adelante sin detenerme a revisar mis ideas." },
     { texto: "Me cuesta abandonar una convicción importante aunque aparezcan evidencias que la cuestionan." },
-    { texto: "Cambiar de opinión cuando aprendo algo nuevo me parece una muestra de crecimiento.", invertida: true },
+    { texto: "Cambiar de opinión me incomoda, aunque haya aprendido algo que lo justifique." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Eres capaz de revisar tus ideas sin sentir que pierdes tu identidad. Permites que la realidad enriquezca tu propósito." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones tus expectativas condicionan la forma en que interpretas los hechos. Existe margen para desarrollar una mirada más abierta." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Tiendes a proteger tus ideas antes que revisarlas. El crecimiento comienza cuando permites que la realidad participe en la construcción de tu propósito." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales desafíos consiste en dejar de buscar confirmación y empezar a buscar comprensión. La realidad no viene a destruir tu propósito, sino a hacerlo más auténtico." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Eres capaz de revisar tus ideas sin sentir que pierdes tu identidad. Permites que la realidad enriquezca tu propósito." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones tus expectativas condicionan la forma en que interpretas los hechos. Existe margen para desarrollar una mirada más abierta." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Tiendes a proteger tus ideas antes que revisarlas. El crecimiento comienza cuando permites que la realidad participe en la construcción de tu propósito." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales desafíos consiste en dejar de buscar confirmación y empezar a buscar comprensión. La realidad no viene a destruir tu propósito, sino a hacerlo más auténtico." },
   ],
   senales: [
     "Buscas confirmar tus ideas antes de comprender las de los demás.",
@@ -134,15 +133,15 @@ const BETH: SenderoContenido = {
   test: [
     { texto: "Suelo actuar antes de comprender completamente una situación." },
     { texto: "Me cuesta dedicar tiempo a reflexionar sobre mis experiencias." },
-    { texto: "Antes de tomar decisiones importantes procuro comprender todos los aspectos relevantes.", invertida: true },
+    { texto: "Tomo decisiones importantes sin haber comprendido todos los aspectos relevantes." },
     { texto: "Me impaciento cuando un proceso requiere tiempo para entenderse." },
-    { texto: "Disfruto reflexionando y aprendiendo antes de sacar conclusiones.", invertida: true },
+    { texto: "Detenerme a reflexionar antes de sacar conclusiones se me hace pesado." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Sabes convertir tus ideales en una comprensión sólida antes de actuar. Tu propósito se apoya en la reflexión y no solo en el impulso." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones avanzas demasiado rápido sin dedicar suficiente tiempo a comprender lo que estás viviendo." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a actuar desde la intención sin construir una comprensión profunda. Tu aprendizaje consiste en desarrollar mayor paciencia para integrar las experiencias." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es detenerte antes de avanzar. La comprensión no retrasa el camino; le da profundidad y dirección." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Sabes convertir tus ideales en una comprensión sólida antes de actuar. Tu propósito se apoya en la reflexión y no solo en el impulso." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones avanzas demasiado rápido sin dedicar suficiente tiempo a comprender lo que estás viviendo." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a actuar desde la intención sin construir una comprensión profunda. Tu aprendizaje consiste en desarrollar mayor paciencia para integrar las experiencias." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es detenerte antes de avanzar. La comprensión no retrasa el camino; le da profundidad y dirección." },
   ],
   senales: [
     "Tomas decisiones importantes sin haber reflexionado lo suficiente.",
@@ -176,15 +175,15 @@ const GIMEL: SenderoContenido = {
   test: [
     { texto: "Con frecuencia siento que mis acciones no reflejan lo que considero importante." },
     { texto: "Me resulta difícil conectar emocionalmente con el propósito que quiero vivir." },
-    { texto: "Mis decisiones suelen estar alineadas con los valores que considero esenciales.", invertida: true },
+    { texto: "Mis decisiones se alejan de los valores que considero esenciales." },
     { texto: "Cuando aparecen dificultades, olvido fácilmente aquello que da sentido a mi Vida." },
-    { texto: "Siento que mi propósito forma parte de mi identidad y guía mi manera de vivir.", invertida: true },
+    { texto: "Siento mi propósito como una idea aparte que no guía mi manera de vivir." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Tu propósito no solo orienta tus decisiones; también forma parte de la persona que eres. Existe una conexión saludable entre tus valores y tu Vida emocional." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Sabes qué es importante para ti, pero no siempre consigues mantener esa conexión cuando aparecen las dificultades o las emociones intensas." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una distancia entre tus ideales y la forma en que vives. Tu crecimiento consiste en acercar cada vez más tu propósito a tu identidad cotidiana." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales desafíos es dejar de vivir el propósito como una meta futura y comenzar a experimentarlo como una forma presente de ser." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Tu propósito no solo orienta tus decisiones; también forma parte de la persona que eres. Existe una conexión saludable entre tus valores y tu Vida emocional." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "Sabes qué es importante para ti, pero no siempre consigues mantener esa conexión cuando aparecen las dificultades o las emociones intensas." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una distancia entre tus ideales y la forma en que vives. Tu crecimiento consiste en acercar cada vez más tu propósito a tu identidad cotidiana." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales desafíos es dejar de vivir el propósito como una meta futura y comenzar a experimentarlo como una forma presente de ser." },
   ],
   senales: [
     "Tus decisiones reflejan realmente los valores que dices tener.",
@@ -218,15 +217,15 @@ const DALETH: SenderoContenido = {
   test: [
     { texto: "Suelo sacar conclusiones antes de comprender completamente una situación." },
     { texto: "Me cuesta escuchar perspectivas diferentes cuando ya tengo una opinión formada." },
-    { texto: "Antes de decidir, procuro comprender todos los aspectos de una situación.", invertida: true },
+    { texto: "Decido sin haber comprendido todos los aspectos de la situación." },
     { texto: "Con frecuencia reacciono más rápido de lo que reflexiono." },
-    { texto: "Estoy dispuesto a revisar mis conclusiones cuando aparece nueva información.", invertida: true },
+    { texto: "Me cuesta revisar mis conclusiones cuando aparece nueva información." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Sabes convertir tus percepciones en una comprensión más profunda. La reflexión complementa tu intuición y te ayuda a tomar decisiones conscientes." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones confías demasiado en tus primeras impresiones. Dedicar más tiempo a comprender enriquecerá tu manera de interpretar la realidad." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a reaccionar antes de comprender. Tu crecimiento consiste en desarrollar la paciencia necesaria para explorar una situación antes de sacar conclusiones." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es atravesar la puerta de la comprensión. La intuición puede mostrar el camino, pero solo la reflexión revela su verdadero significado." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Sabes convertir tus percepciones en una comprensión más profunda. La reflexión complementa tu intuición y te ayuda a tomar decisiones conscientes." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones confías demasiado en tus primeras impresiones. Dedicar más tiempo a comprender enriquecerá tu manera de interpretar la realidad." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a reaccionar antes de comprender. Tu crecimiento consiste en desarrollar la paciencia necesaria para explorar una situación antes de sacar conclusiones." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es atravesar la puerta de la comprensión. La intuición puede mostrar el camino, pero solo la reflexión revela su verdadero significado." },
   ],
   senales: [
     "Sacas conclusiones antes de hacer preguntas.",
@@ -261,15 +260,15 @@ const HE: SenderoContenido = {
   test: [
     { texto: "Comprendo mis errores, pero sigo reaccionando de la misma manera." },
     { texto: "Me resulta difícil cambiar hábitos, incluso cuando sé que ya no me benefician." },
-    { texto: "Cuando aprendo algo importante, procuro aplicarlo en mi Vida.", invertida: true },
+    { texto: "Cuando aprendo algo importante, se queda en la teoría y no lo llevo a mi Vida." },
     { texto: "A menudo separo lo que pienso de lo que siento." },
-    { texto: "Las experiencias importantes suelen transformar mi forma de ver y vivir la Vida.", invertida: true },
+    { texto: "Las experiencias importantes pasan sin llegar a transformar mi forma de vivir." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Permites que aquello que comprendes transforme tu mundo interior. Existe una buena conexión entre tus aprendizajes y tu manera de vivir." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones comprendes una situación, pero necesitas más tiempo para integrarla emocionalmente." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una distancia entre lo que sabes y lo que realmente cambia en tu Vida. Tu crecimiento consiste en permitir que tus aprendizajes lleguen también al corazón." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es transformar el conocimiento en una experiencia interior. Comprender es el primer paso; integrar esa comprensión es lo que produce el cambio." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Permites que aquello que comprendes transforme tu mundo interior. Existe una buena conexión entre tus aprendizajes y tu manera de vivir." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones comprendes una situación, pero necesitas más tiempo para integrarla emocionalmente." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una distancia entre lo que sabes y lo que realmente cambia en tu Vida. Tu crecimiento consiste en permitir que tus aprendizajes lleguen también al corazón." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es transformar el conocimiento en una experiencia interior. Comprender es el primer paso; integrar esa comprensión es lo que produce el cambio." },
   ],
   senales: [
     "Descubres algo importante, pero continúas actuando igual.",
@@ -304,15 +303,15 @@ const VAV: SenderoContenido = {
   test: [
     { texto: "Aunque comprendo las dificultades de otras personas, rara vez hago algo para ayudarlas." },
     { texto: "Suelo mantener mis conocimientos o experiencias para mí en lugar de compartirlos." },
-    { texto: "Cuando comprendo que alguien necesita apoyo, procuro actuar dentro de mis posibilidades.", invertida: true },
+    { texto: "Cuando veo que alguien necesita apoyo, lo dejo pasar aunque esté en mi mano ayudar." },
     { texto: "Con frecuencia pienso que ayudar a los demás no es mi responsabilidad." },
-    { texto: "Disfruto poniendo mis capacidades al servicio de otras personas cuando puedo aportar algo valioso.", invertida: true },
+    { texto: "Me cuesta poner mis capacidades al servicio de otras personas, aunque pueda aportar algo valioso." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Eres capaz de transformar tu comprensión en acciones concretas. Tu conocimiento se expresa de forma natural a través de la empatía y la generosidad." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Comprendes las necesidades de los demás, pero no siempre das el paso hacia la acción. Existe margen para expresar con mayor frecuencia aquello que ya sabes." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Tiendes a mantener la comprensión en el plano intelectual. Tu crecimiento consiste en permitir que ese conocimiento se traduzca en pequeños gestos y acciones cotidianas." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la verdadera sabiduría no termina en comprender; comienza cuando esa comprensión mejora la Vida de otras personas." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Eres capaz de transformar tu comprensión en acciones concretas. Tu conocimiento se expresa de forma natural a través de la empatía y la generosidad." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "Comprendes las necesidades de los demás, pero no siempre das el paso hacia la acción. Existe margen para expresar con mayor frecuencia aquello que ya sabes." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Tiendes a mantener la comprensión en el plano intelectual. Tu crecimiento consiste en permitir que ese conocimiento se traduzca en pequeños gestos y acciones cotidianas." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la verdadera sabiduría no termina en comprender; comienza cuando esa comprensión mejora la Vida de otras personas." },
   ],
   senales: [
     "Comprendes una necesidad, pero decides no actuar por comodidad o indiferencia.",
@@ -347,15 +346,15 @@ const ZAYIN: SenderoContenido = {
   test: [
     { texto: "Con frecuencia sé cuál sería la mejor decisión, pero termino actuando de otra manera." },
     { texto: "Aprendo cosas nuevas, pero rara vez cambian mis hábitos o mi forma de vivir." },
-    { texto: "Intento aplicar aquello que considero importante, aunque requiera esfuerzo.", invertida: true },
+    { texto: "Dejo de aplicar aquello que considero importante en cuanto requiere esfuerzo." },
     { texto: "Me resulta más fácil hablar de lo que sé que vivir de acuerdo con ello." },
-    { texto: "Las experiencias importantes suelen cambiar mi forma de actuar.", invertida: true },
+    { texto: "Las experiencias importantes rara vez cambian mi forma de actuar." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Eres capaz de transformar el conocimiento en sabiduría. Tus aprendizajes se reflejan de forma natural en tus decisiones y en tu manera de vivir." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Comprendes muchas cosas, pero no siempre consigues integrarlas plenamente en tu Vida cotidiana." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una diferencia significativa entre lo que sabes y lo que practicas. Tu crecimiento consiste en convertir el conocimiento en experiencia vivida." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la sabiduría no se mide por lo que sabes, sino por la manera en que eliges vivir cada día." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Eres capaz de transformar el conocimiento en sabiduría. Tus aprendizajes se reflejan de forma natural en tus decisiones y en tu manera de vivir." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "Comprendes muchas cosas, pero no siempre consigues integrarlas plenamente en tu Vida cotidiana." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una diferencia significativa entre lo que sabes y lo que practicas. Tu crecimiento consiste en convertir el conocimiento en experiencia vivida." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la sabiduría no se mide por lo que sabes, sino por la manera en que eliges vivir cada día." },
   ],
   senales: [
     "Das consejos que tú mismo no aplicas.",
@@ -390,15 +389,15 @@ const CHET: SenderoContenido = {
   test: [
     { texto: "Aunque entiendo que una situación me perjudica, me cuesta poner límites." },
     { texto: "Suelo ceder para evitar conflictos, incluso cuando no estoy de acuerdo." },
-    { texto: "Soy capaz de expresar mis límites con respeto cuando es necesario.", invertida: true },
+    { texto: "Me cuesta expresar mis límites, aunque sepa que es necesario." },
     { texto: "Me siento culpable cuando priorizo mis propias necesidades." },
-    { texto: "Entiendo que poner límites también es una forma de cuidar las relaciones.", invertida: true },
+    { texto: "Vivo el poner límites como algo que daña las relaciones." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Sabes combinar la comprensión con límites saludables. Eres capaz de cuidar de los demás sin dejar de cuidar de ti." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones comprendes tanto a los demás que olvidas proteger tus propias necesidades. Existe margen para fortalecer tus límites." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Tiendes a confundir comprensión con renuncia personal. Tu crecimiento consiste en descubrir que decir \"no\" también puede ser un acto de respeto y equilibrio." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es desarrollar límites claros y saludables. Comprender no significa permitirlo todo; significa actuar con conciencia, respeto y responsabilidad." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Sabes combinar la comprensión con límites saludables. Eres capaz de cuidar de los demás sin dejar de cuidar de ti." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones comprendes tanto a los demás que olvidas proteger tus propias necesidades. Existe margen para fortalecer tus límites." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Tiendes a confundir comprensión con renuncia personal. Tu crecimiento consiste en descubrir que decir \"no\" también puede ser un acto de respeto y equilibrio." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es desarrollar límites claros y saludables. Comprender no significa permitirlo todo; significa actuar con conciencia, respeto y responsabilidad." },
   ],
   senales: [
     "Dices \"sí\" cuando en realidad quieres decir \"no\".",
@@ -433,15 +432,15 @@ const TET: SenderoContenido = {
   test: [
     { texto: "Me cuesta decir \"no\" cuando alguien necesita mi ayuda." },
     { texto: "Con frecuencia asumo problemas que realmente pertenecen a otras personas." },
-    { texto: "Soy capaz de ayudar sin sentir que debo hacerme responsable de todo.", invertida: true },
+    { texto: "Cuando ayudo, acabo sintiendo que debo hacerme responsable de todo." },
     { texto: "Me siento culpable cuando priorizo mis propias necesidades antes que las de los demás." },
-    { texto: "Entiendo que poner límites también es una forma de cuidar.", invertida: true },
+    { texto: "Poner un límite me parece dejar de cuidar a la otra persona." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has aprendido a equilibrar la generosidad con límites saludables. Sabes ofrecer apoyo sin perder tu bienestar ni asumir responsabilidades que no te corresponden." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones das más de lo que puedes sostener. Fortalecer tus límites te permitirá ayudar de una forma más sana y sostenible." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a confundir amor con sacrificio. Tu crecimiento consiste en descubrir que cuidar de ti también forma parte del cuidado hacia los demás." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que una generosidad sin límites termina debilitando tanto a quien ayuda como a quien recibe la ayuda. El equilibrio es la expresión más madura del amor." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Has aprendido a equilibrar la generosidad con límites saludables. Sabes ofrecer apoyo sin perder tu bienestar ni asumir responsabilidades que no te corresponden." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones das más de lo que puedes sostener. Fortalecer tus límites te permitirá ayudar de una forma más sana y sostenible." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a confundir amor con sacrificio. Tu crecimiento consiste en descubrir que cuidar de ti también forma parte del cuidado hacia los demás." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que una generosidad sin límites termina debilitando tanto a quien ayuda como a quien recibe la ayuda. El equilibrio es la expresión más madura del amor." },
   ],
   senales: [
     "Ayudas por elección o por culpa.",
@@ -476,15 +475,15 @@ const YOD: SenderoContenido = {
   test: [
     { texto: "Suelo ayudar sin preguntarme si esa ayuda es realmente lo que la otra persona necesita." },
     { texto: "Me cuesta diferenciar entre apoyar a alguien y resolverle sus problemas." },
-    { texto: "Antes de ayudar, procuro comprender qué necesita realmente la otra persona.", invertida: true },
+    { texto: "Ayudo sin detenerme a comprender qué necesita realmente la otra persona." },
     { texto: "Con frecuencia ofrezco ayuda para sentirme útil o valorado." },
-    { texto: "Soy capaz de acompañar a alguien sin sentir la necesidad de controlar el resultado.", invertida: true },
+    { texto: "Cuando acompaño a alguien, necesito controlar cómo termina la situación." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Tu generosidad está acompañada de comprensión y equilibrio. Sabes ofrecer apoyo respetando la autonomía y el proceso de cada persona." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones ayudas desde el impulso más que desde la reflexión. Dedicar un momento a comprender la situación puede hacer que tu apoyo sea mucho más valioso." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a confundir ayudar con hacerse responsable. Tu crecimiento consiste en descubrir que acompañar no siempre significa intervenir." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es transformar la necesidad de ayudar en una compasión consciente. La ayuda más valiosa no siempre es la que más hace, sino la que mejor responde a las necesidades del otro." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Tu generosidad está acompañada de comprensión y equilibrio. Sabes ofrecer apoyo respetando la autonomía y el proceso de cada persona." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones ayudas desde el impulso más que desde la reflexión. Dedicar un momento a comprender la situación puede hacer que tu apoyo sea mucho más valioso." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a confundir ayudar con hacerse responsable. Tu crecimiento consiste en descubrir que acompañar no siempre significa intervenir." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es transformar la necesidad de ayudar en una compasión consciente. La ayuda más valiosa no siempre es la que más hace, sino la que mejor responde a las necesidades del otro." },
   ],
   senales: [
     "Ofreces ayuda antes de preguntar qué necesita realmente la otra persona.",
@@ -519,15 +518,15 @@ const KAF: SenderoContenido = {
   test: [
     { texto: "Empiezo proyectos o compromisos con entusiasmo, pero me cuesta mantenerlos en el tiempo." },
     { texto: "Cuando los resultados tardan en llegar, suelo perder la motivación." },
-    { texto: "Soy capaz de mantener mis compromisos incluso cuando dejan de ser emocionantes.", invertida: true },
+    { texto: "Cuando un compromiso deja de ser emocionante, me cuesta mantenerlo." },
     { texto: "Necesito sentir entusiasmo para seguir adelante con algo importante." },
-    { texto: "Disfruto construyendo poco a poco, aunque el progreso sea lento.", invertida: true },
+    { texto: "Construir poco a poco se me hace cuesta arriba cuando el progreso es lento." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has aprendido a convertir la motivación en compromiso. Tu constancia no depende únicamente del entusiasmo, sino de la importancia que das a aquello que has elegido construir." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones tu perseverancia depende demasiado de cómo te sientes. Desarrollar mayor constancia fortalecerá tus proyectos y relaciones." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a abandonar cuando desaparece la motivación inicial. Tu crecimiento consiste en descubrir que la disciplina puede sostener aquello que el entusiasmo no consigue mantener." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es transformar las buenas intenciones en compromiso sostenido. La perseverancia no consiste en avanzar siempre con ganas, sino en continuar porque sabes por qué empezaste." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Has aprendido a convertir la motivación en compromiso. Tu constancia no depende únicamente del entusiasmo, sino de la importancia que das a aquello que has elegido construir." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones tu perseverancia depende demasiado de cómo te sientes. Desarrollar mayor constancia fortalecerá tus proyectos y relaciones." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a abandonar cuando desaparece la motivación inicial. Tu crecimiento consiste en descubrir que la disciplina puede sostener aquello que el entusiasmo no consigue mantener." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es transformar las buenas intenciones en compromiso sostenido. La perseverancia no consiste en avanzar siempre con ganas, sino en continuar porque sabes por qué empezaste." },
   ],
   senales: [
     "Abandonas una tarea porque ha dejado de ser emocionante.",
@@ -562,20 +561,20 @@ const LAMED: SenderoContenido = {
   test: [
     { texto: "Cuando pongo límites, suelo hacerlo de forma brusca o impulsiva." },
     { texto: "Me cuesta encontrar un punto intermedio entre ceder y ser demasiado rígido." },
-    { texto: "Soy capaz de expresar mis límites con respeto y serenidad.", invertida: true },
+    { texto: "Cuando expreso un límite, me cuesta hacerlo con respeto y serenidad." },
     { texto: "Cuando alguien no actúa como espero, tiendo a endurecer mi postura." },
-    { texto: "Intento comprender a la otra persona sin renunciar a mis propios límites.", invertida: true },
+    { texto: "Me cuesta comprender a la otra persona y sostener mis límites a la vez." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has aprendido a combinar firmeza y comprensión. Tus límites protegen tus valores sin deteriorar tus relaciones." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones oscilas entre ser demasiado flexible o demasiado rígido. Existe margen para desarrollar un equilibrio más estable." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Tiendes a utilizar los límites como una forma de protegerte del conflicto o del malestar. Tu crecimiento consiste en descubrir una firmeza más serena y consciente." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que la verdadera fortaleza no necesita imponerse. Los límites más saludables nacen del equilibrio, no del control." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Has aprendido a combinar firmeza y comprensión. Tus límites protegen tus valores sin deteriorar tus relaciones." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones oscilas entre ser demasiado flexible o demasiado rígido. Existe margen para desarrollar un equilibrio más estable." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Tiendes a utilizar los límites como una forma de protegerte del conflicto o del malestar. Tu crecimiento consiste en descubrir una firmeza más serena y consciente." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que la verdadera fortaleza no necesita imponerse. Los límites más saludables nacen del equilibrio, no del control." },
   ],
   senales: [
     "Reaccionas con dureza cuando alguien sobrepasa un límite.",
     "Evitas el conflicto hasta que terminas explotando.",
-    "Eres capaz de mantener la calma mientras expresas lo que necesitas.",
+    "No eres capaz de mantener la calma mientras expresas lo que necesitas.",
   ],
   umbral: "Tus límites dejan de ser una reacción defensiva y se convierten en una expresión tranquila de quién eres y de lo que valoras.",
   integracion: "La verdadera fortaleza no consiste en endurecerse, sino en mantener el equilibrio incluso cuando es necesario decir 'no'.",
@@ -605,15 +604,15 @@ const MEM: SenderoContenido = {
   test: [
     { texto: "Suelo callarme aquello que me molesta hasta que termino explotando." },
     { texto: "Me cuesta expresar mis necesidades por miedo a generar conflictos." },
-    { texto: "Soy capaz de comunicar mis límites con claridad y respeto.", invertida: true },
+    { texto: "Me cuesta comunicar mis límites con claridad y respeto." },
     { texto: "Cuando pongo un límite, suelo hacerlo desde el enfado o la frustración." },
-    { texto: "Expreso lo que necesito antes de que el malestar se acumule.", invertida: true },
+    { texto: "Dejo que el malestar se acumule antes de expresar lo que necesito." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Sabes expresar tus límites con serenidad y claridad. Tu comunicación favorece el respeto mutuo y evita conflictos innecesarios." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones retrasas conversaciones importantes o esperas demasiado para expresar lo que necesitas. Una comunicación más temprana fortalecerá tus relaciones." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a guardar el malestar o a comunicarlo cuando ya es demasiado intenso. Tu crecimiento consiste en expresar tus necesidades antes de que se conviertan en frustración." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que comunicar un límite no es generar un conflicto, sino ofrecer a los demás la oportunidad de respetarlo. La claridad evita muchos problemas que el silencio termina alimentando." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Sabes expresar tus límites con serenidad y claridad. Tu comunicación favorece el respeto mutuo y evita conflictos innecesarios." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones retrasas conversaciones importantes o esperas demasiado para expresar lo que necesitas. Una comunicación más temprana fortalecerá tus relaciones." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a guardar el malestar o a comunicarlo cuando ya es demasiado intenso. Tu crecimiento consiste en expresar tus necesidades antes de que se conviertan en frustración." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que comunicar un límite no es generar un conflicto, sino ofrecer a los demás la oportunidad de respetarlo. La claridad evita muchos problemas que el silencio termina alimentando." },
   ],
   senales: [
     "Esperas demasiado antes de expresar aquello que te incomoda.",
@@ -648,20 +647,20 @@ const NUN: SenderoContenido = {
   test: [
     { texto: "Cuando las cosas se complican, abandono fácilmente aquello que considero importante." },
     { texto: "El estrés o la frustración hacen que actúe de forma muy diferente a como realmente quiero ser." },
-    { texto: "Soy capaz de mantener mis principios incluso en momentos difíciles.", invertida: true },
+    { texto: "En los momentos difíciles me cuesta mantener mis principios." },
     { texto: "Cuando aparecen obstáculos, suelo perder la motivación rápidamente." },
-    { texto: "Las dificultades fortalecen mi compromiso con aquello que considero valioso.", invertida: true },
+    { texto: "Las dificultades debilitan mi compromiso con aquello que considero valioso." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has desarrollado una perseverancia basada en el equilibrio. Las dificultades no cambian quién eres ni aquello que consideras importante." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones los problemas afectan más de lo que te gustaría a tu constancia. Fortalecer tu equilibrio interior te ayudará a mantener el rumbo." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a perder el centro cuando aparecen los obstáculos. Tu crecimiento consiste en aprender a sostener tus valores incluso en los momentos de incertidumbre." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la perseverancia no depende de que todo salga bien, sino de la capacidad de permanecer fiel a lo que realmente importa." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Has desarrollado una perseverancia basada en el equilibrio. Las dificultades no cambian quién eres ni aquello que consideras importante." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones los problemas afectan más de lo que te gustaría a tu constancia. Fortalecer tu equilibrio interior te ayudará a mantener el rumbo." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a perder el centro cuando aparecen los obstáculos. Tu crecimiento consiste en aprender a sostener tus valores incluso en los momentos de incertidumbre." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la perseverancia no depende de que todo salga bien, sino de la capacidad de permanecer fiel a lo que realmente importa." },
   ],
   senales: [
     "Tus decisiones cambian cuando aparecen dificultades o presión.",
     "Abandonas compromisos por el cansancio del momento.",
-    "Recuerdas tus valores antes de reaccionar ante un problema.",
+    "No recuerdas tus valores antes de reaccionar ante un problema.",
   ],
   umbral: "Las circunstancias dejan de determinar quién eres, porque tus valores se convierten en el verdadero motor de tus decisiones.",
   integracion: "La perseverancia no consiste en resistirlo todo, sino en permanecer fiel a aquello que da sentido a mi camino.",
@@ -691,15 +690,15 @@ const SAMEKH: SenderoContenido = {
   test: [
     { texto: "Me cuesta mantener hábitos alineados con los valores que considero importantes." },
     { texto: "Mis decisiones cambian con facilidad según mi estado de ánimo." },
-    { texto: "Procuro que mis acciones diarias reflejen aquello en lo que creo.", invertida: true },
+    { texto: "Mis acciones diarias se alejan de aquello en lo que creo." },
     { texto: "Con frecuencia dejo para más adelante aquello que sé que me hace bien." },
-    { texto: "Mantengo mis compromisos personales incluso cuando nadie me los exige.", invertida: true },
+    { texto: "Si nadie me los exige, dejo caer mis compromisos personales." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has conseguido transformar tus valores en una forma estable de vivir. Tus hábitos fortalecen el equilibrio que has construido." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones existe una diferencia entre lo que consideras importante y lo que haces cada día. Pequeños cambios sostenidos pueden fortalecer tu coherencia." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Tu equilibrio interior todavía no se refleja de forma constante en tus hábitos y decisiones. Tu crecimiento consiste en construir una base más sólida para sostener aquello que valoras." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que una Vida coherente no se construye con grandes decisiones aisladas, sino con pequeñas acciones repetidas cada día." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Has conseguido transformar tus valores en una forma estable de vivir. Tus hábitos fortalecen el equilibrio que has construido." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones existe una diferencia entre lo que consideras importante y lo que haces cada día. Pequeños cambios sostenidos pueden fortalecer tu coherencia." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Tu equilibrio interior todavía no se refleja de forma constante en tus hábitos y decisiones. Tu crecimiento consiste en construir una base más sólida para sostener aquello que valoras." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que una Vida coherente no se construye con grandes decisiones aisladas, sino con pequeñas acciones repetidas cada día." },
   ],
   senales: [
     "Tus hábitos reflejan realmente tus valores.",
@@ -734,15 +733,15 @@ const AYIN: SenderoContenido = {
   test: [
     { texto: "Suelo callar lo que realmente pienso para evitar conflictos." },
     { texto: "Adapto mi forma de ser para sentirme aceptado por los demás." },
-    { texto: "Expreso mis opiniones con respeto, incluso cuando sé que pueden no gustar.", invertida: true },
+    { texto: "Me guardo mis opiniones cuando sé que pueden no gustar." },
     { texto: "Me cuesta mostrar cómo me siento realmente." },
-    { texto: "Siento que mi forma de comunicar refleja quién soy de verdad.", invertida: true },
+    { texto: "Siento que mi forma de comunicar no refleja quién soy de verdad." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Existe una buena coherencia entre lo que sientes y la forma en que lo expresas. Tu comunicación fortalece tu autenticidad." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones ocultas parte de lo que eres para evitar incomodar o decepcionar a los demás. Expresarte con mayor naturalidad fortalecerá tus relaciones." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una diferencia entre tu mundo interior y la manera en que te comunicas. Tu crecimiento consiste en desarrollar una voz más auténtica y confiada." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que expresar tu verdad con respeto no pone en riesgo tus relaciones; les permite ser más honestas y profundas." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Existe una buena coherencia entre lo que sientes y la forma en que lo expresas. Tu comunicación fortalece tu autenticidad." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones ocultas parte de lo que eres para evitar incomodar o decepcionar a los demás. Expresarte con mayor naturalidad fortalecerá tus relaciones." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una diferencia entre tu mundo interior y la manera en que te comunicas. Tu crecimiento consiste en desarrollar una voz más auténtica y confiada." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que expresar tu verdad con respeto no pone en riesgo tus relaciones; les permite ser más honestas y profundas." },
   ],
   senales: [
     "Guardas silencio cuando realmente necesitas expresar algo importante.",
@@ -777,15 +776,15 @@ const PE: SenderoContenido = {
   test: [
     { texto: "Me cuesta expresar lo que he aprendido a través de mis experiencias." },
     { texto: "Prefiero guardar mis ideas o aprendizajes antes que compartirlos." },
-    { texto: "Comparto mis experiencias cuando creo que pueden aportar valor a otras personas.", invertida: true },
+    { texto: "Me callo mis experiencias aunque crea que pueden aportar valor a otras personas." },
     { texto: "Aunque tenga algo importante que decir, suelo callarlo por inseguridad." },
-    { texto: "Expresar mis aprendizajes me ayuda a comprenderlos todavía mejor.", invertida: true },
+    { texto: "Me cuesta poner en palabras mis aprendizajes, aunque sé que me ayudaría a comprenderlos." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Sabes expresar con claridad aquello que has aprendido. Tu comunicación nace de la experiencia y contribuye tanto a tu crecimiento como al de quienes te rodean." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones dudas antes de compartir lo que sabes o has vivido. Confiar más en tu experiencia enriquecerá tu forma de comunicar." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a guardar para ti aprendizajes valiosos. Tu crecimiento consiste en descubrir que compartir tu experiencia también forma parte del aprendizaje." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es encontrar tu propia voz. Aquello que has construido con esfuerzo puede convertirse en una fuente de inspiración y crecimiento cuando decides expresarlo." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Sabes expresar con claridad aquello que has aprendido. Tu comunicación nace de la experiencia y contribuye tanto a tu crecimiento como al de quienes te rodean." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones dudas antes de compartir lo que sabes o has vivido. Confiar más en tu experiencia enriquecerá tu forma de comunicar." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a guardar para ti aprendizajes valiosos. Tu crecimiento consiste en descubrir que compartir tu experiencia también forma parte del aprendizaje." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es encontrar tu propia voz. Aquello que has construido con esfuerzo puede convertirse en una fuente de inspiración y crecimiento cuando decides expresarlo." },
   ],
   senales: [
     "Guardas silencio cuando tu experiencia podría ayudar a alguien.",
@@ -820,15 +819,15 @@ const TSADI: SenderoContenido = {
   test: [
     { texto: "Me cuesta mantener hábitos durante mucho tiempo." },
     { texto: "Dependo de la motivación para hacer aquello que considero importante." },
-    { texto: "He construido rutinas que apoyan mis objetivos y mis valores.", invertida: true },
+    { texto: "No he construido rutinas que apoyen mis objetivos y mis valores." },
     { texto: "Cuando interrumpo un hábito, me resulta difícil retomarlo." },
-    { texto: "Mis pequeñas acciones diarias reflejan la persona que quiero llegar a ser.", invertida: true },
+    { texto: "Mis pequeñas acciones diarias se parecen poco a la persona que quiero llegar a ser." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has conseguido transformar la perseverancia en hábitos consistentes. Tus rutinas sostienen tus valores y facilitan tu crecimiento." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Existe constancia, pero todavía depende demasiado de la motivación o de las circunstancias. Consolidar pequeños hábitos fortalecerá tu estabilidad." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Tiendes a confiar más en el esfuerzo puntual que en la construcción de hábitos. Tu crecimiento consiste en desarrollar una estructura que sostenga tus objetivos." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la disciplina no nace del sacrificio constante, sino de construir hábitos que faciliten vivir de acuerdo con tus valores." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Has conseguido transformar la perseverancia en hábitos consistentes. Tus rutinas sostienen tus valores y facilitan tu crecimiento." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "Existe constancia, pero todavía depende demasiado de la motivación o de las circunstancias. Consolidar pequeños hábitos fortalecerá tu estabilidad." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Tiendes a confiar más en el esfuerzo puntual que en la construcción de hábitos. Tu crecimiento consiste en desarrollar una estructura que sostenga tus objetivos." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la disciplina no nace del sacrificio constante, sino de construir hábitos que faciliten vivir de acuerdo con tus valores." },
   ],
   senales: [
     "Esperas sentir motivación antes de actuar.",
@@ -863,15 +862,15 @@ const QOF: SenderoContenido = {
   test: [
     { texto: "Abandono un proyecto cuando no veo resultados rápidamente." },
     { texto: "Me cuesta confiar en procesos cuyos beneficios tardan en aparecer." },
-    { texto: "Soy capaz de seguir avanzando aunque el progreso sea lento.", invertida: true },
+    { texto: "Cuando el progreso es lento, dejo de avanzar." },
     { texto: "Necesito resultados visibles para mantener mi compromiso." },
-    { texto: "Entiendo que las grandes transformaciones requieren tiempo y constancia.", invertida: true },
+    { texto: "Espero que las grandes transformaciones lleguen sin tiempo ni constancia." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Comprendes que los resultados son consecuencia del proceso. Tu perseverancia no depende únicamente de recompensas inmediatas." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones la falta de resultados visibles disminuye tu motivación. Aprender a confiar en el proceso fortalecerá tu capacidad para construir cambios duraderos." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una tendencia a medir el éxito solo por aquello que ya es visible. Tu crecimiento consiste en reconocer el valor de los pequeños avances que todavía no muestran todo su potencial." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que la realidad se construye antes de manifestarse. La perseverancia produce resultados, aunque durante un tiempo permanezcan ocultos." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Comprendes que los resultados son consecuencia del proceso. Tu perseverancia no depende únicamente de recompensas inmediatas." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones la falta de resultados visibles disminuye tu motivación. Aprender a confiar en el proceso fortalecerá tu capacidad para construir cambios duraderos." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una tendencia a medir el éxito solo por aquello que ya es visible. Tu crecimiento consiste en reconocer el valor de los pequeños avances que todavía no muestran todo su potencial." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que la realidad se construye antes de manifestarse. La perseverancia produce resultados, aunque durante un tiempo permanezcan ocultos." },
   ],
   senales: [
     "Abandonas un proceso únicamente porque los resultados tardan en llegar.",
@@ -906,15 +905,15 @@ const RESH: SenderoContenido = {
   test: [
     { texto: "Con frecuencia digo que algo es importante para mí, pero luego actúo de otra manera." },
     { texto: "Me resulta más fácil hablar de mis objetivos que trabajar en ellos." },
-    { texto: "Mis acciones suelen reflejar aquello que comunico a los demás.", invertida: true },
+    { texto: "Mis acciones no reflejan aquello que comunico a los demás." },
     { texto: "Prometo cambios que después me cuesta mantener." },
-    { texto: "Procuro que exista coherencia entre lo que pienso, digo y hago.", invertida: true },
+    { texto: "Noto distancia entre lo que pienso, lo que digo y lo que hago." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Existe una buena coherencia entre tus palabras y tus acciones. Lo que comunicas se refleja de forma natural en la manera en que eliges vivir." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "En ocasiones tus intenciones y tus acciones no avanzan al mismo ritmo. Fortalecer pequeños compromisos diarios aumentará tu coherencia." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una diferencia significativa entre aquello que expresas y la forma en que actúas. Tu crecimiento consiste en convertir tus palabras en hábitos concretos." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la verdadera transformación no ocurre cuando hablas del cambio, sino cuando comienzas a vivirlo de forma constante." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Existe una buena coherencia entre tus palabras y tus acciones. Lo que comunicas se refleja de forma natural en la manera en que eliges vivir." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "En ocasiones tus intenciones y tus acciones no avanzan al mismo ritmo. Fortalecer pequeños compromisos diarios aumentará tu coherencia." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una diferencia significativa entre aquello que expresas y la forma en que actúas. Tu crecimiento consiste en convertir tus palabras en hábitos concretos." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que la verdadera transformación no ocurre cuando hablas del cambio, sino cuando comienzas a vivirlo de forma constante." },
   ],
   senales: [
     "Tus acciones respaldan aquello que dices que es importante.",
@@ -949,15 +948,15 @@ const SHIN: SenderoContenido = {
   test: [
     { texto: "Siento que la Vida que llevo no refleja la persona que quiero ser." },
     { texto: "Mis hábitos y decisiones no siempre producen los resultados que deseo." },
-    { texto: "Percibo una relación clara entre mis acciones diarias y los resultados que obtengo.", invertida: true },
+    { texto: "No veo relación entre mis acciones diarias y los resultados que obtengo." },
     { texto: "Espero que mi Vida cambie sin modificar de forma constante mis comportamientos." },
-    { texto: "Siento que mi realidad refleja cada vez más mis valores y mis decisiones.", invertida: true },
+    { texto: "Siento que mi realidad se parece cada vez menos a mis valores y mis decisiones." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Existe una fuerte coherencia entre quién eres y la realidad que estás construyendo. Tus acciones generan resultados alineados con tus valores." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Has iniciado un proceso de transformación, aunque todavía existen áreas donde tus resultados no reflejan plenamente tus esfuerzos." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una diferencia entre la persona que deseas ser y la realidad que estás construyendo. Tu crecimiento consiste en revisar qué hábitos necesitan fortalecerse." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que la realidad cambia cuando cambia la forma en que vivimos cada día. La manifestación comienza mucho antes de que aparezcan los resultados." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Existe una fuerte coherencia entre quién eres y la realidad que estás construyendo. Tus acciones generan resultados alineados con tus valores." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "Has iniciado un proceso de transformación, aunque todavía existen áreas donde tus resultados no reflejan plenamente tus esfuerzos." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una diferencia entre la persona que deseas ser y la realidad que estás construyendo. Tu crecimiento consiste en revisar qué hábitos necesitan fortalecerse." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es comprender que la realidad cambia cuando cambia la forma en que vivimos cada día. La manifestación comienza mucho antes de que aparezcan los resultados." },
   ],
   senales: [
     "Tus decisiones diarias construyen la Vida que realmente deseas.",
@@ -992,15 +991,15 @@ const TAV: SenderoContenido = {
   test: [
     { texto: "Con frecuencia sé lo que debería hacer, pero no lo llevo a la práctica." },
     { texto: "Mis acciones no siempre reflejan los valores que considero importantes." },
-    { texto: "Procuro que mis decisiones diarias sean coherentes con lo que he aprendido.", invertida: true },
+    { texto: "Mis decisiones diarias se alejan de lo que he aprendido." },
     { texto: "Me resulta más fácil aprender que cambiar mis comportamientos." },
-    { texto: "Siento que la forma en que vivo refleja cada vez mejor quién soy.", invertida: true },
+    { texto: "Siento que la forma en que vivo refleja cada vez menos quién soy." },
   ],
   interpretaciones: [
-    { min: 0, max: 7, titulo: "Transición fluida", texto: "Has conseguido integrar tus aprendizajes en tu Vida cotidiana. Tus acciones reflejan con naturalidad tus valores y dejan una huella coherente." },
-    { min: 8, max: 13, titulo: "Ligera resistencia", texto: "Comprendes el camino que quieres seguir, aunque todavía existen áreas donde tus acciones no reflejan plenamente esa comprensión." },
-    { min: 14, max: 18, titulo: "Resistencia importante", texto: "Existe una distancia entre lo que sabes y la forma en que vives. Tu crecimiento consiste en convertir el conocimiento en decisiones concretas y sostenidas." },
-    { min: 19, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que el verdadero aprendizaje no termina cuando comprendes una idea, sino cuando esa idea transforma la manera en que vives y la huella que dejas en el mundo." },
+    { min: 5, max: 9, titulo: "Transición fluida", texto: "Has conseguido integrar tus aprendizajes en tu Vida cotidiana. Tus acciones reflejan con naturalidad tus valores y dejan una huella coherente." },
+    { min: 10, max: 15, titulo: "Ligera resistencia", texto: "Comprendes el camino que quieres seguir, aunque todavía existen áreas donde tus acciones no reflejan plenamente esa comprensión." },
+    { min: 16, max: 20, titulo: "Resistencia importante", texto: "Existe una distancia entre lo que sabes y la forma en que vives. Tu crecimiento consiste en convertir el conocimiento en decisiones concretas y sostenidas." },
+    { min: 21, max: 25, titulo: "Aprendizaje prioritario", texto: "Uno de tus principales retos es descubrir que el verdadero aprendizaje no termina cuando comprendes una idea, sino cuando esa idea transforma la manera en que vives y la huella que dejas en el mundo." },
   ],
   senales: [
     "Tus decisiones reflejan realmente aquello que has aprendido.",
@@ -1043,12 +1042,24 @@ export const senderoPorNum = Object.fromEntries(
   CABALA_SENDEROS.map((s) => [s.num, s]),
 ) as Record<number, SenderoContenido>;
 
-/** Suma del test aplicando la inversión (6 - r) a las preguntas invertidas. */
+/**
+ * Puntuación del test: la SUMA TAL CUAL de lo que ha marcado la persona.
+ *
+ * Nada de preguntas que puntúan al revés: TODAS las frases están redactadas en
+ * el mismo sentido (describen la dificultad), así que responder más alto es
+ * siempre más resistencia y el número que sale es el que cualquiera sacaría
+ * sumando a mano sus respuestas. Antes había 2 frases por sendero escritas en
+ * positivo que restaban (6 - r) y el total no cuadraba con lo marcado.
+ *
+ * Rango real: 5 preguntas × (1…5) = **de 5 a 25**, nunca 0. Por eso las bandas
+ * son 5-9 / 10-15 / 16-20 / 21-25, con el punto neutro (todo «A veces» = 15) al
+ * final de «Ligera resistencia». Si cambia el número de preguntas hay que
+ * recalcular esos cortes: mínimo (nº preguntas), máximo (nº preguntas × 5).
+ */
 export function puntuacionSendero(s: SenderoContenido, respuestas: number[]): number {
-  return s.test.reduce((acc, preg, i) => {
+  return s.test.reduce((acc, _preg, i) => {
     const r = respuestas[i] ?? 0;
-    if (r < 1) return acc;
-    return acc + (preg.invertida ? 6 - r : r);
+    return r < 1 ? acc : acc + r;
   }, 0);
 }
 

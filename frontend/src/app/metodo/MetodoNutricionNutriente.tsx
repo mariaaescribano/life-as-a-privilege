@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -31,6 +31,30 @@ import { NUTRIENTES, rutaListaNutriente, type Nutriente, type NutrienteTarjeta }
 
 const nutrienteByKey = (key: string): Nutriente | undefined =>
   NUTRIENTES.find((n) => n.key === key);
+
+// ── Iconos de los subgrupos de tarjetas ──────────────────────────────────
+// Los datos traen el subgrupo como «⚡ Electrolitos», pero el emoji no se pinta:
+// cada subgrupo tiene su icono dibujado (SVG blanco), que es lo que se ve. Si
+// algún subgrupo nuevo no está en el mapa, no se pinta icono (nunca el emoji).
+const ICONOS_SUBGRUPO: Record<string, string> = {
+  electrolitos:
+    "m480-336 128-184H494l80-280H360v320h120v144ZM400-80v-320H280v-480h400l-80 280h160L400-80Zm80-400H360h120Z",
+  minerales:
+    "m390-80-68-120H190l-90-160 68-120-68-120 90-160h132l68-120h180l68 120h132l90 160-68 120 68 120-90 160H638L570-80H390Zm248-440h86l44-80-44-80h-86l-45 80 45 80ZM438-400h84l45-80-45-80h-84l-45 80 45 80Zm0-240h84l46-81-45-79h-86l-45 79 46 81ZM237-520h85l45-80-45-80h-85l-45 80 45 80Zm0 240h85l45-80-45-80h-86l-44 80 45 80Zm200 120h86l45-79-46-81h-84l-46 81 45 79Zm201-120h85l45-80-45-80h-85l-45 80 45 80Z",
+};
+
+const IconoSubgrupo = ({ nombre }: { nombre: string }) => {
+  const d = ICONOS_SUBGRUPO[nombre.trim().toLowerCase()];
+  if (!d) return null;
+  return (
+    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+         w={{ base: "22px", md: "26px" }} h={{ base: "22px", md: "26px" }}
+         fill="#FFFFFF" flexShrink={0}
+         style={{ filter: "drop-shadow(0 1px 4px rgba(0,0,0,0.35))" }}>
+      <path d={d} />
+    </Box>
+  );
+};
 
 // Botón «← Volver» en la gama de Nutrición (verde), bajo el header. Lleva la
 // foto de la disciplina (nutri.png) de fondo, con un velo claro para que el
@@ -111,6 +135,9 @@ export default function MetodoNutricionNutriente() {
 
   const [fichaIdx, setFichaIdx] = useState<number | null>(null); // tarjeta abierta
   const [comicOpen, setComicOpen] = useState(false); // ilustración (cómic) del grupo
+  // Fichas de este grupo que ya ha abierto. Es lo que da (o no) el tick.
+  const [fichasVistas, setFichasVistas] = useState<number[]>([]);
+  const dataRef = useRef<Record<string, any>>({}); // copia del blob para mergear al guardar
 
   const n = nutrienteByKey(key || "");
 
@@ -125,20 +152,16 @@ export default function MetodoNutricionNutriente() {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
-        // Marcar este nutriente como REVISADO: el usuario está viendo sus subtipos.
-        // Es el único sitio donde se marca (fuente única para principales y
-        // secundarios), para que el tick de la rejilla signifique de verdad
-        // «he visto sus subtipos» y no solo «he pulsado la tarjeta».
         try {
           const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           const data = r.data?.data ?? {};
-          const explorados: string[] = Array.isArray(data.nutrientes_explorados) ? data.nutrientes_explorados : [];
-          if (n && !explorados.includes(n.key)) {
-            const nuevos = [...explorados, n.key];
-            void axios.patch(`${API_URL}/metodo-nutricion/${userId}`,
-              { data: { ...data, nutrientes_explorados: nuevos, nutrientes_hecho: nuevos.length >= NUTRIENTES.length } },
-              { headers: { Authorization: `Bearer ${token}` } }).catch(() => { /* se reintenta al volver a entrar */ });
-          }
+          dataRef.current = data;
+          const previas = data.nutrientes_fichas?.[n.key];
+          setFichasVistas(Array.isArray(previas) ? previas.map(Number) : []);
+
+          // Un grupo SIN tarjetas no tiene subtipos que descubrir: con leerlo ya
+          // está revisado, así que se marca al entrar (si no, nunca tendría tick).
+          if (!n.tarjetas?.length) marcarExplorado(userId, token, n.key);
         } catch { /* sin fila todavía: se creará al guardar */ }
 
         // No mostramos la página hasta que sus fotos estén descargadas: la foto
@@ -154,6 +177,50 @@ export default function MetodoNutricionNutriente() {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate, key]);
+
+  /** Escribe el blob entero (el backend lo reemplaza) partiendo de lo último leído. */
+  const guardar = (userId: string, token: string, cambios: Record<string, any>) => {
+    const data = { ...dataRef.current, ...cambios };
+    dataRef.current = data;
+    void axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
+      { headers: { Authorization: `Bearer ${token}` } })
+      .catch(() => { /* se reintenta al volver a entrar */ });
+  };
+
+  /** Da el tick a este grupo (y recalcula si ya están todos). */
+  const marcarExplorado = (userId: string, token: string, key: string) => {
+    const explorados: string[] = Array.isArray(dataRef.current.nutrientes_explorados)
+      ? dataRef.current.nutrientes_explorados : [];
+    if (explorados.includes(key)) return;
+    const nuevos = [...explorados, key];
+    guardar(userId, token, {
+      nutrientes_explorados: nuevos,
+      nutrientes_hecho: nuevos.length >= NUTRIENTES.length,
+    });
+  };
+
+  /**
+   * Abrir una ficha es lo que cuenta.
+   *
+   * ANTES el tick se daba nada más entrar en la página: quien llegaba a la
+   * rejilla se la encontraba entera marcada sin haber visto un solo subtipo, y
+   * el candado de la página siguiente se abría solo. Ahora el grupo queda
+   * revisado cuando ha abierto TODAS sus fichas; lo que lleva visto se guarda
+   * sobre la marcha, así que puede irse y seguir otro día donde lo dejó.
+   */
+  const abrirFicha = (idx: number) => {
+    setFichaIdx(idx);
+    if (!n?.tarjetas?.length || fichasVistas.includes(idx)) return;
+    const vistas = [...fichasVistas, idx];
+    setFichasVistas(vistas);
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    if (!userId || !token) return;
+    guardar(userId, token, {
+      nutrientes_fichas: { ...(dataRef.current.nutrientes_fichas ?? {}), [n.key]: vistas },
+    });
+    if (vistas.length >= n.tarjetas.length) marcarExplorado(userId, token, n.key);
+  };
 
   if (loading) return <NutricionLoading />;
   if (!n) return null;
@@ -289,13 +356,26 @@ export default function MetodoNutricionNutriente() {
             </SeccionBox>
           </Reveal>
 
+          {/* Cuántos subtipos lleva descubiertos. El grupo no queda revisado (ni
+              se abre la página siguiente) hasta abrirlos todos, así que se dice. */}
+          {n.tarjetas && n.tarjetas.length > 0 && (
+            <Reveal direction="up" distance={12} delay={0.2} duration={0.5} display="flex" justifyContent="center">
+              <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                    textAlign="center" lineHeight="1.8">
+                {fichasVistas.length >= n.tarjetas.length
+                  ? "Ya los has descubierto todos."
+                  : `Toca cada uno para descubrirlo · ${fichasVistas.length}/${n.tarjetas.length}`}
+              </Text>
+            </Reveal>
+          )}
+
           {/* 4 · Tarjetas (moléculas/tipos). En círculo de colores (vitaminas) o
               en rejilla estilo «Todas tus células». Cada una abre su ficha cómic. */}
           {n.tarjetas && n.tarjetas.length > 0 && (
             <Reveal direction="up" distance={20} delay={0.24} duration={0.6} w="100%">
               {n.tarjetasCirculo ? (
                 <NutrienteCirculo tarjetas={n.tarjetas} tituloCentro={n.label}
-                                  onSelect={(i) => setFichaIdx(i)} />
+                                  onSelect={abrirFicha} />
               ) : (
                 <Flex direction="column" w="100%" gap={{ base: 6, md: 8 }}>
                   {subgruposTarjetas.map((g, gi) => (
@@ -303,30 +383,27 @@ export default function MetodoNutricionNutriente() {
                       {/* Encabezado del subgrupo con línea horizontal a los lados
                           (solo si hay más de un subgrupo, p.ej. Electrolitos/Minerales). */}
                       {hayVariosSubgrupos && g.grupo && (() => {
-                        // «⚡ Electrolitos» → mandala (emoji) centrado en la línea,
-                        // y el nombre en blanco, centrado, debajo de la separación.
-                        const partes = g.grupo.split(" ");
-                        const mandala = partes[0];
-                        const nombre = partes.slice(1).join(" ");
+                        // «⚡ Electrolitos» → icono dibujado + nombre, TODO a la
+                        // izquierda, y la raya blanca ocupando el resto del ancho.
+                        // El emoji de los datos no se pinta: manda el SVG.
+                        const nombre = g.grupo.split(" ").slice(1).join(" ");
                         return (
-                          <Flex direction="column" align="center" gap={{ base: 1.5, md: 2 }} mb={{ base: 4, md: 5 }}>
-                            <Flex align="center" gap={3} w="100%">
-                              <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${nutricionTxt}66)`} />
-                              <Box as="span" fontSize={{ base: "lg", md: "xl" }} lineHeight="1" flexShrink={0}>{mandala}</Box>
-                              <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${nutricionTxt}66)`} />
-                            </Flex>
+                          <Flex align="center" gap={{ base: 2.5, md: 3 }} w="100%" mb={{ base: 4, md: 5 }}>
+                            <IconoSubgrupo nombre={nombre} />
                             <Text color="white" fontWeight="800" fontSize={{ base: "md", md: "lg" }}
-                                  letterSpacing="0.08em" textTransform="uppercase" textAlign="center" whiteSpace="nowrap"
+                                  letterSpacing="0.08em" textTransform="uppercase" whiteSpace="nowrap"
                                   style={{ textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
                               {nombre}
                             </Text>
+                            <Box flex="1" h="1px" bgGradient="linear(to-r, rgba(255,255,255,0.8), rgba(255,255,255,0))" />
                           </Flex>
                         );
                       })()}
                       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
                         {g.items.map(({ tar, idx }) => (
                           <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto} numero={tar.numero}
-                                        onClick={() => setFichaIdx(idx)} />
+                                        visto={fichasVistas.includes(idx)}
+                                        onClick={() => abrirFicha(idx)} />
                         ))}
                       </SimpleGrid>
                     </Box>
@@ -342,7 +419,7 @@ export default function MetodoNutricionNutriente() {
       {/* Ficha tipo cómic de la tarjeta seleccionada. */}
       {n.tarjetas && fichaIdx !== null && (
         <NutrienteFichaModal tarjetas={n.tarjetas} index={fichaIdx}
-                             onClose={() => setFichaIdx(null)} onSelect={setFichaIdx} />
+                             onClose={() => setFichaIdx(null)} onSelect={abrirFicha} />
       )}
 
       {/* Ilustración (cómic) del grupo, a pantalla completa (misma estructura que

@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import { CabalaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
+import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -21,10 +22,20 @@ const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 
 // Sombra del box = la MISMA que la del header (glow claro sobre el fondo de la
 // disciplina), no la sombra oscura anterior.
 // El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
-// Fondo del box = imagen de Cábala (cabala.png) con un velo marrón oscuro
-// (cabalaBg) que sube el contraste del texto ámbar sobre la acuarela (igual que
-// los boxes del resto del recorrido de Cábala).
-const CAJA_OVERLAY = `${cabalaBg}cc`;
+// Fondo del box = imagen de Cábala (cabala.webp) con un velo NEGRO translúcido.
+// El velo va oscuro-neutro, no del color de la disciplina: un `${cabalaBg}cc`
+// (marrón al 80 %) apagaba la acuarela hasta dejarla en un barro marrón plano.
+// Con negro al 45 % la foto conserva sus colores y el texto ámbar sigue
+// legible (además lleva INK_SHADOW).
+const CAJA_OVERLAY = "rgba(0,0,0,0.45)";
+
+// Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
+const EyeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"
+       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))", flexShrink: 0 }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </svg>
+);
 
 // Un día por SEFIRÁ (las 10 clásicas, sin Da'at). Cada día toma el ejercicio de
 // esa dimensión; si no tiene, se usan sus preguntas de reflexión.
@@ -48,6 +59,7 @@ const ItemLista = ({ children }: { children: React.ReactNode }) => (
 export default function MetodoCabalaDiezDias() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -80,13 +92,21 @@ export default function MetodoCabalaDiezDias() {
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
               prev={{ label: "← Diagnóstico final", onClick: () => navigate("/metodo/cabala/final") }}
               extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
+              // "Ilustraciones" nunca falta en los headers de Cábala. En móvil se
+              // queda solo el ojo, para que los cuatro botones sigan en una fila.
+              extra2={{
+                label: <Box as="span" display={{ base: "none", md: "inline" }}>Ilustraciones</Box>,
+                onClick: () => setIlustracionesOpen(true),
+                icon: <EyeIcon />,
+              }}
               next={{ label: "Cursos →", onClick: () => navigate("/metodo/cabala/cursos") }}
             />
           </Reveal>
 
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
+            {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.85" maxW="660px" style={{ textShadow: INK_SHADOW }}>
+                  lineHeight="1.85" maxW="660px">
               Diez días, una dimensión cada día. Dedica la jornada a observar y practicar la sefirá que toca,
               apoyándote en su ejercicio. No se trata de hacerlo perfecto, sino de habitar cada energía un día entero.
             </Text>
@@ -199,6 +219,8 @@ export default function MetodoCabalaDiezDias() {
           </Reveal>
         </Flex>
       </Flex>
+
+      <CabalaIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
       <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
       <SiteFooter />

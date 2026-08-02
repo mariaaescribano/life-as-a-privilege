@@ -1,7 +1,9 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { EstudioService } from './estudio.service';
 import type { DatosParticipante, Eje } from './estudio.service';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { AdminGuard } from '../auth/admin.guard';
 import { LIMITE_ESTUDIO, LIMITE_ESTUDIO_RESPUESTA } from '../rate-limit';
 
 /**
@@ -56,5 +58,24 @@ export class EstudioController {
   @Get('estadisticas/:id')
   async getEstadisticas(@Param('id') id: string) {
     return await this.service.getEstadisticas(id);
+  }
+
+  /* ── Panel de administración ──────────────────────────────────────────────
+   * Lo ÚNICO del estudio que no es público. Exige token de admin desbloqueado
+   * (email en ADMIN_EMAILS + contraseña verificada), igual que el resto del
+   * panel: aquí se ven los emails de quien participa, que son datos personales. */
+
+  /** Quién ha participado: email, cuándo, y cuánto lleva respondido. */
+  @Get('admin/participantes')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async adminParticipantes() {
+    return await this.service.getAdminParticipantes();
+  }
+
+  /** Cómo van los resultados: el agregado de TODAS las respuestas. */
+  @Get('admin/resultados')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async adminResultados() {
+    return await this.service.getAdminResultados();
   }
 }

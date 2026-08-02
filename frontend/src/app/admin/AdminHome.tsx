@@ -134,6 +134,13 @@ export default function AdminHome() {
                  transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
               ✦ Accesos (regalar el recorrido)
             </Box>
+            <Box as="button" onClick={() => navigate("/admin/estudio")}
+                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
+                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
+                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
+                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
+              ✦ Estudio (participantes y resultados)
+            </Box>
           </Flex>
         </Box>
       </Flex>

@@ -21,17 +21,19 @@ import {
 } from "../../components/metodo/cabalaSenderos";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW, CAJA_GLOW_HOVER } from "../../components/metodo/cabalaGlow";
+import { disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
+import { generarPdfCabala } from "../../utils/generateCabalaPdf";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
 // El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
-const CAJA_OVERLAY = `${cabalaBg}cc`;
-
+// `talCual`: la acuarela de Cábala se ve al 100 %, sin velo ni opacidad que la
+// laven. El contraste del texto lo pone INK_SHADOW, no un velo sobre la foto.
 const Caja = ({ children }: { children: React.ReactNode }) => (
   <Box position="relative" overflow="hidden" w="100%" border={`1.5px solid ${cabalaTxt}44`}
        borderRadius="2xl" boxShadow={CAJA_GLOW}>
-    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay={CAJA_OVERLAY} />
+    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" talCual />
     <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>{children}</Box>
   </Box>
 );
@@ -57,6 +59,8 @@ export default function MetodoCabalaFinal() {
   const [test, setTest] = useState<Record<string, number[]>>({});
   const [autoeval, setAutoeval] = useState<Record<string, number[]>>({});
   const [senderos, setSenderos] = useState<Record<string, number[]>>({});
+  const [nombre, setNombre] = useState("");
+  const [generando, setGenerando] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -67,6 +71,8 @@ export default function MetodoCabalaFinal() {
       try {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
+        // Su nombre va en la portada del PDF: el diagnóstico es suyo.
+        setNombre(String(me.data?.name ?? "").trim());
         try {
           const res = await axios.get(`${API_URL}/metodo-cabala/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           const dt = res.data?.data ?? {};
@@ -123,39 +129,59 @@ export default function MetodoCabalaFinal() {
   const sendCompletos = senderoRes.filter((r) => r.completo).length;
   const senderosPrioritarios = senderoRes.filter((r) => r.completo && r.bandIdx >= 2).sort((a, b) => b.total - a.total).slice(0, 3);
 
-  const descargar = () => {
-    const L: string[] = [];
-    L.push("DIAGNÓSTICO FINAL · CÁBALA");
-    L.push("El Árbol de la Vida — mapa de autoconocimiento");
-    L.push("");
-    L.push(`— TUS DIMENSIONES (${dimsCompletas}/${niveles.length} respondidas) —`);
-    niveles.forEach((n) => {
-      L.push(`${n.numero}. ${n.titulo} · ${n.etiqueta}: ${n.completo ? `${n.nivel}/10 · ${POLARIDAD_LABEL[n.polaridad]}` : "sin responder"}`);
-    });
-    if (bloqueoPrincipal) {
-      L.push("");
-      L.push(`Paso evolutivo prioritario: ${cabalaSefirotMap[bloqueoPrincipal.from].titulo} → ${cabalaSefirotMap[bloqueoPrincipal.to].titulo} (${TIPO_LABEL[bloqueoPrincipal.tipo]}).`);
-      L.push(bloqueoPrincipal.narrativa);
+  /**
+   * El diagnóstico en un PDF que se guarda para siempre: portada con la acuarela
+   * de Cábala y SU Árbol dibujado (cada sefirá rellena según su nivel), y dentro
+   * sus dimensiones, su paso evolutivo y sus 22 senderos. Toda la maquetación
+   * vive en generateCabalaPdf.ts; aquí solo se le pasan los datos ya calculados.
+   */
+  const descargar = async () => {
+    if (generando) return;
+    setGenerando(true);
+    try {
+      await generarPdfCabala({
+        nombre,
+        imgFondo: disciplinaBgImg(cabalaNom),
+        dimensiones: niveles.map((n) => ({
+          key: n.key,
+          numero: n.numero,
+          titulo: n.titulo,
+          etiqueta: n.etiqueta,
+          completo: n.completo,
+          nivel: n.nivel,
+          estado: POLARIDAD_LABEL[n.polaridad],
+        })),
+        bloqueo: bloqueoPrincipal
+          ? {
+              de: cabalaSefirotMap[bloqueoPrincipal.from].titulo,
+              a: cabalaSefirotMap[bloqueoPrincipal.to].titulo,
+              tipo: TIPO_LABEL[bloqueoPrincipal.tipo],
+              narrativa: bloqueoPrincipal.narrativa,
+            }
+          : null,
+        senderos: senderoRes.map(({ s, band, total, completo }) => ({
+          orden: s.orden,
+          letra: s.letra,
+          de: NOMBRE_SEFIRA[s.from],
+          a: NOMBRE_SEFIRA[s.to],
+          completo,
+          total,
+          banda: band?.titulo,
+        })),
+        senderosPrioritarios: senderosPrioritarios.map(({ s, band, total, completo }) => ({
+          orden: s.orden,
+          letra: s.letra,
+          de: NOMBRE_SEFIRA[s.from],
+          a: NOMBRE_SEFIRA[s.to],
+          completo,
+          total,
+          banda: band?.titulo,
+          texto: band?.texto,
+        })),
+      });
+    } finally {
+      setGenerando(false);
     }
-    L.push("");
-    L.push(`— TUS SENDEROS (${sendCompletos}/${senderoRes.length} completados) —`);
-    senderoRes.forEach(({ s, band, total }) => {
-      L.push(`${s.orden}. ${s.letra} · ${NOMBRE_SEFIRA[s.from]} → ${NOMBRE_SEFIRA[s.to]}: ${band ? `${band.titulo} (${total})` : "sin responder"}`);
-    });
-    if (senderosPrioritarios.length) {
-      L.push("");
-      L.push("Senderos prioritarios:");
-      senderosPrioritarios.forEach(({ s, band }) => L.push(`· ${s.letra} (${NOMBRE_SEFIRA[s.from]} → ${NOMBRE_SEFIRA[s.to]}): ${band?.titulo}. ${band?.texto}`));
-    }
-    const blob = new Blob([L.join("\n")], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "diagnostico-cabala.txt";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   if (loading) return <CabalaLoading />;
@@ -180,8 +206,9 @@ export default function MetodoCabalaFinal() {
           </Reveal>
 
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
+            {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.85" maxW="660px" style={{ textShadow: INK_SHADOW }}>
+                  lineHeight="1.85" maxW="660px">
               Aquí se reúne todo tu recorrido: tus dimensiones (las sefirot) y tus transiciones (los senderos).
               Puedes descargarlo para guardarlo y volver a él cuando quieras.
             </Text>
@@ -189,16 +216,17 @@ export default function MetodoCabalaFinal() {
 
           {/* Descargar */}
           <Reveal direction="up" distance={14} delay={0.16} duration={0.55} display="flex" justifyContent="center">
-            <Box as="button" onClick={descargar}
+            <Box as="button" onClick={() => void descargar()} disabled={generando}
                  display="inline-flex" alignItems="center" gap={2.5} px={{ base: 7, md: 8 }} py={{ base: 2.5, md: 3 }}
                  borderRadius="full" bg={cabalaTxt} color={cabalaBg} fontWeight="800" fontSize={{ base: "sm", md: "md" }}
-                 letterSpacing="0.06em" cursor="pointer" transition="all 0.2s"
+                 letterSpacing="0.06em" cursor={generando ? "wait" : "pointer"} opacity={generando ? 0.75 : 1}
+                 transition="all 0.2s"
                  boxShadow={CAJA_GLOW}
-                 _hover={{ transform: "translateY(-2px)", boxShadow: CAJA_GLOW_HOVER }}>
+                 _hover={generando ? undefined : { transform: "translateY(-2px)", boxShadow: CAJA_GLOW_HOVER }}>
               <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="20px" h="20px" fill="currentColor">
                 <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
               </Box>
-              Descargar mi diagnóstico
+              {generando ? "Preparando tu PDF…" : "Descargar mi diagnóstico"}
             </Box>
           </Reveal>
 

@@ -440,7 +440,7 @@ export default function MetodoCabalaSefira() {
             </Box>
           </Reveal>
 
-          {/* Frase bajo el header */}
+          {/* Frase bajo el header — SIN sombra: va sobre el turquesa limpio. */}
           {sefira.frase && (
             <Reveal direction="up" distance={14} delay={0.08} duration={0.6} display="flex" justifyContent="center">
               <Text
@@ -451,7 +451,6 @@ export default function MetodoCabalaSefira() {
                 textAlign="center"
                 maxW="640px"
                 lineHeight="1.5"
-                style={{ textShadow: INK_SHADOW }}
               >
                 {sefira.frase}
                 {sefira.nota && (

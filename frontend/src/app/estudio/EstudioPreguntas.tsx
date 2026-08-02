@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { EstudioLayout } from "../../components/estudio/EstudioLayout";
 import { PreguntasEstudioModal, type PreguntaConEje } from "../../components/estudio/PreguntasEstudioModal";
@@ -12,6 +12,7 @@ import { Reveal, RevealItem, RevealStagger } from "../../components/global/Revea
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { preguntasDe as preguntasDelEje } from "../../data/estudioPreguntas";
+import { estadisticasDeEjemplo } from "../../data/estudioDemo";
 import {
   getEstudioId,
   getParticipante,
@@ -24,6 +25,7 @@ const clave = (planeta: string, preguntaId: string) => `${planeta}|${preguntaId}
 
 export default function EstudioPreguntas() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [participante, setParticipante] = useState<ParticipanteEstudio | null>(null);
   const [cargando, setCargando] = useState(true);
   // Respuestas en memoria: { "sol|sol-1": true, … }. Se llenan con lo que ya
@@ -31,15 +33,23 @@ export default function EstudioPreguntas() {
   const [respuestas, setRespuestas] = useState<Record<string, boolean>>({});
   const [abierto, setAbierto] = useState<CuerpoKey | null>(null);
   const [errorGuardado, setErrorGuardado] = useState<string | null>(null);
-  // Guardados en vuelo: se responde sin esperar al servidor, pero antes de
-  // enseñar las estadísticas hay que dejar que lleguen todos.
-  const pendientes = useRef(new Set<Promise<unknown>>());
-  const [yendoAResultados, setYendoAResultados] = useState(false);
+
+  // Vista de ejemplo: /estudio/preguntas?demo — carta inventada (la misma de
+  // estudioDemo.ts) y sin guardar nada, para poder ver la pantalla sin darse de
+  // alta. Nadie llega aquí por accidente.
+  const esEjemplo = new URLSearchParams(location.search).has("demo");
 
   const fotosListas = useImagesReady([SPACE_IMG]);
 
   // Sin participante no hay preguntas que hacer: se vuelve a pedir los datos.
   useEffect(() => {
+    if (esEjemplo) {
+      // La carta de ejemplo, pero SIN respuestas: así se ve la pantalla tal y
+      // como se la encuentra quien acaba de dar sus datos.
+      setParticipante({ ...estadisticasDeEjemplo().participante, respuestas: [] });
+      setCargando(false);
+      return;
+    }
     const id = getEstudioId();
     if (!id) { navigate("/estudio/datos", { replace: true }); return; }
     (async () => {
@@ -55,7 +65,7 @@ export default function EstudioPreguntas() {
         setCargando(false);
       }
     })();
-  }, [navigate]);
+  }, [navigate, esEjemplo]);
 
   /**
    * Las preguntas que le tocan a esta persona en un arquetipo: primero las de
@@ -96,11 +106,6 @@ export default function EstudioPreguntas() {
 
   const totalRespondidas = cuerpos.reduce((n, c) => n + respondidasDe(c), 0);
   const totalPreguntas = cuerpos.reduce((n, c) => n + preguntasDe(c).length, 0);
-  const completado = totalPreguntas > 0 && totalRespondidas >= totalPreguntas;
-  // Los resultados NO se guardan bajo llave hasta el final: cada respuesta ya
-  // está guardada, así que con una sola ya hay algo que enseñar. Quien lo deje a
-  // medias ve lo suyo, y puede volver cuando quiera a seguir.
-  const puedeVerResultados = totalRespondidas > 0;
 
   /**
    * Responder es INSTANTÁNEO: se apunta en pantalla y el POST viaja por detrás.
@@ -108,6 +113,9 @@ export default function EstudioPreguntas() {
    * servidor + base de datos); esperar a cada Sí/No hacía el cuestionario lento.
    * Si un guardado falla, esa respuesta se deshace y se avisa: nada se da por
    * guardado sin estarlo.
+   *
+   * Al terminar todas NO pasa nada: no hay salida a estadísticas ni mensaje de
+   * final. Quien responde deja sus respuestas y se queda donde está.
    */
   const responder = (planeta: CuerpoKey, pregunta: PreguntaConEje, valor: boolean) => {
     if (!participante) return;
@@ -116,8 +124,9 @@ export default function EstudioPreguntas() {
 
     setRespuestas((prev) => ({ ...prev, [k]: valor }));
     setErrorGuardado(null);
+    if (esEjemplo) return; // la vista de ejemplo no guarda nada
 
-    const envio = guardarRespuesta(participante.id, planeta, pregunta.eje, pregunta.id, valor)
+    guardarRespuesta(participante.id, planeta, pregunta.eje, pregunta.id, valor)
       .catch(() => {
         setRespuestas((prev) => {
           const copia = { ...prev };
@@ -128,20 +137,7 @@ export default function EstudioPreguntas() {
         setErrorGuardado(
           "Alguna respuesta no se ha podido guardar. Revisa la conexión y vuelve a responderla.",
         );
-      })
-      .finally(() => { pendientes.current.delete(envio); });
-    pendientes.current.add(envio);
-  };
-
-  /** No se va a las estadísticas hasta que hayan llegado los guardados en vuelo. */
-  const irAResultados = async () => {
-    if (!puedeVerResultados || yendoAResultados) return;
-    if (pendientes.current.size > 0) {
-      setYendoAResultados(true);
-      await Promise.allSettled([...pendientes.current]);
-      setYendoAResultados(false);
-    }
-    navigate("/estudio/resultados");
+      });
   };
 
   if (cargando || !fotosListas) return <LifeLoading />;
@@ -166,17 +162,9 @@ export default function EstudioPreguntas() {
               Tus planetas y sus preguntas
             </Text>
             <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }} maxW="680px" lineHeight="1.75">
-              Ahí tienes tu carta. Pincha cada planeta y responde a sus preguntas: solo Sí o No, sin
-              pensarlo demasiado. Se guardan una a una, así que puedes parar y volver cuando quieras.
+              Gracias por tu colaboración, tus respuestas son valiosas.
             </Text>
           </Flex>
-        </Reveal>
-
-        {/* La lectura de pago, arriba del todo: quien entra ya sabe que existe,
-            no hay que llegar al final para enterarse. */}
-        <Reveal direction="up" distance={14} duration={0.65} delay={0.08}>
-          <BotonLecturaCarta email={participante?.email} datos={participante?.datos}
-                             participanteId={participante?.id} />
         </Reveal>
 
         {/* ── Progreso general ── */}
@@ -238,42 +226,19 @@ export default function EstudioPreguntas() {
           })}
         </RevealStagger>
 
-        {/* ── Salida hacia las estadísticas ── */}
+        {/* ── Cierre: la lectura de pago ──
+            El único botón de la pantalla, y va AL FINAL: primero se responde;
+            quien quiera su lectura la encuentra al terminar de bajar. No hay
+            salida a estadísticas: al responderlo todo no pasa nada. */}
         <Reveal direction="up" distance={16} duration={0.7} delay={0.25} w="100%" maxW="520px">
           <Flex direction="column" align="center" gap={3}>
-            <Box
-              as="button"
-              onClick={() => void irAResultados()}
-              w="100%"
-              py={{ base: 4, md: 5 }}
-              borderRadius="full"
-              bg={puedeVerResultados ? "rgba(255,255,255,0.16)" : "transparent"}
-              border={`1px solid ${puedeVerResultados ? "white" : "rgba(255,255,255,0.3)"}`}
-              color={puedeVerResultados ? "white" : "rgba(255,255,255,0.45)"}
-              fontFamily="'EB Garamond', serif"
-              fontSize={{ base: "lg", md: "xl" }}
-              fontWeight="700"
-              letterSpacing="0.16em"
-              textTransform="uppercase"
-              cursor={puedeVerResultados ? (yendoAResultados ? "wait" : "pointer") : "not-allowed"}
-              opacity={yendoAResultados ? 0.7 : 1}
-              transition="all 0.22s"
-              _hover={puedeVerResultados ? { bg: "rgba(255,255,255,0.26)", boxShadow: "0 0 26px rgba(255,255,255,0.4)" } : {}}
-            >
-              {yendoAResultados ? "Guardando lo último…" : "Ver mis estadísticas →"}
-            </Box>
             {errorGuardado && (
               <Text color="#ffb8b8" fontSize="sm" fontStyle="italic" textAlign="center">
                 {errorGuardado}
               </Text>
             )}
-            <Text color="rgba(255,255,255,0.66)" fontSize="sm" fontStyle="italic" textAlign="center">
-              {completado
-                ? "Ya está todo respondido. Vamos a ver qué dicen los números."
-                : puedeVerResultados
-                ? `Puedes ver ya lo que llevas respondido. Te quedan ${totalPreguntas - totalRespondidas} preguntas; tus respuestas se guardan solas, así que puedes seguir cuando quieras.`
-                : "Responde a lo que quieras: cada respuesta se guarda al momento."}
-            </Text>
+            <BotonLecturaCarta email={participante?.email} datos={participante?.datos}
+                               participanteId={participante?.id} variant="destacado" />
           </Flex>
         </Reveal>
       </Flex>

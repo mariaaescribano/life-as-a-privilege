@@ -26,13 +26,14 @@ import { CAJA_GLOW, CAJA_GLOW_FUERTE } from "../../components/metodo/cabalaGlow"
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
 // El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
-const CAJA_OVERLAY = `${cabalaBg}cc`;
 
 // Box con la imagen de Cábala de fondo (letra dorada).
+// `talCual`: la acuarela de Cábala se ve al 100 %, sin velo ni opacidad que la
+// laven. El contraste del texto lo pone INK_SHADOW, no un velo encima de la foto.
 const Caja = ({ children, destacado = false }: { children: React.ReactNode; destacado?: boolean }) => (
   <Box position="relative" overflow="hidden" w="100%" border={`1.5px solid ${destacado ? cabalaTxt : `${cabalaTxt}44`}`}
        borderRadius="2xl" boxShadow={destacado ? CAJA_GLOW_FUERTE : CAJA_GLOW}>
-    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay={CAJA_OVERLAY} />
+    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" talCual />
     <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>
       {children}
     </Box>
@@ -125,8 +126,10 @@ export default function MetodoCabalaSenderosDiagnostico() {
           </Reveal>
 
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
+            {/* El texto de debajo del header va SIEMPRE sin sombra: cae sobre el
+                turquesa limpio y la sombra solo lo ensucia. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.85" maxW="660px" style={{ textShadow: INK_SHADOW }}>
+                  lineHeight="1.85" maxW="660px">
               Cada sendero es una transición entre dos capacidades. Aquí se reúne el resultado de tus 22 tests
               para mostrar qué caminos fluyen y cuáles piden más trabajo.
             </Text>

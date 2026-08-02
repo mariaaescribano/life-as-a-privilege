@@ -17,10 +17,7 @@ import { CABALA_SENDERO_VINETAS, CABALA_SENDERO_VINETA_NUMS } from "../../compon
 import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
-
-// Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
-// texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
-const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
+import { flushSaves } from "../../utils/flushSaves";
 
 export default function MetodoCabalaSenderos() {
   const navigate = useNavigate();
@@ -75,6 +72,14 @@ export default function MetodoCabalaSenderos() {
   const todosVistos = CABALA_SENDEROS.every((s) => readNums.has(s.num));
   const primero = CABALA_SENDEROS[0];
 
+  // Marcar ilustraciones vistas dispara PATCHes que reescriben el blob entero;
+  // se espera a que lleguen antes de cambiar de página para que la siguiente no
+  // lea datos viejos y los revierta al guardar (ver flushSaves).
+  const ir = async (ruta: string) => {
+    await flushSaves();
+    navigate(ruta);
+  };
+
   if (loading) {
     return <CabalaLoading />;
   }
@@ -96,11 +101,11 @@ export default function MetodoCabalaSenderos() {
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: "← Mapa Evolutivo", onClick: () => navigate("/metodo/cabala/diagnostico") }}
-              extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
+              prev={{ label: "← Mapa Evolutivo", onClick: () => void ir("/metodo/cabala/diagnostico") }}
+              extra={{ label: "El Árbol", onClick: () => void ir("/metodo/cabala/arbol") }}
               next={{
                 label: "Recorrer →",
-                onClick: () => navigate(`/metodo/cabala/sendero/${primero.num}`),
+                onClick: () => void ir(`/metodo/cabala/sendero/${primero.num}`),
                 disabled: !todosVistos,
                 disabledTooltip: "Descubre la ilustración de los 22 senderos para recorrerlos uno a uno",
               }}
@@ -108,8 +113,9 @@ export default function MetodoCabalaSenderos() {
           </Reveal>
 
           <Reveal direction="up" distance={22} delay={0.55} duration={1.3} display="flex" justifyContent="center">
+            {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.8" maxW="600px" style={{ textShadow: INK_SHADOW }}>
+                  lineHeight="1.8" maxW="600px">
               Si las sefirot son estados, los senderos son el movimiento entre ellos. Toca cualquiera de los
               22 caminos para ver su ilustración. Cuando los hayas descubierto todos, se desbloqueará el recorrido.
             </Text>
@@ -150,7 +156,7 @@ export default function MetodoCabalaSenderos() {
           {/* Comenzar por el principio — se desbloquea al ver TODAS las ilustraciones */}
           <Reveal direction="up" distance={22} delay={1.7} duration={1.3} display="flex" justifyContent="center">
             <Box as="button"
-                 onClick={todosVistos ? () => navigate(`/metodo/cabala/sendero/${primero.num}`) : undefined}
+                 onClick={todosVistos ? () => void ir(`/metodo/cabala/sendero/${primero.num}`) : undefined}
                  disabled={!todosVistos}
                  px={8} py={3} borderRadius="full"
                  bg={todosVistos ? `${cabalaTxt}18` : `${cabalaTxt}0a`}

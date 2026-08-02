@@ -263,6 +263,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
         "Mientras el hígado está ocupado eliminando el alcohol, otras funciones pasan a un segundo plano. Por ejemplo, disminuye la producción de glucosa y se altera el metabolismo de las grasas.",
         "El alcohol también afecta al cerebro. Modifica la comunicación entre las neuronas, alterando el juicio, la coordinación, la memoria y el tiempo de reacción.",
         "Además, al metabolizar el alcohol se generan más radicales libres. Si son demasiados, pueden producir estrés oxidativo y dañar proteínas, grasas y ADN.",
+        "Profundiza: el neurotransmisor GABA, encargado de la relajación, aumenta su acción, produciendo relajación y una disminución de la actividad cerebral. En cambio, el glutamato disminuye su actividad, afectando a la memoria y a la capacidad de concentración. La serotonina también se altera, lo que puede modificar el estado de ánimo, las emociones y el comportamiento, favoreciendo cambios como la desinhibición, la impulsividad o la variabilidad emocional.",
       ],
     },
     {
