@@ -14,6 +14,10 @@ import type { Vineta } from "../../components/metodo/ComicViewer";
 // Profundiza. Estructura: { [temaKey]: string[] } (keys de fichas leídas).
 export const PROFUNDIZA_LEIDAS_KEY = "profundiza_leidas";
 
+// Clave donde guardamos los cómics «antes de empezar» ya leídos de Profundiza.
+// Estructura: string[] (keys de tema cuyo cómic se ha abierto).
+export const PROFUNDIZA_COMICS_KEY = "profundiza_comics_leidos";
+
 // Una caja del tema: al pulsarla se abre el modal con su explicación.
 export type Ficha = {
   key: string;
@@ -200,7 +204,9 @@ const HORMONAS: Ficha[] = [
     claves: ["Baja el azúcar en sangre", "Mete la glucosa en las células", "Si falla, diabetes tipo 2"],
     explicacion: [
       "La fabrica el páncreas cuando sube la glucosa en sangre, por ejemplo después de comer. Es la llave que abre las células para que la glucosa entre y se use como energía o se guarde.",
-      "Cuándo importa: si las células dejan de responderle bien (resistencia a la insulina), la glucosa se queda en la sangre y aparece, con el tiempo, la diabetes tipo 2.",
+      "Cómo se fabrica: en las células beta de los islotes del páncreas. Primero se hace una versión larga y todavía inútil, la proinsulina, y luego se le recorta un trozo del medio, el péptido C. Lo que queda son dos cadenas cosidas por puentes de azufre: la insulina. Se guarda empaquetada en gránulos junto con zinc, lista para salir en cuanto la glucosa entra en la célula beta. El trozo recortado sale a la sangre en la misma cantidad, y por eso el péptido C se mide en un análisis para saber si un páncreas sigue fabricando insulina propia.",
+      "Su receptor: el receptor de insulina, anclado en la membrana de casi todas tus células y muy abundante en músculo, grasa e hígado. Cuando la insulina se posa en él, el receptor se enciende por dentro y desata una cascada de señales cuyo efecto más visible es sacar a la superficie los transportadores de glucosa (GLUT4), que son las puertas por las que la glucosa entra de verdad. Sin esa orden, las puertas se quedan guardadas dentro de la célula.",
+      "Cuándo importa: si las células dejan de responderle bien (resistencia a la insulina), la glucosa se queda en la sangre y aparece, con el tiempo, la diabetes tipo 2. Y lo habitual no es que falte insulina, sino que el mensaje se pierda por el camino, después del receptor.",
     ],
   },
   {
@@ -209,6 +215,8 @@ const HORMONAS: Ficha[] = [
     claves: ["Sube el azúcar en sangre", "El hígado suelta glucosa", "Compañera de la insulina"],
     explicacion: [
       "Es la contraparte de la insulina. Cuando la glucosa baja (ayuno, ejercicio), el páncreas libera glucagón para que el hígado suelte glucosa guardada y mantenga estable el nivel en sangre.",
+      "Cómo se fabrica: en las células alfa de los mismos islotes del páncreas, vecinas de las que hacen insulina. Se fabrica una proteína grande, el proglucagón, y se recorta hasta dejar un péptido pequeño de 29 piezas. Lo curioso es que el intestino fabrica ese mismo proglucagón, pero lo recorta por otro sitio, y de ahí sale el GLP-1, la hormona de la saciedad en la que se basan los fármacos que hoy se usan para la obesidad. La misma materia prima, dos tijeras distintas y efectos casi opuestos.",
+      "Su receptor: el receptor de glucagón, en la membrana y sobre todo en las células del hígado. Al activarse sube dentro de la célula un segundo mensajero, el AMP cíclico, que enciende las enzimas encargadas de desmontar el glucógeno guardado y de fabricar glucosa nueva. Es la orden de «abrid la despensa».",
       "Juntas, insulina y glucagón mantienen tu azúcar en un margen estrecho, subiéndolo o bajándolo según haga falta.",
     ],
   },
@@ -218,6 +226,8 @@ const HORMONAS: Ficha[] = [
     claves: ["La hormona del estrés", "Sube de mañana, baja de noche", "Crónico, desgasta el cuerpo"],
     explicacion: [
       "Las glándulas suprarrenales lo liberan ante el estrés y también siguiendo un ritmo diario: sube por la mañana para despertarte y baja por la noche. Moviliza energía y te pone en alerta.",
+      "Cómo se fabrica: a partir de colesterol, en la corteza de las glándulas suprarrenales y por orden de la hipófisis, que manda una señal llamada ACTH. El colesterol entra en la mitocondria, se convierte en pregnenolona y de ahí, enzima tras enzima, en cortisol. Al ser una hormona esteroidea no se puede almacenar hecha: se fabrica en el momento en que hace falta, y por eso tarda unos minutos en aparecer mientras la adrenalina ya está actuando.",
+      "Su receptor: el receptor de glucocorticoides, que no está en la membrana sino dentro de la célula. El cortisol es liposoluble, así que atraviesa la membrana sin pedir permiso, se une a su receptor en el interior y el conjunto entra en el núcleo, donde enciende y apaga cientos de genes. Eso explica su carácter: tarda más en notarse y dura mucho más que la adrenalina. Los corticoides de farmacia, como la prednisona, actúan sobre ese mismo receptor, y de ahí que sus efectos se parezcan tanto a los de un estrés sostenido.",
       "Cuándo importa: útil en momentos puntuales, pero mantenerlo alto durante meses (estrés crónico, dormir mal) desgasta el cuerpo, sube el azúcar y baja las defensas.",
     ],
   },
@@ -227,6 +237,8 @@ const HORMONAS: Ficha[] = [
     claves: ["La hormona del «lucha o huye»", "Acelera el corazón al instante", "Libera energía para reaccionar"],
     explicacion: [
       "Es la hormona del «lucha o huye». Ante un peligro, en segundos acelera el corazón, dilata las pupilas y libera energía para reaccionar.",
+      "Cómo se fabrica: en la médula de la glándula suprarrenal, su parte más interna, a partir de un aminoácido que viene de la comida, la tirosina. La cadena es la misma que en el cerebro: tirosina, luego dopamina, luego noradrenalina y por último adrenalina. El paso final necesita cortisol para funcionar, y de ahí un detalle de diseño precioso: la médula que fabrica adrenalina está envuelta por la corteza que fabrica cortisol, bañada en él. A diferencia del cortisol, la adrenalina sí se guarda ya hecha en vesículas, y por eso puede salir en un segundo en cuanto el nervio simpático da la orden.",
+      "Sus receptores: los receptores adrenérgicos, repartidos por todo el cuerpo en dos familias, alfa y beta. Ahí está el truco de que una sola molécula haga cosas distintas en cada sitio: los beta-1 del corazón lo hacen latir más fuerte y más rápido; los beta-2 de los bronquios y de los vasos del músculo los abren, y por eso los inhaladores del asma imitan a la adrenalina; los alfa-1 cierran los vasos de la piel y del intestino, que es la palidez del susto. Los fármacos llamados betabloqueantes tapan los beta-1 del corazón para que la adrenalina no pueda acelerarlo.",
       "Cuándo la notas: ese vuelco cuando te asustas o el corazón a mil antes de hablar en público.",
     ],
   },
@@ -236,7 +248,11 @@ const HORMONAS: Ficha[] = [
     claves: ["Marcan la velocidad del cuerpo", "Energía, temperatura y pulso", "El acelerador del metabolismo"],
     explicacion: [
       "Las hormonas tiroideas (T3 y T4) marcan la velocidad a la que funcionan tus células: el gasto de energía, la temperatura y el ritmo del corazón.",
-      "Cuándo importa: demasiadas aceleran todo (nerviosismo, pérdida de peso); pocas lo frenan todo (cansancio, frío, lentitud).",
+      "Cómo se fabrican: son las únicas hormonas que necesitan un mineral de la dieta, el yodo, y las únicas que se almacenan fuera de la célula. Las células de la tiroides fabrican una proteína enorme, la tiroglobulina, y la vuelcan dentro de unos sacos llamados folículos. Allí una enzima va enganchando yodo a esa proteína y uniendo las piezas de dos en dos. Cuando hace falta hormona, la célula recupera un trozo de tiroglobulina y lo recorta. El número del nombre dice cuántos átomos de yodo lleva: cuatro en la T4, tres en la T3.",
+      "El detalle que casi nunca se cuenta: de todo lo que suelta la glándula, alrededor del 90 % es T4… y la T4 apenas actúa por sí sola. Es la reserva. La que de verdad da la orden es la T3, y son los propios tejidos (sobre todo el hígado, el riñón y el músculo) los que le quitan un átomo de yodo a la T4 para fabricar T3 justo donde y cuando la necesitan, con unas enzimas que requieren selenio. Visto así, la tiroides no manda la orden final: manda la materia prima, y cada tejido decide cuánta hormona activa se fabrica.",
+      "Su receptor: está dentro del núcleo de la célula, esperando pegado al ADN incluso antes de que llegue la hormona. Cuando la T3 entra y se le une, ese receptor enciende los genes que suben el ritmo de todo: más mitocondrias, más consumo de energía, más calor, un corazón más fuerte, un intestino que se mueve más. La T4 encaja mucho peor en él, y esa es exactamente la razón de que haga falta convertirla antes.",
+      "El termostato: el hipotálamo suelta TRH, la hipófisis responde con TSH y la TSH pide a la tiroides que produzca; cuando ya hay hormona suficiente, ella misma frena al cerebro. Por eso en una analítica la TSH se lee del revés de lo que parece: TSH alta suele significar tiroides lenta, y TSH baja, tiroides acelerada. Y otro detalle práctico: en la sangre casi toda la hormona viaja pegada a proteínas transportadoras, y así no hace nada; solo cuenta la fracción que va libre, y de ahí que los análisis midan T4 libre y no el total.",
+      "Cuándo importa: demasiadas aceleran todo (nerviosismo, pérdida de peso, insomnio, pulso rápido); pocas lo frenan todo (cansancio, frío, piel seca, estreñimiento, lentitud mental). Y existe una situación intermedia que es normal: en ayunos largos, dietas muy restrictivas o durante una enfermedad, el cuerpo baja la T3 a propósito para gastar menos. No es que la tiroides se haya roto, es el cuerpo poniéndose en modo ahorro.",
     ],
   },
   {
@@ -246,6 +262,8 @@ const HORMONAS: Ficha[] = [
     explicacion: [
       "Presente en ambos sexos, aunque más alta en hombres. Interviene en el desarrollo muscular y óseo, el deseo sexual, la energía y el ánimo.",
       "Se produce sobre todo en los testículos y, en menor cantidad, en ovarios y glándulas suprarrenales.",
+      "Cómo se fabrica: también a partir de colesterol, en las células de Leydig del testículo y por orden de la hipófisis, que envía la señal LH. Y no acaba ahí, porque después sigue transformándose según el tejido: en la piel y en el folículo del pelo una enzima la convierte en DHT, una versión bastante más potente, y en el tejido graso otra enzima, la aromatasa, la convierte en estradiol. Es decir, el estrógeno se fabrica a partir de la testosterona.",
+      "Su receptor: el receptor de andrógenos, dentro de la célula, del mismo tipo que el del cortisol. La hormona atraviesa la membrana, se une a él y el conjunto viaja al núcleo a encender genes. La DHT se agarra a ese receptor con mucha más fuerza que la testosterona, y por eso es la responsable de buena parte de los efectos sobre la piel, la barba y el pelo.",
     ],
   },
   {
@@ -254,6 +272,8 @@ const HORMONAS: Ficha[] = [
     claves: ["Hormonas sexuales femeninas", "Regulan el ciclo", "Protegen hueso y corazón"],
     explicacion: [
       "Principales hormonas sexuales femeninas. Regulan el ciclo menstrual y la fertilidad, pero también protegen los huesos, el corazón y el cerebro.",
+      "Cómo se fabrican: en el ovario, y no desde cero. El ovario parte de andrógenos, es decir de testosterona, y una enzima llamada aromatasa los transforma en estradiol, el estrógeno principal. La orden la da la hipófisis con la señal FSH. Esa misma aromatasa está también en el tejido graso, en el hueso y en el cerebro, y por eso, cuando el ovario se apaga en la menopausia, la grasa corporal sigue fabricando una pequeña cantidad.",
+      "Sus receptores: son dos, alfa y beta, y están dentro del núcleo de la célula. Lo llamativo es dónde aparecen: además del útero y el pecho, hay receptores de estrógenos en el hueso, en los vasos sanguíneos, en el cerebro, en la piel y en el hígado. Que estén en tantos sitios es exactamente la razón de que su caída en la menopausia no se note solo en el ciclo, sino en los huesos, el sueño, la memoria, la piel y el riesgo cardiovascular.",
       "Cuándo importa: su caída en la menopausia explica muchos cambios, desde los huesos hasta el estado de ánimo.",
     ],
   },
@@ -264,6 +284,8 @@ const HORMONAS: Ficha[] = [
     explicacion: [
       "Es la otra gran hormona sexual femenina. Prepara el útero para un posible embarazo y lo sostiene si ocurre; sube en la segunda mitad del ciclo menstrual.",
       "También tiene un efecto calmante sobre el cerebro. Sus vaivenes explican parte de los cambios de ánimo y sueño a lo largo del ciclo.",
+      "Cómo se fabrica: la produce el cuerpo lúteo, que es lo que queda del folículo después de ovular, y si hay embarazo toma el relevo la placenta. Es además el primer escalón de todos los esteroides: el colesterol se convierte en pregnenolona y esta en progesterona, y de ella salen después el cortisol, la testosterona y los estrógenos. Es, literalmente, la madre de las demás.",
+      "Su receptor: el receptor de progesterona, en el núcleo, con un detalle elegante: son los estrógenos los que hacen que la célula lo fabrique. Es decir, la primera mitad del ciclo prepara el terreno para que la segunda pueda funcionar. Y en el cerebro ocurre algo aparte: la progesterona se transforma en otra molécula, la alopregnanolona, que actúa sobre el receptor GABA, el gran freno del sistema nervioso y la misma diana donde actúan los ansiolíticos. De ahí su efecto calmante, y de ahí que su caída brusca en los días previos a la regla se note tanto en el ánimo y en el sueño.",
     ],
   },
   {
@@ -272,6 +294,8 @@ const HORMONAS: Ficha[] = [
     claves: ["La libera la oscuridad", "La señal de dormir", "Las pantallas la frenan"],
     explicacion: [
       "La glándula pineal la libera cuando cae la luz: es la señal de que llega la noche y toca dormir. Sincroniza tu reloj interno con el día y la noche.",
+      "Cómo se fabrica: en la glándula pineal y a partir del triptófano de la comida, en una cadena que quizá te suene: triptófano, después serotonina y por último melatonina. Sí, la melatonina es una serotonina retocada. La enzima que da el paso decisivo solo trabaja a oscuras: la luz que entra por el ojo llega al reloj central del cerebro y este le ordena parar. No hay nada mágico en las pantallas, simplemente apagan esa enzima.",
+      "Sus receptores: se llaman MT1 y MT2, están en la membrana y se concentran en el reloj central del cerebro (el núcleo supraquiasmático) y en la retina. El MT1 baja el nivel de alerta y el MT2 ajusta la hora de ese reloj. Esto aclara una confusión muy común: la melatonina no es un somnífero que te tumba, es un aviso de «es de noche». Por eso ayuda más a recolocar el horario, como en el jet lag o los turnos de noche, que a dormir más profundo.",
       "Cuándo importa: la luz de las pantallas por la noche frena su producción y te cuesta más dormir.",
     ],
   },
@@ -281,6 +305,8 @@ const HORMONAS: Ficha[] = [
     claves: ["Se libera al dormir profundo", "Hace crecer de niños", "Repara de adultos"],
     explicacion: [
       "La hipófisis la libera sobre todo durante el sueño profundo y el ejercicio. Estimula el crecimiento en la infancia y, de adulto, la reparación de tejidos y músculo.",
+      "Cómo se fabrica: es una proteína, no un esteroide, así que la hipófisis la fabrica y la guarda hecha en gránulos, lista para salir. Y no gotea de forma constante: sale a pulsos, empujada por una señal del hipotálamo (la GHRH) y frenada por otra (la somatostatina). El pulso más grande del día ocurre en las primeras horas de sueño profundo, y el ejercicio intenso y el ayuno también la disparan.",
+      "Su receptor: el receptor de GH, en la membrana y muy abundante en el hígado. Y aquí está lo interesante: gran parte de su efecto no lo hace ella. Al activar ese receptor, el hígado fabrica y suelta otra hormona, el IGF-1, y es el IGF-1 el que actúa de verdad sobre el cartílago de crecimiento, el músculo y el hueso. Por eso, cuando se quiere saber cuánta hormona del crecimiento hay, se mide el IGF-1: la GH sale a pulsos y un análisis puntual no dice casi nada, mientras que el IGF-1 se mantiene estable.",
       "Cuándo importa: dormir bien es, literalmente, cuando más te reparas.",
     ],
   },
@@ -429,10 +455,19 @@ const DETOXIFICACION: Ficha[] = [
   {
     key: "glutation", nombre: "Glutatión", color: "#c9a7ff", foto: SUB("higado", "higado4"),
     eyebrow: "El antioxidante maestro",
-    claves: ["El antioxidante maestro", "Neutraliza tóxicos y radicales", "Se gasta con el alcohol"],
+    claves: ["Cede su electrón y se recicla", "Engancha los tóxicos para sacarlos", "Recarga las vitaminas C y E"],
     explicacion: [
-      "Es la molécula estrella de la desintoxicación y la defensa antioxidante del hígado: neutraliza tóxicos y radicales libres.",
-      "El cuerpo lo fabrica, pero se gasta con el alcohol, los tóxicos y el estrés oxidativo.",
+      "Es la molécula estrella de la desintoxicación y la defensa antioxidante del hígado. El cuerpo la fabrica él mismo y hace dos trabajos muy distintos: neutralizar radicales libres y engancharse a los tóxicos para poder expulsarlos.",
+      "PRIMER TRABAJO · el sacrificio antioxidante. Los radicales libres son moléculas inestables a las que les falta un electrón, y lo roban de donde pueden: del ADN, de las proteínas, de las grasas de las membranas. Ahí entra el glutatión.",
+      "1. La entrega. El glutatión en su forma activa (GSH) tiene un átomo de azufre con un hidrógeno, lo que se llama un grupo tiol. Le entrega voluntariamente ese hidrógeno con su electrón al radical libre.",
+      "2. La neutralización. Con la ayuda de una enzima, la glutatión peroxidasa, el radical se estabiliza y queda inofensivo: acaba convertido en agua o en un alcohol.",
+      "3. El reciclaje. Al ceder su electrón, el glutatión queda oxidado y se une a otro glutatión gastado formando una pareja (GSSG). Entonces otra enzima, la glutatión reductasa, gasta energía celular (NADPH) para recargarlo y devolverlo a la batalla. Casi nada se tira: la misma molécula vuelve a usarse una y otra vez.",
+      "SEGUNDO TRABAJO · la conjugación, la desintoxicación propiamente dicha. En el hígado, el glutatión se enfrenta de forma directa a medicamentos (el paracetamol es el ejemplo clásico), al alcohol, a los metales pesados y a otros tóxicos.",
+      "1. El gancho. Una enzima llamada glutatión S-transferasa pega el glutatión físicamente a la toxina.",
+      "2. Volverla soluble. La mayoría de los tóxicos son grasos, y el cuerpo no sabe eliminar la grasa por la orina. Al quedar pegados al glutatión pasan a ser solubles en agua.",
+      "3. La expulsión. Ya solubles, pueden salir por el riñón con la orina o por la bilis hacia el intestino. Esto es exactamente la Fase II que has visto antes: el glutatión es una de sus moléculas principales.",
+      "Y además es el recargador oficial del equipo: cuando la vitamina C y la vitamina E se agotan defendiéndote, el glutatión les cede electrones y las deja otra vez operativas. Por eso se le llama el antioxidante maestro, no solo por lo que neutraliza él, sino porque mantiene en pie a los demás.",
+      "Cuándo importa: el cuerpo lo fabrica, pero las reservas se agotan con el alcohol, el tabaco, los tóxicos, las infecciones y el estrés oxidativo sostenido. El daño empieza a acumularse justo cuando el glutatión se queda corto. De hecho, en una intoxicación por paracetamol el antídoto que se usa en el hospital (N-acetilcisteína) sirve precisamente para dar al hígado la materia prima con la que volver a fabricarlo.",
     ],
   },
   {
@@ -643,6 +678,19 @@ const ENVEJECIMIENTO: Ficha[] = [
     explicacion: [
       "Es el sistema de reciclaje de la célula: elimina piezas viejas o dañadas y reutiliza sus materiales.",
       "El ejercicio y el ayuno la estimulan; mantenerla activa ayuda a envejecer mejor.",
+    ],
+  },
+  {
+    key: "fotoenvejecimiento", nombre: "Fotoenvejecimiento", color: "#f2c86b", foto: SUB("envejecimiento", "envejecimiento6"),
+    eyebrow: "Hasta dónde llega cada rayo",
+    claves: ["Cada rayo llega a una capa", "El UVB quema, el UVA arruga", "Atraviesa nubes y cristales"],
+    explicacion: [
+      "La luz del sol no es una sola cosa: es una mezcla de radiaciones, y cada una penetra en la piel a una profundidad distinta. Eso explica por qué unas queman y otras, sin que te enteres, te arrugan.",
+      "UVB · se queda arriba, en la epidermis. Es la que quema y la que enrojece. Su energía es tan alta que daña el ADN de las células directamente, y por eso es la principal responsable del cáncer de piel. También es la que inicia la producción de vitamina D.",
+      "UVA · atraviesa la epidermis y llega hasta la dermis, justo donde viven los fibroblastos y el colágeno. No quema, así que no avisa de nada, pero genera radicales libres que rompen las fibras de colágeno y elastina. Es la causante de las arrugas, la flacidez y las manchas. Supone la mayor parte de la radiación ultravioleta que nos llega y, a diferencia del UVB, atraviesa las nubes y el cristal de una ventana o de un coche.",
+      "Luz visible e infrarrojo · llegan todavía más profundo, hasta la hipodermis. El infrarrojo es el calor que notas y también genera radicales libres. La luz visible, sobre todo la azul, puede activar a los melanocitos y empeorar manchas como el melasma, especialmente en pieles morenas.",
+      "Por qué esto está en el envejecimiento: además de los relojes internos que has visto en las otras cajas, la piel acumula un envejecimiento añadido que depende solo de la cantidad de sol recibida. Se llama fotoenvejecimiento y explica la mayor parte de lo que reconocemos como una cara envejecida. La prueba está en tu propio cuerpo: compara la piel de tu cara con la de la cara interna de tu brazo. Tienen exactamente la misma edad.",
+      "Cuándo importa: por eso el protector solar es, con diferencia, la mejor crema antiedad que existe. Y como el UVA atraviesa nubes y cristales, el daño no depende de que haga calor ni de estar en la playa: un día nublado de invierno junto a la ventana también cuenta.",
     ],
   },
 ];
@@ -996,6 +1044,35 @@ const CETOSIS: Ficha[] = [
   },
 ];
 
+// ── Músculo · cómo se contrae y quién le pone el freno ───────────────────────
+const MUSCULO: Ficha[] = [
+  {
+    key: "actina-miosina", nombre: "Actina y miosina", color: "#e07a5f", foto: SUB("musculo", "actinamiosina"),
+    eyebrow: "Así se contrae un músculo",
+    claves: ["Dos filamentos que se deslizan", "El calcio da la señal", "Cada tirón gasta ATP"],
+    explicacion: [
+      "Dentro de cada fibra muscular hay dos tipos de filamentos colocados de forma milimétrica: la actina, fina, y la miosina, más gruesa y con unas «cabezas» que sobresalen. Contraer un músculo es, literalmente, hacer que unos se deslicen sobre los otros.",
+      "1. La orden. La neurona libera acetilcolina en la unión neuromuscular y eso genera un impulso eléctrico que recorre la fibra entera.",
+      "2. El calcio. Ese impulso hace que los almacenes internos de la fibra suelten calcio. Es la señal que lo desencadena todo.",
+      "3. Se despeja el carril. En reposo, los puntos de anclaje de la actina están tapados por unas proteínas que hacen de cerrojo. El calcio las aparta y deja el sitio libre.",
+      "4. El remo. Las cabezas de miosina se agarran a la actina y tiran de ella, se sueltan, se recolocan y vuelven a tirar, gastando ATP en cada tirón. Muchísimas veces por segundo, como miles de remeros a la vez.",
+      "5. El acortamiento. Los filamentos se han deslizado unos sobre otros y cada pequeña unidad de la fibra, el sarcómero, queda más corta. Millones de sarcómeros acortándose al mismo tiempo es lo que notas como un músculo contrayéndose.",
+      "Y una cosa que sorprende: relajarse también cuesta energía. Hace falta ATP para volver a guardar el calcio y que las cabezas de miosina se suelten. Por eso, cuando ya no queda ATP, el músculo se queda agarrado y rígido: es lo que ocurre en el rigor mortis.",
+    ],
+  },
+  {
+    key: "miostatina", nombre: "Miostatina", color: "#b5806b", foto: SUB("musculo", "miostatina"),
+    eyebrow: "El freno del músculo",
+    claves: ["Limita cuánto músculo creces", "La fabrica el propio músculo", "Entrenar baja su señal"],
+    explicacion: [
+      "Si el cuerpo pudiera fabricar músculo sin límite, lo haría… y se arruinaría, porque mantenerlo es carísimo en energía. La miostatina es el freno que lo evita: una proteína que el propio músculo produce y libera para decirle «hasta aquí, no crezcas más».",
+      "Cómo frena: se une a receptores de la fibra muscular y apaga las rutas que ordenan fabricar proteína nueva. Al mismo tiempo, mantiene a raya a las células satélite, las que se fusionan a la fibra para repararla y hacerla más grande. Con la miostatina alta, entrenas y el músculo apenas responde.",
+      "Cuándo importa: el entrenamiento de fuerza reduce su señal durante unas horas, y esa es parte del motivo por el que un músculo trabajado crece. Con la edad, el reposo prolongado y la inflamación crónica, en cambio, la señal sube y cuesta más mantener masa muscular.",
+      "Como curiosidad: existen animales con una mutación que deja la miostatina sin funcionar, como el ganado Blue Belgian o unos ratones apodados «ratones Schwarzenegger», y desarrollan una musculatura enorme. Se han descrito también algunos casos en personas. Es un blanco muy investigado para tratar enfermedades que consumen el músculo, aunque los fármacos probados hasta ahora dan bastante músculo y poca fuerza real.",
+    ],
+  },
+];
+
 // ═════════════════════════════════════════════════════════════════════════
 // Los temas de PROFUNDIZA, agrupados en 3 bloques para el hub.
 // Neurotransmisores lleva cómic de intro; el resto ya tienen sus fichas con un
@@ -1066,6 +1143,17 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     intro: "La dieta cetogénica: cuando falta la glucosa, el cuerpo fabrica cuerpos cetónicos a partir de la grasa y los usa como combustible.",
     pista: "",
     fichas: CETOSIS,
+  },
+  {
+    key: "musculo",
+    label: "Músculos",
+    resumen: "Cómo se contraen y qué los frena.",
+    color: "#e07a5f",
+    foto: PORTADA("musculoportada"),
+    grupo: "Química interna",
+    intro: "Qué ocurre exactamente dentro de una fibra muscular cuando te mueves, y por qué tu propio cuerpo le pone un freno al crecimiento.",
+    pista: "",
+    fichas: MUSCULO,
   },
 
   // ── Bloque 2 · El código y la limpieza ──

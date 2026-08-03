@@ -15,6 +15,7 @@ export function FichaExploraModal({
   temaColor,
   onSelect,
   onClose,
+  leida = false,
 }: {
   ficha: Ficha | null;
   /** Lista completa para navegar con flechas. */
@@ -23,6 +24,8 @@ export function FichaExploraModal({
   temaColor: string;
   onSelect?: (f: Ficha) => void;
   onClose: () => void;
+  /** Ya se había leído antes de abrirla → aviso «✓ Leída» arriba. */
+  leida?: boolean;
 }) {
   const puedeNavegar = !!fichas && fichas.length > 1 && !!onSelect;
   const idx = ficha && fichas ? fichas.findIndex((f) => f.key === ficha.key) : -1;
@@ -46,6 +49,7 @@ export function FichaExploraModal({
       onPrev={puedeNavegar ? () => salta(-1) : undefined}
       onNext={puedeNavegar ? () => salta(1) : undefined}
       contador={puedeNavegar && fichas ? `${idx + 1} / ${fichas.length}` : null}
+      leida={leida}
       fotoFallback={
         <Text color={accent} fontWeight="800" fontSize={{ base: "4xl", md: "5xl" }}
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>

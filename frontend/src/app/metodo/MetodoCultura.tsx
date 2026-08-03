@@ -47,9 +47,9 @@ export default function MetodoCultura() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Prerrequisito: hay que haber pagado Cábala (7ª disciplina).
-        if (!me.data?.cabala_suscrito) { navigate("/home"); return; }
-
+        // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
+        // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
+        // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const culturaSuscrito = !!me.data?.cultura_suscrito;
         setSuscrito(culturaSuscrito);
         if (!culturaSuscrito) { setPagoOpen(true); return; }

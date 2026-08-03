@@ -11,11 +11,12 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { FichaExploraModal } from "../../components/metodo/FichaExploraModal";
+import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
 import { VolverFisio } from "../../components/metodo/VolverFisio";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
-import { temaByKey, PROFUNDIZA_LEIDAS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
+import { temaByKey, PROFUNDIZA_LEIDAS_KEY, PROFUNDIZA_COMICS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
 
 // Tarjeta de una ficha (neurotransmisor, hormona…): imagen + nombre. Rejilla de 3.
 // Todos los temas usan la MISMA iluminación (la de Neurotransmisores/Hormonas):
@@ -49,16 +50,9 @@ function FichaBox({ ficha, temaColor, active, leido = false, onClick }: {
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
 
-      {/* Sello de "ficha ya leída" */}
-      {leido && (
-        <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
-              w="24px" h="24px" borderRadius="full" bg={fisiologiaTxt}
-              boxShadow={`0 0 10px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="#1a1226">
-            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-          </Box>
-        </Flex>
-      )}
+      {/* Marca de "ficha ya leída" — la común (MarcaLeido), igual que en las
+          rejillas de FotoBox: círculo del Bg con el tick en la letra. */}
+      {leido && <MarcaLeido tinta={fisiologiaTxt} bg={fisiologiaBg} />}
 
       {/* Foto a sangre en la parte de arriba (como en Sistemas). */}
       <Box position="relative" zIndex={1} w="100%" aspectRatio={1} overflow="hidden" flexShrink={0}
@@ -96,8 +90,14 @@ export default function MetodoFisiologiaTema() {
   const { temaKey } = useParams<{ temaKey: string }>();
   const [loading, setLoading] = useState(true);
   const [ficha, setFicha] = useState<Ficha | null>(null);
+  // La ficha abierta ya estaba leída ANTES de abrirla (aviso dentro del popup).
+  const [fichaYaLeida, setFichaYaLeida] = useState(false);
   const [leidas, setLeidas] = useState<Set<string>>(new Set());
   const [comicAbierto, setComicAbierto] = useState(false);
+  // El cómic «antes de empezar» de este tema ya se ha leído (marquita en el botón).
+  const [comicLeido, setComicLeido] = useState(false);
+  // Y si ya lo estaba ANTES de abrirlo, el visor lo dice arriba («✓ Leída»).
+  const [comicYaLeido, setComicYaLeido] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
 
@@ -121,6 +121,8 @@ export default function MetodoFisiologiaTema() {
           const mapa = dataRef.current?.[PROFUNDIZA_LEIDAS_KEY] ?? {};
           const arr: string[] = Array.isArray(mapa?.[temaKey || ""]) ? mapa[temaKey || ""] : [];
           if (arr.length) setLeidas(new Set(arr));
+          const comics = dataRef.current?.[PROFUNDIZA_COMICS_KEY];
+          if (Array.isArray(comics) && comics.includes(temaKey || "")) setComicLeido(true);
         } catch { /* sin fila todavía */ }
 
         // No mostramos la página hasta que TODAS las fotos de las fichas estén
@@ -142,6 +144,8 @@ export default function MetodoFisiologiaTema() {
   // Abre una ficha y la marca como leída (se guarda en BD). Se usa tanto al
   // pulsar la caja como al navegar con las flechas dentro del modal.
   const verFicha = (f: Ficha) => {
+    // Antes de marcarla: si ya venía leída, la ficha lo dice arriba («✓ Leída»).
+    setFichaYaLeida(leidas.has(f.key));
     setFicha(f);
     if (leidas.has(f.key)) return;
     const next = new Set(leidas);
@@ -153,6 +157,25 @@ export default function MetodoFisiologiaTema() {
     const mapa = { ...(dataRef.current?.[PROFUNDIZA_LEIDAS_KEY] ?? {}) };
     mapa[tema.key] = Array.from(next);
     const data = { ...dataRef.current, [PROFUNDIZA_LEIDAS_KEY]: mapa };
+    dataRef.current = data;
+    axios.patch(`${API_URL}/metodo-fisiologia/${userId}`, { data }, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => { /* se reintenta la próxima vez */ });
+  };
+
+  // Abre el cómic «antes de empezar» y lo deja marcado como leído (se guarda en
+  // BD, igual que las fichas: al volver, el botón conserva su marquita).
+  const abrirComic = () => {
+    setComicYaLeido(comicLeido); // foto de antes: el aviso de dentro del cómic
+    setComicAbierto(true);
+    if (comicLeido) return;
+    setComicLeido(true);
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    if (!userId || !token) return;
+    const previos: string[] = Array.isArray(dataRef.current?.[PROFUNDIZA_COMICS_KEY])
+      ? dataRef.current[PROFUNDIZA_COMICS_KEY] : [];
+    const data = { ...dataRef.current, [PROFUNDIZA_COMICS_KEY]: [...previos, tema.key] };
     dataRef.current = data;
     axios.patch(`${API_URL}/metodo-fisiologia/${userId}`, { data }, {
       headers: { Authorization: `Bearer ${token}` },
@@ -194,7 +217,7 @@ export default function MetodoFisiologiaTema() {
             <Reveal direction="up" distance={16} delay={0.2} duration={0.55} display="flex" justifyContent="center">
               <Box
                 as="button"
-                onClick={() => setComicAbierto(true)}
+                onClick={abrirComic}
                 display="inline-flex"
                 alignItems="center"
                 gap={2.5}
@@ -217,6 +240,11 @@ export default function MetodoFisiologiaTema() {
                   <path d="M320-200v-560l440 280-440 280Z" />
                 </Box>
                 Antes de empezar: mira cómo se fabrican
+                {/* Ya leído: la marquita común, aquí dentro del botón. */}
+                {comicLeido && (
+                  <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg}
+                              size="22px" iconSize="13px" />
+                )}
               </Box>
             </Reveal>
           )}
@@ -267,11 +295,13 @@ export default function MetodoFisiologiaTema() {
 
       {/* Modal de la ficha (foto + explicación, con flechas). */}
       <FichaExploraModal ficha={ficha} fichas={tema.fichas} temaColor={tema.color}
+                         leida={fichaYaLeida}
                          onSelect={verFicha} onClose={() => setFicha(null)} />
 
       {/* Cómic «antes de empezar». */}
       {tieneComic && (
-        <ComicTemaModal isOpen={comicAbierto} vinetas={tema.comicIntro!} onClose={() => setComicAbierto(false)} />
+        <ComicTemaModal isOpen={comicAbierto} vinetas={tema.comicIntro!} leida={comicYaLeido}
+                        onClose={() => setComicAbierto(false)} />
       )}
 
       {celulasModal}

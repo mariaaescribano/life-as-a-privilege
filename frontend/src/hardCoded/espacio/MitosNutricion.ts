@@ -9,6 +9,11 @@ import type { NutrienteTarjeta } from "./NutrientesNutricion";
 // Faltan por subir: alcohol-calorias y picante-metabolismo (muestran la inicial
 // de la pregunta como marcador mientras no exista el archivo).
 
+// Clave en metodo_nutricion.data con los mitos ya leídos (string[] de keys).
+// La comparten la página de «Preguntas y mitos» y el «Respuestas» de la
+// Biblioteca: se lea por donde se lea, la tarjeta se queda con su marquita.
+export const MITOS_LEIDOS_KEY = "mitos_leidos";
+
 export const MITOS_NUTRICION: NutrienteTarjeta[] = [
   {
     key: "soja-cancer",
@@ -17,7 +22,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "La soja contiene isoflavonas, unas moléculas llamadas fitoestrógenos porque se parecen a los estrógenos humanos. Por eso pueden unirse a algunos de sus receptores, aunque con una fuerza muchísimo menor.",
       "El miedo nació de experimentos en ratones a los que se daban dosis enormes de isoflavonas aisladas, muy lejos de lo que aporta un plato de tofu o edamame. En personas, los estudios no encuentran que el consumo habitual de soja aumente el riesgo de cáncer.",
-      "De hecho, en el cáncer de mama la evidencia apunta a un efecto neutro o incluso ligeramente protector. Comer soja como alimento (tofu, tempeh, edamame, bebida de soja) en cantidades normales es seguro.",
+      "De hecho, en el cáncer de mama la evidencia apunta a un efecto protector. Comer soja como alimento (tofu, tempeh, edamame, bebida de soja) en cantidades normales es seguro.",
     ],
   },
   {
@@ -35,9 +40,9 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     titulo: "¿Se pueden comer demasiadas proteínas?",
     foto: "/recorrido/nutricion/mitos/proteinasdemasiadas.webp",
     parrafos: [
-      "La proteína es esencial para construir y reparar tejidos, pero el cuerpo no la almacena como reserva igual que la grasa o los hidratos. Lo que no usa, lo transforma y elimina, sobre todo por la orina.",
-      "En personas sanas, comer más proteína de la necesaria no es peligroso: simplemente se aprovecha lo justo y el resto se descarta. Rangos habituales de 1,2 a 2 g por kilo de peso son perfectamente seguros para la mayoría.",
-      "El «demasiado» de verdad llega con dosis muy altas y sostenidas, o si desplazan por completo a verduras, fruta y fibra. El equilibrio del plato importa más que obsesionarse con un solo nutriente.",
+      "La proteína es esencial para construir y reparar tejidos. El cuerpo no dispone de un almacén específico de proteínas, por lo que los aminoácidos que no necesita para sintetizar proteínas se utilizan como energía o pueden convertirse en glucosa o grasa.",
+      "El nitrógeno sobrante se elimina principalmente en forma de urea por la orina. En personas sanas, consumir entre 1,2 y 2 g de proteína por kilo de peso al día es seguro para la mayoría, y cantidades algo superiores también suelen ser bien toleradas.",
+      "Más importante que consumir mucha proteína es mantener una dieta equilibrada que incluya suficiente fibra, frutas, verduras y otros nutrientes.",
     ],
   },
   {
@@ -65,7 +70,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     titulo: "¿Comer carne roja es malo para la salud?",
     foto: "/recorrido/nutricion/mitos/carneroja.webp",
     parrafos: [
-      "Conviene separar dos cosas. La carne roja sin procesar (un filete, por ejemplo) puede formar parte de una dieta sana con moderación: aporta proteína, hierro y vitamina B12.",
+      "Conviene separar dos cosas. La carne roja sin procesar y de granja (un filete, por ejemplo) puede formar parte de una dieta sana con moderación (2-3 veces por semana): aporta proteína, hierro y vitamina B12.",
       "La carne procesada (embutidos, salchichas, bacon) es otra historia: su consumo habitual sí se asocia con más riesgo de ciertos cánceres y de enfermedad cardiovascular. Ahí sí merece la pena reducir.",
       "La recomendación general es moderar la carne roja a un par de raciones por semana, minimizar la procesada y dar más peso a legumbres, pescado, aves y proteína vegetal. No es prohibir: es equilibrar.",
     ],
@@ -148,6 +153,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
       "La idea de que «por la noche los carbohidratos se convierten en grasa» no tiene base sólida. El cuerpo no lleva un reloj que decida engordar a partir de cierta hora.",
       "Lo que cuenta es el balance total de energía del día, no el momento exacto en que comes los hidratos. De hecho, una cena con algo de carbohidrato puede ayudar al descanso.",
       "Lo que sí conviene por la noche es no llegar a una cena enorme por haber comido poco durante el día, y elegir opciones ligeras. La hora importa mucho menos que el conjunto.",
+      "Profundiza: Los carbohidratos en la cena ayudan a que el aminoácido triptófano llegue mejor al cerebro, donde se convierte en serotonina y luego en melatonina, facilitando el descanso.",
     ],
   },
   {
@@ -157,7 +163,8 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "El pan es, sobre todo, harina: un carbohidrato. Como cualquier alimento, suma calorías, pero no tiene un poder mágico de engordar por sí mismo.",
       "Suele engordar lo que le ponemos encima y la cantidad: mantequilla, embutidos, salsas… y las raciones grandes de pan blanco muy refinado, que sacia poco y se come de más.",
-      "Un pan integral de buena calidad, en una ración razonable, encaja perfectamente en una dieta sana. La diferencia está en el tipo de pan y en cuánto, no en el pan como enemigo.",
+      "Un pan integral de buena calidad, en una ración razonable, encaja perfectamente en una dieta sana.",
+      "La diferencia está en el tipo de pan y en cuánto, no en el pan como enemigo.",
     ],
   },
   {
@@ -168,6 +175,22 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
       "La fruta contiene azúcar (fructosa), sí, pero viene envuelto en fibra, agua, vitaminas y antioxidantes. Esa fibra hace que el azúcar se absorba despacio, sin los picos bruscos del azúcar añadido.",
       "Por eso comer fruta entera no se parece en nada a beber un refresco: la matriz del alimento cambia por completo cómo lo procesa el cuerpo.",
       "Salvo indicación médica concreta, no hay motivo para temer la fruta. Es de los alimentos con mejor relación entre lo que aporta y las calorías que tiene. Distinto es el zumo, donde se pierde la fibra.",
+    ],
+  },
+  {
+    key: "zumo-vs-fruta",
+    titulo: "¿Por qué el zumo no es lo mismo que la fruta?",
+    foto: "/recorrido/nutricion/mitos/zumovsfruta.webp",
+    parrafos: [
+      "Empecemos por los números, que aquí lo explican casi todo. Para llenar un vaso de zumo de naranja natural hacen falta entre tres y cuatro naranjas. Ese vaso lleva unos 22 gramos de azúcar; el mismo vaso lleno de refresco de cola lleva unos 26. La diferencia es mucho menor de lo que casi nadie imagina.",
+      "Pero el azúcar no es lo que más cambia. Esas tres o cuatro naranjas contenían entre 8 y 10 gramos de fibra —cerca de un tercio de todo lo que deberías tomar en un día— y en el vaso no queda prácticamente nada: la fibra se ha quedado en el exprimidor o en el colador. Y con ella se ha ido el freno.",
+      "Ahí está la clave, porque la fructosa la gestiona casi en exclusiva el hígado, y lo hace de una forma peculiar. Cuando le llega glucosa, el hígado tiene un regulador que la procesa más despacio si ya va sobrado. Con la fructosa no existe ese freno: la enzima que la capta, la fructoquinasa, trabaja a toda velocidad sin poder pararse. Fosforila toda la que le llegue, tan rápido como llegue.",
+      "Y eso tiene un precio. Cada molécula de fructosa consume una de ATP, la moneda energética de la célula, y deja el fósforo atrapado. Cuando llega un chorro grande y de golpe, la energía del hepatocito cae en picado durante unos minutos. Al reponerse, esa degradación genera ácido úrico como residuo. Además, los carbonos de la fructosa entran en la ruta por debajo del punto que está regulado, así que fluyen sin control hacia la fabricación de grasa: triglicéridos y grasa que se deposita en el propio hígado.",
+      "Con la fruta entera esto no pasa. La fibra forma una especie de gel que hace que la fructosa se libere poco a poco, y a esas dosis pequeñas y lentas el propio intestino se encarga de la mayor parte antes de que llegue al hígado. La fruta entrega la misma molécula, pero a cuentagotas. El zumo la entrega de golpe.",
+      "Un matiz sobre la vitamina C, porque suele contarse al revés: el zumo NO pierde la vitamina C, la conserva casi entera, y tampoco es verdad que haya que bebérselo en dos minutos «antes de que se vayan las vitaminas». Ese es un mito. Lo que ocurre es más incómodo: una sola naranja ya te cubre prácticamente toda la vitamina C que necesitas en un día. Así que si te tomas el zumo por la vitamina C, la primera naranja ya te la dio; las otras tres solo han añadido azúcar sin fibra.",
+      "Súmale el tiempo. Comerte cuatro naranjas te llevaría un buen rato de pelar y masticar, y lo más probable es que no pudieras acabártelas. El zumo se bebe en veinte segundos y no llena nada, porque masticar y la propia fibra son parte de la señal de saciedad. Por eso es tan fácil tomar en un vaso una cantidad de fruta que jamás te comerías.",
+      "No es una impresión: en un seguimiento de más de 180.000 personas durante años, comer fruta entera se asoció a menos riesgo de diabetes tipo 2, mientras que beber zumo se asoció a más. Cambiar el zumo por la pieza entera bastaba para que el riesgo bajara.",
+      "Nada de esto convierte un zumo en veneno. Un zumo puntual no le hace daño a nadie. Pero conviene tenerlo claro: el zumo no cuenta como una ración de fruta, no debería ser la bebida de todos los desayunos y no sustituye a la pieza entera. La fruta hay que masticarla.",
     ],
   },
   {
@@ -207,7 +230,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "El aceite de oliva virgen extra es rico en grasas monoinsaturadas y en antioxidantes (polifenoles), y es un pilar de la dieta mediterránea, asociada a mejor salud cardiovascular.",
       "La mantequilla, en cambio, es principalmente grasa saturada. No es un veneno, pero como grasa habitual del día a día el aceite de oliva le gana con claridad.",
-      "Usar mantequilla de vez en cuando por su sabor está perfectamente bien; el aceite de oliva es la mejor opción para cocinar y aliñar a diario. Es una cuestión de cuál pones como base.",
+      "Usar mantequilla de vez en cuando por su sabor está perfectamente bien; el aceite de oliva es la mejor opción para cocinar y aliñar a diario. Es una cuestión de cuál usas a diario.",
     ],
   },
   {
@@ -227,7 +250,8 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "«Light» solo significa que tiene menos calorías o menos grasa/azúcar que su versión normal, pero no que sea un alimento sano ni bajo en calorías en términos absolutos.",
       "A veces, al quitar grasa se añade azúcar (o al revés) para mantener el sabor, así que la diferencia real puede ser pequeña. Y el efecto psicológico juega en contra: solemos comer más «porque es light».",
-      "Adelgazar depende del conjunto de la dieta, no de una etiqueta. Muchas veces la versión normal en menor cantidad, o directamente un alimento sin procesar, es mejor opción que su equivalente «light».",
+      "Adelgazar depende del conjunto de la dieta, no de una etiqueta.",
+      "Muchas veces la versión normal en menor cantidad, o directamente un alimento sin procesar, es mejor opción que su equivalente «light».",
     ],
   },
   {
@@ -256,8 +280,17 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     foto: "/recorrido/nutricion/mitos/colesterolalimentos.webp",
     parrafos: [
       "Parece de sentido común: si como colesterol, sube mi colesterol. Pero el cuerpo es más listo. Tu hígado fabrica la mayor parte del colesterol y baja su producción cuando llega más de la comida.",
-      "Por eso, para la mayoría de las personas, el colesterol de los alimentos tiene un impacto mucho menor del que se creía sobre el nivel en sangre.",
+      "Los números lo dejan claro. Tu cuerpo produce cada día entre 800 y 1.000 miligramos de colesterol por su cuenta, mientras que una dieta normal aporta unos 300. Es decir: la mayor parte del colesterol que llevas dentro no lo has comido, lo has fabricado tú. Y es lógico, porque lo necesitas para las membranas de todas tus células, para las hormonas sexuales, para el cortisol, para la vitamina D y para las sales biliares.",
+      "El primer freno es un termostato. La enzima que dirige la fábrica se llama HMG-CoA reductasa —exactamente la misma que bloquean las estatinas—, y el hígado la regula según lo que le llega: si comes más colesterol, produce menos; si comes menos, produce más. Por eso quitar el colesterol de la dieta rara vez baja tanto el análisis como uno esperaría: el cuerpo compensa.",
+      "El segundo freno está en el intestino. No absorbes todo lo que comes: de media, alrededor de la mitad. El colesterol tiene que entrar por una puerta concreta (una proteína llamada NPC1L1) y, además, hay unas bombas en la pared intestinal que devuelven parte de lo que ya había entrado. Dos filtros antes de que nada llegue a la sangre.",
+      "Ahí está también la explicación de por qué esto no es igual para todo el mundo. La eficacia de esa puerta, la de esas bombas y el tipo de apolipoproteína E que hayas heredado varían de una persona a otra. Se calcula que en torno a una de cada cuatro o cinco personas es «hiperrespondedora»: a ellas el colesterol de la dieta sí les sube el de la sangre de forma apreciable. La única manera de saber en qué grupo estás es un análisis.",
+      "¿De dónde salió entonces el miedo? De unos conejos. En 1913, un investigador ruso alimentó conejos con yema de huevo y les llenó las arterias de placas. El problema es que el conejo es herbívoro: en la naturaleza no come colesterol jamás y no tiene forma de deshacerse de él. Era el peor modelo posible para estudiar a un omnívoro, pero aquel experimento marcó un siglo de recomendaciones.",
+      "Por eso las guías han cambiado. El famoso límite de 300 miligramos al día se retiró de las recomendaciones estadounidenses en 2015, y los organismos europeos han ido en la misma dirección. No porque el colesterol de la dieta sea irrelevante, sino porque contar miligramos no predecía bien quién iba a tener un problema.",
+      "Y aquí viene el aviso importante, porque este mito se ha dado la vuelta y ahora mucha gente concluye que el colesterol de la comida da igual del todo. No es eso. Lo que pasa es que la mayoría de los alimentos ricos en colesterol vienen acompañados de grasa saturada en el mismo bocado —embutidos, carnes grasas, mantequilla, quesos curados, bollería—, y es esa grasa saturada la que sí te sube el LDL. El mecanismo es distinto: hace que el hígado reduzca sus receptores de LDL, así que las partículas se quedan más tiempo dando vueltas por la sangre en lugar de ser retiradas.",
+      "El huevo y el marisco son la excepción que lo demuestra: llevan colesterol pero muy poca grasa saturada. Por eso han sido rehabilitados, mientras que el grupo de la mantequilla y el embutido no. No era el colesterol: era la compañía.",
+      "Hay personas para las que esto sí importa mucho, y conviene decirlo. Quien tiene hipercolesterolemia familiar —un fallo hereditario en los receptores de LDL que afecta a alrededor de 1 de cada 250 personas y que está enormemente infradiagnosticado— no regula bien nada de esto. También quien tiene diabetes tipo 2 o ya ha tenido un evento cardiovascular. Si en tu familia hay infartos tempranos o colesterol muy alto desde joven, coméntalo con tu médica o médico.",
       "Lo que más eleva el colesterol «malo» (LDL) es el exceso de grasas saturadas y, sobre todo, de grasas trans de los ultraprocesados. Ahí es donde de verdad merece la pena poner el foco.",
+      "Y si lo que quieres es bajarlo, esto es lo que funciona de verdad: fibra soluble (avena, cebada, legumbres), que atrapa las sales biliares y obliga al hígado a gastar colesterol para fabricar más; cambiar grasa saturada por insaturada en lugar de simplemente quitar grasa; los esteroles vegetales, que compiten por esa misma puerta del intestino y pueden bajar el LDL en torno a un 10 %; y perder grasa abdominal y moverte. Nada de eso pasa por contar los miligramos de colesterol del plato.",
     ],
   },
   {
@@ -277,7 +310,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "Circula la moda de añadir una pizca de sal al agua para «hidratarse mejor». Tiene algo de lógica en contextos muy concretos: ejercicio intenso y prolongado, mucho calor y sudoración abundante.",
       "En esos casos, reponer sodio junto con el agua ayuda a mantener el equilibrio de líquidos. Es la base de las bebidas isotónicas de los deportistas.",
-      "Pero para la Vida normal, con una dieta que ya suele tener sal de sobra, echar sal al agua no aporta beneficio y puede sumar sodio innecesario. Para el día a día, agua sin más es perfecto.",
+      "Pero para la vida normal, con una dieta que ya suele tener sal de sobra, echar sal al agua no aporta beneficio y puede sumar sodio innecesario. Para el día a día, agua sin más es perfecto.",
     ],
   },
   {
@@ -345,7 +378,8 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     titulo: "¿Los probióticos funcionan?",
     foto: "/recorrido/nutricion/mitos/probioticos.webp",
     parrafos: [
-      "Los probióticos son microorganismos vivos que, en cantidad suficiente, pueden aportar beneficios. La evidencia es más sólida en situaciones concretas, como la diarrea asociada a antibióticos o algunos problemas digestivos.",
+      "Los probióticos son microorganismos vivos que, en cantidad suficiente, pueden aportar beneficios.",
+      "La evidencia es más sólida en situaciones concretas, como la diarrea asociada a antibióticos o algunos problemas digestivos.",
       "El matiz importante es que no todos son iguales: los efectos dependen de la cepa concreta y de la dosis, así que no vale cualquier producto para cualquier objetivo.",
       "Para cuidar tu microbiota en el día a día, suele importar más el conjunto de la dieta: mucha fibra, alimentos fermentados (yogur, kéfir, chucrut) y variedad vegetal. Los probióticos en cápsula son útiles en casos puntuales, no un imprescindible diario.",
     ],
@@ -355,9 +389,12 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     titulo: "¿Cenar tarde hace ganar peso?",
     foto: "/recorrido/nutricion/mitos/cenartarde.webp",
     parrafos: [
-      "No es la hora del reloj lo que engorda, sino el total de energía del día. Una caloría a las diez de la noche no cuenta distinto que a las seis de la tarde.",
-      "Lo que ocurre es que cenar muy tarde suele venir acompañado de otras cosas: más hambre, raciones grandes, picoteo nocturno y peor descanso, y eso sí puede favorecer ganar peso.",
-      "Además, comer justo antes de dormir puede empeorar el sueño y la digestión en algunas personas. Cenar con cierta antelación y de forma ligera es buena idea, pero por confort y descanso más que por un efecto mágico sobre la báscula.",
+      "Durante años se respondió a esto con un «da igual la hora, lo que cuenta son las calorías». Es una simplificación: la hora sí importa, porque tu cuerpo no procesa igual la misma comida a mediodía que a medianoche.",
+      "Tienes un reloj interno, el ritmo circadiano, que va preparando al organismo para dormir mucho antes de que te acuestes. Al caer la noche empiezas a segregar melatonina, y resulta que las células beta del páncreas —las que fabrican la insulina— tienen receptores para ella. Cuando la melatonina se une a esos receptores, frena la liberación de insulina.",
+      "El resultado es que, por la noche, la sensibilidad a la insulina y la tolerancia a la glucosa disminuyen. La misma cena, tomada tarde, deja más glucosa en sangre y durante más tiempo que si la hubieras tomado temprano. El cuerpo procesa peor los nutrientes justo cuando se está preparando para descansar, no para digerir.",
+      "Ahora bien, matiz igual de importante: eso no convierte la hora en la causa principal de ganar peso. El factor que más pesa sigue siendo el total de energía del día. Cenar tarde modula cómo gestionas esa comida; no sustituye al balance global.",
+      "Y a lo anterior se suma lo de siempre: quien cena muy tarde suele llegar con más hambre, servirse raciones más grandes, picotear después y dormir peor. Eso también empuja en la misma dirección.",
+      "En la práctica: intenta cenar dos o tres horas antes de acostarte y que la cena no sea la comida más copiosa del día. No por un efecto mágico sobre la báscula, sino porque le pones las cosas fáciles a tu metabolismo en el momento en que peor las tiene.",
     ],
   },
   {
@@ -435,7 +472,8 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     titulo: "¿El café es malo para la salud?",
     foto: "/recorrido/nutricion/mitos/cafemalo.webp",
     parrafos: [
-      "El café ha pasado de sospechoso a bien valorado. En cantidades moderadas, su consumo se asocia incluso con algunos beneficios y con menor riesgo de varias enfermedades.",
+      "El café ha pasado de sospechoso a bien valorado.",
+      "En cantidades moderadas, su consumo se asocia incluso con algunos beneficios y con menor riesgo de varias enfermedades.",
       "Aporta antioxidantes y, por supuesto, cafeína, que mejora el estado de alerta. En personas sanas, un consumo razonable no perjudica al corazón ni a la salud general.",
       "Los matices son individuales: quien es sensible a la cafeína puede notar nerviosismo, palpitaciones o mal sueño, y el embarazo requiere moderación. Y ojo con el café «postre» cargado de azúcar y nata, que es otra cosa muy distinta.",
     ],
@@ -475,7 +513,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     titulo: "¿La cerveza engorda?",
     foto: "/recorrido/nutricion/mitos/cervezaengorda.webp",
     parrafos: [
-      "La cerveza tiene calorías, sobre todo por su alcohol, más que por los hidratos. Una caña suelta no es gran cosa, pero varias al día suman rápido.",
+      "La cerveza tiene calorías, sobre todo por su alcohol, más que por los hidratos.",
       "El clásico «michelín» o «barriga cervecera» tiene que ver con ese aporte extra de calorías líquidas y con el picoteo que suele acompañar a la cerveza, más que con un efecto mágico sobre el abdomen.",
       "Con moderación no es un drama, pero como bebida habitual sí puede favorecer ganar peso. La versión sin alcohol reduce buena parte de las calorías y puede ser una alternativa razonable.",
     ],
@@ -501,6 +539,18 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     ],
   },
   {
+    key: "grasa-toxinas",
+    titulo: "¿La grasa acumula toxinas?",
+    foto: "/recorrido/nutricion/mitos/grasatoxinas.webp",
+    parrafos: [
+      "Aquí hay un matiz importante respecto a lo anterior. Tu cuerpo no acumula «toxinas» genéricas que necesiten limpiezas milagrosas, pero sí existe un grupo concreto de sustancias que se guardan en la grasa: los contaminantes liposolubles.",
+      "Son compuestos que no se disuelven en agua, así que el riñón no puede eliminarlos por la orina. Al no encontrar salida, se disuelven en lo único que les resulta afín: el tejido graso. Ahí pueden quedarse años. Hablamos de restos de pesticidas antiguos, PCB o dioxinas, que llegan sobre todo a través de la grasa animal.",
+      "Y ahora lo que casi nadie cuenta: que se queden ahí es, en realidad, una forma de protegerte. Guardados en la grasa están fuera de circulación y lejos de tus órganos. El tejido adiposo funciona como un almacén de seguridad.",
+      "Eso explica algo curioso: cuando se pierde peso muy rápido, parte de esos compuestos se liberan de nuevo a la sangre y sus niveles suben temporalmente. No es un motivo para no adelgazar —los beneficios de perder peso son enormemente mayores—, sino un argumento más para hacerlo de forma progresiva y sostenida, no a base de dietas exprés.",
+      "Lo que ayuda es lo aburrido de siempre: variedad en la dieta, fibra abundante (facilita que se eliminen por la bilis en lugar de reabsorberse), moderar la grasa animal y bajar peso poco a poco. Ningún zumo verde hace nada de esto.",
+    ],
+  },
+  {
     key: "sin-gluten",
     titulo: "¿Los alimentos «sin gluten» son más saludables?",
     foto: "/recorrido/nutricion/mitos/singluten.webp",
@@ -508,6 +558,19 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
       "Los alimentos sin gluten son imprescindibles para quien tiene celiaquía o sensibilidad al gluten, porque para ellos el gluten sí es un problema de salud real.",
       "Pero para el resto de la gente, «sin gluten» no significa más sano. Muchos productos procesados sin gluten llevan más azúcar, grasa o aditivos para compensar la textura, y suelen ser más caros.",
       "Quitar el gluten sin necesidad médica no aporta beneficios y puede reducir el consumo de cereales integrales y fibra. Si no eres celíaco ni sensible, no hay razón para evitarlo.",
+    ],
+  },
+  {
+    key: "celiaquia",
+    titulo: "¿Cómo se reconoce la celiaquía?",
+    foto: "/recorrido/nutricion/mitos/celiaquia.webp",
+    parrafos: [
+      "Primero, qué es: la celiaquía no es una alergia ni una intolerancia. Es una enfermedad autoinmune. El gluten hace que el sistema inmunitario ataque al propio intestino y vaya destruyendo las vellosidades que absorben los nutrientes. Por eso no se trata de «sentar mal»: se trata de daño real en el tejido.",
+      "Afecta aproximadamente al 1 % de la población, una de cada cien personas. Pero el dato que importa es otro: se estima que alrededor del 75 % de los casos están sin diagnosticar. La mayoría de las personas celíacas no sabe que lo es, y el retraso hasta el diagnóstico se ha estimado en más de cinco años en adultos.",
+      "Se diagnostica poco por dos ideas equivocadas muy extendidas. La primera, que es cosa de niños: puede aparecer a cualquier edad, y hoy muchos diagnósticos llegan pasados los cuarenta. La segunda, que el celíaco está delgado: se puede tener celiaquía con peso normal o con sobrepeso.",
+      "Los síntomas digestivos son los conocidos —diarrea o estreñimiento, hinchazón, dolor abdominal, gases, náuseas—, pero en adultos muchas veces son leves o ni siquiera aparecen. Lo que más se pasa por alto son las señales de fuera del intestino: anemia por falta de hierro que no mejora tomando hierro (la pista clásica), cansancio persistente, llagas en la boca que se repiten, dolor articular, osteoporosis temprana, migrañas, hormigueo en manos y pies, abortos de repetición o problemas de fertilidad, y transaminasas altas sin explicación. En la piel puede dar una erupción con picor intenso y ampollitas (dermatitis herpetiforme). En niños, falta de crecimiento, retraso puberal o irritabilidad.",
+      "Hay un aviso práctico que puede ahorrarte años: si sospechas, NO dejes el gluten antes de hacerte las pruebas. Los análisis y la biopsia se basan en la reacción al gluten, así que quitarlo antes da falsos negativos y obliga a volver a comerlo durante semanas para poder diagnosticarte. Primero se consulta y se analiza; después se retira.",
+      "Y si tienes un familiar de primer grado celíaco, tu probabilidad ronda el 10 %: merece la pena comentarlo con tu médica o médico aunque te encuentres bien.",
     ],
   },
   {
@@ -528,6 +591,30 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
       "Recalentar comida es perfectamente seguro si se hace bien. La clave está en la conservación: enfriar rápido las sobras, guardarlas en la nevera y recalentarlas a fondo, bien calientes.",
       "El verdadero riesgo no es el hecho de recalentar, sino dejar la comida horas a temperatura ambiente, donde las bacterias se multiplican. Ahí sí puede haber problemas.",
       "Algunos alimentos concretos (como el arroz mal conservado) requieren más cuidado, y no conviene recalentar una y otra vez lo mismo. Pero, en general, aprovechar las sobras con buena higiene no tiene nada de malo.",
+    ],
+  },
+  {
+    key: "pasta-fuera",
+    titulo: "¿Pasa algo por dejar la pasta fuera de la nevera?",
+    foto: "/recorrido/nutricion/mitos/pastafuera.webp",
+    parrafos: [
+      "Sí, y es de las pocas cosas de esta sección donde el riesgo es serio. Dejar la pasta ya cocida en la olla, tapada en la encimera o «al fresco» hasta el día siguiente no es una costumbre inocente.",
+      "La culpable es una bacteria llamada Bacillus cereus, muy común en la tierra y por tanto en los cereales. Aquí está el problema: hervir la pasta mata a la bacteria, pero no a sus esporas, que aguantan perfectamente el agua hirviendo. Mientras la pasta está caliente no pasa nada; en cuanto se templa y se queda a temperatura ambiente, esas esporas despiertan, se multiplican y empiezan a fabricar una toxina.",
+      "Y esa toxina es el verdadero problema, porque resiste el calor. Puedes recalentar la pasta hasta que humee, saltearla en la sartén o meterla en el horno: matarás a las bacterias, pero la toxina seguirá intacta. Recalentar bien no arregla una mala conservación.",
+      "No es teoría. Hay un caso documentado en la literatura médica de un joven de veinte años que murió tras comerse unos espaguetis que llevaban cinco días fuera de la nevera y que había recalentado antes de cenar. Es un caso extremo y muy raro, pero explica por qué esto se toma en serio.",
+      "La regla es sencilla: en cuanto la pasta deje de estar caliente, a la nevera. No más de dos horas fuera (una sola si hace calor en la cocina) y consumirla en un par de días. Si te la has dejado toda la noche fuera, no la recalientes: tírala.",
+    ],
+  },
+  {
+    key: "arroz-fuera",
+    titulo: "¿Y el arroz? ¿Puede quedarse fuera?",
+    foto: "/recorrido/nutricion/mitos/arrozfuera.webp",
+    parrafos: [
+      "Todavía menos que la pasta. El arroz es el ejemplo clásico de este problema, hasta el punto de que en inglés lo llaman «síndrome del arroz frito»: la mayoría de los brotes descritos venían de arroz cocido que había pasado la noche fuera y se había salteado al día siguiente.",
+      "El motivo es el mismo que en la pasta —las esporas de Bacillus cereus sobreviven a la cocción y su toxina resiste el recalentado—, pero el arroz lo agrava por su forma de enfriarse: una olla llena, compacta y húmeda tarda muchísimo en bajar de temperatura, y guarda el calor justo en la franja en la que las bacterias se multiplican mejor. Puede pasar horas en la zona de peligro sin que tú lo notes.",
+      "Así que el truco no es solo meterlo en la nevera, sino enfriarlo rápido: extiéndelo en una bandeja o en un recipiente ancho y plano en cuanto termines de comer, en lugar de dejarlo apelmazado en la olla. Cuanta más superficie, antes se enfría.",
+      "Después: a la nevera antes de una hora, en un recipiente cerrado, y consumirlo en 24 horas. Recalentarlo una sola vez y bien caliente, nunca templado. Y si vas a congelarlo, hazlo también cuanto antes, no al día siguiente.",
+      "Dicho esto, tampoco hay que vivir con miedo: millones de personas comen arroz sobrante todos los días sin problema. Basta con no dejarlo horas al aire y no confiar en que un buen recalentado lo arregle todo, porque no lo hace.",
     ],
   },
   {
@@ -575,7 +662,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     titulo: "¿La fruta engorda?",
     foto: "/recorrido/nutricion/mitos/frutaengorda.webp",
     parrafos: [
-      "La fruta tiene azúcar, pero también fibra, agua y muchos nutrientes, y aporta relativamente pocas calorías para lo que llena. Es de los alimentos que mejor sacian por caloría.",
+      "La fruta tiene fructosa, pero también fibra, agua y muchos nutrientes, y aporta relativamente pocas calorías para lo que llena. Es de los alimentos que mejor sacian por caloría.",
       "En los estudios, comer fruta se asocia con mejor control del peso, no con engordar. Su fibra ralentiza la absorción del azúcar y ayuda a comer menos de otras cosas.",
       "Salvo indicación médica muy concreta, no hay motivo para limitar la fruta por miedo a engordar. El «peligro» del azúcar está en los añadidos y los zumos, no en una manzana o un plátano enteros.",
     ],
@@ -587,17 +674,8 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "Durante años se dijo que hacer muchas comidas pequeñas «acelera el metabolismo». Hoy sabemos que el número de comidas apenas cambia las calorías que gastas al día.",
       "Lo que de verdad cuenta es el total de energía y la calidad de lo que comes, no repartirlo en tres tomas o en cinco. No hay una fórmula única mejor para todo el mundo.",
-      "Lo ideal es lo que a ti te funcione: a algunas personas comer varias veces les evita el picoteo; a otras, menos comidas más completas les sacia mejor. Elige el patrón que puedas mantener y te siente bien.",
-    ],
-  },
-  {
-    key: "comer-noche",
-    titulo: "¿Comer de noche engorda más?",
-    foto: "/recorrido/nutricion/mitos/comernoche.webp",
-    parrafos: [
-      "El cuerpo no tiene un interruptor que a partir de cierta hora convierta la comida en grasa. Lo que engorda es el balance total de energía a lo largo del tiempo.",
-      "Lo que sí pasa es que por la noche solemos comer peor: más cansados, con menos control, picoteando ultraprocesados frente a la pantalla. Ahí es donde se acumulan calorías de más.",
-      "Si cenas de forma equilibrada y en una cantidad razonable, la hora importa poco. El problema no es la noche en sí, sino qué y cuánto comemos cuando bajamos la guardia.",
+      "Lo ideal es lo que a ti te funcione: a algunas personas comer varias veces les evita el picoteo; a otras, menos comidas más completas les sacia mejor.",
+      "Elige el patrón que puedas mantener y te siente bien.",
     ],
   },
   {
@@ -607,7 +685,8 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     parrafos: [
       "No todos los alimentos llenan igual para las mismas calorías. Los que más sacian combinan proteína, fibra, agua y volumen, porque llenan el estómago y mandan señales de saciedad al cerebro.",
       "Por eso llenan tanto las legumbres, los huevos, el pescado, las verduras, la fruta entera, la avena o las patatas cocidas: dan mucho «relleno» con relativamente pocas calorías.",
-      "En el extremo contrario están los ultraprocesados: mucha energía en poco volumen, fáciles de comer sin parar y que sacian poco. Elegir alimentos que llenan de verdad es una de las claves para comer bien sin pasar hambre.",
+      "En el extremo contrario están los ultraprocesados: mucha energía en poco volumen, fáciles de comer sin parar y que sacian poco.",
+      "Elegir alimentos que llenan de verdad es una de las claves para comer bien sin pasar hambre.",
     ],
   },
 ];

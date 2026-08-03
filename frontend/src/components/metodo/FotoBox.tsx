@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import { MarcaLeido } from "./MarcaLeido";
 import { culturaNom, fisiologiaNom, nutricionNom } from "../../GlobalVariables";
 
 // Glow suave de la tarjeta, SOLO con el color de la disciplina (`c` = <disc>Txt).
@@ -109,16 +110,9 @@ export function FotoBox({
       {/* Fondo temático de la disciplina (se ve en el pie, bajo el título). */}
       <DisciplinaBgLayer nom={nom} borderRadius="2xl" overlay={`${bg}55`} />
 
-      {/* Tick de «visto» (arriba a la derecha). */}
-      {visto && (
-        <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
-              w="24px" h="24px" borderRadius="full" bg={bg} border={`1px solid ${tinta}`}
-              boxShadow={`0 0 10px ${tinta}66, 0 1px 4px rgba(0,0,0,0.5)`}>
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill={tinta}>
-            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-          </Box>
-        </Flex>
-      )}
+      {/* Marca de «ya leído / visto» (arriba a la derecha). Sale de MarcaLeido:
+          es la MISMA marca en todas las tarjetas del recorrido. */}
+      {visto && <MarcaLeido tinta={tinta} bg={bg} />}
 
       {/* Badge de número de orden (arriba a la izquierda). */}
       {numero != null && (

@@ -13,6 +13,7 @@ import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { ComicHambreModal } from "../../components/metodo/ComicHambreModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useLeidos } from "../../hooks/useLeidos";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { MICROBIOTA_BACTERIAS, MICROBIOTA_TARJETAS } from "../../hardCoded/espacio/MicrobiotaNutricion";
 
@@ -20,13 +21,34 @@ import { MICROBIOTA_BACTERIAS, MICROBIOTA_TARJETAS } from "../../hardCoded/espac
 // Apartado «Microbiota» del recorrido de Nutrición. Se llega desde Los
 // nutrientes (botón «Microbiota →» → cómic de transición → aquí). Primero las
 // bacterias más conocidas de la microbiota; tras un separador con el mandala,
-// las moléculas que fabrican. Cada tarjeta abre su ficha tipo cómic.
+// las moléculas que fabrican. Cada tarjeta abre su ficha tipo cómic y, al
+// leerla, se queda con su marquita (también las que se leen pasando con las
+// flechas dentro del visor).
 // ═════════════════════════════════════════════════════════════════════════
+
+// Listas de leídos dentro de metodo_nutricion.data (una por rejilla).
+const CAMPO_BACTERIAS = "microbiota_bacterias_leidas";
+const CAMPO_MOLECULAS = "microbiota_moleculas_leidas";
+
 export default function MetodoNutricionMicrobiota() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [fichaIdx, setFichaIdx] = useState<number | null>(null);
   const [bacteriaIdx, setBacteriaIdx] = useState<number | null>(null);
+  const { leido, marcarLeido, snapshot } = useLeidos("metodo-nutricion");
+  // Lo que venía YA leído al abrir el visor (para el aviso «✓ Leída» de dentro).
+  const [yaLeidas, setYaLeidas] = useState<Set<string>>(new Set());
+
+  // El visor marca cada ficha que se muestra, así que la foto de lo ya leído se
+  // toma al abrir, antes de entrar.
+  const abrirBacteria = (i: number) => {
+    setYaLeidas(snapshot(CAMPO_BACTERIAS));
+    setBacteriaIdx(i);
+  };
+  const abrirMolecula = (i: number) => {
+    setYaLeidas(snapshot(CAMPO_MOLECULAS));
+    setFichaIdx(i);
+  };
   // Cómic de transición hacia «El hambre» (se abre al pulsar «El hambre →»).
   const [comicHambreOpen, setComicHambreOpen] = useState(false);
 
@@ -87,7 +109,8 @@ export default function MetodoNutricionMicrobiota() {
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
               {MICROBIOTA_BACTERIAS.map((bac, i) => (
                 <TarjetaNutri key={bac.key} titulo={bac.titulo} foto={bac.foto}
-                              onClick={() => setBacteriaIdx(i)} />
+                              visto={leido(CAMPO_BACTERIAS, bac.key)}
+                              onClick={() => abrirBacteria(i)} />
               ))}
             </SimpleGrid>
           </Reveal>
@@ -120,7 +143,8 @@ export default function MetodoNutricionMicrobiota() {
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
               {MICROBIOTA_TARJETAS.map((tar, i) => (
                 <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto}
-                              onClick={() => setFichaIdx(i)} />
+                              visto={leido(CAMPO_MOLECULAS, tar.key)}
+                              onClick={() => abrirMolecula(i)} />
               ))}
             </SimpleGrid>
           </Reveal>
@@ -131,12 +155,22 @@ export default function MetodoNutricionMicrobiota() {
       {/* Ficha tipo cómic de la bacteria seleccionada. */}
       {bacteriaIdx !== null && (
         <NutrienteFichaModal tarjetas={MICROBIOTA_BACTERIAS} index={bacteriaIdx}
+                             onLeida={(i) => {
+                               const bac = MICROBIOTA_BACTERIAS[i];
+                               if (bac) marcarLeido(CAMPO_BACTERIAS, bac.key);
+                             }}
+                             leida={(i) => yaLeidas.has(MICROBIOTA_BACTERIAS[i]?.key)}
                              onClose={() => setBacteriaIdx(null)} onSelect={setBacteriaIdx} />
       )}
 
       {/* Ficha tipo cómic de la molécula seleccionada. */}
       {fichaIdx !== null && (
         <NutrienteFichaModal tarjetas={MICROBIOTA_TARJETAS} index={fichaIdx}
+                             onLeida={(i) => {
+                               const tar = MICROBIOTA_TARJETAS[i];
+                               if (tar) marcarLeido(CAMPO_MOLECULAS, tar.key);
+                             }}
+                             leida={(i) => yaLeidas.has(MICROBIOTA_TARJETAS[i]?.key)}
                              onClose={() => setFichaIdx(null)} onSelect={setFichaIdx} />
       )}
 

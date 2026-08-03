@@ -21,7 +21,7 @@ import {
 } from "../../GlobalVariables";
 
 // ── Cursos para profundizar (Fisiología) ────────────────────────────────────
-// Página-hub que va DESPUÉS de Niveles. Aquí se listarán los cursos avanzados de
+// Página-hub que va DESPUÉS de La sonrisa interior. Aquí se listarán los cursos avanzados de
 // Fisiología. De momento no hay ninguno: se deja el enrutado y el diseño listos;
 // María solo tendrá que ir añadiendo objetos a CURSOS y el resto funciona solo.
 interface Curso {
@@ -162,7 +162,7 @@ export default function MetodoFisiologiaCursos() {
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
+              prev={{ label: "← La sonrisa interior", onClick: () => navigate("/metodo/fisiologia/sonrisa") }}
               extra={celulasBtn}
               next={nutriSuscrito
                 ? { label: "Nutrición →", onClick: () => navigate("/metodo/nutricion") }

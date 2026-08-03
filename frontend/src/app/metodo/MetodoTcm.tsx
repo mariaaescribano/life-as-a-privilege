@@ -68,9 +68,9 @@ export default function MetodoTcm() {
           }
         } catch { /* sin dosha: se queda el inicio de Ayurveda */ }
 
-        // Prerrequisito: hay que haber pagado Ayurveda (3ª disciplina).
-        if (!me.data?.ayurveda_suscrito) { navigate("/home"); return; }
-
+        // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
+        // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
+        // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const tcmSuscrito = !!me.data?.tcm_suscrito;
         setSuscrito(tcmSuscrito);
         if (!tcmSuscrito) { setPagoOpen(true); return; }

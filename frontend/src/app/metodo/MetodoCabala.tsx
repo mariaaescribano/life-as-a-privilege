@@ -56,9 +56,9 @@ export default function MetodoCabala() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Prerrequisito: hay que haber pagado Nutrición (6ª disciplina).
-        if (!me.data?.nutricion_suscrito) { navigate("/home"); return; }
-
+        // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
+        // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
+        // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const cabalaSuscrito = !!me.data?.cabala_suscrito;
         setSuscrito(cabalaSuscrito);
         if (!cabalaSuscrito) { setPagoOpen(true); return; }

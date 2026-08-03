@@ -240,6 +240,11 @@ function MarcadorModal({
                "&::-webkit-scrollbar": { width: "5px" },
                "&::-webkit-scrollbar-track": { bg: "transparent" },
                "&::-webkit-scrollbar-thumb": { bg: "rgba(255,255,255,0.4)", borderRadius: "full" },
+               // Lo que se LEE se puede seleccionar con el ratón: la página pone
+               // `noSelectSx` en su raíz y este popup, al pintarse dentro de
+               // ella, lo heredaba.
+               userSelect: "text",
+               WebkitUserSelect: "text",
              }}>
 
           {/* ── Título ── */}

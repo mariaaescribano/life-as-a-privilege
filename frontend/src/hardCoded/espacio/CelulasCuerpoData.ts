@@ -526,11 +526,11 @@ export const celulas: Celula[] = [
   // ── Sangre e inmunidad (nuevas) ──
   {
     id: "plaquetas",
-    claves: ["Vigilan los vasos", "Forman el tapón de una herida", "Activan la coagulación"],
+    claves: ["Fragmentos de un megacariocito", "Forman el tapón de una herida", "Activan la coagulación"],
     nombre: "Plaquetas",
     foto: "/viñetas/fisiologia/celulas/sangre/plaquetas.webp",
     descripcion:
-      "Son fragmentos celulares que vigilan la integridad de los vasos sanguíneos. Cuando hay una herida, acuden rápidamente, se agrupan y forman un tapón inicial que detiene el sangrado, activando después la cascada de coagulación para sellar la lesión.",
+      "No son células completas, sino fragmentos celulares: por eso no tienen núcleo. Nacen de una célula gigante que vive en la médula ósea, el megacariocito, que extiende unas prolongaciones larguísimas y ramificadas llamadas proplaquetas —como tentáculos— e introduce sus puntas dentro de los vasos sanguíneos de la propia médula. El flujo de la sangre va rompiendo y desprendiendo esas puntas, y cada fragmento que se libera a la circulación es una plaqueta. Un solo megacariocito puede producir entre 1.000 y 3.000 antes de agotarse y desaparecer. Ya en la sangre, vigilan la integridad de los vasos sanguíneos: cuando hay una herida acuden rápidamente, se agrupan y forman un tapón inicial que detiene el sangrado, activando después la cascada de coagulación para sellar la lesión. Como no tienen núcleo tampoco pueden repararse, así que viven entre 7 y 10 días y se reponen sin descanso.",
     cuidados:
       "Se benefician de buena hidratación, vitamina K y una alimentación equilibrada.",
   },
@@ -748,9 +748,19 @@ export const celulas: Celula[] = [
     nombre: "Célula de soporte (tipo I)",
     foto: "/viñetas/fisiologia/celulas/lengua/soportegusto.webp",
     descripcion:
-      "Son la glía del gusto: sostienen y envuelven a las células receptoras, mantienen el equilibrio químico a su alrededor y limpian los neurotransmisores tras cada señal, igual que los astrocitos hacen con las neuronas. Se cree que también participan en la detección del sabor salado.",
+      "Son la glía del gusto: sostienen y envuelven a las células receptoras, mantienen el equilibrio químico a su alrededor y limpian los neurotransmisores tras cada señal, igual que los astrocitos hacen con las neuronas. Se cree que también participan en la detección del sabor salado. Se las llama también células receptoras tipo I, y ese mismo nombre reaparece en otro rincón del cuerpo con un papel completamente distinto: las células glómicas de la carótida, que tienes justo en la tarjeta de al lado.",
     cuidados:
       "Se benefician de una buena hidratación y de una mucosa bucal sana, sin irritantes constantes.",
+  },
+  {
+    id: "glomica-tipo1",
+    claves: ["Los sensores de oxígeno", "Están en la carótida, no en la lengua", "Te hacen jadear en altitud"],
+    nombre: "Célula glómica (tipo I)",
+    foto: "/viñetas/fisiologia/celulas/lengua/glomica.webp",
+    descripcion:
+      "Comparten nombre con las células tipo I del gusto, pero viven en otro sitio y tienen otro oficio: están en el cuerpo carotídeo, un nódulo del tamaño de un grano de arroz situado en el cuello, donde la carótida se bifurca, bañado por la sangre que sube al cerebro. Son los sensores de oxígeno del organismo. Cuando el oxígeno de la sangre baja, cierran unos canales de su membrana, se activan y liberan neurotransmisores que excitan al nervio que va al tronco cerebral; en segundos, este ordena respirar más rápido y más profundo y acelera el corazón. Es lo que te hace jadear al subir a mucha altitud. El nombre, curiosamente, está cruzado: en el botón gustativo la tipo I es la célula de apoyo, mientras que en el cuerpo carotídeo la tipo I es la protagonista y las de apoyo son las tipo II. Y un detalle revelador de cómo funcionan: miden el oxígeno disuelto en el plasma, no el que llevan los glóbulos rojos. Por eso, en una intoxicación por monóxido de carbono, estas células no se enteran de nada y la persona no siente que le falte el aire.",
+    cuidados:
+      "No se cuidan de forma directa, pero sí se les puede dar tregua: no fumar y tratar la apnea del sueño, porque las bajadas repetidas de oxígeno durante la noche las mantienen sobreexcitadas y eso contribuye a la tensión alta.",
   },
   {
     id: "basal-gusto",

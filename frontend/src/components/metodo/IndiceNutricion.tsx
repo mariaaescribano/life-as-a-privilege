@@ -7,6 +7,8 @@
 // backend (metodo_nutricion.data):
 //   · Nutrientes secundarios → hasta revisar todos los principales.
 //   · Tus calorías y macros   → hasta crear el plato de Harvard.
+//   · ¿Cómo va tu azúcar?     → hasta tener el cálculo de calorías (de ahí saca
+//                               edad, peso y altura, para no volver a pedirlos).
 //   · Diseña tu día           → hasta tener el cálculo de calorías.
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -24,6 +26,7 @@ const PASOS: { titulo: string; path: string }[] = [
   { titulo: "El hambre",              path: "/metodo/nutricion/hambre" },
   { titulo: "Tu plato",               path: "/metodo/nutricion/plato" },
   { titulo: "Tus calorías y macros",  path: "/metodo/nutricion/calorias" },
+  { titulo: "¿Cómo va tu azúcar?",    path: "/metodo/nutricion/prediabetes" },
   { titulo: "Diseña tu día",          path: "/metodo/nutricion/dia" },
   { titulo: "Preguntas y mitos",      path: "/metodo/nutricion/mitos" },
   { titulo: "Cursos para profundizar", path: "/metodo/nutricion/cursos" },
@@ -63,6 +66,8 @@ export function IndiceNutricion() {
   const bloqueoPorPath: Record<string, boolean> = {
     "/metodo/nutricion/nutrientes-secundarios": !flags.principales,
     "/metodo/nutricion/calorias": !flags.plato,
+    // El test de azúcar necesita edad/peso/altura, que salen de las calorías.
+    "/metodo/nutricion/prediabetes": !flags.calorias,
     "/metodo/nutricion/dia": !flags.calorias,
   };
 

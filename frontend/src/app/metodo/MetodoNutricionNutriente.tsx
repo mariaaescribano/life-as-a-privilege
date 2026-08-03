@@ -13,6 +13,7 @@ import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlus
 import { NutrienteCirculo } from "../../components/metodo/NutrienteCirculo";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
+import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { comicNutrienteByKey } from "../../components/metodo/comicsNutrientes";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
@@ -31,6 +32,10 @@ import { NUTRIENTES, rutaListaNutriente, type Nutriente, type NutrienteTarjeta }
 
 const nutrienteByKey = (key: string): Nutriente | undefined =>
   NUTRIENTES.find((n) => n.key === key);
+
+// Ilustraciones (cómics) de grupo ya leídas, en metodo_nutricion.data: string[]
+// con las keys de los grupos cuyo cómic se ha abierto.
+const CAMPO_COMICS = "nutrientes_comics_leidos";
 
 // ── Iconos de los subgrupos de tarjetas ──────────────────────────────────
 // Los datos traen el subgrupo como «⚡ Electrolitos», pero el emoji no se pinta:
@@ -135,8 +140,17 @@ export default function MetodoNutricionNutriente() {
 
   const [fichaIdx, setFichaIdx] = useState<number | null>(null); // tarjeta abierta
   const [comicOpen, setComicOpen] = useState(false); // ilustración (cómic) del grupo
+  // La ilustración de este grupo ya está leída (marquita en el botón).
+  const [comicLeido, setComicLeido] = useState(false);
+  // Y si ya lo estaba ANTES de abrirla, el visor lo dice arriba («✓ Leída»).
+  const [comicYaLeido, setComicYaLeido] = useState(false);
   // Fichas de este grupo que ya ha abierto. Es lo que da (o no) el tick.
   const [fichasVistas, setFichasVistas] = useState<number[]>([]);
+  // Mismo dato en un ref: el visor avisa de una ficha leída por cada flecha, y
+  // dos avisos seguidos leerían el estado antiguo.
+  const vistasRef = useRef<number[]>([]);
+  // Fichas que YA estaban leídas al abrir el visor (para el aviso «✓ Leída»).
+  const [yaVistas, setYaVistas] = useState<number[]>([]);
   const dataRef = useRef<Record<string, any>>({}); // copia del blob para mergear al guardar
 
   const n = nutrienteByKey(key || "");
@@ -157,7 +171,11 @@ export default function MetodoNutricionNutriente() {
           const data = r.data?.data ?? {};
           dataRef.current = data;
           const previas = data.nutrientes_fichas?.[n.key];
-          setFichasVistas(Array.isArray(previas) ? previas.map(Number) : []);
+          const vistas = Array.isArray(previas) ? previas.map(Number) : [];
+          vistasRef.current = vistas;
+          setFichasVistas(vistas);
+          const comics = data[CAMPO_COMICS];
+          if (Array.isArray(comics) && comics.includes(n.key)) setComicLeido(true);
 
           // Un grupo SIN tarjetas no tiene subtipos que descubrir: con leerlo ya
           // está revisado, así que se marca al entrar (si no, nunca tendría tick).
@@ -207,11 +225,15 @@ export default function MetodoNutricionNutriente() {
    * el candado de la página siguiente se abría solo. Ahora el grupo queda
    * revisado cuando ha abierto TODAS sus fichas; lo que lleva visto se guarda
    * sobre la marcha, así que puede irse y seguir otro día donde lo dejó.
+   *
+   * Cuenta CADA ficha leída, no solo la tarjeta pulsada: el visor navega por
+   * dentro con las flechas y avisa de cada una (`onLeida`), así que las que se
+   * leen de paso también se quedan con su marquita.
    */
-  const abrirFicha = (idx: number) => {
-    setFichaIdx(idx);
-    if (!n?.tarjetas?.length || fichasVistas.includes(idx)) return;
-    const vistas = [...fichasVistas, idx];
+  const marcarFichaVista = (idx: number) => {
+    if (!n?.tarjetas?.length || vistasRef.current.includes(idx)) return;
+    const vistas = [...vistasRef.current, idx];
+    vistasRef.current = vistas;
     setFichasVistas(vistas);
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
@@ -220,6 +242,30 @@ export default function MetodoNutricionNutriente() {
       nutrientes_fichas: { ...(dataRef.current.nutrientes_fichas ?? {}), [n.key]: vistas },
     });
     if (vistas.length >= n.tarjetas.length) marcarExplorado(userId, token, n.key);
+  };
+
+  /**
+   * Abre la ficha pulsada. NO la marca aquí: de eso se encarga el visor por
+   * cada viñeta que muestra (`onLeida`). Lo que sí se guarda es la foto de lo
+   * que ya venía leído, para el aviso «✓ Leída» de dentro del popup.
+   */
+  const abrirFicha = (idx: number) => {
+    setYaVistas(vistasRef.current);
+    setFichaIdx(idx);
+  };
+
+  /** Abre la ilustración del grupo y la deja marcada como leída. */
+  const abrirComic = () => {
+    setComicYaLeido(comicLeido); // foto de antes: el aviso de dentro del visor
+    setComicOpen(true);
+    if (comicLeido || !n) return;
+    setComicLeido(true);
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    if (!userId || !token) return;
+    const previos: string[] = Array.isArray(dataRef.current[CAMPO_COMICS])
+      ? dataRef.current[CAMPO_COMICS] : [];
+    guardar(userId, token, { [CAMPO_COMICS]: [...previos, n.key] });
   };
 
   if (loading) return <NutricionLoading />;
@@ -304,7 +350,7 @@ export default function MetodoNutricionNutriente() {
                   </Box>
 
                   {comic && (
-                    <Box as="button" onClick={() => setComicOpen(true)}
+                    <Box as="button" onClick={abrirComic}
                          w="100%" position="relative" overflow="hidden"
                          display="inline-flex" alignItems="center" justifyContent="center" gap={2.5}
                          px={5} py={{ base: 2.5, md: 3 }} borderRadius="xl"
@@ -322,6 +368,11 @@ export default function MetodoNutricionNutriente() {
                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
                       </Box>
                       Ver ilustración
+                      {/* Ya leída: la marquita común, aquí dentro del botón. */}
+                      {comicLeido && (
+                        <MarcaLeido inline tinta={nutricionTxt} bg={nutricionBg}
+                                    size="22px" iconSize="13px" title="Leída" />
+                      )}
                     </Box>
                   )}
                 </Flex>
@@ -419,13 +470,16 @@ export default function MetodoNutricionNutriente() {
       {/* Ficha tipo cómic de la tarjeta seleccionada. */}
       {n.tarjetas && fichaIdx !== null && (
         <NutrienteFichaModal tarjetas={n.tarjetas} index={fichaIdx}
+                             onLeida={marcarFichaVista}
+                             leida={(i) => yaVistas.includes(i)}
                              onClose={() => setFichaIdx(null)} onSelect={abrirFicha} />
       )}
 
       {/* Ilustración (cómic) del grupo, a pantalla completa (misma estructura que
           las ilustraciones de otras disciplinas). */}
       {comic && (
-        <NutrienteIlustracionModal isOpen={comicOpen} vinetas={comic} onClose={() => setComicOpen(false)} />
+        <NutrienteIlustracionModal isOpen={comicOpen} vinetas={comic} leida={comicYaLeido}
+                                   onClose={() => setComicOpen(false)} />
       )}
 
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />

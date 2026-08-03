@@ -11,6 +11,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -458,12 +459,9 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
             <Flex align="center" gap={2.5}>
               <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
                     style={{ textShadow: INK }}>{e.nombre}</Text>
-              {hecha && (
-                <Flex as="span" align="center" justify="center" flexShrink={0}
-                      w={{ base: "22px", md: "24px" }} h={{ base: "22px", md: "24px" }} borderRadius="full"
-                      bg={e.glow} color={fisiologiaBg} fontSize={{ base: "xs", md: "sm" }} fontWeight="900"
-                      boxShadow={`0 0 10px ${e.glow}aa`}>✓</Flex>
-              )}
+              {/* Marca común del recorrido (MarcaLeido), con el color de la
+                  estructura: misma forma que el resto de marcas. */}
+              {hecha && <MarcaLeido inline tinta={e.glow} bg={fisiologiaBg} title="Construida" />}
             </Flex>
             <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
                   style={{ textShadow: INK }}>{e.desc}</Text>

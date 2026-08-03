@@ -9,6 +9,9 @@ import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
+import { MarcaLeido } from "../../components/metodo/MarcaLeido";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { MEDITACION_CEREBRO } from "../../components/metodo/comicMeditacion";
 import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
@@ -78,18 +81,10 @@ const Profundiza = ({ size }: { size: any }) => (
   </Box>
 );
 
-// Tick de «nivel superado» (esquina superior derecha de la tarjeta).
+// Tick de «nivel superado» (esquina superior derecha de la tarjeta). Es la
+// marquita común del recorrido (MarcaLeido), la misma que en las tarjetas.
 const TickSuperado = () => (
-  <Flex position="absolute" top={{ base: 2.5, md: 3 }} right={{ base: 2.5, md: 3 }} zIndex={2}
-        w={{ base: "26px", md: "28px" }} h={{ base: "26px", md: "28px" }} borderRadius="full"
-        align="center" justify="center"
-        bg={`${fisiologiaBg}cc`} border={`2px solid ${fisiologiaTxt}`}
-        style={{ boxShadow: `0 0 10px ${fisiologiaTxt}88` }}>
-    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-         w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill={fisiologiaTxt}>
-      <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-    </Box>
-  </Flex>
+  <MarcaLeido tinta={fisiologiaTxt} bg={fisiologiaBg} title="Superado" />
 );
 
 // ── Caja de un nivel (tarjeta VERTICAL, para ir las 3 en fila) ──────────────
@@ -197,6 +192,9 @@ export default function MetodoFisiologiaNiveles() {
   const [loading, setLoading] = useState(true);
   // Flags de progreso (metodo_fisiologia.data) que desbloquean cada nivel.
   const [flags, setFlags] = useState<Record<string, boolean>>({});
+  // Cómic «La meditación y el cerebro»: se intercala al pulsar «La sonrisa
+  // interior →», antes de entrar en la práctica.
+  const [comicOpen, setComicOpen] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
 
   useEffect(() => {
@@ -249,7 +247,7 @@ export default function MetodoFisiologiaNiveles() {
             mb={0}
             prev={{ label: "← Introducción", onClick: () => navigate("/metodo/fisiologia") }}
             extra={celulasBtn}
-            next={{ label: "Cursos →", onClick: () => navigate("/metodo/fisiologia/cursos") }}
+            next={{ label: "La sonrisa interior →", onClick: () => setComicOpen(true) }}
           />
           </Reveal>
 
@@ -285,6 +283,26 @@ export default function MetodoFisiologiaNiveles() {
       </Flex>
 
       {celulasModal}
+
+      {/* Cómic de paso: «La meditación y el cerebro». Al terminarlo (o pulsar
+          «Saltar →») entra en la práctica de La sonrisa interior. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={() => navigate("/metodo/fisiologia/sonrisa")}
+        vinetas={MEDITACION_CEREBRO}
+        continueLabel={
+          <>
+            <Box as="span" display={{ base: "none", md: "inline" }}>La sonrisa interior</Box>
+            <Box as="span" display={{ base: "inline", md: "none" }}>Sonrisa</Box>
+          </>
+        }
+        themeColor={fisiologiaTxt}
+        textColor={fisiologiaTxt}
+        disciplinaBgImage="/img/fondos/fisio.webp"
+        disciplinaBgColor={fisiologiaBg}
+      />
+
       <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
     </Box>

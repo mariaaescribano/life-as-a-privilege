@@ -343,13 +343,13 @@ export default function MetodoNutricionCalorias() {
               prev={{ label: "← Tu plato", onClick: () => navigate("/metodo/nutricion/plato") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{
-                label: "Diseña tu día →",
+                label: "Tu azúcar →",
                 disabled: !resultado,
-                disabledTooltip: "Calcula tus calorías para desbloquear «Diseña tu día»",
+                disabledTooltip: "Calcula tus calorías para continuar",
                 onClick: async () => {
                   if (!resultado) return;
                   await guardarCaloriasAhora(); // flush antes de navegar (evita el candado por debounce)
-                  navigate("/metodo/nutricion/dia");
+                  navigate("/metodo/nutricion/prediabetes");
                 },
               }}
             />
@@ -468,7 +468,7 @@ export default function MetodoNutricionCalorias() {
                     </Text>
                   )}
                   <Text color={nutricionTxt} fontSize="sm" textAlign="center" mt={4} fontStyle="italic">
-                    Guardado. Ya puedes «Diseñar tu día» con estas calorías.
+                    Guardado. Ya puedes seguir con el resto del recorrido.
                   </Text>
 
                   <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={{ base: 3, md: 5 }} mt={5}>

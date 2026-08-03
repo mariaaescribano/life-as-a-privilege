@@ -13,10 +13,13 @@ export function ComicTemaModal({
   isOpen,
   vinetas,
   onClose,
+  leida = false,
 }: {
   isOpen: boolean;
   vinetas: Vineta[];
   onClose: () => void;
+  /** El cómic ya se había leído antes de abrirlo → aviso discreto «✓ Leída». */
+  leida?: boolean;
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -39,6 +42,7 @@ export function ComicTemaModal({
           themeColor={fisiologiaTxt}
           disciplinaBgImage="/img/fondos/fisio.webp"
           disciplinaBgColor={fisiologiaBg}
+          leida={leida ? () => true : undefined}
         />
       </ModalContent>
     </Modal>

@@ -22,6 +22,8 @@ export function NutrienteFichaModal({
   index,
   onClose,
   sinSaltar,
+  onLeida,
+  leida,
 }: {
   tarjetas: NutrienteTarjeta[];
   index: number;
@@ -29,6 +31,14 @@ export function NutrienteFichaModal({
   /** Ya no se usa: el ComicViewer navega internamente. Se mantiene opcional por
    *  compatibilidad con las páginas que aún lo pasan. */
   onSelect?: (i: number) => void;
+  /** Se llama con el índice de CADA ficha que se muestra (al abrir y al pasar de
+   *  una a otra con las flechas), para poder marcarla como leída. Es lo que da la
+   *  marquita de las tarjetas: el visor navega por dentro, así que sin esto la
+   *  página solo sabría de la ficha que se pulsó. */
+  onLeida?: (i: number) => void;
+  /** Qué fichas YA estaban leídas al abrir (foto fija, no en vivo): las que lo
+   *  estén muestran arriba el aviso discreto «✓ Leída». */
+  leida?: (i: number) => boolean;
   /** Oculta el botón «Saltar»: en galerías de tarjetas independientes (mitos,
    *  preguntas…) saltar no tiene sentido, no son un cómic secuencial. */
   sinSaltar?: boolean;
@@ -62,6 +72,8 @@ export function NutrienteFichaModal({
           disciplinaBgImage={NUTRI_IMG}
           disciplinaBgColor={nutricionBg}
           loader={<AppleLoader />}
+          onPageView={onLeida}
+          leida={leida}
           cerrarColor={nutricionTxt}
           sinSaltar={sinSaltar}
           onClose={onClose}

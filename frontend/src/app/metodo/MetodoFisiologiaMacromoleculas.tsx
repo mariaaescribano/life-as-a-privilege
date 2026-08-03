@@ -11,6 +11,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
+import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -539,12 +540,9 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
             <Flex align="center" gap={2.5}>
               <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
                     style={{ textShadow: INK }}>{m.nombre}</Text>
-              {hecha && (
-                <Flex as="span" align="center" justify="center" flexShrink={0}
-                      w={{ base: "22px", md: "24px" }} h={{ base: "22px", md: "24px" }} borderRadius="full"
-                      bg={m.glow} color={fisiologiaBg} fontSize={{ base: "xs", md: "sm" }} fontWeight="900"
-                      boxShadow={`0 0 10px ${m.glow}aa`}>✓</Flex>
-              )}
+              {/* Marca común del recorrido (MarcaLeido), con el color de la
+                  macromolécula: misma forma que el resto de marcas. */}
+              {hecha && <MarcaLeido inline tinta={m.glow} bg={fisiologiaBg} title="Formada" />}
             </Flex>
             <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" mt={1.5}
                   style={{ textShadow: INK }}>{m.desc}</Text>

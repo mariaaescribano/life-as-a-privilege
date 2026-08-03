@@ -6,6 +6,8 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_CREENCIAS } from "../../components/metodo/comicCreencias";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -40,6 +42,7 @@ export default function MetodoPsicologiaHuellas() {
   const [data, setData] = useState<LineaDeVidaData>({});
   const [guardando, setGuardando] = useState(false);
   const [spread, setSpread] = useState(0); // par de páginas visible (2 años)
+  const [comicOpen, setComicOpen] = useState(false);
   const guardadoRef = useRef<LineaDeVidaData>({});
 
   const anioActual = new Date().getFullYear();
@@ -143,7 +146,7 @@ export default function MetodoPsicologiaHuellas() {
             prev={{ label: "← Línea de Vida", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
             next={{
               label: "Nudos →",
-              onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/nudos`); },
+              onClick: () => setComicOpen(true),
               disabled: !algunaHuella,
               disabledTooltip: "Marca con ◈ al menos un recuerdo que dejó huella para continuar.",
             }}
@@ -259,6 +262,22 @@ export default function MetodoPsicologiaHuellas() {
       </Flex>
 
       <AyudaRecorrido pagina="huellas" />
+
+      {/* Cómic «Cómo nacen las creencias» — se muestra entre Huellas y Nudos:
+          explica cómo una huella acaba convertida en la creencia que la página
+          siguiente pide nombrar. Al terminarlo (o pulsar «Continuar →») avanza. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/nudos`); }}
+        vinetas={COMIC_CREENCIAS}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.webp"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={INK_SHADOW}
+      />
 
       <SiteFooter />
     </Box>

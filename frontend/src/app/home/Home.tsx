@@ -49,11 +49,11 @@ const disciplines = [
   { name: culturaNom,         bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon,         link: `/aprendizaje/cursos/${culturaNom}` },
 ];
 
-// Astrología lleva candado hasta pagarse (metodo_suscrito), pero su círculo es
-// clickable: al pulsarlo abre el pago si aún no está pagada, o entra al recorrido
-// si ya lo está. Psicología se abre una vez pagada la primera disciplina
-// (metodo_suscrito) — clickable igual: navega si ya está pagada, o abre el pago
-// si todavía no. El resto queda con candado.
+// SIN ORDEN OBLIGATORIO: el número de cada círculo es el orden que ACONSEJAMOS,
+// no una condición. Los ocho círculos son clicables siempre: si la disciplina ya
+// está pagada se entra a su recorrido, y si no, se abre su pago. Cada una lleva
+// candado solo hasta que se desbloquea ella misma (su `*_suscrito`), así que se
+// puede empezar por donde se quiera y saltarse las que se quiera.
 
 // Disciplina según la ruta del Mapa guardada (para el botón «Continuar por dónde
 // lo dejé», que se pinta con el fondo, el icono y el color de esa disciplina).
@@ -761,15 +761,6 @@ const Home = () => {
 
   const angleStep = (2 * Math.PI) / disciplines.length;
 
-  // Estado de pago de cada disciplina, en el MISMO orden que `disciplines`
-  // (Astrología → Psicología → Ayurveda → TCM → Fisiología → Nutrición →
-  // Cábala → Cultura). Con esto el mandala aplica el ORDEN del Mapa: una
-  // disciplina solo se puede abrir —o pagar— si la anterior ya está pagada.
-  const pagadas = [
-    metodoSuscrito, psicologiaSuscrito, ayurvedaSuscrito, tcmSuscrito,
-    fisiologiaSuscrito, nutricionSuscrito, cabalaSuscrito, culturaSuscrito,
-  ].map(Boolean);
-
   // El mandala se pinta UNA sola vez y ya en su estado correcto (candados donde
   // toca). Para eso hace falta esperar a TRES cosas: la foto del usuario, la
   // precarga de los fondos, y —clave— el estado de suscripciones. Como
@@ -964,12 +955,10 @@ const Home = () => {
                 const Icon = d.Icon;
                 // Astrología tiene txt muy claro → usar bg para el badge solo en ese caso.
                 const badgeColor = d.bg === astrologiaBg ? d.bg : d.txt;
-                // `abierta` = estado visual desbloqueado (iluminado, sin candado).
-                //   · Astrología: solo cuando está PAGADA (metodo_suscrito === true).
-                //     Por defecto (aún sin pagar o mientras carga) sale bloqueada.
-                //   · Psicología: solo cuando está PAGADA (psicologia_suscrito).
-                // Ambas siguen con candado hasta que se pague / se pruebe el pago,
-                // pero siguen siendo clicables para poder abrir su pago.
+                // `abierta` = estado visual desbloqueado (iluminado, sin candado):
+                // depende SOLO de que esa disciplina esté pagada, de ninguna otra.
+                // Mientras no lo esté (o mientras carga) sale con candado, pero
+                // clicable, para poder abrir su pago cuando se quiera.
                 const abierta =
                   (d.name === astrologiaNom && metodoSuscrito === true) ||
                   (d.name === neuropsicologiaNom && psicologiaSuscrito === true) ||
@@ -979,12 +968,6 @@ const Home = () => {
                   (d.name === nutricionNom && nutricionSuscrito === true) ||
                   (d.name === cabalaNom && cabalaSuscrito === true) ||
                   (d.name === culturaNom && culturaSuscrito === true);
-                // `clickable` = se puede pulsar aunque siga con candado, para poder
-                //   abrir su pago. BLOQUEO SECUENCIAL: el Mapa se hace en orden, así
-                //   que una disciplina solo es clicable si la ANTERIOR de la cadena
-                //   ya está pagada (Astrología, la primera, siempre lo es). Las que
-                //   aún no tocan quedan con candado y no responden al clic.
-                const clickable = index === 0 || pagadas[index - 1];
                 const hasBg = hasDisciplinaBg(d.name);
                 // Astrología: flujo propio. Psicología: navega (si pagada) o abre el pago.
                 // Las demás abiertas saltarían directamente a su página.
@@ -1005,30 +988,21 @@ const Home = () => {
                   : d.name === culturaNom
                   ? irCultura
                   : () => navigate(d.link);
-                // Tooltip al pasar el ratón sobre un círculo bloqueado.
+                // Tooltip al pasar el ratón sobre un círculo bloqueado. Ya no hay
+                // «completa la anterior»: cualquiera se puede desbloquear ahora, y
+                // el número solo indica el orden que aconsejamos.
                 const tooltipLabel =
                   d.name === astrologiaNom
-                    ? "Haz clic en Astrología para empezar tu mapa."
-                    : d.name === neuropsicologiaNom && clickable
-                    ? "Desbloquea Psicología para empezar la 2ª disciplina."
-                    : d.name === ayurvedaNom && clickable
-                    ? "Desbloquea Ayurveda para empezar la 3ª disciplina."
-                    : d.name === tcmNom && clickable
-                    ? "Desbloquea Medicina China para empezar la 4ª disciplina."
-                    : d.name === fisiologiaNom && clickable
-                    ? "Desbloquea Fisiología para empezar la 5ª disciplina."
-                    : d.name === nutricionNom && clickable
-                    ? "Desbloquea Nutrición para empezar la 6ª disciplina."
-                    : d.name === cabalaNom && clickable
-                    ? "Desbloquea Cábala para empezar la 7ª disciplina."
-                    : d.name === culturaNom && clickable
-                    ? "Desbloquea Cultura para empezar la 8ª disciplina."
-                    : "El Mapa se hace en orden — por favor, completa la disciplina anterior.";
+                    ? "Desbloquea Astrología, la 1ª disciplina que aconsejamos para empezar."
+                    : `Desbloquea ${d.name} cuando quieras — es la ${number}ª que aconsejamos, pero puedes empezar por aquí.`;
 
                 const disciplinaCircle = (
                   <Box
-                    onClick={clickable ? handleClick : undefined}
-                    cursor={clickable ? "pointer" : "not-allowed"}
+                    // Los ocho círculos responden SIEMPRE: si la disciplina está
+                    // pagada se entra, y si no, se abre su pago. No hay orden que
+                    // cumplir, así que ninguno queda muerto al clic.
+                    onClick={handleClick}
+                    cursor="pointer"
                     w="100%"
                     h="100%"
                     borderRadius="full"
@@ -1038,7 +1012,11 @@ const Home = () => {
                     animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay} both`}
                     filter={abierta ? "none" : "grayscale(0.35)"}
                     transition="transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease"
-                    _hover={abierta ? { transform: "scale(1.06)" } : { opacity: 0.75 }}
+                    // La bloqueada también crece un poco al pasar por encima (ya
+                    // no es un círculo muerto: se puede desbloquear cuando quiera).
+                    _hover={abierta
+                      ? { transform: "scale(1.06)" }
+                      : { opacity: 0.8, transform: "scale(1.04)" }}
                   >
                     {/* Círculo principal con icono */}
                     <Box

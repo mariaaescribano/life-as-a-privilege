@@ -10,6 +10,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { CelulaCard, CelulaModal, ConsejoModal, type Consejo } from "../../components/metodo/celulasUi";
 import { glowHeader } from "../../components/metodo/FotoBox";
+import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -431,8 +432,8 @@ const ORGANOS: Organo[] = [
       },
       {
         titular: "Tus heridas se reparan mejor de lo que imaginas.",
-        claves: ["Las plaquetas cierran en minutos", "Las defensas evitan infección", "El colágeno reconstruye"],
-        texto: <>Cuando te haces un corte, las plaquetas cierran la herida en minutos, creando una barrera usando a un montón de desafortunados glóbulos rojos que pasaban por ahí. Después llegan células inmunitarias para evitar infecciones y, finalmente, los fibroblastos fabrican colágeno para reconstruir el tejido. Una simple herida pone en marcha a millones de células trabajando al mismo tiempo con un único objetivo: protegerte.</>,
+        claves: ["Las plaquetas cierran en minutos", "La fibrina teje la red", "El colágeno reconstruye"],
+        texto: <>Cuando te haces un corte, las plaquetas cierran la herida en minutos, creando una barrera usando a un montón de desafortunados glóbulos rojos que pasaban por ahí. Después llegan células inmunitarias para evitar infecciones y, finalmente, los fibroblastos fabrican colágeno para reconstruir el tejido. Una simple herida pone en marcha a millones de células trabajando al mismo tiempo con un único objetivo: protegerte.<br /><br />¿Y cómo se construye ese tapón? En cinco pasos encadenados:<br /><br /><b>1. Activación.</b> Al ocurrir la herida, las plaquetas se activan: cambian de forma, de disco liso a esfera con picos, y se vuelven muy pegajosas.<br /><br /><b>2. El llamado químico.</b> Esas plaquetas liberan sustancias que activan la «cascada de coagulación» en la sangre: una reacción en la que cada paso desencadena el siguiente.<br /><br /><b>3. La fabricación del pegamento.</b> La cascada transforma una proteína líquida y soluble que viaja por la sangre, el <b>fibrinógeno</b>, en hilos sólidos e insolubles de <b>fibrina</b>.<br /><br /><b>4. La red de captura.</b> Esos hilos de fibrina se cruzan entre sí por encima de las plaquetas y forman una malla tridimensional fuertemente unida.<br /><br /><b>5. El atrapamiento.</b> Los glóbulos rojos, que simplemente pasaban por ahí flotando en el flujo sanguíneo, chocan contra esa malla y quedan atrapados en la red. Son los que aportan volumen y solidez mecánica al tapón: el coágulo.</>,
       },
       {
         titular: "Tu piel también tiene un ecosistema.",
@@ -532,6 +533,11 @@ const ORGANOS: Organo[] = [
         texto: <>En la infancia, casi todos los huesos contienen médula ósea roja, el tejido que fabrica las células sanguíneas. Con la edad, parte de esa médula se transforma en médula amarilla, rica en grasa. Aun así, la médula roja que permanece en la pelvis, las vértebras, las costillas o el esternón sigue produciendo glóbulos rojos, glóbulos blancos y plaquetas durante toda la Vida.</>,
       },
       {
+        titular: "Tus plaquetas no son células: son trozos de otra célula.",
+        claves: ["Nacen de un megacariocito", "La sangre arranca sus puntas", "Hasta 3.000 de una sola célula"],
+        texto: <>En la médula ósea vive una célula enorme, el <b>megacariocito</b>, que ha llegado a ese tamaño copiando su ADN una y otra vez sin llegar a dividirse nunca. Para fabricar plaquetas no se divide como haría cualquier otra célula: extiende unas prolongaciones larguísimas y ramificadas llamadas <b>proplaquetas</b>, parecidas a tentáculos, y cuela sus puntas dentro de los vasos sanguíneos de la propia médula.<br /><br />Y entonces deja que la corriente haga el trabajo. El flujo de la sangre va rompiendo y desprendiendo las puntas de esos tentáculos, y cada fragmento que se suelta a la circulación es una plaqueta. Un solo megacariocito puede llegar a producir entre 1.000 y 3.000 antes de quedarse sin material y desaparecer.<br /><br />Por eso las plaquetas no tienen núcleo: no son células enteras, sino pedazos de una célula que ya no está. Y por eso, igual que los glóbulos rojos, no pueden repararse: viven entre 7 y 10 días y hay que reponerlas continuamente.</>,
+      },
+      {
         titular: "El hierro no da energía… permite fabricarla.",
         claves: ["El hierro forma la hemoglobina", "Transporta el oxígeno", "Sin él llega el cansancio"],
         texto: <>Muchas personas creen que el hierro «da energía». En realidad, su función principal es formar parte de la hemoglobina, la molécula que transporta el oxígeno. Sin suficiente hierro, llega menos oxígeno a las células y estas producen menos energía, por eso aparece el cansancio.</>,
@@ -545,11 +551,6 @@ const ORGANOS: Organo[] = [
         titular: "La inflamación también puede ser un problema.",
         claves: ["Sirve para reparar y defender", "Crónica, daña los órganos", "Favorece enfermedades graves"],
         texto: <>La inflamación es una herramienta esencial para reparar tejidos y combatir infecciones. Pero si permanece activada durante meses o años, empieza a dañar los propios órganos y favorece enfermedades como la diabetes, la aterosclerosis o algunos tipos de cáncer.</>,
-      },
-      {
-        titular: "Las plaquetas son los primeros albañiles del cuerpo.",
-        claves: ["Llegan a la herida en segundos", "Forman el tapón", "Atraen a las reparadoras"],
-        texto: <>Cuando te haces una herida, las plaquetas llegan en segundos y forman un tapón para evitar que sigas perdiendo sangre. Después liberan señales que atraen a otras células encargadas de reparar el tejido dañado.</>,
       },
       {
         titular: "Tu sangre también reparte los mensajes.",
@@ -573,7 +574,43 @@ const ORGANOS: Organo[] = [
       {
         titular: "El colágeno es el pegamento de tu cuerpo.",
         claves: ["La proteína más abundante", "Forma piel, tendones y vasos", "Sin él, todo se desmonta"],
-        texto: <>El colágeno es la proteína más abundante del organismo. Forma la estructura de la piel, los tendones, los ligamentos, los huesos, los vasos sanguíneos e incluso muchos órganos. Sin él, tu cuerpo literalmente se desmontaría.</>,
+        texto: <>El colágeno es la proteína más abundante del organismo. Forma la estructura de la piel, los tendones, los ligamentos, los huesos, los vasos sanguíneos e incluso muchos órganos. Sin él, tu cuerpo literalmente se desmontaría.<br /><br />Y no es uno solo: se conocen cerca de <b>veintiocho tipos</b> de colágeno, aunque cinco o seis hacen prácticamente todo el trabajo. Cada uno se ensambla de una forma distinta y por eso sirve para cosas distintas: unos hacen cuerdas, otros mallas y otros solo grapas. Los tienes en las cajas siguientes.</>,
+      },
+      {
+        titular: "Colágeno tipo I: el cable que aguanta el tirón.",
+        claves: ["Nueve de cada diez fibras", "Piel, hueso y tendón", "El que se pierde con la edad"],
+        foto: "/recorrido/fisiologia/colageno/tipo1.webp",
+        texto: <>Es el mayoritario con mucha diferencia: alrededor del <b>90 %</b> de todo el colágeno que tienes. Sus moléculas se agrupan en fibras gruesas y alineadas en paralelo, la forma ideal para aguantar tracción sin estirarse. Está en la dermis de la piel, en los tendones, en los ligamentos, en la córnea y en el hueso, donde reparte el trabajo con el mineral: el colágeno pone la flexibilidad y el calcio la dureza.<br /><br />Esa sociedad se entiende muy bien cuando falla. En la <b>osteogénesis imperfecta</b>, la enfermedad de los «huesos de cristal», el gen del colágeno tipo I viene defectuoso, y sin su malla el mineral se comporta como tiza: los huesos se rompen con nada.<br /><br />Es también el que vas perdiendo con los años y el que el sol destruye más deprisa de lo que puedes reponerlo. Cuando alguien habla de «perder colágeno» en la piel, habla de este.</>,
+      },
+      {
+        titular: "Colágeno tipo II: la almohada de tus articulaciones.",
+        claves: ["El del cartílago", "Retiene agua y amortigua", "Se desgasta en la artrosis"],
+        foto: "/recorrido/fisiologia/colageno/tipo2.webp",
+        texto: <>Es el colágeno del <b>cartílago</b>. Aquí las fibras son más finas y se cruzan formando una malla desordenada a propósito, que atrapa unas moléculas capaces de retener enormes cantidades de agua. Y esa agua es la que amortigua: al apoyar el pie, el cartílago se comprime y suelta agua; al levantarlo, la vuelve a absorber. Es una almohada hidráulica.<br /><br />Lo tienes en el cartílago de las articulaciones, en los discos entre las vértebras y en el humor vítreo del ojo.<br /><br />Su punto débil es que el cartílago no tiene vasos sanguíneos, así que se repara malísimamente. Por eso el desgaste de este tipo II, que es lo que llamamos <b>artrosis</b>, cuesta tantísimo de revertir, y por eso el movimiento suave y frecuente es lo mejor que puedes hacer por él: es lo único que bombea el líquido dentro y fuera y lo mantiene nutrido.</>,
+      },
+      {
+        titular: "Colágeno tipo III: el andamio provisional de las heridas.",
+        claves: ["El primero en una herida", "Fibras finas y elásticas", "Luego se cambia por tipo I"],
+        foto: "/recorrido/fisiologia/colageno/tipo3.webp",
+        texto: <>Es más fino y más elástico que el tipo I, y aparece donde el tejido tiene que ceder y volver: la pared de los vasos sanguíneos, el intestino, el útero, el pulmón.<br /><br />Pero su papel estrella es la reparación. Cuando te haces una herida, los fibroblastos fabrican primero tipo III, deprisa y sin acabados, para cerrar el hueco cuanto antes. En las semanas y los meses siguientes ese andamio provisional se va sustituyendo por tipo I, más fuerte y mejor ordenado.<br /><br />Ese relevo explica dos cosas que se ven a simple vista: por qué una cicatriz reciente es rosada y frágil y una antigua es blanca y resistente, y por qué ninguna llega a ser piel normal. En la reparación las fibras quedan alineadas en la dirección de la tensión, no entrecruzadas como en la piel sana. Más fuerte en un sentido, más pobre en todos los demás.</>,
+      },
+      {
+        titular: "Colágeno tipo IV: este no hace cuerdas, hace sábanas.",
+        claves: ["No forma fibras, forma redes", "Construye la membrana basal", "Es el filtro del riñón"],
+        foto: "/recorrido/fisiologia/colageno/tipo4.webp",
+        texto: <>Es el raro de la familia: no se ensambla en fibras, sino en una <b>red plana</b>, como una gasa. Con ella se construye la <b>membrana basal</b>, esa lámina finísima sobre la que se apoyan todos los epitelios del cuerpo: la que separa la epidermis de la dermis, la que envuelve cada fibra muscular, la que sostiene el revestimiento de los vasos.<br /><br />Y al ser una malla, hace de colador. En el riñón, el colágeno tipo IV es parte del filtro que decide qué se queda en la sangre y qué pasa a la orina. Cuando esa malla se estropea, empiezan a escaparse proteínas por la orina, que es uno de los primeros avisos de un riñón en apuros y algo que se puede ver en un análisis mucho antes de notar cualquier síntoma.</>,
+      },
+      {
+        titular: "Colágeno tipo V: el que dirige a los demás.",
+        claves: ["Hay poquísimo", "Marca el grosor de las fibras", "Sin él, todo queda laxo"],
+        foto: "/recorrido/fisiologia/colageno/tipo5.webp",
+        texto: <>Hay muy poca cantidad, pero sin él lo demás no se monta bien. El tipo V se coloca <b>en el centro</b> de las fibras de tipo I y funciona como el molde alrededor del cual estas se van ensamblando: decide cuántas moléculas se unen y qué grosor tendrá la fibra final. Un director de obra más que un ladrillo.<br /><br />Está en la córnea, la placenta, los tendones y la piel.<br /><br />Cuando falla, el tejido queda demasiado laxo, porque las fibras salen desiguales. Es lo que ocurre en la forma clásica del <b>síndrome de Ehlers-Danlos</b>: piel muy elástica y fina, articulaciones que se van de sitio con facilidad y cicatrices anchas que no acaban de cerrar bien.</>,
+      },
+      {
+        titular: "Colágeno tipo VII: las grapas de tu piel.",
+        claves: ["Ancla la epidermis a la dermis", "No da fuerza, sujeta", "Sin él, la piel se despega"],
+        foto: "/recorrido/fisiologia/colageno/tipo7.webp",
+        texto: <>Forma unas fibrillas cortas con forma de gancho que atraviesan la membrana basal y cosen la epidermis a la dermis. No aportan resistencia ni volumen: solo <b>sujetan</b> una capa a la otra, como grapas.<br /><br />Su importancia se entiende cuando faltan. En la <b>epidermólisis bullosa</b>, una enfermedad genética que afecta a este colágeno, la piel se separa con el mínimo roce y se llena de ampollas; a quienes la tienen se les llama a veces «niños mariposa» por lo frágil que es su piel.<br /><br />Es el mejor recordatorio de que en el tejido conectivo no todo es fuerza. Buena parte del trabajo consiste simplemente en mantener pegadas unas capas a otras.</>,
       },
       {
         titular: "Los péptidos de colágeno despiertan a tus fibroblastos.",
@@ -636,8 +673,8 @@ const ORGANOS: Organo[] = [
       },
       {
         titular: "El exceso de comida rompe células.",
-        claves: ["Adipocitos que crecen y mueren", "Provocan inflamación crónica", "Favorecen resistencia a la insulina"],
-        texto: <>Cuando el tejido adiposo acumula mucha más grasa de la que puede almacenar de forma saludable, los adipocitos aumentan tanto de tamaño que algunos dejan de recibir suficiente oxígeno y terminan muriendo. Al romperse, liberan su contenido y desencadenan una respuesta del sistema inmunitario. Los macrófagos acuden para eliminar esos restos, pero si la situación se mantiene durante años, el tejido adiposo permanece inflamado de forma crónica. Esa inflamación favorece la resistencia a la insulina y aumenta el riesgo de enfermedades cardiovasculares. Además, los macrófagos cargados de colesterol y grasas también participan en la formación de las placas de ateroma que estrechan las arterias.</>,
+        claves: ["Adipocitos que mueren asfixiados", "Los macrófagos rodean y se inflaman", "Ahí nace la resistencia a la insulina"],
+        texto: <>Cuando el tejido adiposo acumula mucha más grasa de la que puede almacenar de forma saludable, los adipocitos se hinchan tanto que los vasos sanguíneos ya no alcanzan a todos: algunos dejan de recibir suficiente oxígeno y terminan muriendo. Lo que ocurre a partir de ahí lo deciden los <b>macrófagos</b>, las células inmunitarias que limpian los restos.<br /><br /><b>1. Acuden a limpiar.</b> El adipocito que ha muerto vuelca en el tejido su gota de grasa y sus restos. Los macrófagos llegan a retirarlo y lo rodean varios a la vez, en corro; al microscopio se ven como pequeñas coronas alrededor de la célula muerta.<br /><br /><b>2. Cambian de carácter.</b> Un macrófago puede comportarse de dos formas: en modo reparador, que calma el tejido, o en modo alarma, que lo inflama. Al engullir tanta grasa y tanto resto celular pasan al modo alarma y empiezan a liberar señales inflamatorias, las <b>citoquinas</b>.<br /><br /><b>3. Esas señales estropean el mensaje de la insulina.</b> Las citoquinas interfieren dentro de la célula con la orden que trae la insulina: la insulina llega y llama a la puerta, pero el aviso se pierde por el camino. Es el origen de la <b>resistencia a la insulina</b> en ese tejido.<br /><br /><b>4. Se monta un bucle.</b> Un tejido adiposo inflamado almacena peor la grasa, así que suelta más ácidos grasos a la sangre. Esos ácidos grasos llegan al hígado y al músculo, que también se vuelven resistentes a la insulina, y el cuerpo responde fabricando aún más insulina y almacenando más grasa. El problema alimentándose a sí mismo.<br /><br /><b>5. No se queda en la grasa.</b> Mantenido durante años, ese goteo de citoquinas circula por la sangre y deja al cuerpo entero en un estado de inflamación baja pero constante: el terreno donde crecen la diabetes tipo 2 y la enfermedad cardiovascular.<br /><br />Una precisión, porque se confunde a menudo: los macrófagos también son los protagonistas de las placas de las arterias, pero eso ocurre en <b>otro sitio</b>, en la pared arterial, y con otros macrófagos, no con estos mudándose. Ese recorrido lo tienes contado en la caja de la grasa visceral.<br /><br />Y la buena noticia: nada de esto es un punto sin retorno. Al perder grasa, los adipocitos dejan de asfixiarse, se reclutan menos macrófagos y los que quedan vuelven poco a poco al modo reparador. La inflamación baja y la sensibilidad a la insulina mejora.</>,
       },
       {
         titular: "Hacer ejercicio también cambia tu grasa.",
@@ -652,10 +689,22 @@ const ORGANOS: Organo[] = [
       {
         titular: "El problema no es la grasa… es dónde se acumula.",
         claves: ["La subcutánea es menos dañina", "La visceral inflama", "Su ubicación importa"],
-        texto: <>La grasa situada bajo la piel suele ser mucho menos perjudicial que la grasa que rodea órganos como el hígado, el páncreas o el intestino. Esta grasa visceral libera más moléculas inflamatorias directamente hacia la circulación que llega al hígado, favoreciendo la resistencia a la insulina, el hígado graso y la alteración del metabolismo. Con el tiempo aumenta el riesgo de diabetes tipo 2, hipertensión, enfermedad cardiovascular e incluso algunos tipos de cáncer. No toda la grasa tiene el mismo impacto sobre la salud: su localización importa tanto como su cantidad.</>,
+        texto: <>La grasa situada bajo la piel suele ser mucho menos perjudicial que la grasa que rodea órganos como el hígado, el páncreas o el intestino. No toda la grasa tiene el mismo impacto sobre la salud: <b>su localización importa tanto como su cantidad</b>, y con los años el exceso de grasa visceral aumenta el riesgo de diabetes tipo 2, hipertensión, enfermedad cardiovascular e incluso algunos tipos de cáncer.<br /><br />Una pista casera mejor que la báscula: el perímetro de la cintura, y sobre todo la relación entre cintura y altura. Mantener la cintura por debajo de la mitad de tu altura es un indicador de riesgo más fiable que el peso, porque habla justo de la grasa que no se ve.<br /><br />En las dos cajas siguientes tienes cada una por separado: qué hace la subcutánea, y por qué la visceral es un problema de otra naturaleza.</>,
+      },
+      {
+        titular: "La grasa subcutánea es tu reserva, y es la sensata.",
+        claves: ["Justo debajo de la piel", "La mayor reserva de energía", "Aísla, amortigua y protege"],
+        foto: "/recorrido/fisiologia/grasa/subcutanea.webp",
+        texto: <>Es la que está inmediatamente debajo de la piel, la que puedes pellizcar, y es <b>la mayor reserva energética del cuerpo</b>: brazos, piernas, glúteos, caderas y la superficie del abdomen. Aísla del frío, amortigua los golpes y guarda de forma ordenada la energía que sobra.<br /><br />Su virtud menos evidente es que, guardando grasa, te protege. Mientras quede sitio ahí, los ácidos grasos que sobran acaban encerrados dentro del adipocito y no en el hígado, el músculo o el páncreas, que es donde de verdad estorban. Es el lugar correcto.<br /><br />Las personas con <b>lipodistrofia</b>, que no pueden formar esta grasa, están delgadísimas y aun así desarrollan hígado graso y diabetes severa: no tener dónde guardarla es peor que tenerla.</>,
+      },
+      {
+        titular: "La grasa visceral es otra cosa: vive entre tus órganos.",
+        claves: ["Envuelve hígado e intestinos", "Desagua directa al hígado", "Inflama todo el cuerpo"],
+        foto: "/recorrido/fisiologia/grasa/visceral.webp",
+        texto: <>Está dentro del abdomen, envolviendo el hígado y el intestino. No se pellizca y casi no se ve en el espejo, y ahí está parte del problema: se puede tener poca grasa subcutánea y mucha visceral.<br /><br />Dos cosas la hacen distinta. Desagua por la <b>vena porta</b>, así que todo lo que suelta —ácidos grasos y señales inflamatorias— llega primero al hígado, concentrado y sin diluir. Y tiene muchas más células inmunitarias por gramo, así que cuando se satura y sus adipocitos mueren asfixiados, la alarma es mucho más ruidosa: <b>recluta monocitos</b> desde la sangre que se convierten en macrófagos inflamatorios (<b>M1</b>) y que, en vez de reparar, sueltan citoquinas llamando a más macrófagos. El sistema inmunitario se queda encendido a todas horas.<br /><br />Y esas citoquinas escapan del abdomen: irritan el <b>endotelio</b>, la pared interna de las arterias, el colesterol se cuela y se oxida allí, y los macrófagos de la propia arteria lo engullen hasta saturarse y convertirse en <b>células espumosas</b>. Ahí empieza la <b>placa de ateroma</b>.<br /><br />La grasa visceral no es un problema de peso, es un problema de inflamación. Y la inflamación no se queda donde nace.</>,
       },
     ] },
-  { key: "lengua",    label: "Lengua",         foto: "/recorrido/fisiologia/organos/lengua.png",   hotspot: { top: 16, left: 50 }, celulas: pick("gustativa-tipo2", "gustativa-tipo3", "soporte-gusto", "basal-gusto"),
+  { key: "lengua",    label: "Lengua",         foto: "/recorrido/fisiologia/organos/lengua.png",   hotspot: { top: 16, left: 50 }, celulas: pick("gustativa-tipo2", "gustativa-tipo3", "soporte-gusto", "glomica-tipo1", "basal-gusto"),
     descripcion: <>Es un órgano muscular ágil, cubierto de papilas que albergan los botones del gusto. Dentro de ellos, unas células especializadas detectan los cinco sabores —dulce, salado, ácido, amargo y umami— y envían la señal al cerebro. Además de saborear, la lengua mezcla y empuja los alimentos para tragarlos y es esencial para hablar.</>,
     consejos: [
       {
@@ -809,16 +858,8 @@ function OrganoCard({
     >
       <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
 
-      {/* Sello de "órgano completo" */}
-      {completo && (
-        <Flex position="absolute" top="9px" right="9px" zIndex={2} align="center" justify="center"
-              w="24px" h="24px" borderRadius="full" bg={fisiologiaTxt}
-              boxShadow={`0 0 10px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.5)`}>
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="#1a1226">
-            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-          </Box>
-        </Flex>
-      )}
+      {/* Sello de "órgano completo" — la marca común (MarcaLeido). */}
+      {completo && <MarcaLeido tinta={fisiologiaTxt} bg={fisiologiaBg} />}
 
       {/* Foto del órgano a sangre en la parte de arriba (como en Sistemas). */}
       <Box position="relative" zIndex={1} w="100%" aspectRatio={1} overflow="hidden" flexShrink={0}
@@ -1127,19 +1168,11 @@ function OrganoDetalle({
         <Box px={{ base: 4, md: 6 }} py={{ base: 6, md: 8 }}>
           {consejoActual && (
             <Flex justify="space-between" align="center" mb={{ base: 2, md: 3 }} minH="20px">
-              {/* Marca de curiosidad ya leída */}
-              {consejoLeido ? (
-                <Flex align="center" gap={1.5} color={fisiologiaTxt}
-                      style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                       w="15px" h="15px" fill="currentColor">
-                    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                  </Box>
-                  <Text fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.08em" textTransform="uppercase">
-                    Leída
-                  </Text>
-                </Flex>
-              ) : <Box />}
+              {/* Marca de curiosidad ya leída — la misma marca que en las
+                  tarjetas, aquí en el flujo de la fila de arriba. */}
+              {consejoLeido
+                ? <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} title="Leída" />
+                : <Box />}
               {consejos.length > 1 && (
                 <Text color={`${fisiologiaTxt}bb`} fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.06em">
                   {idx + 1} / {consejos.length}
@@ -1202,6 +1235,9 @@ export default function MetodoFisiologiaTodasCelulas() {
   const [organo, setOrgano] = useState<Organo>(ORGANOS[0]);
   const [celula, setCelula] = useState<Celula | null>(null);
   const [consejo, setConsejo] = useState<Consejo | null>(null);
+  // Lo abierto ya estaba leído ANTES de abrirlo (aviso «✓ Leída» en el popup).
+  const [celulaYaVista, setCelulaYaVista] = useState(false);
+  const [consejoYaLeido, setConsejoYaLeido] = useState(false);
   const [vistas, setVistas] = useState<Set<string>>(new Set());
   const [curiosidadesLeidas, setCuriosidadesLeidas] = useState<Set<string>>(new Set());
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
@@ -1265,6 +1301,8 @@ export default function MetodoFisiologiaTodasCelulas() {
 
   // Abre la ficha de una célula y la marca como descubierta (se guarda en BD).
   const verCelula = (c: Celula) => {
+    // Antes de marcarla: si ya venía descubierta, el popup lo dice arriba.
+    setCelulaYaVista(vistas.has(c.id));
     setCelula(c);
     if (vistas.has(c.id)) return;
     const next = new Set(vistas);
@@ -1283,6 +1321,8 @@ export default function MetodoFisiologiaTodasCelulas() {
   // Abre una curiosidad y la marca como leída (se guarda en BD). Se usa tanto al
   // pulsar «Leer más» como al navegar con las flechas dentro del modal.
   const verConsejo = (c: Consejo) => {
+    // Antes de marcarla: si ya venía leída, el popup lo dice arriba.
+    setConsejoYaLeido(curiosidadesLeidas.has(c.titular));
     setConsejo(c);
     if (curiosidadesLeidas.has(c.titular)) return;
     const next = new Set(curiosidadesLeidas);
@@ -1385,6 +1425,7 @@ export default function MetodoFisiologiaTodasCelulas() {
         <CelulaModal
           celula={celula}
           celulas={organo.celulas}
+          leida={celulaYaVista}
           onSelect={verCelula}
           onClose={() => setCelula(null)}
         />
@@ -1398,6 +1439,7 @@ export default function MetodoFisiologiaTodasCelulas() {
           label={organo.label}
           onClose={() => setConsejo(null)}
           consejos={organo.consejos}
+          leida={consejoYaLeido}
           onSelect={verConsejo}
         />
       )}

@@ -67,7 +67,7 @@ export const MICROBIOTA_BACTERIAS: NutrienteTarjeta[] = [
     foto: "/recorrido/nutricion/bacterias/ecoli.png",
     parrafos: [
       "Aunque algunas cepas pueden causar enfermedad, la mayoría de las que forman parte de la microbiota intestinal son inofensivas e incluso beneficiosas.",
-      "Participan en la síntesis de vitamina K, compiten con microorganismos patógenos y contribuyen al equilibrio del ecosistema intestinal.",
+      "Participan en la síntesis de vitamina K, compiten con microorganismos patógenos (ocupan todo el espacio y consumen los nutrientes del intestino antes de que los 'malos' los consuman) y contribuyen al equilibrio del ecosistema intestinal.",
     ],
   },
 ];
@@ -89,7 +89,7 @@ export const MICROBIOTA_TARJETAS: NutrienteTarjeta[] = [
     foto: "/recorrido/nutricion/moleculas/acetato.webp",
     parrafos: [
       "Es uno de los ácidos grasos de cadena corta que las bacterias fabrican al fermentar la fibra.",
-      "Se absorbe y viaja por la sangre, donde sirve de fuente de energía y de molécula que ayuda a regular el metabolismo.",
+      "Se absorbe y viaja por la sangre, donde se transforma en acetil-CoA, la molécula clave que empieza la respiración celular en las mitocondrias.",
     ],
   },
   {

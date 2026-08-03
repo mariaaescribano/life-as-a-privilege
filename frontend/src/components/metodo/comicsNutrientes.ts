@@ -278,32 +278,66 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
 
   agua: [
     {
+      // Foto nueva: la molécula de agua, en uve, con su polo + y su polo −.
+      src: "/viñetas/nutricion/agua/aguamolecula.png",
+      paragraphs: [
+        "Antes de para qué sirve, conviene saber qué es. El agua son dos hidrógenos pegados a un oxígeno, pero no en línea recta: forman una uve. Esa forma torcida lo cambia todo.",
+        "El oxígeno tira con más fuerza de los electrones compartidos y se queda con una carga ligeramente negativa; los dos hidrógenos quedan ligeramente positivos. Así que cada molécula de agua es un imán diminuto, con un polo más y un polo menos.",
+        "Todo lo que el agua hace dentro de ti sale de ahí. De una molécula torcida con dos polos.",
+      ],
+    },
+    {
+      // Foto nueva: el agua rodeando y separando la sal en iones; y las grasas
+      // juntándose entre ellas para huir del agua (membrana).
+      src: "/viñetas/nutricion/agua/aguadisuelve.png",
+      paragraphs: [
+        "Por ser un imán, el agua rodea a todo lo que tenga carga y lo separa. Cuando echas sal en agua, su polo negativo se pega al sodio y el positivo al cloro, y los arranca uno del otro. La sal no desaparece: queda flotando en piezas sueltas.",
+        "Eso es ser un disolvente. Y por eso todo lo que tu cuerpo necesita mover (sales, glucosa, vitaminas, hormonas, desechos) viaja disuelto en agua.",
+        "Con las grasas pasa justo lo contrario: no tienen polos, el agua no puede agarrarlas y ellas se juntan entre sí para huir del agua. Parece un defecto y es una genialidad: esa huida es lo que forma las membranas de todas tus células. Cada célula tiene una frontera de grasa precisamente porque el agua no puede cruzarla cuando quiere.",
+      ],
+    },
+    {
       src: src("agua", 1),
       paragraphs: [
-        "Nuestro cuerpo está formado por unos 37 billones de células. Y la inmensa mayoría vive rodeada de agua. El agua no es solo una bebida. Es el entorno donde ocurre la Vida.",
-        "Aproximadamente el 60% de nuestro cuerpo es agua. Dentro de las células, alrededor de ellas y en la sangre. Sin ese medio acuoso, las moléculas ni siquiera podrían encontrarse para reaccionar.",
-      ],
-    },
-    {
-      src: src("agua", 2),
-      paragraphs: [
-        "Todas las reacciones químicas de nuestras células ocurren en agua. Las enzimas, los nutrientes y el ATP necesitan moverse constantemente para encontrarse. El agua hace posible ese movimiento.",
-        "El agua también es el gran sistema de transporte del cuerpo. Lleva oxígeno, nutrientes, hormonas y elimina productos de desecho. La sangre es, en gran parte, agua.",
-      ],
-    },
-    {
-      src: src("agua", 3),
-      paragraphs: [
-        "Además, ayuda a mantener estable nuestra temperatura. Cuando sudamos, el agua absorbe calor al evaporarse y evita que el cuerpo se sobrecaliente.",
-        "El agua también protege. Lubrica las articulaciones, amortigua golpes y forma parte de líquidos como la saliva, las lágrimas o el líquido cefalorraquídeo.",
-        "Nuestro cuerpo pierde agua continuamente al respirar, sudar y orinar. Por eso necesita reponerla cada día. No porque el agua se gaste... sino porque está en constante movimiento.",
+        "Alrededor del 60% de tu cuerpo es agua, y dos de cada tres litros están dentro de las células. No es relleno: es el lugar donde vive todo lo demás.",
+        "Tienes unos 37 billones de células, y cada una es, por dentro, una gota de agua con cosas disueltas.",
       ],
     },
     {
       src: src("agua", 4),
       paragraphs: [
-        "El agua no aporta calorías. No construye músculos. No fabrica ATP. Pero sin ella, ninguno de los demás nutrientes podría cumplir su función.",
-        "Si los nutrientes son las piezas que mantienen vivo tu cuerpo, el agua es el escenario donde toda esa historia puede ocurrir.",
+        "Ninguna reacción química de tu cuerpo ocurre en seco. Las enzimas, los nutrientes y el ATP tienen que moverse y chocar para encontrarse, y eso solo pasa flotando en un líquido.",
+        "Pero el agua no es solo el escenario: también actúa. Cuando tu cuerpo parte una molécula grande en trozos (una grasa, una proteína, el propio ATP) lo hace metiendo una molécula de agua en medio para romper el enlace. Se llama hidrólisis, que significa literalmente «romper con agua».",
+        "Y funciona en los dos sentidos: tus mitocondrias fabrican agua. El oxígeno que respiras termina convertido en agua al final de la cadena que produce tu energía.",
+      ],
+    },
+    {
+      src: src("agua", 2),
+      paragraphs: [
+        "¿Y qué papel tiene en la sangre? Enorme, porque la sangre es agua con cosas dentro. Más de la mitad de su volumen es plasma, y el plasma es agua en un 90%.",
+        "Ahí está la clave que casi nunca se cuenta: el agua es lo que da VOLUMEN a la sangre, y ese volumen es lo que llena tus vasos y sostiene la tensión arterial. Cuando te deshidratas hay menos agua en el plasma, el volumen baja y el corazón tiene que latir más rápido para seguir repartiendo. De ahí el mareo al levantarte, el dolor de cabeza y la sensación de no poder con nada.",
+        "En esa agua viaja casi todo: la glucosa, las sales, las hormonas, los aminoácidos, los desechos camino del riñón y el CO₂ de vuelta a los pulmones. El oxígeno es la excepción, porque apenas se disuelve en agua: para él tienes glóbulos rojos cargados de hemoglobina… que a su vez flotan en el agua del plasma.",
+        "Y esa agua no está encerrada en el vaso. Entra y sale continuamente de los capilares para bañar a las células. Es la única manera de que lo que comes acabe llegando a una célula del dedo del pie.",
+      ],
+    },
+    {
+      // Foto nueva: la ósmosis. El agua cruzando hacia donde hay más sal
+      // (plasma / líquido entre células / interior de la célula).
+      src: "/viñetas/nutricion/agua/aguaosmosis.png",
+      paragraphs: [
+        "El agua no se queda donde te la bebes: se mueve sola, y siempre hacia donde hay más sales. Ese movimiento se llama ósmosis, y es la razón de que hidratarse no sea solo cuestión de beber.",
+        "El que manda es el sodio. Si a un lado hay más sal, el agua cruza hacia allí hasta igualar la concentración. Así decide tu cuerpo cuánta agua se queda en la sangre, cuánta baña los tejidos y cuánta entra en las células.",
+        "De ahí dos cosas que se ven a diario. Si comes muy salado retienes agua y te hinchas, porque el agua acompaña a ese sodio. Y si bebes litros de agua sola después de sudar mucho, puedes diluir tanto el sodio de la sangre que el agua empiece a entrar en las células y estas se hinchen. Por eso las bebidas de rehidratación llevan sal y algo de azúcar: no es marketing.",
+        "El riñón lleva la contabilidad. Cuando el agua escasea, el cerebro suelta una hormona (la vasopresina) que le ordena recuperar toda la que pueda, y por eso la orina sale más oscura y concentrada.",
+      ],
+    },
+    {
+      src: src("agua", 3),
+      paragraphs: [
+        "El agua también te mantiene templado, porque aguanta muchísimo calor sin cambiar apenas de temperatura. Y cuando hay que enfriar, el sudor se evapora y se lleva el calor consigo.",
+        "Además protege: lubrica las articulaciones, humedece los ojos, forma la saliva y rodea tu cerebro con un colchón de líquido cefalorraquídeo.",
+        "La pierdes todo el día sin darte cuenta, al respirar, al sudar y en la orina, y hay que reponerla. No solo bebiendo: buena parte llega en las frutas, las verduras, las sopas y el resto de la comida.",
+        "El agua no aporta calorías, no construye músculo y no fabrica ATP. Pero sin ella nada de lo demás ocurre. Si los nutrientes son las piezas, el agua es a la vez el escenario, el transporte y el mensajero.",
       ],
     },
   ],
@@ -336,6 +370,58 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
         "Por eso comer siempre la misma fruta o la misma verdura no es suficiente. Cuantos más colores diferentes haya en tu plato... Mayor será la variedad de fitoquímicos que recibirán tus células.",
         "Los fitoquímicos no son esenciales para sobrevivir como las vitaminas o los minerales. Pero cada vez sabemos más sobre cómo ayudan a proteger nuestras células y a mantener el organismo en equilibrio. La naturaleza lleva millones de años perfeccionando estas moléculas.",
         "Las plantas no fabricaron estas moléculas para nosotros. Las fabricaron para sobrevivir. Nosotros simplemente aprendimos a beneficiarnos de millones de años de evolución.",
+      ],
+    },
+  ],
+
+  edulcorantes: [
+    {
+      src: src("edulcorantes", 1),
+      paragraphs: [
+        "En la lengua tienes un receptor del dulce. Y no es un detector de azúcar: es un detector de formas. Si una molécula encaja en él, tu cerebro recibe la palabra «dulce», sea lo que sea esa molécula.",
+        "Los edulcorantes son moléculas que encajan en esa cerradura muchísimo mejor que el azúcar: entre 200 y 20.000 veces más fuerte. Pero ahí acaba el parecido. No se pueden quemar, no dan energía y casi todos salen del cuerpo tal como entraron.",
+        "Son una llave que abre la puerta del dulce sin traer nada detrás. Y en eso está su gracia… y todo su problema.",
+      ],
+    },
+    {
+      src: src("edulcorantes", 2),
+      paragraphs: [
+        "Para tu cuerpo el dulce nunca fue un placer: era un aviso. Durante millones de años, dulce significó «viene energía», y el organismo aprendió a prepararse antes de que llegara.",
+        "En cuanto algo dulce toca la lengua, el cerebro da órdenes por adelantado: más saliva, jugos gástricos y un pequeño adelanto de insulina para recibir la glucosa que está a punto de entrar. Se llama fase cefálica y es, literalmente, una predicción.",
+        "Con un edulcorante la predicción se dispara igual… y la glucosa no aparece nunca. El cuerpo se ha preparado para nada. Ese es el engaño, y no es al paladar: es al sistema de previsión.",
+      ],
+    },
+    {
+      src: src("edulcorantes", 3),
+      paragraphs: [
+        "El placer del dulce se cobra en dos plazos. El primero es el sabor, en la boca. El segundo llega después y desde abajo: unos sensores del intestino comprueban que de verdad ha entrado energía y avisan al cerebro por el nervio vago. Ese segundo aviso es el que cierra el círculo y te deja satisfecha.",
+        "El edulcorante paga el primer plazo y no el segundo. Sabor sí, energía no. La recompensa se queda a medias, y en muchas personas eso se traduce en seguir buscando algo dulce un rato después.",
+        "En animales está muy bien demostrado. En personas es más variable: a algunas les quita el antojo y a otras se lo enciende. Merece la pena que observes qué te pasa a ti.",
+      ],
+    },
+    {
+      src: src("edulcorantes", 4),
+      paragraphs: [
+        "Y hay una segunda lengua de la que nadie habla: el intestino también tiene receptores del dulce. Cuando detectan dulzor, suelta hormonas (entre ellas el GLP-1, el de la saciedad) y prepara más transportadores para absorber glucosa.",
+        "O sea que, aunque no lleven calorías, los edulcorantes sí mandan señales metabólicas de verdad. Son pequeñas y muy variables, pero es falso que «pasen de largo sin hacer nada».",
+        "Falta una pieza más: la microbiota. Algunos edulcorantes cambian su composición en algunas personas, y justo en esas se ha visto un peor manejo de la glucosa. No le ocurre a todo el mundo: es una respuesta individual, y eso explica por qué los estudios se contradicen tanto.",
+      ],
+    },
+    {
+      src: src("edulcorantes", 5),
+      paragraphs: [
+        "Vamos a la pregunta de verdad: ¿son tan malos? La respuesta honesta es incómoda, porque no son un veneno pero tampoco son la solución.",
+        "A favor tienen cosas sólidas y medibles: no producen caries, no elevan la glucosa ni la insulina de forma apreciable, y cambiar un refresco azucarado diario por su versión sin azúcar quita de golpe una cantidad enorme de azúcar. Para quien tiene diabetes o viene de un consumo muy alto, eso no es poco: es una escalera para bajar.",
+        "Y en las cantidades a las que se consumen habitualmente, ninguna agencia ha encontrado motivo para retirarlos del mercado.",
+      ],
+    },
+    {
+      src: src("edulcorantes", 6),
+      paragraphs: [
+        "En contra hay tres cosas que conviene saber. La primera: a largo plazo no funcionan para lo que la gente los usa. La Organización Mundial de la Salud revisó la evidencia en 2023 y recomendó no utilizarlos para controlar el peso, porque no aparece un beneficio sostenido y sí una asociación con más riesgo de diabetes tipo 2 y de enfermedad cardiovascular. Asociación, no causa demostrada: en parte puede ser simplemente que quien ya tiene un problema metabólico es quien más los consume.",
+        "La segunda: hay casos con dudas abiertas, como la clasificación del aspartamo en 2023 o el hallazgo que relaciona el eritritol con las plaquetas. Nada concluyente, pero suficiente para no construir la alimentación de toda una vida encima de ellos.",
+        "La tercera es la que más importa, y no se mide en ningún análisis: mantienen el listón del dulce donde está. Si todo lo que comes es intensamente dulce, una fruta te sabe a nada. Y ese umbral es lo que de verdad decide qué te apetece cada día.",
+        "Así que el objetivo no es cambiar de azúcar, es bajar el listón poco a poco hasta no necesitar ninguno de los dos. Los edulcorantes pueden ser un escalón intermedio muy útil. El problema es quedarse a vivir en el escalón.",
       ],
     },
   ],

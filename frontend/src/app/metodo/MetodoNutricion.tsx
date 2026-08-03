@@ -58,9 +58,9 @@ export default function MetodoNutricion() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Prerrequisito: hay que haber pagado Fisiología (5ª disciplina).
-        if (!me.data?.fisiologia_suscrito) { navigate("/home"); return; }
-
+        // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
+        // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
+        // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const nutriSuscrito = !!me.data?.nutricion_suscrito;
         setSuscrito(nutriSuscrito);
         if (!nutriSuscrito) { setPagoOpen(true); return; }

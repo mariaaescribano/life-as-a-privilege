@@ -12,19 +12,33 @@ import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useLeidos } from "../../hooks/useLeidos";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { MITOS_NUTRICION } from "../../hardCoded/espacio/MitosNutricion";
+import { MITOS_NUTRICION, MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/MitosNutricion";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Apartado «Preguntas y mitos» del recorrido de Nutrición. Se llega desde la
 // actividad del plato de Harvard. Cada pregunta es una tarjeta con su viñeta;
 // al pulsarla se abre la respuesta en el visor de ilustración (foto + texto +
 // fondo de la disciplina), y se puede pasar de un mito a otro con las flechas.
+// Cada respuesta leída deja su marquita en la tarjeta (también las que se leen
+// pasando con las flechas dentro del visor).
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionMitos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [fichaIdx, setFichaIdx] = useState<number | null>(null);
+  const { leido, marcarLeido, snapshot } = useLeidos("metodo-nutricion");
+  // Qué mitos venían YA leídos al abrir el visor (para el aviso «✓ Leída»).
+  const [yaLeidos, setYaLeidos] = useState<Set<string>>(new Set());
+
+  // Abre la respuesta de un mito. El visor marca como leída cada viñeta que se
+  // muestre (también las que se pasan con las flechas), así que la foto de lo
+  // que ya estaba leído se toma AQUÍ, antes de entrar.
+  const abrir = (i: number) => {
+    setYaLeidos(snapshot(MITOS_LEIDOS_KEY));
+    setFichaIdx(i);
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -81,7 +95,8 @@ export default function MetodoNutricionMitos() {
             <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
               {MITOS_NUTRICION.map((m, i) => (
                 <TarjetaNutri key={m.key} titulo={m.titulo} foto={m.foto}
-                              onClick={() => setFichaIdx(i)} />
+                              visto={leido(MITOS_LEIDOS_KEY, m.key)}
+                              onClick={() => abrir(i)} />
               ))}
             </SimpleGrid>
           </Reveal>
@@ -92,6 +107,11 @@ export default function MetodoNutricionMitos() {
       {/* Respuesta en el visor de ilustración (foto + texto + fondo cambiado). */}
       {fichaIdx !== null && (
         <NutrienteFichaModal tarjetas={MITOS_NUTRICION} index={fichaIdx} sinSaltar
+                             onLeida={(i) => {
+                               const m = MITOS_NUTRICION[i];
+                               if (m) marcarLeido(MITOS_LEIDOS_KEY, m.key);
+                             }}
+                             leida={(i) => yaLeidos.has(MITOS_NUTRICION[i]?.key)}
                              onClose={() => setFichaIdx(null)} onSelect={setFichaIdx} />
       )}
 

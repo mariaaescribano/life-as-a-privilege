@@ -26,6 +26,9 @@ interface ComicModalProps {
   /** Color de la X de cerrar (se pasa tal cual a ComicViewer). Nutrición la pide
    *  en nutricionTxt, no blanca. */
   cerrarColor?: string;
+  /** El cómic ya se había leído antes de abrirlo: sale el aviso discreto
+   *  «✓ Leída» arriba del texto (en todas sus viñetas). */
+  leida?: boolean;
 }
 
 export function ComicModal({
@@ -38,6 +41,7 @@ export function ComicModal({
   textShadow,
   textColor,
   cerrarColor,
+  leida,
 }: ComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -62,6 +66,7 @@ export function ComicModal({
           textShadow={textShadow}
           textColor={textColor}
           cerrarColor={cerrarColor}
+          leida={leida ? () => true : undefined}
           // En la galería de Ilustraciones no hay «Saltar»: es un visor, la X ya
           // cierra. Saltar solo tiene sentido en el cómic de intro de disciplina.
           sinSaltar

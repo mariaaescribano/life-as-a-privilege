@@ -14,7 +14,8 @@ import { NutricionIlustracionesModal } from "../../components/metodo/NutricionIl
 import { NutricionMaterialesModal } from "../../components/metodo/NutricionMaterialesModal";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { glowHeader } from "../../components/metodo/FotoBox";
-import { MITOS_NUTRICION } from "../../hardCoded/espacio/MitosNutricion";
+import { useLeidos } from "../../hooks/useLeidos";
+import { MITOS_NUTRICION, MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/MitosNutricion";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -113,6 +114,14 @@ export default function MetodoNutricionAlimentos() {
   const [molecularOpen, setMolecularOpen] = useState(false);   // alimentos + desglose
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false); // galería de cómics
   const [respuestasOpen, setRespuestasOpen] = useState(false); // mitos (un box por mito)
+  const { marcarLeido, snapshot } = useLeidos("metodo-nutricion");
+  // Mitos que venían YA leídos al abrir «Respuestas» (aviso «✓ Leída» dentro).
+  const [yaLeidos, setYaLeidos] = useState<Set<string>>(new Set());
+
+  const abrirRespuestas = () => {
+    setYaLeidos(snapshot(MITOS_LEIDOS_KEY));
+    setRespuestasOpen(true);
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -177,7 +186,7 @@ export default function MetodoNutricionAlimentos() {
               titulo="Respuestas"
               subtitulo="Las preguntas y mitos más frecuentes, uno a uno."
               icono={IconoRespuestas}
-              onClick={() => setRespuestasOpen(true)}
+              onClick={abrirRespuestas}
               delay={0.18}
             />
           </SimpleGrid>
@@ -191,9 +200,16 @@ export default function MetodoNutricionAlimentos() {
       {/* ILUSTRACIONES: galería con TODOS los cómics de Nutrición. */}
       <NutricionIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
-      {/* RESPUESTAS: los mitos, un box por mito, navegable con las flechas. */}
+      {/* RESPUESTAS: los mitos, un box por mito, navegable con las flechas. Lo
+          que se lea aquí también deja su marquita en la página de mitos. */}
       {respuestasOpen && (
-        <NutrienteFichaModal tarjetas={MITOS_NUTRICION} index={0} onClose={() => setRespuestasOpen(false)} />
+        <NutrienteFichaModal tarjetas={MITOS_NUTRICION} index={0}
+                             onLeida={(i) => {
+                               const m = MITOS_NUTRICION[i];
+                               if (m) marcarLeido(MITOS_LEIDOS_KEY, m.key);
+                             }}
+                             leida={(i) => yaLeidos.has(MITOS_NUTRICION[i]?.key)}
+                             onClose={() => setRespuestasOpen(false)} />
       )}
 
       <IndiceNutricion />

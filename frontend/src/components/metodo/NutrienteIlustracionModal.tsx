@@ -18,10 +18,13 @@ export function NutrienteIlustracionModal({
   isOpen,
   vinetas,
   onClose,
+  leida = false,
 }: {
   isOpen: boolean;
   vinetas: Vineta[];
   onClose: () => void;
+  /** La ilustración ya se había leído antes de abrirla → aviso «✓ Leída». */
+  leida?: boolean;
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
@@ -47,6 +50,7 @@ export function NutrienteIlustracionModal({
             disciplinaBgColor={nutricionBg}
             loader={<AppleLoader />}
             cerrarColor={nutricionTxt}
+            leida={leida ? () => true : undefined}
             onClose={onClose}
             onComplete={onClose}
           />

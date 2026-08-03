@@ -54,9 +54,9 @@ export default function MetodoPsicologia() {
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Prerrequisito: hay que haber pagado Astrología para llegar aquí.
-        if (!me.data?.metodo_suscrito) { navigate("/home"); return; }
-
+        // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
+        // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
+        // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const psicoSuscrito = !!me.data?.psicologia_suscrito;
         setSuscrito(psicoSuscrito);
         if (!psicoSuscrito) { setPagoOpen(true); return; }

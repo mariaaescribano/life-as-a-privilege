@@ -55,9 +55,9 @@ export default function MetodoAyurveda() {
         const me = await axios.get(`${API_URL}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Prerrequisito: hay que haber pagado Psicología para llegar aquí.
-        if (!me.data?.psicologia_suscrito) { navigate("/home"); return; }
-
+        // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
+        // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
+        // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const ayurSuscrito = !!me.data?.ayurveda_suscrito;
         setSuscrito(ayurSuscrito);
         if (!ayurSuscrito) { setPagoOpen(true); return; }

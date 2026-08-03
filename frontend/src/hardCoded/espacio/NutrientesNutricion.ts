@@ -152,9 +152,17 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Grasas trans",
         foto: "/recorrido/nutricion/moleculas/trans.webp",
         parrafos: [
-          "La mayoría de las grasas trans presentes en la alimentación se generan durante procesos industriales que modifican aceites vegetales para hacerlos más estables. Es decir, su estructura molecular no existe en la naturaleza, sino que se creó en un laboratorio.",
-          "Su forma altera el funcionamiento normal de las membranas celulares y se asocia con un aumento del colesterol LDL, una disminución del HDL y un mayor riesgo de enfermedad cardiovascular. Por eso se recomienda consumir la menor cantidad posible.",
-          "Recuerda que no cumplen ninguna función beneficiosa conocida y su consumo debe minimizarse.",
+          "La mayoría de las grasas trans presentes en la alimentación se generan durante procesos industriales que modifican aceites vegetales para hacerlos más estables. Es decir, esa forma molecular apenas existe en la naturaleza: se fabricó en un laboratorio.",
+          "Para entender qué es «trans» hay que mirar la molécula. En una grasa insaturada natural, el doble enlace deja los dos hidrógenos del mismo lado, y eso obliga a la cadena a doblarse: es la famosa curvatura, la forma «cis». En una grasa trans los hidrógenos quedan en lados opuestos y la cadena se queda recta. Ese es todo el cambio, y es enorme: una molécula que se comporta como una grasa saturada rígida aunque técnicamente siga siendo insaturada.",
+          "¿Cómo se llega ahí? Con la hidrogenación parcial. Se coge un aceite vegetal líquido y barato, se le inyecta hidrógeno a presión con un catalizador metálico y calor. Si el proceso se completara, el aceite quedaría totalmente saturado; al dejarlo a medias, parte de los dobles enlaces que sobreviven se giran de cis a trans. El resultado era justo lo que la industria quería: una grasa sólida y untuosa a temperatura ambiente, que no se enrancia, que aguanta frituras repetidas y que alarga meses la caducidad del producto.",
+          "Tiene su ironía histórica: las margarinas hidrogenadas se promocionaron durante décadas como la alternativa moderna y saludable a la mantequilla y a la grasa animal. Acabaron siendo peores que aquello que venían a sustituir.",
+          "El daño empieza en la membrana. Tus células fabrican sus membranas con las grasas que les llegan, y no saben distinguir: al ser rectas, colocan las moléculas trans en el sitio de las insaturadas. Pero una membrana que debería ser fluida se vuelve rígida, y con ella dejan de funcionar bien los receptores, los canales y las enzimas que están incrustados en ella. El material es defectuoso, pero la obra sigue.",
+          "En la sangre hacen algo que ninguna otra grasa hace: suben el colesterol LDL y, a la vez, bajan el HDL. La grasa saturada sube el LDL pero también sube algo el HDL; las trans empeoran los dos lados a la vez, así que dejan el peor perfil de todas las grasas conocidas. Además elevan la lipoproteína(a), favorecen la inflamación y dañan el endotelio, la capa que recubre las arterias por dentro.",
+          "Y todo eso con dosis diminutas. La Organización Mundial de la Salud recomienda que no superen el 1 % de la energía diaria: unos 2 gramos al día. Los grandes análisis estiman que cada 2 % de la energía que venga de grasas trans se asocia a un aumento de en torno al 20-25 % del riesgo de enfermedad coronaria. Muy poca cantidad para tanto efecto.",
+          "Un matiz honesto: sí existen grasas trans naturales, en pequeñas cantidades, en la carne y la leche de los rumiantes, porque las fabrican las bacterias de su estómago. A las dosis en que se comen no parecen tener el mismo efecto que las industriales. El problema es la versión de fábrica.",
+          "La buena noticia es que esto se ha regulado. Dinamarca fue la primera en limitarlas en 2003 y, desde abril de 2021, en toda la Unión Europea ningún alimento puede llevar más de 2 gramos de grasas trans industriales por cada 100 gramos de grasa. En Europa el problema es hoy mucho menor que hace quince años.",
+          "Aun así, conviene saber leer, porque el etiquetado europeo NO obliga a declarar cuántas grasas trans lleva un producto: no las vas a encontrar en la tabla nutricional. Donde sí aparecen es en la lista de ingredientes. Busca las palabras «parcialmente hidrogenado» o «parcialmente hidrogenada»: ahí es donde están. Ojo, si pone solo «hidrogenado» sin el «parcialmente», esa grasa está completamente saturada y no es trans. Sospecha sobre todo de la bollería industrial, las margarinas duras, las galletas rellenas, las coberturas, los precocinados y los productos importados de fuera de la UE.",
+          "Recuerda que no cumplen ninguna función beneficiosa conocida y su consumo debe minimizarse. No hay una cantidad recomendada de grasas trans, porque no hacen falta para nada: es el único componente de la dieta del que lo ideal, sencillamente, es cero.",
         ],
       },
     ],
@@ -228,7 +236,9 @@ export const NUTRIENTES: Nutriente[] = [
       "La vitamina D se fabrica en la piel con la luz del sol.",
     ],
     donde: ["Fruta y verdura", "Verduras de hoja verde", "Huevo e hígado", "Sol (vitamina D)", "Cereales integrales"],
-    tarjetasCirculo: true,
+    // Rejilla de boxes, igual que el resto de grupos (el círculo de colores se
+    // descartó). `color` y `sigla` de cada tarjeta se conservan por si se
+    // recupera: solo los usa NutrienteCirculo.
     tarjetas: [
       {
         key: "a", sigla: "A", titulo: "Vitamina A (Retinol)", color: "#ef8e3a",
@@ -547,8 +557,8 @@ export const NUTRIENTES: Nutriente[] = [
       "El hígado produce la mayor parte del colesterol que necesitas. Lo importante no es solo la cantidad de colesterol, sino también la forma en que se transporta por la sangre, mediante las lipoproteínas HDL y LDL.",
     ],
     tipos: [
-      { nombre: "HDL", desc: "El que retira el colesterol sobrante y lo lleva al hígado. El «que limpia»." },
-      { nombre: "LDL", desc: "El que reparte colesterol a las células. En exceso se acumula en las arterias." },
+      { nombre: "HDL", desc: "Mitad proteína: densa. Recoge el colesterol sobrante y lo devuelve al hígado." },
+      { nombre: "LDL", desc: "Mitad colesterol: ligera. Lo reparte a las células y en exceso se queda en las arterias." },
     ],
     queHacen: [
       "Forma parte de la membrana de todas tus células y les da firmeza.",
@@ -566,6 +576,9 @@ export const NUTRIENTES: Nutriente[] = [
           "Es la materia prima con la que el cuerpo fabrica hormonas (como los estrógenos, la testosterona o el cortisol), también fabrica vitamina D y las sales biliares que ayudan a digerir las grasas.",
           "La mayor parte del colesterol la fabrica tu propio hígado; solo una pequeña parte procede de los alimentos. Por eso no es ni bueno ni malo: es imprescindible. El problema no es el colesterol en sí, sino cómo viaja por la sangre.",
           "Como es grasa, no se disuelve en la sangre (que es agua). Para poder moverse, viaja empaquetado dentro de unas partículas llamadas lipoproteínas: las dos principales son la LDL y la HDL.",
+          "Imagina cada lipoproteína como una pelotita: por dentro la carga de grasa, y por fuera una cáscara de proteínas que hace de envoltorio y de etiqueta. Todas llevan las dos cosas; lo que cambia entre ellas es la proporción.",
+          "Y de ahí salen sus nombres, que no tienen nada que ver con «bueno» y «malo». La grasa flota y la proteína pesa. Una partícula con mucha grasa y poca proteína es ligera: baja densidad, LDL (Low Density Lipoprotein). Una con mucha proteína y poca grasa es pesada: alta densidad, HDL (High Density Lipoprotein). Se llaman así, literalmente, porque se descubrieron separándolas por peso en una centrifugadora.",
+          "En números redondos: en una LDL, alrededor de la mitad de su peso es colesterol y solo un cuarto es proteína. En una HDL es justo al revés, en torno a la mitad es proteína y el colesterol es la parte pequeña. Misma carga, proporciones opuestas.",
         ],
       },
       {
@@ -574,8 +587,11 @@ export const NUTRIENTES: Nutriente[] = [
         foto: "/recorrido/nutricion/moleculas/hdl.webp",
         parrafos: [
           "La HDL (lipoproteína de alta densidad) es la partícula que hace el camino de vuelta: recoge el colesterol sobrante de los tejidos y de las paredes de las arterias y lo devuelve al hígado para reciclarlo o eliminarlo.",
+          "Qué lleva dentro: es la más densa porque es la que MÁS proteína tiene, alrededor de la mitad de su peso. Su proteína principal se llama apoA-I. El colesterol es en ella la parte pequeña, en torno a un quinto. Mucho envase y poca carga: por eso pesa y por eso es «de alta densidad».",
+          "Tiene sentido si piensas en su trabajo. La HDL sale del hígado casi vacía, como un camión que va a recoger, y se va llenando por el camino con el colesterol que va retirando de los tejidos. Empieza siendo casi solo proteína y se va cargando.",
           "Por eso se le llama coloquialmente «colesterol bueno»: ayuda a retirar el exceso y a mantener las arterias limpias.",
           "Unos niveles altos de HDL se asocian con una mejor salud cardiovascular. El ejercicio físico y las grasas saludables (aceite de oliva, pescado azul, tofu, frutos secos) ayudan a elevarla.",
+          "Un matiz que conviene conocer: cuando se han probado fármacos para subir la HDL, no se han reducido los infartos. Eso sugiere que una HDL alta es sobre todo la señal de un metabolismo que funciona bien, más que la causa de esa buena salud. Sube por hacer las cosas bien; no basta con subirla.",
         ],
       },
       {
@@ -584,7 +600,10 @@ export const NUTRIENTES: Nutriente[] = [
         foto: "/recorrido/nutricion/moleculas/ldl.webp",
         parrafos: [
           "La LDL (lipoproteína de baja densidad) es la partícula que reparte el colesterol desde el hígado hacia las células que lo necesitan.",
-          "Se le llama coloquialmente «colesterol malo», pero cumple una función necesaria. El problema aparece cuando hay demasiadas partículas LDL circulando: pueden quedarse pegadas y oxidarse en la pared de las arterias, formando placas que las estrechan (aterosclerosis).",
+          "Qué lleva dentro: es la que MÁS colesterol transporta, en torno a la mitad de su peso, y solo alrededor de un cuarto es proteína. Al ir tan cargada de grasa y llevar tan poco envase, pesa poco: por eso es «de baja densidad». Lleva una única proteína grande, la apoB-100, que funciona como etiqueta de reparto: es la que reconocen las células para engancharla y quedarse con su carga.",
+          "Fíjate en la simetría con la HDL: la LDL sale del hígado llena y va repartiendo, mientras que la HDL sale vacía y va recogiendo. Una es el camión de reparto y la otra el de recogida. Y como el colesterol pesa menos que la proteína, la que va cargada de colesterol es precisamente la ligera.",
+          "Se le llama coloquialmente «colesterol malo», pero cumple una función necesaria: sin ella tus células no recibirían el colesterol con el que fabrican sus membranas y tus hormonas. El problema aparece cuando hay demasiadas partículas LDL circulando durante demasiado tiempo: acaban colándose en la pared de la arteria, oxidándose allí y atrayendo a células inmunitarias que se las tragan y se quedan atrapadas, formando la placa que va estrechando el vaso (aterosclerosis).",
+          "De ahí una idea importante: lo que más cuenta no es solo cuánto colesterol llevan, sino cuántas partículas hay. Como cada LDL lleva exactamente una apoB-100, medir la apoB es contar partículas, y suele reflejar el riesgo mejor que el colesterol LDL a secas. Si aparece en tu analítica, ya sabes qué está contando.",
           "Por eso interesa mantener la LDL en niveles adecuados, sobre todo evitando el exceso de grasas trans, el tabaco y el sobrepeso.",
         ],
       },
@@ -650,17 +669,19 @@ export const NUTRIENTES: Nutriente[] = [
     img: "/recorrido/nutricion/portadas/agua.webp",
     resumen: "El medio donde ocurre toda la Vida.",
     descripcion: [
-      "El agua es el medio donde ocurre toda la Vida: en ella tienen lugar prácticamente todas las reacciones químicas del organismo.",
-      "Transporta oxígeno, nutrientes y hormonas, elimina desechos, regula la temperatura corporal y lubrica articulaciones y órganos. Aproximadamente dos tercios del agua del cuerpo se encuentran dentro de las células y el resto las rodea.",
+      "El agua es una molécula asimétrica: dos hidrógenos unidos a un oxígeno formando una uve. Como el oxígeno tira más de los electrones, un extremo queda con carga negativa y el otro positiva, así que cada molécula funciona como un imán diminuto. De esa asimetría sale todo lo demás: por eso rodea a las sales y los azúcares y los mantiene disueltos y en movimiento, y por eso no puede agarrar a las grasas, que al huir de ella forman las membranas de tus células.",
+      "En el cuerpo hace tres trabajos a la vez: es el medio donde ocurren todas las reacciones químicas (y participa en muchas de ellas), es el sistema de transporte, porque la sangre es agua con cosas dentro, y es el regulador de la temperatura. Además lubrica articulaciones y ojos y amortigua el cerebro.",
+      "Y da volumen: el agua del plasma es la que llena los vasos y sostiene la tensión arterial. Cómo se reparte entre la sangre, los tejidos y el interior de las células lo decide el sodio, porque el agua siempre se mueve hacia donde hay más sales. Por eso hidratarse no es solo beber, es beber con sales.",
     ],
     tipos: [
-      { nombre: "Agua intracelular", desc: "La que está dentro de las células: unos dos tercios del total." },
-      { nombre: "Agua extracelular", desc: "La que rodea las células y forma el plasma de la sangre." },
+      { nombre: "Agua intracelular", desc: "Dentro de las células: unos dos tercios del total." },
+      { nombre: "Agua del plasma", desc: "La que llena los vasos y da volumen a la sangre." },
+      { nombre: "Agua intersticial", desc: "La que baña a las células por fuera, entre unas y otras." },
     ],
     queHacen: [
-      "Es el medio donde ocurren todas las reacciones químicas del cuerpo.",
-      "Transporta oxígeno, nutrientes y hormonas, y elimina los desechos.",
-      "Regula la temperatura y lubrica articulaciones, ojos y cerebro.",
+      "Es el medio de toda reacción química, y participa en muchas de ellas.",
+      "Da volumen a la sangre y transporta todo lo que va disuelto.",
+      "Regula la temperatura, lubrica y amortigua.",
     ],
     donde: ["Agua", "Frutas y verduras", "Caldos y sopas", "Infusiones", "Lácteos"],
   },
@@ -714,6 +735,7 @@ export const NUTRIENTES: Nutriente[] = [
           "Constituyen una de las familias más abundantes de fitoquímicos y se encuentran en frutas, verduras, cebolla, cacao, té y cítricos.",
           "Muchas de estas moléculas actúan como antioxidantes, pero también regulan la actividad de enzimas y proteínas implicadas en la inflamación, la coagulación y la función de los vasos sanguíneos.",
           "Algunos incluso favorecen la producción de óxido nítrico, ayudando a que las arterias se relajen.",
+          "Profundiza: Los flavonoides son capaces de hacer esto porque inhiben las enzimas que fabrican prostaglandinas, que regulan la contracción y el dolor; frenan las señales que activan la formación de trombos; favorece la producción de óxido nítrico, el cual relaja las arterias, porque activa una enzima encargada de fabricarlo."
         ],
       },
       {
@@ -774,6 +796,82 @@ export const NUTRIENTES: Nutriente[] = [
           "Son flavonoides presentes principalmente en la soja, el tofu, el tempeh y otros derivados.",
           "Su estructura se parece a la de los estrógenos humanos, por lo que pueden unirse a algunos de sus receptores, aunque con una intensidad mucho menor.",
           "Dependiendo del tejido, pueden activar o bloquear parcialmente esos receptores, motivo por el que se estudian por su posible papel en la salud ósea, cardiovascular y en el alivio de algunos síntomas de la menopausia.",
+        ],
+      },
+    ],
+  },
+  {
+    key: "edulcorantes",
+    label: "Edulcorantes",
+    color: "#c94f7c",
+    img: "/recorrido/nutricion/portadas/edulcorantes.webp",
+    resumen: "Dulzor sin azúcar: qué le hacen al cerebro.",
+    descripcion: [
+      "Los edulcorantes no son un nutriente: son moléculas que encajan en tu receptor del dulce sin ser un combustible. Tu lengua las lee como azúcar, tu metabolismo no puede usarlas, y casi todas salen del cuerpo tal como entraron. De ahí sus cero calorías: no son mágicas, simplemente son moléculas que no sabes digerir.",
+      "Su potencia es enorme. La sacarina endulza unas 300 veces más que el azúcar, la sucralosa unas 600 y hay algunas que superan las 20.000 veces. Por eso la cantidad que llevas encima en un refresco «zero» es minúscula, y por eso los edulcorantes de mesa vienen mezclados con un relleno: solos serían imposibles de dosificar.",
+      "Lo interesante no es lo que aportan, sino lo que descolocan. El dulce, para tu cuerpo, no es un sabor: es un anuncio de que viene energía. Cuando el anuncio llega y la energía no, el cuerpo responde a esa contradicción, y ahí está toda la discusión sobre ellos.",
+    ],
+    tipos: [
+      { nombre: "Intensos artificiales", desc: "Aspartamo, sucralosa, sacarina, acesulfamo K. Sintéticos y potentísimos." },
+      { nombre: "Intensos de planta", desc: "Estevia y fruta del monje. Naturales, pero igual de intensos." },
+      { nombre: "Polialcoholes", desc: "Eritritol, xilitol, sorbitol, maltitol. Dulzor suave y efecto laxante." },
+    ],
+    queHacen: [
+      "Activan tu receptor del dulce sin aportar energía utilizable.",
+      "Disparan una predicción de glucosa que luego no se cumple.",
+      "No dan caries ni suben el azúcar, pero mantienen el hábito del dulce.",
+    ],
+    donde: ["Refrescos «zero»", "Yogures y postres 0%", "Chicles «sin azúcar»", "Proteína en polvo", "Salsas y galletas light"],
+    tarjetas: [
+      {
+        key: "aspartamo",
+        titulo: "Aspartamo",
+        foto: "/recorrido/nutricion/moleculas/aspartamo.webp",
+        parrafos: [
+          "Es el edulcorante de los refrescos «light» clásicos y endulza unas 200 veces más que el azúcar.",
+          "Es el único que sí se digiere: está hecho de dos aminoácidos (ácido aspártico y fenilalanina) más un poco de metanol, y el intestino lo parte en esas piezas, que ya existen en la comida normal. Por eso técnicamente sí tiene calorías, pero se usa en cantidades tan pequeñas que no cuentan.",
+          "Por esa fenilalanina lleva un aviso en la etiqueta: las personas con fenilcetonuria, una enfermedad genética que impide procesarla, deben evitarlo.",
+          "En 2023 la Organización Mundial de la Salud lo clasificó como «posiblemente cancerígeno» a partir de evidencia limitada, y al mismo tiempo mantuvo intacta la cantidad diaria admisible. Traducido: la señal es débil y el consumo habitual se sigue considerando aceptable, pero no es un producto sobre el que apoyarse.",
+        ],
+      },
+      {
+        key: "sucralosa",
+        titulo: "Sucralosa",
+        foto: "/recorrido/nutricion/moleculas/sucralosa.webp",
+        parrafos: [
+          "Se fabrica a partir del azúcar, sustituyendo tres de sus piezas por cloro. Ese pequeño cambio la vuelve unas 600 veces más dulce y, sobre todo, indigerible: tus enzimas ya no la reconocen.",
+          "La mayor parte atraviesa el intestino sin absorberse y sale por las heces, lo que la hace muy estable, también al calor, y por eso es la habitual en productos horneados «sin azúcar».",
+          "Es una de las que más se ha estudiado por su posible efecto sobre la microbiota, con resultados que varían mucho de una persona a otra.",
+        ],
+      },
+      {
+        key: "estevia",
+        titulo: "Estevia",
+        foto: "/recorrido/nutricion/moleculas/estevia.webp",
+        parrafos: [
+          "Lo que se usa no es la hoja, sino unas moléculas extraídas de ella, los glucósidos de esteviol, unas 300 veces más dulces que el azúcar.",
+          "Que venga de una planta no cambia lo esencial: sigue siendo un dulzor intenso sin energía detrás, y tu cerebro no distingue el origen. La bacteria del intestino le quita los azúcares que lleva colgando y el resto se absorbe, pasa por el hígado y se elimina por la orina.",
+          "Su punto débil es el sabor: deja un regusto amargo o metálico, y por eso casi siempre viene mezclada con eritritol.",
+        ],
+      },
+      {
+        key: "eritritol",
+        titulo: "Eritritol",
+        foto: "/recorrido/nutricion/moleculas/eritritol.webp",
+        parrafos: [
+          "Es un polialcohol: ni azúcar ni edulcorante intenso, sino algo intermedio. Endulza un 70% de lo que endulza el azúcar, así que se usa a cucharadas y no a gotas, y deja una sensación fresca en la boca.",
+          "A diferencia de sus hermanos, se absorbe en el intestino delgado y se elimina casi intacto por la orina, así que sienta mejor y apenas fermenta. Tu propio cuerpo, además, fabrica pequeñas cantidades a partir de la glucosa.",
+          "En 2023 se publicó un trabajo que asoció niveles altos de eritritol en sangre con más agregación de plaquetas y más eventos cardiovasculares. Es un hallazgo por confirmar y no una condena, pero es la razón por la que ha dejado de tratarse como el edulcorante inofensivo por defecto.",
+        ],
+      },
+      {
+        key: "xilitol",
+        titulo: "Xilitol",
+        foto: "/recorrido/nutricion/moleculas/xilitol.webp",
+        parrafos: [
+          "Otro polialcohol, con un dulzor casi idéntico al del azúcar. Es el de los chicles y las pastas de dientes «sin azúcar», y ahí tiene una ventaja real: las bacterias de la boca no pueden fermentarlo, así que no produce caries e incluso dificulta que se formen.",
+          "Se absorbe solo en parte, así que buena parte llega al colon, donde la microbiota lo fermenta. De ahí los gases, la hinchazón y el efecto laxante si se pasa de cantidad.",
+          "Un aviso importante que casi nadie conoce: es muy tóxico para los perros, incluso en dosis pequeñas. Un chicle olvidado en un bolso puede ser un problema serio.",
         ],
       },
     ],

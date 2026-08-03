@@ -38,7 +38,12 @@ export class PaymentService {
   // Si es `true`, cada disciplina exige haber pagado la anterior de la cadena
   // (Astrología → Psicología → … → Cultura). En `false` se puede pagar cualquier
   // disciplina directamente, sin orden. Poner en `true` para restaurar el camino.
-  private static readonly PAGO_SECUENCIAL = true;
+  //
+  // Está en `false`: el orden del Mapa es el ACONSEJADO, no obligatorio. Cada
+  // una se desbloquea cuando la usuaria quiera, empiece por donde empiece y se
+  // salte las que se salte. Los prerrequisitos de la tabla DISCIPLINAS se
+  // conservan (dan el nombre de la anterior en los mensajes) pero no bloquean.
+  private static readonly PAGO_SECUENCIAL = false;
 
   constructor(
     private readonly userService: UserService,

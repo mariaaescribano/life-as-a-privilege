@@ -2,18 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Text, SimpleGrid, Image } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { ComicModal } from "./ComicModal";
+import { MarcaLeido } from "./MarcaLeido";
 import { NUTRICION_ILUSTRACIONES } from "./nutricionIlustraciones";
 import type { IlustracionEntry } from "./ilustracionesGaleria";
+import { useLeidos } from "../../hooks/useLeidos";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Galería de ILUSTRACIONES de Nutrición. Se abre desde la Biblioteca (popup del
 // alimento → «Ilustraciones»). Muestra TODOS los cómics de la disciplina; la
 // portada de cada tarjeta es la última viñeta del cómic. Al pulsar una tarjeta
-// se abre el visor inmersivo (ComicModal) con el tema de Nutrición.
+// se abre el visor inmersivo (ComicModal) con el tema de Nutrición. El cómic
+// que ya se ha leído se queda con su marquita (la común, MarcaLeido).
 // ─────────────────────────────────────────────────────────────────────────
 
-function IlustracionCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: () => void }) {
+// Lista de ilustraciones leídas dentro de metodo_nutricion.data.
+const CAMPO_LEIDAS = "ilustraciones_leidas";
+
+function IlustracionCard({ entry, leida, onOpen }: {
+  entry: IlustracionEntry; leida: boolean; onOpen: () => void;
+}) {
   const [coverErr, setCoverErr] = useState(false);
   return (
     <Box as="button" onClick={onOpen} position="relative" w="100%" h="100%" display="flex"
@@ -24,6 +32,9 @@ function IlustracionCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: (
          _hover={{ transform: "translateY(-4px)", borderColor: `${nutricionTxt}88`,
                    boxShadow: `0 10px 30px rgba(0,0,0,0.3), 0 0 26px ${nutricionTxt}55` }}
          _active={{ transform: "translateY(-1px)" }}>
+      {/* Marca de «ya leído» (la misma que en las tarjetas del recorrido) */}
+      {leida && <MarcaLeido tinta={nutricionTxt} bg={nutricionBg} />}
+
       {/* Portada (última viñeta) */}
       <Box position="relative" w="100%" aspectRatio={1} flexShrink={0} overflow="hidden" bg={`${nutricionTxt}12`}>
         {!coverErr && entry.cover ? (
@@ -60,6 +71,17 @@ function IlustracionCard({ entry, onOpen }: { entry: IlustracionEntry; onOpen: (
 
 export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
+  const { leido, marcarLeido } = useLeidos("metodo-nutricion");
+  // Si el cómic ya venía leído, el visor lo dice arriba («✓ Leída»). Se mira
+  // ANTES de marcarlo, que si no lo diría siempre.
+  const [abiertaLeida, setAbiertaLeida] = useState(false);
+
+  // Abrir un cómic = leerlo: se queda con su marquita.
+  const abrir = (e: IlustracionEntry) => {
+    setAbiertaLeida(leido(CAMPO_LEIDAS, e.id));
+    setAbierta(e);
+    marcarLeido(CAMPO_LEIDAS, e.id);
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -107,7 +129,8 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
 
             <SimpleGrid columns={{ base: 2, sm: 3, lg: 4 }} spacing={{ base: 4, md: 6 }} w="100%">
               {NUTRICION_ILUSTRACIONES.map((e) => (
-                <IlustracionCard key={e.id} entry={e} onOpen={() => setAbierta(e)} />
+                <IlustracionCard key={e.id} entry={e} leida={leido(CAMPO_LEIDAS, e.id)}
+                                 onOpen={() => abrir(e)} />
               ))}
             </SimpleGrid>
           </Flex>
@@ -125,6 +148,7 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
         textShadow={abierta?.textShadow}
         textColor={abierta?.textColor}
         cerrarColor={nutricionTxt}
+        leida={abiertaLeida}
       />
     </>
   );

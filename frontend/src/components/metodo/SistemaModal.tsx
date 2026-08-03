@@ -17,6 +17,7 @@ export function SistemaModal({
   sistemas,
   onSelect,
   onClose,
+  leida = false,
 }: {
   sistema: Sistema | null;
   /** Lista completa de sistemas para poder navegar con flechas. */
@@ -24,6 +25,8 @@ export function SistemaModal({
   /** Cambia el sistema mostrado (lo usan las flechas). */
   onSelect?: (s: Sistema) => void;
   onClose: () => void;
+  /** Ya se había leído antes de abrirlo → aviso «✓ Leída» arriba. */
+  leida?: boolean;
 }) {
   const puedeNavegar = !!sistemas && sistemas.length > 1 && !!onSelect;
   const idx = sistema && sistemas ? sistemas.findIndex((s) => s.key === sistema.key) : -1;
@@ -44,6 +47,7 @@ export function SistemaModal({
       onClose={onClose}
       onPrev={puedeNavegar ? () => salta(-1) : undefined}
       onNext={puedeNavegar ? () => salta(1) : undefined}
+      leida={leida}
       fotoFallback={
         <Text color={TXT} fontWeight="800" fontSize={{ base: "4xl", md: "5xl" }}
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>

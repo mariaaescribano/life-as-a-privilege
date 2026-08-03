@@ -48,7 +48,8 @@ export default function Terminos() {
             <>
               <strong>Disciplinas de El Recorrido</strong> — acceso digital, personal e indefinido, a
               los contenidos interactivos de cada disciplina, mientras el servicio siga activo. Se
-              adquieren por separado y en orden: cada una se abre al haber adquirido la anterior.
+              adquieren por separado y en el orden que quieras: el del Mapa es el que aconsejamos,
+              pero puedes empezar por cualquiera y saltarte las que no te interesen.
             </>,
             <>
               <strong>Libros digitales</strong> — un PDF que se descarga tras el pago. También se

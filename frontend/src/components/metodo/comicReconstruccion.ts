@@ -6,8 +6,7 @@ import type { Vineta } from "./ComicViewer";
 // estilo de vida). El mensaje: tu cuerpo no para de rehacerse, y cada decisión
 // repetida es una instrucción sobre en qué dirección lo construyes.
 //
-// Imágenes (pendientes): /viñetas/fisiologia/reconstruccion/1.png … 5.png (una
-// por viñeta). Mientras no existan, el ComicViewer muestra su loader/fallback.
+// Imágenes: /viñetas/fisiologia/reconstruccion/1.png … 5.png (una por viñeta).
 const PRE = "/viñetas/fisiologia/reconstruccion";
 
 export const RECONSTRUCCION: Vineta[] = [

@@ -49,9 +49,9 @@ export default function MetodoFisiologia() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Prerrequisito: hay que haber pagado Medicina China (4ª disciplina).
-        if (!me.data?.tcm_suscrito) { navigate("/home"); return; }
-
+        // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
+        // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
+        // falta es tener esta disciplina desbloqueada (si no, sale su pago).
         const fisioSuscrito = !!me.data?.fisiologia_suscrito;
         setSuscrito(fisioSuscrito);
         if (!fisioSuscrito) { setPagoOpen(true); return; }

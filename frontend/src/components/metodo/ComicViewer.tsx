@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { comicLoaderPorColor } from "./comicLoaders";
+import { AvisoLeida } from "./MarcaLeido";
 import { astrologiaTxt } from "../../GlobalVariables";
 
 // Frontend único del cómic: misma vista, misma maquetación, mismas animaciones.
@@ -122,6 +123,12 @@ interface ComicViewerProps {
    *  abrir). Útil, p.ej., para marcar como «leída» cada sefirá de Cábala según se
    *  navega de una a otra con las flechas. */
   onPageView?: (index: number) => void;
+  /** Si devuelve true para una viñeta, arriba del texto sale el aviso discreto
+   *  «✓ Leída». Lo que se pasa aquí tiene que ser el estado de ANTES de abrir el
+   *  visor (una foto fija del momento de abrir): si se recalculara en vivo, la
+   *  viñeta que se está leyendo ahora se marcaría sola y el aviso saldría
+   *  siempre. */
+  leida?: (index: number) => boolean;
   /** Animación de espera mientras la ilustración de la viñeta carga. Si no se
    *  pasa, se usa un spinner del color de la disciplina. Nutrición pasa aquí su
    *  manzana (AppleLoader). */
@@ -179,6 +186,7 @@ export function ComicViewer({
   initialIndex = 0,
   loader,
   onPageView,
+  leida,
   sinSombra,
   scrollbarColor,
   cerrarColor,
@@ -187,8 +195,32 @@ export function ComicViewer({
   esperarFondo,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
-  // Color de la scrollbar: el que pidan o, por defecto, el acento del cómic.
-  const sbColor = scrollbarColor ?? themeColor;
+  // Color de la scrollbar: el que pidan; si no, el color de la LETRA (que es el
+  // que contrasta con el fondo del box) y, en último término, el acento. OJO:
+  // caer siempre en `themeColor` dejaba la barra invisible en Nutrición, donde
+  // el acento es casi blanco (#e4f8e1) sobre un box claro.
+  const sbColor = scrollbarColor ?? textColor ?? themeColor;
+  // Estilo único de la barra vertical: SIEMPRE visible (carril tenue + pulgar
+  // marcado), para que se vea que el texto continúa aunque no se toque nada.
+  const scrollSx = {
+    "&::-webkit-scrollbar": { width: "8px" },
+    "&::-webkit-scrollbar-track": { background: `${sbColor}1f`, borderRadius: "4px" },
+    "&::-webkit-scrollbar-thumb": { background: `${sbColor}88`, borderRadius: "4px" },
+    "&::-webkit-scrollbar-thumb:hover": { background: `${sbColor}cc` },
+    scrollbarWidth: "thin" as const,
+    scrollbarColor: `${sbColor}88 ${sbColor}1f`,
+  };
+  // La COLUMNA DE TEXTO además se puede seleccionar con el ratón (copiar una
+  // frase de la viñeta). Hay que decirlo aquí explícitamente porque las páginas
+  // de Fisiología prohíben la selección en su raíz (`noSelectSx`, para que los
+  // juegos de arrastrar no se pongan azules) y el visor, al pintarse dentro de
+  // la página, heredaba esa prohibición: en Fisiología no se podía seleccionar
+  // el texto de las viñetas y en el resto de disciplinas sí.
+  const textoSx = {
+    ...scrollSx,
+    userSelect: "text" as const,
+    WebkitUserSelect: "text",
+  };
   // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
   // elementos de TCM) muestra la foto casi nítida y a plena pantalla; el resto
   // del modo disciplina la deja muy blureada + pantalla negra para contrastar
@@ -708,13 +740,7 @@ export function ComicViewer({
             pl={{ base: 0, md: 10 }}
             pr={0}
             py={{ base: 0, md: 10 }}
-            sx={{
-              "&::-webkit-scrollbar": { width: "6px" },
-              "&::-webkit-scrollbar-thumb": {
-                background: `${sbColor}55`,
-                borderRadius: "3px",
-              },
-            }}
+            sx={scrollSx}
           >
             {/* Mientras la ilustración de la izquierda no ha cargado, el panel
                 entero muestra solo un spinner del color de la disciplina. La
@@ -841,7 +867,9 @@ export function ComicViewer({
               // arranca arriba (flex-start) con un margen superior constante, así
               // que empieza siempre en el mismo sitio sin cortarse por arriba.
               maxH={{ base: "none", md: "100%" }}
-              overflowY={{ base: "visible", md: "auto" }}
+              // `scroll` (no `auto`): el carril de la barra está SIEMPRE ahí, así
+              // que se ve de un vistazo que la columna de texto es scrollable.
+              overflowY={{ base: "visible", md: "scroll" }}
               overflowX="hidden"
               display="flex"
               flexDirection="column"
@@ -858,18 +886,14 @@ export function ComicViewer({
               // quitaron a la fila. El texto queda donde estaba; lo que se ha
               // movido a la derecha es la barra de scroll.
               pr={{ base: 5, md: 14 }}
-              sx={{
-                "&::-webkit-scrollbar": { width: "6px" },
-                "&::-webkit-scrollbar-track": { background: "transparent" },
-                "&::-webkit-scrollbar-thumb": {
-                  background: `${sbColor}55`,
-                  borderRadius: "3px",
-                },
-                "&::-webkit-scrollbar-thumb:hover": { background: `${sbColor}88` },
-                scrollbarWidth: "thin",
-                scrollbarColor: `${sbColor}55 transparent`,
-              }}
+              sx={textoSx}
             >
+              {/* Aviso discreto de «ya la habías leído» (tick + LEÍDA), justo
+                  encima del antetítulo/título. */}
+              {leida?.(index) && (
+                <AvisoLeida color={tituloColor} textShadow={tituloShadow} />
+              )}
+
               {/* Encabezado opcional (antetítulo + título + separador) */}
               {current.eyebrow && (
                 <Text color={tituloColor} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.14em"

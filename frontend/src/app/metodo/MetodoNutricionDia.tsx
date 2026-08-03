@@ -424,7 +424,7 @@ export default function MetodoNutricionDia() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Tus calorías", onClick: () => navigate("/metodo/nutricion/calorias") }}
+              prev={{ label: "← Tu azúcar", onClick: () => navigate("/metodo/nutricion/prediabetes") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{ label: "Preguntas y mitos →", onClick: () => navigate("/metodo/nutricion/mitos") }}
             />

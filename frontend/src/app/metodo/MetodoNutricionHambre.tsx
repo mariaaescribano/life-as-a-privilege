@@ -26,12 +26,16 @@ import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from 
 // «Ilustraciones» de Nutrición.
 // ═════════════════════════════════════════════════════════════════════════
 
+// Barra de scroll SIEMPRE visible (mismo estilo que el visor de ilustraciones):
+// carril tenue + pulgar marcado, en la letra de la disciplina (el acento claro
+// de Nutrición no se vería sobre el box).
 const SCROLL_SX = {
-  "&::-webkit-scrollbar": { width: "6px" },
-  "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}55`, borderRadius: "3px" },
-  "&::-webkit-scrollbar-track": { background: "transparent" },
+  "&::-webkit-scrollbar": { width: "8px" },
+  "&::-webkit-scrollbar-track": { background: `${nutricionTxt}1f`, borderRadius: "4px" },
+  "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}88`, borderRadius: "4px" },
+  "&::-webkit-scrollbar-thumb:hover": { background: `${nutricionTxt}cc` },
   scrollbarWidth: "thin" as const,
-  scrollbarColor: `${nutricionTxt}55 transparent`,
+  scrollbarColor: `${nutricionTxt}88 ${nutricionTxt}1f`,
 };
 
 // Pinta un párrafo con soporte de **negrita** (misma emphasis que pidió la usuaria).
@@ -91,7 +95,7 @@ function HambreBox({ v }: { v: Vineta }) {
         {/* Texto (derecha) con scroll propio */}
         <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }} alignSelf={{ base: "auto", md: "stretch" }}
              display="flex" flexDirection="column" justifyContent="flex-start"
-             maxH={{ base: "none", md: "100%" }} overflowY={{ base: "visible", md: "auto" }} overflowX="hidden"
+             maxH={{ base: "none", md: "100%" }} overflowY={{ base: "visible", md: "scroll" }} overflowX="hidden"
              // 52px = los 12 de antes + los 40 que se le han quitado a la fila.
              pr={{ base: 0, md: "52px" }} sx={SCROLL_SX}>
           <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.25"

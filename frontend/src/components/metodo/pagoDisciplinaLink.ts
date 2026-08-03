@@ -32,7 +32,8 @@ export const STRIPE_LINK_DISCIPLINAS =
 /** Precio de UNA disciplina, en euros. */
 export const PRECIO_DISCIPLINA_EUR = 30;
 
-/** Las disciplinas que forman El Mapa (se pagan una a una, en orden). */
+/** Las disciplinas que forman El Mapa (se pagan una a una; el orden es el
+ *  aconsejado, se puede desbloquear cualquiera cuando se quiera). */
 export const NUM_DISCIPLINAS = 8;
 
 /** Precio de una disciplina, tal y como se muestra en el box de pago. */

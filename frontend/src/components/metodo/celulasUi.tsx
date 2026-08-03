@@ -3,6 +3,7 @@ import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
 import { FotoBox } from "./FotoBox";
+import { AvisoLeida } from "./MarcaLeido";
 import { fisiologiaTxt, fisiologiaBg, fisiologiaNom } from "../../GlobalVariables";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
@@ -63,6 +64,8 @@ export function FichaFisioModal({
   onPrev,
   onNext,
   contador = null,
+  leida = false,
+  acciones,
   fotoFallback,
   accent = TXT,
   bgImage = FISIO_IMG,
@@ -85,6 +88,13 @@ export function FichaFisioModal({
   onNext?: () => void;
   /** Contador discreto abajo (p. ej. "3 / 8"). Opcional. */
   contador?: string | null;
+  /** Esto ya se había leído ANTES de abrir la ficha: sale el aviso discreto
+   *  «✓ Leída» encima del título. Lo pasa la página con el estado de antes de
+   *  marcarla (si se mirara en vivo, saldría siempre). */
+  leida?: boolean;
+  /** Botones al final del texto, después de los párrafos (p.ej. el «Gracias»
+   *  de La sonrisa interior). Opcional: si no se pasa, la ficha es solo lectura. */
+  acciones?: React.ReactNode;
   /** Qué mostrar si la foto falla (por defecto, nada). */
   fotoFallback?: React.ReactNode;
   /** Color de acento (glows, líneas, flechas, título). Por defecto el de Fisiología. */
@@ -135,6 +145,17 @@ export function FichaFisioModal({
     "&::-webkit-scrollbar-thumb:hover": { background: `${accent}88` },
     scrollbarWidth: "thin" as const,
     scrollbarColor: `${accent}55 transparent`,
+  };
+
+  // El texto de la ficha se puede seleccionar con el ratón. Hay que decirlo
+  // explícitamente: esta ficha se pinta DENTRO de la página (no en un portal) y
+  // las páginas de Fisiología prohíben la selección en su raíz (`noSelectSx`,
+  // por los juegos de arrastrar), así que la heredaba y no se podía copiar ni
+  // una frase de lo que estabas leyendo.
+  const textoSx = {
+    ...scrollbarSx,
+    userSelect: "text" as const,
+    WebkitUserSelect: "text",
   };
 
   const flechaSx = {
@@ -353,8 +374,11 @@ export function FichaFisioModal({
             pt={{ base: 0, md: 1 }}
             pb={{ base: 0, md: 6 }}
             pr={{ base: 0, md: 4 }}
-            sx={scrollbarSx}
+            sx={textoSx}
           >
+            {/* Aviso discreto de «ya la habías leído», encima del título. */}
+            {leida && <AvisoLeida color={accent} textShadow="0 2px 8px rgba(0,0,0,0.9)" />}
+
             <Text
               color={accent}
               fontSize={{ base: "2xl", md: "3xl" }}
@@ -413,6 +437,14 @@ export function FichaFisioModal({
                 </Text>
               ))}
             </Flex>
+
+            {/* Acciones (opcional): van al final del texto, con su propio aire. */}
+            {acciones && (
+              <Flex mt={{ base: 6, md: 7 }} justify={{ base: "center", md: "flex-start" }}
+                    align="center" gap={3} flexWrap="wrap">
+                {acciones}
+              </Flex>
+            )}
           </Box>
         </Flex>
 
@@ -450,6 +482,7 @@ export function CelulaModal({
   onClose,
   celulas,
   onSelect,
+  leida = false,
 }: {
   celula: Celula;
   onClose: () => void;
@@ -457,6 +490,8 @@ export function CelulaModal({
   celulas?: Celula[];
   /** Cambia la célula mostrada (lo usan las flechas). */
   onSelect?: (c: Celula) => void;
+  /** Ya estaba descubierta antes de abrirla → aviso «✓ Leída». */
+  leida?: boolean;
 }) {
   const puedeNavegar = !!celulas && celulas.length > 1 && !!onSelect;
   const idx = celulas ? celulas.findIndex((c) => c.id === celula.id) : -1;
@@ -475,6 +510,7 @@ export function CelulaModal({
       onClose={onClose}
       onPrev={puedeNavegar ? () => salta(-1) : undefined}
       onNext={puedeNavegar ? () => salta(1) : undefined}
+      leida={leida}
     />
   );
 }
@@ -487,6 +523,8 @@ export interface Consejo {
   titular: string;
   /** Texto largo que aparece a la derecha de la foto dentro del modal. */
   texto: React.ReactNode;
+  /** Foto propia de esta curiosidad. Si no se pone, se usa la del órgano. */
+  foto?: string;
   /** Las 3 ideas clave de la curiosidad (resumen del texto). Se muestran en
    *  cajas blancas bajo el titular, para captarla en 3-5 s. */
   claves?: string[];
@@ -502,6 +540,7 @@ export function ConsejoModal({
   onClose,
   consejos,
   onSelect,
+  leida = false,
 }: {
   consejo: Consejo;
   /** Foto del órgano (la misma que aparece arriba en el panel). */
@@ -512,6 +551,8 @@ export function ConsejoModal({
   consejos?: Consejo[];
   /** Cambia la curiosidad mostrada (lo usan las flechas). */
   onSelect?: (c: Consejo) => void;
+  /** Ya se había leído antes de abrirla → aviso «✓ Leída». */
+  leida?: boolean;
 }) {
   const puedeNavegar = !!consejos && consejos.length > 1 && !!onSelect;
   const total = consejos?.length ?? 0;
@@ -523,7 +564,7 @@ export function ConsejoModal({
 
   return (
     <FichaFisioModal
-      foto={foto}
+      foto={consejo.foto || foto}
       alt={label}
       titulo={consejo.titular}
       claves={consejo.claves}
@@ -532,6 +573,7 @@ export function ConsejoModal({
       onPrev={puedeNavegar ? () => salta(-1) : undefined}
       onNext={puedeNavegar ? () => salta(1) : undefined}
       contador={puedeNavegar ? `${idx + 1} / ${total}` : null}
+      leida={leida}
       fotoFallback={
         <Text color={`${TXT}aa`} fontSize="xs" fontStyle="italic">Foto de {label} (próximamente)</Text>
       }

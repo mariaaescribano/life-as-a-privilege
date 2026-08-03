@@ -49,6 +49,8 @@ export default function MetodoFisiologiaSistemas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [sistema, setSistema] = useState<Sistema | null>(null);
+  // El sistema abierto ya estaba visto ANTES de abrirlo (aviso en el popup).
+  const [sistemaYaVisto, setSistemaYaVisto] = useState(false);
   const [vistos, setVistos] = useState<Set<string>>(new Set());
   const dataRef = useRef<Record<string, any>>({});
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
@@ -88,6 +90,8 @@ export default function MetodoFisiologiaSistemas() {
   // Abre la viñeta de un sistema y lo marca como visto (se guarda en BD). Se usa
   // tanto al pulsar la tarjeta como al navegar con las flechas dentro del modal.
   const verSistema = (s: Sistema) => {
+    // Antes de marcarlo: si ya venía leído, el popup lo dice arriba.
+    setSistemaYaVisto(vistos.has(s.key));
     setSistema(s);
     if (vistos.has(s.key)) return;
     const next = new Set(vistos);
@@ -164,7 +168,8 @@ export default function MetodoFisiologiaSistemas() {
 
       {/* Modal inmersivo del sistema: imagen + descripción, con flechas para
           moverse entre sistemas sin cerrar. */}
-      <SistemaModal sistema={sistema} sistemas={SISTEMAS} onSelect={verSistema} onClose={() => setSistema(null)} />
+      <SistemaModal sistema={sistema} sistemas={SISTEMAS} leida={sistemaYaVisto}
+                    onSelect={verSistema} onClose={() => setSistema(null)} />
 
       {celulasModal}
       <IndiceFisiologia />
