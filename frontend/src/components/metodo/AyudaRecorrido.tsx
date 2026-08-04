@@ -260,6 +260,56 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       ],
     },
   },
+  familia: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Colocas a tu familia y eliges para cada uno el personaje o el animal que se le parece.",
+        "Por ejemplo: tu padre, un león; tu madre, una loba y un ángel; tu hermana, un erizo. No hay imágenes buenas ni malas: solo la que a ti te viene.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Toca un «+» junto a una foto para añadir a alguien: arriba las generaciones anteriores (padres, abuelos), a los lados tu generación (hermanos, pareja) y abajo tus hijos.",
+        "Se abre su ventana: ponle nombre y parentesco (y su foto, si quieres) y elige el personaje o el animal que asocias con esa persona. Puedes elegir hasta dos.",
+        "Toca una imagen ya elegida para quitarla. Todo se guarda solo.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "No lo pienses mucho: quédate con la primera imagen que te venga, aunque no sepas explicar por qué.",
+        "La imagen no juzga a nadie: dice cómo lo viviste tú.",
+        "En la página siguiente tendrás esta misma familia para escribir sobre cada persona.",
+      ],
+    },
+  },
+  genograma: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "Tienes tu familia delante: toca a una persona y escribe sobre ella.",
+        "Por ejemplo, en la ficha de tu madre: «Nos queríamos mucho, pero me faltó que me escuchara cuando lo pasaba mal.»",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Toca un «+» junto a una foto para añadir a alguien: arriba las generaciones anteriores (padres, abuelos), a los lados tu generación (hermanos, pareja) y abajo tus hijos.",
+        "Se abre su ficha: ponle foto, nombre y parentesco, y escribe lo que quieras de esa persona.",
+        "Toca cualquier foto para volver a abrir su ficha. Todo se guarda solo.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "Coloca a quien de verdad te formó, aunque no sea familia de sangre; y también a quien faltó.",
+        "No hace falta que el árbol esté completo ni ordenado: es tu mapa, no un documento oficial.",
+        "Si duele mirar a alguien, escribe solo lo que puedas hoy. Puedes volver cuando quieras.",
+      ],
+    },
+  },
   huellas: {
     ejemplo: {
       titulo: "Un ejemplo",

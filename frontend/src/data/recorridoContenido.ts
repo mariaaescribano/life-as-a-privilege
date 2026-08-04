@@ -315,16 +315,27 @@ export const recorridoContenido: Record<
   // 8. CULTURA
   // ───────────────────────────────────────────────────────────
   cultura: {
-    desc: "Has aprendido siete sistemas de pensamiento. Es hora de construir el tuyo.",
-    videoIntro: {
-      titulo: "Construye tu propia visión del mundo",
-      puntos: [
-        "Conoce el pasado para comprender el presente: las grandes ideas y las grandes historias de la humanidad.",
-        "Descubre a los pensadores que se hicieron las mismas preguntas que tú.",
-        "Reflexiona por ti mismo. Tu punto de vista importa. ¿Qué piensas realmente?",
-        "Mira quién fuiste, comprende quién eres y decide en quién quieres convertirte.",
-      ],
-    },
+    desc: "Has conocido siete maneras de interpretar la realidad. Ahora te toca construir la tuya.",
+
+
+
+videoIntro: {
+
+  titulo: "Las ideas que cambiaron el mundo empiezan con una pregunta.",
+
+  puntos: [
+
+    "Viaja por las historias que moldearon civilizaciones y transformaron la forma en que entendemos la Vida.",
+
+    "El pasado no está muerto: sigue hablándonos. Escúchalo para no repetir sus errores.",
+
+    "Conoce a los grandes pensadores que se hicieron las mismas preguntas que tú.",
+
+    "Desarrolla un pensamiento propio. Tu verdad importa.  Piensa, cuestiona y construye tu propia visión del mundo.",
+
+  ],
+
+},
     modalDesc:
       "El último paso no es aprender otra cosa: es ordenar lo que ya sabes. Has pasado por siete formas distintas de entender al ser humano. Aquí construyes la tuya.",
     contenido: [

@@ -147,9 +147,6 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
             </Text>
           </RevealItem>
 
-          <RevealItem direction="none" scaleFrom={0.3} w="100%" maxW="420px">
-            <Box h="1px" bgGradient="linear(to-r, transparent, #ffffff8c, transparent)" />
-          </RevealItem>
 
           {/* Frase de una línea de /elMetodo */}
           <RevealItem direction="up" distance={14}>

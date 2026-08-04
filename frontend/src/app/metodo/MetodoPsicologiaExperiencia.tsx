@@ -168,13 +168,14 @@ export default function MetodoPsicologiaExperiencia() {
     await persistir(next);
   };
 
-  // Pasar a «Las Huellas». Si ha rellenado toda su Vida, va directo. Si solo ha
-  // rellenado algunos años, le mostramos primero un aviso que le recomienda
-  // rellenar todo lo que pueda (o pedir una llamada si le resulta difícil).
+  // Pasar a «Tu familia». Si ha rellenado toda su Vida, va
+  // directo. Si solo ha rellenado algunos años, le mostramos primero un aviso
+  // que le recomienda rellenar todo lo que pueda (o pedir una llamada si le
+  // resulta difícil).
   const irAHuellas = async () => {
     await guardarSiCambio();
     await flushSaves();
-    if (completa) { navigate(`/metodo/psicologia/${exp.id}/huellas`); return; }
+    if (completa) { navigate(`/metodo/psicologia/${exp.id}/familia`); return; }
     setAvisoOpen(true);
   };
 
@@ -183,7 +184,7 @@ export default function MetodoPsicologiaExperiencia() {
     setAvisoOpen(false);
     await guardarSiCambio();
     await flushSaves();
-    navigate(`/metodo/psicologia/${exp.id}/huellas`);
+    navigate(`/metodo/psicologia/${exp.id}/familia`);
   };
 
   // Estilos de nodo por estado.
@@ -205,14 +206,14 @@ export default function MetodoPsicologiaExperiencia() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title="Línea de Vida"
-                pageLabel="5/20"
+                pageLabel="5/22"
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Resultado ACE", onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
-                next={{ label: puedeAvanzar ? "Huellas →" : "Rellena al menos un año", onClick: irAHuellas, disabled: !puedeAvanzar, disabledTooltip: "Rellena al menos un año (o márcalo sin recuerdos) para continuar" }}
+                next={{ label: puedeAvanzar ? "Tu familia →" : "Rellena al menos un año", onClick: irAHuellas, disabled: !puedeAvanzar, disabledTooltip: "Rellena al menos un año (o márcalo sin recuerdos) para continuar" }}
               />
             </Reveal>
 

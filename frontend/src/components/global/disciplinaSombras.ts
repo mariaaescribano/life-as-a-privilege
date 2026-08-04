@@ -33,3 +33,19 @@ export const sombraTexto = (nom: string, bg: string): string => {
   if (esOscuraNegra(nom)) return SHADOW_BLACK;
   return naturalBoxShadow(bg);
 };
+
+/**
+ * Igual que `sombraTexto` pero SIN luz: para los bloques donde no se quiere
+ * ningún resplandor detrás de la letra.
+ *
+ * No es lo mismo que quitar la sombra a todas: `naturalBoxShadow` ES una luz
+ * (halo del color de la disciplina + blanco) y se va, pero la negra y la granate
+ * no son luz, son CONTRASTE — Fisiología, Cábala, Cultura y Medicina China tienen
+ * fotos de fondo con zonas claras y sin esa sombra su letra se pierde. Devuelve
+ * `undefined` cuando no hace falta ninguna.
+ */
+export const sombraSoloContraste = (nom: string): string | undefined => {
+  if (nom === tcmNom) return SHADOW_GRANATE;
+  if (esOscuraNegra(nom)) return SHADOW_BLACK;
+  return undefined;
+};

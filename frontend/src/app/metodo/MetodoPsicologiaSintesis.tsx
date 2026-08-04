@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · SÍNTESIS  (última del recorrido · paso 20/20 · le sigue Ayurveda)
+// PÁGINA · SÍNTESIS  (última del recorrido · paso 22/22 · le sigue Ayurveda)
 //
 // El cierre de todo el camino: aquí la persona ve TODO lo que ha recorrido, de
 // principio a fin y en solo lectura — su problema, lo que cargó (ACE), sus
@@ -383,7 +383,7 @@ export default function MetodoPsicologiaSintesis() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 20, total: 20 }}
+                step={{ current: 22, total: 22 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Carta", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}

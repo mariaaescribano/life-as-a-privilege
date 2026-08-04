@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · TU BRÚJULA  (después del Compromiso · paso 19/20 · le sigue Síntesis)
+// PÁGINA · TU BRÚJULA  (después del Compromiso · paso 21/22 · le sigue Síntesis)
 //
 // Una brújula para el futuro. La persona se deja un mensaje libre a su yo del
 // futuro, para cuando vuelva a sentirse bloqueada. No es análisis: es una guía
@@ -142,7 +142,7 @@ export default function MetodoPsicologiaBrujula() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 19, total: 20 }}
+                step={{ current: 21, total: 22 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Compromiso", onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}

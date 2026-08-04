@@ -370,7 +370,7 @@ export default function MetodoPsicologiaIntegracion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 12, total: 20 }}
+              step={{ current: 14, total: 22 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Narra", onClick: irANarra }}

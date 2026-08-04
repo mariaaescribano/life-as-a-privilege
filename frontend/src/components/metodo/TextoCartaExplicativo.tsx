@@ -63,14 +63,7 @@ const twinkle = keyframes`
   50%      { opacity: 1; }
 `;
 
-/* Brillo de la caja: esta caja (y SOLO esta) va apagada respecto a las demás.
-   BRILLO afecta al fondo, las estrellas y los halos; BRILLO_FOTO a la propia
-   ilustración de la viñeta, que es lo que más luz daba. */
-const BRILLO = 0.5;
-const BRILLO_FOTO = 0.7;
-
-/* Estrellas titilantes, idénticas a las del ComicViewer (Ilustraciones), pero
-   atenuadas con BRILLO. */
+/* Estrellas titilantes, idénticas a las del ComicViewer (Ilustraciones). */
 const Stars = () => {
   const stars = [
     { top: "12%", left: "8%", size: 2, delay: "0s" },
@@ -95,10 +88,9 @@ const Stars = () => {
           borderRadius="full"
           bg="white"
           animation={`${twinkle} 3.5s ease-in-out ${s.delay} infinite`}
-          boxShadow={`0 0 6px rgba(255,255,255,${0.85 * BRILLO}), 0 0 14px rgba(180,255,245,${0.55 * BRILLO})`}
+          boxShadow="0 0 6px rgba(255,255,255,0.85), 0 0 14px rgba(180,255,245,0.55)"
           pointerEvents="none"
           zIndex={1}
-          style={{ filter: `brightness(${BRILLO})` }}
         />
       ))}
     </>
@@ -253,18 +245,18 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
         position="relative"
         borderRadius="xl"
         overflow="hidden"
-        // EXACTAMENTE el glow del header (glowHeader), sin atenuar por BRILLO:
-        // todos los boxes de la página tienen que brillar igual. BRILLO sigue
-        // apagando el FONDO y la ilustración, pero no el halo de la caja.
+        // EXACTAMENTE el glow del header (glowHeader): todos los boxes de la
+        // página tienen que brillar igual.
         boxShadow={glowHeader(color)}
         animation={`${fadeIn} 0.55s ease both`}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         sx={{ touchAction: "pan-y" }}
       >
-        {/* Fondo de la caja (foto espacial + velo), un 30% más apagado que el
-            del resto de cajas: solo se atenúa el FONDO, el texto se queda igual
-            de nítido. */}
+        {/* Fondo de la caja: la foto espacial TAL CUAL, a opacidad plena y sin
+            velo encima. Antes iba atenuada (brightness 0.5 + foto al 75% + velo
+            oscuro) y la caja se veía gris y apagada sobre el turquesa. La foto
+            ya es un cielo casi negro, así que la letra dorada se lee igual. */}
         <Box
           position="absolute"
           inset="0"
@@ -273,7 +265,6 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           style={{
             background:
               "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
-            filter: `brightness(${BRILLO})`,
           }}
         >
           <Box
@@ -285,9 +276,8 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
             inset="0"
             w="100%"
             h="100%"
-            style={{ objectFit: "cover", objectPosition: "center", opacity: 0.75 }}
+            style={{ objectFit: "cover", objectPosition: "center" }}
           />
-          <Box position="absolute" inset="0" bg="rgba(8,13,30,0.55)" />
         </Box>
 
         <Stars />
@@ -379,7 +369,7 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
             // recortaría contra los bordes de la caja y se vería como una mancha.
             filter={{
               base: "none",
-              md: `drop-shadow(0 0 10px rgba(255,255,255,${0.22 * BRILLO})) drop-shadow(0 0 26px ${color}26) drop-shadow(0 0 54px ${color}13)`,
+              md: `drop-shadow(0 0 10px rgba(255,255,255,0.22)) drop-shadow(0 0 26px ${color}4c) drop-shadow(0 0 54px ${color}26)`,
             }}
           >
             {!imgFailed[i] ? (
@@ -394,8 +384,6 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
                 // quedarse pequeña con el margen que trae la propia ilustración.
                 // Lo que sobra lo recorta el `overflow: hidden` del contenedor.
                 sx={{ transform: { base: "scale(1.06)", md: "scale(1.18)" } }}
-                // La ilustración es lo que más luz daba: va atenuada.
-                style={{ filter: `brightness(${BRILLO_FOTO})` }}
               />
             ) : (
               <Flex

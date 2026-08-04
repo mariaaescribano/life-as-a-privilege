@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { FotoBox } from "../../components/metodo/FotoBox";
 import { CulturaIlustracionesModal } from "../../components/metodo/CulturaIlustracionesModal";
+import { historiaVisual } from "../../components/metodo/culturaPortadas";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
@@ -21,20 +22,26 @@ const EyeIcon = () => (
   </svg>
 );
 
-// Las 6 grandes Historias del recorrido de Cultura, en orden. Las portadas viven
-// en /recorrido/cultura/portadas/<archivo>.png (nombres propios, no coinciden con
-// la key). Las que aún no tienen portada dejan `portada` sin poner y FotoBox
-// muestra el emoji de reserva.
+// Las 6 grandes Historias del recorrido de Cultura, en orden. La portada y el
+// emoji de reserva de cada una salen de `culturaPortadas` (compartido con la
+// presentación pública /d/cultura): las que aún no tienen portada muestran su
+// emoji en el FotoBox.
 type Historia = { key: string; titulo: string; emoji: string; ruta: string; portada?: string };
 
-const P = "/recorrido/cultura/portadas";
+const historia = (key: string, titulo: string): Historia => ({
+  key,
+  titulo,
+  ruta: `/metodo/cultura/historia/${key}`,
+  ...historiaVisual(key),
+});
+
 const HISTORIAS: Historia[] = [
-  { key: "universal",  titulo: "HISTORIA UNIVERSAL",              emoji: "🌍", ruta: "/metodo/cultura/historia/universal",  portada: `${P}/historiauniversal.png` },
-  { key: "religiones", titulo: "HISTORIA DE LAS RELIGIONES",      emoji: "🕊️", ruta: "/metodo/cultura/historia/religiones", portada: `${P}/historiareligion.png` },
-  { key: "filosofia",  titulo: "HISTORIA DE LA FILOSOFÍA",        emoji: "🏛️", ruta: "/metodo/cultura/historia/filosofia",  portada: `${P}/historiafilosofia.png` },
-  { key: "ciencia",    titulo: "HISTORIA DE LA CIENCIA",          emoji: "🔬", ruta: "/metodo/cultura/historia/ciencia" },
-  { key: "medicina",   titulo: "HISTORIA DE LA MEDICINA",         emoji: "⚕️", ruta: "/metodo/cultura/historia/medicina" },
-  { key: "arte",       titulo: "HISTORIA DEL ARTE Y LA LITERATURA", emoji: "🎭", ruta: "/metodo/cultura/historia/arte" },
+  historia("universal",  "HISTORIA UNIVERSAL"),
+  historia("religiones", "HISTORIA DE LAS RELIGIONES"),
+  historia("filosofia",  "HISTORIA DE LA FILOSOFÍA"),
+  historia("ciencia",    "HISTORIA DE LA CIENCIA"),
+  historia("medicina",   "HISTORIA DE LA MEDICINA"),
+  historia("arte",       "HISTORIA DEL ARTE Y LA LITERATURA"),
 ];
 
 export default function MetodoCulturaHistorias() {

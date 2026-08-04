@@ -110,13 +110,18 @@ const CIC_ELEM_BASE = 0.12, CIC_ELEM_STEP = 0.12, CIC_ELEM_DUR = 0.5;
 const CIC_ARROW_BASE = 0.95, CIC_ARROW_STEP = 0.24, CIC_ARROW_DUR = 0.5;
 
 // ── Estrella de un ciclo (pentágono con iconos + rayitas clicables) ──────────
-export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge }: {
+export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge, cajaPulsable = false }: {
   titulo: string;
   pinyin: string;
   hanzi: string;
   subtitulo: string;
   ciclo: Ciclo;
   onEdge: (ciclo: Ciclo, origen: Elemento) => void;
+  /** La caja ENTERA abre el cómic (no solo las flechas). En la página pública
+   *  nadie adivina que las rayitas se pulsan; aquí se pulsa donde sea y el cómic
+   *  arranca por la primera relación del ciclo. Las flechas siguen mandando: si
+   *  se pulsa una, abre SU relación (paran la propagación). */
+  cajaPulsable?: boolean;
 }) {
   const mapa = ciclo === "sheng" ? CICLO_SHENG : CICLO_KE;
   const [hover, setHover] = useState<Elemento | null>(null);
@@ -130,7 +135,22 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
   const walk = ordenCiclo(ciclo);
 
   return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+    <Box
+      position="relative"
+      w="100%"
+      borderRadius="2xl"
+      overflow="hidden"
+      boxShadow={CAJA_GLOW}
+      {...(cajaPulsable
+        ? {
+            onClick: () => onEdge(ciclo, walk[0]),
+            cursor: "pointer",
+            transition: "transform 0.25s ease, box-shadow 0.25s ease",
+            _hover: { transform: "translateY(-3px)", boxShadow: `${CAJA_GLOW}, 0 0 34px ${tcmTxt}55` },
+            sx: { WebkitTapHighlightColor: "transparent" },
+          }
+        : {})}
+    >
       <Global styles={FLECHA_GLOW_CSS} />
       {/* Fondo grande: foto del ciclo, atenuada (oscura + leve desenfoque) para
           que no se lleve la atención y la estrella se lea bien encima */}
@@ -177,7 +197,7 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge 
                    animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.55 })}
                    transition={{ delay: CIC_ARROW_BASE + walk.indexOf(origen) * CIC_ARROW_STEP, duration: CIC_ARROW_DUR, ease: EASE_POP }}
                    style={{ cursor: "pointer", transformBox: "view-box", transformOrigin: `${inicio.x}px ${inicio.y}px` }}
-                   onClick={() => onEdge(ciclo, origen)}
+                   onClick={(e: React.MouseEvent) => { e.stopPropagation(); onEdge(ciclo, origen); }}
                    onMouseEnter={() => setHover(origen)} onMouseLeave={() => setHover(null)}>
                   <line x1={inicio.x} y1={inicio.y} x2={fin.x} y2={fin.y}
                         stroke="transparent" strokeWidth={18} strokeLinecap="round" />
@@ -257,12 +277,15 @@ function ordenCiclo(ciclo: Ciclo): Elemento[] {
 // (izq/der) navegan por ellas. Arranca en la relación que pulsó el usuario.
 // Fondo (pantalla completa + box) = foto del CICLO (generador / controlador).
 // Foto de la izquierda = la de la pareja de cada relación.
-export function RelacionModal({ rel, onClose, onView }: {
+export function RelacionModal({ rel, onClose, onView, textoBorroso }: {
   rel: Relacion | null;
   onClose: () => void;
   /** Se llama con cada relación que el usuario VE al pasar viñetas (no solo la
    *  flechita que abrió el popup), para marcarla como vista en la página. */
   onView?: (ciclo: Ciclo, origen: Elemento) => void;
+  /** ESCAPARATE (páginas /d/…): se leen los títulos pero el cuerpo del texto
+   *  sale difuminado. En el recorrido va SIEMPRE nítido: ahí se paga por leerlo. */
+  textoBorroso?: boolean;
 }) {
   return (
     <Modal isOpen={!!rel} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
@@ -300,6 +323,7 @@ export function RelacionModal({ rel, onClose, onView }: {
               loader={<TcmLoader color="#ffffff" />}
               scrollbarColor="#ffffff"
               sinSaltar
+              textoBorroso={textoBorroso}
               onClose={onClose}
               onPageView={(idx) => onView?.(ciclo, orden[idx])}
             />

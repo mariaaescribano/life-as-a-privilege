@@ -5,21 +5,17 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import ArbolDeLaVida from "../../components/global/ArbolDeLaVida";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaVideoBox } from "../../components/metodo/DisciplinaVideoBox";
 import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
-import { CAJA_GLOW, CAJA_GLOW_FUERTE, CAJA_GLOW_HOVER } from "../../components/metodo/cabalaGlow";
 import {
   CABALA_ILUSTRACIONES_VINETAS,
   CABALA_ILUSTRACIONES_VINETA_KEYS,
 } from "../../components/metodo/cabalaIlustraciones";
-import { CABALA_SEFIROT } from "../../components/metodo/cabalaSefirot";
 import type { CabalaPageKey } from "../../components/metodo/cabalaSefirot";
-import { POLARIDAD_LABEL } from "../../components/metodo/cabalaDiagnostico";
 import { NUM_PREGUNTAS } from "../../components/metodo/cabalaTest";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
@@ -27,9 +23,12 @@ import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/il
 import {
   BLANCO_GLOW,
   BLANCO_GLOW_SUAVE,
+  CajaLisa,
   CierreCrearCuenta,
+  IdeasConMuestra,
   SeparadorSeccion,
   VideoMuestra,
+  type IdeaPresentacion,
 } from "../../components/metodo/presentacionUi";
 import { CabalaIcon, cabalaBg, cabalaNom } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
@@ -42,16 +41,40 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 //   2. El box de la disciplina con su precio + el vídeo al lado.
 //   3. EL ÁRBOL DE LA VIDA: el de verdad, con su animación. Se pulsa una sefirá
 //      y se abre su ilustración. Es la pieza que vende esta disciplina sola.
-//   4. LAS ONCE DIMENSIONES: cada una con la pregunta que la abre, y cómo se
-//      diagnostican (poco desarrollada / integrada / sobreexpresada).
+//   4. LO QUE HAY DENTRO: tres ideas y, al lado, el Árbol en pequeño (este NO se
+//      pulsa: es una muestra).
 //   5. Las ilustraciones de la disciplina.
 //   6. Llamada a la acción.
 //
 // OJO con dos reglas de Cábala:
-//   · Ningún box lleva sombra oscura: todos el halo de cabalaGlow.
+//   · Ningún box lleva sombra oscura ni filo de color: todos el halo del header
+//     (CajaLisa / cabalaGlow), para que ninguno destaque más que él.
 //   · El Árbol NO se envuelve en un Reveal con blur ni retrasos largos — su
 //     dinamismo son sus propios keyframes SVG y taparlo lo estropea.
 // ─────────────────────────────────────────────────────────────────────────────
+
+/** Lo que hay dentro, en tres ideas. ✍️ Textos editables. */
+const IDEAS: IdeaPresentacion[] = [
+  {
+    titulo: "Filosofía de la Cábala",
+    parrafos: [
+      "Descubrirás una forma de comprender al ser humano, sus conflictos internos y su potencial de desarrollo.",
+    ],
+  },
+  {
+    titulo: "Las Sefirot como herramientas",
+    parrafos: [
+      "Aprenderás a desarrollar cualidades concretas que transforman la manera en que te relacionas contigo mismo y con los demás.",
+    ],
+  },
+  {
+    titulo: "Sesiones individuales",
+    parrafos: [
+      "Un espacio para aterrizar estos principios en situaciones reales de tu Vida y convertirlos en algo práctico.",
+    ],
+    nota: "Opcional. Se cobra aparte.",
+  },
+];
 
 export default function PresentacionCabala({ d }: { d: PresentacionDisciplina }) {
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
@@ -139,9 +162,6 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
               {d.gancho}
             </Text>
           </RevealItem>
-          <RevealItem w="100%" maxW="420px">
-            <Box h="1px" bgGradient="linear(to-r, transparent, #ffffff8c, transparent)" />
-          </RevealItem>
         </RevealStagger>
 
         {/* ══ 2. BOX DE LA DISCIPLINA (con su precio) + VÍDEO ══ */}
@@ -179,22 +199,13 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
         <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 6, md: 8 }}>
           <SeparadorSeccion>El Árbol de la Vida</SeparadorSeccion>
 
-          <Box
-            position="relative"
-            w="100%"
-            borderRadius="3xl"
-            overflow="hidden"
-            border={`1.5px solid ${d.txt}66`}
-            boxShadow={CAJA_GLOW_FUERTE}
-          >
-            <DisciplinaBgLayer nom={cabalaNom} borderRadius="3xl" />
-
+          {/* Sin filo de color y con el halo del header: la caja no debe destacar
+              más que él (regla de las presentaciones y del recorrido de Cábala). */}
+          <CajaLisa d={d}>
             <Flex
               direction="column"
               align="center"
               gap={{ base: 5, md: 7 }}
-              position="relative"
-              zIndex={1}
               px={{ base: 4, md: 10 }}
               py={{ base: 8, md: 11 }}
             >
@@ -219,109 +230,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
                 onDaatClick={() => abrirSefira("daat")}
               />
             </Flex>
-          </Box>
-        </Flex>
-
-        {/* ══ 4. LAS ONCE DIMENSIONES ══
-            Cada una con la pregunta que la abre. Es lo que hace entender que esto
-            no es teoría: son once preguntas sobre tu propia Vida. */}
-        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Las once dimensiones</SeparadorSeccion>
-
-          <Reveal inView direction="up" distance={16} duration={0.7}>
-            <Text
-              color="rgba(255,255,255,0.9)"
-              fontSize={{ base: "md", md: "lg" }}
-              fontStyle="italic"
-              textAlign="center"
-              lineHeight="1.65"
-              maxW="740px"
-              textShadow={BLANCO_GLOW_SUAVE}
-            >
-              Cada dimensión se abre con una pregunta. Y cada una se puede medir: ninguna es buena
-              ni mala, pero puede estar {POLARIDAD_LABEL.deficit.toLowerCase()},{" "}
-              {POLARIDAD_LABEL.equilibrio.toLowerCase()} o {POLARIDAD_LABEL.exceso.toLowerCase()}.
-            </Text>
-          </Reveal>
-
-          <RevealStagger
-            inView
-            stagger={0.07}
-            delayChildren={0.1}
-            amount={0.1}
-            w="100%"
-            display="grid"
-            gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
-            gap={{ base: 4, md: 5 }}
-          >
-            {CABALA_SEFIROT.map((s) => (
-              <RevealItem
-                key={s.key}
-                direction="up"
-                distance={18}
-                scaleFrom={0.96}
-                duration={0.65}
-                position="relative"
-                overflow="hidden"
-                borderRadius="2xl"
-                h="100%"
-                border={`1px solid ${d.txt}55`}
-                cursor="pointer"
-                onClick={() => abrirSefira(s.key)}
-                sx={{
-                  boxShadow: CAJA_GLOW,
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
-                  _hover: {
-                    transform: "translateY(-4px)",
-                    borderColor: d.txt,
-                    boxShadow: CAJA_GLOW_HOVER,
-                  },
-                }}
-              >
-                <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" />
-                <Flex
-                  direction="column"
-                  gap={2}
-                  position="relative"
-                  zIndex={1}
-                  px={{ base: 5, md: 6 }}
-                  py={{ base: 5, md: 6 }}
-                  h="100%"
-                >
-                  <Flex align="baseline" gap={2.5}>
-                    <Text
-                      color={`${d.txt}aa`}
-                      fontSize={{ base: "sm", md: "md" }}
-                      fontWeight="700"
-                      letterSpacing="0.1em"
-                      textShadow={sombra}
-                    >
-                      {String(s.numero).padStart(2, "0")}
-                    </Text>
-                    <Text
-                      color={d.txt}
-                      fontSize={{ base: "xl", md: "2xl" }}
-                      fontWeight="700"
-                      letterSpacing="0.04em"
-                      lineHeight="1.2"
-                      textShadow={sombra}
-                    >
-                      {s.titulo}
-                    </Text>
-                  </Flex>
-                  <Text
-                    color={d.txt}
-                    fontSize={{ base: "md", md: "lg" }}
-                    fontStyle="italic"
-                    lineHeight={{ base: "1.7", md: "1.75" }}
-                    textShadow={sombra}
-                  >
-                    {s.frase}
-                  </Text>
-                </Flex>
-              </RevealItem>
-            ))}
-          </RevealStagger>
+          </CajaLisa>
 
           <Reveal inView direction="up" distance={14} duration={0.65}>
             <Text
@@ -338,6 +247,20 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
               diagnóstico en PDF.
             </Text>
           </Reveal>
+        </Flex>
+
+        {/* ══ 4. LO QUE HAY DENTRO ══
+            Tres ideas y, al lado, el Árbol en pequeño. Ese Árbol NO se pulsa: es
+            una muestra, no un menú (el de arriba sí se abre). */}
+        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
+          <SeparadorSeccion maxW="1180px">Lo que hay dentro</SeparadorSeccion>
+          <IdeasConMuestra d={d} ideas={IDEAS}>
+            <CajaLisa d={d} h="100%" sx={{ pointerEvents: "none" }}>
+              <Flex h="100%" align="center" justify="center" px={{ base: 5, md: 8 }} py={{ base: 7, md: 9 }}>
+                <ArbolDeLaVida maxWidth="340px" showDaat suppressInternalModal />
+              </Flex>
+            </CajaLisa>
+          </IdeasConMuestra>
         </Flex>
 
         {/* ══ 5. ILUSTRACIONES ══ */}

@@ -16,9 +16,6 @@ import {
   type ResultadosPublicos,
 } from "../../data/estudioApi";
 
-/** Debajo de esta muestra un porcentaje no dice nada: se enseña la fila, pero sin cifra. */
-const MUESTRA_MINIMA = 5;
-
 /** Alto del header de la web: lo que hay que dejar libre al saltar con el índice. */
 const HUECO_ANCLA = { base: "84px", md: "104px" };
 
@@ -117,21 +114,15 @@ export default function EstudioEstadisticas() {
               en esa misma posición, cuántas de sus respuestas sobre él han sido <b>sí</b>. Aquí no
               hay nadie en concreto —ni nombres, ni cartas, ni pregunta a pregunta—: solo el conjunto.
             </Text>
-            {esEjemplo ? (
+            {/* Nada de «somos N»: con muestra pequeña, cantar el total resta más
+                de lo que suma. Cada fila ya dice sobre cuánta gente está hecha. */}
+            {esEjemplo && (
               <Box px={4} py={1.5} borderRadius="full" bg="rgba(255,255,255,0.14)"
                    border="1px solid rgba(255,255,255,0.4)">
                 <Text color="white" fontSize="xs" letterSpacing="0.18em" textTransform="uppercase" fontWeight="600">
                   Vista de ejemplo · datos inventados
                 </Text>
               </Box>
-            ) : (
-              !!datos?.participantesTotales && (
-                <Text color="rgba(255,255,255,0.6)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                  {datos.participantesTotales === 1
-                    ? "1 persona ha participado hasta ahora."
-                    : `${datos.participantesTotales} personas han participado hasta ahora.`}
-                </Text>
-              )
             )}
           </Flex>
         </Reveal>
@@ -235,9 +226,10 @@ export default function EstudioEstadisticas() {
               ← Volver a la portada del estudio
             </Box>
             <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="620px">
-              Los porcentajes se recalculan solos cada vez que alguien participa, así que estos
-              números cambian con el tiempo. Los grupos con muy poca gente se muestran sin cifra:
-              con tres respuestas, un porcentaje engaña más de lo que explica.
+              El estudio acaba de empezar: muchos de estos porcentajes están hechos sobre muy poca
+              gente todavía, y por eso al lado de cada uno pone sobre cuántas personas se ha
+              calculado. Se recalculan solos cada vez que alguien participa, así que vuelve dentro
+              de un tiempo: no dirán lo mismo.
             </Text>
           </Flex>
         </Reveal>
@@ -305,7 +297,6 @@ function Lista({ cuerpo: c, titulo, grupos }: { cuerpo: Cuerpo; titulo: string; 
 
       <Flex direction="column" gap={{ base: 2.5, md: 3 }}>
         {grupos.map((g) => {
-          const hayMuestra = g.personas >= MUESTRA_MINIMA;
           return (
             <Flex key={`${g.eje}-${g.posicion}`} align="center" gap={{ base: 2.5, md: 4 }}>
               {/* Quién: el signo con su icono dibujado, o el número de la casa */}
@@ -325,23 +316,21 @@ function Lista({ cuerpo: c, titulo, grupos }: { cuerpo: Cuerpo; titulo: string; 
               </Flex>
 
               <Box flex="1" h="10px" borderRadius="full" bg={`${c.color}1a`} overflow="hidden">
-                <Box h="100%" borderRadius="full" bg={hayMuestra ? c.color : "transparent"}
-                     w={`${hayMuestra ? g.porcentajeSi : 0}%`}
-                     boxShadow={hayMuestra ? `0 0 10px ${c.color}aa` : "none"}
-                     transition="width 0.6s ease" />
+                <Box h="100%" borderRadius="full" bg={c.color} w={`${g.porcentajeSi}%`}
+                     boxShadow={`0 0 10px ${c.color}aa`} transition="width 0.6s ease" />
               </Box>
 
-              <Text color={hayMuestra ? c.color : `${c.color}66`} fontSize={{ base: "md", md: "lg" }}
+              <Text color={c.color} fontSize={{ base: "md", md: "lg" }}
                     fontWeight="700" minW={{ base: "46px", md: "56px" }} textAlign="right" flexShrink={0}>
-                {hayMuestra ? `${g.porcentajeSi}%` : "—"}
+                {g.porcentajeSi}%
               </Text>
 
-              {/* Cuánta gente sostiene esa media: en móvil no cabe y se calla. */}
+              {/* Sobre cuánta gente está hecha esa media. Se queda AUNQUE sean
+                  una o dos: un 100% sin decir de cuántos es el porcentaje que
+                  engaña. En móvil no cabe y se calla. */}
               <Text color={`${c.color}88`} fontSize="xs" fontStyle="italic" minW="86px" flexShrink={0}
                     textAlign="right" display={{ base: "none", md: "block" }}>
-                {hayMuestra
-                  ? `${g.personas} ${g.personas === 1 ? "persona" : "personas"}`
-                  : "aún sois pocos"}
+                {g.personas} {g.personas === 1 ? "persona" : "personas"}
               </Text>
             </Flex>
           );

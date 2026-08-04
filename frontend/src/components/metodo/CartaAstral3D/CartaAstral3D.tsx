@@ -168,7 +168,9 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                   // demasiado largo se trunca con ellipsis manteniendo el tamaño.
                   noOfLines={1}
                   w="100%"
-                  style={{ textShadow: `0 0 10px ${c}cc, 0 0 22px ${c}77` }}
+                  // Halo del nombre un 20% más bajo (antes cc / 77): con el
+                  // Bloom de la rueda al lado, el nombre daba demasiada luz.
+                  style={{ textShadow: `0 0 10px ${c}a3, 0 0 22px ${c}5f` }}
                 >
                   {focusedCuerpo.label}
                 </Text>
@@ -181,7 +183,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                   textAlign="center"
                   noOfLines={1}
                   w="100%"
-                  style={{ textShadow: `0 0 8px rgba(255,255,255,0.35)` }}
+                  style={{ textShadow: `0 0 8px rgba(255,255,255,0.28)` }}
                 >
                   {ZODIAC_SIGNS[focused.signoIdx].name} · Casa {focused.casa}
                 </Text>
@@ -203,7 +205,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                 bg={leido ? `${c}33` : `${c}22`}
                 color={c}
                 pointerEvents="none"
-                sx={{ boxShadow: `0 0 10px ${c}55` }}
+                sx={{ boxShadow: `0 0 10px ${c}44` }}
               >
                 {leido ? (
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -231,7 +233,9 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                   px={{ base: 4, md: 5 }}
                   borderRadius="xl"
                   bg={`${c}08`}
-                  border={`1px solid ${c}33`}
+                  // Sin línea de borde: era el «subrayado de luz» que cruzaba
+                  // por encima del nombre del planeta. Queda solo el fondo.
+                  border="none"
                 >
                   {contenido}
                 </Box>
@@ -249,23 +253,25 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                 px={{ base: 4, md: 5 }}
                 borderRadius="xl"
                 bg={`${c}12`}
-                border={`1px solid ${c}88`}
+                // Sin línea de borde: era el «subrayado de luz» que cruzaba por
+                // encima del nombre. El botón se sigue leyendo como botón por su
+                // fondo y su halo (que ahora late un 20% más bajo).
+                border="none"
                 color={c}
                 cursor="pointer"
                 textAlign="center"
                 sx={{
                   transition: "all 0.22s ease",
-                  boxShadow: `0 0 14px ${c}33, 0 0 32px ${c}1f, inset 0 0 16px rgba(255,255,255,0.04)`,
+                  boxShadow: `0 0 14px ${c}29, 0 0 32px ${c}19, inset 0 0 16px rgba(255,255,255,0.032)`,
                   animation: leido ? "none" : "saberMasPulse 2.6s ease-in-out infinite",
                   "@keyframes saberMasPulse": {
-                    "0%, 100%": { boxShadow: `0 0 14px ${c}33, 0 0 32px ${c}1f, inset 0 0 16px rgba(255,255,255,0.04)` },
-                    "50%":       { boxShadow: `0 0 22px ${c}88, 0 0 50px ${c}55, inset 0 0 18px rgba(255,255,255,0.08)` },
+                    "0%, 100%": { boxShadow: `0 0 14px ${c}29, 0 0 32px ${c}19, inset 0 0 16px rgba(255,255,255,0.032)` },
+                    "50%":       { boxShadow: `0 0 22px ${c}6d, 0 0 50px ${c}44, inset 0 0 18px rgba(255,255,255,0.064)` },
                   },
                   _hover: {
                     bg: `${c}22`,
-                    borderColor: c,
                     transform: "translateY(-1px)",
-                    boxShadow: `0 0 26px ${c}99, 0 0 56px ${c}55, inset 0 0 18px rgba(255,255,255,0.08)`,
+                    boxShadow: `0 0 26px ${c}7a, 0 0 56px ${c}44, inset 0 0 18px rgba(255,255,255,0.064)`,
                     animation: "none",
                   },
                   _active: { transform: "translateY(0)" },

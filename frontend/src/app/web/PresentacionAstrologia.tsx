@@ -6,6 +6,7 @@ import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { BloqueDiferido } from "../../components/global/BloqueDiferido";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaVideoBox } from "../../components/metodo/DisciplinaVideoBox";
@@ -118,9 +119,6 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
               {d.gancho}
             </Text>
           </RevealItem>
-          <RevealItem w="100%" maxW="420px">
-            <Box h="1px" bgGradient="linear(to-r, transparent, #ffffff8c, transparent)" />
-          </RevealItem>
         </RevealStagger>
 
         {/* ══ 2. BOX DE LA DISCIPLINA (con su precio) + VÍDEO ══
@@ -159,13 +157,20 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
         <Flex direction="column" align="center" w="100%" maxW="1280px" gap={{ base: 6, md: 8 }}>
           <SeparadorSeccion maxW="1100px">De qué trata</SeparadorSeccion>
 
+          {/* Las tres cajas y la carta se MONTAN al llegar aquí, no al cargar la
+              página. Las dos cosas animan al montarse (la cascada de las cajas y
+              los planetas brotando uno a uno), así que montándose antes la
+              animación ocurría metros más arriba y al bajar te las encontrabas ya
+              quietas. Es el mismo BloqueDiferido del mandala de /elMetodo.
+              `minH` reserva el hueco para que no dé un salto al montarse. */}
+          <BloqueDiferido minH={{ base: "1500px", lg: "820px" }}>
           <Grid
             w="100%"
             templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
             gap={{ base: 10, md: 10 }}
             alignItems="stretch"
           >
-            <Reveal inView direction="right" distance={26} duration={0.75} h="100%">
+            <Reveal direction="right" distance={26} duration={0.75} h="100%">
               <DisciplinaFichaBox
                 nom={astrologiaNom}
                 bg={astrologiaBg}
@@ -181,11 +186,10 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
             </Reveal>
 
             {/* Carta de muestra: se dibuja sola (los planetas brotan uno a uno y
-                después se trazan los aspectos). El montaje se retrasa hasta que
-                asoma con `inView`, si no la animación pasa fuera de pantalla.
-                Va dentro de un box con el cielo estrellado, del mismo material
-                que la ficha de al lado, para que pesen igual. */}
-            <Reveal inView direction="left" distance={26} duration={0.8} delay={0.1} h="100%">
+                después se trazan los aspectos). Va dentro de un box con el cielo
+                estrellado, del mismo material que la ficha de al lado, para que
+                pesen igual. */}
+            <Reveal direction="left" distance={26} duration={0.8} delay={0.1} h="100%">
               <Box
                 position="relative"
                 w="100%"
@@ -223,6 +227,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
               </Box>
             </Reveal>
           </Grid>
+          </BloqueDiferido>
         </Flex>
 
         {/* ══ 4. LOS TRES CÓMICS, en la misma fila ══ */}

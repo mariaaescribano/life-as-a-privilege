@@ -6,7 +6,6 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
@@ -28,9 +27,9 @@ import {
   type Elemento,
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
-import { LENGUA_DIMENSIONES } from "../../components/metodo/tcmLenguaContenido";
 import {
   BLANCO_GLOW,
+  CajaDisciplina,
   CierreCrearCuenta,
   SeparadorSeccion,
   VideoMuestra,
@@ -44,10 +43,12 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 // Orden:
 //   1. Header de la disciplina, sin botones.
 //   2. El box de la disciplina con su precio + el vídeo al lado.
-//   3. UN SOLO BOX con TODO el sistema: la estrella de los cinco elementos y,
-//      debajo, las dos estrellas de los ciclos (generador y de control) con sus
-//      flechas. Las flechas se pueden pulsar: abren la relación entera.
-//   4. Aprende a leer tu lengua: las lenguas de verdad, con su lectura.
+//   3. Los Cinco Elementos: los tres boxes de «qué te llevas» (los de /elMetodo)
+//      y, al lado, el box con la estrella de los cinco elementos.
+//   4. Los dos ciclos (generador y de control), cada uno en su caja y uno al
+//      lado del otro — FUERA de cualquier box grande. La caja entera se pulsa y
+//      abre el cómic del ciclo, con el cuerpo del texto difuminado (los títulos
+//      se leen): el escaparate enseña que hay lectura, no la regala.
 //   5. Las ilustraciones de la disciplina.
 //   6. Llamada a la acción.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -157,19 +158,12 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
     [d.ilustracionesLabel],
   );
 
-  // La capa de la lengua que se enseña: el COLOR del cuerpo, que es la más
-  // importante de las seis. Se muestran sus variantes reales, con su lectura.
-  const dimColor = useMemo(() => LENGUA_DIMENSIONES.find((x) => x.dim === "color"), []);
-  const [lenguaSel, setLenguaSel] = useState(0);
-  const lengua = dimColor?.opciones[lenguaSel];
-
   const fotosListas = useImagesReady([
     "/img/icono/life.png",
     "/img/fondos/tcm.webp",
     ...ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]),
     FONDO_CICLO.sheng,
     FONDO_CICLO.ke,
-    ...(dimColor?.opciones ?? []).map((o) => o.src),
     ...comics.map((c) => c.cover),
   ]);
   if (!fotosListas) return <LifeLoading variant="auto" />;
@@ -240,9 +234,6 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
               {d.gancho}
             </Text>
           </RevealItem>
-          <RevealItem w="100%" maxW="420px">
-            <Box h="1px" bgGradient="linear(to-r, transparent, #ffffff8c, transparent)" />
-          </RevealItem>
         </RevealStagger>
 
         {/* ══ 2. BOX DE LA DISCIPLINA (con su precio) + VÍDEO ══ */}
@@ -273,264 +264,136 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
           </Reveal>
         </Grid>
 
-        {/* ══ 3. EL SISTEMA COMPLETO, EN UN SOLO BOX ══
-            Arriba los cinco elementos; debajo, los dos ciclos que los relacionan.
-            Todo dentro de la misma caja, porque es UNA sola idea: nada funciona
-            por separado. */}
+        {/* ══ 3. LOS CINCO ELEMENTOS ══
+            A la izquierda, los tres boxes de «qué te llevas» (los mismos que en
+            /elMetodo, salen de recorridoContenido). A su lado, la estrella de
+            los cinco elementos. Los ciclos ya NO viven aquí dentro: van en su
+            propia sección, uno al lado del otro. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Los Cinco Elementos y sus ciclos</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">Los Cinco Elementos</SeparadorSeccion>
 
-          <Reveal inView direction="up" distance={24} scaleFrom={0.98} duration={0.75} w="100%">
-            <Box
-              position="relative"
-              w="100%"
-              borderRadius="3xl"
-              overflow="hidden"
-              border={`1.5px solid ${d.txt}66`}
-              boxShadow={`0 0 0 1px ${d.txt}55, 0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
-            >
-              <DisciplinaBgLayer nom={tcmNom} borderRadius="3xl" />
-
-              <Flex
-                direction="column"
-                align="center"
-                gap={{ base: 7, md: 9 }}
-                position="relative"
-                zIndex={1}
-                px={{ base: 4, md: 8 }}
-                py={{ base: 8, md: 11 }}
-              >
-                <Text
-                  color={d.txt}
-                  fontSize={{ base: "md", md: "lg" }}
-                  lineHeight={{ base: "1.75", md: "1.8" }}
-                  textAlign="center"
-                  maxW="760px"
-                  textShadow={sombra}
+          <Grid
+            w="100%"
+            templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+            gap={{ base: 6, md: 6 }}
+            alignItems="stretch"
+          >
+            {/* Los tres boxes, uno debajo de otro */}
+            <Flex direction="column" gap={{ base: 6, md: 6 }}>
+              {d.contenido.map((seccion, i) => (
+                <Reveal
+                  key={i}
+                  inView
+                  direction="right"
+                  distance={22}
+                  scaleFrom={0.97}
+                  duration={0.65}
+                  delay={i * 0.1}
+                  flex="1"
+                  display="flex"
                 >
-                  Madera, Fuego, Tierra, Metal y Agua. Cinco energías que te habitan y que se
-                  sostienen y se frenan entre ellas. Ningún síntoma aparece aislado: aparece en
-                  un sistema.
-                </Text>
+                  <CajaDisciplina d={d} compacta radio="2xl" h="100%">
+                    <Flex direction="column" gap={{ base: 3, md: 4 }} h="100%" justify="center">
+                      <Text
+                        color={d.txt}
+                        fontSize={{ base: "lg", md: "xl" }}
+                        fontWeight="700"
+                        letterSpacing="0.03em"
+                        lineHeight="1.25"
+                        textAlign="center"
+                        textShadow={sombra}
+                      >
+                        {seccion.titulo}
+                      </Text>
+                      <Box h="1px" w="60px" alignSelf="center" bg={`${d.txt}77`} />
+                      {seccion.items.map((item, j) => (
+                        <Text
+                          key={j}
+                          color={d.txt}
+                          fontSize={{ base: "15px", md: "md" }}
+                          lineHeight={{ base: "1.65", md: "1.75" }}
+                          textAlign="center"
+                          textShadow={sombra}
+                        >
+                          {item}
+                        </Text>
+                      ))}
+                    </Flex>
+                  </CajaDisciplina>
+                </Reveal>
+              ))}
+            </Flex>
 
-                {/* La estrella de los elementos: florecen uno a uno */}
-                <EstrellaElementos />
-
-                <Box
-                  w="100%"
-                  maxW="420px"
-                  h="1px"
-                  bgGradient="linear(to-r, transparent, rgba(255,255,255,0.85), transparent)"
-                />
-
-                <Flex direction="column" align="center" gap={2}>
-                  <Text
-                    color="white"
-                    fontSize={{ base: "sm", md: "md" }}
-                    letterSpacing="0.28em"
-                    textTransform="uppercase"
-                    fontWeight="600"
-                    textAlign="center"
-                    style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                  >
-                    Cómo se relacionan
-                  </Text>
-                  <Text
-                    color="rgba(255,255,255,0.85)"
-                    fontSize={{ base: "xs", md: "sm" }}
-                    fontStyle="italic"
-                    textAlign="center"
-                    maxW="560px"
-                    lineHeight="1.6"
-                    style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                  >
-                    Pulsa cualquier flecha y verás qué hace un elemento sobre el siguiente.
-                  </Text>
-                </Flex>
-
-                {/* Las dos estrellas de los ciclos, con sus flechas animadas.
-                    Cada una trae su propia coreografía: primero florecen los
-                    elementos y después brotan las flechas en el orden del ciclo. */}
-                <Flex direction={{ base: "column", lg: "row" }} gap={{ base: 6, md: 5 }} w="100%" align="stretch">
-                  <Reveal inView direction="right" distance={30} scaleFrom={0.97} duration={0.65} amount={0.2} w="100%" display="flex">
-                    <EstrellaCiclo
-                      titulo="Ciclo generador"
-                      pinyin="Sheng"
-                      hanzi="生"
-                      subtitulo="Cada elemento alimenta al siguiente"
-                      ciclo="sheng"
-                      onEdge={abrirRelacion}
-                    />
-                  </Reveal>
-                  <Reveal inView direction="left" distance={30} scaleFrom={0.97} duration={0.65} amount={0.2} w="100%" display="flex">
-                    <EstrellaCiclo
-                      titulo="Ciclo de control"
-                      pinyin="Ke"
-                      hanzi="克"
-                      subtitulo="Cada elemento pone límite a otro"
-                      ciclo="ke"
-                      onEdge={abrirRelacion}
-                    />
-                  </Reveal>
-                </Flex>
-              </Flex>
-            </Box>
-          </Reveal>
-        </Flex>
-
-        {/* ══ 4. APRENDE A LEER TU LENGUA ══
-            Las lenguas de verdad del material, con su lectura. Es lo que hace
-            que se vea que aquí hay un sistema de diagnóstico, no metáforas. */}
-        {dimColor && lengua && (
-          <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Aprende a leer tu lengua</SeparadorSeccion>
-
-            <Reveal inView direction="up" distance={22} scaleFrom={0.98} duration={0.75} w="100%">
-              <Box
-                position="relative"
-                w="100%"
-                borderRadius="3xl"
-                overflow="hidden"
-                border={`1.5px solid ${d.txt}66`}
-                boxShadow={`0 0 0 1px ${d.txt}55, 0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
-              >
-                <DisciplinaBgLayer nom={tcmNom} borderRadius="3xl" />
-
-                <Flex
-                  direction="column"
-                  align="center"
-                  gap={{ base: 6, md: 7 }}
-                  position="relative"
-                  zIndex={1}
-                  px={{ base: 5, md: 10 }}
-                  py={{ base: 8, md: 11 }}
-                >
+            {/* La estrella de los cinco elementos, al lado */}
+            <Reveal inView direction="left" distance={24} scaleFrom={0.98} duration={0.75} delay={0.1} display="flex">
+              <CajaDisciplina d={d} destacada radio="3xl" h="100%">
+                <Flex direction="column" align="center" justify="center" gap={{ base: 6, md: 8 }} h="100%">
                   <Text
                     color={d.txt}
                     fontSize={{ base: "md", md: "lg" }}
                     lineHeight={{ base: "1.75", md: "1.8" }}
                     textAlign="center"
-                    maxW="760px"
+                    maxW="520px"
                     textShadow={sombra}
                   >
-                    {dimColor.subtitulo} Tu cuerpo lo deja escrito ahí todos los días; solo hay
-                    que saber mirarlo.
+                    Madera, Fuego, Tierra, Metal y Agua. Cinco energías que te habitan y que se
+                    sostienen y se frenan entre ellas. Ningún síntoma aparece aislado: aparece en
+                    un sistema.
                   </Text>
 
-                  {/* Las variantes reales: se pulsan y abajo sale su lectura */}
-                  <Grid
-                    w="100%"
-                    templateColumns={{ base: "repeat(3, 1fr)", md: `repeat(${dimColor.opciones.length}, 1fr)` }}
-                    gap={{ base: 3, md: 4 }}
-                  >
-                    {dimColor.opciones.map((o, i) => {
-                      const sel = i === lenguaSel;
-                      return (
-                        <Flex
-                          key={o.key}
-                          as="button"
-                          onClick={() => setLenguaSel(i)}
-                          direction="column"
-                          align="center"
-                          gap={2}
-                          cursor="pointer"
-                          sx={{
-                            WebkitTapHighlightColor: "transparent",
-                            transition: "transform 0.25s ease",
-                            _hover: { transform: "translateY(-3px)" },
-                          }}
-                        >
-                          <Box
-                            position="relative"
-                            w="100%"
-                            borderRadius="xl"
-                            overflow="hidden"
-                            border={`2px solid ${sel ? d.txt : `${d.txt}44`}`}
-                            boxShadow={sel ? `0 0 20px ${d.txt}88, 0 0 44px ${d.txt}44` : "none"}
-                            sx={{ aspectRatio: "1 / 1", transition: "all 0.25s ease" }}
-                          >
-                            <Box
-                              as="img"
-                              src={o.src}
-                              alt={o.nombre}
-                              loading="lazy"
-                              position="absolute"
-                              inset="0"
-                              w="100%"
-                              h="100%"
-                              style={{ objectFit: "cover", opacity: sel ? 1 : 0.75 }}
-                            />
-                          </Box>
-                          <Text
-                            color={d.txt}
-                            fontSize={{ base: "2xs", md: "sm" }}
-                            fontWeight={sel ? "700" : "600"}
-                            letterSpacing="0.03em"
-                            lineHeight="1.2"
-                            textAlign="center"
-                            opacity={sel ? 1 : 0.8}
-                            textShadow={sombra}
-                          >
-                            {o.nombre}
-                          </Text>
-                        </Flex>
-                      );
-                    })}
-                  </Grid>
-
-                  {/* La lectura de la variante elegida */}
-                  <Flex
-                    direction="column"
-                    align="center"
-                    gap={2}
-                    w="100%"
-                    maxW="720px"
-                    px={{ base: 5, md: 7 }}
-                    py={{ base: 5, md: 6 }}
-                    borderRadius="xl"
-                    bg="rgba(255,255,255,0.08)"
-                    border="1px solid rgba(255,255,255,0.16)"
-                    sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-                  >
-                    <Text
-                      color={d.txt}
-                      fontSize={{ base: "lg", md: "xl" }}
-                      fontWeight="700"
-                      letterSpacing="0.04em"
-                      textAlign="center"
-                      textShadow={sombra}
-                    >
-                      {lengua.nombre}
-                    </Text>
-                    <Text
-                      color={d.txt}
-                      fontSize={{ base: "sm", md: "md" }}
-                      lineHeight={{ base: "1.7", md: "1.75" }}
-                      textAlign="center"
-                      textShadow={sombra}
-                    >
-                      {lengua.lectura}
-                    </Text>
-                  </Flex>
-
-                  <Text
-                    color="rgba(255,255,255,0.85)"
-                    fontSize={{ base: "xs", md: "sm" }}
-                    fontStyle="italic"
-                    textAlign="center"
-                    maxW="640px"
-                    lineHeight="1.6"
-                    style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                  >
-                    Y esto es solo el color. Dentro se observan {LENGUA_DIMENSIONES.length} capas
-                    —color, forma, movimiento, saburra, humedad y puntos— y una herramienta que
-                    reúne lo que ves para darte tu lectura.
-                  </Text>
+                  {/* La estrella de los elementos: florecen uno a uno */}
+                  <EstrellaElementos />
                 </Flex>
-              </Box>
+              </CajaDisciplina>
+            </Reveal>
+          </Grid>
+        </Flex>
+
+        {/* ══ 4. LOS DOS CICLOS ══
+            Fuera del box grande y juntos, uno al lado del otro: cada estrella
+            trae su propia caja (foto del ciclo + halo) y su coreografía —
+            primero florecen los elementos y después brotan las flechas en el
+            orden del ciclo. Las flechas se pulsan: abren la relación entera. */}
+        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 5, md: 7 }}>
+          <SeparadorSeccion maxW="1180px">Cómo se relacionan</SeparadorSeccion>
+
+          <Text
+            color="rgba(255,255,255,0.85)"
+            fontSize={{ base: "xs", md: "sm" }}
+            fontStyle="italic"
+            textAlign="center"
+            maxW="560px"
+            lineHeight="1.6"
+            style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+          >
+            Pulsa cualquier flecha y verás qué hace un elemento sobre el siguiente.
+          </Text>
+
+          <Flex direction={{ base: "column", lg: "row" }} gap={{ base: 6, md: 6 }} w="100%" align="stretch">
+            <Reveal inView direction="right" distance={30} scaleFrom={0.97} duration={0.65} amount={0.2} w="100%" display="flex">
+              <EstrellaCiclo
+                titulo="Ciclo generador"
+                pinyin="Sheng"
+                hanzi="生"
+                subtitulo="Cada elemento alimenta al siguiente"
+                ciclo="sheng"
+                onEdge={abrirRelacion}
+                cajaPulsable
+              />
+            </Reveal>
+            <Reveal inView direction="left" distance={30} scaleFrom={0.97} duration={0.65} amount={0.2} w="100%" display="flex">
+              <EstrellaCiclo
+                titulo="Ciclo de control"
+                pinyin="Ke"
+                hanzi="克"
+                subtitulo="Cada elemento pone límite a otro"
+                ciclo="ke"
+                onEdge={abrirRelacion}
+                cajaPulsable
+              />
             </Reveal>
           </Flex>
-        )}
+        </Flex>
 
         {/* ══ 5. ILUSTRACIONES ══ */}
         {comics.length > 0 && (
@@ -566,7 +429,10 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
 
       {/* Relación de un ciclo (al pulsar una flecha): el visor inmersivo con
           todas las relaciones de ese ciclo, empezando por la pulsada. */}
-      <RelacionModal rel={relacion} onClose={() => setRelacion(null)} />
+      {/* El cómic de los ciclos, con el cuerpo del texto difuminado: se leen los
+          títulos (qué genera o controla qué) pero la lectura entera se queda
+          dentro del recorrido. */}
+      <RelacionModal rel={relacion} onClose={() => setRelacion(null)} textoBorroso />
 
       <ComicModal
         isOpen={!!abierta}

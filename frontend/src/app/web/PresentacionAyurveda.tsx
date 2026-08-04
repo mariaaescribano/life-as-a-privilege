@@ -5,6 +5,7 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Float, Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
@@ -33,8 +34,8 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 // Orden:
 //   1. Header de la disciplina, sin botones.
 //   2. El box de la disciplina con su precio + el vídeo al lado.
-//   3. LOS TRES DOṢHAS: la pieza central. Cada uno con su acuarela, su color, sus
-//      elementos y su descripción. Se colocan en escena al asomar y reaccionan al
+//   3. LOS TRES DOṢHAS: la pieza central. Cada uno con su color, sus elementos y
+//      su descripción, sobre el fondo común de la disciplina. Se colocan en escena al asomar y reaccionan al
 //      ratón: es lo que tiene que hacer pensar «esto está cuidado».
 //   4. Las ilustraciones de la disciplina.
 //   5. Llamada a la acción.
@@ -47,7 +48,6 @@ const DOSHAS: {
   nombre: string;
   color: string;
   elementos: string;
-  fondo: string;
   descripcion: string;
   Icon: (p: { size?: string; color?: string }) => React.ReactElement;
 }[] = [
@@ -56,7 +56,6 @@ const DOSHAS: {
     nombre: "Vata",
     color: vataColor,
     elementos: "Aire · Éter",
-    fondo: "/img/fondos/vata.webp",
     descripcion:
       "La energía del movimiento: ligera, rápida, creativa e intuitiva. Entusiasta e imaginativa, tiende a la dispersión y la irregularidad. Se equilibra con rutina, calor y alimentos que anclen.",
     Icon: VataIcon,
@@ -66,7 +65,6 @@ const DOSHAS: {
     nombre: "Pitta",
     color: pittaColor,
     elementos: "Fuego · Agua",
-    fondo: "/img/fondos/pitta.webp",
     descripcion:
       "La energía de la transformación: intensa, decidida y precisa. Con gran capacidad de ejecución, puede caer en la irritabilidad y el exceso de calor. Se equilibra con frescor, moderación y calma.",
     Icon: PittaIcon,
@@ -76,15 +74,14 @@ const DOSHAS: {
     nombre: "Kapha",
     color: kaphaColor,
     elementos: "Tierra · Agua",
-    fondo: "/img/fondos/kapha.webp",
     descripcion:
       "La energía de la estructura: estable, resistente y profundamente afectuosa. Constante y paciente, tiende al apego y a la resistencia al cambio. Se equilibra con movimiento, estímulo y ligereza.",
     Icon: KaphaIcon,
   },
 ];
 
-/** Tarjeta de un doṣha: su acuarela de fondo, su color en el borde y el halo, el
- *  icono flotando dentro de un círculo y el texto debajo. */
+/** Tarjeta de un doṣha: el fondo de la disciplina, su color en el borde, el
+ *  halo, la letra y el icono, que flota dentro de un círculo. */
 function DoshaCard({
   dosha,
   sombra,
@@ -115,18 +112,10 @@ function DoshaCard({
         },
       }}
     >
-      {/* Acuarela propia del doṣha + velo claro para que la letra se lea */}
-      <Box position="absolute" inset="0" zIndex={0} pointerEvents="none" bgColor={ayurvedaBg}>
-        <Box
-          position="absolute"
-          inset="0"
-          bgImage={`url('${dosha.fondo}')`}
-          bgSize="cover"
-          bgPosition="center"
-          bgRepeat="no-repeat"
-        />
-        <Box position="absolute" inset="0" bg={`${ayurvedaBg}40`} />
-      </Box>
+      {/* Los tres llevan el MISMO fondo, el de la disciplina: la acuarela propia
+          de cada doṣha era del mismo color que su letra y el texto se perdía
+          dentro. Lo que distingue a cada uno es el color, no el fondo. */}
+      <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="3xl" />
 
       <Flex
         direction="column"
@@ -181,7 +170,7 @@ function DoshaCard({
         <Box w="54px" h="2px" bgGradient={`linear(to-r, transparent, ${c}, transparent)`} opacity={0.8} />
 
         <Text
-          color="#5e3a12"
+          color={c}
           fontSize={{ base: "sm", md: "md" }}
           lineHeight={{ base: "1.7", md: "1.75" }}
           textShadow={sombra}
@@ -202,12 +191,11 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
     [d.ilustracionesLabel],
   );
 
-  // La página espera al mandala, al fondo de la disciplina, a las tres acuarelas
-  // de los doṣhas y a las portadas de los cómics: entra de una pieza.
+  // La página espera al mandala, al fondo de la disciplina y a las portadas de
+  // los cómics: entra de una pieza.
   const fotosListas = useImagesReady([
     "/img/icono/life.png",
     "/img/fondos/hinduismo.webp",
-    ...DOSHAS.map((x) => x.fondo),
     ...comics.map((c) => c.cover),
   ]);
   if (!fotosListas) return <LifeLoading variant="auto" />;
@@ -273,9 +261,6 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
             >
               {d.gancho}
             </Text>
-          </RevealItem>
-          <RevealItem w="100%" maxW="420px">
-            <Box h="1px" bgGradient="linear(to-r, transparent, #ffffff8c, transparent)" />
           </RevealItem>
         </RevealStagger>
 

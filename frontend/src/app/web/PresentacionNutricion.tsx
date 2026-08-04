@@ -1,12 +1,10 @@
 import React, { useMemo, useRef, useState } from "react";
-import { Box, Flex, Grid, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaVideoBox } from "../../components/metodo/DisciplinaVideoBox";
@@ -21,8 +19,11 @@ import {
   BLANCO_GLOW,
   BLANCO_GLOW_SUAVE,
   CierreCrearCuenta,
+  IdeasConMuestra,
+  MosaicoMuestra,
   SeparadorSeccion,
   VideoMuestra,
+  type IdeaPresentacion,
 } from "../../components/metodo/presentacionUi";
 import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
@@ -33,24 +34,56 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 // Orden:
 //   1. Header de la disciplina, sin botones.
 //   2. El box de la disciplina con su precio + el vídeo al lado.
-//   3. LOS NUTRIENTES: los once, con su foto y su color. Se pulsan y se abre su
-//      ficha real (el visor de Nutrición, con la manzana de espera).
-//   4. MITO O VERDAD: ocho de las 64 preguntas del material. Es el bloque que
-//      engancha: todo el mundo tiene una opinión sobre estas ocho cosas.
-//   5. Las ilustraciones (Nutrición es la que más tiene).
-//   6. Llamada a la acción.
+//   3. LOS NUTRIENTES: los CUATRO primeros (dentro están los once). Se pulsan y
+//      se abre su ficha real (el visor de Nutrición, con la manzana de espera).
+//   4. MITO O VERDAD: cuatro de las 64 preguntas del material, sin caja detrás.
+//      Es el bloque que engancha: todo el mundo tiene una opinión.
+//   5. Las ilustraciones (cuatro).
+//   6. LO QUE HAY DENTRO: tres ideas + un mosaico de fotos que NO se abre.
+//   7. Llamada a la acción.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Los ocho mitos que se enseñan: los que más se dan por sabidos. */
+/** Los cuatro mitos que se enseñan: los que más se dan por sabidos. */
 const MITOS_MUESTRA = [
   "carbohidratos-engordan",
   "huevos-colesterol",
   "grasa-engorda",
   "calorias-iguales",
-  "detox",
-  "edulcorantes",
-  "cafe-malo",
-  "sin-gluten",
+];
+
+/** De los once nutrientes se enseñan los CUATRO primeros: dentro están todos. */
+const NUTRIENTES_MUESTRA = NUTRIENTES.slice(0, 4);
+
+/** Mosaico de muestra: unas cuantas fotos bonitas de lo que hay dentro. No se
+ *  abren (ver MosaicoMuestra). ✍️ Cambia las fotos o los títulos a gusto. */
+const FOTOS_MUESTRA = [
+  { foto: "/recorrido/nutricion/bacterias/bifidobacterium.png", titulo: "Microbiota" },
+  { foto: "/recorrido/nutricion/portadas/agua.webp", titulo: "Agua" },
+  { foto: "/recorrido/nutricion/portadas/fibra.webp", titulo: "Fibra" },
+  { foto: "/recorrido/nutricion/portadas/fitoquimico.webp", titulo: "Fitoquímicos" },
+];
+
+/** Lo que hay dentro, en tres ideas. ✍️ Textos editables. */
+const IDEAS: IdeaPresentacion[] = [
+  {
+    titulo: "Macronutrientes y micronutrientes",
+    parrafos: [
+      "Déjate de pensar en «esto es sano y esto no». Comprenderás, de forma sencilla, qué moléculas componen los alimentos y qué función cumplen en tu organismo.",
+    ],
+  },
+  {
+    titulo: "Microbiota",
+    parrafos: [
+      "Entenderás por qué la microbiota va mucho más allá de la digestión y cómo se relaciona con tu salud, energía y bienestar general.",
+    ],
+  },
+  {
+    titulo: "Sesiones individuales",
+    parrafos: [
+      "Adaptaremos el conocimiento a tu realidad. No te diré qué comer; resolveremos tus dudas sobre los alimentos, cómo funcionan y cómo aplicarlo a tu día a día. Si lo deseas, también podremos explorar la relación entre ciertos hábitos alimentarios y factores emocionales o experiencias personales.",
+    ],
+    nota: "Opcional. Se cobra aparte.",
+  },
 ];
 
 export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina }) {
@@ -68,7 +101,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
   // Los nutrientes, como tarjetas para el visor de Nutrición: su foto de portada
   // y su descripción larga (si no la tiene, su resumen de una línea).
   const nutrientesTarjetas: NutrienteTarjeta[] = useMemo(
-    () => NUTRIENTES.map((n) => ({
+    () => NUTRIENTES_MUESTRA.map((n) => ({
       key: n.key,
       titulo: n.label,
       foto: n.img,
@@ -88,13 +121,13 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
   const fotosListas = useImagesReady([
     "/img/icono/life.png",
     "/img/fondos/nutri.webp",
-    ...NUTRIENTES.map((n) => n.img),
+    ...NUTRIENTES_MUESTRA.map((n) => n.img),
     ...mitos.map((m) => m.foto),
+    ...FOTOS_MUESTRA.map((f) => f.foto),
     ...comics.map((c) => c.cover),
   ]);
   if (!fotosListas) return <LifeLoading variant="auto" />;
 
-  const sombra = sombraTexto(d.nom, d.bg);
   const renderIcon = (size: string) => <NutricionIcon size={{ base: size, md: size }} />;
 
   const verVideo = () => {
@@ -156,9 +189,6 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               {d.gancho}
             </Text>
           </RevealItem>
-          <RevealItem w="100%" maxW="420px">
-            <Box h="1px" bgGradient="linear(to-r, transparent, #ffffff8c, transparent)" />
-          </RevealItem>
         </RevealStagger>
 
         {/* ══ 2. BOX DE LA DISCIPLINA (con su precio) + VÍDEO ══ */}
@@ -205,8 +235,8 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               maxW="720px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Déjate de «esto es sano y esto no». Estas son las moléculas que componen lo que
-              comes: pulsa cualquiera y lee qué hace de verdad dentro de ti.
+              Estas son las moléculas que componen lo que comes: pulsa cualquiera y lee qué hace
+              de verdad dentro de ti.
             </Text>
           </Reveal>
 
@@ -220,7 +250,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
             gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }}
             gap={{ base: 4, md: 6 }}
           >
-            {NUTRIENTES.map((n, i) => (
+            {NUTRIENTES_MUESTRA.map((n, i) => (
               <RevealItem key={n.key} direction="up" distance={18} scaleFrom={0.96} duration={0.6}>
                 <FotoBox
                   titulo={n.label}
@@ -234,68 +264,72 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               </RevealItem>
             ))}
           </RevealStagger>
+
+          <Reveal inView direction="up" distance={14} duration={0.65}>
+            <Text
+              color="rgba(255,255,255,0.9)"
+              fontSize={{ base: "md", md: "lg" }}
+              fontStyle="italic"
+              textAlign="center"
+              lineHeight="1.65"
+              maxW="700px"
+              textShadow={BLANCO_GLOW_SUAVE}
+            >
+              Dentro conocerás los secretos de la nutrición…
+            </Text>
+          </Reveal>
         </Flex>
 
         {/* ══ 4. MITO O VERDAD ══
-            Ocho preguntas de las 64 del material. Cada una abre su respuesta
-            entera, con la ilustración. */}
+            Cuatro preguntas de las 64 del material, sin caja detrás. Cada una
+            abre su respuesta entera, con la ilustración. */}
         {mitos.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
             <SeparadorSeccion maxW="1180px">Mito o verdad</SeparadorSeccion>
 
-            <Reveal inView direction="up" distance={22} scaleFrom={0.98} duration={0.75} w="100%">
-              <Box
-                position="relative"
-                w="100%"
-                borderRadius="3xl"
-                overflow="hidden"
-                border={`1.5px solid ${d.txt}66`}
-                boxShadow={`0 0 0 1px ${d.txt}55, 0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
+            <Reveal inView direction="up" distance={16} duration={0.7}>
+              <Text
+                color="rgba(255,255,255,0.9)"
+                fontSize={{ base: "md", md: "lg" }}
+                fontStyle="italic"
+                textAlign="center"
+                lineHeight="1.65"
+                maxW="720px"
+                textShadow={BLANCO_GLOW_SUAVE}
               >
-                <DisciplinaBgLayer nom={nutricionNom} borderRadius="3xl" />
-
-                <Flex
-                  direction="column"
-                  align="center"
-                  gap={{ base: 6, md: 8 }}
-                  position="relative"
-                  zIndex={1}
-                  px={{ base: 5, md: 10 }}
-                  py={{ base: 8, md: 11 }}
-                >
-                  <Text
-                    color={d.txt}
-                    fontSize={{ base: "md", md: "lg" }}
-                    lineHeight={{ base: "1.75", md: "1.8" }}
-                    textAlign="center"
-                    maxW="780px"
-                    textShadow={sombra}
-                  >
-                    Sobre estas ocho cosas todo el mundo tiene una opinión. Pulsa una y lee la
-                    respuesta, con lo que dice la evidencia y sin titulares.
-                    Dentro hay <b>{MITOS_NUTRICION.length} preguntas</b> respondidas así.
-                  </Text>
-
-                  <SimpleGrid w="100%" columns={{ base: 2, md: 4 }} spacing={{ base: 4, md: 5 }}>
-                    {mitos.map((m, i) => (
-                      <FotoBox
-                        key={m.key}
-                        titulo={m.titulo}
-                        foto={m.foto}
-                        nom={nutricionNom}
-                        tinta={nutricionTxt}
-                        bg={nutricionBg}
-                        onClick={() => setMitoIdx(i)}
-                      />
-                    ))}
-                  </SimpleGrid>
-                </Flex>
-              </Box>
+                Sobre estas cosas todo el mundo tiene una opinión. Pulsa una y lee la respuesta,
+                con lo que dice la evidencia y sin titulares. Dentro hay {MITOS_NUTRICION.length}{" "}
+                preguntas respondidas así.
+              </Text>
             </Reveal>
+
+            <RevealStagger
+              inView
+              stagger={0.06}
+              delayChildren={0.1}
+              amount={0.1}
+              w="100%"
+              display="grid"
+              gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+              gap={{ base: 4, md: 5 }}
+            >
+              {mitos.map((m, i) => (
+                <RevealItem key={m.key} direction="up" distance={18} scaleFrom={0.96} duration={0.6}>
+                  <FotoBox
+                    titulo={m.titulo}
+                    foto={m.foto}
+                    nom={nutricionNom}
+                    tinta={nutricionTxt}
+                    bg={nutricionBg}
+                    onClick={() => setMitoIdx(i)}
+                  />
+                </RevealItem>
+              ))}
+            </RevealStagger>
           </Flex>
         )}
 
-        {/* ══ 5. ILUSTRACIONES ══ Nutrición es la que más tiene ══ */}
+        {/* ══ 5. ILUSTRACIONES ══ cuatro, aunque dentro haya más ══ */}
         {comics.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
             <SeparadorSeccion>Ilustraciones de Nutrición</SeparadorSeccion>
@@ -304,14 +338,23 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
               gap={{ base: 6, md: 6 }}
             >
-              {comics.map((entry, i) => (
+              {comics.slice(0, 4).map((entry, i) => (
                 <IlustracionCard key={entry.id} entry={entry} i={i} onOpen={() => setAbierta(entry)} />
               ))}
             </Grid>
           </Flex>
         )}
 
-        {/* ══ 6. LLAMADA A LA ACCIÓN ══ */}
+        {/* ══ 6. LO QUE HAY DENTRO ══
+            Tres ideas y, al lado, unas fotos de muestra que NO se abren. */}
+        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
+          <SeparadorSeccion maxW="1180px">Lo que hay dentro</SeparadorSeccion>
+          <IdeasConMuestra d={d} ideas={IDEAS}>
+            <MosaicoMuestra d={d} fotos={FOTOS_MUESTRA} />
+          </IdeasConMuestra>
+        </Flex>
+
+        {/* ══ 7. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
           <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
           <CierreCrearCuenta d={d} />

@@ -163,6 +163,11 @@ interface ComicViewerProps {
    *  ve el loader a pantalla completa. Evita ver el box con el fondo a medio
    *  cargar. Lo usan los cómics de TCM (elementos). */
   esperarFondo?: boolean;
+  /** ESCAPARATE: el cuerpo del texto sale difuminado (ilegible) y solo se leen
+   *  el antetítulo y el título. Es para las páginas públicas de presentación:
+   *  se ve que ahí hay una lectura entera, pero no se regala. Se desactiva la
+   *  selección para que no se pueda copiar el texto de debajo del blur. */
+  textoBorroso?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -193,6 +198,7 @@ export function ComicViewer({
   textSize,
   flechasEnBox,
   esperarFondo,
+  textoBorroso,
 }: ComicViewerProps) {
   const isDisciplinaMode = !!disciplinaBgImage;
   // Color de la scrollbar: el que pidan; si no, el color de la LETRA (que es el
@@ -932,7 +938,15 @@ export function ComicViewer({
                   textAlign={{ base: "center", md: "left" }}
                   fontWeight="400"
                   mt={i === 0 ? 0 : { base: 5, md: 6 }}
-                  style={{ textShadow }}
+                  // `textoBorroso`: el cuerpo se difumina (el título NO) para
+                  // despertar curiosidad en la página pública. `select: none` +
+                  // aria-hidden para que no se pueda copiar ni leer por detrás.
+                  aria-hidden={textoBorroso ? true : undefined}
+                  style={
+                    textoBorroso
+                      ? { textShadow, filter: "blur(6px)", userSelect: "none", pointerEvents: "none" }
+                      : { textShadow }
+                  }
                 >
                   {bloque}
                 </Text>

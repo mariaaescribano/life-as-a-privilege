@@ -13,10 +13,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaVideoBox } from "../../components/metodo/DisciplinaVideoBox";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
-import {
-  CursoCard,
-  STRIPE_PAYMENT_LINK_CURSOS_PSICOLOGIA,
-} from "../../components/metodo/CursosPsicologiaModal";
+import { STRIPE_PAYMENT_LINK_CURSOS_PSICOLOGIA } from "../../components/metodo/CursosPsicologiaModal";
 import { PsicologiaLoader } from "../../components/metodo/comicLoaders";
 import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
 import { useCursosData } from "../../data/cursosApi";
@@ -29,6 +26,7 @@ import {
 import {
   BLANCO_GLOW_SUAVE,
   CierreCrearCuenta,
+  CursoMiniCard,
   SeparadorSeccion,
   VideoMuestra,
 } from "../../components/metodo/presentacionUi";
@@ -67,6 +65,15 @@ const HERRAMIENTAS: string[] = [
   "Dones",
 ];
 
+/** Los cuatro cursos que se enseñan, por título tal cual está en el catálogo.
+ *  Editar aquí para cambiar la vitrina: el orden es el que se ve. */
+const CURSOS_MUESTRA = [
+  "Psicosomática",
+  "Los primeros vínculos",
+  "La Autoestima",
+  "EMDR: guía avanzada",
+];
+
 export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplina }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -84,15 +91,19 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
     return [...intro, ...PSICOLOGIA_COMICS_RECORRIDO].slice(0, 4);
   }, [d.ilustracionesLabel]);
 
-  // Cuatro cursos de Psicología, los más recientes. El resto, en su página.
-  // Cuatro y no tres porque la rejilla llega a 4 columnas en pantalla ancha y
-  // así la fila queda completa; en tablet se ven 2 y en ordenador normal 3.
+  // Los cuatro cursos que se enseñan, ELEGIDOS por título (no los más recientes):
+  // así no salen tres EMDR seguidos y se ve la variedad del catálogo. Si alguno
+  // no estuviera en el catálogo, se rellena con el más reciente que quede.
   const { cursosData, loading: cargandoCursos } = useCursosData();
   const cursos = useMemo(() => {
     const todos = [...(cursosData[neuropsicologiaNom]?.cursos ?? [])].sort(
       (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
     );
-    return { visibles: todos.slice(0, 4), total: todos.length };
+    const elegidos = CURSOS_MUESTRA
+      .map((t) => todos.find((c) => c.titulo === t))
+      .filter(Boolean) as Curso[];
+    const relleno = todos.filter((c) => !elegidos.includes(c));
+    return { visibles: [...elegidos, ...relleno].slice(0, 4), total: todos.length };
   }, [cursosData]);
 
   const abrirCurso = (curso: Curso) => {
@@ -306,12 +317,13 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
               spacing={{ base: 5, md: 6 }}
               alignItems="start"
             >
-              {cursos.visibles.map((curso, i) => (
-                <CursoCard
+              {cursos.visibles.map((curso) => (
+                <CursoMiniCard
                   key={curso.id}
-                  curso={curso}
-                  onAcceder={() => abrirCurso(curso)}
-                  delay={`${i * 0.08}s`}
+                  foto={curso.foto}
+                  titulo={curso.titulo}
+                  d={d}
+                  onOpen={() => abrirCurso(curso)}
                 />
               ))}
             </SimpleGrid>
@@ -331,30 +343,33 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
 
           {/* «Mucho más en el interior…» + flecha a la página de cursos */}
             <Reveal inView direction="up" distance={16} duration={0.65}>
+              {/* El botón lleva la FOTO de Psicología de fondo, como las cajas de
+                  la página, en vez de un relleno plano del color. */}
               <Flex
                 as="button"
                 onClick={() => navigate(`/aprendizaje/cursos/${encodeURIComponent(neuropsicologiaNom)}`)}
+                position="relative"
+                overflow="hidden"
                 align="center"
                 justify="center"
                 gap={{ base: 3, md: 4 }}
-                px={{ base: 6, md: 9 }}
-                py={{ base: 3, md: 3.5 }}
+                px={{ base: 7, md: 11 }}
+                py={{ base: 3.5, md: 4 }}
                 borderRadius="full"
-                border={`1.5px solid ${d.txt}aa`}
-                bg={`${d.txt}1f`}
                 color={d.txt}
                 cursor="pointer"
-                boxShadow={`0 0 18px ${d.txt}44`}
+                boxShadow={`0 0 20px ${d.txt}55, 0 0 46px ${d.txt}2e`}
                 transition="all 0.25s ease"
                 _hover={{
-                  bg: `${d.txt}33`,
-                  borderColor: d.txt,
                   transform: "translateY(-2px)",
-                  boxShadow: `0 0 26px ${d.txt}77`,
+                  boxShadow: `0 0 30px ${d.txt}88, 0 0 64px ${d.txt}44`,
                 }}
                 _active={{ transform: "translateY(0)" }}
               >
+                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
                 <Text
+                  position="relative"
+                  zIndex={1}
                   fontSize={{ base: "md", md: "xl" }}
                   fontStyle="italic"
                   letterSpacing="0.04em"
@@ -370,6 +385,8 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
                   h={{ base: "20px", md: "24px" }}
                   fill="currentColor"
                   flexShrink={0}
+                  position="relative"
+                  zIndex={1}
                 >
                   <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
                 </Box>

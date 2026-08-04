@@ -58,6 +58,8 @@ const MetodoPsicologiaNecesidades = lazy(() => import("./app/metodo/MetodoPsicol
 const MetodoPsicologiaAce = lazy(() => import("./app/metodo/MetodoPsicologiaAce"));
 const MetodoPsicologiaAceResultado = lazy(() => import("./app/metodo/MetodoPsicologiaAceResultado"));
 const MetodoPsicologiaExperiencia = lazy(() => import("./app/metodo/MetodoPsicologiaExperiencia"));
+const MetodoPsicologiaFamilia = lazy(() => import("./app/metodo/MetodoPsicologiaFamilia"));
+const MetodoPsicologiaGenograma = lazy(() => import("./app/metodo/MetodoPsicologiaGenograma"));
 const MetodoPsicologiaHuellas = lazy(() => import("./app/metodo/MetodoPsicologiaHuellas"));
 const MetodoPsicologiaNudos = lazy(() => import("./app/metodo/MetodoPsicologiaNudos"));
 const MetodoPsicologiaHuellasNudos = lazy(() => import("./app/metodo/MetodoPsicologiaHuellasNudos"));
@@ -290,6 +292,8 @@ export default function App()
       <Route path="/metodo/psicologia/:experienciaId/necesidades" element={<PrivateRoute><MetodoPsicologiaNecesidades /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/ace" element={<PrivateRoute><MetodoPsicologiaAce /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/ace-resultado" element={<PrivateRoute><MetodoPsicologiaAceResultado /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/familia" element={<PrivateRoute><MetodoPsicologiaFamilia /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/genograma" element={<PrivateRoute><MetodoPsicologiaGenograma /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/huellas" element={<PrivateRoute><MetodoPsicologiaHuellas /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/nudos" element={<PrivateRoute><MetodoPsicologiaNudos /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/huellas-nudos" element={<PrivateRoute><MetodoPsicologiaHuellasNudos /></PrivateRoute>} />

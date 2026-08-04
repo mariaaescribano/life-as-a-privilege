@@ -154,7 +154,7 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 16, total: 20 }}
+                step={{ current: 18, total: 22 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Miedos", onClick: irAMiedos }}

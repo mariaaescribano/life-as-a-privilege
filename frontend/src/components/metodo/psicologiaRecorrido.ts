@@ -113,21 +113,23 @@ export const RECORRIDO_INDICE: PasoRecorrido[] = [
   { n: 3,  titulo: "ACE",             ruta: (id) => `/metodo/psicologia/${id}/ace` },
   { n: 4,  titulo: "Resultado ACE",   ruta: (id) => `/metodo/psicologia/${id}/ace-resultado` },
   { n: 5,  titulo: "Línea de Vida",   ruta: (id) => `/metodo/psicologia/${id}` },
-  { n: 6,  titulo: "Huellas",         ruta: (id) => `/metodo/psicologia/${id}/huellas` },
-  { n: 7,  titulo: "Nudos",           ruta: (id) => `/metodo/psicologia/${id}/nudos` },
-  { n: 8,  titulo: "Necesidades",     ruta: (id) => `/metodo/psicologia/${id}/necesidades` },
-  { n: 9,  titulo: "Heridas",         ruta: (id) => `/metodo/psicologia/${id}/huellas-nudos` },
-  { n: 10, titulo: "Tus heridas",     ruta: (id) => `/metodo/psicologia/${id}/heridas-lista` },
-  { n: 11, titulo: "Narra",           ruta: (id) => `/metodo/psicologia/${id}/regulacion` },
-  { n: 12, titulo: "Relación",        ruta: (id) => `/metodo/psicologia/${id}/integracion` },
-  { n: 13, titulo: "Recuérdate",      ruta: (id) => `/metodo/psicologia/${id}/dones` },
-  { n: 14, titulo: "Dones",           ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
-  { n: 15, titulo: "Miedos",          ruta: (id) => `/metodo/psicologia/${id}/miedos` },
-  { n: 16, titulo: "Atrévete",        ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
-  { n: 17, titulo: "Integración",     ruta: (id) => `/metodo/psicologia/${id}/mapa` },
-  { n: 18, titulo: "Compromiso",      ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
-  { n: 19, titulo: "Carta",      ruta: (id) => `/metodo/psicologia/${id}/brujula` },
-  { n: 20, titulo: "Síntesis",     ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
+  { n: 6,  titulo: "Tu familia",      ruta: (id) => `/metodo/psicologia/${id}/familia` },
+  { n: 7,  titulo: "Genograma",       ruta: (id) => `/metodo/psicologia/${id}/genograma` },
+  { n: 8,  titulo: "Huellas",         ruta: (id) => `/metodo/psicologia/${id}/huellas` },
+  { n: 9,  titulo: "Nudos",           ruta: (id) => `/metodo/psicologia/${id}/nudos` },
+  { n: 10, titulo: "Necesidades",     ruta: (id) => `/metodo/psicologia/${id}/necesidades` },
+  { n: 11, titulo: "Heridas",         ruta: (id) => `/metodo/psicologia/${id}/huellas-nudos` },
+  { n: 12, titulo: "Tus heridas",     ruta: (id) => `/metodo/psicologia/${id}/heridas-lista` },
+  { n: 13, titulo: "Narra",           ruta: (id) => `/metodo/psicologia/${id}/regulacion` },
+  { n: 14, titulo: "Relación",        ruta: (id) => `/metodo/psicologia/${id}/integracion` },
+  { n: 15, titulo: "Recuérdate",      ruta: (id) => `/metodo/psicologia/${id}/dones` },
+  { n: 16, titulo: "Dones",           ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
+  { n: 17, titulo: "Miedos",          ruta: (id) => `/metodo/psicologia/${id}/miedos` },
+  { n: 18, titulo: "Atrévete",        ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
+  { n: 19, titulo: "Integración",     ruta: (id) => `/metodo/psicologia/${id}/mapa` },
+  { n: 20, titulo: "Compromiso",      ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
+  { n: 21, titulo: "Carta",      ruta: (id) => `/metodo/psicologia/${id}/brujula` },
+  { n: 22, titulo: "Síntesis",     ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
 ];
 
 /** Total de pasos del recorrido (para las etiquetas X/total). */
@@ -247,6 +249,191 @@ export interface LineaDeVidaData {
   /** «Tu brújula»: mensaje de la persona a su yo del futuro para los momentos de
    *  bloqueo. Cuatro preguntas guía (ver `BrujulaData`). */
   brujula?: BrujulaData;
+  /** La FAMILIA de la usuaria: las personas que coloca alrededor de sí misma,
+   *  con su foto, su nombre, los personajes/animales que asocia a cada una y lo
+   *  que escribe de ellas. Ella misma NO está en la lista: es el centro fijo del
+   *  mapa (ver `PersonaGenograma`).
+   *
+   *  La MISMA lista alimenta las dos páginas: «Tu familia» (paso 6, donde compone
+   *  la familia y le pone un personaje/animal a cada miembro) y «Genograma»
+   *  (paso 7, el mapa completo con la ficha escrita de cada persona). Así la
+   *  usuaria coloca a su familia UNA vez. */
+  genograma?: PersonaGenograma[];
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// LA FAMILIA · dos páginas seguidas que comparten el MISMO mapa de personas.
+//
+//   Paso 6 · «Tu familia»  → compone su familia y asocia a cada miembro uno o
+//                            dos personajes/animales (ver familiaSimbolos.ts).
+//   Paso 7 · «Genograma»   → el mismo mapa, ya completo, donde abre la ficha de
+//                            cada persona y escribe sobre ella.
+//
+// La persona empieza sola en el centro del mapa (su foto de perfil, con la
+// etiqueta «Tú») y va colocando a su familia a su alrededor: hacia ARRIBA las
+// generaciones anteriores (padres, abuelos) y a los LADOS su propia generación
+// (hermanos, pareja). Hacia abajo, si quiere, sus hijos.
+//
+// El mapa es una rejilla de casillas: cada persona guarda su posición como
+// (fila, col) RELATIVA a la usuaria, que ocupa siempre (0, 0):
+//   fila  −1, −2…  → una y dos generaciones por encima     |  +1 → por debajo
+//   col   −1, −2…  → a su izquierda                        |  +1… → a su derecha
+//
+// Persistencia: data.genograma = PersonaGenograma[]. Las fotos NO van en el
+// blob: se suben al bucket (POST /upload/genograma/:userId) y aquí se guarda
+// solo su URL — si no, el `data` reventaría el límite de tamaño del body.
+//
+// ✍️  No cambies las `key` de las preguntas tras publicar (se perderían las
+//     respuestas guardadas con esa clave).
+// ─────────────────────────────────────────────────────────────────────────
+
+export interface PersonaGenograma {
+  /** Identificador estable. */
+  id: string;
+  /** Nombre que le pone la usuaria («Mamá», «Carmen»…). */
+  nombre: string;
+  /** Parentesco (Madre, Padre, Hermana, Abuela materna…). Libre. */
+  parentesco?: string;
+  /** URL pública de su foto (bucket). Sin foto se dibuja su inicial. */
+  foto?: string;
+  /** Fila relativa a la usuaria: negativa hacia arriba, positiva hacia abajo. */
+  fila: number;
+  /** Columna relativa a la usuaria: negativa a la izquierda, positiva a la derecha. */
+  col: number;
+  /** Personajes/animales que la usuaria asocia a esta persona (página «Tu
+   *  familia»): hasta `SIMBOLOS_POR_PERSONA` claves de `SIMBOLOS_FAMILIA`. */
+  simbolos?: string[];
+  /** Lo que la usuaria escribe de esta persona, por `key` de pregunta. */
+  notas?: Record<string, string>;
+}
+
+/** Cuántos personajes/animales puede asociar a cada miembro de la familia. */
+export const SIMBOLOS_POR_PERSONA = 2;
+
+export const GENOGRAMA = {
+  titulo: "Genograma",
+  /** Frase bajo el header (sobre el turquesa). */
+  intro:
+    "Aquí está tu familia completa. Toca a cada persona y escribe lo que sepas y lo que sientas de ella: lo que te dio, lo que te faltó y lo que crees que cargaba. Puedes seguir añadiendo a quien falte.",
+  /** Etiqueta bajo la foto de la propia usuaria. */
+  yo: "Tú",
+  /** Parentescos sugeridos en la ficha (pulsables, también se puede escribir). */
+  parentescos: [
+    "Madre", "Padre", "Hermana", "Hermano",
+    "Abuela materna", "Abuelo materno", "Abuela paterna", "Abuelo paterno",
+    "Pareja", "Hija", "Hijo", "Tía", "Tío", "Prima", "Primo",
+    "Madrastra", "Padrastro", "Quien me cuidó",
+  ],
+};
+
+// ── Paso 6 · «Tu familia» (componer la familia + personaje/animal) ──
+export const FAMILIA = {
+  titulo: "Tu familia",
+  /** Frase bajo el header (sobre el turquesa). */
+  intro:
+    "Empieza por ti, en el centro, y coloca a tu familia alrededor: hacia arriba quienes te precedieron, a los lados quienes crecieron contigo. Después elige para cada uno el personaje o el animal que se le parece: a veces una imagen dice lo que no sabemos nombrar.",
+  /** Texto del popup, encima de las imágenes. */
+  eligeTitulo: "¿A quién se parece?",
+  eligeApoyo:
+    "Elige el personaje o el animal que asocias con esta persona. Puedes elegir hasta dos. No lo pienses mucho: quédate con el primero que te venga.",
+};
+
+/** Las preguntas de la ficha de cada persona del genograma. */
+export const GENOGRAMA_PREGUNTAS: Pregunta[] = [
+  { key: "quien", pregunta: "¿Quién es o quién fue para ti?", placeholder: "Es mi…" },
+  { key: "relacion", pregunta: "¿Cómo es (o cómo era) vuestra relación?", placeholder: "Con ella/él siento…" },
+  { key: "recuerdo", pregunta: "¿Qué recuerdo te viene primero de esta persona?", placeholder: "Recuerdo…" },
+  { key: "aprendi", pregunta: "¿Qué aprendiste de ella o de él, para bien o para mal?", placeholder: "Aprendí que…" },
+  { key: "falto", pregunta: "¿Qué te dio y qué te faltó de esta persona?", placeholder: "Me dio… y me faltó…" },
+  { key: "cargaba", pregunta: "¿Qué crees que cargaba esta persona? (su propia historia, sus heridas)", placeholder: "Creo que cargaba…" },
+  { key: "parecido", pregunta: "¿En qué te pareces y en qué no quieres parecerte?", placeholder: "Me parezco en…" },
+  { key: "pendiente", pregunta: "¿Hay algo que te gustaría decirle y nunca le dijiste?", placeholder: "Me gustaría decirle…" },
+  { key: "algo-mas", pregunta: "Algo más que quieras contar de ella o de él…" },
+];
+
+/** Personas del genograma, blindadas: los datos guardados con una forma antigua
+ *  (o incompleta) no pueden reventar el render. */
+export function personasGenograma(data: LineaDeVidaData): PersonaGenograma[] {
+  const lista = Array.isArray(data?.genograma) ? data.genograma : [];
+  return lista
+    .filter((p): p is PersonaGenograma => !!p && typeof p === "object")
+    .map((p, i) => ({
+      id: typeof p.id === "string" && p.id ? p.id : `persona-${i}`,
+      nombre: typeof p.nombre === "string" ? p.nombre : "",
+      parentesco: typeof p.parentesco === "string" ? p.parentesco : "",
+      foto: typeof p.foto === "string" ? p.foto : undefined,
+      fila: Number.isFinite(p.fila) ? Number(p.fila) : -1,
+      col: Number.isFinite(p.col) ? Number(p.col) : 0,
+      simbolos: (Array.isArray(p.simbolos) ? p.simbolos : [])
+        .filter((s): s is string => typeof s === "string" && s.length > 0)
+        .slice(0, SIMBOLOS_POR_PERSONA),
+      notas: p.notas && typeof p.notas === "object" ? p.notas : {},
+    }))
+    // Nadie puede ocupar el centro: ese sitio es siempre de la usuaria.
+    .filter((p) => !(p.fila === 0 && p.col === 0));
+}
+
+/** Nombre visible de una persona del genograma. */
+export const personaLabel = (p: PersonaGenograma): string =>
+  (p.nombre || "").trim() || (p.parentesco || "").trim() || "Sin nombre";
+
+/** Cuántas preguntas de su ficha tiene escritas (para el «3/9» de la tarjeta). */
+export const personaEscritas = (p: PersonaGenograma): number =>
+  GENOGRAMA_PREGUNTAS.filter((q) => ((p.notas?.[q.key] || "").trim().length > 0)).length;
+
+/** Los personajes/animales de una persona (lista segura, como mucho dos). */
+export const personaSimbolos = (p: PersonaGenograma): string[] =>
+  (Array.isArray(p.simbolos) ? p.simbolos : []).slice(0, SIMBOLOS_POR_PERSONA);
+
+/** ¿Hay ya alguien de la familia con un personaje/animal elegido? Es lo que
+ *  desbloquea el paso siguiente en la página «Tu familia». */
+export const familiaConSimbolo = (data: LineaDeVidaData): boolean =>
+  personasGenograma(data).some((p) => personaSimbolos(p).length > 0);
+
+/** Identificador de una persona nueva del mapa. */
+export const nuevaPersonaId = (): string =>
+  `p-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+
+/** Clave de una casilla del mapa (fila:col). */
+export const posKeyFamilia = (fila: number, col: number): string => `${fila}:${col}`;
+
+/** Casillas ocupadas del mapa. La usuaria ocupa SIEMPRE el centro (0,0). */
+export function ocupacionFamilia(personas: PersonaGenograma[]): Map<string, PersonaGenograma | "yo"> {
+  const m = new Map<string, PersonaGenograma | "yo">();
+  m.set(posKeyFamilia(0, 0), "yo");
+  personas.forEach((p) => m.set(posKeyFamilia(p.fila, p.col), p));
+  return m;
+}
+
+/** Dónde colocar a alguien nuevo al pulsar un «+» desde la casilla (fila, col).
+ *  Arriba y abajo: la misma columna si está libre y, si no, el hueco más cercano
+ *  de esa fila (abriéndose a los dos lados) — así el segundo padre o el segundo
+ *  abuelo nunca pisa a nadie. A los lados: se avanza en esa dirección hasta
+ *  encontrar sitio. */
+export function posicionLibreFamilia(
+  personas: PersonaGenograma[],
+  desdeFila: number,
+  desdeCol: number,
+  dir: "arriba" | "abajo" | "izq" | "der",
+): { fila: number; col: number } {
+  const ocupado = ocupacionFamilia(personas);
+  const libre = (f: number, c: number) => !ocupado.has(posKeyFamilia(f, c));
+
+  if (dir === "izq" || dir === "der") {
+    const paso = dir === "izq" ? -1 : 1;
+    for (let d = 1; d <= 20; d++) {
+      if (libre(desdeFila, desdeCol + paso * d)) return { fila: desdeFila, col: desdeCol + paso * d };
+    }
+    return { fila: desdeFila, col: desdeCol + paso * 21 };
+  }
+
+  const fila = dir === "arriba" ? desdeFila - 1 : desdeFila + 1;
+  if (libre(fila, desdeCol)) return { fila, col: desdeCol };
+  for (let d = 1; d <= 20; d++) {
+    if (libre(fila, desdeCol + d)) return { fila, col: desdeCol + d };
+    if (libre(fila, desdeCol - d)) return { fila, col: desdeCol - d };
+  }
+  return { fila, col: desdeCol + 21 };
 }
 
 /** «Compromiso»: lo que la persona escribe en el cierre del recorrido. */
@@ -1100,22 +1287,24 @@ export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolea
     case 2:  return t(data["problema-actual"]) !== "";                         // Problemas: escrito
     case 3:  return aceCompleto(data);                                         // ACE: 10 respondidas
     case 5:  return aniosRecorridos(data, Number(data.edad) || 0) >= 1;        // Línea de Vida: ≥1 año
-    case 6:  return Object.values(data.anos || {}).some((a) => (a?.huellas?.length ?? 0) > 0); // Huellas: ≥1 marcada
-    case 7:  return (data.nudos || []).length > 0;                             // Nudos: ≥1
-    case 8:  return necesidadesCompletas(data);                                // Necesidades: las 18
-    case 9:  return (data.heridas || []).length > 0;                           // Heridas: ≥1
-    case 12: return (data.constelaciones || []).some(                          // Relación: ≥1 con contenido
+    case 6:  return familiaConSimbolo(data);                                   // Tu familia: ≥1 con personaje
+    case 7:  return personasGenograma(data).length > 0;                        // Genograma: ≥1 persona
+    case 8:  return Object.values(data.anos || {}).some((a) => (a?.huellas?.length ?? 0) > 0); // Huellas: ≥1 marcada
+    case 9:  return (data.nudos || []).length > 0;                             // Nudos: ≥1
+    case 10: return necesidadesCompletas(data);                                // Necesidades: las 18
+    case 11: return (data.heridas || []).length > 0;                           // Heridas: ≥1
+    case 14: return (data.constelaciones || []).some(                          // Relación: ≥1 con contenido
                (c) => (c?.nudos?.length ?? 0) > 0 || (c?.arquetipos?.length ?? 0) > 0 || t(c?.titulo) !== "" || t(c?.texto) !== "");
-    case 13: return DONES_PREGUNTAS.every(                                      // Recuérdate: todas resueltas
+    case 15: return DONES_PREGUNTAS.every(                                      // Recuérdate: todas resueltas
                (q) => t(data.dones?.respuestas?.[q.key]) !== "" || (data.dones?.sinIdeas || []).includes(q.key));
-    case 14: return (data.dones?.lista || []).some((d) => t(d.texto) !== "");  // Dones: ≥1 don escrito
-    case 15: return (data.miedos || []).length > 0;                            // Miedos: ≥1
-    case 16: return (data.miedos || []).length > 0 &&                          // Atrévete: todos respondidos
+    case 16: return (data.dones?.lista || []).some((d) => t(d.texto) !== "");  // Dones: ≥1 don escrito
+    case 17: return (data.miedos || []).length > 0;                            // Miedos: ≥1
+    case 18: return (data.miedos || []).length > 0 &&                          // Atrévete: todos respondidos
                     (data.miedos || []).every((m) => miedoRespondidas(m) >= MIEDOS_PREGUNTAS.length);
-    case 17: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
-    case 18: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
-    case 19: return t(data.brujula?.mensaje) !== "";                           // Carta
-    default: return true;  // 1, 4, 10, 11, 20 y cualquier otro: sin requisito
+    case 19: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
+    case 20: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
+    case 21: return t(data.brujula?.mensaje) !== "";                           // Carta
+    default: return true;  // 1, 4, 12, 13, 22 y cualquier otro: sin requisito
   }
 }
 

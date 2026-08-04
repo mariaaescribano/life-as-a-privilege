@@ -11,6 +11,7 @@ import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
+import { BloqueDiferido } from "../../components/global/BloqueDiferido";
 import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
 // Para reactivar el mandala en el futuro: añade `MandalaRecorrido` (default) al import.
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
@@ -127,15 +128,6 @@ const METODO_IMGS: string[] = [
 // DisciplinaFicha (mismo criterio: natural / negra en Fisiología-Cábala-Cultura /
 // granate en Medicina China).
 
-// ── Bloque de montaje diferido ──────────────────────────────────────────────
-// No es una animación: retrasa el MONTAJE de lo que envuelve hasta que está a
-// punto de asomar. Hace falta porque el mandala-vídeo anima sus círculos al
-// montarse (framer `animate`, no `whileInView`), y como vive muy por debajo del
-// pliegue, esa entrada ocurría fuera de pantalla: al bajar hasta él lo
-// encontrabas ya colocado y quieto. Envolver en <Reveal> NO lo arregla — Reveal
-// anima su envoltorio, pero el hijo se monta igual. De paso, no se cargan sus
-// siete vídeos hasta que hacen falta.
-// `minH` reserva el hueco para que la página no dé un salto al montarlo.
 // ── QUÉ OBTIENES ─────────────────────────────────────────────────────────────
 // Lo que se lleva quien accede a El Mapa. Va en DOS columnas a propósito: son
 // siete líneas y en una sola columna el box se hacía una lista larguísima que
@@ -222,37 +214,6 @@ function QueObtienesBox() {
         </RevealStagger>
       </Flex>
     </Reveal>
-  );
-}
-
-function BloqueDiferido({
-  children,
-  minH,
-}: {
-  children: React.ReactNode;
-  minH?: BoxProps["minH"];
-}) {
-  const [cerca, setCerca] = useState(false);
-  const [node, setNode] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    if (!node || cerca) return;
-    const obs = new IntersectionObserver(
-      ([entrada]) => { if (entrada.isIntersecting) { setCerca(true); obs.disconnect(); } },
-      // Justo antes de entrar (80px), no mucho antes. El montaje dispara la
-      // entrada de los círculos, así que si se monta demasiado pronto la cascada
-      // arranca fuera de pantalla y te pierdes los primeros. 80px es suficiente
-      // para que el salto de maquetación no se vea y la cascada se vea entera.
-      { rootMargin: "80px 0px" },
-    );
-    obs.observe(node);
-    return () => obs.disconnect();
-  }, [node, cerca]);
-
-  return (
-    <Box ref={setNode} minH={cerca ? undefined : minH}>
-      {cerca ? children : null}
-    </Box>
   );
 }
 

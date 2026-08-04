@@ -1,27 +1,26 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaVideoBox } from "../../components/metodo/DisciplinaVideoBox";
-import { LineaTiempoCultura } from "../../components/metodo/LineaTiempoCultura";
 import { HISTORIAS_CULTURA } from "../../components/metodo/culturaHistorias";
+import { historiaVisual } from "../../components/metodo/culturaPortadas";
 import type { HitoHistoria } from "../../components/metodo/culturaHistoriaUniversal";
-import { FichaFisioModal } from "../../components/metodo/celulasUi";
 import {
   BLANCO_GLOW,
   BLANCO_GLOW_SUAVE,
+  CajaLisa,
   CierreCrearCuenta,
   SeparadorSeccion,
   VideoMuestra,
 } from "../../components/metodo/presentacionUi";
-import { CulturaIcon, culturaBg, culturaNom, culturaTxt } from "../../GlobalVariables";
+import { CulturaIcon, culturaBg, culturaNom } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -30,10 +29,10 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 // Orden:
 //   1. Header de la disciplina, sin botones.
 //   2. El box de la disciplina con su precio + el vídeo al lado.
-//   3. LAS SEIS HISTORIAS: universal, religiones, filosofía, ciencia, medicina y
-//      arte. Cada una con sus eras contadas y su párrafo de apertura.
-//   4. LA LÍNEA DEL TIEMPO de verdad (la de la Historia Universal). Se pulsa una
-//      era y se abre con su texto y los hitos que contiene.
+//   3. LAS SEIS HISTORIAS: su portada en un círculo y el título debajo.
+//   4. SUS LÍNEAS DEL TIEMPO, como ejemplo: la línea principal de cada Historia
+//      para que se vea cuál es cuál. NO se pulsan (aquí no se abre nada): al
+//      tocarlas sale «Descúbrelo dentro».
 //   5. Llamada a la acción.
 //
 // Cultura es la única disciplina SIN ilustraciones en la galería, así que aquí no
@@ -45,37 +44,26 @@ const CULTURA_IMG = "/img/fondos/cultura.webp";
 /** Las seis Historias, en el orden en que se recorren. */
 const ORDEN_HISTORIAS = ["universal", "religiones", "filosofia", "ciencia", "medicina", "arte"];
 
-/** Primera frase de un texto largo: sirve de resumen sin escribir uno nuevo. */
-const primeraFrase = (texto?: string): string => {
-  if (!texto) return "";
-  const corte = texto.indexOf(". ");
-  return corte > 0 ? texto.slice(0, corte + 1) : texto;
-};
+/** Lo que sale al tocar una línea del tiempo: aquí no se abre nada. */
+const AVISO = "Descúbrelo dentro";
 
 export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }) {
-  const [era, setEra] = useState<HitoHistoria | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const historias = useMemo(
     () => ORDEN_HISTORIAS
-      .map((k) => ({ key: k, ...HISTORIAS_CULTURA[k] }))
+      .map((k) => ({ key: k, ...HISTORIAS_CULTURA[k], ...historiaVisual(k) }))
       .filter((h) => h.hitos?.length),
     [],
   );
 
-  const totalEras = useMemo(
-    () => historias.reduce((n, h) => n + h.hitos.length, 0),
-    [historias],
-  );
-
-  // La línea del tiempo que se enseña: la Historia Universal, que son seis eras
-  // — justo las que caben de una vez en la fila de escritorio.
-  const universal = HISTORIAS_CULTURA.universal;
-
-  const fotosListas = useImagesReady(["/img/icono/life.png", CULTURA_IMG]);
+  const fotosListas = useImagesReady([
+    "/img/icono/life.png",
+    CULTURA_IMG,
+    ...historias.map((h) => h.portada).filter((p): p is string => !!p),
+  ]);
   if (!fotosListas) return <LifeLoading variant="auto" />;
 
-  const sombra = sombraTexto(d.nom, d.bg);
   const renderIcon = (size: string) => <CulturaIcon size={{ base: size, md: size }} />;
 
   const verVideo = () => {
@@ -137,9 +125,6 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
               {d.gancho}
             </Text>
           </RevealItem>
-          <RevealItem w="100%" maxW="420px">
-            <Box h="1px" bgGradient="linear(to-r, transparent, #ffffff8c, transparent)" />
-          </RevealItem>
         </RevealStagger>
 
         {/* ══ 2. BOX DE LA DISCIPLINA (con su precio) + VÍDEO ══ */}
@@ -171,10 +156,55 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
         </Grid>
 
         {/* ══ 3. LAS SEIS HISTORIAS ══
-            Cada una con sus eras contadas y su primera frase. Los números son
-            reales: salen de los propios datos. */}
+            Su portada en un círculo y el título debajo. Sin caja: los círculos se
+            presentan solos sobre el turquesa. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Seis maneras de contar lo mismo</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">Las seis Historias</SeparadorSeccion>
+
+          <RevealStagger
+            inView
+            stagger={0.08}
+            delayChildren={0.1}
+            amount={0.1}
+            w="100%"
+            display="grid"
+            gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(6, 1fr)" }}
+            gap={{ base: 5, md: 6 }}
+            justifyItems="center"
+          >
+            {historias.map((h) => (
+              <RevealItem key={h.key} direction="up" distance={20} scaleFrom={0.96} duration={0.65}>
+                <Flex direction="column" align="center" gap={{ base: 2.5, md: 3 }}>
+                  <Circulo
+                    foto={h.portada}
+                    alt={h.titulo}
+                    emoji={h.emoji}
+                    d={d}
+                    size={{ base: "108px", md: "124px", lg: "134px" }}
+                  />
+                  <Text
+                    color="white"
+                    fontSize={{ base: "sm", md: "md" }}
+                    fontWeight="700"
+                    lineHeight="1.25"
+                    letterSpacing="0.02em"
+                    textAlign="center"
+                    maxW="150px"
+                    textShadow={BLANCO_GLOW_SUAVE}
+                  >
+                    {h.titulo}
+                  </Text>
+                </Flex>
+              </RevealItem>
+            ))}
+          </RevealStagger>
+        </Flex>
+
+        {/* ══ 4. SUS LÍNEAS DEL TIEMPO (como ejemplo) ══
+            La línea principal de cada Historia, para que se vea cuál es cuál.
+            Aquí NO se abre nada: al tocarla sale «Descúbrelo dentro». */}
+        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
+          <SeparadorSeccion maxW="1180px">Sus líneas del tiempo</SeparadorSeccion>
 
           <Reveal inView direction="up" distance={16} duration={0.7}>
             <Text
@@ -186,155 +216,28 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
               maxW="740px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Seis historias de la humanidad, {totalEras} eras en total, cada una con su línea del
-              tiempo. Conocer el pasado no es memorizar fechas: es entender por qué pensamos como
-              pensamos.
+              Cada Historia se recorre por su línea del tiempo, era por era. Estas son, solo para
+              que las veas.
             </Text>
           </Reveal>
 
-          <RevealStagger
-            inView
-            stagger={0.09}
-            delayChildren={0.1}
-            amount={0.1}
-            w="100%"
-            display="grid"
-            gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
-            gap={{ base: 5, md: 6 }}
-          >
-            {historias.map((h) => (
-              <RevealItem
+          <Flex direction="column" w="100%" gap={{ base: 5, md: 6 }}>
+            {historias.map((h, i) => (
+              <Reveal
                 key={h.key}
+                inView
                 direction="up"
                 distance={20}
-                scaleFrom={0.96}
-                blur
+                scaleFrom={0.98}
                 duration={0.7}
-                position="relative"
-                overflow="hidden"
-                borderRadius="2xl"
-                h="100%"
-                border={`1.5px solid ${d.txt}66`}
-                sx={{
-                  boxShadow: `0 0 0 1px ${d.txt}33, 0 0 26px ${d.txt}3d, 0 0 60px ${d.txt}1f`,
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
-                  _hover: {
-                    transform: "translateY(-5px)",
-                    borderColor: d.txt,
-                    boxShadow: `0 0 0 1px ${d.txt}55, 0 0 36px ${d.txt}77, 0 0 80px ${d.txt}44`,
-                  },
-                }}
-              >
-                <DisciplinaBgLayer nom={culturaNom} borderRadius="2xl" />
-                <Flex
-                  direction="column"
-                  gap={3}
-                  position="relative"
-                  zIndex={1}
-                  px={{ base: 5, md: 6 }}
-                  py={{ base: 6, md: 7 }}
-                  h="100%"
-                >
-                  <Text
-                    color={`${d.txt}b3`}
-                    fontSize={{ base: "2xs", md: "xs" }}
-                    fontWeight="700"
-                    letterSpacing="0.22em"
-                    textTransform="uppercase"
-                    textShadow={sombra}
-                  >
-                    {h.hitos.length} eras
-                  </Text>
-                  <Text
-                    color={d.txt}
-                    fontSize={{ base: "xl", md: "2xl" }}
-                    fontWeight="700"
-                    letterSpacing="0.03em"
-                    lineHeight="1.2"
-                    textShadow={sombra}
-                  >
-                    {h.titulo}
-                  </Text>
-                  <Box h="1px" w="46px" bg={`${d.txt}77`} />
-                  <Text
-                    color={d.txt}
-                    fontSize={{ base: "sm", md: "md" }}
-                    lineHeight={{ base: "1.7", md: "1.75" }}
-                    textShadow={sombra}
-                  >
-                    {primeraFrase(h.intro) || "Recorre su línea del tiempo, era por era."}
-                  </Text>
-                </Flex>
-              </RevealItem>
-            ))}
-          </RevealStagger>
-        </Flex>
-
-        {/* ══ 4. LA LÍNEA DEL TIEMPO ══
-            La de verdad, con la Historia Universal. En escritorio es una fila de
-            círculos con sus flechas; en móvil, una lista que se va cargando al
-            bajar. Al pulsar una era se abre con su texto y sus hitos. */}
-        {universal && (
-          <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion maxW="1180px">La línea del tiempo</SeparadorSeccion>
-
-            <Reveal inView direction="up" distance={22} scaleFrom={0.98} duration={0.75} w="100%">
-              <Box
-                position="relative"
+                delay={Math.min(i, 3) * 0.06}
                 w="100%"
-                borderRadius="3xl"
-                overflow="hidden"
-                border={`1.5px solid ${d.txt}66`}
-                boxShadow={`0 0 0 1px ${d.txt}55, 0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
               >
-                <DisciplinaBgLayer nom={culturaNom} borderRadius="3xl" />
-
-                <Flex
-                  direction="column"
-                  align="center"
-                  gap={{ base: 6, md: 8 }}
-                  position="relative"
-                  zIndex={1}
-                  px={{ base: 4, md: 10 }}
-                  py={{ base: 8, md: 11 }}
-                >
-                  <Flex direction="column" align="center" gap={2}>
-                    <Text
-                      color={d.txt}
-                      fontSize={{ base: "xl", md: "2xl" }}
-                      fontWeight="700"
-                      letterSpacing="0.05em"
-                      textAlign="center"
-                      textShadow={sombra}
-                    >
-                      {universal.titulo}
-                    </Text>
-                    <Text
-                      color={`${d.txt}d9`}
-                      fontSize={{ base: "sm", md: "md" }}
-                      fontStyle="italic"
-                      textAlign="center"
-                      maxW="620px"
-                      lineHeight="1.65"
-                      textShadow={sombra}
-                    >
-                      De la Prehistoria a hoy. Pulsa una era y verás qué contiene.
-                    </Text>
-                  </Flex>
-
-                  <Box w="100%">
-                    <LineaTiempoCultura
-                      hitos={universal.hitos}
-                      tinta={culturaTxt}
-                      bg={culturaBg}
-                      onSelect={(key) => setEra(universal.hitos.find((h) => h.key === key) ?? null)}
-                    />
-                  </Box>
-                </Flex>
-              </Box>
-            </Reveal>
+                <LineaEjemplo d={d} titulo={h.titulo} hitos={h.hitos} />
+              </Reveal>
+            ))}
           </Flex>
-        )}
+        </Flex>
 
         {/* ══ 5. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
@@ -346,32 +249,222 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
       </Flex>
 
       <SiteFooter />
+    </Box>
+  );
+}
 
-      {/* Era abierta: el mismo popup de ficha del recorrido, vestido con los
-          colores de Cultura. Los «claves» son los hitos que contiene la era, así
-          que se ve de un golpe cuánto hay dentro de cada una. */}
-      {era && (
-        <FichaFisioModal
-          foto={era.foto ?? ""}
-          alt={era.titulo}
-          titulo={`${era.titulo} · ${era.anio}`}
-          claves={era.subhitos.slice(0, 6).map((s) => s.titulo)}
-          parrafos={[
-            era.intro ??
-              `Esta era se recorre hito a hito: ${era.subhitos.length} momentos, cada uno con su ilustración.`,
-          ]}
-          onClose={() => setEra(null)}
-          accent={culturaTxt}
-          bgImage={CULTURA_IMG}
-          bgColor={culturaBg}
-          txtColor={culturaTxt}
-          fotoFallback={
-            <Text color={culturaTxt} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" letterSpacing="0.06em">
-              {era.anio}
-            </Text>
-          }
+// ─────────────────────────────────────────────────────────────────────────────
+// Círculo con foto (portada de una Historia o era de su línea). Si la foto aún
+// no existe, se queda su emoji o su año: nunca un icono roto.
+// ─────────────────────────────────────────────────────────────────────────────
+function Circulo({
+  foto,
+  alt,
+  emoji,
+  texto,
+  d,
+  size,
+  lazy = false,
+}: {
+  foto?: string;
+  alt: string;
+  /** Reserva si no hay foto (portadas de Historia). */
+  emoji?: string;
+  /** Reserva si no hay foto ni emoji (eras: se pinta su año). */
+  texto?: string;
+  d: PresentacionDisciplina;
+  size: Record<string, string> | string;
+  lazy?: boolean;
+}) {
+  const [falla, setFalla] = useState(false);
+  const hayFoto = !!foto && !falla;
+  return (
+    <Box
+      position="relative"
+      flexShrink={0}
+      w={size}
+      h={size}
+      borderRadius="full"
+      overflow="hidden"
+      bg={`${d.bg}cc`}
+      boxShadow={`0 0 16px ${d.txt}4d, 0 0 40px ${d.txt}22`}
+    >
+      {hayFoto ? (
+        <Box
+          as="img"
+          src={encodeURI(foto!)}
+          alt={alt}
+          loading={lazy ? "lazy" : undefined}
+          w="100%"
+          h="100%"
+          style={{ objectFit: "cover", objectPosition: "center" }}
+          onError={() => setFalla(true)}
         />
+      ) : (
+        <Flex w="100%" h="100%" align="center" justify="center" px={1.5}>
+          <Text
+            color={d.txt}
+            fontSize={emoji ? { base: "3xl", md: "4xl" } : { base: "2xs", md: "xs" }}
+            fontWeight="700"
+            lineHeight="1.15"
+            textAlign="center"
+            noOfLines={3}
+          >
+            {emoji ?? texto ?? ""}
+          </Text>
+        </Flex>
       )}
     </Box>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LÍNEA DE EJEMPLO de una Historia: su título y sus eras en fila, con la línea
+// que las une. Es una MUESTRA: no navega a ninguna parte. Al tocarla (o al pasar
+// por encima) aparece «Descúbrelo dentro» y ya está.
+//
+// La fila se desplaza dentro de su caja cuando hay muchas eras — la página nunca
+// hace scroll horizontal.
+// ─────────────────────────────────────────────────────────────────────────────
+function LineaEjemplo({
+  d,
+  titulo,
+  hitos,
+}: {
+  d: PresentacionDisciplina;
+  titulo: string;
+  hitos: HitoHistoria[];
+}) {
+  const sombra = sombraTexto(d.nom, d.bg);
+  const [aviso, setAviso] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // El aviso se va solo: es un recordatorio, no un cartel permanente.
+  const mostrarAviso = () => {
+    setAviso(true);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setAviso(false), 1800);
+  };
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+
+  return (
+    <CajaLisa d={d} radio="2xl" role="group" onClick={mostrarAviso} cursor="default">
+      <Flex direction="column" gap={{ base: 4, md: 5 }} px={{ base: 4, md: 7 }} py={{ base: 5, md: 6 }}>
+        <Flex align="baseline" justify="space-between" gap={3} wrap="wrap">
+          <Text
+            color={d.txt}
+            fontSize={{ base: "lg", md: "xl" }}
+            fontWeight="700"
+            letterSpacing="0.03em"
+            lineHeight="1.25"
+            textShadow={sombra}
+          >
+            {titulo}
+          </Text>
+          <Text
+            color={`${d.txt}b3`}
+            fontSize={{ base: "2xs", md: "xs" }}
+            fontWeight="700"
+            letterSpacing="0.22em"
+            textTransform="uppercase"
+            textShadow={sombra}
+          >
+            {hitos.length} eras
+          </Text>
+        </Flex>
+
+        {/* La línea: eras en fila, unidas. Se desplaza dentro de la caja. */}
+        <Box position="relative">
+          <Box
+            overflowX="auto"
+            overflowY="hidden"
+            pb={1}
+            sx={{
+              scrollbarWidth: "thin",
+              "&::-webkit-scrollbar": { height: "6px" },
+              "&::-webkit-scrollbar-thumb": { background: `${d.txt}55`, borderRadius: "9999px" },
+            }}
+          >
+            <Flex align="flex-start" gap={0} w="fit-content" px={0.5}>
+              {hitos.map((h, i) => (
+                <React.Fragment key={h.key}>
+                  {i > 0 && (
+                    <Box
+                      flexShrink={0}
+                      h="1.5px"
+                      w={{ base: "16px", md: "26px" }}
+                      bg={`${d.txt}66`}
+                      mt={{ base: "28px", md: "36px" }}
+                    />
+                  )}
+                  <Flex direction="column" align="center" gap={1.5} w={{ base: "72px", md: "92px" }} flexShrink={0}>
+                    <Circulo
+                      foto={h.foto}
+                      alt={h.titulo}
+                      texto={h.anio}
+                      d={d}
+                      size={{ base: "56px", md: "72px" }}
+                      lazy
+                    />
+                    <Text
+                      color={d.txt}
+                      fontSize={{ base: "2xs", md: "xs" }}
+                      fontWeight="700"
+                      lineHeight="1.2"
+                      textAlign="center"
+                      noOfLines={2}
+                      textShadow={sombra}
+                    >
+                      {h.titulo}
+                    </Text>
+                    {h.anio && (
+                      <Text
+                        color={`${d.txt}b3`}
+                        fontSize="2xs"
+                        fontStyle="italic"
+                        lineHeight="1.15"
+                        textAlign="center"
+                        noOfLines={1}
+                        textShadow={sombra}
+                      >
+                        {h.anio}
+                      </Text>
+                    )}
+                  </Flex>
+                </React.Fragment>
+              ))}
+            </Flex>
+          </Box>
+
+          {/* «Descúbrelo dentro»: al tocar la línea (o al pasar por encima en
+              ordenador). No hay nada que abrir aquí. */}
+          <Flex
+            position="absolute"
+            inset={0}
+            align="center"
+            justify="center"
+            pointerEvents="none"
+            opacity={aviso ? 1 : 0}
+            transition="opacity 0.25s ease"
+            _groupHover={{ opacity: 1 }}
+          >
+            <Text
+              px={{ base: 4, md: 5 }}
+              py={{ base: 2, md: 2.5 }}
+              borderRadius="full"
+              bg={`${d.bg}f2`}
+              color={d.txt}
+              fontSize={{ base: "sm", md: "md" }}
+              fontWeight="700"
+              letterSpacing="0.08em"
+              textTransform="uppercase"
+              boxShadow={`0 0 18px ${d.txt}55, 0 6px 24px rgba(0,0,0,0.35)`}
+            >
+              {AVISO}
+            </Text>
+          </Flex>
+        </Box>
+      </Flex>
+    </CajaLisa>
   );
 }

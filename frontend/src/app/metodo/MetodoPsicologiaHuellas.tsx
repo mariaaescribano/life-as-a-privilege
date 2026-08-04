@@ -137,13 +137,13 @@ export default function MetodoPsicologiaHuellas() {
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title="Huellas"
-            pageLabel="6/20"
+            pageLabel="8/22"
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
             boxShadow={glowHeader}
-            prev={{ label: "← Línea de Vida", onClick: () => navigate(`/metodo/psicologia/${exp.id}`) }}
+            prev={{ label: "← Genograma", onClick: () => navigate(`/metodo/psicologia/${exp.id}/genograma`) }}
             next={{
               label: "Nudos →",
               onClick: () => setComicOpen(true),

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Text, type BoxProps } from "@chakra-ui/react";
+import { Box, Flex, Grid, SimpleGrid, Text, type BoxProps } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
-import { sombraTexto } from "../global/disciplinaSombras";
+import { sombraSoloContraste, sombraTexto } from "../global/disciplinaSombras";
 import { Reveal } from "../global/Reveal";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 
@@ -27,12 +27,16 @@ export function CajaDisciplina({
   children,
   destacada = false,
   compacta = false,
+  sinBorde = false,
   radio = "3xl",
   ...rest
 }: {
   d: PresentacionDisciplina;
   /** Halo más presente: la caja final (crear cuenta), la de precio. */
   destacada?: boolean;
+  /** Sin filo de color: se va el borde y también el aro de 1px del boxShadow
+   *  (que es el que seguía dibujando la línea). Queda solo el halo suave. */
+  sinBorde?: boolean;
   /** Menos aire por dentro: cajas que van en rejilla. */
   compacta?: boolean;
   /** Radio del borde. La capa de fondo tiene que recortarse con el MISMO, si no
@@ -48,9 +52,11 @@ export function CajaDisciplina({
       borderRadius={radio}
       w="100%"
       bg={hasBg ? "transparent" : d.bg + "f0"}
-      border={`1.5px solid ${d.txt}${destacada ? "99" : "66"}`}
+      border={sinBorde ? undefined : `1.5px solid ${d.txt}${destacada ? "99" : "66"}`}
       boxShadow={
-        destacada
+        sinBorde
+          ? `0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`
+          : destacada
           ? `0 0 0 1px ${d.txt}55, 0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`
           : `0 0 0 1px ${d.txt}44, 0 0 30px ${d.txt}3d, 0 0 64px ${d.txt}1f`
       }
@@ -67,6 +73,205 @@ export function CajaDisciplina({
         {children}
       </Box>
     </Box>
+  );
+}
+
+/**
+ * HALO DEL HEADER, tal cual (MetodoStepHeader con fondo de disciplina).
+ *
+ * Regla de las presentaciones: las cajas de contenido NO llevan filo de color ni
+ * halo fuerte. Llevan este mismo halo y ningún borde, para que ninguna destaque
+ * más que el header ni parezca un botón. Si hay que retocarlo, se retoca aquí.
+ */
+export const glowComoHeader = (txt: string): string =>
+  `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${txt}1a, 0 0 48px ${txt}10`;
+
+/** Caja lisa con el material de la disciplina: su foto de fondo, sin borde y con
+ *  el halo del header. Es la base de las cajas de las presentaciones. */
+export function CajaLisa({
+  d,
+  children,
+  radio = "3xl",
+  ...rest
+}: {
+  d: PresentacionDisciplina;
+  radio?: string;
+  children?: React.ReactNode;
+} & BoxProps) {
+  const hasBg = hasDisciplinaBg(d.nom);
+  return (
+    <Box
+      position="relative"
+      w="100%"
+      borderRadius={radio}
+      overflow="hidden"
+      bg={hasBg ? "transparent" : `${d.bg}f0`}
+      boxShadow={glowComoHeader(d.txt)}
+      {...rest}
+    >
+      {hasBg && <DisciplinaBgLayer nom={d.nom} borderRadius={radio} />}
+      <Box position="relative" zIndex={1} h="100%">
+        {children}
+      </Box>
+    </Box>
+  );
+}
+
+/** Una idea de lo que hay dentro: su título y su texto. Con `nota` al pie para
+ *  las advertencias («Opcional. Se cobra aparte»). */
+export interface IdeaPresentacion {
+  titulo: string;
+  parrafos: string[];
+  nota?: string;
+}
+
+export function CajaIdea({ d, idea }: { d: PresentacionDisciplina; idea: IdeaPresentacion }) {
+  const sombra = sombraTexto(d.nom, d.bg);
+  return (
+    <CajaLisa d={d} h="100%">
+      <Flex direction="column" gap={{ base: 2.5, md: 3 }} px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
+        <Text
+          color={d.txt}
+          fontSize={{ base: "xl", md: "2xl" }}
+          fontWeight="700"
+          letterSpacing="0.03em"
+          lineHeight="1.25"
+          textShadow={sombra}
+        >
+          {idea.titulo}
+        </Text>
+        {idea.parrafos.map((p, i) => (
+          <Text
+            key={i}
+            color={d.txt}
+            fontSize={{ base: "md", md: "lg" }}
+            lineHeight={{ base: "1.75", md: "1.8" }}
+            textShadow={sombra}
+          >
+            {p}
+          </Text>
+        ))}
+        {idea.nota && (
+          <Text
+            color={d.txt}
+            fontSize={{ base: "xs", md: "sm" }}
+            fontStyle="italic"
+            opacity={0.75}
+            textShadow={sombra}
+          >
+            {idea.nota}
+          </Text>
+        )}
+      </Flex>
+    </CajaLisa>
+  );
+}
+
+/**
+ * MOSAICO DE MUESTRA: unas fotos de lo que hay dentro, con su título debajo.
+ *
+ * NO se abre nada a propósito: no es un menú, es una ventana. Está para que se
+ * vea que dentro hay mucho más de lo que cabe en la página. Por eso ignora el
+ * ratón por completo (`pointerEvents: none`): nada de cursores de mano ni de
+ * hovers que prometan un clic que no existe.
+ */
+export function MosaicoMuestra({
+  d,
+  fotos,
+  columnas = 2,
+}: {
+  d: PresentacionDisciplina;
+  fotos: { foto: string; titulo: string }[];
+  columnas?: number;
+}) {
+  const sombra = sombraTexto(d.nom, d.bg);
+  return (
+    <CajaLisa d={d} h="100%" sx={{ pointerEvents: "none" }}>
+      <Flex direction="column" h="100%" justify="center" px={{ base: 5, md: 7 }} py={{ base: 6, md: 8 }}>
+        <SimpleGrid columns={{ base: 2, md: columnas }} spacing={{ base: 4, md: 5 }}>
+          {fotos.map((f) => (
+            <Flex key={f.foto} direction="column" align="center" gap={2}>
+              <Box
+                w="100%"
+                borderRadius="2xl"
+                overflow="hidden"
+                bg={`${d.bg}55`}
+                sx={{ aspectRatio: "1 / 1" }}
+                boxShadow={`0 0 14px ${d.txt}2b, 0 0 32px ${d.txt}17`}
+              >
+                <Box
+                  as="img"
+                  src={encodeURI(f.foto)}
+                  alt={f.titulo}
+                  loading="lazy"
+                  w="100%"
+                  h="100%"
+                  style={{ objectFit: "cover", objectPosition: "center" }}
+                />
+              </Box>
+              <Text
+                color={d.txt}
+                fontSize={{ base: "sm", md: "md" }}
+                fontWeight="700"
+                lineHeight="1.25"
+                textAlign="center"
+                textShadow={sombra}
+              >
+                {f.titulo}
+              </Text>
+            </Flex>
+          ))}
+        </SimpleGrid>
+      </Flex>
+    </CajaLisa>
+  );
+}
+
+/**
+ * SECCIÓN «lo que hay dentro»: a la izquierda las ideas en su caja, y al lado
+ * una muestra (el mosaico de fotos, el Árbol pequeño…) que se pasa como hijo.
+ */
+export function IdeasConMuestra({
+  d,
+  ideas,
+  children,
+}: {
+  d: PresentacionDisciplina;
+  ideas: IdeaPresentacion[];
+  children?: React.ReactNode;
+}) {
+  return (
+    <Grid
+      w="100%"
+      maxW="1180px"
+      templateColumns={{ base: "1fr", lg: "1.05fr 0.95fr" }}
+      gap={{ base: 6, md: 8 }}
+      alignItems="stretch"
+    >
+      <Flex direction="column" gap={{ base: 6, md: 7 }}>
+        {ideas.map((idea, i) => (
+          <Reveal
+            key={idea.titulo}
+            inView
+            direction="right"
+            distance={22}
+            scaleFrom={0.98}
+            duration={0.7}
+            delay={i * 0.08}
+            w="100%"
+            flex="1"
+            display="flex"
+          >
+            <CajaIdea d={d} idea={idea} />
+          </Reveal>
+        ))}
+      </Flex>
+      {children && (
+        <Reveal inView direction="left" distance={22} scaleFrom={0.98} duration={0.7} delay={0.1} h="100%" display="flex">
+          {children}
+        </Reveal>
+      )}
+    </Grid>
   );
 }
 
@@ -125,7 +330,7 @@ export function BotonDisciplina({
       letterSpacing="0.14em"
       textTransform="uppercase"
       cursor="pointer"
-      textShadow={sombraTexto(d.nom, d.bg)}
+      textShadow={sombraSoloContraste(d.nom)}
       boxShadow={`0 0 20px ${d.txt}55, 0 0 44px ${d.txt}2e`}
       transition="all 0.25s ease"
       _hover={{
@@ -168,8 +373,10 @@ export function VideoMuestra({
       borderRadius="3xl"
       overflow="hidden"
       bg="#000"
-      border={`1.5px solid ${d.txt}66`}
-      boxShadow={`0 0 0 1px ${d.txt}55, 0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
+      // Sin borde ni aro de la disciplina: el vídeo se presenta limpio, solo con
+      // el halo suave alrededor. Una línea de color encima del vídeo lo enmarcaba
+      // como si fuera una caja más, y no lo es.
+      boxShadow={`0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
       sx={{ aspectRatio: "1 / 1" }}
     >
       <Box
@@ -177,12 +384,17 @@ export function VideoMuestra({
         ref={videoRef as any}
         key={d.video}
         src={d.video}
-        // Sin autoPlay: en una página pública un vídeo que arranca solo molesta
-        // (y en móvil se come los datos). Lo pone en marcha quien quiera verlo.
-        controls
+        // Arranca solo y se repite en bucle: quien llega de un cartel ve el
+        // recorrido en marcha sin tener que pulsar nada.
+        autoPlay
+        loop
+        // `muted` es OBLIGATORIO para que arranque solo: los vídeos son mudos,
+        // pero llevan pista de audio en silencio y sin esto Chrome y Safari
+        // bloquean el autoplay (se quedarían parados en el primer fotograma).
         muted
+        // En iOS, sin `playsInline` el vídeo se abriría a pantalla completa.
         playsInline
-        preload="metadata"
+        preload="auto"
         w="100%"
         h="100%"
         onLoadedMetadata={(e: React.SyntheticEvent<HTMLVideoElement>) => {
@@ -204,10 +416,12 @@ export function VideoMuestra({
  */
 export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
   const navigate = useNavigate();
-  const sombra = sombraTexto(d.nom, d.bg);
+  // Sin luz detras de la letra: solo la sombra de contraste en las disciplinas
+  // cuya foto de fondo la necesita (undefined en el resto).
+  const sombra = sombraSoloContraste(d.nom);
   return (
     <Reveal inView direction="up" distance={24} scaleFrom={0.97} duration={0.75} w="100%">
-      <CajaDisciplina d={d} destacada>
+      <CajaDisciplina d={d} destacada sinBorde>
         <Flex direction="column" align="center" gap={{ base: 5, md: 7 }} textAlign="center">
           <Text
             color={d.txt}
@@ -275,6 +489,109 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
         </Flex>
       </CajaDisciplina>
     </Reveal>
+  );
+}
+
+/**
+ * TARJETA DE CURSO para las presentaciones. La foto 16:9 del curso ya lleva su
+ * título impreso, así que aquí no se repite: solo se enmarca con el color de la
+ * disciplina y, al pie, un «Ver el curso ›» discreto sobre un velo.
+ *
+ * No usa la tarjeta del popup de cursos del recorrido a propósito: aquélla lleva
+ * un círculo grande con la flecha dentro de la foto, que en una fila de cuatro
+ * pesa demasiado y tapa la ilustración.
+ */
+export function CursoMiniCard({
+  foto,
+  titulo,
+  d,
+  onOpen,
+}: {
+  foto: string;
+  /** Solo para el `alt` y para lectores de pantalla: no se pinta. */
+  titulo: string;
+  d: PresentacionDisciplina;
+  onOpen: () => void;
+}) {
+  const [falla, setFalla] = useState(false);
+  return (
+    <Box
+      as="button"
+      onClick={onOpen}
+      position="relative"
+      w="100%"
+      borderRadius="2xl"
+      overflow="hidden"
+      bg={`${d.bg}cc`}
+      cursor="pointer"
+      fontFamily="'EB Garamond', serif"
+      sx={{
+        aspectRatio: "16 / 9",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        boxShadow: `0 0 16px ${d.txt}2e, 0 0 40px ${d.txt}1a`,
+        _hover: {
+          transform: "translateY(-5px)",
+          boxShadow: `0 0 26px ${d.txt}88, 0 0 64px ${d.txt}44`,
+          "& .curso-foto": { transform: "scale(1.05)" },
+          "& .curso-pie": { opacity: 1 },
+        },
+        _active: { transform: "translateY(-1px)" },
+      }}
+    >
+      {!falla ? (
+        <Box
+          as="img"
+          className="curso-foto"
+          src={encodeURI(foto)}
+          alt={titulo}
+          loading="lazy"
+          position="absolute"
+          inset="0"
+          w="100%"
+          h="100%"
+          style={{ objectFit: "cover", objectPosition: "center", transition: "transform 0.45s ease" }}
+          onError={() => setFalla(true)}
+        />
+      ) : (
+        <Flex position="absolute" inset="0" align="center" justify="center" px={4}>
+          <Text color={d.txt} fontSize={{ base: "sm", md: "md" }} fontWeight="700" textAlign="center">
+            {titulo}
+          </Text>
+        </Flex>
+      )}
+
+      {/* Pie: velo suave y «Ver el curso ›». Se enciende del todo al pasar por
+          encima, pero se lee siempre (en táctil no hay hover). */}
+      <Flex
+        className="curso-pie"
+        position="absolute"
+        left="0"
+        right="0"
+        bottom="0"
+        align="center"
+        justify="flex-end"
+        gap={1.5}
+        px={{ base: 3, md: 4 }}
+        pt={{ base: 6, md: 8 }}
+        pb={{ base: 2.5, md: 3 }}
+        color="white"
+        opacity={0.88}
+        bgGradient="linear(to-t, #000000d9, #00000073, transparent)"
+        sx={{ transition: "opacity 0.3s ease" }}
+      >
+        <Text
+          fontSize={{ base: "2xs", md: "xs" }}
+          letterSpacing="0.16em"
+          textTransform="uppercase"
+          fontWeight="600"
+        >
+          Ver el curso
+        </Text>
+        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="12px" h="12px" fill="currentColor">
+          <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+        </Box>
+      </Flex>
+    </Box>
   );
 }
 

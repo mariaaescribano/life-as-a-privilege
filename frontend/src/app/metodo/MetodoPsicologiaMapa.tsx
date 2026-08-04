@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · INTEGRACIÓN  (ruta interna /mapa)  ·  17/20
+// PÁGINA · INTEGRACIÓN  (ruta interna /mapa)  ·  19/22
 //
 // Recupera TODAS las relaciones que el usuario compuso en la página «Relación»
 // (data.constelaciones) y las presenta como tarjetas. Al tocar una, se abre un
@@ -249,7 +249,7 @@ export default function MetodoPsicologiaMapa() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 17, total: 20 }}
+                step={{ current: 19, total: 22 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Atrévete", onClick: () => ir("miedos-preguntas") }}

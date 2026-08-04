@@ -75,7 +75,9 @@ export interface IlustracionEntry {
 }
 
 const hinduTextShadow = `0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`;
-const astroTextShadow = `0 0 4px ${astrologiaTxt}aa, 0 0 9px ${astrologiaTxt}66`;
+// Astrología: sin brillo en la letra. El crema sobre el cielo estrellado ya
+// contrasta de sobra, y el halo del propio color solo ensuciaba el texto.
+const astroTextShadow = "none";
 const psicoTextShadow = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
 // Nutrición: acento claro (nutricionBg) + letra oscura (nutricionTxt), sin
@@ -129,6 +131,8 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     cover: "/viñetas/comicInicio/viñeta1.png",
     vinetas: ORIGEN_ESPIRITUALIDAD,
     themeColor: astrologiaTxt,
+    // Las cinco series de Astrología van igual: sin brillo en la letra.
+    textShadow: astroTextShadow,
   },
   {
     id: "origen-hinduismo",
