@@ -5,7 +5,6 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
-import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaVideoBox } from "../../components/metodo/DisciplinaVideoBox";
@@ -251,15 +250,21 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
   );
 }
 
+
 // ─────────────────────────────────────────────────────────────────────────────
-// Círculo con foto (portada de una Historia o era de su línea). Si la foto aún
-// no existe, se queda su emoji o su año: nunca un icono roto.
+// Círculo con foto (portada de una Historia o era de su línea).
+//
+// Luz: aro fino del color de la disciplina + sombra OSCURA de apoyo. Antes
+// llevaba un halo turquesa ancho que, sobre el fondo de acuarela de Cultura, se
+// mezclaba con él y dejaba los círculos lavados y sin profundidad.
+// Si la foto aún no existe, se queda su emoji o su número: nunca un icono roto
+// ni un párrafo apretado dentro del círculo.
 // ─────────────────────────────────────────────────────────────────────────────
 function Circulo({
   foto,
   alt,
   emoji,
-  texto,
+  numero,
   d,
   size,
   lazy = false,
@@ -268,8 +273,8 @@ function Circulo({
   alt: string;
   /** Reserva si no hay foto (portadas de Historia). */
   emoji?: string;
-  /** Reserva si no hay foto ni emoji (eras: se pinta su año). */
-  texto?: string;
+  /** Reserva si no hay foto ni emoji (eras: su número en la línea). */
+  numero?: number;
   d: PresentacionDisciplina;
   size: Record<string, string> | string;
   lazy?: boolean;
@@ -284,8 +289,9 @@ function Circulo({
       h={size}
       borderRadius="full"
       overflow="hidden"
-      bg={`${d.bg}cc`}
-      boxShadow={`0 0 16px ${d.txt}4d, 0 0 40px ${d.txt}22`}
+      bg="rgba(4,26,26,0.72)"
+      border={`1px solid ${d.txt}59`}
+      boxShadow="0 6px 18px rgba(0,0,0,0.45), 0 0 0 4px rgba(4,26,26,0.35)"
     >
       {hayFoto ? (
         <Box
@@ -295,20 +301,26 @@ function Circulo({
           loading={lazy ? "lazy" : undefined}
           w="100%"
           h="100%"
-          style={{ objectFit: "cover", objectPosition: "center" }}
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+            // Un punto de saturación y contraste: las fotos de época son
+            // apagadas y sobre el fondo oscuro se veían grises.
+            filter: "saturate(1.08) contrast(1.06)",
+          }}
           onError={() => setFalla(true)}
         />
       ) : (
-        <Flex w="100%" h="100%" align="center" justify="center" px={1.5}>
+        <Flex w="100%" h="100%" align="center" justify="center">
           <Text
             color={d.txt}
-            fontSize={emoji ? { base: "3xl", md: "4xl" } : { base: "2xs", md: "xs" }}
+            fontSize={emoji ? { base: "3xl", md: "4xl" } : { base: "xl", md: "2xl" }}
             fontWeight="700"
-            lineHeight="1.15"
+            lineHeight="1"
+            opacity={emoji ? 1 : 0.85}
             textAlign="center"
-            noOfLines={3}
           >
-            {emoji ?? texto ?? ""}
+            {emoji ?? (numero != null ? String(numero).padStart(2, "0") : "")}
           </Text>
         </Flex>
       )}
@@ -317,13 +329,30 @@ function Circulo({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LÍNEA DE EJEMPLO de una Historia: su título y sus eras en fila, con la línea
-// que las une. Es una MUESTRA: no navega a ninguna parte. Al tocarla (o al pasar
-// por encima) aparece «Descúbrelo dentro» y ya está.
+// LÍNEA DE EJEMPLO de una Historia: su nombre y sus primeras eras en fila, con
+// la línea que las une y, al final, un círculo punteado con las que faltan.
 //
-// La fila se desplaza dentro de su caja cuando hay muchas eras — la página nunca
-// hace scroll horizontal.
+// Es una MUESTRA: no navega a ninguna parte. Al pasar por encima (o al tocarla)
+// la fila se atenúa y aparece «Descúbrelo dentro».
+//
+// DECISIONES DE CALIDAD (venían de que se veía apretado y lavado):
+//   · Solo ERAS_MUESTRA eras, grandes y legibles, en vez de las 6-13 de la
+//     Historia en miniatura con el título cortado y una barra de scroll a la
+//     vista. Las que faltan se resumen en el círculo «+N».
+//   · Velo oscuro propio de la caja: unifica el fondo de acuarela y hace que
+//     salten las fotos y la letra.
+//   · Letra blanca con sombra NEGRA (no el halo blanco de la disciplina, que
+//     sobre esta foto ensucia) y tamaños de leer, no de adivinar.
 // ─────────────────────────────────────────────────────────────────────────────
+const ERAS_MUESTRA = 5;
+
+/** Sombra de contraste, sin nada de luz: la letra va sobre foto oscura. */
+const SOMBRA_NEGRA = "0 1px 3px rgba(0,0,0,0.9), 0 2px 10px rgba(0,0,0,0.7)";
+
+const CIRCULO = { base: "84px", md: "112px" };
+const COLUMNA = { base: "96px", md: "132px" };
+const UNION = { base: "16px", md: "26px" };
+
 function LineaEjemplo({
   d,
   titulo,
@@ -333,7 +362,6 @@ function LineaEjemplo({
   titulo: string;
   hitos: HitoHistoria[];
 }) {
-  const sombra = sombraTexto(d.nom, d.bg);
   const [aviso, setAviso] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -345,85 +373,90 @@ function LineaEjemplo({
   };
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
+  const visibles = hitos.slice(0, ERAS_MUESTRA);
+  const restantes = hitos.length - visibles.length;
+
   return (
     <CajaLisa d={d} radio="2xl" role="group" onClick={mostrarAviso} cursor="default">
-      <Flex direction="column" gap={{ base: 4, md: 5 }} px={{ base: 4, md: 7 }} py={{ base: 5, md: 6 }}>
-        <Flex align="baseline" justify="space-between" gap={3} wrap="wrap">
+      {/* Velo de la caja: el fondo de acuarela de Cultura tiene zonas claras y
+          zonas oscuras; con este velo todas las líneas parten del mismo tono. */}
+      <Box position="absolute" inset={0} bg="rgba(4,26,26,0.46)" pointerEvents="none" />
+
+      <Flex position="relative" direction="column" gap={{ base: 4, md: 5 }}
+            px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
+        {/* Cabecera de la línea: la Historia y cuántas eras tiene */}
+        <Flex align="center" justify="space-between" gap={3}>
           <Text
-            color={d.txt}
-            fontSize={{ base: "lg", md: "xl" }}
+            color="white"
+            fontSize={{ base: "xl", md: "2xl" }}
             fontWeight="700"
-            letterSpacing="0.03em"
-            lineHeight="1.25"
-            textShadow={sombra}
+            letterSpacing="0.02em"
+            lineHeight="1.2"
+            style={{ textShadow: SOMBRA_NEGRA }}
           >
             {titulo}
           </Text>
-          <Text
-            color={`${d.txt}b3`}
-            fontSize={{ base: "2xs", md: "xs" }}
-            fontWeight="700"
-            letterSpacing="0.22em"
-            textTransform="uppercase"
-            textShadow={sombra}
+          <Flex
+            flexShrink={0}
+            px={{ base: 2.5, md: 3 }}
+            py={1}
+            borderRadius="full"
+            border={`1px solid ${d.txt}4d`}
+            bg="rgba(4,26,26,0.5)"
           >
-            {hitos.length} eras
-          </Text>
+            <Text
+              color={d.txt}
+              fontSize={{ base: "2xs", md: "xs" }}
+              fontWeight="700"
+              letterSpacing="0.18em"
+              textTransform="uppercase"
+              whiteSpace="nowrap"
+            >
+              {hitos.length} eras
+            </Text>
+          </Flex>
         </Flex>
 
-        {/* La línea: eras en fila, unidas. Se desplaza dentro de la caja. */}
+        {/* La línea. Sin barra de scroll a la vista: si en móvil no cabe, se
+            arrastra con el dedo. */}
         <Box position="relative">
           <Box
             overflowX="auto"
             overflowY="hidden"
-            pb={1}
             sx={{
-              scrollbarWidth: "thin",
-              "&::-webkit-scrollbar": { height: "6px" },
-              "&::-webkit-scrollbar-thumb": { background: `${d.txt}55`, borderRadius: "9999px" },
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              "&::-webkit-scrollbar": { display: "none" },
             }}
           >
-            <Flex align="flex-start" gap={0} w="fit-content" px={0.5}>
-              {hitos.map((h, i) => (
+            <Flex align="flex-start" gap={0} w="fit-content" mx="auto" px={0.5}>
+              {visibles.map((h, i) => (
                 <React.Fragment key={h.key}>
-                  {i > 0 && (
-                    <Box
-                      flexShrink={0}
-                      h="1.5px"
-                      w={{ base: "16px", md: "26px" }}
-                      bg={`${d.txt}66`}
-                      mt={{ base: "28px", md: "36px" }}
-                    />
-                  )}
-                  <Flex direction="column" align="center" gap={1.5} w={{ base: "72px", md: "92px" }} flexShrink={0}>
-                    <Circulo
-                      foto={h.foto}
-                      alt={h.titulo}
-                      texto={h.anio}
-                      d={d}
-                      size={{ base: "56px", md: "72px" }}
-                      lazy
-                    />
+                  {i > 0 && <Union d={d} />}
+                  <Flex direction="column" align="center" gap={2} w={COLUMNA} flexShrink={0}>
+                    <Circulo foto={h.foto} alt={h.titulo} numero={i + 1} d={d} size={CIRCULO} lazy />
                     <Text
-                      color={d.txt}
-                      fontSize={{ base: "2xs", md: "xs" }}
+                      color="white"
+                      fontSize={{ base: "xs", md: "sm" }}
                       fontWeight="700"
-                      lineHeight="1.2"
+                      lineHeight="1.25"
                       textAlign="center"
                       noOfLines={2}
-                      textShadow={sombra}
+                      style={{ textShadow: SOMBRA_NEGRA }}
                     >
                       {h.titulo}
                     </Text>
                     {h.anio && (
                       <Text
-                        color={`${d.txt}b3`}
+                        color={d.txt}
                         fontSize="2xs"
-                        fontStyle="italic"
-                        lineHeight="1.15"
+                        fontWeight="600"
+                        letterSpacing="0.1em"
+                        lineHeight="1.2"
                         textAlign="center"
                         noOfLines={1}
-                        textShadow={sombra}
+                        opacity={0.95}
+                        style={{ textShadow: SOMBRA_NEGRA }}
                       >
                         {h.anio}
                       </Text>
@@ -431,32 +464,78 @@ function LineaEjemplo({
                   </Flex>
                 </React.Fragment>
               ))}
+
+              {/* Las eras que no se enseñan: un círculo punteado con el resto.
+                  Es lo que dice «esto sigue dentro» sin cortar la línea de golpe. */}
+              {restantes > 0 && (
+                <>
+                  <Union d={d} punteada />
+                  <Flex direction="column" align="center" gap={2} w={COLUMNA} flexShrink={0}>
+                    <Flex
+                      w={CIRCULO}
+                      h={CIRCULO}
+                      flexShrink={0}
+                      borderRadius="full"
+                      align="center"
+                      justify="center"
+                      bg="rgba(4,26,26,0.45)"
+                      border={`1px dashed ${d.txt}80`}
+                    >
+                      <Text
+                        color={d.txt}
+                        fontSize={{ base: "xl", md: "2xl" }}
+                        fontWeight="700"
+                        lineHeight="1"
+                        style={{ textShadow: SOMBRA_NEGRA }}
+                      >
+                        +{restantes}
+                      </Text>
+                    </Flex>
+                    <Text
+                      color={d.txt}
+                      fontSize={{ base: "xs", md: "sm" }}
+                      fontWeight="600"
+                      fontStyle="italic"
+                      lineHeight="1.25"
+                      textAlign="center"
+                      style={{ textShadow: SOMBRA_NEGRA }}
+                    >
+                      más dentro
+                    </Text>
+                  </Flex>
+                </>
+              )}
             </Flex>
           </Box>
 
-          {/* «Descúbrelo dentro»: al tocar la línea (o al pasar por encima en
-              ordenador). No hay nada que abrir aquí. */}
+          {/* «Descúbrelo dentro»: la fila se atenúa un poco y sale el mensaje.
+              Aquí no hay nada que abrir. */}
           <Flex
             position="absolute"
             inset={0}
             align="center"
             justify="center"
             pointerEvents="none"
+            borderRadius="xl"
+            bg="rgba(4,26,26,0.55)"
+            sx={{ backdropFilter: "blur(2px)", WebkitBackdropFilter: "blur(2px)" }}
             opacity={aviso ? 1 : 0}
-            transition="opacity 0.25s ease"
+            transition="opacity 0.28s ease"
             _groupHover={{ opacity: 1 }}
           >
             <Text
-              px={{ base: 4, md: 5 }}
+              px={{ base: 4, md: 6 }}
               py={{ base: 2, md: 2.5 }}
               borderRadius="full"
-              bg={`${d.bg}f2`}
+              bg="rgba(4,26,26,0.92)"
+              border={`1px solid ${d.txt}66`}
               color={d.txt}
-              fontSize={{ base: "sm", md: "md" }}
+              fontSize={{ base: "sm", md: "lg" }}
               fontWeight="700"
-              letterSpacing="0.08em"
+              letterSpacing="0.14em"
               textTransform="uppercase"
-              boxShadow={`0 0 18px ${d.txt}55, 0 6px 24px rgba(0,0,0,0.35)`}
+              whiteSpace="nowrap"
+              boxShadow="0 8px 26px rgba(0,0,0,0.5)"
             >
               {AVISO}
             </Text>
@@ -464,5 +543,19 @@ function LineaEjemplo({
         </Box>
       </Flex>
     </CajaLisa>
+  );
+}
+
+/** El tramo de línea que une dos eras, a la altura del centro del círculo. */
+function Union({ d, punteada = false }: { d: PresentacionDisciplina; punteada?: boolean }) {
+  return (
+    <Box
+      flexShrink={0}
+      w={UNION}
+      h="2px"
+      mt={{ base: `calc(${CIRCULO.base} / 2)`, md: `calc(${CIRCULO.md} / 2)` }}
+      bg={punteada ? "transparent" : `${d.txt}80`}
+      borderTop={punteada ? `2px dashed ${d.txt}80` : undefined}
+    />
   );
 }

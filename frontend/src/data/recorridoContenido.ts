@@ -342,19 +342,19 @@ videoIntro: {
       {
         titulo: "Las historias que formaron la humanidad.",
         items: [
-          "Después de recorrer siete disciplinas distintas, llega el momento de integrarlas en una visión propia del mundo y de ti mismo.",
+          "No te olvides del pasado. Descúbrelo, llévalo contigo par valorar tu presente y dejar de vivir en modo automático.",
         ],
       },
       {
-        titulo: "Autores importantes",
+        titulo: "Autores, líderes y reyes importantes",
         items: [
-          "Conocerás ideas y autores que han dedicado su Vida a responder las mismas preguntas que el ser humano lleva siglos haciéndose.",
+          "Conocerás historias, ideas, reinados y autores que han cambiado la humanidad.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "Reflexionaremos sobre quién eras al empezar este mapa, qué has comprendido y quién te estás convirtiendo después de atravesarlo.",
+          "Ahora que conoces tu mente, tu cuerpo y tu historia, reflexiona sobre quién te estás convirtiendo y cómo quieres vivir. Te acompaño a aterrizar todo lo aprendido en tu Vida cotidiana.",
         ],
         aviso: "Opcional. Se cobra aparte",
       },
