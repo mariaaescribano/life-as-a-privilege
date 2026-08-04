@@ -127,23 +127,26 @@ function ChipOrgano({ organo, hecho, onClick }: { organo: OrganoSonrisa; hecho: 
       position="relative"
       overflow="hidden"
       borderRadius="xl"
-      px={{ base: 3, md: 3.5 }}
-      py={{ base: 2.5, md: 3 }}
+      px={{ base: 3, md: 4 }}
+      py={{ base: 3, md: 3.5 }}
       cursor="pointer"
       boxShadow={hecho ? glowSuaveVisto(fisiologiaTxt) : CAJA_GLOW_FILA}
       transition="transform 0.2s ease, box-shadow 0.2s ease"
       _hover={{ transform: "translateY(-3px)", boxShadow: glowSuaveHover(fisiologiaTxt) }}
       _active={{ transform: "translateY(-1px)" }}
     >
-      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="xl" overlay={`${fisiologiaBg}${hecho ? "88" : "cc"}`} />
+      {/* Sin `overlay`, como la cabecera. Antes el velo distinguía además el
+          chip agradecido (88) del pendiente (cc); ese aviso lo siguen dando el
+          halo `glowSuaveVisto` y la marca de leído, que se ven mucho mejor. */}
+      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="xl" />
       <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700}
-            fontSize={{ base: "sm", md: "md" }} lineHeight="1.2"
-            style={{ textShadow: "0 1px 5px rgba(0,0,0,0.7)" }}>
+            fontSize={{ base: "md", md: "lg" }} lineHeight="1.2"
+            style={{ textShadow: "0 1px 5px rgba(0,0,0,0.8)" }}>
         {organo.nombre}
       </Text>
       {hecho && (
         <Box position="relative" zIndex={1}>
-          <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} size="18px" iconSize="10px"
+          <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} size="20px" iconSize="11px"
                       title="Gracias dadas" />
         </Box>
       )}
@@ -239,12 +242,12 @@ export default function MetodoFisiologiaSonrisa() {
 
           {/* Texto bajo el header: va sobre el turquesa limpio, SIN sombra. */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
-            <Flex direction="column" align="center" gap={2.5} maxW="700px" textAlign="center">
-              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.8">
+            <Flex direction="column" align="center" gap={3} maxW="760px" textAlign="center">
+              <Text color="white" fontSize={{ base: "md", md: "xl" }} fontStyle="italic" lineHeight="1.8">
                 Has recorrido tu cuerpo de la partícula al organismo. Ahora mírate: todo eso está dentro de ti
                 mientras lees esto.
               </Text>
-              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.8">
+              <Text color="white" fontSize={{ base: "md", md: "xl" }} fontStyle="italic" lineHeight="1.8">
                 Esta práctica es antigua y se llama «la sonrisa interior»: consiste en visitar tus órganos uno a uno
                 y darles las gracias.
               </Text>
@@ -255,26 +258,31 @@ export default function MetodoFisiologiaSonrisa() {
           <Reveal direction="up" distance={18} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 3, md: 4 }} w="100%" maxW="900px">
               {PASOS.map((p) => (
-                <Flex key={p.n} direction="column" align="center" textAlign="center" gap={2}
+                <Flex key={p.n} direction="column" align="center" textAlign="center" gap={2.5}
                       position="relative" overflow="hidden" borderRadius="2xl" boxShadow={CAJA_GLOW_FILA}
-                      px={{ base: 5, md: 5 }} py={{ base: 5, md: 6 }}>
-                  <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}cc`} />
+                      px={{ base: 5, md: 5 }} py={{ base: 6, md: 7 }}>
+                  {/* Sin `overlay`: la acuarela se ve tal cual, igual que en la
+                      cabecera. El texto se sostiene con su sombra negra. */}
+                  <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
+                  {/* El círculo del número sí va en color macizo: es una chapa
+                      pequeña y translúcida se ensuciaría con el dibujo de las
+                      células por debajo. */}
                   <Flex position="relative" zIndex={1} align="center" justify="center" flexShrink={0}
-                        w={{ base: "38px", md: "42px" }} h={{ base: "38px", md: "42px" }} borderRadius="full"
-                        border={`2px solid ${fisiologiaTxt}`} bg={`${fisiologiaBg}cc`}>
-                    <Text color={fisiologiaTxt} fontWeight={700} fontSize={{ base: "lg", md: "xl" }} lineHeight="1"
+                        w={{ base: "46px", md: "52px" }} h={{ base: "46px", md: "52px" }} borderRadius="full"
+                        border={`2px solid ${fisiologiaTxt}`} bg={fisiologiaBg}>
+                    <Text color={fisiologiaTxt} fontWeight={700} fontSize={{ base: "xl", md: "2xl" }} lineHeight="1"
                           style={{ textShadow: `0 1px 6px ${fisiologiaBg}` }}>
                       {p.n}
                     </Text>
                   </Flex>
                   <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700}
-                        fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em"
-                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
+                        fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.04em"
+                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
                     {p.titulo}
                   </Text>
-                  <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }}
+                  <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
                         fontStyle="italic" lineHeight="1.6"
-                        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+                        style={{ textShadow: "0 1px 5px rgba(0,0,0,0.8)" }}>
                     {p.texto}
                   </Text>
                 </Flex>
@@ -295,8 +303,14 @@ export default function MetodoFisiologiaSonrisa() {
                  // `screen` se hace contra el fondo del espejo y NO contra el
                  // turquesa de la página.
                  sx={{ isolation: "isolate" }}>
+              {/* Éste es el ÚNICO box de la página que conserva algo de velo, y
+                  es por el `screen` del cuerpo (abajo): `screen` aclara, así que
+                  cuanto más oscuro el fondo, más brilla la figura dorada. Sin
+                  nada de velo, sobre las manchas rosas claras de la acuarela el
+                  cuerpo se lava y pierde el filo. Con 25 % la acuarela se ve de
+                  sobra y el cuerpo sigue recortado. */}
               <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="220px 220px 24px 24px"
-                                 overlay={`${fisiologiaBg}e6`} />
+                                 overlay={`${fisiologiaBg}40`} />
 
               {/* Cuerpo. `screen` quita el negro de la ilustración y deja el
                   dorado brillando sobre el fondo. OJO: este contenedor NO puede
@@ -323,10 +337,10 @@ export default function MetodoFisiologiaSonrisa() {
               {/* Progreso, dentro del propio marco del espejo. */}
               <Flex position="relative" zIndex={3} direction="column" align="center" gap={2}
                     px={{ base: 5, md: 6 }} pb={{ base: 5, md: 6 }} pt={1}>
-                <Flex align="center" gap={2}>
-                  <Sonrisa size={{ base: "18px", md: "20px" }} />
-                  <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700}
-                        letterSpacing="0.04em" style={{ textShadow: "0 1px 5px rgba(0,0,0,0.7)" }}>
+                <Flex align="center" gap={2.5}>
+                  <Sonrisa size={{ base: "22px", md: "26px" }} />
+                  <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700}
+                        letterSpacing="0.04em" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
                     {completo
                       ? "Has sonreído a todo tu cuerpo"
                       : `Has sonreído a ${hechos} de ${ORGANOS_SONRISA.length}`}
@@ -357,18 +371,18 @@ export default function MetodoFisiologiaSonrisa() {
               <Flex direction="column" align="center" textAlign="center" gap={3} maxW="640px" w="100%"
                     position="relative" overflow="hidden" borderRadius="2xl" boxShadow={CAJA_GLOW}
                     px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-                <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" overlay={`${fisiologiaBg}cc`} />
+                <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                 <Box position="relative" zIndex={1}>
-                  <Sonrisa size={{ base: "34px", md: "40px" }} />
+                  <Sonrisa size={{ base: "40px", md: "48px" }} />
                 </Box>
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700}
-                      fontSize={{ base: "lg", md: "xl" }} lineHeight="1.3"
-                      style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
+                      fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.3"
+                      style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
                   Todo tu cuerpo ha recibido tu sonrisa
                 </Text>
-                <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }}
+                <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
                       fontStyle="italic" lineHeight="1.8"
-                      style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
+                      style={{ textShadow: "0 1px 5px rgba(0,0,0,0.85)" }}>
                   Nada de lo que has leído en este recorrido era teoría: todo estaba pasando dentro de ti mientras lo
                   leías, y sigue pasando ahora. Vuelve a esta página cuando quieras acordarte.
                 </Text>
@@ -399,9 +413,9 @@ export default function MetodoFisiologiaSonrisa() {
           acciones={
             leido(SONRISA_CAMPO, abierto.key) ? (
               <Flex align="center" gap={2.5} color={fisiologiaTxt}>
-                <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} size="24px" iconSize="14px"
+                <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} size="26px" iconSize="15px"
                             title="Gracias dadas" />
-                <Text fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.04em"
+                <Text fontSize={{ base: "md", md: "lg" }} fontWeight={700} letterSpacing="0.04em"
                       style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
                   Ya le has sonreído
                 </Text>
@@ -417,10 +431,10 @@ export default function MetodoFisiologiaSonrisa() {
                     _active={{ transform: "translateY(0)" }}>
                 <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="full" overlay={`${fisiologiaBg}cc`} />
                 <Box position="relative" zIndex={1}>
-                  <Sonrisa size={{ base: "20px", md: "22px" }} />
+                  <Sonrisa size={{ base: "22px", md: "25px" }} />
                 </Box>
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700}
-                      fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em"
+                      fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.04em"
                       style={{ textShadow: "0 1px 5px rgba(0,0,0,0.8)" }}>
                   Gracias
                 </Text>

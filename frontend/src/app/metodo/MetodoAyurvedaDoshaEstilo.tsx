@@ -213,7 +213,7 @@ export default function MetodoAyurvedaDoshaEstilo() {
             />
             <Panel color={meta.color}>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={3} style={{ textShadow: INK_SHADOW }}>
-                Estamos preparando esta sección
+                Estoy preparando esta sección
               </Text>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
                 Tu estilo de Vida ideal para {meta.label} estará disponible muy pronto.

@@ -101,7 +101,7 @@ export default function LogIn() {
         setmessage({
           soy: 1,
           title: "Bienvenido",
-          description: "Lo estamos preparando para ti",
+          description: "Lo estoy preparando para ti",
         });
       }
     } catch (err: any) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import type { BoxProps } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -284,6 +285,23 @@ export default function MetodoPsicologiaHuellas() {
   );
 }
 
+// Aspecto del papel. Lo comparten LAS DOS ramas de <Pagina>: la que lleva un
+// año escrito y la que se queda en blanco cuando el número de años es impar.
+// Va en una constante a propósito: cuando cada rama tenía sus propios estilos,
+// la página en blanco se quedó sin fondo, el turquesa de la página se veía por
+// el hueco y el cuaderno aparentaba ocupar solo media pantalla.
+const PAPEL: BoxProps = {
+  flex: "1",
+  minW: 0,
+  position: "relative",
+  overflow: "hidden",
+  h: { base: "60vh", md: "440px" },
+  bgColor: neuropsicologiaBg,
+  bgImage: "url('/img/fondos/psciologia.webp')",
+  bgSize: "cover",
+  bgPosition: "center",
+};
+
 // ── Página (un año) del cuaderno ──
 // Se define A NIVEL DE MÓDULO (no dentro del componente padre) para que su
 // identidad sea estable: al marcar una huella el padre re-renderiza, pero React
@@ -309,8 +327,11 @@ const Pagina = ({
   onToggle: (edadAno: number, texto: string) => void;
 }) => {
   if (edadAno === undefined) {
-    // Página en blanco (cuando el nº de años es impar).
-    return <Box flex="1" display={{ base: "none", md: "block" }} />;
+    // Página en blanco (cuando el nº de años es impar). Tiene que seguir
+    // PINTÁNDOSE como papel para que el cuaderno ocupe el ancho completo: en
+    // blanco significa «sin nada escrito», no «transparente».
+    // En móvil no existe, que allí las páginas van una debajo de otra.
+    return <Box {...PAPEL} display={{ base: "none", md: "block" }} />;
   }
   const items = itemsDelAno(data, edadAno, preguntasPorAno);
 
@@ -334,17 +355,7 @@ const Pagina = ({
   }, [items.length]);
 
   return (
-    <Box
-      flex="1"
-      minW={0}
-      position="relative"
-      overflow="hidden"
-      h={{ base: "60vh", md: "440px" }}
-      bgColor={neuropsicologiaBg}
-      bgImage="url('/img/fondos/psciologia.webp')"
-      bgSize="cover"
-      bgPosition="center"
-    >
+    <Box {...PAPEL}>
       {/* Contenido con scroll interno SIEMPRE visible (móvil y ordenador),
           barra gruesa para que quede clarísimo que se puede desplazar. */}
       <Box

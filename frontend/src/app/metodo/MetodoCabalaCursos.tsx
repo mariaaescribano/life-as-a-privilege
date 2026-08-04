@@ -153,7 +153,7 @@ export default function MetodoCabalaCursos() {
                 <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay="rgba(0,0,0,0.5)" />
                 <Text position="relative" zIndex={1} color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
-                  Estamos preparando los cursos
+                  Estoy preparando los cursos
                 </Text>
                 <Text position="relative" zIndex={1} color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }}
                       fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
