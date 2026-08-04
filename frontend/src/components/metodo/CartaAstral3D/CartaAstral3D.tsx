@@ -353,11 +353,15 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
           />
           {planetMeshes}
 
+          {/* Bloom contenido: el umbral alto deja fuera los medios tonos (antes,
+              con 0.18, TODO el halo de los planetas florecía y la rueda parecía
+              iluminada por dentro) y la intensidad baja hace que solo el núcleo
+              de cada cuerpo desprenda un poco de luz. */}
           <EffectComposer>
             <Bloom
-              intensity={1.2}
-              luminanceThreshold={0.18}
-              luminanceSmoothing={0.6}
+              intensity={0.6}
+              luminanceThreshold={0.35}
+              luminanceSmoothing={0.4}
               mipmapBlur
             />
           </EffectComposer>
