@@ -28,7 +28,6 @@ import {
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import {
-  BLANCO_GLOW,
   CajaDisciplina,
   CierreCrearCuenta,
   SeparadorSeccion,
@@ -229,7 +228,6 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
               lineHeight="1.15"
               letterSpacing="0.04em"
               maxW="760px"
-              textShadow={BLANCO_GLOW}
             >
               {d.gancho}
             </Text>

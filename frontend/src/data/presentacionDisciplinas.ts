@@ -166,7 +166,7 @@ const base: Record<string, PresentacionDisciplina> = {
     bg: cabalaBg,
     txt: cabalaTxt,
     Icon: CabalaIcon,
-    gancho: "La estructura y arquitectura del alma humana.",
+    gancho: "Desde el misticismo judío; La estructura y arquitectura del alma humana.",
     ilustracionesLabel: "Cábala",
     paso: 7,
     ordinal: "Séptima disciplina",

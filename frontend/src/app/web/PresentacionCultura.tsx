@@ -13,7 +13,6 @@ import { HISTORIAS_CULTURA } from "../../components/metodo/culturaHistorias";
 import { historiaVisual } from "../../components/metodo/culturaPortadas";
 import type { HitoHistoria } from "../../components/metodo/culturaHistoriaUniversal";
 import {
-  BLANCO_GLOW,
   BLANCO_GLOW_SUAVE,
   CajaLisa,
   CierreCrearCuenta,
@@ -120,7 +119,6 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
               lineHeight="1.15"
               letterSpacing="0.04em"
               maxW="760px"
-              textShadow={BLANCO_GLOW}
             >
               {d.gancho}
             </Text>

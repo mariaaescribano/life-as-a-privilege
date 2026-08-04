@@ -18,7 +18,6 @@ import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiolog
 import { celulas, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 import { TEMAS_PROFUNDIZA } from "../../hardCoded/espacio/ProfundizaFisiologia";
 import {
-  BLANCO_GLOW,
   BLANCO_GLOW_SUAVE,
   CierreCrearCuenta,
   IdeasConMuestra,
@@ -184,7 +183,6 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
               lineHeight="1.15"
               letterSpacing="0.04em"
               maxW="760px"
-              textShadow={BLANCO_GLOW}
             >
               {d.gancho}
             </Text>
@@ -224,7 +222,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             verdad: foto grande, las tres claves y la explicación, con flechas
             para pasar de un sistema al siguiente sin salir. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Los doce sistemas</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">Los sistemas</SeparadorSeccion>
 
           <Reveal inView direction="up" distance={16} duration={0.7}>
             <Text

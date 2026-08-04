@@ -12,7 +12,6 @@ import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import {
-  BLANCO_GLOW,
   BLANCO_GLOW_SUAVE,
   CajaDisciplina,
   CierreCrearCuenta,
@@ -141,7 +140,6 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
               lineHeight="1.14"
               letterSpacing="0.04em"
               maxW="760px"
-              textShadow={BLANCO_GLOW}
             >
               {d.gancho}
             </Text>

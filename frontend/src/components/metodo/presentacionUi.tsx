@@ -15,6 +15,10 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 // sobre el turquesa, la caja de precio y el cierre de crear cuenta.
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** Halo blanco fuerte. OJO: la frase que va bajo el header NO lo lleva (cae
+ *  sobre el turquesa limpio y el brillo la ensucia), así que ahora mismo no lo
+ *  usa ninguna presentación. Se queda por si algún titular lo necesita sobre
+ *  una foto. */
 export const BLANCO_GLOW =
   "0 0 14px rgba(255,255,255,0.6), 0 0 32px rgba(255,255,255,0.34), 0 0 60px rgba(180,255,245,0.26)";
 export const BLANCO_GLOW_SUAVE =

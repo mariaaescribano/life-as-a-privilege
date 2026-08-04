@@ -53,6 +53,8 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
  *  solo el nombre de cada una, sin explicaciones, y nueve exactas para que la
  *  rejilla salga cuadrada (3 × 3). El recorrido tiene más pasos: estos son los
  *  que lo cuentan. */
+// Se enseñan solo las SEIS primeras: la página es el escaparate, no el índice
+// (debajo de la rejilla va «Descubre mucho más dentro…»).
 const HERRAMIENTAS: string[] = [
   "Test ACE",
   "Línea de Vida",
@@ -63,7 +65,7 @@ const HERRAMIENTAS: string[] = [
   "Narra",
   "Integración",
   "Dones",
-];
+].slice(0, 6);
 
 /** Los cuatro cursos que se enseñan, por título tal cual está en el catálogo.
  *  Editar aquí para cambiar la vitrina: el orden es el que se ve. */
@@ -256,6 +258,20 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
               </RevealItem>
             ))}
           </RevealStagger>
+
+          <Reveal inView direction="up" distance={14} duration={0.65}>
+            <Text
+              color="rgba(255,255,255,0.9)"
+              fontSize={{ base: "md", md: "lg" }}
+              fontStyle="italic"
+              textAlign="center"
+              lineHeight="1.65"
+              maxW="700px"
+              textShadow={BLANCO_GLOW_SUAVE}
+            >
+              Descubre mucho más dentro…
+            </Text>
+          </Reveal>
         </Flex>
 
         {/* ══ 4. LOS CÓMICS, grandes ══

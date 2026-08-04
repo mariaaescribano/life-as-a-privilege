@@ -14,7 +14,6 @@ import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import {
-  BLANCO_GLOW,
   BLANCO_GLOW_SUAVE,
   CierreCrearCuenta,
   SeparadorSeccion,
@@ -257,7 +256,6 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
               lineHeight="1.15"
               letterSpacing="0.04em"
               maxW="760px"
-              textShadow={BLANCO_GLOW}
             >
               {d.gancho}
             </Text>

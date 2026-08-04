@@ -186,12 +186,16 @@ export function DisciplinaVideoBox({
         gap={{ base: 4, md: 5 }}
         flex="1"
       >
-        {/* Título (puede ser una frase larga que introduce el recorrido) */}
+        {/* Título (puede ser una frase larga que introduce el recorrido).
+            En `textoGrande` (las presentaciones, donde el box va a media página
+            y su alto lo impone el vídeo cuadrado de al lado) la letra sube para
+            que el texto LLENE la caja en vez de quedarse un bloque pequeño
+            arriba con medio box vacío. */}
         <Text
           color={accent}
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
-          fontSize={textoGrande ? { base: "xl", md: "3xl" } : { base: "lg", md: "xl" }}
+          fontSize={textoGrande ? { base: "2xl", md: "4xl" } : { base: "lg", md: "xl" }}
           lineHeight="1.35"
           letterSpacing="0.01em"
           textShadow={textGlow}
@@ -200,14 +204,14 @@ export function DisciplinaVideoBox({
         </Text>
 
         {/* Puntos con ✓ */}
-        <Flex direction="column" gap={textoGrande ? { base: 3, md: 4.5 } : { base: 2.5, md: 3 }}>
+        <Flex direction="column" gap={textoGrande ? { base: 3, md: 4 } : { base: 2.5, md: 3 }}>
           {videoIntro.puntos.map((p, i) => (
-            <Flex key={i} align="flex-start" gap={2.5}>
+            <Flex key={i} align="flex-start" gap={{ base: 2.5, md: 3 }}>
               <Text
                 color={accent}
                 fontWeight="700"
                 fontSize={textoGrande ? { base: "lg", md: "2xl" } : { base: "md", md: "lg" }}
-                lineHeight="1.5"
+                lineHeight="1.45"
                 flexShrink={0}
                 textShadow={textGlow}
               >
@@ -216,8 +220,8 @@ export function DisciplinaVideoBox({
               <Text
                 color={accent}
                 fontFamily="'EB Garamond', serif"
-                fontSize={textoGrande ? { base: "md", md: "xl" } : { base: "sm", md: "md" }}
-                lineHeight="1.5"
+                fontSize={textoGrande ? { base: "lg", md: "2xl" } : { base: "sm", md: "md" }}
+                lineHeight="1.45"
                 textShadow={textGlow}
               >
                 {p}

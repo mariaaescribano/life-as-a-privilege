@@ -16,7 +16,6 @@ import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/il
 import { NUTRIENTES, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
 import { MITOS_NUTRICION } from "../../hardCoded/espacio/MitosNutricion";
 import {
-  BLANCO_GLOW,
   BLANCO_GLOW_SUAVE,
   CierreCrearCuenta,
   IdeasConMuestra,
@@ -184,7 +183,6 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               lineHeight="1.15"
               letterSpacing="0.04em"
               maxW="760px"
-              textShadow={BLANCO_GLOW}
             >
               {d.gancho}
             </Text>

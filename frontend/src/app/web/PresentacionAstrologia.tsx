@@ -15,7 +15,6 @@ import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import {
-  BLANCO_GLOW,
   CierreCrearCuenta,
   ComicMiniCard,
   SeparadorSeccion,
@@ -114,7 +113,6 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
               lineHeight="1.15"
               letterSpacing="0.04em"
               maxW="760px"
-              textShadow={BLANCO_GLOW}
             >
               {d.gancho}
             </Text>
