@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { rutaHome } from "../../api/sesion";
+import { BotonModoOscuro } from "./ModoOscuro";
 
 type SiteHeaderProps = {
   /**
@@ -102,6 +103,12 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       {/* Enlace derecha — avatar si está logueado (el logo ya lleva a home), El recorrido si público */}
       {isPrivate ? (
         <Flex align="center" gap={{ base: 4, md: 6 }}>
+          {/* Modo oscuro. Va aquí porque este header sale en 97 de las 100
+              páginas del recorrido: un solo sitio y queda a mano en casi
+              cualquier pantalla, sin tocar los headers de disciplina (que no
+              pueden perder sus botones laterales) ni las esquinas de abajo,
+              ocupadas por el mini diario y por «Volver»/ayuda. */}
+          <BotonModoOscuro compact />
           {/* Pestañas de administración — a la izquierda del avatar */}
           {isAdminPage && (
             <>
@@ -230,6 +237,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         </Flex>
       ) : (
         <Flex align="center" gap={{ base: 4, md: 7 }}>
+          <BotonModoOscuro />
           <Text
             as="button"
             onClick={() => navigate("/elMetodo")}
