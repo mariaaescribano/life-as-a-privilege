@@ -9,6 +9,7 @@ import { CUERPOS, type CuerpoKey } from "../../components/metodo/astrologiaData"
 import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { LifeLoading } from "../../components/global/LifeLoading";
+import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { AstrologiaIcon, astrologiaTxt } from "../../GlobalVariables";
 
 /* ── Textos de la portada del estudio ── */
@@ -139,6 +140,44 @@ export default function EstudioHome() {
           </Breathe>
         </Reveal>
 
+        {/* ── BOTÓN ESTADÍSTICAS ──
+            Debajo de EMPEZAR y a propósito más discreto (sin relleno ni
+            respiración): quien llega busca participar; los números son para
+            quien tiene curiosidad por el conjunto. */}
+        <Reveal direction="up" distance={16} duration={0.7} delay={0.85} w="100%" maxW="420px">
+          <Flex
+            as="button"
+            onClick={() => navigate("/estudio/estadisticas")}
+            align="center"
+            justify="center"
+            gap={3}
+            w="100%"
+            px={{ base: 6, md: 8 }}
+            py={{ base: 3.5, md: 4 }}
+            borderRadius="full"
+            border="1px solid rgba(255,255,255,0.5)"
+            cursor="pointer"
+            transition="transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease"
+            _hover={{
+              transform: "translateY(-2px)",
+              borderColor: "white",
+              bg: "rgba(255,255,255,0.1)",
+              boxShadow: "0 0 22px rgba(255,255,255,0.28)",
+            }}
+          >
+            <Text
+              color="white"
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="600"
+              letterSpacing="0.22em"
+              textTransform="uppercase"
+              textShadow="0 0 12px rgba(255,255,255,0.4)"
+            >
+              Estadísticas
+            </Text>
+          </Flex>
+        </Reveal>
+
         {/* ── SEPARADOR ── */}
         <Reveal direction="none" duration={0.9} delay={0.95} w="100%" maxW="560px">
           <Box h="1px" bgGradient="linear(to-r, transparent, rgba(255,255,255,0.55), transparent)" />
@@ -172,6 +211,11 @@ export default function EstudioHome() {
           ))}
         </RevealStagger>
       </Flex>
+
+      {/* ── SUSCRIBIRSE ──
+          Abajo del todo, después de los arquetipos: quien llega hasta aquí ya ha
+          visto el estudio, así que no estorba a lo importante (título y EMPEZAR). */}
+      <SubscribeBox />
 
       <PlanetaInfoModal isOpen={!!cuerpoInfo} onClose={() => setInfo(null)} cuerpo={cuerpoInfo} />
     </EstudioLayout>

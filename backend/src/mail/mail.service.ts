@@ -48,11 +48,21 @@ export class MailService {
        * quien lo recibe no tiene por qué ver una dirección interna.
        */
       copiaAdmin?: boolean;
+      /**
+       * Imágenes incrustadas en el propio correo. Van dentro del mensaje (no
+       * como enlace a un servidor), así que se ven aunque el cliente bloquee
+       * las imágenes remotas y siguen ahí dentro de un año. En el HTML se
+       * referencian con `src="cid:<cid>"`.
+       */
+      imagenes?: { cid: string; nombre: string; contenido: Buffer }[];
     },
-  ): Promise<void> {
+    // Devuelve si el correo ha salido de verdad. Casi todos los envíos lo
+    // ignoran (son avisos: si uno se pierde, no se cae nada), pero el del
+    // estudio lo mira para poder decir en el log si ha salido o no.
+  ): Promise<boolean> {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
       console.warn(`[MailService] EMAIL_USER / EMAIL_PASS no configurados — ${etiqueta} no enviado.`);
-      return;
+      return false;
     }
     try {
       // Si la copia fuese a la MISMA cuenta que envía, se omite: Gmail no se
@@ -69,10 +79,74 @@ export class MailService {
         bcc: copia,
         subject,
         html,
+        attachments: opciones?.imagenes?.map((img) => ({
+          filename: img.nombre,
+          content: img.contenido,
+          cid: img.cid,
+          contentType: 'image/png',
+        })),
       });
+      return true;
     } catch (err) {
       console.error(`[MailService] Error enviando ${etiqueta}:`, err);
+      return false;
     }
+  }
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Bienvenida al crear la cuenta. Su razón de ser es el ENLACE: quien se
+  // registra y cierra la pestaña no siempre sabe volver (la web no vive en su
+  // historial ni tiene la dirección a mano), así que el correo le deja
+  // guardada la puerta de entrada a su cuenta.
+  //
+  // No lleva contraseña ni token: es un enlace público a /logIn, así que si el
+  // correo se reenvía o se filtra no da acceso a nada.
+  // ───────────────────────────────────────────────────────────────────────────
+  async enviarBienvenidaCuenta(
+    email: string,
+    nombre: string,
+    /** Cuenta creada con Google: ahí no hay contraseña que recordar ni recuperar. */
+    opciones?: { conGoogle?: boolean },
+  ): Promise<void> {
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const enlace = `${frontendUrl}/logIn`;
+    const comoEntrar = opciones?.conGoogle
+      ? 'Entras con el botón de Google, con este mismo correo.'
+      : 'Entras con tu nombre o tu email y la contraseña que elegiste. Si algún día la olvidas, puedes recuperarla desde esa misma página.';
+    const html = this.plantilla(
+      'Tu cuenta ya existe',
+      `
+        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
+          Hola <strong>${nombre}</strong>, bienvenida a <strong>Life as a Privilege</strong>.
+          Tu cuenta ya está creada.
+        </p>
+        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
+          <strong>Guarda este enlace para iniciar sesión en tu cuenta:</strong>
+        </p>
+        <p style="margin: 28px 0;">
+          <a href="${enlace}"
+             style="display: inline-block; padding: 14px 28px; border-radius: 999px;
+                    border: 1.5px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.12);
+                    color: #ffffff; text-decoration: none; letter-spacing: 0.14em;
+                    text-transform: uppercase; font-weight: 700;">
+            Iniciar sesión
+          </a>
+        </p>
+        <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
+          Si el botón no funciona, copia esta dirección en tu navegador:<br />
+          <span style="word-break: break-all;">${enlace}</span>
+        </p>
+        <p style="margin-top: 24px; font-size: 14px; opacity: 0.78;">
+          ${comoEntrar}
+        </p>
+      `,
+    );
+    await this.enviar(
+      email,
+      'Guarda este enlace para entrar en tu cuenta — Life as a Privilege',
+      html,
+      'email de bienvenida',
+    );
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -312,6 +386,47 @@ export class MailService {
             </table>`;
   }
 
+  /**
+   * Dos botones en la misma fila: el de la izquierda secundario (contorno de
+   * menta) y el de la derecha el principal (blanco sólido), abajo a la derecha
+   * como el resto.
+   *
+   * Cada botón va en su propia tabla en línea, y no en dos celdas de una tabla
+   * común, por dos motivos: en móvil el segundo baja solo cuando no cabe, y en
+   * Outlook —que no entiende `inline-block`— quedan uno debajo del otro, que es
+   * un apaño digno y no un desastre.
+   */
+  private dosBotones(
+    secundario: { href: string; label: string },
+    principal: { href: string; label: string },
+  ): string {
+    const c = MailService.PALETA;
+    const serif = MailService.SERIF;
+    const comun = `display:inline-block;font-family:${serif};font-size:13px;line-height:1;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;text-decoration:none;border-radius:999px;`;
+
+    return `
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:30px 0 0;">
+              <tr>
+                <td align="right">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-block;vertical-align:middle;margin:0 10px 10px 0;">
+                    <tr>
+                      <td align="center" style="border-radius:999px;border:1.5px solid ${c.borde};">
+                        <a href="${secundario.href}" style="${comun}padding:13px 24px;color:${c.menta};">${secundario.label}</a>
+                      </td>
+                    </tr>
+                  </table>
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-block;vertical-align:middle;margin:0 0 10px;">
+                    <tr>
+                      <td align="center" bgcolor="${c.tinta}" style="border-radius:999px;">
+                        <a href="${principal.href}" style="${comun}padding:15px 30px;color:${c.tarjeta};">${principal.label}</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>`;
+  }
+
   // ── 1. Automático: datos registrados ──────────────────────────────────────
   // Sale en cuanto la persona envía (o corrige) sus datos de nacimiento.
   async enviarCartaRegistrada(
@@ -436,6 +551,141 @@ export class MailService {
     await this.enviar(email, 'Tu carta ya ha sido leída', html, 'email de carta leída', {
       copiaAdmin: true,
     });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ESTUDIO ESTADÍSTICO — gracias por participar
+  //
+  // Sale cuando alguien deja sus datos en /estudio. Del estudio NO se sabe el
+  // nombre (solo el email), así que el correo no saluda por nombre: nunca se
+  // deduce del email.
+  //
+  // El correo lleva SU CARTA DIBUJADA dentro (PNG incrustado, no un enlace a
+  // ninguna parte): se ve al abrir el correo, aunque el cliente bloquee las
+  // imágenes remotas, y sigue ahí dentro de un año. Quien la dibuja es
+  // estudio/cartaPng.ts; aquí solo se coloca.
+  // ═══════════════════════════════════════════════════════════════════════════
+  async enviarGraciasEstudio(
+    email: string,
+    opciones?: {
+      /** Su carta ya rasterizada (estudio/cartaPng.ts). Sin ella, correo sin dibujo. */
+      cartaPng?: Buffer;
+      /**
+       * El precio de la primera disciplina. `antes` es el precio de referencia
+       * que va tachado: solo se manda si esa disciplina ha estado de verdad a
+       * ese precio (tachar una cifra que nunca se cobró es precio de referencia
+       * falso, y es sancionable). Sin `precio` no sale la caja.
+       */
+      precio?: { ahora: string; antes?: string };
+      /** A dónde lleva el botón principal. Por defecto, crear la cuenta (/signIn). */
+      enlace?: string;
+      /** A dónde lleva «Ver el Mapa». Por defecto, la presentación de El Mapa. */
+      enlaceMapa?: string;
+    },
+    /** Devuelve si ha salido: quien llama lo escribe en el log. */
+  ): Promise<boolean> {
+    const c = MailService.PALETA;
+    const serif = MailService.SERIF;
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    // A crear la cuenta directamente: el correo ya le ha explicado qué hay
+    // dentro, así que el botón hace lo siguiente y no lo vuelve a contar. Y al
+    // lado, la salida para quien todavía quiere mirar antes de decidir: El Mapa
+    // entero, que es la página pública donde están las ocho disciplinas.
+    const destino = opciones?.enlace ?? `${frontendUrl}/signIn`;
+    const destinoMapa = opciones?.enlaceMapa ?? `${frontendUrl}/elMetodo`;
+    const p = opciones?.precio;
+
+    // ── Su carta, dibujada ──
+    // Va incrustada con `cid:` (nunca como enlace a un servidor): así se ve al
+    // abrir el correo sin tener que pulsar «mostrar imágenes». El ancho en el
+    // atributo y no solo en el CSS, que Outlook ignora el CSS de las imágenes.
+    // Sin pie de foto: el dibujo se explica solo.
+    const CID_CARTA = 'carta-natal';
+    const cajaCarta = opciones?.cartaPng
+      ? `
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:26px 0 0;">
+              <tr>
+                <td align="center">
+                  <img src="cid:${CID_CARTA}" width="512" alt="Tu carta natal"
+                       style="display:block;width:100%;max-width:512px;height:auto;border:0;outline:none;text-decoration:none;" />
+                </td>
+              </tr>
+            </table>`
+      : '';
+
+    // La caja del precio. No hay código ni cupón: es el precio que hay, y lo que
+    // empuja es que está por debajo de lo que va a estar.
+    const cajaPrecio = p
+      ? `
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:30px 0 0;background:${c.caja};border:1px solid ${c.borde};border-radius:14px;">
+              <tr>
+                <td align="center" style="padding:24px 26px 26px;font-family:${serif};">
+                  <div style="font-size:11px;line-height:1.3;letter-spacing:0.22em;text-transform:uppercase;color:${c.menta};">
+                    Astrología · la primera disciplina
+                  </div>
+                  <div style="padding-top:12px;font-size:38px;line-height:1;color:${c.tinta};font-weight:700;">
+                    ${p.ahora}${
+                      p.antes
+                        ? ` <span style="font-size:19px;font-weight:400;color:${c.pie};text-decoration:line-through;">${p.antes}</span>`
+                        : ''
+                    }
+                  </div>
+                  <div style="font-size:16px;line-height:1.6;color:${c.menta};padding-top:14px;">
+                    Aprovecha que está en un precio reducido.
+                  </div>
+                </td>
+              </tr>
+            </table>`
+      : '';
+
+    const html = this.sobreAstro({
+      antetitulo: 'Estudio de astrología',
+      titulo: 'Gracias: esta es tu carta',
+      preheader: 'Tu cielo dibujado, y por dónde seguir si quieres entenderlo.',
+      cuerpo: `
+            ${this.parrafo(
+              'Gracias por participar. Así estaba el cielo en el momento y el lugar en que naciste:',
+              0,
+            )}
+            ${cajaCarta}
+            ${/* El puente al Recorrido: va justo encima del precio, que es a
+                  donde empuja. */ ''}
+            ${this.parrafo(
+              'Si te has sentido identificado con los resultados, quizá haya llegado el momento de profundizar y usar la Astrología como una herramienta de autoconocimiento.',
+              26,
+            )}
+            ${/* Lo que hay dentro, en una línea suelta y en menta: es la promesa
+                  del correo, y suelta pesa más que metida en el párrafo. */ ''}
+            <div style="margin:16px 0 0;font-family:${serif};font-size:18px;line-height:1.6;color:${c.menta};">
+              Una lectura real y profunda, hecha por mí.
+            </div>
+            ${cajaPrecio}
+            ${this.dosBotones(
+              { href: destinoMapa, label: 'Ver el Mapa' },
+              { href: destino, label: 'Entrar en Astrología' },
+            )}
+            ${/* Debajo del botón: quita el miedo a pulsarlo (no hay suscripción
+                  ni hay que pagar para mirar). */ ''}
+            <div style="margin:22px 0 0;font-family:${serif};font-size:14px;line-height:1.7;color:${c.pie};">
+              Crea una cuenta sin compromiso, se paga por disciplinas y una vez que estés dentro.
+            </div>`,
+    });
+
+    // Copia oculta a NOTIFY_EMAIL: este correo sale solo, sin que nadie lo
+    // dispare, así que la copia es la forma de VER que está saliendo (y de leer
+    // exactamente lo que ha recibido esa persona) sin mirar los logs.
+    return await this.enviar(
+      email,
+      'Gracias por participar: esta es tu carta',
+      html,
+      'email de gracias del estudio',
+      {
+        copiaAdmin: true,
+        imagenes: opciones?.cartaPng
+          ? [{ cid: CID_CARTA, nombre: 'tu-carta-natal.png', contenido: opciones.cartaPng }]
+          : undefined,
+      },
+    );
   }
 
   // Notifica a la creadora cuando un usuario solicita su carta astral.

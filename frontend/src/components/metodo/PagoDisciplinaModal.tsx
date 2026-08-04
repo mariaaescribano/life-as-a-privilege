@@ -9,7 +9,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
-import { PRECIO_DISCIPLINA } from "./pagoDisciplinaLink";
+import { PRECIO_DISCIPLINA, PRECIO_DISCIPLINA_ANTES } from "./pagoDisciplinaLink";
+import { PrecioConAntes } from "./PrecioConAntes";
 import {
   ayurvedaNom, AyurvedaIcon,
   tcmNom, TCMIcon,
@@ -136,17 +137,18 @@ export function PagoDisciplinaModal({
               {descripcion}
             </Text>
 
-            <Text
-              color={txt}
-              fontSize={{ base: "4xl", md: "5xl" }}
-              fontWeight="700"
-              lineHeight="1"
-              textAlign="center"
-              textShadow={`0 0 20px ${txt}80, 0 0 42px ${txt}55`}
-              mt={1}
-            >
-              {precio}
-            </Text>
+            <Flex direction="column" align="center" gap={1.5} mt={1}>
+              <PrecioConAntes
+                precio={precio}
+                color={txt}
+                sombra={`0 0 20px ${txt}80, 0 0 42px ${txt}55`}
+              />
+              {PRECIO_DISCIPLINA_ANTES && (
+                <Text color={`${txt}bb`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
+                  Aprovecha que está en un precio reducido
+                </Text>
+              )}
+            </Flex>
 
             {/* Una sola casilla, con texto corto. El detalle de qué se acepta
                 —incluido que el pago no se devuelve— vive en la lista de

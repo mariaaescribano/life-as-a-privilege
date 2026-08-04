@@ -96,6 +96,11 @@ export class UserService {
           if (rows && rows.length === 1) {
             const newUser = rows[0];
             const token = this.authService.generateToken(newUser.id, data.email);
+            // Correo de bienvenida con el enlace de /logIn guardado. No se espera
+            // ni se deja que reviente el registro: la cuenta ya existe y la
+            // persona ya está dentro, así que un fallo del SMTP no puede
+            // devolverle un error como si no se hubiera registrado.
+            this.enviarBienvenidaSinBloquear(newUser.email, newUser.name);
             return { token, user: newUser };
           }
           // Insert sin error pero sin fila: no reintentamos a ciegas.
@@ -122,6 +127,17 @@ export class UserService {
       console.log(error);
       throw error;
     }
+  }
+
+  /**
+   * Manda la bienvenida en segundo plano. Va aparte (y sin `await`) porque el
+   * envío tarda un par de segundos contra el SMTP de Gmail y no tiene por qué
+   * retrasar la respuesta del registro.
+   */
+  private enviarBienvenidaSinBloquear(email: string, nombre: string, conGoogle = false) {
+    void this.mailService
+      .enviarBienvenidaCuenta(email, nombre ?? '', { conGoogle })
+      .catch((err) => console.error('[createUser] no se pudo enviar la bienvenida:', err));
   }
 
   // --------- Login ---------
@@ -439,6 +455,9 @@ export class UserService {
 
         if (rows && rows.length === 1) {
           const token = this.authService.generateToken(rows[0].id, rows[0].email);
+          // Cuenta nueva (arriba se ha devuelto ya si existía), así que también
+          // le llega su enlace de acceso guardado.
+          this.enviarBienvenidaSinBloquear(rows[0].email, rows[0].name, true);
           return { token, user: rows[0] };
         }
         throw new Error('El insert de usuario (Google) no devolvió la fila esperada');

@@ -54,6 +54,14 @@ export class EstudioController {
     );
   }
 
+  /** Los totales del estudio, sin nadie dentro: la media de cada arquetipo en
+   *  cada posición. Público (es lo que se le prometió a quien participa: los
+   *  resultados se publican en conjunto) y cacheado en el servicio. */
+  @Get('resultados')
+  async getResultados() {
+    return await this.service.getResultadosPublicos();
+  }
+
   /** Resultado final: su respuesta frente a la de todo el mundo con su mismo signo. */
   @Get('estadisticas/:id')
   async getEstadisticas(@Param('id') id: string) {

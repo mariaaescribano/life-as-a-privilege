@@ -7,6 +7,7 @@ import { ContactModal } from "../../components/global/ContactModal";
 import { BookCallModal } from "../../components/global/BookCallModal";
 import { recorridoContenido, nombreEnMapa, type ContenidoSeccion } from "../../data/recorridoContenido";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
+import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
@@ -119,45 +120,12 @@ const METODO_IMGS: string[] = [
 // ── Sombras de texto del recorrido ──
 // La mayoría de disciplinas usan una "luz" suave basada en su color (natural).
 // Algunas concretas piden una sombra oscura para que el texto contraste mejor.
-const SHADOW_BLACK = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.19)";
-const SHADOW_GRANATE = "0 1px 4px rgba(56,8,8,0.95), 0 2px 12px rgba(56,8,8,0.82), 0 0 5px rgba(56,8,8,0.78), 0 0 18px rgba(255,255,255,0.17)";
+// Viven en components/global/disciplinaSombras.ts porque las páginas de
+// presentación (/d/:disciplina) pintan las mismas cajas y deben leerse igual.
 
-const naturalBoxShadow = (bg: string) =>
-  `0 1px 3px ${bg}f5, 0 0 6px ${bg}cc, 0 2px 14px ${bg}88, 0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)`;
-
-const esOscuraNegra = (name: string) =>
-  name === fisiologiaNom || name === cabalaNom || name === culturaNom;
-
-// Sombra para los textos DENTRO de las cajas (ítems y aviso).
-const boxTextShadow = (card: ModalidadData) => {
-  if (card.name === tcmNom) return SHADOW_GRANATE;
-  if (esOscuraNegra(card.name)) return SHADOW_BLACK;
-  return naturalBoxShadow(card.bg);
-};
-
-// Igual, pero para el título de cada sección (en el original, las disciplinas
-// sin fondo propio no llevaban sombra).
-const boxTitleShadow = (card: ModalidadData) => {
-  if (card.name === tcmNom) return SHADOW_GRANATE;
-  if (esOscuraNegra(card.name)) return SHADOW_BLACK;
-  return hasDisciplinaBg(card.name) ? naturalBoxShadow(card.bg) : undefined;
-};
-
-// Cabecera del modal: nombre de la disciplina y frase introductoria. Solo
-// Cábala y Cultura llevan sombra oscura aquí.
-const headerNameShadow = (card: ModalidadData) =>
-  card.name === tcmNom
-    ? SHADOW_GRANATE
-    : esOscuraNegra(card.name)
-    ? SHADOW_BLACK
-    : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 16px rgba(255,255,255,0.41), 0 0 36px rgba(255,255,255,0.22)`;
-
-const headerDescShadow = (card: ModalidadData) =>
-  card.name === tcmNom
-    ? SHADOW_GRANATE
-    : esOscuraNegra(card.name)
-    ? SHADOW_BLACK
-    : `0 1px 3px ${card.bg}f5, 0 0 8px ${card.bg}cc, 0 2px 16px ${card.bg}88, 0 0 12px rgba(255,255,255,0.38), 0 0 26px rgba(255,255,255,0.19)`;
+// Las sombras del NOMBRE, la frase y las cajas de la ficha se calculan dentro de
+// DisciplinaFicha (mismo criterio: natural / negra en Fisiología-Cábala-Cultura /
+// granate en Medicina China).
 
 // ── Bloque de montaje diferido ──────────────────────────────────────────────
 // No es una animación: retrasa el MONTAJE de lo que envuelve hasta que está a
@@ -178,7 +146,7 @@ const QUE_OBTIENES: string[] = [
   "Un recorrido guiado, con un orden coherente y concreto.",
   "Materiales de lectura, ilustraciones y explicaciones paso a paso.",
   "Ejercicios prácticos para integrar lo aprendido en tu día a día.",
-  "Acceso durante 1 año. Los PDF personalizados con tu información serán tuyos para siempre.",
+  "Acceso durante 1 año. Los PDF serán tuyos para siempre.",
   "Compra por disciplina. Avanza a tu ritmo, sin suscripciones ni compromisos.",
   "Posibilidad de llamadas para resolver dudas o profundizar en tu proceso.",
   "Acceso a todos los cursos e ilustraciones."
@@ -1289,211 +1257,18 @@ export default function ElMetodo() {
               }}
             >
 
-            {/* HERO ── icono + título + descripción ──
-                Entra en cascada (icono → nombre → línea → frase) con un retraso
-                sobre la propia ficha, para que se lea como una sola secuencia. */}
-            <RevealStagger
-              stagger={0.14}
-              delayChildren={0.22}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              gap={{ base: 4, md: 6 }}
-              pt={{ base: 2, md: 4 }}
-              position="relative"
-              zIndex={1}
-            >
-              <RevealItem direction="up" distance={16} scaleFrom={0.9} display="flex" justifyContent="center">
-              {/* El icono late despacio mientras la ficha está abierta. */}
-              <Breathe scale={0.02} duration={5}>
-              <Box position="relative" display="flex" alignItems="center" justifyContent="center">
-                <Box
-                  position="absolute"
-                  w={{ base: "160px", md: "200px" }}
-                  h={{ base: "160px", md: "200px" }}
-                  borderRadius="full"
-                  bg={`radial-gradient(circle, ${selectedCard.txt}33 0%, ${selectedCard.txt}00 70%)`}
-                />
-                <Box
-                  bg={hasDisciplinaBg(selectedCard.name) ? "transparent" : selectedCard.bg}
-                  borderRadius="full"
-                  w={{ base: "108px", md: "128px" }}
-                  h={{ base: "108px", md: "128px" }}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  border={`3px solid ${selectedCard.txt}`}
-                  boxShadow={`0 0 28px ${selectedCard.txt}cc, 0 4px 20px ${selectedCard.txt}77`}
-                  position="relative"
-                  overflow={hasDisciplinaBg(selectedCard.name) ? "hidden" : undefined}
-                >
-                  {hasDisciplinaBg(selectedCard.name) && <DisciplinaBgLayer nom={selectedCard.name} borderRadius="full" />}
-                  <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
-                    {selectedCard.renderIcon("64px")}
-                  </Box>
-                </Box>
-              </Box>
-              </Breathe>
-              </RevealItem>
-
-              <RevealItem direction="up" distance={14}>
-              <Text
-                color={selectedCard.txt}
-                fontSize={{ base: "3xl", md: "5xl" }}
-                fontWeight="700"
-                letterSpacing="0.05em"
-                textAlign="center"
-                lineHeight="1.1"
-                textShadow={headerNameShadow(selectedCard)}
-                filter={hasDisciplinaBg(selectedCard.name) ? undefined : `drop-shadow(0 2px 14px ${selectedCard.txt}55)`}
-              >
-                {nombreEnMapa(selectedCard.name)}
-              </Text>
-              </RevealItem>
-
-              <RevealItem direction="none" scaleFrom={0.3}>
-              <Box
-                w="80px"
-                h="2px"
-                bgGradient={`linear(to-r, transparent, ${selectedCard.txt}, transparent)`}
-                opacity={0.7}
-              />
-              </RevealItem>
-
-              <RevealItem direction="up" distance={14}>
-              <Text
-                color={selectedCard.txt}
-                fontSize={{ base: "lg", md: "2xl" }}
-                fontStyle="italic"
-                textAlign="center"
-                lineHeight="1.7"
-                letterSpacing="0.02em"
-                opacity={0.95}
-                maxW="640px"
-                textShadow={headerDescShadow(selectedCard)}
-              >
-                {selectedCard.desc}
-              </Text>
-              </RevealItem>
-            </RevealStagger>
-
-            {/* Separador antes del contenido */}
-            <Reveal direction="none" scaleFrom={0.9} delay={0.5} duration={0.7} position="relative" zIndex={1}>
-            <Flex align="center" gap={4} mt={{ base: 2, md: 4 }}>
-              <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${selectedCard.txt}55)`} />
-              <Text
-                color={selectedCard.txt}
-                opacity={0.7}
-                fontSize={{ base: "sm", md: "md" }}
-                letterSpacing="0.32em"
-                textTransform="uppercase"
-                fontWeight="600"
-                textShadow={naturalBoxShadow(selectedCard.bg)}
-              >
-                Qué incluye
-              </Text>
-              <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${selectedCard.txt}55)`} />
-            </Flex>
-            </Reveal>
-
-            {/* SECCIONES DE CONTENIDO — cada una dentro de un panel translúcido
-                claro, estilo cristal, para separarlas visualmente del fondo de
-                la disciplina. Sin hover ni shadow fuerte para no parecer botón.
-                Entran en cascada, uno detrás de otro, después del hero. */}
-            <RevealStagger
-              stagger={0.18}
-              delayChildren={0.6}
-              display="flex"
-              flexDirection="column"
-              gap={{ base: 4, md: 5 }}
-              position="relative"
-              zIndex={1}
-            >
-              {selectedCard.contenido.map((seccion, i) => (
-                <RevealItem
-                  key={i}
-                  direction="up"
-                  distance={18}
-                  scaleFrom={0.98}
-                  display="flex"
-                  flexDirection="column"
-                  px={{ base: 5, md: 7 }}
-                  py={{ base: 5, md: 6 }}
-                  gap={{ base: 3, md: 4 }}
-                  cursor="default"
-                  userSelect="text"
-                  bg="rgba(255,255,255,0.08)"
-                  border="1px solid rgba(255,255,255,0.14)"
-                  borderRadius="xl"
-                  sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-                >
-                  {/* Título de sección */}
-                  <Text
-                    color={selectedCard.txt}
-                    fontSize={{ base: "16px", md: "20px" }}
-                    fontWeight="700"
-                    letterSpacing="0.04em"
-                    lineHeight="1.25"
-                    textAlign="center"
-                    textShadow={boxTitleShadow(selectedCard)}
-                  >
-                    {seccion.titulo}
-                  </Text>
-
-                  {/* Items */}
-                  <Flex direction="column" gap={{ base: 2, md: 2.5 }} flex="1">
-                    {seccion.items.map((item, j) => (
-                      <Text
-                        key={j}
-                        color={selectedCard.txt}
-                        opacity={1}
-                        fontSize={{ base: "14px", md: "16px" }}
-                        lineHeight={{ base: "1.6", md: "1.7" }}
-                        letterSpacing="0.01em"
-                        textAlign="center"
-                        textShadow={boxTextShadow(selectedCard)}
-                      >
-                        {item}
-                      </Text>
-                    ))}
-                  </Flex>
-
-                  {/* Aviso (p.ej. "Se cobra aparte") */}
-                  {seccion.aviso && (
-                    <Flex
-                      align="center"
-                      justify="center"
-                      gap={{ base: 1.5, md: 2 }}
-                      mt={1}
-                    >
-                      <Box
-                        as="svg"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 -960 960 960"
-                        w={{ base: "12px", md: "14px" }}
-                        h={{ base: "12px", md: "14px" }}
-                        fill={selectedCard.txt}
-                        opacity={0.95}
-                        flexShrink={0}
-                      >
-                        <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/>
-                      </Box>
-                      <Text
-                        color={selectedCard.txt}
-                        fontSize={{ base: "xs", md: "sm" }}
-                        letterSpacing="0.06em"
-                        fontStyle="italic"
-                        opacity={0.95}
-                        lineHeight="1.3"
-                        textShadow={boxTextShadow(selectedCard)}
-                      >
-                        {seccion.aviso}
-                      </Text>
-                    </Flex>
-                  )}
-                </RevealItem>
-              ))}
-            </RevealStagger>
+            {/* La ficha (icono + nombre + frase, «Qué incluye» y sus cajas) vive
+                en components/metodo/DisciplinaFicha.tsx: es la MISMA que se
+                despliega en la presentacion publica de la disciplina
+                (/d/:disciplina), donde no hay popup. */}
+            <DisciplinaFicha
+              nom={selectedCard.name}
+              bg={selectedCard.bg}
+              txt={selectedCard.txt}
+              desc={selectedCard.desc}
+              contenido={selectedCard.contenido}
+              renderIcon={selectedCard.renderIcon}
+            />
             </Box>
           </Box>
           </Reveal>

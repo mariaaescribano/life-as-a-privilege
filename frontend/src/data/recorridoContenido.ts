@@ -15,7 +15,7 @@ export type ContenidoSeccion = {
 export type VideoIntro = {
   titulo: string;
   puntos: string[];
-  /** Texto del botón (por defecto "Ver por dentro"). */
+  /** Texto del botón (por defecto "Muestra"). */
   boton?: string;
 };
 

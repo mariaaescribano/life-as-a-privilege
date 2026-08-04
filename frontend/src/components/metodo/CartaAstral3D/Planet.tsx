@@ -38,9 +38,18 @@ function buildGlyphTexture(symbol: string, color: string): THREE.CanvasTexture {
   const cx = size / 2;
   const cy = size / 2 + 6;
 
+  // Halo ancho del color del planeta: dos pasadas del mismo trazo con mucho
+  // desenfoque. Es lo que hace que el planeta «brille» — el Bloom del Canvas
+  // (luminanceThreshold 0.18) recoge ese halo y lo extiende alrededor.
   ctx.shadowColor = color;
-  ctx.shadowBlur = 7;
-  ctx.fillStyle = "rgba(255,255,255,0.6)";
+  ctx.shadowBlur = 26;
+  ctx.fillStyle = "rgba(255,255,255,0.5)";
+  ctx.fillText(text, cx, cy);
+  ctx.fillText(text, cx, cy);
+
+  // Resplandor cercano, más contenido, para que el glifo no se quede lavado.
+  ctx.shadowBlur = 10;
+  ctx.fillStyle = "rgba(255,255,255,0.72)";
   ctx.fillText(text, cx, cy);
 
   ctx.shadowBlur = 0;

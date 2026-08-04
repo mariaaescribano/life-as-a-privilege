@@ -110,7 +110,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
     titulo: "¿El azúcar moreno es más saludable que el blanco?",
     foto: "/recorrido/nutricion/mitos/azucarmoreno.webp",
     parrafos: [
-      "El azúcar moreno es básicamente azúcar blanco con algo de melaza, que le da color y ese punto de humedad. Esa melaza conserva trazas de minerales, pero en cantidades tan pequeñas que no cambian nada.",
+      "El azúcar moreno es básicamente azúcar blanco con algo de melaza (miel oscura), que le da color y ese punto de humedad. Esa melaza conserva trazas de minerales, pero en cantidades tan pequeñas que no cambian nada.",
       "En la práctica, tu cuerpo procesa ambos casi igual: el efecto sobre la glucosa en sangre y las calorías son prácticamente los mismos.",
       "Cambiar blanco por moreno no aporta beneficio real para la salud. Si quieres cuidar el azúcar, lo que ayuda es reducir la cantidad total, no cambiar de color.",
     ],
@@ -581,6 +581,7 @@ export const MITOS_NUTRICION: NutrienteTarjeta[] = [
       "El microondas calienta haciendo vibrar las moléculas de agua del alimento; no emite radiación peligrosa ni «destroza» la comida. Es una forma de cocinar como otra cualquiera.",
       "De hecho, suele conservar bien los nutrientes: cocina rápido, con poco o nada de agua, y esa combinación evita muchas de las pérdidas de vitaminas que sí ocurren al hervir largo rato.",
       "Como cualquier método, un calentamiento excesivo puede reducir algunas vitaminas sensibles, pero el microondas está entre las opciones más respetuosas con los nutrientes. Es seguro y práctico.",
+      "Profundiza: El microondas es un aparato seguro que usa radiación no ionizante (tipos de energía que no tienen la fuerza necesaria para arrancar electrones de los átomos, NO CAUSA RADICALES LIBRES), calienta por vibración del agua y no vuelve la comida radiactiva. Funciona con ondas que mueven las moléculas de los alimentos sin dañar la salud."
     ],
   },
   {

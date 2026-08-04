@@ -500,14 +500,13 @@ export default function MetodoAstrologia() {
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
                 <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.09} delayChildren={0.35}>
                   <RevealItem>
-                    <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center"
-                          style={{ textShadow: `0 0 14px rgba(255,255,255,0.55), 0 0 30px rgba(255,255,255,0.28), 0 0 60px ${astrologiaTxt}55` }}>
+                    {/* Sin textShadow: el brillo sobre el velo del cielo ensuciaba la letra. */}
+                    <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center">
                       {editando ? "Corrige tus datos" : "Tu Carta Astral"}
                     </Text>
                   </RevealItem>
                   <RevealItem>
-                    <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto"
-                          style={{ textShadow: `0 0 10px rgba(255,255,255,0.4), 0 0 22px rgba(255,255,255,0.2)` }}>
+                    <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto">
                       {editando
                         ? "Cambia lo que haga falta y vuelve a enviarlos: tu carta se calcula de nuevo con los datos corregidos."
                         : "Necesito tus datos de nacimiento para poder leer tu carta."}

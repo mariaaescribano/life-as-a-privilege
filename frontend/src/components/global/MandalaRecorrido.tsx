@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { recorridoContenido, nombreEnMapa, type VideoIntro } from "../../data/recorridoContenido";
-import { PRECIO_DISCIPLINA } from "../metodo/pagoDisciplinaLink";
+import { useNavigate } from "react-router-dom";
+import { DisciplinaVideoBox } from "../metodo/DisciplinaVideoBox";
+import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
@@ -976,238 +978,28 @@ const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () =>
   );
 };
 
-// ── Box de al lado del mandala ────────────────────────────────────────────────
-// Fondo = imagen propia de la disciplina. Cabecera "nº. Nombre" + separador y,
-// debajo, un texto introductorio (título + puntos con ✓) y un botón al final
-// que abre el vídeo de muestra en un popup (VideoMuestraModal).
+// -- Box de al lado del mandala ------------------------------------------------
+// El box vive en components/metodo/DisciplinaVideoBox.tsx porque lo comparte con
+// la presentacion de cada disciplina (/d/:disciplina): es el box donde se decide
+// la compra y tiene que verse igual en los dos sitios. Aqui solo se le pasan los
+// datos de la disciplina seleccionada en el mandala.
 const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; onVerVideo: () => void }) => {
-  const accent = disc.txt;
-  const hasBg = hasDisciplinaBg(disc.nom);
-  const textGlow = `0 1px 3px ${disc.bg}, 0 0 10px ${disc.bg}, 0 0 20px ${disc.bg}`;
-
+  const navigate = useNavigate();
+  // Presentación pública de esta disciplina (/d/:disciplina). La búsqueda acepta
+  // el nombre interno, así que «Hinduismo» encuentra su ficha igual.
+  const presentacion = presentacionPorKey(disc.nom);
   return (
-    <Flex
-      direction="column"
-      position="relative"
-      borderRadius="2xl"
-      overflow="hidden"
+    <DisciplinaVideoBox
+      nom={disc.nom}
       bg={disc.bg}
-      boxShadow={`0 10px 34px rgba(0,0,0,0.32), 0 0 26px ${accent}44`}
-    >
-      {/* Fondo del box: imagen propia de la disciplina */}
-      <DisciplinaBgLayer nom={disc.nom} borderRadius="2xl" />
-
-      {/* Cabecera: nº + icono + nombre */}
-      <Flex align="center" gap={3} px={{ base: 5, md: 6 }} pt={{ base: 4, md: 5 }} pb={{ base: 3, md: 3 }} position="relative" zIndex={1}>
-        <Box
-          position="relative"
-          w={{ base: "40px", md: "46px" }}
-          h={{ base: "40px", md: "46px" }}
-          borderRadius="full"
-          overflow="hidden"
-          flexShrink={0}
-          bg={hasBg ? "transparent" : disc.bg}
-          border={`2px solid ${accent}`}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          {hasBg && <DisciplinaBgLayer nom={disc.nom} borderRadius="full" />}
-          <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
-            {disc.renderIcon("28px")}
-          </Box>
-        </Box>
-        <Flex align="baseline" gap={2} minW={0}>
-          <Text
-            color={accent}
-            fontFamily="'EB Garamond', serif"
-            fontWeight="700"
-            fontSize={{ base: "xl", md: "2xl" }}
-            lineHeight="1.1"
-            opacity={0.9}
-            textShadow={textGlow}
-          >
-            {step}.
-          </Text>
-          <Text
-            color={accent}
-            fontFamily="'EB Garamond', serif"
-            fontWeight="700"
-            fontSize={{ base: "xl", md: "2xl" }}
-            lineHeight="1.35"
-            letterSpacing="0.02em"
-            pb="0.12em"
-            whiteSpace="nowrap"
-            textShadow={textGlow}
-          >
-            {nombreEnMapa(disc.nom)}
-          </Text>
-        </Flex>
-      </Flex>
-
-      {/* Separador horizontal */}
-      <Box
-        mx={{ base: 5, md: 6 }}
-        h="1px"
-        position="relative"
-        zIndex={1}
-        bg={`linear-gradient(to right, transparent, ${accent}bb, transparent)`}
-      />
-
-      {/* Texto introductorio (título + puntos con ✓) + botón al final */}
-      <Flex
-        direction="column"
-        position="relative"
-        zIndex={1}
-        px={{ base: 5, md: 7 }}
-        pt={{ base: 5, md: 6 }}
-        pb={{ base: 5, md: 6 }}
-        gap={{ base: 4, md: 5 }}
-      >
-        {/* Título (puede ser una frase larga que introduce el recorrido) */}
-        <Text
-          color={accent}
-          fontFamily="'EB Garamond', serif"
-          fontWeight="700"
-          fontSize={{ base: "lg", md: "xl" }}
-          lineHeight="1.35"
-          letterSpacing="0.01em"
-          textShadow={textGlow}
-        >
-          {disc.videoIntro.titulo}
-        </Text>
-
-        {/* Puntos con ✓ */}
-        <Flex direction="column" gap={{ base: 2.5, md: 3 }}>
-          {disc.videoIntro.puntos.map((p, i) => (
-            <Flex key={i} align="flex-start" gap={2.5}>
-              <Text
-                color={accent}
-                fontWeight="700"
-                fontSize={{ base: "md", md: "lg" }}
-                lineHeight="1.5"
-                flexShrink={0}
-                textShadow={textGlow}
-              >
-                ✓
-              </Text>
-              <Text
-                color={accent}
-                fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "sm", md: "md" }}
-                lineHeight="1.5"
-                textShadow={textGlow}
-              >
-                {p}
-              </Text>
-            </Flex>
-          ))}
-        </Flex>
-
-        {/* Fila de cierre: a la izquierda el botón (ver una muestra de la
-            plataforma, abre el popup del vídeo); abajo a la derecha, el precio
-            de la disciplina. Así el «cuánto cuesta» sale justo donde se decide,
-            sin necesidad de un box de precio aparte. */}
-        <Flex
-          mt={{ base: 1, md: 2 }}
-          direction={{ base: "column", md: "row" }}
-          align={{ base: "stretch", md: "flex-end" }}
-          justify="space-between"
-          gap={{ base: 4, md: 5 }}
-          w="100%"
-        >
-          {disc.video ? (
-            <Flex
-              as="button"
-              onClick={onVerVideo}
-              align="center"
-              justify="center"
-              gap={2.5}
-              alignSelf={{ base: "stretch", md: "flex-end" }}
-              px={{ base: 5, md: 6 }}
-              py={{ base: "10px", md: "11px" }}
-              borderRadius="full"
-              border={`1.5px solid ${accent}aa`}
-              bg={`${accent}1f`}
-              color={accent}
-              cursor="pointer"
-              boxShadow={`0 0 14px ${accent}33, 0 2px 12px rgba(0,0,0,0.25)`}
-              sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none", backdropFilter: "blur(4px)" }}
-              _hover={{ bg: `${accent}33`, borderColor: accent, boxShadow: `0 0 22px ${accent}55, 0 4px 16px rgba(0,0,0,0.3)`, transform: "translateY(-2px)" }}
-              _active={{ transform: "translateY(0) scale(0.98)" }}
-              transition="all 0.2s ease"
-            >
-              <Box as="span" fontSize={{ base: "sm", md: "md" }} lineHeight="1" style={{ textShadow: textGlow }}>▶</Box>
-              <Text
-                fontFamily="'EB Garamond', serif"
-                fontWeight="600"
-                fontSize={{ base: "sm", md: "md" }}
-                letterSpacing="0.03em"
-                textShadow={textGlow}
-              >
-                {disc.videoIntro.boton ?? "Ver por dentro"}
-              </Text>
-            </Flex>
-          ) : (
-            <Text
-              color={accent}
-              fontFamily="'EB Garamond', serif"
-              fontStyle="italic"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.12em"
-              textTransform="uppercase"
-              opacity={0.8}
-              alignSelf={{ base: "center", md: "flex-end" }}
-              textShadow={textGlow}
-            >
-              Vídeo próximamente
-            </Text>
-          )}
-
-          {/* Precio de la disciplina (sale de pagoDisciplinaLink, el mismo sitio
-              del que bebe el box de pago: web y cobro no se desincronizan). */}
-          <Flex
-            direction="column"
-            align={{ base: "center", md: "flex-end" }}
-            gap={0.5}
-            flexShrink={0}
-          >
-            <Flex align="baseline" gap={2}>
-              <Text
-                color={accent}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "3xl", md: "4xl" }}
-                lineHeight="1"
-                letterSpacing="0.02em"
-                textShadow={textGlow}
-              >
-                {PRECIO_DISCIPLINA}
-              </Text>
-              <Text
-                color={accent}
-                fontFamily="'EB Garamond', serif"
-                fontStyle="italic"
-                fontSize={{ base: "sm", md: "md" }}
-                opacity={0.9}
-                textShadow={textGlow}
-              >
-                por disciplina
-              </Text>
-            </Flex>
-            {/* <Text
-              color={accent}
-              fontFamily="'EB Garamond', serif"
-              fontSize={{ base: "xs", md: "sm" }}
-              opacity={0.72}
-              textShadow={textGlow}
-            >
-              Pago único · tuya para siempre
-            </Text> */}
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
+      txt={disc.txt}
+      videoIntro={disc.videoIntro}
+      paso={step}
+      renderIcon={disc.renderIcon}
+      tieneVideo={!!disc.video}
+      onVerVideo={onVerVideo}
+      onSaberMas={presentacion ? () => navigate(`/d/${presentacion.key}`) : undefined}
+    />
   );
 };
 

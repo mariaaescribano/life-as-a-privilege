@@ -17,7 +17,9 @@ import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../..
 import { recordarOrigenCurso } from "../global/VolverAlMapa";
 import { PsicologiaLoader } from "./comicLoaders";
 
-const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
+/** Enlace de pago de los cursos de Psicología (los gratuitos no pasan por aquí). */
+export const STRIPE_PAYMENT_LINK_CURSOS_PSICOLOGIA = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
+const STRIPE_PAYMENT_LINK = STRIPE_PAYMENT_LINK_CURSOS_PSICOLOGIA;
 const PSICOLOGIA_BG = "/img/fondos/psciologia.webp";
 const C = neuropsicologiaTxt;
 
@@ -37,7 +39,7 @@ const arrowNudge = keyframes`
 // la vez, el propio botón: al pulsar la foto se accede al curso. Una flecha
 // animada (abajo a la derecha) invita a pulsar. Sin título. Glow de psicología.
 // ────────────────────────────────────────────────────────────────────────────
-function CursoCard({ curso, onAcceder, delay }: { curso: Curso; onAcceder: () => void; delay: string }) {
+export function CursoCard({ curso, onAcceder, delay }: { curso: Curso; onAcceder: () => void; delay: string }) {
   return (
     <Box
       as="button"

@@ -18,6 +18,10 @@ import { HAMBRE_HOLISTICA } from "./hambreHolistica";
 import { COMICS_NUTRIENTES } from "./comicsNutrientes";
 import { INTRO_PSICOLOGIA } from "./comicPsicologiaIntro";
 import { COMIC_COMPROMISO } from "./comicCompromiso";
+import { COMIC_ACE } from "./comicAce";
+import { COMIC_CREENCIAS } from "./comicCreencias";
+import { COMIC_LINEA_TIEMPO } from "./comicLineaTiempo";
+import { COMIC_SINTESIS } from "./comicSintesis";
 import {
   VINETAS_ORIGEN as HINDU_ORIGEN,
   VINETAS_ELEMENTOS as HINDU_ELEMENTOS,
@@ -30,10 +34,13 @@ import {
   VINETAS_ALMA as TCM_ALMA,
 } from "./TCMIlustracionesModal";
 import { VINETAS_SIGNOS, VINETAS_CASAS, VINETAS_PLANETAS } from "./ComicAstrologiaModal";
+import { HISTORIA_ASTROLOGIA } from "./comicHistoriaAstrologia";
 import { ESTRELLA_ATOMOS } from "./comicEstrellaAtomos";
 import { CELULA_VIVA } from "./comicCelulaViva";
 import { CICLOS_NATURALEZA } from "./comicCiclosNaturaleza";
 import { CABALA_INTRO } from "./comicCabalaIntro";
+import { CABALA_ILUSTRACIONES_VINETAS } from "./cabalaIlustraciones";
+import { CABALA_SENDERO_VINETAS } from "./cabalaSenderoIlustraciones";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Galería de ILUSTRACIONES (página /ilustraciones). Reúne todas las series de
@@ -82,6 +89,26 @@ const nutriEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]
   themeColor: nutricionBg, textColor: nutricionTxt, cardColor: nutricionTxt,
   disciplinaBgImage: "/img/fondos/nutri.webp", disciplinaBgColor: nutricionBg, textShadow: "none",
 });
+
+const psicoEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]): IlustracionEntry => ({
+  id, titulo, disciplina: "Psicología", cover, vinetas,
+  themeColor: neuropsicologiaTxt,
+  disciplinaBgImage: "/img/fondos/psciologia.webp", disciplinaBgColor: neuropsicologiaBg,
+  textShadow: psicoTextShadow,
+});
+
+// ── Cómics de Psicología que van INTERCALADOS en el recorrido ──────────────
+// Estos cuatro no forman parte de las «Ilustraciones» del material (así lo dice
+// cada uno de sus archivos): viven dentro de su paso del recorrido, no en la
+// galería. Aquí se listan aparte, SIN entrar en ILUSTRACIONES, porque la
+// presentación pública de Psicología (/d/psicologia) sí los enseña: son
+// justamente los que explican en qué consiste el método.
+export const PSICOLOGIA_COMICS_RECORRIDO: IlustracionEntry[] = [
+  psicoEntry("psico-creencias", "Cómo nacen las creencias", "/viñetas/psicologia/creencias/creencias1.png", COMIC_CREENCIAS),
+  psicoEntry("psico-ace", "Los ACE", "/viñetas/psicologia/ace/ace1.png", COMIC_ACE),
+  psicoEntry("psico-linea", "La Línea de Vida", "/viñetas/psicologia/lineatiempo/lineatiempo1.png", COMIC_LINEA_TIEMPO),
+  psicoEntry("psico-sintesis", "El problema nunca es el problema", "/viñetas/psicologia/sintesis/sintesis1.png", COMIC_SINTESIS),
+];
 
 export const ILUSTRACIONES: IlustracionEntry[] = [
   // ── EL ORIGEN (primero) ──
@@ -169,6 +196,15 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
 
   // ── Astrología ──
+  {
+    id: "astro-historia",
+    titulo: "La historia de la Astrología",
+    disciplina: "Astrología",
+    cover: "/viñetas/astrologia/historia/historiaastrologia1.png",
+    vinetas: HISTORIA_ASTROLOGIA,
+    themeColor: astrologiaTxt,
+    textShadow: astroTextShadow,
+  },
   {
     id: "astro-signos",
     titulo: "Los Signos",
@@ -279,6 +315,28 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   nutriEntry("nutricion-microbiota", "La microbiota", "/viñetas/nutricion/microbiota/microbiota1.png", NUTRICION_MICROBIOTA),
   nutriEntry("nutricion-hambre", "El hambre: una mirada holística", "/recorrido/nutricion/hambre/hambre1.png", sinNegrita(HAMBRE_HOLISTICA)),
   nutriEntry("nutricion-integral", "Lo integral", "/viñetas/nutricion/integral/integral1.png", NUTRICION_INTEGRAL),
+
+  // ── Cábala ── (el Origen ya va arriba; aquí las dos series del Árbol)
+  {
+    id: "cabala-sefirot",
+    titulo: "Las diez dimensiones del alma",
+    disciplina: "Cábala",
+    cover: "/recorrido/cabala/sefirot/keter.png",
+    vinetas: CABALA_ILUSTRACIONES_VINETAS,
+    themeColor: cabalaTxt,
+    disciplinaBgImage: "/img/fondos/cabala.webp",
+    disciplinaBgColor: cabalaBg,
+  },
+  {
+    id: "cabala-senderos",
+    titulo: "Los 22 senderos",
+    disciplina: "Cábala",
+    cover: "/recorrido/cabala/senderos/aleph.png",
+    vinetas: CABALA_SENDERO_VINETAS,
+    themeColor: cabalaTxt,
+    disciplinaBgImage: "/img/fondos/cabala.webp",
+    disciplinaBgColor: cabalaBg,
+  },
 
   // ── Medicina China ──
   {

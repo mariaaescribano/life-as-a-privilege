@@ -3,8 +3,10 @@ import { EstudioController } from './estudio.controller';
 import { EstudioService } from './estudio.service';
 import { CartaNatalService } from '../metodoAstrologia/cartaNatal.service';
 import { DatabaseService } from '../database.service';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
+  imports: [MailModule],
   controllers: [EstudioController],
   providers: [EstudioService, CartaNatalService, DatabaseService],
 })

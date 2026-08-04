@@ -657,7 +657,22 @@ const QuienSoy = () => {
           transform={cierreReveal.visible ? "translateY(0) scale(1)" : "translateY(20px) scale(0.95)"}
           transition="opacity 0.9s ease, transform 0.9s ease"
         >
-          <Box as="span" display="inline-flex" alignItems="center" verticalAlign="-3px" mr={2}>
+          {/* El glifo acompaña a la frase, así que va a la altura de la letra:
+              el tamaño se fija desde aquí (el `size` del componente se queda
+              corto) para que crezca con el breakpoint igual que el texto. */}
+          <Box
+            as="span"
+            display="inline-flex"
+            alignItems="center"
+            verticalAlign="-6px"
+            mr={{ base: 2.5, md: 3 }}
+            sx={{
+              "& svg": {
+                width: { base: "34px", md: "50px" },
+                height: { base: "34px", md: "50px" },
+              },
+            }}
+          >
             <GlifoSigno nombre="Géminis" color="currentColor" size={22} glow={false} />
           </Box>
           Esto es solo el principio…

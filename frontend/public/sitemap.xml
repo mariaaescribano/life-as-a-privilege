@@ -19,6 +19,39 @@
     <loc>https://lifeasaprivilege.onrender.com/quienSoy</loc>
     <priority>0.8</priority>
   </url>
+  <!-- Presentación de cada disciplina (destino de los QR de los carteles). -->
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/d/astrologia</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/d/psicologia</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/d/ayurveda</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/d/medicinachina</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/d/fisiologia</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/d/nutricion</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/d/cabala</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/d/cultura</loc>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://lifeasaprivilege.onrender.com/productos</loc>
     <priority>0.7</priority>

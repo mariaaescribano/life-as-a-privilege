@@ -103,6 +103,30 @@ export async function guardarRespuesta(
   });
 }
 
+/** Un arquetipo en una posición, con la media de todas las personas que lo tienen ahí. */
+export interface GrupoPublico {
+  planeta: string;
+  eje: Eje;
+  posicion: string;
+  preguntas: number;
+  respuestas: number;
+  /** Cuánta gente hay en el grupo. */
+  personas: number;
+  /** % de «sí» de todo el grupo. */
+  porcentajeSi: number;
+}
+
+export interface ResultadosPublicos {
+  grupos: GrupoPublico[];
+  participantesTotales: number;
+}
+
+/** Los totales del estudio, sin nadie dentro (página /estudio/estadisticas). */
+export async function getResultadosPublicos(): Promise<ResultadosPublicos> {
+  const res = await axios.get<ResultadosPublicos>(`${API_URL}/estudio/resultados`);
+  return res.data;
+}
+
 export async function getEstadisticas(id: string): Promise<EstadisticasEstudio> {
   const res = await axios.get<EstadisticasEstudio>(`${API_URL}/estudio/estadisticas/${id}`);
   return res.data;

@@ -16,9 +16,14 @@
  *  siempre igual y se pueda comparar un cambio de diseño con el anterior.
  * ───────────────────────────────────────────────────────────────────────────── */
 
-import { CUERPOS, type CuerpoKey } from "../components/metodo/astrologiaData";
+import { CUERPOS, ZODIAC_SIGNS, type CuerpoKey } from "../components/metodo/astrologiaData";
 import { preguntasDe } from "./estudioPreguntas";
-import type { EstadisticasEstudio, ItemEstadistica } from "./estudioApi";
+import type {
+  EstadisticasEstudio,
+  GrupoPublico,
+  ItemEstadistica,
+  ResultadosPublicos,
+} from "./estudioApi";
 
 /** Una carta de ejemplo, con sus dos ejes. */
 const SIGNOS: Record<string, string> = {
@@ -50,6 +55,47 @@ function semilla(texto: string): number {
   let h = 0;
   for (let i = 0; i < texto.length; i++) h = (h * 31 + texto.charCodeAt(i)) % 100000;
   return h / 100000;
+}
+
+/**
+ * Los totales del estudio, inventados, para la página pública de estadísticas:
+ *
+ *     /estudio/estadisticas?demo
+ *
+ * Aquí SÍ salen las doce posiciones de cada arquetipo (no solo la de una carta),
+ * porque esa página es justo eso: el mapa entero. Mismo criterio que arriba —los
+ * porcentajes se generan de forma determinista— y algunos grupos se dejan a
+ * propósito con poca gente, para ver cómo queda la fila que todavía no tiene
+ * muestra suficiente.
+ */
+export function resultadosDeEjemplo(): ResultadosPublicos {
+  const grupos: GrupoPublico[] = [];
+
+  const añadir = (planeta: CuerpoKey, eje: "signo" | "casa", posicion: string) => {
+    const preguntas = preguntasDe(planeta, eje, posicion);
+    if (!preguntas.length) return;
+    const s = semilla(`${planeta}|${eje}|${posicion}`);
+    // Uno de cada seis grupos se queda con dos o tres personas: así se ve en
+    // pantalla el caso «todavía sois pocos».
+    const personas = s < 0.17 ? 2 + Math.floor(s * 12) : 6 + Math.floor(s * 38);
+    const porcentajeSi = 24 + Math.floor(semilla(`${planeta}|${posicion}|%`) * 68);
+    grupos.push({
+      planeta,
+      eje,
+      posicion,
+      preguntas: preguntas.length,
+      respuestas: personas * preguntas.length,
+      personas,
+      porcentajeSi,
+    });
+  };
+
+  for (const c of CUERPOS) {
+    for (const s of ZODIAC_SIGNS) añadir(c.key, "signo", s.name);
+    for (let casa = 1; casa <= 12; casa++) añadir(c.key, "casa", String(casa));
+  }
+
+  return { grupos, participantesTotales: 214 };
 }
 
 export function estadisticasDeEjemplo(): EstadisticasEstudio {

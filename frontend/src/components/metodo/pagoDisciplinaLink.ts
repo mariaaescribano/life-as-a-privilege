@@ -39,6 +39,23 @@ export const NUM_DISCIPLINAS = 8;
 /** Precio de una disciplina, tal y como se muestra en el box de pago. */
 export const PRECIO_DISCIPLINA = `${PRECIO_DISCIPLINA_EUR} €`;
 
+/**
+ * PRECIO DE REFERENCIA (el que va tachado al lado, más pequeño).
+ *
+ * OJO, esto no es solo diseño: en España, anunciar una reducción de precio
+ * obliga a que el precio tachado sea el MÁS BAJO que se haya aplicado en los 30
+ * días anteriores (Directiva Ómnibus, recogida en el RDL 24/2021). Tachar una
+ * cifra que nunca se ha cobrado es precio de referencia falso y es sancionable.
+ *
+ * Así que solo debe estar puesto si esas disciplinas han estado de verdad a ese
+ * precio. Para quitarlo de TODA la web —box de pago y mandala— se pone a `null`
+ * aquí y no hay que tocar nada más.
+ */
+export const PRECIO_DISCIPLINA_ANTES_EUR: number | null = 50;
+
+export const PRECIO_DISCIPLINA_ANTES =
+  PRECIO_DISCIPLINA_ANTES_EUR != null ? `${PRECIO_DISCIPLINA_ANTES_EUR} €` : null;
+
 /** Lo que cuesta El Mapa entero si se completan las ocho disciplinas. */
 export const PRECIO_MAPA_COMPLETO = `${PRECIO_DISCIPLINA_EUR * NUM_DISCIPLINAS} €`;
 

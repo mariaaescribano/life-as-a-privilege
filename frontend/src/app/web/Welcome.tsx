@@ -242,7 +242,7 @@ function TarjetaDisciplina({
         position="relative"
         pt="46px"
         pb={{ base: 5, md: 7 }}
-        px={{ base: 3, md: 5 }}
+        px={{ base: 3, md: 5, lg: 6 }}
         bg={hasBg ? "transparent" : d.bg}
         borderRadius="2xl"
         textAlign="center"
@@ -305,7 +305,7 @@ function TarjetaDisciplina({
           zIndex={1}
           color={d.txt}
           fontWeight="700"
-          fontSize={{ base: "18px", md: "27px", lg: "33px" }}
+          fontSize={{ base: "19px", md: "30px", lg: "38px" }}
           letterSpacing="0.04em"
           lineHeight="short"
           textShadow={hasBg
@@ -326,7 +326,7 @@ function TarjetaDisciplina({
             minH="2em"
             color={d.txt}
             fontWeight="500"
-            fontSize={{ base: "sm", md: "lg" }}
+            fontSize={{ base: "sm", md: "lg", lg: "xl" }}
             lineHeight="1.45"
             letterSpacing="0.01em"
             opacity={0.96}
@@ -350,7 +350,7 @@ function TarjetaDisciplina({
           gap={1.5}
           mt={{ base: 3, md: 3 }}
           color={d.txt}
-          fontSize={{ base: "10px", md: "xs" }}
+          fontSize={{ base: "10px", md: "xs", lg: "sm" }}
           fontWeight="600"
           letterSpacing={{ base: "0.08em", md: "0.14em" }}
           textTransform="uppercase"
@@ -560,13 +560,16 @@ const Welcome = () => {
           scroll. Ojo al subirlo: cada píxel de aquí empuja esa fila hacia abajo.
           (Las tarjetas ya traen 42px de `mt` propios para el icono que sobresale.) */}
       <Box
-        px={{ base: 5, md: 10, lg: 16 }}
+        px={{ base: 5, md: 6, lg: 8 }}
         pt={{ base: 2, md: 4 }}
         pb={{ base: 9, md: 13 }}
       >
+        {/* Hueco corto y padding lateral corto: las tarjetas mandan, así que se
+            comen el aire y salen anchas (el texto de dentro sube de tamaño
+            en consecuencia). */}
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-          gap={{ base: 4, md: 10 }}
+          gap={{ base: 3, md: 5 }}
         >
           {disciplines.map((d, i) => (
             <TarjetaDisciplina

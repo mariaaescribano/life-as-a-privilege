@@ -90,6 +90,7 @@ export const NUTRIENTES: Nutriente[] = [
           "A diferencia de la glucosa, la mayor parte de la fructosa se procesa primero en el hígado.",
           "Cuando se consume dentro de una fruta, la fibra hace que se absorba lentamente.",
           " Sin embargo, cuando se consume en grandes cantidades y sin fibra (como en refrescos o zumos), el hígado recibe una carga muy rápida que favorece la producción de grasa, gasta las reservas y altera el metabolismo.",
+          "Profundiza: Cuando consumes fructosa en grandes cantidades y sin fibra, el hígado la procesa a través de una ruta propia llamada fructólisis, la cual se salta el 'semáforo' de control que regula la glucólisis (la vía normal de la glucosa). Al ingresar directamente pasada esta cabina de peaje y sin frenos metabólicos, la fructosa satura el órgano de golpe, agotando instantáneamente sus reservas de energía celular (ATP). Al no poder frenar el proceso, el hígado se ve obligado a desviar todo ese exceso de carbono hacia la lipogénesis de novo, transformándolo directamente en grasa. Esto satura las células hepáticas provocando hígado graso, eleva los triglicéridos en sangre y genera ácido úrico, lo que desencadena inflamación celular y resistencia a la insulina.",
         ],
       },
       {

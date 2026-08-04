@@ -26,6 +26,7 @@ const Opiniones = lazy(() => import("./app/web/Opiniones"));
 const ElMetodo = lazy(() => import("./app/web/ElMetodo"));
 const MaterialesGratuitos = lazy(() => import("./app/web/MaterialesGratuitos"));
 const Ilustraciones = lazy(() => import("./app/web/Ilustraciones"));
+const PresentacionDisciplina = lazy(() => import("./app/web/PresentacionDisciplina"));
 const CheckoutMetodo = lazy(() => import("./app/web/CheckoutMetodo"));
 const MetodoAstrologia = lazy(() => import("./app/metodo/MetodoAstrologia"));
 const MetodoAstrologiaCartaAstral = lazy(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
@@ -142,6 +143,7 @@ const EstudioHome = lazy(() => import("./app/estudio/EstudioHome"));
 const EstudioDatos = lazy(() => import("./app/estudio/EstudioDatos"));
 const EstudioPreguntas = lazy(() => import("./app/estudio/EstudioPreguntas"));
 const EstudioResultados = lazy(() => import("./app/estudio/EstudioResultados"));
+const EstudioEstadisticas = lazy(() => import("./app/estudio/EstudioEstadisticas"));
 const UserAccount = lazy(() => import("./app/user/UserAccount"));
 const TCMTest1 = lazy(() => import("./components/espacio/components/TCMTest1"));
 const TCMTest2 = lazy(() => import("./components/espacio/components/TCMTest2"));
@@ -254,6 +256,9 @@ export default function App()
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/materiales" element={<MaterialesGratuitos />} />
       <Route path="/ilustraciones" element={<Ilustraciones />} />
+      {/* Presentación pública de una disciplina — destino del QR de los carteles.
+          Ruta corta porque va impresa: /d/cabala, /d/nutricion, … */}
+      <Route path="/d/:disciplina" element={<PresentacionDisciplina />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
       <Route path="/metodo/astrologia/solascendenteluna" element={<PrivateRoute><MetodoAstrologiaSolAscLuna /></PrivateRoute>} />
@@ -407,6 +412,8 @@ export default function App()
       <Route path="/estudio/datos" element={<EstudioDatos />} />
       <Route path="/estudio/preguntas" element={<EstudioPreguntas />} />
       <Route path="/estudio/resultados" element={<EstudioResultados />} />
+      {/* Los totales del estudio: medias de grupo, sin nadie dentro. */}
+      <Route path="/estudio/estadisticas" element={<EstudioEstadisticas />} />
 
 
       <Route path="*" element={<NoEncontrada />} />

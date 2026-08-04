@@ -1,7 +1,16 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from '../database.service';
+import { MailService } from '../mail/mail.service';
 import { CartaNatalService } from '../metodoAstrologia/cartaNatal.service';
 import type { CartaNatal, CuerpoKey } from '../metodoAstrologia/cartaNatal.types';
+import { cartaPng } from './cartaPng';
+
+/* Precio de la primera disciplina, tal y como se anuncia en el correo de
+ * gracias. Tiene que decir lo mismo que la web: frontend/src/components/metodo/
+ * pagoDisciplinaLink.ts (PRECIO_DISCIPLINA_EUR y PRECIO_DISCIPLINA_ANTES_EUR).
+ * Si allí se quita el precio tachado, aquí se pone PRECIO_ANTES a undefined. */
+const PRECIO_AHORA = '30 €';
+const PRECIO_ANTES: string | undefined = '50 €';
 
 /* Nombres de los signos por índice (Aries = 0), igual que en cartaNatal. */
 const ZODIACO = [
@@ -66,6 +75,26 @@ export interface ItemEstadistica {
   porcentajeSi: number;
 }
 
+/** Un arquetipo en una posición, con la media de toda su gente. */
+export interface GrupoPublico {
+  planeta: string;
+  eje: Eje;
+  posicion: string;
+  /** Cuántas preguntas tiene ese bloque. */
+  preguntas: number;
+  /** Respuestas contadas en total (preguntas × personas, más o menos). */
+  respuestas: number;
+  /** Cuánta gente hay en el grupo (la pregunta más respondida del bloque). */
+  personas: number;
+  /** % de «sí» de todo el grupo. */
+  porcentajeSi: number;
+}
+
+export interface ResultadosPublicos {
+  grupos: GrupoPublico[];
+  participantesTotales: number;
+}
+
 /**
  * Estudio estadístico sobre astrología.
  *
@@ -96,9 +125,21 @@ export class EstudioService {
   >();
   private static readonly POSICIONES_TTL_MS = 30 * 60 * 1000;
 
+  /**
+   * Los resultados públicos, ya sumados, en memoria.
+   *
+   * La página de estadísticas es pública y recorre TODA la vista de agregados
+   * para pintarse. Sin esto, cada visita (y cada recarga) volvería a leerse el
+   * estudio entero. Los porcentajes no cambian de un minuto a otro: cinco
+   * minutos de retraso no se notan y ahorran el paseo.
+   */
+  private resultadosCache: { datos: ResultadosPublicos; ts: number } | null = null;
+  private static readonly RESULTADOS_TTL_MS = 5 * 60 * 1000;
+
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly cartaNatalService: CartaNatalService,
+    private readonly mailService: MailService,
   ) {}
 
   /* ── Alta (o corrección) de un participante ────────────────────────────── */
@@ -184,6 +225,19 @@ export class EstudioService {
     // La carta se acaba de recalcular: la copia en memoria se pone al día en el
     // acto (si corrigió su hora, las respuestas siguientes van a la posición nueva).
     this.posicionesEnMemoria.set(id, { signos, casas, ts: Date.now() });
+
+    // El correo de gracias con su carta dibujada, SOLO en el alta.
+    //
+    // No se manda al corregir los datos: quien se equivoca con la hora y la
+    // arregla dos veces no tiene por qué recibir tres correos iguales.
+    //
+    // Va sin await a propósito: dibujar el PNG y hablar con Gmail tarda, y quien
+    // acaba de pulsar «Continuar» está esperando su cuestionario. Si el correo
+    // falla, se queda escrito en el log y el alta sigue siendo válida — nunca al
+    // contrario.
+    if (!anterior) {
+      void this.enviarGraciasConCarta(email, carta);
+    }
 
     return {
       id,
@@ -325,6 +379,71 @@ export class EstudioService {
     return { participante, items, participantesTotales: count ?? 0 };
   }
 
+  /* ── Resultados públicos (página /estudio/estadisticas) ──────────────────── */
+
+  /**
+   * El estudio entero, en totales: por cada arquetipo y cada posición, qué
+   * porcentaje de «sí» han dado de media las personas que lo tienen ahí.
+   *
+   * No sale pregunta a pregunta a propósito (eso es ruido y además dejaría ver
+   * qué contesta la gente a cada cosa): se suman los síes y las respuestas de
+   * todas las preguntas del bloque y se divide. Sumar y dividir —en vez de
+   * promediar porcentajes— hace que una pregunta con mucha muestra pese lo que
+   * le toca y no lo mismo que una con tres respuestas.
+   *
+   * Es público: son datos agregados, que es exactamente lo que se le prometió a
+   * quien participa («los resultados se publican siempre en conjunto»).
+   */
+  async getResultadosPublicos(): Promise<ResultadosPublicos> {
+    const cache = this.resultadosCache;
+    if (cache && Date.now() - cache.ts < EstudioService.RESULTADOS_TTL_MS) {
+      return cache.datos;
+    }
+
+    const filas = await this.traerTodo(
+      'estudio_stats',
+      'planeta, eje, posicion, pregunta_id, total, si',
+    );
+
+    const acum = new Map<string, { planeta: string; eje: Eje; posicion: string; si: number; total: number; preguntas: number; personas: number }>();
+    for (const f of filas) {
+      const planeta = f.planeta as string;
+      const eje = ((f.eje as Eje) ?? 'signo') as Eje;
+      const posicion = String(f.posicion ?? '');
+      const total = Number(f.total) || 0;
+      const si = Number(f.si) || 0;
+      const clave = `${planeta}|${eje}|${posicion}`;
+      const g = acum.get(clave) ?? { planeta, eje, posicion, si: 0, total: 0, preguntas: 0, personas: 0 };
+      g.si += si;
+      g.total += total;
+      g.preguntas += 1;
+      // Cuánta gente hay en el grupo: la pregunta más contestada del bloque (no
+      // la suma, que contaría a la misma persona una vez por pregunta).
+      g.personas = Math.max(g.personas, total);
+      acum.set(clave, g);
+    }
+
+    const grupos: GrupoPublico[] = [...acum.values()]
+      .map((g) => ({
+        planeta: g.planeta,
+        eje: g.eje,
+        posicion: g.posicion,
+        preguntas: g.preguntas,
+        respuestas: g.total,
+        personas: g.personas,
+        porcentajeSi: g.total > 0 ? Math.round((g.si / g.total) * 100) : 0,
+      }))
+      .sort((a, b) => a.planeta.localeCompare(b.planeta) || a.eje.localeCompare(b.eje));
+
+    const { count } = await this.databaseService.getClient()
+      .from('estudio_participante')
+      .select('id', { count: 'exact', head: true });
+
+    const datos: ResultadosPublicos = { grupos, participantesTotales: count ?? 0 };
+    this.resultadosCache = { datos, ts: Date.now() };
+    return datos;
+  }
+
   /* ── Panel de administración ──────────────────────────────────────────────
    * Dos listados sin filtro: quién ha participado y cómo van los resultados. El
    * cruce fino se hace en memoria (son decenas o cientos de filas) para no
@@ -414,6 +533,34 @@ export class EstudioService {
   }
 
   /* ─────────────────────────── Interno ─────────────────────────── */
+
+  /**
+   * Dibuja la carta y manda el correo de gracias.
+   *
+   * Todo va dentro de un try: ni un fallo del dibujo ni uno de Gmail pueden
+   * tumbar un alta que ya está guardada. Lo que sí hace es DEJARLO ESCRITO en el
+   * log —con el email delante— para que se pueda ver qué correos han salido y
+   * cuáles no sin tener que adivinarlo.
+   */
+  private async enviarGraciasConCarta(email: string, carta: CartaNatal): Promise<void> {
+    try {
+      const png = cartaPng(carta);
+      const salio = await this.mailService.enviarGraciasEstudio(email, {
+        cartaPng: png,
+        precio: { ahora: PRECIO_AHORA, antes: PRECIO_ANTES },
+      });
+      console.log(
+        salio
+          ? `[estudio] correo de gracias ENVIADO a ${email} (carta de ${Math.round(png.length / 1024)} KB)`
+          : `[estudio] correo de gracias NO ENVIADO a ${email} — revisa EMAIL_USER / EMAIL_PASS`,
+      );
+    } catch (err: unknown) {
+      console.error(
+        `[estudio] NO se ha podido mandar el correo de gracias a ${email}:`,
+        err instanceof Error ? err.message : err,
+      );
+    }
+  }
 
   /**
    * Todas las filas de una tabla o vista, de mil en mil.
