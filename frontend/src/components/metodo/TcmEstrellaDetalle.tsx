@@ -25,6 +25,11 @@ const CONTENT_KEY: Record<VeredictoBalance, "equilibrio" | "exceso" | "deficienc
   equilibrio: "equilibrio", exceso: "exceso", deficiencia: "deficiencia", mixto: "desequilibrio",
 };
 
+// Altura FIJA del box en escritorio (md+). El detalle de cada elemento tiene un
+// texto de largo distinto: si la caja se adaptase, la página daría un salto cada
+// vez que se pincha otro elemento. Se fija una vez y lo que sobra se scrollea.
+const ALTO_FIJO = "560px";
+
 // Geometría del pentágono selector (centrada en el viewBox 400×348).
 const CX = 200, CY = 184, R = 110, FOTO_R = 52;
 function vertice(i: number, radio: number) {
@@ -59,7 +64,11 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
   const parrafos = (veredicto ? C?.[CONTENT_KEY[veredicto]] : C?.intro) ?? C?.intro ?? [];
 
   return (
-    <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">
+    // De md hacia arriba el box tiene ALTURA FIJA: así no da saltos al cambiar de
+    // elemento (cada uno tiene un texto de largo distinto) y el texto que no cabe
+    // se lee con scroll vertical dentro. En móvil se deja crecer libremente.
+    <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch"
+          h={{ base: "auto", md: ALTO_FIJO }}>
       {/* Izquierda · la estrella de los cinco elementos (selector) */}
       <Box w={{ base: "100%", md: "540px" }} flexShrink={0}>
         <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
@@ -115,7 +124,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
 
       {/* Derecha · detalle con la foto del elemento de fondo */}
       <Box flex="1" minW={0}>
-        <Box position="relative" w="100%" h="100%" minH={{ base: "420px", md: "540px" }}
+        <Box position="relative" w="100%" h="100%" minH={{ base: "420px", md: "0" }}
              borderRadius="2xl" overflow="hidden" border={`1px solid ${E.color}66`}
              boxShadow={`${CAJA_GLOW}, 0 0 48px ${E.color}55, inset 0 0 70px ${E.color}22`}>
           <Box key={`bg-${elActivo}`} position="absolute" inset={0}
@@ -126,9 +135,23 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
           <Box position="absolute" inset={0} bg={`${E.color}1f`}
                bgGradient={`linear(to-t, ${E.color}4d, transparent 55%)`} />
 
-          <Box key={elActivo} position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 10 }}
-               sx={{ "@keyframes elemIn": { from: { opacity: 0, transform: "translateY(12px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}
+          {/* La caja de fondo no se mueve: solo scrollea este contenido. `pr` 0
+              para que la barra quede pegada al borde derecho; ese aire lo pone
+              el `pr` de dentro. Al cambiar de elemento vuelve arriba (key). */}
+          <Box key={elActivo} position="relative" zIndex={1} h="100%"
+               overflowY={{ base: "visible", md: "auto" }}
+               pl={{ base: 6, md: 10 }} pr={0} py={{ base: 7, md: 10 }}
+               sx={{
+                 "@keyframes elemIn": { from: { opacity: 0, transform: "translateY(12px)" }, to: { opacity: 1, transform: "translateY(0)" } },
+                 "&::-webkit-scrollbar": { width: "8px" },
+                 "&::-webkit-scrollbar-track": { background: "transparent" },
+                 "&::-webkit-scrollbar-thumb": { background: `${E.color}aa`, borderRadius: "8px" },
+                 "&::-webkit-scrollbar-thumb:hover": { background: E.color },
+                 scrollbarWidth: "thin",
+                 scrollbarColor: `${E.color}aa transparent`,
+               }}
                style={{ animation: "elemIn 0.35s cubic-bezier(0.22,1,0.36,1)" }}>
+           <Box pr={{ base: 6, md: 10 }}>
             <Flex align="center" justify="space-between" gap={3} wrap="wrap" mb={4}>
               <Text color="white" fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" lineHeight="1.1"
                     style={{ textShadow: "0 2px 10px rgba(0,0,0,0.9)" }}>
@@ -156,6 +179,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                 </Text>
               ))}
             </Flex>
+           </Box>
           </Box>
         </Box>
       </Box>
