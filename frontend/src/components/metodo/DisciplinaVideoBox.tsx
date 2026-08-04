@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { Box, Flex, Text, type FlexProps } from "@chakra-ui/react";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { nombreEnMapa, type VideoIntro } from "../../data/recorridoContenido";
@@ -16,6 +16,27 @@ import { PrecioConAntes } from "./PrecioConAntes";
 // Vive aquí (y no dentro de MandalaRecorrido) porque lo usan DOS páginas y tiene
 // que verse EXACTAMENTE igual en las dos: es el box donde se decide la compra.
 // ─────────────────────────────────────────────────────────────────────────────
+
+/** Envoltura del bloque de texto. Con `activa` (las presentaciones) es la zona
+ *  MEDIDA: ocupa el hueco libre del box y recorta lo que sobre, para que el
+ *  ajuste de tamaño tenga un alto contra el que medir. Sin ella, el texto se
+ *  pinta tal cual (el box de /elMetodo crece con su contenido). */
+function ZonaTexto({
+  activa,
+  zonaRef,
+  children,
+}: {
+  activa: boolean;
+  zonaRef: React.RefObject<HTMLDivElement | null>;
+  children: React.ReactNode;
+}) {
+  if (!activa) return <>{children}</>;
+  return (
+    <Box ref={zonaRef} flex="1" minH={0} overflow="hidden">
+      {children}
+    </Box>
+  );
+}
 
 export function DisciplinaVideoBox({
   nom,
@@ -57,6 +78,65 @@ export function DisciplinaVideoBox({
   const accent = txt;
   const hasBg = hasDisciplinaBg(nom);
   const textGlow = `0 1px 3px ${bg}, 0 0 10px ${bg}, 0 0 20px ${bg}`;
+
+  // ── AJUSTE DEL TEXTO AL HUECO (solo en `textoGrande`) ──────────────────
+  // En las presentaciones el alto del box lo impone el vídeo cuadrado de al
+  // lado, así que el hueco del texto es FIJO y cada disciplina escribe frases
+  // de largo distinto: con un tamaño fijo, a unas les sobraba medio box y a
+  // otras no les cabía.
+  //
+  // Aquí el bloque (título + puntos) se pinta en `em` sobre un tamaño base que
+  // se mide: se empieza por el más grande que queremos ver y se baja de medio en
+  // medio píxel hasta que cabe entero. Es la misma idea que el título del
+  // header: medición imperativa (se escribe `style.fontSize`), sin estado, así
+  // que no hay re-render por píxel ni bucle de «mido → cambio → vuelvo a medir».
+  const zonaRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const zona = zonaRef.current;
+    if (!textoGrande || !zona) return;
+    const bloque = zona.firstElementChild as HTMLElement | null;
+    if (!bloque) return;
+
+    const ajustar = () => {
+      const ancho = window.innerWidth;
+      // Techo por pantalla (px del `em` base) y suelo por debajo del cual no se
+      // baja: mejor un pelín justo que ilegible.
+      const max = ancho >= 992 ? 26 : ancho >= 768 ? 22 : 18;
+      const min = 12;
+      let size = max;
+      zona.style.fontSize = `${size}px`;
+      // En móvil el box crece con su contenido (no hay vídeo que le imponga el
+      // alto), así que `clientHeight` acompaña y el bucle no baja nada.
+      while (size > min && bloque.scrollHeight > zona.clientHeight + 1) {
+        size -= 0.5;
+        zona.style.fontSize = `${size}px`;
+      }
+    };
+
+    const raf = requestAnimationFrame(ajustar);
+    // Segunda pasada: en el primer frame el vídeo de al lado puede no haber
+    // fijado todavía el alto del box, así que el hueco no es el definitivo.
+    const tardia = window.setTimeout(ajustar, 300);
+    // Al cambiar el ancho (girar el móvil, redimensionar) se vuelve a medir.
+    let anchoPrev = zona.getBoundingClientRect().width;
+    const ro = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width ?? 0;
+      if (Math.abs(w - anchoPrev) < 1) return;
+      anchoPrev = w;
+      ajustar();
+    });
+    ro.observe(zona);
+    // EB Garamond suele cargar DESPUÉS del primer pintado y el texto cambia de
+    // alto: se mide otra vez cuando la tipografía está lista.
+    document.fonts?.ready.then(ajustar).catch(() => {});
+    return () => { cancelAnimationFrame(raf); window.clearTimeout(tardia); ro.disconnect(); };
+  }, [textoGrande, videoIntro]);
+
+  // Tamaños del bloque de texto. Con `textoGrande` van en `em` (los manda el
+  // ajuste de arriba); sin él, los tokens de siempre — /elMetodo no se toca.
+  const fsTitulo = textoGrande ? "1.6em" : { base: "lg", md: "xl" };
+  const fsTick = textoGrande ? "1.15em" : { base: "md", md: "lg" };
+  const fsPunto = textoGrande ? "1em" : { base: "sm", md: "md" };
 
   return (
     <Flex
@@ -186,49 +266,52 @@ export function DisciplinaVideoBox({
         gap={{ base: 4, md: 5 }}
         flex="1"
       >
-        {/* Título (puede ser una frase larga que introduce el recorrido).
-            En `textoGrande` (las presentaciones, donde el box va a media página
-            y su alto lo impone el vídeo cuadrado de al lado) la letra sube para
-            que el texto LLENE la caja en vez de quedarse un bloque pequeño
-            arriba con medio box vacío. */}
-        <Text
-          color={accent}
-          fontFamily="'EB Garamond', serif"
-          fontWeight="700"
-          fontSize={textoGrande ? { base: "2xl", md: "4xl" } : { base: "lg", md: "xl" }}
-          lineHeight="1.35"
-          letterSpacing="0.01em"
-          textShadow={textGlow}
-        >
-          {videoIntro.titulo}
-        </Text>
+        {/* Título + puntos. En `textoGrande` van dentro de la ZONA que se mide
+            (ver el useLayoutEffect de arriba): ocupa todo el hueco que deja el
+            precio y el texto se pinta lo más grande que quepa entero. */}
+        <ZonaTexto activa={textoGrande} zonaRef={zonaRef}>
+          <Flex direction="column" gap={textoGrande ? "0.75em" : { base: 4, md: 5 }}>
+            {/* Título (puede ser una frase larga que introduce el recorrido) */}
+            <Text
+              color={accent}
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={fsTitulo}
+              lineHeight="1.3"
+              letterSpacing="0.01em"
+              textShadow={textGlow}
+            >
+              {videoIntro.titulo}
+            </Text>
 
-        {/* Puntos con ✓ */}
-        <Flex direction="column" gap={textoGrande ? { base: 3, md: 4 } : { base: 2.5, md: 3 }}>
-          {videoIntro.puntos.map((p, i) => (
-            <Flex key={i} align="flex-start" gap={{ base: 2.5, md: 3 }}>
-              <Text
-                color={accent}
-                fontWeight="700"
-                fontSize={textoGrande ? { base: "lg", md: "2xl" } : { base: "md", md: "lg" }}
-                lineHeight="1.45"
-                flexShrink={0}
-                textShadow={textGlow}
-              >
-                ✓
-              </Text>
-              <Text
-                color={accent}
-                fontFamily="'EB Garamond', serif"
-                fontSize={textoGrande ? { base: "lg", md: "2xl" } : { base: "sm", md: "md" }}
-                lineHeight="1.45"
-                textShadow={textGlow}
-              >
-                {p}
-              </Text>
+            {/* Puntos con ✓ */}
+            <Flex direction="column" gap={textoGrande ? "0.6em" : { base: 2.5, md: 3 }}>
+              {videoIntro.puntos.map((p, i) => (
+                <Flex key={i} align="flex-start" gap={textoGrande ? "0.55em" : { base: 2.5, md: 3 }}>
+                  <Text
+                    color={accent}
+                    fontWeight="700"
+                    fontSize={fsTick}
+                    lineHeight="1.4"
+                    flexShrink={0}
+                    textShadow={textGlow}
+                  >
+                    ✓
+                  </Text>
+                  <Text
+                    color={accent}
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={fsPunto}
+                    lineHeight="1.4"
+                    textShadow={textGlow}
+                  >
+                    {p}
+                  </Text>
+                </Flex>
+              ))}
             </Flex>
-          ))}
-        </Flex>
+          </Flex>
+        </ZonaTexto>
 
         {/* Fila de cierre: a la izquierda el botón (ver una muestra de la
             plataforma); abajo a la derecha, el precio de la disciplina. Así el

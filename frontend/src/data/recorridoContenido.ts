@@ -340,7 +340,7 @@ videoIntro: {
       "El último paso no es aprender otra cosa: es ordenar lo que ya sabes. Has pasado por siete formas distintas de entender al ser humano. Aquí construyes la tuya.",
     contenido: [
       {
-        titulo: "Filosofía de Life as a Privilege",
+        titulo: "Las historias que formaron la humanidad.",
         items: [
           "Después de recorrer siete disciplinas distintas, llega el momento de integrarlas en una visión propia del mundo y de ti mismo.",
         ],
