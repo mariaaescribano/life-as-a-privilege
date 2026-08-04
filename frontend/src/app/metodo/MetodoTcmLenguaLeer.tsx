@@ -90,7 +90,7 @@ export default function MetodoTcmLenguaLeer() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Lee tu lengua"
-            pageLabel="6/7"
+            pageLabel="6/9"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -98,7 +98,7 @@ export default function MetodoTcmLenguaLeer() {
             mb={0}
             prev={{ label: "← El curso", onClick: () => navigate("/metodo/tcm/lengua") }}
             extra={ilustracionesBtn}
-            next={{ label: "Cursos →", onClick: () => navigate("/metodo/tcm/cursos") }}
+            next={{ label: "Taoísmo →", onClick: () => navigate("/metodo/tcm/taoismo") }}
           />
           </Reveal>
 

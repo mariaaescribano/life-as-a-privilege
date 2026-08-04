@@ -93,6 +93,8 @@ const MetodoTcmCiclos = lazy(() => import("./app/metodo/MetodoTcmCiclos"));
 const MetodoTcmDiagnostico = lazy(() => import("./app/metodo/MetodoTcmDiagnostico"));
 const MetodoTcmLengua = lazy(() => import("./app/metodo/MetodoTcmLengua"));
 const MetodoTcmLenguaLeer = lazy(() => import("./app/metodo/MetodoTcmLenguaLeer"));
+const MetodoTcmTaoismo = lazy(() => import("./app/metodo/MetodoTcmTaoismo"));
+const MetodoTcmRecetas = lazy(() => import("./app/metodo/MetodoTcmRecetas"));
 const MetodoTcmCursos = lazy(() => import("./app/metodo/MetodoTcmCursos"));
 const MetodoFisiologia = lazy(() => import("./app/metodo/MetodoFisiologia"));
 const MetodoFisiologiaNiveles = lazy(() => import("./app/metodo/MetodoFisiologiaNiveles"));
@@ -333,6 +335,8 @@ export default function App()
       <Route path="/metodo/tcm/diagnostico" element={<PrivateRoute><MetodoTcmDiagnostico /></PrivateRoute>} />
       <Route path="/metodo/tcm/lengua" element={<PrivateRoute><MetodoTcmLengua /></PrivateRoute>} />
       <Route path="/metodo/tcm/lengua/leer" element={<PrivateRoute><MetodoTcmLenguaLeer /></PrivateRoute>} />
+      <Route path="/metodo/tcm/taoismo" element={<PrivateRoute><MetodoTcmTaoismo /></PrivateRoute>} />
+      <Route path="/metodo/tcm/recetas" element={<PrivateRoute><MetodoTcmRecetas /></PrivateRoute>} />
       <Route path="/metodo/tcm/cursos" element={<PrivateRoute><MetodoTcmCursos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia" element={<PrivateRoute><MetodoFisiologia /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/niveles" element={<PrivateRoute><MetodoFisiologiaNiveles /></PrivateRoute>} />

@@ -46,6 +46,8 @@ export const ORDEN_ELEMENTOS: Elemento[] = ["madera", "fuego", "tierra", "metal"
 // ── Índice del recorrido (botón «Índice», reutiliza IndiceRecorrido) ────────
 // Solo las páginas ya navegables (sin enlaces muertos). Se irá ampliando según
 // se construyan los pasos pendientes (perfil, ciclos, tu mapa, escucharte…).
+// OJO: al añadir o quitar un paso hay que retocar el `pageLabel` («n/9») del
+// MetodoStepHeader de TODAS las páginas y los botones prev/next de las vecinas.
 export const TCM_INDICE: PasoRecorrido[] = [
   { n: 1, titulo: "Medicina China",     ruta: () => "/metodo/tcm" },
   { n: 2, titulo: "Los Cinco Elementos", ruta: () => "/metodo/tcm/elementos" },
@@ -53,7 +55,9 @@ export const TCM_INDICE: PasoRecorrido[] = [
   { n: 4, titulo: "Diagnóstico final", ruta: () => "/metodo/tcm/diagnostico" },
   { n: 5, titulo: "Tu lengua", ruta: () => "/metodo/tcm/lengua" },
   { n: 6, titulo: "Lee tu lengua", ruta: () => "/metodo/tcm/lengua/leer" },
-  { n: 7, titulo: "Cursos", ruta: () => "/metodo/tcm/cursos" },
+  { n: 7, titulo: "Taoísmo", ruta: () => "/metodo/tcm/taoismo" },
+  { n: 8, titulo: "Recetas tradicionales", ruta: () => "/metodo/tcm/recetas" },
+  { n: 9, titulo: "Cursos", ruta: () => "/metodo/tcm/cursos" },
 ];
 
 export const TCM_TOTAL = TCM_INDICE.length;

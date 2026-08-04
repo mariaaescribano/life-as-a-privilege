@@ -131,7 +131,7 @@ export default function MetodoTcmCiclos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Ciclos"
-            pageLabel="3/7"
+            pageLabel="3/9"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
