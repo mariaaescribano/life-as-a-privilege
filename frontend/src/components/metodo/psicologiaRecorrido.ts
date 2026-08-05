@@ -130,6 +130,7 @@ export const RECORRIDO_INDICE: PasoRecorrido[] = [
   { n: 20, titulo: "Compromiso",      ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
   { n: 21, titulo: "Carta",      ruta: (id) => `/metodo/psicologia/${id}/brujula` },
   { n: 22, titulo: "Síntesis",     ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
+  { n: 23, titulo: "Cursos",       ruta: (id) => `/metodo/psicologia/${id}/cursos` },
 ];
 
 /** Total de pasos del recorrido (para las etiquetas X/total). */
@@ -987,6 +988,10 @@ export interface PreguntaMiedo {
   pregunta: string;
   apoyo?: string;
   placeholder?: string;
+  /** Ejemplos pulsables: se escriben en la respuesta para que luego los edite.
+   *  Máximo 4 y CORTOS: se pintan en el hueco que queda bajo el recuadro del
+   *  popup, que no crece (ver MetodoPsicologiaMiedosPreguntas). */
+  ejemplos?: string[];
 }
 
 export const MIEDOS_ENFRENTAR_INTRO = {
@@ -1002,33 +1007,69 @@ export const MIEDOS_PREGUNTAS: PreguntaMiedo[] = [
     pregunta: "¿Qué es exactamente lo que temes que ocurra?",
     apoyo: "Ponle nombre concreto, no en abstracto.",
     placeholder: "Lo que de verdad temo es…",
+    ejemplos: [
+      "Que enferme alguien que quiero",
+      "Que me quede sola",
+      "Que dejen de quererme",
+      "Que no llegue a tiempo",
+    ],
   },
   {
     key: "peor",
     pregunta: "Si se hiciera realidad, ¿qué es lo peor que podría pasar?",
     placeholder: "Lo peor sería…",
+    ejemplos: [
+      "Que no pudiera soportarlo",
+      "Que me hundiera y no me levantara",
+      "Que me quedara sin nadie",
+      "Que nada volviera a tener sentido",
+    ],
   },
   {
     key: "probabilidad",
     pregunta: "¿Qué probabilidad real crees que tiene de ocurrir?",
     apoyo: "Del 0 al 100 %. Sé honesto contigo, no con tu miedo.",
     placeholder: "Creo que…",
+    ejemplos: [
+      "Muy baja, menos del 10 %",
+      "Un 30 %",
+      "Un 50 %",
+      "Alta, más del 70 %",
+    ],
   },
   {
     key: "cambio",
     pregunta: "Si ocurriera, ¿cómo cambiaría de verdad tu Vida?",
     placeholder: "Mi Vida cambiaría en que…",
+    ejemplos: [
+      "Dolería, pero seguiría siendo yo",
+      "Tendría que empezar de nuevo",
+      "Cambiaría un tiempo y luego me adaptaría",
+      "Menos de lo que mi miedo me dice",
+    ],
   },
   {
     key: "afrontar",
     pregunta: "¿Cómo lo afrontarías? ¿Con qué fortalezas, personas o recursos contarías?",
     placeholder: "Podría apoyarme en…",
+    ejemplos: [
+      "Mi familia",
+      "Mis amigos",
+      "Pedir ayuda a un profesional",
+      "Todo lo que ya he superado antes",
+    ],
   },
   {
     key: "compasion",
     pregunta: "¿Qué le dirías a alguien que quieres si tuviera este mismo miedo?",
     apoyo: "Háblate con esa misma amabilidad.",
     placeholder: "Le diría que…",
+    ejemplos: [
+      "Que no está sola",
+      "Que su miedo tiene sentido",
+      "Que puede con esto",
+      "Que yo estaría a su lado",
+    ],
   },
 ];
 
@@ -1304,7 +1345,7 @@ export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolea
     case 19: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
     case 20: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
     case 21: return t(data.brujula?.mensaje) !== "";                           // Carta
-    default: return true;  // 1, 4, 12, 13, 22 y cualquier otro: sin requisito
+    default: return true;  // 1, 4, 12, 13, 22, 23 y cualquier otro: sin requisito
   }
 }
 

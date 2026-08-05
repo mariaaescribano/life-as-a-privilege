@@ -8,7 +8,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Float } from "../../components/global/Reveal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -415,11 +415,11 @@ export default function MetodoNutricionDia() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "30px", md: "38px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title="Diseña tu día"
-              compact
-              dense
-              maxW="1200px"
+              // Header NORMAL, como el resto de Nutrición: sin `dense`/`compact`
+              // (que lo dejaban bajito y con el título pequeño) y con el ancho
+              // por defecto (850px), no estirado a los 1200 del contenido.
               bgColor={`${nutricionBg}dd`}
               color={nutricionTxt}
               nom={nutricionNom}
@@ -456,7 +456,7 @@ export default function MetodoNutricionDia() {
           ) : (
             <>
               {/* Intro compacta */}
-              <Reveal direction="up" distance={18} delay={0.08} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <Reveal inView direction="up" distance={18} delay={0.08} duration={0.6} w="100%" display="flex" justifyContent="center">
                 <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic"
                       textAlign="center" lineHeight="1.7" maxW="820px">
                   Aprender a comer no es contar: es saber <b>cuánto</b> y <b>cómo</b>. Reparte tus{" "}
@@ -466,7 +466,7 @@ export default function MetodoNutricionDia() {
               </Reveal>
 
               {/* ── DOS COLUMNAS ── */}
-              <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
+              <Reveal inView direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
                 <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
                   {/* ── IZQUIERDA · tus comidas (scroll propio) ── */}
@@ -646,7 +646,7 @@ export default function MetodoNutricionDia() {
               </Reveal>
 
               {/* Nota educativa */}
-              <Reveal direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <Reveal inView direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
                 <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="760px" lineHeight="1.7">
                   Tu mano es tu báscula: un puño ≈ una ración de fruta o cereal cocido · la palma ≈ tu proteína ·
                   el pulgar ≈ una cucharada de grasa · dos manos ahuecadas ≈ tus verduras. Aprende a mirar el plato,

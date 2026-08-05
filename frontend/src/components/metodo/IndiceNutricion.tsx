@@ -26,7 +26,7 @@ const PASOS: { titulo: string; path: string }[] = [
   { titulo: "El hambre",              path: "/metodo/nutricion/hambre" },
   { titulo: "Tu plato",               path: "/metodo/nutricion/plato" },
   { titulo: "Tus calorías y macros",  path: "/metodo/nutricion/calorias" },
-  { titulo: "¿Cómo va tu azúcar?",    path: "/metodo/nutricion/prediabetes" },
+  { titulo: "Test de prevención",    path: "/metodo/nutricion/prediabetes" },
   { titulo: "Diseña tu día",          path: "/metodo/nutricion/dia" },
   { titulo: "Preguntas y mitos",      path: "/metodo/nutricion/mitos" },
   { titulo: "Cursos para profundizar", path: "/metodo/nutricion/cursos" },

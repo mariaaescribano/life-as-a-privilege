@@ -107,7 +107,7 @@ export default function MetodoPsicologiaHeridasLista() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 12, total: 22 }}
+            step={{ current: 12, total: 23 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: "← Heridas", onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); } }}

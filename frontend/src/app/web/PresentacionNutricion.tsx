@@ -178,7 +178,8 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
           <RevealItem>
             <Text
               color="white"
-              fontSize={{ base: "2xl", md: "4xl" }}
+              fontSize={{ base: "lg", md: "2xl" }}
+              fontStyle="italic"
               fontWeight="700"
               lineHeight="1.15"
               letterSpacing="0.04em"
@@ -196,6 +197,28 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
           templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
           gap={{ base: 8, md: 8 }}
           alignItems="stretch"
+          // `1fr` es en realidad `minmax(auto, 1fr)`: un item de rejilla NO se
+          // encoge por debajo del mínimo de su contenido. El <video> de la
+          // muestra mide 1080×1080 de verdad, así que reclamaba 784px y dejaba
+          // la columna del box en 364; con esa anchura el texto del box pedía
+          // 1147px de alto, se salía de la rejilla y la sección de abajo se
+          // pintaba encima. Con `minWidth: 0` las dos columnas son de verdad
+          // 1fr, iguales, y de ahí salen las cajas cuadradas.
+          //
+          // Quién manda el alto: el CUADRADO, no el contenido. El box no cambia
+          // de tamaño; lo que se estira es la letra, hasta llenarlo. El vídeo
+          // sigue al box (`h="100%"` y recorta con `object-fit: cover`).
+          sx={{
+            "& > *": { minWidth: 0 },
+            // El box va CUADRADO y no cambia de tamaño: su alto sale de la
+            // anchura de la columna, no del contenido. Es lo que le da al texto
+            // un hueco fijo que llenar (ver el autoajuste de
+            // DisciplinaVideoBox) y lo que mantiene las dos cajas iguales.
+            // Hace falta ponerlo AQUÍ y no dentro del vídeo: el suyo lo anula
+            // su propio `h="100%"`.
+            // Solo de `lg` para arriba; en móvil se apilan y crecen a lo alto.
+            "@media (min-width: 62em)": { "& > *": { aspectRatio: "1 / 1" } },
+          }}
         >
           <Reveal inView direction="right" distance={26} duration={0.7} h="100%">
             <DisciplinaVideoBox

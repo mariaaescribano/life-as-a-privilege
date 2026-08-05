@@ -67,7 +67,10 @@ export default function MetodoCulturaHistoria() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1000px" gap={8}>
+        {/* 1240 y no 1000: la banda de la línea del tiempo necesita aire para
+            que quepan seis círculos decentes. El header no se entera — lleva su
+            propio maxW="1000px" ahí abajo. */}
+        <Flex direction="column" align="center" w="100%" maxW="1240px" gap={8}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader

@@ -54,6 +54,7 @@ export function FotoBox({
   colorTint,
   aspect = 1,
   glow,
+  vivo = false,
 }: {
   titulo: React.ReactNode;
   foto?: string;
@@ -77,6 +78,11 @@ export function FotoBox({
   /** Glow a medida (sustituye al glowSuave por defecto). P.ej. el glow de la
    *  cabecera. Se usa también en hover para que no cambie a otro tono. */
   glow?: string;
+  /** Tarjeta VIVA: al pasar el puntero la foto hace un zoom lento, el halo
+   *  crece y el título se desplaza un pelo. Va por parámetro (y no por defecto)
+   *  porque este box lo comparten Nutrición, Fisiología y Cultura, y de momento
+   *  solo Nutrición lo pide. */
+  vivo?: boolean;
 }) {
   const [imgErr, setImgErr] = useState(false);
   const hayFoto = !!foto && !imgErr;
@@ -90,6 +96,9 @@ export function FotoBox({
     <Box
       as="button"
       onClick={onClick}
+      // `role="group"` habilita los `_groupHover` de la foto y del título: sin
+      // él, la tarjeta se levanta pero por dentro no se mueve nada.
+      role={vivo ? "group" : undefined}
       textAlign="left"
       position="relative"
       overflow="hidden"
@@ -102,10 +111,17 @@ export function FotoBox({
       fontFamily="'EB Garamond', serif"
       border={sinLineas ? "none" : (visto ? `1px solid ${tinta}aa` : `1px solid ${tinta}33`)}
       boxShadow={glow ?? (visto ? glowSuaveVisto(tinta) : glowSuave(tinta))}
-      transition="all 0.22s ease"
-      _hover={{ transform: "translateY(-4px)", ...(sinLineas ? {} : { borderColor: `${tinta}88` }),
-                boxShadow: glow ?? glowSuaveHover(tinta) }}
-      _active={{ transform: "translateY(-1px)" }}
+      transition={vivo
+        ? "transform 0.32s cubic-bezier(0.22,1,0.36,1), box-shadow 0.32s ease, border-color 0.22s ease"
+        : "all 0.22s ease"}
+      _hover={{
+        transform: vivo ? "translateY(-6px)" : "translateY(-4px)",
+        ...(sinLineas ? {} : { borderColor: `${tinta}88` }),
+        boxShadow: vivo
+          ? `${glow ?? glowSuaveHover(tinta)}, 0 0 28px ${tinta}2e`
+          : (glow ?? glowSuaveHover(tinta)),
+      }}
+      _active={{ transform: vivo ? "translateY(-2px) scale(0.985)" : "translateY(-1px)" }}
     >
       {/* Fondo temático de la disciplina (se ve en el pie, bajo el título). */}
       <DisciplinaBgLayer nom={nom} borderRadius="2xl" overlay={`${bg}55`} />
@@ -130,10 +146,23 @@ export function FotoBox({
            display="flex" alignItems="center" justifyContent="center">
         {hayFoto ? (
           <Image src={encodeURI(foto!)} alt={typeof titulo === "string" ? titulo : ""} w="100%" h="100%"
-                 objectFit="cover" onError={() => setImgErr(true)} />
+                 objectFit="cover" onError={() => setImgErr(true)}
+                 transition={vivo ? "transform 0.55s cubic-bezier(0.22,1,0.36,1)" : undefined}
+                 _groupHover={vivo ? { transform: "scale(1.07)" } : undefined} />
         ) : emoji ? (
-          <Box as="span" fontSize={{ base: "44px", md: "60px" }} lineHeight="1">{emoji}</Box>
+          <Box as="span" fontSize={{ base: "44px", md: "60px" }} lineHeight="1"
+               transition={vivo ? "transform 0.45s cubic-bezier(0.22,1,0.36,1)" : undefined}
+               _groupHover={vivo ? { transform: "scale(1.12) rotate(-4deg)" } : undefined}>
+            {emoji}
+          </Box>
         ) : null}
+        {/* Brillo que barre la foto al pasar el puntero. */}
+        {vivo && hayFoto && (
+          <Box position="absolute" inset="0" pointerEvents="none" opacity={0}
+               transition="opacity 0.35s ease"
+               bgGradient="linear(to-tr, transparent 40%, rgba(255,255,255,0.22) 55%, transparent 70%)"
+               _groupHover={{ opacity: 1 }} />
+        )}
       </Box>
 
       {/* Línea separadora a todo el ancho (en Nutrición se omite). */}
@@ -145,7 +174,9 @@ export function FotoBox({
       <Flex position="relative" zIndex={1} flex="1" align="center"
             px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}>
         <Text color={tinta} fontWeight="700" fontSize={{ base: "sm", md: "md" }} lineHeight="1.25"
-              letterSpacing="0.02em" style={{ textShadow: `0 1px 4px ${bg}` }}>
+              letterSpacing="0.02em" style={{ textShadow: `0 1px 4px ${bg}` }}
+              transition={vivo ? "transform 0.3s cubic-bezier(0.22,1,0.36,1)" : undefined}
+              _groupHover={vivo ? { transform: "translateX(3px)" } : undefined}>
           {titulo}
         </Text>
       </Flex>

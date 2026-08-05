@@ -1,35 +1,33 @@
-import jsPDF from "jspdf";
-import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
-import type { DiaBloque } from "./generateDiaPdf";
+// ─────────────────────────────────────────────────────────────────────────
+// «Mi mapa» — todo el recorrido de Ayurveda en un cuaderno.
+//
+// Es el documento más personal de la disciplina: reúne, en orden, lo que la
+// persona fue escribiendo paso a paso, su compromiso, el día que diseñó y —de
+// regalo— el recordatorio de qué desequilibra y qué devuelve el eje a su doṣha.
+//
+// La portada lleva su compromiso escrito a mano dentro de un cartucho: es la
+// frase que quiso dejarse a sí misma, y merece ser lo primero que vea. Si no
+// escribió ninguna, la portada cae en el emblema del loto.
+// ─────────────────────────────────────────────────────────────────────────
+import { Taller, MARGEN, ANCHO, A4_W, A4_H } from "./pdf/atelier";
+import { TEMA_AYURVEDA, COLOR_DOSHA, type Tema } from "./pdf/temas";
+import { conAlfa, filigranaEsquina } from "./pdf/formas";
+import { relojDelDia, type DiaBloque } from "./generateDiaPdf";
+import { GARAMOND } from "./fonts/ebGaramond";
 
-// PDF completo de «Tu recorrido» (Ayurveda): reúne las palabras que el usuario
-// dejó en cada paso, su compromiso, su día ideal y —de regalo— un recordatorio
-// de qué equilibra y qué desequilibra a su dosha.
-// Comparte el lenguaje visual del PDF del día (acuarela + tinta marrón).
-
-const PAGE_BG: [number, number, number] = [255, 255, 255];
-const INK: [number, number, number] = [133, 62, 11];
-const INK_SOFT: [number, number, number] = [150, 96, 50];
-const MUTED: [number, number, number] = [165, 120, 80];
-
-const DOSHA_COLORS: Record<string, [number, number, number]> = {
-  vata: [124, 92, 191],
-  pitta: [192, 82, 42],
-  kapha: [58, 138, 92],
+const ACUARELA: Record<string, string> = {
+  vata: "/img/fondos/vata.webp",
+  pitta: "/img/fondos/pitta.webp",
+  kapha: "/img/fondos/kapha.webp",
 };
 
-const MARGIN = 20;
-const PAGE_W = 210;
-const CONTENT_W = PAGE_W - MARGIN * 2;
-const BG_IMG = "/img/fondos/hinduismo.webp";
-
-const plain = (s: string) => (s || "").replace(/\*\*/g, "").replace(/\*/g, "").trim();
+const limpio = (s: string) => (s || "").replace(/\*\*/g, "").replace(/\*/g, "").trim();
 
 export interface RecorridoData {
   entradas: { pregunta: string; respuesta: string }[];
   compromiso: string;
   diaBloques: DiaBloque[];
-  /** «Lo que aumenta / desequilibra tu dosha». */
+  /** «Lo que aumenta / desequilibra tu doṣha». */
   desequilibra: { titulo: string; items: string[] };
   /** «Las primeras señales» de desequilibrio. */
   senales: { titulo: string; items: string[] };
@@ -37,271 +35,213 @@ export interface RecorridoData {
   equilibra: { titulo: string; items: string[] };
 }
 
-function loadImage(src: string): Promise<HTMLImageElement | null> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
-}
-
-// Dibuja `draw` con opacidad (si el visor soporta GState); si no, opaco. Para
-// tintes suaves (paneles de sección, tarjetas) sin romper visores antiguos.
-function withAlpha(doc: jsPDF, opacity: number, draw: () => void): void {
-  const GS = (doc as any).GState;
-  if (GS) {
-    try {
-      doc.saveGraphicsState();
-      doc.setGState(new GS({ opacity }));
-      draw();
-      doc.restoreGraphicsState();
-      return;
-    } catch { /* sin GState: opaco */ }
-  }
-  draw();
-}
-
 export async function generateRecorridoPdf(
   dosha: string,
   doshaLabel: string,
   data: RecorridoData,
 ): Promise<void> {
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-  registerEbGaramond(doc);
-  const pageH = doc.internal.pageSize.getHeight();
-  const doshaColor = DOSHA_COLORS[dosha] ?? INK;
-  const img = await loadImage(BG_IMG);
-  let page = 1;
-  const fecha = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
-
-  const fillBackground = () => { doc.setFillColor(...PAGE_BG); doc.rect(0, 0, PAGE_W, pageH, "F"); };
-
-  const drawWatercolorBand = (h: number) => {
-    if (img && img.naturalWidth) {
-      const drawH = PAGE_W * (img.naturalHeight / img.naturalWidth);
-      doc.addImage(img, "PNG", 0, 0, PAGE_W, drawH);
-      doc.setFillColor(...PAGE_BG);
-      doc.rect(0, h, PAGE_W, Math.max(0, drawH - h) + 1, "F");
-    } else {
-      doc.setFillColor(245, 238, 225);
-      doc.rect(0, 0, PAGE_W, h, "F");
-    }
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(0.6);
-    doc.line(0, h, PAGE_W, h);
+  const clave = (dosha || "").toLowerCase();
+  const color = COLOR_DOSHA[clave] ?? TEMA_AYURVEDA.acento;
+  const tema: Tema = {
+    ...TEMA_AYURVEDA,
+    acento: color,
+    acentoSuave: [
+      Math.round(color[0] + (255 - color[0]) * 0.46),
+      Math.round(color[1] + (255 - color[1]) * 0.46),
+      Math.round(color[2] + (255 - color[2]) * 0.46),
+    ],
+    acuarela: ACUARELA[clave] ?? TEMA_AYURVEDA.acuarela,
   };
 
-  const ornament = (y: number) => {
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(0.4);
-    doc.line(PAGE_W / 2 - 26, y, PAGE_W / 2 - 5, y);
-    doc.line(PAGE_W / 2 + 5, y, PAGE_W / 2 + 26, y);
-    doc.setFillColor(...doshaColor);
-    doc.circle(PAGE_W / 2, y, 1.1, "F");
-  };
+  const taller = await Taller.abrir(tema, { titulo: "Mi mapa" });
+  const doc = taller.doc;
+  const compromiso = limpio(data.compromiso);
 
-  const drawFooter = (p: number) => {
-    doc.setDrawColor(224, 205, 178); doc.setLineWidth(0.2);
-    doc.line(MARGIN, pageH - 12.5, PAGE_W - MARGIN, pageH - 12.5);
-    doc.setFont(GARAMOND, "italic"); doc.setFontSize(8.5); doc.setTextColor(...MUTED);
-    doc.text("Life as a Privilege  ·  Ayurveda", MARGIN, pageH - 8);
-    doc.text(`${p}`, PAGE_W - MARGIN, pageH - 8, { align: "right" });
-  };
+  /* ── PORTADA ── */
+  taller.portada({
+    titulo: "Mi mapa",
+    subtitulo: `Ayurveda · Doṣha ${doshaLabel}`,
+    cierre: "Mi recorrido",
+    pieLamina: compromiso ? "Tu compromiso, con tus palabras." : undefined,
+    lamina: compromiso
+      ? (d, cx, yTop, ancho) => {
+          // Cartucho: la frase enmarcada como una inscripción, centrada en todo
+          // el hueco que queda entre el rombo y el bloque del pie.
+          const largo = compromiso.length > 130;
+          const tam = largo ? 14 : 17;
+          const salto = largo ? 7.6 : 9.2;
+          d.setFont(GARAMOND, "italic");
+          d.setFontSize(tam);
+          const lineas = d.splitTextToSize(`«${compromiso}»`, ancho - 34) as string[];
+          const alto = lineas.length * salto + 32;
+          const w = ancho - 8;
+          const x = cx - w / 2;
+          // Centro vertical del hueco disponible (hasta el pie de portada).
+          const y = yTop + Math.max(0, (A4_H - 74 - yTop - alto) / 2);
 
-  const drawMiniHeader = () => {
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(0.5);
-    doc.line(MARGIN, 18, PAGE_W - MARGIN, 18);
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...INK);
-    doc.text("Mi mapa", MARGIN, 14);
-    doc.setFont(GARAMOND, "normal"); doc.setFontSize(10); doc.setTextColor(...doshaColor);
-    doc.text(`Dosha ${doshaLabel}`, PAGE_W - MARGIN, 14, { align: "right" });
-  };
+          conAlfa(d, 0.34, () => {
+            d.setFillColor(22, 10, 4);
+            d.roundedRect(x, y, w, alto, 3.5, 3.5, "F");
+          });
+          d.setDrawColor(...tema.acentoSuave);
+          d.setLineWidth(0.45);
+          d.roundedRect(x, y, w, alto, 3.5, 3.5, "S");
+          d.setLineWidth(0.16);
+          d.roundedRect(x + 2.6, y + 2.6, w - 5.2, alto - 5.2, 2.4, 2.4, "S");
+          filigranaEsquina(d, x + 6, y + 6, 1, 1, tema.acentoSuave, 8, false);
+          filigranaEsquina(d, x + w - 6, y + alto - 6, -1, -1, tema.acentoSuave, 8, false);
 
-  let y = 0;
-  const ensureSpace = (needed: number) => {
-    if (y + needed > pageH - 18) {
-      drawFooter(page); doc.addPage(); page++;
-      fillBackground(); drawMiniHeader(); y = 28;
-    }
-  };
+          d.setFont(GARAMOND, "italic");
+          d.setFontSize(tam);
+          d.setTextColor(255, 250, 244);
+          lineas.forEach((l, i) => d.text(l, cx, y + 21 + i * salto, { align: "center" }));
+        }
+      : undefined,
+  });
 
-  // ── Bloques reutilizables ──────────────────────────────────────────────
-  // Cabecera de sección: banda redondeada con un tinte muy suave + barra de
-  // acento (color del dosha) + numeral. Aire de «capítulo».
-  let sectionNum = 0;
-  const sectionTitle = (title: string) => {
-    ensureSpace(24);
-    y += 6;
-    sectionNum++;
-    const panelH = 12.5;
-    const panelTop = y - 7;
-    withAlpha(doc, 0.09, () => {
-      doc.setFillColor(...doshaColor);
-      doc.roundedRect(MARGIN, panelTop, CONTENT_W, panelH, 2.8, 2.8, "F");
-    });
-    doc.setFillColor(...doshaColor);
-    doc.roundedRect(MARGIN, panelTop, 2.4, panelH, 1.2, 1.2, "F");
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(9); doc.setTextColor(...MUTED);
-    doc.text(String(sectionNum).padStart(2, "0"), MARGIN + 7, y);
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(15.5); doc.setTextColor(...INK);
-    doc.text(title, MARGIN + 16, y);
-    y = panelTop + panelH + 7;
-  };
-
-  const paragraph = (text: string, opts?: { italic?: boolean; size?: number; color?: [number, number, number] }) => {
-    const size = opts?.size ?? 11.5;
-    doc.setFont(GARAMOND, opts?.italic ? "italic" : "normal"); doc.setFontSize(size);
-    doc.setTextColor(...(opts?.color ?? INK));
-    const lines = doc.splitTextToSize(plain(text), CONTENT_W) as string[];
-    lines.forEach((line) => { ensureSpace(size * 0.55); doc.text(line, MARGIN, y); y += size * 0.52; });
-  };
-
-  const bulletList = (items: string[]) => {
-    doc.setFont(GARAMOND, "normal"); doc.setFontSize(11.5); doc.setTextColor(...INK);
-    for (const it of items) {
-      const lines = doc.splitTextToSize(plain(it), CONTENT_W - 8) as string[];
-      ensureSpace(lines.length * 6 + 1);
-      doc.setFillColor(...doshaColor);
-      doc.circle(MARGIN + 1.5, y - 1.4, 1, "F");
-      lines.forEach((line, i) => doc.text(line, MARGIN + 8, y + i * 6));
-      y += lines.length * 6 + 1.5;
-    }
-  };
-
-  // Pregunta + respuesta como TARJETA (tinte suave + barra de acento).
-  const qaBlock = (pregunta: string, respuesta: string) => {
-    const innerW = CONTENT_W - 16;
-    const pLines = doc.splitTextToSize(plain(pregunta), innerW) as string[];
-    const rLines = doc.splitTextToSize(plain(respuesta), innerW) as string[];
-    const textH = pLines.length * 5.5 + 1 + rLines.length * 6;
-    const padY = 5.5;
-    const cardH = textH + padY * 2;
-    ensureSpace(cardH + 5);
-    const cardTop = y - 4;
-    withAlpha(doc, 0.055, () => {
-      doc.setFillColor(...doshaColor);
-      doc.roundedRect(MARGIN, cardTop, CONTENT_W, cardH, 3, 3, "F");
-    });
-    doc.setFillColor(...doshaColor);
-    doc.roundedRect(MARGIN, cardTop, 2.2, cardH, 1.1, 1.1, "F");
-    let yy = cardTop + padY + 3.5;
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...INK_SOFT);
-    pLines.forEach((line) => { doc.text(line, MARGIN + 9, yy); yy += 5.5; });
-    yy += 1;
-    doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...INK);
-    rLines.forEach((line) => { doc.text(line, MARGIN + 9, yy); yy += 6; });
-    y = cardTop + cardH + 5;
-  };
-
-  /* ── PÁGINA 1 · portada ── */
-  fillBackground();
-  drawWatercolorBand(58);
-  // Marco fino doble de cortesía.
-  doc.setDrawColor(...doshaColor);
-  doc.setLineWidth(0.5); doc.rect(10, 10, PAGE_W - 20, pageH - 20);
-  doc.setLineWidth(0.2); doc.rect(12.4, 12.4, PAGE_W - 24.8, pageH - 24.8);
-  doc.setFont(GARAMOND, "bold"); doc.setFontSize(26); doc.setTextColor(...INK);
-  doc.text("Mi mapa", PAGE_W / 2, 76, { align: "center", charSpace: 0.5 });
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...doshaColor);
-  doc.text(`Ayurveda  ·  Doṣha ${doshaLabel}`, PAGE_W / 2, 85, { align: "center" });
-  ornament(93);
-  y = 104;
-
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(11.5); doc.setTextColor(...MUTED);
-  const intro = doc.splitTextToSize(
-    "A lo largo del camino te has ido escuchando. Estas son las palabras que te dejaste a ti mismo, tu día ideal y un recordatorio de lo que cuida tu equilibrio.",
-    CONTENT_W - 10,
-  ) as string[];
-  intro.forEach((line) => { doc.text(line, PAGE_W / 2, y, { align: "center" }); y += 6; });
-  y += 2;
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(9.5); doc.setTextColor(...MUTED);
-  doc.text(fecha, PAGE_W / 2, y, { align: "center" });
-  y += 3;
-
-  /* ── Tus palabras ── */
-  if (data.entradas.length > 0) {
-    sectionTitle("Tus palabras");
-    data.entradas.forEach((e) => qaBlock(e.pregunta, e.respuesta));
+  /* ── TUS PALABRAS ── */
+  taller.nuevaPagina();
+  const entradas = (data.entradas || []).filter((e) => limpio(e.respuesta));
+  if (entradas.length) {
+    taller.capitulo(
+      "Tus palabras",
+      "Lo que fuiste escribiendo paso a paso, sin retocar. Léelo dentro de un tiempo: " +
+        "vas a reconocerte y a la vez vas a ver cuánto te has movido.",
+    );
+    entradas.forEach((e) => taller.preguntaRespuesta(e.pregunta, e.respuesta));
   }
 
-  /* ── Tu compromiso ── */
-  if (data.compromiso.trim()) {
-    sectionTitle("Tu compromiso");
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(13.5); doc.setTextColor(...doshaColor);
-    const cl = doc.splitTextToSize(plain(data.compromiso), CONTENT_W) as string[];
-    cl.forEach((line) => { ensureSpace(8); doc.text(line, MARGIN, y); y += 7; });
-    y += 3;
+  /* ── TU COMPROMISO ── */
+  if (compromiso) {
+    taller.capitulo("Tu compromiso");
+    taller.reservar(30);
+    const arriba = taller.y - 3;
+    doc.setFont(GARAMOND, "italic");
+    doc.setFontSize(15);
+    const lineas = doc.splitTextToSize(compromiso, ANCHO - 26) as string[];
+    const alto = lineas.length * 8 + 15;
+    conAlfa(doc, 0.07, () => {
+      doc.setFillColor(...color);
+      doc.roundedRect(MARGEN, arriba, ANCHO, alto, 3, 3, "F");
+    });
+    doc.setDrawColor(...color);
+    doc.setLineWidth(0.35);
+    doc.roundedRect(MARGEN, arriba, ANCHO, alto, 3, 3, "S");
+    // Comillas grandes, de libro.
+    conAlfa(doc, 0.3, () => {
+      doc.setFont(GARAMOND, "bold");
+      doc.setFontSize(38);
+      doc.setTextColor(...color);
+      doc.text("“", MARGEN + 6, arriba + 20);
+    });
+    doc.setFont(GARAMOND, "italic");
+    doc.setFontSize(15);
+    doc.setTextColor(...tema.tinta);
+    lineas.forEach((l, i) => doc.text(l, A4_W / 2, arriba + 13 + i * 8, { align: "center" }));
+    taller.y = arriba + alto + 8;
   }
 
-  /* ── Tu día ideal ── */
-  sectionTitle("Tu día ideal");
-  const orden = [...data.diaBloques]
+  /* ── TU DÍA IDEAL ── */
+  const orden = [...(data.diaBloques || [])]
     .filter((b) => (b.actividad && b.actividad.trim()) || (b.alimentos && b.alimentos.length > 0) || b.hora)
     .sort((a, b) => (a.hora || "99").localeCompare(b.hora || "99"));
+
+  taller.capitulo("Tu día ideal", "La rutina que diseñaste para sostener tu equilibrio.");
   if (orden.length === 0) {
-    paragraph("Aún no has creado tu día ideal.", { italic: true, color: MUTED });
+    taller.parrafo("Aún no has creado tu día ideal.", { cursiva: true, color: tema.apagado });
   } else {
-    const TEXT_X = MARGIN + 24;
-    const TEXT_W = CONTENT_W - 24;
-    for (const b of orden) {
+    taller.lamina(
+      104,
+      (d, cx, cy) => relojDelDia(d, cx, cy, 41, orden, color, tema.apagado, tema.tintaSuave),
+      "Los puntos grandes son tus comidas; los pequeños, el resto de momentos.",
+    );
+
+    const HILO_X = MARGEN + 21;
+    const TEXTO_X = MARGEN + 28;
+    orden.forEach((b, i) => {
       const actividad = (b.actividad || (b.comida ? "Comida" : "Momento")).trim();
-      const actLines = doc.splitTextToSize(actividad, TEXT_W) as string[];
-      const foodsStr = b.comida && b.alimentos.length > 0 ? b.alimentos.join("   ·   ") : "";
-      const foodLines = foodsStr ? (doc.splitTextToSize(foodsStr, TEXT_W) as string[]) : [];
-      ensureSpace(actLines.length * 6 + foodLines.length * 5 + 9);
-      const topY = y;
-      doc.setFont(GARAMOND, "bold"); doc.setFontSize(12); doc.setTextColor(...doshaColor);
-      doc.text(b.hora || "—", MARGIN, y + 1.5);
-      doc.setFillColor(...doshaColor);
-      doc.circle(TEXT_X - 6, y, 1.2, "F");
-      doc.setFont(GARAMOND, b.comida ? "bold" : "normal"); doc.setFontSize(12); doc.setTextColor(...INK);
-      actLines.forEach((line, i) => doc.text(line, TEXT_X, y + i * 6));
-      let yy = y + actLines.length * 6;
-      if (foodLines.length) {
-        doc.setFont(GARAMOND, "italic"); doc.setFontSize(10); doc.setTextColor(...INK_SOFT);
-        foodLines.forEach((line, i) => doc.text(line, TEXT_X, yy + 0.5 + i * 5));
-        yy += foodLines.length * 5 + 0.5;
+      doc.setFont(GARAMOND, b.comida ? "bold" : "normal");
+      doc.setFontSize(11.5);
+      const lineasAct = doc.splitTextToSize(actividad, ANCHO - 28) as string[];
+      const comidaTxt = b.comida && b.alimentos.length > 0 ? b.alimentos.join("   ·   ") : "";
+      doc.setFont(GARAMOND, "italic");
+      doc.setFontSize(9.6);
+      const lineasCom = comidaTxt ? (doc.splitTextToSize(comidaTxt, ANCHO - 28) as string[]) : [];
+      const alto = lineasAct.length * 5.8 + (lineasCom.length ? lineasCom.length * 4.8 + 1.5 : 0);
+      taller.reservar(alto + 10);
+      const arriba = taller.y;
+
+      doc.setFont(GARAMOND, "bold");
+      doc.setFontSize(11.5);
+      doc.setTextColor(...color);
+      doc.text(b.hora || "—", MARGEN, arriba + 1);
+
+      if (b.comida) {
+        doc.setFillColor(...color);
+        doc.circle(HILO_X, arriba - 1.2, 1.8, "F");
+      } else {
+        doc.setFillColor(...tema.papel);
+        doc.circle(HILO_X, arriba - 1.2, 1.6, "F");
+        doc.setDrawColor(...color);
+        doc.setLineWidth(0.4);
+        doc.circle(HILO_X, arriba - 1.2, 1.6, "S");
       }
-      y = yy + 6;
-      doc.setDrawColor(...doshaColor); doc.setLineWidth(0.2);
-      doc.line(TEXT_X - 6, topY + 3, TEXT_X - 6, y - 4);
-      doc.setDrawColor(...MUTED); doc.setLineWidth(0.1);
-      doc.line(TEXT_X, y - 2.5, PAGE_W - MARGIN, y - 2.5);
-      y += 3;
-    }
+
+      doc.setFont(GARAMOND, b.comida ? "bold" : "normal");
+      doc.setFontSize(11.5);
+      doc.setTextColor(...tema.tinta);
+      lineasAct.forEach((l, j) => doc.text(l, TEXTO_X, arriba + j * 5.8));
+      let yy = arriba + lineasAct.length * 5.8;
+      if (lineasCom.length) {
+        doc.setFont(GARAMOND, "italic");
+        doc.setFontSize(9.6);
+        doc.setTextColor(...tema.tintaSuave);
+        lineasCom.forEach((l, j) => doc.text(l, TEXTO_X, yy + 1.5 + j * 4.8));
+        yy += lineasCom.length * 4.8 + 1.5;
+      }
+      const abajo = yy + 4;
+      if (i < orden.length - 1) {
+        conAlfa(doc, 0.4, () => {
+          doc.setDrawColor(...color);
+          doc.setLineWidth(0.28);
+          doc.line(HILO_X, arriba + 2, HILO_X, abajo + 2.5);
+        });
+      }
+      taller.y = abajo + 2.5;
+    });
   }
 
-  /* ── Regalo: equilibrio / desequilibrio del dosha ── */
-  ensureSpace(24);
-  y += 6;
-  ornament(y);
-  y += 9;
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(10.5); doc.setTextColor(...MUTED);
-  doc.text("Un regalo para tu camino", PAGE_W / 2, y, { align: "center" });
-  y += 8;
+  /* ── EL REGALO: TU MAPA DE EQUILIBRIO ── */
+  taller.divisor();
+  taller.reservar(16);
+  taller.versalitas("Un regalo para tu camino", A4_W / 2, taller.y, 8.6, tema.apagado, "center");
+  taller.y += 10;
 
-  sectionTitle(data.desequilibra.titulo || `Lo que desequilibra tu ${doshaLabel}`);
-  bulletList(data.desequilibra.items);
-
-  if (data.senales.items.length > 0) {
-    sectionTitle(data.senales.titulo || "Las primeras señales");
-    bulletList(data.senales.items);
+  if (data.desequilibra?.items?.length) {
+    taller.capitulo(
+      data.desequilibra.titulo || `Lo que desequilibra tu ${doshaLabel}`,
+      "Reconocerlo a tiempo es la mitad del trabajo.",
+    );
+    taller.lista(data.desequilibra.items);
+  }
+  if (data.senales?.items?.length) {
+    taller.capitulo(
+      data.senales.titulo || "Las primeras señales",
+      "El cuerpo avisa mucho antes de romperse. Estas son tus alarmas tempranas.",
+    );
+    taller.lista(data.senales.items);
+  }
+  if (data.equilibra?.items?.length) {
+    taller.capitulo(
+      data.equilibra.titulo || "Cómo volver al equilibrio",
+      "Cuando reconozcas alguna de las señales de arriba, empieza por aquí.",
+    );
+    taller.lista(data.equilibra.items);
   }
 
-  sectionTitle(data.equilibra.titulo || "Cómo volver al equilibrio");
-  bulletList(data.equilibra.items);
-
-  /* Cierre */
-  ensureSpace(22);
-  y += 6;
-  ornament(y);
-  y += 8;
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(10.5); doc.setTextColor(...MUTED);
-  const cierre = doc.splitTextToSize(
+  taller.cierre(
     "El equilibrio no aparece sin más: se construye con pequeñas decisiones repetidas cada día.",
-    CONTENT_W - 20,
-  ) as string[];
-  cierre.forEach((line, i) => doc.text(line, PAGE_W / 2, y + i * 5.5, { align: "center" }));
+  );
 
-  drawFooter(page);
-  doc.save(`mi_recorrido_ayurveda_${dosha}.pdf`);
+  taller.guardar(`mi-mapa-ayurveda-${clave || "dosha"}.pdf`);
 }

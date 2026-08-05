@@ -55,9 +55,10 @@ function ReadSeal({ x, y, nodeR = R }: { x: number; y: number; nodeR?: number })
   const by = y - nodeR * 0.72
   return (
     <g style={{ pointerEvents: 'none' }}>
-      {/* Anillo dorado que late alrededor del nodo leído */}
+      {/* Anillo dorado que late alrededor del nodo leído. Va por FUERA del aro
+          concéntrico de la esfera (nodeR + 7) para que no se solapen. */}
       <circle
-        cx={x} cy={y} r={nodeR + 5}
+        cx={x} cy={y} r={nodeR + 11}
         fill="none" stroke={cabalaTxt} strokeWidth={1.4}
         style={{ transformOrigin: `${x}px ${y}px`, animation: 'readRing 3s ease-in-out infinite' }}
       />
@@ -146,6 +147,32 @@ const PATHS: Array<{ num: number; from: SefiraKey; to: SefiraKey }> = [
 ]
 
 const sefiraMap = Object.fromEntries(SEFIROT.map(s => [s.key, s])) as Record<SefiraKey, Sefira>
+
+/* ─── El Rayo relampagueante ────────────────────────────────────────────────
+ * El camino clásico por el que la luz baja de Keter a Malkhut, en zigzag por
+ * las diez sefirot. Se dibuja a partir de `sefiraMap`, así que si alguna
+ * sefirá se mueve, el Rayo se mueve con ella (no hay coordenadas repetidas).
+ * Se recorre en bucle con una chispa de luz: es lo que mantiene el Árbol vivo
+ * cuando ya han terminado las animaciones de entrada. */
+const RAYO_ORDEN: SefiraKey[] = [
+  'kether', 'chokmah', 'binah', 'chesed', 'geburah',
+  'tipharet', 'netzach', 'hod', 'yesod', 'malkuth',
+]
+const RAYO_D = RAYO_ORDEN
+  .map((k, i) => `${i === 0 ? 'M' : 'L'}${sefiraMap[k].x},${sefiraMap[k].y}`)
+  .join(' ')
+/** Largo total del Rayo (suma de sus tramos): lo necesita el dash de la chispa. */
+const RAYO_LEN = RAYO_ORDEN.reduce((acc, k, i) => {
+  if (i === 0) return 0
+  const a = sefiraMap[RAYO_ORDEN[i - 1]]
+  const b = sefiraMap[k]
+  return acc + Math.hypot(b.x - a.x, b.y - a.y)
+}, 0)
+/** Largo del trazo de luz que viaja por el Rayo (la «cola» del cometa). */
+const CHISPA = 150
+/** Duración de una bajada completa y cuándo empieza (tras la entrada del Árbol). */
+const RAYO_DUR = 7
+const RAYO_DELAY = 3.4
 
 /* ─── Modal ────────────────────────────────────────────── */
 function SefiraModal({ sefira, onClose }: { sefira: Sefira; onClose: () => void }) {
@@ -338,6 +365,36 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 0%,100% { opacity: 0.3; }
                 50%     { opacity: 0.7; }
               }
+              /* Respiración de las esferas: apenas un 4% de escala, muy lenta.
+                 Arranca cuando la sefirá ya ha terminado de aparecer, y cada una
+                 con su duración para que NO respiren todas al unísono. */
+              @keyframes sefiraBreath {
+                0%,100% { transform: scale(1);    }
+                50%     { transform: scale(1.04); }
+              }
+              /* El recorrido del Rayo se insinúa al final de la entrada. */
+              @keyframes rayoRuta {
+                from { opacity: 0; }
+                to   { opacity: 1; }
+              }
+              /* La chispa baja de Keter a Malkhut. El dash mide CHISPA con un
+                 hueco del largo total, así que solo hay UNA chispa en el Árbol:
+                 el offset lleva su cabeza del inicio (0) al final del camino.
+                 Se enciende y se apaga en los extremos para que el salto de
+                 Malkhut a Keter no se vea. */
+              @keyframes rayoBaja {
+                0%   { stroke-dashoffset: ${CHISPA}; opacity: 0; }
+                7%   { opacity: 0.95; }
+                86%  { opacity: 0.95; }
+                100% { stroke-dashoffset: ${CHISPA - RAYO_LEN}; opacity: 0; }
+              }
+              /* La cabeza del cometa se enciende y apaga con la chispa. */
+              @keyframes rayoCabeza {
+                0%   { opacity: 0;   }
+                7%   { opacity: 0.9; }
+                86%  { opacity: 0.9; }
+                100% { opacity: 0;   }
+              }
             `}</style>
             {/* Fondo propio de cada sefirá (círculo), tanto en el árbol como en
                 el modo senderos (ahí, muy atenuado). */}
@@ -349,6 +406,19 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               <stop offset="0%"   stopColor={cabalaTxt} stopOpacity="0.9" />
               <stop offset="35%"  stopColor={cabalaTxt} stopOpacity="0.5" />
               <stop offset="100%" stopColor={cabalaTxt} stopOpacity="0" />
+            </radialGradient>
+            {/* Volumen de la esfera: brillo especular arriba-izquierda (en dorado
+                claro, NUNCA blanco: el blanco sobre el turquesa se ve sucio) y
+                penumbra en el borde. Los dos son gradientes de caja (objectBounding),
+                así que valen para las diez sefirot sin repetir nada. */}
+            <radialGradient id="sefira-lustre" cx="34%" cy="26%" r="54%">
+              <stop offset="0%"   stopColor="#ffe6b0" stopOpacity="0.5" />
+              <stop offset="55%"  stopColor="#ffe6b0" stopOpacity="0.13" />
+              <stop offset="100%" stopColor="#ffe6b0" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="sefira-volumen" cx="50%" cy="50%" r="50%">
+              <stop offset="58%"  stopColor={cabalaBg} stopOpacity="0" />
+              <stop offset="100%" stopColor={cabalaBg} stopOpacity="0.5" />
             </radialGradient>
             <linearGradient id="pilar-luz" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%"   stopColor={cabalaTxt} stopOpacity="0.9" />
@@ -525,6 +595,60 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
             )
           })}
 
+          {/* ── El Rayo relampagueante ──
+              La luz que baja en zigzag de Keter a Malkhut, en bucle y para
+              siempre: es lo que deja el Árbol vivo cuando la entrada ya ha
+              terminado. Va por DEBAJO de las esferas (que son las
+              protagonistas) y solo en el Árbol, no en el modo senderos, donde
+              taparía a los 22 caminos. */}
+          {!esSenderos && (
+            <g style={{ pointerEvents: 'none' }}>
+              {/* El recorrido, apenas insinuado */}
+              <path
+                d={RAYO_D}
+                fill="none"
+                stroke={`${cabalaTxt}22`}
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ opacity: 0, animation: `rayoRuta 1.4s ease ${RAYO_DELAY - 0.6}s forwards` }}
+              />
+              {/* La chispa que lo recorre */}
+              <path
+                d={RAYO_D}
+                fill="none"
+                stroke={cabalaTxt}
+                strokeWidth={4}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                filter="url(#sefira-glow)"
+                style={{
+                  opacity: 0,
+                  strokeDasharray: `${CHISPA} ${RAYO_LEN}`,
+                  strokeDashoffset: CHISPA,
+                  animation: `rayoBaja ${RAYO_DUR}s linear ${RAYO_DELAY}s infinite`,
+                }}
+              />
+              {/* Cabeza del cometa: viaja por el mismo camino y a la misma
+                  velocidad (animateMotion va a paso constante, igual que el
+                  dash), así que va siempre al frente de la chispa. */}
+              {/* Ojo con la opacidad: hasta que `animateMotion` no arranca, el
+                  círculo está en su sitio por defecto (0,0), que cae DENTRO del
+                  viewBox. Nace invisible y se enciende con la chispa. */}
+              <circle
+                r={5} fill={cabalaTxt} filter="url(#sefira-glow)"
+                style={{ opacity: 0, animation: `rayoCabeza ${RAYO_DUR}s linear ${RAYO_DELAY}s infinite` }}
+              >
+                <animateMotion
+                  path={RAYO_D}
+                  dur={`${RAYO_DUR}s`}
+                  begin={`${RAYO_DELAY}s`}
+                  repeatCount="indefinite"
+                />
+              </circle>
+            </g>
+          )}
+
           {/* Sefirot. En variant 'senderos' quedan atenuadas (secundarias). */}
           {SEFIROT.map((sefira) => {
             const isOpen    = open?.key === sefira.key
@@ -562,6 +686,12 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
 
             const strokeColor = active ? cabalaTxt : `${cabalaTxt}88`
             const strokeW     = active ? 3 : 2
+            // La esfera empieza a respirar justo cuando acaba de aparecer, y cada
+            // una con su propia duración (6 / 6,7 / 7,4 s) para que el conjunto
+            // nunca lata al unísono: parece vivo, no un metrónomo.
+            const apareceEn  = 0.55 + sefira.number * 0.13
+            const respiraEn  = apareceEn + 0.95
+            const respiraDur = 6 + (sefira.number % 3) * 0.7
 
             return (
               <g
@@ -574,9 +704,13 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                   cursor: 'pointer',
                   opacity: 0,
                   transformOrigin: `${sefira.x}px ${sefira.y}px`,
-                  animation: `sefiraAppearEpic 0.95s cubic-bezier(0.34,1.56,0.64,1) ${0.55 + sefira.number * 0.13}s forwards`,
+                  animation: `sefiraAppearEpic 0.95s cubic-bezier(0.34,1.56,0.64,1) ${apareceEn}s forwards, sefiraBreath ${respiraDur}s ease-in-out ${respiraEn}s infinite`,
                 }}
               >
+                {/* Aro concéntrico por fuera: le da profundidad a la esfera (y de
+                    paso deja sitio al anillo del sello de «leída»). */}
+                <circle cx={sefira.x} cy={sefira.y} r={R + 7} fill="none"
+                        stroke={`${cabalaTxt}${active ? '55' : '2e'}`} strokeWidth={1} />
                 {/* Fondo del nodo = imagen propia de las sefirot. Un velo oscuro
                     encima da contraste al nombre dorado; al pasar el ratón, se
                     aclara para resaltar el nodo. */}
@@ -584,6 +718,11 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
                 {/* Velo mínimo: lo justo para que el nombre (marrón oscuro) siga
                     leyéndose. Estaba al 30% y apagaba la esfera de fuego. */}
                 <circle cx={sefira.x} cy={sefira.y} r={R} fill={active ? `${cabalaBg}14` : `${cabalaBg}26`} />
+                {/* Volumen: penumbra en el canto y brillo especular arriba a la
+                    izquierda. Es lo que convierte el círculo con textura en una
+                    esfera. Sin eventos: el click sigue siendo del grupo. */}
+                <circle cx={sefira.x} cy={sefira.y} r={R} fill="url(#sefira-volumen)" style={{ pointerEvents: 'none' }} />
+                <circle cx={sefira.x} cy={sefira.y} r={R} fill="url(#sefira-lustre)" style={{ pointerEvents: 'none' }} />
                 <circle
                   cx={sefira.x} cy={sefira.y} r={R}
                   fill="none"

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · SÍNTESIS  (última del recorrido · paso 22/22 · le sigue Ayurveda)
+// PÁGINA · SÍNTESIS  (paso 22/23 · le siguen los Cursos para profundizar)
 //
 // El cierre de todo el camino: aquí la persona ve TODO lo que ha recorrido, de
 // principio a fin y en solo lectura — su problema, lo que cargó (ACE), sus
@@ -8,8 +8,8 @@
 // futuro. No se edita nada: es el espejo completo del recorrido, para leerlo
 // entero de una sola vez. Reúne, en el mismo orden, lo que también arma el PDF.
 //
-// Es también el paso que enlaza con Ayurveda (con el pago si aún no está
-// desbloqueado), por ser el verdadero cierre del recorrido de psicología.
+// El salto a Ayurveda (con su pago) ya no vive aquí: se ha movido al paso 23,
+// «Cursos para profundizar», que es ahora el final del recorrido.
 //
 // Datos: solo LEE `metodo_psicologia.data` (no escribe nada).
 // ─────────────────────────────────────────────────────────────────────────
@@ -24,9 +24,9 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { TextoLetraALetra } from "../../components/global/TextoLetraALetra";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceRecorrido } from "../../components/metodo/IndiceRecorrido";
-import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { generatePsicologiaPdf } from "../../utils/generatePsicologiaPdf";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import {
@@ -46,7 +46,6 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
-import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
@@ -85,10 +84,6 @@ export default function MetodoPsicologiaSintesis() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<LineaDeVidaData>({});
   const [descargando, setDescargando] = useState(false);
-  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState(false);
-  const [pagoOpen, setPagoOpen] = useState(false);
-  const [pagoLoading, setPagoLoading] = useState(false);
-  const [pagoError, setPagoError] = useState<string | null>(null);
   // «Volver arriba»: aparece al bajar un poco; sube hasta la cabecera.
   const [mostrarArriba, setMostrarArriba] = useState(false);
 
@@ -103,7 +98,6 @@ export default function MetodoPsicologiaSintesis() {
       try {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.psicologia_suscrito) { navigate("/metodo/psicologia", { replace: true }); return; }
-        setAyurvedaSuscrito(!!me.data?.ayurveda_suscrito);
 
         const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -127,27 +121,6 @@ export default function MetodoPsicologiaSintesis() {
   }, []);
 
   const volverArriba = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
-  // Enlace con Ayurveda: abre el pago si aún no está desbloqueado.
-  const onAyurveda = () => {
-    if (ayurvedaSuscrito) navigate("/metodo/ayurveda");
-    else { setPagoError(null); setPagoOpen(true); }
-  };
-
-  const pagarAyurveda = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    setPagoLoading(true);
-    setPagoError(null);
-    // Todas las disciplinas se cobran por separado, pero comparten el mismo
-    // Payment Link: el scope y el userId viajan en el client_reference_id
-    // para que, al volver a /home, el verify sepa qué desbloquear.
-    const errPago = irAPagoDisciplina("ayurveda");
-    if (errPago) {
-      setPagoError(errPago);
-      setPagoLoading(false);
-    }
-  };
 
   const descargarPdf = async () => {
     setDescargando(true);
@@ -383,11 +356,11 @@ export default function MetodoPsicologiaSintesis() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 22, total: 22 }}
+                step={{ current: 22, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Carta", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
-                next={{ label: "Ayurveda →", onClick: onAyurveda }}
+                next={{ label: "Cursos →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/cursos`) }}
               />
             </Reveal>
 
@@ -451,10 +424,13 @@ export default function MetodoPsicologiaSintesis() {
                     </Flex>
 
                     <Box>
-                      <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.2"
-                            style={{ textShadow: INK_SHADOW }}>
+                      {/* Es el remate de todo el recorrido: se escribe algo más
+                          despacio que los títulos de sección. */}
+                      <TextoLetraALetra color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
+                                        lineHeight="1.2" style={{ textShadow: INK_SHADOW }}
+                                        delay={0.35} porLetra={0.045} amount={0.5}>
                         Llévate todo tu mapa
-                      </Text>
+                      </TextoLetraALetra>
                       <Text color={`${TINTA}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6"
                             mt={2} maxW="520px" mx="auto" style={{ textShadow: INK_SHADOW }}>
                         Descárgalo en un cuaderno en PDF, cuidado y bonito, para releerlo siempre que lo necesites.
@@ -486,14 +462,6 @@ export default function MetodoPsicologiaSintesis() {
           </Flex>
         </Flex>
       </Box>
-
-      <PagoAyurvedaModal
-        isOpen={pagoOpen}
-        onClose={() => { setPagoOpen(false); setPagoError(null); }}
-        onPagar={pagarAyurveda}
-        loading={pagoLoading}
-        error={pagoError}
-      />
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
 
@@ -571,10 +539,16 @@ function Seccion({ numero, titulo, children }: { numero: number; titulo: string;
                 boxShadow={`0 3px 12px ${TINTA}66`}>
             {numero}
           </Flex>
-          <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.2"
-                style={{ textShadow: INK_SHADOW }}>
+          {/* El título se escribe letra a letra al asomar la sección: entra un
+              poco después que el panel (0,3 s) para que se lea como si el
+              camino se fuera revelando a medida que bajas. */}
+          <TextoLetraALetra
+            color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.2"
+            style={{ textShadow: INK_SHADOW }}
+            delay={0.3} amount={0.6}
+          >
             {titulo}
-          </Text>
+          </TextoLetraALetra>
         </Flex>
         <Box h="1px" w="100%" my={{ base: 4, md: 5 }} bg={`${TINTA}22`} />
         {children}

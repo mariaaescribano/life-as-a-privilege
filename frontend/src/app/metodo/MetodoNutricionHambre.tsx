@@ -9,7 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Float } from "../../components/global/Reveal";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
 import { HAMBRE_HOLISTICA, HAMBRE_CIERRE } from "../../components/metodo/hambreHolistica";
@@ -82,7 +82,11 @@ function HambreBox({ v }: { v: Vineta }) {
             // él. Ese aire lo recupera la columna de texto con su propio `pr`
             // (así se mueve la barra, no el texto).
             pl={{ base: 5, md: 10 }} pr={{ base: 5, md: 0 }}
-            py={{ base: 6, md: 9 }} h={{ base: "auto", md: "440px" }}>
+            // Más aire ARRIBA y ABAJO (antes 6/9): la foto y el texto quedaban
+            // pegados a los bordes del box. El alto crece lo mismo que el padding
+            // (440 → 520) para que la foto siga cabiendo entera a 400px y el
+            // texto no pierda altura de lectura.
+            py={{ base: 8, md: 14 }} h={{ base: "auto", md: "520px" }}>
 
         {/* Foto (izquierda) */}
         <Box flexShrink={0} w={{ base: "100%", md: "400px" }} maxW={{ base: "320px", md: "400px" }}
@@ -151,7 +155,7 @@ export default function MetodoNutricionHambre() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title="El hambre"
               compact
               maxW="1000px"
@@ -173,15 +177,15 @@ export default function MetodoNutricionHambre() {
           </Reveal>
 
           {/* 4 boxes tipo ilustración, uno debajo del otro */}
-          {HAMBRE_HOLISTICA.map((v, i) => (
-            <Reveal key={v.src} direction="up" distance={22} scaleFrom={0.98} delay={0.12 + i * 0.06}
+          {HAMBRE_HOLISTICA.map((v) => (
+            <Reveal inView key={v.src} direction="up" distance={22} scaleFrom={0.98} delay={0.05}
                     duration={0.65} w="100%">
               <HambreBox v={v} />
             </Reveal>
           ))}
 
           {/* Frase de cierre, directamente sobre el fondo turquesa (sin box) */}
-          <Reveal direction="up" distance={18} delay={0.2} duration={0.7} w="100%" display="flex" justifyContent="center">
+          <Reveal inView direction="up" distance={18} delay={0.2} duration={0.7} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="400"
                   textAlign="center" maxW="740px" lineHeight="1.7" mt={{ base: 2, md: 4 }}
                   style={{ textShadow: "0 1px 12px rgba(0,0,0,0.4)" }}>

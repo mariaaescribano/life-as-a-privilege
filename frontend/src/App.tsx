@@ -74,6 +74,7 @@ const MetodoPsicologiaMiedosPreguntas = lazy(() => import("./app/metodo/MetodoPs
 const MetodoPsicologiaCompromiso = lazy(() => import("./app/metodo/MetodoPsicologiaCompromiso"));
 const MetodoPsicologiaBrujula = lazy(() => import("./app/metodo/MetodoPsicologiaBrujula"));
 const MetodoPsicologiaSintesis = lazy(() => import("./app/metodo/MetodoPsicologiaSintesis"));
+const MetodoPsicologiaCursos = lazy(() => import("./app/metodo/MetodoPsicologiaCursos"));
 const MetodoAyurveda = lazy(() => import("./app/metodo/MetodoAyurveda"));
 const MetodoAyurvedaTest = lazy(() => import("./app/metodo/MetodoAyurvedaTest"));
 const MetodoAyurvedaResultado = lazy(() => import("./app/metodo/MetodoAyurvedaResultado"));
@@ -310,6 +311,7 @@ export default function App()
       <Route path="/metodo/psicologia/:experienciaId/compromiso" element={<PrivateRoute><MetodoPsicologiaCompromiso /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/brujula" element={<PrivateRoute><MetodoPsicologiaBrujula /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/sintesis" element={<PrivateRoute><MetodoPsicologiaSintesis /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/cursos" element={<PrivateRoute><MetodoPsicologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId" element={<PrivateRoute><MetodoPsicologiaExperiencia /></PrivateRoute>} />
       <Route path="/metodo/ayurveda" element={<PrivateRoute><MetodoAyurveda /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/test" element={<PrivateRoute><MetodoAyurvedaTest /></PrivateRoute>} />

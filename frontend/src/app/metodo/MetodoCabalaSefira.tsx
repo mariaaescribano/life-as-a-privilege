@@ -105,11 +105,25 @@ const ItemLista = ({ children }: { children: React.ReactNode }) => (
 /* ── Autoevaluación (local, no se persiste): la frase y un único box lateral
    donde el usuario escribe su nota del 1 al 10 ── */
 function EscalaAutoeval({ statement, value, onChange, max = 10 }: { statement: string; value: number; onChange: (v: number) => void; max?: number }) {
+  const puesta = value >= 1;
   return (
     <Flex align="center" gap={{ base: 3, md: 5 }}>
-      <Text flex="1" color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-        {statement}
-      </Text>
+      <Box flex="1" minW={0}>
+        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
+          {statement}
+        </Text>
+        {/* La nota se VE, no solo se lee en la casilla: la barra crece hasta la
+            puntuación dada. Es el feedback que faltaba al responder (antes se
+            escribía un número y no pasaba nada). */}
+        <Box mt={2} h="3px" w="100%" borderRadius="full" bg={`${cabalaTxt}1f`} overflow="hidden">
+          <Box
+            h="100%" borderRadius="full" bg={cabalaTxt}
+            w={`${Math.min(100, (value / max) * 100)}%`}
+            transition="width 0.45s cubic-bezier(0.22,1,0.36,1)"
+            boxShadow={puesta ? `0 0 10px ${cabalaTxt}` : "none"}
+          />
+        </Box>
+      </Box>
       {/* type="text" + filtro de dígitos, NO type="number": el input numérico del
           navegador deja teclear «e», «+», «-» o «,», y esas letras se quedan
           pintadas en la caja aunque el valor que llega al onChange sea vacío. */}
@@ -133,7 +147,10 @@ function EscalaAutoeval({ statement, value, onChange, max = 10 }: { statement: s
         borderRadius="lg"
         bg={`${cabalaBg}e6`}
         color={cabalaTxt}
-        border={`1px solid ${cabalaTxt}44`}
+        // Respondida: el borde se cierra en ámbar pleno y la casilla se enciende.
+        border={`1px solid ${puesta ? cabalaTxt : `${cabalaTxt}44`}`}
+        boxShadow={puesta ? `0 0 12px ${cabalaTxt}55` : "none"}
+        transition="border-color 0.25s, box-shadow 0.25s"
         fontFamily="'EB Garamond', serif"
         fontSize={{ base: "md", md: "lg" }}
         fontWeight="700"
@@ -224,6 +241,9 @@ export default function MetodoCabalaSefira() {
   const [loading, setLoading] = useState(true);
   const [ilusOpen, setIlusOpen] = useState(false);
   const [carruselIdx, setCarruselIdx] = useState(0);
+  // Hacia dónde se ha movido el carrusel: la frase nueva entra por el lado del
+  // que viene (antes todas entraban igual y no se sentía el movimiento).
+  const [carruselDir, setCarruselDir] = useState<1 | -1>(1);
   const [autoeval, setAutoeval] = useState<number[]>([]);
   const [notaOpen, setNotaOpen] = useState(false);
   // Estado del guardado, para poder cerrar la página diciendo si está a salvo.
@@ -301,6 +321,51 @@ export default function MetodoCabalaSefira() {
       }
     })();
   }, [key, navigate, sefira]);
+
+  /* ── Carrusel de la intro: flechas, teclado y swipe ──
+     Antes solo se podía pasar con las dos flechas. Ahora se pasa como se espera
+     de un carrusel: con ← →, arrastrando con el dedo, o con las flechas y los
+     puntos de siempre. */
+  const nIntroTotal = sefira?.intro.length ?? 0;
+  const pasarIntro = (delta: 1 | -1) => {
+    if (nIntroTotal < 2) return;
+    setCarruselDir(delta);
+    setCarruselIdx((i) => (i + delta + nIntroTotal) % nIntroTotal);
+  };
+  const irAIntro = (i: number) => {
+    setCarruselDir(i >= carruselIdx ? 1 : -1);
+    setCarruselIdx(i);
+  };
+  const touchIntro = useRef<{ x: number; y: number } | null>(null);
+  const onIntroTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchIntro.current = { x: t.clientX, y: t.clientY };
+  };
+  const onIntroTouchEnd = (e: React.TouchEvent) => {
+    if (!touchIntro.current) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchIntro.current.x;
+    const dy = t.clientY - touchIntro.current.y;
+    touchIntro.current = null;
+    // Solo cuenta como swipe si el gesto es claramente horizontal: si no, se
+    // robaría el scroll vertical de la página.
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 45) pasarIntro(dx < 0 ? 1 : -1);
+  };
+
+  useEffect(() => {
+    if (nIntroTotal < 2) return;
+    const onKey = (e: KeyboardEvent) => {
+      // Con un modal abierto (ilustraciones, nota) las flechas no son nuestras.
+      if (ilusOpen || notaOpen) return;
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+      if (e.key === "ArrowRight") pasarIntro(1);
+      else if (e.key === "ArrowLeft") pasarIntro(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nIntroTotal, ilusOpen, notaOpen]);
 
   // Guarda una respuesta del test en BD (merge dentro de data.test[key]).
   /**
@@ -405,6 +470,21 @@ export default function MetodoCabalaSefira() {
     !testCompletado && "la escala de equilibrio",
   ].filter(Boolean) as string[];
 
+  /** Progreso de la dimensión, en números: se pinta al pie con sus barras para
+   *  que en todo momento se vea cuánto queda (antes solo se decía «te falta X»). */
+  const progresoDimension = [
+    sefira.autoevaluacion.items.length > 0 && {
+      etiqueta: "Autoevaluación",
+      hechas: sefira.autoevaluacion.items.filter((_, i) => (autoeval[i] ?? 0) >= 1).length,
+      total: sefira.autoevaluacion.items.length,
+    },
+    testDim && {
+      etiqueta: "Escala de equilibrio",
+      hechas: testAnswers.filter((v) => v >= 1).length,
+      total: NUM_PREGUNTAS,
+    },
+  ].filter(Boolean) as { etiqueta: string; hechas: number; total: number }[];
+
   /** Guarda lo que quede pendiente y solo entonces navega (ver flushSaves). */
   const seguir = async () => {
     if (siguiente.disabled) return;
@@ -415,6 +495,25 @@ export default function MetodoCabalaSefira() {
     <Box minH="100vh" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif"
          bg="#008080">
       <SiteHeader variant="private" />
+
+      {/* Animaciones de la página, en un solo sitio (antes el keyframe del
+          carrusel vivía dentro de su propio box y solo existía si había intro). */}
+      <style>{`
+        @keyframes cabalaEntraDer {
+          from { opacity: 0; transform: translateX(26px); }
+          to   { opacity: 1; transform: translateX(0);    }
+        }
+        @keyframes cabalaEntraIzq {
+          from { opacity: 0; transform: translateX(-26px); }
+          to   { opacity: 1; transform: translateX(0);     }
+        }
+        /* El botón «siguiente» respira en cuanto la dimensión queda completa:
+           es el premio, y de paso dice sin palabras que ya se puede pasar. */
+        @keyframes cabalaListo {
+          0%,100% { box-shadow: 0 0 14px ${cabalaTxt}44, 0 0 30px ${cabalaTxt}22; }
+          50%     { box-shadow: 0 0 22px ${cabalaTxt}88, 0 0 48px ${cabalaTxt}44; }
+        }
+      `}</style>
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
@@ -495,11 +594,13 @@ export default function MetodoCabalaSefira() {
           {nIntro > 0 && (
             <Reveal direction="up" distance={24} scaleFrom={0.97} delay={0.12} duration={0.7} w="100%">
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                   boxShadow={CAJA_GLOW}>
+                   boxShadow={CAJA_GLOW}
+                   onTouchStart={onIntroTouchStart} onTouchEnd={onIntroTouchEnd}
+                   sx={{ touchAction: "pan-y" }}>
                 <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" />
                 <Flex position="relative" zIndex={1} align="center" gap={{ base: 3, md: 5 }}
                       px={{ base: 4, md: 8 }} py={{ base: 8, md: 12 }} minH={{ base: "220px", md: "260px" }}>
-                  <FlechaCarrusel dir="left" onClick={() => setCarruselIdx((i) => (i - 1 + nIntro) % nIntro)} />
+                  <FlechaCarrusel dir="left" onClick={() => pasarIntro(-1)} />
                   <Flex direction="column" align="center" flex="1" minW={0} gap={5}>
                     <Text
                       key={carruselIdx}
@@ -512,7 +613,12 @@ export default function MetodoCabalaSefira() {
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
-                      style={{ textShadow: INK_SHADOW, animation: "cabalaFade 0.4s ease" }}
+                      style={{
+                        textShadow: INK_SHADOW,
+                        // Entra por el lado del que viene: hacia delante, desde la
+                        // derecha; hacia atrás, desde la izquierda.
+                        animation: `${carruselDir === 1 ? "cabalaEntraDer" : "cabalaEntraIzq"} 0.42s cubic-bezier(0.22,1,0.36,1)`,
+                      }}
                     >
                       {sefira.intro[carruselIdx]}
                     </Text>
@@ -521,7 +627,7 @@ export default function MetodoCabalaSefira() {
                         <Box
                           key={i}
                           as="button"
-                          onClick={() => setCarruselIdx(i)}
+                          onClick={() => irAIntro(i)}
                           w={i === carruselIdx ? "22px" : "8px"}
                           h="8px"
                           borderRadius="full"
@@ -533,9 +639,8 @@ export default function MetodoCabalaSefira() {
                       ))}
                     </Flex>
                   </Flex>
-                  <FlechaCarrusel dir="right" onClick={() => setCarruselIdx((i) => (i + 1) % nIntro)} />
+                  <FlechaCarrusel dir="right" onClick={() => pasarIntro(1)} />
                 </Flex>
-                <style>{`@keyframes cabalaFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
               </Box>
             </Reveal>
           )}
@@ -672,6 +777,41 @@ export default function MetodoCabalaSefira() {
                 para pasar a la sefirá siguiente. */}
           <Reveal direction="up" distance={18} delay={0.38} duration={0.6} w="100%">
             <Caja>
+              {/* Progreso de la dimensión: cuánto llevas de cada bloque. Las
+                  barras crecen a la vez que se responde, así que la página
+                  responde a cada nota que se escribe. */}
+              {progresoDimension.length > 0 && (
+                <Flex direction={{ base: "column", md: "row" }} gap={{ base: 3, md: 8 }} mb={4}>
+                  {progresoDimension.map((p) => {
+                    const completo = p.hechas >= p.total;
+                    return (
+                      <Box key={p.etiqueta} flex="1" minW={0}>
+                        <Flex align="baseline" justify="space-between" gap={2}>
+                          <Text color={`${cabalaTxt}bb`} fontSize={{ base: "xs", md: "sm" }}
+                                letterSpacing="0.12em" textTransform="uppercase"
+                                style={{ textShadow: INK_SHADOW }}>
+                            {p.etiqueta}
+                          </Text>
+                          <Text color={completo ? cabalaTxt : `${cabalaTxt}aa`}
+                                fontSize={{ base: "xs", md: "sm" }} fontWeight="700"
+                                style={{ textShadow: INK_SHADOW }}>
+                            {completo ? `${p.total}/${p.total} ✓` : `${p.hechas}/${p.total}`}
+                          </Text>
+                        </Flex>
+                        <Box mt={1.5} h="4px" w="100%" borderRadius="full" bg={`${cabalaTxt}1f`} overflow="hidden">
+                          <Box
+                            h="100%" borderRadius="full" bg={cabalaTxt}
+                            w={`${(p.hechas / p.total) * 100}%`}
+                            transition="width 0.5s cubic-bezier(0.22,1,0.36,1)"
+                            boxShadow={p.hechas > 0 ? `0 0 10px ${cabalaTxt}aa` : "none"}
+                          />
+                        </Box>
+                      </Box>
+                    );
+                  })}
+                </Flex>
+              )}
+
               <Flex align="center" justify="space-between" gap={4} wrap="wrap">
                 <Flex align="center" gap={2} minW="200px">
                   {guardando ? (
@@ -722,8 +862,14 @@ export default function MetodoCabalaSefira() {
                        fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
                        cursor={siguiente.disabled ? "not-allowed" : "pointer"}
                        boxShadow={siguiente.disabled ? "none" : CAJA_GLOW} transition="all 0.2s"
-                       _hover={siguiente.disabled ? {} : { bg: `${cabalaTxt}33`, transform: "translateY(-1px)" }}
-                       style={{ textShadow: INK_SHADOW }}>
+                       _hover={siguiente.disabled ? {} : { bg: `${cabalaTxt}33`, transform: "translateY(-1px)", boxShadow: `0 0 26px ${cabalaTxt}88` }}
+                       _active={siguiente.disabled ? {} : { transform: "scale(0.97)" }}
+                       // Al quedar la dimensión completa, el botón late: se ve que
+                       // se acaba de desbloquear sin tener que leer nada.
+                       style={{
+                         textShadow: INK_SHADOW,
+                         ...(siguiente.disabled ? {} : { animation: "cabalaListo 2.4s ease-in-out infinite" }),
+                       }}>
                     {siguiente.label}
                   </Box>
                 </Flex>

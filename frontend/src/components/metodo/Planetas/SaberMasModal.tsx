@@ -215,10 +215,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         </Text>
       </Flex>
 
-      {/* Separación horizontal bajo el título */}
-      <Box h="1px" w="72%" mx="auto" bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
-           boxShadow={`0 0 6px ${color}44`} />
-
+      {/* Sin raya bajo el título: el título ya se separa por el gap. */}
       {cargando ? (
         <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
       ) : textoSigno ? (
@@ -252,10 +249,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         </Text>
       </Flex>
 
-      {/* Separación horizontal bajo el título */}
-      <Box h="1px" w="72%" mx="auto" bgGradient={`linear(to-r, transparent, ${color}88, transparent)`}
-           boxShadow={`0 0 6px ${color}44`} />
-
+      {/* Sin raya bajo el título: el título ya se separa por el gap. */}
       {cargando ? (
         <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
       ) : textoCasa ? (

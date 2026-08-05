@@ -97,6 +97,9 @@ export default function MetodoAyurvedaDoshaDia() {
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
 
   const [loading, setLoading] = useState(true);
+  // ¿Tiene el recorrido de Psicología? Si no, la «Carta para ti» no se muestra
+  // ni se va a buscar (esa carta se escribe al final de Psicología).
+  const [tienePsicologia, setTienePsicologia] = useState(false);
   const [bloques, setBloques] = useState<Bloque[]>([]);
   const [guardado, setGuardado] = useState(false);
   const [guardando, setGuardando] = useState(false);
@@ -120,6 +123,7 @@ export default function MetodoAyurvedaDoshaDia() {
       try {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.ayurveda_suscrito) { navigate("/metodo/ayurveda"); return; }
+        setTienePsicologia(!!me.data?.psicologia_suscrito);
 
         const r = await axios.get(`${API_URL}/metodo-ayurveda/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: Record<string, any> = r.data?.data || {};
@@ -239,9 +243,11 @@ export default function MetodoAyurvedaDoshaDia() {
 
           {/* CARTA (solo lectura): la carta que el usuario se escribió a su yo
               del futuro en Psicología. Va justo ANTES de «Tu día» para releerla
-              antes de diseñar el día (coherencia entre disciplinas). Si no hay
-              carta escrita, el componente no renderiza nada (ni hueco). */}
-          <CartaBox />
+              antes de diseñar el día (coherencia entre disciplinas).
+              Solo se monta si la persona TIENE Psicología: así ni se muestra ni
+              se pide la carta a la API a quien no ha hecho ese recorrido. Y si la
+              tiene pero aún no ha escrito la carta, el componente no pinta nada. */}
+          {tienePsicologia && <CartaBox />}
 
           {/* TU DÍA (lista editable) */}
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.12} w="100%">

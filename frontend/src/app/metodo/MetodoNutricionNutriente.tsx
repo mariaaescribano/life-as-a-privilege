@@ -8,12 +8,13 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Float } from "../../components/global/Reveal";
 import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlustracionModal";
 import { NutrienteCirculo } from "../../components/metodo/NutrienteCirculo";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { comicNutrienteByKey } from "../../components/metodo/comicsNutrientes";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
@@ -63,7 +64,9 @@ const IconoSubgrupo = ({ nombre }: { nombre: string }) => {
 
 // Botón «← Volver» en la gama de Nutrición (verde), bajo el header. Lleva la
 // foto de la disciplina (nutri.png) de fondo, con un velo claro para que el
-// texto verde oscuro (nutricionTxt) se lea.
+// texto verde oscuro (nutricionTxt) se lea, y el MISMO halo que la cabecera.
+// Vale para los nutrientes primarios y para los secundarios: los dos se pintan
+// con esta página (/metodo/nutricion/nutrientes/:key).
 function VolverNutri({ onClick }: { onClick: () => void }) {
   return (
     <Box
@@ -84,6 +87,10 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
       fontSize={{ base: "sm", md: "md" }}
       letterSpacing="0.03em"
       cursor="pointer"
+      // El mismo halo que la cabecera. `glowHeader()` es literalmente la cadena
+      // que MetodoStepHeader se pone a sí mismo cuando lleva fondo de
+      // disciplina, así que tocando allí cambian los dos a la vez.
+      boxShadow={glowHeader(nutricionTxt)}
       transition="all 0.18s"
       _hover={{ transform: "translateY(-1px)" }}
     >
@@ -295,7 +302,7 @@ export default function MetodoNutricionNutriente() {
           {/* 1 · Header */}
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title={esSecundario ? "Nutrientes secundarios" : "Los nutrientes"}
               compact
               maxW="1000px"
@@ -318,7 +325,7 @@ export default function MetodoNutricionNutriente() {
               la descripción con su propio scroll. Sin rayita, líneas de luz
               arriba/abajo y la sombra de la disciplina, para que case 1:1 con el
               visor de ilustraciones. */}
-          <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal inView direction="up" distance={20} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             {/* Ancho = el del header (maxW 1000). Sin override de sombra: usa el
                 glow suave por defecto de SeccionBox (el mismo discreto del header). */}
             <SeccionBox
@@ -410,7 +417,7 @@ export default function MetodoNutricionNutriente() {
           {/* Cuántos subtipos lleva descubiertos. El grupo no queda revisado (ni
               se abre la página siguiente) hasta abrirlos todos, así que se dice. */}
           {n.tarjetas && n.tarjetas.length > 0 && (
-            <Reveal direction="up" distance={12} delay={0.2} duration={0.5} display="flex" justifyContent="center">
+            <Reveal inView direction="up" distance={12} delay={0.2} duration={0.5} display="flex" justifyContent="center">
               <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                     textAlign="center" lineHeight="1.8">
                 {fichasVistas.length >= n.tarjetas.length
@@ -423,7 +430,7 @@ export default function MetodoNutricionNutriente() {
           {/* 4 · Tarjetas (moléculas/tipos). En círculo de colores (vitaminas) o
               en rejilla estilo «Todas tus células». Cada una abre su ficha cómic. */}
           {n.tarjetas && n.tarjetas.length > 0 && (
-            <Reveal direction="up" distance={20} delay={0.24} duration={0.6} w="100%">
+            <Reveal inView direction="up" distance={20} delay={0.24} duration={0.6} w="100%">
               {n.tarjetasCirculo ? (
                 <NutrienteCirculo tarjetas={n.tarjetas} tituloCentro={n.label}
                                   onSelect={abrirFicha} />

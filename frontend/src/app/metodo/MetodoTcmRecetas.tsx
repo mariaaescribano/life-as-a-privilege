@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -18,7 +18,7 @@ import {
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import {
-  COCINA_ELEMENTO, RECETAS_NOTA, recetasDe, type Receta,
+  COCINA_ELEMENTO, FOTO_RECETA, RECETAS_NOTA, recetasDe, type Receta,
 } from "../../components/metodo/tcmRecetasContenido";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
@@ -217,11 +217,27 @@ function BotonElemento({ elemento, activo, onClick }: {
 }
 
 // ── Tarjeta de una receta ────────────────────────────────────────────────────
+// Si la receta tiene su foto en /recorrido/tcm/recetas/<key>.png, se pinta como
+// banda superior; si aún no existe, la tarjeta va directa al texto (sin hueco).
 function RecetaCard({ receta, color }: { receta: Receta; color: string }) {
+  const [sinFoto, setSinFoto] = useState(false);
+
   return (
     <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden"
          boxShadow={`${CAJA_GLOW}, 0 0 34px ${color}44`}>
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
+
+      {!sinFoto && (
+        <Box position="relative" zIndex={1} w="100%" overflow="hidden" sx={{ aspectRatio: "16 / 9" }}>
+          <Image src={encodeURI(FOTO_RECETA(receta.key))} alt={receta.nombre}
+                 w="100%" h="100%" objectFit="cover" onError={() => setSinFoto(true)} />
+          {/* Velo inferior: el título de debajo arranca sobre el degradado y la
+              foto no corta en seco. */}
+          <Box position="absolute" inset={0} pointerEvents="none"
+               bgGradient={`linear(to-t, ${tcmBg}f0, transparent 45%)`} />
+        </Box>
+      )}
+
       <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
 
         {/* Título + nombre chino */}

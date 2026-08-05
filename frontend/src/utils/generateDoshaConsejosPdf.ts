@@ -1,164 +1,107 @@
-import jsPDF from "jspdf";
-import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
+// ─────────────────────────────────────────────────────────────────────────
+// «Cuidar tu doṣha» — el vademécum personal que sale del test.
+//
+// Los consejos vienen escritos como «Nombre · explicación», así que el PDF los
+// compone como un DICCIONARIO (nombre en negrita, explicación en redonda,
+// sangría francesa y filete entre entradas) en vez de como una lista de la
+// compra. Cada bloque abre con su antetítulo en versalitas y su intención en
+// una línea, para que se pueda leer suelto meses después.
+//
+// La acuarela de la portada es la del doṣha concreto (vata/pitta/kapha), no la
+// genérica: el documento se siente hecho para esa persona.
+// ─────────────────────────────────────────────────────────────────────────
+import { Taller } from "./pdf/atelier";
+import { TEMA_AYURVEDA, COLOR_DOSHA, type Tema } from "./pdf/temas";
 import type { DoshaRecs } from "../hardCoded/espacio/DoshaConsejos";
 
-const HEADER_COLOR: [number, number, number] = [0, 128, 128];
-const PAGE_BG: [number, number, number] = [255, 255, 255];
-const TEXT_COLOR: [number, number, number] = [0, 80, 80];
-const MUTED_COLOR: [number, number, number] = [80, 155, 155];
-const SECTION_COLOR: [number, number, number] = [0, 100, 100];
-const VATA_COLOR: [number, number, number] = [124, 92, 191];
-const PITTA_COLOR: [number, number, number] = [192, 82, 42];
-const KAPHA_COLOR: [number, number, number] = [58, 138, 92];
-
-const DOSHA_COLORS: Record<string, [number, number, number]> = {
-  vata: VATA_COLOR,
-  pitta: PITTA_COLOR,
-  kapha: KAPHA_COLOR,
+const ETIQUETA: Record<string, string> = { vata: "Vata", pitta: "Pitta", kapha: "Kapha" };
+const ELEMENTOS: Record<string, string> = {
+  vata: "aire y éter",
+  pitta: "fuego y agua",
+  kapha: "tierra y agua",
+};
+/** Cada doṣha tiene su acuarela propia en la web; el PDF la hereda. */
+const ACUARELA: Record<string, string> = {
+  vata: "/img/fondos/vata.webp",
+  pitta: "/img/fondos/pitta.webp",
+  kapha: "/img/fondos/kapha.webp",
 };
 
-const MARGIN = 18;
-const PAGE_W = 210;
-const CONTENT_W = PAGE_W - MARGIN * 2;
+const BLOQUES: { key: keyof DoshaRecs; titulo: string; intencion: string }[] = [
+  {
+    key: "alimentacion",
+    titulo: "En la mesa",
+    intencion: "Lo que enciende tu digestión y lo que te asienta, comida a comida.",
+  },
+  {
+    key: "hierbas",
+    titulo: "Plantas aliadas",
+    intencion: "Las que la tradición asocia a tu constitución. Ninguna sustituye a un tratamiento.",
+  },
+  {
+    key: "estiloDeVida",
+    titulo: "En el día a día",
+    intencion: "Los hábitos que sostienen tu equilibrio cuando la vida aprieta.",
+  },
+  {
+    key: "evitar",
+    titulo: "Lo que te desequilibra",
+    intencion: "No es una lista de prohibiciones: es saber qué te está pasando factura.",
+  },
+];
 
-function sanitize(text: string): string {
-  return text;
-}
+export async function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): Promise<void> {
+  const clave = (dosha || "").toLowerCase();
+  const etiqueta = ETIQUETA[clave] ?? (dosha.charAt(0).toUpperCase() + dosha.slice(1));
+  const color = COLOR_DOSHA[clave] ?? TEMA_AYURVEDA.acento;
 
-function splitLines(doc: jsPDF, text: string, maxWidth: number): string[] {
-  return doc.splitTextToSize(sanitize(text), maxWidth) as string[];
-}
-
-export function generateDoshaConsejosPdf(dosha: string, recs: DoshaRecs): void {
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-  registerEbGaramond(doc);
-  const pageH = doc.internal.pageSize.getHeight();
-  const doshaColor = DOSHA_COLORS[dosha] ?? TEXT_COLOR;
-  const doshaLabel = dosha.charAt(0).toUpperCase() + dosha.slice(1);
-  let page = 1;
-
-  const fillBackground = () => {
-    doc.setFillColor(...PAGE_BG);
-    doc.rect(0, 0, PAGE_W, pageH, "F");
+  // El tema de Ayurveda, teñido con el color del doṣha: mismo taller, otra voz.
+  const tema: Tema = {
+    ...TEMA_AYURVEDA,
+    acento: color,
+    acentoSuave: [
+      Math.round(color[0] + (255 - color[0]) * 0.46),
+      Math.round(color[1] + (255 - color[1]) * 0.46),
+      Math.round(color[2] + (255 - color[2]) * 0.46),
+    ],
+    acuarela: ACUARELA[clave] ?? TEMA_AYURVEDA.acuarela,
   };
 
-  const drawPageNum = (p: number) => {
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(8);
-    doc.setTextColor(...MUTED_COLOR);
-    doc.text(`${p}`, PAGE_W / 2, pageH - 6, { align: "center" });
-  };
+  const taller = await Taller.abrir(tema, { titulo: `Cuidar tu ${etiqueta}` });
 
-  const drawHeader = () => {
-    doc.setFillColor(...HEADER_COLOR);
-    doc.rect(0, 0, PAGE_W, 22, "F");
-    doc.setFont(GARAMOND, "bold");
-    doc.setFontSize(10);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Life as a Privilege  \u00b7  Ayurveda", MARGIN, 10);
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(236, 213, 237);
-    doc.text(sanitize("Consejos personalizados"), MARGIN, 17);
-  };
-
-  let y = 0;
-  const ensureSpace = (needed: number) => {
-    if (y + needed > pageH - 14) {
-      drawPageNum(page);
-      doc.addPage();
-      page++;
-      fillBackground();
-      drawHeader();
-      y = 30;
-    }
-  };
-
-  /* PAGE 1 */
-  fillBackground();
-  drawHeader();
-  y = 30;
-
-  /* Title */
-  doc.setFont(GARAMOND, "bold");
-  doc.setFontSize(18);
-  doc.setTextColor(...TEXT_COLOR);
-  doc.text(sanitize("Tus consejos personalizados"), MARGIN, y);
-  y += 10;
-
-  /* Dosha result */
-  ensureSpace(14);
-  doc.setDrawColor(...doshaColor);
-  doc.setLineWidth(0.5);
-  doc.roundedRect(MARGIN, y - 4, CONTENT_W, 12, 2, 2, "S");
-  doc.setFont(GARAMOND, "normal");
-  doc.setFontSize(9);
-  doc.setTextColor(...MUTED_COLOR);
-  doc.text("Tu Doṣha:", MARGIN + 4, y + 3);
-  doc.setFont(GARAMOND, "bold");
-  doc.setFontSize(13);
-  doc.setTextColor(...doshaColor);
-  doc.text(doshaLabel, MARGIN + 26, y + 3);
-  y += 16;
-
-  /* Description */
-  const descLines = splitLines(doc, recs.descripcion, CONTENT_W - 8);
-  const descH = descLines.length * 5 + 10;
-  ensureSpace(descH);
-  doc.setDrawColor(...doshaColor);
-  doc.setLineWidth(0.4);
-  doc.roundedRect(MARGIN, y - 2, CONTENT_W, descH, 3, 3, "S");
-  doc.setFont(GARAMOND, "normal");
-  doc.setFontSize(9.5);
-  doc.setTextColor(...TEXT_COLOR);
-  y += 5;
-  descLines.forEach((line) => {
-    doc.text(line, MARGIN + 4, y);
-    y += 5;
+  /* ── PORTADA ── */
+  taller.portada({
+    titulo: "Cuidar tu doṣha",
+    subtitulo: `Ayurveda · ${etiqueta}`,
+    nombre: etiqueta,
+    pieLamina: ELEMENTOS[clave] ? `${ELEMENTOS[clave]}` : undefined,
+    cierre: "Tu vademécum",
   });
-  y += 8;
 
-  /* Categories */
-  const categories: Array<{ key: keyof DoshaRecs; label: string }> = [
-    { key: "alimentacion", label: "Alimentación" },
-    { key: "hierbas", label: "Hierbas" },
-    { key: "estiloDeVida", label: "Estilo de Vida" },
-    { key: "evitar", label: "Evitar" },
-  ];
+  /* ── QUIÉN ES TU DOṢHA ── */
+  taller.nuevaPagina();
+  taller.capitulo(`Tu ${etiqueta}`);
+  taller.parrafo(recs.descripcion, { capitular: true, tam: 11.5 });
+  taller.espacio(3);
+  taller.parrafo(
+    "Lo que sigue no son reglas. Es un repertorio: coge dos o tres cosas, sostenlas unas semanas " +
+      "y observa. El Ayurveda se mide en temporadas, no en días.",
+    { cursiva: true, color: tema.apagado, tam: 10.5 },
+  );
 
-  for (const cat of categories) {
-    const items = recs[cat.key];
-    if (!items || !Array.isArray(items) || items.length === 0) continue;
-
-    ensureSpace(12);
-    doc.setFont(GARAMOND, "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(...SECTION_COLOR);
-    doc.text(sanitize(cat.label), MARGIN, y);
-    y += 2;
-    doc.setDrawColor(...doshaColor);
-    doc.setLineWidth(0.25);
-    doc.line(MARGIN, y, MARGIN + 35, y);
-    y += 6;
-
-    for (const item of items) {
-      const lines = splitLines(doc, item, CONTENT_W - 8);
-      ensureSpace(lines.length * 5 + 4);
-      doc.setFont(GARAMOND, "normal");
-      doc.setFontSize(9.5);
-      doc.setTextColor(...TEXT_COLOR);
-
-      doc.setFillColor(...doshaColor);
-      doc.circle(MARGIN + 2, y - 1.2, 1, "F");
-
-      lines.forEach((line, li) => {
-        doc.text(line, MARGIN + 6, y + li * 5);
-      });
-      y += lines.length * 5 + 2;
-    }
-    y += 5;
+  /* ── LOS CUATRO BLOQUES ── */
+  for (const bloque of BLOQUES) {
+    const items = recs[bloque.key];
+    if (!Array.isArray(items) || items.length === 0) continue;
+    taller.capitulo(bloque.titulo, bloque.intencion);
+    taller.glosario(items);
   }
 
-  drawPageNum(page);
-  doc.save(`ayurveda_consejos_${dosha}.pdf`);
+  /* ── CIERRE ── */
+  taller.cierre(
+    "«Lo semejante aumenta lo semejante; lo opuesto equilibra.» " +
+      "Toda la medicina ayurvédica cabe en esa frase: si algo te sobra, no le eches más.",
+  );
+
+  taller.guardar(`cuidar-mi-dosha-${clave || "ayurveda"}.pdf`);
 }

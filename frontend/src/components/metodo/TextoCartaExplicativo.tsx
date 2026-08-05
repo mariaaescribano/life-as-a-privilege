@@ -298,7 +298,7 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           direction={{ base: "column", md: "row" }}
           align={{ base: "center", md: "stretch" }}
           justify="center"
-          gap={{ base: 5, md: 10 }}
+          gap={{ base: 5, md: 6, lg: 10 }}
           position="relative"
           zIndex={2}
           flex="1"
@@ -309,9 +309,9 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           // texto añade el suyo. Desktop: padding a la izquierda, pero NINGUNO a
           // la derecha — así la columna de texto llega hasta la pared de la caja
           // y su barra de scroll queda pegada al borde, sin flotar sobre el texto.
-          pl={{ base: 0, md: 10 }}
+          pl={{ base: 0, md: 6, lg: 10 }}
           pr={0}
-          py={{ base: 0, md: 10 }}
+          py={{ base: 0, md: 7, lg: 10 }}
           sx={{
             "&::-webkit-scrollbar": { width: "6px" },
             "&::-webkit-scrollbar-thumb": {
@@ -351,8 +351,12 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           <Box
             // Desktop: foto cuadrada MÁS GRANDE a la izquierda (290px + 10%).
             // Móvil: hero image a todo el ancho que cubre la parte de arriba.
-            w={{ base: "100%", md: "319px" }}
-            maxW={{ base: "100%", md: "319px" }}
+            // Entre 768px y 992px la caja no da para 319px de foto + texto
+            // grande: la columna de texto se quedaba en ~290px y el párrafo se
+            // partía en líneas de 3 palabras que ya no cabían en los 418px de
+            // alto. La foto grande sólo a partir de `lg`.
+            w={{ base: "100%", md: "236px", lg: "319px" }}
+            maxW={{ base: "100%", md: "236px", lg: "319px" }}
             h={{ base: "42vh", md: "auto" }}
             aspectRatio={{ base: "auto", md: 1 }}
             flexShrink={0}
@@ -453,8 +457,10 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
               // completa, así que a 3xl las viñetas largas obligaban a hacer
               // demasiado scroll dentro del box.
               // 10% más grande que el original (xl / 2xl → 1.375rem / 1.65rem).
-              fontSize={{ base: "1.375rem", md: "1.65rem" }}
-              lineHeight="1.8"
+              // En `md` (768–992px) el texto vive en una columna estrecha: a
+              // 1.65rem salían líneas de 3 palabras y el párrafo se cortaba.
+              fontSize={{ base: "1.375rem", md: "1.25rem", lg: "1.65rem" }}
+              lineHeight={{ base: "1.8", md: "1.65", lg: "1.8" }}
               letterSpacing="0.02em"
               fontWeight="400"
               whiteSpace="pre-line"

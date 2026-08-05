@@ -44,6 +44,7 @@ function BibliotecaCard({
       <Box
         as="button"
         onClick={onClick}
+        role="group"
         position="relative"
         overflow="hidden"
         w="100%"
@@ -52,9 +53,10 @@ function BibliotecaCard({
         cursor="pointer"
         fontFamily="'EB Garamond', serif"
         boxShadow={glowHeader(nutricionTxt)}
-        transition="all 0.2s ease"
-        _hover={{ transform: "translateY(-4px)", boxShadow: glowHeader(nutricionTxt) }}
-        _active={{ transform: "translateY(-1px)" }}
+        transition="transform 0.32s cubic-bezier(0.22,1,0.36,1), box-shadow 0.32s ease"
+        _hover={{ transform: "translateY(-6px)",
+                  boxShadow: `${glowHeader(nutricionTxt)}, 0 0 28px ${nutricionTxt}2e` }}
+        _active={{ transform: "translateY(-2px) scale(0.985)" }}
       >
         {/* NutriImg de fondo, clara y nítida (sin velo ni difuminado). */}
         <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
@@ -65,7 +67,9 @@ function BibliotecaCard({
             <Flex align="center" justify="center"
                   w={{ base: "66px", md: "78px" }} h={{ base: "66px", md: "78px" }} borderRadius="full"
                   bg={`${nutricionTxt}14`} border={`1px solid ${nutricionTxt}33`} color={nutricionTxt}
-                  boxShadow={`inset 0 0 12px ${nutricionTxt}12`}>
+                  boxShadow={`inset 0 0 12px ${nutricionTxt}12`}
+                  transition="transform 0.35s cubic-bezier(0.22,1,0.36,1), background 0.3s ease"
+                  _groupHover={{ transform: "scale(1.08)", bg: `${nutricionTxt}24` }}>
               {icono}
             </Flex>
           </Float>
@@ -80,7 +84,9 @@ function BibliotecaCard({
           <Flex align="center" gap={1} color={nutricionTxt} mt={0.5}
                 fontSize="2xs" letterSpacing="0.16em" textTransform="uppercase">
             <Text as="span">Ver</Text>
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="12px" h="12px" fill="currentColor">
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="12px" h="12px" fill="currentColor"
+                 transition="transform 0.3s cubic-bezier(0.22,1,0.36,1)"
+                 _groupHover={{ transform: "translateX(4px)" }}>
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </Box>
           </Flex>
@@ -148,7 +154,7 @@ export default function MetodoNutricionAlimentos() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title="Biblioteca de Nutrición"
               compact
               maxW="960px"

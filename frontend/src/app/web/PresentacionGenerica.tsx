@@ -135,7 +135,8 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
           <RevealItem direction="up" distance={16}>
             <Text
               color="white"
-              fontSize={{ base: "3xl", md: "5xl" }}
+              fontSize={{ base: "lg", md: "2xl" }}
+              fontStyle="italic"
               fontWeight="700"
               lineHeight="1.14"
               letterSpacing="0.04em"

@@ -25,6 +25,7 @@ export function TarjetaNutri({
       numero={numero}
       visto={visto}
       onClick={onClick}
+      vivo
     />
   );
 }

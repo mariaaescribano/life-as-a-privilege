@@ -26,7 +26,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { glowHeader } from "../../components/metodo/FotoBox";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem, Float } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
   PREDIABETES_INTRO,
@@ -287,7 +287,7 @@ export default function MetodoNutricionPrediabetes() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title={PREDIABETES_INTRO.titulo}
               compact
               maxW="1000px"
@@ -333,7 +333,7 @@ export default function MetodoNutricionPrediabetes() {
           </Reveal>
 
           {/* ── TUS DATOS · vienen de «Tus calorías», no hay que reescribirlos ── */}
-          <Reveal direction="up" distance={20} delay={0.14} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={20} delay={0.14} duration={0.6} w="100%">
             <SeccionBox>
               <Box px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
                 <Rotulo>Tus datos</Rotulo>
@@ -373,7 +373,7 @@ export default function MetodoNutricionPrediabetes() {
           </Reveal>
 
           {/* ── CINTURA ── */}
-          <Reveal direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
             <SeccionBox>
               <Box px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
                 <Rotulo>Tu cintura</Rotulo>
@@ -419,7 +419,7 @@ export default function MetodoNutricionPrediabetes() {
           </Reveal>
 
           {/* ── LAS PREGUNTAS ── */}
-          <RevealStagger stagger={0.1} delayChildren={0.05} amount={0.15}
+          <RevealStagger inView stagger={0.1} delayChildren={0.05} amount={0.15}
                          display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }}>
             {PREDIABETES_PREGUNTAS.map((p) => (
               <RevealItem key={p.key} w="100%">
@@ -461,7 +461,7 @@ export default function MetodoNutricionPrediabetes() {
 
           {/* ── RESULTADO ── */}
           {completo && resultado && banda && (
-            <Reveal direction="up" distance={22} delay={0.05} duration={0.65} w="100%">
+            <Reveal inView direction="up" distance={22} delay={0.05} duration={0.65} w="100%">
               <Box ref={resultadoRef} w="100%" scrollMarginTop={{ base: 4, md: 6 }}>
                 <SeccionBox>
                   <Box px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
@@ -570,7 +570,7 @@ export default function MetodoNutricionPrediabetes() {
           )}
 
           {/* ── SEÑALES DE ALERTA · siempre visibles, con test o sin él ── */}
-          <Reveal direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
             <SeccionBox>
               <Box px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.25" mb={3}>
@@ -607,7 +607,7 @@ export default function MetodoNutricionPrediabetes() {
           </Reveal>
 
           {/* ── ESPERANZA · el cierre imprescindible ── */}
-          <Reveal direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
             <SeccionBox>
               <Box px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.25" mb={3}>
@@ -625,7 +625,7 @@ export default function MetodoNutricionPrediabetes() {
           </Reveal>
 
           {/* Aviso honesto. */}
-          <Reveal direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal inView direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center"
                   maxW="660px" lineHeight="1.6">
               {PREDIABETES_ESPERANZA.aviso}

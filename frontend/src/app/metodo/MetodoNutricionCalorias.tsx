@@ -10,7 +10,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { glowHeader } from "../../components/metodo/FotoBox";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Float, Contador } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -159,15 +159,20 @@ function MacroBox({ nombre, gramos, kcal, color }: { nombre: string; gramos: num
   return (
     <Box borderRadius="xl" px={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }} textAlign="center"
          bg="#ffffff66" border={`1px solid ${color}66`}
-         style={{ boxShadow: `0 0 14px ${color}1e, inset 0 1px 0 rgba(255,255,255,0.5)` }}>
+         boxShadow={`0 0 14px ${color}1e, inset 0 1px 0 rgba(255,255,255,0.5)`}
+         transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease"
+         _hover={{ transform: "translateY(-3px)",
+                   boxShadow: `0 0 22px ${color}38, inset 0 1px 0 rgba(255,255,255,0.6)` }}>
       <Text color={color} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase">
         {nombre}
       </Text>
+      {/* Los gramos CUENTAN hasta su valor, y vuelven a contar cada vez que se
+          toca un control del formulario: el resultado se ve reaccionar. */}
       <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.1" mt={1}>
-        {gramos} g
+        <Contador valor={gramos} duracion={0.9} /> g
       </Text>
       <Text color={`${nutricionTxt}99`} fontSize={{ base: "xs", md: "sm" }} mt={1}>
-        {kcal} kcal
+        <Contador valor={kcal} duracion={0.9} /> kcal
       </Text>
     </Box>
   );
@@ -332,7 +337,7 @@ export default function MetodoNutricionCalorias() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title="Tus calorías y macros"
               compact
               maxW="1000px"
@@ -343,7 +348,7 @@ export default function MetodoNutricionCalorias() {
               prev={{ label: "← Tu plato", onClick: () => navigate("/metodo/nutricion/plato") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{
-                label: "Tu azúcar →",
+                label: "Test →",
                 disabled: !resultado,
                 disabledTooltip: "Calcula tus calorías para continuar",
                 onClick: async () => {
@@ -364,7 +369,7 @@ export default function MetodoNutricionCalorias() {
           </Reveal>
 
           {/* ── FORMULARIO ── */}
-          <Reveal direction="up" distance={20} delay={0.14} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={20} delay={0.14} duration={0.6} w="100%">
             <SeccionBox>
               <Box px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
 
@@ -448,7 +453,7 @@ export default function MetodoNutricionCalorias() {
 
           {/* ── RESULTADO ── */}
           {resultado && (
-            <Reveal direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
+            <Reveal inView direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
               <SeccionBox>
                 <Box px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
 
@@ -456,7 +461,8 @@ export default function MetodoNutricionCalorias() {
                     Tu objetivo diario aproximado
                   </Text>
                   <Text color={nutricionTxt} fontSize={{ base: "4xl", md: "5xl" }} fontWeight={700} textAlign="center" lineHeight="1.1">
-                    {resultado.kcal} <Text as="span" fontSize={{ base: "xl", md: "2xl" }} fontWeight={600}>kcal</Text>
+                    <Contador valor={resultado.kcal} duracion={1.2} />{" "}
+                    <Text as="span" fontSize={{ base: "xl", md: "2xl" }} fontWeight={600}>kcal</Text>
                   </Text>
                   <Text color={`${nutricionTxt}99`} fontSize="xs" textAlign="center" mt={1}>
                     Metabolismo basal ≈ {resultado.bmr} kcal · gasto total ≈ {resultado.tdee} kcal
@@ -482,7 +488,7 @@ export default function MetodoNutricionCalorias() {
           )}
 
           {/* Nota educativa. */}
-          <Reveal direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal inView direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="660px" lineHeight="1.6">
               Este cálculo es orientativo y con fin educativo. Es una estimación estadística: tus necesidades reales
               pueden variar. No sustituye la valoración de un profesional de la nutrición.

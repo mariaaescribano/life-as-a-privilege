@@ -486,7 +486,7 @@ export default function MetodoFisiologiaAtomos() {
                       {/* Paso interno: ir al siguiente átomo. En el último NO hay
                           botón aquí: el avance es «Moléculas →» de la cabecera. */}
                       {!esUltimo && (
-                        <Box as="button" onClick={siguienteAtomo} alignSelf={{ base: "center", md: "flex-start" }} mt={2}
+                        <Box as="button" onClick={siguienteAtomo} alignSelf={{ base: "center", md: "flex-end" }} mt={2}
                              px={8} py={2.5} borderRadius="full" bg={fisiologiaTxt} color={fisiologiaBg}
                              fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                              letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"

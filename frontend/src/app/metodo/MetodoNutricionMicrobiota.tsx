@@ -8,7 +8,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Float } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { ComicHambreModal } from "../../components/metodo/ComicHambreModal";
@@ -83,7 +83,7 @@ export default function MetodoNutricionMicrobiota() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title="La microbiota"
               compact
               maxW="1000px"
@@ -105,7 +105,7 @@ export default function MetodoNutricionMicrobiota() {
             </Text>
           </Reveal>
 
-          <Reveal direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
               {MICROBIOTA_BACTERIAS.map((bac, i) => (
                 <TarjetaNutri key={bac.key} titulo={bac.titulo} foto={bac.foto}
@@ -116,7 +116,7 @@ export default function MetodoNutricionMicrobiota() {
           </Reveal>
 
           {/* ── Separador horizontal con el mandala en medio ── */}
-          <Reveal direction="up" distance={12} delay={0.1} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={12} delay={0.1} duration={0.6} w="100%">
             <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" py={{ base: 2, md: 3 }}>
               <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.75))" />
               <Image
@@ -132,14 +132,14 @@ export default function MetodoNutricionMicrobiota() {
           </Reveal>
 
           {/* ── Las moléculas que fabrican ── */}
-          <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal inView direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
               Tres de las moléculas más importantes que fabrican las bacterias de tu intestino.
             </Text>
           </Reveal>
 
-          <Reveal direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
               {MICROBIOTA_TARJETAS.map((tar, i) => (
                 <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto}

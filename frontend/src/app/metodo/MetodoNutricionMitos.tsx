@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -8,7 +8,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem, Float } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -69,7 +69,7 @@ export default function MetodoNutricionMitos() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title="Preguntas y mitos"
               compact
               maxW="1000px"
@@ -91,15 +91,21 @@ export default function MetodoNutricionMitos() {
             </Text>
           </Reveal>
 
-          <Reveal direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
-            <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {MITOS_NUTRICION.map((m, i) => (
-                <TarjetaNutri key={m.key} titulo={m.titulo} foto={m.foto}
+          {/* La rejilla entra en cascada al ASOMAR, no de golpe al montar: con 
+              doce tarjetas, la mitad quedaba fuera de pantalla y ya había 
+              terminado de animarse cuando el usuario llegaba a ellas. */}
+          <RevealStagger inView stagger={0.06} amount={0.1} w="100%"
+                         display="grid" gap={{ base: 4, md: 6 }}
+                         gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}>
+            {MITOS_NUTRICION.map((m, i) => (
+              <RevealItem key={m.key} direction="up" distance={22} scaleFrom={0.96} duration={0.55}
+                          w="100%" display="flex">
+                <TarjetaNutri titulo={m.titulo} foto={m.foto}
                               visto={leido(MITOS_LEIDOS_KEY, m.key)}
                               onClick={() => abrir(i)} />
-              ))}
-            </SimpleGrid>
-          </Reveal>
+              </RevealItem>
+            ))}
+          </RevealStagger>
 
         </Flex>
       </Flex>

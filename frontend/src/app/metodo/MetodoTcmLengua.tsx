@@ -12,6 +12,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
+import { FotoAmpliable } from "../../components/global/FotoAmpliable";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
@@ -155,10 +156,16 @@ export default function MetodoTcmLengua() {
           <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
           <Panel titulo="El mapa de la lengua" color={tcmTxt}>
             <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align={{ base: "stretch", md: "flex-start" }}>
+              {/* Los rótulos del mapa son diminutos a este tamaño: se puede
+                  pulsar la foto para verla a pantalla completa. */}
               <Box flexShrink={0} w={{ base: "100%", md: "300px" }} borderRadius="xl" overflow="hidden"
                    border={`1px solid ${tcmTxt}55`} boxShadow={`0 0 18px ${tcmTxt}33`}>
-                <img src={encodeURI(MAPA_LENGUA)} alt="Mapa de la lengua"
-                     style={{ width: "100%", height: "auto", display: "block" }} />
+                <FotoAmpliable
+                  src={MAPA_LENGUA}
+                  alt="Mapa de la lengua"
+                  acento={tcmTxt}
+                  pie="El mapa de la lengua: cada zona se corresponde con unos órganos."
+                />
               </Box>
               <Box flex="1" minW={0}>
                 <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"

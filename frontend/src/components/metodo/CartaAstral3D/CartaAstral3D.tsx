@@ -233,9 +233,8 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                   px={{ base: 4, md: 5 }}
                   borderRadius="xl"
                   bg={`${c}08`}
-                  // Sin línea de borde: era el «subrayado de luz» que cruzaba
-                  // por encima del nombre del planeta. Queda solo el fondo.
-                  border="none"
+                  // Borde del color del arquetipo (cada planeta el suyo).
+                  border={`1px solid ${c}55`}
                 >
                   {contenido}
                 </Box>
@@ -253,10 +252,9 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                 px={{ base: 4, md: 5 }}
                 borderRadius="xl"
                 bg={`${c}12`}
-                // Sin línea de borde: era el «subrayado de luz» que cruzaba por
-                // encima del nombre. El botón se sigue leyendo como botón por su
-                // fondo y su halo (que ahora late un 20% más bajo).
-                border="none"
+                // Borde del color del arquetipo: cada planeta enmarca su botón
+                // con SU color (Neptuno malva, Júpiter dorado…).
+                border={`1px solid ${c}99`}
                 color={c}
                 cursor="pointer"
                 textAlign="center"
@@ -270,6 +268,7 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
                   },
                   _hover: {
                     bg: `${c}22`,
+                    borderColor: c,
                     transform: "translateY(-1px)",
                     boxShadow: `0 0 26px ${c}7a, 0 0 56px ${c}44, inset 0 0 18px rgba(255,255,255,0.064)`,
                     animation: "none",

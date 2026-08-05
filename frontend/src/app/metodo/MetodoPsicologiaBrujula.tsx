@@ -142,7 +142,7 @@ export default function MetodoPsicologiaBrujula() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 21, total: 22 }}
+                step={{ current: 21, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Compromiso", onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}
@@ -174,7 +174,6 @@ export default function MetodoPsicologiaBrujula() {
                         lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
                     Cuando vuelvas a bloquearte, recuerda...
                   </Text>
-                  <Box h="2px" w="72px" bg={`${TINTA}66`} borderRadius="full" />
                 </Flex>
 
                 <Textarea

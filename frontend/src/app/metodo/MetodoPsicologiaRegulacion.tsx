@@ -250,7 +250,7 @@ export default function MetodoPsicologiaRegulacion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 13, total: 22 }}
+              step={{ current: 13, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Heridas", onClick: irAHeridas }}

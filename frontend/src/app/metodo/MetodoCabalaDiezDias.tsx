@@ -91,10 +91,9 @@ export default function MetodoCabalaDiezDias() {
               pageLabel={`${CABALA_PAG.dias}/${CABALA_TOTAL_PAGINAS}`}
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
               prev={{ label: "← Diagnóstico final", onClick: () => navigate("/metodo/cabala/final") }}
-              extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
               // "Ilustraciones" nunca falta en los headers de Cábala. En móvil se
-              // queda solo el ojo, para que los cuatro botones sigan en una fila.
-              extra2={{
+              // queda solo el ojo, para que los botones sigan en una fila.
+              extra={{
                 label: <Box as="span" display={{ base: "none", md: "inline" }}>Ilustraciones</Box>,
                 onClick: () => setIlustracionesOpen(true),
                 icon: <EyeIcon />,

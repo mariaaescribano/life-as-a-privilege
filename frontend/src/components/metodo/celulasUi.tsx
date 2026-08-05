@@ -372,7 +372,22 @@ export function FichaFisioModal({
             flexDirection="column"
             justifyContent="flex-start"
             pt={{ base: 0, md: 1 }}
-            pb={{ base: 0, md: 6 }}
+            // AIRE PARA EL HALO. Esta columna scrollea, y un contenedor con
+            // scroll RECORTA todo lo que se salga de su caja — también el
+            // `boxShadow` de lo que hay dentro. Sin este aire, el brillo del
+            // botón «Gracias» (que va al final del texto, pegado al borde
+            // izquierdo y al de abajo) aparecía cortado en seco.
+            //
+            // Abajo basta con más `padding`: el recorte va por el borde de la
+            // caja, así que el relleno ya aparta el botón de la tijera.
+            // A la izquierda no vale, porque el relleno movería TODO el texto
+            // hacia dentro. Por eso el margen negativo: saca el borde de la
+            // caja 28 px hacia fuera (hay sitio: el padre tiene 40 px) y el
+            // relleno devuelve el contenido a su sitio. El texto no se mueve y
+            // el halo deja de tocar el recorte.
+            pb={{ base: "28px", md: "52px" }}
+            ml={{ base: 0, md: "-28px" }}
+            pl={{ base: 0, md: "28px" }}
             pr={{ base: 0, md: 4 }}
             sx={textoSx}
           >

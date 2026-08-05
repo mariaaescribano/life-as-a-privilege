@@ -12,6 +12,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -35,6 +36,10 @@ type Forma = "cadena" | "helice" | "membrana";
 interface MacroDef {
   id: MacroId;
   nombre: string;
+  /** Artículo del nombre, para el botón «Ahora, {articulo} {nombre} →». Va en
+   *  los datos y no deducido: aquí conviven «el ADN», «las Enzimas» y «los
+   *  Lípidos», y no hay regla que los saque del nombre. */
+  articulo: string;
   monomero: string;       // singular
   monomeroPl: string;     // plural
   glow: string;           // color de acento
@@ -68,7 +73,7 @@ const piezasDe = (def: MacroDef): PiezaMacro[] =>
 
 const MACROS: MacroDef[] = [
   {
-    id: "proteina", nombre: "Enzimas", monomero: "aminoácido", monomeroPl: "aminoácidos",
+    id: "proteina", nombre: "Enzimas", articulo: "las", monomero: "aminoácido", monomeroPl: "aminoácidos",
     glow: "#7fd6c2", glyph: "A", n: 4, forma: "cadena",
     desc: "Realizan la mayoría de las funciones de la célula.",
     resultado: [
@@ -78,7 +83,7 @@ const MACROS: MacroDef[] = [
     monomeroImg: `${PRE}/aminoacido.webp`, resultadoImg: `${PRE}/circularenzima.webp`, cuadradoImg: `${PRE}/enzima.webp`,
   },
   {
-    id: "adn", nombre: "ADN", monomero: "nucleótido", monomeroPl: "nucleótidos",
+    id: "adn", nombre: "ADN", articulo: "el", monomero: "nucleótido", monomeroPl: "nucleótidos",
     glow: "#9ab6f0", glyph: "N", n: 4, forma: "helice",
     desc: "Contiene la información genética.",
     resultado: [
@@ -94,7 +99,7 @@ const MACROS: MacroDef[] = [
     ],
   },
   {
-    id: "lipido", nombre: "Lípidos", monomero: "fosfolípido", monomeroPl: "piezas",
+    id: "lipido", nombre: "Lípidos", articulo: "los", monomero: "fosfolípido", monomeroPl: "piezas",
     glow: "#f2c86b", glyph: "L", n: 4, forma: "membrana",
     desc: "Forman las membranas celulares.",
     resultado: [
@@ -110,7 +115,7 @@ const MACROS: MacroDef[] = [
     ],
   },
   {
-    id: "carbohidrato", nombre: "Carbohidratos", monomero: "glucosa", monomeroPl: "glucosas",
+    id: "carbohidrato", nombre: "Carbohidratos", articulo: "los", monomero: "glucosa", monomeroPl: "glucosas",
     glow: "#e79ac0", glyph: "G", n: 4, forma: "cadena",
     desc: "Almacenan y proporcionan energía.",
     resultado: [
@@ -234,7 +239,7 @@ function PanelBox({ children, minH, px, py, ...rest }: any) {
 // Estación de una macromolécula (se remonta al cambiar de estación).
 // ═════════════════════════════════════════════════════════════════════════
 function Estacion({
-  def, yaFormada, onFormar, onVolver, onSiguiente,
+  def, yaFormada, onFormar, onVolver, onSiguiente, labelSiguiente,
 }: {
   def: MacroDef;
   yaFormada: boolean;
@@ -242,6 +247,9 @@ function Estacion({
   onVolver: () => void;
   /** Avanza a la siguiente macromolécula sin formar; en la última vuelve al menú. */
   onSiguiente: () => void;
+  /** Texto del botón de avance: dice a DÓNDE lleva («Ahora, el ADN →»). Lo
+   *  calcula el padre, que es quien sabe cuáles quedan sin formar. */
+  labelSiguiente: string;
 }) {
   // Piezas a arrastrar (monómeros iguales o componentes distintos) y estado.
   const piezas = piezasDe(def);
@@ -291,6 +299,9 @@ function Estacion({
              display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
              color={fisiologiaTxt}
              fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }} cursor="pointer"
+             // El MISMO halo que la cabecera (glowHeader): el botón lleva su
+             // mismo fondo, así que tenía que llevar también su misma sombra.
+             boxShadow={glowHeader(fisiologiaTxt)}
              transition="all 0.2s"
              sx={{ "&:hover .volver-velo": { opacity: 0 } }}>
           <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="full" overlay={`${fisiologiaBg}bb`} />
@@ -439,7 +450,7 @@ function Estacion({
                        letterSpacing="0.04em" cursor="pointer" transition="all 0.2s" whiteSpace="nowrap"
                        boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
                        _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                    Siguiente →
+                    {labelSiguiente}
                   </Box>
                 </Flex>
               </PanelBox>
@@ -634,10 +645,18 @@ export default function MetodoFisiologiaMacromoleculas() {
   // «Siguiente →» desde el resultado: salta a la primera macromolécula que aún
   // no esté formada; si están las 4, vuelve al menú de las 4 cajas. Como no hay
   // orden fijo, «la última» es simplemente la que completa el conjunto.
-  const irSiguiente = () => {
-    const siguiente = MACROS.find((m) => !formadas.includes(m.id));
-    setActiva(siguiente ? siguiente.id : null);
-  };
+  // La que toca: la primera sin formar, descartando la que se está viendo (la
+  // que se acaba de formar puede no estar aún en `formadas`, porque el guardado
+  // va por detrás). Si no queda ninguna, se vuelve al menú de las 4.
+  const proxima = MACROS.find((m) => !formadas.includes(m.id) && m.id !== activa) ?? null;
+
+  // El destino y el rótulo salen del MISMO valor a propósito: así el botón no
+  // puede decir una cosa y llevar a otra. El rótulo nombra a dónde va («Ahora,
+  // el ADN →»), igual que en /metodo/fisiologia/atomos y /moleculas.
+  const irSiguiente = () => setActiva(proxima ? proxima.id : null);
+  const labelSiguiente = proxima
+    ? `Ahora, ${proxima.articulo} ${proxima.nombre} →`
+    : "Las 4 macromoléculas →";
 
   if (loading) {
     return <FisiologiaLoading />;
@@ -688,6 +707,7 @@ export default function MetodoFisiologiaMacromoleculas() {
                 onFormar={() => formar(defActiva.id)}
                 onVolver={() => setActiva(null)}
                 onSiguiente={irSiguiente}
+                labelSiguiente={labelSiguiente}
               />
             </Box>
           ) : (

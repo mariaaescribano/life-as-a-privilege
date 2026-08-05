@@ -53,6 +53,10 @@ const Candado = ({ size }: { size: any }) => (
 export default function MetodoCabalaCursos() {
   const navigate = useNavigate();
   const [accesoOk, setAccesoOk] = useState(false);
+  // ¿Tiene ya Cultura? De eso depende que el botón de «siguiente» lleve candado
+  // o no: el candado solo se pinta cuando está bloqueada de verdad. Mismo
+  // patrón que Fisiología→Nutrición y Ayurveda→Med. China.
+  const [culturaSuscrito, setCulturaSuscrito] = useState(false);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
   const { cursosData, loading } = useCursosData();
 
@@ -67,6 +71,7 @@ export default function MetodoCabalaCursos() {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
+        setCulturaSuscrito(!!me.data?.cultura_suscrito);
         setAccesoOk(true);
       } catch {
         navigate("/metodo/cabala");
@@ -106,15 +111,18 @@ export default function MetodoCabalaCursos() {
               nom={cabalaNom}
               mb={0}
               prev={{ label: "← 10 días", onClick: () => navigate("/metodo/cabala/dias") }}
-              extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
               // "Ilustraciones" nunca falta en los headers de Cábala. En móvil se
-              // queda solo el ojo, para que los cuatro botones sigan en una fila.
-              extra2={{
+              // queda solo el ojo, para que los botones sigan en una fila.
+              extra={{
                 label: <Box as="span" display={{ base: "none", md: "inline" }}>Ilustraciones</Box>,
                 onClick: () => setIlustracionesOpen(true),
                 icon: <EyeIcon />,
               }}
-              next={{ label: "Cultura →", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cultura") }}
+              // El candado SOLO si Cultura está bloqueada. Estaba fijo, así que
+              // salía también a quien ya la tenía comprada.
+              next={culturaSuscrito
+                ? { label: "Cultura →", onClick: () => navigate("/metodo/cultura") }
+                : { label: "Cultura", icon: <Candado size="15px" />, arrow: "next", onClick: () => navigate("/metodo/cultura") }}
             />
           </Reveal>
 

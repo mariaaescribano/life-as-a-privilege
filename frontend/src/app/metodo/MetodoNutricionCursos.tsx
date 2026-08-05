@@ -10,7 +10,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Float } from "../../components/global/Reveal";
 import {
   API_URL,
   nutricionBg,
@@ -149,7 +149,7 @@ export default function MetodoNutricionCursos() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title="Cursos de Nutrición"
               compact
               bgColor={`${nutricionBg}dd`}
@@ -175,14 +175,14 @@ export default function MetodoNutricionCursos() {
           {CURSOS.length > 0 ? (
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
               {CURSOS.map((c, i) => (
-                <Reveal key={c.key} direction="up" distance={20} delay={0.06 * i} duration={0.55} w="100%" display="flex">
+                <Reveal inView key={c.key} direction="up" distance={20} delay={0.06 * i} duration={0.55} w="100%" display="flex">
                   <CursoBox curso={c} onEnter={() => { if (c.ruta) { recordarOrigenCurso(); navigate(c.ruta); } }} />
                 </Reveal>
               ))}
             </SimpleGrid>
           ) : (
             /* ── Aún no hay cursos: estado vacío elegante ── */
-            <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <Reveal inView direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
               <Flex direction="column" align="center" gap={3} maxW="560px" textAlign="center"
                     position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                     border={`1px dashed ${nutricionTxt}44`} px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }}>

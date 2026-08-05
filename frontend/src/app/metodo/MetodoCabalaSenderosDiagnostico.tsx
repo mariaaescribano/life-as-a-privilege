@@ -127,8 +127,13 @@ export default function MetodoCabalaSenderosDiagnostico() {
 
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             {/* El texto de debajo del header va SIEMPRE sin sombra: cae sobre el
-                turquesa limpio y la sombra solo lo ensucia. */}
-            <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
+                turquesa limpio y la sombra solo lo ensucia.
+                OJO: este párrafo NO va dentro de caja, va sobre el turquesa
+                #008080, y ahí cabalaTxt (#bd814d) da 1,46:1 de contraste — muy
+                poco. Se pone así porque en esta página no se quiere letra
+                blanca en ningún sitio; si costase leerlo, aquí es donde hay que
+                volver al blanco (4,8:1) o meter el párrafo en una Caja. */}
+            <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
               Cada sendero es una transición entre dos capacidades. Aquí se reúne el resultado de tus 22 tests
               para mostrar qué caminos fluyen y cuáles piden más trabajo.
@@ -174,7 +179,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
                               {band?.titulo} · {total}
                             </Text>
                           </Flex>
-                          <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
+                          <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
                             {band?.texto}
                           </Text>
                         </Box>
@@ -197,19 +202,23 @@ export default function MetodoCabalaSenderosDiagnostico() {
               {/* ── Todos los senderos ── */}
               <Reveal direction="up" distance={18} delay={0.24} duration={0.6} w="100%">
                 <Caja>
-                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={4} style={{ textShadow: INK_SHADOW }}>
+                  <Text color={cabalaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.08em" mb={5} style={{ textShadow: INK_SHADOW }}>
                     Los 22 senderos
                   </Text>
-                  <Flex direction="column" gap={3}>
+                  <Flex direction="column" gap={3.5}>
                     {resultados.map(({ s, band, total }) => (
                       <Flex key={s.num} align="baseline" justify="space-between" gap={3} wrap="wrap"
-                            borderBottom={`1px solid ${cabalaTxt}1c`} pb={2.5}>
-                        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} style={{ textShadow: INK_SHADOW }}>
+                            borderBottom={`1px solid ${cabalaTxt}1c`} pb={3}>
+                        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} style={{ textShadow: INK_SHADOW }}>
                           <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{s.orden}.</Box>
                           {s.letra} <Box as="span" color={`${cabalaTxt}77`}>· {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}</Box>
                         </Text>
-                        <Text color={band ? cabalaTxt : `${cabalaTxt}66`} fontSize="xs" fontWeight={band ? "700" : "400"}
-                              fontStyle={band ? "normal" : "italic"}>
+                        {/* El veredicto de cada sendero sube con la lista: en `xs`
+                            quedaba como una nota al pie al lado de una línea que
+                            ahora es bastante mayor. */}
+                        <Text color={band ? cabalaTxt : `${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }}
+                              fontWeight={band ? "700" : "400"} letterSpacing="0.04em"
+                              fontStyle={band ? "normal" : "italic"} style={{ textShadow: INK_SHADOW }}>
                           {band ? `${band.titulo} · ${total}` : "sin responder"}
                         </Text>
                       </Flex>

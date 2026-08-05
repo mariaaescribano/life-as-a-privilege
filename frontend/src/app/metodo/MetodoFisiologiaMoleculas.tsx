@@ -61,6 +61,9 @@ interface Slot { tipo: Tipo; x: number; y: number; }
 interface Mol {
   key: string;
   nombre: string;
+  /** Artículo del nombre, para el botón «Ahora, {articulo} {nombre} →».
+   *  Por defecto «el»; ponlo cuando la molécula sea femenina («la glucosa»). */
+  articulo?: string;
   formula: string;
   instruccion: string;
   slots: Slot[];
@@ -83,7 +86,6 @@ const MOLS: Mol[] = [
     ],
     titulo: "¡Has formado una molécula de agua!",
     parrafos: [
-      <>Una <b>molécula</b> nace cuando varios átomos se unen <b>compartiendo electrones</b>: esa unión es un <b>enlace</b>. Aquí, un oxígeno se une a dos hidrógenos y forman el <b>agua</b>, H₂O.</>,
       <>El agua es la <b>molécula de la Vida</b>: disuelve, transporta y hace posible casi todo lo que ocurre dentro de tus células. Alrededor del <b>60% de tu cuerpo es agua</b>. En buena parte, eres agua.</>,
     ],
     resultadoImg: "/recorrido/fisiologia/pre/h2o.webp",
@@ -100,7 +102,6 @@ const MOLS: Mol[] = [
     ],
     titulo: "¡Has formado dióxido de carbono!",
     parrafos: [
-      <>Un átomo de <b>carbono</b> se une a dos de <b>oxígeno</b>: es el <b>CO₂</b>, el gas que exhalas en cada respiración.</>,
       <>Tus células lo liberan al obtener energía, y las plantas lo capturan para crecer. Es una pieza clave del <b>ciclo de la Vida</b>.</>,
     ],
     resultadoImg: "/recorrido/fisiologia/pre/co2.webp",
@@ -116,7 +117,6 @@ const MOLS: Mol[] = [
     ],
     titulo: "¡Has formado una molécula de oxígeno!",
     parrafos: [
-      <>Dos átomos de oxígeno se unen y forman el <b>O₂</b>: el oxígeno que respiras.</>,
       <>Cada célula lo necesita para <b>transformar los alimentos en energía</b>. Sin él, la Vida tal como la conoces no existiría.</>,
     ],
     resultadoImg: "/recorrido/fisiologia/pre/o2.webp",
@@ -267,6 +267,25 @@ function AccionesBox({ children }: { children: React.ReactNode }) {
   );
 }
 
+// «Volver a hacer»: FUERA de la caja, abajo a la derecha del todo y medio
+// transparente. Es deshacer, no avanzar, así que no compite con el botón de
+// paso. Idéntico al de /metodo/fisiologia/atomos: es la misma acción en la
+// misma disciplina y tiene que verse igual en las dos páginas.
+function BotonVolverAHacer({ onClick }: { onClick: () => void }) {
+  return (
+    <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
+      <Box as="button" onClick={onClick}
+           display="inline-flex" alignItems="center" gap={2} px={5} py={2} borderRadius="full"
+           bg="rgba(255,255,255,0.08)" color={fisiologiaTxt} border="1px solid rgba(255,255,255,0.28)"
+           fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
+           letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+           _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
+        ↺ Volver a hacer
+      </Box>
+    </Flex>
+  );
+}
+
 function PanelBox({ children, minH, px, py, ...rest }: any) {
   return (
     <Box position="relative" borderRadius="2xl" overflow="hidden"
@@ -397,6 +416,13 @@ export default function MetodoFisiologiaMoleculas() {
   const total = mol.slots.length;
   const hechas = colocadas.length;
   const esUltima = indice === MOLS.length - 1;
+  // El botón de avance dice a DÓNDE lleva («Ahora, el oxígeno →»), igual que el
+  // «Ahora, el Helio →» de /metodo/fisiologia/atomos. El artículo va en los
+  // datos y no deducido del nombre: en cuanto entre una molécula femenina
+  // («la glucosa»), un «el» fijo cantaría.
+  const siguienteMol = esUltima ? null : MOLS[indice + 1];
+  const nombreSiguiente = siguienteMol?.nombre ?? "";
+  const articuloSiguiente = siguienteMol?.articulo ?? "el";
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
@@ -553,23 +579,29 @@ export default function MetodoFisiologiaMoleculas() {
                           </Text>
                           <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                                bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
+                          {/* Peso normal: lo que destaca son las palabras con
+                              <b> dentro de la frase, no el párrafo entero. */}
                           {mol.parrafos.map((p, i) => (
-                            <Text key={i} color={i === mol.parrafos.length - 1 ? fisiologiaTxt : fisiologiaTxt}
+                            <Text key={i} color={fisiologiaTxt}
                                   fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
-                                  fontWeight={i === mol.parrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
+                                  fontWeight="400" style={{ textShadow: INK }}>
                               {p}
                             </Text>
                           ))}
 
+                          {/* Solo el avance. «Volver a hacer» ya no vive aquí:
+                              va fuera de la caja, abajo a la derecha, como en
+                              /metodo/fisiologia/atomos. */}
                           <AccionesBox>
-                            <BotonAccion onClick={reiniciar}>↺ Volver a hacer</BotonAccion>
                             <BotonAccion onClick={siguiente}>
-                              {esUltima ? "Ver las moléculas de la Vida →" : "Siguiente →"}
+                              {esUltima ? "Ver las moléculas de la Vida →" : `Ahora, ${articuloSiguiente} ${nombreSiguiente} →`}
                             </BotonAccion>
                           </AccionesBox>
                         </Flex>
                       </PanelBox>
                     </Flex>
+
+                    <BotonVolverAHacer onClick={reiniciar} />
                   </MBox>
                 )}
 
@@ -578,8 +610,8 @@ export default function MetodoFisiologiaMoleculas() {
                   <MBox key="final" w="100%" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6, ease: "easeOut" }}>
                    <PanelBox w="100%" minH={{ md: "360px" }}>
-                    {/* `h="100%"` para que el `mt="auto"` de AccionesBox tenga
-                        contra qué empujar y el botón quede pegado abajo. */}
+                    {/* `h="100%"` para que el contenido reparta el alto de la
+                        caja; el «Volver a hacer» ya no va dentro, va debajo. */}
                     <Flex direction="column" align="center" h="100%" gap={{ base: 7, md: 9 }} py={{ base: 2, md: 4 }}>
 
                       <Flex wrap="nowrap" justify="center" align="flex-start" gap={{ base: 1.5, md: 5 }} w="100%">
@@ -602,13 +634,13 @@ export default function MetodoFisiologiaMoleculas() {
                         ))}
                       </Flex>
 
-                      {/* Acción de esta fase, también dentro de la caja y abajo
-                          a la derecha (antes vivía fuera, al final de la página). */}
-                      <AccionesBox>
-                        <BotonAccion onClick={empezarDeCero}>↺ Volver a hacer</BotonAccion>
-                      </AccionesBox>
                     </Flex>
                    </PanelBox>
+
+                   {/* Mismo sitio y mismo aspecto que en la fase anterior y que
+                       en /metodo/fisiologia/atomos: fuera de la caja, abajo a
+                       la derecha y medio transparente. */}
+                   <BotonVolverAHacer onClick={empezarDeCero} />
                   </MBox>
                 )}
               </AnimatePresence>

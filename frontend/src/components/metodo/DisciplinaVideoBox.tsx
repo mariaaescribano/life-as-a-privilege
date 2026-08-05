@@ -79,17 +79,16 @@ export function DisciplinaVideoBox({
   const hasBg = hasDisciplinaBg(nom);
   const textGlow = `0 1px 3px ${bg}, 0 0 10px ${bg}, 0 0 20px ${bg}`;
 
-  // ── AJUSTE DEL TEXTO AL HUECO (solo en `textoGrande`) ──────────────────
-  // En las presentaciones el alto del box lo impone el vídeo cuadrado de al
-  // lado, así que el hueco del texto es FIJO y cada disciplina escribe frases
-  // de largo distinto: con un tamaño fijo, a unas les sobraba medio box y a
-  // otras no les cabía.
+  // ── LA LETRA LLENA EL BOX (solo en `textoGrande`) ──────────────────────
+  // Regla: el BOX no cambia de tamaño — es cuadrado, lo fija la rejilla de la
+  // presentación — y es la LETRA la que se estira hasta llenarlo. Nunca al
+  // revés. Cada disciplina escribe frases de largo distinto, así que con un
+  // tamaño fijo a unas les sobraba medio box y a otras no les cabía.
   //
-  // Aquí el bloque (título + puntos) se pinta en `em` sobre un tamaño base que
-  // se mide: se empieza por el más grande que queremos ver y se baja de medio en
-  // medio píxel hasta que cabe entero. Es la misma idea que el título del
-  // header: medición imperativa (se escribe `style.fontSize`), sin estado, así
-  // que no hay re-render por píxel ni bucle de «mido → cambio → vuelvo a medir».
+  // El bloque (título + puntos) se pinta en `em` sobre un tamaño base que se
+  // mide aquí: se busca el mayor que quepa ENTERO en el hueco. Medición
+  // imperativa (se escribe `style.fontSize` directamente), sin estado, así que
+  // no hay re-render por píxel ni bucle de «mido → cambio → vuelvo a medir».
   const zonaRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const zona = zonaRef.current;
@@ -97,32 +96,64 @@ export function DisciplinaVideoBox({
     const bloque = zona.firstElementChild as HTMLElement | null;
     if (!bloque) return;
 
+    // Última geometría con la que se ajustó. La escribe el propio `ajustar` al
+    // terminar, así un cambio de tamaño provocado por NOSOTROS (cambiar la
+    // letra mueve el contenido) no se confunde con uno de fuera y no hay bucle.
+    let anchoPrev = 0;
+    let altoPrev = 0;
+
     const ajustar = () => {
       const ancho = window.innerWidth;
-      // Techo por pantalla (px del `em` base) y suelo por debajo del cual no se
-      // baja: mejor un pelín justo que ilegible.
-      const max = ancho >= 992 ? 26 : ancho >= 768 ? 22 : 18;
-      const min = 12;
-      let size = max;
-      zona.style.fontSize = `${size}px`;
-      // En móvil el box crece con su contenido (no hay vídeo que le imponga el
-      // alto), así que `clientHeight` acompaña y el bucle no baja nada.
-      while (size > min && bloque.scrollHeight > zona.clientHeight + 1) {
-        size -= 0.5;
-        zona.style.fontSize = `${size}px`;
+
+      // Por debajo de `lg` las dos columnas se apilan y el box crece con su
+      // contenido: NO hay hueco fijo contra el que medir (`clientHeight` iría
+      // siempre detrás del texto y la búsqueda se dispararía al techo). Ahí,
+      // tamaño fijo y sensato, sin autoajuste.
+      if (ancho < 992) {
+        zona.style.fontSize = ancho >= 768 ? "17px" : "15px";
+        const r0 = zona.getBoundingClientRect();
+        anchoPrev = r0.width;
+        altoPrev = r0.height;
+        return;
       }
+
+      // Techo alto a propósito: el objetivo es LLENAR el box, así que hay que
+      // dejar crecer a las disciplinas de texto corto. El suelo es el punto por
+      // debajo del cual preferimos que quede justo antes que ilegible.
+      const max = 60;
+      const min = 13;
+      // Búsqueda binaria del mayor tamaño que cabe: 9 medidas en vez de las
+      // ~100 que costaba bajar de medio en medio píxel desde el techo.
+      let lo = min;
+      let hi = max;
+      let mejor = min;
+      for (let i = 0; i < 9; i++) {
+        const m = (lo + hi) / 2;
+        zona.style.fontSize = `${m}px`;
+        if (bloque.scrollHeight <= zona.clientHeight + 1) { mejor = m; lo = m; }
+        else { hi = m; }
+      }
+      zona.style.fontSize = `${mejor}px`;
+
+      const r = zona.getBoundingClientRect();
+      anchoPrev = r.width;
+      altoPrev = r.height;
     };
 
     const raf = requestAnimationFrame(ajustar);
     // Segunda pasada: en el primer frame el vídeo de al lado puede no haber
     // fijado todavía el alto del box, así que el hueco no es el definitivo.
     const tardia = window.setTimeout(ajustar, 300);
-    // Al cambiar el ancho (girar el móvil, redimensionar) se vuelve a medir.
-    let anchoPrev = zona.getBoundingClientRect().width;
+    // Se remide con CUALQUIER cambio de tamaño de la zona, ancho Y ALTO.
+    // Mirar solo el ancho era el fallo: el alto de este box lo impone el vídeo
+    // cuadrado de al lado, y cuando el vídeo carga y lo fija —casi siempre
+    // después de los 300 ms de la pasada tardía— el hueco cambiaba y el texto
+    // no se volvía a ajustar. Como la zona recorta (`overflow: hidden`), el
+    // último punto se quedaba cortado a media frase.
     const ro = new ResizeObserver((entries) => {
-      const w = entries[0]?.contentRect.width ?? 0;
-      if (Math.abs(w - anchoPrev) < 1) return;
-      anchoPrev = w;
+      const r = entries[0]?.contentRect;
+      if (!r) return;
+      if (Math.abs(r.width - anchoPrev) < 1 && Math.abs(r.height - altoPrev) < 1) return;
       ajustar();
     });
     ro.observe(zona);
@@ -265,6 +296,15 @@ export function DisciplinaVideoBox({
         pb={{ base: 5, md: 6 }}
         gap={{ base: 4, md: 5 }}
         flex="1"
+        // `minH={0}` NO se puede quitar. Un item flex tiene `min-height: auto`,
+        // que le impide encogerse por debajo de su contenido: sin esto, esta
+        // columna crecía con el texto en vez de quedarse en el alto del box, y
+        // entonces la ZONA de medida de abajo tampoco tenía un tope real —
+        // medía 3038px dentro de un box de 574—. El autoajuste preguntaba
+        // «¿cabe?», le decían que sí siempre, y la letra se iba al techo y
+        // salía recortada. Es el hermano del `min-width: auto` que rompía las
+        // columnas de la rejilla en las presentaciones.
+        minH={0}
       >
         {/* Título + puntos. En `textoGrande` van dentro de la ZONA que se mide
             (ver el useLayoutEffect de arriba): ocupa todo el hueco que deja el

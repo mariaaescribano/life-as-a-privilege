@@ -245,10 +245,7 @@ export default function MetodoFisiologiaSonrisa() {
             <Flex direction="column" align="center" gap={3} maxW="760px" textAlign="center">
               <Text color="white" fontSize={{ base: "md", md: "xl" }} fontStyle="italic" lineHeight="1.8">
                 Has recorrido tu cuerpo de la partícula al organismo. Ahora mírate: todo eso está dentro de ti
-                mientras lees esto.
-              </Text>
-              <Text color="white" fontSize={{ base: "md", md: "xl" }} fontStyle="italic" lineHeight="1.8">
-                Esta práctica es antigua y se llama «la sonrisa interior»: consiste en visitar tus órganos uno a uno
+                mientras lees esto. Esta práctica es antigua y se llama «la sonrisa interior»: consiste en visitar tus órganos uno a uno
                 y darles las gracias.
               </Text>
             </Flex>

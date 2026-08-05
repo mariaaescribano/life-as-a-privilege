@@ -1,5 +1,23 @@
-import jsPDF from "jspdf";
-import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
+// ─────────────────────────────────────────────────────────────────────────
+// «Mi mapa» — el recorrido entero de Psicología en un cuaderno.
+//
+// Es el documento más íntimo de toda la web: aquí no hay contenido nuestro,
+// solo lo que la persona escribió sobre su propia historia. Por eso el diseño
+// se aparta: papel crema, tinta marrón, mucho blanco y ni un adorno que
+// compita con sus palabras. Lo único que decora es la acuarela de la disciplina
+// y la espiral —el camino hacia dentro— como emblema.
+//
+// Dos cosas que no existían y cambian el documento:
+//  · La ESPIRAL DE LA PORTADA lleva un punto por cada paso que dejó escrito:
+//    la portada cuenta cuánto recorrió antes de abrir la primera página.
+//  · «Tu mapa de un vistazo» resume en una página lo que hay dentro (cuántas
+//    huellas, cuántos nudos, cuántas heridas, cuántos dones) y coloca el ACE en
+//    un medidor. Sirve para volver meses después sin releerlo entero.
+// ─────────────────────────────────────────────────────────────────────────
+import type jsPDF from "jspdf";
+import { Taller, MARGEN, ANCHO } from "./pdf/atelier";
+import { TEMA_PSICOLOGIA } from "./pdf/temas";
+import { polar, conAlfa, medidorArco } from "./pdf/formas";
 import {
   aceScore,
   aceBanda,
@@ -9,57 +27,15 @@ import {
   type LineaDeVidaData,
 } from "../components/metodo/psicologiaRecorrido";
 import { arquetipoLabel } from "../components/metodo/integracionSimbolos";
+import { GARAMOND } from "./fonts/ebGaramond";
 
-// PDF completo de «Mi recorrido» (Psicología): reúne, en orden, todo lo que la
-// persona dejó escrito a lo largo del camino — su problema, lo que cargó, sus
-// huellas, nudos, necesidades, heridas, relaciones, miedos, dones, su
-// compromiso y su brújula. Comparte el lenguaje visual del resto de PDFs
-// (acuarela + tinta marrón de psicología).
-
-const PAGE_BG: [number, number, number] = [255, 255, 255];
-const INK: [number, number, number] = [94, 45, 16];       // #5e2d10 — tinta psicología
-const INK_SOFT: [number, number, number] = [133, 80, 45];
-const MUTED: [number, number, number] = [158, 118, 84];
-const ACCENT = INK;
-
-const MARGIN = 20;
-const PAGE_W = 210;
-const CONTENT_W = PAGE_W - MARGIN * 2;
-const BG_IMG = "/img/fondos/psciologia.webp";
-
-const plain = (s: string) => (s || "").replace(/\*\*/g, "").replace(/\*/g, "").trim();
-
-// Dibuja `draw` con opacidad (si el visor soporta GState); si no, lo dibuja opaco.
-// Sirve para tintes suaves (paneles de sección, tarjetas de cita) sin romper nada
-// en visores antiguos.
-function withAlpha(doc: jsPDF, opacity: number, draw: () => void): void {
-  const GS = (doc as any).GState;
-  if (GS) {
-    try {
-      doc.saveGraphicsState();
-      doc.setGState(new GS({ opacity }));
-      draw();
-      doc.restoreGraphicsState();
-      return;
-    } catch { /* sin soporte de GState: se dibuja opaco */ }
-  }
-  draw();
-}
-
-function loadImage(src: string): Promise<HTMLImageElement | null> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
-}
+const limpio = (s: string) => (s || "").replace(/\*\*/g, "").replace(/\*/g, "").trim();
 
 /** Todas las huellas marcadas a lo largo de la línea de Vida (sin duplicar). */
 function todasLasHuellas(d: LineaDeVidaData): string[] {
   const set = new Set<string>();
   for (const ano of Object.values(d.anos || {})) {
-    // Blindaje: `huellas` heredado podría no ser array (string suelto) → un
+    // Blindaje: `huellas` heredado podría no ser array (un string suelto) y un
     // for..of lo rompería en caracteres. Solo iteramos arrays reales.
     const huellas = Array.isArray(ano?.huellas) ? ano!.huellas : [];
     for (const t of huellas) {
@@ -70,267 +46,59 @@ function todasLasHuellas(d: LineaDeVidaData): string[] {
   return Array.from(set);
 }
 
+/** Espiral con un punto por paso recorrido: el camino hacia dentro. */
+function espiralDeRecorrido(
+  doc: jsPDF,
+  cx: number,
+  cy: number,
+  r: number,
+  pasos: number,
+  color: [number, number, number],
+  colorPunto: [number, number, number],
+): void {
+  const VUELTAS = 2.7;
+  const punto = (t: number) => polar(cx, cy, r * (0.1 + 0.9 * t), t * 360 * VUELTAS);
+
+  const linea: [number, number][] = [];
+  for (let i = 0; i <= 260; i++) linea.push(punto(i / 260));
+  conAlfa(doc, 0.75, () => {
+    doc.setDrawColor(...color);
+    doc.setLineWidth(0.5);
+    for (let i = 1; i < linea.length; i++) {
+      doc.line(linea[i - 1][0], linea[i - 1][1], linea[i][0], linea[i][1]);
+    }
+  });
+
+  const n = Math.max(1, pasos);
+  for (let i = 0; i < n; i++) {
+    const p = punto(n === 1 ? 1 : i / (n - 1));
+    const tamano = 1 + (1.6 * i) / Math.max(1, n - 1);
+    conAlfa(doc, 0.3, () => {
+      doc.setFillColor(...colorPunto);
+      doc.circle(p[0], p[1], tamano + 1.7, "F");
+    });
+    doc.setFillColor(...colorPunto);
+    doc.circle(p[0], p[1], tamano, "F");
+  }
+  doc.setFillColor(...colorPunto);
+  doc.circle(cx, cy, 1.1, "F");
+}
+
 export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void> {
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-  registerEbGaramond(doc);
-  const pageH = doc.internal.pageSize.getHeight();
-  const img = await loadImage(BG_IMG);
-  let page = 1;
-  const fecha = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+  const t = TEMA_PSICOLOGIA;
+  const taller = await Taller.abrir(t, { titulo: "Mi mapa" });
+  const doc = taller.doc;
 
-  const fillBackground = () => { doc.setFillColor(...PAGE_BG); doc.rect(0, 0, PAGE_W, pageH, "F"); };
-
-  const drawWatercolorBand = (h: number) => {
-    if (img && img.naturalWidth) {
-      const drawH = PAGE_W * (img.naturalHeight / img.naturalWidth);
-      doc.addImage(img, "PNG", 0, 0, PAGE_W, drawH);
-      doc.setFillColor(...PAGE_BG);
-      doc.rect(0, h, PAGE_W, Math.max(0, drawH - h) + 1, "F");
-    } else {
-      doc.setFillColor(245, 238, 225);
-      doc.rect(0, 0, PAGE_W, h, "F");
-    }
-    doc.setDrawColor(...ACCENT); doc.setLineWidth(0.6);
-    doc.line(0, h, PAGE_W, h);
-  };
-
-  const ornament = (y: number) => {
-    doc.setDrawColor(...ACCENT); doc.setLineWidth(0.4);
-    doc.line(PAGE_W / 2 - 26, y, PAGE_W / 2 - 5, y);
-    doc.line(PAGE_W / 2 + 5, y, PAGE_W / 2 + 26, y);
-    doc.setFillColor(...ACCENT);
-    doc.circle(PAGE_W / 2, y, 1.1, "F");
-  };
-
-  const drawFooter = (p: number) => {
-    // Hairline de cortesía sobre el pie.
-    doc.setDrawColor(214, 198, 180); doc.setLineWidth(0.2);
-    doc.line(MARGIN, pageH - 12.5, PAGE_W - MARGIN, pageH - 12.5);
-    doc.setFont(GARAMOND, "italic"); doc.setFontSize(8.5); doc.setTextColor(...MUTED);
-    doc.text("Life as a Privilege  ·  Psicología", MARGIN, pageH - 8);
-    doc.text(`${p}`, PAGE_W - MARGIN, pageH - 8, { align: "right" });
-  };
-
-  // Membrete de las páginas interiores: una banda fina de la acuarela de
-  // psicología (la misma imagen de la portada), atenuada con un velo claro para
-  // que el texto se lea, más el título y la disciplina. Da un aire de cuaderno.
-  const drawMiniHeader = () => {
-    const bandH = 26;
-    if (img && img.naturalWidth) {
-      const drawH = PAGE_W * (img.naturalHeight / img.naturalWidth);
-      doc.addImage(img, "PNG", 0, 0, PAGE_W, drawH);
-      doc.setFillColor(...PAGE_BG);
-      doc.rect(0, bandH, PAGE_W, Math.max(0, drawH - bandH) + 1, "F");
-      // Velo claro sobre la banda para legibilidad del texto del membrete.
-      try {
-        const GS = (doc as any).GState;
-        if (GS) {
-          doc.saveGraphicsState();
-          doc.setGState(new GS({ opacity: 0.62 }));
-          doc.setFillColor(...PAGE_BG);
-          doc.rect(0, 0, PAGE_W, bandH, "F");
-          doc.restoreGraphicsState();
-        }
-      } catch { /* sin GState: se deja la banda tal cual */ }
-    }
-    doc.setDrawColor(...ACCENT); doc.setLineWidth(0.5);
-    doc.line(MARGIN, bandH, PAGE_W - MARGIN, bandH);
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...INK);
-    doc.text("Mi mapa", MARGIN, 15);
-    doc.setFont(GARAMOND, "italic"); doc.setFontSize(10); doc.setTextColor(...ACCENT);
-    doc.text("Psicología", PAGE_W - MARGIN, 15, { align: "right" });
-  };
-
-  let y = 0;
-  const ensureSpace = (needed: number) => {
-    if (y + needed > pageH - 18) {
-      drawFooter(page); doc.addPage(); page++;
-      fillBackground(); drawMiniHeader(); y = 34;
-    }
-  };
-
-  // ── Bloques reutilizables ──────────────────────────────────────────────
-  // Cada sección va precedida de un adorno de separación (menos la primera),
-  // para que el documento respire y cada bloque quede bien delimitado.
-  let primeraSeccion = true;
-  let sectionNum = 0;
-  const sectionTitle = (title: string) => {
-    ensureSpace(34);
-    if (!primeraSeccion) {
-      y += 9;
-      ornament(y);
-      y += 12;
-    } else {
-      y += 6;
-      primeraSeccion = false;
-    }
-    sectionNum++;
-    // Panel de sección: banda redondeada con un tinte muy suave + barra de acento
-    // a la izquierda + un pequeño numeral. Da a cada bloque aire de «capítulo».
-    const panelH = 12.5;
-    const panelTop = y - 7;
-    withAlpha(doc, 0.09, () => {
-      doc.setFillColor(...INK);
-      doc.roundedRect(MARGIN, panelTop, CONTENT_W, panelH, 2.8, 2.8, "F");
-    });
-    doc.setFillColor(...ACCENT);
-    doc.roundedRect(MARGIN, panelTop, 2.4, panelH, 1.2, 1.2, "F");
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(9); doc.setTextColor(...MUTED);
-    doc.text(String(sectionNum).padStart(2, "0"), MARGIN + 7, y);
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(15.5); doc.setTextColor(...INK);
-    doc.text(title, MARGIN + 16, y);
-    y = panelTop + panelH + 7;
-  };
-
-  const paragraph = (text: string, opts?: { italic?: boolean; size?: number; color?: [number, number, number] }) => {
-    const size = opts?.size ?? 11.5;
-    doc.setFont(GARAMOND, opts?.italic ? "italic" : "normal"); doc.setFontSize(size);
-    doc.setTextColor(...(opts?.color ?? INK));
-    const lines = doc.splitTextToSize(plain(text), CONTENT_W) as string[];
-    lines.forEach((line) => { ensureSpace(size * 0.55); doc.text(line, MARGIN, y); y += size * 0.52; });
-    y += 2;
-  };
-
-  const bulletList = (items: string[]) => {
-    doc.setFont(GARAMOND, "normal"); doc.setFontSize(11.5); doc.setTextColor(...INK);
-    for (const it of items) {
-      const lines = doc.splitTextToSize(plain(it), CONTENT_W - 8) as string[];
-      ensureSpace(lines.length * 6 + 1);
-      doc.setFillColor(...ACCENT);
-      doc.circle(MARGIN + 1.5, y - 1.4, 1, "F");
-      lines.forEach((line, i) => doc.text(line, MARGIN + 8, y + i * 6));
-      y += lines.length * 6 + 1.5;
-    }
-  };
-
-  // Cita como TARJETA (para heridas, relaciones): fondo con un tinte muy suave,
-  // barra de acento a la izquierda y las esquinas redondeadas.
-  const quote = (titulo: string, cuerpo: string, extra?: string) => {
-    const innerW = CONTENT_W - 16;
-    const tLines = titulo ? (doc.splitTextToSize(plain(titulo), innerW) as string[]) : [];
-    const cLines = cuerpo ? (doc.splitTextToSize(plain(cuerpo), innerW) as string[]) : [];
-    const eLines = extra ? (doc.splitTextToSize(plain(extra), innerW) as string[]) : [];
-    const textH = tLines.length * 6 + cLines.length * 5.8 + (eLines.length ? 1 + eLines.length * 5.8 : 0);
-    const padY = 5.5;
-    const cardH = textH + padY * 2;
-    ensureSpace(cardH + 6);
-    const cardTop = y - 4;
-    withAlpha(doc, 0.055, () => {
-      doc.setFillColor(...INK);
-      doc.roundedRect(MARGIN, cardTop, CONTENT_W, cardH, 3, 3, "F");
-    });
-    doc.setFillColor(...ACCENT);
-    doc.roundedRect(MARGIN, cardTop, 2.2, cardH, 1.1, 1.1, "F");
-    let yy = cardTop + padY + 3.5;
-    if (tLines.length) {
-      doc.setFont(GARAMOND, "bold"); doc.setFontSize(12.5); doc.setTextColor(...INK);
-      tLines.forEach((line) => { doc.text(line, MARGIN + 9, yy); yy += 6; });
-    }
-    if (cLines.length) {
-      doc.setFont(GARAMOND, "italic"); doc.setFontSize(11.5); doc.setTextColor(...INK_SOFT);
-      cLines.forEach((line) => { doc.text(line, MARGIN + 9, yy); yy += 5.8; });
-    }
-    if (eLines.length) {
-      yy += 1;
-      doc.setFont(GARAMOND, "bold"); doc.setFontSize(11.5); doc.setTextColor(...ACCENT);
-      eLines.forEach((line) => { doc.text(line, MARGIN + 9, yy); yy += 5.8; });
-    }
-    y = cardTop + cardH + 6;
-  };
-
-  const qaBlock = (pregunta: string, respuesta: string) => {
-    const pLines = doc.splitTextToSize(plain(pregunta), CONTENT_W) as string[];
-    const rLines = doc.splitTextToSize(plain(respuesta), CONTENT_W - 8) as string[];
-    ensureSpace(pLines.length * 5.5 + rLines.length * 6 + 8);
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...INK_SOFT);
-    pLines.forEach((line) => { doc.text(line, MARGIN, y); y += 5.5; });
-    y += 1;
-    const barTop = y - 3;
-    doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...INK);
-    rLines.forEach((line) => { doc.text(line, MARGIN + 8, y); y += 6; });
-    doc.setDrawColor(...ACCENT); doc.setLineWidth(1.2);
-    doc.line(MARGIN + 2, barTop, MARGIN + 2, y - 5);
-    y += 5;
-  };
-
-  /* ── PÁGINA 1 · portada ── */
-  fillBackground();
-  drawWatercolorBand(58);
-  // Marco fino doble de cortesía (aire de documento cuidado).
-  doc.setDrawColor(...ACCENT);
-  doc.setLineWidth(0.5); doc.rect(10, 10, PAGE_W - 20, pageH - 20);
-  doc.setLineWidth(0.2); doc.rect(12.4, 12.4, PAGE_W - 24.8, pageH - 24.8);
-  doc.setFont(GARAMOND, "bold"); doc.setFontSize(26); doc.setTextColor(...INK);
-  doc.text("Mi mapa", PAGE_W / 2, 76, { align: "center", charSpace: 0.5 });
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...ACCENT);
-  doc.text("Psicología  ·  Tu historia, contada por ti", PAGE_W / 2, 85, { align: "center" });
-  ornament(93);
-  y = 106;
-
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(11.5); doc.setTextColor(...MUTED);
-  const intro = doc.splitTextToSize(
-    "Este es el mapa completo de todo lo que has recorrido: las palabras que te dejaste a ti mismo, lo que comprendiste y lo que decidiste llevarte. Es tuyo. Vuelve a él siempre que lo necesites.",
-    CONTENT_W - 10,
-  ) as string[];
-  intro.forEach((line) => { doc.text(line, PAGE_W / 2, y, { align: "center" }); y += 6; });
-  y += 3;
-
-  // Fecha de generación, discreta bajo la introducción de la portada.
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(9.5); doc.setTextColor(...MUTED);
-  doc.text(fecha, PAGE_W / 2, y, { align: "center" });
-  y += 3;
-
-  /* ── 1 · De dónde vengo ── */
+  /* ── Se recoge todo primero: hace falta para el resumen y para la portada ── */
   const problemas = (typeof data["problema-actual"] === "string" ? (data["problema-actual"] as string) : "")
     .split(/\n+/).map((s) => s.trim()).filter(Boolean);
-  if (problemas.length > 0) {
-    sectionTitle("De dónde vengo");
-    problemas.forEach((p) => paragraph(p, { italic: true }));
-  }
-
-  /* ── 2 · Lo que cargué (ACE) ── */
-  if (aceCompleto(data)) {
-    const score = aceScore(data);
-    const banda = aceBanda(score);
-    sectionTitle("Lo que cargué");
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(13.5); doc.setTextColor(...ACCENT);
-    ensureSpace(9);
-    doc.text(`Puntuación ACE: ${score} / 10  ·  ${banda.titulo}`, MARGIN, y); y += 8;
-    paragraph(banda.texto, { color: INK_SOFT });
-  }
-
-  /* ── 3 · Lo que dejó huella ── */
   const huellas = todasLasHuellas(data);
-  if (huellas.length > 0) {
-    sectionTitle("Lo que dejó huella");
-    bulletList(huellas);
-  }
-
-  /* ── 4 · Los nudos ── */
-  const nudos = (Array.isArray(data.nudos) ? data.nudos : []).map((n) => (typeof n === "string" ? n : "").trim()).filter(Boolean);
-  if (nudos.length > 0) {
-    sectionTitle("Los nudos");
-    bulletList(nudos);
-  }
-
-  /* ── 5 · Lo que me faltó (necesidades) ── */
+  const nudos = (Array.isArray(data.nudos) ? data.nudos : [])
+    .map((n) => (typeof n === "string" ? n : "").trim()).filter(Boolean);
   const necesidades = necesidadesNoCubiertas(data);
-  if (necesidades.length > 0) {
-    sectionTitle("Lo que me faltó");
-    bulletList(necesidades);
-  }
+  const heridas = (Array.isArray(data.heridas) ? data.heridas : [])
+    .filter((h) => (h.titulo || "").trim() || (h.texto || "").trim());
 
-  /* ── 6 · Mis heridas ── */
-  const heridas = (Array.isArray(data.heridas) ? data.heridas : []).filter((h) => (h.titulo || "").trim() || (h.texto || "").trim());
-  if (heridas.length > 0) {
-    sectionTitle("Mis heridas");
-    heridas.forEach((h) => {
-      const piezas = [...(h.huellas || []), ...(h.nudos || []), ...(h.necesidades || [])].join("   ·   ");
-      quote((h.titulo || "").trim() || "Herida", (h.texto || "").trim(), piezas || undefined);
-    });
-  }
-
-  /* ── 7 · Cómo me relaciono ── */
   const INTEGRACION_PREGUNTAS: { key: "proteger" | "coste" | "verdadSana" | "recordatorio"; label: string }[] = [
     { key: "proteger", label: "Qué intentaba proteger" },
     { key: "coste", label: "Qué me cuesta mantenerlo" },
@@ -341,92 +109,285 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
     (c) => (c.titulo || "").trim() || (c.texto || "").trim() ||
       INTEGRACION_PREGUNTAS.some((p) => ((c[p.key] as string) || "").trim()),
   );
+  const miedos = (Array.isArray(data.miedos) ? data.miedos : []).filter((m) => (m.texto || "").trim());
+  const dones = (Array.isArray(data.dones?.lista) ? data.dones!.lista! : [])
+    .map((x) => (typeof x === "string" ? x : (x?.texto || "")).trim())
+    .filter(Boolean);
+  const b = data.brujula || {};
+  const comp = data.compromiso || {};
+  const aceHecho = aceCompleto(data);
+  const ace = aceHecho ? aceScore(data) : 0;
+
+  const bloquesConContenido = [
+    problemas.length, aceHecho ? 1 : 0, huellas.length, nudos.length, necesidades.length,
+    heridas.length, relaciones.length, miedos.length, dones.length,
+    (b.mensaje || b.herida || b.necesidad || b.miedo || b.don) ? 1 : 0,
+    (comp.necesitaste || comp.dartelo) ? 1 : 0,
+  ].filter((n) => n > 0).length;
+
+  /* ── PORTADA ── */
+  taller.portada({
+    titulo: "Mi mapa",
+    subtitulo: "Psicología · Tu historia, contada por ti",
+    pieLamina:
+      bloquesConContenido > 1
+        ? `Cada punto es uno de los ${bloquesConContenido} pasos que dejaste escritos.`
+        : undefined,
+    cierre: "Mi recorrido",
+    lamina: (d, cx, yTop, ancho) => {
+      const r = Math.min(ancho / 2 - 18, 46);
+      espiralDeRecorrido(d, cx, yTop + r + 14, r, bloquesConContenido, [246, 226, 206], [255, 246, 236]);
+    },
+  });
+
+  /* ── TU MAPA DE UN VISTAZO ── */
+  taller.nuevaPagina();
+  taller.capitulo(
+    "De un vistazo",
+    "Lo que hay dentro de este cuaderno. Sirve para volver dentro de unos meses sin " +
+      "tener que releerlo entero.",
+  );
+
+  const inventario: [string, number][] = [
+    ["Huellas", huellas.length],
+    ["Nudos", nudos.length],
+    ["Necesidades", necesidades.length],
+    ["Heridas", heridas.length],
+    ["Relaciones", relaciones.length],
+    ["Miedos", miedos.length],
+    ["Dones", dones.length],
+  ].filter(([, n]) => (n as number) > 0) as [string, number][];
+
+  if (inventario.length) {
+    const cols = Math.min(4, inventario.length);
+    const anchoCel = ANCHO / cols;
+    const filas = Math.ceil(inventario.length / cols);
+    taller.reservar(filas * 21 + 6);
+    const arriba = taller.y;
+    inventario.forEach(([etiqueta, n], i) => {
+      const fila = Math.floor(i / cols);
+      const col = i % cols;
+      const cx = MARGEN + col * anchoCel + anchoCel / 2;
+      const cy = arriba + fila * 21;
+      doc.setFont(GARAMOND, "bold");
+      doc.setFontSize(25);
+      doc.setTextColor(...t.acento);
+      doc.text(String(n), cx, cy + 6, { align: "center" });
+      taller.versalitas(etiqueta, cx, cy + 12.5, 7.6, t.apagado, "center");
+      if (col < cols - 1 && i < inventario.length - 1) {
+        conAlfa(doc, 0.6, () => {
+          doc.setDrawColor(...t.trama);
+          doc.setLineWidth(0.15);
+          doc.line(cx + anchoCel / 2, cy - 2, cx + anchoCel / 2, cy + 13);
+        });
+      }
+    });
+    taller.y = arriba + filas * 21 + 5;
+  }
+
+  if (aceHecho) {
+    const banda = aceBanda(ace);
+    taller.espacio(2);
+    taller.reservar(46);
+    const arriba = taller.y;
+    // Medidor a la izquierda, lectura a la derecha.
+    medidorArco(doc, MARGEN + 22, arriba + 19, 16, ace / 10, t.acento, t.trama);
+    doc.setFont(GARAMOND, "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(...t.tinta);
+    doc.text(`${ace}`, MARGEN + 22, arriba + 33.5, { align: "center" });
+    doc.setFont(GARAMOND, "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(...t.apagado);
+    doc.text("de 10", MARGEN + 22, arriba + 38.5, { align: "center" });
+
+    const x = MARGEN + 48;
+    const w = ANCHO - 48;
+    taller.versalitas("Puntuación ACE", x, arriba + 6, 8, t.apagado);
+    doc.setFont(GARAMOND, "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(...t.acento);
+    doc.text(banda.titulo, x, arriba + 14);
+    // Aquí solo el titular: el texto completo de la banda va en su capítulo,
+    // y repetirlo dos veces en el mismo cuaderno lo abarata.
+    doc.setFont(GARAMOND, "italic");
+    doc.setFontSize(10.2);
+    doc.setTextColor(...t.tintaSuave);
+    const lineas = doc.splitTextToSize(
+      `De las diez preguntas del cuestionario ACE respondiste que sí a ${ace}. ` +
+        "En «Lo que cargué» tienes qué significa eso y qué no.",
+      w,
+    ) as string[];
+    lineas.forEach((l, i) => doc.text(l, x, arriba + 21 + i * 5));
+    taller.y = Math.max(arriba + 46, arriba + 21 + lineas.length * 5 + 4);
+  }
+
+  taller.espacio(2);
+  taller.parrafo(
+    "Nada de lo que sigue es un diagnóstico. Son tus palabras, ordenadas. El valor de este " +
+      "cuaderno no está en lo que dice, sino en que lo escribiste tú y puedes volver a él.",
+    { cursiva: true, color: t.apagado, tam: 10.4 },
+  );
+
+  /* ── 1 · DE DÓNDE VENGO ── */
+  if (problemas.length > 0) {
+    taller.capitulo("De dónde vengo");
+    problemas.forEach((p, i) => taller.parrafo(p, { cursiva: true, capitular: i === 0, tam: 11.5 }));
+  }
+
+  /* ── 2 · LO QUE CARGUÉ ── */
+  if (aceHecho) {
+    const banda = aceBanda(ace);
+    taller.capitulo("Lo que cargué");
+    taller.filaBarra({
+      etiqueta: "Puntuación ACE",
+      coletilla: banda.titulo,
+      valor: `${ace} / 10`,
+      fraccion: ace / 10,
+    });
+    taller.parrafo(banda.texto, { color: t.tintaSuave });
+  }
+
+  /* ── 3 · LO QUE DEJÓ HUELLA ── */
+  if (huellas.length > 0) {
+    taller.capitulo("Lo que dejó huella");
+    taller.listaDoble(huellas);
+  }
+
+  /* ── 4 · LOS NUDOS ── */
+  if (nudos.length > 0) {
+    taller.capitulo("Los nudos");
+    taller.listaDoble(nudos);
+  }
+
+  /* ── 5 · LO QUE ME FALTÓ ── */
+  if (necesidades.length > 0) {
+    taller.capitulo("Lo que me faltó");
+    taller.listaDoble(necesidades);
+  }
+
+  /* ── 6 · MIS HERIDAS ── */
+  if (heridas.length > 0) {
+    taller.capitulo("Mis heridas");
+    heridas.forEach((h) => {
+      const piezas = [...(h.huellas || []), ...(h.nudos || []), ...(h.necesidades || [])].join("   ·   ");
+      taller.tarjeta({
+        titulo: limpio(h.titulo) || "Herida",
+        cuerpo: limpio(h.texto),
+        extra: piezas || undefined,
+      });
+    });
+  }
+
+  /* ── 7 · CÓMO ME RELACIONO ── */
   if (relaciones.length > 0) {
-    sectionTitle("Cómo me relaciono");
+    taller.capitulo("Cómo me relaciono");
     relaciones.forEach((c) => {
       const piezas = [
         ...(c.nudos || []),
         ...(c.arquetipos || []).map((a) => arquetipoLabel(a)),
       ].join("   ·   ");
-      quote((c.titulo || "").trim() || "Relación", (c.texto || "").trim(), piezas || undefined);
+      taller.tarjeta({
+        titulo: limpio(c.titulo) || "Relación",
+        cuerpo: limpio(c.texto),
+        extra: piezas || undefined,
+      });
       INTEGRACION_PREGUNTAS.forEach((p) => {
-        const r = ((c[p.key] as string) || "").trim();
-        if (r) qaBlock(p.label, r);
+        const r = limpio((c[p.key] as string) || "");
+        if (r) taller.preguntaRespuesta(p.label, r);
       });
-      y += 2;
+      taller.espacio(2);
     });
   }
 
-  /* ── 8 · Mis miedos ── */
-  const miedos = (Array.isArray(data.miedos) ? data.miedos : []).filter((m) => (m.texto || "").trim());
+  /* ── 8 · MIS MIEDOS ── */
   if (miedos.length > 0) {
-    sectionTitle("Mis miedos");
+    taller.capitulo("Mis miedos");
     miedos.forEach((m) => {
-      doc.setFont(GARAMOND, "bold"); doc.setFontSize(13); doc.setTextColor(...INK);
-      const mLines = doc.splitTextToSize(plain(m.texto), CONTENT_W) as string[];
-      ensureSpace(mLines.length * 6 + 3);
-      mLines.forEach((line) => { doc.text(line, MARGIN, y); y += 6; });
-      y += 1;
+      taller.reservar(14);
+      doc.setFont(GARAMOND, "bold");
+      doc.setFontSize(13.5);
+      doc.setTextColor(...t.tinta);
+      const lineas = doc.splitTextToSize(limpio(m.texto), ANCHO - 8) as string[];
+      taller.reservar(lineas.length * 6.4 + 5);
+      doc.setFillColor(...t.acento);
+      doc.circle(MARGEN + 1.8, taller.y - 1.6, 1.5, "F");
+      doc.setFont(GARAMOND, "bold");
+      doc.setFontSize(13.5);
+      doc.setTextColor(...t.tinta);
+      lineas.forEach((l, i) => doc.text(l, MARGEN + 7, taller.y + i * 6.4));
+      taller.y += lineas.length * 6.4 + 3;
       MIEDOS_PREGUNTAS.forEach((p) => {
-        const r = (m.respuestas?.[p.key] || "").trim();
-        if (r) qaBlock(p.pregunta, r);
+        const r = limpio(m.respuestas?.[p.key] || "");
+        if (r) taller.preguntaRespuesta(p.pregunta, r);
       });
-      y += 2;
+      taller.espacio(2);
     });
   }
 
-  /* ── 9 · Mis dones ── */
-  // Acepta la forma nueva (objetos {texto}) y la antigua (string[]).
-  const dones = (Array.isArray(data.dones?.lista) ? data.dones!.lista! : [])
-    .map((x) => (typeof x === "string" ? x : (x?.texto || "")).trim())
-    .filter(Boolean);
+  /* ── 9 · MIS DONES ── */
   if (dones.length > 0) {
-    sectionTitle("Mis dones");
-    bulletList(dones);
+    taller.capitulo("Mis dones", "Lo que sabes que tienes, escrito por ti y no por nadie más.");
+    taller.lista(dones, { tam: 11.5 });
   }
 
-  /* ── 10 · Mi carta ── */
-  const b = data.brujula || {};
-  if ((b.mensaje || "").trim()) {
-    // Formato nuevo: un mensaje libre a su yo del futuro.
-    sectionTitle("Mi carta");
-    paragraph("Para cuando vuelva a sentirme bloqueado:", { italic: true, color: MUTED, size: 11 });
-    paragraph(b.mensaje as string);
+  /* ── 10 · MI CARTA ── */
+  if (limpio(b.mensaje as string)) {
+    // Formato nuevo: un mensaje libre a su yo del futuro. Va en papel de carta.
+    taller.capitulo("Mi carta", "Para cuando vuelva a sentirme bloqueado.");
+    taller.reservar(40);
+    const arriba = taller.y - 3;
+    doc.setFont(GARAMOND, "italic");
+    doc.setFontSize(12.5);
+    const lineas = doc.splitTextToSize(limpio(b.mensaje as string), ANCHO - 28) as string[];
+    const alto = lineas.length * 6.8 + 22;
+    conAlfa(doc, 0.05, () => {
+      doc.setFillColor(...t.acento);
+      doc.roundedRect(MARGEN, arriba, ANCHO, alto, 3, 3, "F");
+    });
+    doc.setDrawColor(...t.acento);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(MARGEN, arriba, ANCHO, alto, 3, 3, "S");
+    conAlfa(doc, 0.28, () => {
+      doc.setFont(GARAMOND, "bold");
+      doc.setFontSize(40);
+      doc.setTextColor(...t.acento);
+      doc.text("“", MARGEN + 7, arriba + 22);
+    });
+    doc.setFont(GARAMOND, "italic");
+    doc.setFontSize(12.5);
+    doc.setTextColor(...t.tinta);
+    lineas.forEach((l, i) => doc.text(l, MARGEN + 14, arriba + 15 + i * 6.8));
+    taller.y = arriba + alto + 8;
   } else {
     // Formato antiguo (recorridos guardados con las cuatro preguntas guía).
-    const brujulaPreg: [string, string | undefined][] = [
+    const brujula: [string, string | undefined][] = [
       ["¿Qué herida se ha activado?", b.herida],
       ["¿Qué necesidad hay debajo?", b.necesidad],
       ["¿Qué miedo está hablando?", b.miedo],
       ["¿Qué don puedes utilizar ahora?", b.don],
     ];
-    if (brujulaPreg.some(([, v]) => (v || "").trim())) {
-      sectionTitle("Mi carta");
-      paragraph("Para cuando vuelva a sentirme bloqueado:", { italic: true, color: MUTED, size: 11 });
-      brujulaPreg.forEach(([q, v]) => { if ((v || "").trim()) qaBlock(q, v as string); });
+    if (brujula.some(([, v]) => limpio(v || ""))) {
+      taller.capitulo("Mi carta", "Para cuando vuelva a sentirme bloqueado.");
+      brujula.forEach(([q, v]) => { if (limpio(v || "")) taller.preguntaRespuesta(q, v as string); });
     }
   }
 
-  /* ── 11 · Mi compromiso ── */
-  const comp = data.compromiso || {};
-  if ((comp.necesitaste || "").trim() || (comp.dartelo || "").trim()) {
-    sectionTitle("Mi compromiso conmigo mismo");
-    if ((comp.necesitaste || "").trim()) qaBlock("¿Qué necesitaste que nadie pudo darte?", comp.necesitaste as string);
-    if ((comp.dartelo || "").trim()) qaBlock("¿Cómo puedes empezar a dártelo hoy?", comp.dartelo as string);
+  /* ── 11 · MI COMPROMISO ── */
+  if (limpio(comp.necesitaste as string) || limpio(comp.dartelo as string)) {
+    taller.capitulo("Mi compromiso conmigo mismo");
+    if (limpio(comp.necesitaste as string)) {
+      taller.preguntaRespuesta("¿Qué necesitaste que nadie pudo darte?", comp.necesitaste as string);
+    }
+    if (limpio(comp.dartelo as string)) {
+      taller.preguntaRespuesta("¿Cómo puedes empezar a dártelo hoy?", comp.dartelo as string);
+    }
   }
 
-  /* Cierre */
-  ensureSpace(24);
-  y += 6;
-  ornament(y);
-  y += 8;
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(10.5); doc.setTextColor(...MUTED);
-  const cierre = doc.splitTextToSize(
-    "No mirabas tu historia para quedarte en ella, sino para transformarla. Este mapa es la prueba de que ya empezaste.",
-    CONTENT_W - 20,
-  ) as string[];
-  cierre.forEach((line, i) => doc.text(line, PAGE_W / 2, y + i * 5.5, { align: "center" }));
+  taller.cierre(
+    "No mirabas tu historia para quedarte en ella, sino para transformarla. " +
+      "Este mapa es la prueba de que ya empezaste.",
+  );
 
-  drawFooter(page);
-  doc.save("mi_recorrido_psicologia.pdf");
+  taller.guardar("mi-mapa-psicologia.pdf");
 }

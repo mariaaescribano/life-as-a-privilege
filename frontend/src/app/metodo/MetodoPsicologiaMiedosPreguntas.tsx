@@ -18,6 +18,7 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { EjemplosPulsables } from "../../components/metodo/EjemplosPulsables";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
@@ -154,7 +155,7 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 18, total: 22 }}
+                step={{ current: 18, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Miedos", onClick: irAMiedos }}
@@ -363,6 +364,21 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
                   _hover={{ borderColor: `${TINTA}55` }}
                   _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
                 />
+
+                {/* Ejemplos: a veces no hay palabras y ayuda que te den opciones.
+                    Van en el hueco que YA queda bajo el recuadro (el popup no
+                    crece: alto y ancho siguen fijos), así que solo se pintan los
+                    que caben. Misma pieza que en «Integración». */}
+                <EjemplosPulsables
+                  ejemplos={q.ejemplos || []}
+                  respuesta={respuesta}
+                  onElegir={(ej) => {
+                    const actual = respuesta.trim();
+                    onUpdate(q.key, actual ? `${actual}\n${ej}` : ej);
+                    actualRef.current?.focus({ preventScroll: true });
+                  }}
+                />
+
               </Box>
             );
           })()}

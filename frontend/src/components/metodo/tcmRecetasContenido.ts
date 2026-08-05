@@ -129,6 +129,28 @@ export const RECETAS_ELEMENTO: Record<Elemento, Receta[]> = {
       ],
       cuando: "En la cena, en épocas de mucha frustración o tensión mandibular.",
     },
+    {
+      key: "madera-sopa-apio-shiitake",
+      nombre: "Sopa clara de apio y shiitake",
+      para: "Bajar el Yang del hígado: cabeza cargada, ojos rojos, tensión que sube.",
+      tiempo: "30 min",
+      naturaleza: "Refrescante",
+      ingredientes: [
+        "3 ramas de apio con sus hojas, en trozos",
+        "4 setas shiitake (frescas o remojadas)",
+        "1 trozo pequeño de jengibre",
+        "700 ml de agua o caldo vegetal suave",
+        "Sal marina y unas gotas de aceite de sésamo",
+      ],
+      pasos: [
+        "Lleva el agua a ebullición con el jengibre y las shiitake laminadas.",
+        "Baja el fuego y cuece 15 minutos, para que la seta suelte su sabor.",
+        "Añade el apio y cuece 8 minutos más: tiene que quedar tierno pero vivo.",
+        "Sala al final y termina con unas gotas de aceite de sésamo.",
+      ],
+      cuando: "En la comida, en primavera o en rachas de mucha tensión y mal dormir.",
+      nota: "El apio es el clásico de la Madera cuando la energía «sube» de más. Si eres muy friolera, sube el jengibre.",
+    },
   ],
 
   // ── FUEGO · corazón e intestino delgado ──────────────────────────────────
@@ -196,6 +218,27 @@ export const RECETAS_ELEMENTO: Record<Elemento, Receta[]> = {
       cuando: "En la comida, en verano y a final de primavera.",
       nota: "Amargo en poca cantidad: el amargo drena, y en exceso enfría demasiado el corazón.",
     },
+    {
+      key: "fuego-trigo-datil",
+      nombre: "Caldo dulce de trigo y dátil rojo",
+      hanzi: "甘麥大棗湯",
+      para: "Serenar el corazón cuando hay llanto fácil, angustia o sueño roto.",
+      tiempo: "40 min",
+      naturaleza: "Neutra",
+      ingredientes: [
+        "30 g de trigo en grano (mejor el que flota al remojarlo)",
+        "10 dátiles rojos (jujube) abiertos",
+        "1 trozo pequeño de regaliz (opcional)",
+        "800 ml de agua",
+      ],
+      pasos: [
+        "Remoja el trigo un par de horas y escúrrelo.",
+        "Cuécelo con los dátiles, el regaliz y el agua a fuego lento 35-40 minutos.",
+        "Cuela y bebe el caldo templado, a sorbos y sin prisa.",
+      ],
+      cuando: "Al final del día, en épocas de mucha carga emocional.",
+      nota: "Es una de las recetas más antiguas y queridas de la cocina medicinal china para calmar el ánimo. Si tomas medicación, consulta antes por el regaliz.",
+    },
   ],
 
   // ── TIERRA · bazo y estómago ─────────────────────────────────────────────
@@ -261,6 +304,28 @@ export const RECETAS_ELEMENTO: Record<Elemento, Receta[]> = {
         "Sirve caliente con el sésamo y la especia por encima.",
       ],
       cuando: "Como merienda o guarnición, todo el año; especialmente si hay antojo de dulce.",
+    },
+    {
+      key: "tierra-azuki-calabaza",
+      nombre: "Guiso de azuki y calabaza",
+      para: "Tonificar el bazo y drenar la humedad: hinchazón, pesadez, piernas cargadas.",
+      tiempo: "80 min",
+      naturaleza: "Neutra",
+      ingredientes: [
+        "1 taza de judía azuki (remojada la noche anterior)",
+        "300 g de calabaza en dados grandes",
+        "1 tira de alga kombu",
+        "1 rodaja de jengibre",
+        "Sal marina al final",
+      ],
+      pasos: [
+        "Escurre las azuki y cuécelas con agua nueva, el alga y el jengibre.",
+        "A los 45 minutos añade la calabaza, sin remover, encima de las judías.",
+        "Cuece 25-30 minutos más, hasta que la calabaza se deshaga y ligue el guiso.",
+        "Sala solo al final y toma caliente.",
+      ],
+      cuando: "Dos veces por semana al final del verano y en días húmedos.",
+      nota: "La pareja azuki + calabaza es un clásico: la judía drena el exceso de agua y la calabaza nutre el centro. Salar antes endurece la piel de la legumbre.",
     },
   ],
 
@@ -329,6 +394,29 @@ export const RECETAS_ELEMENTO: Record<Elemento, Receta[]> = {
       ],
       cuando: "En los primeros fríos, o cuando notas el pecho cargado.",
       nota: "El vapor forma parte de la receta: acerca la cara al bol antes del primer sorbo.",
+    },
+    {
+      key: "metal-congee-almendra",
+      nombre: "Congee de almendra dulce",
+      hanzi: "杏仁粥",
+      para: "Humedecer el pulmón y calmar la tos seca de los días de aire frío.",
+      tiempo: "60 min",
+      naturaleza: "Neutra",
+      ingredientes: [
+        "1/2 taza de arroz redondo",
+        "12 almendras crudas peladas (o 2 cucharadas de crema de almendra)",
+        "6 tazas de agua",
+        "Un poco de miel al final",
+        "Opcional: unas rodajas de pera",
+      ],
+      pasos: [
+        "Tritura las almendras con un poco de agua hasta hacer una leche espesa.",
+        "Cuece el arroz con el resto del agua a fuego muy bajo, tapado, unos 45 minutos.",
+        "Añade la leche de almendra (y la pera, si la usas) y cuece 10 minutos más.",
+        "Endulza con un poco de miel fuera del fuego y toma caliente.",
+      ],
+      cuando: "En el desayuno de otoño, o en cualquier época de garganta y piel secas.",
+      nota: "La miel se añade fuera del fuego: hervida pierde su cualidad humectante.",
     },
   ],
 
@@ -401,8 +489,38 @@ export const RECETAS_ELEMENTO: Record<Elemento, Receta[]> = {
       ],
       cuando: "En el desayuno de invierno, o al final del día en épocas de mucho desgaste.",
     },
+    {
+      key: "agua-cordero-angelica",
+      nombre: "Sopa de cordero con jengibre y angélica",
+      hanzi: "當歸生薑羊肉湯",
+      para: "Calentar el Yang del riñón: frío que no se va, lumbares y manos heladas.",
+      tiempo: "2 h",
+      naturaleza: "Caliente",
+      ingredientes: [
+        "500 g de cordero en trozos (pierna o falda)",
+        "6 rodajas gruesas de jengibre fresco",
+        "10 g de raíz de angélica china (dang gui)",
+        "1,5 litros de agua",
+        "Sal marina al final",
+      ],
+      pasos: [
+        "Escalda el cordero 3 minutos en agua hirviendo y descarta esa agua.",
+        "Ponlo en la olla con el agua limpia, el jengibre y la angélica.",
+        "Lleva a ebullición, retira la espuma y cuece a fuego muy bajo 90 minutos.",
+        "Sala al final y toma la carne y el caldo bien calientes.",
+      ],
+      cuando: "En pleno invierno, una vez por semana. Mejor a mediodía.",
+      nota: "Receta clásica de hace casi dos mil años. Si no tomas carne, un guiso largo de castaña, nuez y raíces con las mismas especias hace un papel parecido. No es para quien tenga mucho calor interno.",
+    },
   ],
 };
+
+/**
+ * Foto de cada receta: `/public/recorrido/tcm/recetas/<key>.png`. Mientras el
+ * archivo no exista, la tarjeta se pinta sin banda de imagen (ni hueco ni foto
+ * rota), así que se pueden ir soltando de una en una sin tocar código.
+ */
+export const FOTO_RECETA = (key: string) => `/recorrido/tcm/recetas/${key}.png`;
 
 /** Nota general de la página (al pie). */
 export const RECETAS_NOTA =

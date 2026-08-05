@@ -300,7 +300,7 @@ export default function MetodoNutricionPlato() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title="Crea el plato de Harvard"
               compact
               maxW="1000px"
@@ -528,7 +528,7 @@ export default function MetodoNutricionPlato() {
                 {/* Los alimentos del macro entran UNO A UNO (cascada). La `key`
                     con el macro reinicia la animación al cambiar de sector, así
                     cada grupo se va cargando pieza a pieza (da más emoción). */}
-                <RevealStagger key={macroSel} stagger={0.09} delayChildren={0.05}
+                <RevealStagger inView key={macroSel} stagger={0.09} delayChildren={0.05}
                                display="flex" flexWrap="wrap" gap={{ base: 4, md: 5 }} justifyContent="center">
                   {macro.alimentos.map((food) => (
                     <RevealItem key={food.key} direction="up" distance={14} scaleFrom={0.5} duration={0.5}

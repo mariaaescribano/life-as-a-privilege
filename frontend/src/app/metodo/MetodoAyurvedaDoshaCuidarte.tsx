@@ -314,7 +314,10 @@ export default function MetodoAyurvedaDoshaCuidarte() {
               <RevealStagger inView display="flex" flexDirection="column" gap={2.5} stagger={0.07} delayChildren={0.05} amount={0.1}>
                 {c.desequilibran.opciones.map((op) => (
                   <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
-                    <CheckRow label={op} tono="#b9770e" checked={desequilibranSel.includes(op)} onToggle={() => toggleDeseq(op)} />
+                    {/* El marcado va SIEMPRE en el color del dosha (Kapha verde,
+                        Pitta rojo…), como en el resto del recorrido: antes iba en
+                        un marrón fijo y esta caja se salía del conjunto. */}
+                    <CheckRow label={op} tono={meta.color} checked={desequilibranSel.includes(op)} onToggle={() => toggleDeseq(op)} />
                   </RevealItem>
                 ))}
               </RevealStagger>

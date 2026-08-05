@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { CelulaCard, CelulaModal, ConsejoModal, type Consejo } from "../../components/metodo/celulasUi";
+import { FotoBox } from "../../components/metodo/FotoBox";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
@@ -49,6 +50,19 @@ interface Organo {
   /** Consejos del órgano (frase titular + texto). Cada uno abre un modal
    *  inmersivo. ⚠️ PENDIENTE: María irá pasando los titulares y sus textos. */
   consejos?: Consejo[];
+  /** Fichas propias del órgano que NO son células pero merecen su tarjeta: los
+   *  tipos de colágeno del tejido conectivo, las piezas del músculo… Se pintan
+   *  en su propia fila de tarjetas, debajo de las células, y abren el mismo
+   *  modal que los consejos. */
+  fichas?: FichaOrgano[];
+  /** Título de esa fila («Los siete tipos de colágeno»…). */
+  fichasTitulo?: string;
+}
+
+/** Una ficha con tarjeta propia. Es un consejo con un nombre corto para el box:
+ *  `titular` es la frase larga del modal y `nombre` lo que cabe en la tarjeta. */
+interface FichaOrgano extends Consejo {
+  nombre: string;
 }
 
 // Posiciones PROVISIONALES (se ajustarán sobre la imagen real). Las fotos de
@@ -442,6 +456,44 @@ const ORGANOS: Organo[] = [
       },
     ] },
   { key: "musculo",   label: "Músculo",   foto: "/recorrido/fisiologia/organos/musculo.png",   hotspot: { top: 66, left: 43 }, celulas: pick("miocitos", "musculares-lisas", "satelite"),
+    fichasTitulo: "Las piezas de la contracción",
+    fichas: [
+      {
+        nombre: "Actina · el carril",
+        titular: "La actina es el carril del que se tira.",
+        claves: ["El filamento fino", "Lleva el cerrojo puesto", "El calcio lo abre"],
+        foto: "/recorrido/fisiologia/musculo/actina.webp",
+        texto: <>La actina es el filamento <b>fino</b>. Se forma encadenando miles de moléculas globulares en una doble hélice, como dos collares de perlas retorcidos entre sí, y queda anclada por sus extremos a las paredes de cada unidad del músculo.<br /><br />Lo interesante es que va con el <b>cerrojo puesto</b>. Enrollada a lo largo de la actina hay una proteína alargada, la tropomiosina, que tapa exactamente los puntos donde la miosina tendría que agarrarse. Mientras esté ahí, no hay contracción posible por mucha energía que sobre.<br /><br />La llave es el <b>calcio</b>. Cuando llega la orden nerviosa, la fibra suelta calcio de sus almacenes internos; el calcio se une a otra proteína pegada a la tropomiosina y la desplaza. El carril queda libre y la miosina ya puede engancharse.<br /><br />La actina no es exclusiva del músculo: está en todas tus células, dándoles forma y permitiéndoles moverse y dividirse. En el músculo simplemente está ordenada con una precisión milimétrica.</>,
+      },
+      {
+        nombre: "Miosina · el motor",
+        titular: "La miosina es el motor que rema.",
+        claves: ["El filamento grueso", "Cabezas que se agarran y tiran", "Cada tirón gasta ATP"],
+        foto: "/recorrido/fisiologia/musculo/miosina.webp",
+        texto: <>La miosina es el filamento <b>grueso</b>, y es una máquina de verdad: cada molécula tiene una cola larga y dos <b>cabezas</b> móviles que sobresalen hacia la actina, como remos a los lados de una barca.<br /><br />El ciclo es siempre el mismo, y se repite muchísimas veces por segundo: la cabeza se agarra a la actina, <b>tira</b> de ella y la desplaza un poco, se suelta, se recoloca y vuelve a empezar. A eso se le llama el ciclo de los puentes cruzados, y es literalmente lo que ocurre dentro de ti cada vez que mueves un dedo.<br /><br />Cada tirón <b>gasta una molécula de ATP</b>. Por eso el músculo es, con diferencia, el mayor consumidor de energía cuando trabaja, y por eso el ejercicio calienta: buena parte de ese gasto se va en calor.<br /><br />Y hay un detalle que sorprende: <b>soltarse también cuesta energía</b>. Sin ATP, las cabezas se quedan enganchadas a la actina y el músculo queda agarrotado. Es lo que ocurre en el rigor mortis, cuando ya no hay ATP que gastar.</>,
+      },
+      {
+        nombre: "El sarcómero",
+        titular: "El sarcómero: la unidad que se acorta.",
+        claves: ["La pieza que se repite", "Nada se encoge: se deslizan", "Millones a la vez"],
+        foto: "/recorrido/fisiologia/musculo/sarcomero.webp",
+        texto: <>Actina y miosina no están sueltas: se ordenan en una pieza que se repite millones de veces a lo largo de cada fibra, el <b>sarcómero</b>. Es la unidad mínima de contracción y lo que da al músculo su aspecto rayado bajo el microscopio.<br /><br />Aquí está la idea que más cuesta creer: al contraerte, <b>ningún filamento se encoge</b>. La actina y la miosina miden exactamente lo mismo antes y después. Lo único que pasa es que se <b>deslizan</b> unos sobre otros, así que los extremos del sarcómero se acercan y la pieza queda más corta. Es la llamada teoría del filamento deslizante.<br /><br />Cada sarcómero se acorta muy poquito. Pero cuando millones de ellos, colocados en fila a lo largo de miles de fibras, lo hacen a la vez y de forma coordinada, lo que notas es un músculo tirando.<br /><br />Un músculo, por tanto, no es un bloque de carne: es una formación ordenadísima de motores diminutos remando en la misma dirección.</>,
+      },
+      {
+        nombre: "Titina · el muelle",
+        titular: "La titina es el muelle que te devuelve a tu sitio.",
+        claves: ["La proteína más grande de tu cuerpo", "Devuelve la fibra a su forma", "Hace de regla y de sensor"],
+        foto: "/recorrido/fisiologia/musculo/titina.webp",
+        texto: <>Es la <b>proteína más grande del cuerpo humano</b> con mucha diferencia, y su nombre completo tiene tantas letras que se tarda horas en pronunciarlo. Una sola molécula de titina recorre medio sarcómero de punta a punta, uniendo el extremo con el filamento de miosina.<br /><br />Funciona como un <b>muelle</b>. Al estirar el músculo, la titina se despliega y acumula tensión; al soltar, se recoge y devuelve la fibra a su longitud. Esa elasticidad es parte de por qué un movimiento que empieza con un estiramiento previo sale más potente, y por qué el músculo no se deshace al estirarse.<br /><br />Además hace de <b>regla y de sensor</b>: mantiene la miosina centrada en su sitio y avisa a la célula de cuánta tensión está soportando, una de las señales que ponen en marcha la construcción de músculo nuevo cuando entrenas.</>,
+      },
+      {
+        nombre: "Miostatina · el freno",
+        titular: "La miostatina es el freno del músculo.",
+        claves: ["Limita cuánto músculo creces", "La fabrica el propio músculo", "Entrenar baja su señal"],
+        foto: "/recorrido/fisiologia/profundiza/musculo/miostatina.png",
+        texto: <>Si el cuerpo pudiera fabricar músculo sin límite, lo haría… y se arruinaría, porque mantenerlo es carísimo en energía. La miostatina es el freno que lo evita: una proteína que el propio músculo produce y libera para decirle «hasta aquí, no crezcas más».<br /><br />Frena de dos maneras: apaga las rutas que ordenan fabricar proteína nueva y mantiene a raya a las <b>células satélite</b>, las que se fusionan a la fibra para repararla y hacerla más grande. Con la miostatina alta, entrenas y el músculo apenas responde.<br /><br />El entrenamiento de fuerza <b>baja su señal</b> durante unas horas, y esa es parte del motivo por el que un músculo trabajado crece. Con la edad, el reposo prolongado y la inflamación crónica, en cambio, la señal sube y cuesta más mantener masa.<br /><br />Existen animales con una mutación que deja la miostatina sin funcionar —el ganado azul belga, o unos ratones apodados «ratones Schwarzenegger»— y desarrollan una musculatura enorme. Se han descrito también algunos casos en personas.</>,
+      },
+    ],
     descripcion: <>Es lo que te permite moverte, mantenerte en pie y hasta respirar. Se contrae y se relaja miles de veces al día, quema mucha energía y se vuelve más fuerte cuanto más lo usas. Si lo abandonas, tu cuerpo lo va desmontando.</>,
     consejos: [
       {
@@ -570,47 +622,63 @@ const ORGANOS: Organo[] = [
     ] },
   { key: "conectivo", label: "Tejido conectivo (colágeno)", foto: "/recorrido/fisiologia/organos/conectivo.png", hotspot: { top: 70, left: 57 }, celulas: pick("fibroblastos", "mastocito"),
     descripcion: <>Es el pegamento y la estructura de tu cuerpo. El colágeno da forma y resistencia a la piel, los tendones, los huesos y los vasos, mientras sus células fabrican y reparan ese andamiaje durante toda la Vida.</>,
-    consejos: [
+    fichasTitulo: "Los siete tipos de colágeno",
+    fichas: [
       {
-        titular: "El colágeno es el pegamento de tu cuerpo.",
-        claves: ["La proteína más abundante", "Forma piel, tendones y vasos", "Sin él, todo se desmonta"],
-        texto: <>El colágeno es la proteína más abundante del organismo. Forma la estructura de la piel, los tendones, los ligamentos, los huesos, los vasos sanguíneos e incluso muchos órganos. Sin él, tu cuerpo literalmente se desmontaría.<br /><br />Y no es uno solo: se conocen cerca de <b>veintiocho tipos</b> de colágeno, aunque cinco o seis hacen prácticamente todo el trabajo. Cada uno se ensambla de una forma distinta y por eso sirve para cosas distintas: unos hacen cuerdas, otros mallas y otros solo grapas. Los tienes en las cajas siguientes.</>,
-      },
-      {
+        nombre: "Tipo I · el cable",
         titular: "Colágeno tipo I: el cable que aguanta el tirón.",
         claves: ["Nueve de cada diez fibras", "Piel, hueso y tendón", "El que se pierde con la edad"],
         foto: "/recorrido/fisiologia/colageno/tipo1.webp",
         texto: <>Es el mayoritario con mucha diferencia: alrededor del <b>90 %</b> de todo el colágeno que tienes. Sus moléculas se agrupan en fibras gruesas y alineadas en paralelo, la forma ideal para aguantar tracción sin estirarse. Está en la dermis de la piel, en los tendones, en los ligamentos, en la córnea y en el hueso, donde reparte el trabajo con el mineral: el colágeno pone la flexibilidad y el calcio la dureza.<br /><br />Esa sociedad se entiende muy bien cuando falla. En la <b>osteogénesis imperfecta</b>, la enfermedad de los «huesos de cristal», el gen del colágeno tipo I viene defectuoso, y sin su malla el mineral se comporta como tiza: los huesos se rompen con nada.<br /><br />Es también el que vas perdiendo con los años y el que el sol destruye más deprisa de lo que puedes reponerlo. Cuando alguien habla de «perder colágeno» en la piel, habla de este.</>,
       },
       {
+        nombre: "Tipo II · la almohada",
         titular: "Colágeno tipo II: la almohada de tus articulaciones.",
         claves: ["El del cartílago", "Retiene agua y amortigua", "Se desgasta en la artrosis"],
         foto: "/recorrido/fisiologia/colageno/tipo2.webp",
         texto: <>Es el colágeno del <b>cartílago</b>. Aquí las fibras son más finas y se cruzan formando una malla desordenada a propósito, que atrapa unas moléculas capaces de retener enormes cantidades de agua. Y esa agua es la que amortigua: al apoyar el pie, el cartílago se comprime y suelta agua; al levantarlo, la vuelve a absorber. Es una almohada hidráulica.<br /><br />Lo tienes en el cartílago de las articulaciones, en los discos entre las vértebras y en el humor vítreo del ojo.<br /><br />Su punto débil es que el cartílago no tiene vasos sanguíneos, así que se repara malísimamente. Por eso el desgaste de este tipo II, que es lo que llamamos <b>artrosis</b>, cuesta tantísimo de revertir, y por eso el movimiento suave y frecuente es lo mejor que puedes hacer por él: es lo único que bombea el líquido dentro y fuera y lo mantiene nutrido.</>,
       },
       {
+        nombre: "Tipo III · el andamio",
         titular: "Colágeno tipo III: el andamio provisional de las heridas.",
         claves: ["El primero en una herida", "Fibras finas y elásticas", "Luego se cambia por tipo I"],
         foto: "/recorrido/fisiologia/colageno/tipo3.webp",
         texto: <>Es más fino y más elástico que el tipo I, y aparece donde el tejido tiene que ceder y volver: la pared de los vasos sanguíneos, el intestino, el útero, el pulmón.<br /><br />Pero su papel estrella es la reparación. Cuando te haces una herida, los fibroblastos fabrican primero tipo III, deprisa y sin acabados, para cerrar el hueco cuanto antes. En las semanas y los meses siguientes ese andamio provisional se va sustituyendo por tipo I, más fuerte y mejor ordenado.<br /><br />Ese relevo explica dos cosas que se ven a simple vista: por qué una cicatriz reciente es rosada y frágil y una antigua es blanca y resistente, y por qué ninguna llega a ser piel normal. En la reparación las fibras quedan alineadas en la dirección de la tensión, no entrecruzadas como en la piel sana. Más fuerte en un sentido, más pobre en todos los demás.</>,
       },
       {
+        nombre: "Tipo IV · la sábana",
         titular: "Colágeno tipo IV: este no hace cuerdas, hace sábanas.",
         claves: ["No forma fibras, forma redes", "Construye la membrana basal", "Es el filtro del riñón"],
         foto: "/recorrido/fisiologia/colageno/tipo4.webp",
         texto: <>Es el raro de la familia: no se ensambla en fibras, sino en una <b>red plana</b>, como una gasa. Con ella se construye la <b>membrana basal</b>, esa lámina finísima sobre la que se apoyan todos los epitelios del cuerpo: la que separa la epidermis de la dermis, la que envuelve cada fibra muscular, la que sostiene el revestimiento de los vasos.<br /><br />Y al ser una malla, hace de colador. En el riñón, el colágeno tipo IV es parte del filtro que decide qué se queda en la sangre y qué pasa a la orina. Cuando esa malla se estropea, empiezan a escaparse proteínas por la orina, que es uno de los primeros avisos de un riñón en apuros y algo que se puede ver en un análisis mucho antes de notar cualquier síntoma.</>,
       },
       {
+        nombre: "Tipo V · el director",
         titular: "Colágeno tipo V: el que dirige a los demás.",
         claves: ["Hay poquísimo", "Marca el grosor de las fibras", "Sin él, todo queda laxo"],
         foto: "/recorrido/fisiologia/colageno/tipo5.webp",
         texto: <>Hay muy poca cantidad, pero sin él lo demás no se monta bien. El tipo V se coloca <b>en el centro</b> de las fibras de tipo I y funciona como el molde alrededor del cual estas se van ensamblando: decide cuántas moléculas se unen y qué grosor tendrá la fibra final. Un director de obra más que un ladrillo.<br /><br />Está en la córnea, la placenta, los tendones y la piel.<br /><br />Cuando falla, el tejido queda demasiado laxo, porque las fibras salen desiguales. Es lo que ocurre en la forma clásica del <b>síndrome de Ehlers-Danlos</b>: piel muy elástica y fina, articulaciones que se van de sitio con facilidad y cicatrices anchas que no acaban de cerrar bien.</>,
       },
       {
+        nombre: "Tipo VI · el relleno",
+        titular: "Colágeno tipo VI: el que rellena los huecos.",
+        claves: ["Rellena entre fibra y fibra", "Ancla las células a la matriz", "Falla en algunas miopatías"],
+        foto: "/recorrido/fisiologia/colageno/tipo6.webp",
+        texto: <>No hace ni cuerdas ni sábanas: forma unas microfibrillas finísimas, con aspecto de collar de cuentas, que <b>rellenan el espacio</b> entre las fibras grandes y las mantienen en su sitio. Es el material de relleno de la obra.<br /><br />Y hace otra cosa igual de importante: <b>engancha las células a la matriz</b> que las rodea. Sin ese anclaje, una célula no sabe dónde está ni recibe las señales mecánicas de su entorno. Lo tienes por todo el cuerpo, sobre todo en el músculo, la piel y el cartílago.<br /><br />Cuando falla se ve justo en el músculo, porque cada fibra muscular necesita estar bien sujeta a lo que la envuelve: es lo que ocurre en la <b>miopatía de Bethlem</b> y en la distrofia muscular congénita de Ullrich, con debilidad muscular y articulaciones a la vez rígidas y laxas. Es el mejor ejemplo de que el tejido conectivo no está «alrededor» de los órganos: forma parte de cómo funcionan.</>,
+      },
+      {
+        nombre: "Tipo VII · las grapas",
         titular: "Colágeno tipo VII: las grapas de tu piel.",
         claves: ["Ancla la epidermis a la dermis", "No da fuerza, sujeta", "Sin él, la piel se despega"],
         foto: "/recorrido/fisiologia/colageno/tipo7.webp",
         texto: <>Forma unas fibrillas cortas con forma de gancho que atraviesan la membrana basal y cosen la epidermis a la dermis. No aportan resistencia ni volumen: solo <b>sujetan</b> una capa a la otra, como grapas.<br /><br />Su importancia se entiende cuando faltan. En la <b>epidermólisis bullosa</b>, una enfermedad genética que afecta a este colágeno, la piel se separa con el mínimo roce y se llena de ampollas; a quienes la tienen se les llama a veces «niños mariposa» por lo frágil que es su piel.<br /><br />Es el mejor recordatorio de que en el tejido conectivo no todo es fuerza. Buena parte del trabajo consiste simplemente en mantener pegadas unas capas a otras.</>,
+      },
+    ],
+    consejos: [
+      {
+        titular: "El colágeno es el pegamento de tu cuerpo.",
+        claves: ["La proteína más abundante", "Forma piel, tendones y vasos", "Sin él, todo se desmonta"],
+        texto: <>El colágeno es la proteína más abundante del organismo. Forma la estructura de la piel, los tendones, los ligamentos, los huesos, los vasos sanguíneos e incluso muchos órganos. Sin él, tu cuerpo literalmente se desmontaría.<br /><br />Y no es uno solo: se conocen cerca de <b>veintiocho tipos</b> de colágeno, aunque cinco o seis hacen prácticamente todo el trabajo. Cada uno se ensambla de una forma distinta y por eso sirve para cosas distintas: unos hacen cuerdas, otros mallas y otros solo grapas. Tienes los siete principales en las tarjetas de arriba.</>,
       },
       {
         titular: "Los péptidos de colágeno despiertan a tus fibroblastos.",
@@ -1047,6 +1115,36 @@ function CelulasCarousel({
   );
 }
 
+// Fila de tarjetas de las FICHAS del órgano (los tipos de colágeno, las piezas
+// del músculo…). Misma tarjeta que las células —FotoBox, para que la página no
+// tenga dos estilos de box— pero en rejilla, no en carrusel: al ser siete u ocho
+// se leen mejor todas de golpe que pasándolas de una en una.
+function FichasGrid({ fichas, leidos, onFicha }: {
+  fichas: FichaOrgano[];
+  leidos: Set<string>;
+  onFicha: (f: FichaOrgano) => void;
+}) {
+  return (
+    <Box display="grid" w="100%"
+         gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+         gap={{ base: 3, md: 4 }}>
+      {fichas.map((f) => (
+        <FotoBox
+          key={f.titular}
+          titulo={f.nombre}
+          foto={f.foto}
+          nom={fisiologiaNom}
+          tinta={fisiologiaTxt}
+          bg={fisiologiaBg}
+          colorTint={fisiologiaBg}
+          visto={leidos.has(f.titular)}
+          onClick={() => onFicha(f)}
+        />
+      ))}
+    </Box>
+  );
+}
+
 // Ficha de detalle del órgano a pantalla completa (sustituye a la galería al
 // pulsar una tarjeta). Apilado: (0) volver, (1) foto + título + descripción,
 // (2) sus células en línea (carrusel), (3) un consejo a la vez.
@@ -1161,6 +1259,18 @@ function OrganoDetalle({
               textAlign="center" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>
           Pronto podrás explorar las células de este órgano.
         </Text>
+      )}
+
+      {/* 2b · Fichas propias del órgano (tipos de colágeno, piezas del músculo) */}
+      {(organo.fichas?.length ?? 0) > 0 && (
+        <Flex direction="column" gap={{ base: 3, md: 4 }} w="100%">
+          <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
+                letterSpacing="0.04em" textAlign="center"
+                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.55)" }}>
+            {organo.fichasTitulo ?? "En detalle"}
+          </Text>
+          <FichasGrid fichas={organo.fichas!} leidos={consejosLeidos} onFicha={onConsejo} />
+        </Flex>
       )}
 
       {/* 3 · Consejos: un titular a la vez (sin título de sección), con flechas */}
@@ -1438,7 +1548,10 @@ export default function MetodoFisiologiaTodasCelulas() {
           foto={organo.foto}
           label={organo.label}
           onClose={() => setConsejo(null)}
-          consejos={organo.consejos}
+          // Las flechas del modal navegan por la lista a la que pertenece lo que
+          // está abierto: si es una ficha (un tipo de colágeno), se pasa por los
+          // demás tipos; si es un consejo, por los consejos.
+          consejos={organo.fichas?.includes(consejo as FichaOrgano) ? organo.fichas : organo.consejos}
           leida={consejoYaLeido}
           onSelect={verConsejo}
         />

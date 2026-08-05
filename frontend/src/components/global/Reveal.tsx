@@ -16,7 +16,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 import React from "react";
 import { Box, type BoxProps } from "@chakra-ui/react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
 
 // `motion(Box)`: Chakra tipa `transition` como string CSS y framer como objeto,
 // lo que choca al pasarle transiciones/variants. Casteamos para evitar el
@@ -154,6 +154,99 @@ export function Breathe({
     <MotionBox
       animate={{ scale: [1, 1 + scale, 1] }}
       transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
+      {...rest}
+    >
+      {children}
+    </MotionBox>
+  );
+}
+
+// ── Contador: un número que sube hasta su valor ───────────────────────────
+// Para resultados (kcal, gramos, porcentajes): en vez de aparecer puesto, el
+// número CUENTA hasta él. Arranca al asomar en pantalla y vuelve a contar —
+// desde donde estaba, no desde cero— cada vez que el valor cambia, así que en
+// una calculadora se ve el número moverse al tocar cualquier control.
+export function Contador({
+  valor,
+  duracion = 1.1,
+  decimales = 0,
+  prefijo = "",
+  sufijo = "",
+  enPantalla = true,
+  ...rest
+}: {
+  valor: number;
+  duracion?: number;
+  decimales?: number;
+  prefijo?: string;
+  sufijo?: string;
+  /** true (por defecto): espera a estar en pantalla la primera vez. */
+  enPantalla?: boolean;
+} & BoxProps) {
+  const reduce = useReducedMotion();
+  const ref = React.useRef<HTMLSpanElement>(null);
+  const visible = useInView(ref, { once: true, amount: 0.4 });
+  const arranca = !enPantalla || visible;
+
+  const [mostrado, setMostrado] = React.useState(reduce ? valor : 0);
+  // Desde dónde cuenta: el último valor pintado, para que al cambiar de valor
+  // continúe en vez de dar un salto a cero.
+  const actualRef = React.useRef(reduce ? valor : 0);
+
+  React.useEffect(() => {
+    if (reduce) { actualRef.current = valor; setMostrado(valor); return; }
+    if (!arranca) return;
+    const desde = actualRef.current;
+    if (desde === valor) return;
+    let raf = 0;
+    const t0 = performance.now();
+    const paso = (t: number) => {
+      const p = Math.min(1, (t - t0) / (duracion * 1000));
+      const e = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      const n = desde + (valor - desde) * e;
+      actualRef.current = n;
+      setMostrado(n);
+      if (p < 1) raf = requestAnimationFrame(paso);
+      else actualRef.current = valor;
+    };
+    raf = requestAnimationFrame(paso);
+    return () => cancelAnimationFrame(raf);
+  }, [valor, arranca, duracion, reduce]);
+
+  const texto = mostrado.toLocaleString("es-ES", {
+    minimumFractionDigits: decimales,
+    maximumFractionDigits: decimales,
+  });
+
+  return (
+    <Box as="span" ref={ref} {...rest}>
+      {prefijo}{texto}{sufijo}
+    </Box>
+  );
+}
+
+// ── Pop: reacción al puntero y al toque ───────────────────────────────────
+// Para lo que se pulsa y no es una <FotoBox>: levanta un poco al pasar por
+// encima y se hunde al pulsar, con muelle. No anima nada en reposo.
+export function Pop({
+  children,
+  levanta = 3,
+  hunde = 0.97,
+  ...rest
+}: {
+  /** px que sube al pasar el puntero. */
+  levanta?: number;
+  /** escala al pulsar. */
+  hunde?: number;
+  children?: React.ReactNode;
+} & BoxProps) {
+  const reduce = useReducedMotion();
+  if (reduce) return <Box {...rest}>{children}</Box>;
+  return (
+    <MotionBox
+      whileHover={{ y: -levanta }}
+      whileTap={{ scale: hunde, y: 0 }}
+      transition={{ type: "spring", stiffness: 380, damping: 26 }}
       {...rest}
     >
       {children}

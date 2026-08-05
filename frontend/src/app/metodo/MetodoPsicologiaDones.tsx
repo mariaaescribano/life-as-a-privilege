@@ -6,7 +6,8 @@
 // preguntas sin ver todavía ningún resultado (el resultado llega en el espejo,
 // la página siguiente, para que responda con honestidad y no «para» un tipo).
 //
-// Datos: data.dones.respuestas[key] = string  (autoguardado con debounce).
+// Datos: data.dones.respuestas[key] = string  (autoguardado con debounce; el
+// botón «Siguiente →» guarda y pasa a la pregunta siguiente).
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -115,15 +116,14 @@ export default function MetodoPsicologiaDones() {
     }
   };
 
-  // Guardado SOLO explícito: no hay autoguardado al escribir. La persona debe
-  // pulsar «Guardar» (o «Sin ideas») en cada box que responda.
+  // Guardado inmediato: cancela el debounce pendiente y persiste ya.
   const guardarAhora = (resp: Record<string, string>, sin: string[]) => {
     if (saveTimer.current) clearTimeout(saveTimer.current);
     pendiente.current = null;
     void persistir(resp, sin);
   };
 
-  // Flush al desmontar.
+  // Flush al desmontar: lo que quedara pendiente del debounce se guarda igual.
   useEffect(() => () => {
     if (saveTimer.current) clearTimeout(saveTimer.current);
     if (pendiente.current) void persistir(pendiente.current.resp, pendiente.current.sin);
@@ -141,8 +141,8 @@ export default function MetodoPsicologiaDones() {
   const siguiente = () => setPaso((i) => Math.min(total - 1, i + 1));
 
   // Escribir texto quita la marca «sin ideas» de esa pregunta. Se AUTOGUARDA con
-  // un pequeño retardo (además del botón «Guardar»), para que nada de lo escrito
-  // se pierda al cambiar de pregunta o salir de la página.
+  // un pequeño retardo, para que nada de lo escrito se pierda al cambiar de
+  // pregunta o salir de la página.
   const updateRespuesta = (key: string, valor: string) => {
     const resp = { ...respuestas, [key]: valor };
     const sin = valor.trim() ? sinIdeas.filter((k) => k !== key) : sinIdeas;
@@ -165,7 +165,7 @@ export default function MetodoPsicologiaDones() {
     guardarAhora(resp, sin);
     if (!esUltima) siguiente();
   };
-  // «Guardar»: fuerza el guardado y avanza (mantiene el ritmo del ejercicio).
+  // «Siguiente →»: fuerza el guardado y avanza (mantiene el ritmo del ejercicio).
   const guardarYSeguir = () => {
     guardarAhora(respuestas, sinIdeas);
     if (!esUltima) siguiente();
@@ -197,7 +197,7 @@ export default function MetodoPsicologiaDones() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 15, total: 22 }}
+              step={{ current: 15, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: "← Relación", onClick: irARelacion }}
@@ -259,7 +259,7 @@ export default function MetodoPsicologiaDones() {
                          fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
                          boxShadow={`0 2px 12px ${TINTA}3a`} transition="all 0.18s"
                          _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 16px ${TINTA}5a` }}>
-                      Guardar
+                      {esUltima ? "Guardar" : "Siguiente →"}
                     </Box>
                   </Flex>
                 </Flex>

@@ -441,10 +441,16 @@ const MANDALA = [
   { x: 60, y: 60 }, { x: 80, y: 60 }, { x: 70, y: 77.3 }, { x: 50, y: 77.3 },
   { x: 40, y: 60 }, { x: 50, y: 42.7 }, { x: 70, y: 42.7 },
 ];
+// La flor de la Vida son circunferencias finas y muy abiertas: al tamaño común
+// se quedaba pequeña en la pantalla de carga. Va un 20 % por encima (74→89,
+// 90→108), igual que el Árbol de Cábala tiene el suyo propio. Quien pase un
+// `size` explícito (los huecos pequeños del registro) manda sobre esto.
+const CULTURA_SVG_W = { base: "89px", md: "108px" };
+
 export function CulturaLoader({ color, size }: LoaderProps = {}) {
   const c = color ?? culturaTxt;
   return (
-    <Shell size={size}>
+    <Shell size={size ?? CULTURA_SVG_W}>
       <Box
         as="g"
         animation={`${girarLento} 12s linear infinite`}

@@ -146,7 +146,7 @@ export default function MetodoPsicologiaCompromiso() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 20, total: 22 }}
+                step={{ current: 20, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Integración", onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/mapa`); } }}
@@ -180,6 +180,7 @@ export default function MetodoPsicologiaCompromiso() {
                     onChange={(v) => commit({ ...compromiso, necesitaste: v })}
                     placeholder="Lo que más eché en falta fue…"
                   />
+                  <SeparadorPreguntas />
                   <PreguntaCompromiso
                     numero={2}
                     pregunta="¿Cómo puedes empezar a dártelo hoy?"
@@ -214,6 +215,27 @@ export default function MetodoPsicologiaCompromiso() {
     </Box>
   );
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// Separación entre las dos preguntas: una raya de tinta que CRUZA el box de
+// pared a pared (de ahí los márgenes negativos, que anulan el padding del
+// panel) y se apaga en los extremos, con un rombo de tinta en el centro. El
+// halo en color PAPEL la despega de la acuarela para que se lea siempre.
+// ─────────────────────────────────────────────────────────────────────────
+const SeparadorPreguntas = () => (
+  <Flex align="center" gap={{ base: 2.5, md: 3 }} mx={{ base: -6, md: -10 }} aria-hidden="true">
+    <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}44 40%, ${TINTA}99)`}
+         boxShadow={`0 1px 3px ${PAPEL}`} />
+    <Flex align="center" gap={1.5} flexShrink={0}>
+      <Box w="4px" h="4px" borderRadius="full" bg={`${TINTA}88`} />
+      <Box w="9px" h="9px" transform="rotate(45deg)" bg={`${TINTA}33`}
+           border={`1px solid ${TINTA}bb`} boxShadow={`0 0 7px ${PAPEL}`} />
+      <Box w="4px" h="4px" borderRadius="full" bg={`${TINTA}88`} />
+    </Flex>
+    <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${TINTA}44 40%, ${TINTA}99)`}
+         boxShadow={`0 1px 3px ${PAPEL}`} />
+  </Flex>
+);
 
 // ─────────────────────────────────────────────────────────────────────────
 // Una pregunta del compromiso: enunciado + área de escritura (autoguardado).

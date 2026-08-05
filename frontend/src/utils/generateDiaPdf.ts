@@ -1,196 +1,264 @@
-import jsPDF from "jspdf";
-import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
-
-const PAGE_BG: [number, number, number] = [255, 255, 255];
-const INK: [number, number, number] = [133, 62, 11];     // ayurvedaTxt (marrón)
-const INK_SOFT: [number, number, number] = [150, 96, 50];
-const MUTED: [number, number, number] = [165, 120, 80];
-
-const VATA_COLOR: [number, number, number] = [124, 92, 191];
-const PITTA_COLOR: [number, number, number] = [192, 82, 42];
-const KAPHA_COLOR: [number, number, number] = [58, 138, 92];
-const DOSHA_COLORS: Record<string, [number, number, number]> = {
-  vata: VATA_COLOR, pitta: PITTA_COLOR, kapha: KAPHA_COLOR,
-};
-
-const MARGIN = 20;
-const PAGE_W = 210;
-const CONTENT_W = PAGE_W - MARGIN * 2;
-const BG_IMG = "/img/fondos/hinduismo.webp";
+// ─────────────────────────────────────────────────────────────────────────
+// «Mi día equilibrado» — la rutina que la persona ha diseñado para su doṣha.
+//
+// El hallazgo de este documento es la portada: un RELOJ DE 24 HORAS con todos
+// sus momentos colocados donde caen de verdad. De un vistazo se ve si el día
+// está bien repartido o si hay cinco cosas amontonadas por la mañana y un
+// desierto por la tarde. Ninguna lista consigue eso.
+//
+// Dentro, la misma información como línea del tiempo: hora en el margen, hilo
+// vertical continuo y cada momento en su tarjeta. Las comidas van marcadas con
+// un disco lleno; el resto, con un anillo.
+// ─────────────────────────────────────────────────────────────────────────
+import type jsPDF from "jspdf";
+import { Taller, MARGEN, ANCHO } from "./pdf/atelier";
+import { TEMA_AYURVEDA, COLOR_DOSHA, type Tema, type RGB } from "./pdf/temas";
+import { polar, conAlfa, arco } from "./pdf/formas";
+import { GARAMOND } from "./fonts/ebGaramond";
 
 export interface DiaBloque { hora: string; actividad: string; comida: boolean; alimentos: string[] }
 
-function loadImage(src: string): Promise<HTMLImageElement | null> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    img.src = src;
+const ACUARELA: Record<string, string> = {
+  vata: "/img/fondos/vata.webp",
+  pitta: "/img/fondos/pitta.webp",
+  kapha: "/img/fondos/kapha.webp",
+};
+
+/** «07:30» → 7.5. Devuelve null si no hay hora legible. */
+function horaDecimal(hora: string): number | null {
+  const m = /^(\d{1,2})(?::(\d{2}))?/.exec((hora || "").trim());
+  if (!m) return null;
+  const h = Number(m[1]);
+  const min = Number(m[2] ?? 0);
+  if (!Number.isFinite(h) || h > 23) return null;
+  return h + min / 60;
+}
+
+/**
+ * Reloj de 24 horas con los momentos del día colocados en su ángulo real.
+ * Medianoche arriba, mediodía abajo: se lee como un reloj normal, pero de día
+ * entero.
+ */
+export function relojDelDia(
+  doc: jsPDF,
+  cx: number,
+  cy: number,
+  r: number,
+  bloques: DiaBloque[],
+  color: RGB,
+  aro: RGB,
+  texto: RGB,
+): void {
+  // Corona: apenas un velo. Más tinta que esto y compite con la caja de la
+  // lámina que hay debajo.
+  conAlfa(doc, 0.08, () => {
+    doc.setFillColor(...color);
+    doc.circle(cx, cy, r, "F");
   });
-}
+  doc.setDrawColor(...aro);
+  doc.setLineWidth(0.4);
+  doc.circle(cx, cy, r, "S");
+  doc.setLineWidth(0.2);
+  doc.circle(cx, cy, r * 0.82, "S");
 
-// Dibuja `draw` con opacidad (si el visor soporta GState); si no, opaco. Para
-// tintes suaves (tarjetas de momento) sin romper nada en visores antiguos.
-function withAlpha(doc: jsPDF, opacity: number, draw: () => void): void {
-  const GS = (doc as any).GState;
-  if (GS) {
-    try {
-      doc.saveGraphicsState();
-      doc.setGState(new GS({ opacity }));
-      draw();
-      doc.restoreGraphicsState();
-      return;
-    } catch { /* sin GState: opaco */ }
+  // Muescas: una por hora, más largas cada seis.
+  for (let h = 0; h < 24; h++) {
+    const ang = (h / 24) * 360;
+    const grande = h % 6 === 0;
+    const p1 = polar(cx, cy, r * (grande ? 0.72 : 0.78), ang);
+    const p2 = polar(cx, cy, r * 0.82, ang);
+    doc.setLineWidth(grande ? 0.4 : 0.15);
+    doc.setDrawColor(...aro);
+    doc.line(p1[0], p1[1], p2[0], p2[1]);
   }
-  draw();
+
+  // Las cuatro horas cardinales.
+  doc.setFont(GARAMOND, "normal");
+  doc.setFontSize(8.4);
+  doc.setTextColor(...texto);
+  ([[0, "00"], [6, "06"], [12, "12"], [18, "18"]] as [number, string][]).forEach(([h, txt]) => {
+    const p = polar(cx, cy, r * 0.63, (h / 24) * 360);
+    doc.text(txt, p[0], p[1] + 1.4, { align: "center" });
+  });
+
+  // Los momentos.
+  const conHora = bloques
+    .map((b) => ({ b, h: horaDecimal(b.hora) }))
+    .filter((x): x is { b: DiaBloque; h: number } => x.h !== null)
+    .sort((a, b) => a.h - b.h);
+
+  // Hilo que une el día: un arco de la primera a la última hora.
+  if (conHora.length > 1) {
+    conAlfa(doc, 0.5, () => {
+      doc.setDrawColor(...color);
+      doc.setLineWidth(0.6);
+      arco(doc, cx, cy, r, (conHora[0].h / 24) * 360, (conHora[conHora.length - 1].h / 24) * 360, 60);
+    });
+  }
+
+  for (const { b, h } of conHora) {
+    const ang = (h / 24) * 360;
+    const p = polar(cx, cy, r, ang);
+    // Comida y momento se distinguen por TAMAÑO, no por relleno: el reloj se
+    // dibuja lo mismo sobre la acuarela de la portada que sobre el papel, y un
+    // anillo «vacío» necesitaría saber de qué color es el fondo en ese punto.
+    if (b.comida) {
+      conAlfa(doc, 0.3, () => { doc.setFillColor(...color); doc.circle(p[0], p[1], 3.6, "F"); });
+      doc.setFillColor(...color);
+      doc.circle(p[0], p[1], 2, "F");
+    } else {
+      doc.setFillColor(...color);
+      doc.circle(p[0], p[1], 1, "F");
+    }
+    // Radio corto hacia dentro: ancla el punto al reloj.
+    const dentro = polar(cx, cy, r * 0.84, ang);
+    conAlfa(doc, 0.45, () => {
+      doc.setDrawColor(...color);
+      doc.setLineWidth(0.2);
+      doc.line(dentro[0], dentro[1], p[0], p[1]);
+    });
+  }
+
+  // Centro.
+  doc.setFillColor(...aro);
+  doc.circle(cx, cy, 1, "F");
 }
 
-export async function generateDiaPdf(dosha: string, doshaLabel: string, bloques: DiaBloque[]): Promise<void> {
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-  registerEbGaramond(doc);
-  const pageH = doc.internal.pageSize.getHeight();
-  const doshaColor = DOSHA_COLORS[dosha] ?? INK;
-  const img = await loadImage(BG_IMG);
-  let page = 1;
-  const fecha = new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
-
-  const fillBackground = () => { doc.setFillColor(...PAGE_BG); doc.rect(0, 0, PAGE_W, pageH, "F"); };
-
-  // Cabecera con la acuarela (banda superior). Se dibuja a su proporción natural
-  // y se enmascara por debajo de `h` para que no se distorsione.
-  const drawWatercolorBand = (h: number) => {
-    if (img && img.naturalWidth) {
-      const drawH = PAGE_W * (img.naturalHeight / img.naturalWidth);
-      doc.addImage(img, "PNG", 0, 0, PAGE_W, drawH);
-      doc.setFillColor(...PAGE_BG);
-      doc.rect(0, h, PAGE_W, Math.max(0, drawH - h) + 1, "F");
-    } else {
-      doc.setFillColor(245, 238, 225);
-      doc.rect(0, 0, PAGE_W, h, "F");
-    }
-    // Línea fina inferior en el color del dosha.
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(0.6);
-    doc.line(0, h, PAGE_W, h);
+export async function generateDiaPdf(
+  dosha: string,
+  doshaLabel: string,
+  bloques: DiaBloque[],
+): Promise<void> {
+  const clave = (dosha || "").toLowerCase();
+  const color = COLOR_DOSHA[clave] ?? TEMA_AYURVEDA.acento;
+  const tema: Tema = {
+    ...TEMA_AYURVEDA,
+    acento: color,
+    acentoSuave: [
+      Math.round(color[0] + (255 - color[0]) * 0.46),
+      Math.round(color[1] + (255 - color[1]) * 0.46),
+      Math.round(color[2] + (255 - color[2]) * 0.46),
+    ],
+    acuarela: ACUARELA[clave] ?? TEMA_AYURVEDA.acuarela,
   };
 
-  // Ornamento central: pequeña línea — rombo — línea.
-  const ornament = (y: number) => {
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(0.4);
-    doc.line(PAGE_W / 2 - 26, y, PAGE_W / 2 - 5, y);
-    doc.line(PAGE_W / 2 + 5, y, PAGE_W / 2 + 26, y);
-    doc.setFillColor(...doshaColor);
-    doc.circle(PAGE_W / 2, y, 1.1, "F");
-  };
-
-  const drawFooter = (p: number) => {
-    doc.setDrawColor(224, 205, 178); doc.setLineWidth(0.2);
-    doc.line(MARGIN, pageH - 12.5, PAGE_W - MARGIN, pageH - 12.5);
-    doc.setFont(GARAMOND, "italic"); doc.setFontSize(8.5); doc.setTextColor(...MUTED);
-    doc.text("Life as a Privilege  ·  Ayurveda", MARGIN, pageH - 8);
-    doc.text(`${p}`, PAGE_W - MARGIN, pageH - 8, { align: "right" });
-  };
-
-  // Mini-cabecera para páginas siguientes.
-  const drawMiniHeader = () => {
-    doc.setDrawColor(...doshaColor); doc.setLineWidth(0.5);
-    doc.line(MARGIN, 18, PAGE_W - MARGIN, 18);
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...INK);
-    doc.text("Mi día equilibrado", MARGIN, 14);
-    doc.setFont(GARAMOND, "normal"); doc.setFontSize(10); doc.setTextColor(...doshaColor);
-    doc.text(doshaLabel, PAGE_W - MARGIN, 14, { align: "right" });
-  };
-
-  let y = 0;
-  const ensureSpace = (needed: number) => {
-    if (y + needed > pageH - 18) {
-      drawFooter(page); doc.addPage(); page++;
-      fillBackground(); drawMiniHeader(); y = 28;
-    }
-  };
-
-  /* ── PÁGINA 1 ── */
-  fillBackground();
-  drawWatercolorBand(58);
-  // Marco fino doble de cortesía (aire de documento cuidado).
-  doc.setDrawColor(...doshaColor);
-  doc.setLineWidth(0.5); doc.rect(10, 10, PAGE_W - 20, pageH - 20);
-  doc.setLineWidth(0.2); doc.rect(12.4, 12.4, PAGE_W - 24.8, pageH - 24.8);
-
-  // Título
-  doc.setFont(GARAMOND, "bold"); doc.setFontSize(26); doc.setTextColor(...INK);
-  doc.text("Mi día equilibrado", PAGE_W / 2, 76, { align: "center", charSpace: 0.4 });
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...doshaColor);
-  doc.text(`Ayurveda  ·  Doṣha ${doshaLabel}`, PAGE_W / 2, 85, { align: "center" });
-  ornament(93);
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(9.5); doc.setTextColor(...MUTED);
-  doc.text(fecha, PAGE_W / 2, 100, { align: "center" });
-  y = 110;
+  const taller = await Taller.abrir(tema, { titulo: "Mi día equilibrado" });
+  const doc = taller.doc;
 
   const orden = [...bloques]
     .filter((b) => (b.actividad && b.actividad.trim()) || (b.alimentos && b.alimentos.length > 0) || b.hora)
     .sort((a, b) => (a.hora || "99").localeCompare(b.hora || "99"));
 
+  const comidas = orden.filter((b) => b.comida).length;
+
+  /* ── PORTADA ── */
+  taller.portada({
+    titulo: "Mi día equilibrado",
+    subtitulo: `Ayurveda · Doṣha ${doshaLabel}`,
+    nombre: orden.length
+      ? `${orden.length} momentos  ·  ${comidas} comidas`
+      : undefined,
+    pieLamina: orden.length
+      ? "Tu día entero en un reloj de 24 horas. Los puntos grandes son las comidas."
+      : undefined,
+    cierre: "Mi rutina",
+    lamina: (d, cx, yTop, ancho) => {
+      const r = Math.min(ancho / 2 - 20, 44);
+      relojDelDia(
+        d, cx, yTop + r + 14, r, orden,
+        [255, 250, 244], [240, 218, 192], [255, 250, 244],
+      );
+    },
+  });
+
+  /* ── LA LÍNEA DEL DÍA ── */
+  taller.nuevaPagina();
+
   if (orden.length === 0) {
-    doc.setFont(GARAMOND, "italic"); doc.setFontSize(12); doc.setTextColor(...MUTED);
-    doc.text("Aún no has añadido momentos a tu día.", PAGE_W / 2, y, { align: "center" });
-    drawFooter(page);
-    doc.save(`mi_dia_ayurveda_${dosha}.pdf`);
+    taller.capitulo("Tu día");
+    taller.parrafo("Aún no has añadido momentos a tu día.", { cursiva: true, color: tema.apagado });
+    taller.guardar(`mi-dia-ayurveda-${clave || "dosha"}.pdf`);
     return;
   }
 
-  const HORA_X = MARGIN + 6;
-  const TEXT_X = MARGIN + 28;
-  const TEXT_W = CONTENT_W - 32;
+  taller.capitulo(
+    "Tu día, hora a hora",
+    "El Ayurveda no pide gestas: pide repetición. Esto es lo que has decidido sostener.",
+  );
 
-  // Cada momento del día en una tarjeta suave con barra de acento a la izquierda.
-  for (const b of orden) {
+  // El reloj va PRIMERO: es la lectura de un vistazo, y además así la lista no
+  // deja media página en blanco cuando la lámina no cabe detrás.
+  taller.lamina(
+    104,
+    (d, cx, cy) => relojDelDia(d, cx, cy, 41, orden, color, tema.apagado, tema.tintaSuave),
+    "Si todo se te amontona en una franja del día, ahí tienes el primer ajuste.",
+  );
+
+  const HORA_X = MARGEN;
+  const HILO_X = MARGEN + 21;
+  const TEXTO_X = MARGEN + 28;
+  const TEXTO_W = ANCHO - 28;
+
+  orden.forEach((b, i) => {
     const actividad = (b.actividad || (b.comida ? "Comida" : "Momento")).trim();
-    const actLines = doc.splitTextToSize(actividad, TEXT_W) as string[];
-    const foodsStr = b.comida && b.alimentos.length > 0 ? b.alimentos.join("   ·   ") : "";
-    const foodLines = foodsStr ? (doc.splitTextToSize(foodsStr, TEXT_W) as string[]) : [];
-    const innerH = actLines.length * 6 + (foodLines.length ? foodLines.length * 5 + 1 : 0);
-    const cardH = innerH + 9;
-    ensureSpace(cardH + 4);
+    doc.setFont(GARAMOND, b.comida ? "bold" : "normal");
+    doc.setFontSize(12);
+    const lineasAct = doc.splitTextToSize(actividad, TEXTO_W) as string[];
+    const comida = b.comida && b.alimentos.length > 0 ? b.alimentos.join("   ·   ") : "";
+    doc.setFont(GARAMOND, "italic");
+    doc.setFontSize(10);
+    const lineasCom = comida ? (doc.splitTextToSize(comida, TEXTO_W) as string[]) : [];
+    const alto = lineasAct.length * 6 + (lineasCom.length ? lineasCom.length * 5 + 1.5 : 0);
 
-    const cardTop = y;
-    withAlpha(doc, 0.06, () => {
-      doc.setFillColor(...INK);
-      doc.roundedRect(MARGIN, cardTop, CONTENT_W, cardH, 3, 3, "F");
-    });
-    doc.setFillColor(...doshaColor);
-    doc.roundedRect(MARGIN, cardTop, 2.4, cardH, 1.2, 1.2, "F");
+    taller.reservar(alto + 12);
+    const arriba = taller.y;
 
-    const baseY = cardTop + 6.5;
-    // Hora
-    doc.setFont(GARAMOND, "bold"); doc.setFontSize(11); doc.setTextColor(...doshaColor);
-    doc.text(b.hora || "—", HORA_X, baseY + 1.5);
-    // Punto guía
-    doc.setFillColor(...doshaColor);
-    doc.circle(TEXT_X - 6, baseY, 1.2, "F");
-    // Actividad
-    doc.setFont(GARAMOND, b.comida ? "bold" : "normal"); doc.setFontSize(12); doc.setTextColor(...INK);
-    actLines.forEach((line, i) => doc.text(line, TEXT_X, baseY + i * 6));
-    let yy = baseY + actLines.length * 6;
-    // Alimentos
-    if (foodLines.length) {
-      doc.setFont(GARAMOND, "italic"); doc.setFontSize(10); doc.setTextColor(...INK_SOFT);
-      foodLines.forEach((line, i) => doc.text(line, TEXT_X, yy + 0.5 + i * 5));
+    // Hora, en el margen.
+    doc.setFont(GARAMOND, "bold");
+    doc.setFontSize(12.5);
+    doc.setTextColor(...color);
+    doc.text(b.hora || "—", HORA_X, arriba + 1);
+
+    // Nodo del hilo.
+    if (b.comida) {
+      conAlfa(doc, 0.25, () => { doc.setFillColor(...color); doc.circle(HILO_X, arriba - 1.2, 3.2, "F"); });
+      doc.setFillColor(...color);
+      doc.circle(HILO_X, arriba - 1.2, 1.9, "F");
+    } else {
+      doc.setFillColor(...tema.papel);
+      doc.circle(HILO_X, arriba - 1.2, 1.7, "F");
+      doc.setDrawColor(...color);
+      doc.setLineWidth(0.45);
+      doc.circle(HILO_X, arriba - 1.2, 1.7, "S");
     }
-    y = cardTop + cardH + 4;
-  }
 
-  /* Cierre */
-  ensureSpace(20);
-  y += 6;
-  ornament(y);
-  y += 8;
-  doc.setFont(GARAMOND, "italic"); doc.setFontSize(10.5); doc.setTextColor(...MUTED);
-  const cierre = doc.splitTextToSize(
-    "El equilibrio se construye con pequeños hábitos repetidos cada día.",
-    CONTENT_W - 20,
-  ) as string[];
-  cierre.forEach((line, i) => doc.text(line, PAGE_W / 2, y + i * 5.5, { align: "center" }));
+    // Texto.
+    doc.setFont(GARAMOND, b.comida ? "bold" : "normal");
+    doc.setFontSize(12);
+    doc.setTextColor(...tema.tinta);
+    lineasAct.forEach((l, j) => doc.text(l, TEXTO_X, arriba + j * 6));
+    let yy = arriba + lineasAct.length * 6;
+    if (lineasCom.length) {
+      doc.setFont(GARAMOND, "italic");
+      doc.setFontSize(10);
+      doc.setTextColor(...tema.tintaSuave);
+      lineasCom.forEach((l, j) => doc.text(l, TEXTO_X, yy + 1.5 + j * 5));
+      yy += lineasCom.length * 5 + 1.5;
+    }
 
-  drawFooter(page);
-  doc.save(`mi_dia_ayurveda_${dosha}.pdf`);
+    // Hilo hasta el siguiente momento.
+    const abajo = yy + 5;
+    if (i < orden.length - 1) {
+      conAlfa(doc, 0.45, () => {
+        doc.setDrawColor(...color);
+        doc.setLineWidth(0.3);
+        doc.line(HILO_X, arriba + 2.2, HILO_X, abajo + 2.5);
+      });
+    }
+    taller.y = abajo + 3;
+  });
+
+  taller.cierre("El equilibrio no aparece: se construye con pequeños hábitos repetidos cada día.");
+
+  taller.guardar(`mi-dia-ayurveda-${clave || "dosha"}.pdf`);
 }

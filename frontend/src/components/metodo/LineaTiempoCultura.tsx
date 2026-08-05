@@ -50,10 +50,15 @@ function CirculoVisual({
       zIndex={1}
       flexShrink={0}
       w={size}
-      h={size}
+      // El alto sale del ancho (`aspect-ratio`) y no de un `h` fijo: así el
+      // círculo puede ser fluido (`100%` del hueco) sin dejar de ser redondo.
+      sx={{ aspectRatio: "1 / 1" }}
       borderRadius="full"
       overflow="hidden"
       bg={bg}
+      // Filo fino del acento de Cultura: recorta la foto contra el turquesa sin
+      // convertirse en un marco. Discreto a propósito — 1,5px al 40 %.
+      border={`1.5px solid ${tinta}66`}
       boxShadow={`0 0 18px ${tinta}55, 0 0 40px ${tinta}22`}
       display="flex"
       alignItems="center"
@@ -182,15 +187,22 @@ function TimelineDesktop({
   const paginaSeg = Math.min(pagina, totalPaginas - 1);
   const visibles = hitos.slice(paginaSeg * POR_PAGINA, paginaSeg * POR_PAGINA + POR_PAGINA);
 
-  const size = { base: "96px", md: "96px", lg: "136px", xl: "148px" };
-  const iconSize = { base: "34px", md: "34px", lg: "46px", xl: "50px" };
+  // TOPE del círculo, no su tamaño: los seis se reparten el ancho de la fila y
+  // solo llegan hasta aquí. Antes eran medidas FIJAS y no encogían, así que en
+  // cuanto la ventana no daba de sí (a 992px faltaban 100px, a 1280 faltaban
+  // 36) la fila se salía y el primer círculo aparecía cortado. Ahora el tope
+  // sube —son más grandes donde hay sitio— y donde no lo hay, se ajustan solos.
+  const size = { base: "110px", md: "110px", lg: "154px", xl: "166px" };
+  const iconSize = { base: "39px", md: "39px", lg: "52px", xl: "56px" };
 
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 6, md: 7 }}>
       {/* Fila de círculos con su línea. py deja hueco para las etiquetas. */}
       <Box w="100%" position="relative" py={{ md: "96px", lg: "104px" }}>
+        {/* Hueco y márgenes justos: cada píxel que se quita aquí se lo lleva el
+            diámetro de los círculos, que es lo que se quiere ver. */}
         <Flex position="relative" align="center" justify="center"
-              gap={{ base: 4, md: 4, lg: 5, xl: 5 }} px={{ base: 4, md: 4, lg: 6 }}>
+              gap={{ base: 4, md: 4, lg: 4, xl: 5 }} px={{ base: 4, md: 4, lg: 2, xl: 4 }}>
           {/* Línea horizontal que une los círculos (solo si hay más de uno). */}
           {visibles.length > 1 && (
             <Box
@@ -211,7 +223,12 @@ function TimelineDesktop({
               key={hito.key}
               onClick={() => onSelect(hito.key)}
               position="relative"
-              flexShrink={0}
+              // Reparto a partes iguales del ancho de la fila, con `size` de
+              // tope. `minW={0}` es imprescindible: sin él, el mínimo
+              // automático de flex impediría encoger y volveríamos al recorte.
+              flex="1 1 0"
+              minW={0}
+              maxW={size}
               display="flex"
               alignItems="center"
               justifyContent="center"
@@ -221,7 +238,9 @@ function TimelineDesktop({
               _active={{ transform: "scale(1.02)" }}
             >
               <Etiqueta hito={hito} tinta={tinta} arriba={i % 2 === 0} />
-              <CirculoVisual hito={hito} tinta={tinta} bg={bg} size={size} iconSize={iconSize} />
+              {/* `100%`: el círculo llena el hueco que le ha tocado al botón,
+                  que es quien lleva el tope. */}
+              <CirculoVisual hito={hito} tinta={tinta} bg={bg} size="100%" iconSize={iconSize} />
             </Box>
           ))}
         </Flex>
@@ -291,7 +310,7 @@ function TimelineMovil({
           _active={{ transform: "scale(0.99)" }}
         >
           <CirculoVisual hito={hito} tinta={tinta} bg={bg}
-                         size={{ base: "120px" }} iconSize={{ base: "42px" }} lazy />
+                         size={{ base: "137px" }} iconSize={{ base: "48px" }} lazy />
           <Box flex="1" minW={0}>
             <Text color={tinta} fontSize="md" fontWeight="700" lineHeight="1.3"
                   letterSpacing="0.02em" style={{ textShadow: `0 1px 3px #0c3c3cf5, 0 0 10px ${tinta}55` }}>

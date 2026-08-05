@@ -119,7 +119,7 @@ export const PREDIABETES_PREGUNTAS: PreguntaPrediabetes[] = [
     key: "vegetales",
     categoria: "Tu plato",
     pregunta: "¿Comes verdura, fruta u hortalizas todos los días?",
-    apoyo: "Todos los días, aunque sea una pieza o una guarnición.",
+    apoyo: "Todos los días, una pieza de fruta o 200 gramos de verduras.",
     opciones: [
       { value: "si", label: "Sí, todos los días", puntos: 0 },
       { value: "no", label: "No todos los días", puntos: 1 },

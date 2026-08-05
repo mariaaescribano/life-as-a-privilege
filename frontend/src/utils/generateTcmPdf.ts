@@ -1,9 +1,26 @@
-import jsPDF from "jspdf";
-import { registerEbGaramond, GARAMOND } from "./fonts/ebGaramond";
+// ─────────────────────────────────────────────────────────────────────────
+// Los PDF de Medicina China: el perfil del test y el vademécum de consejos.
+//
+// Papel oscuro —la MTC es una medicina de tinta y sello rojo, no de folio
+// blanco— con la acuarela de la disciplina a sangre en la portada.
+//
+// La gracia está en el gráfico: si el test es el de los cinco movimientos, el
+// documento dibuja el CICLO WU XING de verdad (anillo de generación fuera,
+// estrella de control dentro) con cada nodo hinchado según lo que ha salido en
+// las respuestas. Para el resto de tests, un radar con un eje por sección. En
+// los dos casos el diagnóstico se ve antes de leerlo.
+//
+// Las respuestas no se listan como un formulario: cada pregunta lleva una
+// REGLA con tantas muescas como valores tiene la escala y solo la elegida
+// encendida. Ocupa una línea, se entiende de un vistazo y la escala se explica
+// una sola vez al abrir el capítulo.
+// ─────────────────────────────────────────────────────────────────────────
+import type jsPDF from "jspdf";
+import { Taller, MARGEN, ANCHO, A4_W } from "./pdf/atelier";
+import { TEMA_TCM, COLOR_ELEMENTO, type RGB } from "./pdf/temas";
+import { cicloWuXing, radar, conAlfa, polar } from "./pdf/formas";
+import { GARAMOND } from "./fonts/ebGaramond";
 
-/* ══════════════════════════════════════════════
-   TYPES
-══════════════════════════════════════════════ */
 export type TcmRespuesta = {
   seccion: string;
   pregunta_idx: number;
@@ -11,457 +28,396 @@ export type TcmRespuesta = {
   respuesta: number;
 };
 
-/* ══════════════════════════════════════════════
-   CONSTANTS
-══════════════════════════════════════════════ */
-const TCM_TESTS: Record<
-  number,
-  {
-    title: string;
-    scaleValues: number[];
-    scaleLabels: string[];
-  }
-> = {
+const TCM_TESTS: Record<number, { title: string; scaleValues: number[]; scaleLabels: string[]; intro: string }> = {
   1: {
     title: "Conoce tu constitución",
     scaleValues: [0, 1, 2],
     scaleLabels: ["Rara vez", "A veces", "Frecuentemente"],
+    intro:
+      "La constitución es el terreno con el que llegaste: no cambia con la estación, " +
+      "pero explica por qué te desequilibras siempre por el mismo sitio.",
   },
   2: {
     title: "Tu elemento predominante",
     scaleValues: [0, 1, 2, 3],
-    scaleLabels: [
-      "No me describe",
-      "Leve tendencia",
-      "Moderadamente característico",
-      "Muy característico",
-    ],
+    scaleLabels: ["No me describe", "Leve tendencia", "Moderadamente característico", "Muy característico"],
+    intro:
+      "Los cinco movimientos no son cinco cajones: son cinco fases de un mismo ciclo. " +
+      "Lo que buscas aquí no es tu etiqueta, es dónde se está atascando la rueda.",
   },
   3: {
     title: "Tu desequilibrio actual",
     scaleValues: [0, 1, 2, 3],
     scaleLabels: ["Ausente", "Ocasional", "Frecuente", "Persistente / intenso"],
+    intro:
+      "Esto no retrata quién eres, sino cómo estás HOY. Repítelo dentro de unos meses: " +
+      "la diferencia entre las dos fotos es el tratamiento.",
   },
 };
 
-const HEADER_COLOR: [number, number, number] = [0, 128, 128]; // teal #008080
-const SECTION_COLOR: [number, number, number] = [218, 113, 113]; // #da7171
-const PAGE_BG: [number, number, number] = [22, 14, 14]; // near-black
-const TEXT_COLOR: [number, number, number] = [230, 210, 210];
-const MUTED_COLOR: [number, number, number] = [130, 100, 100];
-const CHOSEN_COLOR: [number, number, number] = [0, 200, 200]; // teal chosen
-const MARGIN = 18;
-const PAGE_W = 210;
-const CONTENT_W = PAGE_W - MARGIN * 2;
+const ELEMENTOS_ORDEN = ["madera", "fuego", "tierra", "metal", "agua"];
+const normaliza = (s: string) =>
+  (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
-/* ══════════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════════ */
-
-/** Ensure accented characters are encoded properly for jsPDF latin1 */
-function sanitize(text: string): string {
-  // Replace common Spanish accented chars with latin1 equivalents
-  return text
-    .replace(/\u00e1/g, "\u00e1") // á
-    .replace(/\u00e9/g, "\u00e9") // é
-    .replace(/\u00ed/g, "\u00ed") // í
-    .replace(/\u00f3/g, "\u00f3") // ó
-    .replace(/\u00fa/g, "\u00fa") // ú
-    .replace(/\u00fc/g, "\u00fc") // ü
-    .replace(/\u00f1/g, "\u00f1") // ñ
-    .replace(/\u00c1/g, "\u00c1") // Á
-    .replace(/\u00c9/g, "\u00c9") // É
-    .replace(/\u00cd/g, "\u00cd") // Í
-    .replace(/\u00d3/g, "\u00d3") // Ó
-    .replace(/\u00da/g, "\u00da") // Ú
-    .replace(/\u00dc/g, "\u00dc") // Ü
-    .replace(/\u00d1/g, "\u00d1") // Ñ
-    .replace(/\u00bf/g, "\u00bf") // ¿
-    .replace(/\u00a1/g, "\u00a1"); // ¡
+/** Agrupa las respuestas por sección conservando el orden de aparición. */
+function porSeccion(respuestas: TcmRespuesta[]) {
+  const secciones: { nombre: string; preguntas: TcmRespuesta[]; total: number }[] = [];
+  const indice: Record<string, number> = {};
+  for (const r of respuestas) {
+    if (!(r.seccion in indice)) {
+      indice[r.seccion] = secciones.length;
+      secciones.push({ nombre: r.seccion, preguntas: [], total: 0 });
+    }
+    const s = secciones[indice[r.seccion]];
+    s.preguntas.push(r);
+    s.total += r.respuesta;
+  }
+  return secciones;
 }
 
-/** Split text into lines that fit within maxWidth */
-function splitLines(
+/** ¿Las secciones son los cinco movimientos? Entonces toca el ciclo Wu Xing. */
+function esWuXing(secciones: { nombre: string }[]): boolean {
+  return (
+    secciones.length === 5 &&
+    secciones.every((s, i) => normaliza(s.nombre) === ELEMENTOS_ORDEN[i])
+  );
+}
+
+const colorSeccion = (nombre: string, fallback: RGB): RGB =>
+  COLOR_ELEMENTO[normaliza(nombre)] ?? fallback;
+
+/**
+ * Lámina del perfil: ciclo Wu Xing si procede, radar si no. Devuelve el radio
+ * usado por si el llamante quiere colocar algo alrededor.
+ */
+function laminaPerfil(
   doc: jsPDF,
-  text: string,
-  maxWidth: number
-): string[] {
-  return doc.splitTextToSize(sanitize(text), maxWidth) as string[];
+  cx: number,
+  cy: number,
+  r: number,
+  secciones: { nombre: string; total: number }[],
+  max: number,
+  tinta: RGB,
+  trama: RGB,
+  acento: RGB,
+): void {
+  const etiquetar = (p: [number, number], texto: string, valor: number, color: RGB, ang: number) => {
+    const derecha = ang > 5 && ang < 175;
+    const centro = ang <= 5 || ang >= 355 || (ang > 175 && ang < 185);
+    doc.setFont(GARAMOND, "bold");
+    doc.setFontSize(9.6);
+    doc.setTextColor(...color);
+    const align = centro ? "center" : derecha ? "left" : "right";
+    doc.text(texto, p[0], p[1], { align });
+    doc.setFont(GARAMOND, "normal");
+    doc.setFontSize(8.4);
+    doc.setTextColor(...tinta);
+    doc.text(String(valor), p[0], p[1] + 3.8, { align });
+  };
+
+  if (esWuXing(secciones)) {
+    const nodos = secciones.map((s) => ({
+      etiqueta: s.nombre,
+      color: colorSeccion(s.nombre, acento),
+      valor: s.total,
+    }));
+    cicloWuXing(doc, cx, cy, r, nodos, max, trama);
+    secciones.forEach((_, i) => {
+      const ang = (i * 360) / 5;
+      // r + 16: los nodos del Wu Xing son discos de 7,4 mm, así que la etiqueta
+      // tiene que salir bastante más lejos que en el radar para no pisarlos.
+      const fuera = polar(cx, cy, r + 16, ang);
+      etiquetar(fuera, secciones[i].nombre, secciones[i].total, nodos[i].color, ang);
+    });
+    return;
+  }
+
+  const bordes = radar(
+    doc, cx, cy, r,
+    secciones.map((s) => s.total),
+    max, acento, trama,
+  );
+  bordes.forEach((p, i) => {
+    const ang = (i * 360) / secciones.length;
+    etiquetar(p, secciones[i].nombre, secciones[i].total, acento, ang);
+  });
 }
 
-/* ══════════════════════════════════════════════
-   MAIN GENERATOR
-══════════════════════════════════════════════ */
-export function generateTcmPdf(
+/* ═══════════════════════════════════════════════════════════════════════════
+   1 · EL PERFIL DEL TEST
+═══════════════════════════════════════════════════════════════════════════ */
+
+export async function generateTcmPdf(
   testNum: number,
   respuestas: TcmRespuesta[],
   resultado?: string,
-  consejo?: string
-): void {
-  const testInfo = TCM_TESTS[testNum];
-  if (!testInfo) return;
+  consejo?: string,
+): Promise<void> {
+  const info = TCM_TESTS[testNum];
+  if (!info) return;
 
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-  registerEbGaramond(doc);
-  const pageH = doc.internal.pageSize.getHeight();
-  let page = 1;
+  const t = TEMA_TCM;
+  const taller = await Taller.abrir(t, { titulo: info.title });
+  const doc = taller.doc;
 
-  /* ── draw background ── */
-  const fillBackground = () => {
-    doc.setFillColor(...PAGE_BG);
-    doc.rect(0, 0, PAGE_W, pageH, "F");
-  };
+  const secciones = porSeccion(respuestas);
+  const maxPosible = Math.max(
+    1,
+    ...secciones.map((s) => s.preguntas.length * Math.max(...info.scaleValues)),
+  );
+  const maxObtenido = Math.max(1, ...secciones.map((s) => s.total));
+  const colorResultado = resultado ? colorSeccion(resultado, t.acento) : t.acento;
 
-  /* ── draw page number ── */
-  const drawPageNum = (p: number) => {
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(8);
-    doc.setTextColor(...MUTED_COLOR);
-    doc.text(`${p}`, PAGE_W / 2, pageH - 6, { align: "center" });
-  };
-
-  /* ── draw header bar ── */
-  const drawHeader = () => {
-    doc.setFillColor(...HEADER_COLOR);
-    doc.rect(0, 0, PAGE_W, 22, "F");
-    doc.setFont(GARAMOND, "bold");
-    doc.setFontSize(10);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Life as a Privilege  ·  TCM", MARGIN, 10);
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(220, 240, 240);
-    doc.text(sanitize(testInfo.title), MARGIN, 17);
-  };
-
-  /* ── check page overflow and add new page ── */
-  let y = 0;
-  const ensureSpace = (needed: number) => {
-    if (y + needed > pageH - 14) {
-      drawPageNum(page);
-      doc.addPage();
-      page++;
-      fillBackground();
-      drawHeader();
-      y = 30;
-    }
-  };
-
-  /* ═══════════════════ PAGE 1 SETUP ═══════════════════ */
-  fillBackground();
-  drawHeader();
-  y = 30;
-
-  /* ── test title ── */
-  doc.setFont(GARAMOND, "bold");
-  doc.setFontSize(16);
-  doc.setTextColor(...TEXT_COLOR);
-  const titleLines = splitLines(doc, testInfo.title, CONTENT_W);
-  titleLines.forEach((line) => {
-    ensureSpace(8);
-    doc.text(line, MARGIN, y);
-    y += 7;
+  /* ── PORTADA ── */
+  taller.portada({
+    titulo: info.title,
+    subtitulo: "Medicina Tradicional China",
+    nombre: resultado,
+    pieLamina: esWuXing(secciones)
+      ? "El anillo es el ciclo de generación; la estrella de puntos, el de control. " +
+        "Cada disco crece con lo que has respondido."
+      : "Cada eje es una de las áreas del test. La forma del polígono es tu perfil.",
+    cierre: "Tu perfil",
+    lamina: (d, cx, yTop, ancho) => {
+      const r = Math.min(ancho / 2 - 24, 42);
+      laminaPerfil(
+        d, cx, yTop + r + 16, r, secciones, maxObtenido,
+        [255, 246, 242], [206, 150, 142], t.acentoSuave,
+      );
+    },
   });
-  y += 3;
 
-  /* ── resultado ── */
+  /* ── LO QUE DICE ── */
+  taller.nuevaPagina();
+  taller.capitulo("Lo que dice tu test", info.intro);
+
   if (resultado) {
-    ensureSpace(14);
-    doc.setFillColor(0, 128, 128, 0.15);
-    // draw a subtle box
-    doc.setDrawColor(...HEADER_COLOR);
+    taller.reservar(26);
+    const arriba = taller.y - 3;
+    const alto = 20;
+    conAlfa(doc, 0.18, () => {
+      doc.setFillColor(...colorResultado);
+      doc.roundedRect(MARGEN, arriba, ANCHO, alto, 3, 3, "F");
+    });
+    doc.setDrawColor(...colorResultado);
     doc.setLineWidth(0.4);
-    doc.roundedRect(MARGIN, y - 4, CONTENT_W, 11, 2, 2, "S");
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(...MUTED_COLOR);
-    doc.text("Resultado predominante:", MARGIN + 3, y + 2);
+    doc.roundedRect(MARGEN, arriba, ANCHO, alto, 3, 3, "S");
+    taller.versalitas("Predominante", MARGEN + 9, arriba + 7.5, 7.6, t.apagado);
     doc.setFont(GARAMOND, "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(...CHOSEN_COLOR);
-    doc.text(sanitize(resultado), MARGIN + 52, y + 2);
-    y += 14;
+    doc.setFontSize(17);
+    doc.setTextColor(...colorResultado);
+    doc.text(resultado, MARGEN + 9, arriba + 15.5);
+    taller.y = arriba + alto + 9;
   }
 
-  /* ── consejo / advice ── */
-  if (consejo) {
-    ensureSpace(30);
-    // box background
-    const consejoLines = splitLines(doc, consejo, CONTENT_W - 12);
-    const boxH = consejoLines.length * 5.5 + 20;
-    ensureSpace(boxH);
-    doc.setDrawColor(...HEADER_COLOR);
-    doc.setLineWidth(0.5);
-    doc.roundedRect(MARGIN, y - 2, CONTENT_W, boxH, 3, 3, "S");
-    // title
-    doc.setFont(GARAMOND, "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(...CHOSEN_COLOR);
-    doc.text(sanitize("Tu consejo personalizado"), MARGIN + 6, y + 6);
-    y += 14;
-    // body
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(10);
-    doc.setTextColor(...TEXT_COLOR);
-    consejoLines.forEach((line) => {
-      doc.text(line, MARGIN + 6, y);
-      y += 5.5;
+  if (consejo) taller.parrafo(consejo, { capitular: true, tam: 11.2 });
+
+  /* ── EL PERFIL ── */
+  taller.capitulo(
+    esWuXing(secciones) ? "Tu rueda de los cinco movimientos" : "Tu perfil",
+    esWuXing(secciones)
+      ? "Un movimiento muy cargado tira del que genera y ahoga al que controla: por eso se lee la rueda entera, no el nodo más alto."
+      : "La puntuación de cada área, en bruto y en proporción.",
+  );
+
+  taller.lamina(
+    118,
+    // La geometría del gráfico va en `apagado`: `trama` es el carril de las
+    // barras y sobre el papel apenas se ve.
+    (d, cx, cy) => laminaPerfil(d, cx, cy, 40, secciones, maxObtenido, t.tinta, t.apagado, t.acento),
+  );
+
+  for (const s of secciones) {
+    taller.filaBarra({
+      etiqueta: s.nombre,
+      coletilla: `${s.preguntas.length} preguntas`,
+      valor: `${s.total} / ${s.preguntas.length * Math.max(...info.scaleValues)}`,
+      fraccion: s.total / maxPosible,
+      color: colorSeccion(s.nombre, t.acento),
     });
-    y += 10;
   }
 
-  /* ── thin separator ── */
-  doc.setDrawColor(...HEADER_COLOR);
-  doc.setLineWidth(0.3);
-  doc.line(MARGIN, y, PAGE_W - MARGIN, y);
-  y += 6;
+  /* ── LAS RESPUESTAS ── */
+  taller.capitulo("Tus respuestas", "El registro completo, para poder repetir el test y comparar.");
 
-  /* ═══════════════════ GROUP BY SECTION ═══════════════════ */
-  // Build section → questions map preserving order
-  const sections: Array<{ nombre: string; preguntas: TcmRespuesta[] }> = [];
-  const sectionIndex: Record<string, number> = {};
-  for (const r of respuestas) {
-    if (!(r.seccion in sectionIndex)) {
-      sectionIndex[r.seccion] = sections.length;
-      sections.push({ nombre: r.seccion, preguntas: [] });
-    }
-    sections[sectionIndex[r.seccion]].preguntas.push(r);
-  }
-
-  for (const sec of sections) {
-    /* ── section header ── */
-    ensureSpace(10);
+  // La escala, explicada una sola vez.
+  taller.reservar(10 + info.scaleValues.length * 5);
+  taller.versalitas("La escala", MARGEN, taller.y, 8, t.acento);
+  taller.y += 5.5;
+  info.scaleValues.forEach((v) => {
+    taller.reservar(6);
+    doc.setDrawColor(...t.acento);
+    doc.setLineWidth(0.3);
+    doc.circle(MARGEN + 3, taller.y - 1.2, 2.2, "S");
     doc.setFont(GARAMOND, "bold");
-    doc.setFontSize(12);
-    doc.setTextColor(...SECTION_COLOR);
-    const secLines = splitLines(doc, sec.nombre, CONTENT_W);
-    secLines.forEach((line) => {
-      doc.text(line, MARGIN, y);
-      y += 6;
-    });
-    y += 1;
+    doc.setFontSize(7.6);
+    doc.setTextColor(...t.acento);
+    doc.text(String(v), MARGEN + 3, taller.y - 0.2, { align: "center" });
+    doc.setFont(GARAMOND, "normal");
+    doc.setFontSize(9.6);
+    doc.setTextColor(...t.tintaSuave);
+    doc.text(info.scaleLabels[v] ?? "", MARGEN + 10, taller.y);
+    taller.y += 6;
+  });
+  taller.y += 5;
 
-    // thin underline
-    doc.setDrawColor(...SECTION_COLOR);
-    doc.setLineWidth(0.25);
-    doc.line(MARGIN, y, MARGIN + 40, y);
-    y += 5;
+  const REGLA_X = A4_W - MARGEN - 34;
+  for (const sec of secciones) {
+    const colorSec = colorSeccion(sec.nombre, t.acento);
+    taller.reservar(16);
+    taller.y += 2;
+    taller.versalitas(sec.nombre, MARGEN, taller.y, 8.6, colorSec);
+    taller.y += 2.4;
+    doc.setDrawColor(...colorSec);
+    doc.setLineWidth(0.35);
+    doc.line(MARGEN, taller.y, MARGEN + 22, taller.y);
+    taller.y += 7;
 
-    /* ── questions ── */
-    // Sort by pregunta_idx
-    const sorted = [...sec.preguntas].sort(
-      (a, b) => a.pregunta_idx - b.pregunta_idx
-    );
+    const ordenadas = [...sec.preguntas].sort((a, b) => a.pregunta_idx - b.pregunta_idx);
+    for (const item of ordenadas) {
+      doc.setFont(GARAMOND, "normal");
+      doc.setFontSize(10);
+      const lineas = doc.splitTextToSize(item.pregunta, REGLA_X - MARGEN - 8) as string[];
+      const alto = Math.max(lineas.length * 5, 6);
+      taller.reservar(alto + 4.5);
 
-    for (const item of sorted) {
-      /* question text */
-      doc.setFont(GARAMOND, "bold");
-      doc.setFontSize(9);
-      doc.setTextColor(...TEXT_COLOR);
-      const qText = `${item.pregunta_idx + 1}. ${item.pregunta}`;
-      const qLines = splitLines(doc, qText, CONTENT_W);
+      doc.setFont(GARAMOND, "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(...t.tinta);
+      lineas.forEach((l, i) => doc.text(l, MARGEN, taller.y + i * 5));
 
-      const optionCount = testInfo.scaleValues.length;
-      const blockHeight = qLines.length * 5 + optionCount * 6 + 6;
-      ensureSpace(blockHeight);
-
-      qLines.forEach((line) => {
-        doc.text(line, MARGIN, y);
-        y += 5;
+      // La regla de la escala, alineada a la derecha.
+      const n = info.scaleValues.length;
+      const paso = 30 / (n - 1);
+      const yr = taller.y - 1.3;
+      conAlfa(doc, 0.55, () => {
+        doc.setDrawColor(...t.trama);
+        doc.setLineWidth(0.35);
+        doc.line(REGLA_X, yr, REGLA_X + 30, yr);
       });
-
-      /* scale options */
-      const circleR = 1.8;
-      const circleX = MARGIN + 5;
-      const labelX = MARGIN + 11;
-      testInfo.scaleValues.forEach((v) => {
-        const chosen = item.respuesta === v;
-        const label = testInfo.scaleLabels[v];
-
-        // Draw circle
-        const cy = y - circleR + 0.3;
-        if (chosen) {
-          doc.setFillColor(...CHOSEN_COLOR);
-          doc.circle(circleX, cy, circleR, "F");
+      info.scaleValues.forEach((v, i) => {
+        const x = REGLA_X + i * paso;
+        if (item.respuesta === v) {
+          // La muesca elegida se enciende con el color de su sección: la página
+          // se lee como cinco columnas de color, no como una lista gris.
+          conAlfa(doc, 0.3, () => {
+            doc.setFillColor(...colorSec);
+            doc.circle(x, yr, 3.1, "F");
+          });
+          doc.setFillColor(...colorSec);
+          doc.circle(x, yr, 1.75, "F");
         } else {
-          doc.setDrawColor(...MUTED_COLOR);
+          doc.setDrawColor(...t.trama);
           doc.setLineWidth(0.3);
-          doc.circle(circleX, cy, circleR, "S");
+          doc.circle(x, yr, 1.35, "S");
         }
-
-        // Draw label
-        doc.setFont(GARAMOND, chosen ? "bold" : "normal");
-        doc.setFontSize(9);
-        doc.setTextColor(chosen ? CHOSEN_COLOR[0] : MUTED_COLOR[0], chosen ? CHOSEN_COLOR[1] : MUTED_COLOR[1], chosen ? CHOSEN_COLOR[2] : MUTED_COLOR[2]);
-
-        const labelLines = splitLines(doc, label, CONTENT_W - (labelX - MARGIN));
-        labelLines.forEach((lline, li) => {
-          doc.text(lline, labelX, y + li * 4.5);
-        });
-        y += labelLines.length * 4.5 + 1;
       });
 
-      y += 4; // space between questions
+      taller.y += alto + 3.4;
+      conAlfa(doc, 0.4, () => {
+        doc.setDrawColor(...t.trama);
+        doc.setLineWidth(0.12);
+        doc.line(MARGEN, taller.y - 2.2, A4_W - MARGEN, taller.y - 2.2);
+      });
     }
-
-    y += 3; // space between sections
+    taller.y += 4;
   }
 
-  /* ── final page number ── */
-  drawPageNum(page);
+  taller.cierre(
+    "«El buen médico trata la enfermedad que aún no ha aparecido.» — Huangdi Neijing",
+  );
 
-  doc.save(`tcm_test${testNum}_respuestas.pdf`);
+  taller.guardar(`mi-perfil-mtc-${testNum}.pdf`);
 }
 
-/* ══════════════════════════════════════════════
-   CONSEJOS PDF GENERATOR
-══════════════════════════════════════════════ */
-export function generateTcmConsejosPdf(
+/* ═══════════════════════════════════════════════════════════════════════════
+   2 · EL VADEMÉCUM DE CONSEJOS
+═══════════════════════════════════════════════════════════════════════════ */
+
+const BLOQUES_CONSEJOS: {
+  key: "infusiones" | "hierbas" | "nutricion" | "estiloDeVida";
+  titulo: string;
+  intencion: string;
+}[] = [
+  {
+    key: "infusiones",
+    titulo: "Infusiones",
+    intencion: "Lo más suave y lo más diario: agua caliente con intención.",
+  },
+  {
+    key: "hierbas",
+    titulo: "Plantas",
+    intencion:
+      "La farmacopea tradicional asociada a tu patrón. Consúltalas con un profesional si tomas medicación.",
+  },
+  {
+    key: "nutricion",
+    titulo: "En la mesa",
+    intencion: "En MTC la comida se clasifica por su naturaleza térmica y su sabor, no por sus calorías.",
+  },
+  {
+    key: "estiloDeVida",
+    titulo: "En el día a día",
+    intencion: "El ritmo, el descanso y el movimiento: lo que sostiene todo lo anterior.",
+  },
+];
+
+export async function generateTcmConsejosPdf(
   testNum: number,
   resultado: string,
   recs: { infusiones: string[]; hierbas: string[]; estiloDeVida: string[]; nutricion: string[] },
-  interpretacion?: string
-): void {
-  const testInfo = TCM_TESTS[testNum];
-  if (!testInfo) return;
+  interpretacion?: string,
+): Promise<void> {
+  const info = TCM_TESTS[testNum];
+  if (!info) return;
 
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
-  registerEbGaramond(doc);
-  const pageH = doc.internal.pageSize.getHeight();
-  let page = 1;
-
-  const fillBackground = () => {
-    doc.setFillColor(...PAGE_BG);
-    doc.rect(0, 0, PAGE_W, pageH, "F");
+  const color = colorSeccion(resultado, TEMA_TCM.acento);
+  const tema = {
+    ...TEMA_TCM,
+    acento: color,
+    acentoSuave: [
+      Math.round(color[0] + (255 - color[0]) * 0.34),
+      Math.round(color[1] + (255 - color[1]) * 0.34),
+      Math.round(color[2] + (255 - color[2]) * 0.34),
+    ] as RGB,
   };
 
-  const drawPageNum = (p: number) => {
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(8);
-    doc.setTextColor(...MUTED_COLOR);
-    doc.text(`${p}`, PAGE_W / 2, pageH - 6, { align: "center" });
-  };
+  const taller = await Taller.abrir(tema, { titulo: "Tus consejos" });
 
-  const drawHeader = () => {
-    doc.setFillColor(...HEADER_COLOR);
-    doc.rect(0, 0, PAGE_W, 22, "F");
-    doc.setFont(GARAMOND, "bold");
-    doc.setFontSize(10);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Life as a Privilege  ·  TCM", MARGIN, 10);
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(220, 240, 240);
-    doc.text(sanitize("Consejos personalizados"), MARGIN, 17);
-  };
-
-  let y = 0;
-  const ensureSpace = (needed: number) => {
-    if (y + needed > pageH - 14) {
-      drawPageNum(page);
-      doc.addPage();
-      page++;
-      fillBackground();
-      drawHeader();
-      y = 30;
-    }
-  };
-
-  /* ═══════════════════ PAGE 1 ═══════════════════ */
-  fillBackground();
-  drawHeader();
-  y = 30;
-
-  /* ── title ── */
-  doc.setFont(GARAMOND, "bold");
-  doc.setFontSize(16);
-  doc.setTextColor(...TEXT_COLOR);
-  const titleLines = splitLines(doc, "Tus consejos personalizados", CONTENT_W);
-  titleLines.forEach((line) => {
-    doc.text(line, MARGIN, y);
-    y += 7;
+  /* ── PORTADA ── */
+  taller.portada({
+    titulo: "Cuidarte",
+    subtitulo: `Medicina China · ${info.title}`,
+    nombre: resultado,
+    pieLamina: "Infusiones, plantas, mesa y ritmo — lo que la tradición asocia a tu patrón.",
+    cierre: "Tu vademécum",
   });
-  y += 2;
 
-  /* ── resultado ── */
-  ensureSpace(14);
-  doc.setDrawColor(...HEADER_COLOR);
-  doc.setLineWidth(0.4);
-  doc.roundedRect(MARGIN, y - 4, CONTENT_W, 11, 2, 2, "S");
-  doc.setFont(GARAMOND, "normal");
-  doc.setFontSize(9);
-  doc.setTextColor(...MUTED_COLOR);
-  doc.text("Resultado predominante:", MARGIN + 3, y + 2);
-  doc.setFont(GARAMOND, "bold");
-  doc.setFontSize(11);
-  doc.setTextColor(...CHOSEN_COLOR);
-  doc.text(sanitize(resultado), MARGIN + 52, y + 2);
-  y += 14;
-
-  /* ── interpretación ── */
+  /* ── TU PATRÓN ── */
+  taller.nuevaPagina();
+  taller.capitulo(`Tu patrón · ${resultado}`);
   if (interpretacion) {
-    const iLines = splitLines(doc, interpretacion, CONTENT_W - 8);
-    const boxH = iLines.length * 5 + 12;
-    ensureSpace(boxH);
-    doc.setDrawColor(...HEADER_COLOR);
-    doc.setLineWidth(0.4);
-    doc.roundedRect(MARGIN, y - 2, CONTENT_W, boxH, 3, 3, "S");
-    doc.setFont(GARAMOND, "normal");
-    doc.setFontSize(9.5);
-    doc.setTextColor(...TEXT_COLOR);
-    y += 6;
-    iLines.forEach((line) => {
-      doc.text(line, MARGIN + 4, y);
-      y += 5;
-    });
-    y += 10;
+    taller.parrafo(interpretacion, { capitular: true, tam: 11.5 });
+    taller.espacio(3);
+  }
+  taller.parrafo(
+    "La MTC no receta contra un síntoma: mueve un terreno. Elige dos o tres cosas de las que " +
+      "siguen, sostenlas unas semanas y observa qué cambia. Si estás en tratamiento médico o " +
+      "tomas medicación, consulta antes las plantas.",
+    { cursiva: true, color: tema.apagado, tam: 10.5 },
+  );
+
+  /* ── LOS BLOQUES ── */
+  for (const bloque of BLOQUES_CONSEJOS) {
+    const items = recs[bloque.key];
+    if (!Array.isArray(items) || items.length === 0) continue;
+    taller.capitulo(bloque.titulo, bloque.intencion);
+    taller.glosario(items);
   }
 
-  /* ── categories ── */
-  const categories: Array<{ key: keyof typeof recs; label: string }> = [
-    { key: "infusiones", label: "Infusiones" },
-    { key: "hierbas", label: "Hierbas" },
-    { key: "nutricion", label: "Nutrición" },
-    { key: "estiloDeVida", label: "Estilo de Vida" },
-  ];
+  taller.cierre(
+    "«Cuando el qi fluye, no hay dolor; donde hay dolor, el qi no fluye.»",
+  );
 
-  for (const cat of categories) {
-    const items = recs[cat.key];
-    if (!items || items.length === 0) continue;
-
-    /* section title */
-    ensureSpace(12);
-    doc.setFont(GARAMOND, "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(...SECTION_COLOR);
-    doc.text(sanitize(cat.label), MARGIN, y);
-    y += 2;
-    doc.setDrawColor(...SECTION_COLOR);
-    doc.setLineWidth(0.25);
-    doc.line(MARGIN, y, MARGIN + 35, y);
-    y += 6;
-
-    /* items */
-    for (const item of items) {
-      const lines = splitLines(doc, item, CONTENT_W - 8);
-      ensureSpace(lines.length * 5 + 4);
-      doc.setFont(GARAMOND, "normal");
-      doc.setFontSize(9.5);
-      doc.setTextColor(...TEXT_COLOR);
-
-      // bullet
-      doc.setFillColor(...CHOSEN_COLOR);
-      doc.circle(MARGIN + 2, y - 1.2, 1, "F");
-
-      lines.forEach((line, li) => {
-        doc.text(line, MARGIN + 6, y + li * 5);
-      });
-      y += lines.length * 5 + 2;
-    }
-
-    y += 5;
-  }
-
-  drawPageNum(page);
-  doc.save(`tcm_test${testNum}_consejos.pdf`);
+  taller.guardar(`mis-consejos-mtc-${testNum}.pdf`);
 }

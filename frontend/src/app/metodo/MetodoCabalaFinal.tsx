@@ -39,7 +39,7 @@ const Caja = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Titulo = ({ children }: { children: React.ReactNode }) => (
-  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={4} style={{ textShadow: INK_SHADOW }}>
+  <Text color={cabalaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.08em" mb={5} style={{ textShadow: INK_SHADOW }}>
     {children}
   </Text>
 );
@@ -236,27 +236,27 @@ export default function MetodoCabalaFinal() {
               <Titulo>Tus dimensiones · {dimsCompletas}/{niveles.length}</Titulo>
               {bloqueoPrincipal && (
                 <Box mb={5} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 4, md: 5 }}>
-                  <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" mb={1} style={{ textShadow: INK_SHADOW }}>
+                  <Text color={`${cabalaTxt}99`} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" textTransform="uppercase" mb={1} style={{ textShadow: INK_SHADOW }}>
                     Paso evolutivo prioritario
                   </Text>
-                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
+                  <Text color={cabalaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                     {cabalaSefirotMap[bloqueoPrincipal.from].titulo} → {cabalaSefirotMap[bloqueoPrincipal.to].titulo}
-                    <Box as="span" color={`${cabalaTxt}88`} fontSize="sm" fontWeight="400"> · {TIPO_LABEL[bloqueoPrincipal.tipo]}</Box>
+                    <Box as="span" color={`${cabalaTxt}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="400"> · {TIPO_LABEL[bloqueoPrincipal.tipo]}</Box>
                   </Text>
-                  <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>{bloqueoPrincipal.narrativa}</Text>
+                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>{bloqueoPrincipal.narrativa}</Text>
                 </Box>
               )}
               <Flex direction="column" gap={3}>
                 {niveles.map((n) => (
                   <Box key={n.key}>
                     <Flex justify="space-between" align="baseline" mb={1} gap={2} wrap="wrap">
-                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} style={{ textShadow: INK_SHADOW }}>
+                      <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} style={{ textShadow: INK_SHADOW }}>
                         <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{n.numero}.</Box>
                         {n.titulo} <Box as="span" color={`${cabalaTxt}77`}>· {n.etiqueta}</Box>
                       </Text>
                       {n.completo
-                        ? <Text color={cabalaTxt} fontSize="xs" fontWeight="700">{n.nivel}/10 · <Box as="span" color={`${cabalaTxt}99`}>{POLARIDAD_LABEL[n.polaridad]}</Box></Text>
-                        : <Text color={`${cabalaTxt}66`} fontSize="xs" fontStyle="italic">sin responder</Text>}
+                        ? <Text color={cabalaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight="700">{n.nivel}/10 · <Box as="span" color={`${cabalaTxt}99`}>{POLARIDAD_LABEL[n.polaridad]}</Box></Text>
+                        : <Text color={`${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">sin responder</Text>}
                     </Flex>
                     {n.completo ? <BarraNivel nivel={n.nivel} /> : <Box w="100%" h="7px" borderRadius="full" bg={`${cabalaTxt}12`} />}
                   </Box>
@@ -271,17 +271,17 @@ export default function MetodoCabalaFinal() {
               <Titulo>Tus senderos · {sendCompletos}/{senderoRes.length}</Titulo>
               {senderosPrioritarios.length > 0 && (
                 <Box mb={5}>
-                  <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" mb={2} style={{ textShadow: INK_SHADOW }}>
+                  <Text color={`${cabalaTxt}99`} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" textTransform="uppercase" mb={2} style={{ textShadow: INK_SHADOW }}>
                     Senderos prioritarios
                   </Text>
                   <Flex direction="column" gap={3}>
                     {senderosPrioritarios.map(({ s, band }) => (
                       <Box key={s.num} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 3.5, md: 4 }}>
-                        <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} mb={1} style={{ textShadow: INK_SHADOW }}>
+                        <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} mb={1} style={{ textShadow: INK_SHADOW }}>
                           {s.letra} · {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}
-                          <Box as="span" color={`${cabalaTxt}88`} fontSize="sm" fontWeight="400"> · {band?.titulo}</Box>
+                          <Box as="span" color={`${cabalaTxt}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="400"> · {band?.titulo}</Box>
                         </Text>
-                        <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{band?.texto}</Text>
+                        <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{band?.texto}</Text>
                       </Box>
                     ))}
                   </Flex>
@@ -291,11 +291,11 @@ export default function MetodoCabalaFinal() {
                 {senderoRes.map(({ s, band, total }) => (
                   <Flex key={s.num} align="baseline" justify="space-between" gap={3} wrap="wrap"
                         borderBottom={`1px solid ${cabalaTxt}1c`} pb={2}>
-                    <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} style={{ textShadow: INK_SHADOW }}>
+                    <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} style={{ textShadow: INK_SHADOW }}>
                       <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{s.orden}.</Box>
                       {s.letra} <Box as="span" color={`${cabalaTxt}77`}>· {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}</Box>
                     </Text>
-                    <Text color={band ? cabalaTxt : `${cabalaTxt}66`} fontSize="xs" fontWeight={band ? "700" : "400"} fontStyle={band ? "normal" : "italic"}>
+                    <Text color={band ? cabalaTxt : `${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }} fontWeight={band ? "700" : "400"} fontStyle={band ? "normal" : "italic"}>
                       {band ? `${band.titulo} · ${total}` : "sin responder"}
                     </Text>
                   </Flex>

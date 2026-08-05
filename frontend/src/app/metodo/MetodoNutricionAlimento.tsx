@@ -8,7 +8,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Float } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
   alimentoByKey, molsDeAlimento, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
@@ -194,7 +194,7 @@ export default function MetodoNutricionAlimento() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
               title={a.nombre}
               compact
               maxW="1000px"
@@ -210,7 +210,7 @@ export default function MetodoNutricionAlimento() {
           </Reveal>
 
           {/* Cabecera del alimento: emoji + nombre + resumen + barra de macros */}
-          <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
+          <Reveal inView direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
             <SeccionBox>
               <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 5, md: 8 }} p={{ base: 5, md: 8 }}>
                 <Flex w={{ base: "120px", md: "180px" }} flexShrink={0} aspectRatio={1} borderRadius="2xl"
@@ -236,15 +236,15 @@ export default function MetodoNutricionAlimento() {
           </Reveal>
 
           {/* Moléculas que lo componen, por grupos */}
-          <Reveal direction="up" distance={18} delay={0.18} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal inView direction="up" distance={18} delay={0.18} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center">
               Toca cada molécula para ver qué hace dentro de ti.
             </Text>
           </Reveal>
 
-          {gruposConMols.map((s, gi) => (
-            <Reveal key={s.grupo} direction="up" distance={16} delay={0.06 * gi} duration={0.55} w="100%">
+          {gruposConMols.map((s) => (
+            <Reveal inView key={s.grupo} direction="up" distance={16} delay={0.04} duration={0.55} w="100%">
               <SeccionBox>
                 <Box px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
                   <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={800} mb={3.5}

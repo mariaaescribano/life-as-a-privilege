@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -9,7 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { FotoBox } from "../../components/metodo/FotoBox";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem, Float } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
@@ -22,9 +22,13 @@ import {
 // Profundiza (fondo de la disciplina difuminado + imagen dentro + título), pero
 // con el fondo de Nutrición. Al ver el grupo (abrir su modal), aparece un tick
 // verde de la gama de Nutrición arriba a la derecha.
-function NutrienteBox({ n, visto, onClick, delay }: { n: Nutriente; visto: boolean; onClick: () => void; delay: number }) {
+function NutrienteBox({ n, visto, onClick }: { n: Nutriente; visto: boolean; onClick: () => void }) {
   return (
-    <Reveal direction="up" distance={20} delay={delay} duration={0.55} w="100%" display="flex">
+    // RevealItem (y no un Reveal con delay a mano): la cascada la marca el
+    // RevealStagger de la rejilla, que arranca cuando la rejilla ASOMA en
+    // pantalla. Con delays sueltos al montar, las filas de abajo terminaban su
+    // animación antes de que nadie las viera.
+    <RevealItem direction="up" distance={22} scaleFrom={0.96} duration={0.55} w="100%" display="flex">
       <FotoBox
         titulo={n.label}
         foto={n.img}
@@ -34,10 +38,11 @@ function NutrienteBox({ n, visto, onClick, delay }: { n: Nutriente; visto: boole
         visto={visto}
         colorTint={`${n.color}22`}
         onClick={onClick}
+        vivo
         // Mismo glow que la cabecera (halo blanco + menta con el tinte de la disciplina).
         glow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${nutricionTxt}1a, 0 0 48px ${nutricionTxt}10`}
       />
-    </Reveal>
+    </RevealItem>
   );
 }
 
@@ -95,7 +100,7 @@ export default function MetodoNutricionNutrientes() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
-            icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
+            icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
             title="Los nutrientes"
             compact
             maxW="1000px"
@@ -121,12 +126,14 @@ export default function MetodoNutricionNutrientes() {
             </Text>
           </Reveal>
 
-          <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-            {NUTRIENTES_PRINCIPALES.map((n, i) => (
+          <RevealStagger inView stagger={0.07} amount={0.12} w="100%"
+                         display="grid" gap={{ base: 4, md: 6 }}
+                         gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}>
+            {NUTRIENTES_PRINCIPALES.map((n) => (
               <NutrienteBox key={n.key} n={n} visto={exploradosSet.has(n.key)}
-                            delay={0.05 * i} onClick={() => abrir(n)} />
+                            onClick={() => abrir(n)} />
             ))}
-          </SimpleGrid>
+          </RevealStagger>
         </Flex>
       </Flex>
 

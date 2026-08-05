@@ -26,6 +26,7 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { EjemplosPulsables } from "../../components/metodo/EjemplosPulsables";
 import { COMIC_COMPROMISO } from "../../components/metodo/comicCompromiso";
 import {
   experienciaById,
@@ -61,7 +62,11 @@ const BLOQUES: {
   key: "proteger" | "coste" | "verdadSana" | "recordatorio";
   pregunta: string;
   apoyo: string;
+  /** Ejemplos pulsables. OJO: el popup tiene alto fijo y solo se pintan los
+   *  `topeEjemplos` PRIMEROS (los que caben bajo el recuadro), así que el orden
+   *  importa: delante los más útiles. */
   ejemplos: string[];
+  topeEjemplos?: number;
   placeholder: string;
 }[] = [
   {
@@ -69,11 +74,12 @@ const BLOQUES: {
     pregunta: "¿Qué intentaba proteger este patrón?",
     apoyo: "Reconoce la intención positiva que había detrás del mecanismo.",
     ejemplos: [
-      "Evitar el rechazo", "Evitar críticas", "Sentirme suficiente", "No decepcionar a nadie",
-      "Sentirme seguro/a", "Evitar el conflicto", "Protegerme del abandono", "Sentir que tengo el control",
+      "Evitar el rechazo", "Protegerme del abandono", "Evitar el conflicto", "Sentirme suficiente",
+      "Evitar críticas", "No decepcionar a nadie", "Sentirme seguro/a", "Sentir que tengo el control",
       "Evitar el dolor", "Ser aceptado/a", "No mostrarme vulnerable", "Mantener la paz",
       "Que no me hicieran daño", "Sentirme querido/a", "Evitar la humillación", "No volver a sufrir lo mismo",
     ],
+    topeEjemplos: 4,
     placeholder: "Lo que en el fondo intentaba cuidar de mí…",
   },
   {
@@ -81,11 +87,12 @@ const BLOQUES: {
     pregunta: "¿Qué coste tiene mantener este patrón?",
     apoyo: "Toma conciencia de las consecuencias que tiene hoy en tu Vida.",
     ejemplos: [
-      "Ansiedad", "Agotamiento", "Relaciones superficiales", "Falta de autenticidad",
-      "Miedo constante", "Soledad", "Perder oportunidades", "No disfrutar el presente",
-      "Reprimir lo que siento", "Tensión física", "Insatisfacción", "Alejar a quien quiero",
+      "Ansiedad", "Agotamiento", "Soledad", "Reprimir lo que siento",
+      "Relaciones superficiales", "Falta de autenticidad", "Miedo constante", "Perder oportunidades",
+      "No disfrutar el presente", "Tensión física", "Insatisfacción", "Alejar a quien quiero",
       "Vivir siempre en guardia", "Perderme a mí mismo/a",
     ],
+    topeEjemplos: 4,
     placeholder: "Lo que me cuesta seguir sosteniéndolo…",
   },
   {
@@ -93,14 +100,16 @@ const BLOQUES: {
     pregunta: "¿Qué verdad más sana quieres practicar?",
     apoyo: "El núcleo: transforma la narrativa antigua en una nueva.",
     ejemplos: [
-      "«Mi valor depende de hacerlo perfecto» → «Mi valor no depende de hacerlo perfecto»",
+      "«No soy suficiente» → «Soy suficiente tal como soy»",
       "«Necesito agradar para ser querido» → «Puedo ser querido siendo yo mismo»",
       "«Si pongo límites me abandonarán» → «Poner límites me acerca a quien me respeta»",
+      "«Mi valor depende de hacerlo perfecto» → «Mi valor no depende de hacerlo perfecto»",
       "«Tengo que poder con todo sola» → «Pedir ayuda también es de valientes»",
       "«Equivocarme me hace menos» → «Equivocarme es parte de aprender»",
       "«Debo controlarlo todo» → «Puedo confiar y soltar»",
-      "«No soy suficiente» → «Soy suficiente tal como soy»",
     ],
+    // Frases largas: solo dos caben en el hueco sin que el popup crezca.
+    topeEjemplos: 2,
     placeholder: "La nueva verdad que quiero empezar a creer…",
   },
   {
@@ -108,11 +117,12 @@ const BLOQUES: {
     pregunta: "¿Qué te gustaría recordar cuando vuelvas a caer en este patrón?",
     apoyo: "Una frase breve de apoyo personal.",
     ejemplos: [
+      "Soy suficiente", "Puedo pedir ayuda", "Está bien decir que no", "Mis emociones son válidas",
       "Está bien equivocarme", "Mi voz también importa", "Puedo poner límites con amor",
-      "No tengo que poder con todo", "Merezco descansar", "Soy suficiente",
-      "Puedo pedir ayuda", "Está bien decir que no", "Mis emociones son válidas",
+      "No tengo que poder con todo", "Merezco descansar",
       "No necesito agradar a todos", "Puedo confiar en mí", "Me trato con amabilidad",
     ],
+    topeEjemplos: 4,
     placeholder: "Una frase que quiero recordar…",
   },
 ];
@@ -249,7 +259,7 @@ export default function MetodoPsicologiaMapa() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 19, total: 22 }}
+                step={{ current: 19, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Atrévete", onClick: () => ir("miedos-preguntas") }}
@@ -489,6 +499,9 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
          onClick={onClose} fontFamily="'EB Garamond', serif">
       <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}
            position="relative" w="100%" maxW={{ base: "440px", md: "500px" }}
+           // MISMA medida que el popup de «Enfréntate»: alto FIJO, no cambia con
+           // la pregunta (el cuerpo hace scroll interno si hiciera falta).
+           h={{ base: "calc(100vh - 48px)", md: "600px" }}
            maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 120px)" }}
            borderRadius="2xl" overflow="hidden" display="flex" flexDirection="column"
            boxShadow={`0 0 40px ${TINTA}66, 0 24px 70px rgba(0,0,0,0.5)`}>
@@ -533,33 +546,6 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
                     style={{ textShadow: INK_SHADOW }}>
                 {b.apoyo}
               </Text>
-
-              {/* Ejemplos: boxes blancos, grandes y PULSABLES. Al pulsar se añaden
-                  al texto (sin borrar lo ya escrito). El usuario puede pulsar,
-                  borrar y escribir con total libertad. */}
-              {b.ejemplos.length > 0 && (
-                <>
-                  <Text color={`${TINTA}`} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700"
-                        letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} mt={3.5} mb={2}
-                        style={{ textShadow: INK_SHADOW }}>
-                    Toca un ejemplo para añadirlo
-                  </Text>
-                  <Flex gap={2.5} wrap="wrap">
-                    {b.ejemplos.map((ej, i) => (
-                      <Box as="button" key={i} onClick={() => añadirEjemplo(ej)} textAlign="left"
-                           px={{ base: 3, md: 3.5 }} py={{ base: 2, md: 2.5 }} borderRadius="lg"
-                           bg="rgba(255,251,243,0.72)" border={`1px solid ${TINTA}33`}
-                           cursor="pointer" transition="all 0.15s"
-                           _hover={{ bg: "rgba(255,251,243,0.96)", borderColor: TINTA,
-                                     transform: "translateY(-1px)", boxShadow: `0 3px 12px ${TINTA}26` }}>
-                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.4">
-                          {ej}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Flex>
-                </>
-              )}
             </Box>
 
             {/* La respuesta */}
@@ -579,6 +565,16 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
               _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
               _hover={{ borderColor: `${TINTA}55` }}
               _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
+            />
+
+            {/* Ejemplos: van DEBAJO del recuadro, en el hueco que sobra, igual que
+                en «Enfréntate». El popup no crece: por eso solo se pintan los que
+                caben (`tope` por bloque, ver BLOQUES). */}
+            <EjemplosPulsables
+              ejemplos={b.ejemplos}
+              respuesta={respuesta}
+              onElegir={añadirEjemplo}
+              tope={b.topeEjemplos ?? 4}
             />
           </Box>
         </Box>

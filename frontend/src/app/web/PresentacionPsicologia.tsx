@@ -88,9 +88,9 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
   const comics = useMemo(() => {
     const galeria = ILUSTRACIONES.filter((i) => i.disciplina === d.ilustracionesLabel);
     const intro = galeria.filter((i) => i.id === "psicologia-intro");
-    // Cuatro, no todas: el bloque tiene que abrir el apetito, no vaciar la
-    // despensa. El origen del sufrimiento + los tres que explican el método.
-    return [...intro, ...PSICOLOGIA_COMICS_RECORRIDO].slice(0, 4);
+    // Dos, no todas: el bloque tiene que abrir el apetito, no vaciar la
+    // despensa. El origen del sufrimiento y el primero que explica el método.
+    return [...intro, ...PSICOLOGIA_COMICS_RECORRIDO].slice(0, 2);
   }, [d.ilustracionesLabel]);
 
   // Los cuatro cursos que se enseñan, ELEGIDOS por título (no los más recientes):
@@ -172,6 +172,28 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
           templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
           gap={{ base: 8, md: 8 }}
           alignItems="stretch"
+          // `1fr` es en realidad `minmax(auto, 1fr)`: un item de rejilla NO se
+          // encoge por debajo del mínimo de su contenido. El <video> de la
+          // muestra mide 1080×1080 de verdad, así que reclamaba 784px y dejaba
+          // la columna del box en 364; con esa anchura el texto del box pedía
+          // 1147px de alto, se salía de la rejilla y la sección de abajo se
+          // pintaba encima. Con `minWidth: 0` las dos columnas son de verdad
+          // 1fr, iguales, y de ahí salen las cajas cuadradas.
+          //
+          // Quién manda el alto: el CUADRADO, no el contenido. El box no cambia
+          // de tamaño; lo que se estira es la letra, hasta llenarlo. El vídeo
+          // sigue al box (`h="100%"` y recorta con `object-fit: cover`).
+          sx={{
+            "& > *": { minWidth: 0 },
+            // El box va CUADRADO y no cambia de tamaño: su alto sale de la
+            // anchura de la columna, no del contenido. Es lo que le da al texto
+            // un hueco fijo que llenar (ver el autoajuste de
+            // DisciplinaVideoBox) y lo que mantiene las dos cajas iguales.
+            // Hace falta ponerlo AQUÍ y no dentro del vídeo: el suyo lo anula
+            // su propio `h="100%"`.
+            // Solo de `lg` para arriba; en móvil se apilan y crecen a lo alto.
+            "@media (min-width: 62em)": { "& > *": { aspectRatio: "1 / 1" } },
+          }}
         >
           <Reveal inView direction="right" distance={26} duration={0.7} h="100%">
             <DisciplinaVideoBox
@@ -353,58 +375,60 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
               textAlign="center"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Los cursos se están preparando. Entra a verlos con el botón de abajo.
+              Los cursos se están preparando. Entra a verlos con el enlace de abajo.
             </Text>
           )}
 
-          {/* «Mucho más en el interior…» + flecha a la página de cursos */}
+          {/* «Ver todos los cursos →», como ENLACE y no como botón: era una
+              píldora grande con la foto de fondo y su halo, y competía con las
+              tarjetas de los cursos, que es lo que hay que mirar aquí. Ahora es
+              texto con una flecha, y el subrayado y la flecha se despiertan al
+              pasar por encima. */}
             <Reveal inView direction="up" distance={16} duration={0.65}>
-              {/* El botón lleva la FOTO de Psicología de fondo, como las cajas de
-                  la página, en vez de un relleno plano del color. */}
               <Flex
                 as="button"
                 onClick={() => navigate(`/aprendizaje/cursos/${encodeURIComponent(neuropsicologiaNom)}`)}
-                position="relative"
-                overflow="hidden"
                 align="center"
                 justify="center"
-                gap={{ base: 3, md: 4 }}
-                px={{ base: 7, md: 11 }}
-                py={{ base: 3.5, md: 4 }}
-                borderRadius="full"
-                color={d.txt}
+                gap={2.5}
+                bg="transparent"
+                border="none"
+                px={0}
+                py={1}
+                color="rgba(255,255,255,0.9)"
                 cursor="pointer"
-                boxShadow={`0 0 20px ${d.txt}55, 0 0 46px ${d.txt}2e`}
-                transition="all 0.25s ease"
-                _hover={{
-                  transform: "translateY(-2px)",
-                  boxShadow: `0 0 30px ${d.txt}88, 0 0 64px ${d.txt}44`,
+                sx={{
+                  textDecoration: "underline",
+                  textDecorationColor: "rgba(255,255,255,0.35)",
+                  textUnderlineOffset: "6px",
+                  textDecorationThickness: "1px",
+                  transition: "color 0.25s ease, text-decoration-color 0.25s ease",
+                  _hover: {
+                    color: "white",
+                    textDecorationColor: "white",
+                    "& svg": { transform: "translateX(4px)" },
+                  },
                 }}
-                _active={{ transform: "translateY(0)" }}
               >
-                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="full" />
                 <Text
-                  position="relative"
-                  zIndex={1}
-                  fontSize={{ base: "md", md: "xl" }}
+                  fontSize={{ base: "md", md: "lg" }}
                   fontStyle="italic"
                   letterSpacing="0.04em"
-                  textShadow={sombra}
+                  textShadow={BLANCO_GLOW_SUAVE}
                 >
-                  Mucho más en el interior…
+                  Ver todos los cursos
                 </Text>
                 <Box
                   as="svg"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 -960 960 960"
-                  w={{ base: "20px", md: "24px" }}
-                  h={{ base: "20px", md: "24px" }}
+                  w={{ base: "18px", md: "20px" }}
+                  h={{ base: "18px", md: "20px" }}
                   fill="currentColor"
                   flexShrink={0}
-                  position="relative"
-                  zIndex={1}
+                  sx={{ transition: "transform 0.25s ease" }}
                 >
-                  <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                  <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
                 </Box>
               </Flex>
             </Reveal>
