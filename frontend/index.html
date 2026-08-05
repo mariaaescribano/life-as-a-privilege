@@ -38,30 +38,6 @@
     <meta name="twitter:image" content="https://lifeasaprivilege.onrender.com/img/og/portada.png" />
     <meta name="theme-color" content="#008080" />
 
-    <!-- El navegador NO oscurece la página por su cuenta. Sin esto, con el
-         móvil en modo oscuro el auto-dark de Chrome/Edge/Samsung invertía
-         fondos pero no todos los textos y psicología (cajas melocotón con
-         letra marrón) se quedaba ilegible. El modo oscuro de la app es el de
-         src/modoOscuro.css, y lo enciende la usuaria desde el header. -->
-    <meta name="color-scheme" content="only light" />
-    <script>
-      // Deja puesto `data-modo` ANTES del primer pintado: si no, quien tenga
-      // el modo oscuro activado vería un fogonazo claro en cada carga.
-      // Misma clave y misma lógica que components/global/ModoOscuro.tsx: si se
-      // cambia una, hay que cambiar la otra.
-      (function () {
-        try {
-          var v = localStorage.getItem("modoLuz");
-          var oscuro =
-            v === "oscuro" ||
-            (v !== "claro" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-          document.documentElement.setAttribute("data-modo", oscuro ? "oscuro" : "claro");
-        } catch (e) {
-          /* sin localStorage: se queda en claro y el provider lo resuelve luego */
-        }
-      })();
-    </script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
