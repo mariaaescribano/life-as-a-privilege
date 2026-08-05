@@ -105,6 +105,13 @@ export function ComicPorQueExiste() {
   const vineta = COMIC_POR_QUE_EXISTE[index];
   const esPrimera = index === 0;
   const esUltima = index === total - 1;
+  // Número del rótulo = el PASO DEL MAPA, no la posición en el cómic: «El
+  // comienzo» es el 0 (todavía no has empezado) y las ocho disciplinas van 1-8,
+  // que es justo su índice porque el guion está en el orden del recorrido. Las
+  // dos viñetas de cierre (el descubrimiento y Life as a Privilege) no son pasos
+  // del recorrido, así que van sin número: numerarlas como 9 y 10 haría pensar
+  // que el Mapa tiene diez disciplinas.
+  const numerada = index === 0 || !!vineta.disciplina;
   // La ilustración de esta viñeta o no existe todavía (sin `src`) o falló.
   const sinFoto = !vineta.src || falladas[index];
   const fotoLista = !!vineta.src && cargadas[index];
@@ -304,7 +311,7 @@ export function ComicPorQueExiste() {
               textTransform="uppercase"
               textShadow="0 1px 4px rgba(0,0,0,0.9), 0 0 10px rgba(0,0,0,0.7)"
             >
-              {index + 1} · {vineta.titulo}
+              {numerada ? `${index} · ${vineta.titulo}` : vineta.titulo}
             </Text>
 
             {vineta.lineas.map((linea) => (
@@ -344,7 +351,7 @@ export function ComicPorQueExiste() {
                 <Box
                   key={v.titulo}
                   as="button"
-                  aria-label={`Ir a la viñeta ${i + 1}: ${v.titulo}`}
+                  aria-label={`Ir a la viñeta: ${v.titulo}`}
                   aria-current={i === index ? "true" : undefined}
                   onClick={() => setIndex(i)}
                   w={i === index ? "9px" : "6px"}
