@@ -11,7 +11,7 @@ import type { Vineta } from "./ComicViewer";
 // Imágenes: /viñetas/psicologia/ace/ace1.png … ace4.png (una por viñeta).
 export const COMIC_ACE: Vineta[] = [
   {
-    src: "/viñetas/psicologia/ace/ace1.png",
+    src: "/viñetas/psicologia/ace/ace1.webp",
     titulo: "",
     paragraphs: [
       "Los ACE (Experiencias Adversas en la Infancia) son eventos o circunstancias potencialmente traumáticas que ocurren antes de los 18 años.",
@@ -20,7 +20,7 @@ export const COMIC_ACE: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/ace/ace2.png",
+    src: "/viñetas/psicologia/ace/ace2.webp",
     titulo: "",
     paragraphs: [
       "Cuando un niño vive estrés intenso, frecuente o prolongado sin el apoyo de un adulto que le proporcione seguridad y regulación emocional, la respuesta de estrés permanece activada. Esto puede dar lugar a lo que se conoce como estrés tóxico.",
@@ -28,7 +28,7 @@ export const COMIC_ACE: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/ace/ace3.png",
+    src: "/viñetas/psicologia/ace/ace3.webp",
     titulo: "",
     paragraphs: [
       "A mayor número de ACE, mayor es la probabilidad de presentar problemas de salud física y mental durante la adolescencia y la adultez.",
@@ -37,7 +37,7 @@ export const COMIC_ACE: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/ace/ace4.png",
+    src: "/viñetas/psicologia/ace/ace4.webp",
     titulo: "",
     paragraphs: [
       "Los efectos de los ACE pueden reducirse cuando existen relaciones seguras, apoyo emocional, intervención temprana y comunidades protectoras.",

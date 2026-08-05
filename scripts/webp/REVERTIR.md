@@ -39,6 +39,19 @@ git checkout <REF> -- frontend/src
 node scripts/webp/revertir.mjs --lote=2
 ```
 
+El **lote 3** son las carpetas de las ilustraciones nuevas:
+
+```bash
+git checkout <REF> -- "frontend/public/recorrido/cabala/sefirot" \
+                      "frontend/public/recorrido/cabala/senderos" \
+                      "frontend/public/viñetas/comicInicioSegunCiencia" \
+                      "frontend/public/viñetas/hinduismo/doshas" \
+                      "frontend/public/viñetas/nutricion" \
+                      "frontend/public/viñetas/psicologia"
+git checkout <REF> -- frontend/src
+node scripts/webp/revertir.mjs --lote=3
+```
+
 ## Revertir una sola imagen
 
 ```bash
@@ -77,10 +90,15 @@ nombre del archivo; solo aparece en uno o dos sitios.
 |---|---|---|---|---|
 | 1 | las 9 carpetas más pesadas del recorrido | 552 | 356,3 MB | 96,4 MB |
 | 2 | `img/fondos` (fondos de disciplina) | 15 | 5,5 MB | 1,4 MB |
+| 3 | ilustraciones nuevas (Cábala + viñetas repintadas) | 67 | 179,6 MB | 37,0 MB |
 
-Quedan **698 PNG, unos 275 MB**: el resto de `viñetas/` (astrología, tcm,
-hinduismo, nutrición…), `recorrido/cabala`, `recorrido/tcm`, `capturasRecorrido`,
-`cursos`, `libros`, `miniaturas` y los iconos de `img/`.
+El **lote 3 va a calidad 92 y sin redimensionar**, al contrario que los otros:
+son dibujos recién hechos y se querían con la mínima pérdida posible. Aun así
+bajan un 80%. Pesan ~3× lo que una imagen del lote 1, que es el precio.
+
+Quedan **631 PNG, unos 95 MB**: el resto de `viñetas/` (astrología, tcm…),
+el resto de `recorrido/cabala`, `recorrido/tcm`, `capturasRecorrido`, `cursos`,
+`libros`, `miniaturas` y los iconos de `img/`.
 
 Para el siguiente lote basta con añadir un `3: { ladoMax, carpetas }` a la
 constante `LOTES` de `convertir.mjs` y repetir los mismos pasos.

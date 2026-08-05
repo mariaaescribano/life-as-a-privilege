@@ -11,7 +11,7 @@ import type { Vineta } from "./ComicViewer";
 // Imágenes: /viñetas/psicologia/lineatiempo/lineatiempo1.png … lineatiempo3.png.
 export const COMIC_LINEA_TIEMPO: Vineta[] = [
   {
-    src: "/viñetas/psicologia/lineatiempo/lineatiempo1.png",
+    src: "/viñetas/psicologia/lineatiempo/lineatiempo1.webp",
     paragraphs: [
       "La realidad que vivimos es fruto de nuestro autoconcepto.",
       "Nuestro autoconcepto es fruto de cómo somos capaces de narrar nuestra propia biografía.",
@@ -20,7 +20,7 @@ export const COMIC_LINEA_TIEMPO: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/lineatiempo/lineatiempo2.png",
+    src: "/viñetas/psicologia/lineatiempo/lineatiempo2.webp",
     paragraphs: [
       "Para cambiar nuestro presente, primero debemos entender nuestro pasado.",
       "Hay que reunir las fragmentaciones de nuestros recuerdos para darles significado.",
@@ -28,7 +28,7 @@ export const COMIC_LINEA_TIEMPO: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/lineatiempo/lineatiempo3.png",
+    src: "/viñetas/psicologia/lineatiempo/lineatiempo3.webp",
     paragraphs: [
       "Si estás aquí es porque estás listo para desarrollar las herramientas que te permitan navegar entre el caos y el dolor sin perderte.",
       "Estás listo para empezar a reunir esas fragmentaciones y comprender la historia que te ha traído hasta aquí.",

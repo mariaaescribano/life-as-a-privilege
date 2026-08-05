@@ -16,7 +16,7 @@ export const NUTRICION_INTEGRAL: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/integral/integral2.png",
+    src: "/viñetas/nutricion/integral/integral2.webp",
     titulo: "Qué se pierde al refinar",
     paragraphs: [
       "Para fabricar harina blanca, la industria separa el salvado y el germen. Solo conserva el endospermo, la parte más rica en almidón.",
@@ -24,7 +24,7 @@ export const NUTRICION_INTEGRAL: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/integral/integral3.png",
+    src: "/viñetas/nutricion/integral/integral3.webp",
     titulo: "La harina blanca",
     paragraphs: [
       "El endospermo se muele hasta obtener un polvo muy fino: la harina blanca. Es más fácil de conservar y trabajar, pero nutricionalmente es un alimento mucho más simple.",
@@ -32,7 +32,7 @@ export const NUTRICION_INTEGRAL: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/integral/integral4.png",
+    src: "/viñetas/nutricion/integral/integral4.webp",
     titulo: "Lo que separamos",
     paragraphs: [
       "La naturaleza unió estas tres partes por una razón.",

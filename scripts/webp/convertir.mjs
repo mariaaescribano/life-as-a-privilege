@@ -33,8 +33,8 @@ const sharp = (await import(
 )).default;
 
 // Calidad 80: en las pruebas no se distingue del PNG original a tamaño de
-// pantalla. El lado máximo va por lote, porque no todas las imágenes se ven
-// igual de grandes (ver LOTES).
+// pantalla. Cada lote puede subirla con `calidad` (ver LOTES). El lado máximo
+// también va por lote, porque no todas las imágenes se ven igual de grandes.
 const CALIDAD = 80;
 
 // ── LOTES ────────────────────────────────────────────────────────────────────
@@ -62,6 +62,35 @@ const LOTES = {
   2: {
     ladoMax: 1280,
     carpetas: ["img/fondos"],                //  15 archivos · 5,5 MB
+  },
+  // Ilustraciones nuevas (Cábala + viñetas repintadas). Aquí NO se recorta
+  // calidad: son dibujos recién hechos y se quieren ver como el original, así
+  // que van a calidad 92 y sin redimensionar (todas miden ≤1254 px, y ladoMax
+  // 1400 con withoutEnlargement deja el tamaño intacto). Pesan ~3× lo que las
+  // del lote 1, pero siguen quitando el 80-85% del PNG.
+  3: {
+    ladoMax: 1400,
+    calidad: 92,
+    // Excepción a la regla "nunca a peor": los senderos se piden con una ruta
+    // dinámica (`/senderos/${letra}.png`), así que o va la carpeta ENTERA a
+    // WebP o se rompen los 17 nuevos. Los 5 viejos que no adelgazan (ya venían
+    // cuantizados) se convierten igual: son +12 kB cada uno.
+    forzar: ["recorrido/cabala/senderos"],
+    carpetas: [
+      "recorrido/cabala/sefirot",            //  11 archivos
+      "recorrido/cabala/senderos",           //  22 archivos
+      "viñetas/comicInicioSegunCiencia",     //   8 archivos
+      "viñetas/hinduismo/doshas",            //   4 archivos
+      "viñetas/nutricion/agua",              //   4 archivos
+      "viñetas/nutricion/fibra",             //   4 archivos
+      "viñetas/nutricion/fitoquimicos",      //   4 archivos
+      "viñetas/nutricion/grasas",            //   4 archivos
+      "viñetas/nutricion/integral",          //   4 archivos
+      "viñetas/nutricion/minerales",         //   4 archivos
+      "viñetas/psicologia/ace",              //   4 archivos
+      "viñetas/psicologia/lineatiempo",      //   3 archivos
+      "viñetas/psicologia/sufrimiento",      //   8 archivos
+    ],
   },
 };
 
@@ -97,6 +126,10 @@ if (!config) {
   process.exit(1);
 }
 const { ladoMax: LADO_MAX, carpetas } = config;
+const CALIDAD_LOTE = config.calidad ?? CALIDAD;
+// alphaQuality 100 = la transparencia (sefirot) no se toca; effort 6 = el
+// compresor se esfuerza al máximo, tarda más pero pesa menos a igual calidad.
+const OPCIONES_WEBP = { quality: CALIDAD_LOTE, effort: 6, alphaQuality: 100, smartSubsample: true };
 
 let archivos = [];
 for (const c of carpetas) archivos.push(...(await pngsDe(c)));
@@ -119,7 +152,7 @@ if (prueba) {
     const meta = await sharp(f).metadata();
     const buf = await sharp(f)
       .resize({ width: LADO_MAX, height: LADO_MAX, fit: "inside", withoutEnlargement: true })
-      .webp({ quality: CALIDAD })
+      .webp(OPCIONES_WEBP)
       .toBuffer();
     const destino = path.join(dirMuestra, path.basename(f, ".png") + ".webp");
     await fs.writeFile(destino, buf);
@@ -133,7 +166,7 @@ if (prueba) {
 }
 
 // ── Conversión de verdad ─────────────────────────────────────────────────────
-console.log(`Lote ${lote}: ${archivos.length} PNG en ${carpetas.length} carpetas (lado máx ${LADO_MAX} px)\n`);
+console.log(`Lote ${lote}: ${archivos.length} PNG en ${carpetas.length} carpetas (lado máx ${LADO_MAX} px, calidad ${CALIDAD_LOTE})\n`);
 
 const filas = [];
 let antes = 0, despues = 0, saltados = 0, fallos = 0;
@@ -148,11 +181,14 @@ for (const abs of archivos) {
     const meta = await sharp(origen).metadata();
     const buf = await sharp(origen)
       .resize({ width: LADO_MAX, height: LADO_MAX, fit: "inside", withoutEnlargement: true })
-      .webp({ quality: CALIDAD })
+      .webp(OPCIONES_WEBP)
       .toBuffer();
 
     // Si no mejora, el PNG se queda: no tiene sentido tocar código para nada.
-    if (buf.length >= size) {
+    // Salvo en las carpetas de `forzar`, que van enteras o no van (rutas
+    // dinámicas: media carpeta en cada formato = imágenes rotas).
+    const forzado = (config.forzar ?? []).some((c) => rel.startsWith("/" + c + "/"));
+    if (buf.length >= size && !forzado) {
       saltados++;
       console.log(`  = ${rel}  (WebP no mejora: ${kb(size)} → ${kb(buf.length)} kB)`);
       continue;

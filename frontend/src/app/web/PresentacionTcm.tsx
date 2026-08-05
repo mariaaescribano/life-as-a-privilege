@@ -3,6 +3,7 @@ import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import CreadoraCard from "../../components/welcome/CreadoraCard";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
@@ -436,6 +437,15 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
             </Grid>
           </Flex>
         )}
+
+        {/* ══ QUIÉN LO HA HECHO ══
+            Antes de pedir la cuenta: quién está detrás. La MISMA tarjeta de
+            /welcome y /elMetodo (components/welcome/CreadoraCard), con
+            `sinMargenes` porque esta página ya pone los suyos. */}
+        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
+          <SeparadorSeccion maxW="1100px">Quién está detrás</SeparadorSeccion>
+          <CreadoraCard sinMargenes />
+        </Flex>
 
         {/* ══ 6. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>

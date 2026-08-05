@@ -3,6 +3,7 @@ import { Box, Flex, Grid, SimpleGrid, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import CreadoraCard from "../../components/welcome/CreadoraCard";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
@@ -165,6 +166,36 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
           />
         </Reveal>
 
+        {/* La frase del cartel, justo debajo del header — la misma que va
+            impresa, para que quien escanea reconozca al instante que ha llegado
+            bien. Faltaba SOLO en esta página de las ocho. */}
+        <RevealStagger
+          stagger={0.12}
+          delayChildren={0.2}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          gap={{ base: 4, md: 5 }}
+          w="100%"
+          maxW="900px"
+          textAlign="center"
+          mt={{ base: -6, md: -8 }}
+        >
+          <RevealItem>
+            <Text
+              color="white"
+              fontSize={{ base: "lg", md: "2xl" }}
+              fontStyle="italic"
+              fontWeight="700"
+              lineHeight="1.15"
+              letterSpacing="0.04em"
+              maxW="760px"
+            >
+              {d.gancho}
+            </Text>
+          </RevealItem>
+        </RevealStagger>
+
         {/* ══ 2. BOX DE LA DISCIPLINA (con su precio) + VÍDEO ══ */}
         <Grid
           w="100%"
@@ -312,8 +343,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
                 maxW="680px"
                 textShadow={BLANCO_GLOW_SUAVE}
               >
-                Los cómics que acompañan cada paso del recorrido. Pulsa cualquiera para leerlo
-                entero: son los mismos que se encuentran dentro.
+                Algunos de los cómics que acompañan el recorrido. Pulsa para leer.
               </Text>
             </Reveal>
             <Grid w="100%" templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={{ base: 6, md: 8 }}>
@@ -432,6 +462,15 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
                 </Box>
               </Flex>
             </Reveal>
+        </Flex>
+
+        {/* ══ QUIÉN LO HA HECHO ══
+            Antes de pedir la cuenta: quién está detrás. La MISMA tarjeta de
+            /welcome y /elMetodo (components/welcome/CreadoraCard), con
+            `sinMargenes` porque esta página ya pone los suyos. */}
+        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
+          <SeparadorSeccion maxW="1100px">Quién está detrás</SeparadorSeccion>
+          <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 6. LLAMADA A LA ACCIÓN ══ */}

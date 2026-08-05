@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import CreadoraCard from "../../components/welcome/CreadoraCard";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
@@ -69,7 +70,7 @@ const TEMAS_MUESTRA = ["hormonas", "neurotransmisores", "metabolismo", "inmunita
 /** Lo que hay dentro, en tres ideas. ✍️ Textos editables. */
 const IDEAS: IdeaPresentacion[] = [
   {
-    titulo: "Curso sobre el cuerpo humano",
+    titulo: "Eres tu cuerpo, deja de ser un misterio",
     parrafos: [
       "Entenderás qué ocurre realmente en ti cuando tienes energía, inflamación, fatiga o enfermedad. Eres tu cuerpo, deja de ser un misterio.",
     ],
@@ -374,6 +375,15 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
           <IdeasConMuestra d={d} ideas={IDEAS}>
             <MosaicoMuestra d={d} fotos={temasMuestra} />
           </IdeasConMuestra>
+        </Flex>
+
+        {/* ══ QUIÉN LO HA HECHO ══
+            Antes de pedir la cuenta: quién está detrás. La MISMA tarjeta de
+            /welcome y /elMetodo (components/welcome/CreadoraCard), con
+            `sinMargenes` porque esta página ya pone los suyos. */}
+        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
+          <SeparadorSeccion maxW="1100px">Quién está detrás</SeparadorSeccion>
+          <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 7. LLAMADA A LA ACCIÓN ══ */}

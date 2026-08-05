@@ -107,8 +107,8 @@ const psicoEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]
 // justamente los que explican en qué consiste el método.
 export const PSICOLOGIA_COMICS_RECORRIDO: IlustracionEntry[] = [
   psicoEntry("psico-creencias", "Cómo nacen las creencias", "/viñetas/psicologia/creencias/creencias1.png", COMIC_CREENCIAS),
-  psicoEntry("psico-ace", "Los ACE", "/viñetas/psicologia/ace/ace1.png", COMIC_ACE),
-  psicoEntry("psico-linea", "La Línea de Vida", "/viñetas/psicologia/lineatiempo/lineatiempo1.png", COMIC_LINEA_TIEMPO),
+  psicoEntry("psico-ace", "Los ACE", "/viñetas/psicologia/ace/ace1.webp", COMIC_ACE),
+  psicoEntry("psico-linea", "La Línea de Vida", "/viñetas/psicologia/lineatiempo/lineatiempo1.webp", COMIC_LINEA_TIEMPO),
   psicoEntry("psico-sintesis", "El problema nunca es el problema", "/viñetas/psicologia/sintesis/sintesis1.png", COMIC_SINTESIS),
 ];
 
@@ -266,7 +266,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     id: "psicologia-intro",
     titulo: "El origen del sufrimiento",
     disciplina: "Psicología",
-    cover: "/viñetas/psicologia/sufrimiento/sufrimiento1.png",
+    cover: "/viñetas/psicologia/sufrimiento/sufrimiento1.webp",
     vinetas: INTRO_PSICOLOGIA,
     themeColor: neuropsicologiaTxt,
     disciplinaBgImage: "/img/fondos/psciologia.webp",
@@ -314,8 +314,8 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
   nutriEntry("nutricion-carbohidratos", "Carbohidratos", "/viñetas/nutricion/carbohidratos/carbohidratos1.png", COMICS_NUTRIENTES.carbohidratos),
   nutriEntry("nutricion-vitaminas", "Vitaminas", "/viñetas/nutricion/vitaminas/vitaminas1.png", COMICS_NUTRIENTES.vitaminas),
-  nutriEntry("nutricion-minerales", "Minerales", "/viñetas/nutricion/minerales/minerales1.png", COMICS_NUTRIENTES.minerales),
-  nutriEntry("nutricion-agua", "Agua", "/viñetas/nutricion/agua/agua1.png", COMICS_NUTRIENTES.agua),
+  nutriEntry("nutricion-minerales", "Minerales", "/viñetas/nutricion/minerales/minerales1.webp", COMICS_NUTRIENTES.minerales),
+  nutriEntry("nutricion-agua", "Agua", "/viñetas/nutricion/agua/agua1.webp", COMICS_NUTRIENTES.agua),
   nutriEntry("nutricion-microbiota", "La microbiota", "/viñetas/nutricion/microbiota/microbiota1.png", NUTRICION_MICROBIOTA),
   nutriEntry("nutricion-hambre", "El hambre: una mirada holística", "/recorrido/nutricion/hambre/hambre1.png", sinNegrita(HAMBRE_HOLISTICA)),
   nutriEntry("nutricion-integral", "Lo integral", "/viñetas/nutricion/integral/integral1.png", NUTRICION_INTEGRAL),
@@ -325,7 +325,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     id: "cabala-sefirot",
     titulo: "Las diez dimensiones del alma",
     disciplina: "Cábala",
-    cover: "/recorrido/cabala/sefirot/keter.png",
+    cover: "/recorrido/cabala/sefirot/keter.webp",
     vinetas: CABALA_ILUSTRACIONES_VINETAS,
     themeColor: cabalaTxt,
     disciplinaBgImage: "/img/fondos/cabala.webp",
@@ -335,7 +335,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     id: "cabala-senderos",
     titulo: "Los 22 senderos",
     disciplina: "Cábala",
-    cover: "/recorrido/cabala/senderos/aleph.png",
+    cover: "/recorrido/cabala/senderos/aleph.webp",
     vinetas: CABALA_SENDERO_VINETAS,
     themeColor: cabalaTxt,
     disciplinaBgImage: "/img/fondos/cabala.webp",

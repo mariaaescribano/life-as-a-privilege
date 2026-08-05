@@ -149,14 +149,14 @@ export const VINETAS_DOSHAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/hinduismo/doshas/pitta.png",
+    src: "/viñetas/hinduismo/doshas/pitta.webp",
     paragraphs: [
       "Pitta está formado por Fuego y Agua.",
       "Es la energía de la transformación, la intensidad y la acción.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/doshas/kapha.png",
+    src: "/viñetas/hinduismo/doshas/kapha.webp",
     paragraphs: [
       "Kapha está formado por Agua y Tierra.",
       "Es la energía de la estabilidad, la nutrición y la constancia.",

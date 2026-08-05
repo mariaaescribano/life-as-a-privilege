@@ -1,7 +1,8 @@
 import React, { useMemo, useRef, useState } from "react";
-import { Box, Flex, Grid, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import CreadoraCard from "../../components/welcome/CreadoraCard";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
@@ -16,12 +17,10 @@ import {
   CABALA_ILUSTRACIONES_VINETA_KEYS,
 } from "../../components/metodo/cabalaIlustraciones";
 import type { CabalaPageKey } from "../../components/metodo/cabalaSefirot";
-import { NUM_PREGUNTAS } from "../../components/metodo/cabalaTest";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import {
-  BLANCO_GLOW_SUAVE,
   CajaLisa,
   CierreCrearCuenta,
   IdeasConMuestra,
@@ -38,10 +37,13 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 // Orden:
 //   1. Header de la disciplina, sin botones.
 //   2. El box de la disciplina con su precio + el vídeo al lado.
-//   3. EL ÁRBOL DE LA VIDA: el de verdad, con su animación. Se pulsa una sefirá
-//      y se abre su ilustración. Es la pieza que vende esta disciplina sola.
+//   3. EL ÁRBOL DE LA VIDA: el de verdad, con su animación, que NO arranca hasta
+//      que el Árbol asoma en pantalla (`animarAlEntrar`) — queda muy por debajo
+//      del pliegue y, si no, nadie la ve. Se pulsa una sefirá y se abre su
+//      ilustración. Es la pieza que vende esta disciplina sola.
 //   4. LO QUE HAY DENTRO: tres ideas y, al lado, el Árbol en pequeño (este NO se
-//      pulsa: es una muestra).
+//      pulsa: es una muestra). En móvil no sale: a una columna caería justo
+//      debajo del Árbol grande, repetido.
 //   5. Las ilustraciones de la disciplina.
 //   6. Llamada a la acción.
 //
@@ -57,7 +59,7 @@ const IDEAS: IdeaPresentacion[] = [
   {
     titulo: "Filosofía de la Cábala",
     parrafos: [
-      "Descubrirás una forma de comprender al ser humano, sus conflictos internos y su potencial de desarrollo.",
+      "Descubrirás una forma nueva de comprender al ser humano, sus conflictos internos y su potencial de desarrollo.",
     ],
   },
   {
@@ -76,6 +78,10 @@ const IDEAS: IdeaPresentacion[] = [
 ];
 
 export default function PresentacionCabala({ d }: { d: PresentacionDisciplina }) {
+  // El Árbol de muestra (bloque 4) solo existe donde hay dos columnas: en móvil se
+  // repetiría el mismo dibujo debajo del grande. `ssr: false` para que resuelva
+  // ya en el primer render y no se monte para desmontarse acto seguido.
+  const esMovil = useBreakpointValue({ base: true, lg: false }, { ssr: false });
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   // Índice dentro de CABALA_ILUSTRACIONES_VINETAS de la sefirá abierta.
   const [sefiraIdx, setSefiraIdx] = useState<number | null>(null);
@@ -247,27 +253,12 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
                 maxWidth="520px"
                 showDaat
                 suppressInternalModal
+                animarAlEntrar
                 onSefiraClick={(s) => abrirSefira(s.key as CabalaPageKey)}
                 onDaatClick={() => abrirSefira("daat")}
               />
             </Flex>
           </CajaLisa>
-
-          <Reveal inView direction="up" distance={14} duration={0.65}>
-            <Text
-              color="rgba(255,255,255,0.85)"
-              fontSize={{ base: "sm", md: "md" }}
-              fontStyle="italic"
-              textAlign="center"
-              lineHeight="1.65"
-              maxW="700px"
-              textShadow={BLANCO_GLOW_SUAVE}
-            >
-              Dentro respondes {NUM_PREGUNTAS} preguntas por dimensión y sale tu Mapa Evolutivo:
-              qué energías te sostienen, cuáles te desbordan y por dónde empezar. Con su
-              diagnóstico en PDF.
-            </Text>
-          </Reveal>
         </Flex>
 
         {/* ══ 4. LO QUE HAY DENTRO ══
@@ -276,11 +267,15 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
           <SeparadorSeccion maxW="1180px">Lo que hay dentro</SeparadorSeccion>
           <IdeasConMuestra d={d} ideas={IDEAS}>
-            <CajaLisa d={d} h="100%" sx={{ pointerEvents: "none" }}>
-              <Flex h="100%" align="center" justify="center" px={{ base: 5, md: 8 }} py={{ base: 7, md: 9 }}>
-                <ArbolDeLaVida maxWidth="340px" showDaat suppressInternalModal />
-              </Flex>
-            </CajaLisa>
+            {/* En móvil NO va: el Árbol de arriba ya se ha visto entero y aquí,
+                a una columna, sería el mismo dibujo dos veces seguidas. */}
+            {!esMovil && (
+              <CajaLisa d={d} h="100%" sx={{ pointerEvents: "none" }}>
+                <Flex h="100%" align="center" justify="center" px={{ base: 5, md: 8 }} py={{ base: 7, md: 9 }}>
+                  <ArbolDeLaVida maxWidth="340px" showDaat suppressInternalModal animarAlEntrar />
+                </Flex>
+              </CajaLisa>
+            )}
           </IdeasConMuestra>
         </Flex>
 
@@ -299,6 +294,15 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
             </Grid>
           </Flex>
         )}
+
+        {/* ══ QUIÉN LO HA HECHO ══
+            Antes de pedir la cuenta: quién está detrás. La MISMA tarjeta de
+            /welcome y /elMetodo (components/welcome/CreadoraCard), con
+            `sinMargenes` porque esta página ya pone los suyos. */}
+        <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
+          <SeparadorSeccion maxW="1100px">Quién está detrás</SeparadorSeccion>
+          <CreadoraCard sinMargenes />
+        </Flex>
 
         {/* ══ 6. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>

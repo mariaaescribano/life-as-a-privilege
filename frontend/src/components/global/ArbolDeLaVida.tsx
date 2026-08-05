@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Text } from '@chakra-ui/react'
 import { cabalaBg, cabalaTxt } from '../../GlobalVariables'
 import { CAJA_GLOW } from '../metodo/cabalaGlow'
+import { useEnPantalla } from '../../hooks/useEnPantalla'
 
 export type SefiraKey =
   | 'kether' | 'chokmah' | 'binah'
@@ -47,6 +48,11 @@ interface Props {
   /** En variant 'senderos': `num` de los senderos ya LEÍDOS (ilustración vista).
    *  Su insignia se enciende en dorado. */
   readSenderos?: Set<number>
+  /** La animación NO arranca hasta que el Árbol asoma en pantalla. Para las
+   *  páginas donde queda por debajo del pliegue: si no, el haz baja y las
+   *  sefirot aparecen una a una mientras se mira la cabecera, y quien llega
+   *  scrolleando se lo encuentra ya quieto. */
+  animarAlEntrar?: boolean
 }
 
 /* ─── Sello «leída»: anillo dorado alrededor del nodo + tick arriba-derecha ── */
@@ -284,11 +290,17 @@ function SefiraModal({ sefira, onClose }: { sefira: Sefira; onClose: () => void 
 }
 
 /* ─── Componente principal ─────────────────────────────── */
-export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppressInternalModal = false, variant = 'sefirot', onSenderoClick, selectedSendero = null, showDaat = false, onDaatClick, readKeys, readSenderos }: Props) {
+export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppressInternalModal = false, variant = 'sefirot', onSenderoClick, selectedSendero = null, showDaat = false, onDaatClick, readKeys, readSenderos, animarAlEntrar = false }: Props) {
   const [hovered, setHovered] = useState<SefiraKey | null>(null)
   const [open, setOpen]       = useState<Sefira | null>(null)
   const [hoveredPath, setHoveredPath] = useState<number | null>(null)
   const [daatHover, setDaatHover] = useState(false)
+
+  // Con `animarAlEntrar`, todo el Árbol nace con sus animaciones EN PAUSA (o sea,
+  // invisible: todas arrancan en opacidad 0) y solo echan a andar cuando asoma en
+  // pantalla. Así se ve el trazado completo y las sefirot llegando una tras otra.
+  const { ref: refEntrada, visto } = useEnPantalla()
+  const enEspera = animarAlEntrar && !visto
 
   const esSenderos = variant === 'senderos'
 
@@ -300,7 +312,11 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
 
   return (
     <>
-      <div style={{ width: '100%', maxWidth, margin: '0 auto' }}>
+      <div
+        ref={animarAlEntrar ? refEntrada : undefined}
+        className={enEspera ? 'arbol-en-espera' : undefined}
+        style={{ width: '100%', maxWidth, margin: '0 auto' }}
+      >
         <svg
           viewBox="-10 -48 420 758"
           width="100%"
@@ -309,6 +325,12 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
         >
           <defs>
             <style>{`
+              /* Árbol esperando a asomar en pantalla: TODAS sus animaciones en
+                 pausa en el fotograma cero. Como cada pieza nace en opacidad 0,
+                 el Árbol no se ve hasta que se le quita la clase y todo corre
+                 desde el principio. La regla necesita el !important porque las
+                 animaciones van en el atributo style de cada elemento. */
+              .arbol-en-espera, .arbol-en-espera * { animation-play-state: paused !important; }
               @keyframes pathDraw {
                 from { stroke-dashoffset: 600; opacity: 0; }
                 to   { stroke-dashoffset: 0;   opacity: 1; }

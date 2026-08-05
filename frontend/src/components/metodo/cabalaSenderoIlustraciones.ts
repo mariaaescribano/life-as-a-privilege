@@ -42,7 +42,7 @@ const FOTOS: Record<number, string> = {
 };
 
 const fotoSendero = (num: number): string =>
-  FOTOS[num] ? `/recorrido/cabala/senderos/${FOTOS[num]}.png` : IMG;
+  FOTOS[num] ? `/recorrido/cabala/senderos/${FOTOS[num]}.webp` : IMG;
 
 const placeholder = (): Vineta[] => [
   {

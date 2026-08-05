@@ -117,11 +117,15 @@ export function DisciplinaVideoBox({
         return;
       }
 
-      // Techo alto a propósito: el objetivo es LLENAR el box, así que hay que
+      // Techo alto a propósito: el objetivo es llenar el box, así que hay que
       // dejar crecer a las disciplinas de texto corto. El suelo es el punto por
       // debajo del cual preferimos que quede justo antes que ilegible.
       const max = 60;
       const min = 13;
+      // HOLGURA: el texto no llena el hueco a ras, se le deja un 12 % de aire.
+      // Sin esto la letra crecía hasta tocar los bordes y el box quedaba
+      // apelmazado —correcto de medidas, pero sin respirar—.
+      const hueco = zona.clientHeight * 0.88;
       // Búsqueda binaria del mayor tamaño que cabe: 9 medidas en vez de las
       // ~100 que costaba bajar de medio en medio píxel desde el techo.
       let lo = min;
@@ -130,7 +134,7 @@ export function DisciplinaVideoBox({
       for (let i = 0; i < 9; i++) {
         const m = (lo + hi) / 2;
         zona.style.fontSize = `${m}px`;
-        if (bloque.scrollHeight <= zona.clientHeight + 1) { mejor = m; lo = m; }
+        if (bloque.scrollHeight <= hueco + 1) { mejor = m; lo = m; }
         else { hi = m; }
       }
       zona.style.fontSize = `${mejor}px`;
@@ -291,9 +295,12 @@ export function DisciplinaVideoBox({
         direction="column"
         position="relative"
         zIndex={1}
-        px={{ base: 5, md: 7 }}
-        pt={{ base: 5, md: 6 }}
-        pb={{ base: 5, md: 6 }}
+        // Márgenes generosos: el texto de este box se estira hasta el hueco que
+        // le dejan, así que el aire tiene que venir de aquí. Con menos, la
+        // letra llegaba a los filos.
+        px={{ base: 6, md: 10 }}
+        pt={{ base: 5, md: 7 }}
+        pb={{ base: 5, md: 7 }}
         gap={{ base: 4, md: 5 }}
         flex="1"
         // `minH={0}` NO se puede quitar. Un item flex tiene `min-height: auto`,

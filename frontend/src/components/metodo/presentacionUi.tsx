@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { sombraSoloContraste, sombraTexto } from "../global/disciplinaSombras";
 import { Reveal } from "../global/Reveal";
+import { BookCallModal } from "../global/BookCallModal";
+import { ContactModal } from "../global/ContactModal";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -418,12 +420,60 @@ export function VideoMuestra({
  * camino obligatorio), y esta disciplina es una de las ocho miradas de un camino
  * para entender al ser humano. Termina en el botón de crear la cuenta.
  */
+/** Botón SECUNDARIO del cierre: la llamada y las dudas. Mismo lenguaje que el
+ *  principal —redondo, filo y letra de la disciplina— pero sin relleno ni halo
+ *  y un punto más pequeño. Tiene que verse, no ganar: quien ya lo tiene claro
+ *  va a «Crear mi cuenta», y quien no, tiene aquí las dos salidas. */
+function BotonSecundario({
+  d,
+  children,
+  onClick,
+}: {
+  d: PresentacionDisciplina;
+  children?: React.ReactNode;
+  onClick?: () => void;
+}) {
+  return (
+    <Box
+      as="button"
+      onClick={onClick}
+      px={{ base: 6, md: 8 }}
+      py={{ base: 2.5, md: 3 }}
+      borderRadius="full"
+      bg="transparent"
+      border={`1.5px solid ${d.txt}88`}
+      color={d.txt}
+      fontSize={{ base: "sm", md: "md" }}
+      fontWeight="600"
+      letterSpacing="0.08em"
+      whiteSpace="nowrap"
+      cursor="pointer"
+      textShadow={sombraSoloContraste(d.nom)}
+      transition="all 0.25s ease"
+      _hover={{
+        bg: `${d.txt}1a`,
+        borderColor: d.txt,
+        transform: "translateY(-2px)",
+      }}
+      _active={{ transform: "translateY(0)" }}
+    >
+      {children}
+    </Box>
+  );
+}
+
 export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
   const navigate = useNavigate();
+  // Los dos modales que ya usa /elMetodo: la llamada de 20 min sin coste
+  // (BookCallModal) y el formulario de consulta (ContactModal). Se montan aquí
+  // dentro para que las nueve presentaciones los tengan sin repetir nada.
+  const [llamadaOpen, setLlamadaOpen] = useState(false);
+  const [dudasOpen, setDudasOpen] = useState(false);
   // Sin luz detras de la letra: solo la sombra de contraste en las disciplinas
   // cuya foto de fondo la necesita (undefined en el resto).
   const sombra = sombraSoloContraste(d.nom);
   return (
+    <>
     <Reveal inView direction="up" distance={24} scaleFrom={0.97} duration={0.75} w="100%">
       <CajaDisciplina d={d} destacada sinBorde>
         <Flex direction="column" align="center" gap={{ base: 5, md: 7 }} textAlign="center">
@@ -470,6 +520,23 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
             Crear mi cuenta
           </BotonDisciplina>
 
+          {/* Las dos salidas para quien todavía no lo tiene decidido. En móvil
+              una debajo de otra (los rótulos son largos y no se parten). */}
+          <Flex
+            direction={{ base: "column", sm: "row" }}
+            align="center"
+            justify="center"
+            gap={{ base: 3, md: 4 }}
+            wrap="wrap"
+          >
+            <BotonSecundario d={d} onClick={() => setLlamadaOpen(true)}>
+              Llamada de 20 min sin coste
+            </BotonSecundario>
+            <BotonSecundario d={d} onClick={() => setDudasOpen(true)}>
+              Tengo dudas
+            </BotonSecundario>
+          </Flex>
+
           <Flex
             as="button"
             onClick={() => navigate("/elMetodo")}
@@ -493,6 +560,23 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
         </Flex>
       </CajaDisciplina>
     </Reveal>
+
+    {/* Misma configuración que en /elMetodo, para que la consulta llegue igual
+        y con el mismo asunto de correo. */}
+    <ContactModal
+      isOpen={dudasOpen}
+      onClose={() => setDudasOpen(false)}
+      title="Tengo dudas"
+      bgColor="#008080"
+      color="#ffffff"
+      emailSubject="Consulta — Life as a Privilege"
+      showCheckboxes={false}
+      showDescription={true}
+      textareaPlaceholder="Escribe aquí tu consulta..."
+    />
+
+    <BookCallModal isOpen={llamadaOpen} onClose={() => setLlamadaOpen(false)} />
+    </>
   );
 }
 

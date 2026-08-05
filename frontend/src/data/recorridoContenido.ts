@@ -47,7 +47,7 @@ export const recorridoContenido: Record<
   astrologia: {
     desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
     videoIntro: {
-      titulo: "Un recorrido guiado para comprender tu carta natal y conocerte con mayor profundidad.",
+      titulo: "Un recorrido guiado para comprender tu carta natal y conocerte.",
       puntos: [
         "Una interpretación personal de tu carta, realizada por mí, no por una IA.",
         "Explicaciones claras, paso a paso, para entender cada parte de tu carta.",
@@ -212,7 +212,7 @@ export const recorridoContenido: Record<
       "Hasta ahora hemos trabajado con conocimiento tradicional. Aquí cambia el registro: ciencia, evidencia, mecanismos celulares. No para anular lo anterior, para sostenerlo. Cuando entiendes qué hace tu hígado, por qué se inflama tu intestino o cómo se regula tu glucosa, las decisiones que tomas sobre tu cuerpo dejan de ser intuición.",
     contenido: [
       {
-        titulo: "Curso sobre el cuerpo humano",
+        titulo: "Eres tu cuerpo, deja de ser un misterio",
         items: [
           "Entenderás qué ocurre realmente en ti cuando tienes energía, inflamación, fatiga o enfermedad. Eres tu cuerpo, deja de ser un misterio.",
         ],

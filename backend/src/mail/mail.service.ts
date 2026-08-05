@@ -641,7 +641,7 @@ export class MailService {
     const html = this.sobreAstro({
       antetitulo: 'Estudio de astrología',
       titulo: 'Gracias: esta es tu carta',
-      preheader: 'Tu cielo dibujado, y por dónde seguir si quieres entenderlo.',
+      preheader: 'Tu carta astral y por dónde seguir si quieres entenderla.',
       cuerpo: `
             ${this.parrafo(
               'Gracias por participar. Así estaba el cielo en el momento y el lugar en que naciste:',
@@ -651,7 +651,7 @@ export class MailService {
             ${/* El puente al Recorrido: va justo encima del precio, que es a
                   donde empuja. */ ''}
             ${this.parrafo(
-              'Si te has sentido identificado con los resultados, quizá haya llegado el momento de profundizar y usar la Astrología como una herramienta de autoconocimiento.',
+              'Si te has sentido identificado mientras contestabas a las preguntas, quizá haya llegado el momento de profundizar y usar la Astrología como una herramienta de autoconocimiento.',
               26,
             )}
             ${/* Lo que hay dentro, en una línea suelta y en menta: es la promesa

@@ -18,17 +18,27 @@ type CreadoraCardProps = {
   actionTo?: string;
   /** Párrafo adicional opcional debajo de la bio. */
   extraParagraph?: string;
+  /** Sin los márgenes propios de la tarjeta. Para cuando va dentro de una
+   *  página que ya pone los suyos (las presentaciones /d/:disciplina): si no,
+   *  el hueco se suma dos veces y la tarjeta queda mucho más estrecha que las
+   *  demás secciones. Welcome y ElMetodo NO lo pasan y siguen igual. */
+  sinMargenes?: boolean;
 };
 
 const CreadoraCard: React.FC<CreadoraCardProps> = ({
   actionLabel = "Conocer a la creadora",
   actionTo = "/quienSoy",
   extraParagraph,
+  sinMargenes = false,
 }) => {
   const navigate = useNavigate();
 
   return (
-    <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 14 }}>
+    <Box
+      w="100%"
+      px={sinMargenes ? 0 : { base: 5, md: 10, lg: 16 }}
+      pt={sinMargenes ? 0 : { base: 10, md: 14 }}
+    >
       {/* El panel entra al asomar: sube, crece un poco y sus dos mitades llegan
           en cascada (texto desde la izquierda, foto desde la derecha).
           `amount={0.02}`: arranca en cuanto asoma el BORDE de la caja. Es

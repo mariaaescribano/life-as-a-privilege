@@ -41,7 +41,7 @@ export const ORIGEN_CIENCIA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicioSegunCiencia/inicio5.png",
+    src: "/viñetas/comicInicioSegunCiencia/inicio5.webp",
     paragraphs: [
       "Los átomos se combinaron formando moléculas.",
       "Algunas llegaron a organizarse en células, y con el paso de millones de años, aquellas primeras células dieron origen a toda la diversidad de seres vivos.",

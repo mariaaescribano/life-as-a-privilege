@@ -16,7 +16,7 @@ import { SIGNO_TRAZOS, SIGNOS_ORDEN } from "../signosIconos";
 import { COLOR_ASPECTO, gradoAVisualRad, type CartaNatal } from "../CartaAstral3D/types";
 
 /** Fuentes con los símbolos de planetas (las mismas que usa el resto de la app). */
-const FUENTE_SIMBOLOS =
+export const FUENTE_SIMBOLOS =
   '"Segoe UI Symbol", "Noto Sans Symbols2", "Apple Symbols", "Segoe UI Historic", serif';
 const FUENTE_SERIF = "'EB Garamond', Garamond, Georgia, serif";
 
