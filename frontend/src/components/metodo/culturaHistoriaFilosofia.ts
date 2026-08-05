@@ -1,4 +1,5 @@
 import type { HitoHistoria, SubHito } from "./culturaHistoriaUniversal";
+import type { Vineta } from "./ComicViewer";
 
 // ─────────────────────────────────────────────────────────────────────────
 // HISTORIA DE LA FILOSOFÍA (Cultura). Tagline: «La búsqueda de la sabiduría —
@@ -7,34 +8,73 @@ import type { HitoHistoria, SubHito } from "./culturaHistoriaUniversal";
 // Mismo modelo que las demás Historias: ETAPAS (con intro) → SUB-HITOS (cada uno
 // con su cómic: pregunta-gancho + cuerpo + dato curioso, foto + texto a la
 // derecha). Las 13 etapas están COMPLETAS (de «Antes de la filosofía» hasta
-// «Pensar el futuro»). Fotos planas en /recorrido/cultura/historiafilosofia/<subKey>.png
+// «Pensar el futuro»). Fotos planas en /recorrido/cultura/historiafilosofia/<subKey>.webp
 // (el nombre del archivo = key del sub-hito). El texto se pinta con `separarFrases`
 // (salto de línea tras cada punto).
+//
+// CÓMO SE CUENTA (igual que en Historia Universal y en las religiones): no se
+// trata de contar qué dijo cada filósofo, sino de que se ENTIENDA qué problema
+// tenía delante y por qué su respuesta cambió algo. Esquema de cada momento:
+//     pregunta gancho  →  cuerpo (el problema y la respuesta)  →  «Dato curioso»
+// y, cuando el tema lo pide (la caverna, el juicio de Sócrates, el manual
+// estoico, la duda de Descartes, el imperativo de Kant, la falsación…), se le
+// añaden páginas «Profundiza» con el parámetro `extras`: viñetas EXTRA del mismo
+// momento (misma foto), no círculos nuevos de la línea del tiempo.
 //
 // Momentos sin fecha (eyebrow "") = pasajes de síntesis/transición (p. ej. «Un
 // puente entre dos mundos», «La búsqueda no termina»): el ComicViewer oculta el
 // antetítulo cuando va vacío.
 // ─────────────────────────────────────────────────────────────────────────
 
-// Todas las fotos (círculo + viñeta) van planas en una sola carpeta, con el
+// Fotos PRESTADAS de la Historia de las religiones: los sabios de la etapa «Los
+// primeros sabios» (Zoroastro, Confucio, Lao Tse, Buda…) son los mismos
+// personajes que ya están ilustrados ahí, así que se reutiliza su ilustración en
+// lugar de duplicar archivos. Clave del sub-hito → archivo de historiareligion.
+const FOTOS_RELIGIONES: Record<string, string> = {
+  zoroastro: "zoroastro",
+  confucio: "confucio",
+  confucianismo: "confucianismo",
+  laotse: "laotse",
+  taoismo: "taoismo",
+  buda: "buda",
+  "budismo-filosofia": "budismo",
+};
+
+// El resto de las fotos (círculo + viñeta) van planas en una sola carpeta, con el
 // nombre del sub-hito (misma convención que Historia Universal / historiageneral).
 const foto = (_era: string, sub: string) =>
-  `/recorrido/cultura/historiafilosofia/${sub}.webp`;
+  FOTOS_RELIGIONES[sub]
+    ? `/recorrido/cultura/historiareligion/${FOTOS_RELIGIONES[sub]}.webp`
+    : `/recorrido/cultura/historiafilosofia/${sub}.webp`;
 
-// Sub-hito con su cómic (una viñeta). `pregunta` opcional (gancho, va primero) y
-// `dato` opcional (curiosidad, va al final). El `cuerpo` son los párrafos.
+/** Página «Profundiza» de un momento: una viñeta más, con la misma foto. */
+interface Profundiza {
+  titulo: string;
+  cuerpo: string[];
+  dato?: string;
+}
+
+// Sub-hito con su cómic: viñeta principal (`pregunta` gancho + `cuerpo` + `dato`
+// curioso) y, opcionalmente, páginas «Profundiza» detrás.
 const hito = (
   era: string, key: string, titulo: string, fecha: string,
-  pregunta: string, cuerpo: string[], dato?: string,
+  pregunta: string, cuerpo: string[], dato?: string, extras?: Profundiza[],
 ): SubHito => {
+  const src = foto(era, key);
   const paragraphs: string[] = [];
   if (pregunta) paragraphs.push(pregunta);
   paragraphs.push(...cuerpo);
   if (dato) paragraphs.push(dato);
-  return {
-    key, titulo, foto: foto(era, key),
-    vinetas: [{ src: foto(era, key), eyebrow: fecha, titulo, paragraphs }],
-  };
+  const vinetas: Vineta[] = [{ src, eyebrow: fecha, titulo, paragraphs }];
+  (extras ?? []).forEach((e) => {
+    vinetas.push({
+      src,
+      eyebrow: "Profundiza",
+      titulo: e.titulo,
+      paragraphs: e.dato ? [...e.cuerpo, e.dato] : e.cuerpo,
+    });
+  });
+  return { key, titulo, foto: src, vinetas };
 };
 
 export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
@@ -94,9 +134,90 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "primeros-sabios",
     titulo: "Los primeros sabios",
     anio: "≈1200-500 a. C.",
-    intro: "Antes de Sócrates, algunos pensadores ya se preguntaban cómo debía vivir el ser humano.",
-    // Momentos: Zoroastro · Confucio · Confucianismo · Lao Tse · Taoísmo · Buda · El budismo como filosofía
-    subhitos: [],
+    intro:
+      "Antes de Sócrates, y muy lejos de Grecia, algunos pensadores ya se preguntaban cómo debía vivir el ser humano. Y hay algo que sigue desconcertando a los historiadores: ocurrió casi al mismo tiempo en lugares que apenas se conocían entre sí. Entre los siglos VIII y V a. C., en Persia, en China, en la India y en Grecia, aparecieron figuras que dejaron de preguntar «qué quieren los dioses» para preguntar «qué debo hacer yo». El filósofo Karl Jaspers llamó a ese periodo la Era Axial, el eje sobre el que gira todo lo que pensamos después. Sus respuestas fueron muy distintas —el bien y el mal como elección, la armonía social, el fluir con la naturaleza, el fin del sufrimiento—, pero todas compartían un giro decisivo: la responsabilidad se traslada al ser humano. Ninguno de ellos escribió un libro con su nombre; todos fueron recordados por sus discípulos.",
+    subhitos: [
+      hito("primeros-sabios", "zoroastro", "Zoroastro", "≈1200-1000 a. C. (fecha discutida)",
+        "¿De dónde viene el mal, si el mundo lo hizo alguien bueno?",
+        [
+          "En la antigua Persia, un sacerdote llamado Zaratustra —Zoroastro para los griegos— planteó una de las preguntas más difíciles que existen, y le dio una respuesta de una limpieza lógica admirable: el mal no viene de lo divino, viene de un principio opuesto, y el universo entero es el escenario de esa lucha.",
+          "Frente a Ahura Mazda, el Señor Sabio, la luz, la verdad y el orden. Frente a él, el espíritu de la destrucción y de la mentira. Y en el medio, cada persona con una capacidad decisiva: ELEGIR.",
+          "Ahí está su aportación filosófica. Antes de él, el ser humano era objeto de las decisiones de los dioses; con él pasa a ser un agente moral con libertad y con responsabilidad. Su fórmula lo resume: buenos pensamientos, buenas palabras, buenas obras. No hay ritual que sustituya a esas tres cosas.",
+          "Y su idea del tiempo también fue nueva. Frente al tiempo cíclico de casi todas las culturas antiguas, propuso una historia con dirección y con final: habrá un juicio, el bien vencerá y el mundo quedará renovado. Es la primera vez que aparece la idea de progreso hacia un desenlace, y de ella beberá toda la tradición occidental posterior, incluida la idea moderna de que la historia va hacia algún sitio.",
+          "Sus consecuencias se pueden rastrear. Cuando el pueblo judío estuvo bajo dominio persa, aparecen o se desarrollan en sus textos el juicio individual, los ángeles, el diablo, la resurrección y el final de los tiempos; de ahí pasan al cristianismo y al islam. Media humanidad piensa hoy con categorías que se formularon por primera vez en aquella meseta iraní.",
+          "Su núcleo filosófico está en unos himnos, las Gathas, que se le atribuyen directamente y que se transmitieron oralmente durante siglos.",
+        ],
+        "Dato curioso: Nietzsche eligió justamente su nombre para el personaje de «Así habló Zaratustra», porque quería que el primero que había dividido el mundo en bien y mal fuera también el que anunciara el fin de esa división."),
+      hito("primeros-sabios", "confucio", "Confucio", "≈551-479 a. C.",
+        "¿Se puede arreglar una sociedad rota sin más leyes ni más castigos?",
+        [
+          "Confucio vivió en una China partida en reinos que se hacían la guerra sin descanso, con nobles corruptos y campesinos arruinados. Su diagnóstico fue insólito para un momento así: el problema no es que falten leyes ni ejércitos, es que falta carácter.",
+          "Su tesis central es que el orden social no se impone desde arriba, se contagia. Un gobernante que castiga mucho consigue miedo y trampas; un gobernante que se comporta bien consigue que los demás quieran parecérsele. Decía que gobernar con virtud es como la estrella polar: se queda quieta y todas las demás giran a su alrededor.",
+          "Sus conceptos clave son cuatro y merece la pena entenderlos. El ren, humanidad o benevolencia: la capacidad de ponerse en el lugar del otro. El li, los ritos y los modales, que a él no le parecían tonterías sino el entrenamiento diario del respeto —quien saluda bien mil veces acaba respetando de verdad—. El xiao, el respeto a los padres y a los mayores, que era el modelo de todas las demás relaciones. Y el junzi, la persona ejemplar, que no lo es por nacimiento sino por conducta.",
+          "Ese último punto es el más revolucionario: convirtió la nobleza en algo que se merece y no que se hereda. En una sociedad aristocrática, decir que un campesino educado y decente es más noble que un príncipe indigno era subversivo.",
+          "Y formuló, cinco siglos antes del Evangelio, su propia versión de la regla de oro, en negativo: no hagas a los demás lo que no querrías que te hicieran a ti.",
+          "Nunca pretendió fundar una religión. Preguntado por los espíritus y por lo que hay después de la muerte, respondió que todavía no sabía bastante de esta vida como para opinar de la otra. Toda su atención estaba en el aquí: la familia, el trabajo, el gobierno, el estudio.",
+          "Murió convencido de haber fracasado: se pasó la vida buscando un gobernante que aplicara sus ideas y ninguno lo hizo de forma duradera. Sus enseñanzas las recopilaron sus discípulos en las Analectas, un libro de conversaciones brevísimas. Con el tiempo se convirtieron en la base de la educación y la administración de China, Corea, Japón y Vietnam durante más de dos mil años.",
+        ],
+        "Dato curioso: durante trece siglos, para ser funcionario del Imperio chino había que aprobar unos exámenes durísimos sobre los clásicos confucianos, abiertos en teoría a cualquier varón. Fue el primer sistema del mundo que elegía a sus gobernantes por examen y no por familia, y duró hasta 1905."),
+      hito("primeros-sabios", "confucianismo", "El confucianismo", "Desde el siglo V a. C.",
+        "",
+        [
+          "El confucianismo es un caso que obliga a estirar las categorías: no tiene dios creador, ni revelación, ni promesa de salvación, ni clero. Y sin embargo tiene templos, ritos, un canon de textos y una moral completa. Es, más que nada, una filosofía práctica convertida en cultura.",
+          "Su núcleo es que la sociedad funciona si cada persona cumple bien lo que le corresponde en cada una de sus relaciones: hijo con padre, hermano menor con mayor, súbdito con gobernante, amigo con amigo. Y la obligación es de ida y vuelta: el hijo debe respeto, pero el padre debe cuidado; el súbdito debe lealtad, pero el gobernante debe justicia. Si el de arriba incumple, pierde la autoridad moral, y ese es el argumento con el que en China se legitimaron muchas rebeliones.",
+          "Su gran apuesta filosófica es la educación. Para el confucianismo, la naturaleza humana es mejorable y el estudio es un deber moral, no un lujo ni un adorno. De ahí el prestigio del maestro, del examen y del esfuerzo escolar en toda Asia oriental hasta hoy.",
+          "Y su gran discusión interna es preciosa: dos siglos después, Mencio sostuvo que las personas nacen buenas y que basta cultivar esa semilla, mientras Xunzi sostuvo que nacen egoístas y que solo la educación y las normas las civilizan. Es exactamente el debate que en Europa tendrán Rousseau y Hobbes dos mil años más tarde.",
+          "Su parte discutible es la otra cara de lo mismo: una jerarquía muy marcada, una fuerte subordinación de la mujer en su formulación tradicional y una tendencia a valorar la armonía por encima de la disidencia, que ha servido para justificar autoritarismos.",
+          "Su historia reciente demuestra que las ideas nunca están quietas: fue atacado con furia durante la Revolución Cultural china, con templos destruidos y estudiosos perseguidos, y en las últimas décadas el propio Estado chino lo ha rehabilitado y lo exporta como emblema cultural.",
+        ],
+        "Dato curioso: el árbol genealógico documentado de la familia de Confucio es probablemente el más largo del mundo: se registra desde hace unos 2.500 años y reúne a más de dos millones de descendientes identificados."),
+      hito("primeros-sabios", "laotse", "Lao Tse", "≈Siglo VI-IV a. C. (tradicionalmente)",
+        "¿Y si el problema fuera precisamente intentar controlarlo todo?",
+        [
+          "Mientras Confucio proponía orden, educación y ritos, la tradición atribuye a Lao Tse la idea contraria: el universo ya funciona por su cuenta, y buena parte de nuestro sufrimiento viene de forzarlo.",
+          "Su libro, el Tao Te Ching, tiene ochenta y un capítulos brevísimos y unos cinco mil caracteres, y está escrito a propósito de forma esquiva, llena de paradojas: el que sabe no habla; lo blando vence a lo duro; el vacío es lo que hace útil una taza.",
+          "Su imagen favorita es el agua. El agua no pelea, cede, rodea el obstáculo, busca el punto más bajo… y termina atravesando la roca. Para él, esa es la forma verdadera de la fuerza, y el error humano es confundir fuerza con rigidez.",
+          "De ahí sale su concepto más famoso y más malinterpretado: wu wei, «no acción». No significa cruzarse de brazos: significa actuar sin forzar, en el momento oportuno y con el mínimo esfuerzo necesario, como el buen jinete que no pelea con el caballo o el carpintero que corta siguiendo la fibra de la madera. Cualquiera que haya aprendido a nadar o a tocar un instrumento reconoce la diferencia entre pelearse con algo y dejar que fluya.",
+          "Aplicado al gobierno era casi anarquista: el mejor gobernante es el que interviene menos, y el pueblo mejor gobernado es el que apenas nota que lo gobiernan. Justo lo contrario del programa confuciano.",
+          "La leyenda de su vida encaja con su filosofía: era archivero de la corte, se hartó de la corrupción, se marchó hacia el oeste a lomos de un búfalo y, al llegar al último paso de montaña, el guardián le pidió que dejara escrito su pensamiento antes de desaparecer. Escribió el libro y se fue. Nadie volvió a verlo.",
+        ],
+        "Dato curioso: algunos historiadores dudan de que Lao Tse existiera como persona concreta; puede ser el nombre bajo el que se reunieron los dichos de varios sabios. Y aun así, el Tao Te Ching es, después de la Biblia, uno de los libros más traducidos de la historia: solo al inglés tiene más de doscientas cincuenta versiones."),
+      hito("primeros-sabios", "taoismo", "El taoísmo", "Desde el siglo IV a. C.",
+        "",
+        [
+          "El taoísmo enseña que todo sigue un principio natural llamado Tao, «el camino», y su primera frase ya es una advertencia filosófica de primer orden: el Tao que se puede nombrar ya no es el Tao. Es decir, hay realidades que el lenguaje deforma al intentar fijarlas. Veinticinco siglos después, esa misma idea reaparecerá en Wittgenstein y en la filosofía del lenguaje.",
+          "Su símbolo es conocidísimo y casi siempre mal entendido: el yin y el yang no son el bien y el mal. Son dos fuerzas complementarias —oscuridad y luz, frío y calor, quietud y movimiento— que se necesitan, que se convierten una en otra y que llevan cada una un punto de la otra dentro. En esta lógica, la enfermedad no es la presencia del mal: es un desequilibrio.",
+          "De esa idea salen la medicina tradicional china, el tai chi, el qigong, el concepto de qi y toda una cultura del cuerpo y del espacio.",
+          "Su segundo maestro, Zhuangzi, es uno de los grandes filósofos del mundo y escribe con humor, que es rarísimo en filosofía. Cuenta que una noche soñó que era una mariposa y que al despertar no sabía si era un hombre que había soñado ser mariposa o una mariposa que ahora soñaba ser un hombre. Con eso planteó, en cuatro líneas, el problema del criterio de realidad que Descartes desarrollará dos mil años después.",
+          "Con los siglos, el taoísmo filosófico se convirtió también en religión organizada, con templos, dioses y una obsesión característica por la longevidad, buscada con dietas, respiración, ejercicios y alquimia.",
+          "Y esa búsqueda tuvo una consecuencia histórica absurda y enorme: mientras mezclaban minerales buscando el elixir de la vida eterna, unos alquimistas taoístas dieron con una combinación de salitre, azufre y carbón que explotaba. Habían inventado la pólvora. La sustancia que cambiaría la guerra en todo el planeta salió de la búsqueda de no morir.",
+        ],
+        "Dato curioso: varios emperadores chinos murieron intoxicados por los elixires de inmortalidad que les preparaban sus alquimistas, hechos a base de mercurio. Buscando vivir para siempre, se envenenaron."),
+      hito("primeros-sabios", "buda", "Buda", "≈Siglo VI a. C.",
+        "¿Se puede acabar con el sufrimiento sin necesidad de ningún dios?",
+        [
+          "Siddhartha Gautama era hijo de un noble del norte de la India y creció, según la tradición, protegido de todo lo desagradable. Un día salió del palacio y vio por primera vez a un anciano, a un enfermo y a un cadáver. Aquello le rompió la vida: entendió que nada de lo que tenía lo salvaría de eso.",
+          "Lo dejó todo y probó el camino opuesto: años de ascetismo extremo, ayunos hasta casi morir. Tampoco funcionó, y de ahí sacó su primera conclusión: ni el placer ni el castigo del cuerpo liberan. Existe un camino medio.",
+          "Meditando bajo un árbol alcanzó lo que llamó el despertar, y desde entonces fue Buda, «el despierto». No dijo ser un dios, ni un enviado, ni un profeta: dijo haber comprendido algo, y que cualquiera podía comprobarlo por sí mismo. Eso lo convierte, filosóficamente, en un caso rarísimo entre los fundadores de tradiciones.",
+          "Su planteamiento son las Cuatro Nobles Verdades, y está construido exactamente como una consulta médica: hay sufrimiento; el sufrimiento tiene una causa; si se elimina la causa, cesa; y existe un tratamiento.",
+          "La causa que señaló es la sed: el deseo constante de que las cosas sean distintas de como son, y el apego a que permanezcan cuando todo cambia. Y el tratamiento es el Óctuple Sendero, que combina ética, atención y meditación, sin exigir creer nada por fe.",
+          "Su idea más difícil y más potente es que no existe un «yo» fijo. Lo que llamamos nuestra identidad es un proceso, un río de sensaciones, pensamientos y hábitos que cambia sin parar. Buena parte del sufrimiento, decía, viene de defender algo que no está ahí. Es exactamente lo contrario del alma inmortal e inmutable de Platón, y una de las dos grandes respuestas que la humanidad ha dado a la pregunta de qué somos.",
+          "Y su otra revolución fue social: enseñó a cualquiera, de cualquier casta, incluidas mujeres y personas consideradas impuras, y en la lengua del pueblo y no en el sánscrito de los sacerdotes.",
+        ],
+        "Dato curioso: sus últimas palabras, según los textos, son un encargo incómodo para cualquier escuela: no dependáis de mí, sed vuestra propia lámpara."),
+      hito("primeros-sabios", "budismo-filosofia", "El budismo como filosofía", "Desde el siglo VI a. C.",
+        "¿Es el budismo una religión o una filosofía de la mente?",
+        [
+          "La pregunta lleva décadas discutiéndose en Occidente, y la respuesta honesta es que depende de qué budismo mires. Tiene templos, monjes, ritos y devoción popular, como una religión; y a la vez tiene un análisis de la mente, una teoría del conocimiento y una ética que se pueden estudiar sin creer en nada, como una filosofía.",
+          "Su parte estrictamente filosófica es sofisticadísima. Sostiene tres tesis sobre la realidad: todo es impermanente (nada de lo que existe se mantiene igual); nada tiene una esencia independiente (todo existe en relación con otras cosas y por causas); y el sufrimiento nace de tratar lo cambiante como si fuera fijo.",
+          "De ahí sale un análisis del yo que la filosofía occidental no alcanzó hasta el siglo XVIII: cuando buscas «tu yo» solo encuentras sensaciones, percepciones, recuerdos e impulsos que se suceden. Es exactamente lo que dirá David Hume al examinar su propia mente y no encontrar más que «un haz de percepciones». Hume no leyó a Buda, pero llegó al mismo sitio.",
+          "Y desarrolló una lógica y una escolástica propias: durante siglos, en universidades monásticas como Nalanda, se discutió por escrito sobre causalidad, percepción, lenguaje y vacuidad con un rigor comparable al de la escolástica medieval europea. Nagarjuna, en el siglo II, escribió argumentos que hoy se estudian en cursos de lógica y de filosofía del lenguaje.",
+          "Su otra aportación es de método: propone la introspección entrenada como forma de conocimiento. En lugar de razonar sobre la mente desde fuera, observar la propia mente sistemáticamente durante años. Occidente lo ignoró durante siglos y hoy lo estudia con escáneres: hay cientos de investigaciones sobre lo que la meditación hace en el cerebro, y el Dalái Lama lleva décadas organizando encuentros con neurocientíficos.",
+          "Y el resultado más visible de ese cruce está en las consultas: el mindfulness que hoy se receta para el dolor crónico, la ansiedad y la prevención de recaídas depresivas es una adaptación deliberadamente laica de la meditación budista de atención plena, diseñada a finales de los años setenta.",
+          "Ese es su lugar en esta historia: una tradición que, sin dios y sin dogma, hizo hace 2.500 años preguntas que la psicología y la filosofía de la mente están respondiendo ahora.",
+        ],
+        "Dato curioso: Schopenhauer, el primer filósofo europeo que leyó textos budistas traducidos, se quedó tan impresionado que tenía una estatua de Buda en su escritorio junto a un busto de Kant. Decía que había llegado por su cuenta a conclusiones muy parecidas sin conocerlas."),
+    ],
   },
   {
     key: "grecia-razon",
@@ -127,9 +248,12 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         "¿Puede un solo elemento transformarse en todo lo que existe?",
         [
           "Anaxímenes volvió a buscar un elemento concreto como origen del universo y eligió el aire.",
-          "Pensaba que, al condensarse, el aire se convertía en agua y luego en tierra, mientras que al expandirse se transformaba en fuego. Aunque esta explicación hoy resulta incorrecta, mostraba un intento de comprender cómo la materia podía cambiar de una forma a otra.",
-          "Lo importante era el método: observar la naturaleza y buscar explicaciones racionales.",
-        ]),
+          "Y su argumento no era caprichoso: el aire es invisible pero está en todas partes, se mueve por sí mismo, es lo que respiramos —es decir, parece ser la vida misma— y, sobre todo, se puede ver cambiar de estado. Eso último es lo importante.",
+          "Pensaba que, al condensarse, el aire se convertía en nube, luego en agua y luego en tierra y piedra; y que al expandirse y calentarse se convertía en fuego. Hoy sabemos que no funciona así, pero fíjate en lo que está haciendo: está proponiendo un MECANISMO —condensación y rarefacción— para explicar por qué una sola sustancia puede dar lugar a cosas tan distintas.",
+          "Eso es un paso enorme respecto a Tales. No basta con decir cuál es el principio de todo: hay que explicar cómo se transforma. Es la primera vez que alguien intenta responder al «cómo» y no solo al «qué».",
+          "Y hay algo casi conmovedor en su método: se apoyaba en experiencias que cualquiera podía comprobar. Decía que si soplas con la boca muy abierta el aire sale caliente, y que si soplas apretando los labios sale frío. Su física estaba equivocada; su actitud —mira, prueba, explica— es la de la ciencia.",
+        ],
+        "Dato curioso: los tres primeros filósofos de la historia —Tales, Anaximandro y Anaxímenes— eran de la misma ciudad, Mileto, y fueron maestro y discípulos. La filosofía no nació de un genio solitario: nació de una conversación entre vecinos que duró dos generaciones."),
       hito("grecia-razon", "pitagoras", "Pitágoras", "≈570-495 a. C.",
         "¿Y si el universo estuviera hecho de números?",
         [
@@ -154,8 +278,27 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Parménides defendía exactamente lo contrario que Heráclito.",
           "Si algo cambia, decía, deja de ser lo que era. Pero de la nada no puede surgir nada. Por tanto, el verdadero ser debe ser eterno, único e inmutable.",
           "Según él, nuestros sentidos nos engañan al hacernos creer que el mundo cambia constantemente. Solo la razón puede mostrarnos la auténtica realidad.",
+          "Y con eso hizo algo que marcó a la filosofía para siempre: separó dos vías de conocimiento. La vía de los sentidos, que nos muestra un mundo variado y cambiante, y la vía de la razón, que nos dice lo que TIENE que ser por pura lógica. Y decidió que, cuando las dos se contradicen, gana la razón.",
+          "Fue también el primero en razonar como se razona hoy en matemáticas: no describiendo lo que ve, sino deduciendo paso a paso a partir de un principio. Su principio era simple y demoledor: lo que es, es; lo que no es, no es. Y de ahí sacó que del no-ser no puede salir el ser, así que nada puede empezar a existir ni dejar de existir.",
           "Durante siglos, los filósofos intentaron resolver esta enorme contradicción: ¿tiene razón Heráclito al decir que todo cambia? ¿O la tiene Parménides al afirmar que el cambio es una ilusión?",
           "Gran parte de la filosofía posterior intentará responder precisamente a esa pregunta.",
+        ],
+        "Dato curioso: escribió su filosofía en verso, en un poema en el que una diosa le muestra el camino de la verdad. El pensamiento más frío y lógico de la Antigüedad se transmitió en forma de poema épico.",
+        [
+          {
+            titulo: "La gran discusión: ¿todo cambia o nada cambia?",
+            cuerpo: [
+              "Merece la pena detenerse aquí, porque este choque es el motor de casi toda la filosofía occidental posterior y no es en absoluto una discusión abstracta.",
+              "HERÁCLITO dice: mira alrededor. Nada permanece. El río, tu cuerpo, esta ciudad, tus opiniones. Lo único estable es la propia ley del cambio. Lo real es el proceso.",
+              "PARMÉNIDES contesta: si algo cambia de verdad, entonces algo que no existía empieza a existir. Y de la nada no sale nada. Por tanto, el cambio que ves es apariencia; lo que realmente es tiene que ser eterno y no puede moverse.",
+              "Su discípulo Zenón inventó para defenderlo unas paradojas que son famosísimas y que tardaron dos mil años en resolverse. La más conocida: Aquiles no puede alcanzar a una tortuga que le lleva ventaja, porque cuando llegue a donde estaba la tortuga, la tortuga ya se habrá movido un poco, y así infinitas veces. Como el razonamiento parece impecable y el hecho es obvio, la conclusión de Zenón era que el movimiento es una ilusión. Hoy sabemos que la salida está en cómo se suman las series infinitas, y esas paradojas empujaron el desarrollo del cálculo y de la idea moderna de límite.",
+              "¿Y cómo se salió del atolladero? Con intentos de síntesis. Empédocles propuso cuatro elementos que no nacen ni mueren y solo se combinan. Demócrito propuso átomos eternos —Parménides tenía razón sobre ellos— moviéndose en el vacío y recombinándose —Heráclito tenía razón sobre lo que vemos—. Y Platón partió la realidad en dos: un mundo de Ideas eternas e inmutables (Parménides) y un mundo sensible en flujo permanente (Heráclito).",
+              "Fíjate en la jugada de Platón, porque de ahí sale medio Occidente: si lo verdadero es lo que no cambia, entonces lo eterno vale más que lo temporal, el alma más que el cuerpo, la idea más que la cosa. Esa jerarquía pasó al cristianismo y organizó el pensamiento europeo durante dos milenios.",
+              "Y hoy la ciencia ha dado un veredicto mezclado, cosa que a los dos les habría interesado: hay leyes de conservación que dicen que la materia y la energía no se crean ni se destruyen —eso es Parménides— y una descripción del universo como un proceso en expansión, con partículas que se transforman y sistemas que se organizan y se deshacen —eso es Heráclito—.",
+              "Y sigue viva en cosas muy personales. Cuando te preguntas si eres la misma persona que hace veinte años, cuando cambia una empresa y discute si sigue siendo la misma, o cuando alguien con demencia deja de reconocerse, estás en medio de esta discusión de hace 2.500 años.",
+            ],
+            dato: "Dato curioso: Heráclito escribía de forma tan oscura y desdeñosa que lo apodaron «el Oscuro», y se cuenta que se retiró a vivir a las montañas comiendo hierbas por desprecio a sus conciudadanos. Parménides, en cambio, fue legislador respetado de su ciudad. Los dos filósofos más opuestos de la historia también lo fueron en su forma de vivir.",
+          },
         ]),
       hito("grecia-razon", "empedocles", "Empédocles", "≈494-434 a. C.",
         "¿Y si todos tuvieran un poco de razón?",
@@ -169,7 +312,10 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         [
           "Demócrito imaginó que, si dividíamos cualquier objeto una y otra vez, acabaríamos llegando a unas partículas tan pequeñas que ya no podrían romperse.",
           "Las llamó átomos, palabra que en griego significa precisamente «indivisible».",
-          "No disponía de microscopios ni experimentos para demostrarlo, pero su intuición fue extraordinaria. Más de dos mil años después, la ciencia recuperaría esa idea y desarrollaría la teoría atómica moderna.",
+          "Su modelo era asombrosamente completo: átomos eternos, indestructibles, de distintas formas y tamaños, moviéndose en el vacío, que se enganchan y se separan. Todo lo que existe —una piedra, un árbol, tú— es una combinación temporal de esas piezas, y cuando algo se destruye no desaparece nada: solo se deshace la combinación. Lo dulce, lo amargo, el color y el olor no estarían en las cosas, sino en cómo esas formas afectan a nuestros sentidos.",
+          "Y esto es lo verdaderamente radical: en su universo no hace falta ningún propósito ni ningún dios. Todo ocurre por el choque mecánico de partículas, sin plan y sin finalidad. Es la primera explicación completamente materialista de la realidad, y por eso fue tan combatida: Platón, que lo detestaba, no lo menciona ni una vez en toda su obra, y no ha sobrevivido ninguno de sus libros, solo citas de otros.",
+          "También aplicó esa lógica al ser humano: pensaba que el alma estaba hecha de átomos especialmente finos y móviles, y que por tanto también se disgregaba al morir. De ahí su ética, que era serena y muy poco solemne: si no hay premio ni castigo después, la meta es vivir con buen ánimo, sin miedos inútiles y sin excesos. Le llamaban «el filósofo que ríe».",
+          "No disponía de microscopios ni experimentos para demostrarlo, pero su intuición fue extraordinaria. Más de dos mil años después, cuando la química empezó a pesar reacciones y a comprobar que los elementos se combinan en proporciones fijas, la ciencia recuperó su idea y hasta su palabra.",
         ],
         "Dato curioso: aunque los átomos actuales sí pueden dividirse, Demócrito fue el primero en imaginar que toda la materia estaba formada por pequeñas partículas."),
     ],
@@ -204,7 +350,39 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Fue condenado a muerte. Pudo escapar. No quiso hacerlo.",
           "Aceptó la sentencia y murió bebiendo una copa de cicuta porque consideraba que un ciudadano debía respetar las leyes incluso cuando le perjudicaban personalmente.",
         ],
-        "Dato curioso: la muerte de Sócrates marcó profundamente a Platón, que dedicaría gran parte de su vida a intentar construir una sociedad donde una injusticia semejante no volviera a repetirse."),
+        "Dato curioso: la muerte de Sócrates marcó profundamente a Platón, que dedicaría gran parte de su vida a intentar construir una sociedad donde una injusticia semejante no volviera a repetirse.",
+        [
+          {
+            titulo: "Cómo funcionaba de verdad su método",
+            cuerpo: [
+              "El método socrático no es «hacer preguntas» en general: es una técnica con pasos, y sigue usándose en las facultades de derecho, en la terapia y en la buena docencia.",
+              "PASO 1. Alguien afirma algo con seguridad. «Yo sé perfectamente lo que es la valentía».",
+              "PASO 2. Sócrates pide una definición, no un ejemplo. No «dime alguien valiente», sino «dime qué tienen en común todos los actos valientes».",
+              "PASO 3. La otra persona da una definición. «Valentía es no retirarse nunca en la batalla».",
+              "PASO 4. Sócrates busca un caso que la rompa. «¿Y el general que finge retirarse para atraer al enemigo y luego gana? ¿No es valiente?». La definición se cae.",
+              "PASO 5. Se prueba otra, y otra. Y muchos diálogos de Platón terminan SIN respuesta: la conversación acaba reconociendo que ninguno de los dos sabía lo que creía saber. Eso no es un fracaso, es el objetivo. Los griegos lo llamaban aporía, el momento de quedarse sin salida, y sin pasar por ahí no se empieza a pensar de verdad.",
+              "Sócrates llamaba a esto «partear»: decía que él no enseñaba nada, que solo ayudaba a que el otro diera a luz lo que ya llevaba dentro. De ahí el nombre de mayéutica, que viene de la palabra griega para comadrona. Su madre, según la tradición, era comadrona.",
+              "Y decía también que era como un tábano: una mosca molesta que picotea a un caballo grande y perezoso —Atenas— para que no se duerma. Sabía perfectamente que estaba siendo incómodo.",
+              "Lo que hay detrás es una idea moral, y es la más discutida de todas las suyas: creía que nadie hace el mal a sabiendas. Si alguien actúa mal, es porque se equivoca sobre lo que es bueno para él. Por eso, para Sócrates, conocer bien y vivir bien son lo mismo, y la ignorancia no es un defecto intelectual sino un problema ético.",
+              "El método, por cierto, es incompatible con casi todos los sistemas de poder, y por eso su historia acaba como acaba.",
+            ],
+            dato: "Dato curioso: cuando el oráculo de Delfos dijo que nadie era más sabio que él, Sócrates se quedó desconcertado y se dedicó a interrogar a los expertos de Atenas para refutarlo. Su conclusión fue que el oráculo tenía razón por un detalle mínimo: los demás no sabían y creían saber; él no sabía y lo sabía.",
+          },
+          {
+            titulo: "El juicio: por qué mataron a un señor que hacía preguntas",
+            cuerpo: [
+              "En el año 399 a. C., un tribunal de unos quinientos ciudadanos atenienses juzgó a Sócrates, que tenía setenta años, por dos cargos: no respetar a los dioses de la ciudad e introducir divinidades nuevas, y corromper a la juventud.",
+              "El contexto explica mucho. Atenas acababa de perder una guerra devastadora de veintisiete años contra Esparta, había sufrido una epidemia, una dictadura de los Treinta Tiranos y dos golpes de Estado. Estaba humillada, empobrecida y buscando culpables. Y varios de los discípulos más conocidos de Sócrates habían sido protagonistas de aquel desastre: uno traicionó a la ciudad y se pasó a Esparta, y otro fue uno de los tiranos más sanguinarios. Sócrates no había hecho nada de eso, pero era «el maestro de esa gente».",
+              "Y había además una acusación de fondo, no escrita: llevaba décadas mostrando en público que los políticos, los generales y los poetas más respetados no sabían justificar lo que decían. Eso deja muchos rencores acumulados.",
+              "En el juicio no hizo lo que se esperaba. La costumbre era pedir clemencia, llevar a la familia llorando, apelar a los servicios prestados. Él dio un discurso en el que dijo que hacía a la ciudad un bien, que si lo dejaban seguir seguiría exactamente igual, y que «una vida sin examen no merece ser vivida». Fue declarado culpable por un margen estrecho.",
+              "Entonces vino la segunda votación, la de la pena. La ley ateniense permitía al condenado proponer una alternativa, y bastaba con ofrecer el destierro o una multa razonable para salvarse. Sócrates propuso, medio en broma, que la ciudad debería mantenerlo de por vida como se hacía con los campeones olímpicos, y solo después ofreció una multa pequeña. El tribunal, ofendido, votó la muerte por un margen mucho mayor que el de la culpabilidad.",
+              "Sus amigos le organizaron la fuga y la habrían pagado sin problema. Se negó, y su razonamiento es el corazón del asunto: había vivido setenta años aceptando las leyes de Atenas y beneficiándose de ellas, así que romperlas cuando le perjudicaban sería exactamente la incoherencia que él criticaba en los demás. Distinguía además entre las leyes, que consideraba justas, y la sentencia concreta, que consideraba equivocada.",
+              "Se bebió la cicuta rodeado de sus discípulos, hablando con ellos hasta el final. Platón, que no estuvo presente por enfermedad, escribió aquella escena, y con ella creó el primer mártir de la historia del pensamiento: alguien que muere no por su fe, sino por su forma de razonar.",
+              "Y dejó a Occidente una pregunta que sigue sin cerrarse: ¿hay que obedecer una ley injusta? Sócrates dijo que sí y aceptó morir; Gandhi, Thoreau y Martin Luther King dijeron que no y aceptaron ir a la cárcel. Los cuatro estaban discutiendo lo mismo.",
+            ],
+            dato: "Dato curioso: cuatro años después de ejecutarlo, la propia Atenas se arrepintió. Según algunas fuentes antiguas, se condenó a sus acusadores y se le levantó una estatua. La ciudad que lo mató por preguntar demasiado acabó poniéndolo en un pedestal.",
+          },
+        ]),
       hito("hombre-centro", "platon", "Platón", "427-347 a. C.",
         "¿Existe una realidad más perfecta que la que vemos?",
         [
@@ -215,7 +393,37 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "En él describe a unos prisioneros que viven encadenados desde su nacimiento mirando únicamente las sombras proyectadas sobre una pared. Como nunca han visto otra cosa, creen que esas sombras son toda la realidad. Solo cuando uno consigue salir de la cueva descubre el mundo verdadero.",
           "Para Platón, los filósofos son precisamente quienes logran abandonar la caverna y comprender la auténtica realidad. Por eso defendía que los gobernantes ideales debían ser filósofos.",
         ],
-        "Dato curioso: Platón fundó la Academia de Atenas, considerada la primera gran institución dedicada a la enseñanza filosófica. Permaneció abierta durante casi novecientos años."),
+        "Dato curioso: Platón fundó la Academia de Atenas, considerada la primera gran institución dedicada a la enseñanza filosófica. Permaneció abierta durante casi novecientos años, hasta que el emperador Justiniano la cerró en el año 529.",
+        [
+          {
+            titulo: "El mito de la caverna, explicado",
+            cuerpo: [
+              "Es la imagen más famosa de la filosofía y casi siempre se cuenta a medias. Va entera, porque cada pieza significa algo.",
+              "LA ESCENA. Unos prisioneros están encadenados desde la infancia en el fondo de una cueva, de espaldas a la entrada, sin poder girar la cabeza. Detrás de ellos hay un muro bajo, y detrás una hoguera. Entre el fuego y el muro pasan personas llevando figuras de objetos y de animales, cuyas sombras se proyectan en la pared que los prisioneros miran. También oyen ecos de sus voces, que parecen venir de las sombras.",
+              "PRIMERA CLAVE: para esos prisioneros, las sombras NO son una ilusión que ellos sepan reconocer. Son la realidad entera. Tienen nombres para cada sombra, discuten sobre ellas, hacen predicciones y aciertan. Tienen su propia ciencia de las sombras. Nadie está engañado en el sentido de sentirse engañado: están perfectamente convencidos.",
+              "LA LIBERACIÓN. A uno lo desatan y lo obligan a levantarse. Y lo primero que ocurre es que sufre: le duelen las piernas, la luz del fuego le hace daño en los ojos y lo que ve al principio le parece MENOS real que las sombras a las que estaba acostumbrado. Platón insiste en esto: salir del error es doloroso y desorientador, y el primer efecto de la verdad es que parece falsa.",
+              "LA SUBIDA. Lo arrastran fuera de la cueva. Al principio solo puede mirar de noche, luego los reflejos en el agua, luego las cosas mismas, y por fin, al cabo de un tiempo, el sol. El sol es la Idea de Bien: aquello que hace posible que todo lo demás sea visible y comprensible.",
+              "LA VUELTA, que es la parte que casi nunca se cuenta y la más importante. El que ha visto la luz tiene la obligación de volver a bajar a contárselo a los demás. Y al bajar le pasan dos cosas: viene con los ojos deslumbrados, así que en la penumbra ve PEOR que los que nunca salieron y hace el ridículo; y cuando les dice que lo que miran son sombras, no le creen, se ríen y —dice Platón textualmente— si pudieran, lo matarían.",
+              "Y ahí está el golpe: Platón está escribiendo la muerte de Sócrates. La caverna es Atenas, y el que baja a contarlo es su maestro ejecutado.",
+              "QUÉ SIGNIFICA CADA COSA. Las cadenas: la costumbre, la educación recibida sin examen, los prejuicios. Las sombras: las opiniones que aceptamos porque todo el mundo las repite. El fuego: las explicaciones aparentes. Salir: la educación, que para Platón no es meter datos en una cabeza sino girar la mirada hacia otro sitio. Y el mundo exterior: la realidad inteligible, lo que se comprende con la razón y no con los sentidos.",
+              "Y por eso es un mito tan resistente al tiempo: funciona igual para hablar de la propaganda, de las burbujas informativas, de la publicidad, de una secta, de una familia disfuncional o de las redes sociales, donde también existe una ciencia muy eficaz de las sombras.",
+            ],
+            dato: "Dato curioso: el mito aparece en «La República», en un pasaje en el que Platón lo cuenta en boca de Sócrates. La escena es doblemente triste: es el ejecutado explicando por qué iban a ejecutarlo.",
+          },
+          {
+            titulo: "La República: la ciudad justa y su parte incómoda",
+            cuerpo: [
+              "«La República» no es un libro sobre política, aunque lo parezca. Empieza con una pregunta personal —¿por qué debería ser justo si puedo salir ganando siendo injusto?— y para responderla Platón construye una ciudad imaginaria, porque piensa que en grande se ven mejor las mismas piezas que hay en un alma.",
+              "Su respuesta es que hay tres partes en el alma: la racional, que piensa; la impulsiva, que se enfada y quiere honor; y la apetitiva, que desea comer, poseer, disfrutar. Una persona está bien cuando la razón gobierna, con el impulso como aliado y los deseos ordenados. Cuando manda otra parte, la vida se descompone.",
+              "Y la ciudad tiene la misma estructura: los gobernantes-filósofos, que conocen; los guardianes, que defienden; y los productores, que trabajan y comercian. Cada grupo hace lo suyo y ahí está su definición de justicia: que cada parte cumpla su función sin invadir la de otra.",
+              "Tiene propuestas que en el siglo IV a. C. eran de una audacia enorme. Los gobernantes no pueden tener propiedad privada ni riquezas, para que no gobiernen por interés. Deben pasar por un plan de estudios larguísimo —matemáticas, geometría, astronomía, dialéctica— y no acceder al poder hasta los cincuenta años. Y las mujeres pueden ser guardianas y gobernantas en igualdad, con la misma educación e incluso el mismo entrenamiento físico, algo que ningún griego de su época había planteado.",
+              "Y tiene otras que hoy nos horrorizan, y hay que decirlas: censura estricta de la poesía y la música que se puede escuchar, selección de nacimientos, crianza colectiva de los hijos de los guardianes, mentiras piadosas del Estado para mantener la cohesión, y una desconfianza radical hacia la democracia, a la que consideraba el gobierno de la persuasión y del capricho, el paso previo a la tiranía.",
+              "El siglo XX leyó ese programa con espanto: Karl Popper lo acusó directamente de ser el primer diseño de una sociedad totalitaria. Otros responden que Platón nunca pretendió que esa ciudad se construyera, que es un modelo para pensar el alma y que él mismo la llama «una ciudad en palabras».",
+              "Sea como sea, ahí está su prueba de realidad: intentó tres veces asesorar a los tiranos de Siracusa para llevar sus ideas a la práctica, fracasó estrepitosamente y en uno de los viajes acabó, según la tradición, vendido como esclavo y rescatado por un amigo. El filósofo que quería filósofos gobernando comprobó en su propia piel lo que es la política real.",
+            ],
+            dato: "Dato curioso: la palabra «academia» viene del nombre del lugar donde fundó su escuela, un bosque dedicado a un héroe llamado Academo. Y en su entrada, según la tradición, había una inscripción: «que no entre aquí quien no sepa geometría».",
+          },
+        ]),
       hito("hombre-centro", "aristoteles", "Aristóteles", "384-322 a. C.",
         "¿Y si el conocimiento comenzara observando el mundo real?",
         [
@@ -226,7 +434,21 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "En ética defendía la famosa teoría del justo medio. La virtud, decía, suele encontrarse entre dos extremos. El valor, por ejemplo, está entre la cobardía y la temeridad. La generosidad se sitúa entre la avaricia y el despilfarro.",
           "Su influencia fue tan enorme que durante casi dos mil años sus obras se estudiaron como la máxima autoridad en filosofía y ciencia.",
         ],
-        "Dato curioso: durante la Edad Media muchos europeos conocían a Aristóteles simplemente como «El Filósofo», porque se consideraba que ningún otro pensador había explicado el mundo con tanta profundidad."),
+        "Dato curioso: durante la Edad Media muchos europeos conocían a Aristóteles simplemente como «El Filósofo», porque se consideraba que ningún otro pensador había explicado el mundo con tanta profundidad.",
+        [
+          {
+            titulo: "Las herramientas que nos dejó",
+            cuerpo: [
+              "Aristóteles no es solo un filósofo con ideas: es el hombre que fabricó los instrumentos con los que Occidente ha pensado desde entonces. Cuatro de ellos siguen en uso diario.",
+              "1. LA LÓGICA. Fue el primero en darse cuenta de que se puede estudiar la FORMA de un razonamiento independientemente de su contenido. Su invento es el silogismo: todos los hombres son mortales; Sócrates es un hombre; por tanto Sócrates es mortal. Lo importante es que la validez no depende de que hablemos de Sócrates: cualquier razonamiento con esa estructura funciona, y cualquiera con la estructura equivocada falla aunque su conclusión sea verdadera. Con eso creó la primera herramienta de la historia para detectar razonamientos tramposos, y no se le añadió nada verdaderamente nuevo hasta el siglo XIX.",
+              "2. LAS CUATRO CAUSAS. Para explicar algo, decía, hay que responder a cuatro preguntas distintas, y confundirlas produce discusiones absurdas. De qué está hecho (causa material: la madera de la mesa). Qué forma o estructura tiene (formal: el diseño de mesa). Quién o qué lo ha producido (eficiente: el carpintero). Y para qué sirve o hacia qué tiende (final: comer, escribir). La ciencia moderna se construyó precisamente eliminando la cuarta en la naturaleza —una piedra no cae «para» llegar al suelo—, pero seguimos usándola sin darnos cuenta cada vez que preguntamos «¿y esto para qué es?».",
+              "3. LA CLASIFICACIÓN. Fue el primer gran biólogo: describió y ordenó cientos de especies, disecó animales, estudió embriones abriendo huevos de gallina en días sucesivos para ver cómo se desarrolla un corazón, y observó que los delfines paren crías vivas y las amamantan, así que no podían ser peces. Nadie le hizo caso en eso hasta el siglo XVIII. Su manera de agrupar por género y especie es el antepasado directo de la clasificación biológica.",
+              "4. EL TÉRMINO MEDIO, que no es tibieza. Su ética no da normas: dice que la virtud es un punto de equilibrio que depende de la persona y de la situación, y que se aprende por HÁBITO, como se aprende a tocar un instrumento. No te vuelves valiente leyendo sobre la valentía, sino haciendo cosas valientes hasta que se te da bien. De ahí sale una idea muy moderna: el carácter se entrena.",
+              "Y su meta última tiene nombre propio: eudaimonía, que se traduce como felicidad pero significa más bien «vida floreciente». No es un estado de ánimo agradable, es una vida entera bien vivida, con amistades, actividad, virtud y cierta suerte material. Es la respuesta griega más influyente a la pregunta de para qué sirve todo esto, y hoy vuelve a citarse continuamente en psicología positiva.",
+            ],
+            dato: "Dato curioso: prácticamente todo lo que escribió para publicar se ha perdido, y los antiguos decían que era elegantísimo. Lo que conservamos son sus apuntes de clase, densos y difíciles: hemos construido dos mil años de pensamiento sobre las notas de un profesor.",
+          },
+        ]),
       hito("hombre-centro", "legado-tres-gigantes", "El legado de tres gigantes", "",
         "",
         [
@@ -278,7 +500,24 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Siglos después, emperadores como Marco Aurelio, esclavos como Epicteto o políticos como Séneca desarrollarían esta filosofía hasta convertirla en una de las más influyentes de la historia.",
           "Hoy el estoicismo vive un enorme renacimiento y muchas de sus ideas se utilizan incluso en psicología moderna.",
         ],
-        "Dato curioso: Marco Aurelio escribió uno de los libros más famosos del estoicismo, Meditaciones, mientras dirigía el Imperio romano y luchaba en campañas militares."),
+        "Dato curioso: Marco Aurelio escribió uno de los libros más famosos del estoicismo, Meditaciones, mientras dirigía el Imperio romano y luchaba en campañas militares. No lo escribió para publicarlo: son notas para sí mismo, y por eso se repite tanto. Es el diario privado del hombre más poderoso del mundo intentando no volverse insoportable.",
+        [
+          {
+            titulo: "El manual estoico, en cinco ideas",
+            cuerpo: [
+              "El estoicismo es probablemente la filosofía antigua más práctica que existe, y se puede resumir en unas pocas herramientas concretas.",
+              "1. LA DICOTOMÍA DEL CONTROL. Es la base de todo. Hay cosas que dependen de ti —tus juicios, tus decisiones, tus intenciones, tu esfuerzo— y cosas que no —tu salud, tu reputación, el pasado, la economía, lo que otros hacen y piensan—. El sufrimiento evitable nace de invertir energía emocional en la segunda columna. Epicteto lo abre así en su manual: distingue las dos, y serás libre.",
+              "2. NO SON LAS COSAS, SON LOS JUICIOS. «No nos perturban los hechos, sino las opiniones que tenemos sobre los hechos». Un mismo despido, una misma enfermedad o una misma crítica producen reacciones completamente distintas en dos personas, así que buena parte del malestar está en la interpretación, que sí es modificable. Ese principio es, literalmente, el fundamento de la terapia cognitiva moderna: Albert Ellis y Aaron Beck, sus creadores en los años cincuenta y sesenta, citan a Epicteto expresamente.",
+              "3. LA PREMEDITACIÓN DE LOS MALES. Dedicar un rato a imaginar con calma lo que puede ir mal —perder el trabajo, una enfermedad, la muerte de alguien— para que no te encuentre desarmado y para dejar de dar por supuesto lo que tienes. No es pesimismo: es entrenamiento. Séneca aconsejaba incluso vivir algunos días con lo mínimo, pasando frío o comiendo mal a propósito, para comprobar que se puede.",
+              "4. LA VISTA DESDE ARRIBA. Marco Aurelio se obligaba a mirar su propio problema desde muy lejos: la extensión del imperio, los siglos que han pasado, los que vendrán, la cantidad de gente que vivió obsesionada con asuntos que hoy no recuerda nadie. Es una técnica de perspectiva para desinflar lo urgente.",
+              "5. MEMENTO MORI. Recordar que vas a morir, no para angustiarte, sino para dejar de posponer. «Actúa como si esta fuera la última cosa que haces en tu vida», escribe Marco Aurelio. Y Séneca dedicó un tratado entero a demostrar que no tenemos poca vida: la desperdiciamos.",
+              "Y una idea que hoy suena rarísima: los estoicos sostenían que las cosas externas —dinero, salud, éxito— son «indiferentes preferibles». Está perfectamente bien tenerlas y hay que trabajar por ellas, pero tu vida buena no puede DEPENDER de ellas, porque entonces la has puesto en manos del azar.",
+              "Sus tres grandes figuras dicen mucho de su alcance social: Epicteto nació esclavo y era cojo por los malos tratos de un amo; Séneca fue un político riquísimo y muy criticado por su incoherencia; y Marco Aurelio era emperador. La misma filosofía servía en los tres extremos de la escala.",
+              "Y conviene señalar su límite, porque hoy se vende a veces como una técnica de rendimiento: los estoicos no proponían aguantar cualquier cosa sin protestar. Su virtud central era la justicia, sostenían que todos los seres humanos somos ciudadanos de una misma comunidad —de ahí la palabra «cosmopolita»— y Séneca escribió a favor de tratar humanamente a los esclavos en un imperio que se sostenía sobre ellos. La serenidad no era para conformarse: era para poder actuar sin que el miedo decidiera por ti.",
+            ],
+            dato: "Dato curioso: Epicteto no escribió nada. Sus enseñanzas las apuntó un alumno, igual que pasó con Sócrates, con Buda, con Confucio y con Jesús. Una parte enorme del pensamiento de la humanidad existe porque alguien tomó apuntes.",
+          },
+        ]),
       hito("buena-vida", "pirron-escepticismo", "Pirrón y el escepticismo", "≈360-270 a. C.",
         "¿Y si nunca pudiéramos estar completamente seguros de nada?",
         [
@@ -372,7 +611,22 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Defendía que las personas preparadas intelectualmente debían utilizar la razón para comprender las Escrituras, mientras que la mayoría podía acercarse a ellas mediante interpretaciones más sencillas.",
           "Gracias a sus comentarios, gran parte de la obra de Aristóteles volvió a conocerse en Europa occidental, influyendo decisivamente en universidades como París, Bolonia u Oxford.",
         ],
-        "Dato curioso: durante siglos, en muchas universidades europeas Averroes fue conocido simplemente como «El Comentador», por la enorme calidad de sus explicaciones sobre Aristóteles."),
+        "Dato curioso: durante siglos, en muchas universidades europeas Averroes fue conocido simplemente como «El Comentador», por la enorme calidad de sus explicaciones sobre Aristóteles.",
+        [
+          {
+            titulo: "La ruta de los libros: cómo volvió Aristóteles a Europa",
+            cuerpo: [
+              "Aquí hay una historia que casi nunca se cuenta y que explica por qué existe la filosofía europea posterior. Durante unos seiscientos años, Europa occidental perdió casi por completo la obra de Aristóteles. No la quemó nadie: simplemente dejó de saber griego.",
+              "El camino de vuelta fue larguísimo y pasó por cuatro lenguas. Primero, en Siria, monjes cristianos tradujeron a Aristóteles del griego al siríaco. Después, en la Bagdad del siglo IX, la Casa de la Sabiduría lo tradujo del siríaco y del griego al ÁRABE, con un programa estatal que pagaba a los traductores y compraba manuscritos por todo el Mediterráneo. Allí lo estudiaron, lo comentaron y lo discutieron durante tres siglos Al-Farabi, Avicena y Averroes.",
+              "Y desde el árabe volvió al latín, sobre todo por dos puertas: la Sicilia normanda y, principalmente, TOLEDO. Después de 1085, con la ciudad ya en manos castellanas y con su población mezclada, se formó allí un taller de traducción que funcionó durante más de un siglo. Trabajaban en equipo y en cadena: un judío o un mozárabe que sabía árabe traducía en voz alta al romance castellano, y un clérigo latino escribía en latín lo que oía.",
+              "Por ahí entraron en Europa Aristóteles completo, Euclides, Ptolomeo, Galeno, Hipócrates, el álgebra, la trigonometría, la óptica de Al-Hazen, la medicina de Avicena, los números que usamos hoy y el cero.",
+              "Y provocó una crisis intelectual enorme. De repente, las universidades europeas del siglo XIII tenían delante un sistema completo del mundo, coherente, racional… y pagano, que en varios puntos contradecía la doctrina cristiana: por ejemplo, Aristóteles sostenía que el universo es eterno y no creado. En 1210 y 1277 se prohibió enseñar algunas de sus tesis en París.",
+              "Ese es el problema exacto que Tomás de Aquino se propone resolver: no rechazar a Aristóteles ni rechazar la fe, sino demostrar que caben juntos. Sin las traducciones de Toledo no hay escolástica, y sin escolástica no hay universidad europea tal como la conocemos.",
+              "Y hay una ironía preciosa en todo esto: Averroes fue mucho más influyente entre cristianos y judíos que en el mundo islámico, donde su corriente perdió terreno. Sus comentarios se leyeron durante siglos en París, Bolonia y Oxford, y Dante lo puso en su Divina Comedia con Aristóteles y con Avicena, en el limbo de los sabios virtuosos.",
+            ],
+            dato: "Dato curioso: el traductor más prolífico de Toledo, Gerardo de Cremona, era un italiano que llegó buscando un solo libro —el gran tratado de astronomía de Ptolomeo— y se quedó allí el resto de su vida traduciendo unas setenta obras. Vino a por uno y se llevó una biblioteca.",
+          },
+        ]),
       hito("razon-busca-dios", "maimonides", "Maimónides", "1138-1204",
         "¿Puede la filosofía fortalecer la fe?",
         [
@@ -391,7 +645,25 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Entre sus aportaciones destacan las famosas Cinco Vías, cinco argumentos filosóficos con los que intentó demostrar racionalmente la existencia de Dios. Aunque hoy siguen siendo objeto de debate, marcaron profundamente la historia de la filosofía.",
           "Para Santo Tomás, la razón podía descubrir muchas verdades por sí sola, pero había otras —como la Trinidad o la Encarnación— que solo podían conocerse mediante la revelación.",
         ],
-        "Dato curioso: las universidades medievales estudiaron las obras de Santo Tomás durante siglos y todavía hoy siguen siendo fundamentales en la filosofía católica."),
+        "Dato curioso: las universidades medievales estudiaron las obras de Santo Tomás durante siglos y todavía hoy siguen siendo fundamentales en la filosofía católica.",
+        [
+          {
+            titulo: "Las cinco vías, y por qué se siguen discutiendo",
+            cuerpo: [
+              "Sus cinco argumentos no pretenden demostrar al Dios de la Biblia con todos sus detalles, sino solo que tiene que existir «algo» con ciertas características. Van así, en versión llana:",
+              "1. EL MOVIMIENTO. Todo lo que se mueve ha sido movido por otra cosa. Si vamos hacia atrás en la cadena, no puede ser infinita, así que debe haber un primer motor que mueva sin ser movido.",
+              "2. LA CAUSA. Nada se causa a sí mismo. Toda causa tiene una causa anterior, y por el mismo razonamiento debe haber una causa primera.",
+              "3. LO POSIBLE Y LO NECESARIO. Todo lo que vemos podría no haber existido: nace y muere. Pero si TODO fuera así, en algún momento no habría habido nada, y de la nada no sale nada. Debe existir algo que exista necesariamente.",
+              "4. LOS GRADOS. Hablamos de cosas más o menos buenas, más o menos verdaderas, más o menos perfectas. Comparar en grados exige una referencia máxima.",
+              "5. EL ORDEN. Los seres sin inteligencia —una semilla, un ojo, una órbita— actúan de forma regular y orientada a un fin. Lo que no tiene inteligencia y aun así tiende ordenadamente a algo tiene que haber sido dirigido por una inteligencia.",
+              "Fíjate en lo que está haciendo, porque eso es lo importante para esta historia: son argumentos que no citan la Biblia ni piden fe. Están construidos con lógica aristotélica y se dirigen a quien no cree. Tomás acepta jugar con las reglas del adversario, y eso cambió la relación entre fe y razón en Occidente.",
+              "Las objeciones llegaron pronto y son igual de conocidas. Hume respondió que la causalidad es una costumbre de nuestra mente y no una ley del universo, así que la cadena de causas no prueba nada. Kant sostuvo que la razón no puede llegar hasta ahí sin caer en contradicciones, y que la existencia de Dios no es demostrable ni refutable, solo postulable desde la moral. Darwin desmontó la quinta vía al explicar el orden aparente de los seres vivos sin necesidad de un diseñador.",
+              "Y aun así siguen vivas, porque la pregunta de fondo —por qué existe algo en lugar de nada— no la ha respondido nadie todavía. Hay versiones actuales de la tercera vía discutidas por filósofos profesionales, creyentes y ateos, en revistas académicas de este siglo.",
+              "Lo más valioso de Tomás no es, en realidad, si acertó. Es la regla de juego que fijó y que Occidente conservó: si quieres sostener algo, tienes que argumentarlo y responder a las objeciones. Su Suma Teológica está escrita exactamente así, y esa es su parte más admirable: cada cuestión empieza exponiendo con toda la fuerza posible los argumentos CONTRARIOS a su propia posición, antes de contestarles.",
+            ],
+            dato: "Dato curioso: al final de su vida tuvo una experiencia que nunca explicó y dejó de escribir. A quien le pedía que continuara la Suma le respondió que todo lo que había escrito le parecía paja. Murió meses después, con cuarenta y nueve años, dejando su obra máxima sin terminar.",
+          },
+        ]),
       hito("razon-busca-dios", "escolastica", "La Escolástica", "Siglos XI-XV",
         "¿Puede organizarse todo el conocimiento mediante la razón?",
         [
@@ -495,7 +767,6 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     anio: "Siglos XVII-XVIII",
     intro:
       "¿Cómo sabemos que algo es realmente cierto? Durante siglos, los filósofos habían confiado en las enseñanzas de Aristóteles o en la autoridad de la Iglesia. Pero el Renacimiento y la Revolución Científica cambiaron completamente el panorama. Los telescopios mostraban un universo diferente del imaginado por los antiguos. Los experimentos demostraban que incluso las ideas más aceptadas podían estar equivocadas. La filosofía comenzó entonces a hacerse una nueva pregunta: ¿cuál es el mejor camino para alcanzar el conocimiento? Algunos respondieron que la razón era la fuente principal de la verdad. Otros defendieron que todo conocimiento nace de la experiencia. Durante más de un siglo, este debate dominaría la filosofía europea.",
-    // Momentos aún por añadir del índice original: Montesquieu · Voltaire · Jean-Jacques Rousseau · Blaise Pascal
     subhitos: [
       hito("revolucion-pensamiento", "francis-bacon", "Francis Bacon", "1561-1626",
         "¿Y si dejáramos de adivinar cómo funciona el mundo y empezáramos a comprobarlo?",
@@ -524,7 +795,33 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Así nació una de las frases más famosas de toda la historia de la filosofía: «Pienso, luego existo» (Cogito, ergo sum).",
           "A partir de esa certeza intentó reconstruir todo el conocimiento mediante la razón. Por ello se le considera el padre del racionalismo moderno.",
         ],
-        "Dato curioso: Descartes también fue un brillante matemático y creó el sistema de coordenadas cartesianas que seguimos utilizando hoy."),
+        "Dato curioso: Descartes también fue un brillante matemático y creó el sistema de coordenadas cartesianas que seguimos utilizando hoy.",
+        [
+          {
+            titulo: "La duda, paso a paso",
+            cuerpo: [
+              "Su método no era dudar por gusto: era una demolición controlada para ver qué quedaba en pie. Y lo hizo por escalones, cada uno más radical que el anterior.",
+              "PRIMER ESCALÓN: los sentidos engañan. Un remo parece roto dentro del agua, una torre lejana parece redonda y es cuadrada, el mismo agua parece caliente o fría según la mano. Si a veces me engañan, no puedo fiarme de ellos como base segura de nada.",
+              "SEGUNDO ESCALÓN: el sueño. Ahora mismo creo estar despierto, pero cuando sueño también lo creo, y con todo detalle. No hay ninguna señal infalible que me permita distinguir un estado del otro. Así que ni siquiera puedo estar seguro de tener un cuerpo o de que exista esta habitación.",
+              "TERCER ESCALÓN, el más radical: ¿y si un poder inmensamente astuto y engañoso me estuviera manipulando la mente para que dos y dos me parezcan cuatro sin que lo sean? Descartes lo llamó el «genio maligno», y con esa hipótesis se cae hasta la matemática.",
+              "Y ahí encuentra el suelo. Por mucho que me engañen, para ser engañado tengo que ESTAR. Si dudo, pienso; si pienso, existo. No es una deducción sobre el mundo, es la única cosa que no puede ser falsa mientras la estoy pensando. «Pienso, luego existo».",
+              "Y de ahí sale su problema, que sigue abierto: si lo único seguro es que existo como algo que piensa, ¿cómo salgo de mi propia cabeza? ¿Cómo demuestro que existen el mundo, los demás y mi cuerpo? Descartes intentó salir apoyándose en Dios, y casi nadie después quedó convencido de ese paso.",
+              "Su otra herencia es un problema que arrastramos: dividió la realidad en dos sustancias distintas, la mente que piensa y el cuerpo que ocupa espacio. Eso permitió que la ciencia estudiara el cuerpo como una máquina —enorme avance para la medicina— y dejó una pregunta sin resolver: si son cosas distintas, ¿cómo se comunican? ¿Cómo consigue una decisión mover un brazo? Es el «problema mente-cuerpo», y hoy sigue siendo el asunto central de la filosofía de la mente y de la neurociencia.",
+            ],
+            dato: "Dato curioso: esa hipótesis del genio maligno es exactamente el argumento de «Matrix», y también el de la versión moderna del problema: «¿y si fuera un cerebro conectado a un simulador?». Cuatro siglos después, no tenemos una respuesta mejor que la suya.",
+          },
+        ]),
+      hito("revolucion-pensamiento", "pascal", "Blaise Pascal", "1623-1662",
+        "¿Puede la razón responder a las preguntas que más nos importan?",
+        [
+          "Pascal fue un caso extraordinario: a los dieciséis años escribía tratados de geometría, a los diecinueve construyó una de las primeras máquinas de calcular mecánicas para ayudar a su padre con los impuestos, y con Fermat fundó el cálculo de probabilidades. Además demostró experimentalmente la existencia del vacío y de la presión atmosférica, contra toda la física de su época.",
+          "Es decir: era exactamente el tipo de genio matemático que cabría esperar en el bando de Descartes. Y se pasó al otro lado.",
+          "Su tesis es que la razón es una herramienta magnífica y limitada. Sirve para la geometría y para la física, pero no alcanza a lo que de verdad decide una vida: si merece la pena vivir, a quién querer, qué hacer con el miedo a morir. Para eso, decía, existe otra vía de conocimiento, y la formuló en la frase más citada de su obra: el corazón tiene razones que la razón no entiende.",
+          "Su retrato del ser humano es el más incómodo del siglo XVII. Describe a alguien enormemente grande y enormemente miserable a la vez: capaz de comprender el universo y de angustiarse por una tontería. Y señala nuestro mecanismo de defensa favorito, al que llamó divertissement, «distracción»: no soportamos quedarnos quietos con nosotros mismos, así que nos llenamos de ruido, de trabajo, de juegos y de asuntos urgentes para no pensar. Escribió que toda la desgracia de los hombres viene de no saber estarse quietos en una habitación.",
+          "Y dejó la imagen que resume su idea del ser humano: somos una caña, la cosa más débil de la naturaleza, pero una caña que piensa. El universo puede aplastarnos sin enterarse; nosotros, al morir aplastados, sabemos lo que pasa. Ahí está toda nuestra dignidad.",
+          "Sus notas para un libro que nunca terminó se publicaron después de su muerte con el título de «Pensamientos», y ahí aparece su célebre apuesta: ante una pregunta que la razón no puede zanjar, argumenta que apostar por la existencia de Dios es la decisión más racional en términos de riesgo y beneficio. Es discutible como teología y es fascinante como historia de las ideas: es el primer razonamiento de la historia que aplica el cálculo de probabilidades a una decisión vital.",
+        ],
+        "Dato curioso: murió con treinta y nueve años, con una salud terrible toda su vida. Y en sus últimos años organizó en París el primer servicio de transporte público urbano de la historia, con coches de caballos con ruta fija y precio fijo. El lenguaje de programación Pascal y la unidad de presión llevan su nombre."),
       hito("revolucion-pensamiento", "spinoza", "Baruch Spinoza", "1632-1677",
         "¿Y si Dios no estuviera fuera del universo... sino que fuera el propio universo?",
         [
@@ -561,6 +858,41 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Fue además uno de los inventores del cálculo infinitesimal, al mismo tiempo que Newton.",
         ],
         "Dato curioso: Leibniz soñó con crear un lenguaje universal basado en la lógica que permitiera resolver los desacuerdos mediante cálculos. Muchos consideran que esa idea anticipó la informática moderna."),
+      hito("revolucion-pensamiento", "montesquieu", "Montesquieu", "1689-1755",
+        "¿Cómo se impide que quien manda abuse de su poder?",
+        [
+          "Montesquieu era un noble francés, presidente de un tribunal, y dedicó veinte años a un libro enorme, «El espíritu de las leyes», con una pregunta muy práctica detrás: por qué unos pueblos viven en libertad y otros bajo despotismo.",
+          "Su punto de partida es una observación sobre la naturaleza humana, no sobre la política: todo el que tiene poder tiende a abusar de él, y sigue abusando hasta que encuentra un límite. No porque los gobernantes sean malas personas, sino porque el poder sin freno se comporta siempre así.",
+          "De ahí su conclusión, que es una de las ideas más útiles jamás formuladas: si el poder no se puede eliminar, hay que DIVIDIRLO, de manera que cada parte tenga interés en frenar a las otras. Legislativo, que hace las leyes; ejecutivo, que las aplica; y judicial, que juzga. Separados, en manos distintas, y vigilándose entre sí.",
+          "Lo importante es entender que no es un ideal moral, es un mecanismo. No confía en la virtud de nadie: monta el sistema para que la ambición de uno choque con la ambición del otro. Él lo decía así: hace falta que, por la disposición de las cosas, el poder detenga al poder.",
+          "Estudió además las leyes comparando países, climas, religiones, economías y costumbres, buscando por qué cada sociedad tiene las leyes que tiene. Con eso inauguró de hecho una forma de mirar que después se llamará sociología y derecho comparado.",
+          "Y publicó antes un libro brillante y tramposo: unas «Cartas persas» en las que dos viajeros persas describen París con perplejidad, lo que le permitió reírse de la corte, del clero y de las costumbres francesas fingiendo que era un extranjero quien lo decía. Fue un éxito enorme y una manera muy eficaz de esquivar la censura.",
+          "Su influencia es medible: la separación de poderes está en la Constitución de Estados Unidos de 1787, en la Declaración francesa de 1789 y hoy en la práctica totalidad de las constituciones del mundo. Cuando se dice que un país «está degradando su democracia», casi siempre se está describiendo exactamente lo que él advirtió: alguien juntando otra vez los tres poderes en una sola mano.",
+        ],
+        "Dato curioso: los redactores de la Constitución estadounidense lo citaron más que a ningún otro autor europeo. Un magistrado francés del siglo XVIII, escribiendo sobre Roma y sobre Persia, diseñó el esqueleto del Estado en el que vive hoy casi todo el mundo."),
+      hito("revolucion-pensamiento", "voltaire", "Voltaire", "1694-1778",
+        "¿Se puede defender a alguien con quien no estás de acuerdo?",
+        [
+          "Voltaire fue el intelectual más famoso, más leído y más temido de su siglo, y no por un sistema filosófico —no lo tuvo— sino por algo distinto: convirtió la escritura en un arma contra la injusticia concreta.",
+          "Su vida empezó con un aprendizaje muy directo. Un noble lo insultó, él respondió con ingenio, y el noble mandó a sus criados a darle una paliza. Cuando Voltaire pidió reparación, lo encerraron en la Bastilla y lo desterraron. Se fue a Inglaterra, y allí descubrió un país donde había libertad de prensa, tolerancia religiosa y donde un comerciante podía valer tanto como un aristócrata. Volvió convertido en un crítico feroz del sistema francés.",
+          "Sus dos obsesiones fueron la libertad de expresión y la tolerancia. Y no las defendió en abstracto: se metió en casos judiciales reales. El más célebre es el de Jean Calas, un comerciante protestante torturado y ejecutado en Toulouse en 1762 acusado sin pruebas de haber matado a su hijo para impedir que se convirtiera al catolicismo. Voltaire investigó, publicó, movilizó a media Europa y consiguió tres años después la anulación de la sentencia y la rehabilitación de la familia. Es probablemente la primera campaña de opinión pública de la historia moderna.",
+          "Contra el fanatismo escribió una consigna que repitió durante veinte años: «aplastad al infame», refiriéndose a la intolerancia religiosa e institucional, no a la fe. Él creía en Dios, pero no en las iglesias.",
+          "Su libro más leído hoy es «Cándido», una novela corta y divertidísima en la que un joven optimista recorre el mundo recibiendo desgracias absurdas —terremotos, guerras, inquisiciones, esclavitud— para desmontar la idea de Leibniz de que vivimos en el mejor de los mundos posibles. Su conclusión final es de una modestia deliberada: hay que cultivar el propio huerto, es decir, dejar de justificar el mal del mundo y ponerse a arreglar el pedazo que uno tiene delante.",
+          "Y conviene ser honestos con él, porque no fue un santo: escribió páginas despectivas sobre otros pueblos y sobre los judíos, invirtió en negocios discutibles y podía ser cruel con sus rivales. La Ilustración proclamó derechos universales que ni sus propios autores aplicaban del todo, y ese desfase es una parte importante de esta historia.",
+        ],
+        "Dato curioso: la frase «no estoy de acuerdo con lo que dices, pero defenderé con mi vida tu derecho a decirlo» no es suya: la escribió una biógrafa suya en 1906 resumiendo su actitud. Es un caso curioso: la cita más famosa de Voltaire no es de Voltaire, pero lo describe bastante bien."),
+      hito("revolucion-pensamiento", "rousseau", "Jean-Jacques Rousseau", "1712-1778",
+        "¿Y si la sociedad no nos hubiera civilizado, sino estropeado?",
+        [
+          "Rousseau fue la oveja negra de la Ilustración. Mientras sus contemporáneos celebraban el progreso, la razón y la civilización, él escribió que el ser humano nace bueno y que es la sociedad la que lo corrompe.",
+          "Su argumento es sofisticado y no un elogio ingenuo del salvaje. Sostiene que en un estado original, sin propiedad ni comparación, no había ni vicio ni virtud: había necesidades sencillas y compasión natural. Lo que aparece con la vida social es la MIRADA DEL OTRO —la vanidad, la envidia, el prestigio, el afán de aparentar— y, sobre todo, la desigualdad: el día en que alguien cercó un trozo de tierra y dijo «esto es mío», y encontró gente lo bastante simple para creerle, empezaron los problemas.",
+          "Pero su conclusión no es volver al bosque, y esto es lo que casi todo el mundo malinterpreta. Su conclusión es que hay que construir una sociedad legítima. Y su respuesta está en «El contrato social», que empieza con una de las frases más famosas de la filosofía política: el hombre nace libre y, sin embargo, en todas partes está encadenado.",
+          "Su solución es que las leyes no pueden venir de un rey ni de una élite: tienen que salir de la «voluntad general», es decir, de los propios ciudadanos deliberando sobre el bien común. Obedecer una ley que tú mismo has contribuido a hacer no es someterse, es ser libre. Ahí nace la idea moderna de soberanía popular, la que hay detrás de cada «la soberanía nacional reside en el pueblo» de las constituciones actuales.",
+          "Y escribió también «Emilio», un libro sobre educación que cambió la forma de criar niños en Occidente: defendió que el niño no es un adulto defectuoso al que hay que llenar de datos, sino alguien con sus propias etapas, que aprende jugando, moviéndose, tocando y equivocándose, y al que hay que dejar madurar. Casi toda la pedagogía moderna arranca de ahí.",
+          "Su parte incómoda es enorme y hay que decirla: el hombre que escribió el mejor tratado de educación de su siglo abandonó a sus cinco hijos en un hospicio. Él mismo lo confesó en sus «Confesiones», un libro donde se retrata con sus miserias, y que inaugura la autobiografía moderna tal como la entendemos.",
+          "Su influencia fue inmediata y ambigua: inspiró la Revolución Francesa —los revolucionarios lo citaban continuamente— y también sirvió para justificar la idea de que quien encarna la voluntad general puede imponerla, con lo que su nombre aparece tanto en la historia de la democracia como en la del Terror.",
+        ],
+        "Dato curioso: aquí están las tres respuestas del contrato social, una al lado de otra, y sigue siendo la discusión política de hoy. Hobbes: como somos peligrosos, hace falta un poder fuerte que garantice el orden. Locke: como tenemos derechos previos, el poder existe para protegerlos y puede ser destituido. Rousseau: como la libertad es obedecer lo que uno mismo ha decidido, el poder tiene que ser el pueblo. Casi cualquier debate actual sobre seguridad, derechos y participación es una versión de esa discusión."),
       hito("revolucion-pensamiento", "david-hume", "David Hume", "1711-1776",
         "¿Podemos estar completamente seguros de algo?",
         [
@@ -679,7 +1011,22 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Creía que el capitalismo acabaría generando enormes desigualdades y que los trabajadores terminarían organizándose para transformar la sociedad.",
           "Sus ideas inspiraron revoluciones, partidos políticos y gobiernos durante todo el siglo XX.",
         ],
-        "Dato curioso: probablemente ningún filósofo ha influido tanto en la política mundial como Karl Marx."),
+        "Dato curioso: probablemente ningún filósofo ha influido tanto en la política mundial como Karl Marx.",
+        [
+          {
+            titulo: "Sus tres ideas, sin consignas",
+            cuerpo: [
+              "Marx se cita muchísimo y se lee poco, y sus conceptos centrales son bastante concretos. Van tres, con el ejemplo más simple posible.",
+              "1. LA PLUSVALÍA, que es su análisis económico. Imagina que trabajas ocho horas y que en las cuatro primeras ya has producido el valor equivalente a tu salario. Lo que produces en las otras cuatro es valor que se queda quien te ha contratado. Marx llamó a eso plusvalía, y sostuvo que es la fuente del beneficio: no un robo ilegal, sino el funcionamiento normal del sistema, porque en el mercado lo que se compra no es tu trabajo hecho, es tu tiempo disponible. De ahí deducía que la relación entre quien pone el capital y quien pone las horas es estructuralmente conflictiva, por muy correctas que sean las dos personas.",
+              "2. LA ALIENACIÓN, que es su análisis humano y quizá el más actual. Trabajar debería ser una de las formas en que una persona se expresa y se reconoce en lo que hace. En la fábrica ocurre lo contrario: no eliges qué se produce, no controlas el ritmo, haces un fragmento minúsculo del proceso, el producto no es tuyo y el resultado te resulta ajeno. Trabajas para poder vivir fuera del trabajo, y el trabajo, que es la mayor parte de tu vida despierta, se convierte en algo que sufres. Marx llamó alienación a esa desconexión, y describió cuatro caras: del producto, de la actividad, de los demás y de uno mismo.",
+              "3. EL MATERIALISMO HISTÓRICO, que es su método. Sostiene que para entender una época no hay que empezar por sus ideas, sino por cómo produce lo que necesita para vivir: quién tiene la tierra, la máquina, el capital, la tecnología. Las leyes, la religión, la moral y el arte no flotan libres, sino que se apoyan en esa base y suelen justificar el orden existente. Ese enfoque —mirar los intereses materiales que hay detrás de una idea— es hoy herramienta común en historia, sociología y periodismo, se sea marxista o no.",
+              "Y su diagnóstico del capitalismo incluía descripciones que hoy se leen con cierto asombro: que tiende a concentrarse en pocas manos, que necesita crecer y expandirse por todo el planeta, que arrasa formas de vida tradicionales, que produce crisis cíclicas y que transforma cualquier cosa en mercancía. Escribió que en él «todo lo sólido se desvanece en el aire».",
+              "Su predicción central, en cambio, falló: pensaba que la clase trabajadora de los países industrializados se empobrecería sin remedio hasta derribar el sistema. Lo que ocurrió fue distinto: sindicatos, sufragio universal, jornada de ocho horas, sanidad y educación públicas, pensiones. El capitalismo demostró una capacidad de reforma que él no había previsto, en parte por la presión de los movimientos que su propia obra inspiró.",
+              "Y hay que decir lo otro con la misma claridad: los regímenes que se declararon marxistas en el siglo XX produjeron dictaduras de partido único, hambrunas, campos de trabajo y decenas de millones de muertos. Se discute cuánto de eso está en su obra y cuánto en quienes la usaron —Marx murió en 1883 y escribió muy poco sobre cómo debía organizarse la sociedad futura—, pero cualquier lectura honesta tiene que sostener las dos cosas: la potencia de su análisis y el resultado histórico de su nombre.",
+            ],
+            dato: "Dato curioso: vivió en la pobreza, perdió a tres hijos por enfermedades ligadas a la miseria y pudo escribir «El capital» porque lo mantuvo económicamente su amigo Friedrich Engels… que era hijo de un dueño de fábricas textiles. El análisis del capitalismo lo financió el capitalismo familiar.",
+          },
+        ]),
       hito("grandes-ideas", "darwin", "Charles Darwin", "1809-1882",
         "¿Y si el ser humano fuera una especie más de la naturaleza?",
         [
@@ -701,7 +1048,24 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "A esta idea la representó mediante el concepto del superhombre (Übermensch), una persona capaz de crear su propio sentido de la vida en lugar de limitarse a seguir las normas heredadas.",
           "Aunque sus escritos fueron manipulados décadas después por el nazismo, esa interpretación contradice muchas de las propias ideas de Nietzsche, que murió antes del nacimiento de ese movimiento.",
         ],
-        "Dato curioso: la expresión «Dios ha muerto» es probablemente la frase filosófica más conocida del mundo, pero muy pocas personas conocen su verdadero significado."),
+        "Dato curioso: la expresión «Dios ha muerto» es probablemente la frase filosófica más conocida del mundo, pero muy pocas personas conocen su verdadero significado.",
+        [
+          {
+            titulo: "«Dios ha muerto» no es lo que parece",
+            cuerpo: [
+              "La frase suele leerse como una celebración atea, y no lo es. Nietzsche la pone en boca de un personaje que la anuncia como una CATÁSTROFE, y añade: «lo hemos matado nosotros». Y luego pregunta, aterrado: ¿quién limpiará ahora esta sangre, con qué agua podremos purificarnos, hacia dónde caemos si hemos soltado la Tierra de su sol?",
+              "Lo que está diciendo no es que Dios no exista. Está diciendo algo histórico: que la cultura europea ha dejado de creer de verdad, aunque siga con las formas, y que todavía no se ha dado cuenta de las consecuencias. Y las consecuencias son enormes, porque toda nuestra moral, nuestra idea de verdad, de dignidad, de justicia y de sentido estaba sostenida en ese fundamento.",
+              "De ahí su gran pregunta, que es la del siglo XX entero: si ya no hay un garante externo, ¿de dónde salen los valores? Su respuesta al peligro tiene nombre: el NIHILISMO, el momento en que se descubre que nada vale nada. Nietzsche no lo propone: lo anuncia como la enfermedad que viene, y se propone encontrar la salida.",
+              "Su salida son tres ideas, y ninguna significa lo que se dice por ahí.",
+              "LA VOLUNTAD DE PODER no es ansia de mandar sobre otros. Es el impulso de todo lo vivo por crecer, desplegarse y afirmarse. Aplicado a una persona, es la capacidad de convertirse en lo que puede llegar a ser en lugar de conformarse.",
+              "EL SUPERHOMBRE no es una raza superior ni un tirano. Es alguien capaz de crear sus propios valores y de sostenerlos sin necesitar que se los garantice nadie: el que ya no obedece por miedo al castigo ni por esperanza de premio. Nietzsche describe tres etapas: el camello, que carga con lo que le mandan; el león, que se rebela y dice no; y el niño, que juega y crea de nuevo.",
+              "EL ETERNO RETORNO es un experimento mental brutal: imagina que tuvieras que vivir tu vida exactamente igual, con los mismos dolores y los mismos errores, infinitas veces. ¿Te hundiría o dirías «otra vez»? Es su medida de una vida bien vivida, y él la llamó amor fati: querer lo que te ha pasado, incluido lo malo.",
+              "Y también hay que contar el desastre. Nietzsche se volvió loco en 1889 —según la escena célebre, abrazado al cuello de un caballo al que estaban azotando en Turín— y pasó sus últimos once años sin lucidez, al cuidado primero de su madre y luego de su hermana Elisabeth. Ella era antisemita y nacionalista, todo lo contrario de lo que él había defendido —había roto con Wagner y con su propio cuñado precisamente por eso, y escribió que quería que se fusilara a los antisemitas—. Elisabeth se quedó con sus manuscritos inéditos, montó un archivo, recortó, mezcló y publicó a su gusto, y acabó recibiendo a Hitler en su casa y entregándole el bastón de su hermano.",
+              "Así, el filósofo que despreciaba el nacionalismo, el Estado, la masa y el antisemitismo terminó convertido en emblema del nazismo. La rehabilitación de sus textos originales llevó décadas de trabajo filológico, y todavía hoy hay que decirlo cada vez que se cita: aquello no fue una interpretación, fue una falsificación.",
+            ],
+            dato: "Dato curioso: escribía casi todo en frases breves y sueltas, en parte por estilo y en parte por necesidad: tenía migrañas y problemas de vista tan graves que apenas podía leer o escribir seguido. Sus libros más deslumbrantes están hechos de notas tomadas en los ratos en los que el dolor le dejaba.",
+          },
+        ]),
     ],
   },
   {
@@ -747,7 +1111,22 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Eso nos hace radicalmente libres, pero también totalmente responsables. No podemos culpar a los dioses, al destino ni a nuestra naturaleza: somos lo que elegimos ser.",
           "Sartre decía que estamos «condenados a ser libres», porque incluso no elegir es ya una elección.",
         ],
-        "Dato curioso: Sartre rechazó el Premio Nobel de Literatura en 1964 porque no quería que ninguna institución condicionara su independencia como escritor."),
+        "Dato curioso: Sartre rechazó el Premio Nobel de Literatura en 1964 porque no quería que ninguna institución condicionara su independencia como escritor.",
+        [
+          {
+            titulo: "«Condenados a ser libres» y la mala fe",
+            cuerpo: [
+              "Su idea central se resume en una fórmula: la existencia precede a la esencia. Un cuchillo se fabrica ya con su finalidad decidida —cortar—, así que su esencia viene antes que su existencia. Con las personas es al revés: primero estamos aquí, y solo después, con lo que hacemos, vamos construyendo lo que somos. No hay un plan previo, ni una naturaleza humana fijada, ni un manual de instrucciones.",
+              "De ahí sale su frase más dura: estamos «condenados a ser libres». Condenados, porque no la hemos elegido y no podemos devolverla: incluso no decidir es una decisión, y quedarse quieto también es actuar. Y si no hay nadie que garantice los valores, cada elección nuestra los está creando, y somos responsables de ella sin excusas. Eso produce lo que él llamó angustia, que no es miedo a algo concreto: es el vértigo de darse cuenta de que depende de ti.",
+              "Y ahí aparece su concepto más útil en la vida cotidiana: la MALA FE. Es la maniobra por la que nos mentimos para no cargar con esa libertad. Consiste en tratarse a uno mismo como si fuera una cosa con esencia fija: «yo soy así», «no puedo cambiar», «es mi carácter», «no me queda otra», «solo cumplo órdenes», «tengo mi papel».",
+              "Su ejemplo famoso es el del camarero que actúa exageradamente de camarero: los gestos demasiado precisos, la voz demasiado atenta, como si estuviera interpretando el personaje para no tener que ser una persona que ha elegido estar ahí y que podría irse. Todos tenemos versiones de eso.",
+              "Su tesis es incómoda a propósito: casi todo lo que llamamos «no tengo elección» es en realidad «no quiero asumir el coste de elegir». Y su límite lo señalaron sus críticos con razón: una persona pobre, enferma o presa no tiene el mismo margen que un profesor parisino, y Sartre fue matizando con los años el peso de las circunstancias sociales.",
+              "Y por eso su filosofía cabe en la literatura: la desarrolló en novelas y en teatro más que en tratados. En su obra «A puerta cerrada», tres personas encerradas para siempre en una habitación descubren que no hay verdugos ni fuego: se torturan unas a otras con la mirada y con el juicio. De ahí la frase que todo el mundo cita: el infierno son los otros.",
+              "Y también hay que decir esto: el mismo hombre que hizo de la responsabilidad el centro de su filosofía defendió durante años regímenes que estaban asesinando a su propia gente, y tardó demasiado en reconocerlo. Es un buen recordatorio de que la coherencia entre lo que se piensa y lo que se hace es la parte más difícil de la filosofía.",
+            ],
+            dato: "Dato curioso: en 1945 dio una conferencia titulada «El existencialismo es un humanismo» para responder a sus críticos, y acudió tanta gente que hubo desmayos y no se podía entrar. Es probablemente la única vez en la historia en que una charla de filosofía provocó un colapso de aforo.",
+          },
+        ]),
       hito("mente-humana", "simone-de-beauvoir", "Simone de Beauvoir", "1908-1986",
         "¿Se nace mujer o se llega a serlo?",
         [
@@ -756,7 +1135,23 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Su frase más famosa resume su pensamiento: «No se nace mujer, se llega a serlo». Con ella quería decir que muchos de los papeles considerados «femeninos» no son naturales, sino aprendidos e impuestos por la cultura.",
           "Su trabajo se convirtió en una de las bases del feminismo moderno.",
         ],
-        "Dato curioso: El segundo sexo causó tanto escándalo al publicarse en 1949 que llegó a incluirse en listas de libros prohibidos."),
+        "Dato curioso: El segundo sexo causó tanto escándalo al publicarse en 1949 que llegó a incluirse en listas de libros prohibidos.",
+        [
+          {
+            titulo: "«No se nace mujer: se llega a serlo»",
+            cuerpo: [
+              "Es la frase más citada de la filosofía del siglo XX sobre este asunto, y conviene entender exactamente qué afirma, porque suele malinterpretarse.",
+              "No dice que el cuerpo no exista. Dice que del hecho biológico de nacer con un cuerpo determinado no se deduce automáticamente un carácter, una vocación, unas capacidades ni un destino. Todo eso —ser dulce, cuidar, gustar, no destacar, no ocupar espacio— se aprende, y se enseña desde la primera infancia con juguetes, cuentos, elogios, correcciones y expectativas distintas. Es decir: distingue el sexo de lo que la sociedad construye sobre él, que es la distinción con la que se sigue trabajando hoy.",
+              "Su otro concepto clave es el de «el Otro». Beauvoir observa que en toda la tradición cultural el varón se ha tomado como el ser humano por defecto —el sujeto, lo normal, lo universal— y la mujer se ha definido como lo que se desvía de esa norma, como lo secundario y relativo a él. De ahí el título: el «segundo» sexo no es el segundo por orden, es el definido siempre desde el otro.",
+              "Y lo demuestra con un método que era nuevo: no argumenta en abstracto, sino que recorre la biología, la historia, la mitología, el psicoanálisis, la literatura y decenas de testimonios de mujeres reales sobre la infancia, la adolescencia, el matrimonio, la maternidad, la vejez y la prostitución. Casi mil páginas.",
+              "Su análisis material es demoledor y muy concreto: mientras una mujer no tenga dinero propio, trabajo propio y control sobre su cuerpo, su libertad es teórica. Por eso insistió en la independencia económica y en el derecho a decidir sobre la maternidad, cosas que en 1949 no estaban ni cerca de conseguirse: en Francia las mujeres acababan de conseguir el voto en 1944 y necesitaban permiso del marido para abrir una cuenta bancaria hasta 1965.",
+              "Es también la aplicación más consecuente del existencialismo. Si la existencia precede a la esencia, entonces no hay «esencia femenina» que cumplir, y la libertad de la que hablaba Sartre es una libertad situada, condicionada por la educación, la ley, el dinero y la mirada de los demás. Muchos consideran que su libro es la mejor obra existencialista que se escribió, más que las de él.",
+              "Su influencia fue directa: el feminismo de los años sesenta y setenta se organizó en buena parte a partir de ahí, y ella participó activamente, firmó manifiestos por el derecho al aborto y acompañó procesos judiciales.",
+              "Y su vida fue otra forma de argumento: no se casó, no tuvo hijos, vivió de escribir y mantuvo con Sartre una relación abierta y pactada durante cincuenta años, algo que escandalizó y que también se ha analizado críticamente, porque en aquella relación hubo desequilibrios y episodios discutibles con alumnas jóvenes.",
+            ],
+            dato: "Dato curioso: sacó la segunda mejor nota de Francia en el examen de acceso a la enseñanza de la filosofía, el más duro del país. El primero fue Sartre, y era su segundo intento; para ella era el primero, y tenía veintiún años, la persona más joven que lo había aprobado nunca.",
+          },
+        ]),
       hito("mente-humana", "albert-camus", "Albert Camus", "1913-1960",
         "¿Tiene sentido la vida... aunque no tenga sentido?",
         [
@@ -765,7 +1160,24 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Pero su respuesta no fue pesimista. Propuso rebelarse contra el absurdo viviendo con intensidad, disfrutando y creando, precisamente porque la vida no viene con un manual de instrucciones.",
           "Lo explicó con el mito de Sísifo, aquel personaje condenado a empujar eternamente una roca montaña arriba. Camus imaginaba que, pese a todo, podíamos imaginar a Sísifo feliz.",
         ],
-        "Dato curioso: Camus recibió el Premio Nobel de Literatura con solo 44 años y murió poco después en un accidente de coche, llevando en el bolsillo un billete de tren que finalmente no llegó a usar."),
+        "Dato curioso: Camus recibió el Premio Nobel de Literatura con solo 44 años y murió poco después en un accidente de coche, llevando en el bolsillo un billete de tren que finalmente no llegó a usar.",
+        [
+          {
+            titulo: "Sísifo, o por qué merece la pena seguir",
+            cuerpo: [
+              "Camus empieza su ensayo más famoso con una frase que no se anda con rodeos: no hay más que un problema filosófico verdaderamente serio, el suicidio. Es decir, la pregunta de si la vida merece la pena vivirse. Todo lo demás —cuántas dimensiones tiene el universo, cómo funciona el lenguaje— viene después.",
+              "Su punto de partida es lo que llama el ABSURDO, y conviene entenderlo bien porque no significa que la vida sea ridícula. El absurdo es un desajuste entre dos cosas: por un lado, nuestra necesidad de que las cosas tengan sentido, orden y justicia; por otro, un universo que no responde a esa demanda. Ninguna de las dos partes es absurda por separado: lo absurdo es el choque.",
+              "Y dice que ante eso hay tres salidas posibles, y descarta dos.",
+              "Descarta el suicidio, porque es suprimir uno de los términos del problema en lugar de afrontarlo. Y descarta lo que llama el «salto»: adoptar una fe, una ideología o un sistema que te asegure que sí hay un sentido garantizado, porque eso es dejar de mirar lo que estabas mirando. Lo llamó «suicidio filosófico», y lo dijo con respeto pero sin rebaja.",
+              "Su tercera vía es la rebelión: sostener las dos cosas a la vez. Vivir sin garantías y seguir queriendo, actuando y creando de todas formas. Y ahí entra su imagen.",
+              "SÍSIFO es el personaje mitológico condenado por los dioses a empujar una piedra enorme hasta la cima de una montaña, para que en el último momento la piedra ruede hacia abajo y tenga que empezar otra vez, eternamente. Es el castigo perfecto porque es un trabajo inútil y sin esperanza.",
+              "Camus se fija en un instante concreto: el rato en que Sísifo baja la ladera, después de que la piedra haya caído, y va a por ella otra vez. Ese es el momento consciente, cuando sabe perfectamente lo que le espera y aun así camina. Y remata con la frase que ha hecho célebre el ensayo: hay que imaginar a Sísifo feliz. Su piedra es suya, la montaña es suya, y el destino sin esperanza deja de ser un castigo en cuanto lo asume sin mentirse.",
+              "Y su segunda gran idea es moral, no metafísica. En «El hombre rebelde» sostiene que del absurdo no se deduce que todo esté permitido, y ahí rompió públicamente con Sartre: se negó a justificar la violencia política y las víctimas presentes en nombre de un futuro mejor. Su fórmula, contra las ideologías que aceptaban cualquier precio, era clara: nada justifica convertir a una persona en un medio.",
+              "Y hay una biografía detrás que explica el tono: nació muy pobre en Argelia, su padre murió en la Primera Guerra Mundial cuando él tenía un año, su madre era analfabeta y sorda, tuvo tuberculosis desde joven —convivió con la posibilidad de morir toda su vida—, jugó de portero de fútbol y llegó a la universidad gracias a un maestro de primaria que peleó por él. Al recibir el Nobel, la primera carta que escribió fue para aquel maestro.",
+            ],
+            dato: "Dato curioso: su novela «La peste», sobre una ciudad cerrada por una epidemia, volvió a agotarse en librerías de medio mundo en 2020. Su conclusión —que en una catástrofe lo único decente es hacer bien tu trabajo y cuidar de los demás, sin heroísmos— se leyó de otra manera después de aquella primavera.",
+          },
+        ]),
       hito("mente-humana", "hannah-arendt", "Hannah Arendt", "1906-1975",
         "¿Cómo pueden personas normales cometer atrocidades?",
         [
@@ -774,7 +1186,23 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "De ahí nació su idea más célebre: la banalidad del mal. El mal más terrible, decía, no siempre lo cometen seres perversos, sino personas que dejan de pensar y de cuestionar lo que hacen.",
           "Por eso defendió que pensar por uno mismo y participar en la vida pública son formas de proteger la libertad.",
         ],
-        "Dato curioso: la expresión «la banalidad del mal» generó un enorme debate y todavía hoy se utiliza para analizar cómo se cometen las grandes injusticias."),
+        "Dato curioso: la expresión «la banalidad del mal» generó un enorme debate y todavía hoy se utiliza para analizar cómo se cometen las grandes injusticias.",
+        [
+          {
+            titulo: "La banalidad del mal: qué vio exactamente en aquel juicio",
+            cuerpo: [
+              "En 1961, Hannah Arendt fue a Jerusalén como corresponsal para cubrir el juicio a Adolf Eichmann, el funcionario nazi que había organizado la logística de la deportación de millones de judíos a los campos de exterminio.",
+              "Esperaba encontrarse con un monstruo. Y lo que vio, sentado en una cabina de cristal, fue un hombre mediocre, calvo, con problemas de próstata, que hablaba en jerga administrativa, que se equivocaba con los tópicos, que estaba orgulloso de su eficiencia profesional y de haber cumplido con las órdenes, y que no parecía odiar a nadie en particular. No era un fanático ideológico ni un sádico: era un burócrata que quería ascender.",
+              "Su conclusión es lo que le costó una tormenta de críticas: el mal más extremo del siglo XX no lo cometieron sobre todo psicópatas, sino gente normal que dejó de pensar. Y por «pensar» ella entendía algo muy preciso: la capacidad de imaginar cómo se ve tu acto desde el punto de vista del otro, y de mantener un diálogo interior contigo mismo en el que tengas que responder por lo que haces.",
+              "Eichmann, decía, había sustituido eso por reglamentos, ascensos, lenguaje técnico —«traslado», «tratamiento especial», «solución final»— y por la obediencia como virtud. Nunca se preguntó qué había al final de los trenes que él organizaba, porque su trabajo era que los trenes salieran a su hora.",
+              "El malentendido que persiguió a Arendt durante años es doble, y merece aclararse. «Banal» no significa que el crimen fuera pequeño: significa que sus AUTORES podían ser gente sin nada excepcional. Y su tesis no exculpa a nadie: al contrario, sostiene que no pensar es una forma de responsabilidad, y ella defendió expresamente su condena.",
+              "También le costó ataques feroces la parte en que analizó, con dureza y quizá con injusticia, el papel de algunos consejos judíos obligados a colaborar en la administración de los guetos. Perdió amigos y fue acusada de todo. El libro sigue siendo objeto de discusión, y los historiadores han matizado su retrato: hay documentos que muestran a un Eichmann más antisemita y más consciente de lo que ella percibió en la sala.",
+              "Su análisis conectaba con su gran obra anterior, «Los orígenes del totalitarismo», donde describe cómo estos regímenes destruyen primero la vida pública y la posibilidad de discutir, luego los lazos entre las personas hasta dejarlas aisladas y, finalmente, la propia noción de hecho comprobable, sustituyéndola por una realidad fabricada donde ya nadie sabe qué es verdad y da igual.",
+              "Y por eso se la cita tanto ahora: describió el proceso por el que una sociedad puede dejar de distinguir lo verdadero de lo falso y aceptar cualquier cosa, y describió los engranajes que hacen posible que miles de personas decentes participen en algo atroz sin sentirse responsables de nada. Cada una hacía «solo su parte».",
+            ],
+            dato: "Dato curioso: pocos años después, el psicólogo Stanley Milgram hizo su famoso experimento en el que voluntarios corrientes aplicaban descargas eléctricas a un desconocido porque una figura con autoridad les decía que continuaran. Milgram citó expresamente el juicio de Eichmann como inspiración: la filosofía había planteado la pregunta y el laboratorio fue a comprobarla.",
+          },
+        ]),
       hito("mente-humana", "ortega-y-gasset", "José Ortega y Gasset", "1883-1955",
         "¿Somos realmente dueños de nuestra vida?",
         [
@@ -801,7 +1229,23 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "A esta idea la llamó falsabilidad. Según Popper, la ciencia avanza proponiendo teorías atrevidas e intentando después echarlas abajo. Las que resisten todos los intentos son las que provisionalmente aceptamos.",
           "Por eso, en ciencia, ninguna teoría es una verdad absoluta y definitiva: siempre está abierta a ser corregida.",
         ],
-        "Dato curioso: Popper también fue un firme defensor de la democracia; en La sociedad abierta y sus enemigos criticó a los regímenes totalitarios y a las filosofías que creían poseer la verdad absoluta."),
+        "Dato curioso: Popper también fue un firme defensor de la democracia; en La sociedad abierta y sus enemigos criticó a los regímenes totalitarios y a las filosofías que creían poseer la verdad absoluta.",
+        [
+          {
+            titulo: "La falsación: cómo distinguir la ciencia de lo que solo lo parece",
+            cuerpo: [
+              "Popper se hizo la pregunta mirando a su alrededor en la Viena de los años veinte, donde convivían cuatro teorías que se presentaban como científicas: la relatividad de Einstein, el marxismo, el psicoanálisis de Freud y la psicología de Adler. Todas explicaban muchísimas cosas. ¿Por qué le parecía que una de ellas era distinta?",
+              "Su respuesta fue esta: la diferencia no está en cuánto explica una teoría, sino en si ARRIESGA algo. Una teoría es científica si dice de antemano qué observación la dejaría por falsa.",
+              "El contraste que usaba es clarísimo. Einstein predijo que la gravedad desviaría la luz de las estrellas una cantidad exacta y medible; si en el eclipse de 1919 la desviación no aparecía, su teoría estaba muerta. Se midió, apareció, y la teoría sobrevivió a una prueba que podía haberla matado. En cambio, con las otras tres podía explicarse cualquier comportamiento y también el contrario: si un hombre salva a un niño que se ahoga, es sublimación; si lo empuja al agua, es represión. Explicar todo y no poder fallar nunca no es una virtud: es la señal de alarma.",
+              "De ahí sale un cambio de perspectiva enorme sobre cómo funciona el conocimiento. No acumulamos verdades comprobadas: eliminamos errores. Mil cisnes blancos no demuestran que todos los cisnes sean blancos; un solo cisne negro demuestra que no. Por eso el trabajo del científico no es buscar confirmaciones —que siempre se encuentran— sino intentar tumbar su propia hipótesis con el experimento más severo que se le ocurra.",
+              "Y de ahí su visión del progreso: toda teoría es provisional, incluso la mejor. Lo que llamamos conocimiento es el conjunto de conjeturas que han aguantado hasta hoy los intentos de refutarlas. Su fórmula era «conjeturas y refutaciones».",
+              "Con ese criterio se puede separar la ciencia de la pseudociencia sin necesidad de ser experto: pregunta qué resultado concreto haría que quien te habla admitiera estar equivocado. Si no hay ninguno, no estás ante una teoría científica, estés de acuerdo con ella o no.",
+              "Y lo más interesante es que aplicó exactamente lo mismo a la política, y ahí está su otra gran idea. Un sistema es «sociedad abierta» si permite criticar y CORREGIR las decisiones sin violencia. Por eso decía que la pregunta importante no es «¿quién debe gobernar?» —la pregunta de Platón— sino «¿cómo podemos organizarnos para poder echar a un mal gobierno sin derramar sangre?». La democracia, para Popper, no es el gobierno de los mejores: es el único sistema con mecanismo de rectificación incorporado.",
+              "Su límite lo señaló su propio alumno más brillante y otros críticos: en la práctica, un experimento fallido casi nunca mata una teoría de golpe; se ajusta, se discute, se buscan explicaciones. Eso es lo que estudió Thomas Kuhn, que viene a continuación en esta historia.",
+            ],
+            dato: "Dato curioso: la ciencia mantiene hoy una versión práctica de su criterio: registrar públicamente qué se va a medir ANTES de hacer el experimento, para no poder decidir después qué resultado «contaba». Es la falsación convertida en trámite administrativo.",
+          },
+        ]),
       hito("pensar-futuro", "kuhn", "Thomas Kuhn", "1922-1996",
         "¿La ciencia avanza poco a poco o a saltos?",
         [
@@ -819,7 +1263,24 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Según él, en cada momento histórico existe una forma de saber que decide qué se considera verdadero y qué queda excluido.",
           "Su obra invita a mirar con ojos críticos las instituciones y las normas que aceptamos sin cuestionar.",
         ],
-        "Dato curioso: Foucault es uno de los autores más citados de todas las ciencias sociales en el mundo entero."),
+        "Dato curioso: Foucault es uno de los autores más citados de todas las ciencias sociales en el mundo entero.",
+        [
+          {
+            titulo: "El poder no está solo arriba: está en los detalles",
+            cuerpo: [
+              "La aportación de Foucault es un cambio de mirada. Estamos acostumbrados a imaginar el poder como algo que está en un sitio —el rey, el Estado, el jefe— y que baja en forma de prohibición. Él sostuvo que el poder moderno funciona de otra manera: está repartido, atraviesa las instituciones que consideramos neutrales y no actúa tanto prohibiendo como PRODUCIENDO conductas, hábitos, cuerpos y formas de normalidad.",
+              "Su método fue histórico: se puso a leer archivos, expedientes, reglamentos y manuales para reconstruir cómo cambiaron nuestras instituciones. Y encontró un patrón.",
+              "Estudió LA LOCURA y mostró cómo, en unos pocos siglos, personas que antes vivían integradas de mala manera en su pueblo pasaron a ser encerradas, clasificadas y tratadas como enfermas, y cómo la definición de lo que cuenta como locura se movía según lo que cada época consideraba inaceptable.",
+              "Estudió LA CÁRCEL y contó un cambio decisivo: antes se castigaba el cuerpo del condenado en público —el suplicio, el patíbulo—; a partir del siglo XIX se pasó a encerrarlo, vigilarlo, medirlo, contabilizar su conducta y corregirlo. El castigo dejó de ser un espectáculo de dolor y pasó a ser un programa de reforma del interior de la persona.",
+              "Su imagen más célebre está ahí: el panóptico, un diseño real de prisión pensado por Bentham en el que las celdas rodean una torre central desde la que un vigilante puede verlas todas sin ser visto. El detalle importante es que no hace falta que haya nadie en la torre: basta con que el preso NO PUEDA SABERLO. Sabiéndose posiblemente observado, se vigila a sí mismo. Foucault lo usó como modelo de cómo funcionan la escuela, el cuartel, el hospital, la fábrica y la oficina: horarios, exámenes, fichas, evaluaciones, expedientes.",
+              "Y estudió LA SEXUALIDAD para desmontar un tópico: se dice que la época victoriana la reprimió con el silencio, y él mostró lo contrario —que se habló de ella más que nunca, pero en las consultas, los confesionarios, los tratados médicos y los informes—, convirtiéndola en un asunto que hay que clasificar, diagnosticar y confesar.",
+              "De ahí su tesis más citada: saber y poder van juntos. Quien tiene autoridad para definir lo normal, lo sano, lo correcto y lo desviado tiene un poder enorme, aunque no dé ninguna orden. Y las disciplinas que estudian a las personas no solo describen: contribuyen a fabricar las categorías con las que después nos entendemos a nosotros mismos.",
+              "Es imposible no leerlo hoy pensando en móviles, cámaras, algoritmos, puntuaciones de usuario, seguimiento de la productividad y redes sociales, donde además nos vigilamos voluntariamente y nos exponemos por gusto. Murió en 1984, sin ver nada de eso, y describió el mecanismo.",
+              "Sus críticos le reprochan dos cosas con razón: que si el poder está en todas partes se vuelve difícil señalar responsables y proponer alternativas, y que sus reconstrucciones históricas son a veces más brillantes que exactas. Aun así, su vocabulario está en todas las ciencias sociales.",
+            ],
+            dato: "Dato curioso: no fue solo un teórico de despacho. Fundó un grupo para dar voz a los presos, entrevistó a reclusos y participó en protestas por sus condiciones de vida. El hombre que escribió el gran libro sobre la cárcel se dedicó también a intentar cambiar las cárceles reales.",
+          },
+        ]),
       hito("pensar-futuro", "john-rawls", "John Rawls", "1921-2002",
         "¿Cómo sería una sociedad realmente justa?",
         [
@@ -828,7 +1289,24 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "A esa situación la llamó el velo de la ignorancia. Si no sabemos qué nos va a tocar, tenderemos a crear reglas justas para todos, y no solo para unos pocos privilegiados.",
           "Con esta idea defendió que las desigualdades solo son aceptables si benefician también a los más desfavorecidos.",
         ],
-        "Dato curioso: su libro Teoría de la justicia, publicado en 1971, reavivó el interés por la filosofía política en todo el mundo."),
+        "Dato curioso: su libro Teoría de la justicia, publicado en 1971, reavivó el interés por la filosofía política en todo el mundo.",
+        [
+          {
+            titulo: "El velo de ignorancia: pruébalo tú",
+            cuerpo: [
+              "Rawls inventó el experimento mental más útil que ha dado la filosofía política, y funciona porque neutraliza lo que estropea cualquier discusión sobre justicia: que cada uno defiende, sin darse cuenta, lo que le conviene desde donde está.",
+              "LA PRUEBA. Imagina que tienes que decidir las reglas de la sociedad en la que vas a vivir —impuestos, sanidad, educación, herencias, derechos, castigos— pero que aún no sabes qué lugar vas a ocupar en ella. No sabes si nacerás rico o pobre, en la capital o en un pueblo, sano o con una enfermedad grave, hombre o mujer, con talento para los negocios o sin ninguno, en una familia que te lea de niño o en una que no. Tampoco sabes en qué país ni en qué siglo.",
+              "Desde ahí, ¿qué reglas elegirías?",
+              "La respuesta de Rawls es que nadie apostaría a lo grande, porque el que reparte es también el que juega: tenderías a asegurar un suelo decente para cualquier posición posible, incluida la peor, porque podría ser la tuya. Y de ahí saca sus dos principios de justicia.",
+              "PRIMERO: las mismas libertades básicas para todos, y no negociables. Expresión, conciencia, voto, propiedad personal, garantías ante la ley. No se pueden recortar a cambio de ventajas económicas.",
+              "SEGUNDO: se aceptan las desigualdades, pero con dos condiciones. Que los puestos y las oportunidades estén realmente abiertos a todos —no basta con que sea legal presentarse, hace falta que sea posible—, y que la desigualdad sirva para mejorar la situación de los que están PEOR. Esta última es su famoso «principio de diferencia»: que unos ganen mucho más solo se justifica si eso hace que a los últimos les vaya mejor de lo que les iría en una sociedad más plana.",
+              "Fíjate en su idea de fondo, que es la más potente: casi todo lo que determina tu vida —tu familia, tu país, tu salud, tu talento, tu época— no lo has elegido ni lo has merecido. Es lotería. Y una sociedad justa es la que no permite que la lotería del nacimiento decida el resto.",
+              "Sus críticos le respondieron desde los dos lados, y las dos objeciones son serias. Los libertarios, con Nozick a la cabeza, dijeron que redistribuir lo que alguien ha ganado legítimamente es tomar de él sin su consentimiento, y que la justicia debe mirar cómo se han adquirido las cosas, no cómo quedan repartidas. Los comunitaristas dijeron que ese individuo sin identidad, sin cultura y sin vínculos que decide detrás del velo no existe: nadie elige sus valores desde ninguna parte. Y Amartya Sen y Martha Nussbaum añadieron que no basta con repartir recursos: hay que mirar qué puede hacer realmente cada persona con ellos, porque el mismo dinero no da la misma libertad a alguien con una discapacidad grave.",
+              "Y lo mejor de la herramienta es que se puede usar sin ser filósofo. Aplícala a cualquier debate actual —la sanidad, las herencias, la vivienda, la inmigración, el reparto de la crisis climática entre generaciones— y pregúntate qué defenderías si no supieras de qué lado vas a caer.",
+            ],
+            dato: "Dato curioso: Rawls fue soldado en el Pacífico durante la Segunda Guerra Mundial y estuvo en Japón poco después del bombardeo de Hiroshima. Aquello, y el racismo que había visto en el ejército, están detrás de una vida entera dedicada a preguntarse cómo se justifica el reparto de las cargas entre las personas.",
+          },
+        ]),
       hito("pensar-futuro", "peter-singer", "Peter Singer", "n. 1946",
         "¿Debería importarnos el sufrimiento de todos los seres vivos?",
         [

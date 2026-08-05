@@ -118,7 +118,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             letterSpacing="0.02em"
             textShadow="0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.14)"
           >
-            Ingeniera informática. No existía lo que he construido: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.
+            Ingeniera informática. Reconstruí el camino que muchas personas recorremos durante años intentando comprendernos: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.
           </Text>
 
           {extraParagraph && (

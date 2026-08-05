@@ -40,8 +40,28 @@ export default function MetodoCulturaHistoriaEra() {
   );
   const volverHistoria = `/metodo/cultura/historia/${historiaKey}`;
 
+  // Eras vecinas: la Historia es una línea del tiempo, así que desde una era se
+  // puede AVANZAR a la siguiente (y volver a la anterior) sin pasar por el
+  // índice. Al terminar el cómic de la era también se salta a la siguiente.
+  const { eraAnterior, eraSiguiente } = useMemo(() => {
+    const eras = historia?.hitos ?? [];
+    const i = eras.findIndex((h) => h.key === eraKey);
+    return {
+      eraAnterior: i > 0 ? eras[i - 1] : null,
+      eraSiguiente: i >= 0 && i < eras.length - 1 ? eras[i + 1] : null,
+    };
+  }, [historia, eraKey]);
+
+  const irAEra = (key: string) => {
+    setActiveKey(null);
+    navigate(`/metodo/cultura/historia/${historiaKey}/${key}`);
+  };
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+    // Al cambiar de era volvemos a esperar (loader + precarga de sus fotos): si
+    // no, la nueva era se pintaría con los círculos aún sin imagen.
+    setLoading(true);
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
@@ -112,6 +132,17 @@ export default function MetodoCulturaHistoriaEra() {
               nom={culturaNom}
               mb={0}
               prev={{ label: "← La Historia", onClick: () => navigate(volverHistoria) }}
+              // Avanzar/retroceder entre eras sin volver al índice. En la última
+              // era el botón se queda deshabilitado (con su explicación) para que
+              // no baile la fila de botones de una era a otra.
+              extra={eraAnterior
+                ? { label: eraAnterior.titulo, arrow: "prev", onClick: () => irAEra(eraAnterior.key) }
+                : { label: "Era anterior", arrow: "prev", onClick: () => {}, disabled: true,
+                    disabledTooltip: "Es la primera era de la Historia" }}
+              next={eraSiguiente
+                ? { label: eraSiguiente.titulo, arrow: "next", onClick: () => irAEra(eraSiguiente.key) }
+                : { label: "Era siguiente", arrow: "next", onClick: () => {}, disabled: true,
+                    disabledTooltip: "Es la última era de la Historia" }}
             />
           </Reveal>
 
@@ -143,6 +174,13 @@ export default function MetodoCulturaHistoriaEra() {
         vinetas={todasVinetas}
         initialIndex={indiceInicial}
         onClose={() => setActiveKey(null)}
+        // Al terminar la era (avanzar más allá de la última viñeta) se pasa
+        // directamente a la era siguiente; si es la última, solo se cierra.
+        onComplete={eraSiguiente ? () => irAEra(eraSiguiente.key) : undefined}
+        // Botón siempre visible, junto a la X: saltar a la era siguiente sin
+        // tener que leerse el resto del cómic.
+        continueLabel={eraSiguiente ? eraSiguiente.titulo : undefined}
+        onContinue={eraSiguiente ? () => irAEra(eraSiguiente.key) : undefined}
         themeColor={culturaTxt}
         textColor={culturaTxt}
         disciplinaBgImage={CULTURA_IMG}

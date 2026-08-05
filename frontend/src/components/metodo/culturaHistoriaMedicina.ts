@@ -1,4 +1,5 @@
 import type { HitoHistoria, SubHito } from "./culturaHistoriaUniversal";
+import type { Vineta } from "./ComicViewer";
 
 // ─────────────────────────────────────────────────────────────────────────
 // HISTORIA DE LA MEDICINA (Cultura). Tagline: «20.000 años buscando la salud —
@@ -16,9 +17,18 @@ import type { HitoHistoria, SubHito } from "./culturaHistoriaUniversal";
 // India el equilibrio, China el flujo, Grecia la razón, el islam la compasión
 // clínica, el Renacimiento la evidencia, la medicina moderna la integración.
 //
-// Fotos planas en /recorrido/cultura/historiamedicina/<subKey>.png (el nombre del
-// archivo = key del sub-hito). El texto se pinta con `separarFrases` (salto de
-// línea tras cada punto).
+// Fotos planas en /recorrido/cultura/historiamedicina/<subKey>.webp (el nombre
+// del archivo = key del sub-hito; la carpeta aún no existe, así que de momento
+// todos los círculos pintan su marcador y los cómics el «próximamente»). El
+// texto se pinta con `separarFrases` (salto de línea tras cada punto).
+//
+// CÓMO SE CUENTA (igual que en las demás Historias): que se ENTIENDA, no que se
+// cuente. Cada momento va con pregunta gancho → cuerpo (qué problema había y
+// cómo se resolvió) → «Dato curioso», y cuando el tema da para más (cómo
+// funciona el placebo, por qué las sangrías duraron dos mil años, el primer
+// ensayo clínico, las resistencias a los antibióticos, los tratamientos
+// psiquiátricos que hoy nos horrorizan…) se le añaden páginas «Profundiza» con
+// el parámetro `extras`: viñetas EXTRA del mismo momento, no círculos nuevos.
 //
 // Momentos sin fecha (eyebrow "") = pasajes de síntesis/ejercicio (p. ej.
 // «Aplícalo a tu vida», «Mensaje final»): el ComicViewer oculta el antetítulo
@@ -28,22 +38,36 @@ import type { HitoHistoria, SubHito } from "./culturaHistoriaUniversal";
 // Todas las fotos (círculo + viñeta) van planas en una sola carpeta, con el
 // nombre del sub-hito (misma convención que las demás Historias).
 const foto = (_era: string, sub: string) =>
-  `/recorrido/cultura/historiamedicina/${sub}.png`;
+  `/recorrido/cultura/historiamedicina/${sub}.webp`;
 
-// Sub-hito con su cómic (una viñeta). `pregunta` opcional (gancho, va primero) y
-// `dato` opcional (curiosidad, va al final). El `cuerpo` son los párrafos.
+/** Página «Profundiza» de un momento: una viñeta más, con la misma foto. */
+interface Profundiza {
+  titulo: string;
+  cuerpo: string[];
+  dato?: string;
+}
+
+// Sub-hito con su cómic: viñeta principal (`pregunta` gancho + `cuerpo` + `dato`
+// curioso) y, opcionalmente, páginas «Profundiza» detrás.
 const hito = (
   era: string, key: string, titulo: string, fecha: string,
-  pregunta: string, cuerpo: string[], dato?: string,
+  pregunta: string, cuerpo: string[], dato?: string, extras?: Profundiza[],
 ): SubHito => {
+  const src = foto(era, key);
   const paragraphs: string[] = [];
   if (pregunta) paragraphs.push(pregunta);
   paragraphs.push(...cuerpo);
   if (dato) paragraphs.push(dato);
-  return {
-    key, titulo, foto: foto(era, key),
-    vinetas: [{ src: foto(era, key), eyebrow: fecha, titulo, paragraphs }],
-  };
+  const vinetas: Vineta[] = [{ src, eyebrow: fecha, titulo, paragraphs }];
+  (extras ?? []).forEach((e) => {
+    vinetas.push({
+      src,
+      eyebrow: "Profundiza",
+      titulo: e.titulo,
+      paragraphs: e.dato ? [...e.cuerpo, e.dato] : e.cuerpo,
+    });
+  });
+  return { key, titulo, foto: src, vinetas };
 };
 
 export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
@@ -133,7 +157,22 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "El chamán, sin saber nada de neuronas, dominaba este poder mejor que nadie. Todo su ritual estaba diseñado para maximizar la confianza del enfermo.",
           "Por eso su medicina, tantas veces despreciada como magia, contenía una verdad que seguimos usando hoy: la mente es una farmacia.",
         ],
-        "Dato curioso: existe también el efecto contrario, el nocebo: si alguien cree que algo le va a hacer daño, puede llegar a sentir síntomas reales. La mente cura, pero también puede enfermar."),
+        "Dato curioso: existe también el efecto contrario, el nocebo: si alguien cree que algo le va a hacer daño, puede llegar a sentir síntomas reales. La mente cura, pero también puede enfermar.",
+        [
+          {
+            titulo: "Cómo funciona el placebo (y qué no puede hacer)",
+            cuerpo: [
+              "El placebo es la prueba más sólida que tenemos de que la mente y el cuerpo no son dos cosas separadas, y conviene entenderlo bien, porque se usa como excusa para dos errores opuestos: despreciarlo («es solo sugestión») o exagerarlo («la mente lo cura todo»).",
+              "QUÉ OCURRE DE VERDAD. No es imaginación. Cuando alguien espera aliviarse, el cerebro pone en marcha respuestas medibles: libera sus propios opioides y dopamina, cambia la actividad de las zonas que procesan el dolor y modifica el ritmo cardiaco y las hormonas del estrés. Se ha visto en escáneres, y se puede bloquear: si a una persona que está respondiendo a un placebo se le da un fármaco que anula los opioides internos, el alivio desaparece. Es decir, había una reacción química real.",
+              "QUÉ LO HACE MÁS FUERTE. Y aquí esta parte de la historia se da la mano con la del chamán, porque son exactamente los mismos ingredientes: el ritual —que haya un procedimiento, un tiempo, un gesto—, la seguridad de quien te atiende, la atención dedicada, una explicación que dé sentido a lo que te pasa, la expectativa y la esperanza. Un tratamiento administrado con calma y bien explicado funciona MEJOR que el mismo tratamiento dado con prisa y sin mirar a la cara. Eso está medido.",
+              "LO CURIOSO. Funciona incluso cuando el paciente SABE que es un placebo, si se le explica el mecanismo: se llaman placebos abiertos y hay ensayos con buenos resultados en dolor crónico y en colon irritable. Y el envoltorio cuenta: las cápsulas grandes funcionan más que las pequeñas, las inyecciones más que las pastillas y las de marca más que un genérico idéntico.",
+              "SUS LÍMITES, que son la parte importante. El placebo actúa sobre SÍNTOMAS —dolor, náuseas, fatiga, ansiedad, insomnio, malestar— y no sobre la enfermedad de fondo. No reduce un tumor, no baja el azúcar de un diabético, no cierra una fractura ni mata una bacteria. Puede hacer que alguien con asma diga que respira mejor mientras su función pulmonar medida sigue igual de mal: se siente mejor y está igual de enfermo. Y ahí está el peligro real, y es el argumento más importante de todo este recorrido: creer que basta con sentirse mejor puede llevar a alguien a abandonar el tratamiento que sí le hace falta.",
+              "EL NOCEBO explica muchas cosas del día a día: leer la lista de efectos secundarios aumenta la probabilidad de notarlos, un comentario alarmista de un profesional puede empeorar un dolor y una explicación catastrofista puede cronificar una molestia. Por eso hoy se entrena a los médicos en cómo dar una noticia: las palabras son parte del tratamiento, y también pueden ser parte del daño.",
+              "Y LA CONCLUSIÓN PRÁCTICA, que es la lección más antigua y más moderna a la vez: el efecto placebo no es un rival de la medicina, es un componente de TODA medicina. La pastilla correcta administrada por alguien que te escucha, te explica y te acompaña vale más que la misma pastilla dada sin mirarte. Los chamanes llevaban veinte mil años usándolo; la ciencia ha tardado en aprender a medirlo.",
+            ],
+            dato: "Dato curioso: los ensayos clínicos existen precisamente por esto. Como todo tratamiento arrastra su efecto placebo, la única manera de saber si un fármaco funciona de verdad es compararlo con un grupo que recibe una copia sin principio activo. El placebo es, a la vez, un fenómeno curativo y la herramienta que usamos para no engañarnos.",
+          },
+        ]),
       hito("chaman", "comunidad-vinculo", "La comunidad y el vínculo", "El sanador y el paciente",
         "¿Qué cura más, el remedio o quien te lo da?",
         [
@@ -344,6 +383,24 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "Cada humor se asociaba a un elemento, una estación y un temperamento. De ahí vienen palabras que aún usamos: sanguíneo, flemático, colérico, melancólico.",
           "El tratamiento buscaba reequilibrar los humores mediante la dieta, el ejercicio o, a veces, prácticas como las sangrías.",
           "La teoría era incorrecta, pero tenía una virtud enorme: buscaba una explicación natural y un equilibrio interno, no la voluntad de los dioses. Dominaría la medicina occidental durante casi dos mil años.",
+        ],
+        undefined,
+        [
+          {
+            titulo: "Por qué una teoría falsa duró dos mil años",
+            cuerpo: [
+              "Esta es una de las preguntas más útiles de todo el recorrido, porque no habla solo del pasado: habla de cómo nos equivocamos.",
+              "PRIMERO, porque explicaba TODO. Cualquier síntoma se podía interpretar como exceso o defecto de alguno de los cuatro humores, y cualquier evolución del paciente confirmaba el diagnóstico. Una teoría que encaja con cualquier resultado posible parece muy potente y en realidad es el peor síntoma que puede tener una idea: no se puede comprobar y no se puede refutar.",
+              "SEGUNDO, porque era coherente y elegante. Cuatro humores, cuatro elementos, cuatro estaciones, cuatro edades de la vida, cuatro temperamentos. Todo encajaba con todo, y esa belleza intelectual convence muchísimo. La historia de la ciencia está llena de teorías falsas y hermosas.",
+              "TERCERO, por la autoridad. Galeno la sistematizó tan bien que durante siglos la medicina consistió en comentar a Galeno. Discutirlo no era un debate científico, era una falta de respeto, y quien lo intentaba se jugaba la carrera —eso es exactamente lo que le pasó a Vesalio y a Harvey siglos después—.",
+              "CUARTO, y este es el punto clave: NADIE CONTABA. No existía la costumbre de comparar dos grupos de pacientes, uno tratado y otro no, y ver qué pasaba. Sin comparación y sin números, el médico solo tenía sus recuerdos, y la memoria es un instrumento tramposo: se recuerdan los casos que curaron y se explican los que murieron («estaba muy débil», «llegó tarde», «era su hora»). Con esa manera de mirar, cualquier tratamiento parece funcionar.",
+              "Y AHORA LA PARTE CRUDA: LAS SANGRÍAS. De aquella teoría salió el tratamiento más practicado de la historia de la medicina occidental. Si la enfermedad era exceso de sangre, había que sacarla, y se hizo durante más de dos mil años, con lancetas o con sanguijuelas, para la fiebre, el dolor de cabeza, la neumonía, la locura, el embarazo complicado y casi cualquier cosa.",
+              "En la mayoría de los casos era inútil, y en muchos, mortal, porque debilitaba precisamente a quien más necesitaba fuerzas. El caso más famoso es el de George Washington: en 1799, con una infección de garganta, sus médicos le extrajeron en unas horas alrededor de dos litros y medio de sangre. Murió esa misma noche.",
+              "Y la lección que deja no es que aquellos médicos fueran tontos ni crueles: eran inteligentes, cuidadosos y estaban convencidos de estar ayudando. Fallaba el MÉTODO, no la intención. Por eso el capítulo siguiente de esta historia —el método científico y el ensayo comparado— es el más importante de todos: no aportó un remedio nuevo, aportó una forma de saber si un remedio sirve.",
+              "Y una advertencia para hoy: la teoría de los humores también tenía su versión de las «terapias que funcionan porque llevan siglos usándose». La antigüedad de un tratamiento no dice nada de su eficacia; solo dice que la gente ha creído en él mucho tiempo.",
+            ],
+            dato: "Dato curioso: no todo era falso. De aquella tradición sobrevive intacto lo mejor: la idea de que la salud es un equilibrio dinámico, la importancia de la dieta, el sueño, el ejercicio y el ambiente, y la costumbre de observar al paciente entero. Hasta el vocabulario emocional que usamos —ser flemático, estar de mal humor, tener mala bilis, ser melancólico— viene de ahí.",
+          },
         ]),
       hito("grecia", "observacion-clinica", "La observación clínica", "Mirar al enfermo, no solo la enfermedad",
         "¿Qué se aprende sentándose junto a la cama de un enfermo?",
@@ -600,6 +657,26 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "Lo esencial es que cualquiera puede repetir el experimento y comprobar si obtiene lo mismo. La verdad deja de depender de la autoridad de una persona y pasa a depender de las pruebas.",
           "Para la medicina, esto fue revolucionario. Por fin habría una manera de saber si un tratamiento cura de verdad o si solo parece hacerlo por casualidad o por sugestión.",
           "Sobre este método se construiría, con el tiempo, la medicina basada en la evidencia que salva millones de vidas hoy.",
+        ],
+        undefined,
+        [
+          {
+            titulo: "El ensayo clínico: el invento que separa lo que cura de lo que no",
+            cuerpo: [
+              "Este es probablemente el invento más importante de la historia de la medicina, y no es un aparato ni un fármaco: es una forma de comparar.",
+              "EL PRIMERO. En 1747, el médico naval escocés James Lind se enfrentaba al escorbuto, que mataba a más marineros que los combates y las tormentas juntos. Cogió a doce enfermos en condiciones parecidas, los repartió en seis parejas y a cada pareja le dio un tratamiento distinto: sidra, vinagre, agua de mar, un elixir, una pasta de especias… y a dos de ellos, naranjas y limones. Los de los cítricos se recuperaron en menos de una semana. Fue uno de los primeros ensayos comparados de la historia, con grupos, con las mismas condiciones y con resultado medido.",
+              "Y ojo con lo que pasó después, porque es muy instructivo: la Marina británica tardó unos cuarenta años en aplicarlo de forma sistemática. Tener la prueba no basta; hay que convencer a una institución.",
+              "CÓMO SE HACE HOY, y merece conocerlo porque es lo que hay detrás de cada medicamento que te tomas:",
+              "1. DOS GRUPOS. Uno recibe el tratamiento y otro recibe un placebo o el mejor tratamiento disponible. Sin grupo de comparación no se sabe nada, porque muchísimas dolencias mejoran solas y porque el simple hecho de ser atendido mejora los síntomas.",
+              "2. AL AZAR. Se decide por sorteo quién va a cada grupo. Esto es más importante de lo que parece: si eligiera el médico, tendería —sin querer— a poner en el grupo del tratamiento nuevo a los pacientes con mejor pronóstico. El azar reparte por igual todo lo que no sabemos.",
+              "3. A CIEGAS. El paciente no sabe qué le han dado, y en el doble ciego tampoco lo sabe quien lo evalúa. Porque las expectativas cambian lo que se siente y también lo que se observa: un médico convencido interpreta con más optimismo la mejoría de su paciente.",
+              "4. SUFICIENTES PERSONAS. Con diez pacientes cualquier resultado puede ser casualidad; hacen falta cientos o miles para distinguir un efecto real de una coincidencia. De eso se ocupa la estadística.",
+              "5. PUBLICAR TODO, incluidos los resultados malos, y decir ANTES de empezar qué se va a medir, para no poder cambiar de objetivo cuando los números no salen como se esperaba.",
+              "EL SALTO FINAL fue en los años setenta y noventa, con lo que se llamó medicina basada en la evidencia: en lugar de fiarse de la experiencia personal de cada médico, reunir TODOS los ensayos hechos sobre una pregunta, valorar su calidad y sacar una conclusión conjunta. Así se descubrió que tratamientos usados durante décadas no servían de nada, y que otros muy baratos salvaban muchas vidas.",
+              "Y ES LA HERRAMIENTA QUE PUEDES USAR TÚ. Ante cualquier tratamiento, terapia o suplemento, hay tres preguntas que lo aclaran casi todo: ¿se ha comparado con un grupo que no lo tomaba? ¿lo han comprobado personas independientes de quien lo vende? ¿y qué resultado concreto haría que quien me lo recomienda admitiera que no funciona? Si no hay respuesta para ninguna, no estás ante una prueba: estás ante una creencia.",
+            ],
+            dato: "Dato curioso: el mayor problema actual no es la falta de ensayos, es el sesgo de publicación. Durante años, los estudios con resultados positivos se publicaban mucho más que los negativos, así que un fármaco podía parecer eficaz solo porque los ensayos fallidos se quedaban en un cajón. Hoy es obligatorio registrar los ensayos antes de empezar, precisamente para que no puedan desaparecer.",
+          },
         ]),
       hito("revolucion-cientifica", "sesgos", "Los sesgos: cómo nos engañamos", "El enemigo invisible",
         "¿Y si tu propia mente te hiciera ver curas donde no las hay?",
@@ -639,7 +716,57 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "Había inventado la vacuna, la primera forma de entrenar al cuerpo para defenderse de una enfermedad antes de sufrirla.",
           "Fue el comienzo de una de las herramientas más poderosas de la historia de la medicina.",
         ],
-        "Dato curioso: la palabra «vacuna» viene precisamente de «vaca», en recuerdo de aquella viruela vacuna. Gracias a la vacunación, la viruela es hoy la única enfermedad humana totalmente erradicada del planeta."),
+        "Dato curioso: la palabra «vacuna» viene precisamente de «vaca», en recuerdo de aquella viruela vacuna. Gracias a la vacunación, la viruela es hoy la única enfermedad humana totalmente erradicada del planeta.",
+        [
+          {
+            titulo: "Cómo funciona una vacuna, y cómo se borró una enfermedad",
+            cuerpo: [
+              "CÓMO FUNCIONA. Tu sistema inmunitario aprende. Cuando entra un microbio, tarda días en identificarlo y en fabricar las defensas adecuadas, y en ese tiempo la enfermedad puede haberte hecho un daño enorme. Una vacuna le da los deberes hechos: le enseña un trozo del microbio, o una versión debilitada, o solo sus instrucciones, para que fabrique las defensas y —esto es lo importante— guarde la memoria. Si algún día llega el microbio de verdad, la respuesta que antes tardaba diez días tarda horas.",
+              "LO QUE NO ES. No es «meterte la enfermedad». No sustituye a tus defensas: las entrena. Y no protege solo a quien se la pone.",
+              "LA INMUNIDAD DE GRUPO. Un microbio necesita encontrar personas susceptibles para seguir circulando. Cuando una proporción alta de la población está vacunada, las cadenas de contagio se rompen y quedan protegidos también los que no pueden vacunarse: los bebés demasiado pequeños, las personas con el sistema inmunitario dañado, quien está en tratamiento oncológico. Por eso vacunarse es a la vez una decisión personal y una contribución a los demás.",
+              "CÓMO SE BORRÓ LA VIRUELA. Es la mejor campaña sanitaria de la historia y merece contarse. La viruela mataba a alrededor de un tercio de los infectados, dejaba ciegos y marcados a muchos de los supervivientes y se calcula que en el siglo XX se llevó a unos 300 millones de personas: más que todas las guerras del siglo juntas.",
+              "En 1967 la Organización Mundial de la Salud lanzó una campaña mundial, y la estrategia fue tan inteligente como el invento. Se dieron cuenta de que no hacía falta vacunar a todo el planeta: bastaba con detectar cada brote y vacunar en anillo a todos los contactos alrededor, cerrándole el paso al virus. Se recompensaba económicamente a quien informara de un caso, y equipos de vacunadores recorrieron aldeas de la India, Etiopía o Bangladés casa por casa.",
+              "El último caso natural fue en Somalia en 1977, en un cocinero de hospital llamado Ali Maow Maalin, que sobrevivió. En 1980 se declaró erradicada. Es la única enfermedad humana que hemos hecho desaparecer del mundo, y el virus solo existe hoy en dos laboratorios de máxima seguridad.",
+              "Y una advertencia que la propia historia enseña: cuando una vacuna funciona muy bien, la enfermedad desaparece de la vista, la gente deja de tenerle miedo y empieza a tenérselo a la vacuna. Es la paradoja del éxito, y explica los brotes de sarampión que reaparecen hoy en países donde ya estaba controlado.",
+            ],
+            dato: "Dato curioso: la idea no era nueva del todo. En China y en la India se practicaba desde siglos antes la variolización —inocular a propósito una dosis pequeña de viruela humana—, y en Europa la introdujo en 1721 Lady Mary Montagu, que la había visto en Estambul y la probó en sus propios hijos. Era eficaz y peligrosa; la aportación de Jenner fue encontrar una versión segura.",
+          },
+        ]),
+      hito("microbios", "semmelweis", "Ignaz Semmelweis", "1818-1865",
+        "¿Qué pasa cuando tienes razón, tienes los datos… y nadie te cree?",
+        [
+          "En el hospital general de Viena, hacia 1846, había dos salas de maternidad. En una atendían los médicos y los estudiantes de medicina; en la otra, las matronas. Y ocurría algo que todo el mundo sabía y nadie explicaba: en la sala de los médicos morían de fiebre puerperal alrededor del 10 % de las mujeres, y en algunos meses hasta el 18 %; en la de las matronas, en torno al 2 %.",
+          "Las mujeres del barrio lo sabían y suplicaban que las llevaran a la sala de las matronas. Algunas preferían dar a luz en la calle.",
+          "Semmelweis, un joven médico húngaro, se obsesionó con esa diferencia y fue descartando explicaciones una por una: el hacinamiento, el clima, la dieta, la postura del parto, hasta el miedo. Nada cuadraba.",
+          "La pista se la dio una desgracia: un amigo suyo, un profesor de medicina legal, se cortó con un bisturí durante una autopsia y murió con exactamente los mismos síntomas que las parturientas. Y entonces lo vio: los médicos y los estudiantes venían de hacer autopsias, se limpiaban las manos con un trapo y entraban a examinar a las mujeres. Las matronas no hacían autopsias.",
+          "Concluyó que las manos llevaban «partículas cadavéricas» —no sabía nada de bacterias, faltaban veinte años para Pasteur— e impuso una norma: lavarse las manos con una solución de cal clorada antes de cada exploración. La mortalidad de su sala cayó del 18 % a menos del 2 % en unos meses.",
+          "Tenía los datos, tenía el resultado, y fue rechazado. Sus superiores se ofendieron: lo que estaba diciendo, en el fondo, era que los médicos mataban a sus pacientes con sus propias manos. Y en 1847 no había ninguna teoría que explicara POR QUÉ funcionaba, así que se descartó como una manía. No le renovaron el puesto, tuvo que volver a Hungría, publicó tarde y mal, y sus cartas se volvieron cada vez más furiosas y desesperadas.",
+          "Acabó ingresado en un manicomio, donde murió a los 47 años a las dos semanas, por una infección provocada por los golpes de los vigilantes. Murió, con una ironía atroz, de lo mismo que había pasado la vida intentando evitar.",
+        ],
+        "Dato curioso: hoy se llama «reflejo Semmelweis» a la tendencia a rechazar automáticamente una prueba que contradice lo que uno cree o le obliga a cambiar de conducta. Y su medida es todavía, según la OMS, la intervención más eficaz y más barata para evitar infecciones en un hospital: lavarse las manos."),
+      hito("microbios", "john-snow", "John Snow y el mapa del cólera", "1854",
+        "¿Se puede detener una epidemia sin saber qué la causa?",
+        [
+          "En el verano de 1854, un brote de cólera mató a más de 600 personas en pocas semanas en el barrio del Soho, en Londres. La explicación oficial era el «miasma»: un aire corrompido y maloliente que se creía responsable de las epidemias.",
+          "John Snow, un médico y anestesista, sospechaba que la culpa era del AGUA, y no tenía forma de demostrarlo con un microscopio. Así que hizo algo nuevo: fue casa por casa, apuntó cada muerte y la dibujó en un plano del barrio.",
+          "El mapa habló solo: las muertes se agrupaban alrededor de una fuente pública concreta, la bomba de Broad Street. Y las excepciones confirmaban la regla, que es la parte más elegante de su trabajo. Los trabajadores de una fábrica de cerveza cercana apenas enfermaron: bebían cerveza, no agua de la bomba. En un asilo con cientos de personas casi no hubo casos: tenía su propio pozo. Y hubo una mujer que murió en un barrio lejano, sin contacto con el Soho, y resultó que le gustaba el sabor de aquella agua y se la hacía traer.",
+          "Con el mapa en la mano convenció a las autoridades de retirar la palanca de la bomba. El brote se apagó. Después se comprobó que un pozo negro con las deposiciones de un bebé enfermo filtraba a pocos metros del pozo de agua.",
+          "Lo importante no es solo que acertara: es el MÉTODO. Snow inventó la epidemiología moderna, es decir, la ciencia de encontrar la causa de una enfermedad estudiando cómo se distribuye entre la población, con datos, mapas y comparaciones. Se puede actuar contra una epidemia antes de conocer al culpable.",
+          "Y de ahí salió lo que probablemente ha salvado más vidas que ningún fármaco: la decisión de separar el agua potable de las aguas residuales. El alcantarillado y la potabilización han evitado más muertes que cualquier medicamento inventado después.",
+        ],
+        "Dato curioso: sus mapas de puntos son el antepasado directo de los mapas de contagios que todos miramos en 2020. Y en Londres, en el lugar de la bomba de Broad Street, hay hoy una réplica sin palanca, en recuerdo del día en que un médico paró una epidemia quitándole el mango a un grifo."),
+      hito("microbios", "nightingale", "Florence Nightingale", "1820-1910",
+        "¿Y si la mitad de los muertos de una guerra los estuviera matando el hospital?",
+        [
+          "Florence Nightingale venía de una familia acomodada británica y se empeñó, contra la oposición de los suyos, en dedicarse a cuidar enfermos: en aquella época, la enfermería no era una profesión respetable, la ejercían mujeres sin formación y estaba mal pagada y peor considerada.",
+          "En 1854 la enviaron con un grupo de enfermeras al hospital militar británico de Scutari, en la guerra de Crimea. Lo que encontró era una carnicería administrativa: soldados tumbados en el suelo entre ratas, sin agua limpia, sin letrinas que funcionaran, con las heridas vendadas con trapos reutilizados, mantas escasas y comida podrida. Morían muchísimos más soldados de tifus, cólera y disentería que de las heridas de combate.",
+          "Hizo dos cosas. La primera, lo obvio y agotador: organizar. Limpieza, ventilación, lavandería, letrinas, cocina, agua, camas separadas, cuidados por turnos y presencia constante —de ahí el apodo con el que se hizo célebre, «la dama de la lámpara», por sus rondas nocturnas—. La mortalidad del hospital cayó de forma espectacular.",
+          "La segunda es la que la convierte en una figura decisiva de la historia de la medicina: APUNTÓ TODO. Recogió cifras de ingresos, causas de muerte y fechas, y al volver a Londres las presentó al gobierno en unos gráficos que ella misma diseñó —los famosos «diagramas de área polar», que se siguen reproduciendo— para que cualquier político pudiera ver de un vistazo que la mayoría de las muertes eran evitables y de origen infeccioso.",
+          "Con esos datos consiguió una comisión real, la reforma sanitaria del ejército británico, la construcción de hospitales con criterios de higiene y ventilación, y un cambio de mentalidad: la salud pública se podía medir y por tanto se podía exigir.",
+          "Y fundó en 1860 la primera escuela de enfermería moderna, con formación reglada, exámenes y ética profesional. Convirtió el cuidado en una profesión con conocimiento propio, no en una tarea doméstica improvisada.",
+          "Su idea de fondo es la que atraviesa toda esta historia: el cuidado no es el adorno de la medicina, es una parte de la medicina. La limpieza, el descanso, la comida, el aire, la compañía y la atención son tratamiento.",
+        ],
+        "Dato curioso: fue la primera mujer admitida en la Royal Statistical Society. Pasó buena parte de sus últimas décadas enferma y postrada en su casa, y desde allí, escribiendo informes y cartas, siguió reformando la sanidad de un imperio."),
       hito("microbios", "pasteur", "Louis Pasteur", "1822-1895",
         "¿Quién es el culpable invisible de tantas muertes?",
         [
@@ -682,10 +809,44 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
   {
     key: "medicina-moderna",
     titulo: "La medicina moderna",
-    anio: "Siglo XX",
+    anio: "Siglos XIX-XX",
     intro:
-      "El siglo XX fue el siglo de los milagros médicos. Aparecieron los antibióticos, que vencieron infecciones antes mortales; se comprendió cómo el cuerpo se mantiene en equilibrio; se organizó el hospital moderno y la medicina se dividió en especialidades cada vez más precisas. Curamos como nunca antes en la historia. Pero, junto a este triunfo, surgió una pregunta incómoda que abre el último capítulo del viaje: hemos aprendido a curar enfermedades con una eficacia asombrosa, ¿pero entendemos igual de bien al ser humano completo?",
+      "En apenas siglo y medio, la medicina consiguió más que en los veinte mil años anteriores. Se aprendió a operar sin dolor, a ver dentro de un cuerpo vivo, a sustituir lo que el organismo ya no fabrica, a matar bacterias con una pastilla, a leer las instrucciones con las que estamos hechos y a fabricar una vacuna en meses. La esperanza de vida mundial pasó de unos treinta años a más de setenta. Curamos como nunca antes en la historia. Pero, junto a este triunfo, surgieron dos preguntas incómodas que abren el último capítulo del viaje: ¿hasta dónde se puede llegar sin pedir permiso a la persona que tienes delante? Y sobre todo: hemos aprendido a curar enfermedades con una eficacia asombrosa, ¿pero entendemos igual de bien al ser humano completo?",
     subhitos: [
+      hito("medicina-moderna", "anestesia", "La anestesia", "1846",
+        "¿Te imaginas una operación sin nada que te quite el dolor?",
+        [
+          "Es la parte de la historia de la medicina que más cuesta leer, y hay que contarla para entender el resto. Hasta mediados del siglo XIX, toda cirugía se hacía con el paciente despierto.",
+          "El único recurso era la velocidad. Los cirujanos famosos lo eran por rápidos: se cronometraban las amputaciones y algunos las hacían en menos de treinta segundos. Al paciente se le sujetaba con correas o entre varios hombres, se le daba alcohol, opio si había, un trozo de cuero para morder, y se operaba mientras gritaba. Muchos morían del propio shock, y bastantes preferían morir de la enfermedad antes que pasar por el quirófano.",
+          "Eso limitaba la medicina entera: no se podía operar dentro del abdomen, ni del tórax, ni del cráneo, porque hacen falta tiempo y precisión, y ninguna de las dos cosas era posible con una persona consciente y aterrorizada.",
+          "El 16 de octubre de 1846, en el Hospital General de Massachusetts, un dentista llamado William Morton administró éter a un paciente delante de una sala llena de médicos escépticos, y el cirujano le extirpó un tumor del cuello sin que se moviera ni gritara. Al terminar, el cirujano se volvió hacia el público y dijo: «señores, esto no es una farsa». La noticia recorrió el mundo en meses.",
+          "En Escocia, el obstetra James Simpson probó el cloroformo y lo introdujo en los partos. Hubo resistencia moral: se argumentó que el dolor del parto era natural y hasta que estaba prescrito en la Biblia. La discusión se zanjó en 1853 de forma muy práctica, cuando la reina Victoria pidió cloroformo para el nacimiento de su octavo hijo. Si valía para la reina, valía para todas.",
+          "La anestesia no curó ninguna enfermedad, y sin embargo cambió la medicina más que casi cualquier medicamento: hizo posible la cirugía moderna. Con anestesia y, poco después, con asepsia, se pudo por fin abrir un cuerpo con calma.",
+        ],
+        "Dato curioso: los anestesistas de hoy vigilan constantemente algo que nadie ve: la profundidad exacta de la inconsciencia, la respiración, la tensión y el dolor. Se dice que es la única especialidad en la que el éxito consiste en que el paciente no recuerde absolutamente nada de las horas más peligrosas de su vida."),
+      hito("medicina-moderna", "rayos-x", "Los rayos X y ver por dentro", "1895",
+        "¿Cómo se diagnostica lo que no se puede ver ni tocar?",
+        [
+          "Durante toda la historia, el médico solo tuvo acceso a la superficie: mirar, escuchar, palpar, oler, preguntar. Lo que pasaba dentro de un cuerpo vivo era invisible, y la única forma de saberlo con certeza era abrirlo… o esperar la autopsia.",
+          "En noviembre de 1895, el físico alemán Wilhelm Röntgen estaba experimentando con tubos de descarga y observó que una pantalla cercana brillaba aunque el tubo estuviera tapado con cartón negro. Había una radiación desconocida que atravesaba materiales opacos. La llamó «rayos X» precisamente porque no sabía lo que era.",
+          "La primera radiografía de la historia fue la mano de su mujer, Anna Bertha, con su anillo de boda. Al ver sus propios huesos dijo: «he visto mi muerte».",
+          "La difusión fue vertiginosa: en pocos meses se hacían radiografías en hospitales de todo el mundo, y en cuestión de un año ya se usaban para localizar balas y fracturas. Es probablemente la aplicación médica más rápida de un descubrimiento físico en la historia. Röntgen renunció a patentarlo para que estuviera al alcance de todos.",
+          "Y a partir de ahí llegó todo lo demás: el electrocardiograma para ver el ritmo del corazón, el ecógrafo —que usa ultrasonidos, sin radiación, y permitió ver por primera vez a un bebé antes de nacer—, la tomografía computarizada, que reconstruye el cuerpo en cortes, y la resonancia magnética, que distingue los tejidos blandos sin usar radiación.",
+          "El cambio de fondo es enorme: el diagnóstico deja de depender solo del ojo y la experiencia del médico y pasa a apoyarse en imágenes que se pueden guardar, comparar, medir y enseñar a otro. Y también trajo su propio riesgo, que se aprendió a golpes: los pioneros de la radiología sufrieron quemaduras, amputaciones y cánceres por exponerse sin protección, y hoy toda prueba con radiación se hace con la dosis mínima y solo cuando aporta algo.",
+        ],
+        "Dato curioso: durante los primeros años, los rayos X fueron una atracción de feria: había máquinas para ver los huesos de tu mano en ferias y espectáculos, e incluso zapaterías con aparatos para «comprobar» cómo encajaba el pie dentro del zapato. Estuvieron en las tiendas hasta los años cincuenta."),
+      hito("medicina-moderna", "insulina", "La insulina y las hormonas", "1921-1922",
+        "¿Y si a un cuerpo se le pudiera devolver exactamente lo que le falta?",
+        [
+          "Antes de 1922, un diagnóstico de diabetes tipo 1 en un niño era una sentencia de muerte a corto plazo. El único tratamiento era una dieta de hambre que alargaba unos meses la vida. Los hospitales tenían salas con niños en coma esperando morir.",
+          "En Toronto, un cirujano joven llamado Frederick Banting, con un estudiante, Charles Best, y el apoyo del laboratorio de John Macleod y del bioquímico James Collip, consiguieron extraer del páncreas la sustancia que regula el azúcar en la sangre y purificarla lo suficiente para inyectarla.",
+          "La escena de aquel primer ensayo es una de las más impresionantes de la medicina: entraron en una sala con niños en coma diabético, acompañados de sus familias, y fueron poniendo inyecciones uno por uno. Antes de terminar con el último, los primeros estaban despertando.",
+          "Y hubo una decisión ética que merece recordarse: vendieron la patente a la Universidad de Toronto por un dólar simbólico, para que nadie pudiera especular con ella. Banting dijo que la insulina no le pertenecía, que pertenecía al mundo. Que hoy el precio de la insulina sea un escándalo en algunos países es una de las ironías más amargas de la historia de la medicina.",
+          "Lo importante para esta historia es el CONCEPTO que se abrió: existen sustancias fabricadas en un órgano que viajan por la sangre y dan órdenes a otros órganos —las hormonas—, y si el cuerpo deja de producir una, se puede reponer desde fuera.",
+          "De ahí salió media medicina del siglo XX: el tratamiento del hipotiroidismo con hormona tiroidea, la cortisona para la inflamación, las hormonas sexuales, la píldora anticonceptiva —que cambió la vida de las mujeres más que casi cualquier otro fármaco—, los tratamientos de fertilidad, la hormona del crecimiento y los fármacos actuales para la obesidad y la diabetes tipo 2.",
+          "Y encaja perfectamente con lo que este recorrido lleva viendo desde el Ayurveda y la medicina china: el cuerpo funciona por equilibrios y por mensajes internos, no por piezas independientes.",
+        ],
+        "Dato curioso: la insulina fue también la primera proteína humana fabricada por ingeniería genética, en 1978: se metió el gen humano en una bacteria para que la produjera. Hasta entonces se extraía del páncreas de cerdos y vacas, y hacían falta toneladas de páncreas para tratar a un paciente durante un año."),
       hito("medicina-moderna", "fleming", "Alexander Fleming", "1881-1955",
         "¿Puede un descuido cambiar la historia de la humanidad?",
         [
@@ -694,7 +855,21 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "Los antibióticos transformaron la medicina. Enfermedades que antes eran una sentencia de muerte —una neumonía, una herida infectada— se volvieron curables con unas pocas dosis.",
           "Se calcula que los antibióticos han salvado cientos de millones de vidas. Pocas veces la casualidad y la observación atenta han dado tanto a la humanidad.",
         ],
-        "Dato curioso: hoy el uso excesivo de antibióticos está creando bacterias resistentes. Un recordatorio de que hasta los mayores triunfos de la medicina hay que usarlos con sabiduría."),
+        "Dato curioso: hoy el uso excesivo de antibióticos está creando bacterias resistentes. Un recordatorio de que hasta los mayores triunfos de la medicina hay que usarlos con sabiduría.",
+        [
+          {
+            titulo: "Lo que hay que saber sobre los antibióticos",
+            cuerpo: [
+              "PRIMERO: no fue solo Fleming. Él observó el fenómeno en 1928 y no consiguió aislar la sustancia en cantidad útil, así que el asunto quedó parado casi diez años. Lo rescataron en Oxford, ya en plena Segunda Guerra Mundial, Howard Florey, Ernst Chain y su equipo, que lograron purificarla y demostrar que curaba infecciones mortales. Y como Inglaterra estaba siendo bombardeada, la producción industrial se montó en Estados Unidos, a tiempo para el desembarco de Normandía. Es un ejemplo perfecto de que la medicina moderna la hacen equipos, no genios sueltos.",
+              "SEGUNDO: qué cambió de verdad. Antes de los antibióticos, un arañazo infectado, una neumonía, una apendicitis, una infección de oído o una infección después de dar a luz podían matar a cualquiera, a cualquier edad y con buena salud. Y hay algo que casi nunca se dice: los antibióticos son los que hacen posible el resto de la medicina moderna. Sin poder controlar las infecciones no habría cirugía compleja, ni trasplantes, ni cuidados intensivos, ni quimioterapia, ni prótesis, ni partos seguros.",
+              "TERCERO, y es lo importante ahora: LAS BACTERIAS EVOLUCIONAN. Cada vez que se usa un antibiótico, mueren las bacterias sensibles y sobreviven las que por azar resistían. Esas se multiplican y transmiten su resistencia, incluso entre especies distintas. No es que «el cuerpo se acostumbre»: es que la población de bacterias cambia. Es evolución por selección natural, ocurriendo en tiempo real y en tu propio organismo.",
+              "Fleming lo advirtió en su discurso del Nobel en 1945, y su advertencia se ha cumplido: hoy se atribuyen a las bacterias resistentes más de un millón de muertes al año en el mundo, y hay infecciones para las que quedan muy pocas opciones. Y mientras tanto se han desarrollado pocos antibióticos verdaderamente nuevos, porque son un mal negocio: se toman diez días, se recomienda usarlos lo menos posible y se venden baratos.",
+              "QUÉ SE PUEDE HACER, en concreto: no tomarlos para virus —una gripe, un catarro, la mayoría de los dolores de garganta y de las bronquitis son víricos y el antibiótico no hace absolutamente nada, salvo daño—; no dejar el tratamiento a medias por sentirse mejor; no reutilizar los que sobraron de otra vez; no darle a nadie los tuyos; y saber que el mayor consumo mundial de antibióticos no está en las personas, sino en la ganadería intensiva, donde se usan para engordar y prevenir en granjas hacinadas.",
+              "Y una idea que enlaza con el resto de este recorrido: durante décadas se pensó en las bacterias solo como enemigas. Hoy sabemos que llevamos encima billones de microorganismos —la microbiota— que participan en la digestión, en el sistema inmunitario y probablemente en el estado de ánimo, y que un antibiótico también arrasa con ellos. La medicina ha pasado de querer esterilizar el cuerpo a intentar cuidar su ecosistema.",
+            ],
+            dato: "Dato curioso: cuando la penicilina era escasísima y carísima, en los hospitales militares se recuperaba de la orina de los pacientes tratados para volver a purificarla y reutilizarla. No se podía desperdiciar ni una gota.",
+          },
+        ]),
       hito("medicina-moderna", "cannon-homeostasis", "Cannon y la homeostasis", "El equilibrio interior",
         "¿Cómo consigue el cuerpo mantenerse estable pase lo que pase?",
         [
@@ -719,6 +894,44 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "Pero trajo también un riesgo: mirar tanto una parte que se pierde de vista a la persona entera. El paciente podía convertirse en «un corazón», «un hígado» o «un caso».",
           "De esta tensión nacería la última gran pregunta de la medicina: cómo unir de nuevo todas las piezas para volver a ver al ser humano completo.",
         ]),
+      hito("medicina-moderna", "adn-genetica", "El ADN y la genética", "1953-2003",
+        "¿Y si pudiéramos leer las instrucciones con las que estás hecho?",
+        [
+          "En 1953, en Cambridge, se describió la estructura del ADN: dos hebras enrolladas en doble hélice, con cuatro letras químicas que se emparejan siempre igual. Esa forma explicaba de golpe dos misterios enormes: cómo se guarda la información de un ser vivo y cómo se copia cada vez que una célula se divide.",
+          "El descubrimiento lo firmaron James Watson y Francis Crick, y aquí hay una deuda que hay que nombrar: la imagen que permitió resolver la estructura, la famosa «foto 51», la había obtenido Rosalind Franklin con difracción de rayos X, y se la mostraron sin su permiso. Ella murió de cáncer de ovario a los treinta y siete años, cuatro años antes del Nobel, y no pudo compartirlo.",
+          "Lo que abrió esa doble hélice fue una manera nueva de entender la enfermedad. Hay dolencias causadas por un solo gen defectuoso —fibrosis quística, hemofilia, anemia falciforme, Huntington—, y por primera vez se pudo saber exactamente qué falla y en qué punto. Y hay muchísimas otras, las más frecuentes, en las que la genética solo pone una predisposición que se activa o no según cómo vivas: eso es lo que estudia la epigenética, y es una de las mejores noticias de la medicina actual, porque significa que heredar un riesgo no es heredar un destino.",
+          "Entre 1990 y 2003, miles de científicos de una veintena de instituciones secuenciaron el genoma humano completo: unos 3.200 millones de letras. Y las sorpresas fueron grandes: no había 100.000 genes, sino algo más de 20.000, aproximadamente los mismos que un gusano microscópico; y solo alrededor del 1,5 % de nuestro ADN codifica proteínas, mientras el resto —despectivamente llamado «ADN basura»— resultó estar lleno de instrucciones que deciden cuándo y cuánto se enciende cada gen.",
+          "Y un hallazgo con consecuencias sociales enormes: dos personas cualesquiera del planeta comparten en torno al 99,9 % de su ADN, y hay más variación genética dentro de cualquier población que entre poblaciones distintas. Las «razas» humanas no tienen fundamento biológico.",
+          "En la consulta ya se nota: diagnóstico de enfermedades raras que antes tardaban años en identificarse, tratamientos oncológicos dirigidos a la mutación concreta de un tumor, farmacogenética para saber qué medicamento y qué dosis tolera cada persona, y cribados prenatales.",
+          "Y desde 2012, con la herramienta CRISPR, editar el ADN se ha vuelto relativamente sencillo y barato. Ya hay terapias aprobadas que curan enfermedades de la sangre corrigiendo las células del propio paciente. Y ahí aparece el límite que la humanidad todavía está decidiendo: modificar las células de una persona enferma es medicina; modificar embriones significa cambiar a todas las generaciones siguientes. En 2018, un investigador chino lo hizo y fue condenado internacionalmente y penalmente.",
+        ],
+        "Dato curioso: secuenciar el primer genoma humano costó unos 2.700 millones de dólares y trece años de trabajo. Hoy se hace en un día por unos cientos de dólares. Ninguna tecnología, ni la informática, ha bajado de precio tan rápido."),
+      hito("medicina-moderna", "etica-medica", "La ética médica", "Desde 1947",
+        "¿Puede un médico hacer algo por tu bien sin preguntártelo?",
+        [
+          "Durante casi toda la historia, la respuesta fue sí. La relación entre médico y paciente era paternalista: el médico sabía, decidía y a veces ni siquiera informaba del diagnóstico «para no angustiar». Y en el siglo XX se comprobó a dónde puede llevar eso cuando además hay poder y prisa por investigar.",
+          "Los experimentos de los médicos nazis en los campos de concentración —congelación, presión, inoculación de enfermedades, mutilaciones, en personas que no podían negarse— se juzgaron en Núremberg en 1947. De aquel juicio salió el primer código de la historia sobre investigación en personas, y su punto número uno es tan sencillo como revolucionario: el consentimiento voluntario del sujeto es absolutamente esencial.",
+          "Y no fue solo el nazismo. En Estados Unidos, entre 1932 y 1972, el estudio de Tuskegee siguió durante cuarenta años a cientos de hombres negros con sífilis SIN tratarlos, para observar la evolución natural de la enfermedad, incluso después de que existiera la penicilina. Se les ocultó su diagnóstico. El escándalo, al descubrirse, cambió la legislación estadounidense y dejó en las comunidades afectadas una desconfianza hacia el sistema sanitario que se sigue notando hoy.",
+          "También hubo abusos silenciosos y cotidianos. En 1951, a una mujer llamada Henrietta Lacks le tomaron una muestra de su tumor sin informarla ni pedirle permiso; sus células resultaron capaces de multiplicarse indefinidamente en el laboratorio y se han usado desde entonces en decenas de miles de investigaciones —la vacuna de la polio, la fecundación in vitro, la investigación del cáncer y del virus del papiloma—. Su familia no lo supo durante veinte años y vivió sin seguro médico mientras se vendían viales de sus células por todo el mundo.",
+          "De todo eso nacieron las reglas que hoy protegen a cualquiera que entra en una consulta o en un estudio, y conviene conocerlas porque son TUS derechos: el consentimiento informado, es decir, que te expliquen en un idioma que entiendas qué te van a hacer, con qué alternativas y qué riesgos, y que puedas decir no; los comités de ética que revisan cada investigación antes de empezar; el derecho a tu historia clínica; la confidencialidad; el derecho a una segunda opinión; y el derecho a decidir sobre el final de tu vida, con el documento de últimas voluntades.",
+          "Los cuatro principios que se enseñan hoy en las facultades son fáciles de recordar: no hacer daño, buscar el beneficio del paciente, respetar su autonomía y ser justos en el reparto de los recursos. Y a menudo entran en conflicto entre sí, y ahí es donde empieza la discusión de verdad.",
+          "Y siguen apareciendo preguntas nuevas: quién puede acceder a tus datos genéticos, si una aseguradora podría discriminarte por ellos, cómo se reparten unos órganos o unas camas de cuidados intensivos cuando no hay para todos, qué hacer con un algoritmo que decide a quién se le hace una prueba, o hasta dónde alargar una vida que la técnica puede sostener.",
+        ],
+        "Dato curioso: el juramento hipocrático tiene 2.400 años y sigue siendo la referencia moral de la profesión. Pero su versión antigua no dice nada de informar al paciente ni de pedirle su opinión: esa idea —que la persona enferma es quien decide sobre su propio cuerpo— es la aportación ética más importante del siglo XX a la medicina."),
+      hito("medicina-moderna", "pandemias-arn", "Pandemias y vacunas de ARN", "2020-2023",
+        "¿Cómo se consigue una vacuna en un año cuando siempre se habían tardado décadas?",
+        [
+          "Cuando en marzo de 2020 la Organización Mundial de la Salud declaró la pandemia de COVID-19, se dio por hecho que la vacuna tardaría cinco o diez años: era el récord histórico. La primera se estaba administrando en diciembre de ese mismo año.",
+          "Cómo fue posible es una lección sobre cómo funciona realmente la ciencia, y son cuatro factores.",
+          "UNO: décadas de trabajo previo que parecía no servir para nada. La tecnología del ARN mensajero llevaba treinta años investigándose, con financiación escasa y muchos rechazos; la bioquímica Katalin Karikó pasó años sin conseguir becas y fue degradada en su universidad por insistir en esa línea. En 2023 recibió el Nobel. Cuando llegó la emergencia, la herramienta ya estaba a medio construir.",
+          "DOS: información compartida de inmediato. El genoma del virus se secuenció y se publicó en internet en enero de 2020, a disposición de cualquier laboratorio del mundo. Con esa secuencia, diseñar la vacuna de ARN llevó días: por eso se dice que estas vacunas se diseñan en un ordenador.",
+          "TRES: dinero público a riesgo y en cantidad, que permitió fabricar millones de dosis ANTES de saber si funcionaban, y solapar fases de ensayo que normalmente van una detrás de otra. No se recortaron los controles de seguridad: se recortó el tiempo de espera entre trámites y el tiempo de fabricación.",
+          "CUATRO: voluntarios. Decenas de miles de personas se apuntaron a los ensayos en pocas semanas.",
+          "Y CÓMO FUNCIONAN, en corto: en lugar de inyectar el virus debilitado, se inyectan las instrucciones para fabricar una sola pieza suya —la proteína de la espícula— envueltas en una burbuja de grasa. Tus células leen esas instrucciones, fabrican la pieza, el sistema inmunitario la reconoce como extraña y aprende a defenderse. El ARN se degrada en horas y no entra en el núcleo ni modifica tu ADN.",
+          "La pandemia dejó otras lecciones menos técnicas. Que las medidas más eficaces al principio fueron las de siempre —distancia, ventilación, aislamiento, higiene, exactamente lo que se aprendió con Snow y Semmelweis—. Que la desigualdad decide quién enferma: no fue lo mismo confinarse en un piso con terraza que en uno de cuarenta metros, ni tener un trabajo que se podía hacer desde casa. Que los países ricos vacunaron primero mientras África esperaba más de un año. Y que la confianza es un recurso sanitario: donde se perdió, ninguna medida funcionó bien.",
+          "Y esa misma tecnología ya se está probando en otras cosas: vacunas contra la gripe, contra el virus respiratorio infantil, contra el paludismo y, sobre todo, vacunas de tratamiento personalizadas contra algunos cánceres, fabricadas a partir de las mutaciones del tumor concreto de una persona.",
+        ],
+        "Dato curioso: casi todos los expertos coinciden en algo incómodo: no será la última. Con la densidad de población, la ganadería intensiva, la deforestación y la aviación actuales, habrá más pandemias, y lo que decidirá el resultado será la vigilancia temprana, la capacidad de fabricar y —sobre todo— la confianza social."),
       hito("medicina-moderna", "moderna-aplicalo", "Aplícalo a tu vida", "",
         "Curamos mejor que nunca... pero ¿entendemos mejor al ser humano?",
         [
@@ -775,7 +988,23 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "El efecto fue extraordinario. Muchos hospitales psiquiátricos, auténticos almacenes de enfermos sin esperanza, empezaron a vaciarse: por fin había tratamientos que permitían a muchas personas volver a vivir fuera del encierro.",
           "Nacía así la psicofarmacología. Se confirmaba algo profundo: la mente tiene una base química en el cerebro, y actuar sobre esa química puede ayudar a devolver el equilibrio perdido.",
         ],
-        "Dato curioso: muchos de aquellos primeros psicofármacos se descubrieron casi por casualidad, al observar que fármacos pensados para otra cosa cambiaban el ánimo o la conducta de los pacientes."),
+        "Dato curioso: muchos de aquellos primeros psicofármacos se descubrieron casi por casualidad, al observar que fármacos pensados para otra cosa cambiaban el ánimo o la conducta de los pacientes.",
+        [
+          {
+            titulo: "Lo que se hizo antes de la pastilla",
+            cuerpo: [
+              "Para entender por qué la llegada de los psicofármacos fue una liberación, hay que saber qué había antes. Y es la página más dura de la historia de la medicina.",
+              "EL ENCIERRO. Los grandes manicomios del siglo XIX y de la primera mitad del XX albergaban a decenas de miles de personas de por vida, sin tratamiento posible, en condiciones de hacinamiento, con cadenas, celdas de aislamiento y camisas de fuerza. En muchos casos no se separaba a los enfermos mentales de los mendigos, los epilépticos, las madres solteras, los alcohólicos o simplemente los incómodos para su familia.",
+              "LOS «TRATAMIENTOS» DE CHOQUE. Ante la impotencia se probó de todo: duchas de agua helada, sillas giratorias hasta el vómito, aislamiento prolongado, comas provocados con insulina, malaria inducida a propósito para provocar fiebre. Casi nada de eso se había comparado nunca con un grupo de control: se aplicaba porque parecía que a veces algo cambiaba.",
+              "LA LOBOTOMÍA es el caso más escandaloso. Consistía en destruir las conexiones de la parte frontal del cerebro, y en su versión más difundida se hacía introduciendo un punzón por encima del ojo, sin quirófano y en pocos minutos. Se practicó en decenas de miles de personas, muchas de ellas mujeres internadas por «nerviosismo» o por conducta inapropiada, y dejaba a los pacientes apáticos, infantilizados y con daños irreversibles. Su promotor recibió el Premio Nobel de Medicina en 1949. Es el recordatorio más incómodo posible de que un premio, un prestigio o un consenso profesional no son pruebas de eficacia.",
+              "EL ELECTROSHOCK merece un matiz honesto, porque es el ejemplo contrario. Se usó de forma brutal y abusiva —sin anestesia, sin consentimiento, como castigo—, y su imagen quedó marcada por eso y por el cine. Pero la técnica en sí, hecha hoy con anestesia general, relajantes musculares y consentimiento informado, es un tratamiento legítimo y a veces salvador en depresiones gravísimas que no responden a nada y en riesgo alto de suicidio. La misma herramienta puede ser tortura o medicina según cómo, por qué y con qué permiso se aplique.",
+              "QUÉ CAMBIÓ CON LOS FÁRMACOS. Con la clorpromazina y el litio, miles de personas pudieron salir de los hospitales y vivir en su casa. En los años sesenta y setenta empezó el cierre de los grandes manicomios en medio mundo. Pero ese proceso tuvo su propio fracaso, y hay que contarlo: en muchos países se cerraron los hospitales sin construir la red de atención comunitaria que debía sustituirlos, y una parte de aquellos pacientes acabó en la calle o en la cárcel. Es un problema todavía sin resolver.",
+              "Y LO QUE SABEMOS HOY, con la humildad que toca: los psicofármacos ayudan de verdad a muchísima gente y no son caramelos; la explicación simple de que la depresión es «falta de serotonina» está superada y el mecanismo es mucho más complejo; para la mayoría de los cuadros, lo que mejor funciona es la combinación de fármaco y psicoterapia, no uno solo; y el estigma sigue siendo parte de la enfermedad.",
+              "Ese es el hilo de este capítulo: se tardó dos mil años en aceptar que la mente puede enfermar como el cuerpo, y todavía cuesta tratarla con la misma naturalidad con la que se trata una tiroides.",
+            ],
+            dato: "Dato curioso: el litio, que sigue siendo uno de los tratamientos más eficaces que existen para el trastorno bipolar, es un elemento químico simple, no una molécula diseñada en un laboratorio. Uno de los mejores medicamentos de la psiquiatría es, literalmente, un metal de la tabla periódica.",
+          },
+        ]),
       hito("psiquiatria", "psiquiatria-aplicalo", "Aplícalo a tu vida", "",
         "La psiquiatría te enseña que la mente también se cuida.",
         [
@@ -804,6 +1033,23 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
           "No se opone a la medicina científica: la usa como base. Pero le suma herramientas que la ciencia había dejado de lado, como la nutrición, la actividad física, la gestión del estrés y la calidad de la relación entre médico y paciente.",
           "Su criterio es siempre la evidencia: incorpora aquello que demuestra funcionar y descarta lo que no, venga de donde venga.",
           "Es, en cierto modo, la síntesis de todo este viaje: la razón griega, la observación egipcia, el equilibrio indio, el flujo chino y el rigor moderno, trabajando juntos.",
+        ],
+        undefined,
+        [
+          {
+            titulo: "Cómo distinguir lo que funciona de lo que se vende",
+            cuerpo: [
+              "Este es el punto más delicado de todo el recorrido y merece decirse con claridad, porque bajo la etiqueta de «integrativa», «natural» o «holística» convive lo mejor de la medicina actual con negocios que se aprovechan de la gente enferma.",
+              "LO QUE TIENE PRUEBAS SÓLIDAS y ya forma parte de la mejor medicina: el ejercicio físico —que es, medido en resultados, uno de los tratamientos más potentes que existen para el ánimo, el corazón, la diabetes, la artrosis, el sueño y el dolor crónico—; la alimentación y el peso; dormir lo suficiente; dejar de fumar; el manejo del estrés y las técnicas de atención plena en dolor crónico y ansiedad; la fisioterapia; el acompañamiento psicológico; los grupos de apoyo; la relación de confianza con quien te atiende; y la rehabilitación en cualquier enfermedad crónica.",
+              "LO QUE TIENE PRUEBAS PARCIALES O DÉBILES: muchas plantas medicinales —algunas funcionan, algunas interaccionan peligrosamente con medicamentos y de la mayoría no se conoce la dosis segura—, la acupuntura para ciertos dolores (donde los estudios muestran un efecto real pero pequeño y muy dependiente del contexto y del ritual), y buena parte de los suplementos, que en una persona bien alimentada casi nunca aportan nada.",
+              "LO QUE NO TIENE NINGUNA PRUEBA, dicho sin rodeos: los productos que prometen curar el cáncer, «limpiar toxinas», reforzar el sistema inmunitario de forma genérica o sustituir a un tratamiento eficaz. Y el riesgo aquí no es solo el dinero: hay muertes documentadas de personas que abandonaron una quimioterapia con posibilidades reales de curación por seguir una promesa.",
+              "SEÑALES DE ALARMA, y son bastante fiables: promete curar muchas cosas distintas a la vez; usa palabras como «energía», «toxinas» o «cuántico» sin definirlas; dice que la ciencia «no quiere que se sepa»; se apoya solo en testimonios y no en resultados; te pide que dejes tu tratamiento; cobra por adelantado un paquete largo; y no admite ningún resultado que pudiera demostrar que se equivoca.",
+              "PREGUNTAS QUE PUEDES HACER SIEMPRE, a cualquier profesional y ante cualquier terapia: ¿esto se ha comparado con un grupo que no lo recibía? ¿qué beneficio concreto se ha medido, y de cuánto? ¿qué riesgos e interacciones tiene? ¿se puede combinar con mi tratamiento actual? ¿y qué pasaría si no hago nada?",
+              "Y LA REGLA DE ORO, que resume dos mil años de esta historia: lo que ayuda se SUMA, no se sustituye. La medicina integrativa bien entendida no consiste en cambiar la ciencia por la tradición, sino en no renunciar a nada de lo que funciona: el fármaco correcto, y también el ejercicio, la comida, el sueño, la compañía y una persona que te escuche.",
+              "Porque el error de la medicina moderna nunca fue curar demasiado bien. Fue olvidar, por el camino, que quien está enfermo es una persona entera.",
+            ],
+            dato: "Dato curioso: hay un tratamiento que aparece en casi todas las guías clínicas modernas, no tiene efectos secundarios, es gratis y ninguna cultura de este recorrido lo ignoró: el movimiento. Hipócrates ya lo receta, el Ayurveda y la medicina china lo prescriben, y la investigación actual lo confirma como una de las intervenciones más eficaces que tenemos.",
+          },
         ]),
       hito("integrativa", "pilares-integrativa", "Los pilares del cuidado", "Nutrición, mente y estilo de vida",
         "¿Cuánta de tu salud depende de cómo vives cada día?",

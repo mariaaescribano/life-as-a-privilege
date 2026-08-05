@@ -4,11 +4,7 @@ USAR OBJ+ID : userId
 ---------------------------------------------
 
 
-- explicaciones
-- pedir en un check en astro si puedo usar sus datos para estaditsicas
-- añadir mas tests en psicologia
-
-
+- poder descargar materiales con fotos /sin fotos / fondo blanco/ fondo disciplina
 
 
 

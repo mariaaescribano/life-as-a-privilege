@@ -382,7 +382,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">Quién está detrás</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 

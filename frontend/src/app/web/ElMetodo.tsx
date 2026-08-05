@@ -8,6 +8,7 @@ import { BookCallModal } from "../../components/global/BookCallModal";
 import { recorridoContenido, nombreEnMapa, type ContenidoSeccion } from "../../data/recorridoContenido";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
+import { ComicPorQueExiste } from "../../components/metodo/ComicPorQueExiste";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
@@ -246,6 +247,27 @@ function SeparadorMandala({ mt, mb }: { mt?: BoxProps["mt"]; mb?: BoxProps["mb"]
           h="1px"
           w={{ base: "60px", md: "150px" }}
           bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
+        />
+      </Flex>
+    </Reveal>
+  );
+}
+
+// ── Separador de línea ──────────────────────────────────────────────────────
+// Cesura simple: una línea horizontal que se enciende de los extremos al centro
+// al asomar. La usa el corte entre el cómic del origen y «Así es El Mapa por
+// dentro»: ahí el mandala quedaba a un palmo del mandala del propio mapa (y del
+// de la cabecera), y eran demasiados mandalas seguidos.
+function SeparadorLinea({ mt, mb }: { mt?: BoxProps["mt"]; mb?: BoxProps["mb"] }) {
+  return (
+    <Reveal inView direction="none" scaleFrom={0.6} duration={0.9} mt={mt} mb={mb} w="100%">
+      <Flex justify="center">
+        <Box
+          w="100%"
+          maxW={{ base: "260px", md: "560px" }}
+          h="1px"
+          bg="linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent)"
+          boxShadow="0 0 8px rgba(255,255,255,0.28)"
         />
       </Flex>
     </Reveal>
@@ -565,39 +587,68 @@ export default function ElMetodo() {
         >
           de Life as a Privilege
         </Text>
-        <Text
-          color="white"
-          fontSize={{ base: "sm", md: "lg" }}
-          fontWeight="700"
-          fontStyle="italic"
-          lineHeight="1.95"
-          letterSpacing="0.015em"
-          textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
-          maxW={{ base: "100%", md: "70%" }}
-          mt={{ base: 2, md: 3 }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(14px)"}
-          transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
-        >
-          Ocho disciplinas. Un orden. Un propósito: entenderte.
-        </Text>
-
-        <Text
-          color="white"
-          fontSize={{ base: "sm", md: "lg" }}
-          lineHeight="1.95"
-          letterSpacing="0.015em"
-          textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
-          maxW={{ base: "100%", md: "70%" }}
-          mt={{ base: 2, md: 3 }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(14px)"}
-          transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
-        >
-          No son ocho cursos independientes. Es una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.
-        </Text>
-
       </Flex>
+
+      {/* ── ¿POR QUÉ EXISTE LIFE AS A PRIVILEGE? ──
+          Primero las frases que explican qué es El Mapa, centradas sobre el
+          turquesa; DEBAJO, el cómic del origen a todo el ancho (panel
+          rectangular: acuarela a la izquierda, texto a la derecha).
+          Antes iban al lado del cómic, en dos columnas: el cómic quedaba
+          reducido a un cuadradito del 46% y la historia —que es lo importante de
+          este bloque— competía con el texto en vez de tener su sitio. */}
+      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 16, md: 24 }}>
+        <Flex
+          maxW="1200px"
+          mx="auto"
+          direction="column"
+          align="center"
+          gap={{ base: 10, md: 14 }}
+        >
+          {/* Las dos frases que explican El Mapa, centradas encima del panel.
+              El título «¿Por qué existe Life as a Privilege?» NO va aquí: es el
+              título del cómic y vive dentro del propio panel.
+              Con un ancho tope para que las líneas no se hagan larguísimas de
+              lado a lado de la pantalla. */}
+          <Flex
+            direction="column"
+            align="center"
+            gap={{ base: 4, md: 5 }}
+            maxW="900px"
+            textAlign="center"
+          >
+            <Reveal inView direction="up" distance={16} duration={0.8} delay={0.1}>
+              <Text
+                color="white"
+                fontSize={{ base: "md", md: "xl" }}
+                fontWeight="700"
+                fontStyle="italic"
+                lineHeight="1.8"
+                letterSpacing="0.015em"
+                textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
+              >
+                Ocho disciplinas. Un orden. Un propósito: entenderte.
+              </Text>
+            </Reveal>
+
+            <Reveal inView direction="up" distance={16} duration={0.8} delay={0.22}>
+              <Text
+                color="white"
+                fontSize={{ base: "sm", md: "lg" }}
+                lineHeight="1.9"
+                letterSpacing="0.015em"
+                textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
+              >
+                No son ocho cursos independientes. Es una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.
+              </Text>
+            </Reveal>
+          </Flex>
+
+          {/* El cómic del origen, a todo el ancho del bloque. */}
+          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.8} w="100%">
+            <ComicPorQueExiste />
+          </Reveal>
+        </Flex>
+      </Box>
 
       {/* ── SEPARADOR + TÍTULO DEL MANDALA ──
           Las frases van con su bloque: este título encabeza el mandala de las
@@ -607,9 +658,18 @@ export default function ElMetodo() {
         direction="column"
         align="center"
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 14, md: 21 }}
+        // Sin `pt` propio: el aire de arriba lo pone el `mt` del separador, que
+        // es EL MISMO que su `mb`. Así la línea queda a la misma distancia del
+        // cómic que del título, y para cambiar el hueco se toca un solo sitio
+        // (si el aire viniera de dos paddings distintos, nunca cuadran).
       >
-        <SeparadorMandala mb={{ base: 10, md: 14 }} />
+        {/* En px y no en tokens de Chakra: 17 no existe en la escala de
+            espaciado, y un token que no existe NO cae en 68px sino en 17px
+            (se cuela como valor crudo). Con px se ve lo que mide. */}
+        <SeparadorLinea
+          mt={{ base: "48px", md: "67px" }}
+          mb={{ base: "48px", md: "67px" }}
+        />
 
         <Text
           color="white"
@@ -975,11 +1035,14 @@ export default function ElMetodo() {
           onClick={handleAcceder}
           align="center"
           justify="center"
-          gap={{ base: 2, md: 6 }}
+          gap={{ base: 3, md: 6 }}
           px={{ base: 5, md: 24 }}
-          py={{ base: "12px", md: "22px" }}
+          py={{ base: "16px", md: "22px" }}
+          // En móvil manda ESTE botón: ocupa el ancho que le dejan los márgenes
+          // (nunca de filo a filo) y los secundarios de abajo van más estrechos,
+          // así la jerarquía se ve de un vistazo sin leer nada.
+          w={{ base: "min(88vw, 420px)", md: "auto" }}
           minW={{ base: "auto", md: "520px" }}
-          maxW={{ base: "92vw", md: "none" }}
           flexShrink={0}
           borderRadius="full"
           border="1.5px solid rgba(255,255,255,0.65)"
@@ -996,7 +1059,7 @@ export default function ElMetodo() {
           <Image
             src="/img/icono/life.png"
             alt=""
-            h={{ base: "24px", md: "44px" }}
+            h={{ base: "30px", md: "44px" }}
             objectFit="contain"
             flexShrink={0}
             style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.56)) drop-shadow(0 0 24px rgba(255,255,255,0.3))" }}
@@ -1005,7 +1068,7 @@ export default function ElMetodo() {
             color="white"
             fontFamily="'EB Garamond', serif"
             fontWeight="700"
-            fontSize={{ base: "14px", md: "2xl" }}
+            fontSize={{ base: "17px", md: "2xl" }}
             letterSpacing={{ base: "0.04em", md: "0.18em" }}
             textTransform="uppercase"
             textAlign="center"
@@ -1034,8 +1097,10 @@ export default function ElMetodo() {
             align="center"
             justify="center"
             gap={2}
-            px={{ base: 5, md: 7 }}
+            px={{ base: 4, md: 7 }}
             py={{ base: "7px", md: "9px" }}
+            // Más estrecho que el de ACCEDER, a propósito (ver arriba).
+            w={{ base: "min(76vw, 330px)", md: "auto" }}
             borderRadius="full"
             border="1px solid rgba(255,255,255,0.5)"
             bg="rgba(255,255,255,0.06)"
@@ -1086,8 +1151,10 @@ export default function ElMetodo() {
             align="center"
             justify="center"
             gap={2}
-            px={{ base: 5, md: 7 }}
+            px={{ base: 4, md: 7 }}
             py={{ base: "7px", md: "9px" }}
+            // El más pequeño de los tres: es la última salida, no el camino.
+            w={{ base: "min(58vw, 260px)", md: "auto" }}
             borderRadius="full"
             border="1px solid rgba(255,255,255,0.5)"
             bg="rgba(255,255,255,0.06)"

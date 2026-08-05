@@ -17,6 +17,11 @@ import { PrecioConAntes } from "./PrecioConAntes";
 // que verse EXACTAMENTE igual en las dos: es el box donde se decide la compra.
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** Tope del cuerpo de letra (px) del bloque de texto cuando se autoajusta.
+ *  Los puntos van a este tamaño y el título a 1,5 veces. Subirlo hace el box más
+ *  aparatoso, no más lleno: el hueco que sobra se rellena con aire entre líneas. */
+const MAX_LETRA = 20;
+
 /** Envoltura del bloque de texto. Con `activa` (las presentaciones) es la zona
  *  MEDIDA: ocupa el hueco libre del box y recorta lo que sobre, para que el
  *  ajuste de tamaño tenga un alto contra el que medir. Sin ella, el texto se
@@ -32,7 +37,7 @@ function ZonaTexto({
 }) {
   if (!activa) return <>{children}</>;
   return (
-    <Box ref={zonaRef} flex="1" minH={0} overflow="hidden">
+    <Box ref={zonaRef} flex="1" minH={0} overflow="hidden" display="flex" flexDirection="column">
       {children}
     </Box>
   );
@@ -89,6 +94,12 @@ export function DisciplinaVideoBox({
   // mide aquí: se busca el mayor que quepa ENTERO en el hueco. Medición
   // imperativa (se escribe `style.fontSize` directamente), sin estado, así que
   // no hay re-render por píxel ni bucle de «mido → cambio → vuelvo a medir».
+  //
+  // PERO la letra tiene un TOPE (`MAX_LETRA`). El box es medio ancho de página y
+  // cuadrado: llenarlo solo a base de agrandar la letra la dejaba de tamaño
+  // cartel. Al llegar al tope, el hueco que sobra se reparte como AIRE entre las
+  // líneas (variable `--aire`) y la zona se centra: el box sigue lleno de arriba
+  // abajo, pero con un cuerpo de letra que se lee, no que se grita.
   const zonaRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const zona = zonaRef.current;
@@ -102,6 +113,8 @@ export function DisciplinaVideoBox({
     let anchoPrev = 0;
     let altoPrev = 0;
 
+    const setAire = (px: number) => zona.style.setProperty("--aire", `${px}px`);
+
     const ajustar = () => {
       const ancho = window.innerWidth;
 
@@ -110,6 +123,8 @@ export function DisciplinaVideoBox({
       // siempre detrás del texto y la búsqueda se dispararía al techo). Ahí,
       // tamaño fijo y sensato, sin autoajuste.
       if (ancho < 992) {
+        setAire(0);
+        zona.style.justifyContent = "flex-start";
         zona.style.fontSize = ancho >= 768 ? "17px" : "15px";
         const r0 = zona.getBoundingClientRect();
         anchoPrev = r0.width;
@@ -117,15 +132,20 @@ export function DisciplinaVideoBox({
         return;
       }
 
-      // Techo alto a propósito: el objetivo es llenar el box, así que hay que
-      // dejar crecer a las disciplinas de texto corto. El suelo es el punto por
-      // debajo del cual preferimos que quede justo antes que ilegible.
-      const max = 60;
+      // TOPE del cuerpo de letra: llenar el box NO es motivo para agrandarla sin
+      // freno (el box mide media página y es cuadrado, así que el hueco es
+      // enorme). Lo que sobre se reparte más abajo como aire entre líneas. El
+      // suelo es el punto por debajo del cual preferimos que quede justo antes
+      // que ilegible.
+      const max = MAX_LETRA;
       const min = 13;
       // HOLGURA: el texto no llena el hueco a ras, se le deja un 12 % de aire.
       // Sin esto la letra crecía hasta tocar los bordes y el box quedaba
       // apelmazado —correcto de medidas, pero sin respirar—.
       const hueco = zona.clientHeight * 0.88;
+      // Se mide SIN aire: el aire es un premio de después, y si contara aquí la
+      // búsqueda mediría contra un bloque ya hinchado por la pasada anterior.
+      setAire(0);
       // Búsqueda binaria del mayor tamaño que cabe: 9 medidas en vez de las
       // ~100 que costaba bajar de medio en medio píxel desde el techo.
       let lo = min;
@@ -138,6 +158,15 @@ export function DisciplinaVideoBox({
         else { hi = m; }
       }
       zona.style.fontSize = `${mejor}px`;
+
+      // El texto ya está al tope y todavía sobra hueco: se reparte entre los
+      // huecos del bloque (título↔puntos y punto↔punto). Con su propio tope, que
+      // si no las líneas quedan desperdigadas; lo que aún sobre lo absorbe el
+      // centrado vertical, así el aire queda arriba Y abajo, no todo al final.
+      const huecos = Math.max(1, zona.querySelectorAll("[data-punto]").length);
+      const sobra = hueco - bloque.scrollHeight;
+      setAire(sobra > 0 ? Math.min(sobra / huecos, mejor * 1.6) : 0);
+      zona.style.justifyContent = sobra > 0 ? "center" : "flex-start";
 
       const r = zona.getBoundingClientRect();
       anchoPrev = r.width;
@@ -169,7 +198,7 @@ export function DisciplinaVideoBox({
 
   // Tamaños del bloque de texto. Con `textoGrande` van en `em` (los manda el
   // ajuste de arriba); sin él, los tokens de siempre — /elMetodo no se toca.
-  const fsTitulo = textoGrande ? "1.6em" : { base: "lg", md: "xl" };
+  const fsTitulo = textoGrande ? "1.5em" : { base: "lg", md: "xl" };
   const fsTick = textoGrande ? "1.15em" : { base: "md", md: "lg" };
   const fsPunto = textoGrande ? "1em" : { base: "sm", md: "md" };
 
@@ -317,7 +346,12 @@ export function DisciplinaVideoBox({
             (ver el useLayoutEffect de arriba): ocupa todo el hueco que deja el
             precio y el texto se pinta lo más grande que quepa entero. */}
         <ZonaTexto activa={textoGrande} zonaRef={zonaRef}>
-          <Flex direction="column" gap={textoGrande ? "0.75em" : { base: 4, md: 5 }}>
+          {/* `--aire` lo pone el ajuste de arriba: es el hueco que sobra cuando
+              la letra ya está en su tope, repartido entre las líneas. */}
+          <Flex
+            direction="column"
+            gap={textoGrande ? "calc(0.75em + var(--aire, 0px))" : { base: 4, md: 5 }}
+          >
             {/* Título (puede ser una frase larga que introduce el recorrido) */}
             <Text
               color={accent}
@@ -332,9 +366,14 @@ export function DisciplinaVideoBox({
             </Text>
 
             {/* Puntos con ✓ */}
-            <Flex direction="column" gap={textoGrande ? "0.6em" : { base: 2.5, md: 3 }}>
+            <Flex
+              direction="column"
+              gap={textoGrande ? "calc(0.6em + var(--aire, 0px))" : { base: 2.5, md: 3 }}
+            >
               {videoIntro.puntos.map((p, i) => (
-                <Flex key={i} align="flex-start" gap={textoGrande ? "0.55em" : { base: 2.5, md: 3 }}>
+                // data-punto: el ajuste los cuenta para saber entre cuántos
+                // huecos reparte el aire.
+                <Flex key={i} data-punto align="flex-start" gap={textoGrande ? "0.55em" : { base: 2.5, md: 3 }}>
                   <Text
                     color={accent}
                     fontWeight="700"

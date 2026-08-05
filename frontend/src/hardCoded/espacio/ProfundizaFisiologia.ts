@@ -160,9 +160,13 @@ const NEUROTRANSMISORES: Ficha[] = [
   {
     key: "acetilcolina", nombre: "Acetilcolina", color: "#6bd39a", foto: NT("acetilcolina"),
     eyebrow: "Músculo y memoria",
-    claves: ["Ordena mover los músculos", "Une cerebro y cuerpo", "Clave para atención y memoria"],
+    claves: ["Ordena mover los músculos", "Dos receptores: nicotínico y muscarínico", "Clave para atención y memoria"],
     explicacion: [
       "Une el cerebro con los músculos: cada vez que mueves un dedo, es la acetilcolina la que transmite la orden desde la neurona al músculo y desencadena la liberación del calcio necesario para que la fibra muscular se contraiga. Además, es esencial para la atención, el aprendizaje y la memoria.",
+      "Una misma molécula, dos cerraduras distintas: lo que ocurre no lo decide la acetilcolina, lo decide el receptor en el que encaja. Y hay dos familias, bautizadas por las sustancias que las imitan: la nicotina del tabaco y la muscarina de la seta Amanita muscaria.",
+      "Receptores nicotínicos: son canales. Cuando la acetilcolina encaja, el receptor se abre como una puerta y entra sodio, así que la célula se activa en milisegundos. Son los de la unión neuromuscular (por eso el movimiento voluntario es instantáneo) y también están repartidos por el cerebro, donde participan en la atención y en el circuito de recompensa. Son los que ocupa la nicotina, haciéndose pasar por acetilcolina.",
+      "Receptores muscarínicos: no son canales, sino receptores acoplados a proteína G. Al encajar la acetilcolina no se abre nada: se pone en marcha una cascada de mensajeros dentro de la célula. Es más lento (décimas de segundo) pero más duradero, y en vez de dar una orden seca modula el tono de fondo del órgano. Son los del sistema parasimpático (bajan el ritmo del corazón, ponen en marcha la digestión, contraen la pupila, activan las glándulas) y los del cerebro implicados en memoria y aprendizaje.",
+      "Por qué importa la diferencia: casi todo lo que toca la acetilcolina es selectivo de una de las dos familias. Los relajantes musculares de quirófano bloquean los nicotínicos y dejan el músculo sin la orden; la atropina bloquea los muscarínicos, y por eso dilata la pupila y acelera el corazón. En el Alzheimer, donde se pierden neuronas colinérgicas, los fármacos no añaden acetilcolina: frenan la enzima que la destruye (la acetilcolinesterasa) para que la poca que queda dure más en la sinapsis.",
       "Cuándo la notas: en cada movimiento voluntario y cuando estás concentrado y con la mente despierta.",
     ],
   },

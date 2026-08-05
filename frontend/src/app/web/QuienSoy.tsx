@@ -176,7 +176,7 @@ const QuienSoy = () => {
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.75s ease 0.5s, transform 0.75s ease 0.5s"
         >
-          Ingeniera informática. No existía lo que he construido: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.
+          Ingeniera informática. Reconstruí el camino que muchas personas recorremos durante años intentando comprendernos: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.
         </Text>
 
         <Text
@@ -191,7 +191,7 @@ const QuienSoy = () => {
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.75s ease 0.5s, transform 0.75s ease 0.5s"
         >
-          Mi propósito es profundizar en la naturaleza humana, usando psicología, filosofía, ciencias biológicas y conocimientos tradicionales para ello.
+          Durante siglos hemos acumulado conocimiento sobre el ser humano, pero ese conocimiento ha permanecido disperso. Mi objetivo no es crear más conocimiento, sino ordenarlo y ponerlo al servicio de tu comprensión.
         </Text>
 
 
