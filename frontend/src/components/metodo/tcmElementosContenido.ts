@@ -581,12 +581,15 @@ export interface PasoTest { tipo: "test"; src: string; intro?: string[]; testKey
 export type PasoComic = PasoVineta | PasoTest;
 
 // Fotos del cómic de Madera (/public/recorrido/tcm/madera): 1 intro/qué rige,
-// 2 exceso, 3 deficiencia, 4 reequilibrar (nutrición + estilo de Vida).
+// 2 exceso, 3 deficiencia, 4 nutrición, 5 estilo de Vida. Mismo reparto que
+// Fuego: la nutrición y el estilo de Vida son dos viñetas distintas, así que
+// cada una lleva su ilustración (antes las dos repetían la 4).
 const FOTOS_MADERA = {
   intro: "/recorrido/tcm/madera/madera1.png",
   exceso: "/recorrido/tcm/madera/madera2.png",
   deficiencia: "/recorrido/tcm/madera/madera3.png",
-  reequilibrar: "/recorrido/tcm/madera/madera4.png",
+  nutricion: "/recorrido/tcm/madera/madera4.png",
+  estilo: "/recorrido/tcm/madera/madera5.png",
 };
 
 // Madera · viñetas con el texto del curso (voz de María).
@@ -625,7 +628,7 @@ const comicMadera: PasoComic[] = [
   },
   {
     tipo: "vineta",
-    src: FOTOS_MADERA.reequilibrar,
+    src: FOTOS_MADERA.nutricion,
     paragraphs: [
       "Para reequilibrar la Madera, favorece alimentos que apoyen el hígado y el libre flujo del Qi:",
       "Verduras amargas como diente de león, rúcula o kale; alimentos ácidos como limón, vinagre o encurtidos; hierbas frescas como menta, albahaca y perejil; germinados y té verde.",
@@ -633,7 +636,7 @@ const comicMadera: PasoComic[] = [
   },
   {
     tipo: "vineta",
-    src: FOTOS_MADERA.reequilibrar,
+    src: FOTOS_MADERA.estilo,
     paragraphs: [
       "La Madera necesita movimiento, dirección y expresión: muévete por la mañana (estiramientos, Qi Gong o artes marciales), da forma a tu creatividad planificando o escribiendo nuevos proyectos y practica límites sanos para no acumular frustración.",
       "Descansa alrededor de las 22:30, cuando su energía empieza a relajarse, y elige un ejercicio dinámico pero no agresivo, de movimiento continuo y flexible.",

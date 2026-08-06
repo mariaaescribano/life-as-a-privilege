@@ -9,10 +9,18 @@
 // ser el mismo que el del componente: en Windows dos rutas que solo difieren en
 // mayúsculas rompen tsc.
 //
-// Ilustraciones en public/viñetas/elMapa/. Las que aún no existen se dejan sin
-// `src`: el box enseña un hueco elegante (el mandala latiendo) y el texto se lee
-// igual, así el guion está completo desde el primer día y las acuarelas se van
-// cayendo cuando estén (solo hay que rellenar el `src`).
+// ── CÓMO SUBIR UNA ACUARELA ──────────────────────────────────────────────
+// Se deja el PNG en `frontend/public/viñetas/elMapa/` con el NOMBRE EXACTO que
+// ya tiene escrito su viñeta aquí abajo (en el `src`), y aparece sola. No hay
+// que tocar código: todas las viñetas tienen su ruta puesta de antemano, y
+// mientras el archivo no exista el box enseña un hueco elegante (el mandala
+// latiendo, sin avisos de «próximamente») y el texto se lee igual.
+//
+// Pendientes ahora mismo: comicinicioayurveda, comiciniciocabala,
+// comiciniciocultura, comiciniciodescubrimiento, comiciniciofinal.
+//
+// Las acuarelas van CUADRADAS (las que ya hay son 1254×1254). Si se sube una que
+// no lo sea, el box la recorta por arriba y por abajo para llenar el cuadrado.
 // ─────────────────────────────────────────────────────────────────────────
 
 import {
@@ -79,7 +87,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    // Foto pendiente.
+    src: `${P}/comicinicioayurveda.png`,
     titulo: "Ayurveda",
     disciplina: ayurvedaNom,
     lineas: [
@@ -115,7 +123,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    // Foto pendiente.
+    src: `${P}/comiciniciocabala.png`,
     titulo: "Cábala",
     disciplina: cabalaNom,
     lineas: [
@@ -130,6 +138,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     // TEXTO PROVISIONAL: está escrito para que el mapa funcione desde ya, pero
     // es tu voz la que tiene que contarlo — reescríbelo cuando quieras (y la
     // acuarela, cuando la tengas, va en el `src`).
+    src: `${P}/comiciniciocultura.png`,
     titulo: "Cultura e Historia",
     disciplina: culturaNom,
     lineas: [
@@ -138,7 +147,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    // Foto pendiente.
+    src: `${P}/comiciniciodescubrimiento.png`,
     titulo: "El descubrimiento",
     lineas: [
       "Entonces lo entendí.",
@@ -147,7 +156,8 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    // Foto pendiente. Viñeta de CIERRE: aquí el mapa de al lado se une.
+    // Viñeta de CIERRE: aquí el mapa de al lado se une.
+    src: `${P}/comiciniciofinal.png`,
     titulo: "Life as a Privilege",
     cierre: true,
     lineas: [
