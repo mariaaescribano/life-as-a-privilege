@@ -9,18 +9,19 @@
 // ser el mismo que el del componente: en Windows dos rutas que solo difieren en
 // mayúsculas rompen tsc.
 //
-// ── CÓMO SUBIR UNA ACUARELA ──────────────────────────────────────────────
-// Se deja el PNG en `frontend/public/viñetas/elMapa/` con el NOMBRE EXACTO que
-// ya tiene escrito su viñeta aquí abajo (en el `src`), y aparece sola. No hay
-// que tocar código: todas las viñetas tienen su ruta puesta de antemano, y
-// mientras el archivo no exista el box enseña un hueco elegante (el mandala
+// ── CÓMO CAMBIAR UNA ACUARELA ────────────────────────────────────────────
+// Las once están subidas y convertidas a WebP (lote 4 de scripts/webp), y las
+// rutas de aquí abajo apuntan ya a los `.webp`. Para sustituir una:
+//   1. Deja el PNG nuevo en `frontend/public/viñetas/elMapa/`.
+//   2. Pasa la carpeta por el conversor (un lote nuevo en convertir.mjs), que
+//      escribe el WebP y borra el PNG. Si se deja en PNG NO se ve: la ruta del
+//      código pide `.webp`.
+// Mientras un archivo no exista, el box enseña un hueco elegante (el mandala
 // latiendo, sin avisos de «próximamente») y el texto se lee igual.
 //
-// Pendientes ahora mismo: comicinicioayurveda, comiciniciocabala,
-// comiciniciocultura, comiciniciodescubrimiento, comiciniciofinal.
-//
-// Las acuarelas van CUADRADAS (las que ya hay son 1254×1254). Si se sube una que
-// no lo sea, el box la recorta por arriba y por abajo para llenar el cuadrado.
+// Las acuarelas van CUADRADAS (las que hay son 1254×1254 de origen). Si se sube
+// una que no lo sea, el box la recorta por arriba y por abajo para llenar el
+// cuadrado.
 // ─────────────────────────────────────────────────────────────────────────
 
 import {
@@ -101,7 +102,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     disciplina: tcmNom,
     lineas: [
       "Las emociones, el cuerpo y la energía no están separados.",
-      "Empiezo a ver cómo ciertas mis emociones y hábitos me desequilibraban.",
+      "Empiezo a ver cómo ciertas de mis emociones y hábitos me desequilibraban.",
     ],
   },
   {
@@ -118,8 +119,8 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     titulo: "Nutrición",
     disciplina: nutricionNom,
     lineas: [
-      "Mi cuerpo también estaba intentando hablar conmigo.",
-      "No todo dependía de mi fuerza de voluntad.",
+      "Mi cuerpo está hecho con las moléculas de los alimentos que elijo.",
+      "Cuanto mejor coma, mejor me sentiré y mejor pensaré.",
     ],
   },
   {
@@ -128,31 +129,26 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     disciplina: cabalaNom,
     lineas: [
       "Después de comprender mi mente y mi cuerpo...",
-      "Empiezo a preguntarme quién quiero llegar a ser.",
+      "Me empiezo a preguntar si es verdad que tenemos un alma.",
     ],
   },
   {
-    // ── VIÑETA NUEVA ──
-    // El mapa tiene OCHO disciplinas y el guion solo contaba siete: faltaba
-    // Cultura e Historia, así que el anillo del mapa nunca llegaba a cerrarse.
-    // TEXTO PROVISIONAL: está escrito para que el mapa funcione desde ya, pero
-    // es tu voz la que tiene que contarlo — reescríbelo cuando quieras (y la
-    // acuarela, cuando la tengas, va en el `src`).
+    // Esta viñeta se añadió después: el mapa tiene OCHO disciplinas y el guion
+    // solo contaba siete, así que sin Cultura e Historia el anillo del mapa no
+    // llegaba a cerrarse nunca.
     src: `${P}/comiciniciocultura.webp`,
     titulo: "Cultura e Historia",
     disciplina: culturaNom,
     lineas: [
-      "Y entendí que nada de esto lo había inventado yo.",
-      "Llevamos siglos preguntándonos lo mismo, en cada historia, con otras palabras.",
+      "Entender la historia de la humanidad me ayuda a entender el contexto actual.",
+      "Ahora puedo apreciar más mi realidad.",
     ],
   },
   {
     src: `${P}/comiciniciodescubrimiento.webp`,
     titulo: "El descubrimiento",
     lineas: [
-      "Entonces lo entendí.",
-      "Ninguna disciplina estaba equivocada.",
-      "Simplemente todas estaban observando a la misma persona.",
+      "Entendí que todas poseen un fragmento de la misma verdad.",
     ],
   },
   {
@@ -163,7 +159,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     lineas: [
       "Durante siglos hemos acumulado conocimiento sobre el ser humano.",
       "Ese conocimiento ha permanecido disperso entre disciplinas que rara vez dialogan entre sí.",
-      "Life as a Privilege nace para reconstruir ese mapa y ponerlo al servicio de tu comprensión.",
+      "Life as a Privilege nace para reconstruir ese mapa y ponerlo al servicio del crecimiento.",
     ],
   },
 ];
