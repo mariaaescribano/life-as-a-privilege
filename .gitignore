@@ -22,3 +22,7 @@ yarn-error.log*
 # IDE / OS files
 .vscode/
 .DS_Store
+
+# Salida del modo --prueba de scripts/webp/convertir.mjs: copias de descarte
+# para comparar a ojo PNG vs WebP. No es material del proyecto.
+scripts/webp/muestra/
