@@ -141,6 +141,16 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/tcm/metal"],  // metal5, la del estilo de Vida
   },
+  // Personajes y animales de «Tu familia» (psicología). 600 px y no 1000: aquí
+  // no son ilustraciones de lectura, son las miniaturas de las tarjetas del
+  // mapa y del selector, y es el tamaño que recomienda el propio catálogo
+  // (familiaSimbolos.ts). La ruta se arma sola (`${key}.webp`), así que en esta
+  // carpeta el WebP no es opcional: en PNG no se verían.
+  8: {
+    ladoMax: 600,
+    calidad: 85,
+    carpetas: ["recorrido/psicologia/familia"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

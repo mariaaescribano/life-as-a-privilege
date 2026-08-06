@@ -172,8 +172,8 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
 
         {/* Cerrar */}
         <Box as="button" onClick={onClose} position="absolute" top={3} right={3} zIndex={3}
-             w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
-             color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
+             w="38px" h="38px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+             color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="lg" cursor="pointer"
              _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>
           ✕
         </Box>
@@ -198,7 +198,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
                 placeholder="Su nombre…"
                 bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
                 borderRadius="lg" fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "md", md: "lg" }} fontWeight="700"
+                fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
                 sx={{ caretColor: TINTA }}
                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 400 }}
                 _hover={{ borderColor: `${TINTA}55` }}
@@ -208,9 +208,8 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
                 value={p.parentesco || ""}
                 onChange={(e) => onCampo({ parentesco: e.target.value })}
                 placeholder="Parentesco (madre, abuelo…)"
-                size="sm"
                 bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "sm", md: "md" }}
+                borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
                 sx={{ caretColor: TINTA }}
                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                 _hover={{ borderColor: `${TINTA}55` }}
@@ -220,7 +219,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
           </Flex>
 
           {error && (
-            <Text color="#8c2f13" fontSize="sm" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
+            <Text color="#8c2f13" fontSize="md" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
               {error}
             </Text>
           )}
@@ -229,12 +228,12 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
           <Flex wrap="wrap" gap={1.5} mt={3}>
             {GENOGRAMA.parentescos.map((par) => (
               <Box as="button" key={par} onClick={() => onCampo({ parentesco: par })}
-                   px={2.5} py={1} borderRadius="full"
+                   px={3} py={1.5} borderRadius="full"
                    bg={p.parentesco === par ? TINTA : "rgba(255,251,243,0.72)"}
                    border={`1px solid ${p.parentesco === par ? TINTA : `${TINTA}33`}`}
                    cursor="pointer" transition="all 0.15s"
                    _hover={{ borderColor: TINTA, transform: "translateY(-1px)" }}>
-                <Text color={p.parentesco === par ? PAPEL : TINTA} fontSize="xs" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
+                <Text color={p.parentesco === par ? PAPEL : TINTA} fontSize="sm" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
                   {par}
                 </Text>
               </Box>
@@ -250,12 +249,12 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
           <Flex direction="column" gap={{ base: 5, md: 6 }}>
             {GENOGRAMA_PREGUNTAS.map((q) => (
               <Box key={q.key}>
-                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.35"
+                <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.35"
                       style={{ textShadow: INK_SHADOW }}>
                   {q.pregunta}
                 </Text>
                 {q.apoyo && (
-                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.82} mt={1} lineHeight="1.55"
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.82} mt={1} lineHeight="1.55"
                         style={{ textShadow: INK_SHADOW }}>
                     {q.apoyo}
                   </Text>
@@ -268,7 +267,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
                   minH={{ base: "90px", md: "104px" }}
                   bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
                   borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                  fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7"
                   sx={{ caretColor: TINTA, scrollbarWidth: "thin", scrollbarColor: `${TINTA}99 transparent`,
                         "&::-webkit-scrollbar": { width: "8px" },
                         "&::-webkit-scrollbar-thumb": { background: `${TINTA}99`, borderRadius: "8px" } }}
@@ -287,17 +286,17 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
           <Flex justify="space-between" align="center" gap={3}>
             {confirmarBorrado ? (
               <Flex align="center" gap={2}>
-                <Text color={TINTA} fontSize="sm" fontWeight="600" style={{ textShadow: INK_SHADOW }}>
+                <Text color={TINTA} fontSize="md" fontWeight="600" style={{ textShadow: INK_SHADOW }}>
                   ¿Quitarla del mapa?
                 </Text>
-                <Box as="button" onClick={onEliminar} px={3} py={1.5} borderRadius="full"
-                     bg="#8c2f13" color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="sm"
+                <Box as="button" onClick={onEliminar} px={3.5} py={2} borderRadius="full"
+                     bg="#8c2f13" color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="md"
                      cursor="pointer" _hover={{ filter: "brightness(1.1)" }}>
                   Sí, quitar
                 </Box>
-                <Box as="button" onClick={() => setConfirmarBorrado(false)} px={3} py={1.5} borderRadius="full"
+                <Box as="button" onClick={() => setConfirmarBorrado(false)} px={3.5} py={2} borderRadius="full"
                      bg="transparent" border={`1.5px solid ${TINTA}88`} color={TINTA}
-                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="sm" cursor="pointer"
+                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="md" cursor="pointer"
                      _hover={{ bg: `${TINTA}14` }}>
                   No
                 </Box>
@@ -306,7 +305,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
               <Box as="button" onClick={() => setConfirmarBorrado(true)}
                    px={{ base: 4, md: 5 }} py={2} borderRadius="full" bg="transparent"
                    border={`1.5px solid ${TINTA}66`} color={TINTA}
-                   fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                   fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                    cursor="pointer" transition="all 0.18s" _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>
                 Quitar
               </Box>
@@ -314,7 +313,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
 
             <Box as="button" onClick={onClose}
                  px={{ base: 5, md: 6 }} py={2} borderRadius="full" bg={TINTA} color={PAPEL}
-                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                  letterSpacing="0.04em" cursor="pointer"
                  boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
                  _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>

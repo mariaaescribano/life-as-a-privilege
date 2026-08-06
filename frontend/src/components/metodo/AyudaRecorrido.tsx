@@ -265,7 +265,7 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       titulo: "Un ejemplo",
       cuerpo: [
         "Colocas a tu familia y eliges para cada uno el personaje o el animal que se le parece.",
-        "Por ejemplo: tu padre, un león; tu madre, una loba y un ángel; tu hermana, un erizo. No hay imágenes buenas ni malas: solo la que a ti te viene.",
+        "Por ejemplo: tu padre, un león; tu madre, un lobo y un ángel; tu hermana, un erizo. No hay imágenes buenas ni malas: solo la que a ti te viene.",
       ],
     },
     ayuda: {

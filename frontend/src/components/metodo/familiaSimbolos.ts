@@ -34,7 +34,7 @@ export const simboloSrc = (key: string): string => `${SIMBOLOS_DIR}/${key}.webp`
 export const SIMBOLOS_FAMILIA: SimboloFamilia[] = [
   // ── Animales ──
   { key: "leon",      nombre: "León",      grupo: "Animales" },
-  { key: "loba",      nombre: "Loba",      grupo: "Animales" },
+  { key: "lobo",      nombre: "Lobo",      grupo: "Animales" },
   { key: "oso",       nombre: "Oso",       grupo: "Animales" },
   { key: "ciervo",    nombre: "Ciervo",    grupo: "Animales" },
   { key: "buho",      nombre: "Búho",      grupo: "Animales" },

@@ -197,8 +197,8 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
 
         {/* Cerrar */}
         <Box as="button" onClick={onClose} position="absolute" top={3} right={3} zIndex={3}
-             w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
-             color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
+             w="38px" h="38px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+             color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="lg" cursor="pointer"
              _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>
           ✕
         </Box>
@@ -220,7 +220,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
                 placeholder="Su nombre…"
                 bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
                 borderRadius="lg" fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "md", md: "lg" }} fontWeight="700"
+                fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
                 sx={{ caretColor: TINTA }}
                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 400 }}
                 _hover={{ borderColor: `${TINTA}55` }}
@@ -230,9 +230,8 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
                 value={p.parentesco || ""}
                 onChange={(e) => onCampo({ parentesco: e.target.value })}
                 placeholder="Parentesco (madre, abuelo…)"
-                size="sm"
                 bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "sm", md: "md" }}
+                borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
                 sx={{ caretColor: TINTA }}
                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                 _hover={{ borderColor: `${TINTA}55` }}
@@ -242,7 +241,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
           </Flex>
 
           {error && (
-            <Text color="#8c2f13" fontSize="sm" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
+            <Text color="#8c2f13" fontSize="md" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
               {error}
             </Text>
           )}
@@ -251,12 +250,12 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
           <Flex wrap="wrap" gap={1.5} mt={3}>
             {GENOGRAMA.parentescos.map((par) => (
               <Box as="button" key={par} onClick={() => onCampo({ parentesco: par })}
-                   px={2.5} py={1} borderRadius="full"
+                   px={3} py={1.5} borderRadius="full"
                    bg={p.parentesco === par ? TINTA : "rgba(255,251,243,0.72)"}
                    border={`1px solid ${p.parentesco === par ? TINTA : `${TINTA}33`}`}
                    cursor="pointer" transition="all 0.15s"
                    _hover={{ borderColor: TINTA, transform: "translateY(-1px)" }}>
-                <Text color={p.parentesco === par ? PAPEL : TINTA} fontSize="xs" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
+                <Text color={p.parentesco === par ? PAPEL : TINTA} fontSize="sm" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
                   {par}
                 </Text>
               </Box>
@@ -270,23 +269,23 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
              sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
 
-          <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.3"
+          <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3"
                 style={{ textShadow: INK_SHADOW }}>
             {FAMILIA.eligeTitulo}
           </Text>
-          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.85} mt={1} lineHeight="1.6"
+          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} mt={1} lineHeight="1.6"
                 style={{ textShadow: INK_SHADOW }}>
             {FAMILIA.eligeApoyo}
           </Text>
 
           {/* Cuántas lleva elegidas */}
           <Flex align="center" gap={2} mt={3}>
-            <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.14em" textTransform="uppercase"
+            <Text color={TINTA} fontSize="xs" fontWeight="700" letterSpacing="0.14em" textTransform="uppercase"
                   opacity={0.7} style={{ textShadow: INK_SHADOW }}>
               {elegidos.length} de {SIMBOLOS_POR_PERSONA} elegidas
             </Text>
             {completo && (
-              <Text color={TINTA} fontSize="2xs" fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
+              <Text color={TINTA} fontSize="xs" fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
                 · toca una elegida para cambiarla
               </Text>
             )}
@@ -299,7 +298,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
               if (delGrupo.length === 0) return null;
               return (
                 <Box key={grupo}>
-                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                  <Text color={TINTA} fontSize="xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
                         opacity={0.65} mb={2.5} style={{ textShadow: INK_SHADOW }}>
                     {grupo}
                   </Text>
@@ -328,17 +327,17 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
           <Flex justify="space-between" align="center" gap={3}>
             {confirmarBorrado ? (
               <Flex align="center" gap={2}>
-                <Text color={TINTA} fontSize="sm" fontWeight="600" style={{ textShadow: INK_SHADOW }}>
+                <Text color={TINTA} fontSize="md" fontWeight="600" style={{ textShadow: INK_SHADOW }}>
                   ¿Quitarla del mapa?
                 </Text>
-                <Box as="button" onClick={onEliminar} px={3} py={1.5} borderRadius="full"
-                     bg="#8c2f13" color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="sm"
+                <Box as="button" onClick={onEliminar} px={3.5} py={2} borderRadius="full"
+                     bg="#8c2f13" color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="md"
                      cursor="pointer" _hover={{ filter: "brightness(1.1)" }}>
                   Sí, quitar
                 </Box>
-                <Box as="button" onClick={() => setConfirmarBorrado(false)} px={3} py={1.5} borderRadius="full"
+                <Box as="button" onClick={() => setConfirmarBorrado(false)} px={3.5} py={2} borderRadius="full"
                      bg="transparent" border={`1.5px solid ${TINTA}88`} color={TINTA}
-                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="sm" cursor="pointer"
+                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="md" cursor="pointer"
                      _hover={{ bg: `${TINTA}14` }}>
                   No
                 </Box>
@@ -347,7 +346,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
               <Box as="button" onClick={() => setConfirmarBorrado(true)}
                    px={{ base: 4, md: 5 }} py={2} borderRadius="full" bg="transparent"
                    border={`1.5px solid ${TINTA}66`} color={TINTA}
-                   fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                   fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                    cursor="pointer" transition="all 0.18s" _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>
                 Quitar
               </Box>
@@ -355,7 +354,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
 
             <Box as="button" onClick={onClose}
                  px={{ base: 5, md: 6 }} py={2} borderRadius="full" bg={TINTA} color={PAPEL}
-                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                 fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                  letterSpacing="0.04em" cursor="pointer"
                  boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
                  _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
@@ -386,7 +385,7 @@ function TarjetaSimbolo({ s, elegido, apagado, onClick }: {
            boxShadow={elegido ? `0 0 0 3px ${TINTA}22, 0 4px 14px ${TINTA}44` : `0 2px 8px ${TINTA}22`}>
         <SimboloImg keyName={s.key} />
       </Box>
-      <Text color={TINTA} fontSize={{ base: "2xs", md: "xs" }} fontWeight={elegido ? "700" : "600"}
+      <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontWeight={elegido ? "700" : "600"}
             lineHeight="1.2" textAlign="center" noOfLines={1} style={{ textShadow: INK_SHADOW }}>
         {elegido ? `✓ ${s.nombre}` : s.nombre}
       </Text>
