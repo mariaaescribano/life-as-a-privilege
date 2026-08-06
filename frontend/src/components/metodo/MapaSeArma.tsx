@@ -39,9 +39,13 @@ const aterrizar = keyframes`
   100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 `;
 
+// El `translate(-50%, -50%)` va DENTRO del keyframe: es lo que centra el
+// mandala, y como la animación también escribe `transform`, sin repetirlo aquí
+// lo pisaría y el mandala se caería media anchura abajo y a la derecha en
+// cuanto el mapa se completa (que es justo cuando arranca el latido).
 const latir = keyframes`
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.045); }
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-50%, -50%) scale(1.045); }
 `;
 
 const respirarHueco = keyframes`
