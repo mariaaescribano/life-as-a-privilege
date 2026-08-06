@@ -10,7 +10,7 @@ const PRE = "/viñetas/fisiologia/meditacion";
 
 export const MEDITACION_CEREBRO: Vineta[] = [
   {
-    src: `${PRE}/1.png`,
+    src: `${PRE}/1.webp`,
     titulo: "La respiración: la puerta de entrada al cerebro",
     paragraphs: [
       "La mayoría de las personas cree que respira por la nariz, pero en realidad utiliza la boca gran parte del tiempo.",
@@ -21,7 +21,7 @@ export const MEDITACION_CEREBRO: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/2.png`,
+    src: `${PRE}/2.webp`,
     titulo: "El cerebro escucha constantemente al cuerpo",
     paragraphs: [
       "Durante mucho tiempo se creyó que el cerebro dirigía al cuerpo, pero hoy sabemos que la comunicación funciona en ambas direcciones.",
@@ -31,7 +31,7 @@ export const MEDITACION_CEREBRO: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/3.png`,
+    src: `${PRE}/3.webp`,
     titulo: "Meditar cambia físicamente el cerebro",
     paragraphs: [
       "El cerebro tiene una enorme capacidad para cambiar a lo largo de toda la Vida. Esta propiedad se llama neuroplasticidad.",
@@ -40,7 +40,7 @@ export const MEDITACION_CEREBRO: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/4.png`,
+    src: `${PRE}/4.webp`,
     titulo: "Las emociones también se entrenan",
     paragraphs: [
       "La meditación no consiste en dejar la mente en blanco ni en eliminar las emociones negativas. Su objetivo es aprender a observar pensamientos y emociones sin reaccionar automáticamente.",
@@ -49,7 +49,7 @@ export const MEDITACION_CEREBRO: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/5.png`,
+    src: `${PRE}/5.webp`,
     titulo: "La amabilidad también modifica el cerebro",
     paragraphs: [
       "La forma en la que hablamos a los demás y, sobre todo, a nosotros mismos, cambia nuestro funcionamiento cerebral.",
@@ -60,7 +60,7 @@ export const MEDITACION_CEREBRO: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/6.png`,
+    src: `${PRE}/6.webp`,
     titulo: "Meditar es entrenar el cerebro para vivir mejor",
     paragraphs: [
       "La meditación no hace desaparecer los problemas, pero cambia la forma en que el cerebro los afronta.",

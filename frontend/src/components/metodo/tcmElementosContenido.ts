@@ -585,11 +585,11 @@ export type PasoComic = PasoVineta | PasoTest;
 // Fuego: la nutrición y el estilo de Vida son dos viñetas distintas, así que
 // cada una lleva su ilustración (antes las dos repetían la 4).
 const FOTOS_MADERA = {
-  intro: "/recorrido/tcm/madera/madera1.png",
-  exceso: "/recorrido/tcm/madera/madera2.png",
-  deficiencia: "/recorrido/tcm/madera/madera3.png",
-  nutricion: "/recorrido/tcm/madera/madera4.png",
-  estilo: "/recorrido/tcm/madera/madera5.png",
+  intro: "/recorrido/tcm/madera/madera1.webp",
+  exceso: "/recorrido/tcm/madera/madera2.webp",
+  deficiencia: "/recorrido/tcm/madera/madera3.webp",
+  nutricion: "/recorrido/tcm/madera/madera4.webp",
+  estilo: "/recorrido/tcm/madera/madera5.webp",
 };
 
 // Madera · viñetas con el texto del curso (voz de María).

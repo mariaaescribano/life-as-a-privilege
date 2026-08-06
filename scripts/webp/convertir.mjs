@@ -92,6 +92,23 @@ const LOTES = {
       "viñetas/psicologia/sufrimiento",      //   8 archivos
     ],
   },
+  // Acuarelas de agosto. Mismos ajustes que el lote 1 (1000 px / calidad 80) y
+  // no los del 3: estas se ven a 400-440 px como mucho —el box del cómic del
+  // origen mide 400 px y el visor de viñetas 440—, así que 1000 px de lado
+  // sobra hasta en retina, y el peso aquí importa el doble porque las de elMapa
+  // están en el PRIMER bloque de la landing. Las eras de Filosofía van con
+  // ellas por otro motivo: sus hermanas ya son WebP del lote 1 y la ruta del
+  // código es dinámica (`${era.key}.webp`), así que mientras estén en PNG esas
+  // cuatro portadas dan 404.
+  4: {
+    ladoMax: 1000,
+    carpetas: [
+      "viñetas/elMapa",                          // 11 archivos · 32 MB
+      "recorrido/tcm/madera",                    //  5 archivos · 14 MB
+      "viñetas/fisiologia/meditacion",           //  6 archivos · 16 MB
+      "recorrido/cultura/historiafilosofia/eras",//  4 en PNG (el resto ya WebP)
+    ],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

@@ -250,7 +250,10 @@ export const celulas: Celula[] = [
     id: "musculares-lisas",
     claves: ["Mueven los órganos internos", "Contracción involuntaria", "Regulan flujo y tono"],
     nombre: "Células musculares lisas",
-    foto: "/viñetas/fisiologia/celulas/musculo/musculareslisas.webp",
+    // .png y no .webp: la que hay en disco es PNG. La WebP del lote 1 se hizo
+    // sobre la que estaba en la raíz de celulas/, y esta se repuso después
+    // dentro de musculo/, así que la ruta apuntaba a un archivo inexistente.
+    foto: "/viñetas/fisiologia/celulas/musculo/musculareslisas.png",
     descripcion:
       "Controlan la contracción involuntaria de órganos internos como el intestino, los vasos sanguíneos y otras estructuras viscerales. Regulan el flujo, el movimiento y el tono de estos sistemas de forma continua y automática.",
     cuidados:

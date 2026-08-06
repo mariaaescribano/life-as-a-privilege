@@ -55,7 +55,7 @@ const P = "/viñetas/elMapa";
 
 export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   {
-    src: `${P}/comicinicioinicio.png`,
+    src: `${P}/comicinicioinicio.webp`,
     titulo: "El comienzo",
     lineas: [
       "No entiendo qué me pasa.",
@@ -69,7 +69,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   // mapa se rellena a saltos y el usuario no entiende el recorrido: este orden
   // manda.
   {
-    src: `${P}/comicinicioastro.png`,
+    src: `${P}/comicinicioastro.webp`,
     titulo: "Astrología",
     disciplina: astrologiaNom,
     lineas: [
@@ -78,7 +78,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    src: `${P}/comiciniciopsico.png`,
+    src: `${P}/comiciniciopsico.webp`,
     titulo: "Psicología",
     disciplina: neuropsicologiaNom,
     lineas: [
@@ -87,7 +87,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    src: `${P}/comicinicioayurveda.png`,
+    src: `${P}/comicinicioayurveda.webp`,
     titulo: "Ayurveda",
     disciplina: ayurvedaNom,
     lineas: [
@@ -96,7 +96,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    src: `${P}/comiciniciotcm.png`,
+    src: `${P}/comiciniciotcm.webp`,
     titulo: "Medicina Tradicional China",
     disciplina: tcmNom,
     lineas: [
@@ -105,7 +105,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    src: `${P}/comiciniciofisio.png`,
+    src: `${P}/comiciniciofisio.webp`,
     titulo: "Fisiología",
     disciplina: fisiologiaNom,
     lineas: [
@@ -114,7 +114,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    src: `${P}/comicinicionutri.png`,
+    src: `${P}/comicinicionutri.webp`,
     titulo: "Nutrición",
     disciplina: nutricionNom,
     lineas: [
@@ -123,7 +123,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    src: `${P}/comiciniciocabala.png`,
+    src: `${P}/comiciniciocabala.webp`,
     titulo: "Cábala",
     disciplina: cabalaNom,
     lineas: [
@@ -138,7 +138,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     // TEXTO PROVISIONAL: está escrito para que el mapa funcione desde ya, pero
     // es tu voz la que tiene que contarlo — reescríbelo cuando quieras (y la
     // acuarela, cuando la tengas, va en el `src`).
-    src: `${P}/comiciniciocultura.png`,
+    src: `${P}/comiciniciocultura.webp`,
     titulo: "Cultura e Historia",
     disciplina: culturaNom,
     lineas: [
@@ -147,7 +147,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    src: `${P}/comiciniciodescubrimiento.png`,
+    src: `${P}/comiciniciodescubrimiento.webp`,
     titulo: "El descubrimiento",
     lineas: [
       "Entonces lo entendí.",
@@ -157,7 +157,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   },
   {
     // Viñeta de CIERRE: aquí el mapa de al lado se une.
-    src: `${P}/comiciniciofinal.png`,
+    src: `${P}/comiciniciofinal.webp`,
     titulo: "Life as a Privilege",
     cierre: true,
     lineas: [
