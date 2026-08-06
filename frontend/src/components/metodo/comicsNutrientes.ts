@@ -7,9 +7,28 @@ import type { Vineta } from "./ComicViewer";
 //
 // Imágenes: /viñetas/nutricion/<key>/<key>1.png … (PENDIENTES de subir; hasta
 // entonces el cómic pinta un placeholder).
+//
+// OJO CON LA EXTENSIÓN: unas carpetas ya se han pasado a WebP (scripts/webp) y
+// otras siguen en PNG, así que no puede ser fija. Este helper es UNO para todos
+// los cómics, así que `rutas.mjs` no podía reescribirlo por carpetas: al
+// convertir los lotes, las viñetas ya convertidas se quedaron pidiendo un .png
+// que ya no existe y salían como «próximamente». Aquí van las que YA son WebP;
+// al convertir una carpeta nueva hay que añadir sus nombres a la lista.
 // ─────────────────────────────────────────────────────────────────────────
 
-const src = (key: string, i: number) => `/viñetas/nutricion/${key}/${key}${i}.png`;
+const EN_WEBP = new Set([
+  "agua1", "agua2", "agua3", "agua4",
+  "fitoquimicos1", "fitoquimicos2", "fitoquimicos3", "fitoquimicos4",
+  "grasas1", "grasas2", "grasas4",
+  "minerales1", "minerales2", "minerales4",
+  "fibra1", "fibra2",
+  // Lote 5.
+  "edulcorantes1", "edulcorantes2", "edulcorantes3",
+  "edulcorantes4", "edulcorantes5", "edulcorantes6",
+]);
+
+const src = (key: string, i: number) =>
+  `/viñetas/nutricion/${key}/${key}${i}.${EN_WEBP.has(`${key}${i}`) ? "webp" : "png"}`;
 
 export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
   carbohidratos: [

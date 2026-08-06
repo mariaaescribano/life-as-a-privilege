@@ -109,6 +109,38 @@ const LOTES = {
       "recorrido/cultura/historiafilosofia/eras",//  4 en PNG (el resto ya WebP)
     ],
   },
+  // Segunda tanda de agosto: los elementos de TCM repintados (Fuego con la 6
+  // nueva, Metal y Tierra) y las de Nutrición. Mismos ajustes que el 1 y el 4.
+  //
+  // En `alimentos` y `portadas` solo quedan en PNG las nuevas —el resto de esas
+  // carpetas ya es WebP del lote 1— y ahí la conversión NO es opcional: la ruta
+  // de un alimento se arma sola (`/alimentos/${f}.webp`) y la de la portada es
+  // literal `.webp`, así que mientras estén en PNG dan 404.
+  5: {
+    ladoMax: 1000,
+    carpetas: [
+      "recorrido/tcm/fuego",             // 6 archivos (la 6 es nueva)
+      "recorrido/tcm/metal",             // 4 archivos
+      "recorrido/tcm/tierra",            // 4 archivos
+      "recorrido/nutricion/alimentos",   // 5 nuevos: cacahuete, cafe, choco, miel, nueces
+      "recorrido/nutricion/portadas",    // 1 nuevo: carbs
+      "viñetas/nutricion/edulcorantes",  // 6 viñetas del cómic de edulcorantes
+    ],
+  },
+  // Agua, aparte del 5 solo porque sus cuatro fotos nuevas llegaron con el
+  // nombre por defecto de ChatGPT y hubo que renombrarlas antes (cada lote
+  // reescribe su propio CSV, así que no se puede reejecutar el 5 sin perder el
+  // registro de lo que ya convirtió).
+  6: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/tcm/agua"],   // 5 archivos (falta la 6, la del estilo de Vida)
+  },
+  // Rezagadas: fotos que llegaron con el lote ya cerrado. Las carpetas ya están
+  // en WebP, así que aquí solo cae lo que quede en PNG.
+  7: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/tcm/metal"],  // metal5, la del estilo de Vida
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

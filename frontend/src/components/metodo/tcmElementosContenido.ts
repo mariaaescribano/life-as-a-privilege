@@ -645,12 +645,25 @@ const comicMadera: PasoComic[] = [
 ];
 
 // Fotos del cómic de Fuego (/public/recorrido/tcm/fuego).
+//
+// OJO con la numeración: las seis se repintaron y ya NO van corridas con las
+// viñetas. Están asignadas por lo que DIBUJA cada una, no por su número:
+//   1 · la mujer con la mano en el pecho, corazón/intestino delgado, vínculos → intro
+//   2 · el desbordamiento con los círculos de síntomas y la escena social  → exceso (1/2)
+//   3 · las manos en la cabeza, las llamas desbordándose                   → exceso (2/2)
+//   4 · el fuego pequeño, encogida, las figuras difuminadas al fondo       → deficiencia
+//   5 · pepino, sandía, cerezas, quinoa, infusión de crisantemo            → nutrición
+//   6 · «antes de 23:00», «movimiento y disfrute», «conexión y presencia»  → estilo de Vida
+//
+// Antes de esto, la 4 no se usaba en ninguna viñeta y la 5 estaba repetida en
+// las dos últimas (nutrición y estilo enseñaban el mismo dibujo).
 const FOTOS_FUEGO = {
-  intro: "/recorrido/tcm/fuego/fuego1.png",
-  exceso: "/recorrido/tcm/fuego/fuego2.png",
-  deficiencia: "/recorrido/tcm/fuego/fuego3.png",
-  nutricion: "/recorrido/tcm/fuego/fuego4.png",
-  estilo: "/recorrido/tcm/fuego/fuego5.png",
+  intro: "/recorrido/tcm/fuego/fuego1.webp",
+  exceso: "/recorrido/tcm/fuego/fuego2.webp",
+  excesoCuerpo: "/recorrido/tcm/fuego/fuego3.webp",
+  deficiencia: "/recorrido/tcm/fuego/fuego4.webp",
+  nutricion: "/recorrido/tcm/fuego/fuego5.webp",
+  estilo: "/recorrido/tcm/fuego/fuego6.webp",
 };
 
 // Fuego · viñetas con el texto del curso (voz de María).
@@ -668,6 +681,16 @@ const comicFuego: PasoComic[] = [
     src: FOTOS_FUEGO.exceso,
     paragraphs: [
       "Cuando el Fuego está en exceso, la energía asciende de forma descontrolada. Puede manifestarse como inquietud, ansiedad, pánico o insomnio. Es frecuente hablar en exceso, reír de forma nerviosa o mostrar una necesidad constante de estimulación y contacto social.",
+    ],
+  },
+  {
+    // Segunda mitad del exceso: el texto ya venía en dos párrafos (el emocional
+    // y el del cuerpo/los vínculos) y ahora cada uno tiene su dibujo. Fuego es
+    // el único elemento con el exceso partido en dos; el resto siguen con una
+    // sola viñeta porque solo tienen un dibujo para ella.
+    tipo: "vineta",
+    src: FOTOS_FUEGO.excesoCuerpo,
+    paragraphs: [
       "También pueden aparecer palpitaciones, sensación de calor en el pecho o en la cara, sobreapego, celos y reacciones emocionales intensas o dramáticas, con tendencia a la sobre-socialización.",
     ],
   },
@@ -686,9 +709,8 @@ const comicFuego: PasoComic[] = [
     intro: [],
   },
   {
-    // La foto de esta viñeta es la MISMA que la de la última (estilo/fuego5).
     tipo: "vineta",
-    src: FOTOS_FUEGO.estilo,
+    src: FOTOS_FUEGO.nutricion,
     paragraphs: [
       "Para reequilibrar el Fuego, favorece alimentos hidratantes como pepino, sandía y lechuga; alimentos amargos como lechuga romana, cacao y quinoa.",
       "Frutos rojos como cerezas y bayas de espino blanco; e infusiones refrescantes de crisantemo e hibisco.",
@@ -704,13 +726,16 @@ const comicFuego: PasoComic[] = [
   },
 ];
 
-// Fotos del cómic de Metal (/public/recorrido/tcm/metal): 4 fotos; la 4ª se
-// reutiliza en las dos viñetas de reequilibrar.
+// Fotos del cómic de Metal (/public/recorrido/tcm/metal): 1 intro, 2 exceso,
+// 3 deficiencia, 4 nutrición, 5 estilo de Vida. Mismo reparto que Madera y
+// Fuego: antes solo había cuatro y la 4ª salía repetida en las dos viñetas de
+// reequilibrar.
 const FOTOS_METAL = {
-  intro: "/recorrido/tcm/metal/metal1.png",
-  exceso: "/recorrido/tcm/metal/metal2.png",
-  deficiencia: "/recorrido/tcm/metal/metal3.png",
-  reequilibrar: "/recorrido/tcm/metal/metal4.png",
+  intro: "/recorrido/tcm/metal/metal1.webp",
+  exceso: "/recorrido/tcm/metal/metal2.webp",
+  deficiencia: "/recorrido/tcm/metal/metal3.webp",
+  nutricion: "/recorrido/tcm/metal/metal4.webp",
+  estilo: "/recorrido/tcm/metal/metal5.webp",
 };
 
 // Metal · viñetas con el texto del curso (voz de María).
@@ -745,14 +770,14 @@ const comicMetal: PasoComic[] = [
   },
   {
     tipo: "vineta",
-    src: FOTOS_METAL.reequilibrar,
+    src: FOTOS_METAL.nutricion,
     paragraphs: [
       "Para reequilibrar el Metal, favorece alimentos blancos como daikon, ajo y cebolla; rábanos, peras y manzanas; alimentos que humedecen el pulmón como la miel o el congee de arroz; setas y algas; e infusiones tibias de jengibre o regaliz.",
     ],
   },
   {
     tipo: "vineta",
-    src: FOTOS_METAL.reequilibrar,
+    src: FOTOS_METAL.estilo,
     paragraphs: [
       "El Metal necesita respirar, ordenar y soltar. Practica ejercicios de respiración y Qi Gong para fortalecer y expandir el pulmón, y crea rituales que aporten significado y faciliten el cierre de etapas.",
       "Descansa en una habitación profundamente oscura y silenciosa, favoreciendo un descanso reparador y una respiración tranquila, y elige actividades que mejoren la postura, la respiración y la capacidad pulmonar. Aprender a soltar personas, experiencias y etapas de forma saludable protege el Qi del pulmón y permite que la energía siga fluyendo.",
@@ -761,12 +786,24 @@ const comicMetal: PasoComic[] = [
 ];
 
 // Fotos del cómic de Agua (/public/recorrido/tcm/agua).
+// Fotos del cómic de Agua. Igual que en Fuego, están asignadas por lo que
+// DIBUJA cada una y no por su número, porque la numeración de los archivos no
+// coincide con el orden de las viñetas:
+//   1 · la intro
+//   2 · abrazándose las rodillas, la cabeza escondida        → exceso (1/2)
+//   3 · abrazándose de frío junto al agua quieta             → exceso (2/2)
+//   4 · el cabello caído, el cepillo, la mano en la rodilla  → deficiencia
+//   5 · arándanos, algas, frijol negro, el caldo caliente    → nutrición
+//   6 · PENDIENTE · la del estilo de Vida (descanso, silencio, invierno).
+//     Su ruta ya está escrita: en cuanto dejes `agua6.png` en la carpeta,
+//     aparece sola. Mientras tanto esa viñeta sale con el aviso de pendiente.
 const FOTOS_AGUA = {
-  intro: "/recorrido/tcm/agua/agua1.png",
-  exceso: "/recorrido/tcm/agua/agua2.png",
-  deficiencia: "/recorrido/tcm/agua/agua3.png",
-  nutricion: "/recorrido/tcm/agua/agua4.png",
-  estilo: "/recorrido/tcm/agua/agua5.png",
+  intro: "/recorrido/tcm/agua/agua1.webp",
+  exceso: "/recorrido/tcm/agua/agua2.webp",
+  excesoFrio: "/recorrido/tcm/agua/agua3.webp",
+  deficiencia: "/recorrido/tcm/agua/agua4.webp",
+  nutricion: "/recorrido/tcm/agua/agua5.webp",
+  estilo: "/recorrido/tcm/agua/agua6.png",
 };
 
 // Agua · viñetas con el texto del curso (voz de María).
@@ -783,7 +820,18 @@ const comicAgua: PasoComic[] = [
     tipo: "vineta",
     src: FOTOS_AGUA.exceso,
     paragraphs: [
-      "Cuando el Agua está en exceso, el miedo puede llegar a ser paralizante, favoreciendo la evitación, el aislamiento y la dificultad para avanzar. Es frecuente la aparición de retención de líquidos, hinchazón, sensación de frío crónico y una preocupación constante.",
+      "Cuando el Agua está en exceso, el miedo puede llegar a ser paralizante, favoreciendo la evitación, el aislamiento y la dificultad para avanzar.",
+    ],
+  },
+  {
+    // Segunda mitad del exceso. Hay dos dibujos para él (la que se esconde y la
+    // que se abraza de frío), así que la frase se parte por donde ya se partía
+    // sola: primero el miedo, después lo que hace el cuerpo. Mismo criterio que
+    // en Fuego.
+    tipo: "vineta",
+    src: FOTOS_AGUA.excesoFrio,
+    paragraphs: [
+      "Es frecuente la aparición de retención de líquidos, hinchazón, sensación de frío crónico y una preocupación constante.",
     ],
   },
   {
@@ -819,10 +867,10 @@ const comicAgua: PasoComic[] = [
 
 // Fotos del cómic de Tierra (/public/recorrido/tcm/tierra): 4 fotos.
 const FOTOS_TIERRA = {
-  intro: "/recorrido/tcm/tierra/tierra1.png",
-  exceso: "/recorrido/tcm/tierra/tierra2.png",
-  deficiencia: "/recorrido/tcm/tierra/tierra3.png",
-  reequilibrar: "/recorrido/tcm/tierra/tierra4.png",
+  intro: "/recorrido/tcm/tierra/tierra1.webp",
+  exceso: "/recorrido/tcm/tierra/tierra2.webp",
+  deficiencia: "/recorrido/tcm/tierra/tierra3.webp",
+  reequilibrar: "/recorrido/tcm/tierra/tierra4.webp",
 };
 
 // Elementos que aún se arman desde su contenido rico (mismo arco narrativo).
