@@ -10,6 +10,13 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
+import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
+import { CabalaFotoIlustracion } from "../../components/metodo/CabalaFotoIlustracion";
+import {
+  CABALA_SENDERO_VINETAS,
+  fotoSenderoIlustracion,
+  indiceIlustracionSendero,
+} from "../../components/metodo/cabalaSenderoIlustraciones";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { ESCALA } from "../../components/metodo/cabalaTest";
 import { CABALA_TOTAL_PAGINAS, paginaSendero } from "../../components/metodo/cabalaSefirot";
@@ -90,6 +97,8 @@ export default function MetodoCabalaSendero() {
 
   const [loading, setLoading] = useState(true);
   const [ilusOpen, setIlusOpen] = useState(false);
+  // Visor abierto por la FOTO de este sendero (la de su cabecera).
+  const [fotoOpen, setFotoOpen] = useState(false);
   const [answers, setAnswers] = useState<number[]>([]);
   const dataRef = useRef<any>({});
 
@@ -209,9 +218,23 @@ export default function MetodoCabalaSendero() {
             <Box w="100%" position="relative" overflow="hidden"
                  borderRadius="3xl" boxShadow={CAJA_GLOW}>
               <DisciplinaBgLayer nom={cabalaNom} borderRadius="3xl" />
-              <Flex position="relative" zIndex={1} align="center" gap={{ base: 5, md: 8 }} direction={{ base: "column", sm: "row" }}
+              <Flex position="relative" zIndex={1} align="center" gap={{ base: 5, md: 7 }} direction={{ base: "column", sm: "row" }}
                     textAlign={{ base: "center", sm: "left" }} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
-                <Text fontSize={{ base: "72px", md: "96px" }} lineHeight="1" color={cabalaTxt}
+                {/* La foto del sendero abre la cabecera: es lo primero que se ve
+                    y deja identificada la letra de un vistazo. Pinchándola se
+                    abre su ilustración a pantalla completa. */}
+                {fotoSenderoIlustracion(sendero.num) && (
+                  <CabalaFotoIlustracion
+                    src={fotoSenderoIlustracion(sendero.num)!}
+                    alt={`${sendero.letra} (${sendero.hebreo})`}
+                    onClick={() => setFotoOpen(true)}
+                    size={{ base: "100%", sm: "150px", md: "180px", lg: "200px" }}
+                    maxW={{ base: "260px", sm: "150px", md: "180px", lg: "200px" }}
+                  />
+                )}
+                {/* La letra hebrea baja de tamaño ahora que comparte fila con la
+                    foto: sigue siendo el emblema, pero sin comerse la cabecera. */}
+                <Text fontSize={{ base: "64px", md: "84px" }} lineHeight="1" color={cabalaTxt} flexShrink={0}
                       style={{ textShadow: `0 0 26px ${cabalaTxt}88, 0 0 60px ${cabalaTxt}44` }}>
                   {sendero.hebreo}
                 </Text>
@@ -517,6 +540,15 @@ export default function MetodoCabalaSendero() {
 
       {/* Galería de ilustraciones de Cábala (Origen · Sefirot · Senderos). */}
       <CabalaIlustracionesModal isOpen={ilusOpen} onClose={() => setIlusOpen(false)} />
+
+      {/* Ilustración de ESTE sendero, abierta desde su foto. Se le pasa la
+          secuencia de los 22 para poder seguir con las flechas. */}
+      <CabalaSefiraIlustracionModal
+        isOpen={fotoOpen}
+        vinetas={CABALA_SENDERO_VINETAS}
+        initialIndex={indiceIlustracionSendero(sendero.num)}
+        onClose={() => setFotoOpen(false)}
+      />
     </Box>
   );
 }

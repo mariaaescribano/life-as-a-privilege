@@ -137,3 +137,14 @@ export const CABALA_ILUSTRACIONES_VINETAS: Vineta[] = CABALA_ILUSTRACIONES_KEYS.
 export const CABALA_ILUSTRACIONES_VINETA_KEYS: CabalaPageKey[] = CABALA_ILUSTRACIONES_KEYS.flatMap(
   (k) => ilustracionSefira(k).map(() => k),
 );
+
+/** Foto que representa a la sefirá: la de su ilustración. Es la que se pinta
+ *  dentro de la página de la dimensión (/metodo/cabala/sefira/…), no solo en el
+ *  visor a pantalla completa. */
+export const fotoSefira = (key: CabalaPageKey): string | undefined =>
+  CABALA_ILUSTRACIONES[key]?.[0]?.src;
+
+/** Índice de la sefirá dentro de la secuencia completa de viñetas, para abrir el
+ *  visor justo por su ilustración (y poder seguir con las flechas). */
+export const indiceIlustracionSefira = (key: CabalaPageKey): number =>
+  Math.max(0, CABALA_ILUSTRACIONES_VINETA_KEYS.indexOf(key));

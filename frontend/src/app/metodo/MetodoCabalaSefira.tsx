@@ -12,6 +12,13 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { CabalaNotaModal } from "../../components/metodo/CabalaNotaModal";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
+import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
+import { CabalaFotoIlustracion } from "../../components/metodo/CabalaFotoIlustracion";
+import {
+  CABALA_ILUSTRACIONES_VINETAS,
+  fotoSefira,
+  indiceIlustracionSefira,
+} from "../../components/metodo/cabalaIlustraciones";
 import {
   cabalaSefirotMap,
   CABALA_SEFIROT_ORDEN,
@@ -240,6 +247,9 @@ export default function MetodoCabalaSefira() {
 
   const [loading, setLoading] = useState(true);
   const [ilusOpen, setIlusOpen] = useState(false);
+  // Visor abierto por la FOTO de esta sefirá (la del box de intro): entra
+  // directamente por su ilustración y desde ahí se puede seguir con las flechas.
+  const [fotoOpen, setFotoOpen] = useState(false);
   const [carruselIdx, setCarruselIdx] = useState(0);
   // Hacia dónde se ha movido el carrusel: la frase nueva entra por el lado del
   // que viene (antes todas entraban igual y no se sentía el movimiento).
@@ -355,8 +365,8 @@ export default function MetodoCabalaSefira() {
   useEffect(() => {
     if (nIntroTotal < 2) return;
     const onKey = (e: KeyboardEvent) => {
-      // Con un modal abierto (ilustraciones, nota) las flechas no son nuestras.
-      if (ilusOpen || notaOpen) return;
+      // Con un modal abierto (ilustraciones, foto, nota) las flechas no son nuestras.
+      if (ilusOpen || fotoOpen || notaOpen) return;
       const t = e.target as HTMLElement | null;
       if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       if (e.key === "ArrowRight") pasarIntro(1);
@@ -365,7 +375,7 @@ export default function MetodoCabalaSefira() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nIntroTotal, ilusOpen, notaOpen]);
+  }, [nIntroTotal, ilusOpen, fotoOpen, notaOpen]);
 
   // Guarda una respuesta del test en BD (merge dentro de data.test[key]).
   /**
@@ -598,48 +608,63 @@ export default function MetodoCabalaSefira() {
                    onTouchStart={onIntroTouchStart} onTouchEnd={onIntroTouchEnd}
                    sx={{ touchAction: "pan-y" }}>
                 <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" />
-                <Flex position="relative" zIndex={1} align="center" gap={{ base: 3, md: 5 }}
-                      px={{ base: 4, md: 8 }} py={{ base: 8, md: 12 }} minH={{ base: "220px", md: "260px" }}>
-                  <FlechaCarrusel dir="left" onClick={() => pasarIntro(-1)} />
-                  <Flex direction="column" align="center" flex="1" minW={0} gap={5}>
-                    <Text
-                      key={carruselIdx}
-                      color={cabalaTxt}
-                      fontSize={{ base: "lg", md: "2xl" }}
-                      lineHeight="1.9"
-                      textAlign="center"
-                      maxW="620px"
-                      minH={{ base: "120px", md: "110px" }}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      style={{
-                        textShadow: INK_SHADOW,
-                        // Entra por el lado del que viene: hacia delante, desde la
-                        // derecha; hacia atrás, desde la izquierda.
-                        animation: `${carruselDir === 1 ? "cabalaEntraDer" : "cabalaEntraIzq"} 0.42s cubic-bezier(0.22,1,0.36,1)`,
-                      }}
-                    >
-                      {sefira.intro[carruselIdx]}
-                    </Text>
-                    <Flex gap={2}>
-                      {sefira.intro.map((_, i) => (
-                        <Box
-                          key={i}
-                          as="button"
-                          onClick={() => irAIntro(i)}
-                          w={i === carruselIdx ? "22px" : "8px"}
-                          h="8px"
-                          borderRadius="full"
-                          bg={i === carruselIdx ? cabalaTxt : "rgba(255,255,255,0.45)"}
-                          transition="all 0.25s"
-                          cursor="pointer"
-                          boxShadow={i === carruselIdx ? `0 0 10px ${cabalaTxt}` : "none"}
-                        />
-                      ))}
+                {/* Foto de la sefirá a la IZQUIERDA y el carrusel de intro a la
+                    derecha: la estructura de siempre para un box con ilustración
+                    (la del cómic). Al pincharla se abre a pantalla completa. */}
+                <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }}
+                      align="center" gap={{ base: 5, md: 8 }}
+                      px={{ base: 4, md: 8 }} py={{ base: 6, md: 10 }} minH={{ base: "220px", md: "260px" }}>
+                  {fotoSefira(sefira.key) && (
+                    <CabalaFotoIlustracion
+                      src={fotoSefira(sefira.key)!}
+                      alt={sefira.titulo}
+                      onClick={() => setFotoOpen(true)}
+                      size={{ base: "100%", md: "210px", lg: "240px" }}
+                      maxW={{ base: "280px", md: "210px", lg: "240px" }}
+                    />
+                  )}
+                  <Flex align="center" flex="1" minW={0} w="100%" gap={{ base: 3, md: 4 }}>
+                    <FlechaCarrusel dir="left" onClick={() => pasarIntro(-1)} />
+                    <Flex direction="column" align="center" flex="1" minW={0} gap={5}>
+                      <Text
+                        key={carruselIdx}
+                        color={cabalaTxt}
+                        fontSize={{ base: "lg", md: "2xl" }}
+                        lineHeight="1.9"
+                        textAlign="center"
+                        maxW="620px"
+                        minH={{ base: "120px", md: "110px" }}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        style={{
+                          textShadow: INK_SHADOW,
+                          // Entra por el lado del que viene: hacia delante, desde la
+                          // derecha; hacia atrás, desde la izquierda.
+                          animation: `${carruselDir === 1 ? "cabalaEntraDer" : "cabalaEntraIzq"} 0.42s cubic-bezier(0.22,1,0.36,1)`,
+                        }}
+                      >
+                        {sefira.intro[carruselIdx]}
+                      </Text>
+                      <Flex gap={2}>
+                        {sefira.intro.map((_, i) => (
+                          <Box
+                            key={i}
+                            as="button"
+                            onClick={() => irAIntro(i)}
+                            w={i === carruselIdx ? "22px" : "8px"}
+                            h="8px"
+                            borderRadius="full"
+                            bg={i === carruselIdx ? cabalaTxt : "rgba(255,255,255,0.45)"}
+                            transition="all 0.25s"
+                            cursor="pointer"
+                            boxShadow={i === carruselIdx ? `0 0 10px ${cabalaTxt}` : "none"}
+                          />
+                        ))}
+                      </Flex>
                     </Flex>
+                    <FlechaCarrusel dir="right" onClick={() => pasarIntro(1)} />
                   </Flex>
-                  <FlechaCarrusel dir="right" onClick={() => pasarIntro(1)} />
                 </Flex>
               </Box>
             </Reveal>
@@ -894,6 +919,15 @@ export default function MetodoCabalaSefira() {
       </Flex>
 
       <CabalaIlustracionesModal isOpen={ilusOpen} onClose={() => setIlusOpen(false)} />
+
+      {/* Ilustración de ESTA sefirá, abierta desde su foto. Se le pasa la
+          secuencia completa para poder seguir con las flechas a las demás. */}
+      <CabalaSefiraIlustracionModal
+        isOpen={fotoOpen}
+        vinetas={CABALA_ILUSTRACIONES_VINETAS}
+        initialIndex={indiceIlustracionSefira(sefira.key)}
+        onClose={() => setFotoOpen(false)}
+      />
 
       {sefira.nota && (
         <CabalaNotaModal nota={sefira.nota} isOpen={notaOpen} onClose={() => setNotaOpen(false)} />

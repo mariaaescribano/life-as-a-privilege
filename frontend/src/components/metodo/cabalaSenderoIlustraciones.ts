@@ -101,3 +101,13 @@ export const CABALA_SENDERO_VINETAS: Vineta[] = CABALA_SENDERO_NUMS.flatMap(
 export const CABALA_SENDERO_VINETA_NUMS: number[] = CABALA_SENDERO_NUMS.flatMap(
   (n) => ilustracionSendero(n).map(() => n),
 );
+
+/** Foto que representa al sendero: la de su ilustración. Se pinta en la cabecera
+ *  de su página (/metodo/cabala/sendero/…), no solo en el visor. */
+export const fotoSenderoIlustracion = (num: number): string | undefined =>
+  CABALA_SENDERO_ILUSTRACIONES[num]?.[0]?.src;
+
+/** Índice del sendero dentro de la secuencia completa de viñetas, para abrir el
+ *  visor justo por su ilustración (y poder seguir con las flechas). */
+export const indiceIlustracionSendero = (num: number): number =>
+  Math.max(0, CABALA_SENDERO_VINETA_NUMS.indexOf(num));
