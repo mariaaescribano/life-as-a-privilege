@@ -506,13 +506,16 @@ export const COCINA_ELEMENTO: Record<Elemento, CocinaElemento> = {
 };
 
 /**
- * Foto de cada FORMA DE COCINAR (4 por elemento, 20 en total):
- * `/public/recorrido/tcm/cocina/<key de la coccion>.webp`. Las cajas de
- * ingredientes van sin foto a propósito: son listas y se sostienen solas.
- * Mientras el archivo no exista, la caja se pinta sin banda de imagen (ni hueco
- * ni foto rota), así que se pueden ir soltando de una en una sin tocar código.
+ * Ilustración de cada FORMA DE COCINAR (4 por elemento, 20 en total). Son
+ * CUADRADAS (1:1) y van numeradas por elemento y posición, tal y como llegaron:
+ * `/public/recorrido/tcm/cocina/<elemento><1-4>.webp` — madera1, madera2…
+ *
+ * O sea: el ORDEN de `cocciones` en cada elemento manda. Si reordenas la lista,
+ * cambias también la ilustración. Las cajas de ingredientes van sin foto a
+ * propósito: son listas y se sostienen solas.
  */
-export const FOTO_COCINA = (key: string) => `/recorrido/tcm/cocina/${key}.webp`;
+export const FOTO_COCINA = (el: Elemento, indice: number) =>
+  `/recorrido/tcm/cocina/${el}${indice + 1}.webp`;
 
 /** Nota general de la página (al pie). */
 export const COCINA_NOTA =

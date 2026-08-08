@@ -1,5 +1,8 @@
 import React, { lazy, Suspense, useEffect } from "react";
 import { Box } from "@chakra-ui/react";
+// La raíz ahora es la landing de bienvenida (elegir proyecto); la portada de
+// Life as a Privilege sigue viva y sin cambios en /welcome.
+import Landing from "./app/web/Landing";
 import Welcome from "./app/web/Welcome";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 const LogIn = lazy(() => import("./app/auth/LogIn"));
@@ -96,6 +99,7 @@ const MetodoTcmLengua = lazy(() => import("./app/metodo/MetodoTcmLengua"));
 const MetodoTcmLenguaLeer = lazy(() => import("./app/metodo/MetodoTcmLenguaLeer"));
 const MetodoTcmTaoismo = lazy(() => import("./app/metodo/MetodoTcmTaoismo"));
 const MetodoTcmRecetas = lazy(() => import("./app/metodo/MetodoTcmRecetas"));
+const MetodoTcmQigong = lazy(() => import("./app/metodo/MetodoTcmQigong"));
 const MetodoTcmCursos = lazy(() => import("./app/metodo/MetodoTcmCursos"));
 const MetodoFisiologia = lazy(() => import("./app/metodo/MetodoFisiologia"));
 const MetodoFisiologiaNiveles = lazy(() => import("./app/metodo/MetodoFisiologiaNiveles"));
@@ -237,7 +241,7 @@ export default function App()
         entero para ver la portada. */}
     <Suspense fallback={<LifeLoading />}>
     <Routes>
-      <Route path="/" element={<Welcome />} />
+      <Route path="/" element={<Landing />} />
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
       <Route path="/signIn" element={<SignIn />} />
@@ -339,6 +343,7 @@ export default function App()
       <Route path="/metodo/tcm/lengua/leer" element={<PrivateRoute><MetodoTcmLenguaLeer /></PrivateRoute>} />
       <Route path="/metodo/tcm/taoismo" element={<PrivateRoute><MetodoTcmTaoismo /></PrivateRoute>} />
       <Route path="/metodo/tcm/recetas" element={<PrivateRoute><MetodoTcmRecetas /></PrivateRoute>} />
+      <Route path="/metodo/tcm/qigong" element={<PrivateRoute><MetodoTcmQigong /></PrivateRoute>} />
       <Route path="/metodo/tcm/cursos" element={<PrivateRoute><MetodoTcmCursos /></PrivateRoute>} />
       <Route path="/metodo/fisiologia" element={<PrivateRoute><MetodoFisiologia /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/niveles" element={<PrivateRoute><MetodoFisiologiaNiveles /></PrivateRoute>} />

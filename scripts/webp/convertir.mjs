@@ -159,6 +159,15 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/tcm/taoismo"],   // 10 archivos · 26 MB
   },
+  // Las formas de cocinar de «Tu cocina diaria» (TCM): 4 por elemento, en
+  // apaisado. Se ven como banda superior de una tarjeta de media columna (~410
+  // px) y a 850 px como mucho en móvil, así que 1000 px de lado sobra. La ruta
+  // se arma sola (`${elemento}${n}.webp` en tcmCocinaContenido.ts): aquí el
+  // WebP no es opcional, en PNG dan 404.
+  10: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/tcm/cocina"],    // 20 archivos · 61 MB
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

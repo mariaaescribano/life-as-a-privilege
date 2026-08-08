@@ -17,7 +17,9 @@ import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoMasCargado, type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
-import { COCINA_NOTA, FOTO_COCINA, cocinaDe } from "../../components/metodo/tcmCocinaContenido";
+import {
+  COCINA_NOTA, FOTO_COCINA, cocinaDe, type Coccion,
+} from "../../components/metodo/tcmCocinaContenido";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
@@ -81,7 +83,7 @@ export default function MetodoTcmRecetas() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Tu cocina diaria"
-            pageLabel="8/9"
+            pageLabel="8/10"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -90,7 +92,7 @@ export default function MetodoTcmRecetas() {
             mb={0}
             prev={{ label: "← Taoísmo", onClick: () => navigate("/metodo/tcm/taoismo") }}
             extra={ilustracionesBtn}
-            next={{ label: "Cursos →", onClick: () => navigate("/metodo/tcm/cursos") }}
+            next={{ label: "Qigong →", onClick: () => navigate("/metodo/tcm/qigong") }}
           />
           </Reveal>
 
@@ -200,27 +202,16 @@ export default function MetodoTcmRecetas() {
             ))}
           </Box>
 
-          {/* ── FORMAS DE COCINAR ── */}
+          {/* ── FORMAS DE COCINAR ──
+              Una sola columna: las ilustraciones son CUADRADAS y van al lado del
+              texto (como los boxes de cómic), así que cada tarjeta necesita el
+              ancho entero. */}
           <Seccion>Formas de cocinar</Seccion>
-          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
-               gap={{ base: 5, md: 6 }} w="100%">
-            {cocina.cocciones.map((c) => (
+          <Box display="grid" gridTemplateColumns="1fr" gap={{ base: 5, md: 6 }} w="100%">
+            {cocina.cocciones.map((c, i) => (
               <Reveal key={`${elActivo}-${c.key}`} inView direction="up" distance={24} scaleFrom={0.98}
                       duration={0.68} amount={0.12} w="100%" h="100%">
-                <Panel h="100%" foto={FOTO_COCINA(c.key)} alt={c.nombre}>
-                  <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={800} lineHeight="1.25"
-                        style={{ textShadow: `0 1px 8px rgba(0,0,0,0.8), 0 0 18px ${E.color}55` }}>
-                    {c.nombre}
-                  </Text>
-                  <Box h="1px" w="100%" my={{ base: 3.5, md: 4 }}
-                       bgGradient="linear(to-r, transparent, #ffffff, transparent)" />
-                  <Rotulo color={E.color}>Cómo</Rotulo>
-                  <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                        style={{ textShadow: INK_SHADOW }}>{c.como}</Text>
-                  <Rotulo color={E.color} mt={5}>Por qué</Rotulo>
-                  <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                        lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{c.porque}</Text>
-                </Panel>
+                <CoccionCard coccion={c} elemento={elActivo} numero={i + 1} color={E.color} />
               </Reveal>
             ))}
           </Box>
@@ -307,6 +298,61 @@ function BotonElemento({ elemento, activo, onClick }: {
   );
 }
 
+// ── Tarjeta de una forma de cocinar ──────────────────────────────────────────
+// Las ilustraciones son CUADRADAS (1:1), así que van enteras a la izquierda y el
+// texto a la derecha —la estructura de los boxes con ilustración del recorrido—.
+// En móvil la ilustración pasa arriba, cuadrada y a todo el ancho. Si todavía no
+// existe el archivo, la tarjeta se queda solo con el texto, sin hueco.
+function CoccionCard({ coccion, elemento, numero, color }: {
+  coccion: Coccion; elemento: Elemento; numero: number; color: string;
+}) {
+  const [sinFoto, setSinFoto] = useState(false);
+
+  return (
+    <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden"
+         boxShadow={`${CAJA_GLOW}, 0 0 30px ${color}33`} display="flex" flexDirection="column">
+      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
+
+      <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="stretch" h="100%">
+        {!sinFoto && (
+          <Box position="relative" flexShrink={0} overflow="hidden" bg={`${tcmBg}88`}
+               w={{ base: "100%", md: "300px" }}
+               sx={{ aspectRatio: "1" }}
+               alignSelf={{ base: "auto", md: "flex-start" }}
+               m={{ base: 0, md: 5 }}
+               borderRadius={{ base: 0, md: "xl" }}>
+            <Image src={encodeURI(FOTO_COCINA(elemento, numero - 1))} alt={coccion.nombre}
+                   w="100%" h="100%" objectFit="cover" onError={() => setSinFoto(true)} />
+            {/* Número de la cocción, arriba a la izquierda */}
+            <Flex position="absolute" top="10px" left="10px" align="center" justify="center"
+                  w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }} borderRadius="full"
+                  bg={`${tcmBg}dd`} border={`1px solid ${color}`}>
+              <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={800} lineHeight="1">
+                {numero}
+              </Text>
+            </Flex>
+          </Box>
+        )}
+
+        <Box flex="1" minW={0} px={{ base: 6, md: 7 }} py={{ base: 5, md: 6 }}>
+          <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.2"
+                style={{ textShadow: `0 1px 8px rgba(0,0,0,0.8), 0 0 18px ${color}55` }}>
+            {coccion.nombre}
+          </Text>
+          <Box h="1px" w="100%" my={{ base: 3.5, md: 4 }}
+               bgGradient="linear(to-r, transparent, #ffffff, transparent)" />
+          <Rotulo color={color}>Cómo</Rotulo>
+          <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
+                style={{ textShadow: INK_SHADOW }}>{coccion.como}</Text>
+          <Rotulo color={color} mt={5}>Por qué</Rotulo>
+          <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{coccion.porque}</Text>
+        </Box>
+      </Flex>
+    </Box>
+  );
+}
+
 // ── Título de sección · va FUERA de las cajas: blanco y sin sombra ───────────
 function Seccion({ children }: { children: React.ReactNode }) {
   return (
@@ -341,29 +387,10 @@ function Etiqueta({ children, color }: { children: React.ReactNode; color: strin
 }
 
 // ── Box común (mismo que el resto del recorrido) ─────────────────────────────
-// Si se le pasa `foto` y el archivo existe, se pinta como banda superior; si
-// aún no existe, la caja va directa al texto (sin hueco ni imagen rota), así
-// que las fotos se pueden ir soltando de una en una sin tocar código.
-function Panel({ children, h, foto, alt }: {
-  children: React.ReactNode; h?: any; foto?: string; alt?: string;
-}) {
-  const [sinFoto, setSinFoto] = useState(false);
-
+function Panel({ children, h }: { children: React.ReactNode; h?: any }) {
   return (
     <Box position="relative" w="100%" h={h} borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-
-      {foto && !sinFoto && (
-        <Box position="relative" zIndex={1} w="100%" overflow="hidden" sx={{ aspectRatio: "16 / 9" }}>
-          <Image src={encodeURI(foto)} alt={alt ?? ""} w="100%" h="100%" objectFit="cover"
-                 onError={() => setSinFoto(true)} />
-          {/* Velo inferior: el texto de debajo arranca sobre el degradado y la
-              foto no corta en seco. */}
-          <Box position="absolute" inset={0} pointerEvents="none"
-               bgGradient={`linear(to-t, ${tcmBg}f0, transparent 45%)`} />
-        </Box>
-      )}
-
       <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
         {children}
       </Box>

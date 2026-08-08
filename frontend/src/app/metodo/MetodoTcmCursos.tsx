@@ -76,13 +76,13 @@ export default function MetodoTcmCursos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Cursos de Medicina China"
-            pageLabel="9/9"
+            pageLabel="10/10"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Tu cocina", onClick: () => navigate("/metodo/tcm/recetas") }}
+            prev={{ label: "← Qigong", onClick: () => navigate("/metodo/tcm/qigong") }}
             extra={ilustracionesBtn}
             next={fisioSuscrito
               ? { label: "Fisiología →", onClick: () => navigate("/metodo/fisiologia") }

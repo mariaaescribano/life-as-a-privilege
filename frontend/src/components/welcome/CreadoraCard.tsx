@@ -24,6 +24,16 @@ type CreadoraCardProps = {
    *  el hueco se suma dos veces y la tarjeta queda mucho más estrecha que las
    *  demás secciones. Welcome y ElMetodo NO lo pasan y siguen igual. */
   sinMargenes?: boolean;
+  /**
+   * Sobre qué fondo se pinta la tarjeta. "oscuro" (por defecto) = el turquesa de
+   * toda la web: cristal blanco translúcido y letra blanca con glow. "claro" =
+   * la landing de bienvenida (arena): panel blanco y letra tinta, sin glow.
+   *
+   * Hace falta porque sobre crema la versión oscura es literalmente invisible
+   * (letra blanca sobre fondo claro). Todas las páginas que ya la usaban siguen
+   * sin pasar nada y se ven exactamente igual que antes.
+   */
+  fondo?: "oscuro" | "claro";
 };
 
 const CreadoraCard: React.FC<CreadoraCardProps> = ({
@@ -31,11 +41,57 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
   actionTo = "/quienSoy",
   extraParagraph,
   sinMargenes = false,
+  fondo = "oscuro",
 }) => {
   const navigate = useNavigate();
   const t = useT();
   // El valor por defecto no puede ir en la firma: depende del idioma activo.
   const etiquetaAccion = actionLabel ?? t("creadora.accion");
+
+  // Los dos juegos de color de la tarjeta. Todo lo que cambia entre fondo
+  // oscuro y claro vive aquí, para que el markup de abajo sea uno solo.
+  const claro = fondo === "claro";
+  const c = claro
+    ? {
+        panelBg: "#FFFFFF8C",
+        panelBorde: "#2A262218",
+        panelSombra: "0 14px 40px #2A26221F",
+        titulo: "#2A2622",
+        tituloGlow: "none",
+        texto: "#4A4238",
+        textoGlow: "none",
+        lineaBase: "linear(to-r, transparent, #2A262266, transparent)",
+        lineaMd: "linear(to-r, #2A262266, transparent)",
+        btnTexto: "#4A4238",
+        btnBorde: "#2A262240",
+        btnBg: "#FFFFFF73",
+        btnSombra: "0 2px 10px #2A26221A",
+        btnHoverBg: "#FFFFFFD9",
+        btnHoverBorde: "#2A262273",
+        btnHoverTexto: "#2A2622",
+        btnHoverSombra: "0 4px 16px #2A26222B",
+        fotoSombra: "0 18px 45px #2A262229, 0 4px 14px #2A262217",
+      }
+    : {
+        panelBg: "rgba(255,255,255,0.05)",
+        panelBorde: "rgba(255,255,255,0.14)",
+        panelSombra: "none",
+        titulo: "white",
+        tituloGlow: "0 0 13px rgba(255,255,255,0.49), 0 0 27px rgba(255,255,255,0.26), 0 0 54px rgba(180,255,245,0.22)",
+        texto: "rgba(255,255,255,0.92)",
+        textoGlow: "0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.14)",
+        lineaBase: "linear(to-r, transparent, rgba(255,255,255,0.6), transparent)",
+        lineaMd: "linear(to-r, rgba(255,255,255,0.6), transparent)",
+        btnTexto: "rgba(255,255,255,0.85)",
+        btnBorde: "rgba(255,255,255,0.35)",
+        btnBg: "rgba(255,255,255,0.05)",
+        btnSombra: "0 0 12px rgba(255,255,255,0.2), 0 0 24px rgba(180,255,245,0.16), 0 2px 10px rgba(0,0,0,0.16)",
+        btnHoverBg: "rgba(255,255,255,0.12)",
+        btnHoverBorde: "rgba(255,255,255,0.6)",
+        btnHoverTexto: "white",
+        btnHoverSombra: "0 0 16px rgba(255,255,255,0.3), 0 0 32px rgba(180,255,245,0.26), 0 2px 12px rgba(0,0,0,0.18)",
+        fotoSombra: "0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)",
+      };
 
   return (
     <Box
@@ -76,8 +132,9 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         w="100%"
         p={{ base: 7, md: 12, lg: 16 }}
         borderRadius="3xl"
-        bg="rgba(255,255,255,0.05)"
-        border="1px solid rgba(255,255,255,0.14)"
+        bg={c.panelBg}
+        border={`1px solid ${c.panelBorde}`}
+        boxShadow={c.panelSombra}
         sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
       >
         {/* ── Texto (izquierda) ── */}
@@ -92,13 +149,13 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           gap={{ base: 4, md: 5, lg: 6 }}
         >
           <Text
-            color="white"
+            color={c.titulo}
             fontFamily="'EB Garamond', serif"
             fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
             fontWeight="700"
             letterSpacing="0.04em"
             lineHeight="1.15"
-            textShadow="0 0 13px rgba(255,255,255,0.49), 0 0 27px rgba(255,255,255,0.26), 0 0 54px rgba(180,255,245,0.22)"
+            textShadow={c.tituloGlow}
           >
             María Escribano
           </Text>
@@ -107,32 +164,29 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           <Box
             h="2px"
             w={{ base: "70px", md: "90px", lg: "120px" }}
-            bgGradient={{
-              base: "linear(to-r, transparent, rgba(255,255,255,0.6), transparent)",
-              md: "linear(to-r, rgba(255,255,255,0.6), transparent)",
-            }}
+            bgGradient={{ base: c.lineaBase, md: c.lineaMd }}
             borderRadius="full"
           />
 
           <Text
-            color="rgba(255,255,255,0.92)"
+            color={c.texto}
             fontFamily="'EB Garamond', serif"
             fontSize={{ base: "sm", md: "lg", lg: "xl" }}
             lineHeight="1.85"
             letterSpacing="0.02em"
-            textShadow="0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.14)"
+            textShadow={c.textoGlow}
           >
             {t("creadora.bio")}
           </Text>
 
           {extraParagraph && (
             <Text
-              color="rgba(255,255,255,0.92)"
+              color={c.texto}
               fontFamily="'EB Garamond', serif"
               fontSize={{ base: "sm", md: "lg" }}
               lineHeight="1.85"
               letterSpacing="0.02em"
-              textShadow="0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.14)"
+              textShadow={c.textoGlow}
             >
               {extraParagraph}
             </Text>
@@ -145,7 +199,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             align="center"
             gap={2}
             mt={{ base: 1, md: 2 }}
-            color="rgba(255,255,255,0.85)"
+            color={c.btnTexto}
             fontFamily="'EB Garamond', serif"
             fontWeight="500"
             fontSize={{ base: "xs", md: "sm", lg: "md" }}
@@ -155,15 +209,15 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             px={{ base: 5, md: 6, lg: 8 }}
             py={{ base: "8px", md: "10px", lg: "13px" }}
             borderRadius="full"
-            border="1px solid rgba(255,255,255,0.35)"
-            bg="rgba(255,255,255,0.05)"
+            border={`1px solid ${c.btnBorde}`}
+            bg={c.btnBg}
             cursor="pointer"
-            boxShadow="0 0 12px rgba(255,255,255,0.2), 0 0 24px rgba(180,255,245,0.16), 0 2px 10px rgba(0,0,0,0.16)"
+            boxShadow={c.btnSombra}
             _hover={{
-              bg: "rgba(255,255,255,0.12)",
-              borderColor: "rgba(255,255,255,0.6)",
-              color: "white",
-              boxShadow: "0 0 16px rgba(255,255,255,0.3), 0 0 32px rgba(180,255,245,0.26), 0 2px 12px rgba(0,0,0,0.18)",
+              bg: c.btnHoverBg,
+              borderColor: c.btnHoverBorde,
+              color: c.btnHoverTexto,
+              boxShadow: c.btnHoverSombra,
             }}
             transition="all 0.25s ease"
           >
@@ -181,7 +235,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           w={{ base: "240px", md: "340px", lg: "430px" }}
           borderRadius="2xl"
           overflow="hidden"
-          boxShadow="0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)"
+          boxShadow={c.fotoSombra}
           sx={{ aspectRatio: "4 / 3" }}
         >
           <Image

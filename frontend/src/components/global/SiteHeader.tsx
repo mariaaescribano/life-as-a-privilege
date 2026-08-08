@@ -40,7 +40,11 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // En el área privada (logueado: /home, /metodo, …) el header es ~10% más compacto.
   const compact = isPrivate;
   // Para admins el "home" es el panel de administración (ver rutaHome()).
-  const homeTarget = isPrivate ? rutaHome() : "/";
+  // Sin sesión el "home" es /welcome, la portada de Life as a Privilege: la raíz
+  // ya no es esta web, es la landing donde se elige proyecto — y pinchar el
+  // mandala dentro de Life as a Privilege tiene que devolverte a SU portada, no
+  // echarte fuera del proyecto.
+  const homeTarget = isPrivate ? rutaHome() : "/welcome";
   const logoTarget = homeTarget;
   const avatarSrc  = userImg ?? sessionImg ?? "/img/icono/noImg.png";
 

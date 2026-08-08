@@ -321,7 +321,9 @@ export default function EstudioResultados() {
                      _hover={{ bg: `${astrologiaTxt}33`, boxShadow: `0 0 24px ${astrologiaTxt}55` }}>
                   Descubrir El Mapa
                 </Box>
-                <Box as="button" onClick={() => navigate("/")} flex="1"
+                {/* "Ir a la web" = la portada de Life as a Privilege (/welcome).
+                    La raíz `/` ya no es esta web: es la landing de proyectos. */}
+                <Box as="button" onClick={() => navigate("/welcome")} flex="1"
                      py={{ base: 3.5, md: 4 }} borderRadius="full"
                      bg="transparent" border={`1px solid ${astrologiaTxt}55`} color={`${astrologiaTxt}cc`}
                      fontSize={{ base: "md", md: "lg" }} fontWeight="600" letterSpacing="0.12em"

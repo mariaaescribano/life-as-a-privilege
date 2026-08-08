@@ -8,6 +8,7 @@ import { elMetodo } from "./elMetodo";
 import { espacio } from "./espacio";
 import { header } from "./header";
 import { home } from "./home";
+import { landing } from "./landing";
 import { metodo } from "./metodo";
 import { footer } from "./footer";
 import { opiniones } from "./opiniones";
@@ -34,6 +35,7 @@ export const en: Partial<Record<ClaveTexto, string>> = {
   ...espacio,
   ...header,
   ...home,
+  ...landing,
   ...metodo,
   ...footer,
   ...opiniones,

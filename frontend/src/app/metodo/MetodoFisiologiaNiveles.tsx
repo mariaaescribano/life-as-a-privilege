@@ -241,14 +241,15 @@ export default function MetodoFisiologiaNiveles() {
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
-              Descubre poco a poco, de las partículas que te forman hasta el ecosistema mágico que eres.
+              Descubre poco a poco, de las partículas que te forman hasta el ecosistema complejo y mágico que eres.
             </Text>
           </Reveal>
 
           {/* Las 3 tarjetas en fila (en móvil se apilan). Entran de izquierda a
-              derecha con retraso escalonado. */}
+              derecha con retraso escalonado. No se salen del ancho del header:
+              mismo maxW que MetodoStepHeader (850px). */}
           <Flex direction={{ base: "column", md: "row" }} align="stretch"
-                justify="center" gap={{ base: 4, md: 4 }} w="100%">
+                justify="center" gap={{ base: 4, md: 4 }} w="100%" maxW="850px">
             {NIVELES.map((nivel, i) => {
               const reqs = nivel.requiere
                 ? (Array.isArray(nivel.requiere) ? nivel.requiere : [nivel.requiere])

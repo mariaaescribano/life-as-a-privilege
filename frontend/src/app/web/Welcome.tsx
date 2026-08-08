@@ -218,9 +218,13 @@ function TarjetaDisciplina({
   const hasBg = hasDisciplinaBg(d.name);
   const t = useT();
   const nombreDe = useNombreDisciplina();
-  // En móvil pide la versión corta: solo «Medicina China» tiene, el resto
-  // devuelve su nombre largo tal cual.
-  const displayName = nombreDe(d.name, isMobile);
+  // El nombre va SIEMPRE en una línea: si salta a dos, esa tarjeta crece de alto
+  // y rompe la fila. Se pide la versión corta en móvil y también cuando el
+  // idioma alarga el nombre («Chinese Medicine» → «Chinese Med.»); en español
+  // «Medicina China» cabe entera y se queda como está. Solo Medicina China tiene
+  // versión corta: el resto devuelve su nombre largo tal cual.
+  const nombreLargo = nombreDe(d.name);
+  const displayName = isMobile || nombreLargo.length > 14 ? nombreDe(d.name, true) : nombreLargo;
 
   return (
     <Box

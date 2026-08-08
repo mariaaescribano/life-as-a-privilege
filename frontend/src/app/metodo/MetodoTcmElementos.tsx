@@ -152,7 +152,7 @@ export default function MetodoTcmElementos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Los Cinco Elementos"
-            pageLabel="2/9"
+            pageLabel="2/10"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

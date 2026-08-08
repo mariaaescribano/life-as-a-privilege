@@ -127,7 +127,7 @@ export default function MetodoTcmDiagnostico() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Diagnóstico final"
-            pageLabel="4/9"
+            pageLabel="4/10"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
