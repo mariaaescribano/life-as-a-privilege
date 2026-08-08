@@ -196,7 +196,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     id: "astro-historia",
     titulo: "La historia de la Astrología",
     disciplina: "Astrología",
-    cover: "/viñetas/astrologia/historia/historiaastrologia1.png",
+    cover: "/viñetas/astrologia/historia/mesopotamia.webp",
     vinetas: HISTORIA_ASTROLOGIA,
     themeColor: astrologiaTxt,
     textShadow: astroTextShadow,
