@@ -168,6 +168,38 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/tcm/cocina"],    // 20 archivos · 61 MB
   },
+  // Portadas de Nutrición repintadas: llegaron en PNG encima de las WebP que ya
+  // había (y borrándolas), y la ruta de una portada es literal `.webp`
+  // (NutrientesNutricion.ts), así que mientras estén en PNG la página de los
+  // nutrientes se queda SIN FOTOS. Aquí el WebP no es opcional.
+  11: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/nutricion/portadas"],  // 10 repintadas · 32 MB
+  },
+  // Ilustraciones del Qigong (paso 9 de TCM): las posturas y las viñetas de sus
+  // cómics. Cuadradas, se ven a 300 px al lado del texto y a ~500 px en el
+  // visor de cómic. La ruta se arma sola (`${key}.webp`): aquí el WebP no es
+  // opcional.
+  12: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/tcm/qigong"],
+  },
+  // Historia de la Astrología repintada: las viñetas del segundo cómic de intro.
+  // Se ven a 440 px como mucho (el visor de viñetas), así que 1000 px de lado
+  // sobra. La ruta se arma sola (`${n}.webp` en comicHistoriaAstrologia.ts):
+  // aquí el WebP no es opcional, en PNG dan 404.
+  13: {
+    ladoMax: 1000,
+    carpetas: ["viñetas/astrologia/historia"],
+  },
+  // Moléculas de Nutrición repintadas (las 27 primeras por orden alfabético).
+  // Llegaron en PNG encima de las WebP que ya había, y la foto de una molécula
+  // se pide con la extensión escrita (`${key}.webp` en AlimentosNutricion.ts y
+  // rutas literales en NutrientesNutricion.ts), así que en PNG no se ven.
+  14: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/nutricion/moleculas"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

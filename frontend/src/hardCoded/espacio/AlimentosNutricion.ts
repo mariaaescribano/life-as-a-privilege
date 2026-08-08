@@ -61,13 +61,15 @@ export const MOLECULAS: Record<string, Molecula> = {
   fibrasoluble:   { key: "fibrasoluble", nombre: "Fibra soluble", grupo: "carbohidrato", funcion: "protectora", queHace: "Se disuelve formando un gel: ralentiza la absorción del azúcar, sacia y alimenta a tu microbiota." },
   fibrainsoluble: { key: "fibrainsoluble", nombre: "Fibra insoluble", grupo: "carbohidrato", funcion: "protectora", queHace: "No se disuelve: da volumen a las heces y ayuda a que el intestino se mueva con regularidad." },
   pectina:        { key: "pectina", nombre: "Pectina", grupo: "carbohidrato", funcion: "protectora", queHace: "Una fibra soluble de la fruta: forma gel, sacia y alimenta a tus bacterias." },
-  "azucar-anadido": { key: "azucar-anadido", nombre: "Azúcar añadido", grupo: "carbohidrato", funcion: "danina", queHace: "Azúcar libre añadido a los ultraprocesados: picos de glucosa sin apenas nutrientes ni fibra." },
+  // `foto` a mano: la ilustración se repintó con otro nombre de archivo y la
+  // clave NO se puede tocar (con ella se listan las moléculas de cada alimento).
+  "azucar-anadido": { key: "azucar-anadido", nombre: "Azúcar añadido", grupo: "carbohidrato", funcion: "danina", foto: "/recorrido/nutricion/moleculas/azucar.webp", queHace: "Azúcar libre añadido a los ultraprocesados: picos de glucosa sin apenas nutrientes ni fibra." },
   // Proteínas
   proteina:       { key: "proteina", nombre: "Proteína", grupo: "proteina", funcion: "constructora", queHace: "Cadenas de aminoácidos: el material con el que reconstruyes músculo, enzimas y defensas." },
-  "aminoacidos-esenciales": { key: "aminoacidos-esenciales", nombre: "Aminoácidos esenciales", grupo: "proteina", funcion: "constructora", queHace: "Los ladrillos que tu cuerpo no sabe fabricar y debes comer; sin ellos no puedes reconstruirte." },
+  "aminoacidos-esenciales": { key: "aminoacidos-esenciales", nombre: "Aminoácidos esenciales", grupo: "proteina", funcion: "constructora", foto: "/recorrido/nutricion/moleculas/aminoacidoesencial.webp", queHace:"Los ladrillos que tu cuerpo no sabe fabricar y debes comer; sin ellos no puedes reconstruirte." },
   // Grasas
   omega3:         { key: "omega3", nombre: "Omega-3", grupo: "grasa", funcion: "protectora", queHace: "Grasa insaturada antiinflamatoria; cuida el cerebro y el corazón." },
-  "grasa-monoinsaturada": { key: "grasa-monoinsaturada", nombre: "Grasa monoinsaturada", grupo: "grasa", funcion: "protectora", queHace: "Grasa estable y cardiosaludable, como la del aceite de oliva y el aguacate." },
+  "grasa-monoinsaturada": { key: "grasa-monoinsaturada", nombre: "Grasa monoinsaturada", grupo: "grasa", funcion: "protectora", foto: "/recorrido/nutricion/moleculas/grasamonoinsaturada.webp", queHace:"Grasa estable y cardiosaludable, como la del aceite de oliva y el aguacate." },
   "grasa-saturada": { key: "grasa-saturada", nombre: "Grasa saturada", grupo: "grasa", funcion: "combustible", queHace: "Fuente de energía y estructura; en exceso puede subir el colesterol que se acumula en las arterias." },
   "grasa-trans":  { key: "grasa-trans", nombre: "Grasa trans", grupo: "grasa", funcion: "danina", queHace: "Grasa artificial de muchos ultraprocesados; daña las arterias. Cuanta menos, mejor." },
   colesterol:     { key: "colesterol", nombre: "Colesterol", grupo: "grasa", funcion: "constructora", queHace: "Material para las membranas y para hormonas; tu cuerpo fabrica la mayor parte." },

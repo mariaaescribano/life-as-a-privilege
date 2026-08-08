@@ -192,7 +192,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "esenciales",
         titulo: "Aminoácidos esenciales",
-        foto: "/recorrido/nutricion/moleculas/aesencial.webp",
+        foto: "/recorrido/nutricion/moleculas/aminoacidoesencial.webp",
         parrafos: [
           "Son los aminoácidos que nuestro cuerpo no puede fabricar o no puede producir en cantidad suficiente pero son necesarios. Por eso debemos obtenerlos a través de la alimentación.",
           "Son imprescindibles para fabricar músculos, enzimas, hormonas, anticuerpos y miles de proteínas diferentes.",
@@ -210,7 +210,7 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "condicionalmente-esenciales",
         titulo: "Aminoácidos condicionalmente esenciales",
-        foto: "/recorrido/nutricion/moleculas/acondesencial.webp",
+        foto: "/recorrido/nutricion/moleculas/aminoacidocondicionalmente.webp",
         parrafos: [
           "Normalmente nuestro cuerpo puede producirlos, pero en determinadas situaciones —como el crecimiento, una enfermedad, una infección o una lesión importante— la demanda aumenta tanto que es necesario obtener una mayor cantidad a través de la alimentación.",
         ],
