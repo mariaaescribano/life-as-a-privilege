@@ -13,8 +13,10 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { ELEMENTOS } from "../../components/metodo/tcmRecorrido";
+import { QigongComicModal } from "../../components/metodo/QigongComicModal";
 import {
-  BROCADOS, CINCO_ANIMALES, COMO_PRACTICAR, DAO_YIN, FOTO_POSTURA, HISTORIA_QIGONG,
+  BROCADOS, CINCO_ANIMALES, DAO_YIN, DAO_YIN_VINETAS, FOTO_POSTURA,
+  HISTORIA_QIGONG, HISTORIA_QIGONG_VINETAS,
   QIGONG_INTRO, QIGONG_NOTA, QIGONG_QUE_ES, TRES_REGULACIONES, type Postura,
 } from "../../components/metodo/tcmQigongContenido";
 
@@ -28,6 +30,10 @@ export default function MetodoTcmQigong() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+  // Los dos cómics de la página. La historia se abre por el hito pulsado (de ahí
+  // el índice); el Dao Yin siempre por el principio.
+  const [hitoAbierto, setHitoAbierto] = useState<number | null>(null);
+  const [daoYinAbierto, setDaoYinAbierto] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -132,30 +138,45 @@ export default function MetodoTcmQigong() {
             ))}
           </Box>
 
-          {/* ── DE DÓNDE VIENE ── */}
+          {/* ── DE DÓNDE VIENE · solo la línea del tiempo; el texto, en el cómic ── */}
           <Seccion>De dónde viene</Seccion>
+          <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
+          <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} textAlign="center"
+                maxW="640px" mt={-2}>
+            Veintitrés siglos en nueve hitos. Pincha cualquiera y se abre por ahí.
+          </Text>
+          </Reveal>
           <Reveal inView direction="up" distance={24} scaleFrom={0.99} duration={0.7} amount={0.1} w="100%">
           <Panel>
-            <Flex direction="column" gap={0}>
+            <Flex direction="column">
               {HISTORIA_QIGONG.map((h, i) => (
-                <Flex key={h.key} direction={{ base: "column", sm: "row" }} gap={{ base: 1, sm: 5 }}
-                      align="flex-start" pt={i === 0 ? 0 : 5} mt={i === 0 ? 0 : 5}
-                      borderTop={i === 0 ? undefined : `1px solid ${tcmTxt}33`}>
-                  <Text flexShrink={0} w={{ base: "auto", sm: "110px" }} color={tcmTxt}
-                        fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.08em"
-                        textTransform="uppercase" mt={{ base: 0, sm: "5px" }} opacity={0.85}
-                        style={{ textShadow: INK_SHADOW }}>
+                <Flex key={h.key} as="button" onClick={() => setHitoAbierto(i)} textAlign="left"
+                      w="100%" align="stretch" gap={{ base: 3, md: 5 }} py={{ base: 2.5, md: 3 }}
+                      borderRadius="lg" transition="background 0.18s, transform 0.18s"
+                      _hover={{ bg: `${tcmTxt}14`, transform: "translateX(3px)" }}
+                      sx={{ WebkitTapHighlightColor: "transparent" }}>
+                  <Text flexShrink={0} w={{ base: "72px", md: "110px" }} color={tcmTxt} alignSelf="center"
+                        fontSize={{ base: "2xs", md: "sm" }} fontWeight={700} letterSpacing="0.08em"
+                        textTransform="uppercase" opacity={0.85} style={{ textShadow: INK_SHADOW }}>
                     {h.fecha}
                   </Text>
-                  <Box minW={0}>
-                    <Text color={tcmTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight={800} lineHeight="1.25"
-                          style={{ textShadow: INK_SHADOW }}>
-                      {h.titulo}
-                    </Text>
-                    <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" mt={1.5}
-                          style={{ textShadow: INK_SHADOW }}>
-                      {h.texto}
-                    </Text>
+
+                  {/* El raíl de la línea del tiempo: hilo continuo y un punto por hito. */}
+                  <Flex direction="column" align="center" flexShrink={0} w="12px" alignSelf="stretch">
+                    <Box flex="1" w="1px" bg={i === 0 ? "transparent" : `${tcmTxt}55`} />
+                    <Box w="9px" h="9px" borderRadius="full" bg={tcmTxt} boxShadow={`0 0 10px ${tcmTxt}`} />
+                    <Box flex="1" w="1px"
+                         bg={i === HISTORIA_QIGONG.length - 1 ? "transparent" : `${tcmTxt}55`} />
+                  </Flex>
+
+                  <Text flex="1" minW={0} alignSelf="center" color={tcmTxt}
+                        fontSize={{ base: "md", md: "lg" }} fontWeight={800} lineHeight="1.3"
+                        style={{ textShadow: INK_SHADOW }}>
+                    {h.titulo}
+                  </Text>
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" alignSelf="center"
+                       w="16px" h="16px" flexShrink={0} fill={tcmTxt} opacity={0.7}>
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
                   </Box>
                 </Flex>
               ))}
@@ -163,61 +184,41 @@ export default function MetodoTcmQigong() {
           </Panel>
           </Reveal>
 
-          {/* ── DAO YIN · y el rostro femenino del Dao ── */}
+          {/* ── DAO YIN · el nombre y una línea; lo demás, en su cómic ── */}
           <Seccion>Dao Yin</Seccion>
           <Reveal inView direction="up" distance={24} scaleFrom={0.99} duration={0.7} amount={0.12} w="100%">
           <Panel>
-            <Flex align="baseline" gap={3} wrap="wrap" mb={4}>
-              <Text color={tcmTxt} fontSize={{ base: "4xl", md: "5xl" }} lineHeight="1" fontWeight={700}
-                    style={{ textShadow: INK_SHADOW }}>
-                {DAO_YIN.hanzi}
-              </Text>
-              <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.14em"
-                    textTransform="uppercase" opacity={0.75} style={{ textShadow: INK_SHADOW }}>
-                {DAO_YIN.pinyin}
-              </Text>
-            </Flex>
-            <Box h="1px" w="100%" mb={4} bg={`${tcmTxt}88`} />
-
-            <Flex direction="column" gap={4}>
-              {DAO_YIN.parrafos.map((p, i) => (
-                <Text key={i} color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
+            <Flex as="button" onClick={() => setDaoYinAbierto(true)} w="100%" textAlign="left"
+                  direction={{ base: "column", sm: "row" }} align="center" gap={{ base: 4, md: 7 }}
+                  sx={{ WebkitTapHighlightColor: "transparent" }} role="group">
+              <Flex direction="column" align="center" flexShrink={0}>
+                <Text color={tcmTxt} fontSize={{ base: "5xl", md: "6xl" }} lineHeight="1" fontWeight={700}
                       style={{ textShadow: INK_SHADOW }}>
-                  {p}
+                  {DAO_YIN.hanzi}
                 </Text>
-              ))}
-            </Flex>
-
-            {/* El Dao es femenino: el corazón de esta página */}
-            <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.1em"
-                  textTransform="uppercase" mt={7} mb={3} style={{ textShadow: INK_SHADOW }}>
-              El rostro femenino del Dao
-            </Text>
-            <Box h="1px" w="100%" mb={4} bg={`${tcmTxt}88`} />
-
-            <Flex direction="column" gap={4}>
-              {DAO_YIN.femenino.map((p, i) => (
-                <Text key={i} color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
-                      style={{ textShadow: INK_SHADOW }}>
-                  {p}
+                <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.14em"
+                      textTransform="uppercase" opacity={0.75} mt={2} style={{ textShadow: INK_SHADOW }}>
+                  {DAO_YIN.pinyin}
                 </Text>
-              ))}
-            </Flex>
+              </Flex>
 
-            <Flex direction="column" gap={4} mt={6}>
-              {DAO_YIN.citas.map((c, i) => (
-                <Box key={i} px={{ base: 4, md: 5 }} py={{ base: 3, md: 4 }} borderRadius="lg"
-                     bg="rgba(0,0,0,0.28)" borderLeft={`3px solid ${tcmTxt}`}>
-                  <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8"
-                        style={{ textShadow: INK_SHADOW }}>
-                    {c.texto}
+              <Box minW={0} flex="1">
+                <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                      textAlign={{ base: "center", sm: "left" }} style={{ textShadow: INK_SHADOW }}>
+                  {DAO_YIN.resumen}
+                </Text>
+                <Flex align="center" gap={2} mt={4} justify={{ base: "center", sm: "flex-start" }}
+                      color={tcmTxt} transition="gap 0.18s" _groupHover={{ gap: 3 }}>
+                  <Text fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.12em"
+                        textTransform="uppercase" style={{ textShadow: INK_SHADOW }}>
+                    Leer
                   </Text>
-                  <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={600} letterSpacing="0.04em"
-                        opacity={0.8} mt={2} style={{ textShadow: INK_SHADOW }}>
-                    {c.fuente}
-                  </Text>
-                </Box>
-              ))}
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px"
+                       fill="currentColor">
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                  </Box>
+                </Flex>
+              </Box>
             </Flex>
           </Panel>
           </Reveal>
@@ -227,8 +228,8 @@ export default function MetodoTcmQigong() {
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
                 textAlign="center" maxW="700px" mt={-2}>
-            Ocho piezas de seda bordada: cortas, valiosas y que se pasan de mano en mano desde
-            hace ochocientos años. Se hacen del uno al ocho, seguidas, en unos diez minutos.
+            Piezas de seda bordada: cortas, valiosas y que se pasan de mano en mano desde hace
+            ochocientos años. Se hacen en orden, seguidas, en unos diez minutos.
           </Text>
           </Reveal>
 
@@ -247,9 +248,8 @@ export default function MetodoTcmQigong() {
           <Panel>
             <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" mb={5}
                   style={{ textShadow: INK_SHADOW }}>
-              La otra gran serie, la de Hua Tuo (五禽戲), tiene un animal por elemento. Es la
-              puerta más directa entre esta práctica y tu mapa: mira qué elemento te salió más
-              cargado y empieza por su animal.
+              La otra gran serie, la de Hua Tuo (五禽戲): un animal por elemento. Mira cuál te
+              salió más cargado en tu mapa y empieza por su animal.
             </Text>
             <Flex direction="column" gap={4}>
               {CINCO_ANIMALES.map((a) => {
@@ -289,25 +289,6 @@ export default function MetodoTcmQigong() {
           </Panel>
           </Reveal>
 
-          {/* ── CÓMO PRACTICAR ── */}
-          <Seccion>Cómo practicar</Seccion>
-          <Reveal inView direction="up" distance={22} scaleFrom={0.99} duration={0.68} amount={0.12} w="100%">
-          <Panel>
-            <Flex direction="column" gap={3.5}>
-              {COMO_PRACTICAR.map((r, i) => (
-                <Flex key={i} gap={3} align="flex-start">
-                  <Flex flexShrink={0} align="center" justify="center" w="22px" h="22px" borderRadius="full"
-                        mt="3px" bg={`${tcmTxt}22`} border={`1px solid ${tcmTxt}`}>
-                    <Text color={tcmTxt} fontSize="2xs" fontWeight={800} lineHeight="1">{i + 1}</Text>
-                  </Flex>
-                  <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8"
-                        style={{ textShadow: INK_SHADOW }}>{r}</Text>
-                </Flex>
-              ))}
-            </Flex>
-          </Panel>
-          </Reveal>
-
           {/* ── NOTA FINAL ── */}
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="680px"
@@ -319,6 +300,21 @@ export default function MetodoTcmQigong() {
       </Flex>
 
       {ilustracionesModal}
+
+      {/* Cómic de la línea del tiempo: abre por el hito que se haya pulsado. */}
+      <QigongComicModal
+        isOpen={hitoAbierto !== null}
+        vinetas={HISTORIA_QIGONG_VINETAS}
+        initialIndex={hitoAbierto ?? 0}
+        onClose={() => setHitoAbierto(null)}
+      />
+
+      {/* Cómic del Dao Yin y el rostro femenino del Dao. */}
+      <QigongComicModal
+        isOpen={daoYinAbierto}
+        vinetas={DAO_YIN_VINETAS}
+        onClose={() => setDaoYinAbierto(false)}
+      />
 
       <IndiceTcm />
 
@@ -344,45 +340,31 @@ function PosturaCard({ postura, numero }: { postura: Postura; numero: number }) 
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
 
       <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="stretch" h="100%">
-        {/* Ilustración cuadrada */}
-        <Box position="relative" flexShrink={0} overflow="hidden" bg={`${tcmBg}88`}
-             w={{ base: "100%", md: "300px" }}
-             sx={{ aspectRatio: "1" }}
-             alignSelf={{ base: "auto", md: "flex-start" }}
-             m={{ base: 0, md: 5 }}
-             borderRadius={{ base: 0, md: "xl" }}>
-          {!sinFoto && (
-            <Image src={encodeURI(FOTO_POSTURA(postura.key))} alt={postura.nombre} w="100%" h="100%"
+        {/* Ilustración cuadrada · LIMPIA: sin velo, sin número y sin verso
+            encima. Mientras no exista la foto, el hueco no se pinta: el verso
+            chino se lee igual en la columna de texto. */}
+        {!sinFoto && (
+          <Box position="relative" flexShrink={0} overflow="hidden" bg={`${tcmBg}88`}
+               w={{ base: "100%", md: "300px" }}
+               sx={{ aspectRatio: "1" }}
+               alignSelf={{ base: "auto", md: "flex-start" }}
+               m={{ base: 0, md: 5 }}
+               borderRadius={{ base: 0, md: "xl" }}>
+            <Image src={encodeURI(FOTO_POSTURA(numero - 1))} alt={postura.nombre} w="100%" h="100%"
                    objectFit="cover" onError={() => setSinFoto(true)} />
-          )}
-          <Box position="absolute" inset={0} pointerEvents="none"
-               bgGradient={`linear(to-t, ${tcmBg}e0, ${tcmBg}33 45%, transparent)`} />
-
-          {/* Número del brocado, arriba a la izquierda */}
-          <Flex position="absolute" top="10px" left="10px" align="center" justify="center"
-                w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }} borderRadius="full"
-                bg={`${tcmBg}dd`} border={`1px solid ${E.color}`}>
-            <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={800} lineHeight="1">
-              {numero}
-            </Text>
-          </Flex>
-
-          {/* El verso chino: grande y centrado si no hay foto, abajo si la hay */}
-          <Flex position="absolute" inset={0} align={sinFoto ? "center" : "flex-end"}
-                justify={sinFoto ? "center" : "flex-start"} px={5} pb={sinFoto ? 0 : 3}>
-            <Text color={tcmTxt} lineHeight="1.25" fontWeight={700} textAlign={sinFoto ? "center" : "left"}
-                  fontSize={sinFoto ? { base: "3xl", md: "4xl" } : { base: "xl", md: "2xl" }}
-                  style={{ textShadow: `0 2px 10px ${tcmBg}, 0 0 26px ${tcmBg}` }}>
-              {postura.hanzi}
-            </Text>
-          </Flex>
-        </Box>
+          </Box>
+        )}
 
         {/* Texto */}
         <Box flex="1" minW={0} px={{ base: 6, md: 7 }} py={{ base: 5, md: 6 }}>
+          {/* El verso chino, a la izquierda y sobre el nombre */}
+          <Text color={tcmTxt} fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.25" fontWeight={700}
+                style={{ textShadow: INK_SHADOW }}>
+            {postura.hanzi}
+          </Text>
           <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"
-                opacity={0.75} style={{ textShadow: INK_SHADOW }}>
-            {postura.pinyin}
+                opacity={0.75} mt={2} style={{ textShadow: INK_SHADOW }}>
+            {numero} · {postura.pinyin}
           </Text>
           <Text color={tcmTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.2" mt={0.5}
                 style={{ textShadow: INK_SHADOW }}>

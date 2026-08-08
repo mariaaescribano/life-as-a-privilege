@@ -10,11 +10,13 @@
 //     clave de React y el nombre del archivo de la foto).
 // ─────────────────────────────────────────────────────────────────────────
 import type { Elemento } from "./tcmRecorrido";
+import type { Vineta } from "./ComicViewer";
 
-/** Intro de la página (bajo el header). */
+/** Intro de la página (bajo el header). Dos líneas, no más: lo largo se lee en
+ *  los cómics (la línea del tiempo y el Dao Yin). */
 export const QIGONG_INTRO: string[] = [
-  "El Qi (氣) es la energía que circula por ti. Gong (功) es el trabajo constante, el oficio que solo se gana con horas. Qigong es exactamente eso: el trabajo de la energía, hecho con las manos y con la respiración.",
-  "No es gimnasia y no es religión. Es la única rama de la Medicina China que no puede hacerte nadie: ni un acupuntor, ni una planta, ni un plato. Esta la haces tú, de pie, diez minutos.",
+  "Qi (氣) es la energía que circula por ti. Gong (功) es el trabajo constante. Qigong es eso: el trabajo de la energía, hecho con las manos y con la respiración.",
+  "Es la única rama de esta medicina que no puede hacerte nadie. Esta la haces tú, de pie, diez minutos.",
 ];
 
 /** Las tres regulaciones (三調): la base de cualquier práctica. */
@@ -32,33 +34,37 @@ export const TRES_REGULACIONES: Regulacion[] = [
     hanzi: "調身",
     pinyin: "tiáo shēn",
     titulo: "Regular el cuerpo",
-    texto: "La postura: pies al ancho de las caderas, rodillas blandas, coxis hacia abajo, coronilla hacia arriba, hombros sueltos. Antes de mover nada, colócate.",
+    texto: "Pies al ancho de las caderas, rodillas blandas, coxis abajo, coronilla arriba. Antes de mover nada, colócate.",
   },
   {
     key: "respiracion",
     hanzi: "調息",
     pinyin: "tiáo xī",
     titulo: "Regular la respiración",
-    texto: "Por la nariz, al vientre, lenta y silenciosa. No la fuerces: acompáñala hasta que sea larga sola. La respiración es el puente entre lo que puedes mandar y lo que no.",
+    texto: "Por la nariz, al vientre, lenta y silenciosa. No la fuerces: acompáñala hasta que sea larga sola.",
   },
   {
     key: "mente",
     hanzi: "調心",
     pinyin: "tiáo xīn",
     titulo: "Regular la mente",
-    texto: "La atención dentro del movimiento, no en la lista de la compra. Cuando las tres se funden y dejas de vigilarlas, eso es la práctica de verdad (三調合一).",
+    texto: "La atención dentro del movimiento, no en la lista de la compra. Cuando las tres se funden, eso es la práctica (三調合一).",
   },
 ];
 
-/** Qué es (y qué no es) el qigong. */
+/** Qué es (y qué no es) el qigong. Tres frases; ni una más. */
 export const QIGONG_QUE_ES: string[] = [
-  "En China no es una disciplina alternativa ni una moda: es la cuarta rama de su medicina, junto con la acupuntura, la farmacopea y la dietética. Se enseña en los hospitales y se practica en los parques a las siete de la mañana, con la misma naturalidad con la que aquí se saca al perro.",
-  "El movimiento es lento a propósito. La lentitud te obliga a sostener, y sostener es lo que mueve el Qi: si vas deprisa, la inercia hace el trabajo por ti y no entrenas nada. Por eso una serie de ocho posturas puede dejarte más caliente que una carrera.",
-  "Y no busca fuerza, busca circulación. En Medicina China casi ningún síntoma viene de que falte energía: viene de que la energía no llega. El qigong no te añade nada; te desatasca.",
+  "En China no es una moda: es la cuarta rama de su medicina, junto con la acupuntura, la farmacopea y la dietética. Se practica en los parques a las siete de la mañana.",
+  "El movimiento es lento a propósito: la lentitud te obliga a sostener, y sostener es lo que mueve el Qi.",
+  "No busca fuerza, busca circulación. No te añade nada: te desatasca.",
 ];
 
 // ─────────────────────────────────────────────────────────────────────────
 // DE DÓNDE VIENE · los hitos, en orden
+//
+// En la página solo se ve la LÍNEA DEL TIEMPO: la fecha y el titular de cada
+// hito. El texto se lee en el cómic (HISTORIA_QIGONG_VINETAS), que se abre
+// pinchando cualquier hito y arranca justo por ese.
 // ─────────────────────────────────────────────────────────────────────────
 export interface HitoQigong {
   key: string;
@@ -124,48 +130,120 @@ export const HISTORIA_QIGONG: HitoQigong[] = [
   },
 ];
 
+/** Foto de cada hito de la línea del tiempo (viñeta del cómic de la historia).
+ *  CUADRADA y en WebP, en `/public/recorrido/tcm/qigong/historia/<key>.webp`.
+ *  Mientras no exista, el visor avisa de que esa viñeta está por llegar. */
+export const FOTO_HITO = (key: string) => `/recorrido/tcm/qigong/historia/${key}.webp`;
+
+/** El cómic de «De dónde viene»: un hito por viñeta, en orden. La fecha va de
+ *  antetítulo, así la línea del tiempo se sigue leyendo dentro del cómic. */
+export const HISTORIA_QIGONG_VINETAS: Vineta[] = HISTORIA_QIGONG.map((h) => ({
+  src: FOTO_HITO(h.key),
+  eyebrow: h.fecha,
+  titulo: h.titulo,
+  paragraphs: [h.texto],
+}));
+
 // ─────────────────────────────────────────────────────────────────────────
 // DAO YIN · y el rostro femenino del Dao
+//
+// Todo esto se lee en su propio cómic (DAO_YIN_VINETAS). En la página solo
+// queda el nombre en chino y una línea: es el corazón de la página, pero no
+// tiene por qué ser un muro de texto.
 // ─────────────────────────────────────────────────────────────────────────
 export const DAO_YIN = {
   hanzi: "導引",
   pinyin: "dǎo yǐn",
-  parrafos: [
-    "Antes de que existiera la palabra «qigong», esto se llamaba Dao Yin. 導 dǎo es guiar, conducir. 引 yǐn es tirar, estirar, atraer hacia ti. Guiar el Qi y estirar el cuerpo: el nombre describe exactamente lo que haces mientras lo haces.",
-    "Es el nombre que está escrito en la tela de Mawangdui, junto a cada una de aquellas 44 figuras. Dos mil años después seguimos haciendo lo mismo con otro nombre.",
-    "Y aquí hay que decir una cosa con cariño: el 引 de «estirar» no es el 陰 yīn de lo femenino. Son dos caracteres distintos y dos palabras distintas. Pero la intuición no va desencaminada, porque lo femenino no está en el nombre: está en el centro mismo de todo el taoísmo.",
-  ],
-  /** Lo femenino del Dao, con las fuentes en la mano. */
-  femenino: [
-    "Cuando Lao-Tse tiene que decir qué es el Dao, no le sale una figura de padre ni de rey. Le sale una madre, un valle, un útero, una hondonada: lo que recibe, lo que sostiene, lo que da vida sin quedarse con nada.",
-    "El Dao no manda: nutre. No conquista: cede y por eso vence. No hace: deja que ocurra. Ese es el fondo yin de esta medicina entera, y también el fondo de esta práctica: en el qigong no se fuerza nada. Se abre, se sostiene y se deja pasar.",
-  ],
-  citas: [
-    {
-      texto: "«El espíritu del valle no muere. Se le llama la hembra misteriosa. La puerta de la hembra misteriosa es la raíz del cielo y de la tierra.»",
-      fuente: "Tao Te King, cap. 6 · 谷神不死，是謂玄牝",
-    },
-    {
-      texto: "«Hay algo que se formó antes que el cielo y la tierra. Silencioso, vacío, solo e inmutable. Podría ser la madre del mundo. No sé su nombre; lo llamo Dao.»",
-      fuente: "Tao Te King, cap. 25 · 可以為天下母",
-    },
-    {
-      texto: "«Conoce lo masculino, mantente en lo femenino, y serás el cauce del mundo.»",
-      fuente: "Tao Te King, cap. 28 · 知其雄，守其雌",
-    },
-    {
-      texto: "«Los da a luz y los cría; los hace crecer sin poseerlos; obra sin apoyarse en ello; los guía sin dominarlos.»",
-      fuente: "Tao Te King, cap. 51 · 生而不有",
-    },
-  ],
+  /** La línea que se lee en la página (el resto, en el cómic). */
+  resumen: "Guiar el Qi y estirar el cuerpo. Es el nombre que esto tuvo durante dos mil años… y la puerta al rostro femenino del Dao.",
 };
+
+/** Foto de cada viñeta del cómic del Dao Yin: CUADRADA y en WebP, en
+ *  `/public/recorrido/tcm/qigong/daoyin/<key>.webp`. */
+export const FOTO_DAOYIN = (key: string) => `/recorrido/tcm/qigong/daoyin/${key}.webp`;
+
+export const DAO_YIN_VINETAS: Vineta[] = [
+  {
+    src: FOTO_DAOYIN("nombre"),
+    eyebrow: "導引 · dǎo yǐn",
+    titulo: "Antes se llamaba Dao Yin",
+    paragraphs: [
+      "Antes de que existiera la palabra «qigong», esto se llamaba Dao Yin. 導 dǎo es guiar, conducir. 引 yǐn es tirar, estirar, atraer hacia ti.",
+      "Guiar el Qi y estirar el cuerpo: el nombre describe exactamente lo que haces mientras lo haces.",
+    ],
+  },
+  {
+    src: FOTO_DAOYIN("mawangdui"),
+    eyebrow: "168 a.C.",
+    titulo: "Escrito en la tela",
+    paragraphs: [
+      "Es el nombre que está escrito en la tela de Mawangdui, junto a cada una de aquellas 44 figuras que se estiran, giran y respiran.",
+      "Dos mil años después seguimos haciendo lo mismo con otro nombre.",
+    ],
+  },
+  {
+    src: FOTO_DAOYIN("yin"),
+    eyebrow: "引 no es 陰",
+    titulo: "Una cosa, con cariño",
+    paragraphs: [
+      "El 引 de «estirar» no es el 陰 yīn de lo femenino: son dos caracteres distintos y dos palabras distintas.",
+      "Pero la intuición no va desencaminada. Lo femenino no está en el nombre: está en el centro mismo de todo el taoísmo.",
+    ],
+  },
+  {
+    src: FOTO_DAOYIN("madre"),
+    eyebrow: "El rostro femenino del Dao",
+    titulo: "A Lao-Tse le sale una madre",
+    paragraphs: [
+      "Cuando Lao-Tse tiene que decir qué es el Dao, no le sale una figura de padre ni de rey. Le sale una madre, un valle, un útero, una hondonada.",
+      "Lo que recibe, lo que sostiene, lo que da vida sin quedarse con nada.",
+    ],
+  },
+  {
+    src: FOTO_DAOYIN("no-fuerza"),
+    eyebrow: "El rostro femenino del Dao",
+    titulo: "No manda: nutre",
+    paragraphs: [
+      "El Dao no conquista: cede, y por eso vence. No hace: deja que ocurra.",
+      "Ese es el fondo yin de esta medicina entera, y también el de esta práctica: en el qigong no se fuerza nada. Se abre, se sostiene y se deja pasar.",
+    ],
+  },
+  {
+    src: FOTO_DAOYIN("cita-6"),
+    eyebrow: "Tao Te King, cap. 6 · 谷神不死，是謂玄牝",
+    paragraphs: [
+      "«El espíritu del valle no muere. Se le llama la hembra misteriosa. La puerta de la hembra misteriosa es la raíz del cielo y de la tierra.»",
+    ],
+  },
+  {
+    src: FOTO_DAOYIN("cita-25"),
+    eyebrow: "Tao Te King, cap. 25 · 可以為天下母",
+    paragraphs: [
+      "«Hay algo que se formó antes que el cielo y la tierra. Silencioso, vacío, solo e inmutable. Podría ser la madre del mundo. No sé su nombre; lo llamo Dao.»",
+    ],
+  },
+  {
+    src: FOTO_DAOYIN("cita-28"),
+    eyebrow: "Tao Te King, cap. 28 · 知其雄，守其雌",
+    paragraphs: [
+      "«Conoce lo masculino, mantente en lo femenino, y serás el cauce del mundo.»",
+    ],
+  },
+  {
+    src: FOTO_DAOYIN("cita-51"),
+    eyebrow: "Tao Te King, cap. 51 · 生而不有",
+    paragraphs: [
+      "«Los da a luz y los cría; los hace crecer sin poseerlos; obra sin apoyarse en ello; los guía sin dominarlos.»",
+    ],
+  },
+];
 
 // ─────────────────────────────────────────────────────────────────────────
 // LAS OCHO POSTURAS · Ba Duan Jin (八段錦), los Ocho Brocados
 // El orden importa: se hacen del uno al ocho, seguidos, y el ocho cierra.
 // ─────────────────────────────────────────────────────────────────────────
 export interface Postura {
-  /** Clave estable. Es también el nombre de su foto: /recorrido/tcm/qigong/<key>.webp */
+  /** Clave estable de React (la ilustración va por posición, no por esta clave). */
   key: string;
   /** Nombre en castellano. */
   nombre: string;
@@ -267,54 +345,6 @@ export const BROCADOS: Postura[] = [
     repeticiones: "6 veces por lado",
     clave: "El movimiento es lento y ancho. Si te mareas, hazlo con recorrido corto: el efecto está en la lentitud, no en la amplitud.",
   },
-  {
-    key: "brocado-6-tocar-los-pies",
-    nombre: "Bajar por la espalda hasta los pies",
-    hanzi: "兩手攀足固腎腰",
-    pinyin: "liǎng shǒu pān zú gù shèn yāo",
-    organo: "Riñón y zona lumbar",
-    elemento: "agua",
-    para: "Fortalecer lumbares y rodillas y calentar la reserva: la postura del cansancio de fondo.",
-    pasos: [
-      "De pie, sube los brazos por delante hasta el cielo e inspira.",
-      "Lleva las manos a la lumbar y desciende por la espalda y las piernas, espirando, hasta donde llegues con las rodillas casi rectas pero no bloqueadas.",
-      "Sube enrollando la columna vértebra a vértebra, con la cabeza la última.",
-    ],
-    repeticiones: "6 a 8 veces",
-    clave: "No busques tocar el suelo: busca calor en las lumbares. Frota los riñones con las palmas al subir y notarás de qué va esto.",
-  },
-  {
-    key: "brocado-7-punos-y-mirada",
-    nombre: "Cerrar los puños con mirada de fuego",
-    hanzi: "攢拳怒目增氣力",
-    pinyin: "zǎn quán nù mù zēng qì lì",
-    organo: "Hígado, tendones y ojos",
-    elemento: "madera",
-    para: "Sacar la fuerza y la rabia guardada: la postura de la frustración que no encuentra salida.",
-    pasos: [
-      "Postura de jinete: piernas abiertas, rodillas flexionadas, puños a la altura de la cintura con los nudillos hacia abajo.",
-      "Lanza un puño hacia delante espirando, abre la mano, gírala y ciérrala como si agarraras algo, con los ojos muy abiertos.",
-      "Recoge el puño a la cintura tirando con fuerza, e inspira. Repite con el otro brazo.",
-    ],
-    repeticiones: "6 a 8 veces por brazo",
-    clave: "Es el único brocado con fuerza y con «mala cara» a propósito: la Madera necesita salir. Si te dan ganas de gruñir, gruñe.",
-  },
-  {
-    key: "brocado-8-siete-rebotes",
-    nombre: "Siete rebotes sobre los talones",
-    hanzi: "背後七顛百病消",
-    pinyin: "bèi hòu qī diān bǎi bìng xiāo",
-    organo: "Columna y todo el cuerpo",
-    elemento: "agua",
-    para: "Cerrar la serie: asentar lo movido y sacudir lo que sobra. «Cien dolencias desaparecen.»",
-    pasos: [
-      "De pie, pies juntos, brazos sueltos, coronilla hacia arriba.",
-      "Levanta los talones inspirando y quédate ahí un instante, alto y estirado.",
-      "Déjalos caer de golpe espirando: una pequeña vibración recorre la columna hasta la cabeza.",
-    ],
-    repeticiones: "7 veces (ni una más, dice la tradición)",
-    clave: "Termina con las palmas sobre el ombligo, un minuto en silencio: es donde se guarda lo que acabas de mover.",
-  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -373,23 +403,16 @@ export const CINCO_ANIMALES: Animal[] = [
   },
 ];
 
-/** Cómo practicar: las reglas de la casa. */
-export const COMO_PRACTICAR: string[] = [
-  "Mejor por la mañana temprano y, si puedes, al aire libre y mirando al este. Si no puedes, en el salón y a la hora que sea: la que se hace es la buena.",
-  "Diez minutos cada día valen más que una hora el domingo. El Qi responde a la constancia, no a la intensidad.",
-  "Respira siempre por la nariz, al vientre, y deja la punta de la lengua tocando el paladar: cierra el circuito y hace que salgan más saliva y más calma.",
-  "Las rodillas nunca bloqueadas y nada debe doler. Si algo tira, reduce el recorrido: en qigong el rango pequeño y sostenido gana al grande y forzado.",
-  "No practiques con el estómago muy lleno ni con hambre de verdad, ni justo después de una emoción fuerte: espera a que baje.",
-  "Termina siempre igual: palmas sobre el ombligo (una encima de la otra), respirando, un minuto. Es el gesto de guardar lo que has movido.",
-];
-
 /**
- * Foto de cada postura: CUADRADA (1:1) y en WebP, en
- * `/public/recorrido/tcm/qigong/<key>.webp`. Mientras no exista, la tarjeta
- * enseña su carácter chino en grande: la página funciona igual, sin huecos ni
- * fotos rotas.
+ * Ilustración de cada postura: CUADRADA (1:1) y en WebP, numerada por su
+ * POSICIÓN en la serie, tal y como llegan: `/public/recorrido/tcm/qigong/1.webp`
+ * … `8.webp` (los cómics viven en sus subcarpetas `historia/` y `daoyin/`).
+ *
+ * O sea: el ORDEN de `BROCADOS` manda. Si reordenas la serie, cambias también
+ * la ilustración. Mientras un número no exista, esa tarjeta se queda solo con el
+ * texto: ni hueco ni foto rota.
  */
-export const FOTO_POSTURA = (key: string) => `/recorrido/tcm/qigong/${key}.webp`;
+export const FOTO_POSTURA = (indice: number) => `/recorrido/tcm/qigong/${indice + 1}.webp`;
 
 /** Nota al pie. */
 export const QIGONG_NOTA =
