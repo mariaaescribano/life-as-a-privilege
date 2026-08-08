@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -35,6 +36,7 @@ const EyeIcon = () => (
 );
 
 export default function MetodoCabala() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -138,9 +140,7 @@ export default function MetodoCabala() {
                   mb={4}
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  La Cábala es una de las tradiciones místicas más antiguas; es un mapa simbólico de cómo
-                  la luz infinita desciende hasta la materia y de cómo el alma puede recorrer ese mismo
-                  camino de vuelta a su origen.
+                  {t("metodo.gate.cabala.intro1")}
                 </Text>
                 <Text
                   color={cabalaTxt}
@@ -151,10 +151,9 @@ export default function MetodoCabala() {
                   mx="auto"
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  Su corazón es el <Box as="span" fontStyle="italic" color={cabalaTxt}>Árbol de la Vida</Box>:
-                  diez esferas —las sefirot— unidas por senderos que representan las fuerzas que nos
-                  habitan. En este recorrido las iremos descubriendo una a una, para reconocerlas en ti
-                  y que estén al servicio de tu crecimiento personal.
+                  {t("metodo.gate.cabala.corazon")}{" "}
+                  <Box as="span" fontStyle="italic" color={cabalaTxt}>{t("metodo.gate.cabala.arbol")}</Box>
+                  {t("metodo.gate.cabala.intro2")}
                 </Text>
               </Box>
             </Box>

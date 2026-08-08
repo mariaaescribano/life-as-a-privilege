@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Botón flotante «← Volver al Mapa».
@@ -33,6 +34,7 @@ export function recordarOrigenCurso(): void {
 
 export function VolverAlMapa() {
   const navigate = useNavigate();
+  const t = useT();
   let url: string | null = null;
   try { url = sessionStorage.getItem(KEY); } catch { url = null; }
   if (!url) return null;
@@ -70,7 +72,7 @@ export function VolverAlMapa() {
       transition="all 0.2s"
       _hover={{ bg: "rgba(0,0,0,0.85)", borderColor: "rgba(255,255,255,0.6)", transform: "translateY(-1px)" }}
     >
-      ← Volver al Mapa
+      ← {t("comun.volverAlMapa")}
     </Box>
   );
 }

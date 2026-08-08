@@ -18,6 +18,8 @@ import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCursosData } from "../../data/cursosApi";
 import type { ModalidadInfo } from "../../hardCoded/cursos";
+import { useT } from "../../i18n";
+import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { nutricionNom, nutricionNomLink, NutricionIcon, nutricionBg, nutricionTxt, FitoterapiaIcon, tcmNom, tcmNomLink, tcmBg, tcmTxt, TCMIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaBg, ayurvedaTxt, AyurvedaIcon, astrologiaNom, astrologiaBg, astrologiaTxt, AstrologiaIcon, culturaNom, culturaBg, culturaTxt, CulturaIcon, cabalaNom, cabalaBg, cabalaTxt, CabalaIcon, fisiologiaNom, fisiologiaBg, fisiologiaTxt, FisiologiaIcon, neuropsicologiaNom, neuropsicologiaBg, neuropsicologiaTxt, NeuropsicologiaIcon } from "../../GlobalVariables";
 
 
@@ -88,6 +90,8 @@ export default function CursosModalidad() {
   // nombres canónicos (`astrologiaNom = "Astrología"`).
   const moduloId = rawModuloId ? safeDecode(rawModuloId) : rawModuloId;
   const navigate = useNavigate();
+  const t = useT();
+  const nombreDisciplina = useNombreDisciplina();
   const { cursosData, loading } = useCursosData();
 
   const fromData = moduloId ? cursosData[moduloId] : null;
@@ -109,30 +113,30 @@ export default function CursosModalidad() {
   const headerButtons: { prev?: any; extra?: any; next?: any } = (() => {
     if (moduloId === tcmNomLink) {
       return {
-        next: { label: "Ilustraciones", onClick: () => setIlustracionesTCMOpen(true), icon: <EyeIcon /> },
+        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesTCMOpen(true), icon: <EyeIcon /> },
       };
     }
     if (moduloId === ayurvedaNomLink) {
       return {
-        prev: { label: "Test de los Doṣhas", onClick: () => navigate("/aprendizaje/test-doshas"),    icon: <DoshasIcon /> },
-        next: { label: "Ilustraciones",      onClick: () => setIlustracionesHinduismoOpen(true),    icon: <EyeIcon /> },
+        prev: { label: t("aprendizaje.btn.testDoshas"),    onClick: () => navigate("/aprendizaje/test-doshas"),    icon: <DoshasIcon /> },
+        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesHinduismoOpen(true),    icon: <EyeIcon /> },
       };
     }
     if (moduloId === astrologiaNom) {
       return {
         prev:  {
-          label: "Cartas de Personajes Históricos",
+          label: t("aprendizaje.btn.cartasHistoricas"),
           onClick: () => window.open("https://docs.google.com/document/d/1OWQUl5Nz2AgzDow4O1-PQKoakzDwEo9KwY9qOk6QKWg/edit?usp=sharing", "_blank"),
           icon: <CartasIcon />,
         },
-        next: { label: "Ilustraciones", onClick: () => setIlustracionesAstroOpen(true), icon: <EyeIcon /> },
+        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesAstroOpen(true), icon: <EyeIcon /> },
       };
     }
     if (moduloId === nutricionNomLink) {
       return {
-        prev:  { label: "Herbario",             onClick: () => navigate("/aprendizaje/herbario"),             icon: <FitoterapiaIcon size="16px" color={nutricionTxt} /> },
-        extra: { label: "Alimentos",            onClick: () => navigate("/aprendizaje/alimentos"),            icon: <NutricionIcon size={{ base: "16px", md: "16px" }} /> },
-        next:  { label: "Calcular necesidades", onClick: () => navigate("/aprendizaje/calcular-necesidades"), icon: <CalcularIcon /> },
+        prev:  { label: t("aprendizaje.btn.herbario"),             onClick: () => navigate("/aprendizaje/herbario"),             icon: <FitoterapiaIcon size="16px" color={nutricionTxt} /> },
+        extra: { label: t("aprendizaje.btn.alimentos"),            onClick: () => navigate("/aprendizaje/alimentos"),            icon: <NutricionIcon size={{ base: "16px", md: "16px" }} /> },
+        next:  { label: t("aprendizaje.btn.calcularNecesidades"), onClick: () => navigate("/aprendizaje/calcular-necesidades"), icon: <CalcularIcon /> },
       };
     }
     if (moduloId === fisiologiaNom) {
@@ -159,7 +163,7 @@ export default function CursosModalidad() {
         <SiteHeader variant="auto" />
         <Box flex="1" display="flex" alignItems="center" justifyContent="center">
           <Text color="white" fontSize="xl" fontStyle="italic">
-            Disciplina en construcción.
+            {t("aprendizaje.enConstruccion")}
           </Text>
         </Box>
       </Box>
@@ -193,7 +197,7 @@ export default function CursosModalidad() {
         >
           <MetodoStepHeader
             icon={modalidad.icon}
-            title={modalidad.nom}
+            title={nombreDisciplina(modalidad.nom)}
             bgColor={`${modalidad.bgColor}dd`}
             color={modalidad.color}
             nom={modalidad.nom}
@@ -302,11 +306,12 @@ export default function CursosModalidad() {
       <ContactModal
         isOpen={saberMasOpen}
         onClose={() => setSaberMasOpen(false)}
-        title="¿Quieres saber más?"
+        title={t("contactoModal.saberMas")}
         icon={modalidad.icon}
-        subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+        subtitle={t("contactoModal.saberMas.sub")}
         bgColor={modalidad.bgColor}
         color={modalidad.color}
+        // El asunto va al correo de María: siempre en español (ver ContactModal).
         emailSubject={`Quiero saber más — ${modalidad.nom}`}
         showDescription
       />
@@ -415,7 +420,7 @@ export default function CursosModalidad() {
                     textShadow: `0 0 14px ${tcmTxt}cc, 0 0 32px ${tcmTxt}77, 0 0 70px ${tcmTxt}44`,
                   }}
                 >
-                  Tests de Medicina China
+                  {t("tcmTests.titulo")}
                 </Text>
                 <Text
                   color={`${tcmTxt}cc`}
@@ -425,7 +430,7 @@ export default function CursosModalidad() {
                   textAlign="center"
                   maxW="520px"
                 >
-                  Elige el test que quieras hacer.
+                  {t("tcmTests.subtitulo")}
                 </Text>
               </Flex>
 
@@ -438,9 +443,9 @@ export default function CursosModalidad() {
                 wrap="wrap"
               >
                 {[
-                  { label: "Constitución",  path: "/tcm/test/1?guest=true", Icon: TestConstitucionIcon  },
-                  { label: "Elemento",      path: "/tcm/test/2?guest=true", Icon: TestElementoIcon      },
-                  { label: "Desequilibrio", path: "/tcm/test/3?guest=true", Icon: TestDesequilibrioIcon },
+                  { label: t("tcmTests.constitucion"),  path: "/tcm/test/1?guest=true", Icon: TestConstitucionIcon  },
+                  { label: t("tcmTests.elemento"),      path: "/tcm/test/2?guest=true", Icon: TestElementoIcon      },
+                  { label: t("tcmTests.desequilibrio"), path: "/tcm/test/3?guest=true", Icon: TestDesequilibrioIcon },
                 ].map(({ label, path, Icon }) => (
                   <Box
                     key={path}
@@ -510,7 +515,7 @@ export default function CursosModalidad() {
                         textTransform="uppercase"
                         style={{ textShadow: `0 0 10px ${tcmTxt}aa` }}
                       >
-                        <Text as="span">Empezar</Text>
+                        <Text as="span">{t("comun.empezar")}</Text>
                         <Box
                           as="svg"
                           xmlns="http://www.w3.org/2000/svg"

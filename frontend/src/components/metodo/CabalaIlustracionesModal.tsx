@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -52,6 +53,7 @@ interface CabalaIlustracionesModalProps {
 }
 
 export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: CabalaIlustracionesModalProps) {
+  const t = useT();
   const [capitulo, setCapitulo] = useState<Capitulo | null>(null);
 
   useEffect(() => {
@@ -102,7 +104,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
 
         {/* X cerrar */}
         <IconButton
-          aria-label="Cerrar"
+          aria-label={t("comun.cerrar")}
           onClick={onClose}
           position="fixed"
           top={{ base: 3, md: 5 }}
@@ -156,7 +158,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                   lineHeight="1.1"
                   style={{ textShadow: `0 0 14px ${cabalaTxt}cc, 0 0 32px ${cabalaTxt}77, 0 0 70px ${cabalaTxt}44` }}
                 >
-                  Ilustraciones de Cábala
+                  {t("metodo.ilustracionesDe", { disciplina: t("disciplina.cabala") })}
                 </Text>
                 <Text
                   color={`${cabalaTxt}cc`}
@@ -166,7 +168,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                   textAlign="center"
                   maxW="520px"
                 >
-                  Elige un capítulo para empezar a leer.
+                  {t("metodo.ilustracionesElige")}
                 </Text>
               </Flex>
 
@@ -261,7 +263,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                         textTransform="uppercase"
                         style={{ textShadow: `0 0 10px ${cabalaTxt}aa` }}
                       >
-                        <Text as="span">Leer</Text>
+                        <Text as="span">{t("metodo.leer")}</Text>
                         <Box
                           as="svg"
                           xmlns="http://www.w3.org/2000/svg"

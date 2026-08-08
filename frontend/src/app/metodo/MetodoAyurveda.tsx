@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import {
   Box, Flex, Text,
@@ -34,6 +35,7 @@ const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${ayurvedaBg}
 const glowPanel = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${ayurvedaTxt}1a, 0 0 48px ${ayurvedaTxt}10`;
 
 export default function MetodoAyurveda() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -102,7 +104,7 @@ export default function MetodoAyurveda() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Equilibra tu naturaleza"
+            title={t("metodo.gate.ayurveda.titulo")}
             pageLabel="1/4"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
@@ -136,7 +138,7 @@ export default function MetodoAyurveda() {
                 maxW="600px"
                 mx="auto"
               >
-                El Ayurveda enseña que cada persona nace con una constitución única —su Doṣha— y que la salud es el equilibrio de esa naturaleza. 
+                {t("metodo.gate.ayurveda.intro1")}
               </Text>
               <Text
                 color={TINTA}
@@ -147,7 +149,7 @@ export default function MetodoAyurveda() {
                 mx="auto"
                 mt={{ base: 4, md: 5 }}
               >
-                Esta tercera etapa de El Mapa es para reconocer tu constitución, entender tus desequilibrios y aprender a vivir en armonía contigo mismo.
+                {t("metodo.gate.ayurveda.intro2")}
               </Text>
             </Box>
           </Box>
@@ -175,7 +177,7 @@ export default function MetodoAyurveda() {
             transition="all 0.2s"
             _hover={{ bg: "rgba(255,255,255,0.16)", transform: "translateY(-1px)" }}
           >
-            <Box as="span" fontSize="md">⚠</Box> Aviso importante
+            <Box as="span" fontSize="md">⚠</Box> {t("metodo.gate.avisoImportante")}
           </Box>
           </Reveal>
         </Flex>
@@ -229,21 +231,21 @@ export default function MetodoAyurveda() {
                   </Box>
                   <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
                         style={{ textShadow: INK_SHADOW }}>
-                    Importante
+                    {t("metodo.gate.importante")}
                   </Text>
                 </Flex>
                 <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.75"
                       style={{ textShadow: INK_SHADOW }}>
-                  El Ayurveda es un saber milenario de autoconocimiento, no un sustituto de la medicina.
+                  {t("metodo.gate.ayurveda.aviso1")}
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  Su propósito en El Mapa es ayudarte a observar tu constitución y tus hábitos, y a cuidarte con más conciencia día a día.
+                  {t("metodo.gate.ayurveda.aviso2")}
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  Ante cualquier síntoma o problema de salud, consulta siempre con un profesional sanitario.
+                  {t("metodo.gate.ayurveda.aviso3")}
                 </Text>
               </Flex>
             </ModalBody>

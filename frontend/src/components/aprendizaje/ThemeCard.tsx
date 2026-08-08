@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 
 export const ThemeCard = (props:{
-  title:string, bgColor:string, color:string, icon:any, link:string, cursor:string
+  /** Nombre INTERNO de la disciplina: da el fondo y NO se traduce. */
+  title:string,
+  /** Texto que se pinta. Si falta, se usa `title` (que es el nombre interno). */
+  label?:string,
+  bgColor:string, color:string, icon:any, link:string, cursor:string
 }) => {
   const navigate = useNavigate();
   const hasBg = hasDisciplinaBg(props.title);
@@ -72,7 +76,7 @@ export const ThemeCard = (props:{
             ? `0 1px 3px ${props.bgColor}f5, 0 0 6px ${props.bgColor}cc, 0 2px 14px ${props.bgColor}88`
             : `0 0 10px ${props.color}cc, 0 0 21px ${props.color}88, 0 0 40px ${props.color}55`}
         >
-          {props.title}
+          {props.label ?? props.title}
         </Text>
       </Flex>
     </Box>

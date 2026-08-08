@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 
 const FlowerIcon = ({ size = "28px" }: { size?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 -960 960 960" width={size} fill="#008080">
@@ -24,6 +25,7 @@ interface ProductosBannerProps {
 
 const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: ProductosBannerProps) => {
   const navigate = useNavigate();
+  const t = useT();
 
   if (compact) {
     return (
@@ -66,7 +68,7 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
               textShadow="0 2px 8px rgba(0,100,90,0.4)"
               lineHeight="1.2"
             >
-              Productos Naturales
+              {t("productos.titulo")}
             </Text>
           </Flex>
 
@@ -77,7 +79,7 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
             lineHeight="1.7"
             letterSpacing="0.01em"
           >
-            Cuídate con ingredientes naturales y el Amor de la madre tierra.
+            {t("productos.lema")}
           </Text>
 
           <Box
@@ -97,7 +99,7 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
             _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
             transition="all 0.2s"
           >
-            Ver más →
+            {t("productos.verMas")}
           </Box>
         </Box>
       </Box>
@@ -161,7 +163,7 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
             textShadow="0 2px 10px rgba(0,100,90,0.35)"
             lineHeight="1.2"
           >
-            Productos Naturales
+            {t("productos.titulo")}
           </Text>
         </Flex>
 
@@ -172,8 +174,7 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
           lineHeight="1.9" letterSpacing="0.02em"
           textShadow="0 1px 5px rgba(0,100,90,0.25)"
         >
-          Descubre todos los productos hechos con ingredientes naturales y Amor.
-          Cuídate con las herramientas que nos ha dado la madre tierra.
+          {t("productos.texto")}
         </Text>
 
         <Flex justify={{ base: "center", md: "flex-end" }} mt={1}>
@@ -189,7 +190,7 @@ const ProductosBanner = ({ maxW = "900px", w = "100%", compact = false }: Produc
             _hover={{ bg: "rgba(255,255,255,0.25)", borderColor: "white" }}
             transition="all 0.22s"
           >
-            Ver más →
+            {t("productos.verMas")}
           </Box>
         </Flex>
       </Box>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { Mail, Heart } from "lucide-react";
 import axios from "axios";
@@ -27,6 +28,7 @@ const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicol
 interface CartaPreg { pregunta: string; respuesta: string }
 
 export function CartaBox() {
+  const t = useT();
   const [mensaje, setMensaje] = useState("");
   // Formato antiguo (recorridos guardados con las cuatro preguntas guía).
   const [preguntas, setPreguntas] = useState<CartaPreg[]>([]);
@@ -90,7 +92,7 @@ export function CartaBox() {
             lineHeight="1.25"
             style={{ textShadow: INK_SHADOW }}
           >
-            Tu carta para ti
+            {t("metodo.cartaParaTi")}
           </Text>
         </Flex>
 
@@ -106,7 +108,7 @@ export function CartaBox() {
           py={{ base: 5, md: 6 }}
         >
           <Text color={`${TINTA}b0`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={3}>
-            Para cuando vuelvas a sentirte bloqueado:
+            {t("metodo.cartaCuandoVuelvas")}
           </Text>
           {mensaje ? (
             <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" whiteSpace="pre-wrap">

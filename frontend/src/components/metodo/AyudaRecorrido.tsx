@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useT } from "../../i18n";
 import {
   Box, Flex, Text,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
@@ -663,6 +664,7 @@ function BotonAyuda({ children, onClick, icon }: { children: React.ReactNode; on
  *  abre un popup con un curso de acceso libre). El resto de páginas mantiene los
  *  3 botones informativos de siempre. */
 export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof typeof AYUDA_RECORRIDO; ocultarCompania?: boolean }) {
+  const t = useT();
   const [abierto, setAbierto] = useState<keyof Ayuda | null>(null);
   // Popups especiales de la página inicio.
   const [acompPreguntaOpen, setAcompPreguntaOpen] = useState(false); // paso previo "¿Necesitas ayuda?"
@@ -701,20 +703,20 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
             direction="column" align="flex-end" gap={2}>
         {esInicio ? (
           <>
-            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>Agenda una llamada</BotonAyuda>
-            <BotonAyuda onClick={() => setCursoOpen(true)}>Orientación</BotonAyuda>
+            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>{t("llamada.agenda")}</BotonAyuda>
+            <BotonAyuda onClick={() => setCursoOpen(true)}>{t("metodo.ayuda.orientacion")}</BotonAyuda>
           </>
         ) : (
           <>
-            <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>Ejemplo</BotonAyuda>
+            <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>{t("metodo.ayuda.ejemplo")}</BotonAyuda>
             {!ocultarCompania && (
-              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>Agenda una llamada</BotonAyuda>
+              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>{t("llamada.agenda")}</BotonAyuda>
             )}
             <BotonAyuda onClick={() => {
               if (pagina === "regulacion") setPreparacionOpen(true);   // «Antes de empezar»
               else if (curso) setCursoOpen(true);
               else setAbierto("orientacion");
-            }}>Orientación</BotonAyuda>
+            }}>{t("metodo.ayuda.orientacion")}</BotonAyuda>
           </>
         )}
       </Flex>
@@ -768,18 +770,18 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                     style={{ textShadow: INK_SHADOW }}>
                 <LlamadaIcon size={{ base: "22px", md: "26px" }} />
                 <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.4">
-                  Agenda una llamada
+                  {t("llamada.agenda")}
                 </Text>
               </Flex>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} lineHeight="1.8" mb={7}>
-                Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.
+                {t("llamada.acompanarTexto")}
               </Text>
               <Box as="button" onClick={() => { setAcompPreguntaOpen(false); setCompaniaOpen(true); }}
                    px={9} py={3} borderRadius="full" bg={TINTA} color={PAPEL} border={`1px solid ${TINTA}`}
                    fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.06em"
                    cursor="pointer" boxShadow={`0 6px 20px rgba(94,45,16,0.32)`} transition="all 0.2s"
                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}>
-                Agenda tu llamada →
+                {t("llamada.acompanar")}
               </Box>
             </Box>
           </Box>
@@ -803,8 +805,8 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
               bgColor={neuropsicologiaBg}
               disciplinaNom={neuropsicologiaNom}
               tipo="compania"
-              titulo="¿Prefieres compañía?"
-              subtitulo="Recorre el camino conmigo. Agenda una llamada · horario peninsular España"
+              titulo={t("metodo.ayuda.prefieresCompania")}
+              subtitulo={t("metodo.ayuda.recorreConmigo")}
             />
           </Box>
         </Box>
@@ -865,7 +867,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                     <Flex key={i} direction="column" gap={3}>
                       <Box>
                         <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
-                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Herida</Text>
+                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>{t("metodo.ayuda.herida")}</Text>
                         <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6"
                               style={{ textShadow: INK_SHADOW }}>
                           «{r.herida}»
@@ -873,14 +875,14 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                       </Box>
                       <Box>
                         <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
-                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Arquetipo</Text>
+                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>{t("metodo.ayuda.arquetipo")}</Text>
                         <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
                           {r.arquetipo}
                         </Text>
                       </Box>
                       <Box>
                         <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
-                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>Relación</Text>
+                              opacity={0.7} mb={0.5} style={{ textShadow: INK_SHADOW }}>{t("metodo.ayuda.relacion")}</Text>
                         <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.4"
                               style={{ textShadow: INK_SHADOW }}>
                           {r.relacionTitulo}
@@ -935,7 +937,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
             <Flex align="center" justify="space-between" gap={3} mb={4}>
               <Text color={PAPEL} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.03em"
                     style={{ textShadow: `0 1px 3px rgba(0,0,0,0.5), 0 0 16px rgba(255,251,243,0.35)` }}>
-                Orientación de acceso libre
+                {t("metodo.ayuda.orientacionLibre")}
               </Text>
               <Box as="button" onClick={() => setCursoOpen(false)}
                    w="36px" h="36px" borderRadius="full" flexShrink={0}
@@ -952,7 +954,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
               </Box>
             ) : (
               <Text color={PAPEL} fontStyle="italic" opacity={0.85}>
-                El curso estará disponible pronto.
+                {t("metodo.ayuda.cursoPronto")}
               </Text>
             )}
           </Box>

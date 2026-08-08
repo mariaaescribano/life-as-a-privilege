@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
-import { nombreEnMapa } from "../../data/recorridoContenido";
+import { useT } from "../../i18n";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -85,6 +86,8 @@ interface MapaSeArmaProps {
 }
 
 export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
+  const t = useT();
+  const nombreEnMapa = useNombreDisciplinaEnMapa();
   const ref = useRef<HTMLDivElement>(null);
   const [lado, setLado] = useState(0);
 
@@ -308,7 +311,7 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
               textAlign="center"
               textShadow="0 0 14px rgba(255,255,255,0.5), 0 0 30px rgba(180,255,245,0.28)"
             >
-              El Mapa
+              {t("header.mapa")}
             </Text>
             <Text
               color="rgba(255,255,255,0.85)"
@@ -317,7 +320,7 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
               textAlign="center"
               textShadow="0 0 10px rgba(255,255,255,0.28)"
             >
-              Las ocho miradas, sobre la misma persona.
+              {t("presentacion.mapa.ochoMiradasPie")}
             </Text>
           </>
         ) : (
@@ -330,7 +333,7 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
               minH="1.5em"
               textShadow="0 0 11px rgba(255,255,255,0.32)"
             >
-              {ultima ? nombreEnMapa(ultima) : "Tu mapa empieza vacío."}
+              {ultima ? nombreEnMapa(ultima) : t("presentacion.mapa.vacio")}
             </Text>
             <Text
               color="rgba(255,255,255,0.7)"

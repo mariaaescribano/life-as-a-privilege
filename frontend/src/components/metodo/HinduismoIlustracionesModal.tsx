@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -194,6 +195,7 @@ export function HinduismoIlustracionesModal({
   onClose,
   onComplete,
 }: HinduismoIlustracionesModalProps) {
+  const t = useT();
   const [capitulo, setCapitulo] = useState<Capitulo | null>(null);
   // Espera de las portadas del selector: hasta que TODAS estén descargadas se
   // muestra la animación de Ayurveda (el loto) en vez de la rejilla.
@@ -255,7 +257,7 @@ export function HinduismoIlustracionesModal({
 
         {/* X cerrar — siempre visible */}
         <IconButton
-          aria-label="Cerrar"
+          aria-label={t("comun.cerrar")}
           onClick={onClose}
           position="fixed"
           top={{ base: 3, md: 5 }}
@@ -314,7 +316,7 @@ export function HinduismoIlustracionesModal({
                   textAlign="center"
                   lineHeight="1.1"
                 >
-                  Ilustraciones de Hinduismo
+                  {t("metodo.ilustracionesDe", { disciplina: t("disciplina.hinduismo") })}
                 </Text>
                 <Text
                   color={`${ayurvedaTxt}cc`}
@@ -324,7 +326,7 @@ export function HinduismoIlustracionesModal({
                   textAlign="center"
                   maxW="520px"
                 >
-                  Elige un capítulo para empezar a leer.
+                  {t("metodo.ilustracionesElige")}
                 </Text>
               </Flex>
 
@@ -415,7 +417,7 @@ export function HinduismoIlustracionesModal({
                         textTransform="uppercase"
                         style={{ textShadow: `0 0 10px ${ayurvedaTxt}aa` }}
                       >
-                        <Text as="span">Leer</Text>
+                        <Text as="span">{t("metodo.leer")}</Text>
                         <Box
                           as="svg"
                           xmlns="http://www.w3.org/2000/svg"

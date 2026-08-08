@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
 import { AppleLoader } from "./AppleLoader";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
@@ -49,6 +50,7 @@ function FlechaLateral({ lado, onClick, disabled }: { lado: "izq" | "der"; onCli
 }
 
 export function NutrienteComic({ vinetas }: { vinetas: Vineta[] }) {
+  const t = useT();
   const [idx, setIdx] = useState(0);
   const [imgOk, setImgOk] = useState(false);   // foto de la viñeta actual cargada
   const [imgErr, setImgErr] = useState(false); // foto de la viñeta actual no existe
@@ -116,7 +118,7 @@ export function NutrienteComic({ vinetas }: { vinetas: Vineta[] }) {
               </Box>
               <Text color={`${nutricionTxt}88`} fontSize="2xs" fontWeight="700" letterSpacing="0.14em"
                     textTransform="uppercase">
-                Próximamente
+                {t("comun.proximamente")}
               </Text>
             </Flex>
           )}

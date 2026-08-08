@@ -17,6 +17,7 @@ import { API_URL, turquesa } from "../../GlobalVariables";
 import { ADMIN_DISCIPLINAS, disciplinaByKey } from "../../data/adminDisciplinas";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { LifeLoader } from "../metodo/comicLoaders";
+import { useT } from "../../i18n";
 
 /** Icono del diario (libro abierto). El color se adapta vía `fill`. */
 function DiarioIcon({ fill = "currentColor", size = "24px" }: { fill?: string; size?: string }) {
@@ -59,6 +60,7 @@ const fmtFecha = (iso: string) => {
 /** Botón flotante (abajo a la derecha) + popup del mini-diario. Se monta una
  *  sola vez a nivel de app y aparece en todas las páginas con sesión iniciada. */
 export function MiniDiario() {
+  const t = useT();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [vista, setVista] = useState<"escribir" | "notas">("escribir");
 
@@ -189,7 +191,7 @@ export function MiniDiario() {
           boxShadow: `0 6px 28px rgba(0,0,0,0.35), 0 0 28px ${btnBg}aa`,
         }}
         _active={{ transform: "translateY(0)" }}
-        aria-label="Abrir mis notas"
+        aria-label={t("diario.abrir")}
       >
         {btnConImg && <DisciplinaBgLayer nom={disciplinaRuta!.nombre} borderRadius="full" />}
         <Box
@@ -215,7 +217,7 @@ export function MiniDiario() {
           lineHeight="1"
           style={{ textShadow: `0 1px 6px ${btnBg}cc` }}
         >
-          Mis notas
+          {t("diario.titulo")}
         </Text>
       </Flex>
 
@@ -258,7 +260,7 @@ export function MiniDiario() {
             cursor="pointer"
             transition="all 0.18s"
             _hover={{ bg: "rgba(255,255,255,0.22)", borderColor: "white" }}
-            aria-label="Cerrar"
+            aria-label={t("comun.cerrar")}
           >
             ✕
           </Box>
@@ -322,6 +324,7 @@ function VistaEscribir({
   onGuardar: () => void;
   onVerNotas: () => void;
 }) {
+  const t = useT();
   // Placeholder rotatorio entre los ejemplos, para que "vivan".
   const [ejIdx, setEjIdx] = useState(0);
   useEffect(() => {
@@ -362,7 +365,7 @@ function VistaEscribir({
           textAlign="center"
           style={{ textShadow: "1px 2px 12px rgba(255,255,255,0.2)" }}
         >
-          ¿Qué quieres escribir?
+          {t("diario.escribir")}
         </Text>
       </Flex>
 
@@ -483,7 +486,7 @@ function VistaEscribir({
           transition="all 0.18s"
           _hover={{ color: "white", borderBottom: "1px solid white" }}
         >
-          ← Ver mis notas
+          {t("diario.verNotas")}
         </Box>
         <Box
           as="button"
@@ -522,6 +525,7 @@ function VistaNotas({
   onVolver: () => void;
   onBorrar: (id: string) => void;
 }) {
+  const t = useT();
   return (
     <Flex direction="column" gap={4} flex="1" minH={0}>
       <Flex align="center" gap={3} flexShrink={0}>
@@ -535,7 +539,7 @@ function VistaNotas({
           transition="all 0.18s"
           _hover={{ color: turquesa }}
         >
-          ← Volver a escribir
+          {t("diario.volverEscribir")}
         </Box>
       </Flex>
 
@@ -546,7 +550,7 @@ function VistaNotas({
       ) : notas.length === 0 ? (
         <Flex justify="center" align="center" flex="1" minH={0}>
           <Text color="rgba(255,255,255,0.6)" textAlign="center" fontStyle="italic">
-            Todavía no has escrito ninguna nota.
+            {t("diario.vacio")}
           </Text>
         </Flex>
       ) : (
@@ -576,6 +580,7 @@ function VistaNotas({
 }
 
 function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string) => void }) {
+  const t = useT();
   const disc = nota.categoria ? disciplinaByKey(nota.categoria) : undefined;
   const nom = disc?.nombre;
   const conFondo = !!nom && hasDisciplinaBg(nom);
@@ -621,7 +626,7 @@ function NotaCard({ nota, onBorrar }: { nota: Nota; onBorrar: (id: string) => vo
             lineHeight="1"
             transition="all 0.18s"
             _hover={{ color: "#ffb4b4", bg: `${txtColor}1a` }}
-            aria-label="Borrar nota"
+            aria-label={t("diario.borrarNota")}
           >
             ✕
           </Box>

@@ -27,6 +27,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { LifeLoader } from "../../../components/metodo/comicLoaders";
 import SiteFooter from "../../../components/global/Footer";
+import { useT } from "../../../i18n";
 
 const popIn = keyframes`
   from {
@@ -41,6 +42,7 @@ const popIn = keyframes`
 
 const EspacioHome = () => {
   const navigate = useNavigate();
+  const t = useT();
 
   // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
   // Fisiología → Nutrición → Cábala → Cultura
@@ -138,7 +140,7 @@ const EspacioHome = () => {
                   filter: "drop-shadow(4px 4px 6px rgba(0,0,0,0.5))"
                 }}
               >
-                Mi Espacio
+                {t("espacio.titulo")}
               </Text>
             </Flex>
 

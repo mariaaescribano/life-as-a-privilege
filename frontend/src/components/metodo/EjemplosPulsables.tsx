@@ -12,6 +12,7 @@
 //   solo pueden ocupar el hueco que sobra. Si son frases largas, baja el tope.
 // ─────────────────────────────────────────────────────────────────────────
 import React from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { neuropsicologiaBg, neuropsicologiaTxt } from "../../GlobalVariables";
 
@@ -31,6 +32,7 @@ export function EjemplosPulsables({
   onElegir: (ejemplo: string) => void;
   tope?: number;
 }) {
+  const t = useT();
   const lista = ejemplos.slice(0, tope);
   if (lista.length === 0) return null;
 
@@ -39,7 +41,7 @@ export function EjemplosPulsables({
       <Text color={TINTA} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700"
             letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} mb={2}
             style={{ textShadow: INK_SHADOW }}>
-        Toca un ejemplo para añadirlo
+        {t("metodo.tocaEjemplo")}
       </Text>
       <Flex wrap="wrap" gap={2}>
         {lista.map((ej) => {

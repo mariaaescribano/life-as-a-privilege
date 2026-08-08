@@ -73,11 +73,11 @@ export default function MetodoTcmTaoismo() {
           {/* Cita de apertura (sin sombra: va sobre el turquesa limpio) */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Flex direction="column" align="center" gap={2} maxW="680px">
-            <Text color={tcmTxt} fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+            <Text color="white" fontStyle="italic" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8"
                   textAlign="center">
               «El Tao que puede ser nombrado no es el Tao eterno.»
             </Text>
-            <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={600} letterSpacing="0.06em"
+            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight={600} letterSpacing="0.06em"
                   textAlign="center" opacity={0.85}>
               — Lao-Tse
             </Text>
@@ -99,8 +99,8 @@ export default function MetodoTcmTaoismo() {
           </Reveal>
 
           <Reveal inView direction="up" distance={16} duration={0.6} amount={0.4} display="flex" justifyContent="center">
-          <Text color={tcmTxt} fontStyle="italic" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                textAlign="center" maxW="680px" mt={1} style={{ textShadow: INK_SHADOW }}>
+          <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                textAlign="center" maxW="680px" mt={1}>
             Diez leyes, diez ideas. Cada una con su reflejo en el cuerpo.
           </Text>
           </Reveal>

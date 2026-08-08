@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
+import { useT } from "../../i18n";
+
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -20,6 +22,7 @@ const useReveal = (threshold = 0.15) => {
 
 const OpinionesSection: React.FC = () => {
   const navigate = useNavigate();
+  const t = useT();
   const reveal = useReveal(0.1);
 
   return (
@@ -86,7 +89,7 @@ const OpinionesSection: React.FC = () => {
               textShadow="0 0 16px rgba(255,255,255,0.56), 0 0 34px rgba(255,255,255,0.32), 0 0 66px rgba(180,255,245,0.24)"
               whiteSpace="nowrap"
             >
-              El Mapa
+              {t("header.mapa")}
             </Text>
             <Box
               as="span"

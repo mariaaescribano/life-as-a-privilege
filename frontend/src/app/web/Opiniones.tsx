@@ -4,6 +4,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { API_URL } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
+import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.1) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -50,6 +51,7 @@ const textareaStyles = {
 };
 
 function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[]; loading: boolean; listReveal: { ref: React.RefObject<HTMLDivElement | null>; visible: boolean } }) {
+  const t = useT();
   return (
     <Box ref={listReveal.ref} w="100%" maxW="950px" mx="auto">
       {loading ? (
@@ -60,7 +62,7 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
           fontSize={{ base: "md", md: "lg" }}
           textShadow="0 0 8px rgba(255,255,255,0.19)"
         >
-          Cargando…
+          {t("comun.cargando")}
         </Text>
       ) : opiniones.length === 0 ? (
         <Text
@@ -70,7 +72,7 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
           fontSize={{ base: "md", md: "lg" }}
           textShadow="0 0 8px rgba(255,255,255,0.19)"
         >
-          Todavía no hay opiniones publicadas. ¡Sé la primera persona en compartir la tuya!
+          {t("opiniones.vacio")}
         </Text>
       ) : (
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 5, md: 6 }}>
@@ -119,6 +121,7 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
 }
 
 function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLDivElement | null>; visible: boolean } }) {
+  const t = useT();
   const [form, setForm] = useState({ nombre: "", texto: "", email: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
 
@@ -182,14 +185,14 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
             letterSpacing="0.05em"
             textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22)"
           >
-            ¡Gracias por compartirla!
+            {t("opiniones.gracias")}
           </Text>
           <Text
             color="rgba(255,255,255,0.85)"
             fontSize={{ base: "md", md: "lg" }}
             textShadow="0 0 10px rgba(255,255,255,0.26)"
           >
-            Aparecerá publicada en breve.
+            {t("opiniones.graciasTexto")}
           </Text>
           <Flex
             as="button"
@@ -219,20 +222,20 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
             transition="all 0.25s ease"
             mt={2}
           >
-            Dejar otra opinión
+            {t("opiniones.otra")}
           </Flex>
         </Flex>
       ) : (
         <Flex as="form" onSubmit={handleSubmit} direction="column" gap={5}>
           <Box>
             <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
-              NOMBRE
+              {t("opiniones.campo.nombre")}
             </Text>
             <Input
               name="nombre"
               value={form.nombre}
               onChange={handleChange}
-              placeholder="Tu nombre"
+              placeholder={t("opiniones.ph.nombre")}
               required
               {...inputStyles}
             />
@@ -240,27 +243,27 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
 
           <Box>
             <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
-              EMAIL (OPCIONAL)
+              {t("opiniones.campo.email")}
             </Text>
             <Input
               name="email"
               type="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="tu@email.com"
+              placeholder={t("opiniones.ph.email")}
               {...inputStyles}
             />
           </Box>
 
           <Box>
             <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
-              TU OPINIÓN
+              {t("opiniones.campo.texto")}
             </Text>
             <Textarea
               name="texto"
               value={form.texto}
               onChange={handleChange}
-              placeholder="Cuenta tu experiencia…"
+              placeholder={t("opiniones.ph.texto")}
               required
               rows={6}
               resize="vertical"
@@ -270,7 +273,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
 
           {status === "error" && (
             <Text color="#ff8a8a" fontSize="sm" textAlign="center" fontStyle="italic" textShadow="0 0 8px rgba(255,140,140,0.4)">
-              Hubo un error al enviar la opinión. Inténtalo de nuevo.
+              {t("opiniones.error")}
             </Text>
           )}
 
@@ -315,7 +318,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
                 textTransform="uppercase"
                 textShadow="0 0 12px rgba(255,255,255,0.49), 0 0 26px rgba(255,255,255,0.3)"
               >
-                {status === "sending" ? "Enviando…" : "Enviar opinión"}
+                {status === "sending" ? t("comun.enviando") : t("opiniones.enviar")}
               </Text>
             </Flex>
           </Flex>
@@ -326,6 +329,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
 }
 
 export default function Opiniones() {
+  const t = useT();
   const [opiniones, setOpiniones] = useState<Opinion[]>([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -389,7 +393,7 @@ export default function Opiniones() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Experiencias reales
+          {t("opiniones.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -403,7 +407,7 @@ export default function Opiniones() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Experiencias de quienes ya han participado en El Mapa
+          {t("opiniones.subtitulo")}
         </Text>
       </Flex>
 
@@ -444,7 +448,7 @@ export default function Opiniones() {
           transform={dejarTitleReveal.visible ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
-          Deja tu opinión
+          {t("opiniones.dejar.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.85)"
@@ -458,7 +462,7 @@ export default function Opiniones() {
           transform={dejarTitleReveal.visible ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
         >
-          Comparte tu experiencia con El Mapa
+          {t("opiniones.dejar.subtitulo")}
         </Text>
       </Flex>
 

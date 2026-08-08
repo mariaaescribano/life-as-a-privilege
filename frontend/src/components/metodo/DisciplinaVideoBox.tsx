@@ -1,7 +1,9 @@
 import React, { useLayoutEffect, useRef } from "react";
 import { Box, Flex, Text, type FlexProps } from "@chakra-ui/react";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
-import { nombreEnMapa, type VideoIntro } from "../../data/recorridoContenido";
+import { type VideoIntro } from "../../data/recorridoContenido";
+import { useT } from "../../i18n";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { PrecioConAntes } from "./PrecioConAntes";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -80,6 +82,8 @@ export function DisciplinaVideoBox({
   // Solo lo que necesitan los dos sitios donde se usa. Aceptar FlexProps entero
   // hace explotar el chequeo de tipos («union type too complex»).
 } & Pick<FlexProps, "h" | "minH" | "flex">) {
+  const t = useT();
+  const nombreEnMapa = useNombreDisciplinaEnMapa();
   const accent = txt;
   const hasBg = hasDisciplinaBg(nom);
   const textGlow = `0 1px 3px ${bg}, 0 0 10px ${bg}, 0 0 20px ${bg}`;
@@ -293,7 +297,7 @@ export function DisciplinaVideoBox({
               whiteSpace="nowrap"
               textShadow={textGlow}
             >
-              Saber más
+              {t("elMetodo.saberMas")}
             </Text>
             <Box
               as="svg"
@@ -442,7 +446,7 @@ export function DisciplinaVideoBox({
                 letterSpacing="0.03em"
                 textShadow={textGlow}
               >
-                {videoIntro.boton ?? "Muestra"}
+                {videoIntro.boton ?? t("elMetodo.muestra")}
               </Text>
             </Flex>
           ) : (
@@ -457,7 +461,7 @@ export function DisciplinaVideoBox({
               alignSelf={{ base: "center", md: "flex-end" }}
               textShadow={textGlow}
             >
-              Vídeo próximamente
+              {t("elMetodo.videoProximamente")}
             </Text>
           )}
 

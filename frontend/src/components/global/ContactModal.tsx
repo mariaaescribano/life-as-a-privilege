@@ -5,6 +5,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -24,8 +25,9 @@ interface ContactModalProps {
 export function ContactModal({
   isOpen, onClose, title, icon, subtitle, bgColor, color, emailSubject,
   showDescription = false, showCheckboxes = true, emailOrPhone = false,
-  textareaPlaceholder = "¿En qué puedo ayudarte?",
+  textareaPlaceholder,
 }: ContactModalProps) {
+  const t = useT();
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -46,6 +48,8 @@ export function ContactModal({
     if (!nombre.trim() || !email.trim()) return;
     setSending(true); setError(false);
 
+    // Lo que se ENVÍA va siempre en español, aunque el usuario vea la web en
+    // inglés: el destinatario es María, y su bandeja no debería llegar mezclada.
     const opciones: string[] = [];
     if (claseParticular) opciones.push("Quiero clases particulares");
     if (conocerme) opciones.push("Quiero conocerme según esta modalidad");
@@ -105,7 +109,7 @@ export function ContactModal({
                 textAlign="center"
                 letterSpacing="0.04em"
               >
-                ¡Mensaje enviado!
+                {t("contacto.enviado")}
               </Text>
               <Text
                 color={`${color}aa`}
@@ -113,8 +117,7 @@ export function ContactModal({
                 textAlign="center"
                 lineHeight="1.7"
               >
-                Muy pronto me pondré en contacto contigo.
-                Gracias por tu confianza.
+                {t("contactoModal.gracias")}
               </Text>
               <Box
                 as="button"
@@ -133,7 +136,7 @@ export function ContactModal({
                 transition="all 0.2s"
                 _hover={{ bg: `${color}18`, color: color }}
               >
-                Cerrar
+                {t("comun.cerrar")}
               </Box>
             </Flex>
           ) : (
@@ -168,13 +171,13 @@ export function ContactModal({
               <Box h="1px" bg={`${color}22`} borderRadius="full" />
 
               <Input
-                placeholder="Tu nombre"
+                placeholder={t("contacto.ph.nombre")}
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 {...inputStyle}
               />
               <Input
-                placeholder={emailOrPhone ? "Tu email o teléfono" : "Tu email"}
+                placeholder={t(emailOrPhone ? "contactoModal.ph.emailOTelefono" : "contactoModal.ph.email")}
                 type={emailOrPhone ? "text" : "email"}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -185,8 +188,8 @@ export function ContactModal({
               {showCheckboxes && (
                 <Flex direction="column" gap={3}>
                   {[
-                    { label: "Quiero clases particulares", value: claseParticular, set: setClaseParticular },
-                    { label: "Quiero conocerme según esta modalidad", value: conocerme, set: setConocerme },
+                    { label: t("contactoModal.check.clases"), value: claseParticular, set: setClaseParticular },
+                    { label: t("contactoModal.check.conocerme"), value: conocerme, set: setConocerme },
                   ].map(({ label, value, set }) => (
                     <Flex
                       key={label}
@@ -232,7 +235,7 @@ export function ContactModal({
 
               {showDescription && (
                 <Textarea
-                  placeholder={textareaPlaceholder}
+                  placeholder={textareaPlaceholder ?? t("contactoModal.ph.ayuda")}
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
                   rows={3}
@@ -243,7 +246,7 @@ export function ContactModal({
 
               {error && (
                 <Text color={`${color}aa`} fontSize="sm" textAlign="center">
-                  Ha ocurrido un error. Por favor, inténtalo de nuevo.
+                  {t("comun.error")}
                 </Text>
               )}
 
@@ -266,7 +269,7 @@ export function ContactModal({
                 boxShadow={`0 4px 20px ${color}44`}
                 _hover={{ opacity: 0.88, transform: "translateY(-1px)" }}
               >
-                {sending ? "Enviando..." : "Enviar"}
+                {sending ? t("comun.enviando") : t("comun.enviar")}
               </Box>
             </Flex>
           )}

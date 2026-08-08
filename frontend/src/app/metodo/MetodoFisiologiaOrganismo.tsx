@@ -245,14 +245,14 @@ export default function MetodoFisiologiaOrganismo() {
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="El cuerpo"
-            pageLabel="4/4"
+            pageLabel="5/5"
             compact
             maxW="1000px"
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Sistemas", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
+            prev={{ label: "← El cerebro", onClick: () => navigate("/metodo/fisiologia/cerebro") }}
             extra={celulasBtn}
             next={{ label: "Niveles →", onClick: () => setComicOpen(true),
                     disabled: !completo, disabledTooltip: "Primero crea al ser humano" }}

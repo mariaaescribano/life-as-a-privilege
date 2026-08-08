@@ -109,6 +109,7 @@ const MetodoFisiologiaEstructuras = lazy(() => import("./app/metodo/MetodoFisiol
 const MetodoFisiologiaCelula = lazy(() => import("./app/metodo/MetodoFisiologiaCelula"));
 const MetodoFisiologiaTodasCelulas = lazy(() => import("./app/metodo/MetodoFisiologiaTodasCelulas"));
 const MetodoFisiologiaSistemas = lazy(() => import("./app/metodo/MetodoFisiologiaSistemas"));
+const MetodoFisiologiaCerebro = lazy(() => import("./app/metodo/MetodoFisiologiaCerebro"));
 const MetodoFisiologiaOrganismo = lazy(() => import("./app/metodo/MetodoFisiologiaOrganismo"));
 const MetodoFisiologiaAnalitica = lazy(() => import("./app/metodo/MetodoFisiologiaAnalitica"));
 const MetodoFisiologiaProfundiza = lazy(() => import("./app/metodo/MetodoFisiologiaProfundiza"));
@@ -121,6 +122,7 @@ const MetodoNutricionCalorias = lazy(() => import("./app/metodo/MetodoNutricionC
 const MetodoNutricionPrediabetes = lazy(() => import("./app/metodo/MetodoNutricionPrediabetes"));
 const MetodoNutricionDia = lazy(() => import("./app/metodo/MetodoNutricionDia"));
 const MetodoNutricionMitos = lazy(() => import("./app/metodo/MetodoNutricionMitos"));
+const MetodoNutricionOrigen = lazy(() => import("./app/metodo/MetodoNutricionOrigen"));
 const MetodoNutricionNutriente = lazy(() => import("./app/metodo/MetodoNutricionNutriente"));
 const MetodoNutricionMicrobiota = lazy(() => import("./app/metodo/MetodoNutricionMicrobiota"));
 const MetodoNutricionHambre = lazy(() => import("./app/metodo/MetodoNutricionHambre"));
@@ -352,6 +354,7 @@ export default function App()
       <Route path="/metodo/fisiologia/celula" element={<PrivateRoute><MetodoFisiologiaCelula /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/todas-tus-celulas" element={<PrivateRoute><MetodoFisiologiaTodasCelulas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/sistemas" element={<PrivateRoute><MetodoFisiologiaSistemas /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/cerebro" element={<PrivateRoute><MetodoFisiologiaCerebro /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/organismo" element={<PrivateRoute><MetodoFisiologiaOrganismo /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/analitica" element={<PrivateRoute><MetodoFisiologiaAnalitica /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/profundiza" element={<PrivateRoute><MetodoFisiologiaProfundiza /></PrivateRoute>} />
@@ -369,6 +372,7 @@ export default function App()
       <Route path="/metodo/nutricion/prediabetes" element={<PrivateRoute><MetodoNutricionPrediabetes /></PrivateRoute>} />
       <Route path="/metodo/nutricion/dia" element={<PrivateRoute><MetodoNutricionDia /></PrivateRoute>} />
       <Route path="/metodo/nutricion/mitos" element={<PrivateRoute><MetodoNutricionMitos /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/origen" element={<PrivateRoute><MetodoNutricionOrigen /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos" element={<PrivateRoute><MetodoNutricionAlimentos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos/:key" element={<PrivateRoute><MetodoNutricionAlimento /></PrivateRoute>} />
       <Route path="/metodo/nutricion/cursos" element={<PrivateRoute><MetodoNutricionCursos /></PrivateRoute>} />

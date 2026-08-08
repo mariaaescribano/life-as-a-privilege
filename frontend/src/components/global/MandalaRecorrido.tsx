@@ -2,7 +2,10 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
-import { recorridoContenido, nombreEnMapa, type VideoIntro } from "../../data/recorridoContenido";
+import { type DisciplinaClave } from "../../data/recorridoContenido";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useIdioma, useT, type Texto } from "../../i18n";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { useNavigate } from "react-router-dom";
 import { DisciplinaVideoBox } from "../metodo/DisciplinaVideoBox";
 import { presentacionPorKey } from "../../data/presentacionDisciplinas";
@@ -19,16 +22,21 @@ import {
 
 const MotionBox = motion(Box);
 
-/** Una captura real de la plataforma + su mini texto descriptivo. */
-type Captura = { src: string; titulo: string };
+/**
+ * Una captura real de la plataforma + su mini texto descriptivo.
+ * El pie va bilingüe aquí mismo (y no en el diccionario) porque cada frase
+ * describe UNA captura concreta: separarlos solo haría más fácil que se
+ * desparejen. Se lee con `segunIdioma(...)`.
+ */
+type Captura = { src: string; titulo: Texto };
 
 type Disciplina = {
   nom: string;
+  /** Clave de su contenido: la frase y los puntos se piden AL PINTAR, para que
+   *  cambien de idioma (ver `useRecorridoContenido`). */
+  clave: DisciplinaClave;
   bg: string;
   txt: string;
-  desc: string;
-  /** Texto introductorio del box de al lado del mandala (título + puntos ✓). */
-  videoIntro: VideoIntro;
   /** Capturas reales de la plataforma. Vacío = aún no disponible. */
   capturas: Captura[];
   /** Ruta a la que lleva el botón "Explorar disciplina". */
@@ -47,30 +55,29 @@ type Disciplina = {
 const disciplinas: Disciplina[] = [
   {
     nom: astrologiaNom,
+    clave: "astrologia",
     bg: astrologiaBg,
     txt: astrologiaTxt,
-    desc: recorridoContenido.astrologia.desc,
-    videoIntro: recorridoContenido.astrologia.videoIntro,
     capturas: [
-      { src: "/capturasRecorrido/astro/1.png",  titulo: "Tus datos para que te haga la lectura." },
-      { src: "/capturasRecorrido/astro/2.png",  titulo: "Minicomic: entiende qué es una carta astral" },
-      { src: "/capturasRecorrido/astro/3.png",  titulo: "Básico" },
-      { src: "/capturasRecorrido/astro/4.png",  titulo: "La lectura de todas las partes de ti" },
-      { src: "/capturasRecorrido/astro/5.png",  titulo: "Tus nudos, conflictos y dones" },
-      { src: "/capturasRecorrido/astro/6.png",  titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/astro/7.png",  titulo: "Léelos todos" },
-      { src: "/capturasRecorrido/astro/8.png",  titulo: "Las áreas de tu Vida y cómo te mueves por ellas" },
-      { src: "/capturasRecorrido/astro/9.png",  titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/astro/10.png", titulo: "¿Cómo te llevas contigo?" },
-      { src: "/capturasRecorrido/astro/11.png", titulo: "Tus patrones y su para qué" },
-      { src: "/capturasRecorrido/astro/13.png", titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/astro/14.png", titulo: "No te quedarán dudas de quién eres" },
-      { src: "/capturasRecorrido/astro/15.png", titulo: "Llamada si lo deseas" },
-      { src: "/capturasRecorrido/astro/16.png", titulo: "Cursos de acceso libre" },
-      { src: "/capturasRecorrido/astro/18.png", titulo: "No te olvides de las Ilustraciones" },
-      { src: "/capturasRecorrido/astro/19.png", titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/astro/20.png", titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/astro/21.png", titulo: "Ejemplo" },
+      { src: "/capturasRecorrido/astro/1.png",  titulo: { es: "Tus datos para que te haga la lectura.", en: "Your details, so I can do your reading." } },
+      { src: "/capturasRecorrido/astro/2.png",  titulo: { es: "Minicomic: entiende qué es una carta astral", en: "Mini-comic: what a birth chart actually is" } },
+      { src: "/capturasRecorrido/astro/3.png",  titulo: { es: "Básico", en: "The basics" } },
+      { src: "/capturasRecorrido/astro/4.png",  titulo: { es: "La lectura de todas las partes de ti", en: "The reading of every part of you" } },
+      { src: "/capturasRecorrido/astro/5.png",  titulo: { es: "Tus nudos, conflictos y dones", en: "Your knots, conflicts and gifts" } },
+      { src: "/capturasRecorrido/astro/6.png",  titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/7.png",  titulo: { es: "Léelos todos", en: "Read them all" } },
+      { src: "/capturasRecorrido/astro/8.png",  titulo: { es: "Las áreas de tu Vida y cómo te mueves por ellas", en: "The areas of your Life, and how you move through them" } },
+      { src: "/capturasRecorrido/astro/9.png",  titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/10.png", titulo: { es: "¿Cómo te llevas contigo?", en: "How do you get along with yourself?" } },
+      { src: "/capturasRecorrido/astro/11.png", titulo: { es: "Tus patrones y su para qué", en: "Your patterns, and what they're for" } },
+      { src: "/capturasRecorrido/astro/13.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/14.png", titulo: { es: "No te quedarán dudas de quién eres", en: "You'll be left in no doubt about who you are" } },
+      { src: "/capturasRecorrido/astro/15.png", titulo: { es: "Llamada si lo deseas", en: "A call, if you want one" } },
+      { src: "/capturasRecorrido/astro/16.png", titulo: { es: "Cursos de acceso libre", en: "Freely available courses" } },
+      { src: "/capturasRecorrido/astro/18.png", titulo: { es: "No te olvides de las Ilustraciones", en: "Don't forget the Illustrations" } },
+      { src: "/capturasRecorrido/astro/19.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/20.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/21.png", titulo: { es: "Ejemplo", en: "Example" } },
     ],
     link: "/espacio/questions/" + astrologiaNom,
     enabled: true,
@@ -79,31 +86,30 @@ const disciplinas: Disciplina[] = [
   },
   {
     nom: neuropsicologiaNom,
+    clave: "psicologia",
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
-    desc: recorridoContenido.psicologia.desc,
-    videoIntro: recorridoContenido.psicologia.videoIntro,
     capturas: [
-      { src: "/capturasRecorrido/psico/1.png",  titulo: "Bienvenido a la segunda disciplina." },
-      { src: "/capturasRecorrido/psico/2.png",  titulo: "Introducción" },
-      { src: "/capturasRecorrido/psico/3.png",  titulo: "Aviso" },
-      { src: "/capturasRecorrido/psico/20.png", titulo: "En cualquier momento puedes agendar una llamada." },
-      { src: "/capturasRecorrido/psico/4.png",  titulo: "Tus problemas" },
-      { src: "/capturasRecorrido/psico/5.png",  titulo: "Tu edad para tu línea de Vida" },
-      { src: "/capturasRecorrido/psico/6.png",  titulo: "Línea de Vida" },
-      { src: "/capturasRecorrido/psico/7.png",  titulo: "Ejemplo de año" },
-      { src: "/capturasRecorrido/psico/8.png",  titulo: "Rellena poco a poco" },
-      { src: "/capturasRecorrido/psico/9.png",  titulo: "Rellena poco a poco" },
-      { src: "/capturasRecorrido/psico/10.png", titulo: "¿Qué experiencia te marcó?" },
-      { src: "/capturasRecorrido/psico/11.png", titulo: "Tus nudos" },
-      { src: "/capturasRecorrido/psico/12.png", titulo: "Las necesidades en la infancia" },
-      { src: "/capturasRecorrido/psico/13.png", titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/psico/14.png", titulo: "Tus heridas" },
-      { src: "/capturasRecorrido/psico/15.png", titulo: "Relaciona heridas con tus arquetipos" },
-      { src: "/capturasRecorrido/psico/16.png", titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/psico/17.png", titulo: "Intégralas en la persona que eres hoy" },
-      { src: "/capturasRecorrido/psico/18.png", titulo: "Comprométete" },
-      { src: "/capturasRecorrido/psico/19.png", titulo: "No te olvides de los cursos" },
+      { src: "/capturasRecorrido/psico/1.png",  titulo: { es: "Bienvenido a la segunda disciplina.", en: "Welcome to the second discipline." } },
+      { src: "/capturasRecorrido/psico/2.png",  titulo: { es: "Introducción", en: "Introduction" } },
+      { src: "/capturasRecorrido/psico/3.png",  titulo: { es: "Aviso", en: "A note" } },
+      { src: "/capturasRecorrido/psico/20.png", titulo: { es: "En cualquier momento puedes agendar una llamada.", en: "You can book a call at any time." } },
+      { src: "/capturasRecorrido/psico/4.png",  titulo: { es: "Tus problemas", en: "Your problems" } },
+      { src: "/capturasRecorrido/psico/5.png",  titulo: { es: "Tu edad para tu línea de Vida", en: "Your age, for your Life line" } },
+      { src: "/capturasRecorrido/psico/6.png",  titulo: { es: "Línea de Vida", en: "Life line" } },
+      { src: "/capturasRecorrido/psico/7.png",  titulo: { es: "Ejemplo de año", en: "A sample year" } },
+      { src: "/capturasRecorrido/psico/8.png",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
+      { src: "/capturasRecorrido/psico/9.png",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
+      { src: "/capturasRecorrido/psico/10.png", titulo: { es: "¿Qué experiencia te marcó?", en: "Which experience marked you?" } },
+      { src: "/capturasRecorrido/psico/11.png", titulo: { es: "Tus nudos", en: "Your knots" } },
+      { src: "/capturasRecorrido/psico/12.png", titulo: { es: "Las necesidades en la infancia", en: "Childhood needs" } },
+      { src: "/capturasRecorrido/psico/13.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/psico/14.png", titulo: { es: "Tus heridas", en: "Your wounds" } },
+      { src: "/capturasRecorrido/psico/15.png", titulo: { es: "Relaciona heridas con tus arquetipos", en: "Link your wounds to your archetypes" } },
+      { src: "/capturasRecorrido/psico/16.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/psico/17.png", titulo: { es: "Intégralas en la persona que eres hoy", en: "Integrate them into the person you are today" } },
+      { src: "/capturasRecorrido/psico/18.png", titulo: { es: "Comprométete", en: "Commit" } },
+      { src: "/capturasRecorrido/psico/19.png", titulo: { es: "No te olvides de los cursos", en: "Don't forget the courses" } },
     ],
     link: "/espacio/questions/" + neuropsicologiaNom,
     enabled: true,
@@ -112,34 +118,33 @@ const disciplinas: Disciplina[] = [
   },
   {
     nom: ayurvedaNom,
+    clave: "ayurveda",
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
-    desc: recorridoContenido.ayurveda.desc,
-    videoIntro: recorridoContenido.ayurveda.videoIntro,
     capturas: [
-      { src: "/capturasRecorrido/hinduismo/1.png",  titulo: "Bienvenido a la tercera disciplina: Ayurveda" },
-      { src: "/capturasRecorrido/hinduismo/2.png",  titulo: "Introducción" },
-      { src: "/capturasRecorrido/hinduismo/3.png",  titulo: "Aviso" },
-      { src: "/capturasRecorrido/hinduismo/4.png",  titulo: "El test" },
-      { src: "/capturasRecorrido/hinduismo/5.png",  titulo: "El test" },
-      { src: "/capturasRecorrido/hinduismo/6.png",  titulo: "Tu resultado" },
-      { src: "/capturasRecorrido/hinduismo/7.png",  titulo: "Las energías" },
-      { src: "/capturasRecorrido/hinduismo/8.png",  titulo: "" },
-      { src: "/capturasRecorrido/hinduismo/9.png",  titulo: "" },
-      { src: "/capturasRecorrido/hinduismo/10.png", titulo: "" },
-      { src: "/capturasRecorrido/hinduismo/11.png", titulo: "" },
-      { src: "/capturasRecorrido/hinduismo/12.png", titulo: "" },
-      { src: "/capturasRecorrido/hinduismo/13.png", titulo: "Con test interactivos" },
-      { src: "/capturasRecorrido/hinduismo/14.png", titulo: "" },
-      { src: "/capturasRecorrido/hinduismo/17.png", titulo: "Actividad: crea tu día" },
-      { src: "/capturasRecorrido/hinduismo/18.png", titulo: "¡Muy bien, creaste tu día!" },
-      { src: "/capturasRecorrido/hinduismo/19.png", titulo: "Descárgalo en PDF" },
-      { src: "/capturasRecorrido/hinduismo/20.png", titulo: "" },
-      { src: "/capturasRecorrido/hinduismo/21.png", titulo: "Descarga en PDF tu mapa" },
-      { src: "/capturasRecorrido/hinduismo/23.png", titulo: "No te olvides de las ilustraciones" },
-      { src: "/capturasRecorrido/hinduismo/24.png", titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/hinduismo/25.png", titulo: "Ejemplo" },
-      { src: "/capturasRecorrido/hinduismo/26.png", titulo: "Ejemplo" },
+      { src: "/capturasRecorrido/hinduismo/1.png",  titulo: { es: "Bienvenido a la tercera disciplina: Ayurveda", en: "Welcome to the third discipline: Ayurveda" } },
+      { src: "/capturasRecorrido/hinduismo/2.png",  titulo: { es: "Introducción", en: "Introduction" } },
+      { src: "/capturasRecorrido/hinduismo/3.png",  titulo: { es: "Aviso", en: "A note" } },
+      { src: "/capturasRecorrido/hinduismo/4.png",  titulo: { es: "El test", en: "The test" } },
+      { src: "/capturasRecorrido/hinduismo/5.png",  titulo: { es: "El test", en: "The test" } },
+      { src: "/capturasRecorrido/hinduismo/6.png",  titulo: { es: "Tu resultado", en: "Your result" } },
+      { src: "/capturasRecorrido/hinduismo/7.png",  titulo: { es: "Las energías", en: "The energies" } },
+      { src: "/capturasRecorrido/hinduismo/8.png",  titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/9.png",  titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/10.png", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/11.png", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/12.png", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/13.png", titulo: { es: "Con test interactivos", en: "With interactive tests" } },
+      { src: "/capturasRecorrido/hinduismo/14.png", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/17.png", titulo: { es: "Actividad: crea tu día", en: "Activity: build your day" } },
+      { src: "/capturasRecorrido/hinduismo/18.png", titulo: { es: "¡Muy bien, creaste tu día!", en: "Nicely done — you built your day!" } },
+      { src: "/capturasRecorrido/hinduismo/19.png", titulo: { es: "Descárgalo en PDF", en: "Download it as a PDF" } },
+      { src: "/capturasRecorrido/hinduismo/20.png", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/21.png", titulo: { es: "Descarga en PDF tu mapa", en: "Download your map as a PDF" } },
+      { src: "/capturasRecorrido/hinduismo/23.png", titulo: { es: "No te olvides de las ilustraciones", en: "Don't forget the illustrations" } },
+      { src: "/capturasRecorrido/hinduismo/24.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/hinduismo/25.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/hinduismo/26.png", titulo: { es: "Ejemplo", en: "Example" } },
     ],
     link: "/espacio/questions/" + ayurvedaNomLink,
     enabled: true,
@@ -148,10 +153,9 @@ const disciplinas: Disciplina[] = [
   },
   {
     nom: tcmNom,
+    clave: "tcm",
     bg: tcmBg,
     txt: tcmTxt,
-    desc: recorridoContenido.tcm.desc,
-    videoIntro: recorridoContenido.tcm.videoIntro,
     capturas: [],
     link: "/espacio/questions/" + tcmNomLink,
     enabled: false,
@@ -160,10 +164,9 @@ const disciplinas: Disciplina[] = [
   },
   {
     nom: fisiologiaNom,
+    clave: "fisiologia",
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
-    desc: recorridoContenido.fisiologia.desc,
-    videoIntro: recorridoContenido.fisiologia.videoIntro,
     capturas: [],
     link: "/espacio/questions/" + fisiologiaNom,
     enabled: false,
@@ -172,10 +175,9 @@ const disciplinas: Disciplina[] = [
   },
   {
     nom: nutricionNom,
+    clave: "nutricion",
     bg: nutricionBg,
     txt: nutricionTxt,
-    desc: recorridoContenido.nutricion.desc,
-    videoIntro: recorridoContenido.nutricion.videoIntro,
     capturas: [],
     link: "/espacio/questions/" + nutricionNomLink,
     enabled: false,
@@ -184,10 +186,9 @@ const disciplinas: Disciplina[] = [
   },
   {
     nom: cabalaNom,
+    clave: "cabala",
     bg: cabalaBg,
     txt: cabalaTxt,
-    desc: recorridoContenido.cabala.desc,
-    videoIntro: recorridoContenido.cabala.videoIntro,
     capturas: [],
     link: "/espacio/questions/" + cabalaNom,
     enabled: false,
@@ -196,10 +197,9 @@ const disciplinas: Disciplina[] = [
   },
   {
     nom: culturaNom,
+    clave: "cultura",
     bg: culturaBg,
     txt: culturaTxt,
-    desc: recorridoContenido.cultura.desc,
-    videoIntro: recorridoContenido.cultura.videoIntro,
     capturas: [],
     link: "/aprendizaje/cursos/" + culturaNomLink,
     enabled: false,
@@ -350,6 +350,7 @@ const PanelArrow = ({
 // un pie discreto con el título de la captura + progreso. La imagen mantiene
 // siempre `contain` (nunca se deforma) y cambia con una transición suave.
 const CapturasModal = ({ disc, startIndex = 0, onClose }: { disc: Disciplina; startIndex?: number; onClose: () => void }) => {
+  const { segunIdioma } = useIdioma();
   const [[page, direction], setPage] = useState<[number, number]>([startIndex, 0]);
   const total = disc.capturas.length;
   const accent = disc.txt;
@@ -455,7 +456,7 @@ const CapturasModal = ({ disc, startIndex = 0, onClose }: { disc: Disciplina; st
           >
             <Image
               src={captura.src}
-              alt={`${disc.nom} — ${captura.titulo}`}
+              alt={`${disc.nom} — ${segunIdioma(captura.titulo)}`}
               maxW={{ base: "100%", md: "620px" }}
               maxH={{ base: "100%", md: "68vh" }}
               w="auto"
@@ -495,7 +496,7 @@ const CapturasModal = ({ disc, startIndex = 0, onClose }: { disc: Disciplina; st
           noOfLines={2}
           style={{ textShadow: darkShadow }}
         >
-          {captura.titulo}
+          {segunIdioma(captura.titulo)}
         </Text>
         {total > 1 && (
           <Text
@@ -577,6 +578,10 @@ const CarruselCard = ({
   step: number;
   onOpen: (startIndex: number) => void;
 }) => {
+  const t = useT();
+  const { segunIdioma } = useIdioma();
+  const nombreEnMapa = useNombreDisciplinaEnMapa();
+  const contenido = useRecorridoContenido();
   const [[page, direction], setPage] = useState<[number, number]>([0, 0]);
   const hasBg = hasDisciplinaBg(disc.nom);
   const total = disc.capturas.length;
@@ -701,7 +706,7 @@ const CarruselCard = ({
               >
                 <Image
                   src={captura.src}
-                  alt={`${disc.nom} — ${captura.titulo}`}
+                  alt={`${disc.nom} — ${segunIdioma(captura.titulo)}`}
                   w="100%"
                   h="100%"
                   objectFit="contain"
@@ -766,7 +771,7 @@ const CarruselCard = ({
               opacity={0.85}
               textShadow={textGlow}
             >
-              Próximamente
+              {t("comun.proximamente")}
             </Text>
           </Flex>
         )}
@@ -787,7 +792,7 @@ const CarruselCard = ({
             opacity={0.95}
             textShadow={textGlow}
           >
-            {captura.titulo || " "}
+            {segunIdioma(captura.titulo) || " "}
           </Text>
           {total > 1 && (
             <Box position="relative" h="3px" w="100%" borderRadius="full" bg={`${accent}2b`} overflow="hidden">
@@ -816,7 +821,7 @@ const CarruselCard = ({
             opacity={0.8}
             textShadow={textGlow}
           >
-            {disc.desc}
+            {contenido[disc.clave].desc}
           </Text>
         </Box>
       )}
@@ -984,6 +989,7 @@ const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () =>
 // la compra y tiene que verse igual en los dos sitios. Aqui solo se le pasan los
 // datos de la disciplina seleccionada en el mandala.
 const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; onVerVideo: () => void }) => {
+  const contenido = useRecorridoContenido();
   const navigate = useNavigate();
   // Presentación pública de esta disciplina (/d/:disciplina). La búsqueda acepta
   // el nombre interno, así que «Hinduismo» encuentra su ficha igual.
@@ -993,7 +999,7 @@ const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; 
       nom={disc.nom}
       bg={disc.bg}
       txt={disc.txt}
-      videoIntro={disc.videoIntro}
+      videoIntro={contenido[disc.clave].videoIntro}
       paso={step}
       renderIcon={disc.renderIcon}
       tieneVideo={!!disc.video}

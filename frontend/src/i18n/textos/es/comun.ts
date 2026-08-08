@@ -1,0 +1,26 @@
+/** Textos que se repiten por toda la web: botones, estados, acciones. */
+export const comun = {
+  "comun.volver": "Volver",
+  /** Botón flotante que devuelve al Mapa desde dentro de un curso. */
+  "comun.volverAlMapa": "Volver al Mapa",
+  "comun.continuar": "Continuar",
+  "comun.siguiente": "Siguiente",
+  "comun.anterior": "Anterior",
+  "comun.empezar": "Empezar",
+  "comun.cerrar": "Cerrar",
+  "comun.guardar": "Guardar",
+  "comun.guardando": "Guardando…",
+  "comun.guardado": "Guardado",
+  "comun.cargando": "Cargando…",
+  "comun.enviar": "Enviar",
+  "comun.enviando": "Enviando…",
+  "comun.cancelar": "Cancelar",
+  "comun.aceptar": "Aceptar",
+  "comun.saltar": "Saltar",
+  "comun.leido": "Leído",
+  "comun.si": "Sí",
+  "comun.no": "No",
+  "comun.error": "Algo ha fallado. Vuelve a intentarlo.",
+  "comun.reintentar": "Reintentar",
+  "comun.proximamente": "Próximamente",
+} as const;

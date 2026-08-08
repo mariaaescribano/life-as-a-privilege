@@ -9,6 +9,7 @@
 // tamaño, cambia en las dos.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { API_URL, neuropsicologiaTxt } from "../../GlobalVariables";
 
@@ -27,6 +28,7 @@ export function FotoPersonaBoton({
   /** Mensaje de error para que lo pinte la página (null = se limpia). */
   onError?: (mensaje: string | null) => void;
 }) {
+  const t = useT();
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [subiendo, setSubiendo] = useState(false);
 
@@ -73,12 +75,12 @@ export function FotoPersonaBoton({
         ) : (
           <Flex w="100%" h="100%" align="center" justify="center" direction="column" gap={0.5}>
             <Text color={`${TINTA}aa`} fontSize={{ base: "xl", md: "2xl" }} lineHeight="1">+</Text>
-            <Text color={`${TINTA}aa`} fontSize="2xs" fontWeight="700" letterSpacing="0.08em">FOTO</Text>
+            <Text color={`${TINTA}aa`} fontSize="2xs" fontWeight="700" letterSpacing="0.08em">{t("metodo.foto")}</Text>
           </Flex>
         )}
         {subiendo && (
           <Flex position="absolute" inset={0} align="center" justify="center" bg="rgba(251,244,232,0.82)">
-            <Text color={TINTA} fontSize="2xs" fontWeight="700">Subiendo…</Text>
+            <Text color={TINTA} fontSize="2xs" fontWeight="700">{t("metodo.subiendo")}</Text>
           </Flex>
         )}
       </Box>

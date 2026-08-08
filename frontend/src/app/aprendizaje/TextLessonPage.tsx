@@ -10,11 +10,19 @@ import { Markdown } from "../../components/global/Markdown";
 import { CursoTest } from "../../components/aprendizaje/CursoTest";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { useCursosData } from "../../data/cursosApi";
+import { useT } from "../../i18n";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
 
 function safeDecode(s: string): string {
   try { return decodeURIComponent(s); } catch { return s; }
 }
+
+// ── Escala de la página de lección ──────────────────────────────────────────
+// Toda esta pantalla va un 20% más grande que el resto del recorrido: el header,
+// el rectángulo del texto y la letra. Es una página para LEER (no hay nada más
+// que el artículo), así que a tamaño normal se quedaba pequeña dentro de la
+// pantalla. Los 850px de ancho de la casa pasan aquí a 1020.
+const ANCHO = "1020px";
 
 // Divide el contenido de la lección en secciones por las líneas separadoras
 // (--- o ***), igual que las detecta el Markdown. Cada sección se pinta como
@@ -44,6 +52,7 @@ export default function TextLessonPage() {
   }>();
   const modalidadId = rawMod ? safeDecode(rawMod) : "";
   const navigate = useNavigate();
+  const t = useT();
   const { cursosData, loading } = useCursosData();
 
   React.useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [submoduloId]);
@@ -65,7 +74,7 @@ export default function TextLessonPage() {
       <Box minH="100vh" bg="#008080" display="flex" flexDirection="column" fontFamily="'EB Garamond', serif">
         <SiteHeader variant="auto" />
         <Box flex="1" display="flex" alignItems="center" justifyContent="center">
-          <Box color="white" fontSize="xl" fontStyle="italic">Lección no encontrada.</Box>
+          <Box color="white" fontSize="xl" fontStyle="italic">{t("aprendizaje.leccionNoEncontrada")}</Box>
         </Box>
         <SiteFooter />
       </Box>
@@ -86,13 +95,13 @@ export default function TextLessonPage() {
       as="button"
       disabled={!target}
       onClick={() => target && navigate(target.link)}
-      w={{ base: "44px", md: "52px" }}
-      h={{ base: "44px", md: "52px" }}
+      w={{ base: "52px", md: "62px" }}
+      h={{ base: "52px", md: "62px" }}
       borderRadius="full"
       border="2px solid rgba(255,255,255,0.6)"
       color="white"
       fontFamily="'EB Garamond', serif"
-      fontSize={{ base: "xl", md: "2xl" }}
+      fontSize={{ base: "2xl", md: "3xl" }}
       fontWeight="700"
       bg="rgba(255,255,255,0.08)"
       cursor={target ? "pointer" : "not-allowed"}
@@ -124,16 +133,18 @@ export default function TextLessonPage() {
             compact
             tallTitle
             fitTitle
+            titleScale={1.2}
+            maxW={ANCHO}
             hideCursos
-            mb={{ base: 6, md: 7 }}
+            mb={{ base: 7, md: 8 }}
             prev={{
               label: "←",
               onClick: () => anterior && navigate(anterior.link),
               disabled: !anterior,
-              disabledTooltip: "Es la primera lección",
+              disabledTooltip: t("leccion.esLaPrimera"),
             }}
             extra={{
-              label: "Volver al curso",
+              label: t("leccion.volverAlCurso"),
               onClick: () => navigate(`/aprendizaje/modulosPage/${modalidadId}/${cursoId}`),
               small: true,
             }}
@@ -141,7 +152,7 @@ export default function TextLessonPage() {
               label: "→",
               onClick: () => siguiente && navigate(siguiente.link),
               disabled: !siguiente,
-              disabledTooltip: "Es la última lección",
+              disabledTooltip: t("leccion.esLaUltima"),
             }}
           />
 
@@ -149,7 +160,7 @@ export default function TextLessonPage() {
               tienen reproductor: caen aquí y se muestran como texto. */}
           {esTest ? (
             <Box
-              maxW="850px"
+              maxW={ANCHO}
               w="100%"
               position="relative"
               overflow="hidden"
@@ -162,7 +173,7 @@ export default function TextLessonPage() {
             </Box>
           ) : (
             <Box
-              maxW="850px"
+              maxW={ANCHO}
               w="100%"
               position="relative"
               overflow="hidden"
@@ -179,11 +190,11 @@ export default function TextLessonPage() {
                 <Box key={si} position="relative">
                   {si > 0 && <Box position="relative" zIndex={1} h="1px" bg={`${color}44`} />}
                   {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="0" />}
-                  <Box position="relative" zIndex={1} px={{ base: 6, md: 0 }} py={{ base: 8, md: 12 }} sx={{ textShadow: TEXT_GLOW }}>
+                  <Box position="relative" zIndex={1} px={{ base: 6, md: 0 }} py={{ base: 10, md: 14 }} sx={{ textShadow: TEXT_GLOW }}>
                     {/* Las líneas de texto ocupan ~82% del ancho de la tarjeta
                         (centradas) en escritorio; en móvil van a ancho completo. */}
                     <Box w="100%" maxW={{ base: "100%", md: "82%" }} mx="auto">
-                      <Markdown text={sec} color={color} bigger />
+                      <Markdown text={sec} color={color} bigger="xl" />
                     </Box>
                   </Box>
                 </Box>

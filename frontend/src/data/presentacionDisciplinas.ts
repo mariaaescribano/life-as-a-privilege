@@ -24,21 +24,28 @@ import {
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
   tcmBg, TCMIcon, tcmNom, tcmTxt,
 } from "../GlobalVariables";
-import { recorridoContenido, type DisciplinaContenido } from "./recorridoContenido";
+import { type DisciplinaClave } from "./recorridoContenido";
+import { type Texto } from "../i18n";
 
-export type PresentacionDisciplina = DisciplinaContenido & {
+export type PresentacionDisciplina = {
   /** Slug de la URL: /d/<key>. Corto, porque va impreso debajo del QR. */
   key: string;
   /** Nombre interno (GlobalVariables): fondo propio, filtros, estilos. */
   nom: string;
-  /** Nombre a mostrar. Ayurveda se llama "Hinduismo" por dentro. */
+  /**
+   * SOLO para casar la URL escrita a mano (`/d/Cábala`). NO se pinta: el
+   * nombre que se muestra sale de `useNombreDisciplinaEnMapa()`, que sí
+   * traduce. Por eso este campo se queda en español pase lo que pase.
+   */
   titulo: string;
+  /** Clave de su contenido; el texto se pide al pintar (useRecorridoContenido). */
+  clave: DisciplinaClave;
   bg: string;
   txt: string;
   Icon: React.ComponentType<{ size?: any }>;
   /** Frase del CARTEL. Es lo primero que se lee al escanear el QR: debe ser
    *  literalmente la misma que va impresa, para dar continuidad. */
-  gancho: string;
+  gancho: Texto;
   /** Etiqueta con la que esta disciplina aparece en ILUSTRACIONES (galería).
    *  No siempre coincide con `nom`: Hinduismo está etiquetado "Ayurveda". */
   ilustracionesLabel: string;
@@ -65,15 +72,18 @@ const base: Record<string, PresentacionDisciplina> = {
     titulo: astrologiaNom,
     bg: astrologiaBg,
     txt: astrologiaTxt,
+    clave: "astrologia",
     Icon: AstrologiaIcon,
-    gancho: "La carta natal es el mapa del inconsciente. Describe la estructura de tu mente.",
+    gancho: {
+      es: "La carta natal es el mapa del inconsciente. Describe la estructura de tu mente.",
+      en: "Your birth chart is a map of the unconscious. It describes the structure of your mind.",
+    },
     ilustracionesLabel: "Astrología",
     paso: 1,
     ordinal: "Primera disciplina",
     resumenPago:
       "Empieza el mapa con tu carta natal: descubre tus puntos clave, tus dones y tus conflictos. Encuentra dónde nacieron tus patrones, para qué y por qué los mantienes, y cuál es tu propósito.",
     video: "/videos/astrovideo.mp4",
-    ...recorridoContenido.astrologia,
   },
   psicologia: {
     key: "psicologia",
@@ -81,8 +91,12 @@ const base: Record<string, PresentacionDisciplina> = {
     titulo: neuropsicologiaNom,
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
+    clave: "psicologia",
     Icon: NeuropsicologiaIcon,
-    gancho: "No estás roto. No eres una etiqueta. Eres un ser humano con una historia que merece ser comprendida.",
+    gancho: {
+      es: "No estás roto. No eres una etiqueta. Eres un ser humano con una historia que merece ser comprendida.",
+      en: "You are not broken. You are not a label. You are a human being with a history that deserves to be understood.",
+    },
     ilustracionesLabel: "Psicología",
     paso: 2,
     ordinal: "Segunda disciplina",
@@ -90,7 +104,6 @@ const base: Record<string, PresentacionDisciplina> = {
       "Continúa el Mapa con Psicología: reconstruye tu historia y comprende cómo se fue construyendo tu mente, recorriendo tus huellas, tus miedos y tus heridas para habitarte con más libertad y coherencia.",
     video: "/videos/psicovideo.mp4",
     alias: ["neuropsicologia"],
-    ...recorridoContenido.psicologia,
   },
   ayurveda: {
     key: "ayurveda",
@@ -99,8 +112,12 @@ const base: Record<string, PresentacionDisciplina> = {
     titulo: "Ayurveda",
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
+    clave: "ayurveda",
     Icon: AyurvedaIcon,
-    gancho: "No somos iguales. Descubre tu constitución, tus tendencias mentales y vive en coherencia contigo.",
+    gancho: {
+      es: "No somos iguales. Descubre tu constitución, tus tendencias mentales y vive en coherencia contigo.",
+      en: "We are not all alike. Discover your constitution and your mental tendencies, and live in step with yourself.",
+    },
     ilustracionesLabel: "Ayurveda",
     paso: 3,
     ordinal: "Tercera disciplina",
@@ -108,7 +125,6 @@ const base: Record<string, PresentacionDisciplina> = {
       "Continúa el Mapa con el Hinduismo: descubre tu Doṣha —tu constitución— y la naturaleza que te define, y aprende a comer, moverte y descansar en equilibrio con lo que de verdad eres.",
     video: "/videos/hinduismovideo.mp4",
     alias: ["hinduismo"],
-    ...recorridoContenido.ayurveda,
   },
   tcm: {
     key: "medicinachina",
@@ -116,8 +132,12 @@ const base: Record<string, PresentacionDisciplina> = {
     titulo: tcmNom,
     bg: tcmBg,
     txt: tcmTxt,
+    clave: "tcm",
     Icon: TCMIcon,
-    gancho: "El cuerpo habla. Aprende a escucharlo y a leer sus señales.",
+    gancho: {
+      es: "El cuerpo habla. Aprende a escucharlo y a leer sus señales.",
+      en: "The body speaks. Learn to listen to it and to read its signals.",
+    },
     ilustracionesLabel: "Medicina China",
     paso: 4,
     ordinal: "Cuarta disciplina",
@@ -125,7 +145,6 @@ const base: Record<string, PresentacionDisciplina> = {
       "Continúa el Mapa con la Medicina China: descubre cómo los Cinco Elementos y sus ciclos te habitan, y lee las señales de tu cuerpo —hasta en tu lengua— para volver al equilibrio entre todo lo que nos forma, que es a lo que llamamos salud.",
     video: "/videos/tcm.mp4",
     alias: ["tcm"],
-    ...recorridoContenido.tcm,
   },
   fisiologia: {
     key: "fisiologia",
@@ -133,15 +152,18 @@ const base: Record<string, PresentacionDisciplina> = {
     titulo: fisiologiaNom,
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
+    clave: "fisiologia",
     Icon: FisiologiaIcon,
-    gancho: "Eres un ecosistema celular en constante cooperación, segundo a segundo; conocer tus células también es conocerte a ti.",
+    gancho: {
+      es: "Eres un ecosistema celular en constante cooperación, segundo a segundo; conocer tus células también es conocerte a ti.",
+      en: "You are a cellular ecosystem in constant cooperation, second by second; to know your cells is also to know yourself.",
+    },
     ilustracionesLabel: "Fisiología",
     paso: 5,
     ordinal: "Quinta disciplina",
     resumenPago:
       "Continúa el Mapa con la Fisiología: viaja desde las partículas que te forman hasta el milagro de ser un cuerpo vivo, conoce tus células y tus sistemas y redescúbrete como el ser complejo y fascinante que eres.",
     video: "/videos/fisiologia.mp4",
-    ...recorridoContenido.fisiologia,
   },
   nutricion: {
     key: "nutricion",
@@ -149,15 +171,18 @@ const base: Record<string, PresentacionDisciplina> = {
     titulo: nutricionNom,
     bg: nutricionBg,
     txt: nutricionTxt,
+    clave: "nutricion",
     Icon: NutricionIcon,
-    gancho: "Estás formado por las moléculas de los alimentos que eliges cada día.",
+    gancho: {
+      es: "Estás formado por las moléculas de los alimentos que eliges cada día.",
+      en: "You are built from the molecules of the food you choose every day.",
+    },
     ilustracionesLabel: "Nutrición",
     paso: 6,
     ordinal: "Sexta disciplina",
     resumenPago:
       "Continúa el Mapa con la Nutrición: descubre qué hay más allá de lo que comes cada día y nútrete con lo que de verdad te reconstruye. Recuerda cómo no destruirte con los alimentos.",
     video: "/videos/nutricion.mp4",
-    ...recorridoContenido.nutricion,
   },
   cabala: {
     key: "cabala",
@@ -165,15 +190,18 @@ const base: Record<string, PresentacionDisciplina> = {
     titulo: cabalaNom,
     bg: cabalaBg,
     txt: cabalaTxt,
+    clave: "cabala",
     Icon: CabalaIcon,
-    gancho: "Explora la estructura del alma según la Cábala, el misticismo judío en el que nació Jesucristo.",
+    gancho: {
+      es: "Explora la estructura del alma según la Cábala, el misticismo judío en el que nació Jesucristo.",
+      en: "Explore the structure of the soul according to Kabbalah, the Jewish mysticism Jesus Christ was born into.",
+    },
     ilustracionesLabel: "Cábala",
     paso: 7,
     ordinal: "Séptima disciplina",
     resumenPago:
       "Adéntrate en la Cábala y recorre el Árbol de la Vida: descubre las diez sefirot que te habitan, los 22 senderos de la consciencia y aprende a reconocer en ti esas fuerzas para vivir desde tu esencia.",
     video: "/videos/cabala.mp4",
-    ...recorridoContenido.cabala,
   },
   cultura: {
     key: "cultura",
@@ -181,15 +209,18 @@ const base: Record<string, PresentacionDisciplina> = {
     titulo: culturaNom,
     bg: culturaBg,
     txt: culturaTxt,
+    clave: "cultura",
     Icon: CulturaIcon,
-    gancho: "¿Cómo hemos llegado hasta aquí? Conocer la historia nos permite no repetirla y valorar nuestra realidad.",
+    gancho: {
+      es: "¿Cómo hemos llegado hasta aquí? Conocer la historia nos permite no repetirla y valorar nuestra realidad.",
+      en: "How did we get here? Knowing history lets us avoid repeating it, and value the reality we live in.",
+    },
     ilustracionesLabel: "Cultura",
     paso: 8,
     ordinal: "Octava disciplina",
     resumenPago:
       "Cierra El Mapa recorriendo la Historia de la Filosofía, la Medicina, la Religión y la cultura general: recuerda de dónde venimos para entender dónde estamos y poder crear un futuro más bonito.",
     video: "/videos/cultura.mp4",
-    ...recorridoContenido.cultura,
   },
 };
 

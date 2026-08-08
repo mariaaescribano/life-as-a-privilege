@@ -37,7 +37,7 @@ import { VINETAS_SIGNOS, VINETAS_CASAS, VINETAS_PLANETAS } from "./ComicAstrolog
 import { HISTORIA_ASTROLOGIA } from "./comicHistoriaAstrologia";
 import { ESTRELLA_ATOMOS } from "./comicEstrellaAtomos";
 import { CELULA_VIVA } from "./comicCelulaViva";
-import { CICLOS_NATURALEZA } from "./comicCiclosNaturaleza";
+import { ORIGEN_NUTRIENTES } from "./comicsOrigenNutrientes";
 import { CABALA_INTRO } from "./comicCabalaIntro";
 import { CABALA_ILUSTRACIONES_VINETAS } from "./cabalaIlustraciones";
 import { CABALA_SENDERO_VINETAS } from "./cabalaSenderoIlustraciones";
@@ -187,17 +187,9 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplinaBgImage: "/img/fondos/fisio.webp",
     disciplinaBgColor: fisiologiaBg,
   },
-  {
-    id: "fisio-ciclos",
-    titulo: "Los grandes ciclos de la naturaleza",
-    disciplina: "Fisiología",
-    cover: "/viñetas/fisiologia/ciclos/agua.png",
-    vinetas: CICLOS_NATURALEZA,
-    themeColor: fisiologiaTxt,
-    textColor: fisiologiaTxt,
-    disciplinaBgImage: "/img/fondos/fisio.webp",
-    disciplinaBgColor: fisiologiaBg,
-  },
+  // OJO: «Los grandes ciclos de la naturaleza» era de Fisiología y ahora vive en
+  // Nutrición (paso «¿De dónde vienen los nutrientes?»), así que su entrada está
+  // más abajo, con el resto de las de Nutrición.
 
   // ── Astrología ──
   {
@@ -319,6 +311,10 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   nutriEntry("nutricion-microbiota", "La microbiota", "/viñetas/nutricion/microbiota/microbiota1.png", NUTRICION_MICROBIOTA),
   nutriEntry("nutricion-hambre", "El hambre: una mirada holística", "/recorrido/nutricion/hambre/hambre1.png", sinNegrita(HAMBRE_HOLISTICA)),
   nutriEntry("nutricion-integral", "Lo integral", "/viñetas/nutricion/integral/integral1.png", NUTRICION_INTEGRAL),
+  // ── Las cinco lecturas de «¿De dónde vienen los nutrientes?» ──
+  // (los ciclos de la naturaleza, el suelo, la planta, la hoja y el fruto)
+  ...ORIGEN_NUTRIENTES.map((l) =>
+    nutriEntry(`nutricion-origen-${l.key}`, l.titulo, l.cover, l.vinetas)),
 
   // ── Cábala ── (el Origen ya va arriba; aquí las dos series del Árbol)
   {

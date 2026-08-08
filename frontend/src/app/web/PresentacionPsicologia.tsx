@@ -33,6 +33,9 @@ import {
 } from "../../components/metodo/presentacionUi";
 import { NeuropsicologiaIcon, neuropsicologiaBg, neuropsicologiaNom } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import { useIdioma, useT } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /d/psicologia — presentación de Psicología (destino del QR de su cartel).
@@ -78,6 +81,12 @@ const CURSOS_MUESTRA = [
 ];
 
 export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplina }) {
+  const { segunIdioma } = useIdioma();
+  const t = useT();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   const navigate = useNavigate();
   const location = useLocation();
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
@@ -191,7 +200,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
         </RevealStagger>
@@ -231,7 +240,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
               nom={neuropsicologiaNom}
               bg={neuropsicologiaBg}
               txt={d.txt}
-              videoIntro={d.videoIntro}
+              videoIntro={cont.videoIntro}
               paso={d.paso}
               renderIcon={renderIcon}
               tieneVideo={!!d.video}
@@ -250,7 +259,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
             Las herramientas del recorrido con su nombre. Es el bloque que un
             profesional lee para decidir si esto le sirve. */}
         <Flex direction="column" align="center" w="100%" maxW="1100px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">Basado en la Psicoterapia Breve</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.psico.psicoterapiaBreve")}</SeparadorSeccion>
 
           {/* Nueve mini boxes, 3 × 3, SUELTOS sobre el turquesa (sin caja
               contenedora). Cada uno lleva el fondo de la disciplina, que es lo
@@ -322,7 +331,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
               maxW="700px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Descubre mucho más dentro…
+              {t("presentacion.psico.dentro")}
             </Text>
           </Reveal>
         </Flex>
@@ -332,7 +341,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
             entiende de verdad dónde se mete quien empieza. */}
         {comics.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Ilustraciones de Psicología</SeparadorSeccion>
+            <SeparadorSeccion>{t("presentacion.sec.ilustraciones", { disciplina })}</SeparadorSeccion>
             <Reveal inView direction="up" distance={16} duration={0.7}>
               <Text
                 color="rgba(255,255,255,0.9)"
@@ -343,7 +352,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
                 maxW="680px"
                 textShadow={BLANCO_GLOW_SUAVE}
               >
-                Algunos de los cómics que acompañan el recorrido. Pulsa para leer.
+                {t("presentacion.psico.comicsTexto")}
               </Text>
             </Reveal>
             <Grid w="100%" templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={{ base: 6, md: 8 }}>
@@ -364,7 +373,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
             Tres, y una flecha a la página con todos. No están para venderse
             aquí: están para que se vea que el recorrido no se acaba en sí mismo. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Cursos de Psicología</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.psico.cursos", { disciplina })}</SeparadorSeccion>
 
           {/* La rejilla espera a que lleguen los cursos del catálogo; mientras,
               la animación de espera de Psicología. El botón de abajo NO espera:
@@ -405,7 +414,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
               textAlign="center"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Los cursos se están preparando. Entra a verlos con el enlace de abajo.
+              {t("presentacion.psico.cursosPreparando")}
             </Text>
           )}
 
@@ -446,7 +455,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
                   letterSpacing="0.04em"
                   textShadow={BLANCO_GLOW_SUAVE}
                 >
-                  Ver todos los cursos
+                  {t("presentacion.psico.verTodos")}
                 </Text>
                 <Box
                   as="svg"
@@ -469,13 +478,13 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 6. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 

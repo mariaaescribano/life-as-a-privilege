@@ -1,4 +1,5 @@
 import React from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 
 // El tick (mismo dibujo en la marquita de las tarjetas y en el aviso de los
@@ -27,7 +28,7 @@ export function MarcaLeido({
   inline = false,
   size = "24px",
   iconSize = "14px",
-  title = "Leído",
+  title,
 }: {
   /** Color del tick y del borde (el <disc>Txt). */
   tinta: string;
@@ -42,9 +43,10 @@ export function MarcaLeido({
   /** Texto del tooltip («Leído», «Leída», «Superado»…). */
   title?: string;
 }) {
+  const t = useT();
   return (
     <Flex
-      title={title}
+      title={title ?? t("comun.leido")}
       align="center"
       justify="center"
       flexShrink={0}
@@ -77,7 +79,7 @@ export function MarcaLeido({
 export function AvisoLeida({
   color,
   textShadow,
-  texto = "Leída",
+  texto,
 }: {
   /** Color del tick y de la palabra (el del texto de lectura). */
   color: string;
@@ -86,6 +88,7 @@ export function AvisoLeida({
   /** «Leída», «Leído»… */
   texto?: string;
 }) {
+  const t = useT();
   return (
     <Flex align="center" gap={1.5} mb={{ base: 2.5, md: 3 }}
           justify={{ base: "center", md: "flex-start" }} color={color} opacity={0.78}>
@@ -95,7 +98,7 @@ export function AvisoLeida({
       </Box>
       <Text fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.16em"
             textTransform="uppercase" lineHeight="1" style={{ textShadow }}>
-        {texto}
+        {texto ?? t("metodo.leida")}
       </Text>
     </Flex>
   );

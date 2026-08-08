@@ -7,6 +7,7 @@ import { NUTRICION_MICROBIOTA } from "./comicNutricionMicrobiota";
 import { NUTRICION_INTEGRAL } from "./comicNutricionIntegral";
 import { HAMBRE_HOLISTICA } from "./hambreHolistica";
 import { COMICS_NUTRIENTES } from "./comicsNutrientes";
+import { ORIGEN_NUTRIENTES } from "./comicsOrigenNutrientes";
 import { NUTRIENTES } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -24,12 +25,14 @@ const sinNegrita = (vinetas: Vineta[]): Vineta[] =>
   vinetas.map((v) => ({ ...v, paragraphs: v.paragraphs.map((p) => p.replace(/\*\*/g, "")) }));
 
 // Construye una entrada de galería con el tema de Nutrición (acento claro +
-// letra oscura, sin sombra) y la portada = última viñeta del cómic.
-const entry = (id: string, titulo: string, vinetas: Vineta[]): IlustracionEntry => ({
+// letra oscura, sin sombra) y la portada = última viñeta del cómic (o la que se
+// pase a mano, p.ej. las lecturas de «¿De dónde vienen?», que llevan su portada
+// elegida en comicsOrigenNutrientes).
+const entry = (id: string, titulo: string, vinetas: Vineta[], cover?: string): IlustracionEntry => ({
   id,
   titulo,
   disciplina: "Nutrición",
-  cover: vinetas.length ? vinetas[vinetas.length - 1].src : "",
+  cover: cover ?? (vinetas.length ? vinetas[vinetas.length - 1].src : ""),
   vinetas,
   themeColor: nutricionBg,
   textColor: nutricionTxt,
@@ -49,4 +52,8 @@ export const NUTRICION_ILUSTRACIONES: IlustracionEntry[] = [
   entry("nutricion-microbiota", "La microbiota", NUTRICION_MICROBIOTA),
   entry("nutricion-hambre", "El hambre: una mirada holística", sinNegrita(HAMBRE_HOLISTICA)),
   entry("nutricion-integral", "Lo integral", NUTRICION_INTEGRAL),
+  // Las cinco lecturas del último paso, «¿De dónde vienen los nutrientes?»: los
+  // ciclos de la naturaleza (venía de Fisiología), el suelo y la raíz, la planta,
+  // la hoja y el fruto con sus colores.
+  ...ORIGEN_NUTRIENTES.map((l) => entry(`nutricion-origen-${l.key}`, l.titulo, l.vinetas, l.cover)),
 ];

@@ -3,7 +3,9 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { SHADOW_BLACK, SHADOW_GRANATE, esOscuraNegra, naturalBoxShadow } from "../global/disciplinaSombras";
 import { Breathe, Reveal, RevealItem, RevealStagger } from "../global/Reveal";
-import { nombreEnMapa, type ContenidoSeccion } from "../../data/recorridoContenido";
+import { type ContenidoSeccion } from "../../data/recorridoContenido";
+import { useT } from "../../i18n";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { tcmNom } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -77,6 +79,8 @@ export function DisciplinaFicha({
   sinCabecera = false,
   soloContenido = false,
 }: DisciplinaFichaProps) {
+  const t = useT();
+  const nombreEnMapa = useNombreDisciplinaEnMapa();
   const hasBg = hasDisciplinaBg(nom);
   // `soloContenido` implica también quitar la cabecera.
   const ocultaCabecera = sinCabecera || soloContenido;
@@ -192,7 +196,7 @@ export function DisciplinaFicha({
             fontWeight="600"
             textShadow={naturalBoxShadow(bg)}
           >
-            Qué incluye
+            {t("elMetodo.queIncluye")}
           </Text>
           <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${txt}55)`} />
         </Flex>

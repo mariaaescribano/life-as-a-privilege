@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text, SimpleGrid, Image } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { ComicModal } from "./ComicModal";
+import { AppleLoader } from "./AppleLoader";
 import { MarcaLeido } from "./MarcaLeido";
 import { NUTRICION_ILUSTRACIONES } from "./nutricionIlustraciones";
 import type { IlustracionEntry } from "./ilustracionesGaleria";
@@ -22,6 +24,7 @@ const CAMPO_LEIDAS = "ilustraciones_leidas";
 function IlustracionCard({ entry, leida, onOpen }: {
   entry: IlustracionEntry; leida: boolean; onOpen: () => void;
 }) {
+  const t = useT();
   const [coverErr, setCoverErr] = useState(false);
   return (
     <Box as="button" onClick={onOpen} position="relative" w="100%" h="100%" display="flex"
@@ -59,7 +62,7 @@ function IlustracionCard({ entry, leida, onOpen }: {
         </Text>
         <Flex position="relative" zIndex={1} align="center" gap={1} color={nutricionTxt}
               fontSize="2xs" letterSpacing="0.16em" textTransform="uppercase">
-          <Text as="span">Ver</Text>
+          <Text as="span">{t("metodo.ver")}</Text>
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="12px" h="12px" fill="currentColor">
             <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
           </Box>
@@ -70,6 +73,7 @@ function IlustracionCard({ entry, leida, onOpen }: {
 }
 
 export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const t = useT();
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   const { leido, marcarLeido } = useLeidos("metodo-nutricion");
   // Si el cómic ya venía leído, el visor lo dice arriba («✓ Leída»). Se mira
@@ -120,10 +124,10 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
             <Flex direction="column" align="center" gap={2} textAlign="center">
               <Text color={nutricionTxt} fontSize={{ base: "3xl", md: "5xl" }} fontWeight={800}
                     letterSpacing="0.08em" textTransform="uppercase" lineHeight="1.1">
-                Ilustraciones
+                {t("metodo.ilustraciones")}
               </Text>
               <Text color={`${nutricionTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" maxW="560px">
-                Todos los cómics de Nutrición reunidos. Pulsa uno para leerlo.
+                {t("metodo.nutriIlustraciones")}
               </Text>
             </Flex>
 
@@ -148,6 +152,7 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
         textShadow={abierta?.textShadow}
         textColor={abierta?.textColor}
         cerrarColor={nutricionTxt}
+        loader={<AppleLoader color={nutricionTxt} label={null} />}
         leida={abiertaLeida}
       />
     </>

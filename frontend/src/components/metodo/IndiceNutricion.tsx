@@ -29,6 +29,7 @@ const PASOS: { titulo: string; path: string }[] = [
   { titulo: "Test de prevención",    path: "/metodo/nutricion/prediabetes" },
   { titulo: "Diseña tu día",          path: "/metodo/nutricion/dia" },
   { titulo: "Preguntas y mitos",      path: "/metodo/nutricion/mitos" },
+  { titulo: "¿De dónde vienen?",      path: "/metodo/nutricion/origen" },
   { titulo: "Cursos para profundizar", path: "/metodo/nutricion/cursos" },
 ];
 

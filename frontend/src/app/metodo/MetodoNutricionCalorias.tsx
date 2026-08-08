@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Input, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -179,6 +180,7 @@ function MacroBox({ nombre, gramos, kcal, color }: { nombre: string; gramos: num
 }
 
 export default function MetodoNutricionCalorias() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -363,8 +365,7 @@ export default function MetodoNutricionCalorias() {
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
-              Cada cuerpo necesita una cantidad distinta de energía. Calcula tu propia medición: tus calorías
-              diarias y cómo repartir los macronutrientes según tu objetivo.
+              {t("metodo.nutri.caloriasIntro")}
             </Text>
           </Reveal>
 
@@ -375,23 +376,23 @@ export default function MetodoNutricionCalorias() {
 
                 {/* Sexo */}
                 <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase" mb={2}>
-                  Sexo
+                  {t("metodo.nutri.sexo")}
                 </Text>
                 <Flex gap={3} mb={5} wrap="wrap">
-                  <Opcion activo={sexo === "mujer"} label="Mujer" onClick={() => setSexo("mujer")} />
-                  <Opcion activo={sexo === "hombre"} label="Hombre" onClick={() => setSexo("hombre")} />
+                  <Opcion activo={sexo === "mujer"} label={t("metodo.nutri.mujer")} onClick={() => setSexo("mujer")} />
+                  <Opcion activo={sexo === "hombre"} label={t("metodo.nutri.hombre")} onClick={() => setSexo("hombre")} />
                 </Flex>
 
                 {/* Edad / peso / altura */}
                 <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={{ base: 4, md: 5 }} mb={5}>
-                  <CampoNum label="Edad" sufijo="años" value={edad} onChange={setEdad} />
-                  <CampoNum label="Peso" sufijo="kg" value={peso} onChange={setPeso} />
-                  <CampoNum label="Altura" sufijo="cm" value={altura} onChange={setAltura} />
+                  <CampoNum label={t("metodo.nutri.edad")} sufijo="años" value={edad} onChange={setEdad} />
+                  <CampoNum label={t("metodo.nutri.peso")} sufijo="kg" value={peso} onChange={setPeso} />
+                  <CampoNum label={t("metodo.nutri.altura")} sufijo="cm" value={altura} onChange={setAltura} />
                 </SimpleGrid>
 
                 {/* Actividad de base (día a día, sin ejercicio) */}
                 <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase" mb={2}>
-                  Tu día a día
+                  {t("metodo.nutri.diaADia")}
                 </Text>
                 <Flex gap={2.5} mb={5} wrap="wrap">
                   {BASES.map((b) => (
@@ -406,7 +407,7 @@ export default function MetodoNutricionCalorias() {
 
                 {/* Ejercicio (más específico → mejor estimación) */}
                 <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase" mb={2}>
-                  Ejercicio
+                  {t("metodo.nutri.ejercicio")}
                 </Text>
                 <Flex gap={2.5} mb={4} wrap="wrap">
                   {INTENSIDADES.map((i) => (
@@ -419,10 +420,10 @@ export default function MetodoNutricionCalorias() {
                   ))}
                 </Flex>
                 <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={{ base: 4, md: 6 }} mb={2}>
-                  <Stepper label="Días por semana" value={ejDias} min={0} max={7} sufijo="días/sem" onChange={setEjDias} />
+                  <Stepper label={t("metodo.nutri.diasSemana")} value={ejDias} min={0} max={7} sufijo="días/sem" onChange={setEjDias} />
                   <Flex direction="column" gap={1.5}>
                     <Text color={nutricionTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={600} letterSpacing="0.04em">
-                      Minutos por sesión
+                      {t("metodo.nutri.minutosSesion")}
                     </Text>
                     <Flex gap={2} wrap="wrap" opacity={ejDias === 0 ? 0.4 : 1} pointerEvents={ejDias === 0 ? "none" : "auto"}>
                       {MINUTOS_OPC.map((m) => (
@@ -433,14 +434,14 @@ export default function MetodoNutricionCalorias() {
                 </SimpleGrid>
                 {ejDias === 0 && (
                   <Text color={`${nutricionTxt}88`} fontSize="2xs" fontStyle="italic" mb={4}>
-                    Pon al menos 1 día para contar el ejercicio.
+                    {t("metodo.nutri.alMenosUnDia")}
                   </Text>
                 )}
                 <Box h={ejDias === 0 ? 1 : 5} />
 
                 {/* Objetivo */}
                 <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase" mb={2}>
-                  Objetivo
+                  {t("metodo.nutri.objetivo")}
                 </Text>
                 <Flex gap={2.5} wrap="wrap">
                   {OBJETIVOS.map((o) => (
@@ -458,7 +459,7 @@ export default function MetodoNutricionCalorias() {
                 <Box px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
 
                   <Text color={`${nutricionTxt}cc`} fontSize={{ base: "sm", md: "md" }} textAlign="center">
-                    Tu objetivo diario aproximado
+                    {t("metodo.nutri.objetivoDiario")}
                   </Text>
                   <Text color={nutricionTxt} fontSize={{ base: "4xl", md: "5xl" }} fontWeight={700} textAlign="center" lineHeight="1.1">
                     <Contador valor={resultado.kcal} duracion={1.2} />{" "}
@@ -474,7 +475,7 @@ export default function MetodoNutricionCalorias() {
                     </Text>
                   )}
                   <Text color={nutricionTxt} fontSize="sm" textAlign="center" mt={4} fontStyle="italic">
-                    Guardado. Ya puedes seguir con el resto del recorrido.
+                    {t("metodo.nutri.guardadoSigue")}
                   </Text>
 
                   <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={{ base: 3, md: 5 }} mt={5}>
@@ -490,8 +491,7 @@ export default function MetodoNutricionCalorias() {
           {/* Nota educativa. */}
           <Reveal inView direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="660px" lineHeight="1.6">
-              Este cálculo es orientativo y con fin educativo. Es una estimación estadística: tus necesidades reales
-              pueden variar. No sustituye la valoración de un profesional de la nutrición.
+              {t("metodo.nutri.caloriasAviso")}
             </Text>
           </Reveal>
 

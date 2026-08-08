@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Box, Image, Text } from "@chakra-ui/react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 
 interface LoginRequiredModalProps {
@@ -8,6 +9,7 @@ interface LoginRequiredModalProps {
 }
 
 export function LoginRequiredModal({ isOpen, onClose }: LoginRequiredModalProps) {
+  const t = useT();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,7 +92,7 @@ export function LoginRequiredModal({ isOpen, onClose }: LoginRequiredModalProps)
           letterSpacing="0.02em"
           textShadow="0 1px 6px rgba(255, 255, 255, 0.3)"
         >
-          Crea una cuenta o inicia sesión
+          {t("login.necesaria")}
         </Text>
 
         <Box
@@ -111,7 +113,7 @@ export function LoginRequiredModal({ isOpen, onClose }: LoginRequiredModalProps)
           _hover={{ bg: "rgba(255,255,255,0.26)", borderColor: "white", boxShadow: "0 0 40px rgba(107,196,200,0.8)" }}
           transition="all 0.22s ease"
         >
-          Iniciar sesión →
+          {t("login.entrar")}
         </Box>
       </Box>
     </Box>

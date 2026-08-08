@@ -23,10 +23,13 @@ import {
   MosaicoMuestra,
   SeparadorSeccion,
   VideoMuestra,
-  type IdeaPresentacion,
+  ideasDesdeContenido,
 } from "../../components/metodo/presentacionUi";
 import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import { useIdioma, useT, type ClaveTexto } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /d/nutricion — presentación de Nutrición.
@@ -56,37 +59,26 @@ const NUTRIENTES_MUESTRA = NUTRIENTES.slice(0, 4);
 
 /** Mosaico de muestra: unas cuantas fotos bonitas de lo que hay dentro. No se
  *  abren (ver MosaicoMuestra). ✍️ Cambia las fotos o los títulos a gusto. */
-const FOTOS_MUESTRA = [
-  { foto: "/recorrido/nutricion/bacterias/bifidobacterium.png", titulo: "Microbiota" },
-  { foto: "/recorrido/nutricion/portadas/agua.webp", titulo: "Agua" },
-  { foto: "/recorrido/nutricion/portadas/fibra.webp", titulo: "Fibra" },
-  { foto: "/recorrido/nutricion/portadas/fitoquimico.webp", titulo: "Fitoquímicos" },
+const FOTOS_MUESTRA: { foto: string; tituloKey: ClaveTexto }[] = [
+  // El título va como CLAVE: este array es de nivel de módulo y un texto ya
+  // traducido se quedaría congelado en el idioma de arranque.
+  { foto: "/recorrido/nutricion/bacterias/bifidobacterium.png", tituloKey: "presentacion.nutri.microbiota" },
+  { foto: "/recorrido/nutricion/portadas/agua.webp", tituloKey: "presentacion.nutri.agua" },
+  { foto: "/recorrido/nutricion/portadas/fibra.webp", tituloKey: "presentacion.nutri.fibra" },
+  { foto: "/recorrido/nutricion/portadas/fitoquimico.webp", tituloKey: "presentacion.nutri.fitoquimicos" },
 ];
 
 /** Lo que hay dentro, en tres ideas. ✍️ Textos editables. */
-const IDEAS: IdeaPresentacion[] = [
-  {
-    titulo: "Macronutrientes y micronutrientes",
-    parrafos: [
-      "Déjate de pensar en «esto es sano y esto no». Comprenderás, de forma sencilla, qué moléculas componen los alimentos y qué función cumplen en tu organismo.",
-    ],
-  },
-  {
-    titulo: "Microbiota",
-    parrafos: [
-      "Entenderás por qué la microbiota va mucho más allá de la digestión y cómo se relaciona con tu salud, energía y bienestar general.",
-    ],
-  },
-  {
-    titulo: "Sesiones individuales",
-    parrafos: [
-      "Adaptaremos el conocimiento a tu realidad. No te diré qué comer; resolveremos tus dudas sobre los alimentos, cómo funcionan y cómo aplicarlo a tu día a día. Si lo deseas, también podremos explorar la relación entre ciertos hábitos alimentarios y factores emocionales o experiencias personales.",
-    ],
-    nota: "Opcional. Se cobra aparte.",
-  },
-];
+// Las cajas de «Qué incluye» ya no se copian aquí: salen de recorridoContenido
+// (ver ideasDesdeContenido), que es el mismo texto que enseña /elMetodo.
 
 export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina }) {
+  const { segunIdioma } = useIdioma();
+  const t = useT();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   // Índice dentro de la lista de tarjetas que esté abierta (nutrientes o mitos).
   const [nutriIdx, setNutriIdx] = useState<number | null>(null);
@@ -154,7 +146,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
         <Reveal direction="down" distance={18} duration={0.8} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NutricionIcon size={{ base: "38px", md: "52px" }} />}
-            title={d.titulo}
+            title={disciplina}
             bgColor={nutricionBg}
             color={d.txt}
             nom={nutricionNom}
@@ -186,7 +178,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
         </RevealStagger>
@@ -226,7 +218,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               nom={nutricionNom}
               bg={nutricionBg}
               txt={d.txt}
-              videoIntro={d.videoIntro}
+              videoIntro={cont.videoIntro}
               paso={d.paso}
               renderIcon={renderIcon}
               tieneVideo={!!d.video}
@@ -245,7 +237,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
             Los once, con su foto y su color. Se pulsan y se abre su ficha real,
             con las flechas para pasar de uno a otro. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Los nutrientes</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.nutri.nutrientes")}</SeparadorSeccion>
 
           <Reveal inView direction="up" distance={16} duration={0.7}>
             <Text
@@ -257,8 +249,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               maxW="720px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Estas son las moléculas que componen lo que comes: pulsa cualquiera y lee qué hace
-              de verdad dentro de ti.
+              {t("presentacion.nutri.nutrientesTexto")}
             </Text>
           </Reveal>
 
@@ -297,7 +288,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               maxW="700px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Dentro conocerás los secretos de la nutrición…
+              {t("presentacion.nutri.dentro")}
             </Text>
           </Reveal>
         </Flex>
@@ -307,7 +298,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
             abre su respuesta entera, con la ilustración. */}
         {mitos.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion maxW="1180px">Mito o verdad</SeparadorSeccion>
+            <SeparadorSeccion maxW="1180px">{t("presentacion.nutri.mitoOVerdad")}</SeparadorSeccion>
 
             <Reveal inView direction="up" distance={16} duration={0.7}>
               <Text
@@ -354,7 +345,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
         {/* ══ 5. ILUSTRACIONES ══ cuatro, aunque dentro haya más ══ */}
         {comics.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Ilustraciones de Nutrición</SeparadorSeccion>
+            <SeparadorSeccion>{t("presentacion.sec.ilustraciones", { disciplina })}</SeparadorSeccion>
             <Grid
               w="100%"
               templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
@@ -370,8 +361,8 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
         {/* ══ 6. LO QUE HAY DENTRO ══
             Tres ideas y, al lado, unas fotos de muestra que NO se abren. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Lo que hay dentro</SeparadorSeccion>
-          <IdeasConMuestra d={d} ideas={IDEAS}>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.sec.loQueHayDentro")}</SeparadorSeccion>
+          <IdeasConMuestra d={d} ideas={ideasDesdeContenido(cont.contenido)}>
             <MosaicoMuestra d={d} fotos={FOTOS_MUESTRA} />
           </IdeasConMuestra>
         </Flex>
@@ -381,13 +372,13 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 7. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 

@@ -3,6 +3,7 @@ import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { astrologiaNom, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
+import { useT } from "../../i18n";
 
 interface StepButton {
   label: React.ReactNode;
@@ -80,6 +81,11 @@ interface MetodoStepHeaderProps {
    *  trunca. Ignora el modo `tituloUniforme` de las disciplinas (que sí
    *  permite dos líneas). Usado en la página de lección (/aprendizaje/leccion). */
   fitTitle?: boolean;
+  /** Multiplica el tamaño NATURAL del título de `fitTitle` (1 = el de siempre).
+   *  El auto-encogido sigue funcionando igual: esto solo sube el techo del que
+   *  parte. Lo usa la página de lección, que va un 20% más grande que el resto
+   *  del recorrido porque ahí el texto es lo único que hay. */
+  titleScale?: number;
   /** Sombra/glow del box completo. Si se pasa, sustituye al glow por defecto
    *  (útil para darle un brillo propio a una página, p.ej. dorado). */
   boxShadow?: string;
@@ -212,8 +218,12 @@ export function MetodoStepHeader({
   tallTitle = false,
   hideCursos = false,
   fitTitle = false,
+  titleScale = 1,
   dense = false,
 }: MetodoStepHeaderProps) {
+  const t = useT();
+  // Tamaño natural del título de `fitTitle`, en px y ya escalado.
+  const pxTitulo = (n: number) => `${Math.round(n * titleScale)}px`;
   // Si pasas `nom` y esa disciplina tiene fondo propio, lo usamos. El antiguo
   // prop `space` se mantiene como alias para Astrología.
   const headerNom = nom ?? (space ? astrologiaNom : undefined);
@@ -285,7 +295,7 @@ export function MetodoStepHeader({
     // texto cambia de ancho: se mide otra vez cuando esté lista.
     document.fonts?.ready.then(ajustar).catch(() => {});
     return () => { cancelAnimationFrame(raf); window.clearTimeout(tardia); ro.disconnect(); };
-  }, [title, fitTitle, tallTitle, compact, dense, tituloUniforme]);
+  }, [title, fitTitle, tallTitle, titleScale, compact, dense, tituloUniforme]);
   // TCM quiere sus títulos igual de GRANDES que el resto de disciplinas, así que
   // ignoramos el `compact` que traen sus páginas (era el que los encogía). Fuera
   // de TCM, `compact` sigue funcionando igual (tests con nombres largos).
@@ -331,7 +341,9 @@ export function MetodoStepHeader({
                 // variantes «por si envuelve»: nunca envuelve.
                 fontSize={
                   fitTitle
-                    ? (tallTitle ? { base: "34px", md: "60px" } : { base: "30px", md: "48px" })
+                    ? (tallTitle
+                        ? { base: pxTitulo(34), md: pxTitulo(60) }
+                        : { base: pxTitulo(30), md: pxTitulo(48) })
                     : dense
                     // Modo denso: título contenido. Manda sobre `tituloUniforme`,
                     // que es lo que anula el `compact` en estas disciplinas.
@@ -395,7 +407,7 @@ export function MetodoStepHeader({
             {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra && <StepBtn {...extra} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {showPsicoCursos && <StepBtn label="Cursos" onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
           </Flex>
         )}

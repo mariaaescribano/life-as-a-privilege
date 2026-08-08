@@ -12,7 +12,10 @@ import SiteFooter from "../../global/Footer";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt } from "../../../GlobalVariables";
 import { useNavigate } from "react-router-dom";
-import { organosFisiologia, type Organo } from "../../../hardCoded/espacio/OrganosFisiologia";
+import { type Organo } from "../../../hardCoded/espacio/OrganosFisiologia";
+import { useOrganosFisiologia } from "../../../hardCoded/espacio/useOrganosFisiologia";
+import { useT } from "../../../i18n";
+import { useNombreDisciplina } from "../../../i18n/nombreDisciplina";
 
 const ORGAN_ICONS: Record<string, React.ReactNode> = {
   cerebro:   <Brain   size={48} />,
@@ -27,6 +30,11 @@ const ORGAN_ICONS: Record<string, React.ReactNode> = {
 
 const FisiologiaEspacio = () => {
   const navigate = useNavigate();
+  const t = useT();
+  const nombreDisciplina = useNombreDisciplina();
+  // Los órganos en el idioma activo (el texto; la lógica del test la manda
+  // siempre el fichero español).
+  const organosFisiologia = useOrganosFisiologia();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [organo, setOrgano] = useState<Organo | null>(null);
   const [pregIdx, setPregIdx] = useState(0);
@@ -71,7 +79,7 @@ const FisiologiaEspacio = () => {
         <Flex direction="column" alignItems="center">
           <DisciplineHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "52px" }} />}
-            title={fisiologiaNom}
+            title={nombreDisciplina(fisiologiaNom)}
             bgColor={fisiologiaBg}
             color={fisiologiaTxt}
             maxW="900px"
@@ -112,7 +120,7 @@ const FisiologiaEspacio = () => {
               letterSpacing="0.08em"
               lineHeight="1"
             >
-              Las células de tu cuerpo
+              {t("espacio.fisio.celulas")}
             </Text>
           </Flex>
         </Flex>
@@ -209,7 +217,7 @@ const FisiologiaEspacio = () => {
                     _hover={{ bg: fisiologiaTxt, color: "white" }}
                     transition="all 0.2s"
                   >
-                    No
+                    {t("comun.no")}
                   </Button>
                   <Button
                     onClick={() => responder(true)}
@@ -223,7 +231,7 @@ const FisiologiaEspacio = () => {
                     _hover={{ opacity: 0.82 }}
                     transition="all 0.2s"
                   >
-                    Sí
+                    {t("comun.si")}
                   </Button>
                 </HStack>
               </VStack>
@@ -242,7 +250,7 @@ const FisiologiaEspacio = () => {
                     </Text>
                     <Divider borderColor={fisiologiaTxt} opacity={0.25} />
                     <Text fontSize="sm" color={fisiologiaTxt} fontWeight="700">
-                      Plantas y remedios naturales
+                      {t("espacio.fisio.plantas")}
                     </Text>
                     <VStack spacing={2} align="stretch">
                       {organo.resultado.plantas.map((p, i) => (
@@ -256,10 +264,10 @@ const FisiologiaEspacio = () => {
                 ) : (
                   <VStack spacing={3} align="center" py={4}>
                     <Text fontSize="lg" color={fisiologiaTxt} fontWeight="700" textAlign="center">
-                      Tu {organo.nombre.toLowerCase()} parece estar bien
+                      {t("espacio.fisio.bien", { organo: organo.nombre.toLowerCase() })}
                     </Text>
                     <Text fontSize="sm" color={fisiologiaTxt} opacity={0.8} textAlign="center" lineHeight="1.6">
-                      No has marcado síntomas significativos. Sigue cuidándote con una alimentación natural y descanso suficiente.
+                      {t("espacio.fisio.bienTexto")}
                     </Text>
                   </VStack>
                 )}
@@ -276,7 +284,7 @@ const FisiologiaEspacio = () => {
                     fontSize="sm" h="42px"
                     _hover={{ bg: "rgba(0,0,0,0.06)" }}
                   >
-                    Repetir test
+                    {t("espacio.fisio.repetir")}
                   </Button>
                   <Button
                     onClick={onClose}
@@ -288,7 +296,7 @@ const FisiologiaEspacio = () => {
                     fontSize="sm" h="42px"
                     _hover={{ opacity: 0.82 }}
                   >
-                    Cerrar
+                    {t("comun.cerrar")}
                   </Button>
                 </HStack>
               </VStack>

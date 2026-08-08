@@ -8,10 +8,14 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import { VolverAlMapa } from "../../components/global/VolverAlMapa";
 import { useCursosData } from "../../data/cursosApi";
+import { useT } from "../../i18n";
+import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 
 export default function ModulosPage() {
   const { modalidadId, cursoId } = useParams<{ modalidadId: string; cursoId: string }>();
   const { cursosData, loading } = useCursosData();
+  const t = useT();
+  const nombreDisciplina = useNombreDisciplina();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   // Ruta de origen: solo presente si se llegó desde el recorrido (modal Cursos).
@@ -52,8 +56,8 @@ export default function ModulosPage() {
               // de la propia disciplina (misma clave que la ruta /cursos/:slug).
               prev={
                 volver
-                  ? { label: "← Volver a El Mapa", onClick: () => navigate(volver), small: true }
-                  : { label: `← Cursos de ${modalidad.nom}`, onClick: () => navigate(`/aprendizaje/cursos/${modalidadId}`), small: true }
+                  ? { label: `← ${t("comun.volverAlMapa")}`, onClick: () => navigate(volver), small: true }
+                  : { label: `← ${t("aprendizaje.cursosDe", { disciplina: nombreDisciplina(modalidad.nom) })}`, onClick: () => navigate(`/aprendizaje/cursos/${modalidadId}`), small: true }
               }
             />
 
@@ -89,14 +93,14 @@ export default function ModulosPage() {
 
               {(!curso.modulos || curso.modulos.length === 0) && (
                 <Text color="rgba(255,255,255,0.75)" fontStyle="italic" textAlign="center" mt={6}>
-                  Este curso aún no tiene contenido.
+                  {t("aprendizaje.sinContenido")}
                 </Text>
               )}
             </Box>
           </Flex>
         ) : (
           <Box flex="1" display="flex" alignItems="center" justifyContent="center" py={20}>
-            <Text color="white" fontSize="xl" fontStyle="italic">Curso no encontrado.</Text>
+            <Text color="white" fontSize="xl" fontStyle="italic">{t("aprendizaje.cursoNoEncontrado")}</Text>
           </Box>
         )}
       </Box>

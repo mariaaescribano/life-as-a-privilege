@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -27,6 +28,7 @@ const EyeIcon = () => (
 );
 
 export default function MetodoCultura() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -120,10 +122,9 @@ export default function MetodoCultura() {
                   mb={4}
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  El último paso de <Box as="span" fontStyle="italic" color={culturaTxt}>El Mapa</Box>.
-                  Recorre la historia de la filosofía, la medicina, la religión y del mundo entero.
-                  Recordar de dónde venimos es lo que nos permite comprender dónde estamos y sembrar,
-                  entre todos, un futuro más hermoso.
+                  {t("metodo.gate.cultura.ultimoPaso")}{" "}
+                  <Box as="span" fontStyle="italic" color={culturaTxt}>{t("metodo.gate.cultura.elMapa")}</Box>
+                  {t("metodo.gate.cultura.intro1")}
                 </Text>
                 <Text
                   color={culturaTxt}
@@ -135,8 +136,7 @@ export default function MetodoCultura() {
                   fontStyle="italic"
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  Quizá casi todo ya fue pensado y dicho alguna vez. A nosotros nos corresponde
-                  recordarlo, comprenderlo y traer esa sabiduría de vuelta al presente.
+                  {t("metodo.gate.cultura.intro2")}
                 </Text>
               </Box>
             </Box>

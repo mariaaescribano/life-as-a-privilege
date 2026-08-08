@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { GlifoSigno } from "../../components/metodo/Glifo";
+import { useT, type ClaveTexto } from "../../i18n";
 
 const heartbeat = keyframes`
   0%   { transform: scale(1); }
@@ -56,17 +57,19 @@ const allCerts: Certificado[] = Object.entries(certImages).map(([path, img]) => 
 }));
 
 // Prefijo → sección. fp = Formación Psicoterapia, e = Especializaciones, resto = Cursos.
-const secciones: { titulo: string; items: Certificado[] }[] = [
+// El título se guarda como CLAVE, no como texto: este array se calcula una sola
+// vez al cargar el módulo, así que un texto ya traducido se quedaría congelado
+// en el idioma de ese momento. Sin clave (la primera sección) = sin título.
+const secciones: { tituloKey?: ClaveTexto; items: Certificado[] }[] = [
   {
-    titulo: "",
     items: allCerts.filter((c) => /^fp/i.test(c.name)).sort(byNaturalName),
   },
   {
-    titulo: "Especializaciones",
+    tituloKey: "quienSoy.certif.especializaciones",
     items: allCerts.filter((c) => /^e/i.test(c.name) && !/^fp/i.test(c.name)).sort(byNaturalName),
   },
   {
-    titulo: "Cursos",
+    tituloKey: "header.cursos",
     items: allCerts.filter((c) => !/^fp/i.test(c.name) && !/^e/i.test(c.name)).sort(byNaturalName),
   },
 ];
@@ -75,6 +78,7 @@ const secciones: { titulo: string; items: Certificado[] }[] = [
 const certificados: Certificado[] = secciones.flatMap((s) => s.items);
 
 const QuienSoy = () => {
+  const t = useT();
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
   const presentacionReveal = useReveal(0.12);
@@ -176,7 +180,7 @@ const QuienSoy = () => {
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.75s ease 0.5s, transform 0.75s ease 0.5s"
         >
-          Ingeniera informática. Reconstruí el camino que muchas personas recorremos durante años intentando comprendernos: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.
+          {t("creadora.bio")}
         </Text>
 
         <Text
@@ -191,7 +195,7 @@ const QuienSoy = () => {
           transform={presentacionReveal.visible ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.75s ease 0.5s, transform 0.75s ease 0.5s"
         >
-          Durante siglos hemos acumulado conocimiento sobre el ser humano, pero ese conocimiento ha permanecido disperso. Mi objetivo no es crear más conocimiento, sino ordenarlo y ponerlo al servicio de tu comprensión.
+          {t("quienSoy.mision")}
         </Text>
 
 
@@ -238,7 +242,7 @@ const QuienSoy = () => {
             transition="all 0.25s ease"
             textDecoration="none"
           >
-            Contactar
+            {t("footer.contactar")}
           </Flex>
           <Box
             h="1px"
@@ -295,7 +299,7 @@ const QuienSoy = () => {
           transform={donacionReveal.visible ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.75s ease 0.25s, transform 0.75s ease 0.25s"
         >
-          Apoya este proyecto
+          {t("quienSoy.apoya")}
         </Text>
 
         <Box
@@ -334,7 +338,7 @@ const QuienSoy = () => {
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" h="18px" w="18px" viewBox="0 -960 960 960" fill="currentColor">
             <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
           </Box>
-          Hacer una donación
+          {t("quienSoy.donar")}
         </Box>
 
         <Text
@@ -347,7 +351,7 @@ const QuienSoy = () => {
           transform={donacionReveal.visible ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.75s ease 0.7s, transform 0.75s ease 0.7s"
         >
-          Pago seguro a través de Stripe · Cualquier importe es bienvenido
+          {t("quienSoy.pagoSeguro")}
         </Text>
       </Flex>
 
@@ -400,7 +404,7 @@ const QuienSoy = () => {
           transform={testimonioReveal.visible ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          "Brillante, colaboradora, productiva y ética. No podría recomendarla lo suficiente."
+          {t("quienSoy.testimonio")}
         </Text>
 
         <Flex
@@ -431,7 +435,7 @@ const QuienSoy = () => {
             letterSpacing="0.04em"
             textShadow="0 0 6px rgba(255,255,255,0.19)"
           >
-            CEO de Savimbo
+            {t("quienSoy.testimonioCargo")}
           </Text>
         </Flex>
 
@@ -468,7 +472,7 @@ const QuienSoy = () => {
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w="14px" h="14px" fill="currentColor">
             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.852 3.37-1.852 3.601 0 4.267 2.37 4.267 5.455v6.288zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
           </Box>
-          Ver carta completa en LinkedIn
+          {t("quienSoy.linkedin")}
         </Flex>
       </Flex>
 
@@ -515,7 +519,7 @@ const QuienSoy = () => {
             letterSpacing="0.06em"
             textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22)"
           >
-            Mis Certificados
+            {t("quienSoy.certificados")}
           </Text>
         </Flex>
       </Flex>
@@ -529,11 +533,11 @@ const QuienSoy = () => {
       >
         <Flex direction="column" gap={{ base: 12, md: 16 }} maxW="1100px" mx="auto">
           {secciones.filter((s) => s.items.length > 0).map((seccion) => (
-            <Box key={seccion.titulo || "sin-titulo"}>
+            <Box key={seccion.tituloKey ?? "sin-titulo"}>
               {/* Separador horizontal con el mandala en medio, encima del título.
                   El contenedor de secciones ya deja `gap` por arriba; con este mb
                   igual, el espacio por arriba y por abajo del mandala es el mismo. */}
-              {seccion.titulo && (
+              {seccion.tituloKey && (
                 <Flex
                   align="center"
                   justify="center"
@@ -560,7 +564,7 @@ const QuienSoy = () => {
               )}
 
               {/* Subtítulo de la sección */}
-              {seccion.titulo && (
+              {seccion.tituloKey && (
                 <Flex
                   direction="column"
                   align="center"
@@ -578,7 +582,7 @@ const QuienSoy = () => {
                     textAlign="center"
                     textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(255,255,255,0.2)"
                   >
-                    {seccion.titulo}
+                    {t(seccion.tituloKey)}
                   </Text>
                   <Box
                     mt={3}
@@ -617,7 +621,7 @@ const QuienSoy = () => {
                     >
                       <Image
                         src={cert.img}
-                        alt={`${seccion.titulo} ${i + 1}`}
+                        alt={`${seccion.tituloKey ? t(seccion.tituloKey) : t("quienSoy.certificados")} ${i + 1}`}
                         w="100%"
                         h={{ base: "130px", md: "170px" }}
                         objectFit="cover"
@@ -675,7 +679,7 @@ const QuienSoy = () => {
           >
             <GlifoSigno nombre="Géminis" color="currentColor" size={22} glow={false} />
           </Box>
-          Esto es solo el principio…
+          {t("quienSoy.cierre")}
         </Text>
       </Flex>
       </Box>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -228,6 +229,7 @@ export function TCMIlustracionesModal({
   onClose,
   onComplete,
 }: TCMIlustracionesModalProps) {
+  const t = useT();
   const [capitulo, setCapitulo] = useState<Capitulo | null>(null);
 
   useEffect(() => {
@@ -283,7 +285,7 @@ export function TCMIlustracionesModal({
 
         {/* X cerrar */}
         <IconButton
-          aria-label="Cerrar"
+          aria-label={t("comun.cerrar")}
           onClick={onClose}
           position="fixed"
           top={{ base: 3, md: 5 }}
@@ -339,7 +341,7 @@ export function TCMIlustracionesModal({
                     textShadow: `0 0 14px ${tcmTxt}cc, 0 0 32px ${tcmTxt}77, 0 0 70px ${tcmTxt}44`,
                   }}
                 >
-                  Ilustraciones de Medicina China
+                  {t("metodo.ilustracionesDe", { disciplina: t("disciplina.medicinaChina") })}
                 </Text>
                 <Text
                   color={`${tcmTxt}cc`}
@@ -349,7 +351,7 @@ export function TCMIlustracionesModal({
                   textAlign="center"
                   maxW="520px"
                 >
-                  Elige un capítulo para empezar a leer.
+                  {t("metodo.ilustracionesElige")}
                 </Text>
               </Flex>
 
@@ -450,7 +452,7 @@ export function TCMIlustracionesModal({
                         textTransform="uppercase"
                         style={{ textShadow: `0 0 10px ${tcmTxt}aa` }}
                       >
-                        <Text as="span">Leer</Text>
+                        <Text as="span">{t("metodo.leer")}</Text>
                         <Box
                           as="svg"
                           xmlns="http://www.w3.org/2000/svg"

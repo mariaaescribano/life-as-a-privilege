@@ -13,8 +13,10 @@ type MarkdownProps = {
   text: string;
   /** Color principal del texto (suele ser el color de la disciplina). */
   color?: string;
-  /** Sube el cuerpo del texto un escalón (~2px más). Usado en las lecciones. */
-  bigger?: boolean;
+  /** Sube el tamaño del texto: `true` un escalón, `"xl"` dos. El `"xl"` lo usa
+   *  la página de lección, que va un 20% más grande que el resto (ahí el texto
+   *  es lo único que hay en la página y se lee del tirón). */
+  bigger?: boolean | "xl";
 };
 
 // ── Inline: **negrita** o __negrita__, *cursiva* o _cursiva_, `código`, [texto](url) ──
@@ -98,8 +100,14 @@ export function Markdown({ text, color = "white", bigger = false }: MarkdownProp
   const blocks: React.ReactNode[] = [];
   let i = 0;
   let key = 0;
-  // Tamaño del cuerpo de texto (párrafos, listas, citas). `bigger` sube un escalón.
-  const bodySize = bigger ? { base: "lg", md: "xl" } : { base: "md", md: "lg" };
+  // Tamaño del cuerpo de texto (párrafos, listas, citas): normal, un escalón
+  // (`bigger`) o dos (`bigger="xl"`, la página de lección).
+  const xl = bigger === "xl";
+  const bodySize = xl
+    ? { base: "xl", md: "2xl" }
+    : bigger
+    ? { base: "lg", md: "xl" }
+    : { base: "md", md: "lg" };
 
   const headingProps = {
     color,
@@ -147,7 +155,10 @@ export function Markdown({ text, color = "white", bigger = false }: MarkdownProp
     const h = /^(#{1,3})\s+(.*)$/.exec(trimmed);
     if (h) {
       const level = h[1].length;
-      const size = level === 1 ? { base: "2xl", md: "3xl" } : level === 2 ? { base: "xl", md: "2xl" } : { base: "lg", md: "xl" };
+      // Los títulos suben con el cuerpo, para que la jerarquía no se aplaste.
+      const size = xl
+        ? (level === 1 ? { base: "3xl", md: "4xl" } : level === 2 ? { base: "2xl", md: "3xl" } : { base: "xl", md: "2xl" })
+        : (level === 1 ? { base: "2xl", md: "3xl" } : level === 2 ? { base: "xl", md: "2xl" } : { base: "lg", md: "xl" });
       blocks.push(
         <Heading key={key++} as={`h${level}` as "h1"} fontSize={size} mt={{ base: 6, md: 8 }} mb={{ base: 2, md: 3 }} {...headingProps}>
           {parseInline(h[2], color)}

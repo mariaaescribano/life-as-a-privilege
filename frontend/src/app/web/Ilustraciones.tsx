@@ -6,12 +6,14 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
+import { useT } from "../../i18n";
 
 // Página /ilustraciones — galería con TODAS las series de viñetas de todas las
 // disciplinas. Al pulsar una, se abre el popup inmersivo con el estilo de su
 // disciplina (ComicModal). Grid: 4 por fila en escritorio, 1 en móvil.
 
 export default function Ilustraciones() {
+  const t = useT();
   const [mounted, setMounted] = useState(false);
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   // La galería no se muestra hasta que TODAS las portadas están descargadas:
@@ -107,7 +109,7 @@ export default function Ilustraciones() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Ilustraciones
+          {t("ilustraciones.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -121,7 +123,7 @@ export default function Ilustraciones() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Todas las ilustraciones del Mapa, reunidas. Pulsa una para leerla.
+          {t("ilustraciones.subtitulo")}
         </Text>
       </Flex>
 

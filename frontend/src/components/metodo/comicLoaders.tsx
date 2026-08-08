@@ -1,4 +1,5 @@
 import React from "react";
+import { useT } from "../../i18n";
 import { Box, Flex } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { AppleLoader } from "./AppleLoader";
@@ -22,10 +23,11 @@ const SVG_W = { base: "74px", md: "90px" };
 type LoaderProps = { color?: string; size?: any };
 
 function Shell({ children, size }: { children: React.ReactNode; size?: any }) {
+  const t = useT();
   const w = size ?? SVG_W;
   return (
     <Flex align="center" justify="center">
-      <Box as="svg" viewBox="0 0 120 120" w={w} h={w} overflow="visible" aria-label="Cargando">
+      <Box as="svg" viewBox="0 0 120 120" w={w} h={w} overflow="visible" aria-label={t("comun.cargando")}>
         {children}
       </Box>
     </Flex>

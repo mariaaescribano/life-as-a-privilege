@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Input, Select, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -122,6 +123,7 @@ interface Estado {
 
 
 export default function MetodoAstrologia() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [estado, setEstado] = useState<Estado | null>(null);
@@ -454,7 +456,7 @@ export default function MetodoAstrologia() {
                        w="13px" h="13px" fill="currentColor" flexShrink={0}>
                     <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
                   </Box>
-                  Cambiar
+                  {t("metodo.astro.cambiar")}
                 </Box>
                 </Flex>
               </Box>
@@ -519,7 +521,7 @@ export default function MetodoAstrologia() {
 
                   <RevealItem>
                     <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
-                      Fecha de nacimiento
+                      {t("metodo.astro.fechaNacimiento")}
                     </Text>
                     <Flex gap={3}>
                       <Box flex="1">
@@ -530,7 +532,7 @@ export default function MetodoAstrologia() {
                           max={31}
                           value={dia}
                           onChange={(e) => setDia(e.target.value)}
-                          placeholder="Día"
+                          placeholder={t("metodo.astro.dia")}
                           bg="rgba(8,13,30,0.55)"
                           border={`1px solid ${astrologiaTxt}44`}
                           color={astrologiaTxt}
@@ -550,7 +552,7 @@ export default function MetodoAstrologia() {
                         <Select
                           value={mes}
                           onChange={(e) => setMes(e.target.value)}
-                          placeholder="Mes"
+                          placeholder={t("metodo.astro.mes")}
                           bg="rgba(8,13,30,0.55)"
                           border={`1px solid ${astrologiaTxt}44`}
                           color={astrologiaTxt}
@@ -580,7 +582,7 @@ export default function MetodoAstrologia() {
                           max={2100}
                           value={anio}
                           onChange={(e) => setAnio(e.target.value)}
-                          placeholder="Año"
+                          placeholder={t("metodo.astro.anio")}
                           bg="rgba(8,13,30,0.55)"
                           border={`1px solid ${astrologiaTxt}44`}
                           color={astrologiaTxt}
@@ -606,7 +608,7 @@ export default function MetodoAstrologia() {
 
                   <RevealItem>
                     <Text color={`${astrologiaTxt}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
-                      Hora de nacimiento
+                      {t("metodo.astro.horaNacimiento")}
                     </Text>
                     <Input
                       type="time"
@@ -630,11 +632,11 @@ export default function MetodoAstrologia() {
                     />
                   </RevealItem>
                   <RevealItem>
-                    <Campo label="País" value={pais} onChange={setPais} color={astrologiaTxt} placeholder="Ej: España" />
+                    <Campo label={t("metodo.astro.pais")} value={pais} onChange={setPais} color={astrologiaTxt} placeholder={t("metodo.astro.paisEj")} />
                   </RevealItem>
                   <RevealItem display="flex" flexDirection={{ base: "column", md: "row" }} gap={4}>
-                    <Campo label="Lugar (ciudad)" value={lugar} onChange={setLugar} color={astrologiaTxt} placeholder="Ej: Madrid" />
-                    <Campo label="Región / provincia" value={region} onChange={setRegion} color={astrologiaTxt} placeholder="Ej: Comunidad de Madrid" />
+                    <Campo label={t("metodo.astro.lugar")} value={lugar} onChange={setLugar} color={astrologiaTxt} placeholder={t("metodo.astro.lugarEj")} />
+                    <Campo label={t("metodo.astro.region")} value={region} onChange={setRegion} color={astrologiaTxt} placeholder={t("metodo.astro.regionEj")} />
                   </RevealItem>
 
                   {error && (
@@ -660,7 +662,7 @@ export default function MetodoAstrologia() {
                         transition="all 0.22s"
                         _hover={{ borderColor: astrologiaTxt, color: astrologiaTxt }}
                       >
-                        Cancelar
+                        {t("comun.cancelar")}
                       </Box>
                     )}
                     <Box
@@ -766,7 +768,7 @@ export default function MetodoAstrologia() {
               <Flex direction="column" align="center" gap={5}>
                 <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
                       letterSpacing="0.03em" style={{ textShadow: `0 0 14px ${astrologiaTxt}66` }}>
-                  ¿Seguro que estos son tus datos?
+                  {t("metodo.astro.seguroDatos")}
                 </Text>
 
                 <Flex direction="column" align="center" gap={2} w="100%"
@@ -789,7 +791,7 @@ export default function MetodoAstrologia() {
                        border={`1px solid ${astrologiaTxt}55`} fontFamily="'EB Garamond', serif" fontWeight="600"
                        cursor={enviando ? "not-allowed" : "pointer"} opacity={enviando ? 0.5 : 1}
                        _hover={enviando ? {} : { borderColor: astrologiaTxt, color: astrologiaTxt }}>
-                    Volver a revisar
+                    {t("metodo.astro.volverRevisar")}
                   </Box>
                   <Box as="button" onClick={() => { if (!enviando) void confirmarEnvio(); }}
                        px={7} py={2.5} borderRadius="full" bg={astrologiaTxt} color="#0a0a1a"
@@ -838,7 +840,7 @@ export default function MetodoAstrologia() {
                      border={`1px solid ${astrologiaTxt}88`} fontFamily="'EB Garamond', serif" fontWeight="700"
                      letterSpacing="0.06em" cursor="pointer" boxShadow={`0 0 18px ${astrologiaTxt}66`}
                      _hover={{ boxShadow: `0 0 28px ${astrologiaTxt}88`, transform: "translateY(-1px)" }} transition="all 0.2s">
-                  Aceptar
+                  {t("comun.aceptar")}
                 </Box>
               </Flex>
             </Box>

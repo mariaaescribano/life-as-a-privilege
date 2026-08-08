@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import type { IlustracionEntry } from "./ilustracionesGaleria";
 import { StarsLayer } from "../global/StarsLayer";
@@ -44,6 +45,7 @@ export function IlustracionCard({
   /** Nº de columnas de la rejilla, para que la cascada reinicie en cada fila. */
   columnas?: number;
 }) {
+  const t = useT();
   const [coverFailed, setCoverFailed] = useState(false);
   const { ref, visible } = useReveal();
   // Color del texto/borde de la tarjeta: `cardColor` si la entrada lo define
@@ -156,7 +158,7 @@ export function IlustracionCard({
         </Text>
         <Flex align="center" gap={1.5} mt={1.5} color={c} fontSize="2xs" letterSpacing="0.18em" textTransform="uppercase"
               position="relative" zIndex={1}>
-          <Text as="span">Ver</Text>
+          <Text as="span">{t("metodo.ver")}</Text>
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill="currentColor">
             <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
           </Box>

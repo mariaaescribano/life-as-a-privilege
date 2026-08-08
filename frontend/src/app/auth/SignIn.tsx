@@ -11,6 +11,7 @@ import type { CreateUser, Trato } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
 import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
+import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -88,6 +89,7 @@ const CasillaTrato = ({
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const t = useT();
   const [params] = useSearchParams();
   const next = params.get("next") || "/home";
   const destinoRef = useRef<string>(next);
@@ -141,8 +143,8 @@ export default function SignIn() {
 
         setMessage({
           soy: 1,
-          title: "¡Cuenta creada!",
-          description: "Continuamos en un instante...",
+          title: t("auth.signin.creada"),
+          description: t("auth.signin.creadaTexto"),
         });
       }
     } catch (err: any) {
@@ -156,32 +158,32 @@ export default function SignIn() {
     if (name === "" || email === "" || contra === "" || contra2 === "") {
       setMessage({
         soy: 2,
-        title: "Faltan datos",
-        description: "Rellena todos los campos",
+        title: t("auth.error.faltanDatos"),
+        description: t("auth.error.rellena"),
       });
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setMessage({
         soy: 2,
-        title: "Email no válido",
-        description: "Introduce un email correcto",
+        title: t("auth.error.emailInvalido"),
+        description: t("auth.error.emailCorrecto"),
       });
       return;
     }
     if (contra.length < 4) {
       setMessage({
         soy: 2,
-        title: "Contraseña muy corta",
-        description: "Usa al menos 4 caracteres",
+        title: t("auth.error.contraCorta"),
+        description: t("auth.error.contraCorta4"),
       });
       return;
     }
     if (contra !== contra2) {
       setMessage({
         soy: 2,
-        title: "Las contraseñas no coinciden",
-        description: "Repite la misma contraseña en los dos campos",
+        title: t("auth.error.noCoinciden"),
+        description: t("auth.error.noCoincidenTexto"),
       });
       return;
     }
@@ -240,7 +242,7 @@ export default function SignIn() {
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Crear cuenta
+          {t("auth.signin.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -253,7 +255,7 @@ export default function SignIn() {
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Crea tu cuenta sin coste ninguno 
+          {t("auth.signin.subtitulo")}
         </Text>
       </Flex>
 
@@ -270,7 +272,7 @@ export default function SignIn() {
         >
           <Box>
             <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              NOMBRE
+              {t("auth.campo.nombre")}
             </Text>
             <Input
               value={name}
@@ -282,17 +284,17 @@ export default function SignIn() {
           <Box>
             <Text color="rgba(255,255,255,0.78)" fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" mb={2.5}
                   fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              ¿CÓMO PREFIERES QUE ME DIRIJA HACIA TI?
+              {t("auth.signin.trato")}
             </Text>
             <Flex gap={3}>
               <CasillaTrato
-                etiqueta="Él"
+                etiqueta={t("auth.signin.tratoEl")}
                 marcada={trato === "el"}
                 disabled={bloqueado}
                 onClick={() => setTrato(trato === "el" ? null : "el")}
               />
               <CasillaTrato
-                etiqueta="Ella"
+                etiqueta={t("auth.signin.tratoElla")}
                 marcada={trato === "ella"}
                 disabled={bloqueado}
                 onClick={() => setTrato(trato === "ella" ? null : "ella")}
@@ -302,7 +304,7 @@ export default function SignIn() {
 
           <Box>
             <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              EMAIL
+              {t("auth.campo.email")}
             </Text>
             <Input
               type="email"
@@ -313,7 +315,7 @@ export default function SignIn() {
           </Box>
 
           <CampoContrasena
-            label="CONTRASEÑA"
+            label={t("auth.campo.contrasena")}
             value={contra}
             onChange={setContra}
             isDisabled={bloqueado}
@@ -321,7 +323,7 @@ export default function SignIn() {
           />
 
           <CampoContrasena
-            label="REPITE LA CONTRASEÑA"
+            label={t("auth.campo.repiteContrasena")}
             value={contra2}
             onChange={setContra2}
             isDisabled={bloqueado}
@@ -379,7 +381,7 @@ export default function SignIn() {
                 textTransform="uppercase"
                 textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
               >
-                Registrarme
+                {t("auth.signin.boton")}
               </Text>
               {/* Dentro de un botón sí va el anillo de siempre: el mandala pide
                   demasiado sitio y distrae en una línea de texto. */}
@@ -411,7 +413,7 @@ export default function SignIn() {
               _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
               transition="all 0.22s ease"
             >
-              ¿Ya tienes cuenta? Iniciar sesión
+              {t("auth.signin.yaTienes")}
             </Text>
           </Flex>
         </VStack>

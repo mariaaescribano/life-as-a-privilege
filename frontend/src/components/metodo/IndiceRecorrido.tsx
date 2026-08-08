@@ -7,6 +7,7 @@
 // aparece en todo el recorrido sin tocar cada página.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
@@ -76,6 +77,7 @@ export function IndiceRecorrido({
    *  la foto del progreso de cuando cargó la página). */
   onOpen?: () => void;
 } = {}) {
+  const t = useT();
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams<Record<string, string>>();
@@ -193,7 +195,7 @@ export function IndiceRecorrido({
         cursor="pointer"
         transition="all 0.22s ease"
         _hover={{ transform: "translateY(-2px)", boxShadow: `0 6px 28px rgba(0,0,0,0.35), 0 0 26px ${bg}aa` }}
-        aria-label="Abrir índice del mapa"
+        aria-label={t("metodo.abrirIndice")}
       >
         <DisciplinaBgLayer nom={nom} borderRadius="full" />
         <Box as="span" position="relative" zIndex={1} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1"
@@ -201,7 +203,7 @@ export function IndiceRecorrido({
         <Text position="relative" zIndex={1} color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
               fontSize={{ base: "sm", md: "md" }} letterSpacing="0.06em" lineHeight="1"
               style={{ textShadow: BTN_TEXT_SHADOW }}>
-          Índice
+          {t("metodo.indice")}
         </Text>
       </Flex>
 
@@ -232,7 +234,7 @@ export function IndiceRecorrido({
               ) : (
               <>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" pr={6}>
-                Índice del mapa
+                {t("metodo.indiceMapa")}
               </Text>
               <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 

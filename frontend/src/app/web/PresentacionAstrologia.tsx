@@ -23,6 +23,9 @@ import {
 } from "../../components/metodo/presentacionUi";
 import { AstrologiaIcon, astrologiaBg, astrologiaNom } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import { useIdioma, useT } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /d/astrologia — presentación de Astrología (destino del QR de su cartel).
@@ -41,6 +44,12 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 const COMICS = ["astro-historia", "astro-planetas", "astro-signos"];
 
 export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplina }) {
+  const { segunIdioma } = useIdioma();
+  const t = useT();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   // El vídeo grande de al lado del box. El botón «Ver por dentro» del box lo pone
   // en marcha aquí mismo, en vez de abrir el popup: el vídeo ya está a la vista.
@@ -116,7 +125,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
         </RevealStagger>
@@ -158,7 +167,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
               nom={astrologiaNom}
               bg={astrologiaBg}
               txt={d.txt}
-              videoIntro={d.videoIntro}
+              videoIntro={cont.videoIntro}
               paso={d.paso}
               renderIcon={renderIcon}
               tieneVideo={!!d.video}
@@ -178,7 +187,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
 
         {/* ══ 3. LA FICHA (el popup de /elMetodo, aquí desplegado) + CARTA ══ */}
         <Flex direction="column" align="center" w="100%" maxW="1280px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">De qué trata</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.deQueTrata")}</SeparadorSeccion>
 
           {/* Las tres cajas y la carta se MONTAN al llegar aquí, no al cargar la
               página. Las dos cosas animan al montarse (la cascada de las cajas y
@@ -198,8 +207,8 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
                 nom={astrologiaNom}
                 bg={astrologiaBg}
                 txt={d.txt}
-                desc={d.desc}
-                contenido={d.contenido}
+                desc={cont.desc}
+                contenido={cont.contenido}
                 renderIcon={renderIcon}
                 // Solo las tres cajas: el nombre, el icono y la frase ya están
                 // arriba, y así esta columna casa de altura con la carta.
@@ -244,7 +253,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
                     textAlign="center"
                     textShadow={`0 0 14px ${d.txt}66, 0 0 34px ${d.txt}33`}
                   >
-                    Carta de muestra
+                    {t("presentacion.astro.cartaMuestra")}
                   </Text>
                 </Flex>
               </Box>
@@ -256,7 +265,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
         {/* ══ 4. LOS TRES CÓMICS, en la misma fila ══ */}
         {comics.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Ilustraciones de Astrología</SeparadorSeccion>
+            <SeparadorSeccion>{t("presentacion.sec.ilustraciones", { disciplina })}</SeparadorSeccion>
             <Grid w="100%" templateColumns="repeat(3, 1fr)" gap={{ base: 3, sm: 5, md: 6 }}>
               {comics.map((entry, i) => (
                 <Reveal key={entry.id} inView direction="up" distance={18} duration={0.65} delay={i * 0.1}>
@@ -277,13 +286,13 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 5. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 

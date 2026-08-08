@@ -14,6 +14,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useState } from "react";
 import { Box, Flex, Modal, ModalContent, ModalOverlay, Text } from "@chakra-ui/react";
+import { useT } from "../../i18n";
 
 /** Lupa con un «+»: se puede ampliar. */
 function IconoLupa({ size, color }: { size: string; color: string }) {
@@ -44,7 +45,9 @@ export interface FotoAmpliableProps {
   etiqueta?: string;
 }
 
-export function FotoAmpliable({ src, alt, acento = "#ffffff", pie, etiqueta = "Ampliar" }: FotoAmpliableProps) {
+export function FotoAmpliable({ src, alt, acento = "#ffffff", pie, etiqueta }: FotoAmpliableProps) {
+  const t = useT();
+  const etiquetaTxt = etiqueta ?? t("foto.etiqueta");
   const [abierta, setAbierta] = useState(false);
   const url = encodeURI(src);
   const leyenda = pie ?? alt;
@@ -53,7 +56,7 @@ export function FotoAmpliable({ src, alt, acento = "#ffffff", pie, etiqueta = "A
     <>
       {/* La foto, pulsable. Ocupa todo el hueco que le dé su caja. */}
       <Box as="button" type="button" onClick={() => setAbierta(true)}
-           aria-label={`Ampliar la imagen: ${alt}`} title="Pulsa para verla más grande"
+           aria-label={`Ampliar la imagen: ${alt}`} title={t("foto.ampliar")}
            position="relative" display="block" w="100%" cursor="zoom-in"
            sx={{ "& img": { transition: "transform 0.35s cubic-bezier(0.22,1,0.36,1)" } }}
            _hover={{ "& img": { transform: "scale(1.04)" }, "& .lupa-foto": { opacity: 1 } }}>
@@ -68,7 +71,7 @@ export function FotoAmpliable({ src, alt, acento = "#ffffff", pie, etiqueta = "A
                 sx={{ backdropFilter: "blur(4px)", transition: "opacity 0.25s ease" }}>
             <IconoLupa size="14px" color={acento} />
             <Text color="white" fontSize="2xs" fontWeight={700} letterSpacing="0.06em" lineHeight="1">
-              {etiqueta}
+              {etiquetaTxt}
             </Text>
           </Flex>
         )}
@@ -99,7 +102,7 @@ export function FotoAmpliable({ src, alt, acento = "#ffffff", pie, etiqueta = "A
             )}
           </Flex>
 
-          <Box as="button" type="button" aria-label="Cerrar" onClick={() => setAbierta(false)}
+          <Box as="button" type="button" aria-label={t("comun.cerrar")} onClick={() => setAbierta(false)}
                position="fixed" top={{ base: 3, md: 5 }} right={{ base: 3, md: 5 }} zIndex={10}
                p={2} borderRadius="md" _hover={{ bg: "rgba(255,255,255,0.14)" }}>
             <IconoCerrar size="26px" color={acento} />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
@@ -27,6 +28,7 @@ function OpcionBox({
   onClick?: () => void;
   proximamente?: boolean;
 }) {
+  const t = useT();
   const [imgErr, setImgErr] = useState(false);
   const hayPortada = !!portada && !imgErr;
   return (
@@ -63,7 +65,7 @@ function OpcionBox({
                 bg={`${nutricionTxt}e0`} align="center">
             <Text color={nutricionBg} fontSize="2xs" fontWeight={800} letterSpacing="0.08em"
                   textTransform="uppercase">
-              Próximamente
+              {t("comun.proximamente")}
             </Text>
           </Flex>
         )}
@@ -77,7 +79,7 @@ function OpcionBox({
         </Text>
         {!proximamente && (
           <Flex align="center" gap={1} color={nutricionTxt}>
-            <Text as="span" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic">Ver</Text>
+            <Text as="span" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic">{t("metodo.ver")}</Text>
             <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px" fill="currentColor">
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </Box>
@@ -100,6 +102,7 @@ export function AlimentoOpcionesModal({
   /** Si no se pasa, el box de Ilustraciones aparece como «Próximamente». */
   onIlustraciones?: () => void;
 }) {
+  const t = useT();
   useEffect(() => {
     if (!alimento) return;
     document.body.style.overflow = "hidden";
@@ -148,7 +151,7 @@ export function AlimentoOpcionesModal({
           {/* Los dos caminos */}
           <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 5 }} align="stretch">
             <OpcionBox
-              titulo="Ilustraciones"
+              titulo={t("metodo.ilustraciones")}
               proximamente={!onIlustraciones}
               onClick={onIlustraciones}
               icono={
@@ -158,7 +161,7 @@ export function AlimentoOpcionesModal({
               }
             />
             <OpcionBox
-              titulo="Los materiales de los alimentos"
+              titulo={t("metodo.alimentos.materiales")}
               onClick={onMateriales}
               icono={
                 <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="56px" h="56px" fill="currentColor">

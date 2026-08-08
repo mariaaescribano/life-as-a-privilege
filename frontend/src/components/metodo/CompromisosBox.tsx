@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { Heart } from "lucide-react";
 import axios from "axios";
@@ -35,6 +36,7 @@ interface Carta {
 }
 
 export function CompromisosBox() {
+  const t = useT();
   const [compromisos, setCompromisos] = useState<Compromiso[]>([]);
   const [carta, setCarta] = useState<Carta | null>(null);
 
@@ -96,7 +98,7 @@ export function CompromisosBox() {
             lineHeight="1.25"
             style={{ textShadow: INK_SHADOW }}
           >
-            No olvides tus compromisos contigo mismo
+            {t("metodo.compromiso.noOlvides")}
           </Text>
         </Flex>
 
@@ -124,13 +126,13 @@ export function CompromisosBox() {
               textAlign="center"
               mb={4}
             >
-              Tu compromiso contigo
+              {t("metodo.compromiso.tuCompromiso")}
             </Text>
             <Flex direction="column" gap={{ base: 4, md: 5 }}>
               {carta.necesitaste && (
                 <Box>
                   <Text color={`${TINTA}b0`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" mb={1}>
-                    Lo que necesité que nadie pudo darme
+                    {t("metodo.compromiso.loQueNecesite")}
                   </Text>
                   <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6">
                     «{carta.necesitaste}»
@@ -140,7 +142,7 @@ export function CompromisosBox() {
               {carta.dartelo && (
                 <Box>
                   <Text color={`${TINTA}b0`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" mb={1}>
-                    Cómo puedo empezar a dármelo hoy
+                    {t("metodo.compromiso.comoDarmelo")}
                   </Text>
                   <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6">
                     «{carta.dartelo}»

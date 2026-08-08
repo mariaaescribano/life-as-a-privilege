@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -23,6 +24,7 @@ export function SubscribeBox() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "invalid" | "error">("idle");
   const reveal = useReveal(0.15);
+  const t = useT();
 
   const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
@@ -116,7 +118,7 @@ export function SubscribeBox() {
           mb={2}
           textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3), 0 0 50px rgba(180,255,245,0.22)"
         >
-          No te pierdas nada.
+          {t("suscribir.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.65)"
@@ -125,7 +127,7 @@ export function SubscribeBox() {
           mb={6}
           lineHeight="1.6"
         >
-          Cuando publique nuevos contenidos serás el primero en saberlo.
+          {t("suscribir.texto")}
         </Text>
 
         {status === "ok" ? (
@@ -137,7 +139,7 @@ export function SubscribeBox() {
               fontWeight="600"
               fontFamily="'EB Garamond', serif"
             >
-              Registrado correctamente
+              {t("suscribir.ok")}
             </Text>
             <Text
               color="rgba(255,255,255,0.7)"
@@ -145,7 +147,7 @@ export function SubscribeBox() {
               fontFamily="'EB Garamond', serif"
               fontStyle="italic"
             >
-              Gracias por querer aprender
+              {t("suscribir.gracias")}
             </Text>
           </Flex>
         ) : (
@@ -154,7 +156,7 @@ export function SubscribeBox() {
               value={email}
               onChange={(e) => { setEmail(e.target.value); if (status === "invalid") setStatus("idle"); }}
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-              placeholder="Tu email"
+              placeholder={t("suscribir.placeholder")}
               type="email"
               w="100%"
               maxW="320px"
@@ -172,12 +174,12 @@ export function SubscribeBox() {
             />
             {status === "invalid" && (
               <Text color="rgba(255,150,150,0.9)" fontSize="sm" fontFamily="'EB Garamond', serif">
-                Introduce un email válido
+                {t("suscribir.invalido")}
               </Text>
             )}
             {status === "error" && (
               <Text color="rgba(255,150,150,0.9)" fontSize="sm" fontFamily="'EB Garamond', serif">
-                No se pudo enviar. Inténtalo de nuevo en un momento.
+                {t("suscribir.error")}
               </Text>
             )}
             <Box
@@ -207,7 +209,7 @@ export function SubscribeBox() {
               transition="all 0.2s"
               whiteSpace="nowrap"
             >
-              {status === "loading" ? "Enviando…" : "Suscribirme"}
+              {status === "loading" ? t("comun.enviando") : t("suscribir.boton")}
             </Box>
           </Flex>
         )}

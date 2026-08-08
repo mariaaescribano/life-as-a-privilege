@@ -19,21 +19,25 @@ import {
   nutricionNomLink,
   ayurvedaNomLink,
 } from "../../GlobalVariables";
-import { welcomeDisciplinas } from "../../data/welcomeDisciplinas";
+import { useT, type ClaveTexto } from "../../i18n";
+import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
 
 type Discipline = {
+  /** Nombre INTERNO (GlobalVariables): viaja en el `link`, no se traduce. */
   name: string;
   bg: string;
   txt: string;
   renderIcon: (size: string) => React.ReactNode;
-  desc: string;
+  /** Clave del texto del modal — se traduce al pintar, no aquí. */
+  descKey: ClaveTexto;
   link: string;
   available:boolean;
-  tagline?: string;
+  /** Clave del lema de la tarjeta. */
+  lemaKey?: ClaveTexto;
 };
 
 // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
@@ -44,80 +48,80 @@ const disciplines: Discipline[] = [
     bg: astrologiaBg,
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
-    desc: welcomeDisciplinas.astrologia.desc,
+    descKey: "welcome.desc.astrologia",
     link: "/aprendizaje/cursos/" + astrologiaNom,
     available: true,
-    tagline: "Los patrones que te forman.",
+    lemaKey: "welcome.lema.astrologia",
   },
   {
     name: neuropsicologiaNom,
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    desc: welcomeDisciplinas.psicologia.desc,
+    descKey: "welcome.desc.psicologia",
     link: "/aprendizaje/cursos/" + neuropsicologiaNom,
     available: true,
-    tagline: "Cómo funciona tu mente.",
+    lemaKey: "welcome.lema.psicologia",
   },
   {
     name: ayurvedaNom,
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
-    desc: welcomeDisciplinas.ayurveda.desc,
+    descKey: "welcome.desc.hinduismo",
     link: "/aprendizaje/cursos/" + ayurvedaNomLink,
     available: true,
-    tagline: "Tu constitución única.",
+    lemaKey: "welcome.lema.hinduismo",
   },
   {
     name: tcmNom,
     bg: tcmBg,
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
-    desc: welcomeDisciplinas.tcm.desc,
+    descKey: "welcome.desc.medicinaChina",
     link: "/aprendizaje/cursos/" + tcmNomLink,
     available: true,
-    tagline: "El origen de tus desequilibrios.",
+    lemaKey: "welcome.lema.medicinaChina",
   },
   {
     name: fisiologiaNom,
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
-    desc: welcomeDisciplinas.fisiologia.desc,
+    descKey: "welcome.desc.fisiologia",
     link: "/aprendizaje/cursos/" + fisiologiaNom,
     available: true,
-    tagline: "Eres un cuerpo.",
+    lemaKey: "welcome.lema.fisiologia",
   },
   {
     name: nutricionNom,
     bg: nutricionBg,
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
-    desc: welcomeDisciplinas.nutricion.desc,
+    descKey: "welcome.desc.nutricion",
     link: "/aprendizaje/cursos/" + nutricionNomLink,
     available: true,
-    tagline: "Cómo te reconstruyes.",
+    lemaKey: "welcome.lema.nutricion",
   },
   {
     name: cabalaNom,
     bg: cabalaBg,
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
-    desc: welcomeDisciplinas.cabala.desc,
+    descKey: "welcome.desc.cabala",
     link: "/aprendizaje/cursos/" + cabalaNom,
     available: true,
-    tagline: "La arquitectura del alma.",
+    lemaKey: "welcome.lema.cabala",
   },
   {
     name: culturaNom,
     bg: culturaBg,
     txt: culturaTxt,
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
-    desc: welcomeDisciplinas.cultura.desc,
+    descKey: "welcome.desc.cultura",
     link: "/aprendizaje/cursos/" + culturaNom,
     available: true,
-    tagline: "Las historias de la humanidad.",
+    lemaKey: "welcome.lema.cultura",
   },
 ];
 
@@ -212,7 +216,11 @@ function TarjetaDisciplina({
   // estar las tarjetas. Esa fila entra con la página; las siguientes, al bajar.
   const visto = entraAlCargar ? cargado : enPantalla.visto;
   const hasBg = hasDisciplinaBg(d.name);
-  const displayName = d.name === "Medicina China" && isMobile ? "Med. China" : d.name;
+  const t = useT();
+  const nombreDe = useNombreDisciplina();
+  // En móvil pide la versión corta: solo «Medicina China» tiene, el resto
+  // devuelve su nombre largo tal cual.
+  const displayName = nombreDe(d.name, isMobile);
 
   return (
     <Box
@@ -318,7 +326,7 @@ function TarjetaDisciplina({
         {/* Subtítulo — el verdadero protagonista: responde
             "¿qué voy a descubrir aquí?". minH fija para que la fila
             "Explorar disciplina" quede alineada en todas las tarjetas. */}
-        {d.tagline && (
+        {d.lemaKey && (
           <Text
             position="relative"
             zIndex={1}
@@ -334,7 +342,7 @@ function TarjetaDisciplina({
               ? `0 1px 3px ${d.bg}, 0 1px 6px ${d.bg}, 0 0 12px ${d.bg}dd`
               : "1px 1px 3px rgba(0,0,0,0.5)"}
           >
-            {d.tagline}
+            {t(d.lemaKey)}
           </Text>
         )}
   
@@ -363,7 +371,7 @@ function TarjetaDisciplina({
           _hover={{ opacity: 1 }}
           onClick={(e: React.MouseEvent) => { e.stopPropagation(); onExplorar(); }}
         >
-          <Box as="span">Explorar</Box>
+          <Box as="span">{t("welcome.explorar")}</Box>
           <Box
             as="span"
             transition="transform 0.28s ease"
@@ -379,6 +387,8 @@ function TarjetaDisciplina({
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const t = useT();
+  const nombreDe = useNombreDisciplina();
   const [selected, setSelected] = useState<Discipline | null>(null);
   const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
@@ -506,7 +516,7 @@ const Welcome = () => {
             fontFamily="'EB Garamond', serif"
             maxW={{ base: "100%", md: "640px" }}
           >
-            Un mapa de ocho disciplinas para comprenderte, integrando ciencia y tradición.
+            {t("welcome.subtitulo")}
           </Text>
         </Box>
       </Flex>
@@ -718,7 +728,7 @@ const Welcome = () => {
               letterSpacing="0.02em"
               textShadow="0 1px 6px rgba(255, 255, 255, 0.22)"
             >
-              Crea una cuenta o inicia sesión
+              {t("welcome.modal.cuenta")}
               {/* <Box as="span" fontWeight="700">Espacio Personal de crecimiento</Box> */}
             </Text>
 
@@ -742,7 +752,7 @@ const Welcome = () => {
               _hover={{ bg: "rgba(255,255,255,0.26)", borderColor: "white", boxShadow: "0 0 40px rgba(107,196,200,0.8)" }}
               transition="all 0.22s ease"
             >
-              Iniciar sesión →
+              {t("welcome.modal.iniciarSesion")}
             </Box>
           </Box>
         </Box>
@@ -824,7 +834,7 @@ const Welcome = () => {
               _hover={{ opacity: 1 }}
               sx={{ "&:hover span": { transform: "translateX(4px)" } }}
             >
-              Explorar disciplina
+              {t("welcome.explorarDisciplina")}
               <Box as="span" transition="transform 0.2s ease">→</Box>
             </Flex>
 
@@ -881,7 +891,7 @@ const Welcome = () => {
                 textAlign="center"
                 textShadow={nameShadow(selected)}
               >
-                {selected.name}
+                {nombreDe(selected.name)}
               </Text>
 
               {/* Descripción */}
@@ -896,7 +906,7 @@ const Welcome = () => {
                 opacity={0.82}
                 textShadow={descShadow(selected)}
               >
-                {selected.desc}
+                {t(selected.descKey)}
               </Text>
 
             {/* Botón APRENDER — desactivado temporalmente para v1, mostramos solo "Próximamente"

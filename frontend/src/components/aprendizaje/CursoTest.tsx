@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Box, Flex, Text, Select } from "@chakra-ui/react";
 import type { Ejercicio } from "../../dtos/aprendizaje.type";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
+import { useT } from "../../i18n";
 
 const VERDE = "#3fbf6f";
 const ROJO = "#e06a6a";
@@ -36,6 +37,7 @@ export function CursoTest({
   disciplinaNom: string;
   bgColor: string;
 }) {
+  const t = useT();
   const [answers, setAnswers] = useState<Record<number, any>>({});
 
   // Opciones de la derecha barajadas por cada ejercicio "relacionar".
@@ -51,7 +53,7 @@ export function CursoTest({
   if (!ejercicios || ejercicios.length === 0) {
     return (
       <Box px={{ base: 5, md: 8 }} py={{ base: 6, md: 7 }}>
-        <Text color={color} fontStyle="italic" opacity={0.85}>Este test todavía no tiene ejercicios.</Text>
+        <Text color={color} fontStyle="italic" opacity={0.85}>{t("test.sinEjercicios")}</Text>
       </Box>
     );
   }
@@ -109,7 +111,7 @@ export function CursoTest({
                 {/* ── Verdadero / Falso ── */}
                 {ej.tipo === "verdadero" && (
                   <Flex gap={3}>
-                    {[{ v: true, label: "Verdadero" }, { v: false, label: "Falso" }].map(({ v, label }) => {
+                    {[{ v: true, label: t("test.verdadero") }, { v: false, label: t("test.falso") }].map(({ v, label }) => {
                       const selected = answers[i] === v;
                       const isCorrect = ej.correcta === v;
                       let bd = `${color}66`, bgc = OPT_BG;
@@ -147,7 +149,7 @@ export function CursoTest({
                             borderColor={ok ? VERDE : bad ? ROJO : `${color}66`}
                             onChange={(e) => setAnswers((a) => ({ ...a, [i]: { ...(a[i] ?? {}), [li]: e.target.value } }))}
                             sx={{ option: { color: "black" } }}>
-                            <option value="" disabled>Elige…</option>
+                            <option value="" disabled>{t("test.elige")}</option>
                             {(derechas[i] ?? []).map((d, di) => <option key={di} value={d}>{d}</option>)}
                           </Select>
                           {done && <Text color={ok ? VERDE : ROJO} fontWeight="700" w="16px" textAlign="center">{ok ? "✓" : "✗"}</Text>}

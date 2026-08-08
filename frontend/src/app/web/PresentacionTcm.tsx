@@ -36,6 +36,9 @@ import {
 } from "../../components/metodo/presentacionUi";
 import { TCMIcon, tcmBg, tcmNom, tcmTxt } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import { useIdioma, useT } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /d/medicinachina — presentación de Medicina China.
@@ -149,6 +152,12 @@ function EstrellaElementos() {
 }
 
 export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
+  const { segunIdioma } = useIdioma();
+  const t = useT();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   const [relacion, setRelacion] = useState<Relacion | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -199,7 +208,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
         <Reveal direction="down" distance={18} duration={0.8} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "38px", md: "52px" }} />}
-            title={d.titulo}
+            title={disciplina}
             bgColor={tcmBg}
             color={d.txt}
             nom={tcmNom}
@@ -231,7 +240,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
         </RevealStagger>
@@ -271,7 +280,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
               nom={tcmNom}
               bg={tcmBg}
               txt={d.txt}
-              videoIntro={d.videoIntro}
+              videoIntro={cont.videoIntro}
               paso={d.paso}
               renderIcon={renderIcon}
               tieneVideo={!!d.video}
@@ -292,7 +301,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
             los cinco elementos. Los ciclos ya NO viven aquí dentro: van en su
             propia sección, uno al lado del otro. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Los Cinco Elementos</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.tcm.cincoElementos")}</SeparadorSeccion>
 
           <Grid
             w="100%"
@@ -302,7 +311,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
           >
             {/* Los tres boxes, uno debajo de otro */}
             <Flex direction="column" gap={{ base: 6, md: 6 }}>
-              {d.contenido.map((seccion, i) => (
+              {cont.contenido.map((seccion, i) => (
                 <Reveal
                   key={i}
                   inView
@@ -358,9 +367,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
                     maxW="520px"
                     textShadow={sombra}
                   >
-                    Madera, Fuego, Tierra, Metal y Agua. Cinco energías que te habitan y que se
-                    sostienen y se frenan entre ellas. Ningún síntoma aparece aislado: aparece en
-                    un sistema.
+                    {t("presentacion.tcm.elementosTexto")}
                   </Text>
 
                   {/* La estrella de los elementos: florecen uno a uno */}
@@ -377,7 +384,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
             primero florecen los elementos y después brotan las flechas en el
             orden del ciclo. Las flechas se pulsan: abren la relación entera. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 5, md: 7 }}>
-          <SeparadorSeccion maxW="1180px">Cómo se relacionan</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.tcm.comoSeRelacionan")}</SeparadorSeccion>
 
           <Text
             color="rgba(255,255,255,0.85)"
@@ -388,16 +395,16 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
             lineHeight="1.6"
             style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
           >
-            Pulsa cualquier flecha y verás qué hace un elemento sobre el siguiente.
+            {t("presentacion.tcm.flechasTexto")}
           </Text>
 
           <Flex direction={{ base: "column", lg: "row" }} gap={{ base: 6, md: 6 }} w="100%" align="stretch">
             <Reveal inView direction="right" distance={30} scaleFrom={0.97} duration={0.65} amount={0.2} w="100%" display="flex">
               <EstrellaCiclo
-                titulo="Ciclo generador"
+                titulo={t("presentacion.tcm.cicloSheng")}
                 pinyin="Sheng"
                 hanzi="生"
-                subtitulo="Cada elemento alimenta al siguiente"
+                subtitulo={t("presentacion.tcm.cicloShengSub")}
                 ciclo="sheng"
                 onEdge={abrirRelacion}
                 cajaPulsable
@@ -405,10 +412,10 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
             </Reveal>
             <Reveal inView direction="left" distance={30} scaleFrom={0.97} duration={0.65} amount={0.2} w="100%" display="flex">
               <EstrellaCiclo
-                titulo="Ciclo de control"
+                titulo={t("presentacion.tcm.cicloKe")}
                 pinyin="Ke"
                 hanzi="克"
-                subtitulo="Cada elemento pone límite a otro"
+                subtitulo={t("presentacion.tcm.cicloKeSub")}
                 ciclo="ke"
                 onEdge={abrirRelacion}
                 cajaPulsable
@@ -420,7 +427,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
         {/* ══ 5. ILUSTRACIONES ══ */}
         {comics.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Ilustraciones de Medicina China</SeparadorSeccion>
+            <SeparadorSeccion>{t("presentacion.sec.ilustraciones", { disciplina })}</SeparadorSeccion>
             <Grid
               w="100%"
               templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
@@ -443,13 +450,13 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 6. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 

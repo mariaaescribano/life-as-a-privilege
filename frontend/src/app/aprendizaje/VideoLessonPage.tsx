@@ -33,8 +33,10 @@ import { modulosKarma } from "../../hardCoded/aprendizajes/Ayurveda/ModulosKarma
 import { modulosFisiologia, modulosFisiologiaInflamacion, modulosFisiologiaCancer, modulosFisiologiaMeditacion, modulosFisiologiaEjercicio } from "../../hardCoded/aprendizajes/Fisiologia/ModulosFisiologia";
 import { modulosCultura } from "../../hardCoded/aprendizajes/Cultura/ModulosCultura";
 import { modulosFisica } from "../../hardCoded/aprendizajes/Cultura/ModulosFisica";
+import { useT } from "../../i18n";
 
 export default function VideoLessonPage() {
+  const t = useT();
   const { moduloId, submoduloId } = useParams<{ moduloId: string; submoduloId: string }>();
   const [datos, setdatos] = useState<Submodulo | null>(null);
   const [moduloDatos, setModuloDatos] = useState<Modulo | null>(null);
@@ -318,7 +320,7 @@ export default function VideoLessonPage() {
                     fontWeight="600"
                     letterSpacing="0.04em"
                   >
-                    Transcripción
+                    {t("leccion.transcripcion")}
                   </Text>
                   <Text
                     color={moduloDatos.color}
@@ -380,11 +382,12 @@ export default function VideoLessonPage() {
         <ContactModal
           isOpen={saberMasOpen}
           onClose={() => setSaberMasOpen(false)}
-          title="¿Quieres saber más?"
+          title={t("contactoModal.saberMas")}
           icon={moduloDatos.icon}
-          subtitle="Déjame tus datos y cuéntame en qué puedo ayudarte."
+          subtitle={t("contactoModal.saberMas.sub")}
           bgColor={moduloDatos.bgColor}
           color={moduloDatos.color}
+          // El asunto va al correo de María: siempre en español (ver ContactModal).
           emailSubject={`Quiero saber más — ${moduloDatos.nom}`}
           showDescription
         />

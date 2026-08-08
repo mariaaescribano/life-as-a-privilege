@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
@@ -107,6 +108,7 @@ export function FichaFisioModal({
   /** Color del texto de los párrafos. Por defecto el de Fisiología. */
   txtColor?: string;
 }) {
+  const t = useT();
   const [imgErr, setImgErr] = useState(false);
   const puedeNavegar = !!onPrev && !!onNext;
   // Contenedores con scroll (móvil: el Flex; escritorio: el Box del texto).
@@ -221,7 +223,7 @@ export function FichaFisioModal({
 
       {/* X cerrar — chip oscuro para que resalte sobre cualquier fondo */}
       <IconButton
-        aria-label="Cerrar"
+        aria-label={t("comun.cerrar")}
         onClick={(e) => { e.stopPropagation(); onClose(); }}
         position="fixed"
         top={{ base: 3, md: 5 }}
@@ -251,7 +253,7 @@ export function FichaFisioModal({
       {puedeNavegar && (
         <>
           <IconButton
-            aria-label="Anterior"
+            aria-label={t("comun.anterior")}
             onClick={(e) => { e.stopPropagation(); onPrev!(); }}
             left={{ base: 1, md: 6 }}
             {...flechaSx}
@@ -263,7 +265,7 @@ export function FichaFisioModal({
             }
           />
           <IconButton
-            aria-label="Siguiente"
+            aria-label={t("comun.siguiente")}
             onClick={(e) => { e.stopPropagation(); onNext!(); }}
             right={{ base: 1, md: 6 }}
             {...flechaSx}

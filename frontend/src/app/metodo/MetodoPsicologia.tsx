@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import {
   Box, Flex, Text,
@@ -33,6 +34,7 @@ const TINTA = neuropsicologiaTxt;
 const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologia() {
+  const t = useT();
   const navigate = useNavigate();
   const experiencia = EXPERIENCIAS[0];
   const [loading, setLoading] = useState(true);
@@ -107,7 +109,7 @@ export default function MetodoPsicologia() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Vuelve a ti"
+              title={t("metodo.gate.psico.titulo")}
               pageLabel="1/22"
               bgColor={`${neuropsicologiaBg}dd`}
               color={neuropsicologiaTxt}
@@ -142,7 +144,7 @@ export default function MetodoPsicologia() {
                 mx="auto"
                 style={{ textShadow: INK_SHADOW }}
               >
-                Nuestra historia marca nuestra Vida, todo lo que no hemos gestionado o que hemos callado sigue pulsando y guiando nuestro pensamiento. En este mapa te conocerás en profundidad y verás con claridad dónde estás, por qué y para qué. El propósito es volver a unir tus fragmentaciones.
+                {t("metodo.gate.psico.intro")}
               </Text>
 
               {/* ── Recomendación: no hacerlo en solitario ── */}
@@ -157,7 +159,7 @@ export default function MetodoPsicologia() {
                   mb={3}
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  Se recomienda no hacer este mapa de manera individual.
+                  {t("metodo.gate.psico.noIndividual")}
                 </Text>
                 <Text
                   color={TINTA}
@@ -165,7 +167,7 @@ export default function MetodoPsicologia() {
                   lineHeight="1.8"
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  Aunque si llevas años en terapia y trabajando en ti, es posible. Sea como sea, siempre tendrás el botón abajo a la derecha por si necesitas mi ayuda.
+                  {t("metodo.gate.psico.noIndividualTexto")}
                 </Text>
               </Box>
             </Box>
@@ -194,7 +196,7 @@ export default function MetodoPsicologia() {
             transition="all 0.2s"
             _hover={{ bg: "rgba(255,255,255,0.16)", transform: "translateY(-1px)" }}
           >
-            <Box as="span" fontSize="md">⚠</Box> Aviso importante
+            <Box as="span" fontSize="md">⚠</Box> {t("metodo.gate.avisoImportante")}
           </Box>
           </Reveal>
         </Flex>
@@ -242,21 +244,21 @@ export default function MetodoPsicologia() {
                   </Box>
                   <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
                         style={{ textShadow: INK_SHADOW }}>
-                    Importante
+                    {t("metodo.gate.importante")}
                   </Text>
                 </Flex>
                 <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.75"
                       style={{ textShadow: INK_SHADOW }}>
-                  Este mapa no sustituye una terapia psicológica ni una evaluación profesional.
+                  {t("metodo.gate.psico.aviso1")}
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  Su propósito es ayudarte a ordenar tu historia, comprender mejor tus patrones y construir una narrativa más consciente sobre tu Vida.
+                  {t("metodo.gate.psico.aviso2")}
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  Si estás atravesando un momento de sufrimiento importante o necesitas apoyo especializado, te recomiendo buscar ayuda profesional.
+                  {t("metodo.gate.psico.aviso3")}
                 </Text>
               </Flex>
             </ModalBody>

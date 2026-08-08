@@ -168,7 +168,7 @@ export const organosFisiologia: Organo[] = [
     preguntas: [
       "¿Tienes molestias en la zona lumbar baja (no de origen muscular)?",
       "¿Orinas poco, con dificultad o con mal olor frecuentemente?",
-      "¿Retines líquidos (piernas, tobillos o cara hinchados)?",
+      "¿Retienes líquidos (piernas, tobillos o cara hinchados)?",
       "¿Bebes menos de 1,5 litros de agua al día?",
       "¿Tu dieta es alta en sal, proteína animal o alimentos procesados?",
     ],

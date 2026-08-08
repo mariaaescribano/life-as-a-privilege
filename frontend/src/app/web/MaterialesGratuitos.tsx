@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LibrosIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -30,6 +31,7 @@ type Cajita = {
 
 export default function MaterialesGratuitos() {
   const navigate = useNavigate();
+  const t = useT();
   const [mounted, setMounted] = useState(false);
   const cardsReveal = useReveal(0.1);
 
@@ -62,7 +64,7 @@ export default function MaterialesGratuitos() {
     //   ),
     // },
     {
-      titulo: "Ilustraciones",
+      titulo: t("materiales.ilustraciones"),
       delay: 0.15,
       link: "/ilustraciones",
       renderIcon: () => (
@@ -79,7 +81,7 @@ export default function MaterialesGratuitos() {
       ),
     },
     {
-      titulo: "Cursos",
+      titulo: t("header.cursos"),
       delay: 0.3,
       link: "/aprendizaje/aprendizajeHome",
       renderIcon: () => (
@@ -93,7 +95,7 @@ export default function MaterialesGratuitos() {
       ),
     },
     {
-      titulo: "Libros",
+      titulo: t("materiales.libros"),
       delay: 0.45,
       link: "/libros",
       renderIcon: () => <LibrosIcon color="white" size="52px" shadow={false} />,
@@ -139,7 +141,7 @@ export default function MaterialesGratuitos() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Materiales
+          {t("header.materiales")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -154,7 +156,7 @@ export default function MaterialesGratuitos() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Contenido creado y seleccionado por María
+          {t("materiales.subtitulo")}
         </Text>
       </Flex>
 
@@ -175,7 +177,7 @@ export default function MaterialesGratuitos() {
         >
           {cajitas.map((c) => (
             <Flex
-              key={c.titulo}
+              key={c.link}
               as="button"
               onClick={() => navigate(c.link)}
               direction="column"

@@ -28,6 +28,8 @@ import {
 } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
+import { useT, type ClaveTexto } from "../../i18n";
+import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 
 const popIn = keyframes`
   from { opacity: 0; transform: scale(0.2); }
@@ -86,6 +88,8 @@ let imagesReadyCache = false;
 
 const Home = () => {
   const navigate = useNavigate();
+  const t = useT();
+  const nombreDisciplina = useNombreDisciplina();
   const toast = useToast();
 
   // Iniciamos la foto ya desde localStorage: así, al volver a /home con la
@@ -747,8 +751,8 @@ const Home = () => {
       setImg(freshUrl);
     } catch (err) {
       toast({
-        title: "No se pudo subir la foto",
-        description: "Inténtalo de nuevo en un momento.",
+        title: t("home.fotoError"),
+        description: t("home.fotoErrorTexto"),
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -813,7 +817,7 @@ const Home = () => {
         </Box>
       )}
       <Box as="span" position="relative" zIndex={1} textShadow="none">
-        Continuar →
+        {t("home.continuar")}
       </Box>
     </Box>
   ) : null;
@@ -918,7 +922,7 @@ const Home = () => {
                 border="2px solid rgba(255,255,255,0.9)"
                 zIndex={10}
               >
-                <Image src={img} alt="Tu foto" w="100%" h="100%" objectFit="cover" />
+                <Image src={img} alt={t("home.foto")} w="100%" h="100%" objectFit="cover" />
                 <input
                   type="file"
                   accept="image/*"
@@ -993,8 +997,11 @@ const Home = () => {
                 // el número solo indica el orden que aconsejamos.
                 const tooltipLabel =
                   d.name === astrologiaNom
-                    ? "Desbloquea Astrología, la 1ª disciplina que aconsejamos para empezar."
-                    : `Desbloquea ${d.name} cuando quieras — es la ${number}ª que aconsejamos, pero puedes empezar por aquí.`;
+                    ? t("home.desbloquea.astrologia")
+                    : t("home.desbloquea.otra", {
+                        disciplina: nombreDisciplina(d.name),
+                        ordinal: t(`comun.ordinal.${number}` as ClaveTexto),
+                      });
 
                 const disciplinaCircle = (
                   <Box
@@ -1155,8 +1162,8 @@ const Home = () => {
       <PagoExitoModal
         isOpen={pagoPsicoExitoOpen}
         onAceptar={() => setPagoPsicoExitoOpen(false)}
-        titulo="Pago de Psicología realizado"
-        mensaje="Ya puedes empezar tu Línea de Vida."
+        titulo={t("home.pago.titulo", { disciplina: t("disciplina.psicologia") })}
+        mensaje={t("home.pago.lineaDeVida")}
         nom={neuropsicologiaNom}
         txtColor={neuropsicologiaTxt}
         bgColor={neuropsicologiaBg}
@@ -1178,8 +1185,8 @@ const Home = () => {
       <PagoExitoModal
         isOpen={pagoAyurExitoOpen}
         onAceptar={() => setPagoAyurExitoOpen(false)}
-        titulo="Pago de Ayurveda realizado"
-        mensaje="Ya puedes empezar la 3ª disciplina del Mapa."
+        titulo={t("home.pago.titulo", { disciplina: t("disciplina.ayurveda") })}
+        mensaje={t("home.pago.puedesEmpezar", { ordinal: t("comun.ordinal.3") })}
         nom={ayurvedaNom}
         txtColor={ayurvedaTxt}
         bgColor={ayurvedaBg}
@@ -1194,8 +1201,8 @@ const Home = () => {
       <PagoExitoModal
         isOpen={pagoTcmExitoOpen}
         onAceptar={() => setPagoTcmExitoOpen(false)}
-        titulo="Pago de Medicina China realizado"
-        mensaje="Ya puedes empezar la 4ª disciplina del Mapa."
+        titulo={t("home.pago.titulo", { disciplina: t("disciplina.medicinaChina") })}
+        mensaje={t("home.pago.puedesEmpezar", { ordinal: t("comun.ordinal.4") })}
         nom={tcmNom}
         txtColor={tcmTxt}
         bgColor={tcmBg}
@@ -1210,8 +1217,8 @@ const Home = () => {
       <PagoExitoModal
         isOpen={pagoFisioExitoOpen}
         onAceptar={() => setPagoFisioExitoOpen(false)}
-        titulo="Pago de Fisiología realizado"
-        mensaje="Ya puedes empezar la 5ª disciplina del Mapa."
+        titulo={t("home.pago.titulo", { disciplina: t("disciplina.fisiologia") })}
+        mensaje={t("home.pago.puedesEmpezar", { ordinal: t("comun.ordinal.5") })}
         nom={fisiologiaNom}
         txtColor={fisiologiaTxt}
         bgColor={fisiologiaBg}
@@ -1226,8 +1233,8 @@ const Home = () => {
       <PagoExitoModal
         isOpen={pagoNutriExitoOpen}
         onAceptar={() => setPagoNutriExitoOpen(false)}
-        titulo="Pago de Nutrición realizado"
-        mensaje="Ya puedes empezar la 6ª disciplina del Mapa."
+        titulo={t("home.pago.titulo", { disciplina: t("disciplina.nutricion") })}
+        mensaje={t("home.pago.puedesEmpezar", { ordinal: t("comun.ordinal.6") })}
         nom={nutricionNom}
         txtColor={nutricionTxt}
         bgColor={nutricionBg}
@@ -1242,8 +1249,8 @@ const Home = () => {
       <PagoExitoModal
         isOpen={pagoCabalaExitoOpen}
         onAceptar={() => setPagoCabalaExitoOpen(false)}
-        titulo="Pago de Cábala realizado"
-        mensaje="Ya puedes empezar la 7ª disciplina del Mapa."
+        titulo={t("home.pago.titulo", { disciplina: t("disciplina.cabala") })}
+        mensaje={t("home.pago.puedesEmpezar", { ordinal: t("comun.ordinal.7") })}
         nom={cabalaNom}
         txtColor={cabalaTxt}
         bgColor={cabalaBg}
@@ -1258,8 +1265,8 @@ const Home = () => {
       <PagoExitoModal
         isOpen={pagoCulturaExitoOpen}
         onAceptar={() => setPagoCulturaExitoOpen(false)}
-        titulo="Pago de Cultura realizado"
-        mensaje="Ya puedes empezar la 8ª disciplina del Mapa."
+        titulo={t("home.pago.titulo", { disciplina: t("disciplina.cultura") })}
+        mensaje={t("home.pago.puedesEmpezar", { ordinal: t("comun.ordinal.8") })}
         nom={culturaNom}
         txtColor={culturaTxt}
         bgColor={culturaBg}

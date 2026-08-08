@@ -5,6 +5,7 @@
 import React, { useState } from "react";
 import { Box, Input, InputGroup, InputRightElement, Text } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useT } from "../../i18n";
 
 /**
  * Estilo de TODOS los campos de las pantallas de acceso (sobre el turquesa).
@@ -56,6 +57,8 @@ export function CampoContrasena({
   autoComplete,
 }: Props) {
   const [visible, setVisible] = useState(false);
+  const t = useT();
+  const tituloOjo = visible ? t("auth.contrasena.ocultar") : t("auth.contrasena.mostrar");
 
   return (
     <Box>
@@ -90,8 +93,8 @@ export function CampoContrasena({
             as="button"
             type="button"
             onClick={() => setVisible((v) => !v)}
-            aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
-            title={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
+            aria-label={tituloOjo}
+            title={tituloOjo}
             display="flex"
             alignItems="center"
             justifyContent="center"

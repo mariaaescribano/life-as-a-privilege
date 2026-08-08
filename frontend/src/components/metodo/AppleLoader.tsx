@@ -1,4 +1,5 @@
 import React from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { nutricionTxt } from "../../GlobalVariables";
@@ -47,11 +48,12 @@ export function AppleLoader({
   color = nutricionTxt,
   size,
 }: { label?: string | null; color?: string; size?: any }) {
+  const t = useT();
   const w = size ?? { base: "78px", md: "92px" };
   return (
     <Flex direction="column" align="center" justify="center" gap={4}>
       <Box as="svg" viewBox="0 0 120 120" w={w} h={w}
-           overflow="visible" aria-label="Cargando">
+           overflow="visible" aria-label={t("comun.cargando")}>
         {/* Sombra en el suelo (no bota con la manzana) */}
         <Box
           as="ellipse"

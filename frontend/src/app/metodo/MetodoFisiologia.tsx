@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -27,6 +28,7 @@ const INK_SHADOW = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2p
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(200,181,209,0.12), 0 0 20px ${fisiologiaTxt}1a, 0 0 48px ${fisiologiaTxt}10`;
 
 export default function MetodoFisiologia() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -128,8 +130,7 @@ export default function MetodoFisiologia() {
                   mb={4}
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  No tenemos un cuerpo: somos un cuerpo. Todo lo que existe —incluido tú— está construido a
-                  partir de las mismas partículas que nacieron en el corazón de las estrellas.
+                  {t("metodo.gate.fisio.intro1")}
                 </Text>
                 <Text
                   color={fisiologiaTxt}
@@ -140,8 +141,7 @@ export default function MetodoFisiologia() {
                   mx="auto"
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  En este recorrido descenderás hasta lo más pequeño que te forma y volverás a subir, nivel a
-                  nivel, hasta el milagro entero que eres. Empecemos por el principio de todo.
+                  {t("metodo.gate.fisio.intro2")}
                 </Text>
               </Box>
             </Box>

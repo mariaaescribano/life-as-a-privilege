@@ -3,11 +3,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { GlifoSigno } from "../metodo/Glifo";
+import { useT } from "../../i18n";
 
 const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 const SiteFooter = () => {
   const navigate = useNavigate();
+  const t = useT();
   return (
     <Box
       as="footer"
@@ -16,7 +18,7 @@ const SiteFooter = () => {
       py={{ base: 8, md: 10 }}
     >
       <Text color="rgba(255,255,255,0.5)" fontSize="xs" letterSpacing="0.05em" textAlign="center">
-        © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
+        {t("footer.derechos")}
       </Text>
       <Flex justify="center" gap={6} mt={3} flexWrap="wrap" alignItems="center">
         <Flex align="center" gap={6} flexWrap="wrap" justify="center">
@@ -35,7 +37,7 @@ const SiteFooter = () => {
           <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="currentColor">
             <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280 320-200v-80L480-520 160-720v80l320 200Z"/>
           </svg>
-          Contactar
+          {t("footer.contactar")}
         </Flex>
         <Flex
           align="center"
@@ -50,7 +52,7 @@ const SiteFooter = () => {
         >
           {/* Géminis DIBUJADO (el carácter ♊ salía como emoji morado). */}
           <GlifoSigno nombre="Géminis" color="white" size={16} glow={false} />
-          Quién soy
+          {t("footer.quienSoy")}
         </Flex>
         <Flex
           align="center"
@@ -66,7 +68,7 @@ const SiteFooter = () => {
           <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="currentColor">
             <path d="M240-400h122l200-200q9-9 13.5-20.5T580-643q0-11-5-21.5T562-684l-36-38q-9-9-20-13.5t-23-4.5q-11 0-22.5 4.5T440-722L240-522v122ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Z"/>
           </svg>
-          Experiencias reales
+          {t("footer.experiencias")}
         </Flex>
         <Box
           as="a"
@@ -136,7 +138,7 @@ const SiteFooter = () => {
           <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor">
             <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/>
           </svg>
-          Donar
+          {t("footer.donar")}
         </Box>
         </Flex>
       </Flex>
@@ -144,10 +146,10 @@ const SiteFooter = () => {
       {/* ── Enlaces legales ── */}
       <Flex justify="center" gap={{ base: 3, md: 5 }} mt={5} flexWrap="wrap" alignItems="center">
         {[
-          { texto: "Aviso legal", ruta: "/aviso-legal" },
-          { texto: "Privacidad", ruta: "/privacidad" },
-          { texto: "Cookies", ruta: "/cookies" },
-          { texto: "Términos de contratación", ruta: "/terminos" },
+          { texto: t("footer.avisoLegal"), ruta: "/aviso-legal" },
+          { texto: t("footer.privacidad"), ruta: "/privacidad" },
+          { texto: t("footer.cookies"), ruta: "/cookies" },
+          { texto: t("footer.terminos"), ruta: "/terminos" },
         ].map((l) => (
           <Text
             key={l.ruta}

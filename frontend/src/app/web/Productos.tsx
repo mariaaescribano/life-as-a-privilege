@@ -1,3 +1,4 @@
+import { useT } from "../../i18n";
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +31,7 @@ const glassCard = {
 };
 
 const Productos = () => {
+  const t = useT();
   const navigate = useNavigate();
   const isRegistered = !!localStorage.getItem("userId");
   const [favoritos, setFavoritos] = useState<Set<string>>(() => {
@@ -83,7 +85,7 @@ const Productos = () => {
               textShadow="0 2px 10px rgba(0,100,90,0.4)"
               lineHeight="1.1"
             >
-              Productos Naturales
+              {t("productos.titulo")}
             </Text>
           </Flex>
 
@@ -101,8 +103,7 @@ const Productos = () => {
               lineHeight="1.95"
               letterSpacing="0.03em"
             >
-              Cada producto nace de un proceso artesanal, con ingredientes seleccionados por su pureza y su poder sanador.
-              Porque cuidarse es un acto de Amor propio, y mereces lo mejor que la madre tierra tiene para ofrecerte.
+              {t("productos.intro")}
             </Text>
           </Box>
 
@@ -142,7 +143,7 @@ const Productos = () => {
                     _hover={{ bg: favoritos.has(p.id) ? "rgba(255,107,138,0.3)" : "rgba(255,255,255,0.15)" }}
                     transition="all 0.18s"
                     onClick={(e: React.MouseEvent) => toggleFavorito(p.id, e)}
-                    title={favoritos.has(p.id) ? "Quitar de favoritos" : "Guardar en favoritos"}
+                    title={favoritos.has(p.id) ? t("productos.quitarFavorito") : t("productos.guardarFavorito")}
                   >
                     <HeartIcon filled={favoritos.has(p.id)} />
                   </Box>
@@ -211,7 +212,7 @@ const Productos = () => {
                       _hover={{ bg: "rgba(255,255,255,0.22)", borderColor: "white" }}
                       transition="all 0.2s"
                     >
-                      Ver más →
+                      {t("productos.verMas")}
                     </Box>
                   </Flex>
                 </Box>

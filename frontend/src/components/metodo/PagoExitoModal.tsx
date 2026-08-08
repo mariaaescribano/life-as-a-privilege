@@ -1,4 +1,5 @@
 import React from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -31,12 +32,13 @@ interface PagoExitoModalProps {
 export function PagoExitoModal({
   isOpen,
   onAceptar,
-  titulo = "Pago de Astrología realizado",
-  mensaje = "Ya puedes acceder.",
+  titulo,
+  mensaje,
   nom = astrologiaNom,
   txtColor = astrologiaTxt,
   bgColor = astrologiaBg,
 }: PagoExitoModalProps) {
+  const t = useT();
   // Halo del color base de la disciplina para que el texto claro se lea sobre
   // la imagen de fondo (inmersivo).
   const ink = `0 1px 3px ${bgColor}f2, 0 0 10px ${bgColor}cc, 0 2px 18px ${bgColor}99`;
@@ -77,7 +79,7 @@ export function PagoExitoModal({
                 whiteSpace="nowrap"
                 style={{ textShadow: ink }}
               >
-                {titulo}
+                {titulo ?? t("metodo.pago.realizado", { disciplina: t("disciplina.astrologia") })}
               </Text>
             </Flex>
 
@@ -92,7 +94,7 @@ export function PagoExitoModal({
               fontStyle="italic"
               style={{ textShadow: ink }}
             >
-              {mensaje}
+              {mensaje ?? t("metodo.pago.yaPuedes")}
             </Text>
 
             <Flex justify="center" mt={3}>
@@ -118,7 +120,7 @@ export function PagoExitoModal({
                 _focusVisible={{ boxShadow: `0 4px 24px ${txtColor}55`, outline: "none" }}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 32px ${txtColor}88` }}
               >
-                Aceptar
+                {t("comun.aceptar")}
               </Box>
             </Flex>
           </Flex>

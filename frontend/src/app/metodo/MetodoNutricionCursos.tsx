@@ -21,7 +21,7 @@ import {
 } from "../../GlobalVariables";
 
 // ── Cursos para profundizar (Nutrición) ─────────────────────────────────────
-// Página-hub que va DESPUÉS de «Preguntas y mitos». Aquí se listarán los cursos
+// Página-hub que va DESPUÉS de «¿De dónde vienen los nutrientes?». Aquí se listarán los cursos
 // avanzados de Nutrición. De momento no hay ninguno: se deja el enrutado y el
 // diseño listos; basta con ir añadiendo objetos a CURSOS y el resto funciona solo.
 // Su «siguiente» arranca la 7ª disciplina: Cábala.
@@ -156,7 +156,7 @@ export default function MetodoNutricionCursos() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Preguntas y mitos", onClick: () => navigate("/metodo/nutricion/mitos") }}
+              prev={{ label: "← ¿De dónde vienen?", onClick: () => navigate("/metodo/nutricion/origen") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={cabalaSuscrito
                 ? { label: "Cábala →", onClick: () => navigate("/metodo/cabala") }

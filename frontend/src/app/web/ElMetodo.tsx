@@ -5,7 +5,10 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ContactModal } from "../../components/global/ContactModal";
 import { BookCallModal } from "../../components/global/BookCallModal";
-import { recorridoContenido, nombreEnMapa, type ContenidoSeccion } from "../../data/recorridoContenido";
+import { type DisciplinaClave } from "../../data/recorridoContenido";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useT, type ClaveTexto } from "../../i18n";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
 import { ComicPorQueExiste } from "../../components/metodo/ComicPorQueExiste";
@@ -34,81 +37,88 @@ import {
 //   NUM_DISCIPLINAS, PRECIO_DISCIPLINA, PRECIO_MAPA_COMPLETO,
 // } from "../../components/metodo/pagoDisciplinaLink";
 
+/**
+ * Parte VISUAL de cada disciplina: lo que no depende del idioma (colores, icono,
+ * nombre interno) más las CLAVES de su texto.
+ *
+ * El texto no se guarda aquí a propósito: este array se calcula una sola vez al
+ * importar el módulo, así que una cadena ya traducida se quedaría congelada en
+ * el idioma con el que arrancó la página. El contenido se pide al pintar, con
+ * `useRecorridoContenido()`, y el lema con `t(m.lemaKey)`.
+ */
 type ModalidadData = {
+  clave: DisciplinaClave;
   name: string;
   bg: string;
   txt: string;
   renderIcon: (size: string) => React.ReactNode;
-  tagline: string;
-  desc: string;
-  modalDesc: string;
-  contenido: ContenidoSeccion[];
+  lemaKey: ClaveTexto;
 };
 
 const modalidades: ModalidadData[] = [
   {
+    clave: "astrologia",
     name: astrologiaNom,
     bg: astrologiaBg,
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
-    tagline: "Los patrones que te forman.",
-    ...recorridoContenido.astrologia,
+    lemaKey: "welcome.lema.astrologia",
   },
   {
+    clave: "psicologia",
     name: neuropsicologiaNom,
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
-    tagline: "Cómo funciona tu mente.",
-    ...recorridoContenido.psicologia,
+    lemaKey: "welcome.lema.psicologia",
   },
   {
+    clave: "ayurveda",
     name: ayurvedaNom,
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
-    tagline: "Tu constitución única.",
-    ...recorridoContenido.ayurveda,
+    lemaKey: "welcome.lema.hinduismo",
   },
   {
+    clave: "tcm",
     name: tcmNom,
     bg: tcmBg,
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
-    tagline: "El origen de tus desequilibrios.",
-    ...recorridoContenido.tcm,
+    lemaKey: "welcome.lema.medicinaChina",
   },
   {
+    clave: "fisiologia",
     name: fisiologiaNom,
     bg: fisiologiaBg,
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
-    tagline: "Eres un cuerpo.",
-    ...recorridoContenido.fisiologia,
+    lemaKey: "welcome.lema.fisiologia",
   },
   {
+    clave: "nutricion",
     name: nutricionNom,
     bg: nutricionBg,
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
-    tagline: "Cómo te reconstruyes.",
-    ...recorridoContenido.nutricion,
+    lemaKey: "welcome.lema.nutricion",
   },
   {
+    clave: "cabala",
     name: cabalaNom,
     bg: cabalaBg,
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
-    tagline: "La arquitectura del alma.",
-    ...recorridoContenido.cabala,
+    lemaKey: "welcome.lema.cabala",
   },
   {
+    clave: "cultura",
     name: culturaNom,
     bg: culturaBg,
     txt: culturaTxt,
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
-    tagline: "Las historias de la humanidad.",
-    ...recorridoContenido.cultura,
+    lemaKey: "welcome.lema.cultura",
   },
 ];
 
@@ -134,18 +144,19 @@ const METODO_IMGS: string[] = [
 // siete líneas y en una sola columna el box se hacía una lista larguísima que
 // obligaba a bajar; en dos entra de un vistazo y queda horizontal, del ancho del
 // resto de la página. En móvil se apila a una columna, que dos no caben.
-const QUE_OBTIENES: string[] = [
-  "Una lectura personalizada de tu carta astral, realizada por mí.",
-  "Un recorrido guiado, con un orden coherente y concreto.",
-  "Materiales de lectura, ilustraciones y explicaciones paso a paso.",
-  "Ejercicios prácticos para integrar lo aprendido en tu día a día.",
-  "Acceso durante 1 año. Los PDF serán tuyos para siempre.",
-  "Compra por disciplina. Avanza a tu ritmo, sin suscripciones ni compromisos.",
-  "Posibilidad de llamadas para resolver dudas o profundizar en tu proceso.",
-  "Acceso a todos los cursos e ilustraciones."
+const QUE_OBTIENES: ClaveTexto[] = [
+  "elMetodo.obtienes.1",
+  "elMetodo.obtienes.2",
+  "elMetodo.obtienes.3",
+  "elMetodo.obtienes.4",
+  "elMetodo.obtienes.5",
+  "elMetodo.obtienes.6",
+  "elMetodo.obtienes.7",
+  "elMetodo.obtienes.8",
 ];
 
 function QueObtienesBox() {
+  const t = useT();
   return (
     <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.8} w="100%">
       <Flex
@@ -171,7 +182,7 @@ function QueObtienesBox() {
             textAlign="center"
             textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
           >
-            ¿Qué obtienes al acceder a El Mapa?
+            {t("elMetodo.queObtienes")}
           </Text>
           {/* Rayita corta bajo el título: cierra la cabecera del box sin meter
               otra línea a todo el ancho, que competiría con el borde. */}
@@ -186,8 +197,8 @@ function QueObtienesBox() {
           gridTemplateColumns={{ base: "1fr", md: "1fr 1fr" }}
           gap={{ base: 3.5, md: "18px 44px" }}
         >
-          {QUE_OBTIENES.map((linea) => (
-            <RevealItem key={linea} direction="up" distance={14}>
+          {QUE_OBTIENES.map((clave) => (
+            <RevealItem key={clave} direction="up" distance={14}>
               <Flex align="flex-start" gap={3}>
                 <Text
                   color="white"
@@ -207,7 +218,7 @@ function QueObtienesBox() {
                   letterSpacing="0.01em"
                   textShadow="0 0 10px rgba(255,255,255,0.2)"
                 >
-                  {linea}
+                  {t(clave)}
                 </Text>
               </Flex>
             </RevealItem>
@@ -290,9 +301,11 @@ function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
   const enPantalla = useEnPantalla();
   const hasBg = hasDisciplinaBg(data.name);
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
-  // En El Mapa, "Hinduismo" se muestra como "Ayurveda" (nombreEnMapa). Medicina
-  // China se abrevia en móvil por espacio.
-  const displayName = data.name === "Medicina China" && isMobile ? "Med. China" : nombreEnMapa(data.name);
+  const t = useT();
+  const nombreEnMapa = useNombreDisciplinaEnMapa();
+  // En El Mapa, "Hinduismo" se muestra como "Ayurveda". En móvil se pide la
+  // versión corta, que solo tiene Medicina China («Med. China»).
+  const displayName = nombreEnMapa(data.name, isMobile);
   // Entrada: la tarjeta sube a su sitio y se enfoca, y las de una misma fila lo
   // hacen UNA DETRÁS DE OTRA, de izquierda a derecha.
   //
@@ -395,7 +408,7 @@ function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
       </Flex>
 
       {/* Frase corta bajo el nombre (misma que las cajas de home) */}
-      {data.tagline && (
+      {data.lemaKey && (
         <Text
           position="relative"
           zIndex={1}
@@ -411,7 +424,7 @@ function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
             ? `0 1px 3px ${data.bg}f5, 0 1px 6px ${data.bg}cc, 0 0 12px ${data.bg}dd`
             : undefined}
         >
-          {data.tagline}
+          {t(data.lemaKey)}
         </Text>
       )}
 
@@ -451,6 +464,9 @@ function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
 
 export default function ElMetodo() {
   const navigate = useNavigate();
+  const t = useT();
+  // El contenido de las ocho disciplinas, ya en el idioma activo.
+  const contenido = useRecorridoContenido();
   // Las entradas de esta página las hace el sistema Reveal (framer-motion), el
   // mismo del recorrido de astrología. Las ocho tarjetas son la excepción:
   // conservan su entrada en CSS y cada una se observa a sí misma (ver MetodoCard).
@@ -572,7 +588,7 @@ export default function ElMetodo() {
           transform={mounted ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.85s ease, transform 0.85s ease"
         >
-          EL MAPA
+          {t("elMetodo.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.85)"
@@ -585,7 +601,7 @@ export default function ElMetodo() {
           transform={mounted ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s"
         >
-          de Life as a Privilege
+          {t("elMetodo.subtitulo")}
         </Text>
       </Flex>
 
@@ -626,7 +642,7 @@ export default function ElMetodo() {
                 letterSpacing="0.015em"
                 textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
               >
-                Ocho disciplinas. Un orden. Un propósito: entenderte.
+                {t("elMetodo.lema")}
               </Text>
             </Reveal>
 
@@ -638,7 +654,7 @@ export default function ElMetodo() {
                 letterSpacing="0.015em"
                 textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
               >
-                No son ocho cursos independientes. Es una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.
+                {t("elMetodo.intro")}
               </Text>
             </Reveal>
           </Flex>
@@ -684,7 +700,7 @@ export default function ElMetodo() {
           transform={mounted ? "translateY(0)" : "translateY(14px)"}
           transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
         >
-          Así es El Mapa por dentro
+          {t("elMetodo.porDentro")}
         </Text>
       </Flex>
       
@@ -744,7 +760,7 @@ export default function ElMetodo() {
                 maxW={{ base: "100%", md: "640px" }}
                 textShadow="0 0 10px rgba(255,255,255,0.32), 0 0 22px rgba(255,255,255,0.16)"
               >
-                Cada disciplina observa una parte distinta del ser humano.
+                {t("elMetodo.cadaDisciplina")}
               </Text>
             </Reveal>
           </Flex>
@@ -1075,7 +1091,7 @@ export default function ElMetodo() {
             whiteSpace="nowrap"
             textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.22)"
           >
-            Acceder a El Mapa
+            {t("elMetodo.acceder")}
           </Text>
         </Flex>
         </Breathe>
@@ -1140,7 +1156,7 @@ export default function ElMetodo() {
               fontStyle="italic"
               textShadow="0 0 8px rgba(255,255,255,0.34), 0 0 18px rgba(255,255,255,0.17)"
             >
-              Agendar llamada gratuita (20 min)
+              {t("elMetodo.agendar")}
             </Text>
           </Flex>
 
@@ -1191,7 +1207,7 @@ export default function ElMetodo() {
               fontStyle="italic"
               textShadow="0 0 8px rgba(255,255,255,0.34), 0 0 18px rgba(255,255,255,0.17)"
             >
-              Tengo dudas
+              {t("elMetodo.dudas")}
             </Text>
           </Flex>
         </Flex>
@@ -1293,8 +1309,8 @@ export default function ElMetodo() {
               nom={selectedCard.name}
               bg={selectedCard.bg}
               txt={selectedCard.txt}
-              desc={selectedCard.desc}
-              contenido={selectedCard.contenido}
+              desc={contenido[selectedCard.clave].desc}
+              contenido={contenido[selectedCard.clave].contenido}
               renderIcon={selectedCard.renderIcon}
             />
             </Box>
@@ -1306,13 +1322,13 @@ export default function ElMetodo() {
       <ContactModal
         isOpen={dudasOpen}
         onClose={() => setDudasOpen(false)}
-        title="Tengo dudas"
+        title={t("elMetodo.dudas")}
         bgColor="#008080"
         color="#ffffff"
-        emailSubject="Consulta — Life as a Privilege"
+        emailSubject={t("elMetodo.dudas.asunto")}
         showCheckboxes={false}
         showDescription={true}
-        textareaPlaceholder="Escribe aquí tu consulta..."
+        textareaPlaceholder={t("elMetodo.dudas.placeholder")}
       />
 
       <BookCallModal

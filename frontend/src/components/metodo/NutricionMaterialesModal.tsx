@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text, SimpleGrid, Image, Portal } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { FotoBox, glowSuave } from "./FotoBox";
@@ -114,6 +115,7 @@ function MoleculaCard({ m, pct }: { m: Molecula; pct?: number }) {
 // Detalle de UN alimento: foto + nombre + descripción + macros + fichas de sus
 // moléculas (foto, %, función y qué hace).
 function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void }) {
+  const t = useT();
   const mols = molsDeAlimento(a);
   const grupos = ORDEN_GRUPOS_MOLECULA
     .map((g) => ({ grupo: g, items: mols.filter((x) => x.m.grupo === g) }))
@@ -129,7 +131,7 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
         <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
           <path d="M480-160 160-480l320-320 56 57-223 223h487v80H313l224 224-57 56Z" />
         </Box>
-        Todos los alimentos
+        {t("metodo.alimentos.todos")}
       </Box>
 
       {/* Box tipo cómic SIN foto a la izquierda: solo el contenido, a todo el ancho. */}
@@ -177,7 +179,7 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
           <Box>
             <Text color={`${nutricionTxt}aa`} fontSize="2xs" fontWeight={700} letterSpacing="0.14em"
                   textTransform="uppercase" mb={2.5}>
-              De qué está hecho
+              {t("metodo.alimentos.deQueEstaHecho")}
             </Text>
             <BarraMacros macros={a.macros} />
           </Box>
@@ -186,7 +188,7 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
 
           <Text color={`${nutricionTxt}aa`} fontSize="2xs" fontWeight={700} letterSpacing="0.14em"
                 textTransform="uppercase">
-            Las moléculas que lo forman
+            {t("metodo.alimentos.moleculas")}
           </Text>
 
           {grupos.map((s) => (
@@ -222,6 +224,7 @@ function AlimentoBox({ a, onClick }: { a: Alimento; onClick: () => void }) {
 }
 
 export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const t = useT();
   const [sel, setSel] = useState<Alimento | null>(null);
 
   // No mostramos la rejilla hasta que TODAS las fotos de los alimentos estén
@@ -277,10 +280,10 @@ export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean;
             <Flex direction="column" align="center" gap={2} textAlign="center">
               <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "4xl" }} fontWeight={800}
                     letterSpacing="0.04em" lineHeight="1.1">
-                Los materiales de los alimentos
+                {t("metodo.alimentos.materiales")}
               </Text>
               <Text color={`${nutricionTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" maxW="560px">
-                Elige un alimento y descubre de qué moléculas está hecho.
+                {t("metodo.alimentos.elige")}
               </Text>
             </Flex>
 

@@ -7,6 +7,9 @@ import { Reveal } from "../global/Reveal";
 import { BookCallModal } from "../global/BookCallModal";
 import { ContactModal } from "../global/ContactModal";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import type { ContenidoSeccion } from "../../data/recorridoContenido";
+import { TextoRico, useT, type ClaveTexto } from "../../i18n";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Piezas comunes a las páginas de presentación (/d/:disciplina).
@@ -131,6 +134,18 @@ export interface IdeaPresentacion {
   nota?: string;
 }
 
+/**
+ * Convierte las cajas de «Qué incluye» de una disciplina (recorridoContenido,
+ * el mismo sitio del que bebe /elMetodo) en ideas de presentación.
+ *
+ * Antes cada página se traía su propia copia del párrafo en un array `IDEAS`
+ * local. Eran los MISMOS textos duplicados, y con dos idiomas eso serían cuatro
+ * copias del mismo párrafo esperando a desincronizarse. Ahora hay una sola
+ * fuente y esta función la adapta.
+ */
+export const ideasDesdeContenido = (secciones: ContenidoSeccion[]): IdeaPresentacion[] =>
+  secciones.map((s) => ({ titulo: s.titulo, parrafos: s.items, nota: s.aviso }));
+
 export function CajaIdea({ d, idea }: { d: PresentacionDisciplina; idea: IdeaPresentacion }) {
   const sombra = sombraTexto(d.nom, d.bg);
   return (
@@ -187,9 +202,12 @@ export function MosaicoMuestra({
   columnas = 2,
 }: {
   d: PresentacionDisciplina;
-  fotos: { foto: string; titulo: string }[];
+  /** El pie de cada foto: texto ya resuelto, o su clave si viene de un array
+   *  de nivel de módulo (que no puede traer texto ya traducido). */
+  fotos: { foto: string; titulo?: string; tituloKey?: ClaveTexto }[];
   columnas?: number;
 }) {
+  const t = useT();
   const sombra = sombraTexto(d.nom, d.bg);
   return (
     <CajaLisa d={d} h="100%" sx={{ pointerEvents: "none" }}>
@@ -208,7 +226,7 @@ export function MosaicoMuestra({
                 <Box
                   as="img"
                   src={encodeURI(f.foto)}
-                  alt={f.titulo}
+                  alt={f.titulo ?? (f.tituloKey ? t(f.tituloKey) : "")}
                   loading="lazy"
                   w="100%"
                   h="100%"
@@ -223,7 +241,7 @@ export function MosaicoMuestra({
                 textAlign="center"
                 textShadow={sombra}
               >
-                {f.titulo}
+                {f.titulo ?? (f.tituloKey ? t(f.tituloKey) : "")}
               </Text>
             </Flex>
           ))}
@@ -463,7 +481,10 @@ function BotonSecundario({
 }
 
 export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
+  const t = useT();
   const navigate = useNavigate();
+  // El nombre que se ve: `d.titulo` no vale, ese solo sirve para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
   // Los dos modales que ya usa /elMetodo: la llamada de 20 min sin coste
   // (BookCallModal) y el formulario de consulta (ContactModal). Se montan aquí
   // dentro para que las nueve presentaciones los tengan sin repetir nada.
@@ -485,7 +506,7 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
             letterSpacing="0.04em"
             textShadow={sombra}
           >
-            Empieza por {d.titulo}
+            {t("presentacion.empiezaPor", { disciplina })}
           </Text>
 
           <Box h="1px" w="100px" bgGradient={`linear(to-r, transparent, ${d.txt}, transparent)`} />
@@ -497,9 +518,7 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
             maxW="660px"
             textShadow={sombra}
           >
-            Puedes recorrer <b>solo {d.titulo}</b>. Es un recorrido completo en sí mismo,
-            con sus ilustraciones, sus ejercicios y su acompañamiento, y no hay ningún
-            orden obligatorio: se empieza por donde tenga sentido para ti.
+            <TextoRico>{t("presentacion.soloUna", { disciplina })}</TextoRico>
           </Text>
 
           <Text
@@ -509,15 +528,11 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
             maxW="660px"
             textShadow={sombra}
           >
-            Pero {d.titulo} es una de las <b>ocho miradas</b> de El Mapa. Cada una explica
-            una parte del ser humano —tu carácter, tu historia, tu cuerpo, tu alimentación,
-            tu alma, tus ideas— y el propósito de recorrerlas es uno solo:
-            <b> entenderte del todo</b>. Ninguna disciplina sola contesta la pregunta;
-            juntas son un camino.
+            <TextoRico>{t("presentacion.ochoMiradas", { disciplina })}</TextoRico>
           </Text>
 
           <BotonDisciplina d={d} onClick={() => navigate("/signIn")} mt={{ base: 1, md: 2 }}>
-            Crear mi cuenta
+            {t("presentacion.crearCuenta")}
           </BotonDisciplina>
 
           {/* Las dos salidas para quien todavía no lo tiene decidido. En móvil
@@ -530,10 +545,10 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
             wrap="wrap"
           >
             <BotonSecundario d={d} onClick={() => setLlamadaOpen(true)}>
-              Llamada de 20 min sin coste
+              {t("presentacion.llamada")}
             </BotonSecundario>
             <BotonSecundario d={d} onClick={() => setDudasOpen(true)}>
-              Tengo dudas
+              {t("elMetodo.dudas")}
             </BotonSecundario>
           </Flex>
 
@@ -552,7 +567,7 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
             transition="opacity 0.2s ease"
             _hover={{ opacity: 1, textDecoration: "underline" }}
           >
-            <Text as="span">Ver las ocho disciplinas</Text>
+            <Text as="span">{t("presentacion.verOcho")}</Text>
             <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="15px" h="15px" fill="currentColor">
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </Box>
@@ -566,13 +581,13 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
     <ContactModal
       isOpen={dudasOpen}
       onClose={() => setDudasOpen(false)}
-      title="Tengo dudas"
+      title={t("elMetodo.dudas")}
       bgColor="#008080"
       color="#ffffff"
-      emailSubject="Consulta — Life as a Privilege"
+      emailSubject={t("elMetodo.dudas.asunto")}
       showCheckboxes={false}
       showDescription={true}
-      textareaPlaceholder="Escribe aquí tu consulta..."
+      textareaPlaceholder={t("elMetodo.dudas.placeholder")}
     />
 
     <BookCallModal isOpen={llamadaOpen} onClose={() => setLlamadaOpen(false)} />
@@ -601,6 +616,7 @@ export function CursoMiniCard({
   d: PresentacionDisciplina;
   onOpen: () => void;
 }) {
+  const t = useT();
   const [falla, setFalla] = useState(false);
   return (
     <Box
@@ -673,7 +689,7 @@ export function CursoMiniCard({
           textTransform="uppercase"
           fontWeight="600"
         >
-          Ver el curso
+          {t("presentacion.verCurso")}
         </Text>
         <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="12px" h="12px" fill="currentColor">
           <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />

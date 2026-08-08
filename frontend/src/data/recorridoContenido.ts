@@ -22,8 +22,15 @@ export type VideoIntro = {
 /** Nombre a mostrar en El Mapa (/elMetodo). Internamente Ayurveda se llama
  *  "Hinduismo" (ayurvedaNom, usado para rutas y claves de fondo/estilos), pero
  *  en El Mapa se muestra como "Ayurveda". El resto se muestra igual. */
+/** @deprecated No traduce. Usa `useNombreDisciplinaEnMapa()` de
+ *  `src/i18n/nombreDisciplina.ts`. Solo queda vivo para MapaSeArma. */
 export const nombreEnMapa = (nom: string): string =>
   nom === "Hinduismo" ? "Ayurveda" : nom;
+
+/** Las ocho disciplinas del recorrido, por su clave interna. */
+export type DisciplinaClave =
+  | "astrologia" | "psicologia" | "ayurveda" | "tcm"
+  | "fisiologia" | "nutricion" | "cabala" | "cultura";
 
 export type DisciplinaContenido = {
   /** Frase introductoria en cursiva dentro del modal (1 línea) */
@@ -36,10 +43,7 @@ export type DisciplinaContenido = {
   videoIntro: VideoIntro;
 };
 
-export const recorridoContenido: Record<
-  "astrologia" | "psicologia" | "ayurveda" | "tcm" | "fisiologia" | "nutricion" | "cabala" | "cultura",
-  DisciplinaContenido
-> = {
+export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = {
 
   // ───────────────────────────────────────────────────────────
   // 1. ASTROLOGÍA
@@ -260,6 +264,12 @@ export const recorridoContenido: Record<
         titulo: "Microbiota",
         items: [
           "Entenderás por qué la microbiota va mucho más allá de la digestión y cómo se relaciona con tu salud, energía y bienestar general.",
+        ],
+      },
+      {
+        titulo: "De dónde vienen los nutrientes",
+        items: [
+          "Ningún ser vivo fabrica un átomo: verás el viaje completo, de la roca al suelo, del suelo a la raíz, de la raíz a la hoja y de la hoja al fruto que te comes. Y entenderás por qué cada color de una verdura es una familia distinta de moléculas.",
         ],
       },
       {

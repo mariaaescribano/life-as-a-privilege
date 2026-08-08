@@ -5,6 +5,7 @@ import {
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
 import SiteFooter from "../../components/global/Footer";
+import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -54,6 +55,7 @@ const textareaStyle = {
 };
 
 const Contacto = () => {
+  const t = useT();
   const [form, setForm] = useState({ nombre: "", email: "", titulo: "", mensaje: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [serverSlow, setServerSlow] = useState(false);
@@ -141,7 +143,7 @@ const Contacto = () => {
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Contactar
+          {t("contacto.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -154,7 +156,7 @@ const Contacto = () => {
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          ¿Tienes alguna pregunta o quieres ponerte en contacto? Escríbeme.
+          {t("contacto.subtitulo")}
         </Text>
       </Flex>
 
@@ -194,14 +196,14 @@ const Contacto = () => {
                 letterSpacing="0.05em"
                 textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(255,255,255,0.22)"
               >
-                ¡Mensaje enviado!
+                {t("contacto.enviado")}
               </Text>
               <Text
                 color="rgba(255,255,255,0.85)"
                 fontSize={{ base: "md", md: "lg" }}
                 textShadow="0 0 10px rgba(255,255,255,0.26)"
               >
-                Te responderé lo antes posible.
+                {t("contacto.responder")}
               </Text>
               <Flex
                 as="button"
@@ -232,7 +234,7 @@ const Contacto = () => {
                 transition="all 0.25s ease"
                 mt={2}
               >
-                Enviar otro mensaje
+                {t("contacto.otro")}
               </Flex>
             </Flex>
           ) : (
@@ -240,13 +242,13 @@ const Contacto = () => {
 
               <Box>
                 <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
-                  NOMBRE
+                  {t("contacto.campo.nombre")}
                 </Text>
                 <Input
                   name="nombre"
                   value={form.nombre}
                   onChange={handleChange}
-                  placeholder="Tu nombre"
+                  placeholder={t("contacto.ph.nombre")}
                   required
                   {...inputStyle}
                 />
@@ -254,14 +256,14 @@ const Contacto = () => {
 
               <Box>
                 <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
-                  EMAIL
+                  {t("contacto.campo.email")}
                 </Text>
                 <Input
                   name="email"
                   type="email"
                   value={form.email}
                   onChange={handleChange}
-                  placeholder="tu@email.com"
+                  placeholder={t("contacto.ph.email")}
                   required
                   {...inputStyle}
                 />
@@ -269,13 +271,13 @@ const Contacto = () => {
 
               <Box>
                 <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
-                  TÍTULO
+                  {t("contacto.campo.titulo")}
                 </Text>
                 <Input
                   name="titulo"
                   value={form.titulo}
                   onChange={handleChange}
-                  placeholder="Asunto de tu mensaje"
+                  placeholder={t("contacto.ph.titulo")}
                   required
                   {...inputStyle}
                 />
@@ -283,13 +285,13 @@ const Contacto = () => {
 
               <Box>
                 <Text color="rgba(255,255,255,0.78)" fontSize="xs" letterSpacing="0.18em" mb={2} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.26)">
-                  MENSAJE
+                  {t("contacto.campo.mensaje")}
                 </Text>
                 <Textarea
                   name="mensaje"
                   value={form.mensaje}
                   onChange={handleChange}
-                  placeholder="Escribe tu mensaje aquí..."
+                  placeholder={t("contacto.ph.mensaje")}
                   required
                   rows={6}
                   resize="vertical"
@@ -299,13 +301,13 @@ const Contacto = () => {
 
               {serverSlow && status === "idle" && (
                 <Text color="rgba(255,220,100,0.9)" fontSize="sm" textAlign="center" textShadow="0 0 8px rgba(255,220,100,0.4)">
-                  El servidor está iniciando, puede tardar unos segundos...
+                  {t("contacto.servidorLento")}
                 </Text>
               )}
 
               {status === "error" && (
                 <Text color="rgba(255,150,150,0.9)" fontSize="sm" textAlign="center" textShadow="0 0 8px rgba(255,150,150,0.4)">
-                  Hubo un error al enviar el mensaje. Inténtalo de nuevo.
+                  {t("contacto.error")}
                 </Text>
               )}
 
@@ -353,7 +355,7 @@ const Contacto = () => {
                     textShadow="0 0 12px rgba(255,255,255,0.49), 0 0 26px rgba(255,255,255,0.3)"
                     whiteSpace="nowrap"
                   >
-                    {status === "sending" ? "Enviando…" : "Enviar mensaje"}
+                    {status === "sending" ? t("comun.enviando") : t("contacto.enviar")}
                   </Text>
                 </Flex>
               </Flex>

@@ -7,6 +7,7 @@
 // debajo las piezas seleccionadas (huellas ◈, nudos espiral, necesidades ◇).
 // ─────────────────────────────────────────────────────────────────────────
 import React from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { RevealStagger, RevealItem } from "../global/Reveal";
 import { NudoEspiralIcon } from "./NudoEspiralIcon";
@@ -65,6 +66,7 @@ export function HeridaCard({ herida, color, onBorrar }: {
   color: string;
   onBorrar?: () => void;
 }) {
+  const t = useT();
   // Blindamos las tres listas: datos guardados con una forma antigua podían venir
   // sin `huellas`/`nudos` y hacían reventar el render (pantalla en blanco).
   const huellas = herida.huellas || [];
@@ -97,7 +99,7 @@ export function HeridaCard({ herida, color, onBorrar }: {
             <Box as="button" onClick={onBorrar} flexShrink={0} w="24px" h="24px" borderRadius="full"
                  bg={`${PAPEL}b3`} color={TINTA} display="flex" alignItems="center" justifyContent="center"
                  fontSize="11px" cursor="pointer" border={`1px solid ${TINTA}22`} transition="all 0.16s"
-                 _hover={{ bg: `${TINTA}22`, transform: "scale(1.08)" }} title="Borrar herida">✕</Box>
+                 _hover={{ bg: `${TINTA}22`, transform: "scale(1.08)" }} title={t("metodo.borrarHerida")}>✕</Box>
           )}
         </Flex>
 
@@ -112,7 +114,7 @@ export function HeridaCard({ herida, color, onBorrar }: {
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
           {vacia ? (
             <Flex align="center" justify="center" h="100%">
-              <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize={{ base: "sm", md: "md" }}>Sin piezas.</Text>
+              <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize={{ base: "sm", md: "md" }}>{t("metodo.sinPiezas")}</Text>
             </Flex>
           ) : (
             <Flex wrap="wrap" gap={2}>

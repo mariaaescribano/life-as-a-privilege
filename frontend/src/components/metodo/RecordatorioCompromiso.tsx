@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -35,6 +36,7 @@ interface Compromiso {
 }
 
 export function RecordatorioCompromiso() {
+  const t = useT();
   const [compromisos, setCompromisos] = useState<Compromiso[]>([]);
   const [open, setOpen] = useState(false);
 
@@ -90,7 +92,7 @@ export function RecordatorioCompromiso() {
         fontFamily="'EB Garamond', serif"
         transition="all 0.2s"
         _hover={{ transform: "translateY(-2px)", boxShadow: `0 6px 24px rgba(0,0,0,0.3), 0 0 22px ${neuropsicologiaBg}` }}
-        aria-label="Ver mi compromiso"
+        aria-label={t("metodo.compromiso.ver")}
       >
         <Heart size={16} color={TINTA} fill={TINTA} />
         <Text color={TINTA} fontWeight="700" fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.04em" whiteSpace="nowrap">
@@ -132,8 +134,7 @@ export function RecordatorioCompromiso() {
                   textAlign="center"
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  Esto es lo que te comprometiste a vivir en Psicología. Que te acompañe mientras
-                  diseñas tu día.
+                  {t("metodo.compromiso.recordatorio")}
                 </Text>
               </Flex>
 

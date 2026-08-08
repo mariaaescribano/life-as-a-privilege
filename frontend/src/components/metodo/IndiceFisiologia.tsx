@@ -27,6 +27,7 @@ const NIVELES: { label: string; pasos: { titulo: string; path: string }[] }[] = 
       { titulo: "Célula",      path: "/metodo/fisiologia/celula" },
       { titulo: "Las células", path: "/metodo/fisiologia/todas-tus-celulas" },
       { titulo: "Sistemas",    path: "/metodo/fisiologia/sistemas" },
+      { titulo: "El cerebro",  path: "/metodo/fisiologia/cerebro" },
       { titulo: "El cuerpo",   path: "/metodo/fisiologia/organismo" },
     ],
   },

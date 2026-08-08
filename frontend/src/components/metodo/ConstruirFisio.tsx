@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -170,6 +171,7 @@ function Dibujada({ piezas, forma }: { piezas: Pieza[]; forma: FormaFisio }) {
 }
 
 export default function ConstruirFisio(props: ConstruirFisioProps) {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const flat = (): Pieza[] =>
@@ -348,7 +350,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                             : <Ficha key={p.id} pieza={p} onSoltar={(r) => soltar(p, r)} />
                         ))}
                       </Box>
-                      {pendientes.length === 0 && (<Text color={`${props.glow}bb`} fontSize="md" fontStyle="italic">…uniéndose…</Text>)}
+                      {pendientes.length === 0 && (<Text color={`${props.glow}bb`} fontSize="md" fontStyle="italic">{t("metodo.uniendose")}</Text>)}
                       <Flex justify="center" gap={2} wrap="wrap" maxW="320px">
                         {Array.from({ length: total }).map((_, i) => (
                           <Box key={i} w="9px" h="9px" borderRadius="full"
@@ -435,7 +437,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                ↺ Volver a hacer
+                {t("metodo.volverAHacer")}
               </Box>
             </Flex>
           )}

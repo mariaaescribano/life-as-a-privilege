@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Portal, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
@@ -80,6 +81,7 @@ interface Row {
 const boxAspectoKey = (cuerpoKey: string, a: Aspecto): string => `${cuerpoKey}|${aspectoKey(a)}`;
 
 export default function MetodoAstrologiaAspectos() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [aspectos, setAspectos] = useState<Aspecto[]>([]);
@@ -232,7 +234,7 @@ export default function MetodoAstrologiaAspectos() {
             {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
             <Text color={astrologiaTxt} fontSize={{ base: "md", md: "lg" }} mb={2} fontStyle="italic"
                   letterSpacing="0.04em">
-              Cada aspecto es una relación entre dos planetas. Pulsa para leer.
+              {t("metodo.astro.aspectosPulsa")}
             </Text>
             {/* <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} maxW="560px">
               Cada aspecto es una conversación entre dos planetas. Pulsa para leer.

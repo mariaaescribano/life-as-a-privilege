@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex, Text } from "@chakra-ui/react";
@@ -88,6 +89,7 @@ function narrativaTransicion(t: TransicionResultado): string {
 }
 
 export default function MetodoCabalaDiagnostico() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [test, setTest] = useState<Record<string, number[]>>({});
@@ -182,7 +184,7 @@ export default function MetodoCabalaDiagnostico() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Mapa Evolutivo"
+              title={t("metodo.cabala.mapaEvolutivo")}
               pageLabel={`${CABALA_PAG.diagnostico}/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
@@ -200,8 +202,7 @@ export default function MetodoCabalaDiagnostico() {
             {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
-              Las sefirot son estados; los senderos, transiciones. El crecimiento no ocurre en una capacidad aislada,
-              sino en el paso de una a la siguiente. Este mapa busca qué transición evolutiva está bloqueada.
+              {t("metodo.cabala.diagIntro")}
             </Text>
           </Reveal>
 
@@ -217,11 +218,10 @@ export default function MetodoCabalaDiagnostico() {
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%">
               <Caja px={{ base: 6, md: 10 }} py={{ base: 12, md: 14 }} textAlign="center">
                 <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
-                  Aún faltan respuestas
+                  {t("metodo.cabala.faltanRespuestas")}
                 </Text>
                 <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                  Completa la «Escala de equilibrio» de al menos dos dimensiones consecutivas para empezar a ver tus
-                  transiciones. Cuantas más completes, más preciso será tu mapa.
+                  {t("metodo.cabala.faltanRespuestasTexto")}
                 </Text>
               </Caja>
             </Reveal>
@@ -232,7 +232,7 @@ export default function MetodoCabalaDiagnostico() {
                 <Reveal direction="up" distance={22} delay={0.18} duration={0.7} w="100%">
                   <Caja px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }}>
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={2}>
-                      Tu paso evolutivo prioritario
+                      {t("metodo.cabala.pasoPrioritario")}
                     </Text>
                     <Flex align="center" gap={3} wrap="wrap" mb={1}>
                       <Text color={cabalaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
@@ -270,7 +270,7 @@ export default function MetodoCabalaDiagnostico() {
 
                     {/* Siguiente paso concreto */}
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" mt={5} mb={2}>
-                      Tu siguiente paso
+                      {t("metodo.cabala.siguientePaso")}
                     </Text>
                     <Flex gap={3} wrap="wrap">
                       <BotonSefira label={`Repasar ${nombre(principal.from)}`} onClick={() => navigate(`/metodo/cabala/sefira/${principal.from}`)} />
@@ -282,11 +282,10 @@ export default function MetodoCabalaDiagnostico() {
                 <Reveal direction="up" distance={18} delay={0.18} duration={0.6} w="100%">
                   <Caja px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }} textAlign="center">
                     <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
-                      Tus transiciones fluyen
+                      {t("metodo.cabala.transicionesFluyen")}
                     </Text>
                     <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                      En las dimensiones que has respondido no aparece un bloqueo claro entre una capacidad y la
-                      siguiente. Sigue completando el resto para afinar el mapa.
+                      {t("metodo.cabala.transicionesFluyenTexto")}
                     </Text>
                   </Caja>
                 </Reveal>
@@ -298,7 +297,7 @@ export default function MetodoCabalaDiagnostico() {
                   <Box w="100%">
                     <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
                           letterSpacing="0.08em" mb={3} style={{ textShadow: INK_SHADOW }}>
-                      Otras transiciones a observar
+                      {t("metodo.cabala.otrasTransiciones")}
                     </Text>
                     <Flex direction="column" gap={3}>
                       {secundarios.map((t) => (
@@ -324,10 +323,10 @@ export default function MetodoCabalaDiagnostico() {
               {/* ── Mapa evolutivo: capacidades ── */}
               <Reveal direction="up" distance={18} delay={0.26} duration={0.6} w="100%">
                 <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 5 }} w="100%">
-                  <ListaChips titulo="Capacidades desarrolladas"
+                  <ListaChips titulo={t("metodo.cabala.desarrolladas")}
                               items={desarrolladas.map((n) => `${n.titulo} · ${n.etiqueta}`)}
                               vacio="Ninguna destaca todavía." />
-                  <ListaChips titulo="Capacidades por fortalecer"
+                  <ListaChips titulo={t("metodo.cabala.porFortalecer")}
                               items={porFortalecer.map((n) => `${n.titulo} · ${n.etiqueta}`)}
                               vacio="Ninguna especialmente baja." />
                 </Flex>
@@ -337,7 +336,7 @@ export default function MetodoCabalaDiagnostico() {
               <Reveal direction="up" distance={18} delay={0.3} duration={0.6} w="100%">
                 <Caja px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
                   <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={3} style={{ textShadow: INK_SHADOW }}>
-                    Tus capacidades
+                    {t("metodo.cabala.tusCapacidades")}
                   </Text>
 
                   {/* Sin esta leyenda, «Sobreexpresada» se lee como un suspenso.
@@ -345,17 +344,19 @@ export default function MetodoCabalaDiagnostico() {
                       CUÁNTO, la palabra es HACIA DÓNDE. */}
                   <Text color={`${cabalaTxt}bb`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" mb={2.5}
                         style={{ textShadow: INK_SHADOW }}>
-                    El número dice <Box as="span" fontWeight="700" color={cabalaTxt}>cuánto</Box> tienes
-                    desarrollada la capacidad. La palabra dice <Box as="span" fontWeight="700" color={cabalaTxt}>hacia
-                    dónde</Box> se desequilibra — no es una nota, y ninguna de las tres es peor que otra:
+                    {t("metodo.cabala.numeroDice")}{" "}
+                    <Box as="span" fontWeight="700" color={cabalaTxt}>{t("metodo.cabala.cuanto")}</Box>{" "}
+                    {t("metodo.cabala.tienesDesarrollada")}{" "}
+                    <Box as="span" fontWeight="700" color={cabalaTxt}>{t("metodo.cabala.haciaDonde")}</Box>{" "}
+                    {t("metodo.cabala.seDesequilibra")}
                   </Text>
                   <Flex direction="column" gap={1.5} mb={5}>
                     <LeyendaPolaridad label={POLARIDAD_LABEL.deficit}
-                                      texto="esa energía te falta. El trabajo es construirla." />
+                                      texto={t("metodo.cabala.falta")} />
                     <LeyendaPolaridad label={POLARIDAD_LABEL.equilibrio}
-                                      texto="la usas de forma proporcionada a lo que pide cada situación." />
+                                      texto={t("metodo.cabala.equilibrio")} />
                     <LeyendaPolaridad label={POLARIDAD_LABEL.exceso}
-                                      texto="la tienes de sobra y empieza a volverse en tu contra (rigidez, autoexigencia, no saber parar). El trabajo es soltar, no añadir." />
+                                      texto={t("metodo.cabala.exceso")} />
                   </Flex>
 
                   <Flex direction="column" gap={3.5}>
@@ -371,7 +372,7 @@ export default function MetodoCabalaDiagnostico() {
                               {n.nivel}/10 · <Box as="span" color={`${cabalaTxt}99`}>{POLARIDAD_LABEL[n.polaridad]}</Box>
                             </Text>
                           ) : (
-                            <Text color={`${cabalaTxt}66`} fontSize="xs" fontStyle="italic">sin responder</Text>
+                            <Text color={`${cabalaTxt}66`} fontSize="xs" fontStyle="italic">{t("metodo.cabala.sinResponder")}</Text>
                           )}
                         </Flex>
                         {n.completo ? <BarraNivel nivel={n.nivel} /> : (

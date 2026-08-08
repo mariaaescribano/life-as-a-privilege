@@ -4,6 +4,7 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { AgendarLlamada } from "./AgendarLlamada";
 import { PRECIO_LLAMADA, type LlamadaTipo } from "./llamadaPrecios";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { useT } from "../../i18n";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * BotonCompania — botón flotante REUTILIZABLE (abajo a la derecha, siempre
@@ -157,13 +158,21 @@ export function BotonCompania({
   disciplinaNom,
   tipo = "estandar",
   precio = PRECIO_LLAMADA[tipo],
-  etiqueta = "Agenda una llamada",
-  titulo = "Agenda una llamada",
-  texto = "Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.",
-  llamadaTitulo = "Reserva tu llamada",
+  etiqueta,
+  titulo,
+  texto,
+  llamadaTitulo,
   llamadaSubtitulo,
   queEsEsto,
 }: BotonCompaniaProps) {
+  const t = useT();
+  // Los textos por defecto se resuelven AQUÍ y no en los parámetros: en la firma
+  // no existe todavía `t`, y además así cambian al vuelo al cambiar de idioma.
+  const etiquetaTxt = etiqueta ?? t("llamada.agenda");
+  const tituloTxt = titulo ?? t("llamada.agenda");
+  const textoTxt = texto ?? t("llamada.acompanarTexto");
+  const llamadaTituloTxt = llamadaTitulo ?? t("llamada.reserva");
+
   const [preguntaOpen, setPreguntaOpen] = useState(false); // popup invitación
   const [companiaOpen, setCompaniaOpen] = useState(false);  // calendario de reserva
   const [queEsOpen, setQueEsOpen] = useState(false);        // popup «¿Qué es esto?»
@@ -171,7 +180,7 @@ export function BotonCompania({
   const hasBg = hasDisciplinaBg(disciplinaNom);
   const tsh = `0 0 10px ${bgColor}, 0 0 22px ${bgColor}`;
   // El título del popup de explicación es también la etiqueta de su botón.
-  const queEsTitulo = queEsEsto?.titulo ?? "¿Qué es esto?";
+  const queEsTitulo = queEsEsto?.titulo ?? t("llamada.queEsEsto");
 
   useLockBodyScroll(preguntaOpen || companiaOpen || queEsOpen);
 
@@ -214,7 +223,7 @@ export function BotonCompania({
           icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}
           color={color} bgColor={bgColor} disciplinaNom={disciplinaNom} hasBg={hasBg} tsh={tsh}
         >
-          {etiqueta}
+          {etiquetaTxt}
         </PillFlotante>
       </Flex>
 
@@ -290,7 +299,7 @@ export function BotonCompania({
                   fontWeight="700"
                   lineHeight="1.4"
                 >
-                  {titulo}
+                  {tituloTxt}
                 </Text>
               </Box>
               <Text
@@ -300,7 +309,7 @@ export function BotonCompania({
                 mb={7}
                 style={{ textShadow: tsh }}
               >
-                {texto}
+                {textoTxt}
               </Text>
               <Box
                 as="button"
@@ -323,7 +332,7 @@ export function BotonCompania({
                 transition="all 0.2s"
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px ${color}55` }}
               >
-                Agenda tu llamada →
+                {t("llamada.acompanar")}
               </Box>
             </Box>
           </Box>
@@ -433,7 +442,7 @@ export function BotonCompania({
                   transition="all 0.2s"
                   _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px ${color}55` }}
                 >
-                  Entendido
+                  {t("llamada.entendido")}
                 </Box>
               </Flex>
             </Box>
@@ -493,7 +502,7 @@ export function BotonCompania({
               disciplinaNom={disciplinaNom}
               tipo={tipo}
               precio={precio}
-              titulo={llamadaTitulo}
+              titulo={llamadaTituloTxt}
               subtitulo={llamadaSubtitulo}
             />
           </Box>

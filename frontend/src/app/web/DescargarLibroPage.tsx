@@ -1,3 +1,4 @@
+import { TextoRico, useT } from "../../i18n";
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -17,6 +18,7 @@ type VerifyResponse = VerifyOk | VerifyFail;
 type Status = "verifying" | "ok" | "error";
 
 export default function DescargarLibroPage() {
+  const t = useT();
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const sessionId = params.get("session_id");
@@ -28,7 +30,7 @@ export default function DescargarLibroPage() {
   useEffect(() => {
     if (!sessionId) {
       setStatus("error");
-      setErrorMsg("Falta el identificador de sesión.");
+      setErrorMsg(t("descarga.sinSesion"));
       return;
     }
 
@@ -46,8 +48,8 @@ export default function DescargarLibroPage() {
           setStatus("error");
           setErrorMsg(
             data.reason === "unpaid"
-              ? "El pago aún no se ha completado."
-              : "No hemos podido verificar la compra."
+              ? t("descarga.sinPagar")
+              : t("descarga.sinVerificar")
           );
           return;
         }
@@ -63,7 +65,7 @@ export default function DescargarLibroPage() {
         console.error("Error verificando compra:", err);
         if (cancelled) return;
         setStatus("error");
-        setErrorMsg("No hemos podido verificar la compra. Contacta con nosotros si el cobro se hizo.");
+        setErrorMsg(t("descarga.sinVerificarContacto"));
       }
     })();
 
@@ -101,10 +103,10 @@ export default function DescargarLibroPage() {
               textTransform="uppercase"
               textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(180,255,245,0.3)"
             >
-              Verificando tu compra…
+              {t("descarga.verificando")}
             </Text>
             <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
-              Un momento, por favor.
+              {t("descarga.unMomento")}
             </Text>
           </>
         )}
@@ -119,10 +121,10 @@ export default function DescargarLibroPage() {
               lineHeight="1.2"
               textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(180,255,245,0.34)"
             >
-              ¡Gracias por tu compra!
+              {t("descarga.gracias")}
             </Text>
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "xl" }} maxW="640px">
-              Tu descarga de <strong>{libro.titulo}</strong> debería haberse iniciado automáticamente. Si no ha ocurrido, pulsa el botón:
+              <TextoRico>{t("descarga.instrucciones", { titulo: libro.titulo })}</TextoRico>
             </Text>
             <Flex
               as="button"
@@ -146,7 +148,7 @@ export default function DescargarLibroPage() {
               _hover={{ bg: "rgba(255,255,255,0.22)", boxShadow: "0 0 24px rgba(255,255,255,0.65), 0 0 54px rgba(180,255,245,0.4)" }}
               transition="all 0.25s ease"
             >
-              Descargar PDF ↓
+              {t("descarga.boton")}
             </Flex>
             <Flex
               as="button"
@@ -161,7 +163,7 @@ export default function DescargarLibroPage() {
               cursor="pointer"
               _hover={{ color: "white" }}
             >
-              ← Volver a libros
+              {t("descarga.volver")}
             </Flex>
           </>
         )}
@@ -175,7 +177,7 @@ export default function DescargarLibroPage() {
               letterSpacing="0.08em"
               textShadow="0 0 14px rgba(255,255,255,0.45)"
             >
-              No hemos podido completar la descarga
+              {t("descarga.fallo")}
             </Text>
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} maxW="640px">
               {errorMsg}
@@ -199,7 +201,7 @@ export default function DescargarLibroPage() {
               _hover={{ bg: "rgba(255,255,255,0.18)" }}
               transition="all 0.25s ease"
             >
-              ← Volver a libros
+              {t("descarga.volver")}
             </Flex>
           </>
         )}

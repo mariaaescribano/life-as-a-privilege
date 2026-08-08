@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { TextoRico, useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Input, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -104,6 +105,7 @@ function MacroBarra({ seg }: { seg: { c: number; p: number; g: number } | null }
 }
 
 export default function MetodoNutricionDia() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [kcalObjetivo, setKcalObjetivo] = useState<number | null>(null);
@@ -386,7 +388,7 @@ export default function MetodoNutricionDia() {
              onClick={(e: React.MouseEvent) => { e.stopPropagation(); setInfoKey(info.key); }}
              w="26px" h="26px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
              bg="#ffffffcc" border={`1px solid ${nutricionTxt}33`} color={nutricionTxt} cursor="pointer"
-             _hover={{ bg: "#ffffff", borderColor: nutricionTxt }} title="Ver ficha">
+             _hover={{ bg: "#ffffff", borderColor: nutricionTxt }} title={t("metodo.dia.verFicha")}>
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
             <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
           </Box>
@@ -439,17 +441,16 @@ export default function MetodoNutricionDia() {
                 <Text fontSize={{ base: "3xl", md: "4xl" }} mb={2}>🔒</Text>
                 <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={700}
                       style={{ textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>
-                  Primero, tus calorías
+                  {t("metodo.dia.primeroCalorias")}
                 </Text>
                 <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" mt={3} mb={6}>
-                  Para diseñar tu día necesitamos saber cuánta energía necesitas. Calcula tu objetivo
-                  y vuelve: repartiremos esas calorías entre tus comidas.
+                  {t("metodo.dia.primeroCaloriasTexto")}
                 </Text>
                 <Box as="button" onClick={() => navigate("/metodo/nutricion/calorias")}
                      px={7} py={3} borderRadius="full" fontWeight={700} fontStyle="italic"
                      color={nutricionBg} bg={nutricionTxt} cursor="pointer"
                      transition="all 0.15s ease" _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 20px ${nutricionTxt}88` }}>
-                  Calcular mis calorías →
+                  {t("metodo.dia.calcular")}
                 </Box>
               </Box>
             </Reveal>
@@ -459,9 +460,9 @@ export default function MetodoNutricionDia() {
               <Reveal inView direction="up" distance={18} delay={0.08} duration={0.6} w="100%" display="flex" justifyContent="center">
                 <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic"
                       textAlign="center" lineHeight="1.7" maxW="820px">
-                  Aprender a comer no es contar: es saber <b>cuánto</b> y <b>cómo</b>. Reparte tus{" "}
+                  <TextoRico>{t("metodo.dia.repartePre")}</TextoRico>{" "}
                   <Text as="span" color={nutricionTxt} fontWeight={700}>{kcalObjetivo} kcal</Text>{" "}
-                  entre las comidas del día y dale a tu cuerpo —es decir, a ti— lo que de verdad necesitas.
+                  {t("metodo.dia.repartePost")}
                 </Text>
               </Reveal>
 
@@ -480,7 +481,7 @@ export default function MetodoNutricionDia() {
                           borderRadius="xl" px={4} py={3} bg="#ffffff40" border="1px solid #ffffff8c"
                           sx={{ backdropFilter: "blur(3px)", WebkitBackdropFilter: "blur(3px)" }}>
                       <Flex align="baseline" gap={2} wrap="wrap">
-                        <Text color={`${nutricionTxt}cc`} fontSize="sm">Tu día suma</Text>
+                        <Text color={`${nutricionTxt}cc`} fontSize="sm">{t("metodo.dia.tuDiaSuma")}</Text>
                         <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1">
                           {Math.round(totalDia)}
                         </Text>
@@ -531,7 +532,7 @@ export default function MetodoNutricionDia() {
                             <Flex direction="column" gap={2} mt={4} minH="52px">
                               {foods.length === 0 && (
                                 <Text color={`${nutricionTxt}77`} fontSize="sm" fontStyle="italic" textAlign="center" py={3}>
-                                  Arrastra alimentos aquí
+                                  {t("metodo.dia.arrastraAqui")}
                                 </Text>
                               )}
                               {foods.map((f) => {
@@ -596,7 +597,7 @@ export default function MetodoNutricionDia() {
                     <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} pt={{ base: 5, md: 6 }} pb={2}>
                       <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase" mb={3}
                             textShadow="0 1px 2px #ffffffcc, 0 0 10px #ffffffaa">
-                        Elige buenos alimentos · arrástralos a cada comida
+                        {t("metodo.dia.eligeArrastra")}
                       </Text>
                       <Flex gap={2} wrap="wrap">
                         {GRUPOS_DIA.map((g) => {
@@ -627,10 +628,10 @@ export default function MetodoNutricionDia() {
                                 align="center" justify="center" bg={`${grupoColor}22`} color={grupoColor}
                                 fontSize="3xl" fontWeight={700} lineHeight="1">+</Flex>
                           <Text color={nutricionTxt} fontSize="sm" fontWeight={700} textAlign="center" lineHeight="1.2">
-                            Crea tu alimento
+                            {t("metodo.dia.creaAlimento")}
                           </Text>
                           <Text color={`${nutricionTxt}99`} fontSize="2xs" textAlign="center">
-                            el tuyo, las veces que quieras
+                            {t("metodo.dia.elTuyo")}
                           </Text>
                         </Flex>
 
@@ -648,9 +649,7 @@ export default function MetodoNutricionDia() {
               {/* Nota educativa */}
               <Reveal inView direction="up" distance={14} delay={0.05} duration={0.6} w="100%" display="flex" justifyContent="center">
                 <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="760px" lineHeight="1.7">
-                  Tu mano es tu báscula: un puño ≈ una ración de fruta o cereal cocido · la palma ≈ tu proteína ·
-                  el pulgar ≈ una cucharada de grasa · dos manos ahuecadas ≈ tus verduras. Aprende a mirar el plato,
-                  no la báscula. Esto es orientativo y educativo; no sustituye a un profesional.
+                  {t("metodo.dia.manoBascula")}
                 </Text>
               </Reveal>
             </>
@@ -694,7 +693,7 @@ export default function MetodoNutricionDia() {
               </Flex>
 
               <Text color={nutricionTxt} fontSize="sm" mt={4} lineHeight="1.6">
-                <b>A ojo:</b> {infoFood.aOjo}.
+                <b>{t("metodo.dia.aOjo")}</b> {infoFood.aOjo}.
               </Text>
               {infoFood.descripcion && (
                 <Text color={`${nutricionTxt}cc`} fontSize="sm" mt={2} lineHeight="1.7" fontStyle="italic">
@@ -706,7 +705,7 @@ export default function MetodoNutricionDia() {
               {(infoFood.macros.carbohidrato + infoFood.macros.proteina + infoFood.macros.grasa) > 0 && (
                 <Box mt={4}>
                   <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase" mb={2}>
-                    De qué está hecho
+                    {t("metodo.alimentos.deQueEstaHecho")}
                   </Text>
                   <Flex h="10px" borderRadius="full" overflow="hidden" bg={`${nutricionTxt}1a`}>
                     <Box w={`${infoFood.macros.carbohidrato}%`} bg={MACRO_COLOR.carbohidrato} />
@@ -730,7 +729,7 @@ export default function MetodoNutricionDia() {
               {infoFood.moleculas && infoFood.moleculas.length > 0 && (
                 <Box mt={4}>
                   <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase" mb={2}>
-                    Sus moléculas
+                    {t("metodo.dia.susMoleculas")}
                   </Text>
                   <Flex gap={1.5} wrap="wrap">
                     {infoFood.moleculas.map((m) => {
@@ -752,7 +751,7 @@ export default function MetodoNutricionDia() {
 
               {infoFood.custom && (
                 <Text color={`${nutricionTxt}99`} fontSize="2xs" fontStyle="italic" mt={4}>
-                  Este alimento lo has creado tú.
+                  {t("metodo.dia.loHasCreado")}
                 </Text>
               )}
             </Box>
@@ -775,20 +774,20 @@ export default function MetodoNutricionDia() {
             </Text>
 
             <Flex direction="column" gap={3.5}>
-              <CampoCrear label="Nombre" value={fNombre} onChange={setFNombre} placeholder="p. ej. mi bocadillo" />
+              <CampoCrear label={t("metodo.dia.nombre")} value={fNombre} onChange={setFNombre} placeholder={t("metodo.dia.nombreEj")} />
               <SimpleGrid columns={2} spacing={3}>
-                <CampoCrear label="kcal por ración" value={fKcal} onChange={setFKcal} numeric placeholder="p. ej. 320" />
-                <CampoCrear label="Ración (g)" value={fGramos} onChange={setFGramos} numeric placeholder="100" />
+                <CampoCrear label={t("metodo.dia.kcalRacion")} value={fKcal} onChange={setFKcal} numeric placeholder={t("metodo.dia.kcalEj")} />
+                <CampoCrear label={t("metodo.dia.racionG")} value={fGramos} onChange={setFGramos} numeric placeholder="100" />
               </SimpleGrid>
-              <CampoCrear label="Cómo medirla a ojo (opcional)" value={fAOjo} onChange={setFAOjo} placeholder="p. ej. un puño" />
+              <CampoCrear label={t("metodo.dia.medirAOjo")} value={fAOjo} onChange={setFAOjo} placeholder={t("metodo.dia.medirEj")} />
               <Box>
                 <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.08em" textTransform="uppercase" mb={1.5}>
-                  De qué es (opcional, %)
+                  {t("metodo.dia.deQueEs")}
                 </Text>
                 <SimpleGrid columns={3} spacing={3}>
-                  <CampoCrear label="Carb." value={fCarb} onChange={setFCarb} numeric placeholder="0" />
-                  <CampoCrear label="Proteína" value={fProt} onChange={setFProt} numeric placeholder="0" />
-                  <CampoCrear label="Grasa" value={fGrasa} onChange={setFGrasa} numeric placeholder="0" />
+                  <CampoCrear label={t("metodo.dia.carb")} value={fCarb} onChange={setFCarb} numeric placeholder="0" />
+                  <CampoCrear label={t("metodo.dia.proteina")} value={fProt} onChange={setFProt} numeric placeholder="0" />
+                  <CampoCrear label={t("metodo.dia.grasa")} value={fGrasa} onChange={setFGrasa} numeric placeholder="0" />
                 </SimpleGrid>
               </Box>
             </Flex>
@@ -797,14 +796,14 @@ export default function MetodoNutricionDia() {
               <Box as="button" onClick={() => setCrearOpen(false)} px={5} py={2.5} borderRadius="full"
                    fontSize="sm" fontWeight={600} color={nutricionTxt} bg={`${nutricionTxt}12`}
                    border={`1px solid ${nutricionTxt}33`} cursor="pointer" _hover={{ bg: `${nutricionTxt}22` }}>
-                Cancelar
+                {t("comun.cancelar")}
               </Box>
               <Box as="button" onClick={crearAlimento}
                    px={6} py={2.5} borderRadius="full" fontSize="sm" fontWeight={700}
                    color={nutricionBg} bg={nutricionTxt} cursor={fNombre.trim() && Number(fKcal) > 0 ? "pointer" : "not-allowed"}
                    opacity={fNombre.trim() && Number(fKcal) > 0 ? 1 : 0.5}
                    _hover={fNombre.trim() && Number(fKcal) > 0 ? { transform: "translateY(-1px)" } : undefined}>
-                Crear alimento
+                {t("metodo.dia.crearAlimento")}
               </Box>
             </Flex>
           </Box>
@@ -822,7 +821,7 @@ export default function MetodoNutricionDia() {
             <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
             <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center">
-              ¿Cuántas comidas haces al día?
+              {t("metodo.dia.cuantasComidas")}
             </Text>
             <Text color={`${nutricionTxt}aa`} fontSize="sm" textAlign="center" mt={2} mb={5} lineHeight="1.6">
               Repartiremos tus {kcalObjetivo} kcal entre esas comidas de forma equilibrada. Puedes cambiarlo cuando quieras.

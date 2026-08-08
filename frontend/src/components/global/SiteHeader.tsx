@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { rutaHome } from "../../api/sesion";
+import { useT } from "../../i18n";
+import SelectorIdioma from "./SelectorIdioma";
 
 type SiteHeaderProps = {
   /**
@@ -21,6 +23,7 @@ type SiteHeaderProps = {
 const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const t = useT();
   const [sessionImg] = useState<string | null>(() => localStorage.getItem("img"));
 
   // Recordamos la última página del Mapa (recorrido) visitada, para que /home
@@ -122,7 +125,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
                 _hover={{ textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
                 transition="text-shadow 0.25s ease"
               >
-                El Mapa
+                {t("header.mapa")}
               </Text>
               <Text
                 as="button"
@@ -141,7 +144,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
                 _hover={{ textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
                 transition="text-shadow 0.25s ease"
               >
-                Cursos
+                {t("header.cursos")}
               </Text>
             </>
           )}
@@ -170,7 +173,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               }}
               transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
             >
-              Materiales
+              {t("header.materiales")}
             </Text>
           )}
           {/* Estudio estadístico sobre astrología — abierto a todo el mundo */}
@@ -197,9 +200,10 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               }}
               transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
             >
-              Estudio
+              {t("header.estudio")}
             </Text>
           )}
+          <SelectorIdioma compact />
           <Box
             as="button"
             onClick={() => navigate("/user/account")}
@@ -221,7 +225,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           >
             <Image
               src={avatarSrc}
-              alt="Mi cuenta"
+              alt={t("header.miCuenta")}
               w="100%"
               h="100%"
               objectFit="cover"
@@ -251,7 +255,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             }}
             transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
           >
-            El Mapa
+            {t("header.mapa")}
           </Text>
           <Text
             as="button"
@@ -274,7 +278,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             }}
             transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
           >
-            Materiales
+            {t("header.materiales")}
           </Text>
           {/* Estudio estadístico sobre astrología — abierto a todo el mundo */}
           <Text
@@ -298,8 +302,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             }}
             transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
           >
-            Estudio
+            {t("header.estudio")}
           </Text>
+          <SelectorIdioma />
         </Flex>
       )}
     </Flex>

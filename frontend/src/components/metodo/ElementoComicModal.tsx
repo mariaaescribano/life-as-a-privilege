@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text, Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
 import axios from "axios";
 import { ComicViewer } from "./ComicViewer";
@@ -241,6 +242,7 @@ function TestBalanceComic({
   completo: boolean;
   onContinuar: () => void;
 }) {
+  const t = useT();
   const [guardado, setGuardado] = useState(false);
   return (
     <Flex direction="column" gap={5} textAlign="left">
@@ -292,7 +294,7 @@ function TestBalanceComic({
         {guardado && (
           <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
                 style={{ textShadow: `0 1px 4px rgba(0,0,0,0.85), 0 0 12px ${color}` }}>
-            Guardado ✓
+            {t("metodo.guardadoOk")}
           </Text>
         )}
         <Box as="button"

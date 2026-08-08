@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
+import { useT } from "../../i18n";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * BotonGuardar — botón de «Guardar» REUTILIZABLE con feedback de estado.
@@ -38,10 +39,10 @@ export function BotonGuardar({
   onSave,
   bg,
   fg,
-  label = "Guardar",
-  labelGuardando = "Guardando…",
-  labelOk = "Guardado",
-  labelError = "Reintentar",
+  label,
+  labelGuardando,
+  labelOk,
+  labelError,
   okDuracion = 2400,
   minW = "160px",
   px = 9,
@@ -49,6 +50,13 @@ export function BotonGuardar({
   fontSize = { base: "md", md: "lg" },
   disabled = false,
 }: BotonGuardarProps) {
+  const t = useT();
+  // Los textos por defecto se resuelven aquí (en la firma no existe aún `t`).
+  const txt = label ?? t("comun.guardar");
+  const txtGuardando = labelGuardando ?? t("comun.guardando");
+  const txtOk = labelOk ?? t("comun.guardado");
+  const txtError = labelError ?? t("comun.reintentar");
+
   const [estado, setEstado] = useState<Estado>("idle");
   const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const montado = useRef(true);
@@ -124,12 +132,12 @@ export function BotonGuardar({
           />
         )}
         {estado === "guardando"
-          ? labelGuardando
+          ? txtGuardando
           : estado === "ok"
-            ? `${labelOk} ✓`
+            ? `${txtOk} ✓`
             : estado === "error"
-              ? labelError
-              : label}
+              ? txtError
+              : txt}
       </Flex>
     </Box>
   );

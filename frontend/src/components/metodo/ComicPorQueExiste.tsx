@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { COMIC_POR_QUE_EXISTE } from "./comicElMapa";
@@ -95,6 +96,7 @@ function FlechaComic({
 }
 
 export function ComicPorQueExiste() {
+  const t = useT();
   const [index, setIndex] = useState(0);
   // Viñeta más lejana alcanzada: de aquí sale lo que está colocado en el mapa.
   const [maxVisto, setMaxVisto] = useState(0);
@@ -216,7 +218,7 @@ export function ComicPorQueExiste() {
           flexShrink={0}
           textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
         >
-          ¿Por qué existe Life as a Privilege?
+          {t("metodo.porQueExiste")}
         </Text>
 
         {/* ── LA ACUARELA (con el texto incrustado abajo) ──

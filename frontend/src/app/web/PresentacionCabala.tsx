@@ -26,10 +26,13 @@ import {
   IdeasConMuestra,
   SeparadorSeccion,
   VideoMuestra,
-  type IdeaPresentacion,
+  ideasDesdeContenido,
 } from "../../components/metodo/presentacionUi";
 import { CabalaIcon, cabalaBg, cabalaNom } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import { TextoRico, useIdioma, useT } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /d/cabala — presentación de Cábala.
@@ -55,29 +58,16 @@ import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas"
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Lo que hay dentro, en tres ideas. ✍️ Textos editables. */
-const IDEAS: IdeaPresentacion[] = [
-  {
-    titulo: "Filosofía de la Cábala",
-    parrafos: [
-      "Descubrirás una forma nueva de comprender al ser humano, sus conflictos internos y su potencial de desarrollo.",
-    ],
-  },
-  {
-    titulo: "Las Sefirot como herramientas",
-    parrafos: [
-      "Aprenderás a desarrollar cualidades concretas que transforman la manera en que te relacionas contigo mismo y con los demás.",
-    ],
-  },
-  {
-    titulo: "Sesiones individuales",
-    parrafos: [
-      "Un espacio para aterrizar estos principios en situaciones reales de tu Vida y convertirlos en algo práctico.",
-    ],
-    nota: "Opcional. Se cobra aparte.",
-  },
-];
+// Las cajas de «Qué incluye» ya no se copian aquí: salen de recorridoContenido
+// (ver ideasDesdeContenido), que es el mismo texto que enseña /elMetodo.
 
 export default function PresentacionCabala({ d }: { d: PresentacionDisciplina }) {
+  const { segunIdioma } = useIdioma();
+  const t = useT();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   // El Árbol de muestra (bloque 4) solo existe donde hay dos columnas: en móvil se
   // repetiría el mismo dibujo debajo del grande. `ssr: false` para que resuelva
   // ya en el primer render y no se monte para desmontarse acto seguido.
@@ -132,7 +122,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
         <Reveal direction="down" distance={18} duration={0.8} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<CabalaIcon size={{ base: "38px", md: "52px" }} />}
-            title={d.titulo}
+            title={disciplina}
             bgColor={cabalaBg}
             color={d.txt}
             nom={cabalaNom}
@@ -164,7 +154,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
         </RevealStagger>
@@ -204,7 +194,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
               nom={cabalaNom}
               bg={cabalaBg}
               txt={d.txt}
-              videoIntro={d.videoIntro}
+              videoIntro={cont.videoIntro}
               paso={d.paso}
               renderIcon={renderIcon}
               tieneVideo={!!d.video}
@@ -224,7 +214,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
             las sefirot irrumpen una a una). NO va envuelto en un Reveal: su
             dinamismo es suyo y taparlo lo estropea. */}
         <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>El Árbol de la Vida</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.cabala.arbol")}</SeparadorSeccion>
 
           {/* Sin filo de color y con el halo del header: la caja no debe destacar
               más que él (regla de las presentaciones y del recorrido de Cábala). */}
@@ -244,9 +234,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
                 maxW="720px"
                 textShadow={sombra}
               >
-                Diez dimensiones y una más oculta —Da'at— unidas por veintidós senderos. No es un
-                adorno: es un mapa del alma humana con más de mil años de estudio.
-                <b> Pulsa cualquiera y la lees.</b>
+                <TextoRico>{t("presentacion.cabala.arbolTexto")}</TextoRico>
               </Text>
 
               <ArbolDeLaVida
@@ -265,8 +253,8 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
             Tres ideas y, al lado, el Árbol en pequeño. Ese Árbol NO se pulsa: es
             una muestra, no un menú (el de arriba sí se abre). */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Lo que hay dentro</SeparadorSeccion>
-          <IdeasConMuestra d={d} ideas={IDEAS}>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.sec.loQueHayDentro")}</SeparadorSeccion>
+          <IdeasConMuestra d={d} ideas={ideasDesdeContenido(cont.contenido)}>
             {/* En móvil NO va: el Árbol de arriba ya se ha visto entero y aquí,
                 a una columna, sería el mismo dibujo dos veces seguidas. */}
             {!esMovil && (
@@ -282,7 +270,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
         {/* ══ 5. ILUSTRACIONES ══ */}
         {comics.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Ilustraciones de Cábala</SeparadorSeccion>
+            <SeparadorSeccion>{t("presentacion.sec.ilustraciones", { disciplina })}</SeparadorSeccion>
             <Grid
               w="100%"
               templateColumns={{ base: "1fr", md: `repeat(${Math.min(comics.length, 3)}, 1fr)` }}
@@ -300,13 +288,13 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 6. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 

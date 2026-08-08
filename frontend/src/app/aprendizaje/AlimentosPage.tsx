@@ -7,6 +7,13 @@ import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../GlobalVariables";
 import { alimentos, type Alimento } from "../../components/recursos/nutricion/AlimentosData";
+import { useT } from "../../i18n";
+
+/** Etiqueta traducida del tipo de alimento («fruta» / «verdura»). */
+const CLAVE_TIPO = {
+  fruta: "ficha.tipo.fruta",
+  verdura: "ficha.tipo.verdura",
+} as const;
 
 const CARD_COLOR  = nutricionTxt;
 const MODAL_COLOR = nutricionBg;
@@ -74,6 +81,7 @@ const SeccionModal = ({ titulo, color, textMid, children }: { titulo: string; co
    MODAL DE ALIMENTO
 ══════════════════════════════════════════════ */
 const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () => void }) => {
+  const t = useT();
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -144,7 +152,7 @@ const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () 
                   color={alimento.tipo === "fruta" ? "#b05a20" : "#2b6b2b"}
                   fontFamily="'EB Garamond', serif"
                 >
-                  {alimento.tipo}
+                  {t(CLAVE_TIPO[alimento.tipo])}
                 </Text>
               </Box>
             </Flex>
@@ -180,7 +188,7 @@ const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () 
 
           <BotanicalDivider color={nutricionTxt} />
 
-          <SeccionModal titulo="Beneficios" color={nutricionTxt} textMid={textMid}>
+          <SeccionModal titulo={t("ficha.beneficios")} color={nutricionTxt} textMid={textMid}>
             <Flex direction="column" gap={2}>
               {alimento.beneficios.map((b, i) => (
                 <Flex key={i} gap={3} align="flex-start">
@@ -193,7 +201,7 @@ const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () 
 
           <BotanicalDivider color={nutricionTxt} />
 
-          <SeccionModal titulo="Cómo consumirlo" color={nutricionTxt} textMid={textMid}>
+          <SeccionModal titulo={t("ficha.comoConsumirlo")} color={nutricionTxt} textMid={textMid}>
             <Box bg={accentBg} border={`1px solid ${accentBorder}`} borderRadius="xl" px={5} py={4}>
               <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" opacity={0.88}>
                 {alimento.formaDeUso}
@@ -204,7 +212,7 @@ const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () 
           {alimento.datosCuriosos && alimento.datosCuriosos.length > 0 && (
             <>
               <BotanicalDivider color={nutricionTxt} />
-              <SeccionModal titulo="Datos curiosos" color={nutricionTxt} textMid={textMid}>
+              <SeccionModal titulo={t("ficha.datosCuriosos")} color={nutricionTxt} textMid={textMid}>
                 <Flex direction="column" gap={3}>
                   {alimento.datosCuriosos.map((d, i) => (
                     <Flex key={i} gap={3} align="flex-start">
@@ -227,7 +235,7 @@ const AlimentoModal = ({ alimento, onClose }: { alimento: Alimento; onClose: () 
           {alimento.precauciones && alimento.precauciones.length > 0 && (
             <>
               <BotanicalDivider color="#b05a2a" />
-              <SeccionModal titulo="Precauciones" color="#b05a2a" textMid="#8a3e18">
+              <SeccionModal titulo={t("ficha.precauciones")} color="#b05a2a" textMid="#8a3e18">
                 <Box bg="rgba(176,90,42,0.08)" border="1px solid rgba(176,90,42,0.28)" borderRadius="xl" px={5} py={4}>
                   <Flex direction="column" gap={2}>
                     {alimento.precauciones.map((p, i) => (
@@ -254,6 +262,7 @@ function AlimentoCard({ alimento, onOpen, isFavorite, onToggleFavorite, showFavo
   alimento: Alimento; onOpen: () => void;
   isFavorite?: boolean; onToggleFavorite?: () => void; showFavorite?: boolean;
 }) {
+  const t = useT();
   const [imgError, setImgError] = useState(false);
 
   return (
@@ -301,7 +310,7 @@ function AlimentoCard({ alimento, onOpen, isFavorite, onToggleFavorite, showFavo
               fontSize="9px" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase"
               color={alimento.tipo === "fruta" ? "#b05a20" : "#2b6b2b"}
             >
-              {alimento.tipo}
+              {t(CLAVE_TIPO[alimento.tipo])}
             </Text>
           </Box>
         </Flex>
@@ -335,6 +344,7 @@ function AlimentoCard({ alimento, onOpen, isFavorite, onToggleFavorite, showFavo
 ══════════════════════════════════════════════ */
 export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly?: boolean }) {
   const navigate = useNavigate();
+  const t = useT();
   const [selected, setSelected] = useState<Alimento | null>(null);
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
   const userId = localStorage.getItem("userId");
@@ -385,18 +395,18 @@ export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly
         >
           <MetodoStepHeader
             icon={<NutricionIcon size={{ base: "35px", md: "45px" }} />}
-            title={favoritesOnly ? "Mis alimentos favoritos" : "Alimentos"}
+            title={t(favoritesOnly ? "alimentos.favoritos" : "alimentos.titulo")}
             bgColor={nutricionBg}
             color={nutricionTxt}
             nom={nutricionNom}
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
+            prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
           />
 
           {favoritesOnly && alimentosMostrados.length === 0 && (
             <Text color="rgba(255,255,255,0.75)" fontSize={{ base: "lg", md: "xl" }}
               fontStyle="italic" textAlign="center" mt={4}
             >
-              Aún no tienes alimentos marcados como favoritos.
+              {t("alimentos.sinFavoritos")}
             </Text>
           )}
 

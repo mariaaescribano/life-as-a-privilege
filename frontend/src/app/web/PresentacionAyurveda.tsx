@@ -27,6 +27,9 @@ import {
   VataIcon, vataColor,
 } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import { TextoRico, useIdioma, useT } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /d/ayurveda — presentación de Ayurveda (destino del QR de su cartel).
@@ -183,6 +186,12 @@ function DoshaCard({
 }
 
 export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina }) {
+  const { segunIdioma } = useIdioma();
+  const t = useT();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -227,7 +236,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
         <Reveal direction="down" distance={18} duration={0.8} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "38px", md: "52px" }} />}
-            title={d.titulo}
+            title={disciplina}
             bgColor={ayurvedaBg}
             color={d.txt}
             nom={ayurvedaNom}
@@ -259,7 +268,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
         </RevealStagger>
@@ -299,7 +308,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
               nom={ayurvedaNom}
               bg={ayurvedaBg}
               txt={d.txt}
-              videoIntro={d.videoIntro}
+              videoIntro={cont.videoIntro}
               paso={d.paso}
               renderIcon={renderIcon}
               tieneVideo={!!d.video}
@@ -316,7 +325,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
 
         {/* ══ 3. LOS TRES DOṢHAS ══ la pieza central de la página ══ */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Los tres Doṣhas</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.ayurveda.tresDoshas")}</SeparadorSeccion>
 
           <Reveal inView direction="up" distance={16} duration={0.7}>
             <Text
@@ -328,8 +337,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
               maxW="720px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Todos tenemos los tres. Lo que cambia es la proporción, y esa proporción única
-              es tu <b>Prakṛti</b>: la forma en que la naturaleza se expresa en ti.
+              <TextoRico>{t("presentacion.ayurveda.prakriti")}</TextoRico>
             </Text>
           </Reveal>
 
@@ -361,7 +369,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
               maxW="640px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Dentro descubrirás cuál predomina en ti.
+              {t("presentacion.ayurveda.cualPredomina")}
             </Text>
           </Reveal>
         </Flex>
@@ -369,7 +377,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
         {/* ══ 4. ILUSTRACIONES ══ */}
         {comics.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Ilustraciones de Ayurveda</SeparadorSeccion>
+            <SeparadorSeccion>{t("presentacion.sec.ilustraciones", { disciplina })}</SeparadorSeccion>
             <Grid
               w="100%"
               templateColumns={{ base: "1fr", md: `repeat(${Math.min(comics.length, 3)}, 1fr)` }}
@@ -393,13 +401,13 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 5. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 

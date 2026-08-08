@@ -1,3 +1,4 @@
+import { useT } from "../../i18n";
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -31,7 +32,7 @@ function DescargarBtn({
   href,
   onClick,
   disabled = false,
-  label = "Descargar PDF",
+  label,
   icon = "↓",
 }: {
   href?: string;
@@ -40,6 +41,8 @@ function DescargarBtn({
   label?: string;
   icon?: string;
 }) {
+  const t = useT();
+  const labelTxt = label ?? t("libros.descargarPdf");
   const isLink = !onClick && !!href;
   const commonProps = {
     align: "center" as const,
@@ -73,7 +76,7 @@ function DescargarBtn({
   if (isLink) {
     return (
       <Flex as="a" href={href} target="_blank" rel="noopener noreferrer" {...commonProps}>
-        {label}
+        {labelTxt}
         <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.45)" }}>
           {icon}
         </Box>
@@ -83,7 +86,7 @@ function DescargarBtn({
 
   return (
     <Flex as="button" onClick={disabled ? undefined : onClick} disabled={disabled} {...commonProps}>
-      {label}
+      {labelTxt}
       <Box as="span" fontSize="sm" style={{ textShadow: "0 0 8px rgba(255,255,255,0.45)" }}>
         {icon}
       </Box>
@@ -105,6 +108,7 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
   const [acepta, setAcepta] = useState(false);
   const { ref, visible } = useReveal();
   const toast = useToast();
+  const t = useT();
 
   const handleComprar = async () => {
     if (loading || !acepta) return;
@@ -122,8 +126,8 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
     } catch (err) {
       console.error("Error iniciando checkout:", err);
       toast({
-        title: "No se pudo iniciar el pago",
-        description: "Inténtalo de nuevo en un momento.",
+        title: t("libros.pagoError"),
+        description: t("libros.pagoErrorTexto"),
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -258,7 +262,7 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
               onClick={(e) => { e.stopPropagation(); window.open("/terminos", "_blank"); }}
               _hover={{ color: "white" }}
             >
-              condiciones de compra
+              {t("libros.condiciones")}
             </Text>
           </Text>
         </Flex>
@@ -345,6 +349,7 @@ function BookCell({ item, i, total }: { item: Item; i: number; total: number }) 
 }
 
 export default function LibrosPage() {
+  const t = useT();
   const [mounted, setMounted] = useState(false);
   // La página no se muestra hasta que TODAS las portadas están descargadas:
   // así entra ya completa (nada de imágenes cargando a trozos) y transmite
@@ -479,7 +484,7 @@ export default function LibrosPage() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Libros
+          {t("libros.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -493,7 +498,7 @@ export default function LibrosPage() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Más de 40 libros para acompañar tu camino
+          {t("libros.subtitulo")}
         </Text>
       </Flex>
 

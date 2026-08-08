@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -200,6 +201,7 @@ export function ComicViewer({
   esperarFondo,
   textoBorroso,
 }: ComicViewerProps) {
+  const t = useT();
   const isDisciplinaMode = !!disciplinaBgImage;
   // Color de la scrollbar: el que pidan; si no, el color de la LETRA (que es el
   // que contrasta con el fondo del box) y, en último término, el acento. OJO:
@@ -397,7 +399,7 @@ export function ComicViewer({
     : ({ position: "fixed", zIndex: 10 } as const);
   const prevArrow = (
     <IconButton
-      aria-label="Anterior"
+      aria-label={t("comun.anterior")}
       onClick={goPrev}
       isDisabled={isFirst}
       {...arrowPos}
@@ -512,7 +514,7 @@ export function ComicViewer({
           zIndex 12: por encima del loader de espera de fondo (11) para poder
           cerrar aunque la foto aún no haya cargado. */}
       <IconButton
-        aria-label="Cerrar"
+        aria-label={t("comun.cerrar")}
         onClick={onClose}
         position="fixed"
         top={{ base: 3, md: 5 }}
@@ -564,7 +566,7 @@ export function ComicViewer({
       {/* Botón "volver" (solo si onBack está definido) */}
       {onBack && (
         <IconButton
-          aria-label="Volver al menú"
+          aria-label={t("metodo.volverMenu")}
           onClick={onBack}
           position="fixed"
           top={{ base: 3, md: 5 }}

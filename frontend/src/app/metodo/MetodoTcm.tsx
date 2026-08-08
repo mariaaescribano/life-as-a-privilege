@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import {
   Box, Flex, Text,
@@ -30,6 +31,7 @@ const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc, 0 2px 16px ${tcmBg
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 export default function MetodoTcm() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -147,8 +149,7 @@ export default function MetodoTcm() {
                 mx="auto"
                 mb={4}
               >
-                La Medicina Tradicional China lleva miles de años observando la naturaleza y al ser humano.
-                Según esta visión, la salud es el equilibrio dinámico entre tu cuerpo, tus emociones y el entorno que te forma.
+                {t("metodo.gate.tcm.intro1")}
               </Text>
               <Text
                 color={tcmTxt}
@@ -157,8 +158,7 @@ export default function MetodoTcm() {
                 maxW="600px"
                 mx="auto"
               >
-                En este mapa descubrirás tu equilibrio actual entre los cinco elementos, aprenderás a
-                reconocer tus desequilibrios y sabrás cómo cuidarte desde esta sabiduría milenaria.
+                {t("metodo.gate.tcm.intro2")}
               </Text>
             </Box>
           </Box>
@@ -185,7 +185,7 @@ export default function MetodoTcm() {
             transition="all 0.2s"
             _hover={{ bg: "rgba(255,255,255,0.16)", transform: "translateY(-1px)" }}
           >
-            <Box as="span" fontSize="md">⚠</Box> Aviso importante
+            <Box as="span" fontSize="md">⚠</Box> {t("metodo.gate.avisoImportante")}
           </Box>
           </Reveal>
         </Flex>
@@ -249,18 +249,16 @@ export default function MetodoTcm() {
               <Flex direction="column" gap={4}>
                 <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
                       textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                  Importante
+                  {t("metodo.gate.importante")}
                 </Text>
                 <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.75"
                       style={{ textShadow: INK_SHADOW }}>
-                  Este mapa tiene un fin educativo y de autoconocimiento.
+                  {t("metodo.gate.tcm.aviso1")}
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                       style={{ textShadow: INK_SHADOW }}>
-                  No constituye un diagnóstico clínico ni sustituye la valoración realizada por un profesional
-                  cualificado en medicina tradicional china o en medicina convencional. Si atraviesas un problema
-                  de salud, busca acompañamiento profesional.
+                  {t("metodo.gate.tcm.aviso2")}
                 </Text>
               </Flex>
             </ModalBody>

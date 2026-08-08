@@ -10,6 +10,7 @@
 // Datos: data.regulacion.texto = string  (autoguardado con debounce).
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Box, Flex, Text, Textarea,
@@ -57,6 +58,7 @@ function fmtTime(s: number): string {
 }
 
 export default function MetodoPsicologiaRegulacion() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -246,7 +248,7 @@ export default function MetodoPsicologiaRegulacion() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Narra"
+              title={t("metodo.psico.narra")}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
@@ -273,18 +275,18 @@ export default function MetodoPsicologiaRegulacion() {
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 9 }}>
                 <Flex direction="column" align="center" gap={{ base: 5, md: 6 }}>
-                  <SeccionTitulo>Estimulación bilateral · usa auriculares </SeccionTitulo>
+                  <SeccionTitulo>{t("metodo.psico.bilateral")}</SeccionTitulo>
 
                   {audioError ? (
                     <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.78}
                           textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                      El audio estará disponible muy pronto. Puedes escribir igualmente.
+                      {t("metodo.psico.audioPronto")}
                     </Text>
                   ) : (
                     <>
                       {/* Botones: volver a empezar + play/pausa */}
                       <Flex align="center" justify="center" gap={{ base: 5, md: 7 }}>
-                        <CircleBtn onClick={reiniciar} title="Volver a poner desde el principio" size="52px">
+                        <CircleBtn onClick={reiniciar} title={t("metodo.psico.desdeElPrincipio")} size="52px">
                           {/* icono replay */}
                           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="52%" h="52%" fill="currentColor">
                             <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-820q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 105-114 172.5T480-160Z" />
@@ -306,7 +308,7 @@ export default function MetodoPsicologiaRegulacion() {
 
                       {/* Barra de progreso + tiempos */}
                       <Box w="100%" maxW="480px">
-                        <Slider aria-label="Progreso del audio" value={tiempo} min={0}
+                        <Slider aria-label={t("metodo.psico.progresoAudio")} value={tiempo} min={0}
                                 max={duracion || 0} step={1} onChange={buscar} isDisabled={!duracion} focusThumbOnChange={false}>
                           <SliderTrack bg={`${TINTA}33`} h="6px" borderRadius="full">
                             <SliderFilledTrack bg={TINTA} />
@@ -326,7 +328,7 @@ export default function MetodoPsicologiaRegulacion() {
                              fill={TINTA} flexShrink={0} opacity={0.85}>
                           <path d="M200-360v-240h160l200-200v640L360-360H200Z" />
                         </Box>
-                        <Slider aria-label="Volumen" value={volumen} min={0} max={1} step={0.02}
+                        <Slider aria-label={t("metodo.psico.volumen")} value={volumen} min={0} max={1} step={0.02}
                                 onChange={cambiarVolumen} flex="1" focusThumbOnChange={false}>
                           <SliderTrack bg={`${TINTA}33`} h="5px" borderRadius="full">
                             <SliderFilledTrack bg={TINTA} />
@@ -353,7 +355,7 @@ export default function MetodoPsicologiaRegulacion() {
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 6, md: 8 }}>
                 <Box mb={{ base: 5, md: 6 }}>
-                  <SeccionTitulo>Junta los fragmentos de tus recuerdos. Pon en palabras tu dolor para darle sentido y empezar a integrarlo.</SeccionTitulo>
+                  <SeccionTitulo>{t("metodo.psico.juntaFragmentos")}</SeccionTitulo>
                 </Box>
 
                 {/* Fragmentos: cada uno es un box de altura fija; si el texto lo
@@ -381,7 +383,7 @@ export default function MetodoPsicologiaRegulacion() {
                         _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.9)" }}
                       />
                       {fragmentos.length > 1 && (
-                        <Box as="button" onClick={() => quitarFragmento(i)} title="Quitar este fragmento"
+                        <Box as="button" onClick={() => quitarFragmento(i)} title={t("metodo.psico.quitarFragmento")}
                              position="absolute" top={2.5} right={2.5} w="26px" h="26px" borderRadius="full"
                              bg={`${PAPEL}cc`} color={TINTA} border={`1px solid ${TINTA}33`}
                              display="flex" alignItems="center" justifyContent="center"
@@ -399,7 +401,7 @@ export default function MetodoPsicologiaRegulacion() {
                        fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.18s"
                        _hover={{ bg: "rgba(255,251,243,0.92)", borderColor: TINTA, transform: "translateY(-2px)" }}>
-                    + Añadir
+                    {t("metodo.psico.anadir")}
                   </Box>
                 </Flex>
 
@@ -410,7 +412,7 @@ export default function MetodoPsicologiaRegulacion() {
                        fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.18s"
                        _hover={{ bg: "rgba(255,251,243,0.92)", borderColor: TINTA, transform: "translateY(-2px)" }}>
-                    Hacer el cierre
+                    {t("metodo.psico.hacerCierre")}
                   </Box>
                   <BotonGuardar onSave={guardarAhora} bg={TINTA} fg={neuropsicologiaBg}
                                 minW="150px" px={7} py={2.5} fontSize={{ base: "sm", md: "md" }} />
@@ -477,7 +479,7 @@ export default function MetodoPsicologiaRegulacion() {
                    fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" cursor="pointer"
                    boxShadow={`0 6px 20px rgba(94,45,16,0.32)`} transition="all 0.2s"
                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}>
-                Estoy mejor
+                {t("metodo.psico.estoyMejor")}
               </Box>
             </Box>
           </Box>

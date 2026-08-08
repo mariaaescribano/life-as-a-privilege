@@ -21,6 +21,9 @@ import {
 } from "../../components/metodo/presentacionUi";
 import { CulturaIcon, culturaBg, culturaNom } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import { useIdioma, useT } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /d/cultura — presentación de Cultura, el cierre de El Mapa.
@@ -47,6 +50,12 @@ const ORDEN_HISTORIAS = ["universal", "religiones", "filosofia", "ciencia", "med
 const AVISO = "Descúbrelo dentro";
 
 export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }) {
+  const { segunIdioma } = useIdioma();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  const t = useT();
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const historias = useMemo(
@@ -89,7 +98,7 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
         <Reveal direction="down" distance={18} duration={0.8} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<CulturaIcon size={{ base: "38px", md: "52px" }} />}
-            title={d.titulo}
+            title={disciplina}
             bgColor={culturaBg}
             color={d.txt}
             nom={culturaNom}
@@ -121,7 +130,7 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
         </RevealStagger>
@@ -161,7 +170,7 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
               nom={culturaNom}
               bg={culturaBg}
               txt={d.txt}
-              videoIntro={d.videoIntro}
+              videoIntro={cont.videoIntro}
               paso={d.paso}
               renderIcon={renderIcon}
               tieneVideo={!!d.video}
@@ -180,7 +189,7 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
             Su portada en un círculo y el título debajo. Sin caja: los círculos se
             presentan solos sobre el turquesa. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Las seis Historias</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.cultura.seisHistorias")}</SeparadorSeccion>
 
           <RevealStagger
             inView
@@ -225,7 +234,7 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
             La línea principal de cada Historia, para que se vea cuál es cuál.
             Aquí NO se abre nada: al tocarla sale «Descúbrelo dentro». */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Sus líneas del tiempo</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.cultura.lineasTiempo")}</SeparadorSeccion>
 
           <Reveal inView direction="up" distance={16} duration={0.7}>
             <Text
@@ -237,8 +246,7 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
               maxW="740px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Cada Historia se recorre por su línea del tiempo, era por era. Estas son, solo para
-              que las veas.
+              {t("presentacion.cultura.lineasTexto")}
             </Text>
           </Reveal>
 
@@ -265,13 +273,13 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 5. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 
@@ -395,6 +403,7 @@ function LineaEjemplo({
   titulo: string;
   hitos: HitoHistoria[];
 }) {
+  const t = useT();
   const [aviso, setAviso] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -533,7 +542,7 @@ function LineaEjemplo({
                       textAlign="center"
                       style={{ textShadow: SOMBRA_NEGRA }}
                     >
-                      más dentro
+                      {t("presentacion.masDentro")}
                     </Text>
                   </Flex>
                 </>

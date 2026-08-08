@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { useT } from "../../i18n";
 
 export default function NoEncontrada() {
   const navigate = useNavigate();
+  const t = useT();
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -33,12 +35,11 @@ export default function NoEncontrada() {
         <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="600" letterSpacing="0.05em"
               textTransform="uppercase"
               textShadow="0 0 12px rgba(255,255,255,0.35)">
-          Esta página no existe
+          {t("web.404.titulo")}
         </Text>
 
         <Text color="rgba(255,255,255,0.78)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" maxW="520px">
-          Puede que el enlace esté mal escrito o que la página se haya movido de sitio.
-          Vuelve al inicio y sigue el camino desde ahí.
+          {t("web.404.texto")}
         </Text>
 
         <Flex gap={4} wrap="wrap" justify="center" mt={2}>
@@ -47,14 +48,14 @@ export default function NoEncontrada() {
                border="1.5px solid rgba(255,255,255,0.5)" color="white" fontWeight="700"
                fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
                transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.2)", transform: "translateY(-2px)" }}>
-            Ir al inicio
+            {t("web.404.inicio")}
           </Box>
           <Box as="button" onClick={() => navigate("/elMetodo")}
                px={7} py={3} borderRadius="full" bg="transparent"
                border="1.5px solid rgba(255,255,255,0.35)" color="rgba(255,255,255,0.9)" fontWeight="600"
                fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
                transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.12)", transform: "translateY(-2px)" }}>
-            Ver El Recorrido
+            {t("web.404.recorrido")}
           </Box>
         </Flex>
       </Flex>

@@ -1,17 +1,18 @@
 import type { Vineta } from "./ComicViewer";
 
-// Cómic de Fisiología: «Los grandes ciclos de la naturaleza». Cierre del ascenso
-// (partícula → organismo → «eres tú»): se intercala al terminar de construir el
-// ser humano (Organismo), como último zoom-OUT antes de volver a Niveles. El
-// mensaje: tus átomos están prestados de los ciclos de la naturaleza y volverán
-// a ellos; eres parte de algo más grande.
+// Cómic de NUTRICIÓN: «Los grandes ciclos de la naturaleza». Nació en Fisiología
+// (como zoom-OUT al terminar de construir el organismo), pero su sitio es el
+// paso «¿De dónde vienen los nutrientes?» de Nutrición: es la PRIMERA lectura de
+// ese paso, la que explica que los átomos que comes son prestados y vuelven a
+// los ciclos. Por eso el archivo, las fotos y la entrada de galería son de
+// Nutrición.
 //
-// Imágenes: /viñetas/fisiologia/ciclos/agua.png, carbono.png, oxigeno.png,
+// Imágenes: /viñetas/nutricion/ciclos/agua.png, carbono.png, oxigeno.png,
 // nitrogeno.png, fosforo.png (una por viñeta). Mientras no existan, el
 // ComicViewer muestra su loader/fallback.
-export const CICLOS_NATURALEZA: Vineta[] = [
+export const NUTRICION_CICLOS: Vineta[] = [
   {
-    src: "/viñetas/fisiologia/ciclos/agua.png",
+    src: "/viñetas/nutricion/ciclos/agua.png",
     titulo: "Ciclo del agua",
     paragraphs: [
       "El ciclo del agua es el proceso continuo mediante el cual el agua circula entre la superficie terrestre, la atmósfera y los océanos.",
@@ -21,7 +22,7 @@ export const CICLOS_NATURALEZA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/ciclos/carbono.png",
+    src: "/viñetas/nutricion/ciclos/carbono.png",
     titulo: "Ciclo del carbono",
     paragraphs: [
       "El ciclo del carbono describe el movimiento continuo del carbono entre la atmósfera, los seres vivos, los océanos y la corteza terrestre.",
@@ -30,7 +31,7 @@ export const CICLOS_NATURALEZA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/ciclos/oxigeno.png",
+    src: "/viñetas/nutricion/ciclos/oxigeno.png",
     titulo: "Ciclo del oxígeno",
     paragraphs: [
       "El ciclo del oxígeno consiste en el intercambio continuo de este elemento entre la atmósfera, los seres vivos y los ecosistemas.",
@@ -39,7 +40,7 @@ export const CICLOS_NATURALEZA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/ciclos/nitrogeno.png",
+    src: "/viñetas/nutricion/ciclos/nitrogeno.png",
     titulo: "Ciclo del nitrógeno",
     paragraphs: [
       "El ciclo del nitrógeno permite transformar el nitrógeno atmosférico en formas que pueden ser utilizadas por los seres vivos.",
@@ -48,7 +49,7 @@ export const CICLOS_NATURALEZA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/ciclos/fosforo.png",
+    src: "/viñetas/nutricion/ciclos/fosforo.png",
     titulo: "Ciclo del fósforo",
     paragraphs: [
       "El ciclo del fósforo describe el movimiento de este elemento entre las rocas, el suelo, el agua y los organismos vivos.",

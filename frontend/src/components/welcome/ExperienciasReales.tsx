@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
 import { RevealItem, RevealStagger } from "../global/Reveal";
+import { useT } from "../../i18n";
 
 // La entrada ya no se hace con un IntersectionObserver propio (que encendía
 // todo el bloque a la vez): ahora se usa el sistema Reveal común, que además
@@ -45,6 +46,7 @@ const ArrowButton: React.FC<{ dir: "left" | "right"; onClick: () => void }> = ({
 
 const ExperienciasReales: React.FC = () => {
   const navigate = useNavigate();
+  const t = useT();
   const [opiniones, setOpiniones] = useState<Opinion[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [index, setIndex] = useState(0);
@@ -97,7 +99,7 @@ const ExperienciasReales: React.FC = () => {
             textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 28px rgba(255,255,255,0.3), 0 0 50px rgba(180,255,245,0.25)"
             fontFamily="'EB Garamond', serif"
           >
-            Experiencias reales
+            {t("experiencias.titulo")}
           </Text>
         </RevealItem>
 
@@ -206,7 +208,7 @@ const ExperienciasReales: React.FC = () => {
           maxW="640px"
           textShadow="0 0 10px rgba(255,255,255,0.3)"
         >
-          Si ellos encontraron respuestas aquí, tú también puedes.
+          {t("experiencias.cierre")}
         </Text>
         </RevealItem>
 
@@ -227,7 +229,7 @@ const ExperienciasReales: React.FC = () => {
           transition="color 0.2s ease"
           _hover={{ color: "white" }}
         >
-          Ver más experiencias →
+          {t("experiencias.verMas")}
         </Box>
         </RevealItem>
       </Flex>

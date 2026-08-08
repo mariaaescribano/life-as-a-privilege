@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
+import { useT } from "../../i18n";
 
 /**
  * Tarjeta de la creadora — panel glass horizontal: texto a la izquierda
@@ -12,7 +13,7 @@ import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
  * extra opcional, para reutilizar la tarjeta en distintas páginas.
  */
 type CreadoraCardProps = {
-  /** Texto del botón. Por defecto "Conocer a la creadora". */
+  /** Texto del botón. Por defecto, «Conocer a la creadora» en el idioma activo. */
   actionLabel?: string;
   /** Ruta a la que navega el botón. Por defecto "/quienSoy". */
   actionTo?: string;
@@ -26,12 +27,15 @@ type CreadoraCardProps = {
 };
 
 const CreadoraCard: React.FC<CreadoraCardProps> = ({
-  actionLabel = "Conocer a la creadora",
+  actionLabel,
   actionTo = "/quienSoy",
   extraParagraph,
   sinMargenes = false,
 }) => {
   const navigate = useNavigate();
+  const t = useT();
+  // El valor por defecto no puede ir en la firma: depende del idioma activo.
+  const etiquetaAccion = actionLabel ?? t("creadora.accion");
 
   return (
     <Box
@@ -118,7 +122,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             letterSpacing="0.02em"
             textShadow="0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.14)"
           >
-            Ingeniera informática. Reconstruí el camino que muchas personas recorremos durante años intentando comprendernos: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.
+            {t("creadora.bio")}
           </Text>
 
           {extraParagraph && (
@@ -163,7 +167,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             }}
             transition="all 0.25s ease"
           >
-            {actionLabel}
+            {etiquetaAccion}
             <Box as="span" fontSize={{ base: "sm", md: "md", lg: "lg" }}>→</Box>
           </Flex>
         </RevealItem>

@@ -9,6 +9,7 @@ import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, FitoterapiaIcon,
 } from "../../GlobalVariables";
 import { plantas, type Planta } from "../../components/recursos/fitoterapia/PlantasData";
+import { useT } from "../../i18n";
 
 const CARD_COLOR  = nutricionTxt;
 const MODAL_COLOR = nutricionBg;
@@ -86,6 +87,7 @@ const SeccionModal = ({ titulo, color, textMid, children }: { titulo: string; co
    MODAL DE PLANTA
 ══════════════════════════════════════════════ */
 const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }) => {
+  const t = useT();
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -180,7 +182,7 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
 
           <BotanicalDivider color={nutricionTxt} />
 
-          <SeccionModal titulo="Beneficios" color={nutricionTxt} textMid={textMid}>
+          <SeccionModal titulo={t("ficha.beneficios")} color={nutricionTxt} textMid={textMid}>
             <Flex direction="column" gap={2}>
               {planta.beneficios.map((b, i) => (
                 <Flex key={i} gap={3} align="flex-start">
@@ -193,7 +195,7 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
 
           <BotanicalDivider color={nutricionTxt} />
 
-          <SeccionModal titulo="Forma de uso" color={nutricionTxt} textMid={textMid}>
+          <SeccionModal titulo={t("ficha.formaDeUso")} color={nutricionTxt} textMid={textMid}>
             <Box bg={accentBg} border={`1px solid ${accentBorder}`} borderRadius="xl" px={5} py={4}>
               <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" opacity={0.88}>
                 {planta.formaDeUso}
@@ -204,7 +206,7 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
           {planta.datosCuriosos && planta.datosCuriosos.length > 0 && (
             <>
               <BotanicalDivider color={nutricionTxt} />
-              <SeccionModal titulo="Datos curiosos" color={nutricionTxt} textMid={textMid}>
+              <SeccionModal titulo={t("ficha.datosCuriosos")} color={nutricionTxt} textMid={textMid}>
                 <Flex direction="column" gap={3}>
                   {planta.datosCuriosos.map((d, i) => (
                     <Flex key={i} gap={3} align="flex-start">
@@ -227,7 +229,7 @@ const PlantModal = ({ planta, onClose }: { planta: Planta; onClose: () => void }
           {planta.precauciones && planta.precauciones.length > 0 && (
             <>
               <BotanicalDivider color="#b05a2a" />
-              <SeccionModal titulo="Precauciones" color="#b05a2a" textMid="#8a3e18">
+              <SeccionModal titulo={t("ficha.precauciones")} color="#b05a2a" textMid="#8a3e18">
                 <Box bg="rgba(176,90,42,0.08)" border="1px solid rgba(176,90,42,0.28)" borderRadius="xl" px={5} py={4}>
                   <Flex direction="column" gap={2}>
                     {planta.precauciones.map((p, i) => (
@@ -336,6 +338,7 @@ function PlantCard({ planta, isFavorite, onOpen, onToggleFavorite, showFavorite 
 ══════════════════════════════════════════════ */
 export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?: boolean }) {
   const navigate = useNavigate();
+  const t = useT();
   const [selected, setSelected]   = useState<Planta | null>(null);
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
   const userId = localStorage.getItem("userId");
@@ -394,18 +397,18 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
         >
           <MetodoStepHeader
             icon={<FitoterapiaIcon size={{ base: "40px", md: "50px" }} color={nutricionTxt} />}
-            title={favoritesOnly ? "Mis plantas favoritas" : "Herbario"}
+            title={t(favoritesOnly ? "herbario.favoritos" : "herbario.titulo")}
             bgColor={nutricionBg}
             color={nutricionTxt}
             nom={nutricionNom}
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
+            prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
           />
 
           {favoritesOnly && plantasMostradas.length === 0 && (
             <Text color="rgba(255,255,255,0.75)" fontSize={{ base: "lg", md: "xl" }}
               fontStyle="italic" textAlign="center" mt={4}
             >
-              Aún no tienes plantas marcadas como favoritas.
+              {t("herbario.sinFavoritos")}
             </Text>
           )}
 

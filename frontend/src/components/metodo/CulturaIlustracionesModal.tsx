@@ -1,4 +1,5 @@
 import React from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -25,6 +26,7 @@ import { comicLoaderPorColor } from "./comicLoaders";
 const CULTURA_IMG = "/img/fondos/cultura.webp";
 
 export function CulturaIlustracionesModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const t = useT();
   const fondosListos = usePrecargarImagenes(isOpen ? [CULTURA_IMG] : []);
 
   return (
@@ -57,7 +59,7 @@ export function CulturaIlustracionesModal({ isOpen, onClose }: { isOpen: boolean
         {fondosListos && (<>
           {/* X cerrar */}
           <IconButton
-            aria-label="Cerrar"
+            aria-label={t("comun.cerrar")}
             onClick={onClose}
             position="fixed"
             top={{ base: 3, md: 5 }}
@@ -94,11 +96,11 @@ export function CulturaIlustracionesModal({ isOpen, onClose }: { isOpen: boolean
                 lineHeight="1.1"
                 style={{ textShadow: `0 0 14px ${culturaTxt}cc, 0 0 32px ${culturaTxt}77, 0 0 70px ${culturaTxt}44` }}
               >
-                Ilustraciones de Cultura
+                {t("metodo.ilustracionesDe", { disciplina: t("disciplina.cultura") })}
               </Text>
               <Box h="1px" w="60%" maxW="220px" style={{ background: `linear-gradient(90deg, transparent, ${culturaTxt}66, transparent)` }} />
               <Text color={`${culturaTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.7">
-                Las ilustraciones de Cultura llegarán muy pronto.
+                {t("metodo.ilustracionesPronto", { disciplina: t("disciplina.cultura") })}
               </Text>
             </Flex>
           </ModalBody>

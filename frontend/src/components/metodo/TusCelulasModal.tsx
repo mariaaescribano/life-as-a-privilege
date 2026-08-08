@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useSyncExternalStore } from "react";
+import { traducir, useT } from "../../i18n";
 import { Box, Flex, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -46,7 +47,7 @@ const VISTAS_KEY = "celulas_vistas";
 export function TusCelulasModal({
   isOpen,
   onClose,
-  titulo = "Tus células",
+  titulo,
   celulas = CELULAS,
 }: {
   isOpen: boolean;
@@ -56,6 +57,7 @@ export function TusCelulasModal({
   /** Lista de células a mostrar. Por defecto todas las de Fisiología. */
   celulas?: Celula[];
 }) {
+  const t = useT();
   const [selected, setSelected] = useState<Celula | null>(null);
   // Células que el usuario ya ha visto (para pintar el tick arriba a la derecha).
   const [vistas, setVistas] = useState<Set<string>>(new Set());
@@ -137,7 +139,7 @@ export function TusCelulasModal({
 
       {/* ── X cerrar ── */}
       <IconButton
-        aria-label="Cerrar"
+        aria-label={t("comun.cerrar")}
         onClick={onClose}
         position="fixed"
         top={{ base: 3, md: 5 }}
@@ -182,7 +184,7 @@ export function TusCelulasModal({
               letterSpacing="0.08em"
               lineHeight="1.1"
             >
-              {titulo}
+              {titulo ?? t("metodo.tusCelulas")}
             </Text>
           </Flex>
 
@@ -237,7 +239,7 @@ export function TusCelulasModal({
 export function useTusCelulas() {
   const [open, setOpen] = useState(false);
   const extra = {
-    label: "Tus células",
+    label: traducir("metodo.tusCelulas"),
     onClick: () => setOpen(true),
     icon: <CelulasOrganosIcon size={{ base: "16px", md: "18px" }} />,
   };

@@ -6,6 +6,8 @@ import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
+import { useT } from "../../i18n";
+import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
@@ -40,6 +42,8 @@ const useReveal = (threshold = 0.05, enabled = true) => {
 };
 
 export const AprendizajeHome = () => {
+  const t = useT();
+  const nombreDisciplina = useNombreDisciplina();
   const [mounted, setMounted] = useState(false);
   // La página no se muestra hasta que TODAS las portadas de los cursos están
   // descargadas: entra ya completa (nada de portadas cargando a trozos), que
@@ -171,7 +175,7 @@ export const AprendizajeHome = () => {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          CURSOS Y DISCIPLINAS
+          {t("aprendizaje.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -185,7 +189,7 @@ export const AprendizajeHome = () => {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Ocho perspectivas. Un ser humano.
+          {t("aprendizaje.lema")}
         </Text>
       </Flex>
 
@@ -212,6 +216,7 @@ export const AprendizajeHome = () => {
               >
                 <ThemeCard
                   title={item.title}
+                  label={nombreDisciplina(item.title)}
                   bgColor={item.bgColor}
                   color={item.color}
                   icon={item.icon}

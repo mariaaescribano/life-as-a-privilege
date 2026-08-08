@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -130,6 +131,7 @@ interface CursosPsicologiaModalProps {
  * imagen 16:9 de cada curso. Se cierra con la X de arriba a la derecha.
  */
 export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModalProps) {
+  const t = useT();
   const navigate = useNavigate();
   const location = useLocation();
   const { cursosData, loading } = useCursosData();
@@ -189,7 +191,7 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
         {/* X cerrar — arriba a la derecha */}
         <Box
           as="button"
-          aria-label="Cerrar"
+          aria-label={t("comun.cerrar")}
           onClick={onClose}
           position="fixed"
           top={{ base: 3, md: 5 }}
@@ -248,7 +250,7 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
                 lineHeight="1.15"
                 style={{ textShadow: `0 0 14px ${neuropsicologiaBg}cc, 0 0 32px ${neuropsicologiaBg}77, 0 0 70px ${neuropsicologiaBg}44` }}
               >
-                Cursos orientativos de Psicología
+                {t("metodo.cursosOrientativos", { disciplina: t("disciplina.psicologia") })}
               </Text>
             </Flex>
 
@@ -266,7 +268,7 @@ export function CursosPsicologiaModal({ isOpen, onClose }: CursosPsicologiaModal
               </SimpleGrid>
             ) : (
               <Text color={`${C}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" style={{ textShadow: `0 0 10px ${neuropsicologiaBg}` }}>
-                Pronto encontrarás aquí los cursos de Psicología.
+                {t("metodo.cursosPronto", { disciplina: t("disciplina.psicologia") })}
               </Text>
             )}
           </Flex>

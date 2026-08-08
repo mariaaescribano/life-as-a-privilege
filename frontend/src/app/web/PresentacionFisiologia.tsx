@@ -25,10 +25,13 @@ import {
   MosaicoMuestra,
   SeparadorSeccion,
   VideoMuestra,
-  type IdeaPresentacion,
+  ideasDesdeContenido,
 } from "../../components/metodo/presentacionUi";
 import { FisiologiaIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
+import { useIdioma, useT } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /d/fisiologia — presentación de Fisiología.
@@ -68,28 +71,16 @@ const SISTEMAS_MUESTRA = SISTEMAS.slice(0, 4);
 const TEMAS_MUESTRA = ["hormonas", "neurotransmisores", "metabolismo", "inmunitario"];
 
 /** Lo que hay dentro, en tres ideas. ✍️ Textos editables. */
-const IDEAS: IdeaPresentacion[] = [
-  {
-    titulo: "Eres tu cuerpo, deja de ser un misterio",
-    parrafos: [
-      "Entenderás qué ocurre realmente en ti cuando tienes energía, inflamación, fatiga o enfermedad. Eres tu cuerpo, deja de ser un misterio.",
-    ],
-  },
-  {
-    titulo: "Desequilibrios frecuentes",
-    parrafos: [
-      "Aprenderás a reconocer los mecanismos detrás de muchos de los problemas que afectan a millones de personas hoy.",
-    ],
-  },
-  {
-    titulo: "Sesiones individuales",
-    parrafos: [
-      "Un espacio para traducir la teoría a tu situación concreta y comprender mejor lo que ocurre en tu propio organismo.",
-    ],
-  },
-];
+// Las cajas de «Qué incluye» ya no se copian aquí: salen de recorridoContenido
+// (ver ideasDesdeContenido), que es el mismo texto que enseña /elMetodo.
 
 export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplina }) {
+  const { segunIdioma } = useIdioma();
+  const t = useT();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   const [sistema, setSistema] = useState<Sistema | null>(null);
   const [celulaIdx, setCelulaIdx] = useState<number | null>(null);
@@ -154,7 +145,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
         <Reveal direction="down" distance={18} duration={0.8} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "38px", md: "52px" }} />}
-            title={d.titulo}
+            title={disciplina}
             bgColor={fisiologiaBg}
             color={d.txt}
             nom={fisiologiaNom}
@@ -186,7 +177,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
         </RevealStagger>
@@ -226,7 +217,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
               nom={fisiologiaNom}
               bg={fisiologiaBg}
               txt={d.txt}
-              videoIntro={d.videoIntro}
+              videoIntro={cont.videoIntro}
               paso={d.paso}
               renderIcon={renderIcon}
               tieneVideo={!!d.video}
@@ -246,7 +237,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             verdad: foto grande, las tres claves y la explicación, con flechas
             para pasar de un sistema al siguiente sin salir. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Los sistemas</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.fisio.sistemas")}</SeparadorSeccion>
 
           <Reveal inView direction="up" distance={16} duration={0.7}>
             <Text
@@ -258,8 +249,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
               maxW="700px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Varios órganos que colaboran forman un sistema. Pulsa cualquiera y lo lees entero,
-              igual que dentro del recorrido.
+              {t("presentacion.fisio.sistemasTexto")}
             </Text>
           </Reveal>
 
@@ -298,7 +288,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
               maxW="700px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Dentro los conocerás todos…
+              {t("presentacion.fisio.dentro")}
             </Text>
           </Reveal>
         </Flex>
@@ -307,7 +297,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             Sin caja detrás: las células se presentan solas sobre el turquesa
             (una caja más ahí solo pesaba). */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">De qué estás hecho</SeparadorSeccion>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.fisio.deQueEstasHecho")}</SeparadorSeccion>
 
           <Reveal inView direction="up" distance={16} duration={0.7}>
             <Text
@@ -319,8 +309,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
               maxW="720px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              Tu cuerpo no es una idea: son células trabajando ahora mismo, cada una con su
-              oficio. Dentro hay {celulas.length} tipos con su ficha. Aquí van ocho.
+              {t("presentacion.fisio.celulasTexto", { n: celulas.length })}
             </Text>
           </Reveal>
 
@@ -354,7 +343,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
         {/* ══ 5. ILUSTRACIONES ══ */}
         {comics.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Ilustraciones de Fisiología</SeparadorSeccion>
+            <SeparadorSeccion>{t("presentacion.sec.ilustraciones", { disciplina })}</SeparadorSeccion>
             <Grid
               w="100%"
               templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
@@ -371,8 +360,8 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             Tres ideas de lo que se aprende y, al lado, cuatro temas de
             «Profundiza» solo para verse: no se abren (ver MosaicoMuestra). */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1180px">Lo que hay dentro</SeparadorSeccion>
-          <IdeasConMuestra d={d} ideas={IDEAS}>
+          <SeparadorSeccion maxW="1180px">{t("presentacion.sec.loQueHayDentro")}</SeparadorSeccion>
+          <IdeasConMuestra d={d} ideas={ideasDesdeContenido(cont.contenido)}>
             <MosaicoMuestra d={d} fotos={temasMuestra} />
           </IdeasConMuestra>
         </Flex>
@@ -382,13 +371,13 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ 7. LLAMADA A LA ACCIÓN ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 

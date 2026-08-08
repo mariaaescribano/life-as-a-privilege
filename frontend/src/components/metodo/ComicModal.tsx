@@ -29,6 +29,11 @@ interface ComicModalProps {
   /** El cómic ya se había leído antes de abrirlo: sale el aviso discreto
    *  «✓ Leída» arriba del texto (en todas sus viñetas). */
   leida?: boolean;
+  /** Animación de espera mientras carga la viñeta. El ComicViewer la elige sola
+   *  a partir del `themeColor`, pero solo acierta si ese color es el `<disc>Txt`;
+   *  Nutrición pasa acento CLARO (nutricionBg), así que aquí se le pone su
+   *  manzana a mano para que no caiga en el mandala de la casa. */
+  loader?: React.ReactNode;
 }
 
 export function ComicModal({
@@ -42,6 +47,7 @@ export function ComicModal({
   textColor,
   cerrarColor,
   leida,
+  loader,
 }: ComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -66,6 +72,7 @@ export function ComicModal({
           textShadow={textShadow}
           textColor={textColor}
           cerrarColor={cerrarColor}
+          loader={loader}
           leida={leida ? () => true : undefined}
           // En la galería de Ilustraciones no hay «Saltar»: es un visor, la X ya
           // cierra. Saltar solo tiene sentido en el cómic de intro de disciplina.

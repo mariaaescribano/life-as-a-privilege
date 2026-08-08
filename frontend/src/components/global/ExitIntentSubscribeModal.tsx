@@ -5,6 +5,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const SHOWN_KEY = "exitIntentShownAt";
 const DISMISSED_KEY = "exitIntentDismissed";
@@ -37,6 +38,7 @@ function shouldSkip(): boolean {
 }
 
 export function ExitIntentSubscribeModal() {
+  const t = useT();
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "ok" | "invalid">("idle");
@@ -171,14 +173,14 @@ export function ExitIntentSubscribeModal() {
                 fontWeight="700"
                 letterSpacing="0.05em"
               >
-                Registrado correctamente
+                {t("suscribir.ok")}
               </Text>
               <Text
                 color="rgba(255,255,255,0.75)"
                 fontSize={{ base: "md", md: "lg" }}
                 fontStyle="italic"
               >
-                Gracias por querer aprender
+                {t("suscribir.gracias")}
               </Text>
               <Box
                 as="button"
@@ -197,7 +199,7 @@ export function ExitIntentSubscribeModal() {
                 transition="all 0.2s"
                 _hover={{ bg: "rgba(255,255,255,0.18)" }}
               >
-                Cerrar
+                {t("comun.cerrar")}
               </Box>
             </Flex>
           ) : (
@@ -217,7 +219,7 @@ export function ExitIntentSubscribeModal() {
                 textShadow="0 2px 10px rgba(0,0,0,0.3)"
                 lineHeight="1.2"
               >
-                Antes de irte...
+                {t("salida.titulo")}
               </Text>
               <Text
                 color="rgba(255,255,255,0.78)"
@@ -225,14 +227,14 @@ export function ExitIntentSubscribeModal() {
                 lineHeight="1.6"
                 maxW="380px"
               >
-                Suscríbete y recibe un email cuando haya contenido nuevo.
+                {t("salida.texto")}
               </Text>
 
               <Input
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); if (status === "invalid") setStatus("idle"); }}
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-                placeholder="Tu email"
+                placeholder={t("suscribir.placeholder")}
                 type="email"
                 w="100%"
                 maxW="320px"
@@ -250,7 +252,7 @@ export function ExitIntentSubscribeModal() {
               />
               {status === "invalid" && (
                 <Text color="rgba(255,170,170,0.95)" fontSize="sm">
-                  Introduce un email válido
+                  {t("suscribir.invalido")}
                 </Text>
               )}
 
@@ -271,7 +273,7 @@ export function ExitIntentSubscribeModal() {
                 transition="all 0.2s"
                 _hover={{ bg: "rgba(255,255,255,0.22)" }}
               >
-                Suscribirme
+                {t("suscribir.boton")}
               </Box>
 
               <Box
@@ -287,7 +289,7 @@ export function ExitIntentSubscribeModal() {
                 cursor="pointer"
                 _hover={{ color: "rgba(255,255,255,0.85)" }}
               >
-                No, gracias
+                {t("salida.noGracias")}
               </Box>
             </Flex>
           )}

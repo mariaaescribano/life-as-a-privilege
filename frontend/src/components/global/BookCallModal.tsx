@@ -5,6 +5,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 interface BookCallModalProps {
   isOpen: boolean;
@@ -78,6 +79,7 @@ function slotIsPast(day: Date, slot: string) {
 }
 
 export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
+  const t = useT();
   const days = useMemo(buildDays, []);
   const slots = useMemo(buildSlots, []);
 
@@ -198,7 +200,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                 letterSpacing="0.04em"
                 textShadow={`0 0 14px ${FG}55`}
               >
-                ¡Reserva confirmada!
+                {t("llamada.confirmada")}
               </Text>
               <Text
                 color={`${FG}cc`}
@@ -230,7 +232,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                 transition="all 0.2s"
                 _hover={{ bg: `${FG}18` }}
               >
-                Cerrar
+                {t("comun.cerrar")}
               </Box>
             </Flex>
           ) : (
@@ -245,7 +247,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                   lineHeight="1.2"
                   textShadow={`1px 2px 10px ${FG}55`}
                 >
-                  Agenda una llamada
+                  {t("llamada.agenda")}
                 </Text>
                 <Text
                   color={`${FG}cc`}
@@ -253,7 +255,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                   fontStyle="italic"
                   mt={1}
                 >
-                  20 minutos, sin coste · horario peninsular España
+                  {t("llamada.gratis")}
                 </Text>
               </Box>
 
@@ -295,7 +297,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
               {step === 1 && (
                 <Flex direction="column" gap={4}>
                   <Text color={FG} fontSize={{ base: "md", md: "lg" }} fontWeight="600">
-                    Elige un día
+                    {t("llamada.elegirDia")}
                   </Text>
                   <Grid
                     templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(4, 1fr)" }}
@@ -342,7 +344,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                   <Flex justify="space-between" align="center" gap={3}>
                     <Box>
                       <Text color={FG} fontSize={{ base: "md", md: "lg" }} fontWeight="600">
-                        Elige una hora
+                        {t("llamada.elegirHora")}
                       </Text>
                       <Text color={`${FG}aa`} fontSize="sm" textTransform="capitalize">
                         {formatDayFullEs(selectedDay)}
@@ -365,7 +367,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       transition="all 0.2s"
                       flexShrink={0}
                     >
-                      ← Cambiar día
+                      {t("llamada.cambiarDia")}
                     </Box>
                   </Flex>
                   {errorMsg && (
@@ -425,7 +427,7 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                   <Flex justify="space-between" align="center" gap={3}>
                     <Box>
                       <Text color={FG} fontSize={{ base: "md", md: "lg" }} fontWeight="600">
-                        Tus datos
+                        {t("llamada.tusDatos")}
                       </Text>
                       <Text color={`${FG}aa`} fontSize="sm" textTransform="capitalize">
                         {formatDayFullEs(selectedDay)} · {selectedSlot}
@@ -448,25 +450,25 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
                       transition="all 0.2s"
                       flexShrink={0}
                     >
-                      ← Cambiar hora
+                      {t("llamada.cambiarHora")}
                     </Box>
                   </Flex>
 
                   <Input
-                    placeholder="Tu nombre"
+                    placeholder={t("llamada.nombre")}
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                     {...inputStyle}
                   />
                   <Input
-                    placeholder="Tu email"
+                    placeholder={t("llamada.email")}
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     {...inputStyle}
                   />
                   <Textarea
-                    placeholder="¿De qué te gustaría hablar? (opcional)"
+                    placeholder={t("llamada.tema")}
                     value={tema}
                     onChange={(e) => setTema(e.target.value)}
                     rows={3}

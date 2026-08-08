@@ -19,6 +19,9 @@ import {
   SeparadorSeccion,
 } from "../../components/metodo/presentacionUi";
 import type { PresentacionDisciplina as Presentacion } from "../../data/presentacionDisciplinas";
+import { useIdioma, useT } from "../../i18n";
+import { useRecorridoContenido } from "../../data/useRecorridoContenido";
+import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Presentación GENÉRICA de una disciplina (/d/:disciplina).
@@ -35,6 +38,12 @@ import type { PresentacionDisciplina as Presentacion } from "../../data/presenta
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function PresentacionGenerica({ d }: { d: Presentacion }) {
+  const { segunIdioma } = useIdioma();
+  // El nombre visible; `d.titulo` solo vale para casar la URL.
+  const disciplina = useNombreDisciplinaEnMapa()(d.nom);
+  const t = useT();
+  // El contenido de la disciplina, ya en el idioma activo.
+  const cont = useRecorridoContenido()[d.clave];
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
 
   // Las series de ilustraciones de ESTA disciplina, tal cual están en la galería
@@ -127,7 +136,7 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
               fontWeight="600"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              {d.titulo}
+              {disciplina}
             </Text>
           </RevealItem>
 
@@ -143,7 +152,7 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
               letterSpacing="0.04em"
               maxW="760px"
             >
-              {d.gancho}
+              {segunIdioma(d.gancho)}
             </Text>
           </RevealItem>
 
@@ -159,14 +168,14 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
               maxW="680px"
               textShadow={BLANCO_GLOW_SUAVE}
             >
-              {d.desc}
+              {cont.desc}
             </Text>
           </RevealItem>
         </RevealStagger>
 
         {/* ══ DE QUÉ TRATA ══ el párrafo largo de /elMetodo ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>De qué trata</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.deQueTrata")}</SeparadorSeccion>
           <Reveal inView direction="up" distance={22} scaleFrom={0.98} duration={0.7} w="100%">
             <CajaDisciplina d={d}>
               <Text
@@ -177,7 +186,7 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
                 textAlign="center"
                 textShadow={sombra}
               >
-                {d.modalDesc}
+                {cont.modalDesc}
               </Text>
             </CajaDisciplina>
           </Reveal>
@@ -185,7 +194,7 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
 
         {/* ══ QUÉ VAS A COMPRENDER ══ los 4 puntos con ✓ ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Qué vas a comprender</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.queVasAComprender")}</SeparadorSeccion>
           <Reveal inView direction="up" distance={22} scaleFrom={0.98} duration={0.7} w="100%">
             <CajaDisciplina d={d}>
               <Flex direction="column" gap={{ base: 5, md: 7 }}>
@@ -198,13 +207,13 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
                   textAlign="center"
                   textShadow={sombra}
                 >
-                  {d.videoIntro.titulo}
+                  {cont.videoIntro.titulo}
                 </Text>
 
                 <Box h="1px" w="100%" bgGradient={`linear(to-r, transparent, ${d.txt}66, transparent)`} />
 
                 <Flex direction="column" gap={{ base: 3.5, md: 4 }}>
-                  {d.videoIntro.puntos.map((punto, i) => (
+                  {cont.videoIntro.puntos.map((punto, i) => (
                     <Flex key={i} align="flex-start" gap={{ base: 3, md: 4 }}>
                       {/* Tick en el color de la disciplina */}
                       <Box
@@ -240,7 +249,7 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
             Las mismas tarjetas y el mismo visor inmersivo de /ilustraciones. */}
         {ilustraciones.length > 0 && (
           <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-            <SeparadorSeccion>Míralo con tus ojos</SeparadorSeccion>
+            <SeparadorSeccion>{t("presentacion.sec.miralo")}</SeparadorSeccion>
             <Reveal inView direction="up" distance={16} duration={0.7}>
               <Text
                 color="rgba(255,255,255,0.9)"
@@ -270,13 +279,13 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
 
         {/* ══ QUÉ INCLUYE ══ las cajas de contenido de /elMetodo ══ */}
         <Flex direction="column" align="center" w="100%" maxW="1100px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Qué incluye</SeparadorSeccion>
+          <SeparadorSeccion>{t("elMetodo.queIncluye")}</SeparadorSeccion>
           <Grid
             w="100%"
-            templateColumns={{ base: "1fr", lg: `repeat(${Math.min(d.contenido.length, 3)}, 1fr)` }}
+            templateColumns={{ base: "1fr", lg: `repeat(${Math.min(cont.contenido.length, 3)}, 1fr)` }}
             gap={{ base: 6, md: 6 }}
           >
-            {d.contenido.map((seccion, i) => (
+            {cont.contenido.map((seccion, i) => (
               <Reveal
                 key={i}
                 inView
@@ -349,13 +358,13 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
             /welcome y /elMetodo (components/welcome/CreadoraCard), con
             `sinMargenes` porque esta página ya pone los suyos. */}
         <Flex direction="column" align="center" w="100%" maxW="1180px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion maxW="1100px">La creadora</SeparadorSeccion>
+          <SeparadorSeccion maxW="1100px">{t("presentacion.sec.laCreadora")}</SeparadorSeccion>
           <CreadoraCard sinMargenes />
         </Flex>
 
         {/* ══ CIERRE ══ crear la cuenta ══ */}
         <Flex direction="column" align="center" w="100%" maxW="900px" gap={{ base: 6, md: 8 }}>
-          <SeparadorSeccion>Empieza por aquí</SeparadorSeccion>
+          <SeparadorSeccion>{t("presentacion.sec.empiezaPorAqui")}</SeparadorSeccion>
           <CierreCrearCuenta d={d} />
         </Flex>
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { nutricionTxt } from "../../GlobalVariables";
 import { glowSuave, glowSuaveHover } from "./FotoBox";
@@ -57,6 +58,7 @@ export function NutrienteCirculo({ tarjetas, onSelect, tituloCentro }: {
   onSelect: (i: number) => void;
   tituloCentro?: string;
 }) {
+  const t = useT();
   const N = tarjetas.length;
   const R = 41; // radio del anillo (% del contenedor)
 
@@ -78,7 +80,7 @@ export function NutrienteCirculo({ tarjetas, onSelect, tituloCentro }: {
           </Text>
           <Text color="whiteAlpha.800" fontSize={{ base: "2xs", md: "xs" }} fontStyle="italic"
                 style={{ textShadow: "0 1px 6px rgba(0,0,0,0.3)" }}>
-            Toca cada una
+            {t("metodo.tocaCadaUna")}
           </Text>
         </Flex>
       )}

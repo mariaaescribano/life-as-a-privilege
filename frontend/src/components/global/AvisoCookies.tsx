@@ -6,6 +6,7 @@
 //   · Cerrar sin elegir no equivale a aceptar: el aviso vuelve a salir.
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { TextoRico, useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { estadoCookies, guardarConsentimiento } from "./cookies";
 
@@ -58,6 +59,8 @@ export default function AvisoCookies() {
 
   if (!visible) return null;
 
+  const t = useT();
+
   const decidir = (valor: "aceptadas" | "rechazadas") => {
     guardarConsentimiento(valor);
     setVisible(false);
@@ -85,9 +88,7 @@ export default function AvisoCookies() {
         gap={{ base: 4, md: 8 }}
       >
         <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" flex="1">
-          Usamos cookies propias necesarias para que la web funcione y para mantener tu sesión
-          iniciada. Nos gustaría usar también cookies de Google Analytics para entender cómo se
-          usa el sitio y mejorarlo, pero <strong>solo si tú lo autorizas</strong>.{" "}
+          <TextoRico>{t("cookies.aviso")}</TextoRico>{" "}
           <Text
             as="span"
             textDecoration="underline"
@@ -95,15 +96,15 @@ export default function AvisoCookies() {
             _hover={{ color: "white" }}
             onClick={() => navigate("/cookies")}
           >
-            Más información
+            {t("cookies.masInfo")}
           </Text>
           .
         </Text>
 
         <Flex gap={3} justify={{ base: "center", md: "flex-end" }} flexShrink={0}>
-          <Boton onClick={() => decidir("rechazadas")}>Rechazar</Boton>
+          <Boton onClick={() => decidir("rechazadas")}>{t("cookies.rechazar")}</Boton>
           <Boton onClick={() => decidir("aceptadas")} primario>
-            Aceptar
+            {t("cookies.aceptar")}
           </Boton>
         </Flex>
       </Flex>

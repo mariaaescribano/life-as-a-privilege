@@ -1,24 +1,21 @@
 import React from "react";
+import { useT } from "../../i18n";
 import { PagoDisciplinaModal } from "./PagoDisciplinaModal";
 import type { PagoDisciplinaModalProps } from "./PagoDisciplinaModal";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
 /** Pago de la 2ª disciplina (Psicología). Estilo con los colores de Psicología. */
 export function PagoPsicologiaModal(props: PagoDisciplinaModalProps) {
+  const t = useT();
   return (
     <PagoDisciplinaModal
       {...props}
       bg={neuropsicologiaBg}
       txt={neuropsicologiaTxt}
       nom={neuropsicologiaNom}
-      ordinal="Segunda disciplina"
+      ordinal={t("metodo.pago.ordinal.2")}
       errorColor="#a02020"
-      descripcion={
-        <>
-          Continúa el Mapa con Psicología: reconstruye tu historia y comprende cómo se fue construyendo tu
-          mente, recorriendo tus huellas, tus miedos y tus heridas para habitarte con más libertad y coherencia.
-        </>
-      }
+      descripcion={t("metodo.pago.resumen.psicologia")}
     />
   );
 }

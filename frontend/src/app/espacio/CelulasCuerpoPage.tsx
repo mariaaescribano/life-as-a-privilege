@@ -7,6 +7,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { CelulaCard, CelulaModal } from "../../components/metodo/celulasUi";
 import { CelulasOrganosIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
 import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
+import { useT } from "../../i18n";
 
 const BG = fisiologiaBg;
 const TXT = fisiologiaTxt;
@@ -16,6 +17,7 @@ const TXT = fisiologiaTxt;
 ───────────────────────────────────────── */
 export default function CelulasCuerpoPage() {
   const navigate = useNavigate();
+  const t = useT();
   const [selected, setSelected] = useState<Celula | null>(null);
 
   useEffect(() => {
@@ -37,12 +39,12 @@ export default function CelulasCuerpoPage() {
         >
           <MetodoStepHeader
             icon={<CelulasOrganosIcon size={{ base: "40px", md: "56px" }} />}
-            title="Tus células"
+            title={t("espacio.tusCelulas")}
             bgColor={`${BG}dd`}
             color={TXT}
             nom={fisiologiaNom}
             mb={{ base: 2, md: 4 }}
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/" + fisiologiaNom) }}
+            prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/aprendizaje/cursos/" + fisiologiaNom) }}
           />
 
           {/* Rejilla plana: 4 en ordenador, 1 en móvil */}

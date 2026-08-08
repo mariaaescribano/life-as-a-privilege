@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 interface WaitlistModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ interface WaitlistModalProps {
 }
 
 export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
+  const t = useT();
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -38,7 +40,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
     setError(null);
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-      setError("Introduce un email válido.");
+      setError(t("suscribir.invalido"));
       return;
     }
 
@@ -90,7 +92,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                 lineHeight="1.2"
                 style={{ textShadow: "1px 2px 10px rgba(255,255,255,0.35)" }}
               >
-                Próximamente
+                {t("comun.proximamente")}
               </Text>
             </Flex>
 
@@ -103,12 +105,11 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   fontSize={{ base: "md", md: "lg" }}
                   lineHeight="1.8"
                 >
-                  Actualmente está en proceso de desarrollo. Deja tu email para
-                  ser de los primeros en avisar.
+                  {t("espera.texto")}
                 </Text>
 
                 <Input
-                  placeholder="Tu email"
+                  placeholder={t("suscribir.placeholder")}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -157,7 +158,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   textAlign="center"
                   letterSpacing="0.04em"
                 >
-                  ¡Gracias!
+                  {t("espera.gracias")}
                 </Text>
                 <Text
                   color="rgba(255,255,255,0.85)"
@@ -165,7 +166,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   textAlign="center"
                   lineHeight="1.7"
                 >
-                  Te avisaré en cuando El Mapa esté disponible.
+                  {t("espera.aviso")}
                 </Text>
                 <Box
                   as="button"
@@ -185,7 +186,7 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   transition="all 0.2s"
                   _hover={{ bg: "rgba(255,255,255,0.12)", color: "white" }}
                 >
-                  Cerrar
+                  {t("comun.cerrar")}
                 </Box>
               </Flex>
             )}

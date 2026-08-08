@@ -6,6 +6,7 @@
 import React, { useEffect } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
+import { useIdioma } from "../../i18n";
 import SiteFooter from "../../components/global/Footer";
 
 /** Datos identificativos del titular del sitio (los exige el art. 10 de la LSSI).
@@ -63,6 +64,7 @@ export default function PaginaLegal({
   entradilla?: string;
   children: React.ReactNode;
 }) {
+  const { idioma, t } = useIdioma();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
@@ -107,8 +109,30 @@ export default function PaginaLegal({
             </Text>
           )}
           <Text color="rgba(255,255,255,0.55)" fontSize="xs" letterSpacing="0.14em" mt={4} textTransform="uppercase">
-            Última actualización: {ULTIMA_ACTUALIZACION}
+            {t("legal.ultimaActualizacion", { fecha: ULTIMA_ACTUALIZACION })}
           </Text>
+
+          {/* AVISO EN INGLÉS. El cuerpo de los textos legales se queda en
+              español a propósito: obligan, y citan la ley española (LSSI, RGPD,
+              TRLGDCU). Traducirlos sin revisión jurídica podría hacer que la
+              versión inglesa dijera algo distinto de lo que firma el usuario.
+              Se avisa en vez de callarlo. */}
+          {idioma !== "es" && (
+            <Text
+              color="rgba(255,255,255,0.8)"
+              fontSize={{ base: "sm", md: "md" }}
+              fontStyle="italic"
+              maxW="640px"
+              mt={5}
+              px={4}
+              py={3}
+              borderRadius="lg"
+              border="1px solid rgba(255,255,255,0.25)"
+              bg="rgba(255,255,255,0.06)"
+            >
+              {t("legal.soloEspanol")}
+            </Text>
+          )}
         </Flex>
 
         <Flex justify="center" px={{ base: 5, md: 10 }} pt={{ base: 10, md: 14 }} pb={{ base: 16, md: 24 }}>

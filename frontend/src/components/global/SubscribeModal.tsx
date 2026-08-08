@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
+import { TextoRico, useIdioma, useT } from "../../i18n";
 
 const PAYMENT_LINK = "https://buy.stripe.com/fZu6oAc1x02E8zZ7Uw2VG01";
 
@@ -22,6 +23,10 @@ interface SubscribeModalProps {
 }
 
 export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
+  const t = useT();
+  const { idioma } = useIdioma();
+  // Misma moneda, la convención de cada idioma: «70 €» / «€70».
+  const precio = idioma === "es" ? "70 €" : "€70";
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -99,7 +104,7 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
                 lineHeight="1.2"
                 style={{ textShadow: "1px 2px 10px rgba(255,255,255,0.35)" }}
               >
-                Quiero apuntarme
+                {t("acceso.apuntarme")}
               </Text>
             </Flex>
 
@@ -108,13 +113,11 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
             {!submitted ? (
               <Flex direction="column" gap={4}>
                 <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">
-                  Introduce el email con el que quieres acceder a los cursos.
-                  Después te llevaremos al pago seguro y, una vez confirmado,
-                  recibirás tu código de acceso por correo.
+                  {t("acceso.email")}
                 </Text>
 
                 <Input
-                  placeholder="Tu email"
+                  placeholder={t("suscribir.placeholder")}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -130,13 +133,13 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
                   textAlign="center"
                 >
                   <Text color="rgba(255,255,255,0.7)" fontSize="sm" letterSpacing="0.12em" textTransform="uppercase">
-                    Pack completo
+                    {t("acceso.pack")}
                   </Text>
                   <Text color="white" fontSize="2xl" fontWeight="700">
-                    70 €
+                    {precio}
                   </Text>
                   <Text color="rgba(255,255,255,0.65)" fontSize="xs" fontStyle="italic">
-                    acceso 1 año a cursos y materiales · consultas aparte
+                    {t("acceso.incluye")}
                   </Text>
                 </Box>
 
@@ -166,7 +169,7 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
                   boxShadow="0 4px 20px rgba(255,255,255,0.25)"
                   _hover={{ opacity: 0.9, transform: "translateY(-1px)" }}
                 >
-                  {submitting ? "Preparando..." : "Continuar al pago"}
+                  {submitting ? t("acceso.preparando") : t("acceso.continuarPago")}
                 </Box>
               </Flex>
             ) : (
@@ -179,7 +182,7 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
                   textAlign="center"
                   letterSpacing="0.04em"
                 >
-                  Datos recibidos
+                  {t("acceso.recibidos")}
                 </Text>
                 <Text
                   color="rgba(255,255,255,0.85)"
@@ -187,9 +190,7 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
                   textAlign="center"
                   lineHeight="1.7"
                 >
-                  Pulsa el botón para completar el pago de <strong>70&nbsp;€</strong> en
-                  Stripe. Una vez confirmado, recibirás tu código de acceso por
-                  email.
+                  <TextoRico>{t("acceso.pagarTexto", { precio })}</TextoRico>
                 </Text>
 
                 <Box
@@ -213,7 +214,7 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
                   transition="all 0.22s"
                   _hover={{ opacity: 0.9, transform: "translateY(-1px)" }}
                 >
-                  Ir al pago →
+                  {t("acceso.irPago")}
                 </Box>
 
                 <Box
@@ -234,7 +235,7 @@ export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
                   transition="all 0.2s"
                   _hover={{ bg: "rgba(255,255,255,0.12)", color: "white" }}
                 >
-                  Cerrar
+                  {t("comun.cerrar")}
                 </Box>
               </Flex>
             )}

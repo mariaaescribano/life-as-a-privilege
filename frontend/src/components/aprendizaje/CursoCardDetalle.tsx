@@ -16,6 +16,7 @@ import type { Curso } from "../../hardCoded/cursos";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { recordarOrigenCurso } from "../global/VolverAlMapa";
 import { LifeLoader } from "../metodo/comicLoaders";
+import { useIdioma, useT } from "../../i18n";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -38,6 +39,8 @@ export function CursoCardDetalle({
   nom: string;
 }) {
   const navigate = useNavigate();
+  const t = useT();
+  const { idioma } = useIdioma();
   const [leccionesOpen, setLeccionesOpen] = useState(false);
   const [fotoOk, setFotoOk] = useState(false); // portada del curso ya cargada
 
@@ -49,8 +52,14 @@ export function CursoCardDetalle({
       navigate(curso.cursoLink);
     } else window.open(STRIPE_PAYMENT_LINK, "_blank");
   };
+  // El precio se muestra con la convención de cada idioma: «19,90 €» en español,
+  // «€19.90» en inglés. La moneda es la misma (los cobra Stripe en euros).
   const formatPrecio = (precio: number | null) =>
-    precio === null ? "Acceso Libre" : `${precio.toFixed(2).replace(".", ",")} €`;
+    precio === null
+      ? t("curso.accesoLibre")
+      : idioma === "es"
+      ? `${precio.toFixed(2).replace(".", ",")} €`
+      : `€${precio.toFixed(2)}`;
 
   const nLecciones =
     curso.modulos?.reduce((a, m) => a + m.submodules.length, 0) ??
@@ -130,8 +139,8 @@ export function CursoCardDetalle({
             _hover={{ bg: "rgba(255,255,255,0.14)" }}
           >
             <Text color={color} fontSize={{ base: "xs", md: "sm" }} fontWeight="600" letterSpacing="0.03em" opacity={0.9} style={{ textShadow: tShadow }}>
-              {nLecciones} {nLecciones === 1 ? "lección" : "lecciones"}
-              {nEjercicios > 0 && ` · ${nEjercicios} ${nEjercicios === 1 ? "ejercicio" : "ejercicios"}`}
+              {nLecciones} {t(nLecciones === 1 ? "curso.leccion" : "curso.lecciones")}
+              {nEjercicios > 0 && ` · ${nEjercicios} ${t(nEjercicios === 1 ? "curso.ejercicio" : "curso.ejercicios")}`}
             </Text>
           </Flex>
         </Box>
@@ -155,7 +164,7 @@ export function CursoCardDetalle({
             {/* Cabecera fija: título + minidescripción (1 frase) y separación horizontal */}
             <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} pt={{ base: 5, md: 6 }} pb={3}>
               <Text color={color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.12em" textTransform="uppercase" pr={6} style={{ textShadow: tShadow }}>
-                Contenido del curso
+                {t("curso.contenido")}
               </Text>
               <Text color={color} opacity={0.8} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" lineHeight="1.5" mt={2} pr={6} style={{ textShadow: tShadow }}>
                 {curso.descripcionContenido || curso.descripcion}
@@ -191,7 +200,7 @@ export function CursoCardDetalle({
                 </Box>
               ))}
               {(!curso.modulos || curso.modulos.length === 0) && (
-                <Text color={color} opacity={0.8} fontStyle="italic" fontSize="xs" style={{ textShadow: tShadow }}>Próximamente.</Text>
+                <Text color={color} opacity={0.8} fontStyle="italic" fontSize="xs" style={{ textShadow: tShadow }}>{t("comun.proximamente")}</Text>
               )}
             </ModalBody>
           </ModalContent>
@@ -227,7 +236,7 @@ export function CursoCardDetalle({
             transition="all 0.2s"
             boxShadow={`0 3px 14px rgba(0,0,0,0.35), 0 0 16px ${color}55`}
           >
-            {curso.precio === null ? "Comenzar →" : "Pagar →"}
+            {t(curso.precio === null ? "curso.comenzar" : "curso.pagar")} →
           </Box>
         </Flex>
       </Flex>

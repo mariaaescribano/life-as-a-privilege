@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import {
   Box, Flex, Text,
@@ -35,6 +36,7 @@ import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${nutricionTxt}1a, 0 0 48px ${nutricionTxt}10`;
 
 export default function MetodoNutricion() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -188,7 +190,7 @@ export default function MetodoNutricion() {
               transition="all 0.2s"
               _hover={{ bg: "rgba(255,255,255,0.22)", transform: "translateY(-1px)" }}
             >
-              <Box as="span" fontSize="md">⚠</Box> Aviso importante
+              <Box as="span" fontSize="md">⚠</Box> {t("metodo.gate.avisoImportante")}
             </Box>
           </Reveal>
         </Flex>
@@ -227,16 +229,12 @@ export default function MetodoNutricion() {
                     <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
                   </Box>
                   <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em">
-                    Importante
+                    {t("metodo.gate.importante")}
                   </Text>
                 </Flex>
                 <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${nutricionTxt}66, transparent)`} />
                 <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">
-                  Todo lo que encontrarás aquí es contenido educativo para que entiendas mejor tu
-                  cuerpo y tu alimentación. No sustituye el consejo médico. Si de verdad necesitas
-                  una ayuda concreta con tu dieta —por una condición, un objetivo de salud o
-                  cualquier duda personal— acude a un profesional (médico o dietista-nutricionista
-                  colegiado) que pueda acompañarte de forma individual.
+                  {t("metodo.gate.nutri.aviso")}
                 </Text>
               </Flex>
             </ModalBody>

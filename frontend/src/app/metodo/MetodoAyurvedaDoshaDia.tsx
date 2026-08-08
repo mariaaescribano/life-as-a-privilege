@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Box, Flex, Text, Input, Wrap, WrapItem,
@@ -92,6 +93,7 @@ function Chip({ label, checked, onToggle, color }: { label: string; checked: boo
 }
 
 export default function MetodoAyurvedaDoshaDia() {
+  const t = useT();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
@@ -231,11 +233,11 @@ export default function MetodoAyurvedaDoshaDia() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
-                Crea tu día equilibrado
+                {t("metodo.ayurDia.titulo")}
               </Text>
               <Separador />
               <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" maxW="600px">
-                Diseña tu propio día, a tu manera. Añade los momentos que quieras —cuándo te levantas, cuándo respiras, tus comidas, tu descanso— con la hora que mejor encaje en tu Vida. Cada momento te llega con recomendaciones para tu Doṣha, pero el día lo escribes tú.
+                {t("metodo.ayurDia.intro")}
               </Text>
             </Flex>
           </Panel>
@@ -254,7 +256,7 @@ export default function MetodoAyurvedaDoshaDia() {
           <Panel color={meta.color} tile>
             <Flex align="center" justify="space-between" gap={3} mb={{ base: 4, md: 5 }} wrap="wrap">
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
-                Tu día
+                {t("metodo.ayurDia.tuDia")}
               </Text>
               <Flex gap={2} align="center">
                 {ordenados.length > 0 && (
@@ -271,14 +273,14 @@ export default function MetodoAyurvedaDoshaDia() {
                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                       cursor="pointer" transition="all 0.15s"
                       _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
-                  <Eye size={16} /> Ver ejemplo
+                  <Eye size={16} /> {t("metodo.ayurDia.verEjemplo")}
                 </Flex>
                 <Flex as="button" onClick={abrirAnadir} align="center" gap={2} px={4} py={2} borderRadius="full"
                       bg={meta.color} color="#fff" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                       cursor="pointer" boxShadow={`0 0 14px ${meta.color}66`} transition="all 0.15s"
                       style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                       _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 22px ${meta.color}99` }}>
-                  <Plus size={16} /> Añadir momento
+                  <Plus size={16} /> {t("metodo.ayurDia.anadirMomento")}
                 </Flex>
               </Flex>
             </Flex>
@@ -287,14 +289,14 @@ export default function MetodoAyurvedaDoshaDia() {
             {ordenados.length === 0 ? (
               <Flex direction="column" align="center" textAlign="center" gap={4} py={{ base: 4, md: 6 }}>
                 <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" maxW="460px">
-                  Tu día está en blanco. Pulsa «Añadir momento» y empieza a construir la rutina que de verdad encaja contigo.
+                  {t("metodo.ayurDia.enBlanco")}
                 </Text>
                 <Flex as="button" onClick={() => setEjemploOpen(true)} align="center" gap={2} px={5} py={2.5} borderRadius="full"
                       bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}
                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                       cursor="pointer" transition="all 0.15s"
                       _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
-                  <Eye size={16} /> Ver un día de ejemplo
+                  <Eye size={16} /> {t("metodo.ayurDia.verDiaEjemplo")}
                 </Flex>
               </Flex>
             ) : (
@@ -341,13 +343,13 @@ export default function MetodoAyurvedaDoshaDia() {
                       <Box as="button" onClick={() => abrirEditar(b)} w="30px" h="30px" borderRadius="full"
                            display="flex" alignItems="center" justifyContent="center" color={meta.color}
                            border={`1px solid ${meta.color}44`} bg="rgba(255,255,255,0.4)" transition="all 0.15s"
-                           _hover={{ bg: `${meta.color}1a`, borderColor: meta.color }} aria-label="Editar">
+                           _hover={{ bg: `${meta.color}1a`, borderColor: meta.color }} aria-label={t("metodo.ayurDia.editar")}>
                         <Pencil size={14} />
                       </Box>
                       <Box as="button" onClick={() => removeBloque(b.id)} w="30px" h="30px" borderRadius="full"
                            display="flex" alignItems="center" justifyContent="center" color={`${TINTA}99`}
                            border={`1px solid ${TINTA}26`} bg="rgba(255,255,255,0.4)" transition="all 0.15s"
-                           _hover={{ color: "#c0392b", borderColor: "#c0392b66" }} aria-label="Quitar">
+                           _hover={{ color: "#c0392b", borderColor: "#c0392b66" }} aria-label={t("metodo.ayurDia.quitar")}>
                         <X size={15} />
                       </Box>
                     </Flex>
@@ -378,7 +380,7 @@ export default function MetodoAyurvedaDoshaDia() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7">
-                Tu día no tiene que ser perfecto. Basta con que, poco a poco, se parezca un poco más a lo que tu cuerpo necesita.
+                {t("metodo.ayurDia.noPerfecto")}
               </Text>
               <Box
                 as="button" onClick={irRecorrido} mt={1}
@@ -395,7 +397,7 @@ export default function MetodoAyurvedaDoshaDia() {
               </Box>
               {!guardado && (
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                  Guarda tu día para continuar.
+                  {t("metodo.ayurDia.guardaParaSeguir")}
                 </Text>
               )}
             </Flex>
@@ -435,7 +437,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 />
                 <Input
                   value={draft.actividad} onChange={(e) => setDraft((d) => ({ ...d, actividad: e.target.value }))}
-                  placeholder="¿Qué harás en este momento?" flex="1" minW="180px" size="md"
+                  placeholder={t("metodo.ayurDia.queHaras")} flex="1" minW="180px" size="md"
                   bg="rgba(255,255,255,0.65)" border={`1px solid ${TINTA}33`} color={TINTA} borderRadius="lg"
                   fontFamily="'EB Garamond', serif" _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                   _focus={{ borderColor: meta.color, boxShadow: `0 0 0 1px ${meta.color}55` }}
@@ -444,7 +446,7 @@ export default function MetodoAyurvedaDoshaDia() {
 
               {/* ¿Es una comida? */}
               <Flex align="center" gap={3} mb={draft.comida ? 4 : 5}>
-                <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600">¿Es una comida?</Text>
+                <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600">{t("metodo.ayurDia.esComida")}</Text>
                 <Flex as="button" onClick={() => setDraft((d) => ({ ...d, comida: !d.comida }))}
                       align="center" gap={1.5} px={3} py={1} borderRadius="full"
                       bg={draft.comida ? meta.color : "rgba(255,251,243,0.6)"} border={`1.5px solid ${draft.comida ? meta.color : TINTA + "33"}`}
@@ -458,7 +460,7 @@ export default function MetodoAyurvedaDoshaDia() {
               {draft.comida && (
                 <Box mb={5}>
                   <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.06em" textTransform="uppercase" mb={2.5}>
-                    Alimentos que te equilibran
+                    {t("metodo.ayurDia.alimentosEquilibran")}
                   </Text>
                   <Wrap spacing={2}>
                     {pool.map((food) => (
@@ -478,7 +480,7 @@ export default function MetodoAyurvedaDoshaDia() {
                     Recomendaciones para {meta.label}
                   </Text>
                   <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" mb={3}>
-                    Pulsa una para usarla como punto de partida. Puedes cambiarla a tu gusto.
+                    {t("metodo.ayurDia.pulsaPuntoPartida")}
                   </Text>
                   <Wrap spacing={2}>
                     {recomendaciones.map((r, i) => (
@@ -507,7 +509,7 @@ export default function MetodoAyurvedaDoshaDia() {
                      bg="transparent" border={`1.5px solid ${TINTA}55`} color={TINTA}
                      fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
                      cursor="pointer" transition="all 0.15s" _hover={{ borderColor: TINTA, bg: "rgba(255,251,243,0.4)" }}>
-                  Cancelar
+                  {t("comun.cancelar")}
                 </Box>
                 <Box as="button" onClick={guardarMomento} px={8} py={2.5} borderRadius="full"
                      bg={meta.color} color="#fff" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
@@ -540,10 +542,10 @@ export default function MetodoAyurvedaDoshaDia() {
             <Flex direction="column" gap={5}>
               <Flex direction="column" align="center" gap={1.5}>
                 <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                  Un día de ejemplo
+                  {t("metodo.ayurDia.diaEjemplo")}
                 </Text>
                 <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
-                  Solo para inspirarte. Tu día lo escribes tú, a tu manera.
+                  {t("metodo.ayurDia.soloInspirarte")}
                 </Text>
               </Flex>
 
@@ -574,7 +576,7 @@ export default function MetodoAyurvedaDoshaDia() {
                   cursor="pointer" boxShadow={`0 4px 20px ${meta.color}55`} style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                   transition="all 0.2s" _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 28px ${meta.color}88` }}
                 >
-                  Crear el mío
+                  {t("metodo.ayurDia.crearElMio")}
                 </Box>
               </Flex>
             </Flex>

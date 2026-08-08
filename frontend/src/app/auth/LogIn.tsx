@@ -11,6 +11,7 @@ import type { LoginUser } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
 import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
+import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -34,6 +35,7 @@ const inputStyles = inputAuthStyles;
 
 export default function LogIn() {
   const navigate = useNavigate();
+  const t = useT();
   const [params] = useSearchParams();
   const next = params.get("next") || "/home";
   // Destino tras login: si la cuenta es admin, va al panel.
@@ -100,8 +102,8 @@ export default function LogIn() {
 
         setmessage({
           soy: 1,
-          title: "Bienvenido",
-          description: "Lo estoy preparando para ti",
+          title: t("auth.login.bienvenido"),
+          description: t("auth.login.preparando"),
         });
       }
     } catch (err: any) {
@@ -116,8 +118,8 @@ export default function LogIn() {
     if (name === "" || contra === "") {
       setmessage({
         soy: 2,
-        title: "Faltan datos",
-        description: "Rellena todos los campos",
+        title: t("auth.error.faltanDatos"),
+        description: t("auth.error.rellena"),
       });
     } else {
       inicioSesion();
@@ -177,7 +179,7 @@ export default function LogIn() {
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Iniciar sesión
+          {t("auth.login.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -190,7 +192,7 @@ export default function LogIn() {
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          Entra a tu cuenta de El Mapa
+          {t("auth.login.subtitulo")}
         </Text>
       </Flex>
 
@@ -207,7 +209,7 @@ export default function LogIn() {
         >
           <Box>
             <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              NOMBRE O EMAIL
+              {t("auth.campo.nombreOEmail")}
             </Text>
             <Input
               value={name}
@@ -217,7 +219,7 @@ export default function LogIn() {
           </Box>
 
           <CampoContrasena
-            label="CONTRASEÑA"
+            label={t("auth.campo.contrasena")}
             value={contra}
             onChange={setcontra}
             isDisabled={bloqueado}
@@ -275,7 +277,7 @@ export default function LogIn() {
                 textTransform="uppercase"
                 textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
               >
-                Entrar
+                {t("auth.login.entrar")}
               </Text>
               {/* Dentro de un botón sí va el anillo de siempre: el mandala pide
                   demasiado sitio y distrae en una línea de texto. */}
@@ -307,7 +309,7 @@ export default function LogIn() {
               _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
               transition="all 0.22s ease"
             >
-              ¿Has olvidado tu contraseña?
+              {t("auth.login.olvidada")}
             </Text>
           </Flex>
 
@@ -325,7 +327,7 @@ export default function LogIn() {
               _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
               transition="all 0.22s ease"
             >
-              ¿No tienes cuenta? Crear cuenta
+              {t("auth.login.sinCuenta")}
             </Text>
           </Flex>
         </VStack>

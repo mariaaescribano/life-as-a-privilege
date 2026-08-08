@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -404,6 +405,7 @@ interface SelectorCardProps {
 }
 
 function SelectorCard({ option, onClick, delay = "0s" }: SelectorCardProps) {
+  const t = useT();
   const [coverFailed, setCoverFailed] = useState(false);
   return (
     <Box
@@ -536,7 +538,7 @@ function SelectorCard({ option, onClick, delay = "0s" }: SelectorCardProps) {
           textTransform="uppercase"
           style={{ textShadow: `0 0 10px ${astrologiaTxt}aa` }}
         >
-          <Text as="span">Leer</Text>
+          <Text as="span">{t("metodo.leer")}</Text>
           <Box
             as="svg"
             xmlns="http://www.w3.org/2000/svg"
@@ -563,6 +565,7 @@ interface ComicAstrologiaModalProps {
 }
 
 export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstrologiaModalProps) {
+  const t = useT();
   const [seccion, setSeccion] = useState<Seccion | null>(null);
 
   // El selector muestra las portadas TODAS a la vez: hasta que carguen (con el
@@ -622,7 +625,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             {/* X cerrar — solo en el selector. En la vista cómic la pinta ComicViewer. */}
             <Box
               as="button"
-              aria-label="Cerrar"
+              aria-label={t("comun.cerrar")}
               onClick={onClose}
               position="fixed"
               top={{ base: 3, md: 5 }}
@@ -712,7 +715,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
                       textShadow: `0 0 14px ${astrologiaTxt}cc, 0 0 32px ${astrologiaTxt}77, 0 0 70px ${astrologiaTxt}44`,
                     }}
                   >
-                    Ilustraciones de Astrología
+                    {t("metodo.ilustracionesDe", { disciplina: t("disciplina.astrologia") })}
                   </Text>
                   <Text
                     color={`${astrologiaTxt}cc`}
@@ -722,7 +725,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
                     textAlign="center"
                     maxW="520px"
                   >
-                    Elige un capítulo para empezar a leer.
+                    {t("metodo.ilustracionesElige")}
                   </Text>
                 </Flex>
 

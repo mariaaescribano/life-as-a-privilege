@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { PRECIO_LLAMADA, type LlamadaTipo } from "./llamadaPrecios";
+import { useT } from "../../i18n";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * AgendarLlamada — componente INLINE y REUTILIZABLE para reservar una llamada
@@ -104,9 +105,13 @@ export function AgendarLlamada({
   tipo = "estandar",
   precio = PRECIO_LLAMADA[tipo],
   duracionMin = 60,
-  titulo = "Reserva tu llamada",
+  titulo,
   subtitulo,
 }: AgendarLlamadaProps) {
+  const t = useT();
+  // Igual que en BotonCompania: el título por defecto se resuelve aquí, que en
+  // la firma todavía no existe `t`.
+  const tituloTxt = titulo ?? t("llamada.reserva");
   const days = useMemo(buildDays, []);
   const slots = useMemo(buildSlots, []);
 
@@ -292,7 +297,7 @@ export function AgendarLlamada({
             <Text fontSize="4xl" color={color} style={{ textShadow: `0 0 16px ${color}88` }}>✓</Text>
             <Text color={color} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em"
                   style={{ textShadow: `0 0 16px ${color}66, 0 0 36px ${color}33` }}>
-              ¡Llamada reservada!
+              {t("llamada.reservada")}
             </Text>
             <Text color={`${color}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" maxW="440px"
                   style={{ textShadow: tsh }}>
@@ -306,17 +311,17 @@ export function AgendarLlamada({
               border={`1.5px solid ${color}66`} bg="transparent" color={color}
               fontSize="md" fontWeight="600" letterSpacing="0.06em" cursor="pointer"
               _hover={{ bg: `${color}18` }} transition="all 0.2s">
-              Reservar otra
+              {t("llamada.reservarOtra")}
             </Box>
           </Flex>
         ) : verificando ? (
           <Flex direction="column" align="center" gap={4} py={10} textAlign="center">
             <Text color={color} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
                   style={{ textShadow: `0 0 16px ${color}66` }}>
-              Confirmando tu pago…
+              {t("llamada.confirmandoPago")}
             </Text>
             <Text color={`${color}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" style={{ textShadow: tsh }}>
-              Un momento, estamos confirmando tu reserva.
+              {t("llamada.confirmandoTexto")}
             </Text>
           </Flex>
         ) : (
@@ -325,7 +330,7 @@ export function AgendarLlamada({
             <Box textAlign="center">
               <Text color={color} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em"
                     lineHeight="1.2" style={{ textShadow: `0 0 14px ${color}77, 0 0 34px ${color}44` }}>
-                {titulo}
+                {tituloTxt}
               </Text>
               <Text color={`${color}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                     style={{ textShadow: tsh }}>
@@ -366,7 +371,7 @@ export function AgendarLlamada({
                     <Text color="#ffd4d4" fontSize={{ base: "sm", md: "md" }} textAlign="center" fontWeight="500">{errorMsg}</Text>
                   </Box>
                 )}
-                <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>Elige un día</Text>
+                <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>{t("llamada.elegirDia")}</Text>
                 <Grid templateColumns={{ base: "repeat(3, 1fr)", md: "repeat(4, 1fr)" }} gap={{ base: 2, md: 3 }}>
                   {days.map((d, i) => {
                     const { weekday, day, month } = formatDayLabel(d);
@@ -393,10 +398,10 @@ export function AgendarLlamada({
               <Flex direction="column" gap={4}>
                 <Flex justify="space-between" align="center" gap={3}>
                   <Box>
-                    <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>Elige una hora</Text>
+                    <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>{t("llamada.elegirHora")}</Text>
                     <Text color={`${color}aa`} fontSize="sm" textTransform="capitalize">{formatDayFullEs(selectedDay)}</Text>
                   </Box>
-                  <BackBtn onClick={() => setStep(1)} label="← Cambiar día" />
+                  <BackBtn onClick={() => setStep(1)} label={t("llamada.cambiarDia")} />
                 </Flex>
                 {errorMsg && (
                   <Box bg="rgba(255,90,90,0.18)" border="1px solid rgba(255,120,120,0.7)" borderRadius="lg" px={4} py={3}>
@@ -432,14 +437,14 @@ export function AgendarLlamada({
               <Flex direction="column" gap={4}>
                 <Flex justify="space-between" align="center" gap={3}>
                   <Box>
-                    <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>Tus datos</Text>
+                    <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>{t("llamada.tusDatos")}</Text>
                     <Text color={`${color}aa`} fontSize="sm" textTransform="capitalize">{formatDayFullEs(selectedDay)} · {selectedSlot}</Text>
                   </Box>
-                  <BackBtn onClick={() => setStep(2)} label="← Cambiar hora" />
+                  <BackBtn onClick={() => setStep(2)} label={t("llamada.cambiarHora")} />
                 </Flex>
-                <Input placeholder="Tu nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} {...inputStyle} />
-                <Input placeholder="Tu email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} {...inputStyle} />
-                <Textarea placeholder="¿De qué te gustaría hablar? (opcional)" value={tema} onChange={(e) => setTema(e.target.value)} rows={3} resize="none" {...inputStyle} />
+                <Input placeholder={t("llamada.nombre")} value={nombre} onChange={(e) => setNombre(e.target.value)} {...inputStyle} />
+                <Input placeholder={t("llamada.email")} type="email" value={email} onChange={(e) => setEmail(e.target.value)} {...inputStyle} />
+                <Textarea placeholder={t("llamada.tema")} value={tema} onChange={(e) => setTema(e.target.value)} rows={3} resize="none" {...inputStyle} />
                 <Box as="button" onClick={() => setStep(4)}
                   disabled={!nombre.trim() || !email.trim()}
                   mt={1} px={8} py={3} borderRadius="full" bg={color} color={bgColor}
@@ -447,7 +452,7 @@ export function AgendarLlamada({
                   cursor={!nombre.trim() || !email.trim() ? "not-allowed" : "pointer"}
                   opacity={!nombre.trim() || !email.trim() ? 0.5 : 1} transition="all 0.22s"
                   boxShadow={`0 4px 20px ${color}44`} _hover={{ opacity: 0.88, transform: "translateY(-1px)" }}>
-                  Continuar al pago →
+                  {t("llamada.continuarPago")}
                 </Box>
               </Flex>
             )}
@@ -456,29 +461,29 @@ export function AgendarLlamada({
             {step === 4 && selectedDay && selectedSlot && (
               <Flex direction="column" gap={4}>
                 <Flex justify="space-between" align="center" gap={3}>
-                  <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>Pago</Text>
-                  <BackBtn onClick={() => setStep(3)} label="← Volver" />
+                  <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="600" style={{ textShadow: tsh }}>{t("llamada.pago")}</Text>
+                  <BackBtn onClick={() => setStep(3)} label={t("llamada.volver")} />
                 </Flex>
 
                 {/* Resumen */}
                 <Box borderRadius="xl" border={`1px solid ${color}33`} bg="rgba(255,255,255,0.06)" px={{ base: 4, md: 5 }} py={4}>
                   <Flex justify="space-between" gap={3} mb={2}>
-                    <Text color={`${color}cc`} fontSize="sm">Fecha</Text>
+                    <Text color={`${color}cc`} fontSize="sm">{t("llamada.fecha")}</Text>
                     <Text color={color} fontSize="sm" fontWeight="600" textAlign="right" textTransform="capitalize">{formatDayFullEs(selectedDay)}</Text>
                   </Flex>
                   <Flex justify="space-between" gap={3} mb={2}>
-                    <Text color={`${color}cc`} fontSize="sm">Hora</Text>
+                    <Text color={`${color}cc`} fontSize="sm">{t("llamada.hora")}</Text>
                     <Text color={color} fontSize="sm" fontWeight="600">{selectedSlot} · {duracionMin} min</Text>
                   </Flex>
                   <Box h="1px" bg={`${color}22`} my={3} />
                   <Flex justify="space-between" align="center" gap={3}>
-                    <Text color={color} fontSize="lg" fontWeight="700">Total</Text>
+                    <Text color={color} fontSize="lg" fontWeight="700">{t("llamada.total")}</Text>
                     <Text color={color} fontSize="2xl" fontWeight="700" style={{ textShadow: `0 0 12px ${color}66` }}>{precio} €</Text>
                   </Flex>
                 </Box>
 
                 <Text color={`${color}99`} fontSize="xs" fontStyle="italic" textAlign="center">
-                  Pago seguro con tarjeta a través de Stripe.
+                  {t("llamada.pagoSeguro")}
                 </Text>
 
                 {errorMsg && (

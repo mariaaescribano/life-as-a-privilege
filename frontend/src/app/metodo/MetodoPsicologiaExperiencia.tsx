@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
@@ -47,6 +48,7 @@ const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicol
 const MotionBox = motion(Box) as any;
 
 export default function MetodoPsicologiaExperiencia() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -355,7 +357,7 @@ export default function MetodoPsicologiaExperiencia() {
 
                 {completa && (
                   <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" maxW="560px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.3)" }}>
-                    Has reconstruido tu Vida entera. Enhorabuena por no abandonarte.
+                    {t("metodo.psico.lineaEnhorabuena")}
                   </Text>
                 )}
 
@@ -363,7 +365,7 @@ export default function MetodoPsicologiaExperiencia() {
 
                 {/* Recomendación discreta */}
                 <Text color={CREMA} fontSize={{ base: "xs", md: "sm" }} opacity={0.78} fontStyle="italic" textAlign="center" maxW="520px" mt={2}>
-                  Se recomienda buscar fotos de todas las edades de tu Vida.
+                  {t("metodo.psico.buscaFotos")}
                 </Text>
               </Flex>
             </Reveal>
@@ -442,7 +444,7 @@ export default function MetodoPsicologiaExperiencia() {
                 transition="all 0.2s"
                 _hover={edadValida ? { transform: "translateY(-2px)", boxShadow: `0 0 26px ${TINTA}88, 0 0 60px ${TINTA}44` } : {}}
               >
-                Mi línea de tiempo
+                {t("metodo.psico.miLinea")}
               </Box>
             </Box>
           </Box>
@@ -484,16 +486,16 @@ export default function MetodoPsicologiaExperiencia() {
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 10 }} py={{ base: 9, md: 11 }} textAlign="center">
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3" mb={4} style={{ textShadow: INK_SHADOW }}>
-                Antes de continuar
+                {t("metodo.psico.antesDeContinuar")}
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92} mb={3} style={{ textShadow: INK_SHADOW }}>
-                Cuanto más completes tu línea de Vida, más claro verás después tus huellas, tus nudos y tus heridas.
+                {t("metodo.psico.cuantoMasCompletes")}
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92} mb={3} style={{ textShadow: INK_SHADOW }}>
-                Rellénala entera, o todo lo que puedas.
+                {t("metodo.psico.rellenaEntera")}
               </Text>
               <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" fontStyle="italic" opacity={0.85} mb={7} style={{ textShadow: INK_SHADOW }}>
-                Y si te resulta muy difícil recordar o remueve demasiado, no tienes que hacerlo solo: puedes pedir una llamada y lo hacemos juntos.
+                {t("metodo.psico.siRemueve")}
               </Text>
 
               <Flex direction="column" gap={3} align="stretch">
@@ -506,7 +508,7 @@ export default function MetodoPsicologiaExperiencia() {
                   boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
                   _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}
                 >
-                  Seguir rellenando
+                  {t("metodo.psico.seguirRellenando")}
                 </Box>
                 <Box
                   as="button"
@@ -517,7 +519,7 @@ export default function MetodoPsicologiaExperiencia() {
                   transition="all 0.2s"
                   _hover={{ bg: "rgba(255,251,243,0.75)", transform: "translateY(-1px)" }}
                 >
-                  Pedir una llamada
+                  {t("metodo.psico.pedirLlamada")}
                 </Box>
                 <Box
                   as="button"
@@ -527,7 +529,7 @@ export default function MetodoPsicologiaExperiencia() {
                   letterSpacing="0.03em" cursor="pointer" textDecoration="underline"
                   _hover={{ color: TINTA }}
                 >
-                  Continuar de todas formas →
+                  {t("metodo.psico.continuarIgual")}
                 </Box>
               </Flex>
             </Box>
@@ -557,8 +559,8 @@ export default function MetodoPsicologiaExperiencia() {
               bgColor={neuropsicologiaBg}
               disciplinaNom={neuropsicologiaNom}
               tipo="compania"
-              titulo="¿Prefieres compañía?"
-              subtitulo="Recorre tu línea de Vida conmigo. Agenda una llamada · horario peninsular España"
+              titulo={t("metodo.ayuda.prefieresCompania")}
+              subtitulo={t("metodo.psico.recorreLinea")}
             />
           </Box>
         </Box>
@@ -614,6 +616,7 @@ function PaginaDeAno({
   onGuardar: (estado: { respuestas: Record<string, string[]>; sinRecuerdos: boolean }) => Promise<void> | void;
   onGuardarSinCerrar: (estado: { respuestas: Record<string, string[]>; sinRecuerdos: boolean }) => Promise<void> | void;
 }) {
+  const t = useT();
   // Cada pregunta guarda una LISTA de ítems (coerciona datos antiguos en string).
   const [respuestas, setRespuestas] = useState<Record<string, string[]>>(() => {
     const out: Record<string, string[]> = {};
@@ -757,13 +760,13 @@ function PaginaDeAno({
             {edadAno === ANO_GESTACION ? (
               <>
                 <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.15" style={{ textShadow: INK_SHADOW }}>
-                  Antes de nacer
+                  {t("metodo.psico.antesDeNacer")}
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
                   El embarazo de tu madre · {anioNatural}
                 </Text>
                 <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} opacity={0.8} maxW="440px" mt={2} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                  Tu historia empieza mucho antes de nacer.
+                  {t("metodo.psico.empiezaAntes")}
                 </Text>
               </>
             ) : (
@@ -820,7 +823,7 @@ function PaginaDeAno({
                             transition="opacity 0.15s, background 0.15s, color 0.15s"
                             _groupHover={{ opacity: 1 }}
                             _hover={{ bg: `${TINTA}14`, color: TINTA }}
-                            aria-label="Quitar"
+                            aria-label={t("metodo.psico.quitar")}
                           >
                             ✕
                           </Box>
@@ -925,7 +928,7 @@ function PaginaDeAno({
                 transition="transform 0.2s, box-shadow 0.2s, opacity 0.2s"
                 _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 26px ${TINTA}88, 0 0 60px ${TINTA}44` }}
               >
-                Guardar y cerrar
+                {t("metodo.psico.guardarCerrar")}
               </Box>
           </Flex>
         </Box>

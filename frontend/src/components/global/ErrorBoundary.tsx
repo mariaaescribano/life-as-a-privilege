@@ -1,4 +1,5 @@
 import React from "react";
+import { traducir } from "../../i18n";
 
 // ─────────────────────────────────────────────────────────────────────────
 // ErrorBoundary — red de seguridad global. Sin ella, cualquier excepción
@@ -47,10 +48,10 @@ export class ErrorBoundary extends React.Component<Props, State> {
         }}
       >
         <div style={{ fontSize: "22px", fontWeight: 700, letterSpacing: "0.04em" }}>
-          Algo se ha torcido por un momento
+          {traducir("error.titulo")}
         </div>
         <div style={{ fontSize: "16px", opacity: 0.9, maxWidth: "460px", lineHeight: 1.6 }}>
-          No te preocupes: tus datos están guardados. Vuelve a cargar la página para continuar.
+          {traducir("error.texto")}
         </div>
         <button
           onClick={this.handleReload}
@@ -68,7 +69,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
             cursor: "pointer",
           }}
         >
-          Recargar
+          {traducir("error.recargar")}
         </button>
       </div>
     );

@@ -15,6 +15,7 @@
 // Datos: metodo_nutricion.data.prediabetes (ver `PrediabetesData`).
 // ═════════════════════════════════════════════════════════════════════════
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Input, Modal, ModalContent, ModalOverlay, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -121,6 +122,7 @@ const Rotulo = ({ children }: { children: React.ReactNode }) => (
 
 // ── Popup «¿Qué es esto?» ──
 function QueEsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const t = useT();
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior="inside" size="xl">
       <ModalOverlay bg="rgba(0,0,0,0.55)" sx={{ backdropFilter: "blur(6px)" }} />
@@ -132,7 +134,7 @@ function QueEsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
                      "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}55`, borderRadius: "3px" } }}>
             <Flex justify="space-between" align="flex-start" gap={4} mb={3}>
               <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.25">
-                Prediabetes: qué es y qué no
+                {t("metodo.nutri.prediabetes")}
               </Text>
               <Box as="button" onClick={onClose} flexShrink={0} w="32px" h="32px" borderRadius="full"
                    display="flex" alignItems="center" justifyContent="center"
@@ -157,6 +159,7 @@ function QueEsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
 }
 
 export default function MetodoNutricionPrediabetes() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [guardando, setGuardando] = useState(false);
@@ -315,7 +318,7 @@ export default function MetodoNutricionPrediabetes() {
                    fontSize={{ base: "sm", md: "md" }} fontWeight={600}
                    transition="all 0.18s ease"
                    _hover={{ transform: "translateY(-1px)", bg: "#ffffff", borderColor: nutricionTxt }}>
-                ¿Qué es esto?
+                {t("llamada.queEsEsto")}
               </Box>
 
               <Flex align="center" gap={3} w="100%" maxW="380px">
@@ -336,7 +339,7 @@ export default function MetodoNutricionPrediabetes() {
           <Reveal inView direction="up" distance={20} delay={0.14} duration={0.6} w="100%">
             <SeccionBox>
               <Box px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
-                <Rotulo>Tus datos</Rotulo>
+                <Rotulo>{t("metodo.nutri.tusDatos")}</Rotulo>
                 {!editarDatos ? (
                   <Flex align="center" justify="space-between" gap={4} wrap="wrap">
                     <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
@@ -349,22 +352,22 @@ export default function MetodoNutricionPrediabetes() {
                          px={4} py={1.5} borderRadius="full" flexShrink={0} cursor="pointer"
                          color={nutricionTxt} bg={`${nutricionTxt}14`} border={`1px solid ${nutricionTxt}44`}
                          fontSize="sm" fontWeight={600} _hover={{ bg: `${nutricionTxt}2a` }}>
-                      Cambiar
+                      {t("metodo.astro.cambiar")}
                     </Box>
                   </Flex>
                 ) : (
                   <>
                     <Flex gap={3} mb={4} wrap="wrap">
-                      <Opcion activo={sexo === "mujer"} label="Mujer" onClick={() => setSexo("mujer")} />
-                      <Opcion activo={sexo === "hombre"} label="Hombre" onClick={() => setSexo("hombre")} />
+                      <Opcion activo={sexo === "mujer"} label={t("metodo.nutri.mujer")} onClick={() => setSexo("mujer")} />
+                      <Opcion activo={sexo === "hombre"} label={t("metodo.nutri.hombre")} onClick={() => setSexo("hombre")} />
                     </Flex>
                     <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={{ base: 4, md: 5 }}>
-                      <CampoNum label="Edad" sufijo="años" value={edad} onChange={setEdad} />
-                      <CampoNum label="Altura" sufijo="cm" value={altura} onChange={setAltura} />
-                      <CampoNum label="Peso" sufijo="kg" value={peso} onChange={setPeso} />
+                      <CampoNum label={t("metodo.nutri.edad")} sufijo="años" value={edad} onChange={setEdad} />
+                      <CampoNum label={t("metodo.nutri.altura")} sufijo="cm" value={altura} onChange={setAltura} />
+                      <CampoNum label={t("metodo.nutri.peso")} sufijo="kg" value={peso} onChange={setPeso} />
                     </SimpleGrid>
                     <Text color={`${nutricionTxt}99`} fontSize="2xs" fontStyle="italic" mt={3}>
-                      Corregirlos aquí no cambia el cálculo de tus calorías.
+                      {t("metodo.nutri.corregirNoCambia")}
                     </Text>
                   </>
                 )}
@@ -376,18 +379,18 @@ export default function MetodoNutricionPrediabetes() {
           <Reveal inView direction="up" distance={20} delay={0.05} duration={0.6} w="100%">
             <SeccionBox>
               <Box px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
-                <Rotulo>Tu cintura</Rotulo>
+                <Rotulo>{t("metodo.nutri.tuCintura")}</Rotulo>
                 <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8" mb={4}>
                   {CINTURA_AYUDA.porQue}
                 </Text>
 
                 <Flex gap={{ base: 4, md: 8 }} wrap="wrap" align="flex-end">
                   <Box opacity={sinCintura ? 0.4 : 1} pointerEvents={sinCintura ? "none" : "auto"}>
-                    <CampoNum label="Perímetro" sufijo="cm" value={cintura} onChange={setCintura} />
+                    <CampoNum label={t("metodo.nutri.perimetro")} sufijo="cm" value={cintura} onChange={setCintura} />
                   </Box>
                   <Flex gap={2.5} wrap="wrap" pb={1}>
-                    <Opcion activo={comoMedirse} label="Cómo medirme" onClick={() => setComoMedirse((v) => !v)} />
-                    <Opcion activo={sinCintura} label="Ahora no puedo medirme"
+                    <Opcion activo={comoMedirse} label={t("metodo.nutri.comoMedirme")} onClick={() => setComoMedirse((v) => !v)} />
+                    <Opcion activo={sinCintura} label={t("metodo.nutri.noPuedoMedirme")}
                             onClick={() => { setSinCintura((v) => !v); if (!sinCintura) setCintura(""); }} />
                   </Flex>
                 </Flex>
@@ -410,8 +413,7 @@ export default function MetodoNutricionPrediabetes() {
 
                 {sinCintura && (
                   <Text color={`${nutricionTxt}aa`} fontSize="xs" fontStyle="italic" mt={3} lineHeight="1.6">
-                    Sin este dato el test funciona igual, pero puede quedarse corto: la cintura es uno de los
-                    factores que más pesa. Si puedes, vuelve con una cinta métrica.
+                    {t("metodo.nutri.sinCintura")}
                   </Text>
                 )}
               </Box>
@@ -456,7 +458,7 @@ export default function MetodoNutricionPrediabetes() {
           </RevealStagger>
 
           {guardando && (
-            <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic">Guardando…</Text>
+            <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic">{t("comun.guardando")}</Text>
           )}
 
           {/* ── RESULTADO ── */}
@@ -469,7 +471,7 @@ export default function MetodoNutricionPrediabetes() {
                     {/* Puntuación + banda */}
                     <Flex direction="column" align="center" textAlign="center" gap={1}>
                       <Text color={`${nutricionTxt}cc`} fontSize={{ base: "sm", md: "md" }}>
-                        Tu puntuación
+                        {t("metodo.nutri.tuPuntuacion")}
                       </Text>
                       <Text color={banda.color} fontSize={{ base: "5xl", md: "6xl" }} fontWeight={700} lineHeight="1.05">
                         {resultado.puntos}
@@ -499,7 +501,7 @@ export default function MetodoNutricionPrediabetes() {
                          bg={`${banda.color}14`} border={`1px solid ${banda.color}66`}>
                       <Text color={nutricionTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.14em"
                             textTransform="uppercase" mb={1.5}>
-                        Qué haría yo ahora
+                        {t("metodo.nutri.queHariaYo")}
                       </Text>
                       <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75">
                         {banda.paso}
@@ -508,8 +510,7 @@ export default function MetodoNutricionPrediabetes() {
 
                     {resultado.sinCintura && (
                       <Text color={`${nutricionTxt}99`} fontSize="xs" fontStyle="italic" mt={3} lineHeight="1.6">
-                        Recuerda que has hecho el test sin medirte la cintura: tu puntuación real podría ser algo
-                        más alta.
+                        {t("metodo.nutri.recuerdaSinCintura")}
                       </Text>
                     )}
 
@@ -517,7 +518,7 @@ export default function MetodoNutricionPrediabetes() {
                     {heredados.length > 0 && (
                       <>
                         <Box h="1px" bg={`${nutricionTxt}22`} my={{ base: 5, md: 6 }} />
-                        <Rotulo>Lo que no elegiste</Rotulo>
+                        <Rotulo>{t("metodo.nutri.loQueNoElegiste")}</Rotulo>
                         <Flex gap={2} wrap="wrap" mb={2}>
                           {heredados.map((d) => (
                             <Flex key={d.etiqueta} align="center" gap={2} px={3.5} py={1.5} borderRadius="full"
@@ -528,20 +529,17 @@ export default function MetodoNutricionPrediabetes() {
                           ))}
                         </Flex>
                         <Text color={`${nutricionTxt}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" lineHeight="1.7">
-                          Tu edad y tu familia no se cambian, y no dicen absolutamente nada de cómo te cuidas.
-                          Aparecen solo para que veas de dónde sale el número. Que sumen es justo la razón por la
-                          que conviene cuidar lo de abajo, que sí depende de ti.
+                          {t("metodo.nutri.loQueNoElegisteTexto")}
                         </Text>
                       </>
                     )}
 
                     {/* ── Lo que está en tu mano ── */}
                     <Box h="1px" bg={`${nutricionTxt}22`} my={{ base: 5, md: 6 }} />
-                    <Rotulo>Lo que está en tu mano</Rotulo>
+                    <Rotulo>{t("metodo.nutri.enTuMano")}</Rotulo>
                     {enTuMano.length === 0 ? (
                       <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8">
-                        Nada de lo que puntúa en tu resultado depende de tus hábitos: ya estás haciendo bien la
-                        parte que te toca. Sigue así.
+                        {t("metodo.nutri.enTuManoNada")}
                       </Text>
                     ) : (
                       <Flex direction="column" gap={3}>

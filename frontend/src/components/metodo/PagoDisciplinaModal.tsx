@@ -1,4 +1,5 @@
 import React from "react";
+import { useT } from "../../i18n";
 import {
   Box,
   Flex,
@@ -81,6 +82,7 @@ export function PagoDisciplinaModal({
   precio = PRECIO_DISCIPLINA,
   errorColor = "#ffb4b4",
 }: BaseProps) {
+  const t = useT();
   // Consentimiento de términos + renuncia al desistimiento. Se reinicia cada vez
   // que se abre el modal: nunca debe quedar marcado «de la vez anterior».
   const [acepta, setAcepta] = React.useState(false);
@@ -145,7 +147,7 @@ export function PagoDisciplinaModal({
               />
               {PRECIO_DISCIPLINA_ANTES && (
                 <Text color={`${txt}bb`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
-                  Aprovecha que está en un precio reducido
+                  {t("metodo.pago.precioReducido")}
                 </Text>
               )}
             </Flex>
@@ -233,7 +235,7 @@ export function PagoDisciplinaModal({
                 transition="all 0.22s"
                 _hover={loading ? {} : { borderColor: txt, color: txt }}
               >
-                Ahora no
+                {t("metodo.pago.ahoraNo")}
               </Box>
             </Flex>
 
@@ -257,7 +259,7 @@ export function PagoDisciplinaModal({
               textAlign="center"
               mt={1}
             >
-              Pago seguro a través de Stripe
+              {t("metodo.pago.stripe")}
             </Text>
 
             <Box h="1px" bgGradient={`linear(to-r, transparent, ${txt}40, transparent)`} mt={1} />
@@ -269,9 +271,7 @@ export function PagoDisciplinaModal({
               fontStyle="italic"
               textAlign="center"
             >
-              Doy mi palabra de honor de que todos los textos son obra mía, escritos por mí. Aunque me he
-              apoyado en herramientas de inteligencia artificial, las ideas, las palabras y el contenido son
-              enteramente míos.
+              {t("metodo.pago.palabra")}
             </Text>
           </Flex>
         </ModalBody>

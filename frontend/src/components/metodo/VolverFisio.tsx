@@ -1,4 +1,5 @@
 import React from "react";
+import { useT } from "../../i18n";
 import { Box } from "@chakra-ui/react";
 import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 
@@ -8,12 +9,13 @@ import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 // último hijo de la columna de contenido (que va centrada), por eso
 // alignSelf="flex-end" lo empuja al borde derecho del ancho de la página.
 // ─────────────────────────────────────────────────────────────────────────
-export function VolverFisio({ onClick, label = "Volver", direction = "left" }: {
+export function VolverFisio({ onClick, label, direction = "left" }: {
   onClick: () => void;
   label?: string;
   /** Sentido de la flecha: «left» (volver atrás) o «up» (volver arriba). */
   direction?: "left" | "up";
 }) {
+  const t = useT();
   // Flecha SVG (Material): izquierda (arrow_back) o arriba (arrow_upward).
   const arrowPath = direction === "up"
     ? "M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"
@@ -46,7 +48,7 @@ export function VolverFisio({ onClick, label = "Volver", direction = "left" }: {
            w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
         <path d={arrowPath} />
       </Box>
-      {label}
+      {label ?? t("comun.volver")}
     </Box>
   );
 }

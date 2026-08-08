@@ -17,6 +17,7 @@ import type { SuccessErrorMessageDto } from "../../components/global/SuccessErro
 import { API_URL } from "../../GlobalVariables";
 import { gestionaError } from "../../GlobalHelper";
 import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
+import { useT } from "../../i18n";
 
 // El estilo de los campos vive en CampoContrasena, para que el campo con ojo y
 // los normales no puedan quedar distintos.
@@ -113,6 +114,7 @@ const BotonPrincipal = ({
 
 export default function RecuperarPassword() {
   const navigate = useNavigate();
+  const t = useT();
   const [params] = useSearchParams();
   const token = params.get("token") ?? "";
   const conToken = token !== "";
@@ -143,7 +145,7 @@ export default function RecuperarPassword() {
 
   const pedirEnlace = async () => {
     if (!email.trim()) {
-      setMessage({ soy: 2, title: "Falta el email", description: "Escribe el email de tu cuenta" });
+      setMessage({ soy: 2, title: t("auth.recuperar.faltaEmail"), description: t("auth.recuperar.escribeEmail") });
       return;
     }
     setLoading(true);
@@ -155,9 +157,9 @@ export default function RecuperarPassword() {
       setHecho(true);
       setMessage({
         soy: 1,
-        title: "Mira tu correo",
+        title: t("auth.recuperar.miraCorreo"),
         description:
-          "Si ese email tiene una cuenta, te acabamos de enviar un enlace para elegir una contraseña nueva. Caduca en una hora.",
+          t("auth.recuperar.enlaceEnviado"),
       });
     } catch (err: any) {
       setMessage(gestionaError(err));
@@ -170,13 +172,13 @@ export default function RecuperarPassword() {
     if (pass1.length < 6) {
       setMessage({
         soy: 2,
-        title: "Contraseña muy corta",
-        description: "Tiene que tener al menos 6 caracteres",
+        title: t("auth.error.contraCorta"),
+        description: t("auth.error.contraCorta6"),
       });
       return;
     }
     if (pass1 !== pass2) {
-      setMessage({ soy: 2, title: "No coinciden", description: "Las dos contraseñas tienen que ser iguales" });
+      setMessage({ soy: 2, title: t("auth.error.noCoincidenCorto"), description: t("auth.error.dosIguales") });
       return;
     }
     setLoading(true);
@@ -186,8 +188,8 @@ export default function RecuperarPassword() {
       setHecho(true);
       setMessage({
         soy: 1,
-        title: "Contraseña cambiada",
-        description: "Ya puedes entrar con la nueva. Te llevamos al inicio de sesión…",
+        title: t("auth.recuperar.cambiada"),
+        description: t("auth.recuperar.cambiadaTexto"),
       });
     } catch (err: any) {
       setMessage(gestionaError(err));
@@ -241,7 +243,7 @@ export default function RecuperarPassword() {
             transform={mounted ? "translateY(0)" : "translateY(24px)"}
             transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
           >
-            {conToken ? "Nueva contraseña" : "Recuperar contraseña"}
+            {conToken ? t("auth.recuperar.tituloNueva") : t("auth.recuperar.titulo")}
           </Text>
           <Text
             color="rgba(255,255,255,0.88)"
@@ -255,8 +257,8 @@ export default function RecuperarPassword() {
             transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
           >
             {conToken
-              ? "Elige la contraseña con la que entrarás a partir de ahora"
-              : "Te enviamos un enlace al email de tu cuenta"}
+              ? t("auth.recuperar.subtituloNueva")
+              : t("auth.recuperar.subtitulo")}
           </Text>
         </Flex>
 
@@ -266,14 +268,14 @@ export default function RecuperarPassword() {
             {conToken ? (
               <>
                 <CampoContrasena
-                  label="NUEVA CONTRASEÑA"
+                  label={t("auth.campo.nuevaContrasena")}
                   value={pass1}
                   onChange={setPass1}
                   isDisabled={bloqueado}
                   autoComplete="new-password"
                 />
                 <CampoContrasena
-                  label="REPÍTELA"
+                  label={t("auth.campo.repitela")}
                   value={pass2}
                   onChange={setPass2}
                   isDisabled={bloqueado}
@@ -283,7 +285,7 @@ export default function RecuperarPassword() {
               </>
             ) : (
               <Box>
-                <Etiqueta>EMAIL</Etiqueta>
+                <Etiqueta>{t("auth.campo.email")}</Etiqueta>
                 <Input
                   type="email"
                   value={email}
@@ -306,7 +308,7 @@ export default function RecuperarPassword() {
 
             {!hecho && (
               <BotonPrincipal
-                texto={conToken ? "Guardar" : "Enviar enlace"}
+                texto={conToken ? t("comun.guardar") : t("auth.recuperar.enviarEnlace")}
                 onClick={conToken ? cambiarPassword : pedirEnlace}
                 bloqueado={bloqueado}
                 loading={loading}
@@ -326,7 +328,7 @@ export default function RecuperarPassword() {
                 _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
                 transition="all 0.22s ease"
               >
-                Volver a iniciar sesión
+                {t("auth.recuperar.volver")}
               </Text>
             </Flex>
           </VStack>
