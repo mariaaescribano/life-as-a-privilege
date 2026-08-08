@@ -11,6 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
+import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   LEYES_TAO, TAOISMO_INTRO, TAOISMO_CIERRE, FOTO_LEY, type LeyTao,
@@ -138,6 +139,11 @@ export default function MetodoTcmTaoismo() {
             </Text>
           </Panel>
           </Reveal>
+
+          {/* El paso siguiente, abajo a la derecha: el header ya se ha quedado
+              muy arriba después de las diez leyes. Mismo texto que su botón. */}
+          <BotonPaso label="Tu cocina" nom={tcmNom} color={tcmTxt} bg={tcmBg}
+                     onClick={() => navigate("/metodo/tcm/recetas")} />
         </Flex>
       </Flex>
 
@@ -167,51 +173,40 @@ function LeyCard({ ley, numero }: { ley: LeyTao; numero: number }) {
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
 
       <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="stretch" h="100%">
-        {/* Ilustración cuadrada */}
-        <Box position="relative" flexShrink={0} overflow="hidden" bg={`${tcmBg}88`}
-             w={{ base: "100%", md: "300px" }}
-             sx={{ aspectRatio: "1" }}
-             alignSelf={{ base: "auto", md: "flex-start" }}
-             m={{ base: 0, md: 5 }}
-             borderRadius={{ base: 0, md: "xl" }}>
-          {!sinFoto && (
+        {/* Ilustración cuadrada · LIMPIA: sin velo, sin número y sin carácter
+            encima. La ilustración se ve tal cual se pintó; el carácter chino
+            vive ahora a la izquierda del título, en la columna de texto. */}
+        {!sinFoto && (
+          <Box position="relative" flexShrink={0} overflow="hidden" bg={`${tcmBg}88`}
+               w={{ base: "100%", md: "300px" }}
+               sx={{ aspectRatio: "1" }}
+               alignSelf={{ base: "auto", md: "flex-start" }}
+               m={{ base: 0, md: 5 }}
+               borderRadius={{ base: 0, md: "xl" }}>
             <Image src={encodeURI(FOTO_LEY(ley.key))} alt="" w="100%" h="100%" objectFit="cover"
                    onError={() => setSinFoto(true)} />
-          )}
-          {/* Velo inferior para que el carácter y el número se lean sobre la foto */}
-          <Box position="absolute" inset={0} pointerEvents="none"
-               bgGradient={`linear(to-t, ${tcmBg}e0, ${tcmBg}33 45%, transparent)`} />
-
-          {/* Número de la ley, arriba a la izquierda */}
-          <Flex position="absolute" top="10px" left="10px" align="center" justify="center"
-                w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }} borderRadius="full"
-                bg={`${tcmBg}dd`} border={`1px solid ${tcmTxt}66`}>
-            <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={800} lineHeight="1">
-              {numero}
-            </Text>
-          </Flex>
-
-          {/* El carácter chino: grande si no hay foto, montado abajo si la hay */}
-          <Flex position="absolute" inset={0} align={sinFoto ? "center" : "flex-end"}
-                justify={sinFoto ? "center" : "flex-start"} px={{ base: 5, md: 5 }} pb={sinFoto ? 0 : 3}>
-            <Text color={tcmTxt} lineHeight="1" fontWeight={700}
-                  fontSize={sinFoto ? { base: "6xl", md: "7xl" } : { base: "4xl", md: "5xl" }}
-                  style={{ textShadow: `0 2px 10px ${tcmBg}, 0 0 26px ${tcmBg}` }}>
-              {ley.hanzi}
-            </Text>
-          </Flex>
-        </Box>
+          </Box>
+        )}
 
         {/* Texto */}
         <Box flex="1" minW={0} px={{ base: 6, md: 7 }} py={{ base: 5, md: 6 }}>
-        <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"
-              opacity={0.75} style={{ textShadow: INK_SHADOW }}>
-          {ley.pinyin}
-        </Text>
-        <Text color={tcmTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.2" mt={0.5}
-              style={{ textShadow: INK_SHADOW }}>
-          {ley.nombre}
-        </Text>
+        {/* Cabecera: el carácter chino a la izquierda y, a su lado, el nombre */}
+        <Flex align="center" gap={{ base: 3.5, md: 4 }}>
+          <Text flexShrink={0} color={tcmTxt} fontSize={{ base: "4xl", md: "5xl" }} lineHeight="1"
+                fontWeight={700} style={{ textShadow: INK_SHADOW }}>
+            {ley.hanzi}
+          </Text>
+          <Box minW={0}>
+            <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"
+                  opacity={0.75} style={{ textShadow: INK_SHADOW }}>
+              {numero} · {ley.pinyin}
+            </Text>
+            <Text color={tcmTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.2" mt={0.5}
+                  style={{ textShadow: INK_SHADOW }}>
+              {ley.nombre}
+            </Text>
+          </Box>
+        </Flex>
 
         <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" fontWeight={600}
               lineHeight="1.6" mt={3} style={{ textShadow: INK_SHADOW }}>

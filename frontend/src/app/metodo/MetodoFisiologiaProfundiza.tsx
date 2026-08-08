@@ -10,7 +10,7 @@ import { FotoBox } from "../../components/metodo/FotoBox";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
-import { VolverFisio } from "../../components/metodo/VolverFisio";
+import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import {
@@ -112,8 +112,9 @@ export default function MetodoFisiologiaProfundiza() {
             ))}
           </SimpleGrid>
 
-          <VolverFisio label="Volver a arriba" direction="up"
-                       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} />
+          <BotonPaso label="Volver a arriba" direction="up"
+                     nom={fisiologiaNom} color={fisiologiaTxt} bg={fisiologiaBg}
+                     onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} />
 
         </Flex>
       </Flex>

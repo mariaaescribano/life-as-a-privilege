@@ -323,14 +323,6 @@ function CoccionCard({ coccion, elemento, numero, color }: {
                borderRadius={{ base: 0, md: "xl" }}>
             <Image src={encodeURI(FOTO_COCINA(elemento, numero - 1))} alt={coccion.nombre}
                    w="100%" h="100%" objectFit="cover" onError={() => setSinFoto(true)} />
-            {/* Número de la cocción, arriba a la izquierda */}
-            <Flex position="absolute" top="10px" left="10px" align="center" justify="center"
-                  w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }} borderRadius="full"
-                  bg={`${tcmBg}dd`} border={`1px solid ${color}`}>
-              <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={800} lineHeight="1">
-                {numero}
-              </Text>
-            </Flex>
           </Box>
         )}
 

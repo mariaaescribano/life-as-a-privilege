@@ -13,7 +13,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { FichaExploraModal } from "../../components/metodo/FichaExploraModal";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
-import { VolverFisio } from "../../components/metodo/VolverFisio";
+import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { PROFUNDIZA_LEIDAS_KEY, PROFUNDIZA_COMICS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
@@ -340,7 +340,9 @@ export default function MetodoFisiologiaTema() {
             </Reveal>
           )}
 
-          <VolverFisio onClick={() => navigate("/metodo/fisiologia/profundiza")} />
+          <BotonPaso label="Volver" direction="prev"
+                     nom={fisiologiaNom} color={fisiologiaTxt} bg={fisiologiaBg}
+                     onClick={() => navigate("/metodo/fisiologia/profundiza")} />
 
         </Flex>
       </Flex>
