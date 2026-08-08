@@ -347,13 +347,7 @@ export const metodo = {
   "fisiologia.celula.titulo": "Célula",
   "fisiologia.lasCelulas.titulo": "Las células de tus órganos",
   "fisiologia.sistemas.titulo": "Sistemas",
-  "fisiologia.cerebro.titulo": "El cerebro",
   "fisiologia.organismo.titulo": "El cuerpo",
-
-  // Página del cerebro (/metodo/fisiologia/cerebro).
-  "fisiologia.cerebro.entradilla":
-    "Kilo y medio que decide quién eres. Recórrelo de fuera hacia dentro: pulsa cada parte para conocerla.",
-  "fisiologia.cerebro.faltanPartes": "Primero conoce todas las partes del cerebro",
 
   // Ordinal de cada disciplina en la cabecera del box de pago. Va como frase
   // entera y no «{n}ª disciplina» porque en inglés el ordinal es irregular.

@@ -11,8 +11,8 @@
 // psicología = añadirlo al catálogo, no tocar este archivo.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -21,19 +21,15 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { TextoLetraALetra } from "../../components/global/TextoLetraALetra";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceRecorrido } from "../../components/metodo/IndiceRecorrido";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
-import {
-  CursoCard, STRIPE_PAYMENT_LINK_CURSOS_PSICOLOGIA,
-} from "../../components/metodo/CursosPsicologiaModal";
-import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
+import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { experienciaById } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
-import type { Curso } from "../../hardCoded/cursos";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -49,7 +45,6 @@ const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicol
 
 export default function MetodoPsicologiaCursos() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
 
@@ -107,17 +102,6 @@ export default function MetodoPsicologiaCursos() {
   // tarjetas aparecen a medio pintar.
   const fotosListas = usePrecargarImagenes(cursos.map((c) => c.foto).filter(Boolean) as string[]);
 
-  // Los cursos gratuitos se abren dentro de la web (y se recuerda de dónde
-  // venimos, para el botón «Volver a El Recorrido»); los de pago van a Stripe.
-  const acceder = (curso: Curso) => {
-    if (curso.precio === null) {
-      recordarOrigenCurso();
-      navigate(`${curso.cursoLink}?volver=${encodeURIComponent(location.pathname)}`);
-    } else {
-      window.open(STRIPE_PAYMENT_LINK_CURSOS_PSICOLOGIA, "_blank");
-    }
-  };
-
   if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
@@ -126,8 +110,11 @@ export default function MetodoPsicologiaCursos() {
       <SiteHeader variant="private" />
 
       <Box position="relative" flex="1">
-        <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
-          <Flex direction="column" align="center" w="100%" maxW="1080px" gap={{ base: 6, md: 8 }}>
+        {/* Mismos márgenes que Materiales (CursosModalidad) y SIN maxW: la rejilla
+            ocupa el ancho de la pantalla, con las tarjetas grandes, igual que en
+            /aprendizaje/cursos/psicologia. */}
+        <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
+          <Flex direction="column" align="center" w="100%" gap={{ base: 6, md: 8 }}>
 
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
@@ -136,7 +123,6 @@ export default function MetodoPsicologiaCursos() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                maxW="100%"
                 step={{ current: 23, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
@@ -153,44 +139,60 @@ export default function MetodoPsicologiaCursos() {
               </IntroRecorrido>
             </Reveal>
 
-            {/* ── Panel con los cursos del catálogo ── */}
-            <Reveal inView once amount={0.2} direction="up" distance={44} scaleFrom={0.94} blur duration={0.85} w="100%">
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 border={azulBorde} boxShadow={glowPanel} bgColor={neuropsicologiaBg}>
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-
-                <Flex direction="column" align="center" gap={2} mb={{ base: 6, md: 8 }} textAlign="center">
-                  <TextoLetraALetra color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
-                                    lineHeight="1.2" style={{ textShadow: INK_SHADOW }}
-                                    delay={0.3} amount={0.6}>
-                    Por dónde seguir
-                  </TextoLetraALetra>
+            {/* ── Cursos del catálogo ──
+                Las tarjetas van SUELTAS sobre el turquesa, exactamente como en
+                Materiales (CursosGrid → CursoCardDetalle): sin panel de acuarela
+                alrededor, que metía las fotos dentro de una caja y las apagaba. */}
+            {cursosLoading || !fotosListas ? (
+              <Flex minH={{ base: "220px", md: "300px" }} w="100%" align="center" justify="center">
+                <PsicologiaLoader />
+              </Flex>
+            ) : cursos.length === 1 ? (
+              <Flex
+                w="100%"
+                justify="center"
+                sx={{
+                  "@keyframes cursoCardIn": {
+                    from: { opacity: 0, transform: "translateY(40px) scale(0.95)" },
+                    to:   { opacity: 1, transform: "translateY(0)    scale(1)"    },
+                  },
+                }}
+              >
+                <Box
+                  w="100%"
+                  maxW="520px"
+                  style={{ opacity: 0, animation: "cursoCardIn 0.55s cubic-bezier(0.22,1,0.36,1) 0s forwards" }}
+                >
+                  <CursoCardDetalle
+                    curso={cursos[0]}
+                    bgColor={neuropsicologiaBg}
+                    color={neuropsicologiaTxt}
+                    nom={neuropsicologiaNom}
+                  />
+                </Box>
+              </Flex>
+            ) : cursos.length > 1 ? (
+              <CursosGrid
+                items={cursos.map((curso) => ({
+                  curso,
+                  color: neuropsicologiaTxt,
+                  bgColor: neuropsicologiaBg,
+                  nom: neuropsicologiaNom,
+                }))}
+              />
+            ) : (
+              <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75}
+                      position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                      border={azulBorde} boxShadow={glowPanel}>
+                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">
                   <Text color={`${TINTA}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                        lineHeight="1.6" maxW="560px" style={{ textShadow: INK_SHADOW }}>
-                    Cada uno se puede hacer por su cuenta, en el orden que quieras y a tu ritmo.
-                  </Text>
-                </Flex>
-
-                {cursosLoading || !fotosListas ? (
-                  <Flex minH={{ base: "220px", md: "300px" }} w="100%" align="center" justify="center">
-                    <PsicologiaLoader />
-                  </Flex>
-                ) : cursos.length > 0 ? (
-                  <SimpleGrid w="100%" columns={{ base: 1, md: 2 }} spacing={{ base: 5, md: 7 }} alignItems="start">
-                    {cursos.map((curso, i) => (
-                      <CursoCard key={curso.id} curso={curso} onAcceder={() => acceder(curso)} delay={`${i * 0.07}s`} />
-                    ))}
-                  </SimpleGrid>
-                ) : (
-                  <Text color={`${TINTA}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                        textAlign="center" lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>
+                        lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>
                     Pronto encontrarás aquí los cursos de Psicología.
                   </Text>
-                )}
-              </Box>
-            </Box>
-            </Reveal>
+                </Box>
+              </Reveal>
+            )}
 
           </Flex>
         </Flex>

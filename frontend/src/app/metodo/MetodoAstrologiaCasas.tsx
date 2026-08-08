@@ -21,6 +21,16 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
+// Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
+// llamada): explica esta página del recorrido. Edítalo libremente.
+const QUE_ES_ESTO = {
+  parrafos: [
+    "Las Casas son las distintas áreas de tu Vida. En cada una de ellas se despliega una versión de ti, y aquí verás el conjunto de características que usas en cada una.",
+    "Recuerda que nada de esto es juzgable: todo tiene un propósito y un para qué.",
+    "Ninguna de estos arquetipos puede ser eliminado, pero sí puedes vivir la mejor versión si haces un trabajo de consciencia.",
+  ],
+};
+
 // Check pequeño para marcar una casa ya leída.
 const CheckIcon = ({ color, size = 14 }: { color: string; size?: number }) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={`${size}px`} h={`${size}px`} fill={color}
@@ -377,7 +387,8 @@ export default function MetodoAstrologiaCasas() {
       </Flex>
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

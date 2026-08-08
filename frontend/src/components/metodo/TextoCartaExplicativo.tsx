@@ -58,45 +58,6 @@ const fadeIn = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-const twinkle = keyframes`
-  0%, 100% { opacity: 0.35; }
-  50%      { opacity: 1; }
-`;
-
-/* Estrellas titilantes, idénticas a las del ComicViewer (Ilustraciones). */
-const Stars = () => {
-  const stars = [
-    { top: "12%", left: "8%", size: 2, delay: "0s" },
-    { top: "20%", left: "92%", size: 2, delay: "1.4s" },
-    { top: "38%", left: "4%", size: 3, delay: "0.7s" },
-    { top: "52%", left: "96%", size: 2, delay: "2.1s" },
-    { top: "70%", left: "6%", size: 2, delay: "1.1s" },
-    { top: "82%", left: "94%", size: 3, delay: "0.4s" },
-    { top: "26%", left: "50%", size: 2, delay: "1.8s" },
-    { top: "88%", left: "48%", size: 2, delay: "2.6s" },
-  ];
-  return (
-    <>
-      {stars.map((s, i) => (
-        <Box
-          key={i}
-          position="absolute"
-          top={s.top}
-          left={s.left}
-          w={`${s.size}px`}
-          h={`${s.size}px`}
-          borderRadius="full"
-          bg="white"
-          animation={`${twinkle} 3.5s ease-in-out ${s.delay} infinite`}
-          boxShadow="0 0 6px rgba(255,255,255,0.85), 0 0 14px rgba(180,255,245,0.55)"
-          pointerEvents="none"
-          zIndex={1}
-        />
-      ))}
-    </>
-  );
-};
-
 // Renderiza **negrita** (sin brillo: solo peso de fuente).
 function renderTexto(texto: string): React.ReactNode {
   return texto.split(/(\*\*[^*]+\*\*)/g).map((p, i) =>
@@ -280,8 +241,6 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
           />
         </Box>
 
-        <Stars />
-
         {/* Línea de luz superior */}
         <Box
           position="absolute"
@@ -357,8 +316,10 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
             // alto. La foto grande sólo a partir de `lg`.
             w={{ base: "100%", md: "236px", lg: "319px" }}
             maxW={{ base: "100%", md: "236px", lg: "319px" }}
-            h={{ base: "42vh", md: "auto" }}
-            aspectRatio={{ base: "auto", md: 1 }}
+            // La carta es una rueda: la foto va SIEMPRE cuadrada (también en
+            // móvil, donde antes era un hero de 42vh y salía rectangular).
+            h="auto"
+            aspectRatio={1}
             flexShrink={0}
             alignSelf={{ base: "stretch", md: "center" }}
             position="relative"

@@ -18,7 +18,7 @@ export default function MetodoFisiologiaCelula() {
     <>
       <ConstruirFisio
         title="Célula"
-        pageLabel="1/5"
+        pageLabel="1/4"
         prev={{ label: "← Estructuras", ruta: "/metodo/fisiologia/estructuras" }}
         introTitulo=""
         instruccion="Construye una célula."

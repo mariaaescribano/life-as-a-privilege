@@ -13,7 +13,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface LeyTao {
-  /** Clave estable. Es también el nombre de su foto: /recorrido/tcm/taoismo/<key>.png */
+  /** Clave estable. Es también el nombre de su foto: /recorrido/tcm/taoismo/<key>.webp */
   key: string;
   /** Nombre en castellano. */
   nombre: string;
@@ -44,10 +44,12 @@ export const TAOISMO_CIERRE = {
 };
 
 /**
- * Ilustración de cada ley. Si el PNG no existe todavía, la tarjeta enseña su
- * carácter chino en grande: la página funciona igual, sin huecos ni fotos rotas.
+ * Ilustración de cada ley: CUADRADA (1:1) y en WebP (las sube en PNG y se pasan
+ * con `node scripts/webp/convertir.mjs --lote=9`). Si el archivo no existe
+ * todavía, la tarjeta enseña su carácter chino en grande: la página funciona
+ * igual, sin huecos ni fotos rotas.
  */
-export const FOTO_LEY = (key: string) => `/recorrido/tcm/taoismo/${key}.png`;
+export const FOTO_LEY = (key: string) => `/recorrido/tcm/taoismo/${key}.webp`;
 
 // ─────────────────────────────────────────────────────────────────────────
 // LAS DIEZ LEYES

@@ -56,17 +56,18 @@ export default function MetodoTcmElementos() {
   const [comicEl, setComicEl] = useState<Elemento | null>(null);
   const reduce = useReducedMotion();
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
-  // Cómic de intro (Módulo 1): se abre al entrar, a pantalla completa, con el
-  // mismo ComicViewer que los cómics de astrología y de cada elemento.
+  // Cómic de intro (Módulo 1): ya NO se abre solo al entrar (era pesado verlo
+  // cada vez). Se abre únicamente al pulsar el botón «¿Qué son los Cinco
+  // Elementos?», con el mismo ComicViewer que los cómics de cada elemento.
   const intro = useIntroComic("metodo-tcm-elementos");
 
-  // No pintamos la página hasta que las fotos de fondo (el fondo de TCM, los
-  // iconos de los elementos y las viñetas de la intro) estén completamente
-  // cargadas: mientras tanto, solo el loader. Así aparece todo a la vez.
+  // No pintamos la página hasta que las fotos de fondo (el fondo de TCM y los
+  // iconos de los elementos) estén completamente cargadas: mientras tanto, solo
+  // el loader. Así aparece todo a la vez. Las viñetas del cómic ya NO bloquean
+  // la entrada: como ahora es opcional, las carga su propio visor al abrirlo.
   const fondosListos = usePrecargarImagenes([
     disciplinaBgImg(tcmNom),
     ...ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]),
-    ...COMIC_INTRO_ELEMENTOS.map((v) => v.src),
   ]);
 
   useEffect(() => {
@@ -82,9 +83,6 @@ export default function MetodoTcmElementos() {
         const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: DatosTcm = res.data?.data ?? {};
         setData(d);
-        // Abrimos el cómic de intro (Módulo 1) al entrar, una vez confirmado el
-        // acceso. Es saltable con la X / el tick.
-        intro.openNow();
       } catch {
         navigate("/metodo/tcm");
         return;
@@ -145,12 +143,6 @@ export default function MetodoTcmElementos() {
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
-      {/* La página NO se monta hasta que el usuario termina el cómic de los
-          elementos (el de intro). Mientras el cómic está abierto solo se ve él,
-          a pantalla completa, sobre el fondo turquesa; al cerrarlo (X o tick) se
-          revela la página con sus animaciones (estrella, boxes) frescas. */}
-      {!intro.open && (
-      <>
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
@@ -175,6 +167,51 @@ export default function MetodoTcmElementos() {
               disabledTooltip: "Rellena los tests de los cinco elementos para continuar",
             }}
           />
+          </Reveal>
+
+          {/* Botón del cómic de intro (Módulo 1). Antes el cómic saltaba solo al
+              entrar en la página, cada vez; ahora se ve únicamente si se pulsa
+              aquí. Estilo de botón de la casa: imagen de la disciplina + velo y
+              letra en el color de TCM. */}
+          <Reveal direction="down" distance={12} delay={0.08} duration={0.6} display="flex" justifyContent="center">
+            <Box
+              as="button"
+              onClick={intro.openNow}
+              position="relative"
+              overflow="hidden"
+              display="inline-flex"
+              alignItems="center"
+              gap={2.5}
+              px={{ base: 5, md: 8 }}
+              py={{ base: 2.5, md: 3 }}
+              borderRadius="full"
+              bg="transparent"
+              color={tcmTxt}
+              border={`2px solid ${tcmTxt}`}
+              fontWeight="700"
+              fontStyle="italic"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.04em"
+              whiteSpace="nowrap"
+              cursor="pointer"
+              boxShadow={CAJA_GLOW}
+              textShadow="0 1px 4px rgba(58,10,10,0.95), 0 2px 10px rgba(58,10,10,0.85)"
+              transition="transform 0.15s ease, box-shadow 0.15s ease"
+              sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", userSelect: "none" }}
+              _hover={{ transform: "translateY(-1px)", boxShadow: `${CAJA_GLOW}, 0 0 26px ${tcmTxt}55` }}
+              _active={{ transform: "scale(0.97)" }}
+            >
+              {/* Fondo: la pintura de Medicina China + velo para que se lea */}
+              <Box as="img" src={disciplinaBgImg(tcmNom)} alt="" position="absolute" inset="0"
+                   w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
+              <Box position="absolute" inset="0" bg={`${tcmBg}b3`} pointerEvents="none" />
+              {/* Icono de libro abierto (el cómic) */}
+              <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                   w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
+                <path d="M560-564v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-600q-38 0-73 9.5T560-564Zm0 220v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-380q-38 0-73 9t-67 27Zm0-110v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-490q-38 0-73 9.5T560-454ZM260-320q47 0 91.5 10.5T440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6Zm260 42q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-396q-33-14-68.5-21t-71.5-7q-47 0-93 12t-87 36v394Zm-40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740q51-30 106.5-45T700-800q52 0 102 12t96 36q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59Zm-140-353Z" />
+              </Box>
+              <Box as="span" position="relative" zIndex={1}>¿Qué son los Cinco Elementos?</Box>
+            </Box>
           </Reveal>
 
           {/* La estrella interactiva */}
@@ -278,13 +315,11 @@ export default function MetodoTcmElementos() {
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
 
       <SiteFooter />
-      </>
-      )}
 
       {/* Cómic de intro (Módulo 1) · a pantalla completa, con el mismo ComicViewer
-          que astrología y que el cómic de cada elemento. Se abre al entrar y es
-          lo ÚNICO visible hasta que se termina; al cerrarlo (X o tick) se revela
-          la página. Sigue siendo saltable con la X / el tick. */}
+          que astrología y que el cómic de cada elemento. Solo se abre desde el
+          botón «¿Qué son los Cinco Elementos?»; cerrable en cualquier momento con
+          la X / el tick, y la página sigue justo donde estaba. */}
       <IntroComicModal
         isOpen={intro.open}
         onClose={intro.finish}

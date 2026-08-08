@@ -515,21 +515,15 @@ function indice(
   doc: jsPDF,
   bloques: Bloque[],
   paginaInicial: number,
-  totalPaginas: number,
   dibujar: boolean,
 ): number {
   let paginas = 1;
-  let y = MARGEN_SUP;
+  // Arranca donde arrancan las páginas de contenido: el índice ya no lleva el
+  // antetítulo «TU CARTA COMPLETA · N páginas», solo su título.
+  let y = MARGEN_SUP + 4;
   let seccionActual: Seccion | null = null;
 
   const cabeceraIndice = () => {
-    if (dibujar) {
-      doc.setFont("times", "normal");
-      doc.setFontSize(8.5);
-      doc.setTextColor(...BLANCO);
-      doc.text(latin1(`TU CARTA COMPLETA   ·   ${totalPaginas} páginas`), MARGEN_X, y);
-    }
-    y += 9;
     doc.setFont("times", "bold");
     doc.setFontSize(22);
     if (dibujar) {
@@ -551,7 +545,7 @@ function indice(
         fondoPagina(doc);
       }
       paginas++;
-      y = MARGEN_SUP;
+      y = MARGEN_SUP + 4;
       seccionActual = null;
       cabeceraIndice();
     }
@@ -762,14 +756,13 @@ export async function generarPdfCarta(
 
   // 1) Paginación en seco (sin dibujar nada): cuántas páginas ocupa el índice y
   //    en qué página empieza cada lectura.
-  const paginasIndice = indice(doc, bloques, 2, 0, false);
+  const paginasIndice = indice(doc, bloques, 2, false);
   const reparto = bloques.map((b) => repartirBloque(doc, b));
   let cursor = 2 + paginasIndice; // 1 = portada
   bloques.forEach((b, i) => {
     b.pagina = cursor;
     cursor += reparto[i].length;
   });
-  const totalPaginas = cursor - 1;
 
   const totalPasos = bloques.length + 2;
   let hechos = 0;
@@ -787,7 +780,7 @@ export async function generarPdfCarta(
   // 3) Índice.
   doc.addPage();
   fondoPagina(doc);
-  indice(doc, bloques, 2, totalPaginas, true);
+  indice(doc, bloques, 2, true);
   paso();
 
   // 4) Contenido: cada lectura empieza en página nueva.

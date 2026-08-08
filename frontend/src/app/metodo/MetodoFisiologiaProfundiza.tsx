@@ -100,7 +100,7 @@ export default function MetodoFisiologiaProfundiza() {
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
-              Para los que quieren toda la verdad. Elige por dónde asomarte.
+              Para los que quieren toda la verdad. Elige por dónde empezar.
             </Text>
           </Reveal>
 

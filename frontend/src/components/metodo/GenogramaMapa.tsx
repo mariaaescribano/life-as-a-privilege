@@ -25,7 +25,7 @@ import {
   posKeyFamilia,
   type PersonaGenograma,
 } from "./psicologiaRecorrido";
-import { glowPanel, azulBorde } from "./psicologiaGlow";
+import { glowPanel, azulBorde, scrollAcuarela } from "./psicologiaGlow";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
 const TINTA = neuropsicologiaTxt; // #5e2d10 — marrón tinta
@@ -87,9 +87,7 @@ export function GenogramaMapa({
           nunca hace scroll horizontal. */}
       <Box position="relative" zIndex={1} overflowX="auto" overflowY="hidden"
            px={{ base: 6, md: 12 }} py={{ base: 10, md: 14 }}
-           sx={{ scrollbarWidth: "thin",
-                 "&::-webkit-scrollbar": { height: "8px" },
-                 "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
+           sx={scrollAcuarela(TINTA)}>
         <Box display="grid" mx="auto" w="fit-content"
              gridTemplateColumns={{ base: `repeat(${nCols}, ${CELDA.base})`, md: `repeat(${nCols}, ${CELDA.md})` }}
              columnGap={HUECO_X} rowGap={HUECO_Y}>

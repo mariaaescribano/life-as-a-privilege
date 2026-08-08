@@ -22,6 +22,7 @@ import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { Reveal } from "../../components/global/Reveal";
+import { BotonCompania } from "../../components/global/BotonCompania";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import {
   generarPdfCarta,
@@ -30,7 +31,7 @@ import {
   type DatosPdfCarta,
   type RetoPdf,
 } from "../../components/metodo/pdf/pdfCartaAstral";
-import { API_URL, astrologiaBg, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 const EyeIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
@@ -219,26 +220,6 @@ export default function MetodoAstrologiaPdf() {
                   Toda tu carta, página a página
                 </Text>
 
-                <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9"
-                      maxW="640px" style={{ textShadow: `0 0 8px ${astrologiaBg}` }}>
-                  Se abre con tu rueda dibujada sobre el cielo, sigue un índice y después
-                  cada lectura ocupa su propia página: tus arquetipos en el orden del cómic
-                  (cada planeta con su signo y su casa), tus puntos clave, tus casas y tus
-                  aspectos.
-                </Text>
-
-                {resumen && !sinTextos && (
-                  <Flex wrap="wrap" justify="center" gap={2}>
-                    {Object.entries(resumen.secciones).map(([seccion, n]) => (
-                      <Text key={seccion} color={astrologiaTxt} fontSize="xs" letterSpacing="0.08em"
-                            px={3} py={1} borderRadius="full"
-                            border={`1px solid ${astrologiaTxt}55`} bg={`${astrologiaBg}88`}>
-                        {seccion.toUpperCase()} · {n}
-                      </Text>
-                    ))}
-                  </Flex>
-                )}
-
                 {sinTextos ? (
                   <Text color="#ffd9a0" fontSize="sm" fontStyle="italic" maxW="560px">
                     Tu carta todavía no tiene lecturas escritas. En cuanto estén, aquí podrás
@@ -304,6 +285,8 @@ export default function MetodoAstrologiaPdf() {
         </Flex>
       </Flex>
 
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+                     llamadaTitulo="Reserva tu llamada de astrología" />
       <IndiceAstrologia />
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
       <SiteFooter />

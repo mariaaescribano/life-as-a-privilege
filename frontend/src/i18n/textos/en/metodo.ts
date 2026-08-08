@@ -330,12 +330,7 @@ export const metodo = {
   "fisiologia.celula.titulo": "Cell",
   "fisiologia.lasCelulas.titulo": "The cells of your organs",
   "fisiologia.sistemas.titulo": "Systems",
-  "fisiologia.cerebro.titulo": "The brain",
   "fisiologia.organismo.titulo": "The body",
-
-  "fisiologia.cerebro.entradilla":
-    "Three pounds that decide who you are. Walk it from the outside in: tap each part to get to know it.",
-  "fisiologia.cerebro.faltanPartes": "First get to know every part of the brain",
 
   "metodo.pago.ordinal.1": "First discipline",
   "metodo.pago.ordinal.2": "Second discipline",

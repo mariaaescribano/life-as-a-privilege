@@ -152,12 +152,14 @@ export default function MetodoTcmDiagnostico() {
           </Flex>
           </Reveal>
 
-          {/* ── BOX 1 · Estrella-perfil (lo que ocurre en ti ahora mismo) ── */}
-          <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
+          {/* ── BOX 1 · Estrella-perfil (lo que ocurre en ti ahora mismo) ──
+              Box contenido (no a todo el ancho de la página): la estrella se lee
+              mejor recogida que estirada de lado a lado. */}
+          <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%" maxW="560px">
           <Panel titulo="" color={tcmTxt}>
             <EstrellaPerfil estados={estados} onElemento={(el) => setComicEl(el)} />
-            <Text color="rgba(255,255,255,0.6)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
-                  mt={2} lineHeight="1.6">
+            <Text color="rgba(255,255,255,0.6)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" textAlign="center"
+                  mt={1} lineHeight="1.6">
               Los elementos iluminados son los que más necesitan de tu atención.
             </Text>
           </Panel>
@@ -302,8 +304,8 @@ function EstrellaPerfil({ estados, onElemento }: {
   };
 
   return (
-    <Flex ref={ref} justify="center" py={{ base: 2, md: 3 }}>
-      <Box as="svg" viewBox="0 0 300 320" w="100%" maxW={{ base: "360px", md: "500px" }} h="auto" overflow="visible">
+    <Flex ref={ref} justify="center" py={{ base: 1, md: 1.5 }}>
+      <Box as="svg" viewBox="0 0 300 320" w="100%" maxW={{ base: "280px", md: "360px" }} h="auto" overflow="visible">
         {/* Aristas: primero las de FUERA (Sheng, perímetro) una a una, luego las
             de DENTRO (Ke, las que cruzan la estrella), tras florecer los iconos. */}
         {ORDEN_ELEMENTOS.map((el, i) => (

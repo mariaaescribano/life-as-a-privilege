@@ -17,12 +17,14 @@ import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoMasCargado, type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
-import {
-  COCINA_ELEMENTO, FOTO_RECETA, RECETAS_NOTA, recetasDe, type Receta,
-} from "../../components/metodo/tcmRecetasContenido";
+import { COCINA_NOTA, FOTO_COCINA, cocinaDe } from "../../components/metodo/tcmCocinaContenido";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
+
+// Toda la página vive dentro del mismo ancho que el header del recorrido
+// (MetodoStepHeader va a 850px): ningún box se sale de esa columna.
+const ANCHO = "850px";
 
 export default function MetodoTcmRecetas() {
   const navigate = useNavigate();
@@ -66,25 +68,25 @@ export default function MetodoTcmRecetas() {
   }
 
   const E = ELEMENTOS[elActivo];
-  const cocina = COCINA_ELEMENTO[elActivo];
-  const recetas = recetasDe(elActivo);
+  const cocina = cocinaDe(elActivo);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1080px" gap={7}>
+        <Flex direction="column" align="center" w="100%" maxW={ANCHO} gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Recetas tradicionales"
+            title="Tu cocina diaria"
             pageLabel="8/9"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
+            maxW={ANCHO}
             mb={0}
             prev={{ label: "← Taoísmo", onClick: () => navigate("/metodo/tcm/taoismo") }}
             extra={ilustracionesBtn}
@@ -96,8 +98,9 @@ export default function MetodoTcmRecetas() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="700px">
-            En Medicina China la cocina es la primera farmacia. Cada elemento tiene su sabor, su
-            temperatura y sus platos: elige el tuyo y empieza por una sola receta.
+            En Medicina China la cocina es la primera farmacia. Aquí no hay recetas cerradas:
+            hay ingredientes que aportar cada día y formas de cocinar que cambian lo que un
+            mismo alimento hace en ti. Elige tu elemento y empieza por un solo gesto.
           </Text>
           </Reveal>
 
@@ -147,32 +150,120 @@ export default function MetodoTcmRecetas() {
             </Box>
           </Box>
 
-          {/* ── LAS RECETAS DEL ELEMENTO ── */}
-          <Box display="grid" gridTemplateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={{ base: 5, md: 6 }} w="100%">
-            {recetas.map((r) => (
+          {/* ── LO QUE APORTAR CADA DÍA ── */}
+          <Seccion>Cada día</Seccion>
+          <Reveal key={`dia-${elActivo}`} inView direction="up" distance={22} scaleFrom={0.99} duration={0.66}
+                  amount={0.12} w="100%">
+            <Panel>
+              <Flex direction="column" gap={3}>
+                {cocina.cadaDia.map((g, i) => (
+                  <Flex key={i} gap={3} align="flex-start">
+                    <Flex flexShrink={0} align="center" justify="center" w="22px" h="22px" borderRadius="full"
+                          mt="3px" bg={`${E.color}33`} border={`1px solid ${E.color}`}>
+                      <Text color="white" fontSize="2xs" fontWeight={800} lineHeight="1">{i + 1}</Text>
+                    </Flex>
+                    <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.75"
+                          style={{ textShadow: INK_SHADOW }}>{g}</Text>
+                  </Flex>
+                ))}
+              </Flex>
+            </Panel>
+          </Reveal>
+
+          {/* ── LOS INGREDIENTES, POR FAMILIAS ── */}
+          <Seccion>Ingredientes que aportar</Seccion>
+          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
+               gap={{ base: 5, md: 6 }} w="100%">
+            {cocina.grupos.map((g) => (
               // `key` con el elemento: al cambiar de elemento las tarjetas se
               // remontan y vuelven a entrar en escena en vez de cambiar de texto.
-              <Reveal key={`${elActivo}-${r.key}`} inView direction="up" distance={24} scaleFrom={0.98}
+              <Reveal key={`${elActivo}-${g.key}`} inView direction="up" distance={24} scaleFrom={0.98}
                       duration={0.68} amount={0.12} w="100%" h="100%">
-                <RecetaCard receta={r} color={E.color} />
+                <Panel h="100%">
+                  <Rotulo color={E.color}>{g.titulo}</Rotulo>
+                  <Flex direction="column" gap={3}>
+                    {g.alimentos.map((a, i) => (
+                      <Flex key={i} gap={2.5} align="flex-start" minW={0}>
+                        <Box flexShrink={0} mt={{ base: "9px", md: "10px" }} w="5px" h="5px" borderRadius="full"
+                             bg={E.color} boxShadow={`0 0 6px ${E.color}`} />
+                        <Box minW={0}>
+                          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700} lineHeight="1.5"
+                                style={{ textShadow: INK_SHADOW }}>{a.nombre}</Text>
+                          <Text color="rgba(255,255,255,0.86)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+                                lineHeight="1.65" style={{ textShadow: INK_SHADOW }}>{a.aporta}</Text>
+                        </Box>
+                      </Flex>
+                    ))}
+                  </Flex>
+                </Panel>
               </Reveal>
             ))}
           </Box>
 
-          {recetas.length === 0 && (
+          {/* ── FORMAS DE COCINAR ── */}
+          <Seccion>Formas de cocinar</Seccion>
+          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
+               gap={{ base: 5, md: 6 }} w="100%">
+            {cocina.cocciones.map((c) => (
+              <Reveal key={`${elActivo}-${c.key}`} inView direction="up" distance={24} scaleFrom={0.98}
+                      duration={0.68} amount={0.12} w="100%" h="100%">
+                <Panel h="100%" foto={FOTO_COCINA(c.key)} alt={c.nombre}>
+                  <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={800} lineHeight="1.25"
+                        style={{ textShadow: `0 1px 8px rgba(0,0,0,0.8), 0 0 18px ${E.color}55` }}>
+                    {c.nombre}
+                  </Text>
+                  <Box h="1px" w="100%" my={{ base: 3.5, md: 4 }}
+                       bgGradient="linear(to-r, transparent, #ffffff, transparent)" />
+                  <Rotulo color={E.color}>Cómo</Rotulo>
+                  <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
+                        style={{ textShadow: INK_SHADOW }}>{c.como}</Text>
+                  <Rotulo color={E.color} mt={5}>Por qué</Rotulo>
+                  <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                        lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{c.porque}</Text>
+                </Panel>
+              </Reveal>
+            ))}
+          </Box>
+
+          {/* ── LO QUE CONVIENE BAJAR + UN DÍA CUALQUIERA ── */}
+          <Seccion>Baja un poco</Seccion>
+          <Reveal key={`baja-${elActivo}`} inView direction="up" distance={20} duration={0.64} amount={0.15} w="100%">
             <Panel>
-              <Text color={`${tcmTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                    lineHeight="1.8">
-                Pronto encontrarás aquí las recetas de este elemento.
-              </Text>
+              <Flex gap={2.5} wrap="wrap">
+                {cocina.baja.map((b, i) => (
+                  <Etiqueta key={i} color={E.color}>{b}</Etiqueta>
+                ))}
+              </Flex>
             </Panel>
-          )}
+          </Reveal>
+
+          <Seccion>Así queda un día</Seccion>
+          <Reveal key={`jornada-${elActivo}`} inView direction="up" distance={20} duration={0.64} amount={0.12} w="100%">
+            <Panel>
+              <Flex direction="column" gap={4}>
+                {cocina.dia.map((m, i) => (
+                  <Flex key={i} direction={{ base: "column", sm: "row" }} gap={{ base: 1, sm: 4 }} align="flex-start">
+                    <Text flexShrink={0} w={{ base: "auto", sm: "130px" }} color={E.color}
+                          fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.08em"
+                          textTransform="uppercase" mt={{ base: 0, sm: "3px" }}
+                          style={{ textShadow: `0 0 10px ${E.color}55, ${INK_SHADOW}` }}>
+                      {m.momento}
+                    </Text>
+                    <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
+                          minW={0} style={{ textShadow: INK_SHADOW }}>
+                      {m.texto}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
+            </Panel>
+          </Reveal>
 
           {/* ── NOTA FINAL ── */}
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="680px"
                 lineHeight="1.7">
-            {RECETAS_NOTA} Estas recetas tienen un fin educativo y de autocuidado: no sustituyen la
+            {COCINA_NOTA} Todo esto tiene un fin educativo y de autocuidado: no sustituye la
             valoración de un profesional cualificado ni un tratamiento médico.
           </Text>
           </Reveal>
@@ -216,103 +307,19 @@ function BotonElemento({ elemento, activo, onClick }: {
   );
 }
 
-// ── Tarjeta de una receta ────────────────────────────────────────────────────
-// Si la receta tiene su foto en /recorrido/tcm/recetas/<key>.png, se pinta como
-// banda superior; si aún no existe, la tarjeta va directa al texto (sin hueco).
-function RecetaCard({ receta, color }: { receta: Receta; color: string }) {
-  const [sinFoto, setSinFoto] = useState(false);
-
+// ── Título de sección · va FUERA de las cajas: blanco y sin sombra ───────────
+function Seccion({ children }: { children: React.ReactNode }) {
   return (
-    <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden"
-         boxShadow={`${CAJA_GLOW}, 0 0 34px ${color}44`}>
-      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-
-      {!sinFoto && (
-        <Box position="relative" zIndex={1} w="100%" overflow="hidden" sx={{ aspectRatio: "16 / 9" }}>
-          <Image src={encodeURI(FOTO_RECETA(receta.key))} alt={receta.nombre}
-                 w="100%" h="100%" objectFit="cover" onError={() => setSinFoto(true)} />
-          {/* Velo inferior: el título de debajo arranca sobre el degradado y la
-              foto no corta en seco. */}
-          <Box position="absolute" inset={0} pointerEvents="none"
-               bgGradient={`linear(to-t, ${tcmBg}f0, transparent 45%)`} />
-        </Box>
-      )}
-
-      <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
-
-        {/* Título + nombre chino */}
-        <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.2"
-              style={{ textShadow: `0 1px 8px rgba(0,0,0,0.8), 0 0 18px ${color}55` }}>
-          {receta.nombre}
-          {receta.hanzi && (
-            <Text as="span" color={color} fontWeight={700} ml={2}>{receta.hanzi}</Text>
-          )}
-        </Text>
-
-        {/* Para qué sirve */}
-        <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-              lineHeight="1.7" mt={2} style={{ textShadow: INK_SHADOW }}>
-          {receta.para}
-        </Text>
-
-        {/* Etiquetas: tiempo y naturaleza */}
-        <Flex gap={2} wrap="wrap" mt={3.5}>
-          <Etiqueta color={color}>{receta.tiempo}</Etiqueta>
-          <Etiqueta color={color}>{receta.naturaleza}</Etiqueta>
-        </Flex>
-
-        <Box h="1px" w="100%" my={{ base: 4, md: 5 }} bgGradient="linear(to-r, transparent, #ffffff, transparent)" />
-
-        {/* Ingredientes */}
-        <Rotulo color={color}>Ingredientes</Rotulo>
-        <Flex direction="column" gap={1.5}>
-          {receta.ingredientes.map((ing, i) => (
-            <Flex key={i} gap={2.5} align="flex-start">
-              <Box flexShrink={0} mt={{ base: "9px", md: "10px" }} w="5px" h="5px" borderRadius="full"
-                   bg={color} boxShadow={`0 0 6px ${color}`} />
-              <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                    style={{ textShadow: INK_SHADOW }}>{ing}</Text>
-            </Flex>
-          ))}
-        </Flex>
-
-        {/* Preparación */}
-        <Rotulo color={color} mt={6}>Preparación</Rotulo>
-        <Flex direction="column" gap={2.5}>
-          {receta.pasos.map((p, i) => (
-            <Flex key={i} gap={3} align="flex-start">
-              <Flex flexShrink={0} align="center" justify="center" w="22px" h="22px" borderRadius="full"
-                    mt="2px" bg={`${color}33`} border={`1px solid ${color}`}>
-                <Text color="white" fontSize="2xs" fontWeight={800} lineHeight="1">{i + 1}</Text>
-              </Flex>
-              <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                    style={{ textShadow: INK_SHADOW }}>{p}</Text>
-            </Flex>
-          ))}
-        </Flex>
-
-        {/* Cuándo tomarla */}
-        <Rotulo color={color} mt={6}>Cuándo</Rotulo>
-        <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-              style={{ textShadow: INK_SHADOW }}>
-          {receta.cuando}
-        </Text>
-
-        {/* Nota (opcional) */}
-        {receta.nota && (
-          <Box mt={5} px={4} py={3} borderRadius="lg" bg="rgba(0,0,0,0.3)" borderLeft={`3px solid ${color}`}>
-            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-              {receta.nota}
-            </Text>
-          </Box>
-        )}
-      </Box>
-    </Box>
+    <Reveal inView direction="up" distance={12} duration={0.55} amount={0.5} display="flex" justifyContent="center">
+      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} letterSpacing="0.04em"
+            textAlign="center">
+        {children}
+      </Text>
+    </Reveal>
   );
 }
 
-// ── Rótulo de apartado dentro de una receta ──────────────────────────────────
+// ── Rótulo de apartado dentro de una caja ────────────────────────────────────
 function Rotulo({ children, color, mt }: { children: React.ReactNode; color: string; mt?: any }) {
   return (
     <Text color={color} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase"
@@ -322,10 +329,10 @@ function Rotulo({ children, color, mt }: { children: React.ReactNode; color: str
   );
 }
 
-// ── Etiqueta pequeña (tiempo, naturaleza) ────────────────────────────────────
+// ── Etiqueta pequeña ─────────────────────────────────────────────────────────
 function Etiqueta({ children, color }: { children: React.ReactNode; color: string }) {
   return (
-    <Box px={3} py={1} borderRadius="full" bg={`${color}2e`} border={`1px solid ${color}aa`}>
+    <Box px={3} py={1.5} borderRadius="full" bg={`${color}2e`} border={`1px solid ${color}aa`}>
       <Text color="white" fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.04em">
         {children}
       </Text>
@@ -334,11 +341,30 @@ function Etiqueta({ children, color }: { children: React.ReactNode; color: strin
 }
 
 // ── Box común (mismo que el resto del recorrido) ─────────────────────────────
-function Panel({ children }: { children: React.ReactNode }) {
+// Si se le pasa `foto` y el archivo existe, se pinta como banda superior; si
+// aún no existe, la caja va directa al texto (sin hueco ni imagen rota), así
+// que las fotos se pueden ir soltando de una en una sin tocar código.
+function Panel({ children, h, foto, alt }: {
+  children: React.ReactNode; h?: any; foto?: string; alt?: string;
+}) {
+  const [sinFoto, setSinFoto] = useState(false);
+
   return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+    <Box position="relative" w="100%" h={h} borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-      <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
+
+      {foto && !sinFoto && (
+        <Box position="relative" zIndex={1} w="100%" overflow="hidden" sx={{ aspectRatio: "16 / 9" }}>
+          <Image src={encodeURI(foto)} alt={alt ?? ""} w="100%" h="100%" objectFit="cover"
+                 onError={() => setSinFoto(true)} />
+          {/* Velo inferior: el texto de debajo arranca sobre el degradado y la
+              foto no corta en seco. */}
+          <Box position="absolute" inset={0} pointerEvents="none"
+               bgGradient={`linear(to-t, ${tcmBg}f0, transparent 45%)`} />
+        </Box>
+      )}
+
+      <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
         {children}
       </Box>
     </Box>

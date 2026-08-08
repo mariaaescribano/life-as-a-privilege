@@ -25,7 +25,7 @@ import {
   type LineaDeVidaData,
   type EstadoAno,
 } from "../../components/metodo/psicologiaRecorrido";
-import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { AZUL, glowPanel, glowHeader, azulBorde, scrollAcuarela } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import { Reveal } from "../../components/global/Reveal";
 import {
@@ -749,11 +749,7 @@ function PaginaDeAno({
           py={{ base: 9, md: 12 }}
           overflowY="auto"
           overscrollBehavior="contain"
-          sx={{
-            scrollbarWidth: "thin",
-            "&::-webkit-scrollbar": { width: "8px" },
-            "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" },
-          }}
+          sx={scrollAcuarela(TINTA)}
         >
           {/* Encabezado del año (la gestación tiene su propio título) */}
           <Flex direction="column" align="center" textAlign="center" gap={1} mb={{ base: 7, md: 9 }}>

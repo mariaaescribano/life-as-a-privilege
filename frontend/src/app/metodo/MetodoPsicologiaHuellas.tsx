@@ -198,9 +198,12 @@ export default function MetodoPsicologiaHuellas() {
                   onToggle={toggleItem}
                 />
 
-                {/* Lomo del cuaderno con anillas: opaco (cubre del todo la unión,
-                    no asoma el fondo), monta sobre ambas páginas. Vertical en
-                    ordenador, horizontal en móvil (une abajo↔arriba). */}
+                {/* Lomo del cuaderno: es la MISMA hoja (acuarela de psicología),
+                    no un bloque oscuro — un tablón marrón partía el box en dos y
+                    se veía como una franja negra sobre el papel. El pliegue se
+                    sugiere con dos sombras suaves a los lados y los agujeros
+                    troquelados en medio. Vertical en ordenador, horizontal en
+                    móvil (une abajo↔arriba). */}
                 <Flex
                   position="relative"
                   direction={{ base: "row", md: "column" }}
@@ -208,10 +211,13 @@ export default function MetodoPsicologiaHuellas() {
                   align="center"
                   flexShrink={0}
                   alignSelf="stretch"
+                  overflow="hidden"
                   w={{ base: "100%", md: "42px" }}
                   h={{ base: "34px", md: "440px" }}
-                  bg={TINTA}
-                  boxShadow={`inset 0 0 18px rgba(0,0,0,0.4)`}
+                  bgColor={neuropsicologiaBg}
+                  bgImage="url('/img/fondos/psciologia.webp')"
+                  bgSize="cover"
+                  bgPosition="center"
                   my={{ base: "-14px", md: 0 }}
                   mx={{ base: 0, md: "-12px" }}
                   gap={{ base: 4, md: 0 }}
@@ -219,15 +225,26 @@ export default function MetodoPsicologiaHuellas() {
                   zIndex={3}
                   aria-hidden
                 >
+                  {/* Valle del pliegue: solo sombra del color de la tinta a cada
+                      lado, para que se note el doblez sin tapar la acuarela. */}
+                  <Box
+                    position="absolute"
+                    inset="0"
+                    pointerEvents="none"
+                    bgGradient={{
+                      base: `linear(to-b, ${TINTA}33, ${TINTA}00 38%, ${TINTA}00 62%, ${TINTA}33)`,
+                      md: `linear(to-r, ${TINTA}33, ${TINTA}00 38%, ${TINTA}00 62%, ${TINTA}33)`,
+                    }}
+                  />
                   {Array.from({ length: 7 }).map((_, i) => (
                     <Box
                       key={i}
-                      w="14px"
-                      h="14px"
+                      position="relative"
+                      w="13px"
+                      h="13px"
                       borderRadius="full"
-                      border={`2px solid rgba(255,251,243,0.55)`}
-                      bg="rgba(255,251,243,0.9)"
-                      boxShadow={`inset 0 1px 3px rgba(94,45,16,0.5)`}
+                      bg={`${TINTA}44`}
+                      boxShadow={`inset 0 2px 4px ${TINTA}aa, 0 1px 0 rgba(255,251,243,0.75)`}
                     />
                   ))}
                 </Flex>
@@ -290,6 +307,8 @@ export default function MetodoPsicologiaHuellas() {
 // Va en una constante a propósito: cuando cada rama tenía sus propios estilos,
 // la página en blanco se quedó sin fondo, el turquesa de la página se veía por
 // el hueco y el cuaderno aparentaba ocupar solo media pantalla.
+// El papel: la acuarela de psicología. La misma foto la lleva el lomo (arriba,
+// en el propio JSX), para que el cuaderno entero sea la MISMA hoja.
 const PAPEL: BoxProps = {
   flex: "1",
   minW: 0,

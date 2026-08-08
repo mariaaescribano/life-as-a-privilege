@@ -109,9 +109,7 @@ const MetodoFisiologiaEstructuras = lazy(() => import("./app/metodo/MetodoFisiol
 const MetodoFisiologiaCelula = lazy(() => import("./app/metodo/MetodoFisiologiaCelula"));
 const MetodoFisiologiaTodasCelulas = lazy(() => import("./app/metodo/MetodoFisiologiaTodasCelulas"));
 const MetodoFisiologiaSistemas = lazy(() => import("./app/metodo/MetodoFisiologiaSistemas"));
-const MetodoFisiologiaCerebro = lazy(() => import("./app/metodo/MetodoFisiologiaCerebro"));
 const MetodoFisiologiaOrganismo = lazy(() => import("./app/metodo/MetodoFisiologiaOrganismo"));
-const MetodoFisiologiaAnalitica = lazy(() => import("./app/metodo/MetodoFisiologiaAnalitica"));
 const MetodoFisiologiaProfundiza = lazy(() => import("./app/metodo/MetodoFisiologiaProfundiza"));
 const MetodoFisiologiaTema = lazy(() => import("./app/metodo/MetodoFisiologiaTema"));
 const MetodoNutricion = lazy(() => import("./app/metodo/MetodoNutricion"));
@@ -354,9 +352,10 @@ export default function App()
       <Route path="/metodo/fisiologia/celula" element={<PrivateRoute><MetodoFisiologiaCelula /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/todas-tus-celulas" element={<PrivateRoute><MetodoFisiologiaTodasCelulas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/sistemas" element={<PrivateRoute><MetodoFisiologiaSistemas /></PrivateRoute>} />
-      <Route path="/metodo/fisiologia/cerebro" element={<PrivateRoute><MetodoFisiologiaCerebro /></PrivateRoute>} />
+      {/* El cerebro dejó de ser un paso del recorrido: ahora es un apartado de
+          Profundiza. La ruta vieja sigue viva para no romper enlaces guardados. */}
+      <Route path="/metodo/fisiologia/cerebro" element={<Navigate to="/metodo/fisiologia/profundiza/cerebro" replace />} />
       <Route path="/metodo/fisiologia/organismo" element={<PrivateRoute><MetodoFisiologiaOrganismo /></PrivateRoute>} />
-      <Route path="/metodo/fisiologia/analitica" element={<PrivateRoute><MetodoFisiologiaAnalitica /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/profundiza" element={<PrivateRoute><MetodoFisiologiaProfundiza /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/profundiza/:temaKey" element={<PrivateRoute><MetodoFisiologiaTema /></PrivateRoute>} />
 

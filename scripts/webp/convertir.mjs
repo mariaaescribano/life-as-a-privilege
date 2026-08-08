@@ -151,6 +151,14 @@ const LOTES = {
     calidad: 85,
     carpetas: ["recorrido/psicologia/familia"],
   },
+  // Las diez leyes del Taoísmo (TCM). Ilustraciones cuadradas de 1254 px que se
+  // ven a 300 px al lado del texto (y a ~500 px de ancho en móvil), así que 1000
+  // px de lado sobra. La ruta se arma sola (`${key}.webp` en
+  // tcmTaoismoContenido.ts): aquí el WebP no es opcional, en PNG dan 404.
+  9: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/tcm/taoismo"],   // 10 archivos · 26 MB
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

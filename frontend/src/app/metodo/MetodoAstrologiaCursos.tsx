@@ -26,6 +26,15 @@ const EyeIcon = () => (
   </Box>
 );
 
+// Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
+// llamada): explica esta página del recorrido. Edítalo libremente.
+const QUE_ES_ESTO = {
+  parrafos: [
+    "Hasta ahora solo has aprendido tu carta, pero la Astrología tiene mucho más que ofrecer.",
+    "¿Quieres profundizar en todos los arquetipos? No dudes en leer un rato :)",
+  ],
+};
+
 /**
  * Última pantalla del Recorrido de Astrología: los cursos de Astrología, para
  * que el usuario los tenga a mano y pueda profundizar. Va después de la pantalla
@@ -218,7 +227,8 @@ export default function MetodoAstrologiaCursos() {
         error={pagoPsicoError}
       />
 
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

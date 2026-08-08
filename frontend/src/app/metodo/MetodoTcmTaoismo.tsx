@@ -52,7 +52,9 @@ export default function MetodoTcmTaoismo() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1080px" gap={7}>
+        {/* 850px = el ancho del MetodoStepHeader: ninguna caja de la página se
+            sale de la cabecera. */}
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
@@ -66,7 +68,7 @@ export default function MetodoTcmTaoismo() {
             mb={0}
             prev={{ label: "← Lee tu lengua", onClick: () => navigate("/metodo/tcm/lengua/leer") }}
             extra={ilustracionesBtn}
-            next={{ label: "Recetas →", onClick: () => navigate("/metodo/tcm/recetas") }}
+            next={{ label: "Tu cocina →", onClick: () => navigate("/metodo/tcm/recetas") }}
           />
           </Reveal>
 
@@ -105,8 +107,11 @@ export default function MetodoTcmTaoismo() {
           </Text>
           </Reveal>
 
-          {/* ── LAS LEYES · rejilla de tarjetas ── */}
-          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={{ base: 5, md: 6 }} w="100%">
+          {/* ── LAS LEYES · una tarjeta por ley, a lo ancho ──
+              Una sola columna: las ilustraciones son CUADRADAS y van al lado del
+              texto (como los boxes de cómic), así que cada tarjeta necesita el
+              ancho entero. */}
+          <Box display="grid" gridTemplateColumns="1fr" gap={{ base: 5, md: 6 }} w="100%">
             {LEYES_TAO.map((ley, i) => (
               <Reveal key={ley.key} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7}
                       amount={0.15} w="100%" h="100%">
@@ -148,10 +153,11 @@ export default function MetodoTcmTaoismo() {
 }
 
 // ── Tarjeta de una ley ───────────────────────────────────────────────────────
-// Ilustración arriba con el carácter chino montado sobre ella; debajo, la ley en
-// una frase, un párrafo y su línea de cuerpo. MIENTRAS NO HAYA FOTO, la banda de
-// arriba enseña el carácter en grande: la tarjeta se sostiene igual y no queda
-// ningún hueco ni foto rota.
+// Las ilustraciones son CUADRADAS (1:1), así que van enteras a la izquierda y el
+// texto a la derecha —la estructura de los boxes con ilustración del recorrido—.
+// En móvil la foto pasa arriba, cuadrada y a todo el ancho. MIENTRAS NO HAYA
+// FOTO, el hueco enseña el carácter chino en grande: la tarjeta se sostiene
+// igual y no queda ningún hueco ni foto rota.
 function LeyCard({ ley, numero }: { ley: LeyTao; numero: number }) {
   const [sinFoto, setSinFoto] = useState(false);
 
@@ -160,39 +166,44 @@ function LeyCard({ ley, numero }: { ley: LeyTao; numero: number }) {
          display="flex" flexDirection="column">
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
 
-      {/* Banda de la ilustración */}
-      <Box position="relative" zIndex={1} w="100%" flexShrink={0} overflow="hidden"
-           sx={{ aspectRatio: "16 / 9" }} bg={`${tcmBg}88`}>
-        {!sinFoto && (
-          <Image src={encodeURI(FOTO_LEY(ley.key))} alt="" w="100%" h="100%" objectFit="cover"
-                 onError={() => setSinFoto(true)} />
-        )}
-        {/* Velo inferior para que el carácter y el número se lean sobre la foto */}
-        <Box position="absolute" inset={0} pointerEvents="none"
-             bgGradient={`linear(to-t, ${tcmBg}f2, ${tcmBg}55 55%, transparent)`} />
+      <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="stretch" h="100%">
+        {/* Ilustración cuadrada */}
+        <Box position="relative" flexShrink={0} overflow="hidden" bg={`${tcmBg}88`}
+             w={{ base: "100%", md: "300px" }}
+             sx={{ aspectRatio: "1" }}
+             alignSelf={{ base: "auto", md: "flex-start" }}
+             m={{ base: 0, md: 5 }}
+             borderRadius={{ base: 0, md: "xl" }}>
+          {!sinFoto && (
+            <Image src={encodeURI(FOTO_LEY(ley.key))} alt="" w="100%" h="100%" objectFit="cover"
+                   onError={() => setSinFoto(true)} />
+          )}
+          {/* Velo inferior para que el carácter y el número se lean sobre la foto */}
+          <Box position="absolute" inset={0} pointerEvents="none"
+               bgGradient={`linear(to-t, ${tcmBg}e0, ${tcmBg}33 45%, transparent)`} />
 
-        {/* Número de la ley, arriba a la izquierda */}
-        <Flex position="absolute" top="10px" left="10px" align="center" justify="center"
-              w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }} borderRadius="full"
-              bg={`${tcmBg}dd`} border={`1px solid ${tcmTxt}66`}>
-          <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={800} lineHeight="1">
-            {numero}
-          </Text>
-        </Flex>
+          {/* Número de la ley, arriba a la izquierda */}
+          <Flex position="absolute" top="10px" left="10px" align="center" justify="center"
+                w={{ base: "26px", md: "30px" }} h={{ base: "26px", md: "30px" }} borderRadius="full"
+                bg={`${tcmBg}dd`} border={`1px solid ${tcmTxt}66`}>
+            <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={800} lineHeight="1">
+              {numero}
+            </Text>
+          </Flex>
 
-        {/* El carácter chino: grande si no hay foto, montado abajo si la hay */}
-        <Flex position="absolute" inset={0} align={sinFoto ? "center" : "flex-end"}
-              justify={sinFoto ? "center" : "flex-start"} px={{ base: 5, md: 6 }} pb={sinFoto ? 0 : 3}>
-          <Text color={tcmTxt} lineHeight="1" fontWeight={700}
-                fontSize={sinFoto ? { base: "6xl", md: "7xl" } : { base: "4xl", md: "5xl" }}
-                style={{ textShadow: `0 2px 10px ${tcmBg}, 0 0 26px ${tcmBg}` }}>
-            {ley.hanzi}
-          </Text>
-        </Flex>
-      </Box>
+          {/* El carácter chino: grande si no hay foto, montado abajo si la hay */}
+          <Flex position="absolute" inset={0} align={sinFoto ? "center" : "flex-end"}
+                justify={sinFoto ? "center" : "flex-start"} px={{ base: 5, md: 5 }} pb={sinFoto ? 0 : 3}>
+            <Text color={tcmTxt} lineHeight="1" fontWeight={700}
+                  fontSize={sinFoto ? { base: "6xl", md: "7xl" } : { base: "4xl", md: "5xl" }}
+                  style={{ textShadow: `0 2px 10px ${tcmBg}, 0 0 26px ${tcmBg}` }}>
+              {ley.hanzi}
+            </Text>
+          </Flex>
+        </Box>
 
-      {/* Texto */}
-      <Box position="relative" zIndex={1} flex="1" px={{ base: 6, md: 7 }} py={{ base: 5, md: 6 }}>
+        {/* Texto */}
+        <Box flex="1" minW={0} px={{ base: 6, md: 7 }} py={{ base: 5, md: 6 }}>
         <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"
               opacity={0.75} style={{ textShadow: INK_SHADOW }}>
           {ley.pinyin}
@@ -221,7 +232,8 @@ function LeyCard({ ley, numero }: { ley: LeyTao; numero: number }) {
             {ley.enTuCuerpo}
           </Text>
         </Flex>
-      </Box>
+        </Box>
+      </Flex>
     </Box>
   );
 }

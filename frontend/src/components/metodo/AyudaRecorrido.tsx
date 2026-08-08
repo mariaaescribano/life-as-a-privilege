@@ -5,6 +5,7 @@ import {
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
+import { scrollAcuarela } from "./psicologiaGlow";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { AgendarLlamada } from "../global/AgendarLlamada";
 import { LlamadaIcon } from "../global/BotonCompania";
@@ -19,6 +20,11 @@ const PAPEL = "#fbf4e8";
 // Halo claro para que la tinta se lea sobre el fondo de acuarela (igual que en
 // el resto del recorrido de psicología).
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
+
+// Barra de scroll de los popups de acuarela (carril transparente: se sigue
+// viendo la foto de psicología de punta a punta del box). Vive en psicologiaGlow
+// para que la usen todas las cajas del recorrido, no solo estos popups.
+const SCROLL_ACUARELA = scrollAcuarela(TINTA);
 
 // Curso (de acceso libre) que se muestra en el popup «Orientación» de cada
 // página del recorrido. Varía por página: añade aquí la pareja página → id de
@@ -701,22 +707,24 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
 
       <Flex position="fixed" bottom={{ base: 4, md: 6 }} right={{ base: 4, md: 6 }} zIndex={20}
             direction="column" align="flex-end" gap={2}>
+        {/* Orden fijo de la columna: Ejemplo arriba, Orientación en medio y
+            «Agenda una llamada» SIEMPRE abajo del todo. */}
         {esInicio ? (
           <>
-            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>{t("llamada.agenda")}</BotonAyuda>
             <BotonAyuda onClick={() => setCursoOpen(true)}>{t("metodo.ayuda.orientacion")}</BotonAyuda>
+            <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>{t("llamada.agenda")}</BotonAyuda>
           </>
         ) : (
           <>
             <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>{t("metodo.ayuda.ejemplo")}</BotonAyuda>
-            {!ocultarCompania && (
-              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>{t("llamada.agenda")}</BotonAyuda>
-            )}
             <BotonAyuda onClick={() => {
               if (pagina === "regulacion") setPreparacionOpen(true);   // «Antes de empezar»
               else if (curso) setCursoOpen(true);
               else setAbierto("orientacion");
             }}>{t("metodo.ayuda.orientacion")}</BotonAyuda>
+            {!ocultarCompania && (
+              <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>{t("llamada.agenda")}</BotonAyuda>
+            )}
           </>
         )}
       </Flex>
@@ -728,7 +736,8 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
           <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <ModalCloseButton color={TINTA} zIndex={3} />
-            <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
+            <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}
+                       sx={SCROLL_ACUARELA}>
               {sec && (
                 <Flex direction="column" gap={4}>
                   <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
@@ -823,7 +832,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}
                  maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
-                 sx={{ "&::-webkit-scrollbar": { width: "6px" }, "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "9999px" } }}>
+                 sx={SCROLL_ACUARELA}>
               <Box as="button" onClick={() => setEjemplosOpen(false)} position="absolute" top={3} right={3} zIndex={2}
                    w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
                    color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
@@ -973,7 +982,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}
                  maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
-                 sx={{ "&::-webkit-scrollbar": { width: "6px" }, "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "9999px" } }}>
+                 sx={SCROLL_ACUARELA}>
               <Box as="button" onClick={() => setPreparacionOpen(false)} position="absolute" top={3} right={3} zIndex={2}
                    w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
                    color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"

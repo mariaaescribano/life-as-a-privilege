@@ -40,8 +40,8 @@ interface Nivel {
   superado?: string;
   /** Antetítulo (por defecto «Nivel {n}»). P.ej. la práctica usa «Práctica». */
   eyebrow?: string;
-  /** Icono del círculo en vez del número: "gota" (análisis) o "avanzado" (PROFUNDIZA). */
-  iconKind?: "gota" | "avanzado";
+  /** Icono del círculo en vez del número: "avanzado" (PROFUNDIZA). */
+  iconKind?: "avanzado";
 }
 
 const NIVELES: Nivel[] = [
@@ -50,8 +50,6 @@ const NIVELES: Nivel[] = [
   { n: 2, titulo: "VIDA", sub: "El milagro de ser un cuerpo.", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho", superado: "organismo_hecho" },
   // 3ª tarjeta · contenido avanzado: bloqueado hasta superar los dos primeros niveles.
   { n: 3, titulo: "PROFUNDIZA", sub: "Para los que quieren toda la verdad.", ruta: "/metodo/fisiologia/profundiza", requiere: ["estructuras_hecho", "organismo_hecho"], eyebrow: "Avanzado", iconKind: "avanzado" },
-  // 4ª tarjeta · práctica (no es un nivel del ascenso): va DESPUÉS de Sistemas.
-  { n: 4, titulo: "TU ANALÍTICA", sub: "Aprende a leer tu análisis de sangre.", ruta: "/metodo/fisiologia/analitica", eyebrow: "Práctica", iconKind: "gota" },
 ];
 
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
@@ -60,15 +58,6 @@ const Candado = ({ size }: { size: any }) => (
        w={size} h={size} fill={fisiologiaTxt}
        style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 1px 3px rgba(0,0,0,0.6))" }}>
     <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
-  </Box>
-);
-
-// SVG informe (análisis de sangre) para la tarjeta de práctica.
-const Gota = ({ size }: { size: any }) => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-       w={size} h={size} fill={fisiologiaTxt}
-       style={{ filter: `drop-shadow(0 1px 3px ${fisiologiaBg})` }}>
-    <path d="M320-480v-80h320v80H320Zm0-160v-80h320v80H320Zm-80 240h300q29 0 54 12.5t42 35.5l84 110v-558H240v400Zm0 240h442L573-303q-6-8-14.5-12.5T540-320H240v160Zm480 80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h480q33 0 56.5 23.5T800-800v640q0 33-23.5 56.5T720-80Zm-480-80v-640 640Zm0-160v-80 80Z" />
   </Box>
 );
 
@@ -123,14 +112,12 @@ function NivelBox({ nivel, locked, done, onEnter }: { nivel: Nivel; locked: bool
 
       <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center"
             h="100%" gap={{ base: 2, md: 2.5 }} px={{ base: 5, md: 4 }} py={{ base: 6, md: 7 }}>
-        {/* Círculo con el número del nivel (o icono de práctica; candado si bloqueado) */}
+        {/* Círculo con el número del nivel (o su icono; candado si bloqueado) */}
         <Box position="relative" flexShrink={0} w={{ base: "54px", md: "62px" }} h={{ base: "54px", md: "62px" }} mb={1}>
           <Box w="100%" h="100%" borderRadius="full"
                border={`2px solid ${locked ? `${fisiologiaTxt}88` : fisiologiaTxt}`}
                bg={`${fisiologiaBg}cc`} display="flex" alignItems="center" justifyContent="center">
-            {nivel.iconKind === "gota" ? (
-              <Gota size={{ base: "26px", md: "30px" }} />
-            ) : nivel.iconKind === "avanzado" ? (
+            {nivel.iconKind === "avanzado" ? (
               <Profundiza size={{ base: "28px", md: "32px" }} />
             ) : (
               <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1"
@@ -258,8 +245,8 @@ export default function MetodoFisiologiaNiveles() {
             </Text>
           </Reveal>
 
-          {/* Las 4 tarjetas en fila (en móvil se apilan). Entran de izquierda a
-              derecha con retraso escalonado. La 4ª (TU ANALÍTICA) va tras Sistemas. */}
+          {/* Las 3 tarjetas en fila (en móvil se apilan). Entran de izquierda a
+              derecha con retraso escalonado. */}
           <Flex direction={{ base: "column", md: "row" }} align="stretch"
                 justify="center" gap={{ base: 4, md: 4 }} w="100%">
             {NIVELES.map((nivel, i) => {

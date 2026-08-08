@@ -44,7 +44,7 @@ import {
   SIMBOLOS_POR_PERSONA,
   type PersonaGenograma,
 } from "../../components/metodo/psicologiaRecorrido";
-import { glowHeader } from "../../components/metodo/psicologiaGlow";
+import { glowHeader, scrollAcuarela } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
   neuropsicologiaBg,
@@ -266,8 +266,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
         {/* Cuerpo scrollable: el selector de personajes/animales */}
         <Box position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
              px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}
-             sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
-                   "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
+             sx={scrollAcuarela(TINTA)}>
 
           <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3"
                 style={{ textShadow: INK_SHADOW }}>

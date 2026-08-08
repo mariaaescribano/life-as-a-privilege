@@ -1466,7 +1466,7 @@ export default function MetodoFisiologiaTodasCelulas() {
             <MetodoStepHeader
               icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
               title="Las células de tus órganos"
-              pageLabel="2/5"
+              pageLabel="2/4"
               compact
               bgColor={`${fisiologiaBg}dd`}
               color={fisiologiaTxt}

@@ -82,7 +82,7 @@ export default function MetodoTcmCursos() {
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Recetas", onClick: () => navigate("/metodo/tcm/recetas") }}
+            prev={{ label: "← Tu cocina", onClick: () => navigate("/metodo/tcm/recetas") }}
             extra={ilustracionesBtn}
             next={fisioSuscrito
               ? { label: "Fisiología →", onClick: () => navigate("/metodo/fisiologia") }

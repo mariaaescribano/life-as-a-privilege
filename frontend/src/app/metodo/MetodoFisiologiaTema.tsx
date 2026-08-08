@@ -16,7 +16,8 @@ import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
 import { VolverFisio } from "../../components/metodo/VolverFisio";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
-import { temaByKey, PROFUNDIZA_LEIDAS_KEY, PROFUNDIZA_COMICS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
+import { PROFUNDIZA_LEIDAS_KEY, PROFUNDIZA_COMICS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
+import { useTemaProfundiza } from "../../hardCoded/espacio/useTemaProfundiza";
 
 // Tarjeta de una ficha (neurotransmisor, hormona…): imagen + nombre. Rejilla de 3.
 // Todos los temas usan la MISMA iluminación (la de Neurotransmisores/Hormonas):
@@ -101,7 +102,7 @@ export default function MetodoFisiologiaTema() {
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
 
-  const tema: TemaProfundiza | undefined = temaByKey(temaKey || "");
+  const tema: TemaProfundiza | undefined = useTemaProfundiza(temaKey || "");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -140,6 +141,18 @@ export default function MetodoFisiologiaTema() {
 
   const tieneComic = (tema.comicIntro?.length ?? 0) > 0;
   const tieneFichas = tema.fichas.length > 0;
+  // Ya se han leído TODAS las fichas: se descubre la frase de cierre del tema.
+  const completo = tieneFichas && tema.fichas.every((f) => leidas.has(f.key));
+
+  // Temas que se recorren por ZONAS (el cerebro: corteza → centro → base): las
+  // fichas se reparten en bloques, cada uno con su título y su entradilla. Las
+  // zonas sin fichas no se pintan. `desde` mantiene la cascada de entrada
+  // corriendo de un bloque al siguiente, para que no se reinicie en cada zona.
+  let desde = 0;
+  const zonas = (tema.zonas ?? [])
+    .map((z) => ({ ...z, fichas: tema.fichas.filter((f) => f.zona === z.zona) }))
+    .filter((z) => z.fichas.length > 0)
+    .map((z) => { const inicio = desde; desde += z.fichas.length; return { ...z, inicio }; });
 
   // Abre una ficha y la marca como leída (se guarda en BD). Se usa tanto al
   // pulsar la caja como al navegar con las flechas dentro del modal.
@@ -181,6 +194,19 @@ export default function MetodoFisiologiaTema() {
       headers: { Authorization: `Bearer ${token}` },
     }).catch(() => { /* se reintenta la próxima vez */ });
   };
+
+  // Una rejilla de fichas. `desdeI` es el número de fichas que van antes, para
+  // que la cascada de entrada siga corriendo entre zonas en vez de reiniciarse.
+  const rejilla = (fichas: Ficha[], desdeI = 0) => (
+    <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+      {fichas.map((f, i) => (
+        <Reveal key={f.key} direction="up" distance={20} delay={0.05 * (desdeI + i)} duration={0.5} w="100%" display="flex">
+          <FichaBox ficha={f} temaColor={tema.color} active={ficha?.key === f.key}
+                    leido={leidas.has(f.key)} onClick={() => verFicha(f)} />
+        </Reveal>
+      ))}
+    </SimpleGrid>
+  );
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
@@ -260,14 +286,40 @@ export default function MetodoFisiologiaTema() {
                   </Text>
                 </Reveal>
               )}
-              <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-                {tema.fichas.map((f, i) => (
-                  <Reveal key={f.key} direction="up" distance={20} delay={0.05 * i} duration={0.5} w="100%" display="flex">
-                    <FichaBox ficha={f} temaColor={tema.color} active={ficha?.key === f.key}
-                              leido={leidas.has(f.key)} onClick={() => verFicha(f)} />
+              {zonas.length === 0 ? rejilla(tema.fichas) : zonas.map((z) => (
+                <Flex key={z.zona} direction="column" w="100%" gap={{ base: 3, md: 4 }}
+                      mt={z.inicio > 0 ? { base: 4, md: 6 } : 0}>
+                  <Reveal direction="up" distance={14} duration={0.55} w="100%">
+                    <Flex direction="column" align="center" gap={1.5} w="100%">
+                      <Flex align="center" gap={{ base: 3, md: 4 }} w="100%">
+                        <Box flex="1" h="1px" bg={`${fisiologiaTxt}44`} />
+                        <Text color={fisiologiaTxt} fontWeight="700" fontSize={{ base: "md", md: "xl" }}
+                              letterSpacing="0.14em" textTransform="uppercase" whiteSpace="nowrap"
+                              style={{ textShadow: `0 0 12px ${fisiologiaTxt}66, 0 0 28px ${fisiologiaTxt}33` }}>
+                          {z.titulo}
+                        </Text>
+                        <Box flex="1" h="1px" bg={`${fisiologiaTxt}44`} />
+                      </Flex>
+                      <Text color="rgba(255,255,255,0.82)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+                            textAlign="center" lineHeight="1.7" maxW="560px">
+                        {z.entradilla}
+                      </Text>
+                    </Flex>
                   </Reveal>
-                ))}
-              </SimpleGrid>
+                  {rejilla(z.fichas, z.inicio)}
+                </Flex>
+              ))}
+
+              {/* Frase de cierre: solo cuando ya se han leído todas las fichas. */}
+              {tema.cierre && completo && (
+                <Reveal direction="up" distance={16} duration={0.7} w="100%" display="flex" justifyContent="center">
+                  <Text color="white" fontSize={{ base: "md", md: "xl" }} fontStyle="italic" textAlign="center"
+                        lineHeight="1.9" maxW="620px" mt={{ base: 4, md: 6 }}
+                        style={{ textShadow: "0 0 14px rgba(255,255,255,0.35), 0 0 30px rgba(180,255,245,0.2)" }}>
+                    {tema.cierre}
+                  </Text>
+                </Reveal>
+              )}
             </>
           ) : (
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">

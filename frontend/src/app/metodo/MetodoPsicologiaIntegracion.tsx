@@ -15,6 +15,7 @@ import { Glifo } from "../../components/metodo/Glifo";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { SaberMasModal } from "../../components/metodo/Planetas/SaberMasModal";
+import { ArquetiposBloqueados } from "../../components/metodo/ArquetiposBloqueados";
 import { CUERPOS, cuerpoByKey, type Cuerpo } from "../../components/metodo/astrologiaData";
 import { type CartaData } from "../../components/metodo/Planetas/useCartaPlanetas";
 import {
@@ -433,16 +434,24 @@ export default function MetodoPsicologiaIntegracion() {
                        bgSize="cover" bgPosition="center" />
                   {/* pb permanente: siempre deja un respiro al fondo del scroll. */}
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={{ base: 3, md: 4 }}>
-                    <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />} titulo="Tus arquetipos" apoyo="Toca una carta para relacionarla; el ojo abre su lectura." />
+                    <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />} titulo="Tus arquetipos"
+                                      apoyo={arquetipos.length === 0
+                                        ? "Se abren cuando tengas hecha tu carta astral."
+                                        : "Toca una carta para relacionarla; el ojo abre su lectura."} />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }}
                          sx={{ ...SCROLL_SX, scrollbarColor: `${PAPEL}55 transparent`,
                                "&::-webkit-scrollbar": { width: "7px" },
                                "&::-webkit-scrollbar-thumb": { background: `${PAPEL}55`, borderRadius: "8px" } }}>
                       {arquetipos.length === 0 ? (
-                        <Flex h="100%" align="center">
-                          <EstadoVacio texto="Tus arquetipos aparecerán cuando completes tu carta astral."
-                                       accion="Ir a Astrología →" onClick={() => navigate("/metodo/astrologia")} />
-                        </Flex>
+                        // Sin carta astral la columna va BLOQUEADA: se explica qué
+                        // se hace aquí y que para completarlo hace falta la carta.
+                        <ArquetiposBloqueados
+                          onIr={() => navigate("/metodo/astrologia")}
+                          texto={[
+                            "En esta página reúnes en cada relación tus heridas y los arquetipos de tu carta: así ves con qué energía te relacionas y de dónde viene.",
+                            "Puedes crear tus relaciones y colocar en ellas tus heridas igualmente, pero para hacerla completa necesitas tu carta astrológica.",
+                          ]}
+                        />
                       ) : (
                         <Flex direction="column" gap={{ base: 4, md: 5 }}>
                           {arquetipos.map((p) => (

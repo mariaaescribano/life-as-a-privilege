@@ -25,6 +25,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { Glifo } from "../../components/metodo/Glifo";
 import { SaberMasModal } from "../../components/metodo/Planetas/SaberMasModal";
+import { ArquetiposBloqueados } from "../../components/metodo/ArquetiposBloqueados";
 import { CUERPOS, cuerpoByKey, type Cuerpo } from "../../components/metodo/astrologiaData";
 import { type CartaData } from "../../components/metodo/Planetas/useCartaPlanetas";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
@@ -413,18 +414,21 @@ export default function MetodoPsicologiaDonesEspejo() {
                        bgSize="cover" bgPosition="center" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={COL_PB}>
                     <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />}
-                                      titulo="Tus arquetipos" apoyo="Toca una carta para unirla al don activo; el ojo abre su lectura." />
+                                      titulo="Tus arquetipos"
+                                      apoyo={arquetipos.length === 0
+                                        ? "Se abren cuando tengas hecha tu carta astral."
+                                        : "Toca una carta para unirla al don activo; el ojo abre su lectura."} />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_CLARO}>
                       {arquetipos.length === 0 ? (
-                        <Flex direction="column" align="center" justify="center" h="100%" gap={3} textAlign="center" px={4}>
-                          <Text color={PAPEL} fontStyle="italic" opacity={0.92} fontSize="sm">
-                            Tus arquetipos aparecerán cuando completes tu carta astral.
-                          </Text>
-                          <Box as="button" onClick={() => navigate("/metodo/astrologia")} px={5} py={2} borderRadius="full"
-                               bg={PAPEL} color={TINTA} fontWeight="700" fontSize="sm" cursor="pointer">
-                            Ir a Astrología →
-                          </Box>
-                        </Flex>
+                        // Sin carta astral la columna va BLOQUEADA: se explica qué
+                        // se hace aquí y que para completarlo hace falta la carta.
+                        <ArquetiposBloqueados
+                          onIr={() => navigate("/metodo/astrologia")}
+                          texto={[
+                            "En esta página pones frente a frente lo que reconoces de ti y los arquetipos de tu carta: el espejo te devuelve tus dones con nombre propio.",
+                            "Puedes escribir tus dones igualmente, pero para hacerlo completo necesitas tu carta astrológica.",
+                          ]}
+                        />
                       ) : (
                         <Flex direction="column" gap={{ base: 4, md: 5 }}>
                           {arquetipos.map((p) => (

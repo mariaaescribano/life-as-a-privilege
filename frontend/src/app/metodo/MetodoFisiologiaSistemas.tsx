@@ -129,7 +129,7 @@ export default function MetodoFisiologiaSistemas() {
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title="Sistemas"
-            pageLabel="3/5"
+            pageLabel="3/4"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
@@ -137,7 +137,7 @@ export default function MetodoFisiologiaSistemas() {
             mb={0}
             prev={{ label: "← Las células", onClick: () => navigate("/metodo/fisiologia/todas-tus-celulas") }}
             extra={celulasBtn}
-            next={{ label: "El cerebro →", onClick: () => navigate("/metodo/fisiologia/cerebro"),
+            next={{ label: "El cuerpo →", onClick: () => navigate("/metodo/fisiologia/organismo"),
                     disabled: vistos.size < SISTEMAS.length,
                     disabledTooltip: "Primero lee todos los sistemas" }}
           />
