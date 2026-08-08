@@ -9,7 +9,6 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -116,14 +115,8 @@ export default function MetodoTcmRecetas() {
           </Reveal>
 
           {/* ── CABECERA DEL ELEMENTO · foto de fondo + cómo se cocina ── */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-               border={`1px solid ${E.color}66`}
-               boxShadow={`${CAJA_GLOW}, 0 0 48px ${E.color}55, inset 0 0 70px ${E.color}22`}>
-            <Box key={`bg-${elActivo}`} position="absolute" inset={0}
-                 bgImage={`url('${encodeURI(FOTO_ELEMENTO[elActivo])}')`} bgSize="cover" bgPosition="center"
-                 sx={{ "@keyframes bgIn": { from: { opacity: 0 }, to: { opacity: 1 } } }}
-                 style={{ animation: "bgIn 0.5s ease" }} />
-            <Box position="absolute" inset={0} bgGradient="linear(to-r, rgba(0,0,0,0.78), rgba(0,0,0,0.35))" />
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+            <FondoElemento elemento={elActivo} />
 
             <Box key={elActivo} position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 6, md: 8 }}
                  sx={{ "@keyframes elemIn": { from: { opacity: 0, transform: "translateY(12px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}
@@ -152,26 +145,6 @@ export default function MetodoTcmRecetas() {
             </Box>
           </Box>
 
-          {/* ── LO QUE APORTAR CADA DÍA ── */}
-          <Seccion>Cada día</Seccion>
-          <Reveal key={`dia-${elActivo}`} inView direction="up" distance={22} scaleFrom={0.99} duration={0.66}
-                  amount={0.12} w="100%">
-            <Panel>
-              <Flex direction="column" gap={3}>
-                {cocina.cadaDia.map((g, i) => (
-                  <Flex key={i} gap={3} align="flex-start">
-                    <Flex flexShrink={0} align="center" justify="center" w="22px" h="22px" borderRadius="full"
-                          mt="3px" bg={`${E.color}33`} border={`1px solid ${E.color}`}>
-                      <Text color="white" fontSize="2xs" fontWeight={800} lineHeight="1">{i + 1}</Text>
-                    </Flex>
-                    <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.75"
-                          style={{ textShadow: INK_SHADOW }}>{g}</Text>
-                  </Flex>
-                ))}
-              </Flex>
-            </Panel>
-          </Reveal>
-
           {/* ── LOS INGREDIENTES, POR FAMILIAS ── */}
           <Seccion>Ingredientes que aportar</Seccion>
           <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
@@ -181,7 +154,7 @@ export default function MetodoTcmRecetas() {
               // remontan y vuelven a entrar en escena en vez de cambiar de texto.
               <Reveal key={`${elActivo}-${g.key}`} inView direction="up" distance={24} scaleFrom={0.98}
                       duration={0.68} amount={0.12} w="100%" h="100%">
-                <Panel h="100%">
+                <Panel h="100%" elemento={elActivo}>
                   <Rotulo color={E.color}>{g.titulo}</Rotulo>
                   <Flex direction="column" gap={3}>
                     {g.alimentos.map((a, i) => (
@@ -215,40 +188,6 @@ export default function MetodoTcmRecetas() {
               </Reveal>
             ))}
           </Box>
-
-          {/* ── LO QUE CONVIENE BAJAR + UN DÍA CUALQUIERA ── */}
-          <Seccion>Baja un poco</Seccion>
-          <Reveal key={`baja-${elActivo}`} inView direction="up" distance={20} duration={0.64} amount={0.15} w="100%">
-            <Panel>
-              <Flex gap={2.5} wrap="wrap">
-                {cocina.baja.map((b, i) => (
-                  <Etiqueta key={i} color={E.color}>{b}</Etiqueta>
-                ))}
-              </Flex>
-            </Panel>
-          </Reveal>
-
-          <Seccion>Así queda un día</Seccion>
-          <Reveal key={`jornada-${elActivo}`} inView direction="up" distance={20} duration={0.64} amount={0.12} w="100%">
-            <Panel>
-              <Flex direction="column" gap={4}>
-                {cocina.dia.map((m, i) => (
-                  <Flex key={i} direction={{ base: "column", sm: "row" }} gap={{ base: 1, sm: 4 }} align="flex-start">
-                    <Text flexShrink={0} w={{ base: "auto", sm: "130px" }} color={E.color}
-                          fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.08em"
-                          textTransform="uppercase" mt={{ base: 0, sm: "3px" }}
-                          style={{ textShadow: `0 0 10px ${E.color}55, ${INK_SHADOW}` }}>
-                      {m.momento}
-                    </Text>
-                    <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                          minW={0} style={{ textShadow: INK_SHADOW }}>
-                      {m.texto}
-                    </Text>
-                  </Flex>
-                ))}
-              </Flex>
-            </Panel>
-          </Reveal>
 
           {/* ── NOTA FINAL ── */}
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
@@ -310,8 +249,8 @@ function CoccionCard({ coccion, elemento, numero, color }: {
 
   return (
     <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden"
-         boxShadow={`${CAJA_GLOW}, 0 0 30px ${color}33`} display="flex" flexDirection="column">
-      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
+         boxShadow={CAJA_GLOW} display="flex" flexDirection="column">
+      <FondoElemento elemento={elemento} />
 
       <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="stretch" h="100%">
         {!sinFoto && (
@@ -332,7 +271,7 @@ function CoccionCard({ coccion, elemento, numero, color }: {
             {coccion.nombre}
           </Text>
           <Box h="1px" w="100%" my={{ base: 3.5, md: 4 }}
-               bgGradient="linear(to-r, transparent, #ffffff, transparent)" />
+               bgGradient={`linear(to-r, transparent, ${tcmTxt}, transparent)`} />
           <Rotulo color={color}>Cómo</Rotulo>
           <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
                 style={{ textShadow: INK_SHADOW }}>{coccion.como}</Text>
@@ -367,22 +306,30 @@ function Rotulo({ children, color, mt }: { children: React.ReactNode; color: str
   );
 }
 
-// ── Etiqueta pequeña ─────────────────────────────────────────────────────────
-function Etiqueta({ children, color }: { children: React.ReactNode; color: string }) {
+// ── Fondo de caja · la foto DEL ELEMENTO, no la de la disciplina ─────────────
+// Cada elemento tiñe su página entera: las cajas llevan su acuarela de fondo
+// con un velo negro encima para que el texto se lea sin pelearse con la foto.
+function FondoElemento({ elemento }: { elemento: Elemento }) {
   return (
-    <Box px={3} py={1.5} borderRadius="full" bg={`${color}2e`} border={`1px solid ${color}aa`}>
-      <Text color="white" fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.04em">
-        {children}
-      </Text>
-    </Box>
+    <>
+      <Box key={`bg-${elemento}`} position="absolute" inset={0}
+           bgImage={`url('${encodeURI(FOTO_ELEMENTO[elemento])}')`} bgSize="cover" bgPosition="center"
+           sx={{ "@keyframes bgIn": { from: { opacity: 0 }, to: { opacity: 1 } } }}
+           style={{ animation: "bgIn 0.5s ease" }} />
+      <Box position="absolute" inset={0} bg="rgba(0,0,0,0.66)" />
+    </>
   );
 }
 
 // ── Box común (mismo que el resto del recorrido) ─────────────────────────────
-function Panel({ children, h }: { children: React.ReactNode; h?: any }) {
+// El glow es SIEMPRE el del header (CAJA_GLOW), sin halos de color añadidos:
+// con ellos las cajas brillaban más que la cabecera.
+function Panel({ children, h, elemento }: {
+  children: React.ReactNode; h?: any; elemento: Elemento;
+}) {
   return (
     <Box position="relative" w="100%" h={h} borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
-      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
+      <FondoElemento elemento={elemento} />
       <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
         {children}
       </Box>

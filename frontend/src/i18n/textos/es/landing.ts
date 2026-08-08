@@ -9,10 +9,19 @@
  * `../en/landing.ts`.
  */
 export const landing = {
+  // ── Marca (lo primero de la página) ────────────────────────────────────
+  // El nombre de la CASA, no el de un proyecto: no se traduce, se pinta igual
+  // en los dos idiomas (la página lo pone en mayúsculas). Debajo, la frase que
+  // resume las dos cosas que se hacen aquí.
+  "landing.marca": "Life as a Privilege",
+  "landing.marca.lema": "Entenderte es la primera forma de cuidarte.",
+
   // ── Intro (cabecera) ───────────────────────────────────────────────────
   // Las dos se pueden dejar en "" y la landing no pinta nada en su lugar (sin
   // hueco muerto). Aquí NO va ningún símbolo: el mandala es de El Mapa.
-  "landing.intro.titulo": "Dos proyectos. Una misma mirada.",
+  // El título va vacío desde que arriba está la marca: dos titulares seguidos
+  // se quitaban fuerza el uno al otro.
+  "landing.intro.titulo": "",
   "landing.intro.sub":
     "Conocerte por dentro, y acompañarte cuando la vida te cambia de sitio. Elige por dónde quieres entrar.",
 
@@ -40,9 +49,9 @@ export const landing = {
   // El nombre se pinta en mayúsculas (igual que en la portada del proyecto),
   // así que aquí va escrito normal: de las mayúsculas se encarga el diseño.
   "landing.nombre.elMapa": "El Mapa",
-  "landing.lema.elMapa": "Conócete para poder cuidarte.",
+  "landing.lema.elMapa": "El dolor es inevitable, el sufrimiento es opcional. Dale un sentido a tu Vida.",
   "landing.desc.elMapa":
-    "Ocho disciplinas —astrología, psicología, ayurveda, medicina china, fisiología, nutrición, cábala e historia— para entender cómo funcionas y dejar de pelearte contigo.",
+    "Viaje interactivo a través de 8 disciplinas para comprender tu mente, tu cuerpo y tu historia.",
 
   // ── Nace una madre ─────────────────────────────────────────────────────
   // BORRADOR: escrito a partir del título, para que la caja no salga vacía.

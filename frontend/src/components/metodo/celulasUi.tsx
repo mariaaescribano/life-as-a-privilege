@@ -5,6 +5,7 @@ import { keyframes } from "@emotion/react";
 import { disciplinaBgImg } from "../global/DisciplinaBgLayer";
 import { FotoBox } from "./FotoBox";
 import { AvisoLeida } from "./MarcaLeido";
+import { ClavesRapidas } from "./ClavesRapidas";
 import { fisiologiaTxt, fisiologiaBg, fisiologiaNom } from "../../GlobalVariables";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
@@ -410,32 +411,10 @@ export function FichaFisioModal({
               {titulo}
             </Text>
 
-            {/* Las 3 claves: cajas blancas apiladas con un punto de acento.
-                Lo primero que se ve, para aprender la célula en 3-5 segundos. */}
-            {claves && claves.length > 0 && (
-              <Flex direction="column" gap={{ base: 2, md: 2.5 }} mb={{ base: 5, md: 6 }} w="100%">
-                {claves.map((c, i) => (
-                  <Flex
-                    key={i}
-                    align="center"
-                    gap={3}
-                    bg="rgba(255,255,255,0.96)"
-                    borderRadius="lg"
-                    px={{ base: 3.5, md: 4 }}
-                    py={{ base: 2, md: 2.5 }}
-                    boxShadow="0 2px 10px rgba(0,0,0,0.28)"
-                  >
-                    <Box flexShrink={0} w="8px" h="8px" borderRadius="full" bg={accent}
-                         boxShadow={`0 0 8px ${accent}`} />
-                    <Text color={bgColor} fontWeight={700} fontSize={{ base: "sm", md: "md" }}
-                          lineHeight="1.3" letterSpacing="0.01em" fontFamily="'EB Garamond', serif"
-                          textAlign="left">
-                      {c}
-                    </Text>
-                  </Flex>
-                ))}
-              </Flex>
-            )}
+            {/* Las 3 claves: lo primero que se ve, para aprender la célula en
+                3-5 segundos. El bloque vive en ClavesRapidas, que es el mismo
+                que usa el visor de cómic (las fichas de Nutrición). */}
+            <ClavesRapidas claves={claves} accent={accent} tinta={bgColor} />
 
             <Flex direction="column" gap={{ base: 5, md: 6 }}>
               {parrafos.map((p, i) => (

@@ -210,10 +210,12 @@ function CajaProyecto({ p, delay }: { p: ProyectoLanding; delay: number }) {
 
         <Box position="relative" zIndex={1} display="flex" flexDirection="column" h="100%">
           {/* ── Logo del proyecto ──
+              Va CENTRADO en la caja (el texto de debajo sigue a la izquierda:
+              el mandala hace de emblema, no de primera línea del texto).
               El hueco se reserva SIEMPRE (aunque el proyecto no tenga logo
               todavía): así los dos títulos quedan a la misma altura y las cajas
               no se descuadran la una respecto a la otra. */}
-          <Flex h={ALTO_LOGO} align="center" justify="flex-start" flexShrink={0}>
+          <Flex h={ALTO_LOGO} align="center" justify="center" flexShrink={0}>
             {p.logo && (
               <Float amplitude={5} duration={5.5}>
                 <Image
@@ -418,7 +420,51 @@ const Landing = () => {
       <HeaderLanding />
 
       <Box flex="1">
-        {/* ── 1 · INTRO ──
+        {/* ── 1 · LA MARCA ──
+            El nombre de la casa y la frase que resume las dos cosas que se
+            hacen aquí. Va antes que nada y sin símbolo: el mandala es de El
+            Mapa y vive en su caja. */}
+        <Flex
+          direction="column"
+          align="center"
+          textAlign="center"
+          gap={{ base: 4, md: 5 }}
+          pt={{ base: 12, md: 20 }}
+          px={{ base: 8, md: 12 }}
+        >
+          <Reveal direction="up" distance={24} duration={0.95} delay={0.05}>
+            <Text
+              color={arenaTinta}
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "3xl", md: "6xl" }}
+              letterSpacing={{ base: "0.12em", md: "0.16em" }}
+              textTransform="uppercase"
+              lineHeight="1.15"
+            >
+              {t("landing.marca")}
+            </Text>
+          </Reveal>
+
+          {/* Filete corto: separa el nombre de la frase sin meter otra línea. */}
+          <Box h="1px" w={{ base: "90px", md: "140px" }} bg={arenaTintaSuave} opacity={0.5} />
+
+          <Reveal direction="up" distance={20} duration={0.9} delay={0.18}>
+            <Text
+              color={arenaTinta}
+              fontFamily="'EB Garamond', serif"
+              fontStyle="italic"
+              fontSize={{ base: "lg", md: "2xl" }}
+              letterSpacing="0.02em"
+              lineHeight="1.6"
+              maxW="720px"
+            >
+              {t("landing.marca.lema")}
+            </Text>
+          </Reveal>
+        </Flex>
+
+        {/* ── 2 · INTRO ──
             La única cabecera de la página, y sin ningún símbolo: el mandala
             pertenece a El Mapa y vive en su caja. Las dos frases se pueden dejar
             vacías en los textos y no dejan hueco muerto. */}
@@ -428,7 +474,7 @@ const Landing = () => {
             align="center"
             textAlign="center"
             gap={{ base: 5, md: 6 }}
-            pt={{ base: 12, md: 20 }}
+            pt={{ base: 7, md: 9 }}
             px={{ base: 8, md: 12 }}
           >
             {introTitulo && (

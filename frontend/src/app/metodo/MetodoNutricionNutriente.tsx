@@ -13,7 +13,6 @@ import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlus
 import { NutrienteCirculo } from "../../components/metodo/NutrienteCirculo";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
-import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { comicNutrienteByKey } from "../../components/metodo/comicsNutrientes";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -81,6 +80,9 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
       px={{ base: 4, md: 5 }}
       py={{ base: 2, md: 2.5 }}
       borderRadius="full"
+      // Borde con la tinta de la disciplina, como los botones del header: sin él
+      // la pastilla se fundía con el fondo claro y no se leía como botón.
+      border={`1.5px solid ${nutricionTxt}aa`}
       color={nutricionTxt}
       fontFamily="'EB Garamond', serif"
       fontWeight="600"
@@ -92,7 +94,7 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
       // disciplina, así que tocando allí cambian los dos a la vez.
       boxShadow={glowHeader(nutricionTxt)}
       transition="all 0.18s"
-      _hover={{ transform: "translateY(-1px)" }}
+      _hover={{ transform: "translateY(-1px)", borderColor: nutricionTxt }}
     >
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="full" overlay={`${nutricionBg}55`} />
       <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" gap={2}>
@@ -375,11 +377,6 @@ export default function MetodoNutricionNutriente() {
                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
                       </Box>
                       Ver ilustración
-                      {/* Ya leída: la marquita común, aquí dentro del botón. */}
-                      {comicLeido && (
-                        <MarcaLeido inline tinta={nutricionTxt} bg={nutricionBg}
-                                    size="22px" iconSize="13px" title="Leída" />
-                      )}
                     </Box>
                   )}
                 </Flex>

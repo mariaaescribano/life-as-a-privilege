@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { comicLoaderPorColor } from "./comicLoaders";
+import { ClavesRapidas } from "./ClavesRapidas";
 import { AvisoLeida } from "./MarcaLeido";
 import { astrologiaTxt } from "../../GlobalVariables";
 
@@ -33,6 +34,10 @@ export interface Vineta {
   paragraphs: string[];
   /** Encabezado opcional sobre el texto (p.ej. "La Madera genera el Fuego"). */
   titulo?: string;
+  /** Las (tres) claves de la viñeta: cajas blancas ENCIMA del texto, para que
+   *  quien tenga tres segundos se lleve lo esencial sin leerse la ficha entera.
+   *  Mismo bloque que las fichas de Fisiología (ClavesRapidas). */
+  claves?: string[];
   /** Antetítulo pequeño en mayúsculas sobre el título (p.ej. "Ciclo generador"). */
   eyebrow?: string;
   /** La ilustración de esta viñeta es VERTICAL (9:16). En vez del cuadrado
@@ -164,6 +169,10 @@ interface ComicViewerProps {
    *  ve el loader a pantalla completa. Evita ver el box con el fondo a medio
    *  cargar. Lo usan los cómics de TCM (elementos). */
   esperarFondo?: boolean;
+  /** Color de la LETRA de las claves (las cajas blancas de cada viñeta). Va
+   *  sobre blanco, así que tiene que ser oscuro: no vale heredar el color del
+   *  texto de la viñeta, que en varios cómics es blanco. */
+  clavesTinta?: string;
   /** ESCAPARATE: el cuerpo del texto sale difuminado (ilegible) y solo se leen
    *  el antetítulo y el título. Es para las páginas públicas de presentación:
    *  se ve que ahí hay una lectura entera, pero no se regala. Se desactiva la
@@ -199,6 +208,7 @@ export function ComicViewer({
   textSize,
   flechasEnBox,
   esperarFondo,
+  clavesTinta,
   textoBorroso,
 }: ComicViewerProps) {
   const t = useT();
@@ -917,6 +927,11 @@ export function ComicViewer({
                   {current.titulo}
                 </Text>
               )}
+
+              {/* Las claves de la viñeta: cajas blancas ENCIMA del texto, para
+                  leerse lo esencial en tres segundos. Mismo bloque que las
+                  fichas de Fisiología. */}
+              <ClavesRapidas claves={current.claves} accent={themeColor} tinta={clavesTinta} />
 
               {/* Cada bloque se pinta con separación (línea en blanco) respecto
                   al anterior. Con `separarFrases`, además, cada frase (tras un

@@ -81,10 +81,10 @@ export default function MetodoTcmLenguaLeer() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        {/* Columna algo más ancha que el resto de pasos (1080 en vez de 960):
-            la herramienta de la lengua necesita sitio para que las 6 fotos de
-            «El color del cuerpo» quepan en una sola fila siendo más grandes. */}
-        <Flex direction="column" align="center" w="100%" maxW="1080px" gap={7}>
+        {/* 850px = el ancho del MetodoStepHeader: ninguna caja se sale de la
+            cabecera. Las fotos de cada apartado ya no van todas en una fila:
+            son más grandes y envuelven en dos. */}
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
@@ -209,7 +209,10 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
 }) {
   return (
     <Box as="button" onClick={onClick} textAlign="center"
-         w={{ base: "calc(33.333% - 7px)", sm: "134px", md: "150px" }}
+         // Tarjetas grandes: la foto de una lengua se tiene que poder comparar
+         // con la tuya, y a 150px no se distinguía el matiz. Dos por fila en
+         // móvil y tres dentro del box de 850px.
+         w={{ base: "calc(50% - 6px)", sm: "180px", md: "212px" }}
          borderRadius="xl" overflow="hidden" cursor="pointer"
          bg={seleccionada ? `${tcmTxt}26` : "rgba(0,0,0,0.28)"}
          border={`2px solid ${seleccionada ? tcmTxt : "rgba(255,255,255,0.18)"}`}
@@ -323,7 +326,8 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
                 </Text>
 
                 {/* Separador horizontal blanco */}
-                <Box h="1px" w="100%" my={{ base: 4, md: 5 }} bgGradient="linear(to-r, transparent, #ffffff, transparent)" />
+                <Box h="1px" w="100%" my={{ base: 4, md: 5 }}
+                     bgGradient={`linear(to-r, transparent, ${tcmTxt}, transparent)`} />
 
                 {/* Qué significa */}
                 <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
@@ -380,9 +384,11 @@ function Banda({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── Separador horizontal BLANCO entre apartados (blanco completo, de lado a lado) ─
+// ── Separador horizontal entre apartados (de lado a lado) ────────────────────
+// Regla de la casa: las líneas de separación van con la tinta de la disciplina,
+// nunca en blanco.
 function Separador() {
-  return <Box h="1px" w="100%" bg="#ffffff" />;
+  return <Box h="1px" w="100%" bg={tcmTxt} />;
 }
 
 // ── Separador con el mandala en medio (entre el box de la herramienta y la
@@ -391,10 +397,10 @@ function MandalaSeparador() {
   return (
     <Reveal inView direction="none" scaleFrom={0.8} duration={0.8} amount={0.6} w="100%">
       <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" py={{ base: 1, md: 2 }}>
-        <Box flex="1" h="1px" bgGradient="linear(to-r, transparent, rgba(255,255,255,0.9))" />
+        <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${tcmTxt})`} />
         <Image src="/img/icono/life.png" alt="" h={{ base: "42px", md: "56px" }} objectFit="contain" flexShrink={0}
                style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.55)) drop-shadow(0 0 24px rgba(180,255,245,0.28))" }} />
-        <Box flex="1" h="1px" bgGradient="linear(to-l, transparent, rgba(255,255,255,0.9))" />
+        <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${tcmTxt})`} />
       </Flex>
     </Reveal>
   );

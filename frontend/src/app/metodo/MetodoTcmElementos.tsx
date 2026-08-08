@@ -25,6 +25,11 @@ import { tieneContenido, COMIC_INTRO_ELEMENTOS, ICONO_ELEMENTO } from "../../com
 
 // Mismo glow ligero que el header, para uniformar los boxes.
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
+// El halo del header es para una caja ancha: en la píldora del cómic, sus
+// capas blancas y de menta se juntan alrededor de algo pequeño y la dejan
+// encendida. Este es el mismo material pero solo con el color de la
+// disciplina, corto y discreto.
+const BOTON_GLOW = `0 0 12px ${tcmTxt}33, 0 0 26px ${tcmTxt}1a`;
 
 // Viñetas del cómic de intro (Módulo 1) en el formato del ComicViewer: cada
 // viñeta lleva su foto y un único párrafo de texto.
@@ -194,21 +199,21 @@ export default function MetodoTcmElementos() {
               letterSpacing="0.04em"
               whiteSpace="nowrap"
               cursor="pointer"
-              boxShadow={CAJA_GLOW}
+              boxShadow={BOTON_GLOW}
               textShadow="0 1px 4px rgba(58,10,10,0.95), 0 2px 10px rgba(58,10,10,0.85)"
               transition="transform 0.15s ease, box-shadow 0.15s ease"
               sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", userSelect: "none" }}
-              _hover={{ transform: "translateY(-1px)", boxShadow: `${CAJA_GLOW}, 0 0 26px ${tcmTxt}55` }}
+              _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 18px ${tcmTxt}55, 0 0 34px ${tcmTxt}26` }}
               _active={{ transform: "scale(0.97)" }}
             >
               {/* Fondo: la pintura de Medicina China + velo para que se lea */}
               <Box as="img" src={disciplinaBgImg(tcmNom)} alt="" position="absolute" inset="0"
                    w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
               <Box position="absolute" inset="0" bg={`${tcmBg}b3`} pointerEvents="none" />
-              {/* Icono de libro abierto (el cómic) */}
-              <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                   w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
-                <path d="M560-564v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-600q-38 0-73 9.5T560-564Zm0 220v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-380q-38 0-73 9t-67 27Zm0-110v-68q33-14 67.5-21t72.5-7q26 0 51 4t49 10v64q-24-9-48.5-13.5T700-490q-38 0-73 9.5T560-454ZM260-320q47 0 91.5 10.5T440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6Zm260 42q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-396q-33-14-68.5-21t-71.5-7q-47 0-93 12t-87 36v394Zm-40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740q51-30 106.5-45T700-800q52 0 102 12t96 36q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59Zm-140-353Z" />
+              {/* El icono de la disciplina, no un libro: es el mismo que preside
+                  el header de Medicina China. */}
+              <Box position="relative" zIndex={1} display="flex" flexShrink={0}>
+                <TCMIcon size={{ base: "18px", md: "20px" }} />
               </Box>
               <Box as="span" position="relative" zIndex={1}>¿Qué son los Cinco Elementos?</Box>
             </Box>

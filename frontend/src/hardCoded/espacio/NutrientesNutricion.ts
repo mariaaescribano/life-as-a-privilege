@@ -14,6 +14,10 @@ export interface NutrienteTarjeta {
   /** Foto cuadrada de la molécula/tipo. PENDIENTE de subir:
    *  /img/nutri/nutrientes/<grupo>/<key>.png */
   foto: string;
+  /** Las TRES claves de la ficha: cajas blancas encima del texto, para llevarse
+   *  lo esencial en tres segundos sin leérsela entera. Frases cortas, de una
+   *  línea, y en el mismo orden en que lo cuentan los párrafos. */
+  claves?: string[];
   parrafos: string[];
   /** Color propio de la tarjeta (para el círculo de vitaminas: cada una uno). */
   color?: string;
@@ -76,6 +80,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "glucosa",
         titulo: "Glucosa",
         foto: "/recorrido/nutricion/moleculas/glucosa.webp",
+        claves: [
+          "El combustible favorito de tus células",
+          "Al subir en sangre, la insulina manda guardarla",
+          "Si las reservas están llenas, el hígado la pasa a grasa",
+        ],
         parrafos: [
           "Es la molécula que nuestras células utilizan con más frecuencia para fabricar ATP, la energía.",
           "Cuando la ingerimos, pasa a la sangre y se libera insulina, la hormona que les dice a las células que capten la glucosa para usarla. Si hay más glucosa de la que el organismo necesita y las reservas de glucógeno están llenas, el hígado transforma la glucosa en triglicéridos y los almacena en grasa para guardarlo como reserva.",
@@ -85,6 +94,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "fructosa",
         titulo: "Fructosa",
         foto: "/recorrido/nutricion/moleculas/fructosa.webp",
+        claves: [
+          "El azúcar de la fruta y de la miel",
+          "La procesa el hígado, no las células",
+          "Con fibra es amable; en zumo llega toda de golpe",
+        ],
         parrafos: [
           "Es la molécula característica de las frutas y la miel.",
           "A diferencia de la glucosa, la mayor parte de la fructosa se procesa primero en el hígado.",
@@ -97,6 +111,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "galactosa",
         titulo: "Galactosa",
         foto: "/recorrido/nutricion/moleculas/galactosa.webp",
+        claves: [
+          "Es la mitad de la lactosa, el azúcar de la leche",
+          "La lactasa la separa; sin ella, gases e hinchazón",
+          "Una vez dentro, se convierte en glucosa",
+        ],
         parrafos: [
           "La galactosa forma parte de la lactosa, la molécula de carbohidratos presente en la leche.",
           "Para absorberla, primero debemos romper la lactosa gracias a una enzima llamada lactasa, que la divide en glucosa y galactosa.",
@@ -132,6 +151,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "insaturadas",
         titulo: "Grasas insaturadas",
         foto: "/recorrido/nutricion/moleculas/insaturado.webp",
+        claves: [
+          "Aceite de oliva, frutos secos, aguacate y pescado azul",
+          "Su curvatura mantiene flexibles tus membranas",
+          "Son con las que evolucionaste: las más eficientes",
+        ],
         parrafos: [
           "Son las grasas más habituales en alimentos como el aceite de oliva, los frutos secos, las semillas, el aguacate y el pescado azul.",
           "Su estructura presenta una o varias curvaturas que ayudan a mantener las membranas celulares flexibles y favorecen el funcionamiento normal de las células.",
@@ -142,6 +166,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "saturadas",
         titulo: "Grasas saturadas",
         foto: "/recorrido/nutricion/moleculas/saturado.webp",
+        claves: [
+          "Sobre todo en carne, lácteos y aceite de coco",
+          "Son rectas: se empaquetan y endurecen la membrana",
+          "Tu cuerpo las usa, pero en exceso pesan en el corazón",
+        ],
         parrafos: [
           "Se encuentran principalmente en productos de origen animal, como la carne o los lácteos, aunque también en algunos vegetales como el aceite de coco.",
           "Sus moléculas son rectas y pueden empaquetarse con mayor facilidad, haciendo que las membranas celulares sean más rígidas y menos eficientes.",
@@ -152,6 +181,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "trans",
         titulo: "Grasas trans",
         foto: "/recorrido/nutricion/moleculas/trans.webp",
+        claves: [
+          "Nacen en la fábrica: aceite hidrogenado a medias",
+          "Suben el colesterol LDL y bajan el HDL a la vez",
+          "No hay cantidad recomendada: lo ideal es cero",
+        ],
         parrafos: [
           "La mayoría de las grasas trans presentes en la alimentación se generan durante procesos industriales que modifican aceites vegetales para hacerlos más estables. Es decir, esa forma molecular apenas existe en la naturaleza: se fabricó en un laboratorio.",
           "Para entender qué es «trans» hay que mirar la molécula. En una grasa insaturada natural, el doble enlace deja los dos hidrógenos del mismo lado, y eso obliga a la cadena a doblarse: es la famosa curvatura, la forma «cis». En una grasa trans los hidrógenos quedan en lados opuestos y la cadena se queda recta. Ese es todo el cambio, y es enorme: una molécula que se comporta como una grasa saturada rígida aunque técnicamente siga siendo insaturada.",
@@ -193,6 +227,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "esenciales",
         titulo: "Aminoácidos esenciales",
         foto: "/recorrido/nutricion/moleculas/aminoacidoesencial.webp",
+        claves: [
+          "Tu cuerpo no sabe fabricarlos",
+          "Hay que comerlos, sí o sí",
+          "Con ellos haces músculo, enzimas, hormonas y defensas",
+        ],
         parrafos: [
           "Son los aminoácidos que nuestro cuerpo no puede fabricar o no puede producir en cantidad suficiente pero son necesarios. Por eso debemos obtenerlos a través de la alimentación.",
           "Son imprescindibles para fabricar músculos, enzimas, hormonas, anticuerpos y miles de proteínas diferentes.",
@@ -202,6 +241,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "no-esenciales",
         titulo: "Aminoácidos no esenciales",
         foto: "/recorrido/nutricion/moleculas/noaesencial.webp",
+        claves: [
+          "Estos sí los fabricas tú, a partir de otras moléculas",
+          "No hace falta buscarlos en la comida",
+          "Igual de importantes: construyen y reparan tejidos",
+        ],
         parrafos: [
           "Nuestro cuerpo puede fabricar estos aminoácidos a partir de otras moléculas, por lo que no es imprescindible obtenerlos directamente de los alimentos.",
           "Aun así, siguen siendo igual de importantes, ya que participan en la construcción y reparación de todos los tejidos.",
@@ -211,6 +255,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "condicionalmente-esenciales",
         titulo: "Aminoácidos condicionalmente esenciales",
         foto: "/recorrido/nutricion/moleculas/aminoacidocondicionalmente.webp",
+        claves: [
+          "Normalmente los fabricas tú",
+          "En crecimiento, enfermedad o lesión no das abasto",
+          "En esos momentos hay que traerlos de la comida",
+        ],
         parrafos: [
           "Normalmente nuestro cuerpo puede producirlos, pero en determinadas situaciones —como el crecimiento, una enfermedad, una infección o una lesión importante— la demanda aumenta tanto que es necesario obtener una mayor cantidad a través de la alimentación.",
         ],
@@ -244,6 +293,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "a", sigla: "A", titulo: "Vitamina A (Retinol)", color: "#ef8e3a",
         foto: "/recorrido/nutricion/moleculas/vitaminaa.webp",
+        claves: [
+          "Sin ella no podrías ver",
+          "Forma la rodopsina, el pigmento de tu retina",
+          "Renueva la piel y ajusta la respuesta inmunitaria",
+        ],
         parrafos: [
           "Sin la vitamina A no podríamos ver.",
           "La vitamina A se transforma en retinal, una molécula que forma parte de la rodopsina, el pigmento de la retina que nos permite ver.",
@@ -254,6 +308,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "b1", sigla: "B1", titulo: "Vitamina B1 (Tiamina)", color: "#f2c230",
         foto: "/recorrido/nutricion/moleculas/vitb1.webp",
+        claves: [
+          "Enciende las enzimas que sacan energía del azúcar",
+          "Sin ella, a la célula le cuesta usar la glucosa",
+          "Cerebro, nervios y músculo dependen de ella",
+        ],
         parrafos: [
           "Activa las enzimas que transforman los carbohidratos en energía y es imprescindible para el funcionamiento del cerebro, los nervios y los músculos. Sin ella, las células tendrían muchas dificultades para obtener energía de la glucosa.",
         ],
@@ -261,6 +320,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "b2", sigla: "B2", titulo: "Vitamina B2 (Riboflavina)", color: "#ecbb2f",
         foto: "/recorrido/nutricion/moleculas/vitb2.webp",
+        claves: [
+          "Mueve los electrones de la respiración celular",
+          "Es decir: fabricar energía",
+          "Cuida piel, ojos y mucosas, y frena la oxidación",
+        ],
         parrafos: [
           "Participa en numerosas reacciones metabólicas relacionadas con la producción de energía, para ser exactos que se convierten en activadores de las enzimas que transportan electrones durante la respiración celular.",
           "También ayuda a mantener la piel, los ojos y las mucosas en buen estado y contribuye a proteger las células frente al estrés oxidativo.",
@@ -269,6 +333,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "b3", sigla: "B3", titulo: "Vitamina B3 (Niacina)", color: "#e6b02c",
         foto: "/recorrido/nutricion/moleculas/vitb3.webp",
+        claves: [
+          "Se convierte en NAD⁺ y NADP⁺, los porteadores de electrones",
+          "Con ese NAD se repara el ADN roto",
+          "Sostiene el sistema nervioso y la barrera de la piel",
+        ],
         parrafos: [
           "Es necesaria para fabricar las moléculas que permiten obtener energía a partir de los alimentos.",
           "Es decir, se transforma en NAD⁺ y NADP⁺, moléculas que transportan electrones entre enzimas durante cientos de reacciones metabólicas.",
@@ -278,6 +347,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "b5", sigla: "B5", titulo: "Vitamina B5 (Ácido pantoténico)", color: "#dda829",
         foto: "/recorrido/nutricion/moleculas/vitb5.webp",
+        claves: [
+          "Forma la coenzima A",
+          "Sin ella no se fabrican ni se queman grasas",
+          "También hace falta para el colesterol y las hormonas",
+        ],
         parrafos: [
           "Forma parte de la coenzima A (CoA), una molécula imprescindible para que las enzimas puedan fabricar y degradar grasas, producir energía y sintetizar colesterol y hormonas.",
         ],
@@ -285,6 +359,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "b6", sigla: "B6", titulo: "Vitamina B6 (Piridoxina)", color: "#efc94c",
         foto: "/recorrido/nutricion/moleculas/vitb6.webp",
+        claves: [
+          "Se encarga del trabajo con los aminoácidos",
+          "Fabrica neurotransmisores, hemoglobina y anticuerpos",
+          "Clave para el sistema nervioso y para las defensas",
+        ],
         parrafos: [
           "Activa a las enzimas que participan en la transformación de los aminoácidos y en la fabricación de neurotransmisores, hemoglobina (la proteína de los glóbulos rojos que transporta oxígeno) y anticuerpos.",
           "Debido a esto, es fundamental para el sistema nervioso y el sistema inmunitario.",
@@ -293,6 +372,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "b7", sigla: "B7", titulo: "Vitamina B7 (Biotina)", color: "#e4be3c",
         foto: "/recorrido/nutricion/moleculas/vitb7.webp",
+        claves: [
+          "Es la coenzima de las carboxilasas",
+          "Con ellas se fabrica glucosa y ácidos grasos",
+          "De ahí su fama en piel, cabello y uñas",
+        ],
         parrafos: [
           "Actúa como coenzima de las carboxilasas, un grupo de enzimas que permiten fabricar glucosa, sintetizar ácidos grasos y aprovechar algunos aminoácidos para obtener energía. Por ello, participa en el mantenimiento de la piel, el cabello y las uñas.",
         ],
@@ -300,6 +384,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "b9", sigla: "B9", titulo: "Vitamina B9 (Ácido fólico o Folato)", color: "#d6a336",
         foto: "/recorrido/nutricion/moleculas/vitb9.webp",
+        claves: [
+          "Reparte los carbonos con los que se fabrica el ADN",
+          "Sin ella las células no pueden dividirse bien",
+          "En el embarazo, imprescindible para el sistema nervioso del bebé",
+        ],
         parrafos: [
           "Activa a la enzima que transporta pequeños fragmentos de carbono necesarios para fabricar ADN y ARN. Sin ella, las células no podrían dividirse correctamente.",
           "Durante el embarazo es especialmente importante porque participa en el correcto desarrollo del sistema nervioso del bebé. Sin esta vitamina, el bebé podría fallecer.",
@@ -309,6 +398,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "b12", sigla: "B12", titulo: "Vitamina B12 (Cobalamina)", color: "#c99a32",
         foto: "/recorrido/nutricion/moleculas/vitb12.webp",
+        claves: [
+          "Libera el folato que se queda atrapado",
+          "Sin ella no hay glóbulos rojos ni mielina sana",
+          "Solo la fabrican microorganismos: animal o suplemento",
+        ],
         parrafos: [
           "La vitamina B12 funciona como una coenzima esencial que activa a la metionina sintasa, una enzima que libera el folato atrapado, permitiendo la síntesis de ADN necesaria para la producción de glóbulos rojos, y activa también a la metilmalonil-CoA mutasa, la enzima que procesa grasas, evitando la acumulación de compuestos tóxicos que destruyen la capa protectora de mielina en las neuronas.",
           "Solo la producen ciertos microorganismos, por lo que se obtiene principalmente de alimentos de origen animal o de alimentos suplementados.",
@@ -317,6 +411,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "c", sigla: "C", titulo: "Vitamina C (Ácido ascórbico)", color: "#6fb84c",
         foto: "/recorrido/nutricion/moleculas/vitc.webp",
+        claves: [
+          "Antioxidante: dona electrones y calma radicales libres",
+          "Sin ella el colágeno no se estabiliza",
+          "Hace absorbible el hierro de origen vegetal",
+        ],
         parrafos: [
           "Actúa como antioxidante, dona electrones a enzimas que fabrican colágeno, permitiendo estabilizar sus fibras. Mejora la absorción del hierro de origen vegetal, manteniéndolo en una forma más fácil de absorber.",
           "Contribuye al funcionamiento normal del sistema inmunitario, es decir ayuda a estimular la producción y función de las células inmunes, además de actuar como antioxidante que protege a estas células de daños.",
@@ -325,6 +424,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "d", sigla: "D", titulo: "Vitamina D (Calciferol)", color: "#4a90d9",
         foto: "/recorrido/nutricion/moleculas/vitd.webp",
+        claves: [
+          "Abre la puerta al calcio y al fósforo",
+          "Huesos y dientes, pero también músculo y defensas",
+          "La haces con el sol, aunque cuesta: suele suplementarse",
+        ],
         parrafos: [
           "Facilita la absorción del calcio y del fósforo, ayudando a mantener huesos y dientes fuertes.",
           "Además, participa en el funcionamiento del sistema inmunitario y de los músculos. Nuestro cuerpo puede fabricarla gracias a la luz solar, pero es muy complicada de fabricar por lo que se recomienda tomarla como suplemento.",
@@ -333,6 +437,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "e", sigla: "E", titulo: "Vitamina E (Tocoferol)", color: "#9b6fc7",
         foto: "/recorrido/nutricion/moleculas/vite.webp",
+        claves: [
+          "El gran antioxidante de las membranas",
+          "Se mete dentro de ellas y para a los radicales libres",
+          "Protege la grasa de tus células antes de que se dañe",
+        ],
         parrafos: [
           "Es uno de los principales antioxidantes del organismo.",
           "Protege las membranas celulares porque se incorpora a ellas y dona electrones para calmar a los radicales libres antes de que puedan dañar los lípidos que forman la membrana.",
@@ -341,6 +450,11 @@ export const NUTRIENTES: Nutriente[] = [
       {
         key: "k", sigla: "K", titulo: "Vitamina K (Filoquinona y Menaquinonas)", color: "#d9534f",
         foto: "/recorrido/nutricion/moleculas/vitk.webp",
+        claves: [
+          "Sin ella la sangre no coagula",
+          "Ordena dónde se coloca el calcio del hueso",
+          "Parte la fabrican las bacterias de tu intestino",
+        ],
         parrafos: [
           "Es imprescindible para que la sangre coagule correctamente cuando sufrimos una herida. También participa en el mantenimiento de los huesos regulando el uso del calcio.",
           "Parte de la vitamina K también puede ser producida por algunas bacterias de nuestra microbiota intestinal.",
@@ -374,6 +488,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Sodio (Na⁺)",
         foto: "/recorrido/nutricion/moleculas/sodio.webp",
         grupo: "⚡ Electrolitos",
+        claves: [
+          "El electrolito principal de FUERA de la célula",
+          "Manda sobre el agua del cuerpo y el impulso nervioso",
+          "Retiene agua en los vasos: por eso sube la tensión",
+        ],
         parrafos: [
           "Es el principal electrolito fuera de las células.",
           "Regula la cantidad de agua del organismo y permite que los nervios transmitan impulsos eléctricos.",
@@ -386,6 +505,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Potasio (K⁺)",
         foto: "/recorrido/nutricion/moleculas/potasio.webp",
         grupo: "⚡ Electrolitos",
+        claves: [
+          "El electrolito principal de DENTRO de la célula",
+          "Sale y vuelve en cada impulso nervioso",
+          "Nervios, músculo y corazón se coordinan gracias a él",
+        ],
         parrafos: [
           "Es el principal electrolito dentro de las células.",
           "Gracias a la diferencia generada por la bomba sodio-potasio, el potasio puede salir temporalmente de la célula durante un impulso nervioso y volver después a su estado inicial.",
@@ -397,6 +521,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Calcio (Ca²⁺)",
         foto: "/recorrido/nutricion/moleculas/calcio.webp",
         grupo: "⚡ Electrolitos",
+        claves: [
+          "Hueso y diente, pero también señal química",
+          "Con él se contrae el músculo y hablan las neuronas",
+          "Sin él la sangre no coagula",
+        ],
         parrafos: [
           "Además de formar parte de los huesos y dientes, el calcio actúa como una señal química dentro de las células.",
           "Permite que los músculos se contraigan, que las neuronas liberen neurotransmisores y que la sangre pueda coagular correctamente.",
@@ -407,6 +536,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Magnesio (Mg²⁺)",
         foto: "/recorrido/nutricion/moleculas/magnesio.webp",
         grupo: "⚡ Electrolitos",
+        claves: [
+          "El ATP casi nunca va solo: va agarrado a magnesio",
+          "Sin él tus enzimas no saben usar esa energía",
+          "Activa cientos de reacciones: ADN, ARN y proteínas",
+        ],
         parrafos: [
           "El ATP casi nunca existe libre dentro de las células. Normalmente está unido a un ion de magnesio formando Mg-ATP, la forma que necesitan la mayoría de las enzimas.",
           "Sin magnesio, muchas de ellas no podrían utilizar la energía almacenada en el ATP, por lo que la célula sería mucho menos eficiente.",
@@ -418,6 +552,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Cloruro (Cl⁻)",
         foto: "/recorrido/nutricion/moleculas/cloruro.webp",
         grupo: "⚡ Electrolitos",
+        claves: [
+          "Acompaña al sodio y mantiene el equilibrio eléctrico",
+          "Con él se mueve el agua entre los tejidos",
+          "Y con él el estómago fabrica su ácido clorhídrico",
+        ],
         parrafos: [
           "Presente en gran parte del líquido que rodea a las células y acompaña al sodio para mantener el equilibrio eléctrico y el movimiento del agua entre los distintos tejidos.",
           "También desempeña una función esencial en el estómago: las células de la mucosa gástrica combinan cloruro con protones (H⁺) para formar ácido clorhídrico (HCl), imprescindible para desnaturalizar las proteínas de los alimentos, activar la enzima pepsina y destruir muchos microorganismos que ingerimos.",
@@ -428,6 +567,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Fosfato (PO₄³⁻)",
         foto: "/recorrido/nutricion/moleculas/fosfato.webp",
         grupo: "⚡ Electrolitos",
+        claves: [
+          "Está en el ATP, en el ADN y en tus membranas",
+          "Es donde se guarda la energía química",
+          "Puesto sobre una enzima, la enciende o la apaga",
+        ],
         parrafos: [
           "El fosfato es uno de los componentes más importantes de la Vida.",
           "Forma parte del ATP, donde almacena la energía química; del ADN y el ARN, donde une los nucleótidos formando su estructura; y de los fosfolípidos, que construyen las membranas celulares.",
@@ -440,6 +584,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Hierro (Fe)",
         foto: "/recorrido/nutricion/moleculas/hierro.webp",
         grupo: "🧱 Minerales",
+        claves: [
+          "Es el que agarra el oxígeno dentro de la hemoglobina",
+          "Lo lleva del pulmón hasta el último tejido",
+          "También trabaja dentro de tus mitocondrias",
+        ],
         parrafos: [
           "Es un componente esencial de la hemoglobina de los glóbulos rojos y de la mioglobina de los músculos.",
           "Permite transportar oxígeno desde los pulmones hasta los tejidos y participar en la producción de energía dentro de las mitocondrias.",
@@ -451,6 +600,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Zinc (Zn)",
         foto: "/recorrido/nutricion/moleculas/zinc.webp",
         grupo: "🧱 Minerales",
+        claves: [
+          "Cofactor de más de 300 enzimas",
+          "ADN, división celular y cicatrización",
+          "Sostiene el sistema inmunitario",
+        ],
         parrafos: [
           "Participa como cofactor en más de 300 enzimas implicadas en la síntesis de ADN y proteínas, la división celular, la cicatrización y el metabolismo de los nutrientes.",
           "Además, es fundamental para el correcto funcionamiento del sistema inmunitario y ayuda a regular la expresión de numerosos genes.",
@@ -461,6 +615,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Cobre (Cu)",
         foto: "/recorrido/nutricion/moleculas/cobre.webp",
         grupo: "🧱 Minerales",
+        claves: [
+          "Energía, tejido conectivo y defensa antioxidante",
+          "Sin él, el hierro no se aprovecha bien",
+          "Por eso también toca el transporte de oxígeno",
+        ],
         parrafos: [
           "El cobre participa en enzimas que intervienen en la producción de energía, la formación del tejido conectivo y la protección frente al estrés oxidativo.",
           "También es necesario para el metabolismo del hierro y para la síntesis de hemoglobina, por lo que contribuye indirectamente al transporte de oxígeno.",
@@ -471,6 +630,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Yodo (I)",
         foto: "/recorrido/nutricion/moleculas/yodo.webp",
         grupo: "🧱 Minerales",
+        claves: [
+          "Sin yodo no hay hormonas tiroideas",
+          "Ellas marcan el ritmo de tu metabolismo",
+          "Y el desarrollo del sistema nervioso",
+        ],
         parrafos: [
           "El yodo es imprescindible para fabricar las hormonas tiroideas (T₃ y T₄).",
           "Estas hormonas regulan el metabolismo, el crecimiento, el desarrollo del sistema nervioso y el consumo de energía por las células.",
@@ -481,6 +645,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Selenio (Se)",
         foto: "/recorrido/nutricion/moleculas/selenio.webp",
         grupo: "🧱 Minerales",
+        claves: [
+          "Forma parte de varias enzimas antioxidantes",
+          "Protege del daño de los radicales libres",
+          "Tiroides y defensas dependen de él",
+        ],
         parrafos: [
           "Forma parte de varias enzimas antioxidantes que protegen a las células frente al daño causado por los radicales libres.",
           "Además, participa en el funcionamiento de la glándula tiroides y contribuye al correcto funcionamiento del sistema inmunitario.",
@@ -491,6 +660,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Manganeso (Mn)",
         foto: "/recorrido/nutricion/moleculas/manganeso.webp",
         grupo: "🧱 Minerales",
+        claves: [
+          "Cofactor del metabolismo de los tres nutrientes",
+          "Participa en la formación del hueso",
+          "También en la defensa antioxidante de la célula",
+        ],
         parrafos: [
           "Actúa como cofactor de diversas enzimas implicadas en el metabolismo de carbohidratos, proteínas y grasas.",
           "También participa en la formación del hueso y en mecanismos antioxidantes celulares.",
@@ -523,6 +697,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "soluble",
         titulo: "Fibra soluble",
         foto: "/recorrido/nutricion/moleculas/fibrasoluble.webp",
+        claves: [
+          "Se disuelve en agua y forma un gel",
+          "Frena la subida de glucosa y ayuda a bajar el colesterol",
+          "Avena, legumbres, manzana y semillas de chía",
+        ],
         parrafos: [
           "Se disuelve en agua y forma un gel dentro del intestino. Ese gel ralentiza la digestión, hace que la glucosa llegue más lentamente a la sangre y ayuda a reducir los niveles de colesterol.",
           "Se encuentra en alimentos como la avena, las legumbres, las manzanas o las semillas de chía.",
@@ -532,6 +711,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "insoluble",
         titulo: "Fibra insoluble",
         foto: "/recorrido/nutricion/moleculas/fibrainsoluble.webp",
+        claves: [
+          "No se disuelve: pasa casi tal cual",
+          "Da volumen y hace que el intestino se mueva",
+          "Integrales, verduras, frutos secos y piel de la fruta",
+        ],
         parrafos: [
           "No se disuelve en agua y apenas cambia durante la digestión. Aumenta el volumen del contenido intestinal y facilita su paso, ayudando a mantener un tránsito intestinal saludable.",
           "Se encuentra sobre todo en cereales integrales, verduras, frutos secos y la piel de muchas frutas.",
@@ -541,6 +725,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "fermentable",
         titulo: "Fibra fermentable",
         foto: "/recorrido/nutricion/moleculas/fibrafermentable.webp",
+        claves: [
+          "Es la comida de tus bacterias",
+          "De ella salen butirato, propionato y acetato",
+          "Cuidan la pared del intestino y calman la inflamación",
+        ],
         parrafos: [
           "Algunas fibras pueden ser fermentadas por las bacterias del intestino grueso. Al hacerlo producen ácidos grasos de cadena corta, como el butirato, el propionato y el acetato, que ayudan a mantener sana la pared intestinal y participan en la regulación del metabolismo y del sistema inmunitario.",
         ],
@@ -572,6 +761,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "colesterol",
         titulo: "Colesterol",
         foto: "/recorrido/nutricion/moleculas/colesterol.webp",
+        claves: [
+          "Es el cemento de la membrana de todas tus células",
+          "Materia prima de hormonas, vitamina D y sales biliares",
+          "Casi todo lo fabrica tu hígado, no la comida",
+        ],
         parrafos: [
           "El colesterol es una molécula grasa (un lípido) que forma parte de la membrana de todas tus células, dándoles firmeza y a la vez flexibilidad, es como el cemento de la membrana celular.",
           "Es la materia prima con la que el cuerpo fabrica hormonas (como los estrógenos, la testosterona o el cortisol), también fabrica vitamina D y las sales biliares que ayudan a digerir las grasas.",
@@ -586,6 +780,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "hdl",
         titulo: "HDL",
         foto: "/recorrido/nutricion/moleculas/hdl.webp",
+        claves: [
+          "El camión que RECOGE: devuelve el sobrante al hígado",
+          "Mitad de su peso es proteína: por eso es densa",
+          "Sube por hacer las cosas bien; no basta con subirla",
+        ],
         parrafos: [
           "La HDL (lipoproteína de alta densidad) es la partícula que hace el camino de vuelta: recoge el colesterol sobrante de los tejidos y de las paredes de las arterias y lo devuelve al hígado para reciclarlo o eliminarlo.",
           "Qué lleva dentro: es la más densa porque es la que MÁS proteína tiene, alrededor de la mitad de su peso. Su proteína principal se llama apoA-I. El colesterol es en ella la parte pequeña, en torno a un quinto. Mucho envase y poca carga: por eso pesa y por eso es «de alta densidad».",
@@ -599,6 +798,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "ldl",
         titulo: "LDL",
         foto: "/recorrido/nutricion/moleculas/ldl.webp",
+        claves: [
+          "El camión que REPARTE colesterol a tus células",
+          "Mitad de su peso es colesterol: por eso es ligera",
+          "El problema es que haya muchas y durante mucho tiempo",
+        ],
         parrafos: [
           "La LDL (lipoproteína de baja densidad) es la partícula que reparte el colesterol desde el hígado hacia las células que lo necesitan.",
           "Qué lleva dentro: es la que MÁS colesterol transporta, en torno a la mitad de su peso, y solo alrededor de un cuarto es proteína. Al ir tan cargada de grasa y llevar tan poco envase, pesa poco: por eso es «de baja densidad». Lleva una única proteína grande, la apoB-100, que funciona como etiqueta de reparto: es la que reconocen las células para engancharla y quedarse con su carga.",
@@ -635,6 +839,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Etanol (CH₃CH₂OH)",
         numero: 1,
         foto: "/recorrido/nutricion/moleculas/etanol.webp",
+        claves: [
+          "7 kcal por gramo y ni un solo nutriente",
+          "El hígado lo trata como un tóxico y lo elimina primero",
+          "Aunque lo quite rápido, siempre deja algún daño",
+        ],
         parrafos: [
           "Es la molécula presente en las bebidas alcohólicas.",
           "Aporta energía (7 kcal por gramo, casi las mismas que la grasa, es decir el alcohol es muy calórico), pero no es un nutriente esencial ni participa en la construcción de tejidos.",
@@ -646,6 +855,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Acetaldehído (CH₃CHO)",
         numero: 2,
         foto: "/recorrido/nutricion/moleculas/acetaldehido.webp",
+        claves: [
+          "Lo primero en lo que se convierte el alcohol",
+          "Más reactivo y más tóxico que el propio etanol",
+          "Si se queda, daña proteínas, membranas y ADN",
+        ],
         parrafos: [
           "Es la primera molécula que se forma cuando el hígado metaboliza el etanol.",
           "Es mucho más reactiva y tóxica que el propio alcohol, pudiendo dañar proteínas, membranas y ADN si permanece demasiado tiempo en las células. Por eso el organismo intenta transformarla rápidamente.",
@@ -656,6 +870,11 @@ export const NUTRIENTES: Nutriente[] = [
         titulo: "Acetato (CH₃COO⁻)",
         numero: 3,
         foto: "/recorrido/nutricion/moleculas/acetatoalcohol.webp",
+        claves: [
+          "El final de la ruta del alcohol",
+          "Ya es poco tóxico: se usa como energía o se elimina",
+          "Llegar hasta aquí cuanto antes es la prioridad del hígado",
+        ],
         parrafos: [
           "Es el producto final del metabolismo del alcohol. Es una molécula mucho menos tóxica que puede utilizarse para producir energía o eliminarse.",
           "Transformar el acetaldehído en acetato es uno de los principales objetivos del hígado tras consumir alcohol.",
@@ -711,6 +930,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "antocianinas",
         titulo: "Antocianinas",
         foto: "/recorrido/nutricion/moleculas/antocianinas.webp",
+        claves: [
+          "El morado y el rojo de arándanos, moras y lombarda",
+          "Donan electrones a los radicales libres",
+          "Relajan los vasos: suben el óxido nítrico",
+        ],
         parrafos: [
           "Son los pigmentos que dan el color morado, azul y rojo intenso a alimentos como los arándanos, las moras, las cerezas o la col lombarda.",
           "En las plantas ayudan a proteger frente a la radiación ultravioleta y al estrés ambiental.",
@@ -722,6 +946,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "carotenoides",
         titulo: "Carotenoides",
         foto: "/recorrido/nutricion/moleculas/carotenoides.webp",
+        claves: [
+          "El amarillo, el naranja y el rojo de la huerta",
+          "El betacaroteno se transforma en vitamina A",
+          "Luteína y zeaxantina se instalan en tu retina",
+        ],
         parrafos: [
           "Son pigmentos amarillos, naranjas y rojos presentes en zanahorias, calabazas, tomates, pimientos y muchas frutas.",
           "En las plantas capturan parte de la energía de la luz y las protegen del exceso de radiación solar.",
@@ -732,6 +961,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "flavonoides",
         titulo: "Flavonoides",
         foto: "/recorrido/nutricion/moleculas/flavonoides.webp",
+        claves: [
+          "La familia más abundante: fruta, cacao, té y cebolla",
+          "Antioxidantes, pero sobre todo reguladores",
+          "Tocan la inflamación, la coagulación y las arterias",
+        ],
         parrafos: [
           "Constituyen una de las familias más abundantes de fitoquímicos y se encuentran en frutas, verduras, cebolla, cacao, té y cítricos.",
           "Muchas de estas moléculas actúan como antioxidantes, pero también regulan la actividad de enzimas y proteínas implicadas en la inflamación, la coagulación y la función de los vasos sanguíneos.",
@@ -743,6 +977,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "glucosinolatos",
         titulo: "Glucosinolatos",
         foto: "/recorrido/nutricion/moleculas/glucosinolatos.webp",
+        claves: [
+          "Del brócoli, la col y la coliflor",
+          "Al cortar o masticar aparece el sulforafano",
+          "Encienden TUS enzimas antioxidantes y de desintoxicación",
+        ],
         parrafos: [
           "Son compuestos característicos del brócoli, la col, la coliflor o las coles de Bruselas.",
           "Mientras la planta permanece intacta apenas reaccionan, pero al cortarla o masticarla entran en contacto con una enzima, que los transforma en moléculas como el sulforafano.",
@@ -753,6 +992,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "polifenoles",
         titulo: "Polifenoles",
         foto: "/recorrido/nutricion/moleculas/polifenoles.webp",
+        claves: [
+          "Una gran familia: aceite de oliva, cacao, café, uva y té",
+          "Más que antioxidantes, son mensajeros",
+          "Cambian qué genes se encienden y cuáles no",
+        ],
         parrafos: [
           "Los polifenoles son una gran familia que engloba miles de fitoquímicos, incluidos muchos flavonoides.",
           "Se encuentran en el aceite de oliva virgen extra, el cacao, el café, las uvas, el té y numerosos frutos.",
@@ -763,6 +1007,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "fitoesteroles",
         titulo: "Fitoesteroles",
         foto: "/recorrido/nutricion/moleculas/fitoesteroles.webp",
+        claves: [
+          "Se parecen muchísimo al colesterol",
+          "Le quitan el sitio en el transportador del intestino",
+          "Resultado: baja el colesterol LDL",
+        ],
         parrafos: [
           "Son moléculas vegetales con una estructura muy parecida al colesterol.",
           "Durante la digestión compiten con él por los mismos transportadores del intestino, reduciendo así la cantidad de colesterol que conseguimos absorber.",
@@ -773,6 +1022,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "terpenos",
         titulo: "Terpenos",
         foto: "/recorrido/nutricion/moleculas/terpenos.webp",
+        claves: [
+          "El aroma de hierbas, especias y cítricos",
+          "En la planta atraen polinizadores o la defienden",
+          "Limoneno, mentol y pineno: antioxidantes y antiinflamatorios",
+        ],
         parrafos: [
           "Son una enorme familia de moléculas aromáticas presentes en hierbas, especias, cítricos y muchas plantas medicinales.",
           "En la naturaleza sirven para atraer polinizadores, repeler insectos o defenderse de microorganismos.",
@@ -783,6 +1037,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "licopeno",
         titulo: "Licopeno",
         foto: "/recorrido/nutricion/moleculas/licopeno.webp",
+        claves: [
+          "El rojo intenso del tomate, la sandía y el pomelo",
+          "Neutraliza el oxígeno singlete, muy dañino",
+          "Se estudia por su papel cardiovascular",
+        ],
         parrafos: [
           "El licopeno es un carotenoide responsable del intenso color rojo del tomate, la sandía y el pomelo rosa.",
           "Destaca por su capacidad para neutralizar el oxígeno singlete, una forma muy reactiva del oxígeno que puede dañar las membranas celulares y el ADN.",
@@ -793,6 +1052,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "isoflavonas",
         titulo: "Isoflavonas",
         foto: "/recorrido/nutricion/moleculas/isoflavonas.webp",
+        claves: [
+          "Los flavonoides de la soja, el tofu y el tempeh",
+          "Se parecen a los estrógenos, pero mucho más flojas",
+          "Según el tejido, activan o bloquean el receptor",
+        ],
         parrafos: [
           "Son flavonoides presentes principalmente en la soja, el tofu, el tempeh y otros derivados.",
           "Su estructura se parece a la de los estrógenos humanos, por lo que pueden unirse a algunos de sus receptores, aunque con una intensidad mucho menor.",
@@ -828,6 +1092,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "aspartamo",
         titulo: "Aspartamo",
         foto: "/recorrido/nutricion/moleculas/aspartamo.webp",
+        claves: [
+          "El de los refrescos «light»: 200 veces más dulce",
+          "El único que sí se digiere: son dos aminoácidos",
+          "«Posiblemente cancerígeno», con evidencia limitada",
+        ],
         parrafos: [
           "Es el edulcorante de los refrescos «light» clásicos y endulza unas 200 veces más que el azúcar.",
           "Es el único que sí se digiere: está hecho de dos aminoácidos (ácido aspártico y fenilalanina) más un poco de metanol, y el intestino lo parte en esas piezas, que ya existen en la comida normal. Por eso técnicamente sí tiene calorías, pero se usa en cantidades tan pequeñas que no cuentan.",
@@ -839,6 +1108,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "sucralosa",
         titulo: "Sucralosa",
         foto: "/recorrido/nutricion/moleculas/sucralosa.webp",
+        claves: [
+          "Es azúcar con tres piezas cambiadas por cloro",
+          "600 veces más dulce y ya indigerible",
+          "Aguanta el horno; se estudia su efecto en la microbiota",
+        ],
         parrafos: [
           "Se fabrica a partir del azúcar, sustituyendo tres de sus piezas por cloro. Ese pequeño cambio la vuelve unas 600 veces más dulce y, sobre todo, indigerible: tus enzimas ya no la reconocen.",
           "La mayor parte atraviesa el intestino sin absorberse y sale por las heces, lo que la hace muy estable, también al calor, y por eso es la habitual en productos horneados «sin azúcar».",
@@ -849,6 +1123,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "estevia",
         titulo: "Estevia",
         foto: "/recorrido/nutricion/moleculas/estevia.webp",
+        claves: [
+          "No es la hoja: son sus glucósidos de esteviol",
+          "Que venga de una planta no cambia lo esencial",
+          "Deja regusto amargo: casi siempre va con eritritol",
+        ],
         parrafos: [
           "Lo que se usa no es la hoja, sino unas moléculas extraídas de ella, los glucósidos de esteviol, unas 300 veces más dulces que el azúcar.",
           "Que venga de una planta no cambia lo esencial: sigue siendo un dulzor intenso sin energía detrás, y tu cerebro no distingue el origen. La bacteria del intestino le quita los azúcares que lleva colgando y el resto se absorbe, pasa por el hígado y se elimina por la orina.",
@@ -859,6 +1138,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "eritritol",
         titulo: "Eritritol",
         foto: "/recorrido/nutricion/moleculas/eritritol.webp",
+        claves: [
+          "Un polialcohol: endulza un 70 % de lo que endulza el azúcar",
+          "Se absorbe y sale por la orina: sienta mejor que sus hermanos",
+          "En 2023 se asoció a más eventos cardiovasculares",
+        ],
         parrafos: [
           "Es un polialcohol: ni azúcar ni edulcorante intenso, sino algo intermedio. Endulza un 70% de lo que endulza el azúcar, así que se usa a cucharadas y no a gotas, y deja una sensación fresca en la boca.",
           "A diferencia de sus hermanos, se absorbe en el intestino delgado y se elimina casi intacto por la orina, así que sienta mejor y apenas fermenta. Tu propio cuerpo, además, fabrica pequeñas cantidades a partir de la glucosa.",
@@ -869,6 +1153,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "xilitol",
         titulo: "Xilitol",
         foto: "/recorrido/nutricion/moleculas/xilitol.webp",
+        claves: [
+          "Dulzor casi idéntico al del azúcar",
+          "Las bacterias de la boca no lo fermentan: no da caries",
+          "Ojo: es muy tóxico para los perros",
+        ],
         parrafos: [
           "Otro polialcohol, con un dulzor casi idéntico al del azúcar. Es el de los chicles y las pastas de dientes «sin azúcar», y ahí tiene una ventaja real: las bacterias de la boca no pueden fermentarlo, así que no produce caries e incluso dificulta que se formen.",
           "Se absorbe solo en parte, así que buena parte llega al colon, donde la microbiota lo fermenta. De ahí los gases, la hinchazón y el efecto laxante si se pasa de cantidad.",
@@ -906,6 +1195,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "ibuprofeno",
         titulo: "Ibuprofeno",
         foto: "/recorrido/nutricion/moleculas/ibuprofeno.webp",
+        claves: [
+          "No cura nada: apaga el aviso",
+          "Bloquea la COX y con ella dolor, fiebre e hinchazón",
+          "También quita el escudo del estómago y el riego del riñón",
+        ],
         parrafos: [
           "El ibuprofeno no cura nada: apaga un aviso. Y para entender lo que hace hay que empezar por un detalle precioso: la molécula con la que fabricas el dolor sale de tu propia membrana celular.",
           "Cuando un tejido se daña, de la membrana se libera un ácido graso, el ácido araquidónico. Dos enzimas llamadas COX (ciclooxigenasa 1 y 2) lo transforman en prostaglandinas, que son mensajeros locales de vida cortísima. Unas sensibilizan las terminaciones nerviosas, y entonces lo que antes no dolía, duele (ahí está tu dolor); otras suben el termostato del hipotálamo (ahí está la fiebre); otras dilatan los vasos y dejan salir líquido (ahí están la hinchazón y el enrojecimiento).",
@@ -921,6 +1215,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "paracetamol",
         titulo: "Paracetamol",
         foto: "/recorrido/nutricion/moleculas/paracetamol.webp",
+        claves: [
+          "Quita dolor y fiebre, pero casi no desinflama",
+          "Actúa en el cerebro, no en el tejido inflamado",
+          "Se paga en el hígado: cada dosis gasta glutatión",
+        ],
         parrafos: [
           "Se parece al ibuprofeno en lo que sientes y no se le parece en nada por dentro. El paracetamol quita dolor y baja la fiebre, pero apenas es antiinflamatorio: actúa sobre todo en el sistema nervioso central, no en el tejido inflamado. De hecho, su mecanismo exacto todavía se discute; se le atribuye una inhibición de la COX dentro del cerebro y un metabolito propio (el AM404) que actúa sobre receptores del dolor y del sistema cannabinoide. Por eso no te desprotege el estómago ni el riñón como un antiinflamatorio.",
           "Su historia está en otro sitio: en el hígado. Y es el mejor ejemplo de que la toxicidad no depende de la molécula que te tomas, sino de en qué la convierte tu cuerpo.",
@@ -934,6 +1233,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "marihuana",
         titulo: "Marihuana (THC)",
         foto: "/recorrido/nutricion/moleculas/thc.webp",
+        claves: [
+          "Tú ya fabricas cannabinoides: son tu mando del volumen",
+          "El THC lo baja en TODO el cerebro y durante horas",
+          "La neurona se defiende quitando receptores: tolerancia",
+        ],
         parrafos: [
           "Para entender la marihuana hay que empezar por algo que casi nadie sabe: tú ya fabricas cannabinoides. Se llaman anandamida y 2-AG, y son un sistema de ajuste fino del cerebro. Funcionan al revés que un neurotransmisor normal: los fabrica la neurona que RECIBE el mensaje y viajan hacia atrás, hasta la que lo envía, para decirle «baja el volumen». Son el mando de la intensidad, y con él se regulan el apetito, el dolor, la ansiedad, el sueño, la memoria y hasta qué recuerdos se archivan y cuáles se dejan ir.",
           "Ese sistema tiene tres reglas: se fabrica en el momento (no hay almacén), actúa solo en la sinapsis exacta que lo necesita, y se destruye en segundos. Preciso, local y breve.",
@@ -948,6 +1252,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "tabaco",
         titulo: "Tabaco",
         foto: "/recorrido/nutricion/moleculas/nicotina.webp",
+        claves: [
+          "La nicotina es la que engancha; el humo es el que mata",
+          "El cerebro fabrica MÁS receptores: eso que sientes es el ansia",
+          "Casi todo mejora al dejarlo, y antes de lo que parece",
+        ],
         parrafos: [
           "En un cigarro hay dos cosas distintas, y confundirlas es el error que sostiene el hábito: la nicotina es la que engancha, y el humo es el que mata. La nicotina, por sí sola, no es la que provoca el cáncer. El cáncer lo traen los más de setenta carcinógenos que viajan en el humo. La nicotina es solo el motivo por el que sigues respirando ese humo veinte veces al día.",
           "La nicotina encaja en los receptores nicotínicos de acetilcolina, los mismos que usa tu cuerpo para mover un músculo y para sostener la atención (los ves en Fisiología). Al inhalarla, llega al cerebro en unos diez segundos y hace que el circuito de recompensa suelte dopamina. Rápido, intenso y repetido cientos de veces al día: no existe una forma más eficiente de grabar un aprendizaje en el cerebro. No es debilidad de carácter, es la ley del refuerzo funcionando a la perfección.",
@@ -964,6 +1273,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "vaper",
         titulo: "Vaper",
         foto: "/recorrido/nutricion/moleculas/vaper.webp",
+        claves: [
+          "Sin combustión: menos malo que el tabaco, que no inofensivo",
+          "Las sales de nicotina quitan la tos, que era el freno",
+          "Al calentarse, el líquido deja carbonilos y metales",
+        ],
         parrafos: [
           "Aquí no hay combustión, y esa es la diferencia real: una resistencia calienta un líquido (propilenglicol, glicerina vegetal, nicotina y aromas) y lo convierte en aerosol. Sin fuego no hay alquitrán ni apenas monóxido de carbono, así que para alguien que fuma y se pasa del todo al vaper, es menos malo. El problema es el salto que se hizo con esa frase: «menos malo que lo peor» se vendió como «inofensivo», y no es lo mismo.",
           "Empecemos por la nicotina, porque el vaper cambió su ingeniería. Las sales de nicotina (nicotina con un ácido, normalmente benzoico) permiten un vapor suave que no raspa la garganta aun llevando concentraciones altísimas. La tos era el freno natural del cigarro; al quitarlo, se inhala más nicotina, más veces y durante más rato, sin el ritual que marcaba un final. Un desechable puede llevar el equivalente en nicotina a un paquete entero o más, y se lleva en el bolsillo para dar caladas sueltas todo el día. La consecuencia es una dependencia que se instala más rápido y más fuerte, especialmente en adolescentes, en un cerebro donde la nicotina remodela los circuitos de atención y recompensa que todavía se están construyendo.",
@@ -978,6 +1292,11 @@ export const NUTRIENTES: Nutriente[] = [
         key: "cafeina",
         titulo: "Cafeína",
         foto: "/recorrido/nutricion/moleculas/cafeina.webp",
+        claves: [
+          "No da energía: tapa el cansancio que ya tienes",
+          "Ocupa el receptor de la adenosina sin activarlo",
+          "Un café a las cinco conserva media dosis a medianoche",
+        ],
         parrafos: [
           "La cafeína no te da energía. Es importante entenderlo bien, porque cambia por completo la relación que tienes con el café: no aporta ni una caloría ni un vatio. Lo único que hace es taparte el cansancio que ya tenías.",
           "Mientras estás despierto, cada vez que tus células gastan ATP (su moneda de energía) va quedando un residuo: la adenosina. Se acumula hora tras hora y se va pegando a sus receptores en el cerebro, donde funciona como un mensaje clarísimo: «llevas muchas horas gastando, empieza a parar». Esa marea creciente de adenosina es una de las dos cosas que te hacen tener sueño por la noche.",

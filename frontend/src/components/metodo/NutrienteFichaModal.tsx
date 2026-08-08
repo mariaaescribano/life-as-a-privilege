@@ -47,6 +47,9 @@ export function NutrienteFichaModal({
     src: t.foto || "",
     paragraphs: t.parrafos,
     titulo: t.titulo,
+    // Las tres claves, en cajas blancas encima del texto: lo esencial de la
+    // ficha en tres segundos, sin tener que leérsela entera.
+    claves: t.claves,
   }));
 
   return (
@@ -69,6 +72,7 @@ export function NutrienteFichaModal({
           themeColor={nutricionTxt}
           textColor={nutricionTxt}
           textShadow="none"
+          clavesTinta={nutricionTxt}
           disciplinaBgImage={NUTRI_IMG}
           disciplinaBgColor={nutricionBg}
           loader={<AppleLoader />}

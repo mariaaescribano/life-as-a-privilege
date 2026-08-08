@@ -5,8 +5,14 @@
  * English, so there is never any doubt about which language you are reading.
  */
 export const landing = {
+  // ── Brand (the first thing on the page) ────────────────────────────────
+  // The name of the HOUSE, not of a project: it is not translated.
+  "landing.marca": "Life as a Privilege",
+  "landing.marca.lema": "Understanding yourself is the first way to care for yourself.",
+
   // ── Intro ──────────────────────────────────────────────────────────────
-  "landing.intro.titulo": "Two projects. The same way of looking.",
+  // Empty since the brand sits above: two headlines in a row weakened each other.
+  "landing.intro.titulo": "",
   "landing.intro.sub":
     "Understanding yourself from the inside, and being accompanied when life moves you somewhere new. Choose where you want to come in.",
 

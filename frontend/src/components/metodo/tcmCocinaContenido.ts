@@ -6,6 +6,11 @@
 // el alimento se elige por su sabor, su naturaleza (fría/templada/caliente) y el
 // órgano al que entra; y la cocción es la mitad del remedio.
 //
+// OJO: la página solo pinta `principio`, `grupos` (los ingredientes) y
+// `cocciones` (las formas de cocinar). `cadaDia`, `baja` y `dia` se quedan aquí
+// escritos pero NO se muestran: la página se estaba yendo de texto. Si algún día
+// vuelven, es descomentar su bloque en MetodoTcmRecetas.tsx.
+//
 // ✍️  EDITAR CONTENIDO: cambia los textos aquí. No cambies las `key`.
 // ─────────────────────────────────────────────────────────────────────────
 import type { Elemento } from "./tcmRecorrido";

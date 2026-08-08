@@ -13,6 +13,7 @@ import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { ElementoComicModal } from "../../components/metodo/ElementoComicModal";
 import { Reveal } from "../../components/global/Reveal";
+import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, CICLO_SHENG, CICLO_KE,
@@ -135,7 +136,7 @@ export default function MetodoTcmDiagnostico() {
             mb={0}
             prev={{ label: "← Los ciclos", onClick: () => navigate("/metodo/tcm/ciclos") }}
             extra={ilustracionesBtn}
-            next={{ label: "Tu lengua →", onClick: () => navigate("/metodo/tcm/lengua") }}
+            next={{ label: "La lengua →", onClick: () => navigate("/metodo/tcm/lengua") }}
           />
           </Reveal>
 
@@ -216,6 +217,11 @@ export default function MetodoTcmDiagnostico() {
             diagnóstico clínico ni sustituye la valoración de un profesional cualificado.
           </Text>
           </Reveal>
+
+          {/* El paso siguiente, abajo a la derecha: mismo texto que el botón
+              del header, que aquí se ha quedado muy arriba. */}
+          <BotonPaso label="La lengua" nom={tcmNom} color={tcmTxt} bg={tcmBg}
+                     onClick={() => navigate("/metodo/tcm/lengua")} />
         </Flex>
       </Flex>
 
@@ -305,7 +311,11 @@ function EstrellaPerfil({ estados, onElemento }: {
 
   return (
     <Flex ref={ref} justify="center" py={{ base: 1, md: 1.5 }}>
-      <Box as="svg" viewBox="0 0 300 320" w="100%" maxW={{ base: "280px", md: "360px" }} h="auto" overflow="visible">
+      {/* La estrella ocupa TODO el ancho del box (sin `maxW`, que la dejaba a
+          360 px dentro de una caja de 560 y con un marco de aire alrededor).
+          El viewBox se recorta a 275 de alto: los 320 de antes eran, de la
+          etiqueta de abajo para abajo, espacio vacío. */}
+      <Box as="svg" viewBox="0 0 300 275" w="100%" h="auto" overflow="visible">
         {/* Aristas: primero las de FUERA (Sheng, perímetro) una a una, luego las
             de DENTRO (Ke, las que cruzan la estrella), tras florecer los iconos. */}
         {ORDEN_ELEMENTOS.map((el, i) => (
