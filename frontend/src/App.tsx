@@ -2,7 +2,8 @@ import React, { lazy, Suspense, useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 // La raíz ahora es la landing de bienvenida (elegir proyecto); la portada de
 // Life as a Privilege sigue viva y sin cambios en /welcome.
-import Landing from "./app/web/Landing";
+// La landing de dos proyectos está aparcada (ver la nota en la ruta «/»).
+// import Landing from "./app/web/Landing";
 import Welcome from "./app/web/Welcome";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 const LogIn = lazy(() => import("./app/auth/LogIn"));
@@ -241,7 +242,19 @@ export default function App()
         entero para ver la portada. */}
     <Suspense fallback={<LifeLoading />}>
     <Routes>
-      <Route path="/" element={<Landing />} />
+      {/* ── LA PORTADA ──
+          Por ahora la casa enseña UN SOLO proyecto: «/» es la portada de Life
+          as a Privilege (Welcome), como antes. `/welcome` se mantiene para que
+          no se rompa ningún enlace antiguo: lleva a la misma página.
+
+          La landing de DOS proyectos (elegir entre «Vida como privilegio» y
+          «Nace una madre») está hecha y esperando en `app/web/Landing.tsx`,
+          con sus textos en `i18n/textos/{es,en}/landing.ts` y sus datos en
+          `data/landingProyectos.ts`. El día que «Nace una madre» exista, esto
+          es todo lo que hay que hacer: descomentar el import de arriba y las
+          dos líneas de aquí abajo, y quitar el `<Welcome />` de «/». */}
+      {/* <Route path="/" element={<Landing />} /> */}
+      <Route path="/" element={<Welcome />} />
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/logIn" element={<LogIn />} />
       <Route path="/signIn" element={<SignIn />} />
