@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { comicLoaderPorColor } from "./comicLoaders";
+import { StarsLayer } from "../global/StarsLayer";
 import { glowHeader } from "./FotoBox";
 import { astrologiaTxt } from "../../GlobalVariables";
 
@@ -13,8 +14,6 @@ const MAPA1 = "/viñetas/astrologia/astro/mapa1.png";
 const MAPA2 = "/viñetas/astrologia/astro/mapa2.png";
 const MAPA3 = "/viñetas/astrologia/astro/mapa3.png";
 const MAPA4 = "/viñetas/astrologia/astro/mapa4.png";
-
-const SPACE_IMG = "/img/astrologia/space.jpg";
 
 /** Fotos del cómic de la carta, para poder precargarlas desde la página (que
  *  no aparezca la página hasta que la foto de la carta también esté lista). */
@@ -214,32 +213,12 @@ export function TextoCartaExplicativo({ color = astrologiaTxt }: { color?: strin
         onTouchEnd={onTouchEnd}
         sx={{ touchAction: "pan-y" }}
       >
-        {/* Fondo de la caja: la foto espacial TAL CUAL, a opacidad plena y sin
-            velo encima. Antes iba atenuada (brightness 0.5 + foto al 75% + velo
-            oscuro) y la caja se veía gris y apagada sobre el turquesa. La foto
-            ya es un cielo casi negro, así que la letra dorada se lee igual. */}
-        <Box
-          position="absolute"
-          inset="0"
-          pointerEvents="none"
-          zIndex={0}
-          style={{
-            background:
-              "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
-          }}
-        >
-          <Box
-            as="img"
-            src={SPACE_IMG}
-            alt=""
-            loading="eager"
-            position="absolute"
-            inset="0"
-            w="100%"
-            h="100%"
-            style={{ objectFit: "cover", objectPosition: "center" }}
-          />
-        </Box>
+        {/* Fondo de la caja: EL MISMO que el header y el resto de cajas de
+            Astrología (StarsLayer: cielo al 85% + velo azul oscuro). Aquí iba la
+            foto tal cual, a opacidad plena y sin velo, y la caja salía cargadísima
+            de estrellas —la nebulosa competía con la ilustración de la carta y
+            con la letra— mientras el header, justo encima, se veía tranquilo. */}
+        <StarsLayer borderRadius="xl" />
 
         {/* Línea de luz superior */}
         <Box
