@@ -13,9 +13,9 @@ import type { ClaveTexto } from "../i18n";
 
 // ── Paleta de la landing ─────────────────────────────────────────────────────
 // Arena cálida: es "el recibidor" de la casa, deliberadamente NEUTRAL. No es de
-// ningún proyecto, así que ni el turquesa de Vida como Privilegio ni la terracota
-// de Nace una madre se pelean con el fondo — al revés, son las dos únicas
-// manchas de color de la página.
+// ningún proyecto, así que ni el turquesa de El Mapa ni la terracota de Nace una
+// madre se pelean con el fondo — al revés, son las dos únicas manchas de color
+// de la página.
 //
 // OJO: esta es la única página de la web con fondo claro. El resto va sobre
 // turquesa (#008080) y da por hecho letra blanca; de ahí que aquí haya que pedir
@@ -33,13 +33,25 @@ export const arenaLinea = "#2A262222";
  *  títulos quedan a la misma altura aunque un proyecto todavía no tenga logo. */
 export const ALTO_LOGO = { base: "56px", md: "68px", lg: "76px" } as const;
 
+/**
+ * Logo de LA CASA (el elefante), en el header de la landing sobre «MARÍA
+ * ESCRIBANO». No es de ningún proyecto: el mandala es de El Mapa y vive dentro
+ * de su caja.
+ *
+ * Tiene que ser un PNG con FONDO TRANSPARENTE y línea oscura: se pinta sobre el
+ * crema de la landing, así que si trae el fondo gris del original se vería un
+ * cuadrado gris. Si el archivo no está, el header se pinta solo con el nombre
+ * (ver `HeaderLanding` en Landing.tsx) — nada se rompe.
+ */
+export const LOGO_CASA = "/img/icono/elefante.png";
+
 export type ProyectoLanding = {
   /** Clave interna, no se muestra. */
   key: string;
   /**
-   * Nombre del proyecto — SÍ se traduce: en español «Vida como Privilegio», en
-   * inglés «Life as a Privilege». Es lo que se lee en la caja, no un nombre
-   * interno de los que viajan en las URLs.
+   * Nombre del proyecto — SÍ se traduce: en español «El Mapa», en inglés «The
+   * Map». Es lo que se lee en la caja, no un nombre interno de los que viajan en
+   * las URLs.
    */
   nombreKey: ClaveTexto;
   /** Color de la caja del proyecto. */
@@ -64,15 +76,15 @@ export type ProyectoLanding = {
 
 export const PROYECTOS: ProyectoLanding[] = [
   {
-    key: "lifeasaprivilege",
-    nombreKey: "landing.nombre.laap",
+    key: "elMapa",
+    nombreKey: "landing.nombre.elMapa",
     bg: "#008080",
     txt: "#F3FBF9",
     // El mandala es el logo de ESTE proyecto (no de la casa): por eso vive
     // dentro de su caja y ya no en la cabecera de la landing.
     logo: "/img/icono/life.png",
-    lemaKey: "landing.lema.laap",
-    descKey: "landing.desc.laap",
+    lemaKey: "landing.lema.elMapa",
+    descKey: "landing.desc.elMapa",
     // La portada de siempre sigue en /welcome, tal cual estaba.
     ruta: "/welcome",
     disponible: true,

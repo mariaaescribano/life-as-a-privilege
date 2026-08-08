@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SelectorIdioma from "../../components/global/SelectorIdioma";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
+import DisciplinasMirada from "../../components/landing/DisciplinasMirada";
 import { Float, Reveal } from "../../components/global/Reveal";
 import { useT } from "../../i18n";
 import {
   ALTO_LOGO,
+  LOGO_CASA,
   PROYECTOS,
   arenaBg,
   arenaLinea,
@@ -18,23 +20,132 @@ import {
 /**
  * Landing de bienvenida (`/`) — el recibidor de la casa.
  *
- * Aquí no se enseña nada ni se vende nada: solo se elige proyecto. Por eso NO
- * lleva header de navegación, ni disciplinas, ni opiniones, ni newsletter — solo
- * las cajas de los proyectos, el box de María y la línea legal. Todo lo que
+ * Aquí no se enseña nada ni se vende nada: solo se elige proyecto. Todo lo que
  * había antes en la raíz sigue intacto en /welcome (Welcome.tsx).
  *
- * Es la ÚNICA página de la web con fondo claro (arena, #F2EAE0): al ser neutral,
- * ni el turquesa de Vida como Privilegio ni la terracota de Nace una madre se
- * pelean con el fondo, y las dos cajas son las únicas manchas de color. De ahí
- * que a los componentes compartidos haya que pedirles `fondo="claro"`.
+ * ── El orden, y por qué ──────────────────────────────────────────────────────
+ *   0. Header: el elefante + MARÍA ESCRIBANO (izquierda) · idioma + Materiales
+ *   1. Intro corta (qué es esto)
+ *   2. LAS DOS CAJAS — sin hacer scroll
+ *   3. María (quién está detrás de los dos)
+ *   4. «Desde dónde miro»: las ocho disciplinas, como prueba de lo anterior
+ *   5. Las dos puertas OTRA VEZ, pequeñas
+ *   6. Línea legal
  *
- * IMPORTANTE — la landing no tiene logo propio: el mandala es el logo de Vida
- * como Privilegio, así que va DENTRO de su caja. Nada de la casa (cabecera,
- * separadores) usa el símbolo de un proyecto concreto.
+ * La elección va arriba porque quien ya sabe a qué viene no tiene que bajar por
+ * la biografía para encontrar la puerta; y se repite abajo porque quien llega
+ * frío baja leyendo y se la encuentra justo cuando ya está convencido. Cambiar
+ * ese orden (relato primero, botones al final) castiga a quien vuelve.
+ *
+ * Es la ÚNICA página de la web con fondo claro (arena, #F2EAE0): al ser neutral,
+ * ni el turquesa de El Mapa ni la terracota de Nace una madre se pelean con el
+ * fondo. De ahí que a los componentes compartidos haya que pedirles
+ * `fondo="claro"`.
+ *
+ * IMPORTANTE — cada símbolo es de quien es: el elefante es de LA CASA (header),
+ * el mandala es de El Mapa y vive DENTRO de su caja. Ni la cabecera ni los
+ * separadores usan el símbolo de un proyecto concreto.
  *
  * Los proyectos se definen en `data/landingProyectos.ts` — para añadir uno,
  * ponerle logo o encender el que está en «Muy pronto», se toca solo ese archivo.
  */
+
+// ── Separador neutro ─────────────────────────────────────────────────────────
+// Filete + punto. No puede llevar el mandala: es el logo de uno de los dos
+// proyectos, no de la casa.
+const Separador = () => (
+  <Flex align="center" justify="center" gap={{ base: 4, md: 5 }} px={{ base: 6, md: 12 }}>
+    <Box h="1px" w={{ base: "70px", md: "170px" }} bgGradient={`linear(to-r, transparent, ${arenaLinea})`} />
+    <Box w="5px" h="5px" borderRadius="full" bg={arenaTintaSuave} opacity={0.45} flexShrink={0} />
+    <Box h="1px" w={{ base: "70px", md: "170px" }} bgGradient={`linear(to-l, transparent, ${arenaLinea})`} />
+  </Flex>
+);
+
+// Candado del proyecto que aún no existe: «Próximamente» a secas se puede leer
+// como «hay algo, entra a verlo». Con el candado no hay duda de que está cerrado.
+const IconoCandado = ({ color }: { color: string }) => (
+  <Box as="svg" viewBox="0 0 24 24" w="13px" h="13px" fill="none" stroke={color} strokeWidth="2" flexShrink={0} aria-hidden>
+    <Box as="rect" x="4" y="10.5" width="16" height="11" rx="2.5" />
+    <Box as="path" d="M8 10.5V7.5a4 4 0 0 1 8 0v3" strokeLinecap="round" />
+  </Box>
+);
+
+// ── Header de la landing ─────────────────────────────────────────────────────
+// A la izquierda la marca de la casa: el elefante con MARÍA ESCRIBANO debajo. A
+// la derecha, idioma y Materiales.
+//
+// Sin más navegación a propósito: el resto de la página son las dos puertas, y
+// un menú largo aquí las convertiría en dos opciones entre muchas.
+function HeaderLanding() {
+  const navigate = useNavigate();
+  const t = useT();
+  // Si el PNG del elefante todavía no está en /public/img/icono/, el header se
+  // pinta solo con el nombre en vez de dejar el icono roto del navegador.
+  const [sinLogo, setSinLogo] = useState(false);
+
+  return (
+    <Flex
+      as="header"
+      align="flex-start"
+      justify="space-between"
+      gap={4}
+      px={{ base: 6, md: 12 }}
+      pt={{ base: 6, md: 8 }}
+    >
+      {/* ── Izquierda: la marca de la casa ── */}
+      <Flex direction="column" align="center" gap={{ base: 2, md: 2.5 }} flexShrink={0}>
+        {!sinLogo && (
+          <Image
+            src={LOGO_CASA}
+            alt=""
+            h={{ base: "52px", md: "68px" }}
+            objectFit="contain"
+            onError={() => setSinLogo(true)}
+          />
+        )}
+        <Text
+          color={arenaTinta}
+          fontFamily="'EB Garamond', serif"
+          fontWeight="700"
+          fontSize={{ base: "2xs", md: "sm" }}
+          letterSpacing={{ base: "0.14em", md: "0.2em" }}
+          textTransform="uppercase"
+          whiteSpace="nowrap"
+          lineHeight="1"
+        >
+          María Escribano
+        </Text>
+      </Flex>
+
+      {/* ── Derecha: idioma y Materiales ──
+          `pt` corto para que queden a la altura del elefante, no del nombre. */}
+      <Flex align="center" gap={{ base: 4, md: 8 }} pt={{ base: 1, md: 3 }} flexShrink={0}>
+        <SelectorIdioma fondo="claro" />
+
+        <Text
+          as="button"
+          type="button"
+          onClick={() => navigate("/materiales")}
+          color={arenaTinta}
+          fontFamily="'EB Garamond', serif"
+          fontWeight="600"
+          fontSize={{ base: "2xs", md: "sm" }}
+          letterSpacing={{ base: "0.1em", md: "0.16em" }}
+          textTransform="uppercase"
+          whiteSpace="nowrap"
+          bg="transparent"
+          border="none"
+          cursor="pointer"
+          opacity={0.85}
+          _hover={{ opacity: 1, textDecoration: "underline", textUnderlineOffset: "6px" }}
+          transition="opacity 0.2s ease"
+        >
+          {t("header.materiales")}
+        </Text>
+      </Flex>
+    </Flex>
+  );
+}
 
 // ── Caja de un proyecto ──────────────────────────────────────────────────────
 function CajaProyecto({ p, delay }: { p: ProyectoLanding; delay: number }) {
@@ -194,6 +305,7 @@ function CajaProyecto({ p, delay }: { p: ProyectoLanding; delay: number }) {
               transition="background 0.25s ease, border-color 0.25s ease"
               _groupHover={p.disponible ? { bg: `${p.txt}33`, borderColor: p.txt } : {}}
             >
+              {!p.disponible && <IconoCandado color={p.txt} />}
               {p.disponible ? t("landing.entrar") : t("landing.muyPronto")}
               {p.disponible && (
                 <Box
@@ -213,11 +325,65 @@ function CajaProyecto({ p, delay }: { p: ProyectoLanding; delay: number }) {
   );
 }
 
+// ── Puerta del cierre ────────────────────────────────────────────────────────
+// La misma decisión que arriba, en pequeño: quien ha bajado leyendo el relato se
+// encuentra la puerta sin tener que volver al principio. Aquí el color del
+// proyecto va RELLENO (no hay descripción que sostener), para que se lean como
+// dos botones y no como dos cajas más.
+function PuertaCierre({ p }: { p: ProyectoLanding }) {
+  const navigate = useNavigate();
+  const t = useT();
+
+  return (
+    <Flex
+      as="button"
+      type="button"
+      disabled={!p.disponible}
+      onClick={() => { if (p.disponible) navigate(p.ruta); }}
+      role="group"
+      align="center"
+      justify="center"
+      gap={2.5}
+      px={{ base: 8, md: 11 }}
+      py={{ base: "14px", md: "17px" }}
+      borderRadius="full"
+      bg={p.bg}
+      color={p.txt}
+      fontFamily="'EB Garamond', serif"
+      fontWeight="700"
+      fontSize={{ base: "sm", md: "md" }}
+      letterSpacing="0.14em"
+      textTransform="uppercase"
+      whiteSpace="nowrap"
+      border="none"
+      cursor={p.disponible ? "pointer" : "default"}
+      opacity={p.disponible ? 1 : 0.62}
+      boxShadow={`0 8px 24px ${p.bg}45`}
+      transition="transform 0.28s ease, box-shadow 0.28s ease"
+      _hover={p.disponible ? { transform: "translateY(-3px)", boxShadow: `0 14px 34px ${p.bg}5E` } : {}}
+      _focusVisible={{ outline: `2px solid ${arenaTinta}`, outlineOffset: "4px" }}
+    >
+      {!p.disponible && <IconoCandado color={p.txt} />}
+      {t(p.nombreKey)}
+      <Box
+        as="span"
+        display="inline-block"
+        fontSize={{ base: "xs", md: "sm" }}
+        transition="transform 0.28s ease"
+        _groupHover={p.disponible ? { transform: "translateX(4px)" } : {}}
+      >
+        {p.disponible ? "→" : `· ${t("landing.muyPronto")}`}
+      </Box>
+    </Flex>
+  );
+}
+
 // ── Página ───────────────────────────────────────────────────────────────────
 const Landing = () => {
   const navigate = useNavigate();
   const t = useT();
-  const intro = t("landing.intro");
+  const introTitulo = t("landing.intro.titulo");
+  const introSub = t("landing.intro.sub");
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
@@ -248,40 +414,62 @@ const Landing = () => {
       bg={arenaBg}
       fontFamily="'EB Garamond', serif"
     >
-      {/* ── Barra mínima: solo el idioma ──
-          Sin navegación a propósito: desde aquí solo se entra a un proyecto. */}
-      <Flex justify="flex-end" px={{ base: 6, md: 12 }} pt={{ base: 6, md: 8 }}>
-        <SelectorIdioma fondo="claro" />
-      </Flex>
+      {/* ── 0 · HEADER ── */}
+      <HeaderLanding />
 
       <Box flex="1">
-        {/* ── Frase de orientación ──
-            Es la única cabecera de la página: aquí no va ningún símbolo, porque
-            el mandala pertenece a Vida como Privilegio y vive en su caja.
-            Si `landing.intro` se deja vacía, no se pinta nada (sin hueco muerto). */}
-        {intro && (
-          <Reveal direction="up" distance={22} duration={0.9} delay={0.1}>
-            <Text
-              pt={{ base: 12, md: 20 }}
-              px={{ base: 8, md: 12 }}
-              mx="auto"
-              maxW="720px"
-              textAlign="center"
-              color={arenaTintaSuave}
-              fontStyle="italic"
-              fontSize={{ base: "lg", md: "2xl" }}
-              letterSpacing="0.04em"
-              lineHeight="1.65"
-            >
-              {intro}
-            </Text>
-          </Reveal>
+        {/* ── 1 · INTRO ──
+            La única cabecera de la página, y sin ningún símbolo: el mandala
+            pertenece a El Mapa y vive en su caja. Las dos frases se pueden dejar
+            vacías en los textos y no dejan hueco muerto. */}
+        {(introTitulo || introSub) && (
+          <Flex
+            direction="column"
+            align="center"
+            textAlign="center"
+            gap={{ base: 5, md: 6 }}
+            pt={{ base: 12, md: 20 }}
+            px={{ base: 8, md: 12 }}
+          >
+            {introTitulo && (
+              <Reveal direction="up" distance={24} duration={0.95} delay={0.05}>
+                <Text
+                  color={arenaTinta}
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "3xl", md: "5xl" }}
+                  letterSpacing="0.04em"
+                  lineHeight="1.2"
+                  maxW="820px"
+                >
+                  {introTitulo}
+                </Text>
+              </Reveal>
+            )}
+
+            {introSub && (
+              <Reveal direction="up" distance={20} duration={0.9} delay={0.2}>
+                <Text
+                  color={arenaTintaSuave}
+                  fontFamily="'EB Garamond', serif"
+                  fontStyle="italic"
+                  fontSize={{ base: "md", md: "xl" }}
+                  letterSpacing="0.03em"
+                  lineHeight="1.7"
+                  maxW="680px"
+                >
+                  {introSub}
+                </Text>
+              </Reveal>
+            )}
+          </Flex>
         )}
 
-        {/* ── Las dos cajas ──
+        {/* ── 2 · LAS DOS CAJAS ──
+            Lo primero que se ve, sin scroll: es para lo que existe la página.
             `alignItems="stretch"`: las dos miden lo mismo de alto aunque una
             tenga más texto que la otra. */}
-        <Box px={{ base: 6, md: 12, lg: 20 }} pt={{ base: 12, md: 20 }}>
+        <Box px={{ base: 6, md: 12, lg: 20 }} pt={{ base: 11, md: 16 }}>
           <Grid
             templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
             gap={{ base: 8, md: 10, lg: 14 }}
@@ -290,25 +478,59 @@ const Landing = () => {
             mx="auto"
           >
             {PROYECTOS.map((p, i) => (
-              <CajaProyecto key={p.key} p={p} delay={0.25 + i * 0.18} />
+              <CajaProyecto key={p.key} p={p} delay={0.3 + i * 0.18} />
             ))}
           </Grid>
         </Box>
 
-        {/* ── Separador ──
-            Neutro (filete + punto): no puede llevar el mandala, que es el logo
-            de uno de los dos proyectos, no de la casa. */}
-        <Flex align="center" justify="center" gap={{ base: 4, md: 5 }} px={{ base: 6, md: 12 }} pt={{ base: 20, md: 28 }}>
-          <Box h="1px" w={{ base: "70px", md: "170px" }} bgGradient={`linear(to-r, transparent, ${arenaLinea})`} />
-          <Box w="5px" h="5px" borderRadius="full" bg={arenaTintaSuave} opacity={0.45} flexShrink={0} />
-          <Box h="1px" w={{ base: "70px", md: "170px" }} bgGradient={`linear(to-l, transparent, ${arenaLinea})`} />
-        </Flex>
+        <Box pt={{ base: 20, md: 28 }}><Separador /></Box>
 
-        {/* ── Box de María ── */}
+        {/* ── 3 · YO ── */}
         <CreadoraCard fondo="claro" />
+
+        <Box pt={{ base: 20, md: 28 }}><Separador /></Box>
+
+        {/* ── 4 · DESDE DÓNDE MIRO ──
+            Las ocho disciplinas como PRUEBA de lo que dice el box de María, no
+            como menú: los círculos no son enlaces (ver DisciplinasMirada). */}
+        <Box pt={{ base: 16, md: 24 }}>
+          <DisciplinasMirada />
+        </Box>
+
+        <Box pt={{ base: 20, md: 28 }}><Separador /></Box>
+
+        {/* ── 5 · LAS DOS PUERTAS OTRA VEZ ──
+            Para quien ha bajado leyendo y ya está convencido: la puerta está
+            aquí, no hay que volver arriba. */}
+        <Reveal inView amount={0.15} direction="up" distance={22} duration={0.85}>
+          <Flex
+            direction="column"
+            align="center"
+            gap={{ base: 7, md: 9 }}
+            px={{ base: 6, md: 12 }}
+            pt={{ base: 16, md: 24 }}
+          >
+            <Text
+              color={arenaTinta}
+              fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "xl", md: "3xl" }}
+              fontWeight="700"
+              letterSpacing="0.04em"
+              textAlign="center"
+            >
+              {t("landing.cierre")}
+            </Text>
+
+            <Flex gap={{ base: 4, md: 6 }} wrap="wrap" justify="center">
+              {PROYECTOS.map((p) => (
+                <PuertaCierre key={p.key} p={p} />
+              ))}
+            </Flex>
+          </Flex>
+        </Reveal>
       </Box>
 
-      {/* ── Línea legal ──
+      {/* ── 6 · LÍNEA LEGAL ──
           Lo mínimo imprescindible: la raíz es la puerta de entrada de la web y
           los avisos legales tienen que estar alcanzables desde aquí. */}
       <Flex

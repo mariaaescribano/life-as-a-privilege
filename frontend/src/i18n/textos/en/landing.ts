@@ -1,21 +1,33 @@
 /**
  * Welcome landing (`/`) — Landing.tsx.
  *
- * Project names ARE translated here: «Vida como Privilegio» in Spanish becomes
- * «Life as a Privilege» in English, so there is never any doubt about which
- * language you are reading.
+ * Project names ARE translated here: «El Mapa» in Spanish becomes «The Map» in
+ * English, so there is never any doubt about which language you are reading.
  */
 export const landing = {
-  "landing.intro": "Two projects, one same gaze. Choose where you want to come in.",
+  // ── Intro ──────────────────────────────────────────────────────────────
+  "landing.intro.titulo": "Two projects. The same way of looking.",
+  "landing.intro.sub":
+    "Understanding yourself from the inside, and being accompanied when life moves you somewhere new. Choose where you want to come in.",
+
   "landing.entrar": "Enter",
   "landing.muyPronto": "Coming soon",
+
+  // ── Where I look from (the eight disciplines) ───────────────────────────
+  "landing.mirada.titulo": "Where I look from",
+  "landing.mirada.sub":
+    "The eight disciplines I study and work from. Both projects are born of this same way of looking.",
+
+  // ── Closing (the two buttons again) ────────────────────────────────────
+  "landing.cierre": "Where would you like to start?",
+
   "landing.derechos": "© 2026 María Escribano · All rights reserved",
 
-  // ── Life as a Privilege ────────────────────────────────────────────────
-  "landing.nombre.laap": "Life as a Privilege",
-  "landing.lema.laap": "Know yourself so you can care for yourself.",
-  "landing.desc.laap":
-    "A map of eight disciplines —astrology, psychology, ayurveda, Chinese medicine, physiology, nutrition, kabbalah and history— to understand how you work and stop fighting yourself.",
+  // ── The Map ────────────────────────────────────────────────────────────
+  "landing.nombre.elMapa": "The Map",
+  "landing.lema.elMapa": "Know yourself so you can care for yourself.",
+  "landing.desc.elMapa":
+    "Eight disciplines —astrology, psychology, ayurveda, Chinese medicine, physiology, nutrition, kabbalah and history— to understand how you work and stop fighting yourself.",
 
   // ── A Mother Is Born ───────────────────────────────────────────────────
   // DRAFT, same as the Spanish: rewrite once the project is defined.
