@@ -157,7 +157,7 @@ const EspacioHome = () => {
                   content: '""',
                   position: "absolute",
                   inset: 0,
-                  backgroundImage: "url('/img/life.png')",
+                  backgroundImage: "url('/img/icono/life.png')",
                   backgroundSize: "100%",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",

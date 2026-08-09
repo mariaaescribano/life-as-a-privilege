@@ -23,10 +23,9 @@ import type { Vineta } from "./ComicViewer";
 //   astrologosdelrey, zodiaco, alejandro, grecia, roma, nobleza, cortes,
 //   universidades, pausaqarawiyyin, alandalus, revolucioncientifica,
 //   periodico1930, jung, hoy.
-//   HECHAS las nueve primeras (repintadas en agosto de 2026, de mesopotamia a
-//   universidades). Faltan las seis últimas: pausaqarawiyyin, alandalus,
-//   revolucioncientifica, periodico1930, jung y hoy. Mientras no existan,
-//   ComicViewer pinta «Viñeta N próximamente» y el cómic va igual.
+//   HECHAS LAS QUINCE (agosto de 2026). Si alguna se repinta, se sustituye el
+//   WebP con el mismo nombre; mientras un nombre no exista, ComicViewer pinta
+//   «Viñeta N próximamente» y el cómic va igual.
 // ─────────────────────────────────────────────────────────────────────────
 
 const F = (n: string) => `/viñetas/astrologia/historia/${n}.webp`;
