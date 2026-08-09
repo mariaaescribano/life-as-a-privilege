@@ -1,0 +1,216 @@
+{
+  "id": "d1766747-5765-4f32-b919-f090ba94e3b0",
+  "modalidad": "Cábala",
+  "titulo": "El Árbol de la Vida",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. El Árbol de la Vida",
+      "submodules": [
+        {
+          "id": "l-hg6df8w",
+          "nom": "1.1 Definición",
+          "tipo": "texto",
+          "contenido": "El **Árbol de la Vida** es un mapa de diez **sefirot** (emanaciones o canales de la energía divina) conectadas por veintidós senderos.\n\nNo es un árbol físico, sino un diagrama de cómo el **Infinito (Ein Sof)** crea y sostiene el mundo finito.\n\nSe organiza en tres columnas: la derecha (**expansión**), la izquierda (**restricción**) y la central (**equilibrio**).\n\nEl árbol surge en el sur de Francia en el siglo XII, en la escuela del rabino Isaac el Ciego."
+        },
+        {
+          "id": "l-ym782w2",
+          "nom": "1.2 El sufrimiento",
+          "tipo": "texto",
+          "contenido": "El alma humana y la del universo están estructuradas siguiendo este mapa.\n\n*El sufrimiento humano viene del desequilibrio de estas dimensiones.*\n\nPor eso, para entendernos y conseguir la paz interior y nuestra unión con nuestra esencia, debemos entender las dimensiones."
+        }
+      ]
+    },
+    {
+      "title": "2. Las dimensiones",
+      "submodules": [
+        {
+          "id": "l-irnpusk",
+          "nom": "2.1 El orden",
+          "tipo": "texto",
+          "contenido": "El orden tradicional descendente es: **Kéter**, **Jojmá**, **Biná**, **Jésed**, **Guevurá**, **Tiféret**, **Nétzaj**, **Hod**, **Yesod** y **Maljut**.\n\nLas tres primeras forman el plano del intelecto (**ChaBaD**: Jojmá-Biná-Daat); las siete inferiores, el plano de las emociones.\n\n**Daat** (conocimiento) no es una sefirá independiente, sino el punto donde Jojmá y Biná se unen para producir acción."
+        },
+        {
+          "id": "l-8aeaccg",
+          "nom": "2.2 Kéter — la corona",
+          "tipo": "texto",
+          "contenido": "*En el trabajo interior, Kéter puede experimentarse como la conciencia de que siempre existe un nivel más profundo de crecimiento.*\n\nEs la única dimensión donde habita la verdad; todo lo demás son niveles transitorios de verdades.\n\nSe considera el intermediario entre el **Ein Sof** y el resto de las sefirot: el puente entre el infinito y lo manifestado.\n\nRepresenta la **voluntad divina**, el primer impulso hacia la creación."
+        },
+        {
+          "id": "l-ua3yv5d",
+          "nom": "2.3 Jojmá — la sabiduría",
+          "tipo": "texto",
+          "contenido": "Jojmá es el **destello de inspiración pura**, la idea cruda antes de tener forma.\n\nSu nombre se interpreta como kóaj-mah, *el potencial de lo que es*.\n\nSu distorsión, sin Biná que la dé forma, es la dispersión: brillantez sin coherencia."
+        },
+        {
+          "id": "l-g4mvcd6",
+          "nom": "2.4 Biná — el entendimiento",
+          "tipo": "texto",
+          "contenido": "Biná toma el destello de Jojmá y lo procesa, le da estructura, detalle y forma.\n\nCrea las clasificaciones desde las que vemos la realidad.\n\nSu raíz hebrea tiene que ver con **separar** y **discernir**.\n\nSe la llama *la Madre superior* y *el vientre de la creación*, donde la sabiduría cruda se vuelve concepto comprensible."
+        },
+        {
+          "id": "l-pkgu9z1",
+          "nom": "2.5 Daat — el conocimiento",
+          "tipo": "texto",
+          "contenido": "Es hijo de Biná y Jojmá: el conocimiento nacido de la sabiduría y la inteligencia.\n\nSon las perspectivas, lo que creemos que sabemos.\n\n*Daat aumenta cuando se hace buen uso de Biná.*"
+        },
+        {
+          "id": "l-bm2iz25",
+          "nom": "2.6 Jésed — la bondad",
+          "tipo": "texto",
+          "contenido": "Jésed es el **Amor incondicional** y la entrega sin límites.\n\n*La piedad y el Amor que damos fuera son proporcionales a los que nos damos a nosotros mismos.*\n\nNo siempre es sí: hay que aprender a decir no y a bajar barreras.\n\nDamos, pero a veces no se puede dar todo lo que se quisiera porque el otro no es capaz de recibirlo.\n\n*Doy por el placer de dar.*\n\n---\n\nHay que aprender a dar, pero no más allá de nuestras posibilidades.\n\nLa negativa de Jésed (su kelipá) es dar más de lo que uno puede."
+        },
+        {
+          "id": "l-osvzfqm",
+          "nom": "2.7 Guevurá — la severidad y los límites",
+          "tipo": "texto",
+          "contenido": "Guevurá es la **disciplina**, la **restricción** y la capacidad de poner límites.\n\nEs la fuerza que permite distinguir entre lo que el otro desea y lo que nosotros deseamos.\n\n*Debemos aprender a decir no.*\n\nNo dar falsas esperanzas es una forma de fortaleza.\n\nSu lado negativo es la severidad excesiva."
+        },
+        {
+          "id": "l-rkcguxz",
+          "nom": "2.8 Tiféret — la armonía",
+          "tipo": "texto",
+          "contenido": "Tiféret es la **belleza**, la **compasión** y el equilibrio entre derecha e izquierda.\n\nEs el centro: equilibrio para los otros y con nosotros mismos.\n\n*Es la reconciliación de los opuestos.*\n\nEl Amor de Jésed debe equilibrarse con la severidad de Guevurá.\n\n*En ella encontramos la paz.*"
+        },
+        {
+          "id": "l-6y59mun",
+          "nom": "2.9 Nétzaj — las emociones",
+          "tipo": "texto",
+          "contenido": "**Nétzaj** es la capacidad de sostener una dirección a pesar de las dificultades.\n\nSignifica *victoria*, *perseverancia* o *eternidad*.\n\nJunto con Hod regula cómo y en qué medida la energía llega hacia abajo.\n\n*La verdadera victoria es reconocer nuestros sentimientos.*\n\nNo debemos reprimir lo que sentimos.\n\nEl baile, la música y el arte son formas de expresión.\n\n*Hay que sentir el dolor cuando se siente.*"
+        },
+        {
+          "id": "l-0vg9cql",
+          "nom": "2.10 Hod — la honestidad",
+          "tipo": "texto",
+          "contenido": "Hod significa **esplendor**, pero también **humildad** y **reconocimiento**.\n\nSi Nétzaj es el impulso que avanza, Hod es la capacidad de detenerse, escuchar y aceptar.\n\n*Nos permite reconocer nuestros límites, admitir nuestros errores y aprender de los demás.*\n\nTambién está relacionada con el lenguaje y la comunicación.\n\n*La humildad no es pensar menos de uno mismo, sino ver la realidad con la menor distorsión posible.*\n\nSu lado negativo es el **autoengaño**."
+        },
+        {
+          "id": "l-vdwbjf1",
+          "nom": "2.11 Yesod — la identidad",
+          "tipo": "texto",
+          "contenido": "Yesod significa **fundamento**.\n\nEs la dimensión que reúne las energías de todas las sefirot anteriores y las convierte en algo capaz de manifestarse.\n\nRepresenta el **vínculo**, la **conexión** y la capacidad de relacionarnos con nosotros mismos, con los demás y con el mundo.\n\n*Nuestra identidad se construye en Yesod porque aquí integramos nuestras ideas, emociones y experiencias.*\n\nTambién se relaciona con la intimidad, la confianza y la energía sexual.\n\nSu lado negativo es la **falsa identidad**."
+        },
+        {
+          "id": "l-orv0ez5",
+          "nom": "2.12 Maljut — el mundo físico",
+          "tipo": "texto",
+          "contenido": "Maljut es el **reino**, la receptora de todas las sefirot superiores, identificada con la **Shejiná**.\n\nEs la realización final de todo el proceso: la luz que desciende hasta hacerse mundo.\n\nSomos seres físicos conectados con la divinidad, y recibimos la energía de todas las demás dimensiones.\n\n*Volver santa a la materia es la virtud más elevada.*\n\n---\n\n*La maldad física es la forma más condensada de la manifestación del mal, pero rechazar lo material por creer que es malo también es una forma de negatividad.*"
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-00y3gmf",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Exceso de Biná sin Jojmá.",
+                "B) Exceso de Jojmá sin Biná.",
+                "C) Exceso de Yesod sin Maljut."
+              ],
+              "enunciado": "Una persona tiene ideas brillantes constantemente, pero nunca consigue desarrollarlas ni convertirlas en proyectos concretos. ¿Qué desequilibrio describe mejor esta situación?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Crear nuevas ideas espontáneamente.",
+                "B) Conectar sabiduría e inteligencia para generar conocimiento aplicable.",
+                "C) Equilibrar las emociones del plano inferior."
+              ],
+              "enunciado": "Según el texto, ¿qué función cumple Daat?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Jésed.",
+                "B) Guevurá.",
+                "C) Hod."
+              ],
+              "enunciado": "Una persona ayuda a todo el mundo, nunca dice que no y termina agotada y resentida. ¿Qué sefirá está actuando de forma distorsionada?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Castigar severamente cualquier error.",
+                "B) Reprimir emociones para mantener el control.",
+                "C) Poner límites claros aunque resulten incómodos."
+              ],
+              "enunciado": "¿Cuál de las siguientes situaciones representa mejor a Guevurá sana?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Son fuerzas opuestas que deben eliminarse mutuamente.",
+                "B) Deben equilibrarse para producir una expresión saludable.",
+                "C) Jésed es superior y Guevurá es una corrección temporal."
+              ],
+              "enunciado": "¿Qué relación existe entre Jésed y Guevurá según el texto?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Hod.",
+                "B) Nétzaj.",
+                "C) Maljut."
+              ],
+              "enunciado": "Una persona reconoce que estaba equivocada, acepta la realidad y modifica su comportamiento. ¿Qué sefirá aparece más claramente?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Es el origen de todas las ideas creativas.",
+                "B) Integra energías anteriores y las prepara para manifestarse.",
+                "C) Es la dimensión donde habita la verdad absoluta."
+              ],
+              "enunciado": "¿Qué afirmación refleja mejor el papel de Yesod?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Reconocer un error propio.",
+                "B) Escuchar perspectivas distintas.",
+                "C) Negar capacidades reales para obtener aprobación."
+              ],
+              "enunciado": "Según el texto, ¿cuál sería un ejemplo de falsa humildad más que de Hod auténtico?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) La verdadera victoria implica reconocer lo que sentimos.",
+                "B) La perseverancia exige eliminar las emociones.",
+                "C) Las emociones pertenecen exclusivamente a Hod."
+              ],
+              "enunciado": "Una persona siente miedo, tristeza y frustración, pero insiste en ignorarlos para seguir adelante. ¿Qué enseñanza de Nétzaj está descuidando?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Transformar la inspiración en conocimiento.",
+                "B) Convertir la energía espiritual en realidad manifestada.",
+                "C) Mantener el equilibrio entre Amor y disciplina."
+              ],
+              "enunciado": "¿Cuál de las siguientes frases resume mejor la función de Maljut?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

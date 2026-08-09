@@ -1,0 +1,231 @@
+{
+  "id": "e67b8e91-c4a6-4234-9251-1e9088919cc1",
+  "modalidad": "Astrología",
+  "titulo": "Los Ascendentes",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "Ascendentes",
+      "submodules": [
+        {
+          "id": "l-l514yz4",
+          "nom": "Ascendente Aries",
+          "tipo": "texto",
+          "contenido": "Atlético. Independiente, fuerte e impulsivo. Le gusta liderar y necesita saber que puede manejar la Vida. \n\nEs su mejor versión cuando controla su agresividad innata. Necesita ser creativo y libre; de lo contrario, puede experimentar una profunda frustración que se manifiesta en enfermedad o enfado. \n\nTiende a dejar proyectos a medias, se aburre rápidamente y necesita movimiento físico. Valentía, iniciativa y espontaneidad."
+        },
+        {
+          "id": "l-b9p9h8n",
+          "nom": "Ascendente Tauro",
+          "tipo": "texto",
+          "contenido": "Lento; puede sentir que su cuerpo es pesado. \n\nEstable, constante y metódico. Puede mantenerse rígido y apegado a algo que le proporciona comodidad, aunque no le aporte salud, energía o Amor. \n\nTrabajador y celoso. Es su mejor versión cuando conecta con su propia energía. A menudo transmite calma, estabilidad y resistencia frente a la adversidad."
+        },
+        {
+          "id": "l-gy6pqf9",
+          "nom": "Ascendente Géminis",
+          "tipo": "texto",
+          "contenido": "Apariencia juvenil. Puede hablar mucho. \n\nNervioso, curioso y de aprendizaje rápido. Debe tener cuidado de no quedarse en la superficialidad. \n\nEstá en su mejor versión cuando se compromete, profundiza en el aprendizaje y conecta con su corazón y, por extensión, con sus emociones. "
+        },
+        {
+          "id": "l-pdr7gfp",
+          "nom": "Ascendente Cáncer",
+          "tipo": "texto",
+          "contenido": "De formas redondeadas y aspecto aniñado. Tímido y sensible. \n\nPara evitar que se vea su vulnerabilidad, crea una coraza tras la que esconderse y protegerse. Tiene una fuerte necesidad de seguridad emocional y material. \n\nPuede buscar ser nutrido por una figura materna o nutrir a otros; en cualquier caso, necesita volver a sí mismo para comprender que su fuente de nutrición, tanto para él como para los demás, reside en su propio corazón."
+        },
+        {
+          "id": "l-jjclt9h",
+          "nom": "Ascendente Leo",
+          "tipo": "texto",
+          "contenido": "Atractivo, con cabello abundante y, a menudo, ojos claros. \n\nGeneroso, idealista, romántico, honesto y directo. Tiene miedo al ridículo y puede identificarse excesivamente con el ego. \n\nPosee una fuerte necesidad de amar y sentirse amado. No suele mostrar su realidad interna, dejando ver únicamente aquello que puede despertar admiración en los demás. \n\nEs su mejor versión cuando es humilde, entendiendo la humildad como el reconocimiento sincero de sus dones tal y como son, sin exagerarlos ni minimizarlos. Irradia presencia, carisma y necesidad de expresión personal."
+        },
+        {
+          "id": "l-ss8v1cg",
+          "nom": "Ascendente Virgo",
+          "tipo": "texto",
+          "contenido": "De movimientos nerviosos y apariencia más joven de la que corresponde a su edad. \n\nPuede sentirse inadecuado y guardar resentimiento de sus experiencias. Crítico, analítico y juzgador, especialmente consigo mismo, aunque también con los demás. \n\nDetallista, se reprocha no ser perfecto aun sabiendo que la perfección es imposible. Desea poner su conocimiento al servicio. Olvida que la Vida no puede ser medida ni controlada por completo. \n\nEs su mejor versión cuando utiliza sus dones para acercarse a su esencia y no únicamente para servir a los demás."
+        },
+        {
+          "id": "l-ruav8ck",
+          "nom": "Ascendente Libra",
+          "tipo": "texto",
+          "contenido": "De rasgos armoniosos y simétricos, con piel delicada. \n\nNecesita la compañía de otros para conocerse a sí mismo y suele desear una pareja que le ayude a definirse. Dulce, diplomático y conciliador, busca la unión y evita los conflictos. \n\nEs su mejor versión cuando confía en su propio valor, deja de necesitar armonía externa para sentir armonía interna y toma sus propias decisiones."
+        },
+        {
+          "id": "l-ux4kkoa",
+          "nom": "Ascendente Escorpio",
+          "tipo": "texto",
+          "contenido": "Despierta una fuerte atracción sexual en los demás y suele tener una mirada intensa. \n\nMisterioso y enigmático, prefiere observar antes que participar. Necesita sentirse valorado por los otros. Internamente suele estar en constante actividad o atravesando crisis, aunque por fuera parezca tranquilo. Puede desarrollar tendencias narcisistas o egoicas. \n\nEl sexo es importante y suele vivirlo como una forma de regresar a la unidad. Destruye estructuras pasadas que ya no le sirven. Puede generar reacciones intensas en los demás incluso sin proponérselo.\n\nEstá destinado a enfrentarse a la oscuridad para transformarla. "
+        },
+        {
+          "id": "l-rhm9qp2",
+          "nom": "Ascendente Sagitario",
+          "tipo": "texto",
+          "contenido": "Alto, atlético y de piernas largas. \n\nPuede tener dificultades para creer que la Vida es realmente buena o abundante. En su expresión más elevada, vive como si no existieran límites. Posee capacidad filosófica y pensamiento abstracto. \n\nAma los viajes, la libertad y los animales. Alcanza un objetivo para dirigirse inmediatamente hacia el siguiente. Inspirador e inspirado por naturaleza.  "
+        },
+        {
+          "id": "l-i9mo6xq",
+          "nom": "Ascendente Capricornio",
+          "tipo": "texto",
+          "contenido": "De piel apagada y estructura ósea marcada. \n\nPlanifica de forma metódica y orientada al futuro. Tiende a buscar la aprobación de la figura paterna. Puede parecer mayor de lo que es. \n\nMaduro, frío, serio y, en cierta medida, reprimido. Valora el trabajo duro y la paciencia. Necesita encontrar el equilibrio entre su naturaleza disciplinada y su lado más sensible y suave."
+        },
+        {
+          "id": "l-tbyxdqd",
+          "nom": "Ascendente Acuario",
+          "tipo": "texto",
+          "contenido": "De dedos largos, rasgos angulares y mirada llamativa. \n\nNecesita posicionarse como observador para encontrar equilibrio y comprenderse mejor. Desea ser reconocido por su individualidad dentro de un grupo más amplio. Puede mostrarse irracional, egocéntrico, futurista y muy mental. \n\nLa convivencia cercana puede resultar complicada. Está en su mejor versión cuando desarrolla disciplina y paciencia para acercarse a sus ideales."
+        },
+        {
+          "id": "l-lrkr5cc",
+          "nom": "Ascendente Piscis",
+          "tipo": "texto",
+          "contenido": "Con tendencia al llanto, expresión soñadora y rasgos delicados. \n\nEn algunos casos puede presentar una dentadura irregular o frágil. Hipersensible, soñador y compasivo. \n\nEs su mejor versión cuando aprende a gestionar sus emociones y evita ser arrastrado por ellas. Es fácilmente influenciable porque le cuesta distinguir lo que le pertenece de lo que pertenece a los demás. \n\nPueden aparecer las adicciones, el arte o las formas de escapismo a través de sustancias, fantasías o del sueño. Suele percibir fácilmente los estados emocionales del entorno y absorberlos como propios, debe aprender a liberarlos."
+        }
+      ]
+    },
+    {
+      "title": "Tes de integración",
+      "submodules": [
+        {
+          "id": "l-zueo33o",
+          "nom": "Elige el Ascendente",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Sagitario",
+                "B) Aries",
+                "C) Acuario",
+                "D) Leo"
+              ],
+              "enunciado": "Esta persona suele buscar constantemente nuevos retos. Cuando algo deja de estimularla o ya no supone un desafío, pierde el interés rápidamente. Necesita movimiento y autonomía para sentirse viva."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Libra",
+                "B) Géminis",
+                "C) Virgo",
+                "D) Piscis"
+              ],
+              "enunciado": "Tiene facilidad para adaptarse a distintas situaciones y aprende muy deprisa. Sin embargo, suele dispersarse y le cuesta profundizar emocionalmente en aquello que estudia o experimenta."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Cáncer",
+                "B) Tauro",
+                "C) Libra",
+                "D) Piscis"
+              ],
+              "enunciado": "Se muestra amable y conciliadora. Evita los conflictos y suele buscar el equilibrio en sus relaciones. Le cuesta tomar decisiones sin consultar o apoyarse en otros."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Escorpio",
+                "B) Capricornio",
+                "C) Acuario",
+                "D) Virgo"
+              ],
+              "enunciado": "Es una persona reservada que rara vez muestra todo lo que siente. Los demás suelen percibirla como intensa o magnética, incluso cuando no intenta llamar la atención."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Tauro",
+                "B) Capricornio",
+                "C) Leo",
+                "D) Escorpio"
+              ],
+              "enunciado": "Tiende a responsabilizarse desde muy joven. Da una impresión de madurez y suele planificar pensando en el futuro. Puede parecer distante emocionalmente."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Aries",
+                "B) Leo",
+                "C) Sagitario",
+                "D) Libra"
+              ],
+              "enunciado": "Tiene una fuerte necesidad de sentirse especial y reconocida. A menudo muestra confianza, aunque en el fondo teme hacer el ridículo o no ser suficientemente admirada."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Tauro",
+                "B) Capricornio",
+                "C) Virgo",
+                "D) Cáncer"
+              ],
+              "enunciado": "Necesita estabilidad y puede permanecer mucho tiempo en situaciones que ya no le aportan bienestar porque teme perder la seguridad que le proporcionan."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Cáncer",
+                "B) Piscis",
+                "C) Escorpio",
+                "D) Libra"
+              ],
+              "enunciado": "Posee una gran sensibilidad hacia el sufrimiento ajeno y le cuesta distinguir qué emociones son suyas y cuáles pertenecen a otros. Necesita aprender a poner límites."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Acuario",
+                "B) Géminis",
+                "C) Sagitario",
+                "D) Capricornio"
+              ],
+              "enunciado": "Busca pertenecer a algo más grande que sí mismo, pero al mismo tiempo necesita sentirse diferente y único. Puede alternar entre la Vida social y la soledad."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Piscis",
+                "B) Tauro",
+                "C) Cáncer",
+                "D) Virgo"
+              ],
+              "enunciado": "Suele cuidar mucho de quienes ama, pero corre el riesgo de olvidarse de sí mismo. Tiene una gran necesidad de seguridad emocional y puede protegerse detrás de una coraza."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Capricornio",
+                "B) Virgo",
+                "C) Géminis",
+                "D) Escorpio"
+              ],
+              "enunciado": "Analiza constantemente lo que sucede a su alrededor. Es muy exigente consigo mismo y puede frustrarse porque siente que nunca alcanza el nivel de perfección que busca."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Aries",
+                "B) Leo",
+                "C) Sagitario",
+                "D) Acuario"
+              ],
+              "enunciado": "Ama la libertad, el aprendizaje y la exploración. Cuando alcanza una meta, rápidamente dirige su atención hacia una nueva. Tiene una visión amplia de la Vida y suele inspirar a otros."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

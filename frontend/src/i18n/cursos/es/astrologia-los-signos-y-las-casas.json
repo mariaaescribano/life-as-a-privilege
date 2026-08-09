@@ -1,0 +1,519 @@
+{
+  "id": "30aa7c98-274b-4bd1-b92a-9576227f7ed9",
+  "modalidad": "Astrología",
+  "titulo": "Los Signos y las Casas",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Los Elementos",
+      "submodules": [
+        {
+          "id": "l-s6ug6pp",
+          "nom": "Fuego",
+          "tipo": "texto",
+          "contenido": "Las personas que tienen mucho fuego en su carta sienten que tienen una **misión en la Vida.** Son entusiastas, románticas, enérgicas y poseen una gran autosuficiencia. Pueden ser dominantes. \n\nCuando falta fuego en la carta, las personas pueden sentir poca confianza en la Vida y vivir con escasa ilusión o motivación."
+        },
+        {
+          "id": "l-6zykaz4",
+          "nom": "Tierra",
+          "tipo": "texto",
+          "contenido": "Lo **práctico** y lo **material.** Asociado con los sentidos físicos. \n\nLas personas con mucha tierra sienten que deben permanecer y mantener con Vida las estructuras construidas en el pasado (tradiciones, creencias, costumbres...), aunque no les gusten o les hagan daño. \n\nCuando falta tierra, falta estructura y puede existir una gran desconexión de la consciencia corporal."
+        },
+        {
+          "id": "l-bg2724f",
+          "nom": "Aire",
+          "tipo": "texto",
+          "contenido": "El **pensamiento** y la **comunicación.** \n\nLas personas con predominancia de aire suelen ser inteligentes, racionales y necesitan compartir ideas. Cuando hay demasiado aire, puede existir un exceso de actividad mental y ruido interno, por lo que resulta importante encontrar espacios de calma y reflexión. \n\nCuando falta aire, puede haber torpeza mental y riesgo de que las emociones nublen la razón."
+        },
+        {
+          "id": "l-7noxdsv",
+          "nom": "Agua",
+          "tipo": "texto",
+          "contenido": "Las personas con predominancia de este elemento son **emocionales**, **intuitivas** y **sensibles**. Pueden ser muy influenciables, rencorosas y tener tendencia a la depresión. \n\nCuando falta agua, existe dificultad para sentir y expresar los sentimientos. Estas personas suelen cerrar su corazón porque creen que así evitarán el dolor."
+        },
+        {
+          "id": "l-l5thc40",
+          "nom": "Combinaciones de Elementos",
+          "tipo": "texto",
+          "contenido": "Normalmente, dos elementos predominan en una carta astral. No son buenos ni malos, se trata de equilibrarlos en ti mismo y elevarlos a su mejro versión.\n\n**Fuego + Tierra:** Materializan su potencial en acciones u objetivos concretos.\n\n**Fuego + Aire:** Pueden idealizar y racionalizar sus intuiciones. Suelen inspirar a los demás.\n\n**Fuego + Agua:** Necesitan expresarse de forma creativa o, de lo contrario, tenderán a dramatizar su Vida.\n\n**Tierra + Agua:** Son los nutridores, quienes proveen y sostienen. Deben tener cuidado de dar demasiado para olvidarse de ellos mismos. Deben encontrar su fuente de nutrición interior.\n\n**Tierra + Aire:** Racionales, pragmáticos y poco emocionales. Les cuesta gestionar sus emociones, por lo que la Vida suele presentarles situaciones que les obligan a enfrentarse a su mundo emocional.\n\n**Agua + Aire:** Necesitan conectar y relacionarse con los demás. Deben tener cuidado de no perderse en el otro debido a esta necesidad de vinculación."
+        }
+      ]
+    },
+    {
+      "title": "2. Las casas",
+      "submodules": [
+        {
+          "id": "l-9c52rs4",
+          "nom": "Sucedentes - Cadentes - Angulares",
+          "tipo": "texto",
+          "contenido": "**Casas sucedentes (2, 5, 8 y 11)**\n\nAportan **estabilidad** y **propósito**. Representan el bienestar material y la consolidación de aquello que se ha iniciado en las casas angulares.\n\nCuando no hay planetas en estas casas, a las personas puede costarles terminar lo que empiezan, ya que sienten que *siguen buscando sin encontrar su propio lugar.*\n\n---\n\n**Casas cadentes (3, 6, 9 y 12)**\n\nSon **adaptables** y **mentales**. Los planetas situados aquí hacen que la persona tenga una gran necesidad de pensar, aprender y comprender. También favorecen la capacidad de adaptación a nuevas situaciones.\n\n---\n\n**Casas angulares (1, 4, 7 y 10)**\n\nNos influyen desde niveles muy profundos e inconscientes. Representan la energía con la que iniciamos **nuevos ciclos en nuestra Vida.** \n\nLos planetas situados en estas casas poseen una gran fuerza de manifestación. Cuando no hay planetas en ellas, las personas pueden tender a esperar que otros actúen primero antes de tomar la iniciativa, debido a una sensación de falta de impulso o energía."
+        },
+        {
+          "id": "l-emnzlya",
+          "nom": "Casa 1",
+          "tipo": "texto",
+          "contenido": "**La casa de Aries.** \n\nEl Ascendente. Cómo nos presentamos y cómo nos perciben el mundo y los demás. Cómo fue nuestro nacimiento y lo que nos condiciona desde entonces. Cómo percibimos la Vida y cómo afrontamos lo nuevo. Las herramientas que tenemos. \n\n*La energía de la cual se tiñe el camino que necesitamos recorrer para llegar al Sol.*"
+        },
+        {
+          "id": "l-07yale7",
+          "nom": "Casa 2",
+          "tipo": "texto",
+          "contenido": "**La casa de Tauro.** \n\nEl valor propio y el mundo tangible. Nuestra relación con la materia, el dinero y con nosotros mismos. El valor que somos capaces de aportar al mundo. Las cualidades que deseamos desarrollar."
+        },
+        {
+          "id": "l-ssgwi22",
+          "nom": "Casa 3",
+          "tipo": "texto",
+          "contenido": "**La casa de Géminis.**\n\nCómo comunicas, piensas y te mueves. Nombrar las cosas. El mundo mental. Los primeros años de Vida, el colegio, los vecinos y los hermanos. Lo que percibimos de nuestro ambiente y lo que absorbemos sin ser conscientes de ello."
+        },
+        {
+          "id": "l-p8oio8s",
+          "nom": "Casa 4",
+          "tipo": "texto",
+          "contenido": "**La casa de Cáncer.**\n\nCómo son tus raíces. El hogar al que llegamos. Las primeras emociones. La nutrición de la madre. La seguridad emocional, la protección y la nutrición. Qué percibiste y cómo experimentaste a tus padres. Nuestro niño y templo interior (no el que fuimos)."
+        },
+        {
+          "id": "l-jjymw5i",
+          "nom": "Casa 5",
+          "tipo": "texto",
+          "contenido": "**La casa de Leo.**\n\n¿Disfrutas de la Vida? Ideas, proyectos y creaciones. El niño que fuimos. Deseo de ser padres o de crear. El romance. Encuentros sexuales sin compromiso. Arte, placer y disfrute. \n\n*La casa del corazón.*"
+        },
+        {
+          "id": "l-magcgbk",
+          "nom": "Casa 6",
+          "tipo": "texto",
+          "contenido": "**La casa de Virgo.** \n\n¿Cómo te cuidas? El servicio a los demás. La dieta, la rutina, el cuidado, la limpieza y los detalles. Cómo gestionas tu tiempo. La enfermedad como síntoma de que nos estamos alejando de nosotros mismos. El trabajo como empleado."
+        },
+        {
+          "id": "l-lzq16wv",
+          "nom": "Casa 7",
+          "tipo": "texto",
+          "contenido": "**La casa de Libra.**\n\nLas relaciones de equidad e igualdad. Asociaciones de uno a uno, parejas a largo plazo y matrimonio. ¿Cómo te relacionas con el otro? Las cualidades que buscas en la pareja. \n\nLo que proyectas en el otro y que, en verdad, es tuyo; es decir, la cualidad que no deseas reconocer en ti mismo y que, por ello, atraes para tomar conciencia de que eso que ves fuera también te pertenece."
+        },
+        {
+          "id": "l-ji8h41p",
+          "nom": "Casa 8",
+          "tipo": "texto",
+          "contenido": "**La casa de Escorpio.** \n\nEl inconsciente, la sombra, los miedos y los traumas. El dolor y cómo fue recibido y causado. Aquello que no está resuelto. Nuestro infierno, nuestros demonios. El sexo como fusión. La Muerte."
+        },
+        {
+          "id": "l-8c5jpo6",
+          "nom": "Casa 9",
+          "tipo": "texto",
+          "contenido": "**La casa de Sagitario.**\n\nEl sentido de la Vida. La búsqueda de la verdad, la autenticidad y el significado de nuestras experiencias. El entendimiento del mundo y de nuestro lugar en él. \n\nSe examina lo establecido por la religión o la filosofía. Mente elevada, simbología. \n\nEducación superior, universidad. Las culturas, el extranjero y los viajes para conocerlos. \n\nMal colocado: dogma, intolerancia e indoctrinación."
+        },
+        {
+          "id": "l-09ucyg0",
+          "nom": "Casa 10",
+          "tipo": "texto",
+          "contenido": "**La casa de Capricornio.**\n\nTu vocación, aquello que aportas a la sociedad. Las cualidades por las que queremos ser recordados o percibidos, o que deseamos que caractericen nuestro trabajo. Lo que representamos para los demás. La influencia de alguno de nuestros progenitores. Nuestra relación con la autoridad. Éxito y logros.\n"
+        },
+        {
+          "id": "l-x4txuqa",
+          "nom": "Casa 11",
+          "tipo": "texto",
+          "contenido": "**La casa de Acuario.** \n\nQué anhelas. Amigos, grupos, asociaciones y clientes. Buscamos trascendernos a nosotros mismos y formar parte de algo más grande. \n\nPuede vivirse desde un punto de vista Saturnino, juntándote con otros solo para pertenecer, o desde uno Acuariano, siendo consciente de que todos somos uno y que lo que nos separa es una ilusión. \n\nEmpatía. Amor por la humanidad y lo que podemos hacer por ella."
+        },
+        {
+          "id": "l-9cebfno",
+          "nom": "Casa 12",
+          "tipo": "texto",
+          "contenido": "**La casa de Piscis.**\n\nEl transgeneracional. Lo que nuestros ancestros no pudieron gestionar ni sanar. El inconsciente colectivo. Sueños y adicciones. \n\nLa casa de la unidad con Dios; puede buscarse de manera errónea a través de las drogas o de forma más consciente a través de la meditación. \n\nDificultad para establecer límites y distinguir qué es propio. Secretos. Aislamiento para conocerse. Compasión."
+        }
+      ]
+    },
+    {
+      "title": "3. Los Signos",
+      "submodules": [
+        {
+          "id": "l-kfl4elm",
+          "nom": "Aries",
+          "tipo": "texto",
+          "contenido": "Actúa con decisión sin ser plenamente consciente de que sus acciones tienen consecuencias. \n\nSe mueve por impulsos cortos e intensos, pero pierde el interés rápidamente y busca el siguiente comienzo. \n\nConcentra su energía en conseguir objetivos; mientras lucha por alcanzarlos, toma conciencia de su poder. Por eso, cuando las cosas se ponen difíciles o se aburre, abandona y dejar proyectos sin terminar. \n\nNo le gusta escuchar consejos. Puede ser agresivo y le cuesta reconocer una derrota. \n\nPuede experimentar fluctuaciones emocionales y fuertes impulsos agresivos que desaparecen con la misma rapidez con la que aparecen.\n\nCompetitivo; si siente que no puede seguir creciendo, puede caer en la depresión. \n\nEl movimiento mental y físico es esencial. "
+        },
+        {
+          "id": "l-vm4f1xo",
+          "nom": "Tauro",
+          "tipo": "texto",
+          "contenido": "*Capaz de convertir la energía en materia.* \n\nLabrador por naturaleza, su trabajo es constante y estable. Conectado a la naturaleza y a sus ciclos, por lo que suele ser paciente. \n\nLe gusta compartir, aunque puede ser posesivo y cabezota. Suele apegarse al pasado y a las estructuras, incluso cuando ya no le sirven. \n\nLeal y comprometido, valora la amistad y las relaciones cuando aportan estabilidad y valor a su Vida. \n\nTiene una fuerte necesidad de seguridad y estabilidad, tanto material como emocional."
+        },
+        {
+          "id": "l-6dg7ncf",
+          "nom": "Géminis",
+          "tipo": "texto",
+          "contenido": "La dualidad como camino para volver a la unidad y comprender que todo forma parte de lo mismo. \n\nRápido, intelectual y comunicador. Puede costarle empatizar y profundizar emocionalmente. \n\nDebe aprender a conectar con sus emociones y a bajar el volumen del ruido mental. Tiene múltiples perspectivas desde las que observar una situación. \n\nSiempre busca algo nuevo que aprender. Destaca por su adaptabilidad y capacidad para conectar personas e ideas diferentes."
+        },
+        {
+          "id": "l-bibcagr",
+          "nom": "Cáncer",
+          "tipo": "texto",
+          "contenido": "Su acción se dirige hacia fuera, tratando de nutrir y cuidar a los demás, pero no debe olvidarse de volver hacia dentro para nutrirse a sí mismo; de lo contrario, puede aparecer la enfermedad. \n\nPuede apegarse profundamente, especialmente a la familia, a las raíces, al dulce, al pasado y al hogar. \n\nLa casa en cuya cúspide se encuentra Cáncer señala el área en la que se necesita sentir vulnerabilidad para poder crecer."
+        },
+        {
+          "id": "l-i22olg0",
+          "nom": "Leo",
+          "tipo": "texto",
+          "contenido": "Desea que nadie esté por encima. Quiere ser dueño de su propia Vida. \n\nEl protagonista, el rey, el corazón. Se encuentra a sí mismo a través de sus creaciones. \n\nRomántico, juguetón y brillante, rara vez pasa desapercibido. Necesita sentir que expresa su individualidad y creatividad de forma auténtica."
+        },
+        {
+          "id": "l-tzjvton",
+          "nom": "Virgo",
+          "tipo": "texto",
+          "contenido": "Analiza, cuida y busca que su conocimiento esté al servicio \n\nNecesita entender cómo funciona el mundo; para ello, disecciona la realidad con el fin de reconstruirla. \n\nColecciona datos en su mente para clasificarlos y darles el uso más útil posible. Vive en constante lucha contra su caos y trata de poner orden a través de rutinas. Somatiza aquello que niega. \n\nSolitario, detallista y responsable. No tolera la pereza y puede costarle conectar con la pasión. Teme el envejecimiento y la enfermedad."
+        },
+        {
+          "id": "l-eas610u",
+          "nom": "Libra",
+          "tipo": "texto",
+          "contenido": "Necesita a los demás para conectarse consigo mismo y conocerse. Puede costarle conectar con sus emociones. Entiende a los otros desde la mente, recopilando información para evitar conflictos y mantener la armonía. \n\nDiplomacia, negociación y equilibrio. Los ambientes tensos o desagradables pueden afectar a su salud. No le gusta el trabajo duro. \n\nIndeciso, a menudo prefiere que otros tomen decisiones por él. El matrimonio y las alianzas pueden adquirir más importancia que las emociones o los sentimientos. \n\nElegante y buen compañero, aunque también puede dejarse influir con facilidad por los demás. No tolera las malas formas sociales."
+        },
+        {
+          "id": "l-r2igmfy",
+          "nom": "Escorpio",
+          "tipo": "texto",
+          "contenido": "Comienza la muerte del \"yo\". Profundo e intenso, rechaza la superficialidad y percibe la oscuridad de la Vida y de las personas. \n\nVive procesos cíclicos de construcción y destrucción. Teme el abandono, busca la unión y anhela que no exista separación. Magnético, sexual y perceptivo. \n\nSus constantes crisis suelen actuar como motores de transformación personal."
+        },
+        {
+          "id": "l-2z364nb",
+          "nom": "Sagitario",
+          "tipo": "texto",
+          "contenido": "El explorador, el filósofo, el Maestro. Busca el sentido de la Vida y de las experiencias. \n\nSe libera del pasado y confía en la Vida. Sabe que, más allá de cada descubrimiento, siempre existe la posibilidad de seguir evolucionando. \n\nPuede refugiarse en el futuro mediante un optimismo excesivo o poco realista. Directo, honesto y reflexivo; rara vez actúa con mala intención."
+        },
+        {
+          "id": "l-37khjmm",
+          "nom": "Capricornio",
+          "tipo": "texto",
+          "contenido": "Ambicioso, responsable, serio y metódico. Busca dejar una huella positiva en la sociedad que repercuta en las futuras generaciones. Rígido e independiente. \n\nAustero y ahorrador, comprende el valor del dinero y suele administrarlo cuidadosamente. Tiende a respetar y seguir las normas sociales."
+        },
+        {
+          "id": "l-z0s5gd7",
+          "nom": "Acuario",
+          "tipo": "texto",
+          "contenido": "**Ama a la humanidad, odia a los humanos. **\n\nBusca la igualdad y la fraternidad entre toda la humanidad. Le cuesta crear conexiones profundas y exclusivas con una sola persona, alternando entre los grupos y la soledad. Muy mental, futurista, libre, rebelde y con tendencias anarquistas. Puede sentirse profundamente incomprendido."
+        },
+        {
+          "id": "l-tye272c",
+          "nom": "Piscis",
+          "tipo": "texto",
+          "contenido": "Dulce, sensible y de gran corazón. Vive fusionado con todo lo que le rodea, por lo que puede sentir como propio el dolor ajeno. \n\nEmpieza a encontrar la felicidad cuando aprende a hacerse cargo de sí mismo; para ello, necesita liberar el dolor y las emociones que no le pertenecen. \n\nBusca la Vida interior y aquello que le aporta plenitud. Puede sentirse desorientado y mostrar tendencia a la depresión. Puede desear ser salvado o asumir el papel de salvador. \n\nPosee una gran capacidad de compasión, intuición e inspiración artística o espiritual."
+        }
+      ]
+    },
+    {
+      "title": "Ejercicios",
+      "submodules": [
+        {
+          "id": "l-rtb0zw3",
+          "nom": "Los Elementos",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "relacionar",
+              "pares": [
+                {
+                  "derecha": "Puede sentirse perdido cuando no tiene una meta, dirección o desafío que perseguir.",
+                  "izquierda": "A. Fuego"
+                },
+                {
+                  "derecha": "Encuentra seguridad en las estructuras conocidas, incluso cuando ya no son beneficiosas.",
+                  "izquierda": "B. Tierra"
+                },
+                {
+                  "derecha": "Tiende a racionalizar las emociones y busca comprenderlas antes que sentirlas.",
+                  "izquierda": "C. Aire"
+                },
+                {
+                  "derecha": "Tiene facilidad para absorber estados emocionales ajenos y hacerlos propios.",
+                  "izquierda": "D. Agua"
+                }
+              ],
+              "enunciado": "Relaciona cada descripción con el elemento predominante correspondiente."
+            }
+          ]
+        },
+        {
+          "id": "l-i0ejc1j",
+          "nom": "Las Casas",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 3",
+                "B) Casa 6",
+                "C) Casa 9",
+                "D) Casa 12"
+              ],
+              "enunciado": "Una persona siente una necesidad constante de comprender el sentido profundo de sus experiencias, estudiar filosofía y cuestionar las creencias heredadas."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Casa 1",
+                "B) Casa 4",
+                "C) Casa 7",
+                "D) Casa 10"
+              ],
+              "enunciado": "¿En qué casa observaríamos principalmente la forma en que una persona inicia proyectos y se presenta ante el mundo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Casa 2",
+                "B) Casa 5",
+                "C) Casa 8",
+                "D) Casa 11"
+              ],
+              "enunciado": "Una persona tiene dificultades recurrentes relacionadas con autoestima, dinero y valoración personal."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Casa 3",
+                "B) Casa 4",
+                "C) Casa 8",
+                "D) Casa 12"
+              ],
+              "enunciado": "¿Qué casa se relaciona más directamente con el niño interior y la seguridad emocional?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Casa 2",
+                "B) Casa 5",
+                "C) Casa 9",
+                "D) Casa 11"
+              ],
+              "enunciado": "¿En qué casa encontraríamos la necesidad de crear, disfrutar, enamorarse y expresar el corazón?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Casa 4",
+                "B) Casa 6",
+                "C) Casa 8",
+                "D) Casa 10"
+              ],
+              "enunciado": "Una persona dedica gran parte de su energía a rutinas, alimentación, organización y mejora continua."
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 1",
+                "B) Casa 5",
+                "C) Casa 7",
+                "D) Casa 11"
+              ],
+              "enunciado": "¿Qué casa está más relacionada con las proyecciones psicológicas sobre la pareja?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Casa 6",
+                "B) Casa 8",
+                "C) Casa 10",
+                "D) Casa 12"
+              ],
+              "enunciado": "Una experiencia relacionada con traumas, sombras y procesos de transformación profunda pertenece principalmente a:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 4",
+                "B) Casa 7",
+                "C) Casa 10",
+                "D) Casa 11"
+              ],
+              "enunciado": "La relación con la autoridad y la vocación profesional se estudian principalmente en:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 3,
+              "opciones": [
+                "A) Casa 5",
+                "B) Casa 7",
+                "C) Casa 9",
+                "D) Casa 11"
+              ],
+              "enunciado": "¿En qué casa buscaríamos información sobre grupos, amistades y participación en causas colectivas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 4",
+                "B) Casa 8",
+                "C) Casa 12",
+                "D) Casa 2"
+              ],
+              "enunciado": "Sueños, inconsciente colectivo, aislamiento y espiritualidad corresponden principalmente a:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Casa 1",
+                "B) Casa 3",
+                "C) Casa 7",
+                "D) Casa 9"
+              ],
+              "enunciado": "Una persona trabaja constantemente en entender cómo piensa, cómo aprende y cómo procesa la información recibida de su entorno inmediato."
+            }
+          ]
+        },
+        {
+          "id": "l-xxnbnqc",
+          "nom": "Los Signos",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Capricornio",
+                "B) Tauro",
+                "C) Virgo",
+                "D) Cáncer"
+              ],
+              "enunciado": "¿Qué signo puede permanecer durante años en una estructura que ya no le beneficia simplemente porque le aporta estabilidad?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Libra",
+                "B) Acuario",
+                "C) Géminis",
+                "D) Virgo"
+              ],
+              "enunciado": "¿Qué signo tiene como aprendizaje principal bajar del ruido mental y conectar con el corazón?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Piscis",
+                "B) Tauro",
+                "C) Cáncer",
+                "D) Libra"
+              ],
+              "enunciado": "¿Qué signo puede nutrir constantemente a otros olvidándose de nutrirse a sí mismo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Leo",
+                "B) Sagitario",
+                "C) Aries",
+                "D) Acuario"
+              ],
+              "enunciado": "¿Cuál de estos signos se encuentra a sí mismo principalmente a través de sus creaciones?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Capricornio",
+                "B) Virgo",
+                "C) Escorpio",
+                "D) Tauro"
+              ],
+              "enunciado": "¿Qué signo vive en una lucha constante por poner orden en vez de enfrentarse al caos?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Géminis",
+                "B) Libra",
+                "C) Piscis",
+                "D) Cáncer"
+              ],
+              "enunciado": "¿Qué signo recopila información sobre los demás para evitar conflictos y mantener la armonía?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Capricornio",
+                "B) Escorpio",
+                "C) Acuario",
+                "D) Piscis"
+              ],
+              "enunciado": "¿En qué signo comienza simbólicamente la \"muerte del yo\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Aries",
+                "B) Leo",
+                "C) Sagitario",
+                "D) Acuario"
+              ],
+              "enunciado": "¿Qué signo puede refugiarse en el futuro a través de un optimismo excesivo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Capricornio",
+                "B) Tauro",
+                "C) Virgo",
+                "D) Leo"
+              ],
+              "enunciado": "¿Qué signo busca dejar una huella que beneficie a generaciones futuras?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Libra",
+                "B) Acuario",
+                "C) Géminis",
+                "D) Piscis"
+              ],
+              "enunciado": "¿Qué signo ama la humanidad pero puede sentirse incómodo en los vínculos individuales?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Escorpio",
+                "B) Piscis",
+                "C) Cáncer",
+                "D) Tauro"
+              ],
+              "enunciado": "¿Qué signo puede absorber emociones ajenas hasta el punto de confundirlas con las propias?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Aries",
+                "B) Sagitario",
+                "C) Leo",
+                "D) Escorpio"
+              ],
+              "enunciado": "¿Qué signo necesita seguir creciendo constantemente y puede deprimirse cuando siente que ya no avanza?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

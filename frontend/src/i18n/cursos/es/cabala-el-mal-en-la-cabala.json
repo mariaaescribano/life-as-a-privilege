@@ -1,0 +1,156 @@
+{
+  "id": "7372fe0c-a90b-4a60-a48a-145a10c31d05",
+  "modalidad": "Cábala",
+  "titulo": "El Mal en la Cábala",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. El Mal",
+      "submodules": [
+        {
+          "id": "l-33e4d9k",
+          "nom": "1.1 Definición",
+          "tipo": "texto",
+          "contenido": "El mal no es producto de nuestra libertad, sino la **ocultación de la esencia de las cosas**, de su luz.\n\n*El mal es cuando algo bueno no ocupa el lugar que le pertenece.*"
+        },
+        {
+          "id": "l-onm75s0",
+          "nom": "1.2 Energías",
+          "tipo": "texto",
+          "contenido": "*Las energías del Árbol son neutras.*\n\nEl mal aparece cuando la energía masculina y la femenina, en vez de unificarse, se confrontan en alguna de las dimensiones del **Árbol de la Vida**, que estructura el alma humana.\n\nLa voluntad se convierte rápidamente en obstinación cuando no se usa correctamente.\n\n*El lado negativo aparece cuando la fuerza no se emplea para alcanzar una meta concreta y avanzamos a ciegas, sin usar la inteligencia.*\n\n---\n\n*Solo puedo ser malo si hay algo dentro de mí que me predisponga a serlo.*\n\nLas fuerzas externas encuentran más facilidad para influir allí donde existen aspectos de nosotros mismos que aún no comprendemos o integramos."
+        }
+      ]
+    },
+    {
+      "title": "2. Las dualidad del Mal",
+      "submodules": [
+        {
+          "id": "l-s2fyxvy",
+          "nom": "2.1 Amalek",
+          "tipo": "texto",
+          "contenido": "**Amalek** es la negación de la espiritualidad; es creerse separado.\n\nAmalek niega la existencia de otras dimensiones: existe en **Maljut** y no cree en la espiritualidad, solo en el bien y en el mal.\n\nSiempre acaba autodestruyéndose; su esencia es la inconsciencia de creerse desconectado del infinito.\n\n*El mal siempre se suicida.*"
+        },
+        {
+          "id": "l-nesebf1",
+          "nom": "2.2 Satán — el adversario",
+          "tipo": "texto",
+          "contenido": "En el judaísmo, **ha-Satán** significa *\"el adversario\"* o *\"el acusador\"* (no el diablo del cristianismo).\n\nAparece en el Libro de Job como un agente que **actúa con permiso divino para poner a prueba al ser humano.**\n\nA través de Satán, el alma experimenta **carencia**, **deseo**, **miedo** y **ego**, que es lo que hace posible la experiencia y la libertad humanas.\n\nSu función es esconder la luz, generar obstáculos, producir dudas y crear la ilusión de separación.\n\n*Sin resistencia no habría revelación.*\n\nSolo a través de **Daat** y de la conciencia puede emerger la luz.\n\n*Es el ingeniero de la evolución del alma.*\n\n---\n\nSe manifiesta sobre todo en **Maljut** en forma de **miedo**, **ansiedad**, **procrastinación** y **necesidad de control**.\n\nEstas manifestaciones sirven para poner a prueba el **klí**, revelar sus límites y mostrar dónde está fragmentado.\n\n*Las fuerzas externas encuentran más facilidad para influir allí donde todavía existe inconsciencia o fragmentación.*"
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-6rg6ezh",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El ser humano ejerce mal su libertad.",
+                "B) La luz queda oculta y las energías se desalinean.",
+                "C) Satán actúa sin permiso divino."
+              ],
+              "enunciado": "Según el texto, el mal surge principalmente cuando:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Una capacidad positiva utilizada fuera de su lugar adecuado.",
+                "B) Una emoción desagradable.",
+                "C) Una acción que la sociedad considera incorrecta."
+              ],
+              "enunciado": "¿Cuál de estas situaciones encaja mejor con la definición de mal propuesta?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Ninguna energía es buena o mala en sí misma.",
+                "B) El bien y el mal son ilusiones.",
+                "C) Las sefirot no influyen en la conducta humana."
+              ],
+              "enunciado": "La frase \"las energías del Árbol son neutras\" implica que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Una expresión sana de Guevurá.",
+                "B) Una energía positiva utilizada de forma desequilibrada.",
+                "C) Una influencia exclusiva de Satán."
+              ],
+              "enunciado": "Una persona extremadamente disciplinada termina convirtiéndose en rígida, obsesiva e incapaz de adaptarse. Según el texto, esto sería:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Porque son más fuertes que la voluntad humana.",
+                "B) Porque existen zonas internas todavía inconscientes o fragmentadas.",
+                "C) Porque la materia siempre domina al espíritu."
+              ],
+              "enunciado": "¿Por qué las fuerzas externas tienen más facilidad para influir en una persona?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Una entidad demoníaca independiente de Dios.",
+                "B) La tendencia a creer que estamos separados del infinito.",
+                "C) El castigo por actuar incorrectamente."
+              ],
+              "enunciado": "¿Qué representa Amalek en este curso?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Satán actúa dentro del orden divino y cumple una función.",
+                "B) Satán no existe realmente.",
+                "C) Satán representa únicamente emociones negativas."
+              ],
+              "enunciado": "Según la descripción dada, ¿qué diferencia principal existe entre Satán y el diablo cristiano?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Castigar los errores humanos.",
+                "B) Impedir la evolución espiritual.",
+                "C) Crear resistencia para que la conciencia pueda desarrollarse."
+              ],
+              "enunciado": "¿Cuál es la función más profunda de los obstáculos generados por Satán?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Maljut fragmentada.",
+                "B) Jojmá excesiva.",
+                "C) Tiféret equilibrada."
+              ],
+              "enunciado": "Una persona intenta controlar absolutamente todo porque vive con miedo constante a la incertidumbre. Según el texto, esto sería principalmente una manifestación de:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El mal es una fuerza independiente que combate a Dios.",
+                "B) El mal es una ausencia de conciencia y conexión con la luz.",
+                "C) El mal es simplemente el resultado de tomar malas decisiones."
+              ],
+              "enunciado": "¿Cuál de estas frases resume mejor la visión del mal presentada aquí?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

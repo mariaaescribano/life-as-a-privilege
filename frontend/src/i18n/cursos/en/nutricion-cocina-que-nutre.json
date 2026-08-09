@@ -1,0 +1,125 @@
+{
+  "id": "e4c488cf-83ce-4995-b506-159587aedeea",
+  "modalidad": "nutricion",
+  "titulo": "Cooking that nourishes",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1 · Microbiota",
+      "submodules": [
+        {
+          "id": "l-yn57034",
+          "nom": "Introduction",
+          "tipo": "texto",
+          "contenido": "Gut health depends to a large extent on the microorganisms living in our intestine. These microorganisms take part in digestion, produce vitamins, help the immune system and generate substances that benefit the whole body.\n\nIn this module you'll learn how to encourage a more diverse and healthier microbiota using very simple foods and techniques."
+        },
+        {
+          "id": "l-ilmy3ps",
+          "nom": "Fermented foods",
+          "tipo": "texto",
+          "contenido": "Not every fermented food contains live microorganisms.\n\nMany products, such as some commercial sauerkrauts, are **pasteurized*** after fermentation to keep longer. That kills off most of the beneficial bacteria, so they keep the flavor but no longer have any probiotic effect.\n\nWhen you buy a fermented food:\n\n· Look for \"live cultures\" or \"live probiotics\" on the label.\n\n· They normally have to be sold refrigerated.\n\n· Check the expiration date: the more recently it was made and the further away the use-by date, the more likely it is to still hold viable microorganisms.\n\n---\n\nPasteurization is a heat process that warms a liquid food to a temperature below its boiling point for a short time, followed by rapid cooling. It destroys harmful microbes without changing the flavor or the nutrients of the product."
+        },
+        {
+          "id": "l-funyme1",
+          "nom": "Resistant starch",
+          "tipo": "texto",
+          "contenido": "When you cook rice, potato or pasta and then chill it for several hours, part of its **starch** changes structure and becomes **resistant starch**.\n\nThis kind of starch isn't digested in the small intestine and reaches the colon, where it feeds the beneficial bacteria.\n\nYou can eat these foods cold or reheat them gently, since a good part of the resistant starch survives."
+        }
+      ]
+    },
+    {
+      "title": "2 · Get more out of the nutrients",
+      "submodules": [
+        {
+          "id": "l-e4dchhn",
+          "nom": "Introduction",
+          "tipo": "texto",
+          "contenido": "Eating healthy food doesn't always mean absorbing all of its nutrients.\n\nMany foods contain compounds that hinder the absorption of minerals, or hold surface residues that are worth removing. \n\nWith a few small changes you can make much better nutritional use of them."
+        },
+        {
+          "id": "l-n4kejny",
+          "nom": "Whole grains",
+          "tipo": "texto",
+          "contenido": "Whole grains contain phytic acid, a compound that can reduce the absorption of minerals such as iron, zinc or magnesium.\n\nTo reduce it:\n\n1. Use lukewarm water.\n2. Add a few drops of lemon or something slightly acidic.\n3. Soak them for at least 8 hours. If the soak is longer, keep them in the fridge.\n4. Throw the water away and cook with clean water.\n\nSoaking activates phytase, an enzyme that helps break down part of the phytic acid."
+        },
+        {
+          "id": "l-4a9cy54",
+          "nom": "Pumpkin seeds",
+          "tipo": "texto",
+          "contenido": "Pumpkin seeds stand out for their iron, zinc, magnesium, protein and healthy fats.\n\nTo make better use of their nutrients:\n\n· Soak them for around 8 hours.\n\n· Blanch them for about 20 seconds.\n\n· Grind them before eating them.\n\n· Whenever you can, eat them with the hull, which also provides fiber and nutrients."
+        },
+        {
+          "id": "l-9xp8sro",
+          "nom": "Pesticides",
+          "tipo": "texto",
+          "contenido": "Washing fruit and vegetables removes part of the pesticide residue.\n\nOne of the most effective techniques is soaking them for a few minutes in water with baking soda, especially when you're going to eat the skin too.\n\nVinegar helps as well, though it usually removes less residue.\n\nIn fruits rich in anthocyanins (such as berries or dark grapes), a very alkaline wash can reduce part of those antioxidants, so it's better to use baking soda only when it's needed."
+        }
+      ]
+    },
+    {
+      "title": "3 · Cook better",
+      "submodules": [
+        {
+          "id": "l-r8dxmes",
+          "nom": "Introduction",
+          "tipo": "texto",
+          "contenido": "The way you cook can make a huge difference to the nutritional value of food.\n\nIn this module you'll learn small tricks that help preserve vitamins, antioxidants and other beneficial compounds."
+        },
+        {
+          "id": "l-3x7ttoj",
+          "nom": "Freezing vegetables",
+          "tipo": "texto",
+          "contenido": "Before freezing many vegetables it's a good idea to blanch them.\n\nThis inactivates the enzymes that go on degrading the food even inside the freezer.\n\nThe procedure is simple:\n\n1. Blanch for 1-3 minutes.\n2. Cool down quickly in iced water.\n3. Dry them well.\n4. Freeze in small portions.\n\nTomato and onion are two exceptions and can be frozen raw, just as they are."
+        },
+        {
+          "id": "l-8lfx0iz",
+          "nom": "Zucchini",
+          "tipo": "texto",
+          "contenido": "The **skin of the zucchini** holds much of its chlorophyll and other antioxidants.\n\nIf you're making a soup:\n\n1. Peel the zucchini.\n2. Cook the pale green part first.\n3. Add the skin at the end of the cooking.\n4. Blend it all together.\n\nThat way the heat-sensitive compounds are better preserved."
+        },
+        {
+          "id": "l-wmdykwh",
+          "nom": "Broccoli stalk",
+          "tipo": "texto",
+          "contenido": "The broccoli stalk usually ends up in the bin, even though it's one of the most nutritious parts.\n\nIt contains:\n\n· Vitamin C\n· Fiber\n· Glucosinolates\n· Precursor compounds of sulforaphane\n\nPeel the tougher outer part and eat the inside raw or very briefly cooked."
+        }
+      ]
+    },
+    {
+      "title": "4 · Activate the nutrients",
+      "submodules": [
+        {
+          "id": "l-2j9iuii",
+          "nom": "Introduction",
+          "tipo": "texto",
+          "contenido": "Many foods only produce their beneficial compounds when they're cut or crushed.\n\nBreaking their cells puts certain enzymes in contact with other substances, and that generates molecules with antioxidant and anti-inflammatory activity.\n\nThe problem is that these enzymes are very sensitive to heat. If you cook the food right away, the reaction stops and far fewer beneficial compounds are formed."
+        },
+        {
+          "id": "l-ayoua8x",
+          "nom": "Garlic",
+          "tipo": "texto",
+          "contenido": "Crushing or chopping garlic activates alliinase, the enzyme responsible for forming allicin.\n\nAllicin is one of the most studied compounds in garlic, for its cardiovascular and antimicrobial benefits.\n\nTrick: let the garlic rest for about 10 minutes before cooking it, so the enzymes that give rise to allicin have time to work."
+        },
+        {
+          "id": "l-0mt02s9",
+          "nom": "Onion",
+          "tipo": "texto",
+          "contenido": "Something similar happens with onion.\n\nCutting it generates sulfur compounds with antioxidant and anti-inflammatory activity.\n\nThree very common mistakes\n\n1. **Cooking it right away**: wait about 10 minutes before applying heat, to help these compounds form.\n\n2. **Throwing the skin away**: the skin holds a lot of quercetin. Once you've washed it well, you can use it to make broths or infusions.\n\n3. **Removing the outer layers**: the layers closest to the skin contain more quercetin than the center of the onion."
+        },
+        {
+          "id": "l-m2kjypl",
+          "nom": "Broccoli and cauliflower",
+          "tipo": "texto",
+          "contenido": "Broccoli and cauliflower contain one of the most interesting compounds from a nutritional point of view: sulforaphane. \n\nThis molecule stands out for its antioxidant capacity and for helping activate the body's natural defense systems, which is why it's been linked to benefits for cardiovascular health, to lower inflammation and to protecting cells against oxidative damage.\n\nThe curious thing is that sulforaphane isn't present in active form inside the vegetable. It forms when we cut or crush the broccoli: breaking its cells brings together two substances that were separate, and the molecule starts being produced.\n\nBut this process needs a few minutes. If you cook broccoli right after cutting it, the heat stops the reaction and far less sulforaphane is formed.\n\nThe trick: cut the broccoli or cauliflower very finely, let it rest for 20 to 30 minutes and then cook it. That way you'll get far more out of its beneficial compounds."
+        },
+        {
+          "id": "l-zpyb2gy",
+          "nom": "Asparagus",
+          "tipo": "texto",
+          "contenido": "Asparagus provides compounds related to the production of **glutathione**, one of the body's most important antioxidants and a key player in the liver's detoxification processes.\n\nTo make glutathione, the body needs amino acids such as glutamate, glycine and cysteine.\n\nFoods of the *Allium* genus (garlic, onion and leek) provide sulfur compounds that favor the availability of cysteine. \n\nSo combining asparagus with garlic or onion is an excellent nutritional strategy."
+        }
+      ]
+    }
+  ]
+}

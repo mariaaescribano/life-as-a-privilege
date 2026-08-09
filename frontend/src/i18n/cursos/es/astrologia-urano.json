@@ -1,0 +1,427 @@
+{
+  "id": "55527a43-1540-4df3-9acc-05ef7fdef09f",
+  "modalidad": "Astrología",
+  "titulo": "Urano",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Urano en la Astrología",
+      "submodules": [
+        {
+          "id": "l-gkbcsb2",
+          "nom": "1.1 El arquetipo de Urano",
+          "tipo": "texto",
+          "contenido": "Representa la **libertad**, la innovación y la necesidad de romper con aquello que ya no permite crecer. Nos impulsa a cuestionar normas, explorar nuevas posibilidades y encontrar una forma más auténtica de vivir.\n\nSe relaciona con la *originalidad*, la tecnología, los cambios repentinos, los movimientos colectivos y el deseo de construir un futuro diferente.\n\nSu energía actúa de manera rápida e inesperada, generando despertares, giros de rumbo y oportunidades para liberarnos de viejos condicionamientos.\n\nCuando está bien integrado aporta *independencia*, creatividad y visión de futuro. En desequilibrio puede manifestarse como rebeldía, impulsividad o una necesidad excesiva de cambio constante.\n\nSu aprendizaje consiste en encontrar el equilibrio entre la **libertad** y la estabilidad.\n"
+        }
+      ]
+    },
+    {
+      "title": "2. Urano en los Signos",
+      "submodules": [
+        {
+          "id": "l-bym8mrq",
+          "nom": "Urano en Aries",
+          "tipo": "texto",
+          "contenido": "Generación pionera e innovadora que impulsa cambios sociales y científicos. Independientes, valientes y con fuerte iniciativa para abrir nuevos caminos. \n\nEn desequilibrio pueden caer en la impulsividad, la rebeldía o el fanatismo."
+        },
+        {
+          "id": "l-5wc4nr7",
+          "nom": "Urano en Tauro",
+          "tipo": "texto",
+          "contenido": "Generación que transforma la relación con el dinero, los recursos, la naturaleza y los valores. \n\nBusca nuevas formas de crear estabilidad y abundancia. Talento para lo artístico y lo práctico. \n\nEn desequilibrio puede haber terquedad, celos o problemas económicos."
+        },
+        {
+          "id": "l-n974hcu",
+          "nom": "Urano en Géminis",
+          "tipo": "texto",
+          "contenido": "Generación de mentes brillantes y originales que revoluciona la comunicación, la educación y el intercambio de ideas. \n\nGran curiosidad y rapidez mental, aunque con tendencia a la dispersión o a sentirse desconectada de otras generaciones."
+        },
+        {
+          "id": "l-u5jkgj3",
+          "nom": "Urano en Cáncer",
+          "tipo": "texto",
+          "contenido": "Generación que redefine el hogar, la familia y la seguridad emocional. Busca libertad frente a modelos familiares tradicionales y desarrolla nuevas formas de pertenencia. \n\nEn desequilibrio puede experimentar altibajos emocionales o dificultad para echar raíces."
+        },
+        {
+          "id": "l-bmp8x7j",
+          "nom": "Urano en Leo",
+          "tipo": "texto",
+          "contenido": "Generación que transforma la creatividad, la expresión personal y el reconocimiento. Necesita destacar por su originalidad y dejar una huella propia. \n\nEn desequilibrio puede volverse dogmática, dramática o excesivamente orgullosa."
+        },
+        {
+          "id": "l-x2pascw",
+          "nom": "Urano en Virgo",
+          "tipo": "texto",
+          "contenido": "Generación que revoluciona el trabajo, la salud y la relación con el cuerpo. Introduce nuevas formas de organización, tecnología y bienestar. \n\nEn desequilibrio puede experimentar nerviosismo, inquietud o problemas de salud poco comunes."
+        },
+        {
+          "id": "l-4x295wy",
+          "nom": "Urano en Libra",
+          "tipo": "texto",
+          "contenido": "Generación que redefine las relaciones, el matrimonio y los conceptos de igualdad. \n\nBusca vínculos más libres y auténticos, basados en el equilibrio entre independencia y compromiso. \n\nEn desequilibrio puede vivir rupturas frecuentes o dificultad para establecer acuerdos."
+        },
+        {
+          "id": "l-lt3dveq",
+          "nom": "Urano en Escorpio",
+          "tipo": "texto",
+          "contenido": "Generación de cambios profundos que transforma la sexualidad, la psicología y la relación con el poder. \n\nAtracción por lo oculto, la regeneración y los procesos de transformación. \n\nEn desequilibrio puede manifestar celos, obsesión o conductas destructivas."
+        },
+        {
+          "id": "l-p53r0cm",
+          "nom": "Urano en Sagitario",
+          "tipo": "texto",
+          "contenido": "Generación que cuestiona religiones, filosofías y sistemas educativos. \n\nBusca expandir la consciencia a través del conocimiento, los viajes y la exploración de nuevas verdades. \n\nEn desequilibrio puede rechazar todo límite o caer en el extremismo ideológico."
+        },
+        {
+          "id": "l-q9vmeyp",
+          "nom": "Urano en Capricornio",
+          "tipo": "texto",
+          "contenido": "Generación que transforma gobiernos, instituciones y estructuras de poder. \n\nBusca construir un futuro diferente sin perder completamente el vínculo con la tradición. \n\nEn desequilibrio puede experimentar tensión entre libertad y ambición."
+        },
+        {
+          "id": "l-28tzqbl",
+          "nom": "Urano en Acuario",
+          "tipo": "texto",
+          "contenido": "Generación que impulsa la innovación tecnológica, los cambios sociales y las nuevas formas de comunidad. \n\nAbierta a lo diferente, busca mejorar el mundo a través de ideas progresistas. \n\nEn desequilibrio puede resultar excéntrica o poco práctica."
+        },
+        {
+          "id": "l-c4vj3za",
+          "nom": "Urano en Piscis",
+          "tipo": "texto",
+          "contenido": "Generación que transforma la espiritualidad, la intuición y la relación con el inconsciente. \n\nSensible, imaginativa y conectada con dimensiones sutiles de la realidad. \n\nEn desequilibrio puede tender al escapismo, la confusión o las adicciones."
+        }
+      ]
+    },
+    {
+      "title": "3. Urano en las Casas",
+      "submodules": [
+        {
+          "id": "l-cyv3w7x",
+          "nom": "Urano en casa 1",
+          "tipo": "texto",
+          "contenido": "Personalidad **original**, independiente y difícil de encasillar. Existe una fuerte necesidad de descubrir el propio camino y vivir de acuerdo con una verdad personal.\n\nNecesita libertad para experimentar, equivocarse y crecer a través de sus propios descubrimientos. Le cuesta seguir caminos impuestos o adaptarse a expectativas que siente ajenas.\n\n---\n\nSuele reinventarse varias veces a lo largo de la Vida, cambiando de imagen, intereses o dirección de forma repentina. Hay algo *eléctrico*, diferente y poco convencional en su presencia.\n\nPuede cambiar de opinión rápidamente o sentir una necesidad constante de explorar nuevas posibilidades. A veces las aspiraciones pueden convertirse en obsesiones.\n\nEn desequilibrio puede mostrarse rebelde, impredecible o creer que solo su visión es la correcta. Su aprendizaje consiste en expresar su individualidad sin aislarse de los demás.\n"
+        },
+        {
+          "id": "l-pgjcur8",
+          "nom": "Urano en casa 2",
+          "tipo": "texto",
+          "contenido": "Fuerte deseo de *independencia* que lleva a la persona a crecer más allá de los valores tradicionales y de lo que otros consideran importante.\n\nEl dinero le importa principalmente porque le permite comprar *libertad*. No suele sentirse realizado trabajando únicamente por dinero; necesita sentir que su vocación está al servicio de algo más grande.\n\nPuede experimentar cambios inesperados en su economía y descubrir que en su caso la abundancia es dinámica. Su aprendizaje consiste en confiar en que los recursos pueden llegar de formas distintas a las convencionales.\n\nNecesita desarrollar su propio sistema de valores o la Vida terminará empujándolo a hacerlo. Las crisis relacionadas con el dinero suelen actuar como llamadas de atención y momentos de despertar.\n\nPuede menospreciar sus propios talentos o logros. Su desafío no es rechazar el mundo material, sino redefinirlo según sus propios términos.\n"
+        },
+        {
+          "id": "l-y46l7aq",
+          "nom": "Urano en casa 3",
+          "tipo": "texto",
+          "contenido": "Necesidad de **comprender** el mundo desde una perspectiva propia. Cuestiona ideas, creencias y formas de pensar que percibe como obsoletas, buscando siempre nuevas maneras de interpretar la realidad.\n\nPosee una mente *rápida*, original e inquieta. Le encanta aprender, investigar y debatir temas que despierten su interés, especialmente aquellos que desafían lo establecido.\n\n---\n\nSu forma de comunicar suele estar basada en asociaciones, intuiciones y saltos mentales que otros no siempre logran seguir. Esto puede hacer que a veces se sienta incomprendido o adelantado a su entorno.\n\nNecesita constante estimulación intelectual y explorar una misma idea desde múltiples ángulos. Cuando la mente no encuentra canales de expresión, puede aparecer nerviosismo, dispersión o tensión mental.\n\nPuede haber experimentado cambios bruscos durante la infancia o en su entorno cercano, generando una sensación de no pertenecer completamente a ningún lugar. \n\nLas relaciones con hermanos o personas cercanas suelen estar marcadas por la independencia, la distancia o los cambios inesperados.\n\n---\n\nSu propósito es desarrollar una mente **libre**, educada y estable, capaz de innovar sin perder claridad ni dirección.\n"
+        },
+        {
+          "id": "l-ftmceiz",
+          "nom": "Urano en casa 4",
+          "tipo": "texto",
+          "contenido": "Suele ser quien rompe con las **tradiciones familiares** y se atreve a vivir de una manera diferente a la de su familia de origen. Existe una necesidad profunda de encontrar su propio concepto de hogar y pertenencia, debido a que no lo ha tenido.\n\n---\n\nPuede sentir que nunca encajó del todo en su entorno familiar o que fue diferente desde muy temprana edad. Son frecuentes los cambios bruscos durante la infancia, como mudanzas, separaciones o reestructuraciones familiares.\n\nEl hogar pudo sentirse *impredecible* o inestable, generando una sensación de alerta constante. En algunos casos, uno o ambos padres pudieron ser emocionalmente distantes, ausentes o difíciles de comprender.\n\nDebido a esto, puede temer echar raíces por miedo a perder oportunidades o descubrir algo mejor más adelante.\n\n---\n\nLe gusta rodearse de personas afines y convertir su hogar en un espacio abierto para amigos, ideas y nuevas experiencias. Sin embargo, puede correr el riesgo de destruir lo que ha construido cuando siente que se vuelve demasiado predecible.\n\nSu propósito es crear sus propias **raíces**, redefiniendo la seguridad no como rigidez o permanencia, sino como una estabilidad que nace desde dentro.\n"
+        },
+        {
+          "id": "l-kviemm3",
+          "nom": "Urano en casa 5",
+          "tipo": "texto",
+          "contenido": "Existe una fuerte necesidad de **crear**, innovar y expresar algo único. La persona necesita sentir que aquello que muestra al mundo nace de su propia autenticidad y no de lo que otros esperan.\n\nLa inspiración suele aparecer de forma *repentina*, acompañada de ideas brillantes y originales. Sin embargo, también puede desaparecer rápidamente, generando cambios frecuentes en proyectos o intereses.\n\nSuele reinventar constantemente su identidad creativa y sentirse atraída por lo diferente, lo excéntrico o aquello que está adelantado a su tiempo. \n\n---\n\nSi teme mostrar quién es realmente, puede apagar su brillo natural para encajar o ser aceptado. Su aprendizaje consiste en comprender que las personas que le quieran le valorarán precisamente por ser él mismo.\n\nLas relaciones románticas suelen ser poco convencionales y estar marcadas por una fuerte conexión mental. Puede enamorarse de manera intensa y repentina, aunque también perder el interés cuando la relación se vuelve predecible.\n\n---\n\nNo se recomienda tener hijos, debido a que existe una necesidad de mantener libertad personal. \n"
+        },
+        {
+          "id": "l-4jsoxj7",
+          "nom": "Urano en casa 6",
+          "tipo": "texto",
+          "contenido": "Hace de su Vida cotidiana un constante campo de **despertar**. Aquello que ocurre en su trabajo, hábitos, cuerpo y rutinas suele reflejar procesos internos que necesitan ser comprendidos e integrados.\n\nPosee una gran capacidad para observar patrones y encontrar soluciones originales a los problemas. Suele pensar de manera diferente a los demás y destacar por su ingenio, especialmente cuando ayuda a otras personas.\n\n---\n\nNo se adapta fácilmente a rutinas impuestas o estructuras demasiado rígidas. Necesita construir formas de trabajo que le permitan mantener cierto grado de libertad, autonomía y entusiasmo.\n\n---\n\nExiste una fuerte conexión entre *cuerpo* y *mente*. Cuando se siente atrapado, limitado o alejado de su verdad, pueden aparecer síntomas físicos, estrés o somatizaciones que le obligan a prestar atención a lo que está evitando.\n\nTiende a la ansiedad mental o a la sobreestimulación del sistema nervioso, por lo que resulta importante encontrar espacios de descanso y relajación.\n\n---\n\nSuele sentirse atraído por enfoques alternativos, terapias holísticas y métodos poco convencionales de sanación. \n\nSu aprendizaje consiste en crear hábitos que le aporten libertad sin caer en el caos, y poner límites sanos antes de llegar a la reacción explosiva.\n"
+        },
+        {
+          "id": "l-6ss0qnt",
+          "nom": "Urano en casa 7",
+          "tipo": "texto",
+          "contenido": "Existe un fuerte deseo de vivir las relaciones desde la **libertad** y la autenticidad. No suele sentirse atraído por vínculos construidos por miedo a la soledad, costumbre o presión social.\n\nBusca parejas *originales*, independientes o poco convencionales que le inspiren a crecer y ampliar su visión del mundo. La conexión mental suele ser más importante que la emocional.\n\n---\n\nNecesita espacio dentro de la relación para mantener su individualidad, intereses y proyectos personales. Cuando siente que pierde libertad, puede alejarse emocionalmente o provocar cambios inesperados en el vínculo.\n\nA pesar de valorar profundamente la independencia, puede existir un miedo inconsciente al abandono o al rechazo. Esto puede generar una tensión entre el deseo de cercanía y la necesidad de autonomía.\n\nLas relaciones suelen atravesar cambios importantes a lo largo de la Vida. Si la pareja deja de evolucionar o se vuelve demasiado rígida, pueden producirse rupturas repentinas o giros inesperados.\n\n---\n\nSu propósito es aprender que la **intimidad** y la libertad no son opuestas. Cuando ambas pueden coexistir, tiene la capacidad de construir relaciones innovadoras que sirvan de ejemplo para nuevas formas de amar y convivir.\n"
+        },
+        {
+          "id": "l-joojbyq",
+          "nom": "Urano en casa 8",
+          "tipo": "texto",
+          "contenido": "La Vida suele estar marcada por procesos de **transformación** profundos y cambios inesperados que obligan a soltar viejas versiones de sí mismo para renacer desde un lugar más auténtico.\n\nExiste una fuerte atracción por lo *oculto*, lo misterioso y todo aquello que se encuentra más allá de la realidad visible. Son comunes los intereses por la psicología, la astrología, la metafísica, las ciencias ocultas y los grandes misterios de la Vida y la Muerte.\n\n---\n\nVive las emociones, los deseos y la sexualidad de forma intensa. En algunos casos puede intentar controlar o reprimir estos impulsos, sintiendo que debe trascenderlos o comprenderlos desde una perspectiva más elevada.\n\nLas experiencias compartidas con otros pueden traer cambios repentinos relacionados con recursos, herencias, inversiones o asociaciones. Pueden producirse ganancias o pérdidas inesperadas que impulsan importantes procesos de crecimiento.\n\nPosee una gran capacidad para atravesar crisis y reconstruirse. Aunque la Vida pueda llevarle por etapas de ruptura, suele encontrar dentro de sí una fuerza extraordinaria para comenzar de nuevo.\n\n---\n\nSu propósito es aprender a abrazar la **transformación** sin miedo, comprendiendo que cada final contiene la posibilidad de un nuevo despertar.\n"
+        },
+        {
+          "id": "l-tbwyeuv",
+          "nom": "Urano en casa 9",
+          "tipo": "texto",
+          "contenido": "Existe una profunda necesidad de desarrollar una **filosofía propia** y descubrir la verdad a través de la experiencia directa. Le cuesta aceptar creencias heredadas o sistemas de pensamiento que no ha cuestionado por sí mismo.\n\nSu búsqueda de conocimiento es constante. Necesita explorar nuevas ideas, perspectivas y formas de comprender la realidad, ampliando continuamente los límites de su consciencia.\n\nSuele sentirse atraído por conceptos innovadores, movimientos progresistas y avances sociales. A menudo posee ideas que van por delante de su tiempo o que desafían la visión convencional del mundo.\n\n---\n\nLos viajes, el contacto con otras culturas y el intercambio de perspectivas diferentes juegan un papel importante en su crecimiento. Necesita libertad para explorar, aprender y expandirse.\n\nPuede desarrollar una visión muy original de la Vida, aunque a veces sus ideales o creencias resulten difíciles de aplicar en la práctica. Su desafío consiste en encontrar un equilibrio entre la inspiración y la realidad cotidiana.\n\n---\n\nSu propósito es descubrir una verdad **auténtica**, construida a través de sus propias experiencias y no únicamente a través de las respuestas de otros.\n"
+        },
+        {
+          "id": "l-3wy35h7",
+          "nom": "Urano en casa 10",
+          "tipo": "texto",
+          "contenido": "Existe un fuerte deseo de aportar algo **significativo** a la sociedad. No suele sentirse satisfecho trabajando únicamente por dinero o estatus; necesita que su profesión tenga un propósito y refleje sus valores más profundos.\n\nLa autenticidad es fundamental en su carrera. Le cuesta permanecer en entornos donde las ideas, normas o creencias chocan con su visión del mundo, por lo que puede realizar cambios importantes en su rumbo profesional.\n\n---\n\nSuele buscar nuevas formas de hacer las cosas y aportar innovación allí donde va. Aunque valora el reconocimiento, normalmente prioriza la libertad y la posibilidad de generar un impacto real.\n\nPuede pasar por diferentes etapas profesionales hasta encontrar un camino que le resulte verdaderamente alineado. Incluso después de encontrarlo, puede sentir la necesidad de seguir evolucionando y explorando nuevas posibilidades.\n\n---\n\nLas figuras de autoridad o las estructuras rígidas pueden generar conflicto, especialmente si durante la infancia experimentó ambientes poco estables, impredecibles o con escasa sensación de apoyo y protección.\n\nSu propósito es construir una vocación **auténtica**, capaz de unir libertad, innovación y contribución, dejando una huella propia en el mundo.\n"
+        },
+        {
+          "id": "l-1w1zn2u",
+          "nom": "Urano en casa 11",
+          "tipo": "texto",
+          "contenido": "Existe un intenso deseo de **conexión** y pertenencia. La persona suele sentirse atraída por grupos, comunidades y redes donde pueda compartir ideas, ideales y una visión de futuro.\n\nLa amistad ocupa un lugar central en su Vida, llegando en ocasiones a tener más peso que los vínculos familiares. Suele rodearse de personas muy diferentes entre sí, encontrando riqueza en la diversidad.\n\n---\n\nPosee una visión amplia y humanitaria, percibiendo a la humanidad como parte de una unidad mayor. A menudo se siente atraído por movimientos sociales, causas progresistas o proyectos que buscan generar cambios colectivos.\n\nA través de sus amistades y grupos aprende mucho sobre sí mismo. Los demás actúan como espejos que le ayudan a descubrir nuevas facetas de su identidad y propósito.\n\nEn su expresión menos consciente puede buscar validación externa o depender excesivamente de la aprobación de un grupo para sentirse aceptado. También puede confundir pertenencia con conformidad.\n\n---\n\nSu propósito es encontrar una **pertenencia auténtica**, donde la libertad individual y el sentido de comunidad puedan coexistir sin sacrificar ninguna de las dos.\n"
+        },
+        {
+          "id": "l-kbi6c60",
+          "nom": "Urano en casa 12",
+          "tipo": "texto",
+          "contenido": "La energía de Urano opera a un nivel **profundo e inconsciente**, conectando a la persona con dimensiones de la realidad que no siempre son visibles para los demás. Existe una gran intuición y una sensibilidad especial para percibir lo que ocurre detrás de las apariencias.\n\nPuede poseer una profunda *compasión*, sabiduría y capacidad de empatizar con el sufrimiento ajeno. A menudo capta estados emocionales, energías o dinámicas que otros pasan por alto.\n\nNecesita momentos de soledad para reconectar consigo mismo y escuchar su mundo interior. Cuando no se concede estos espacios, puede sentirse agotado, desconectado o incluso desarrollar síntomas que le obliguen a retirarse temporalmente.\n\n---\n\nExiste una fuerte inclinación hacia la espiritualidad, la meditación, la introspección y la exploración de la consciencia. Algunas personas con esta posición pueden vivir experiencias intuitivas muy intensas o estados de percepción poco habituales.\n\nEn su expresión menos consciente puede buscar formas de escapar de la realidad, idealizar situaciones o verse atrapado en patrones inconscientes y autodestructivos. Por ello, resulta importante aprender a integrar lo que descubre en su mundo interior en lugar de huir hacia él.\n\n---\n\nPuede existir una sensación profunda de soledad o de no pertenecer completamente a este mundo. Sin embargo, su propósito consiste en despertar una comprensión más amplia de la Vida, uniendo el **inconsciente personal** con el **inconsciente colectivo** de maneras creativas y transformadoras.\n"
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-rs38sl4",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 1",
+                "B) Urano en Casa 4",
+                "C) Urano en Libra"
+              ],
+              "enunciado": "¿Qué posición describe mejor una persona que necesita reinventar constantemente su identidad y siente que no encaja en ningún molde?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Urano en Acuario",
+                "B) Urano en Libra",
+                "C) Urano en Géminis"
+              ],
+              "enunciado": "¿Qué signo de Urano está más relacionado con la transformación de las relaciones, el matrimonio y los conceptos de igualdad?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 2",
+                "B) Urano en Casa 8",
+                "C) Urano en Tauro"
+              ],
+              "enunciado": "Una persona que siente que el dinero solo tiene valor si le proporciona libertad probablemente tiene:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Encontrar seguridad a través de la dependencia",
+                "B) Equilibrar libertad y estabilidad",
+                "C) Desarrollar disciplina emocional"
+              ],
+              "enunciado": "¿Cuál es uno de los desafíos principales del arquetipo de Urano?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Urano en Sagitario",
+                "B) Urano en Casa 9",
+                "C) Ambas"
+              ],
+              "enunciado": "¿Qué posición suele cuestionar constantemente las creencias heredadas para construir una filosofía propia?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 4",
+                "B) Urano en Casa 6",
+                "C) Urano en Cáncer"
+              ],
+              "enunciado": "¿Qué ubicación se asocia más con una infancia impredecible y la sensación de no haber echado raíces emocionales sólidas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Capricornio",
+                "B) Urano en Leo",
+                "C) Urano en Tauro"
+              ],
+              "enunciado": "¿Qué generación está asociada con la transformación de gobiernos, instituciones y estructuras de poder?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Urano en Acuario",
+                "B) Urano en Casa 11",
+                "C) Urano en Géminis"
+              ],
+              "enunciado": "Una persona que se siente atraída por amistades muy diversas y encuentra su identidad a través de grupos probablemente tiene:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 3",
+                "B) Urano en Casa 10",
+                "C) Urano en Casa 7"
+              ],
+              "enunciado": "¿Qué posición suele presentar una mente brillante, rápida y llena de asociaciones poco convencionales?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Mantener el orden existente",
+                "B) Expandir la consciencia mediante la innovación y la libertad",
+                "C) Preservar las tradiciones familiares"
+              ],
+              "enunciado": "¿Cuál de las siguientes opciones refleja mejor el propósito de Urano?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 6",
+                "B) Urano en Casa 12",
+                "C) Urano en Virgo"
+              ],
+              "enunciado": "¿Qué posición puede experimentar síntomas físicos cuando reprime su necesidad de libertad?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Géminis",
+                "B) Urano en Virgo",
+                "C) Urano en Libra"
+              ],
+              "enunciado": "¿Qué signo generacional está relacionado con la revolución de la comunicación y la educación?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Urano en Casa 5",
+                "B) Urano en Casa 7",
+                "C) Urano en Casa 8"
+              ],
+              "enunciado": "Una persona que busca relaciones donde la libertad y la intimidad coexistan probablemente tiene:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 8",
+                "B) Urano en Casa 2",
+                "C) Urano en Casa 9"
+              ],
+              "enunciado": "¿Qué ubicación está más relacionada con intereses en psicología, astrología, sexualidad y procesos de transformación profunda?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Piscis",
+                "B) Urano en Escorpio",
+                "C) Urano en Cáncer"
+              ],
+              "enunciado": "¿Qué signo de Urano se asocia con la transformación de la espiritualidad y el inconsciente colectivo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 10",
+                "B) Urano en Casa 3",
+                "C) Urano en Casa 5"
+              ],
+              "enunciado": "¿Qué posición puede sentirse atraída por profesiones innovadoras pero abandonar trabajos que no estén alineados con sus valores?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Urano en Casa 5",
+                "B) Urano en Leo",
+                "C) Ambas"
+              ],
+              "enunciado": "¿Dónde encontramos con más frecuencia una necesidad de crear algo único y expresar una creatividad poco convencional?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Tauro",
+                "B) Urano en Capricornio",
+                "C) Urano en Virgo"
+              ],
+              "enunciado": "¿Qué signo está asociado con la transformación de los conceptos de valor, recursos y naturaleza?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 12",
+                "B) Urano en Casa 1",
+                "C) Urano en Casa 11"
+              ],
+              "enunciado": "¿Qué posición puede sentirse profundamente sola y al mismo tiempo necesitar largos períodos de aislamiento voluntario?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Adaptarse para pertenecer",
+                "B) Cuestionar para evolucionar",
+                "C) Conservar para proteger"
+              ],
+              "enunciado": "¿Cuál de las siguientes ideas representa mejor la energía uraniana?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Leo",
+                "B) Urano en Escorpio",
+                "C) Urano en Aries"
+              ],
+              "enunciado": "¿Qué signo generacional se relaciona con la revolución sexual, la expresión creativa y la necesidad de destacar?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 3",
+                "B) Urano en Casa 9",
+                "C) Urano en Géminis"
+              ],
+              "enunciado": "¿Qué posición suele tener una necesidad constante de movimiento intelectual y exploración mental?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Casa 8",
+                "B) Urano en Casa 2",
+                "C) Urano en Casa 10"
+              ],
+              "enunciado": "¿Qué ubicación puede generar cambios repentinos relacionados con herencias, recursos compartidos o asociaciones económicas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Urano en Acuario",
+                "B) Urano en Capricornio",
+                "C) Urano en Libra"
+              ],
+              "enunciado": "¿Qué signo está especialmente vinculado a la innovación tecnológica, las redes y los nuevos modelos de comunidad?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

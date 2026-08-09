@@ -1,0 +1,276 @@
+{
+  "id": "f100d68e-2c49-4c31-8bec-ce9d5c76f9c1",
+  "modalidad": "medicinachina",
+  "titulo": "Los Ciclos los Cinco Elementos 五行",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Las relaciones entre los Cinco Elementos",
+      "submodules": [
+        {
+          "id": "l-1sv2pz2",
+          "nom": "1.1 Introducción",
+          "tipo": "texto",
+          "contenido": "Los **Cinco Elementos** no funcionan de forma aislada: forman una red en la que cada elemento **nutre** a otro y, al mismo tiempo, **regula** a un tercero. Esta doble dinámica es la que permite mantener el **equilibrio** del organismo.\n\nCuando hablamos de relaciones **\"positivas\"** y **\"negativas\"**, es importante entender que, en **Medicina Tradicional China**, **ambos ciclos forman parte del funcionamiento normal y saludable del cuerpo**.\n\n---\n\n**Ciclo de Generación 相生**\n\nEs el ciclo **nutritivo** o **generador**.\n\nCada elemento **genera**, **alimenta** y **fortalece** al siguiente. Gracias a este ciclo, la energía puede crecer, transformarse y mantenerse en movimiento.\n\n---\n\n**Ciclo de Control 相克**\n\nEs el ciclo **regulador**.\n\nCada elemento **controla** o **limita** a otro para evitar que se vuelva excesivo. Lejos de ser un proceso negativo, este mecanismo resulta imprescindible para mantener el equilibrio y evitar que un elemento domine sobre los demás.\n\nUn organismo sano necesita tanto la **nutrición** del ciclo de generación como la **regulación** del ciclo del control.\n\n---\n\nLo verdaderamente patológico surge cuando estos ciclos dejan de funcionar de manera armoniosa.\n\n* **Sobreexplotación 相乘:** el **control** se vuelve excesivo y un elemento comienza a oprimir a otro más de lo necesario.\n\n* **Contra-dominancia o insulto 相侮:** el ciclo de control se invierte y el elemento que debería ser controlado termina reaccionando contra quien debía regularlo.\n\n---\n\nA lo largo de este curso estudiaremos estos **tres niveles de relación**. En cada uno encontrarás tanto la **formulación clásica de la Medicina Tradicional China** como su **interpretación fisiológica moderna**, facilitando la comprensión de los mismos conceptos desde ambos lenguajes."
+        }
+      ]
+    },
+    {
+      "title": "2. El Ciclo de Generación 相生",
+      "submodules": [
+        {
+          "id": "l-5y7ono1",
+          "nom": "2.1 La Madera genera el Fuego",
+          "tipo": "texto",
+          "contenido": "*El Hígado nutre al Corazón*\n\n**Formulación clásica:** el **Hígado** almacena la **Sangre** para nutrir al **Corazón**.\n\n---\n\nEl **Hígado** actúa como el gran **reservorio de Sangre** y uno de los principales reguladores metabólicos del organismo.\n\nAlmacena un importante volumen de **Sangre** y puede liberarlo rápidamente a la circulación durante situaciones de **estrés físico o emocional**, contribuyendo a mantener la **precarga** y el **gasto cardíaco**.\n\nMantiene la disponibilidad de **glucosa** mediante el almacenamiento y la liberación de **glucógeno**, un proceso fundamental para cubrir las necesidades energéticas del **miocardio**.\n\nLa síntesis hepática de **factores de coagulación** y **proteínas plasmáticas** ayuda a preservar la **viscosidad de la Sangre** y la **integridad vascular**, reduciendo la carga de trabajo del **Corazón**.\n\nA través del metabolismo de diferentes **hormonas**, como las **hormonas tiroideas**, las **catecolaminas** y los **estrógenos**, el Hígado regula de forma indirecta la **frecuencia cardíaca**, la **contractilidad** y el **tono vascular**.\n\nEn conjunto, todas estas funciones explican por qué, en **Medicina Tradicional China**, se afirma que la **Madera genera el Fuego**: un **Hígado** fuerte y equilibrado proporciona el soporte necesario para que el **Corazón** pueda desempeñar correctamente sus funciones."
+        },
+        {
+          "id": "l-1uhitjd",
+          "nom": "2.2 El Fuego genera la Tierra",
+          "tipo": "texto",
+          "contenido": "*El Corazón nutre al Bazo*\n\n**Formulación clásica:** el **Yang del Corazón** calienta la **Tierra del Bazo**, favoreciendo sus funciones de **transporte** y **transformación**.\n\n---\n\nEl **Corazón** aporta la **fuerza circulatoria** y la distribución del **calor** necesarias para que el sistema digestivo y el metabolismo funcionen correctamente.\n\nUn **gasto cardíaco** adecuado garantiza un buen **flujo sanguíneo** hacia el tracto gastrointestinal, permitiendo la correcta **secreción de enzimas digestivas**, la **absorción de nutrientes** y la **motilidad intestinal**.\n\nEl **calor** distribuido por la circulación favorece las **reacciones enzimáticas** implicadas en la digestión y en la transformación de los nutrientes.\n\nLa **señalización autonómica cardíaca**, especialmente a través del **nervio vago**, modula el **peristaltismo** y la **actividad secretora** del intestino.\n\nCuando la función del **Corazón** se debilita o el equilibrio del **sistema nervioso autónomo** se altera, la **eficiencia digestiva** disminuye, dificultando las funciones propias del **Bazo**.\n\nEn **Medicina Tradicional China**, esta relación explica por qué el **Fuego genera la Tierra**: el calor y el impulso proporcionados por el **Corazón** permiten que el **Bazo** transforme los alimentos en **Qi** y **Sangre**, sosteniendo así la nutrición de todo el organismo."
+        },
+        {
+          "id": "l-7jzek8k",
+          "nom": "2.3 La Tierra genera el Metal",
+          "tipo": "texto",
+          "contenido": "*El Bazo nutre al Pulmón*\n\n**Formulación clásica:** el **Qi del Bazo** dispersa los nutrientes hacia el **Pulmón**.\n\n---\n\nEl **Bazo**, a través de la **digestión** y la **absorción intestinal**, transforma los alimentos en los nutrientes que el organismo necesita para mantener todas sus funciones, incluidas las del **Pulmón**.\n\nLos alimentos se convierten en **glucosa**, **ácidos grasos** y **aminoácidos**, que llegan al tejido pulmonar a través de la circulación.\n\nEstos nutrientes son esenciales para la **renovación de las células epiteliales alveolares** y para la síntesis del **surfactante pulmonar**, una sustancia rica en lípidos que evita el colapso de los **alvéolos** durante la respiración.\n\nLos **aminoácidos** también participan en la producción de **anticuerpos** y **mediadores inmunitarios**, contribuyendo a la defensa del tejido pulmonar.\n\nLas **proteínas plasmáticas** procedentes de una correcta nutrición, especialmente la **albúmina**, mantienen la **presión oncótica intravascular**, evitando la acumulación de líquido en los alvéolos y favoreciendo un adecuado **intercambio gaseoso**.\n\nAdemás, la **microbiota intestinal** transforma componentes de la dieta en moléculas de señalización que alcanzan los **Pulmones**, modulando la **respuesta inmunitaria** y el **tono inflamatorio**.\n\nEn **Medicina Tradicional China**, esta relación explica por qué la **Tierra genera el Metal**: un **Bazo** fuerte proporciona el **Qi** y los nutrientes necesarios para que el **Pulmón** pueda nutrirse, defender al organismo y realizar correctamente el intercambio con el exterior."
+        },
+        {
+          "id": "l-cdr31qd",
+          "nom": "2.4 El Metal genera el Agua",
+          "tipo": "texto",
+          "contenido": "*El Pulmón nutre al Riñón*\n\n**Formulación clásica:** el **Qi del Pulmón** desciende para regular las **vías del agua** y favorecer las funciones del **Riñón**.\n\n---\n\nEl **Pulmón** regula la **oxigenación** del organismo y la eliminación de **dióxido de carbono (CO₂)**, desempeñando un papel fundamental en el equilibrio que mantiene la función renal.\n\nAl eliminar **CO₂**, los Pulmones contribuyen al equilibrio **ácido-base**, reduciendo la necesidad de que el **Riñón** compense estas alteraciones mediante la regulación del **bicarbonato**. De este modo, los riñones pueden centrarse en el control de los **líquidos corporales** y los **electrolitos**.\n\nLa **mecánica respiratoria** también influye sobre el **retorno venoso** y la **presión de perfusión renal**, favoreciendo una adecuada irrigación de los riñones.\n\nCuando los Pulmones detectan una disminución del **oxígeno** disponible (**hipoxia**), se estimula la liberación renal de **eritropoyetina**, una hormona que promueve la producción de **glóbulos rojos**, estableciendo un importante vínculo entre la función respiratoria y la actividad endocrina del Riñón.\n\nAdemás, el correcto **aporte de oxígeno** favorece diferentes mecanismos hormonales implicados en la **reabsorción de sodio y agua**, contribuyendo al mantenimiento del equilibrio hídrico del organismo.\n\nEn **Medicina Tradicional China**, esta relación explica por qué el **Metal genera el Agua**: un **Pulmón** fuerte impulsa el descenso del **Qi**, favorece el metabolismo de los líquidos y proporciona el soporte necesario para que el **Riñón** conserve y distribuya adecuadamente las reservas del organismo."
+        },
+        {
+          "id": "l-5fj8m1d",
+          "nom": "2.5 El Agua genera la Madera",
+          "tipo": "texto",
+          "contenido": "*El Riñón nutre al Hígado*\n\n**Formulación clásica:** el **Riñón** almacena la **Esencia (Jing)** para nutrir la **Sangre del Hígado**.\n\n---\n\nEl **Riñón** sostiene la función del **Hígado** a través de mecanismos **endocrinos**, **hematológicos** y de **eliminación de desechos**, favoreciendo el correcto funcionamiento del metabolismo.\n\nLa secreción renal de **eritropoyetina** estimula la producción de **glóbulos rojos**, garantizando un adecuado aporte de **oxígeno** para el metabolismo de los **hepatocitos** y el funcionamiento del Hígado.\n\nEl Riñón participa en la **activación de la vitamina D** y en la regulación del **equilibrio mineral**, procesos que favorecen numerosas **reacciones enzimáticas** dentro del tejido hepático.\n\nMediante la eliminación de los **desechos metabólicos** solubles en agua, los riñones reducen la **carga tóxica** del organismo y ayudan a preservar la capacidad de **detoxificación** del Hígado.\n\nCuando existe una **disfunción renal crónica**, aumenta el **estrés metabólico** y se deteriora la calidad de la sangre que llega al Hígado, comprometiendo progresivamente su funcionamiento.\n\nEn **Medicina Tradicional China**, esta relación explica por qué el **Agua genera la Madera**: la **Esencia (Jing)** almacenada en el **Riñón** constituye la base sobre la que se forma y nutre la **Sangre del Hígado**, permitiendo el crecimiento, la regeneración y el correcto movimiento del **Qi**."
+        }
+      ]
+    },
+    {
+      "title": "3. El Ciclo de Control 相克",
+      "submodules": [
+        {
+          "id": "l-shju76q",
+          "nom": "3.1 La Madera controla la Tierra",
+          "tipo": "texto",
+          "contenido": "*El Hígado regula al Bazo*\n\n**Formulación clásica:** el **libre flujo del Qi del Hígado** ayuda a desbloquear el estancamiento de la **Tierra del Bazo**, favoreciendo sus funciones de transporte y transformación.\n\n---\n\nEl **Hígado** regula el **metabolismo hepático** y el **tono del sistema nervioso autónomo**, influyendo directamente sobre la **motilidad gastrointestinal** y el funcionamiento del aparato digestivo.\n\nUna función hepática adecuada favorece la **secreción de bilis**, facilitando la **digestión de las grasas** y la absorción de los nutrientes.\n\nAdemás, el Hígado modula la actividad del **músculo liso** del **estómago** y los **intestinos** a través de las vías **vagal** y **simpática**, contribuyendo a un tránsito digestivo equilibrado.\n\nCuando la regulación hepática o neural se altera, el **vaciamiento gástrico** se enlentece, el **tránsito intestinal** disminuye y la **absorción de nutrientes** se vuelve menos eficiente.\n\nComo consecuencia, aumenta la tendencia al **estancamiento** de alimentos, líquidos y nutrientes dentro del aparato digestivo.\n\nEn **Medicina Tradicional China**, esta relación explica por qué la **Madera controla la Tierra**: un **Hígado** con un **Qi** que fluye libremente regula y mantiene en movimiento las funciones del **Bazo**, evitando el estancamiento y favoreciendo una digestión armoniosa."
+        },
+        {
+          "id": "l-8c4zv1b",
+          "nom": "3.2 La Tierra controla el Agua",
+          "tipo": "texto",
+          "contenido": "*El Bazo regula al Riñón*\n\n**Formulación clásica:** el **Bazo** transforma el **agua** y la **humedad**, evitando que el **Agua del Riñón** se desborde.\n\n---\n\nEl **sistema digestivo-metabólico**, representado por el **Bazo**, regula la **absorción de agua** y el equilibrio de los **solutos** antes de que los líquidos sean filtrados por el **Riñón**.\n\nEl **cotransporte de glucosa y sodio** en el intestino permite que la absorción de agua vaya unida a la de los nutrientes, favoreciendo que los líquidos permanezcan dentro del **torrente sanguíneo** y no se acumulen en los tejidos.\n\nUn correcto procesamiento de los **alimentos** y los **líquidos** ayuda a prevenir la **hipervolemia** y la acumulación de **líquido intersticial**.\n\nAl mantener el equilibrio **osmótico** y el volumen adecuado de líquidos, el sistema digestivo reduce la carga de trabajo del **Riñón**, facilitando su función de filtración y excreción.\n\nComo consecuencia, disminuye el riesgo de **edemas**, **retención de líquidos** y una sobreactivación de la función renal.\n\nEn **Medicina Tradicional China**, esta relación explica por qué la **Tierra controla el Agua**: un **Bazo** fuerte transforma y distribuye correctamente los líquidos, evitando que el **Agua** se acumule o desborde y facilitando el trabajo del **Riñón**."
+        },
+        {
+          "id": "l-sryjpdb",
+          "nom": "3.3 El Agua controla el Fuego",
+          "tipo": "texto",
+          "contenido": "*El Riñón regula al Corazón*\n\n**Formulación clásica:** el **ascenso del Agua del Riñón** sirve para **frenar el Fuego del Corazón**, manteniendo el equilibrio entre ambos órganos.\n\n---\n\nEl **Riñón** regula el **volumen sanguíneo**, el equilibrio de los **electrolitos** (*Na⁺, K⁺ y Ca²⁺*) y la actividad del sistema **renina-angiotensina**, mecanismos que influyen directamente sobre el funcionamiento del **Corazón**.\n\nUna función renal adecuada mantiene una correcta **precarga** y **poscarga**, facilitando un trabajo cardíaco eficiente.\n\nAdemás, contribuye a regular la **frecuencia cardíaca**, la **contractilidad** del miocardio y el **tono vascular**, evitando una activación excesiva del sistema cardiovascular.\n\nEl equilibrio de los **líquidos corporales** y de los **electrolitos** disminuye el riesgo de **arritmias** y reduce el esfuerzo que debe realizar el Corazón para bombear la sangre.\n\nAsimismo, una buena función renal ayuda a limitar la **activación excesiva del sistema nervioso simpático**, favoreciendo un estado de mayor estabilidad cardiovascular.\n\nEn **Medicina Tradicional China**, esta relación explica por qué el **Agua controla el Fuego**: un **Riñón** fuerte mantiene bajo control la actividad del **Corazón**, evitando que el **Fuego** se vuelva excesivo y preservando el equilibrio del organismo."
+        },
+        {
+          "id": "l-9rh0qgv",
+          "nom": "3.4 El Fuego controla el Metal",
+          "tipo": "texto",
+          "contenido": "*El Corazón regula al Pulmón*\n\n**Formulación clásica:** el **calor del Fuego del Corazón** favorece la **dispersión del Qi del Pulmón** y evita que su energía descienda en exceso.\n\n---\n\nEl **Corazón**, a través de su función de bombeo, genera la **presión arterial** y la **perfusión** necesarias para el correcto funcionamiento del **Pulmón**.\n\nUn **gasto cardíaco** adecuado garantiza un correcto **flujo capilar pulmonar**, favoreciendo la **ventilación alveolar** y el adecuado **aporte de oxígeno** al organismo.\n\nLa **Sangre** cálida y bien perfundida mantiene la **temperatura tisular**, permitiendo que las **reacciones enzimáticas** de las células pulmonares se desarrollen de forma óptima.\n\nLa **regulación del sistema nervioso autónomo**, en la que participa el Corazón, también influye sobre el **tono del músculo liso bronquial** y la **frecuencia respiratoria**.\n\nEn conjunto, estos mecanismos ayudan a prevenir el **colapso alveolar**, la **retención excesiva de líquidos** y la **congestión** del tejido pulmonar.\n\nEn **Medicina Tradicional China**, esta relación explica por qué el **Fuego controla el Metal**: el impulso y el calor proporcionados por el **Corazón** mantienen la adecuada dispersión del **Qi del Pulmón**, favoreciendo una respiración eficiente y un correcto intercambio con el exterior."
+        },
+        {
+          "id": "l-f2h4cfa",
+          "nom": "3.5 El Metal controla la Madera",
+          "tipo": "texto",
+          "contenido": "*El Pulmón regula al Hígado*\n\n**Formulación clásica:** el **Qi del Pulmón** desciende para evitar el **ascenso excesivo del Qi del Hígado**.\n\n---\n\nEl **Pulmón** regula la **ventilación** y el equilibrio de **oxígeno** y **dióxido de carbono (CO₂)** en el organismo, influyendo directamente sobre la actividad del **sistema nervioso autónomo** y el **flujo sanguíneo hepático**.\n\nUna respiración adecuada y un correcto **descenso del Qi del Pulmón** favorecen una buena **oxigenación** de los tejidos y contribuyen a mantener estable la actividad del sistema nervioso autónomo.\n\nEste equilibrio ayuda a prevenir una **activación simpática excesiva**, evitando una perfusión hepática desproporcionada, un metabolismo excesivamente acelerado o una vasodilatación mantenida.\n\nGracias a una función pulmonar eficiente, el **Hígado** mantiene un funcionamiento metabólico más equilibrado y una adecuada regulación de la circulación.\n\nComo consecuencia, se preservan el **tono vascular**, la **tasa metabólica** y el correcto movimiento del **Qi** y la **Sangre**.\n\nEn **Medicina Tradicional China**, esta relación explica por qué el **Metal controla la Madera**: el descenso armonioso del **Qi del Pulmón** modera la tendencia ascendente del **Qi del Hígado**, evitando los excesos y favoreciendo el equilibrio energético del organismo."
+        }
+      ]
+    },
+    {
+      "title": "4. Desequuilibrios severos",
+      "submodules": [
+        {
+          "id": "l-y0ap6at",
+          "nom": "4.1 La sobreexplotación 相乘",
+          "tipo": "texto",
+          "contenido": "La **sobreexplotación 相乘** ocurre cuando un elemento **controla a otro con demasiada fuerza**, siguiendo la dirección normal del **ciclo de control (Ke)**.\n\nComo consecuencia, el elemento controlado se **debilita** y pierde la capacidad de desempeñar correctamente sus funciones.\n\nEjemeplo: La **Madera sobreexplota a la Tierra**. Un **Qi del Hígado** excesivo invade al **Bazo** y al **Estómago**, provocando un cuadro muy frecuente en la práctica clínica caracterizado por:\n\n* **Irritabilidad**.\n* **Digestiones alteradas**.\n* **Hinchazón abdominal**.\n* **Dolor abdominal** relacionado con el estado emocional."
+        },
+        {
+          "id": "l-hmrz28q",
+          "nom": "4.2 Contra-dominancia o insulto 相侮",
+          "tipo": "texto",
+          "contenido": "La **contra-dominancia** o **insulto** aparece cuando el elemento que debería ser controlado adquiere tanta fuerza que termina **rebelándose contra su controlador**, invirtiendo la dirección normal del ciclo.\n\nEjemplo: La **Madera insulta al Metal**. El **Fuego del Hígado**, al volverse excesivo, agrede al **Pulmón**. En lugar de que el **Metal** controle a la **Madera**, es la propia Madera la que termina dañando al Metal."
+        },
+        {
+          "id": "l-7btud8u",
+          "nom": "4.3 Trastornos del Ciclo de Generación ",
+          "tipo": "texto",
+          "contenido": "Dentro del **Ciclo de Generación (Sheng)**, la enfermedad también puede transmitirse entre el elemento que **genera** y el que **es generado**.\n\n**La enfermedad del anterior afecta al posterior:** cuando un elemento está **deficiente**, no puede nutrir adecuadamente al siguiente.\n\nEjemplo: una **deficiencia de Agua** impide nutrir a la **Madera**, pudiendo provocar una **deficiencia de Sangre del Hígado** secundaria a una **deficiencia de Esencia del Riñón**.\n\nCuando un elemento está en **exceso** o excesivamente **agotado**, termina **consumiendo** la energía del elemento que lo genera, debilitándolo progresivamente."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-swc0bf2",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Limitar el exceso de cada elemento.",
+                "B) Nutrir y sostener al elemento siguiente.",
+                "C) Eliminar los factores patógenos."
+              ],
+              "enunciado": "¿Cuál es el objetivo principal del ciclo de generación?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Agua.",
+                "B) Tierra.",
+                "C) Fuego."
+              ],
+              "enunciado": "Según el ciclo de generación, ¿qué elemento nutre directamente al Metal?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El Pulmón.",
+                "B) El Hígado.",
+                "C) El Riñón."
+              ],
+              "enunciado": "¿Qué órgano genera fisiológicamente al Corazón dentro del ciclo Sheng?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El Pulmón regula la oxigenación y facilita la función renal.",
+                "B) El Pulmón produce la Esencia.",
+                "C) El Pulmón almacena la Sangre."
+              ],
+              "enunciado": "La relación entre el Pulmón y el Riñón dentro del ciclo de generación se explica porque:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Metal.",
+                "B) Tierra.",
+                "C) Fuego."
+              ],
+              "enunciado": "¿Qué órgano controla al Agua en el ciclo Ke?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Almacenar la Sangre.",
+                "B) Regular el libre flujo del Qi para favorecer la digestión.",
+                "C) Controlar los líquidos."
+              ],
+              "enunciado": "¿Qué función ejerce el Hígado sobre el Bazo en el ciclo de control?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El Riñón sostiene la función hepática.",
+                "B) El Riñón produce bilis.",
+                "C) El Riñón regula directamente la Vesícula Biliar."
+              ],
+              "enunciado": "¿Cuál de las siguientes relaciones explica que el Agua genere a la Madera?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Produce enzimas digestivas.",
+                "B) Aporta perfusión y calor al aparato digestivo.",
+                "C) Activa la secreción de bilis."
+              ],
+              "enunciado": "En la interpretación fisiológica moderna, el Corazón nutre al Bazo porque:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El ciclo de generación se detiene.",
+                "B) Un elemento controla con demasiada fuerza al que normalmente regula.",
+                "C) El elemento hijo consume a la madre."
+              ],
+              "enunciado": "¿Qué ocurre en la sobreexplotación?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El elemento controlado termina dañando a su controlador.",
+                "B) La madre deja de nutrir al hijo.",
+                "C) El ciclo de generación cambia de dirección."
+              ],
+              "enunciado": "¿Qué sucede en la contra-dominancia?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El Metal invade la Tierra.",
+                "B) La Madera invade la Tierra.",
+                "C) El Agua invade el Fuego."
+              ],
+              "enunciado": "¿Cuál es el ejemplo clásico de sobreexplotación explicado en el curso?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Insomnio y palpitaciones.",
+                "B) Irritabilidad junto con digestiones alteradas.",
+                "C) Tos y dificultad respiratoria."
+              ],
+              "enunciado": "Cuando la Madera sobreexplota a la Tierra es frecuente encontrar:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El Pulmón favorece el descenso del Qi y modera el ascenso del Qi del Hígado.",
+                "B) El Pulmón almacena la Sangre.",
+                "C) El Pulmón produce la bilis."
+              ],
+              "enunciado": "¿Qué relación explica que el Metal controle a la Madera?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Porque el Riñón regula el volumen sanguíneo y los electrolitos.",
+                "B) Porque el Riñón produce glóbulos rojos.",
+                "C) Porque el Riñón regula la digestión."
+              ],
+              "enunciado": "¿Por qué el Agua controla al Fuego desde un punto de vista fisiológico?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El Bazo regula la absorción de agua y nutrientes antes de la filtración renal.",
+                "B) El Bazo almacena la Esencia.",
+                "C) El Bazo produce eritropoyetina."
+              ],
+              "enunciado": "¿Qué función permite que la Tierra controle al Agua?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

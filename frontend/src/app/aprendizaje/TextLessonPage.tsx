@@ -9,7 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Markdown } from "../../components/global/Markdown";
 import { CursoTest } from "../../components/aprendizaje/CursoTest";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
-import { useCursosData } from "../../data/cursosApi";
+import { useCursosData, useLeccionTraducida } from "../../data/cursosApi";
 import { useT } from "../../i18n";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
 
@@ -54,6 +54,9 @@ export default function TextLessonPage() {
   const navigate = useNavigate();
   const t = useT();
   const { cursosData, loading } = useCursosData();
+  // Cuerpo de la lección en el idioma activo (null si es español o si esta
+  // lección todavía no está traducida: entonces se lee la del API).
+  const traducida = useLeccionTraducida(cursoId, submoduloId);
 
   React.useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [submoduloId]);
 
@@ -84,6 +87,8 @@ export default function TextLessonPage() {
   const { bgColor, color, icon, nom: disciplinaNom } = modalidad;
   const hasBg = hasDisciplinaBg(disciplinaNom);
   const esTest = leccion.tipo === "test";
+  const cuerpo = traducida?.contenido ?? leccion.contenido ?? leccion.letra ?? "";
+  const ejercicios = traducida?.ejercicios ?? leccion.ejercicios ?? [];
 
   // Misma sombra que la tarjeta de curso y el editor admin (coherencia del módulo de cursos).
   const TEXT_GLOW = `0 1px 4px ${bgColor}, 0 0 10px ${bgColor}, 0 0 22px ${bgColor}`;
@@ -169,7 +174,7 @@ export default function TextLessonPage() {
               boxShadow={HEADER_GLOW}
               mt={{ base: 2, md: 4 }}
             >
-              <CursoTest ejercicios={leccion.ejercicios ?? []} color={color} disciplinaNom={disciplinaNom} bgColor={bgColor} />
+              <CursoTest ejercicios={ejercicios} color={color} disciplinaNom={disciplinaNom} bgColor={bgColor} />
             </Box>
           ) : (
             <Box
@@ -186,7 +191,7 @@ export default function TextLessonPage() {
                   una imagen de la disciplina ajustada a su tamaño. Las
                   secciones van pegadas y se separan con una línea fina (el
                   antiguo `---`). */}
-              {splitSecciones(leccion.contenido ?? leccion.letra ?? "").map((sec, si) => (
+              {splitSecciones(cuerpo).map((sec, si) => (
                 <Box key={si} position="relative">
                   {si > 0 && <Box position="relative" zIndex={1} h="1px" bg={`${color}44`} />}
                   {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="0" />}

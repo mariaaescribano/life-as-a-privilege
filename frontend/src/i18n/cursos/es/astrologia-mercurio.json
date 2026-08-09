@@ -1,0 +1,427 @@
+{
+  "id": "fb6ff1e7-fec0-40c6-ae55-aa06f6e44ee7",
+  "modalidad": "Astrología",
+  "titulo": "Mercurio",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Mercurio en la Astrología",
+      "submodules": [
+        {
+          "id": "l-dni04o6",
+          "nom": "1.1 El arquetipo de Mercurio",
+          "tipo": "texto",
+          "contenido": "Mercurio representa **nuestra mente, la forma de pensar, aprender, comprender y comunicarnos**, tanto con los demás como con nosotros mismos.\n\n**El signo** en el que se encuentra muestra **cómo funciona nuestra mente, cómo nos comunicamos y cuál es nuestro tipo de mentalidad.**\n\n**La casa** indica **dónde y cómo se expresa esa forma de pensar**, las áreas de la Vida que despiertan nuestra curiosidad y donde permanecemos abiertos al aprendizaje y al cambio.\n\n**El verdadero conocimiento debe integrarse a través de la experiencia.** Si no se vive, el aprendizaje puede quedarse únicamente en el plano mental, sin llegar a transformarnos realmente.\n\n---\n\n**Mercurio nunca se separa más de 30° del Sol**, por lo que siempre estará en la misma casa que el Sol o en la anterior o posterior. Esto puede generar un conflicto entre **la forma en la que funciona la mente** y **el arquetipo solar que la persona ha venido a desarrollar.**"
+        }
+      ]
+    },
+    {
+      "title": "2. Mercurio en los Signos",
+      "submodules": [
+        {
+          "id": "l-jn51kbv",
+          "nom": "Mercurio en Aries",
+          "tipo": "texto",
+          "contenido": "**Mente enfocada en el futuro**, rápida y orientada a los retos. Muy imaginativo y con gran capacidad para pensar e improvisar sobre la marcha. **Es un solucionador de problemas nato** y suele expresarse con facilidad, aunque también puede ser sarcástico o argumentativo.\n\nLe gusta iniciar proyectos, competir y **ser el primero en todo.** Tiene una gran hambre de conocimiento, por lo que suele ser un lector o escritor compulsivo. Aprende rápido y disfruta enfrentándose a nuevos desafíos intelectuales.\n\nPuede costarle terminar lo que empieza, ya que su mente siempre está buscando el siguiente reto. **Impaciente, combativo y de pensamiento muy veloz.**\n\n**En baja frecuencia** puede ser demasiado cabezota, egoico, irritable o discutir por el simple hecho de tener razón."
+        },
+        {
+          "id": "l-20sn8uj",
+          "nom": "Mercurio en Tauro",
+          "tipo": "texto",
+          "contenido": "**Mente práctica, estable y profundamente conectada con el mundo material.** Necesita creer, experimentar y comprender las cosas a través de lo tangible. No suele aceptar una idea hasta haberla comprobado por sí mismo.\n\nTiene gustos muy definidos y una forma de pensar constante. **Metódico y perseverante**, rara vez abandona aquello que empieza. Discreto, realista y paciente. Aunque puede ser creativo, suele preferir soluciones prácticas antes que abstractas.\n\n**Posee una excelente memoria** y recuerda conversaciones, detalles y palabras con gran facilidad. Aprende despacio, pero cuando integra un conocimiento es muy difícil que lo olvide.\n\n**En baja frecuencia** puede mostrarse muy cabezota, rígido, resistente al cambio o aprender con excesiva lentitud por no salir de su zona de confort."
+        },
+        {
+          "id": "l-wus1en1",
+          "nom": "Mercurio en Géminis",
+          "tipo": "texto",
+          "contenido": "**Curioso, lógico y con una necesidad constante de aprender.** Su mente necesita movimiento, variedad e información nueva. Puede pasar rápidamente de un tema a otro, aunque si no profundiza, esa búsqueda constante solo aumenta la sensación de vacío y la necesidad de seguir aprendiendo.\n\n**Necesita comprender de verdad, no solo memorizar.** Cuando integra un conocimiento, lo recuerda para siempre. Aprende mejor investigando, preguntando y relacionando conceptos.\n\nNecesita aprender a vivir también en su cuerpo y no únicamente en su mente. **Posee una memoria muy asociativa**, suele tener pocos prejuicios y rara vez se toma las cosas de forma personal.\n\nLe gustan los viajes, el movimiento y descubrir aquello que despierta su curiosidad.\n\n**En baja frecuencia** puede ser indeciso, nervioso, disperso o sufrir agotamiento mental."
+        },
+        {
+          "id": "l-o1ps1gr",
+          "nom": "Mercurio en Cáncer",
+          "tipo": "texto",
+          "contenido": "**Mente profundamente sensible e intuitiva.** Absorbe con facilidad el ambiente y las emociones de quienes le rodean, hasta el punto de que puede confundir lo que sienten los demás con lo que siente él mismo.\n\nLe interesa conocer la historia de su familia, sus raíces y sus ancestros. **No escucha solo las palabras, sino también las emociones que hay detrás de ellas.** Por ello suele ser un gran oyente, aunque mantener la objetividad puede resultarle difícil.\n\nTiene una gran memoria emocional y procesa la realidad a través de sus sentimientos. Puede experimentar cambios de humor o cierta inestabilidad emocional.\n\n**En baja frecuencia** puede dejarse llevar demasiado por sus emociones, sentirse constantemente juzgado u observado, dramatizar las situaciones o tomarse todo de forma muy personal."
+        },
+        {
+          "id": "l-a6kbtae",
+          "nom": "Mercurio en Leo",
+          "tipo": "texto",
+          "contenido": "**Mente creativa, persuasiva e inspiradora.** Capta las ideas rápidamente y tiene facilidad para convertirlas en algo real. Se expresa desde el corazón y posee un gran magnetismo al comunicar.\n\nTiene entusiasmo, confianza y una forma de hablar cálida que inspira a quienes le rodean. **Desea liderar y ser reconocido por sus ideas.** Elegante, digno y ambicioso, suele destacar por su capacidad para motivar a otros.\n\nLe gustan los niños, el arte y todo aquello que le permita expresar su creatividad. **Tiene un enorme potencial creativo**, aunque si no está equilibrado puede buscar demasiado la aprobación externa.\n\n**En baja frecuencia** puede ser cabezota, vanidoso, exagerado, indulgente o reaccionar con irritabilidad cuando no recibe el reconocimiento que espera."
+        },
+        {
+          "id": "l-luvd8oi",
+          "nom": "Mercurio en Virgo",
+          "tipo": "texto",
+          "contenido": "**Mente analítica, crítica y orientada al detalle.** Organizado, metódico y preciso. Valora la eficiencia, la lógica y la utilidad de las cosas. Suele ser reservado emocionalmente y puede mostrarse tímido al expresarse.\n\n**Acumula conocimiento y busca comprender cada detalle antes de actuar.** Tiene una gran capacidad para detectar errores y mejorar procesos, aunque esa misma búsqueda de perfección puede hacer que retrase sus proyectos o nunca llegue a sentirse completamente satisfecho.\n\nTiende a reprimir las emociones y el dolor, evitando mirar aquello que le bloquea. **Lo que no expresa emocionalmente puede terminar manifestándose a través del cuerpo** mediante síntomas psicosomáticos.\n\n**En baja frecuencia** puede convertirse en una persona excesivamente crítica, perfeccionista, intolerante o muy juzgadora con quienes considera menos competentes."
+        },
+        {
+          "id": "l-df79mai",
+          "nom": "Mercurio en Libra",
+          "tipo": "texto",
+          "contenido": "**Mente orientada a comprender a los demás y crear armonía.** Recolecta información para entender diferentes puntos de vista y mantener el equilibrio en sus relaciones. Aprende sobre sí mismo a través del diálogo, la observación y el intercambio con otras personas.\n\nLe importan la estética, los buenos modales, la elegancia y el buen gusto. **Las relaciones y las amistades desempeñan un papel fundamental en su desarrollo mental.** Antes de tomar una decisión suele valorar todas las opciones, buscando la más justa y equilibrada.\n\nTiene facilidad para mediar, negociar y comunicarse con diplomacia. Evita la confrontación siempre que puede.\n\n**En baja frecuencia** puede ser muy indeciso, superficial, inconsistente o cambiar con facilidad de opinión y de comportamiento para agradar a los demás."
+        },
+        {
+          "id": "l-0u7gf7x",
+          "nom": "Mercurio en Escorpio",
+          "tipo": "texto",
+          "contenido": "**Mente intensa, profunda e investigadora.** Siempre percibe que hay algo oculto bajo la superficie y siente una necesidad constante de descubrir la verdad. Muy intuitivo, perceptivo y observador.\n\nNo cambia de opinión fácilmente. **Necesita investigar, analizar y comprobar antes de llegar a una conclusión.** Su comunicación suele ser directa, precisa y sin rodeos. Inteligente, reservado y estratégico, suele conseguir aquello que se propone.\n\nTiene facilidad para investigar, descubrir secretos y comprender la psicología humana. **Le atraen los temas tabú, el misterio, la transformación y la sexualidad.**\n\n**En baja frecuencia** puede mostrar demasiada desconfianza, obsesionarse con temas relacionados con el sexo o lo prohibido, o utilizar la información de forma manipuladora."
+        },
+        {
+          "id": "l-2g6t4t1",
+          "nom": "Mercurio en Sagitario",
+          "tipo": "texto",
+          "contenido": "**Mente inspirada, futurista y abierta a nuevas formas de pensamiento.** Disfruta aprendiendo, explorando ideas y ampliando sus horizontes. Comprende con facilidad conceptos abstractos y busca el sentido profundo de la Vida y la existencia.\n\n**Necesita descubrir la verdad y compartir lo que aprende.** Es honesto, entusiasta y suele tener un gran sentido del humor, a veces con un toque sarcástico. Posee un talento natural para enseñar, inspirar y comunicar ideas complejas de forma sencilla.\n\nLe beneficia tener una dirección clara para no dispersarse entre tantos intereses y posibilidades.\n\n**En baja frecuencia** puede ser pedante, disperso, imprudente o emitir juicios demasiado rápidos sin conocer todos los hechos."
+        },
+        {
+          "id": "l-p9r97dz",
+          "nom": "Mercurio en Capricornio",
+          "tipo": "texto",
+          "contenido": "**Mente estratégica, disciplinada y orientada a los resultados.** Piensa antes de actuar y planifica con cuidado cada paso. Tiene una gran capacidad para organizarse y convertir sus ideas en resultados concretos.\n\n**Persevera hasta terminar lo que empieza.** Posee una memoria sólida, es responsable y suele preferir lo práctico antes que lo idealista. Se centra en lo tangible, el crecimiento económico, el estatus y la construcción de algo duradero.\n\nEs diplomático y sabe persuadir a los demás desde la estrategia más que desde la impulsividad. Suele anticiparse a los problemas y pensar en todo lo que podría salir mal antes de actuar.\n\n**En baja frecuencia** puede ser demasiado pesimista, rígido, controlador o excesivamente ambicioso, priorizando el éxito por encima de otras áreas de su Vida."
+        },
+        {
+          "id": "l-9td48yn",
+          "nom": "Mercurio en Acuario",
+          "tipo": "texto",
+          "contenido": "**Mente rápida, original e independiente.** Observa la realidad desde una perspectiva diferente y suele percibir tendencias antes de que se manifiesten. Muy innovador y con un gran interés por aprender y comprender aquello que se sale de lo convencional.\n\nLe atraen temas como la ciencia, la tecnología, la naturaleza humana y cualquier conocimiento que desafíe lo establecido. **Aunque tiene una mente abierta, no cambia de opinión con facilidad; primero necesita analizarlo todo.**\n\nPuede tener un punto rebelde y cuestionar las normas establecidas. **Busca aceptación social y estimulación intelectual a través de sus amistades y grupos.**\n\nSu mente suele estar muy activa, por lo que necesita aprender a cultivar el silencio y la calma.\n\n**En baja frecuencia** puede hablar demasiado, mostrarse muy cabezota, arrogante o sufrir estrés y tensión mental constantes."
+        },
+        {
+          "id": "l-mltf034",
+          "nom": "Mercurio en Piscis",
+          "tipo": "texto",
+          "contenido": "**Mente intuitiva, psíquica y profundamente imaginativa.** Aprende absorbiendo el ambiente más que mediante la lógica, y puede llegar a tener una memoria casi fotográfica. Su forma de pensar es romántica, meditativa y muy conectada con el inconsciente.\n\n**Necesita entornos armónicos**, ya que su mente procesa constantemente información a un nivel muy sutil. Puede mostrarse vulnerable, reservado o taciturno, y le cuesta expresar sus verdaderos pensamientos.\n\nEs un excelente escritor o artista, ya que posee una gran capacidad para imaginar, simbolizar y reinterpretar la realidad desde una perspectiva creativa.\n\nAl tomar decisiones puede mostrarse indeciso, dejándose llevar más por la intuición que por la lógica.\n\n**En baja frecuencia** puede perder el contacto con la realidad, caer en la confusión, desarrollar miedos o fobias, tener pensamientos obsesivos o morbosos, mostrar una visión pesimista de la Vida o caer en una excesiva autocompasión."
+        }
+      ]
+    },
+    {
+      "title": "3. Mercurio en las Casas",
+      "submodules": [
+        {
+          "id": "l-n8g85eg",
+          "nom": "Mercurio en Casa 1",
+          "tipo": "texto",
+          "contenido": "Individuos curiosos, con una gran necesidad de descubrir, investigar y estudiar. **Toman consciencia de sí mismos a través de la curiosidad.** Muy analíticos. **Poderosas habilidades mentales** y buenos resolviendo problemas. Su mente es rápida y ágil. \n\nBuen orador. Intelectual. Claro, rápido y con atención al detalle. Seguro y confiado. **Suele parecer más joven de lo que es.**\n\nA pesar de sus capacidades mentales, puede costarle mucho la empatía y entender a los demás. **La Vida le ha traído muchos cambios durante la juventud, lo que le ha enseñado a adaptarse rápidamente.**\n"
+        },
+        {
+          "id": "l-r11qk1f",
+          "nom": "Mercurio en Casa 2",
+          "tipo": "texto",
+          "contenido": "Centrado en el entendimiento a través del mundo físico y tangible. **Saber cómo funcionan las cosas le hace sentirse tranquilo.** \n\nEl conocimiento debe ser incorporado antes de confiar plenamente en él. Usa su inteligencia en todo lo relacionado con posesiones y finanzas. **Es capaz de crear e incrementar recursos.**\n\nValora lo práctico y la seguridad material. **Suele tener más de una fuente de ingresos.** Necesita comprender el funcionamiento de las cosas para sentirse estable y seguro."
+        },
+        {
+          "id": "l-ntgr28k",
+          "nom": "Mercurio en Casa 3",
+          "tipo": "texto",
+          "contenido": "Racional, curioso, rápido y, en ocasiones, irónico. Le gusta observar. **Gran capacidad para comunicar.** Talento para los negocios. Buena atención al detalle sin volverse obsesivo. **Suele tener algo que decir sobre casi todo** y puede hablar mucho.\n\nLe suelen gustar los viajes cortos. **Necesita movimiento constante** y tiende a cambiar de intereses con frecuencia. La relación con los hermanos suele ser importante, e incluso puede llegar a trabajar con ellos.\n\n**Cuidado con fumar (mejor evitarlo), al firmar documentos y con los accidentes en las manos.**"
+        },
+        {
+          "id": "l-10hbwiq",
+          "nom": "Mercurio en Casa 4",
+          "tipo": "texto",
+          "contenido": "**Fuerte influencia de los padres o del entorno familiar en la forma de pensar.** Puede haber habido ideas muy marcadas sobre que el nativo debía ser fuerte, racional e intelectualmente capaz, dejando en segundo plano el cariño, la ternura o el contacto físico. Esto puede convertirlo en alguien más introvertido.\n\nUno de los padres suele ser percibido como una persona inteligente. También puede haber habido **otras figuras de apego importantes** (un tío, un hermano mayor u otra persona que asumió parte del cuidado). Existe orgullo por la familia y las raíces.\n\n**Disfruta aprendiendo y suele mantener ese interés durante toda la Vida.** En baja frecuencia puede ser nervioso, inquieto e irritable."
+        },
+        {
+          "id": "l-0p8dlj5",
+          "nom": "Mercurio en Casa 5",
+          "tipo": "texto",
+          "contenido": "Le gusta pensar en el romance, el Amor y vivir experiencias que le aporten disfrute. **Busca estimulación mental en sus relaciones.** Le atraen el arte, los niños y todo aquello que despierte su creatividad. La educación tiene un papel importante en su Vida.\n\n**Creativo, expresivo y con talento para comunicar.** Puede sentir miedo a desarrollar un talento artístico, aunque con el tiempo este termina convirtiéndose en una de sus principales formas de expresión. Se siente atraído por los cambios y por personas inteligentes que estimulen su mente.\n\n**Puede desear tener hijos y estos suelen ocupar un lugar importante en su Vida.** También suele sentir el deseo de escribir o expresar su forma de entender la Vida y el Amor."
+        },
+        {
+          "id": "l-4p3x0zj",
+          "nom": "Mercurio en Casa 6",
+          "tipo": "texto",
+          "contenido": "Sistemático, observador y un **solucionador natural de problemas**, capaz de mejorar cualquier situación. Meticuloso y analítico. Fuerte tendencia a trabajar y mantenerse ocupado.\n\nPuede exagerar la importancia de detalles innecesarios. **Adquiere conocimiento a través de la Vida cotidiana, el trabajo y las rutinas.** El cuerpo se convierte en su maestro, y muchas veces el malestar físico le trae lecciones importantes.\n\n**La salud está estrechamente relacionada con su sistema nervioso y su actividad mental.** Necesita aprender a desarrollar una buena imagen de sí mismo y evitar que el exceso de análisis se convierta en autocrítica."
+        },
+        {
+          "id": "l-jfshuxj",
+          "nom": "Mercurio en Casa 7",
+          "tipo": "texto",
+          "contenido": "**Las relaciones, el matrimonio y las asociaciones tienen un papel muy importante en su Vida**, a veces incluso más que el aspecto emocional. Busca un compañero inteligente, curioso y que le estimule mentalmente.\n\nPuede encontrar muchos candidatos y, aun así, sentir que ninguno es suficiente. **Necesita una comunicación constante y compartir una visión similar de la Vida.** Es posible que tenga más de un matrimonio o varias relaciones importantes a lo largo de su Vida.\n\nTiene un gran interés por las personas: le gusta aprender de los demás y compartir lo que ha aprendido. **Se comunica con todo el mundo intentando comprender cómo piensan los otros.** En baja frecuencia puede tender a discutir o debatir en exceso."
+        },
+        {
+          "id": "l-lnwvvru",
+          "nom": "Mercurio en Casa 8",
+          "tipo": "texto",
+          "contenido": "**Apariencia melancólica.** Persona perceptiva, intuitiva y con una mente profundamente investigadora. Reservado, sarcástico y muy observador. Le gusta profundizar en todo y puede llegar a volverse obsesivo.\n\n**Le fascinan los intercambios psicológicos entre las personas, así como los temas relacionados con la muerte y la sexualidad.** Suele mantener sus emociones en privado. \n\nLa atracción sexual suele dirigirse hacia personas más jóvenes o con una mente ágil e inteligente.\n\nPuede haber vivido **la muerte de un amigo o de alguien cercano**, dejando un fuerte impacto mental. **Debe evitar fumar por la sensibilidad de su sistema nervioso.** También conviene tener especial cuidado con contratos, especialmente los relacionados con herencias o bienes compartidos."
+        },
+        {
+          "id": "l-q2rgo9k",
+          "nom": "Mercurio en Casa 9",
+          "tipo": "texto",
+          "contenido": "**Mente enfocada en descubrir y comprender las leyes que rigen la existencia.** Gran profundidad y capacidad intelectual. Tiende a descartar como irreal aquello que no encuentra lógico o coherente.\n\nTiene una necesidad natural de expandir su mente, estudiar y ampliar sus horizontes. **Posee facilidad para enseñar, inspirar y transmitir conocimiento.** Puede convertirse en un maestro que comunica desde el corazón y despierta a sus alumnos.\n\nExiste la posibilidad de vivir en el extranjero o desarrollar una fuerte conexión con otras culturas. **En baja frecuencia puede ser muy cabezota, crítico o imprudente.**"
+        },
+        {
+          "id": "l-bieqssg",
+          "nom": "Mercurio en Casa 10",
+          "tipo": "texto",
+          "contenido": "Rápido, de mente afilada y, en ocasiones, despreocupado. **Le gusta comunicar y hacerse escuchar.** Suele cambiar de trabajo varias veces o desempeñar varios a la vez.\n\n**La carrera y la Vida pública son muy importantes.** Mientras persigue su vocación, continúa aprendiendo y ampliando sus conocimientos. \n\nQuiere ser visto como una persona inteligente, despierta y bien informada, del mismo modo que pudo percibir a uno de sus padres. Busca reconocimiento por sus ideas y por la forma en la que piensa.\n\nLos hermanos pueden desempeñar un papel importante en su Vida. **En baja frecuencia puede haber conflictos con los padres o la sensación de que uno de ellos estuvo emocional o mentalmente ausente.** También puede tender a saltarse algunas reglas con tal de alcanzar sus objetivos."
+        },
+        {
+          "id": "l-xcjjcbw",
+          "nom": "Mercurio en Casa 11",
+          "tipo": "texto",
+          "contenido": "Activo, original e intelectual. **Las amistades expanden su mente, sus ideas y su forma de ver el mundo.** Suele unirse a grupos con los que comparte intereses u objetivos intelectuales.\n\n**Refuerza su identidad a través de sus amistades y de los grupos a los que pertenece.** Tiene mucho diálogo interno, por lo que necesita aprender a calmar su mente. Los hermanos pueden convertirse en amigos muy cercanos.\n\nPuede sentirse incomprendido por otras personas. Es común que tenga conexiones sociales dentro de ambientes intelectuales o de aprendizaje. **Sus amistades suelen estar basadas más en la conexión mental que en la emocional.**"
+        },
+        {
+          "id": "l-ug0yg8m",
+          "nom": "Mercurio en Casa 12",
+          "tipo": "texto",
+          "contenido": "Puede sentirse perdido dentro de un mundo interior difícil de comprender. **Introvertido, muy sensible y con dificultad para expresar lo que realmente piensa o siente.** A menudo le falta confianza para comunicar sus ideas.\n\nNo suele decir todo lo que piensa y, en ocasiones, puede tomar decisiones sin una lógica aparente. **Tiene una fuerte necesidad de comprender el inconsciente para poder entenderse a sí mismo.** Puede experimentar pensamientos poco comunes o difíciles de explicar.\n\nPuede existir un miedo a perder la cordura, lo que le lleva a intentar ser extremadamente racional y confiar únicamente en aquello que puede comprobar. **Absorbe con facilidad las energías del entorno y es muy influenciable.** Existe tendencia al escapismo, ya sea a través de sustancias, la fantasía o incluso la meditación cuando se utiliza para evitar la realidad.\n\n**Necesita conocerse profundamente para dejar de escapar de sí mismo.** No tolera sentirse juzgado. Puede haber vivido experiencias difíciles durante los primeros años de Vida que hagan que le cueste mantener una percepción objetiva de las situaciones. **En baja frecuencia puede llegar a sentir que los demás conspiran en su contra.**"
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-y6vt3jh",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Mercurio en Capricornio",
+                "B) Mercurio en Tauro",
+                "C) Mercurio en Virgo"
+              ],
+              "enunciado": "Una persona necesita comprobar las cosas por sí misma antes de creerlas. Tiene una gran memoria, aprende despacio pero de forma muy sólida y rara vez abandona lo que empieza. ¿Qué Mercurio describe mejor este perfil?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Mercurio en Leo",
+                "B) Mercurio en Acuario",
+                "C) Mercurio en Sagitario"
+              ],
+              "enunciado": "¿Qué Mercurio destaca por comprender conceptos abstractos, buscar la verdad y tener una capacidad natural para enseñar e inspirar?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Mercurio en Piscis",
+                "B) Mercurio en Cáncer",
+                "C) Mercurio en Escorpio"
+              ],
+              "enunciado": "Una persona absorbe fácilmente las emociones del ambiente, escucha tanto lo que se dice como lo que se siente y muestra interés por la historia de sus ancestros. ¿Qué Mercurio tiene?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Mercurio en Capricornio",
+                "B) Mercurio en Géminis",
+                "C) Mercurio en Virgo"
+              ],
+              "enunciado": "¿Qué Mercurio puede retrasar sus propios proyectos debido a un exceso de perfeccionismo y atención al detalle?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Mercurio en Géminis",
+                "B) Mercurio en Libra",
+                "C) Mercurio en Acuario"
+              ],
+              "enunciado": "Una persona observa tendencias antes que los demás, disfruta aprendiendo sobre ciencia, tecnología y naturaleza humana, y necesita mucha estimulación intelectual. ¿Qué Mercurio es?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Mercurio en Géminis",
+                "B) Mercurio en Aries",
+                "C) Mercurio en Libra"
+              ],
+              "enunciado": "¿Qué Mercurio necesita profundizar en el conocimiento para no quedarse únicamente acumulando información?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Mercurio en Aries",
+                "B) Mercurio en Libra",
+                "C) Mercurio en Leo"
+              ],
+              "enunciado": "Una persona comunica desde el corazón, inspira a los demás y busca reconocimiento por sus ideas y creatividad. ¿Qué Mercurio describe mejor este perfil?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Mercurio en Capricornio",
+                "B) Mercurio en Escorpio",
+                "C) Mercurio en Piscis"
+              ],
+              "enunciado": "¿Qué Mercurio necesita investigar profundamente antes de sacar conclusiones y suele sentirse atraído por la psicología, los misterios y los temas tabú?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Mercurio en Tauro",
+                "B) Mercurio en Virgo",
+                "C) Mercurio en Capricornio"
+              ],
+              "enunciado": "Una persona planifica cuidadosamente, piensa a largo plazo y transforma sus ideas en resultados concretos gracias a su disciplina. ¿Qué Mercurio tiene?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Mercurio en Cáncer",
+                "B) Mercurio en Escorpio",
+                "C) Mercurio en Piscis"
+              ],
+              "enunciado": "¿Qué Mercurio aprende absorbiendo el ambiente, posee una imaginación extraordinaria y necesita entornos armónicos para mantener el equilibrio mental?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Mercurio en Sagitario",
+                "B) Mercurio en Aries",
+                "C) Mercurio en Géminis"
+              ],
+              "enunciado": "Una persona disfruta improvisando, resuelve problemas rápidamente, necesita retos constantes y puede dejar proyectos a medias por querer empezar otros nuevos. ¿Qué Mercurio describe mejor este perfil?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Mercurio en Libra",
+                "B) Mercurio en Géminis",
+                "C) Mercurio en Acuario"
+              ],
+              "enunciado": "¿Qué Mercurio aprende especialmente a través del diálogo, busca comprender todos los puntos de vista y evita la confrontación siempre que puede?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 8",
+                "B) Casa 10",
+                "C) Casa 2"
+              ],
+              "enunciado": "Una persona necesita comprender profundamente el funcionamiento del mundo material. Utiliza su inteligencia para crear recursos y suele tener varias fuentes de ingresos. ¿En qué casa está Mercurio?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Casa 5",
+                "B) Casa 1",
+                "C) Casa 9"
+              ],
+              "enunciado": "¿Qué casa describe a una persona con una fuerte necesidad de descubrir, investigar y estudiar, que desarrolla su identidad a través de la curiosidad?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 11",
+                "B) Casa 6",
+                "C) Casa 3"
+              ],
+              "enunciado": "Una persona siente una necesidad constante de movimiento, disfruta de los viajes cortos, cambia frecuentemente de intereses y tiene facilidad para comunicar. ¿En qué casa se encuentra Mercurio?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 10",
+                "B) Casa 12",
+                "C) Casa 4"
+              ],
+              "enunciado": "¿Qué casa suele reflejar una infancia donde predominó la exigencia intelectual o racional sobre la expresión emocional, favoreciendo una personalidad más introvertida?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 7",
+                "B) Casa 11",
+                "C) Casa 5"
+              ],
+              "enunciado": "Una persona disfruta pensando en el Amor, expresa su creatividad mediante la comunicación y puede terminar escribiendo sobre su forma de entender la Vida. ¿En qué casa está Mercurio?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 2",
+                "B) Casa 10",
+                "C) Casa 6"
+              ],
+              "enunciado": "¿Qué casa convierte la rutina diaria en una fuente constante de aprendizaje y relaciona el estado del sistema nervioso con la salud física?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Casa 7",
+                "B) Casa 5",
+                "C) Casa 11"
+              ],
+              "enunciado": "Una persona aprende principalmente a través de las relaciones, busca parejas intelectualmente estimulantes y suele interesarse mucho por comprender cómo piensan los demás. ¿En qué casa está Mercurio?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Casa 4",
+                "B) Casa 8",
+                "C) Casa 12"
+              ],
+              "enunciado": "¿Qué casa se relaciona con una mente investigadora, fascinación por la psicología, la muerte y la sexualidad, además de recomendar precaución con contratos y herencias?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 1",
+                "B) Casa 5",
+                "C) Casa 9"
+              ],
+              "enunciado": "Una persona busca comprender las leyes que rigen la existencia, posee facilidad para enseñar y puede terminar viviendo en el extranjero. ¿En qué casa está Mercurio?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 6",
+                "B) Casa 2",
+                "C) Casa 10"
+              ],
+              "enunciado": "¿Qué casa suele indicar una persona que quiere ser reconocida por sus ideas, puede desempeñar varios trabajos a la vez y considera la carrera profesional una prioridad?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Casa 3",
+                "B) Casa 11",
+                "C) Casa 7"
+              ],
+              "enunciado": "Una persona siente que sus amistades amplían su forma de pensar, disfruta perteneciendo a grupos intelectuales y necesita aprender a calmar el diálogo interno. ¿En qué casa está Mercurio?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Casa 8",
+                "B) Casa 4",
+                "C) Casa 12"
+              ],
+              "enunciado": "¿Qué casa describe una mente muy sensible al inconsciente, con tendencia al escapismo, dificultad para expresar lo que piensa y necesidad de conocerse profundamente?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,468 @@
+{
+  "id": "d2490811-f6b3-455c-945d-1bc15b531085",
+  "modalidad": "ayurveda",
+  "titulo": "Introducción al Ayurveda",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. ¿Qué es el Ayurveda?",
+      "submodules": [
+        {
+          "id": "l-5s9vmoe",
+          "nom": "1.1 ¿Qué es el Ayurveda?",
+          "tipo": "texto",
+          "contenido": "El **Ayurveda** es uno de los sistemas médicos tradicionales vivos más antiguos del mundo.\n\nSurgió en el subcontinente indio hace más de **3.000 años** y se desarrolló dentro de la tradición védica, transmitiéndose inicialmente de forma oral y, posteriormente, a través de textos escritos en sánscrito.\n\n---\n\nLa palabra **Ayurveda** proviene del sánscrito: **āyus** (\"Vida\") y **veda** (\"conocimiento\" o \"ciencia\"), por lo que se traduce como **\"la ciencia de la Vida\"**.\n\nSin embargo, el Ayurveda no es únicamente una medicina. Es una forma de comprender la Vida y la salud.\n\n*La salud no consiste simplemente en la ausencia de enfermedad, sino en mantener un equilibrio dinámico entre el cuerpo, la mente, la consciencia y la naturaleza.*\n\nDesde esta perspectiva, cada persona posee una constitución única y la enfermedad aparece cuando nos alejamos de ese equilibrio natural.\n"
+        },
+        {
+          "id": "l-0r36gl5",
+          "nom": "1.2 Los textos clásicos",
+          "tipo": "texto",
+          "contenido": "El conocimiento del Ayurveda quedó recopilado en tres grandes tratados clásicos, conocidos como la **Bṛhat-trayī** (\"los tres grandes\"), que continúan siendo la base del Ayurveda tradicional:\n\n* **Charaka Saṃhitā**: el gran tratado de medicina interna. Desarrolla la teoría de los **Doṣas**, la fisiología y la filosofía **Sāṃkhya** aplicada al ser humano.\n\n* **Suśruta Saṃhitā**: el tratado de cirugía y anatomía. Describe con gran detalle los **Marmas**, los puntos vitales del cuerpo, además de técnicas quirúrgicas muy avanzadas para su época.\n\n* **Aṣṭāṅga Hṛdaya**, de **Vāgbhaṭa**: una síntesis de las enseñanzas de Charaka y Suśruta, considerada una de las obras más importantes para el estudio práctico del Ayurveda.\n\nEntre los autores contemporáneos más influyentes destacan **Dr. Vasant Lad**, **Dr. Robert Svoboda** y **David Frawley (Vāmadeva Śāstrī)**, cuyas obras han contribuido a acercar el Ayurveda clásico al mundo occidental."
+        },
+        {
+          "id": "l-yugswic",
+          "nom": "1.3 El propósito del Ayurveda",
+          "tipo": "texto",
+          "contenido": "El objetivo del Ayurveda no es únicamente tratar la enfermedad cuando aparece.\n\nSu propósito es comprender cómo funciona la naturaleza para aprender a vivir en armonía con ella.\n\nPor eso pone un gran énfasis en la prevención: la alimentación, el descanso, las rutinas diarias, la adaptación a las estaciones, el equilibrio emocional y el autoconocimiento son considerados herramientas fundamentales para conservar la salud.\n\n*El Ayurveda no busca que todos seamos iguales; busca que cada persona aprenda a vivir de acuerdo con su propia naturaleza.*\n\nEse será el hilo conductor de todo este curso."
+        }
+      ]
+    },
+    {
+      "title": "2. El origen de la creación",
+      "submodules": [
+        {
+          "id": "l-stuf66r",
+          "nom": "2.1 Puruṣa y Prakṛti",
+          "tipo": "texto",
+          "contenido": "El Ayurveda se fundamenta en la filosofía **Sāṃkhya**, una de las seis escuelas clásicas del pensamiento de la India.\n\nSegún esta visión, el universo surge de la interacción de dos principios eternos e independientes:\n\n* **Puruṣa** representa la consciencia pura y la energía masculina: el observador o testigo. Es eterno, inmutable, no tiene forma y no participa activamente en la creación. Simplemente presencia.\n\n* **Prakṛti** representa la naturaleza primordial y la energía femenina: la energía creadora de la que surgen la materia, la mente y todo el universo manifestado. Todo aquello que cambia, evoluciona o puede percibirse pertenece a Prakṛti.\n\n*Mientras Puruṣa observa, Prakṛti crea.*\n\nDe la interacción entre ambos nace todo cuanto existe."
+        },
+        {
+          "id": "l-rstduvh",
+          "nom": "2.2 Los tres Guṇas",
+          "tipo": "texto",
+          "contenido": "En su estado original, **Prakṛti** permanece en perfecto equilibrio gracias a la interacción de tres cualidades fundamentales llamadas **Guṇas**.\n\n* **Sattva** representa la claridad, la armonía, la sabiduría y el equilibrio.\n* **Rajas** representa el movimiento, la energía, la acción y el cambio.\n* **Tamas** representa la estabilidad, la inercia, la densidad y la materia.\n\nMientras estos tres Guṇas permanecen en equilibrio, la creación no se manifiesta. \n\n*Ese equilibrio fue alterado cuando Puruṣa se juntó con Prakṛti, en ese momento, comienza el nacimiento del universo.*"
+        },
+        {
+          "id": "l-w4dau7h",
+          "nom": "2.3 El desarrollo de la creación",
+          "tipo": "texto",
+          "contenido": "La primera manifestación es **Mahat**, también llamado **Buddhi**, el intelecto cósmico.\n\n**Mahat** representa la inteligencia universal que organiza toda la creación y hace posible el discernimiento. Es el principio ordenador de la naturaleza.\n\nDe Mahat surge **Ahaṃkāra**, el ego o el sentido del \"yo\", que individualiza la experiencia y permite distinguir entre quien observa y aquello que es observado.\n\nA partir de **Ahaṃkāra**, la creación continúa siguiendo dos grandes caminos:\n\n* Con predominio de **Sattva** aparecen **Manas** (la mente), los cinco sentidos de conocimiento (**Jñānendriyas**) y los cinco órganos de acción (**Karmendriyas**).\n\n* Con predominio de **Tamas** surgen los cinco **Tanmātras** (sonido, tacto, forma, sabor y olor), de los que posteriormente nacerán los cinco grandes elementos.\n\n**Rajas** actúa como la fuerza que pone en movimiento todo este proceso evolutivo."
+        },
+        {
+          "id": "l-z4in1jv",
+          "nom": "2.4 Los cinco grandes elementos",
+          "tipo": "texto",
+          "contenido": "De los cinco **Tanmātras** surgen los **Pañca Mahābhūta**, los cinco grandes elementos que constituyen toda la creación:\n\n* **Ākāśa (Éter o Espacio)** → vacío, expansión y el espacio donde todo ocurre.\n* **Vāyu (Aire)** → movimiento.\n* **Agni o Tejas (Fuego)** → transformación, calor y luz.\n* **Jala o Āpas (Agua)** → cohesión y fluidez.\n* **Pṛthivī (Tierra)** → estructura y solidez.\n\n*Según el Ayurveda, el ser humano es un universo dentro del universo.*\n\nLos mismos principios que dieron origen al cosmos constituyen también nuestro cuerpo, nuestra mente y nuestra consciencia. Comprender cómo se creó el universo es comprender, al mismo tiempo, cómo funciona el ser humano.\n\nEste es el fundamento sobre el que se construyó todo el Ayurveda."
+        }
+      ]
+    },
+    {
+      "title": "3. Los fundamentos del Ayurveda",
+      "submodules": [
+        {
+          "id": "l-hogs65a",
+          "nom": "3.1 Los cinco grandes elementos",
+          "tipo": "texto",
+          "contenido": "La base de todo el Ayurveda es que **los mismos cinco elementos que componen el universo también componen al ser humano**.\n\nEstos elementos no son sustancias materiales en el sentido moderno, sino principios o cualidades de la naturaleza. Todo lo que existe —desde una montaña hasta una célula del cuerpo— es una combinación única de ellos.\n\n---\n\nLos cinco grandes elementos (**Pañca Mahābhūta**) son:\n\n* **Ākāśa (Éter o Espacio)** → vacío, expansión y el espacio donde todo ocurre.\n* **Vāyu (Aire)** → movimiento.\n* **Agni o Tejas (Fuego)** → transformación, calor y luz.\n* **Jala o Āpas (Agua)** → cohesión y fluidez.\n* **Pṛthivī (Tierra)** → estructura y solidez.\n\n*Nada existe formado por un solo elemento; todo es una combinación única de los cinco.*"
+        },
+        {
+          "id": "l-ou7sthb",
+          "nom": "3.2 Los tres Doṣhas",
+          "tipo": "texto",
+          "contenido": "Los cinco elementos se combinan para formar los **tres Doṣhas**, las tres fuerzas biológicas que regulan el funcionamiento del cuerpo y la mente.\n\n* **Vata** = Aire + Éter → movimiento, comunicación, sistema nervioso y transporte.\n* **Pitta** = Fuego + Agua → digestión, metabolismo, calor y transformación.\n* **Kapha** = Tierra + Agua → estructura, estabilidad, lubricación, crecimiento y nutrición.\n\nCada persona posee los tres Doṣhas, aunque en proporciones diferentes. Esa combinación hace que cada individuo sea único."
+        },
+        {
+          "id": "l-wmzutkc",
+          "nom": "3.3 Prakṛti y Vikṛti",
+          "tipo": "texto",
+          "contenido": "La **constitución** con la que nacemos recibe el nombre de **Prakṛti**. Es nuestra naturaleza individual y permanece relativamente estable durante toda la Vida.\n\nEn cambio, **Vikṛti** representa nuestro estado actual: el equilibrio o desequilibrio de los Doṣhas en un momento determinado de nuestra Vida.\n\nLa salud, según el Ayurveda, consiste en que **Vikṛti se mantenga lo más cercana posible a Prakṛti**.\n\n*El objetivo del Ayurveda no es cambiar quién eres, sino ayudarte a volver a tu estado natural de equilibrio.*"
+        },
+        {
+          "id": "l-sqlw3kd",
+          "nom": "3.4 El principio fundamental",
+          "tipo": "texto",
+          "contenido": "Uno de los principios más importantes del Ayurveda es:\n\n**\"Lo semejante aumenta lo semejante; lo opuesto equilibra.\"**\n\nEsto significa que las cualidades del Doṣha que ya predomina en una persona tiende a aumentar cuando recibe emociones, alimentos y estados mentales de ese Doṣha. \n\nPor ejemplo:\n\n* Un **Vata**, que es frío y seco, se equilibra con lo caliente, húmedo y nutritivo.\n* Un **Pitta**, que es caliente, se calma con lo fresco y refrescante.\n* Un **Kapha**, que es pesado y húmedo, se beneficia de lo ligero, cálido y estimulante.\n\nComprender este principio permite entender gran parte de la alimentación, los hábitos y los tratamientos de sanación del Ayurveda."
+        }
+      ]
+    },
+    {
+      "title": "4. La fisiología ayurvédica",
+      "submodules": [
+        {
+          "id": "l-f1ahyf4",
+          "nom": "4.1 Las cuatro esencias sutiles",
+          "tipo": "texto",
+          "contenido": "El Ayurveda describe cuatro principios fundamentales que sostienen la Vida y explican el funcionamiento más sutil del organismo. \n\n*Prāṇa mueve, Agni transforma, Tejas dirige y Ojas sostiene.*\n\nEstas cuatro energías trabajan continuamente para mantener el equilibrio del cuerpo y de la mente. Las cuatro energías son interdependientes. Por ejemplo, un exceso de **Tejas** puede consumir **Ojas**, debilitando la inmunidad y favoreciendo el agotamiento físico y mental.\n\n---\n\nAunque están profundamente relacionados, cada uno cumple una función diferente:\n\n* **Prāṇa** → la fuerza vital que mueve la energía y sostiene toda forma de movimiento.\n\n* **Agni** → el principio de transformación, responsable de la digestión, el metabolismo y la inteligencia celular.\n\n* **Tejas** → la inteligencia del fuego, relacionada con la claridad mental, el discernimiento y la percepción.\n\n* **Ojas** → la esencia de la vitalidad, la inmunidad y la resistencia del organismo."
+        },
+        {
+          "id": "l-rkt30wy",
+          "nom": "4.2 Prāṇa, Agni, Tejas y Ojas",
+          "tipo": "texto",
+          "contenido": "**Prāṇa** es la fuerza vital que anima todo el organismo. Gobierna la respiración, la circulación, el movimiento y nuestra capacidad para adaptarnos a la Vida.\n\n**Agni** es el fuego de la transformación. No solo digiere los alimentos, sino también las experiencias, los pensamientos y las emociones. Un Agni fuerte favorece la vitalidad; un Agni débil facilita la acumulación de toxinas.\n\n**Tejas** es la forma más sutil de Agni y de Pitta. Representa la inteligencia, el razonamiento, la curiosidad, el foco, la autodisciplina y la claridad mental.\n\n**Ojas** es la esencia más refinada de todos los tejidos corporales. Sostiene la inmunidad, la estabilidad emocional y la capacidad de recuperación del organismo."
+        },
+        {
+          "id": "l-7bod60c",
+          "nom": "4.3 Los siete Dhātus y los tres Malas",
+          "tipo": "texto",
+          "contenido": "Los **Dhātus** son los siete tejidos fundamentales que sostienen y nutren el organismo.\n\nSe forman de manera secuencial: cada tejido alimenta al siguiente y, cuando este proceso ocurre correctamente gracias a un **Agni** equilibrado, se genera **Ojas**, la esencia de la vitalidad.\n\nLos siete Dhātus son:\n\n* **Rasa** → plasma y líquidos nutritivos.\n* **Rakta** → sangre.\n* **Māṃsa** → tejido muscular.\n* **Meda** → tejido adiposo.\n* **Asthi** → huesos y dientes.\n* **Majjā** → médula ósea y tejido nervioso.\n* **Śukra** (hombre) / **Artava** (mujer) → tejido reproductor.\n\n---\n\nJunto a los Dhātus, el Ayurveda reconoce tres productos de desecho llamados **Malas**:\n\n* **Purīṣa** → heces.\n* **Mūtra** → orina.\n* **Sveda** → sudor.\n\n*La salud depende tanto de nutrir correctamente los tejidos como de eliminar adecuadamente los desechos.*"
+        },
+        {
+          "id": "l-f32wvmg",
+          "nom": "4.4 Los Srotas",
+          "tipo": "texto",
+          "contenido": "Los **Srotas** son los canales por los que circulan los nutrientes, los fluidos, los productos de desecho y el **Prāṇa** a través del organismo.\n\nGracias a ellos, los tejidos reciben nutrición y pueden eliminar aquello que ya no necesitan.\n\nCuando los Srotas permanecen abiertos, el cuerpo funciona de manera eficiente y mantiene su equilibrio.\n\nCuando se obstruyen, la nutrición de los tejidos disminuye, la eliminación se dificulta y comienzan a aparecer los primeros signos de enfermedad.\n\n*La salud depende, en gran parte, de que los Srotas permanezcan abiertos y en constante flujo.*"
+        }
+      ]
+    },
+    {
+      "title": "5. Agni y el origen de la enfermedad",
+      "submodules": [
+        {
+          "id": "l-wrfobfa",
+          "nom": "5.1 Agni y Āma",
+          "tipo": "texto",
+          "contenido": "**Agni** es uno de los conceptos más importantes del Ayurveda. Representa el principio de transformación y gobierna la digestión, el metabolismo, la absorción de nutrientes y la conversión de los alimentos en energía y tejidos corporales.\n\nCuando **Agni** está equilibrado, el organismo aprovecha correctamente los nutrientes, mantiene una buena vitalidad y favorece la formación adecuada de los **Dhātus** y de **Ojas**.\n\nCuando Agni se debilita, la digestión se vuelve incompleta y aparece **Āma**, una sustancia mal digerida o mal transformada que el Ayurveda considera el origen de muchos desequilibrios.\n\n*Un Agni fuerte construye salud; un Agni débil favorece la enfermedad.*"
+        },
+        {
+          "id": "l-ozb7v3o",
+          "nom": "5.2 El papel de Āma",
+          "tipo": "texto",
+          "contenido": "**Āma** significa literalmente \"lo no digerido\". Puede originarse a partir de alimentos, emociones o experiencias que el organismo no ha sido capaz de transformar correctamente.\n\nSegún el Ayurveda, Āma es pesada, pegajosa y tiende a acumularse en el cuerpo.\n\nCon el tiempo, obstruye los **Srotas**, dificulta la correcta nutrición de los tejidos y altera el equilibrio de los **Doṣhas**, favoreciendo la aparición de la enfermedad.\n\n*La mayoría de las enfermedades comienzan mucho antes de que aparezcan los primeros síntomas.*"
+        },
+        {
+          "id": "l-arazup0",
+          "nom": "5.3 Las seis etapas de la enfermedad",
+          "tipo": "texto",
+          "contenido": "El Ayurveda describe que la enfermedad no aparece de forma repentina, sino que sigue un proceso progresivo de seis etapas.\n\n1. **Sañcaya** → acumulación del Doṣha en su lugar de origen.\n\n2. **Prakopa** → agravación o aumento del Doṣha.\n\n3. **Prasara** → el Doṣha se desborda y comienza a dispersarse por el organismo.\n\n4. **Sthāna Saṃśraya** → el Doṣha encuentra un tejido débil donde se instala.\n\n5. **Vyakti** → aparecen los primeros síntomas y la enfermedad ya puede manifestarse clínicamente.\n\n6. **Bheda** → la enfermedad se vuelve crónica y aparecen complicaciones.\n\n*El Ayurveda busca intervenir en las primeras etapas, mucho antes de que la enfermedad sea visible.*\n\nPor ello, fortalecer **Agni**, evitar la formación de **Āma** y mantener los **Srotas** abiertos constituye una de las estrategias preventivas más importantes de todo el sistema ayurvédico."
+        }
+      ]
+    },
+    {
+      "title": "6. Alimentación ayurvédica",
+      "submodules": [
+        {
+          "id": "l-k0rgg1g",
+          "nom": "6.1 Los seis sabores",
+          "tipo": "texto",
+          "contenido": "El Ayurveda clasifica los alimentos según **seis sabores** (**Rasas**), y considera que cada uno ejerce un efecto diferente sobre los **Doṣhas**.\n\nLos seis sabores son:\n\n* **Dulce (Madhura)**\n* **Ácido o Agrio (Amla)**\n* **Salado (Lavaṇa)**\n* **Picante (Kaṭu)**\n* **Amargo (Tikta)**\n* **Astringente (Kaṣāya)**\n\nCada comida debería contener una combinación equilibrada de estos sabores, adaptada a la constitución y al estado actual de la persona.\n\n*La alimentación es una de las herramientas más importantes para mantener el equilibrio de los Doṣhas.*"
+        },
+        {
+          "id": "l-pqvlbpx",
+          "nom": "6.2 ¿Cómo afectan los sabores a los Doṣhas?",
+          "tipo": "texto",
+          "contenido": "Cada sabor está formado por una combinación de elementos y, por ello, aumenta o disminuye determinados Doṣhas.\n\n* **Dulce (Madhura)** → Tierra + Agua → aumenta **Kapha**.\n* **Ácido o Agrio (Amla)** → Tierra + Fuego → aumenta **Pitta** y **Kapha**.\n* **Salado (Lavaṇa)** → Agua + Fuego → aumenta **Pitta** y **Kapha**.\n* **Picante (Kaṭu)** → Fuego + Aire → aumenta **Vata** y **Pitta**.\n* **Amargo (Tikta)** → Aire + Éter → aumenta **Vata**.\n* **Astringente (Kaṣāya)** → Aire + Tierra → aumenta **Vata**.\n\nComprender esta relación permite adaptar la alimentación según las necesidades de cada persona y de cada momento."
+        },
+        {
+          "id": "l-lknfftl",
+          "nom": "6.3 El principio del equilibrio",
+          "tipo": "texto",
+          "contenido": "El Ayurveda resume toda su nutrición en un principio muy sencillo:\n\n**\"Lo semejante aumenta lo semejante; lo opuesto equilibra.\"**\n\nPor ello:\n\n* Un **Vata**, que es frío, ligero y seco, se beneficia de alimentos calientes, nutritivos, húmedos y de sabor dulce.\n\n* Un **Pitta**, que es caliente e intenso, encuentra equilibrio con alimentos frescos y sabores dulces, amargos y astringentes.\n\n* Un **Kapha**, que es pesado, frío y húmedo, necesita alimentos ligeros, calientes y estimulantes, especialmente de sabor picante, amargo y astringente.\n\n*No existen alimentos buenos o malos por sí mismos; todo depende de quién los coma, cuándo los coma y en qué estado se encuentre.*\n\nEse es uno de los principios más importantes de la nutrición ayurvédica."
+        }
+      ]
+    },
+    {
+      "title": "7. La mente y la energía sutil",
+      "submodules": [
+        {
+          "id": "l-hqg1pzu",
+          "nom": "7.1 Los tres Guṇas: las cualidades de la mente",
+          "tipo": "texto",
+          "contenido": "Mientras que los **Doṣhas** describen la fisiología del cuerpo, los **Guṇas** representan las tres cualidades fundamentales de la mente y la consciencia.\n\n* **Sattva** representa la claridad, la armonía, la serenidad y la sabiduría. Favorece la paz interior, el equilibrio emocional y la capacidad de discernimiento.\n\n* **Rajas** representa el movimiento, la acción y el deseo. Proporciona motivación, dinamismo y capacidad para actuar, aunque en exceso puede generar inquietud, impulsividad o estrés.\n\n* **Tamas** representa la estabilidad, el descanso y la inercia. En equilibrio aporta calma y capacidad de recuperación; cuando predomina puede manifestarse como apatía, confusión o falta de motivación.\n\n*El objetivo del Ayurveda y del Yoga no es eliminar Rajas o Tamas, sino cultivar Sattva, utilizar Rajas cuando la acción es necesaria y evitar que Tamas predomine en exceso.*"
+        },
+        {
+          "id": "l-xxwcamp",
+          "nom": "7.2 Marmas: los puntos vitales",
+          "tipo": "texto",
+          "contenido": "Los **Marmas** son puntos vitales descritos por primera vez en la **Suśruta Saṃhitā**.\n\nSe localizan en las uniones de músculos, vasos sanguíneos, ligamentos, huesos y articulaciones, donde la energía vital es especialmente accesible.\n\nLa tradición clásica describe **107 Marmas** distribuidos por todo el cuerpo.\n\nAdemás de su importancia anatómica y quirúrgica, los Marmas se utilizan con fines terapéuticos para favorecer el flujo de energía, aliviar tensiones y apoyar el equilibrio del organismo.\n\n*Los Marmas representan el lugar donde el cuerpo físico y la energía vital se encuentran.*"
+        },
+        {
+          "id": "l-vqpezmu",
+          "nom": "7.3 Los Chakras: los centros energéticos",
+          "tipo": "texto",
+          "contenido": "Los **Chakras** son centros energéticos situados a lo largo del eje central del cuerpo, asociados al recorrido de la **Suṣumnā Nāḍī**.\n\nAunque su desarrollo pertenece principalmente a las tradiciones del **Yoga** y el **Tantra**, el Ayurveda los integra para comprender la dimensión más sutil del ser humano.\n\nCada Chakra se relaciona con aspectos físicos, emocionales y espirituales, y su equilibrio contribuye al bienestar integral.\n\nJunto con los **Doṣhas**, los **Guṇas** y los **Marmas**, forman parte de la visión holística que caracteriza al Ayurveda.\n\n*El Ayurveda entiende que cuerpo, mente y consciencia forman una única realidad inseparable.*"
+        }
+      ]
+    },
+    {
+      "title": "8. Prevención",
+      "submodules": [
+        {
+          "id": "l-mdtu4ny",
+          "nom": "8.1 Dinacharya: la rutina diaria",
+          "tipo": "texto",
+          "contenido": "La **Dinacharya** es el conjunto de hábitos diarios que ayudan a mantener el equilibrio de los **Doṣhas**, fortalecer **Agni** y prevenir la enfermedad.\n\nEl Ayurveda considera que la regularidad es uno de los pilares fundamentales de la salud. Por ello, recomienda establecer rutinas que respeten los ritmos naturales del cuerpo.\n\n---\n\nEntre las prácticas tradicionales destacan levantarse temprano, mantener una buena higiene personal y bucal (**importante: el raspado de lengua**), realizar ejercicio adaptado a la constitución, alimentarse a horarios regulares, practicar respiración y meditación, y respetar un descanso adecuado.\n\n*No son las grandes decisiones las que transforman nuestra salud, sino los pequeños hábitos que repetimos cada día.*\n\nUna rutina estable favorece el equilibrio físico, mental y emocional, permitiendo que el organismo funcione en armonía con la naturaleza."
+        },
+        {
+          "id": "l-5fmvrl2",
+          "nom": "8.2 Ritucharya: vivir en armonía con las estaciones",
+          "tipo": "texto",
+          "contenido": "La **Ritucharya** es la adaptación de la alimentación y del estilo de Vida a las distintas estaciones del año.\n\nSegún el Ayurveda, los cambios climáticos modifican el equilibrio de los **Doṣhas**, por lo que nuestras necesidades también cambian a lo largo del año.\n\nCada estación requiere pequeños ajustes en la dieta, la actividad física, el descanso y los hábitos cotidianos para mantener el equilibrio del organismo.\n\n*La naturaleza cambia constantemente; el ser humano también debe aprender a adaptarse a esos cambios.*\n\nVivir en armonía con las estaciones es una de las estrategias preventivas más importantes del Ayurveda y una forma de mantener la salud antes de que aparezca la enfermedad."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-sdg3a2j",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Ciencia de la naturaleza.",
+                "B) Ciencia o conocimiento de la Vida.",
+                "C) Medicina de la India."
+              ],
+              "enunciado": "¿Qué significa la palabra \"Ayurveda\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Curar únicamente las enfermedades.",
+                "B) Mantener el equilibrio entre cuerpo, mente, consciencia y naturaleza.",
+                "C) Sustituir la medicina moderna."
+              ],
+              "enunciado": "¿Cuál es el principal objetivo del Ayurveda?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Bhagavad Gītā.",
+                "B) Yoga Sūtras.",
+                "C) Charaka Saṃhitā."
+              ],
+              "enunciado": "¿Cuál de los siguientes textos pertenece a la Bṛhat-trayī?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) La naturaleza creadora.",
+                "B) La consciencia pura o testigo.",
+                "C) El ego individual."
+              ],
+              "enunciado": "Según la filosofía Sāṃkhya, ¿qué representa Puruṣa?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Desaparece Prakṛti.",
+                "B) Comienza la manifestación del universo.",
+                "C) Nacen directamente los cinco Doṣhas."
+              ],
+              "enunciado": "¿Qué sucede cuando se altera el equilibrio de los tres Guṇas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Ahaṃkāra.",
+                "B) Mahat (Buddhi).",
+                "C) Manas."
+              ],
+              "enunciado": "¿Cuál es la primera manifestación de Prakṛti?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Tierra.",
+                "B) Agua.",
+                "C) Aire."
+              ],
+              "enunciado": "¿Qué elemento representa principalmente el movimiento?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Vata.",
+                "B) Pitta.",
+                "C) Kapha."
+              ],
+              "enunciado": "¿Qué Doṣha está formado por Fuego y Agua?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El estado actual de desequilibrio.",
+                "B) La constitución con la que nacemos.",
+                "C) El proceso de envejecimiento."
+              ],
+              "enunciado": "¿Qué significa Prakṛti?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Todo alimento produce el mismo efecto en todas las personas.",
+                "B) Las cualidades similares aumentan un mismo Doṣha.",
+                "C) Los opuestos siempre se atraen."
+              ],
+              "enunciado": "¿Qué afirma el principio \"Lo semejante aumenta lo semejante\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Es el tejido reproductor.",
+                "B) Es la fuerza vital responsable del movimiento.",
+                "C) Es el fuego digestivo."
+              ],
+              "enunciado": "¿Cuál de las siguientes afirmaciones sobre Prāṇa es correcta?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Generar calor corporal.",
+                "B) Favorecer la inmunidad y la vitalidad.",
+                "C) Estimular el movimiento."
+              ],
+              "enunciado": "¿Qué función desempeña principalmente Ojas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Rakta.",
+                "B) Majjā.",
+                "C) Sveda."
+              ],
+              "enunciado": "¿Cuál de los siguientes NO pertenece a los siete Dhātus?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Tejas.",
+                "B) Purīṣa.",
+                "C) Rasa."
+              ],
+              "enunciado": "¿Cuál de los siguientes es uno de los tres Malas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Los centros energéticos del cuerpo.",
+                "B) Los canales por los que circulan nutrientes, fluidos y Prāṇa.",
+                "C) Los puntos vitales descritos por Suśruta."
+              ],
+              "enunciado": "¿Qué son los Srotas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Se produce más Ojas.",
+                "B) Se forma Āma.",
+                "C) Aumenta automáticamente Kapha."
+              ],
+              "enunciado": "Según el Ayurveda, ¿qué ocurre cuando Agni se debilita?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Prasara.",
+                "B) Vyakti.",
+                "C) Sañcaya."
+              ],
+              "enunciado": "¿En qué etapa del proceso de la enfermedad aparecen por primera vez los síntomas claramente reconocibles?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Salado.",
+                "B) Amargo.",
+                "C) Astringente."
+              ],
+              "enunciado": "¿Qué sabor aumenta principalmente Pitta y Kapha?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Adaptarse a las estaciones del año.",
+                "B) Mantener una rutina diaria que favorezca el equilibrio de los Doṣhas.",
+                "C) Aprender técnicas de meditación avanzadas."
+              ],
+              "enunciado": "¿Cuál es el objetivo de la Dinacharya?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El tratamiento comienza cuando aparecen los síntomas.",
+                "B) La salud consiste en vivir de acuerdo con la propia naturaleza y prevenir el desequilibrio antes de que aparezca la enfermedad.",
+                "C) Todos los seres humanos deberían seguir la misma alimentación."
+              ],
+              "enunciado": "¿Qué frase resume mejor la visión del Ayurveda?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Su Prakṛti ha cambiado.",
+                "B) Su Vikṛti está desequilibrada, aunque su Prakṛti siga siendo Vata.",
+                "C) Ha desarrollado un nuevo Doṣa."
+              ],
+              "enunciado": "Una persona tiene una constitución predominantemente Vata, pero actualmente presenta pesadez, exceso de mucosidad y somnolencia. Según el Ayurveda, ¿qué concepto explica esta situación?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Ojas → Agni → Āma → Srotas.",
+                "B) Agni débil → Āma → obstrucción de los Srotas → enfermedad.",
+                "C) Srotas → Dhātus → Agni → Āma."
+              ],
+              "enunciado": "Una persona mantiene una digestión débil durante meses y comienza a acumular toxinas que obstruyen los Srotas. ¿Cuál es la secuencia correcta según el Ayurveda?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Prāṇa.",
+                "B) Ojas.",
+                "C) Agni."
+              ],
+              "enunciado": "Una persona muy irritable, perfeccionista y competitiva trabaja sin descansar durante meses. Según el Ayurveda, ¿qué energía sutil es más probable que se esté consumiendo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Una persona con exceso de Pitta consume alimentos muy picantes y nota más acidez e irritabilidad.",
+                "B) Una persona Vata toma una sopa caliente y se siente más tranquila.",
+                "C) Una persona Kapha comienza a hacer ejercicio diario y recupera energía."
+              ],
+              "enunciado": "¿Cuál de las siguientes situaciones refleja mejor el principio \"lo semejante aumenta lo semejante\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) La enfermedad aparece de forma repentina cuando un órgano deja de funcionar.",
+                "B) La salud depende únicamente de una buena alimentación.",
+                "C) El equilibrio se mantiene cuando vivimos de acuerdo con nuestra constitución, fortalecemos Agni y prevenimos el desequilibrio antes de que aparezcan los síntomas."
+              ],
+              "enunciado": "¿Cuál de las siguientes afirmaciones resume mejor la visión del Ayurveda sobre la salud?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

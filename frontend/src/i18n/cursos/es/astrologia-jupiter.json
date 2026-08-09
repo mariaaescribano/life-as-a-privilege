@@ -1,0 +1,427 @@
+{
+  "id": "b4aeb23d-7e60-4bf1-8438-ffa8c5a28b8b",
+  "modalidad": "Astrología",
+  "titulo": "Júpiter",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Júpiter en la Astrología",
+      "submodules": [
+        {
+          "id": "l-zx5a1dz",
+          "nom": "El arquetipo de Júpiter ",
+          "tipo": "texto",
+          "contenido": "El arquetipo de la **expansión**, la **libertad** y las **bendiciones**.\n\nBusca elevarse por encima de lo que ya conoce. Es **optimista**, está en constante búsqueda del *conocimiento superior* y siente la necesidad de viajar, descubrir nuevas culturas y explorar nuevos lugares.\n\nSu mayor deseo es la búsqueda del **sentido de la Vida** y de *uno mismo*.\n\nCuando está bien integrado, aporta **protección**, **fe**, **generosidad** e **inspiración**. En su sombra, puede manifestarse como **insatisfacción crónica**, *expectativas poco realistas* o **sobreindulgencia**.\n\nNos recuerda que, por mucho que consigamos, **siempre habrá algo más por descubrir**."
+        }
+      ]
+    },
+    {
+      "title": "2. Júpiter en los Signos",
+      "submodules": [
+        {
+          "id": "l-4sjomjo",
+          "nom": "Júpiter en Aries",
+          "tipo": "texto",
+          "contenido": "El nativo posee una gran **confianza** en sí mismo. Es **entusiasta**, **generoso** y un **líder natural**. Busca la **libertad** y no quiere que nadie le diga qué hacer.\n\nEs capaz de aprender de sus **errores del pasado**. Es innovador en temas de *filosofía* y *espiritualidad*. Su **fe** es el motor que le inspira a pasar a la acción.\n\nDebe aprender a poner **límites**. Es **optimista**, **inspirador** y gana la confianza de los demás con facilidad, aunque, en negativo, puede mostrarse **egocéntrico** o **imprudente**.\n\nSuele encontrar el **sentido de su Vida** e inspirar a quienes le rodean."
+        },
+        {
+          "id": "l-2e7xo46",
+          "nom": "Júpiter en Tauro",
+          "tipo": "texto",
+          "contenido": "Existe una gran capacidad para la **maestría económica**, las **finanzas** y las **inversiones**. El nativo suele generar **riqueza** construyendo una base sólida y estable. Comprende que **dar** es lo que le permite **recibir**, y puede administrar el dinero de otras personas de forma eficiente.\n\nTiene una fuerte **fe en la Vida** y disfruta de los placeres de estar vivo. En su sombra, puede caer en los excesos, comer demasiado o desarrollar un fuerte apego a las **posesiones materiales**. \n\nEn su mejor expresión, mantiene una relación sana con su **cuerpo**, lo que le ayuda a encontrar el **sentido de su existencia**."
+        },
+        {
+          "id": "l-044aovf",
+          "nom": "Júpiter en Géminis",
+          "tipo": "texto",
+          "contenido": "Necesita expandir su **mente** a través de la **comunicación**, aunque es muy selectivo con las personas que le rodean, ya que busca relaciones con **profundidad**.\n\nSuele viajar, pero prefiere hacerlo a lugares cercanos, explorando nuevos pueblos o ciudades.\n\nEn negativo, puede buscar el **conocimiento** únicamente en los libros, dejando de lado el aprendizaje que aporta la **experiencia**."
+        },
+        {
+          "id": "l-q9acxua",
+          "nom": "Júpiter en Cáncer",
+          "tipo": "texto",
+          "contenido": "El nativo encuentra el **sentido de su Vida** a través de la **seguridad emocional**, la conexión con su **familia** y sus **raíces**.\n\nSuele investigar y cuestionar aquello que su familia le ha inculcado para expandir su visión del mundo. Sin embargo, para hacerlo necesita sentirse emocionalmente seguro.\n\nEn su sombra, puede ser muy **soñador**, estar sobreprotegido por la **madre** o recurrir a la comida en exceso, especialmente cuando esta le recuerda a su origen o a su infancia.\n\nSu forma de vivir suele estar profundamente influenciada por la atención recibida de sus padres, o especialmente de uno de ellos.\n\nSuele ser una persona **popular**, **conservadora**, con una casa llena de amigos o niños. La **riqueza** acostumbra a llegar más adelante en la Vida, a través de **herencias** o **inversiones**."
+        },
+        {
+          "id": "l-cl3hz05",
+          "nom": "Júpiter en Leo",
+          "tipo": "texto",
+          "contenido": "Es una persona **generosa** y **benevolente**, aunque suele esperar reconocimiento por todo lo que hace. A medida que se expande y evoluciona, descubre cuál es su verdadero lugar en la sociedad.\n\nDisfruta de la **buena Vida** y de los placeres, aunque puede tender a los excesos. Suele ser **ambicioso** y planifica sus metas con determinación.\n\nEn su sombra, puede mostrarse **orgulloso**, **arrogante** o caer en la **sobreindulgencia**. Una de sus grandes lecciones es aprender a **dar** sin esperar nada a cambio.\n\nEl nativo suele ser **popular**, **carismático** y despertar la admiración de los demás."
+        },
+        {
+          "id": "l-oaog3zd",
+          "nom": "Júpiter en Virgo",
+          "tipo": "texto",
+          "contenido": "El nativo basa su **confianza** en lo que sabe y en todo lo que ha conseguido. Suele tener expectativas muy altas tanto de los demás como de la **Vida**.\n\nEl **trabajo** ocupa un lugar muy importante. Es una persona excesivamente trabajadora, aunque necesita aprender a **delegar**. Además, suele actuar con **ética** y procura aplicar sus principios en el ámbito laboral.\n\nEl **éxito profesional** suele manifestarse con mayor fuerza durante la segunda mitad de la Vida.\n\nEn negativo, puede obsesionarse tanto con el **orden** como con el **caos**. También puede mostrarse perezoso cuando las cosas no se hacen a su manera: *\"Si ellos no trabajan como yo quiero, pues yo tampoco trabajo.\"*"
+        },
+        {
+          "id": "l-3py0b3w",
+          "nom": "Júpiter en Libra",
+          "tipo": "texto",
+          "contenido": "El nativo siente un gran interés por las **relaciones**, tanto de **amistad** como de **pareja**. Necesita vincularse con los demás para crecer y expandirse. Tiende a **idealizar** a las personas y a sus relaciones.\n\nSus relaciones íntimas suelen ir mucho más allá de lo físico, ya que busca una conexión profunda.\n\nDisfruta de su **hogar** y suele tener una marcada sensibilidad o habilidades **artísticas**.\n\nEn su sombra, puede prometer más de lo que realmente es capaz de cumplir, intentando complacer a todo el mundo."
+        },
+        {
+          "id": "l-ucvnrr7",
+          "nom": "Júpiter en Escorpio",
+          "tipo": "texto",
+          "contenido": "El nativo tiene una gran **confianza** en sí mismo. Las **crisis de identidad** suelen formar parte de su camino y le ayudan a encontrar un **sentido** mucho más profundo de la Vida.\n\nEs una persona **intensa**, firme en sus **creencias** y **principios**. Es **valiente**, se siente atraído por lo oculto y lo profundo, y puede desarrollar habilidades **sanadoras**, así como una gran capacidad para conectar con otros planos de la realidad.\n\n---\n\nTiene facilidad para reconocer la **corrupción** de la sociedad e identificar aquello que resulta **tóxico**.\n\nPuede encontrarse con **enemigos poderosos**, pero posee la capacidad de desenvolverse con éxito en situaciones complejas.\n\nEn su sombra, puede experimentar dificultades con las **inversiones**, perder **herencias**, desarrollar una actitud **manipuladora** o un fuerte deseo de **control**.\n\nEs importante comprender que este arquetipo tiene un gran potencial, ya que permite al nativo encontrar la **luz** incluso en la **oscuridad**. Tiene una gran facilidad para explorar sus propios infiernos y, gracias a ello, puede convertirse en un guía para la **sanación** de los demás."
+        },
+        {
+          "id": "l-gd9b2oz",
+          "nom": "Júpiter en Sagitario",
+          "tipo": "texto",
+          "contenido": "Busca encontrar el **sentido** en todo lo que hace y en todo lo que vive. Posee un fuerte sentido de la **justicia** y una profunda necesidad de comprender el propósito de las cosas.\n\nSuele preguntarse: *\"¿Cómo puedo ser feliz con la Vida que tengo? Si esta es la Vida que me ha tocado vivir, ¿para qué es? ¿Cómo puedo encontrar plenitud en ella?\"*\n\nAunque puede ser **dogmático** en su sombra, por lo general es una persona de **mente abierta**, **confiable** y con un gran interés por la **filosofía**, la **metafísica**, la **cultura** y el **sentido de la Vida**. Sin embargo, su constante búsqueda de significado puede hacer que le cueste conectar con su propia **tristeza**.\n\nNecesita **viajar** y expresar sus talentos a través de la **escritura**, la **creatividad** o el **deporte**. Es una persona **sociable** y suele sentir un profundo cariño por los **animales**."
+        },
+        {
+          "id": "l-xgaukus",
+          "nom": "Júpiter  en Capricornio",
+          "tipo": "texto",
+          "contenido": "Es una persona **ética** y **responsable**, con una fuerte necesidad de alcanzar **reconocimiento** y **estatus**. Siente que su Vida cobra sentido cuando logra cumplir sus **ambiciones profesionales**. Puede exigirse demasiado en el camino hacia sus metas, aunque, por lo general, tiene la capacidad de alcanzarlas.\n\nPosee una gran **confianza** en sí mismo y suele dar más importancia a las normas y estructuras de la sociedad más que a lo espiritual. Busca que su **carrera profesional** le proporcione **seguridad económica**.\n\nEn el ámbito financiero, puede gastar grandes cantidades de dinero en algo que considera importante y, al mismo tiempo, ser muy ahorrador con los pequeños gastos. En general, no le gusta el **gasto innecesario**."
+        },
+        {
+          "id": "l-akd517v",
+          "nom": "Júpiter  en Acuario",
+          "tipo": "texto",
+          "contenido": "El nativo siente que su **crecimiento personal** debe contribuir, de alguna forma, al desarrollo de la **sociedad**. Busca **verdades objetivas** que no solo le permitan comprender el mundo, sino también compartir ese conocimiento con los demás.\n\nSuele ser una persona **considerada**, **sociable** y valora profundamente la **imparcialidad** y la **democracia**. Puede sentirse cómodo desempeñando roles de **liderazgo** y busca renovar los sistemas que han quedado obsoletos.\n\nLe atraen los temas *esotéricos*. Mantiene una mente abierta a las **nuevas ideas** y disfruta alejándose de la rutina.\n\nSu mente suele proyectarse constantemente hacia el **futuro**. En su sombra, puede mostrarse falto de tacto, **intolerante**, **indisciplinado** o adoptar una actitud excesivamente **revolucionaria**."
+        },
+        {
+          "id": "l-dvjb06v",
+          "nom": "Júpiter  en Piscis",
+          "tipo": "texto",
+          "contenido": "Es una persona **amable**, **calmada** e **introspectiva**, con una profunda necesidad de conectar con lo **trascendente**. Periódicamente necesita aislarse para encontrarse a sí mismo y alinearse con su verdadero lugar.\n\nNecesita creer en la **magia** y posee una gran **compasión** hacia los más vulnerables. Su **intuición** es muy fuerte, aunque esa sensibilidad puede hacer que otras personas intenten aprovecharse de él.\n\nSuele luchar por las **causas perdidas**. Cuando trabaja su mundo interior, puede alcanzar una profunda **aceptación** a través de la **espiritualidad**.\n\nEn su sombra, puede caer en la **autonegación**, evitar asumir **responsabilidades**, dejarse llevar por una intensa **emocionalidad** o desarrollar **dependencia** hacia los demás."
+        }
+      ]
+    },
+    {
+      "title": "3. Júpiter en las Casas",
+      "submodules": [
+        {
+          "id": "l-4e2hf4x",
+          "nom": "Júpiter en Casa 1",
+          "tipo": "texto",
+          "contenido": "El nativo posee una actitud **filósofa** y **optimista**. Siente una profunda necesidad de comprender y explicar las grandes cuestiones de la **existencia**. Puede percibir que tiene una **misión en la Vida**, por lo que siempre busca darle un **significado** a su camino.\n\nEn su sombra, puede creer que tiene mucho que ofrecer y adoptar una actitud **autoritaria**. También puede tener tendencia al **sobrepeso** o mostrarse excesivamente **excéntrico**.\n\nSuele entregarse con mucha **pasión** a todo lo que hace. Tiende a fijarse metas muy ambiciosas y lejanas, lo que, en ocasiones, puede dificultar que llegue a cumplirlas. Es importante que no se rinda ante el primer obstáculo.\n\nDisfruta de **viajar**, de pasar tiempo fuera de casa y de vivir nuevas **aventuras**. Además, siente una profunda necesidad de ser **útil** para las personas que ama."
+        },
+        {
+          "id": "l-hgjkr7q",
+          "nom": "Júpiter en Casa 2",
+          "tipo": "texto",
+          "contenido": "El nativo suele disfrutar de una gran **buena fortuna** y posee un **corazón generoso**.\n\nCon frecuencia consigue grandes resultados con relativamente poco esfuerzo. Puede tender a gastar mucho dinero, aunque suele recuperarlo con facilidad. Para él, el crecimiento de sus **recursos** representa una mayor capacidad para disfrutar de la **Vida**. Sin embargo, debe tener cuidado de no creer que su **valor personal** depende de lo que posee.\n\nTiene la capacidad de **inspirar** a los demás y de encontrar un **propósito** en la Vida. En su sombra, puede justificar sus deseos con argumentos \"divinos\", dando rienda suelta a impulsos o deseos **insaciables**."
+        },
+        {
+          "id": "l-g75x21n",
+          "nom": "Júpiter en Casa 3",
+          "tipo": "texto",
+          "contenido": "El nativo posee una gran **capacidad mental**, aunque puede encontrar dificultades para expresar con claridad lo que piensa. Tiene la capacidad de **inspirar** a los demás, pero no siempre lleva sus ideas a la acción.\n\nPuede concentrarse tanto en un tema que termina perdiendo de vista lo que ocurre a su alrededor. Su mente es muy **abundante** en ideas y siente una necesidad constante de **aprender**. A menudo tiene la sensación de que una sola Vida no es suficiente para adquirir todo el conocimiento que desea.\n\nEs probable que tenga **hermanos** y mantenga una buena relación con ellos. Sin embargo, sus altas **expectativas** pueden llevarle a experimentar decepciones.\n\nEn la edad adulta suele sentir el deseo de seguir **estudiando**, **viajar** y aprender uno o varios **idiomas**."
+        },
+        {
+          "id": "l-05z4ecl",
+          "nom": "Júpiter en Casa 4",
+          "tipo": "texto",
+          "contenido": "Provenir de una **familia** con estabilidad económica suele aportar **buena fortuna** al nativo. Esto puede ser una gran ventaja, siempre que no llegue a sentirse atrapado o limitado por su entorno familiar. Además, existe la posibilidad de recibir importantes **herencias**.\n\nSu **hogar** puede convertirse en un punto de encuentro para actividades sociales, filosóficas o **espirituales**. Aunque en la edad adulta puede viajar con frecuencia, suele preferir vivir en una casa amplia, de madera y alejada del ruido.\n\nTiende a priorizar el **crecimiento interior** y el desarrollo personal por encima del **reconocimiento profesional**.\n\nMantiene una actitud de **optimismo** hacia la **Vida** y suele llegar al final de ella con una sensación de plenitud.\n\nEn su sombra, puede cargar con una profunda herida relacionada con la **fe**."
+        },
+        {
+          "id": "l-g6amjc9",
+          "nom": "Júpiter en Casa 5",
+          "tipo": "texto",
+          "contenido": "Su lema podría resumirse en: **\"Más es mejor que suficiente.\"**\n\nNecesita expresar su **creatividad** de forma intensa y, a menudo, con cierta **exageración**. Es una persona **valiente** y creativa, aunque en ocasiones puede asumir más riesgos de los necesarios. Tiene muchos **hobbies** e intereses, pero no siempre dedica el tiempo suficiente para desarrollarlos.\n\nSuele confiar plenamente en sus **ideas** y puede llegar a creer que siempre son las mejores. Es una persona **romántica**, aunque la **fidelidad** puede resultarle difícil.\n\nSi decide tener **hijos**, suele conectar muy bien con ellos y transmitirles nuevos **valores** y formas de ver la Vida. Sin embargo, deberá aprender a equilibrar su deseo de **libertad** con las responsabilidades que implica ser un buen progenitor."
+        },
+        {
+          "id": "l-r0ecc78",
+          "nom": "Júpiter en Casa 6",
+          "tipo": "texto",
+          "contenido": "El nativo puede encontrar el **sentido de su Vida** y su **crecimiento personal** a través de ámbitos como la **rutina**, el **trabajo** y el **servicio a los demás**. Sin embargo, en su expresión más elevada, también lo encontrará en el **autocuidado** y en aprender a cuidarse a sí mismo.\n\nSuele enfrentarse a las tareas cotidianas de dos maneras: con mucho **esmero** y atención al detalle, o haciéndolas deprisa para terminarlas cuanto antes. En cualquier caso, suele tener la sensación de que realiza las cosas mejor que los demás.\n\nPuede desarrollar una relación obsesiva con la **alimentación** o las **dietas**, ya sea a través del exceso o de la restricción. Además, suele sentir un gran cariño por los **animales de compañía**.\n\nSi no aprende a cuidarse y a escuchar lo que realmente necesita, el cuerpo puede acabar somatizando ese desequilibrio, llegando incluso a manifestarse en **enfermedades graves**, como el cáncer."
+        },
+        {
+          "id": "l-oxxui4n",
+          "nom": "Júpiter en Casa 7",
+          "tipo": "texto",
+          "contenido": "El nativo puede vivir las **relaciones** desde un sentimiento de superioridad o atraer personas que se perciban a sí mismas de esa manera, dando lugar a vínculos **desequilibrados**.\n\nLe resulta fácil **seducir** a quien desea, pero suele acabar decepcionándose, ya que la realidad rara vez cumple con sus **expectativas**.\n\nA pesar de las dificultades que pueda experimentar en sus relaciones, nunca pierde la **fe en el Amor** ni la esperanza de encontrar a su **pareja ideal**.\n\nEsta posición suele traer **ventajas materiales** y oportunidades de **crecimiento económico**, aunque, por sí sola, no garantiza la **felicidad**."
+        },
+        {
+          "id": "l-5qmyvge",
+          "nom": "Júpiter en Casa 8",
+          "tipo": "texto",
+          "contenido": "El nativo es **resiliente** y mantiene una actitud **positiva** cuando se enfrenta a las **crisis**. Incluso en sus momentos más oscuros, es capaz de encontrar la **luz**, no perder el camino y transformar esas experiencias en **sabiduría**.\n\nEsta posición suele aportar una mayor **aceptación de la muerte**, por lo que los finales de la Vida tienden a vivirse con más **paz** y serenidad. Además, favorece la **ayuda económica** o el apoyo material por parte de otras personas.\n\nLa **sexualidad** puede vivirse como una experiencia **trascendente**. Sin embargo, en negativo, el nativo puede aburrirse con facilidad y sentir una necesidad constante de buscar más, al no encontrar aquello que había **idealizado**.\n\nPuede experimentar conflictos entre sus **creencias**, su **religión** y sus **deseos sexuales**.\n\nExiste una tendencia natural a explorar lo **oculto**, lo **psicológico** y todo aquello que se encuentra más allá de la superficie."
+        },
+        {
+          "id": "l-imda8bx",
+          "nom": "Júpiter en Casa 9",
+          "tipo": "texto",
+          "contenido": "El nativo siente una profunda necesidad de encontrar el **sentido** de todo lo que vive. Posee una fuerte **intuición** y una gran capacidad para comprender la **Vida** en profundidad, lo que le permite dar un **propósito** tanto a su camino como a sus experiencias.\n\nDebe aprender a mantenerse en el **presente** y no perderse en lo excesivamente abstracto. Su carácter se distingue por la **fuerza**, la **integridad** y la **sinceridad**.\n\nSuele sentir un deseo constante de seguir **aprendiendo**, especialmente sobre **filosofía**, los **viajes** y cualquier conocimiento que le permita expandir su **mente** y su visión del mundo.\n\nEn su sombra, puede mostrarse **dogmático** o **manipulador**, intentando aferrarse a sus **creencias** por miedo a enfrentarse a la **verdad**."
+        },
+        {
+          "id": "l-zcjzrqq",
+          "nom": "Júpiter en Casa 10",
+          "tipo": "texto",
+          "contenido": "El nativo suele alcanzar **éxito**, **reconocimiento** y una gran **visibilidad** a lo largo de su Vida.\n\nNecesita sentirse **visto** y valorado por quien es y por todo lo que es capaz de conseguir. Con frecuencia, busca el **sentido de su Vida** a través de su **carrera** o **profesión**.\n\nEs una posición muy favorable para crecer en el ámbito **profesional**, ya que las oportunidades suelen aparecer con facilidad. Sin embargo, conviene tener cuidado con las promociones o ascensos demasiado rápidos: **planificar** y construir sobre una base sólida será clave para sostener el éxito.\n\nSuele destacar en roles de **liderazgo**, como **maestro**, director o cualquier profesión que implique **autoridad**. También puede existir una fuerte influencia de la **madre** en su desarrollo personal, la cual, en muchos casos, puede vivirse como un desafío, aunque no necesariamente tiene por qué ser negativa."
+        },
+        {
+          "id": "l-py3pn5j",
+          "nom": "Júpiter en Casa 11",
+          "tipo": "texto",
+          "contenido": "El nativo siente una fuerte inclinación hacia las **actividades sociales**. Los **amigos** suelen convertirse en una fuente de **inspiración** y **apoyo**. Disfruta formando parte de **organizaciones**, comunidades y proyectos con un propósito **humanitario**.\n\nEs un **pensador progresista**, siempre buscando crecer y evolucionar más allá de sus propios límites. Sin embargo, debe tener cuidado de no comprometerse con demasiadas cosas al mismo tiempo y terminar dejando algunas de lado.\n\nTiende a **idealizar la amistad**. Puede experimentar **traiciones** por parte de personas cercanas, pero, aun así, suele mantenerse **leal** a quienes considera importantes."
+        },
+        {
+          "id": "l-1cyj97a",
+          "nom": "Júpiter en Casa 12",
+          "tipo": "texto",
+          "contenido": "El nativo está acompañado por un **Ángel guardián** o una fuerza de **protección** que le guía a lo largo de su Vida.\n\nDurante las **crisis**, tanto literales como existenciales, suele recibir el apoyo y la protección que necesita. De una forma u otra, las puertas terminan abriéndose cuando busca **refugio**.\n\nSu mayor **fortaleza** reside en la conexión con su **esencia** y su **verdad interior**. Gracias a ello, es capaz de transformar las experiencias más difíciles en oportunidades de **crecimiento**.\n\n---\n\nExiste una marcada tendencia hacia la **introspección**, la **soledad** y el **trabajo interior**. Sus periodos de aislamiento suelen convertirse en momentos clave para su **crecimiento personal**.\n\nTiene la capacidad de convertir **enemigos** en **aliados** y siente una profunda vocación de ayudar a las personas **marginadas** o que atraviesan situaciones de **sufrimiento**. En negativo, si no trabaja en sí mismo, puede caer en la hipocresía, el escapismo o la autocomplacencia.\n\nSuele mostrar una gran **resiliencia** frente a los problemas de **salud**, recuperándose con fuerza cuando realmente lo necesita.\n\nEsta posición favorece un profundo **crecimiento espiritual**, una gran **fuerza interior**, la capacidad de seguir adelante incluso cuando la **fe** parece ausente y una conexión muy profunda con su **esencia**."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-050696g",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Piscis",
+                "B) Júpiter en Casa 12",
+                "C) Júpiter en Escorpio"
+              ],
+              "enunciado": "¿Qué arquetipo afirma que la verdadera fortaleza consiste en transformar las experiencias más difíciles gracias a la conexión con la esencia?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Júpiter en Capricornio",
+                "B) Júpiter en Casa 10",
+                "C) Júpiter en Virgo"
+              ],
+              "enunciado": "¿En cuál el éxito profesional suele manifestarse especialmente durante la segunda mitad de la Vida?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Casa 6",
+                "B) Júpiter en Virgo",
+                "C) Júpiter en Casa 2"
+              ],
+              "enunciado": "¿En cuál el éxito profesional suele manifestarse especialmente durante la segunda mitad de la Vida?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Leo",
+                "B) Júpiter en Aries",
+                "C) Júpiter en Casa 5"
+              ],
+              "enunciado": "¿Qué arquetipo aprende que debe dar sin esperar reconocimiento?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Casa 7",
+                "B) Júpiter en Libra",
+                "C) Júpiter en Piscis"
+              ],
+              "enunciado": "¿En cuál existe una fuerte tendencia a idealizar las relaciones y prometer más de lo que realmente puede cumplir?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Cáncer",
+                "B) Júpiter en Casa 4",
+                "C) Júpiter en Tauro"
+              ],
+              "enunciado": "¿Qué arquetipo encuentra el sentido de la Vida principalmente mediante la seguridad emocional y las raíces familiares?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Capricornio",
+                "B) Júpiter en Casa 10",
+                "C) Júpiter en Casa 1"
+              ],
+              "enunciado": "¿Qué posición suele atraer reconocimiento, liderazgo y éxito público, pero advierte sobre ascensos demasiado rápidos?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Escorpio",
+                "B) Júpiter en Casa 8",
+                "C) Júpiter en Piscis"
+              ],
+              "enunciado": "¿Cuál habla de una aceptación especialmente serena de la muerte y de la sexualidad como experiencia trascendente?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Géminis",
+                "B) Júpiter en Casa 3",
+                "C) Júpiter en Sagitario"
+              ],
+              "enunciado": "¿Qué arquetipo necesita expandir la mente mediante la comunicación, pero puede limitarse al conocimiento de los libros?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Acuario",
+                "B) Júpiter en Casa 11",
+                "C) Júpiter en Libra"
+              ],
+              "enunciado": "¿Qué posición describe que los amigos inspiran y apoyan, aunque pueden producirse traiciones?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Acuario",
+                "B) Júpiter en Casa 11",
+                "C) Júpiter en Aries"
+              ],
+              "enunciado": "¿En cuál el crecimiento consiste en contribuir al desarrollo de la sociedad mediante ideas nuevas y objetivas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Tauro",
+                "B) Júpiter en Casa 2",
+                "C) Júpiter en Capricornio"
+              ],
+              "enunciado": "¿Qué arquetipo posee gran talento para inversiones y finanzas, comprendiendo que dar permite recibir?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Géminis",
+                "B) Júpiter en Casa 3",
+                "C) Júpiter en Casa 9"
+              ],
+              "enunciado": "¿Qué posición señala que una sola Vida parece insuficiente para aprender todo el conocimiento deseado?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Escorpio",
+                "B) Júpiter en Casa 8",
+                "C) Júpiter en Piscis"
+              ],
+              "enunciado": "¿Qué arquetipo puede encontrar enemigos poderosos, pero también desarrollar capacidades sanadoras?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Cáncer",
+                "B) Júpiter en Casa 4",
+                "C) Júpiter en Casa 12"
+              ],
+              "enunciado": "¿En cuál el hogar puede convertirse en un lugar de reuniones filosóficas o espirituales?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Piscis",
+                "B) Júpiter en Casa 12",
+                "C) Júpiter en Sagitario"
+              ],
+              "enunciado": "¿Qué arquetipo necesita creer en la magia y luchar por las causas perdidas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Júpiter en Tauro",
+                "B) Júpiter en Casa 2",
+                "C) Ambas lo mencionan, pero una lo señala como advertencia específica."
+              ],
+              "enunciado": "¿Qué posición afirma que el valor personal nunca debe depender de los recursos materiales?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Sagitario",
+                "B) Júpiter en Casa 9",
+                "C) Júpiter en Aries"
+              ],
+              "enunciado": "¿Qué arquetipo encuentra sentido en la filosofía, la justicia y la búsqueda constante de propósito, aunque pueda desconectarse de su tristeza?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Júpiter en Libra",
+                "B) Júpiter en Casa 7",
+                "C) Júpiter en Leo"
+              ],
+              "enunciado": "¿Qué posición puede vivir las relaciones desde un sentimiento de superioridad y nunca pierde la fe en el Amor?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Capricornio",
+                "B) Júpiter en Leo",
+                "C) Júpiter en Casa 10"
+              ],
+              "enunciado": "¿Qué arquetipo busca reconocimiento y estatus como forma de dar sentido a su Vida?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Casa 4",
+                "B) Júpiter en Casa 10",
+                "C) Júpiter en Cáncer"
+              ],
+              "enunciado": "¿Qué posición afirma que el crecimiento interior es más importante que el reconocimiento profesional?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Virgo",
+                "B) Júpiter en Capricornio",
+                "C) Júpiter en Casa 6"
+              ],
+              "enunciado": "¿Qué arquetipo basa su confianza en lo que sabe y necesita aprender a delegar?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Casa 1",
+                "B) Júpiter en Aries",
+                "C) Júpiter en Casa 9"
+              ],
+              "enunciado": "¿Qué posición habla de una misión vital, grandes metas y riesgo de abandonar al primer obstáculo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Júpiter en Aries",
+                "B) Júpiter en Sagitario",
+                "C) Júpiter en Leo"
+              ],
+              "enunciado": "¿Qué arquetipo destaca porque su fe inspira directamente la acción y aprende de los errores del pasado?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

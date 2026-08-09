@@ -1,0 +1,383 @@
+{
+  "id": "59597636-b11f-4df2-ae14-00448ccf8ccb",
+  "modalidad": "Psicología",
+  "titulo": "EMDR trauma",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Trauma",
+      "submodules": [
+        {
+          "id": "l-nx0fb5s",
+          "nom": "1.1 Protocolo de Trauma Temprano",
+          "tipo": "texto",
+          "contenido": "El **Protocolo de Trauma Temprano** se indica cuando hay experiencia traumática o de negligencia, conocida o sospechada, en el periodo **prenatal o postnatal temprano**.\n\nIndicadores claros: **adopción o acogidas múltiples**; embarazo o parto traumáticos; **malestar físico o emocional de la madre** durante embarazo, parto o posparto; **fallo de medro**; cirugías u hospitalizaciones tempranas (prematuridad, fisura palatina); y **abuso o negligencia** en los primeros años."
+        },
+        {
+          "id": "l-oz3spzv",
+          "nom": "1.2 Señales de trauma temprano ",
+          "tipo": "texto",
+          "contenido": "A veces no hay historia conocida, pero el cuadro clínico la sugiere: **trastorno reactivo del apego**, síndrome alcohólico fetal, presentaciones del espectro autista, **TDA/TDAH**, trastornos del sueño, alimentación o eliminación, y desregulación emocional como **ansiedad (huida), depresión (congelación) o ira crónica (lucha)**.\n\nEspecialmente significativos son los **síntomas disociativos**: lagunas e **incapacidad de recordar periodos** de tiempo, migrañas, quedarse **\"pegado\" a las pantallas** o en estado de trance, fantaseo absorbente. También: **predominio somático**, narrativa incoherente, imposibilidad de responder a las preguntas del Protocolo Estándar, y un **Floatback o Affect Scan** que lleva a un momento muy temprano."
+        },
+        {
+          "id": "l-lhexvfh",
+          "nom": "1.3 El trauma",
+          "tipo": "texto",
+          "contenido": "**Trauma** viene del griego *herida*. \n\nEn España, uno de cada cinco personas sufrió abuso sexual infantil, uno de cada cuatro fue maltratado físicamente por un progenitor, uno de cada ocho vio a su madre ser golpeada. \n\n---\n\n*Es traumático verse **forzado a callar** cualquier experiencia de alto impacto emocional.* \n\nEl **trauma psíquico** es la herida de tener que **silenciar, negar o disociar** experiencias que **deberían haberse compartido con las figuras de apego** para adquirir significado, generar creencias adecuadas sobre uno mismo y el mundo, y así permitir la adaptación y el aprendizaje.\n\n---\n\nEl mecanismo que mantiene ese silencio es la **disociación**, lo que **Pierre Janet** llamó un **\"automatismo psicológico\"**: un sofisticado **\"plan B\"** que garantiza el silencio y, con él, preserva la **pertenencia y el apego**."
+        },
+        {
+          "id": "l-xcby604",
+          "nom": "1.4 Disociación",
+          "tipo": "texto",
+          "contenido": "La disociación mantiene el material traumático **fuera de la conciencia**, mientras la regulación se logra por vías indirectas: **somatizaciones, insomnio, dificultades de concentración, ansiedad generalizada**. \n\nLa experiencia interna se vuelve **el enemigo**; las señales del cuerpo no se oyen; la conexión emocional se vuelve un disparador. La persona acaba **desconectada de sí misma y desconocida para sí misma**.\n\n---\n\nCuando el vínculo se siente amenazado, **el apego siempre gana sobre la integración**. El ser humano sacrifica su propia salud y equilibrio al servicio de un imperativo mayor: **pertenecer y conectar**.\n\nTras el impacto traumático, los síntomas se expresan en tres modos: **intrusión, hiperactivación y evitación**."
+        }
+      ]
+    },
+    {
+      "title": "2. Retraumatización",
+      "submodules": [
+        {
+          "id": "l-gzgjy7f",
+          "nom": "2.1 Re-experimentación",
+          "tipo": "texto",
+          "contenido": "Al acercarse a un recuerdo de alto impacto, volver a él **desborda** a la persona.\n\nPor el bloqueo disociativo, las experiencias traumáticas **no se recuerdan: se reviven**.\n\nEl paciente vuelve a sentir **exactamente** lo que sintió en el momento original, pero sin ser consciente de por qué es tan exagerado y doloros lo que siente.\n\n---\n\nEs más intenso cuando el trauma ocurrió en la **infancia**, donde la **indefensión y la incapacidad de controlar** la situación agravaron el impacto. \n\nUna vez catalogada una experiencia como **peligrosa** y generadas creencias de **incontrolabilidad y vulnerabilidad**, la persona **evitará** —consciente e inconscientemente— todo lo que se la recuerde: situaciones, personas, sonidos, olores..."
+        },
+        {
+          "id": "l-kwdne9s",
+          "nom": "2.2 Ventana de tolerancia",
+          "tipo": "texto",
+          "contenido": "El mecanismo de evitación es la base de lo que **Daniel Siegel** llamó la **ventana de tolerancia**: el margen dentro del cual la persona puede procesar lo externo y lo interno **con comodidad y sin desbordarse**.\n\nCuando el impacto de un estímulo o situación supera ese umbral, la persona **hiperactiva** (respuesta simpática de lucha/huida) o **hipoactiva** (inmovilización vagal dorsal), y **pierde la atención dual**.\n\n---\n\nLa **atención dual** es la capacidad de **permanecer en el presente mientras se \"viaja\" al pasado**: mantenerse conectado con la experiencia interna que el disparador produce **sin ser inundado** ni arrastrado al pasado.\n\nEs el **prerrequisito funcional** de todas las fases del EMDR y debe **garantizarse antes** de seguir avanzando con el protocolo."
+        }
+      ]
+    },
+    {
+      "title": "3. El protocolo básico de 8 fases y el ICES",
+      "submodules": [
+        {
+          "id": "l-xv1w32a",
+          "nom": "3.1 Las ocho fases",
+          "tipo": "texto",
+          "contenido": "El Protocolo Básico de EMDR se despliega en **ocho fases**: (1) **Historia**, (2) **Preparación**, (3) **Evaluación**, (4) **Desensibilización**, (5) **Instalación** de la cognición positiva, (6) **Body Scan**, (7) **Cierre** y (8) **Reevaluación**.\n\n---\n\n**Fase 1 — Historia clínica y planificación.** Recoger la **historia del paciente**, identificar las **dianas** (recuerdos, disparadores presentes, retos futuros) y valorar la **idoneidad** para EMDR, incluido el cribado de **disociación**.\n\n**Fase 2 — Preparación.** Crear la **alianza terapéutica**, dar **psicoeducación**, enseñar la estimulación bilateral e instalar **recursos de estabilización** (Lugar Seguro, contenedor). Garantizar que el paciente puede **regularse**.\n\n**Fase 3 — Evaluación.** Activar la diana construyendo el **ICES**: imagen, cognición negativa y la **positiva** deseada, medir la creencia con la **VoC** (1-7), nombrar la emoción y medir el malestar con la **SUD** (0-10), y localizar la **sensación corporal**.\n\n**Fase 4 — Desensibilización.** Procesar la diana con **estimulación bilateral** en tandas, siguiendo las asociaciones que surjan, hasta que la **SUD baje a 0**.\n\n**Fase 5 — Instalación.** Reforzar la **cognición positiva** y enlazarla con la diana mediante BLS, hasta que la **VoC llegue a 7**.\n\n**Fase 6 — Body Scan.** Revisar el cuerpo en busca de **tensión o sensación residual** y procesarla hasta que la respuesta corporal sea **neutra o positiva**.\n\n**Fase 7 — Cierre.** Devolver al paciente a un **estado de equilibrio** al acabar (procesada o no la diana) y avisar de que el **procesamiento continúa** entre sesiones.\n\n**Fase 8 — Reevaluación.** Al inicio de la sesión siguiente, **comprobar lo procesado** (¿se mantiene la SUD en 0, la VoC en 7?) y decidir los **siguientes pasos**."
+        },
+        {
+          "id": "l-0ogn1fy",
+          "nom": "3.2 El ICES",
+          "tipo": "texto",
+          "contenido": "El constructo central de la evaluación es el **ICES**, las cuatro dimensiones del **evento diana** que deben estar **presentes a la vez** para que haya procesamiento:\n\n- **I** — *Input* sensorial (la imagen).\n\n- **C** — *Cognición* (la creencia asociada).\n\n- **E** — *Emoción* que evoca el recuerdo.\n\n- **S** — *Sensaciones* corporales registradas.\n\n---\n\nConstruir el ICES en la **Fase 3** asegura que todos los elementos de la experiencia se activen **simultáneamente**, condición fundamental del reprocesamiento. \n\nEl Estándar es muy eficaz en **trauma simple**, pero en **trauma complejo** hay que **extender mucho la preparación** y abordar la disociación."
+        },
+        {
+          "id": "l-okbglzb",
+          "nom": "3.3 Estimulación bilateral ",
+          "tipo": "texto",
+          "contenido": "Se recomienda la **estimulación bilateral auditiva** porque permite **conversación continua y mirada mutua** entre terapeuta y paciente —dos anclajes potentes al presente—. Que sea **menos potente** que la visual o táctil, lejos de ser un defecto, es una **ventaja**: garantiza una desensibilización **más lenta y gradual**, con menos riesgo de desbordar. El **volumen**: suficiente para oírse sin interferir en la conversación."
+        },
+        {
+          "id": "l-qt21buq",
+          "nom": "3.4 Logros",
+          "tipo": "texto",
+          "contenido": "- **Logro 1 — Reducir la intensidad y ampliar la ventana de tolerancia:** baja la fobia a la reexperimentación, sostiene la atención dual y **revierte la disociación** (útil contra la **\"fobia entre partes\"**).\n\n- **Logro 2 — Más conexión con la experiencia interna:** al bajar el malestar, **sentir deja de ser peligroso**; emociones y sensaciones vuelven a ser **guías** para decidir.\n\n- **Logro 3 — Contrarrestar el bloqueo y generar una narrativa más completa:** recuperar material bloqueado permite una **historia de Vida más coherente** y elegir mejor los **recuerdos diana**."
+        },
+        {
+          "id": "l-5vqx1m7",
+          "nom": "3.5 Línea de Vida",
+          "tipo": "texto",
+          "contenido": "La aplicación práctica de lo anterior es la **Desensibilización de la Línea de Vida**.\n\nEn la fase de evaluación se construye una **línea de Vida exhaustiva**: un mapa de los eventos significativos de toda la historia evolutiva. \n\nEsa línea es el **marco de referencia** del trabajo preparatorio: el paciente la recorre **sección por sección**, narrando su historia con **audición bilateral**, generando **tolerancia, insights y consciencia**, mientras el terapeuta **acompaña y atestigua**.\n\nConviene dedicar **varias sesiones iniciales** a esto, dejando que el paciente **ordene, complete, explique y dé sentido coherente** a su historia. "
+        }
+      ]
+    },
+    {
+      "title": "4. El Protocolo de Trauma Temprano paso a paso",
+      "submodules": [
+        {
+          "id": "l-8zx8o23",
+          "nom": "4.1 Introducción",
+          "tipo": "texto",
+          "contenido": "Requisito previo: que el paciente esté en un **estado de recursos** (*resourced state*).\n\n- **Paso 1 — Float back:** pedir que **flote hacia el tiempo antes de nacer** y empezar la desensibilización. Si se conoce un evento prenatal concreto, abordarlo directamente; si no, dirigir la atención a ese periodo y añadir BLS (mejor **golpecitos en rodillas** para el material temprano guardado en el cuerpo).\n\n- **Paso 2 — Notar:** preguntar qué percibe. Si surge una **sensación buena** y no deriva en malestar, **instalarla**; si surge algo **incómodo**, **limpiarlo**.\n\n- **Paso 3 — Avanzar en el tiempo:** dejar que siga notando; guiar si hace falta por **nacimiento, infancia, ventanas evolutivas**. Si aparece un evento peligroso conocido, abordarlo.\n\n- **Paso 4 — Cogniciones de muerte:** si aparece *\"voy a morir\"* o *\"quiero morir\"*, abordarlas **en cuanto haya seguridad suficiente**, dirigiendo al momento **más temprano** en que se sintió así. Asegurar **precauciones y tiempo** de sesión.\n\n- **Paso 5 — Interweave imaginativo:** si el malestar no cede, decir: *\"imagina qué necesitabas o qué necesitabas hacer\"* — permite **escapar, defenderse, recibir protección** o cubrir necesidades. Volver a cada periodo hasta que **no quede malestar**.\n\n- **Paso 6 — Reparación imaginativa:** si no surge sola, decir: *\"imagina qué habría pasado si todo hubiera sido como necesitabas\"* — repetir hasta que reciba **todo lo necesario**, dando la **base neurológica** para elegir distinto en el futuro.\n\n- **Paso 7 — Cierre:** completar **Instalación y Body Scan** en cada periodo, ofreciendo el terapeuta cogniciones positivas si hace falta."
+        }
+      ]
+    },
+    {
+      "title": "5. Caso clínico: Jenny",
+      "submodules": [
+        {
+          "id": "l-l9tcp14",
+          "nom": "5.1 Quién es Jenny",
+          "tipo": "texto",
+          "contenido": "**Jenny**, **52 años**, con **TEPT crónico**. La habían **expulsado de un estudio universitario de exposición** por **descompensarse** gravemente tras cada sesión. Estaba prácticamente **inmovilizada**. Su madre biológica **murió de un tumor cerebral** cuando Jenny tenía **ocho meses**."
+        },
+        {
+          "id": "l-8ywkkhf",
+          "nom": "5.2 El procesamiento",
+          "tipo": "texto",
+          "contenido": "Tras establecer el **contenedor** y reconectar con su **lugar seguro**, el terapeuta simplemente dirigió la atención al **tiempo antes de nacer**, con golpecitos en rodillas. \n\nEl procesamiento recorrió **experiencias sensoriales y emocionales prenatales** —estados de flotación, imágenes embrionarias, **pavor creciente** al desaparecer los colores, tensión, la cognición *\"él quería un niño\"*— pasando por malestar, alivio y el interweave reparador, hasta llegar a la cognición positiva: **\"ahora estoy a salvo\"**."
+        },
+        {
+          "id": "l-8mizhy0",
+          "nom": "5.3 El desenlace",
+          "tipo": "texto",
+          "contenido": "En la sesión siguiente, el procesamiento avanzó **cronológicamente** a pérdidas de la infancia y conectó **espontáneamente** con preocupaciones presentes y futuras —identidad profesional, capacidad de hacer un trabajo con sentido—, hasta la creencia nuclear: **\"soy amada\"**.\n\nLa clave: con **preparación terapéutica previa adecuada**, el procesamiento natural puede recorrer solo el paradigma **Responsabilidad → Seguridad → Elecciones** sin necesidad de mucha estructura del terapeuta."
+        }
+      ]
+    },
+    {
+      "title": "6. El Protocolo Breve de Intervención",
+      "submodules": [
+        {
+          "id": "l-nlp3gp7",
+          "nom": "6.1 Fase 1 — Estabilización",
+          "tipo": "texto",
+          "contenido": "*Estabilización y ventana de tolerancia (sesiones 1-4)*\n\n**Psicoeducación** e instalación de **recursos positivos**; se identifica la modalidad de BLS preferida. \n\nSe divide la línea de Vida en **tres segmentos** (infancia; adolescencia y adultez temprana; del diagnóstico al presente) y se toman **SUDS y VOC globales**. Se desensibiliza segmento a segmento con **audición bilateral**, identificando los **Puntos de Perturbación (PP)** — el mapa de dianas de la Fase 2."
+        },
+        {
+          "id": "l-59usc8z",
+          "nom": "6.2 Fase 2 — Desensibilización",
+          "tipo": "texto",
+          "contenido": "*Desensibilización y reprocesamiento de dianas (sesiones 5-9)*\n\nSe localizan los **PP** (Puntos de Perturbación) y se valora si se puede construir su **ICES**, tratando cada uno como **diana independiente**. \n\nSi iniciar el Estándar es **prematuro**, se usa el **Procesamiento Telescópico** (**EMD → EMDr → EMDR**) como entrada gradual.\n\n Se procesa cada PP hasta **SUD 0 y VOC 7**; si no se logra del todo, se instala una **cognición positiva** de capacidad. \n\nLa BLS puede pasar ya de auditiva a **tapping o movimientos oculares**."
+        },
+        {
+          "id": "l-jiwf51t",
+          "nom": "6.3 Fases 3 y 4 — Presente",
+          "tipo": "texto",
+          "contenido": "*Presente y futuro (sesiones 10-15)*\n\n- **Fase 3 (10-13):** abordar con el Estándar los **disparadores actuales** que activan material traumático residual.\n\n- **Fase 4 (14-15):** trabajar la **ansiedad anticipatoria** y el **Future Template** — base neurológica de nuevas respuestas adaptativas.\n\n- **Sesión 16:** **Reevaluación y cierre**."
+        },
+        {
+          "id": "l-wni7ews",
+          "nom": "6.4 Principios de cierre",
+          "tipo": "texto",
+          "contenido": "- **La ventana de tolerancia es la piedra angular:** todo procesamiento posterior depende de que el paciente **permanezca dentro de su ventana**. Ampliarla antes de reprocesar **no es un lujo previo, sino una necesidad clínica**.\n\n- **La narrativa es el vehículo de la atención dual:** mantener una relación **reflexiva y narrativa** con el material —en vez de revivirlo de forma inmersiva— es lo que **sostiene la atención dual**. La audición bilateral lo facilita al permitir **conversación y mirada mutua**.\n\n- **La desensibilización gradual precede y posibilita el reprocesamiento:** la aparente **\"debilidad\"** de la audición bilateral se reinterpreta como **ventaja estratégica** — una desensibilización **más lenta y segura** que prepara el sistema nervioso para el trabajo profundo posterior."
+        }
+      ]
+    },
+    {
+      "title": "7. Material de consulta rápida",
+      "submodules": [
+        {
+          "id": "l-ck44xj0",
+          "nom": "7.1 Las escalas",
+          "tipo": "texto",
+          "contenido": "- **SUD** (*Subjective Units of Disturbance*): mide el **malestar**, de **0 a 10**. Objetivo de procesamiento: **0**.\n\n- **VoC** (*Validity of Cognition*): mide cuán **verdadera** siente la persona la cognición positiva, de **1 a 7**. Objetivo: **7**."
+        },
+        {
+          "id": "l-hzwofp1",
+          "nom": "7.2 Glosario de siglas",
+          "tipo": "texto",
+          "contenido": "- **EMDR** — *Eye Movement Desensitization and Reprocessing*: desensibilización + reprocesamiento.\n\n- **EMD** — solo desensibilización (sin reprocesar); usado para preparar.\n\n- **AIP** — Procesamiento Adaptativo de la Información: el modelo teórico.\n\n- **BLS** — estimulación bilateral (auditiva, táctil o visual).\n\n- **ICES** — Input, Cognición, Emoción, Sensación: las 4 dimensiones de la diana.\n\n- **PP** — Puntos de Perturbación: recuerdos-nodo que siguen activando."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-qlrjwuj",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Adopción o acogidas múltiples.",
+                "B) Fallo de medro (*failure to thrive*).",
+                "C) Inicio de una fobia específica en la edad adulta."
+              ],
+              "enunciado": "¿Cuál de estos NO es un indicador claro de aplicación del Protocolo de Trauma Temprano?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Cualquier evento que ocurre fuera de la experiencia humana normal.",
+                "B) La herida de verse forzado a silenciar, negar o disociar una experiencia de alto impacto que debió compartirse con las figuras de apego.",
+                "C) La reacción fisiológica de lucha o huida ante un peligro real."
+              ],
+              "enunciado": "Según la definición de trabajo del curso, ¿qué constituye el trauma psíquico?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Esencialmente correcta pero incompleta.",
+                "B) Inexacta, según ha demostrado la práctica clínica.",
+                "C) Válida solo para el trauma infantil."
+              ],
+              "enunciado": "La definición del DSM-III (1980) caracterizaba el trauma como un evento \"fuera de la experiencia humana normal\". El curso sostiene que esa formulación es:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Un automatismo psicológico, un \"plan B\" que garantiza el silencio.",
+                "B) Una regresión a etapas tempranas del desarrollo.",
+                "C) Un fallo de la memoria a largo plazo."
+              ],
+              "enunciado": "¿Cómo describió Pierre Janet la disociación?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Inversa: a más riesgo, menos disociación.",
+                "B) Proporcional: a mayor riesgo, mayor disociación.",
+                "C) Independiente entre sí."
+              ],
+              "enunciado": "La relación entre riesgo de desconexión y disociación es:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) La persona sacrifica su salud y equilibrio para preservar la pertenencia y el vínculo.",
+                "B) El apego seguro es incompatible con la integración del trauma.",
+                "C) Integrar el trauma exige romper los vínculos de apego."
+              ],
+              "enunciado": "El principio \"el apego siempre gana sobre la integración\" significa que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Por la represión voluntaria del recuerdo.",
+                "B) Por el bloqueo disociativo y su patrón particular de almacenamiento.",
+                "C) Porque el recuerdo se ha borrado y se reconstruye cada vez."
+              ],
+              "enunciado": "¿Por qué las experiencias traumáticas \"no se recuerdan, se reviven\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) La respuesta simpática de lucha o huida.",
+                "B) La inmovilización vagal dorsal.",
+                "C) La activación parasimpática ventral."
+              ],
+              "enunciado": "Cuando el impacto de un estímulo supera la ventana de tolerancia, la persona puede hipoactivarse mediante:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Atender a dos recuerdos traumáticos a la vez.",
+                "B) Permanecer en el presente mientras se \"viaja\" al pasado, sin ser inundado.",
+                "C) Mantener la mirada y la conversación con el terapeuta."
+              ],
+              "enunciado": "La atención dual se define como la capacidad de:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El contexto del evento.",
+                "B) La cognición o creencia asociada.",
+                "C) La conducta de evitación."
+              ],
+              "enunciado": "En el constructo ICES, la \"C\" corresponde a:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Fase 2 (Preparación).",
+                "B) Fase 3 (Evaluación).",
+                "C) Fase 4 (Desensibilización)."
+              ],
+              "enunciado": "¿En qué fase del Protocolo Básico se construye el ICES?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Aceleran el reprocesamiento profundo desde el inicio.",
+                "B) Evitan deliberadamente el reprocesamiento y solo buscan bajar la intensidad.",
+                "C) Sustituyen por completo al Protocolo Estándar."
+              ],
+              "enunciado": "La propuesta central del autor consiste en introducir protocolos de EMD en la Fase 2 porque estos:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Porque es la única modalidad compatible con niños.",
+                "B) Porque su menor potencia garantiza una desensibilización más lenta y segura.",
+                "C) Porque impide la conversación, favoreciendo la concentración."
+              ],
+              "enunciado": "¿Por qué se recomienda la audición bilateral en la fase preparatoria, pese a ser \"menos potente\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Ampliar la ventana de tolerancia y revertir la disociación.",
+                "B) Eliminar por completo la necesidad del Protocolo Estándar.",
+                "C) Generar una narrativa más completa y coherente."
+              ],
+              "enunciado": "¿Cuál de estos NO es uno de los tres \"logros preparatorios\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Interpretar el significado de cada evento narrado.",
+                "B) Acompañar y atestiguar mientras el paciente narra.",
+                "C) Dirigir el reprocesamiento de cada diana hasta SUD 0."
+              ],
+              "enunciado": "En la Desensibilización de la Línea de Vida, el papel del terapeuta es fundamentalmente:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) \"Imagina qué necesitabas o qué necesitabas hacer\".",
+                "B) \"Imagina que el evento nunca ocurrió\".",
+                "C) \"Describe el evento con el máximo detalle posible\"."
+              ],
+              "enunciado": "En el Protocolo de Trauma Temprano, si el malestar no cede espontáneamente, el interweave imaginativo consiste en pedir:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El 5 instala recursos; el 6 hace el Body Scan.",
+                "B) El 5 (interweave) permite cubrir la necesidad; el 6 (reparación) imagina que todo fue como se necesitaba.",
+                "C) El 5 trabaja el presente; el 6 trabaja el futuro."
+              ],
+              "enunciado": "La diferencia entre el Paso 5 y el Paso 6 del Protocolo de Trauma Temprano es que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) \"Soy amada\".",
+                "B) \"Ahora estoy a salvo\".",
+                "C) \"Él quería un niño\"."
+              ],
+              "enunciado": "En el caso de Jenny, ¿con qué cognición positiva concluyó el procesamiento prenatal de la primera sesión?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El Procesamiento Telescópico (EMD → EMDr → EMDR).",
+                "B) La interrupción del tratamiento.",
+                "C) El salto directo a la Fase 4."
+              ],
+              "enunciado": "En el Protocolo Breve, cuando iniciar el Protocolo Estándar se juzga prematuro, se recurre a:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Criterio para dar el alta al paciente.",
+                "B) Mapa de dianas para el trabajo de la Fase 2.",
+                "C) Medida del malestar global equivalente al SUD."
+              ],
+              "enunciado": "En el Protocolo Breve de 16 sesiones, los Puntos de Perturbación (PP) se identifican en la Fase 1 y sirven como:"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,450 @@
+{
+  "id": "6eb897a6-04e8-4caa-aa98-5351a37c8e0f",
+  "modalidad": "Psicología",
+  "titulo": "EMDR: Trauma y Duelo",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Qué es el EMDR",
+      "submodules": [
+        {
+          "id": "l-l4g9tti",
+          "nom": "1.1 Qué es y para qué sirve",
+          "tipo": "texto",
+          "contenido": "El EMDR es una técnica de terapia para procesar **traumas**, entendiendo por trauma un evento tan impactante que **sobrepasa la capacidad de afrontamiento** de la persona.\n\nLo que la mente no logra digerir suele quedarse en el cuerpo. Por eso el terapeuta ayuda primero a tomar conciencia de las **somatizaciones** ligadas al trauma, para poder integrarlas."
+        },
+        {
+          "id": "l-rdfepce",
+          "nom": "1.2 La narrativa como objetivo",
+          "tipo": "texto",
+          "contenido": "El objetivo es **poner una narrativa a lo que pasó**. \n\nSe revisa mentalmente pero en voz alta la secuencia del evento para identificar los momentos que resultaron más perturbadores, hasta llegar a un relato **completo**.\n\nEsto importa porque un recuerdo *fragmentado* duele en pedazos sueltos. Cuando todo se reúne en un mismo bloque, la persona **encuentra sentido** a la experiencia vivida."
+        },
+        {
+          "id": "l-g1zu60q",
+          "nom": " 1.3 El trauma",
+          "tipo": "texto",
+          "contenido": "El EMDR mira el trauma **desde el momento en que ocurrió hasta el presente**. \n\nEl trauma no se entiende como el evento en sí, sino como las **reacciones, consecuencias y retraumatizaciones** que siguen ocurriendo después además de todas las experiencias que hacen revivir ese dolor."
+        },
+        {
+          "id": "l-be9dctk",
+          "nom": "1.4 Cómo es la terapia",
+          "tipo": "texto",
+          "contenido": "Las **primeras sesiones** se centran en la **desensibilización**: bajar la intensidad emocional y fisiológica para que la persona pueda mantener una parte de su conciencia en la historia del trauma y otra en el presente.\n\nDespués se trabaja con las **secuencias narrativas**, una estructura que permite acercarse al trauma *de forma gradual*, sin superar la **tolerancia a la frustración** de la persona. \n\nMientras tanto se refuerza su confianza, la idea de que *puede con lo que ha pasado*. Para anclarla en el presente se usa la **estimulación bilateral** (auditiva).\n\n---\n\nEl propósito **no es resolverlo todo de una sentada**, sino dejar a la persona en las mejores condiciones para seguir procesando en sesiones próximas. \n\nLa persona debería irse más **conectada con el presente** y con su **fuerza interior**."
+        },
+        {
+          "id": "l-e0be53l",
+          "nom": "1.5 Antes de empezar",
+          "tipo": "texto",
+          "contenido": "Conviene trazar primero una **línea del tiempo de la Vida** donde se vean con claridad los eventos que han marcado la Vida de la persona. \n\nEl objetivo es una **narrativa autobiográfica más coherente y estable**, que la prepare para procesar el trauma."
+        }
+      ]
+    },
+    {
+      "title": "2. El dolor y la pérdida",
+      "submodules": [
+        {
+          "id": "l-gy0vxgv",
+          "nom": "2.1 Qué es el dolor",
+          "tipo": "texto",
+          "contenido": "El dolor es el **proceso natural de una pérdida**, y aquí toda pérdida se considera **traumática**. \n\nEl objetivo de la terapia es llegar a una **narrativa adaptada al presente** de esa pérdida.\n\nA veces una pérdida duele muchísimo porque, en el fondo, estamos **reviviendo otra pérdida que nunca llegamos a asimilar**. Y conviene recordar algo básico: para que haya pérdida, primero tuvo que haber **vínculo**."
+        },
+        {
+          "id": "l-y14en9c",
+          "nom": "2.2 Qué se pierde de verdad",
+          "tipo": "texto",
+          "contenido": "Cuando perdemos algo, no perdemos solo a esa persona o esa cosa. También se derrumban las **estructuras internas** y los **futuros que habíamos imaginado**, además de una **sensación de seguridad y protección**.\n\nPor eso el dolor no es solo sufrimiento emocional: es una **disrupción de los esquemas mentales** y de la forma en que entendíamos la Vida hasta entonces."
+        },
+        {
+          "id": "l-5fvb3iq",
+          "nom": "2.3 El significado",
+          "tipo": "texto",
+          "contenido": "Nos adaptamos cuando logramos **darle un significado** a la pérdida. \n\nLa única forma de darle un significado es a través de la **narración**, de esta forma, se puede asimilar racionalmente, sin fragmentaciones.\n\nPor eso hay que entender las narrativas que existían *antes* de la pérdida: solo así se comprende el impacto real y se puede gestionar coherentemente la situación.\n\n---\n\nUna *narrativa* es, sencillamente, una secuencia de eventos ordenados en el tiempo."
+        },
+        {
+          "id": "l-gn1ltps",
+          "nom": "2.4 Las emociones",
+          "tipo": "texto",
+          "contenido": "Las emociones se quedan latentes en nosotros hasta que se hace una gestión racional de a qué están asociadas. \n\nDe esta forma se **desactivan** cuando nuestra visión del mundo vuelve a encajar con lo que está ocurriendo en vez de que nos recuerdes a eventos pasados. \n\n---\n\nUna vez **integrada** la experiencia, la emoción ya cumplió su función y **se apaga sola**: las emociones siguen encendidas hasta que el mundo de la persona vuelve a tener relación con lo que pasó."
+        }
+      ]
+    },
+    {
+      "title": "3. La fases de la intervención",
+      "submodules": [
+        {
+          "id": "l-ajhlh2o",
+          "nom": "3.1 Freud",
+          "tipo": "texto",
+          "contenido": "*Freud describía el *duelo* como la liberación gradual de los lazos con lo perdido.* \n\nLa mente sigue un recorrido: **resiste la ruptura → se confronta con la realidad → sufre las consecuencias → se reorganiza** en su mundo ya cambiado. \n\nCada fase trae consigo unas **tareas** que hay que cumplir."
+        },
+        {
+          "id": "l-qt0wt93",
+          "nom": "3.1 Fase 1 — Shock",
+          "tipo": "texto",
+          "contenido": "**Objetivo:** amortiguar el impacto de la pérdida. \n\nLa psique está **sobrepasada** y **oscila** entre rechazar lo ocurrido y confrontarlo. \n\nLa **tarea** es manejar los aspectos *traumáticos* de la pérdida: antes de poder llorar el vínculo, hay que **sobrevivir al impacto**.\n\n---\n\n**Si la persona se queda estancada aquí →** aparece el **dolor traumático**, el cual no se procesa como ausencia, sino como una **herida congelada**. \n\nEl duelo fracasa no por haber amado demasiado, sino porque el acontecimiento queda **sin elaborar**, atrapado en el abrumamiento, la fragmentación o la intrusión.\n\n---\n\n**Cómo se interviene:** se usan el **EMD y los protocolos de trauma reciente**. \n\nEl objetivo **no** es forzar una elaboración profunda, sino **manejar los síntomas, contener la sobreestimulación y ampliar la ventana de tolerancia**. \n\nEl trabajo es **estabilizador, no interpretativo**. \n\n---\n\nPosibles focos: **validar la reacción emocional** (incluida la oscilación entre acercamiento y evitación), manejar las **imágenes intrusivas**, las emociones que disparan los recordatorios y las **cogniciones negativas** que surgen tras el evento."
+        },
+        {
+          "id": "l-4jrxxk4",
+          "nom": "3.2 Fase 2 — Evitación y negación",
+          "tipo": "texto",
+          "contenido": "**Objetivo:** hay que permitir que la persona **edite la realidad** para hacerla más tolerable, a pesar de que distorsione o inhiba partes de la experiencia. \n\n---\n\nLa **tarea** es ir disolviendo *poco a poco* esas defensas mientras aumenta la **tolerancia al dolor**.\n\nLa sanación no consiste en derribar las defensas **a la fuerza**, sino en desarrollar la capacidad de sentir aquello que antes era imposible de sentir.\n\n---\n\n**Si la persona se queda estancada aquí →** aparece el **duelo evitativo o ausente**: se rechaza la realidad y hay una **conexión insuficiente** con la pérdida, porque nunca se permite que se vuelva emocionalmente real.\n\n---\n\n**Cómo se interviene:** la **meta** es deshacer poco a poco las estrategias evitativas hasta alcanzar la **aceptación de la realidad**. \n\nLa negación no es simple irracionalidad: es una **organización defensiva** que en su momento protegió, pero que ahora estorba. \n\nEl EMDR **flexibiliza y desmonta** esas defensas respetando el ritmo de la persona. \n\n---\n\nSe trabajan los **desencadenantes presentes** que reactivan la evitación: espacios vacíos, aniversarios, objetos, rutinas, encuentros sociales.\n\n**Importante**: Hay que atender la relación con **pérdidas anteriores** no resueltas, porque con esta experiencia puede estar reviviendo heridas no sanadas del pasado."
+        },
+        {
+          "id": "l-bq9697p",
+          "nom": "3.3 Fase 3 — Integración",
+          "tipo": "texto",
+          "contenido": "**Objetivo:** darle a la pérdida un significado **emocional y cognitivo**. \n\nLa persona empieza a conectar con la realidad a través del dolor, la tristeza, la culpa, la **rumiación productiva**, la aceptación y los rituales.\n\n---\n\nEl duelo se vuelve **multidimensional**: participan la emoción, el pensamiento, la memoria, la simbolización y el ritual. \n\nLo que se llora no es solo un hecho, sino un **vínculo, una historia compartida, un mundo relacional interiorizado**. \n\nHay que procesar la Vida interna de esa relación: sus **diálogos inconclusos, ambivalencias, dependencias, culpas y gratitud**.\n\n---\n\n**Si la persona se queda estancada aquí →** aparece el **duelo crónico**. \n\nLas estrategias que deberían ayudar se vuelven **rígidas e improductivas**: las emociones se cronifican (tristeza persistente, autocompasión dramatizada, **identidad de víctima**) y las conductas simbólicas se convierten en hábitos inflexibles. \n\nEl duelo **sigue activo, pero ya no transforma**: continúa en el tiempo, pero sin movimiento.\n\n---\n\n**Cómo se interviene:** el dolor no solo se piensa o se siente, también se **lleva en el cuerpo** y se expresa en los vínculos. \n\nHay que **ampliar la ventana de tolerancia** una y otra vez: el duelo **rara vez es lineal**. \n\nEl objetivo es construir una **narrativa relacional** que explique lo que pasó y lo que está pasando ahora. \n\n---\n\nLa pregunta que marca la transición es: **«He perdido esto, ¿y ahora qué?»** — una vez que se pasa el duelo, surge la *reorientación*. \n\nEste momento se asocia con la **despedida, la reconciliación y la aceptación**, y aquí ayudan los **protocolos orientados al futuro**:\n\n- **Despedida:** reposicionar internamente la relación.\n\n- **Reconciliación:** elaborar culpas, ambivalencias, rabia y asuntos pendientes.\n\n- **Aceptación:** no es resignación, sino situar la pérdida en un **nuevo horizonte temporal**.\n\n---\n\nEl EMDR no sirve solo para procesar el pasado: también ayuda a construir un **yo futuro**."
+        },
+        {
+          "id": "l-dsmsgtt",
+          "nom": "3.4 Fase 4 — Crecimiento",
+          "tipo": "texto",
+          "contenido": "**Objetivo:** el **crecimiento postraumático** y el desarrollo de un **yo reflexivo**. \n\n---\n\nAquí el duelo deja de verse como recuperarse de una interrupción y pasa a entenderse como una oportunidad de **reestructurar el mundo interno**.\n\nSe desmantelan **creencias fundamentales, esquemas básicos, creencias-guion** e incluso la **escala de valores** de la persona. \n\nLa pérdida no solo duele: puede desestabilizar toda la **arquitectura** con la que entendíamos la Vida, el yo, las relaciones y el sentido. \n\n---\n\nLa **tarea** no es restaurar la estructura antigua tal como era, sino **reemplazar los esquemas previos por otros nuevos** que incorporen el peso de la pérdida.\n\n---\n\n**Cómo se interviene:** la intervención se vuelve **constructiva**: se trata de **instalar recursos y creencias positivas**. \n\nSe apoyan nuevas capacidades internas, nuevas formas de verse a uno mismo y nuevas **creencias organizadoras** que permitan sostener la Vida después de la pérdida. \n\nNo se busca borrar el apego ni recuperar al yo de antes, sino ayudar a la persona a **llevar consigo la pérdida sin quedar dominada por ella**. \n\n---\n\n*«Sin el otro no puedo comenzar a construirme, pero si no pierdo al otro no puedo terminar de hacerlo.»*\n\n*«Si no construyo una idea reflexiva de quién soy, no puedo empezar a narrarme; pero si no pierdo esa idea, tampoco puedo completar una narrativa coherente de mí mismo.»*\n\n---\n\nDesde aquí, el duelo es un proceso de **reorganización de la identidad**: perder a alguien implica perder también **versiones de uno mismo**, proyectos y expectativas. \n\nLa tarea final es incorporar la pérdida **sin negarla, sin quedar atrapado en ella y sin destruir la continuidad de la propia historia**."
+        }
+      ]
+    },
+    {
+      "title": "4. Apego y trauma infantil",
+      "submodules": [
+        {
+          "id": "l-o73a4p0",
+          "nom": "4.1 La teoría de Bowlby, 1977",
+          "tipo": "texto",
+          "contenido": "La **teoría del apego** explica nuestra tendencia a formar **vínculos afectivos intensos** con ciertas personas, y también el sufrimiento y los **trastornos de personalidad** que surgen de **separaciones y pérdidas afectivas** no deseadas.\n\nNuestra capacidad de relacionarnos está moldeada por la **evolución**, mediada por la **arquitectura cerebral** e influida por el **contexto** en que crecemos."
+        },
+        {
+          "id": "l-whlopby",
+          "nom": "5.2 Los modelos internos",
+          "tipo": "texto",
+          "contenido": "A partir de los primeros vínculos construimos lo que Bowlby llamó **Modelos Internos de Trabajo**: sistemas internos que nacen de las **primeras interacciones entre el niño y sus cuidadores**.\n\nFuncionan como **mapas cognitivos, esquemas o guiones** sobre nosotros mismos y el entorno, y una de sus funciones clave es **filtrar la información** sobre uno mismo y sobre el mundo.\n\n*La capacidad de un niño para **autoengañarse** es vital para su supervivencia.*\n\n---\n\nLa psicoterapia del apego busca **obtener, explorar, integrar y modificar** estos modelos. \n\nComo sobrevivir exige adaptarse al entorno, el **apego pasa por delante de cualquier otra necesidad**; y para mantener ese vínculo recurrimos a la **polarización, la disociación y el silencio**."
+        },
+        {
+          "id": "l-xm630ly",
+          "nom": "4.3 La desconexión",
+          "tipo": "texto",
+          "contenido": "Normalmente, cuando no estamos ocupados en una tarea, el cerebro dirige la atención **hacia dentro**, hacia uno mismo. \n\nEn el trauma, esas estructuras **se desactivan**, salvo el **cíngulo posterior**, encargado de la orientación espacial básica.\n\nEl resultado es que las personas traumatizadas **no logran registrar bien sus estados internos**. \n\nEn el esfuerzo por desconectarse de las sensaciones aterradoras, también **adormecen su capacidad de sentirse vivas**. Y se instala una creencia nuclear: **sentir es peligroso**."
+        },
+        {
+          "id": "l-tp3otce",
+          "nom": "5.4 Integración",
+          "tipo": "texto",
+          "contenido": "*En el fondo, el trauma es un **fracaso de integración de las emociones provocadas por la experiencia**.*\n\n---\n\nEl reto terapéutico es favorecer la **asociación e integración** de aquello que quedó fragmentado. \n\nExisten dos caminos:\n\n- **Psicoterapia tradicional (*top-down*):** sana a través del **diálogo** y la **reconstrucción narrativa**.\n\n- **EMDR (*bottom-up*):** integra mediante **estimulación bilateral**, actuando directamente sobre los **procesos subcorticales** en lugar de depender solo de lo verbal.\n\nAmbas reconocen el mismo problema de fondo: el trauma **fracturó la coherencia** de la experiencia, y la recuperación depende de **restaurar la capacidad de integrar** lo que un día fue forzado al silencio."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-zbbvz58",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Un evento objetivamente grave e irreversible.",
+                "B) Un evento que sobrepasa la capacidad de afrontamiento de la persona.",
+                "C) Una reacción fisiológica que se extingue al cabo de un tiempo."
+              ],
+              "enunciado": "Según el curso, el trauma se define fundamentalmente como:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) El evento puntual que ocurrió en el pasado.",
+                "B) La somatización corporal del recuerdo.",
+                "C) Las reacciones, consecuencias y retraumatizaciones que siguen ocurriendo después del evento."
+              ],
+              "enunciado": "En el modelo del curso, ¿qué es propiamente el trauma?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Atender al trauma y al cuerpo simultáneamente.",
+                "B) Tener una parte de la conciencia en la historia del trauma y otra en el presente.",
+                "C) Alternar entre dos recuerdos traumáticos distintos."
+              ],
+              "enunciado": "La \"atención dual\" que se busca en las primeras sesiones consiste en:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Resolver el trauma por completo en una sola sesión.",
+                "B) Reducir la intensidad emocional y fisiológica (desensibilización).",
+                "C) Reconstruir la línea del tiempo autobiográfica."
+              ],
+              "enunciado": "El propósito de las primeras sesiones de EMDR es:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Identificar cuál fue el evento más traumático.",
+                "B) Lograr una narrativa autobiográfica coherente y estable que prepare el procesamiento.",
+                "C) Sustituir la estimulación bilateral en pacientes resistentes."
+              ],
+              "enunciado": "La línea del tiempo previa al procesamiento sirve para:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Una interpretación emocional de lo vivido.",
+                "B) Una secuencia de eventos ordenados temporalmente.",
+                "C) El significado que el terapeuta atribuye a la pérdida."
+              ],
+              "enunciado": "Una narrativa, según el curso, se define como:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Solo se puede perder lo que materialmente se poseyó.",
+                "B) La pérdida incluye el colapso de estructuras internas y futuros imaginados.",
+                "C) El duelo es proporcional al tiempo de la relación."
+              ],
+              "enunciado": "\"Para que haya pérdida, primero tuvo que haber posesión\" implica que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Cuando la persona deja de pensar en lo ocurrido.",
+                "B) Cuando la concepción del mundo vuelve a alinearse con lo que ocurre.",
+                "C) Cuando se cumple el tiempo socialmente esperado de duelo."
+              ],
+              "enunciado": "Según el curso, ¿cuándo se desactivan las emociones ligadas a una pérdida?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Se suman varias pérdidas en poco tiempo.",
+                "B) La persona queda sola y sin reconocimiento, sin relaciones de apoyo.",
+                "C) El trauma original nunca se llegó a recordar."
+              ],
+              "enunciado": "El \"dolor acumulativo\" se vuelve más doloroso porque:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) La intensidad del trauma en sí.",
+                "B) La falta de relaciones en las que apoyarse para recuperar la estabilidad.",
+                "C) La incapacidad de narrar lo ocurrido."
+              ],
+              "enunciado": "En el modelo, ¿qué es lo que realmente \"destroza\" a la persona?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Negación → ira → negociación → aceptación.",
+                "B) Resiste la ruptura → se confronta con la realidad → sufre las consecuencias → se reorganiza.",
+                "C) Shock → evitación → integración → recuperación del estado previo."
+              ],
+              "enunciado": "El recorrido de la mente en el duelo (según Freud) es:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Dotar de significado emocional y cognitivo a la pérdida.",
+                "B) Manejar los aspectos traumáticos: sobrevivir al impacto antes de llorar el vínculo.",
+                "C) Disolver las defensas evitativas."
+              ],
+              "enunciado": "En la Fase 1 (Shock), la tarea principal es:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Duelo evitativo o ausente.",
+                "B) Duelo crónico.",
+                "C) Dolor traumático (trauma congelado)."
+              ],
+              "enunciado": "El estancamiento en la Fase 1 produce:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Confrontar de golpe la negación para acelerar la aceptación.",
+                "B) Disolver poco a poco las defensas mientras aumenta la tolerancia al dolor.",
+                "C) Instalar recursos y creencias positivas."
+              ],
+              "enunciado": "En la Fase 2, la persona \"edita la realidad\". La tarea terapéutica es:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Emociones cronificadas y conductas rígidas.",
+                "B) Conexión insuficiente con la pérdida, que nunca se vuelve emocionalmente real.",
+                "C) Imágenes intrusivas y oscilación entre apagamiento e inundación."
+              ],
+              "enunciado": "El duelo evitativo o ausente se caracteriza por:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Deben desmantelarse a la fuerza para que el duelo avance.",
+                "B) No se derriban a la fuerza, sino desarrollando la capacidad de sentir lo antes insoportable.",
+                "C) Deben mantenerse intactas hasta la Fase 4."
+              ],
+              "enunciado": "Sobre la sanación de las defensas, el curso afirma que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El cuerpo, la conducta y los vínculos únicamente.",
+                "B) Emoción, pensamiento, memoria, simbolización y ritual.",
+                "C) Despedida, reconciliación y aceptación."
+              ],
+              "enunciado": "En la Fase 3, el duelo se describe como \"multidimensional\" porque participan:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) La sensación de seguridad perdida.",
+                "B) Un vínculo, una historia compartida y un mundo relacional interiorizado.",
+                "C) Las versiones futuras de uno mismo."
+              ],
+              "enunciado": "En la Fase 3, lo que se llora no es solo un hecho, sino:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Rechazo de la realidad de la pérdida.",
+                "B) Estrategias rígidas e improductivas; el duelo sigue activo pero ya no transforma.",
+                "C) Trauma congelado no elaborado."
+              ],
+              "enunciado": "El duelo crónico se caracteriza por:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Duelo evitativo.",
+                "B) Emociones cronificadas propias del duelo crónico.",
+                "C) Crecimiento postraumático mal dirigido."
+              ],
+              "enunciado": "La \"identidad de víctima\" y la autocompasión persistente son ejemplos de:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Reemplazar esquemas previos por otros nuevos que incorporen la pérdida.",
+                "B) Restaurar la estructura interna antigua tal como era.",
+                "C) Construir una nueva organización interna que sostenga la verdad de la pérdida."
+              ],
+              "enunciado": "En la Fase 4, la tarea NO consiste en:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Las imágenes intrusivas y las cogniciones negativas.",
+                "B) Las creencias fundamentales, los esquemas básicos, las creencias-guion y la escala de valores.",
+                "C) Los desencadenantes presentes de la evitación."
+              ],
+              "enunciado": "En la Fase 4 se desmantelan, entre otras cosas:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Estabilizador, no interpretativo.",
+                "B) Interpretativo y orientado al significado.",
+                "C) Constructivo y orientado al futuro."
+              ],
+              "enunciado": "En la intervención de la Fase 1, el trabajo es fundamentalmente:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Hay que evitar los protocolos orientados al futuro.",
+                "B) Hay que atender pérdidas anteriores no resueltas, que pueden amplificar el duelo actual.",
+                "C) Hay que desmantelar las defensas lo antes posible."
+              ],
+              "enunciado": "La intervención en la evitación señala que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El shock a la evitación.",
+                "B) El duelo como reacción al duelo como reorientación.",
+                "C) La conexión a la integración cognitiva."
+              ],
+              "enunciado": "La pregunta \"He perdido esto, ¿y ahora qué?\" marca el paso de:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Resignación ante lo inevitable.",
+                "B) Situar la pérdida dentro de un nuevo horizonte temporal.",
+                "C) El reposicionamiento interno de la relación."
+              ],
+              "enunciado": "En el modelo, la \"aceptación\" se entiende como:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Son innatos y no se modifican con la experiencia.",
+                "B) Derivan de las primeras interacciones niño-cuidador y filtran la información sobre uno mismo y el mundo.",
+                "C) Se forman únicamente tras experiencias traumáticas."
+              ],
+              "enunciado": "Según Bowlby, los Modelos Internos de Trabajo:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Polarización, disociación y silencio.",
+                "B) Negación, proyección y sublimación.",
+                "C) Desensibilización, atención dual y estimulación bilateral."
+              ],
+              "enunciado": "Para mantener el vínculo de apego por encima de otras necesidades, el ser humano recurre a:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Es la única estructura que permanece activa, encargada de la orientación espacial básica.",
+                "B) Se desactiva por completo junto al resto de estructuras.",
+                "C) Es responsable de la creencia \"sentir es peligroso\"."
+              ],
+              "enunciado": "Sobre el cíngulo posterior en el trauma, el curso afirma que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El top-down usa estimulación bilateral; el bottom-up usa diálogo.",
+                "B) El top-down sana por diálogo y reconstrucción narrativa; el bottom-up (EMDR) integra por estimulación bilateral actuando sobre procesos subcorticales.",
+                "C) El top-down actúa sobre lo subcortical; el bottom-up sobre lo verbal."
+              ],
+              "enunciado": "La diferencia entre el abordaje top-down y bottom-up es:"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": "cf53523f-9a27-4866-95e3-71e08cef4886",
+  "modalidad": "Psicología",
+  "titulo": "Los primeros vínculos",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. El apego",
+      "submodules": [
+        {
+          "id": "l-5y2ayft",
+          "nom": "1.1 Estilos de apego",
+          "tipo": "texto",
+          "contenido": "*¿Cómo y dónde aprendemos a relacionarnos?*\n\nLos **estilos de apego** son la forma en la que aprendemos a vernos a nosotros mismos y al mundo.\n\nNuestra forma de relacionarnos con otros nace de cómo nos relacionamos con nuestras figuras de apego durante el desarrollo.\n\nLo que aprendemos en esas relaciones tempranas se convierte en la base desde la que interpretamos **quiénes somos**, qué podemos esperar de los demás y cuánta seguridad existe en el mundo."
+        },
+        {
+          "id": "l-oasm6hf",
+          "nom": "1.2 La transmisión transgeneracional",
+          "tipo": "texto",
+          "contenido": "**Bowlby** ya mostró desde la década de 1940 que los padres que no han sanado su propia historia y sus vínculos con sus figuras de apego depositan en sus hijos necesidades emocionales no resueltas, exigiendoles que les den lo que sus figuras de apego no supieron darle.\n\nExigen que el niño les proporcione la seguridad que ellos mismos no recibieron.\n\nDe esta forma, las heridas relacionales pueden transmitirse de generación en generación, a no ser que se haga un trabajo de sanación."
+        },
+        {
+          "id": "l-ryq6uhe",
+          "nom": "1.3 Qué necesita un niño",
+          "tipo": "texto",
+          "contenido": "Más importante que la autonomía es la **coherencia**.\n\nNo pedir al niño que actúe de formas que no entiende o para las que todavía no está preparado.\n\nNecesita crecer en circunstancias donde pueda confiar en que la guía adulta le tiene en cuenta.\n\nNecesita sentir que existe espacio para la **vulnerabilidad**.\n\nNecesita respeto por su **autonomía**.\n\nNecesita poder sentir cercanía sin sentir que su espacio está siendo invadido."
+        },
+        {
+          "id": "l-bwjdmo4",
+          "nom": "1.4 El apego seguro",
+          "tipo": "texto",
+          "contenido": "El niño con **apego seguro** muestra una temporal desregulación cuando el cuidador se marcha.\n\nNo puede continuar jugando o explorando con normalidad.\n\nMuestra ansiedad hasta que vuelve la figura de apego.\n\nCuando regresa, se calma rápidamente y vuelve a explorar con normalidad.\n\nEl **apego seguro** es la estructura interna que permite al niño, o posteriormente al adulto, regularse emocionalmente con una resolución satisfactoria."
+        },
+        {
+          "id": "l-0b61360",
+          "nom": "1.4 El apego evitativo",
+          "tipo": "texto",
+          "contenido": "El **apego evitativo** muestra muy poco estrés cuando el cuidador se marcha.\n\nNo busca proximidad cuando regresa.\n\nEvita activamente el contacto.\n\nSu atención está más orientada hacia los objetos que hacia las personas y las relaciones.\n\nSu comportamiento se interpreta como una **estrategia defensiva**.\n\nEl niño redirige su atención hacia los objetos como una forma de mantener sus emociones manejables y controlables.\n\nSabe que sus necesidades emocionales no van a ser cubiertas.\n\nSu independencia enmascara *afecto suprimido* más que una regulación óptima."
+        },
+        {
+          "id": "l-iyu7y8a",
+          "nom": "1.6 El apego ansioso-ambivalente",
+          "tipo": "texto",
+          "contenido": "El **apego ansioso-ambivalente** muestra mucha ansiedad y preocupación incluso antes de que el cuidador se marche.\n\nReacciona intensamente a la separación.\n\nCuando el cuidador vuelve, busca proximidad y confort.\n\nSin embargo, no consigue regularse.\n\nNo puede calmarse.\n\nMuestra enfado.\n\nNo vuelve a su estado anterior de juego y exploración.\n\nEsto se debe a una historia de respuestas inconsistentes por parte del cuidador.\n\nEl niño aprende que amplificar sus emociones y sus señales emocionales es la estrategia más efectiva para conseguir atención y cuidado.\n\nSin embargo, aunque obtiene atención, sigue sin ser suficiente para conseguir relajarse."
+        },
+        {
+          "id": "l-ti8pgoj",
+          "nom": "1.7 El apego desorganizado",
+          "tipo": "texto",
+          "contenido": "El **apego desorganizado o desorientado** muestra señales confusas y contradictorias cuando el cuidador se marcha y cuando vuelve.\n\nPuede congelarse, parecer que está en estado de trance o llorar intensamente sin buscar contacto visual.\n\nEste patrón suele encontrarse en niños con padres maltratadores, adictos o con enfermedades mentales.\n\nAquí aparece una contradicción fundamental: la misma persona que debería proveer seguridad es la fuente de sus miedos.\n\nPor ello, el **sistema de apego** y el **sistema de defensa** son activados simultáneamente por la misma figura.\n\nEsto produce un **colapso interno** de la capacidad de respuesta del niño, por esto no llegan a desarrollarse esquemas funcionales de la conducta."
+        }
+      ]
+    },
+    {
+      "title": "2. El trauma complejo",
+      "submodules": [
+        {
+          "id": "l-f6h0lra",
+          "nom": "2.1 La necesidad de una base segura",
+          "tipo": "texto",
+          "contenido": "Una base segura implica ayudar al niño a tomar conciencia de la información que proviene de su sistema de defensa: el miedo, el enfado y el dolor que experimenta. \n\nPara ello, el cuidador debe ser capaz de reconocer esos estados internos y traducirlos adecuadamente, incluso cuando haya sido el propio progenitor quien los haya provocado.\n\n---\n\nEsta función incluye legitimar las emociones del niño, nombrarlas correctamente y ayudarle a regularlas. De este modo, el niño desarrolla modelos internos más flexibles, sujetos a una revisión continua, lo que facilita la reparación de las experiencias relacionales y la construcción de vínculos más abiertos y seguros.\n\nUno de los resultados de la base segura es permitir un equilibrio saludable entre el sistema de apego y el sistema de desapego o exploración. El niño puede acercarse a los demás y alejarse cuando lo necesita sin experimentar ansiedad excesiva ni verse obligado a suprimir sus sentimientos para mantener la relación."
+        },
+        {
+          "id": "l-akgkkfx",
+          "nom": "2.2 El vacío interno",
+          "tipo": "texto",
+          "contenido": "Los modelos que conceptualizan el **trauma complejo** describen las estructuras internas de la persona como una serie de espacios o \"celdas\" que deberían haber sido llenados mediante respuestas adecuadas del cuidador. \n\nCuando las respuestas han sido insuficientes, inadecuadas o ausentes, dichas celdas permanecen vacías y se experimentan subjetivamente como un vacío interno.\n\n---\n\nAl haber sido construidas sobre la ausencia de respuesta, estas áreas carecen de una base sólida. Además, los vacíos no permanecen estáticos: tienden a expandirse e incluso pueden erosionar o destruir las áreas que sí fueron adecuadamente desarrolladas. \n\nEl resultado no es una estructura interna parcialmente completa, sino una colapsada.\n\n---\n\nEl vacío representa tanto la información más valiosa como la más peligrosa de la experiencia interna de la persona traumatizada. \n\nExpresa las privaciones sufridas en las relaciones tempranas, una de las experiencias más dolorosas que puede vivir un ser humano. \n\nGenera sentimientos de vulnerabilidad extrema, enfado y terror existencial, que pueden manifestarse en el ámbito psicosomático, somático, cognitivo y conductual. \n\nJunto a ello aparecen también las creencias negativas sobre uno mismo y sobre los demás, que constituyen otra fuente importante de sufrimiento."
+        },
+        {
+          "id": "l-x6mi5o0",
+          "nom": "2.3 Afrontar el vacío",
+          "tipo": "texto",
+          "contenido": "*El dolor de estos vacíos resulta tan intenso, que la mente se aferra a cualquier actividad para silenciarlo.*\n\nDesde esta perspectiva, conductas como el autodaño no se entienden como una aberración irracional, sino como *intentos comprensibles de sustituir un sufrimiento considerado intolerable por otro que parece más manejable.*\n\n---\n\nLa recuperación requiere un proceso diferente: mirar directamente al vacío, comprenderlo dentro de su contexto relacional e histórico, asumir la realidad de la experiencia vivida y permitir que el dolor sea sentido y atravesado. \n\nSolo así puede integrarse la experiencia traumática y abrirse un camino hacia la sanación."
+        }
+      ]
+    }
+  ]
+}

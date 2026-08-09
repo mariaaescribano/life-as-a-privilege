@@ -1,0 +1,448 @@
+{
+  "id": "0defc9ea-cd2c-40a3-b6f1-eda4180b9d5b",
+  "modalidad": "medicinachina",
+  "titulo": "Diagnóstico de la lengua 舌诊",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Cómo usar este curso",
+      "submodules": [
+        {
+          "id": "l-fze0eye",
+          "nom": "1.1 Introducción",
+          "tipo": "texto",
+          "contenido": "Este curso está diseñado para llevarte **desde los conceptos más básicos hasta la interpretación completa de la lengua** según la **Medicina Tradicional China**.\n\nEl **orden de aprendizaje es importante**. Primero comprenderás **qué observas** y **por qué es relevante**, después aprenderás el **método de observación** y, más adelante, estudiarás cada una de las capas de información por separado: **el color**, la **forma**, la **saburra**, la **humedad** y las **venas sublinguales**.\n\nUna vez dominados estos conceptos, aprenderás a **integrarlos** para identificar **patrones energéticos completos**, que es donde realmente comienza el proceso diagnóstico dentro de la **MTC**.\n\n---\n\n> **Importante:** el **diagnóstico por la lengua** es una herramienta de valoración propia de la **Medicina Tradicional China**. No constituye un **diagnóstico médico occidental** ni sustituye la atención sanitaria o la evaluación de un profesional de la salud.\n\n> Este material tiene un **fin exclusivamente formativo**. Para realizar valoraciones clínicas o tomar decisiones terapéuticas es necesaria una **formación reglada** y, ante cualquier signo o síntoma de enfermedad, la valoración de un **profesional sanitario cualificado**."
+        }
+      ]
+    },
+    {
+      "title": "2. Las bases",
+      "submodules": [
+        {
+          "id": "l-73v0l2p",
+          "nom": "2.1 La lengua",
+          "tipo": "texto",
+          "contenido": "En **Medicina Tradicional China**, la **boca**, los **dientes** y la **lengua** no sirven únicamente para comer y hablar: también son importantes **indicadores del estado interno del organismo**.\n\nLa **lengua** refleja el estado interno de los **órganos Zang-Fu** y, especialmente, el del **Qi del Estómago**, la **Sangre**, los **Fluidos Corporales** y los patrones de **calor** y **frío**.\n\n---\n\nEl **Bazo** y el **Estómago** son los responsables de la **digestión**, la **absorción** y la **distribución de los nutrientes**, y se dice que **\"se abren en la boca\"**. Por ello, su estado energético se refleja en el **gusto**, la **saliva** y la **salud bucal**.\n\nEl **Riñón** gobierna los **huesos** y, como los **dientes** se consideran una prolongación de estos, su desarrollo, fortaleza y deterioro dependen de la **Esencia (Jing)** almacenada en el Riñón.\n\nLa **lengua** está gobernada por el **Corazón**, ya que el **Qi del Corazón** hace posible el **gusto**, el **habla** y la expresión del **Shen** (*espíritu o brillo vital*). Sin embargo, **todos los órganos Zang-Fu** dejan su huella en la lengua, motivo por el cual su observación constituye uno de los métodos diagnósticos más importantes de la **MTC**.\n\n> *\"La lengua es el brote del Corazón y el espejo de las vísceras.\"*\n\n---\n\n### **¿Qué refleja cada órgano en la lengua?**\n\n* **Corazón:** el **color** de la lengua y el **Shen** (*brillo vital*).\n* **Bazo y Estómago:** la **saburra** o capa lingual.\n* **Riñón:** la **raíz de la humedad** y el estado de los **fluidos corporales**.\n* **Hígado:** la **forma** y el **movimiento** de la lengua.\n"
+        },
+        {
+          "id": "l-cbskb88",
+          "nom": "2.2 El método de observación",
+          "tipo": "texto",
+          "contenido": "**¿Cuándo observar la lengua?**\n\nLo ideal es realizar la observación **por la mañana**, **antes de comer o beber**.\n\nLos alimentos y las bebidas pueden modificar temporalmente el **color de la lengua** y de la **saburra**, dificultando una valoración fiable.\n\n---\n\n**¿Cómo observar la lengua?**\n\n* Siempre que sea posible, utilizar **luz natural**.\n* La persona debe **sacar la lengua de forma relajada**, sin forzarla ni tensarla.\n* La lengua debe mantenerse fuera **solo unos segundos**, ya que una exposición prolongada puede alterar su color.\n\n---\n\n**Orden recomendado de observación**\n\nPara no pasar por alto ningún detalle, se recomienda seguir siempre el mismo orden:\n\n1. **Color del cuerpo de la lengua**, que aporta información sobre el **Yin**, el **Yang**, el **Calor** y el **Frío**.\n\n2. **Forma del cuerpo de la lengua**, relacionada con los patrones de **Plenitud** (*Lleno*) y **Deficiencia** (*Vacío*).\n\n3. **Saburra o capa lingual**, que refleja principalmente el estado del **Estómago** y la presencia de **factores patógenos**.\n\n4. **Humedad** de la lengua.\n\n5. **Venas sublinguales**, observadas en la parte inferior de la lengua.\n\n---\n\nAlgunos factores pueden producir **falsos positivos** y modificar temporalmente el aspecto de la lengua.\n\nEntre los más frecuentes se encuentran:\n\n* Alimentos y bebidas que tiñen la lengua, como el **café**, la **remolacha**, los **caramelos de colores** o la **cúrcuma**.\n* **Fumar**.\n* **Cepillarse** o **rasparse la lengua** inmediatamente antes de la exploración.\n\n> **Importante:** si observas un color inusual, pregunta siempre qué ha **comido**, **bebido** o si ha realizado alguna higiene lingual antes de la valoración."
+        },
+        {
+          "id": "l-3pfeua5",
+          "nom": "2.3 El mapa de la lengua",
+          "tipo": "texto",
+          "contenido": "En **Medicina Tradicional China**, cada zona de la **lengua** se relaciona con un grupo de **órganos Zang-Fu**. Por ello, no solo es importante observar el color o la forma de la lengua, sino también **en qué parte aparecen los cambios**.\n\nLa distribución clásica es la siguiente:\n\n* **La punta** corresponde al **Corazón** y al **Pulmón**.\n\n* **La zona central** refleja principalmente el estado del **Bazo** y el **Estómago**.\n\n* **Los laterales** se relacionan con el **Hígado** y la **Vesícula Biliar**.\n\n* **La raíz** o parte posterior de la lengua corresponde al **Riñón**, la **Vejiga Urinaria** y los **Intestinos**.\n\n* **El área del pecho**, situada entre la punta y el centro, a ambos lados de la lengua, se relaciona con el **Pulmón**, el **Corazón** y, en las mujeres, con la **mama**.\n\n---\n\n**Cómo interpretar las distintas zonas**\n\nAlgunos ejemplos clásicos son:\n\n* **Punta roja:** indica **Calor en el Corazón**.\n* **Saburra gruesa en el centro:** sugiere **Humedad en el Bazo**.\n* **Lados púrpuras:** indican **estasis de Sangre del Hígado**.\n* **Raíz pelada** (sin saburra): orienta hacia una **deficiencia de Yin del Riñón**."
+        }
+      ]
+    },
+    {
+      "title": "3. El color",
+      "submodules": [
+        {
+          "id": "l-s7ijje3",
+          "nom": "3.1 El color del cuerpo de la lengua",
+          "tipo": "texto",
+          "contenido": "El **color del cuerpo de la lengua** refleja principalmente el estado de la **Sangre**, el equilibrio entre **Yin y Yang** y la presencia de patrones de **Calor** o **Frío**.\n\nEs, probablemente, **la información más importante** que obtenemos durante la observación de la lengua.\n\nEl color fisiológico es un **rojo pálido uniforme** (rosado). A partir de este punto, cualquier variación aporta información diagnóstica."
+        },
+        {
+          "id": "l-plpqbdt",
+          "nom": "3.2 La lengua pálida",
+          "tipo": "texto",
+          "contenido": "Una **lengua pálida** suele indicar una **deficiencia de Sangre** o una **deficiencia de Yang**.\n\nLa lengua pierde color porque:\n\n* No llega suficiente **Sangre** para nutrirla (**deficiencia de Sangre**).\n\n* El **Yang** está debilitado y no consigue impulsar la Sangre hasta la lengua (**deficiencia de Yang**).\n\n---\n\n**Claves clínicas**\n\n* Si la lengua está **muy pálida** o además presenta un aspecto **muy húmedo**, suele orientar hacia una **deficiencia de Yang del Riñón**, donde el **Fuego Ministerial** no proporciona el calor suficiente.\n\n* Si únicamente los **laterales** aparecen pálidos, es frecuente pensar en una **deficiencia de Sangre del Hígado**.\n\n* En términos generales, la lengua por sí sola **no permite identificar con precisión qué órgano** está implicado en una deficiencia de Sangre. En las deficiencias de Yang, el proceso suele comenzar en el **Bazo** y, cuando se cronifica, puede afectar también al **Riñón**."
+        },
+        {
+          "id": "l-32cabjn",
+          "nom": "3.3. La lengua roja",
+          "tipo": "texto",
+          "contenido": "Una **lengua roja** indica la presencia de **Calor patológico**.\n\nLa primera pregunta que debe hacerse es:\n\n**¿La lengua conserva saburra o no?**\n\n* **Roja con saburra:** indica **Calor Pleno** (*patrón de plenitud*).\n\n* **Roja sin saburra:** indica **Calor por Vacío**, originado por una **deficiencia de Yin**.\n\nLa clave está en que **ambos patrones producen Calor**, pero la **ausencia de saburra** revela que el origen del problema es la insuficiencia de **Yin**.\n"
+        },
+        {
+          "id": "l-gmtqz52",
+          "nom": "3.4 La lengua rojo oscuro",
+          "tipo": "texto",
+          "contenido": "Una lengua de color **rojo oscuro** indica un **Calor más intenso**, ya sea por un exceso importante de Calor o por un **Calor por deficiencia de Yin** especialmente avanzado.\n\n**Calor (*Re*) y Fuego (*Huo*): una diferencia importante**\n\nAunque a menudo se utilizan como sinónimos, en **Medicina Tradicional China** no significan exactamente lo mismo, especialmente en **fitoterapia**.\n\n---\n\nEl **Fuego** representa un grado de Calor mucho más intenso y seco.\n\nPuede manifestarse con:\n\n* **Sensación intensa de calor**.\n\n* **Sed marcada**.\n\n* **Sequedad importante**, con orina oscura, heces secas y lengua seca.\n\n* Alteraciones del **Shen**, como **agitación**, **inquietud mental** o **insomnio**.\n\n* Tendencia a provocar **hemorragias**, como epistaxis, sangre al toser, hematemesis o sangre en la orina o las heces.\n\nEn la lengua suele observarse una coloración **roja intensa** acompañada de una **saburra gruesa**, **seca**, **amarilla**, **marrón** o incluso **negra**."
+        },
+        {
+          "id": "l-j0yoapk",
+          "nom": "3.5 La lengua púrpura",
+          "tipo": "texto",
+          "contenido": "Una **lengua púrpura** indica, en la mayoría de los casos, una **estasis de Sangre**.\n\n* Suele desarrollarse lentamente, por lo que generalmente refleja un proceso **crónico**.\n\n* Las principales excepciones son los **traumatismos** y las **cirugías**, donde la coloración púrpura puede aparecer en cuestión de horas o pocos días.\n\n* El tono púrpura puede ser muy discreto. Si una lengua **no parece normal**, pero tampoco claramente **pálida** ni **roja**, conviene sospechar una **estasis de Sangre leve**.\n\n* Es uno de los hallazgos más importantes en la práctica clínica, ya que la estasis de Sangre puede estar presente en enfermedades como la **cardiopatía coronaria**, algunos **cánceres** o el **ictus**.\n\n---\n\n* La intensidad del color también ayuda a valorar la gravedad:\n\n  * **Púrpura claro:** estasis leve.\n\n  * **Púrpura intenso:** estasis importante."
+        },
+        {
+          "id": "l-swhxxqm",
+          "nom": "3.6 Particularidades en la mujer",
+          "tipo": "texto",
+          "contenido": "Cuando los **laterales** de la lengua presentan una tonalidad **púrpura**, suele ser más frecuente que reflejen una **estasis de Sangre en el útero** que una alteración del propio **Hígado**.\n\nEs importante recordar que una **estasis leve** puede existir aunque la lengua todavía no haya adquirido una coloración púrpura evidente. Por ejemplo, en mujeres con **menstruaciones dolorosas**, **sangre oscura** o **coágulos**.\n\nAsimismo, una coloración **púrpura** en el **área del pecho** puede asociarse a una **estasis de Sangre en la mama**. Cuanto más oscura sea esta zona, mayor suele ser la gravedad del proceso, por lo que merece una observación especialmente cuidadosa."
+        },
+        {
+          "id": "l-ll07s4q",
+          "nom": "3.7 La lengua azul-púrpura",
+          "tipo": "texto",
+          "contenido": "Una lengua de color **azul-púrpura** suele indicar un **estancamiento producido por frío**, donde la circulación de la **Sangre** y del **Qi** se ralentiza debido a la insuficiencia de calor."
+        }
+      ]
+    },
+    {
+      "title": "4. La forma ",
+      "submodules": [
+        {
+          "id": "l-t84w4ae",
+          "nom": "4.1 La forma del cuerpo de la lengua",
+          "tipo": "texto",
+          "contenido": "La **forma del cuerpo de la lengua** aporta información sobre si un patrón es de **Plenitud (Lleno)** o **Deficiencia (Vacío)**, así como sobre su gravedad.\n\nSiempre debe interpretarse junto al **color** de la lengua.\n\n**Regla de oro:** el significado de una forma depende del **color**. Por ejemplo, una **lengua fina** indica **deficiencia de Sangre** si es **pálida**, mientras que sugiere **deficiencia de Yin** cuando aparece **sin saburra**."
+        },
+        {
+          "id": "l-600js89",
+          "nom": "4.2 La lengua fina",
+          "tipo": "texto",
+          "contenido": "Una **lengua fina** indica una **falta de sustancia**.\n\nPuede corresponder a:\n\n* **Deficiencia de Sangre**, si la lengua es **pálida**.\n\n* **Deficiencia de Yin**, si la lengua está **pelada** o carece de saburra.\n\nCuanto más fina sea la lengua, mayor suele ser la gravedad del cuadro.\n\n**Ejemplo:** una lengua **pálida**, **seca** y **fina** orienta hacia una **deficiencia severa de Sangre**.\n\n---\n\nAunque la **deficiencia de Sangre** es muy frecuente, especialmente en mujeres, una lengua fina no siempre está presente.\n\nEsto ocurre porque muchas personas también presentan **humedad** o **flema**, que provocan una **hinchazón** de la lengua y pueden ocultar este signo.\n\n> **Importante:** una **lengua hinchada no descarta una deficiencia de Sangre**. Ambos patrones pueden coexistir."
+        },
+        {
+          "id": "l-7w9icwz",
+          "nom": "4.3 La lengua hinchada",
+          "tipo": "texto",
+          "contenido": "Una **lengua hinchada** indica la presencia de **humedad** o **flema**.\n\nEl aumento del tamaño del cuerpo lingual refleja la acumulación de un **factor patógeno**, aunque dicho factor pueda haberse originado sobre una **deficiencia de Qi del Bazo**.\n\nEs decir, la causa puede ser una deficiencia, pero la **hinchazón** corresponde a un **patrón de exceso**, ya que existe una acumulación de sustancias que no deberían estar presentes."
+        },
+        {
+          "id": "l-wjavej5",
+          "nom": "4.4 La lengua con marcas de dientes ",
+          "tipo": "texto",
+          "contenido": "La presencia de **marcas de dientes** en los bordes de la lengua suele indicar una **deficiencia de Qi del Bazo**.\n\nHabitualmente se acompaña de una **lengua pálida** y una **saburra blanca y fina**."
+        },
+        {
+          "id": "l-ll2rnb3",
+          "nom": "4.5 La lengua agrietada",
+          "tipo": "texto",
+          "contenido": "En términos generales, una **lengua agrietada** suele indicar una **deficiencia de Yin**, aunque no todas las grietas tienen este significado.\n\nLa **localización** de la grieta ayuda a identificar qué órgano presenta la deficiencia.\n\n---\n\n**Grieta del Corazón**\n\nSe observa como una línea longitudinal en el centro de la lengua, que se extiende desde la raíz hacia la punta.\n\nSi es **superficial** y el color de la lengua es normal, no indica necesariamente una enfermedad del Corazón, sino una **predisposición constitucional al estrés mental y emocional**. Estas personas suelen vivir el estrés con mayor intensidad.\n\n---\n\n**Grietas del Pulmón**\n\nLas grietas situadas de forma bilateral suelen reflejar una **enfermedad pulmonar previa**, con frecuencia ocurrida durante la infancia.\n\nCon un tratamiento adecuado, estas grietas pueden hacerse progresivamente más superficiales."
+        },
+        {
+          "id": "l-3arzf0y",
+          "nom": "4.6 Los movimientos",
+          "tipo": "texto",
+          "contenido": "Además de la forma, también debe observarse el **movimiento** de la lengua.\n\n---\n\n**Lengua temblorosa**\n\nPresenta un temblor rápido y de poca amplitud.\n\nSuele indicar una **deficiencia de Bazo** y, en personas mayores, también puede asociarse a **Viento Interno**.\n\n---\n\n**Movimiento lateral involuntario**\n\nLa lengua se desplaza lentamente de un lado a otro sin que la persona sea consciente de ello. Este signo refleja una alteración neurológica o energética que merece valoración. Aunque puede pasar desapercibido durante mucho tiempo, suele indicar una pérdida del control fino de la musculatura lingual. Es importante observar si aparece de forma persistente o se acompaña de otros cambios en el habla, la deglución o los movimientos faciales, ya que esta información puede orientar su origen.\n\n---\n\n**Lengua desviada**\n\nAl sacar la lengua, esta se desvía de la línea media.\n\nSiempre indica la presencia de **viento interno**.\n\nEs un hallazgo frecuente tras un **ictus** o en enfermedades neurológicas como el **Parkinson**. En personas aparentemente sanas, constituye una **señal de alerta** que justifica una evaluación más profunda.\n\n---\n\n**Lengua rígida**\n\nUna **lengua rígida** suele asociarse a **Viento Interno** y puede observarse en cuadros como el **ictus** u otras alteraciones neurológicas importantes."
+        }
+      ]
+    },
+    {
+      "title": "5. La saburra (la capa lingual)",
+      "submodules": [
+        {
+          "id": "l-kj0364j",
+          "nom": "5.1 Qué es",
+          "tipo": "texto",
+          "contenido": "La **saburra** es un subproducto de la actividad digestiva del **Estómago**. En condiciones normales debe ser **fina**, **blanca**, tener **raíz** y permitir ver el cuerpo de la lengua por debajo.\n\nSu observación aporta información sobre el estado del **Qi del Estómago** y sobre la presencia de **factores patógenos**."
+        },
+        {
+          "id": "l-hus6rq4",
+          "nom": "5.2 La raíz de la saburra",
+          "tipo": "texto",
+          "contenido": "La primera pregunta que debemos hacernos no es el color ni el grosor, sino si la **saburra tiene raíz**.\n\nSe dice que una saburra tiene **raíz** cuando parece nacer del cuerpo de la lengua, igual que la hierba crece desde la tierra.\n\n---\n\n**Saburra con raíz**\n\nIndica que el **Qi del Estómago** permanece intacto.\n\nAunque la saburra sea patológica por su color o grosor, la capacidad funcional del Estómago todavía se conserva.\n\n**Ejemplo:** una **saburra amarilla y gruesa** indica **Calor en el Estómago**, pero si mantiene la raíz, el Qi del Estómago sigue siendo fuerte.\n\n---\n\n**Saburra sin raíz**\n\nLa ausencia de raíz o la desaparición de la saburra indican una **deficiencia de Qi** y/o **Yin del Estómago**.\n\n> **Regla práctica:** siempre es mejor encontrar una **saburra patológica con raíz** que una **lengua sin raíz**, ya que el primer caso suele responder mejor al tratamiento."
+        },
+        {
+          "id": "l-o1a7f7s",
+          "nom": "5.3 Las cuatro combinaciones principales",
+          "tipo": "texto",
+          "contenido": "**Saburra fina, blanca y con raíz**\n\nCorresponde a una **lengua normal** y refleja un **Qi del Estómago fuerte**.\n\n---\n\n**Saburra fina, blanca y sin raíz**\n\nIndica una **deficiencia del Qi del Estómago** y un **patrón de Vacío**.\n\n---\n\n**Saburra gruesa y con raíz**\n\nExiste un **factor patógeno**, pero el **Qi del Estómago** continúa siendo fuerte.\n\nCorresponde a un **patrón de Plenitud**.\n\n---\n\n**Saburra gruesa y sin raíz**\n\nEs la combinación más desfavorable.\n\nExiste un **factor patógeno** al mismo tiempo que una **deficiencia del Qi del Estómago**.\n\nEn otras palabras, conviven un **patrón de Plenitud** y un **patrón de Vacío**.\n\n---\n\n**Aplicación al tratamiento**\n\n* Si la saburra es **gruesa**, normalmente se comienza eliminando el **factor patógeno**.\n\n* Si la saburra es **fina y sin raíz**, suele priorizarse la **tonificación del Qi**."
+        },
+        {
+          "id": "l-opers87",
+          "nom": "5.4 El color de la saburra",
+          "tipo": "texto",
+          "contenido": "El color de la saburra refleja principalmente patrones de **calor** y **frío**, especialmente en los **órganos Yang (Fu)**.\n\n* **Blanca:** suele indicar **frío** o un proceso **externo**.\n\n* **Amarilla** o **marrón:** indica **calor**.\n\n* **Gris:** suele corresponder a procesos **internos** y **crónicos**.\n\n* **Negra:** refleja una alteración interna importante, ya sea por **calor extremo** o **frío extremo**, dependiendo de si la saburra está **seca** o **húmeda**.\n\n> **Importante:** el color de la saburra puede modificarse rápidamente por factores externos, por lo que resulta menos fiable que el color del cuerpo de la lengua para valorar patrones crónicos. Su utilidad es mayor en procesos **agudos**."
+        },
+        {
+          "id": "l-tij9x7b",
+          "nom": "5.5 La ausencia de saburra ",
+          "tipo": "texto",
+          "contenido": "La **deficiencia de Yin** suele desarrollarse lentamente, a lo largo de meses o años, y la lengua permite valorar su evolución.\n\n**Primera etapa:** la saburra pierde su **raíz**, aunque todavía permanece presente.\n\n**Segunda etapa:** aparecen zonas donde la saburra ha desaparecido parcialmente.\n\n**Tercera etapa:** la lengua queda completamente **pelada**, sin saburra."
+        },
+        {
+          "id": "l-pcczi3u",
+          "nom": "5.6 La evolución",
+          "tipo": "texto",
+          "contenido": "La evolución de la saburra también aporta información pronóstica.\n\nSon signos favorables:\n\n* Que una lengua pelada recupere la saburra de forma gradual.\n\n* Que una saburra gruesa vaya disminuyendo progresivamente.\n\nPor el contrario, la aparición o desaparición **brusca** y **parcial** de la saburra suele considerarse un signo desfavorable. La zona donde ocurre ayuda a localizar el órgano afectado."
+        },
+        {
+          "id": "l-ta11jvv",
+          "nom": "5.7 La textura de la saburra",
+          "tipo": "texto",
+          "contenido": "Además del color y el grosor, también debe valorarse su textura.\n\n* **Grasosa o pegajosa:** indica **Humedad** o **Flema**.\n\n* **Seca:** indica **Calor** que ha lesionado los **Fluidos Corporales** o un estado importante de sequedad.\n\n* **Viscosa o resbaladiza:** suele indicar **Humedad-Calor**.\n\n* **Pelada:** orienta hacia una **deficiencia de Qi y Yin del Estómago**.\n\n* **Con raíz:** refleja un **Qi del Estómago fuerte**.\n\n* **Flotante o sin raíz:** indica un **Qi del Estómago debilitado**."
+        }
+      ]
+    },
+    {
+      "title": "6. Puntos y venas",
+      "submodules": [
+        {
+          "id": "l-h1zqiag",
+          "nom": "6.1 Los puntos rojos",
+          "tipo": "texto",
+          "contenido": "Los **puntos rojos** son una alteración de las **papilas fungiformes**, conocidas clásicamente como los **\"granos rojos\"** de la lengua.\n\nEn condiciones normales, estas papilas permanecen al mismo nivel que la superficie lingual y reflejan el **Fuego Ministerial fisiológico** del **Riñón**.\n\nCuando este fuego aumenta de forma patológica, asciende hacia la lengua, enrojece las papilas y hace que sobresalgan, transformándolas en **puntos** o **manchas rojas**.\n\n---\n\nLos **puntos rojos** indican siempre la presencia de **calor**.\n\nSu **localización** ayuda a identificar el órgano afectado.\n\n**Ejemplo:** puntos rojos en el **área del pecho** pueden indicar **calor tóxico** en el **Pulmón** o, en las mujeres, en la **mama**."
+        },
+        {
+          "id": "l-typo18d",
+          "nom": "6.2 Vesículas blancas",
+          "tipo": "texto",
+          "contenido": "Las **vesículas blancas** corresponden también a papilas fungiformes que sobresalen de la superficie, pero presentan una coloración **blanca**.\n\nSuelen indicar la presencia de **humedad**."
+        },
+        {
+          "id": "l-vjs014d",
+          "nom": "6.3 Venas",
+          "tipo": "texto",
+          "contenido": "**Venas sublinguales**\n\nLa observación de las **venas situadas debajo de la lengua** debería formar parte de toda exploración lingual.\n\nEn condiciones normales:\n\n* Apenas son visibles.\n* No están dilatadas.\n* No presentan una coloración oscura.\n\n---\n\n**Venas púrpuras**\n\nLa presencia de **venas sublinguales púrpuras** suele indicar una **estasis de Sangre** en fases tempranas.\n\nDe hecho, este signo puede aparecer **antes** de que el resto de la lengua adquiera una coloración púrpura.\n\nEs especialmente útil para valorar alteraciones de los **calentadores superior y medio**.\n\n---\n\n**Correlación con enfermedades modernas**\n\nAlgunas alteraciones de las venas sublinguales presentan una buena correlación con determinadas patologías:\n\n* **Venas de color púrpura oscuro:** pueden asociarse a **estasis de Sangre** en el **Corazón** y/o el **Pulmón** y, en algunos casos, al **endurecimiento de las arterias cerebrales**.\n\n* **Venas dilatadas, oscuras y tortuosas:** pueden observarse en personas con **arteriosclerosis** o **hipertensión arterial**.\n\n* Cuando estas venas sobresalen de forma muy marcada y adquieren un aspecto similar al de **lombrices**, suele indicar un proceso de mayor gravedad.\n\n* La presencia de **nódulos oscuros** en las venas, con aspecto de **granos de arroz o de trigo**, se ha relacionado con **endurecimiento arterial** y **cardiopatías**."
+        }
+      ]
+    },
+    {
+      "title": "7. La humedad",
+      "submodules": [
+        {
+          "id": "l-x90b2yf",
+          "nom": "7.1 La humedad de la lengua",
+          "tipo": "texto",
+          "contenido": "La **humedad** de la lengua refleja principalmente el estado de los **Fluidos Corporales**, así como el equilibrio entre el **Yin** y el **Yang**.\n\nUna lengua sana debe presentar una **humedad ligera y uniforme**, sin estar excesivamente seca ni mojada.\n\n---\n\n**Lengua húmeda**\n\nCorresponde al **estado fisiológico normal**.\n\nIndica que los **Fluidos Corporales** son suficientes y están correctamente distribuidos por el organismo.\n\n---\n\n**Lengua seca**\n\nUna **lengua seca** suele indicar la presencia de **Calor** o una **deficiencia de Yin**.\n\nLa disminución de los Fluidos Corporales impide mantener la humedad normal de la lengua.\n\n---\n\n**Lengua muy húmeda**\n\nCuando la lengua presenta un exceso de humedad o un aspecto claramente mojado, suele indicar **Frío** o una **deficiencia de Yang**.\n\nEn estos casos, el organismo no transforma ni moviliza correctamente los líquidos, favoreciendo su acumulación.\n\n---\n\n**Lengua brillante o \"lacada\"**\n\nUna lengua con un aspecto muy **brillante**, liso y brillante como si estuviera **barnizada** o **lacada**, indica un **colapso de Yin**.\n\nEste hallazgo refleja un agotamiento profundo de los **fluidos corporales** y constituye un signo de gran importancia clínica."
+        }
+      ]
+    },
+    {
+      "title": "8. Los patrones completos",
+      "submodules": [
+        {
+          "id": "l-hcdqr7q",
+          "nom": "8.1 Combinaciones frecuentes",
+          "tipo": "texto",
+          "contenido": "En la práctica clínica, **raramente se interpreta un único signo de forma aislada**. Lo habitual es combinar el **color**, la **forma**, la **saburra** y la **humedad** para identificar el patrón energético predominante.\n\nEstas son algunas de las combinaciones más frecuentes:\n\n* **Lengua pálida + fina + húmeda:** **deficiencia de Qi y de Yang**.\n\n* **Lengua roja + saburra amarilla:** **Calor Pleno** (por exceso).\n\n* **Lengua roja + sin saburra:** **deficiencia de Yin** con **Calor por Vacío**.\n\n* **Lengua púrpura + oscura:** **estasis de Sangre**.\n\n* **Lengua hinchada + saburra grasosa:** **Humedad-Flema**.\n\n* **Lengua agrietada + seca:** **daño del Yin**.\n\n* **Lengua temblorosa + pálida:** **deficiencia de Qi**.\n\n* **Saburra gruesa, amarilla y grasosa:** **Humedad-Calor**."
+        },
+        {
+          "id": "l-147vegn",
+          "nom": "8.2 Patrones frecuentes",
+          "tipo": "texto",
+          "contenido": "A medida que adquieras experiencia, empezarás a reconocer ciertos **patrones linguales** de un solo vistazo. Aunque la lengua nunca debe interpretarse de forma aislada, existen combinaciones que aparecen con frecuencia en determinados cuadros clínicos.\n\n**Deficiencia de Qi del Bazo:** **pálida**, con **marcas de dientes** y **saburra blanca y fina**.\n\n**Estancamiento de Qi del Hígado:** cuerpo de color prácticamente **normal**, pero con los **laterales ligeramente enrojecidos** y una apariencia **tensa**.\n\n**Deficiencia de Yin** (frecuente en personas con **burnout** o agotamiento prolongado): lengua **roja**, **seca**, **agrietada** y con **poca o ninguna saburra**.\n\n**Humedad-Calor** (frecuente, por ejemplo, en el **SOP** o en determinados trastornos digestivos): lengua con **saburra gruesa**, **amarilla** y **grasosa**.\n\n**Estasis de Sangre** (frecuente, por ejemplo, en la **endometriosis**): lengua **púrpura**, con **puntos** o **manchas oscuras**."
+        },
+        {
+          "id": "l-0iru6g0",
+          "nom": "8.3 ANEXO",
+          "tipo": "texto",
+          "contenido": "**Color del cuerpo de la lengua**\n\n* **Pálida:** **deficiencia de Sangre**, **Qi** o **Yang**.\n* **Rojo pálido (rosado):** estado **normal** y saludable.\n* **Roja:** **Calor**.\n* **Rojo oscuro:** **Calor por exceso** o **Calor por deficiencia de Yin**.\n* **Púrpura:** **estasis de Sangre**.\n* **Azul-púrpura:** **estancamiento por Frío**.\n\n---\n\n**Forma del cuerpo de la lengua**\n\n* **Fina:** **deficiencia de Sangre** o **deficiencia de Yin**.\n* **Hinchada:** **Humedad**, **Flema** o **deficiencia de Yang**.\n* **Hinchada con marcas de dientes:** **deficiencia de Qi del Bazo**.\n* **Agrietada:** **deficiencia de Yin** o daño de los **Fluidos Corporales**.\n* **Rígida:** **Viento Interno** o **ictus**.\n* **Desviada:** **Viento Interno** o **ictus**.\n* **Temblorosa:** **deficiencia de Qi** o **Viento del Hígado**.\n\n---\n\n**Color de la saburra**\n\n* **Blanca:** **Frío**.\n* **Amarilla:** **Calor**.\n* **Gris:** trastorno **crónico**.\n* **Negra:** **Calor extremo** o **Frío extremo**.\n\n---\n\n**Grosor de la saburra**\n\n* **Fina:** estado **normal** o condición **leve**.\n* **Gruesa:** presencia de un **factor patógeno**.\n* **Sin saburra:** **deficiencia de Yin del Estómago**.\n* **Pelada:** **deficiencia de Yin**.\n\n---\n\n**Textura de la saburra**\n\n* **Grasosa:** **Humedad** o **Flema**.\n* **Seca:** **Calor** que daña los **Fluidos Corporales**.\n* **Viscosa:** **Humedad-Calor**.\n* **Con raíz (enraizada):** buen **Qi del Estómago**.\n* **Sin raíz (flotante):** **Qi del Estómago** debilitado.\n\n---\n\n**Humedad de la lengua**\n\n* **Húmeda:** estado **normal**.\n* **Seca:** **Calor** o **deficiencia de Yin**.\n* **Muy húmeda (mojada):** **Frío** o **deficiencia de Yang**.\n* **Brillante (\"lacada\"):** **colapso de Yin**.\n\n---\n\n**Mapa de las zonas de la lengua**\n\n* **Punta:** **Corazón** y **Pulmón**.\n* **Centro:** **Bazo** y **Estómago**.\n* **Lados:** **Hígado** y **Vesícula Biliar**.\n* **Raíz:** **Riñón**, **Vejiga Urinaria** e **Intestinos**.\n* **Área del pecho** (entre el centro y la punta, en los laterales): **Pulmón**, **Corazón** y **mama** (en mujeres)."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-agltwal",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) La saburra.",
+                "B) El color del cuerpo.",
+                "C) La humedad."
+              ],
+              "enunciado": "¿Qué aspecto de la lengua aporta la información más importante sobre el estado del Yin, el Yang, el calor y el frío?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Calor Pleno.",
+                "B) Deficiencia de Yin con calor por vacío.",
+                "C) Deficiencia de Yang."
+              ],
+              "enunciado": "Una lengua roja sin saburra indica principalmente:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Deficiencia de Yang.",
+                "B) Estasis de Sangre.",
+                "C) Humedad-Calor."
+              ],
+              "enunciado": "¿Qué indica una lengua muy pálida y húmeda?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Lengua fina.",
+                "B) Lengua púrpura.",
+                "C) Lengua roja brillante."
+              ],
+              "enunciado": "¿Qué hallazgo orienta hacia una estasis de Sangre crónica?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Deficiencia de Sangre.",
+                "B) Humedad o Flema.",
+                "C) Calor por Vacío."
+              ],
+              "enunciado": "Una lengua hinchada refleja principalmente:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Que existe un exceso de Humedad.",
+                "B) Que el Qi del Estómago permanece conservado.",
+                "C) Que existe una deficiencia de Yin."
+              ],
+              "enunciado": "¿Qué significa que la saburra tenga raíz?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Frío.",
+                "B) Calor.",
+                "C) Deficiencia de Qi."
+              ],
+              "enunciado": "Una saburra gruesa y amarilla suele indicar:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Saburra gruesa con raíz.",
+                "B) Saburra fina sin raíz.",
+                "C) Saburra gruesa sin raíz."
+              ],
+              "enunciado": "¿Qué combinación se considera la más desfavorable?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Deficiencia de Yin sin calor por vacío.",
+                "B) Calor Pleno.",
+                "C) Estasis de Sangre."
+              ],
+              "enunciado": "Una lengua pelada con color normal indica:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Sequedad.",
+                "B) Humedad o Flema.",
+                "C) Viento Interno."
+              ],
+              "enunciado": "¿Qué suele indicar una saburra grasosa?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Humedad.",
+                "B) Daño del Yin.",
+                "C) Deficiencia de Yang."
+              ],
+              "enunciado": "¿Qué patrón sugiere una lengua agrietada y seca?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Riñón.",
+                "B) Corazón.",
+                "C) Pulmón."
+              ],
+              "enunciado": "¿Qué órgano suele relacionarse con una grieta central larga que alcanza la punta?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Viento Interno.",
+                "B) Deficiencia de Qi del Bazo.",
+                "C) Calor de Estómago."
+              ],
+              "enunciado": "Una lengua desviada al sacarla indica:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Roja intensa y seca.",
+                "B) Rojo pálido con saburra fina blanca.",
+                "C) Pálida sin saburra."
+              ],
+              "enunciado": "¿Qué aspecto tiene una lengua normal?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Colapso de Yin.",
+                "B) Humedad.",
+                "C) Deficiencia de Sangre."
+              ],
+              "enunciado": "¿Qué indica una lengua brillante o \"lacada\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Deficiencia de Qi.",
+                "B) Estasis de Sangre.",
+                "C) Calor por vacío."
+              ],
+              "enunciado": "Las venas sublinguales oscuras y dilatadas suelen indicar:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) La punta.",
+                "B) El centro.",
+                "C) La raíz."
+              ],
+              "enunciado": "¿Qué zona de la lengua corresponde al Bazo y al Estómago?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Calor en el Corazón.",
+                "B) Deficiencia de Yang del Riñón.",
+                "C) Estasis de Sangre del Hígado."
+              ],
+              "enunciado": "Una punta roja de la lengua orienta hacia:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Deficiencia de Qi o viento interno.",
+                "B) Humedad-Calor.",
+                "C) Estasis de Sangre."
+              ],
+              "enunciado": "Una lengua temblorosa suele indicar:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Lengua pálida, fina y húmeda.",
+                "B) Saburra gruesa, amarilla y grasosa.",
+                "C) Lengua roja sin saburra."
+              ],
+              "enunciado": "¿Cuál de las siguientes combinaciones corresponde a Humedad-Calor?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

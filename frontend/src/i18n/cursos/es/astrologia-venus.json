@@ -1,0 +1,451 @@
+{
+  "id": "b351e824-f359-4cf2-90c4-f5b9a7b22163",
+  "modalidad": "Astrología",
+  "titulo": "Venus",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Venus en la Astrología",
+      "submodules": [
+        {
+          "id": "l-5xezopg",
+          "nom": "El arquetipo de Venus",
+          "tipo": "texto",
+          "contenido": "*¿Crees que mereces disfrutar de la Vida? ¿Te da miedo tener el corazón abierto?*\n\nVenus habla de la **sensualidad**, del goce de la Vida y de aquello que nos **abre el corazón**. \n\nLa **casa** donde se encuentra Venus en nuestra carta natal muestra el área donde podemos encontrar mayor paz, armonía y satisfacción, pero también donde corremos el riesgo de idealizar y decepcionarnos más. \n\nEl **signo** de Venus describe cómo amamos, cómo seducimos, qué nos atrae y cómo atraemos. También habla de lo que **valoramos** en nosotros mismos y en los demás."
+        }
+      ]
+    },
+    {
+      "title": "2. Venus en los Signos",
+      "submodules": [
+        {
+          "id": "l-8nheakn",
+          "nom": "Venus en Aries",
+          "tipo": "texto",
+          "contenido": "*Impulsivo y conquistador.* \n\nAtraído por personas atléticas, fuertes y auténticas. No le gusta la monotonía y necesita conquistar, aunque sea a la misma persona una y otra vez; necesita ese fuego para mantener viva la relación y sentirse vivo él mismo. \n\nPuede buscar satisfacción inmediata y experimentar una gran intensidad emocional. \n\nEn negativo puede faltar consideración hacia los demás, por lo que necesita aprender a tomar conciencia de las necesidades del otro."
+        },
+        {
+          "id": "l-wxjnmj2",
+          "nom": "Venus en Tauro",
+          "tipo": "texto",
+          "contenido": "Busca **seguridad** y **estabilidad** por encima de todo. \n\n*Leal, fiel, sensual y táctil.* Puede ser posesivo o celoso. Disfruta de manera natural de los placeres de la Vida y sabe apreciar lo que le aporta bienestar. \n\nPuede ser muy cabezota y ganar peso con facilidad, pero cuando está bien integrado favorece una conexión positiva y profunda con su propio cuerpo y relaciones largas, sólidas y estables."
+        },
+        {
+          "id": "l-vct1lza",
+          "nom": "Venus en Géminis",
+          "tipo": "texto",
+          "contenido": "Necesita cambio constante y estimulación mental. El Amor se experimenta a través de la **curiosidad**, la **comunicación** y el juego antes que mediante la profundidad emocional.\n\nPuede aburrirse rápido y pasar de una experiencia a otra. No es necesariamente infiel, pero sí puede sentirse impulsado a atraer y luego marcharse, no por maldad, sino porque necesita seguir descubriendo. La sexualidad suele ser secundaria; lo importante es la conexión mental. \n\nMal integrado sí puede dar lugar a infidelidad, inconsistencia y superficialidad."
+        },
+        {
+          "id": "l-b9521ij",
+          "nom": "Venus en Cáncer",
+          "tipo": "texto",
+          "contenido": "**Idealista** y **sensible**, pero suele esconderse tras una coraza para que no se vea su vulnerabilidad. \n\nSus sentimientos están fuertemente influenciados por su familia y por su sensación de seguridad emocional y material. \n\nSe siente atraído por personas nutritivas, tiernas y emocionales. Necesita demostraciones de afecto y cercanía. \n\nEn negativo puede frustrarse fácilmente y volverse **excesivamente sensible**."
+        },
+        {
+          "id": "l-fnbvf1r",
+          "nom": "Venus en Leo",
+          "tipo": "texto",
+          "contenido": "Ama de forma intensa, a lo grande y, en ocasiones, de manera algo egoica. \n\nLe encanta compartir con su pareja aquello que ama: sus gustos, sus creaciones y aquello que le inspira. Necesita comodidad, Amor y admiración. \n\nEs naturalmente atractivo. Ama apasionadamente y espera recibir el mismo nivel de entrega.\n\nPuede buscar validación fuera de la relación si siente que no está siendo reconocido o apreciado."
+        },
+        {
+          "id": "l-b4pe7lz",
+          "nom": "Venus en Virgo",
+          "tipo": "texto",
+          "contenido": "*Limpio, analítico y contenido.* \n\nMuy **autocrítico**, puede rechazar la intimidad mientras la anhela en secreto. \n\nSuele mostrar su Amor señalando aquello que considera mejorable, creyendo que así está ayudando o cuidando al otro. \n\nTiene interés por la salud y el bienestar, además de una gran compasión hacia los más vulnerables. \n\nLa sexualidad puede convertirse en un conflicto difícil de comprender. Tiende a intentar \"arreglar\" al otro."
+        },
+        {
+          "id": "l-kojwpeo",
+          "nom": "Venus en Libra",
+          "tipo": "texto",
+          "contenido": "*Belleza, armonía y atractivo.* \n\nBusca mantener la **paz** y suele dar mucho para asegurarse de que los demás le necesiten. \n\nMuy **selecto**, puede frustrarse cuando el otro no cumple sus elevados ideales sobre el Amor. \n\nNecesita estimulación mental e intercambio de ideas. Busca relaciones comprometidas y armoniosas. \n\nEn negativo puede desarrollar una fuerte dependencia de los demás y terminar alejándose de lo verdaderamente importante: el Amor auténtico."
+        },
+        {
+          "id": "l-rrhwe05",
+          "nom": "Venus en Escorpio",
+          "tipo": "texto",
+          "contenido": "*Intensidad, profundidad y Amor transformador.* \n\nVive las relaciones como una **fusión profunda** entre dos almas. Consciente de la muerte y de los procesos de transformación, ama con pasión. \n\nRechaza la superficialidad y busca la esencia de las personas. Es frecuente que las relaciones le lleven a atravesar y conocer sus propias sombras. \n\nPuede volverse controlador, obsesivo o celoso. Necesita aprender el equilibrio para no devastarse a través del Amor."
+        },
+        {
+          "id": "l-bvx5p1n",
+          "nom": "Venus en Sagitario",
+          "tipo": "texto",
+          "contenido": "*Idealista y de corazón abierto.* \n\nPara él, el Amor es un viaje de descubrimiento, crecimiento y propósito compartido. \n\nNecesita libertad. Es tolerante con los defectos, pero no soporta la pereza ni la falta de propósito. \n\nLas relaciones deben inspirar expansión y crecimiento mutuo. Odia la rutina y necesita movimiento, experiencias y aventuras. \n\nCuidado con el falso optimismo y con escapar constantemente hacia el futuro."
+        },
+        {
+          "id": "l-j55rc6r",
+          "nom": "Venus en Capricornio",
+          "tipo": "texto",
+          "contenido": "*Busca seguridad y fiabilidad.* \n\nPuede sentirse atraído por personas con autoridad o experiencia, percibiendo a la pareja como una figura de guía. \n\nEl miedo al rechazo puede hacer que parezca distante o reservado. Es muy sensual, aunque a menudo ha reprimido parte de su energía sexual. \n\nLeal y dedicado, suele apostar por **relaciones largas** y comprometidas. Experiencias pasadas de abandono pueden haberle llevado a desarrollar una actitud fría o calculadora.\n\nPrefiere **calidad antes que cantidad**. \n\nEn negativo puede aislarse y volverse excesivamente frío o preocupado."
+        },
+        {
+          "id": "l-8hot3ec",
+          "nom": "Venus en Acuario",
+          "tipo": "texto",
+          "contenido": "*Libertad, novedad y conexiones poco convencionales.* \n\nPuede **enamorarse de una idea** o de alguien que represente sus ideales. \n\nLa amistad suele ser el paso previo a una relación amorosa. Su sensualidad es calmada y serena. \n\nVive según sus **propias reglas** y valora profundamente que su libertad sea respetada. \n\nSuele resultar popular o interesante para los demás. \n\nEn negativo puede volverse muy cabezota, convencido de que sus ideas son las correctas, además de frío o arrogante."
+        },
+        {
+          "id": "l-tow6dp0",
+          "nom": "Venus en Piscis",
+          "tipo": "texto",
+          "contenido": "*Busca la unión incondicional.* \n\nAnhela un **Amor divino** que, al no encontrarlo plenamente en la Tierra, puede hacer que se sienta perdido o vacío. \n\n*Tierno, compasivo, sensitivo, espiritual y empático.* \n\nSuele sentirse atraído por personas heridas y puede intentar salvarlas, colocándose así en una posición donde resulta fácil salir herido. \n\nPuede sacrificarse por sus parejas o esperar que sean ellas quienes le salven. Necesita aprender límites sanos. \n\nEn negativo puede caer en el escapismo."
+        }
+      ]
+    },
+    {
+      "title": "3. Venus en las Casas",
+      "submodules": [
+        {
+          "id": "l-1gxmp3d",
+          "nom": "Venus en casa 1",
+          "tipo": "texto",
+          "contenido": "*Belleza, encanto y atractivo natural.* \n\nSuele ser una de las personas más agradables o atractivas de la habitación. Busca la conexión y formar vínculos con otros. Atrae parejas que le hacen sentir amado, valorado y apreciado. \n\nPuede desear ser **reconocido por su belleza, inteligencia o carisma.** \n\nExiste una tendencia a **distorsionar la realidad** para mantener la armonía y evitar el conflicto. \n\nGeneroso, amante del placer y de **disfrutar de la Vida.** \n\nPuede tener talentos artísticos que deja de lado por pereza o falta de iniciativa. \n\nEl propósito es aprender a no depender de la aprobación de otros para cultivar una autoestima auténtica."
+        },
+        {
+          "id": "l-gn4fwwg",
+          "nom": "Venus en casa 2",
+          "tipo": "texto",
+          "contenido": "*Atrae abundancia y bienestar.*\n\nTiene una apreciación natural por la **belleza**, el arte y la calidad. Carácter diplomático y justo. Suele tener una percepción positiva de la Vida y una capacidad especial para disfrutar de lo que tiene sin culpa. \n\nCuando no está bien integrado, puede aparecer el **miedo a la pérdida material** o una preocupación constante por la seguridad económica. El pensamiento de \"¿y si lo pierdo todo?\" puede acabar atrayendo experiencias de carencia. \n\nSu propósito es aprender a equilibrar la gratitud por lo que ya existe con la generosidad y la confianza en la Vida. Aprender el desapego al dinero."
+        },
+        {
+          "id": "l-16mw5mj",
+          "nom": "Venus en casa 3",
+          "tipo": "texto",
+          "contenido": "*Facilidad para comunicarse y aprender.* \n\nEn negativo puede traer conflictos con hermanos, vecinos o personas del entorno cercano. \n\n**Ama y seduce a través de las palabras**, utilizando diplomacia, encanto y una forma de expresarse poco amenazante. \n\nDisfruta de los viajes cortos, las escapadas y el movimiento constante. \n\nLa **atracción intelectual** es fundamental, y suele conquistar a otros por la forma en que piensa y comunica."
+        },
+        {
+          "id": "l-s6chk29",
+          "nom": "Venus en casa 4",
+          "tipo": "texto",
+          "contenido": "*Familia, hogar y seguridad emocional.* \n\nTiene la capacidad de crear un hogar armonioso, bello y acogedor, y se nutre emocionalmente de hacerlo. \n\n**La infancia puede haber sido idealizada** o recordada con más dulzura de la que realmente tuvo. \n\nSi te quiere, pasas a formar parte de su familia. Puede sentir interés por sus raíces, sus ancestros y la historia familiar. \n\nExiste potencial para recibir apoyo o herencias familiares y suele ser conservador con el dinero. \n\nEn negativo, puede tener **dificultades para identificar lo que realmente siente.**"
+        },
+        {
+          "id": "l-2vrom8d",
+          "nom": "Venus en casa 5",
+          "tipo": "texto",
+          "contenido": "*Talento natural para la creatividad, el arte y la expresión personal.* \n\n**Atractivo, estiloso y profundamente enamorado del Amor.**\n\nApasionado. Puede sentir que solo está realmente vivo cuando existe romance en su Vida. \n\nLos niños suelen ocupar un lugar importante; en ocasiones puede proyectar sobre ellos deseos o sueños que no ha cumplido, e incluso generar dinámicas de competencia. \n\nTiene una gran **necesidad de admiración y reconocimiento.** \n\nEn negativo puede buscar constantemente la emoción de la conquista, favoreciendo conductas infieles."
+        },
+        {
+          "id": "l-wcdwk2u",
+          "nom": "Venus en casa 6",
+          "tipo": "texto",
+          "contenido": "Se siente cómodo en entornos tranquilos y funcionales, trabajando desde casa. \n\n**Elegante y relajado.** \n\nExiste un fuerte **deseo de cultivar sus talentos y hacer las cosas bien**, no simplemente hacerlas. Interés por la salud, el bienestar, el autocuidado y el cuidado hacia los demás. \n\nDetallista y observador. Puede encontrar dificultades para abrirse emocionalmente, mostrándose tímido o reservado. \n\n**Ama a través del servicio**, siendo útil, atento y dedicado. \n\nCuidado con somatizar conflictos internos. Puede sentir que **no es suficientemente válido o que debe ganarse el Amor a través del esfuerzo.**"
+        },
+        {
+          "id": "l-obw9rfy",
+          "nom": "Venus en casa 7",
+          "tipo": "texto",
+          "contenido": "*Se descubre a sí mismo a través de sus relaciones*, y la Vida suele tener más sentido cuando es compartida. \n\nProyecta tanto sus virtudes como sus defectos en la pareja, utilizándola como espejo para conocerse mejor. \n\n**Puede idealizar el Amor y cómo debería ser una relación**, cayendo en la decepción cuando la realidad no coincide con sus expectativas. \n\nSu aprendizaje consiste en aceptar que las relaciones requieren compromiso y trabajo. Puede enamorarse de la idea de la relación más que de la persona. \n\n*Tiene la capacidad de hacer que otros se sientan valorados y apreciados.* \n\nPor naturaleza busca y consigue la armonía, **suaviza conflictos y neutraliza rivalidades.**"
+        },
+        {
+          "id": "l-40g4jof",
+          "nom": "Venus en casa 8",
+          "tipo": "texto",
+          "contenido": "*Relaciones intensas y transformadoras.*\n\nPuede sentirse atraído por personas emocionalmente complejas, heridas o no disponibles. \n\nLas experiencias de pérdida, abandono o separación suelen convertirse en importantes catalizadores de crecimiento personal. \n\nSu mundo emocional es profundo y le obliga a **enfrentarse a sus propias sombras**. \n\nExiste una fascinación por la muerte, los misterios, lo oculto y todo aquello que permanece bajo la superficie. \n\nSeduce con facilidad; su **magnetismo** hace que otros bajen sus defensas y se entreguen. \n\nPuede beneficiarse económicamente a través de alianzas, herencias o recursos compartidos. \n\n*Su propósito es comprender que aquello que busca fuera ya existe dentro de sí mismo.*"
+        },
+        {
+          "id": "l-58vsaia",
+          "nom": "Venus en casa 9",
+          "tipo": "texto",
+          "contenido": "Encuentra paz y estabilidad a través de su **filosofía de Vida**, sus **creencias** y su manera de comprender el mundo. \n\nNaturalmente **optimista** y **generoso**. Busca placer, crecimiento y expansión a través de experiencias que amplíen sus horizontes. \n\nSe siente atraído por maestros, sabios, culturas extranjeras y personas que le enseñen nuevas formas de pensar. Puede enamorarse de alguien extranjero o construir una Vida lejos de su lugar de origen. \n\nTiene facilidad para **inspirar a otros**, transmitiendo pasión y entusiasmo por aquello en lo que cree. Honesto y justo. \n\nEn negativo, sus relaciones y experiencias emocionales pueden provocar cambios profundos en sus creencias y valores."
+        },
+        {
+          "id": "l-1hlvy7v",
+          "nom": "Venus en casa 10",
+          "tipo": "texto",
+          "contenido": "Se siente atraído por personas con **autoridad**, influencia o posición social. \n\nNaturalmente **encantador** y **elegante**, suele dejar una impresión positiva en quienes le rodean, ganándose admiración con facilidad. \n\nNecesita que su profesión le permita expresar sus talentos y recibir reconocimiento por ellos. Busca ser visto, valorado y apreciado por figuras de autoridad. \n\nPuede haber conflictos con la madre o una sensación de no haber recibido de ella la validación que necesitaba. En ocasiones busca parejas que encarnen cualidades asociadas a esa figura materna. \n\nPuede sentirse atraído por relaciones que aporten estatus, visibilidad o prestigio. \n\nEn negativo, puede obsesionarse con el reconocimiento externo y llegar a creer que necesita demostrar constantemente su valor."
+        },
+        {
+          "id": "l-vlau9nj",
+          "nom": "Venus en casa 11",
+          "tipo": "texto",
+          "contenido": "*Populares y agradables en los grupos.* \n\nSuelen atraer amistades valiosas, apoyo social y, en muchos casos, clientela femenina. \n\nNecesitan rodearse de personas leales y valoran profundamente la reciprocidad en las relaciones. Su autoestima puede estar muy vinculada a la aceptación y validación de su entorno. \n\nTienen grandes ideales sobre la amistad, la comunidad y el compromiso con los demás. Cuando esos ideales no se cumplen, pueden experimentar profundas decepciones. \n\nEncuentran placer en compartir sueños, proyectos y visiones de futuro con otros."
+        },
+        {
+          "id": "l-nso77v5",
+          "nom": "Venus en casa 12",
+          "tipo": "texto",
+          "contenido": "Las heridas emocionales y el sufrimiento se convierten en un camino hacia el desarrollo del Amor propio y la compasión. \n\n*Busca un Amor absoluto, incondicional y casi divino*; un ideal que rara vez puede encontrarse por completo en otro ser humano. \n\nPor ello, puede preferir la soledad o sentirse atraído por personas inaccesibles, ausentes o que terminarán rechazándole. Inconscientemente, puede aferrarse al anhelo antes que aceptar que ningún ser humano puede encarnar la perfección que busca. \n\nLos períodos de retiro y soledad suelen revelar talentos ocultos, sensibilidad artística o una profundidad espiritual. \n\nSiente una gran **compasión** por quienes han sido excluidos, rechazados o marginados por la sociedad. \n\nSu aprendizaje consiste en descubrir que el Amor que busca fuera siempre ha estado esperando dentro de sí."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-x84p6v1",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Venus en Escorpio",
+                "B) Venus en Piscis",
+                "C) Venus en casa 12",
+                "D) Venus en casa 5"
+              ],
+              "enunciado": "¿Qué Venus suele enamorarse de personas inaccesibles o que terminarán rechazándole?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Leo",
+                "B) Venus en Aries",
+                "C) Venus en Sagitario",
+                "D) Venus en casa 8"
+              ],
+              "enunciado": "¿Qué Venus necesita conquistar constantemente para mantener vivo el deseo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Libra",
+                "B) Venus en casa 7",
+                "C) Venus en Cáncer",
+                "D) Venus en casa 4"
+              ],
+              "enunciado": "¿Qué posición puede hacer que una persona se descubra a sí misma principalmente a través de sus relaciones?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Venus en Virgo",
+                "B) Venus en casa 6",
+                "C) Ambas son correctas",
+                "D) Venus en Capricornio"
+              ],
+              "enunciado": "¿Quién tiende a amar a través del servicio, siendo útil, atento y dedicado?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Tauro",
+                "B) Venus en casa 2",
+                "C) Venus en Capricornio",
+                "D) Venus en casa 10"
+              ],
+              "enunciado": "¿Qué Venus puede atraer abundancia, pero también desarrollar miedo a perderlo todo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Venus en Acuario",
+                "B) Venus en Libra",
+                "C) Venus en Géminis",
+                "D) Venus en Sagitario"
+              ],
+              "enunciado": "¿Qué Venus busca la conexión mental por encima de la intensidad emocional?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Venus en Escorpio",
+                "B) Venus en casa 8",
+                "C) Ambas son correctas",
+                "D) Venus en Piscis"
+              ],
+              "enunciado": "¿Qué posición suele generar fascinación por la muerte, los misterios y lo oculto?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Leo",
+                "B) Venus en casa 5",
+                "C) Venus en Aries",
+                "D) Venus en casa 1"
+              ],
+              "enunciado": "¿Qué Venus puede sentirse vivo únicamente cuando existe romance en su Vida?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Venus en Tauro",
+                "B) Venus en Sagitario",
+                "C) Venus en Acuario",
+                "D) Venus en Géminis"
+              ],
+              "enunciado": "¿Quién suele ser extremadamente leal, sensual y orientado a relaciones duraderas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Libra",
+                "B) Venus en casa 11",
+                "C) Venus en Leo",
+                "D) Venus en casa 3"
+              ],
+              "enunciado": "¿Qué posición puede indicar una persona popular que atrae amistades y apoyo social?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Capricornio",
+                "B) Venus en Virgo",
+                "C) Venus en Escorpio",
+                "D) Venus en casa 6"
+              ],
+              "enunciado": "¿Qué Venus puede mostrar Amor señalando aquello que considera mejorable?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Venus en Sagitario",
+                "B) Venus en casa 9",
+                "C) Ambas son correctas",
+                "D) Venus en Acuario"
+              ],
+              "enunciado": "¿Qué Venus suele sentirse atraído por culturas extranjeras, maestros y viajes?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Leo",
+                "B) Venus en casa 10",
+                "C) Venus en casa 11",
+                "D) Venus en Aries"
+              ],
+              "enunciado": "¿Qué posición puede indicar una fuerte necesidad de reconocimiento profesional y social?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Piscis",
+                "B) Venus en Escorpio",
+                "C) Venus en Capricornio",
+                "D) Venus en Cáncer"
+              ],
+              "enunciado": "¿Qué Venus rechaza la superficialidad y busca la esencia de las personas?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 3,
+              "opciones": [
+                "A) Venus en casa 2",
+                "B) Venus en casa 4",
+                "C) Venus en Cáncer",
+                "D) B y C son correctas"
+              ],
+              "enunciado": "¿Qué posición suele favorecer la capacidad de crear un hogar armonioso y acogedor?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Aries",
+                "B) Venus en Géminis",
+                "C) Venus en Acuario",
+                "D) Venus en Sagitario"
+              ],
+              "enunciado": "¿Qué Venus puede aburrirse rápidamente y pasar de una experiencia a otra?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Cáncer",
+                "B) Venus en Piscis",
+                "C) Venus en Libra",
+                "D) Venus en casa 7"
+              ],
+              "enunciado": "¿Qué Venus busca una unión incondicional y puede sacrificarse excesivamente por Amor?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Venus en casa 4",
+                "B) Venus en Cáncer",
+                "C) Ambas son correctas",
+                "D) Venus en casa 12"
+              ],
+              "enunciado": "¿Qué posición puede indicar una tendencia a idealizar la infancia o la familia?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Venus en Acuario",
+                "B) Venus en Piscis",
+                "C) Venus en Libra",
+                "D) Venus en Capricornio"
+              ],
+              "enunciado": "¿Qué Venus puede enamorarse más de la idea de una persona que de la persona real?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en casa 1",
+                "B) Venus en casa 11",
+                "C) Venus en casa 10",
+                "D) Venus en Libra"
+              ],
+              "enunciado": "¿Qué posición puede generar una autoestima excesivamente dependiente de la validación del grupo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Venus en Aries",
+                "B) Venus en Sagitario",
+                "C) Venus en Acuario",
+                "D) Venus en Géminis"
+              ],
+              "enunciado": "¿Qué Venus necesita libertad, aventura y crecimiento dentro de sus relaciones?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Venus en Géminis",
+                "B) Venus en casa 10",
+                "C) Ambas son correctas",
+                "D) Venus en Leo"
+              ],
+              "enunciado": "¿Qué posición puede hacer que alguien seduzca principalmente a través de las palabras?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Venus en casa 8",
+                "B) Venus en casa 12",
+                "C) Venus en Capricornio",
+                "D) Todas las anteriores"
+              ],
+              "enunciado": "¿Qué Venus suele sentirse atraído por personas con autoridad, experiencia o estatus?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 3,
+              "opciones": [
+                "A) Venus en casa 8",
+                "B) Venus en casa 12",
+                "C) Venus en Piscis",
+                "D) Todas las anteriores"
+              ],
+              "enunciado": "¿Qué posición tiene como aprendizaje principal descubrir que aquello que busca fuera ya existe dentro de sí?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

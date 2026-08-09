@@ -1,0 +1,335 @@
+{
+  "id": "40705da8-0dab-4152-aa6f-ba10b68bc46c",
+  "modalidad": "Psicología",
+  "titulo": "EMDR: guía avanzada",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Origen y desarrollo",
+      "submodules": [
+        {
+          "id": "l-25zbduh",
+          "nom": "1.1 El origen",
+          "tipo": "texto",
+          "contenido": "El EMDR (*Eye Movement Desensitization and Reprocessing*) fue desarrollado por **Francine Shapiro en 1987**. Nació de una observación sencilla: los **movimientos oculares bilaterales** parecían reducir rápidamente el malestar emocional asociado a recuerdos perturbadores.\n\nAl principio se llamó solo **EMD** (*Eye Movement Desensitization*) y se entendía en clave **conductual**, como una forma especialmente eficaz de **desensibilización**."
+        },
+        {
+          "id": "l-mgbg3ib",
+          "nom": "1.2 Reprocesamiento",
+          "tipo": "texto",
+          "contenido": "Con la práctica se vio que los efectos iban **mucho más allá de desensibilizar**. \n\nLos pacientes no solo sentían menos miedo o ansiedad: aparecían **nuevas perspectivas, cambios en cómo valoraban lo ocurrido, cambios en las sensaciones corporales** y hasta en su **sentido de sí mismos**. Era como si el recuerdo se **integrara y metabolizara**, no como si simplemente se reprimiera.\n\nEsto llevó a Shapiro a añadir el concepto de **reprocesamiento** (de ahí la \"R\" de EMDR) y a formular el modelo teórico que lo explica: el **modelo AIP**."
+        }
+      ]
+    },
+    {
+      "title": "2. El modelo AIP",
+      "submodules": [
+        {
+          "id": "l-k4ca11w",
+          "nom": "2.1 La idea central",
+          "tipo": "texto",
+          "contenido": "El modelo **AIP** (*Adaptive Information Processing*) parte de una premisa: la mente tiene un **sistema innato de procesamiento de la información** orientado de forma natural hacia la **salud y la sanación**.\n\nEn condiciones normales, una experiencia perturbadora se **procesa e integra** en las redes de memoria que ya tenemos. Así aprendemos de ella y seguimos adelante."
+        },
+        {
+          "id": "l-nrshwg9",
+          "nom": "2.2 Cuando hay trauma...",
+          "tipo": "texto",
+          "contenido": "Bajo **estrés extremo o trauma**, ese sistema natural se **desborda y se bloquea**. El recuerdo se queda almacenado de forma **fragmentada y sin procesar**, conservando intactas su **carga emocional original, sus cogniciones negativas y sus sensaciones físicas**. Cada vez que algo lo activa, vuelve a generar malestar y disfunción."
+        },
+        {
+          "id": "l-ajexs1h",
+          "nom": "2.3 Desbloqueo",
+          "tipo": "texto",
+          "contenido": "El EMDR **activa esos recuerdos congelados** mientras aplica **estimulación bilateral** (movimientos oculares, golpecitos o tonos), lo que parece **reactivar el sistema de procesamiento** que estaba bloqueado.\n\nA medida que el recuerdo se procesa, se **transforma**: las emociones negativas dejan paso a otras más positivas, las cogniciones distorsionadas se vuelven más **adaptativas**, las sensaciones corporales se resuelven y el recuerdo se integra como **experiencia pasada, no como amenaza presente**.\n\nEl resultado no es solo **reducir síntomas**, sino una **transformación de fondo**: el recuerdo pasa de ser fuente de dolor a ser una memoria integrada que se puede sostener con serenidad."
+        }
+      ]
+    },
+    {
+      "title": "3. Mecanismos neurobiológicos",
+      "submodules": [
+        {
+          "id": "l-f90sysq",
+          "nom": "3.1 Reactivación del tálamo",
+          "tipo": "texto",
+          "contenido": "En el TEPT, la **activación del tálamo** está **reducida** respecto a personas no traumatizadas. Esto importa porque el tálamo es un **centro de integración** de lo perceptivo, lo somatosensorial, lo cognitivo y lo memorístico.\n\nLa estimulación bilateral parece **aumentar la actividad talámica** y devolverle su capacidad integradora. \n\nEn lo clínico, esto explica cómo el EMDR puede **reparar la fragmentación** típica del recuerdo traumático."
+        },
+        {
+          "id": "l-9v2vmu7",
+          "nom": "3.2 Resincronización ",
+          "tipo": "texto",
+          "contenido": "El TEPT muestra una marcada **lateralización hacia el hemisferio derecho**. Como la estimulación bilateral **activa ambos hemisferios de forma alterna**, parece favorecer su **resincronización**.\n\nEsto ayuda a integrar el procesamiento **emocional y corporal** (hemisferio derecho) con el procesamiento **racional y narrativo** (hemisferio izquierdo) — justo la integración que el trauma rompe y que la terapia busca restaurar."
+        },
+        {
+          "id": "l-2b2duoz",
+          "nom": "3.3 Desactivación de la amígdala",
+          "tipo": "texto",
+          "contenido": "El trabajo de **LeDoux** explica que la estimulación bilateral **reduce la activación de la amígdala**, probablemente activando el **sistema nervioso parasimpático**, que frena la respuesta de **lucha o huida** y favorece una respuesta más **exploratoria y de orientación**.\n\nLa prueba de ello son los cambios fisiológicos que acompañan al procesamiento: **baja la frecuencia cardíaca y sube la temperatura de la piel** (ambos signos de activación parasimpática). \n\nAl rebajar la **alarma condicionada** de la amígdala, el EMDR rompe el ciclo automático en que un estímulo inofensivo del presente dispara el **re-experimentar el trauma**."
+        }
+      ]
+    },
+    {
+      "title": "4. El protocolo integrador",
+      "submodules": [
+        {
+          "id": "l-s06hwdv",
+          "nom": "4.1 Introducción",
+          "tipo": "texto",
+          "contenido": "Este protocolo combina **terapia narrativa y EMDR**, y se describe para casos de **trauma relacional temprano** (por ejemplo, niños adoptados). \n\nSu acto central es crear y leer una **historia de Vida completa y emocionalmente rica**, que abarca toda la biografía del niño desde el nacimiento, **incluido lo que no puede recordar conscientemente**."
+        },
+        {
+          "id": "l-3w75okg",
+          "nom": "4.2 Paso 1 — Crear la narrativa",
+          "tipo": "texto",
+          "contenido": "Los **padres adoptivos** escriben, con ayuda del terapeuta, un relato completo de la Vida del niño **desde su nacimiento**. Debe incluir:\n\n- Todo lo **factual** que se conozca: nombres de los padres biológicos, lugar de nacimiento, cuidadores, compañeros, eventos concretos.\n\n- Contenido **emocionalmente imaginado**: qué pudo **sentir** el niño en cada momento crítico, qué sensaciones acompañaron cada pérdida, transición o cuidado.\n\n---\n\nEl objetivo **no es inventar una historia falsa**, sino **honrar la realidad emocional completa** del niño, incluyendo aquello que su cuerpo guardó aunque su mente no pueda acceder.\n\nEl texto se divide en **párrafos cortos**, cada uno terminado con la palabra **STOP**, para que el niño comparta lo que surja. Y se organiza en **capítulos**: el primero, del nacimiento al encuentro con los padres adoptivos; el segundo, la llegada al nuevo país y la incorporación a la familia.\n\n---\n\nEsta misma técnica puede usarse con **adultos con trauma complejo**. En ese caso es el propio adulto quien narra la historia que recuerda, convirtiéndose en agente activo de su relato. \n\nCuando faltan datos de la **primera infancia** —porque no se conocen o porque no hay quien los aporte—, se trabaja con lo que la persona sí puede recordar y reconstruir."
+        },
+        {
+          "id": "l-0wkqr7m",
+          "nom": "4.2 Paso 2 — Leer la narrativa",
+          "tipo": "texto",
+          "contenido": "La lectura está cuidadosamente montada: el niño se sienta **entre los dos padres**; uno **lee** en voz alta y el otro lo **sostiene** físicamente, dando contención y calor. \n\nEl terapeuta, enfrente, aplica **estimulación bilateral** (normalmente golpecitos en rodillas o manos) durante toda la lectura, y la **pausa en cada STOP** para que el niño comparta.\n\nLas respuestas del niño suelen pasar por varias fases: primero **sorpresa, incredulidad y confusión**; luego **miedo, tristeza y ansiedad**; y al acercarse el relato a los **tres años** (cuando termina la amnesia infantil y empieza la memoria autobiográfica), el cuerpo se **relaja**, cambia la expresión facial y empiezan a **aflorar recuerdos reales** que estaban en la memoria implícita."
+        },
+        {
+          "id": "l-69sjn9u",
+          "nom": "4.3 Paso 3 — Segunda lectura",
+          "tipo": "texto",
+          "contenido": "Tras la primera lectura estructurada con STOPs, el mismo capítulo se lee **otra vez desde el principio, pero sin pausas**: de forma **continua** y con estimulación bilateral mantenida todo el rato. Esta segunda lectura ininterrumpida permite un nivel de **procesamiento e integración más profundo**."
+        },
+        {
+          "id": "l-q2l9z9q",
+          "nom": "4.4 Paso 4 — Diálogo integrador",
+          "tipo": "texto",
+          "contenido": "Después de leer, el terapeuta facilita una **conversación integradora**: un diálogo cálido y abierto entre el niño y los padres sobre lo que surgió —qué sintió, recordó o notó el niño; qué observaron los padres—. \n\nEsto corresponde a la **tercera fase del modelo de Judith Herman** (tras la estabilización y el procesamiento): la fase de **reconexión e integración**, en la que la experiencia procesada se teje en la Vida y los vínculos del niño."
+        },
+        {
+          "id": "l-k03qsyb",
+          "nom": "4.5 Paso 5 — Procesamiento continuado",
+          "tipo": "texto",
+          "contenido": "Hay que avisar a los padres de que, **aun terminada la sesión, el procesamiento continúa**. \n\nEl cerebro sigue trabajando el material activado, y en los días siguientes pueden aflorar **nuevos recuerdos, emociones o sensaciones**. Conviene que los padres lo **anoten** y contacten con el terapeuta si hace falta."
+        }
+      ]
+    },
+    {
+      "title": "5. Caso clínico: Manuel",
+      "submodules": [
+        {
+          "id": "l-eot5fvy",
+          "nom": "5.1 Quién es Manuel",
+          "tipo": "texto",
+          "contenido": "**Manuel** (nombre ficticio) tiene **diez años** cuando llega a terapia. Nacido en **Colombia** en 2001, su madre biológica lo **entregó a una institución** hacia los tres años —reconociendo que no lo quería y que lo había maltratado—. \n\nVivió casi **cuatro años en acogida residencial** antes de ser **adoptado en 2008**, con casi siete años, por una **viuda que lo adoptó sola**."
+        },
+        {
+          "id": "l-vjmmpxu",
+          "nom": "5.2 El motivo de consulta",
+          "tipo": "texto",
+          "contenido": "La madre consultó por dos cosas: Manuel **mentía con frecuencia y escondía objetos** (incluida comida), y sobre todo le preocupaba su **distancia emocional**. \n\nNo lograba llegar a él: **\"sé que es muy sensible, pero no consigo que muestre sus sentimientos\"**. Recordaba uno de sus primeros abrazos como algo **frío, como asomarse a un pozo oscuro**, que la dejó asustada.\n\nEn positivo: lo describía como **inteligente, muy creativo, buen músico**, imaginativo y sociable. Pero también **rígido, terco y excesivamente controlador** con ciertas rutinas."
+        },
+        {
+          "id": "l-5732prt",
+          "nom": "5.3 Qué mostró la evaluación",
+          "tipo": "texto",
+          "contenido": "Preguntado por qué creía que venía a terapia, Manuel dijo: **\"creo que es por mis rabietas\"**. \n\nDibujó episodios en los que **\"explotaba\"**: estallidos de **rabia disociada** que surgían de golpe, disparados por algo que activaba la **memoria implícita del trauma**, sin que él fuera del todo consciente ni pudiera controlarlo. Después necesitaba **soledad**, y luego era capaz de **disculparse**.\n\n---\n\nEl cuadro encajaba con las secuelas del **trauma relacional temprano**:\n\n- **Alexitimia**: dificultad para identificar y nombrar emociones.\n\n- **Aplanamiento afectivo** y distancia emocional en los vínculos cercanos.\n\n- **Emociones disociadas** descargadas automáticamente ante disparadores del presente.\n\n- **Necesidad rígida de control**, como compensación de la indefensión e imprevisibilidad vividas.\n\n- **Inseguridad** expresada en mentiras y conductas de esconder."
+        },
+        {
+          "id": "l-u52wuwo",
+          "nom": "5.4 El momento clave",
+          "tipo": "texto",
+          "contenido": "Cuando el terapeuta propuso la **segunda lectura** (la continua), Manuel respondió: **\"quiero leerla yo mismo\"**. Y leyó en voz alta la historia de su propia Vida, mientras su **madre lo sostenía** y el terapeuta aplicaba estimulación bilateral en sus rodillas.\n\nEse gesto es lo más significativo del caso: Manuel dejó de ser el **receptor pasivo** de una historia contada sobre él y se convirtió en **agente activo** que narra y **re-narra su propia historia** — y lo hizo desde un cuerpo **seguro**, en el abrazo de su madre y con la regulación de la estimulación bilateral."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-g2wdm62",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Que los pacientes solo reducían su ansiedad temporalmente.",
+                "B) Que aparecían nuevas perspectivas, cambios cognitivos, corporales y en el sentido de sí mismos.",
+                "C) Que la desensibilización fallaba en traumas complejos."
+              ],
+              "enunciado": "¿Qué observación llevó a Shapiro a añadir el concepto de \"reprocesamiento\"?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Se borra parcialmente para proteger a la persona.",
+                "B) Se integra demasiado rápido en las redes de memoria.",
+                "C) Queda almacenado fragmentado y sin procesar, conservando su carga original."
+              ],
+              "enunciado": "Según el AIP, ¿qué le ocurre a un recuerdo en condiciones de trauma?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Una transformación de fondo de la experiencia almacenada.",
+                "B) Una reducción de síntomas.",
+                "C) Una memoria que se puede sostener con serenidad."
+              ],
+              "enunciado": "El resultado del reprocesamiento, según el curso, NO es:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Su activación está reducida respecto a personas no traumatizadas.",
+                "B) Su activación está aumentada de forma crónica.",
+                "C) Permanece inactivo de forma permanente."
+              ],
+              "enunciado": "Respecto al tálamo en el TEPT, el curso afirma que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Es el responsable de la respuesta de lucha o huida.",
+                "B) Es un centro de integración perceptiva, somatosensorial, cognitiva y memorística.",
+                "C) Controla la lateralización hemisférica."
+              ],
+              "enunciado": "¿Por qué es importante el tálamo en este modelo?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El hemisferio izquierdo.",
+                "B) El hemisferio derecho.",
+                "C) Ambos hemisferios por igual."
+              ],
+              "enunciado": "El TEPT muestra una marcada lateralización hacia:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El procesamiento emocional/corporal (derecho) con el racional/narrativo (izquierdo).",
+                "B) La memoria explícita con la implícita en el mismo hemisferio.",
+                "C) El tálamo con el cíngulo posterior."
+              ],
+              "enunciado": "La resincronización hemisférica ayuda a integrar:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Bowlby.",
+                "B) LeDoux.",
+                "C) Janet."
+              ],
+              "enunciado": "El tercer mecanismo (desactivación de la amígdala) se apoya en el trabajo de:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) La activación del sistema nervioso parasimpático.",
+                "B) La inhibición del hemisferio derecho.",
+                "C) El aumento de la actividad simpática."
+              ],
+              "enunciado": "La reducción de la activación de la amígdala se produciría, probablemente, por:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Aumento de la frecuencia cardíaca y sudoración.",
+                "B) Bajada de la frecuencia cardíaca y subida de la temperatura de la piel.",
+                "C) Dilatación pupilar y tensión muscular."
+              ],
+              "enunciado": "¿Qué cambios fisiológicos acompañan al procesamiento y prueban la activación parasimpática?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) La persona evita conscientemente los recuerdos.",
+                "B) Un estímulo inofensivo del presente dispara el re-experimentar el trauma.",
+                "C) El recuerdo se fragmenta de nuevo."
+              ],
+              "enunciado": "Al rebajar la \"alarma condicionada\" de la amígdala, el EMDR rompe el ciclo en que:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Solo los hechos verificables, para no inventar.",
+                "B) Lo factual conocido y también contenido emocionalmente imaginado.",
+                "C) Únicamente el periodo posterior a la adopción."
+              ],
+              "enunciado": "La narrativa que escriben los padres debe incluir:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Inventar una historia más agradable que la real.",
+                "B) Honrar la realidad emocional completa, incluido lo que el cuerpo guardó.",
+                "C) Rellenar los huecos para que la historia sea coherente."
+              ],
+              "enunciado": "El objetivo de incluir contenido \"emocionalmente imaginado\" es:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El momento de la adopción.",
+                "B) Los tres años (fin de la amnesia infantil, inicio de la memoria autobiográfica).",
+                "C) El nacimiento."
+              ],
+              "enunciado": "Las respuestas del niño suelen relajarse y aflorar recuerdos reales cuando el relato se acerca a:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) La hace el terapeuta en lugar de los padres.",
+                "B) Es continua, sin pausas, con estimulación bilateral mantenida.",
+                "C) Se centra solo en los capítulos más recientes."
+              ],
+              "enunciado": "¿En qué se diferencia la segunda lectura de la primera?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Judith Herman.",
+                "B) Francine Shapiro.",
+                "C) John Bowlby."
+              ],
+              "enunciado": "El \"diálogo integrador\" posterior a la lectura corresponde a la tercera fase del modelo de:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Ser conscientes y voluntarios, con intención de manipular.",
+                "B) Surgir de golpe, disparados por la memoria implícita, sin control voluntario.",
+                "C) Aparecer solo cuando estaba con sus compañeros."
+              ],
+              "enunciado": "Los estallidos de \"rabia disociada\" de Manuel se caracterizaban por:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) El terapeuta leyó la narrativa por segunda vez.",
+                "B) Manuel pidió leer él mismo su propia historia, sostenido por su madre.",
+                "C) Manuel dibujó sus rabietas en la evaluación."
+              ],
+              "enunciado": "El momento más significativo del caso de Manuel fue cuando:"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

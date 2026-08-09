@@ -1,0 +1,125 @@
+{
+  "id": "e4c488cf-83ce-4995-b506-159587aedeea",
+  "modalidad": "nutricion",
+  "titulo": "Cocina que nutre",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1 · Microbiota",
+      "submodules": [
+        {
+          "id": "l-yn57034",
+          "nom": "Introducción",
+          "tipo": "texto",
+          "contenido": "La salud intestinal depende en gran medida de los microorganismos que viven en nuestro intestino. Estos microorganismos participan en la digestión, producen vitaminas, ayudan al sistema inmunitario y generan sustancias beneficiosas para todo el organismo.\n\nEn este módulo aprenderás cómo favorecer una microbiota más diversa y saludable utilizando alimentos y técnicas muy sencillas."
+        },
+        {
+          "id": "l-ilmy3ps",
+          "nom": "Fermentados",
+          "tipo": "texto",
+          "contenido": "No todos los alimentos fermentados contienen microorganismos vivos.\n\nMuchos productos, como algunos chucruts comerciales, se **pasteurizan*** después de la fermentación para aumentar su conservación. Esto elimina la mayoría de las bacterias beneficiosas, por lo que mantienen el sabor, pero ya no aportan efecto probiótico.\n\nCuando compres un fermentado:\n\n· Busca que indique \"cultivos vivos\" o \"probióticos vivos\".\n\n· Normalmente deben venderse refrigerados.\n\n· Comprueba la fecha de caducidad: cuanto más reciente sea su elaboración y más alejada la fecha de consumo, mayor probabilidad de que conserve microorganismos viables.\n\n---\n\nLa pasteurización es un proceso térmico que calienta un alimento líquido a una temperatura menor que su punto de ebullición durante poco tiempo, seguido de un enfriamiento rápido. Esto destruye los microbios dañinos sin cambiar el sabor ni los nutrientes del producto."
+        },
+        {
+          "id": "l-funyme1",
+          "nom": "Almidón resistente",
+          "tipo": "texto",
+          "contenido": "Cuando cocinas arroz, patata o pasta y después los enfrías durante varias horas, parte de su **almidón** cambia de estructura y se convierte en **almidón resistente**.\n\nEste tipo de almidón no se digiere en el intestino delgado y llega al colon, donde sirve de alimento para las bacterias beneficiosas.\n\nPuedes consumir estos alimentos fríos o recalentarlos ligeramente, ya que buena parte del almidón resistente se mantiene."
+        }
+      ]
+    },
+    {
+      "title": "2 · Aprovecha más los nutrientes",
+      "submodules": [
+        {
+          "id": "l-e4dchhn",
+          "nom": "Introducción",
+          "tipo": "texto",
+          "contenido": "Comer alimentos saludables no siempre significa absorber todos sus nutrientes.\n\nMuchos alimentos contienen compuestos que dificultan la absorción de minerales o conservan residuos superficiales que conviene eliminar. \n\nCon unos pequeños cambios puedes mejorar su aprovechamiento nutricional."
+        },
+        {
+          "id": "l-n4kejny",
+          "nom": "Cereales integrales",
+          "tipo": "texto",
+          "contenido": "Los cereales integrales contienen ácido fítico, un compuesto que puede disminuir la absorción de minerales como el hierro, el zinc o el magnesio.\n\nPara reducirlo:\n\n1. Utiliza agua templada.\n2. Añade unas gotas de limón o un medio ligeramente ácido.\n3. Déjalos en remojo al menos 8 horas. Si el remojo es más largo, guárdalos en la nevera.\n4. Desecha el agua y cocina con agua limpia.\n\nDurante el remojo se activa la fitasa, una enzima que ayuda a degradar parte del ácido fítico."
+        },
+        {
+          "id": "l-4a9cy54",
+          "nom": "Semillas de calabaza",
+          "tipo": "texto",
+          "contenido": "Las semillas de calabaza destacan por su contenido en hierro, zinc, magnesio, proteínas y grasas saludables.\n\nPara aprovechar mejor sus nutrientes:\n\n· Remójalas unas 8 horas.\n\n· Escáldalas unos 20 segundos.\n\n· Tritúralas antes de consumirlas.\n\n· Siempre que sea posible, consúmelas con la cáscara, ya que también aporta fibra y nutrientes."
+        },
+        {
+          "id": "l-9xp8sro",
+          "nom": "Pesticidas",
+          "tipo": "texto",
+          "contenido": "Lavar frutas y verduras reduce parte de los residuos de pesticidas.\n\nUna de las técnicas más eficaces consiste en sumergirlas durante unos minutos en agua con bicarbonato, especialmente cuando la piel también se va a consumir.\n\nEl vinagre también ayuda, aunque suele eliminar menos residuos.\n\nEn frutas ricas en antocianinas (como frutos rojos o uvas oscuras), un lavado muy alcalino puede disminuir parte de estos antioxidantes, por lo que conviene utilizar el bicarbonato solo cuando sea necesario."
+        }
+      ]
+    },
+    {
+      "title": "3 · Cocina mejor",
+      "submodules": [
+        {
+          "id": "l-r8dxmes",
+          "nom": "Introducción",
+          "tipo": "texto",
+          "contenido": "La forma de cocinar puede marcar una gran diferencia en el valor nutricional de los alimentos.\n\nEn este módulo aprenderás pequeños trucos que ayudan a conservar vitaminas, antioxidantes y otros compuestos beneficiosos."
+        },
+        {
+          "id": "l-3x7ttoj",
+          "nom": "Congelar verduras",
+          "tipo": "texto",
+          "contenido": "Antes de congelar muchas verduras es recomendable escaldarlas.\n\nEste proceso inactiva las enzimas que continúan deteriorando el alimento incluso dentro del congelador.\n\nEl procedimiento es sencillo:\n\n1. Escaldar 1-3 minutos.\n2. Enfriar rápidamente en agua con hielo.\n3. Secar bien.\n4. Congelar en raciones pequeñas.\n\nTomate y cebolla son dos excepciones y pueden congelarse directamente en crudo."
+        },
+        {
+          "id": "l-8lfx0iz",
+          "nom": "Calabacín",
+          "tipo": "texto",
+          "contenido": "La **piel del calabacín** concentra gran parte de su clorofila y otros antioxidantes.\n\nSi preparas una crema:\n\n1. Pela el calabacín.\n2. Cocina primero la parte verde clara.\n3. Añade la piel al final de la cocción.\n4. Tritura todo junto.\n\nAsí se conservan mejor los compuestos sensibles al calor."
+        },
+        {
+          "id": "l-wmdykwh",
+          "nom": "Tronco de brócoli",
+          "tipo": "texto",
+          "contenido": "El tronco del brócoli suele terminar en la basura, aunque es una de las partes más nutritivas.\n\nContiene:\n\n· Vitamina C\n· Fibra\n· Glucosinolatos\n· Compuestos precursores del sulforafano\n\nPela la parte exterior más dura y consume el interior crudo o con una cocción muy breve."
+        }
+      ]
+    },
+    {
+      "title": "4 · Activa los nutrientes",
+      "submodules": [
+        {
+          "id": "l-2j9iuii",
+          "nom": "Introducción",
+          "tipo": "texto",
+          "contenido": "Muchos alimentos producen compuestos beneficiosos solo cuando se cortan o se trituran.\n\nAl romper sus células, unas enzimas entran en contacto con otras sustancias y generan moléculas con actividad antioxidante y antiinflamatoria.\n\nEl problema es que estas enzimas son muy sensibles al calor. Si cocinas el alimento inmediatamente, la reacción se interrumpe y se forman muchos menos compuestos beneficiosos."
+        },
+        {
+          "id": "l-ayoua8x",
+          "nom": "Ajo",
+          "tipo": "texto",
+          "contenido": "Al machacar o cortar el ajo se activa la enzima aliinasa, responsable de formar la alicina.\n\nLa alicina es uno de los compuestos más estudiados del ajo por sus beneficios cardiovasculares y antimicrobianos.\n\nTruco: deja reposar el ajo unos 10 minutos antes de cocinarlo para activar las enzimas que dan lugar a la alicina."
+        },
+        {
+          "id": "l-0mt02s9",
+          "nom": "Cebolla",
+          "tipo": "texto",
+          "contenido": "Con la cebolla ocurre un proceso similar.\n\nAl cortarla se generan compuestos azufrados con actividad antioxidante y antiinflamatoria.\n\nTres errores muy comunes\n\n1. **Cocinarla inmediatamente**: Espera unos 10 minutos antes de aplicar calor para favorecer la formación de estos compuestos.\n\n2. **Tirar la piel**: La piel concentra gran cantidad de quercetina. Después de lavarla bien, puedes utilizarla para preparar caldos o infusiones.\n\n3. **Quitar las capas externas**: Las capas más cercanas a la piel contienen más quercetina que el centro de la cebolla."
+        },
+        {
+          "id": "l-m2kjypl",
+          "nom": "Brócoli y coliflor",
+          "tipo": "texto",
+          "contenido": "El brócoli y la coliflor contienen uno de los compuestos más interesantes desde el punto de vista nutricional: el sulforafano. \n\nEsta molécula destaca por su capacidad antioxidante y por ayudar a activar los sistemas naturales de defensa del organismo, por lo que se ha relacionado con beneficios para la salud cardiovascular, la reducción de la inflamación y la protección de las células frente al daño oxidativo.\n\nLo curioso es que el sulforafano no está presente de forma activa dentro de la verdura. Se forma cuando cortamos o trituramos el brócoli, ya que al romper sus células se unen dos sustancias que estaban separadas y comienza a producirse esta molécula.\n\nSin embargo, este proceso necesita unos minutos. Si cocinas el brócoli inmediatamente después de cortarlo, el calor detiene la reacción y se forma mucho menos sulforafano.\n\nEl truco: corta el brócoli o la coliflor muy finos, déjalos reposar entre 20 y 30 minutos y después cocínalos. Así aprovecharás mucho mejor sus compuestos beneficiosos."
+        },
+        {
+          "id": "l-zpyb2gy",
+          "nom": "Espárragos",
+          "tipo": "texto",
+          "contenido": "Los espárragos aportan compuestos relacionados con la producción de **glutatión**, uno de los antioxidantes más importantes del organismo y fundamental en los procesos de desintoxicación del hígado.\n\nPara fabricar glutatión, el cuerpo necesita aminoácidos como glutamato, glicina y cisteína.\n\nLos alimentos del género *Allium* (ajo, cebolla y puerro) aportan compuestos azufrados que favorecen la disponibilidad de cisteína. \n\nEn conclusión, combinar espárragos con ajo o cebolla es una excelente estrategia nutricional."
+        }
+      ]
+    }
+  ]
+}

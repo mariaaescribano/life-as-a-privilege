@@ -1,0 +1,156 @@
+{
+  "id": "7372fe0c-a90b-4a60-a48a-145a10c31d05",
+  "modalidad": "Cábala",
+  "titulo": "Evil in Kabbalah",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Evil",
+      "submodules": [
+        {
+          "id": "l-33e4d9k",
+          "nom": "1.1 Definition",
+          "tipo": "texto",
+          "contenido": "Evil isn't a product of our freedom, but the **concealment of the essence of things**, of their light.\n\n*Evil is when something good doesn't occupy the place that belongs to it.*"
+        },
+        {
+          "id": "l-onm75s0",
+          "nom": "1.2 Energies",
+          "tipo": "texto",
+          "contenido": "*The energies of the Tree are neutral.*\n\nEvil appears when the masculine and the feminine energy, instead of uniting, confront each other in one of the dimensions of the **Tree of Life**, which structures the human soul.\n\nWill quickly turns into stubbornness when it isn't used correctly.\n\n*The negative side appears when strength isn't put to work toward a concrete goal and we move forward blindly, without using intelligence.*\n\n---\n\n*I can only be bad if there's something inside me that predisposes me to it.*\n\nExternal forces find it easier to influence us wherever there are aspects of ourselves we don't yet understand or integrate."
+        }
+      ]
+    },
+    {
+      "title": "2. The duality of Evil",
+      "submodules": [
+        {
+          "id": "l-s2fyxvy",
+          "nom": "2.1 Amalek",
+          "tipo": "texto",
+          "contenido": "**Amalek** is the denial of spirituality; it's believing yourself separate.\n\nAmalek denies the existence of other dimensions: it exists in **Malkhut** and doesn't believe in spirituality, only in good and evil.\n\nIt always ends up destroying itself; its essence is the unconsciousness of believing itself disconnected from the infinite.\n\n*Evil always takes its own life.*"
+        },
+        {
+          "id": "l-nesebf1",
+          "nom": "2.2 Satan — the adversary",
+          "tipo": "texto",
+          "contenido": "In Judaism, **ha-Satan** means *\"the adversary\"* or *\"the accuser\"* (not the devil of Christianity).\n\nHe appears in the Book of Job as an agent who **acts with divine permission in order to put the human being to the test.**\n\nThrough Satan, the soul experiences **lack**, **desire**, **fear** and **ego**, which is what makes human experience and human freedom possible.\n\nHis function is to hide the light, generate obstacles, produce doubts and create the illusion of separation.\n\n*Without resistance there would be no revelation.*\n\nOnly through **Da'at** and consciousness can the light emerge.\n\n*He is the engineer of the soul's evolution.*\n\n---\n\nHe shows up above all in **Malkhut** in the form of **fear**, **anxiety**, **procrastination** and **the need for control**.\n\nThese manifestations serve to test the **kli**, to reveal its limits and to show where it's fragmented.\n\n*External forces find it easier to influence us wherever there is still unconsciousness or fragmentation.*"
+        }
+      ]
+    },
+    {
+      "title": "Integration test",
+      "submodules": [
+        {
+          "id": "l-6rg6ezh",
+          "nom": "Consolidate what you've learned",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) The human being misuses their freedom.",
+                "B) The light is concealed and the energies fall out of alignment.",
+                "C) Satan acts without divine permission."
+              ],
+              "enunciado": "According to the text, evil arises mainly when:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) A positive capacity used outside its proper place.",
+                "B) An unpleasant emotion.",
+                "C) An action that society considers wrong."
+              ],
+              "enunciado": "Which of these situations best fits the definition of evil proposed here?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) No energy is good or bad in itself.",
+                "B) Good and evil are illusions.",
+                "C) The Sefirot have no influence on human behavior."
+              ],
+              "enunciado": "The phrase \"the energies of the Tree are neutral\" implies that:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) A healthy expression of Gevurah.",
+                "B) A positive energy used in an unbalanced way.",
+                "C) An influence coming solely from Satan."
+              ],
+              "enunciado": "An extremely disciplined person ends up becoming rigid, obsessive and unable to adapt. According to the text, this would be:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Because they're stronger than human will.",
+                "B) Because there are inner areas that are still unconscious or fragmented.",
+                "C) Because matter always rules over spirit."
+              ],
+              "enunciado": "Why do external forces find it easier to influence a person?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) A demonic entity independent of God.",
+                "B) The tendency to believe we're separate from the infinite.",
+                "C) The punishment for acting wrongly."
+              ],
+              "enunciado": "What does Amalek represent in this course?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Satan acts within the divine order and fulfills a function.",
+                "B) Satan doesn't really exist.",
+                "C) Satan represents negative emotions and nothing else."
+              ],
+              "enunciado": "According to the description given, what is the main difference between Satan and the Christian devil?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) To punish human mistakes.",
+                "B) To prevent spiritual evolution.",
+                "C) To create resistance so that consciousness can develop."
+              ],
+              "enunciado": "What is the deepest function of the obstacles Satan generates?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) A fragmented Malkhut.",
+                "B) An excessive Chokhmah.",
+                "C) A balanced Tiferet."
+              ],
+              "enunciado": "Someone tries to control absolutely everything because they live in constant fear of uncertainty. According to the text, this would mainly be a manifestation of:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Evil is an independent force that fights against God.",
+                "B) Evil is an absence of consciousness and of connection with the light.",
+                "C) Evil is simply the result of making bad decisions."
+              ],
+              "enunciado": "Which of these sentences best sums up the view of evil presented here?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

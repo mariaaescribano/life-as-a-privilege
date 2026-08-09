@@ -1,0 +1,521 @@
+{
+  "id": "db5e6e62-78b8-431e-8d96-01bb889649b1",
+  "modalidad": "Psicología",
+  "titulo": "Psicosomática",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. Historia de la Psicosomática",
+      "submodules": [
+        {
+          "id": "l-c3noejy",
+          "nom": "1.1. Hipócrates: el origen",
+          "tipo": "texto",
+          "contenido": "Hipócrates (460-370 a.C.) fue uno de los primeros médicos en entender que la enfermedad no afecta solo al **cuerpo**. \n\nObservó que las **emociones**, los hábitos y el entorno también influyen en la salud. \n\nPara él, una persona no podía separarse en **cuerpo y mente**. La enfermedad era consecuencia de un **desequilibrio** general del organismo.\n\n*No hay enfermedades, hay enfermos.*"
+        },
+        {
+          "id": "l-qwlwgac",
+          "nom": "1.2 Galeno y los cuatro temperamentos",
+          "tipo": "texto",
+          "contenido": "Galeno desarrolló la teoría de los **cuatro humores**: sangre, flema, bilis amarilla y bilis negra. \n\nCada uno se asociaba a una forma de ser:\n\nSangre: social y enérgico.\n\nFlema: calmado y reflexivo.\n\nBilis amarilla: colérico, apasionado e irritable.\n\nBilis negra: triste y sensible.\n\n---\n\nEl temperamento **melancólico** se relacionaba con personas más sensibles, preocupadas e introspectivas.\n\nAunque hoy esta teoría ha tenido modificaciones  ampliaciones, fue uno de los primeros intentos de relacionar **personalidad** y **enfermedad**."
+        },
+        {
+          "id": "l-gf7e7jt",
+          "nom": "1.3 El modelo biomédico",
+          "tipo": "texto",
+          "contenido": "Durante siglos la medicina se centró casi exclusivamente en el **cuerpo físico**. \n\nLa enfermedad se explicaba por lesiones, infecciones o alteraciones biológicas. \n\nEste enfoque permitió grandes avances médicos, pero dejaba sin respuesta muchas situaciones donde el **estrés** o las **emociones** parecían influir claramente en la salud.\n\n*Conocer la enfermedad no siempre significa comprender al enfermo.*"
+        },
+        {
+          "id": "l-rbscynj",
+          "nom": "1.4 El modelo biopsicosocial",
+          "tipo": "texto",
+          "contenido": "En el siglo XX apareció una visión más amplia. La salud empezó a entenderse como el resultado de la interacción entre factores **biológicos**, **psicológicos** y **sociales**. \n\nYa no importaba solo qué enfermedad tiene una persona, sino también cómo vive, cómo siente y cómo se relaciona con los demás."
+        },
+        {
+          "id": "l-o2ej166",
+          "nom": "1.5 Nacimiento de la psicosomática",
+          "tipo": "texto",
+          "contenido": "La **psicosomática** surge al observar que algunos conflictos emocionales se expresaban a través del cuerpo cuando el enfermo no tenía palabras para narrar el conflicto.\n\nNo niega las causas biológicas de las enfermedades, sino que intenta entender por qué una persona desarrolla determinados síntomas en un momento concreto de su Vida. \n\nEl síntoma deja de verse solo como un problema y empieza a entenderse también como un **mensaje**."
+        },
+        {
+          "id": "l-ozxorjn",
+          "nom": "1.6 La idea central de la psicosomática",
+          "tipo": "texto",
+          "contenido": "La pregunta principal de la psicosomática no es únicamente \"¿qué enfermedad tiene esta persona?\", sino también \"¿qué le ha ocurrido para llegar hasta aquí?\".\n\nLa **historia personal**, las **pérdidas**, los **traumas** y las **emociones** forman parte de la comprensión del síntoma.\n\n**Lo que pasó explica lo que está pasando.**"
+        }
+      ]
+    },
+    {
+      "title": "2. ¿Qué es la Psicosomática?",
+      "submodules": [
+        {
+          "id": "l-zd1g2af",
+          "nom": "2.1 Definición de psicosomática",
+          "tipo": "texto",
+          "contenido": "La **psicosomática** estudia la relación entre la mente, las emociones y el cuerpo. \n\nNo afirma que las enfermedades sean imaginarias ni que todo tenga un origen psicológico. \n\nSu objetivo es comprender cómo los conflictos emocionales, el estrés y la historia personal pueden influir en la aparición o evolución de determinados síntomas físicos."
+        },
+        {
+          "id": "l-t1dsyxi",
+          "nom": "2.2 El cuerpo como lenguaje",
+          "tipo": "texto",
+          "contenido": "El síntoma no se entiende únicamente como un fallo del organismo. \n\nEn muchas ocasiones se considera un intento de adaptación frente a una situación que la persona no ha podido gestionar de otra manera. \n\nAunque produzca sufrimiento, es una forma de aliviar otro sufrimiento mayor. "
+        },
+        {
+          "id": "l-yfhjer3",
+          "nom": "2.3 El síntoma",
+          "tipo": "texto",
+          "contenido": "La pregunta no es solo qué síntoma tiene una persona, sino también qué papel cumple en su Vida.\n\nAlgunas veces protege, otras expresa dolor, evita conflictos o permite pedir ayuda. Comprender su función puede ser tan importante como tratarlo.\n\n---\n\nDos personas pueden desarrollar la misma enfermedad y vivirla de forma completamente distinta. La psicosomática presta atención a la **biografía**, los **vínculos**, las **pérdidas** y los **traumas** de cada individuo. \n\nNo busca sustituir el diagnóstico médico, sino **ampliarlo**."
+        },
+        {
+          "id": "l-dqghm9r",
+          "nom": "2.4 El cuerpo lleva la cuenta",
+          "tipo": "texto",
+          "contenido": "**El cuerpo lleva la cuenta hasta que alguien escuche.**\n\nLas experiencias dolorosas que no se elaboran emocionalmente no desaparecen. \n\nPueden permanecer activas durante años en forma de tensión, ansiedad, hipervigilancia o síntomas físicos.\n\nA veces la persona ha olvidado el acontecimiento, pero el cuerpo sigue reaccionando como si estuviera ocurriendo."
+        }
+      ]
+    },
+    {
+      "title": "3. Trauma y enfermedad",
+      "submodules": [
+        {
+          "id": "l-yhcm6u4",
+          "nom": "3.1 ¿Qué es un trauma?",
+          "tipo": "texto",
+          "contenido": "Un **trauma** es una experiencia que supera la capacidad de adaptación de una persona. \n\nNo depende solo de lo que ocurrió, sino de cómo fue vivido. \n\nDos personas pueden pasar por la misma situación y reaccionar de forma diferente. \n\nLo traumático aparece cuando no existen recursos suficientes para procesar lo sucedido."
+        },
+        {
+          "id": "l-wrpjbfb",
+          "nom": "3.2 Trauma simple y trauma complejo",
+          "tipo": "texto",
+          "contenido": "El **trauma simple** suele estar asociado a un acontecimiento concreto, como un accidente o una agresión. \n\nEl **trauma complejo** aparece cuando el sufrimiento es repetido y prolongado, especialmente durante la infancia. Este último suele afectar más profundamente a la identidad, la autoestima y las relaciones porque es desde ese trauma que la persona se entiende así misma y al mundo.\n\nEl trauma complejo muchas veces no se recuerda, sino que se revive. Un olor, una situación o una persona pueden activar la misma sensación de peligro que existió en el pasado. La reacción aparece automáticamente, aunque la persona no entienda por qué."
+        },
+        {
+          "id": "l-cbq14ws",
+          "nom": "3.3 El duelo no elaborado",
+          "tipo": "texto",
+          "contenido": "Toda pérdida requiere un proceso de adaptación llamado **duelo**. Cuando este proceso queda bloqueado, el dolor puede permanecer activo durante años. \n\nNo solo se hacen duelos por personas; también por relaciones, proyectos, salud, trabajo o etapas de la Vida que terminan.\n\n---\n\nCuando una experiencia dolorosa no se resuelve, suele seguir un patrón similar:\n\n**Trauma → Alarma → Resistencia → Desgaste → Síntoma**\n\nPrimero aparece la activación, después el intento de adaptación. Si el conflicto continúa, llega el agotamiento físico y emocional. Finalmente, el organismo puede expresar ese desgaste mediante síntomas.\n\nDespués de un trauma pueden aparecer respuestas automáticas como **ansiedad**, **irritabilidad**, hipervigilancia o evitación. Estas reacciones intentan proteger a la persona de un peligro que ya pasó, pero que el organismo sigue percibiendo como presente.\n\n*La defensa continúa incluso cuando la amenaza ha desaparecido.*\n\n---\n\nDesde la psicosomática, muchos síntomas aparecen cuando una emoción no ha podido ser reconocida, expresada o elaborada. El cuerpo se convierte entonces en el escenario donde se representa el conflicto. No porque la enfermedad sea imaginaria, sino porque la experiencia emocional queda atrapada en circuitos más automáticos y emocionales del cerebro, sin llegar a integrarse plenamente mediante la reflexión y la elaboración consciente. En ese contexto, el cuerpo puede convertirse en una vía de expresión del malestar.\n\n*El cuerpo expresa aquello que la persona todavía no ha conseguido convertir en palabras.*\n\n**Lo que no puede expresarse con palabras puede terminar expresándose con síntomas.**"
+        }
+      ]
+    },
+    {
+      "title": "4. La aparición del síntoma",
+      "submodules": [
+        {
+          "id": "l-8xjlx5l",
+          "nom": "4.1 Fase de alarma",
+          "tipo": "texto",
+          "contenido": "Ante una amenaza, real o percibida, el organismo activa una respuesta de supervivencia. Aumenta la atención, la tensión muscular y el estado de alerta. Esta reacción es útil a corto plazo porque prepara al cuerpo para actuar frente al peligro.\n\n*El cuerpo se prepara para sobrevivir antes de saber a qué intenta sobrevivir.*"
+        },
+        {
+          "id": "l-62qxmvt",
+          "nom": "4.2 Fase de resistencia",
+          "tipo": "texto",
+          "contenido": "Si el problema continúa, el organismo intenta adaptarse. La persona sigue funcionando aparentemente con normalidad, pero mantiene un gasto constante de energía física y emocional. Muchas personas pasan años en esta fase sin ser conscientes del desgaste acumulado.\n\n**Adaptarse no significa estar bien.**"
+        },
+        {
+          "id": "l-ch4nm1k",
+          "nom": "4.3 Fase de agotamiento",
+          "tipo": "texto",
+          "contenido": "Cuando el estrés se prolonga demasiado tiempo, los recursos comienzan a agotarse. Aparecen cansancio, irritabilidad, problemas de sueño, ansiedad o sensación de no poder más. El organismo pierde capacidad para seguir compensando el esfuerzo realizado.\n\n*Nadie puede vivir indefinidamente en estado de alerta.*"
+        },
+        {
+          "id": "l-mp4hrzt",
+          "nom": "4.4 Aparición del síntoma",
+          "tipo": "texto",
+          "contenido": "El síntoma suele aparecer cuando el sistema de adaptación deja de ser suficiente. Lo que antes se sostenía mediante esfuerzo, control o represión emocional empieza a manifestarse físicamente. El cuerpo señala que algo necesita atención.\n\n**El síntoma aparece cuando el organismo ya no puede seguir callando.**"
+        },
+        {
+          "id": "l-rdm0n91",
+          "nom": "4.5 Estrés y adaptación",
+          "tipo": "texto",
+          "contenido": "El **estrés agudo** es intenso pero temporal, mientras que el **estrés crónico** se mantiene durante meses o años. Es este último el que más suele relacionarse con problemas físicos y emocionales. Muchas veces la persona se acostumbra a vivir estresada y deja de percibirlo como algo anormal.\n\n*Lo más peligroso del estrés crónico es que termina pareciendo normal.*\n\nDesde la psicosomática, muchas enfermedades no aparecen porque la persona sea débil, sino porque ha sido demasiado fuerte durante demasiado tiempo. El organismo intenta adaptarse continuamente hasta que alcanza su límite.\n\n**A veces enfermamos no por no adaptarnos, sino por adaptarnos demasiado.**\n\nMuchas personas responden al estrés aumentando el control sobre sí mismas y sobre su entorno. Aunque esto puede dar sensación de seguridad, también implica un gran gasto de energía. Cuanto más rígido es el control, más difícil resulta escuchar las necesidades reales del organismo.\n\n*El problema no es el control; el problema es no poder dejar de controlar.*"
+        }
+      ]
+    },
+    {
+      "title": "5. Emociones",
+      "submodules": [
+        {
+          "id": "l-te7k72f",
+          "nom": "5.1 ¿Para qué sirven las emociones?",
+          "tipo": "texto",
+          "contenido": "Las emociones no son un problema, sino mecanismos de adaptación. Nos ayudan a responder a lo que ocurre dentro y fuera de nosotros. \n\nEl miedo protege, la tristeza ayuda a procesar pérdidas y la rabia nos impulsa a defender nuestros límites. \n\nEl problema aparece cuando una emoción no puede sentirse, expresarse o elaborarse.\n\n**Las emociones no vienen a molestarnos, vienen a informarnos.**\n\n---\n\nEn psicosomática se presta especial atención a la rabia, la tristeza, la culpa y la vergüenza. Muchas personas aprenden desde pequeñas que ciertas emociones son peligrosas o inaceptables. En lugar de expresarlas, las controlan, las niegan o las esconden. Sin embargo, una emoción reprimida no desaparece; simplemente cambia de forma de expresión."
+        },
+        {
+          "id": "l-h95hosc",
+          "nom": "5.2 Alexitimia",
+          "tipo": "texto",
+          "contenido": "La **alexitimia** es la dificultad para identificar, diferenciar y expresar emociones. La persona puede notar tensión, cansancio o malestar físico, pero le cuesta poner palabras a lo que ocurre internamente. \n\n**Si no puedo nombrar lo que siento, es más probable que lo exprese con el cuerpo.**\n\nEl organismo puede convertirse en una vía de expresión emocional. No significa que la persona invente los síntomas, sino que el cuerpo participa en la forma en que se manifiesta el sufrimiento. Cuanto menor es la capacidad para reconocer emociones, más probable es que aparezcan señales físicas asociadas al malestar.\n\n*El cuerpo expresa aquello que la persona todavía no puede expresar.*\n\n---\n\nUna de las preguntas más importantes en psicosomática es: ¿qué emoción hay detrás de este síntoma?. El objetivo no es eliminar emociones negativas, sino comprender qué intentan comunicar. \n\nCuando una emoción es reconocida, validada y expresada, muchas veces disminuye la necesidad de que el cuerpo cargue con ese mensaje.\n\n**Sentir no enferma; lo que suele enfermarnos es no poder sentir.**"
+        }
+      ]
+    },
+    {
+      "title": "6. Mecanismos de defensa",
+      "submodules": [
+        {
+          "id": "l-p02gmpu",
+          "nom": "6.1 Defensa y represión",
+          "tipo": "texto",
+          "contenido": "Los mecanismos de **defensa** son **estrategias automáticas** que utiliza la mente para protegernos del dolor emocional. \n\nNo son buenos ni malos; todos los utilizamos. El problema aparece cuando se vuelven rígidos y nos impiden reconocer lo que realmente sentimos o necesitamos.\n\n---\n\nLa **represión** consiste en apartar emociones o recuerdos dolorosos de la conciencia. \n\nLa **negación** implica actuar como si el problema no existiera. \n\nLa **evitación** busca alejarse de situaciones, personas o emociones que generan malestar. \n\nEstas estrategias reducen la angustia a corto plazo, pero suelen mantener el conflicto a largo plazo."
+        },
+        {
+          "id": "l-dirq83e",
+          "nom": "6.3 Síntomas",
+          "tipo": "texto",
+          "contenido": "La **somatización** puede entenderse como un mecanismo de defensa: el conflicto emocional se desplaza hacia el síntoma físico, que normalmente suele ser un sufrimiento más tolerable y preferible por la propia persona.\n\n---\n\nAlgunos síntomas cumplen funciones que la persona no siempre reconoce conscientemente. \n\nPueden permitir descansar, recibir cuidados, evitar conflictos o expresar necesidades que antes resultaban difíciles de mostrar. \n\nEsto no significa que alguien quiera estar enfermo, sino que el síntoma puede aportar ciertos beneficios psicológicos o relacionales.\n\n**La pregunta no es solo por qué aparece el síntoma, sino para qué sirve.**\n\n---\n\nCuando, por cuidados médicos, un síntoma desaparece sin entender qué beneficio obtenía la persona, puede aparecer otro síntoma diferente siguiendo la misma estrategia: evitar el dolor psíquico. \n\nSi el conflicto emocional sigue latente, el malestar puede buscar nuevas formas de expresión."
+        }
+      ]
+    },
+    {
+      "title": "7. Personalidad",
+      "submodules": [
+        {
+          "id": "l-srxfjsu",
+          "nom": "7.1 La personalidad",
+          "tipo": "texto",
+          "contenido": "No existe una personalidad que provoque enfermedades de forma automática. Sin embargo, algunos rasgos aparecen con frecuencia en personas que tienden a somatizar: autoexigencia, perfeccionismo, dificultad para expresar emociones y tendencia a priorizar las necesidades de los demás sobre las propias.\n\n**No enferma la personalidad, sino determinadas formas de adaptación.**"
+        },
+        {
+          "id": "l-x3678la",
+          "nom": "7.2 Rasgos",
+          "tipo": "texto",
+          "contenido": "Muchas personas desarrollan una fuerte **necesidad de control** para sentirse seguras. Intentan controlar emociones, relaciones y situaciones de la Vida. Aunque esto reduce la incertidumbre, también genera tensión constante y dificulta adaptarse a los cambios.\n\nAlgunas personas aprenden a ser \"buenas\", responsables y complacientes para obtener aceptación o evitar conflictos. Suelen cuidar de todos menos de sí mismas y les cuesta poner límites. Con el tiempo pueden perder contacto con sus propias necesidades y deseos.\n\nEl **perfeccionismo** lleva a vivir con la sensación de que nunca es suficiente. La persona se exige constantemente y rara vez se permite descansar o cometer errores. Este patrón genera estrés crónico y una sensación permanente de estar en deuda consigo misma.\n\nMuchas personas con rasgos psicosomáticos tienen dificultades para mostrarse **vulnerables**. Les cuesta pedir ayuda, expresar necesidades o reconocer que están sufriendo. Mantienen una imagen de fortaleza mientras ocultan gran parte de su mundo emocional."
+        },
+        {
+          "id": "l-25ize8p",
+          "nom": "7.3 Los vínculos",
+          "tipo": "texto",
+          "contenido": "El **apego** es el vínculo emocional que desarrollamos con nuestros cuidadores durante la infancia. A través de estas relaciones aprendemos si el mundo es seguro, si nuestras necesidades serán atendidas y si podemos confiar en los demás. \n\nEstas experiencias influyen en la forma en que nos relacionamos con nosotros mismos y con otras personas durante toda la Vida.\n\n**Aprendemos a relacionarnos con nosotros mismos a través de cómo se relacionaron con nosotros.**\n\n---\n\nCuando las necesidades emocionales no son reconocidas o validadas, el niño desarrolla estrategias para adaptarse. Puede aprender a complacer, a ocultar emociones, a no pedir ayuda o a asumir responsabilidades que no le corresponden. \n\nEstas estrategias fueron útiles para sobrevivir emocionalmente, pero pueden generar dificultades en la Vida adulta.\n\n---\n\nMuchas teorías psicosomáticas prestan atención a los patrones familiares: familias rígidas, frías emocionalmente, sobreprotectoras o con conflictos de roles. \n\nEn estos contextos, la persona puede crecer desconectada de sus propias necesidades y muy pendiente de las expectativas ajenas. \n\nEl síntoma aparece a veces como una forma de expresar dolor por aquello que nunca se tuvo."
+        }
+      ]
+    },
+    {
+      "title": "8. Psicosomática digestiva",
+      "submodules": [
+        {
+          "id": "l-c84fd81",
+          "nom": "8.1 El simbolismo",
+          "tipo": "texto",
+          "contenido": "Desde la psicosomática, el aparato digestivo se relaciona con la capacidad de incorporar, asimilar y soltar experiencias. \n\nAsí como digerimos alimentos, también intentamos digerir emociones, cambios y acontecimientos vitales. \n\nCuando algo resulta difícil de aceptar o procesar, algunas corrientes consideran que pueden aparecer conflictos reflejados en el sistema digestivo.\n\n---\n\nLas enfermedades digestivas tienen causas biológicas conocidas, pero la psicosomática intenta comprender qué papel pueden desempeñar las emociones en su aparición, evolución o vivencia. \n\nEl objetivo no es sustituir la explicación médica, sino ampliar la comprensión de la persona que padece el síntoma."
+        },
+        {
+          "id": "l-w4qtb1z",
+          "nom": "8.2 Úlcera",
+          "tipo": "texto",
+          "contenido": "Algunos modelos psicosomáticos han asociado la úlcera con sentimientos de rechazo, necesidad de reconocimiento y dificultades para expresar necesidades emocionales. \n\nTambién se describen personas con rasgos de alexitimia, tendencia a la complacencia y miedo al conflicto. \n\nEn ocasiones aparecen historias familiares marcadas por exigencia afectiva, distancia emocional o mensajes contradictorios."
+        },
+        {
+          "id": "l-66p46xu",
+          "nom": "8.3 Enfermedad de Crohn",
+          "tipo": "texto",
+          "contenido": "En algunas interpretaciones psicosomáticas, la enfermedad de Crohn se relaciona con conflictos de dependencia, autoestima inestable y necesidad de control. \n\nSon personas que pueden experimentar una fuerte vulnerabilidad emocional mientras intentan mantener una imagen de autosuficiencia. También se describen tendencias a la rumiación, la melancolía y la búsqueda constante de reconocimiento.\n\n**Querer controlar y temer perder el control suele ser un conflicto central.**"
+        }
+      ]
+    },
+    {
+      "title": "9. Psicosomática en la piel",
+      "submodules": [
+        {
+          "id": "l-kozhoqj",
+          "nom": "9.1 La piel como frontera",
+          "tipo": "texto",
+          "contenido": "La piel es el órgano que marca el límite entre nosotros y el mundo. Nos protege, nos permite el contacto y forma parte de nuestra identidad. \n\nDesde la psicosomática, suele relacionarse con temas como la protección, la seguridad, la cercanía emocional y los límites personales.\n\n---\n\n*Emociones a flor de piel.*\n\nMuchas corrientes psicosomáticas relacionan los problemas cutáneos con una elevada sensibilidad emocional. Expresiones como \"tener las emociones a flor de piel\" reflejan esta asociación simbólica. \n\nCuando una persona tiene dificultades para expresar lo que siente, el conflicto puede manifestarse a través de la piel como una forma visible de malestar."
+        },
+        {
+          "id": "l-6c7is9y",
+          "nom": "9.2 Manifestaciones de dolor",
+          "tipo": "texto",
+          "contenido": "Conductas como **morderse las uñas** o **arrancarse el cabello** suelen relacionarse con ansiedad, tensión interna y dificultades para gestionar determinadas emociones.\n\nAlgunas interpretaciones también las asocian con una agresividad reprimida que no puede expresarse directamente. Son intentos automáticos de regular el malestar emocional.\n\n**La agresividad que no puede dirigirse hacia fuera, se dirige hacia dentro.**"
+        },
+        {
+          "id": "l-4p2u1ye",
+          "nom": "9.3 Quistes",
+          "tipo": "texto",
+          "contenido": "En algunas interpretaciones simbólicas, los quistes se asocian a situaciones de estancamiento, pérdidas no elaboradas o pensamientos repetitivos. \n\nSe describen rasgos de personalidad más obsesivos, con tendencia a dar vueltas a los problemas sin encontrar una resolución clara. \n\nEstas asociaciones pertenecen al ámbito interpretativo de la psicosomática y no sustituyen la explicación médica."
+        }
+      ]
+    },
+    {
+      "title": "10. Psicosomática respiratoria",
+      "submodules": [
+        {
+          "id": "l-zbtnos4",
+          "nom": "10.1 El simbolismo",
+          "tipo": "texto",
+          "contenido": "Respirar es una de las funciones más básicas de la Vida. Desde la psicosomática, la respiración se relaciona con la capacidad de recibir, soltar, adaptarse y ocupar nuestro propio espacio. \n\nCuando una persona vive bajo tensión constante, miedo o dependencia emocional, algunas corrientes consideran que estos conflictos pueden reflejarse simbólicamente en el sistema respiratorio."
+        },
+        {
+          "id": "l-9toj5li",
+          "nom": "10.2 Asma",
+          "tipo": "texto",
+          "contenido": "El asma se ha relacionado con conflictos de dependencia, necesidad de protección y dificultades para desarrollar autonomía emocional. También se describen historias de sobreprotección, vínculos muy estrechos con figuras de apego o necesidades afectivas que no han sido completamente satisfechas. Pueden haber tenido \"madres asfixiantes\".\n\nAlgunas personas con problemas respiratorios muestran rasgos como impaciencia, necesidad de control, baja tolerancia a la frustración o dificultades con la autoridad. \n\nDesde esta perspectiva, el síntoma reflejaría una dificultad para adaptarse de forma flexible a determinadas situaciones de la Vida. "
+        }
+      ]
+    },
+    {
+      "title": "11. Psicosomática cardiovascular",
+      "submodules": [
+        {
+          "id": "l-jx8fstv",
+          "nom": "11.1 La personalidad tipo A",
+          "tipo": "texto",
+          "contenido": "La personalidad tipo A fue descrita como un patrón caracterizado por la competitividad, la impaciencia, la necesidad de logro y la dificultad para relajarse. \n\nSon personas orientadas al rendimiento, con una fuerte autoexigencia y una tendencia constante a estar haciendo algo. \n\nSu valor personal suele estar muy ligado a los resultados que consiguen.\n\n---\n\nDesde la psicosomática, el corazón se relaciona simbólicamente con el Amor, el reconocimiento y el valor personal. \n\nAlgunas personas buscan constantemente demostrar su valía a través del éxito, el trabajo o los logros. \n\nCuando la autoestima depende exclusivamente del rendimiento, aparece un estado de tensión física y emocional sostenida.\n\n*No es lo mismo querer conseguir cosas que necesitar conseguirlas para sentirse valioso.*\n\n---\n\nLas enfermedades cardiovasculares tienen causas biológicas bien conocidas, pero algunas corrientes psicosomáticas también estudian el papel del estrés crónico y de determinados patrones de personalidad. \n\nVivir permanentemente bajo presión, compitiendo o intentando demostrar algo puede convertirse en una fuente constante de desgaste."
+        }
+      ]
+    },
+    {
+      "title": "12. Cáncer",
+      "submodules": [
+        {
+          "id": "l-fmy6b05",
+          "nom": "12.1 El cáncer desde la psicosomática",
+          "tipo": "texto",
+          "contenido": "El cáncer no se entiende como un fenómeno aislado, sino como el resultado de múltiples factores biológicos, psicológicos y vitales. \n\nSe plantea que la enfermedad aparece en una persona que ya arrastraba conflictos emocionales, pérdidas o situaciones de estrés mantenidas durante años. \n\nUna de las ideas centrales es que el síntoma tiene sentido dentro de la historia de Vida de cada individuo.\n\n**Lo importante no es solo la enfermedad, sino la persona que la desarrolla.**"
+        },
+        {
+          "id": "l-vs2emh5",
+          "nom": "12.2 La personalidad tipo C",
+          "tipo": "texto",
+          "contenido": "La llamada personalidad tipo C se caracteriza por la represión emocional, la necesidad de agradar, la evitación del conflicto y la dificultad para expresar rabia o frustración. \n\nSuelen ser personas complacientes, cumplidoras y capaces de soportar grandes cargas sin pedir ayuda. \n\nMantienen una imagen de fortaleza mientras sus propias necesidades quedan relegadas a un segundo plano."
+        },
+        {
+          "id": "l-0qcz0sg",
+          "nom": "12.3 Emociones",
+          "tipo": "texto",
+          "contenido": "Muchos autores psicosomáticos han observado la presencia de pérdidas afectivas, duelos no elaborados o situaciones de profunda desesperanza antes de la aparición de la enfermedad.\n\nTambién describen personas que han pospuesto durante años sus deseos y proyectos personales para adaptarse a las expectativas de otros. \n\nEl conflicto no sería únicamente el sufrimiento, sino la sensación de no encontrar salida.\n\n**No siempre enferma la pérdida; a veces enferma la desesperanza.**\n\n---\n\nLa relación entre cáncer y depresión es compleja. La enfermedad puede generar síntomas depresivos, pero algunas teorías también han explorado si ciertos estados emocionales prolongados aumentan la vulnerabilidad. \n\nDurante el proceso terapéutico se busca favorecer la expresión emocional, recuperar el sentido vital y transformar la experiencia de la enfermedad en una oportunidad de aprendizaje y cambio personal."
+        }
+      ]
+    },
+    {
+      "title": "13. Psicoterapia",
+      "submodules": [
+        {
+          "id": "l-pplt2w7",
+          "nom": "13.1 Escuchar el síntoma",
+          "tipo": "texto",
+          "contenido": "La psicoterapia psicosomática no busca únicamente eliminar síntomas, sino comprender qué función cumplen en la Vida de la persona. \n\nLa pregunta central deja de ser \"¿cómo hago para que desaparezca?\" y pasa a ser \"¿qué intenta decirme?\". \n\nEl síntoma se convierte en una puerta de entrada para explorar emociones, conflictos y necesidades no atendidas.\n\n**El síntoma deja de ser el enemigo para convertirse en un mensajero.**\n\n---\n\nMuchas personas llegan a terapia desconectadas de lo que sienten. Han aprendido a controlar, minimizar o ignorar sus emociones durante años. \n\nUna parte fundamental del proceso consiste en reconocer emociones como la rabia, la tristeza, el miedo o la culpa y encontrar formas saludables de expresarlas.\n\n*Lo que puede sentirse y ser expresado con palabras, ya no necesita ser somatizado.*"
+        },
+        {
+          "id": "l-657a052",
+          "nom": "13.2 Integrar",
+          "tipo": "texto",
+          "contenido": "La terapia también ayuda a elaborar traumas, duelos y experiencias que quedaron bloqueadas en el pasado. Comprender la propia historia permite dar sentido a muchos síntomas actuales. El objetivo no es cambiar lo que ocurrió, sino cambiar la relación que tenemos con ello.\n\n---\n\nMuchas personas descubren que han vivido adaptándose continuamente a los demás, olvidando sus propias necesidades. \n\nLa psicoterapia busca recuperar la capacidad de poner límites, tomar decisiones y construir un proyecto vital más auténtico. La curación no consiste solo en eliminar síntomas, sino en vivir de una forma más coherente con uno mismo.\n\n**Curarse no siempre es dejar de tener síntomas; a veces es dejar de abandonarse a uno mismo.**"
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-xsflz9e",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Hipócrates",
+                "B) Freud",
+                "C) Darwin"
+              ],
+              "enunciado": "¿Quién defendía que la enfermedad debía entenderse dentro de la totalidad de la persona?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Sanguíneo",
+                "B) Melancólico",
+                "C) Colérico"
+              ],
+              "enunciado": "Según Galeno, ¿qué temperamento estaba asociado a la bilis negra?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Mente, emociones y cuerpo",
+                "B) Genética y nutrición",
+                "C) Hormonas y metabolismo"
+              ],
+              "enunciado": "La psicosomática estudia principalmente la relación entre:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Un castigo",
+                "B) Un intento de adaptación",
+                "C) Una casualidad"
+              ],
+              "enunciado": "Según la psicosomática, el síntoma puede entenderse como:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) El tiempo lo cura todo",
+                "B) Todo síntoma tiene origen genético",
+                "C) Lo que pasó explica lo que está pasando"
+              ],
+              "enunciado": "¿Qué frase resume una idea central de la psicosomática?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Una experiencia que supera la capacidad de adaptación de la persona",
+                "B) Cualquier acontecimiento desagradable",
+                "C) Una enfermedad mental"
+              ],
+              "enunciado": "¿Qué es un trauma?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Memoria explícita",
+                "B) Memoria implícita",
+                "C) Memoria semántica"
+              ],
+              "enunciado": "¿Qué tipo de memoria almacena sensaciones y emociones difíciles de verbalizar?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Trauma → Alarma → Resistencia → Desgaste → Síntoma",
+                "B) Trauma → Síntoma → Alarma → Curación",
+                "C) Alarma → Trauma → Síntoma → Adaptación"
+              ],
+              "enunciado": "¿Cuál es la secuencia clásica del estrés descrita en el curso?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) El organismo se adapta al estrés y sigue funcionando",
+                "B) Se produce la curación",
+                "C) Desaparecen todos los síntomas"
+              ],
+              "enunciado": "¿Qué ocurre durante la fase de resistencia?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Detectar amenazas automáticamente",
+                "B) Regular emociones y tomar decisiones",
+                "C) Controlar la digestión"
+              ],
+              "enunciado": "¿Qué función tiene principalmente la corteza prefrontal?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Inventar síntomas",
+                "B) Exagerar una enfermedad",
+                "C) Expresar un conflicto emocional principalmente a través del cuerpo"
+              ],
+              "enunciado": "¿Qué es la somatización?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Rabia",
+                "B) Alegría",
+                "C) Curiosidad"
+              ],
+              "enunciado": "¿Qué emoción suele estudiarse especialmente por su frecuente represión?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Dificultad para identificar y expresar emociones",
+                "B) Miedo a las emociones",
+                "C) Falta de memoria"
+              ],
+              "enunciado": "¿Qué es la alexitimia?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Respiración",
+                "B) Represión",
+                "C) Digestión"
+              ],
+              "enunciado": "¿Cuál de los siguientes es un mecanismo de defensa?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Una ventaja psicológica o relacional asociada al síntoma",
+                "B) Una recaída",
+                "C) Una complicación médica"
+              ],
+              "enunciado": "¿Qué es un beneficio secundario del síntoma?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "A) Ausencia de responsabilidades",
+                "B) Impulsividad extrema",
+                "C) Autoexigencia y perfeccionismo"
+              ],
+              "enunciado": "¿Qué rasgo aparece con frecuencia en perfiles psicosomáticos?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Competitividad y agresividad",
+                "B) Represión emocional y complacencia",
+                "C) Búsqueda constante de riesgo"
+              ],
+              "enunciado": "La personalidad tipo C se caracteriza principalmente por:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) La forma de relacionarnos con nosotros mismos y con los demás",
+                "B) El grupo sanguíneo",
+                "C) La altura adulta"
+              ],
+              "enunciado": "Según la teoría del apego, las primeras relaciones influyen en:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A) Incorporar, asimilar y soltar",
+                "B) La visión",
+                "C) La memoria"
+              ],
+              "enunciado": "Desde la psicosomática digestiva, la digestión se relaciona simbólicamente con:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "A) Ignorar el síntoma",
+                "B) Comprender la función y el significado del síntoma",
+                "C) Sustituir los tratamientos médicos"
+              ],
+              "enunciado": "¿Cuál es uno de los objetivos principales de la psicoterapia psicosomática?"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

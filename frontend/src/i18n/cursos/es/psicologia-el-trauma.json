@@ -1,0 +1,356 @@
+{
+  "id": "bf6d66b3-48e1-46f7-90c3-639c7f0f0bc4",
+  "modalidad": "Psicología",
+  "titulo": "El Trauma",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. ¿Qué es?",
+      "submodules": [
+        {
+          "id": "l-yj13x8a",
+          "nom": "1.1 Un trauma es una herida",
+          "tipo": "texto",
+          "contenido": "*Un trauma no es un evento; un trauma es la herida que ocurre dentro de ti después de ese evento.*\n\nNormalmente, si uno puede compartir lo que ha pasado, la herida se cicatriza rápido. Si no se ha podido compartir porque los padres no han querido escucharlo o porque no se ha encontrado un lugar seguro para contarlo... el mandato de tener que **guardar silencio** de ese impacto emocional es lo que crea el trauma, la herida.\n\nA pesar del silencio, siempre habrá una parte de ti que recordará ese evento. Hasta que no seas capaz de mirar la herida, reconocerla y hacer la gestión necesaria para sanarla, se expresará en forma de síntoma, disociación o malestar.\n\n---\n\n**Un trauma es una herida.**\n\nLa palabra trauma, en la RAE, tiene 3 definiciones...\n\nm. Choque emocional que produce un daño duradero en el inconsciente.\n\nm. Emoción o impresión negativa, fuerte y duradera.\n\nm. Lesión duradera producida por un agente mecánico, generalmente externo."
+        },
+        {
+          "id": "l-8b9f3qp",
+          "nom": "1.2 La manifestación del trauma",
+          "tipo": "texto",
+          "contenido": "Desde un punto de vista **neurocientífico**, los eventos traumáticos -aquellos en los que nuestra Vida ha corrido peligro o así lo hemos sentido- se guardan en varias zonas del cerebro; entre ellas la amígdala, el hipocampo y la corteza prefrontal.\n\nCada vez que ocurre un evento parecido, estamos cerca del lugar en el que pasó o con quién pasó, la amígdala se activa, como intento de anticiparse a otro evento doloroso. Esta activación a su vez, despierta el cerebro límbico, el emocional. Pero, si no te han dejado hablar del trauma, **no hay una narrativa racional para ese evento**, por lo que la frustración encuentra otra voz y ocasiona una respuesta hormonal que activa el estrés.\n"
+        },
+        {
+          "id": "l-h6yc2ve",
+          "nom": "1.3 Las raíces del trauma",
+          "tipo": "texto",
+          "contenido": "Hay varios tipos de trauma, no todos son una situación con un momento y tiempo concreto, a veces son circunstancias repetidas en el tiempo. \n\nPor ejemplo, que tus padres nunca te preguntaran cómo estabas, si necesitabas algo... eso puede haber hecho que dudases de tu derecho a ser cuidado, amado y protegido. \n\nLos niños son muy sensibles, tienen que serlo para poder adaptarse a su entorno y sobrevivir. \n\nRecordemos que **la corteza prefrontal no acaba de desarrollarse hasta los 25 años,** por eso, durante los primeros años de Vida, el cerebro reptiliano y el límbico crean conexiones neuronales que a no ser que tomemos consciencia de ellos, nos acompañarán toda la Vida.\n\n**Las conexiones neuronales de nuestra infancia viven en nosotros.** Sin embargo, el cerebro conserva capacidad de cambio durante toda la Vida y puede crear nuevas formas de relacionarse consigo mismo y con los demás."
+        }
+      ]
+    },
+    {
+      "title": "2. La gestión",
+      "submodules": [
+        {
+          "id": "l-nwrxkdq",
+          "nom": "2.1 Romper el silencio",
+          "tipo": "texto",
+          "contenido": "Si has tenido un trauma y te has visto obligado a mantener silencio durante años (hay gente que tarda más de 50 años en poder contarlo o directamente se muere con sus traumas). Cuando encuentras un espacio para hablar, lo primero que piensas es que **lo que sientes o sentiste no es válido ni importante.** \n\nHay que tener en cuenta que esta línea de pensamiento se formó como estrategia adaptativa; \"si papá y mamá no me dan permiso para hablar, es porque en verdad lo que ha pasado no debe de ser importante\"."
+        },
+        {
+          "id": "l-7mmitu6",
+          "nom": "2.2 Los sueños",
+          "tipo": "texto",
+          "contenido": "Cuando se empieza a hablar del trauma después de tantos años, lo que ocurre es que se empieza a soñar con el evento. A pesar del dolor, es una muy buena señal, porque para muchas personas puede ser una señal de que la experiencia está empezando a ser **elaborada** e **integrada**.\n\nTe lo explico; cuando dormimos hay varias etapas del sueño. En la etapa profunda, la **REM**, lo que ocurre es que el cerebro procesa lo que ha pasado durante el día para descartar o guardar los eventos y así crear patrones de conducta y estructuras que filtran cómo vemos y actuamos en el mundo. Por eso, si sueñas con la herida, es que por fin está siendo procesada e integrada en tu narrativa.\n\n*Un trauma también puede definirse como eventos que **rompen la narrativa** de tu historia.*"
+        }
+      ]
+    },
+    {
+      "title": "3. Amnesia",
+      "submodules": [
+        {
+          "id": "l-2ndt5v5",
+          "nom": "3.1 Apego y Defensa",
+          "tipo": "texto",
+          "contenido": "Hay dos voces dentro de nosotros; la del **apego** y la de la **defensa**.\n\nLa del **apego** nos lleva a identificar personas, estímulos y situaciones que son seguras.\n\nLa de la **defensa** nos lleva a desconectarnos, huir, defendernos o atacar porque esas personas o estímulos son peligrosos.\n\nLo que lleva a un cortocircuito es cuando estos dos sistemas chocan entre sí porque se están encontrando una situación antinatural; \"la figura de apego que debería de protegerme (mamá, papá), me está haciendo daño, pero necesito que me cuide o moriré\""
+        },
+        {
+          "id": "l-jpa5kn1",
+          "nom": "3.2 Disociación",
+          "tipo": "texto",
+          "contenido": "Para defendernos de esto, de pequeños nos desconectamos y entramos en lo conocido como **disociación**. \n\nLa dificultad para recordar los primeros años de Vida tiene múltiples causas. Entre ellas se encuentra la llamada **amnesia infantil**.\n\nLejos de ser un fallo, la disociación puede entenderse como una estrategia de supervivencia que permitió soportar situaciones para las que no existían otros recursos.\n\n*Guardamos silencio y nos disociamos del dolor y de la realidad para poder sobrevivir.*\n"
+        },
+        {
+          "id": "l-c138d84",
+          "nom": "3.3 Ansiedad",
+          "tipo": "texto",
+          "contenido": "*La **ansiedad** es la pelea entre la voz del apego contra el de la defensa.* \n\nPara dejar la ansiedad, hay que escuchar lo que piden las dos voces, porque cada una pide una cosa distinta. Esta inconcluencia se manifiesta en muchos ámbitos de tu Vida. \n\nComo adultos, hay que darles una voz real, para que no exista la necesidad de manifestarlo en forma de síntoma."
+        }
+      ]
+    },
+    {
+      "title": "4. Los padres",
+      "submodules": [
+        {
+          "id": "l-mmp43c6",
+          "nom": "4.1 Niño, cállate",
+          "tipo": "texto",
+          "contenido": "Si un niño se enfada con sus padres, los padres en ningún caso deben de enfadarse con el hijo. \n\nAl contrario, deben sentarse con él, poner nombre a lo que está sintiendo, explicarle qué le está pasando y enseñarle a regularse a sí mismo. En ningún caso la respuesta debería ser: \"niño, cállate y trágate lo que sientes\"."
+        },
+        {
+          "id": "l-g4ixgw6",
+          "nom": "4.2 Dar voz a la herida",
+          "tipo": "texto",
+          "contenido": "**Un niño se maltrata a sí mismo proporcionalmente a como ha sido maltratado por sus padres.**\n\nSi sus padres (o las figuras de apego) escuchan lo que el niño **necesita** decir, solo entonces el chiquitín aprenderá que lo que siente es válido y que no debe esconderlo, que tiene voz, espacio y lugar para gestionar su dolor.\n\n**Cuando se le pone voz racional al dolor, no necesita ser expresado a través de otro tipo de dolores.**\n\nDe esta forma, no necesitará expresarlo a través del síntoma; un dolor de tripa, de cabeza, un trastorno mental (anorexia, depresión...) todo ello son síntomas. "
+        }
+      ]
+    },
+    {
+      "title": "5. El cuerpo",
+      "submodules": [
+        {
+          "id": "l-416dt0x",
+          "nom": "5.1 La memoria",
+          "tipo": "texto",
+          "contenido": "*La **memoria** es cómo la experiencia moldea el cerebro y sus respuestas futuras.*\n\n*Estamos deformados por cómo registramos el pasado.*\n\nTenemos dos tipos de memoria principalmente; la **memoria implícita** está disponible desde antes de nacer. Es la que nos permite tener movimientos automáticos, como cuando un bebé busca el pecho de la madre. ¿Cómo sabe que tiene que hacer ese gesto para alimentarse? Eso está escrito en la memoria implícita.\n\nLa otra es la **memoria explícita**. Empieza a crearse cuando tenemos 2 años y es la que nos permite narrar lo que nos ha pasado y cómo nos sentimos.\n\n**La memoria explícita debería ser capaz de poner palabras a la implícita.** \n\n---\n\nPor ejemplo, si de pequeños hemos tenido una mala experiencia con un perro, aprendemos que cada vez que hay un perro cerca debemos estar alertos. \n\nBien gestionado, la memoria explícita es capaz de verbalizar que está asustado porque de pequeño se sintió vulnerable cerca de un perro. Ahora ya no es pequeño, ya no es vulnerable a ese perro, pero sigue reaccionando igual. ¿Por qué? \n\n**Cuando no gestionamos un trauma, lo re-experimentamos una y otra vez hasta que le damos otra vía de expresión.**"
+        },
+        {
+          "id": "l-mc1tzo1",
+          "nom": "5.2 La teoría polivagal",
+          "tipo": "texto",
+          "contenido": "**El cuerpo se adapta a la manifestación física de tener que guardar silencio.**\n\nEn nuestro sistema nervioso predominan dos sistemas; el **parasimpático**, que nos permite relajarnos y sentirnos a salvo, y el **simpático**, que nos permite atacar, defendernos, correr; el que nos permite ponernos a salvo.\n\n---\n\nLa **teoría polivagal** plantea que para socializar necesitamos sentir suficiente seguridad como para conectar con los demás. Sin embargo, cuando existe un trauma, muchas personas tienen dificultades para alcanzar ese estado de seguridad porque su sistema nervioso permanece en alerta. \n\nEl sistema parasimpático no logra activarse plenamente y, como consecuencia, el simpático sigue dominando la respuesta. Esto nos lleva a **estar a la defensiva** gran parte del tiempo.\n\nPor eso muchas personas traumatizadas buscan el **aislamiento**. De esta forma evitan exponerse a situaciones que puedan activar todavía más sus mecanismos de defensa.\n\nLa **intimidad** puede hacerles reaccionar de forma automática y violenta; por eso les cuesta conseguir cualquier tipo de intimidad, ya sea un abrazo, dormir junto a alguien o mantener relaciones sexuales. \n\n*La **intimidad** requiere ser vulnerable y permanecer inmóvil sin experimentar miedo.*"
+        }
+      ]
+    },
+    {
+      "title": "6. La Mente",
+      "submodules": [
+        {
+          "id": "l-byapm0x",
+          "nom": "6.1 La ventana de tolerancia",
+          "tipo": "texto",
+          "contenido": "Todos tenemos un **umbral** dentro del cual podemos soportar las experiencias que nos ocurren a diario sin entrar en colapso. \n\nEste umbral puede expandirse dependiendo de cómo gestionamos lo que nos pasa, si entrenamos nuestra mente (como con la meditación), pero también puede estrecharse si tenemos una herida que ha sido silenciada.\n\nCuando esta ventana llega a su límite, por arriba o por abajo, dependiendo de la persona, podemos hiperactivarnos (ansiedad, insomnio) o hipoactivarnos (sueño constante, disociación)."
+        },
+        {
+          "id": "l-4472ry8",
+          "nom": "6.2 La fragmentación",
+          "tipo": "texto",
+          "contenido": "Cuando un evento sobrepasa la capacidad de afrontamiento de una persona, es decir, cuando excede con creces dicho umbral de tolerancia, no se puede crear una narrativa coherente, lo que da lugar a una **fragmentación** de la persona, de su historia, de su presente y de su futuro.\n\n*Cada uno crea la realidad que puede con las experiencias completas e incompletas que ha tenido.*\n\n---\n\n**Kant** compartía un punto de vista similar; **la mente construye conocimiento a partir de la experiencia:** *Organiza esos datos y crea estructuras con las cuales habitar la realidad.*\n\n---\n\nPara expandir la ventana de tolerancia, necesitamos mentalizar lo que sentimos y pensamos, es decir, hablar de ello. Simplemente hablar, ponerle \"corteza frontal\" al asunto, es terapéutico."
+        }
+      ]
+    },
+    {
+      "title": "7. Psicoterapia",
+      "submodules": [
+        {
+          "id": "l-rxvme63",
+          "nom": "7.1 Miedo a la reexperimentación",
+          "tipo": "texto",
+          "contenido": "Cuando vivimos algo que nos sobrepasa emocionalmente, para no tener que re-experimentar todo ese dolor, desubicación y vulnerabilidad, una parte de nosotros **actúa como si nada hubiese ocurrido.**\n\nEsta estrategia es inútil, porque al estar las conexiones neuronales formadas y los eventos guardados, vas a seguir re-experimentándolo inconscientemente. Lo que sentirás será que te invade una emoción muy grande y no sabrás qué hacer con ella."
+        },
+        {
+          "id": "l-qp23td3",
+          "nom": "7.2 La figura de apego",
+          "tipo": "texto",
+          "contenido": "*Nunca contamos nuestra historia de verdad, solo aquello que creemos que el otro es capaz de tolerar.*\n\nSi nuestros padres nos hicieron daño o no fueron capaces de escucharnos, necesitamos una figura de apego de forma temporal (no importa la edad).\n\nNecesitamos que una persona nos mire de verdad, que no nos juzgue, sino que simplemente nos escuche; mientras nosotros desarrollamos estas cualidades en nosotros, para poder convertirnos en nuestros propios protectores y cuidadores."
+        },
+        {
+          "id": "l-d0iqupq",
+          "nom": "7.3 La sanación",
+          "tipo": "texto",
+          "contenido": "El camino hacia la sanación pasa por que esa figura conecte con nosotros emocionalmente. Al principio no sirve racionalizar. Primero necesitamos sentir que el otro entiende lo que hemos pasado.\n\nUna vez hecho esto, podemos **poner palabras a lo que hemos vivido** y desarrollar **compasión** hacia nosotros mismos; \n\n*\"Mi dolor es legítimo, no necesito un trastorno para que mi dolor sea válido. Contar mi historia es suficiente.\"*\n\n*\"Entiendo que estoy enfadado, veo mis circunstancias y comprendo que lo que me ha generado tanto sufrimiento fue en otro momento, un intento legítimo de protegerme.\"*\n\n*\"Pero ya no necesito esa adaptación, porque **ahora he creado mi propio espacio seguro donde **yo** me escucho**\".*"
+        },
+        {
+          "id": "l-uf6u5wt",
+          "nom": "7.4 La integración",
+          "tipo": "texto",
+          "contenido": "*Una buena psicoterapia te enseña a moverte entre el dolor, el sufrimiento y el caos **sin perderte a ti mismo durante el trayecto**.*\n\nEl propósito final es crear una realidad que te permita acceder a tus propias herramientas y recursos. Cada uno tiene las herramientas para sanarse a sí mismo."
+        }
+      ]
+    },
+    {
+      "title": "Test de integración",
+      "submodules": [
+        {
+          "id": "l-dxfinqa",
+          "nom": "Consolida lo que has aprendido",
+          "tipo": "test",
+          "contenido": "",
+          "ejercicios": [
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "Cualquier experiencia desagradable.",
+                "El evento doloroso en sí mismo.",
+                "La herida que permanece después de una experiencia desbordante."
+              ],
+              "enunciado": "Según el curso, ¿qué es un trauma?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "Porque el trauma depende también de cómo se procesa la experiencia.",
+                "Porque el trauma depende únicamente de la gravedad del evento.",
+                "Porque el trauma depende exclusivamente de la genética."
+              ],
+              "enunciado": "¿Por qué dos personas pueden vivir el mismo acontecimiento y verse afectadas de forma diferente?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "El silencio.",
+                "La inteligencia.",
+                "El paso del tiempo."
+              ],
+              "enunciado": "¿Qué suele dificultar la integración de una experiencia dolorosa?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "Ser feliz.",
+                "Sobrevivir.",
+                "Analizar racionalmente la situación."
+              ],
+              "enunciado": "¿Cuál es la prioridad principal del cerebro cuando percibe una amenaza?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "A través de las relaciones con los demás.",
+                "A través del rendimiento académico.",
+                "A través de sus capacidades innatas."
+              ],
+              "enunciado": "¿Cómo aprende un niño quién es?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "Independencia y disciplina.",
+                "Éxito y reconocimiento.",
+                "Conexión y seguridad."
+              ],
+              "enunciado": "Según el curso, ¿qué necesita un niño para desarrollarse de forma saludable?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "Se genera un conflicto interno entre apego y defensa.",
+                "El sistema de apego desaparece.",
+                "La persona deja de necesitar a los demás."
+              ],
+              "enunciado": "¿Qué ocurre cuando la persona de la que dependemos para sentirnos seguros también es fuente de dolor?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "La memoria que recordamos conscientemente.",
+                "La memoria almacenada únicamente mediante palabras.",
+                "La memoria que se expresa mediante emociones, sensaciones y patrones automáticos."
+              ],
+              "enunciado": "¿Qué es la memoria implícita?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "El cuerpo puede recordar lo que la mente no puede explicar.",
+                "El cuerpo olvida antes que la mente.",
+                "El cuerpo solo responde al presente."
+              ],
+              "enunciado": "¿Qué idea resume mejor la relación entre cuerpo y memoria?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "Como una enfermedad.",
+                "Como una estrategia de supervivencia.",
+                "Como una señal de debilidad."
+              ],
+              "enunciado": "¿Cómo se describe la disociación en el curso?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "Defectos de personalidad.",
+                "Falta de voluntad.",
+                "Adaptaciones destinadas a sobrevivir."
+              ],
+              "enunciado": "Muchos síntomas psicológicos tienen su origen en:"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "¿Cómo puedo eliminarlo?",
+                "¿Qué está intentando proteger?",
+                "¿Quién tiene la culpa?"
+              ],
+              "enunciado": "¿Qué pregunta ayuda a comprender un síntoma?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "Como una falta de fortaleza emocional.",
+                "Como un exceso de pensamiento racional.",
+                "Como un conflicto entre necesidades internas distintas."
+              ],
+              "enunciado": "¿Cómo se explica la ansiedad en el curso?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 1,
+              "opciones": [
+                "Que desaparezca por sí solo.",
+                "Que se exprese mediante síntomas.",
+                "Que se convierta automáticamente en recuerdo consciente."
+              ],
+              "enunciado": "Cuando el dolor no puede expresarse mediante palabras, ¿qué puede ocurrir?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "Porque permite dar coherencia a experiencias fragmentadas.",
+                "Porque elimina automáticamente el sufrimiento.",
+                "Porque sustituye el procesamiento emocional."
+              ],
+              "enunciado": "¿Por qué es importante construir una narrativa sobre lo vivido?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 2,
+              "opciones": [
+                "Suprimirla.",
+                "Ignorarla.",
+                "Ayudar a darle significado."
+              ],
+              "enunciado": "¿Cuál es la función de la memoria explícita respecto a la memoria implícita?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "El rango dentro del cual podemos procesar emociones sin desbordarnos.",
+                "Un rasgo de personalidad.",
+                "Un tipo de memoria."
+              ],
+              "enunciado": "¿Qué es la ventana de tolerancia?"
+            },
+            {
+              "tipo": "opcion",
+              "correcta": 0,
+              "opciones": [
+                "Hiperactivación o hipoactivación.",
+                "Mayor claridad emocional.",
+                "Mejor regulación emocional."
+              ],
+              "enunciado": "¿Qué puede ocurrir cuando salimos de nuestra ventana de tolerancia?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Despedida",
+      "submodules": [
+        {
+          "id": "l-x4njc62",
+          "nom": "Despedida",
+          "tipo": "texto",
+          "contenido": "Gracias por dedicar tu tiempo a comprenderte mejor.\n\nEspero que este curso te haya ayudado a mirar tu historia con más claridad, compasión y profundidad.\n\nGracias por querer aprender, crecer y convertirte en una mejor versión de ti mismo.\n\nMis mejores deseos.\n\n~ María"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "d1766747-5765-4f32-b919-f090ba94e3b0": {
+    "fichero": "cabala-el-arbol-de-la-vida.json",
+    "titulo": "The Tree of Life",
+    "descripcion": "",
+    "descripcionContenido": "",
+    "modulos": [
+      "1. The Tree of Life",
+      "2. The dimensions",
+      "Integration test"
+    ],
+    "lecciones": {
+      "l-hg6df8w": "1.1 Definition",
+      "l-ym782w2": "1.2 Suffering",
+      "l-irnpusk": "2.1 The order",
+      "l-8aeaccg": "2.2 Keter — the crown",
+      "l-ua3yv5d": "2.3 Chokhmah — wisdom",
+      "l-g4mvcd6": "2.4 Binah — understanding",
+      "l-pkgu9z1": "2.5 Da'at — knowledge",
+      "l-bm2iz25": "2.6 Chesed — loving-kindness",
+      "l-osvzfqm": "2.7 Gevurah — severity and limits",
+      "l-rkcguxz": "2.8 Tiferet — harmony",
+      "l-6y59mun": "2.9 Netzach — the emotions",
+      "l-0vg9cql": "2.10 Hod — honesty",
+      "l-vdwbjf1": "2.11 Yesod — identity",
+      "l-orv0ez5": "2.12 Malkhut — the physical world",
+      "l-00y3gmf": "Consolidate what you've learned"
+    }
+  },
+  "7372fe0c-a90b-4a60-a48a-145a10c31d05": {
+    "fichero": "cabala-el-mal-en-la-cabala.json",
+    "titulo": "Evil in Kabbalah",
+    "descripcion": "",
+    "descripcionContenido": "",
+    "modulos": [
+      "1. Evil",
+      "2. The duality of Evil",
+      "Integration test"
+    ],
+    "lecciones": {
+      "l-33e4d9k": "1.1 Definition",
+      "l-onm75s0": "1.2 Energies",
+      "l-s2fyxvy": "2.1 Amalek",
+      "l-nesebf1": "2.2 Satan — the adversary",
+      "l-6rg6ezh": "Consolidate what you've learned"
+    }
+  },
+  "d5adc9fc-9221-4372-a1d8-95a416cb3877": {
+    "fichero": "cabala-introduccion.json",
+    "titulo": "Introduction",
+    "descripcion": "",
+    "descripcionContenido": "",
+    "modulos": [
+      "1. Kabbalah",
+      "2. The human being",
+      "3. Repair",
+      "Integration test"
+    ],
+    "lecciones": {
+      "l-i4v59s6": "1.1 Definition and purpose",
+      "l-spqtcrx": "1.2 Origins",
+      "l-0yslabh": "1.3 Or and Kli",
+      "l-qg12sb7": "2.1 Spirituality and matter",
+      "l-2mbqadi": "2.2 The divine mission",
+      "l-8arphn5": "2.3 Existence",
+      "l-gtrzdmc": "2.4 Refinement",
+      "l-d6fod50": "3.1 The rectification of the world",
+      "l-eyrz7vz": "3.2 Direction",
+      "l-e57f1tx": "3.3 The wise one",
+      "l-23paqfi": "Consolidate what you've learned"
+    }
+  },
+  "e4c488cf-83ce-4995-b506-159587aedeea": {
+    "fichero": "nutricion-cocina-que-nutre.json",
+    "titulo": "Cooking that nourishes",
+    "descripcion": "",
+    "descripcionContenido": "",
+    "modulos": [
+      "1 · Microbiota",
+      "2 · Get more out of the nutrients",
+      "3 · Cook better",
+      "4 · Activate the nutrients"
+    ],
+    "lecciones": {
+      "l-yn57034": "Introduction",
+      "l-ilmy3ps": "Fermented foods",
+      "l-funyme1": "Resistant starch",
+      "l-e4dchhn": "Introduction",
+      "l-n4kejny": "Whole grains",
+      "l-4a9cy54": "Pumpkin seeds",
+      "l-9xp8sro": "Pesticides",
+      "l-r8dxmes": "Introduction",
+      "l-3x7ttoj": "Freezing vegetables",
+      "l-8lfx0iz": "Zucchini",
+      "l-wmdykwh": "Broccoli stalk",
+      "l-2j9iuii": "Introduction",
+      "l-ayoua8x": "Garlic",
+      "l-0mt02s9": "Onion",
+      "l-m2kjypl": "Broccoli and cauliflower",
+      "l-zpyb2gy": "Asparagus"
+    }
+  }
+}
