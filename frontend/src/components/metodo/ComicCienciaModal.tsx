@@ -13,28 +13,28 @@ import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 // para reutilizarlo en la galería de Ilustraciones.
 export const ORIGEN_CIENCIA: Vineta[] = [
   {
-    src: "/viñetas/comicInicioSegunCiencia/inicio1.png",
+    src: "/viñetas/comicInicioSegunCiencia/inicio1.webp",
     paragraphs: [
       "Hace unos 13.800 millones de años, todo el universo estaba concentrado en un punto diminuto y extremadamente denso.",
       "Entonces ocurrió el Big Bang: el espacio comenzó a expandirse y nacieron las primeras partículas.",
     ],
   },
   {
-    src: "/viñetas/comicInicioSegunCiencia/inicio2.png",
+    src: "/viñetas/comicInicioSegunCiencia/inicio2.webp",
     paragraphs: [
       "La gravedad fue reuniendo aquellas partículas.",
       "Así nacieron las primeras estrellas, fábricas donde la fusión nuclear unió las partículas para crear nuevos átomos, como el carbono, el oxígeno o el hierro.",
     ],
   },
   {
-    src: "/viñetas/comicInicioSegunCiencia/inicio3.png",
+    src: "/viñetas/comicInicioSegunCiencia/inicio3.webp",
     paragraphs: [
       "Cuando esas estrellas murieron, liberaron los átomos formados por ellas al espacio.",
       "Con ese material se formaron nuevas estrellas, planetas y sistemas solares.",
     ],
   },
   {
-    src: "/viñetas/comicInicioSegunCiencia/inicio4.png",
+    src: "/viñetas/comicInicioSegunCiencia/inicio4.webp",
     paragraphs: [
       "Los planetas nacen de los átomos formados por estrellas. Uno de aquellos planetas era la Tierra.",
       "Durante millones de años, fue transformándose hasta convertirse en un lugar capaz de albergar Vida.",
@@ -48,7 +48,7 @@ export const ORIGEN_CIENCIA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicioSegunCiencia/inicio6.png",
+    src: "/viñetas/comicInicioSegunCiencia/inicio6.webp",
     paragraphs: [
       "En la naturaleza, nada se desperdicia.",
       "Los átomos pasan continuamente de unos seres a otros mediante ciclos como los del agua, el carbono, el nitrógeno o el oxígeno.",
@@ -56,7 +56,7 @@ export const ORIGEN_CIENCIA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicioSegunCiencia/inicio7.png",
+    src: "/viñetas/comicInicioSegunCiencia/inicio7.webp",
     paragraphs: [
       "Los átomos que forman tu cuerpo nacieron en el interior de estrellas.",
       "Antes de estar en ti, pudieron formar parte de una montaña, un océano, un animal o una flor.",
@@ -64,7 +64,7 @@ export const ORIGEN_CIENCIA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicioSegunCiencia/inicio8.png",
+    src: "/viñetas/comicInicioSegunCiencia/inicio8.webp",
     paragraphs: [
       "No somos individuos hechos de polvo de estrellas.",
       "Somos el universo experimentándose a sí mismo.",

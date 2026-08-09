@@ -421,7 +421,7 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
             {/* Fondo propio de cada sefirá (círculo), tanto en el árbol como en
                 el modo senderos (ahí, muy atenuado). */}
             <pattern id="sefira-node-img" width="1" height="1" patternContentUnits="objectBoundingBox">
-              <image href="/recorrido/cabala/sefirotfondo.png" width="1" height="1" preserveAspectRatio="xMidYMid slice" />
+              <image href="/recorrido/cabala/sefirotfondo.webp" width="1" height="1" preserveAspectRatio="xMidYMid slice" />
             </pattern>
             {/* Halo radial dorado de Keter (luz permanente). */}
             <radialGradient id="keter-halo" cx="50%" cy="50%" r="50%">

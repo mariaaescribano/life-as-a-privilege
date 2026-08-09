@@ -27,15 +27,15 @@ import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from 
 // ═════════════════════════════════════════════════════════════════════════
 
 // Barra de scroll SIEMPRE visible (mismo estilo que el visor de ilustraciones):
-// carril tenue + pulgar marcado, en la letra de la disciplina (el acento claro
-// de Nutrición no se vería sobre el box).
+// solo el pulgar, con la letra de la disciplina (el acento claro de Nutrición no
+// se vería sobre el box); el carril, transparente del todo.
 const SCROLL_SX = {
-  "&::-webkit-scrollbar": { width: "8px" },
-  "&::-webkit-scrollbar-track": { background: `${nutricionTxt}1f`, borderRadius: "4px" },
+  "&::-webkit-scrollbar": { width: "8px", background: "transparent" },
+  "&::-webkit-scrollbar-track": { background: "transparent" },
   "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}88`, borderRadius: "4px" },
   "&::-webkit-scrollbar-thumb:hover": { background: `${nutricionTxt}cc` },
   scrollbarWidth: "thin" as const,
-  scrollbarColor: `${nutricionTxt}88 ${nutricionTxt}1f`,
+  scrollbarColor: `${nutricionTxt}88 transparent`,
 };
 
 // Pinta un párrafo con soporte de **negrita** (misma emphasis que pidió la usuaria).

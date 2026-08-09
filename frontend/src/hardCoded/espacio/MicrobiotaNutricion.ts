@@ -14,7 +14,7 @@ export const MICROBIOTA_BACTERIAS: NutrienteTarjeta[] = [
     key: "bifidobacterium",
     titulo: "Bifidobacterium longum",
     color: "#2f6fd6", // azul zafiro
-    foto: "/recorrido/nutricion/bacterias/bifidobacterium.png",
+    foto: "/recorrido/nutricion/bacterias/bifidobacterium.webp",
     parrafos: [
       "Es una de las bacterias beneficiosas más abundantes en el intestino humano, especialmente durante la infancia.",
       "Ayuda a digerir ciertos carbohidratos, produce ácidos grasos de cadena corta y contribuye a mantener la barrera intestinal y el equilibrio del sistema inmunitario.",
@@ -24,7 +24,7 @@ export const MICROBIOTA_BACTERIAS: NutrienteTarjeta[] = [
     key: "lactobacillus",
     titulo: "Lactobacillus rhamnosus",
     color: "#2fbf87", // verde esmeralda
-    foto: "/recorrido/nutricion/bacterias/lactobacillus.png",
+    foto: "/recorrido/nutricion/bacterias/lactobacillus.webp",
     parrafos: [
       "Produce ácido láctico, contribuyendo a mantener un ambiente intestinal saludable y dificultando el crecimiento de microorganismos patógenos.",
       "También participa en la regulación de la respuesta inmunitaria y es uno de los probióticos más estudiados.",
@@ -34,7 +34,7 @@ export const MICROBIOTA_BACTERIAS: NutrienteTarjeta[] = [
     key: "akkermansia",
     titulo: "Akkermansia muciniphila",
     color: "#22c7d6", // turquesa brillante
-    foto: "/recorrido/nutricion/bacterias/akkermansia.png",
+    foto: "/recorrido/nutricion/bacterias/akkermansia.webp",
     parrafos: [
       "Vive adherida a la capa de moco del intestino y participa en su renovación.",
       "Su presencia se asocia con una mejor salud metabólica y con una mayor integridad de la barrera intestinal.",
@@ -44,7 +44,7 @@ export const MICROBIOTA_BACTERIAS: NutrienteTarjeta[] = [
     key: "faecalibacterium",
     titulo: "Faecalibacterium prausnitzii",
     color: "#f0a63c", // naranja ámbar
-    foto: "/recorrido/nutricion/bacterias/faecalibacterium.png",
+    foto: "/recorrido/nutricion/bacterias/faecalibacterium.webp",
     parrafos: [
       "Es uno de los principales productores de butirato en el colon.",
       "Ese ácido graso es una importante fuente de energía para las células intestinales y tiene propiedades antiinflamatorias, por lo que se considera un indicador de una microbiota saludable.",
@@ -54,7 +54,7 @@ export const MICROBIOTA_BACTERIAS: NutrienteTarjeta[] = [
     key: "bacteroides",
     titulo: "Bacteroides thetaiotaomicron",
     color: "#e6b422", // dorado intenso
-    foto: "/recorrido/nutricion/bacterias/bacteroides.png",
+    foto: "/recorrido/nutricion/bacterias/bacteroides.webp",
     parrafos: [
       "Es una de las bacterias intestinales más abundantes en los adultos.",
       "Tiene una extraordinaria capacidad para degradar polisacáridos complejos de la dieta, facilitando la obtención de nutrientes y colaborando con el metabolismo humano.",
@@ -64,7 +64,7 @@ export const MICROBIOTA_BACTERIAS: NutrienteTarjeta[] = [
     key: "ecoli",
     titulo: "Escherichia coli (comensal)",
     color: "#d1495b", // rojo carmín
-    foto: "/recorrido/nutricion/bacterias/ecoli.png",
+    foto: "/recorrido/nutricion/bacterias/ecoli.webp",
     parrafos: [
       "Aunque algunas cepas pueden causar enfermedad, la mayoría de las que forman parte de la microbiota intestinal son inofensivas e incluso beneficiosas.",
       "Participan en la síntesis de vitamina K, compiten con microorganismos patógenos (ocupan todo el espacio y consumen los nutrientes del intestino antes de que los 'malos' los consuman) y contribuyen al equilibrio del ecosistema intestinal.",

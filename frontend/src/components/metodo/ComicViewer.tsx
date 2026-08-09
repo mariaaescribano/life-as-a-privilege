@@ -218,15 +218,17 @@ export function ComicViewer({
   // caer siempre en `themeColor` dejaba la barra invisible en Nutrición, donde
   // el acento es casi blanco (#e4f8e1) sobre un box claro.
   const sbColor = scrollbarColor ?? textColor ?? themeColor;
-  // Estilo único de la barra vertical: SIEMPRE visible (carril tenue + pulgar
-  // marcado), para que se vea que el texto continúa aunque no se toque nada.
+  // Estilo único de la barra vertical: SIEMPRE visible el PULGAR (lo que sube y
+  // baja), para que se vea que el texto continúa aunque no se toque nada; el
+  // CARRIL va totalmente transparente (nada de franja tenue: se ve la foto/el
+  // fondo del box detrás de la barra).
   const scrollSx = {
-    "&::-webkit-scrollbar": { width: "8px" },
-    "&::-webkit-scrollbar-track": { background: `${sbColor}1f`, borderRadius: "4px" },
+    "&::-webkit-scrollbar": { width: "8px", background: "transparent" },
+    "&::-webkit-scrollbar-track": { background: "transparent" },
     "&::-webkit-scrollbar-thumb": { background: `${sbColor}88`, borderRadius: "4px" },
     "&::-webkit-scrollbar-thumb:hover": { background: `${sbColor}cc` },
     scrollbarWidth: "thin" as const,
-    scrollbarColor: `${sbColor}88 ${sbColor}1f`,
+    scrollbarColor: `${sbColor}88 transparent`,
   };
   // La COLUMNA DE TEXTO además se puede seleccionar con el ratón (copiar una
   // frase de la viñeta). Hay que decirlo aquí explícitamente porque las páginas

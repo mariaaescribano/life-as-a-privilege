@@ -15,21 +15,21 @@ import type { Vineta } from "./ComicViewer";
 // la espiritualidad») sin duplicar el contenido.
 export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
   {
-    src: "/viñetas/comicInicio/viñeta1.png",
+    src: "/viñetas/comicInicio/viñeta1.webp",
     paragraphs: [
       "Al principio existía lo infinito.",
       "Luz y sombra, lo femenino y lo masculino, todo unido en fusión. Todos eran Uno, Uno eran todos.",
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta2.png",
+    src: "/viñetas/comicInicio/viñeta2.webp",
     paragraphs: [
       "Un día, lo infinito quiso saber qué se siente al recibir Amor.",
       "Para poder sentirlo, tuvo que manifestarse en dos.",
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta3.png",
+    src: "/viñetas/comicInicio/viñeta3.webp",
     paragraphs: [
       "Así nacieron la vasija que sostiene y la luz que se entrega.",
       "Yang, Purusha, Or: el portador y dador de luz.",
@@ -37,21 +37,21 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta4.png",
+    src: "/viñetas/comicInicio/viñeta4.webp",
     paragraphs: [
       "Pero lo infinito quería más. Quería experimentarse desde todos los puntos de vista que fuese capaz de imaginar.",
       "Y dentro de ese límite que se había puesto, empezó a presionar hacia fuera.",
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta5.png",
+    src: "/viñetas/comicInicio/viñeta5.webp",
     paragraphs: [
       "Estalló. La primera expansión.",
       "La ciencia la llama Big Bang y la fecha es de hace 13.800 millones de años.",
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta6.png",
+    src: "/viñetas/comicInicio/viñeta6.webp",
     paragraphs: [
       "En los primeros minutos, esa energía se convirtió en materia. Esa materia dio origen a miles de millones de partículas.",
       "Desde una perspectiva espiritual, esa separación fue el primer gran dolor.",
@@ -62,21 +62,21 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta7.png",
+    src: "/viñetas/comicInicio/viñeta7.webp",
     paragraphs: [
       "La materia se buscó a sí misma. Se agrupó en estrellas.",
       "Dentro de ellas, por gravedad, nacieron los elementos pesados: el carbono, el oxígeno, el hierro... Todo lo que hoy existe.",
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta8.png",
+    src: "/viñetas/comicInicio/viñeta8.webp",
     paragraphs: [
       "Las estrellas murieron y con su polvo nacieron los planetas, la naturaleza y nosotros.",
       "El hierro de tu sangre estuvo dentro de una estrella. Esto no es metáfora.",
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta9.png",
+    src: "/viñetas/comicInicio/viñeta9.webp",
     paragraphs: [
       "Ese polvo estelar se unió para formar planetas. El nuestro halló el lugar perfecto.",
       "A lo largo de la historia, las culturas han hablado de elementos distintos.",
@@ -84,7 +84,7 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta10.png",
+    src: "/viñetas/comicInicio/viñeta10.webp",
     paragraphs: [
       "La materia, en algún momento, empezó a copiarse, duplicarse y expandirse.",
       "Eso somos: un préstamo de polvo de estrellas. Una inversión del Universo.",
@@ -92,14 +92,14 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta11.png",
+    src: "/viñetas/comicInicio/viñeta11.webp",
     paragraphs: [
       "Todo lo que ves es una manifestación distinta de Dios. Tú eres parte de lo divino, pero se te ha olvidado.",
       "La Cábala lo llama el exilio de la chispa: la luz que olvidó de dónde venía.",
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta12.png",
+    src: "/viñetas/comicInicio/viñeta12.webp",
     paragraphs: [
       "No estás aquí por casualidad, ni por castigo. No has sido abandonado ni expulsado.",
       "Estás aquí para recordar que eres una manifestación de Dios y estás formado por Amor.",
@@ -108,14 +108,14 @@ export const ORIGEN_ESPIRITUALIDAD: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta13.png",
+    src: "/viñetas/comicInicio/viñeta13.webp",
     paragraphs: [
       "En el instante exacto en que naciste, el cielo tenía una configuración que no se repetirá.",
       "Esa es tu carta natal. Te dice desde dónde y para qué actúas. Es tu camino para volver al Hogar.",
     ],
   },
   {
-    src: "/viñetas/comicInicio/viñeta14.png",
+    src: "/viñetas/comicInicio/viñeta14.webp",
     paragraphs: [
       "El Mapa te acompañará a través de las ocho disciplinas que te ayudarán a entenderte y recordar el sentido de tu Vida.",
       "Obtendrás herramientas que te ayudarán en tu camino, el cual tienes que caminar con tu valentía y fortaleza.",

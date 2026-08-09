@@ -10,10 +10,10 @@ import { astrologiaTxt } from "../../GlobalVariables";
    Viñetas del cómic "¿Qué es una carta astral?".
    Cambia `img` por las fotos que quieras y edita los textos.
    ────────────────────────────────────────────────────────────── */
-const MAPA1 = "/viñetas/astrologia/astro/mapa1.png";
-const MAPA2 = "/viñetas/astrologia/astro/mapa2.png";
-const MAPA3 = "/viñetas/astrologia/astro/mapa3.png";
-const MAPA4 = "/viñetas/astrologia/astro/mapa4.png";
+const MAPA1 = "/viñetas/astrologia/astro/mapa1.webp";
+const MAPA2 = "/viñetas/astrologia/astro/mapa2.webp";
+const MAPA3 = "/viñetas/astrologia/astro/mapa3.webp";
+const MAPA4 = "/viñetas/astrologia/astro/mapa4.webp";
 
 /** Fotos del cómic de la carta, para poder precargarlas desde la página (que
  *  no aparezca la página hasta que la foto de la carta también esté lista). */

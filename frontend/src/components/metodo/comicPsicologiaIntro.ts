@@ -23,7 +23,7 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
     ],
   },
   {
-    src: `${P}/sufrimiento3.png`,
+    src: `${P}/sufrimiento3.webp`,
     paragraphs: [
       "Nuestro cerebro se desarrolla adaptándose a quienes nos cuidan.",
       "Muchas de las conexiones que hoy dirigen nuestra forma de sentir, pensar y relacionarnos nacieron cuando aún no podíamos comprender ni recordar con palabras lo que vivíamos.",
@@ -60,7 +60,7 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
     ],
   },
   {
-    src: `${P}/sufrimiento8.png`,
+    src: `${P}/sufrimiento8.webp`,
     paragraphs: [
       "Pero hoy puedes empezar otro camino.",
       "Tus padres, tus abuelos y tus ancestros también fueron hijos no queridos en su propia historia. Te dieron lo que te pudieron dar.",

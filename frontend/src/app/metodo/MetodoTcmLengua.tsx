@@ -20,7 +20,7 @@ import {
   type LenguaDim, type OpcionLengua,
 } from "../../components/metodo/tcmLenguaContenido";
 
-const MAPA_LENGUA = "/recorrido/tcm/lengua/mapalengua.png";
+const MAPA_LENGUA = "/recorrido/tcm/lengua/mapalengua.webp";
 
 // ── Agrupación visual de las cajitas de lengua ──────────────────────────────
 // Las 30 fotos se reparten en grupos que llenan filas completas de 3 (6 ó 3 por

@@ -11,7 +11,7 @@ import type { Vineta } from "./ComicViewer";
 // Imágenes: /viñetas/psicologia/sintesis/sintesis1.png … sintesis3.png.
 export const COMIC_SINTESIS: Vineta[] = [
   {
-    src: "/viñetas/psicologia/sintesis/sintesis1.png",
+    src: "/viñetas/psicologia/sintesis/sintesis1.webp",
     titulo: "",
     paragraphs: [
       "Todos creemos que el problema es el problema.",
@@ -23,7 +23,7 @@ export const COMIC_SINTESIS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/sintesis/sintesis2.png",
+    src: "/viñetas/psicologia/sintesis/sintesis2.webp",
     titulo: "",
     paragraphs: [
       "Lo que llamas «problema» suele ser un síntoma de que sigues sobreviviendo desde patrones que aprendiste en la infancia.",
@@ -34,7 +34,7 @@ export const COMIC_SINTESIS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/sintesis/sintesis3.png",
+    src: "/viñetas/psicologia/sintesis/sintesis3.webp",
     titulo: "",
     paragraphs: [
       "Ya entiendes de dónde nace esa reivindicación.",

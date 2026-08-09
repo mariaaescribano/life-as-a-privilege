@@ -9,6 +9,9 @@ export const header = {
   "header.estudio": "Estudio",
   "header.cursos": "Cursos",
   "header.miCuenta": "Mi cuenta",
+  /** Última opción del menú SIN sesión. Es una acción, no un sitio: quien no ha
+   *  entrado todavía no tiene ninguna «cuenta» que visitar. */
+  "header.iniciarSesion": "Iniciar sesión",
   "header.idioma": "Cambiar idioma",
   "header.menu": "Menú",
   "header.cerrarMenu": "Cerrar menú",

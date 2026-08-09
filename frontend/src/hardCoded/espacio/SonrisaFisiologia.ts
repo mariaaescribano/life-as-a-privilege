@@ -36,7 +36,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "cerebro",
     nombre: "Cerebro",
     titulo: "Tu cerebro",
-    foto: `${F}/cerebro.png`,
+    foto: `${F}/cerebro.webp`,
     hotspot: { top: 10, left: 47 },
     claves: [
       "Pesa poco más de un kilo y gasta cerca de una quinta parte de tu energía",
@@ -50,7 +50,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "tiroides",
     nombre: "Tiroides",
     titulo: "Tu tiroides",
-    foto: `${F}/tiroides.png`,
+    foto: `${F}/tiroides.webp`,
     hotspot: { top: 18, left: 47 },
     claves: [
       "Una mariposa de 20-25 gramos en tu garganta",
@@ -64,7 +64,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "pulmones",
     nombre: "Pulmones",
     titulo: "Tus pulmones",
-    foto: `${F}/pulmones.png`,
+    foto: `${F}/pulmones.webp`,
     hotspot: { top: 27, left: 42 },
     claves: [
       "Unas 20.000 respiraciones al día",
@@ -78,7 +78,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "corazon",
     nombre: "Corazón",
     titulo: "Tu corazón",
-    foto: `${F}/corazon.png`,
+    foto: `${F}/corazon.webp`,
     hotspot: { top: 29, left: 50 },
     claves: [
       "Unos 100.000 latidos al día",
@@ -92,7 +92,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "higado",
     nombre: "Hígado",
     titulo: "Tu hígado",
-    foto: `${F}/higado.png`,
+    foto: `${F}/higado.webp`,
     hotspot: { top: 35, left: 42.5 },
     claves: [
       "Más de 500 funciones distintas",
@@ -106,7 +106,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "estomago",
     nombre: "Estómago",
     titulo: "Tu estómago",
-    foto: `${F}/estomago.png`,
+    foto: `${F}/estomago.webp`,
     hotspot: { top: 36, left: 55 },
     claves: [
       "Fabrica un ácido tan fuerte que podría dañar un metal",
@@ -120,7 +120,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "pancreas",
     nombre: "Páncreas",
     titulo: "Tu páncreas",
-    foto: `${F}/pancreas.png`,
+    foto: `${F}/pancreas.webp`,
     hotspot: { top: 40.5, left: 49 },
     claves: [
       "Fabrica la insulina y el glucagón",
@@ -134,7 +134,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "bazo",
     nombre: "Bazo",
     titulo: "Tu bazo",
-    foto: `${F}/bazo.png`,
+    foto: `${F}/bazo.webp`,
     hotspot: { top: 39.5, left: 59 },
     claves: [
       "Retira los glóbulos rojos viejos y recicla su hierro",
@@ -148,7 +148,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "rinones",
     nombre: "Riñones",
     titulo: "Tus riñones",
-    foto: `${F}/rinones.png`,
+    foto: `${F}/rinones.webp`,
     hotspot: { top: 44, left: 43 },
     claves: [
       "Filtran unos 180 litros de sangre al día",
@@ -162,7 +162,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "intestino",
     nombre: "Intestinos",
     titulo: "Tus intestinos",
-    foto: `${F}/intestino.png`,
+    foto: `${F}/intestino.webp`,
     hotspot: { top: 48, left: 50 },
     claves: [
       "Entre siete y ocho metros de largo",
@@ -176,7 +176,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "huesos",
     nombre: "Huesos",
     titulo: "Tus huesos",
-    foto: `${F}/huesos.png`,
+    foto: `${F}/huesos.webp`,
     hotspot: { top: 77, left: 55 },
     claves: [
       "206 huesos sosteniéndote ahora mismo",
@@ -190,7 +190,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     key: "piel",
     nombre: "Piel",
     titulo: "Tu piel",
-    foto: `${F}/piel.png`,
+    foto: `${F}/piel.webp`,
     hotspot: { top: 22, left: 32 },
     claves: [
       "Tu órgano más grande: unos dos metros cuadrados",
@@ -203,7 +203,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
 ];
 
 /** Figura del «espejo»: el cuerpo entero con sus órganos dentro. */
-export const ESPEJO_FOTO = `${F}/anatomia.png`;
+export const ESPEJO_FOTO = `${F}/anatomia.webp`;
 
 /** Clave de metodo_fisiologia.data donde se guardan los órganos agradecidos. */
 export const SONRISA_CAMPO = "sonrisa_agradecidos";

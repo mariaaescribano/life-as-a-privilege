@@ -18,9 +18,9 @@ export interface HistoriaVisual {
 }
 
 export const CULTURA_HISTORIA_VISUAL: Record<string, HistoriaVisual> = {
-  universal:  { portada: `${P}/historiauniversal.png`, emoji: "🌍" },
-  religiones: { portada: `${P}/historiareligion.png`,  emoji: "🕊️" },
-  filosofia:  { portada: `${P}/historiafilosofia.png`, emoji: "🏛️" },
+  universal:  { portada: `${P}/historiauniversal.webp`, emoji: "🌍" },
+  religiones: { portada: `${P}/historiareligion.webp`,  emoji: "🕊️" },
+  filosofia:  { portada: `${P}/historiafilosofia.webp`, emoji: "🏛️" },
   ciencia:    { emoji: "🔬" },
   medicina:   { emoji: "⚕️" },
   arte:       { emoji: "🎭" },

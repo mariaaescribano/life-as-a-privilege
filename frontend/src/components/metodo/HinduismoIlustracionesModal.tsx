@@ -26,7 +26,7 @@ import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 // ilustraciones de hinduismo) sin duplicar el contenido.
 export const VINETAS_ORIGEN: Vineta[] = [
   {
-    src: "/viñetas/hinduismo/origen/origen1.png",
+    src: "/viñetas/hinduismo/origen/origen1.webp",
     paragraphs: [
       "El Uno se manifiesta en dos principios fundamentales.",
       "Puruṣa, la energía masculina y la consciencia pura.",
@@ -34,14 +34,14 @@ export const VINETAS_ORIGEN: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/hinduismo/origen/origen2.png",
+    src: "/viñetas/hinduismo/origen/origen2.webp",
     paragraphs: [
       "Prakṛti está formada por tres cualidades o energías llamadas guṇas: ",
       "Sattva (armonía y claridad), Rajas (acción y movimiento) y Tamas (estabilidad e inercia).",
     ],
   },
   {
-    src: "/viñetas/hinduismo/origen/origen3.png",
+    src: "/viñetas/hinduismo/origen/origen3.webp",
     paragraphs: [
       "Cuando Puruṣa se encuentra con Prakṛti, comienza la manifestación del universo.",
       "La primera manifestación es Mahat o Buddhi, la inteligencia cósmica.",
@@ -49,39 +49,39 @@ export const VINETAS_ORIGEN: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/hinduismo/origen/origen4.png",
+    src: "/viñetas/hinduismo/origen/origen4.webp",
     paragraphs: [
       "Desde Ahaṃkāra, cuando predomina Sattva, nacen Manas (la mente), los cinco sentidos de conocimiento y los cinco órganos de acción.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/origen/origen5.png",
+    src: "/viñetas/hinduismo/origen/origen5.webp",
     paragraphs: [
       "Desde Ahaṃkāra, cuando predomina Tamas, surgen los cinco Tanmātras o cualidades sutiles: sonido, tacto, forma, sabor y olor.",
       "De ellos emergerán posteriormente los cinco grandes elementos.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/origen/origen6.png",
+    src: "/viñetas/hinduismo/origen/origen6.webp",
     paragraphs: [
       "Los cinco grandes elementos son: Éter, Aire, Fuego, Agua y Tierra.",
       "Constituyen toda la materia del universo.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/origen/origen7.png",
+    src: "/viñetas/hinduismo/origen/origen7.webp",
     paragraphs: [
       "Los cinco elementos se combinan para formar los tres doṣhas: Vāta, Pitta y Kapha.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/origen/origen8.png",
+    src: "/viñetas/hinduismo/origen/origen8.webp",
     paragraphs: [
       "La interacción de los elementos y los doṣhas da lugar a la naturaleza y al ser humano, que refleja en sí mismo las mismas leyes que gobiernan el universo.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/origen/origen9.png",
+    src: "/viñetas/hinduismo/origen/origen9.webp",
     paragraphs: [
       "Por ello, el ser humano es considerado un microcosmos: un universo en miniatura que contiene los mismos principios presentes en el macrocosmos.",
       "Entendernos es entender el universo y entender el universo es entendernos a nosotros.",
@@ -91,42 +91,42 @@ export const VINETAS_ORIGEN: Vineta[] = [
 
 export const VINETAS_ELEMENTOS: Vineta[] = [
   {
-    src: "/viñetas/hinduismo/elementos/elementosayurveda.png",
+    src: "/viñetas/hinduismo/elementos/elementosayurveda.webp",
     paragraphs: [
       "Según la Ayurveda, todo lo que existe en el universo está formado por Cinco Elementos.",
       "Y nosotros no somos la excepción.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/elementos/eter.png",
+    src: "/viñetas/hinduismo/elementos/eter.webp",
     paragraphs: [
       "El Éter es el espacio.",
       "Es aquello que permite que todo lo demás exista y se exprese.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/elementos/aire.png",
+    src: "/viñetas/hinduismo/elementos/aire.webp",
     paragraphs: [
       "El Aire es el movimiento.",
       "La respiración, los pensamientos y el cambio constante de la Vida.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/elementos/fuego.png",
+    src: "/viñetas/hinduismo/elementos/fuego.webp",
     paragraphs: [
       "El Fuego es la transformación.",
       "Convierte la materia en energía, las experiencias en aprendizaje y las ideas en acción.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/elementos/agua.png",
+    src: "/viñetas/hinduismo/elementos/agua.webp",
     paragraphs: [
       "El Agua es la unión.",
       "La nutrición, la sensibilidad y la capacidad de adaptarnos sin perder nuestra esencia.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/elementos/tierra.png",
+    src: "/viñetas/hinduismo/elementos/tierra.webp",
     paragraphs: [
       "La Tierra es la estabilidad.",
       "Nos aporta estructura, fuerza y la capacidad de construir algo duradero.",
@@ -136,14 +136,14 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
 
 export const VINETAS_DOSHAS: Vineta[] = [
   {
-    src: "/viñetas/hinduismo/doshas/doshasportada.png",
+    src: "/viñetas/hinduismo/doshas/doshasportada.webp",
     paragraphs: [
       "Según la Ayurveda, los Cinco Elementos se mezclan para formar los tres Doṣhas.",
       "En cada persona, un Doṣha predomina sobre los otros, esto influencia la constitución, la mentalidad y la salud.",
     ],
   },
   {
-    src: "/viñetas/hinduismo/doshas/vatta.png",
+    src: "/viñetas/hinduismo/doshas/vatta.webp",
     paragraphs: [
       "Vata está formado por Aire y Éter.",
       "Es la energía del movimiento, la creatividad y el cambio.",
@@ -174,9 +174,9 @@ const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
 };
 
 const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string }[] = [
-  { key: "el_origen",     title: "1. El Origen",     cover: "/viñetas/hinduismo/origen/portada.png"              },
-  { key: "los_elementos", title: "2. Los Elementos", cover: "/viñetas/hinduismo/elementos/elementosayurveda.png" },
-  { key: "los_doshas",    title: "3. Los Doṣhas",    cover: "/viñetas/hinduismo/doshas/doshasportada.png"        },
+  { key: "el_origen",     title: "1. El Origen",     cover: "/viñetas/hinduismo/origen/portada.webp"              },
+  { key: "los_elementos", title: "2. Los Elementos", cover: "/viñetas/hinduismo/elementos/elementosayurveda.webp" },
+  { key: "los_doshas",    title: "3. Los Doṣhas",    cover: "/viñetas/hinduismo/doshas/doshasportada.webp"        },
 ];
 
 // Portadas del selector (con la misma codificación que usa el <img>), para

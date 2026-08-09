@@ -62,7 +62,7 @@ const NUTRIENTES_MUESTRA = NUTRIENTES.slice(0, 4);
 const FOTOS_MUESTRA: { foto: string; tituloKey: ClaveTexto }[] = [
   // El título va como CLAVE: este array es de nivel de módulo y un texto ya
   // traducido se quedaría congelado en el idioma de arranque.
-  { foto: "/recorrido/nutricion/bacterias/bifidobacterium.png", tituloKey: "presentacion.nutri.microbiota" },
+  { foto: "/recorrido/nutricion/bacterias/bifidobacterium.webp", tituloKey: "presentacion.nutri.microbiota" },
   { foto: "/recorrido/nutricion/portadas/agua.webp", tituloKey: "presentacion.nutri.agua" },
   { foto: "/recorrido/nutricion/portadas/fibra.webp", tituloKey: "presentacion.nutri.fibra" },
   { foto: "/recorrido/nutricion/portadas/fitoquimico.webp", tituloKey: "presentacion.nutri.fitoquimicos" },

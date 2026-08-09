@@ -11,7 +11,7 @@ const PRE = "/viñetas/fisiologia/reconstruccion";
 
 export const RECONSTRUCCION: Vineta[] = [
   {
-    src: `${PRE}/1.png`,
+    src: `${PRE}/1.webp`,
     paragraphs: [
       "Tu cuerpo está formado por aproximadamente 37 billones (37 × 10¹²) de células.",
       "Cada día, alrededor de 330.000 millones de ellas mueren y son reemplazadas por otras nuevas.",
@@ -20,7 +20,7 @@ export const RECONSTRUCCION: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/2.png`,
+    src: `${PRE}/2.webp`,
     paragraphs: [
       "Imagina una ciudad en la que cada edificio se estuviera reparando al mismo tiempo, pero cada uno siguiera un calendario distinto.",
       "Eso es exactamente lo que hace tu cuerpo.",
@@ -30,7 +30,7 @@ export const RECONSTRUCCION: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/3.png`,
+    src: `${PRE}/3.webp`,
     paragraphs: [
       "Cada célula nueva necesita materia prima.",
       "Tu cuerpo fabrica aproximadamente 300 millones de células nuevas cada minuto. Más de 5 millones cada segundo.",
@@ -41,7 +41,7 @@ export const RECONSTRUCCION: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/4.png`,
+    src: `${PRE}/4.webp`,
     paragraphs: [
       "Tu cuerpo no distingue entre un día bueno y un día malo.",
       "Registra patrones.",
@@ -52,7 +52,7 @@ export const RECONSTRUCCION: Vineta[] = [
     ],
   },
   {
-    src: `${PRE}/5.png`,
+    src: `${PRE}/5.webp`,
     paragraphs: [
       "Tu ADN sigue siendo prácticamente el mismo.",
       "Pero las proteínas que fabricas, las células que reemplazas, los tejidos que regeneras y la forma en que funcionan tus órganos dependen, en gran medida, de las señales que reciben cada día.",

@@ -108,7 +108,7 @@ export const CABALA_ILUSTRACIONES: Record<CabalaPageKey, Vineta[]> = {
   ],
   malkuth: [
     {
-      src: "/recorrido/cabala/sefirot/malkhut.png",
+      src: "/recorrido/cabala/sefirot/malkhut.webp",
       paragraphs: [
         "Malkhut representa el mundo físico y la manifestación de toda la energía del Árbol de la Vida.",
         "Es la capacidad de convertir el crecimiento interior en acciones concretas, construyendo una realidad que refleje nuestros valores, nuestro propósito y la persona que elegimos ser.",

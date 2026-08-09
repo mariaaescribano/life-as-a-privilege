@@ -68,7 +68,7 @@ interface FichaOrgano extends Consejo {
 // Posiciones PROVISIONALES (se ajustarán sobre la imagen real). Las fotos de
 // los órganos están en /recorrido/fisiologia/organos/{key}.png.
 const ORGANOS: Organo[] = [
-  { key: "cerebro",   label: "Cerebro",   foto: "/recorrido/fisiologia/organos/cerebro.png",   hotspot: { top: 10, left: 47 }, celulas: pick("neuronas", "astrocitos", "microglia", "oligodendrocitos", "ependimarias", "endotelial-cerebral", "pericito", "celula-madre-neural"),
+  { key: "cerebro",   label: "Cerebro",   foto: "/recorrido/fisiologia/organos/cerebro.webp",   hotspot: { top: 10, left: 47 }, celulas: pick("neuronas", "astrocitos", "microglia", "oligodendrocitos", "ependimarias", "endotelial-cerebral", "pericito", "celula-madre-neural"),
     descripcion: <>Es el centro de mando de todo tu cuerpo. Desde aquí piensas, sientes, recuerdas y controlas cada movimiento y casi cada función, muchas veces sin darte cuenta. Aunque pesa poco más de un kilo, gasta cerca de una quinta parte de toda tu energía.</>,
     consejos: [
       {
@@ -97,7 +97,7 @@ const ORGANOS: Organo[] = [
         texto: <>El cerebro intenta ahorrar energía. Cuando repites una acción una y otra vez, las conexiones que la controlan se vuelven más rápidas y eficientes. Así nacen los hábitos. Da igual si son buenos o malos: el cerebro aprende aquello que más practicas. Cada repetición deja una pequeña huella en el cableado cerebral.</>,
       },
     ] },
-  { key: "pulmones",  label: "Pulmones",  foto: "/recorrido/fisiologia/organos/pulmones.png",  hotspot: { top: 27, left: 42 }, celulas: pick("neumocitos-1", "neumocitos-2", "macrofagos-alveolares", "celula-ciliada", "celula-club"),
+  { key: "pulmones",  label: "Pulmones",  foto: "/recorrido/fisiologia/organos/pulmones.webp",  hotspot: { top: 27, left: 42 }, celulas: pick("neumocitos-1", "neumocitos-2", "macrofagos-alveolares", "celula-ciliada", "celula-club"),
     descripcion: <>Son el lugar donde tu sangre se encuentra con el aire. Con cada respiración capturan el oxígeno que necesitan tus células y expulsan el dióxido de carbono que les sobra. Trabajan sin descanso, unas 20.000 veces al día, casi siempre sin que tengas que pensar en ello.</>,
     consejos: [
       {
@@ -126,7 +126,7 @@ const ORGANOS: Organo[] = [
         texto: <>Tus pulmones contienen alrededor de 500 millones de alvéolos. Son tan pequeños que apenas los vemos, pero juntos forman una superficie de intercambio de gases similar a una pista de tenis. Cuidarlos significa cuidar cada respiración que tomarás durante el resto de tu Vida.</>,
       },
     ] },
-  { key: "corazon",   label: "Corazón",   foto: "/recorrido/fisiologia/organos/corazon.png",   hotspot: { top: 29, left: 50 }, celulas: pick("cardiomiocitos", "marcapasos", "purkinje"),
+  { key: "corazon",   label: "Corazón",   foto: "/recorrido/fisiologia/organos/corazon.webp",   hotspot: { top: 29, left: 50 }, celulas: pick("cardiomiocitos", "marcapasos", "purkinje"),
     descripcion: <>Es una bomba incansable, más o menos del tamaño de tu puño. Late unas 100.000 veces al día para empujar la sangre por todo el cuerpo y llevar oxígeno y nutrientes a cada rincón. No ha descansado ni un segundo desde antes de que nacieras.</>,
     consejos: [
       {
@@ -157,7 +157,7 @@ const ORGANOS: Organo[] = [
         texto: <>Nuestro corazón evolucionó para un cuerpo que caminaba, corría y cargaba peso cada día. Pasar muchas horas sentado reduce la circulación, favorece la hipertensión y obliga al corazón a adaptarse a un estilo de Vida para el que nunca fue diseñado. Cada paseo, cada escalera y cada minuto de actividad física son una inversión directa en su salud.</>,
       },
     ] },
-  { key: "estomago",  label: "Estómago",  foto: "/recorrido/fisiologia/organos/estomago.png",  hotspot: { top: 37, left: 54 }, celulas: pick("parietal", "principal", "mucosa-gastrica", "enteroendocrinas-gastricas"),
+  { key: "estomago",  label: "Estómago",  foto: "/recorrido/fisiologia/organos/estomago.webp",  hotspot: { top: 37, left: 54 }, celulas: pick("parietal", "principal", "mucosa-gastrica", "enteroendocrinas-gastricas"),
     descripcion: <>Es donde empieza de verdad la digestión. Guarda la comida, la mezcla y la baña en un ácido tan potente que deshace casi todo lo que comes, mientras un escudo de moco protege sus propias paredes para no digerirse a sí mismo.</>,
     consejos: [
       {
@@ -186,7 +186,7 @@ const ORGANOS: Organo[] = [
         texto: <>Cuando estás estresado, el cerebro prioriza la supervivencia frente a la digestión. El cerebro le hace llegar esta orden al estómago a través del nervio vago. El estómago modifica sus movimientos, cambia la producción de ácido y se comunica constantemente con el sistema nervioso. Por eso los nervios pueden provocar náuseas, dolor o la sensación de tener un «nudo en el estómago».</>,
       },
     ] },
-  { key: "higado",    label: "Hígado",    foto: "/recorrido/fisiologia/organos/higado.png",    hotspot: { top: 35, left: 43 }, celulas: pick("hepatocitos", "kupffer", "estrelladas"),
+  { key: "higado",    label: "Hígado",    foto: "/recorrido/fisiologia/organos/higado.webp",    hotspot: { top: 35, left: 43 }, celulas: pick("hepatocitos", "kupffer", "estrelladas"),
     descripcion: <>Es la gran fábrica química de tu cuerpo. Filtra la sangre, transforma los nutrientes, fabrica proteínas y bilis, almacena energía y neutraliza sustancias tóxicas. Hace cientos de trabajos distintos a la vez y, además, es capaz de regenerarse.</>,
     consejos: [
       {
@@ -250,7 +250,7 @@ const ORGANOS: Organo[] = [
         texto: <>El hígado almacena vitaminas como la A, D, B₁₂ y K, además de minerales como el hierro y el cobre. Actúa como un almacén estratégico que libera estos nutrientes cuando el organismo los necesita, evitando que dependamos únicamente de lo que comemos cada día.</>,
       },
     ] },
-  { key: "pancreas",  label: "Páncreas",  foto: "/recorrido/fisiologia/organos/pancreas.png",  hotspot: { top: 40, left: 49 }, celulas: pick("celulas-beta", "celulas-alfa", "celulas-delta", "celulas-acinares", "celulas-ductales", "celulas-pp"),
+  { key: "pancreas",  label: "Páncreas",  foto: "/recorrido/fisiologia/organos/pancreas.webp",  hotspot: { top: 40, left: 49 }, celulas: pick("celulas-beta", "celulas-alfa", "celulas-delta", "celulas-acinares", "celulas-ductales", "celulas-pp"),
     descripcion: <>Es un órgano discreto con un doble oficio. Regula el azúcar de tu sangre mediante hormonas como la insulina y el glucagón y, a la vez, fabrica las potentes enzimas que digieren gran parte de lo que comes.</>,
     consejos: [
       {
@@ -284,7 +284,7 @@ const ORGANOS: Organo[] = [
         texto: <>A diferencia del estómago o del intestino, el páncreas suele pasar desapercibido. Sin embargo, regula la glucosa en sangre y produce la mayor parte de las enzimas digestivas. Cuando enferma, puede afectar prácticamente a todo el organismo antes de dar síntomas claros.</>,
       },
     ] },
-  { key: "rinones",   label: "Riñones",   foto: "/recorrido/fisiologia/organos/rinones.png",   hotspot: { top: 43, left: 44 }, celulas: pick("podocitos", "celulas-tubulares", "tubulo-proximal", "asa-henle", "tubulo-distal"),
+  { key: "rinones",   label: "Riñones",   foto: "/recorrido/fisiologia/organos/rinones.webp",   hotspot: { top: 43, left: 44 }, celulas: pick("podocitos", "celulas-tubulares", "tubulo-proximal", "asa-henle", "tubulo-distal"),
     descripcion: <>Son los filtros de tu cuerpo. Cada día limpian toda tu sangre muchas veces, eliminan lo que sobra en forma de orina y deciden con precisión cuánta agua y sales conservar. Además, regulan la tensión y ayudan a fabricar sangre.</>,
     consejos: [
       {
@@ -333,7 +333,7 @@ const ORGANOS: Organo[] = [
         texto: <>El color, la cantidad y la frecuencia con la que orinas dicen mucho sobre cómo está funcionando tu organismo. Una orina muy oscura suele indicar que necesitas más agua. La presencia de sangre, espuma persistente o cambios mantenidos en la cantidad de orina pueden ser señales de que algo no funciona bien en los riñones y conviene consultarlo con un profesional sanitario.</>,
       },
     ] },
-  { key: "intestino", label: "Intestino", foto: "/recorrido/fisiologia/organos/intestino.png", hotspot: { top: 47, left: 49 }, celulas: pick("enterocitos", "caliciformes", "paneth", "enteroendocrinas", "celula-madre-intestinal"),
+  { key: "intestino", label: "Intestino", foto: "/recorrido/fisiologia/organos/intestino.webp", hotspot: { top: 47, left: 49 }, celulas: pick("enterocitos", "caliciformes", "paneth", "enteroendocrinas", "celula-madre-intestinal"),
     descripcion: <>Es donde tu cuerpo decide qué entra y qué no. Absorbe los nutrientes a través de una superficie enorme y alberga billones de bacterias que te ayudan a digerir, te protegen y hasta se comunican con tu cerebro.</>,
     consejos: [
       {
@@ -387,7 +387,7 @@ const ORGANOS: Organo[] = [
         texto: <>El intestino contiene cientos de millones de neuronas que controlan gran parte de la digestión sin necesidad de consultar continuamente al cerebro. Además, ambos órganos se comunican constantemente a través del nervio vago, hormonas y moléculas producidas por la microbiota. Por eso las emociones pueden afectar al intestino… y el intestino también influye en cómo nos sentimos.</>,
       },
     ] },
-  { key: "tiroides",  label: "Tiroides",  foto: "/recorrido/fisiologia/organos/tiroides.png",  hotspot: { top: 20, left: 46 }, celulas: pick("tirocito", "celula-c"),
+  { key: "tiroides",  label: "Tiroides",  foto: "/recorrido/fisiologia/organos/tiroides.webp",  hotspot: { top: 20, left: 46 }, celulas: pick("tirocito", "celula-c"),
     descripcion: <>Es una pequeña glándula con forma de mariposa en tu cuello. Marca el ritmo al que funciona todo tu cuerpo: la energía que gastas, la temperatura, el pulso… como un acelerador que trabaja en silencio.</>,
     consejos: [
       {
@@ -416,7 +416,7 @@ const ORGANOS: Organo[] = [
         texto: <>El cansancio, la caída del pelo o el aumento de peso pueden tener muchas causas diferentes. Aunque estos síntomas aparecen en algunas enfermedades tiroideas, también pueden deberse a falta de sueño, estrés, anemia, una mala alimentación o muchos otros problemas. Por eso es importante confirmar el diagnóstico antes de pensar que la tiroides es la responsable.</>,
       },
     ] },
-  { key: "piel",      label: "Piel",      foto: "/recorrido/fisiologia/organos/piel.png",      hotspot: { top: 22, left: 32 }, celulas: pick("queratinocitos", "melanocitos", "langerhans", "endoteliales", "merkel"),
+  { key: "piel",      label: "Piel",      foto: "/recorrido/fisiologia/organos/piel.webp",      hotspot: { top: 22, left: 32 }, celulas: pick("queratinocitos", "melanocitos", "langerhans", "endoteliales", "merkel"),
     descripcion: <>Es tu órgano más grande y tu primera frontera con el mundo. Te protege de golpes, microbios y del sol, regula tu temperatura y te permite sentir el tacto. Se renueva sin parar y se repara sola cuando se daña.</>,
     consejos: [
       {
@@ -455,7 +455,7 @@ const ORGANOS: Organo[] = [
         texto: <>Sobre ella viven millones de bacterias, hongos y otros microorganismos que forman la microbiota cutánea. La mayoría son beneficiosos: ocupan espacio, dificultan el crecimiento de microbios peligrosos y colaboran con el sistema inmunitario para mantener la piel sana.</>,
       },
     ] },
-  { key: "musculo",   label: "Músculo",   foto: "/recorrido/fisiologia/organos/musculo.png",   hotspot: { top: 66, left: 43 }, celulas: pick("miocitos", "musculares-lisas", "satelite"),
+  { key: "musculo",   label: "Músculo",   foto: "/recorrido/fisiologia/organos/musculo.webp",   hotspot: { top: 66, left: 43 }, celulas: pick("miocitos", "musculares-lisas", "satelite"),
     fichasTitulo: "Las piezas de la contracción",
     fichas: [
       {
@@ -490,7 +490,7 @@ const ORGANOS: Organo[] = [
         nombre: "Miostatina · el freno",
         titular: "La miostatina es el freno del músculo.",
         claves: ["Limita cuánto músculo creces", "La fabrica el propio músculo", "Entrenar baja su señal"],
-        foto: "/recorrido/fisiologia/profundiza/musculo/miostatina.png",
+        foto: "/recorrido/fisiologia/profundiza/musculo/miostatina.webp",
         texto: <>Si el cuerpo pudiera fabricar músculo sin límite, lo haría… y se arruinaría, porque mantenerlo es carísimo en energía. La miostatina es el freno que lo evita: una proteína que el propio músculo produce y libera para decirle «hasta aquí, no crezcas más».<br /><br />Frena de dos maneras: apaga las rutas que ordenan fabricar proteína nueva y mantiene a raya a las <b>células satélite</b>, las que se fusionan a la fibra para repararla y hacerla más grande. Con la miostatina alta, entrenas y el músculo apenas responde.<br /><br />El entrenamiento de fuerza <b>baja su señal</b> durante unas horas, y esa es parte del motivo por el que un músculo trabajado crece. Con la edad, el reposo prolongado y la inflamación crónica, en cambio, la señal sube y cuesta más mantener masa.<br /><br />Existen animales con una mutación que deja la miostatina sin funcionar —el ganado azul belga, o unos ratones apodados «ratones Schwarzenegger»— y desarrollan una musculatura enorme. Se han descrito también algunos casos en personas.</>,
       },
     ],
@@ -532,7 +532,7 @@ const ORGANOS: Organo[] = [
         texto: <>Cuando haces ejercicio, los músculos liberan moléculas llamadas mioquinas. Estas viajan por la sangre y ayudan a mejorar el funcionamiento del cerebro, el sistema inmunitario, el hígado y el tejido adiposo. Por eso el ejercicio reduce la inflamación, mejora la memoria, ayuda a controlar la glucosa y protege mucho más que los propios músculos.</>,
       },
     ] },
-  { key: "huesos",    label: "Huesos",    foto: "/recorrido/fisiologia/organos/huesos.png",    hotspot: { top: 77, left: 55 }, celulas: pick("osteoblastos", "osteoclastos", "osteocitos", "condrocito"),
+  { key: "huesos",    label: "Huesos",    foto: "/recorrido/fisiologia/organos/huesos.webp",    hotspot: { top: 77, left: 55 }, celulas: pick("osteoblastos", "osteoclastos", "osteocitos", "condrocito"),
     descripcion: <>Son mucho más que un simple armazón. Están vivos: se rompen y se reconstruyen cada día, sostienen tu cuerpo, protegen tus órganos, guardan tu calcio y en su interior fabrican la sangre.</>,
     consejos: [
       {
@@ -566,7 +566,7 @@ const ORGANOS: Organo[] = [
         texto: <>Aunque alcanzamos el máximo de masa ósea alrededor de los 30 años, los huesos siguen respondiendo al ejercicio durante toda la Vida. Moverte hoy sigue siendo una inversión para el esqueleto de dentro de unas horas o de mañana (literalmente).</>,
       },
     ] },
-  { key: "sangre",    label: "Sangre",    foto: "/recorrido/fisiologia/organos/sangre.png",    hotspot: { top: 40, left: 76 }, celulas: pick("eritrocitos", "plaquetas", "neutrofilos", "eosinofilos", "basofilos", "monocitos", "macrofagos", "linfocitos-b", "linfocitos-t", "dendriticas"),
+  { key: "sangre",    label: "Sangre",    foto: "/recorrido/fisiologia/organos/sangre.webp",    hotspot: { top: 40, left: 76 }, celulas: pick("eritrocitos", "plaquetas", "neutrofilos", "eosinofilos", "basofilos", "monocitos", "macrofagos", "linfocitos-b", "linfocitos-t", "dendriticas"),
     descripcion: <>Es un órgano líquido que conecta todo tu cuerpo. Transporta oxígeno, nutrientes y hormonas, retira los desechos y lleva a tu ejército de defensas allí donde haga falta. Es la red que hace que todo funcione como un solo sistema.</>,
     consejos: [
       {
@@ -620,7 +620,7 @@ const ORGANOS: Organo[] = [
         texto: <>Después de una donación, el organismo detecta que ha perdido parte de su sangre y los riñones producen más eritropoyetina, una hormona que estimula la médula ósea para fabricar nuevos glóbulos rojos. En pocas semanas, el volumen de sangre y las células perdidas vuelven a recuperarse. Una sola donación puede ayudar a salvar varias Vidas.</>,
       },
     ] },
-  { key: "conectivo", label: "Tejido conectivo (colágeno)", foto: "/recorrido/fisiologia/organos/conectivo.png", hotspot: { top: 70, left: 57 }, celulas: pick("fibroblastos", "mastocito"),
+  { key: "conectivo", label: "Tejido conectivo (colágeno)", foto: "/recorrido/fisiologia/organos/conectivo.webp", hotspot: { top: 70, left: 57 }, celulas: pick("fibroblastos", "mastocito"),
     descripcion: <>Es el pegamento y la estructura de tu cuerpo. El colágeno da forma y resistencia a la piel, los tendones, los huesos y los vasos, mientras sus células fabrican y reparan ese andamiaje durante toda la Vida.</>,
     fichasTitulo: "Los siete tipos de colágeno",
     fichas: [
@@ -716,7 +716,7 @@ const ORGANOS: Organo[] = [
         texto: <>La radiación ultravioleta no solo daña el ADN de las células de la piel. También activa unas enzimas llamadas metaloproteinasas, cuya función es cortar las fibras de colágeno dañadas. El problema aparece cuando la exposición solar es excesiva: se destruye colágeno más rápido de lo que los fibroblastos pueden reemplazarlo. Ese desequilibrio es una de las principales causas de las arrugas y la pérdida de firmeza de la piel.</>,
       },
     ] },
-  { key: "grasa",     label: "Tejido graso", foto: "/recorrido/fisiologia/organos/grasa.png",   hotspot: { top: 44, left: 60 }, celulas: pick("adipocitos-blancos", "adipocitos-marrones"),
+  { key: "grasa",     label: "Tejido graso", foto: "/recorrido/fisiologia/organos/grasa.webp",   hotspot: { top: 44, left: 60 }, celulas: pick("adipocitos-blancos", "adipocitos-marrones"),
     descripcion: <>No es solo una reserva de energía: es un órgano activo. Protege, aísla del frío y fabrica hormonas que hablan con tu cerebro sobre el hambre y la energía que tienes almacenada. Bien cuidado, es un gran aliado.</>,
     consejos: [
       {
@@ -772,7 +772,7 @@ const ORGANOS: Organo[] = [
         texto: <>Está dentro del abdomen, envolviendo el hígado y el intestino. No se pellizca y casi no se ve en el espejo, y ahí está parte del problema: se puede tener poca grasa subcutánea y mucha visceral.<br /><br />Dos cosas la hacen distinta. Desagua por la <b>vena porta</b>, así que todo lo que suelta —ácidos grasos y señales inflamatorias— llega primero al hígado, concentrado y sin diluir. Y tiene muchas más células inmunitarias por gramo, así que cuando se satura y sus adipocitos mueren asfixiados, la alarma es mucho más ruidosa: <b>recluta monocitos</b> desde la sangre que se convierten en macrófagos inflamatorios (<b>M1</b>) y que, en vez de reparar, sueltan citoquinas llamando a más macrófagos. El sistema inmunitario se queda encendido a todas horas.<br /><br />Y esas citoquinas escapan del abdomen: irritan el <b>endotelio</b>, la pared interna de las arterias, el colesterol se cuela y se oxida allí, y los macrófagos de la propia arteria lo engullen hasta saturarse y convertirse en <b>células espumosas</b>. Ahí empieza la <b>placa de ateroma</b>.<br /><br />La grasa visceral no es un problema de peso, es un problema de inflamación. Y la inflamación no se queda donde nace.</>,
       },
     ] },
-  { key: "lengua",    label: "Lengua",         foto: "/recorrido/fisiologia/organos/lengua.png",   hotspot: { top: 16, left: 50 }, celulas: pick("gustativa-tipo2", "gustativa-tipo3", "soporte-gusto", "glomica-tipo1", "basal-gusto"),
+  { key: "lengua",    label: "Lengua",         foto: "/recorrido/fisiologia/organos/lengua.webp",   hotspot: { top: 16, left: 50 }, celulas: pick("gustativa-tipo2", "gustativa-tipo3", "soporte-gusto", "glomica-tipo1", "basal-gusto"),
     descripcion: <>Es un órgano muscular ágil, cubierto de papilas que albergan los botones del gusto. Dentro de ellos, unas células especializadas detectan los cinco sabores —dulce, salado, ácido, amargo y umami— y envían la señal al cerebro. Además de saborear, la lengua mezcla y empuja los alimentos para tragarlos y es esencial para hablar.</>,
     consejos: [
       {
@@ -806,7 +806,7 @@ const ORGANOS: Organo[] = [
         texto: <>Hablar sería prácticamente imposible sin la lengua, ya que interviene en la formación de la mayoría de los sonidos del lenguaje. Trabaja junto con los labios, los dientes y el paladar para articular las palabras con claridad. Gracias a su precisión y rapidez de movimiento, podemos expresar ideas, emociones y comunicarnos con las demás personas cada día.</>,
       },
     ] },
-  { key: "bazo",      label: "Bazo",           foto: "/recorrido/fisiologia/organos/bazo.png",     hotspot: { top: 38, left: 57 }, celulas: pick("macrofago-esplenico", "pulpa-blanca"),
+  { key: "bazo",      label: "Bazo",           foto: "/recorrido/fisiologia/organos/bazo.webp",     hotspot: { top: 38, left: 57 }, celulas: pick("macrofago-esplenico", "pulpa-blanca"),
     descripcion: <>Es el gran filtro de la sangre. En su pulpa roja, los macrófagos retiran los glóbulos rojos viejos o dañados y reciclan su hierro; en su pulpa blanca vigila la sangre en busca de infecciones, como un ganglio linfático conectado directamente al torrente sanguíneo. También guarda una reserva de células defensivas lista para actuar.</>,
     consejos: [
       {
@@ -835,7 +835,7 @@ const ORGANOS: Organo[] = [
         texto: <>El tamaño del bazo no siempre es el mismo. Puede aumentar temporalmente durante algunas infecciones, enfermedades de la sangre o problemas hepáticos, ya que trabaja más intensamente para filtrar la sangre y activar la respuesta inmunitaria. En condiciones normales mide alrededor de 12 centímetros, pero su tamaño puede variar según la edad, la constitución física y el estado de salud de cada persona.</>,
       },
     ] },
-  { key: "vesicula",  label: "Vesícula biliar", foto: "/recorrido/fisiologia/organos/vesiculabiliar.png", hotspot: { top: 36, left: 41 }, celulas: pick("colangiocito-vesicula", "muscular-vesicula"),
+  { key: "vesicula",  label: "Vesícula biliar", foto: "/recorrido/fisiologia/organos/vesiculabiliar.webp", hotspot: { top: 36, left: 41 }, celulas: pick("colangiocito-vesicula", "muscular-vesicula"),
     descripcion: <>Es una pequeña bolsa situada bajo el hígado que guarda y concentra la bilis entre comidas. Cuando comes grasa, se contrae y libera esa bilis al intestino para ayudar a digerirla y a absorber las vitaminas liposolubles. Trabaja en equipo con el hígado y el páncreas dentro del sistema digestivo.</>,
     consejos: [
       {

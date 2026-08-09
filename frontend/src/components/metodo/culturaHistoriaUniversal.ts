@@ -943,7 +943,17 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
           "Aquellas instituciones son las más longevas de Occidente después de la Iglesia: Bolonia, París, Oxford, Salamanca (1218), Padua, Cambridge, Coímbra o Praga siguen funcionando casi mil años después.",
           "Con una precisión importante: son las primeras universidades de Europa, no las primeras del mundo. Dos siglos antes, en Fez, ya funcionaba al-Qarawiyyin, fundada por una mujer.",
         ],
-        "Dato curioso: nuestros rituales académicos vienen de allí. El bachiller, la licenciatura (la licentia docendi era literalmente el permiso para enseñar), el doctorado, la toga, el birrete, la lectura pública de la tesis y hasta las novatadas son medievales.",
+        "Dato curioso: nuestros rituales académicos vienen de allí. El bachiller, la licenciatura (la licentia docendi era literalmente el permiso para enseñar), el doctorado, la toga, el birrete, la lectura pública de la tesis y hasta las novatadas son medievales."),
+      hito("edad-media", "al-qarawiyyin", "La universidad más antigua del mundo", "Año 859",
+        "¿Y si la universidad más antigua del mundo no estuviera en Europa, ni la hubiera fundado un rey, ni un hombre?",
+        [
+          "Cuando decimos «universidad» pensamos siempre en Bolonia, en París o en Oxford.",
+          "La institución de educación superior más antigua del mundo en funcionamiento continuo no está en Europa: está en Fez, en Marruecos, y se llama al-Qarawiyyin.",
+          "Se fundó en el año 859 y la fundó una mujer musulmana, Fátima al-Fihri, que gastó en ella la herencia de su padre.",
+          "Lo reconoce la UNESCO. Doscientos treinta años antes que Bolonia, y sigue abierta hoy.",
+          "Allí se enseñaba derecho y Corán, sí, pero también matemáticas, medicina y astronomía: el mismo saber que en Europa tardaría siglos en tener una casa propia.",
+        ],
+        "Dato curioso: cuando en Bolonia se juntó el primer gremio de estudiantes, en 1088, en Fez llevaban ya doscientos treinta años dando clase sin interrupción.",
         [
           {
             titulo: "La universidad más antigua del mundo la fundó una mujer",

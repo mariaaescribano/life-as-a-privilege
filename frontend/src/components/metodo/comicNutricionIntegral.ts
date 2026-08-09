@@ -9,7 +9,7 @@ import type { Vineta } from "./ComicViewer";
 // Imágenes: /viñetas/nutricion/integral/integral1.png … integral4.png (PENDIENTES).
 export const NUTRICION_INTEGRAL: Vineta[] = [
   {
-    src: "/viñetas/nutricion/integral/integral1.png",
+    src: "/viñetas/nutricion/integral/integral1.webp",
     titulo: "La naturaleza creó un alimento completo",
     paragraphs: [
       "Cada parte del grano tiene una función: el salvado protege, el germen nutre y el endospermo aporta energía.",

@@ -12,7 +12,7 @@ import type { Vineta } from "./ComicViewer";
 // Imágenes: /viñetas/psicologia/compromiso/compromiso1.png … compromiso4.png.
 export const COMIC_COMPROMISO: Vineta[] = [
   {
-    src: "/viñetas/psicologia/compromiso/compromiso1.png",
+    src: "/viñetas/psicologia/compromiso/compromiso1.webp",
     eyebrow: "",
     titulo: "",
     paragraphs: [
@@ -22,7 +22,7 @@ export const COMIC_COMPROMISO: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/compromiso/compromiso2.png",
+    src: "/viñetas/psicologia/compromiso/compromiso2.webp",
     eyebrow: "",
     titulo: "",
     paragraphs: [
@@ -33,7 +33,7 @@ export const COMIC_COMPROMISO: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/compromiso/compromiso3.png",
+    src: "/viñetas/psicologia/compromiso/compromiso3.webp",
     eyebrow: "",
     titulo: "",
     paragraphs: [
@@ -44,7 +44,7 @@ export const COMIC_COMPROMISO: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/psicologia/compromiso/compromiso4.png",
+    src: "/viñetas/psicologia/compromiso/compromiso4.webp",
     eyebrow: "",
     titulo: "",
     paragraphs: [

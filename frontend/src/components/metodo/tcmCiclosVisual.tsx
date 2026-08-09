@@ -45,8 +45,8 @@ export interface Relacion { ciclo: Ciclo; origen: Elemento; destino: Elemento; }
 
 // Foto de fondo por ciclo (fondo grande de la estrella de cada ciclo).
 export const FONDO_CICLO: Record<Ciclo, string> = {
-  sheng: "/recorrido/tcm/fondos/generador.png",
-  ke: "/recorrido/tcm/fondos/controlador.png",
+  sheng: "/recorrido/tcm/fondos/generador.webp",
+  ke: "/recorrido/tcm/fondos/controlador.webp",
 };
 
 // Latido de brillo de las flechas: pulsan de un glow suave a uno intenso, para
@@ -62,18 +62,18 @@ const FLECHA_GLOW_CSS = `@keyframes flechaGlowPulse {
 // en Ke: madera→tierra usa "tierramadera.png").
 const FOTO_RELACION: Record<Ciclo, Record<Elemento, string>> = {
   sheng: {
-    madera: "/recorrido/tcm/generador/maderafuego.png",
-    fuego: "/recorrido/tcm/generador/fuegotierra.png",
-    tierra: "/recorrido/tcm/generador/tierrametal.png",
-    metal: "/recorrido/tcm/generador/metalagua.png",
-    agua: "/recorrido/tcm/generador/aguamadera.png",
+    madera: "/recorrido/tcm/generador/maderafuego.webp",
+    fuego: "/recorrido/tcm/generador/fuegotierra.webp",
+    tierra: "/recorrido/tcm/generador/tierrametal.webp",
+    metal: "/recorrido/tcm/generador/metalagua.webp",
+    agua: "/recorrido/tcm/generador/aguamadera.webp",
   },
   ke: {
-    madera: "/recorrido/tcm/controlador/tierramadera.png", // madera → tierra
-    tierra: "/recorrido/tcm/controlador/tierraagua.png",
-    agua: "/recorrido/tcm/controlador/aguafuego.png",
-    fuego: "/recorrido/tcm/controlador/fuegometal.png",
-    metal: "/recorrido/tcm/controlador/metalmadera.png",
+    madera: "/recorrido/tcm/controlador/tierramadera.webp", // madera → tierra
+    tierra: "/recorrido/tcm/controlador/tierraagua.webp",
+    agua: "/recorrido/tcm/controlador/aguafuego.webp",
+    fuego: "/recorrido/tcm/controlador/fuegometal.webp",
+    metal: "/recorrido/tcm/controlador/metalmadera.webp",
   },
 };
 

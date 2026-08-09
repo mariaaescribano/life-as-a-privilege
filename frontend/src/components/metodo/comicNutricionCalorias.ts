@@ -9,21 +9,21 @@ import type { Vineta } from "./ComicViewer";
 // (mientras no existan, el ComicViewer pinta un placeholder «próximamente»).
 export const NUTRICION_CALORIAS: Vineta[] = [
   {
-    src: "/viñetas/nutricion/calorias/calorias1.png",
+    src: "/viñetas/nutricion/calorias/calorias1.webp",
     paragraphs: [
       "Las calorías no existen físicamente. Lo que realmente existe son las moléculas que forman los alimentos y lo que nuestras células pueden hacer con ellas.",
       "Las calorías son simplemente una forma de medir cuánta energía puede obtener el cuerpo de esas moléculas.",
     ],
   },
   {
-    src: "/viñetas/nutricion/calorias/calorias2.png",
+    src: "/viñetas/nutricion/calorias/calorias2.webp",
     paragraphs: [
       "Cuando comemos, nuestras enzimas van desmontando los alimentos poco a poco hasta separar todas sus moléculas: glucosa, aminoácidos, ácidos grasos, vitaminas, minerales...",
       "Esas son las verdaderas «piezas» con las que trabaja el organismo.",
     ],
   },
   {
-    src: "/viñetas/nutricion/calorias/calorias3.png",
+    src: "/viñetas/nutricion/calorias/calorias3.webp",
     paragraphs: [
       "A partir de ahí, cada molécula puede seguir un camino distinto.",
       "Por ejemplo, la glucosa suele utilizarse para obtener energía mediante la respiración celular.",
@@ -32,39 +32,39 @@ export const NUTRICION_CALORIAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/calorias/calorias4.png",
+    src: "/viñetas/nutricion/calorias/calorias4.webp",
     paragraphs: [
       "Cuando una célula obtiene energía de la glucosa mediante la respiración celular, esa energía se almacena temporalmente en una molécula llamada ATP (adenosín trifosfato).",
     ],
   },
   {
-    src: "/viñetas/nutricion/calorias/calorias5.png",
+    src: "/viñetas/nutricion/calorias/calorias5.webp",
     paragraphs: [
       "La energía no es una molécula, pero el ATP es la molécula que almacena la energía.",
       "Se guarda hasta que hace falta, entonces se transporta hasta dónde se necesita.",
     ],
   },
   {
-    src: "/viñetas/nutricion/calorias/calorias6.png",
+    src: "/viñetas/nutricion/calorias/calorias6.webp",
     paragraphs: [
       "Cuando una enzima o cualquier otra maquinaria celular necesita realizar una misión, utiliza el ATP.",
       "Al liberar la energía almacenada en él, la célula puede mover un músculo, fabricar una proteína, enviar una señal nerviosa o llevar a cabo miles de procesos diferentes -gracias a las enzimas.",
     ],
   },
   {
-    src: "/viñetas/nutricion/calorias/calorias7.png",
+    src: "/viñetas/nutricion/calorias/calorias7.webp",
     paragraphs: [
       "Por eso, los valores nutricionales describen las moléculas y materiales que contiene un alimento: proteínas, grasas, carbohidratos, vitaminas y minerales.",
     ],
   },
   {
-    src: "/viñetas/nutricion/calorias/calorias8.png",
+    src: "/viñetas/nutricion/calorias/calorias8.webp",
     paragraphs: [
       "Las calorías, en cambio, no son un ingrediente, sino una medida de la cantidad de energía que las células pueden obtener de ese alimento. Cuantas más calorías, más ATP.",
     ],
   },
   {
-    src: "/viñetas/nutricion/calorias/calorias9.png",
+    src: "/viñetas/nutricion/calorias/calorias9.webp",
     paragraphs: [
       "No comemos calorías. Comemos moléculas.",
       "Algunas se convierten en energía y otras se convierten, literalmente, en nuestro propio cuerpo.",

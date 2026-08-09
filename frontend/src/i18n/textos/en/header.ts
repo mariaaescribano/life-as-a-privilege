@@ -5,6 +5,7 @@ export const header = {
   "header.estudio": "Study",
   "header.cursos": "Courses",
   "header.miCuenta": "My account",
+  "header.iniciarSesion": "Log in",
   "header.idioma": "Change language",
   "header.menu": "Menu",
   "header.cerrarMenu": "Close menu",

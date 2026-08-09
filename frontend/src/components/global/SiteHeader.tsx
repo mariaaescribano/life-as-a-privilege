@@ -54,6 +54,10 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
   const isMaterialesPage = path.startsWith("/materiales") || path.startsWith("/aprendizaje") || path.startsWith("/libros");
   const isEstudioPage = path.startsWith("/estudio");
+  // La última opción del menú: con sesión es «Mi cuenta», sin ella «Iniciar
+  // sesión». Es el mismo sitio visto desde los dos lados de la puerta.
+  const isCuentaPage = path.startsWith("/user");
+  const isEntrarPage = path.startsWith("/login") || path.startsWith("/signin");
   // Navegación de administración (pestañas en el header).
   const isAdminPage = path.startsWith("/admin");
   const adminCursosActive = path.startsWith("/admin/cursos");
@@ -62,10 +66,12 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // seguiría abierto encima de la página nueva.
   useEffect(() => { setMenuAbierto(false); }, [location.pathname]);
 
-  // Destinos del menú. Son EXACTAMENTE los que antes estaban escritos en la
-  // cabecera: en administración, las dos pestañas de admin; con sesión,
-  // Materiales y Estudio (a Mi cuenta se va por el avatar, que sigue fuera); y
-  // sin sesión, además, El Mapa.
+  // Destinos del menú: en administración, las dos pestañas de admin; con sesión,
+  // Materiales, Estudio y Mi cuenta; y sin sesión, además, El Mapa, y de última
+  // Iniciar sesión.
+  //
+  // Mi cuenta va también en el menú aunque el avatar lleve al mismo sitio: el
+  // avatar es un icono sin rótulo y no todo el mundo lo lee como un botón.
   const items: ItemMenu[] = isPrivate
     ? isAdminPage
       ? [
@@ -73,13 +79,15 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           { etiqueta: t("header.cursos"), onSelect: () => navigate("/admin/cursos"), activo: adminCursosActive },
         ]
       : [
-          { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
-          { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
+          { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
+          { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),      activo: isEstudioPage },
+          { etiqueta: t("header.miCuenta"),   onSelect: () => navigate("/user/account"), activo: isCuentaPage },
         ]
     : [
-        { etiqueta: t("header.mapa"),       onSelect: () => navigate("/elMetodo"),   activo: isRecorridoPage },
-        { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
-        { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
+        { etiqueta: t("header.mapa"),          onSelect: () => navigate("/elMetodo"),   activo: isRecorridoPage },
+        { etiqueta: t("header.materiales"),    onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
+        { etiqueta: t("header.estudio"),       onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
+        { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn"),      activo: isEntrarPage },
       ];
 
   return (

@@ -5,30 +5,15 @@ import type { Vineta } from "./ComicViewer";
 // (/metodo/nutricion/nutrientes/:key), en el box tipo cómic (foto 1:1 a la
 // izquierda + texto a la derecha, con scroll). Uno por grupo.
 //
-// Imágenes: /viñetas/nutricion/<key>/<key>1.png … (PENDIENTES de subir; hasta
-// entonces el cómic pinta un placeholder).
+// Imágenes: /viñetas/nutricion/<key>/<key>1.webp … Las que aún no existen se
+// pintan como «próximamente», así que se pueden ir subiendo de una en una.
 //
-// OJO CON LA EXTENSIÓN: unas carpetas ya se han pasado a WebP (scripts/webp) y
-// otras siguen en PNG, así que no puede ser fija. Este helper es UNO para todos
-// los cómics, así que `rutas.mjs` no podía reescribirlo por carpetas: al
-// convertir los lotes, las viñetas ya convertidas se quedaron pidiendo un .png
-// que ya no existe y salían como «próximamente». Aquí van las que YA son WebP;
-// al convertir una carpeta nueva hay que añadir sus nombres a la lista.
+// SIEMPRE WebP: /viñetas está entero convertido (scripts/webp, lote 15), así que
+// una viñeta nueva tiene que llegar en WebP. En PNG da 404 y sale el
+// placeholder, aunque el archivo esté en la carpeta.
 // ─────────────────────────────────────────────────────────────────────────
 
-const EN_WEBP = new Set([
-  "agua1", "agua2", "agua3", "agua4",
-  "fitoquimicos1", "fitoquimicos2", "fitoquimicos3", "fitoquimicos4",
-  "grasas1", "grasas2", "grasas4",
-  "minerales1", "minerales2", "minerales4",
-  "fibra1", "fibra2",
-  // Lote 5.
-  "edulcorantes1", "edulcorantes2", "edulcorantes3",
-  "edulcorantes4", "edulcorantes5", "edulcorantes6",
-]);
-
-const src = (key: string, i: number) =>
-  `/viñetas/nutricion/${key}/${key}${i}.${EN_WEBP.has(`${key}${i}`) ? "webp" : "png"}`;
+const src = (key: string, i: number) => `/viñetas/nutricion/${key}/${key}${i}.webp`;
 
 export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
   carbohidratos: [
@@ -298,7 +283,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
   agua: [
     {
       // Foto nueva: la molécula de agua, en uve, con su polo + y su polo −.
-      src: "/viñetas/nutricion/agua/aguamolecula.png",
+      src: "/viñetas/nutricion/agua/aguamolecula.webp",
       paragraphs: [
         "Antes de para qué sirve, conviene saber qué es. El agua son dos hidrógenos pegados a un oxígeno, pero no en línea recta: forman una uve. Esa forma torcida lo cambia todo.",
         "El oxígeno tira con más fuerza de los electrones compartidos y se queda con una carga ligeramente negativa; los dos hidrógenos quedan ligeramente positivos. Así que cada molécula de agua es un imán diminuto, con un polo más y un polo menos.",
@@ -308,7 +293,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
     {
       // Foto nueva: el agua rodeando y separando la sal en iones; y las grasas
       // juntándose entre ellas para huir del agua (membrana).
-      src: "/viñetas/nutricion/agua/aguadisuelve.png",
+      src: "/viñetas/nutricion/agua/aguadisuelve.webp",
       paragraphs: [
         "Por ser un imán, el agua rodea a todo lo que tenga carga y lo separa. Cuando echas sal en agua, su polo negativo se pega al sodio y el positivo al cloro, y los arranca uno del otro. La sal no desaparece: queda flotando en piezas sueltas.",
         "Eso es ser un disolvente. Y por eso todo lo que tu cuerpo necesita mover (sales, glucosa, vitaminas, hormonas, desechos) viaja disuelto en agua.",
@@ -342,7 +327,7 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
     {
       // Foto nueva: la ósmosis. El agua cruzando hacia donde hay más sal
       // (plasma / líquido entre células / interior de la célula).
-      src: "/viñetas/nutricion/agua/aguaosmosis.png",
+      src: "/viñetas/nutricion/agua/aguaosmosis.webp",
       paragraphs: [
         "El agua no se queda donde te la bebes: se mueve sola, y siempre hacia donde hay más sales. Ese movimiento se llama ósmosis, y es la razón de que hidratarse no sea solo cuestión de beber.",
         "El que manda es el sodio. Si a un lado hay más sal, el agua cruza hacia allí hasta igualar la concentración. Así decide tu cuerpo cuánta agua se queda en la sangre, cuánta baña los tejidos y cuánta entra en las células.",

@@ -13,7 +13,7 @@ const BASE = "/recorrido/nutricion/hambre";
 
 export const HAMBRE_HOLISTICA: Vineta[] = [
   {
-    src: `${BASE}/hambre1.png`,
+    src: `${BASE}/hambre1.webp`,
     titulo: "La microbiota también tiene hambre",
     paragraphs: [
       "Cuando sentimos hambre, no siempre comemos solo lo que nuestro cuerpo necesita. Nuestra microbiota influye en nuestros antojos a través del eje intestino-cerebro, favoreciendo los alimentos con los que mejor se alimentan las bacterias que predominan en nuestro intestino.",
@@ -22,7 +22,7 @@ export const HAMBRE_HOLISTICA: Vineta[] = [
     ],
   },
   {
-    src: `${BASE}/hambre2.png`,
+    src: `${BASE}/hambre2.webp`,
     titulo: "El hambre también puede ser emocional",
     paragraphs: [
       "Muchas veces no tenemos hambre física, sino un vacío emocional que intentamos llenar con comida. Desde una visión energética, este vacío se relaciona con el tercer chakra, el plexo solar, asociado a la autoestima, la seguridad y el poder personal.",
@@ -31,7 +31,7 @@ export const HAMBRE_HOLISTICA: Vineta[] = [
     ],
   },
   {
-    src: `${BASE}/hambre3.png`,
+    src: `${BASE}/hambre3.webp`,
     titulo: "El cuerpo sabe cuándo parar",
     paragraphs: [
       "Cada vez que comemos, nuestro cuerpo regula el hambre de forma natural. Las células de grasa liberan leptina, una hormona que informa al hipotálamo de cuánta energía tenemos almacenada y cuándo ya hemos comido suficiente.",
@@ -40,7 +40,7 @@ export const HAMBRE_HOLISTICA: Vineta[] = [
     ],
   },
   {
-    src: `${BASE}/hambre4.png`,
+    src: `${BASE}/hambre4.webp`,
     titulo: "Elegimos la comida según cómo nos sentimos",
     paragraphs: [
       "Comer no es un acto completamente racional. Nuestro estado emocional influye en las decisiones que tomamos, y cada alimento genera una respuesta distinta en nuestro organismo.",

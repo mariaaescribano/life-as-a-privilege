@@ -33,98 +33,98 @@ const fadeInScale = keyframes`
 
 export const VINETAS_PLANETAS: Vineta[] = [
   {
-    src: "/viñetas/astrologia/planetas/sol.png",
+    src: "/viñetas/astrologia/planetas/sol.webp",
     paragraphs: [
       "El Sol es la energía que nuestra alma necesita manifestar en su más alta frecuencia.",
       "No es lo que somos, es a lo que llegamos cuando nos hemos realizado.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/luna.png",
+    src: "/viñetas/astrologia/planetas/luna.webp",
     paragraphs: [
       "La Luna fue lo que nos cobijó los primeros años de Vida.",
       "Nuestra más sensible vulnerabilidad, nuestra seguridad, nuestro punto de inicio y dónde descansamos.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/mercurio.png",
+    src: "/viñetas/astrologia/planetas/mercurio.webp",
     paragraphs: [
       "Mercurio es nuestro tipo de mentalidad.",
       "Dónde tenemos curiosidad, dónde permanecemos abiertos al cambio y preparados para descubrir cosas nuevas.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/venus.png",
+    src: "/viñetas/astrologia/planetas/venus.webp",
     paragraphs: [
       "Venus es la energía que nos abre el corazón.",
       "Cómo disfrutamos de la Vida, dónde y cómo deseamos ser amados.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/marte.png",
+    src: "/viñetas/astrologia/planetas/marte.webp",
     paragraphs: [
       "Marte es la energía que canaliza el deseo hacia la acción.",
       "Cómo y por qué entramos en acción, nuestra ambición y agresividad.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/jupiter.png",
+    src: "/viñetas/astrologia/planetas/jupiter.webp",
     paragraphs: [
       "Júpiter es la expansión, la abundancia, las bendiciones que recibimos, los estudios y la alta consciencia.",
       "Nuestro estilo de crecimiento, nuestro deseo de trascender los límites y dónde buscamos el sentido de nuestra Vida.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/saturno.png",
+    src: "/viñetas/astrologia/planetas/saturno.webp",
     paragraphs: [
       "Saturno es la estructura y el autosostenimiento. Nos obliga a hacernos cargo de nosotros.",
       "Su crecimiento nos hace sentir inseguros, inadecuados y pequeños, pero si le integramos nos convertiremos en Maestros de esa energía.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/urano.png",
+    src: "/viñetas/astrologia/planetas/urano.webp",
     paragraphs: [
       "Urano es la creación sin límites, la originalidad y lo impredecible.",
       "Dónde queremos más sin valorar lo que ya hay, el futurismo, lo inesperado y la libertad.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/neptuno.png",
+    src: "/viñetas/astrologia/planetas/neptuno.webp",
     paragraphs: [
       "Neptuno es la confusión, el anhelo del Amor real y lo intangible.",
       "Dónde buscamos la fusión con Dios, cómo engañamos a otros y a nosotros. Puede no importarnos la realidad racional.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/pluton.png",
+    src: "/viñetas/astrologia/planetas/pluton.webp",
     paragraphs: [
       "Plutón es la bomba nuclear que nos destruye cíclicamente.",
       "No le vemos venir. Es nuestro miedo más profundo. Es la destrucción total que nos invita a una dolorosa pero necesaria transformación y reconstrucción.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/nodoSur.png",
+    src: "/viñetas/astrologia/planetas/nodoSur.webp",
     paragraphs: [
       "El Nodo Sur es lo que debemos dejar atrás en nuestra Vida porque ya no tiene más para nosotros.",
       "Pero es lo que nos resulta fácil y cómodo, dónde queremos permanecer por miedo a lo desconocido y a la incomodidad.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/nodoNorte.png",
+    src: "/viñetas/astrologia/planetas/nodoNorte.webp",
     paragraphs: [
       "El Nodo Norte es lo que debemos integrar para convertirnos en quién hemos nacido para ser.",
       "Nos resulta incómodo porque es lo contrario a lo que estamos acostumbrados.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/quiron.png",
+    src: "/viñetas/astrologia/planetas/quiron.webp",
     paragraphs: [
       "Quirón es la herida más profunda del alma; la herida de la separación.",
       "Se abre antes de los 3 años. No se cura del todo. Se aprende a vivir y a aceptar el dolor, y al hacerlo, también aceptamos nuestro mayor don.",
     ],
   },
   {
-    src: "/viñetas/astrologia/planetas/lilith.png",
+    src: "/viñetas/astrologia/planetas/lilith.webp",
     paragraphs: [
       "Lilith es nuestro deseo más profundo, el que juzgamos inconfesable — porque nos enseñaron que no teníamos derecho a él.",
       "Tememos que se sepa, no lograrlo, o lograrlo y perderlo.",
@@ -136,7 +136,7 @@ export const VINETAS_PLANETAS: Vineta[] = [
 
 export const VINETAS_SIGNOS: Vineta[] = [
   {
-    src: "/viñetas/astrologia/signos/aries.png",
+    src: "/viñetas/astrologia/signos/aries.webp",
     paragraphs: [
       "Aries.",
       "Acaba de nacer. No conoce las reglas.",
@@ -145,7 +145,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/tauro.png",
+    src: "/viñetas/astrologia/signos/tauro.webp",
     paragraphs: [
       "Tauro.",
       "Materializa la energía. Conectado con la naturaleza.",
@@ -154,7 +154,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/geminis.png",
+    src: "/viñetas/astrologia/signos/geminis.webp",
     paragraphs: [
       "Géminis.",
       "La inteligencia en alta frecuencia. El ruido si no se pone consciencia.",
@@ -164,7 +164,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/cancer.png",
+    src: "/viñetas/astrologia/signos/cancer.webp",
     paragraphs: [
       "Cáncer.",
       "Necesita sentir para saber quién es. Necesita pertenecer.",
@@ -173,7 +173,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/leo.png",
+    src: "/viñetas/astrologia/signos/leo.webp",
     paragraphs: [
       "Leo",
       "Brillante, carismático, encantador. Atrae atención y además la necesita.",
@@ -182,7 +182,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/virgo.png",
+    src: "/viñetas/astrologia/signos/virgo.webp",
     paragraphs: [
       "Virgo.",
       "Analiza, ordena, cuida, sirve.",
@@ -192,7 +192,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/libra.png",
+    src: "/viñetas/astrologia/signos/libra.webp",
     paragraphs: [
       "Libra.",
       "La diplomacia. Necesita al otro para descubrirse a sí mismo.",
@@ -201,7 +201,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/escorpio.png",
+    src: "/viñetas/astrologia/signos/escorpio.webp",
     paragraphs: [
       "Escorpio.",
       "Intensidad, profundidad, transformación. Todo o nada.",
@@ -210,7 +210,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/sagitario.png",
+    src: "/viñetas/astrologia/signos/sagitario.webp",
     paragraphs: [
       "Sagitario",
       "El filósofo. Busca el sentido de la Vida. Encuentra el para qué de sus experiencias.",
@@ -219,7 +219,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/capricornio.png",
+    src: "/viñetas/astrologia/signos/capricornio.webp",
     paragraphs: [
       "Capricornio",
       "La responsabilidad. Desea que lo que construye repercuta positivamente en las siguientes generaciones.",
@@ -229,7 +229,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/acuario.png",
+    src: "/viñetas/astrologia/signos/acuario.webp",
     paragraphs: [
       "Acuario.",
       "Ama a la humanidad, odia a los humanos.",
@@ -238,7 +238,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/signos/piscis.png",
+    src: "/viñetas/astrologia/signos/piscis.webp",
     paragraphs: [
       "Piscis.",      
       "Debe diferenciar si lo que siente es suyo o si lo ha absorbido sin querer.",
@@ -250,7 +250,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
 
 export const VINETAS_CASAS: Vineta[] = [
   {
-    src: "/viñetas/astrologia/casas/casa1.png",
+    src: "/viñetas/astrologia/casas/casa1.webp",
     paragraphs: [
       "El instante del nacimiento.",
       "La forma en que nos perciben y nos percibimos. No es lo que somos. Es la herramienta con la que avanzamos hacia el Sol natal.",
@@ -258,7 +258,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa2.png",
+    src: "/viñetas/astrologia/casas/casa2.webp",
     paragraphs: [
       "El contacto con el mundo tangible.",
       "Nuestra valía y la valía que aportamos al mundo. Habla de la relación con los recursos y el dinero.",
@@ -266,7 +266,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa3.png",
+    src: "/viñetas/astrologia/casas/casa3.webp",
     paragraphs: [
       "La comunicación. El pensamiento estructurado.",
       "Cómo creamos nuestra realidad con palabras. Habla de los hermanos y los vecinos.",
@@ -274,7 +274,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa4.png",
+    src: "/viñetas/astrologia/casas/casa4.webp",
     paragraphs: [
       "La familia de origen y sus raíces.",
       "La seguridad interna.",
@@ -285,7 +285,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa5.png",
+    src: "/viñetas/astrologia/casas/casa5.webp",
     paragraphs: [
       "El niño que fuimos. El romance, la creatividad, el placer.",
       "La Casa de las ideas sin garantía. Los hijos y las creaciones.",
@@ -294,7 +294,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa6.png",
+    src: "/viñetas/astrologia/casas/casa6.webp",
     paragraphs: [
       "Qué hacemos a diario con nuestra energía y nuestro tiempo.",
       "Rutina, el cómo cuidamos a otros y a nosotros mismos. Necesidad de orden y limpieza.",
@@ -302,7 +302,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa7.png",
+    src: "/viñetas/astrologia/casas/casa7.webp",
     paragraphs: [
       "La pareja. Las relaciones de igualdad. Los socios.",
       "Muestra cómo vives estas relaciones, qué personas atraes y te atraen.",
@@ -310,7 +310,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa8.png",
+    src: "/viñetas/astrologia/casas/casa8.webp",
     paragraphs: [
       "El territorio de la sombra.",
       "La Muerte del ego, la Muerte del 'yo',",
@@ -319,7 +319,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa9.png",
+    src: "/viñetas/astrologia/casas/casa9.webp",
     paragraphs: [
       "La búsqueda de sentido.",
       "La Vida como algo que vale la pena entender. Filosofías, misticismos, universidades, culturas.",
@@ -327,7 +327,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa10.png",
+    src: "/viñetas/astrologia/casas/casa10.webp",
     paragraphs: [
       "La vocación, la profesión, el estatus, el perfil público.",
       "La relación con la autoridad.",
@@ -335,7 +335,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa11.png",
+    src: "/viñetas/astrologia/casas/casa11.webp",
     paragraphs: [
       "Los amigos, los grupos, las asociaciones.",
       "Los anhelos del alma. Salir de la individualidad y conectar con algo mayor.",
@@ -344,7 +344,7 @@ export const VINETAS_CASAS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/astrologia/casas/casa12.png",
+    src: "/viñetas/astrologia/casas/casa12.webp",
     paragraphs: [
       "Lo trascendental.",
       "El inconsciente colectivo y lo no digerido por nuestros ancestros. Heridas que se heredan hasta que se sanan.",
@@ -375,7 +375,7 @@ const SELECTOR_OPTIONS: SelectorOption[] = [
   {
     seccion: "signos",
     title: "Los Signos",
-    cover: "/viñetas/astrologia/portadasignos.png",
+    cover: "/viñetas/astrologia/portadasignos.webp",
     // Los signos van como ICONO dibujado (no su carácter): se pintan aparte.
     glyphs: [],
     iconosSigno: true,
@@ -383,13 +383,13 @@ const SELECTOR_OPTIONS: SelectorOption[] = [
   {
     seccion: "casas",
     title: "Las Casas",
-    cover: "/viñetas/astrologia/portadacasas.png",
+    cover: "/viñetas/astrologia/portadacasas.webp",
     glyphs: ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"],
   },
   {
     seccion: "planetas",
     title: "Los Planetas",
-    cover: "/viñetas/astrologia/portadaplanetas.png",
+    cover: "/viñetas/astrologia/portadaplanetas.webp",
     glyphs: ["☉", "☽", "☿", "♀", "♂", "♃", "♄", "♅", "♆", "♇", "⚷"],
   },
 ];

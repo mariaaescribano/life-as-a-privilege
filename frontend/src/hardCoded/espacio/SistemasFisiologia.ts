@@ -30,7 +30,7 @@ export type Sistema = {
   test: PreguntaTest[];
 };
 
-const FOTO = (k: string) => `/recorrido/fisiologia/sistemas/${k}.png`;
+const FOTO = (k: string) => `/recorrido/fisiologia/sistemas/${k}.webp`;
 
 export const SISTEMAS: Sistema[] = [
   { key: "nervioso",      label: "Nervioso",      color: "#c9a7ff", foto: FOTO("nervioso"),

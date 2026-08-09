@@ -404,15 +404,15 @@ export const CINCO_ANIMALES: Animal[] = [
 ];
 
 /**
- * Ilustración de cada postura: CUADRADA (1:1) y en WebP, numerada por su
- * POSICIÓN en la serie, tal y como llegan: `/public/recorrido/tcm/qigong/1.webp`
- * … `8.webp` (los cómics viven en sus subcarpetas `historia/` y `daoyin/`).
+ * Ilustración de cada postura: CUADRADA (1:1) y en WebP, con el nombre de su
+ * `key`: `/public/recorrido/tcm/qigong/brocado-1-sostener-cielo.webp` (los
+ * cómics viven en sus subcarpetas `historia/` y `daoyin/`).
  *
- * O sea: el ORDEN de `BROCADOS` manda. Si reordenas la serie, cambias también
- * la ilustración. Mientras un número no exista, esa tarjeta se queda solo con el
- * texto: ni hueco ni foto rota.
+ * Por la clave y no por la posición, como el resto de fotos de esta página: así
+ * reordenar la serie no cambia la foto de nadie. Mientras una key no tenga
+ * archivo, esa tarjeta se queda solo con el texto: ni hueco ni foto rota.
  */
-export const FOTO_POSTURA = (indice: number) => `/recorrido/tcm/qigong/${indice + 1}.webp`;
+export const FOTO_POSTURA = (key: string) => `/recorrido/tcm/qigong/${key}.webp`;
 
 /** Nota al pie. */
 export const QIGONG_NOTA =

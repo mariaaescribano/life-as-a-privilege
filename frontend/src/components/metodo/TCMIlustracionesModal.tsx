@@ -26,7 +26,7 @@ import { comicLoaderPorColor } from "./comicLoaders";
 // según el taoísmo) sin duplicar el contenido.
 export const VINETAS_ORIGEN: Vineta[] = [
   {
-    src: "/viñetas/tcm/origen/origentcm1.png",
+    src: "/viñetas/tcm/origen/origentcm1.webp",
     paragraphs: [
       "El Dao (Tao) es el principio supremo e indescriptible del que surge toda la realidad.",
       "Del Dao emana el Qi, la energía primordial que, en un primer momento, existe como un estado indiferenciado conocido como Hundun, el caos primordial donde aún no hay distinción individual.",
@@ -34,7 +34,7 @@ export const VINETAS_ORIGEN: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/origen/origentcm2.png",
+    src: "/viñetas/tcm/origen/origentcm2.webp",
     paragraphs: [
       "El Yang es la energía masculina, el Qi del Cielo.",
       "El Yin es la energía femenina, el Qi de la Tierra.",
@@ -43,27 +43,27 @@ export const VINETAS_ORIGEN: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/origen/origentcm3.png",
+    src: "/viñetas/tcm/origen/origentcm3.webp",
     paragraphs: [
       "Montañas, ríos, plantas y animales son manifestaciones del Qi en constante transformación.",
       "«El ser humano nace de la esencia del cielo y recibe su forma de la tierra.» — Guan Zi",
     ],
   },
   {
-    src: "/viñetas/tcm/origen/origentcm4.png",
+    src: "/viñetas/tcm/origen/origentcm4.webp",
     paragraphs: [
       "La esencia (Jing) es la manifestación individualizada de la energía primordial, del Qi.",
       "Es la porción del Dao, la esencia infinita, que se condensa para dar origen al cuerpo, sostener la Vida y expresar la singularidad de cada ser.",
     ],
   },
   {
-    src: "/viñetas/tcm/origen/origentcm5.png",
+    src: "/viñetas/tcm/origen/origentcm5.webp",
     paragraphs: [
       "Del Jing emerge el Shen, el espíritu que anima la conciencia, las emociones y el pensamiento.",
     ],
   },
   {
-    src: "/viñetas/tcm/origen/origentcm6.png",
+    src: "/viñetas/tcm/origen/origentcm6.webp",
     paragraphs: [
       "El taoísmo enseña que el sentido de la Vida es recordar que somos una manifestación del Dao.",
       "Al cultivar el Jing, equilibrar el Qi y aclarar el Shen, dejamos de luchar contra la corriente de la existencia y aprendemos a vivir con naturalidad, armonía y plenitud.",
@@ -73,14 +73,14 @@ export const VINETAS_ORIGEN: Vineta[] = [
 
 export const VINETAS_ELEMENTOS: Vineta[] = [
   {
-    src: "/viñetas/tcm/elementos/5tcm.png",
+    src: "/viñetas/tcm/elementos/5tcm.webp",
     paragraphs: [
       "Los Cinco Elementos son las cinco fuerzas sobre las que se construye la naturaleza y, por extensión, el ser humano.",
       "Nuestros órganos, emociones y procesos vitales siguen los movimientos de estos cinco elementos.",
     ],
   },
   {
-    src: "/viñetas/tcm/elementos/tierratcm.png",
+    src: "/viñetas/tcm/elementos/tierratcm.webp",
     paragraphs: [
       "La Tierra es el suelo sobre el que todo se construye.",
       "Representa nuestra capacidad para nutrirnos y transformarnos, tanto a nivel físico como emocional",
@@ -88,7 +88,7 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/elementos/metaltcm.png",
+    src: "/viñetas/tcm/elementos/metaltcm.webp",
     paragraphs: [
       "Del proceso de transformación de la Tierra surge el Metal.",
       "Representa la claridad, el orden y la capacidad de discernir el dolor que es nuestro y el que no.",
@@ -96,28 +96,28 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/elementos/aguatcm.png",
+    src: "/viñetas/tcm/elementos/aguatcm.webp",
     paragraphs: [
       "Cuando aprendemos a soltar, aparece el Agua. Es la profundidad, la introspección y la conexión con nuestros recursos internos.",
       "Nos invita a mirar hacia dentro, encontrar paz y desarrollar la confianza necesaria para fluir con los cambios de la Vida.",
     ],
   },
   {
-    src: "/viñetas/tcm/elementos/madera.png",
+    src: "/viñetas/tcm/elementos/madera.webp",
     paragraphs: [
       "La Madera representa el crecimiento, la expansión y la capacidad de avanzar. Es la fuerza que transforma nuestro potencial en acción.",
       "Cuando está equilibrada nos ayuda a construir, crear y desarrollar aquello que hemos sembrado. Cuando se bloquea, pueden aparecer la frustración, la rigidez o el enfado.",
     ],
   },
   {
-    src: "/viñetas/tcm/elementos/fuegotcm.png",
+    src: "/viñetas/tcm/elementos/fuegotcm.webp",
     paragraphs: [
       "El Fuego es la expresión de la Vida en movimiento. Representa la alegría, la vitalidad, la pasión y la capacidad de conectar con los demás.",
       "Nos aporta entusiasmo, inspiración y el impulso necesario para compartir aquello que hemos creado.",
     ],
   },
   {
-    src: "/viñetas/tcm/elementos/tcmpersona.png",
+    src: "/viñetas/tcm/elementos/tcmpersona.webp",
     paragraphs: [
       "Según la Medicina Tradicional China, la salud surge cuando estos cinco movimientos se encuentran en equilibrio, permitiendo que la energía fluya de forma armoniosa a través de nuestro cuerpo, nuestras emociones y nuestra forma de vivir.",
     ],
@@ -126,7 +126,7 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
 
 export const VINETAS_YIN_YANG: Vineta[] = [
   {
-    src: "/viñetas/tcm/yinyang/yinyang.png",
+    src: "/viñetas/tcm/yinyang/yinyang.webp",
     paragraphs: [
       "Yin y Yang son dos aspectos opuestos y complementarios de una misma realidad.",
       "Yang representa la actividad, la luz y el movimiento.",
@@ -134,7 +134,7 @@ export const VINETAS_YIN_YANG: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/yinyang/yinyang2.png",
+    src: "/viñetas/tcm/yinyang/yinyang2.webp",
     paragraphs: [
       "Nada es completamente Yin ni completamente Yang. Cada uno contiene la semilla del otro.",
       "El Yang transforma la materia en energía. El Yin transforma la energía en materia.",
@@ -145,21 +145,21 @@ export const VINETAS_YIN_YANG: Vineta[] = [
 
 export const VINETAS_ALMA: Vineta[] = [
   {
-    src: "/viñetas/tcm/alma/alma1.png",
+    src: "/viñetas/tcm/alma/alma1.webp",
     paragraphs: [
       "Para la Medicina Tradicional China, el ser humano es una unidad. Cuerpo, Qi y espíritu forman un todo inseparable.",
       "El cuerpo (Xing) es la forma. El Qi es la energía vital. El Shen es el principio que da Vida, conciencia y presencia.",
     ],
   },
   {
-    src: "/viñetas/tcm/alma/alma2.png",
+    src: "/viñetas/tcm/alma/alma2.webp",
     paragraphs: [
       "Shen (corazón)",
       "Es la conciencia, la claridad mental y la capacidad de relacionarnos con el mundo.",
     ],
   },
   {
-    src: "/viñetas/tcm/alma/alma3.png",
+    src: "/viñetas/tcm/alma/alma3.webp",
     paragraphs: [
       "Hun (hígado)",
       "Es el alma etérea.",
@@ -167,7 +167,7 @@ export const VINETAS_ALMA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/alma/alma4.png",
+    src: "/viñetas/tcm/alma/alma4.webp",
     paragraphs: [
       "Po (pulmones)",
       "Es el alma corpórea.",
@@ -175,7 +175,7 @@ export const VINETAS_ALMA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/alma/alma5.png",
+    src: "/viñetas/tcm/alma/alma5.webp",
     paragraphs: [
       "Yi (bazo)",
       "Es la intención.",
@@ -183,7 +183,7 @@ export const VINETAS_ALMA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/alma/alma6.png",
+    src: "/viñetas/tcm/alma/alma6.webp",
     paragraphs: [
       "Zhi (riñones)",
       "Es la voluntad.",
@@ -191,7 +191,7 @@ export const VINETAS_ALMA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/tcm/alma/alma7.png",
+    src: "/viñetas/tcm/alma/alma7.webp",
     paragraphs: [
       "Cada aspecto del espíritu reside en un órgano.",
       "Cuando los órganos están en equilibrio, también lo está la mente.",
@@ -210,12 +210,12 @@ const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
 };
 
 const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string; coverScale?: number }[] = [
-  { key: "origen",        title: "El Origen", cover: "/viñetas/tcm/origen/origentcm3.png" },
-  { key: "yin_yang",      title: "El Yin Yang", cover: "/viñetas/tcm/yinyang/yinyang.png" },
+  { key: "origen",        title: "El Origen", cover: "/viñetas/tcm/origen/origentcm3.webp" },
+  { key: "yin_yang",      title: "El Yin Yang", cover: "/viñetas/tcm/yinyang/yinyang.webp" },
   // El pergamino de elementos trae un marco crema decorado alrededor; lo
   // ampliamos un poco para recortarlo y que llene la caja como las demás.
-  { key: "los_elementos", title: "Los Cinco Elementos", cover: "/viñetas/tcm/elementos/portadaelementos.png", coverScale: 1.12 },
-  { key: "alma_humana",   title: "El Alma Humana", cover: "/viñetas/tcm/alma/alma7.png" },
+  { key: "los_elementos", title: "Los Cinco Elementos", cover: "/viñetas/tcm/elementos/portadaelementos.webp", coverScale: 1.12 },
+  { key: "alma_humana",   title: "El Alma Humana", cover: "/viñetas/tcm/alma/alma7.webp" },
 ];
 
 interface TCMIlustracionesModalProps {

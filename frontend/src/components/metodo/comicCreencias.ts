@@ -16,7 +16,7 @@ const P = "/viñetas/psicologia/creencias";
 
 export const COMIC_CREENCIAS: Vineta[] = [
   {
-    src: `${P}/creencias1.png`,
+    src: `${P}/creencias1.webp`,
     titulo: "",
     paragraphs: [
       "Un trauma no resuelto no desaparece: se convierte en una desconexión con uno mismo.",
@@ -24,7 +24,7 @@ export const COMIC_CREENCIAS: Vineta[] = [
     ],
   },
   {
-    src: `${P}/creencias2.png`,
+    src: `${P}/creencias2.webp`,
     titulo: "",
     paragraphs: [
       "Nadie puede conectar con las necesidades de un hijo si ha perdido el contacto con las propias. La desconexión emocional se transmite en la crianza.",
@@ -32,7 +32,7 @@ export const COMIC_CREENCIAS: Vineta[] = [
     ],
   },
   {
-    src: `${P}/creencias3.png`,
+    src: `${P}/creencias3.webp`,
     titulo: "",
     paragraphs: [
       "El bebé depende de que alguien dé sentido a lo que siente. Cuando eso no ocurre, no concluye que sus padres no pudieron cuidarlo; concluye que él no merece ser cuidado, que hay algo inherentemente mal en él como persona.",

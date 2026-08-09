@@ -9,7 +9,7 @@ import type { Vineta } from "./ComicViewer";
 // TEXTO PROVISIONAL — la usuaria pasará el definitivo.
 export const NUTRICION_MICROBIOTA: Vineta[] = [
   {
-    src: "/viñetas/nutricion/microbiota/microbiota1.png",
+    src: "/viñetas/nutricion/microbiota/microbiota1.webp",
     paragraphs: [
       "En tu intestino viven billones de microorganismos: bacterias, hongos, virus y otros microbios que forman tu microbiota.",
       "No son intrusos: conviven contigo y cumplen funciones esenciales.",
@@ -17,7 +17,7 @@ export const NUTRICION_MICROBIOTA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/microbiota/microbiota2.png",
+    src: "/viñetas/nutricion/microbiota/microbiota2.webp",
     paragraphs: [
       "Su alimento favorito es la fibra dietética. Como nuestro intestino no tiene las enzimas necesarias para digerirla, la microbiota la fermenta.",
       "Durante ese proceso produce ácidos grasos de cadena corta (acetato, propionato, butirato), que alimentan a las células del intestino y ayudan a regular el metabolismo.",
@@ -25,14 +25,14 @@ export const NUTRICION_MICROBIOTA: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/microbiota/microbiota3.png",
+    src: "/viñetas/nutricion/microbiota/microbiota3.webp",
     paragraphs: [
       "Algunas moléculas fabricadas por la microbiota pueden viajar por la sangre o enviar señales a través del nervio vago.",
       "Gracias a esta comunicación, la microbiota puede influir en el funcionamiento del cerebro, el estado de ánimo y el aprendizaje a través de la creación de serotonina.",
     ],
   },
   {
-    src: "/viñetas/nutricion/microbiota/microbiota4.png",
+    src: "/viñetas/nutricion/microbiota/microbiota4.webp",
     paragraphs: [
       "Cuidar tu microbiota es cuidar de ti - de tu cuerpo, de tu cerebro y de tu salud mental.",
       "Cuanta mayor variedad de alimentos vegetales consumes, más diversa suele ser tu microbiota, y esa diversidad se asocia con una mejor salud.",

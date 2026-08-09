@@ -9,7 +9,7 @@ import type { Vineta } from "./ComicViewer";
 // (mientras no existan, el ComicViewer pinta un placeholder «próximamente»).
 export const ESTRELLA_ATOMOS: Vineta[] = [
   {
-    src: "/viñetas/fisiologia/estrellas/star1.png",
+    src: "/viñetas/fisiologia/estrellas/star1.webp",
     paragraphs: [
       "Para crear una estrella, las creadoras de los átomos...",
       "La gravedad reúne enormes nubes de hidrógeno, llamadas nebulosa.",
@@ -17,7 +17,7 @@ export const ESTRELLA_ATOMOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/estrellas/star2.png",
+    src: "/viñetas/fisiologia/estrellas/star2.webp",
     paragraphs: [
       "En su interior, la temperatura es tan extrema que los átomos de hidrógeno se separan de sus electrones, dejando solo protones, sus núcleos.",
       "Estos protones colisionan y comienzan a unirse. Ha empezado la fusión nuclear.",
@@ -25,27 +25,27 @@ export const ESTRELLA_ATOMOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/estrellas/star3.png",
+    src: "/viñetas/fisiologia/estrellas/star3.webp",
     paragraphs: [
       "La fusión nuclear crea núcleos de helio y libera energía —por eso las estrellas brillan.",
       "Con el tiempo, la estrella fusiona esos núcleos y los transforma en nuevos elementos, como el carbono y el oxígeno.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/estrellas/star4.png",
+    src: "/viñetas/fisiologia/estrellas/star4.webp",
     paragraphs: [
       "Las estrellas más masivas siguen fusionando elementos y fabrican átomos cada vez más pesados.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/estrellas/star5.png",
+    src: "/viñetas/fisiologia/estrellas/star5.webp",
     paragraphs: [
       "Finalmente aparece el hierro.",
       "A partir de él, la estrella ya no puede obtener energía mediante la fusión.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/estrellas/star6.png",
+    src: "/viñetas/fisiologia/estrellas/star6.webp",
     paragraphs: [
       "La estrella colapsa y explota.",
       "En ese instante nacen algunos de los elementos más pesados del universo, como el oro o el uranio.",
@@ -54,7 +54,7 @@ export const ESTRELLA_ATOMOS: Vineta[] = [
   // Cierre distinto al resto: la tabla periódica, en vertical (9:16) y entera
   // (`fotoVertical`), con una sola frase que recontextualiza todo el cómic.
   {
-    src: "/viñetas/fisiologia/estrellas/tablaperiodica.png",
+    src: "/viñetas/fisiologia/estrellas/tablaperiodica.webp",
     fotoVertical: true,
     paragraphs: [
       "Nunca más mirarás la tabla periódica con los mismos ojos...",

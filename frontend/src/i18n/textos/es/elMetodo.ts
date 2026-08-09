@@ -7,7 +7,7 @@
  */
 export const elMetodo = {
   "elMetodo.titulo": "EL MAPA",
-  "elMetodo.subtitulo": "de Life as a Privilege",
+  "elMetodo.subtitulo": "del 'Vivir como Privilegio'",
   "elMetodo.lema": "Ocho disciplinas. Un orden. Un propósito: entenderte.",
   "elMetodo.intro":
     "No son ocho cursos independientes. Es una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.",

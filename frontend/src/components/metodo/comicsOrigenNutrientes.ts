@@ -21,7 +21,7 @@ import { NUTRICION_CICLOS } from "./comicNutricionCiclos";
 //   /viñetas/nutricion/<key>/<key><n>.png  →  tierra, planta, hoja, fruta, animal
 // ─────────────────────────────────────────────────────────────────────────
 
-const src = (key: string, i: number) => `/viñetas/nutricion/${key}/${key}${i}.png`;
+const src = (key: string, i: number) => `/viñetas/nutricion/${key}/${key}${i}.webp`;
 
 // ── 2. La tierra y la raíz ───────────────────────────────────────────────
 export const NUTRICION_TIERRA: Vineta[] = [
@@ -349,7 +349,7 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
     key: "ciclos",
     titulo: "Los grandes ciclos de la naturaleza",
     resumen: "El agua, el carbono, el oxígeno, el nitrógeno y el fósforo dando vueltas: tus átomos son prestados.",
-    cover: "/viñetas/nutricion/ciclos/carbono.png",
+    cover: "/viñetas/nutricion/ciclos/carbono.webp",
     emoji: "🌍",
     vinetas: NUTRICION_CICLOS,
   },

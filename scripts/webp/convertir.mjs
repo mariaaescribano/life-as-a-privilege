@@ -200,6 +200,44 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/nutricion/moleculas"],
   },
+  // TODO LO QUE QUEDABA · ilustraciones (agosto de 2026). Las dos carpetas
+  // enteras, recursivas: aquí ya no se elige carpeta a carpeta, se barre. Mismos
+  // ajustes que el lote 1 porque es el mismo tipo de imagen —ilustración
+  // cuadrada que se lee a 400-600 px—, y las carpetas que ya eran WebP no
+  // aportan ningún PNG, así que pasar por encima no cuesta nada.
+  15: {
+    ladoMax: 1000,
+    carpetas: ["recorrido", "viñetas"],
+  },
+  // TODO LO QUE QUEDABA · el resto: capturas de pantalla del recorrido,
+  // miniaturas, portadas de libros y las fotos sueltas de /img.
+  //
+  // Lado 1400 y calidad 85, no 1000/80: aquí hay CAPTURAS con texto de la app y
+  // portadas de libro con el título escrito; a 1000 px el texto pequeño se
+  // reblandece, y estas imágenes son pequeñas de origen (≤1000 px casi todas),
+  // así que el lado no recorta nada y solo actúa la compresión.
+  //
+  // Fuera del barrido, a propósito:
+  //   · img/og  → la miniatura que enseñan WhatsApp, Twitter y Google al
+  //     compartir el enlace. Varios de ellos no leen WebP: iría sin foto.
+  //   · img/icono/iconoFondo.png → el favicon (`<link rel="icon">` de
+  //     index.html, con type="image/png"). Pesa 13 kB: no hay nada que ganar.
+  //   · cursos/ → la foto de cada curso NO se escribe en el código, vive en la
+  //     columna `foto` de la tabla `curso` (33 filas, todas .png). Convertir esa
+  //     carpeta obliga a actualizar la base de datos a la vez.
+  16: {
+    ladoMax: 1400,
+    calidad: 85,
+    saltar: ["/img/icono/iconoFondo.png"],
+    carpetas: [
+      "capturasRecorrido",
+      "miniaturas",
+      "libros/img",
+      "img/alimentos", "img/astrologia", "img/ayurveda", "img/cabala",
+      "img/extras", "img/icono", "img/me", "img/np", "img/nutri",
+      "img/plantas", "img/videos",
+    ],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

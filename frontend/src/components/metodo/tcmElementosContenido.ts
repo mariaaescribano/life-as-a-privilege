@@ -51,26 +51,26 @@ export interface ContenidoElementoRico {
 export interface VinetaIntro { src: string; texto: string | string[]; }
 export const COMIC_INTRO_ELEMENTOS: VinetaIntro[] = [
   {
-    src: "/recorrido/tcm/elementos/elementos1.png",
+    src: "/recorrido/tcm/elementos/elementos1.webp",
     texto: [
       "Los Cinco Elementos (Wu Xing) —Madera, Fuego, Tierra, Metal y Agua— constituyen una de las bases teóricas fundamentales de la Medicina Tradicional China.",
       "No son «cosas» literales ni meros símbolos: describen procesos dinámicos de la Vida y la manera en que el Qi se transforma y se expresa en la naturaleza y en el ser humano.",
     ],
   },
   {
-    src: "/recorrido/tcm/elementos/elementos2.png",
+    src: "/recorrido/tcm/elementos/elementos2.webp",
     texto:
       "Cada persona encarna el movimiento de los cinco elementos, y vivir en armonía con el Dao significa permitir que esos procesos se expresen sin obstrucción.",
   },
   {
-    src: "/recorrido/tcm/elementos/elementos3.png",
+    src: "/recorrido/tcm/elementos/elementos3.webp",
     texto: [
       "Un desequilibrio aparece cuando un elemento se vuelve excesivo (sobreactúa) o deficiente (rinde por debajo de lo normal).",
       "Los médicos de la antigua China los observaban mediante una atención profunda a la persona: su postura, su expresión, su voz, su pulso, sus hábitos, sus emociones y todos aquellos detalles sutiles que revelan el estado del Qi.",
     ],
   },
   {
-    src: "/recorrido/tcm/elementos/elementos4.png",
+    src: "/recorrido/tcm/elementos/elementos4.webp",
     texto:
       "Cada elemento agrupa un órgano Zang (principal), un órgano Fu (víscera asociada), un tejido, un orificio sensorial, un líquido corporal, una emoción, un color, un sabor, una estación, un tipo de voz y un movimiento característico.",
   },
@@ -531,31 +531,31 @@ export const CONTENIDO_ELEMENTOS: Record<Elemento, ContenidoElementoRico> = {
 // Fotos artísticas de cada elemento (/public/recorrido/tcm/fondos). Se usan como
 // fondo de las viñetas del cómic de cada elemento. Madera = verde.png.
 export const FOTO_ELEMENTO: Record<Elemento, string> = {
-  madera: "/recorrido/tcm/fondos/verde.png",
-  fuego: "/recorrido/tcm/fondos/fuego.png",
-  tierra: "/recorrido/tcm/fondos/tierra.png",
-  metal: "/recorrido/tcm/fondos/metal.png",
-  agua: "/recorrido/tcm/fondos/agua.png",
+  madera: "/recorrido/tcm/fondos/verde.webp",
+  fuego: "/recorrido/tcm/fondos/fuego.webp",
+  tierra: "/recorrido/tcm/fondos/tierra.webp",
+  metal: "/recorrido/tcm/fondos/metal.webp",
+  agua: "/recorrido/tcm/fondos/agua.webp",
 };
 
 // Iconos circulares de cada elemento (/public/recorrido/tcm/icons). Van dentro de
 // los círculos del radar (MetodoTcmMapa) y de la estrella (MetodoTcmElementos).
 export const ICONO_ELEMENTO: Record<Elemento, string> = {
-  madera: "/recorrido/tcm/icons/madera.png",
-  fuego: "/recorrido/tcm/icons/fuego.png",
-  tierra: "/recorrido/tcm/icons/tierra.png",
-  metal: "/recorrido/tcm/icons/metal.png",
-  agua: "/recorrido/tcm/icons/agua.png",
+  madera: "/recorrido/tcm/icons/madera.webp",
+  fuego: "/recorrido/tcm/icons/fuego.webp",
+  tierra: "/recorrido/tcm/icons/tierra.webp",
+  metal: "/recorrido/tcm/icons/metal.webp",
+  agua: "/recorrido/tcm/icons/agua.webp",
 };
 
 // Ilustración de cada elemento (mismas que el modal de Ilustraciones). Se muestra
 // junto al texto en cada momento del recorrido, como ancla visual del elemento.
 export const IMAGEN_ELEMENTO: Record<Elemento, string> = {
-  madera: "/viñetas/tcm/elementos/madera.png",
-  fuego: "/viñetas/tcm/elementos/fuegotcm.png",
-  tierra: "/viñetas/tcm/elementos/tierratcm.png",
-  metal: "/viñetas/tcm/elementos/metaltcm.png",
-  agua: "/viñetas/tcm/elementos/aguatcm.png",
+  madera: "/viñetas/tcm/elementos/madera.webp",
+  fuego: "/viñetas/tcm/elementos/fuegotcm.webp",
+  tierra: "/viñetas/tcm/elementos/tierratcm.webp",
+  metal: "/viñetas/tcm/elementos/metaltcm.webp",
+  agua: "/viñetas/tcm/elementos/aguatcm.webp",
 };
 
 export const tieneContenido = (el: Elemento): boolean => !!CONTENIDO_ELEMENTOS[el];
@@ -795,7 +795,7 @@ const comicMetal: PasoComic[] = [
 //   4 · el cabello caído, el cepillo, la mano en la rodilla  → deficiencia
 //   5 · arándanos, algas, frijol negro, el caldo caliente    → nutrición
 //   6 · PENDIENTE · la del estilo de Vida (descanso, silencio, invierno).
-//     Su ruta ya está escrita: en cuanto dejes `agua6.png` en la carpeta,
+//     Su ruta ya está escrita: en cuanto dejes `agua6.webp` en la carpeta,
 //     aparece sola. Mientras tanto esa viñeta sale con el aviso de pendiente.
 const FOTOS_AGUA = {
   intro: "/recorrido/tcm/agua/agua1.webp",
@@ -803,7 +803,7 @@ const FOTOS_AGUA = {
   excesoFrio: "/recorrido/tcm/agua/agua3.webp",
   deficiencia: "/recorrido/tcm/agua/agua4.webp",
   nutricion: "/recorrido/tcm/agua/agua5.webp",
-  estilo: "/recorrido/tcm/agua/agua6.png",
+  estilo: "/recorrido/tcm/agua/agua6.webp",
 };
 
 // Agua · viñetas con el texto del curso (voz de María).

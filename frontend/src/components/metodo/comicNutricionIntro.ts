@@ -8,7 +8,7 @@ import type { Vineta } from "./ComicViewer";
 // (mientras no existan, el ComicViewer pinta un placeholder «próximamente»).
 export const NUTRICION_INTRO: Vineta[] = [
   {
-    src: "/viñetas/nutricion/intro/nutricomic1.png",
+    src: "/viñetas/nutricion/intro/nutricomic1.webp",
     paragraphs: [
       "Todo lo que está vivo está formado por átomos, moléculas y células.",
       "El universo invierte cierta cantidad de partículas para experimentarse de forma supuestamente individual.",
@@ -16,28 +16,28 @@ export const NUTRICION_INTRO: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/intro/nutricomic2.png",
+    src: "/viñetas/nutricion/intro/nutricomic2.webp",
     paragraphs: [
       "Todos los seres vivos tenemos algo en común: si queremos seguir existiendo, debemos convertir moléculas del exterior en parte de nosotros.",
       "En otras palabras, tenemos que alimentarnos.",
     ],
   },
   {
-    src: "/viñetas/nutricion/intro/nutricomic3.png",
+    src: "/viñetas/nutricion/intro/nutricomic3.webp",
     paragraphs: [
       "Cuando comemos, miles de enzimas trabajan a nuestro servicio para descomponer los alimentos en moléculas cada vez más pequeñas.",
       "Después, nuestro cuerpo las absorbe, las transporta y las utiliza para fabricar nuevas células, reparar tejidos y seguir funcionando."
     ],
   },
   {
-    src: "/viñetas/nutricion/intro/nutricomic4.png",
+    src: "/viñetas/nutricion/intro/nutricomic4.webp",
     paragraphs: [
       "Es un ciclo del que no podemos escapar.",
       "Cada día destruimos una parte de nosotros y cada día la volvemos a construir.",
     ],
   },
   {
-    src: "/viñetas/nutricion/intro/nutricomic5.png",
+    src: "/viñetas/nutricion/intro/nutricomic5.webp",
     paragraphs: [
       "Pero no todos los alimentos aportan las mismas moléculas.",
       "Durante millones de años, la naturaleza fue nuestra única fuente de alimento.",
@@ -46,7 +46,7 @@ export const NUTRICION_INTRO: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/intro/nutricomic6.png",
+    src: "/viñetas/nutricion/intro/nutricomic6.webp",
     paragraphs: [
       "Esta disciplina te invita a dejar de pensar en lo que te gusta y en lo que no.",
       "Te invita a mirar los alimentos desde un punto de vista racional y comprender qué moléculas contienen, cómo actúan en tu organismo y por qué influyen en tu salud.",

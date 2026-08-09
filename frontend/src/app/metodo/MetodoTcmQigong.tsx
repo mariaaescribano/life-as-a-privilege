@@ -350,7 +350,7 @@ function PosturaCard({ postura, numero }: { postura: Postura; numero: number }) 
                alignSelf={{ base: "auto", md: "flex-start" }}
                m={{ base: 0, md: 5 }}
                borderRadius={{ base: 0, md: "xl" }}>
-            <Image src={encodeURI(FOTO_POSTURA(numero - 1))} alt={postura.nombre} w="100%" h="100%"
+            <Image src={encodeURI(FOTO_POSTURA(postura.key))} alt={postura.nombre} w="100%" h="100%"
                    objectFit="cover" onError={() => setSinFoto(true)} />
           </Box>
         )}

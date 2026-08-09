@@ -69,18 +69,18 @@ export type TemaProfundiza = {
 };
 
 // Portada (foto de la tarjeta del hub) de cada tema, en la subcarpeta /portadas.
-const PORTADA = (f: string) => `/recorrido/fisiologia/profundiza/portadas/${f}.png`;
-const NT = (k: string) => `/recorrido/fisiologia/profundiza/neurotransmisores/${k}.png`;
+const PORTADA = (f: string) => `/recorrido/fisiologia/profundiza/portadas/${f}.webp`;
+const NT = (k: string) => `/recorrido/fisiologia/profundiza/neurotransmisores/${k}.webp`;
 // Foto de una ficha dentro de la subcarpeta de su tema (María las irá subiendo;
 // mientras no existan, cada caja muestra la inicial del nombre).
-const SUB = (tema: string, k: string) => `/recorrido/fisiologia/profundiza/${tema}/${k}.png`;
+const SUB = (tema: string, k: string) => `/recorrido/fisiologia/profundiza/${tema}/${k}.webp`;
 
 // ── Cómic «Cómo se sintetiza un neurotransmisor» ───────────────────────────
 // Imágenes: /viñetas/fisiologia/neurocomic/neurocomic1.png … neurocomic6.png
 // Sin encabezados (eyebrow): las viñetas van solo con su texto.
 const NEUROTRANSMISORES_SINTESIS: Vineta[] = [
   {
-    src: "/viñetas/fisiologia/neurocomic/neurocomic1.png",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic1.webp",
     paragraphs: [
       "Todo empieza en tu plato.",
       "Muchos neurotransmisores nacen de aminoácidos que sacas de la comida: el triptófano, la tirosina…",
@@ -88,35 +88,35 @@ const NEUROTRANSMISORES_SINTESIS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurocomic/neurocomic2.png",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic2.webp",
     paragraphs: [
       "El aminoácido viaja hasta la neurona. Dentro, unas enzimas lo transforman paso a paso, como en una fábrica.",
       "Así la tirosina acaba convertida en dopamina; el triptófano, en serotonina.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurocomic/neurocomic3.png",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic3.webp",
     paragraphs: [
       "El neurotransmisor recién fabricado se guarda en pequeñas bolsas: las vesículas.",
       "Esperan cargadas en el extremo de la neurona, listas para disparar.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurocomic/neurocomic4.png",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic4.webp",
     paragraphs: [
       "Llega un impulso eléctrico.",
       "Las vesículas se fusionan con la membrana y liberan el neurotransmisor al pequeño espacio entre dos neuronas: la sinapsis.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurocomic/neurocomic5.png",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic5.webp",
     paragraphs: [
       "El neurotransmisor cruza y encaja en su receptor, como una llave en su cerradura.",
       "Ese encaje ES el mensaje: la neurona siguiente lo recibe y reacciona.",
     ],
   },
   {
-    src: "/viñetas/fisiologia/neurocomic/neurocomic6.png",
+    src: "/viñetas/fisiologia/neurocomic/neurocomic6.webp",
     paragraphs: [
       "Después, el mensaje se apaga.",
       "Parte del neurotransmisor se recicla de vuelta a la neurona (recaptación), los asctrocitos lo limpian o parte se degrada.",

@@ -51,7 +51,7 @@ export interface DimensionLengua {
   opciones: OpcionLengua[];
 }
 
-const IMG = (n: string) => `/recorrido/tcm/lengua/${n}.png`;
+const IMG = (n: string) => `/recorrido/tcm/lengua/${n}.webp`;
 
 export const LENGUA_DIMENSIONES: DimensionLengua[] = [
   // ── COLOR DEL CUERPO ──────────────────────────────────────────────────────
