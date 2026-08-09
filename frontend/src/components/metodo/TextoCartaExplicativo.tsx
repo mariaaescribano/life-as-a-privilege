@@ -11,13 +11,16 @@ import { astrologiaTxt } from "../../GlobalVariables";
    Cambia `img` por las fotos que quieras y edita los textos.
    ────────────────────────────────────────────────────────────── */
 const MAPA1 = "/viñetas/astrologia/astro/mapa1.webp";
+// La segunda viñeta tiene su propia ilustración (antes repetía la primera).
+// En PNG a propósito: es la única de la carpeta que llegó así y no se convierte.
+const MAPA11 = "/viñetas/astrologia/astro/mapa11.png";
 const MAPA2 = "/viñetas/astrologia/astro/mapa2.webp";
 const MAPA3 = "/viñetas/astrologia/astro/mapa3.webp";
 const MAPA4 = "/viñetas/astrologia/astro/mapa4.webp";
 
 /** Fotos del cómic de la carta, para poder precargarlas desde la página (que
  *  no aparezca la página hasta que la foto de la carta también esté lista). */
-export const CARTA_MAPA_IMGS = [MAPA1, MAPA2, MAPA3, MAPA4];
+export const CARTA_MAPA_IMGS = [MAPA1, MAPA11, MAPA2, MAPA3, MAPA4];
 
 const VINETAS: { img: string; texto: string }[] = [
   {
@@ -27,7 +30,7 @@ const VINETAS: { img: string; texto: string }[] = [
 También revela tus heridas más profundas y dónde fueron creadas.`,
   },
   {
-    img: MAPA1,
+    img: MAPA11,
     texto: `Es importante recordar que nada de lo que aparece en tu carta es bueno o malo, ni hay nada que juzgar en ti o en ninguna otra persona.
 
 Todo fue elegido por tu alma antes de nacer.

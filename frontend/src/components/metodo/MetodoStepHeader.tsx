@@ -43,6 +43,12 @@ const ArrowIcon = ({ dir }: { dir: "prev" | "next" }) => (
   </Box>
 );
 
+/** Glow del box del header cuando lleva el fondo de la disciplina (Astrología,
+ *  Cábala…). Se exporta para que las cajas de la MISMA página puedan llevar
+ *  exactamente el mismo halo que el header en vez de una sombra propia. */
+export const glowHeaderDisciplina = (color: string) =>
+  `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`;
+
 interface MetodoStepHeaderProps {
   icon: React.ReactNode;
   title: React.ReactNode;
@@ -315,7 +321,7 @@ export function MetodoStepHeader({
       boxShadow={
         boxShadow ??
         (useDiscBg
-          ? `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${color}1a, 0 0 48px ${color}10`
+          ? glowHeaderDisciplina(color)
           : `0 4px 20px rgba(0,0,0,0.22), 0 0 12px rgba(255,255,255,0.14), 0 0 26px rgba(255,255,255,0.07), 0 0 16px ${color}2b`)
       }
     >

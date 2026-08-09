@@ -17,7 +17,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
-import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { MetodoStepHeader, glowHeaderDisciplina } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
@@ -210,8 +210,10 @@ export default function MetodoAstrologiaPdf() {
           </Reveal>
 
           <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.24} duration={0.75} w="100%">
+            {/* Sin línea de borde: la caja se sostiene con el MISMO halo que el
+                header de la página (glowHeaderDisciplina), no con una sombra propia. */}
             <Box position="relative" borderRadius="2xl" overflow="hidden" w="100%"
-                 border={`1px solid ${astrologiaTxt}44`}>
+                 boxShadow={glowHeaderDisciplina(astrologiaTxt)}>
               <SpaceBg />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={5}
                     px={{ base: 5, md: 10 }} py={{ base: 8, md: 10 }} textAlign="center">

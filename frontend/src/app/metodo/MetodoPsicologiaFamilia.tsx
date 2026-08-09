@@ -21,7 +21,7 @@ import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
-import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
+import { PsicologiaLoader, PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -31,10 +31,12 @@ import { FotoPersonaBoton } from "../../components/metodo/FotoPersonaBoton";
 import { useMapaFamilia } from "../../hooks/useMapaFamilia";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
+  simboloSrc,
   SIMBOLOS_FAMILIA,
   SIMBOLOS_GRUPOS,
   type SimboloFamilia,
 } from "../../components/metodo/familiaSimbolos";
+import { useImagesReady } from "../../hooks/useImagesReady";
 import {
   experienciaById,
   FAMILIA,
@@ -157,7 +159,17 @@ export default function MetodoPsicologiaFamilia() {
 // ─────────────────────────────────────────────────────────────────────────
 // Popup de una persona: su nombre y parentesco arriba, y debajo el selector de
 // personajes/animales (hasta dos). Todo se autoguarda.
+//
+// El popup no se enseña a medias: hasta que TODAS las fotos del catálogo estén
+// cargadas solo se ve la neurona de psicología girando dentro de la caja. Son
+// varias decenas de miniaturas y, sin esto, la rejilla se iba pintando a
+// trozos.
 // ─────────────────────────────────────────────────────────────────────────
+
+/** Las fotos del catálogo. Fuera del componente: la lista no cambia nunca, y
+ *  así `useImagesReady` no vuelve a esperar en cada render. */
+const SIMBOLOS_SRCS = SIMBOLOS_FAMILIA.map((s) => simboloSrc(s.key));
+
 function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
   p: PersonaGenograma;
   onCampo: (campos: Partial<PersonaGenograma>) => void;
@@ -167,6 +179,9 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
   useLockBodyScroll(true);
   const [error, setError] = useState<string | null>(null);
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
+  // Solo el catálogo: la foto de la persona NO entra aquí a propósito, o al
+  // subir una nueva el popup entero se iría al loader en mitad de la edición.
+  const fotosListas = useImagesReady(SIMBOLOS_SRCS);
 
   const elegidos = personaSimbolos(p);
   const completo = elegidos.length >= SIMBOLOS_POR_PERSONA;
@@ -195,6 +210,15 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
            boxShadow={`0 0 40px ${TINTA}66, 0 24px 70px rgba(0,0,0,0.5)`}>
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
+        {!fotosListas ? (
+          // Todavía cargando: la caja no enseña nada más que la neurona. Se
+          // cierra tocando fuera, como siempre.
+          <Flex position="relative" zIndex={1} align="center" justify="center"
+                minH={{ base: "320px", md: "380px" }}>
+            <PsicologiaLoader color={TINTA} />
+          </Flex>
+        ) : (
+        <>
         {/* Cerrar */}
         <Box as="button" onClick={onClose} position="absolute" top={3} right={3} zIndex={3}
              w="38px" h="38px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
@@ -361,6 +385,8 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
             </Box>
           </Flex>
         </Box>
+        </>
+        )}
       </Box>
     </Box>
   );

@@ -198,12 +198,12 @@ export default function MetodoPsicologiaHuellas() {
                   onToggle={toggleItem}
                 />
 
-                {/* Lomo del cuaderno: es la MISMA hoja (acuarela de psicología),
-                    no un bloque oscuro — un tablón marrón partía el box en dos y
-                    se veía como una franja negra sobre el papel. El pliegue se
-                    sugiere con dos sombras suaves a los lados y los agujeros
-                    troquelados en medio. Vertical en ordenador, horizontal en
-                    móvil (une abajo↔arriba). */}
+                {/* Lomo del cuaderno: la canal de encuadernación, en la TINTA de
+                    psicología (neuropsicologiaTxt). Es la pieza que une las dos
+                    hojas, así que va maciza y oscura; el volumen se sugiere con
+                    un brillo central y sombra a los lados, y los agujeros
+                    troquelados se ven CLAROS (el papel de detrás) sobre ella.
+                    Vertical en ordenador, horizontal en móvil (une abajo↔arriba). */}
                 <Flex
                   position="relative"
                   direction={{ base: "row", md: "column" }}
@@ -213,11 +213,8 @@ export default function MetodoPsicologiaHuellas() {
                   alignSelf="stretch"
                   overflow="hidden"
                   w={{ base: "100%", md: "42px" }}
-                  h={{ base: "34px", md: "440px" }}
-                  bgColor={neuropsicologiaBg}
-                  bgImage="url('/img/fondos/psciologia.webp')"
-                  bgSize="cover"
-                  bgPosition="center"
+                  h={{ base: "34px", md: "auto" }}
+                  bgColor={TINTA}
                   my={{ base: "-14px", md: 0 }}
                   mx={{ base: 0, md: "-12px" }}
                   gap={{ base: 4, md: 0 }}
@@ -225,15 +222,17 @@ export default function MetodoPsicologiaHuellas() {
                   zIndex={3}
                   aria-hidden
                 >
-                  {/* Valle del pliegue: solo sombra del color de la tinta a cada
-                      lado, para que se note el doblez sin tapar la acuarela. */}
+                  {/* Volumen del lomo: los bordes se hunden en sombra y el centro
+                      recibe la luz, para que se lea como una canal redondeada y
+                      no como una franja plana. Hex-alpha, nada de rgba(): las
+                      comas rompen bgGradient. */}
                   <Box
                     position="absolute"
                     inset="0"
                     pointerEvents="none"
                     bgGradient={{
-                      base: `linear(to-b, ${TINTA}33, ${TINTA}00 38%, ${TINTA}00 62%, ${TINTA}33)`,
-                      md: `linear(to-r, ${TINTA}33, ${TINTA}00 38%, ${TINTA}00 62%, ${TINTA}33)`,
+                      base: "linear(to-b, #00000059, #ffffff1f 38%, #ffffff1f 62%, #00000059)",
+                      md: "linear(to-r, #00000059, #ffffff1f 38%, #ffffff1f 62%, #00000059)",
                     }}
                   />
                   {Array.from({ length: 7 }).map((_, i) => (
@@ -243,8 +242,8 @@ export default function MetodoPsicologiaHuellas() {
                       w="13px"
                       h="13px"
                       borderRadius="full"
-                      bg={`${TINTA}44`}
-                      boxShadow={`inset 0 2px 4px ${TINTA}aa, 0 1px 0 rgba(255,251,243,0.75)`}
+                      bg={neuropsicologiaBg}
+                      boxShadow={`inset 0 2px 4px ${TINTA}, 0 1px 0 #ffffff33`}
                     />
                   ))}
                 </Flex>
@@ -393,12 +392,17 @@ const Pagina = ({
           "&::-webkit-scrollbar-thumb": { background: TINTA, borderRadius: "10px", border: `3px solid ${neuropsicologiaBg}`, backgroundClip: "content-box" },
         }}
       >
-       <Box sx={{ direction: "ltr" }}>
+       {/* `minH: 100%` + columna flexible: cuando los recuerdos no llenan la
+           hoja, las franjas se REPARTEN el alto y la lista ocupa la página
+           entera (nada de media hoja escrita y media en blanco). Cuando sí la
+           llenan, no sobra espacio que repartir y la página scrollea como
+           siempre. */}
+       <Box sx={{ direction: "ltr" }} minH="100%" display="flex" flexDirection="column">
         {/* Contenido medible (cabecera + ítems), SIN la franja final: así la
             medida de scroll no se pisa a sí misma. */}
-        <Box ref={contentRef}>
+        <Box ref={contentRef} flex="1" display="flex" flexDirection="column">
         {/* Cabecera del año — con su propia "foto" de psicología */}
-        <Box position="relative" px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
+        <Box position="relative" flexShrink={0} px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
           <FotoFranja posicion="center top" />
           <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center" gap={3}>
             <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
@@ -411,22 +415,29 @@ const Pagina = ({
         {/* Cada ítem es su propia franja con una "foto" nueva; entre franjas,
             una raya de separación bien visible. */}
         {items.length === 0 ? (
-          <Box position="relative" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}`} borderBottom={`2px solid ${TINTA}55`}>
+          <Box position="relative" flex="1" display="flex" alignItems="center" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}`} borderBottom={`2px solid ${TINTA}55`}>
             <FotoFranja posicion="center 40%" />
-            <Text position="relative" zIndex={1} color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
+            <Text position="relative" zIndex={1} w="100%" color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
               Sin recuerdos escritos este año.
             </Text>
           </Box>
         ) : (
           // Los recuerdos entran de uno en uno (cascada suave). `delayChildren`
           // espera a que el cuaderno ya esté visible para que se vea el uno-a-uno.
-          <RevealStagger key={edadAno} stagger={0.16} delayChildren={0.55}>
+          // La cascada es además la COLUMNA que reparte el alto sobrante entre
+          // las franjas (`flex: 1`), para que la lista llene la hoja.
+          <RevealStagger key={edadAno} stagger={0.16} delayChildren={0.55} flex="1" display="flex" flexDirection="column">
           {items.map((it, i) => {
             const marcado = itemMarcado(data, edadAno, it);
             return (
-              <RevealItem key={`${i}-${it}`} direction="up" distance={22} scaleFrom={0.98} duration={0.55}>
+              <RevealItem key={`${i}-${it}`} direction="up" distance={22} scaleFrom={0.98} duration={0.55}
+                          flex="1 0 auto" display="flex" flexDirection="column">
               <Box
                 position="relative"
+                flex="1"
+                display="flex"
+                flexDirection="column"
+                justifyContent="center"
                 px={{ base: 6, md: 8 }}
                 py={{ base: 4, md: 5 }}
                 borderTop={`2px solid ${i === 0 ? TINTA : `${TINTA}55`}`}
