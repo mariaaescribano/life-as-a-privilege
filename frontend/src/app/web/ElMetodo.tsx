@@ -702,6 +702,26 @@ export default function ElMetodo() {
         >
           {t("elMetodo.porDentro")}
         </Text>
+
+        {/* Pista de que el mandala se pincha: sin ella, los ocho círculos
+            parecen un dibujo y nadie los toca. Entra un pelín después que el
+            título (0,45s frente a 0,15s) para que se lea primero el titular y
+            luego la instrucción, no las dos de golpe.
+            Blanco y SIN textShadow: está fuera de caja, sobre el turquesa. */}
+        <Text
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "md", md: "xl" }}
+          fontStyle="italic"
+          letterSpacing="0.02em"
+          textAlign="center"
+          mt={{ base: 3, md: 4 }}
+          opacity={mounted ? 0.9 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(10px)"}
+          transition="opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s"
+        >
+          {t("elMetodo.porDentroPista")}
+        </Text>
       </Flex>
       
 
@@ -1041,9 +1061,12 @@ export default function ElMetodo() {
         pb={{ base: 24, md: 32 }}
         gap={{ base: 12, md: 16 }}
       >
-        {/* ACCEDER (botón grande con mandala).
-            Única llamada a la acción de la página: lleva al registro (o directo
-            a /home si ya hay sesión). Respira en bucle para que el ojo vuelva. */}
+        {/* ACCEDER (botón grande con mandala) + la frase de «no te van a cobrar».
+            Van juntos en su propia columna con un hueco corto: el `gap` grande
+            del bloque es el que separa este grupo de los botones secundarios, y
+            si la frase colgara suelta del bloque se iría a media pantalla del
+            botón y ya no se leería como su letra pequeña. */}
+        <Flex direction="column" align="center" gap={{ base: 3, md: 4 }}>
         <Reveal inView direction="up" distance={24} duration={0.7} display="flex" justifyContent="center">
         <Breathe scale={0.014} duration={5.5} display="flex" justifyContent="center">
         <Flex
@@ -1096,6 +1119,25 @@ export default function ElMetodo() {
         </Flex>
         </Breathe>
         </Reveal>
+
+        {/* Letra pequeña que quita el miedo a pulsar: crear la cuenta no cobra
+            nada. Blanca y sin sombra (está fuera de caja, sobre el turquesa) y
+            en un cuerpo claramente menor que el botón, que no le robe el sitio. */}
+        <Reveal inView direction="up" distance={14} delay={0.15} duration={0.6} display="flex" justifyContent="center">
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "sm", md: "md" }}
+            fontStyle="italic"
+            letterSpacing="0.02em"
+            textAlign="center"
+            opacity={0.85}
+            px={4}
+          >
+            {t("elMetodo.sinTarjeta")}
+          </Text>
+        </Reveal>
+        </Flex>
 
         {/* Agendar llamada + Tengo dudas (botones secundarios).
             Cierran la cascada: entran los últimos, después del botón grande. */}

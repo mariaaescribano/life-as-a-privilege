@@ -204,7 +204,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   fisiologia: {
     desc: "No tenemos un cuerpo. Somos un cuerpo. Entiéndete.",
     videoIntro: {
-      titulo: "Entiende de qué estás hecho",
+      titulo: "Conoce las células que te forman",
       puntos: [
         "Comprende las moléculas que forman tu cuerpo.",
         "Descubre qué ocurre dentro de ti a nivel celular.",

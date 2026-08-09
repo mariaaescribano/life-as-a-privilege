@@ -4,7 +4,8 @@ export const elMetodo = {
   "elMetodo.lema": "Eight disciplines. One order. One purpose: to understand yourself.",
   "elMetodo.intro":
     "These aren't eight separate courses. It's a guided exploration of yourself through eight different perspectives, to find the root of your patterns and understand who you are.",
-  "elMetodo.porDentro": "This is what The Map looks like inside",
+  "elMetodo.porDentro": "Meet the disciplines",
+  "elMetodo.porDentroPista": "Click each circle to discover it",
   "elMetodo.cadaDisciplina": "Each discipline looks at a different part of the human being.",
   "elMetodo.queIncluye": "What's included",
 
@@ -26,6 +27,7 @@ export const elMetodo = {
 
   // ── Calls to action ────────────────────────────────────────────────────
   "elMetodo.acceder": "Get access to The Map",
+  "elMetodo.sinTarjeta": "No credit card needed to create your account",
   "elMetodo.agendar": "Book a free 20-minute call",
   "elMetodo.dudas": "I have a question",
   "elMetodo.dudas.asunto": "Question — Life as a Privilege",

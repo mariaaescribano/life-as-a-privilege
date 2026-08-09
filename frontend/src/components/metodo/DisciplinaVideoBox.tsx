@@ -55,6 +55,7 @@ export function DisciplinaVideoBox({
   tieneVideo,
   onVerVideo,
   sinBoton = false,
+  sinPrecio = false,
   textoGrande = false,
   onSaberMas,
   ...rest
@@ -72,6 +73,12 @@ export function DisciplinaVideoBox({
   /** Sin el botón de muestra: en /d/:disciplina el vídeo ya está al lado, así que
    *  la fila de cierre se queda solo con el precio. */
   sinBoton?: boolean;
+  /** Sin el precio: en el mandala de /elMetodo el visitante todavía no sabe qué
+   *  es cada disciplina, y un precio ahí le pone a evaluar antes de tener con
+   *  qué comparar. En su hueco va el «Saber más» grande, que es el único paso
+   *  que queremos que dé desde el mandala. El precio se ve luego, en el bloque
+   *  de compra y dentro de la presentación de la disciplina. */
+  sinPrecio?: boolean;
   /** Letra más grande en ordenador, para que el texto llene el box cuando va a
    *  media página (en el mandala de /elMetodo el box es estrecho y no toca). */
   textoGrande?: boolean;
@@ -267,8 +274,10 @@ export function DisciplinaVideoBox({
         </Flex>
 
         {/* «Saber más ›» — arriba a la derecha. Discreto a propósito: no compite
-            con el precio, que es lo que decide abajo. */}
-        {onSaberMas && (
+            con el precio, que es lo que decide abajo.
+            Solo cuando HAY precio: sin él, el «Saber más» vive abajo y en
+            grande, y tenerlo dos veces en el mismo box parte la mirada. */}
+        {onSaberMas && !sinPrecio && (
           <Flex
             as="button"
             onClick={onSaberMas}
@@ -465,28 +474,82 @@ export function DisciplinaVideoBox({
             </Text>
           )}
 
-          {/* Precio de la disciplina (sale de pagoDisciplinaLink, el mismo sitio
-              del que bebe el box de pago: web y cobro no se desincronizan). */}
-          <Flex direction="column" align={{ base: "center", md: "flex-end" }} gap={0.5} flexShrink={0}>
-            <Flex align="baseline" gap={2}>
-              <PrecioConAntes
+          {/* En el hueco del precio: o el precio, o el «Saber más» GRANDE.
+              En el mandala de /elMetodo va el botón — es el sitio donde la
+              mirada ya se para (esquina de cierre del box), así que es el que
+              tiene que llevarse la llamada, no un importe. */}
+          {sinPrecio ? (
+            onSaberMas && (
+              <Flex
+                as="button"
+                onClick={onSaberMas}
+                align="center"
+                justify="center"
+                gap={2.5}
+                alignSelf={{ base: "stretch", md: "flex-end" }}
+                flexShrink={0}
+                px={{ base: 6, md: 8 }}
+                py={{ base: "12px", md: "14px" }}
+                borderRadius="full"
+                // Relleno y borde más marcados que el de «Muestra»: de los dos
+                // botones de la fila, este es el que queremos que se pulse.
+                border={`1.5px solid ${accent}`}
+                bg={`${accent}33`}
                 color={accent}
-                sombra={textGlow}
-                tamano={{ base: "3xl", md: "4xl" }}
-                tamanoAntes={{ base: "md", md: "lg" }}
-              />
-              <Text
-                color={accent}
-                fontFamily="'EB Garamond', serif"
-                fontStyle="italic"
-                fontSize={{ base: "sm", md: "md" }}
-                opacity={0.9}
-                textShadow={textGlow}
+                cursor="pointer"
+                boxShadow={`0 0 20px ${accent}44, 0 3px 14px rgba(0,0,0,0.28)`}
+                sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none", backdropFilter: "blur(4px)" }}
+                _hover={{ bg: `${accent}4d`, boxShadow: `0 0 30px ${accent}66, 0 5px 18px rgba(0,0,0,0.32)`, transform: "translateY(-2px)" }}
+                _active={{ transform: "translateY(0) scale(0.98)" }}
+                transition="all 0.2s ease"
               >
-                por disciplina
-              </Text>
+                <Text
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="700"
+                  fontSize={{ base: "md", md: "xl" }}
+                  letterSpacing="0.04em"
+                  whiteSpace="nowrap"
+                  textShadow={textGlow}
+                >
+                  {t("elMetodo.saberMas")}
+                </Text>
+                <Box
+                  as="svg"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 -960 960 960"
+                  w={{ base: "16px", md: "20px" }}
+                  h={{ base: "16px", md: "20px" }}
+                  fill="currentColor"
+                  flexShrink={0}
+                >
+                  <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                </Box>
+              </Flex>
+            )
+          ) : (
+            /* Precio de la disciplina (sale de pagoDisciplinaLink, el mismo sitio
+               del que bebe el box de pago: web y cobro no se desincronizan). */
+            <Flex direction="column" align={{ base: "center", md: "flex-end" }} gap={0.5} flexShrink={0}>
+              <Flex align="baseline" gap={2}>
+                <PrecioConAntes
+                  color={accent}
+                  sombra={textGlow}
+                  tamano={{ base: "3xl", md: "4xl" }}
+                  tamanoAntes={{ base: "md", md: "lg" }}
+                />
+                <Text
+                  color={accent}
+                  fontFamily="'EB Garamond', serif"
+                  fontStyle="italic"
+                  fontSize={{ base: "sm", md: "md" }}
+                  opacity={0.9}
+                  textShadow={textGlow}
+                >
+                  por disciplina
+                </Text>
+              </Flex>
             </Flex>
-          </Flex>
+          )}
         </Flex>
       </Flex>
     </Flex>

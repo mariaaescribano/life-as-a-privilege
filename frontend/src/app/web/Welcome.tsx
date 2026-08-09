@@ -505,7 +505,10 @@ const Welcome = () => {
             lineHeight="1.1"
             textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(255,255,255,0.41), 0 0 56px rgba(180,255,245,0.34)"
           >
-            LIFE AS A PRIVILEGE
+            {/* El nombre de la casa vive en `header.marca` (una sola clave para
+                el rótulo del header y este titular): así no se cambia en un
+                sitio y se olvida el otro. */}
+            {t("header.marca")}
           </Text>
 
           {/* Subtítulo (estructura de Materiales) */}

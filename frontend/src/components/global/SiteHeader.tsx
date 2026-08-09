@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { rutaHome } from "../../api/sesion";
 import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
+import MenuHamburguesa, { type ItemMenu } from "./MenuHamburguesa";
 
 type SiteHeaderProps = {
   /**
@@ -25,6 +26,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const location = useLocation();
   const t = useT();
   const [sessionImg] = useState<string | null>(() => localStorage.getItem("img"));
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
   // Recordamos la última página del Mapa (recorrido) visitada, para que /home
   // pueda ofrecer «Continuar por dónde lo dejé». Persiste en localStorage, así
@@ -56,12 +58,29 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const isAdminPage = path.startsWith("/admin");
   const adminCursosActive = path.startsWith("/admin/cursos");
 
-  const underlineStyles = {
-    textDecoration: "underline",
-    textDecorationColor: "rgba(255,255,255,0.55)",
-    textUnderlineOffset: "6px",
-    sx: { textDecorationThickness: "1.5px" },
-  } as const;
+  // Cambiar de página cierra el menú: si no, al volver navegando el panel
+  // seguiría abierto encima de la página nueva.
+  useEffect(() => { setMenuAbierto(false); }, [location.pathname]);
+
+  // Destinos del menú. Son EXACTAMENTE los que antes estaban escritos en la
+  // cabecera: en administración, las dos pestañas de admin; con sesión,
+  // Materiales y Estudio (a Mi cuenta se va por el avatar, que sigue fuera); y
+  // sin sesión, además, El Mapa.
+  const items: ItemMenu[] = isPrivate
+    ? isAdminPage
+      ? [
+          { etiqueta: t("header.mapa"),   onSelect: () => navigate("/admin"),        activo: !adminCursosActive },
+          { etiqueta: t("header.cursos"), onSelect: () => navigate("/admin/cursos"), activo: adminCursosActive },
+        ]
+      : [
+          { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
+          { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
+        ]
+    : [
+        { etiqueta: t("header.mapa"),       onSelect: () => navigate("/elMetodo"),   activo: isRecorridoPage },
+        { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
+        { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
+      ];
 
   return (
     <Flex
@@ -74,7 +93,11 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       bg="#008080"
       position="sticky"
       top="0"
-      zIndex="100"
+      // Con el menú abierto la cabecera se pone POR ENCIMA del velo (que va a
+      // 300): así el logo sigue encendido y, sobre todo, las tres rayas siguen
+      // ahí convertidas en X — cerrar es volver a pulsar donde acabas de
+      // pulsar, sin buscar un aspa en otro sitio.
+      zIndex={menuAbierto ? 400 : 100}
       borderBottom="1px solid rgba(255,255,255,0.12)"
     >
       {/* Logo */}
@@ -102,117 +125,26 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           textShadow="0 0 8px rgba(255,255,255,0.55), 0 0 16px rgba(255,255,255,0.3)"
           whiteSpace="nowrap"
         >
-          LIFE AS A PRIVILEGE
+          {t("header.marca")}
         </Text>
       </Flex>
 
-      {/* Enlace derecha — avatar si está logueado (el logo ya lleva a home), El recorrido si público */}
-      {isPrivate ? (
-        <Flex align="center" gap={{ base: 4, md: 6 }}>
-          {/* Pestañas de administración — a la izquierda del avatar */}
-          {isAdminPage && (
-            <>
-              <Text
-                as="button"
-                onClick={() => navigate("/admin")}
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontWeight="600"
-                fontSize={{ base: "2xs", md: "lg" }}
-                letterSpacing={{ base: "0.08em", md: "0.14em" }}
-                textTransform="uppercase"
-                textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-                cursor="pointer"
-                bg="transparent"
-                border="none"
-                {...(isAdminPage && !adminCursosActive ? underlineStyles : {})}
-                _hover={{ textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
-                transition="text-shadow 0.25s ease"
-              >
-                {t("header.mapa")}
-              </Text>
-              <Text
-                as="button"
-                onClick={() => navigate("/admin/cursos")}
-                color="white"
-                fontFamily="'EB Garamond', serif"
-                fontWeight="600"
-                fontSize={{ base: "2xs", md: "lg" }}
-                letterSpacing={{ base: "0.08em", md: "0.14em" }}
-                textTransform="uppercase"
-                textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-                cursor="pointer"
-                bg="transparent"
-                border="none"
-                {...(adminCursosActive ? underlineStyles : {})}
-                _hover={{ textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)" }}
-                transition="text-shadow 0.25s ease"
-              >
-                {t("header.cursos")}
-              </Text>
-            </>
-          )}
-          {/* Acceso a Materiales sin salir de la sesión (navegación de cliente).
-              Visible mientras el usuario recorre el Mapa; se oculta en admin. */}
-          {!isAdminPage && (
-            <Text
-              as="button"
-              onClick={() => navigate("/materiales")}
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="600"
-              fontSize={{ base: "2xs", md: "lg" }}
-              letterSpacing={{ base: "0.08em", md: "0.14em" }}
-              textTransform="uppercase"
-              textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-              cursor="pointer"
-              bg="transparent"
-              border="none"
-              whiteSpace="nowrap"
-              {...(isMaterialesPage ? underlineStyles : {})}
-              _hover={{
-                color: "white",
-                textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
-                ...(isMaterialesPage ? { textDecorationColor: "white" } : {}),
-              }}
-              transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
-            >
-              {t("header.materiales")}
-            </Text>
-          )}
-          {/* Estudio estadístico sobre astrología — abierto a todo el mundo */}
-          {!isAdminPage && (
-            <Text
-              as="button"
-              onClick={() => navigate("/estudio")}
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="600"
-              fontSize={{ base: "2xs", md: "lg" }}
-              letterSpacing={{ base: "0.08em", md: "0.14em" }}
-              textTransform="uppercase"
-              textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-              cursor="pointer"
-              bg="transparent"
-              border="none"
-              whiteSpace="nowrap"
-              {...(isEstudioPage ? underlineStyles : {})}
-              _hover={{
-                color: "white",
-                textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
-                ...(isEstudioPage ? { textDecorationColor: "white" } : {}),
-              }}
-              transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
-            >
-              {t("header.estudio")}
-            </Text>
-          )}
-          <SelectorIdioma compact />
+      {/* ── LADO DERECHO ──
+          Ya no lleva los enlaces escritos uno detrás de otro: todos viven
+          dentro del menú de hamburguesa. Aquí se queda solo lo que NO es
+          navegación (el idioma, que es una preferencia) y el avatar, que es
+          identidad y tiene que verse siempre. El botón del menú va el último,
+          pegado al margen derecho. */}
+      <Flex align="center" gap={{ base: 3, md: 5 }}>
+        <SelectorIdioma compact={compact} />
+
+        {isPrivate && (
           <Box
             as="button"
             onClick={() => navigate("/user/account")}
-            w={{ base: "44px", md: "50px" }}
-            h={{ base: "44px", md: "50px" }}
+            aria-label={t("header.miCuenta")}
+            w={{ base: "40px", md: "50px" }}
+            h={{ base: "40px", md: "50px" }}
             borderRadius="full"
             overflow="hidden"
             border="2px solid rgba(255,255,255,0.7)"
@@ -235,82 +167,15 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               objectFit="cover"
             />
           </Box>
-        </Flex>
-      ) : (
-        <Flex align="center" gap={{ base: 4, md: 7 }}>
-          <Text
-            as="button"
-            onClick={() => navigate("/elMetodo")}
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="600"
-            fontSize={{ base: "xs", md: "xl" }}
-            letterSpacing={{ base: "0.1em", md: "0.16em" }}
-            textTransform="uppercase"
-            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-            cursor="pointer"
-            bg="transparent"
-            border="none"
-            {...(isRecorridoPage ? underlineStyles : {})}
-            _hover={{
-              color: "white",
-              textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
-              ...(isRecorridoPage ? { textDecorationColor: "white" } : {}),
-            }}
-            transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
-          >
-            {t("header.mapa")}
-          </Text>
-          <Text
-            as="button"
-            onClick={() => navigate("/materiales")}
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="600"
-            fontSize={{ base: "xs", md: "xl" }}
-            letterSpacing={{ base: "0.1em", md: "0.16em" }}
-            textTransform="uppercase"
-            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-            cursor="pointer"
-            bg="transparent"
-            border="none"
-            {...(isMaterialesPage ? underlineStyles : {})}
-            _hover={{
-              color: "white",
-              textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
-              ...(isMaterialesPage ? { textDecorationColor: "white" } : {}),
-            }}
-            transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
-          >
-            {t("header.materiales")}
-          </Text>
-          {/* Estudio estadístico sobre astrología — abierto a todo el mundo */}
-          <Text
-            as="button"
-            onClick={() => navigate("/estudio")}
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="600"
-            fontSize={{ base: "xs", md: "xl" }}
-            letterSpacing={{ base: "0.1em", md: "0.16em" }}
-            textTransform="uppercase"
-            textShadow="0 0 10px rgba(255,255,255,0.55), 0 0 22px rgba(255,255,255,0.3)"
-            cursor="pointer"
-            bg="transparent"
-            border="none"
-            {...(isEstudioPage ? underlineStyles : {})}
-            _hover={{
-              color: "white",
-              textShadow: "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(180,255,245,0.45)",
-              ...(isEstudioPage ? { textDecorationColor: "white" } : {}),
-            }}
-            transition="text-shadow 0.25s ease, text-decoration-color 0.25s ease"
-          >
-            {t("header.estudio")}
-          </Text>
-          <SelectorIdioma />
-        </Flex>
-      )}
+        )}
+
+        <MenuHamburguesa
+          abierto={menuAbierto}
+          onToggle={() => setMenuAbierto((v) => !v)}
+          onClose={() => setMenuAbierto(false)}
+          items={items}
+        />
+      </Flex>
     </Flex>
   );
 };

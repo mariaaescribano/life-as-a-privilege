@@ -1004,6 +1004,9 @@ const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; 
       renderIcon={disc.renderIcon}
       tieneVideo={!!disc.video}
       onVerVideo={onVerVideo}
+      // Sin precio en el mandala: aquí el visitante todavía está descubriendo
+      // qué es cada disciplina. En su hueco, el «Saber más» en grande.
+      sinPrecio
       onSaberMas={presentacion ? () => navigate(`/d/${presentacion.key}`) : undefined}
     />
   );
@@ -1017,8 +1020,16 @@ export const RecorridoMandalaVideo = () => {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
-  const firstEnabled = disciplinas.find((d) => d.enabled && d.video) ?? disciplinas[0];
-  const [selectedNom, setSelectedNom] = useState(firstEnabled.nom);
+  // La que sale seleccionada al llegar. NO es la primera del orden (Astrología):
+  // de entrada, la astrología echa para atrás a parte de quien llega, y es lo
+  // primero que vería del Mapa. Psicología entra a todo el mundo, así que es la
+  // que abre el mandala. El ORDEN y los números de paso no se tocan: Astrología
+  // sigue siendo la 1, solo cambia por cuál se empieza a mirar.
+  const inicial =
+    disciplinas.find((d) => d.clave === "psicologia" && d.enabled && d.video) ??
+    disciplinas.find((d) => d.enabled && d.video) ??
+    disciplinas[0];
+  const [selectedNom, setSelectedNom] = useState(inicial.nom);
   // Disciplina cuyo vídeo de muestra está abierto en el popup (null = cerrado).
   const [videoModal, setVideoModal] = useState<Disciplina | null>(null);
 

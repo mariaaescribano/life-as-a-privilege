@@ -7,6 +7,8 @@
  * frase, acuérdate de tocar también su versión inglesa en `../en/welcome.ts`.
  */
 export const welcome = {
+  // El titular de la portada es el nombre de la casa y sale de `header.marca`
+  // (ahí también se lee el rótulo del header): un solo sitio donde cambiarlo.
   "welcome.subtitulo": "Un mapa de ocho disciplinas para comprenderte, integrando ciencia y tradición.",
   "welcome.explorar": "Explorar",
   "welcome.explorarDisciplina": "Explorar disciplina",
