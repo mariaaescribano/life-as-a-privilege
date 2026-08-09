@@ -1,22 +1,16 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PRĀṆĀYĀMA · contenido de la página del recorrido de Ayurveda (paso 9,
-// justo antes de los Cursos). Introduce la respiración y la meditación, y
-// termina con una práctica guiada distinta para cada doṣha.
+// PRĀṆĀYĀMA · contenido de la página. Ya NO forma parte del submapa de un
+// doṣha: se llega desde las tarjetas de los tres Doṣhas y se muestran las TRES
+// prácticas en la misma página (se elige con las pestañas de arriba).
 //
-// Las fotos son OPCIONALES: cada sección tiene un campo `foto` que, mientras
-// esté vacío, simplemente no pinta imagen. Cuando subas las tuyas a
-// /img/ayurveda/pranayama/, rellena la ruta aquí y aparecen solas.
+// La página es de PRACTICAR, no de leer: el texto se mantiene corto a propósito.
+// Si en algún momento hace falta contar la teoría larga (los cinco vāyus, el
+// nervio vago, Patañjali…), va en un cómic de las Ilustraciones, no aquí.
+//
+// Las fotos son OPCIONALES: mientras el campo `foto` esté vacío no se pinta
+// imagen. Cuando subas las tuyas a /img/ayurveda/pranayama/, rellena la ruta.
 // ─────────────────────────────────────────────────────────────────────────
 import type { DoshaKey } from "./doshaIntro";
-
-export interface SeccionPranayama {
-  titulo: string;
-  parrafos: string[];
-  items?: string[];
-  cierre?: string;
-  /** Ruta de la ilustración, p. ej. "/img/ayurveda/pranayama/prana.webp". Vacío = sin foto. */
-  foto?: string;
-}
 
 /** Una fase de la práctica guiada: el círculo crece, se queda o se encoge. */
 export interface FasePranayama {
@@ -30,8 +24,8 @@ export interface PracticaPranayama {
   nombre: string;
   /** Cómo se dice en español. */
   traduccion: string;
-  /** Por qué esta técnica para este doṣha. */
-  porQue: string[];
+  /** Una sola frase: por qué esta técnica para este doṣha. */
+  porQue: string;
   /** Los pasos, para leerlos antes de practicar. */
   pasos: string[];
   /** Cuidado con… */
@@ -46,103 +40,44 @@ export const PRANAYAMA_HERO = {
   titulo: "Prāṇāyāma",
   subtitulo: "La respiración como puerta",
   parrafos: [
-    "**Prāṇa** es la energía vital, lo que hace que un cuerpo esté vivo y no solo entero. **Āyāma** significa extender, alargar, dar espacio. Prāṇāyāma no es «respirar hondo»: es aprender a **dirigir** esa energía.",
-    "Respiras unas veinte mil veces al día y casi todas se te pasan sin enterarte. Es la única función automática del cuerpo que también puedes gobernar a voluntad — y por eso es la puerta más directa que tienes al sistema nervioso.",
-    "*No vas a cambiar tu mente pensando en tu mente. Vas a cambiarla por la puerta de atrás.*",
+    "**Prāṇa** es la energía vital; **āyāma**, extender. Prāṇāyāma no es «respirar hondo»: es dirigir esa energía.",
+    "Respirar es la única función automática que también puedes gobernar a voluntad. Por eso es la puerta más directa que tienes al sistema nervioso.",
   ],
   foto: "",
 };
 
-export const PRANAYAMA_SECCIONES: SeccionPranayama[] = [
-  {
-    titulo: "Los cinco movimientos del prāṇa",
-    parrafos: [
-      "El Ayurveda no habla del prāṇa como de una sola cosa, sino de **cinco vāyus**: cinco direcciones en las que la energía se mueve dentro de ti.",
-    ],
-    items: [
-      "**Prāṇa vāyu** — entra. Pecho y cabeza: lo que recibes, inspiras y percibes.",
-      "**Apāna vāyu** — baja y suelta. Bajo vientre: lo que eliminas, sueltas y dejas ir.",
-      "**Samāna vāyu** — digiere. Ombligo: lo que transformas, tanto la comida como lo que te pasa.",
-      "**Udāna vāyu** — sube. Garganta: la voz, la expresión, lo que te empuja hacia arriba.",
-      "**Vyāna vāyu** — reparte. Todo el cuerpo: la circulación, el movimiento, lo que distribuye.",
-    ],
-    cierre: "Cuando respiras conscientemente no mueves aire: reorganizas estos cinco movimientos. *De ahí que una respiración cambie un estado de ánimo.*",
-    foto: "",
-  },
-  {
-    titulo: "Cómo respiras cuando nadie te mira",
-    parrafos: [
-      "Casi todos respiramos con la parte alta del pecho, corto y rápido. Es la respiración del que está en alerta: el cuerpo la lee como «hay peligro» y responde subiendo el pulso, tensando la mandíbula y estrechando la atención.",
-      "La respiración **diafragmática** — la que hincha el vientre antes que el pecho — hace lo contrario. Al bajar, el diafragma masajea las vísceras y estimula el **nervio vago**, que es el cable directo del freno del sistema nervioso.",
-      "Y hay un detalle que lo cambia todo: **el freno está en la exhalación**. Al inhalar, el corazón se acelera un poco; al exhalar, se frena. Por eso una espiración más larga que la inspiración calma, y ninguna cantidad de inspiraciones profundas lo consigue por sí sola.",
-    ],
-    cierre: "*Si solo te llevas una cosa de esta página: alarga la salida.*",
-    foto: "",
-  },
-  {
-    titulo: "De la respiración a la meditación",
-    parrafos: [
-      "En los *Yoga Sūtras*, Patañjali coloca el prāṇāyāma en el **cuarto peldaño** de ocho. No es un ejercicio suelto: es el escalón que sostiene a los tres siguientes — retirar los sentidos (*pratyāhāra*), concentrar (*dhāraṇā*) y meditar (*dhyāna*).",
-      "El orden no es un capricho. Sentarte a meditar con la respiración descontrolada es intentar que se pose un pájaro con el árbol temblando.",
-      "El *Haṭha Yoga Pradīpikā* lo dice sin rodeos: **cuando la respiración se mueve, la mente se mueve; cuando la respiración se aquieta, la mente se aquieta.**",
-      "Y la primera frase de Patañjali define el yoga entero como *citta-vṛtti-nirodhaḥ*: aquietar los remolinos de la mente. No vaciarla — **dejar de ser arrastrada por ella**.",
-    ],
-    foto: "",
-  },
-  {
-    titulo: "Por qué importa meditar",
-    parrafos: [
-      "Meditar no es dejar de pensar. Es darte cuenta de que estás pensando — y poder elegir si sigues ese pensamiento o lo dejas pasar. Ese hueco entre lo que te ocurre y cómo reaccionas es, literalmente, todo lo que tienes.",
-      "Lo que se entrena ahí:",
-    ],
-    items: [
-      "**Atención**: sostenerla donde tú decides, no donde te tiran.",
-      "**Interocepción**: enterarte de lo que pasa dentro de ti *antes* de que grite.",
-      "**Reactividad**: el espacio entre el estímulo y tu respuesta se ensancha.",
-      "**Descanso**: el sueño mejora cuando el sistema nervioso aprende a bajar de marcha a voluntad.",
-    ],
-    cierre: "No hace falta que sea media hora. **Cinco minutos todos los días valen más que una hora los domingos**, porque lo que estás construyendo es un hábito del sistema nervioso, no una hazaña.",
-    foto: "",
-  },
-  {
-    titulo: "Antes de empezar",
-    parrafos: [
-      "Cuatro cosas que evitan el 90% de los problemas:",
-    ],
-    items: [
-      "**Con el estómago vacío**, o al menos dos horas después de comer.",
-      "**Sentada y con la columna larga** — en una silla vale. Si te tumbas, te dormirás; y dormir no es meditar.",
-      "**Por la nariz**, salvo que la técnica diga otra cosa. La nariz filtra, calienta y humedece; la boca no.",
-      "**Sin forzar nunca**. Si te falta el aire, te mareas o te agobias, sueltas la técnica y vuelves a tu respiración normal. El prāṇāyāma no se gana apretando.",
-    ],
-    cierre: "Si estás embarazada, tienes la tensión alta, glaucoma, epilepsia o un problema cardíaco, **evita las retenciones y las respiraciones rápidas** y quédate con las suaves. Ante la duda, pregunta a tu médica.",
-    foto: "",
-  },
-];
+/** Lo único que hay que saber antes de practicar. Cuatro líneas, no cinco
+ *  secciones: lo demás se aprende respirando. */
+export const PRANAYAMA_ESENCIAL = {
+  titulo: "Antes de empezar",
+  items: [
+    "**El freno está en la salida.** Al inhalar el corazón se acelera; al exhalar, se frena. Si te llevas una sola cosa: alarga la exhalación.",
+    "**Sentada y con el estómago vacío**, o dos horas después de comer. Tumbada te dormirás, y dormir no es meditar.",
+    "**Por la nariz**, salvo que la técnica diga otra cosa.",
+    "**Sin forzar nunca.** Si te falta el aire o te mareas, sueltas y vuelves a tu respiración normal.",
+  ],
+  aviso: "Si estás embarazada, tienes la tensión alta, glaucoma, epilepsia o un problema cardíaco, evita las retenciones y las respiraciones rápidas. Ante la duda, pregunta a tu médica.",
+  foto: "",
+};
 
-// ── La práctica, distinta para cada doṣha ────────────────────────────────
-// Vata se calma, Pitta se refresca, Kapha se enciende. La misma lógica que
-// el resto del recorrido: lo semejante aumenta lo semejante, lo contrario
-// equilibra.
+// ── Las tres prácticas ───────────────────────────────────────────────────
+// Vata se calma, Pitta se refresca, Kapha se enciende. La misma lógica que el
+// resto del recorrido: lo semejante aumenta lo semejante, lo contrario equilibra.
+// Se muestran las tres en la página; se empieza por la del doṣha de la URL.
 
 export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
   vata: {
     nombre: "Nāḍī Śodhana",
     traduccion: "Respiración alterna — «limpieza de los canales»",
-    porQue: [
-      "Vata es aire y éter: móvil, rápido, frío, irregular. Cuando se desequilibra, la respiración se vuelve corta y entrecortada, y la mente salta de rama en rama.",
-      "La respiración alterna hace justo lo contrario: **impone un ritmo**. Alternar las fosas equilibra los dos lados y da a una mente dispersa algo simple y regular a lo que agarrarse.",
-      "*Para ti la clave es la regularidad, no la intensidad.*",
-    ],
+    porQue: "Vata es móvil, rápido e irregular. Alternar las fosas **impone un ritmo**: le da a una mente dispersa algo simple y regular a lo que agarrarse.",
     pasos: [
-      "Siéntate con la espalda larga y suelta los hombros.",
-      "Mano derecha en **Viṣṇu mudrā**: índice y corazón doblados hacia la palma; el pulgar tapará la fosa derecha y el anular la izquierda.",
-      "Tapa la derecha con el pulgar e **inhala por la izquierda**.",
-      "Tapa las dos un instante, sin apretar.",
-      "Suelta la derecha y **exhala por la derecha**, despacio y largo.",
-      "Inhala por la derecha, retén un instante y exhala por la izquierda. **Eso es un ciclo.**",
+      "Espalda larga, hombros sueltos.",
+      "Mano derecha en **Viṣṇu mudrā**: el pulgar tapa la fosa derecha y el anular la izquierda.",
+      "Tapa la derecha e **inhala por la izquierda**. Tapa las dos un instante.",
+      "Suelta la derecha y **exhala por la derecha**, largo.",
+      "Inhala por la derecha, retén y exhala por la izquierda. **Eso es un ciclo.**",
     ],
-    precaucion: "Si estás muy congestionada, hazlo solo mental: imagina el aire entrando por una fosa y saliendo por la otra, sin tocarte la nariz.",
+    precaucion: "Si estás muy congestionada, hazlo solo mental: imagina el aire entrando por una fosa y saliendo por la otra.",
     ciclos: 6,
     fases: [
       { tipo: "inhala",  texto: "Inhala por la fosa izquierda", segundos: 4 },
@@ -157,14 +92,10 @@ export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
   pitta: {
     nombre: "Śītalī",
     traduccion: "Respiración refrescante — «la que enfría»",
-    porQue: [
-      "Pitta es fuego y agua: caliente, agudo, penetrante. Cuando se desequilibra aparecen la irritabilidad, la prisa, la acidez y esa sensación de estar ardiendo por dentro.",
-      "Śītalī es de las poquísimas técnicas que **enfrían de verdad**: el aire entra por la lengua húmeda y llega templado, y la exhalación por la nariz baja la temperatura interna.",
-      "*Para ti la clave es no convertir la práctica en una competición. No hay nota.*",
-    ],
+    porQue: "Pitta es fuego: caliente y agudo. Śītalī es de las poquísimas técnicas que **enfrían de verdad** — el aire entra por la lengua húmeda y llega templado.",
     pasos: [
-      "Siéntate cómoda, con la espalda larga y la mandíbula suelta.",
-      "Saca un poco la lengua y **enróllala como un canalito**. Si no puedes enrollarla (es genético), aprieta los dientes con suavidad y sonríe: eso es *Śītkārī* y sirve igual.",
+      "Espalda larga, mandíbula suelta.",
+      "Saca un poco la lengua y **enróllala como un canalito**. Si no puedes (es genético), aprieta los dientes y sonríe: eso es *Śītkārī* y sirve igual.",
       "**Inhala por la lengua**, como si sorbieras el aire. Notarás el frescor.",
       "Mete la lengua, cierra la boca y retén un instante.",
       "**Exhala por la nariz**, despacio. Eso es un ciclo.",
@@ -181,19 +112,14 @@ export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
   kapha: {
     nombre: "Bhastrikā",
     traduccion: "Respiración de fuelle — «la que enciende»",
-    porQue: [
-      "Kapha es tierra y agua: pesado, lento, húmedo, estable. Cuando se desequilibra aparecen la niebla mental, la congestión y esa inercia de no arrancar.",
-      "Bhastrikā es un fuelle: **mueve, calienta y despeja**. Es la única de las tres que sube la energía en vez de bajarla, y es exactamente lo que Kapha necesita por la mañana.",
-      "*Para ti la clave es empezar. Una vez que arrancas, sostienes mejor que nadie.*",
-    ],
+    porQue: "Kapha es pesado y lento. Bhastrikā es un fuelle: **mueve, calienta y despeja**. La única de las tres que sube la energía en vez de bajarla.",
     pasos: [
-      "Siéntate con la espalda recta y las manos en las rodillas.",
-      "Inhala y exhala por la nariz **con fuerza y al mismo ritmo**, aproximadamente una respiración por segundo, moviendo el vientre como un fuelle.",
-      "Es un movimiento del abdomen, no de los hombros: si se te suben los hombros, baja el ritmo.",
-      "Al terminar la ronda, **vuelve a tu respiración normal** y quédate quieta notando el cuerpo. Ahí es donde pasa lo interesante.",
-      "Tres rondas, con su descanso entre medias.",
+      "Espalda recta, manos en las rodillas.",
+      "Inhala y exhala por la nariz **con fuerza y al mismo ritmo**, una respiración por segundo, moviendo el vientre como un fuelle.",
+      "Es el abdomen, no los hombros: si se te suben, baja el ritmo.",
+      "Al terminar la ronda, **vuelve a tu respiración normal** y quédate quieta. Ahí es donde pasa lo interesante.",
     ],
-    precaucion: "No la hagas embarazada, con la tensión alta, con problemas de corazón, glaucoma, epilepsia ni con la regla. Si te mareas, para y respira normal: es señal de que ibas demasiado rápido.",
+    precaucion: "No la hagas embarazada, con la tensión alta, con problemas de corazón, glaucoma, epilepsia ni con la regla. Si te mareas, para: ibas demasiado rápido.",
     ciclos: 3,
     fases: [
       { tipo: "rapida",    texto: "Fuelle: respira rápido por la nariz", segundos: 15 },
@@ -206,7 +132,7 @@ export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
 export const PRANAYAMA_REFLEXION = {
   titulo: "Después de respirar",
   pregunta: "¿Qué ha cambiado en ti desde que empezaste hasta ahora?",
-  nota: "No busques la respuesta bonita. Vale «nada», vale «me he aburrido» y vale «me han entrado ganas de llorar». Todo es información.",
+  nota: "Vale «nada», vale «me he aburrido» y vale «me han entrado ganas de llorar». Todo es información.",
   compromisoTitulo: "Tu momento",
   compromisoIntro: "La práctica que se hace es la que tiene un hueco fijo. Elige el tuyo:",
   compromisos: [

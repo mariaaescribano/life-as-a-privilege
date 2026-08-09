@@ -11,6 +11,8 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { AgendarLlamada } from "../../components/global/AgendarLlamada";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_FAMILIA } from "../../components/metodo/comicFamilia";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
@@ -66,6 +68,8 @@ export default function MetodoPsicologiaExperiencia() {
   // popup de reserva de llamada por si le resulta muy difícil.
   const [avisoOpen, setAvisoOpen] = useState(false);
   const [llamadaOpen, setLlamadaOpen] = useState(false);
+  // Cómic «La familia», intercalado antes de pasar a componer el mapa familiar.
+  const [comicOpen, setComicOpen] = useState(false);
 
   const anioActual = new Date().getFullYear();
 
@@ -170,14 +174,14 @@ export default function MetodoPsicologiaExperiencia() {
     await persistir(next);
   };
 
-  // Pasar a «Tu familia». Si ha rellenado toda su Vida, va
-  // directo. Si solo ha rellenado algunos años, le mostramos primero un aviso
-  // que le recomienda rellenar todo lo que pueda (o pedir una llamada si le
-  // resulta difícil).
-  const irAHuellas = async () => {
+  // Pasar a «Tu familia». Si ha rellenado toda su Vida, abre directamente el
+  // cómic de la familia. Si solo ha rellenado algunos años, le mostramos primero
+  // un aviso que le recomienda rellenar todo lo que pueda (o pedir una llamada
+  // si le resulta difícil).
+  const irAFamilia = async () => {
     await guardarSiCambio();
     await flushSaves();
-    if (completa) { navigate(`/metodo/psicologia/${exp.id}/familia`); return; }
+    if (completa) { setComicOpen(true); return; }
     setAvisoOpen(true);
   };
 
@@ -186,7 +190,7 @@ export default function MetodoPsicologiaExperiencia() {
     setAvisoOpen(false);
     await guardarSiCambio();
     await flushSaves();
-    navigate(`/metodo/psicologia/${exp.id}/familia`);
+    setComicOpen(true);
   };
 
   // Estilos de nodo por estado.
@@ -215,7 +219,7 @@ export default function MetodoPsicologiaExperiencia() {
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: "← Resultado ACE", onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
-                next={{ label: puedeAvanzar ? "Tu familia →" : "Rellena al menos un año", onClick: irAHuellas, disabled: !puedeAvanzar, disabledTooltip: "Rellena al menos un año (o márcalo sin recuerdos) para continuar" }}
+                next={{ label: puedeAvanzar ? "Tu familia →" : "Rellena al menos un año", onClick: irAFamilia, disabled: !puedeAvanzar, disabledTooltip: "Rellena al menos un año (o márcalo sin recuerdos) para continuar" }}
               />
             </Reveal>
 
@@ -569,6 +573,23 @@ export default function MetodoPsicologiaExperiencia() {
       {/* El botón flotante de ayuda y la reserva acompañada los aporta ahora
           AyudaRecorrido (común a todo el recorrido). */}
       <AyudaRecorrido pagina="linea-de-Vida" />
+
+      {/* Cómic «La familia» — se muestra entre la Línea de Vida y Tu familia:
+          antes de que componga su propio mapa familiar, cuenta qué enseña una
+          familia cuando sostiene y qué enseña cuando calla. Al terminarlo (o
+          pulsar «Continuar →») avanza a /familia. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/familia`); }}
+        vinetas={COMIC_FAMILIA}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.webp"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={INK_SHADOW}
+      />
 
       <SiteFooter />
     </Box>

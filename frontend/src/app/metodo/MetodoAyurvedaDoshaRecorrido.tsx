@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { Download } from "lucide-react";
 import axios from "axios";
-import { generateDiaPdf } from "../../utils/generateDiaPdf";
 import { generateRecorridoPdf } from "../../utils/generateRecorridoPdf";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -13,7 +12,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -113,8 +112,10 @@ export default function MetodoAyurvedaDoshaRecorrido() {
     alimentos: Array.isArray(b?.alimentos) ? b.alimentos : [],
   }));
 
-  const descargarDia = () => { void generateDiaPdf(doshaKey, meta.label, diaBloquesPdf); };
-
+  // La página es SOLO la despedida del submapa del dosha: un box con la descarga.
+  // Las respuestas del recorrido, el compromiso de la semana y el día ideal ya no
+  // se pintan aquí en boxes sueltos (quedaba una página larguísima); se siguen
+  // recogiendo porque van DENTRO del PDF del mapa.
   const descargarRecorrido = () => {
     const des = DOSHA_DESEQUILIBRIO[doshaKey];
     void generateRecorridoPdf(doshaKey, meta.label, {
@@ -127,7 +128,10 @@ export default function MetodoAyurvedaDoshaRecorrido() {
     });
   };
 
-  const irPranayama = () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/pranayama`);
+  // Fin del submapa del dosha: se vuelve a las tarjetas de los tres Doṣhas, que
+  // son el hub desde el que se entra a cada uno (y desde el que se sigue a
+  // Prāṇāyāma). Prāṇāyāma y Cursos ya NO cuelgan de este recorrido.
+  const irDoshas = () => navigate("/metodo/ayurveda/tarjetas");
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -146,7 +150,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             mb={0}
             prev={{ label: "← Tu día", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/dia`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Prāṇāyāma →", onClick: irPranayama }}
+            next={{ label: "Doṣhas →", onClick: irDoshas }}
           />
           </Reveal>
 
@@ -180,140 +184,6 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           </Panel>
           </Reveal>
 
-          {/* ── Tus respuestas (cada una entra por separado, una tras otra) ── */}
-          {entradas.length > 0 ? (
-            <RevealStagger
-              inView
-              display="flex"
-              flexDirection="column"
-              w="100%"
-              gap={{ base: 5, md: 6 }}
-              stagger={0.12}
-              delayChildren={0.05}
-              amount={0.1}
-            >
-              {entradas.map((e, i) => (
-                <RevealItem key={i} direction="up" distance={22} duration={0.6} scaleFrom={0.98} w="100%">
-                <Panel color={meta.color}>
-                  <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.04em" mb={3}>
-                    {e.pregunta}
-                  </Text>
-                  <Box h="1px" w="100%" mb={4} bgGradient={`linear(to-r, ${ayurvedaTxt}55, transparent)`} />
-                  <Flex align="stretch" gap={4}>
-                    <Box flexShrink={0} w="4px" borderRadius="full" bg={meta.color} />
-                    <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.8">
-                      {e.respuesta}
-                    </Text>
-                  </Flex>
-                </Panel>
-                </RevealItem>
-              ))}
-            </RevealStagger>
-          ) : (
-            <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
-            <Panel color={meta.color}>
-              <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" lineHeight="1.8">
-                Aún no has dejado respuestas en el mapa. Cuando vuelvas atrás y las escribas, aparecerán aquí.
-              </Text>
-            </Panel>
-            </Reveal>
-          )}
-
-          {/* ── Tu compromiso ── */}
-          {compromiso && (
-            <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
-            <Panel color={meta.color}>
-              <Flex direction="column" align="center" textAlign="center" gap={3}>
-                <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.16em" textTransform="uppercase">
-                  Tu compromiso de esta semana
-                </Text>
-                <Separador />
-                <Text color={meta.color} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                  {compromiso}
-                </Text>
-              </Flex>
-            </Panel>
-            </Reveal>
-          )}
-
-          {/* ── Tu día ideal ── */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
-          <Panel color={meta.color}>
-            <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" lineHeight="1.3" mb={2} style={{ textShadow: INK_SHADOW }}>
-              Este es el día ideal que te has propuesto
-            </Text>
-            <Box h="1px" w="60%" mx="auto" mb={6} bgGradient={`linear(to-r, transparent, ${ayurvedaTxt}66, transparent)`} />
-            {diaBloques.length > 0 ? (
-              <>
-                <RevealStagger inView display="flex" flexDirection="column" gap={3.5} stagger={0.08} delayChildren={0.05} amount={0.1}>
-                  {diaBloques.map((b, i) => (
-                    <RevealItem key={i} direction="up" distance={16} duration={0.5} w="100%">
-                    <Flex align="flex-start" gap={4}
-                          borderRadius="xl"
-                          bg="rgba(255,251,243,0.42)"
-                          border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}
-                          sx={{ backdropFilter: "blur(4px)" }}
-                          px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
-                      <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }} minW={{ base: "48px", md: "58px" }} flexShrink={0} mt="2px">
-                        {b.hora || "—"}
-                      </Text>
-                      <Box>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
-                          {b.actividad || (b.comida ? "Comida" : "Momento")}
-                        </Text>
-                        {b.comida && Array.isArray(b.alimentos) && b.alimentos.length > 0 && (
-                          <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" mt={0.5}>
-                            {b.alimentos.join(" · ")}
-                          </Text>
-                        )}
-                      </Box>
-                    </Flex>
-                    </RevealItem>
-                  ))}
-                </RevealStagger>
-                <Flex justify="center" mt={7}>
-                  <Flex as="button" onClick={descargarDia} align="center" gap={2} px={5} py={2.5} borderRadius="full"
-                        bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}
-                        fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
-                        cursor="pointer" transition="all 0.15s"
-                        _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
-                    <Download size={16} /> Descargar este día
-                  </Flex>
-                </Flex>
-              </>
-            ) : (
-              <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center" lineHeight="1.8">
-                Aún no has creado tu día ideal. Vuelve a «Crea tu día» para diseñarlo.
-              </Text>
-            )}
-          </Panel>
-          </Reveal>
-
-          {/* ── Cierre · A por todas ── */}
-          {/* <Panel color={meta.color}>
-            <Flex direction="column" align="center" textAlign="center" gap={4}>
-              <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" maxW="560px">
-                Enhorabuena por llegar hasta aquí. 
-              </Text>
-              <Text color={meta.color} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
-                ¡A por todas!
-              </Text>
-              <Box
-                as="button"
-                onClick={irPranayama}
-                mt={2}
-                px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
-                bg={meta.color} color="#fff"
-                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
-                cursor="pointer"
-                boxShadow={`0 0 26px ${meta.color}88`} transition="all 0.2s"
-                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
-                _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` }}
-              >
-                Cursos →
-              </Box>
-            </Flex>
-          </Panel> */}
         </Flex>
       </Flex>
 

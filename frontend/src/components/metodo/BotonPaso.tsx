@@ -39,11 +39,18 @@ export function BotonPaso({ label, onClick, nom, color, bg, direction = "next" }
   direction?: "next" | "prev" | "up";
 }) {
   const esVolver = direction !== "next";
+  // OJO con el relleno: iba en `currentColor`, y como el <svg> es HERMANO del
+  // <Text> (no hijo), no heredaba la tinta de la disciplina sino el color por
+  // defecto del <button> — negro. Sobre los fondos oscuros la flecha
+  // desaparecía. Va con el color explícito y con el mismo halo que la letra.
   const flecha = (
     <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
          w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }}
-         fill="currentColor" flexShrink={0}
-         style={{ transform: direction === "prev" ? "scaleX(-1)" : undefined }}>
+         fill={color} flexShrink={0}
+         style={{
+           transform: direction === "prev" ? "scaleX(-1)" : undefined,
+           filter: `drop-shadow(0 1px 4px ${bg}) drop-shadow(0 0 6px ${bg})`,
+         }}>
       <path d={direction === "up" ? PATH_ARRIBA : PATH_CHEVRON} />
     </Box>
   );

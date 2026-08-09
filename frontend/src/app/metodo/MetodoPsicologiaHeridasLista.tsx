@@ -21,6 +21,8 @@ import { Reveal } from "../../components/global/Reveal";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { HeridaGrid } from "../../components/metodo/HeridaGrid";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_NARRAR } from "../../components/metodo/comicNarrar";
 import {
   experienciaById,
   HERIDAS_LISTA,
@@ -39,6 +41,8 @@ import {
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
+// Halo claro para que la tinta oscura se lea sobre la acuarela de psicología.
+const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaHeridasLista() {
   const navigate = useNavigate();
@@ -47,6 +51,8 @@ export default function MetodoPsicologiaHeridasLista() {
 
   const [loading, setLoading] = useState(true);
   const [heridas, setHeridas] = useState<RelacionHuellaNudo[]>([]);
+  // Cómic «Narrar», intercalado antes de pasar a contar lo vivido.
+  const [comicOpen, setComicOpen] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
 
   useEffect(() => {
@@ -111,7 +117,7 @@ export default function MetodoPsicologiaHeridasLista() {
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: "← Heridas", onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); } }}
-            next={{ label: "Narra →", onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/regulacion`); } }}
+            next={{ label: "Narra →", onClick: async () => { await flushSaves(); setComicOpen(true); } }}
           />
           </Reveal>
 
@@ -146,6 +152,23 @@ export default function MetodoPsicologiaHeridasLista() {
       </Flex>
 
       <AyudaRecorrido pagina="heridas" />
+
+      {/* Cómic «Narrar» — se muestra entre Tus heridas y Narra: ya tiene sus
+          heridas con nombre, y aquí se explica por qué contarlas cambia algo
+          aunque no cambie los hechos. Al terminarlo (o pulsar «Continuar →»)
+          avanza a /regulacion. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/regulacion`); }}
+        vinetas={COMIC_NARRAR}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.webp"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={INK_SHADOW}
+      />
 
       <SiteFooter />
     </Box>

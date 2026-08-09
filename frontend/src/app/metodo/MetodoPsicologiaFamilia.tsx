@@ -30,6 +30,8 @@ import { GenogramaMapa, SimboloImg } from "../../components/metodo/GenogramaMapa
 import { FotoPersonaBoton } from "../../components/metodo/FotoPersonaBoton";
 import { useMapaFamilia } from "../../hooks/useMapaFamilia";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_HERENCIA } from "../../components/metodo/comicHerencia";
 import {
   simboloSrc,
   SIMBOLOS_FAMILIA,
@@ -67,6 +69,8 @@ export default function MetodoPsicologiaFamilia() {
   const { loading, personas, miFoto, añadir, actualizar, eliminar, flushGuardado } =
     useMapaFamilia(experienciaId);
   const [abiertoId, setAbiertoId] = useState<string | null>(null);
+  // Cómic «Lo que se hereda», intercalado antes de pasar al Genograma.
+  const [comicOpen, setComicOpen] = useState(false);
 
   if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
@@ -75,6 +79,13 @@ export default function MetodoPsicologiaFamilia() {
     flushGuardado();
     await flushSaves();
     navigate(ruta);
+  };
+
+  // Pasar al Genograma: primero el cómic; al terminarlo (o saltarlo) navega.
+  const irAlGenograma = async () => {
+    flushGuardado();
+    await flushSaves();
+    setComicOpen(true);
   };
 
   const abierta = personas.find((p) => p.id === abiertoId) || null;
@@ -103,7 +114,7 @@ export default function MetodoPsicologiaFamilia() {
                 prev={{ label: "← Línea de Vida", onClick: () => ir(`/metodo/psicologia/${exp.id}`) }}
                 next={{
                   label: "Genograma →",
-                  onClick: () => ir(`/metodo/psicologia/${exp.id}/genograma`),
+                  onClick: irAlGenograma,
                   disabled: !algunSimbolo,
                   disabledTooltip:
                     personas.length === 0
@@ -150,6 +161,23 @@ export default function MetodoPsicologiaFamilia() {
       )}
 
       <AyudaRecorrido pagina="familia" />
+
+      {/* Cómic «Lo que se hereda» — se muestra entre Tu familia y el Genograma:
+          antes de escribir la ficha de cada persona, explica por qué ese mapa
+          importa (epigenética, trauma intergeneracional y los patrones que se
+          repiten). Al terminarlo (o pulsar «Continuar →») avanza a /genograma. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/genograma`); }}
+        vinetas={COMIC_HERENCIA}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.webp"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={INK_SHADOW}
+      />
 
       <SiteFooter />
     </Box>

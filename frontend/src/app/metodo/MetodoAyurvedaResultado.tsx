@@ -13,6 +13,7 @@ import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { VINETAS_DOSHAS } from "../../components/metodo/HinduismoIlustracionesModal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import {
   API_URL,
   AyurvedaIcon, ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -275,6 +276,7 @@ export default function MetodoAyurvedaResultado() {
       />
 
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <IndiceAyurveda />
 
       <SiteFooter />
     </Box>

@@ -28,6 +28,7 @@ import { TextoLetraALetra } from "../../components/global/TextoLetraALetra";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceRecorrido } from "../../components/metodo/IndiceRecorrido";
 import { generatePsicologiaPdf } from "../../utils/generatePsicologiaPdf";
+import { generateLineaDeVidaPdf } from "../../utils/generateLineaDeVidaPdf";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import {
   experienciaById,
@@ -84,6 +85,7 @@ export default function MetodoPsicologiaSintesis() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<LineaDeVidaData>({});
   const [descargando, setDescargando] = useState(false);
+  const [descargandoLinea, setDescargandoLinea] = useState(false);
   // «Volver arriba»: aparece al bajar un poco; sube hasta la cabecera.
   const [mostrarArriba, setMostrarArriba] = useState(false);
 
@@ -130,6 +132,17 @@ export default function MetodoPsicologiaSintesis() {
       // silencioso
     } finally {
       setDescargando(false);
+    }
+  };
+
+  const descargarLineaPdf = async () => {
+    setDescargandoLinea(true);
+    try {
+      await generateLineaDeVidaPdf(data);
+    } catch {
+      // silencioso
+    } finally {
+      setDescargandoLinea(false);
     }
   };
 
@@ -401,61 +414,27 @@ export default function MetodoPsicologiaSintesis() {
                   </React.Fragment>
                 ))}
 
-                {/* ── Descarga en PDF · CTA grande y elegante (entrada épica) ── */}
-                <Reveal inView once amount={0.25} direction="up" distance={54} scaleFrom={0.9} blur duration={0.9} w="100%" mt={{ base: 9, md: 12 }}>
-                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                     border={`1px solid ${ORO}66`}
-                     boxShadow={`0 0 0 1px ${ORO}22, 0 14px 46px rgba(94,45,16,0.28), 0 0 34px ${ORO}22`}
-                     bgColor={neuropsicologiaBg}>
-                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-                  {/* Velo cálido para que resalte del resto de secciones */}
-                  <Box position="absolute" inset={0} zIndex={1}
-                       bgGradient={`linear(to-b, ${ORO}14, transparent 60%)`} pointerEvents="none" />
-                  <Flex position="relative" zIndex={2} direction="column" align="center" gap={{ base: 5, md: 6 }}
-                        px={{ base: 6, md: 12 }} py={{ base: 10, md: 14 }} textAlign="center">
-                    {/* Sello con icono de descarga */}
-                    <Flex align="center" justify="center" w={{ base: "60px", md: "72px" }} h={{ base: "60px", md: "72px" }}
-                          borderRadius="full" bg={TINTA} border={`2px solid ${ORO}`} flexShrink={0}
-                          boxShadow={`0 8px 24px rgba(94,45,16,0.4), 0 0 22px ${ORO}55`}>
-                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                           w={{ base: "30px", md: "36px" }} h={{ base: "30px", md: "36px" }} fill={PAPEL}>
-                        <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                      </Box>
-                    </Flex>
+                {/* ── Descargas en PDF · dos cuadernos, mismo envase ──
+                    Arriba el mapa entero (el recorrido completo) y debajo la
+                    línea de Vida año a año, que es el documento más largo y no
+                    cabía dentro del otro. */}
+                <CajaDescarga
+                  titulo="Llévate todo tu mapa"
+                  texto="Descárgalo en un cuaderno en PDF, cuidado y bonito, para releerlo siempre que lo necesites."
+                  boton="Descargar mi mapa"
+                  descargando={descargando}
+                  onClick={descargarPdf}
+                  mt={{ base: 9, md: 12 }}
+                />
 
-                    <Box>
-                      {/* Es el remate de todo el recorrido: se escribe algo más
-                          despacio que los títulos de sección. */}
-                      <TextoLetraALetra color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-                                        lineHeight="1.2" style={{ textShadow: INK_SHADOW }}
-                                        delay={0.35} porLetra={0.045} amount={0.5}>
-                        Llévate todo tu mapa
-                      </TextoLetraALetra>
-                      <Text color={`${TINTA}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6"
-                            mt={2} maxW="520px" mx="auto" style={{ textShadow: INK_SHADOW }}>
-                        Descárgalo en un cuaderno en PDF, cuidado y bonito, para releerlo siempre que lo necesites.
-                      </Text>
-                    </Box>
-
-                    <Box as="button" onClick={descargando ? undefined : descargarPdf} position="relative"
-                         display="inline-flex" alignItems="center" justifyContent="center" gap={3}
-                         px={{ base: 8, md: 12 }} py={{ base: 3.5, md: 4 }} borderRadius="full"
-                         bg={TINTA} color={PAPEL} border={`1px solid ${ORO}aa`}
-                         fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.03em"
-                         cursor={descargando ? "wait" : "pointer"} opacity={descargando ? 0.8 : 1}
-                         boxShadow={`0 10px 30px rgba(94,45,16,0.4), 0 0 26px ${ORO}44`} transition="all 0.2s"
-                         _hover={descargando ? {} : { transform: "translateY(-3px)", boxShadow: `0 16px 40px rgba(94,45,16,0.5), 0 0 34px ${ORO}66` }}>
-                      {!descargando && (
-                        <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                             w={{ base: "22px", md: "24px" }} h={{ base: "22px", md: "24px" }} fill={PAPEL} flexShrink={0}>
-                          <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                        </Box>
-                      )}
-                      {descargando ? "Preparando tu PDF…" : "Descargar mi mapa"}
-                    </Box>
-                  </Flex>
-                </Box>
-                </Reveal>
+                <CajaDescarga
+                  titulo="Llévate tu línea de Vida"
+                  texto="Descárgalo en un cuaderno en PDF, cuidado y bonito, para releerlo siempre que lo necesites."
+                  boton="Descargar mi línea de Vida"
+                  descargando={descargandoLinea}
+                  onClick={descargarLineaPdf}
+                  mt={{ base: 5, md: 7 }}
+                />
               </Flex>
             )}
 
@@ -494,6 +473,77 @@ export default function MetodoPsicologiaSintesis() {
 // numerado; dentro, el contenido se agrupa en tarjetas «crema» limpias. Las
 // secciones se conectan con una flecha vertical que apunta a la siguiente.
 // ─────────────────────────────────────────────────────────────────────────
+
+// CTA de descarga: el envase dorado del final del recorrido. Se usa dos veces
+// (el mapa entero y la línea de Vida), así que vive aquí una sola vez.
+function CajaDescarga({ titulo, texto, boton, descargando, onClick, mt }: {
+  titulo: string;
+  texto: string;
+  boton: string;
+  descargando: boolean;
+  onClick: () => void;
+  mt?: any;
+}) {
+  const icono = (
+    <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+  );
+  return (
+    <Reveal inView once amount={0.25} direction="up" distance={54} scaleFrom={0.9} blur duration={0.9} w="100%" mt={mt}>
+      <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+           border={`1px solid ${ORO}66`}
+           boxShadow={`0 0 0 1px ${ORO}22, 0 14px 46px rgba(94,45,16,0.28), 0 0 34px ${ORO}22`}
+           bgColor={neuropsicologiaBg}>
+        <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+        {/* Velo cálido para que resalte del resto de secciones */}
+        <Box position="absolute" inset={0} zIndex={1}
+             bgGradient={`linear(to-b, ${ORO}14, transparent 60%)`} pointerEvents="none" />
+        <Flex position="relative" zIndex={2} direction="column" align="center" gap={{ base: 5, md: 6 }}
+              px={{ base: 6, md: 12 }} py={{ base: 10, md: 14 }} textAlign="center">
+          {/* Sello con icono de descarga */}
+          <Flex align="center" justify="center" w={{ base: "60px", md: "72px" }} h={{ base: "60px", md: "72px" }}
+                borderRadius="full" bg={TINTA} border={`2px solid ${ORO}`} flexShrink={0}
+                boxShadow={`0 8px 24px rgba(94,45,16,0.4), 0 0 22px ${ORO}55`}>
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                 w={{ base: "30px", md: "36px" }} h={{ base: "30px", md: "36px" }} fill={PAPEL}>
+              {icono}
+            </Box>
+          </Flex>
+
+          <Box>
+            {/* Es el remate de todo el recorrido: se escribe algo más
+                despacio que los títulos de sección. */}
+            <TextoLetraALetra color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
+                              lineHeight="1.2" style={{ textShadow: INK_SHADOW }}
+                              delay={0.35} porLetra={0.045} amount={0.5}>
+              {titulo}
+            </TextoLetraALetra>
+            <Text color={`${TINTA}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6"
+                  mt={2} maxW="520px" mx="auto" style={{ textShadow: INK_SHADOW }}>
+              {texto}
+            </Text>
+          </Box>
+
+          <Box as="button" onClick={descargando ? undefined : onClick} position="relative"
+               display="inline-flex" alignItems="center" justifyContent="center" gap={3}
+               px={{ base: 8, md: 12 }} py={{ base: 3.5, md: 4 }} borderRadius="full"
+               bg={TINTA} color={PAPEL} border={`1px solid ${ORO}aa`}
+               fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.03em"
+               cursor={descargando ? "wait" : "pointer"} opacity={descargando ? 0.8 : 1}
+               boxShadow={`0 10px 30px rgba(94,45,16,0.4), 0 0 26px ${ORO}44`} transition="all 0.2s"
+               _hover={descargando ? {} : { transform: "translateY(-3px)", boxShadow: `0 16px 40px rgba(94,45,16,0.5), 0 0 34px ${ORO}66` }}>
+            {!descargando && (
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                   w={{ base: "22px", md: "24px" }} h={{ base: "22px", md: "24px" }} fill={PAPEL} flexShrink={0}>
+                {icono}
+              </Box>
+            )}
+            {descargando ? "Preparando tu PDF…" : boton}
+          </Box>
+        </Flex>
+      </Box>
+    </Reveal>
+  );
+}
 
 const CARD_BG = "rgba(255,251,243,0.72)";
 const CARD_BORDER = `1px solid ${TINTA}22`;

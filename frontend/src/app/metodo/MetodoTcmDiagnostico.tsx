@@ -364,9 +364,12 @@ function EstrellaPerfil({ estados, onElemento }: {
               <circle cx={v.x} cy={v.y} r={FOTO_R} fill="none" stroke="white"
                       strokeWidth={deseq ? 3 : 1.5} opacity={deseq ? 1 : 0.55}
                       style={{ filter: `drop-shadow(0 0 ${hov ? glow + 6 : glow}px rgba(255,255,255,0.95))`, transition: "all 0.25s ease" }} />
+              {/* El nombre lleva el halo de SU elemento: sobre el rojo oscuro
+                  del box, el blanco a secas se apagaba. El negro se queda
+                  debajo para que siga habiendo contraste. */}
               <text x={label.x} y={label.y} fill="white" fontSize={13} fontWeight={deseq ? 800 : 600}
                     textAnchor="middle" dominantBaseline="middle"
-                    style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}>
+                    style={{ textShadow: `0 0 ${deseq ? 10 : 7}px ${E.color}, 0 0 ${deseq ? 20 : 13}px ${E.color}aa, 0 1px 4px rgba(0,0,0,0.95)` }}>
                 {E.nombre}
               </text>
             </MotionG>
@@ -455,7 +458,8 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
                        style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </Box>
                 <Text color="white" fontSize={{ base: "2xs", md: "sm" }} fontWeight={700}
-                      textAlign="center" noOfLines={1}>
+                      textAlign="center" noOfLines={1}
+                      style={{ textShadow: `0 0 8px ${E.color}, 0 0 15px ${E.color}aa, 0 1px 3px rgba(0,0,0,0.9)` }}>
                   {E.nombre}
                 </Text>
                 <Text color={veredicto ? ESTADO_COLOR[veredicto] : "rgba(255,255,255,0.45)"}

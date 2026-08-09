@@ -97,8 +97,14 @@ export default function MetodoAyurvedaDoshaCursos() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1280px" gap={6}>
+      {/* Sin `maxW` en la columna y con el mismo `px` que /aprendizaje/cursos/:modalidad:
+          así la cuadrícula (CursosGrid, la misma en las dos páginas) dispone del
+          mismo ancho y las tarjetas salen del mismo tamaño. Con el tope de 1280px
+          que había aquí, en pantallas anchas los cursos del recorrido se veían
+          bastante más pequeños que los de su página principal. El header no se
+          desmadra: MetodoStepHeader lleva su propio maxW de 850px. */}
+      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" gap={6}>
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "52px" }} />}
@@ -158,6 +164,10 @@ export default function MetodoAyurvedaDoshaCursos() {
             <Box
               position="relative"
               w="100%"
+              // El aviso de «todavía no hay cursos» sí lleva tope: ahora que la
+              // columna no lo tiene, sin esto se estiraría de lado a lado.
+              maxW="850px"
+              mx="auto"
               borderRadius="2xl"
               overflow="hidden"
               boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${ayurvedaTxt}1a, 0 0 48px ${ayurvedaTxt}10`}

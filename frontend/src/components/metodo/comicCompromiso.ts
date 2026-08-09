@@ -9,7 +9,7 @@ import type { Vineta } from "./ComicViewer";
 // «Compromiso» (/metodo/psicologia/:id/compromiso). Este cómic SÍ aparece además
 // en la galería de Ilustraciones.
 //
-// Imágenes: /viñetas/psicologia/compromiso/compromiso1.png … compromiso4.png.
+// Imágenes: /viñetas/psicologia/compromiso/compromiso1.webp … compromiso4.webp.
 export const COMIC_COMPROMISO: Vineta[] = [
   {
     src: "/viñetas/psicologia/compromiso/compromiso1.webp",

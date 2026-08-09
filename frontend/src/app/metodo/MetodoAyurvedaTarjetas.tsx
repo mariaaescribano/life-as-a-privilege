@@ -9,6 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   API_URL,
@@ -63,6 +64,10 @@ export default function MetodoAyurvedaTarjetas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [scores, setScores] = useState<Record<Dosha, number> | null>(null);
+  // Dosha principal del test. Es el que abre el botón «Prāṇāyāma →»: la práctica
+  // es distinta por dosha, así que se entra por el suyo (desde el Índice puede
+  // ir a la de cualquier otro).
+  const [principal, setPrincipal] = useState<Dosha>("vata");
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
 
   useEffect(() => {
@@ -84,6 +89,7 @@ export default function MetodoAyurvedaTarjetas() {
         if (!res.data) { navigate("/metodo/ayurveda/test"); return; }
         const r = res.data as Resultado;
         setScores({ vata: r.vata_score, pitta: r.pitta_score, kapha: r.kapha_score });
+        if (DOSHAS.includes(r.dosha)) setPrincipal(r.dosha);
       } catch {
         navigate("/metodo/ayurveda/test");
         return;
@@ -125,6 +131,7 @@ export default function MetodoAyurvedaTarjetas() {
             mb={0}
             prev={{ label: "← Resultado", onClick: () => navigate("/metodo/ayurveda/resultado") }}
             extra={ilustracionesBtn}
+            next={{ label: "Prāṇāyāma →", onClick: () => navigate(`/metodo/ayurveda/dosha/${principal}/pranayama`) }}
           />
           </Reveal>
 
@@ -246,6 +253,8 @@ export default function MetodoAyurvedaTarjetas() {
       {ilustracionesModal}
 
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+
+      <IndiceAyurveda />
 
       <SiteFooter />
     </Box>

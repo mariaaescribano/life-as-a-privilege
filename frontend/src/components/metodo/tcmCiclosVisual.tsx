@@ -243,9 +243,12 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge,
                          clipPath={`url(#ciclo-${ciclo}-clip-${el})`} preserveAspectRatio="xMidYMid slice" />
                   <circle cx={v.x} cy={v.y} r={C_FOTO_R} fill="none" stroke={color} strokeWidth={2.5}
                           style={{ filter: `drop-shadow(0 0 6px ${color})` }} />
+                  {/* Halo del color del elemento: es lo que despega el nombre
+                      del fondo oscuro de la caja. El negro, debajo, sostiene
+                      el contraste. */}
                   <text x={label.x} y={label.y} fill="white" fontSize={15} fontWeight={700}
                         textAnchor="middle" dominantBaseline="middle"
-                        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}>
+                        style={{ textShadow: `0 0 9px ${color}, 0 0 18px ${color}aa, 0 1px 4px rgba(0,0,0,0.95)` }}>
                     {ELEMENTOS[el].nombre}
                   </text>
                 </MotionG>

@@ -12,6 +12,8 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_DOSHA } from "../../components/metodo/comicDoshas";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -120,6 +122,8 @@ export default function MetodoAyurvedaDoshaIntro() {
   const [cambio, setCambio] = useState("");
   const [guardado, setGuardado] = useState(false);
   const [guardando, setGuardando] = useState(false);
+  // Cómic del dosha: se intercala al pulsar «Descúbrete →», antes de navegar.
+  const [comicOpen, setComicOpen] = useState(false);
   const dataRef = useRef<Record<string, any>>({});
   const finalRef = useRef<HTMLDivElement>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
@@ -197,13 +201,17 @@ export default function MetodoAyurvedaDoshaIntro() {
 
   // Botón "Comenzar →": bloqueado hasta guardar. Si lo pulsan sin guardar, la
   // página baja hasta la pregunta final como indicación de que la rellenen.
+  // Con la respuesta guardada, primero se abre el cómic del dosha y desde él se
+  // avanza (o se salta) al siguiente paso.
   const irSiguiente = () => {
     if (!guardado) {
       finalRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    navigate(`/metodo/ayurveda/dosha/${doshaKey}/comenzar`);
+    setComicOpen(true);
   };
+
+  const irADescubrete = () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/comenzar`);
 
   if (loading || !doshaKey) {
     return <AyurvedaLoading />;
@@ -494,6 +502,19 @@ export default function MetodoAyurvedaDoshaIntro() {
       </Flex>
 
       {ilustracionesModal}
+
+      {/* Cómic del dosha: intercalado entre esta intro y «Descúbrete». */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={irADescubrete}
+        vinetas={COMIC_DOSHA[doshaKey]}
+        continueLabel="Descúbrete"
+        themeColor={meta.color}
+        disciplinaBgImage="/img/fondos/hinduismo.webp"
+        disciplinaBgColor={ayurvedaBg}
+        textShadow={`0 0 6px ${ayurvedaBg}, 0 0 14px ${ayurvedaBg}, 0 0 26px ${ayurvedaBg}cc`}
+      />
 
       <IndiceAyurveda />
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />

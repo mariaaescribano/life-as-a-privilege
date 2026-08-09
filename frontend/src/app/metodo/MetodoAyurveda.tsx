@@ -18,6 +18,7 @@ import { VINETAS_ORIGEN as ORIGEN_HINDUISMO } from "../../components/metodo/Hind
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import {
   API_URL,
   ayurvedaBg,
@@ -110,7 +111,7 @@ export default function MetodoAyurveda() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Cursos", onClick: () => navigate("/metodo/psicologia/linea-de-Vida/cursos") }}
+            prev={{ label: "← Psicología", onClick: () => navigate("/metodo/psicologia/linea-de-Vida/cursos") }}
             extra={ilustracionesBtn}
             next={{
               label: "Test →",
@@ -184,6 +185,7 @@ export default function MetodoAyurveda() {
       </Flex>
 
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <IndiceAyurveda />
 
       <SiteFooter />
 

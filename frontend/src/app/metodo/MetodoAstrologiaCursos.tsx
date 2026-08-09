@@ -6,7 +6,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
-import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { MetodoStepHeader, glowHeaderDisciplina } from "../../components/metodo/MetodoStepHeader";
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -102,8 +102,11 @@ export default function MetodoAstrologiaCursos() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1280px" gap={6}>
+      {/* Mismos márgenes y ANCHO SIN TOPE que /aprendizaje/cursos/:disciplina
+          (CursosModalidad): allí la cuadrícula ocupa todo el ancho disponible, así
+          que las tarjetas salen grandes. Con un maxW aquí salían más pequeñas. */}
+      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+        <Flex direction="column" align="center" w="100%" gap={6}>
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
@@ -137,8 +140,9 @@ export default function MetodoAstrologiaCursos() {
             />
           </Reveal>
 
-          {/* Texto introductorio debajo del header */}
-          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%">
+          {/* Texto introductorio debajo del header (al ancho del header, no del
+              grid, para que no se estire de lado a lado en pantallas anchas). */}
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" maxW="850px">
             <Text
               color={`${astrologiaTxt}ee`}
               fontSize={{ base: "md", md: "lg" }}
@@ -196,9 +200,10 @@ export default function MetodoAstrologiaCursos() {
               duration={0.75}
               position="relative"
               w="100%"
+              maxW="850px"
               borderRadius="2xl"
               overflow="hidden"
-              boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+              boxShadow={glowHeaderDisciplina(astrologiaTxt)}
             >
               <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">

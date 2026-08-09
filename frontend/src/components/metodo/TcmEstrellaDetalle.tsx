@@ -110,7 +110,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                               style={{ filter: `drop-shadow(0 0 ${activo ? 7 : 3}px ${Ei.color})` }} />
                       <text x={label.x} y={label.y} fill="white" fontSize={15} fontWeight={activo ? 800 : 600}
                             textAnchor="middle" dominantBaseline="middle"
-                            style={{ textShadow: "0 1px 4px rgba(58,10,10,0.95)" }}>
+                            style={{ textShadow: `0 0 ${activo ? 10 : 7}px ${Ei.color}, 0 0 ${activo ? 20 : 13}px ${Ei.color}aa, 0 1px 4px rgba(58,10,10,0.95)` }}>
                         {Ei.nombre}
                       </text>
                     </MotionG>

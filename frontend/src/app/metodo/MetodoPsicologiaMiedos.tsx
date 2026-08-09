@@ -18,6 +18,8 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { COMIC_MIEDO } from "../../components/metodo/comicMiedo";
 import {
   experienciaById,
   MIEDOS,
@@ -52,6 +54,8 @@ export default function MetodoPsicologiaMiedos() {
   const [miedos, setMiedos] = useState<MiedoItem[]>([]);
   const [entrada, setEntrada] = useState("");
   const [guardando, setGuardando] = useState(false);
+  // Cómic «El miedo», intercalado antes de pasar a Atrévete.
+  const [comicOpen, setComicOpen] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
 
   useEffect(() => {
@@ -149,7 +153,7 @@ export default function MetodoPsicologiaMiedos() {
               prev={{ label: "← Dones", onClick: () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`) }}
               next={{
                 label: "Atrévete →",
-                onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/miedos-preguntas`); },
+                onClick: async () => { await flushSaves(); setComicOpen(true); },
                 // Hasta que no haya al menos un miedo (escrito o elegido), la
                 // siguiente página queda bloqueada. Si los borra todos, se vuelve
                 // a bloquear (miedos.length se recalcula).
@@ -387,6 +391,23 @@ export default function MetodoPsicologiaMiedos() {
       </Box>
 
       <AyudaRecorrido pagina="miedos" />
+
+      {/* Cómic «El miedo» — se muestra entre Miedos y Atrévete: ya ha escrito de
+          qué tiene miedo, y aquí se le da la vuelta (detrás de cada miedo hay
+          algo que le importa), que es el giro que la página siguiente le pide.
+          Al terminarlo (o pulsar «Continuar →») avanza a /miedos-preguntas. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/miedos-preguntas`); }}
+        vinetas={COMIC_MIEDO}
+        continueLabel="Continuar"
+        botonNitido
+        themeColor={neuropsicologiaTxt}
+        disciplinaBgImage="/img/fondos/psciologia.webp"
+        disciplinaBgColor={neuropsicologiaBg}
+        textShadow={INK_SHADOW}
+      />
 
       <SiteFooter />
     </Box>
