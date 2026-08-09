@@ -127,7 +127,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
     });
   };
 
-  const irCursos = () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/cursos`);
+  const irPranayama = () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/pranayama`);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -146,7 +146,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
             mb={0}
             prev={{ label: "← Tu día", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/dia`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Cursos →", onClick: irCursos }}
+            next={{ label: "Prāṇāyāma →", onClick: irPranayama }}
           />
           </Reveal>
 
@@ -300,7 +300,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
               </Text>
               <Box
                 as="button"
-                onClick={irCursos}
+                onClick={irPranayama}
                 mt={2}
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={meta.color} color="#fff"

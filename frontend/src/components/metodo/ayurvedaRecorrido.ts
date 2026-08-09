@@ -17,7 +17,8 @@ export const AYURVEDA_INDICE: PasoRecorrido[] = [
   { n: 6, titulo: "Estilo de Vida", ruta: (d) => `/metodo/ayurveda/dosha/${d}/estilo` },
   { n: 7, titulo: "Tu día",         ruta: (d) => `/metodo/ayurveda/dosha/${d}/dia` },
   { n: 8, titulo: "Tu mapa",   ruta: (d) => `/metodo/ayurveda/dosha/${d}/recorrido` },
-  { n: 9, titulo: "Cursos",         ruta: (d) => `/metodo/ayurveda/dosha/${d}/cursos` },
+  { n: 9, titulo: "Prāṇāyāma",      ruta: (d) => `/metodo/ayurveda/dosha/${d}/pranayama` },
+  { n: 10, titulo: "Cursos",        ruta: (d) => `/metodo/ayurveda/dosha/${d}/cursos` },
 ];
 
 export const AYURVEDA_TOTAL = AYURVEDA_INDICE.length;
@@ -45,7 +46,9 @@ export function puedeAvanzarAyurveda(data: AyurvedaData, dosha: string, n: numbe
     // Estilo de Vida guarda su reflexión/compromiso bajo la sección doshaCuidarte.
     case 6: return tieneContenido(sec("doshaCuidarte").reflexion) || tieneContenido(sec("doshaCuidarte").compromiso);
     case 7: return tieneContenido(sec("doshaDia").bloques);             // Tu día
-    default: return true; // 5 (Alimentación), 8 (Tu mapa), 9 (Cursos): sin requisito
+    // 5 (Alimentación), 8 (Tu mapa), 9 (Prāṇāyāma) y 10 (Cursos) no piden nada:
+    // Prāṇāyāma se lee y se practica, pero no bloquea el paso a los Cursos.
+    default: return true;
   }
 }
 

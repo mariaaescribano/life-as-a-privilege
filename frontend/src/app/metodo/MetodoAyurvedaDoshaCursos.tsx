@@ -107,7 +107,7 @@ export default function MetodoAyurvedaDoshaCursos() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Tu Mapa", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/recorrido`) }}
+            prev={{ label: "← Prāṇāyāma", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/pranayama`) }}
             extra={ilustracionesBtn}
             next={tcmSuscrito
               ? { label: "Med. China →", onClick: onMedChina }

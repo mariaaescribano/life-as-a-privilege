@@ -90,6 +90,7 @@ const MetodoAyurvedaDoshaDesequilibrio = lazy(() => import("./app/metodo/MetodoA
 const MetodoAyurvedaDoshaCuidarte = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaCuidarte"));
 const MetodoAyurvedaDoshaEstilo = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaEstilo"));
 const MetodoAyurvedaDoshaDia = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaDia"));
+const MetodoAyurvedaDoshaPranayama = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaPranayama"));
 const MetodoAyurvedaDoshaCursos = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaCursos"));
 const MetodoAyurvedaDoshaRecorrido = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaRecorrido"));
 const MetodoTcm = lazy(() => import("./app/metodo/MetodoTcm"));
@@ -341,6 +342,7 @@ export default function App()
       <Route path="/metodo/ayurveda/dosha/:dosha/cuidarte" element={<PrivateRoute><MetodoAyurvedaDoshaCuidarte /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/estilo" element={<PrivateRoute><MetodoAyurvedaDoshaEstilo /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/dia" element={<PrivateRoute><MetodoAyurvedaDoshaDia /></PrivateRoute>} />
+      <Route path="/metodo/ayurveda/dosha/:dosha/pranayama" element={<PrivateRoute><MetodoAyurvedaDoshaPranayama /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/cursos" element={<PrivateRoute><MetodoAyurvedaDoshaCursos /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/recorrido" element={<PrivateRoute><MetodoAyurvedaDoshaRecorrido /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />
