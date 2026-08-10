@@ -17,11 +17,19 @@ import { NUTRICION_CICLOS } from "./comicNutricionCiclos";
 //   5. La fruta, la verdura y sus colores
 //   6. Cuando el nutriente pasa por un animal
 //
-// Imágenes (PENDIENTES de subir; hasta entonces el visor pinta su placeholder):
-//   /viñetas/nutricion/<key>/<key><n>.png  →  tierra, planta, hoja, fruta, animal
+// Los dos primeros se cuentan largos —son los que abren el viaje—; los cuatro
+// últimos van en cuatro viñetas cada uno, que es lo que pide su historia.
+//
+// Imágenes: una carpeta por lectura dentro de /viñetas/nutricion/biologia/, con
+// sus viñetas numeradas y la portada de la tarjeta sin número:
+//   /viñetas/nutricion/biologia/<key>/<key><n>.webp  →  viñeta n
+//   /viñetas/nutricion/biologia/<key>/<key>.webp     →  portada
 // ─────────────────────────────────────────────────────────────────────────
 
-const src = (key: string, i: number) => `/viñetas/nutricion/${key}/${key}${i}.webp`;
+const BIO = "/viñetas/nutricion/biologia";
+const src = (key: string, i: number) => `${BIO}/${key}/${key}${i}.webp`;
+/** Portada de la tarjeta: el archivo sin número de la carpeta de la lectura. */
+const portada = (key: string) => `${BIO}/${key}/${key}.webp`;
 
 // ── 2. La tierra y la raíz ───────────────────────────────────────────────
 export const NUTRICION_TIERRA: Vineta[] = [
@@ -97,50 +105,29 @@ export const NUTRICION_PLANTA: Vineta[] = [
     src: src("planta", 2),
     titulo: "Dos tuberías que van al revés",
     paragraphs: [
-      "Por dentro, una planta está atravesada de arriba abajo por dos conducciones distintas, pegadas la una a la otra.",
-      "El xilema sube: lleva el agua y los minerales desde la raíz hasta la última hoja. Son tubos huecos, hechos de células que se han vaciado y han muerto para dejar el paso libre, con las paredes reforzadas para no colapsar. La madera es xilema.",
-      "El floema baja y reparte: lleva el azúcar recién fabricado en las hojas hacia donde haga falta —una raíz que crece, una flor, un fruto que se está llenando—. Este sí está hecho de células vivas.",
-      "Cuando le das un mordisco al tallo de una acelga o de un apio, estás masticando esas tuberías.",
+      "Por dentro, una planta está atravesada de arriba abajo por dos conducciones pegadas la una a la otra. El xilema sube el agua y los minerales desde la raíz hasta la última hoja: son tubos huecos, células que se vaciaron y murieron para dejar el paso libre. La madera es xilema.",
+      "El floema baja y reparte el azúcar recién fabricado en las hojas hacia donde haga falta —una raíz que crece, una flor, un fruto que se está llenando—. Este sí está hecho de células vivas. Cuando le das un mordisco al tallo de una acelga, estás masticando esas tuberías.",
+      "Y un árbol levanta agua decenas de metros todos los días sin tener corazón ni bomba. No empuja desde abajo: tira desde arriba. La hoja pierde agua por evaporación, y como las moléculas de agua se agarran unas a otras por sus polos, al escaparse una arrastra a la de detrás.",
+      "El resultado es un hilo de agua continuo desde la hoja hasta el pelillo de la raíz. La planta no bombea: la mueve el Sol.",
     ],
   },
   {
     src: src("planta", 3),
-    titulo: "Sube agua sin tener corazón",
-    paragraphs: [
-      "Un árbol levanta agua decenas de metros todos los días. Y no tiene ni corazón ni bomba. ¿Cómo lo hace?",
-      "No empuja desde abajo: tira desde arriba. La hoja pierde agua por evaporación, y como las moléculas de agua se agarran unas a otras por sus polos, al escaparse una arrastra a la de detrás.",
-      "El resultado es un hilo de agua continuo, sin cortarse, desde la hoja hasta el pelillo de la raíz. La planta no bombea: la mueve el Sol evaporando por arriba.",
-      "Por eso una planta a la que no riegas se marchita antes por arriba: la cadena se ha roto.",
-    ],
-  },
-  {
-    src: src("planta", 4),
     titulo: "La célula vegetal, por dentro",
     paragraphs: [
       "Tus células tienen una frontera blanda de grasa. Las de las plantas tienen eso… y por fuera una pared rígida de celulosa. Esa pared es la fibra que tú no puedes digerir: es lo que da estructura a un tallo y lo que llega intacto a tu intestino grueso para alimentar a tu microbiota.",
-      "Dentro, la mayor parte del espacio lo ocupa una bolsa enorme de agua, la vacuola. Cuando está llena empuja contra la pared y la célula queda firme; cuando se vacía, la célula se arruga.",
-      "Eso es exactamente lo que ves en una lechuga: crujiente cuando sus vacuolas están llenas, lacia cuando han perdido el agua. La frescura de una verdura no es una metáfora, es presión de agua.",
+      "Dentro, la mayor parte del espacio lo ocupa una bolsa enorme de agua, la vacuola. Llena, empuja contra la pared y la célula queda firme; vacía, la célula se arruga. Eso es exactamente una lechuga: crujiente o lacia. La frescura de una verdura no es una metáfora, es presión de agua.",
       "Y en las células de las partes verdes hay además cloroplastos: las fábricas donde ocurre la fotosíntesis.",
     ],
   },
   {
-    src: src("planta", 5),
+    src: src("planta", 4),
     titulo: "Cada parte guarda una cosa distinta",
     paragraphs: [
       "La planta fabrica azúcar en las hojas, pero no lo deja ahí: lo manda a guardar. Y según dónde lo guarde, aparece un alimento distinto.",
-      "En raíces y tubérculos hace despensa de almidón para el invierno o para brotar: zanahoria, remolacha, patata, boniato. Por eso son más dulces y más densas.",
-      "En las semillas guarda lo más valioso y concentrado, porque ahí va la siguiente generación: proteína, grasa y minerales. Legumbres, frutos secos, cereales.",
-      "En hojas y tallos apenas hay reserva: hay maquinaria, agua, fibra, vitaminas y minerales. Mucho volumen y muy pocas calorías.",
+      "En raíces y tubérculos hace despensa de almidón para el invierno o para brotar —zanahoria, remolacha, patata, boniato—, y por eso son más dulces y más densas. En las semillas guarda lo más valioso, porque ahí va la siguiente generación: proteína, grasa y minerales. En hojas y tallos apenas hay reserva: agua, fibra, vitaminas y minerales, mucho volumen y muy pocas calorías.",
       "Por eso una patata y una espinaca no se parecen en nada, aunque las dos sean plantas: no estás comiendo la misma parte de la historia.",
-    ],
-  },
-  {
-    src: src("planta", 6),
-    titulo: "Toda tu comida empieza aquí",
-    paragraphs: [
-      "Mires donde mires —una lenteja, un aguacate, un grano de trigo, una hoja de albahaca—, siempre es la misma arquitectura resolviendo lo mismo: subir agua, bajar azúcar, guardar reservas.",
-      "Y no solo lo vegetal. La carne, el huevo y la leche también salen de aquí, porque el animal comió planta.",
-      "No hay ningún atajo. Toda la comida del mundo pasa primero por una planta.",
+      "Y mires donde mires —una lenteja, un aguacate, un grano de trigo—, siempre es la misma arquitectura. Tampoco hay atajo con la carne, el huevo o la leche, porque el animal comió planta. Toda la comida del mundo pasa primero por aquí.",
     ],
   },
 ];
@@ -151,24 +138,13 @@ export const NUTRICION_HOJA: Vineta[] = [
     src: src("hoja", 1),
     titulo: "La fábrica",
     paragraphs: [
-      "Si la planta es la casa, la hoja es la fábrica. Y su forma lo delata: plana y finísima.",
-      "Plana para que la luz caiga sobre la mayor superficie posible. Fina para que la luz atraviese todas sus capas y para que el aire pueda entrar y salir sin tardar.",
+      "Si la planta es la casa, la hoja es la fábrica. Y su forma lo delata: plana para que la luz caiga sobre la mayor superficie posible, y finísima para que la luz atraviese todas sus capas y el aire pueda entrar y salir sin tardar.",
+      "Por fuera lleva una capa de cera impermeable —lo que hace que el agua resbale en una hoja de col— y debajo una piel de células transparentes que deja pasar la luz sin usarla. En el medio está la capa que trabaja: células altas y apretadas como columnas, atiborradas de cloroplastos. Más abajo, huecos de aire por donde circulan los gases. Y atravesándolo todo, los nervios: el xilema y el floema.",
       "Cada hoja es a la vez un panel solar, un pulmón y una cocina. Y de lo que ocurre aquí dentro sale, sin excepción, toda la comida del planeta.",
     ],
   },
   {
     src: src("hoja", 2),
-    titulo: "Sus capas, de fuera a dentro",
-    paragraphs: [
-      "Por fuera, una capa de cera impermeable. Es lo que hace que el agua resbale en una hoja de col y lo que evita que la hoja se seque al sol.",
-      "Debajo, una piel de células transparentes que deja pasar la luz sin usarla.",
-      "En el medio, la capa que trabaja: células altas y apretadas como una fila de columnas, atiborradas de cloroplastos. Ahí se hace la mayor parte del trabajo.",
-      "Más abajo, células desordenadas con huecos de aire entre ellas, como una esponja: son los pasillos por los que circulan los gases dentro de la hoja.",
-      "Y atravesándolo todo, los nervios: el xilema y el floema, que traen el agua y se llevan el azúcar.",
-    ],
-  },
-  {
-    src: src("hoja", 3),
     titulo: "El dilema de las bocas",
     paragraphs: [
       "En la cara de abajo de la hoja hay miles de boquitas diminutas, cada una formada por dos células que pueden hincharse para abrirse o vaciarse para cerrarse. Se llaman estomas.",
@@ -178,32 +154,22 @@ export const NUTRICION_HOJA: Vineta[] = [
     ],
   },
   {
-    src: src("hoja", 4),
+    src: src("hoja", 3),
     titulo: "El verde que ves es la luz que sobra",
     paragraphs: [
-      "Dentro de las células de la hoja hay unos sacos verdes, los cloroplastos, llenos de clorofila, la molécula que atrapa la luz.",
-      "La clorofila absorbe muy bien la luz roja y la azul, y en cambio rebota la verde. Así que el verde que tú ves es, exactamente, la parte de la luz que la hoja NO quiso quedarse.",
+      "Dentro de las células de la hoja hay unos sacos verdes, los cloroplastos, llenos de clorofila, la molécula que atrapa la luz. Absorbe muy bien la roja y la azul, y en cambio rebota la verde: el verde que tú ves es, exactamente, la parte de la luz que la hoja NO quiso quedarse.",
       "Con la energía que sí atrapa hace algo brutal: rompe moléculas de agua para robarles los electrones y el hidrógeno.",
       "Y al partir el agua sobra oxígeno, que la hoja suelta al aire porque no lo necesita. El oxígeno que respiras ahora mismo es el desecho de una hoja.",
     ],
   },
   {
-    src: src("hoja", 5),
+    src: src("hoja", 4),
     titulo: "El instante en que nace la comida",
     paragraphs: [
       "Ahora la hoja tiene energía de la luz e hidrógeno del agua. Le falta el esqueleto: el carbono. Y lo coge del aire, del dióxido de carbono que entró por los estomas.",
-      "Con esas tres cosas —aire, agua y luz— monta una molécula de glucosa. Ahí, en ese punto exacto, es donde una piedra, un charco y un rayo de sol se convierten en comida.",
-      "Es la única puerta de entrada. Toda la energía y todo el carbono que circulan por el mundo vivo entraron por aquí.",
-      "La glucosa que tienes ahora mismo en la sangre era dióxido de carbono flotando en el aire hace unos meses. Y la fabricó una hoja.",
-    ],
-  },
-  {
-    src: src("hoja", 6),
-    titulo: "Comes hojas, o comes lo que comió hojas",
-    paragraphs: [
-      "Después la planta encadena esas glucosas y hace almidón para guardar, celulosa para sostenerse, y con los minerales que subieron por el xilema fabrica aminoácidos, grasas y vitaminas.",
-      "Todo lo que hay en tu plato salió de ahí. El pan, el aceite, la fruta, la lenteja. Y también el filete, el queso y el huevo, porque el animal comió planta.",
-      "La hoja es la puerta por la que la Vida entra en el mundo. Y tú estás al otro lado de esa puerta.",
+      "Con esas tres cosas —aire, agua y luz— monta una molécula de glucosa. Ahí, en ese punto exacto, es donde una piedra, un charco y un rayo de sol se convierten en comida. Es la única puerta de entrada: toda la energía y todo el carbono que circulan por el mundo vivo entraron por aquí.",
+      "Después la planta encadena esas glucosas y hace almidón para guardar y celulosa para sostenerse, y con los minerales que subieron por el xilema fabrica aminoácidos, grasas y vitaminas. El pan, el aceite, la fruta, la lenteja. Y también el filete, el queso y el huevo, porque el animal comió planta.",
+      "La glucosa que tienes ahora mismo en la sangre era dióxido de carbono flotando en el aire hace unos meses. La hoja es la puerta por la que la Vida entra en el mundo, y tú estás al otro lado de esa puerta.",
     ],
   },
 ];
@@ -214,22 +180,13 @@ export const NUTRICION_FRUTA: Vineta[] = [
     src: src("fruta", 1),
     titulo: "Una flor es una promesa",
     paragraphs: [
-      "Todo fruto empieza siendo una flor. Llega el polen, se une al óvulo y ahí nace una semilla: una planta nueva, entera, en miniatura.",
-      "Y entonces la planta hace algo curiosísimo. Alrededor de esa semilla empieza a construir una caja: paredes, agua, azúcar, color, olor.",
+      "Todo fruto empieza siendo una flor. Llega el polen, se une al óvulo y ahí nace una semilla: una planta nueva, entera, en miniatura. Y entonces la planta empieza a construir una caja alrededor: paredes, agua, azúcar, color, olor.",
       "Esa caja es el fruto. Y aquí está lo que casi nunca se cuenta: el fruto no se hizo para ti. Se hizo para la semilla.",
+      "Por eso, mientras la semilla se forma, el fruto es verde, duro, ácido y a veces amargo o incluso tóxico. No es un fallo: si alguien se lo comiera ahora, la semilla no serviría para nada. Así que se camufla entre las hojas y se hace desagradable a propósito. Es un cartel de «todavía no».",
     ],
   },
   {
     src: src("fruta", 2),
-    titulo: "Verde significa «todavía no»",
-    paragraphs: [
-      "Mientras la semilla se forma, el floema va llevando azúcar de las hojas al fruto un día detrás de otro, y el fruto crece y se llena.",
-      "Pero durante todo ese tiempo es verde, duro, ácido y a veces amargo o incluso tóxico. Y no es un fallo: es a propósito.",
-      "Si alguien se lo comiera ahora, la semilla no serviría para nada. Así que el fruto se camufla entre las hojas y se hace desagradable a propósito. Es un cartel de «todavía no».",
-    ],
-  },
-  {
-    src: src("fruta", 3),
     titulo: "Madurar es una orden química",
     paragraphs: [
       "Cuando la semilla ya está lista, el fruto lanza una señal: un gas llamado etileno. Y ese gas cambia el cartel entero de golpe.",
@@ -239,31 +196,21 @@ export const NUTRICION_FRUTA: Vineta[] = [
     ],
   },
   {
-    src: src("fruta", 4),
+    src: src("fruta", 3),
     titulo: "Los colores son moléculas con oficio",
     paragraphs: [
       "El verde es la clorofila. Al madurar se destruye, y entonces se ve lo que ya estaba debajo, escondido.",
-      "El naranja y el amarillo son carotenoides: de uno de ellos tu cuerpo fabrica vitamina A, y otros dos se van a acumular justo en tu retina. El rojo del tomate es otro de la familia. En la planta son protectores de la maquinaria de la luz.",
-      "El rojo, el morado y el azul son antocianinas, que la planta usa como pantalla solar y protección frente al frío. Cambian de tono según la acidez: por eso la lombarda se vuelve de otro color si la cueces con limón.",
-      "El blanco del ajo y de la cebolla esconde compuestos de azufre, y el verde fuerte de la col y el brócoli, otros que pican y amargan un poco. Son defensas: por eso el ajo muerde.",
-    ],
-  },
-  {
-    src: src("fruta", 5),
-    titulo: "Nada de esto se hizo para ti",
-    paragraphs: [
-      "Ninguno de esos colores se inventó pensando en tu salud. Son escudos contra el sol, avisos para los animales, venenos suaves contra los insectos, señales de «ya estoy listo».",
-      "Pero llevamos millones de años comiéndolos, y nuestras células han aprendido a aprovecharlos: unos neutralizan radicales libres y otros encienden nuestras propias defensas. Es lo que ya viste con los fitoquímicos.",
+      "El naranja y el amarillo son carotenoides: de uno de ellos tu cuerpo fabrica vitamina A y otros dos se acumulan justo en tu retina; el rojo del tomate es otro de la familia. El rojo, el morado y el azul son antocianinas, la pantalla solar de la planta, y cambian de tono según la acidez: por eso la lombarda se vuelve de otro color si la cueces con limón. El blanco del ajo y de la cebolla esconde compuestos de azufre, y el verde fuerte de la col y el brócoli, otros que amargan un poco.",
+      "Ninguno de esos colores se inventó pensando en tu salud. Son escudos contra el sol, avisos para los animales, venenos suaves contra los insectos. Pero llevamos millones de años comiéndolos y nuestras células han aprendido a aprovecharlos, como ya viste con los fitoquímicos.",
       "No somos los destinatarios. Somos los que aprendimos a leer el mensaje.",
     ],
   },
   {
-    src: src("fruta", 6),
+    src: src("fruta", 4),
     titulo: "Por eso se dice «come de muchos colores»",
     paragraphs: [
       "Ahora esa frase deja de ser un consejo bonito. Cada color es una familia distinta de moléculas, con un trabajo distinto, y ninguna hace el trabajo de la otra. Un plato de un solo color es una biblioteca con un solo libro.",
-      "Y también entiendes por qué importa cuándo se recoge. Un fruto arrancado verde para que aguante el viaje puede ponerse rojo y blando por fuera, porque el etileno hace su parte, pero ya está desconectado de la planta: nadie le sigue mandando azúcar ni le termina de llenar la despensa.",
-      "Madurar en la rama y madurar en un camión no es lo mismo, aunque por fuera se parezcan.",
+      "Y también entiendes por qué importa cuándo se recoge. Un fruto arrancado verde para que aguante el viaje puede ponerse rojo y blando por fuera, porque el etileno hace su parte, pero ya está desconectado de la planta: nadie le sigue mandando azúcar. Madurar en la rama y madurar en un camión no es lo mismo, aunque por fuera se parezcan.",
       "Lo que comes es el final de un viaje larguísimo: una roca, un hongo, una raíz, una tubería, una hoja, una flor y una promesa. Y ahora ese viaje sigue dentro de ti.",
     ],
   },
@@ -275,51 +222,32 @@ export const NUTRICION_ANIMAL: Vineta[] = [
     src: src("animal", 1),
     titulo: "Falta una rama del viaje",
     paragraphs: [
-      "Hasta aquí todo salía de una planta. Pero en tu plato hay cosas que no son plantas: un huevo, un filete, un queso, una sardina.",
-      "Y ninguno de esos animales ha fabricado nada de cero. Comieron plantas, o se comieron a alguien que comió plantas. Siempre.",
-      "Sigue el hilo hacia atrás en cualquier alimento del mundo y acabas en el mismo sitio: en una hoja o en un alga atrapando luz.",
-    ],
-  },
-  {
-    src: src("animal", 2),
-    titulo: "Cada eslabón cuesta",
-    paragraphs: [
-      "Un animal se pasa la vida gastando: se mueve, se mantiene caliente, respira, se repara. Casi toda la energía que come la quema en vivir, y solo una parte pequeña queda guardada en su cuerpo.",
-      "Por eso hace falta mucha planta para producir poca carne. No es una opinión: la energía se gasta al usarla, y cada escalón de la cadena pierde la mayor parte de lo que recibió.",
+      "Hasta aquí todo salía de una planta. Pero en tu plato hay cosas que no son plantas: un huevo, un filete, un queso, una sardina. Y ninguno de esos animales ha fabricado nada de cero: comieron plantas, o se comieron a alguien que comió plantas. Siempre.",
+      "Un animal se pasa la vida gastando: se mueve, se mantiene caliente, respira, se repara. Casi toda la energía que come la quema en vivir, y solo una parte pequeña queda guardada en su cuerpo. Por eso hace falta mucha planta para producir poca carne: cada escalón de la cadena pierde la mayor parte de lo que recibió.",
       "Es la misma razón por la que en el mundo hay muchísima más hierba que vacas, y muchas más vacas que leones.",
     ],
   },
   {
-    src: src("animal", 3),
+    src: src("animal", 2),
     titulo: "Pero el animal también hace trabajo",
     paragraphs: [
       "Si solo perdiera, no tendría sentido comerlo. Lo que pasa es que además transforma y concentra.",
-      "Ordena los aminoácidos en una proporción muy parecida a la que necesitas tú, y de ahí viene eso de «proteína completa». Guarda el hierro dentro de una molécula que tu intestino absorbe mucho mejor que el hierro de las plantas. Acumula vitaminas en su hígado y en su grasa. Y alarga las grasas cortas del vegetal hasta las largas que tu cerebro usa.",
-      "Comer animal es, en parte, aprovechar un trabajo ya hecho: él pasó por el proceso lento y tú recibes el resultado.",
+      "Ordena los aminoácidos en una proporción muy parecida a la que necesitas tú, y de ahí viene eso de «proteína completa». Guarda el hierro dentro de una molécula que tu intestino absorbe mucho mejor que el de las plantas. Acumula vitaminas en su hígado y en su grasa. Y alarga las grasas cortas del vegetal hasta las largas que usa tu cerebro. Comer animal es, en parte, aprovechar un trabajo ya hecho.",
+      "Y hay una vitamina que rompe el esquema: la B12. No la fabrica ninguna planta… pero tampoco ningún animal. La fabrican bacterias: el animal las lleva en su tubo digestivo o las traga con la tierra, y va guardando la vitamina en su hígado y en su músculo. Nosotros la sacamos de ahí.",
+      "Por eso es la única que una alimentación totalmente vegetal necesita tomar aparte. No es un defecto de las plantas: ese trabajo lo hacen microbios y hay que ir a buscarlo donde esté. Otra vez lo mismo que viste con tu microbiota y con las raíces.",
     ],
   },
   {
-    src: src("animal", 4),
-    titulo: "La B12 no la hace ni la planta ni el animal",
-    paragraphs: [
-      "Hay una vitamina que rompe el esquema: la B12. No la fabrica ninguna planta… pero tampoco ningún animal.",
-      "La fabrican bacterias. El animal las lleva en su tubo digestivo o las traga con la tierra, y va guardando la vitamina en su hígado y en su músculo. Nosotros la sacamos de ahí.",
-      "Por eso es la única que una alimentación totalmente vegetal necesita tomar aparte. No es un defecto de las plantas: es que ese trabajo concreto lo hacen microbios, y hay que ir a buscarlo donde esté.",
-      "Otra vez lo mismo que ya viste con tu microbiota y con las raíces: sin bacterias, esto no funciona.",
-    ],
-  },
-  {
-    src: src("animal", 5),
+    src: src("animal", 3),
     titulo: "En el mar pasa igual, pero empieza en un alga",
     paragraphs: [
       "El mar no tiene hojas, y aun así tiene la misma historia. Ahí abajo hay algas microscópicas flotando que hacen fotosíntesis exactamente igual: son las hojas invisibles del planeta, y producen buena parte del oxígeno que respiras.",
-      "Ellas son las que fabrican los omega-3 largos. El pez pequeño se las come, el pez grande se come al pequeño, y con cada mordisco se van acumulando.",
-      "Así que el salmón no inventa su omega-3: lo heredó de un alga. Cuando lo comes, estás al final de una cadena que empezó en algo que no se ve a simple vista.",
+      "Ellas son las que fabrican los omega-3 largos. El pez pequeño se las come, el pez grande se come al pequeño, y con cada mordisco se van acumulando. Así que el salmón no inventa su omega-3: lo heredó de un alga.",
       "Y por el mismo camino se concentra lo que no queremos: el mercurio también sube de eslabón en eslabón, y por eso se acumula en los peces grandes y viejos y no en los pequeños.",
     ],
   },
   {
-    src: src("animal", 6),
+    src: src("animal", 4),
     titulo: "El animal solo puede darte lo que comió",
     paragraphs: [
       "Un huevo de gallina que ha picoteado hierba y bichos no lleva la misma grasa que uno de gallina alimentada solo con grano. La leche de un animal de pasto tampoco es igual que la de uno de pienso.",
@@ -357,7 +285,7 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
     key: "tierra",
     titulo: "La tierra y la raíz",
     resumen: "Cómo sale un mineral de una roca, se disuelve en el suelo y entra en una planta.",
-    cover: src("tierra", 1),
+    cover: portada("tierra"),
     emoji: "🌱",
     vinetas: NUTRICION_TIERRA,
   },
@@ -365,7 +293,7 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
     key: "planta",
     titulo: "Una planta por dentro",
     resumen: "Dos tuberías, una pared de fibra y una despensa. Y sube el agua sin tener corazón.",
-    cover: src("planta", 1),
+    cover: portada("planta"),
     emoji: "🌿",
     vinetas: NUTRICION_PLANTA,
   },
@@ -373,7 +301,7 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
     key: "hoja",
     titulo: "Una hoja por dentro",
     resumen: "La fábrica: aire, agua y luz entran; salen comida y el oxígeno que respiras.",
-    cover: src("hoja", 1),
+    cover: portada("hoja"),
     emoji: "🍃",
     vinetas: NUTRICION_HOJA,
   },
@@ -381,7 +309,7 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
     key: "fruta",
     titulo: "La fruta, la verdura y sus colores",
     resumen: "De la flor al fruto, la orden de madurar y qué hace cada color.",
-    cover: src("fruta", 1),
+    cover: portada("fruta"),
     emoji: "🍓",
     vinetas: NUTRICION_FRUTA,
   },
@@ -389,7 +317,7 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
     key: "animal",
     titulo: "Cuando el nutriente pasa por un animal",
     resumen: "La otra rama: la cadena, lo que el animal concentra, la B12 y el omega-3 que era de un alga.",
-    cover: src("animal", 1),
+    cover: portada("animal"),
     emoji: "🥚",
     vinetas: NUTRICION_ANIMAL,
   },
