@@ -5,8 +5,8 @@ import type { Vineta } from "./ComicViewer";
 // HISTORIA DE LA FILOSOFÍA (Cultura). Tagline: «La búsqueda de la sabiduría —
 // cómo la humanidad aprendió a pensar por sí misma».
 //
-// Mismo modelo que las demás Historias: ETAPAS (con intro) → SUB-HITOS (cada uno
-// con su cómic: pregunta-gancho + cuerpo + dato curioso, foto + texto a la
+// Mismo modelo que las demás Historias: ETAPAS → SUB-HITOS (cada uno
+// con su cómic: cuerpo + dato curioso, foto + texto a la
 // derecha). Las 13 etapas están COMPLETAS (de «Antes de la filosofía» hasta
 // «Pensar el futuro»). Fotos planas en /recorrido/cultura/historiafilosofia/<subKey>.webp
 // (el nombre del archivo = key del sub-hito). El texto se pinta con `separarFrases`
@@ -15,7 +15,9 @@ import type { Vineta } from "./ComicViewer";
 // CÓMO SE CUENTA (igual que en Historia Universal y en las religiones): no se
 // trata de contar qué dijo cada filósofo, sino de que se ENTIENDA qué problema
 // tenía delante y por qué su respuesta cambió algo. Esquema de cada momento:
-//     pregunta gancho  →  cuerpo (el problema y la respuesta)  →  «Dato curioso»
+//     cuerpo (el problema y la respuesta)  →  «Dato curioso»
+// El dato curioso NO es obligatorio: solo si de verdad hay algo curioso que
+// contar. Si no lo hay, el momento acaba en el cuerpo.
 // y, cuando el tema lo pide (la caverna, el juicio de Sócrates, el manual
 // estoico, la duda de Descartes, el imperativo de Kant, la falsación…), se le
 // añaden páginas «Profundiza» con el parámetro `extras`: viñetas EXTRA del mismo
@@ -51,27 +53,40 @@ const foto = (_era: string, sub: string) =>
 interface Profundiza {
   titulo: string;
   cuerpo: string[];
-  dato?: string;
+  /** Uno o dos datos curiosos (ver `Datos`). */
+  dato?: Datos;
 }
 
-// Sub-hito con su cómic: viñeta principal (`pregunta` gancho + `cuerpo` + `dato`
-// curioso) y, opcionalmente, páginas «Profundiza» detrás.
+/** Los datos curiosos de un momento: uno («Dato curioso: …»), dos (el segundo
+ *  escrito como «Dato curioso II: …») o ninguno. */
+type Datos = string | string[];
+
+const enLista = (x?: Datos) => (x == null ? [] : Array.isArray(x) ? x : [x]);
+const esProfundiza = (x: unknown): x is Profundiza[] =>
+  Array.isArray(x) && typeof x[0] === "object";
+
+// Sub-hito con su cómic: viñeta principal (`pregunta` gancho + `cuerpo` + hasta
+// dos datos curiosos, OPCIONALES) y, opcionalmente, páginas «Profundiza» detrás.
+// Si el momento no tiene ningún dato curioso pero sí «Profundiza», se pasan los
+// extras directamente en su lugar (sin `undefined` de relleno).
 const hito = (
   era: string, key: string, titulo: string, fecha: string,
-  pregunta: string, cuerpo: string[], dato?: string, extras?: Profundiza[],
+  pregunta: string, cuerpo: string[],
+  datosOExtras?: Datos | Profundiza[], masExtras?: Profundiza[],
 ): SubHito => {
+  const datos = esProfundiza(datosOExtras) ? [] : enLista(datosOExtras);
+  const extras = esProfundiza(datosOExtras) ? datosOExtras : masExtras;
   const src = foto(era, key);
   const paragraphs: string[] = [];
   if (pregunta) paragraphs.push(pregunta);
-  paragraphs.push(...cuerpo);
-  if (dato) paragraphs.push(dato);
+  paragraphs.push(...cuerpo, ...datos);
   const vinetas: Vineta[] = [{ src, eyebrow: fecha, titulo, paragraphs }];
   (extras ?? []).forEach((e) => {
     vinetas.push({
       src,
       eyebrow: "Profundiza",
       titulo: e.titulo,
-      paragraphs: e.dato ? [...e.cuerpo, e.dato] : e.cuerpo,
+      paragraphs: [...e.cuerpo, ...enLista(e.dato)],
     });
   });
   return { key, titulo, foto: src, vinetas };
@@ -82,11 +97,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "antes-filosofia",
     titulo: "Antes de la filosofía",
     anio: "Hasta el siglo VI a. C.",
-    intro:
-      "Antes de la razón estaban los mitos. Mucho antes de que existieran filósofos, los seres humanos ya intentaban comprender el mundo. ¿Por qué llueve? ¿Por qué morimos? ¿Quién creó el universo? Las respuestas no llegaban mediante experimentos o razonamientos, sino a través de relatos transmitidos de generación en generación. En Mesopotamia, Egipto, la India o China surgieron mitos que explicaban el origen del mundo, el paso de las estaciones o el destino de los seres humanos. Aquellas historias no eran simples cuentos: representaban la forma en que las primeras civilizaciones entendían la realidad. Pero poco a poco ocurrió algo inesperado. Algunos pensadores empezaron a sospechar que quizá el universo no funcionaba por capricho de los dioses, sino siguiendo leyes que podían descubrirse mediante la observación y el razonamiento. Ese cambio, conocido como el paso del mito al logos, marcaría el nacimiento de la filosofía.",
     subhitos: [
       hito("antes-filosofia", "mito-logos", "Del mito al logos", "≈Siglo VI a. C.",
-        "¿Y si el universo tuviera reglas en lugar de caprichos?",
+        "",
         [
           "Durante miles de años, casi todas las civilizaciones habían explicado el mundo mediante mitos. Si había una tormenta era porque un dios estaba enfadado. Si el Sol salía cada mañana era porque una divinidad lo guiaba por el cielo. Los fenómenos naturales dependían de la voluntad de los dioses.",
           "Sin embargo, en las ciudades griegas de Asia Menor comenzó a surgir una idea completamente nueva. Algunos pensadores dejaron de preguntarse qué dios provocaba un fenómeno y empezaron a preguntarse qué causa natural lo producía.",
@@ -97,14 +110,14 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la palabra lógica procede precisamente de logos, porque ambas comparten la idea de razonar siguiendo argumentos en lugar de recurrir únicamente a la tradición o la autoridad."),
       hito("antes-filosofia", "egipto-mesopotamia", "Egipto y Mesopotamia", "Milenios antes de la filosofía",
-        "¿Podía existir sabiduría antes de la filosofía?",
+        "",
         [
           "Mucho antes de que aparecieran los filósofos griegos, las civilizaciones de Egipto y Mesopotamia ya habían desarrollado conocimientos sorprendentes sobre matemáticas, astronomía, medicina y organización política.",
           "Los sacerdotes observaban el cielo para predecir las crecidas del Nilo o elaborar calendarios, mientras escribas y estudiosos recopilaban conocimientos sobre geometría, agricultura y leyes. Sin embargo, estos saberes estaban estrechamente ligados a la religión y a la autoridad de los gobernantes.",
           "La filosofía nacería cuando algunos pensadores decidieran separar el conocimiento de la tradición religiosa y preguntarse si las cosas podían explicarse mediante la razón.",
         ]),
       hito("antes-filosofia", "vedas-upanishads", "Los Vedas y las Upanishads", "≈1500-500 a. C.",
-        "¿Quiénes somos realmente?",
+        "",
         [
           "Mientras en Grecia comenzaba a desarrollarse la filosofía, en la India surgían textos que planteaban preguntas profundamente filosóficas sobre la existencia.",
           "Los Vedas recogían antiguos himnos y enseñanzas religiosas, pero fueron las Upanishads las que introdujeron cuestiones que todavía hoy siguen siendo objeto de reflexión: ¿qué es el alma?, ¿qué relación existe entre el individuo y el universo?, ¿qué significa alcanzar la verdadera libertad?",
@@ -112,14 +125,14 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: las Upanishads fueron escritas varios siglos antes de Platón y ya discutían cuestiones sobre la conciencia, la identidad y la realidad que siguen debatiéndose en la filosofía contemporánea."),
       hito("antes-filosofia", "sabios-china", "Los primeros sabios de China", "≈Siglo VI a. C.",
-        "¿Y si la pregunta más importante no fuera cómo empezó el universo, sino cómo debemos vivir?",
+        "",
         [
           "Mientras los filósofos griegos trataban de descubrir de qué estaba hecho el cosmos, en China algunos pensadores dirigían su atención hacia la vida cotidiana y las relaciones humanas.",
           "Allí comenzó a desarrollarse una tradición intelectual que buscaba la armonía, el equilibrio y el buen gobierno. Muy pronto aparecerían figuras como Confucio y Lao Tse, cuyas enseñanzas influirían en cientos de millones de personas durante más de dos mil años.",
           "Su forma de pensar era diferente a la griega, pero perseguía el mismo objetivo: comprender mejor al ser humano y su lugar en el mundo.",
         ]),
       hito("antes-filosofia", "por-que-nacio", "¿Por qué nació la filosofía?", "≈Siglo VI a. C.",
-        "¿Por qué, después de tantos milenios, alguien empezó de repente a pensar de otra manera?",
+        "",
         [
           "Durante miles de años los seres humanos se habían conformado con las explicaciones de los mitos. Entonces, ¿por qué hacia el siglo VI a. C. algunas personas empezaron a buscar respuestas mediante la razón?",
           "No fue casualidad que ocurriera en las ciudades griegas. Allí se daban unas condiciones muy especiales. El comercio ponía en contacto a pueblos con dioses y costumbres muy distintos, lo que hacía sospechar que ninguna versión del mundo era la única verdadera.",
@@ -134,11 +147,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "primeros-sabios",
     titulo: "Los primeros sabios",
     anio: "≈1200-500 a. C.",
-    intro:
-      "Antes de Sócrates, y muy lejos de Grecia, algunos pensadores ya se preguntaban cómo debía vivir el ser humano. Y hay algo que sigue desconcertando a los historiadores: ocurrió casi al mismo tiempo en lugares que apenas se conocían entre sí. Entre los siglos VIII y V a. C., en Persia, en China, en la India y en Grecia, aparecieron figuras que dejaron de preguntar «qué quieren los dioses» para preguntar «qué debo hacer yo». El filósofo Karl Jaspers llamó a ese periodo la Era Axial, el eje sobre el que gira todo lo que pensamos después. Sus respuestas fueron muy distintas —el bien y el mal como elección, la armonía social, el fluir con la naturaleza, el fin del sufrimiento—, pero todas compartían un giro decisivo: la responsabilidad se traslada al ser humano. Ninguno de ellos escribió un libro con su nombre; todos fueron recordados por sus discípulos.",
     subhitos: [
       hito("primeros-sabios", "zoroastro", "Zoroastro", "≈1200-1000 a. C. (fecha discutida)",
-        "¿De dónde viene el mal, si el mundo lo hizo alguien bueno?",
+        "",
         [
           "En la antigua Persia, un sacerdote llamado Zaratustra —Zoroastro para los griegos— planteó una de las preguntas más difíciles que existen, y le dio una respuesta de una limpieza lógica admirable: el mal no viene de lo divino, viene de un principio opuesto, y el universo entero es el escenario de esa lucha.",
           "Frente a Ahura Mazda, el Señor Sabio, la luz, la verdad y el orden. Frente a él, el espíritu de la destrucción y de la mentira. Y en el medio, cada persona con una capacidad decisiva: ELEGIR.",
@@ -149,14 +160,13 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Nietzsche eligió justamente su nombre para el personaje de «Así habló Zaratustra», porque quería que el primero que había dividido el mundo en bien y mal fuera también el que anunciara el fin de esa división."),
       hito("primeros-sabios", "confucio", "Confucio", "≈551-479 a. C.",
-        "¿Se puede arreglar una sociedad rota sin más leyes ni más castigos?",
+        "",
         [
           "Confucio vivió en una China partida en reinos que se hacían la guerra sin descanso, con nobles corruptos y campesinos arruinados. Su diagnóstico fue insólito para un momento así: el problema no es que falten leyes ni ejércitos, es que falta carácter.",
           "Su tesis central es que el orden social no se impone desde arriba, se contagia. Un gobernante que castiga mucho consigue miedo y trampas; un gobernante que se comporta bien consigue que los demás quieran parecérsele. Decía que gobernar con virtud es como la estrella polar: se queda quieta y todas las demás giran a su alrededor.",
           "Sus conceptos clave son cuatro y merece la pena entenderlos. El ren, humanidad o benevolencia: la capacidad de ponerse en el lugar del otro. El li, los ritos y los modales, que a él no le parecían tonterías sino el entrenamiento diario del respeto —quien saluda bien mil veces acaba respetando de verdad—. El xiao, el respeto a los padres y a los mayores, que era el modelo de todas las demás relaciones. Y el junzi, la persona ejemplar, que no lo es por nacimiento sino por conducta.",
           "Ese último punto es el más revolucionario: convirtió la nobleza en algo que se merece y no que se hereda. En una sociedad aristocrática, decir que un campesino educado y decente es más noble que un príncipe indigno era subversivo.",
           "Y formuló, cinco siglos antes del Evangelio, su propia versión de la regla de oro, en negativo: no hagas a los demás lo que no querrías que te hicieran a ti.",
-          "Nunca pretendió fundar una religión. Preguntado por los espíritus y por lo que hay después de la muerte, respondió que todavía no sabía bastante de esta vida como para opinar de la otra. Toda su atención estaba en el aquí: la familia, el trabajo, el gobierno, el estudio.",
           "Murió convencido de haber fracasado: se pasó la vida buscando un gobernante que aplicara sus ideas y ninguno lo hizo de forma duradera. Sus enseñanzas las recopilaron sus discípulos en las Analectas, un libro de conversaciones brevísimas. Con el tiempo se convirtieron en la base de la educación y la administración de China, Corea, Japón y Vietnam durante más de dos mil años.",
         ],
         "Dato curioso: durante trece siglos, para ser funcionario del Imperio chino había que aprobar unos exámenes durísimos sobre los clásicos confucianos, abiertos en teoría a cualquier varón. Fue el primer sistema del mundo que elegía a sus gobernantes por examen y no por familia, y duró hasta 1905."),
@@ -172,7 +182,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: el árbol genealógico documentado de la familia de Confucio es probablemente el más largo del mundo: se registra desde hace unos 2.500 años y reúne a más de dos millones de descendientes identificados."),
       hito("primeros-sabios", "laotse", "Lao Tse", "≈Siglo VI-IV a. C. (tradicionalmente)",
-        "¿Y si el problema fuera precisamente intentar controlarlo todo?",
+        "",
         [
           "Mientras Confucio proponía orden, educación y ritos, la tradición atribuye a Lao Tse la idea contraria: el universo ya funciona por su cuenta, y buena parte de nuestro sufrimiento viene de forzarlo.",
           "Su libro, el Tao Te Ching, tiene ochenta y un capítulos brevísimos y unos cinco mil caracteres, y está escrito a propósito de forma esquiva, llena de paradojas: el que sabe no habla; lo blando vence a lo duro; el vacío es lo que hace útil una taza.",
@@ -194,10 +204,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: varios emperadores chinos murieron intoxicados por los elixires de inmortalidad que les preparaban sus alquimistas, hechos a base de mercurio. Buscando vivir para siempre, se envenenaron."),
       hito("primeros-sabios", "buda", "Buda", "≈Siglo VI a. C.",
-        "¿Se puede acabar con el sufrimiento sin necesidad de ningún dios?",
+        "",
         [
           "Siddhartha Gautama era hijo de un noble del norte de la India y creció, según la tradición, protegido de todo lo desagradable. Un día salió del palacio y vio por primera vez a un anciano, a un enfermo y a un cadáver. Aquello le rompió la vida: entendió que nada de lo que tenía lo salvaría de eso.",
-          "Lo dejó todo y probó el camino opuesto: años de ascetismo extremo, ayunos hasta casi morir. Tampoco funcionó, y de ahí sacó su primera conclusión: ni el placer ni el castigo del cuerpo liberan. Existe un camino medio.",
           "Meditando bajo un árbol alcanzó lo que llamó el despertar, y desde entonces fue Buda, «el despierto». No dijo ser un dios, ni un enviado, ni un profeta: dijo haber comprendido algo, y que cualquiera podía comprobarlo por sí mismo. Eso lo convierte, filosóficamente, en un caso rarísimo entre los fundadores de tradiciones.",
           "Su planteamiento son las Cuatro Nobles Verdades, y está construido exactamente como una consulta médica: hay sufrimiento; el sufrimiento tiene una causa; si se elimina la causa, cesa; y existe un tratamiento.",
           "La causa que señaló es la sed: el deseo constante de que las cosas sean distintas de como son, y el apego a que permanezcan cuando todo cambia. Y el tratamiento es el Óctuple Sendero, que combina ética, atención y meditación, sin exigir creer nada por fe.",
@@ -206,12 +215,11 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: sus últimas palabras, según los textos, son un encargo incómodo para cualquier escuela: no dependáis de mí, sed vuestra propia lámpara."),
       hito("primeros-sabios", "budismo-filosofia", "El budismo como filosofía", "Desde el siglo VI a. C.",
-        "¿Es el budismo una religión o una filosofía de la mente?",
+        "",
         [
-          "La pregunta lleva décadas discutiéndose en Occidente, y la respuesta honesta es que depende de qué budismo mires. Tiene templos, monjes, ritos y devoción popular, como una religión; y a la vez tiene un análisis de la mente, una teoría del conocimiento y una ética que se pueden estudiar sin creer en nada, como una filosofía.",
+          "Si el budismo es una religión o una filosofía de la mente lleva décadas discutiéndose en Occidente, y la respuesta honesta es que depende de qué budismo mires. Tiene templos, monjes, ritos y devoción popular, como una religión; y a la vez tiene un análisis de la mente, una teoría del conocimiento y una ética que se pueden estudiar sin creer en nada, como una filosofía.",
           "Su parte estrictamente filosófica es sofisticadísima. Sostiene tres tesis sobre la realidad: todo es impermanente (nada de lo que existe se mantiene igual); nada tiene una esencia independiente (todo existe en relación con otras cosas y por causas); y el sufrimiento nace de tratar lo cambiante como si fuera fijo.",
           "De ahí sale un análisis del yo que la filosofía occidental no alcanzó hasta el siglo XVIII: cuando buscas «tu yo» solo encuentras sensaciones, percepciones, recuerdos e impulsos que se suceden. Es exactamente lo que dirá David Hume al examinar su propia mente y no encontrar más que «un haz de percepciones». Hume no leyó a Buda, pero llegó al mismo sitio.",
-          "Y desarrolló una lógica y una escolástica propias: durante siglos, en universidades monásticas como Nalanda, se discutió por escrito sobre causalidad, percepción, lenguaje y vacuidad con un rigor comparable al de la escolástica medieval europea. Nagarjuna, en el siglo II, escribió argumentos que hoy se estudian en cursos de lógica y de filosofía del lenguaje.",
           "Su otra aportación es de método: propone la introspección entrenada como forma de conocimiento. En lugar de razonar sobre la mente desde fuera, observar la propia mente sistemáticamente durante años. Occidente lo ignoró durante siglos y hoy lo estudia con escáneres: hay cientos de investigaciones sobre lo que la meditación hace en el cerebro, y el Dalái Lama lleva décadas organizando encuentros con neurocientíficos.",
           "Y el resultado más visible de ese cruce está en las consultas: el mindfulness que hoy se receta para el dolor crónico, la ansiedad y la prevención de recaídas depresivas es una adaptación deliberadamente laica de la meditación budista de atención plena, diseñada a finales de los años setenta.",
           "Ese es su lugar en esta historia: una tradición que, sin dios y sin dogma, hizo hace 2.500 años preguntas que la psicología y la filosofía de la mente están respondiendo ahora.",
@@ -223,11 +231,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "grecia-razon",
     titulo: "Grecia descubre la razón",
     anio: "Siglos VI-V a. C.",
-    intro:
-      "Por primera vez, alguien intentó explicar el universo sin recurrir a los dioses. Alrededor del siglo VI a. C., en las ciudades griegas de la costa de Asia Menor, ocurrió algo que cambiaría la historia del pensamiento. Mientras la mayoría de las civilizaciones seguían explicando el mundo mediante mitos y relatos religiosos, un pequeño grupo de pensadores comenzó a buscar respuestas observando la naturaleza. No pretendían negar a los dioses. Lo que buscaban era comprender si el universo seguía unas leyes propias que podían descubrirse mediante la razón. Todos compartían una misma pregunta: ¿de qué está hecho el universo? Hoy esta pregunta puede parecernos sencilla, pero en aquella época era revolucionaria. Por primera vez, la explicación del mundo dejaba de depender únicamente de la tradición y comenzaba a apoyarse en la observación y el razonamiento. Por eso se les conoce como los filósofos presocráticos, ya que vivieron antes de Sócrates y sentaron las bases de toda la filosofía occidental.",
     subhitos: [
       hito("grecia-razon", "tales-mileto", "Tales de Mileto", "≈624-546 a. C.",
-        "¿Cuál es el origen de todas las cosas?",
+        "",
         [
           "Tales suele ser considerado el primer filósofo de Occidente. Su gran mérito no fue acertar en sus respuestas, sino cambiar la forma de hacer las preguntas.",
           "Observando la naturaleza llegó a la conclusión de que el agua era el principio de todo. Había visto que los seres vivos necesitaban agua para vivir, que la lluvia hacía crecer las plantas y que el agua podía transformarse en hielo o vapor. Pensó que quizá toda la realidad procedía de ese elemento.",
@@ -236,7 +242,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Aristóteles decía que con Tales comenzó la filosofía porque fue el primero en buscar un principio racional para explicar el universo."),
       hito("grecia-razon", "anaximandro", "Anaximandro", "≈610-546 a. C.",
-        "¿Y si el origen del universo no fuera ningún elemento conocido?",
+        "",
         [
           "Discípulo de Tales, Anaximandro pensó que el agua no podía explicar todas las cosas. Si el agua era húmeda, ¿cómo podía dar origen al fuego, que es seco?",
           "Propuso entonces una idea mucho más abstracta: el origen de todo era el ápeiron, una sustancia infinita, eterna e indefinida de la que nacían todas las cosas y a la que todas regresaban.",
@@ -245,7 +251,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: algunos consideran a Anaximandro el primer científico de la historia por intentar explicar fenómenos naturales sin recurrir a causas sobrenaturales."),
       hito("grecia-razon", "anaximenes", "Anaxímenes", "≈586-526 a. C.",
-        "¿Puede un solo elemento transformarse en todo lo que existe?",
+        "",
         [
           "Anaxímenes volvió a buscar un elemento concreto como origen del universo y eligió el aire.",
           "Y su argumento no era caprichoso: el aire es invisible pero está en todas partes, se mueve por sí mismo, es lo que respiramos —es decir, parece ser la vida misma— y, sobre todo, se puede ver cambiar de estado. Eso último es lo importante.",
@@ -255,7 +261,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: los tres primeros filósofos de la historia —Tales, Anaximandro y Anaxímenes— eran de la misma ciudad, Mileto, y fueron maestro y discípulos. La filosofía no nació de un genio solitario: nació de una conversación entre vecinos que duró dos generaciones."),
       hito("grecia-razon", "pitagoras", "Pitágoras", "≈570-495 a. C.",
-        "¿Y si el universo estuviera hecho de números?",
+        "",
         [
           "Pitágoras es conocido por el famoso teorema que lleva su nombre, pero fue mucho más que un matemático.",
           "Creía que la esencia del universo no eran los elementos materiales, sino las matemáticas. Observó que la música, la geometría y el movimiento de los astros seguían proporciones numéricas y concluyó que el cosmos entero estaba gobernado por los números.",
@@ -264,7 +270,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: los pitagóricos descubrieron que las notas musicales agradables siguen proporciones matemáticas muy precisas."),
       hito("grecia-razon", "heraclito", "Heráclito", "≈540-480 a. C.",
-        "¿Existe realmente algo que permanezca igual?",
+        "",
         [
           "Heráclito observó que todo cambia constantemente. Los ríos fluyen, las estaciones se suceden, las personas envejecen y nada permanece inmóvil.",
           "Por eso afirmaba: «Nadie puede bañarse dos veces en el mismo río».",
@@ -273,7 +279,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la idea de que todo está en constante cambio sigue influyendo hoy en la física, la biología y muchas corrientes filosóficas modernas."),
       hito("grecia-razon", "parmenides", "Parménides", "≈515-450 a. C.",
-        "¿Y si el cambio fuera solo una ilusión?",
+        "",
         [
           "Parménides defendía exactamente lo contrario que Heráclito.",
           "Si algo cambia, decía, deja de ser lo que era. Pero de la nada no puede surgir nada. Por tanto, el verdadero ser debe ser eterno, único e inmutable.",
@@ -301,14 +307,14 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("grecia-razon", "empedocles", "Empédocles", "≈494-434 a. C.",
-        "¿Y si todos tuvieran un poco de razón?",
+        "",
         [
           "Empédocles propuso una solución intermedia. El universo no estaba formado por un único elemento, sino por cuatro: tierra, agua, aire y fuego.",
           "Estos elementos nunca desaparecen; simplemente se mezclan y separan gracias a dos fuerzas que llamó Amor y Discordia.",
           "Aunque hoy sabemos que la materia no funciona así, su teoría de los cuatro elementos dominaría la ciencia occidental durante casi dos mil años.",
         ]),
       hito("grecia-razon", "democrito", "Demócrito", "≈460-370 a. C.",
-        "¿Y si toda la materia estuviera formada por partículas invisibles?",
+        "",
         [
           "Demócrito imaginó que, si dividíamos cualquier objeto una y otra vez, acabaríamos llegando a unas partículas tan pequeñas que ya no podrían romperse.",
           "Las llamó átomos, palabra que en griego significa precisamente «indivisible».",
@@ -324,11 +330,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "hombre-centro",
     titulo: "El hombre en el centro",
     anio: "Siglos V-IV a. C.",
-    intro:
-      "La filosofía deja de preguntarse de qué está hecho el universo y comienza a preguntarse cómo debemos vivir. Los filósofos presocráticos habían dedicado siglos a intentar comprender la naturaleza. ¿Cuál era el origen del universo? ¿Qué elemento componía todas las cosas? ¿Por qué cambia la realidad? Pero en el siglo V a. C. Atenas vivía una época extraordinaria. La democracia comenzaba a desarrollarse, los ciudadanos debatían sobre leyes, justicia y política, y la vida pública cobraba una importancia nunca vista. En ese contexto apareció un grupo de pensadores que cambió completamente el rumbo de la filosofía. En lugar de preguntarse por las estrellas, comenzaron a preguntarse por las personas. ¿Qué significa vivir bien? ¿Qué es la justicia? ¿Existe la verdad? ¿Cómo debemos educar a nuestros hijos? Desde ese momento, la filosofía ya no trataría solo del universo, sino también del propio ser humano.",
     subhitos: [
       hito("hombre-centro", "sofistas", "Los sofistas", "≈Siglo V a. C.",
-        "¿Existe una verdad absoluta... o todo depende del punto de vista?",
+        "",
         [
           "Los sofistas fueron los primeros grandes maestros profesionales de Grecia. Viajaban de ciudad en ciudad enseñando oratoria, política y argumentación a cambio de dinero.",
           "En una democracia como la ateniense, hablar bien era una habilidad fundamental. Un buen discurso podía convencer a una asamblea, ganar un juicio o alcanzar el poder.",
@@ -338,7 +342,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: aunque durante siglos los sofistas tuvieron mala fama por las críticas de Platón, hoy muchos historiadores consideran que fueron excelentes educadores y contribuyeron enormemente al desarrollo de la democracia ateniense."),
       hito("hombre-centro", "socrates", "Sócrates", "470-399 a. C.",
-        "¿Cómo puede alguien saber que tiene razón?",
+        "",
         [
           "Sócrates nunca escribió un solo libro. Todo lo que sabemos sobre él procede principalmente de su discípulo Platón.",
           "En lugar de dar respuestas, Sócrates hacía preguntas. Muchas preguntas.",
@@ -384,7 +388,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("hombre-centro", "platon", "Platón", "427-347 a. C.",
-        "¿Existe una realidad más perfecta que la que vemos?",
+        "",
         [
           "La ejecución de Sócrates convenció a Platón de que la mayoría podía equivocarse. Si Atenas había condenado al hombre más sabio que conocía, quizá la democracia no era suficiente para garantizar la justicia.",
           "Platón imaginó entonces que el mundo que percibimos con los sentidos es solo una copia imperfecta de una realidad mucho más perfecta: el Mundo de las Ideas.",
@@ -425,7 +429,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("hombre-centro", "aristoteles", "Aristóteles", "384-322 a. C.",
-        "¿Y si el conocimiento comenzara observando el mundo real?",
+        "",
         [
           "Aristóteles estudió durante veinte años en la Academia de Platón, pero acabó discrepando de su maestro.",
           "Mientras Platón buscaba las Ideas perfectas, Aristóteles pensaba que el conocimiento debía comenzar observando cuidadosamente la naturaleza.",
@@ -465,11 +469,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "buena-vida",
     titulo: "Cómo vivir una buena vida",
     anio: "Helenismo y Roma",
-    intro:
-      "Cuando el mundo cambió, la filosofía dejó de buscar la ciudad perfecta y empezó a enseñar cómo ser feliz. En el año 323 a. C., Alejandro Magno murió después de haber conquistado uno de los mayores imperios de la historia. Su imperio se fragmentó y las antiguas ciudades griegas, como Atenas, perdieron la independencia que habían disfrutado durante siglos. La política dejó de estar en manos de los ciudadanos y muchas personas comenzaron a sentir que ya no podían controlar el rumbo del mundo. Ante esa nueva realidad, la filosofía cambió de objetivo. En lugar de preguntarse cuál era el mejor gobierno o cómo estaba formado el universo, los filósofos comenzaron a hacerse una pregunta mucho más íntima: ¿cómo puede una persona ser feliz, incluso cuando el mundo a su alrededor es caótico? Así nacieron algunas de las escuelas filosóficas más prácticas de toda la historia.",
     subhitos: [
       hito("buena-vida", "diogenes-cinismo", "Diógenes y el cinismo", "≈412-323 a. C.",
-        "¿Y si necesitáramos mucho menos de lo que creemos?",
+        "",
         [
           "Diógenes de Sinope fue probablemente el filósofo más extravagante de la Antigüedad.",
           "Pensaba que la sociedad hacía infelices a las personas porque las llenaba de deseos innecesarios: riqueza, fama, poder, lujo o reconocimiento. Para demostrarlo decidió vivir con lo mínimo imprescindible.",
@@ -480,7 +482,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la palabra «cínico» procede del griego kynikos, que significa «como un perro», porque los seguidores de esta escuela defendían una vida sencilla y alejada de las normas sociales."),
       hito("buena-vida", "epicuro-epicureismo", "Epicuro y el epicureísmo", "341-270 a. C.",
-        "¿Qué significa realmente disfrutar de la vida?",
+        "",
         [
           "Hoy muchas personas utilizan la palabra «epicúreo» para describir a alguien que disfruta de los grandes placeres. Sin embargo, Epicuro enseñaba casi exactamente lo contrario.",
           "Para él, la felicidad no consistía en comer mucho, acumular riquezas o buscar lujos constantes. Todo eso generaba nuevos deseos y, con ellos, nuevas preocupaciones.",
@@ -491,7 +493,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Epicuro consideraba que la amistad era uno de los mayores placeres que podía experimentar un ser humano."),
       hito("buena-vida", "zenon-estoicismo", "Zenón y el estoicismo", "≈334-262 a. C.",
-        "¿Podemos controlar todo lo que nos ocurre?",
+        "",
         [
           "Zenón de Citio observó que gran parte del sufrimiento humano nace de intentar controlar cosas que dependen del azar: la salud, la riqueza, la opinión de los demás o los acontecimientos del mundo.",
           "Por eso enseñó una idea que sigue siendo increíblemente actual: debemos distinguir entre aquello que depende de nosotros... y aquello que no.",
@@ -519,7 +521,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("buena-vida", "pirron-escepticismo", "Pirrón y el escepticismo", "≈360-270 a. C.",
-        "¿Y si nunca pudiéramos estar completamente seguros de nada?",
+        "",
         [
           "Pirrón acompañó a Alejandro Magno en algunos de sus viajes y conoció culturas muy diferentes. Aquello le hizo darse cuenta de que personas igualmente inteligentes defendían ideas completamente opuestas.",
           "Entonces comenzó a preguntarse: ¿cómo sabemos que nuestras creencias son realmente verdaderas?",
@@ -534,11 +536,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "ideas-a-dios",
     titulo: "Del mundo de las ideas al mundo de Dios",
     anio: "Siglos III-V d. C.",
-    intro:
-      "La filosofía griega comenzó a mezclarse con la espiritualidad. Durante siglos, los filósofos griegos habían intentado comprender el universo mediante la razón. Sin embargo, con el paso del tiempo surgió una nueva inquietud. La gente ya no solo quería saber cómo era el mundo, sino también qué sentido tenía la existencia, qué ocurría después de la muerte y cómo podía el ser humano acercarse a lo divino. En este periodo, la filosofía empezó a encontrarse con la religión. Las ideas de Platón adquirieron un significado espiritual y aparecieron pensadores que intentaron unir la razón con la experiencia religiosa. El más importante de todos fue Plotino.",
     subhitos: [
       hito("ideas-a-dios", "plotino", "Plotino", "204-270 d. C.",
-        "¿Existe una realidad superior a todo lo que podemos imaginar?",
+        "",
         [
           "Plotino nació en Egipto durante el Imperio romano, pero desarrolló su pensamiento en Roma. Admiraba profundamente a Platón, aunque creía que sus ideas podían ir todavía más lejos.",
           "Según Plotino, por encima del universo, de los dioses e incluso del pensamiento existía una realidad absolutamente perfecta a la que llamó simplemente: el Uno.",
@@ -549,7 +549,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Plotino era tan humilde que nunca quiso que le hicieran un retrato. Decía que ya era bastante cargar con un cuerpo como para dejar además una imagen de él."),
       hito("ideas-a-dios", "neoplatonismo", "El neoplatonismo", "Siglos III-VI",
-        "¿Puede la filosofía explicar la experiencia religiosa?",
+        "",
         [
           "Las ideas de Plotino dieron origen al neoplatonismo, una corriente filosófica que retomó las enseñanzas de Platón, pero les dio un profundo significado espiritual.",
           "Los neoplatónicos creían que el mundo material era solo un reflejo imperfecto de una realidad superior. El alma humana procedía de ese mundo perfecto y debía esforzarse por regresar a él mediante la virtud, la contemplación y el conocimiento.",
@@ -581,11 +581,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "razon-busca-dios",
     titulo: "Cuando la razón busca a Dios",
     anio: "Edad Media",
-    intro:
-      "Durante casi mil años, la gran pregunta fue si la filosofía podía demostrar aquello que la religión enseñaba. Con la caída del Imperio romano de Occidente en el año 476, Europa cambió profundamente. Muchas ciudades desaparecieron, el comercio disminuyó y gran parte del conocimiento clásico quedó refugiado en monasterios y bibliotecas. Sin embargo, la filosofía no desapareció. Mientras los monjes copiaban las obras de Platón y Aristóteles, en el mundo islámico grandes sabios las traducían al árabe, las comentaban y desarrollaban nuevas ideas. Al mismo tiempo, filósofos judíos intentaban armonizar la tradición hebrea con el pensamiento griego. Durante casi mil años, filósofos de tres religiones distintas compartieron una misma preocupación: ¿puede la razón ayudarnos a comprender a Dios?",
     subhitos: [
       hito("razon-busca-dios", "san-agustin", "San Agustín", "354-430",
-        "¿Qué ocurre cuando un filósofo encuentra la fe?",
+        "",
         [
           "Antes de convertirse al cristianismo, Agustín buscó respuestas en distintas corrientes filosóficas. Durante años leyó a Platón y, especialmente, a Plotino. Aquellas lecturas le convencieron de que la verdad no debía buscarse únicamente en el mundo exterior, sino también dentro de uno mismo.",
           "Tras su conversión escribió algunas de las obras más importantes de la filosofía cristiana, como Las Confesiones y La ciudad de Dios.",
@@ -595,7 +593,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Las Confesiones están consideradas una de las primeras autobiografías de la historia."),
       hito("razon-busca-dios", "avicena", "Avicena", "980-1037",
-        "¿Puede la filosofía explicar la existencia de Dios?",
+        "",
         [
           "Mientras Europa atravesaba la Alta Edad Media, el mundo islámico vivía una auténtica edad de oro del conocimiento.",
           "Uno de sus mayores genios fue Avicena (Ibn Sina), médico, científico y filósofo.",
@@ -604,7 +602,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: se dice que Avicena escribió más de doscientas obras antes de cumplir los cuarenta años."),
       hito("razon-busca-dios", "averroes", "Averroes", "1126-1198",
-        "¿Y si la filosofía y la religión dijeran cosas diferentes?",
+        "",
         [
           "Nacido en Córdoba, durante el esplendor de Al-Ándalus, Averroes dedicó gran parte de su vida a estudiar y comentar las obras de Aristóteles.",
           "Creía que la verdad solo podía ser una. Si parecía existir contradicción entre la filosofía y la religión, era porque los seres humanos habían interpretado mal una de las dos.",
@@ -628,7 +626,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("razon-busca-dios", "maimonides", "Maimónides", "1138-1204",
-        "¿Puede la filosofía fortalecer la fe?",
+        "",
         [
           "Contemporáneo de Averroes y también nacido en Córdoba, Maimónides fue uno de los mayores pensadores del judaísmo.",
           "Intentó demostrar que la filosofía griega y la tradición judía no eran enemigas, sino complementarias.",
@@ -637,7 +635,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Maimónides fue también un médico muy prestigioso y llegó a atender al sultán Saladino."),
       hito("razon-busca-dios", "santo-tomas-aquino", "Santo Tomás de Aquino", "1225-1274",
-        "¿Puede demostrarse racionalmente que Dios existe?",
+        "",
         [
           "Santo Tomás es probablemente el filósofo más importante de toda la Edad Media.",
           "Gracias a las traducciones procedentes del mundo islámico, pudo estudiar en profundidad las obras de Aristóteles y quedó convencido de que la razón y la fe no eran enemigas.",
@@ -665,7 +663,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("razon-busca-dios", "escolastica", "La Escolástica", "Siglos XI-XV",
-        "¿Puede organizarse todo el conocimiento mediante la razón?",
+        "",
         [
           "La Escolástica no fue un filósofo, sino una forma de enseñar y debatir que dominó las universidades medievales.",
           "Los profesores planteaban una pregunta, analizaban los argumentos a favor y en contra y, finalmente, proponían una respuesta razonada.",
@@ -679,11 +677,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "humanistas-alquimistas",
     titulo: "Humanistas, alquimistas y el despertar de la ciencia",
     anio: "Renacimiento",
-    intro:
-      "La humanidad dejó de aceptar la autoridad como única fuente de verdad. A finales de la Edad Media, Europa comenzó a cambiar a una velocidad desconocida. La caída de Constantinopla llevó a muchos sabios griegos a Italia con antiguos manuscritos olvidados, la imprenta permitió difundir las ideas como nunca antes y los grandes viajes demostraron que el mundo era mucho más amplio de lo que se había imaginado. Al mismo tiempo, científicos como Copérnico y Galileo empezaban a cuestionar la visión tradicional del universo. La filosofía también cambió. Durante siglos, la gran pregunta había sido: «¿Cómo demostrar que Dios existe?». Ahora la cuestión era mucho más atrevida: «¿Cómo sabemos que algo es realmente verdadero?». Comenzaba la filosofía moderna.",
     subhitos: [
       hito("humanistas-alquimistas", "humanismo", "El Humanismo", "Siglos XIV-XVI",
-        "¿Y si el ser humano fuera el centro del conocimiento?",
+        "",
         [
           "Los humanistas admiraban profundamente la cultura clásica de Grecia y Roma. Creían que, para construir un mundo mejor, era necesario volver a leer directamente a Platón, Aristóteles, Cicerón y otros autores antiguos.",
           "Pero no querían copiar el pasado. Querían aprender de él.",
@@ -693,7 +689,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: el famoso hombre de Vitruvio de Leonardo da Vinci simboliza precisamente esa nueva confianza en las capacidades del ser humano."),
       hito("humanistas-alquimistas", "nicolas-cusa", "Nicolás de Cusa", "1401-1464",
-        "¿Y si reconocer nuestra ignorancia fuera el principio del conocimiento?",
+        "",
         [
           "Nicolás de Cusa fue uno de los pensadores que marcaron el paso entre la Edad Media y el Renacimiento.",
           "Defendía que Dios era infinito y que la inteligencia humana nunca podría comprenderlo completamente.",
@@ -703,7 +699,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Nicolás de Cusa llegó a imaginar un universo sin un centro absoluto, adelantándose parcialmente a ideas que aparecerían décadas después con Copérnico."),
       hito("humanistas-alquimistas", "hermetismo-alquimia", "Hermetismo y alquimia", "Siglos XV-XVII",
-        "¿Podían descubrirse los secretos ocultos de la naturaleza?",
+        "",
         [
           "Durante el Renacimiento no todos buscaban el conocimiento mediante experimentos o razonamientos.",
           "Muchos pensadores creían que el universo escondía misterios accesibles únicamente a quienes supieran interpretar sus símbolos.",
@@ -713,7 +709,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la famosa Piedra Filosofal no simbolizaba únicamente fabricar oro. Para muchos alquimistas representaba la perfección espiritual."),
       hito("humanistas-alquimistas", "paracelso", "Paracelso", "1493-1541",
-        "¿Puede la experiencia valer más que la tradición?",
+        "",
         [
           "Paracelso fue médico, alquimista y filósofo.",
           "Criticó duramente a los médicos que repetían las enseñanzas antiguas sin comprobar si realmente funcionaban.",
@@ -723,7 +719,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Paracelso popularizó una frase que sigue siendo fundamental en farmacología: «La dosis hace el veneno». Es decir, cualquier sustancia puede ser beneficiosa o perjudicial dependiendo de la cantidad."),
       hito("humanistas-alquimistas", "rosacruces", "Los Rosacruces", "Desde el siglo XVII",
-        "¿Existe un conocimiento reservado para unos pocos?",
+        "",
         [
           "A comienzos del siglo XVII aparecieron unos misteriosos manifiestos que hablaban de una supuesta fraternidad secreta llamada Rosacruz.",
           "Según esos textos, sus miembros poseían antiguos conocimientos sobre filosofía, ciencia, religión y alquimia destinados a mejorar la humanidad.",
@@ -732,7 +728,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: todavía hoy existen organizaciones rosacruces, aunque muy diferentes de las descritas en aquellas primeras leyendas."),
       hito("humanistas-alquimistas", "templarios", "Los templarios y el mito del conocimiento oculto", "Siglos XII-Actualidad",
-        "¿Por qué los templarios aparecen en tantas historias de misterios?",
+        "",
         [
           "Los Caballeros Templarios fueron una orden militar creada durante las Cruzadas para proteger a los peregrinos que viajaban a Tierra Santa.",
           "Con el tiempo acumularon grandes riquezas y poder político, hasta que el rey Felipe IV de Francia ordenó su persecución en 1307.",
@@ -742,7 +738,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: muchas de las historias que hoy asociamos a los templarios fueron inventadas varios siglos después de su desaparición."),
       hito("humanistas-alquimistas", "maquiavelo", "Nicolás Maquiavelo", "1469-1527",
-        "¿Debe un gobernante hacer siempre lo correcto?",
+        "",
         [
           "Mientras muchos filósofos imaginaban cómo debería ser un gobernante ideal, Maquiavelo decidió estudiar cómo actuaban realmente los gobernantes.",
           "En su obra El príncipe analizó la política tal como es, no como le gustaría que fuera.",
@@ -765,11 +761,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "revolucion-pensamiento",
     titulo: "La revolución del pensamiento",
     anio: "Siglos XVII-XVIII",
-    intro:
-      "¿Cómo sabemos que algo es realmente cierto? Durante siglos, los filósofos habían confiado en las enseñanzas de Aristóteles o en la autoridad de la Iglesia. Pero el Renacimiento y la Revolución Científica cambiaron completamente el panorama. Los telescopios mostraban un universo diferente del imaginado por los antiguos. Los experimentos demostraban que incluso las ideas más aceptadas podían estar equivocadas. La filosofía comenzó entonces a hacerse una nueva pregunta: ¿cuál es el mejor camino para alcanzar el conocimiento? Algunos respondieron que la razón era la fuente principal de la verdad. Otros defendieron que todo conocimiento nace de la experiencia. Durante más de un siglo, este debate dominaría la filosofía europea.",
     subhitos: [
       hito("revolucion-pensamiento", "francis-bacon", "Francis Bacon", "1561-1626",
-        "¿Y si dejáramos de adivinar cómo funciona el mundo y empezáramos a comprobarlo?",
+        "",
         [
           "Francis Bacon criticaba duramente a quienes construían teorías sin observar la realidad.",
           "Según él, el conocimiento debía basarse en la experiencia, la observación y la experimentación.",
@@ -778,7 +772,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Bacon es considerado uno de los padres del método científico moderno, aunque él mismo realizó muy pocos experimentos."),
       hito("revolucion-pensamiento", "galileo-galilei", "Galileo Galilei", "1564-1642",
-        "¿Qué ocurre cuando la observación contradice a la autoridad?",
+        "",
         [
           "Galileo dirigió un telescopio hacia el cielo y descubrió montañas en la Luna, manchas solares y satélites girando alrededor de Júpiter.",
           "Aquellas observaciones demostraban que el universo no era exactamente como lo había descrito Aristóteles. También apoyaban la teoría de Copérnico, según la cual la Tierra gira alrededor del Sol.",
@@ -787,7 +781,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la famosa frase «Eppur si muove» («Y, sin embargo, se mueve») probablemente nunca fue pronunciada por Galileo, aunque se convirtió en el símbolo de la libertad científica."),
       hito("revolucion-pensamiento", "descartes", "René Descartes", "1596-1650",
-        "¿Existe alguna verdad de la que no podamos dudar?",
+        "",
         [
           "Descartes decidió hacer algo que ningún filósofo había intentado de forma tan radical: dudar de absolutamente todo.",
           "¿Y si nuestros sentidos nos engañan? ¿Y si todo lo que creemos saber es falso? ¿Y si incluso estamos soñando?",
@@ -812,10 +806,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("revolucion-pensamiento", "pascal", "Blaise Pascal", "1623-1662",
-        "¿Puede la razón responder a las preguntas que más nos importan?",
+        "",
         [
           "Pascal fue un caso extraordinario: a los dieciséis años escribía tratados de geometría, a los diecinueve construyó una de las primeras máquinas de calcular mecánicas para ayudar a su padre con los impuestos, y con Fermat fundó el cálculo de probabilidades. Además demostró experimentalmente la existencia del vacío y de la presión atmosférica, contra toda la física de su época.",
-          "Es decir: era exactamente el tipo de genio matemático que cabría esperar en el bando de Descartes. Y se pasó al otro lado.",
           "Su tesis es que la razón es una herramienta magnífica y limitada. Sirve para la geometría y para la física, pero no alcanza a lo que de verdad decide una vida: si merece la pena vivir, a quién querer, qué hacer con el miedo a morir. Para eso, decía, existe otra vía de conocimiento, y la formuló en la frase más citada de su obra: el corazón tiene razones que la razón no entiende.",
           "Su retrato del ser humano es el más incómodo del siglo XVII. Describe a alguien enormemente grande y enormemente miserable a la vez: capaz de comprender el universo y de angustiarse por una tontería. Y señala nuestro mecanismo de defensa favorito, al que llamó divertissement, «distracción»: no soportamos quedarnos quietos con nosotros mismos, así que nos llenamos de ruido, de trabajo, de juegos y de asuntos urgentes para no pensar. Escribió que toda la desgracia de los hombres viene de no saber estarse quietos en una habitación.",
           "Y dejó la imagen que resume su idea del ser humano: somos una caña, la cosa más débil de la naturaleza, pero una caña que piensa. El universo puede aplastarnos sin enterarse; nosotros, al morir aplastados, sabemos lo que pasa. Ahí está toda nuestra dignidad.",
@@ -823,7 +816,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: murió con treinta y nueve años, con una salud terrible toda su vida. Y en sus últimos años organizó en París el primer servicio de transporte público urbano de la historia, con coches de caballos con ruta fija y precio fijo. El lenguaje de programación Pascal y la unidad de presión llevan su nombre."),
       hito("revolucion-pensamiento", "spinoza", "Baruch Spinoza", "1632-1677",
-        "¿Y si Dios no estuviera fuera del universo... sino que fuera el propio universo?",
+        "",
         [
           "Spinoza fue uno de los filósofos más valientes de su tiempo. Nacido en una comunidad judía de Ámsterdam, sus ideas resultaron tan revolucionarias que fue expulsado de ella mediante una excomunión extremadamente severa.",
           "Mientras la mayoría imaginaba a Dios como un ser separado del mundo, Spinoza defendió algo completamente distinto. Para él, Dios y la Naturaleza son una misma realidad.",
@@ -834,7 +827,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Spinoza rechazó un prestigioso puesto como profesor universitario para conservar su independencia intelectual. Prefería vivir modestamente puliendo lentes antes que renunciar a su libertad para pensar."),
       hito("revolucion-pensamiento", "hobbes", "Thomas Hobbes", "1588-1679",
-        "¿Qué ocurriría si no existieran leyes?",
+        "",
         [
           "Hobbes imaginó una situación extrema: un mundo sin gobiernos, sin jueces, sin policía, sin normas.",
           "Pensaba que, en ese estado natural, las personas acabarían enfrentándose unas a otras para sobrevivir. Lo describió como «la guerra de todos contra todos».",
@@ -842,7 +835,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Hobbes llamó Leviatán al Estado, tomando el nombre de un gigantesco monstruo marino mencionado en la Biblia."),
       hito("revolucion-pensamiento", "locke", "John Locke", "1632-1704",
-        "¿Y si todos naciéramos iguales?",
+        "",
         [
           "Locke no estaba de acuerdo con Hobbes. Creía que las personas poseen unos derechos que ningún gobernante puede quitarles. Entre ellos destacaban la vida, la libertad y la propiedad.",
           "Según Locke, los gobiernos existen para proteger esos derechos, no para concederlos. Si un gobernante los viola, el pueblo tiene derecho a sustituirlo. Estas ideas influirían profundamente en la independencia de Estados Unidos y en la Revolución Francesa.",
@@ -850,7 +843,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: muchas de las ideas presentes en las democracias actuales proceden directamente de Locke."),
       hito("revolucion-pensamiento", "leibniz", "Gottfried Leibniz", "1646-1716",
-        "¿Vivimos en el mejor de los mundos posibles?",
+        "",
         [
           "Leibniz fue matemático, científico, diplomático y filósofo.",
           "Pensaba que Dios, siendo perfecto, había creado el mejor universo que era posible crear. Aunque exista el mal, ese mal forma parte de un equilibrio más amplio que nosotros todavía no alcanzamos a comprender.",
@@ -859,22 +852,20 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Leibniz soñó con crear un lenguaje universal basado en la lógica que permitiera resolver los desacuerdos mediante cálculos. Muchos consideran que esa idea anticipó la informática moderna."),
       hito("revolucion-pensamiento", "montesquieu", "Montesquieu", "1689-1755",
-        "¿Cómo se impide que quien manda abuse de su poder?",
+        "",
         [
           "Montesquieu era un noble francés, presidente de un tribunal, y dedicó veinte años a un libro enorme, «El espíritu de las leyes», con una pregunta muy práctica detrás: por qué unos pueblos viven en libertad y otros bajo despotismo.",
           "Su punto de partida es una observación sobre la naturaleza humana, no sobre la política: todo el que tiene poder tiende a abusar de él, y sigue abusando hasta que encuentra un límite. No porque los gobernantes sean malas personas, sino porque el poder sin freno se comporta siempre así.",
           "De ahí su conclusión, que es una de las ideas más útiles jamás formuladas: si el poder no se puede eliminar, hay que DIVIDIRLO, de manera que cada parte tenga interés en frenar a las otras. Legislativo, que hace las leyes; ejecutivo, que las aplica; y judicial, que juzga. Separados, en manos distintas, y vigilándose entre sí.",
           "Lo importante es entender que no es un ideal moral, es un mecanismo. No confía en la virtud de nadie: monta el sistema para que la ambición de uno choque con la ambición del otro. Él lo decía así: hace falta que, por la disposición de las cosas, el poder detenga al poder.",
-          "Estudió además las leyes comparando países, climas, religiones, economías y costumbres, buscando por qué cada sociedad tiene las leyes que tiene. Con eso inauguró de hecho una forma de mirar que después se llamará sociología y derecho comparado.",
           "Y publicó antes un libro brillante y tramposo: unas «Cartas persas» en las que dos viajeros persas describen París con perplejidad, lo que le permitió reírse de la corte, del clero y de las costumbres francesas fingiendo que era un extranjero quien lo decía. Fue un éxito enorme y una manera muy eficaz de esquivar la censura.",
           "Su influencia es medible: la separación de poderes está en la Constitución de Estados Unidos de 1787, en la Declaración francesa de 1789 y hoy en la práctica totalidad de las constituciones del mundo. Cuando se dice que un país «está degradando su democracia», casi siempre se está describiendo exactamente lo que él advirtió: alguien juntando otra vez los tres poderes en una sola mano.",
         ],
         "Dato curioso: los redactores de la Constitución estadounidense lo citaron más que a ningún otro autor europeo. Un magistrado francés del siglo XVIII, escribiendo sobre Roma y sobre Persia, diseñó el esqueleto del Estado en el que vive hoy casi todo el mundo."),
       hito("revolucion-pensamiento", "voltaire", "Voltaire", "1694-1778",
-        "¿Se puede defender a alguien con quien no estás de acuerdo?",
+        "",
         [
           "Voltaire fue el intelectual más famoso, más leído y más temido de su siglo, y no por un sistema filosófico —no lo tuvo— sino por algo distinto: convirtió la escritura en un arma contra la injusticia concreta.",
-          "Su vida empezó con un aprendizaje muy directo. Un noble lo insultó, él respondió con ingenio, y el noble mandó a sus criados a darle una paliza. Cuando Voltaire pidió reparación, lo encerraron en la Bastilla y lo desterraron. Se fue a Inglaterra, y allí descubrió un país donde había libertad de prensa, tolerancia religiosa y donde un comerciante podía valer tanto como un aristócrata. Volvió convertido en un crítico feroz del sistema francés.",
           "Sus dos obsesiones fueron la libertad de expresión y la tolerancia. Y no las defendió en abstracto: se metió en casos judiciales reales. El más célebre es el de Jean Calas, un comerciante protestante torturado y ejecutado en Toulouse en 1762 acusado sin pruebas de haber matado a su hijo para impedir que se convirtiera al catolicismo. Voltaire investigó, publicó, movilizó a media Europa y consiguió tres años después la anulación de la sentencia y la rehabilitación de la familia. Es probablemente la primera campaña de opinión pública de la historia moderna.",
           "Contra el fanatismo escribió una consigna que repitió durante veinte años: «aplastad al infame», refiriéndose a la intolerancia religiosa e institucional, no a la fe. Él creía en Dios, pero no en las iglesias.",
           "Su libro más leído hoy es «Cándido», una novela corta y divertidísima en la que un joven optimista recorre el mundo recibiendo desgracias absurdas —terremotos, guerras, inquisiciones, esclavitud— para desmontar la idea de Leibniz de que vivimos en el mejor de los mundos posibles. Su conclusión final es de una modestia deliberada: hay que cultivar el propio huerto, es decir, dejar de justificar el mal del mundo y ponerse a arreglar el pedazo que uno tiene delante.",
@@ -882,7 +873,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la frase «no estoy de acuerdo con lo que dices, pero defenderé con mi vida tu derecho a decirlo» no es suya: la escribió una biógrafa suya en 1906 resumiendo su actitud. Es un caso curioso: la cita más famosa de Voltaire no es de Voltaire, pero lo describe bastante bien."),
       hito("revolucion-pensamiento", "rousseau", "Jean-Jacques Rousseau", "1712-1778",
-        "¿Y si la sociedad no nos hubiera civilizado, sino estropeado?",
+        "",
         [
           "Rousseau fue la oveja negra de la Ilustración. Mientras sus contemporáneos celebraban el progreso, la razón y la civilización, él escribió que el ser humano nace bueno y que es la sociedad la que lo corrompe.",
           "Su argumento es sofisticado y no un elogio ingenuo del salvaje. Sostiene que en un estado original, sin propiedad ni comparación, no había ni vicio ni virtud: había necesidades sencillas y compasión natural. Lo que aparece con la vida social es la MIRADA DEL OTRO —la vanidad, la envidia, el prestigio, el afán de aparentar— y, sobre todo, la desigualdad: el día en que alguien cercó un trozo de tierra y dijo «esto es mío», y encontró gente lo bastante simple para creerle, empezaron los problemas.",
@@ -890,11 +881,10 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Su solución es que las leyes no pueden venir de un rey ni de una élite: tienen que salir de la «voluntad general», es decir, de los propios ciudadanos deliberando sobre el bien común. Obedecer una ley que tú mismo has contribuido a hacer no es someterse, es ser libre. Ahí nace la idea moderna de soberanía popular, la que hay detrás de cada «la soberanía nacional reside en el pueblo» de las constituciones actuales.",
           "Y escribió también «Emilio», un libro sobre educación que cambió la forma de criar niños en Occidente: defendió que el niño no es un adulto defectuoso al que hay que llenar de datos, sino alguien con sus propias etapas, que aprende jugando, moviéndose, tocando y equivocándose, y al que hay que dejar madurar. Casi toda la pedagogía moderna arranca de ahí.",
           "Su parte incómoda es enorme y hay que decirla: el hombre que escribió el mejor tratado de educación de su siglo abandonó a sus cinco hijos en un hospicio. Él mismo lo confesó en sus «Confesiones», un libro donde se retrata con sus miserias, y que inaugura la autobiografía moderna tal como la entendemos.",
-          "Su influencia fue inmediata y ambigua: inspiró la Revolución Francesa —los revolucionarios lo citaban continuamente— y también sirvió para justificar la idea de que quien encarna la voluntad general puede imponerla, con lo que su nombre aparece tanto en la historia de la democracia como en la del Terror.",
         ],
         "Dato curioso: aquí están las tres respuestas del contrato social, una al lado de otra, y sigue siendo la discusión política de hoy. Hobbes: como somos peligrosos, hace falta un poder fuerte que garantice el orden. Locke: como tenemos derechos previos, el poder existe para protegerlos y puede ser destituido. Rousseau: como la libertad es obedecer lo que uno mismo ha decidido, el poder tiene que ser el pueblo. Casi cualquier debate actual sobre seguridad, derechos y participación es una versión de esa discusión."),
       hito("revolucion-pensamiento", "david-hume", "David Hume", "1711-1776",
-        "¿Podemos estar completamente seguros de algo?",
+        "",
         [
           "Hume llevó el empirismo hasta sus últimas consecuencias. Decía que todo conocimiento procede de la experiencia.",
           "Pero planteó un problema enorme. Vemos que el Sol sale cada mañana. ¿Podemos demostrar que saldrá mañana? No. Solo sabemos que siempre ha ocurrido así.",
@@ -908,11 +898,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "que-conocer",
     titulo: "¿Qué podemos conocer?",
     anio: "Siglo XVIII",
-    intro:
-      "El filósofo que intentó reconciliar la razón y la experiencia. Después de casi dos siglos de discusión, la filosofía parecía encontrarse en un callejón sin salida. Los racionalistas afirmaban que la razón era la principal fuente del conocimiento. Los empiristas respondían que todo procede de la experiencia. Ambos tenían buenos argumentos. Y ambos parecían tener también importantes problemas. Fue entonces cuando un profesor alemán propuso una idea completamente nueva. No había que elegir entre razón o experiencia. Las dos eran necesarias. Ese profesor se llamaba Immanuel Kant.",
     subhitos: [
       hito("que-conocer", "immanuel-kant", "Immanuel Kant", "1724-1804",
-        "¿Cómo sabemos que conocemos realmente el mundo?",
+        "",
         [
           "Kant vivió toda su vida en la ciudad prusiana de Königsberg y llevó una existencia tan ordenada que se decía que los vecinos podían poner en hora sus relojes cuando salía a pasear.",
           "Sin embargo, detrás de esa rutina se escondía una de las mentes más revolucionarias de la historia.",
@@ -939,7 +927,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           "Por eso, según Kant, conocer consiste en una colaboración constante entre nuestros sentidos y nuestra razón.",
         ]),
       hito("que-conocer", "etica-del-deber", "La ética del deber", "",
-        "¿Cómo sabemos si una acción es realmente buena?",
+        "",
         [
           "Kant no solo transformó la teoría del conocimiento. También revolucionó la ética.",
           "Para Kant, una acción no es moral porque produzca buenos resultados. Es moral cuando hacemos lo correcto por deber.",
@@ -964,11 +952,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "grandes-ideas",
     titulo: "El siglo de las grandes ideas",
     anio: "Siglo XIX",
-    intro:
-      "Nunca antes tantos filósofos habían cambiado tanto la forma de entender al ser humano. El siglo XIX fue una época de cambios extraordinarios. La Revolución Industrial llenó Europa de fábricas y ciudades, aparecieron nuevas máquinas, millones de personas abandonaron el campo para trabajar en las industrias y las revoluciones políticas comenzaron a cuestionar el poder de reyes e iglesias. La ciencia avanzaba a un ritmo nunca visto. La economía estaba transformando la sociedad. Y la filosofía volvió a hacerse nuevas preguntas. ¿Tiene la historia un sentido? ¿Somos realmente libres? ¿Por qué existe el sufrimiento? ¿Qué ocurrirá si la religión deja de ser el centro de la sociedad? Las respuestas fueron muy diferentes... y algunas cambiarían el mundo para siempre.",
     subhitos: [
       hito("grandes-ideas", "hegel", "Georg Wilhelm Friedrich Hegel", "1770-1831",
-        "¿Avanza la historia hacia algún lugar?",
+        "",
         [
           "Hasta entonces muchos pensaban que la historia era simplemente una sucesión de guerras, reyes y acontecimientos. Hegel propuso una idea completamente distinta.",
           "Según él, la historia tiene una dirección. La humanidad avanza poco a poco hacia mayores cotas de libertad.",
@@ -978,7 +964,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Hegel llegó a decir que había visto «al espíritu de la historia a caballo» cuando contempló a Napoleón entrar victorioso en una ciudad alemana."),
       hito("grandes-ideas", "schopenhauer", "Arthur Schopenhauer", "1788-1860",
-        "¿Y si el sufrimiento fuera inevitable?",
+        "",
         [
           "Schopenhauer fue uno de los filósofos más pesimistas de la historia.",
           "Mientras Hegel veía un progreso constante, él observaba algo muy distinto. Las personas desean continuamente cosas nuevas. Cuando las consiguen, pronto vuelven a sentirse insatisfechas.",
@@ -987,7 +973,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Schopenhauer fue uno de los primeros filósofos europeos en estudiar seriamente textos hindúes y budistas."),
       hito("grandes-ideas", "kierkegaard", "Søren Kierkegaard", "1813-1855",
-        "¿Qué significa elegir tu propia vida?",
+        "",
         [
           "Kierkegaard pensaba que la filosofía se estaba olvidando de algo muy importante: cada persona.",
           "Mientras otros filósofos hablaban de la humanidad en general, él se preguntaba cómo vive un individuo concreto sus dudas, sus miedos y sus decisiones.",
@@ -996,7 +982,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: muchas de sus obras fueron publicadas con seudónimos porque quería que el lector reflexionara sobre las ideas sin centrarse en la figura del autor."),
       hito("grandes-ideas", "mill", "John Stuart Mill", "1806-1873",
-        "¿Qué significa realmente ser libre?",
+        "",
         [
           "Mill defendió que cada persona debería ser libre para vivir como quisiera, siempre que no perjudicara a los demás. Esta idea, conocida como el principio del daño, sigue siendo uno de los fundamentos del liberalismo moderno.",
           "También fue uno de los primeros filósofos en defender públicamente la igualdad entre hombres y mujeres.",
@@ -1004,7 +990,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Mill fue diputado en el Parlamento británico y uno de los primeros en defender el derecho al voto femenino."),
       hito("grandes-ideas", "marx", "Karl Marx", "1818-1883",
-        "¿Quién mueve realmente la historia?",
+        "",
         [
           "Marx admiraba profundamente a Hegel, pero pensaba que se equivocaba en algo fundamental. No son las ideas las que cambian el mundo. Son las condiciones materiales: la economía, el trabajo, la forma en que una sociedad produce riqueza.",
           "Según Marx, toda la historia puede entenderse como una lucha entre grupos sociales con intereses opuestos. En el siglo XIX esos grupos eran principalmente la burguesía, propietaria de las fábricas, y el proletariado, formado por los trabajadores.",
@@ -1028,7 +1014,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("grandes-ideas", "darwin", "Charles Darwin", "1809-1882",
-        "¿Y si el ser humano fuera una especie más de la naturaleza?",
+        "",
         [
           "Darwin no era filósofo. Era naturalista. Sin embargo, pocas personas han cambiado tanto la filosofía.",
           "Hasta entonces muchas culturas pensaban que el ser humano había sido creado de forma especial y ocupaba un lugar único en la naturaleza.",
@@ -1038,7 +1024,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Darwin tardó más de veinte años en publicar su teoría porque era consciente de la enorme polémica que podía provocar."),
       hito("grandes-ideas", "nietzsche", "Friedrich Nietzsche", "1844-1900",
-        "¿Qué ocurre cuando una civilización deja de creer en aquello que le daba sentido?",
+        "",
         [
           "A finales del siglo XIX, Europa estaba cambiando rápidamente. La ciencia avanzaba. La industrialización transformaba la sociedad. Cada vez más personas dejaban de explicar el mundo exclusivamente mediante la religión.",
           "Fue entonces cuando Nietzsche escribió una de las frases más famosas de toda la historia: «Dios ha muerto».",
@@ -1072,11 +1058,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "mente-humana",
     titulo: "Descubriendo la mente humana",
     anio: "Siglo XX",
-    intro:
-      "Quizá no somos tan racionales como creemos. Durante siglos, la filosofía había confiado en la razón como la mejor herramienta del ser humano. Pero el siglo XX lo puso todo en duda. Dos guerras mundiales, los campos de exterminio y las bombas atómicas demostraron que la civilización más avanzada también podía cometer las mayores atrocidades. Al mismo tiempo, el psicoanálisis revelaba que buena parte de nuestra conducta nace de impulsos inconscientes que ni siquiera comprendemos. La filosofía dejó entonces de preguntarse solo qué podemos conocer y empezó a preguntarse quiénes somos, por qué existimos y cómo debemos vivir en un mundo que parecía haber perdido el sentido.",
     subhitos: [
       hito("mente-humana", "freud", "Sigmund Freud", "1856-1939",
-        "¿Y si no fuéramos dueños de nuestra propia mente?",
+        "",
         [
           "Freud no era filósofo, sino médico, pero su influencia en la forma de entender al ser humano fue enorme.",
           "Propuso que bajo la parte consciente de nuestra mente existe algo mucho más grande y oculto: el inconsciente.",
@@ -1086,7 +1070,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Freud llamó psicoanálisis a su método, basado en hablar y en interpretar los sueños, y de él proceden palabras tan habituales hoy como «represión» o «subconsciente»."),
       hito("mente-humana", "husserl", "Edmund Husserl", "1859-1938",
-        "¿Podemos describir la experiencia tal y como realmente la vivimos?",
+        "",
         [
           "Husserl quería devolver a la filosofía el rigor de una ciencia, pero partiendo de algo muy concreto: la experiencia vivida.",
           "Propuso un método llamado fenomenología, que consistía en describir con la máxima precisión cómo se nos aparecen las cosas en la conciencia, dejando de lado por un momento las teorías y los prejuicios.",
@@ -1095,7 +1079,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la fenomenología no solo transformó la filosofía; también dejó huella en la psicología, la sociología y hasta en el diseño de tecnología pensada «desde la experiencia del usuario»."),
       hito("mente-humana", "heidegger", "Martin Heidegger", "1889-1976",
-        "¿Qué significa realmente existir?",
+        "",
         [
           "Heidegger pensaba que la filosofía había olvidado su pregunta más importante: ¿qué significa ser?",
           "Se dio cuenta de que el ser humano es el único que se pregunta por su propia existencia. A diferencia de una piedra o un animal, nosotros sabemos que vivimos... y que vamos a morir.",
@@ -1104,7 +1088,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Heidegger inventó numerosas palabras nuevas porque creía que el lenguaje habitual no bastaba para expresar sus ideas sobre la existencia."),
       hito("mente-humana", "sartre", "Jean-Paul Sartre", "1905-1980",
-        "¿Y si estuviéramos condenados a ser libres?",
+        "",
         [
           "Sartre fue la gran figura del existencialismo. Su idea central puede resumirse en una frase: «la existencia precede a la esencia».",
           "Quería decir que el ser humano no nace con un propósito ya escrito. Primero existimos y, después, mediante nuestras decisiones, vamos construyendo quiénes somos.",
@@ -1128,7 +1112,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("mente-humana", "simone-de-beauvoir", "Simone de Beauvoir", "1908-1986",
-        "¿Se nace mujer o se llega a serlo?",
+        "",
         [
           "Compañera intelectual de Sartre, Simone de Beauvoir llevó el existencialismo a un terreno nuevo: la condición de la mujer.",
           "En su obra El segundo sexo analizó cómo, a lo largo de la historia, la sociedad había definido a la mujer siempre en relación con el hombre, como si fuera «lo otro».",
@@ -1153,7 +1137,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("mente-humana", "albert-camus", "Albert Camus", "1913-1960",
-        "¿Tiene sentido la vida... aunque no tenga sentido?",
+        "",
         [
           "Camus se enfrentó a una pregunta incómoda: si el universo no tiene un sentido evidente, ¿merece la pena vivir?",
           "A esa contradicción entre nuestra necesidad de sentido y un mundo que no lo ofrece la llamó lo absurdo.",
@@ -1179,7 +1163,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("mente-humana", "hannah-arendt", "Hannah Arendt", "1906-1975",
-        "¿Cómo pueden personas normales cometer atrocidades?",
+        "",
         [
           "Arendt vivió en primera persona el horror del siglo XX. Judía alemana, tuvo que huir del nazismo y dedicó su vida a comprender cómo había sido posible tanta crueldad.",
           "Al cubrir el juicio de un alto responsable nazi, esperaba encontrarse con un monstruo. En su lugar vio a un hombre corriente que se limitaba a «cumplir órdenes» sin pararse a pensar.",
@@ -1204,7 +1188,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("mente-humana", "ortega-y-gasset", "José Ortega y Gasset", "1883-1955",
-        "¿Somos realmente dueños de nuestra vida?",
+        "",
         [
           "Ortega y Gasset fue el filósofo español más influyente del siglo XX y logró acercar la filosofía al gran público con un lenguaje claro y elegante.",
           "Su idea más conocida se resume en una frase: «Yo soy yo y mi circunstancia».",
@@ -1218,11 +1202,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
     key: "pensar-futuro",
     titulo: "Pensar el futuro",
     anio: "Siglo XX-XXI",
-    intro:
-      "La filosofía sigue viva porque las preguntas nunca terminan. El siglo XX y el comienzo del XXI trajeron un mundo nuevo: la ciencia se volvió capaz de transformar la vida y el planeta, la tecnología conectó a toda la humanidad y aparecieron problemas que ningún filósofo anterior había imaginado. ¿Cómo sabemos que una teoría científica es fiable? ¿Quién decide lo que está bien y lo que está mal en una sociedad diversa? ¿Puede una máquina llegar a pensar? Lejos de haber terminado su trabajo, la filosofía se enfrenta hoy a algunas de las preguntas más importantes de toda su historia.",
     subhitos: [
       hito("pensar-futuro", "popper", "Karl Popper", "1902-1994",
-        "¿Cómo distinguir la ciencia de lo que solo parece ciencia?",
+        "",
         [
           "Popper se hizo una pregunta clave: ¿qué diferencia una teoría científica de una que no lo es?",
           "Su respuesta fue sorprendente. Una teoría es científica no porque pueda demostrarse, sino porque puede refutarse; es decir, porque existe algún experimento capaz de demostrar que es falsa.",
@@ -1247,7 +1229,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("pensar-futuro", "kuhn", "Thomas Kuhn", "1922-1996",
-        "¿La ciencia avanza poco a poco o a saltos?",
+        "",
         [
           "Hasta Kuhn, muchos pensaban que la ciencia progresaba acumulando descubrimientos de manera lenta y constante.",
           "Kuhn propuso algo distinto. Durante largos periodos, los científicos trabajan dentro de un mismo marco de ideas al que llamó paradigma.",
@@ -1256,7 +1238,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: gracias a Kuhn, la palabra «paradigma» pasó de la filosofía a usarse hoy en casi todos los ámbitos para hablar de un gran cambio de perspectiva."),
       hito("pensar-futuro", "foucault", "Michel Foucault", "1926-1984",
-        "¿Quién decide lo que es normal?",
+        "",
         [
           "Foucault estudió algo que casi nadie se había planteado: cómo el poder no solo prohíbe, sino que también moldea nuestra forma de pensar y de vivir.",
           "Investigó la historia de las prisiones, los hospitales, la locura y la sexualidad, y mostró que muchas ideas que damos por naturales —lo normal y lo anormal, lo sano y lo enfermo— cambian con cada época.",
@@ -1282,7 +1264,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("pensar-futuro", "john-rawls", "John Rawls", "1921-2002",
-        "¿Cómo sería una sociedad realmente justa?",
+        "",
         [
           "Rawls devolvió la filosofía política al centro del debate con una pregunta muy antigua: ¿qué es una sociedad justa?",
           "Para responderla propuso un experimento mental. Imagina que tuvieras que diseñar las reglas de la sociedad sin saber qué lugar ocuparás en ella: si serás rico o pobre, sano o enfermo, hombre o mujer.",
@@ -1308,7 +1290,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("pensar-futuro", "peter-singer", "Peter Singer", "n. 1946",
-        "¿Debería importarnos el sufrimiento de todos los seres vivos?",
+        "",
         [
           "Singer es uno de los filósofos vivos más influyentes y también más polémicos.",
           "Defiende que, a la hora de decidir qué está bien, lo que importa es la capacidad de sufrir. Y como los animales también sufren, sostiene que tenerlos en cuenta es una cuestión de justicia, no de sentimentalismo.",
@@ -1317,7 +1299,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Singer popularizó el «altruismo eficaz», un movimiento que busca ayudar al mayor número posible de personas utilizando la razón y las pruebas."),
       hito("pensar-futuro", "byung-chul-han", "Byung-Chul Han", "n. 1959",
-        "¿Nos está agotando la sociedad en la que vivimos?",
+        "",
         [
           "Nacido en Corea del Sur y afincado en Alemania, Byung-Chul Han es uno de los filósofos más leídos del siglo XXI.",
           "Sostiene que hemos pasado de una sociedad que nos prohibía cosas a otra que nos exige rendir al máximo constantemente.",
@@ -1326,7 +1308,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Han reivindica el valor del aburrimiento, la contemplación y el descanso como formas de resistencia frente a un mundo que nunca se detiene."),
       hito("pensar-futuro", "etica-ia", "La ética de la Inteligencia Artificial", "Siglo XXI",
-        "¿Quién es responsable de lo que decide una máquina?",
+        "",
         [
           "Por primera vez en la historia, hemos creado máquinas capaces de aprender, decidir y generar textos, imágenes o diagnósticos.",
           "Esto plantea preguntas filosóficas totalmente nuevas. Si un coche autónomo tiene un accidente, ¿de quién es la culpa? Si un algoritmo decide quién recibe un préstamo o un trabajo, ¿cómo evitamos que sea injusto?",
@@ -1335,7 +1317,7 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: muchas empresas tecnológicas cuentan hoy con filósofos y expertos en ética para decidir cómo deben comportarse sus sistemas de inteligencia artificial."),
       hito("pensar-futuro", "transhumanismo", "El transhumanismo", "Siglo XXI",
-        "¿Deberíamos mejorar al ser humano con la tecnología?",
+        "",
         [
           "El transhumanismo es una corriente que defiende utilizar la ciencia y la tecnología para superar los límites del cuerpo y la mente humanos.",
           "Sus partidarios imaginan un futuro en el que podríamos curar todas las enfermedades, aumentar nuestra inteligencia o incluso alargar enormemente la vida.",
@@ -1344,9 +1326,9 @@ export const HISTORIA_FILOSOFIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: algunos científicos creen que las primeras personas que vivirán más de 120 años ya han nacido; otros piensan que es solo una ilusión tecnológica."),
       hito("pensar-futuro", "puede-pensar-maquina", "¿Puede pensar una máquina?", "Siglo XX-XXI",
-        "¿Podría una máquina llegar a tener conciencia?",
+        "",
         [
-          "Esta pregunta acompaña a la informática desde su nacimiento. El matemático Alan Turing propuso una prueba: si al conversar con una máquina no pudiéramos distinguirla de un ser humano, tendríamos que admitir que «piensa».",
+          "Si una máquina podría llegar a tener conciencia es una pregunta que acompaña a la informática desde su nacimiento. El matemático Alan Turing propuso una prueba: si al conversar con una máquina no pudiéramos distinguirla de un ser humano, tendríamos que admitir que «piensa».",
           "Pero muchos filósofos no están de acuerdo. Una cosa es imitar el pensamiento y otra muy distinta comprender de verdad o tener conciencia.",
           "¿Siente algo una máquina cuando responde, o solo repite patrones sin entender nada? Todavía no tenemos una respuesta.",
           "Es, quizá, una de las preguntas más fascinantes que la filosofía y la ciencia comparten hoy.",

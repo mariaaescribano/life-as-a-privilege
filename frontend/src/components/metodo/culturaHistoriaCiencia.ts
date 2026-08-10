@@ -5,8 +5,8 @@ import type { Vineta } from "./ComicViewer";
 // HISTORIA DE LA CIENCIA (Cultura). Tagline: «Cómo la humanidad aprendió a
 // saber — de mirar el cielo con miedo a comprender el universo».
 //
-// Mismo modelo que las demás Historias: ETAPAS (con intro) → SUB-HITOS (cada uno
-// con su cómic: pregunta-gancho + cuerpo + dato curioso, foto + texto a la
+// Mismo modelo que las demás Historias: ETAPAS → SUB-HITOS (cada uno
+// con su cómic: cuerpo + dato curioso, foto + texto a la
 // derecha). Estructura del índice: Prólogo + 9 etapas (de la Prehistoria a la
 // era de la información).
 //
@@ -21,8 +21,9 @@ import type { Vineta } from "./ComicViewer";
 // de línea tras cada punto).
 //
 // CÓMO SE CUENTA (igual que en las demás Historias): que se ENTIENDA, no que se
-// cuente. Cada momento va con pregunta gancho → cuerpo (qué problema había y
-// cómo se resolvió) → «Dato curioso», y cuando el tema da para más (cómo se mide
+// cuente. Cada momento es cuerpo (qué problema había y cómo se resolvió) →
+// «Dato curioso» (opcional: solo si de verdad hay algo curioso que contar), y
+// cuando el tema da para más (cómo se mide
 // la Tierra con una sombra, las pruebas de la evolución, por qué la cuántica es
 // tan rara, las mujeres borradas de la ciencia…) se le añaden páginas
 // «Profundiza» con el parámetro `extras`: viñetas EXTRA del mismo momento, no
@@ -40,27 +41,40 @@ const foto = (_era: string, sub: string) =>
 interface Profundiza {
   titulo: string;
   cuerpo: string[];
-  dato?: string;
+  /** Uno o dos datos curiosos (ver `Datos`). */
+  dato?: Datos;
 }
 
-// Sub-hito con su cómic: viñeta principal (`pregunta` gancho + `cuerpo` + `dato`
-// curioso) y, opcionalmente, páginas «Profundiza» detrás.
+/** Los datos curiosos de un momento: uno («Dato curioso: …»), dos (el segundo
+ *  escrito como «Dato curioso II: …») o ninguno. */
+type Datos = string | string[];
+
+const enLista = (x?: Datos) => (x == null ? [] : Array.isArray(x) ? x : [x]);
+const esProfundiza = (x: unknown): x is Profundiza[] =>
+  Array.isArray(x) && typeof x[0] === "object";
+
+// Sub-hito con su cómic: viñeta principal (`pregunta` gancho + `cuerpo` + hasta
+// dos datos curiosos, OPCIONALES) y, opcionalmente, páginas «Profundiza» detrás.
+// Si el momento no tiene ningún dato curioso pero sí «Profundiza», se pasan los
+// extras directamente en su lugar (sin `undefined` de relleno).
 const hito = (
   era: string, key: string, titulo: string, fecha: string,
-  pregunta: string, cuerpo: string[], dato?: string, extras?: Profundiza[],
+  pregunta: string, cuerpo: string[],
+  datosOExtras?: Datos | Profundiza[], masExtras?: Profundiza[],
 ): SubHito => {
+  const datos = esProfundiza(datosOExtras) ? [] : enLista(datosOExtras);
+  const extras = esProfundiza(datosOExtras) ? datosOExtras : masExtras;
   const src = foto(era, key);
   const paragraphs: string[] = [];
   if (pregunta) paragraphs.push(pregunta);
-  paragraphs.push(...cuerpo);
-  if (dato) paragraphs.push(dato);
+  paragraphs.push(...cuerpo, ...datos);
   const vinetas: Vineta[] = [{ src, eyebrow: fecha, titulo, paragraphs }];
   (extras ?? []).forEach((e) => {
     vinetas.push({
       src,
       eyebrow: "Profundiza",
       titulo: e.titulo,
-      paragraphs: e.dato ? [...e.cuerpo, e.dato] : e.cuerpo,
+      paragraphs: [...e.cuerpo, ...enLista(e.dato)],
     });
   });
   return { key, titulo, foto: src, vinetas };
@@ -74,11 +88,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "prologo",
     titulo: "¿Qué es la ciencia?",
     anio: "Antes de empezar el viaje",
-    intro:
-      "Antes de recorrer los grandes descubrimientos, conviene detenerse en una pregunta sencilla y enorme a la vez: ¿qué es realmente la ciencia? Solemos imaginarla como un montón de datos difíciles, fórmulas y aparatos. Pero la ciencia no es eso. Es, sobre todo, una forma de hacer preguntas y de comprobar las respuestas; una manera de distinguir lo que creemos de lo que podemos demostrar. Durante casi toda la historia, la humanidad explicó el mundo mediante mitos y autoridades a las que nadie se atrevía a discutir. La ciencia nació el día en que alguien decidió que la naturaleza podía interrogarse directamente, y que ninguna idea, por respetada que fuera, estaba por encima de las pruebas. Este recorrido no trata de memorizar descubrimientos, sino de entender algo mucho más valioso: cómo aprendió a pensar la humanidad.",
     subhitos: [
       hito("prologo", "que-es-ciencia", "¿Qué es la ciencia?", "La gran herramienta",
-        "¿Sabrías explicar con tus propias palabras qué es la ciencia?",
+        "",
         [
           "La ciencia no es una lista de verdades, sino un método para buscarlas. Su punto de partida es la curiosidad: mirar el mundo y preguntarse por qué las cosas ocurren como ocurren.",
           "Lo que la hace especial es que no se conforma con una explicación bonita o antigua. Exige comprobarla. Una idea científica tiene que poder ponerse a prueba y, si la realidad la contradice, hay que abandonarla.",
@@ -87,15 +99,16 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la palabra «ciencia» viene del latín scientia, que significa simplemente «conocimiento». Pero no cualquier conocimiento: el que se puede comprobar."),
       hito("prologo", "como-se-sabe", "El método: preguntar y comprobar", "Cómo se sabe algo",
-        "Cuando alguien afirma que algo es verdad, ¿cómo podemos saber si lo es?",
+        "",
         [
+          "Cuando alguien afirma que algo es verdad, ¿cómo podemos saber si lo es?",
           "El corazón de la ciencia es el método científico, una forma ordenada de buscar la verdad. Primero se observa algo, luego se propone una explicación (una hipótesis), después se diseña un experimento y por fin se comprueba el resultado.",
           "Lo esencial es que cualquiera pueda repetir ese experimento y obtener lo mismo. La verdad deja de depender de quién lo dice y pasa a depender de las pruebas.",
           "Gracias a este método, una persona humilde puede corregir a la mayor autoridad del mundo, siempre que tenga la realidad de su parte.",
           "Es una herramienta tan poderosa que ha transformado la vida humana más en cuatro siglos que en los cien mil años anteriores.",
         ]),
       hito("prologo", "ciencia-se-corrige", "La ciencia que se corrige", "La duda como motor",
-        "¿Y si equivocarse fuera parte de acertar?",
+        "",
         [
           "Muchas personas creen que la ciencia es débil porque «cambia de opinión». En realidad, ahí está su mayor fuerza: es el único saber que se corrige a sí mismo.",
           "Ninguna teoría científica se considera definitiva. Es la mejor explicación que tenemos hasta que aparezca una prueba que la mejore o la sustituya. La duda no es un fallo, es el motor.",
@@ -113,11 +126,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "antes-ciencia",
     titulo: "Antes de la ciencia",
     anio: "Prehistoria – Antigüedad",
-    intro:
-      "La ciencia no apareció de repente. Durante decenas de miles de años, los seres humanos observaron el mundo con muchísima atención, aunque todavía no supieran explicarlo. Aprendieron a dominar el fuego, a fabricar herramientas, a distinguir plantas útiles de venenosas y a leer el cielo para saber cuándo sembrar o cuándo llegarían las lluvias. No tenían método científico, pero sí una curiosidad incansable y una capacidad asombrosa para acumular conocimiento y transmitirlo. Aquellos saberes prácticos, mezclados con mitos y creencias, fueron el terreno del que un día brotaría la ciencia.",
     subhitos: [
       hito("antes-ciencia", "fuego-herramientas", "El fuego y las herramientas", "Prehistoria",
-        "¿Cuál fue el primer gran «invento» de la humanidad?",
+        "",
         [
           "Mucho antes de la escritura, nuestros antepasados lograron algo decisivo: controlar el fuego. Con él pudieron cocinar, calentarse, protegerse y alargar el día más allá de la luz del sol.",
           "También aprendieron a tallar la piedra, fabricar lanzas, agujas y hachas, y más tarde a trabajar los metales. Cada herramienta era el fruto de observar, probar y mejorar durante generaciones.",
@@ -126,7 +137,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: cocinar los alimentos permitió aprovechar mucha más energía de la comida. Algunos investigadores creen que fue clave para que nuestro cerebro pudiera crecer tanto."),
       hito("antes-ciencia", "contar-medir", "Contar y medir", "El nacimiento de los números",
-        "¿Y si toda la ciencia hubiera empezado por contar ovejas?",
+        "",
         [
           "A medida que aparecieron la agricultura y el comercio, hizo falta contar: cuántos animales, cuántos sacos de grano, cuántos días hasta la cosecha. Así nacieron los números.",
           "Las primeras civilizaciones desarrollaron sistemas para calcular, medir terrenos y repartir cosechas. La geometría surgió, literalmente, de medir la tierra tras las crecidas de los ríos.",
@@ -134,7 +145,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           "Sin ese lenguaje de números y figuras, la ciencia que vendría después habría sido sencillamente imposible.",
         ]),
       hito("antes-ciencia", "leer-el-cielo", "Leer el cielo", "Astronomía antigua",
-        "¿Por qué los pueblos antiguos miraban tanto las estrellas?",
+        "",
         [
           "El cielo era el primer gran reloj y el primer gran calendario. Observando el Sol, la Luna y las estrellas, los pueblos antiguos aprendieron a prever las estaciones, las crecidas de los ríos y el momento de sembrar.",
           "Los babilonios registraron durante siglos los movimientos de los astros con una precisión asombrosa, y los egipcios orientaron sus templos y pirámides siguiendo el cielo.",
@@ -152,11 +163,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "grecia-ciencia",
     titulo: "Grecia: la razón mira la naturaleza",
     anio: "Siglos VI – III a. C.",
-    intro:
-      "En Grecia ocurrió algo que cambiaría la historia del pensamiento: por primera vez, un grupo de personas intentó explicar la naturaleza sin recurrir a los dioses, usando solo la observación y la razón. Se preguntaron de qué estaba hecho el mundo, cómo se movían los astros y por qué las cosas caían al suelo. No siempre acertaron, pero inventaron algo más valioso que cualquier respuesta: la costumbre de buscar causas naturales y de demostrar las ideas con argumentos. De aquellos griegos nacieron las matemáticas como las conocemos, la física, la biología y la astronomía. Fue la infancia de la ciencia.",
     subhitos: [
       hito("grecia-ciencia", "tales-presocraticos", "Tales y los presocráticos", "≈siglo VI a. C.",
-        "¿Y si el mundo pudiera explicarse sin dioses?",
+        "",
         [
           "Tales de Mileto suele considerarse el primer científico y filósofo de Occidente. Su gran mérito no fue acertar, sino cambiar la pregunta: en lugar de «¿qué dios lo hizo?», preguntó «¿qué causa natural lo produce?».",
           "Él y otros pensadores, los presocráticos, buscaron el elemento del que estaría hecho todo: el agua, el aire, el fuego. Uno de ellos, Demócrito, imaginó que la materia estaba formada por partículas diminutas e indivisibles, los átomos.",
@@ -165,7 +174,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la palabra «átomo» viene del griego y significa «que no se puede cortar». Más de dos mil años después, la ciencia recuperó esa intuición de Demócrito."),
       hito("grecia-ciencia", "pitagoras-numeros", "Pitágoras y los números", "≈570-495 a. C.",
-        "¿Y si el universo estuviera escrito en números?",
+        "",
         [
           "Pitágoras y sus seguidores descubrieron que detrás de la música, la geometría y el movimiento de los astros había proporciones numéricas exactas.",
           "De ahí sacaron una idea deslumbrante: que el orden del universo podía expresarse con matemáticas. El cosmos no era caos, sino armonía medible.",
@@ -174,7 +183,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: los pitagóricos descubrieron que las notas musicales que suenan bien juntas siguen proporciones matemáticas muy simples. Ciencia y belleza se dieron la mano."),
       hito("grecia-ciencia", "aristoteles-ciencia", "Aristóteles", "384-322 a. C.",
-        "¿Puede una sola persona intentar estudiarlo todo?",
+        "",
         [
           "Aristóteles fue el gran observador de la Antigüedad. Se interesó por prácticamente todo: los animales, las plantas, el movimiento, el cielo, la lógica y la política.",
           "Defendía que el conocimiento debía empezar observando cuidadosamente la realidad, y clasificó cientos de seres vivos con un detalle que asombra todavía hoy. Por eso muchos lo consideran el primer gran naturalista.",
@@ -183,7 +192,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: durante toda la Edad Media a Aristóteles se le llamaba simplemente «el Filósofo», como si no pudiera existir otro mayor."),
       hito("grecia-ciencia", "euclides", "Euclides", "≈300 a. C.",
-        "¿Se puede demostrar algo de forma que sea imposible discutirlo?",
+        "",
         [
           "Euclides, en la ciudad de Alejandría, reunió y ordenó toda la geometría de su tiempo en una obra llamada los Elementos.",
           "Su genialidad fue el método: partió de unas pocas verdades evidentes y, a partir de ellas, demostró paso a paso cientos de teoremas, sin dejar nada al azar.",
@@ -192,7 +201,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: se dice que los Elementos de Euclides es, después de la Biblia, uno de los libros más editados y estudiados de toda la historia."),
       hito("grecia-ciencia", "arquimedes", "Arquímedes", "≈287-212 a. C.",
-        "¿Cuánto se puede descubrir con solo pensar en la bañera?",
+        "",
         [
           "Arquímedes fue el mayor genio científico de la Antigüedad: matemático, físico e ingeniero. Descubrió leyes fundamentales sobre las palancas, los flotadores y los volúmenes.",
           "Comprendió por qué flotan los cuerpos y calculó áreas y volúmenes con métodos que anticipaban las matemáticas modernas. También inventó ingeniosas máquinas de guerra y de riego.",
@@ -201,7 +210,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: se cuenta que Arquímedes afirmó: «Dadme un punto de apoyo y moveré el mundo», para explicar la fuerza de la palanca."),
       hito("grecia-ciencia", "eratostenes", "Eratóstenes mide la Tierra", "≈240 a. C.",
-        "¿Se puede medir el tamaño del planeta sin salir de él?",
+        "",
         [
           "Eratóstenes, bibliotecario de Alejandría, hizo algo increíble: calcular el tamaño de la Tierra usando solo la sombra de un palo, un poco de geometría y mucha inteligencia.",
           "Sabía que, un mismo día, el Sol caía totalmente vertical en una ciudad del sur mientras que en Alejandría proyectaba una sombra. Midiendo ese ángulo y la distancia entre ambas ciudades, dedujo la circunferencia del planeta.",
@@ -235,11 +244,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "ciencia-mundo",
     titulo: "La ciencia viaja por el mundo",
     anio: "Siglos VIII – XV",
-    intro:
-      "Cuando el Imperio romano se derrumbó, gran parte del saber griego habría podido perderse para siempre. No ocurrió, y en buena medida se lo debemos a otras civilizaciones. En el mundo islámico, sabios de Bagdad a Córdoba tradujeron, conservaron y ampliaron el conocimiento griego, y crearon disciplinas nuevas como el álgebra. En la India se inventó una forma de contar que lo cambiaría todo, incluido el número cero. Y en China surgieron inventos que transformarían el planeta. Durante estos siglos, la ciencia no vivió en un solo lugar: viajó, se mezcló y creció, esperando el momento de regresar con fuerza a Europa.",
     subhitos: [
       hito("ciencia-mundo", "cero-india", "El cero y los números", "India, ≈siglo V-VII",
-        "¿Cómo puede «nada» ser uno de los mayores inventos de la historia?",
+        "",
         [
           "En la India nació el sistema de números que usamos hoy, con diez cifras y, sobre todo, con algo revolucionario: el cero como número.",
           "Puede parecer obvio, pero no lo era. El cero permitió escribir cualquier cantidad, por enorme que fuera, y hacer cálculos con una facilidad imposible con los números romanos.",
@@ -248,7 +255,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: hoy los ordenadores funcionan solo con ceros y unos. Aquel invento indio del cero está, literalmente, dentro de cada aparato que usas."),
       hito("ciencia-mundo", "al-juarismi", "Al-Juarismi y el álgebra", "≈780-850",
-        "¿De dónde vienen las «x» de las matemáticas?",
+        "",
         [
           "Al-Juarismi fue un sabio de la Casa de la Sabiduría de Bagdad, el gran centro científico de su época. Escribió un tratado que dio nombre a una rama entera de las matemáticas: el álgebra.",
           "El álgebra permite resolver problemas usando símbolos e incógnitas, en lugar de números concretos. Es una herramienta poderosísima para describir relaciones y resolver ecuaciones.",
@@ -257,7 +264,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la palabra «algoritmo» procede del nombre de Al-Juarismi. Cada vez que un ordenador ejecuta un algoritmo, honra sin saberlo a aquel sabio de Bagdad."),
       hito("ciencia-mundo", "alhacen", "Alhacén y la óptica", "965-1040",
-        "¿Quién fue el primero en pensar como un científico moderno?",
+        "",
         [
           "Alhacén (Ibn al-Haytham) estudió la luz y la visión con una precisión sin precedentes. Demostró que vemos porque la luz rebota en los objetos y entra en nuestros ojos, y no al revés, como se creía.",
           "Pero su mayor aportación fue el método: insistía en que ninguna idea debía aceptarse sin comprobarla mediante experimentos cuidadosos y repetibles.",
@@ -266,7 +273,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Alhacén escribió que quien busca la verdad debe desconfiar incluso de los grandes sabios y comprobarlo todo por sí mismo. Es casi una definición de la ciencia moderna."),
       hito("ciencia-mundo", "china-inventos", "Los grandes inventos de China", "Siglos II a. C. – XV",
-        "¿Y si los inventos que cambiaron Europa vinieran de mucho más lejos?",
+        "",
         [
           "Mientras Europa vivía la Edad Media, China desarrollaba inventos que transformarían el mundo entero: el papel, la imprenta, la pólvora y la brújula.",
           "El papel y la imprenta permitieron guardar y difundir el conocimiento; la brújula hizo posibles los grandes viajes por mar; y la pólvora cambió para siempre la guerra.",
@@ -292,11 +299,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "revolucion-cientifica",
     titulo: "La Revolución Científica",
     anio: "Siglos XVI – XVII",
-    intro:
-      "Entre los siglos XVI y XVII, en apenas unas generaciones, cambió por completo la forma de entender el universo y de buscar la verdad. Se dejó de aceptar lo que decían los libros antiguos y se empezó a observar, medir y experimentar. La Tierra dejó de ser el centro del cosmos, los objetos empezaron a caer según leyes matemáticas y el cielo se llenó de mundos nuevos vistos por primera vez a través de un telescopio. Fue la Revolución Científica: el momento en que nació la ciencia moderna. Nunca la humanidad había cambiado tan deprisa su imagen del mundo.",
     subhitos: [
       hito("revolucion-cientifica", "copernico", "Copérnico", "1473-1543",
-        "¿Y si no fuéramos el centro de todo?",
+        "",
         [
           "Durante más de mil años se había creído que la Tierra estaba inmóvil en el centro del universo y que todo giraba a su alrededor. Parecía evidente: el Sol «sale» y «se pone» cada día.",
           "Nicolás Copérnico se atrevió a proponer lo contrario: es la Tierra la que gira alrededor del Sol, junto con los demás planetas. Su modelo explicaba mucho mejor los movimientos del cielo.",
@@ -305,7 +310,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: cuando decimos que algo produjo un «giro copernicano», nos referimos precisamente a este cambio: una idea que da la vuelta por completo a lo que se creía."),
       hito("revolucion-cientifica", "galileo", "Galileo Galilei", "1564-1642",
-        "¿Qué pasa cuando apuntas un telescopio al cielo por primera vez?",
+        "",
         [
           "Galileo fue uno de los primeros en usar el telescopio para observar el cielo, y lo que vio cambió la historia: montañas en la Luna, lunas girando alrededor de Júpiter, miles de estrellas nuevas.",
           "Todo aquello confirmaba que el cielo no era perfecto e inmutable, y apoyaba la idea de Copérnico de que la Tierra no era el centro de todo.",
@@ -314,7 +319,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: cuenta la leyenda que, tras ser obligado a negar que la Tierra se movía, Galileo murmuró: «Y sin embargo, se mueve»."),
       hito("revolucion-cientifica", "kepler", "Kepler", "1571-1630",
-        "¿Y si los planetas no se movieran en círculos perfectos?",
+        "",
         [
           "Se creía que los astros debían moverse en círculos perfectos, porque el círculo se consideraba la figura más noble. Johannes Kepler descubrió que no era así.",
           "Estudiando durante años miles de observaciones muy precisas, comprobó que los planetas giran alrededor del Sol siguiendo elipses, no círculos, y que se mueven más deprisa cuando están más cerca del Sol.",
@@ -323,7 +328,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Kepler tardó años en aceptar sus propias conclusiones, porque le costaba renunciar a la belleza del círculo. La realidad pesó más que la costumbre."),
       hito("revolucion-cientifica", "nace-metodo", "Nace el método científico", "Bacon y Descartes",
-        "¿Cómo asegurarse de no engañarse a uno mismo?",
+        "",
         [
           "Dos pensadores dieron forma a la nueva manera de buscar la verdad. Francis Bacon defendió que el conocimiento debe nacer de la observación y del experimento, reuniendo datos antes de sacar conclusiones.",
           "René Descartes, en cambio, insistió en la fuerza de la razón y en dudar de todo lo que no fuera absolutamente seguro. Propuso analizar cada problema dividiéndolo en partes más simples.",
@@ -354,7 +359,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("revolucion-cientifica", "newton", "Isaac Newton", "1643-1727",
-        "¿Y si la misma fuerza que hace caer una manzana moviera los planetas?",
+        "",
         [
           "Isaac Newton logró una de las mayores hazañas de la historia del pensamiento: unir el cielo y la Tierra bajo unas mismas leyes.",
           "Comprendió que la fuerza que hace caer una manzana al suelo es la misma que mantiene a la Luna girando alrededor de la Tierra y a los planetas alrededor del Sol: la gravedad.",
@@ -390,11 +395,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "ilustracion-ciencia",
     titulo: "La Ilustración: ordenar el mundo",
     anio: "Siglo XVIII",
-    intro:
-      "Tras la Revolución Científica, el siglo XVIII confió como nunca en la razón. Fue el Siglo de las Luces: se pensaba que, con conocimiento y método, la humanidad podía comprender el mundo y mejorar la vida. La ciencia se organizó, se llenó de academias y sociedades, y empezó a clasificarlo y medirlo todo. Nacieron la química moderna y la biología ordenada, se domó la electricidad y se soñó con reunir todo el saber humano en grandes enciclopedias. La ciencia dejaba de ser cosa de genios aislados para convertirse en una tarea común y compartida.",
     subhitos: [
       hito("ilustracion-ciencia", "linneo", "Linneo clasifica la vida", "1707-1778",
-        "¿Cómo poner orden en millones de seres vivos?",
+        "",
         [
           "El naturalista Carlos Linneo se propuso ordenar toda la vida conocida. Creó un sistema para clasificar plantas y animales en grupos, del más general al más concreto.",
           "Inventó además una forma sencilla de nombrar cada especie con dos palabras en latín, un sistema tan práctico que seguimos usándolo hoy en todo el mundo.",
@@ -403,7 +406,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: nuestra propia especie recibió de Linneo su nombre científico: Homo sapiens, que significa «hombre sabio»."),
       hito("ilustracion-ciencia", "lavoisier", "Lavoisier y la química moderna", "1743-1794",
-        "¿Adónde va la materia cuando algo se quema?",
+        "",
         [
           "Antes de Lavoisier, la química era casi magia, heredera de la alquimia. Él la convirtió en una ciencia exacta, basada en medir con precisión.",
           "Demostró que en una reacción química nada se crea ni se destruye: la materia solo se transforma. Es la ley de conservación de la masa, uno de los pilares de la química.",
@@ -412,7 +415,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Lavoisier murió en la guillotina durante la Revolución Francesa. Un juez llegó a decir que «la República no necesita sabios». La ciencia perdió a uno de sus grandes genios."),
       hito("ilustracion-ciencia", "franklin-electricidad", "Franklin y la electricidad", "1706-1790",
-        "¿Es posible atrapar un rayo?",
+        "",
         [
           "La electricidad parecía un misterio caprichoso hasta que empezó a estudiarse con método. Benjamin Franklin demostró, con experimentos audaces, que el rayo es electricidad.",
           "Según la famosa historia, hizo volar una cometa durante una tormenta para comprobarlo, un experimento tan peligroso como revelador.",
@@ -421,7 +424,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la electricidad, apenas una curiosidad de laboratorio en el siglo XVIII, se convertiría un siglo después en la fuerza que iluminaría y movería el mundo entero."),
       hito("ilustracion-ciencia", "academias-enciclopedia", "Academias y enciclopedias", "El saber compartido",
-        "¿Y si el conocimiento perteneciera a todos?",
+        "",
         [
           "En el siglo XVIII, la ciencia se volvió una tarea colectiva. Surgieron academias y sociedades científicas donde los estudiosos compartían sus descubrimientos, los discutían y los publicaban.",
           "Nació también la idea de reunir todo el conocimiento humano en grandes obras. La Enciclopedia francesa quiso ordenar y difundir los saberes de su tiempo para que llegaran a cualquiera.",
@@ -438,15 +441,12 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "siglo-xix",
     titulo: "El siglo XIX: energía, vida y materia",
     anio: "Siglo XIX",
-    intro:
-      "El siglo XIX fue una explosión de grandes ideas que aún hoy sostienen la ciencia. Se descubrió que la Tierra es inimaginablemente antigua, que todos los seres vivos están hechos de células y están emparentados entre sí, que la herencia sigue reglas matemáticas, que la electricidad y el magnetismo son lo mismo, que toda la materia cabe en una tabla y que la energía no se crea ni se destruye. Fue también el siglo de la Revolución Industrial, en el que la ciencia y la técnica empezaron a cambiar la vida cotidiana a una velocidad nunca vista. Y fue el siglo en que la ciencia dejó de ser una afición de caballeros con dinero para convertirse en una profesión, con laboratorios, revistas y universidades.",
     subhitos: [
       hito("siglo-xix", "edad-de-la-tierra", "La Tierra tiene una edad", "1788-1956",
-        "¿Cuánto tiempo hace falta para que exista una montaña?",
+        "",
         [
           "Antes de poder aceptar la evolución, la ciencia tenía que resolver un problema previo: el TIEMPO. En Europa se daba por bueno un cálculo hecho en el siglo XVII a partir de las genealogías de la Biblia, según el cual el mundo se había creado hacia el 4004 antes de Cristo. Con seis mil años de historia, ninguna montaña puede formarse despacio y ninguna especie puede transformarse en otra.",
           "El primero en romper ese techo fue un médico y agricultor escocés, James Hutton. Observando acantilados y capas de roca se dio cuenta de algo elemental: los procesos que vemos hoy —la lluvia que erosiona, el río que arrastra sedimentos, el sedimento que se comprime y se convierte en roca— son lentísimos, y si son los mismos que han actuado siempre, hacen falta cantidades de tiempo inconcebibles.",
-          "En un lugar llamado Siccar Point encontró la prueba: capas de roca antiquísimas, plegadas y erosionadas hasta quedar horizontales, y encima otras capas nuevas, depositadas mucho después. Un compañero suyo escribió que al mirarlo «la mente parecía marearse de mirar tan atrás en el abismo del tiempo».",
           "Charles Lyell convirtió esa intuición en una ciencia con reglas, y su libro fue precisamente lo que Darwin se llevó a leer en su viaje en el Beagle. Sin el tiempo profundo de la geología, la selección natural no habría podido funcionar: son dos ideas que se sostienen la una a la otra.",
           "Pero seguía faltando un número. En el siglo XIX se intentó calcular por cuánto tarda en enfriarse una bola de roca fundida, y el físico Kelvin dio como máximo unas decenas de millones de años, muy pocos para lo que la geología y la biología necesitaban. La discusión fue enconada durante décadas.",
           "El desempate llegó con la radiactividad. Al descubrirse que ciertos elementos se transforman en otros a un ritmo constante y perfectamente medible, se pudo usar la roca como un reloj: contando cuánto queda del elemento original y cuánto de su producto, sale el tiempo transcurrido. En 1956, midiendo un meteorito, se estableció la edad de la Tierra en unos 4.550 millones de años, cifra que sigue vigente.",
@@ -454,11 +454,10 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: para hacerse una idea de la escala, si los 4.550 millones de años de la Tierra fueran un solo año, la vida aparecería en febrero, los animales complejos a mediados de noviembre, los dinosaurios se extinguirían el 26 de diciembre, nuestra especie aparecería a las once y media de la noche del 31 de diciembre y toda la historia escrita ocuparía los últimos veinte segundos."),
       hito("siglo-xix", "teoria-celular", "Todo está hecho de células", "1665-1858",
-        "¿De qué está hecho un ser vivo si lo miras muy de cerca?",
+        "",
         [
           "En 1665, Robert Hooke apuntó su microscopio a una fina lámina de corcho y vio que estaba dividido en compartimentos diminutos, como las celdillas de un panal o como las celdas de un monasterio. Por eso las llamó «células». Lo que estaba viendo eran las paredes vacías de células muertas, pero el nombre se quedó.",
           "Casi al mismo tiempo, un comerciante de telas holandés, Antoni van Leeuwenhoek, que pulía lentes minúsculas de una calidad asombrosa, miró una gota de agua de un estanque… y descubrió que estaba llena de seres vivos moviéndose. Los llamó «animálculos». Miró también su propia saliva, el sarro de sus dientes, el semen y la sangre, y encontró vida en todas partes. Nadie tenía ni idea de que existiera un mundo entero por debajo del alcance del ojo.",
-          "Y aquí ocurrió algo que se repite en toda esta historia: hizo falta siglo y medio para entender lo que significaba. La teoría celular no se formuló hasta la década de 1830, con tres afirmaciones que hoy son la base entera de la biología y de la medicina.",
           "PRIMERA: todos los seres vivos estamos hechos de células. Una bacteria es una sola; tú tienes en torno a treinta billones.",
           "SEGUNDA: la célula es la unidad funcional de la vida. No hay nada más pequeño que esté vivo, y todo lo que hace un cuerpo —moverse, digerir, pensar, defenderse— es lo que hacen sus células.",
           "TERCERA, la que añadió Rudolf Virchow y la más importante: toda célula procede de otra célula. Nada vivo aparece de la nada, y de ahí salió el golpe definitivo a la idea de la generación espontánea, que Pasteur remató con sus experimentos.",
@@ -467,7 +466,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Leeuwenhoek nunca reveló su técnica para fabricar lentes, y sus microscopios llegaban a aumentos que nadie logró igualar en más de un siglo. Era un comerciante sin estudios universitarios que no sabía latín, la lengua de la ciencia de su época: escribía sus descubrimientos en holandés, en cartas, y aun así lo eligieron miembro de la Royal Society de Londres."),
       hito("siglo-xix", "darwin", "Darwin y la evolución", "1809-1882",
-        "¿De dónde vienen todos los seres vivos?",
+        "",
         [
           "Charles Darwin viajó por el mundo observando la asombrosa variedad de la vida. Poco a poco llegó a una idea revolucionaria: todas las especies proceden de antepasados comunes y cambian a lo largo de enormes periodos de tiempo.",
           "El motor de ese cambio es la selección natural: los seres mejor adaptados a su entorno sobreviven y dejan más descendencia, transmitiendo sus características.",
@@ -492,7 +491,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("siglo-xix", "mendel", "Mendel y la herencia", "1822-1884",
-        "¿Por qué nos parecemos a nuestros padres?",
+        "",
         [
           "Gregor Mendel, un monje apasionado por la naturaleza, cultivó y cruzó miles de plantas de guisantes en el huerto de su monasterio, anotándolo todo con paciencia.",
           "Descubrió que los rasgos se heredan siguiendo reglas matemáticas precisas, gracias a «unidades» que pasan de padres a hijos. Hoy las llamamos genes.",
@@ -501,7 +500,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Mendel fue un adelantado a su tiempo. Su descubrimiento tuvo que esperar a que el mundo estuviera preparado para entenderlo."),
       hito("siglo-xix", "maxwell", "Maxwell y el electromagnetismo", "1831-1879",
-        "¿Y si la luz, la electricidad y el magnetismo fueran lo mismo?",
+        "",
         [
           "James Clerk Maxwell logró unir en una sola teoría dos fuerzas que parecían distintas: la electricidad y el magnetismo. Demostró que son dos caras de un mismo fenómeno, el electromagnetismo.",
           "Sus ecuaciones predijeron algo asombroso: que existían ondas electromagnéticas viajando por el espacio, y que la propia luz era una de ellas.",
@@ -510,7 +509,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: gracias a las ecuaciones de Maxwell entendemos que la luz visible, las ondas de radio y los rayos X son todos el mismo fenómeno, solo que con distinta energía."),
       hito("siglo-xix", "mendeleyev", "Mendeléyev y la tabla periódica", "1834-1907",
-        "¿Se pueden ordenar todos los ladrillos del universo?",
+        "",
         [
           "Dmitri Mendeléyev ordenó todos los elementos químicos conocidos según sus propiedades y creó la tabla periódica, uno de los mapas más útiles de la ciencia.",
           "Lo más impresionante es que su tabla tenía huecos: Mendeléyev predijo que existían elementos aún no descubiertos y describió cómo serían.",
@@ -519,7 +518,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: se cuenta que Mendeléyev concibió la estructura de la tabla periódica tras darle muchas vueltas, casi como quien resuelve un enorme rompecabezas."),
       hito("siglo-xix", "termodinamica", "La energía y la termodinámica", "Descubrir la energía",
-        "¿Qué tienen en común el calor, el movimiento y la vida?",
+        "",
         [
           "En el siglo XIX, impulsados por las máquinas de vapor de la Revolución Industrial, los científicos comprendieron una idea profunda: todo lo que ocurre implica transformaciones de energía.",
           "Descubrieron que la energía no se crea ni se destruye, solo cambia de forma: de calor a movimiento, de movimiento a electricidad. Es una de las leyes más firmes de la física.",
@@ -537,11 +536,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "fisica-moderna",
     titulo: "La revolución de la física",
     anio: "Primera mitad del siglo XX",
-    intro:
-      "A comienzos del siglo XX, justo cuando parecía que la física ya lo tenía casi todo resuelto, el mundo se puso patas arriba. Se descubrió que el tiempo y el espacio no son absolutos, que la materia y la energía son intercambiables y que, en lo más pequeño, la naturaleza se comporta de formas asombrosas e incluso desconcertantes. La imagen ordenada y predecible del universo de Newton dio paso a otra mucho más extraña y fascinante. Fue la mayor revolución en física desde Newton, y de ella salieron tanto maravillas tecnológicas como el arma más terrible jamás creada.",
     subhitos: [
       hito("fisica-moderna", "curie", "Marie Curie y la radiactividad", "1867-1934",
-        "¿Y si algunos átomos brillaran con una energía oculta?",
+        "",
         [
           "Marie Curie descubrió que ciertos materiales emiten por sí solos una radiación misteriosa: la radiactividad. Aquello reveló que dentro del átomo se escondía una energía inmensa.",
           "Junto a su marido descubrió nuevos elementos, como el radio y el polonio, trabajando en condiciones durísimas y con medios muy escasos.",
@@ -571,7 +568,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("fisica-moderna", "einstein", "Einstein y la relatividad", "1879-1955",
-        "¿Y si el tiempo no pasara igual para todos?",
+        "",
         [
           "Albert Einstein transformó nuestra idea del universo. Demostró que el tiempo y el espacio no son fijos: pueden estirarse y encogerse según cómo nos movamos o según la gravedad.",
           "Descubrió también que la masa y la energía son la misma cosa, resumido en la fórmula más famosa de la ciencia: la energía es igual a la masa por la velocidad de la luz al cuadrado.",
@@ -599,7 +596,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("fisica-moderna", "cuantica", "El mundo cuántico", "Planck, Bohr, Heisenberg",
-        "¿Y si en lo más pequeño la naturaleza rompiera todas las reglas?",
+        "",
         [
           "Al estudiar el interior de los átomos, los físicos descubrieron un mundo que desafía el sentido común: el mundo cuántico. Allí, la energía viene en pequeños paquetes y las partículas se comportan también como ondas.",
           "Pioneros como Max Planck, Niels Bohr y Werner Heisenberg comprendieron que, en esa escala diminuta, no se puede predecir con certeza lo que hará una partícula, solo calcular probabilidades.",
@@ -625,7 +622,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("fisica-moderna", "atomo-energia", "El átomo: poder y peligro", "El poder del átomo",
-        "¿Qué ocurre cuando la ciencia libera una fuerza que no puede controlar?",
+        "",
         [
           "Al comprender el interior del átomo, los científicos descubrieron que podía liberarse una cantidad de energía inmensa rompiendo o uniendo sus núcleos.",
           "Esa energía tuvo dos caras opuestas. Por un lado, las centrales nucleares, capaces de producir enormes cantidades de electricidad. Por otro, la bomba atómica, el arma más destructiva jamás creada.",
@@ -634,9 +631,8 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: muchos de los científicos que ayudaron a crear la bomba atómica dedicaron después su vida a advertir contra el peligro de las armas nucleares."),
       hito("fisica-moderna", "big-bang", "El universo tiene una historia", "1929-1965",
-        "¿Ha existido siempre el universo, o empezó alguna vez?",
+        "",
         [
-          "Hasta el siglo XX, la respuesta era «siempre». Se daba por hecho que el universo era eterno, estático y, en lo esencial, igual en todas las épocas. Einstein mismo, cuando sus ecuaciones le salieron con un universo que no podía estar quieto, les añadió un término para forzarlo a estar estable. Después dijo que había sido el mayor error de su vida.",
           "El primer golpe lo dio una pregunta sencilla: ¿qué son exactamente esas manchas nebulosas del cielo? En 1924, midiendo su distancia, Edwin Hubble demostró que algunas no estaban dentro de nuestra galaxia, sino que eran GALAXIAS ENTERAS, con miles de millones de estrellas, a distancias inconcebibles. En una sola observación, el universo conocido se multiplicó por miles.",
           "Y para medir esas distancias usó el método que había descubierto Henrietta Leavitt en Harvard, clasificando placas fotográficas por un sueldo de miseria.",
           "El segundo golpe llegó en 1929: analizando la luz de esas galaxias, Hubble comprobó que casi todas se alejan de nosotros, y que cuanto más lejos están, más rápido se alejan. La conclusión es inevitable y no significa que estemos en el centro de nada: significa que el espacio ENTERO se está expandiendo, como los puntos dibujados en un globo que se infla, que se separan todos entre sí.",
@@ -648,10 +644,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: parte de ese eco del origen se colaba en los televisores antiguos. Un pequeño porcentaje de la nieve gris que aparecía al sintonizar un canal vacío era radiación de fondo cósmico: durante décadas, cualquiera pudo ver en su salón un poquito del universo recién nacido."),
       hito("fisica-moderna", "explorar-cosmos", "Salir a mirar de cerca", "Desde 1957",
-        "¿Qué cambia cuando se puede ir a comprobarlo en persona?",
+        "",
         [
           "Durante toda la historia, la astronomía consistió en mirar hacia arriba desde el suelo. En 1957, con el lanzamiento del Sputnik, empezó a consistir también en IR.",
-          "El motivo inicial fue político: la rivalidad entre Estados Unidos y la Unión Soviética. Pero el resultado científico fue extraordinario, porque por primera vez se pudieron medir cosas en lugar de deducirlas.",
           "LAS SONDAS. Se ha aterrizado en la Luna, en Marte, en Venus, en Titán y en un cometa; se han enviado sondas a todos los planetas del sistema solar. Las dos Voyager, lanzadas en 1977, siguen funcionando y ya han salido de la zona de influencia del Sol: son los objetos humanos más lejanos que existen. Y los robots que recorren Marte han confirmado algo que desde la Tierra solo se sospechaba: allí hubo agua líquida.",
           "LOS TELESCOPIOS ESPACIALES. Fuera de la atmósfera se ve sin la distorsión del aire y se pueden captar radiaciones que aquí no llegan. El Hubble fotografió galaxias a miles de millones de años luz y su famoso «campo profundo» —una foto de un trozo de cielo aparentemente vacío que resultó estar lleno de miles de galaxias— cambió la percepción que teníamos de nuestro sitio. Y el telescopio James Webb, con su espejo dorado de seis metros y medio, ve en infrarrojo y está observando galaxias formadas apenas unos cientos de millones de años después del Big Bang.",
           "LOS EXOPLANETAS, que es probablemente el cambio conceptual mayor. Hasta 1995 no había ninguna prueba de que existieran planetas alrededor de otras estrellas: era una suposición razonable y nada más. Hoy se han confirmado más de cinco mil, se sabe medir su tamaño, su órbita y en algunos casos su atmósfera, y se estima que la mayoría de las estrellas tienen planetas. La pregunta de si hay vida en otro sitio ha pasado de ser filosofía a ser un programa de investigación con instrumentos y calendario.",
@@ -660,7 +655,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: en 1990, a petición del astrónomo Carl Sagan, la sonda Voyager 1 giró sus cámaras y fotografió la Tierra desde seis mil millones de kilómetros. Se ve como un punto de menos de un píxel dentro de un rayo de luz dispersa. Esa foto se llama «un punto azul pálido», y en ella caben, sin excepción, todas las guerras y todas las personas que han existido."),
       hito("fisica-moderna", "tectonica-placas", "Los continentes se mueven", "1912-1968",
-        "¿Y si el suelo firme no fuera firme en absoluto?",
+        "",
         [
           "En 1912, un meteorólogo alemán llamado Alfred Wegener planteó una idea que a sus colegas les pareció ridícula: los continentes se mueven, y en el pasado estuvieron todos unidos en uno solo.",
           "Sus argumentos eran buenos y muy visuales. Las costas de África y Sudamérica encajan como dos piezas de un puzle. Hay fósiles idénticos de plantas y animales terrestres a los dos lados del Atlántico, y ningún reptil cruza un océano a nado. Hay cordilleras que empiezan en un continente y continúan, con las mismas rocas y la misma edad, en otro. Y hay marcas de glaciares antiguos en la India, en África y en Australia, es decir, en zonas hoy tropicales, que solo tienen sentido si todas estuvieron juntas y cerca del polo.",
@@ -669,7 +664,6 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           "El hallazgo definitivo fue magnético. El campo magnético de la Tierra se invierte cada cierto tiempo, y la roca volcánica, al enfriarse, queda «grabada» con la orientación del momento. Al medir el fondo oceánico apareció un patrón de bandas simétricas a los dos lados de la cordillera central, como los anillos de un árbol: roca nueva en el centro, cada vez más antigua a medida que se aleja.",
           "Eso solo se puede explicar de una manera: por la cordillera central sale material nuevo continuamente, el suelo oceánico se va separando hacia los lados y en otras zonas se hunde bajo otra placa. Los continentes no navegan sobre el mar: van montados en placas de corteza que se mueven unos centímetros al año, empujadas por el calor interno del planeta.",
           "Hacia 1968 la teoría de la tectónica de placas estaba aceptada, y unificó de golpe cosas que parecían no tener relación: por qué hay terremotos y volcanes exactamente en las mismas franjas del mapa, por qué crecen las montañas —el Himalaya se levanta porque la India sigue empujando contra Asia—, cómo se abren y se cierran los océanos y por qué la vida evolucionó separada en unos continentes y no en otros.",
-          "Es el ejemplo perfecto de dos cosas: que una idea correcta puede tardar cincuenta años en aceptarse si no explica CÓMO, y que la ciencia acaba corrigiéndose sola cuando llegan los datos.",
         ],
         "Dato curioso: se mueven ahora mismo, mientras lees esto, a un ritmo parecido al que te crecen las uñas: unos centímetros al año. Y en unas decenas de millones de años el Mediterráneo habrá desaparecido, porque África sigue subiendo hacia Europa."),
     ],
@@ -682,11 +676,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "descifrar-vida",
     titulo: "Descifrar la vida",
     anio: "Siglo XX",
-    intro:
-      "Si el siglo XX empezó revolucionando la física, lo terminó revolucionando la biología. Los científicos descubrieron la molécula que guarda las instrucciones de todos los seres vivos, el ADN, y aprendieron a leer su lenguaje. Por primera vez, la humanidad podía asomarse al código secreto de la vida: entender cómo se transmite, cómo se copia y cómo, a veces, se equivoca. De aquellos hallazgos nacería la biología moderna, capaz hoy no solo de leer ese código, sino incluso de corregirlo.",
     subhitos: [
       hito("descifrar-vida", "adn", "El ADN: la molécula de la vida", "1953",
-        "¿Dónde se guardan las instrucciones para construir un ser vivo?",
+        "",
         [
           "En 1953 se descubrió la estructura del ADN, la molécula que contiene las instrucciones para formar y hacer funcionar a todos los seres vivos, desde una bacteria hasta un ser humano.",
           "Tiene forma de doble hélice, como una escalera retorcida. Sus escalones forman un código que se puede copiar con enorme fidelidad cada vez que una célula se divide.",
@@ -695,7 +687,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: si estirásemos todo el ADN de una sola célula humana, mediría cerca de dos metros. Y llevas billones de células dentro de ti."),
       hito("descifrar-vida", "rosalind-franklin", "Rosalind Franklin", "1920-1958",
-        "¿Cuántos descubrimientos ocultan un nombre olvidado?",
+        "",
         [
           "El descubrimiento de la forma del ADN no habría sido posible sin Rosalind Franklin, una científica brillante experta en fotografiar moléculas con rayos X.",
           "Fue su famosa imagen, conocida como «Fotografía 51», la que reveló la forma de doble hélice del ADN con una claridad decisiva.",
@@ -704,7 +696,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: hoy la «Fotografía 51» de Rosalind Franklin se considera una de las imágenes más importantes de la historia de la ciencia."),
       hito("descifrar-vida", "editar-vida", "Leer y editar la vida", "Del genoma a hoy",
-        "¿Y si pudiéramos corregir los errores escritos en nuestros genes?",
+        "",
         [
           "Tras descubrir el ADN, la ciencia se propuso leerlo entero. A comienzos del siglo XXI se logró descifrar el genoma humano completo, todas las instrucciones de nuestra especie.",
           "Más tarde llegaron herramientas capaces no solo de leer los genes, sino de editarlos, corrigiendo con precisión pequeños errores en el ADN.",
@@ -722,11 +714,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
     key: "era-informacion",
     titulo: "La era de la información y el futuro",
     anio: "Siglos XX – XXI",
-    intro:
-      "En la segunda mitad del siglo XX, la ciencia dio a luz una nueva revolución: la de la información. Nacieron los ordenadores, máquinas capaces de calcular y procesar datos a una velocidad imposible para cualquier ser humano. Después llegó internet, que conectó al mundo entero, y más tarde la inteligencia artificial, capaz de aprender por sí misma. En pocas décadas, la información se convirtió en el gran motor de nuestra época. Y así llegamos hasta hoy, con la ciencia avanzando más rápido que nunca y con la misma pregunta de siempre por delante: ¿qué haremos con todo lo que sabemos?",
     subhitos: [
       hito("era-informacion", "turing", "Alan Turing y el ordenador", "1912-1954",
-        "¿Puede una máquina pensar?",
+        "",
         [
           "Alan Turing imaginó, antes de que existieran los ordenadores, una máquina capaz de seguir instrucciones para resolver cualquier problema que pudiera describirse con reglas. Fue la idea que está detrás de todos los ordenadores actuales.",
           "Durante la Segunda Guerra Mundial, ayudó a descifrar los mensajes secretos del enemigo con máquinas de cálculo, acortando la guerra y salvando incontables vidas.",
@@ -752,7 +742,7 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("era-informacion", "internet", "La red que conectó el mundo", "Desde 1969",
-        "¿Qué ocurre cuando todos los ordenadores del mundo pueden hablar entre sí?",
+        "",
         [
           "A finales del siglo XX, los ordenadores empezaron a conectarse entre sí formando una red mundial: internet. Por primera vez, la información podía viajar en segundos de un extremo a otro del planeta.",
           "Con la web, cualquier persona pudo acceder a una cantidad de conocimiento que antes no cabía en las mayores bibliotecas del mundo.",
@@ -761,14 +751,13 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: gran parte de la tecnología de internet nació de la colaboración entre científicos que querían compartir sus datos y descubrimientos más fácilmente."),
       hito("era-informacion", "inteligencia-artificial", "La inteligencia artificial", "Siglo XXI",
-        "¿Y si las máquinas pudieran aprender solas?",
+        "",
         [
           "La inteligencia artificial son programas capaces de aprender a partir de enormes cantidades de datos, en lugar de seguir solo instrucciones fijas.",
           "Hoy pueden reconocer imágenes, traducir idiomas, conducir vehículos, ayudar a descubrir medicinas o mantener una conversación. Aprenden a base de ejemplos, un poco como aprendemos las personas.",
           "Es una herramienta poderosísima que ya está transformando la ciencia, el trabajo y la vida cotidiana a gran velocidad.",
           "Y trae consigo grandes preguntas: ¿cómo usarla bien?, ¿qué decisiones podemos dejarle?, ¿cómo asegurarnos de que beneficie a todos? Responderlas será uno de los grandes retos de tu generación.",
         ],
-        undefined,
         [
           {
             titulo: "Cómo aprende una máquina",
@@ -787,9 +776,8 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("era-informacion", "ciencia-del-clima", "La ciencia que avisa: el clima", "1856-hoy",
-        "¿Desde cuándo se sabe que quemar carbón calienta el planeta?",
+        "",
         [
-          "La respuesta sorprende a casi todo el mundo: desde el siglo XIX. No es un descubrimiento reciente ni una moda: es una de las líneas de investigación más antiguas y mejor comprobadas de la física.",
           "En 1856, la científica estadounidense Eunice Foote hizo un experimento sencillo con dos cilindros de cristal al sol, uno con aire normal y otro con dióxido de carbono, y comprobó que el segundo se calentaba más y tardaba más en enfriarse. Escribió que una atmósfera con más de ese gas daría a la Tierra una temperatura más alta. Su trabajo se leyó en un congreso —lo leyó un hombre, porque a ella no le dejaban hablar— y se olvidó durante siglo y medio.",
           "Pocos años después, John Tyndall midió con precisión qué gases atrapan el calor y cuáles no, y explicó el mecanismo: la luz del sol atraviesa la atmósfera, calienta el suelo, y el suelo devuelve ese calor en forma de radiación infrarroja que algunos gases —vapor de agua, dióxido de carbono, metano— absorben y reemiten. Sin ese efecto invernadero natural, la Tierra sería una bola helada; el problema no es que exista, es cambiar su intensidad.",
           "En 1896, el sueco Svante Arrhenius calculó a mano cuánto subiría la temperatura si se duplicara el dióxido de carbono de la atmósfera. Le salió una cifra asombrosamente cercana a la que dan hoy los superordenadores. Y lo curioso es que a él le parecía una buena noticia: pensaba que un clima más cálido favorecería las cosechas del norte de Europa.",
@@ -801,8 +789,9 @@ export const HISTORIA_CIENCIA_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Eunice Foote publicó su experimento tres años antes que Tyndall, y su nombre se recuperó en 2011 gracias a la investigación de un geólogo que rebuscaba en actas antiguas. Durante 155 años, la primera persona que relacionó el dióxido de carbono con el calentamiento del planeta no figuró en ningún libro."),
       hito("era-informacion", "ciencia-no-termina", "La ciencia no termina", "",
-        "Después de miles de años buscando entender el mundo, descubrimos algo sorprendente.",
+        "",
         [
+          "Después de miles de años buscando entender el mundo, descubrimos algo sorprendente.",
           "Hemos pasado de mirar el cielo con miedo a medir el universo; de creer que la Tierra era el centro de todo a comprender que somos un pequeño planeta girando alrededor de una estrella corriente.",
           "Cada civilización, cada época, añadió una pieza: los números, el método, la razón, el experimento, la duda honesta.",
           "Y sin embargo, cuanto más sabemos, más preguntas nuevas aparecen. No sabemos qué es la mayor parte del universo, cómo surgió la vida ni cómo funciona del todo nuestra propia mente.",

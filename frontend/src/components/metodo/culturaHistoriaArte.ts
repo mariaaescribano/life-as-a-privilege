@@ -5,8 +5,8 @@ import type { Vineta } from "./ComicViewer";
 // HISTORIA DEL ARTE Y LA LITERATURA (Cultura). Tagline: «La necesidad humana de
 // crear — cómo hemos contado quiénes somos, con imágenes y con palabras».
 //
-// Mismo modelo que las demás Historias: ETAPAS (con intro) → SUB-HITOS (cada uno
-// con su cómic: pregunta-gancho + cuerpo + dato curioso, foto + texto a la
+// Mismo modelo que las demás Historias: ETAPAS → SUB-HITOS (cada uno
+// con su cómic: cuerpo + dato curioso, foto + texto a la
 // derecha). Estructura del índice: Prólogo + 9 etapas (de las cuevas al arte
 // digital). Se entrelazan las dos artes: la imagen (pintura, escultura,
 // arquitectura) y la palabra (poesía, teatro, novela).
@@ -26,8 +26,9 @@ import type { Vineta } from "./ComicViewer";
 // de línea tras cada punto).
 //
 // CÓMO SE CUENTA (igual que en las demás Historias): que se ENTIENDA, no que se
-// cuente. Cada momento va con pregunta gancho → cuerpo (qué buscaba esa época y
-// por qué su arte es así) → «Dato curioso», y cuando el tema da para más (cómo
+// cuente. Cada momento es cuerpo (qué buscaba esa época y por qué su arte es así)
+// → «Dato curioso» (opcional: solo si de verdad hay algo curioso que contar), y
+// cuando el tema da para más (cómo
 // funciona la perspectiva, cómo era ir al teatro en Atenas, Las meninas mirada a
 // mirada, de dónde salió el cubismo, cómo mirar una obra que no entiendes…) se le
 // añaden páginas «Profundiza» con el parámetro `extras`: viñetas EXTRA del mismo
@@ -44,27 +45,40 @@ const foto = (_era: string, sub: string) =>
 interface Profundiza {
   titulo: string;
   cuerpo: string[];
-  dato?: string;
+  /** Uno o dos datos curiosos (ver `Datos`). */
+  dato?: Datos;
 }
 
-// Sub-hito con su cómic: viñeta principal (`pregunta` gancho + `cuerpo` + `dato`
-// curioso) y, opcionalmente, páginas «Profundiza» detrás.
+/** Los datos curiosos de un momento: uno («Dato curioso: …»), dos (el segundo
+ *  escrito como «Dato curioso II: …») o ninguno. */
+type Datos = string | string[];
+
+const enLista = (x?: Datos) => (x == null ? [] : Array.isArray(x) ? x : [x]);
+const esProfundiza = (x: unknown): x is Profundiza[] =>
+  Array.isArray(x) && typeof x[0] === "object";
+
+// Sub-hito con su cómic: viñeta principal (`pregunta` gancho + `cuerpo` + hasta
+// dos datos curiosos, OPCIONALES) y, opcionalmente, páginas «Profundiza» detrás.
+// Si el momento no tiene ningún dato curioso pero sí «Profundiza», se pasan los
+// extras directamente en su lugar (sin `undefined` de relleno).
 const hito = (
   era: string, key: string, titulo: string, fecha: string,
-  pregunta: string, cuerpo: string[], dato?: string, extras?: Profundiza[],
+  pregunta: string, cuerpo: string[],
+  datosOExtras?: Datos | Profundiza[], masExtras?: Profundiza[],
 ): SubHito => {
+  const datos = esProfundiza(datosOExtras) ? [] : enLista(datosOExtras);
+  const extras = esProfundiza(datosOExtras) ? datosOExtras : masExtras;
   const src = foto(era, key);
   const paragraphs: string[] = [];
   if (pregunta) paragraphs.push(pregunta);
-  paragraphs.push(...cuerpo);
-  if (dato) paragraphs.push(dato);
+  paragraphs.push(...cuerpo, ...datos);
   const vinetas: Vineta[] = [{ src, eyebrow: fecha, titulo, paragraphs }];
   (extras ?? []).forEach((e) => {
     vinetas.push({
       src,
       eyebrow: "Profundiza",
       titulo: e.titulo,
-      paragraphs: e.dato ? [...e.cuerpo, e.dato] : e.cuerpo,
+      paragraphs: [...e.cuerpo, ...enLista(e.dato)],
     });
   });
   return { key, titulo, foto: src, vinetas };
@@ -78,11 +92,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "prologo",
     titulo: "¿Qué es el arte?",
     anio: "Antes de empezar el viaje",
-    intro:
-      "Antes de recorrer los grandes cuadros, esculturas y libros de la historia, conviene detenerse en una pregunta sencilla y enorme: ¿por qué el ser humano crea? Ningún otro ser vivo pinta, esculpe, canta o escribe historias solo por el placer de expresarse. Nosotros lo hacemos desde hace decenas de miles de años. Antes incluso de inventar la escritura, ya pintábamos animales en las paredes de las cuevas y contábamos relatos alrededor del fuego. El arte y la literatura no sirven para sobrevivir, y sin embargo ninguna cultura ha vivido sin ellos. Son la forma en que cada época se mira a sí misma y nos cuenta qué le importaba, qué temía y qué soñaba. Este recorrido no trata de memorizar nombres y fechas, sino de entender algo más íntimo: cómo la humanidad ha intentado, una y otra vez, decir quién es.",
     subhitos: [
       hito("prologo", "que-es-arte", "¿Qué es el arte?", "La necesidad de crear",
-        "¿Sabrías explicar por qué a los seres humanos nos emociona una imagen o una historia?",
+        "",
         [
           "El arte es todo lo que creamos no para sobrevivir, sino para expresar algo: una emoción, una idea, una belleza, una pregunta. Un cuadro, una canción, una catedral o un poema son formas de decir lo que a veces las palabras corrientes no alcanzan.",
           "Lo asombroso es que el arte no es útil en el sentido práctico, y aun así ninguna cultura ha podido vivir sin él. Parece una necesidad tan humana como comer o dormir.",
@@ -91,7 +103,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la palabra «arte» viene del latín ars, que significaba «habilidad» o «técnica». Durante siglos, pintar o esculpir se consideró un oficio, no muy distinto del de un artesano."),
       hito("prologo", "por-que-creamos", "¿Por qué creamos?", "El impulso más humano",
-        "¿Y si crear fuera una forma de no estar solos ni de olvidar?",
+        "",
         [
           "Creamos por muchas razones: para expresar lo que sentimos, para dar sentido a lo que no entendemos, para dejar huella y para que algo de nosotros permanezca cuando ya no estemos.",
           "El arte y la literatura nos permiten compartir el mundo interior de otra persona: sentir lo que sintió alguien que vivió hace miles de años o al otro lado del planeta.",
@@ -99,7 +111,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           "Quizá por eso creamos: para conectar, para recordar y para entender un poco mejor quiénes somos.",
         ]),
       hito("prologo", "arte-y-palabra", "El arte y la palabra", "Imagen y literatura",
-        "¿Se puede crear belleza solo con palabras?",
+        "",
         [
           "Este viaje recorre dos grandes artes que crecieron juntas. Una es el arte de la imagen: la pintura, la escultura, la arquitectura. La otra es el arte de la palabra: la poesía, el teatro, la novela.",
           "La literatura es, sencillamente, el arte de contar y de emocionar usando el lenguaje. Con palabras se pueden construir mundos, personajes y sentimientos tan vivos como cualquier cuadro.",
@@ -116,11 +128,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "arte-nace",
     titulo: "El arte nace",
     anio: "Prehistoria",
-    intro:
-      "El arte es mucho más antiguo que las ciudades, la escritura o la ciencia. Hace decenas de miles de años, cuando nuestros antepasados aún vivían de la caza y la recolección, ya se adentraban en cuevas oscuras para pintar animales en las paredes, tallaban pequeñas figuras y se adornaban el cuerpo. También, mucho antes de saber escribir, contaban historias en voz alta que pasaban de padres a hijos. Aquellos primeros gestos creativos demuestran algo profundo: la necesidad de crear y de contar es tan vieja como la propia humanidad.",
     subhitos: [
       hito("arte-nace", "cuevas-rupestres", "Las cuevas pintadas", "Hace más de 30.000 años",
-        "¿Por qué alguien se arriesgaría a pintar en lo más profundo de una cueva oscura?",
+        "",
         [
           "En cuevas como Altamira, en España, o Lascaux, en Francia, nuestros antepasados pintaron bisontes, caballos y ciervos con un realismo y una fuerza que todavía hoy nos emocionan.",
           "Lo hacían en rincones profundos y difíciles, a la luz de antorchas, usando pigmentos naturales. No eran simples dibujos: probablemente formaban parte de rituales relacionados con la caza o con creencias sobre la naturaleza.",
@@ -145,7 +155,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("arte-nace", "primeras-esculturas", "Las primeras esculturas", "Prehistoria",
-        "¿Qué fue lo primero que talló la humanidad?",
+        "",
         [
           "Junto a las pinturas, nuestros antepasados crearon también las primeras esculturas: pequeñas figuras talladas en piedra, hueso o marfil.",
           "Muchas representan figuras femeninas, conocidas como Venus, que probablemente simbolizaban la fertilidad y la vida. Otras representaban animales con enorme detalle.",
@@ -154,7 +164,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la Venus de Willendorf, una de las esculturas más famosas de la Prehistoria, fue tallada hace unos 25.000 años y cabe en la palma de una mano."),
       hito("arte-nace", "relatos-orales", "Antes de escribir: los relatos", "La palabra hablada",
-        "¿Existía la literatura antes de que existiera la escritura?",
+        "",
         [
           "Mucho antes de inventar la escritura, los seres humanos ya contaban historias. Alrededor del fuego, los mayores narraban mitos sobre el origen del mundo, hazañas de héroes y leyendas de antepasados.",
           "Aquellos relatos se transmitían de memoria, de generación en generación, y se recitaban muchas veces con ritmo, repeticiones y música para recordarlos mejor.",
@@ -171,11 +181,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "primeras-civilizaciones",
     titulo: "Las primeras civilizaciones",
     anio: "≈3000 – 500 a. C.",
-    intro:
-      "Con las primeras grandes ciudades llegaron el arte monumental y la palabra escrita. En Egipto y Mesopotamia, el arte dejó de caber en una cueva y se volvió gigantesco: pirámides, templos y estatuas colosales al servicio de los dioses y de los reyes. Y ocurrió algo que cambiaría la historia para siempre: la invención de la escritura. Por primera vez, las palabras podían guardarse, viajar y sobrevivir a quien las decía. Así nació la literatura escrita, y con ella el primer gran relato conservado de la humanidad.",
     subhitos: [
       hito("primeras-civilizaciones", "arte-egipcio", "El arte egipcio", "≈3000 – 30 a. C.",
-        "¿Por qué el arte egipcio se mantuvo casi igual durante tres mil años?",
+        "",
         [
           "El arte egipcio buscaba la eternidad. Sus pirámides, templos y estatuas se construían para durar para siempre y para acompañar a los muertos en la otra vida.",
           "Seguía reglas muy estrictas: las figuras humanas se pintaban siempre de la misma manera, con la cabeza de perfil y el cuerpo de frente. No buscaban el realismo, sino el orden y el símbolo.",
@@ -184,7 +192,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: los egipcios llenaban las tumbas de pinturas y objetos porque creían que ayudarían al difunto en su vida después de la muerte. Gracias a ello sabemos hoy cómo vivían."),
       hito("primeras-civilizaciones", "escritura-nace", "Nace la escritura", "≈3300 a. C.",
-        "¿Qué cambia cuando las palabras se pueden guardar?",
+        "",
         [
           "En Mesopotamia y Egipto se inventó la escritura, uno de los mayores hitos de la historia humana. Al principio servía para llevar cuentas y registrar cosechas o impuestos.",
           "Pero pronto se descubrió su poder inmenso: con la escritura, las palabras dejaban de depender de la memoria. Podían guardarse, copiarse y viajar a lugares y épocas lejanas.",
@@ -193,7 +201,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la primera escritura de Mesopotamia se llama cuneiforme, porque se hacía clavando una caña con forma de cuña sobre tablillas de barro húmedo."),
       hito("primeras-civilizaciones", "gilgamesh", "La Epopeya de Gilgamesh", "≈2100 a. C.",
-        "¿Cuál es la historia más antigua que se conserva escrita?",
+        "",
         [
           "La Epopeya de Gilgamesh, escrita en Mesopotamia hace más de cuatro mil años, es la obra literaria más antigua que se conserva. Cuenta las aventuras del rey Gilgamesh en busca de la inmortalidad.",
           "En ella aparecen temas que siguen conmoviéndonos hoy: la amistad, el miedo a la muerte, el deseo de trascender y la aceptación de que somos mortales.",
@@ -211,11 +219,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "grecia-roma",
     titulo: "Grecia y Roma: la belleza y el ideal",
     anio: "Siglos VIII a. C. – V d. C.",
-    intro:
-      "En Grecia, el ser humano se colocó en el centro del arte. Sus escultores buscaron la belleza perfecta del cuerpo humano, sus arquitectos crearon templos de una armonía que aún hoy imitamos, y nacieron dos géneros literarios inmensos: la epopeya y el teatro. Roma heredó todo ese legado, lo difundió por su gigantesco imperio y le añadió su genio para la ingeniería y el retrato realista. El arte y la literatura grecolatinos han sido, durante más de dos mil años, la gran referencia de la cultura occidental.",
     subhitos: [
       hito("grecia-roma", "escultura-griega", "La escultura griega", "Siglos V – IV a. C.",
-        "¿Y si la belleza pudiera medirse con números?",
+        "",
         [
           "Los escultores griegos buscaron representar el cuerpo humano de la forma más perfecta posible. Estudiaron las proporciones ideales y crearon figuras de una armonía y un equilibrio asombrosos.",
           "Sus estatuas parecen a punto de moverse: músculos tensos, posturas naturales, rostros serenos. Buscaban no solo copiar la realidad, sino mejorarla, mostrando al ser humano en su versión más noble.",
@@ -224,7 +230,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: muchas estatuas griegas que hoy vemos blancas estaban en realidad pintadas con colores vivos. El tiempo borró la pintura y nos dejó solo el mármol desnudo."),
       hito("grecia-roma", "templos-arquitectura", "Templos y armonía", "La arquitectura clásica",
-        "¿Por qué seguimos construyendo edificios que imitan a los griegos?",
+        "",
         [
           "Los griegos levantaron templos como el Partenón de Atenas, construidos con reglas de proporción tan cuidadas que aún hoy nos parecen perfectos.",
           "Inventaron los órdenes arquitectónicos, distintos estilos de columnas y decoración que darían forma a la arquitectura de Occidente durante siglos.",
@@ -232,7 +238,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           "Su influencia es tan enorme que muchos museos, parlamentos y bancos de todo el mundo siguen imitando, todavía hoy, la forma de un templo griego.",
         ]),
       hito("grecia-roma", "homero", "Homero", "≈siglo VIII a. C.",
-        "¿Puede un poema unir a todo un pueblo?",
+        "",
         [
           "A Homero se le atribuyen las dos grandes epopeyas de la Antigüedad griega: la Ilíada, que narra un episodio de la guerra de Troya, y la Odisea, el largo y accidentado regreso a casa del héroe Ulises.",
           "Son poemas enormes, llenos de dioses, héroes, batallas y aventuras, pero también de sentimientos muy humanos: el honor, la ira, la nostalgia del hogar y el deseo de volver.",
@@ -241,7 +247,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: no sabemos con certeza si Homero existió realmente o si fue una figura que reunió los relatos de muchos poetas anteriores."),
       hito("grecia-roma", "teatro-griego", "El teatro griego", "Siglo V a. C.",
-        "¿Y si mirar una historia en un escenario pudiera cambiarte por dentro?",
+        "",
         [
           "En Atenas nació el teatro tal como lo conocemos. Miles de espectadores se reunían en grandes graderíos al aire libre para ver representar tragedias y comedias.",
           "Las tragedias contaban historias de héroes enfrentados a su destino, al dolor y a decisiones imposibles. Buscaban conmover profundamente al público y hacerle reflexionar sobre la vida.",
@@ -267,7 +273,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("grecia-roma", "arte-romano", "El arte de Roma", "Siglos III a. C. – V d. C.",
-        "¿Qué añade Roma a la belleza griega?",
+        "",
         [
           "Roma admiró profundamente el arte griego y lo copió e imitó por todo su imperio. Pero también aportó lo suyo: un enorme talento para la ingeniería y un gusto por el realismo.",
           "Construyó acueductos, calzadas, anfiteatros como el Coliseo y edificios como el Panteón, con avances técnicos como el arco, la bóveda y el hormigón.",
@@ -285,11 +291,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "edad-media",
     titulo: "La Edad Media: fe y símbolo",
     anio: "Siglos V – XV",
-    intro:
-      "Durante la Edad Media, el arte y la literatura giraron sobre todo en torno a la religión. En una Europa profundamente cristiana, casi todo el arte se hacía para honrar a Dios: catedrales que se elevaban hacia el cielo, imágenes que enseñaban la fe a un pueblo que no sabía leer y libros copiados a mano con enorme paciencia en los monasterios. No se buscaba el realismo, sino el símbolo y lo sagrado. Y hacia el final del periodo, un poeta escribiría una obra tan inmensa que marcaría el paso hacia una nueva era.",
     subhitos: [
       hito("edad-media", "romanico-gotico", "Catedrales: románico y gótico", "Siglos XI – XV",
-        "¿Cómo se construye un edificio para hacer sentir la presencia de Dios?",
+        "",
         [
           "La Edad Media nos dejó dos grandes estilos de arte religioso. El románico, con iglesias de muros gruesos, arcos redondeados y aire sólido y sereno, como fortalezas de la fe.",
           "Después llegó el gótico, con catedrales altísimas, llenas de luz, con enormes vidrieras de colores y arcos que parecían estirarse hacia el cielo.",
@@ -298,7 +302,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: las grandes vidrieras góticas funcionaban como cómics luminosos: contaban historias de la Biblia con imágenes para que las entendiera un pueblo que en su mayoría no sabía leer."),
       hito("edad-media", "manuscritos-iluminados", "Los libros hechos a mano", "El scriptorium",
-        "¿Cuánto se tarda en escribir un libro entero a mano?",
+        "",
         [
           "Antes de la imprenta, cada libro se copiaba a mano, letra a letra. En los monasterios, los monjes dedicaban meses o años a reproducir textos sagrados y obras antiguas.",
           "Muchos de estos manuscritos se decoraban con bellísimas ilustraciones y letras doradas: son los llamados manuscritos iluminados, auténticas obras de arte.",
@@ -307,7 +311,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: algunos manuscritos eran tan valiosos que se encadenaban a los muros de las bibliotecas para que nadie pudiera robarlos."),
       hito("edad-media", "dante", "Dante y la Divina Comedia", "1265 – 1321",
-        "¿Puede un poema recorrer el infierno, el purgatorio y el paraíso?",
+        "",
         [
           "El poeta italiano Dante Alighieri escribió la Divina Comedia, uno de los mayores poemas de toda la literatura. En él, Dante imagina un viaje por el infierno, el purgatorio y el paraíso.",
           "A lo largo del camino se encuentra con personajes históricos y refleja toda la visión del mundo de su época: la religión, la moral, la política y el amor.",
@@ -316,10 +320,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: al escribir en italiano y no en latín, Dante ayudó a convertir su lengua en un idioma literario. Por eso se le considera uno de los padres del italiano moderno."),
       hito("edad-media", "musica-escrita", "La música aprende a escribirse", "Siglos IX-XV",
-        "¿Cómo se guarda algo que solo existe mientras suena?",
+        "",
         [
           "La música es el arte más antiguo y el más frágil. Se han encontrado flautas de hueso de hace más de 40.000 años, y sabemos que en Grecia, en Egipto y en China la música era central en el culto, la fiesta y el teatro. Y aun así, de todo eso no se conserva prácticamente nada, por una razón sencilla: no se podía escribir.",
-          "Una pintura se queda en la pared y un poema se puede memorizar, pero una melodía que nadie anota muere con quien la sabe. Toda la música de la humanidad hasta la Edad Media se ha perdido.",
           "El problema empezó a resolverse en los monasterios, y por un motivo muy práctico: la Iglesia quería que el canto sonara IGUAL en todas partes, y transmitirlo de oído producía versiones distintas en cada sitio. Así que empezaron a poner marcas sobre el texto para recordar si la voz subía o bajaba.",
           "Hacia el año 1030, un monje italiano llamado Guido de Arezzo dio el salto decisivo: colocó las notas en LÍNEAS, de modo que la altura en el papel indicara la altura del sonido. Con eso, por primera vez en la historia, se podía cantar correctamente una melodía que nunca se había oído. Es un invento comparable a la escritura, y con una consecuencia igual de grande: la música dejó de depender de la memoria.",
           "Y también le puso nombre a las notas, usando las primeras sílabas de un himno: ut, re, mi, fa, sol, la (el «ut» se cambió después por «do»). Cada vez que alguien canta la escala está usando el sistema de un monje del siglo XI.",
@@ -328,7 +331,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la música escrita es también la razón de que podamos «resucitar» sonidos. Nadie ha oído nunca cantar a un coro medieval, y sin embargo hoy se interpretan esas obras exactamente como se anotaron hace mil años. Es la única máquina del tiempo que funciona de verdad."),
       hito("edad-media", "arte-islamico", "El arte islámico: la letra y la geometría", "Siglos VIII-XV",
-        "¿Qué se hace cuando no se pueden pintar figuras?",
+        "",
         [
           "En el arte religioso islámico no se representan ni a Dios ni a los profetas, para evitar cualquier riesgo de idolatría. En muchos contextos se evitó también representar personas y animales. Y eso, que podría haber sido una limitación asfixiante, produjo una de las tradiciones artísticas más originales y sofisticadas de la historia.",
           "Al no poder contar con la figura, se desarrollaron tres lenguajes hasta el extremo.",
@@ -337,15 +340,13 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           "EL ARABESCO. Formas vegetales entrelazadas que crecen y se ramifican sin final visible. La intención es explícita: sugerir el infinito, algo que no se puede encerrar en una figura.",
           "Y con esos tres elementos construyeron espacios como la mezquita de Córdoba, con su bosque de columnas y sus arcos rojos y blancos; la Alhambra, con sus patios de agua, sus mocárabes como estalactitas y sus paredes que son literalmente poemas escritos; o el Taj Mahal.",
           "Su influencia en Europa fue enorme y casi siempre invisible: los azulejos, el yeso trabajado, los artesonados de madera, los tejidos, las alfombras, los tapices, el vidrio, la marquetería y buena parte de la decoración española y portuguesa vienen de ahí. La palabra «arabesco» lo dice todo.",
-          "Y en pintura, donde no había prohibición estricta —sobre todo en Persia y en la India mogola—, floreció la miniatura: escenas de caza, de amor, de batallas y de jardines, con colores intensísimos y perspectivas planas, que después admirarían los pintores europeos del siglo XIX.",
         ],
         "Dato curioso: en la Alhambra, la frase que más se repite en sus paredes, cientos de veces, en yeso y en azulejo, es «solo Dios es vencedor». Es la lema del reino nazarí convertido en decoración: un palacio entero recubierto de una misma frase."),
       hito("edad-media", "arte-asiatico", "China y Japón: el vacío y el trazo", "Siglos VII-XIX",
-        "¿Y si lo que NO está pintado fuera lo más importante del cuadro?",
+        "",
         [
           "Mientras Europa llenaba sus tablas de figuras hasta el borde, en China y en Japón se desarrollaba una idea casi opuesta: que el espacio vacío no es un hueco por rellenar, sino parte de la obra. La niebla, el aire, el papel sin tocar son lo que da respiración a un paisaje.",
           "LA PINTURA CHINA, hecha con tinta y pincel sobre seda o papel, no busca copiar un paisaje concreto, sino captar su energía, su carácter. Se pinta de memoria y de un tirón, porque la tinta no permite corregir: cada trazo es definitivo. Y por eso allí la pintura, la poesía y la caligrafía se consideran la misma disciplina —«las tres perfecciones»—, y es normal que un cuadro lleve un poema escrito dentro, con la letra formando parte de la composición.",
-          "Su formato también es distinto: rollos que se van desenrollando poco a poco, de modo que la obra no se ve de golpe, sino que se RECORRE, como se recorre una música o una lectura.",
           "En JAPÓN, junto a la pintura de tinta, se desarrolló una idea estética que hoy fascina en todo el mundo: la belleza de lo imperfecto, lo asimétrico y lo que envejece —lo que se llama wabi-sabi—. De ahí salen la ceremonia del té, con sus tazas irregulares y su gestualidad medidísima; los jardines de arena rastrillada; el arte de arreglar la cerámica rota con oro en lugar de disimular la grieta; y una poesía diminuta, el haiku, de tres versos y diecisiete sílabas, que no explica nada y solo señala un instante.",
           "Y en el siglo XVIII y XIX llegó el ukiyo-e, el grabado japonés en madera: estampas baratas hechas por miles para la gente corriente, con actores, luchadores, cortesanas, paisajes y olas. La más famosa del mundo es «La gran ola» de Hokusai.",
           "AQUÍ VIENE LA PARTE QUE CONECTA TODO ESTE RECORRIDO. A mediados del siglo XIX, esas estampas empezaron a llegar a Europa, a veces literalmente como papel de embalaje de porcelana. Y a los pintores franceses les estallaron en la cara: veían composiciones cortadas por los bordes, puntos de vista altísimos, colores planos sin sombreado, ausencia de perspectiva clásica, escenas de vida cotidiana sin ninguna solemnidad. Es decir, veían todo lo que ellos estaban empezando a querer hacer.",
@@ -362,11 +363,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "renacimiento",
     titulo: "El Renacimiento: el ser humano en el centro",
     anio: "Siglos XV – XVI",
-    intro:
-      "En el Renacimiento, el arte vivió una explosión sin igual. Los artistas volvieron la mirada a Grecia y Roma, redescubrieron la belleza del cuerpo humano y colocaron de nuevo al ser humano en el centro de todo. Aprendieron a representar el mundo con un realismo asombroso gracias a la perspectiva, estudiaron la anatomía y la naturaleza, y crearon algunas de las obras más admiradas de la historia. Fue una época de genios totales, capaces de pintar, esculpir, inventar y pensar. Y, gracias a la imprenta, la literatura pudo por fin llegar a muchísima más gente.",
     subhitos: [
       hito("renacimiento", "perspectiva", "El descubrimiento de la perspectiva", "Siglo XV",
-        "¿Cómo se mete la profundidad del mundo en una superficie plana?",
+        "",
         [
           "Durante toda la Edad Media, las pinturas parecían planas: no había sensación de profundidad. En el Renacimiento, los artistas descubrieron la perspectiva, una técnica para representar el espacio tal como lo ve el ojo.",
           "Usando reglas matemáticas, aprendieron a pintar de forma que las cosas parecieran más pequeñas cuanto más lejos estaban, creando la ilusión de profundidad en un cuadro plano.",
@@ -392,7 +391,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("renacimiento", "leonardo", "Leonardo da Vinci", "1452 – 1519",
-        "¿Puede una sola persona ser pintor, científico e inventor a la vez?",
+        "",
         [
           "Leonardo da Vinci es el símbolo perfecto del genio renacentista. Fue pintor, pero también inventor, ingeniero, anatomista y estudioso de la naturaleza.",
           "Pintó obras tan famosas como la Mona Lisa y La última cena, con una técnica y una expresividad que aún hoy fascinan al mundo entero.",
@@ -401,7 +400,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: la Mona Lisa es hoy el cuadro más famoso del mundo. Su misteriosa sonrisa sigue fascinando a millones de personas que hacen cola cada año para verla."),
       hito("renacimiento", "miguel-angel", "Miguel Ángel", "1475 – 1564",
-        "¿Cómo se saca una figura viva de un bloque de mármol?",
+        "",
         [
           "Miguel Ángel fue uno de los mayores artistas de todos los tiempos, genial tanto en la escultura como en la pintura y la arquitectura.",
           "Esculpió obras como el David, una figura de mármol de más de cinco metros que parece a punto de respirar, y pintó el impresionante techo de la Capilla Sixtina, cubriéndolo de escenas bíblicas.",
@@ -410,7 +409,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Miguel Ángel pintó el techo de la Capilla Sixtina, de cientos de metros cuadrados, en unos cuatro años, trabajando tumbado y mirando hacia arriba durante jornadas interminables."),
       hito("renacimiento", "imprenta-libro", "La imprenta y el libro", "≈1450",
-        "¿Qué ocurre cuando de pronto los libros pueden fabricarse por miles?",
+        "",
         [
           "Hacia 1450, Johannes Gutenberg inventó en Europa la imprenta de tipos móviles. Por primera vez, los libros podían fabricarse rápido y en gran cantidad, en lugar de copiarse a mano uno a uno.",
           "El efecto fue inmenso. Los libros se volvieron mucho más baratos y abundantes, y el saber dejó de estar reservado a unos pocos privilegiados.",
@@ -428,11 +427,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "barroco",
     titulo: "El Barroco: emoción y movimiento",
     anio: "Siglo XVII",
-    intro:
-      "Si el Renacimiento buscaba el equilibrio y la serenidad, el Barroco buscó lo contrario: la emoción, el movimiento y el impacto. El arte se volvió teatral, lleno de luces y sombras intensas, de gestos dramáticos y escenas cargadas de sentimiento, para conmover al espectador. Fue también una época dorada para la literatura: en apenas unos años vivieron dos de los mayores escritores de todos los tiempos, que crearon obras y personajes que siguen entre nosotros cuatro siglos después.",
     subhitos: [
       hito("barroco", "caravaggio-barroco", "El Barroco y la luz", "Siglo XVII",
-        "¿Y si la luz y la sombra pudieran contar una historia por sí solas?",
+        "",
         [
           "Los artistas barrocos descubrieron el enorme poder dramático de la luz. Pintores como Caravaggio iluminaban con fuerza a sus personajes sobre fondos oscuros, creando un intenso contraste llamado claroscuro.",
           "Sus escenas parecen instantes congelados de máxima emoción: gestos dramáticos, movimiento, tensión. El objetivo era conmover al espectador y llevarlo dentro de la escena.",
@@ -441,7 +438,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: el claroscuro, ese fuerte contraste entre luz y sombra que inventó el Barroco, sigue usándose hoy en el cine y la fotografía para crear escenas llenas de dramatismo."),
       hito("barroco", "velazquez", "Velázquez", "1599 – 1660",
-        "¿Puede un cuadro meterte dentro de la escena?",
+        "",
         [
           "Diego Velázquez, pintor de la corte española, fue uno de los mayores genios de la pintura de todos los tiempos. Dominaba la luz, el color y el realismo como casi nadie.",
           "Su obra más famosa, Las Meninas, es un cuadro tan ingenioso que aún hoy sorprende: juega con los espejos, las miradas y el punto de vista, e incluye al propio pintor pintando.",
@@ -467,7 +464,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("barroco", "cervantes", "Cervantes y el Quijote", "1547 – 1616",
-        "¿Cuál fue la primera novela moderna de la historia?",
+        "",
         [
           "El español Miguel de Cervantes escribió Don Quijote de la Mancha, considerada la primera novela moderna y una de las obras más importantes de la literatura universal.",
           "Cuenta la historia de un hidalgo que, de tanto leer libros de caballerías, pierde el juicio y se lanza a los caminos creyéndose un caballero andante, acompañado por el sencillo Sancho Panza.",
@@ -492,7 +489,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("barroco", "shakespeare", "Shakespeare", "1564 – 1616",
-        "¿Puede un autor de hace cuatro siglos entender el corazón humano mejor que nadie?",
+        "",
         [
           "El inglés William Shakespeare es probablemente el mayor autor de teatro de la historia. Escribió tragedias, comedias y dramas que aún se representan cada día en todo el mundo.",
           "Obras como Romeo y Julieta, Hamlet o Macbeth exploran los sentimientos humanos más profundos: el amor, los celos, la ambición, la duda, la venganza y la muerte.",
@@ -510,11 +507,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "siglos-xviii-xix",
     titulo: "Romanticismo y Realismo",
     anio: "Siglos XVIII – XIX",
-    intro:
-      "En los siglos XVIII y XIX, el arte y la literatura se volvieron más personales y más libres. Frente a las reglas estrictas, el Romanticismo defendió la emoción, la imaginación, la naturaleza salvaje y la rebeldía del individuo. Después, el Realismo quiso retratar la vida tal como era, incluyendo la de la gente humilde y los problemas de la sociedad. Fue el gran siglo de la novela, que se convirtió en el espejo de toda una época, y también el momento en que la pintura empezó a atreverse a romper sus propias reglas.",
     subhitos: [
       hito("siglos-xviii-xix", "goya-romanticismo", "Goya y el Romanticismo", "Siglos XVIII – XIX",
-        "¿Puede el arte mostrar también el horror y no solo la belleza?",
+        "",
         [
           "El Romanticismo puso por delante la emoción, la libertad y la imaginación. Los artistas pintaron tormentas, paisajes grandiosos, pasiones intensas y también los lados oscuros del ser humano.",
           "El español Francisco de Goya es una figura clave. Empezó pintando escenas amables, pero acabó retratando la guerra, la injusticia y las pesadillas con una fuerza estremecedora.",
@@ -523,7 +518,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: al final de su vida, Goya pintó las llamadas «pinturas negras» directamente en las paredes de su casa, obras oscuras y perturbadoras que no pensaba mostrar a nadie."),
       hito("siglos-xviii-xix", "novela-xix", "La gran novela del siglo XIX", "Siglo XIX",
-        "¿Y si un libro pudiera retratar toda una sociedad?",
+        "",
         [
           "El siglo XIX fue la edad de oro de la novela. Autores de toda Europa escribieron largas historias que retrataban la sociedad de su tiempo con enorme detalle.",
           "Escritores como Charles Dickens en Inglaterra denunciaron la pobreza y la injusticia; en Rusia, Tolstói y Dostoyevski exploraron el alma humana con una profundidad inmensa; en España brilló Benito Pérez Galdós.",
@@ -549,32 +544,29 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("siglos-xviii-xix", "musica-clasica", "Bach, Mozart, Beethoven", "Siglos XVII-XIX",
-        "¿Cómo pasó la música de acompañar a ser la protagonista?",
+        "",
         [
           "Durante siglos, la música casi siempre servía para algo: para la misa, para la danza, para acompañar un texto, para amenizar una cena de la corte. Entre el siglo XVII y el XIX pasó a ser un arte que se escucha por sí mismo, en silencio y sentado, y a la que se le atribuye la capacidad de expresar lo que las palabras no alcanzan.",
           "BACH (1685-1750) fue el gran arquitecto. Trabajó toda su vida como empleado: organista y maestro de capilla, obligado a entregar una obra nueva cada semana para el servicio religioso, con veinte hijos que alimentar. Su música es de una complejidad matemática asombrosa —varias melodías que suenan a la vez, se persiguen, se dan la vuelta y encajan sin un solo error— y a la vez es capaz de dejarte deshecho. En su época se le consideraba un artesano anticuado; su obra se olvidó casi por completo durante ochenta años, hasta que Mendelssohn la rescató en el siglo XIX.",
           "MOZART (1756-1791) fue el prodigio y la fluidez. Tocaba y componía desde los cinco años, su padre lo paseó por las cortes de Europa como una atracción, y a los treinta ya había escrito centenares de obras en todos los géneros. Escribía con una facilidad que sigue pareciendo imposible y con una alegría que engaña: sus obras más luminosas suelen tener una tristeza debajo. Y fue de los primeros en intentar vivir de su música como profesional libre, sin depender de un noble. Murió a los treinta y cinco, con un encargo a medias, y fue enterrado en una fosa común.",
           "BEETHOVEN (1770-1827) es el que cambió el significado de la música. Con él, una obra deja de ser un servicio y se convierte en una declaración personal: sus sinfonías cuentan una lucha, con derrota y victoria. Escribió la «Heroica» pensando en los ideales de la Revolución francesa y tachó furioso la dedicatoria a Napoleón cuando este se coronó emperador. Y lo hizo todo QUEDÁNDOSE SORDO: empezó a perder el oído en la veintena y compuso sus obras más grandes sin poder oírlas, imaginándolas. En el estreno de su Novena Sinfonía tuvieron que girarlo hacia el público para que viera que estaban aplaudiendo de pie.",
-          "En esos dos siglos se inventó además casi todo lo que hoy asociamos a un concierto: la orquesta tal como suena ahora, la sinfonía, el cuarteto, el concierto para solista, el piano moderno, la sala de conciertos con público que paga entrada, el director de orquesta y la costumbre de escuchar callado.",
           "Y nació la ÓPERA, que es la mayor operación de arte total que ha existido: música, canto, teatro, poesía, escenografía, vestuario y danza a la vez. De Monteverdi a Verdi, Wagner o Puccini, fue durante trescientos años el espectáculo de masas de Europa, con sus estrellas, sus escándalos y sus abucheos.",
           "Lo que se ganó con todo esto es difícil de exagerar: la humanidad descubrió que se puede construir con sonido algo tan complejo y tan preciso como una catedral, y que sirve para decir cosas que ningún idioma dice.",
         ],
         "Dato curioso: en la placa de oro que llevan las sondas Voyager, con la que la humanidad se presenta a quien pueda encontrarla en millones de años, hay grabados sonidos de la Tierra y veintisiete piezas musicales de todo el mundo. Bach aparece tres veces, más que ningún otro. Un músico de iglesia del siglo XVIII es hoy nuestra tarjeta de visita interestelar."),
       hito("siglos-xviii-xix", "fotografia", "La fotografía cambia el arte para siempre", "1826-1900",
-        "¿Para qué sirve un pintor cuando una máquina copia la realidad mejor que él?",
+        "",
         [
-          "Esta es probablemente la pregunta más importante de toda la historia del arte moderno, y sin ella no se entiende nada de lo que viene después.",
           "En 1826, un francés llamado Niépce consiguió fijar por primera vez una imagen tomada del natural: una vista desde su ventana que necesitó varias horas de exposición. En 1839 se presentó el daguerrotipo, con un detalle asombroso, y en pocas décadas la fotografía se hizo rápida, barata y accesible: en 1888 la primera Kodak vendía cámaras al público con el eslogan «usted apriete el botón, nosotros hacemos el resto».",
           "Y ahí la pintura se quedó sin uno de sus dos oficios. Durante cuatro siglos, buena parte del trabajo de un pintor había consistido en fijar la realidad: retratar a la familia, documentar una batalla, registrar un paisaje o un edificio. Una máquina empezó a hacerlo mejor, más rápido y por mucho menos dinero. Un pintor retratista de provincias se quedó literalmente sin clientela en veinte años.",
           "La reacción fue de dos tipos, y las dos son fértiles.",
           "PRIMERA: si copiar ya no es el trabajo, hagamos lo que la máquina NO puede hacer. Y ahí arranca el arte moderno entero. Los impresionistas se van a pintar fuera, a la luz cambiante, buscando la impresión de un instante y no el detalle; y el detalle, precisamente, se lo dejan a la cámara. Después Cézanne se centra en la estructura, Van Gogh en la emoción del color, Munch en la angustia, Matisse en el color puro, el cubismo en mostrar varios puntos de vista a la vez, el expresionismo abstracto en el gesto. Ninguna de esas cosas la puede hacer una lente.",
           "SEGUNDA: la propia fotografía se convierte en arte. Deja de ser un documento y empieza a elegir el encuadre, la luz, el momento, el contraste, el recorte. Y como llega hasta donde el pintor no llega, transforma el periodismo, la ciencia, la memoria familiar y la política: las primeras fotos de una guerra —la de Crimea y la de Secesión— cambiaron para siempre lo que el público sabía de un campo de batalla.",
           "Y hubo un efecto colateral científico y precioso: en 1878, para resolver una apuesta sobre si un caballo al galope levanta las cuatro patas del suelo a la vez, Muybridge colocó doce cámaras en fila y fotografió la secuencia. El caballo sí las levanta. Y al pasar esas fotos seguidas y deprisa, aquello se movía. De la fotografía nació el cine.",
-          "También cambió lo que la pintura buscaba en el pasado: los cuadros del siglo XIX que hoy nos parecen «fotográficos» eran, muchas veces, un intento de competir con la cámara. Los que ganaron la partida fueron los que dejaron de competir.",
         ],
         "Dato curioso: cuando vio los primeros daguerrotipos, el pintor Paul Delaroche exclamó, según la tradición: «desde hoy, la pintura ha muerto». Se equivocó del todo, y en cierto sentido tenía razón: la pintura que él hacía sí murió, y en su lugar nació otra."),
       hito("siglos-xviii-xix", "impresionismo", "El Impresionismo", "≈1870 – 1900",
-        "¿Y si el arte dejara de copiar la realidad para pintar cómo la vemos?",
+        "",
         [
           "A finales del siglo XIX, un grupo de pintores en Francia se cansó de las reglas de la pintura tradicional. Salieron al aire libre a pintar la luz, el color y los instantes fugaces.",
           "Artistas como Claude Monet daban pinceladas sueltas y vibrantes para captar la impresión de un momento: el reflejo del sol en el agua, la niebla, un jardín en primavera.",
@@ -592,11 +584,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "vanguardias",
     titulo: "El arte se rompe: las vanguardias",
     anio: "Primera mitad del siglo XX",
-    intro:
-      "En el siglo XX, el arte estalló en mil direcciones. Con la invención de la fotografía, ya no hacía falta que la pintura copiara la realidad: una máquina lo hacía mejor. Así que los artistas se lanzaron a explorar lo que ninguna cámara podía captar: las emociones, los sueños, las ideas, la pura forma y el color. Rompieron todas las reglas que habían durado siglos. La literatura también se transformó, buscando nuevas maneras de contar el mundo interior y de reflejar un siglo lleno de guerras, cambios y preguntas. Fueron las vanguardias: la mayor revolución artística de la historia.",
     subhitos: [
       hito("vanguardias", "picasso-cubismo", "Picasso y el cubismo", "1881 – 1973",
-        "¿Y si pudieras pintar un rostro desde varios lados a la vez?",
+        "",
         [
           "El español Pablo Picasso fue uno de los artistas más influyentes de la historia. Junto a otros, inventó el cubismo, una forma totalmente nueva de pintar.",
           "En lugar de representar las cosas desde un solo punto de vista, las descomponía en formas geométricas y las mostraba desde varios ángulos a la vez, como si rompiera la realidad y la recompusiera.",
@@ -621,7 +611,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("vanguardias", "surrealismo-dali", "El surrealismo", "≈1920 – 1940",
-        "¿Puede el arte pintar los sueños?",
+        "",
         [
           "Los surrealistas quisieron llevar al lienzo el mundo de los sueños, el inconsciente y la imaginación más libre, inspirados por las nuevas ideas sobre la mente.",
           "El español Salvador Dalí pintó imágenes imposibles con un realismo asombroso: relojes que se derriten, paisajes oníricos, escenas que desafían toda lógica.",
@@ -630,7 +620,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: Dalí cultivó una imagen tan extravagante como su arte, con su inconfundible bigote y sus salidas provocadoras. Convirtió su propia vida en una obra surrealista."),
       hito("vanguardias", "literatura-moderna", "La literatura se transforma", "Siglo XX",
-        "¿Y si una novela intentara meterse dentro de la mente de un personaje?",
+        "",
         [
           "La literatura del siglo XX también rompió sus moldes. Los escritores buscaron nuevas formas de contar, más allá de la historia ordenada de principio a fin.",
           "Autores como Franz Kafka crearon mundos angustiosos y absurdos que reflejaban el desconcierto del ser humano moderno; otros, como James Joyce, intentaron reproducir el fluir mismo de los pensamientos.",
@@ -639,13 +629,12 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: de Kafka nació el adjetivo «kafkiano», que usamos para describir situaciones absurdas, angustiosas y sin salida, como las de sus relatos."),
       hito("vanguardias", "bauhaus-diseno", "La forma y la función", "1919-1933",
-        "¿Y si el arte se ocupara también de la silla en la que estás sentada?",
+        "",
         [
           "Hasta el siglo XX había una frontera clarísima: por un lado, el ARTE —cuadros y esculturas para contemplar—; por otro, los OBJETOS —muebles, vajillas, carteles, casas—, que eran cosa de artesanos y de fábricas. La gran idea de esta etapa fue borrar esa frontera.",
           "En 1919, en Alemania, se fundó una escuela llamada Bauhaus con un programa revolucionario: juntar en el mismo sitio a pintores, arquitectos, escultores, tipógrafos, ceramistas, carpinteros y tejedores, y diseñar objetos bellos que además pudieran fabricarse EN SERIE y ser baratos. La belleza no debía ser un lujo de ricos.",
           "Su principio era que la forma sale de la función: quitar todo adorno que no sirva para nada y dejar que el material y el uso decidan el aspecto. De ahí sale toda la estética que hoy nos parece «normal»: los muebles de líneas limpias, los tubos de acero, los edificios sin molduras, la tipografía sin remates, el vidrio y el hormigón a la vista, los electrodomésticos sin decoración.",
           "Y de ahí sale también el DISEÑO como profesión. Alguien cuyo trabajo es pensar cómo debe ser una cafetera, un cartel, un tenedor, una tipografía, un paquete de galletas o la pantalla de una aplicación. Hoy vives rodeada de decisiones tomadas por esa gente: el interruptor que encuentras a oscuras, la señal del aeropuerto que entiendes sin saber el idioma, el icono que sabes pulsar sin que nadie te lo explique.",
-          "La escuela duró solo catorce años: el régimen nazi la cerró en 1933 por considerarla degenerada y extranjerizante, y sus profesores se dispersaron por el mundo, sobre todo a Estados Unidos. Es una de las mayores ironías de la historia del arte: al intentar borrarla, la convirtieron en global.",
           "Y CONVIENE PONER AL LADO EL CAMINO OPUESTO, porque también es de estos años y es igual de válido. En Barcelona, Antoni Gaudí hizo justo lo contrario: en lugar de la línea recta y la desnudez, se fue a buscar las formas a la naturaleza —columnas como troncos de árbol, techos como copas, escamas, huesos, conchas— y las calculó con una geometría complicadísima, colgando maquetas de cuerdas y pesos para encontrar la curva exacta que aguanta un arco. Sus edificios están hoy en la lista de patrimonio mundial y la Sagrada Familia sigue en obras más de un siglo después.",
           "Los dos, el Bauhaus y Gaudí, responden a la misma pregunta de una época: cómo debe ser el mundo construido en el que vive la gente. Uno contesta «limpio, útil y para todos»; el otro, «vivo, orgánico y único». La ciudad en la que vives es, casi siempre, una mezcla de las dos respuestas.",
         ],
@@ -660,18 +649,15 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     key: "arte-hoy",
     titulo: "El arte hoy y el futuro",
     anio: "Siglos XX – XXI",
-    intro:
-      "En el último siglo, el arte se ha vuelto más libre y más diverso que nunca. Ya no hay un solo estilo ni unas reglas fijas: hay mil formas de crear. Aparecieron artes completamente nuevas, como el cine, la fotografía y el cómic, capaces de contar historias a millones de personas. Y la tecnología abrió puertas que ningún artista del pasado habría imaginado, hasta llegar al arte digital y a las máquinas que crean imágenes. En medio de tanto cambio, sigue viva la misma pregunta del principio: ¿por qué necesitamos crear?",
     subhitos: [
       hito("arte-hoy", "arte-contemporaneo", "El arte contemporáneo", "Siglo XX – XXI",
-        "¿Puede ser arte algo que no se parece a nada?",
+        "",
         [
           "En el arte contemporáneo, casi todo es posible. Algunos artistas abandonaron por completo las figuras y pintaron solo formas y colores: es el arte abstracto.",
           "Otros hicieron del arte una idea o una experiencia: instalaciones, objetos cotidianos convertidos en obras, acciones en directo. Lo importante ya no era la técnica, sino el mensaje o la pregunta.",
           "El arte se volvió muy libre, pero también más difícil de entender, y a veces genera debate: ¿esto es arte o no lo es?",
           "Quizá esa discusión sea parte de su sentido: el arte contemporáneo nos obliga a preguntarnos, una vez más, qué es realmente el arte.",
         ],
-        undefined,
         [
           {
             titulo: "Cómo mirar una obra que no entiendes",
@@ -689,7 +675,7 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("arte-hoy", "cine-nuevas-artes", "El cine y las nuevas artes", "Desde el siglo XX",
-        "¿Cuál es el gran arte que nació en el siglo XX?",
+        "",
         [
           "El siglo XX trajo artes completamente nuevas. La fotografía capturó la realidad en un instante; el cine unió imagen, movimiento, música e historia en un espectáculo total.",
           "El cine se convirtió en el gran arte popular de nuestra época, capaz de emocionar a millones de personas a la vez y de contar historias como nunca antes.",
@@ -698,14 +684,13 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: cuando se proyectaron las primeras películas, hace más de cien años, algunos espectadores se asustaron al ver un tren avanzar hacia ellos en la pantalla."),
       hito("arte-hoy", "arte-digital", "El arte digital y el futuro", "Siglo XXI",
-        "¿Y si una máquina pudiera crear una obra de arte?",
+        "",
         [
           "Los ordenadores han abierto un mundo nuevo para la creación. Hoy se crea arte digital, música electrónica, animaciones y diseños que serían imposibles con las técnicas tradicionales.",
           "Internet ha permitido que cualquier persona comparta sus creaciones con todo el mundo, sin necesidad de galerías ni editoriales.",
           "Y han aparecido programas de inteligencia artificial capaces de generar imágenes, textos y música, lo que plantea preguntas apasionantes: ¿puede una máquina ser creativa?, ¿qué significa entonces ser artista?",
           "El futuro del arte está por escribir, y probablemente lo escribirán herramientas que hoy apenas empezamos a imaginar.",
         ],
-        undefined,
         [
           {
             titulo: "Cada vez que apareció una máquina nueva pasó lo mismo",
@@ -726,19 +711,18 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
           },
         ]),
       hito("arte-hoy", "musica-grabada", "El siglo en que la música se pudo guardar", "1877-hoy",
-        "¿Qué cambia cuando una canción puede sonar mil veces igual?",
+        "",
         [
           "Durante toda la historia, escuchar música exigió que alguien la tocara delante de ti. Si querías oír una sinfonía, tenías que ir donde estuviera la orquesta; si querías música en casa, alguien de la casa tenía que saber tocar. La música era un acontecimiento, no un objeto.",
           "En 1877, Edison grabó su propia voz en un cilindro y consiguió reproducirla. Es uno de los inventos más asombrosos de la historia y casi nunca se cuenta como tal: por primera vez, un sonido podía sobrevivir al momento en que se produjo.",
           "Y eso lo cambió todo, en cadena. Se pudo escuchar en casa a los mejores músicos del mundo. Aparecieron las estrellas globales, los formatos comerciales de tres minutos —porque era lo que cabía en un disco— y una industria enorme. Y algo casi nunca señalado: la música dejó de tener que ser sencilla para poder recordarse, porque ya no dependía de la memoria de nadie.",
           "SALVÓ MÚSICAS ENTERAS. Gracias a las grabaciones tenemos el blues rural del delta del Misisipi, el flamenco de principios de siglo, el fado, el tango, los cantos de pueblos indígenas y miles de tradiciones orales que estaban a punto de morirse con sus últimos intérpretes. Hubo gente recorriendo caminos con equipos pesadísimos para grabar a cantantes que nunca habían salido de su pueblo.",
           "Y CREÓ MÚSICAS NUEVAS que no habrían existido sin el aparato. El jazz nace de la mezcla en Nueva Orleans de tradiciones africanas, europeas y caribeñas, y se extiende por el mundo gracias al disco y a la radio. Y de la conversación entre el blues negro y la música blanca del sur salen el rock, el soul, el funk, el reggae, el hip hop y casi todo lo que suena hoy.",
-          "Después, cada tecnología volvió a cambiar la manera de crear: el micrófono permitió cantar suave en lugar de proyectar la voz —eso es lo que hace Sinatra—; la grabación multipista permitió construir una canción por capas, superponiendo pistas que nunca se tocaron juntas; el sampler permitió coger un trozo de otra grabación y convertirlo en base de una canción nueva, que es el corazón del hip hop; y el ordenador puso un estudio profesional en cualquier habitación.",
           "Y HOY, con el streaming, cualquier persona con conexión tiene acceso instantáneo a casi toda la música grabada de la historia. Es un privilegio que ninguna reina de ninguna época tuvo, y como todo privilegio cotidiano, ha dejado de parecernos asombroso. También ha traído su problema: los músicos cobran cantidades ínfimas por escucha y, por primera vez en un siglo, casi nadie vive de vender su música.",
         ],
         "Dato curioso: la persona que puso a la orquesta en el sitio en el que la escuchas es probablemente una ingeniera o un ingeniero de sonido cuyo nombre no conoces. Y el formato del CD se fijó, según la versión más contada, en unos setenta y cuatro minutos porque tenía que caber entera la Novena Sinfonía de Beethoven."),
       hito("arte-hoy", "realismo-magico", "Borges, García Márquez y el boom", "1940-1980",
-        "¿Y si la literatura en español hubiera cambiado el mundo desde América?",
+        "",
         [
           "A mediados del siglo XX ocurrió algo que no se había visto antes: la literatura escrita en español dejó de mirar a Europa y Europa empezó a mirarla a ella. El centro se movió a América Latina.",
           "El primero fue JORGE LUIS BORGES, un argentino bibliotecario y casi ciego que escribió cuentos brevísimos de una precisión matemática. Sus temas son mareantes: bibliotecas infinitas que contienen todos los libros posibles, un mapa tan detallado que coincide con el territorio, un hombre que no puede olvidar nada, jardines de senderos que se bifurcan en todos los futuros posibles. Nunca escribió una novela y aun así reorganizó la literatura del siglo XX; hoy se le cita en física, en matemáticas y en informática, porque describió internet, los hipertextos y los universos paralelos antes de que existieran.",
@@ -750,8 +734,9 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
         ],
         "Dato curioso: García Márquez terminó «Cien años de soledad» sin dinero para enviar el manuscrito entero por correo a Buenos Aires. Mandó la mitad, y luego su mujer empeñó lo que quedaba en casa para poder mandar la otra. Y por un error, la mitad que envió primero fue la SEGUNDA."),
       hito("arte-hoy", "por-que-crea", "Por qué seguimos creando", "",
-        "Después de decenas de miles de años creando, descubrimos algo sorprendente.",
+        "",
         [
+          "Después de decenas de miles de años creando, descubrimos algo sorprendente.",
           "Hemos pasado de pintar bisontes en una cueva a generar imágenes con ordenadores; de recitar mitos junto al fuego a contar historias en pantallas de todo el mundo.",
           "Han cambiado las técnicas, los estilos y los materiales, pero el impulso profundo es siempre el mismo: expresar lo que sentimos, comprender el mundo y dejar huella.",
           "El arte y la literatura son el espejo en el que cada época se ha mirado. Gracias a ellos podemos sentir lo que sintieron personas que vivieron hace miles de años.",
