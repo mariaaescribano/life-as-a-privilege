@@ -8,7 +8,7 @@ import type { Vineta } from "./ComicViewer";
 // OJO: este cómic vive solo en este paso del recorrido (no está en la galería
 // de Ilustraciones).
 //
-// Imágenes: /viñetas/psicologia/sintesis/sintesis1.png … sintesis3.png.
+// Imágenes: /viñetas/psicologia/sintesis/sintesis1.webp … sintesis3.webp.
 export const COMIC_SINTESIS: Vineta[] = [
   {
     src: "/viñetas/psicologia/sintesis/sintesis1.webp",

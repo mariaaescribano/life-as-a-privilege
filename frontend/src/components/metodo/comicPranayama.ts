@@ -27,9 +27,10 @@ export const COMIC_PRANAYAMA: Vineta[] = [
     // luz por la nariz y bajando hasta el vientre.
     src: `${P}/pranayama1.webp`,
     eyebrow: "Prāṇāyāma",
-    titulo: "La respiración como puerta",
+    titulo: "",
     paragraphs: [
-      "Prāṇa es la energía vital; āyāma, extender. Prāṇāyāma no es «respirar hondo»: es dirigir esa energía.",
+      "Prāṇa es la energía vital; āyāma, extender.",
+      "Prāṇāyāma no es «respirar hondo»: es dirigir esa energía.",
       "Respirar es la única función automática que también puedes gobernar a voluntad. Por eso es la puerta más directa que tienes al sistema nervioso.",
     ],
   },
@@ -37,11 +38,10 @@ export const COMIC_PRANAYAMA: Vineta[] = [
     // Viñeta 2: la postura. Sentada, espalda larga, primera luz de la mañana,
     // la casa todavía en silencio.
     src: `${P}/pranayama2.webp`,
-    titulo: "Antes de empezar",
+    titulo: "",
     paragraphs: [
-      "El freno está en la salida. Al inhalar el corazón se acelera; al exhalar, se frena. Si te llevas una sola cosa: alarga la exhalación.",
-      "Sentada y con el estómago vacío, o dos horas después de comer. Tumbada te dormirás, y dormir no es meditar.",
-      "Por la nariz, salvo que la técnica diga otra cosa.",
+      "Al inhalar el corazón se acelera; al exhalar, se frena. Si estás nervioso, alarga la exhalación.",
+      "La neurociencia ha demostrado que tumbarte reduce la activación de la corteza prefrontal y facilita que te quedes dormido. Por eso, aunque al principio pueda resultar incómodo, intenta mantenerte sentado.",
     ],
   },
   {
@@ -50,7 +50,7 @@ export const COMIC_PRANAYAMA: Vineta[] = [
     src: `${P}/pranayama3.webp`,
     paragraphs: [
       "Sin forzar nunca. Si te falta el aire o te mareas, sueltas y vuelves a tu respiración normal.",
-      "Si estás embarazada, tienes la tensión alta, glaucoma, epilepsia o un problema cardíaco, evita las retenciones y las respiraciones rápidas. Ante la duda, pregunta a tu médica.",
+      "Si estás embarazada, tienes la tensión alta, glaucoma, epilepsia o un problema cardíaco, evita las retenciones y las respiraciones rápidas, pero puedes hacer esta práctica.",
     ],
   },
 ];
