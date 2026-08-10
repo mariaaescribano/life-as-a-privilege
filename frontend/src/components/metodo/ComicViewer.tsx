@@ -13,6 +13,7 @@ import { keyframes } from "@emotion/react";
 import { comicLoaderPorColor } from "./comicLoaders";
 import { ClavesRapidas } from "./ClavesRapidas";
 import { AvisoLeida } from "./MarcaLeido";
+import { useSinBarraDeScroll } from "../global/sinBarraDeScroll";
 import { astrologiaTxt } from "../../GlobalVariables";
 
 // Frontend único del cómic: misma vista, misma maquetación, mismas animaciones.
@@ -326,28 +327,15 @@ export function ComicViewer({
   // ── Nada de barra de scroll fuera de la caja ──────────────────────────────
   // El visor ocupa la pantalla JUSTA (el ModalBody de abajo va a 100dvh con
   // overflow hidden) y el texto scrollea DENTRO de la caja, pegado a su borde.
-  // Cualquier barra a pantalla completa, por tanto, es un error: sale porque los
-  // ~19 popups que montan este visor abren su <Modal> con
-  // scrollBehavior="outside", y eso pone `overflow: auto` en el contenedor del
-  // diálogo. Un píxel de más (100vh de `size="full"` contra 100dvh, el blur del
-  // fondo, un margen) y aparece la barra maligna a la derecha de todo.
+  // Cualquier barra vertical a pantalla completa es, por tanto, un error.
   //
-  // Se apaga aquí, en UN sitio, en vez de repetir tres props en los 19 popups
-  // (y en vez de tocar los que sí necesitan scroll de página: los MENÚS de las
-  // galerías de Ilustraciones, que no montan el visor y siguen intactos).
-  useEffect(() => {
-    const body = bodyRef.current;
-    if (!body) return;
-    const arriba = [
-      body.closest<HTMLElement>(".chakra-modal__content-container"),
-      body.closest<HTMLElement>(".chakra-modal__content"),
-    ].filter((el): el is HTMLElement => !!el);
-    const antes = arriba.map((el) => [el, el.style.overflow] as const);
-    for (const el of arriba) el.style.overflow = "hidden";
-    // Al cerrar el cómic se devuelve lo que hubiera: en las galerías el mismo
-    // modal vuelve a su menú, que sí scrollea.
-    return () => { for (const [el, valor] of antes) el.style.overflow = valor; };
-  }, []);
+  // Se apaga aquí, en UN sitio, para los ~19 popups que montan este visor (y
+  // sin tocar los que sí necesitan scroll: los MENÚS de las galerías de
+  // Ilustraciones, que vuelven a scrollear al salir del visor). El hook sube
+  // hasta <html> apagando el overflow de todo el camino —incluida la página de
+  // detrás, que era de donde salía la barra gorda del sistema—; el porqué de
+  // cada caso está contado en sinBarraDeScroll.ts.
+  useSinBarraDeScroll(bodyRef);
 
   // Al cambiar de viñeta, la nueva SIEMPRE empieza desde arriba, aunque en la
   // anterior se hubiera bajado hasta el final. Reseteamos el scroll interno

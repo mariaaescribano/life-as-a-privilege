@@ -12,9 +12,10 @@
 // atrapado y el bloqueo del scroll de detrás. La lupa de la esquina es la
 // pista de que se puede pulsar: sin ella nadie lo descubre.
 // ─────────────────────────────────────────────────────────────────────────
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Box, Flex, Modal, ModalContent, ModalOverlay, Text } from "@chakra-ui/react";
 import { useT } from "../../i18n";
+import { useSinBarraDeScroll } from "./sinBarraDeScroll";
 
 /** Lupa con un «+»: se puede ampliar. */
 function IconoLupa({ size, color }: { size: string; color: string }) {
@@ -51,6 +52,10 @@ export function FotoAmpliable({ src, alt, acento = "#ffffff", pie, etiqueta }: F
   const [abierta, setAbierta] = useState(false);
   const url = encodeURI(src);
   const leyenda = pie ?? alt;
+  // Con la foto abierta, ni una barra de scroll a la derecha: la foto va topada
+  // a 78vh y el pie debajo, así que nunca hay nada que recorrer.
+  const cuerpoRef = useRef<HTMLDivElement>(null);
+  useSinBarraDeScroll(cuerpoRef, abierta);
 
   return (
     <>
@@ -83,7 +88,7 @@ export function FotoAmpliable({ src, alt, acento = "#ffffff", pie, etiqueta }: F
         <ModalContent bg="transparent" boxShadow="none" border="none" borderRadius={0} m={0}
                       fontFamily="'EB Garamond', serif">
           {/* Pulsar fuera de la foto también cierra. */}
-          <Flex position="absolute" inset={0} align="center" justify="center" direction="column"
+          <Flex ref={cuerpoRef} position="absolute" inset={0} align="center" justify="center" direction="column"
                 gap={4} px={{ base: 3, md: 8 }} py={{ base: 14, md: 12 }}
                 onClick={() => setAbierta(false)} cursor="zoom-out">
             <Box maxW="100%" maxH="100%" borderRadius="lg" overflow="hidden"
