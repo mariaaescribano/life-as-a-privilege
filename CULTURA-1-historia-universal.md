@@ -1,0 +1,2656 @@
+# Historia Universal
+
+> Texto tal como está AHORA en la web. Reescribe encima: puedes borrar frases o párrafos,
+> quitar el dato curioso (es opcional), poner dos («Dato curioso II:») o cargarte un momento entero.
+> No hace falta dejar saltos de línea tras cada punto: eso lo hace el visor solo.
+
+
+# ERA · Prehistoria
+
+`key: prehistoria` · Época: **hasta ~3500 a. C.**
+
+---
+
+## 1 · Primeros homínidos
+
+`primeros-hominidos` · **Hace 7 millones de años**
+
+**Cuerpo:**
+
+Hace unos siete millones de años, en África, un grupo de primates empezó a evolucionar por un camino distinto al de los chimpancés. No hubo un «primer humano»: hubo una separación lentísima, generación a generación, entre dos ramas de una misma familia.
+
+Aquellos seres no eran humanos. Tenían cerebros pequeños, vivían en los árboles y en el suelo. Fueron los primeros homínidos: nuestros antepasados.
+
+¿Por qué en África? Porque el clima estaba cambiando. La selva continua fue rompiéndose en bosques abiertos y sabanas, y en un paisaje con menos árboles y más distancias, moverse por el suelo empezó a ser una ventaja.
+
+De aquella rama salieron muchas especies: Ardipithecus, Australopithecus (como la famosa Lucy), Homo habilis, Homo erectus… La evolución humana no es una escalera con un escalón detrás de otro, sino un arbusto lleno de ramas, las cuales casi todas se extinguieron.
+
+**Dato curioso:** compartimos alrededor del 98,8 % del ADN con el chimpancé. Toda la diferencia entre construir un cohete y romper una nuez con una piedra cabe en ese 1,2 % restante.
+
+---
+
+## 2 · Bipedismo
+
+`bipedismo` · **Hace 6-4 millones de años**
+
+**Cuerpo:**
+
+Solemos pensar que empezamos siendo listos y luego nos pusimos de pie. Fue justo al contrario: primero nos pusimos de pie y el cerebro grande llegó millones de años después.
+
+Caminar sobre dos piernas tenía un premio enorme: dejaba las manos libres. Con las manos libres se puede transportar comida, llevar a las crías, cargar piedras, usar palos, señalar, gesticular.
+
+Además, un cuerpo erguido gasta menos energía al recorrer distancias largas, permite ver por encima de la hierba alta y expone menos superficie al sol del mediodía. En una sabana llena de depredadores, ver lejos y aguantar caminando es la diferencia entre comer o ser comido.
+
+No fue gratis. Al girar la pelvis para sostener el peso, el canal del parto se estrechó. Millones de años más tarde, cuando el cerebro empezó a crecer, esa pelvis estrecha se convirtió en un problema: la cabeza del bebé ya no cabía.
+
+Por evolución, el niño nacía con el cerebro sin acabar de desarrollarse. De ahí vienen los partos humanos, mucho más difíciles y dolorosos que los del resto de mamíferos, y de ahí viene también que nazcamos tan indefensos.
+
+Ese bebé que nace sin poder hacer nada obliga a algo decisivo: cuidar en grupo durante años. La familia y la cooperación no son un adorno cultural; empezaron siendo una necesidad biológica.
+
+---
+
+## 3 · Primeras herramientas de piedra
+
+`herramientas-piedra` · **Hace 2,6 millones de años**
+
+**Cuerpo:**
+
+Hace unos 2,6 millones de años alguien golpeó una piedra contra otra para conseguir un filo. Es el objeto fabricado más antiguo que conocemos, y con él empieza la tecnología.
+
+Aquellas primeras lascas parecen simples, pero exigen algo que casi ningún animal tiene: imaginar un objeto que todavía no existe y planear los golpes necesarios para obtenerlo.
+
+El premio fue una dieta variada. Con un filo se puede cortar un animal muerto, abrir la cáscara de frutos secos, romper huesos, abrir frutas...
+
+Estas herramientas fueron pasando de generación tras generación. Se aprendía mirando y enseñando. Eso es cultura: conocimiento que se hereda sin genes.
+
+**Dato curioso:** para tallar bien hace falta ser diestro o zurdo de forma marcada, y las marcas de los golpes muestran que ya entonces la mayoría eran diestros. La asimetría de nuestro cerebro tiene millones de años.
+
+---
+
+## 4 · Dominio del fuego
+
+`dominio-fuego` · **Hace 1 millón-400.000 años**
+
+**Cuerpo:**
+
+Todos los animales huyen de las llamas. En algún momento, nuestros antepasados hicieron lo contrario: se acercaron, lo conservaron y aprendieron a encenderlo.
+
+Cocinar lo cambió todo. El calor rompe las fibras y las proteínas, así que un alimento cocinado da mucha más energía y se digiere en mucho menos tiempo. Nuestros intestinos se acortaron, nuestras mandíbulas y dientes se hicieron más pequeños… y la energía ahorrada pudo destinarse al cerebro.
+
+El fuego también mata parásitos y bacterias, permite conservar comida, ahuyenta a los depredadores por la noche, da calor en climas fríos (y por tanto permite salir de África hacia el norte) y sirve para endurecer puntas de madera o trabajar la piedra.
+
+Y hubo un efecto inesperado: la noche. Antes, la oscuridad era tiempo muerto. Con una hoguera, el grupo se queda despierto varias horas más, en círculo, sin nada que hacer con las manos. Es el momento perfecto para hablar, enseñar, recordar, contar historias.
+
+Muchos investigadores creen que alrededor del fuego nacieron el relato, la memoria compartida y buena parte de lo que llamamos identidad de un grupo.
+
+---
+
+## 5 · Aparición del Homo sapiens
+
+`homo-sapiens` · **Hace 300.000 años**
+
+**Cuerpo:**
+
+Hace unos 300.000 años apareció en África nuestra especie, el Homo sapiens. No era la más fuerte, ni la más rápida, ni la de mayor cerebro: los neandertales tenían el cráneo algo más grande que el nuestro.
+
+Nuestra ventaja fue el lenguaje complejo y, con él, la capacidad de cooperar en grupos grandes y de hablar de lo no tangible: el pasado, el futuro, lo que piensa otro, lo que no existe...
+
+Eso permite planear una cacería para dentro de tres días, acordar reglas, repartir tareas, comerciar con desconocidos, transmitir un conocimiento sin tener que redescubrirlo y creer todos en lo mismo (un antepasado común, un espíritu, un tótem), lo que une a cientos de personas que no son familia.
+
+Los restos lo confirman: en esta especie aparecen los primeros adornos y collares de conchas, los pigmentos, los enterramientos con ofrendas, los instrumentos musicales de hueso. Objetos que no sirven para sobrevivir, pero que significan algo.
+
+El Homo sapiens no ganó por fuerza, ganó por mitos y creencias compartidas.
+
+---
+
+## 6 · Expansión fuera de África
+
+`expansion-africa` · **Hace 70.000-60.000 años**
+
+**Cuerpo:**
+
+Hace unos 70.000 años, grupos de Homo sapiens comenzaron a salir de África y expandirse por el mundo.
+
+Llegaron a Asia y Australia, desarrollando embarcaciones y aprendiendo a navegar sin ver la costa.
+
+Hace unos 45.000 años entraron en Europa, adaptándose al frío mediante ropa, refugios, fuego y organización social.
+
+Durante la glaciación llegaron a América a través de Beringia y se extendieron hasta la Patagonia.
+
+No cambiamos nuestro cuerpo para sobrevivir a nuevos entornos, sino nuestra tecnología y conocimiento; por eso, África conserva la mayor diversidad genética humana.
+
+---
+
+## 7 · Neandertales y otros humanos
+
+`neandertales` · **Hace 400.000-40.000 años**
+
+**Cuerpo:**
+
+Estamos acostumbrados a ser la única especie humana del planeta, pero eso es una rareza recentísima. Hasta hace unos 40.000 años convivieron en la Tierra varias especies humanas a la vez.
+
+Los neandertales vivieron en Europa y Asia occidental durante cientos de miles de años, en plena Edad de Hielo. Nada de brutos encorvados: cazaban grandes animales en equipo, hacían herramientas complejas, usaban pieles y fuego, cuidaban de sus heridos y enfermos (hay esqueletos de personas con graves discapacidades que vivieron muchos años), enterraban a sus muertos y usaban pigmentos y conchas como adorno.
+
+Cuando el Homo sapiens salió de África se cruzó con ellos. Hoy, cualquier persona de origen europeo o asiático lleva entre un 1 % y un 3 % de ADN neandertal.
+
+**Dato curioso:** algunos genes heredados de los neandertales siguen afectándonos. Influyen en el color de la piel y el pelo, en el ritmo del sueño, en la coagulación de la sangre y hasta en cómo responde nuestro sistema inmunitario a ciertas infecciones.
+
+---
+
+## 8 · El arte de las cuevas
+
+`arte-rupestre` · **Hace 40.000-12.000 años**
+
+**Cuerpo:**
+
+En cuevas de toda Europa, Asia, África, Australia e Indonesia aparecen pinturas de hace decenas de miles de años: bisontes, caballos, leones, rinocerontes, manos estampadas con pigmento soplado.
+
+Aquello no era decoración: era importante.
+
+Se han propuesto muchas explicaciones y probablemente todas tengan algo de verdad: ritos para propiciar la caza, iniciaciones de jóvenes, mapas de los animales de la zona, calendarios, relatos míticos, trance chamánico, marcas de identidad de un grupo...
+
+Lo que sí es seguro es lo que demuestran: hace 30.000 años ya existían el símbolo, el relato, la enseñanza organizada y la idea de que hay algo más allá de lo que se ve. En Altamira, Chauvet o Lascaux no vemos cazadores: vemos personas.
+
+**Dato curioso:** muchas manos pintadas en las paredes son de mujeres y de niños, y algunas están incompletas.
+
+---
+
+## 9 · La revolución neolítica
+
+`revolucion-neolitica` · **≈10000-8000 a. C.**
+
+**Cuerpo:**
+
+Durante cientos de miles de años, los seres humanos vivimos como cazadores y recolectores nómadas.
+
+Al terminar la última Edad de Hielo, comenzamos a cultivar plantas y domesticar animales de forma independiente en distintas partes del mundo.
+
+En Oriente Próximo surgieron cultivos como el trigo y la cebada, mientras que en otras regiones aparecieron el arroz, el maíz o la patata.
+
+La agricultura obligó a establecerse en un mismo lugar y dio origen a las primeras aldeas permanentes.
+
+Aparecieron las casas, los graneros, la cerámica, la propiedad de la tierra y la herencia.
+
+El excedente de alimentos permitió que algunas personas se dedicaran a otros oficios, como la artesanía, la metalurgia o la administración.
+
+Con ello surgieron las jerarquías sociales, los impuestos, los ejércitos, las ciudades y la escritura.
+
+Sin embargo, la vida agrícola también tuvo consecuencias negativas para la salud.
+
+La dieta se volvió menos variada, aumentaron el trabajo físico, las hambrunas y las enfermedades infecciosas.
+
+La agricultura no nos hizo necesariamente más sanos, pero permitió que la población creciera enormemente y que surgieran las grandes civilizaciones.
+
+**Dato curioso:** Çatalhöyük, en Turquía, llegó a tener unos 8.000 habitantes hacia el 7000 a. C., sin calles: las casas se pegaban unas a otras y se entraba por el tejado. Y en Göbekli Tepe se levantaron templos monumentales de piedra ANTES de la agricultura, lo que sugiere que quizá primero nos reunimos a creer y luego a cultivar.
+
+
+# ERA · Edad Antigua
+
+`key: edad-antigua` · Época: **3500 a. C. – 476 d. C.**
+
+---
+
+## 1 · Invención de la escritura
+
+`invencion-escritura` · **≈3500 a. C.**
+
+**Cuerpo:**
+
+En las primeras ciudades de Mesopotamia había que llevar la cuenta de cosas imposibles de recordar: cuánta cebada había entregado cada familia al templo, cuántas ovejas debía un pastor, qué había cobrado cada trabajador...
+
+La solución empezó siendo contabilidad. Primero fichas de barro para contar; después dibujos de las cosas contadas sobre tablillas de arcilla blanda, marcadas con una caña de punta triangular. De ahí el nombre de esa escritura: cuneiforme, «en forma de cuña».
+
+Al principio cada signo era un dibujo (una cabeza de buey, una espiga). El salto genial vino cuando los signos dejaron de representar cosas y empezaron a representar SONIDOS: entonces ya se podía escribir cualquier cosa, incluidos nombres propios, ideas abstractas y verbos.
+
+Y entonces la escritura se desbordó de la contabilidad: leyes, cartas, tratados, recetas médicas, contratos matrimoniales, tablas de multiplicar, mapas, oraciones y, por fin, literatura. El Poema de Gilgamesh, la primera gran obra literaria conocida, habla de la amistad y del miedo a morir.
+
+Con la escritura pasa algo definitivo: por primera vez, un ser humano puede recibir información de alguien que murió hace mil años. La memoria deja de depender de las personas vivas. Por eso se dice que aquí termina la Prehistoria y empieza la Historia.
+
+---
+
+## 2 · Primeras ciudades-Estado
+
+`ciudades-estado` · **≈3500-3000 a. C.**
+
+**Cuerpo:**
+
+Con la agricultura de regadío, las llanuras entre el Tigris y el Éufrates producían muchísimo grano. Y donde hay excedente de comida, puede haber mucha gente en el mismo sitio. Así nacieron Uruk, Ur, Lagash o Eridú: las primeras ciudades del mundo.
+
+Uruk llegó a tener unos 50.000 habitantes hacia el 3000 a. C. Nunca antes tantos desconocidos habían compartido un espacio, y eso obliga a inventar cosas nuevas: leyes iguales para todos, funcionarios, impuestos, murallas, cárceles y un ejército.
+
+Cada ciudad era un pequeño Estado independiente, con su propio gobernante, su dios protector y su templo-torre (el zigurat), que era además el gran almacén y el banco de la ciudad. Por eso se llaman ciudades-Estado.
+
+El regadío explica mucho: los canales hay que excavarlos, repartirlos y mantenerlos entre todos, y eso exige una autoridad que organice, decida y castigue. Los primeros poderes fuertes nacen, en buena medida, para administrar agua.
+
+También nace la desigualdad tal como la conocemos. En una aldea todos hacen casi lo mismo; en una ciudad hay sacerdotes, escribas, artesanos, soldados, campesinos y esclavos, y las tumbas dejan de parecerse entre sí.
+
+---
+
+## 3 · Unificación de Egipto
+
+`unificacion-egipto` · **≈3100 a. C.**  ·  2 pág. Profundiza
+
+**Pregunta:** ¿Por qué existían un Alto y un Bajo Egipto?
+
+**Cuerpo:**
+
+Egipto es un río rodeado de desierto. Todo lo que hubo allí durante tres mil años existió porque el Nilo se desbordaba cada verano y dejaba un limo negro y fértil en sus orillas. Los propios egipcios llamaban a su país Kemet, «la Tierra Negra», frente a Deshret, «la Tierra Roja» del desierto.
+
+Pero ese río tiene dos partes muy distintas. Al sur, el valle es una franja estrechísima de tierra fértil (a veces solo unos cientos de metros) encajonada entre acantilados. Al norte, el río se abre en un enorme delta pantanoso lleno de brazos, papiro y aves.
+
+Esas dos zonas eran dos mundos: el valle era ganadero, aislado y africano, con contactos con Nubia; el delta era húmedo, abierto al Mediterráneo y en contacto con Oriente Próximo. Vivían distinto, comerciaban con distinta gente y tenían dioses y símbolos propios.
+
+Hacia el 3100 a. C. un rey del sur —la tradición lo llama Menes y la arqueología apunta a Narmer— conquistó el norte y unificó las dos tierras, fundando Menfis, la capital.
+
+Gracias a que el Nilo era un río navegable y previsible (crecida en verano, siembra en otoño, cosecha en primavera), Egipto pudo mantener un Estado unificado, con impuestos y funcionarios, durante casi tres mil años. Ninguna otra civilización ha durado tanto siendo tan reconocible.
+
+### Profundiza 1 · Las señas de las Dos Tierras
+
+Los egipcios eran obsesivos con el equilibrio:
+
+La planta del Alto Egipto era el loto; la del Bajo Egipto, el papiro. En muchas columnas y decoraciones aparecen las dos entrelazadas: es el símbolo de la unión de las Dos Tierras.
+
+Cuando el Estado se debilitaba —y pasó varias veces, en los llamados «períodos intermedios»— Egipto se rompía exactamente por esa línea: el sur con capital en Tebas y el norte en el delta. La unidad no era natural: había que sostenerla.
+
+### Profundiza 2 · Los dioses de Egipto
+
+Los egipcios no tenían un dios: tenían cientos, y no les molestaba que un mismo fenómeno se explicara de dos maneras a la vez. Su religión no era un dogma, era un modo de mantener el orden del mundo.
+
+Ra era el sol, que cada noche moría y cada mañana volvía a nacer tras atravesar el mundo de los muertos. Su viaje diario era la garantía de que el universo seguía funcionando.
+
+Osiris fue un rey asesinado por su hermano Seth y despedazado; su esposa Isis, la gran maga, recompuso su cuerpo y concibió a su hijo Horus. Osiris pasó a reinar sobre los muertos y Horus derrotó a Seth y heredó el trono de los vivos. En ese mito está toda la política egipcia: el faraón vivo es Horus, y cuando muere se convierte en Osiris.
+
+Anubis, con cabeza de perro o chacal, guiaba a los muertos y protegía los cementerios. Thot, con cabeza de ibis, había inventado la escritura y anotaba el resultado del juicio. Hathor era el amor, la música y la alegría; Sekhmet, con cabeza de leona, la enfermedad y la furia curativa; Bastet, la gata protectora del hogar; Ptah, el artesano que creó el mundo con la palabra, patrón de los obreros de Menfis; Amón, el dios oculto de Tebas, que acabó fundido con Ra como Amón-Ra, el más poderoso del imperio.
+
+Por encima de todos ellos había algo que no era un dios sino un principio: Maat, la verdad, la justicia y el orden justo del cosmos, representada por una pluma.
+
+Hubo un intento de romper con todo esto. Hacia 1350 a. C., el faraón Akenatón (con su esposa Nefertiti) abolió el culto a los demás dioses e impuso uno solo, Atón, el dios solar: el primer monoteísmo de estado de la historia. Cerró templos, cambió el arte y fundó una capital nueva. Duró lo que él: a su muerte, su sucesor Tutankamón restauró a los dioses antiguos.
+
+---
+
+## 4 · Pirámides de Guiza
+
+`piramides-guiza` · **≈2600-2500 a. C.**  ·  2 pág. Profundiza
+
+**Cuerpo:**
+
+Una pirámide no es un capricho: es una máquina para convertir a un rey muerto en un dios. Los egipcios creían que la persona estaba formada por varias partes (entre ellas el ka, la fuerza vital, y el ba, algo parecido al alma) y que, si el cuerpo se conservaba y recibía ofrendas, el difunto seguía viviendo eternamente.
+
+Las pirámides no fueron construidas por esclavos con látigos, como cuentan las películas. La construyeron equipos de trabajadores egipcios organizados por turnos, alojados en una ciudad al lado de la obra, y una parte importante eran campesinos que trabajaban durante los meses de la crecida del Nilo, cuando los campos estaban bajo el agua y no había nada que sembrar.
+
+El proyecto tenía un efecto político enorme: durante décadas, miles de personas de todo el país trabajaban, comían y rezaban en la misma obra, con las mismas medidas y el mismo calendario. Construir la pirámide construía Egipto.
+
+**Dato curioso:** la Gran Pirámide estaba recubierta de caliza blanca pulida que brillaba al sol como un espejo. La mayor parte de ese revestimiento se arrancó en la Edad Media para construir El Cairo.
+
+**Dato curioso II:** La Gran Pirámide de Keops tiene unos 2,3 millones de bloques, pesa unos seis millones de toneladas y mide 146 metros: fue el edificio más alto del mundo durante casi 4.000 años, hasta las catedrales góticas. Sus lados están orientados a los puntos cardinales con un error de menos de una décima de grado, y la base es casi perfectamente horizontal.
+
+### Profundiza 1 · Cómo vivía la gente de Egipto
+
+Sabemos cómo vivían los obreros porque se han excavado sus poblados y, sobre todo, porque escribían: miles de trozos de cerámica y piedra (ostraca) con listas, cartas, quejas y bromas.
+
+Los obreros de Guiza vivían en un pueblo junto a la obra con panaderías, fábricas de cerveza y talleres. En sus basureros hay huesos de vacuno, oveja y pescado en cantidad: comían carne, algo que un campesino normal casi no probaba. Y sus esqueletos muestran fracturas curadas, amputaciones y artrosis: trabajaban durísimo, pero recibían atención médica y no se los tiraba cuando se rompían.
+
+En Deir el-Medina, la aldea de los artesanos que excavaban y pintaban las tumbas del Valle de los Reyes, la semana tenía diez días: ocho de trabajo y dos de descanso, y dormían en la obra durante el turno. Cobraban en especie —grano, pan, cerveza, pescado, verdura, aceite, ropa, leña—, porque el dinero no existía todavía.
+
+Por encima de ellos estaban los escribas, que sabían leer y escribir y por eso no pagaban ciertos impuestos ni hacían trabajo físico. Hay un texto escolar egipcio, la «Sátira de los oficios», en el que un padre convence a su hijo de que estudie describiéndole lo horrible que es ser barbero, pescador, herrero o lavandero. La lección era clarísima: el estudio es el único ascensor social.
+
+Y luego estaba todos los demás: campesinos que pagaban impuestos en grano y podían ser azotados si no llegaban, alfareros, tejedoras, cerveceros, músicas, sacerdotes con turnos rotatorios, médicos especializados (había oculistas y dentistas), embalsamadores (bien pagados pero socialmente impuros por tratar con cadáveres) y esclavos, casi siempre prisioneros de guerra, que sí existían pero eran una minoría.
+
+**Dato curioso:** las mujeres egipcias podían poseer tierras, heredar, divorciarse, declarar en juicio y firmar contratos con su propio nombre, algo impensable en Grecia o Roma mil años después. En los contratos de divorcio se especificaba qué se llevaba ella.
+
+### Profundiza 2 · Qué pasaba cuando alguien moría
+
+Los egipcios no eran unos obsesionados con la muerte: eran unos obsesionados con la Vida, tanto que querían que continuara.
+
+El proceso duraba unos setenta días. Se extraían los órganos internos (el cerebro se sacaba por la nariz y se tiraba, porque no le veían utilidad) y se guardaban hígado, pulmones, estómago e intestinos en cuatro vasos canopos protegidos por los hijos de Horus. El corazón se dejaba dentro: era la sede de la inteligencia, la memoria y la conciencia, y hacía falta para el juicio final. El cuerpo se cubría de natrón, una sal que lo deshidrataba, y luego se ungía con resinas y aceites y se vendaba con centenares de metros de lino, colocando amuletos entre las capas.
+
+Después venía el juicio, en la sala de las Dos Verdades. El difunto declaraba no haber hecho el mal (la llamada «confesión negativa»: no he robado, no he mentido, no he matado, no he hecho llorar a nadie, no he desviado el agua del canal de mi vecino) y su corazón se ponía en una balanza frente a la pluma de Maat. Anubis vigilaba el fiel, Thot anotaba el resultado y, si el corazón pesaba más que la verdad, un monstruo llamado Ammit se lo comía: eso era la muerte definitiva, la única que temían de verdad.
+
+Si aprobaba, pasaba a los Campos de Ialu, una versión mejorada de Egipto, con su Nilo, sus cosechas y su familia. Para el viaje se enterraba al difunto con comida, muebles, juegos de mesa, ropa, sandalias, figuritas de sirvientes (los ushebtis, que trabajarían por él) y con el Libro de los Muertos, un manual con las fórmulas exactas para superar cada prueba: hasta el más allá tenía burocracia.
+
+Lo importante es que esto no era solo para faraones. Con el tiempo, cualquiera que pudiera pagarlo podía momificarse; y quien no podía, era enterrado en la arena del desierto con un par de objetos y su nombre escrito. Porque para los egipcios había una última condición para vivir eternamente: que alguien siguiera pronunciando tu nombre. Borrar el nombre de una tumba era la peor condena imaginable.
+
+**Dato curioso:** en las tumbas se pintaban escenas de banquetes, pesca, música y baile, no de tristeza. Y en algunas se dejaba una «carta al difunto» pidiéndole favores, quejándose de la herencia o reprochándole que hubiera dejado a la familia en mala situación.
+
+---
+
+## 5 · Código de Hammurabi
+
+`codigo-hammurabi` · **≈1754 a. C.**
+
+**Cuerpo:**
+
+Hammurabi, rey de Babilonia, reunió las leyes de su reino, las mandó grabar en una estela de diorita de 2,25 metros y la puso en un lugar público para que cualquiera pudiera saber a qué se exponía.
+
+En la parte de arriba de la estela hay un relieve: Hammurabi de pie frente a Shamash, el dios del sol y de la justicia, que le entrega los símbolos del poder. El mensaje era doble: la ley viene de lo divino, y por tanto ni el rey puede cambiarla a su antojo.
+
+El prólogo lo dice sin rodeos: escribe estas leyes «para que el fuerte no oprima al débil», y para que «el hombre agraviado pueda leer y encontrar su derecho». Es la primera vez que un poder político declara por escrito que existe para proteger a los débiles.
+
+El principio famoso, «ojo por ojo, diente por diente», hoy nos suena bárbaro, pero era un avance en dos sentidos: ponía un límite al castigo (no puedes matar a quien te rompió un diente) y quitaba la venganza de las manos de las familias para ponerla en manos de un juez.
+
+Y hay un detalle que lo explica todo: el castigo dependía de la clase social de la víctima. La misma agresión se pagaba con el mismo daño si la víctima era un hombre libre, con una multa si era un plebeyo y con la mitad de su precio si era un esclavo. Aquella justicia era pública y escrita, pero no era igual para todos.
+
+**Dato curioso:** no fue el primer código. Casi tres siglos antes, el rey Ur-Nammu de Ur ya había escrito leyes, y curiosamente eran más suaves: castigaban con multas lo que Hammurabi castigaba con mutilaciones.
+
+---
+
+## 6 · Nacimiento del hinduismo
+
+`nacimiento-hinduismo` · **≈1500-500 a. C.**
+
+**Cuerpo:**
+
+El hinduismo es la más antigua de las grandes religiones vivas y también la más difícil de definir, porque no tuvo un fundador.
+
+Sus raíces están en los Vedas, himnos transmitidos oralmente con una precisión asombrosa (durante siglos se memorizaron sílaba a sílaba antes de escribirse) y, sobre ellos, en las Upanishads, textos que ya no se preguntan qué sacrificio hay que hacer, sino qué somos.
+
+De ahí salen sus ideas centrales. El karma: cada acción tiene consecuencias, y la Vida que vives es fruto de lo que se ha hecho. El samsara: la existencia es un ciclo de nacimientos y muertes. El dharma: cada uno tiene un deber propio que cumplir. Y el moksha: la liberación de ese ciclo, que se alcanza al comprender que el fondo de uno mismo (atman) y el fondo del universo (Brahman) son lo mismo.
+
+Como no hay dogma, caben dentro cosas muy distintas: quien adora a Vishnú, quien adora a Shiva, quien adora a la Diosa, quien practica yoga y meditación, quien apenas se plantea nada metafísico y cumple los ritos de su familia.
+
+Su parte más problemática también viene de aquí: el sistema de castas, un orden social hereditario que separaba a la población en grupos cerrados y dejaba abajo a los intocables. Fue justificado religiosamente durante siglos y está prohibido por la Constitución de la India desde 1950, aunque sigue pesando socialmente.
+
+Hoy lo practican cerca de mil doscientos millones de personas y ha influido en medio mundo: el yoga, la meditación, la idea de karma o la no violencia (ahimsa) que Gandhi convirtió en arma política.
+
+**Dato curioso:** la sílaba «Om» se considera el sonido del que surge el universo. Y la palabra «hindú» no la inventaron los hindúes: viene de cómo llamaban los persas a la gente que vivía al otro lado del río Indo.
+
+---
+
+## 7 · Invención del alfabeto
+
+`invencion-alfabeto` · **≈1200 a. C.**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Los primeros sistemas de escritura eran complejos y solo los dominaban los escribas, que tenían gran poder social y político, pues quien dominaba las escrituras, dominaba el Estado.
+
+Los fenicios simplificaron la escritura a 22 signos consonánticos, haciéndola mucho más rápida y fácil de aprender.
+
+Esto permitió que comerciantes, soldados y otras personas pudieran escribir, dejando de ser un privilegio de las élites.
+
+Los griegos añadieron las vocales y crearon un sistema capaz de representar las palabras con mayor precisión.
+
+De esta evolución surgieron alfabetos como el latino, el hebreo, el árabe, el cirílico y varios alfabetos de la India.
+
+**Dato curioso:** nuestras letras siguen guardando el dibujo original. La «A» viene de alef, «buey» (gírala: verás los cuernos); la «B» de bet, «casa»; la «M» de mem, «agua», con su forma de olas. Y las palabras «alfabeto» y «abecedario» no son más que sus dos primeras letras dichas seguidas.
+
+### Profundiza 1 · Los fenicios: el pueblo que vendía de todo
+
+Los fenicios no fueron un imperio, y precisamente por eso son fascinantes. Eran ciudades independientes —Tiro, Sidón, Biblos, Berito— apretadas entre las montañas del Líbano y el mar, sin territorio para expandirse; por eso se hicieron marineros.
+
+Su nombre nos lo pusieron los griegos: phoínikes, «los rojos» o «los púrpuras», por el producto que los hizo célebres. De un molusco marino, el múrex, extraían un tinte púrpura tan difícil de obtener (miles de conchas para unos gramos, y un hedor insoportable en los talleres) que valía más que su peso en plata y quedó reservado para reyes. De ahí viene que el púrpura sea todavía hoy el color de la realeza.
+
+Fueron los mejores navegantes de la Antigüedad. Navegaban de noche guiándose por la Estrella Polar, a la que los griegos llamaban «la estrella fenicia». Fundaron colonias por todo el Mediterráneo: Gadir (Cádiz, hacia el 1100 a. C., la ciudad más antigua de Europa occidental), Cartago (814 a. C., fundada según la leyenda por la reina Dido, huida de Tiro), Palermo, Ibiza, Málaga, Cartagena.
+
+**Dato curioso:** la palabra «Biblia» viene de Biblos, el puerto fenicio por el que los griegos compraban el papiro egipcio para escribir. Es decir: el libro más leído de la historia se llama así por un puerto de comerciantes.
+
+**Dato curioso II:** Heródoto cuenta que una expedición fenicia dio la vuelta a África entera en unos tres años, saliendo por el mar Rojo y volviendo por el estrecho de Gibraltar.
+
+---
+
+## 8 · Imperio Asirio
+
+`imperio-asirio` · **≈911-609 a. C.**
+
+**Cuerpo:**
+
+Los asirios, del norte de Mesopotamia, crearon el primer imperio militar profesional de la historia. Su innovación no fue solo tener buenas armas: fue tener un ejército permanente, pagado, entrenado y disponible todo el año, en lugar de campesinos reclutados en verano.
+
+Dejaban claro lo que pasaba si te rendías. El mensaje era muy racional: si te rindes y pagas tributo, vivirás; si resistes, sufrirás una muerte violenta y no quedará nada de ti. Cumplían las dos partes, porque solo así la amenaza funcionaba.
+
+Montaron una administración eficaz con provincias, gobernadores, censos, calzadas y correos de relevo, e impusieron el arameo como lengua administrativa.
+
+**Dato curioso:** el último gran rey asirio, Asurbanipal, era un lector obsesivo. Reunió en Nínive una biblioteca de unas 30.000 tablillas y mandó copiar todo lo que encontraba. Cuando la ciudad fue incendiada en 612 a. C., el fuego coció la arcilla y conservó las tablillas: gracias a aquel desastre tenemos hoy el Poema de Gilgamesh.
+
+---
+
+## 9 · Imperio Persa
+
+`imperio-persa` · **≈550-330 a. C.**  ·  2 pág. Profundiza
+
+**Cuerpo:**
+
+Los persas construyeron el imperio más grande que el mundo había visto: de Egipto y Grecia hasta la India, con unos 25 o 30 millones de habitantes, casi la mitad de la humanidad en aquel entonces.
+
+Su gran acierto fue de método. Los asirios habían gobernado deportando y aterrorizando; los persas hicieron lo contrario: respetaron las religiones, las lenguas, las leyes y las costumbres locales, a cambio de impuestos.
+
+Levantaron capitales monumentales, sobre todo Persépolis.
+
+Su religión, el zoroastrismo, aportó ideas que después reaparecerían por todo Occidente: un dios supremo del bien (Ahura Mazda) enfrentado a un principio del mal, la libertad de elegir entre ambos, un juicio después de la muerte y un final en el que el bien vence.
+
+### Profundiza 1 · Ciro el Grande
+
+Ciro II era el rey de un pequeño reino vasallo, Persia, sometido a los medos. En unos veinte años derrotó a los medos, conquistó Lidia y tomó Babilonia en el 539 a. C.
+
+Y ahí hizo algo insólito para la época: entró en Babilonia sin destruirla, se presentó no como conquistador extranjero sino como restaurador del dios local Marduk, respetó los templos y liberó a los pueblos deportados.
+
+Entre ellos estaban los judíos, cautivos en Babilonia desde que se destruyó Jerusalén. Ciro les permitió volver a su tierra y reconstruir su templo, y financió parte de la obra.
+
+Murió hacia el 530 a. C. combatiendo en la frontera nororiental. Su tumba, sencilla, sigue en pie en Pasargada. Se cuenta que llevaba una inscripción que decía: «Oh hombre, quienquiera que seas y de donde quiera que vengas, yo soy Ciro, el que dio a los persas su imperio. No me envidies este poco de tierra que cubre mi cuerpo».
+
+Alejandro Magno, doscientos años después, visitó esa tumba, la encontró saqueada y ordenó restaurarla. Ciro era su modelo.
+
+### Profundiza 2 · Darío el Grande
+
+Si Ciro conquistó el imperio, Darío I lo convirtió en un Estado. Llegó al trono en el 522 a. C. de forma turbia, en medio de una crisis sucesoria y de rebeliones por todas partes, y pasó su primer año aplastándolas.
+
+Su versión de los hechos la dejó escrita en un lugar imposible: la inscripción de Behistún, grabada a 100 metros de altura en un acantilado, en tres idiomas (persa antiguo, elamita y babilonio), para que nadie pudiera borrarla ni alcanzarla. Siglos después, esa triple inscripción sirvió para descifrar la escritura cuneiforme, igual que la piedra de Rosetta sirvió para los jeroglíficos.
+
+Sus reformas fueron las que hicieron funcionar el imperio: fijó los impuestos por provincia (cada satrapía pagaba una cantidad conocida, no lo que se le antojara al gobernador), acuñó el dárico de oro, terminó el Camino Real, organizó el censo, mandó abrir un canal entre el Nilo y el mar Rojo (un antepasado del canal de Suez), estandarizó la ley y creó una flota de guerra.
+
+También ordenó explorar: envió a un capitán a navegar desde el Indo hasta Egipto, y sus barcos cartografiaron rutas que nadie había recorrido.
+
+Su gran fracaso fue Grecia. Cuando las ciudades griegas de Asia Menor se rebelaron con ayuda de Atenas, Darío quiso castigarla. Su primera expedición se perdió en una tempestad en el monte Athos; la segunda fue derrotada en la llanura de Maratón, en el 490 a. C. Murió preparando la tercera, que llevaría a cabo su hijo Jerjes.
+
+**Dato curioso:** en las tablillas administrativas de Persépolis aparecen las raciones que se pagaban a los trabajadores del palacio, y consta que las mujeres cobraban por su trabajo y que a las que acababan de dar a luz se les daba una ración extra de vino o cerveza, más grande si el bebé era niño.
+
+---
+
+## 10 · Nacimiento del budismo
+
+`nacimiento-budismo` · **≈Siglo VI a. C.**
+
+**Cuerpo:**
+
+Siddhartha Gautama era el hijo de un señor del norte de la India, criado entre lujos y protegido de todo lo desagradable. Según la tradición, un día salió del palacio y vio por primera vez a un anciano, a un enfermo y a un cadáver. Aquello le rompió la vida: entendió que nada de lo que tenía lo salvaría de eso.
+
+Lo dejó todo y probó primero el camino contrario: años de ascetismo extremo, ayunos hasta casi morir. Tampoco funcionó. De ahí sacó su primera idea importante: ni el placer ni el castigo del cuerpo liberan. Hay un camino medio.
+
+Meditando bajo un árbol alcanzó lo que llamó el despertar, y pasó a ser el Buda, «el despierto». No dijo ser un dios ni un enviado; dijo haber comprendido algo, y que cualquiera podía comprenderlo.
+
+Su diagnóstico son las Cuatro Nobles Verdades, y está planteado como una consulta médica: existe el sufrimiento; el sufrimiento tiene una causa (el deseo, el apego, la sed de que las cosas sean distintas de como son); si se elimina la causa, cesa; y hay un método para eliminarla, el Óctuple Sendero, que combina ética, atención y meditación.
+
+Su otra idea revolucionaria fue social: enseñó a cualquiera, de cualquier casta, incluidas mujeres y personas consideradas impuras. En una India rígidamente jerarquizada, eso era subversivo.
+
+Enseñó cuarenta años y murió con unos ochenta. Sus últimas palabras, según los textos, fueron un encargo incómodo para cualquier religión: no confiéis en mí, sed vuestra propia lámpara.
+
+---
+
+## 11 · Democracia ateniense
+
+`democracia-ateniense` · **≈508 a. C.**
+
+**Cuerpo:**
+
+En un mundo de reyes, faraones y emperadores, una ciudad griega decidió que las decisiones las tomara la asamblea de sus ciudadanos. La palabra lo dice: demos (pueblo) más kratos (poder).
+
+No era como votar hoy cada cuatro años. Era directa: unas cuarenta veces al año, varios miles de ciudadanos se reunían en la colina de la Pnyx, cualquiera podía pedir la palabra y se votaba a mano alzada la guerra, los impuestos, los tratados o el destierro de alguien.
+
+Y había un detalle asombroso: la mayoría de los cargos públicos no se elegían, se sorteaban. El Consejo de los Quinientos, los tribunales de cientos de jurados, casi toda la administración: por sorteo, por un año y sin repetir. La lógica era que si se sortea, no se puede comprar ni heredar un puesto, y cualquier ciudadano corriente debe ser capaz de gobernar. Solo los generales se elegían por votación, porque ahí hacía falta pericia.
+
+También inventaron controles: al terminar el cargo había que rendir cuentas del dinero público; existía el ostracismo (la propia asamblea podía desterrar diez años a quien se considerara peligroso, escribiendo su nombre en trozos de cerámica); y se pagaba un jornal por asistir, para que un pobre pudiera participar sin perder el día.
+
+Y ahora la parte que hay que decir sin adornos: eran ciudadanos los varones adultos hijos de atenienses. Quedaban fuera las mujeres, los esclavos (que eran muchísimos) y los extranjeros residentes. Participaba, como mucho, entre el 10 % y el 20 % de la población.
+
+Aun así, allí nacieron ideas que seguimos usando: la ley igual para todos, el derecho a hablar en público, el juicio con jurado, la rendición de cuentas y la sospecha de que el poder debe estar vigilado.
+
+---
+
+## 12 · Guerras Médicas
+
+`guerras-medicas` · **499-449 a. C.**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+El Imperio persa era inmenso; las ciudades griegas eran diminutas, pobres y estaban permanentemente peleadas entre sí. Todo apuntaba a que Grecia sería una provincia más. Y no lo fue.
+
+Empezó porque las ciudades griegas de la costa de Asia Menor, súbditas de Persia, se rebelaron, y Atenas les mandó ayuda. Darío decidió castigar a Atenas.
+
+La primera invasión acabó en el 490 a. C. en la llanura de Maratón, y la segunda, diez años después, fue una máquina de guerra colosal dirigida por el rey Jerjes: abrió un canal para sus barcos, cruzó el Helesponto por puentes de barcas y arrasó el centro de Grecia.
+
+Los griegos ganaron por tres razones concretas. Primero, la táctica: su infantería pesada (los hoplitas, con escudo grande, lanza y falange cerrada) era devastadora en terreno estrecho contra tropas ligeras.
+
+Segundo, el terreno: eligieron pelear siempre en pasos y estrechos donde el número enorme del enemigo no servía de nada.
+
+Tercero, y decisivo, la logística: mantener a cientos de miles de hombres en un país seco y montañoso dependía de la flota, así que hundir la flota persa era hundir la invasión.
+
+Las consecuencias fueron gigantescas. Atenas quedó convertida en la potencia del Egeo, se llenó de dinero y de orgullo, y en las décadas siguientes construyó el Partenón y vio nacer la tragedia, la historia, la medicina hipocrática y la filosofía de Sócrates. Casi todo lo que llamamos «cultura clásica» viene de la Grecia que sobrevivió a estas guerras.
+
+### Profundiza 1 · Batalla por batalla
+
+MARATÓN (490 a. C.): Los atenienses y platenses derrotaron a un ejército persa superior gracias a la estrategia de Milcíades. La leyenda del mensajero que corrió hasta Atenas dio origen al nombre de la maratón.
+
+LAS TERMÓPILAS (480 a. C.): Leónidas y unos 7.000 griegos resistieron durante dos días a los persas en un estrecho paso hasta ser rodeados por una traición. Su sacrificio permitió a los griegos ganar tiempo para evacuar y reorganizarse.
+
+SALAMINA (480 a. C.): Temístocles atrajo a la enorme flota persa al estrecho de Salamina, donde los barcos griegos pudieron maniobrar mejor y derrotarla. La derrota debilitó gravemente la capacidad persa de mantener su ejército en Grecia.
+
+PLATEA Y MICALE (479 a. C.): Los griegos derrotaron al ejército persa en Platea y destruyeron su base naval en Micale. Con estas victorias terminó la invasión persa de Grecia.
+
+Los atenienses decidieron invertir la riqueza de las minas de Laurión en construir 200 barcos de guerra en lugar de repartir el dinero entre los ciudadanos. Esa decisión fue clave para la victoria griega.
+
+**Dato curioso:** entre los comandantes de la flota persa había una mujer, Artemisia de Halicarnaso, reina de una ciudad griega sometida a Persia. Jerjes admiraba su criterio y, al verla combatir en Salamina, se cuenta que dijo: «Mis hombres se han vuelto mujeres y mis mujeres, hombres».
+
+---
+
+## 13 · Alejandro Magno
+
+`alejandro-magno` · **336-323 a. C.**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Alejandro Magno heredó a los veinte años el reino de Macedonia y, con él, el ejército profesional y la falange reformada que había construido su padre Filipo II. No partía de cero: partía del mejor ejército del mundo y de una ambición desmedida.
+
+En once años derrotó al Imperio persa en tres grandes batallas —Gránico, Issos y Gaugamela—, conquistó Egipto, entró en Babilonia y Persépolis y llegó hasta el río Indo. Nunca perdió una batalla.
+
+Su estilo militar era reconocible: velocidad, sorpresa, y él mismo cargando al frente de la caballería, buscando personalmente al rey enemigo. Fue herido muchas veces, casi mortalmente en la India. Sus hombres lo seguían porque comía, dormía y sangraba con ellos.
+
+Fundó cerca de veinte ciudades, muchas llamadas Alejandría, y la de Egipto se convirtió en la gran capital cultural del mundo antiguo, con su Biblioteca y su Museo.
+
+Murió en Babilonia a los 32 años, tras once días de fiebre, sin dejar sucesor claro (malaria, tifus o envenenamiento: se sigue discutiendo).
+
+Sus generales se repartieron el imperio a espadazos: Ptolomeo se quedó Egipto —su dinastía acabaría con Cleopatra—, Seleuco Asia, Antígono Macedonia.
+
+Su verdadera huella no fue política sino cultural. Debido a que mezclaba y combinaba las culturas que conquistaba, creó el mundo helenístico, las bases de la cultura occidental.
+
+### Profundiza 1 · El hombre detrás de la leyenda
+
+De niño lo educó Aristóteles, nada menos. Le enseñó filosofía, biología y literatura, y Alejandro llevó toda su vida una copia de la Ilíada; dormía con ella y con un puñal bajo la almohada. Su modelo era Aquiles: gloria breve antes que vida larga.
+
+A los doce años domó un caballo que nadie podía montar, Bucéfalo, al darse cuenta de que se asustaba de su propia sombra: lo giró hacia el sol. Lo montó en sus campañas durante veinte años y cuando murió, en la India, le puso su nombre a una ciudad.
+
+En Gordio le mostraron un nudo imposible de deshacer del que se decía que quien lo desatara reinaría en Asia. Lo cortó con la espada. La escena resume su método: si el problema no tiene solución dentro de las reglas, cambia las reglas.
+
+En la India se enfrentó al rey Poros y a sus elefantes de guerra bajo una tormenta monzónica. Ganó, y al preguntarle a Poros, prisionero, cómo quería ser tratado, este respondió «como un rey». Alejandro lo repuso en su trono como aliado.
+
+Y luego llegó el límite. Al llegar al río Hifasis, su ejército, agotado y a 5.000 kilómetros de casa, se negó a seguir. Alejandro se encerró tres días en su tienda y finalmente cedió: la vuelta la hizo en parte atravesando el desierto de Gedrosia, donde murió de sed y hambre buena parte de su gente.
+
+También hay que contar sus peores hechos... Arrasó Tebas y vendió a sus habitantes como esclavos para dar ejemplo. Incendió Persépolis. Mandó ejecutar a colaboradores por conspiración, entre ellos al viejo general Parmenión. Y en una borrachera mató con sus propias manos a Clito, el amigo que le había salvado la vida en el Gránico; después estuvo tres días sin comer.
+
+Cuando le preguntaron, moribundo, a quién dejaba el imperio, respondió —según la tradición— «al más fuerte». Su cadáver fue secuestrado por Ptolomeo camino de Macedonia y expuesto en Alejandría durante siglos, en un sarcófago visitado por Julio César y por Augusto. Hoy nadie sabe dónde está.
+
+---
+
+## 14 · Fundación del Imperio Maurya
+
+`imperio-maurya` · **≈322 a. C.**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Mientras Alejandro se retiraba de la India, un joven llamado Chandragupta Maurya aprovechó el vacío de poder, derrotó a los reinos del norte y fundó el primer imperio que unificó casi todo el subcontinente indio.
+
+El imperio tenía funcionarios, censos, caminos, pozos, control de precios, un servicio de inteligencia y un ejército enorme, con miles de elefantes de guerra.
+
+Su nieto Ashoka lo llevó a su máxima extensión, y ahí ocurre algo que no tiene paralelo en la Antigüedad: después de conquistar el reino de Kalinga en una guerra atroz, en lugar de celebrarlo, lo lamentó públicamente y por escrito.
+
+Renunció a nuevas conquistas, abrazó el budismo y reorientó el Estado hacia lo que llamó el dhamma: una política basada en la no violencia, la tolerancia religiosa y el bienestar de sus súbditos.
+
+Y no se quedó en su reino: envió misiones budistas a Sri Lanka, al sudeste asiático y a los reinos helenísticos. Por eso el budismo dejó de ser una escuela local y se convirtió en una religión mundial. Sin Ashoka, probablemente hoy no existiría el budismo en Asia.
+
+**Dato curioso:** Su consejero escribió el Arthashastra, un manual de gobierno frío y práctico —sobre impuestos, espías, diplomacia y guerra— que se compara con «El Príncipe» de Maquiavelo, escrito 1.800 años después.
+
+### Profundiza 1 · Aśoka: el rey que escribió su remordimiento en las rocas
+
+Lo que sabemos de Ashoka lo sabemos porque él mismo lo mandó grabar. Repartió por todo el imperio decenas de inscripciones en rocas, cuevas y columnas de piedra pulida, escritas no en el latín culto de la corte sino en las lenguas populares de cada región, para que la gente pudiera entenderlas. En el noroeste, en la actual Kandahar, hay un edicto bilingüe en griego y arameo: hablaba a cada pueblo en su idioma.
+
+En el llamado Edicto XIII cuenta la guerra de Kalinga con una franqueza que no tiene igual en ningún otro documento antiguo: dice que 100.000 personas murieron en combate, que 150.000 fueron deportadas y que muchísimas más murieron después, y añade que «el Amado de los Dioses siente profundo remordimiento». Ningún otro rey de la Antigüedad puso por escrito que su victoria le pareciera una desgracia.
+
+A partir de ahí, las medidas: prohibió los sacrificios de animales en la capital, redujo drásticamente la caza y la matanza en la cocina real, mandó plantar árboles de sombra y cavar pozos a lo largo de los caminos, construir casas de reposo para viajeros y atención médica para personas y animales, y creó unos funcionarios nuevos, los «oficiales del dhamma», encargados de vigilar que se trataba bien a la gente, incluidos los presos.
+
+Y proclamó algo extraordinario para cualquier época: que honrar la propia religión insultando a las otras es la mejor manera de dañar a la propia. Ordenó respeto para brahmanes, jainistas, budistas y todas las escuelas.
+
+---
+
+## 15 · Fundación de Roma
+
+`fundacion-roma` · **753 a. C. (tradicionalmente)**
+
+**Cuerpo:**
+
+La leyenda dice que Rómulo y Remo, gemelos abandonados en el Tíber y amamantados por una loba, fundaron la ciudad, y que Rómulo mató a su hermano por una disputa sobre las murallas. Los romanos contaban su origen empezando por un fratricidio, y eso dice mucho de cómo se veían a sí mismos.
+
+La realidad arqueológica es más modesta: unas aldeas de cabañas en siete colinas junto a un vado del río Tíber, en el siglo VIII a. C. Eso último es la clave. Era el punto donde se podía cruzar el río, en la ruta de la sal, tierra adentro pero con salida al mar.
+
+Desde el principio hicieron algo que ningún otro pueblo antiguo hacía a esa escala: integrar. A los vencidos se les podía ofrecer la ciudadanía, a los aliados un tratado, a los libertos un camino de ascenso. Roma no solo conquistaba pueblos: los convertía en romanos, y así cada guerra ganada aumentaba su base de soldados y de contribuyentes.
+
+Su otra obsesión fue la ingeniería del día a día: calzadas, puentes, acueductos, cloacas, puertos. No conquistaron por tener las mejores ideas, sino por saber organizar, abastecer y aguantar.
+
+**Dato curioso:** la Cloaca Máxima, la gran alcantarilla que desecó el pantano donde estaba el Foro, se empezó en época de los reyes, en el siglo VI a. C., y todavía hoy hay tramos conectados al alcantarillado de Roma. Lleva más de 2.500 años funcionando.
+
+---
+
+## 16 · República Romana
+
+`republica-romana` · **509-27 a. C.**
+
+**Cuerpo:**
+
+Roma expulsó a su último rey y creó una República basada en limitar y repartir el poder.
+
+Dos cónsules gobernaban durante un año, el Senado y las asambleas también tenían funciones políticas.
+
+La plebe luchó por sus derechos mediante conflictos y consiguió los tribunos de la plebe y las Doce Tablas.
+
+Con este sistema, Roma creció hasta dominar gran parte del Mediterráneo y derrotó a su gran rival, Cartago.
+
+Pero gobernar un imperio provocó desigualdad, concentración de tierras y generales con ejércitos fieles a los propios generales.
+
+Las luchas entre facciones y guerras civiles debilitaron progresivamente la República.
+
+Tras un siglo de conflictos, Roma terminó bajo el poder de un solo hombre, justo lo que había intentado evitar.
+
+---
+
+## 17 · Julio César
+
+`julio-cesar` · **100-44 a. C.**
+
+**Cuerpo:**
+
+Cayo Julio César era de una familia noble pero venida a menos, y llegó al poder por la vía difícil: préstamos gigantescos, alianzas cambiantes, cargos religiosos comprados y un talento excepcional para hablar en público y para caerle bien a la gente corriente.
+
+En el año 60 a. C. pactó en secreto con los dos hombres más poderosos de Roma, el general Pompeyo y el millonario Craso, para repartirse la política. Es lo que llamamos el primer triunvirato: tres personas apropiándose de una república.
+
+Su gran obra fue la conquista de la Galia (la actual Francia y alrededores) entre el 58 y el 50 a. C. Fueron ocho años de campañas brillantes y brutales; él mismo las contó en un libro, «La guerra de las Galias», que era a la vez crónica y propaganda electoral. Terminó con la derrota del jefe galo.
+
+Cuando el Senado le ordenó licenciar su ejército y volver como ciudadano particular, César cruzó con sus legiones el río Rubicón, la frontera que ningún general podía pasar armado. Sabía lo que hacía: «la suerte está echada». Fue el comienzo de la guerra civil que acabó con la República.
+
+Ganó, persiguió a Pompeyo hasta Egipto, y en tres años concentró todos los poderes: dictador perpetuo, con su imagen en las monedas y un mes del calendario con su nombre.
+
+Y usó ese poder para reformar mucho: repartió tierras a sus veteranos, extendió la ciudadanía a provincias enteras, alivió deudas, hizo un censo, ordenó obras públicas y arregló el calendario, que llevaba tres meses desfasado respecto al sol.
+
+Un grupo de senadores —entre ellos Bruto, al que había perdonado y ascendido— lo apuñaló 23 veces en plena sesión. Creían estar salvando la República. Consiguieron lo contrario: tras otros trece años de guerra civil, su sobrino nieto Octavio se convirtió en Augusto, el primer emperador.
+
+---
+
+## 18 · Cleopatra
+
+`cleopatra` · **69-30 a. C.**
+
+**Cuerpo:**
+
+Cleopatra VII no era egipcia de origen: descendía de uno de los generales de Alejandro Magno, y su familia llevaba casi tres siglos reinando en Egipto sin molestarse en aprender el idioma del país. Ella fue la primera de su dinastía que lo hablaba, y se dice que dominaba además otras siete u ocho lenguas.
+
+Heredó el trono a los dieciocho años, compartido con su hermano pequeño, y fue expulsada de él por la corte. Su problema de fondo era estructural: Egipto era rico —el granero del Mediterráneo— y Roma estaba a punto de comérselo. Su vida entera fue una maniobra para evitarlo.
+
+Su estrategia fue aliarse con el romano más fuerte de cada momento. Primero César: se hizo llevar en secreto ante él, envuelta en una tela, cuando él estaba en Alejandría. Recuperó el trono con sus legiones, tuvo un hijo con él, Cesarión, y visitó Roma como reina aliada.
+
+Asesinado César, se alió con Marco Antonio, con quien tuvo tres hijos más y una relación política y personal que escandalizó a Roma.
+
+Octavio explotó ese escándalo hasta el final: presentó la guerra no como una guerra civil entre romanos, sino como la defensa de Roma frente a una reina oriental que había hechizado a un general.
+
+Todo se decidió en la batalla naval de Accio, en el 31 a. C. Derrotados, Antonio se suicidó con su espada y Cleopatra se quitó la vida al año siguiente.
+
+Con ella terminaron dos cosas a la vez: los reinos herederos de Alejandro y tres mil años de faraones. Egipto pasó a ser una provincia romana, y su trigo, a alimentar Roma.
+
+**Dato curioso:** la imagen de la seductora la construyó la propaganda de sus enemigos. Plutarco, que no la conoció pero pudo leer testimonios, dice que su belleza no era extraordinaria y que lo irresistible era su conversación y su voz.
+
+---
+
+## 19 · Imperio Romano
+
+`imperio-romano` · **27 a. C.-476 d. C.**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Tras un siglo de guerras civiles, Octavio se quedó solo en la cima y aprendió la lección del asesinato de su tío César: no se proclamó rey. Se hizo llamar «primer ciudadano» (princeps) y Augusto, mantuvo el Senado y las magistraturas, y gobernó como amo absoluto detrás de las formas republicanas.
+
+Funcionó tan bien que el sistema aguantó siglos. El imperio llegó a extenderse desde Britania hasta Mesopotamia, con unos 60 o 70 millones de habitantes.
+
+Lo mantenía unido una combinación muy concreta: unas treinta legiones profesionales en las fronteras, 80.000 kilómetros de calzadas, una misma moneda que servía en todas partes, dos lenguas comunes (latín al oeste, griego al este) y, sobre todo, el derecho romano.
+
+La ciudadanía era el premio, y dejó de ser cosa de italianos: los soldados auxiliares la ganaban sirviendo, ciudades enteras la recibían y en el año 212 se concedió a casi todos los habitantes libres. Hubo emperadores nacidos en Hispania, en África y en Siria.
+
+A cambio, era un mundo brutal: se sostenía sobre millones de esclavos, sobre conquistas sangrientas y sobre espectáculos donde se mataba gente para divertir al público.
+
+Aun así, los dos primeros siglos fueron una paz interior sin precedentes en el Mediterráneo, la Pax Romana: se podía viajar de Cádiz a Siria con la misma moneda, las mismas leyes y sin cruzar una frontera.
+
+**Dato curioso:** la Roma imperial llegó al millón de habitantes, con edificios de pisos de varias alturas, más de 800 baños públicos y once acueductos que traían agua corriente a las fuentes de los barrios. Ninguna ciudad europea volvió a tener un millón de habitantes hasta el Londres de 1800.
+
+### Profundiza 1 · Los emperadores: de Augusto a Nerón
+
+El sistema de Augusto tenía un fallo de origen: si el poder no es oficialmente hereditario pero de hecho lo es, cada muerte es una crisis.
+
+AUGUSTO (27 a. C.-14 d. C.) reinó 41 años, reformó el ejército, la administración, los impuestos y la ciudad, y se murió en la cama. Su balance, dicho por él: «encontré una Roma de ladrillo y dejé una de mármol».
+
+TIBERIO (14-37) fue un buen general y un gobernante competente, pero desconfiado y sombrío; acabó retirado en Capri, multiplicando los juicios por traición.
+
+CALÍGULA (37-41) empezó bien y terminó siendo el ejemplo del poder sin límites: humillaciones a senadores, gastos disparatados y delirios de divinidad. Lo asesinó su propia guardia.
+
+CLAUDIO (41-54) es el caso más interesante. Cojeaba, tartamudeaba y su propia familia lo escondía por vergüenza, y eso probablemente le salvó la vida: nadie lo consideraba un rival. Cuando mataron a Calígula, los guardias lo encontraron escondido detrás de una cortina y lo proclamaron emperador. Resultó un gobernante excelente: conquistó Britania, construyó el puerto de Ostia, extendió la ciudadanía a las provincias y escribió obras de historia.
+
+NERÓN (54-68) llegó al trono con dieciséis años, educado por el filósofo Séneca. Hizo asesinar a su madre, forzó el suicidio de su maestro y gobernó a base de confiscaciones y terror. Cuando Roma se incendió, en el año 64, acusó a los cristianos para desviar la culpa, y ahí empezó su persecución. Terminó como los que se quedan sin ejército: declarado enemigo público, se suicidó a los treinta años.
+
+Después, curiosamente, llegó lo mejor: los Flavios, que construyeron el Coliseo, y el siglo de Trajano, Adriano, Antonino Pío y Marco Aurelio, que en su mayoría no fueron hijos, sino sucesores adoptados por capacidad.
+
+**Dato curioso:** Séneca, el filósofo estoico que escribió páginas admirables sobre la serenidad y la brevedad de la vida, fue durante años el hombre que le redactaba los discursos a Nerón. Terminó recibiendo de su alumno la orden de suicidarse.
+
+---
+
+## 20 · Nacimiento de Jesucristo
+
+`nacimiento-jesucristo` · **≈4-6 a. C.**
+
+**Cuerpo:**
+
+Jesús de Nazaret nació en Judea, una provincia pequeña y conflictiva del Imperio romano, en un pueblo judío que llevaba siglos siendo invadido y que esperaba a un Mesías.
+
+Predicó unos tres años en un territorio de apenas unos cientos de kilómetros. No escribió nada, no fundó una institución y no salió de su región.
+
+Su mensaje era desconcertante para la época: un Dios que es padre y no juez implacable; el perdón en lugar de la venganza; el valor absoluto de cada persona, empezando por las que no valían nada socialmente (enfermos, pobres, prostitutas, extranjeros...); y la idea de que el Reino que esperaban no era un reino político.
+
+Fue ejecutado en la cruz, el suplicio que Roma reservaba a esclavos y sediciosos. Aquello, en principio, cerraba el asunto: un ajusticiado más en una provincia lejana.
+
+Lo que cambió la historia fue lo que ocurrió después. Sus seguidores, un grupo pequeño y aterrorizado, empezaron a anunciar que había resucitado, y esa convicción los volvió imparables: gente sin poder, sin dinero y sin formación se puso a predicar por todo el Mediterráneo hasta morir por ello.
+
+Décadas más tarde se escribieron los Evangelios, y siglos después un monje calculó los años a partir de su nacimiento y dividió el tiempo en «antes» y «después». Vivimos, literalmente, en un calendario contado desde él.
+
+**Dato curioso:** ese monje, Dionisio el Exiguo, se equivocó en el cálculo. Según los datos históricos, Jesús nació probablemente entre el año 6 y el 4 antes de Cristo. Es decir: Cristo nació unos años «antes de Cristo».
+
+---
+
+## 21 · Expansión del cristianismo
+
+`expansion-cristianismo` · **Siglos I-IV**  ·  3 pág. Profundiza
+
+**Cuerpo:**
+
+Al principio, los cristianos eran un grupo diminuto y sospechoso. Roma era tolerantísima con las religiones —cada pueblo tenía sus dioses y no pasaba nada— con una condición: participar en el culto público al emperador, que era el pegamento político del imperio.
+
+Los cristianos se negaban, y esa negativa se leyó como deslealtad, casi como traición. Encima se los acusaba de ateos (por no tener imágenes ni templos), de canibalismo (por comer «el cuerpo y la sangre» en sus reuniones) y de provocar la ira de los dioses: si había peste o sequía, la culpa era de los que no hacían sacrificios.
+
+Aun así crecieron, y hay razones muy concretas. Aceptaban a todo el mundo, sin distinción de clase, sexo u origen, en un mundo rígidamente jerarquizado. Cuidaban de sus enfermos, viudas y huérfanos, es decir: eran una red de apoyo real en ciudades donde la gente moría sola. Ofrecían una vida después de la muerte igual para todos. Y decidieron muy pronto no exigir a los no judíos las normas rituales, lo que abrió la puerta a cualquiera.
+
+Además viajaban con la infraestructura del imperio: las calzadas, los puertos, el griego común y las comunidades judías de cada ciudad, que fueron su primera plataforma.
+
+En el siglo III ya eran una minoría considerable y organizada, con obispos, propiedades y presencia en las ciudades. Y entonces el imperio, en plena crisis, hizo dos cosas seguidas: intentó exterminarlos… y después se alió con ellos.
+
+**Dato curioso:** la palabra «mártir» significa simplemente «testigo». Los propios cristianos vieron pronto el efecto que producía morir sin resistirse: Tertuliano escribió que «la sangre de los mártires es semilla».
+
+### Profundiza 1 · Las persecuciones: qué les hacían de verdad
+
+Conviene decir dos cosas a la vez: las persecuciones fueron atroces, y no fueron continuas. Durante casi tres siglos hubo largos periodos de tranquilidad y estallidos locales terribles.
+
+NERÓN (64). Tras el incendio de Roma, según cuenta el historiador romano Tácito —que no era cristiano y los despreciaba—, fueron destrozados por perros, crucificados, o untados de brea y encendidos como antorchas vivientes para iluminar de noche los jardines del emperador. La tradición sitúa aquí la muerte de Pedro y de Pablo.
+
+EL PROCEDIMIENTO HABITUAL. Se conserva la carta en la que Plinio, gobernador de Bitinia, pregunta al emperador Trajano qué hacer con ellos, y la respuesta: no hay que buscarlos, pero si alguien los denuncia y se niegan a abjurar, hay que ejecutarlos. La prueba consistía en quemar incienso ante la imagen del emperador, y quien lo hacía se iba a casa. Ese es el punto que hay que entender: los que morían, morían por no hacer un gesto.
+
+LOS SUPLICIOS. Azotes con látigos de puntas metálicas, garfios para desgarrar los costados, crucifixión, hoguera, condena a las minas de por vida y damnatio ad bestias: morir devorado por fieras en el anfiteatro, como espectáculo.
+
+LAS GRANDES PERSECUCIONES. En 250, el emperador Decio ordenó por primera vez que TODOS los habitantes del imperio sacrificaran a los dioses y obtuvieran un certificado que lo probara. Y en 303 llegó la peor, la de Diocleciano: derribo de iglesias, quema de los libros sagrados y ejecuciones en masa.
+
+Fracasó. En 311, un moribundo Galerio firmó un edicto de tolerancia admitiendo que, después de tanta sangre, muchos «no adoraban a los dioses ni al suyo».
+
+**Dato curioso:** en muchos procesos, lo que más desconcertaba a los jueces romanos era la calma de los condenados. Hay actas en las que el magistrado insiste, casi suplicando, en que el reo diga la fórmula y se marche a su casa.
+
+### Profundiza 2 · Constantino: por qué un emperador cambió de dios
+
+En 312, Constantino se jugaba el imperio contra su rival Majencio a las puertas de Roma. Según sus biógrafos, antes de la batalla vio en el cielo un signo y le dijeron «con esto vencerás»; mandó pintar el símbolo de Cristo en los escudos, y ganó.
+
+Al año siguiente proclamó la libertad de culto para todos y la devolución de los bienes confiscados a las iglesias. Conviene ser exacto: Constantino NO hizo del cristianismo la religión oficial. Legalizó, protegió y financió. La religión del Estado llegaría casi setenta años después, con Teodosio.
+
+¿Por qué lo hizo? Probablemente por convicción y por política a la vez. Los cristianos eran una minoría —quizá un 10 % de la población—, pero eran urbanos, alfabetizados, organizados jerárquicamente y con una lealtad probada a prueba de tortura: como aliados valían mucho más que su número. Y un solo Dios en el cielo encajaba bien con un solo emperador en la tierra.
+
+Lo que hizo después es lo que verdaderamente cambió la historia: eximió de impuestos al clero, dio a los obispos funciones judiciales, financió basílicas enormes, declaró el domingo día de descanso oficial, fundó una capital nueva y cristiana, Constantinopla, y convocó y presidió el concilio de Nicea. A partir de ese momento, la Iglesia y el poder político quedan enlazados durante mil quinientos años.
+
+Y no fue un santo: mandó ejecutar a su hijo mayor y a su esposa en circunstancias nunca aclaradas, y se bautizó solo en su lecho de muerte.
+
+**Dato curioso:** el símbolo que mandó pintar, el crismón, son las dos primeras letras griegas de «Cristo» superpuestas. Es probablemente el primer logotipo político de la historia europea.
+
+### Profundiza 3 · Cómo cayeron los dioses griegos y romanos
+
+Los dioses del Olimpo no desaparecieron en un día ni por una derrota militar. Se fueron apagando durante dos siglos, y en ese apagón hubo de todo: desprestigio, leyes, dinero y violencia.
+
+Primero, el desgaste. La religión clásica era sobre todo ritual público: sacrificios, procesiones, augurios. No prometía salvación personal, no consolaba en la muerte, no exigía una moral, no tenía libros sagrados ni comunidad de apoyo. En un imperio en crisis, mucha gente buscó precisamente eso.
+
+Segundo, el dinero. En cuanto los emperadores fueron cristianos, los templos dejaron de recibir fondos públicos y los sacerdocios dejaron de ser un buen negocio y una vía de ascenso social. Ser cristiano empezó a convenir profesionalmente, y la élite cambió de religión con notable rapidez.
+
+Tercero, un intento de vuelta atrás que fracasó. El emperador Juliano quiso restaurar el paganismo copiando de los cristianos lo que funcionaba: una jerarquía organizada, escuelas y, sobre todo, obras de caridad. Escribió que era «una vergüenza» que fueran los cristianos y no los templos quienes alimentaban a los pobres. Murió en campaña a los dos años y su reforma murió con él.
+
+Cuarto, la ley. Teodosio prohibió los sacrificios y el culto en los templos, incluso el doméstico. En 394 se apagó el fuego sagrado de Vesta, que había ardido durante más de mil años, y los Juegos Olímpicos, que eran una fiesta religiosa, dejaron de celebrarse por esa época.
+
+Y quinto, la violencia. Multitudes y monjes destruyeron templos y estatuas; en 391 fue arrasado el Serapeo de Alejandría, uno de los santuarios más grandiosos del mundo antiguo, y en 415 la filósofa y matemática Hipatia fue linchada en esa misma ciudad.
+
+Al final, mucho no se destruyó: se reutilizó. Templos convertidos en iglesias (el Panteón de Roma es una iglesia desde el año 609 y por eso está intacto), fiestas antiguas convertidas en fiestas cristianas, dioses locales convertidos en santos protectores. Y hasta el nombre: «pagano» viene de paganus, «del campo», porque los últimos que siguieron con los dioses viejos fueron los campesinos.
+
+**Dato curioso:** seguimos hablando de ellos todos los días. Marte, Venus, Júpiter, Mercurio y Saturno están en los nombres de los planetas y de los días de la semana en muchos idiomas, y Jano, el dios de los comienzos, da nombre a enero.
+
+---
+
+## 22 · Dinastía Han
+
+`dinastia-han` · **206 a. C.-220 d. C.**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Mientras Roma construía su imperio en Occidente, China vivía bajo la dinastía Han una etapa igual de decisiva, con una población parecida: un censo del año 2 d. C. contó 57,6 millones de personas.
+
+La diferencia principal es que los Han no gobernaron con aristócratas guerreros, sino con funcionarios formados. Fundaron una universidad imperial, hicieron del confucianismo la doctrina del Estado y empezaron a seleccionar a los administradores por examen. Aquello creó una burocracia estable, capaz de sobrevivir a los malos emperadores.
+
+Fue también una época de inventos que tardarían siglos en llegar a Europa: el papel, la carretilla, el arnés de pecho para caballos, el timón de codaste, el hierro fundido, el molino de agua, la brújula magnética y el primer sismógrafo, un artefacto de bronce que en el año 132 detectó un terremoto ocurrido a cientos de kilómetros.
+
+Y hacia el oeste abrieron la ruta que cambiaría el mundo. El emperador Wu envió a un explorador, Zhang Qian, a buscar aliados contra los nómadas del norte, y volvió trece años después con noticias de reinos, ciudades y caballos desconocidos. De ahí salió la red de caminos que llamamos Ruta de la Seda.
+
+La dinastía cayó por el guion habitual: concentración de tierras en pocas manos, campesinos arruinados, grandes rebeliones y generales que se quedaron con el poder real. Pero su huella fue definitiva: todavía hoy, la mayoría de los chinos se llaman a sí mismos «han».
+
+**Dato curioso:** en el año 166 llegó a la corte china una embajada procedente del Imperio romano, en nombre del emperador Marco Aurelio. Los dos mayores imperios del planeta sabían el uno del otro, comerciaban indirectamente… y nunca llegaron a tratarse de verdad.
+
+### Profundiza 1 · Qué se intercambiaba de verdad en la Ruta de la Seda
+
+Primero, un malentendido que conviene deshacer: casi nadie recorría la ruta entera. Las mercancías iban pasando de mano en mano, de oasis en oasis, con intermediarios que cobraban en cada paso. Por eso lo que llegaba al otro extremo valía una fortuna.
+
+DE CHINA HACIA OCCIDENTE: seda, cuyo secreto (que sale de un gusano que come hojas de morera) se guardó celosamente durante siglos, con pena de muerte para quien lo exportara. También laca, espejos y objetos de bronce, canela, plantas medicinales y, más adelante, papel.
+
+DE OCCIDENTE HACIA CHINA: sobre todo caballos. Los Han estaban obsesionados con los «caballos celestiales» del valle de Ferganá, más altos y resistentes que los suyos, y llegaron a mandar ejércitos enteros a buscarlos. Y además oro y plata, vidrio romano (que en China era rarísimo y precioso), alfombras, jade, ámbar del Báltico, incienso, uvas, granadas y animales exóticos como leones o avestruces para las cortes.
+
+Y sobre todo, lo que no se compra: ideas. Por esas rutas entró en China el budismo, que acabaría siendo una de sus grandes religiones, y viajaron técnicas, instrumentos musicales, estilos artísticos, alfabetos, astronomía y matemáticas.
+
+También viajaron los microbios. Las mismas caravanas que llevaban seda llevaron epidemias, y algunas de las grandes pestes del mundo antiguo y medieval siguieron exactamente esos caminos.
+
+**Dato curioso:** los romanos no tenían idea de qué era la seda. Se creía que crecía en los árboles de un pueblo lejano, y en China, siglos después, se contaba que en Occidente la lana crecía sobre corderos que brotaban de la tierra. Cada extremo del mundo se inventaba al otro.
+
+---
+
+## 23 · Invención del papel
+
+`invencion-papel` · **≈105 d. C.**
+
+**Cuerpo:**
+
+Antes del papel, escribir era caro y aparatoso. En China se usaban tiras de bambú atadas con cuerdas —un solo libro podía pesar decenas de kilos y llenar un carro— o seda, que era carísima. En Occidente se usaba papiro, que solo crecía en Egipto, y pergamino, es decir, piel de animal: para una Biblia hacían falta los cueros de un rebaño entero.
+
+Hacia el año 105, un funcionario de la corte Han llamado Cai Lun perfeccionó y difundió un procedimiento nuevo: deshacer fibras vegetales —corteza, trapos viejos, redes de pescar, cáñamo— en agua, extender la pasta en una malla fina, prensarla y dejarla secar.
+
+El resultado era ligero, plegable, barato y fabricable en cualquier sitio donde hubiera agua y trapos. Y donde escribir es barato, hay archivos, contabilidad, escuelas, exámenes, correo, mapas, contratos y libros.
+
+Tardó mucho en viajar. Llegó a Corea y Japón, en el siglo VIII pasó al mundo islámico, donde Samarcanda y Bagdad se llenaron de molinos de papel y de librerías, y en Europa entró por al-Ándalus y por Italia entre los siglos XI y XIII.
+
+Y aquí está lo importante: la imprenta de Gutenberg habría sido inútil sin papel barato. Se pueden imprimir mil ejemplares en una tarde, pero no si cada ejemplar necesita un rebaño.
+
+**Dato curioso:** durante siglos, el papel se hizo con ropa vieja. Había recolectores de trapos que iban de casa en casa, y en algunos países la exportación de trapos estuvo prohibida por considerarse materia prima estratégica. Los libros de nuestros bisabuelos son, literalmente, camisas recicladas.
+
+---
+
+## 24 · Caída del Imperio Romano de Occidente
+
+`caida-roma-occidente` · **476 d. C.**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+El año 476 es una fecha de manual, y conviene entender qué pasó exactamente: un jefe militar germano, Odoacro, depuso a Rómulo Augústulo, un emperador adolescente y sin poder real, y decidió no nombrar a otro. Envió las insignias imperiales a Constantinopla diciendo que Occidente ya no necesitaba emperador propio.
+
+No hubo saqueo ni batalla final, y casi nadie lo vivió como el fin de una época: hacía décadas que los emperadores de Occidente eran títeres de sus generales.
+
+El proceso real llevaba doscientos años. En el siglo III el imperio estuvo a punto de deshacerse: unos cincuenta emperadores en cincuenta años, casi todos asesinados, guerra permanente en dos frentes, epidemias devastadoras y una moneda que se fue vaciando de plata hasta provocar una inflación descontrolada.
+
+Los impuestos aplastaron a los pequeños propietarios, que fueron cayendo bajo la protección de los grandes terratenientes y quedaron atados a la tierra: ahí empieza, en la práctica, el mundo señorial de la Edad Media, dentro del propio imperio.
+
+Y encima, la presión exterior cambió de escala. La llegada de los hunos empujó a pueblos enteros contra la frontera del Danubio; en 378 los godos destrozaron al ejército imperial en Adrianópolis y mataron al emperador; en 410 Alarico saqueó Roma, algo que no pasaba en ocho siglos; en 439 los vándalos tomaron el norte de África y con ella el trigo que alimentaba a Roma.
+
+Al final, el imperio de Occidente se disolvió en reinos germánicos que, curiosamente, querían seguir siendo romanos: mantuvieron el latín, el derecho y la Iglesia, que heredó la administración y la escritura. Oriente, en cambio, siguió existiendo mil años más.
+
+**Dato curioso:** cuando llegó a Belén la noticia del saqueo de 410, san Jerónimo escribió una frase que resume el shock de aquella generación: «la ciudad que conquistó el mundo entero ha sido conquistada».
+
+### Profundiza 1 · Por qué cayó, en concreto
+
+No hay una causa única, y desconfía de quien te la venda. Hay un conjunto de problemas que se alimentan entre sí:
+
+DINERO. El imperio dejó de crecer, y con él dejó de entrar botín. Para pagar un ejército cada vez más caro se devaluó la moneda y llegó una inflación brutal. Diocleciano intentó arreglarlo fijando por ley los precios de cientos de productos, y fracasó.
+
+IMPUESTOS Y DESIGUALDAD. Los grandes propietarios tenían influencia para no pagar, y el peso cayó sobre los pequeños campesinos y las ciudades medianas, que se arruinaron. Cuando a un campesino le da igual quién manda porque en ambos casos le quitan la cosecha, un imperio ha perdido su base social.
+
+EPIDEMIAS Y DEMOGRAFÍA. La peste antonina y la de Cipriano pudieron matar a millones de personas. Menos gente significa menos soldados, menos contribuyentes y campos abandonados.
+
+EL EJÉRCITO. Se volvió el árbitro de la política: proclamaba y asesinaba emperadores a conveniencia. Y se fue llenando de unidades de pueblos aliados que combatían bien, pero eran leales a su propio jefe, no al Estado. Cuando el Estado no pudo pagarles, esos jefes se sirvieron solos.
+
+LA PRESIÓN EXTERIOR. No fue una «invasión de bárbaros» al asalto: en 376 miles de godos pidieron entrar como refugiados huyendo de los hunos, fueron admitidos, maltratados y estafados por funcionarios romanos, y se rebelaron. De ahí a Adrianópolis y a todo lo demás.
+
+Y una advertencia: no cayó todo. Cayó la estructura política del oeste, y muchos historiadores hablan de transformación más que de final, aunque la arqueología muestra un empobrecimiento material real: menos comercio, cerámica peor, ciudades más pequeñas, menos escritura. La gente vivió peor durante generaciones.
+
+Y quedó lo demás: el latín se convirtió en el español, el francés, el italiano, el portugués y el rumano; el derecho romano sigue siendo la base del derecho civil europeo; y la idea de «imperio» reapareció una y otra vez, de Carlomagno a Napoleón.
+
+**Dato curioso:** en el siglo XVIII, Edward Gibbon culpó de la caída al cristianismo, por haber desviado la energía de los romanos del Estado al cielo. Desde entonces se han propuesto más de doscientas causas distintas, incluido el envenenamiento por las tuberías de plomo. Ninguna explica sola algo tan grande.
+
+
+# ERA · Edad Media
+
+`key: edad-media` · Época: **476 – 1453/1492**
+
+---
+
+## 1 · Imperio Bizantino
+
+`imperio-bizantino` · **330-1453**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Cuando el imperio se dividió en dos, la mitad occidental se deshizo y la oriental siguió funcionando mil años más, con capital en Constantinopla. A eso llamamos hoy Imperio bizantino, pero es un nombre que inventaron los historiadores en el siglo XVI: ellos se llamaban a sí mismos «romanos» hasta el último día.
+
+Sobrevivió porque tenía lo que Occidente había perdido: la parte rica del imperio (Egipto, Siria, Asia Menor), el control del comercio entre Europa y Asia, una moneda de oro estable —el sólido bizantino fue la divisa fiable del Mediterráneo durante setecientos años—, una burocracia profesional… y las murallas más formidables del mundo.
+
+Su segunda gran defensa fue tecnológica: el «fuego griego», un líquido inflamable que se lanzaba a presión desde sifones instalados en los barcos, seguía ardiendo sobre el agua y era prácticamente imposible de apagar. La fórmula era secreto de Estado y se perdió con el imperio: todavía hoy no sabemos exactamente qué era.
+
+Su decadencia tuvo un momento clave y bochornoso: en 1204, los cruzados que iban a Tierra Santa saquearon Constantinopla, la mayor ciudad cristiana del mundo, durante tres días. Fueron cristianos quienes le dieron el golpe del que no se recuperó. Después sobrevivió doscientos años más, cada vez más pequeño, hasta 1453.
+
+**Dato curioso:** en la balaustrada de la galería de Santa Sofía hay un grafiti rúnico grabado en la piedra que dice «Halfdan estuvo aquí». Lo dejó, aburrido durante una ceremonia, un mercenario vikingo de la guardia imperial.
+
+### Profundiza 1 · Qué hicieron los bizantinos
+
+SALVARON EL DERECHO. El emperador Justiniano (527-565) encargó a un equipo de juristas recopilar, ordenar y depurar mil años de leyes romanas en el Corpus Iuris Civilis. Cuando en el siglo XI se redescubrió en la universidad de Bolonia, se convirtió en la base del derecho civil de casi toda Europa continental y de América Latina. Buena parte de lo que un abogado estudia hoy pasó por aquel encargo.
+
+SALVARON A LOS GRIEGOS. Casi todo lo que conservamos de Platón, Aristóteles, Homero, Sófocles, Euclides o Arquímedes nos ha llegado porque monjes y funcionarios bizantinos lo copiaron una y otra vez durante siglos. Cuando el imperio se hundió, sus eruditos huyeron a Italia con sus libros… y encendieron el Renacimiento.
+
+CONSTRUYERON SANTA SOFÍA. Levantada en solo cinco años (532-537), con una cúpula de 31 metros que parece flotar porque descansa sobre una corona de ventanas. Fue el edificio con la cúpula más grande del mundo durante casi mil años. Cuentan que Justiniano, al entrar, dijo: «Salomón, te he superado».
+
+INVENTARON UN ALFABETO. Dos monjes bizantinos, Cirilo y Metodio, crearon en el siglo IX un alfabeto para poder traducir la Biblia a las lenguas eslavas. De ahí viene el alfabeto cirílico que usan hoy el ruso, el ucraniano, el búlgaro o el serbio. Y de la conversión de los rus de Kiev en 988 nace la Rusia ortodoxa, que siglos después se proclamaría «la tercera Roma».
+
+Y una figura que merece nombre propio: Teodora, la emperatriz. Venía de la nada —hija de un cuidador de osos del circo y ella misma actriz, un oficio despreciado— y llegó a ser la consejera más influyente de Justiniano. En los disturbios de Niká de 532, cuando la corte preparaba la huida, ella se negó y pronunció, según Procopio, la frase que salvó el reinado: «la púrpura es un buen sudario». Impulsó leyes contra la prostitución forzada y a favor de los derechos de las mujeres en el divorcio.
+
+**Dato curioso:** también tuvieron su historiadora. Ana Comnena, hija del emperador Alejo I, escribió en el siglo XII la «Alexiada», la crónica del reinado de su padre y de la llegada de los cruzados. Es la primera gran obra de historia escrita por una mujer en Europa.
+
+---
+
+## 2 · Nacimiento del islam
+
+`nacimiento-islam` · **610-632**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Mahoma nació allí hacia el 570 en una familia respetable pero pobre. Quedó huérfano de padre antes de nacer y de madre a los seis años; lo criaron su abuelo y luego su tío. Trabajó como pastor y después en el comercio de caravanas, y se ganó tal reputación de honradez que le llamaban al-Amin, «el fiable».
+
+Hacia los cuarenta años, en una cueva del monte Hira donde solía retirarse a meditar, tuvo la experiencia que lo cambió todo: dice haber recibido de un ángel la orden «recita». Volvió a casa aterrorizado, temiendo estar enfermo o poseído, y fue su esposa Jadiya quien lo tranquilizó y se convirtió en la primera creyente.
+
+Su mensaje era simple y explosivo: hay un solo Dios, todos los seres humanos son iguales ante Él, hay que dar de lo tuyo a los pobres, huérfanos y viudas, y habrá un juicio. En La Meca eso significaba atacar los ídolos (y el negocio que generaban) y cuestionar el orden tribal y el poder de las familias ricas.
+
+Lo persiguieron, boicotearon a su clan y sus seguidores fueron maltratados; algunos tuvieron que exiliarse a Abisinia, la Etiopía cristiana. En 622 emigró con su comunidad a Medina, y esa emigración —la Hégira— es tan importante que marca el año 1 del calendario islámico.
+
+En Medina no fue solo predicador: fue juez, legislador y jefe político. Redactó un pacto que unía a emigrados, medineses y tribus judías en una sola comunidad, y libró la guerra contra La Meca. En el 630 entró en ella prácticamente sin sangre, destruyó los ídolos de la Kaaba y perdonó a casi todos sus antiguos enemigos.
+
+Murió en 632. En veinte años había convertido a un conjunto de tribus rivales en una comunidad con una fe, una ley y un proyecto común. Un siglo después, sus sucesores gobernaban de la India a España.
+
+**Dato curioso:** el Corán no se escribió como un libro: se recitaba y se memorizaba. La palabra «Corán» significa «recitación», y todavía hoy hay millones de personas que lo saben entero de memoria. Se compiló por escrito en las décadas siguientes a su muerte.
+
+### Profundiza 1 · Cosas de Mahoma que casi nunca se cuentan
+
+Su matrimonio con Jadiya. Ella era una comerciante viuda y rica, quince años mayor que él, y fue su jefa antes de ser su esposa: él trabajaba llevando sus caravanas. Estuvieron casados unos veinticinco años y mientras ella vivió no tomó otra esposa. Cuando murió, junto con su tío protector Abu Talib, aquel año se recordó como «el año del duelo».
+
+Sus primeros seguidores dicen mucho de su mensaje: su esposa; su primo Alí, un adolescente; su amigo Abu Bakr, un comerciante; Zayd, un esclavo liberado al que adoptó; y Bilal, un esclavo abisinio torturado por creer, que acabaría siendo el primer almuédano, la voz que llamaba a la oración. En una sociedad tribal y esclavista, eso era una declaración política.
+
+Sus reformas concretas: obligó a repartir una parte de la riqueza (el zakat), limitó la venganza de sangre, prohibió el infanticidio de niñas (una práctica habitual), dio a las mujeres derecho a heredar y a poseer bienes propios en un contexto donde no tenían ninguno, y estableció normas de protección para huérfanos y esclavos, aunque no abolió la esclavitud ni la poligamia.
+
+Y su lado más duro, que también forma parte de la historia: dirigió y ganó guerras. Tras el asedio de Medina en 627, la tribu judía de los Banu Qurayza, acusada de haber pactado con el enemigo, fue castigada con la ejecución de sus hombres y la esclavización de mujeres y niños. Otras dos tribus judías habían sido expulsadas antes. Fue un jefe político y militar de su tiempo, y sus decisiones se juzgaron entonces con las reglas de aquel mundo.
+
+En su último sermón, en el monte Arafat, dejó una frase que se sigue citando: toda la humanidad viene de Adán y Eva, y ni un árabe es superior a un no árabe ni un blanco a un negro.
+
+No dejó dicho con claridad quién debía sucederle, y de esa duda nació la mayor división del islam: quienes pensaron que debía elegirse al más capaz de la comunidad (los suníes, que eligieron a Abu Bakr) y quienes creyeron que el sucesor debía ser de su familia, su primo y yerno Alí (los chiíes).
+
+**Dato curioso:** en la tradición islámica se cuenta que, al dividir el trabajo de la comunidad, él se encargaba también de sus propias tareas domésticas, y que cuando le preguntaron qué era lo primero que hacía en casa, Aisha respondió que barría y remendaba su ropa.
+
+---
+
+## 3 · Expansión islámica
+
+`expansion-islamica` · **Siglos VII-VIII**
+
+**Cuerpo:**
+
+En apenas cien años, los ejércitos árabes conquistaron Siria, Egipto, Persia, el norte de África y la península ibérica, y llegaron hasta el valle del Indo. Es una de las expansiones más rápidas de la historia.
+
+Se explica por tres factores. Primero, el vacío: los dos grandes imperios de la zona, Bizancio y Persia, acababan de agotarse en una guerra larguísima entre ellos. Segundo, las condiciones: en muchos territorios la población, cansada de impuestos y de persecuciones religiosas, no defendió a sus gobernantes. Y tercero, el modelo de conquista: no exigían la conversión. A cristianos y judíos se les permitía mantener su religión pagando un impuesto especial.
+
+Y entonces vino lo importante. En el siglo IX, los califas de Bagdad emprendieron un proyecto sin precedentes: traducir al árabe TODO el saber disponible del mundo. Griego, persa, sanscrito, siríaco. Fundaron la Casa de la Sabiduría, pagaban a los traductores, compraban manuscritos y, según los cronistas, un califa exigió libros griegos como parte del botín de un tratado de paz.
+
+El resultado fue una explosión de conocimiento propio. Al-Juarismi sistematizó el álgebra (la palabra viene de su libro, «al-yabr», y «algoritmo» viene de su nombre) y difundió los números que llamamos árabes, con el cero, traídos de la India. Al-Hazen escribió un tratado de óptica basado en experimentos, no en autoridades. Avicena redactó un canon de medicina que se usó en las universidades europeas durante seis siglos. Se levantaron observatorios, se midió la circunferencia de la Tierra, se abrieron hospitales con salas separadas y farmacias reguladas.
+
+Y todo eso llegó después a Europa por tres puertas: al-Ándalus (con la escuela de traductores de Toledo), Sicilia y las rutas comerciales. Sin ese puente, la Europa del Renacimiento no habría tenido a Aristóteles, ni la trigonometría, ni la medicina griega, ni los números con los que hacemos las cuentas.
+
+**Dato curioso:** las palabras álgebra, algoritmo, cifra, alcohol, azúcar, jarabe, almohada, alcalde, aduana, ajedrez, azafrán, naranja, guitarra y ojalá llegaron al español desde el árabe. Cada una es la huella de algo que se aprendió, se compró o se copió.
+
+---
+
+## 4 · Dinastía Tang
+
+`dinastia-tang` · **618-907**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Mientras Europa vivía sus siglos más difíciles, China alcanzaba con la dinastía Tang una cima cultural que los chinos siguen considerando su edad de oro.
+
+Su capital, Chang'an (la actual Xi'an), tenía cerca de un millón de habitantes y era la ciudad más grande del planeta. Estaba trazada en una cuadrícula perfecta de 84 km², rodeada de murallas, dividida en barrios que se cerraban de noche al toque de tambor y con avenidas de 150 metros de ancho. En sus mercados se cruzaban comerciantes sogdianos, persas, indios, árabes, coreanos y japoneses.
+
+El Estado se gobernaba mediante exámenes. Cualquier varón podía en teoría presentarse a unas pruebas durísimas de clásicos confucianos, política… y composición poética: hacía falta saber escribir poemas para ser funcionario. Eso rompió el monopolio de las familias aristocráticas y creó una élite de mérito, con su propia cultura literaria.
+
+Y por eso fue la gran época de la poesía china. Li Bai, el poeta vagabundo y borracho al que la leyenda hace morir ahogado por intentar abrazar el reflejo de la luna; Du Fu, el poeta de la guerra y del hambre, que contó la caída del imperio como un cronista; Bai Juyi, que probaba sus poemas con una criada anciana y los reescribía si no los entendía.
+
+También fue una época de inventos decisivos: la imprenta xilográfica (el libro impreso más antiguo con fecha es el Sutra del Diamante, de 868), la pólvora, descubierta por alquimistas que buscaban un elixir de inmortalidad, la porcelana, el reloj de agua con escape mecánico, la primera farmacopea oficial del Estado y la cultura del té.
+
+**Dato curioso:** en 690 subió al trono Wu Zetian, la única mujer que ha gobernado China con el título de emperador. Llegó al poder por pura habilidad política, promovió a funcionarios por mérito y no por familia, apoyó el budismo… y fue implacable con sus rivales. La historiografía posterior, escrita por hombres confucianos, la retrató como un monstruo.
+
+### Profundiza 1 · El monje que fue a la India a por libros
+
+En 629, un monje llamado Xuanzang salió de Chang'an sin permiso imperial —estaba prohibido salir del país— para ir a la India a buscar los textos budistas originales, porque desconfiaba de las traducciones chinas que circulaban.
+
+Tardó diecisiete años. Cruzó el desierto del Gobi, donde perdió el agua y estuvo a punto de morir, atravesó las montañas de Asia Central con temperaturas mortales, fue asaltado por bandidos, retenido por reyes que no querían dejarlo marchar y aprendió sánscrito.
+
+Volvió en 645 con 657 textos cargados a lomo de caballos y elefantes. El emperador, en lugar de castigarlo, le montó un instituto de traducción; pasó el resto de su vida traduciendo, y dejó además un diario de viaje tan preciso que los arqueólogos del siglo XIX lo usaron para localizar ciudades y templos indios perdidos, incluida la propia Nalanda.
+
+Su viaje se convirtió en leyenda, y de ahí salió una de las grandes novelas de la literatura mundial, «Viaje al Oeste», donde el monje va acompañado de un rey mono de poderes fabulosos. Es la historia que ha inspirado desde óperas chinas hasta series de dibujos animados japoneses.
+
+**Dato curioso:** gracias a su diario sabemos cómo era la India del siglo VII con un detalle que no aportan las fuentes indias: qué se comía, cómo se juzgaba, cuánto costaban las cosas y cómo se enseñaba en las escuelas.
+
+---
+
+## 5 · Carlomagno
+
+`carlomagno` · **800**
+
+**Cuerpo:**
+
+Tras la desaparición del Imperio romano de Occidente, Europa quedó dividida en reinos germánicos que guerreaban entre sí. Carlomagno, rey de los francos, conquistó y unió gran parte de ellos: la actual Francia, Alemania occidental, los Países Bajos, el norte de Italia y parte de Austria y Cataluña.
+
+El día de Navidad del año 800, el papa lo coronó emperador en Roma. Aquel gesto tenía una intención clarísima: proclamar que el Imperio romano volvía, esta vez cristiano y con sede en el norte. A Constantinopla le pareció una usurpación, y con razón.
+
+Su obra más duradera fue cultural. Trajo a los mejores sabios de Europa a su corte, mandó abrir escuelas junto a las catedrales y los monasterios y ordenó copiar sistemáticamente los manuscritos antiguos. Aquella operación —el renacimiento carolingio— salvó buena parte de la literatura latina que hoy conservamos: la mayoría de los textos clásicos que leemos vienen de copias hechas en aquellos monasterios.
+
+También inventaron una letra nueva, clara y con separación entre palabras, la minúscula carolina, que es la abuela de la letra con la que están escritas estas líneas. Antes se escribía todo seguido, en mayúsculas, y leer era descifrar.
+
+Su imperio se dividió entre sus nietos apenas treinta años después de su muerte, y de aquel reparto salieron, a grandes rasgos, Francia y Alemania. Pero la idea de una Europa cristiana unida bajo un emperador quedó ahí para siempre.
+
+**Dato curioso:** él mismo apenas sabía escribir. Su biógrafo Eginardo cuenta que guardaba tablillas bajo la almohada para practicar por las noches, y que nunca llegó a conseguirlo. El hombre que financió las escuelas de Europa nunca dominó la escritura.
+
+---
+
+## 6 · Feudalismo
+
+`feudalismo` · **Siglos IX-XV**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Tras la muerte de Carlomagno llegaron las invasiones de vikingos por el norte, de magiares por el este y de musulmanes por el sur. Los reyes eran incapaces de defender territorios grandes: cuando llegaba la noticia del ataque, la aldea ya estaba quemada.
+
+La solución fue local. Quien tenía un castillo y unos hombres a caballo ofrecía protección; a cambio pedía obediencia, trabajo y una parte de la cosecha. Así se formó una pirámide: el rey concedía tierras (feudos) a los nobles, estos a caballeros menores, y todos ellos vivían del trabajo de los campesinos.
+
+Se explicaba con una imagen que todos aceptaban: hay tres órdenes, los que rezan (clero), los que luchan (nobleza) y los que trabajan (campesinos), y cada uno cumple la función que Dios le ha dado. Convenientemente, dos de los tres órdenes no pagaban impuestos.
+
+El sistema empezó a romperse cuando volvieron las ciudades y el dinero. Un comerciante urbano no debía nada a ningún señor, un rey con impuestos en metálico podía pagar soldados profesionales, y un campesino que huía a una ciudad y pasaba allí un año y un día quedaba libre. De ahí el dicho alemán: «el aire de la ciudad hace libre».
+
+**Dato curioso:** nuestro vocabulario laboral viene de ahí. «Vasallo», «señor», «feudo», «villano» (el que vivía en la villa, y que acabó significando malvado) y «trabajo» —del latín tripalium, un instrumento de tortura de tres palos— cuentan bastante bien cómo era aquello.
+
+### Profundiza 1 · Cómo vivía de verdad un campesino
+
+Era el 90 % de la población, así que hablar de la Edad Media es hablar de ellos, no de los caballeros.
+
+SU CASA. Una sola habitación de madera, barro y paja, con suelo de tierra apisonada, sin chimenea (el humo salía por un agujero o por la puerta, y las paredes estaban negras), sin ventanas de cristal, con un fuego en el centro, un jergón de paja compartido por toda la familia y los animales dentro en invierno, porque daban calor. Pulgas, piojos y humo, siempre.
+
+SU COMIDA. Pan negro de centeno o cebada, entre uno y dos kilos al día, que era la base de casi todas las calorías. Potaje de guisantes, habas, coles y cebolla, cocido en la misma olla durante días. Queso, huevos, algo de pescado salado. Cerveza floja o vino aguado, porque el agua de los ríos era peligrosa. Carne, muy poca y casi siempre de cerdo salado o de tocino: los animales grandes eran del señor y la caza en su bosque podía costarte una mano.
+
+SU TRABAJO. De sol a sol, con los ritmos del campo. Y además el trabajo obligatorio para el señor: dos o tres días por semana en sus tierras, más lo que hiciera falta en la siega o la vendimia, sin cobrar. También había que aportar jornadas para reparar el castillo, los caminos o los puentes.
+
+LO QUE PAGABA. La renta al señor (en grano, huevos, gallinas); el diezmo a la Iglesia (la décima parte de todo); y un peaje por casi cualquier cosa: por moler el grano en el molino del señor, por cocer el pan en su horno, por prensar la uva en su lagar, por cruzar su puente, por vender en su mercado. Estaba prohibido tener molino propio.
+
+SU LIBERTAD. Los siervos no podían abandonar la tierra, ni casarse fuera del señorío sin pagar una tasa, ni heredar sin pagar otra —a veces la mejor bestia de la casa— cuando moría el padre. El señor era además el juez: él multaba, él azotaba, él ponía el cepo.
+
+SU SALUD. La esperanza de vida al nacer rondaba los 30-35 años, pero esa cifra engaña: la aplastaba la mortalidad infantil, que se llevaba a uno de cada tres niños antes de los cinco años. Quien llegaba a los veinte tenía posibilidades razonables de llegar a los cincuenta o sesenta. Cada pocos años había hambre; la Gran Hambruna de 1315-1317 mató a millones en el norte de Europa.
+
+LO BUENO, QUE TAMBIÉN LO HABÍA. Había entre 80 y 100 días de fiesta al año en los que la Iglesia prohibía trabajar, y se aprovechaban: mercados, romerías, bodas, bailes, juegos de pelota, música. La comunidad de la aldea funcionaba de verdad: se repartían los pastos comunes, se ayudaba en las cosechas y en las desgracias.
+
+Y CUANDO SE HARTABAN. Se rebelaban. La Jacquerie francesa en 1358; la gran revuelta inglesa de 1381, con Wat Tyler y el predicador John Ball, que resumió en una frase todo el problema: «cuando Adán cavaba y Eva hilaba, ¿quién era entonces el caballero?».
+
+**Dato curioso:** el derecho de pernada, esa historia de que el señor pasaba la primera noche con las novias de su feudo, no aparece en ningún documento medieval serio. Es una invención posterior, muy útil para escandalizar. Los abusos reales eran otros: económicos, judiciales y cotidianos.
+
+---
+
+## 7 · Era vikinga
+
+`era-vikinga` · **793-1066**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Primero, una aclaración importante: «vikingo» no era un pueblo, era una actividad. La palabra nórdica víkingr significa algo así como «el que va de expedición», y la mayoría de los escandinavos de la época no eran guerreros, sino granjeros, pescadores, artesanos y comerciantes que jamás asaltaron nada.
+
+La era vikinga empieza oficialmente en 793 con el saqueo del monasterio de Lindisfarne, en Inglaterra, y termina en 1066. ¿Por qué justo entonces? Por varias razones que coinciden: en Escandinavia había poca tierra cultivable y una población creciente; los hijos que no heredaban tenían que buscarse la vida; los reyes empezaban a centralizar el poder y expulsaban a los perdedores; y al sur había un botín irresistible: monasterios llenos de oro y plata, sin murallas y sin defensa, porque a nadie se le había ocurrido que alguien pudiera atacar un lugar sagrado.
+
+Pero la razón técnica es la decisiva: el barco. El drakkar era una obra maestra de ingeniería. Casco de tablas solapadas y flexibles, muy ligero, con un calado de apenas un metro: eso significa que podía cruzar el mar abierto y luego remontar un río tierra adentro o vararse en cualquier playa sin necesidad de puerto. Con una vela cuadrada y treinta o sesenta remos, alcanzaba velocidades que nadie más tenía, y era simétrico, así que podía retroceder sin dar la vuelta. Aparecían de la nada, saqueaban y desaparecían antes de que nadie pudiera reunir un ejército.
+
+Y llegaron increíblemente lejos: fundaron Dublín y gobernaron York; conquistaron y colonizaron media Inglaterra (el Danelaw); Rollo se quedó con Normandía en 911, y de sus descendientes salió el Guillermo que conquistó Inglaterra en 1066; fundaron los principados de Nóvgorod y Kiev, y de ellos viene el nombre de Rusia; navegaron por los ríos rusos hasta el mar Caspio para comerciar con Bagdad; sirvieron como guardia personal del emperador de Constantinopla; colonizaron Islandia en 874 y Groenlandia en 985; y llegaron a América alrededor del año 1000, casi cinco siglos antes de Colón.
+
+**Dato curioso:** en Suecia se han encontrado decenas de miles de monedas de plata árabes. Su comercio con el mundo islámico era tan intenso que en las tumbas nórdicas aparecen sedas, cuentas de vidrio persas e incluso un anillo con una inscripción en árabe.
+
+### Profundiza 1 · Cómo eran, más allá del casco con cuernos
+
+LOS CUERNOS NO EXISTIERON. Ni un solo casco vikingo encontrado tiene cuernos. Son un invento del vestuario de una ópera de Wagner del siglo XIX. Los cascos reales eran gorros de hierro o cuero, sencillos y sin adornos, porque un cuerno en combate solo sirve para que te agarren la cabeza.
+
+ERAN LIMPIOS. En sus tumbas aparecen peines, pinzas, palillos para las orejas y navajas con una frecuencia asombrosa. Se lavaban una vez por semana, el sábado, y en las lenguas escandinavas el sábado se sigue llamando «día del baño» (laugardagur). Hay una queja de un clérigo inglés advirtiendo de que los daneses seducían a las mujeres inglesas porque se peinaban a diario y se bañaban los sábados. Comparados con la media europea de la época, eran unos coquetos.
+
+TENÍAN ASAMBLEAS. Las decisiones importantes se tomaban en el thing, una reunión de hombres libres donde se juzgaba, se pactaba y se elegía. El Althing de Islandia, fundado en 930, es el parlamento más antiguo del mundo que sigue existiendo. No había una constitución escrita: había hombres cuyo oficio era memorizar la ley y recitarla.
+
+SUS MUJERES. Podían poseer tierras, heredar, divorciarse por su cuenta (bastaba declararlo ante testigos) y gestionar la granja mientras el marido estaba fuera meses o años; llevaban las llaves del arcón como símbolo de autoridad doméstica. Se han hallado tumbas de mujeres con ajuar de comerciante y, en Birka, un enterramiento guerrero de gran rango cuyo ADN resultó ser femenino.
+
+Y SÍ, ERAN VIOLENTOS Y ESCLAVISTAS. Esto no se puede maquillar. El comercio de esclavos era uno de sus grandes negocios: capturaban personas en Irlanda, Inglaterra y Europa del Este —de ahí, según muchos lingüistas, la relación entre «eslavo» y «esclavo»— y las vendían en Dublín, Hedeby o los mercados del califato. En sus granjas, los thrall (esclavos) hacían el trabajo más duro y no tenían derechos.
+
+CÓMO TERMINÓ. No los derrotó nadie. Los reinos escandinavos se cristianizaron y se centralizaron, los reyes empezaron a preferir el comercio y los impuestos al saqueo, Europa aprendió a fortificarse, y los descendientes de los saqueadores se convirtieron en reyes de Inglaterra, duques de Normandía y príncipes de Kiev. Dejaron de asaltar porque ya eran los dueños.
+
+**Dato curioso:** en 1960 se excavó en Terranova (Canadá) un asentamiento nórdico, L'Anse aux Meadows, que confirmó lo que contaban las sagas islandesas. Un análisis de los anillos de la madera cortada permitió fechar la ocupación con precisión asombrosa: el año 1021.
+
+---
+
+## 8 · Cisma de Oriente
+
+`cisma-oriente` · **1054**
+
+**Cuerpo:**
+
+Las iglesias de Roma y de Constantinopla llevaban siglos separándose sin proponérselo. No fue un divorcio, fue una deriva.
+
+Hablaban idiomas distintos —latín en Occidente, griego en Oriente—, y eso hacía que discutieran sin entenderse los mismos textos. Vivían en mundos políticos opuestos: en Oriente había un emperador poderoso y la Iglesia estaba integrada en el Estado; en Occidente no había emperador de verdad y el papa había ocupado ese vacío, incluso políticamente.
+
+Y estaban dos discusiones de fondo. Una teológica: Occidente había añadido al credo una expresión (el «Filioque», que el Espíritu procede también del Hijo) sin consultar a Oriente. Y otra de poder: el papa reclamaba autoridad sobre toda la Iglesia; el patriarca de Constantinopla lo consideraba, como mucho, el primero entre iguales.
+
+En 1054, en medio de una negociación que fue de mal en peor, los enviados del papa y el patriarca de Constantinopla se excomulgaron mutuamente. Se suele dar esa fecha como la ruptura, aunque en su momento pareció otro incidente más.
+
+Lo que la hizo definitiva fue algo posterior y muy concreto: el saqueo de Constantinopla por los cruzados occidentales en 1204. Después de aquello, la reconciliación se volvió emocionalmente imposible.
+
+Desde entonces hay dos grandes ramas: la Iglesia católica, con el papa, y las Iglesias ortodoxas, organizadas por países y con patriarcas. Es la primera gran fractura del cristianismo, cinco siglos antes de la Reforma.
+
+**Dato curioso:** aquellas excomuniones estuvieron técnicamente en vigor 911 años. Se levantaron en 1965, cuando el papa Pablo VI y el patriarca Atenágoras las anularon conjuntamente y se abrazaron en público.
+
+---
+
+## 9 · Cruzadas
+
+`cruzadas` · **1096-1291**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+En 1095, el papa Urbano II pronunció en Clermont un discurso que puso en marcha dos siglos de guerras. Pidió a los cristianos de Europa que fueran a liberar Jerusalén, en manos musulmanas desde hacía cuatro siglos, y ofreció algo decisivo: la remisión de los pecados a quien muriera en el camino. La multitud respondió gritando «Dios lo quiere».
+
+Los motivos eran una mezcla: fe sincera y miedo al infierno (que en aquella mentalidad era muy real), la posibilidad de conseguir tierras y botín, escapar de deudas o de una condena, el deseo de aventura, y el interés de la Iglesia en canalizar hacia fuera la violencia de una nobleza guerrera que se pasaba la vida matándose entre sí.
+
+Lo que casi nunca se cuenta es el precio. Ir a Tierra Santa costaba a un caballero entre cuatro y cinco años de sus ingresos: había que vender o hipotecar tierras para pagar caballos, armas, criados y pasaje. El viaje duraba años. Se cruzaba Anatolia en verano, con armadura, sin agua y con los animales muriéndose. Los ejércitos se deshacían por disentería, tifus y hambre —muchos más morían de enfermedad que en combate—, y en algunos episodios se documentan casos de canibalismo entre los sitiadores hambrientos.
+
+Se calcula que de la primera cruzada volvió a casa entre un cuarto y un tercio de los que salieron.
+
+Y hubo víctimas antes de llegar. Las bandas que se pusieron en marcha por su cuenta en 1096 masacraron las comunidades judías de Renania —Worms, Maguncia, Espira—: son los primeros grandes pogromos de la historia europea, y ocurrieron a manos de gente que iba «a hacer el bien».
+
+El resultado militar fue un fracaso: al final, en 1291, no quedaba ni un territorio cristiano en Tierra Santa. El resultado histórico fue enorme en otra dirección: Europa quedó conectada con el Mediterráneo oriental. Llegaron el azúcar, el algodón, las especias, los cítricos, el papel, los números arábigos, la medicina de Avicena, los textos de Aristóteles, técnicas de fortificación, la contabilidad y las primeras letras de crédito para no viajar con oro encima.
+
+**Dato curioso:** la palabra «asesino» viene de aquellos años. Los cruzados llamaban hashashin a los miembros de una secta ismailí de Siria especializada en matar a dirigentes enemigos, y el término se quedó en las lenguas europeas.
+
+### Profundiza 1 · Cruzada por cruzada
+
+LA CRUZADA POPULAR (1096). Antes de que salieran los ejércitos, un predicador, Pedro el Ermitaño, arrastró a miles de campesinos sin armas ni provisiones. Saquearon a su paso por Hungría y los Balcanes, masacraron a los judíos de Renania y, al llegar a Asia Menor, fueron aniquilados por los turcos en Civetot. No llegó ninguno a Jerusalén.
+
+PRIMERA CRUZADA (1096-1099). La única que consiguió su objetivo. Tomaron Nicea, cruzaron Anatolia con enormes pérdidas y pasaron ocho meses sitiando Antioquía, comiendo cuero y ratas; cuando la tomaron, quedaron sitiados dentro. El 15 de julio de 1099 asaltaron Jerusalén y siguió una matanza atroz de musulmanes y judíos, incluidos los refugiados en la mezquita y en la sinagoga. Fundaron cuatro Estados cruzados y nacieron las órdenes militares: templarios y hospitalarios.
+
+TERCERA (1189-1192), la de los reyes. Saladino había destrozado al ejército cristiano en los Cuernos de Hattin (1187) y recuperado Jerusalén, esta vez sin matanza: permitió a los habitantes rescatarse y liberó a muchos que no podían pagar. Acudieron los tres soberanos más poderosos de Europa: el emperador Federico Barbarroja, que se ahogó al cruzar un río en Anatolia; Felipe II de Francia, que se volvió pronto; y Ricardo Corazón de León, que tomó Acre —donde hizo ejecutar a unos 2.700 prisioneros—, ganó batallas y llegó dos veces a la vista de Jerusalén sin atreverse a atacarla. Acabó firmando con Saladino un tratado: la costa para los cristianos y libre paso para los peregrinos. De vuelta a casa fue capturado y su reino tuvo que pagar un rescate ruinoso.
+
+CUARTA (1202-1204), la vergüenza. Sin dinero para pagar los barcos a Venecia, los cruzados aceptaron «trabajar» para el dux: primero saquearon Zara, una ciudad cristiana, y después, metidos en una intriga sucesoria bizantina, asaltaron Constantinopla y la saquearon durante tres días. Se destruyeron o robaron reliquias, bibliotecas y obras de arte irrepetibles (los cuatro caballos de bronce de San Marcos en Venecia salieron de allí). El papa los excomulgó… y luego aceptó el resultado. Bizancio nunca se recuperó.
+
+LA CRUZADA DE LOS NIÑOS (1212). Un movimiento popular de jóvenes y pobres convencidos de que la inocencia lograría lo que las armas no. No llegaron a Tierra Santa; hay relatos —difíciles de verificar— de que algunos acabaron vendidos como esclavos en los puertos del Mediterráneo.
+
+SEXTA (1228-1229), la del excomulgado. El emperador Federico II fue a Tierra Santa estando excomulgado y consiguió Jerusalén… negociando un tratado de diez años, sin una batalla. Hablaba árabe y respetaba la cultura musulmana. El papa lo excomulgó otra vez, ahora por haberlo logrado sin luchar.
+
+EL FINAL (1291). Los Estados cruzados fueron cayendo uno a uno hasta el asedio de Acre, donde los últimos defensores murieron y la ciudad fue arrasada. Doscientos años de guerras y decenas de miles de muertos para volver al punto de partida.
+
+Y NO SOLO ALLÍ. Hubo cruzadas contra los paganos del Báltico, contra los musulmanes de la península ibérica y, lo más incómodo, contra otros cristianos: en 1209, en la cruzada contra los cátaros del sur de Francia, la ciudad de Béziers fue arrasada con miles de muertos, y a quien preguntó cómo distinguir a los herejes de los católicos se le atribuye la respuesta: «matadlos a todos, Dios reconocerá a los suyos».
+
+**Dato curioso:** los templarios, creados para proteger a los peregrinos, acabaron inventando algo mucho más rentable: un sistema por el que dejabas tu dinero en su casa de París y lo retirabas en Jerusalén con una carta firmada. Fueron, de hecho, el primer banco internacional de Europa. Y por ricos —y por deber el rey de Francia una fortuna— acabaron detenidos, torturados y quemados en 1307-1314.
+
+---
+
+## 10 · Fundación de las universidades
+
+`fundacion-universidades` · **Siglos XI-XIII**
+
+**Cuerpo:**
+
+Hasta el siglo XI, en Europa se estudiaba en escuelas de monasterios y catedrales, para formar monjes y clérigos. Pero las ciudades crecían, el comercio se complicaba, los reyes necesitaban juristas y funcionarios, y hacía falta algo más.
+
+Lo que apareció fue una novedad jurídica curiosa: una corporación, un gremio, exactamente como el de los zapateros o los tejedores, pero de maestros y estudiantes. La palabra latina universitas significa justamente eso: el conjunto, la comunidad. En Bolonia (1088) el gremio lo formaron los estudiantes, que contrataban a los profesores; en París fueron los maestros.
+
+Y consiguieron privilegios: tribunales propios, exención de impuestos y de servicio militar, derecho a huelga y a marcharse en bloque a otra ciudad si el ayuntamiento los trataba mal (así nacieron varias universidades, incluida Cambridge, por una fuga desde Oxford).
+
+Todo se enseñaba en latín, lo que tenía una consecuencia enorme: un estudiante de Escocia podía estudiar en Salamanca, Padua o Praga y entenderse perfectamente. Existía un espacio intelectual europeo cuatro siglos antes de que existiera la idea de Europa.
+
+Aquellas instituciones son las más longevas de Occidente después de la Iglesia: Bolonia, París, Oxford, Salamanca (1218), Padua, Cambridge, Coímbra o Praga siguen funcionando casi mil años después.
+
+**Dato curioso:** nuestros rituales académicos vienen de allí. El bachiller, la licenciatura (la licentia docendi era literalmente el permiso para enseñar), el doctorado, la toga, el birrete, la lectura pública de la tesis y hasta las novatadas son medievales.
+
+---
+
+## 11 · La universidad más antigua del mundo
+
+`al-qarawiyyin` · **Año 859**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+La institución de educación superior más antigua del mundo en funcionamiento continuo no está en Europa: está en Fez, en Marruecos, y se llama al-Qarawiyyin.
+
+Se fundó en el año 859 y la fundó una mujer musulmana, Fátima al-Fihri, que gastó en ella la herencia de su padre.
+
+Allí se enseñaba derecho y Corán, sí, pero también matemáticas, medicina y astronomía: el mismo saber que en Europa tardaría siglos en tener una casa propia.
+
+**Dato curioso:** cuando en Bolonia se juntó el primer gremio de estudiantes, en 1088, en Fez llevaban ya doscientos treinta años dando clase sin interrupción.
+
+### Profundiza 1 · La universidad más antigua del mundo la fundó una mujer
+
+QUIÉN ERA. Su familia venía de Cairuán, en la actual Túnez, y emigró a Fez, que entonces era una ciudad nueva y en plena expansión. Su padre, Muhammad al-Fihri, se hizo comerciante rico. Cuando murió, la herencia pasó a sus dos hijas, Fátima y Mariam, porque no había hijos varones. Y las dos hicieron lo mismo con el dinero: construir. Mariam levantó la mezquita de los Andaluces; Fátima, la de al-Qarawiyyin, llamada así en recuerdo de la ciudad de la que venía su familia.
+
+QUÉ HIZO EXACTAMENTE. No dio una donación y se apartó: según las crónicas, supervisó la obra de principio a fin, quiso que todos los materiales salieran del propio terreno para que nada fuera de procedencia dudosa, y ayunó cada día que duró la construcción. Empezó siendo una mezquita con una escuela al lado, que es como nacían entonces los centros de estudio, y en pocas décadas se convirtió en el gran centro intelectual del occidente islámico.
+
+QUIÉN PASÓ POR ALLÍ. El historiador Ibn Jaldún, considerado el padre de la sociología, estudió y enseñó en Fez. El geógrafo al-Idrisi, que dibujó para el rey de Sicilia el mejor mapa del mundo de su tiempo, se formó en ese ambiente. Y el filósofo judío Maimónides vivió en Fez y frecuentó sus círculos de estudio, que es la mejor prueba de qué clase de sitio era: un centro islámico donde un judío podía aprender y discutir.
+
+SU BIBLIOTECA. Guarda manuscritos de hace más de mil años, entre ellos un Corán del siglo IX y un ejemplar de la Muqaddima de Ibn Jaldún de su puño y letra. Estuvo décadas cerrada y deteriorándose por la humedad, hasta que en 2016 la reabrió, restaurada, la arquitecta marroquí-canadiense Aziza Chaouni. Otra mujer, once siglos después.
+
+Y SIGUE ABIERTA. En 1963 se integró en el sistema universitario del Estado marroquí y hoy es una universidad moderna, con sus facultades y sus exámenes. Es decir: no es una ruina que se visita, es un sitio donde alguien está estudiando esta tarde.
+
+**Dato curioso:** cuando Fátima al-Fihri fundó al-Qarawiyyin, en Europa apenas quedaban escuelas de monasterio y saber leer era cosa de clérigos. La institución educativa más antigua del planeta no la creó un rey, ni un papa, ni un gremio: la pagó una mujer con su herencia, en un tiempo en el que a las mujeres se les niega el mérito por defecto. Su nombre estuvo a punto de perderse; el edificio, no.
+
+---
+
+## 12 · Imperio Mongol
+
+`imperio-mongol` · **Siglo XIII**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Temuyín nació hacia 1162 en la estepa mongola. Su padre, un jefe menor, fue envenenado cuando él era un niño, y su clan abandonó a la familia a su suerte: sobrevivieron comiendo raíces y roedores. Fue capturado y encerrado con un yugo de madera al cuello, y escapó. Le robaron a su mujer y tuvo que ir a rescatarla.
+
+De esa infancia salió un hombre con dos ideas fijas: la lealtad lo es todo, y la sangre no vale nada. En 1206, tras años de guerras entre tribus, fue proclamado Gengis Kan, «el kan universal».
+
+Su genialidad fue organizativa. Rompió las tribus y reorganizó a todos los hombres en unidades de 10, 100, 1.000 y 10.000, mezclando clanes para que la lealtad fuera al ejército y no a la familia, con castigo colectivo si uno abandonaba a un compañero. Ascendía por mérito: su mejor general, Subotai, era hijo de un herrero. Promulgó un código de leyes, protegió a los mercaderes y declaró la libertad religiosa, con exención de impuestos para el clero de cualquier fe.
+
+Su ejército era el más móvil de la historia: cada guerrero llevaba varios caballos de repuesto, comía carne seca y leche fermentada, dormía montando, cubría más de cien kilómetros al día y disparaba un arco compuesto de enorme potencia al galope, incluso hacia atrás. Y aprendía: incorporaron ingenieros chinos y persas y se volvieron expertos en asedios y catapultas.
+
+El imperio que empezó él y ampliaron sus hijos y nietos llegó a ser el mayor imperio continuo de la historia: de Corea a Hungría, de Siberia a Persia.
+
+Y tuvo una consecuencia que casi nadie esperaba: la Pax Mongolica. Con una sola autoridad de China a Persia y un sistema de postas que atravesaba Asia, viajar y comerciar se volvió más seguro que nunca. Por esos caminos pasó Marco Polo, viajaron técnicas e inventos, se intercambiaron embajadas… y también se propagó la peste negra.
+
+**Dato curioso:** montó un servicio postal, el yam, con estaciones de relevo cada 40 kilómetros donde los correos cambiaban de caballo. Un mensaje podía cruzar el imperio a más de 300 kilómetros al día en el siglo XIII. Europa no tuvo nada parecido hasta el siglo XIX.
+
+### Profundiza 1 · La cara salvaje: el precio de aquel imperio
+
+Nada de lo anterior se puede contar sin esto. El método mongol de conquista era el terror calculado, y funcionaba porque cumplían las dos partes del trato: la ciudad que se rendía sin luchar pagaba tributo y seguía viviendo; la ciudad que resistía era borrada del mapa, sin excepciones y sin negociación posterior.
+
+El detonante de la guerra contra Persia lo resume todo: el gobernador de Otrar hizo matar a los embajadores y comerciantes que Gengis Kan había enviado. La respuesta fue la destrucción sistemática del imperio de Corasmia entre 1219 y 1221. Bujará, Samarcanda, Merv, Nishapur —algunas de las ciudades más cultas y ricas del mundo islámico— fueron arrasadas, sus habitantes masacrados o deportados como artesanos útiles, sus bibliotecas quemadas y sus canales de riego destruidos, lo que convirtió comarcas enteras en desierto durante generaciones.
+
+Las cifras de las crónicas son exageradas —hablan de más de un millón de muertos en una sola ciudad—, pero incluso corregidas a la baja la escala es escalofriante. Las estimaciones modernas sitúan el total de muertos de las campañas mongolas entre 30 y 40 millones de personas, alrededor de un 10 % de la humanidad de entonces. La población de Irán y de Asia Central tardó siglos en recuperarse.
+
+Sus sucesores continuaron: Bagdad, la ciudad de la Casa de la Sabiduría, fue tomada en 1258 por su nieto Hulagu; se cuenta que los libros de sus bibliotecas acabaron en el Tigris y que el califa fue envuelto en una alfombra y pisoteado por la caballería. El avance sobre Europa —Kiev arrasada en 1240, victorias en Polonia y Hungría en 1241— se detuvo no por una derrota, sino porque murió el gran kan y los príncipes tuvieron que volver a elegir sucesor.
+
+Y una última cosa, incómoda: en Mongolia es el padre de la patria, el hombre que unió a un pueblo disperso y le dio leyes, escritura y un lugar en la historia. En Irán, en Rusia, en Hungría o en China es el recuerdo de una catástrofe. Las dos memorias son verdad.
+
+**Dato curioso:** un estudio genético publicado en 2003 encontró un mismo linaje del cromosoma Y en aproximadamente el 8 % de los hombres de una amplia región de Asia —unos 16 millones de personas—, y su origen y expansión coinciden con el imperio mongol. Es decir: puede que uno de cada doscientos hombres del mundo descienda de aquella familia.
+
+---
+
+## 13 · La Ruta de la Seda
+
+`ruta-seda` · **Siglos II a. C.-XV**
+
+**Cuerpo:**
+
+La Ruta de la Seda no era una carretera, ni una sola ruta: era una red de caminos terrestres y marítimos que unía China con Asia Central, la India, Persia, el mundo árabe y el Mediterráneo, pasando de oasis en oasis y de puerto en puerto.
+
+Los grandes protagonistas no fueron los chinos ni los europeos, sino los pueblos del medio: los sogdianos de Samarcanda, los partos, los persas, los uigures, los armenios, y en el mar los árabes, indios y malayos. Vivían de conectar mundos que se ignoraban.
+
+Lo que viajó más lejos no fueron los productos, sino las ideas. El budismo entró en China por esas rutas; el islam llegó al sudeste asiático por los puertos; los números indios llegaron a Europa vía el mundo árabe; el papel, la brújula, la pólvora y la imprenta hicieron el camino de China hacia el oeste, y en dirección contraria viajaron el vidrio, la moneda de oro, la astronomía griega y el cristianismo nestoriano.
+
+El momento de mayor tráfico fue el siglo XIII, con los mongoles controlando casi todo el trayecto. Fue entonces cuando un comerciante veneciano, Marco Polo, pasó años en la corte de Kublai Kan y volvió con un relato que sus contemporáneos consideraron mentira: hablaba de ciudades de un millón de habitantes, de papel usado como dinero y de piedras negras que ardían (el carbón). Su libro fue uno de los que Colón leyó y anotó.
+
+Y la ruta se cerró en el siglo XV: los imperios se rompieron, los otomanos controlaron los pasos y encarecieron el comercio. Esa es la razón inmediata por la que Europa se lanzó a buscar un camino por mar hacia Asia. Sin el cierre de la Ruta de la Seda no habría habido descubrimiento de América.
+
+**Dato curioso:** por esos mismos caminos viajó la peste negra. Las caravanas y los barcos que llevaban seda y especias llevaron también las pulgas y las ratas que en 1347 entraron en Europa y mataron a un tercio de su población. La globalización trajo prosperidad y epidemias desde el primer día.
+
+---
+
+## 14 · La Peste Negra
+
+`peste-negra` · **1347-1353**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+En octubre de 1347, unos barcos genoveses procedentes del mar Negro atracaron en Mesina, en Sicilia. Traían la enfermedad. En cinco años había recorrido Europa entera, hasta Escandinavia y Rusia.
+
+La causa era una bacteria, Yersinia pestis, que viajaba en las pulgas de las ratas y también en las pulgas y los piojos humanos, y que en su forma pulmonar se transmitía directamente al respirar. Nadie sabía nada de eso: se hablaba de aire corrompido, de conjunciones planetarias, de castigo divino.
+
+Los síntomas eran brutales y rapidísimos: fiebre alta, bultos negruzcos y dolorosos en el cuello, las axilas o la ingle, manchas oscuras en la piel, y la muerte en dos a siete días. Sin tratamiento moría entre el 60 % y el 90 % de los infectados; la forma pulmonar era prácticamente siempre mortal.
+
+Murió entre un tercio y la mitad de la población europea: probablemente 25 millones de personas en Europa y quizá el doble en Asia y Oriente Próximo. En muchas ciudades no había suficientes vivos para enterrar a los muertos, y los cuerpos se apilaban en fosas comunes.
+
+El miedo produjo lo que suele producir: se buscaron culpables. Se acusó a los judíos de envenenar los pozos y hubo matanzas y quemas en decenas de ciudades alemanas y francesas —en Estrasburgo, en 1349, cientos de personas fueron quemadas vivas—, pese a que el papa Clemente VI condenó expresamente esas acusaciones. Muchas comunidades supervivientes emigraron hacia el este, sobre todo a Polonia.
+
+**Dato curioso:** de esta epidemia viene la palabra «cuarentena». Venecia y Ragusa obligaron a los barcos sospechosos a esperar aislados antes de desembarcar: primero treinta días (trentina) y después cuarenta (quaranta). La medida sanitaria más eficaz de la historia se inventó sin saber qué era un microbio.
+
+### Profundiza 1 · Lo que cambió después de la peste
+
+Aquí está lo más interesante, y lo que casi nunca se cuenta: la mayor catástrofe demográfica de la historia europea acabó mejorando la vida de los supervivientes y desmontando el orden medieval.
+
+LOS SALARIOS SE DISPARARON. De pronto faltaban brazos en todas partes. Los campesinos y artesanos que quedaban vivos podían exigir el doble, negociar o marcharse a otro señorío. Los sueldos reales subieron mucho y durante décadas: para el trabajador inglés, el siglo posterior a la peste fue el de mayor poder de compra hasta el siglo XIX.
+
+LA SERVIDUMBRE SE HUNDIÓ. Los señores intentaron impedirlo por ley: en Inglaterra, el Estatuto de los Trabajadores de 1351 prohibió subir los salarios y cambiar de patrón. No funcionó, y el resentimiento acumulado estalló en grandes revueltas campesinas, como la inglesa de 1381. En la Europa occidental la servidumbre fue desapareciendo en los dos siglos siguientes (en Europa del Este, en cambio, se endureció).
+
+SE BUSCÓ AHORRAR TRABAJO. Cuando el trabajo humano se vuelve caro, interesa la máquina. Se extendieron los molinos, mejoraron los barcos y las técnicas de minería, y en ese contexto de escasez de copistas y demanda de textos encaja bien el éxito fulminante de la imprenta un siglo después.
+
+LA IGLESIA PERDIÓ PRESTIGIO. Los sacerdotes murieron en proporción altísima —atendían a los enfermos— y hubo que ordenar a toda prisa sustitutos sin formación. Además, la peste no distinguió entre santos y pecadores, lo que hizo tambalearse muchas certezas. Creció el anticlericalismo, se multiplicaron las devociones extremas y los flagelantes, y se sembró el descontento del que un siglo y medio después nacería la Reforma.
+
+LA MEDICINA CAMBIÓ. Los médicos universitarios, que citaban a Galeno y no tocaban a los enfermos, quedaron en evidencia; los cirujanos, que trabajaban con las manos, ganaron prestigio. Aparecieron juntas de sanidad municipales, registros de defunciones, normas de limpieza urbana, aislamiento de enfermos y controles portuarios: el embrión de la salud pública.
+
+Y no fue una sola vez. La peste volvió en oleadas durante cuatro siglos —Londres en 1665, Marsella en 1720—, así que Europa vivió generaciones enteras con esa amenaza incorporada a la vida normal.
+
+**Dato curioso:** la famosa máscara con pico de los médicos de la peste no es medieval. Se inventó en el siglo XVII: el pico se rellenaba de hierbas aromáticas porque se creía que la enfermedad viajaba en el mal olor del aire.
+
+---
+
+## 15 · Guerra de los Cien Años
+
+`guerra-cien-anos` · **1337-1453**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+El conflicto empezó por una cuestión dinástica: el rey de Inglaterra, Eduardo III, era nieto de un rey francés por línea materna y reclamó el trono de Francia, que se le negó alegando que la corona no podía heredarse por vía femenina. Por debajo había motivos más prácticos: Inglaterra poseía territorios en el suroeste francés y no quería perderlos, y ambos peleaban por Flandes, el gran centro textil que compraba la lana inglesa.
+
+El motivo fue un arma: el arco largo galés. Un arquero entrenado podía disparar diez o doce flechas por minuto a doscientos metros, y los ingleses los usaban por miles, protegidos por estacas y terreno embarrado. En Crécy (1346) y en Azincourt (1415), la flor de la nobleza francesa cargó a caballo contra ellos y fue masacrada en el lodo. La caballería pesada, que había dominado la guerra durante cinco siglos, quedó obsoleta.
+
+En 1420 Francia estaba prácticamente derrotada: por el Tratado de Troyes, el heredero francés quedaba desposeído y el rey inglés sería el próximo rey de Francia. Y entonces, en 1429, apareció una campesina de diecisiete años.
+
+La segunda parte de la guerra la ganó Francia, y de nuevo por la tecnología: los hermanos Bureau desarrollaron una artillería de asedio móvil y eficaz. En la última batalla, Castillón (1453), los cañones franceses destrozaron al ejército inglés. Inglaterra se quedó solo con Calais.
+
+Las consecuencias fueron enormes: nacieron los ejércitos permanentes pagados con impuestos, y con ellos los Estados modernos; se acabó el mundo de los caballeros; y por primera vez la gente empezó a sentirse «francesa» o «inglesa» y no solo súbdita de un señor.
+
+**Dato curioso:** por esta guerra, Inglaterra dejó de hablar francés. Sus reyes y su nobleza llevaban tres siglos usándolo como lengua de la corte, y el enfrentamiento con Francia convirtió el inglés en la lengua de los tribunales (1362) y del Parlamento.
+
+### Profundiza 1 · Juana de Arco: a quién abandonó Francia
+
+Juana nació hacia 1412 en Domrémy, en una familia de labradores. No sabía leer ni escribir. Desde los trece años decía oír voces que le encargaban una misión: expulsar a los ingleses y llevar al Delfín a coronarse en Reims.
+
+Lo asombroso es que lo consiguió. Convenció a un capitán de que le diera una escolta, cruzó 600 kilómetros de territorio enemigo, fue examinada por teólogos, obtuvo una armadura y un estandarte y, en mayo de 1429, levantó en nueve días el asedio de Orleans, que llevaba medio año resistiendo. Fue herida por una flecha y volvió al combate el mismo día. Después vino Patay, y el 17 de julio de 1429 el Delfín fue coronado en Reims como Carlos VII, con ella de pie a su lado.
+
+Ese detalle es la clave de todo: la legitimidad de aquel rey venía, a ojos de todos, de una campesina que decía hablar con Dios.
+
+En mayo de 1430 fue capturada en Compiègne por los borgoñones, aliados de Inglaterra. Según los relatos, el puente levadizo de la ciudad se cerró con ella fuera. Sus captores la vendieron a los ingleses por 10.000 libras tornesas.
+
+Y AQUÍ VIENE LO QUE HAY QUE CONTAR: Carlos VII no hizo nada por ella. No ofreció rescate, y en aquel tiempo pagar el rescate de un prisionero de valor era lo normal —él mismo había rescatado a otros—. No propuso un canje, no envió una embajada, no la reclamó como súbdita suya, y ni él ni la Iglesia de Francia protestaron por el proceso. Estuvo un año entera en manos enemigas y su rey, el rey que ella había coronado, guardó silencio. A muchos en la corte, aquella muchacha que hablaba en nombre de Dios y les daba órdenes les resultaba, simplemente, incómoda.
+
+La juzgó un tribunal eclesiástico en Ruan, presidido por un obispo partidario de los ingleses, Pierre Cauchon. Tenía diecinueve años, estaba sola, no se le permitió abogado ni defensor y fue interrogada durante meses por decenas de teólogos que buscaban una contradicción. Cuando le preguntaron si estaba en gracia de Dios —una trampa: decir sí era soberbia, decir no era confesarse en pecado— respondió: «si no lo estoy, que Dios me ponga en ella; y si lo estoy, que Dios me mantenga en ella». Los jueces se quedaron callados.
+
+La condenaron por herejía. Amenazada con la hoguera, firmó una abjuración que probablemente no podía leer; días después volvió a vestirse de hombre —dijo que para protegerse de los guardias— y fue declarada reincidente. El 30 de mayo de 1431 fue quemada viva en la plaza del Mercado Viejo de Ruan. Sus cenizas se arrojaron al Sena para que no hubiera reliquias.
+
+Veinticinco años más tarde, cuando ya había recuperado Ruan y le convenía borrar la sospecha de que su corona venía de una bruja, Carlos VII pidió la revisión del proceso. En 1456 fue declarada inocente. Y la Iglesia la canonizó en 1920, cuatrocientos ochenta y nueve años después de quemarla.
+
+**Dato curioso:** conservamos las actas completas de los dos procesos, con sus respuestas transcritas casi palabra por palabra. Es una de las poquísimas voces de una mujer campesina del siglo XV que ha llegado hasta nosotros… y llegó porque la estaban juzgando.
+
+---
+
+## 16 · Caída de Constantinopla
+
+`caida-constantinopla` · **1453**
+
+**Cuerpo:**
+
+En 1453, el Imperio bizantino era ya solo una ciudad y unos alrededores, con quizá 50.000 habitantes en un recinto construido para medio millón. Rodeada por el Imperio otomano, sobrevivía pagando tributos y negociando.
+
+El sultán Mehmed II, de veintiún años, decidió acabar con ella. Reunió un ejército de más de 80.000 hombres frente a los apenas 7.000 defensores, cortó los suministros y trajo la novedad decisiva: una artillería gigantesca, con bombardas de más de ocho metros capaces de lanzar bolas de piedra de media tonelada.
+
+Esas murallas triples habían resistido más de veinte asedios en mil años. Pero estaban diseñadas para un mundo sin pólvora. Los cañones las fueron demoliendo tramo a tramo mientras los defensores reparaban de noche lo que se destruía de día.
+
+Los bizantinos habían cerrado el puerto con una cadena enorme; Mehmed hizo arrastrar parte de su flota por tierra, sobre rodillos engrasados, para meterla en el puerto por detrás. El 29 de mayo, tras 53 días, los otomanos entraron. El último emperador, Constantino XI, murió combatiendo en la brecha.
+
+Consecuencias inmediatas: Constantinopla se convirtió en la capital otomana —Estambul— y Santa Sofía en mezquita; los eruditos griegos huyeron a Italia con sus manuscritos y aceleraron el Renacimiento; y el control otomano de los estrechos encareció el comercio con Asia, lo que empujó a portugueses y castellanos a buscar rutas por mar.
+
+Es decir: la caída de Constantinopla en 1453 explica en buena parte el viaje de Colón en 1492. Y por eso ambas fechas se usan para cerrar la Edad Media.
+
+**Dato curioso:** los otomanos aprovecharon la técnica bizantina y la superaron. Fue un ingeniero húngaro, Orbán, quien ofreció sus cañones primero al emperador bizantino, que no pudo pagarlos, y luego al sultán, que le dio cuatro veces lo que pedía.
+
+
+# ERA · Edad Moderna
+
+`key: edad-moderna` · Época: **1450/1492 – 1789**
+
+---
+
+## 1 · La imprenta de Gutenberg
+
+`imprenta-gutenberg` · **≈1450**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Antes de la imprenta, un libro se copiaba a mano. Un monje o un copista profesional tardaba meses, a veces años, y en cada copia entraban errores nuevos. Los libros eran objetos de lujo: existían en monasterios, catedrales, universidades y palacios, y prácticamente en ningún otro sitio.
+
+Johannes Gutenberg, orfebre de Maguncia, no inventó «imprimir»: se imprimía con planchas de madera desde hacía siglos en China. Lo que inventó fue un sistema completo para producir letras metálicas sueltas, todas exactamente iguales de altura, reutilizables y combinables, más la tinta y la prensa adecuadas para usarlas.
+
+Los números del cambio son brutales: en 1450 no había ni una imprenta en Europa; en 1500 había talleres en unas 250 ciudades y se habían impreso en torno a ocho o nueve millones de libros. El precio de un libro cayó tanto que, por primera vez, un artesano o un estudiante podía llegar a tener uno.
+
+Y todo lo demás vino detrás. La Reforma de Lutero fue el primer acontecimiento mediático de la historia: sus textos se difundieron por Alemania en semanas. La Revolución Científica fue posible porque un astrónomo de Praga podía ver exactamente el mismo diagrama, sin errores de copista, que un astrónomo de Sevilla. Se fijaron las ortografías y las lenguas nacionales. Nacieron los periódicos, los índices, las páginas numeradas y la propiedad intelectual.
+
+También lo malo se multiplicó: uno de los grandes best-sellers de aquellos años fue el «Malleus Maleficarum», el manual para cazar brujas. La imprenta no hace mejor a la gente: hace más grande y más rápido todo lo que la gente ya quiere decir.
+
+Y a él le salió mal el negocio: su socio, que le había prestado el dinero, lo demandó y se quedó con el taller. Gutenberg murió sin ser rico y bastante olvidado.
+
+**Dato curioso:** se imprimieron unos 180 ejemplares de su Biblia y hoy sobreviven 49. Cerca de cuarenta y cinco de aquellos ejemplares se hicieron en pergamino, y para cada uno hicieron falta las pieles de unos 170 terneros.
+
+### Profundiza 1 · Cómo funcionaba la imprenta, paso a paso
+
+1. EL PUNZÓN. Un grabador tallaba a mano la letra, del revés y en relieve, en la punta de una barra de acero. Cada letra, cada acento y cada signo tenían su punzón, y hacerlos bien era un oficio de altísima precisión.
+
+2. LA MATRIZ. Ese punzón de acero se golpeaba contra una barra de cobre, más blando, dejando la letra hundida. Eso es la matriz: el molde de una sola letra.
+
+3. LA FUNDICIÓN, que fue el verdadero invento. La matriz se colocaba en un molde de mano ajustable —la pieza clave de Gutenberg, porque permitía fundir letras de anchuras distintas (una «i» y una «m») manteniendo exactamente la misma altura y profundidad—, y se vertía dentro metal fundido: una aleación de plomo, estaño y antimonio. El antimonio es el truco: se expande ligeramente al enfriarse, así que la letra sale con los bordes nítidos y aguanta miles de prensadas. Así se obtenían cientos de piezas idénticas e intercambiables. Eso, y no «imprimir», es la revolución: es la primera producción en serie de piezas normalizadas de la historia.
+
+4. LA COMPOSICIÓN. El cajista tenía las letras ordenadas en una caja: las mayúsculas arriba y las minúsculas abajo (de ahí que en inglés se llamen todavía uppercase y lowercase). Iba cogiéndolas una a una y colocándolas en un componedor, del revés y de derecha a izquierda, y rellenaba con espacios de metal en blanco hasta que la línea quedaba exactamente del ancho justo. Una sola página podía llevar más de dos mil piezas.
+
+6. LA TINTA. La tinta de los copistas, al agua, resbalaba sobre el metal. Gutenberg tuvo que inventar otra: un barniz de aceite de linaza cocido con negro de humo, espeso y pegajoso, con partículas metálicas que le daban ese negro brillante que aún hoy se distingue en sus Biblias. Se aplicaba con dos almohadillas de cuero rellenas de lana, golpeando la letra.
+
+7. LA PRENSA. El papel se humedecía para que recogiera bien la tinta y se sujetaba en un bastidor con una máscara que protegía los márgenes. Se bajaba sobre las letras, se deslizaba la base bajo el plato de presión y el prensista tiraba de una barra: era una prensa de tornillo, la misma que se usaba para el vino y el aceite, adaptada a este oficio.
+
+El rendimiento: un equipo de dos hombres sacaba entre 200 y 250 impresiones por hora. Un copista, en un día entero, hacía dos o tres páginas.
+
+Y esta tecnología duró: la imprenta de tipos móviles siguió siendo, en lo esencial, la misma durante más de cuatrocientos años, hasta la linotipia del siglo XIX. Nuestro vocabulario todavía la lleva dentro: componer, tipografía, caja alta y caja baja, plantilla, cliché, «sacar a la luz» una obra.
+
+**Dato curioso:** en China ya se habían fundido tipos móviles siglos antes (de cerámica en el siglo XI, y de metal en Corea, con un libro impreso así en 1377). No cambió el mundo allí por una razón práctica: con miles de caracteres distintos, montar una página exige un almacén inmenso, mientras que con un alfabeto de veintitantas letras cabe en una caja de madera.
+
+---
+
+## 2 · Renacimiento
+
+`renacimiento` · **Siglos XV-XVI**
+
+**Cuerpo:**
+
+El Renacimiento empieza como una moda cultural en las ciudades del norte de Italia: recuperar los textos, el arte y las formas de la Grecia y la Roma antiguas. Y arranca ahí por razones muy concretas: Florencia, Venecia, Milán o Génova eran repúblicas y señoríos comerciales llenos de dinero, con banqueros que querían prestigio y compraban arte, y con un pasado romano bajo los pies.
+
+El cambio profundo no fue estético, sino de perspectiva. El humanismo colocó al ser humano en el centro de la reflexión —su cuerpo, su razón, su historia, su capacidad de mejorar— sin renunciar necesariamente a la fe. La pregunta pasó de «qué quiere Dios» a «qué puede el hombre».
+
+En el arte se inventó la perspectiva matemática, que permite representar el espacio como lo ve el ojo; se estudió anatomía disecando cadáveres; se pintó al óleo con una profundidad nueva; y los artistas dejaron de ser artesanos anónimos para convertirse en autores con nombre, contrato y fama.
+
+Aparecieron figuras imposibles de encasillar. Leonardo da Vinci fue pintor, ingeniero militar, anatomista, urbanista, escenógrafo y botánico, y llenó miles de páginas de cuadernos con máquinas y observaciones. Miguel Ángel esculpió, pintó una bóveda entera y diseñó una cúpula. Copérnico era clérigo, médico y economista además de astrónomo.
+
+También conviene no idealizarlo. Fueron los siglos de las guerras de Italia, de los Borgia, de la Inquisición, de la caza de brujas y de la conquista de América. La misma sociedad que pintaba la Capilla Sixtina quemaba herejes.
+
+**Dato curioso:** la palabra «Renacimiento» no la usaron ellos: se la puso el historiador Jacob Burckhardt en el siglo XIX. Y en la Edad Media no se creían en una época oscura: fueron los humanistas quienes inventaron esa etiqueta para presumir de estar volviendo a la luz.
+
+---
+
+## 3 · Descubrimiento de América
+
+`descubrimiento-america` · **1492**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+No buscaba América: buscaba Asia. Los otomanos habían encarecido las rutas terrestres hacia Oriente y los portugueses estaban ganando la carrera rodeando África. Colón defendía que se podía llegar a las Indias navegando hacia el oeste.
+
+Su gran error fue el tamaño de la Tierra. Que era redonda lo sabían todos los cosmógrafos desde la Antigüedad; lo que Colón calculó mal —usando las cifras que más le convenían— fue la distancia. Pensaba que Asia estaba a unos 4.000 km al oeste de Canarias. Está a más de 19.000. Si no hubiera habido un continente en medio, la expedición habría muerto de sed.
+
+Partió de Palos el 3 de agosto de 1492 con tres barcos y unos noventa hombres, y tocó tierra el 12 de octubre en una isla de las Bahamas. Murió en 1506 convencido de haber llegado a Asia; el continente se llamó América por otro navegante, Américo Vespucio, que sí sostuvo que aquello era tierra nueva.
+
+El impacto fue el mayor de la historia moderna. Se llamó «intercambio colombino»: a Europa llegaron el maíz, la patata, el tomate, el cacao, el pimiento, la calabaza, la vainilla, el tabaco, el girasol y las judías; a América fueron el trigo, el arroz, la caña de azúcar, la vid, el olivo, el caballo, la vaca, el cerdo y la gallina. Sin la patata y el maíz, la población europea posterior no habría podido crecer como creció.
+
+Y también viajaron los microbios, en una dirección devastadora: la viruela, el sarampión, la gripe y el tifus encontraron a poblaciones sin ninguna defensa inmunitaria. La mayor parte de la catástrofe demográfica americana —quizá el 80 o 90 % de la población en un siglo— la causaron las enfermedades, no las armas.
+
+**Dato curioso:** Colón anotó en su diario que aquella gente era «muy mansa» y que «con cincuenta hombres los tendría a todos sojuzgados». La misma persona que abrió el contacto entre dos mundos escribió el manual de lo que vendría después.
+
+### Profundiza 1 · Isabel la Católica: «vasallos libres», y lo que pasó de verdad
+
+En 1495, Colón envió a España unos cientos de indígenas taínos capturados para venderlos como esclavos. Isabel ordenó suspender la venta y, en 1500, mandó liberar a los que quedaban vivos y devolverlos a su tierra a costa de la Corona. La tradición le atribuye una frase furiosa al enterarse: «¿Con qué autoridad da mi Almirante mis vasallos a nadie?».
+
+El punto jurídico es exactamente ese: no eran cosas ni botín, eran VASALLOS de la Corona de Castilla. Y si eran vasallos, eran personas libres con derechos, no esclavos.
+
+Lo dejó escrito. En el codicilo de su testamento, firmado en 1504, encarga a sus herederos que los indios «no reciban agravio alguno en sus personas ni en sus bienes», que sean bien tratados, y que si han recibido algún daño se les repare. Es una de las primeras veces en la historia en que un poder europeo declara por escrito que los habitantes de un territorio conquistado tienen derechos que el conquistador debe respetar.
+
+Y AHORA LA OTRA MITAD, que también hay que contar. Aquella ley se dictaba en Castilla y se aplicaba a 8.000 kilómetros, sin manera real de vigilarla. Se acuñó una frase que lo resume: «se acata pero no se cumple». La encomienda funcionó como trabajo forzado, las minas de plata devoraron vidas, hubo matanzas, expolios y esclavitud de hecho, y quienes debían aplicar las leyes eran los mismos que se beneficiaban de incumplirlas.
+
+Y por encima de todo estuvo lo que ninguna ley podía impedir: la viruela y el sarampión. Los taínos de La Española, los primeros en recibir a Colón, habían desaparecido prácticamente como pueblo en dos generaciones. Y cuando faltó mano de obra indígena, se importó mano de obra esclava de África, un comercio que sí fue legal durante siglos.
+
+El balance honesto es incómodo y doble: la monarquía española produjo la legislación protectora más avanzada de su época y, al mismo tiempo, presidió una de las mayores catástrofes demográficas de la historia. Las dos cosas son verdad, y entender la historia es poder sostener las dos a la vez.
+
+**Dato curioso:** el propio Colón acabó detenido por orden de los Reyes y devuelto a España con grilletes en 1500, acusado de gobernar La Española con crueldad, también contra los colonos españoles. Los reyes lo liberaron y lo indemnizaron, pero no le devolvieron el gobierno.
+
+---
+
+## 4 · Primera vuelta al mundo
+
+`primera-vuelta-mundo` · **1519-1522**
+
+**Cuerpo:**
+
+La expedición salió de Sevilla en 1519 con cinco naves y unos 240 hombres, al mando del portugués Fernando de Magallanes, al servicio de la corona española. El objetivo no era dar la vuelta al mundo: era encontrar un paso hacia las islas de las especias navegando hacia el oeste, para llegar a ellas sin usar la ruta portuguesa de África.
+
+Fue un viaje infernal. Un motín en la Patagonia terminado con ejecuciones; el hallazgo del estrecho que hoy lleva el nombre de Magallanes, un laberinto de canales helados; la deserción de una nave; y después el Pacífico, que resultó ser inmensamente más grande de lo que nadie imaginaba: tres meses y veinte días sin ver tierra habitada, comiendo galleta podrida, ratas, cuero de las jarcias y serrín, con la tripulación muriendo de escorbuto.
+
+Magallanes murió en abril de 1521 en la isla de Mactán, en Filipinas, en un combate con guerreros locales dirigidos por Lapulapu.
+
+El vasco Juan Sebastián Elcano tomó el mando de lo que quedaba y consiguió llegar a las Molucas, cargar clavo y volver a España por el océano Índico y el cabo de Buena Esperanza, esquivando a los portugueses. Llegó a Sanlúcar el 6 de septiembre de 1522 con una sola nave, la Victoria, y dieciocho hombres de los 240 que habían salido.
+
+Lo que aquel viaje demostró era imposible de discutir: la Tierra es una esfera navegable, todos los océanos están conectados y el planeta es mucho más grande de lo que decían los mapas. También descubrieron algo que nadie esperaba: al llegar, su diario iba un día por detrás del calendario de tierra. Habían perdido un día por navegar siempre hacia el oeste. Fue la primera prueba práctica de los husos horarios.
+
+**Dato curioso:** el cargamento de especias de aquella única nave superviviente fue suficiente para cubrir los gastos de toda la expedición y dejar beneficio. Eso explica por qué se seguía intentando: con cuatro barcos hundidos y el 92 % de la tripulación muerta, el viaje aún era rentable.
+
+---
+
+## 5 · Reforma Protestante
+
+`reforma-protestante` · **1517**
+
+**Cuerpo:**
+
+En 1517, un fraile y profesor de teología alemán, Martín Lutero, hizo públicas 95 tesis para debatir. Su motivo inmediato era escandaloso: se estaban vendiendo indulgencias —documentos que prometían reducir el castigo por los pecados— para financiar la construcción de San Pedro del Vaticano, con predicadores que llegaban a decir que en cuanto la moneda sonaba en el cofre, un alma salía del purgatorio.
+
+Lutero no pretendía fundar una iglesia. Pretendía discutir. Pero sus tesis se imprimieron, se tradujeron y circularon por toda Alemania en semanas: fue el primer fenómeno viral de la historia gracias a la imprenta.
+
+Su doctrina se resumía en tres ideas demoledoras para el sistema: la salvación se obtiene por la fe y no por obras compradas; la única autoridad es la Biblia, no la tradición ni el papa; y todo creyente es sacerdote de sí mismo, es decir, no necesita intermediarios. Lo que estaba desmontando era el monopolio de la Iglesia sobre el acceso a Dios.
+
+Para que eso fuera posible hizo algo decisivo: traducir la Biblia al alemán, para que cualquiera pudiera leerla sin depender del latín ni del clero. Aquella traducción fijó el alemán moderno.
+
+Se extendió tan rápido porque encajaba con intereses muy terrenales: los príncipes alemanes ganaban independencia frente al emperador y al papa —y, de paso, se quedaban con las tierras de la Iglesia—, y muchas ciudades comerciales veían con simpatía una religión menos ritual y más centrada en el trabajo y la conciencia individual.
+
+El resultado fue la fractura definitiva del cristianismo occidental: luteranos, calvinistas —Calvino organizó Ginebra como una república religiosa severa— y anglicanos, cuando Enrique VIII se separó de Roma por un asunto de divorcio y se declaró cabeza de la Iglesia de Inglaterra.
+
+**Dato curioso:** la historia de Lutero clavando las tesis en la puerta de la iglesia de Wittenberg puede ser una leyenda posterior. Lo que sí consta es que las envió por carta a su arzobispo, y que quienes las convirtieron en un movimiento fueron los impresores, no él.
+
+---
+
+## 6 · Contrarreforma
+
+`contrarreforma` · **Siglo XVI**
+
+**Cuerpo:**
+
+La reforma interna se decidió en el Concilio de Trento, que se reunió con interrupciones entre 1545 y 1563. Prohibió la venta de indulgencias y el nepotismo, obligó a los obispos a residir en sus diócesis (muchos cobraban sin pisarlas), creó los seminarios para que los sacerdotes tuvieran formación obligatoria, fijó el catecismo y la liturgia y reafirmó frente al protestantismo los sacramentos, el culto a los santos y la autoridad del papa.
+
+El instrumento más eficaz fue una orden nueva: la Compañía de Jesús, fundada por Ignacio de Loyola en 1540. Los jesuitas eran una élite formada, disciplinada y móvil, y su arma fue la educación: montaron centenares de colegios y universidades por Europa, América y Asia, con un método pedagógico propio que fue muy imitado. Y fueron misioneros extraordinarios: en China e India aprendieron la lengua, la ciencia y las costumbres locales para poder dialogar con las élites.
+
+El frente represivo fue el otro lado de la moneda: se reforzó la Inquisición y en 1559 se publicó el Índice de libros prohibidos, que estuvo vigente hasta 1966. Se censuró, se procesó y se quemó.
+
+En el arte, la respuesta fue el Barroco: si los protestantes vaciaban las iglesias de imágenes, el catolicismo las llenó de emoción, movimiento, dorado y dramatismo. No era decoración: era una estrategia de comunicación para conmover a una población que en gran parte no sabía leer.
+
+El resultado fue una Europa partida en dos que duró siglos: el norte protestante, el sur católico, y una frontera religiosa que todavía se nota en los mapas culturales del continente.
+
+**Dato curioso:** el calendario que usamos es hijo de esta época. En 1582, el papa Gregorio XIII corrigió el desfase acumulado del calendario juliano suprimiendo diez días de golpe. Los países católicos obedecieron de inmediato; Inglaterra tardó 170 años y Rusia esperó hasta 1918.
+
+---
+
+## 7 · Revolución Científica
+
+`revolucion-cientifica` · **Siglos XVI-XVII**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Durante siglos, en Europa una afirmación sobre la naturaleza se aceptaba por dos motivos: porque lo había dicho un autor antiguo de prestigio (Aristóteles, Galeno, Ptolomeo) o porque encajaba con la doctrina religiosa. El método consistía en leer, interpretar y argumentar, no en comprobar.
+
+Y funcionaba fatal. Se creía que los objetos pesados caen más rápido, que el corazón calienta la sangre, que las moscas nacen de la carne podrida y que el Sol gira alrededor de la Tierra. Nadie lo comprobaba porque no se consideraba necesario.
+
+El cambio consistió en invertir la jerarquía: si una autoridad y un experimento se contradicen, gana el experimento. Suena obvio hoy; en su momento era casi una insolencia.
+
+Las piezas fueron llegando de sitios distintos. Copérnico propuso que la Tierra gira alrededor del Sol. Vesalio abrió cadáveres y demostró que Galeno se había equivocado en decenas de detalles. Kepler descubrió que las órbitas son elipses porque los datos no cuadraban con los círculos. Galileo midió, cronometró y miró de verdad por un telescopio. Bacon defendió que hay que experimentar de forma sistemática y organizada. Descartes exigió dudar de todo y construir desde cero. Boyle publicaba sus experimentos con tal detalle que cualquiera pudiera repetirlos. Y Newton unió todo aquello en una física matemática.
+
+Eso es la Revolución Científica: no un descubrimiento, sino la invención de un método para descubrir y, sobre todo, para detectar errores. Es la herramienta que produjo todo lo demás: la medicina moderna, la electricidad, los ordenadores, las vacunas.
+
+**Dato curioso:** casi ninguno de ellos era «científico» de profesión: la palabra no existía (se acuñó en el siglo XIX). Eran clérigos, médicos, abogados, nobles ricos o funcionarios que investigaban en su tiempo libre y se escribían cartas entre países.
+
+### Profundiza 1 · El método científico, explicado
+
+El método científico no es una lista de pasos que hay que recitar: es una manera de protegerse de uno mismo, porque el ser humano es buenísimo encontrando lo que ya quiere encontrar. Funciona así:
+
+1. OBSERVAR y hacer una PREGUNTA concreta. No «¿por qué enfermamos?», sino «¿por qué mueren más mujeres de fiebres en esta sala que en aquella?».
+
+2. FORMULAR UNA HIPÓTESIS. Una explicación posible… con una condición fundamental: tiene que poder demostrarse FALSA. Si una idea es compatible con cualquier resultado posible, no es una hipótesis científica, es una opinión blindada. Esa exigencia se llama falsabilidad.
+
+4. EXPERIMENTAR, controlando las variables. Se cambia UNA cosa y se deja todo lo demás igual. Hace falta un grupo de control con el que comparar (los que no reciben el tratamiento), muestras suficientes para que no mande el azar y, cuando hay personas implicadas, ocultar quién recibe qué para que ni el paciente ni el investigador se autoengañen: eso es el doble ciego.
+
+5. MEDIR Y ANALIZAR. Datos, números, estadística. Y una regla de oro que se salta todo el mundo: que dos cosas ocurran juntas no significa que una cause la otra. La correlación no es causalidad.
+
+6. PUBLICAR con todos los detalles, incluidos el método, los datos y lo que ha fallado, para que otros puedan revisarlo (revisión por pares) y, sobre todo, REPETIRLO. Un resultado que solo funciona en las manos de quien lo descubrió no vale.
+
+7. Y si sobrevive a muchas pruebas independientes, pasa a ser una TEORÍA: no una suposición, sino un modelo que ha aguantado todos los intentos de tumbarlo. Y aun así, provisional: mañana puede aparecer un dato que la corrija.
+
+LA CLAVE MENTAL: en ciencia no se gana acumulando pruebas a favor, se gana sobreviviendo a los intentos de refutación. Mil experimentos que confirman una idea no la demuestran; uno bien hecho que la contradice la tumba.
+
+UN EJEMPLO REAL. En 1847, en el hospital de Viena, un médico llamado Semmelweis se preguntó por qué en la sala atendida por estudiantes de medicina morían de fiebre puerperal muchas más mujeres que en la atendida por matronas. Observó una diferencia: los estudiantes venían de hacer autopsias. Hipótesis: llevan algo en las manos. Intervención: obligarles a lavarse con una solución de cloro. Resultado medido: la mortalidad cayó de alrededor del 18 % a menos del 2 %. Tenía los datos, tenía el resultado… y sus colegas se ofendieron, lo rechazaron y él acabó apartado de la profesión. Décadas después, Pasteur y Lister demostraron por qué funcionaba. La historia enseña las dos mitades del método: los datos ganan a la autoridad, pero la autoridad se resiste, y por eso hace falta publicar, repetir y discutir en público.
+
+Y LOS PROBLEMAS DE HOY, que también son parte del método: publicar solo lo que sale bien, repetir un análisis hasta que salga un resultado bonito, muestras demasiado pequeñas, presión por publicar. La ciencia se corrige con más ciencia: registrar los estudios antes de hacerlos, compartir los datos y volver a repetir los experimentos famosos.
+
+**Dato curioso:** el lema de la Royal Society, «nullius in verba», significa literalmente «en palabras de nadie». Es decir: aquí no se cree a nadie por quién es. Se lleva puesto desde 1660 y sigue siendo la frase más subversiva de la historia del pensamiento.
+
+---
+
+## 8 · Galileo Galilei
+
+`galileo-galilei` · **Siglo XVII**
+
+**Cuerpo:**
+
+Galileo no inventó el telescopio, pero fue el primero en usarlo sistemáticamente para estudiar el cielo y en publicar lo que veía. Y lo que vio destrozaba la imagen del universo que se enseñaba.
+
+Vio montañas y cráteres en la Luna: los cielos no eran esferas perfectas e inmutables. Vio cuatro lunas girando alrededor de Júpiter: no todo giraba en torno a la Tierra. Vio que Venus tenía fases como la Luna, lo que solo tiene sentido si gira alrededor del Sol. Vio manchas en el Sol y una Vía Láctea hecha de estrellas incontables.
+
+El conflicto no fue simplemente «ciencia contra religión». Al principio tuvo apoyos entre cardenales y jesuitas. El problema llegó cuando entró a interpretar la Biblia, cuando se le prohibió defender el heliocentrismo como verdad demostrada y publicó de todos modos un libro en el que el defensor de la postura oficial quedaba como un tonto. Fue, además, un pésimo diplomático y se ganó enemigos poderosos.
+
+En 1633 la Inquisición lo juzgó, lo obligó a abjurar de rodillas y lo condenó a arresto domiciliario, donde pasó sus últimos años, ciego. Aun así, encerrado, escribió su mejor obra científica, sobre el movimiento y la resistencia de los materiales, que se publicó fuera de Italia.
+
+El caso se convirtió en el símbolo de lo que ocurre cuando el poder decide qué se puede investigar. La Iglesia católica lo reconoció formalmente en 1992, tras una comisión que duró trece años.
+
+**Dato curioso:** la frase «y sin embargo, se mueve» no consta en las actas del juicio; se le atribuyó un siglo después. Lo que sí es real es más sutil: en su libro prohibido puso los argumentos correctos en boca de un personaje llamado Salviati y los oficiales en boca de otro llamado Simplicio.
+
+---
+
+## 9 · Isaac Newton y los Principia
+
+`newton-principia` · **1687**
+
+**Cuerpo:**
+
+Hasta Newton, se creía que el mundo terrestre y el celeste funcionaban con reglas distintas: aquí abajo las cosas caen y se desgastan, allí arriba todo gira eterno y perfecto.
+
+Newton demostró que no: la fuerza que hace caer una manzana es la misma que mantiene a la Luna en órbita. La Luna, de hecho, está cayendo continuamente hacia la Tierra; lo que pasa es que se mueve de lado lo bastante rápido para no llegar nunca. Con eso quedaba unificado el universo entero bajo unas mismas leyes.
+
+Lo publicó en 1687 en los «Principia», donde estableció tres leyes del movimiento —un cuerpo mantiene su estado si nada actúa sobre él; fuerza igual a masa por aceleración; a toda acción corresponde una reacción— y la ley de la gravitación universal, con una fórmula que permite calcular la atracción entre dos cuerpos cualesquiera.
+
+Y esa era la novedad decisiva: se podía CALCULAR. Con sus ecuaciones se predecían eclipses, mareas, el regreso de un cometa (Halley lo hizo, y el cometa volvió cuando tocaba, ya muerto Newton) y, siglos después, la trayectoria de una nave a la Luna.
+
+Para hacer todo eso necesitaba una matemática que no existía y la inventó: el cálculo infinitesimal, con derivadas e integrales, al mismo tiempo que Leibniz lo desarrollaba por su cuenta (y con una amarga disputa entre ambos sobre quién fue primero).
+
+Fue además un personaje extrañísimo: solitario, rencoroso, obsesivo, dedicó tanto o más tiempo a la alquimia y a intentar fechar las profecías bíblicas que a la física. Y dirigió la Casa de la Moneda inglesa persiguiendo falsificadores hasta el patíbulo.
+
+**Dato curioso:** la historia de la manzana la contó él mismo de viejo, y probablemente no le cayó en la cabeza; lo que dijo es que al ver caer una se preguntó por qué la manzana cae y la Luna no. Su frase más honesta fue otra: «si he visto más lejos, es porque estaba subido a hombros de gigantes».
+
+---
+
+## 10 · Colonización europea
+
+`colonizacion-europea` · **Siglos XVI-XVIII**
+
+**Cuerpo:**
+
+España y Portugal montaron imperios territoriales, con virreinatos, ciudades, catedrales, universidades (la de Lima y la de México son de 1551) y una mezcla de población que dio lugar a sociedades nuevas. Su motor económico fue la plata de Potosí y de Zacatecas, extraída con trabajo forzado indígena, que financió las guerras europeas y llegó hasta China.
+
+Holanda e Inglaterra inventaron algo distinto: la compañía comercial privada con poderes de Estado. La Compañía Holandesa de las Indias Orientales y la Compañía Británica de las Indias Orientales tenían acciones en bolsa, ejércitos propios, podían firmar tratados y declarar guerras. Fue el nacimiento de la empresa multinacional y del capitalismo financiero moderno: la primera bolsa de valores del mundo es la de Ámsterdam.
+
+En Norteamérica se impuso otro modelo, el de colonias de poblamiento: llegaban familias enteras a quedarse y ocupar la tierra, lo que llevó al desplazamiento y la destrucción sistemática de las sociedades indígenas.
+
+El coste humano fue inmenso en las tres direcciones: catástrofe demográfica en América por las epidemias y el trabajo forzado; el comercio atlántico de esclavos en África; y la desarticulación de economías locales en Asia, donde por ejemplo la industria textil de la India, la más avanzada del mundo, fue arruinada para favorecer la de Manchester.
+
+Y a Europa le trajo, además de riqueza, ideas nuevas: mapas, plantas, animales, lenguas y la incómoda constatación de que existían otras formas de organizar la vida humana. De ahí salieron el derecho internacional, la antropología… y también las teorías racistas que se inventaron después para justificar lo que ya se estaba haciendo.
+
+**Dato curioso:** la plata americana llegó a ser una moneda global. El «real de a ocho» español circulaba en Manila, en Cantón y en las colonias inglesas, y fue moneda legal en Estados Unidos hasta 1857. El símbolo del dólar, $, procede de esas monedas españolas.
+
+---
+
+## 11 · Comercio atlántico
+
+`comercio-atlantico` · **Siglos XVI-XVIII**
+
+**Cuerpo:**
+
+El esquema más conocido es el «comercio triangular». De Europa salían barcos con manufacturas: telas, armas, alcohol, herramientas, abalorios. En las costas de África se cambiaban por personas esclavizadas, capturadas en el interior y vendidas por intermediarios africanos y europeos. Esos cautivos cruzaban el Atlántico y se vendían en América. Y de América volvían a Europa azúcar, tabaco, café, algodón, cacao y plata.
+
+El tramo del medio, la travesía, duraba entre uno y tres meses en condiciones que cuesta describir: hombres y mujeres encadenados en entrepuentes de menos de un metro de altura, tumbados sin poder incorporarse, con disentería, sin aire y sin agua suficiente. Morían por el camino entre el 10 % y el 20 %, y a veces mucho más.
+
+Las cifras son enormes: alrededor de doce millones y medio de africanos fueron embarcados entre los siglos XVI y XIX, y cerca de once millones llegaron vivos. La mayoría no fue a Estados Unidos, como se suele pensar, sino a Brasil y al Caribe, a las plantaciones de azúcar, donde la esperanza de vida de un esclavo recién llegado se contaba en pocos años.
+
+El azúcar es la clave económica de todo esto: era un producto adictivo, de consumo creciente y con un beneficio altísimo, y sus plantaciones necesitaban muchísima mano de obra barata y desechable. Los puertos que crecieron con este comercio —Liverpool, Bristol, Nantes, Burdeos, Lisboa, Cádiz— financiaron bancos, seguros, astilleros y buena parte del capital que después alimentó la Revolución Industrial.
+
+La abolición llegó tarde y a empujones: Gran Bretaña prohibió el tráfico en 1807 y la esclavitud en sus colonias en 1833; Francia definitivamente en 1848; Estados Unidos en 1865; Brasil, el último gran país americano, en 1888.
+
+**Dato curioso:** la primera revuelta que triunfó fue la de Haití. En 1791 los esclavizados de la colonia francesa más rica del mundo se sublevaron, derrotaron a los ejércitos de Francia, España e Inglaterra y en 1804 proclamaron el primer Estado independiente nacido de una revolución de esclavos. Francia les impuso a cambio una indemnización que Haití terminó de pagar en 1947.
+
+---
+
+## 12 · Ilustración
+
+`ilustracion` · **Siglo XVIII**
+
+**Cuerpo:**
+
+La Ilustración fue la idea de que la razón, y no la tradición ni la revelación, debe guiar la organización de la sociedad. Su lema, según Kant, era «atrévete a pensar por ti mismo».
+
+Aplicado a la política, era dinamita. Si el poder no viene de Dios sino de un acuerdo entre personas, entonces un rey no manda por derecho divino, sino porque los gobernados lo aceptan, y si incumple, se le puede sustituir.
+
+Cada pensador aportó una pieza. Locke: existen derechos naturales —vida, libertad, propiedad— anteriores a cualquier gobierno. Montesquieu: para que el poder no abuse hay que dividirlo en tres —legislativo, ejecutivo y judicial— y hacer que se vigilen entre sí. Rousseau: la soberanía pertenece al pueblo. Voltaire: libertad de expresión y tolerancia religiosa, con una campaña incansable contra los abusos judiciales de su tiempo. Beccaria: contra la tortura y la pena de muerte. Adam Smith: la riqueza nace del trabajo y del intercambio. Y Olympe de Gouges y Mary Wollstonecraft señalaron lo que los demás pasaban por alto: que aquellos derechos «universales» se estaban escribiendo solo para los varones.
+
+Su gran herramienta fue la Enciclopedia de Diderot y d'Alembert: 28 volúmenes para reunir todo el conocimiento útil, incluidos los oficios manuales, con la intención declarada de «cambiar la forma de pensar común». Se difundió pese a la censura, y buena parte de la nobleza y del clero ilustrado la compró.
+
+Y en menos de veinte años sus ideas se convirtieron en dos hechos: la independencia de Estados Unidos y la Revolución Francesa. Las constituciones, las declaraciones de derechos y la división de poderes de casi todos los países actuales salieron de aquí.
+
+**Dato curioso:** no todos los ilustrados fueron coherentes con sus propios principios. Varios defendieron la igualdad natural mientras invertían en compañías esclavistas o escribían páginas racistas. La Ilustración proclamó derechos universales que tardarían siglos en aplicarse de verdad, y ese desfase es la historia política de los dos siglos siguientes.
+
+---
+
+## 13 · Máquina de vapor
+
+`maquina-vapor` · **1769**
+
+**Cuerpo:**
+
+Durante toda la historia, la fuerza disponible para trabajar había sido siempre la misma: personas, animales, corrientes de agua y viento. Todas tienen límites y todas dependen del lugar y del clima: un molino necesita río, un barco necesita viento.
+
+El vapor rompió esa dependencia. Ya existían máquinas anteriores —la de Newcomen, usada para desaguar minas—, pero eran devoradoras de carbón y de rendimiento pésimo, porque en cada ciclo había que calentar y enfriar el mismo cilindro.
+
+James Watt vio el problema exacto y lo resolvió en 1769 con una idea sencilla y brillante: separar el condensador del cilindro, de modo que el cilindro se mantuviera siempre caliente. Con eso el consumo de carbón se redujo drásticamente. Luego añadió el movimiento rotatorio, que fue lo que permitió mover no solo bombas, sino máquinas de fábrica, ruedas, hélices y ejes.
+
+A partir de ahí, la energía se volvió portátil y constante: se podía instalar una fábrica donde interesara —junto al carbón, junto al puerto, junto a la ciudad— y trabajar de día y de noche, en verano y en invierno.
+
+También tuvo un efecto imprevisto y decisivo para nuestra época: para alimentar todo aquello había que quemar carbón, y ahí empieza la curva de emisiones que hoy llamamos cambio climático. La era industrial y la crisis climática tienen la misma fecha de nacimiento.
+
+**Dato curioso:** la unidad de potencia «caballo de vapor» la inventó Watt como argumento de ventas: comparaba su máquina con el número de caballos que sustituía, porque era la única medida que sus clientes entendían. Y el vatio, la unidad eléctrica, lleva su nombre.
+
+---
+
+## 14 · Revolución Industrial
+
+`revolucion-industrial` · **Siglos XVIII-XIX**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Durante milenios, casi todo se había fabricado a mano, en talleres, por artesanos que dominaban un oficio completo. En unas décadas, eso se sustituyó por máquinas, fábricas y trabajadores especializados en una sola tarea.
+
+Que empezara en Inglaterra no fue casualidad: tenía carbón y hierro juntos y accesibles; ríos navegables y luego canales; capital acumulado del comercio colonial y atlántico; un sistema bancario y de patentes que premiaba inventar; mucha mano de obra disponible porque los cercamientos habían expulsado a los campesinos de las tierras comunales; y un mercado colonial enorme donde vender lo producido.
+
+El precio social fue durísimo. Jornadas de doce a dieciséis horas, seis días por semana, en naves ruidosas y sin ventilación; salarios de subsistencia; niños desde los cinco o seis años metidos bajo las máquinas en marcha para recoger algodón; accidentes constantes; ciudades que crecieron sin alcantarillado, con familias enteras en un sótano y epidemias de cólera. En algunos barrios industriales, la esperanza de vida bajó por debajo de la del campo.
+
+Y la reacción vino en tres formas: la destrucción de máquinas por los luditas (castigada con la pena de muerte a partir de 1812); el sindicalismo y las primeras leyes de fábricas, que fueron limitando el trabajo infantil y la jornada; y una crítica intelectual del sistema, que Marx y Engels escribieron mirando precisamente Manchester.
+
+A largo plazo, sin embargo, cambió el nivel de vida de la humanidad. Por primera vez en la historia la producción por persona creció de forma sostenida y no volvió a caer, y objetos que habían sido lujos —ropa, jabón, vajilla, libros, luz— se volvieron accesibles.
+
+**Dato curioso:** la palabra «salario» viene de la sal, con la que se pagaba a los soldados romanos. Pero la palabra «fábrica» viene de fabrica, «taller de artesano». El nombre de aquellos edificios inmensos conservó el recuerdo del taller que habían destruido.
+
+### Profundiza 1 · La especialización: la idea que multiplicó la producción
+
+El invento más potente de la Revolución Industrial no fue una máquina: fue una forma de organizar el trabajo. Y quien lo explicó mejor fue Adam Smith en 1776, con el ejemplo de una fábrica de alfileres.
+
+Un artesano trabajando solo, haciendo un alfiler entero de principio a fin —estirar el alambre, cortarlo, afilar la punta, forjar la cabeza, pulir, empaquetar— podía sacar unos veinte alfileres al día. Diez trabajadores repartiéndose esas mismas operaciones, cada uno haciendo una sola, producían unos 48.000 al día. Es decir, unos 4.800 por persona: doscientas cuarenta veces más.
+
+¿Por qué funciona? Por tres razones concretas. Primera: no se pierde tiempo cambiando de tarea, de herramienta y de posición. Segunda: repetir un solo gesto miles de veces hace que se domine con una velocidad y una precisión imposibles de otro modo. Y tercera, la decisiva: una tarea reducida a un gesto simple se puede MECANIZAR. Nadie sabe construir una máquina que fabrique un alfiler entero; cualquiera puede construir una que afile puntas.
+
+El siguiente paso fue especializar también las PIEZAS. Si todas las piezas de un fusil, de un reloj o de una máquina son idénticas e intercambiables, cualquier operario puede montar el conjunto y cualquier pieza rota se sustituye sin llamar a un artesano. Eso, que empezó con la fabricación de armas a finales del XVIII, terminó en la cadena de montaje: en 1913, Ford redujo el tiempo de ensamblaje de un automóvil de más de doce horas a hora y media, y el precio del coche a menos de la tercera parte.
+
+Y ahora el otro lado. El zapatero que hacía un zapato completo era dueño de su oficio: sabía todo, decidía su ritmo y podía trabajar por su cuenta. El operario que cose una sola costura durante doce horas no sabe hacer un zapato, no controla nada y es fácilmente reemplazable, lo que además tira sus salarios hacia abajo. Y como el gesto es simple, puede hacerlo alguien sin formación… incluido un niño, que cobra menos y cabe debajo de la máquina. La especialización creó la riqueza moderna y también la alienación y el trabajo infantil de las fábricas.
+
+En 1911, Frederick Taylor llevó la idea al extremo: cronometró cada movimiento de cada obrero para eliminar los «inútiles» y fijar el modo óptimo de hacer cada gesto. Se produjo mucho más y el trabajo se volvió más monótono y más vigilado que nunca. Chaplin hizo con eso una película, «Tiempos modernos», que sigue explicándolo mejor que cualquier ensayo.
+
+**Dato curioso:** Ford subió el salario a cinco dólares al día en 1914, el doble de lo normal, y no fue por generosidad: el trabajo en cadena era tan insoportablemente monótono que la rotación de personal llegaba al 370 % al año. Tenía que contratar a más de cincuenta mil personas para mantener a quince mil en su puesto.
+
+---
+
+## 15 · Independencia de Estados Unidos
+
+`independencia-eeuu` · **1776**
+
+**Cuerpo:**
+
+Las trece colonias británicas de Norteamérica eran prósperas y bastante autónomas, con asambleas propias. El conflicto empezó por los impuestos que Londres les impuso para pagar las guerras contra Francia: el impuesto del timbre, el del té, las tasas aduaneras.
+
+El argumento de los colonos no era «no queremos pagar», sino un principio político: «ningún impuesto sin representación». Si no tenían diputados en el Parlamento británico, ese Parlamento no tenía derecho a gravarles. Cuando en 1773 tiraron al mar el cargamento de té de Boston, la respuesta represiva de Londres unió a las colonias.
+
+El 4 de julio de 1776 aprobaron la Declaración de Independencia, un texto redactado en su mayor parte por Jefferson que empieza afirmando que todos los hombres son creados iguales y que tienen derechos inalienables: la vida, la libertad y la búsqueda de la felicidad. Era Locke y la Ilustración convertidos en documento fundacional de un país.
+
+Después hicieron algo aún más difícil que ganar: diseñar un Estado. La Constitución de 1787 creó una república federal con división de poderes, elecciones periódicas, un presidente en lugar de un rey y un sistema de frenos y contrapesos, y añadió una declaración de derechos.
+
+Y en el mismo documento quedó su contradicción de fondo: aquella república de hombres libres e iguales mantuvo la esclavitud de cientos de miles de personas, y varios de los firmantes de la frase «todos los hombres son creados iguales» eran propietarios de esclavos. Esa contradicción no se resolvería hasta una guerra civil ochenta años después.
+
+**Dato curioso:** el modelo se copió inmediatamente. La independencia de Estados Unidos demostró que era posible romper con una monarquía europea y construir una república estable, y sus ideas fueron el guion de las revoluciones de Hispanoamérica y de buena parte del constitucionalismo moderno.
+
+---
+
+## 16 · Revolución Francesa
+
+`revolucion-francesa` · **1789**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+Francia era el país más poblado y culto de Europa, y estaba en bancarrota: las guerras y la ayuda a la independencia de Estados Unidos habían dejado al Estado sin dinero, y varias malas cosechas habían disparado el precio del pan, que se llevaba más de la mitad del jornal de una familia obrera.
+
+El problema no era solo económico, era estructural. La sociedad estaba dividida en tres estamentos: clero, nobleza y el resto —el llamado Tercer Estado, el 97 % de la población—, y los dos primeros estaban prácticamente exentos de impuestos. Es decir: los que no podían pagar eran los únicos que pagaban.
+
+Cuando el rey convocó los Estados Generales para pedir dinero, el Tercer Estado exigió votar por cabeza y no por estamento, se declaró Asamblea Nacional y juró no separarse hasta dar una constitución al país. Ese fue el momento revolucionario: un grupo de diputados decidiendo que la soberanía era suya y no del rey.
+
+El 14 de julio de 1789 el pueblo de París asaltó la Bastilla, una fortaleza-prisión que era el símbolo del poder arbitrario del rey. En agosto se abolieron los privilegios feudales y se aprobó la Declaración de los Derechos del Hombre y del Ciudadano. En octubre, una marcha de mujeres de los mercados de París trajo al rey de Versalles a la capital.
+
+Luego vino todo lo demás: la huida y captura del rey, la guerra contra media Europa, la proclamación de la República, la ejecución de Luis XVI en enero de 1793, el Terror, el golpe que lo terminó y, en 1799, Napoleón.
+
+Lo que quedó es lo que hoy nos parece normal: la igualdad ante la ley, el fin de los privilegios de nacimiento, la nación como sujeto político, la escuela y el registro civil, el sistema métrico decimal, la idea de constitución y de ciudadanía. Y también algo menos amable: que una revolución hecha en nombre de la libertad puede acabar en terror y en dictadura militar.
+
+**Dato curioso:** los propios revolucionarios eran conscientes del riesgo. El diputado Vergniaud, poco antes de ser guillotinado, dijo que la Revolución, como Saturno, podía acabar devorando a sus propios hijos.
+
+### Profundiza 1 · El Reino del Terror de Robespierre
+
+Entre septiembre de 1793 y julio de 1794, la República se defendió mediante el terror organizado por ley. El contexto importa para entenderlo, aunque no lo justifique: Francia estaba invadida por Austria, Prusia, Gran Bretaña y España a la vez, con una guerra civil en la Vendée, revueltas en Lyon, Marsella y Tolón, hambre en las ciudades y el líder popular Marat asesinado en su bañera.
+
+El poder real pasó a un comité de doce hombres, el Comité de Salvación Pública, con facultades dictatoriales. Su figura central fue Maximilien Robespierre, un abogado de provincias apodado «el Incorruptible»: austero, honesto en lo personal, vivía en casa de un carpintero, y años antes había defendido en la Asamblea la abolición de la pena de muerte.
+
+Su lógica quedó escrita en un discurso: «el terror no es otra cosa que la justicia pronta, severa e inflexible… la virtud sin el terror es impotente». Cuando alguien se convence de que representa la virtud, cualquier oposición se convierte en traición.
+
+Las cifras del conjunto: unas 16.600 condenas a muerte oficiales en toda Francia, más entre diez y doce mil personas ejecutadas o muertas sin juicio, y alrededor de 300.000 detenidos. Y aparte, la represión de la Vendée, con las «columnas infernales» arrasando aldeas, los fusilamientos masivos de Lyon y los ahogamientos colectivos en el Loira ordenados por el representante Carrier en Nantes: allí se cuentan entre 170.000 y 250.000 muertos.
+
+Cayeron el rey y la reina, los girondinos, Madame Roland —que dejó al pie de la guillotina la frase «oh, libertad, cuántos crímenes se cometen en tu nombre»—, Olympe de Gouges por haber escrito una declaración de los derechos de la mujer, y Lavoisier, el fundador de la química moderna, del que se dijo que «hizo falta un instante para cortar esa cabeza y quizá cien años no den otra igual». Y cayeron los propios revolucionarios: Danton y Desmoulins, antiguos compañeros de Robespierre, fueron guillotinados en abril de 1794 por pedir clemencia. Danton, camino del cadalso, pidió que mostraran su cabeza al pueblo: «merece la pena verla».
+
+Y un dato que rompe el tópico: la mayoría de los guillotinados no fueron aristócratas. Alrededor del 85 % eran plebeyos —campesinos, jornaleros, artesanos, tenderos—, acusados de acaparar grano, de desertar, de hablar de más o de haber caído en la lista equivocada. Los nobles fueron menos del 10 %.
+
+El final llegó cuando el Terror empezó a amenazar a los propios diputados. El 9 de Termidor (27 de julio de 1794), Robespierre fue abucheado en la Convención, se le impidió hablar —alguien gritó que «la sangre de Danton lo ahoga»— y fue detenido. Durante el arresto un disparo le destrozó la mandíbula. Pasó su última noche tendido en una mesa, sin poder hablar, y al día siguiente fue guillotinado con veintiún seguidores; el verdugo le arrancó el vendaje antes de la cuchilla y su grito se oyó en la plaza.
+
+Y quedó una pregunta que sigue abierta y que merece pensarse: ¿fue el Terror el precio de salvar a la República del invasor y de la guerra civil, o el momento en que una revolución hecha por la libertad empezó a devorar a su propia gente? Casi todos los grandes debates políticos posteriores sobre el «estado de excepción», la seguridad y los derechos son hijos de esos once meses.
+
+**Dato curioso:** la guillotina se adoptó por humanitarismo. El doctor Guillotin la propuso para que la ejecución fuera instantánea y, sobre todo, IGUAL para todos: hasta entonces los nobles eran decapitados con espada y los plebeyos ahorcados, descuartizados o quemados. Un instrumento pensado para hacer la muerte más igualitaria acabó siendo el símbolo del Terror, y la familia Guillotin tuvo que cambiarse el apellido.
+
+
+# ERA · Era Industrial
+
+`key: era-industrial` · Época: **1789 – 1945**
+
+---
+
+## 1 · Guerras Napoleónicas
+
+`guerras-napoleonicas` · **1803-1815**
+
+**Cuerpo:**
+
+Napoleón Bonaparte era un oficial de artillería corso, de familia modesta, que ascendió gracias a que la Revolución había abierto la carrera militar al mérito. En 1799 dio un golpe de Estado, en 1804 se coronó emperador él mismo, y en una década dominó casi toda Europa continental.
+
+Pero su huella real fue administrativa. Donde llegaba, imponía el Código Civil —que abolía los privilegios feudales, igualaba a los ciudadanos ante la ley, garantizaba la propiedad y separaba el Estado de la Iglesia—, el registro civil, un sistema fiscal ordenado y una administración profesional. Ese código sigue siendo la base del derecho civil de buena parte del mundo.
+
+Lo derrotaron tres cosas. Primero, el mar: la flota británica lo aniquiló en Trafalgar en 1805 y nunca pudo invadir Inglaterra. Segundo, España: la guerra de guerrillas y la resistencia popular tras el 2 de mayo de 1808 le costaron años, dinero y trescientos mil hombres en lo que él mismo llamó «mi úlcera española». Y tercero, Rusia: entró en 1812 con más de medio millón de soldados y salió con unas decenas de miles, destruido por las distancias, el hambre, el tifus y el invierno.
+
+Tras Waterloo (1815) fue desterrado a Santa Elena, una isla del Atlántico Sur, donde murió a los 51 años.
+
+Y aquí está la ironía de su historia: fue a Europa a imponer un imperio y lo que dejó sembrado fue el nacionalismo. Los pueblos que se levantaron contra él —españoles, alemanes, rusos, italianos— descubrieron en esa lucha la idea de nación, que dominaría el siglo siguiente.
+
+**Dato curioso:** no era bajito. Medía alrededor de 1,68 m, por encima de la media francesa de su tiempo. La leyenda de su estatura viene de la propaganda británica y de una confusión entre las pulgadas francesas y las inglesas.
+
+---
+
+## 2 · Independencias de Hispanoamérica
+
+`independencias-hispanoamerica` · **1808-1826**
+
+**Cuerpo:**
+
+El detonante vino de Europa: en 1808 Napoleón invadió España, secuestró al rey y puso a su hermano en el trono. De repente, los territorios americanos se quedaron sin rey legítimo a quien obedecer.
+
+La primera reacción no fue independentista, sino todo lo contrario: se formaron juntas de gobierno «en nombre de Fernando VII». Pero al asumir el poder local, las élites criollas —descendientes de españoles nacidos en América— descubrieron que podían gobernarse solas, y que llevaban generaciones apartadas de los altos cargos, reservados a los peninsulares.
+
+Las guerras fueron largas y crudelísimas, y en gran medida guerras civiles: hubo americanos realistas y españoles independentistas, y regiones que cambiaron de manos varias veces. Simón Bolívar, que llegó a proclamar la «guerra a muerte», recorrió medio continente y cruzó los Andes por pasos imposibles; José de San Martín hizo lo mismo desde el sur y liberó Chile y Perú; en México el proceso empezó con dos curas, Hidalgo y Morelos, con un componente social e indígena muy fuerte, y terminó de forma conservadora.
+
+En 1826 solo quedaban Cuba y Puerto Rico en manos españolas. Habían nacido más de quince países nuevos.
+
+Y el sueño de Bolívar fracasó: quería una gran federación hispanoamericana capaz de contar en el mundo, y lo que quedó fue una fragmentación en repúblicas enfrentadas, con ejércitos poderosos, economías dependientes de un solo producto y una desigualdad social que la independencia no tocó. Al final de su vida escribió una frase amarga: «he arado en el mar».
+
+**Dato curioso:** la independencia cambió a los gobernantes, no la estructura social. La esclavitud tardó décadas en abolirse en varios países, y la población indígena y mestiza siguió excluida del voto y de la tierra durante generaciones.
+
+---
+
+## 3 · Ferrocarril
+
+`ferrocarril` · **Siglo XIX**
+
+**Cuerpo:**
+
+Durante toda la historia, la velocidad máxima de una persona había sido la de un caballo al galope, y solo por poco tiempo. Un viaje de Madrid a Barcelona era cuestión de semanas.
+
+El ferrocarril rompió ese techo. Combinaba tres cosas: la máquina de vapor, los rieles de hierro (que reducen la fricción) y una organización empresarial capaz de construir líneas enteras. La primera línea de pasajeros con locomotora, Liverpool-Mánchester, se inauguró en 1830, y en cincuenta años había cientos de miles de kilómetros de vía en el mundo.
+
+Cambió el paisaje humano: las ciudades crecieron alrededor de las estaciones, aparecieron los suburbios (se podía vivir lejos y trabajar en el centro), los mercados dejaron de ser locales, y el pescado fresco, la leche y la fruta llegaron a lugares donde nunca se habían visto.
+
+Y cambió el tiempo, literalmente. Antes, cada ciudad tenía su propia hora, marcada por su sol. Con trenes que cruzaban un país en un día, los horarios eran imposibles de coordinar, así que se impuso una hora oficial común y, en 1884, los husos horarios mundiales. La hora en tu móvil es un invento del ferrocarril.
+
+También tuvo efectos oscuros: fue una herramienta clave de los imperios coloniales para extraer materias primas, y su construcción costó decenas de miles de vidas de obreros, a menudo inmigrantes contratados en condiciones brutales.
+
+**Dato curioso:** hubo médicos que advirtieron seriamente de que viajar a 40 km/h podía provocar locura, asfixia o daños en el útero. Cada tecnología nueva ha tenido su propia versión de ese pánico.
+
+---
+
+## 4 · Electricidad
+
+`electricidad` · **Siglos XIX-XX**
+
+**Cuerpo:**
+
+El vapor había liberado la energía del río y del viento, pero seguía siendo un armatoste: había que llevar la caldera a donde estuviera la máquina, con ejes, correas y humo. La electricidad hizo algo distinto: separó dónde se produce la energía de dónde se usa.
+
+Luego vino la aplicación masiva. Edison montó en 1882 la primera central y la primera red de distribución con bombillas incandescentes, y creó también algo nuevo: el laboratorio industrial, un lugar donde se inventaba de forma sistemática y en equipo. Tesla y Westinghouse impusieron la corriente alterna, que sí podía transportarse a cientos de kilómetros, y con ella la red eléctrica moderna.
+
+Los efectos en la vida cotidiana fueron inmediatos y enormes. Luz limpia y barata: la jornada dejó de terminar al anochecer, se pudo leer y estudiar de noche, las ciudades se volvieron más seguras. Motores eléctricos: cada máquina con el suyo, lo que permitió fábricas más flexibles y talleres pequeños. Y en casa, la nevera, la lavadora, la plancha y el aspirador, que redujeron drásticamente las horas de trabajo doméstico, que hacían casi en exclusiva las mujeres.
+
+Y sobre ella se construyó todo lo que vino después: el telégrafo, el teléfono, la radio, la televisión, el ordenador e internet. La electricidad no es un invento entre otros: es la infraestructura de la que dependen los demás.
+
+**Dato curioso:** hoy, alrededor de 700 millones de personas siguen viviendo sin acceso a la electricidad. El invento que define la vida moderna todavía no ha llegado a todo el mundo.
+
+---
+
+## 5 · Telégrafo
+
+`telegrafo` · **1837**
+
+**Cuerpo:**
+
+Durante milenios, una noticia solo podía viajar a la velocidad de la persona, el caballo o el barco que la llevaba. Las decisiones importantes se tomaban con información de semanas o meses de retraso.
+
+El telégrafo eléctrico rompió eso por primera vez. Con un simple circuito, un interruptor y un código de pulsos —el de Morse, con puntos y rayas— un mensaje podía recorrer cientos de kilómetros en minutos.
+
+El salto definitivo fue el cable submarino. Tras varios intentos fracasados y carísimos, en 1866 quedó operativo un cable transatlántico entre Irlanda y Terranova. Un mensaje que antes tardaba diez días en barco llegaba en unos minutos. En pocas décadas los cables unieron Europa, América, la India, Australia y África.
+
+Las consecuencias fueron enormes y muy concretas. Los mercados financieros se sincronizaron: por primera vez el precio del algodón en Liverpool y en Nueva Orleans era casi el mismo el mismo día, y nacieron las agencias de noticias (Reuters empezó usando palomas y luego cables). Los imperios pudieron gobernar a distancia de verdad. Los ejércitos coordinaron movimientos a escala nacional. Y el periódico pasó a contar lo que había pasado ayer en el otro extremo del mundo.
+
+**Dato curioso:** el primer mensaje que Morse envió en 1844 en la línea Washington-Baltimore fue una cita bíblica: «¿Qué ha forjado Dios?». Y en las oficinas de telégrafos trabajaron algunas de las primeras mujeres empleadas de la industria moderna.
+
+---
+
+## 6 · Teoría de la evolución
+
+`teoria-evolucion` · **1859**
+
+**Cuerpo:**
+
+Antes de Darwin, la explicación aceptada era que cada especie había sido creada tal como es. Pero había hechos que no encajaban: los fósiles de animales que ya no existen, las especies parecidas en islas cercanas, los órganos inútiles (¿para qué tiene una ballena huesos de dedos en las aletas?).
+
+Darwin pasó cinco años dando la vuelta al mundo en el Beagle observando y recogiendo muestras, y luego más de veinte años acumulando pruebas y sin publicar, consciente de la tormenta que iba a provocar. Publicó en 1859, empujado en parte porque otro naturalista, Alfred Russel Wallace, había llegado a la misma idea por su cuenta.
+
+La idea es asombrosamente simple y tiene tres ingredientes: los individuos de una especie no son idénticos; algunas de esas diferencias se heredan; y nacen más individuos de los que pueden sobrevivir. La consecuencia es inevitable: los que por azar tienen alguna variación que encaja mejor con su entorno dejan más descendencia, y esa variación se hace más frecuente. Repetido durante millones de años, produce especies nuevas.
+
+Lo importante es lo que la teoría NO dice. No dice que sobreviva «el más fuerte», sino el que mejor encaja en su entorno concreto —a veces el más pequeño, el más discreto o el que mejor coopera—. No dice que la evolución tenga un objetivo ni una dirección hacia lo «superior». Y no dice que el hombre venga del mono: dice que los monos actuales y nosotros compartimos un antepasado común.
+
+Fue una de las ideas más incómodas de la historia porque sacaba al ser humano de su pedestal y explicaba la complejidad de la vida sin necesidad de un diseñador. Y le faltaba una pieza que Darwin nunca conoció: no sabía cómo se heredaban los rasgos. Eso lo estaba descubriendo, al mismo tiempo y sin que nadie le hiciera caso, un monje llamado Mendel con sus guisantes.
+
+**Dato curioso:** la frase «la supervivencia del más apto» no es de Darwin, sino del filósofo Herbert Spencer, y se ha usado para justificar barbaridades sociales que Darwin nunca defendió. Del uso torcido de su teoría salieron el darwinismo social y la eugenesia.
+
+---
+
+## 7 · Guerra de Secesión y el fin de la esclavitud
+
+`guerra-secesion` · **1861-1865**  ·  1 pág. Profundiza
+
+**Cuerpo:**
+
+A mediados del siglo XIX, Estados Unidos era en realidad dos economías. El norte era industrial, urbano y de trabajo asalariado; el sur vivía del algodón cultivado por casi cuatro millones de personas esclavizadas, que representaban una fortuna colosal en «propiedad».
+
+La chispa fue la elección de Abraham Lincoln en 1860. Lincoln no era abolicionista radical: su programa era impedir que la esclavitud se extendiera a los nuevos territorios del oeste, no eliminarla donde existía. Pero los estados del sur entendieron perfectamente que sin expansión el sistema estaba condenado, y once de ellos se separaron y formaron la Confederación. En abril de 1861 abrieron fuego contra el fuerte Sumter.
+
+La guerra que siguió fue la primera guerra industrial de la historia, y ahí está su importancia mundial: ferrocarriles para mover ejércitos enteros, telégrafo para dirigirlos, fusiles de repetición, acorazados, trincheras, primeras ametralladoras y una capacidad de fabricación que decidió el resultado. También fue una guerra fotografiada: por primera vez el público de las ciudades vio imágenes reales de cadáveres en un campo de batalla.
+
+Murieron entre 620.000 y 750.000 personas, más que en todas las demás guerras estadounidenses juntas hasta Vietnam. Dos tercios murieron de enfermedad, no de heridas.
+
+El 1 de enero de 1863, con la guerra estancada, Lincoln firmó la Proclamación de Emancipación: declaró libres a los esclavos de los territorios en rebeldía y —el punto que cambió la guerra— autorizó su reclutamiento en el ejército de la Unión. A partir de ese momento, cada avance del ejército del norte era literalmente una liberación.
+
+El sur se rindió en abril de 1865 en Appomattox. Cinco días después, Lincoln fue asesinado en un teatro por un fanático sudista, que había escuchado su último discurso público apoyando el derecho al voto de algunos hombres negros. Ese mismo año se aprobó la Decimotercera Enmienda, que abolió la esclavitud en todo el país.
+
+**Dato curioso:** en el discurso de Gettysburg, en 1863, Lincoln habló durante dos minutos y usó 272 palabras. El orador que le precedió habló dos horas. Nadie recuerda una sola frase de aquel discurso largo.
+
+### Profundiza 1 · Los soldados negros: 180.000 hombres que se ganaron un país
+
+Al empezar la guerra, el ejército de la Unión no aceptaba soldados negros. Se decían de ellos las cosas de siempre: que no servirían, que no aguantarían el fuego, que su presencia ofendería a los blancos. Frederick Douglass, que había nacido esclavo y se había convertido en el orador más influyente del país, llevaba años insistiendo en lo contrario, y su argumento era político: «dejad que el hombre negro se ponga en el pecho las letras U.S. … y no habrá poder en la tierra que pueda negarle que se ha ganado el derecho a la ciudadanía».
+
+En 1863, con la Proclamación de Emancipación, se autorizó el reclutamiento y se creó una oficina específica para organizar los regimientos de Tropas de Color de Estados Unidos. Al final de la guerra habían servido alrededor de 180.000 soldados negros —cerca del 10 % del ejército de la Unión— más unos 19.000 en la Marina. Muchos eran hombres que acababan de ser liberados y se alistaban semanas después.
+
+Y cobraban menos: diez dólares al mes con tres descontados para el uniforme, frente a los trece de un soldado blanco. El 54.º de Massachusetts, uno de los regimientos negros más famosos, se negó a aceptar la paga desigual y sirvió dieciocho meses sin cobrar nada hasta que el Congreso igualó los sueldos, en 1864, con efecto retroactivo. Ese mismo regimiento asaltó el fuerte Wagner en julio de 1863 en un ataque suicida; su coronel blanco, Robert Gould Shaw, murió allí, y el sargento William Carney, herido varias veces, salvó la bandera y fue el primer afroamericano condecorado con la Medalla de Honor.
+
+Los confederados no los trataban como soldados: la política oficial era ejecutarlos o esclavizarlos, junto con sus oficiales blancos. En Fort Pillow, en abril de 1864, cientos de soldados negros fueron asesinados después de rendirse. Aquello endureció la guerra y obligó a Lincoln a amenazar con represalias.
+
+Lincoln mismo dejó claro lo que había supuesto su participación. En 1864 escribió que, sin aquellos más de cien mil soldados, marinos y trabajadores negros, la Unión tendría que abandonar la guerra «en tres semanas». Es decir: no fue un gesto simbólico, fue un factor decisivo del resultado.
+
+Al final tuvo también su justicia poética: algunos de los primeros regimientos que entraron en Charleston, cuna de la secesión, y en Richmond, capital confederada, fueron regimientos negros, desfilando entre la población esclavizada que acababa de quedar libre.
+
+Y luego vino la parte amarga. A la abolición siguieron la Decimocuarta Enmienda (ciudadanía e igual protección ante la ley, 1868) y la Decimoquinta (derecho al voto, 1870), y durante unos años hubo diputados, senadores y jueces negros en el sur. Pero en 1877 el gobierno federal retiró las tropas, y a partir de ahí llegaron las leyes de segregación, los impedimentos para votar y el terror del Ku Klux Klan. Hicieron falta otros noventa años, y el movimiento por los derechos civiles de los años sesenta, para conseguir en la práctica lo que aquellas enmiendas ya decían por escrito.
+
+**Dato curioso:** Frederick Douglass, que había aprendido a leer a escondidas siendo esclavo porque su amo decía que la lectura «arruinaba» a un esclavo, acabó siendo recibido en la Casa Blanca por Lincoln y enviando a dos de sus hijos a combatir en el 54.º de Massachusetts.
+
+---
+
+## 8 · Teléfono
+
+`telefono` · **1876**
+
+**Cuerpo:**
+
+El telégrafo transmitía código: había que ir a una oficina, escribir el mensaje, pagar por palabra y esperar. El teléfono transmitía la voz humana en directo, con su tono, sus dudas y sus silencios.
+
+Su origen es una historia de pleitos. Bell patentó su aparato en 1876 y construyó el imperio industrial; pero el italiano Antonio Meucci había presentado años antes un dispositivo similar y no tuvo dinero para mantener la patente, y Elisha Gray presentó una solicitud parecidísima el mismo día. En 2002, el Congreso de Estados Unidos aprobó una resolución reconociendo el trabajo de Meucci.
+
+Creó además un oficio nuevo y muy característico: las operadoras de centralita, uno de los primeros empleos masivos de mujeres jóvenes fuera del servicio doméstico y de la fábrica, con sus propias normas, jerarquías y conflictos laborales.
+
+Y cambió la vida cotidiana de un modo que ahora nos cuesta ver: por primera vez podías saber al momento que tu madre estaba enferma, avisar de un accidente, cerrar un negocio o discutir sin escribir una carta. Un siglo largo después, ese mismo aparato —ahora en el bolsillo— es el objeto que la gente mira más veces al día.
+
+**Dato curioso:** el propio Bell acabó considerándolo una molestia y no quiso tener uno en su despacho. Y de los primeros años vienen dos costumbres que aún duran: decir «¿diga?» al descolgar y esa manía de gritar por teléfono.
+
+---
+
+## 9 · Segunda Revolución Industrial
+
+`segunda-revolucion-industrial` · **1870-1914**
+
+**Cuerpo:**
+
+La primera Revolución Industrial la hicieron artesanos e ingenieros prácticos, casi sin teoría: mejoraban máquinas a base de intuición y prueba. La segunda fue distinta: se basó en la química, la física y la electricidad estudiadas en laboratorios y universidades.
+
+Cambiaron los materiales y las fuentes de energía. El acero barato (con los procesos Bessemer y Siemens-Martin) permitió rascacielos, puentes enormes, raíles duraderos y barcos gigantes. El petróleo y la electricidad sustituyeron progresivamente al carbón y al vapor. Y la química creó productos que no existían en la naturaleza: colorantes sintéticos, fertilizantes, explosivos, plásticos primitivos, medicamentos como la aspirina.
+
+Cambió también la organización. Aparecieron las grandes corporaciones con miles de empleados, la producción en cadena, la gestión profesional, la publicidad de masas, los grandes almacenes, las marcas y la venta por catálogo. Y los laboratorios de investigación pagados por la empresa: inventar dejó de ser cosa de genios solitarios y se convirtió en un departamento.
+
+Un solo descubrimiento de este periodo merece destacarse por encima de todos: la síntesis de amoníaco de Haber y Bosch (1909-1913), que permitió fabricar fertilizantes nitrogenados en cantidad industrial. Se calcula que hoy alrededor de la mitad de la población mundial se alimenta gracias a ese proceso. El mismo hallazgo sirvió también para fabricar explosivos a escala, y su autor participó en el desarrollo de gases de guerra.
+
+Es la contradicción de esta era en una sola persona: la técnica que da de comer a miles de millones y la que mata en masa salieron del mismo laboratorio.
+
+**Dato curioso:** la enorme mejora en la calidad de vida urbana de este periodo no vino de la electricidad ni del acero, sino del alcantarillado y del agua potable clorada. Ninguna tecnología ha salvado tantas vidas como el saneamiento, y no tiene ni un solo inventor famoso.
+
+---
+
+## 10 · Motor de combustión
+
+`motor-combustion` · **Finales del siglo XIX**
+
+**Cuerpo:**
+
+La máquina de vapor era enorme, pesada y necesitaba caldera, agua, carbón y tiempo de calentamiento. Servía para fábricas, trenes y barcos, pero no para un vehículo individual.
+
+El motor de combustión interna resolvió eso: la explosión ocurre dentro del propio cilindro, con un combustible líquido muy concentrado. El resultado es ligero, arranca rápido y se puede fabricar pequeño. Otto desarrolló el ciclo de cuatro tiempos, Benz construyó el primer automóvil práctico en 1886 y Diesel patentó en 1892 un motor de mayor rendimiento para trabajo pesado.
+
+El primer viaje largo lo hizo Bertha Benz en 1888: cogió el coche de su marido sin avisar, recorrió 106 km con sus dos hijos, compró combustible en una farmacia, reparó averías por el camino y demostró que el invento servía. Fue, de hecho, la primera campaña de marketing de la industria del automóvil.
+
+Y cambió el mundo físico. Las ciudades se rediseñaron alrededor del coche: carreteras, semáforos, aparcamientos, gasolineras, barrios residenciales lejos del centro. La libertad de movimiento individual creció como nunca.
+
+El coste lo estamos pagando ahora: dependencia del petróleo (y las guerras que ha provocado), contaminación urbana, más de un millón de muertes al año en accidentes de tráfico y una parte importante de las emisiones que calientan el planeta. De ahí que el gran cambio técnico de nuestro siglo sea sustituir precisamente este motor.
+
+**Dato curioso:** a comienzos del siglo XX competían tres tecnologías en igualdad de condiciones: vapor, gasolina y ELECTRICIDAD. En 1900, cerca de un tercio de los coches de Nueva York eran eléctricos. Ganó la gasolina por autonomía y por el precio del petróleo, y hemos tardado un siglo en volver a la opción que ya estaba ahí.
+
+---
+
+## 11 · Radio
+
+`radio` · **Finales del siglo XIX - principios del XX**
+
+**Cuerpo:**
+
+Maxwell predijo matemáticamente las ondas electromagnéticas, Hertz las produjo en un laboratorio y Marconi tuvo la obsesión práctica de usarlas para comunicar sin cables: en 1901 logró enviar una señal a través del Atlántico, algo que muchos físicos consideraban imposible por la curvatura de la Tierra.
+
+Su primera utilidad fue marítima, y se hizo evidente en 1912: los mensajes de socorro del Titanic por radio permitieron que llegara el Carpathia y se salvaran setecientas personas. A partir de ahí, llevar radio fue obligatorio en los barcos.
+
+Pero el salto histórico llegó en los años veinte, cuando la radio dejó de ser comunicación punto a punto y se convirtió en difusión: uno habla, millones escuchan simultáneamente. Nunca antes había existido nada así.
+
+El efecto cultural fue inmediato: por primera vez, una familia de un pueblo remoto oía la misma música, las mismas noticias y el mismo acento que una de la capital. Se homogeneizaron los idiomas, nacieron los deportes de masas, la publicidad moderna, los seriales —de ahí vienen las telenovelas— y la idea de audiencia.
+
+Y el efecto político fue brutal. Roosevelt hablaba a los estadounidenses desde su despacho en tono de conversación para explicar la crisis; Churchill sostuvo la moral británica con sus discursos; y Hitler y Goebbels convirtieron la radio en el instrumento central de su propaganda, con receptores baratos subvencionados por el Estado y altavoces en calles y fábricas. La misma tecnología que informa y consuela sirve para adoctrinar a un país entero.
+
+**Dato curioso:** en 1938, la emisión radiofónica de «La guerra de los mundos» de Orson Welles, presentada como un boletín de noticias, provocó llamadas y alarma entre parte de la audiencia. El pánico fue mucho menor de lo que después se contó, pero el episodio marcó el primer gran debate sobre la credibilidad de los medios de masas.
+
+---
+
+## 12 · Vacunas modernas
+
+`vacunas-modernas` · **Siglos XIX-XX**
+
+**Cuerpo:**
+
+La idea la abrió Jenner en 1796 al observar algo que sabían las ordeñadoras: quien había pasado la viruela de las vacas —una versión leve— no cogía la viruela humana, que mataba a una de cada tres personas infectadas y dejaba ciegos y marcados a los demás. Inoculó ese material a un niño y funcionó. La palabra «vacuna» viene literalmente de «vaca».
+
+Pasteur convirtió aquella observación en método. Descubrió que se podían debilitar los microbios en el laboratorio y usarlos para provocar defensas, y lo aplicó al cólera de las gallinas, al ántrax y, en 1885, a la rabia, salvando a un niño mordido por un lobo. Con él y con Koch nació la teoría de que las enfermedades infecciosas las causan microorganismos concretos, cada uno con el suyo.
+
+El siglo XX fue el de las grandes campañas: difteria, tétanos, tos ferina, tuberculosis, gripe, polio (Salk y Sabin, en los años cincuenta, contra una enfermedad que paralizaba a miles de niños cada año), sarampión, rubeola, hepatitis, meningitis.
+
+Los resultados son de los más espectaculares de toda la historia de la medicina: la viruela, que había matado a cientos de millones de personas, fue declarada erradicada del planeta en 1980. Es la única enfermedad humana que hemos borrado del mapa. La polio está al borde de desaparecer.
+
+Y funcionan de un modo que solo se entiende en grupo: cuando una proporción alta de la población está vacunada, el microbio no encuentra a quién infectar y quedan protegidos también los que no pueden vacunarse (bebés, inmunodeprimidos). Eso es la inmunidad de grupo, y es la razón por la que vacunarse es a la vez una decisión personal y una contribución colectiva.
+
+**Dato curioso:** cuando una vacuna funciona muy bien, la enfermedad desaparece de la vista, y entonces la gente deja de tener miedo a la enfermedad y empieza a tener miedo a la vacuna. Es la paradoja del éxito, y explica los brotes de sarampión que reaparecen hoy en países donde estaba controlado.
+
+---
+
+## 13 · Avión
+
+`avion` · **1903**
+
+**Cuerpo:**
+
+Volar era el gran fracaso técnico de la historia. Se habían intentado alas de plumas, máquinas de vapor voladoras, planeadores con los que muchos pioneros se mataron. El 17 de diciembre de 1903, dos hermanos que tenían una tienda de bicicletas en Ohio lo consiguieron: doce segundos, treinta y seis metros.
+
+El motivo de que lo lograran ellos es la parte interesante. Los demás se concentraban en la potencia y en la sustentación; los Wright entendieron que el problema real era el CONTROL. Construyeron un túnel de viento propio para medir perfiles alares, descartaron los datos publicados —que estaban mal—, practicaron cientos de vuelos en planeador para aprender a pilotar y diseñaron un sistema de tres ejes para girar, subir y estabilizar, que sigue siendo el principio de cualquier avión actual.
+
+Y cambió todo lo que significa la distancia. Un viaje que costaba semanas se hizo en horas; nació el turismo de masas; las mercancías perecederas y urgentes cruzaron océanos; las familias emigradas pudieron volver a ver a los suyos.
+
+También cambió la guerra de la peor manera posible: por primera vez el frente podía estar en el centro de una ciudad. Los bombardeos aéreos sobre población civil —Guernica, Londres, Dresde, Tokio, Hiroshima— son hijos de aquellos doce segundos.
+
+**Dato curioso:** en el vuelo hay una decisión que salvó millones de vidas y no fue técnica sino de gestión: la obligación de investigar y publicar la causa de cada accidente, para que nadie repita el fallo. Volar es hoy el medio de transporte más seguro del mundo porque su industria aprende de sus errores en público.
+
+---
+
+## 14 · Primera Guerra Mundial
+
+`primera-guerra-mundial` · **1914-1918**
+
+**Cuerpo:**
+
+En junio de 1914, un nacionalista serbio asesinó en Sarajevo al heredero del Imperio austrohúngaro. Cinco semanas después, media Europa estaba en guerra. La chispa fue eso; la carga la llevaban acumulando treinta años.
+
+Los ingredientes eran cuatro. Un sistema de alianzas automáticas que convertía cualquier conflicto local en general. Una carrera de armamentos y unos planes militares rígidos que, una vez iniciada la movilización, no se podían parar. El nacionalismo y el revanchismo, sobre todo entre Francia y Alemania. Y la competencia colonial e industrial entre potencias que se sentían con derecho a mandar.
+
+Todos creían que sería una guerra corta y de movimiento, como las del siglo XIX. Duró cuatro años y se convirtió en algo que nadie había previsto: la guerra de trincheras. Dos líneas paralelas de zanjas desde el mar del Norte hasta Suiza, separadas a veces por doscientos metros de barro, alambre y cadáveres, donde una ofensiva de meses conseguía avanzar unos kilómetros y costaba cientos de miles de vidas.
+
+El motivo técnico es sencillo y brutal: la potencia defensiva —ametralladoras, artillería de tiro rápido, alambre de espino— había superado con mucho a los medios de ataque, que seguían siendo hombres corriendo. Los generales tardaron años en aceptarlo, y mientras tanto se lanzaron batallas como el Somme o Verdún, con cientos de miles de muertos cada una.
+
+Murieron entre nueve y diez millones de soldados y unos siete de civiles, y justo después, la pandemia de gripe de 1918 mató a decenas de millones más, favorecida por los movimientos de tropas.
+
+Y el resultado político sembró la siguiente guerra: desaparecieron cuatro imperios (alemán, austrohúngaro, ruso y otomano), se redibujaron fronteras en Europa y Oriente Próximo con consecuencias que siguen vigentes, y el Tratado de Versalles impuso a Alemania una culpa y unas reparaciones tan humillantes que veinte años después ese resentimiento llevó a Hitler al poder.
+
+**Dato curioso:** en la Navidad de 1914, en varios puntos del frente occidental, soldados alemanes y británicos salieron de las trincheras, se intercambiaron tabaco y comida, enterraron juntos a sus muertos y en algún sitio jugaron al fútbol. Los mandos prohibieron terminantemente que volviera a repetirse.
+
+---
+
+## 15 · Revolución Rusa
+
+`revolucion-rusa` · **1917**
+
+**Cuerpo:**
+
+En 1917 Rusia era el imperio más grande del mundo y el más atrasado de Europa: un zar con poder absoluto, una mayoría campesina que había salido de la servidumbre solo cincuenta años antes, una industria incipiente con condiciones laborales terribles y una guerra que había causado millones de bajas.
+
+Hubo dos revoluciones ese año. En febrero, las colas del pan y las huelgas de Petrogrado se convirtieron en un levantamiento espontáneo; el ejército se negó a disparar contra la multitud y el zar abdicó en pocos días. Cuatro siglos de dinastía cayeron sin que nadie los organizara.
+
+El gobierno provisional que le siguió cometió un error fatal: seguir en la guerra. Y ahí entró Lenin, que llegó del exilio con un programa de tres palabras imposible de derrotar en ese contexto: «paz, pan y tierra».
+
+En octubre, los bolcheviques —un partido pequeño pero disciplinado y con presencia en los consejos de obreros y soldados— tomaron el poder en un golpe casi sin resistencia. Firmaron la paz con Alemania cediendo territorios enormes, repartieron la tierra, nacionalizaron la industria y los bancos.
+
+Después vino una guerra civil de cuatro años, con intervención extranjera, hambrunas y millones de muertos, y de ella salió un Estado de partido único con policía política. En 1922 nació la Unión Soviética, y con Stalin se convirtió en una dictadura total: industrialización acelerada a costa del campo, hambruna en Ucrania, purgas, y millones de personas en campos de trabajo.
+
+Hay que reconocerle también sus logros medibles —alfabetización masiva, sanidad universal, industrialización de un país agrario, papel decisivo en la derrota del nazismo, primer satélite y primer hombre en el espacio— y su precio: la libertad política, y la vida de millones de personas.
+
+**Dato curioso:** la palabra «soviet» significa simplemente «consejo»: eran las asambleas de obreros, campesinos y soldados que surgieron por su cuenta en 1905 y 1917. El nombre del Estado más centralizado del siglo XX venía de sus asambleas de base.
+
+---
+
+## 16 · Penicilina
+
+`penicilina` · **1928**
+
+**Cuerpo:**
+
+Hasta los años cuarenta, una infección banal podía matar a cualquiera. Un arañazo infectado, una neumonía, una apendicitis, una infección después de dar a luz o una herida de guerra eran sentencias frecuentes de muerte, y no había nada que hacer más que esperar.
+
+En 1928, Alexander Fleming volvió de vacaciones y encontró una de sus placas de cultivo contaminada por un moho. Alrededor de ese moho, las bacterias habían desaparecido. Otro habría tirado la placa; él se preguntó por qué.
+
+Pero Fleming no consiguió aislar la sustancia en cantidad útil y el asunto quedó parado casi diez años. Lo rescataron en Oxford, ya en plena Segunda Guerra Mundial, Howard Florey, Ernst Chain y su equipo, que lograron purificarla y demostrar que curaba infecciones mortales. Como Inglaterra estaba siendo bombardeada, la producción industrial masiva se montó en Estados Unidos, con fermentadores gigantes, a tiempo para el desembarco de Normandía.
+
+El cambio fue inmediato y medible: enfermedades que mataban a la mitad de los infectados pasaron a curarse en días. Se hicieron posibles cirugías complejas, trasplantes, cuidados intensivos, quimioterapia y partos seguros, porque todo eso depende de poder controlar las infecciones.
+
+Y ahora la advertencia, que Fleming ya dio en su discurso del Nobel: las bacterias evolucionan. Cada vez que se usa un antibiótico mal —sin necesidad, con dosis incompletas, o masivamente en la ganadería— se seleccionan las bacterias resistentes. La resistencia a los antibióticos es hoy una de las mayores amenazas sanitarias del mundo, con cientos de miles de muertes atribuibles al año.
+
+**Dato curioso:** Fleming, Florey y Chain compartieron el Nobel en 1945. Y hay una mujer casi olvidada en esta historia: Norman Heatley y la bioquímica Mary Hunt, apodada «Mary la mohosa», que en Illinois encontró en un melón podrido la cepa de moho que produjo la mayoría de la penicilina de la guerra.
+
+---
+
+## 17 · Gran Depresión
+
+`gran-depresion` · **1929**
+
+**Cuerpo:**
+
+Los años veinte fueron de euforia en Estados Unidos: crecimiento, coches, radios, electrodomésticos comprados a plazos y una Bolsa que subía sin parar. Mucha gente invertía con dinero prestado, comprando acciones con solo una fracción de su valor y confiando en revenderlas más caras.
+
+El 24 y el 29 de octubre de 1929 el mercado se desplomó. Quien había comprado con crédito tuvo que vender a cualquier precio para pagar, lo que hundió más los precios en una espiral.
+
+Y de ahí pasó a la economía real por un mecanismo concreto: los bancos, que habían prestado para especular, quebraron; con ellos desaparecieron los ahorros de millones de familias; sin crédito, las empresas no pudieron producir; sin empleo, la gente no pudo comprar; y sin ventas, más empresas cerraron. En 1933, uno de cada cuatro trabajadores estadounidenses estaba en el paro.
+
+Se hizo mundial porque la economía ya era global: Estados Unidos retiró sus créditos de Europa, el comercio internacional se hundió y los países respondieron subiendo aranceles y cerrándose, lo que empeoró todo. En Alemania, con seis millones de parados, el desempleo fue el suelo político sobre el que creció el nazismo.
+
+La respuesta que acabó funcionando rompió con la ortodoxia de la época: el New Deal de Roosevelt, con obras públicas masivas, regulación de la banca y la Bolsa, seguro de desempleo, pensiones y reconocimiento de los sindicatos; y la teoría que lo respaldaba, la de Keynes, según la cual cuando el sector privado se para, el Estado debe gastar para sostener la demanda.
+
+De esa crisis salieron muchas de las instituciones que damos por normales: la seguridad social, la garantía de los depósitos bancarios, la supervisión de los mercados y la idea de que el Estado tiene una responsabilidad sobre el empleo.
+
+**Dato curioso:** la crisis coincidió en el medio oeste con una catástrofe ecológica, el «Dust Bowl»: años de arado intensivo y sequía convirtieron las llanuras en polvo y enormes tormentas de tierra expulsaron a cientos de miles de familias de sus granjas. Es una de las primeras veces en que se entendió que una mala práctica agrícola puede arruinar a un país.
+
+---
+
+## 18 · Nazismo y fascismo
+
+`nazismo-fascismo` · **Décadas de 1920 y 1930**
+
+**Cuerpo:**
+
+Cómo llega al poder una dictadura totalitaria en países con elecciones es una de las preguntas más importantes de la historia contemporánea, porque no llegaron por invasión: llegaron aprovechando las reglas del sistema que después destruyeron.
+
+El terreno lo prepararon la Primera Guerra Mundial y sus consecuencias: millones de excombatientes resentidos, la sensación en Italia y Alemania de haber sido humilladas en los tratados, la inflación que arruinó a la clase media alemana, la Gran Depresión con seis millones de parados, el miedo al comunismo tras la revolución rusa y unos partidos democráticos incapaces de formar gobiernos estables.
+
+El método fue parecido en los dos casos. Mussolini tomó el poder en 1922 tras años de violencia de sus escuadras contra sindicalistas y socialistas, y una vez dentro fue eliminando la oposición, la prensa libre y las elecciones. Hitler, después de un golpe fracasado en 1923, cambió de estrategia y decidió llegar por las urnas: su partido fue el más votado en 1932 y en enero de 1933 fue nombrado canciller por el presidente. Semanas después, aprovechando el incendio del Reichstag, suspendió las libertades y consiguió plenos poderes.
+
+Sus ingredientes comunes: un líder infalible; un enemigo interior al que culpar de todo; la exaltación de la nación y de un pasado glorioso; el desprecio de la democracia y del debate como debilidades; la violencia paramilitar como herramienta política normal; el control total de la prensa, la escuela y la cultura; la militarización de la vida cotidiana; y una propaganda moderna y muy eficaz, con radio, cine y actos multitudinarios diseñados como espectáculos.
+
+El nazismo añadió algo que lo hace único: una ideología racista y antisemita convertida en política de Estado, con leyes que privaron a los judíos alemanes de sus derechos, sus trabajos y su ciudadanía desde 1935, y con un proyecto explícito de superioridad racial y expansión territorial.
+
+Y hay un dato que conviene no olvidar nunca: muchas personas decentes votaron o apoyaron aquello sin proponerse un genocidio. Querían orden, trabajo y orgullo nacional, y aceptaron el precio de que otros perdieran sus derechos. Por eso el estudio del ascenso del fascismo no es historia antigua: es un manual de señales de alarma.
+
+**Dato curioso:** Hitler nunca ganó una mayoría absoluta en unas elecciones libres. Llegó al gobierno mediante un pacto de las élites conservadoras, que creyeron que podrían controlarlo. En pocos meses estaban todas fuera del poder o muertas.
+
+---
+
+## 19 · Segunda Guerra Mundial
+
+`segunda-guerra-mundial` · **1939-1945**
+
+**Cuerpo:**
+
+Empezó el 1 de septiembre de 1939 con la invasión alemana de Polonia, pactada en secreto con la Unión Soviética. Pero venía de antes: la remilitarización alemana, la anexión de Austria, el desmembramiento de Checoslovaquia con el consentimiento de Francia y Gran Bretaña, y la invasión japonesa de China desde 1937.
+
+La primera fase fue un desastre para los aliados: Alemania conquistó Polonia, Dinamarca, Noruega, Países Bajos, Bélgica y Francia en meses, con una guerra de movimiento rápido basada en tanques, aviación y radio. Solo Gran Bretaña resistió, y lo hizo ganando la primera batalla decisiva de la historia librada en el aire.
+
+La guerra se volvió mundial en 1941, con dos decisiones: Hitler invadió la Unión Soviética en junio y Japón atacó Pearl Harbor en diciembre, lo que metió a Estados Unidos en el conflicto. Esos dos movimientos sellaron el resultado, porque enfrentaron a Alemania y Japón con las dos potencias de mayor capacidad de producción y de reservas humanas del mundo.
+
+El frente del este fue el más brutal de la historia militar: allí se decidió la guerra en Europa y allí murieron más de veinte millones de soviéticos, entre soldados y civiles. Stalingrado y Kursk marcaron el cambio de dirección. En el oeste, el desembarco de Normandía en junio de 1944 abrió el segundo frente.
+
+Murieron entre 70 y 85 millones de personas, la mayoría civiles: en torno al 3 % de la población mundial de entonces.
+
+Y de sus ruinas salió el mundo actual: Europa dejó de ser el centro del planeta, Estados Unidos y la URSS quedaron como superpotencias enfrentadas, se descolonizaron los imperios, se creó la ONU y se escribió la Declaración Universal de los Derechos Humanos, redactada expresamente para que no volviera a ocurrir.
+
+**Dato curioso:** en Bletchley Park, unos diez mil británicos —de ellos unas siete mil mujeres— trabajaron en descifrar los códigos alemanes con máquinas diseñadas por Alan Turing y su equipo. Se calcula que acortaron la guerra en años. Turing fue condenado después por su homosexualidad y perdonado oficialmente en 2013.
+
+---
+
+## 20 · Holocausto
+
+`holocausto` · **1941-1945**
+
+**Cuerpo:**
+
+El Holocausto no fue un estallido de violencia: fue un proceso administrativo, con presupuestos, leyes, horarios de trenes, informes y funcionarios. Eso es lo que lo hace incomparable y lo que hay que entender.
+
+Empezó por la ley. Entre 1933 y 1939, los judíos alemanes fueron expulsados de la función pública, las universidades y las profesiones; las leyes de Núremberg de 1935 les quitaron la ciudadanía y prohibieron los matrimonios mixtos; se les obligó a registrar sus bienes y se les expropió; en la Noche de los Cristales Rotos de 1938 se quemaron sinagogas y se detuvo a decenas de miles.
+
+Con la guerra llegó el confinamiento: los guetos en las ciudades polacas, sobre todo el de Varsovia, con más de 400.000 personas hacinadas, sin comida ni medicinas, donde murieron de hambre y tifus decenas de miles antes de cualquier deportación.
+
+Después vinieron los fusilamientos masivos de los grupos móviles de exterminio tras el avance en la Unión Soviética —en Babi Yar, a las afueras de Kiev, más de 33.000 personas en dos días—, y finalmente la decisión de industrializar el proceso: campos de exterminio con cámaras de gas y hornos, con Auschwitz-Birkenau como el mayor, donde fueron asesinadas más de un millón de personas.
+
+Murieron cerca de seis millones de judíos, dos tercios de la población judía de Europa, y comunidades enteras con siglos de historia desaparecieron. Fueron asesinados además unos 250.000 gitanos, cientos de miles de personas con discapacidad en el programa de «eutanasia», millones de prisioneros de guerra soviéticos, polacos, opositores políticos, testigos de Jehová y homosexuales.
+
+Lo hicieron personas normales, no monstruos: maquinistas que conducían los trenes, secretarias que mecanografiaban las listas, empresas que suministraban el gas y competían por los contratos, vecinos que ocuparon las casas vacías. Eso es lo que Hannah Arendt llamó la «banalidad del mal».
+
+Y también hubo lo contrario: quienes escondieron, falsificaron papeles y salvaron vidas arriesgando la propia, y los que se rebelaron sin ninguna posibilidad de ganar, como en el levantamiento del gueto de Varsovia en 1943.
+
+**Dato curioso:** los propios nazis intentaron borrar las pruebas al final de la guerra, dinamitando cámaras de gas y quemando archivos. No pudieron: quedaron miles de documentos, fotografías, testimonios de supervivientes y hasta manuscritos enterrados por prisioneros de los campos para que alguien, algún día, pudiera contarlo.
+
+---
+
+## 21 · Bomba atómica
+
+`bomba-atomica` · **1945**
+
+**Cuerpo:**
+
+La física de la primera mitad del siglo XX descubrió que en el núcleo de los átomos había una cantidad de energía descomunal, y que al partir núcleos pesados como el uranio se liberaba, además, en una reacción capaz de mantenerse a sí misma.
+
+Con el miedo a que Alemania la construyera primero, Estados Unidos montó el Proyecto Manhattan: 130.000 personas, ciudades secretas construidas de cero y un coste equivalente a decenas de miles de millones actuales. Es el mayor proyecto científico-militar de la historia hasta entonces.
+
+El 6 de agosto de 1945 se lanzó una bomba de uranio sobre Hiroshima y el 9 de agosto una de plutonio sobre Nagasaki. Murieron en el acto decenas de miles de personas y, en los meses siguientes, muchas más por quemaduras y radiación: las estimaciones totales oscilan entre 150.000 y 250.000 víctimas, casi todas civiles. Japón se rindió el 15 de agosto.
+
+El debate sobre esas dos decisiones sigue abierto ochenta años después, y merece plantearse honestamente: por un lado, se argumentó que evitaba una invasión terrestre de Japón con cientos de miles de bajas previstas; por otro, que Japón ya estaba derrotado, que se buscaba también impresionar a la Unión Soviética y que en ningún caso se puede justificar la destrucción deliberada de dos ciudades civiles.
+
+Lo que cambió para siempre es la situación de la especie. Por primera vez, un conflicto podía terminar no con una derrota, sino con la destrucción de la civilización. Después llegaron las bombas de hidrógeno, mil veces más potentes; los misiles intercontinentales, que reducen el tiempo de decisión a minutos; y arsenales que en su punto máximo superaron las 60.000 cabezas nucleares.
+
+Y produjo una paradoja incómoda: esa capacidad de destrucción mutua es probablemente la razón por la que las grandes potencias no han vuelto a luchar directamente entre ellas. La paz más larga entre potencias de la historia moderna se sostiene sobre la amenaza de aniquilación.
+
+**Dato curioso:** varios de los físicos que la construyeron dedicaron el resto de su vida a intentar controlarla. Einstein, que había firmado la carta que impulsó el proyecto y no participó en él, dijo después que si hubiera sabido cómo acabaría, se habría hecho relojero.
+
+
+# ERA · Era Global y Digital
+
+`key: era-digital` · Época: **1945 – presente**
+
+---
+
+## 1 · Fundación de la ONU
+
+`fundacion-onu` · **1945**
+
+**Cuerpo:**
+
+Ya se había intentado. Después de la Primera Guerra Mundial se creó la Sociedad de Naciones, y fracasó por razones muy concretas: Estados Unidos no entró, no tenía capacidad de imponer nada y las potencias se fueron marchando cuando les convino.
+
+En 1945, con 70 millones de muertos recientes, 51 países firmaron en San Francisco la Carta de las Naciones Unidas. Se diseñó para corregir los fallos anteriores: esta vez estarían dentro todas las grandes potencias, y habría un órgano capaz de decidir el uso de la fuerza.
+
+Su estructura refleja un compromiso realista: una Asamblea General donde cada país tiene un voto, y un Consejo de Seguridad de quince miembros donde cinco —Estados Unidos, Rusia, China, Reino Unido y Francia, los vencedores de 1945— son permanentes y tienen derecho de veto. Ese veto es a la vez su gran defecto (paraliza el Consejo cuando hay un interés de una gran potencia) y la razón de que exista: sin él, esas potencias no habrían entrado.
+
+Su documento más importante llegó en 1948: la Declaración Universal de los Derechos Humanos, impulsada entre otros por Eleanor Roosevelt y redactada por un comité de todos los continentes. No es una ley obligatoria, pero es la referencia moral con la que hoy se juzga a cualquier gobierno, y ha sido la base de decenas de constituciones.
+
+El balance honesto: no ha impedido guerras —Corea, Vietnam, Ruanda, Yugoslavia, Irak, Ucrania, Gaza—, es lenta y a veces impotente. Pero ha evitado una tercera guerra mundial, ha mantenido abierto un lugar donde los enemigos siguen hablándose y ha salvado, en salud y hambre, más vidas de las que cualquier guerra ha costado.
+
+**Dato curioso:** la Declaración Universal de los Derechos Humanos es el documento más traducido del mundo: existe en más de 500 idiomas. Y se aprobó sin ningún voto en contra, aunque con ocho abstenciones.
+
+---
+
+## 2 · Guerra Fría
+
+`guerra-fria` · **1947-1991**
+
+**Cuerpo:**
+
+Al terminar la Segunda Guerra Mundial quedaron dos superpotencias con proyectos de sociedad incompatibles: Estados Unidos con capitalismo y democracia liberal, y la Unión Soviética con economía planificada y partido único. Ninguna podía atacar a la otra sin arriesgarse a la destrucción nuclear mutua.
+
+Así que compitieron en todo lo demás, y de ahí el nombre: una guerra «fría» entre ellos y muy caliente en los demás sitios.
+
+Europa quedó dividida por lo que Churchill llamó el «telón de acero», con Alemania y Berlín partidas en dos, dos alianzas militares (OTAN y Pacto de Varsovia) y dos modelos económicos: el Plan Marshall reconstruyó Europa occidental con dinero estadounidense, y el bloque del este quedó bajo control soviético, con revueltas aplastadas por los tanques en Hungría en 1956 y en Checoslovaquia en 1968.
+
+Las guerras reales se libraron en terceros países, y fueron devastadoras: Corea, Vietnam, Afganistán, Angola, Centroamérica. Cada bando apoyaba dictaduras, guerrillas o golpes de Estado según le convenía, y las poblaciones locales pagaban la factura.
+
+El momento en que estuvimos más cerca del final fue octubre de 1962: la crisis de los misiles de Cuba. Durante trece días, el mundo estuvo a un error de cálculo de una guerra nuclear. Se resolvió con una negociación —retirada de los misiles soviéticos de Cuba y, en secreto, de los estadounidenses de Turquía— y su consecuencia más útil fue instalar un teléfono directo entre Washington y Moscú y empezar a firmar tratados de control de armas.
+
+Terminó sin batalla final: el bloque soviético se derrumbó por su propio agotamiento económico y político entre 1989 y 1991.
+
+**Dato curioso:** en 1983, un teniente coronel soviético, Stanislav Petrov, vio en su pantalla que Estados Unidos había lanzado misiles. El protocolo exigía informar de inmediato, lo que probablemente habría desencadenado la respuesta. Decidió que era un fallo del sistema y no lo comunicó. Tenía razón: era un reflejo del sol en las nubes.
+
+---
+
+## 3 · Descolonización
+
+`descolonizacion` · **1945-1975**
+
+**Cuerpo:**
+
+En 1939, unas pocas potencias europeas gobernaban a un tercio de la humanidad. Treinta años después, casi todo aquello había desaparecido y habían nacido más de cincuenta países nuevos.
+
+Las causas se juntaron todas a la vez. Europa quedó arruinada y sin capacidad militar para sostener imperios lejanos. Millones de soldados coloniales habían combatido en la guerra —indios, argelinos, senegaleses— y volvieron preguntando por qué habían luchado por la libertad de otros. La guerra había demostrado que los europeos eran derrotables: Japón expulsó a los occidentales del sudeste asiático en semanas. Y las dos nuevas superpotencias, cada una por sus motivos, eran anticolonialistas.
+
+Los caminos fueron muy distintos. La India logró la independencia en 1947 tras décadas de movilización no violenta dirigida por Gandhi —boicots, marchas, desobediencia civil, huelgas de hambre—, pero el proceso terminó en la partición entre India y Pakistán, con una violencia religiosa que causó cientos de miles de muertos y unos quince millones de desplazados.
+
+En otros lugares hubo guerras largas y crueles: Argelia (1954-1962), con tortura sistemática y cientos de miles de muertos; Indochina y luego Vietnam; Kenia; Angola y Mozambique. Y en muchos sitios la retirada fue tan rápida como caótica.
+
+El gran problema heredado fueron las fronteras. Muchas se habían trazado en despachos europeos con una regla, sin atender a pueblos, lenguas o rivalidades, y al independizarse quedaron países con grupos enfrentados dentro y comunidades divididas entre dos Estados. Buena parte de los conflictos africanos y asiáticos posteriores tienen ahí una de sus raíces.
+
+**Dato curioso:** la ONU pasó de 51 países fundadores en 1945 a 193 hoy, y la mayor parte de ese crecimiento son antiguas colonias. Es el cambio más grande en el mapa político mundial desde que existen los mapas.
+
+---
+
+## 4 · Carrera espacial
+
+`carrera-espacial` · **1957-1975**
+
+**Cuerpo:**
+
+El 4 de octubre de 1957, la Unión Soviética puso en órbita el Sputnik, una esfera de 58 centímetros que emitía un pitido. Aquel pitido se podía captar con una radio de aficionado desde cualquier parte del mundo, y eso fue justamente el mensaje: los soviéticos podían poner algo sobre Estados Unidos y nadie podía impedirlo.
+
+El susto provocó una reacción histórica en Estados Unidos: se creó la NASA, se multiplicó el presupuesto de investigación y se reformó por completo la enseñanza de ciencias y matemáticas en las escuelas. Una parte de la potencia científica estadounidense de la segunda mitad del siglo XX viene de aquel golpe en el orgullo.
+
+Los soviéticos siguieron ganando durante años: primer animal en órbita (la perra Laika, que no sobrevivió), primer hombre en el espacio (Yuri Gagarin, en 1961), primera mujer (Valentina Tereshkova, en 1963), primer paseo espacial y primeras imágenes de la cara oculta de la Luna.
+
+Y todo aquello dejó una infraestructura que usamos a diario sin pensarlo: los satélites de comunicaciones, la previsión meteorológica moderna, el GPS, la observación de la Tierra —que es la que nos ha permitido medir la deforestación, el deshielo y los agujeros de la capa de ozono—, además de un empujón enorme a la miniaturización electrónica y a la informática.
+
+Terminó de la forma más simbólica posible: en 1975, una nave estadounidense y una soviética se acoplaron en órbita y sus tripulaciones se dieron la mano. Aquella colaboración terminó llevando, veinte años después, a la Estación Espacial Internacional, donde rusos y estadounidenses han convivido durante décadas incluso cuando sus gobiernos no se hablaban.
+
+**Dato curioso:** el ordenador que guiaba el módulo lunar del Apolo 11 tenía menos memoria que una calculadora actual, y su software fue dirigido por Margaret Hamilton, que además insistió en programar protecciones ante errores humanos. Una de esas protecciones evitó que el ordenador se colapsara durante el descenso a la Luna.
+
+---
+
+## 5 · Llegada a la Luna
+
+`llegada-luna` · **1969**
+
+**Cuerpo:**
+
+El 20 de julio de 1969, el módulo Eagle del Apolo 11 se posó en el Mar de la Tranquilidad y Neil Armstrong bajó por la escalerilla con la frase que todo el mundo conoce: un pequeño paso para el hombre, un gran salto para la humanidad. Lo vieron en directo unos 600 millones de personas, la mayor audiencia de la historia hasta entonces.
+
+La dificultad técnica es difícil de exagerar. Hacía falta un cohete de 110 metros y casi 3.000 toneladas —el Saturno V, todavía hoy uno de los más potentes jamás construidos—, calcular una trayectoria hasta un objeto en movimiento a 380.000 km, separar y volver a acoplar dos naves en órbita lunar, aterrizar en un terreno desconocido con combustible para segundos y despegar con un único motor que no podía fallar, porque no había repuesto ni rescate posible.
+
+El descenso estuvo a punto de abortarse: se dispararon alarmas del ordenador, el terreno previsto estaba lleno de rocas y Armstrong tuvo que pilotar manualmente. Aterrizaron con menos de treinta segundos de combustible en el margen.
+
+Fueron seis misiones con alunizaje entre 1969 y 1972; doce personas caminaron por la Luna. Trajeron 382 kilos de rocas que cambiaron lo que sabíamos sobre el origen del sistema solar y de la propia Luna, e instalaron instrumentos que siguieron enviando datos años después.
+
+Y hubo un efecto que nadie había previsto y que quizá fue el más importante: las fotografías de la Tierra vista desde allí. La imagen de un planeta azul, pequeño y sin fronteras visibles, flotando en la oscuridad, se convirtió en el símbolo del movimiento ecologista, que se organizó justo en esos años.
+
+Que hoy no volvamos allí no es por incapacidad, sino porque el objetivo era ganar una carrera, y ganada la carrera se retiró el presupuesto. La ciencia siguió; la épica se paró.
+
+**Dato curioso:** los astronautas dejaron una placa firmada con la frase «vinimos en paz, en nombre de toda la humanidad», y también sus huellas. Sin viento ni agua, esas huellas seguirán ahí, prácticamente intactas, durante millones de años.
+
+---
+
+## 6 · Microprocesador
+
+`microprocesador` · **1971**
+
+**Cuerpo:**
+
+Los primeros ordenadores ocupaban salas enteras, pesaban toneladas, funcionaban con miles de válvulas que se fundían constantemente y consumían la electricidad de un barrio. Solo podían tenerlos gobiernos, ejércitos y grandes universidades.
+
+El camino hacia lo pequeño tuvo dos escalones. El transistor (1947) sustituyó a la válvula por un componente diminuto, sólido y fiable. Y el circuito integrado (1958) permitió grabar muchos transistores a la vez sobre una misma pastilla de silicio, en lugar de fabricarlos y soldarlos uno por uno.
+
+El microprocesador, en 1971, dio el paso definitivo: meter toda la unidad de proceso —la «cabeza pensante» completa de un ordenador— en un solo chip fabricado en serie. El primero, el Intel 4004, tenía 2.300 transistores. Un procesador de móvil actual tiene decenas de miles de millones.
+
+Ese ritmo de mejora se conoce como la ley de Moore: la capacidad se ha ido duplicando aproximadamente cada dos años durante medio siglo. No hay nada parecido en ninguna otra tecnología de la historia; es como si un coche hubiera pasado de 100 km/h a la velocidad de la luz en dos generaciones.
+
+Tiene consecuencias geopolíticas actuales: la fabricación de los chips más avanzados depende de una cadena mundial extremadamente concentrada —unas pocas fábricas en Asia y una única empresa europea capaz de hacer las máquinas de litografía— y eso ha convertido al silicio en un asunto de seguridad nacional para las grandes potencias.
+
+**Dato curioso:** el material del que está hecho todo esto es silicio, es decir, arena purificada. La industria más valiosa del mundo se basa en refinar el segundo elemento más abundante de la corteza terrestre hasta una pureza del 99,9999999 %.
+
+---
+
+## 7 · Internet
+
+`internet` · **Décadas de 1970-1990**
+
+**Cuerpo:**
+
+Internet nació de una pregunta militar y de una necesidad académica. La agencia de investigación del Departamento de Defensa estadounidense quería una red de comunicación que no tuviera un centro que pudiera destruirse, y los investigadores universitarios querían compartir ordenadores carísimos a distancia.
+
+La solución fue una idea elegante: la conmutación de paquetes. En lugar de abrir una línea directa entre dos puntos, se parte el mensaje en trozos pequeños, cada trozo viaja por el camino que esté libre y se reordenan al llegar. Si una ruta desaparece, los paquetes buscan otra. La red no tiene centro y por eso es muy difícil de tumbar.
+
+La primera conexión, en 1969, fue entre dos universidades de California. Intentaron enviar la palabra «LOGIN» y el sistema se cayó tras las dos primeras letras: el primer mensaje de la historia de internet fue «LO».
+
+La pieza que lo convirtió en algo universal fueron los protocolos TCP/IP, adoptados en 1983: un idioma común que permite que redes distintas, con máquinas y sistemas distintos, se entiendan entre sí. Internet no es una red: es una red de redes que aceptan hablar el mismo idioma.
+
+Y una decisión determinó todo lo que vino después: los protocolos eran abiertos y no pertenecían a nadie. Cualquiera podía conectar su red y montar un servicio nuevo sin pedir permiso. Si hubiera sido propiedad de una empresa o de un Estado, no existiría nada de lo que usamos hoy.
+
+**Dato curioso:** el 99 % del tráfico internacional de internet no va por satélite, sino por unos 500 cables submarinos de fibra óptica tendidos en el fondo del mar, algunos del grosor de una manguera de jardín. La red más moderna del mundo depende de la misma idea que el telégrafo de 1866.
+
+---
+
+## 8 · Caída del Muro de Berlín
+
+`caida-muro-berlin` · **1989**
+
+**Cuerpo:**
+
+Berlín había quedado dividida en cuatro sectores tras la guerra, y la ciudad se convirtió en una anomalía: un trozo de Occidente en medio del bloque soviético. Entre 1949 y 1961 huyeron por allí unos dos millones y medio de personas, muchas de ellas jóvenes y cualificadas, lo que estaba desangrando a Alemania Oriental.
+
+En agosto de 1961, en una sola noche, se levantó una alambrada que luego se convirtió en un muro de hormigón de 155 kilómetros, con torres de vigilancia, alambre, perros, minas y una «franja de la muerte». Al menos 140 personas murieron intentando cruzarlo.
+
+El régimen se sostenía además con una de las policías políticas más extensas de la historia: la Stasi llegó a tener un informante por cada pocas decenas de habitantes, con archivos de millones de personas y vecinos, compañeros y familiares vigilándose entre sí.
+
+Se derrumbó por una suma de cosas. La economía del bloque estaba estancada y no podía competir; Gorbachov abrió reformas en la URSS y —esto fue decisivo— anunció que Moscú ya no intervendría militarmente para sostener a los gobiernos comunistas de sus vecinos. Sin los tanques soviéticos detrás, aquellos regímenes se quedaron solos frente a su gente.
+
+En 1989 se abrió Hungría, en Polonia el sindicato Solidaridad ganó unas elecciones, en Checoslovaquia la gente llenó las plazas, y en Alemania Oriental hubo manifestaciones semanales cada vez más grandes, con las iglesias como refugio del movimiento.
+
+El 9 de noviembre de 1989, un portavoz del gobierno anunció torpemente en televisión que se permitían los viajes al oeste, y al ser preguntado desde cuándo, respondió: «inmediatamente». Miles de personas fueron a los pasos fronterizos, los guardias no tenían órdenes claras y, sin recibir ninguna, abrieron. Aquella noche se subieron al muro y empezaron a picarlo.
+
+**Dato curioso:** aquel anuncio fue, en buena medida, un malentendido: la medida estaba pensada para aplicarse al día siguiente y con trámites. El muro cayó, literalmente, porque un funcionario improvisó mal en una rueda de prensa.
+
+---
+
+## 9 · Disolución de la URSS
+
+`disolucion-urss` · **1991**
+
+**Cuerpo:**
+
+La Unión Soviética era el mayor Estado del planeta, con quince repúblicas, más de 280 millones de habitantes, un arsenal nuclear inmenso y un ejército gigantesco. En diciembre de 1991 dejó de existir sin una guerra, sin una invasión y sin apenas violencia.
+
+Las causas de fondo eran económicas. La planificación central podía construir cohetes y presas, pero era incapaz de abastecer de bienes básicos a la población: colas para todo, escasez crónica, calidad pésima. El gasto militar consumía una parte enorme del presupuesto, el precio del petróleo cayó y la guerra de Afganistán fue un desgaste militar, económico y moral de diez años.
+
+Gorbachov intentó salvar el sistema reformándolo, con dos programas: perestroika (reestructuración económica) y glásnost (transparencia y libertad de expresión). Y ahí ocurrió lo que no había previsto: al permitir hablar, salió a la luz todo —las mentiras, la represión estalinista, la corrupción, el desastre de Chernóbil, que su propio ocultamiento había agravado— y el sistema perdió su legitimidad.
+
+En agosto de 1991, un sector duro del régimen intentó un golpe de Estado, sacó los tanques a Moscú y fracasó en tres días ante la resistencia ciudadana. Aquello acabó de deslegitimar al Partido. En diciembre, los líderes de Rusia, Ucrania y Bielorrusia acordaron que la URSS quedaba disuelta, y Gorbachov dimitió el 25 de diciembre.
+
+Lo que vino después fue muy duro para su población: la transición a una economía de mercado se hizo de golpe, la producción se hundió, la inflación arrasó los ahorros, la esperanza de vida masculina en Rusia cayó varios años y un puñado de personas bien situadas se quedó con las grandes empresas públicas. De ese caos y de ese resentimiento nació la Rusia posterior.
+
+Y quedaron problemas abiertos que hoy siguen en los titulares: fronteras heredadas con millones de rusos fuera de Rusia, armas nucleares repartidas en cuatro repúblicas —Ucrania entregó las suyas en 1994 a cambio de garantías de seguridad— y conflictos congelados por todo el antiguo territorio.
+
+**Dato curioso:** aquel mismo año, en agosto de 1991, se publicó la primera página web de la historia. El siglo XX se cerraba políticamente y se abría técnicamente casi el mismo mes.
+
+---
+
+## 10 · World Wide Web
+
+`world-wide-web` · **1991**
+
+**Cuerpo:**
+
+Internet existía desde los años setenta, pero usarla era un oficio: había que conocer comandos, direcciones exactas y programas distintos para cada cosa. Era una red de expertos.
+
+En 1989, un físico británico que trabajaba en el CERN, Tim Berners-Lee, tenía un problema práctico: miles de científicos de decenas de países, con ordenadores y formatos incompatibles, incapaces de encontrar la documentación de los demás. Su propuesta fue un sistema de documentos enlazados entre sí mediante hipervínculos.
+
+Para eso inventó tres cosas que seguimos usando cada día: un lenguaje para escribir las páginas (HTML), un protocolo para pedirlas y recibirlas (HTTP) y un sistema de direcciones único para identificar cualquier documento del mundo (la URL). Más el primer navegador y el primer servidor.
+
+La distinción es sencilla: internet es la infraestructura, la red física y sus protocolos, como las carreteras. La web es UN servicio que circula por ella, como el transporte por carretera. El correo electrónico, las apps de mensajería o el streaming son otros servicios distintos que usan la misma red.
+
+Y ahora la decisión que lo cambió todo: en 1993 el CERN liberó la tecnología de la web al dominio público, gratis y sin patentes. Cualquiera podía montar un sitio o programar un navegador sin pagar ni pedir permiso. Berners-Lee no cobró un céntimo por ello.
+
+**Dato curioso:** la primera página web sigue en línea y explicaba, simplemente, qué era el proyecto y cómo crear una página. Y el ordenador donde funcionaba el primer servidor tenía pegada una nota escrita a mano: «esta máquina es un servidor, NO APAGAR».
+
+---
+
+## 11 · Globalización
+
+`globalizacion` · **Finales del siglo XX**
+
+**Cuerpo:**
+
+La globalización no es nueva —hubo redes mundiales con la Ruta de la Seda y con el comercio atlántico—, pero a finales del siglo XX cambió de escala por tres razones técnicas y una política.
+
+La primera fue el contenedor. Un invento sin glamour: una caja metálica de medidas estándar que se puede mover de un barco a un tren y a un camión sin abrirla. Redujo el coste y el tiempo de carga de forma tan brutal que transportar un producto por medio mundo dejó de ser un factor relevante en su precio.
+
+La segunda fue la comunicación instantánea y barata: cables, satélites, internet. Permite coordinar una fábrica en Vietnam, un diseño en California y un cliente en Madrid en tiempo real.
+
+La tercera fue la reducción de aranceles y la apertura de mercados —los acuerdos comerciales, la Organización Mundial del Comercio, el mercado único europeo— y sobre todo la entrada en el sistema mundial de China (que abrió su economía desde 1978) y de la antigua Unión Soviética.
+
+El resultado es la cadena de valor global: un producto ya no se fabrica en un país, se fabrica en una secuencia de países, cada uno haciendo el paso en el que sale más barato o mejor. Es la especialización de Adam Smith aplicada al planeta entero.
+
+Sus efectos son reales en las dos direcciones, y conviene no elegir solo una mitad. Ha sacado de la pobreza extrema a cientos de millones de personas en Asia y ha abaratado enormemente la ropa, la electrónica y los alimentos. Y a la vez ha destruido industrias y comunidades enteras en los países ricos, ha permitido deslocalizar para pagar sueldos y aceptar condiciones que serían ilegales en el país de destino, ha aumentado la desigualdad interna, ha multiplicado las emisiones del transporte y ha creado una fragilidad enorme: la pandemia y algún barco atravesado en un canal han bastado para paralizar cadenas de suministro de todo el mundo.
+
+**Dato curioso:** hoy alrededor del 90 % del comercio mundial en volumen viaja por mar, en unos 60.000 buques mercantes que la mayoría de la gente nunca ve. La economía global flota, literalmente, sobre una infraestructura invisible.
+
+---
+
+## 12 · Proyecto Genoma Humano
+
+`genoma-humano` · **1990-2003**
+
+**Cuerpo:**
+
+Nuestro ADN es una secuencia de unos 3.200 millones de letras químicas repetidas en casi todas nuestras células. Es la información con la que se construye y se mantiene un cuerpo humano, y hasta los años noventa no teníamos ni idea de lo que decía.
+
+El proyecto fue una colaboración internacional de miles de científicos de una veintena de instituciones, con una duración prevista de quince años y un presupuesto de miles de millones. A mitad de camino apareció una empresa privada compitiendo con un método más rápido, y esa carrera aceleró el resultado: el borrador se anunció en 2000 y la versión completa en 2003.
+
+Los hallazgos rompieron varias expectativas. Se esperaban unos 100.000 genes y resultaron ser algo más de 20.000, aproximadamente los mismos que tiene un gusano microscópico o una planta común. Solo alrededor del 1,5 % del ADN codifica proteínas; el resto, que se llamó despectivamente «ADN basura», resultó estar lleno de instrucciones de regulación: no importa solo qué genes tienes, sino cuándo y cuánto se encienden.
+
+Y una conclusión con implicaciones sociales enormes: dos personas cualesquiera del planeta comparten en torno al 99,9 % de su ADN, y hay más variación genética dentro de cualquier población que entre poblaciones distintas. Las «razas» humanas no tienen fundamento biológico.
+
+También abrió problemas nuevos y muy serios: quién puede acceder a tu información genética, si una aseguradora o una empresa podría discriminarte por ella, qué se hace con los datos de las empresas de test de ADN comerciales y, sobre todo, hasta dónde se puede editar el genoma humano. Con la herramienta CRISPR, editar ADN es hoy relativamente sencillo y barato, y en 2018 un investigador chino modificó embriones humanos que llegaron a nacer, provocando una condena internacional y una condena penal.
+
+**Dato curioso:** secuenciar el primer genoma humano costó unos 2.700 millones de dólares y trece años. Hoy se hace en un día por unos cientos de dólares. Es una caída de precio más rápida que la de los ordenadores.
+
+---
+
+## 13 · Atentados del 11-S
+
+`atentados-11s` · **2001**
+
+**Cuerpo:**
+
+El 11 de septiembre de 2001, diecinueve terroristas de Al Qaeda secuestraron cuatro aviones comerciales en Estados Unidos. Dos impactaron contra las Torres Gemelas de Nueva York, uno contra el Pentágono y el cuarto se estrelló en un campo de Pensilvania después de que los pasajeros, avisados por teléfono, intentaran recuperar la cabina.
+
+Murieron 2.977 personas de más de noventa países, además de los secuestradores. Las dos torres, de 110 pisos, se derrumbaron en menos de dos horas por el efecto combinado del impacto y del incendio del combustible sobre la estructura de acero. Entre las víctimas había 441 miembros de servicios de emergencia que habían entrado a evacuar el edificio.
+
+La respuesta se llamó «guerra contra el terror» y definió dos décadas. Estados Unidos y sus aliados invadieron Afganistán en 2001, y en 2003 Irak, alegando armas de destrucción masiva que nunca se encontraron. Las dos guerras se prolongaron años, causaron centenares de miles de muertos, desestabilizaron la región y contribuyeron a la aparición de nuevos grupos armados. Afganistán acabó en 2021 exactamente donde había empezado: con los talibanes en el poder.
+
+Y cambió la vida cotidiana de todo el mundo, aunque sea en detalles: los controles de aeropuerto tal como los conocemos, los líquidos, los zapatos, los escáneres. Pero sobre todo cambió el equilibrio entre seguridad y libertad: leyes de excepción, vigilancia masiva de comunicaciones (revelada después por las filtraciones de Snowden), detenciones sin juicio en Guantánamo y el uso de la tortura por un Estado democrático, reconocido posteriormente por un informe del Senado estadounidense.
+
+Ese debate sigue vivo y es una de las preguntas políticas centrales de nuestra época: cuánta libertad estamos dispuestos a entregar a cambio de seguridad, y quién decide cuándo devolverla.
+
+**Dato curioso:** aquel día se cerró el espacio aéreo de Estados Unidos y se ordenó aterrizar a más de 4.500 aviones en cuestión de horas. Treinta y ocho vuelos internacionales desviados acabaron en un pueblo de Terranova de 10.000 habitantes, que alojó y alimentó a casi 7.000 desconocidos durante días.
+
+---
+
+## 14 · Smartphones
+
+`smartphones` · **Desde 2007**
+
+**Cuerpo:**
+
+Los móviles existían desde los ochenta y ya había teléfonos con correo y navegador. Lo que ocurrió en 2007 fue una reunión de piezas: pantalla táctil capacitiva de buena calidad, un sistema pensado para el dedo en lugar del teclado, conexión permanente a internet y —el año siguiente— una tienda de aplicaciones que permitía a cualquier programador del mundo crear algo para ese aparato.
+
+El resultado fue el objeto tecnológico de adopción más rápida de la historia. En unos quince años se ha pasado de casi cero a más de siete mil millones de móviles inteligentes en uso.
+
+En muchos países ha significado directamente el salto a la modernidad: en zonas de África sin bancos ni cobertura fija, el móvil se ha convertido en la cuenta corriente, el sistema de pagos, el mercado agrícola y la consulta médica, saltándose por completo la etapa de las infraestructuras que Europa tardó un siglo en construir.
+
+El precio también se está midiendo. Atención fragmentada y dificultad para concentrarse; aplicaciones diseñadas expresamente para generar uso compulsivo; problemas de sueño y de salud mental documentados especialmente en adolescentes; un modelo de negocio basado en registrar el comportamiento; y una presencia constante que ha cambiado la conversación, la espera, el aburrimiento y hasta la forma de recordar, porque delegamos la memoria en el aparato.
+
+Y una consecuencia inesperada y muy potente: cada persona lleva una cámara. Abusos policiales, guerras, catástrofes y protestas se documentan ahora desde dentro y por cualquiera, no solo por los medios. Eso ha cambiado la política en medio mundo.
+
+**Dato curioso:** hay más móviles activos que personas en el planeta, y en muchos países hay más gente con acceso a un teléfono móvil que a un retrete o a agua corriente en casa.
+
+---
+
+## 15 · Redes sociales
+
+`redes-sociales` · **Desde la década de 2000**
+
+**Cuerpo:**
+
+Durante toda la historia, difundir un mensaje a mucha gente exigió una imprenta, una emisora o un periódico, es decir, dinero y permiso. Las redes sociales eliminaron ese filtro: cualquier persona con un móvil puede publicar y, potencialmente, llegar a millones.
+
+Sus efectos positivos son enormes y a veces se olvidan: mantener el contacto con gente lejana, encontrar comunidades para problemas raros o minoritarios, aprender oficios gratis, montar un negocio sin capital, coordinar ayuda en una catástrofe y dar voz a quienes nunca aparecían en los medios. Movimientos como las primaveras árabes, el 15-M o el #MeToo se organizaron ahí.
+
+El problema no es publicar, es lo que decide qué ves. Como el negocio consiste en vender atención a los anunciantes, los algoritmos aprenden a mostrar lo que más te retiene, y lo que más retiene a los seres humanos es lo que provoca emoción intensa: indignación, miedo, escándalo, confirmación de lo que ya piensas.
+
+De ahí salen los efectos conocidos: los bulos se difunden más rápido que las correcciones porque son más llamativos; se forman burbujas donde solo se oye una versión; se polariza el debate público porque el matiz no engancha; y aparecen las campañas organizadas de desinformación, incluidas las de gobiernos, con cuentas falsas y contenido fabricado, ahora también con vídeos y voces generados por inteligencia artificial.
+
+Estamos en el momento en que las sociedades empiezan a reaccionar: leyes de transparencia algorítmica, verificación de edad, límites a la publicidad dirigida a menores, prohibición del móvil en las escuelas. Es exactamente lo que pasó con la imprenta, la prensa amarilla, la radio y la televisión: primero la tecnología, luego el desastre, luego las reglas.
+
+**Dato curioso:** varios de los ingenieros y directivos que diseñaron estos sistemas han declarado públicamente que limitan el uso de pantallas de sus propios hijos. Es un dato que merece pensarse despacio.
+
+---
+
+## 16 · Crisis financiera de 2008
+
+`crisis-2008` · **2008**
+
+**Cuerpo:**
+
+Durante años, los bancos estadounidenses concedieron hipotecas a personas que no podían pagarlas —las llamadas «subprime»—, confiando en que el precio de la vivienda subiría siempre y que, en el peor caso, se quedarían con una casa más valiosa.
+
+El truco fue lo que hicieron después: empaquetaron miles de esas hipotecas en productos financieros complejos y los vendieron a inversores de todo el mundo, troceados y mezclados de tal forma que nadie sabía exactamente qué estaba comprando. Y las agencias de calificación, pagadas por quienes emitían esos productos, les pusieron la mejor nota posible.
+
+Cuando los precios de la vivienda dejaron de subir y la gente empezó a no poder pagar, el valor de esos paquetes se hundió, y de golpe medio sistema financiero mundial descubrió que tenía en su balance activos que no valían nada y deudas enormes. En septiembre de 2008 quebró Lehman Brothers, y como los bancos dejaron de prestarse entre ellos por desconfianza, el crédito se paró en seco.
+
+Sin crédito no hay economía: las empresas no pueden pagar nóminas ni comprar material, así que despiden; con desempleo cae el consumo; y con menos consumo cierran más empresas. La crisis financiera se convirtió en la mayor recesión mundial desde 1929.
+
+En España se sumó una burbuja inmobiliaria propia: en los años del boom se construían más viviendas que en Alemania, Francia e Italia juntas. Al pincharse, el paro llegó al 26 %, hubo cientos de miles de desahucios, se rescató el sistema financiero con dinero público y se aplicaron recortes en sanidad, educación y salarios.
+
+Los rescates dejaron una herida política duradera: se salvó a los bancos porque su caída habría arrastrado al resto, pero casi ningún responsable respondió personalmente, mientras millones de personas perdían casa y empleo. De ese agravio nacieron movimientos de protesta y una desconfianza hacia las instituciones y los partidos tradicionales que sigue marcando la política de hoy.
+
+**Dato curioso:** la palabra «crisis» viene del griego krísis, que significa «decisión» o «momento de decidir». Cada crisis financiera moderna ha terminado con un cambio de reglas… y con un cierto olvido de esas reglas una generación después.
+
+---
+
+## 17 · COVID-19
+
+`covid-19` · **2020**
+
+**Cuerpo:**
+
+A finales de 2019 apareció en China un coronavirus nuevo. En marzo de 2020 la Organización Mundial de la Salud declaró la pandemia, y en pocas semanas la mitad de la humanidad estaba confinada en su casa: una medida sin precedentes en la historia por su escala y simultaneidad.
+
+El balance conocido supera los siete millones de muertes confirmadas, y los estudios de exceso de mortalidad apuntan a que la cifra real ronda los veinte millones. Los sistemas sanitarios de países ricos estuvieron al borde del colapso, con hospitales desbordados y personal agotado.
+
+La respuesta científica fue el hecho más notable. Se secuenció el genoma del virus y se publicó en internet en enero de 2020, a disposición de todo el mundo. Menos de un año después había vacunas eficaces aprobadas, cuando el récord anterior estaba en varios años. Fue posible por tres cosas: décadas de investigación previa en ARN mensajero que parecía no tener aplicación inmediata, financiación pública masiva y a riesgo, y colaboración internacional en tiempo real.
+
+También dejó a la vista las desigualdades: mientras los países ricos vacunaban a su población y acumulaban dosis, países enteros de África esperaron más de un año. Y dentro de cada país, el confinamiento fue muy distinto según se tuviera un piso con terraza o un trabajo que no se podía hacer desde casa.
+
+Y dejó un problema social importante: la desinformación circuló a la velocidad del virus, y la confianza en las instituciones y en la propia ciencia quedó dañada en muchos lugares, en parte por errores reales de comunicación —normal en una emergencia donde el conocimiento cambiaba cada semana— y en parte por campañas deliberadas.
+
+La lección que casi todos los expertos repiten es la misma: no fue la última. Con la densidad de población, la ganadería intensiva, la deforestación y la movilidad aérea actuales, habrá más pandemias, y lo que decidirá el resultado será la vigilancia temprana, la capacidad de fabricar vacunas y la confianza social.
+
+**Dato curioso:** durante los confinamientos, los sismógrafos de todo el planeta registraron una caída notable del «ruido sísmico» generado por la actividad humana: coches, trenes, fábricas. Por primera vez desde que existen esos aparatos, los científicos pudieron escuchar la Tierra casi en silencio.
+
+---
+
+## 18 · Inteligencia artificial generativa
+
+`ia-generativa` · **Desde 2022**
+
+**Cuerpo:**
+
+La inteligencia artificial lleva décadas en marcha, pero lo que cambió a partir de 2022 fue que unos sistemas capaces de generar texto, imágenes, voz, música, vídeo y código con calidad sorprendente pasaron a estar en manos de cualquiera, sin ser experto y desde el navegador.
+
+Cómo funciona, en corto: estos modelos han procesado cantidades gigantescas de texto e imágenes y han aprendido patrones estadísticos extremadamente finos sobre cómo se relacionan las palabras y las formas. No consultan una base de datos ni «entienden» como una persona: predicen lo más plausible a continuación. Eso explica sus dos caras: pueden ser asombrosamente útiles y pueden decir con total seguridad algo falso.
+
+Su impacto ya es real en la programación, la traducción, el diseño, la atención al cliente, el análisis de datos, la educación y la investigación científica —en biología, la predicción de la estructura de las proteínas ha resuelto un problema que llevaba cincuenta años abierto—.
+
+Y plantea preguntas que aún no tienen respuesta: qué pasa con los empleos que consisten en tareas que la máquina hace más rápido; de quién es el trabajo con el que se han entrenado estos modelos; cómo se distingue lo verdadero cuando fabricar una foto, una voz o un vídeo falso es gratis; qué sesgos arrastran, si aprenden de textos escritos por una humanidad con prejuicios; y quién controla una tecnología cuyo desarrollo está concentrado en un puñado de empresas.
+
+Y hay una diferencia que conviene tener presente: la imprenta multiplicó nuestra capacidad de difundir ideas y la máquina de vapor nuestra fuerza física. Esta es la primera tecnología que automatiza tareas cognitivas, es decir, aquello con lo que llevamos toda la historia definiéndonos.
+
+Su desenlace no está escrito, y esa es la parte importante: no es un fenómeno natural que nos ocurre, sino un conjunto de decisiones —de empresas, de gobiernos y de cada persona— que se están tomando ahora mismo.
+
+**Dato curioso:** el mecanismo clave de estos modelos, la llamada «atención», se describió en un artículo científico de 2017 de apenas ocho páginas titulado «Attention is all you need». Casi todo lo que se usa hoy en IA generativa desciende de ese texto.
+
