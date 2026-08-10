@@ -317,8 +317,20 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
         className={enEspera ? 'arbol-en-espera' : undefined}
         style={{ width: '100%', maxWidth, margin: '0 auto' }}
       >
+        {/* El marco (viewBox) está calculado para que el Árbol quede CENTRADO en
+            cualquier caja donde se meta, sin depender de la caja:
+              · arriba sobra sitio a propósito (hasta -48): el halo de Keter es un
+                círculo de r=74 centrado en y=45, o sea que llega a -29, y encima
+                respira (keterBreath lo escala). Recortarlo se ve.
+              · abajo hay que llegar igual de lejos MEDIDO DESDE LAS ESFERAS, que
+                es lo que el ojo ve: van de y=11 (Keter −R) a y=694 (Malkhut +R),
+                así que su centro está en 352,5 y el alto tiene que ser
+                2 × (352,5 + 48) = 801.
+            Con el alto anterior (758) el centro del marco caía en 331 y el Árbol
+            se veía unos 20 puntos bajo dentro de su caja. Si se toca R o la `y`
+            de Keter/Malkhut, hay que rehacer esta cuenta. */}
         <svg
-          viewBox="-10 -48 420 758"
+          viewBox="-10 -48 420 801"
           width="100%"
           style={{ display: 'block' }}
           xmlns="http://www.w3.org/2000/svg"

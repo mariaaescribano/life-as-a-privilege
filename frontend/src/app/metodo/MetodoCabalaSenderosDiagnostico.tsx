@@ -126,14 +126,11 @@ export default function MetodoCabalaSenderosDiagnostico() {
           </Reveal>
 
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
-            {/* El texto de debajo del header va SIEMPRE sin sombra: cae sobre el
-                turquesa limpio y la sombra solo lo ensucia.
-                OJO: este párrafo NO va dentro de caja, va sobre el turquesa
-                #008080, y ahí cabalaTxt (#bd814d) da 1,46:1 de contraste — muy
-                poco. Se pone así porque en esta página no se quiere letra
-                blanca en ningún sitio; si costase leerlo, aquí es donde hay que
-                volver al blanco (4,8:1) o meter el párrafo en una Caja. */}
-            <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
+            {/* El texto de debajo del header va SIEMPRE blanco y sin sombra: cae
+                sobre el turquesa limpio, donde cabalaTxt (#bd814d) da 1,46:1 de
+                contraste y el blanco 4,8:1. El ámbar de Cábala, solo dentro de
+                las cajas. */}
+            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
               Cada sendero es una transición entre dos capacidades. Aquí se reúne el resultado de tus 22 tests
               para mostrar qué caminos fluyen y cuáles piden más trabajo.

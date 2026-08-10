@@ -548,11 +548,13 @@ export default function MetodoCabalaSefira() {
             </Box>
           </Reveal>
 
-          {/* Frase bajo el header — SIN sombra: va sobre el turquesa limpio. */}
+          {/* Frase bajo el header — BLANCA y sin sombra: va sobre el turquesa
+              limpio, y ahí el ámbar de Cábala se lee mal (1,5:1 de contraste).
+              El color de la disciplina, solo dentro de las cajas. */}
           {sefira.frase && (
             <Reveal direction="up" distance={14} delay={0.08} duration={0.6} display="flex" justifyContent="center">
               <Text
-                color={cabalaTxt}
+                color="white"
                 fontSize={{ base: "lg", md: "2xl" }}
                 fontStyle="italic"
                 fontWeight="600"
@@ -573,18 +575,21 @@ export default function MetodoCabalaSefira() {
                     w={{ base: "22px", md: "24px" }}
                     h={{ base: "22px", md: "24px" }}
                     borderRadius="full"
-                    bg={`${cabalaTxt}22`}
-                    border={`1.5px solid ${cabalaTxt}`}
-                    color={cabalaTxt}
+                    // El asterisco va con la frase, así que también en blanco:
+                    // es parte del texto que cae sobre el turquesa, no una pieza
+                    // de caja.
+                    bg="rgba(255,255,255,0.16)"
+                    border="1.5px solid white"
+                    color="white"
                     fontSize={{ base: "md", md: "lg" }}
                     fontWeight="800"
                     lineHeight="1"
                     cursor="pointer"
                     transition="all 0.18s"
-                    boxShadow={`0 0 10px ${cabalaTxt}88`}
+                    boxShadow="0 0 10px rgba(255,255,255,0.55)"
                     aria-label={sefira.nota.titulo}
                     sx={{ WebkitTapHighlightColor: "transparent" }}
-                    _hover={{ bg: cabalaTxt, color: cabalaBg, transform: "scale(1.1)" }}
+                    _hover={{ bg: "white", color: cabalaBg, transform: "scale(1.1)" }}
                   >
                     *
                   </Box>
@@ -594,7 +599,8 @@ export default function MetodoCabalaSefira() {
           )}
 
           {!tieneContenido && (
-            <Text color={cabalaTxt} fontStyle="italic" textAlign="center" style={{ textShadow: INK_SHADOW }}>
+            /* Fuera de caja: blanco y sin sombra, como la frase de arriba. */
+            <Text color="white" fontStyle="italic" textAlign="center">
               Contenido próximamente.
             </Text>
           )}

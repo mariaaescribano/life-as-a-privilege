@@ -6,7 +6,6 @@ import CreadoraCard from "../../components/welcome/CreadoraCard";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import { Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
-import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import ArbolDeLaVida from "../../components/global/ArbolDeLaVida";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
@@ -30,7 +29,7 @@ import {
 } from "../../components/metodo/presentacionUi";
 import { CabalaIcon, cabalaBg, cabalaNom } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
-import { TextoRico, useIdioma, useT } from "../../i18n";
+import { useIdioma, useT } from "../../i18n";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
@@ -95,7 +94,6 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
   ]);
   if (!fotosListas) return <LifeLoading variant="auto" />;
 
-  const sombra = sombraTexto(d.nom, d.bg);
   const renderIcon = (size: string) => <CabalaIcon size={{ base: size, md: size }} />;
 
   const verVideo = () => {
@@ -219,24 +217,16 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
           {/* Sin filo de color y con el halo del header: la caja no debe destacar
               más que él (regla de las presentaciones y del recorrido de Cábala). */}
           <CajaLisa d={d}>
+            {/* Solo el Árbol, centrado en la caja. Aquí iba encima el párrafo
+                «Diez dimensiones y una más oculta —Da'at—…»: retirado, que el
+                Árbol se explica solo y el texto lo descentraba en la caja. */}
             <Flex
               direction="column"
               align="center"
-              gap={{ base: 5, md: 7 }}
+              justify="center"
               px={{ base: 4, md: 10 }}
               py={{ base: 8, md: 11 }}
             >
-              <Text
-                color={d.txt}
-                fontSize={{ base: "lg", md: "xl" }}
-                lineHeight={{ base: "1.8", md: "1.85" }}
-                textAlign="center"
-                maxW="720px"
-                textShadow={sombra}
-              >
-                <TextoRico>{t("presentacion.cabala.arbolTexto")}</TextoRico>
-              </Text>
-
               <ArbolDeLaVida
                 maxWidth="520px"
                 showDaat
