@@ -26,7 +26,7 @@ export const COMIC_PRANAYAMA: Vineta[] = [
     // Viñeta 1: alguien sentado de perfil, el aire entrando como un hilo de
     // luz por la nariz y bajando hasta el vientre.
     src: `${P}/pranayama1.webp`,
-    eyebrow: "Prāṇāyāma",
+    eyebrow: "",
     titulo: "",
     paragraphs: [
       "Prāṇa es la energía vital; āyāma, extender.",

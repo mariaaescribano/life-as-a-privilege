@@ -2,12 +2,17 @@
 // PRĀṆĀYĀMA · contenido de la página. Ya NO forma parte del submapa de un
 // doṣha: se llega desde las tarjetas de los tres Doṣhas.
 //
+// LOS TRES DOṢHAS ESTÁN EN LA MISMA PÁGINA. Debajo del header hay tres
+// botones (Vata · Pitta · Kapha) y se cambia de uno a otro cuando se quiera:
+// la página NO es de un doṣha concreto aunque la URL traiga uno (ese solo
+// decide con cuál se entra). Lo escrito de cada doṣha se guarda por separado
+// en `doshaPranayama[dosha]`, así que ir y volver no pierde nada.
+//
 // QUÉ ES IMPARCIAL Y QUÉ NO. La teoría y los cuidados son iguales para los
 // tres doṣhas, así que NO están aquí: se cuentan en el cómic de tres viñetas
 // (components/metodo/comicPranayama.ts) que sale al entrar en la página. Lo
-// único que cambia de un doṣha a otro es su bloque: UNA práctica, su escrito
-// y sus preguntas. Nada de pestañas con las tres prácticas: cada quien ve la
-// suya.
+// que cambia de un doṣha a otro es su bloque: UNA práctica, su escrito y sus
+// preguntas.
 //
 // La página es de PRACTICAR, no de leer: el texto se mantiene corto a
 // propósito. Si hace falta contar teoría larga (los cinco vāyus, el nervio
@@ -51,8 +56,8 @@ export interface PracticaPranayama {
 // ── Una práctica por doṣha ───────────────────────────────────────────────
 // Vata se calma, Pitta se refresca, Kapha se enciende. La misma lógica que el
 // resto del recorrido: lo semejante aumenta lo semejante, lo contrario equilibra.
-// En la página se ve SOLO la del doṣha de la URL, con su escrito y sus
-// preguntas: es el único bloque que no es imparcial.
+// En la página se ve la del doṣha SELECCIONADO en los botones, con su escrito
+// y sus preguntas; pulsando otro botón se ve la de ese, sin salir de la página.
 
 export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
   vata: {

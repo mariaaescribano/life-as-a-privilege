@@ -268,30 +268,107 @@ function GuiaRespiracion({ fases, ciclos, color, onCompletar, completado }: Guia
   );
 }
 
+/** Lo que se guarda de CADA doṣha. La página tiene los tres a la vez. */
+interface SlicePranayama {
+  respuestas: string[];
+  compromiso: string;
+  practicado: boolean;
+}
+const SLICE_VACIA: SlicePranayama = { respuestas: [], compromiso: "", practicado: false };
+const SLICES_VACIAS: Record<DoshaKey, SlicePranayama> = {
+  vata: SLICE_VACIA, pitta: SLICE_VACIA, kapha: SLICE_VACIA,
+};
+const DOSHAS: DoshaKey[] = ["vata", "pitta", "kapha"];
+
+/** Blindaje de lo guardado: datos antiguos (una `reflexion` en string) o
+ *  campos que faltan no pueden reventar el render. */
+function leerSlice(raw: any): SlicePranayama {
+  const s = raw || {};
+  const respuestas: string[] = Array.isArray(s.respuestas)
+    ? s.respuestas.map((x: unknown) => (typeof x === "string" ? x : ""))
+    : typeof s.reflexion === "string" && s.reflexion.trim()
+    ? [s.reflexion]
+    : [];
+  return {
+    respuestas,
+    compromiso: typeof s.compromiso === "string" ? s.compromiso : "",
+    practicado: s.practicado === true,
+  };
+}
+
+const tieneAlgo = (s: SlicePranayama) =>
+  s.respuestas.some((r) => r.trim().length > 0) || s.compromiso.trim().length > 0;
+
+/** Los tres botones de debajo del header: la página no es de un doṣha, son los
+ *  tres, y se cambia de uno a otro cuando se quiera. */
+function SelectorDosha({ sel, onSelect }: { sel: DoshaKey; onSelect: (k: DoshaKey) => void }) {
+  return (
+    <Flex gap={{ base: 2.5, md: 4 }} wrap="wrap" justify="center" w="100%">
+      {DOSHAS.map((k) => {
+        const m = DOSHA_META[k];
+        const Icon = m.Icon;
+        const activo = k === sel;
+        return (
+          <Flex
+            as="button"
+            key={k}
+            onClick={() => onSelect(k)}
+            align="center"
+            gap={2}
+            px={{ base: 5, md: 8 }}
+            py={{ base: 2, md: 2.5 }}
+            borderRadius="full"
+            bg={activo ? `${ayurvedaBg}f2` : "rgba(255,255,255,0.14)"}
+            border={`1.5px solid ${activo ? m.color : "rgba(255,255,255,0.55)"}`}
+            color={activo ? m.color : "#fff"}
+            fontFamily="'EB Garamond', serif"
+            fontSize={{ base: "md", md: "lg" }}
+            fontWeight={activo ? "700" : "400"}
+            letterSpacing="0.06em"
+            cursor="pointer"
+            transition="background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease"
+            boxShadow={activo ? `0 0 14px ${m.color}66, 0 0 30px rgba(255,255,255,0.18)` : "none"}
+            sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", userSelect: "none" }}
+            _hover={{ bg: activo ? `${ayurvedaBg}f2` : "rgba(255,255,255,0.24)", transform: "translateY(-2px)" }}
+            _active={{ transform: "scale(0.96)" }}
+          >
+            <Icon size={{ base: "20px", md: "24px" }} color={activo ? m.color : "#fff"} />
+            {m.label}
+          </Flex>
+        );
+      })}
+    </Flex>
+  );
+}
+
 export default function MetodoAyurvedaDoshaPranayama() {
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
-  const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
+  // La URL ya solo decide con cuál se ENTRA: dentro se cambia con los botones.
+  const doshaInicial = useRef<DoshaKey>((DOSHAS as string[]).includes(dosha || "") ? (dosha as DoshaKey) : "vata");
 
   const [loading, setLoading] = useState(true);
-  // Una respuesta por pregunta del doṣha (PRANAYAMA_PRACTICA[dosha].preguntas).
-  const [respuestas, setRespuestas] = useState<string[]>([]);
-  const [compromiso, setCompromiso] = useState("");
-  const [practicado, setPracticado] = useState(false);
+  // Los TRES doṣhas a la vez: cada uno con sus respuestas (una por pregunta),
+  // su compromiso y su «practicado». Se cargan de golpe y se guarda solo el
+  // que se está tocando.
+  const [datos, setDatos] = useState<Record<DoshaKey, SlicePranayama>>(SLICES_VACIAS);
+  const [guardado, setGuardado] = useState<Record<DoshaKey, boolean>>({ vata: false, pitta: false, kapha: false });
+  const [sel, setSel] = useState<DoshaKey>(doshaInicial.current);
   // El cómic imparcial (teoría + cuidados) sale al entrar, ANTES de la página:
   // no persiste, se cierra con la X o con el botón «Prāṇāyāma →».
   const [comicOpen, setComicOpen] = useState(true);
-  const [guardado, setGuardado] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const dataRef = useRef<Record<string, any>>({});
+  const practicaRef = useRef<HTMLDivElement | null>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
 
+  // Solo al montar: el doṣha ya no vuelve a recargar la página, se cambia en
+  // memoria (los tres están cargados).
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
-    if (!doshaKey) { navigate("/metodo/ayurveda/tarjetas", { replace: true }); return; }
 
     (async () => {
       try {
@@ -301,20 +378,17 @@ export default function MetodoAyurvedaDoshaPranayama() {
         const r = await axios.get(`${API_URL}/metodo-ayurveda/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: Record<string, any> = r.data?.data || {};
         dataRef.current = d;
-        const slice = d?.doshaPranayama?.[doshaKey] || {};
-        // Blindaje: hasta ahora se guardaba UNA reflexión (string) y ahora se
-        // guarda una respuesta por pregunta (array). Lo viejo se recoloca en la
-        // primera pregunta en vez de perderse.
-        const prevResp: string[] = Array.isArray(slice.respuestas)
-          ? slice.respuestas.map((x: unknown) => (typeof x === "string" ? x : ""))
-          : typeof slice.reflexion === "string" && slice.reflexion.trim()
-          ? [slice.reflexion]
-          : [];
-        const prevCom = typeof slice.compromiso === "string" ? slice.compromiso : "";
-        setRespuestas(prevResp);
-        setCompromiso(prevCom);
-        setPracticado(slice.practicado === true);
-        setGuardado(prevResp.some((r) => r.trim().length > 0) || prevCom.length > 0);
+        const cargado = {
+          vata: leerSlice(d?.doshaPranayama?.vata),
+          pitta: leerSlice(d?.doshaPranayama?.pitta),
+          kapha: leerSlice(d?.doshaPranayama?.kapha),
+        };
+        setDatos(cargado);
+        setGuardado({
+          vata: tieneAlgo(cargado.vata),
+          pitta: tieneAlgo(cargado.pitta),
+          kapha: tieneAlgo(cargado.kapha),
+        });
       } catch {
         // silencioso
       } finally {
@@ -322,23 +396,23 @@ export default function MetodoAyurvedaDoshaPranayama() {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [doshaKey]);
+  }, []);
 
-  const persist = async (resp: string[], comp: string, prac: boolean) => {
+  const persist = async (key: DoshaKey, slice: SlicePranayama) => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    if (!userId || !token || !doshaKey) return;
+    if (!userId || !token) return;
     setGuardando(true);
     try {
       const next = {
         ...dataRef.current,
         doshaPranayama: {
           ...(dataRef.current.doshaPranayama || {}),
-          [doshaKey]: {
-            ...(dataRef.current.doshaPranayama?.[doshaKey] || {}),
-            respuestas: resp,
-            compromiso: comp,
-            practicado: prac,
+          [key]: {
+            ...(dataRef.current.doshaPranayama?.[key] || {}),
+            respuestas: slice.respuestas,
+            compromiso: slice.compromiso,
+            practicado: slice.practicado,
           },
         },
       };
@@ -351,31 +425,50 @@ export default function MetodoAyurvedaDoshaPranayama() {
     }
   };
 
+  const slice = datos[sel];
+  const parche = (p: Partial<SlicePranayama>) =>
+    setDatos((prev) => ({ ...prev, [sel]: { ...prev[sel], ...p } }));
+
   const guardarReflexion = async () => {
-    await persist(respuestas, compromiso, practicado);
-    setGuardado(respuestas.some((r) => r.trim().length > 0) || compromiso.trim().length > 0);
+    await persist(sel, slice);
+    setGuardado((prev) => ({ ...prev, [sel]: tieneAlgo(slice) }));
   };
 
   // Al terminar la práctica se guarda sola: es un dato que no queremos que se
   // pierda porque la usuaria no llegue a pulsar «Guardar».
   const marcarPracticado = () => {
-    if (practicado) return;
-    setPracticado(true);
-    void persist(respuestas, compromiso, true);
+    if (slice.practicado) return;
+    const next = { ...slice, practicado: true };
+    setDatos((prev) => ({ ...prev, [sel]: next }));
+    void persist(sel, next);
   };
 
-  const irCursos = () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/cursos`);
+  // Cambiar de doṣha: se guarda lo escrito del anterior (que no se pierda por
+  // pulsar otro botón) y la página se queda donde está, mirando la práctica.
+  const cambiarDosha = (k: DoshaKey) => {
+    if (k === sel) return;
+    void persist(sel, datos[sel]);
+    setSel(k);
+    // La URL acompaña a la selección para que recargar no devuelva al otro.
+    navigate(`/metodo/ayurveda/dosha/${k}/pranayama`, { replace: true });
+    window.requestAnimationFrame(() => {
+      practicaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
 
-  if (loading || !doshaKey) {
+  const irCursos = () => navigate(`/metodo/ayurveda/dosha/${sel}/cursos`);
+
+  if (loading) {
     return <AyurvedaLoading />;
   }
 
-  // El doṣha de la URL manda en el ÚNICO bloque que no es imparcial: su
-  // práctica, su escrito y sus preguntas. Todo lo demás (cabecera, «Tu
+  // El doṣha ELEGIDO manda en los dos bloques que no son imparciales: su
+  // práctica y su escrito con sus preguntas. Todo lo demás (cabecera, «Tu
   // momento» y el cierre) va en el color de Ayurveda, no en el suyo.
-  const meta = DOSHA_META[doshaKey];
+  const meta = DOSHA_META[sel];
   const DoshaIcon = meta.Icon;
-  const practica = PRANAYAMA_PRACTICA[doshaKey];
+  const practica = PRANAYAMA_PRACTICA[sel];
+  const { respuestas, compromiso, practicado } = slice;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -392,21 +485,29 @@ export default function MetodoAyurvedaDoshaPranayama() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Doṣhas", onClick: () => { void persist(respuestas, compromiso, practicado); navigate("/metodo/ayurveda/tarjetas"); } }}
+            prev={{ label: "← Doṣhas", onClick: () => { void persist(sel, slice); navigate("/metodo/ayurveda/tarjetas"); } }}
             extra={ilustracionesBtn}
-            next={{ label: "Cursos →", onClick: () => { void persist(respuestas, compromiso, practicado); irCursos(); } }}
+            next={{ label: "Cursos →", onClick: () => { void persist(sel, slice); irCursos(); } }}
           />
           </Reveal>
 
-          {/* LA PRÁCTICA DEL DOṢHA — el único bloque que no es imparcial. Una
-              sola, la suya: ni pestañas ni las otras dos. La teoría y los
-              cuidados los ha contado ya el cómic de la entrada. */}
+          {/* LOS TRES DOṢHAS, siempre. La página no es de uno: se elige aquí y
+              se cambia cuando se quiera. Lo escrito de cada uno se guarda por
+              separado, así que ir y volver no pierde nada. */}
+          <Reveal direction="down" distance={14} delay={0.08} duration={0.6} w="100%">
+            <SelectorDosha sel={sel} onSelect={cambiarDosha} />
+          </Reveal>
+
+          {/* LA PRÁCTICA DEL DOṢHA ELEGIDO — uno de los dos bloques que no son
+              imparciales. Se ve una sola práctica, la del botón pulsado. La
+              teoría y los cuidados los ha contado ya el cómic de la entrada. */}
+          <Box ref={practicaRef} w="100%" scrollMarginTop={{ base: 4, md: 6 }}>
           <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex align="center" gap={3} mb={4}>
               <DoshaIcon size={{ base: "30px", md: "36px" }} color={meta.color} />
               <Text color={meta.color} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.14em" textTransform="uppercase">
-                Tu práctica · {meta.label}
+                La práctica de {meta.label}
               </Text>
             </Flex>
 
@@ -457,7 +558,10 @@ export default function MetodoAyurvedaDoshaPranayama() {
                 Sigue el círculo: crece cuando entra el aire y se encoge cuando sale.
                 Si te agobia, para. <Box as="span" fontStyle="italic">Parar también es practicar.</Box>
               </Text>
+              {/* `key` con el doṣha: al cambiar de botón el guía se monta de
+                  nuevo, y así el reloj no sigue contando el de antes. */}
               <GuiaRespiracion
+                key={sel}
                 fases={practica.fases}
                 ciclos={practica.ciclos}
                 color={meta.color}
@@ -467,6 +571,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
             </Box>
           </Panel>
           </Reveal>
+          </Box>
 
           {/* DESPUÉS DE RESPIRAR — también del doṣha: su escrito y SUS
               preguntas, una caja por pregunta. Lo único imparcial de este box
@@ -484,21 +589,19 @@ export default function MetodoAyurvedaDoshaPranayama() {
 
             <RevealStagger inView display="flex" flexDirection="column" gap={6} stagger={0.08} delayChildren={0.05} amount={0.1}>
               {practica.preguntas.map((preg, i) => (
-                <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%">
+                <RevealItem key={`${sel}-${i}`} direction="up" distance={14} duration={0.45} w="100%">
                   <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={3}>{preg}</Text>
                   <Textarea
                     value={respuestas[i] ?? ""}
                     onChange={(e) => {
                       const v = e.target.value;
-                      setRespuestas((prev) => {
-                        // El array puede venir más corto que las preguntas (datos
-                        // antiguos o preguntas nuevas): se rellena con "" hasta i.
-                        const next = [...prev];
-                        while (next.length <= i) next.push("");
-                        next[i] = v;
-                        return next;
-                      });
-                      setGuardado(false);
+                      // El array puede venir más corto que las preguntas (datos
+                      // antiguos o preguntas nuevas): se rellena con "" hasta i.
+                      const next = [...respuestas];
+                      while (next.length <= i) next.push("");
+                      next[i] = v;
+                      parche({ respuestas: next });
+                      setGuardado((prev) => ({ ...prev, [sel]: false }));
                     }}
                     placeholder="Escríbelo aquí…"
                     w="100%"
@@ -535,7 +638,10 @@ export default function MetodoAyurvedaDoshaPranayama() {
                       label={op}
                       color={meta.color}
                       checked={compromiso === op}
-                      onSelect={() => { setCompromiso((prev) => (prev === op ? "" : op)); setGuardado(false); }}
+                      onSelect={() => {
+                        parche({ compromiso: compromiso === op ? "" : op });
+                        setGuardado((prev) => ({ ...prev, [sel]: false }));
+                      }}
                     />
                   </RevealItem>
                 ))}
@@ -554,7 +660,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 28px ${meta.color}88` }}
               >
-                {guardando ? "Guardando…" : guardado ? "Guardado ✓" : "Guardar"}
+                {guardando ? "Guardando…" : guardado[sel] ? "Guardado ✓" : "Guardar"}
               </Box>
             </Flex>
           </Panel>
@@ -570,7 +676,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
               ))}
               <Box
                 as="button"
-                onClick={() => { void persist(respuestas, compromiso, practicado); irCursos(); }}
+                onClick={() => { void persist(sel, slice); irCursos(); }}
                 mt={1}
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={ayurvedaTxt} color="#fff"
