@@ -188,7 +188,13 @@ function SelectoresLengua({ opciones, elegidaKey, onElegir }: {
   const inView = useInView(ref, { once: true, amount: 0.2 });
   const enter = reduce || inView;
   return (
-    <Flex ref={ref} wrap="wrap" gap={{ base: 2.5, md: 4 }}>
+    // Las tarjetas llenan el ANCHO del apartado (2 columnas en móvil, 3 de md
+    // hacia arriba): nada de anchos fijos, que dejaban un pasillo muerto a la
+    // derecha del box. El aire de los lados lo pone el padding de la Banda.
+    // `justify="center"`: las filas completas ocupan el ancho entero y la
+    // última, si va coja (los apartados tienen 4, 5, 6 o 7 variantes), queda
+    // centrada en vez de dejar el hueco pegado a un lado.
+    <Flex ref={ref} wrap="wrap" justify="center" gap={{ base: 2.5, md: 4 }}>
       {opciones.map((op, i) => (
         <SelectorCard
           key={op.key}
@@ -211,8 +217,10 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
     <Box as="button" onClick={onClick} textAlign="center"
          // Tarjetas grandes: la foto de una lengua se tiene que poder comparar
          // con la tuya, y a 150px no se distinguía el matiz. Dos por fila en
-         // móvil y tres dentro del box de 850px.
-         w={{ base: "calc(50% - 6px)", sm: "180px", md: "212px" }}
+         // móvil y tres de md en adelante, repartiéndose TODO el ancho útil del
+         // apartado. Los restos del calc son el gap (10px y 16px) repartido
+         // entre las columnas: 1 hueco entre 2 tarjetas, 2 huecos entre 3.
+         w={{ base: "calc(50% - 5px)", md: "calc(33.333% - 10.67px)" }}
          borderRadius="xl" overflow="hidden" cursor="pointer"
          bg={seleccionada ? `${tcmTxt}26` : "rgba(0,0,0,0.28)"}
          border={`2px solid ${seleccionada ? tcmTxt : "rgba(255,255,255,0.18)"}`}
@@ -223,8 +231,10 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
          sx={{ backdropFilter: "blur(6px)", transitionDelay: `${index * 0.05}s` }}
          transition="opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.15s, background 0.15s">
       <LenguaImg src={opcion.src} alt={opcion.nombre} />
-      <Box px={2.5} py={3}>
-        <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={seleccionada ? 700 : 600}
+      {/* El nombre sube de tamaño con la tarjeta: en 246px de ancho, el `xs` de
+          antes se quedaba en un pie de foto perdido. */}
+      <Box px={3} py={{ base: 3, md: 3.5 }}>
+        <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={seleccionada ? 700 : 600}
               lineHeight="1.35" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
           {opcion.nombre}
         </Text>

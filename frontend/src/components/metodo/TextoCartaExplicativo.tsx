@@ -13,7 +13,7 @@ import { astrologiaTxt } from "../../GlobalVariables";
 const MAPA1 = "/viñetas/astrologia/astro/mapa1.webp";
 // La segunda viñeta tiene su propia ilustración (antes repetía la primera).
 // En PNG a propósito: es la única de la carpeta que llegó así y no se convierte.
-const MAPA11 = "/viñetas/astrologia/astro/mapa11.png";
+const MAPA11 = "/viñetas/astrologia/astro/mapa11.webp";
 const MAPA2 = "/viñetas/astrologia/astro/mapa2.webp";
 const MAPA3 = "/viñetas/astrologia/astro/mapa3.webp";
 const MAPA4 = "/viñetas/astrologia/astro/mapa4.webp";

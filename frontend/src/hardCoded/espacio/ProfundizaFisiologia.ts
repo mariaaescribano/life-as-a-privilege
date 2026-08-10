@@ -1093,17 +1093,17 @@ const ZONAS_CEREBRO = [
   {
     zona: "corteza",
     titulo: "La corteza",
-    entradilla: "La capa de fuera, la más nueva. Aquí vive lo que llamas «pensar».",
+    entradilla: "Pensamiento, raciocinio, narración, lenguaje y decisiones.",
   },
   {
     zona: "centro",
-    titulo: "El centro profundo",
-    entradilla: "Debajo de la corteza. Lo que sientes antes de pensarlo.",
+    titulo: "Sistema límbico y tálamo",
+    entradilla: "Emociones, memoria (consciente e inconsciente) y percepción.",
   },
   {
     zona: "base",
-    titulo: "La base",
-    entradilla: "Lo más antiguo. Late, respira y te sostiene sin pedirte permiso.",
+    titulo: "Cerebro reptiliano",
+    entradilla: "Funciones automáticas y supervivencia.",
   },
 ];
 
@@ -1244,16 +1244,16 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
   {
     key: "cerebro",
     label: "El cerebro",
-    resumen: "Kilo y medio que decide quién eres.",
+    resumen: "",
     color: "#c9a7ff",
     foto: PORTADA("cerebro"),
     grupo: "El sistema nervioso",
-    intro: "Kilo y medio que decide quién eres. Se recorre de fuera hacia dentro: primero la corteza, luego el centro profundo y al final la base.",
+    intro: "",
     pista: "",
     fichasColoreadas: true,
     zonas: ZONAS_CEREBRO,
     fichas: CEREBRO,
-    cierre: "Kilo y medio de tejido que se conoce a sí mismo. Eso es lo único que hay entre tú y el mundo.",
+    cierre: "",
   },
 
   // ── Bloque 1 · Química interna ──

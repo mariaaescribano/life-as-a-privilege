@@ -96,6 +96,44 @@ a:focus-visible,
   to { transform: rotate(360deg); }
 }
 
+/* Barras de scroll de PÁGINA y de POPUP: nunca la blanca del navegador.
+   La app va sobre turquesa y los popups a pantalla completa son casi negros: el
+   carril claro de Windows se veía como una raya blanca cortando el borde
+   derecho. Carril transparente (se ve el fondo detrás, como en las cajas del
+   cómic) y pulgar blanco translúcido.
+   OJO: solo se toca el scroll de la página y el de los contenedores de modal.
+   Las cajas que ya pintan su barra con su color (ComicViewer, fichas, etc.)
+   siguen mandando ellas: aquí no se usa el selector `*`, que habría dejado el
+   pulgar blanco invisible en los boxes de fondo claro. */
+html,
+body,
+.chakra-modal__content-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.38) transparent;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.chakra-modal__content-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+.chakra-modal__content-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+.chakra-modal__content-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.38);
+  border-radius: 4px;
+}
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+.chakra-modal__content-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

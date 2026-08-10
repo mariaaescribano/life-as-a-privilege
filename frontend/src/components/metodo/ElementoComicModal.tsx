@@ -85,7 +85,7 @@ export function ElementoComicModal({
   return (
     <Modal isOpen={!!elemento} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
       <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
-      <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} minH="100vh" position="relative" sx={{ transform: "none !important" }}>
+      <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} minH="100dvh" position="relative" sx={{ transform: "none !important" }}>
         {elemento && (() => {
           const pasos = COMIC_ELEMENTO[elemento];
           const tests = testsDeElemento(elemento);
@@ -120,6 +120,10 @@ export function ElementoComicModal({
               // totalmente cargada: mientras, el loader de TCM a pantalla completa.
               esperarFondo
               sinSaltar
+              // La tinta china es muy clara (niebla casi blanca) y aquí se
+              // escribe en blanco: sin apagar un poco la foto, el texto y los
+              // enunciados del test se pierden contra el cuadro.
+              veloOscuro={0.4}
               // Sin `fondoNitido`: usamos EXACTAMENTE el mismo box, estructura y
               // fondo que las Ilustraciones de TCM (mismo glow de color, mismo
               // velo y desenfoque), por coherencia. Solo cambian la foto y el

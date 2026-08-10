@@ -21,6 +21,27 @@ import { API_URL, neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } fr
 
 const PAPEL = "#fbf4e8";
 
+/** Un bloque del índice. Sirve para los recorridos de DOS NIVELES (ayurveda:
+ *  el mapa común y el submapa de un doṣha): cada sección se pinta con su título
+ *  y sus propias reglas, dentro del mismo popup. */
+export interface SeccionIndice {
+  /** Encabezado del bloque. Vacío = sin encabezado. */
+  titulo: string;
+  pasos: PasoRecorrido[];
+  /** Id de recorrido con el que se construyen las rutas de ESTA sección (el
+   *  doṣha, la experiencia…). Si no se pasa, el del componente. */
+  expId?: string;
+  /** false → la sección entera sale con candado y no navega. Es lo que hace que
+   *  el submapa de un doṣha no sea pulsable mientras no estés dentro de uno. */
+  habilitada?: boolean;
+  /** Frase bajo el título cuando la sección no está habilitada («entra en un
+   *  doṣha para abrir su recorrido»). */
+  nota?: string;
+  /** true → sin bloqueo secuencial: la sección se abre entera y solo respeta el
+   *  flag `bloqueado` de cada paso. Lo usa el nivel neutral del mapa. */
+  libre?: boolean;
+}
+
 // Botón + índice, reutilizable por cualquier disciplina. Por defecto usa el
 // recorrido y los colores de psicología; pásale `indice`/`total` y los colores
 // de otra disciplina para reutilizarlo (p. ej. astrología).
@@ -39,7 +60,12 @@ export function IndiceRecorrido({
   alcanzableDe = pasoAlcanzablePsicologia,
   cargando = false,
   onOpen,
+  secciones,
 }: {
+  /** Recorridos de DOS NIVELES: en vez de una lista plana, varios bloques con
+   *  su título y sus reglas (ver SeccionIndice). Si se pasa, manda sobre
+   *  `indice`. */
+  secciones?: SeccionIndice[];
   indice?: PasoRecorrido[];
   total?: number;
   tinta?: string;
@@ -106,12 +132,32 @@ export function IndiceRecorrido({
   // El id del recorrido: el de la URL (según `paramKey`) o el por defecto.
   const expId = params[paramKey] || defaultExpId;
 
-  // Página actual: la del índice cuya ruta coincide con la URL (la más larga
-  // que casa, para que «/…/linea-de-Vida» no la robe la página base).
+  // Un índice plano es, simplemente, una sección única sin título: así el resto
+  // del componente trabaja SIEMPRE con secciones y no hay dos caminos de render.
+  const grupos: SeccionIndice[] = secciones ?? [{ titulo: "", pasos: indice }];
+  const idDe = (sec: SeccionIndice) => sec.expId ?? expId;
+
+  // Página actual: la ruta más larga que casa con la URL, mirando TODAS las
+  // secciones (la más larga, para que «/…/linea-de-Vida» no la robe la base).
+  // Guardamos también en qué sección está: con dos niveles, el número de paso
+  // por sí solo es ambiguo (hay un «1» en cada uno).
   const pathname = location.pathname.replace(/\/+$/, "");
-  const actual = indice
-    .filter((p) => p.ruta(expId).replace(/\/+$/, "") === pathname)
-    .sort((a, b) => b.ruta(expId).length - a.ruta(expId).length)[0]?.n ?? null;
+  let actual: number | null = null;
+  let actualGrupo: number | null = null;
+  let mejorLargo = -1;
+  grupos.forEach((sec, gi) => {
+    sec.pasos.forEach((p) => {
+      const r = p.ruta(idDe(sec)).replace(/\/+$/, "");
+      if (r === pathname && r.length > mejorLargo) { mejorLargo = r.length; actual = p.n; actualGrupo = gi; }
+    });
+  });
+  const esActual = (p: PasoRecorrido, gi: number) => actualGrupo === gi && p.n === actual;
+  // El paso actual solo cuenta para el progreso SECUENCIAL si su sección lo usa
+  // (la sección «libre» del mapa no debe tocar el progreso del submapa).
+  const actualSecuencial =
+    actualGrupo != null && !grupos[actualGrupo]?.libre && grupos[actualGrupo]?.habilitada !== false
+      ? actual
+      : null;
 
   // Bloqueo secuencial persistido en BD (solo si se pasa `progresoKey`).
   const { pasoMax, cargado: progresoCargado, avanzar } = useRecorridoProgreso(progresoKey);
@@ -141,35 +187,43 @@ export function IndiceRecorrido({
   // adelante de la app es la que va abriendo pasos; el Índice nunca deja saltar a
   // uno bloqueado (ir() lo impide).
   useEffect(() => {
-    if (!progresoKey || !progresoCargado || actual == null) return;
-    if (actual > pasoMax) avanzar(actual);
-  }, [progresoKey, progresoCargado, actual, pasoMax, avanzar]);
+    if (!progresoKey || !progresoCargado || actualSecuencial == null) return;
+    if (actualSecuencial > pasoMax) avanzar(actualSecuencial);
+  }, [progresoKey, progresoCargado, actualSecuencial, pasoMax, avanzar]);
 
   // ¿Está bloqueado el paso n? Con `progresoKey`: todo lo posterior al máximo
   // desbloqueado. Sin él: el flag `bloqueado` de la propia entrada (astrología).
   // IMPORTANTE: mientras el progreso aún NO ha cargado, tratamos como bloqueados
   // todos los pasos salvo la página actual, para no permitir saltar por el índice
   // (y romper el recorrido) en ese instante previo a conocer `pasoMax`.
-  const estaBloqueado = (p: PasoRecorrido): boolean => {
+  const estaBloqueado = (p: PasoRecorrido, sec: SeccionIndice, gi: number): boolean => {
+    // Sección entera cerrada (el submapa de un doṣha visto desde fuera).
+    if (sec.habilitada === false) return true;
+    // Sección libre (el mapa común): solo su propio flag por paso.
+    if (sec.libre) return !!p.bloqueado;
     // Modo por flags: la página en la que ESTÁS nunca sale con candado (estás
     // en ella; enseñarla bloqueada es mentir y además impide volver a ella).
-    if (!progresoKey) return !!p.bloqueado && p.n !== actual;
+    if (!progresoKey) return !!p.bloqueado && !esActual(p, gi);
     // Aún sin datos de progreso NI de alcanzabilidad: solo la actual abierta.
-    if (!progresoCargado && maxAlcanzable == null) return p.n !== actual;
+    if (!progresoCargado && maxAlcanzable == null) return !esActual(p, gi);
     // Techo abierto = lo más lejos entre: lo que YA PUEDE alcanzar por requisitos
     // (maxAlcanzable), lo ya visitado (pasoMax, para no re-bloquear) y la actual.
-    const techo = Math.max(pasoMax, maxAlcanzable ?? 0, actual ?? 0);
+    const techo = Math.max(pasoMax, maxAlcanzable ?? 0, actualSecuencial ?? 0);
     return p.n > techo;
   };
 
-  const ir = async (p: PasoRecorrido) => {
-    if (estaBloqueado(p)) return; // página aún bloqueada: no navega
+  const ir = async (p: PasoRecorrido, sec: SeccionIndice, gi: number) => {
+    if (estaBloqueado(p, sec, gi)) return; // página aún bloqueada: no navega
     setOpen(false);
     // Espera a que termine cualquier guardado en vuelo de la página actual antes
     // de saltar: si no, la página destino leería datos viejos y los pisaría.
     await flushSaves();
-    navigate(p.ruta(expId));
+    navigate(p.ruta(idDe(sec)));
   };
+
+  const totalPaginas = secciones
+    ? grupos.reduce((a, s) => a + s.pasos.length, 0)
+    : total;
 
   return (
     <>
@@ -238,46 +292,67 @@ export function IndiceRecorrido({
               </Text>
               <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 
-              <Box display="grid" gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }} gap={{ base: 2.5, md: 3 }}>
-                {indice.map((p) => {
-                  const esActual = p.n === actual;
-                  const bloqueado = estaBloqueado(p);
-                  return (
-                    <Flex key={p.n} as="button" onClick={() => ir(p)} disabled={bloqueado}
-                          align="center" gap={3} textAlign="left" w="100%"
-                          px={{ base: 3, md: 3.5 }} py={{ base: 2.5, md: 3 }} borderRadius="xl"
-                          bg={esActual ? ACENTO : "rgba(255,251,243,0.62)"}
-                          border={`1.5px solid ${esActual ? ACENTO : `${TINTA}2e`}`}
-                          boxShadow="none"
-                          opacity={bloqueado ? 0.5 : 1}
-                          cursor={bloqueado ? "not-allowed" : "pointer"} transition="all 0.16s"
-                          _hover={bloqueado ? undefined : { transform: "translateY(-1px)", bg: esActual ? ACENTO : "rgba(255,251,243,0.82)" }}>
-                      <Flex flexShrink={0} align="center" justify="center" w={{ base: "26px", md: "28px" }} h={{ base: "26px", md: "28px" }}
-                            borderRadius="full" bg={esActual ? PAPEL : ACENTO}
-                            color={contraste(esActual ? PAPEL : ACENTO)} fontWeight="700" fontSize={{ base: "xs", md: "sm" }}>
-                        {p.n}
-                      </Flex>
-                      <Text flex="1" minW={0} color={esActual ? contraste(ACENTO) : OSCURO} fontWeight={esActual ? "700" : "600"}
-                            fontSize={{ base: "sm", md: "md" }} lineHeight="1.25" noOfLines={1}
-                            style={esActual && contraste(ACENTO) === PAPEL ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
-                        {/* En móvil, la versión corta del título si el paso la
-                            trae (los largos se cortaban con noOfLines={1}). */}
-                        <Box as="span" display={{ base: "none", md: "inline" }}>{p.titulo}</Box>
-                        <Box as="span" display={{ base: "inline", md: "none" }}>{p.tituloCorto ?? p.titulo}</Box>
+              {grupos.map((sec, gi) => (
+                <Box key={sec.titulo || gi} mt={gi === 0 ? 0 : 6}>
+                  {/* Encabezado del bloque (solo en índices de dos niveles). */}
+                  {sec.titulo && (
+                    <Flex align="center" gap={3} mb={sec.habilitada === false && sec.nota ? 1.5 : 3}>
+                      <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontWeight="700"
+                            letterSpacing="0.16em" textTransform="uppercase" whiteSpace="nowrap"
+                            opacity={sec.habilitada === false ? 0.7 : 1}>
+                        {sec.titulo}
                       </Text>
-                      {bloqueado && (
-                        <Box as="svg" flexShrink={0} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                             w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill={OSCURO} opacity={0.75}>
-                          <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
-                        </Box>
-                      )}
+                      <Box h="1px" flex="1" bgGradient={`linear(to-r, ${TINTA}55, transparent)`} />
                     </Flex>
-                  );
-                })}
-              </Box>
+                  )}
+                  {sec.habilitada === false && sec.nota && (
+                    <Text color={TINTA} fontSize="xs" fontStyle="italic" opacity={0.7} mb={3}>
+                      {sec.nota}
+                    </Text>
+                  )}
+
+                  <Box display="grid" gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)" }} gap={{ base: 2.5, md: 3 }}>
+                    {sec.pasos.map((p) => {
+                      const activo = esActual(p, gi);
+                      const bloqueado = estaBloqueado(p, sec, gi);
+                      return (
+                        <Flex key={p.n} as="button" onClick={() => ir(p, sec, gi)} disabled={bloqueado}
+                              align="center" gap={3} textAlign="left" w="100%"
+                              px={{ base: 3, md: 3.5 }} py={{ base: 2.5, md: 3 }} borderRadius="xl"
+                              bg={activo ? ACENTO : "rgba(255,251,243,0.62)"}
+                              border={`1.5px solid ${activo ? ACENTO : `${TINTA}2e`}`}
+                              boxShadow="none"
+                              opacity={bloqueado ? 0.5 : 1}
+                              cursor={bloqueado ? "not-allowed" : "pointer"} transition="all 0.16s"
+                              _hover={bloqueado ? undefined : { transform: "translateY(-1px)", bg: activo ? ACENTO : "rgba(255,251,243,0.82)" }}>
+                          <Flex flexShrink={0} align="center" justify="center" w={{ base: "26px", md: "28px" }} h={{ base: "26px", md: "28px" }}
+                                borderRadius="full" bg={activo ? PAPEL : ACENTO}
+                                color={contraste(activo ? PAPEL : ACENTO)} fontWeight="700" fontSize={{ base: "xs", md: "sm" }}>
+                            {p.n}
+                          </Flex>
+                          <Text flex="1" minW={0} color={activo ? contraste(ACENTO) : OSCURO} fontWeight={activo ? "700" : "600"}
+                                fontSize={{ base: "sm", md: "md" }} lineHeight="1.25" noOfLines={1}
+                                style={activo && contraste(ACENTO) === PAPEL ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
+                            {/* En móvil, la versión corta del título si el paso la
+                                trae (los largos se cortaban con noOfLines={1}). */}
+                            <Box as="span" display={{ base: "none", md: "inline" }}>{p.titulo}</Box>
+                            <Box as="span" display={{ base: "inline", md: "none" }}>{p.tituloCorto ?? p.titulo}</Box>
+                          </Text>
+                          {bloqueado && (
+                            <Box as="svg" flexShrink={0} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                                 w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill={OSCURO} opacity={0.75}>
+                              <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
+                            </Box>
+                          )}
+                        </Flex>
+                      );
+                    })}
+                  </Box>
+                </Box>
+              ))}
 
               <Text color={TINTA} fontSize="xs" textAlign="center" opacity={0.6} mt={5}>
-                {total} páginas · pulsa una para ir
+                {totalPaginas} páginas · pulsa una para ir
               </Text>
               </>
               )}

@@ -51,13 +51,15 @@ export const ESTRELLA_ATOMOS: Vineta[] = [
       "En ese instante nacen algunos de los elementos más pesados del universo, como el oro o el uranio.",
     ],
   },
-  // Cierre distinto al resto: la tabla periódica, en vertical (9:16) y entera
-  // (`fotoVertical`), con una sola frase que recontextualiza todo el cómic.
-  {
-    src: "/viñetas/fisiologia/estrellas/tablaperiodica.webp",
-    fotoVertical: true,
-    paragraphs: [
-      "Nunca más mirarás la tabla periódica con los mismos ojos...",
-    ],
-  },
 ];
+
+// ── El cierre: la tabla periódica ────────────────────────────────────────────
+// Ya NO es una viñeta más. La tabla es apaisada (1000×667) y dentro del visor
+// caía en la columna estrecha de la ilustración, minúscula al lado del texto:
+// justo lo contrario de lo que pide el momento. Ahora, al terminar la última
+// viñeta (la estrella que colapsa), se abre a pantalla completa con la frase
+// encima — TablaPeriodicaFinal.tsx.
+export const CIERRE_TABLA = {
+  src: "/viñetas/fisiologia/estrellas/tablaperiodica.webp",
+  frase: "Nunca más mirarás la tabla periódica con los mismos ojos...",
+};

@@ -221,7 +221,7 @@ export function HinduismoIlustracionesModal({
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        minH="100vh"
+        minH="100dvh"
         position="relative"
       >
         {/* Fondo: foto de Hinduismo blureada, presente, ocupando todo el

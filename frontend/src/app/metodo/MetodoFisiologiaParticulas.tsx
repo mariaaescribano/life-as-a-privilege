@@ -62,15 +62,18 @@ const LABEL: Record<Tipo, string> = { up: "up quark", down: "down quark", gluon:
 // cada gluón en el punto medio de la arista que une dos quarks (o sea, "entre"
 // ellos). Se indexa por id de la pieza (no por orden de colocación) para que
 // cada quark/gluón caiga siempre en su sitio.
+// El triángulo va bajado 5 puntos respecto al centroide teórico (50/50) para que
+// sea la CAJA del conjunto la que quede centrada: el vértice de arriba tiene una
+// bola entera por encima y, sin este ajuste, el grupo se ve alto.
 const CLUSTER: Record<string, { x: number; y: number }> = {
-  // Quarks → vértices del triángulo (centroide en el centro del círculo, 50/50)
-  u1: { x: 50, y: 30 }, // arriba
-  u2: { x: 34, y: 60 }, // abajo-izquierda
-  d1: { x: 66, y: 60 }, // abajo-derecha
+  // Quarks → vértices del triángulo
+  u1: { x: 50, y: 35 }, // arriba
+  u2: { x: 34, y: 65 }, // abajo-izquierda
+  d1: { x: 66, y: 65 }, // abajo-derecha
   // Gluones → en medio de cada arista (entre dos quarks)
-  g1: { x: 42, y: 45 }, // entre u1 y u2
-  g2: { x: 58, y: 45 }, // entre u1 y d1
-  g3: { x: 50, y: 60 }, // entre u2 y d1
+  g1: { x: 42, y: 50 }, // entre u1 y u2
+  g2: { x: 58, y: 50 }, // entre u1 y d1
+  g3: { x: 50, y: 65 }, // entre u2 y d1
 };
 
 const pulse = keyframes`
@@ -213,24 +216,32 @@ function PiezaInterna({ tipo, x, y }: { tipo: Tipo; x: number; y: number }) {
   const esGluon = tipo === "gluon";
   const size = esGluon ? { base: "38px", md: "48px" } : { base: "50px", md: "64px" };
   return (
-    <MBox
+    // El envoltorio centra la pieza en su punto (x, y) con transform de CSS puro.
+    // Va aparte del MBox a propósito: framer-motion escribe su propio `transform`
+    // al animar y se comería el translate(-50%, -50%), dejando el conjunto
+    // descolgado hacia abajo-derecha en vez de en medio del círculo.
+    <Box
       position="absolute"
       left={`${x}%`}
       top={`${y}%`}
-      w={size}
-      h={size}
-      zIndex={esGluon ? 1 : 2}
-      borderRadius="full"
-      overflow="hidden"
       transform="translate(-50%, -50%)"
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 340, damping: 20 }}
-      sx={{ boxShadow: `0 0 12px ${glow}bb, 0 0 26px ${glow}66` }}
+      zIndex={esGluon ? 1 : 2}
+      pointerEvents="none"
     >
-      <Image src={IMG[tipo]} alt="" w="100%" h="100%" objectFit="cover"
-             draggable={false} fallback={<Box w="100%" h="100%" bg={glow} />} />
-    </MBox>
+      <MBox
+        w={size}
+        h={size}
+        borderRadius="full"
+        overflow="hidden"
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 340, damping: 20 }}
+        sx={{ boxShadow: `0 0 12px ${glow}bb, 0 0 26px ${glow}66` }}
+      >
+        <Image src={IMG[tipo]} alt="" w="100%" h="100%" objectFit="cover"
+               draggable={false} fallback={<Box w="100%" h="100%" bg={glow} />} />
+      </MBox>
+    </Box>
   );
 }
 

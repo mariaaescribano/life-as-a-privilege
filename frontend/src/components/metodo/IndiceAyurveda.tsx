@@ -1,19 +1,28 @@
-// Botón «Índice» del recorrido de AYURVEDA. Reutiliza IndiceRecorrido con el
-// índice y los colores de ayurveda. Como cada dosha (vata/pitta/kapha) tiene su
-// propio recorrido, lee el dosha de la URL y le pasa SU color como acento, para
-// que los botones del índice se diferencien por dosha. Añádelo en cada página
-// del recorrido de ayurveda (junto a BotonCompania).
+// Botón «Índice» del recorrido de AYURVEDA. Reutiliza IndiceRecorrido, pero con
+// DOS SECCIONES, porque el recorrido tiene dos niveles:
 //
-// En las páginas ANTERIORES a entrar en un dosha (la portada, el test, el
-// resultado y las tarjetas) la URL todavía no trae dosha: ahí usamos el dosha
-// PRINCIPAL de su test, para que desde el principio pueda saltar a cualquier
-// paso (p.ej. directo a Prāṇāyāma) sin recorrer todo el submapa. Si aún no ha
-// hecho el test no hay recorrido que indexar, así que el botón no se pinta.
+//   · «El mapa de Ayurveda» — neutral. Ayurveda, Test, Resultado, Doṣhas,
+//     Prāṇāyāma y Cursos: las páginas que no son de ningún doṣha en concreto.
+//     Siempre abiertas.
+//   · «Tu doṣha» — el submapa (Naturaleza → Tu mapa). Solo tiene sentido dentro
+//     de un doṣha, así que FUERA de uno se enseña entero con candado y una nota
+//     que dice por dónde entrar. Dentro, funciona como siempre: bloqueo
+//     secuencial, acento del color del doṣha y el paso actual resaltado.
+//
+// Prāṇāyāma y Cursos siguen viviendo en una ruta con doṣha (herencia de cuando
+// eran parte del submapa), así que necesitan uno para construir el enlace: se
+// usa el de la URL y, si no lo hay, el doṣha principal del test. Sin test
+// todavía, esos dos van con candado y el resto del mapa sigue funcionando.
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { IndiceRecorrido } from "./IndiceRecorrido";
-import { AYURVEDA_INDICE, AYURVEDA_TOTAL, pasoAlcanzableAyurveda } from "./ayurvedaRecorrido";
+import { IndiceRecorrido, type SeccionIndice } from "./IndiceRecorrido";
+import {
+  AYURVEDA_MAPA,
+  AYURVEDA_DOSHA_INDICE,
+  AYURVEDA_DOSHA_TOTAL,
+  pasoAlcanzableAyurveda,
+} from "./ayurvedaRecorrido";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -26,16 +35,24 @@ const DOSHA_COLOR: Record<string, string> = {
   kapha: kaphaColor,
 };
 
+const DOSHA_LABEL: Record<string, string> = {
+  vata: "Vata",
+  pitta: "Pitta",
+  kapha: "Kapha",
+};
+
 const esDosha = (d: unknown): d is string =>
   typeof d === "string" && d in DOSHA_COLOR;
 
 export function IndiceAyurveda() {
   const { dosha } = useParams<{ dosha: string }>();
-  // Dosha principal del test, solo para las páginas donde la URL no trae dosha.
+  const doshaUrl = esDosha(dosha) ? dosha : null;
+  // Doṣha principal del test. Solo para poder enlazar Prāṇāyāma y Cursos desde
+  // las páginas donde la URL no trae doṣha.
   const [principal, setPrincipal] = useState<string | null>(null);
 
   useEffect(() => {
-    if (esDosha(dosha)) return; // la URL ya dice de qué dosha es este recorrido
+    if (doshaUrl) return; // la URL ya dice de qué doṣha es este recorrido
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) return;
@@ -48,32 +65,50 @@ export function IndiceAyurveda() {
         const d = res.data?.dosha;
         if (!cancel && esDosha(d)) setPrincipal(d);
       } catch {
-        // Sin test todavía (o error): no hay recorrido que indexar.
+        // Sin test todavía (o error): Prāṇāyāma y Cursos quedan con candado.
       }
     })();
     return () => { cancel = true; };
-  }, [dosha]);
+  }, [doshaUrl]);
 
-  const doshaActivo = esDosha(dosha) ? dosha : principal;
-  // Antes del test no hay submapa: sin dosha, el índice no llevaría a ningún
-  // sitio (sus rutas necesitan el dosha), así que no se pinta el botón.
-  if (!doshaActivo) return null;
+  // Para las rutas del mapa que aún necesitan doṣha.
+  const doshaEnlace = doshaUrl ?? principal;
+
+  // Nivel 1 · el mapa. Prāṇāyāma (5) y Cursos (6) solo se pueden enlazar si hay
+  // un doṣha del que colgarlos.
+  const mapa: SeccionIndice = {
+    titulo: "El mapa de Ayurveda",
+    pasos: AYURVEDA_MAPA.map((p) =>
+      p.n >= 5 && !doshaEnlace ? { ...p, bloqueado: true } : p,
+    ),
+    expId: doshaEnlace ?? "",
+    libre: true,
+  };
+
+  // Nivel 2 · el submapa del doṣha. Sin doṣha en la URL, entero bloqueado.
+  const submapa: SeccionIndice = {
+    titulo: doshaUrl ? `Tu doṣha · ${DOSHA_LABEL[doshaUrl]}` : "El recorrido de un doṣha",
+    pasos: AYURVEDA_DOSHA_INDICE,
+    expId: doshaUrl ?? "",
+    habilitada: !!doshaUrl,
+    nota: "Estas páginas son de cada doṣha. Entra en uno desde «Doṣhas» y se abren aquí.",
+  };
 
   return (
     <IndiceRecorrido
-      indice={AYURVEDA_INDICE}
-      total={AYURVEDA_TOTAL}
+      secciones={[mapa, submapa]}
+      total={AYURVEDA_DOSHA_TOTAL}
       tinta={ayurvedaTxt}
       bg={ayurvedaBg}
       nom={ayurvedaNom}
       paramKey="dosha"
-      // En las páginas previas al dosha la URL no trae `dosha`: IndiceRecorrido
-      // cae aquí para construir las rutas del índice.
-      defaultExpId={doshaActivo}
-      acento={DOSHA_COLOR[doshaActivo]}
+      // Fuera de un doṣha no hay submapa que resaltar; el `defaultExpId` solo
+      // evita que las rutas se construyan con el valor por defecto de psicología.
+      defaultExpId={doshaEnlace ?? ""}
+      acento={doshaUrl ? DOSHA_COLOR[doshaUrl] : ayurvedaTxt}
       progresoKey="ayurveda"
       alcanzableUrl={(userId) => `${API_URL}/metodo-ayurveda/${userId}`}
-      alcanzableDe={(data, dosha) => pasoAlcanzableAyurveda(data, dosha)}
+      alcanzableDe={(data, d) => pasoAlcanzableAyurveda(data, d)}
     />
   );
 }

@@ -294,7 +294,7 @@ export function RelacionModal({ rel, onClose, onView, textoBorroso }: {
     <Modal isOpen={!!rel} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
       <ModalOverlay bg="rgba(0,0,0,0.6)" />
       <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0}
-                    minH="100vh" position="relative" sx={{ transform: "none !important" }}>
+                    minH="100dvh" position="relative" sx={{ transform: "none !important" }}>
         {rel && (() => {
           const { ciclo } = rel;
           const mapa = ciclo === "sheng" ? CICLO_SHENG : CICLO_KE;

@@ -238,6 +238,51 @@ const LOTES = {
       "img/plantas", "img/videos",
     ],
   },
+  // Cómics de los tres doṣhas (Ayurveda): 4 viñetas por dosha. Llegaron en PNG
+  // de 2,5 MB y el código ya las pide en `.webp` (comicDoshas.ts), así que aquí
+  // el WebP no es opcional: en PNG dan 404. Mismos ajustes que el lote 1 —son
+  // viñetas de cómic, se ven a 440 px como mucho en el visor—.
+  17: {
+    ladoMax: 1000,
+    carpetas: [
+      "viñetas/hinduismo/vata",    // 4 archivos
+      "viñetas/hinduismo/pitta",   // 4 archivos
+      "viñetas/hinduismo/kapha",   // 4 archivos
+    ],
+  },
+  // Tanda del 9 de agosto: los elementos de TCM repintados otra vez (Fuego,
+  // Madera, Metal, Tierra y la 6 de Agua), las cinco fotos de los animales de
+  // Hua Tuo —carpeta nueva— y las cinco variantes de lengua que volvieron a
+  // subirse en PNG encima de sus WebP (y borrándolas).
+  //
+  // Aquí el WebP NO es opcional en ninguna: todas se piden con la extensión
+  // escrita o con una ruta que se arma sola en `.webp`, así que en PNG dan 404.
+  // Las de lengua son el caso urgente: su página las PRECARGA antes de pintar,
+  // o sea que en PNG se queda esperando.
+  //
+  // `viñetas/astrologia/astro` va aquí por el mapa 11, que llegó suelto: sus
+  // cuatro hermanas ya son WebP y esta era la única en PNG.
+  18: {
+    ladoMax: 1000,
+    carpetas: [
+      "recorrido/tcm/agua",
+      "recorrido/tcm/cincoanimales",
+      "recorrido/tcm/fuego",
+      "recorrido/tcm/lengua",
+      "recorrido/tcm/madera",
+      "recorrido/tcm/metal",
+      "recorrido/tcm/tierra",
+      "viñetas/astrologia/astro",
+    ],
+  },
+  // Rezagada del lote 18: el sistema endocrino, que volvió a subirse en PNG
+  // encima de su WebP (y borrándolo). La foto de un sistema se pide con una
+  // ruta que se arma sola en `.webp` (SistemasFisiologia.ts), así que en PNG la
+  // página de Sistemas se queda sin la del endocrino.
+  19: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/fisiologia/sistemas"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

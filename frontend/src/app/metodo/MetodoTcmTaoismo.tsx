@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -12,9 +12,10 @@ import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
+import { QigongComicModal } from "../../components/metodo/QigongComicModal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
-  LEYES_TAO, TAOISMO_INTRO, TAOISMO_CIERRE, FOTO_LEY, type LeyTao,
+  LEYES_TAO, LEYES_TAO_VINETAS, TAOISMO_CIERRE, type LeyTao,
 } from "../../components/metodo/tcmTaoismoContenido";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
@@ -24,6 +25,8 @@ export default function MetodoTcmTaoismo() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+  // La ley que se está leyendo en el visor (índice dentro de LEYES_TAO).
+  const [leyAbierta, setLeyAbierta] = useState<number | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -87,36 +90,16 @@ export default function MetodoTcmTaoismo() {
           </Flex>
           </Reveal>
 
-          {/* ── BOX 1 · de dónde viene todo esto ── */}
-          <Reveal direction="up" distance={28} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
-          <Panel titulo="La mirada de la que nace esta medicina">
-            <Flex direction="column" gap={4}>
-              {TAOISMO_INTRO.map((p, i) => (
-                <Text key={i} color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
-                      style={{ textShadow: INK_SHADOW }}>
-                  {p}
-                </Text>
-              ))}
-            </Flex>
-          </Panel>
-          </Reveal>
-
-          <Reveal inView direction="up" distance={16} duration={0.6} amount={0.4} display="flex" justifyContent="center">
-          <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-                textAlign="center" maxW="680px" mt={1}>
-            Diez leyes, diez ideas. Cada una con su reflejo en el cuerpo.
-          </Text>
-          </Reveal>
-
-          {/* ── LAS LEYES · una tarjeta por ley, a lo ancho ──
-              Una sola columna: las ilustraciones son CUADRADAS y van al lado del
-              texto (como los boxes de cómic), así que cada tarjeta necesita el
-              ancho entero. */}
-          <Box display="grid" gridTemplateColumns="1fr" gap={{ base: 5, md: 6 }} w="100%">
+          {/* ── LAS LEYES · un box por ley: el carácter chino, el nombre y «Ver» ──
+              La explicación entera (la esencia, el párrafo y cómo se traduce en
+              el cuerpo) se lee en el visor, con la ilustración al lado:
+              LEYES_TAO_VINETAS abre por la que se pulse y desde dentro se pasa
+              de una a otra con las flechas. */}
+          <Box display="grid" gridTemplateColumns="1fr" gap={{ base: 3.5, md: 4 }} w="100%">
             {LEYES_TAO.map((ley, i) => (
-              <Reveal key={ley.key} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7}
-                      amount={0.15} w="100%" h="100%">
-                <LeyCard ley={ley} numero={i + 1} />
+              <Reveal key={ley.key} inView direction="up" distance={20} scaleFrom={0.99} duration={0.6}
+                      amount={0.3} w="100%">
+                <LeyBox ley={ley} numero={i + 1} onVer={() => setLeyAbierta(i)} />
               </Reveal>
             ))}
           </Box>
@@ -149,6 +132,15 @@ export default function MetodoTcmTaoismo() {
 
       {ilustracionesModal}
 
+      {/* La ley que se haya pulsado: ilustración a la izquierda y explicación al
+          lado. Abre por esa y deja pasar a las demás con las flechas. */}
+      <QigongComicModal
+        isOpen={leyAbierta !== null}
+        vinetas={LEYES_TAO_VINETAS}
+        initialIndex={leyAbierta ?? 0}
+        onClose={() => setLeyAbierta(null)}
+      />
+
       <IndiceTcm />
 
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
@@ -158,76 +150,52 @@ export default function MetodoTcmTaoismo() {
   );
 }
 
-// ── Tarjeta de una ley ───────────────────────────────────────────────────────
-// Las ilustraciones son CUADRADAS (1:1), así que van enteras a la izquierda y el
-// texto a la derecha —la estructura de los boxes con ilustración del recorrido—.
-// En móvil la foto pasa arriba, cuadrada y a todo el ancho. MIENTRAS NO HAYA
-// FOTO, el hueco enseña el carácter chino en grande: la tarjeta se sostiene
-// igual y no queda ningún hueco ni foto rota.
-function LeyCard({ ley, numero }: { ley: LeyTao; numero: number }) {
-  const [sinFoto, setSinFoto] = useState(false);
-
+// ── Box de una ley · el carácter, el nombre y «Ver» ──────────────────────────
+// Una fila por ley: el carácter chino GRANDE a la izquierda (es lo primero que
+// se ve y lo que distingue una ley de otra de un vistazo), el nombre en medio y
+// el botón «Ver» a la derecha. Lo demás se lee en el visor, con la ilustración
+// al lado.
+function LeyBox({ ley, numero, onVer }: { ley: LeyTao; numero: number; onVer: () => void }) {
   return (
-    <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}
-         display="flex" flexDirection="column">
+    <Box as="button" onClick={onVer} w="100%" display="block" textAlign="left"
+         position="relative" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}
+         cursor="pointer" transition="transform 0.18s ease, box-shadow 0.18s ease"
+         _hover={{ transform: "translateY(-2px)", boxShadow: `${CAJA_GLOW}, 0 0 30px ${tcmTxt}44` }}
+         sx={{ WebkitTapHighlightColor: "transparent" }} role="group">
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
 
-      <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="stretch" h="100%">
-        {/* Ilustración cuadrada · LIMPIA: sin velo, sin número y sin carácter
-            encima. La ilustración se ve tal cual se pintó; el carácter chino
-            vive ahora a la izquierda del título, en la columna de texto. */}
-        {!sinFoto && (
-          <Box position="relative" flexShrink={0} overflow="hidden" bg={`${tcmBg}88`}
-               w={{ base: "100%", md: "300px" }}
-               sx={{ aspectRatio: "1" }}
-               alignSelf={{ base: "auto", md: "flex-start" }}
-               m={{ base: 0, md: 5 }}
-               borderRadius={{ base: 0, md: "xl" }}>
-            <Image src={encodeURI(FOTO_LEY(ley.key))} alt="" w="100%" h="100%" objectFit="cover"
-                   onError={() => setSinFoto(true)} />
-          </Box>
-        )}
+      <Flex position="relative" zIndex={1} align="center" gap={{ base: 4, md: 6 }}
+            px={{ base: 5, md: 7 }} py={{ base: 4, md: 5 }}>
+        {/* El carácter chino: lo primero, a la izquierda. */}
+        <Text flexShrink={0} color={tcmTxt} fontSize={{ base: "4xl", md: "5xl" }} lineHeight="1"
+              fontWeight={700} w={{ base: "56px", md: "76px" }} textAlign="center"
+              style={{ textShadow: `${INK_SHADOW}, 0 0 20px ${tcmTxt}44` }}>
+          {ley.hanzi}
+        </Text>
 
-        {/* Texto */}
-        <Box flex="1" minW={0} px={{ base: 6, md: 7 }} py={{ base: 5, md: 6 }}>
-        {/* Cabecera: el carácter chino a la izquierda y, a su lado, el nombre */}
-        <Flex align="center" gap={{ base: 3.5, md: 4 }}>
-          <Text flexShrink={0} color={tcmTxt} fontSize={{ base: "4xl", md: "5xl" }} lineHeight="1"
-                fontWeight={700} style={{ textShadow: INK_SHADOW }}>
-            {ley.hanzi}
+        <Box flex="1" minW={0}>
+          <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"
+                opacity={0.75} style={{ textShadow: INK_SHADOW }}>
+            {numero} · {ley.pinyin}
           </Text>
-          <Box minW={0}>
-            <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"
-                  opacity={0.75} style={{ textShadow: INK_SHADOW }}>
-              {numero} · {ley.pinyin}
-            </Text>
-            <Text color={tcmTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.2" mt={0.5}
-                  style={{ textShadow: INK_SHADOW }}>
-              {ley.nombre}
-            </Text>
-          </Box>
-        </Flex>
-
-        <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" fontWeight={600}
-              lineHeight="1.6" mt={3} style={{ textShadow: INK_SHADOW }}>
-          {ley.esencia}
-        </Text>
-
-        <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" mt={3}
-              style={{ textShadow: INK_SHADOW }}>
-          {ley.texto}
-        </Text>
-
-        {/* En tu cuerpo · el puente con la medicina */}
-        <Flex gap={2.5} align="flex-start" mt={4} pt={4} borderTop={`1px solid ${tcmTxt}33`}>
-          <Box flexShrink={0} mt={{ base: "9px", md: "10px" }} w="5px" h="5px" borderRadius="full"
-               bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
-          <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" opacity={0.92}
+          <Text color={tcmTxt} fontSize={{ base: "lg", md: "2xl" }} fontWeight={800} lineHeight="1.2" mt={0.5}
                 style={{ textShadow: INK_SHADOW }}>
-            {ley.enTuCuerpo}
+            {ley.nombre}
           </Text>
-        </Flex>
         </Box>
+
+        <Flex flexShrink={0} align="center" gap={1.5} px={{ base: 3, md: 4 }} py={1.5} borderRadius="full"
+              border={`1.5px solid ${tcmTxt}99`} bg="rgba(0,0,0,0.25)"
+              transition="all 0.18s" _groupHover={{ borderColor: tcmTxt, bg: "rgba(0,0,0,0.42)" }}>
+          <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase"
+                style={{ textShadow: INK_SHADOW }}>
+            Ver
+          </Text>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px"
+               fill={tcmTxt} flexShrink={0} style={{ filter: `drop-shadow(0 1px 3px ${tcmBg})` }}>
+            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+          </Box>
+        </Flex>
       </Flex>
     </Box>
   );

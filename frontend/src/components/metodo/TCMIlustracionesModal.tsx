@@ -270,13 +270,13 @@ export function TCMIlustracionesModal({
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        minH="100vh"
+        minH="100dvh"
         position="relative"
       >
         {/* Mientras la foto de fondo y las portadas no están cargadas, no se
             muestra nada salvo el loader de TCM (aparece todo a la vez). */}
         {!fondosListos && (
-          <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
+          <Flex position="relative" zIndex={2} minH="100dvh" align="center" justify="center">
             {comicLoaderPorColor(tcmTxt)}
           </Flex>
         )}
@@ -479,6 +479,10 @@ export function TCMIlustracionesModal({
             key={capitulo}
             vinetas={vinetas}
             themeColor={tcmTxt}
+            // Toda la letra del visor en la tinta de la disciplina: sin esto el
+            // ComicViewer pinta el antetítulo y el título en BLANCO (solo el
+            // cuerpo hereda `themeColor`) y las viñetas salían a dos colores.
+            textColor={tcmTxt}
             disciplinaBgImage="/img/fondos/tcm.webp"
             disciplinaBgColor={tcmBg}
             onClose={onClose}

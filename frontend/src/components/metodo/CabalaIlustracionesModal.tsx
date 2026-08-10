@@ -91,11 +91,11 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        minH="100vh"
+        minH="100dvh"
         position="relative"
       >
         {!fondosListos && (
-          <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
+          <Flex position="relative" zIndex={2} minH="100dvh" align="center" justify="center">
             {comicLoaderPorColor(cabalaTxt)}
           </Flex>
         )}

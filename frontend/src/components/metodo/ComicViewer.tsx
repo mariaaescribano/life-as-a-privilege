@@ -173,6 +173,14 @@ interface ComicViewerProps {
    *  sobre blanco, así que tiene que ser oscuro: no vale heredar el color del
    *  texto de la viñeta, que en varios cómics es blanco. */
   clavesTinta?: string;
+  /** Velo NEGRO (0–1) sobre la foto del box, por encima del velo de color. Las
+   *  pinturas claras (las tintas de TCM, con su niebla casi blanca) se comen la
+   *  letra blanca: este velo las apaga lo justo para que el texto se lea.
+   *  Va por cómic y no de serie porque no le conviene a todos: Nutrición
+   *  escribe en verde OSCURO sobre foto clara, y oscurecerle el fondo le
+   *  quitaría contraste en vez de dárselo. En las páginas SIN foto (los tests,
+   *  donde el texto ocupa todo el ancho del box) se aplica un punto más fuerte. */
+  veloOscuro?: number;
   /** ESCAPARATE: el cuerpo del texto sale difuminado (ilegible) y solo se leen
    *  el antetítulo y el título. Es para las páginas públicas de presentación:
    *  se ve que ahí hay una lectura entera, pero no se regala. Se desactiva la
@@ -209,6 +217,7 @@ export function ComicViewer({
   flechasEnBox,
   esperarFondo,
   clavesTinta,
+  veloOscuro,
   textoBorroso,
 }: ComicViewerProps) {
   const t = useT();
@@ -705,10 +714,25 @@ export function ComicViewer({
             />
             {/* Velo oscuro en TODAS las viñetas del cómic de TCM (fondoNitido),
                 para que el texto y las opciones se lean bien sobre la pintura.
-                Opacidad ~20% menor que la del test para que no quede tan oscuro. */}
+                Opacidad ~20% menor que la del test para que no quede tan oscuro.
+                OJO: en hex-alpha, NO en rgba(): `bgGradient` parte el valor por
+                las comas, así que un rgba() dentro se rompe y no pintaba nada
+                (este velo llevaba tiempo sin salir). */}
             {fondoNitido && (
               <Box position="absolute" inset="0"
-                   bgGradient="linear(to-b, rgba(0,0,0,0.18), rgba(0,0,0,0.1))" />
+                   bgGradient="linear(to-b, #0000002e, #0000001a)" />
+            )}
+
+            {/* Velo negro que pide el cómic (`veloOscuro`), sobre el velo de
+                color. En las páginas de test (sin foto) el texto ocupa todo el
+                ancho del box y cae sobre la parte más clara de la pintura, así
+                que ahí va un punto más cargado. */}
+            {!!veloOscuro && (
+              <Box
+                position="absolute"
+                inset="0"
+                bg={`rgba(0,0,0,${Math.min(hideFoto ? veloOscuro + 0.12 : veloOscuro, 1)})`}
+              />
             )}
           </Box>
 

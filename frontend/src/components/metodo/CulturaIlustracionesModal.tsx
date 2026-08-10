@@ -47,11 +47,11 @@ export function CulturaIlustracionesModal({ isOpen, onClose }: { isOpen: boolean
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        minH="100vh"
+        minH="100dvh"
         position="relative"
       >
         {!fondosListos && (
-          <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
+          <Flex position="relative" zIndex={2} minH="100dvh" align="center" justify="center">
             {comicLoaderPorColor(culturaTxt)}
           </Flex>
         )}
@@ -84,7 +84,7 @@ export function CulturaIlustracionesModal({ isOpen, onClose }: { isOpen: boolean
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
-            minH="100vh"
+            minH="100dvh"
           >
             <Flex direction="column" align="center" gap={4} textAlign="center" maxW="560px">
               <Text

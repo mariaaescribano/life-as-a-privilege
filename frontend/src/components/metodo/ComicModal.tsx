@@ -59,7 +59,7 @@ export function ComicModal({
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        minH="100vh"
+        minH="100dvh"
       >
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer

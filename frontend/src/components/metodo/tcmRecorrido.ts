@@ -1260,6 +1260,11 @@ export interface DatosTcm {
    *  (Sheng + Ke) una vez. Se guarda para que el botón «Diagnóstico final» quede
    *  desbloqueado para siempre en visitas posteriores, sin repetir las flechitas. */
   ciclosLeidos?: boolean;
+  /** «Un gesto para hoy» de Tu cocina diaria, por elemento: cuál se está
+   *  mostrando (`i`) y el día en que se marcó como hecho (`hecho`, aaaa-mm-dd).
+   *  Guardar el DÍA y no un booleano es lo que hace que el tick se apague solo
+   *  mañana: es un gesto diario, no una casilla que se marca una vez. */
+  cocinaGesto?: Partial<Record<Elemento, { i?: number; hecho?: string }>>;
 }
 
 // ─────────────────────────────────────────────────────────────────────────

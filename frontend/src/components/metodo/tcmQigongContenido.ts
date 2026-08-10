@@ -15,8 +15,7 @@ import type { Vineta } from "./ComicViewer";
 /** Intro de la página (bajo el header). Dos líneas, no más: lo largo se lee en
  *  los cómics (la línea del tiempo y el Dao Yin). */
 export const QIGONG_INTRO: string[] = [
-  "Qi (氣) es la energía que circula por ti. Gong (功) es el trabajo constante. Qigong es eso: el trabajo de la energía, hecho con las manos y con la respiración.",
-  "Es la única rama de esta medicina que no puede hacerte nadie. Esta la haces tú, de pie, diez minutos.",
+  "Qi (氣) es la energía que circula por ti. Gong (功) es el trabajo constante.",
 ];
 
 /** Las tres regulaciones (三調): la base de cualquier práctica. */
@@ -413,6 +412,47 @@ export const CINCO_ANIMALES: Animal[] = [
  * archivo, esa tarjeta se queda solo con el texto: ni hueco ni foto rota.
  */
 export const FOTO_POSTURA = (key: string) => `/recorrido/tcm/qigong/${key}.webp`;
+
+/** Los Ocho Brocados EN FORMATO CÓMIC: la ilustración a la izquierda y su
+ *  explicación al lado. Es lo que abre el botón «Ver» de cada box de la página;
+ *  desde dentro se pasa de una postura a otra con las flechas del visor.
+ *
+ *  Se genera de BROCADOS: la serie se edita en un solo sitio y aquí no hay
+ *  texto que se pueda quedar desincronizado. */
+export const BROCADOS_VINETAS: Vineta[] = BROCADOS.map((p, i) => ({
+  src: FOTO_POSTURA(p.key),
+  eyebrow: `${i + 1} · ${p.hanzi}`,
+  titulo: p.nombre,
+  paragraphs: [
+    p.para,
+    ...p.pasos.map((paso, j) => `${j + 1}. ${paso}`),
+    `${p.repeticiones}. ${p.clave}`,
+  ],
+}));
+
+/** Ilustración de cada animal del cómic de los Cinco Animales: CUADRADA y en
+ *  WebP, en su propia carpeta `recorrido/tcm/cincoanimales` (al lado de la de
+ *  cada elemento, no dentro de `qigong`). El nombre del archivo es la `key` del
+ *  animal: tigre, ciervo, oso, mono, grulla. */
+export const FOTO_ANIMAL = (key: string) => `/recorrido/tcm/cincoanimales/${key}.webp`;
+
+/** LOS CINCO ANIMALES, en cómic. Ya no se leen en la página de Qigong: se ven
+ *  al pasar de Qigong a Cursos, un animal por viñeta.
+ *
+ *  Cinco viñetas y no seis: hay una foto por animal y ninguna de portada, así
+ *  que la presentación de la serie va como primer párrafo del tigre en vez de
+ *  ocupar una viñeta suya que se vería sin ilustración. */
+export const CINCO_ANIMALES_VINETAS: Vineta[] = CINCO_ANIMALES.map((a, i) => ({
+  src: FOTO_ANIMAL(a.key),
+  eyebrow: `${a.hanzi} · ${a.organo}`,
+  titulo: a.animal,
+  paragraphs: i === 0
+    ? [
+        "La otra gran serie es la de Hua Tuo (五禽戲): un animal por elemento, compuesta mirando cómo se mueven. Mira cuál te salió más cargado en tu mapa y empieza por el suyo.",
+        a.texto,
+      ]
+    : [a.texto],
+}));
 
 /** Nota al pie. */
 export const QIGONG_NOTA =

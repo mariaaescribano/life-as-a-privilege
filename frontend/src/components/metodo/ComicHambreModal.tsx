@@ -23,7 +23,7 @@ export function ComicHambreModal({ isOpen, onClose, onContinue }: ComicHambreMod
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0}
-                    fontFamily="'EB Garamond', serif" minH="100vh">
+                    fontFamily="'EB Garamond', serif" minH="100dvh">
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer
           key={String(isOpen)}

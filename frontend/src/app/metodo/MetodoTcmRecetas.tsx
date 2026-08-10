@@ -9,6 +9,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { HISTORIA_QIGONG_VINETAS } from "../../components/metodo/tcmQigongContenido";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -27,11 +29,25 @@ const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.
 // (MetodoStepHeader va a 850px): ningún box se sale de esa columna.
 const ANCHO = "850px";
 
+/** Hoy en aaaa-mm-dd (hora local, no UTC: a las 23:00 de aquí sigue siendo hoy). */
+function hoyISO(): string {
+  const d = new Date();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${mm}-${dd}`;
+}
+
 export default function MetodoTcmRecetas() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // Se abre por el elemento que hoy más te pide atención; luego el usuario elige.
   const [elActivo, setElActivo] = useState<Elemento>("madera");
+  // El blob ENTERO del recorrido: hay que devolverlo completo en cada PATCH,
+  // porque el backend reemplaza `data` de una pieza.
+  const [datos, setDatos] = useState<DatosTcm>({});
+  // Cómic del ORIGEN del Qigong («De dónde viene»): se ve al pasar de aquí a
+  // Qigong, en vez de leerse dentro de aquella página.
+  const [comicOpen, setComicOpen] = useState(false);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -47,6 +63,7 @@ export default function MetodoTcmRecetas() {
         // El recorrido guarda un blob único; si aún no hay datos, se abre en Madera.
         const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: DatosTcm = res.data?.data ?? {};
+        setDatos(d);
         setElActivo(elementoMasCargado(d));
       } catch {
         navigate("/metodo/tcm");
@@ -56,6 +73,26 @@ export default function MetodoTcmRecetas() {
       }
     })();
   }, [navigate]);
+
+  // Guarda el estado del gesto del elemento activo (qué gesto y si está hecho
+  // hoy). Autoguardado, como el resto del recorrido: no hay botón de guardar.
+  const guardarGesto = async (el: Elemento, cambio: { i?: number; hecho?: string }) => {
+    const next: DatosTcm = {
+      ...datos,
+      cocinaGesto: {
+        ...(datos.cocinaGesto ?? {}),
+        [el]: { ...(datos.cocinaGesto?.[el] ?? {}), ...cambio },
+      },
+    };
+    setDatos(next);
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    if (!userId || !token) return;
+    try {
+      await axios.patch(`${API_URL}/metodo-tcm/${userId}`, { data: next },
+        { headers: { Authorization: `Bearer ${token}` } });
+    } catch { /* el estado local ya refleja el cambio */ }
+  };
 
   // Igual que en el resto del recorrido: no quitamos el loader hasta tener los
   // iconos y los fondos de los elementos descargados.
@@ -91,18 +128,22 @@ export default function MetodoTcmRecetas() {
             mb={0}
             prev={{ label: "← Taoísmo", onClick: () => navigate("/metodo/tcm/taoismo") }}
             extra={ilustracionesBtn}
-            next={{ label: "Qigong →", onClick: () => navigate("/metodo/tcm/qigong") }}
+            next={{ label: "Qigong →", onClick: () => setComicOpen(true) }}
           />
           </Reveal>
 
-          {/* Texto bajo el header · sin sombra (va sobre el turquesa limpio) */}
+          {/* Cita bajo el header · sin sombra (va sobre el turquesa limpio) */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
-          <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                textAlign="center" maxW="700px">
-            En Medicina China la cocina es la primera farmacia. Aquí no hay recetas cerradas:
-            hay ingredientes que aportar cada día y formas de cocinar que cambian lo que un
-            mismo alimento hace en ti. Elige tu elemento y empieza por un solo gesto.
-          </Text>
+          <Flex direction="column" align="center" gap={2} maxW="700px">
+            <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                  textAlign="center">
+              «El médico excelente trata primero la enfermedad mediante la alimentación;
+              solo cuando la alimentación no basta, utiliza medicamentos.»
+            </Text>
+            <Text color="white" fontSize={{ base: "sm", md: "md" }} textAlign="center" opacity={0.85}>
+              — Sun Simiao, <Box as="span" fontStyle="italic">Qianjin Yaofang</Box>
+            </Text>
+          </Flex>
           </Reveal>
 
           {/* ── SELECTOR · los cinco elementos ── */}
@@ -113,6 +154,17 @@ export default function MetodoTcmRecetas() {
             ))}
           </Flex>
           </Reveal>
+
+          {/* ── UN GESTO PARA HOY ──
+              Lo único de la página que se HACE en vez de leerse. Enseña un solo
+              gesto de `cadaDia` (hay cinco por elemento), con «dame otro» para
+              rotar y un tick que se apaga solo al día siguiente. */}
+          <GestoDeHoy
+            elemento={elActivo}
+            gestos={cocina.cadaDia}
+            estado={datos.cocinaGesto?.[elActivo]}
+            onCambiar={(cambio) => void guardarGesto(elActivo, cambio)}
+          />
 
           {/* ── CABECERA DEL ELEMENTO · foto de fondo + cómo se cocina ── */}
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
@@ -202,12 +254,132 @@ export default function MetodoTcmRecetas() {
 
       {ilustracionesModal}
 
+      {/* Cómic del ORIGEN del Qigong: veintitrés siglos en nueve viñetas. Antes
+          se leía dentro de la página de Qigong (línea del tiempo + cómic por
+          hito); ahora se ve entero al entrar, como paso intercalado. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={() => navigate("/metodo/tcm/qigong")}
+        vinetas={HISTORIA_QIGONG_VINETAS}
+        continueLabel="Qigong"
+        themeColor={tcmTxt}
+        textColor={tcmTxt}
+        disciplinaBgImage="/img/fondos/tcm.webp"
+        disciplinaBgColor={tcmBg}
+        textShadow={INK_SHADOW}
+      />
+
       <IndiceTcm />
 
       <BotonCompania color={tcmTxt} bgColor={tcmBg} disciplinaNom={tcmNom} />
 
       <SiteFooter />
     </Box>
+  );
+}
+
+// ── «Un gesto para hoy» ──────────────────────────────────────────────────────
+// La tarjeta de acción de la página: un solo gesto de los cinco que tiene el
+// elemento, con «dame otro» para pasar al siguiente y un tick para marcarlo.
+//
+// El tick guarda el DÍA, no un sí/no: mañana vuelve a estar por hacer. Es la
+// diferencia entre un hábito diario y una casilla que se marca una vez y ya.
+//
+// Al cambiar de elemento la tarjeta se remonta (`key` en el padre no hace falta:
+// el índice y el «hecho» vienen de `estado`, que ya es del elemento activo).
+function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
+  elemento: Elemento;
+  gestos: string[];
+  estado?: { i?: number; hecho?: string };
+  onCambiar: (cambio: { i?: number; hecho?: string }) => void;
+}) {
+  const E = ELEMENTOS[elemento];
+  if (!gestos.length) return null;
+
+  const i = ((estado?.i ?? 0) % gestos.length + gestos.length) % gestos.length;
+  const hecho = estado?.hecho === hoyISO();
+
+  return (
+    <Reveal direction="up" distance={22} delay={0.26} duration={0.68} w="100%">
+      <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+           border={`1.5px solid ${E.color}`}
+           boxShadow={`${CAJA_GLOW}, 0 0 26px ${E.color}44`}>
+        <FondoElemento elemento={elemento} />
+
+        <Flex position="relative" zIndex={1} direction="column" gap={4}
+              px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>
+          <Flex align="center" gap={3}>
+            <Rotulo color={E.color}>Un gesto para hoy</Rotulo>
+            <Box h="1px" flex="1" mb={2.5} bgGradient={`linear(to-r, ${E.color}88, transparent)`} />
+          </Flex>
+
+          {/* El gesto. `key` para que cada uno entre en escena al rotar. */}
+          <Text key={`${elemento}-${i}`} color="white" fontSize={{ base: "lg", md: "2xl" }}
+                fontStyle="italic" lineHeight="1.7" minH={{ base: "auto", md: "5.1em" }}
+                sx={{ "@keyframes gestoIn": { from: { opacity: 0, transform: "translateY(8px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}
+                style={{ textShadow: "0 1px 8px rgba(0,0,0,0.9)", animation: "gestoIn 0.35s cubic-bezier(0.22,1,0.36,1)" }}>
+            {gestos[i]}
+          </Text>
+
+          <Flex align="center" justify="space-between" gap={4} wrap="wrap">
+            {/* Dame otro */}
+            <Flex as="button" onClick={() => onCambiar({ i: i + 1 })} align="center" gap={2}
+                  px={{ base: 4, md: 5 }} py={2} borderRadius="full"
+                  border={`1.5px solid ${E.color}aa`} bg="rgba(0,0,0,0.28)"
+                  cursor="pointer" transition="all 0.18s"
+                  sx={{ backdropFilter: "blur(4px)" }}
+                  _hover={{ borderColor: E.color, bg: "rgba(0,0,0,0.44)", transform: "translateY(-1px)" }}>
+              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                   w="17px" h="17px" fill={E.color} flexShrink={0}
+                   style={{ filter: `drop-shadow(0 1px 4px rgba(0,0,0,0.9))` }}>
+                <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z" />
+              </Box>
+              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700}
+                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
+                Dame otro
+              </Text>
+              <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontWeight={700}>
+                {i + 1}/{gestos.length}
+              </Text>
+            </Flex>
+
+            {/* Hecho hoy */}
+            <Flex as="button"
+                  onClick={() => onCambiar({ hecho: hecho ? "" : hoyISO() })}
+                  align="center" gap={2.5}
+                  px={{ base: 4, md: 5 }} py={2} borderRadius="full"
+                  border={`1.5px solid ${hecho ? E.color : "rgba(255,255,255,0.45)"}`}
+                  bg={hecho ? `${E.color}55` : "rgba(0,0,0,0.28)"}
+                  cursor="pointer" transition="all 0.18s"
+                  sx={{ backdropFilter: "blur(4px)" }}
+                  _hover={{ borderColor: E.color, transform: "translateY(-1px)" }}
+                  aria-pressed={hecho}>
+              <Flex flexShrink={0} align="center" justify="center" w="20px" h="20px" borderRadius="full"
+                    border={`2px solid ${hecho ? E.color : "rgba(255,255,255,0.6)"}`}
+                    bg={hecho ? E.color : "transparent"} transition="all 0.18s">
+                {hecho && (
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill="#ffffff">
+                    <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
+                  </Box>
+                )}
+              </Flex>
+              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700}
+                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
+                {hecho ? "Hecho hoy" : "Lo hago hoy"}
+              </Text>
+            </Flex>
+          </Flex>
+
+          <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic"
+                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
+            {hecho
+              ? "Mañana vuelve a estar por hacer: de eso va."
+              : "Uno solo. Los otros cuatro seguirán aquí mañana."}
+          </Text>
+        </Flex>
+      </Box>
+    </Reveal>
   );
 }
 

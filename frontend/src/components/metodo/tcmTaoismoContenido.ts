@@ -5,12 +5,14 @@
 // paso recoge esa mirada en diez leyes —no mandamientos, sino regularidades de
 // la naturaleza— y baja cada una al cuerpo, que es donde la medicina las usa.
 //
-// FORMATO: cortito a propósito. Una línea de esencia, un párrafo y una línea de
-// cuerpo. Si algo no cabe en eso, es que sobra.
+// FORMATO: cada principio son sus `parrafos`, los que necesite (hay de dos y de
+// cuatro). En la página NO se leen: allí solo está el carácter chino, el nombre
+// y el botón «Ver». El texto vive en el visor, con la ilustración al lado.
 //
 // ✍️  EDITAR CONTENIDO: cambia los textos aquí. No cambies las `key` (son la
 //     clave de React y el nombre del archivo de la foto).
 // ─────────────────────────────────────────────────────────────────────────
+import type { Vineta } from "./ComicViewer";
 
 export interface LeyTao {
   /** Clave estable. Es también el nombre de su foto: /recorrido/tcm/taoismo/<key>.webp */
@@ -21,12 +23,10 @@ export interface LeyTao {
   pinyin: string;
   /** Carácter chino. */
   hanzi: string;
-  /** La ley en una frase. */
-  esencia: string;
-  /** Un párrafo. Uno solo. */
-  texto: string;
-  /** Cómo se traduce en el cuerpo: el puente con la medicina. Una línea. */
-  enTuCuerpo: string;
+  /** El texto del principio, un párrafo por elemento. Los hay de dos y de
+   *  cuatro: cada principio se explica en lo que necesita, ni una frase más.
+   *  Se leen en el visor (LEYES_TAO_VINETAS), uno debajo de otro. */
+  parrafos: string[];
 }
 
 /** Intro de la página (bajo el header). */
@@ -45,9 +45,9 @@ export const TAOISMO_CIERRE = {
 
 /**
  * Ilustración de cada ley: CUADRADA (1:1) y en WebP (las sube en PNG y se pasan
- * con `node scripts/webp/convertir.mjs --lote=9`). Si el archivo no existe
- * todavía, la tarjeta enseña su carácter chino en grande: la página funciona
- * igual, sin huecos ni fotos rotas.
+ * con `node scripts/webp/convertir.mjs --lote=9`). Solo se ve dentro del visor;
+ * si el archivo no existe todavía, el visor avisa con su «próximamente» y el
+ * texto se lee igual. La página no se entera: sus boxes son carácter y nombre.
  */
 export const FOTO_LEY = (key: string) => `/recorrido/tcm/taoismo/${key}.webp`;
 
@@ -60,101 +60,123 @@ export const LEYES_TAO: LeyTao[] = [
     nombre: "El camino",
     pinyin: "Tao",
     hanzi: "道",
-    esencia: "Todo sigue un orden natural. Tú también tienes el tuyo.",
-    texto:
-      "El Tao no es un dios ni premia ni castiga: es la ley por la que la semilla brota en primavera y la hoja cae en otoño. Eres un pequeño universo dentro del grande, y tu camino no es el de nadie más.",
-    enTuCuerpo: "Cada órgano tiene su hora y su estación. Vivir a contrarritmo se acaba pagando.",
+    parrafos: [
+      "El Tao es el orden profundo de la naturaleza: no una figura que manda, premia o castiga, sino la forma en que la Vida se mueve.",
+      "No todos estamos hechos para el mismo ritmo. Eres un pequeño universo dentro de otro mucho mayor, y tu salud depende, en parte, de aprender a reconocer tu propio ciclo.",
+    ],
   },
   {
     key: "yin-yang",
     nombre: "Los opuestos que se necesitan",
     pinyin: "Yin Yang",
     hanzi: "陰陽",
-    esencia: "Nada existe sin su contrario: no luchan, se sostienen.",
-    texto:
-      "El Yang es movimiento, calor y actividad; el Yin, reposo, frío y nutrición. Son la inspiración y la espiración de una misma respiración, y dentro de cada uno hay una semilla del otro.",
-    enTuCuerpo: "Toda la medicina china lee en esta clave: calor o frío, exceso o vacío.",
+    parrafos: [
+      "Yin y Yang no son enemigos. Son dos movimientos complementarios que se necesitan para que la Vida pueda tener una manifestación tangible.",
+      "Yang expresa calor, movimiento, expansión y actividad. Yin expresa frío, quietud, interiorización y nutrición. Ninguno es absoluto: en el Yin existe Yang y en el Yang existe Yin.",
+      "La medicina china observa constantemente estas relaciones: calor y frío, exceso y vacío, actividad y reposo. La salud no consiste en eliminar uno de los dos, sino en permitir que se regulen entre sí.",
+    ],
   },
   {
     key: "wu-wei",
-    nombre: "La no acción",
+    nombre: "No forzar",
     pinyin: "Wu Wei",
     hanzi: "無為",
-    esencia: "No es no hacer: es no forzar.",
-    texto:
-      "El que riega y espera practica Wu Wei; el que tira de la planta para que crezca antes, la mata. Casi todo nuestro agotamiento nace de tirar de plantas.",
-    enTuCuerpo: "Forzar es cortisol: carga al hígado y gasta la reserva del riñón.",
+    parrafos: [
+      "Wu Wei significa aceptar que los procesos tienen su tiempo más allá de nuestro deseo y de nuestro conocimiento.",
+      "Una semilla necesita agua, tierra y tiempo. Si tiras de ella para que crezca más rápido, la destruyes.",
+    ],
   },
   {
     key: "ziran",
-    nombre: "Así por sí mismo",
+    nombre: "Ser lo que eres",
     pinyin: "Ziran",
     hanzi: "自然",
-    esencia: "Cada ser tiene su naturaleza; la salud es dejarla ser.",
-    texto:
-      "Es lo que ocurre cuando nada interfiere: el agua baja, el fuego sube, el niño duerme cuando tiene sueño. Buena parte de lo que nos duele viene de vivir con el horario, el cuerpo y el deseo de otro.",
-    enTuCuerpo: "A un cuerpo friolero no se le exige frío; a una digestión delicada, crudos.",
+    parrafos: [
+      "Ziran significa, literalmente, algo que ocurre «por sí mismo»: aquello que sigue su propia naturaleza.",
+      "La salud comienza cuando dejamos de obligarnos a funcionar como algo que no somos. El cuerpo tiene sus propias señales, ritmos y necesidades.",
+    ],
   },
   {
     key: "fan",
     nombre: "El retorno",
     pinyin: "Fan",
     hanzi: "反",
-    esencia: "Todo lo que llega a su extremo se convierte en su contrario.",
-    texto:
-      "Lo que crece decrece, lo que se llena se vacía, el calor extremo acaba en frío. Y también al revés: si estás en el punto más bajo, esa misma ley dice que el movimiento ya está girando.",
-    enTuCuerpo: "El agotamiento no viene de un golpe: viene de sostener un exceso demasiado tiempo.",
+    parrafos: [
+      "Cuando algo llega a su extremo, comienza a transformarse en su contrario.",
+      "La expansión termina dando paso a la contracción. La plenitud abre espacio al vacío. El frío extremo puede terminar generando calor.",
+      "La naturaleza se mueve en ciclos, no en líneas rectas. Por eso, muchas veces el desequilibrio y la enfermedad no aparecen de repente: llevan mucho tiempo avisando.",
+    ],
   },
   {
     key: "de",
     nombre: "La virtud",
     pinyin: "De",
     hanzi: "德",
-    esencia: "Lo que cada ser da cuando está en su sitio.",
-    texto:
-      "La virtud del árbol es dar sombra; la del agua, bajar y nutrir. No hay que fabricarla a base de esfuerzo: basta con quitar lo que la tapa.",
-    enTuCuerpo: "Un órgano sano no necesita que le pidan que funcione. Aquí la virtud es fisiología.",
+    parrafos: [
+      "La cualidad propia que aparece cuando cada ser expresa plenamente su naturaleza.",
+      "El árbol no necesita esforzarse para ser árbol. El agua no necesita demostrar que sabe fluir.",
+      "Quizá la salud no consista siempre en añadir algo más, sino en retirar aquello que impide que el organismo haga lo que ya sabe hacer.",
+    ],
   },
   {
     key: "pu",
     nombre: "La simplicidad",
     pinyin: "Pu",
     hanzi: "樸",
-    esencia: "La madera sin tallar sirve para todo.",
-    texto:
-      "Cuanto más añadimos —cosas, normas, ideas sobre quién deberíamos ser—, menos disponibles estamos. Para aprender se suma cada día; para seguir el Tao se quita cada día.",
-    enTuCuerpo: "La comida más curativa es la más simple: un congee, un caldo, una verdura al vapor.",
+    parrafos: [
+      "Pu es la madera antes de ser tallada: aquello que todavía conserva su sencillez y sus posibilidades.",
+      "A veces acumulamos tanto —objetos, reglas, estímulos, obligaciones e ideas sobre cómo deberíamos vivir— que terminamos alejándonos de lo esencial.",
+      "Seguir el Tao también puede ser un ejercicio de quitar. Menos ruido. Menos exceso. Más espacio para percibir lo que realmente necesitamos.",
+      "La sencillez no es pobreza: es volver a lo esencial.",
+    ],
   },
   {
     key: "xu",
-    nombre: "El vacío útil",
+    nombre: "El vacío que permite",
     pinyin: "Xu",
     hanzi: "虛",
-    esencia: "Lo que sirve de una vasija es el hueco.",
-    texto:
-      "La rueda gira por el vacío del eje y la casa se habita por el espacio que no está ocupado. Llenar cada hueco del día no te hace más productiva: te hace menos habitable.",
-    enTuCuerpo: "El cuerpo se repara en las pausas: el hígado de noche, la digestión entre comidas.",
+    parrafos: [
+      "Lo más valioso de una vasija no es la arcilla, sino el espacio que queda dentro.",
+      "El vacío no es ausencia inútil. Es lo que permite que algo pueda ser habitado, utilizado y transformado.",
+      "También el cuerpo necesita espacio: entre una actividad y otra, entre una comida y la siguiente, entre el esfuerzo y el descanso. Cuando llenamos cada momento, dejamos de tener espacio para recuperarnos, digerir, integrar y simplemente respirar.",
+    ],
   },
   {
     key: "qi",
-    nombre: "Todo está conectado",
+    nombre: "La energía que conecta",
     pinyin: "Qi",
     hanzi: "氣",
-    esencia: "Lo que haces contigo, lo haces con todo.",
-    texto:
-      "El Qi es la energía que da vida y movimiento a la materia, y nos une con el aire, la comida, las estaciones y la gente con la que vivimos. Cuidarte no es egoísmo: es higiene compartida.",
-    enTuCuerpo: "El Qi entra por dos puertas, la respiración y la comida. Un mismo depósito.",
+    parrafos: [
+      "Qi es el movimiento vital que atraviesa y relaciona todas las cosas.",
+      "En la visión china, somos parte del mundo que nos rodea. No somos seres individuales, sino una extensión del Tao.",
+      "Por eso cuidar de uno mismo no significa aislarse del mundo. Significa comprender que formamos parte de él.",
+      "Respiración, alimentación, movimiento, descanso y entorno participan juntos en la manera en que circula nuestra vitalidad.",
+    ],
   },
   {
     key: "bu-zheng",
-    nombre: "No competir",
+    nombre: "No luchar contra todo",
     pinyin: "Bu Zheng",
     hanzi: "不爭",
-    esencia: "El agua vence a la piedra porque no lucha.",
-    texto:
-      "No competir no es rendirse: es dejar de gastar la fuerza en pelear posiciones y ponerla en avanzar. Quien no compite, decía Lao-Tse, no tiene rivales.",
-    enTuCuerpo: "Competir sin tregua es Madera en exceso: mandíbula, hombros y un hígado cargado.",
+    parrafos: [
+      "El agua no necesita enfrentarse a la piedra para transformarla. Continúa su camino, encuentra otra dirección y, con el tiempo, cambia lo que parecía imposible de mover.",
+      "Bu Zheng no significa rendirse. Significa dejar de desperdiciar fuerza en luchas que no necesitan ser luchadas.",
+      "Hay una fuerza distinta en quien no necesita demostrar constantemente su posición. En lugar de competir con todo lo que aparece delante, conserva su energía para aquello que realmente importa.",
+    ],
   },
 ];
 
 export const TAOISMO_TOTAL = LEYES_TAO.length;
+
+/** Las diez leyes EN FORMATO CÓMIC: la ilustración a la izquierda y su
+ *  explicación al lado. Es lo que abre el botón «Ver» de cada box de la página;
+ *  desde dentro se pasa de una ley a otra con las flechas del visor.
+ *
+ *  Se genera de LEYES_TAO: las leyes se editan en un solo sitio y aquí no hay
+ *  texto que se pueda quedar desincronizado. */
+export const LEYES_TAO_VINETAS: Vineta[] = LEYES_TAO.map((ley, i) => ({
+  src: FOTO_LEY(ley.key),
+  eyebrow: `${i + 1} · ${ley.hanzi} · ${ley.pinyin}`,
+  titulo: ley.nombre,
+  paragraphs: ley.parrafos,
+}));

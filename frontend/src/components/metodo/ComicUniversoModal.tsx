@@ -140,7 +140,7 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        minH="100vh"
+        minH="100dvh"
       >
         {/* key={isOpen}: al reabrir el modal, ComicViewer se remonta y
             empieza desde la viñeta 1 con estado limpio. */}

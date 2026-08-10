@@ -617,7 +617,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
         boxShadow="none"
         m={0}
         fontFamily="'EB Garamond', serif"
-        minH="100vh"
+        minH="100dvh"
       >
         {/* ── VISTA SELECTOR ── */}
         {!seccion && (
@@ -667,7 +667,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
 
             {/* Hasta que el fondo y las portadas carguen: solo la estrella. */}
             {!selectorListo && (
-              <Flex position="relative" zIndex={2} minH="100vh" align="center" justify="center">
+              <Flex position="relative" zIndex={2} minH="100dvh" align="center" justify="center">
                 {comicLoaderPorColor(astrologiaTxt)}
               </Flex>
             )}

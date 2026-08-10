@@ -38,7 +38,7 @@ export function QigongComicModal({
         borderRadius="0"
         boxShadow="none"
         m={0}
-        minH="100vh"
+        minH="100dvh"
         position="relative"
         fontFamily="'EB Garamond', serif"
         sx={{ transform: "none !important" }}
@@ -48,12 +48,15 @@ export function QigongComicModal({
             vinetas={vinetas}
             initialIndex={initialIndex}
             themeColor={tcmTxt}
-            textColor="#ffffff"
+            textColor={tcmTxt}
             disciplinaBgImage={TCM_IMG}
             disciplinaBgColor={tcmBg}
             // Animación de espera y barra de scroll en blanco, como la letra.
             loader={<TcmLoader color="#ffffff" />}
             scrollbarColor="#ffffff"
+            // Mismo caso que el cómic de los elementos: letra blanca sobre la
+            // tinta china, que es clarísima. El velo la apaga lo justo.
+            veloOscuro={0.4}
             onClose={onClose}
             onComplete={onClose}
           />

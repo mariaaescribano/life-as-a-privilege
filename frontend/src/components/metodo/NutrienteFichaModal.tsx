@@ -61,7 +61,7 @@ export function NutrienteFichaModal({
         borderRadius="0"
         boxShadow="none"
         m={0}
-        minH="100vh"
+        minH="100dvh"
         position="relative"
         fontFamily="'EB Garamond', serif"
         sx={{ transform: "none !important" }}
