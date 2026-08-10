@@ -712,7 +712,7 @@ NERÓN (54-68) llegó al trono con dieciséis años, educado por el filósofo S�
 
 Después, curiosamente, llegó lo mejor: los Flavios, que construyeron el Coliseo, y el siglo de Trajano, Adriano, Antonino Pío y Marco Aurelio, que en su mayoría no fueron hijos, sino sucesores adoptados por capacidad.
 
-**Dato curioso:** Séneca, el filósofo estoico que escribió páginas admirables sobre la serenidad y la brevedad de la vida, fue durante años el hombre que le redactaba los discursos a Nerón. Terminó recibiendo de su alumno la orden de suicidarse.
+**Dato curioso:** Séneca, el filósofo estoico que escribió páginas admirables sobre la serenidad y la brevedad de la Vida, fue durante años el hombre que le redactaba los discursos a Nerón. Terminó recibiendo de su alumno la orden de suicidarse.
 
 ---
 
@@ -762,7 +762,7 @@ Conviene decir dos cosas a la vez: las persecuciones fueron atroces, y no fueron
 
 NERÓN (64). Tras el incendio de Roma, según cuenta el historiador romano Tácito —que no era cristiano y los despreciaba—, fueron destrozados por perros, crucificados, o untados de brea y encendidos como antorchas vivientes para iluminar de noche los jardines del emperador. La tradición sitúa aquí la muerte de Pedro y de Pablo.
 
-EL PROCEDIMIENTO HABITUAL. Se conserva la carta en la que Plinio, gobernador de Bitinia, pregunta al emperador Trajano qué hacer con ellos, y la respuesta: no hay que buscarlos, pero si alguien los denuncia y se niegan a abjurar, hay que ejecutarlos. La prueba consistía en quemar incienso ante la imagen del emperador, y quien lo hacía se iba a casa. Ese es el punto que hay que entender: los que morían, morían por no hacer un gesto.
+EL PROCEDIMIENTO HABITUAL. No había orden de buscarlos, pero si alguien los denunciaba y se negaban a abjurar, había que ejecutarlos. La prueba consistía en quemar incienso ante la imagen del emperador, y quien lo hacía se iba a casa. Ese es el punto que hay que entender: los que morían, morían por no hacer un gesto.
 
 LOS SUPLICIOS. Azotes con látigos de puntas metálicas, garfios para desgarrar los costados, crucifixión, hoguera, condena a las minas de por vida y damnatio ad bestias: morir devorado por fieras en el anfiteatro, como espectáculo.
 
@@ -780,33 +780,33 @@ Al año siguiente proclamó la libertad de culto para todos y la devolución de 
 
 ¿Por qué lo hizo? Probablemente por convicción y por política a la vez. Los cristianos eran una minoría —quizá un 10 % de la población—, pero eran urbanos, alfabetizados, organizados jerárquicamente y con una lealtad probada a prueba de tortura: como aliados valían mucho más que su número. Y un solo Dios en el cielo encajaba bien con un solo emperador en la tierra.
 
-Lo que hizo después es lo que verdaderamente cambió la historia: eximió de impuestos al clero, dio a los obispos funciones judiciales, financió basílicas enormes, declaró el domingo día de descanso oficial, fundó una capital nueva y cristiana, Constantinopla, y convocó y presidió el concilio de Nicea. A partir de ese momento, la Iglesia y el poder político quedan enlazados durante mil quinientos años.
+Lo que hizo después es lo que verdaderamente cambió la historia: eximió de impuestos al clero, dio a los obispos funciones judiciales, financió basílicas enormes, declaró el domingo día de descanso oficial, fundó una capital nueva y cristiana, Constantinopla. A partir de ese momento, la Iglesia y el poder político quedan enlazados durante mil quinientos años.
 
-Y no fue un santo: mandó ejecutar a su hijo mayor y a su esposa en circunstancias nunca aclaradas, y se bautizó solo en su lecho de muerte.
-
-**Dato curioso:** el símbolo que mandó pintar, el crismón, son las dos primeras letras griegas de «Cristo» superpuestas. Es probablemente el primer logotipo político de la historia europea.
+Constantino no fue un santo: mandó ejecutar a su hijo mayor y a su esposa en circunstancias nunca aclaradas, y se bautizó solo en su lecho de muerte.
 
 ### Profundiza 3 · Cómo cayeron los dioses griegos y romanos
 
-Los dioses del Olimpo no desaparecieron en un día ni por una derrota militar. Se fueron apagando durante dos siglos, y en ese apagón hubo de todo: desprestigio, leyes, dinero y violencia.
+La religión romana no desapareció de golpe, sino que se debilitó durante unos dos siglos por cinco factores principales:
 
-Primero, el desgaste. La religión clásica era sobre todo ritual público: sacrificios, procesiones, augurios. No prometía salvación personal, no consolaba en la muerte, no exigía una moral, no tenía libros sagrados ni comunidad de apoyo. En un imperio en crisis, mucha gente buscó precisamente eso.
+1. Desgaste religioso: los cultos tradicionales se centraban en rituales públicos y ofrecían poca respuesta a necesidades personales como la salvación o el consuelo ante la muerte.
 
-Segundo, el dinero. En cuanto los emperadores fueron cristianos, los templos dejaron de recibir fondos públicos y los sacerdocios dejaron de ser un buen negocio y una vía de ascenso social. Ser cristiano empezó a convenir profesionalmente, y la élite cambió de religión con notable rapidez.
+2. Dinero y poder: cuando los emperadores adoptaron el cristianismo, los templos perdieron financiación y los cargos sacerdotales dejaron de ser atractivos. Ser cristiano pasó a ofrecer ventajas sociales y profesionales.
 
-Tercero, un intento de vuelta atrás que fracasó. El emperador Juliano quiso restaurar el paganismo copiando de los cristianos lo que funcionaba: una jerarquía organizada, escuelas y, sobre todo, obras de caridad. Escribió que era «una vergüenza» que fueran los cristianos y no los templos quienes alimentaban a los pobres. Murió en campaña a los dos años y su reforma murió con él.
+3. El fracaso de Juliano: intentó recuperar el paganismo imitando elementos eficaces del cristianismo, como la organización religiosa y la caridad, pero murió tras solo dos años y su reforma desapareció.
 
-Cuarto, la ley. Teodosio prohibió los sacrificios y el culto en los templos, incluso el doméstico. En 394 se apagó el fuego sagrado de Vesta, que había ardido durante más de mil años, y los Juegos Olímpicos, que eran una fiesta religiosa, dejaron de celebrarse por esa época.
+4. Las leyes cristianas: Teodosio prohibió sacrificios y cultos paganos. El cierre de templos y la desaparición de rituales tradicionales aceleraron el proceso.
 
-Y quinto, la violencia. Multitudes y monjes destruyeron templos y estatuas; en 391 fue arrasado el Serapeo de Alejandría, uno de los santuarios más grandiosos del mundo antiguo, y en 415 la filósofa y matemática Hipatia fue linchada en esa misma ciudad.
+5. La violencia: algunos templos y estatuas fueron destruidos por multitudes y grupos religiosos, destacando el Serapeo de Alejandría y la muerte de Hipatia.
 
-Al final, mucho no se destruyó: se reutilizó. Templos convertidos en iglesias (el Panteón de Roma es una iglesia desde el año 609 y por eso está intacto), fiestas antiguas convertidas en fiestas cristianas, dioses locales convertidos en santos protectores. Y hasta el nombre: «pagano» viene de paganus, «del campo», porque los últimos que siguieron con los dioses viejos fueron los campesinos.
+Sin embargo, el paganismo no fue simplemente borrado: muchas tradiciones fueron reutilizadas. 
 
-**Dato curioso:** seguimos hablando de ellos todos los días. Marte, Venus, Júpiter, Mercurio y Saturno están en los nombres de los planetas y de los días de la semana en muchos idiomas, y Jano, el dios de los comienzos, da nombre a enero.
+Algunos templos se transformaron en iglesias, fiestas antiguas adoptaron formas cristianas y ciertos dioses locales fueron sustituidos por santos. 
+
+El término «pagano», procedente de paganus («del campo»), refleja además que las antiguas creencias sobrevivieron durante más tiempo en las zonas rurales.
 
 ---
 
-## 22 · Dinastía Han
+## 22 · Dinastía Han xxx
 
 `dinastia-han` · **206 a. C.-220 d. C.**  ·  1 pág. Profundiza
 

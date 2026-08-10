@@ -1082,3 +1082,10 @@ export const HISTORIA_MEDICINA_HITOS: HitoHistoria[] = [
     ],
   },
 ];
+
+// Portada de cada era (círculo de la línea del tiempo principal): vive en la
+// subcarpeta eras/, con el nombre = clave de la era. Mientras no exista el
+// archivo, el círculo muestra su marcador (onError de LineaTiempoCultura).
+HISTORIA_MEDICINA_HITOS.forEach((era) => {
+  era.foto = `/recorrido/cultura/historiamedicina/eras/${era.key}.webp`;
+});

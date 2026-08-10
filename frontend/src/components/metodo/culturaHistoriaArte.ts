@@ -746,3 +746,10 @@ export const HISTORIA_ARTE_HITOS: HitoHistoria[] = [
     ],
   },
 ];
+
+// Portada de cada era (círculo de la línea del tiempo principal): vive en la
+// subcarpeta eras/, con el nombre = clave de la era. Mientras no exista el
+// archivo, el círculo muestra su marcador (onError de LineaTiempoCultura).
+HISTORIA_ARTE_HITOS.forEach((era) => {
+  era.foto = `/recorrido/cultura/historiaarte/eras/${era.key}.webp`;
+});

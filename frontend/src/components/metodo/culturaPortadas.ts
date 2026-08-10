@@ -21,9 +21,9 @@ export const CULTURA_HISTORIA_VISUAL: Record<string, HistoriaVisual> = {
   universal:  { portada: `${P}/historiauniversal.webp`, emoji: "🌍" },
   religiones: { portada: `${P}/historiareligion.webp`,  emoji: "🕊️" },
   filosofia:  { portada: `${P}/historiafilosofia.webp`, emoji: "🏛️" },
-  ciencia:    { emoji: "🔬" },
-  medicina:   { emoji: "⚕️" },
-  arte:       { emoji: "🎭" },
+  ciencia:    { portada: `${P}/historiaciencia.webp`,   emoji: "🔬" },
+  medicina:   { portada: `${P}/historiamedicina.webp`,  emoji: "⚕️" },
+  arte:       { portada: `${P}/historiaarte.webp`,      emoji: "🎭" },
 };
 
 export const historiaVisual = (key: string): HistoriaVisual =>
