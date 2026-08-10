@@ -1,36 +1,25 @@
 // ─────────────────────────────────────────────────────────────────────────
 // TU COCINA DIARIA · una forma de comer por elemento (paso 8 del recorrido TCM)
 //
-// Aquí NO hay recetas cerradas: hay INGREDIENTES que aportar cada día y FORMAS
-// DE COCINAR que cambian lo que un mismo alimento hace en ti. En Medicina China
-// el alimento se elige por su sabor, su naturaleza (fría/templada/caliente) y el
-// órgano al que entra; y la cocción es la mitad del remedio.
+// Aquí NO hay recetas cerradas: hay un GESTO para hoy y FORMAS DE COCINAR que
+// cambian lo que un mismo alimento hace en ti. En Medicina China el alimento se
+// elige por su sabor, su naturaleza (fría/templada/caliente) y el órgano al que
+// entra; y la cocción es la mitad del remedio.
 //
 // QUÉ SE VE Y DÓNDE:
-//   · `cadaDia` + `grupos` → dentro de la caja «Un gesto para hoy»: el gesto del
-//     día y, debajo, todos los ingredientes del elemento.
+//   · `cadaDia` → dentro de la caja «Un gesto para hoy»: el gesto del día.
 //   · `principio` → la única línea de texto suelto de la página (bajo esa caja).
 //   · `cocciones` → las tarjetas de «Formas de cocinar».
 //   · `sabor`, `baja` y `dia` se quedan aquí escritos pero NO se muestran: la
 //     página se estaba yendo de texto.
 //
+// LO QUE SE FUE: había un `grupos` con la lista de «Ingredientes que aportar»
+// de cada elemento. Se borró de los cinco: la caja es de HACER una cosa hoy y
+// la lista de la compra la devolvía a ser algo que leer.
+//
 // ✍️  EDITAR CONTENIDO: cambia los textos aquí. No cambies las `key`.
 // ─────────────────────────────────────────────────────────────────────────
 import type { Elemento } from "./tcmRecorrido";
-
-/** Un ingrediente y lo que hace en ti (una línea corta). */
-export interface Alimento {
-  nombre: string;
-  aporta: string;
-}
-
-/** Los ingredientes agrupados por familia (verduras, cereales, infusiones…). */
-export interface GrupoAlimentos {
-  /** Clave estable (no cambiar tras publicar). */
-  key: string;
-  titulo: string;
-  alimentos: Alimento[];
-}
 
 /** Una forma de cocinar: cómo se hace y por qué le sirve a este elemento. */
 export interface Coccion {
@@ -53,7 +42,6 @@ export interface CocinaElemento {
   principio: string;
   /** Gestos pequeños para hoy mismo (lo que de verdad se repite cada día). */
   cadaDia: string[];
-  grupos: GrupoAlimentos[];
   cocciones: Coccion[];
   /** Lo que conviene bajar (no prohibir: bajar). */
   baja: string[];
@@ -73,49 +61,6 @@ export const COCINA_ELEMENTO: Record<Elemento, CocinaElemento> = {
       "Hierbas frescas o germinados por encima de lo que ya cocinas: es la energía que sube.",
       "Cena pronto y ligera. El hígado se ocupa de sí mismo de una a tres de la madrugada y no quiere una digestión abierta.",
       "Agua templada al despertar (con limón si te sienta bien): nunca fría en ayunas.",
-    ],
-    grupos: [
-      {
-        key: "madera-verdes",
-        titulo: "Verdes de hoja y brotes",
-        alimentos: [
-          { nombre: "Pak choi, acelga, espinaca", aporta: "El verde entra en el hígado; cocción corta para no perder su empuje." },
-          { nombre: "Brócoli y sus hojas", aporta: "Mueve y limpia sin enfriar demasiado." },
-          { nombre: "Alcachofa", aporta: "La gran aliada del hígado y de la bilis." },
-          { nombre: "Apio", aporta: "Baja el Yang que sube: cabeza cargada, ojos rojos, tensión." },
-          { nombre: "Germinados (soja verde, alfalfa)", aporta: "Brote puro: energía de primavera aunque no sea primavera." },
-        ],
-      },
-      {
-        key: "madera-acidos",
-        titulo: "Ácidos y fermentados",
-        alimentos: [
-          { nombre: "Limón y lima", aporta: "Despiertan el hígado y ayudan a digerir la grasa." },
-          { nombre: "Chucrut y encurtidos vivos", aporta: "Ácido que además siembra el intestino." },
-          { nombre: "Vinagre de manzana", aporta: "Unas gotas bastan: el ácido en exceso contrae." },
-          { nombre: "Ciruela umeboshi", aporta: "Clásico del ácido que recoge y ordena el centro." },
-        ],
-      },
-      {
-        key: "madera-aromaticos",
-        titulo: "Aromáticos que mueven",
-        alimentos: [
-          { nombre: "Menta fresca", aporta: "Abre el estancamiento y suelta la irritabilidad." },
-          { nombre: "Hinojo y albahaca", aporta: "Mueven el Qi cuando la digestión se cierra con el estrés." },
-          { nombre: "Cúrcuma", aporta: "Mueve la Sangre y acompaña al hígado." },
-          { nombre: "Ralladura de cítricos", aporta: "Aroma que desatasca; se echa al final, fuera del fuego." },
-        ],
-      },
-      {
-        key: "madera-infusiones",
-        titulo: "Infusiones",
-        alimentos: [
-          { nombre: "Flor de crisantemo", aporta: "Aclara el hígado y descansa los ojos de pantalla." },
-          { nombre: "Bayas de goji", aporta: "Nutren la Sangre del hígado; van bien con el crisantemo." },
-          { nombre: "Diente de león", aporta: "Amargo que drena el calor del hígado." },
-          { nombre: "Rosa mosqueta / capullo de rosa", aporta: "Suaviza el estancamiento emocional." },
-        ],
-      },
     ],
     cocciones: [
       {
@@ -164,49 +109,6 @@ export const COCINA_ELEMENTO: Record<Elemento, CocinaElemento> = {
       "Cena ligera y temprana: el corazón necesita que la digestión esté cerrada al acostarse.",
       "Come sentada, despacio y acompañada cuando puedas: el Fuego también se nutre de la mesa.",
     ],
-    grupos: [
-      {
-        key: "fuego-amargos",
-        titulo: "Amargos suaves",
-        alimentos: [
-          { nombre: "Escarola, endivia, achicoria", aporta: "El amargo drena el calor y desciende: en poca cantidad." },
-          { nombre: "Rúcula y berros", aporta: "Amargo fresco que abre el apetito." },
-          { nombre: "Cacao puro (una onza)", aporta: "Amargo del Fuego; en exceso agita en vez de calmar." },
-          { nombre: "Té verde suave", aporta: "Refresca y aclara; nunca a última hora del día." },
-        ],
-      },
-      {
-        key: "fuego-rojos",
-        titulo: "Rojos que nutren la Sangre",
-        alimentos: [
-          { nombre: "Granada y cerezas", aporta: "Rojo que nutre la Sangre del corazón." },
-          { nombre: "Arándanos y frutos del bosque", aporta: "Sostienen los vasos y la tez." },
-          { nombre: "Remolacha", aporta: "Nutre la Sangre y mueve; mejor cocida." },
-          { nombre: "Judía azuki", aporta: "Roja y drenante: nutre sin cargar." },
-          { nombre: "Dátil rojo (jujube)", aporta: "El clásico para nutrir Sangre y calmar el ánimo." },
-        ],
-      },
-      {
-        key: "fuego-shen",
-        titulo: "Lo que aquieta la mente",
-        alimentos: [
-          { nombre: "Semilla de loto", aporta: "Serena el corazón y ayuda a dormir." },
-          { nombre: "Bulbo de lirio (bai he)", aporta: "Humedece y calma la agitación del verano." },
-          { nombre: "Trigo en grano", aporta: "Base del caldo dulce clásico para el llanto fácil." },
-          { nombre: "Semilla de jujube (suan zao ren)", aporta: "Tradicionalmente, para el sueño roto." },
-        ],
-      },
-      {
-        key: "fuego-refrescantes",
-        titulo: "Refrescantes de verano",
-        alimentos: [
-          { nombre: "Pepino y sandía", aporta: "Bajan el calor y reponen líquidos." },
-          { nombre: "Judía mungo", aporta: "El gran refrescante del verano chino." },
-          { nombre: "Menta", aporta: "Baja el calor que sube a la cabeza." },
-          { nombre: "Flor de crisantemo", aporta: "Sofocos, cara roja, ojos calientes." },
-        ],
-      },
-    ],
     cocciones: [
       {
         key: "fuego-hervido",
@@ -253,49 +155,6 @@ export const COCINA_ELEMENTO: Record<Elemento, CocinaElemento> = {
       "El dulce, de la comida: calabaza, boniato, zanahoria, castaña, dátil. No de azúcar.",
       "Mastica hasta que el bocado sea casi líquido y levántate al 70-80% de lleno.",
       "Nada de bebida fría con la comida: agua templada, caldo o nada.",
-    ],
-    grupos: [
-      {
-        key: "tierra-cereales",
-        titulo: "Cereales que centran",
-        alimentos: [
-          { nombre: "Mijo", aporta: "El cereal del bazo por excelencia; alcalino y muy digerible." },
-          { nombre: "Arroz redondo", aporta: "Base del congee: nutre el centro sin cargarlo." },
-          { nombre: "Avena", aporta: "Templada y sostenida: energía estable toda la mañana." },
-          { nombre: "Cebada", aporta: "Drena la humedad cuando hay pesadez e hinchazón." },
-        ],
-      },
-      {
-        key: "tierra-raices",
-        titulo: "Raíces y calabazas",
-        alimentos: [
-          { nombre: "Calabaza", aporta: "Dulce natural que tonifica el centro." },
-          { nombre: "Boniato", aporta: "Sacia y quita el antojo de azúcar." },
-          { nombre: "Zanahoria y chirivía", aporta: "Dulce templado, perfecto en guiso." },
-          { nombre: "Castaña", aporta: "Dulce que además calienta y llega al riñón." },
-          { nombre: "Ñame chino (shan yao)", aporta: "Tonifica bazo y pulmón; clásico del centro." },
-        ],
-      },
-      {
-        key: "tierra-legumbres",
-        titulo: "Legumbres que drenan",
-        alimentos: [
-          { nombre: "Judía azuki", aporta: "Drena el exceso de agua: hinchazón, piernas cargadas." },
-          { nombre: "Judía mungo", aporta: "Drena y refresca; para la humedad con calor." },
-          { nombre: "Garbanzo", aporta: "Nutritivo; siempre bien cocido y con especias." },
-          { nombre: "Alga kombu", aporta: "En la olla, ablanda la legumbre y la hace digerible." },
-        ],
-      },
-      {
-        key: "tierra-especias",
-        titulo: "Lo que despierta la digestión",
-        alimentos: [
-          { nombre: "Jengibre", aporta: "Calienta el centro y quita el frío del estómago." },
-          { nombre: "Canela y cardamomo", aporta: "Dulce cálido que mueve la humedad." },
-          { nombre: "Comino e hinojo", aporta: "Para los gases y la sensación de plenitud." },
-          { nombre: "Piel de mandarina (chen pi)", aporta: "Mueve el Qi del centro; un trocito en el guiso." },
-        ],
-      },
     ],
     cocciones: [
       {
@@ -344,49 +203,6 @@ export const COCINA_ELEMENTO: Record<Elemento, CocinaElemento> = {
       "Fibra suave para el intestino grueso: manzana cocida, lino remojado, avena.",
       "Bebe caliente y a sorbos a lo largo del día; el pulmón odia la sequedad.",
     ],
-    grupos: [
-      {
-        key: "metal-blancos",
-        titulo: "Blancos que humedecen",
-        alimentos: [
-          { nombre: "Pera", aporta: "El remedio casero chino para la tos seca y la garganta rasposa." },
-          { nombre: "Hongo blanco (tremella)", aporta: "Nutre el Yin del pulmón y de la piel." },
-          { nombre: "Coliflor y nabo", aporta: "Blancos suaves que entran en pulmón e intestino." },
-          { nombre: "Almendra dulce", aporta: "Humedece y calma la tos; mejor triturada en leche." },
-          { nombre: "Miel", aporta: "Humecta de verdad, pero solo fuera del fuego." },
-        ],
-      },
-      {
-        key: "metal-picantes",
-        titulo: "Picantes suaves que abren",
-        alimentos: [
-          { nombre: "Jengibre", aporta: "Abre la superficie y suelta el frío de los primeros días." },
-          { nombre: "Puerro y cebolleta", aporta: "Abren el pecho y ayudan con la mucosidad." },
-          { nombre: "Nabo daikon", aporta: "El gran deshacedor de flema y pesadez." },
-          { nombre: "Pimienta blanca", aporta: "Una pizca en el caldo: calienta el pulmón." },
-        ],
-      },
-      {
-        key: "metal-semillas",
-        titulo: "Semillas y frutos",
-        alimentos: [
-          { nombre: "Sésamo blanco", aporta: "Lubrica el intestino y la piel." },
-          { nombre: "Lino remojado", aporta: "Fibra húmeda: el intestino grueso es Metal." },
-          { nombre: "Nuez", aporta: "Nutre pulmón y riñón a la vez." },
-          { nombre: "Pipa de calabaza", aporta: "Aceite bueno para piel y mucosas." },
-        ],
-      },
-      {
-        key: "metal-infusiones",
-        titulo: "Infusiones y aromáticas",
-        alimentos: [
-          { nombre: "Tomillo", aporta: "Antiséptico suave de las vías respiratorias." },
-          { nombre: "Regaliz (poco)", aporta: "Suaviza la garganta y armoniza el resto." },
-          { nombre: "Piel de mandarina (chen pi)", aporta: "Seca la flema sin resecar el pecho." },
-          { nombre: "Jengibre con miel", aporta: "La miel se añade fuera del fuego, siempre." },
-        ],
-      },
-    ],
     cocciones: [
       {
         key: "metal-vapor",
@@ -433,49 +249,6 @@ export const COCINA_ELEMENTO: Record<Elemento, CocinaElemento> = {
       "Un puñado de frutos secos y semillas: nuez, castaña, sésamo, pipa de calabaza.",
       "Sal buena y justa: sal marina o alga. El exceso de sal agota lo mismo que quiere nutrir.",
       "Nada helado, nada con hielo. Y calor en la zona lumbar mientras comes y trabajas.",
-    ],
-    grupos: [
-      {
-        key: "agua-negros",
-        titulo: "Oscuros que entran en el riñón",
-        alimentos: [
-          { nombre: "Judía negra", aporta: "El color negro entra en el riñón: huesos, rodillas, voluntad." },
-          { nombre: "Sésamo negro", aporta: "Nutre la médula y el cabello; tostado y molido." },
-          { nombre: "Arroz negro y quinoa negra", aporta: "Cereal oscuro para el invierno." },
-          { nombre: "Mora, ciruela, arándano", aporta: "Fruta oscura que nutre Sangre y esencia." },
-          { nombre: "Seta shiitake y seta negra", aporta: "Mineral y profunda; base del caldo largo." },
-        ],
-      },
-      {
-        key: "agua-mar",
-        titulo: "Del mar (el sabor salado)",
-        alimentos: [
-          { nombre: "Alga kombu", aporta: "Mineraliza el caldo y ablanda la legumbre." },
-          { nombre: "Wakame y nori", aporta: "Salado suave: reponen minerales sin sobrecargar." },
-          { nombre: "Pescado azul", aporta: "Grasa buena para cerebro y médula." },
-          { nombre: "Marisco (con moderación)", aporta: "Tonifica el Yang del riñón; poca cantidad." },
-        ],
-      },
-      {
-        key: "agua-frutos",
-        titulo: "Frutos secos y semillas",
-        alimentos: [
-          { nombre: "Nuez", aporta: "La forma del cerebro: nutre médula y pulmón." },
-          { nombre: "Castaña", aporta: "Dulce y cálida; refuerza rodillas y lumbares." },
-          { nombre: "Pipa de calabaza", aporta: "Zinc y grasa buena para la reserva." },
-          { nombre: "Piñón", aporta: "Nutre y lubrica; bueno en la sequedad del invierno." },
-        ],
-      },
-      {
-        key: "agua-calor",
-        titulo: "Calor de fondo",
-        alimentos: [
-          { nombre: "Jengibre y canela", aporta: "Calientan el Yang sin agitar." },
-          { nombre: "Clavo e hinojo", aporta: "Calor que llega al bajo vientre y a las lumbares." },
-          { nombre: "Bayas de goji", aporta: "Nutren el Yin del riñón y del hígado." },
-          { nombre: "Ñame chino (shan yao)", aporta: "Tonifica la esencia sin calentar de más." },
-        ],
-      },
     ],
     cocciones: [
       {

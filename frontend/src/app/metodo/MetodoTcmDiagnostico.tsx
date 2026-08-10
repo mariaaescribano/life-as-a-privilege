@@ -37,14 +37,18 @@ const ESTADO_LABEL: Record<VeredictoBalance, string> = {
   equilibrio: "En equilibrio",
   exceso: "En exceso",
   deficiencia: "En deficiencia",
-  mixto: "Mixto",
 };
 const ESTADO_COLOR: Record<VeredictoBalance, string> = {
   equilibrio: "#6f9463",
   exceso: "#d1495b",
   deficiencia: "#c8963e",
-  mixto: "#9b6fae",
 };
+
+// El desequilibrio neto de un elemento raramente pasa del 50%, así que para lo
+// VISUAL (grosor y halo de las flechas de la estrella) se estira esa mitad a
+// todo el rango: 0 = equilibrio, 1 = 50% o más de desequilibrio. Los números que
+// se leen —el % de cada barra— siguen siendo los de verdad, sin estirar.
+const intensidad = (magnitud: number) => Math.min(1, magnitud / 0.5);
 
 const R = 104, FOTO_R = 25; // mismos que la geometría compartida del pentágono
 
@@ -264,7 +268,7 @@ const AristaPerfil = React.memo(function AristaPerfil({ ciclo, origen, delay, es
   const { inicio, fin, ux, uy } = segmentoPentagono(idxElemento(origen), idxElemento(destino));
   const st = estados[origen];
   const activa = !!st && st.veredicto !== "equilibrio";
-  const nivel = st?.magnitud ?? 0;
+  const nivel = intensidad(st?.magnitud ?? 0);
   // Cada flecha lleva el color de su elemento de origen. El ciclo se distingue
   // por el trazo: Sheng (generador) continuo, Ke (control) entrecortado.
   const color = ELEMENTOS[origen].color;
@@ -342,7 +346,7 @@ function EstrellaPerfil({ estados, onElemento }: {
           const label = verticePentagono(i, R + 30);
           const E = ELEMENTOS[el];
           const deseq = afecta(el);
-          const nivel = estados[el]?.magnitud ?? 0;
+          const nivel = intensidad(estados[el]?.magnitud ?? 0);
           const hov = hover === el;
           // Aro SIEMPRE blanco; brilla más cuanto mayor es el desequilibrio.
           const glow = deseq ? 7 + nivel * 20 : 3;
@@ -402,12 +406,13 @@ function Panel({ titulo, color, children }: {
   );
 }
 
-// ── Box de métricas · barras DIVERGENTES por elemento ────────────────────────
-// Cada elemento tiene una línea central (= equilibrio). La barra crece HACIA
-// ARRIBA según la proporción de respuestas de exceso (rojo) y HACIA ABAJO según
-// las de deficiencia (ámbar). Un elemento equilibrado casi no se despega de la
-// línea; uno "mixto" muestra barra arriba y abajo a la vez. Todo se dibuja con
-// la proporción REAL de respuestas (no depende ya de ninguna mayoría).
+// ── Box de métricas · una barra por elemento, hacia UN solo lado ─────────────
+// Cada elemento tiene su línea central (= equilibrio) y UNA barra: hacia ARRIBA
+// si le sobra energía (rojo) o hacia ABAJO si le falta (ámbar), nunca las dos
+// —un elemento no puede estar en exceso y en deficiencia a la vez—. Lo que mide
+// es el balance NETO de sus respuestas (ver `diagnosticoElemento`), así que un
+// elemento con señales de los dos tipos que se compensan se queda pegado a la
+// línea: eso es, exactamente, estar en equilibrio.
 function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, EstadoElemento>> }) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -417,12 +422,12 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
     <>
       <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
             textAlign="center" lineHeight="1.7" mb={5} style={{ textShadow: INK_SHADOW }}>
-        Hacia arriba, cuánto exceso; hacia abajo, cuánta deficiencia. Cuanto más cerca de la línea, más en equilibrio.
+        Cada elemento tira hacia un lado: hacia arriba si le sobra energía, hacia abajo si le falta. Cuanto más cerca de la línea, más en equilibrio.
       </Text>
 
       {/* Leyenda de estados */}
       <Flex justify="center" gap={{ base: 3, md: 6 }} wrap="wrap" mb={5}>
-        {(["equilibrio", "exceso", "deficiencia", "mixto"] as VeredictoBalance[]).map((b) => (
+        {(["equilibrio", "exceso", "deficiencia"] as VeredictoBalance[]).map((b) => (
           <Flex key={b} align="center" gap={2}>
             <Box w="12px" h="12px" borderRadius="sm" bg={ESTADO_COLOR[b]}
                  style={{ boxShadow: `0 0 8px ${ESTADO_COLOR[b]}` }} />
@@ -476,17 +481,21 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
   );
 }
 
-// ── Columna DIVERGENTE de un elemento ────────────────────────────────────────
+// ── Columna de un elemento ───────────────────────────────────────────────────
 // Estructura fija e idéntica en las 5 columnas (para que las líneas centrales
-// queden alineadas): [% exceso] · [mitad superior] · [línea] · [mitad inferior]
-// · [% deficiencia]. La altura de cada barra es su fracción real de respuestas.
+// queden alineadas): [% arriba] · [mitad superior] · [línea] · [mitad inferior]
+// · [% abajo]. Solo UNA de las dos mitades tiene barra, la del lado hacia el que
+// tira el elemento, y su altura es el desequilibrio NETO (sin estirar: un 20%
+// neto ocupa un quinto de su mitad).
 const EXC = ESTADO_COLOR.exceso;
 const DEF = ESTADO_COLOR.deficiencia;
 function ColumnaBalance({ estado, index, enter, reduce }: {
   estado: EstadoElemento; index: number; enter: boolean; reduce: boolean | null;
 }) {
-  const excPct = estado ? Math.round(estado.excesoFrac * 100) : 0;
-  const defPct = estado ? Math.round(estado.defFrac * 100) : 0;
+  // Hacia dónde y cuánto. `posicion` > 0 = le sobra; < 0 = le falta.
+  const neto = estado?.posicion ?? 0;
+  const pct = Math.round(Math.abs(neto) * 100);
+  const arriba = neto > 0;
 
   // Al asomar, las barras crecen desde la línea central con retraso por índice.
   const [shown, setShown] = useState(!!reduce);
@@ -503,42 +512,42 @@ function ColumnaBalance({ estado, index, enter, reduce }: {
 
   return (
     <Flex flex="1" direction="column" align="center" h="100%" minW={0}>
-      {/* % exceso (arriba) */}
+      {/* % del exceso (solo si el elemento tira hacia arriba) */}
       <Box h="16px" display="flex" alignItems="flex-end" justifyContent="center">
-        {excPct > 0 && (
+        {pct > 0 && arriba && (
           <Text color={EXC} fontSize={{ base: "3xs", md: "2xs" }} fontWeight={800} lineHeight="1"
                 opacity={shown ? 1 : 0} transition="opacity 0.4s ease"
                 style={{ textShadow: `0 0 8px ${EXC}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
-            {excPct}%
+            {pct}%
           </Text>
         )}
       </Box>
 
-      {/* Mitad superior · exceso (crece hacia arriba, anclado a la línea) */}
+      {/* Mitad superior · le sobra (crece hacia arriba, anclada a la línea) */}
       <Flex flex="1" w="100%" align="flex-end" justify="center">
-        <Box w={barW} maxW="46px" h={shown ? `${estado?.excesoFrac ? estado.excesoFrac * 100 : 0}%` : "0%"}
+        <Box w={barW} maxW="46px" h={shown && arriba ? `${pct}%` : "0%"}
              borderTopRadius="md" bgGradient={`linear(to-t, ${EXC}cc, ${EXC})`}
-             style={{ boxShadow: excPct > 0 ? `0 0 12px ${EXC}88, inset 0 1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
+             style={{ boxShadow: arriba && pct > 0 ? `0 0 12px ${EXC}88, inset 0 1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
       </Flex>
 
       {/* Línea central = equilibrio */}
       <Box w="100%" h="2px" flexShrink={0} borderRadius="full" bg="rgba(255,255,255,0.45)"
            style={{ boxShadow: "0 0 6px rgba(255,255,255,0.35)" }} />
 
-      {/* Mitad inferior · deficiencia (crece hacia abajo, anclado a la línea) */}
+      {/* Mitad inferior · le falta (crece hacia abajo, anclada a la línea) */}
       <Flex flex="1" w="100%" align="flex-start" justify="center">
-        <Box w={barW} maxW="46px" h={shown ? `${estado?.defFrac ? estado.defFrac * 100 : 0}%` : "0%"}
+        <Box w={barW} maxW="46px" h={shown && !arriba ? `${pct}%` : "0%"}
              borderBottomRadius="md" bgGradient={`linear(to-b, ${DEF}cc, ${DEF})`}
-             style={{ boxShadow: defPct > 0 ? `0 0 12px ${DEF}88, inset 0 -1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
+             style={{ boxShadow: !arriba && pct > 0 ? `0 0 12px ${DEF}88, inset 0 -1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
       </Flex>
 
-      {/* % deficiencia (abajo) */}
+      {/* % de la deficiencia (solo si tira hacia abajo) */}
       <Box h="16px" display="flex" alignItems="flex-start" justifyContent="center">
-        {defPct > 0 && (
+        {pct > 0 && !arriba && (
           <Text color={DEF} fontSize={{ base: "3xs", md: "2xs" }} fontWeight={800} lineHeight="1"
                 opacity={shown ? 1 : 0} transition="opacity 0.4s ease"
                 style={{ textShadow: `0 0 8px ${DEF}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
-            {defPct}%
+            {pct}%
           </Text>
         )}
       </Box>

@@ -178,7 +178,7 @@ export const DAO_YIN_VINETAS: Vineta[] = [
   {
     src: FOTO_DAOYIN("nombre"),
     eyebrow: "導引 · dǎo yǐn",
-    titulo: "Antes se llamaba Dao Yin",
+    titulo: "",
     paragraphs: [
       "Antes de que existiera la palabra «qigong», esto se llamaba Dao Yin. 導 dǎo es guiar, conducir. 引 yǐn es tirar, estirar, atraer hacia ti.",
       "Guiar el Qi y estirar el cuerpo: el nombre describe exactamente lo que haces mientras lo haces.",
@@ -187,7 +187,7 @@ export const DAO_YIN_VINETAS: Vineta[] = [
   {
     src: FOTO_DAOYIN("mawangdui"),
     eyebrow: "168 a.C.",
-    titulo: "Escrito en la tela",
+    titulo: "",
     paragraphs: [
       "Es el nombre que está escrito en la tela de Mawangdui, junto a cada una de aquellas 44 figuras que se estiran, giran y respiran.",
       "Dos mil años después seguimos haciendo lo mismo con otro nombre.",
@@ -196,35 +196,28 @@ export const DAO_YIN_VINETAS: Vineta[] = [
   {
     src: FOTO_DAOYIN("yin"),
     eyebrow: "引 no es 陰",
-    titulo: "Una cosa, con cariño",
+    titulo: "",
     paragraphs: [
       "El 引 de «estirar» no es el 陰 yīn de lo femenino: son dos caracteres distintos y dos palabras distintas.",
-      "Pero la intuición no va desencaminada. Lo femenino no está en el nombre: está en el centro mismo de todo el taoísmo.",
+      "Lo femenino no está en el nombre: está en el centro mismo de todo el taoísmo.",
     ],
   },
   {
     src: FOTO_DAOYIN("madre"),
-    eyebrow: "El rostro femenino del Dao",
+    eyebrow: "",
     titulo: "A Lao-Tse le sale una madre",
     paragraphs: [
       "Cuando Lao-Tse tiene que decir qué es el Dao, no le sale una figura de padre ni de rey. Le sale una madre, un valle, un útero, una hondonada.",
-      "Lo que recibe, lo que sostiene, lo que da vida sin quedarse con nada.",
+      "Lo que recibe, lo que sostiene, lo que da Vida sin quedarse con nada.",
     ],
   },
   {
     src: FOTO_DAOYIN("no-fuerza"),
-    eyebrow: "El rostro femenino del Dao",
+    eyebrow: "",
     titulo: "No manda: nutre",
     paragraphs: [
       "El Dao no conquista: cede, y por eso vence. No hace: deja que ocurra.",
       "Ese es el fondo yin de esta medicina entera, y también el de esta práctica: en el qigong no se fuerza nada. Se abre, se sostiene y se deja pasar.",
-    ],
-  },
-  {
-    src: FOTO_DAOYIN("cita-6"),
-    eyebrow: "Tao Te King, cap. 6 · 谷神不死，是謂玄牝",
-    paragraphs: [
-      "«El espíritu del valle no muere. Se le llama la hembra misteriosa. La puerta de la hembra misteriosa es la raíz del cielo y de la tierra.»",
     ],
   },
   {
@@ -461,7 +454,8 @@ export const BROCADOS_VINETAS: Vineta[] = BROCADOS.map((p, i) => ({
 export const FOTO_ANIMAL = (key: string) => `/recorrido/tcm/cincoanimales/${key}.webp`;
 
 /** LOS CINCO ANIMALES, en cómic. Ya no se leen en la página de Qigong: se ven
- *  al pasar de Qigong a Cursos, un animal por viñeta.
+ *  al pasar de Tu cocina a Qigong, JUSTO DETRÁS del cómic de la historia del
+ *  Qigong (dos cómics seguidos), un animal por viñeta.
  *
  *  Cinco viñetas y no seis: hay una foto por animal y ninguna de portada, así
  *  que la presentación de la serie va como primer párrafo del tigre en vez de

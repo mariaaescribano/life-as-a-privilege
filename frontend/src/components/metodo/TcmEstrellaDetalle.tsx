@@ -14,15 +14,15 @@ const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
 const STAR_BASE = 0.1, STAR_STEP = 0.13, STAR_DUR = 0.55;
 
 const ESTADO_LABEL: Record<VeredictoBalance, string> = {
-  equilibrio: "En equilibrio", exceso: "En exceso", deficiencia: "En deficiencia", mixto: "Mixto",
+  equilibrio: "En equilibrio", exceso: "En exceso", deficiencia: "En deficiencia",
 };
 const ESTADO_COLOR: Record<VeredictoBalance, string> = {
-  equilibrio: "#6f9463", exceso: "#d1495b", deficiencia: "#c8963e", mixto: "#9b6fae",
+  equilibrio: "#6f9463", exceso: "#d1495b", deficiencia: "#c8963e",
 };
-// Qué texto del elemento mostrar según el veredicto ("mixto" reutiliza el
-// párrafo genérico de desequilibrio).
-const CONTENT_KEY: Record<VeredictoBalance, "equilibrio" | "exceso" | "deficiencia" | "desequilibrio"> = {
-  equilibrio: "equilibrio", exceso: "exceso", deficiencia: "deficiencia", mixto: "desequilibrio",
+// Qué texto del elemento mostrar según el veredicto. Son los tres únicos estados
+// posibles: un elemento tira hacia un lado, hacia el otro, o está en equilibrio.
+const CONTENT_KEY: Record<VeredictoBalance, "equilibrio" | "exceso" | "deficiencia"> = {
+  equilibrio: "equilibrio", exceso: "exceso", deficiencia: "deficiencia",
 };
 
 // Altura FIJA del box en escritorio (md+). El detalle de cada elemento tiene un

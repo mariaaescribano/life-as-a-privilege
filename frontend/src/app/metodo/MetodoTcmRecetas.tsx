@@ -11,7 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { TcmComicModal } from "../../components/metodo/QigongComicModal";
-import { HISTORIA_QIGONG_VINETAS } from "../../components/metodo/tcmQigongContenido";
+import { CINCO_ANIMALES_VINETAS, HISTORIA_QIGONG_VINETAS } from "../../components/metodo/tcmQigongContenido";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -20,7 +20,7 @@ import {
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import {
-  COCINA_NOTA, FOTO_COCINA, cocinaDe, type Coccion, type GrupoAlimentos,
+  COCINA_NOTA, FOTO_COCINA, cocinaDe, type Coccion,
 } from "../../components/metodo/tcmCocinaContenido";
 
 // Sombra del texto DENTRO de las cajas: NEGRA, no del turquesa de la disciplina.
@@ -50,9 +50,15 @@ export default function MetodoTcmRecetas() {
   // El blob ENTERO del recorrido: hay que devolverlo completo en cada PATCH,
   // porque el backend reemplaza `data` de una pieza.
   const [datos, setDatos] = useState<DatosTcm>({});
-  // Cómic del ORIGEN del Qigong («De dónde viene»): se ve al pasar de aquí a
-  // Qigong, en vez de leerse dentro de aquella página.
-  const [comicOpen, setComicOpen] = useState(false);
+  // El paso de aquí a Qigong son DOS cómics seguidos, en este orden:
+  //   1. «historia»  → el ORIGEN del Qigong (veintitrés siglos en nueve viñetas).
+  //   2. «animales»  → los CINCO ANIMALES de Hua Tuo, uno por elemento.
+  // Van juntos a propósito: los animales nacen de esa historia (Hua Tuo es uno
+  // de sus hitos), así que se leen del tirón antes de entrar en Qigong. Antes
+  // los animales se veían al SALIR de Qigong hacia Cursos; se han mudado aquí
+  // para no verlos dos veces en la misma visita.
+  // null = ningún cómic abierto.
+  const [comicPaso, setComicPaso] = useState<"historia" | "animales" | null>(null);
   // Cómic de las FORMAS DE COCINAR del elemento activo: guarda por qué cocción
   // se ha abierto (null = cerrado). Dentro se pasa de una a otra con las flechas
   // del visor, así que basta con recordar la de entrada.
@@ -148,7 +154,7 @@ export default function MetodoTcmRecetas() {
             mb={0}
             prev={{ label: "← Taoísmo", onClick: () => navigate("/metodo/tcm/taoismo") }}
             extra={ilustracionesBtn}
-            next={{ label: "Qigong →", onClick: () => setComicOpen(true) }}
+            next={{ label: "Qigong →", onClick: () => setComicPaso("historia") }}
           />
           </Reveal>
 
@@ -182,7 +188,6 @@ export default function MetodoTcmRecetas() {
           <GestoDeHoy
             elemento={elActivo}
             gestos={cocina.cadaDia}
-            grupos={cocina.grupos}
             estado={datos.cocinaGesto?.[elActivo]}
             onCambiar={(cambio) => void guardarGesto(elActivo, cambio)}
           />
@@ -190,10 +195,10 @@ export default function MetodoTcmRecetas() {
           {/* ── CÓMO SE COCINA PARA ESTE ELEMENTO · una sola línea ──
               Antes esto era una caja entera («La cocina de la X», con el sabor y
               los órganos) y, debajo, el título «Ingredientes que aportar» con
-              cuatro cajas de alimentos. Los ingredientes se han mudado dentro de
-              «Un gesto para hoy», así que de todo aquello queda solo esta frase,
-              en el hueco que ocupaba ese título. Va FUERA de las cajas: blanca y
-              sin sombra, como el resto del texto sobre el turquesa. */}
+              cuatro cajas de alimentos. Los ingredientes ya no están en la
+              página —ni aquí ni dentro de «Un gesto para hoy»—, así que de todo
+              aquello queda solo esta frase. Va FUERA de las cajas: blanca y sin
+              sombra, como el resto del texto sobre el turquesa. */}
           <Reveal key={`principio-${elActivo}`} inView direction="up" distance={12} duration={0.6} amount={0.4}
                   display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.85"
@@ -242,14 +247,32 @@ export default function MetodoTcmRecetas() {
         onClose={() => setCoccionAbierta(null)}
       />
 
-      {/* Cómic del ORIGEN del Qigong: veintitrés siglos en nueve viñetas. Antes
-          se leía dentro de la página de Qigong (línea del tiempo + cómic por
-          hito); ahora se ve entero al entrar, como paso intercalado. */}
+      {/* 1 · Cómic del ORIGEN del Qigong: veintitrés siglos en nueve viñetas.
+          Antes se leía dentro de la página de Qigong (línea del tiempo + cómic
+          por hito); ahora se ve entero al salir de aquí, como paso intercalado.
+          Al terminarlo (o con «Los animales →») NO se navega todavía: empieza
+          el segundo cómic. La X sí cierra del todo y deja la página como
+          estaba. */}
       <ComicPasoModal
-        isOpen={comicOpen}
-        onClose={() => setComicOpen(false)}
-        onContinue={() => navigate("/metodo/tcm/qigong")}
+        isOpen={comicPaso === "historia"}
+        onClose={() => setComicPaso(null)}
+        onContinue={() => setComicPaso("animales")}
         vinetas={HISTORIA_QIGONG_VINETAS}
+        continueLabel="Los animales"
+        themeColor={tcmTxt}
+        textColor={tcmTxt}
+        disciplinaBgImage="/img/fondos/tcm.webp"
+        disciplinaBgColor={tcmBg}
+        textShadow={INK_SHADOW}
+      />
+
+      {/* 2 · Los CINCO ANIMALES de Hua Tuo, justo detrás de la historia: un
+          animal por viñeta y por elemento. Este sí desemboca en Qigong. */}
+      <ComicPasoModal
+        isOpen={comicPaso === "animales"}
+        onClose={() => setComicPaso(null)}
+        onContinue={() => navigate("/metodo/tcm/qigong")}
+        vinetas={CINCO_ANIMALES_VINETAS}
         continueLabel="Qigong"
         themeColor={tcmTxt}
         textColor={tcmTxt}
@@ -274,17 +297,15 @@ export default function MetodoTcmRecetas() {
 // El tick guarda el DÍA, no un sí/no: mañana vuelve a estar por hacer. Es la
 // diferencia entre un hábito diario y una casilla que se marca una vez y ya.
 //
-// Aquí dentro van TAMBIÉN todos los ingredientes del elemento. Antes vivían en
-// cuatro cajas aparte, y estaban lejos justo de lo único que se hace en la
-// página: si el gesto de hoy es «una cocción larga», lo que hace falta al lado
-// es la lista de la compra, no tres pantallas más abajo.
+// Aquí dentro hubo un tiempo la lista de «Ingredientes que aportar» del
+// elemento. Se ha quitado (de los cinco elementos): la caja es de HACER una
+// cosa hoy, y la lista de la compra la convertía otra vez en algo que leer.
 //
 // Al cambiar de elemento la tarjeta se remonta (`key` en el padre no hace falta:
 // el índice y el «hecho» vienen de `estado`, que ya es del elemento activo).
-function GestoDeHoy({ elemento, gestos, grupos, estado, onCambiar }: {
+function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
   elemento: Elemento;
   gestos: string[];
-  grupos: GrupoAlimentos[];
   estado?: { i?: number; hecho?: string };
   onCambiar: (cambio: { i?: number; hecho?: string }) => void;
 }) {
@@ -372,46 +393,6 @@ function GestoDeHoy({ elemento, gestos, grupos, estado, onCambiar }: {
               : "Uno solo. Los otros cuatro seguirán aquí mañana."}
           </Text>
 
-          {/* ── Los ingredientes del elemento, dentro de la misma caja ──
-              Dos columnas en ordenador y una en móvil. `key` con el elemento en
-              la lista entera: al cambiar de elemento se remonta y entra en
-              escena, en vez de cambiarle el texto a las mismas líneas. */}
-          {grupos.length > 0 && (
-            <Box key={`ingr-${elemento}`}
-                 sx={{ "@keyframes ingrIn": { from: { opacity: 0, transform: "translateY(10px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}
-                 style={{ animation: "ingrIn 0.4s cubic-bezier(0.22,1,0.36,1)" }}>
-              <Box h="1px" w="100%" mt={2} mb={5}
-                   bgGradient="linear(to-r, transparent, rgba(255,255,255,0.5), transparent)" />
-              <Rotulo>Ingredientes que aportar</Rotulo>
-              <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
-                   columnGap={{ base: 0, md: 9 }} rowGap={{ base: 6, md: 7 }}>
-                {grupos.map((g) => (
-                  <Box key={g.key} minW={0}>
-                    <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={800} letterSpacing="0.02em"
-                          mb={2.5} style={{ textShadow: INK_SHADOW }}>
-                      {g.titulo}
-                    </Text>
-                    <Flex direction="column" gap={3}>
-                      {g.alimentos.map((a, j) => (
-                        <Flex key={j} gap={2.5} align="flex-start" minW={0}>
-                          {/* El punto sí lleva el color del elemento: es adorno,
-                              no texto, y ahí el color se ve sin estorbar. */}
-                          <Box flexShrink={0} mt={{ base: "9px", md: "10px" }} w="5px" h="5px" borderRadius="full"
-                               bg={E.color} boxShadow={`0 0 6px ${E.color}`} />
-                          <Box minW={0}>
-                            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700} lineHeight="1.5"
-                                  style={{ textShadow: INK_SHADOW }}>{a.nombre}</Text>
-                            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
-                                  lineHeight="1.65" style={{ textShadow: INK_SHADOW }}>{a.aporta}</Text>
-                          </Box>
-                        </Flex>
-                      ))}
-                    </Flex>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          )}
         </Flex>
       </Box>
     </Reveal>

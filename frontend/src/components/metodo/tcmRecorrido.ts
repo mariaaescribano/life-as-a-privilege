@@ -1330,30 +1330,11 @@ export function puntuarBalance(
   return acc;
 }
 
-/** Balance mayoritario del elemento (equilibrio/exceso/deficiencia), o null si
- *  no hay respuestas. No se muestra al usuario (de momento), pero queda para el
- *  perfil. Empate → gana el que más "desequilibra" (exceso o deficiencia). */
-export function balanceElemento(
-  el: Elemento,
-  respuestas: Record<string, string> | undefined,
-): Balance | null {
-  if (!respuestas) return null;
-  const conteo: Record<Balance, number> = { equilibrio: 0, exceso: 0, deficiencia: 0 };
-  let alguna = false;
-  for (const t of testsDeElemento(el)) {
-    for (const q of t.preguntas) {
-      const op = q.opciones.find((o) => o.key === respuestas[q.key]);
-      if (!op) continue;
-      conteo[op.balance] += 1;
-      alguna = true;
-    }
-  }
-  if (!alguna) return null;
-  // Prioridad de desempate: exceso > deficiencia > equilibrio (empate → gana el que más desequilibra).
-  // El reduce arranca en orden[0] ("exceso"), así que un empate nunca cae en "equilibrio".
-  const orden: Balance[] = ["exceso", "deficiencia", "equilibrio"];
-  return orden.reduce((max, b) => (conteo[b] > conteo[max] ? b : max));
-}
+// Aquí vivían `balanceElemento` (el estado por MAYORÍA de respuestas) y
+// `posicionBalance`. Se han quitado: el estado de un elemento sale ahora del
+// balance NETO, en `diagnosticoElemento` (más abajo), y tener a la vez la vieja
+// regla de la mayoría era una trampa —dos funciones que responden cosas distintas
+// a la misma pregunta—. Si hace falta la dirección, es `diagnosticoElemento().posicion`.
 
 /** Conteo de respuestas por estado (A/B/C) de los tests de balance del elemento. */
 export function conteoBalance(
@@ -1373,51 +1354,46 @@ export function conteoBalance(
   return c;
 }
 
-/**
- * Posición del elemento en el eje Deficiencia (−1) ↔ Equilibrio (0) ↔ Exceso (+1),
- * a partir de sus respuestas de balance. `null` si aún no hay respuestas.
- * Es lo que alimenta las barras/termómetro del perfil.
- */
-export function posicionBalance(
-  el: Elemento,
-  respuestas: Record<string, string> | undefined,
-): number | null {
-  const c = conteoBalance(el, respuestas);
-  if (c.total === 0) return null;
-  return (c.exceso - c.deficiencia) / c.total;
-}
-
 // ─────────────────────────────────────────────────────────────────────────
-// DIAGNÓSTICO HONESTO DE UN ELEMENTO
+// DIAGNÓSTICO DE UN ELEMENTO · UN SOLO SENTIDO
 //
-// Antes el estado era la opción "más repetida" (mayoría simple) y la barra solo
-// se mostraba si esa mayoría caía en exceso/deficiencia: podías responder ~45%
-// de deficiencia y salir "En equilibrio" con la barra a cero. Ahora el estado se
-// decide por UMBRALES sobre la proporción real de respuestas de desequilibrio:
+// Un elemento NO puede estar a la vez en exceso y en deficiencia: o le sobra
+// energía, o le falta, o está en equilibrio. Eso es lo que dice la medicina
+// china y es lo único que se puede leer de un vistazo.
 //
-//   magnitud = (exceso + deficiencia) / total   → CUÁNTO desequilibrio (0–1)
-//   posicion = (exceso − deficiencia) / total   → HACIA DÓNDE (−1 def … +1 exc)
+// Antes se contaban los dos lados por separado y cada uno tenía su umbral, así
+// que cualquiera que respondiese algunas señales de cada tipo —o sea, todo el
+// mundo— salía "Mixto", con la barra creciendo hacia arriba Y hacia abajo a la
+// vez. No significaba nada.
 //
-//   · magnitud < UMBRAL_DESEQUILIBRIO           → "equilibrio"
-//   · si no, y ambos lados están repartidos     → "mixto"
-//   · si no                                     → "exceso" | "deficiencia"
+// Ahora se mira el BALANCE NETO, que es lo que de verdad dice hacia dónde tira
+// el elemento: las señales de un lado RESTAN a las del otro.
+//
+//   neto = (respuestas de exceso − respuestas de deficiencia) / total
+//
+//   · |neto| < UMBRAL_NETO  → "equilibrio"   (las señales se compensan)
+//   · neto > 0              → "exceso"
+//   · neto < 0              → "deficiencia"
+//
+// Así, responder un 30% de señales de exceso y un 25% de deficiencia no es
+// "estar en los dos": es estar bastante en equilibrio, con un pelín de exceso.
 // ─────────────────────────────────────────────────────────────────────────
-/** A partir de qué proporción de respuestas de desequilibrio se deja de decir
- *  "En equilibrio" (sensible: 25%). */
-export const UMBRAL_DESEQUILIBRIO = 0.25;
-/** Cuando hay desequilibrio, si el lado menor pesa al menos esto DENTRO del
- *  desequilibrio (min/(exceso+deficiencia)), el estado es "mixto". */
-export const UMBRAL_MIXTO = 0.34;
+/** Por cuánto tiene que ganar un lado al otro para dejar de decir "En
+ *  equilibrio": 15 puntos de las respuestas del elemento (con 15 preguntas, algo
+ *  más de dos respuestas de diferencia). Por debajo, se compensan. */
+export const UMBRAL_NETO = 0.15;
 
-export type VeredictoBalance = "equilibrio" | "deficiencia" | "exceso" | "mixto";
+export type VeredictoBalance = "equilibrio" | "deficiencia" | "exceso";
 
 export interface EstadoDiagnostico {
   veredicto: VeredictoBalance;
-  /** Proporción de respuestas de desequilibrio (0–1). */
+  /** CUÁNTO desequilibrio neto hay, 0–1 (= |posicion|). Es lo que mide la barra
+   *  y lo que decide qué elemento es el protagonista. */
   magnitud: number;
-  /** Dirección: −1 (todo deficiencia) … 0 … +1 (todo exceso). */
+  /** HACIA DÓNDE tira: −1 (toda deficiencia) … 0 … +1 (todo exceso). */
   posicion: number;
-  /** Fracción de respuestas de exceso (0–1). */
+  /** Fracción de respuestas de exceso (0–1). El dato en bruto, por si algún día
+   *  se quiere matizar; el veredicto y la barra van por el neto. */
   excesoFrac: number;
   /** Fracción de respuestas de deficiencia (0–1). */
   defFrac: number;
@@ -1425,8 +1401,8 @@ export interface EstadoDiagnostico {
   total: number;
 }
 
-/** Diagnóstico honesto de un elemento a partir de sus respuestas de balance.
- *  `null` si aún no hay respuestas. */
+/** Diagnóstico de un elemento a partir de sus respuestas de balance: un solo
+ *  sentido (exceso, deficiencia o equilibrio). `null` si aún no hay respuestas. */
 export function diagnosticoElemento(
   el: Elemento,
   respuestas: Record<string, string> | undefined,
@@ -1435,23 +1411,19 @@ export function diagnosticoElemento(
   if (c.total === 0) return null;
   const excesoFrac = c.exceso / c.total;
   const defFrac = c.deficiencia / c.total;
-  const magnitud = excesoFrac + defFrac;
+  // Balance NETO: un lado resta al otro.
   const posicion = excesoFrac - defFrac;
+  const magnitud = Math.abs(posicion);
 
-  let veredicto: VeredictoBalance;
-  if (magnitud < UMBRAL_DESEQUILIBRIO) {
-    veredicto = "equilibrio";
-  } else {
-    const desequilibrio = c.exceso + c.deficiencia;
-    const mezcla = desequilibrio === 0 ? 0 : Math.min(c.exceso, c.deficiencia) / desequilibrio;
-    if (mezcla >= UMBRAL_MIXTO) veredicto = "mixto";
-    else veredicto = posicion >= 0 ? "exceso" : "deficiencia";
-  }
+  const veredicto: VeredictoBalance =
+    magnitud < UMBRAL_NETO ? "equilibrio" : posicion > 0 ? "exceso" : "deficiencia";
+
   return { veredicto, magnitud, posicion, excesoFrac, defFrac, total: c.total };
 }
 
-/** Elemento que hoy más atención necesita: el de MAYOR magnitud de desequilibrio
- *  (fracción, sin el sesgo del nº de preguntas del antiguo `elementoPredominante`).
+/** Elemento que hoy más atención necesita: el del MAYOR desequilibrio neto (así
+ *  el protagonista es siempre uno que de verdad tira hacia algún lado, no uno
+ *  con muchas señales que se anulan entre ellas).
  *  Empate → el primero en el orden del ciclo. */
 export function elementoMasCargado(data: DatosTcm | null | undefined): Elemento {
   let best: Elemento = ORDEN_ELEMENTOS[0];

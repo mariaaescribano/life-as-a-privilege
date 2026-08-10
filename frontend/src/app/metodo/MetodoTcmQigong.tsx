@@ -14,9 +14,8 @@ import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { ELEMENTOS } from "../../components/metodo/tcmRecorrido";
 import { QigongComicModal } from "../../components/metodo/QigongComicModal";
-import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import {
-  BROCADOS, BROCADOS_VINETAS, CINCO_ANIMALES_VINETAS, DAO_YIN, DAO_YIN_VINETAS,
+  BROCADOS, BROCADOS_VINETAS, DAO_YIN, DAO_YIN_VINETAS,
   FOTO_POSTURA, QIGONG_INTRO, QIGONG_NOTA, type Postura,
 } from "../../components/metodo/tcmQigongContenido";
 
@@ -31,11 +30,11 @@ export default function MetodoTcmQigong() {
   const [loading, setLoading] = useState(true);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
   // Cómics que se abren DESDE la página: el Dao Yin y la postura que se pulse.
-  // El de la historia («De dónde viene») se ve al ENTRAR, intercalado entre Tu
-  // cocina y Qigong; el de los cinco animales, al salir hacia Cursos.
+  // Los dos intercalados (la historia del Qigong y los cinco animales) se ven
+  // seguidos al ENTRAR, entre Tu cocina y Qigong; ya no hay ninguno al salir
+  // hacia Cursos.
   const [daoYinAbierto, setDaoYinAbierto] = useState(false);
   const [brocadoAbierto, setBrocadoAbierto] = useState<number | null>(null);
-  const [animalesAbierto, setAnimalesAbierto] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -80,7 +79,7 @@ export default function MetodoTcmQigong() {
             mb={0}
             prev={{ label: "← Tu cocina", onClick: () => navigate("/metodo/tcm/recetas") }}
             extra={ilustracionesBtn}
-            next={{ label: "Cursos →", onClick: () => setAnimalesAbierto(true) }}
+            next={{ label: "Cursos →", onClick: () => navigate("/metodo/tcm/cursos") }}
           />
           </Reveal>
 
@@ -157,8 +156,9 @@ export default function MetodoTcmQigong() {
             ))}
           </Box>
 
-          {/* Los cinco animales ya no se leen aquí: son el cómic que se ve al
-              pasar de Qigong a Cursos (CINCO_ANIMALES_VINETAS). */}
+          {/* Los cinco animales ya no se leen aquí: son el segundo cómic del
+              paso Tu cocina → Qigong, justo detrás de la historia del Qigong
+              (CINCO_ANIMALES_VINETAS, en MetodoTcmRecetas). */}
 
           {/* ── NOTA FINAL ── */}
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
@@ -186,20 +186,6 @@ export default function MetodoTcmQigong() {
         vinetas={BROCADOS_VINETAS}
         initialIndex={brocadoAbierto ?? 0}
         onClose={() => setBrocadoAbierto(null)}
-      />
-
-      {/* Cómic de los cinco animales: se ve al salir hacia Cursos. */}
-      <ComicPasoModal
-        isOpen={animalesAbierto}
-        onClose={() => setAnimalesAbierto(false)}
-        onContinue={() => navigate("/metodo/tcm/cursos")}
-        vinetas={CINCO_ANIMALES_VINETAS}
-        continueLabel="Cursos"
-        themeColor={tcmTxt}
-        textColor={tcmTxt}
-        disciplinaBgImage="/img/fondos/tcm.webp"
-        disciplinaBgColor={tcmBg}
-        textShadow={INK_SHADOW}
       />
 
       <IndiceTcm />
