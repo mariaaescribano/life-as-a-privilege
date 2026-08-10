@@ -1145,19 +1145,76 @@ const CETOSIS: Ficha[] = [
 ];
 
 // ── Músculo · cómo se contrae y quién le pone el freno ───────────────────────
+// El tema se recorre de fuera hacia dentro, como una muñeca rusa: el músculo
+// entero → el sarcómero → las dos proteínas que se deslizan (actina y miosina)
+// → la instalación que reparte la señal (túbulos T y calcio) → el muelle que lo
+// devuelve todo a su sitio (titina). La miostatina va al final porque ya no es
+// el mecanismo, es el freno al crecimiento.
 const MUSCULO: Ficha[] = [
   {
-    key: "actina-miosina", nombre: "Actina y miosina", color: "#e07a5f", foto: SUB("musculo", "actinamiosina"),
-    eyebrow: "Así se contrae un músculo",
-    claves: ["Dos filamentos que se deslizan", "El calcio da la señal", "Cada tirón gasta ATP"],
+    key: "musculo", nombre: "El músculo", color: "#e07a5f", foto: SUB("musculo", "musculo"),
+    eyebrow: "De la carne a la molécula",
+    claves: ["Un manojo de manojos de fibras", "Cada fibra es UNA célula", "Dentro, filamentos en fila"],
     explicacion: [
-      "Dentro de cada fibra muscular hay dos tipos de filamentos colocados de forma milimétrica: la actina, fina, y la miosina, más gruesa y con unas «cabezas» que sobresalen. Contraer un músculo es, literalmente, hacer que unos se deslicen sobre los otros.",
-      "1. La orden. La neurona libera acetilcolina en la unión neuromuscular y eso genera un impulso eléctrico que recorre la fibra entera.",
-      "2. El calcio. Ese impulso hace que los almacenes internos de la fibra suelten calcio. Es la señal que lo desencadena todo.",
-      "3. Se despeja el carril. En reposo, los puntos de anclaje de la actina están tapados por unas proteínas que hacen de cerrojo. El calcio las aparta y deja el sitio libre.",
-      "4. El remo. Las cabezas de miosina se agarran a la actina y tiran de ella, se sueltan, se recolocan y vuelven a tirar, gastando ATP en cada tirón. Muchísimas veces por segundo, como miles de remeros a la vez.",
-      "5. El acortamiento. Los filamentos se han deslizado unos sobre otros y cada pequeña unidad de la fibra, el sarcómero, queda más corta. Millones de sarcómeros acortándose al mismo tiempo es lo que notas como un músculo contrayéndose.",
-      "Y una cosa que sorprende: relajarse también cuesta energía. Hace falta ATP para volver a guardar el calcio y que las cabezas de miosina se suelten. Por eso, cuando ya no queda ATP, el músculo se queda agarrado y rígido: es lo que ocurre en el rigor mortis.",
+      "Un músculo no es una pieza de carne maciza: es un manojo de manojos. Lo envuelve una funda, dentro hay haces —los fascículos—, y dentro de cada haz, fibras colocadas en paralelo como los hilos de una cuerda.",
+      "Cada fibra es UNA célula, y es una célula rarísima: puede medir varios centímetros de largo, tiene cientos de núcleos (uno solo no daría para gobernar tanto territorio) y está atiborrada de mitocondrias, porque moverte es carísimo.",
+      "Dentro de cada fibra, cientos de miofibrillas la recorren de punta a punta, y cada miofibrilla es una fila de sarcómeros, la pieza que de verdad se acorta. De ahí vienen las rayas: el músculo esquelético se ve estriado al microscopio porque millones de sarcómeros están alineados a la misma altura.",
+      "Y lo que llamas «fuerza» nace al final de esa cadena, en dos proteínas deslizándose una sobre otra. Todo lo demás —el tendón, el hueso, el gesto— es la manera de sacar hacia fuera ese tirón microscópico.",
+    ],
+  },
+  {
+    key: "sarcomero", nombre: "El sarcómero", color: "#d4695f", foto: SUB("musculo", "sarcomero"),
+    eyebrow: "La pieza que se acorta",
+    claves: ["La unidad mínima del músculo", "Va de línea Z a línea Z", "Se desliza, no se encoge"],
+    explicacion: [
+      "Es el ladrillo del músculo: el tramo que va de una línea Z a la siguiente. Mide unas dos micras, y una sola fibra lleva millones puestos en fila, uno detrás de otro.",
+      "Dentro está todo colocado con precisión de relojería: anclados a las líneas Z, los filamentos finos de actina apuntando hacia el centro; en medio, los gruesos de miosina, sujetos por la línea M. Los dos juegos se solapan por los extremos, y justo ahí es donde ocurre el trabajo.",
+      "Contraer no es encogerse: los filamentos no se acortan ni un nanómetro. Lo que pasa es que se deslizan unos entre otros, las líneas Z se acercan y el sarcómero queda más corto. Millones acortándose a la vez es lo que notas como un músculo contrayéndose.",
+      "Por eso un músculo tiene un largo en el que es más fuerte. Demasiado estirado, los filamentos apenas se solapan y quedan pocas cabezas con las que agarrar; demasiado acortado, se estorban entre ellas. En el punto medio es donde hace más fuerza, y es parte del motivo por el que un mismo ejercicio se siente distinto según el ángulo.",
+    ],
+  },
+  {
+    key: "actina", nombre: "Actina", color: "#cf6f86", foto: SUB("musculo", "actina"),
+    eyebrow: "El filamento fino (y su cerrojo)",
+    claves: ["Dos hileras de bolitas trenzadas", "La tropomiosina tapa los anclajes", "La troponina espera al calcio"],
+    explicacion: [
+      "La actina es el filamento fino, y de cerca parece un collar: dos hileras de bolitas —cada bolita, una molécula de actina— trenzadas en espiral. Está anclada a la línea Z, y es a ella a la que se agarra la miosina para tirar.",
+      "Pero no está libre. Enroscada a lo largo del collar va una proteína alargada, la tropomiosina, que tapa exactamente los puntos donde la miosina tendría que engancharse. Es un cerrojo: mientras esté echado, la miosina no puede agarrarse y el músculo está relajado aunque le sobre energía.",
+      "Y sujeta a la tropomiosina, cada pocas bolitas, está la troponina: la pieza que sabe reconocer el calcio. Cuando el calcio aparece, la troponina cambia de forma, arrastra con ella a la tropomiosina y descubre los anclajes. El carril queda libre.",
+      "Eso es lo que significa que un músculo esté «en reposo»: no está apagado, está cerrado con llave. Y el calcio es la llave. La actina, por cierto, no es cosa solo del músculo: es una de las proteínas más abundantes de tu cuerpo y forma el esqueleto interno de casi todas tus células.",
+    ],
+  },
+  {
+    key: "miosina", nombre: "Miosina", color: "#a97bbf", foto: SUB("musculo", "miosina"),
+    eyebrow: "El motor que rema",
+    claves: ["Un palo doble con dos cabezas", "Cada tirón gasta un ATP", "Soltarse también cuesta energía"],
+    explicacion: [
+      "Cada molécula de miosina tiene forma de palo de golf doble: una cola larga y enrollada, y dos cabezas que sobresalen. Cientos de ellas se empaquetan por la cola formando el filamento grueso, con las cabezas asomando en todas direcciones hacia la actina.",
+      "La cabeza es el motor de verdad, y sabe hacer dos cosas: agarrarse a la actina y romper ATP. Las hace en ciclo: se engancha, gira y tira de la actina unos nanómetros —el golpe de fuerza—, se suelta, se recoloca y vuelve a agarrarse un poco más adelante. Como remeros que sacan el remo del agua, lo llevan hacia atrás y vuelven a clavarlo.",
+      "Nunca reman todas al mismo tiempo: mientras unas tiran, otras están soltándose. Por eso el filamento no resbala hacia atrás entre tirón y tirón y la fuerza sale continua. Un ciclo dura milisegundos, y hay miles de millones de cabezas trabajando.",
+      "Lo que sorprende: soltarse también cuesta ATP. La cabeza no se libera de la actina hasta que tiene una molécula nueva en la mano. Cuando ya no queda ATP ninguno, las cabezas se quedan agarradas y el músculo se pone rígido: eso es el rigor mortis. Y en vida, cada músculo lleva su versión de miosina, más rápida o más lenta; de ahí que se hable de fibras «rápidas» y «lentas».",
+    ],
+  },
+  {
+    key: "tubulos", nombre: "Túbulos T y calcio", color: "#8f7fc4", foto: SUB("musculo", "tubulos"),
+    eyebrow: "De la orden al movimiento",
+    claves: ["La membrana se hunde hacia dentro", "El retículo guarda el calcio", "Volver a guardarlo gasta ATP"],
+    explicacion: [
+      "La orden llega por fuera: la neurona suelta acetilcolina en la unión neuromuscular y eso enciende un impulso eléctrico que recorre la membrana de la fibra. Pero la fibra es gruesa, y un impulso que viajara solo por la superficie dejaría el centro sin enterarse: el músculo se contraería por fuera y no por dentro.",
+      "La solución son los túbulos T. La propia membrana se hunde hacia el interior formando túneles que atraviesan la fibra de lado a lado, pegados a cada sarcómero. Así la señal eléctrica entra hasta el fondo y llega a todas las miofibrillas a la vez, en el mismo milisegundo.",
+      "Abrazando a cada miofibrilla como una red está el retículo sarcoplásmico: el almacén del calcio. Ahí dentro el calcio está miles de veces más concentrado que fuera, esperando. Cuando el impulso llega por el túbulo T, se abren las puertas del almacén y el calcio se derrama sobre los sarcómeros: la troponina lo recibe, el cerrojo se abre y empieza la contracción.",
+      "Y para relajarte hay que devolverlo. Unas bombas del retículo van recogiendo el calcio y metiéndolo dentro a contracorriente, gastando ATP en cada molécula. Relajarse no es dejar de hacer, es otro trabajo: de hecho es una de las cosas en las que un músculo gasta más energía. Cuando esas bombas no dan abasto, la fibra se queda medio contraída, y eso es parte de lo que hay detrás de un calambre.",
+    ],
+  },
+  {
+    key: "titina", nombre: "Titina", color: "#b06f9a", foto: SUB("musculo", "titina"),
+    eyebrow: "El muelle que lo devuelve a su sitio",
+    claves: ["La proteína más grande de tu cuerpo", "Un muelle molecular", "Devuelve energía al soltar"],
+    explicacion: [
+      "Si dentro del sarcómero solo hubiera actina y miosina, un músculo estirado a la fuerza no sabría volver: nada tiraría de los filamentos para recolocarlos. De eso se encarga la titina, una proteína gigantesca que va desde la línea Z hasta el centro del sarcómero y lo atraviesa entero.",
+      "Es la proteína más grande que fabrica tu cuerpo —unos treinta mil aminoácidos, cien veces lo habitual— y tiene el récord del nombre químico más largo que existe: escrito entero se tarda horas en leerlo. Pero su función es de una sencillez preciosa: es un muelle. Lleva tramos plegados que se desenrollan cuando el sarcómero se estira y se vuelven a plegar solos al soltar.",
+      "Eso hace tres cosas. Mantiene la miosina centrada y cada pieza donde tiene que estar; opone una resistencia elástica cuando estiras (esa tensión que notas en un estiramiento sin contraer nada es en buena parte ella); y devuelve energía al soltar. Por eso al caer de un salto rebotas hacia arriba: parte de esa fuerza no la pones tú, la devuelve el muelle.",
+      "Y no es solo un resorte: la titina también avisa. Al estirarse cambia de forma, y desde ahí salen señales que participan en decidir si la fibra tiene que repararse y crecer. El músculo se entera de cuánta tensión ha aguantado, en parte, a través de ella.",
     ],
   },
   {
@@ -1408,10 +1465,15 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     label: "Músculos",
     resumen: "Cómo se contraen y qué los frena.",
     color: "#e07a5f",
-    foto: PORTADA("musculoportada"),
+    // La única portada que no sale de /portadas: es la misma ilustración del
+    // músculo entero que abre el tema, y se apunta a ella en vez de duplicar el
+    // archivo (la de /portadas/musculoportada.webp era la de actina y miosina,
+    // que ya no representa el tema).
+    foto: SUB("musculo", "musculo"),
     grupo: "Química interna",
-    intro: "Qué ocurre exactamente dentro de una fibra muscular cuando te mueves, y por qué tu propio cuerpo le pone un freno al crecimiento.",
+    intro: "Qué ocurre exactamente dentro de una fibra muscular cuando te mueves. Se recorre de fuera hacia dentro: el músculo entero, el sarcómero, las dos proteínas que se deslizan, la instalación que reparte la señal y el muelle que lo devuelve todo a su sitio. Y al final, por qué tu propio cuerpo le pone un freno al crecimiento.",
     pista: "",
+    cierre: "Mover un dedo es esto: una orden eléctrica que baja por unos túneles, un almacén de calcio que se abre, un cerrojo que se descorre y miles de millones de cabezas remando a la vez. Y lo haces sin pensarlo.",
     fichas: MUSCULO,
   },
 

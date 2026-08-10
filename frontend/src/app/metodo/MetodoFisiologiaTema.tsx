@@ -13,7 +13,6 @@ import { Reveal } from "../../components/global/Reveal";
 import { FichaExploraModal } from "../../components/metodo/FichaExploraModal";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { ComicTemaModal } from "../../components/metodo/ComicTemaModal";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { PROFUNDIZA_LEIDAS_KEY, PROFUNDIZA_COMICS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
@@ -414,9 +413,9 @@ export default function MetodoFisiologiaTema() {
             </Reveal>
           )}
 
-          <BotonPaso label="Volver" direction="prev"
-                     nom={fisiologiaNom} color={fisiologiaTxt} bg={fisiologiaBg}
-                     onClick={() => navigate("/metodo/fisiologia/profundiza")} />
+          {/* Aquí iba un «‹ Volver» al final de la página, en los doce temas.
+              Fuera: el header ya lleva su propio «← Volver» al índice de
+              Profundiza, así que era el mismo botón dos veces. */}
 
         </Flex>
       </Flex>

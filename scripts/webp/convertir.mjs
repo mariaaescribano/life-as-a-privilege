@@ -394,6 +394,16 @@ const LOTES = {
       "viñetas/nutricion/diabetes",
     ],
   },
+  // Las cinco ilustraciones nuevas del MÚSCULO en Profundiza (Fisiología): el
+  // músculo entero, el sarcómero, la actina, la miosina, los túbulos T y la
+  // titina. Sus dos hermanas de la carpeta ya son WebP y la foto de una ficha se
+  // pide con una ruta que se arma sola en `.webp` (el helper SUB de
+  // ProfundizaFisiologia.ts), así que aquí el WebP NO es opcional: en PNG darían
+  // 404 y las cajas saldrían con la inicial del nombre en vez de la foto.
+  30: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/fisiologia/profundiza/musculo"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────
