@@ -347,6 +347,53 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/nutricion/portadas"],
   },
+  // Las tres viñetas del cómic del pranayama (carpeta nueva de Hinduismo) y las
+  // dos primeras de «Síntesis» repintadas, que llegaron en PNG encima de su
+  // WebP. Las dos rutas se escriben con la extensión puesta —comicPranayama.ts
+  // y comicSintesis.ts piden `.webp`—, así que en PNG las viñetas salen vacías.
+  26: {
+    ladoMax: 1000,
+    carpetas: [
+      "viñetas/hinduismo/pranayama",
+      "viñetas/psicologia/sintesis",
+    ],
+  },
+  // Los catorce alimentos nuevos de la Biblioteca (almendras, anacardo, avena,
+  // batata, cerveza y vino, cola, gambas, lentejas, nutella, oreo, queso fresco,
+  // salmón, tofu/seitán y yogur griego). El resto de la carpeta ya es WebP, así
+  // que aquí solo caen ellos. El WebP NO es opcional: la ruta de un alimento se
+  // arma sola en `.webp` (AlimentosNutricion.ts y MacrosAlimentos.ts), así que
+  // en PNG darían 404 —y el juego de macros PRECARGA todas sus fotos—.
+  27: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/nutricion/alimentos"],
+  },
+  // Las 22 viñetas de «¿De dónde vienen los nutrientes?» —los cinco cómics que
+  // seguían con placeholder— más la portada de cada uno (el archivo sin número:
+  // tierra.webp, planta.webp…). Se colocan en una carpeta por lectura, igual que
+  // ciclos/, porque comicsOrigenNutrientes.ts arma la ruta sola con la clave.
+  28: {
+    ladoMax: 1000,
+    carpetas: [
+      "viñetas/nutricion/biologia/tierra",   // 6 viñetas + portada
+      "viñetas/nutricion/biologia/planta",   // 4 viñetas + portada
+      "viñetas/nutricion/biologia/hoja",     // 4 viñetas + portada
+      "viñetas/nutricion/biologia/fruta",    // 4 viñetas + portada
+      "viñetas/nutricion/biologia/animal",   // 4 viñetas + portada
+    ],
+  },
+  // Diecisiete mitos repintados que llegaron en PNG encima de su WebP, dos
+  // mitos nuevos (arrozfuera y zumovsfruta) y la viñeta 4 de «La diabetes».
+  // Como en el lote 24, aquí el WebP no es opcional: la foto de un mito se pide
+  // con la extensión escrita (MitosNutricion.ts) y su página PRECARGA todas
+  // antes de pintar, así que en PNG se quedarían en blanco.
+  29: {
+    ladoMax: 1000,
+    carpetas: [
+      "recorrido/nutricion/mitos",
+      "viñetas/nutricion/diabetes",
+    ],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────
