@@ -51,12 +51,11 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   astrologia: {
     desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
     videoIntro: {
-      titulo: "Un recorrido guiado para comprender tu carta natal y conocerte.",
+      titulo: "Comprende el mapa de las circunstancias que te han dado forma.",
       puntos: [
         "Una interpretación personal de tu carta, realizada por mí, no por una IA.",
-        "Explicaciones claras, paso a paso, para entender cada parte de tu carta.",
+        "Entiende tu carta paso a paso, sin necesidad de conocimientos previos.",
         "Descubre cómo se relacionan tu personalidad, tus fortalezas y tus desafíos.",
-        "Aprende a utilizar tu carta como una herramienta de autoconocimiento para toda tu Vida.",
       ],
     },
     modalDesc:
@@ -92,10 +91,9 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
     videoIntro: {
       titulo: "Comprende cómo tu historia ha dado forma a la persona que eres hoy.",
       puntos: [
-        "Un recorrido guiado para comprender tu historia desde una nueva perspectiva y favorecer un cambio real.",
-        "Descubre cómo se formaron los patrones que hoy influyen en tu Vida.",
-        "Identifica las heridas emocionales que condicionan tu forma de pensar, sentir y relacionarte.",
-        "Integra tu historia con mayor claridad para avanzar de forma consciente.",
+        "Descubre de dónde vienen los patrones que hoy se repiten en tu vida.",
+        "Comprende cómo tu historia influye en tu forma de pensar, sentir y relacionarte.",
+        "Mira tus heridas desde una nueva perspectiva y empieza a darles un nuevo significado.",
       ],
     },
     modalDesc:
@@ -132,8 +130,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       puntos: [
         "Descubre cuál es tu Doṣha predominante y qué revela sobre ti.",
         "Comprende las tendencias naturales de tu cuerpo y de tu mente.",
-        "Identifica qué favorece tu equilibrio y qué tiende a desequilibrarte.",
-        "Aprende hábitos, alimentación y rutinas adaptados a tu constitución.",
+        "Aprende qué favorece tu equilibrio y adapta tus hábitos, alimentación y rutinas a tu constitución.",
       ],
     },
     modalDesc:
@@ -166,12 +163,11 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   tcm: {
     desc: "Los órganos están interconectados. Todo desequilibrio deja huellas. Tu cuerpo habla antes de enfermar. Aprende su lenguaje.",
     videoIntro: {
-      titulo: "Aprende el lenguaje de tu cuerpo",
+      titulo: "Aprende el lenguaje de tu cuerpo.",
       puntos: [
-        "Descubre los cinco elementos y cómo tus órganos siguen sus ciclos naturales.",
-        "Identifica qué elemento u órgano puede necesitar más atención en este momento.",
-        "Comprende el origen de muchos de tus desequilibrios.",
-        "Recupera mayor equilibrio con acciones concretas y fáciles de aplicar.",
+        "Descubre los cinco elementos y cómo se relacionan con tu cuerpo y sus ciclos naturales.",
+        "Identifica qué elemento en ti puede necesitar más atención y qué puede estar detrás de tus desequilibrios.",
+        "Aprende formas concretas de recuperar el equilibrio según el taoísmo y cuidar tu cuerpo, tu mente y tu integridad en el día a día.",
       ],
     },
     modalDesc:
@@ -204,12 +200,11 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   fisiologia: {
     desc: "No tenemos un cuerpo. Somos un cuerpo. Entiéndete.",
     videoIntro: {
-      titulo: "Conoce las células que te forman",
+      titulo: "Comprende el complejo sistema celular que te forma.",
       puntos: [
-        "Comprende las moléculas que forman tu cuerpo.",
-        "Descubre qué ocurre dentro de ti a nivel celular.",
-        "Entiende cómo funcionan tus órganos y las células que los componen.",
-        "Deja de creer lo que te dice cualquiera. Entiende cómo funciona tu cuerpo y decide por ti mismo.",
+        "Descubre las moléculas, células, órganos y sistemas que construyen tu cuerpo.",
+        "Entiende qué ocurre dentro de ti a nivel celular y cómo funciona tu organismo.",
+        "Aprende fisiología de forma divertida para comprender tu cuerpo y tomar decisiones con criterio.",
       ],
     },
     modalDesc:
@@ -245,10 +240,9 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
     videoIntro: {
       titulo: "Descubre cómo los alimentos que eliges cada día reconstruyen tu cuerpo.",
       puntos: [
-        "Comprende por qué tu microbiota influye mucho más allá de la digestión.",
-        "Entiende qué moléculas contienen los alimentos y por qué algunos benefician más a tu organismo que otros.",
-        "Compréndete más allá de tus gustos y antojos.",
-        "Diseña tu alimentación con criterio, desmonta los mitos y elige por ti mismo desde el conocimiento.",
+        "Comprende qué moléculas contienen los alimentos y cómo las utiliza tu organismo.",
+        "Descubre por qué tu microbiota influye mucho más allá de la digestión.",
+        "Aprende a elegir tu alimentación con criterio, desmontar mitos y decidir por ti mismo.",
       ],
     },
     modalDesc:
@@ -288,12 +282,11 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   cabala: {
     desc: "Descubre las dimensiones que viven en tu alma y por extensión en ti. Entiende tus equilibrios y desequilibrios.",
     videoIntro: {
-      titulo: "Descubre las dimensiones de tu alma",
+      titulo: "Descubre las dimensiones de tu alma.",
       puntos: [
-        "Recorre el Árbol de la Vida y sus diez Sefirot.",
-        "Comprende tus conflictos internos y tu potencial.",
-        "Trabaja cualidades concretas que te transforman.",
-        "Aterriza estos principios en tu cotidianidad.",
+        "Recorre el Árbol de la Vida y descubre sus diez Sefirot.",
+        "Comprende tus conflictos internos, tus cualidades y tu potencial.",
+        "Lleva estos principios a tu vida cotidiana y conviértelos en herramientas de transformación.",
       ],
     },
     modalDesc:
@@ -329,23 +322,14 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
 
 
 
-videoIntro: {
-
-  titulo: "Las ideas que cambiaron el mundo empiezan con una pregunta.",
-
-  puntos: [
-
-    "Viaja por las historias que moldearon civilizaciones y transformaron la forma en que entendemos la Vida.",
-
-    "El pasado no está muerto: sigue hablándonos. Escúchalo para no repetir sus errores.",
-
-    "Conoce a los grandes pensadores que se hicieron las mismas preguntas que tú.",
-
-    "Desarrolla un pensamiento propio. Tu verdad importa.  Piensa, cuestiona y construye tu propia visión del mundo.",
-
-  ],
-
-},
+    videoIntro: {
+      titulo: "Las grandes historias que dieron forma al mundo.",
+      puntos: [
+        "Descubre las historias de las civilizaciones que transformaron nuestra forma de entender la Vida.",
+        "Conoce a los pensadores que se hicieron las mismas preguntas que tú y descubre sus ideas.",
+        "Recorre la historia universal desde la ciencia, la filosofía, la religión y la cultura.",
+      ],
+    },
     modalDesc:
       "El último paso no es aprender otra cosa: es ordenar lo que ya sabes. Has pasado por siete formas distintas de entender al ser humano. Aquí construyes la tuya.",
     contenido: [

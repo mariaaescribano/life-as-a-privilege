@@ -829,7 +829,218 @@ const CarruselCard = ({
   );
 };
 
+// ── Rejilla de los OCHO vídeos («El Mapa por dentro») ────────────────────────
+// Dos filas de cuatro en ordenador, cuatro filas de dos en móvil, y los ocho
+// moviéndose a la vez: es la única parte de la página de venta que no promete
+// nada, solo enseña.
+//
+// Lo que se reproduce en la baldosa NO es el vídeo de muestra: es un clip corto
+// y mudo (`/videos/muestra/<clave>.mp4`, ~200 KB) que genera
+// `scripts/video/muestras.mjs`. Los ocho originales pesan 53 MB juntos y aquí
+// habría que cargarlos TODOS: sería, con diferencia, la pantalla más cara de la
+// web. Al pulsar una baldosa sí se abre el vídeo entero, en el popup de siempre.
+//
+// Tres cosas que no son adorno:
+//   · van MUDOS. El autoplay sin permiso solo existe para vídeo sin sonido.
+//   · el clip no se pide hasta que su baldosa asoma, y en cuanto se va de la
+//     pantalla se pausa: ocho decodificadores abiertos calientan el móvil.
+//   · quien pide menos movimiento o menos datos al sistema (`prefers-reduced-
+//     motion`, `saveData`) ve el primer fotograma quieto y pulsa si quiere.
+
+/** ¿Este navegador está pidiendo que le ahorremos movimiento o datos? */
+const ahorroActivo = () => {
+  if (typeof window === "undefined") return false;
+  const menosMovimiento = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const conexion = (navigator as { connection?: { saveData?: boolean } }).connection;
+  return !!menosMovimiento || !!conexion?.saveData;
+};
+
+const VideoMuestraCard = ({
+  disc, step, index, onOpen,
+}: {
+  disc: Disciplina;
+  step: number;
+  index: number;
+  onOpen: () => void;
+}) => {
+  const nombreEnMapa = useNombreDisciplinaEnMapa();
+  const t = useT();
+  const ref = React.useRef<HTMLDivElement>(null);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+  // `pedir` = ya se puede bajar el clip (la baldosa ha asomado). Una vez true no
+  // vuelve a false: el vídeo ya está en caché, quitarlo no ahorra nada.
+  const [pedir, setPedir] = useState(false);
+  const [ahorro] = useState(ahorroActivo);
+  const clip = `/videos/muestra/${disc.clave}.mp4`;
+
+  useEffect(() => {
+    const nodo = ref.current;
+    if (!nodo) return;
+    let temporizador = 0;
+
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        const video = videoRef.current;
+        if (e.isIntersecting) {
+          // Escalonado por posición: si los ocho piden su clip en el mismo
+          // milisegundo, la primera fila tarda más en arrancar que si esperan
+          // su turno.
+          temporizador = window.setTimeout(() => setPedir(true), index * 180);
+          if (!ahorro) void video?.play().catch(() => { /* el navegador manda */ });
+        } else {
+          window.clearTimeout(temporizador);
+          video?.pause();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    obs.observe(nodo);
+    return () => { window.clearTimeout(temporizador); obs.disconnect(); };
+  }, [index, ahorro]);
+
+  // Al llegar el src hay que pedir el play otra vez: cuando el observador lo
+  // pidió, el <video> todavía no tenía nada que reproducir.
+  useEffect(() => {
+    if (!pedir || ahorro) return;
+    void videoRef.current?.play().catch(() => { /* el navegador manda */ });
+  }, [pedir, ahorro]);
+
+  return (
+    <Box
+      ref={ref}
+      role="group"
+      onClick={onOpen}
+      position="relative"
+      w="100%"
+      borderRadius="2xl"
+      overflow="hidden"
+      cursor="pointer"
+      bg={disc.bg}
+      sx={{ aspectRatio: "1 / 1" }}
+      boxShadow={`0 6px 22px rgba(0,0,0,0.28), 0 0 18px ${disc.txt}33`}
+      transition="transform 0.3s ease, box-shadow 0.3s ease"
+      _hover={{ transform: "translateY(-4px)", boxShadow: `0 12px 30px rgba(0,0,0,0.34), 0 0 28px ${disc.txt}66` }}
+    >
+      {/* Debajo del vídeo, el fondo de la disciplina: es lo que se ve mientras
+          el clip carga, en vez de un cuadro negro. */}
+      <DisciplinaBgLayer nom={disc.nom} borderRadius="2xl" />
+
+      <Box
+        as="video"
+        ref={videoRef as React.RefObject<HTMLVideoElement>}
+        src={pedir ? clip : undefined}
+        position="absolute"
+        inset={0}
+        w="100%"
+        h="100%"
+        objectFit="cover"
+        // `muted` y `playsInline` son obligatorios para que el móvil deje
+        // reproducir sin pedir permiso (y sin ponerse a pantalla completa).
+        muted
+        loop
+        playsInline
+        preload={ahorro ? "metadata" : "auto"}
+      />
+
+      {/* Velo de abajo: sin él, el rótulo se pierde en cuanto el vídeo tiene un
+          fotograma claro. */}
+      <Box
+        position="absolute"
+        inset={0}
+        bgGradient="linear(to-t, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.22) 34%, transparent 62%)"
+        pointerEvents="none"
+      />
+
+      {/* Rótulo: nº + nombre de la disciplina, abajo a la izquierda. */}
+      <Flex
+        position="absolute"
+        bottom={{ base: 2.5, md: 3.5 }}
+        left={{ base: 3, md: 4 }}
+        right={{ base: 3, md: 4 }}
+        align="baseline"
+        gap={1.5}
+        pointerEvents="none"
+      >
+        <Text color={disc.txt} fontWeight="700" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2" flexShrink={0}
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
+          {step}.
+        </Text>
+        <Text color="white" fontWeight="700" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
+          {nombreEnMapa(disc.nom, true)}
+        </Text>
+      </Flex>
+
+      {/* Que la baldosa se abre: un ▶ arriba a la derecha, discreto, que se
+          enciende al pasar por encima. En móvil no hay hover, así que se queda
+          siempre a media luz. */}
+      <Flex
+        position="absolute"
+        top={{ base: 2.5, md: 3 }}
+        right={{ base: 2.5, md: 3 }}
+        align="center"
+        gap={1.5}
+        px={2}
+        py={1}
+        borderRadius="full"
+        bg="rgba(0,0,0,0.45)"
+        border={`1px solid ${disc.txt}88`}
+        opacity={0.75}
+        transition="opacity 0.25s ease"
+        _groupHover={{ opacity: 1 }}
+        pointerEvents="none"
+      >
+        <Box as="span" color={disc.txt} fontSize="10px" lineHeight="1">▶</Box>
+        <Text color="white" fontSize="2xs" letterSpacing="0.06em" display={{ base: "none", md: "block" }}>
+          {t("elMetodo.muestra")}
+        </Text>
+      </Flex>
+    </Box>
+  );
+};
+
+export const RecorridoVideosMuestra = () => {
+  const [abierto, setAbierto] = useState<Disciplina | null>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = abierto ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [abierto]);
+
+  // Solo las que tienen vídeo. Ahora mismo son las ocho; si a alguna se le
+  // quitara, la rejilla se recompone sola en vez de dejar un hueco negro.
+  const conVideo = disciplinas
+    .map((disc, i) => ({ disc, step: i + 1 }))
+    .filter(({ disc }) => !!disc.video);
+
+  return (
+    <>
+      <Box
+        display="grid"
+        gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+        gap={{ base: 3, md: 5 }}
+        w="100%"
+      >
+        {conVideo.map(({ disc, step }, i) => (
+          <VideoMuestraCard
+            key={disc.nom}
+            disc={disc}
+            step={step}
+            index={i}
+            onOpen={() => setAbierto(disc)}
+          />
+        ))}
+      </Box>
+
+      {abierto && <VideoMuestraModal disc={abierto} onClose={() => setAbierto(null)} />}
+    </>
+  );
+};
+
 // ── Cuadrícula de carruseles (2 columnas → 4 filas × 2) ──────────────────────
+// Las capturas reales de cada disciplina, en carrusel. No se usa en ninguna
+// página ahora mismo: en /elMetodo, «El Mapa por dentro» enseña los ocho vídeos
+// (RecorridoVideosMuestra), que se ven de un golpe y sin tener que pasar fotos.
 export const RecorridoCarruseles = () => {
   const [selected, setSelected] = useState<{ disc: Disciplina; start: number } | null>(null);
 

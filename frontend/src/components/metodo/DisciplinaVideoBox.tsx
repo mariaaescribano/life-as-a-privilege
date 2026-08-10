@@ -208,10 +208,13 @@ export function DisciplinaVideoBox({
   }, [textoGrande, videoIntro]);
 
   // Tamaños del bloque de texto. Con `textoGrande` van en `em` (los manda el
-  // ajuste de arriba); sin él, los tokens de siempre — /elMetodo no se toca.
-  const fsTitulo = textoGrande ? "1.5em" : { base: "lg", md: "xl" };
-  const fsTick = textoGrande ? "1.15em" : { base: "md", md: "lg" };
-  const fsPunto = textoGrande ? "1em" : { base: "sm", md: "md" };
+  // ajuste de arriba); sin él, tokens fijos.
+  // Los de /elMetodo subieron un paso: cada disciplina cuenta ahora TRES puntos
+  // en lugar de cuatro, y con el tamaño anterior el box se quedaba con letra
+  // pequeña y medio vacío. Si algún día vuelven a ser cuatro, hay que bajarlos.
+  const fsTitulo = textoGrande ? "1.5em" : { base: "xl", md: "2xl" };
+  const fsTick = textoGrande ? "1.15em" : { base: "lg", md: "xl" };
+  const fsPunto = textoGrande ? "1em" : { base: "md", md: "lg" };
 
   return (
     <Flex

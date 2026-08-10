@@ -7,7 +7,7 @@ import { ContactModal } from "../../components/global/ContactModal";
 import { BookCallModal } from "../../components/global/BookCallModal";
 import { type DisciplinaClave } from "../../data/recorridoContenido";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
-import { useT, type ClaveTexto } from "../../i18n";
+import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
@@ -21,6 +21,15 @@ import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../compone
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
+import {
+  BarraFijaMovil,
+  EspejoBloque,
+  FaqBloque,
+  MecanismoBloque,
+  PorDondeEmpiezoBloque,
+  PrecioBloque,
+  PruebasBloque,
+} from "../../components/metodo/elMetodoVenta";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -36,6 +45,16 @@ import {
 // import {
 //   NUM_DISCIPLINAS, PRECIO_DISCIPLINA, PRECIO_MAPA_COMPLETO,
 // } from "../../components/metodo/pagoDisciplinaLink";
+
+/**
+ * Cuánto se agranda TODA la página (1 = tamaño original).
+ * Es el único sitio donde se toca: subirlo a 1.02 la deja un 2% más grande, y
+ * las tarjetas de disciplina se quedan igual solas, porque su zoom se calcula
+ * a partir de este.
+ */
+const ZOOM_PAGINA = 1.01;
+/** El inverso exacto, para las 8 tarjetas: deshace el zoom de la página. */
+const ZOOM_TARJETAS = 1 / ZOOM_PAGINA;
 
 /**
  * Parte VISUAL de cada disciplina: lo que no depende del idioma (colores, icono,
@@ -532,10 +551,21 @@ export default function ElMetodo() {
       flexDirection="column"
       bg="#008080"
       fontFamily="'EB Garamond', serif"
+      // Hueco para la barra fija de móvil: sin él tapa la última línea del
+      // footer. En ordenador no hay barra, así que no hay hueco.
+      pb={{ base: "76px", md: 0 }}
     >
       <SiteHeader variant="auto" />
 
-      <Box flex="1">
+      {/* Toda la página, un 1% más grande. Se hace con `zoom` y no tocando
+          cincuenta tamaños de letra: el zoom SÍ afecta al layout (a diferencia
+          de transform: scale), así que los huecos, los anchos y los saltos de
+          línea crecen igual y no se descuadra nada.
+          Va aquí dentro y no en el <Box> de fuera para que el header y el
+          footer —que son compartidos con el resto de la web— se queden como
+          están. Las 8 tarjetas de disciplina llevan el zoom inverso (ver abajo)
+          y por eso siguen midiendo lo mismo. */}
+      <Box flex="1" sx={{ zoom: ZOOM_PAGINA }}>
       {/* ── MANDALA SEPARADOR ── */}
       {/* Wrapper con flotación + latido perpetuos; la imagen hace la entrada
           épica (surge girando desde muy pequeña y se enfoca). */}
@@ -567,7 +597,14 @@ export default function ElMetodo() {
         </Box>
       </Flex>
 
-      {/* ── CABECERA ── */}
+      {/* ══ 1. HERO ══
+          Antes esto era «EL MAPA / del Vivir como Privilegio»: el nombre del
+          producto y nada más. Quien llega de fuera no sabe todavía qué es El
+          Mapa, así que un nombre no le dice nada y no se queda.
+          Ahora el titular nombra lo que le PASA a quien lee, el subtítulo dice
+          qué se lleva puesto (no qué contiene el curso) y hay un botón aquí
+          mismo: convencido en la primera pantalla, ya puede entrar.
+          La marca no se pierde: se queda arriba, en pequeño, de sombrerete. */}
       <Flex
         direction="column"
         align="center"
@@ -578,32 +615,136 @@ export default function ElMetodo() {
         gap={{ base: 4, md: 5 }}
       >
         <Text
+          color="rgba(255,255,255,0.8)"
+          fontSize={{ base: "2xs", md: "xs" }}
+          fontWeight="600"
+          letterSpacing="0.22em"
+          textTransform="uppercase"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(10px)"}
+          transition="opacity 0.7s ease, transform 0.7s ease"
+        >
+          {t("elMetodo.hero.marca")}
+        </Text>
+
+        {/* El titular lleva un salto de línea escrito en el texto (\n) para
+            poder decidir en cada idioma dónde parte la frase: «Llevas años
+            intentando cambiarte. / Nadie te ha enseñado a leerte.» son dos
+            golpes, y si el navegador los junta se pierde el segundo.
+            En móvil se deja fluir (`pre-line` solo de md hacia arriba), que si
+            no las líneas se salen. */}
+        <Text
           color="white"
           fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
           fontWeight="700"
-          letterSpacing="0.08em"
-          lineHeight="1.1"
-          textShadow="0 0 16px rgba(255,255,255,0.64), 0 0 34px rgba(255,255,255,0.41), 0 0 63px rgba(180,255,245,0.34)"
+          letterSpacing="0.02em"
+          lineHeight="1.15"
+          maxW="1000px"
+          whiteSpace={{ base: "normal", md: "pre-line" }}
+          textShadow="0 0 16px rgba(255,255,255,0.6), 0 0 34px rgba(255,255,255,0.36), 0 0 63px rgba(180,255,245,0.3)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(22px)"}
           transition="opacity 0.85s ease, transform 0.85s ease"
         >
-          {t("elMetodo.titulo")}
+          {t("elMetodo.hero.titulo")}
         </Text>
+
         <Text
-          color="rgba(255,255,255,0.85)"
-          fontSize={{ base: "xs", md: "sm" }}
-          fontStyle="italic"
-          fontWeight="400"
-          letterSpacing="0.05em"
-          textShadow="0 0 9px rgba(255,255,255,0.41), 0 0 20px rgba(255,255,255,0.22)"
+          color="rgba(255,255,255,0.92)"
+          fontSize={{ base: "sm", md: "xl" }}
+          lineHeight="1.8"
+          letterSpacing="0.015em"
+          maxW="860px"
           opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(14px)"}
+          transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s"
         >
-          {t("elMetodo.subtitulo")}
+          <TextoRico>{t("elMetodo.hero.sub")}</TextoRico>
         </Text>
+
+        {/* Botón de la primera pantalla. Es el MISMO destino que el de abajo
+            (handleAcceder), en versión más contenida: aquí acompaña, no manda. */}
+        <Flex
+          as="button"
+          onClick={handleAcceder}
+          align="center"
+          justify="center"
+          gap={3}
+          mt={{ base: 2, md: 3 }}
+          px={{ base: 8, md: 12 }}
+          py={{ base: "12px", md: "15px" }}
+          w={{ base: "min(84vw, 380px)", md: "auto" }}
+          borderRadius="full"
+          border="1.5px solid rgba(255,255,255,0.65)"
+          bg="rgba(255,255,255,0.10)"
+          cursor="pointer"
+          boxShadow="0 0 20px rgba(255,255,255,0.34), 0 0 44px rgba(180,255,245,0.2)"
+          _hover={{
+            bg: "rgba(255,255,255,0.2)",
+            borderColor: "white",
+            boxShadow: "0 0 30px rgba(255,255,255,0.55), 0 0 62px rgba(180,255,245,0.36)",
+          }}
+          transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(16px)"}
+          sx={{ transition: "opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
+        >
+          <Text
+            color="white"
+            fontWeight="700"
+            fontSize={{ base: "md", md: "xl" }}
+            letterSpacing="0.12em"
+            textTransform="uppercase"
+            whiteSpace="nowrap"
+            textShadow="0 0 12px rgba(255,255,255,0.45)"
+          >
+            {t("elMetodo.hero.cta")}
+          </Text>
+        </Flex>
+
+        {/* Letra pequeña del botón: entra un pelín después que él, para que se
+            lea como su pie y no como una línea más del hero. */}
+        <Text
+          color="rgba(255,255,255,0.8)"
+          fontSize={{ base: "xs", md: "sm" }}
+          letterSpacing="0.04em"
+          textAlign="center"
+          mt={{ base: -1, md: -1 }}
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(12px)"}
+          transition="opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s"
+        >
+          {t("elMetodo.hero.ctaPie")}
+        </Text>
+
       </Flex>
+
+      {/* Cierre del hero: la cesura con el mandala en medio, la misma que marca
+          los cortes de sección en el resto de la página.
+          Aquí iban tres pruebas rápidas («8 disciplinas · Ilustraciones propias
+          · Los PDF, tuyos para siempre»): colgaban del botón como un pie de
+          página y le quitaban fuerza en vez de dársela. */}
+      <Box px={{ base: 5, md: 10, lg: 16 }}>
+        <SeparadorMandala mt={{ base: "52px", md: "76px" }} />
+      </Box>
+
+      {/* ══ 2. EL ESPEJO ══
+          Antes de contar nada del producto, cuatro frases para que quien lee se
+          reconozca. Sin caja y sobre el turquesa a propósito: no son contenido
+          de la web, son su propia voz. */}
+      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }}>
+        <EspejoBloque />
+      </Box>
+
+      {/* Cesura entre «Te da tu mapa» y «Ocho disciplinas. Un orden…»: son dos
+          frases fuertes seguidas y sin nada en medio se pisaban.
+          El «TÚ» NO va aquí: vive en el CENTRO del mapa que se arma (MapaSeArma,
+          dentro del cómic del origen), debajo de su mandala. Ahí sí se entiende
+          —el anillo son las ocho disciplinas y quien las mira desde el medio es
+          quien lee—; colgando de esta rayita parecía un rótulo de sección. */}
+      <Box px={{ base: 5, md: 10, lg: 16 }}>
+        <SeparadorMandala mt={{ base: "52px", md: "76px" }} />
+      </Box>
 
       {/* ── ¿POR QUÉ EXISTE LIFE AS A PRIVILEGE? ──
           Primero las frases que explican qué es El Mapa, centradas sobre el
@@ -612,7 +753,10 @@ export default function ElMetodo() {
           Antes iban al lado del cómic, en dos columnas: el cómic quedaba
           reducido a un cuadradito del 46% y la historia —que es lo importante de
           este bloque— competía con el texto en vez de tener su sitio. */}
-      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 16, md: 24 }}>
+      {/* El `pt` es EL MISMO que el `mt` del separador de arriba: así el
+          mandala queda justo en medio de las dos frases y no más pegado a una
+          que a otra. Si se cambia uno, se cambia el otro. */}
+      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: "52px", md: "76px" }}>
         <Flex
           maxW="1200px"
           mx="auto"
@@ -665,6 +809,20 @@ export default function ElMetodo() {
           </Reveal>
         </Flex>
       </Box>
+
+      {/* ══ 3. LA FRASE DEL MÉTODO ══
+          Lo que diferencia esto de un curso, en una línea. Aquí había además un
+          bloque con las ocho disciplinas enumeradas («Astrología ve tu
+          estructura»…): quitado, porque el mandala y las tarjetas de más abajo
+          ya las enumeran. */}
+      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 16, md: 24 }}>
+        <Box maxW="1200px" mx="auto">
+          <MecanismoBloque />
+        </Box>
+      </Box>
+
+      {/* Aquí iba «Al terminar no tienes apuntes. Tienes esto.»: ocho tarjetas
+          con lo que se lleva puesto de cada disciplina. Retirado. */}
 
       {/* ── SEPARADOR + TÍTULO DEL MANDALA ──
           Las frases van con su bloque: este título encabeza el mandala de las
@@ -749,6 +907,18 @@ export default function ElMetodo() {
         </Box>
       </Box>
 
+      {/* ══ 6. TESTIMONIOS ══
+          Estaban al final del todo, después de seis pantallas de scroll: quien
+          dudaba se iba mucho antes de llegar a ellos. Aquí llegan justo cuando
+          se acaba de ver qué es esto y antes de mirar los precios, que es donde
+          hacen falta. Es EL MISMO componente (se pinta una vez, no dos): si no
+          hay opiniones en la base de datos, no pinta nada. */}
+      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 16, md: 24 }}>
+        <Box maxW="1200px" mx="auto">
+          <ExperienciasReales />
+        </Box>
+      </Box>
+
       {/* ── QUÉ RECIBIRÁS ── */}
       {/* Sin `pt` propio: el hueco con el bloque de arriba lo pone el `pt` del
           separador, en un solo sitio, para poder ajustarlo sin sumar tres
@@ -812,6 +982,10 @@ export default function ElMetodo() {
           <Grid
             templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
             gap={{ base: 4, md: 18 }}
+            // Zoom inverso: el `zoom` de la página es heredado y se MULTIPLICA
+            // al anidarlo, así que 1,01 × (1/1,01) = 1. Las ocho tarjetas se
+            // quedan exactamente del tamaño que tenían.
+            sx={{ zoom: ZOOM_TARJETAS }}
           >
             {modalidades.map((m, i) => (
               <MetodoCard
@@ -830,11 +1004,42 @@ export default function ElMetodo() {
 
         <Box maxW="1200px" mx="auto">
 
+          {/* ══ 7. LA PRUEBA ══
+              Lo último que se ve antes de hablar de dinero: pantallas REALES del
+              recorrido. Toda la página de aquí para arriba promete; esto es lo
+              único que enseña, y va justo antes del precio a propósito. */}
+          <Box mt={{ base: 16, md: 24 }}>
+            <PruebasBloque />
+          </Box>
+
           {/* ── QUÉ OBTIENES ──
-              Cierra la parte comercial (las ocho fichas de arriba) justo antes de
-              la tarjeta de María: primero qué te llevas, después quién te lo da. */}
+              Ya no cierra la parte comercial: ahora abre la del dinero. Es la
+              letra pequeña de la compra (acceso, PDF, sin suscripción), así que
+              va pegada al precio y no suelta a media página. */}
           <Box mt={{ base: 12, md: 16 }}>
             <QueObtienesBox />
+          </Box>
+
+          {/* ══ 8. EL PRECIO ══
+              Estaba comentado. Un precio escondido no evita la objeción del
+              dinero: la empeora, porque quien no lo encuentra se imagina la
+              cifra más alta y se va sin preguntar.
+              Lleva su propio botón al final (onAcceder): quien ve el precio y le
+              cuadra tiene que poder entrar ahí mismo. */}
+          <Box mt={{ base: 16, md: 24 }}>
+            <PrecioBloque onAcceder={handleAcceder} />
+          </Box>
+
+          {/* Aquí iba una garantía de devolución de 14 días. Fuera: no se
+              ofrece, y prometer una devolución que no existe es peor que no
+              tener ninguna. */}
+
+          {/* ══ 10. ¿POR DÓNDE EMPIEZO? ══
+              Ocho puertas iguales paralizan. Tres caminos según lo que traiga
+              cada uno, y ya no hay que elegir entre ocho. Y con el botón otra
+              vez al final: es el segundo momento en el que se decide. */}
+          <Box mt={{ base: 16, md: 24 }}>
+            <PorDondeEmpiezoBloque onAcceder={handleAcceder} />
           </Box>
 
           {/* ── PRECIO ──
@@ -873,15 +1078,221 @@ export default function ElMetodo() {
           {/* Tarjeta de la creadora (componente compartido con Welcome) */}
           <CreadoraCard />
 
-          {/* ── Separador con mandala en medio ── */}
-          {/* Aquí había un tercer separador de mandala. Fuera: era el tercero en
-              muy poco recorrido y «Experiencias reales» ya entra con su propio
-              título con icono, así que no hacía falta anunciarlo. El hueco que
-              aportaba lo pone ahora el pt del bloque de testimonios. */}
+          {/* ── BOTÓN EMPEZAR + TENGO DUDAS ──
+              Ya no cierra la página: va ANTES de las preguntas. Quien llega
+              convencido pulsa aquí sin tener que atravesar ocho desplegables, y
+              a quien le queda una duda le esperan justo debajo.
+              Sin `pb`: el hueco con las preguntas lo pone el `pt` del bloque de
+              abajo, en un solo sitio. */}
+          <Flex
+            direction="column"
+            align="center"
+            pt={{ base: 16, md: 24 }}
+            gap={{ base: 12, md: 16 }}
+          >
+            {/* ACCEDER (botón grande con mandala) + la frase de «no te van a cobrar».
+                Van juntos en su propia columna con un hueco corto: el `gap` grande
+                del bloque es el que separa este grupo de los botones secundarios, y
+                si la frase colgara suelta del bloque se iría a media pantalla del
+                botón y ya no se leería como su letra pequeña. */}
+            <Flex direction="column" align="center" gap={{ base: 3, md: 4 }}>
+            <Reveal inView direction="up" distance={24} duration={0.7} display="flex" justifyContent="center">
+            <Breathe scale={0.014} duration={5.5} display="flex" justifyContent="center">
+            <Flex
+              as="button"
+              onClick={handleAcceder}
+              align="center"
+              justify="center"
+              gap={{ base: 3, md: 6 }}
+              px={{ base: 5, md: 24 }}
+              py={{ base: "16px", md: "22px" }}
+              // En móvil manda ESTE botón: ocupa el ancho que le dejan los márgenes
+              // (nunca de filo a filo) y los secundarios de abajo van más estrechos,
+              // así la jerarquía se ve de un vistazo sin leer nada.
+              w={{ base: "min(88vw, 420px)", md: "auto" }}
+              minW={{ base: "auto", md: "520px" }}
+              flexShrink={0}
+              borderRadius="full"
+              border="1.5px solid rgba(255,255,255,0.65)"
+              bg="rgba(255,255,255,0.10)"
+              cursor="pointer"
+              boxShadow="0 0 22px rgba(255,255,255,0.4), 0 0 50px rgba(255,255,255,0.22), 0 0 90px rgba(180,255,245,0.25), 0 6px 20px rgba(0,0,0,0.2)"
+              _hover={{
+                bg: "rgba(255,255,255,0.2)",
+                borderColor: "white",
+                boxShadow: "0 0 34px rgba(255,255,255,0.6), 0 0 70px rgba(180,255,245,0.45), 0 8px 24px rgba(0,0,0,0.25)",
+              }}
+              transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
+            >
+              <Image
+                src="/img/icono/life.png"
+                alt=""
+                h={{ base: "30px", md: "44px" }}
+                objectFit="contain"
+                flexShrink={0}
+                style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.56)) drop-shadow(0 0 24px rgba(255,255,255,0.3))" }}
+              />
+              <Text
+                color="white"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "17px", md: "2xl" }}
+                letterSpacing={{ base: "0.04em", md: "0.18em" }}
+                textTransform="uppercase"
+                textAlign="center"
+                whiteSpace="nowrap"
+                textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.22)"
+              >
+                {t("elMetodo.acceder")}
+              </Text>
+            </Flex>
+            </Breathe>
+            </Reveal>
 
-          {/* ── EXPERIENCIAS REALES (testimonios) ── */}
-          <Box pt={{ base: 20, md: 28 }}>
-            <ExperienciasReales />
+            {/* Letra pequeña que quita el miedo a pulsar: crear la cuenta no cobra
+                nada. Blanca y sin sombra (está fuera de caja, sobre el turquesa) y
+                en un cuerpo claramente menor que el botón, que no le robe el sitio. */}
+            <Reveal inView direction="up" distance={14} delay={0.15} duration={0.6} display="flex" justifyContent="center">
+              <Text
+                color="white"
+                fontFamily="'EB Garamond', serif"
+                fontSize={{ base: "sm", md: "md" }}
+                fontStyle="italic"
+                letterSpacing="0.02em"
+                textAlign="center"
+                opacity={0.85}
+                px={4}
+              >
+                {t("elMetodo.sinTarjeta")}
+              </Text>
+            </Reveal>
+            </Flex>
+
+            {/* Agendar llamada + Tengo dudas (botones secundarios).
+                Cierran la cascada: entran los últimos, después del botón grande. */}
+            <Reveal inView direction="up" distance={20} delay={0.3} duration={0.65} display="flex" justifyContent="center">
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              align="center"
+              justify="center"
+              gap={{ base: 4, md: 6 }}
+            >
+              {/* Agendar llamada gratuita */}
+              <Flex
+                as="button"
+                onClick={() => setBookCallOpen(true)}
+                align="center"
+                justify="center"
+                gap={2}
+                px={{ base: 4, md: 7 }}
+                py={{ base: "7px", md: "9px" }}
+                // Más estrecho que el de ACCEDER, a propósito (ver arriba).
+                w={{ base: "min(76vw, 330px)", md: "auto" }}
+                borderRadius="full"
+                border="1px solid rgba(255,255,255,0.5)"
+                bg="rgba(255,255,255,0.06)"
+                cursor="pointer"
+                boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 26px rgba(255,255,255,0.12)"
+                _hover={{
+                  bg: "rgba(255,255,255,0.16)",
+                  borderColor: "rgba(255,255,255,0.85)",
+                  boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.25)",
+                }}
+                transition="all 0.25s ease"
+              >
+                <Box
+                  as="svg"
+                  viewBox="0 0 24 24"
+                  w={{ base: "14px", md: "16px" }}
+                  h={{ base: "14px", md: "16px" }}
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  flexShrink={0}
+                  style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))" }}
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </Box>
+                <Text
+                  color="white"
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="500"
+                  fontSize={{ base: "sm", md: "md" }}
+                  letterSpacing="0.04em"
+                  fontStyle="italic"
+                  textShadow="0 0 8px rgba(255,255,255,0.34), 0 0 18px rgba(255,255,255,0.17)"
+                >
+                  {t("elMetodo.agendar")}
+                </Text>
+              </Flex>
+
+              {/* Tengo dudas (botón pequeño secundario) */}
+              <Flex
+                as="button"
+                onClick={() => setDudasOpen(true)}
+                align="center"
+                justify="center"
+                gap={2}
+                px={{ base: 4, md: 7 }}
+                py={{ base: "7px", md: "9px" }}
+                // El más pequeño de los tres: es la última salida, no el camino.
+                w={{ base: "min(58vw, 260px)", md: "auto" }}
+                borderRadius="full"
+                border="1px solid rgba(255,255,255,0.5)"
+                bg="rgba(255,255,255,0.06)"
+                cursor="pointer"
+                boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 26px rgba(255,255,255,0.12)"
+                _hover={{
+                  bg: "rgba(255,255,255,0.16)",
+                  borderColor: "rgba(255,255,255,0.85)",
+                  boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.25)",
+                }}
+                transition="all 0.25s ease"
+              >
+                <Box
+                  as="svg"
+                  viewBox="0 0 24 24"
+                  w={{ base: "14px", md: "16px" }}
+                  h={{ base: "14px", md: "16px" }}
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  flexShrink={0}
+                  style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))" }}
+                >
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </Box>
+                <Text
+                  color="white"
+                  fontFamily="'EB Garamond', serif"
+                  fontWeight="500"
+                  fontSize={{ base: "sm", md: "md" }}
+                  letterSpacing="0.04em"
+                  fontStyle="italic"
+                  textShadow="0 0 8px rgba(255,255,255,0.34), 0 0 18px rgba(255,255,255,0.17)"
+                >
+                  {t("elMetodo.dudas")}
+                </Text>
+              </Flex>
+            </Flex>
+            </Reveal>
+          </Flex>
+
+          {/* ══ 12. LAS PREGUNTAS ══
+              Cierran la página, ya detrás del botón: son para quien NO ha
+              pulsado, y aquí es donde se cae la última excusa. Debajo llevan su
+              propio hueco (`pb`) para que la última pregunta no toque el footer.
+              Los testimonios ya NO van aquí — subieron a su sitio, justo
+              después del mandala (ver arriba). */}
+          <Box pt={{ base: 20, md: 28 }} pb={{ base: 24, md: 32 }}>
+            <FaqBloque />
           </Box>
 
           {/* Separador (mismo estilo que el de las disciplinas) */}
@@ -1053,208 +1464,6 @@ export default function ElMetodo() {
         />
       </Flex> */}
 
-      {/* ── BOTÓN EMPEZAR + TENGO DUDAS ── */}
-      <Flex
-        direction="column"
-        align="center"
-        pt={{ base: 16, md: 24 }}
-        pb={{ base: 24, md: 32 }}
-        gap={{ base: 12, md: 16 }}
-      >
-        {/* ACCEDER (botón grande con mandala) + la frase de «no te van a cobrar».
-            Van juntos en su propia columna con un hueco corto: el `gap` grande
-            del bloque es el que separa este grupo de los botones secundarios, y
-            si la frase colgara suelta del bloque se iría a media pantalla del
-            botón y ya no se leería como su letra pequeña. */}
-        <Flex direction="column" align="center" gap={{ base: 3, md: 4 }}>
-        <Reveal inView direction="up" distance={24} duration={0.7} display="flex" justifyContent="center">
-        <Breathe scale={0.014} duration={5.5} display="flex" justifyContent="center">
-        <Flex
-          as="button"
-          onClick={handleAcceder}
-          align="center"
-          justify="center"
-          gap={{ base: 3, md: 6 }}
-          px={{ base: 5, md: 24 }}
-          py={{ base: "16px", md: "22px" }}
-          // En móvil manda ESTE botón: ocupa el ancho que le dejan los márgenes
-          // (nunca de filo a filo) y los secundarios de abajo van más estrechos,
-          // así la jerarquía se ve de un vistazo sin leer nada.
-          w={{ base: "min(88vw, 420px)", md: "auto" }}
-          minW={{ base: "auto", md: "520px" }}
-          flexShrink={0}
-          borderRadius="full"
-          border="1.5px solid rgba(255,255,255,0.65)"
-          bg="rgba(255,255,255,0.10)"
-          cursor="pointer"
-          boxShadow="0 0 22px rgba(255,255,255,0.4), 0 0 50px rgba(255,255,255,0.22), 0 0 90px rgba(180,255,245,0.25), 0 6px 20px rgba(0,0,0,0.2)"
-          _hover={{
-            bg: "rgba(255,255,255,0.2)",
-            borderColor: "white",
-            boxShadow: "0 0 34px rgba(255,255,255,0.6), 0 0 70px rgba(180,255,245,0.45), 0 8px 24px rgba(0,0,0,0.25)",
-          }}
-          transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
-        >
-          <Image
-            src="/img/icono/life.png"
-            alt=""
-            h={{ base: "30px", md: "44px" }}
-            objectFit="contain"
-            flexShrink={0}
-            style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.56)) drop-shadow(0 0 24px rgba(255,255,255,0.3))" }}
-          />
-          <Text
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="700"
-            fontSize={{ base: "17px", md: "2xl" }}
-            letterSpacing={{ base: "0.04em", md: "0.18em" }}
-            textTransform="uppercase"
-            textAlign="center"
-            whiteSpace="nowrap"
-            textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(180,255,245,0.22)"
-          >
-            {t("elMetodo.acceder")}
-          </Text>
-        </Flex>
-        </Breathe>
-        </Reveal>
-
-        {/* Letra pequeña que quita el miedo a pulsar: crear la cuenta no cobra
-            nada. Blanca y sin sombra (está fuera de caja, sobre el turquesa) y
-            en un cuerpo claramente menor que el botón, que no le robe el sitio. */}
-        <Reveal inView direction="up" distance={14} delay={0.15} duration={0.6} display="flex" justifyContent="center">
-          <Text
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontSize={{ base: "sm", md: "md" }}
-            fontStyle="italic"
-            letterSpacing="0.02em"
-            textAlign="center"
-            opacity={0.85}
-            px={4}
-          >
-            {t("elMetodo.sinTarjeta")}
-          </Text>
-        </Reveal>
-        </Flex>
-
-        {/* Agendar llamada + Tengo dudas (botones secundarios).
-            Cierran la cascada: entran los últimos, después del botón grande. */}
-        <Reveal inView direction="up" distance={20} delay={0.3} duration={0.65} display="flex" justifyContent="center">
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          align="center"
-          justify="center"
-          gap={{ base: 4, md: 6 }}
-        >
-          {/* Agendar llamada gratuita */}
-          <Flex
-            as="button"
-            onClick={() => setBookCallOpen(true)}
-            align="center"
-            justify="center"
-            gap={2}
-            px={{ base: 4, md: 7 }}
-            py={{ base: "7px", md: "9px" }}
-            // Más estrecho que el de ACCEDER, a propósito (ver arriba).
-            w={{ base: "min(76vw, 330px)", md: "auto" }}
-            borderRadius="full"
-            border="1px solid rgba(255,255,255,0.5)"
-            bg="rgba(255,255,255,0.06)"
-            cursor="pointer"
-            boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 26px rgba(255,255,255,0.12)"
-            _hover={{
-              bg: "rgba(255,255,255,0.16)",
-              borderColor: "rgba(255,255,255,0.85)",
-              boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.25)",
-            }}
-            transition="all 0.25s ease"
-          >
-            <Box
-              as="svg"
-              viewBox="0 0 24 24"
-              w={{ base: "14px", md: "16px" }}
-              h={{ base: "14px", md: "16px" }}
-              fill="none"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))" }}
-            >
-              <rect x="3" y="4" width="18" height="18" rx="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </Box>
-            <Text
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="500"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.04em"
-              fontStyle="italic"
-              textShadow="0 0 8px rgba(255,255,255,0.34), 0 0 18px rgba(255,255,255,0.17)"
-            >
-              {t("elMetodo.agendar")}
-            </Text>
-          </Flex>
-
-          {/* Tengo dudas (botón pequeño secundario) */}
-          <Flex
-            as="button"
-            onClick={() => setDudasOpen(true)}
-            align="center"
-            justify="center"
-            gap={2}
-            px={{ base: 4, md: 7 }}
-            py={{ base: "7px", md: "9px" }}
-            // El más pequeño de los tres: es la última salida, no el camino.
-            w={{ base: "min(58vw, 260px)", md: "auto" }}
-            borderRadius="full"
-            border="1px solid rgba(255,255,255,0.5)"
-            bg="rgba(255,255,255,0.06)"
-            cursor="pointer"
-            boxShadow="0 0 12px rgba(255,255,255,0.25), 0 0 26px rgba(255,255,255,0.12)"
-            _hover={{
-              bg: "rgba(255,255,255,0.16)",
-              borderColor: "rgba(255,255,255,0.85)",
-              boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.25)",
-            }}
-            transition="all 0.25s ease"
-          >
-            <Box
-              as="svg"
-              viewBox="0 0 24 24"
-              w={{ base: "14px", md: "16px" }}
-              h={{ base: "14px", md: "16px" }}
-              fill="none"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              flexShrink={0}
-              style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))" }}
-            >
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </Box>
-            <Text
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="500"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.04em"
-              fontStyle="italic"
-              textShadow="0 0 8px rgba(255,255,255,0.34), 0 0 18px rgba(255,255,255,0.17)"
-            >
-              {t("elMetodo.dudas")}
-            </Text>
-          </Flex>
-        </Flex>
-        </Reveal>
-      </Flex>
       </Box>
 
       {/* ── MODAL MODALIDAD ── */}
@@ -1379,6 +1588,14 @@ export default function ElMetodo() {
       />
 
       <SiteFooter />
+
+      {/* ══ 13. BARRA FIJA (solo móvil) ══
+          Va FUERA del <Box> que lleva el zoom de la página: un `position:fixed`
+          dentro de un elemento con `zoom` no se ancla a la ventana sino a él, y
+          la barra se quedaría flotando a media página.
+          El hueco para que no tape el final del footer lo pone el `pb` del
+          contenedor de esta misma página (más abajo, en el Box exterior). */}
+      <BarraFijaMovil onAcceder={handleAcceder} />
     </Box>
   );
 }

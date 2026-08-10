@@ -20,12 +20,11 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
   astrologia: {
     desc: "Your birth chart as a starting point. Understand yourself without judgment before you try to change yourself.",
     videoIntro: {
-      titulo: "A guided journey through your birth chart, to get to know yourself.",
+      titulo: "Understand the map of the circumstances that shaped you.",
       puntos: [
-        "A personal reading of your chart, written by me — not by an AI.",
-        "Clear, step-by-step explanations of every part of your chart.",
+        "A personal reading of your chart, written by me, not by an AI.",
+        "Understand your chart step by step, with no prior knowledge needed.",
         "Discover how your personality, your strengths and your challenges connect.",
-        "Learn to use your chart as a tool for self-knowledge for the rest of your Life.",
       ],
     },
     modalDesc:
@@ -61,10 +60,9 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
     videoIntro: {
       titulo: "Understand how your history shaped the person you are today.",
       puntos: [
-        "A guided journey through your history from a new perspective, to make real change possible.",
-        "Discover how the patterns that shape your Life today were formed.",
-        "Identify the emotional wounds behind the way you think, feel and relate to others.",
-        "Integrate your history with more clarity, so you can move forward consciously.",
+        "Discover where the patterns that repeat in your life today come from.",
+        "Understand how your history shapes the way you think, feel and relate to others.",
+        "Look at your wounds from a new perspective and begin to give them a new meaning.",
       ],
     },
     modalDesc:
@@ -97,12 +95,11 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
   ayurveda: {
     desc: "We don't all need the same things. Discover your unique constitution and learn to care for your body and your mind in line with your own nature.",
     videoIntro: {
-      titulo: "Discover your unique constitution and learn to care for your body and your mind in line with your own nature.",
+      titulo: "Discover your own constitution and learn to care for your body and mind according to your nature.",
       puntos: [
-        "Find out which dosha is dominant in you, and what that says about you.",
+        "Discover which doṣha is dominant in you and what it says about you.",
         "Understand the natural tendencies of your body and your mind.",
-        "Identify what keeps you in balance and what tends to throw you off.",
-        "Learn habits, food and routines suited to your constitution.",
+        "Learn what keeps you in balance and adapt your habits, food and routines to your constitution.",
       ],
     },
     modalDesc:
@@ -135,12 +132,11 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
   tcm: {
     desc: "Your organs are interconnected. Every imbalance leaves a trace. Your body speaks before it falls ill. Learn its language.",
     videoIntro: {
-      titulo: "Learn the language of your body",
+      titulo: "Learn the language of your body.",
       puntos: [
-        "Discover the Five Elements, and how your organs follow their natural cycles.",
-        "Identify which element or organ may need more attention right now.",
-        "Understand where many of your imbalances come from.",
-        "Recover your balance with concrete steps that are easy to put into practice.",
+        "Discover the five elements and how they relate to your body and its natural cycles.",
+        "Spot which element in you may need more attention and what could be behind your imbalances.",
+        "Learn concrete ways to restore balance the Taoist way and care for your body, your mind and your wholeness day to day.",
       ],
     },
     modalDesc:
@@ -173,12 +169,11 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
   fisiologia: {
     desc: "We don't have a body. We are a body. Understand yourself.",
     videoIntro: {
-      titulo: "Understand what you are made of",
+      titulo: "Understand the intricate cellular system that makes you.",
       puntos: [
-        "Understand the molecules your body is built from.",
-        "Discover what happens inside you at the cellular level.",
-        "Understand how your organs work, and the cells they are made of.",
-        "Stop believing whatever you are told. Understand how your body works and decide for yourself.",
+        "Discover the molecules, cells, organs and systems that build your body.",
+        "Understand what happens inside you at cell level and how your body works.",
+        "Learn physiology the fun way, to understand your body and make informed decisions.",
       ],
     },
     modalDesc:
@@ -214,10 +209,9 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
     videoIntro: {
       titulo: "Discover how the food you choose every day rebuilds your body.",
       puntos: [
-        "Understand why your microbiome matters far beyond digestion.",
-        "Understand which molecules food contains, and why some do more for your body than others.",
-        "Understand yourself beyond your tastes and your cravings.",
-        "Build your own way of eating with judgment, take the myths apart and choose for yourself, from knowledge.",
+        "Understand which molecules food contains and how your body uses them.",
+        "Discover why your microbiota matters far beyond digestion.",
+        "Learn to choose your food with judgement, take myths apart and decide for yourself.",
       ],
     },
     modalDesc:
@@ -257,12 +251,11 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
   cabala: {
     desc: "Discover the dimensions that live in your soul, and so in you. Understand your balances and your imbalances.",
     videoIntro: {
-      titulo: "Discover the dimensions of your soul",
+      titulo: "Discover the dimensions of your soul.",
       puntos: [
-        "Walk the Tree of Life and its ten Sefirot.",
-        "Understand your inner conflicts and your potential.",
-        "Work on specific qualities that change you.",
-        "Bring these principles down into your everyday life.",
+        "Walk the Tree of Life and discover its ten Sefirot.",
+        "Understand your inner conflicts, your qualities and your potential.",
+        "Bring these principles into your everyday life and turn them into tools for change.",
       ],
     },
     modalDesc:
@@ -296,12 +289,11 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
   cultura: {
     desc: "You have met seven ways of interpreting reality. Now it is your turn to build your own.",
     videoIntro: {
-      titulo: "The ideas that changed the world all begin with a question.",
+      titulo: "The great stories that shaped the world.",
       puntos: [
-        "Travel through the stories that shaped civilizations and transformed the way we understand Life.",
-        "The past is not dead: it is still speaking to us. Listen to it, so you don't repeat its mistakes.",
-        "Meet the great thinkers who asked themselves the same questions you do.",
-        "Develop a mind of your own. Your truth matters. Think, question and build your own view of the world.",
+        "Discover the stories of the civilisations that changed the way we understand life.",
+        "Meet the thinkers who asked the same questions you do, and discover their answers.",
+        "Travel through world history via science, philosophy, religion and culture.",
       ],
     },
     modalDesc:
