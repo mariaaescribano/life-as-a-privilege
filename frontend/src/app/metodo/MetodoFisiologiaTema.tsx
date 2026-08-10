@@ -95,10 +95,16 @@ export default function MetodoFisiologiaTema() {
   const [fichaYaLeida, setFichaYaLeida] = useState(false);
   const [leidas, setLeidas] = useState<Set<string>>(new Set());
   const [comicAbierto, setComicAbierto] = useState(false);
+  // Viñeta por la que abrir el cómic (0 salvo en los temas cuya rejilla SON las
+  // viñetas: allí se entra por la caja que se ha pulsado).
+  const [comicDesde, setComicDesde] = useState(0);
   // El cómic «antes de empezar» de este tema ya se ha leído (marquita en el botón).
   const [comicLeido, setComicLeido] = useState(false);
   // Y si ya lo estaba ANTES de abrirlo, el visor lo dice arriba («✓ Leída»).
   const [comicYaLeido, setComicYaLeido] = useState(false);
+  // Foto fija de las viñetas ya leídas al abrir el cómic en rejilla: con ella el
+  // visor decide el aviso «✓ Leída» sin marcarse sola la que estás leyendo.
+  const [vinetasYaLeidas, setVinetasYaLeidas] = useState<Set<string>>(new Set());
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
 
@@ -129,7 +135,12 @@ export default function MetodoFisiologiaTema() {
         // No mostramos la página hasta que TODAS las fotos de las fichas estén
         // descargadas: así la página y las fotos aparecen a la vez, nunca una
         // rejilla que se rellena de golpe. (onerror también cuenta, no se cuelga.)
-        await precargarImagenes((tema?.fichas ?? []).map((f) => (f.foto ? encodeURI(f.foto) : null)));
+        // En los temas cuya rejilla son las viñetas del cómic, las fotos que hay
+        // que esperar son justamente esas.
+        const fotos = tema?.comicEnRejilla
+          ? (tema.comicIntro ?? []).map((v) => v.src)
+          : (tema?.fichas ?? []).map((f) => f.foto ?? null);
+        await precargarImagenes(fotos.map((f) => (f ? encodeURI(f) : null)));
       } catch { navigate("/metodo/fisiologia"); return; }
       finally { setLoading(false); }
     })();
@@ -141,6 +152,21 @@ export default function MetodoFisiologiaTema() {
 
   const tieneComic = (tema.comicIntro?.length ?? 0) > 0;
   const tieneFichas = tema.fichas.length > 0;
+  // Temas cuyo contenido ES el cómic (el cáncer): las viñetas se pintan como las
+  // cajas de cualquier otro tema —foto + título— y cada una abre el cómic
+  // inmersivo por ella. Se reutiliza FichaBox tal cual convirtiendo cada viñeta
+  // en una ficha de mentira; así la página se ve exactamente igual que las demás.
+  const comicEnRejilla = !!tema.comicEnRejilla && tieneComic;
+  const vinetaKey = (i: number) => `vineta-${i + 1}`;
+  const fichasDelComic: Ficha[] = comicEnRejilla
+    ? (tema.comicIntro ?? []).map((v, i) => ({
+        key: vinetaKey(i),
+        nombre: v.titulo || `Viñeta ${i + 1}`,
+        eyebrow: v.eyebrow,
+        foto: v.src,
+        explicacion: [],
+      }))
+    : [];
   // Ya se han leído TODAS las fichas: se descubre la frase de cierre del tema.
   const completo = tieneFichas && tema.fichas.every((f) => leidas.has(f.key));
 
@@ -154,15 +180,11 @@ export default function MetodoFisiologiaTema() {
     .filter((z) => z.fichas.length > 0)
     .map((z) => { const inicio = desde; desde += z.fichas.length; return { ...z, inicio }; });
 
-  // Abre una ficha y la marca como leída (se guarda en BD). Se usa tanto al
-  // pulsar la caja como al navegar con las flechas dentro del modal.
-  const verFicha = (f: Ficha) => {
-    // Antes de marcarla: si ya venía leída, la ficha lo dice arriba («✓ Leída»).
-    setFichaYaLeida(leidas.has(f.key));
-    setFicha(f);
-    if (leidas.has(f.key)) return;
+  // Deja marcada como leída una caja del tema (ficha o viñeta) y lo guarda en BD.
+  const marcarLeida = (key: string) => {
+    if (leidas.has(key)) return;
     const next = new Set(leidas);
-    next.add(f.key);
+    next.add(key);
     setLeidas(next);
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
@@ -174,6 +196,25 @@ export default function MetodoFisiologiaTema() {
     axios.patch(`${API_URL}/metodo-fisiologia/${userId}`, { data }, {
       headers: { Authorization: `Bearer ${token}` },
     }).catch(() => { /* se reintenta la próxima vez */ });
+  };
+
+  // Abre una ficha y la marca como leída. Se usa tanto al pulsar la caja como al
+  // navegar con las flechas dentro del modal.
+  const verFicha = (f: Ficha) => {
+    // Antes de marcarla: si ya venía leída, la ficha lo dice arriba («✓ Leída»).
+    setFichaYaLeida(leidas.has(f.key));
+    setFicha(f);
+    marcarLeida(f.key);
+  };
+
+  // Abre el cómic inmersivo por la viñeta pulsada (temas con `comicEnRejilla`).
+  // La foto fija de lo ya leído se toma AQUÍ, antes de marcar nada: si no, la
+  // viñeta que se acaba de abrir se anunciaría a sí misma como «✓ Leída».
+  const abrirVineta = (i: number) => {
+    setVinetasYaLeidas(new Set(leidas));
+    setComicDesde(i);
+    setComicAbierto(true);
+    marcarLeida(vinetaKey(i));
   };
 
   // Abre el cómic «antes de empezar» y lo deja marcado como leído (se guarda en
@@ -238,8 +279,9 @@ export default function MetodoFisiologiaTema() {
             </Reveal>
           )}
 
-          {/* Botón «antes de empezar»: abre el cómic de síntesis. */}
-          {tieneComic && (
+          {/* Botón «antes de empezar»: abre el cómic de síntesis. No sale en los
+              temas cuya rejilla ya SON las viñetas: allí se entra por las cajas. */}
+          {tieneComic && !comicEnRejilla && (
             <Reveal direction="up" distance={16} delay={0.2} duration={0.55} display="flex" justifyContent="center">
               <Box
                 as="button"
@@ -275,8 +317,40 @@ export default function MetodoFisiologiaTema() {
             </Reveal>
           )}
 
-          {/* Rejilla de fichas, o mensaje de «en construcción». */}
-          {tieneFichas ? (
+          {/* Rejilla de VIÑETAS (temas que son solo lectura): mismas cajas que las
+              fichas; cada una abre el cómic inmersivo por su viñeta. */}
+          {comicEnRejilla ? (
+            <>
+              {tema.pista && (
+                <Reveal direction="up" distance={12} delay={0.2} duration={0.5} display="flex" justifyContent="center">
+                  <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+                        textAlign="center" style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
+                    {tema.pista}
+                  </Text>
+                </Reveal>
+              )}
+              <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+                {fichasDelComic.map((f, i) => (
+                  <Reveal key={f.key} direction="up" distance={20} delay={0.05 * i} duration={0.5} w="100%" display="flex">
+                    <FichaBox ficha={f} temaColor={tema.color}
+                              active={comicAbierto && comicDesde === i}
+                              leido={leidas.has(f.key)} onClick={() => abrirVineta(i)} />
+                  </Reveal>
+                ))}
+              </SimpleGrid>
+
+              {/* Frase de cierre: solo cuando ya se han leído todas las viñetas. */}
+              {tema.cierre && fichasDelComic.every((f) => leidas.has(f.key)) && (
+                <Reveal direction="up" distance={16} duration={0.7} w="100%" display="flex" justifyContent="center">
+                  <Text color="white" fontSize={{ base: "md", md: "xl" }} fontStyle="italic" textAlign="center"
+                        lineHeight="1.9" maxW="620px" mt={{ base: 4, md: 6 }}
+                        style={{ textShadow: "0 0 14px rgba(255,255,255,0.35), 0 0 30px rgba(180,255,245,0.2)" }}>
+                    {tema.cierre}
+                  </Text>
+                </Reveal>
+              )}
+            </>
+          ) : tieneFichas ? (
             <>
               {tema.pista && (
                 <Reveal direction="up" distance={12} delay={0.26} duration={0.5} display="flex" justifyContent="center">
@@ -352,9 +426,19 @@ export default function MetodoFisiologiaTema() {
                          leida={fichaYaLeida}
                          onSelect={verFicha} onClose={() => setFicha(null)} />
 
-      {/* Cómic «antes de empezar». */}
+      {/* Cómic: «antes de empezar» (botón) o el de la rejilla de viñetas. En el
+          segundo caso se abre por la viñeta pulsada y cada una se va marcando
+          leída según se navega con las flechas. */}
       {tieneComic && (
-        <ComicTemaModal isOpen={comicAbierto} vinetas={tema.comicIntro!} leida={comicYaLeido}
+        <ComicTemaModal isOpen={comicAbierto} vinetas={tema.comicIntro!}
+                        leida={comicYaLeido}
+                        initialIndex={comicEnRejilla ? comicDesde : 0}
+                        leidaPorIndice={comicEnRejilla
+                          ? (i) => vinetasYaLeidas.has(vinetaKey(i))
+                          : undefined}
+                        onPageView={comicEnRejilla
+                          ? (i) => marcarLeida(vinetaKey(i))
+                          : undefined}
                         onClose={() => setComicAbierto(false)} />
       )}
 
