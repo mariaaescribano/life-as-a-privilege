@@ -154,7 +154,7 @@ export default function MetodoNutricionAlimentos() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
+              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
               title="Biblioteca de Nutrición"
               compact
               maxW="960px"

@@ -11,7 +11,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { glowHeader } from "../../components/metodo/FotoBox";
-import { Reveal, Float, Contador } from "../../components/global/Reveal";
+import { Reveal, Contador } from "../../components/global/Reveal";
 import { ComicDiabetesModal } from "../../components/metodo/ComicDiabetesModal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
@@ -346,7 +346,7 @@ export default function MetodoNutricionCalorias() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
+              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
               title="Tus calorías y macros"
               compact
               maxW="1000px"

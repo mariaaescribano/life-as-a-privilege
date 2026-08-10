@@ -11,7 +11,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal, Float } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -299,7 +299,7 @@ export default function MetodoNutricionMacros() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
+              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
               title="Cuenta lo que comes"
               compact
               maxW="900px"

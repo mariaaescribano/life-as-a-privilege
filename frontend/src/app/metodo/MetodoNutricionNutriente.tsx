@@ -9,7 +9,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal, Float } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlustracionModal";
 import { NutrienteCirculo } from "../../components/metodo/NutrienteCirculo";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
@@ -311,7 +311,7 @@ export default function MetodoNutricionNutriente() {
           {/* 1 · Header */}
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
+              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
               title={esSecundario ? "Nutrientes secundarios" : "Los nutrientes"}
               compact
               maxW="1000px"

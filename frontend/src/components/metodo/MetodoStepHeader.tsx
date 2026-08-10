@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { astrologiaNom, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
+import { Float } from "../global/Reveal";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 import { useT } from "../../i18n";
 
@@ -334,8 +335,16 @@ export function MetodoStepHeader({
             calidad; afecta a todos los headers). */}
         <Flex direction="row" align="center" justify="center" gap={dense ? 3.5 : 5}
               mt={dense ? { base: 0.5, md: 1 } : { base: 1.5, md: 2 }}>
+          {/* El icono flota, MUY despacio, en TODOS los headers del recorrido.
+              Vivía suelto en las páginas y solo lo habían puesto las de
+              Nutrición: el mismo header se movía en una disciplina y estaba
+              quieto en las otras siete. Ahora lo hace el componente, así que ni
+              hay que acordarse ni se puede olvidar. `Float` respeta «reducir
+              movimiento» del sistema: quien lo tenga puesto lo verá quieto. */}
           <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center">
-            {icon}
+            <Float amplitude={5} duration={5} display="flex" alignItems="center" justifyContent="center">
+              {icon}
+            </Float>
           </Box>
           <Flex align="baseline" gap={{ base: 1.5, md: 2.5 }} minW={0} flexShrink={1}
                 mt={{ base: "2px", md: "4px" }}>

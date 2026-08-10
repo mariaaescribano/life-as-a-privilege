@@ -9,7 +9,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal, Float } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -71,7 +71,7 @@ export default function MetodoNutricionMitos() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
+              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
               title="Preguntas y mitos"
               compact
               maxW="1000px"

@@ -20,7 +20,7 @@ import { useIntroComic } from "../../hooks/useIntroComic";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal, Float } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   nutricionBg,
@@ -115,7 +115,7 @@ export default function MetodoNutricion() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
-            icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
+            icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
             title="Nutrición"
             compact
             bgColor={`${nutricionBg}dd`}

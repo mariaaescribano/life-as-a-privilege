@@ -10,7 +10,7 @@ import { AppleLoader } from "../../components/metodo/AppleLoader";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal, RevealStagger, RevealItem, Float } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { glowSuave } from "../../components/metodo/FotoBox";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -77,7 +77,7 @@ export default function MetodoNutricionOrigen() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
-              icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
+              icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
               title="¿De dónde vienen los nutrientes?"
               compact
               maxW="1000px"

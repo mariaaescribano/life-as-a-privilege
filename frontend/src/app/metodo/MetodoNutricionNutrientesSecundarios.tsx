@@ -10,7 +10,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { FotoBox } from "../../components/metodo/FotoBox";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal, RevealStagger, RevealItem, Float } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { ComicMicrobiotaModal } from "../../components/metodo/ComicMicrobiotaModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
@@ -110,7 +110,7 @@ export default function MetodoNutricionNutrientesSecundarios() {
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
-            icon={<Float amplitude={5} duration={5}><NutricionIcon size={{ base: "40px", md: "56px" }} /></Float>}
+            icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
             title="Nutrientes secundarios"
             compact
             maxW="1000px"
