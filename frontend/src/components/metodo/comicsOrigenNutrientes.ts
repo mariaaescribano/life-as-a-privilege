@@ -349,7 +349,7 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
     key: "ciclos",
     titulo: "Los grandes ciclos de la naturaleza",
     resumen: "El agua, el carbono, el oxígeno, el nitrógeno y el fósforo dando vueltas: tus átomos son prestados.",
-    cover: "/viñetas/nutricion/ciclos/carbono.webp",
+    cover: "/viñetas/nutricion/biologia/ciclos/carbono.webp",
     emoji: "🌍",
     vinetas: NUTRICION_CICLOS,
   },

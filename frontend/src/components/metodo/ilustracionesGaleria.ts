@@ -14,7 +14,7 @@ import { NUTRICION_INTRO } from "./comicNutricionIntro";
 import { NUTRICION_CALORIAS } from "./comicNutricionCalorias";
 import { NUTRICION_MICROBIOTA } from "./comicNutricionMicrobiota";
 import { NUTRICION_INTEGRAL } from "./comicNutricionIntegral";
-import { HAMBRE_HOLISTICA } from "./hambreHolistica";
+import { HAMBRE_HOLISTICA, sinNegrita } from "./hambreHolistica";
 import { COMICS_NUTRIENTES } from "./comicsNutrientes";
 import { INTRO_PSICOLOGIA } from "./comicPsicologiaIntro";
 import { COMIC_COMPROMISO } from "./comicCompromiso";
@@ -81,11 +81,8 @@ const astroTextShadow = "none";
 const psicoTextShadow = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
 // Nutrición: acento claro (nutricionBg) + letra oscura (nutricionTxt), sin
-// sombra. El visor pinta en plano, así que quitamos las negritas **…** para que
-// no salgan los asteriscos literales.
-const sinNegrita = (vinetas: Vineta[]): Vineta[] =>
-  vinetas.map((v) => ({ ...v, paragraphs: v.paragraphs.map((p) => p.replace(/\*\*/g, "")) }));
-
+// sombra. Las negritas **…** se limpian con `sinNegrita` (hambreHolistica), que
+// es donde vive esa convención: el visor pinta en plano.
 const nutriEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]): IlustracionEntry => ({
   id, titulo, disciplina: "Nutrición", cover, vinetas,
   themeColor: nutricionBg, textColor: nutricionTxt, cardColor: nutricionTxt,

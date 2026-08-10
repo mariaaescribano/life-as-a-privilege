@@ -12,42 +12,31 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, Float } from "../../components/global/Reveal";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
-import { HAMBRE_HOLISTICA, HAMBRE_CIERRE } from "../../components/metodo/hambreHolistica";
+import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlustracionModal";
+import { HAMBRE_HOLISTICA, HAMBRE_CIERRE, sinNegrita } from "../../components/metodo/hambreHolistica";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import type { Vineta } from "../../components/metodo/ComicViewer";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Apartado «El hambre» del recorrido de Nutrición. Va ENTRE la Microbiota y el
-// plato de Harvard. Contenido: «El hambre, una mirada holística» — 4 boxes tipo
-// ilustración (foto a la izquierda + texto a la derecha con scroll vertical) y,
+// plato de Harvard. Contenido: «El hambre, una mirada holística» — 4 lecturas y,
 // al final, una frase directamente sobre el fondo turquesa (sin box).
-// Los mismos 4 bloques (HAMBRE_HOLISTICA) se muestran también como un cómic en
+//
+// La página NO trae el texto: enseña las cuatro fotos con su título numerado y
+// un botón «Ver». La lectura se hace en el visor inmersivo (el mismo de las
+// Ilustraciones), que abre por la que se pulse y deja pasar a las otras tres con
+// las flechas. Antes los cuatro textos iban en la propia página, en boxes con
+// scroll interno: había que leer cuatro columnas de texto seguidas sin salir del
+// turquesa, y la foto competía con la letra.
+//
+// Los mismos 4 bloques (HAMBRE_HOLISTICA) son también un cómic de la galería de
 // «Ilustraciones» de Nutrición.
 // ═════════════════════════════════════════════════════════════════════════
 
-// Barra de scroll SIEMPRE visible (mismo estilo que el visor de ilustraciones):
-// solo el pulgar, con la letra de la disciplina (el acento claro de Nutrición no
-// se vería sobre el box); el carril, transparente del todo.
-const SCROLL_SX = {
-  "&::-webkit-scrollbar": { width: "8px", background: "transparent" },
-  "&::-webkit-scrollbar-track": { background: "transparent" },
-  "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}88`, borderRadius: "4px" },
-  "&::-webkit-scrollbar-thumb:hover": { background: `${nutricionTxt}cc` },
-  scrollbarWidth: "thin" as const,
-  scrollbarColor: `${nutricionTxt}88 transparent`,
-};
-
-// Pinta un párrafo con soporte de **negrita** (misma emphasis que pidió la usuaria).
-function renderNegrita(texto: string): React.ReactNode {
-  return texto.split(/(\*\*[^*]+\*\*)/g).map((p, i) =>
-    p.startsWith("**") && p.endsWith("**") ? (
-      <Box as="span" key={i} fontWeight={700}>{p.slice(2, -2)}</Box>
-    ) : (
-      <React.Fragment key={i}>{p}</React.Fragment>
-    ),
-  );
-}
+// Las viñetas tal como las lee el visor: sin las marcas **…** de negrita, que el
+// ComicViewer pinta en plano.
+const VINETAS_HAMBRE = sinNegrita(HAMBRE_HOLISTICA);
 
 // Placeholder mientras la foto no está subida (icono suave sobre fondo tenue).
 function FotoPlaceholder() {
@@ -62,11 +51,17 @@ function FotoPlaceholder() {
   );
 }
 
-// Box tipo ilustración: foto a la izquierda + texto a la derecha con su propio
-// scroll vertical (idéntico al box de las ilustraciones / cómics de Nutrición).
-function HambreBox({ v }: { v: Vineta }) {
+// ── Box de una lectura · la foto, «1. Título» y «Ver» ────────────────────────
+// La foto arriba (cuadrada, como la ilustración) y debajo el número, el título y
+// el botón. La caja ENTERA es pulsable —el botón es la señal, no la única zona
+// que responde—.
+function HambreBox({ v, numero, onVer }: { v: Vineta; numero: number; onVer: () => void }) {
   return (
-    <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl" boxShadow={glowHeader(nutricionTxt)}>
+    <Box as="button" onClick={onVer} w="100%" h="100%" display="block" textAlign="left"
+         position="relative" borderRadius="2xl" overflow="hidden" boxShadow={glowHeader(nutricionTxt)}
+         cursor="pointer" transition="transform 0.18s ease, box-shadow 0.18s ease"
+         _hover={{ transform: "translateY(-2px)", boxShadow: `${glowHeader(nutricionTxt)}, 0 0 30px ${nutricionTxt}33` }}
+         sx={{ WebkitTapHighlightColor: "transparent" }} role="group">
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
 
       {/* Líneas de luz arriba/abajo (como el visor de ilustraciones) */}
@@ -75,45 +70,35 @@ function HambreBox({ v }: { v: Vineta }) {
       <Box position="absolute" bottom="-1px" left="15%" right="15%" h="1px" zIndex={2}
            bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
 
-      <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }}
-            align={{ base: "center", md: "stretch" }} justify="center" gap={{ base: 5, md: 10 }}
-            // OJO con `pr`: en escritorio va a 0 para que la barra de scroll del
-            // texto quede pegada al borde derecho del box y no flotando a 40px de
-            // él. Ese aire lo recupera la columna de texto con su propio `pr`
-            // (así se mueve la barra, no el texto).
-            pl={{ base: 5, md: 10 }} pr={{ base: 5, md: 0 }}
-            // Más aire ARRIBA y ABAJO (antes 6/9): la foto y el texto quedaban
-            // pegados a los bordes del box. El alto crece lo mismo que el padding
-            // (440 → 520) para que la foto siga cabiendo entera a 400px y el
-            // texto no pierda altura de lectura.
-            py={{ base: 8, md: 14 }} h={{ base: "auto", md: "520px" }}>
-
-        {/* Foto (izquierda) */}
-        <Box flexShrink={0} w={{ base: "100%", md: "400px" }} maxW={{ base: "320px", md: "400px" }}
-             aspectRatio={1} alignSelf={{ base: "auto", md: "center" }} position="relative"
+      <Flex position="relative" zIndex={1} direction="column" h="100%"
+            px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }} gap={{ base: 4, md: 5 }}>
+        {/* La foto, protagonista */}
+        <Box w="100%" aspectRatio={1} position="relative" flexShrink={0}
              filter={`drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${nutricionTxt}33)`}>
           <Image src={encodeURI(v.src)} alt={v.titulo ?? ""} w="100%" h="100%" objectFit="cover"
                  borderRadius="lg" fallback={<FotoPlaceholder />} />
         </Box>
 
-        {/* Texto (derecha) con scroll propio */}
-        <Box flex="1" minW={0} w={{ base: "100%", md: "auto" }} alignSelf={{ base: "auto", md: "stretch" }}
-             display="flex" flexDirection="column" justifyContent="flex-start"
-             maxH={{ base: "none", md: "100%" }} overflowY={{ base: "visible", md: "scroll" }} overflowX="hidden"
-             // 52px = los 12 de antes + los 40 que se le han quitado a la fila.
-             pr={{ base: 0, md: "52px" }} sx={SCROLL_SX}>
-          <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.25"
-                mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}>
-            {v.titulo}
+        {/* Número + título a la izquierda y «Ver» a la derecha, abajo */}
+        <Flex align="center" justify="space-between" gap={{ base: 3, md: 4 }} mt="auto">
+          <Text color={nutricionTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight={700}
+                lineHeight="1.3" flex="1" minW={0}>
+            <Box as="span" fontWeight={800}>{numero}.</Box> {v.titulo}
           </Text>
-          {v.paragraphs.map((p, i) => (
-            <Text key={i} color={nutricionTxt} textAlign={{ base: "center", md: "left" }}
-                  fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.85" letterSpacing="0.01em"
-                  fontWeight="400" mt={i === 0 ? 0 : { base: 4, md: 5 }}>
-              {renderNegrita(p)}
+
+          <Flex flexShrink={0} align="center" gap={1.5} px={{ base: 3, md: 4 }} py={1.5} borderRadius="full"
+                border={`1.5px solid ${nutricionTxt}99`} bg={`${nutricionBg}55`}
+                transition="all 0.18s" _groupHover={{ borderColor: nutricionTxt, bg: `${nutricionBg}99` }}>
+            <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em"
+                  textTransform="uppercase">
+              Ver
             </Text>
-          ))}
-        </Box>
+            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px"
+                 fill={nutricionTxt} flexShrink={0}>
+              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+            </Box>
+          </Flex>
+        </Flex>
       </Flex>
     </Box>
   );
@@ -124,6 +109,8 @@ export default function MetodoNutricionHambre() {
   const [loading, setLoading] = useState(true);
   // Cómic de transición «Lo integral» (se abre al pulsar «Crea tu plato →»).
   const [comicIntegralOpen, setComicIntegralOpen] = useState(false);
+  // La lectura abierta en el visor (índice dentro de HAMBRE_HOLISTICA).
+  const [lecturaAbierta, setLecturaAbierta] = useState<number | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -176,13 +163,17 @@ export default function MetodoNutricionHambre() {
             </Text>
           </Reveal>
 
-          {/* 4 boxes tipo ilustración, uno debajo del otro */}
-          {HAMBRE_HOLISTICA.map((v) => (
-            <Reveal inView key={v.src} direction="up" distance={22} scaleFrom={0.98} delay={0.05}
-                    duration={0.65} w="100%">
-              <HambreBox v={v} />
-            </Reveal>
-          ))}
+          {/* Las cuatro lecturas: foto + título numerado + «Ver». En dos columnas
+              de md hacia arriba y una sola en móvil. */}
+          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+               gap={{ base: 5, md: 6 }} w="100%">
+            {HAMBRE_HOLISTICA.map((v, i) => (
+              <Reveal inView key={v.src} direction="up" distance={22} scaleFrom={0.98} delay={0.05}
+                      duration={0.65} w="100%" h="100%">
+                <HambreBox v={v} numero={i + 1} onVer={() => setLecturaAbierta(i)} />
+              </Reveal>
+            ))}
+          </Box>
 
           {/* Frase de cierre, directamente sobre el fondo turquesa (sin box) */}
           <Reveal inView direction="up" distance={18} delay={0.2} duration={0.7} w="100%" display="flex" justifyContent="center">
@@ -195,6 +186,15 @@ export default function MetodoNutricionHambre() {
 
         </Flex>
       </Flex>
+
+      {/* La lectura que se haya pulsado, en el visor inmersivo: abre por esa y
+          deja pasar a las otras tres con las flechas. */}
+      <NutrienteIlustracionModal
+        isOpen={lecturaAbierta !== null}
+        vinetas={VINETAS_HAMBRE}
+        initialIndex={lecturaAbierta ?? 0}
+        onClose={() => setLecturaAbierta(null)}
+      />
 
       {/* Cómic de transición «Lo integral» hacia el plato de Harvard. */}
       <ComicIntegralModal

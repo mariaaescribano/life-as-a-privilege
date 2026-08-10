@@ -125,6 +125,7 @@ const MetodoNutricionPlato = lazy(() => import("./app/metodo/MetodoNutricionPlat
 const MetodoNutricionCalorias = lazy(() => import("./app/metodo/MetodoNutricionCalorias"));
 const MetodoNutricionPrediabetes = lazy(() => import("./app/metodo/MetodoNutricionPrediabetes"));
 const MetodoNutricionDia = lazy(() => import("./app/metodo/MetodoNutricionDia"));
+const MetodoNutricionMacros = lazy(() => import("./app/metodo/MetodoNutricionMacros"));
 const MetodoNutricionMitos = lazy(() => import("./app/metodo/MetodoNutricionMitos"));
 const MetodoNutricionOrigen = lazy(() => import("./app/metodo/MetodoNutricionOrigen"));
 const MetodoNutricionNutriente = lazy(() => import("./app/metodo/MetodoNutricionNutriente"));
@@ -164,6 +165,7 @@ const FitoterapiaEspacio = lazy(() => import("./components/espacio/pages/Fitoter
 const CelulasCuerpoPage = lazy(() => import("./app/espacio/CelulasCuerpoPage"));
 import { ExitIntentSubscribeModal } from "./components/global/ExitIntentSubscribeModal";
 import { MiniDiario } from "./components/global/MiniDiario";
+import { MusicaFondo } from "./components/global/MusicaFondo";
 const RecuperarPassword = lazy(() => import("./app/auth/RecuperarPassword"));
 const AvisoLegal = lazy(() => import("./app/legal/AvisoLegal"));
 const Privacidad = lazy(() => import("./app/legal/Privacidad"));
@@ -234,6 +236,9 @@ export default function App()
   return (
     <>
     <ScrollToTop />
+    {/* La música vive aquí, fuera de <Routes>, para que no se corte al cambiar
+        de página: los componentes de cada ruta se desmontan, este no. */}
+    <MusicaFondo />
     <ExitIntentSubscribeModal />
     <MiniDiario />
     <AvisoCookies />
@@ -390,6 +395,7 @@ export default function App()
       <Route path="/metodo/nutricion/calorias" element={<PrivateRoute><MetodoNutricionCalorias /></PrivateRoute>} />
       <Route path="/metodo/nutricion/prediabetes" element={<PrivateRoute><MetodoNutricionPrediabetes /></PrivateRoute>} />
       <Route path="/metodo/nutricion/dia" element={<PrivateRoute><MetodoNutricionDia /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/macros" element={<PrivateRoute><MetodoNutricionMacros /></PrivateRoute>} />
       <Route path="/metodo/nutricion/mitos" element={<PrivateRoute><MetodoNutricionMitos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/origen" element={<PrivateRoute><MetodoNutricionOrigen /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos" element={<PrivateRoute><MetodoNutricionAlimentos /></PrivateRoute>} />

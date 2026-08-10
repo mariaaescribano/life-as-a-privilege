@@ -256,6 +256,17 @@ export function Pop({
 
 // ── RevealStagger: contenedor que lanza a sus <RevealItem> en cascada ─────
 // Se puede usar como Flex/Grid pasándole display/flexDirection/gap, etc.
+//
+// ⚠ CUIDADO con `inView` + `amount` en contenedores LARGOS. `amount` es una
+// proporción DEL CONTENEDOR: 0.1 significa «cuando el 10% de él esté en
+// pantalla». En una lista corta se cumple al instante, pero si el contenedor
+// crece hasta medir varias pantallas de alto, ese 10% ya no cabe en el viewport,
+// el disparo no llega nunca y los hijos se quedan a opacidad 0 —ocupando su
+// hueco, invisibles—. Pasó de verdad en «Preguntas y mitos» de Nutrición al
+// pasar de 12 tarjetas a 64: la página parecía vacía.
+// Para rejillas que puedan crecer, no envuelvas la rejilla entera: pon un
+// <Reveal inView> en CADA tarjeta (su umbral es el de la tarjeta, así que da
+// igual cuántas haya) y escalona con `delay`.
 export function RevealStagger({
   children,
   stagger = 0.1,

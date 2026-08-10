@@ -7,12 +7,12 @@ import type { Vineta } from "./ComicViewer";
 // los ciclos. Por eso el archivo, las fotos y la entrada de galería son de
 // Nutrición.
 //
-// Imágenes: /viñetas/nutricion/ciclos/agua.png, carbono.png, oxigeno.png,
+// Imágenes: /viñetas/nutricion/biologia/ciclos/agua.png, carbono.png, oxigeno.png,
 // nitrogeno.png, fosforo.png (una por viñeta). Mientras no existan, el
 // ComicViewer muestra su loader/fallback.
 export const NUTRICION_CICLOS: Vineta[] = [
   {
-    src: "/viñetas/nutricion/ciclos/agua.webp",
+    src: "/viñetas/nutricion/biologia/ciclos/agua.webp",
     titulo: "Ciclo del agua",
     paragraphs: [
       "El ciclo del agua es el proceso continuo mediante el cual el agua circula entre la superficie terrestre, la atmósfera y los océanos.",
@@ -22,7 +22,7 @@ export const NUTRICION_CICLOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/ciclos/carbono.webp",
+    src: "/viñetas/nutricion/biologia/ciclos/carbono.webp",
     titulo: "Ciclo del carbono",
     paragraphs: [
       "El ciclo del carbono describe el movimiento continuo del carbono entre la atmósfera, los seres vivos, los océanos y la corteza terrestre.",
@@ -31,7 +31,7 @@ export const NUTRICION_CICLOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/ciclos/oxigeno.webp",
+    src: "/viñetas/nutricion/biologia/ciclos/oxigeno.webp",
     titulo: "Ciclo del oxígeno",
     paragraphs: [
       "El ciclo del oxígeno consiste en el intercambio continuo de este elemento entre la atmósfera, los seres vivos y los ecosistemas.",
@@ -40,7 +40,7 @@ export const NUTRICION_CICLOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/ciclos/nitrogeno.webp",
+    src: "/viñetas/nutricion/biologia/ciclos/nitrogeno.webp",
     titulo: "Ciclo del nitrógeno",
     paragraphs: [
       "El ciclo del nitrógeno permite transformar el nitrógeno atmosférico en formas que pueden ser utilizadas por los seres vivos.",
@@ -49,7 +49,7 @@ export const NUTRICION_CICLOS: Vineta[] = [
     ],
   },
   {
-    src: "/viñetas/nutricion/ciclos/fosforo.webp",
+    src: "/viñetas/nutricion/biologia/ciclos/fosforo.webp",
     titulo: "Ciclo del fósforo",
     paragraphs: [
       "El ciclo del fósforo describe el movimiento de este elemento entre las rocas, el suelo, el agua y los organismos vivos.",

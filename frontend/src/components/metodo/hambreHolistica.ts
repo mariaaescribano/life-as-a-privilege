@@ -9,6 +9,12 @@ import type { Vineta } from "./ComicViewer";
 // Las negritas van con **…** (las pinta la página; en el cómic se limpian).
 // ─────────────────────────────────────────────────────────────────────────
 
+/** Quita las marcas de negrita de unas viñetas. El visor de cómic no interpreta
+ *  `**…**`, así que sin esto los asteriscos se leerían crudos. Vive aquí, junto a
+ *  la convención que documenta la cabecera, para no tener una copia por página. */
+export const sinNegrita = (vinetas: Vineta[]): Vineta[] =>
+  vinetas.map((v) => ({ ...v, paragraphs: v.paragraphs.map((p) => p.replace(/\*\*/g, "")) }));
+
 const BASE = "/recorrido/nutricion/hambre";
 
 export const HAMBRE_HOLISTICA: Vineta[] = [

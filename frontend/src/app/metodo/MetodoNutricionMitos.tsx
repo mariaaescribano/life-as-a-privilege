@@ -8,7 +8,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal, RevealStagger, RevealItem, Float } from "../../components/global/Reveal";
+import { Reveal, Float } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -77,7 +77,7 @@ export default function MetodoNutricionMitos() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Tus calorías", onClick: () => navigate("/metodo/nutricion/calorias") }}
+              prev={{ label: "← Cuenta lo que comes", onClick: () => navigate("/metodo/nutricion/macros") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{ label: "¿De dónde vienen? →", onClick: () => navigate("/metodo/nutricion/origen") }}
             />
@@ -91,21 +91,29 @@ export default function MetodoNutricionMitos() {
             </Text>
           </Reveal>
 
-          {/* La rejilla entra en cascada al ASOMAR, no de golpe al montar: con 
-              doce tarjetas, la mitad quedaba fuera de pantalla y ya había 
-              terminado de animarse cuando el usuario llegaba a ellas. */}
-          <RevealStagger inView stagger={0.06} amount={0.1} w="100%"
-                         display="grid" gap={{ base: 4, md: 6 }}
-                         gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}>
+          {/* Cada tarjeta se revela POR SÍ MISMA al asomar, en vez de con un
+              RevealStagger sobre la rejilla entera.
+              OJO, que aquí estuvo el fallo de la página en blanco: el
+              RevealStagger disparaba con `amount={0.1}`, o sea «cuando el 10%
+              del contenedor esté en pantalla». Con doce tarjetas se cumplía al
+              instante, pero al pasar de sesenta la rejilla mide varios miles de
+              píxeles y ese 10% no cabe en ninguna pantalla: el disparo NUNCA
+              llegaba y las sesenta y cuatro tarjetas se quedaban a opacidad 0
+              —ocupando su hueco, invisibles—.
+              Tarjeta a tarjeta el umbral es de la tarjeta, así que da igual
+              cuántos mitos haya. El `delay` por columna mantiene la sensación de
+              cascada dentro de cada fila. */}
+          <Box display="grid" gap={{ base: 4, md: 6 }} w="100%"
+               gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}>
             {MITOS_NUTRICION.map((m, i) => (
-              <RevealItem key={m.key} direction="up" distance={22} scaleFrom={0.96} duration={0.55}
-                          w="100%" display="flex">
+              <Reveal inView key={m.key} direction="up" distance={22} scaleFrom={0.96} duration={0.55}
+                      amount={0.2} delay={(i % 3) * 0.06} w="100%" display="flex">
                 <TarjetaNutri titulo={m.titulo} foto={m.foto}
                               visto={leido(MITOS_LEIDOS_KEY, m.key)}
                               onClick={() => abrir(i)} />
-              </RevealItem>
+              </Reveal>
             ))}
-          </RevealStagger>
+          </Box>
 
         </Flex>
       </Flex>

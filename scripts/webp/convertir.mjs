@@ -283,6 +283,70 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/fisiologia/sistemas"],
   },
+  // La figura del «espejo» de Fisiología repintada: llegó en PNG encima de su
+  // WebP (y borrándolo). `ESPEJO_FOTO` la pide con la extensión escrita
+  // (SonrisaFisiologia.ts), así que en PNG la página se queda sin cuerpo —y sin
+  // cuerpo no hay dónde pulsar los doce órganos—.
+  //
+  // Aquí el lado va a 1400 y no a 1000: esta imagen NO se ve a 400 px como una
+  // viñeta, es la figura central de la página y se muestra a ~520 px de ancho,
+  // que en una pantalla retina son más de 1000 px reales.
+  20: {
+    ladoMax: 1400,
+    calidad: 85,
+    carpetas: ["recorrido/fisiologia/organos"],
+  },
+  // Las moléculas de «Drogas» (Nutrición): ibuprofeno, paracetamol y vaper
+  // llegaron en PNG y la foto de una tarjeta se pide con la extensión escrita
+  // (NutrientesNutricion.ts), así que en PNG dan 404. Y esa página PRECARGA
+  // todas sus fotos antes de pintar, con lo que el fallo no es solo estético.
+  21: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/nutricion/moleculas"],
+  },
+  // Tanda del 10 de agosto: las viñetas repintadas de los cómics de
+  // Carbohidratos, Colesterol y Etanol (llegaron en PNG encima de sus WebP, y
+  // borrándolas) y la molécula del THC, que llegó después de cerrar el lote 21.
+  //
+  // En las tres carpetas de viñetas el WebP NO es opcional: las viñetas se piden
+  // con la extensión escrita en comicsNutrientes.ts, así que en PNG dan 404 —y
+  // el visor se queda esperando la ilustración—.
+  22: {
+    ladoMax: 1000,
+    carpetas: [
+      "viñetas/nutricion/carbohidratos",  // 2 repintadas: 1 y 3
+      "viñetas/nutricion/colesterol",     // las 4
+      "viñetas/nutricion/etanol",         // las 4
+      "recorrido/nutricion/moleculas",    // marihuanadhc → se renombra a thc.webp
+    ],
+  },
+  // Las tres viñetas que le faltaban al cómic del AGUA (la molécula con sus
+  // polos, el agua disolviendo la sal y la ósmosis con el riñón). Llegaron con
+  // nombre de tanda —agua0, agua01, agua5— y se renombran a lo que pide
+  // comicsNutrientes.ts antes de convertir: aguamolecula, aguadisuelve y
+  // aguaosmosis. En PNG daban 404 y esas tres viñetas salían vacías.
+  23: {
+    ladoMax: 1000,
+    carpetas: ["viñetas/nutricion/agua"],
+  },
+  // Las viñetas del cómic nuevo de «La diabetes» (carpeta nueva) y ocho mitos
+  // repintados que llegaron en PNG encima de sus WebP. En los mitos el WebP no
+  // es opcional por dos motivos: la foto se pide con la extensión escrita
+  // (MitosNutricion.ts) y su página PRECARGA las 64 antes de pintar.
+  24: {
+    ladoMax: 1000,
+    carpetas: [
+      "viñetas/nutricion/diabetes",
+      "recorrido/nutricion/mitos",
+    ],
+  },
+  // La portada de «Drogas», la última que faltaba de las doce de Nutrición. La
+  // ruta de una portada es literal `.webp` (NutrientesNutricion.ts), así que en
+  // PNG el box de Drogas se veía sin foto en la rejilla de secundarios.
+  25: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/nutricion/portadas"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

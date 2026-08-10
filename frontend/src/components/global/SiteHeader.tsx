@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { rutaHome } from "../../api/sesion";
 import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
+import { BotonMusica } from "./MusicaFondo";
 import MenuHamburguesa, { type ItemMenu } from "./MenuHamburguesa";
 
 type SiteHeaderProps = {
@@ -56,8 +57,12 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const isEstudioPage = path.startsWith("/estudio");
   // La última opción del menú: con sesión es «Mi cuenta», sin ella «Iniciar
   // sesión». Es el mismo sitio visto desde los dos lados de la puerta.
+  //
+  // «Mi cuenta» sí se marca como página actual; «Iniciar sesión» NO, y por eso
+  // no hay aquí ningún `isEntrarPage`: entrar es una acción, no un sitio del
+  // menú, así que va sin la rayita de «estás aquí» —una opción más, como las
+  // demás— también cuando ya estás en la pantalla de login.
   const isCuentaPage = path.startsWith("/user");
-  const isEntrarPage = path.startsWith("/login") || path.startsWith("/signin");
   // Navegación de administración (pestañas en el header).
   const isAdminPage = path.startsWith("/admin");
   const adminCursosActive = path.startsWith("/admin/cursos");
@@ -87,7 +92,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         { etiqueta: t("header.mapa"),          onSelect: () => navigate("/elMetodo"),   activo: isRecorridoPage },
         { etiqueta: t("header.materiales"),    onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
         { etiqueta: t("header.estudio"),       onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
-        { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn"),      activo: isEntrarPage },
+        { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn") },
       ];
 
   return (
@@ -145,6 +150,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           pegado al margen derecho. */}
       <Flex align="center" gap={{ base: 3, md: 5 }}>
         <SelectorIdioma compact={compact} />
+        <BotonMusica compact={compact} />
 
         {isPrivate && (
           <Box

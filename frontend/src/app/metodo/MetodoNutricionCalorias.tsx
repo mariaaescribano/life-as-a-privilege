@@ -12,6 +12,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { Reveal, Float, Contador } from "../../components/global/Reveal";
+import { ComicDiabetesModal } from "../../components/metodo/ComicDiabetesModal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -183,6 +184,10 @@ export default function MetodoNutricionCalorias() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // Cómic «La diabetes»: se abre al pulsar «Test →» y termina llevando al test.
+  // Va aquí y no en el test porque una pregunta sobre algo que no entiendes se
+  // responde a ciegas: primero qué es la glucosa y qué hace la insulina.
+  const [comicDiabetesOpen, setComicDiabetesOpen] = useState(false);
 
   // Entradas del cálculo.
   const [sexo, setSexo] = useState<Sexo>("mujer");
@@ -356,7 +361,9 @@ export default function MetodoNutricionCalorias() {
                 onClick: async () => {
                   if (!resultado) return;
                   await guardarCaloriasAhora(); // flush antes de navegar (evita el candado por debounce)
-                  navigate("/metodo/nutricion/prediabetes");
+                  // El cómic de la diabetes se interpone: al terminarlo (o al
+                  // saltarlo con su botón) se navega al test.
+                  setComicDiabetesOpen(true);
                 },
               }}
             />
@@ -497,6 +504,13 @@ export default function MetodoNutricionCalorias() {
 
         </Flex>
       </Flex>
+
+      {/* Cómic «La diabetes», entre las calorías y el test de azúcar. */}
+      <ComicDiabetesModal
+        isOpen={comicDiabetesOpen}
+        onClose={() => setComicDiabetesOpen(false)}
+        onContinue={() => { setComicDiabetesOpen(false); navigate("/metodo/nutricion/prediabetes"); }}
+      />
 
       <IndiceNutricion />
       <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />

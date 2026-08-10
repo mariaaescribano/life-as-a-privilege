@@ -8,8 +8,14 @@
 // hígado está…»), y cada órgano cierra con una frase de gratitud que el usuario
 // le dice. La página es data-driven: añadir o quitar órganos aquí es suficiente.
 //
-// Las fotos son las que ya usa el recorrido: /recorrido/fisiologia/organos/*.png
-// El `hotspot` es la posición del punto pulsable sobre anatomia.png, en % (0-100).
+// Las fotos son las que ya usa el recorrido: /recorrido/fisiologia/organos/*.webp
+// El `hotspot` es la posición del punto pulsable sobre anatomia.webp, en % (0-100).
+//
+// OJO al repintar la figura: los porcentajes están medidos sobre ESA imagen. Si
+// la nueva trae la misma proporción pero el cuerpo dibujado más pequeño o más
+// centrado dentro del lienzo, los puntos siguen «bien» en porcentaje y sin
+// embargo caen fuera de su órgano. Se vuelven a medir mirando la figura, no
+// convirtiendo números.
 
 export interface OrganoSonrisa {
   key: string;
@@ -37,7 +43,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Cerebro",
     titulo: "Tu cerebro",
     foto: `${F}/cerebro.webp`,
-    hotspot: { top: 10, left: 47 },
+    hotspot: { top: 10, left: 53 },
     claves: [
       "Pesa poco más de un kilo y gasta cerca de una quinta parte de tu energía",
       "Unos 86.000 millones de neuronas",
@@ -51,7 +57,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Tiroides",
     titulo: "Tu tiroides",
     foto: `${F}/tiroides.webp`,
-    hotspot: { top: 18, left: 47 },
+    hotspot: { top: 18.5, left: 50 },
     claves: [
       "Una mariposa de 20-25 gramos en tu garganta",
       "Marca el ritmo al que quema energía cada célula tuya",
@@ -79,7 +85,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Corazón",
     titulo: "Tu corazón",
     foto: `${F}/corazon.webp`,
-    hotspot: { top: 29, left: 50 },
+    hotspot: { top: 28.5, left: 52.5 },
     claves: [
       "Unos 100.000 latidos al día",
       "Mueve alrededor de 7.000 litros de sangre cada día",
@@ -93,7 +99,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Hígado",
     titulo: "Tu hígado",
     foto: `${F}/higado.webp`,
-    hotspot: { top: 35, left: 42.5 },
+    hotspot: { top: 34, left: 41 },
     claves: [
       "Más de 500 funciones distintas",
       "Por él pasa más de un litro de sangre por minuto",
@@ -107,7 +113,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Estómago",
     titulo: "Tu estómago",
     foto: `${F}/estomago.webp`,
-    hotspot: { top: 36, left: 55 },
+    hotspot: { top: 33.6, left: 52.5 },
     claves: [
       "Fabrica un ácido tan fuerte que podría dañar un metal",
       "Su mucosa se renueva cada pocos días",
@@ -121,7 +127,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Páncreas",
     titulo: "Tu páncreas",
     foto: `${F}/pancreas.webp`,
-    hotspot: { top: 40.5, left: 49 },
+    hotspot: { top: 37.8, left: 54 },
     claves: [
       "Fabrica la insulina y el glucagón",
       "Suelta las enzimas que digieren grasas, proteínas e hidratos",
@@ -135,7 +141,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Bazo",
     titulo: "Tu bazo",
     foto: `${F}/bazo.webp`,
-    hotspot: { top: 39.5, left: 59 },
+    hotspot: { top: 36, left: 58 },
     claves: [
       "Retira los glóbulos rojos viejos y recicla su hierro",
       "Guarda y entrena parte de tus defensas",
@@ -149,7 +155,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Riñones",
     titulo: "Tus riñones",
     foto: `${F}/rinones.webp`,
-    hotspot: { top: 44, left: 43 },
+    hotspot: { top: 39.5, left: 43 },
     claves: [
       "Filtran unos 180 litros de sangre al día",
       "Un millón de nefronas en cada uno",
@@ -163,7 +169,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Intestinos",
     titulo: "Tus intestinos",
     foto: `${F}/intestino.webp`,
-    hotspot: { top: 48, left: 50 },
+    hotspot: { top: 44, left: 50 },
     claves: [
       "Entre siete y ocho metros de largo",
       "Más de cien millones de neuronas propias",
@@ -177,7 +183,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Huesos",
     titulo: "Tus huesos",
     foto: `${F}/huesos.webp`,
-    hotspot: { top: 77, left: 55 },
+    hotspot: { top: 76, left: 59.5 },
     claves: [
       "206 huesos sosteniéndote ahora mismo",
       "Dentro de ellos se fabrica tu sangre",
@@ -191,7 +197,7 @@ export const ORGANOS_SONRISA: OrganoSonrisa[] = [
     nombre: "Piel",
     titulo: "Tu piel",
     foto: `${F}/piel.webp`,
-    hotspot: { top: 22, left: 32 },
+    hotspot: { top: 26, left: 35 },
     claves: [
       "Tu órgano más grande: unos dos metros cuadrados",
       "Se renueva por completo cada tres o cuatro semanas",

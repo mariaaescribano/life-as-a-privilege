@@ -28,6 +28,7 @@ const PASOS: { titulo: string; path: string }[] = [
   { titulo: "Tus calorías y macros",  path: "/metodo/nutricion/calorias" },
   { titulo: "Test de prevención",    path: "/metodo/nutricion/prediabetes" },
   { titulo: "Diseña tu día",          path: "/metodo/nutricion/dia" },
+  { titulo: "Cuenta lo que comes",    path: "/metodo/nutricion/macros" },
   { titulo: "Preguntas y mitos",      path: "/metodo/nutricion/mitos" },
   { titulo: "¿De dónde vienen?",      path: "/metodo/nutricion/origen" },
   { titulo: "Cursos para profundizar", path: "/metodo/nutricion/cursos" },

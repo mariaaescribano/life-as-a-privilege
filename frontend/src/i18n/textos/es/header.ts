@@ -13,6 +13,9 @@ export const header = {
    *  entrado todavía no tiene ninguna «cuenta» que visitar. */
   "header.iniciarSesion": "Iniciar sesión",
   "header.idioma": "Cambiar idioma",
+  /** El botón de la nota. Dice lo que va a PASAR al pulsarlo, no cómo está. */
+  "header.musicaEncender": "Poner música",
+  "header.musicaApagar": "Quitar la música",
   "header.menu": "Menú",
   "header.cerrarMenu": "Cerrar menú",
 } as const;

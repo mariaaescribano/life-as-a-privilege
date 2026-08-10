@@ -336,7 +336,8 @@ export const COMICS_NUTRIENTES: Record<string, Vineta[]> = {
       ],
     },
     {
-      src: src("agua", 3),
+      // La última se repintó y llegó con su propio nombre (ya no es agua3).
+      src: "/viñetas/nutricion/agua/aguaultima.webp",
       paragraphs: [
         "El agua también te mantiene templado, porque aguanta muchísimo calor sin cambiar apenas de temperatura. Y cuando hay que enfriar, el sudor se evapora y se lleva el calor consigo.",
         "Además protege: lubrica las articulaciones, humedece los ojos, forma la saliva y rodea tu cerebro con un colchón de líquido cefalorraquídeo.",

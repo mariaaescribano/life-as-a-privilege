@@ -55,6 +55,7 @@ export const metodo = {
   "metodo.destino.hambre": "Hunger",
   "metodo.destino.plato": "Your plate",
   "metodo.destino.microbiota": "the microbiome",
+  "metodo.destino.test": "the test",
   "metodo.crearCelula": "Build the cell",
 
   // ── Food library (nutrition) ───────────────────────────────────────────

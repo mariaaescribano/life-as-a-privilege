@@ -19,12 +19,16 @@ export function NutrienteIlustracionModal({
   vinetas,
   onClose,
   leida = false,
+  initialIndex = 0,
 }: {
   isOpen: boolean;
   vinetas: Vineta[];
   onClose: () => void;
   /** La ilustración ya se había leído antes de abrirla → aviso «✓ Leída». */
   leida?: boolean;
+  /** Viñeta por la que abrir. Lo usa «El hambre», donde cada uno de los cuatro
+   *  boxes abre el visor por SU lectura y desde dentro se pasa a las demás. */
+  initialIndex?: number;
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
@@ -43,6 +47,7 @@ export function NutrienteIlustracionModal({
         {isOpen && (
           <ComicViewer
             vinetas={vinetas}
+            initialIndex={initialIndex}
             themeColor={nutricionTxt}
             textColor={nutricionTxt}
             textShadow="none"

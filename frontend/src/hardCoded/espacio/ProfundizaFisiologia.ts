@@ -78,6 +78,152 @@ const SUB = (tema: string, k: string) => `/recorrido/fisiologia/profundiza/${tem
 // ── Cómic «Cómo se sintetiza un neurotransmisor» ───────────────────────────
 // Imágenes: /viñetas/fisiologia/neurocomic/neurocomic1.png … neurocomic6.png
 // Sin encabezados (eyebrow): las viñetas van solo con su texto.
+// ── Cómic «El cáncer» ──────────────────────────────────────────────────────
+// Imágenes: /viñetas/fisiologia/cancer/cancer1.webp … cancer14.webp
+// Sin encabezados (eyebrow), como el de neurotransmisores: solo texto.
+//
+// El arco: una célula que deja de obedecer → por qué aparecen los errores →
+// aceleradores y frenos → p53 → hacen falta VARIOS fallos → qué deja de
+// obedecer → cómo se alimenta → cómo se esconde del sistema inmunitario →
+// metástasis → la edad → lo que sube la probabilidad → lo que NO la sube (y el
+// desmontaje de los mitos) → cómo se trata → cierre.
+//
+// ⚠️  TONO: mecanismo, nunca culpa. Aquí se explica una probabilidad, no una
+// lección moral: hay gente que hace todo «bien» y enferma igual. Y ninguna
+// comida, planta o práctica de este método cura un cáncer — eso se dice con
+// todas las letras en la viñeta 12, porque el Mapa tiene disciplinas que se
+// prestan a la confusión.
+const CANCER: Vineta[] = [
+  {
+    src: "/viñetas/fisiologia/cancer/cancer1.webp",
+    paragraphs: [
+      "Ahora mismo, mientras lees esto, tu cuerpo está fabricando células nuevas. Miles de millones cada día: piel, sangre, la pared de tu intestino.",
+      "Eso es lo normal. Una célula se divide cuando el tejido se lo pide, para cuando ya hay suficientes, y se muere cuando le toca para dejar sitio.",
+      "El cáncer no es un bicho que llega de fuera. Es una célula tuya que deja de hacer esas tres cosas.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer2.webp",
+    paragraphs: [
+      "Cada vez que una célula se divide tiene que copiar su manual entero: unos tres mil millones de letras de ADN.",
+      "Hay correctores que revisan la copia y arreglan casi todos los fallos. Pero «casi» no es «todos», y son muchísimas divisiones a lo largo de una vida.",
+      "La inmensa mayoría de esos errores no importan: caen en un trozo del manual que esa célula no usa, o la célula defectuosa se muere sola.",
+      "El problema aparece cuando el error cae justo en una de las instrucciones que controlan la división.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer3.webp",
+    paragraphs: [
+      "Porque la división está gobernada por dos tipos de genes, y funcionan como el coche.",
+      "Los aceleradores —los oncogenes— dicen «divídete». Los frenos —los supresores de tumores— dicen «para».",
+      "Un fallo en un acelerador lo deja pisado a fondo. Un fallo en un freno hace que no haya forma de detener el coche.",
+      "Ninguna de las dos cosas basta por separado. Un acelerador atascado con los frenos sanos se detiene igual; unos frenos rotos sin nadie pisando el acelerador no llevan a ninguna parte.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer4.webp",
+    paragraphs: [
+      "Entre los frenos hay uno que se lleva el título de «guardián del genoma»: la proteína p53.",
+      "Cuando el ADN de una célula se daña, p53 para la división en seco y da una de dos órdenes: repara esto, o mátate.",
+      "Esa segunda orden es la clave. Una célula con el manual roto que se suicida a tiempo no es un problema para nadie.",
+      "Por eso p53 aparece estropeada en cerca de la mitad de todos los cánceres humanos: sin guardián, el daño se copia en vez de borrarse.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer5.webp",
+    paragraphs: [
+      "Y aquí está lo que casi nadie tiene en la cabeza: un cáncer no es un fallo. Son varios, acumulados en la misma célula y en su descendencia.",
+      "Hacen falta unas cuantas mutaciones en los genes adecuados, y eso lleva tiempo: normalmente años, muchas veces décadas.",
+      "El cuerpo tiene, además, varias líneas de defensa en el camino: los correctores del ADN, la orden de suicidio, el sistema inmunitario.",
+      "Que el cáncer sea relativamente raro comparado con la cantidad de divisiones que haces es, en realidad, la prueba de lo bien que funcionan esas defensas.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer6.webp",
+    paragraphs: [
+      "Cuando una célula ha acumulado los fallos suficientes, deja de obedecer cuatro reglas a la vez.",
+      "Se divide sin que nadie se lo pida. Ignora las señales de las vecinas que le dicen «ya está bien, para». No se muere cuando debería. Y se vuelve inmortal.",
+      "Lo de inmortal es literal. Tus células normales tienen un contador: los telómeros, unas puntas del cromosoma que se acortan en cada división. Cuando se gastan, la célula se jubila.",
+      "La célula tumoral vuelve a encender una enzima, la telomerasa, que le reconstruye las puntas. Ha roto el contador y ya puede dividirse sin final.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer7.webp",
+    paragraphs: [
+      "Un grupo de células que se divide sin parar tiene un problema muy práctico: se queda sin comida.",
+      "Sin vasos sanguíneos cerca, un tumor no puede pasar del tamaño de una cabeza de alfiler. Las de dentro no reciben oxígeno y se mueren.",
+      "Así que hace algo extraordinario: emite señales químicas que convencen a los vasos de alrededor de construir ramas nuevas hacia él. Se fabrica su propia red de suministro.",
+      "Eso se llama angiogénesis, y es una de las cosas que hoy se pueden atacar con fármacos: cortarle la obra en vez de atacar a la célula.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer8.webp",
+    paragraphs: [
+      "También cambia su forma de sacar energía. En vez de quemar la glucosa del todo en la mitocondria, la fermenta a lo bruto aunque tenga oxígeno de sobra: es rápido, ineficiente y le sirve para fabricar piezas con las que construir células nuevas.",
+      "Consume tanta glucosa que se puede ver desde fuera: en eso se basa el PET, la prueba que ilumina los tumores dándole al paciente un azúcar marcado.",
+      "Y aquí hay que decir claramente algo que circula mucho y es falso: eso NO significa que «el azúcar alimente el cáncer» ni que quitarla lo mate de hambre.",
+      "Tu cerebro, tus glóbulos rojos y tus músculos también viven de la glucosa, y tu cuerpo la fabrica él solo aunque no comas ni un gramo. No hay dieta que le corte el suministro a un tumor.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer9.webp",
+    paragraphs: [
+      "Mientras todo esto pasa, tu sistema inmunitario está mirando. Y casi siempre gana.",
+      "Las células con el manual roto muestran por fuera proteínas raras, y hay linfocitos cuyo trabajo es reconocer eso y matarlas. Ocurre constantemente y no te enteras.",
+      "Entonces, ¿cómo crece un tumor? Porque las células que sobreviven a esa vigilancia son, por definición, las que han aprendido a esquivarla.",
+      "Algunas fabrican una señal que significa «soy de los tuyos, no me toques» y desarman al linfocito que las tenía delante.",
+      "Ahí está una de las revoluciones de la medicina reciente: la inmunoterapia no ataca al tumor, le quita el disfraz para que tus propias defensas vuelvan a verlo. Le dieron el Nobel en 2018.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer10.webp",
+    paragraphs: [
+      "Un tumor que se queda quieto donde nació suele poder quitarse. Lo que cambia el pronóstico es la metástasis.",
+      "Metastatizar es dificilísimo, y por eso tarda: la célula tiene que soltarse de sus vecinas, atravesar la pared de un vaso, sobrevivir sola dando tumbos por la sangre —una célula desprendida normalmente se suicida solo por estar fuera de su sitio—, salir por otro lado y conseguir crecer en un tejido que no es el suyo.",
+      "De todas las que lo intentan, sobreviven poquísimas. Pero basta con que lo logre una.",
+      "Por eso se insiste tanto en detectarlo pronto: no porque el tumor pequeño sea «menos malo», sino porque todavía está en un solo sitio.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer11.webp",
+    paragraphs: [
+      "Con esto ya se entiende por qué el gran factor de riesgo del cáncer es la edad, y no hay nada moral en ello.",
+      "Las mutaciones se acumulan: cada año que vives son más divisiones y más errores guardados en tus tejidos.",
+      "A la vez, el sistema inmunitario vigila peor con los años, y se van acumulando células «jubiladas» (senescentes) que sueltan señales inflamatorias y crean un ambiente en el que a una célula rebelde le resulta más fácil salir adelante.",
+      "Dicho de otro modo: el cáncer es, en buena parte, el precio de un cuerpo que lleva mucho tiempo funcionando.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer12.webp",
+    paragraphs: [
+      "Hay cosas que suben la probabilidad, y conviene saberlas sin dramatismo: son probabilidades, no sentencias.",
+      "El tabaco, con mucha diferencia el más importante de los evitables. El alcohol, que está clasificado como cancerígeno con la misma certeza que el tabaco y del que no existe una cantidad «segura» demostrada. El sol sin protección. La obesidad y la inflamación crónica. Y algunas infecciones —el virus del papiloma, las hepatitis B y C— que hoy se previenen con vacunas.",
+      "Y hay dos cosas que funcionan de verdad y no dependen de la suerte: vacunarse y hacerse los cribados cuando toca. La citología, la colonoscopia o la mamografía no evitan que aparezca: lo encuentran cuando todavía está en un sitio.",
+      "Ahora lo importante. Nada de esto es una garantía en ninguna de las dos direcciones. Hay quien fuma cuarenta años y no enferma, y hay niños de tres años con leucemia que no han hecho nada. Una parte grande del riesgo es simplemente el azar de qué letra se copió mal.",
+      "Así que si te toca, o le toca a alguien tuyo, no busques la culpa. No la hay.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer13.webp",
+    paragraphs: [
+      "Y por eso mismo hay que decir una cosa aquí, en un método que habla de alimentación, de plantas y de energía.",
+      "Cuidarte reduce probabilidades y te ayuda a llegar mejor a un tratamiento y a soportarlo. Eso es cierto y es mucho.",
+      "Pero ningún alimento, ningún ayuno, ninguna planta, ninguna respiración y ninguna «limpieza» cura un cáncer, ni sustituye a la cirugía, a la radioterapia o a la quimioterapia.",
+      "Cambiar un tratamiento que funciona por uno que no cuesta vidas, y casi siempre se lo cuesta a quien más confianza puso. Todo lo que aprendas aquí va al lado de la medicina, nunca en su lugar.",
+    ],
+  },
+  {
+    src: "/viñetas/fisiologia/cancer/cancer14.webp",
+    paragraphs: [
+      "Los tratamientos se entienden mucho mejor sabiendo todo lo anterior.",
+      "La cirugía quita el tumor cuando está localizado. La radioterapia rompe el ADN de las células de una zona concreta, y las tumorales lo reparan peor. La quimioterapia ataca a las células que se dividen deprisa: por eso funciona, y por eso da esos efectos —el pelo, las náuseas, las defensas bajas—, porque tu raíz del pelo, tu intestino y tu médula ósea también se dividen deprisa.",
+      "Y luego está lo nuevo: los fármacos dirigidos, que atacan la avería concreta de ese tumor y no a todo lo que se divide, y la inmunoterapia, que le devuelve el trabajo a tus defensas.",
+      "Por eso hoy se habla de «cánceres» en plural: no es una enfermedad, son cientos, y cada una se trata según qué se le ha roto.",
+      "Al final, todo esto es la historia de una célula tuya que olvidó las reglas. Entender cuáles eran no quita el miedo, pero cambia lo que se siente al oír la palabra: deja de ser una maldición y pasa a ser un mecanismo. Y un mecanismo se puede estudiar, detectar pronto y, cada vez más, tratar.",
+    ],
+  },
+];
+
 const NEUROTRANSMISORES_SINTESIS: Vineta[] = [
   {
     src: "/viñetas/fisiologia/neurocomic/neurocomic1.webp",
@@ -1439,6 +1585,25 @@ export const TEMAS_PROFUNDIZA: TemaProfundiza[] = [
     intro: "Una red de millones de neuronas en las paredes del tubo digestivo que dirige la digestión casi por su cuenta.",
     pista: "",
     fichas: SISTEMA_ENTERICO,
+  },
+  // El cáncer va en este bloque a propósito: se entiende apoyándose en sus
+  // vecinos —apoptosis (la orden de morir que la célula tumoral desobedece),
+  // envejecimiento (los telómeros que vuelve a alargar) e inmunitario (la
+  // vigilancia de la que aprende a esconderse)—.
+  //
+  // De momento SOLO el cómic: las fichas están por escribir, así que la rejilla
+  // sale como «en construcción» y el botón del cómic funciona igual.
+  {
+    key: "cancer",
+    label: "El cáncer",
+    resumen: "Una célula tuya que deja de obedecer.",
+    color: "#f28b8b",
+    foto: PORTADA("cancer"),
+    grupo: "Vida y muerte celular",
+    intro: "No llega de fuera: es una célula tuya que ha ido acumulando fallos hasta dejar de hacer lo que el tejido le pide.",
+    pista: "",
+    comicIntro: CANCER,
+    fichas: [],
   },
 ];
 

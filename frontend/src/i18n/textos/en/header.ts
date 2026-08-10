@@ -7,6 +7,8 @@ export const header = {
   "header.miCuenta": "My account",
   "header.iniciarSesion": "Log in",
   "header.idioma": "Change language",
+  "header.musicaEncender": "Play music",
+  "header.musicaApagar": "Turn the music off",
   "header.menu": "Menu",
   "header.cerrarMenu": "Close menu",
 };

@@ -43,8 +43,10 @@ export function ClavesRapidas({
           py={{ base: 2, md: 2.5 }}
           boxShadow="0 2px 10px rgba(0,0,0,0.28)"
         >
-          <Box flexShrink={0} w="8px" h="8px" borderRadius="full" bg={accent}
-               boxShadow={`0 0 8px ${accent}`} />
+          {/* El punto va LIMPIO, sin halo: el glow del color de la disciplina
+              está pensado para brillar sobre fondo oscuro, y aquí la caja es
+              blanca — se veía como una mancha sucia alrededor del punto. */}
+          <Box flexShrink={0} w="8px" h="8px" borderRadius="full" bg={accent} />
           <Text color={tinta} fontWeight={700} fontSize={{ base: "sm", md: "md" }}
                 lineHeight="1.3" letterSpacing="0.01em" fontFamily="'EB Garamond', serif"
                 textAlign="left">

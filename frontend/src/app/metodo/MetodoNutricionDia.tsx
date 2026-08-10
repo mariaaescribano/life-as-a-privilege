@@ -428,7 +428,7 @@ export default function MetodoNutricionDia() {
               mb={0}
               prev={{ label: "← Tu azúcar", onClick: () => navigate("/metodo/nutricion/prediabetes") }}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Preguntas y mitos →", onClick: () => navigate("/metodo/nutricion/mitos") }}
+              next={{ label: "Cuenta lo que comes →", onClick: () => navigate("/metodo/nutricion/macros") }}
             />
           </Reveal>
 

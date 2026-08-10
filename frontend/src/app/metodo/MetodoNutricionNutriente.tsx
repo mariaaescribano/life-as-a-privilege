@@ -24,10 +24,12 @@ import { NUTRIENTES, rutaListaNutriente, type Nutriente, type NutrienteTarjeta }
 // Se llega desde /metodo/nutricion/nutrientes al pulsar una tarjeta.
 //
 // Estructura (en construcción, se irá rellenando):
-//   1. Header + botón «← Volver».
+//   1. Header.
 //   2. Box grande: foto del grupo a la izquierda + título y descripción.
 //   3. Box tipo cómic: foto a la izquierda + texto a la derecha.
 //   4. Tres tarjetas.
+//   5. Botón «← Volver», abajo a la izquierda (regla de la casa: volver se
+//      ofrece al FINAL de la página, cuando ya has leído).
 // ═════════════════════════════════════════════════════════════════════════
 
 const nutrienteByKey = (key: string): Nutriente | undefined =>
@@ -36,30 +38,6 @@ const nutrienteByKey = (key: string): Nutriente | undefined =>
 // Ilustraciones (cómics) de grupo ya leídas, en metodo_nutricion.data: string[]
 // con las keys de los grupos cuyo cómic se ha abierto.
 const CAMPO_COMICS = "nutrientes_comics_leidos";
-
-// ── Iconos de los subgrupos de tarjetas ──────────────────────────────────
-// Los datos traen el subgrupo como «⚡ Electrolitos», pero el emoji no se pinta:
-// cada subgrupo tiene su icono dibujado (SVG blanco), que es lo que se ve. Si
-// algún subgrupo nuevo no está en el mapa, no se pinta icono (nunca el emoji).
-const ICONOS_SUBGRUPO: Record<string, string> = {
-  electrolitos:
-    "m480-336 128-184H494l80-280H360v320h120v144ZM400-80v-320H280v-480h400l-80 280h160L400-80Zm80-400H360h120Z",
-  minerales:
-    "m390-80-68-120H190l-90-160 68-120-68-120 90-160h132l68-120h180l68 120h132l90 160-68 120 68 120-90 160H638L570-80H390Zm248-440h86l44-80-44-80h-86l-45 80 45 80ZM438-400h84l45-80-45-80h-84l-45 80 45 80Zm0-240h84l46-81-45-79h-86l-45 79 46 81ZM237-520h85l45-80-45-80h-85l-45 80 45 80Zm0 240h85l45-80-45-80h-86l-44 80 45 80Zm200 120h86l45-79-46-81h-84l-46 81 45 79Zm201-120h85l45-80-45-80h-85l-45 80 45 80Z",
-};
-
-const IconoSubgrupo = ({ nombre }: { nombre: string }) => {
-  const d = ICONOS_SUBGRUPO[nombre.trim().toLowerCase()];
-  if (!d) return null;
-  return (
-    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-         w={{ base: "22px", md: "26px" }} h={{ base: "22px", md: "26px" }}
-         fill="#FFFFFF" flexShrink={0}
-         style={{ filter: "drop-shadow(0 1px 4px rgba(0,0,0,0.35))" }}>
-      <path d={d} />
-    </Box>
-  );
-};
 
 // Botón «← Volver» en la gama de Nutrición (verde), bajo el header. Lleva la
 // foto de la disciplina (nutri.png) de fondo, con un velo claro para que el
@@ -188,7 +166,18 @@ export default function MetodoNutricionNutriente() {
 
           // Un grupo SIN tarjetas no tiene subtipos que descubrir: con leerlo ya
           // está revisado, así que se marca al entrar (si no, nunca tendría tick).
-          if (!n.tarjetas?.length) marcarExplorado(userId, token, n.key);
+          //
+          // Y si LAS TIENE TODAS vistas pero el grupo no quedó marcado, se marca
+          // ahora. Esto repara a quien se quedó atascado: antes el tick del grupo
+          // se guardaba en un PATCH aparte del de las fichas, y si ese PATCH se
+          // perdía (dos escrituras a la vez sobre el mismo blob, o cerrar la
+          // pestaña justo después) el candado de la página siguiente no se abría
+          // NUNCA MÁS: al volver, todas las fichas constaban como leídas, así que
+          // `marcarFichaVista` salía por la primera línea y ya no se volvía a
+          // comprobar la condición.
+          if (!n.tarjetas?.length || vistas.length >= n.tarjetas.length) {
+            marcarExplorado(userId, token, n.key);
+          }
         } catch { /* sin fila todavía: se creará al guardar */ }
 
         // No mostramos la página hasta que sus fotos estén descargadas: la foto
@@ -214,16 +203,27 @@ export default function MetodoNutricionNutriente() {
       .catch(() => { /* se reintenta al volver a entrar */ });
   };
 
-  /** Da el tick a este grupo (y recalcula si ya están todos). */
-  const marcarExplorado = (userId: string, token: string, key: string) => {
+  /** Los cambios que dan el tick a este grupo. Vacío si ya lo tenía.
+   *
+   *  Devuelve los cambios en vez de guardarlos para poder mandarlos en el MISMO
+   *  PATCH que las fichas: el backend reemplaza el blob entero, así que dos
+   *  PATCH lanzados a la vez son una carrera y el que llegue último borra lo del
+   *  otro. Ese era el fallo por el que el candado no se abría. */
+  const cambiosExplorado = (key: string): Record<string, any> => {
     const explorados: string[] = Array.isArray(dataRef.current.nutrientes_explorados)
       ? dataRef.current.nutrientes_explorados : [];
-    if (explorados.includes(key)) return;
+    if (explorados.includes(key)) return {};
     const nuevos = [...explorados, key];
-    guardar(userId, token, {
+    return {
       nutrientes_explorados: nuevos,
       nutrientes_hecho: nuevos.length >= NUTRIENTES.length,
-    });
+    };
+  };
+
+  /** Da el tick a este grupo (y recalcula si ya están todos). */
+  const marcarExplorado = (userId: string, token: string, key: string) => {
+    const cambios = cambiosExplorado(key);
+    if (Object.keys(cambios).length > 0) guardar(userId, token, cambios);
   };
 
   /**
@@ -247,10 +247,15 @@ export default function MetodoNutricionNutriente() {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) return;
-    guardar(userId, token, {
+    // UN solo PATCH con las dos cosas: la ficha leída y, si con esta se completan
+    // todas, el tick del grupo. Antes iban en dos escrituras seguidas y, como el
+    // backend reemplaza el blob entero, la que llegaba última se llevaba por
+    // delante lo de la otra: las fichas quedaban marcadas y el grupo no.
+    const cambios: Record<string, any> = {
       nutrientes_fichas: { ...(dataRef.current.nutrientes_fichas ?? {}), [n.key]: vistas },
-    });
-    if (vistas.length >= n.tarjetas.length) marcarExplorado(userId, token, n.key);
+    };
+    if (vistas.length >= n.tarjetas.length) Object.assign(cambios, cambiosExplorado(n.key));
+    guardar(userId, token, cambios);
   };
 
   /**
@@ -314,11 +319,6 @@ export default function MetodoNutricionNutriente() {
               mb={0}
               extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
             />
-          </Reveal>
-
-          {/* Botón «← Volver» */}
-          <Reveal direction="up" distance={12} delay={0.08} duration={0.5} w="100%" display="flex">
-            <VolverNutri onClick={() => navigate(rutaListaNutriente(n.key))} />
           </Reveal>
 
           {/* 2 · Box de lectura con la MISMA estética que las ilustraciones
@@ -438,13 +438,13 @@ export default function MetodoNutricionNutriente() {
                       {/* Encabezado del subgrupo con línea horizontal a los lados
                           (solo si hay más de un subgrupo, p.ej. Electrolitos/Minerales). */}
                       {hayVariosSubgrupos && g.grupo && (() => {
-                        // «⚡ Electrolitos» → icono dibujado + nombre, TODO a la
-                        // izquierda, y la raya blanca ocupando el resto del ancho.
-                        // El emoji de los datos no se pinta: manda el SVG.
+                        // «⚡ Electrolitos» → SOLO el nombre a la izquierda y la
+                        // raya blanca ocupando el resto del ancho. Sin icono: el
+                        // emoji de los datos no se pinta y tampoco un SVG que lo
+                        // sustituya —el rótulo se sostiene solo—.
                         const nombre = g.grupo.split(" ").slice(1).join(" ");
                         return (
                           <Flex align="center" gap={{ base: 2.5, md: 3 }} w="100%" mb={{ base: 4, md: 5 }}>
-                            <IconoSubgrupo nombre={nombre} />
                             <Text color="white" fontWeight="800" fontSize={{ base: "md", md: "lg" }}
                                   letterSpacing="0.08em" textTransform="uppercase" whiteSpace="nowrap"
                                   style={{ textShadow: "0 1px 6px rgba(0,0,0,0.4)" }}>
@@ -467,6 +467,16 @@ export default function MetodoNutricionNutriente() {
               )}
             </Reveal>
           )}
+
+          {/* 5 · Botón «← Volver», al final y a la izquierda, como el resto del
+              recorrido: cuando terminas de mirar las tarjetas el header se ha
+              quedado arriba del todo, y volver se pide DESPUÉS de leer, no antes.
+              Va con `inView` porque queda por debajo del pliegue: con `mounted`
+              se habría animado sin que nadie lo estuviera mirando. */}
+          <Reveal inView direction="up" distance={12} delay={0.06} duration={0.5} w="100%" display="flex"
+                  mt={{ base: 2, md: 3 }}>
+            <VolverNutri onClick={() => navigate(rutaListaNutriente(n.key))} />
+          </Reveal>
 
         </Flex>
       </Flex>

@@ -210,8 +210,8 @@ const FlechaCarrusel = ({ dir, onClick }: { dir: "left" | "right"; onClick: () =
     as="button"
     onClick={onClick}
     flexShrink={0}
-    w={{ base: "36px", md: "44px" }}
-    h={{ base: "36px", md: "44px" }}
+    w={{ base: "34px", md: "38px" }}
+    h={{ base: "34px", md: "38px" }}
     borderRadius="full"
     display="flex"
     alignItems="center"
@@ -256,9 +256,9 @@ export default function MetodoCabalaSefira() {
   const [carruselDir, setCarruselDir] = useState<1 | -1>(1);
   const [autoeval, setAutoeval] = useState<number[]>([]);
   const [notaOpen, setNotaOpen] = useState(false);
-  // Estado del guardado, para poder cerrar la página diciendo si está a salvo.
+  // Estado del guardado: solo se enseña si algo falla (el "se guarda solo" ya no
+  // se pinta, el cierre de la página va limpio).
   const [guardando, setGuardando] = useState(false);
-  const [guardadoOk, setGuardadoOk] = useState(false);
   const [errorGuardado, setErrorGuardado] = useState(false);
   const [testAnswers, setTestAnswers] = useState<number[]>(() => new Array(NUM_PREGUNTAS).fill(0));
   // Copia local del `data` de metodo_cabala para poder mergear al guardar el test.
@@ -398,7 +398,6 @@ export default function MetodoCabalaSefira() {
         { data: { ...nextData, escalaTest: TEST_MAX } },
         { headers: { Authorization: `Bearer ${token}` } },
       );
-      setGuardadoOk(true);
     } catch {
       setErrorGuardado(true);
     } finally {
@@ -623,8 +622,9 @@ export default function MetodoCabalaSefira() {
                       maxW={{ base: "280px", md: "210px", lg: "240px" }}
                     />
                   )}
-                  <Flex align="center" flex="1" minW={0} w="100%" gap={{ base: 3, md: 4 }}>
-                    <FlechaCarrusel dir="left" onClick={() => pasarIntro(-1)} />
+                  <Flex align="center" flex="1" minW={0} w="100%">
+                    {/* Las flechas van ABAJO, a los lados de los puntos: deja el
+                        texto a todo el ancho y en el móvil queda más limpio. */}
                     <Flex direction="column" align="center" flex="1" minW={0} gap={5}>
                       <Text
                         key={carruselIdx}
@@ -646,24 +646,27 @@ export default function MetodoCabalaSefira() {
                       >
                         {sefira.intro[carruselIdx]}
                       </Text>
-                      <Flex gap={2}>
-                        {sefira.intro.map((_, i) => (
-                          <Box
-                            key={i}
-                            as="button"
-                            onClick={() => irAIntro(i)}
-                            w={i === carruselIdx ? "22px" : "8px"}
-                            h="8px"
-                            borderRadius="full"
-                            bg={i === carruselIdx ? cabalaTxt : "rgba(255,255,255,0.45)"}
-                            transition="all 0.25s"
-                            cursor="pointer"
-                            boxShadow={i === carruselIdx ? `0 0 10px ${cabalaTxt}` : "none"}
-                          />
-                        ))}
+                      <Flex align="center" gap={{ base: 4, md: 5 }}>
+                        <FlechaCarrusel dir="left" onClick={() => pasarIntro(-1)} />
+                        <Flex gap={2}>
+                          {sefira.intro.map((_, i) => (
+                            <Box
+                              key={i}
+                              as="button"
+                              onClick={() => irAIntro(i)}
+                              w={i === carruselIdx ? "22px" : "8px"}
+                              h="8px"
+                              borderRadius="full"
+                              bg={i === carruselIdx ? cabalaTxt : "rgba(255,255,255,0.45)"}
+                              transition="all 0.25s"
+                              cursor="pointer"
+                              boxShadow={i === carruselIdx ? `0 0 10px ${cabalaTxt}` : "none"}
+                            />
+                          ))}
+                        </Flex>
+                        <FlechaCarrusel dir="right" onClick={() => pasarIntro(1)} />
                       </Flex>
                     </Flex>
-                    <FlechaCarrusel dir="right" onClick={() => pasarIntro(1)} />
                   </Flex>
                 </Flex>
               </Box>
@@ -806,7 +809,7 @@ export default function MetodoCabalaSefira() {
                   barras crecen a la vez que se responde, así que la página
                   responde a cada nota que se escribe. */}
               {progresoDimension.length > 0 && (
-                <Flex direction={{ base: "column", md: "row" }} gap={{ base: 3, md: 8 }} mb={4}>
+                <Flex direction={{ base: "column", md: "row" }} gap={{ base: 3, md: 8 }}>
                   {progresoDimension.map((p) => {
                     const completo = p.hechas >= p.total;
                     return (
@@ -837,83 +840,68 @@ export default function MetodoCabalaSefira() {
                 </Flex>
               )}
 
-              <Flex align="center" justify="space-between" gap={4} wrap="wrap">
-                <Flex align="center" gap={2} minW="200px">
-                  {guardando ? (
-                    <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                          style={{ textShadow: INK_SHADOW }}>
-                      Guardando…
-                    </Text>
-                  ) : errorGuardado ? (
-                    <Text color="#ffb3b3" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                          style={{ textShadow: INK_SHADOW }}>
-                      No se ha podido guardar. Revisa tu conexión y vuelve a intentarlo.
-                    </Text>
-                  ) : (
-                    <Flex align="center" gap={2}>
-                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                           w="20px" h="20px" fill={cabalaTxt} flexShrink={0}>
-                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                      </Box>
-                      <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }}
-                            style={{ textShadow: INK_SHADOW }}>
-                        {guardadoOk ? "Todo guardado" : "Todo lo que escribas se guarda solo"}
-                      </Text>
-                    </Flex>
-                  )}
-                </Flex>
+            </Caja>
+          </Reveal>
 
-                <Flex gap={3} wrap="wrap">
-                  {errorGuardado && (
-                    <Box as="button"
-                         onClick={guardando ? undefined : () => void persistir(dataRef.current ?? {})}
-                         px={6} py={2.5} borderRadius="full"
-                         border={`1.5px solid ${cabalaTxt}88`} color={cabalaTxt}
-                         fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
-                         cursor={guardando ? "wait" : "pointer"} opacity={guardando ? 0.6 : 1}
-                         boxShadow={CAJA_GLOW} transition="all 0.2s"
-                         _hover={{ bg: `${cabalaTxt}1a`, borderColor: cabalaTxt }}
-                         style={{ textShadow: INK_SHADOW }}>
-                      Reintentar
-                    </Box>
-                  )}
-                  <Box as="button"
-                       onClick={siguiente.disabled ? undefined : () => void seguir()}
-                       title={siguiente.disabled ? siguiente.disabledTooltip : undefined}
-                       px={7} py={2.5} borderRadius="full"
-                       bg={siguiente.disabled ? "transparent" : `${cabalaTxt}1f`}
-                       border={`1.5px solid ${siguiente.disabled ? `${cabalaTxt}44` : cabalaTxt}`}
-                       color={siguiente.disabled ? `${cabalaTxt}66` : cabalaTxt}
-                       fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
-                       cursor={siguiente.disabled ? "not-allowed" : "pointer"}
-                       boxShadow={siguiente.disabled ? "none" : CAJA_GLOW} transition="all 0.2s"
-                       _hover={siguiente.disabled ? {} : { bg: `${cabalaTxt}33`, transform: "translateY(-1px)", boxShadow: `0 0 26px ${cabalaTxt}88` }}
-                       _active={siguiente.disabled ? {} : { transform: "scale(0.97)" }}
-                       // Al quedar la dimensión completa, el botón late: se ve que
-                       // se acaba de desbloquear sin tener que leer nada.
-                       style={{
-                         textShadow: INK_SHADOW,
-                         ...(siguiente.disabled ? {} : { animation: "cabalaListo 2.4s ease-in-out infinite" }),
-                       }}>
-                    {siguiente.label}
-                  </Box>
-                </Flex>
+          {/* El botón de seguir vive FUERA del box, abajo a la derecha; a su
+              izquierda, solo los avisos (qué falta o un fallo al guardar). */}
+          <Reveal direction="up" distance={14} delay={0.42} duration={0.55} w="100%">
+            <Flex align="center" justify="space-between" gap={4} wrap="wrap" w="100%">
+              <Flex direction="column" gap={1.5} minW={0} flex="1">
+                {errorGuardado && (
+                  <Text color="#ffb3b3" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+                    No se ha podido guardar. Revisa tu conexión y vuelve a intentarlo.
+                  </Text>
+                )}
+                {/* Si el paso está bloqueado, se dice QUÉ falta por nombre. */}
+                {siguiente.disabled && queFalta.length > 0 && (
+                  <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+                    Para seguir te queda por completar {queFalta.join(", ")}.
+                  </Text>
+                )}
+                {siguiente.disabled && queFalta.length === 0 && !contenidoSefirot && (
+                  <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+                    Para ver tu Diagnóstico falta el contenido de alguna otra sefirá.
+                  </Text>
+                )}
               </Flex>
 
-              {/* Si el paso está bloqueado, se dice QUÉ falta por nombre. */}
-              {siguiente.disabled && queFalta.length > 0 && (
-                <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={3}
-                      style={{ textShadow: INK_SHADOW }}>
-                  Para seguir te queda por completar {queFalta.join(", ")}.
-                </Text>
-              )}
-              {siguiente.disabled && queFalta.length === 0 && !contenidoSefirot && (
-                <Text color={`${cabalaTxt}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={3}
-                      style={{ textShadow: INK_SHADOW }}>
-                  Para ver tu Diagnóstico falta el contenido de alguna otra sefirá.
-                </Text>
-              )}
-            </Caja>
+              <Flex gap={3} wrap="wrap" ml="auto">
+                {errorGuardado && (
+                  <Box as="button"
+                       onClick={guardando ? undefined : () => void persistir(dataRef.current ?? {})}
+                       px={6} py={2.5} borderRadius="full"
+                       border={`1.5px solid ${cabalaTxt}88`} color={cabalaTxt}
+                       fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
+                       cursor={guardando ? "wait" : "pointer"} opacity={guardando ? 0.6 : 1}
+                       boxShadow={CAJA_GLOW} transition="all 0.2s"
+                       _hover={{ bg: `${cabalaTxt}1a`, borderColor: cabalaTxt }}
+                       style={{ textShadow: INK_SHADOW }}>
+                    Reintentar
+                  </Box>
+                )}
+                <Box as="button"
+                     onClick={siguiente.disabled ? undefined : () => void seguir()}
+                     title={siguiente.disabled ? siguiente.disabledTooltip : undefined}
+                     px={7} py={2.5} borderRadius="full"
+                     bg={siguiente.disabled ? "transparent" : `${cabalaTxt}1f`}
+                     border={`1.5px solid ${siguiente.disabled ? `${cabalaTxt}44` : cabalaTxt}`}
+                     color={siguiente.disabled ? `${cabalaTxt}66` : cabalaTxt}
+                     fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
+                     cursor={siguiente.disabled ? "not-allowed" : "pointer"}
+                     boxShadow={siguiente.disabled ? "none" : CAJA_GLOW} transition="all 0.2s"
+                     _hover={siguiente.disabled ? {} : { bg: `${cabalaTxt}33`, transform: "translateY(-1px)", boxShadow: `0 0 26px ${cabalaTxt}88` }}
+                     _active={siguiente.disabled ? {} : { transform: "scale(0.97)" }}
+                     // Al quedar la dimensión completa, el botón late: se ve que
+                     // se acaba de desbloquear sin tener que leer nada.
+                     style={{
+                       textShadow: INK_SHADOW,
+                       ...(siguiente.disabled ? {} : { animation: "cabalaListo 2.4s ease-in-out infinite" }),
+                     }}>
+                  {siguiente.label}
+                </Box>
+              </Flex>
+            </Flex>
           </Reveal>
         </Flex>
       </Flex>

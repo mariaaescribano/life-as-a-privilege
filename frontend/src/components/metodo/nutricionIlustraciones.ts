@@ -5,7 +5,7 @@ import { NUTRICION_INTRO } from "./comicNutricionIntro";
 import { NUTRICION_CALORIAS } from "./comicNutricionCalorias";
 import { NUTRICION_MICROBIOTA } from "./comicNutricionMicrobiota";
 import { NUTRICION_INTEGRAL } from "./comicNutricionIntegral";
-import { HAMBRE_HOLISTICA } from "./hambreHolistica";
+import { HAMBRE_HOLISTICA, sinNegrita } from "./hambreHolistica";
 import { COMICS_NUTRIENTES } from "./comicsNutrientes";
 import { ORIGEN_NUTRIENTES } from "./comicsOrigenNutrientes";
 import { NUTRIENTES } from "../../hardCoded/espacio/NutrientesNutricion";
@@ -18,11 +18,6 @@ import { NUTRIENTES } from "../../hardCoded/espacio/NutrientesNutricion";
 // ─────────────────────────────────────────────────────────────────────────
 
 const NUTRI_BG_IMG = "/img/fondos/nutri.webp";
-
-// El visor de cómic (ComicViewer) pinta los párrafos en plano, sin markdown.
-// Quitamos los **…** de las negritas para que no salgan los asteriscos literales.
-const sinNegrita = (vinetas: Vineta[]): Vineta[] =>
-  vinetas.map((v) => ({ ...v, paragraphs: v.paragraphs.map((p) => p.replace(/\*\*/g, "")) }));
 
 // Construye una entrada de galería con el tema de Nutrición (acento claro +
 // letra oscura, sin sombra) y la portada = última viñeta del cómic (o la que se

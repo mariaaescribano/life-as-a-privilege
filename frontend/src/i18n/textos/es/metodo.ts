@@ -66,6 +66,7 @@ export const metodo = {
   "metodo.destino.hambre": "El hambre",
   "metodo.destino.plato": "Tu plato",
   "metodo.destino.microbiota": "la microbiota",
+  "metodo.destino.test": "el test",
   "metodo.crearCelula": "Crea la célula",
 
   // ── Biblioteca de alimentos (nutrición) ────────────────────────────────

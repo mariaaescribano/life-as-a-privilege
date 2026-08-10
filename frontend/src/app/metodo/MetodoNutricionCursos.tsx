@@ -1,41 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal, Float } from "../../components/global/Reveal";
+import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
+import { AppleLoader } from "../../components/metodo/AppleLoader";
+import { useCursosData } from "../../data/cursosApi";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL,
   nutricionBg,
   nutricionNom,
+  nutricionNomLink,
   nutricionTxt,
   NutricionIcon,
   noSelectSx,
 } from "../../GlobalVariables";
 
 // ── Cursos para profundizar (Nutrición) ─────────────────────────────────────
-// Página-hub que va DESPUÉS de «¿De dónde vienen los nutrientes?». Aquí se listarán los cursos
-// avanzados de Nutrición. De momento no hay ninguno: se deja el enrutado y el
-// diseño listos; basta con ir añadiendo objetos a CURSOS y el resto funciona solo.
-// Su «siguiente» arranca la 7ª disciplina: Cábala.
-interface Curso {
-  key: string;
-  titulo: string;
-  resumen: string;
-  foto?: string;
-  ruta?: string;
-  proximamente?: boolean;
-}
-
-// Aún no hay cursos de Nutrición. Al añadir objetos aquí, aparecerán solos.
-const CURSOS: Curso[] = [];
+// Página-hub que va DESPUÉS de «¿De dónde vienen los nutrientes?». Su
+// «siguiente» arranca la 7ª disciplina: Cábala.
+//
+// Los cursos NO se escriben aquí: salen del CATÁLOGO (tabla `curso`, vía
+// useCursosData), igual que en el resto de disciplinas. Antes había un array
+// local vacío y por eso la página enseñaba «estoy preparando los cursos»
+// mientras el curso de Nutrición ya existía en el catálogo. Al publicar uno
+// nuevo aparece solo, sin tocar este archivo.
 
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
 const Candado = ({ size }: { size: any }) => (
@@ -46,74 +44,13 @@ const Candado = ({ size }: { size: any }) => (
   </Box>
 );
 
-// ── Tarjeta de un curso ──────────────────────────────────────────────────────
-function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
-  const [imgErr, setImgErr] = useState(false);
-  const bloqueado = !!curso.proximamente || !curso.ruta;
-  return (
-    <Box
-      as={bloqueado ? "div" : "button"}
-      onClick={bloqueado ? undefined : onEnter}
-      position="relative"
-      w="100%"
-      h="100%"
-      borderRadius="2xl"
-      overflow="hidden"
-      cursor={bloqueado ? "default" : "pointer"}
-      aria-disabled={bloqueado}
-      opacity={bloqueado ? 0.78 : 1}
-      boxShadow={bloqueado
-        ? "inset 0 0 24px rgba(0,0,0,0.35)"
-        : `0 0 16px ${nutricionTxt}22, 0 0 40px ${nutricionTxt}14, inset 0 0 24px rgba(0,0,0,0.22)`}
-      transition="all 0.25s ease"
-      _hover={bloqueado ? undefined : {
-        transform: "translateY(-6px)",
-        boxShadow: `0 0 26px ${nutricionTxt}66, 0 0 64px ${nutricionTxt}33, inset 0 0 24px rgba(0,0,0,0.2)`,
-      }}
-      _active={bloqueado ? undefined : { transform: "translateY(-2px)" }}
-    >
-      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl"
-                         overlay={bloqueado ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0.45)"} />
-
-      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
-            p={{ base: 4, md: 5 }} h="100%">
-        <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-             bg="rgba(255,255,255,0.14)" boxShadow="0 4px 16px rgba(0,0,0,0.28)"
-             display="flex" alignItems="center" justifyContent="center">
-          {curso.foto && !imgErr ? (
-            <Image src={encodeURI(curso.foto)} alt={curso.titulo} w="100%" h="100%" objectFit="cover"
-                   onError={() => setImgErr(true)} />
-          ) : (
-            <Text color="white" fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-              {curso.titulo.charAt(0)}
-            </Text>
-          )}
-        </Box>
-        <Text color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }} textAlign="center"
-              lineHeight="1.25" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
-          {curso.titulo}
-        </Text>
-        <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
-              textAlign="center" lineHeight="1.5" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-          {curso.resumen}
-        </Text>
-        <Box flex="1" minH={{ base: 1, md: 2 }} />
-        <Text color="rgba(255,255,255,0.9)" fontSize="2xs" fontWeight={700} letterSpacing="0.12em"
-              textTransform="uppercase">
-          {bloqueado ? "Próximamente" : "Entrar →"}
-        </Text>
-      </Flex>
-    </Box>
-  );
-}
-
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionCursos() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // ¿Ha pagado ya la Cábala? (7ª disciplina, el siguiente paso tras Nutrición).
   const [cabalaSuscrito, setCabalaSuscrito] = useState(false);
+  const { cursosData, loading: cursosLoading } = useCursosData();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -135,6 +72,13 @@ export default function MetodoNutricionCursos() {
       }
     })();
   }, [navigate]);
+
+  // Los cursos publicados de Nutrición, el más nuevo primero.
+  const cursos = [...(cursosData[nutricionNomLink]?.cursos ?? [])].sort(
+    (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
+  );
+  // No se pintan las tarjetas hasta tener sus portadas: si no, aparecen a trozos.
+  const fotosListas = usePrecargarImagenes(cursos.map((c) => c.foto));
 
   if (loading) {
     return <NutricionLoading />;
@@ -172,14 +116,25 @@ export default function MetodoNutricionCursos() {
             </Text>
           </Reveal>
 
-          {CURSOS.length > 0 ? (
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {CURSOS.map((c, i) => (
-                <Reveal inView key={c.key} direction="up" distance={20} delay={0.06 * i} duration={0.55} w="100%" display="flex">
-                  <CursoBox curso={c} onEnter={() => { if (c.ruta) { recordarOrigenCurso(); navigate(c.ruta); } }} />
-                </Reveal>
-              ))}
-            </SimpleGrid>
+          {/* El catálogo manda. Mientras carga, la animación de Nutrición; con un
+              solo curso, su tarjeta centrada (no una rejilla de tres huecos con
+              dos vacíos); con varios, la rejilla común. */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          {cursosLoading || !fotosListas ? (
+            <Flex direction="column" align="center" justify="center" gap={4} w="100%"
+                  minH={{ base: "260px", md: "340px" }}>
+              <AppleLoader />
+            </Flex>
+          ) : cursos.length === 1 ? (
+            <Flex w="100%" justify="center">
+              <Box w="100%" maxW="520px">
+                <CursoCardDetalle curso={cursos[0]} bgColor={nutricionBg} color={nutricionTxt} nom={nutricionNom} />
+              </Box>
+            </Flex>
+          ) : cursos.length > 1 ? (
+            <CursosGrid
+              items={cursos.map((curso) => ({ curso, color: nutricionTxt, bgColor: nutricionBg, nom: nutricionNom }))}
+            />
           ) : (
             /* ── Aún no hay cursos: estado vacío elegante ── */
             <Reveal inView direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
@@ -200,6 +155,7 @@ export default function MetodoNutricionCursos() {
               </Flex>
             </Reveal>
           )}
+          </Reveal>
 
         </Flex>
       </Flex>
