@@ -104,14 +104,14 @@ function DoshaCard({
       overflow="hidden"
       borderRadius="3xl"
       h="100%"
-      border={`1.5px solid ${c}88`}
+      // Sin filo de color (ni borde ni aro de 1px): lo que da cuerpo a la caja
+      // es el halo del doṣha, que al pasar por encima crece.
       sx={{
-        boxShadow: `0 0 0 1px ${c}33, 0 0 28px ${c}3d, 0 0 70px ${c}1f`,
-        transition: "transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease",
+        boxShadow: `0 0 28px ${c}3d, 0 0 70px ${c}1f`,
+        transition: "transform 0.35s ease, box-shadow 0.35s ease",
         _hover: {
           transform: "translateY(-6px)",
-          borderColor: c,
-          boxShadow: `0 0 0 1px ${c}66, 0 0 40px ${c}88, 0 0 92px ${c}44`,
+          boxShadow: `0 0 40px ${c}88, 0 0 92px ${c}44`,
         },
       }}
     >

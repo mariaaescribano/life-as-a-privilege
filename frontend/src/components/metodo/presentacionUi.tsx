@@ -29,23 +29,24 @@ export const BLANCO_GLOW =
 export const BLANCO_GLOW_SUAVE =
   "0 0 10px rgba(255,255,255,0.41), 0 0 21px rgba(255,255,255,0.22)";
 
-/** Caja con el estilo de la disciplina: su foto de fondo, su borde y su halo.
- *  Todo el texto de dentro va en el color `txt` de la disciplina. */
+/** Caja con el estilo de la disciplina: su foto de fondo y su halo.
+ *  Todo el texto de dentro va en el color `txt` de la disciplina.
+ *
+ *  SIN FILO, todas y en todas las disciplinas: ni `border` ni el aro de `0 0 0
+ *  1px` del boxShadow (el aro dibujaba la misma línea que el borde). Antes había
+ *  un `sinBorde` para pedirlo caja a caja; ahora es la única forma que hay, así
+ *  que la prop se fue. La caja se define por su halo, como el header. */
 export function CajaDisciplina({
   d,
   children,
   destacada = false,
   compacta = false,
-  sinBorde = false,
   radio = "3xl",
   ...rest
 }: {
   d: PresentacionDisciplina;
   /** Halo más presente: la caja final (crear cuenta), la de precio. */
   destacada?: boolean;
-  /** Sin filo de color: se va el borde y también el aro de 1px del boxShadow
-   *  (que es el que seguía dibujando la línea). Queda solo el halo suave. */
-  sinBorde?: boolean;
   /** Menos aire por dentro: cajas que van en rejilla. */
   compacta?: boolean;
   /** Radio del borde. La capa de fondo tiene que recortarse con el MISMO, si no
@@ -61,13 +62,10 @@ export function CajaDisciplina({
       borderRadius={radio}
       w="100%"
       bg={hasBg ? "transparent" : d.bg + "f0"}
-      border={sinBorde ? undefined : `1.5px solid ${d.txt}${destacada ? "99" : "66"}`}
       boxShadow={
-        sinBorde
+        destacada
           ? `0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`
-          : destacada
-          ? `0 0 0 1px ${d.txt}55, 0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`
-          : `0 0 0 1px ${d.txt}44, 0 0 30px ${d.txt}3d, 0 0 64px ${d.txt}1f`
+          : `0 0 30px ${d.txt}3d, 0 0 64px ${d.txt}1f`
       }
       {...rest}
     >
@@ -496,7 +494,7 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
   return (
     <>
     <Reveal inView direction="up" distance={24} scaleFrom={0.97} duration={0.75} w="100%">
-      <CajaDisciplina d={d} destacada sinBorde>
+      <CajaDisciplina d={d} destacada>
         <Flex direction="column" align="center" gap={{ base: 5, md: 7 }} textAlign="center">
           <Text
             color={d.txt}

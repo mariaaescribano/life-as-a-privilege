@@ -57,15 +57,23 @@ const MITOS_MUESTRA = [
 /** De los once nutrientes se enseñan los CUATRO primeros: dentro están todos. */
 const NUTRIENTES_MUESTRA = NUTRIENTES.slice(0, 4);
 
-/** Mosaico de muestra: unas cuantas fotos bonitas de lo que hay dentro. No se
- *  abren (ver MosaicoMuestra). ✍️ Cambia las fotos o los títulos a gusto. */
+/** Mosaico de muestra: SEIS acuarelas de lo que hay dentro (tres filas de dos).
+ *  No se abren (ver MosaicoMuestra). ✍️ Cambia las fotos o los títulos a gusto.
+ *
+ *  Criterio para elegirlas —y por lo que se cambiaron las de antes (las portadas
+ *  de `/portadas`, que eran collages de fotos)—: acuarelas de las series de
+ *  viñetas, SIN texto ni etiquetas dentro. En un cuadrado pequeño cualquier
+ *  rótulo se vuelve ilegible y ensucia; también se descartan las viñetas
+ *  partidas en dos (los «antes / después»), que recortadas no se entienden. */
 const FOTOS_MUESTRA: { foto: string; tituloKey: ClaveTexto }[] = [
   // El título va como CLAVE: este array es de nivel de módulo y un texto ya
   // traducido se quedaría congelado en el idioma de arranque.
-  { foto: "/recorrido/nutricion/bacterias/bifidobacterium.webp", tituloKey: "presentacion.nutri.microbiota" },
-  { foto: "/recorrido/nutricion/portadas/agua.webp", tituloKey: "presentacion.nutri.agua" },
-  { foto: "/recorrido/nutricion/portadas/fibra.webp", tituloKey: "presentacion.nutri.fibra" },
-  { foto: "/recorrido/nutricion/portadas/fitoquimico.webp", tituloKey: "presentacion.nutri.fitoquimicos" },
+  { foto: "/viñetas/nutricion/intro/nutricomic1.webp", tituloKey: "presentacion.nutri.deDondeViene" },
+  { foto: "/viñetas/nutricion/biologia/fruta/fruta1.webp", tituloKey: "presentacion.nutri.deLaFlorAlFruto" },
+  { foto: "/recorrido/nutricion/hambre/hambre1.webp", tituloKey: "presentacion.nutri.microbiota" },
+  { foto: "/viñetas/nutricion/agua/agua1.webp", tituloKey: "presentacion.nutri.agua" },
+  { foto: "/viñetas/nutricion/fitoquimicos/fitoquimicos1.webp", tituloKey: "presentacion.nutri.fitoquimicos" },
+  { foto: "/recorrido/nutricion/hambre/hambre2.webp", tituloKey: "presentacion.nutri.elHambre" },
 ];
 
 /** Lo que hay dentro, en tres ideas. ✍️ Textos editables. */

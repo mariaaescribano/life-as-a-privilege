@@ -37,6 +37,7 @@ import { VINETAS_SIGNOS, VINETAS_CASAS, VINETAS_PLANETAS } from "./ComicAstrolog
 import { HISTORIA_ASTROLOGIA } from "./comicHistoriaAstrologia";
 import { ESTRELLA_ATOMOS } from "./comicEstrellaAtomos";
 import { CELULA_VIVA } from "./comicCelulaViva";
+import { CELULAS_ORGANOS } from "./comicCelulasOrganos";
 import { ORIGEN_NUTRIENTES } from "./comicsOrigenNutrientes";
 import { CABALA_INTRO } from "./comicCabalaIntro";
 import { CABALA_ILUSTRACIONES_VINETAS } from "./cabalaIlustraciones";
@@ -180,6 +181,20 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplina: "Fisiología",
     cover: "/viñetas/fisiologia/celulacomic/celula1.webp",
     vinetas: CELULA_VIVA,
+    themeColor: fisiologiaTxt,
+    disciplinaBgImage: "/img/fondos/fisio.webp",
+    disciplinaBgColor: fisiologiaBg,
+  },
+  {
+    // Cuarta serie de Fisiología. La presentación (/d/fisiologia) enseña las
+    // ilustraciones en una rejilla de CUATRO y con tres se quedaba un hueco;
+    // esta sigue además el orden de la historia: la estrella, la célula y cómo
+    // esa célula se convierte en un cuerpo entero.
+    id: "fisio-cigoto",
+    titulo: "De una célula a un órgano",
+    disciplina: "Fisiología",
+    cover: "/viñetas/fisiologia/cigoto/cigoto1.webp",
+    vinetas: CELULAS_ORGANOS,
     themeColor: fisiologiaTxt,
     disciplinaBgImage: "/img/fondos/fisio.webp",
     disciplinaBgColor: fisiologiaBg,

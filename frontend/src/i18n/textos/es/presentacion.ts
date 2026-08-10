@@ -47,6 +47,8 @@ export const presentacion = {
 
   // ── Cábala ─────────────────────────────────────────────────────────────
   "presentacion.cabala.arbol": "El Árbol de la Vida",
+  // YA NO SE PINTA: iba encima del Árbol, dentro de su caja, y lo descentraba.
+  // Se deja escrito por si vuelve (en /d/cabala, bloque 3).
   "presentacion.cabala.arbolTexto":
     "Diez dimensiones y una más oculta —Da'at— unidas por veintidós senderos. No es un adorno: es un mapa del alma humana con más de mil años de estudio. **Pulsa cualquiera y la lees.**",
 
@@ -70,10 +72,14 @@ export const presentacion = {
   "presentacion.nutri.nutrientesTexto":
     "Estas son las moléculas que componen lo que comes: pulsa cualquiera y lee qué hace de verdad dentro de ti.",
   "presentacion.nutri.mitoOVerdad": "Mito o verdad",
+  // Pies del mosaico de muestra de /d/nutricion (seis acuarelas).
   "presentacion.nutri.microbiota": "Microbiota",
   "presentacion.nutri.agua": "Agua",
   "presentacion.nutri.fibra": "Fibra",
   "presentacion.nutri.fitoquimicos": "Fitoquímicos",
+  "presentacion.nutri.deDondeViene": "De dónde viene",
+  "presentacion.nutri.deLaFlorAlFruto": "De la flor al fruto",
+  "presentacion.nutri.elHambre": "El hambre",
   "presentacion.nutri.dentro": "Dentro conocerás los secretos de la nutrición…",
 
   // ── Psicología ─────────────────────────────────────────────────────────
@@ -88,7 +94,7 @@ export const presentacion = {
   // ── Medicina China ─────────────────────────────────────────────────────
   "presentacion.tcm.cincoElementos": "Los Cinco Elementos",
   "presentacion.tcm.elementosTexto":
-    "Madera, Fuego, Tierra, Metal y Agua. Cinco energías que te habitan y que se sostienen y se frenan entre ellas. Ningún síntoma aparece aislado: aparece en un sistema.",
+    "Ningún síntoma aparece aislado: aparece en un sistema.",
   "presentacion.tcm.comoSeRelacionan": "Cómo se relacionan",
   // Los nombres en pinyin (Sheng, Ke) y los hanzi no se traducen.
   "presentacion.tcm.cicloSheng": "Ciclo generador",

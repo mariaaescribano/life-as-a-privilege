@@ -228,8 +228,9 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
                 h="100%"
                 borderRadius="3xl"
                 overflow="hidden"
-                border={`1.5px solid ${d.txt}66`}
-                boxShadow={`0 0 0 1px ${d.txt}55, 0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
+                // Sin filo (ni borde ni aro de 1px): las cajas de las
+                // presentaciones se definen por el halo, no por la línea.
+                boxShadow={`0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
               >
                 <DisciplinaBgLayer nom={astrologiaNom} borderRadius="3xl" />
                 <Flex

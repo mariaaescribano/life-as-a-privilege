@@ -62,6 +62,9 @@ export const presentacion = {
   "presentacion.nutri.agua": "Water",
   "presentacion.nutri.fibra": "Fiber",
   "presentacion.nutri.fitoquimicos": "Phytochemicals",
+  "presentacion.nutri.deDondeViene": "Where it comes from",
+  "presentacion.nutri.deLaFlorAlFruto": "From flower to fruit",
+  "presentacion.nutri.elHambre": "Hunger",
   "presentacion.nutri.dentro": "Inside you'll learn what nutrition really hides…",
 
   // ── Psychology ─────────────────────────────────────────────────────────

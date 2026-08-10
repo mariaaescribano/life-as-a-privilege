@@ -108,7 +108,10 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
   // Geometría del anillo, en fracción del lado del cuadrado.
   const R = 0.345;          // radio del anillo
   const dCirculo = 0.20;    // diámetro de cada círculo
-  const dCentro = 0.235;    // diámetro del mandala del centro
+  // Diámetro del centro. Algo más grande que los círculos del anillo porque
+  // dentro van DOS cosas (el mandala y el «TÚ» debajo); el borde interior de las
+  // piezas está a 0.245 del centro, así que hay sitio de sobra.
+  const dCentro = 0.27;
 
   const px = (f: number) => `${Math.round(lado * f)}px`;
 
@@ -199,9 +202,11 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
           />
         </Box>
 
-        {/* ── EL CENTRO ──
+        {/* ── EL CENTRO · EL MANDALA Y EL «TÚ» ──
+            El anillo son las ocho disciplinas y quien las mira desde el medio es
+            quien lee: por eso el centro lleva el mandala y, DEBAJO, un «TÚ».
             Apagado mientras el mapa se arma; al completarse se enciende y late
-            despacio: es «Life as a Privilege» en el medio de las ocho. */}
+            despacio. */}
         <Flex
           position="absolute"
           left="50%"
@@ -210,8 +215,10 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
           w={px(dCentro)}
           h={px(dCentro)}
           borderRadius="full"
+          direction="column"
           align="center"
           justify="center"
+          gap={px(0.006)}
           bg="rgba(255,255,255,0.06)"
           border={`${Math.max(2, Math.round(lado * 0.006))}px solid ${completo ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.35)"}`}
           sx={{ backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
@@ -225,13 +232,36 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
           <Image
             src="/img/icono/life.png"
             alt=""
-            w="68%"
-            h="68%"
+            w="46%"
+            h="46%"
             objectFit="contain"
+            flexShrink={0}
             opacity={completo ? 1 : 0.5}
             transition="opacity 0.8s ease"
             style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))" }}
           />
+
+          {/* El «TÚ», debajo del mandala y centrado. El espaciado entre letras se
+              añade también DETRÁS de la última, así que la palabra queda medio
+              hueco a la izquierda del centro: el `pl` del mismo tamaño la
+              devuelve al medio. */}
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={px(0.032)}
+            lineHeight="1"
+            letterSpacing="0.18em"
+            pl="0.18em"
+            textTransform="uppercase"
+            textAlign="center"
+            whiteSpace="nowrap"
+            opacity={completo ? 1 : 0.6}
+            transition="opacity 0.8s ease"
+            textShadow="0 0 10px rgba(255,255,255,0.45), 0 1px 3px rgba(0,0,0,0.35)"
+          >
+            {t("elMetodo.mandalaTu")}
+          </Text>
         </Flex>
 
         {/* ── LAS OCHO PIEZAS ── */}

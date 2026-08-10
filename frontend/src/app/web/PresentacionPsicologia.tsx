@@ -293,14 +293,14 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
                 py={{ base: 4, md: 6 }}
                 textAlign="center"
                 borderRadius="2xl"
-                border={`1.5px solid ${d.txt}66`}
+                // Sin filo (ni borde ni aro de 1px): igual que el resto de las
+                // cajas de las presentaciones, solo el halo.
                 sx={{
-                  boxShadow: `0 0 0 1px ${d.txt}33, 0 0 26px ${d.txt}3d, 0 0 60px ${d.txt}1f`,
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
+                  boxShadow: `0 0 26px ${d.txt}3d, 0 0 60px ${d.txt}1f`,
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
                   _hover: {
                     transform: "translateY(-5px)",
-                    borderColor: d.txt,
-                    boxShadow: `0 0 0 1px ${d.txt}55, 0 0 34px ${d.txt}77, 0 0 76px ${d.txt}44`,
+                    boxShadow: `0 0 34px ${d.txt}77, 0 0 76px ${d.txt}44`,
                   },
                 }}
               >
