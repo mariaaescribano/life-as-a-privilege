@@ -85,12 +85,19 @@ export const MOLECULAS: Record<string, Molecula> = {
   calcio:         { key: "calcio", nombre: "Calcio", grupo: "mineral", funcion: "constructora", queHace: "Construye huesos y dientes; también mueve músculos y nervios." },
   potasio:        { key: "potasio", nombre: "Potasio", grupo: "mineral", funcion: "protectora", queHace: "Equilibra el sodio y ayuda a regular la tensión arterial." },
   magnesio:       { key: "magnesio", nombre: "Magnesio", grupo: "mineral", funcion: "protectora", queHace: "Participa en cientos de reacciones: energía, músculo y descanso." },
+  zinc:           { key: "zinc", nombre: "Zinc", grupo: "mineral", funcion: "constructora", queHace: "Repara tejidos, cierra heridas y sostiene tus defensas; abunda en los frutos secos y el marisco." },
+  yodo:           { key: "yodo", nombre: "Yodo", grupo: "mineral", funcion: "constructora", queHace: "El tiroides lo necesita para fabricar sus hormonas, las que marcan el ritmo al que quemas." },
+  selenio:        { key: "selenio", nombre: "Selenio", grupo: "mineral", funcion: "protectora", queHace: "Antioxidante en forma de mineral: protege tus células y ayuda al tiroides." },
+  fosfato:        { key: "fosfato", nombre: "Fosfatos", grupo: "mineral", funcion: "danina", queHace: "Los da el ácido fosfórico de los refrescos de cola: en exceso compiten con el calcio de tus huesos." },
   // Fitoquímicos
   quercetina:     { key: "quercetina", nombre: "Quercetina", grupo: "fitoquimico", funcion: "protectora", queHace: "Un polifenol antioxidante y antiinflamatorio de frutas y verduras." },
   polifenoles:    { key: "polifenoles", nombre: "Polifenoles", grupo: "fitoquimico", funcion: "protectora", queHace: "Familia de antioxidantes vegetales que protegen tus células del desgaste." },
   teobromina:     { key: "teobromina", nombre: "Teobromina", grupo: "fitoquimico", funcion: "protectora", queHace: "El estimulante suave del cacao, primo de la cafeína; también es antioxidante." },
+  carotenoides:   { key: "carotenoides", nombre: "Carotenoides", grupo: "fitoquimico", funcion: "protectora", queHace: "El pigmento naranja de la batata o la zanahoria; tu cuerpo lo convierte en vitamina A." },
+  isoflavonas:    { key: "isoflavonas", nombre: "Isoflavonas", grupo: "fitoquimico", funcion: "protectora", queHace: "Los fitoestrógenos de la soja: se parecen a tus estrógenos pero son muchísimo más suaves." },
   // Otros
   cafeina:        { key: "cafeina", nombre: "Cafeína", grupo: "otro", funcion: "protectora", queHace: "Estimulante del café: mejora el estado de alerta y aporta antioxidantes. En exceso, nerviosismo e insomnio." },
+  etanol:         { key: "etanol", nombre: "Etanol", grupo: "otro", funcion: "danina", queHace: "El alcohol de las bebidas. No es hidrato, ni grasa, ni proteína: es una molécula aparte que da 7 kcal por gramo y que tu hígado tiene que desmontar antes que nada." },
   agua:           { key: "agua", nombre: "Agua", grupo: "otro", funcion: "protectora", queHace: "El medio donde ocurre todo; los alimentos frescos son, sobre todo, agua." },
 };
 
@@ -103,7 +110,7 @@ Object.values(MOLECULAS).forEach((m) => {
 
 // ── Grupos de alimentos (pestañas del hub) ──────────────────────────────────
 export type GrupoAlimento =
-  | "fruta" | "verdura" | "legumbre" | "proteina" | "cereal"
+  | "fruta" | "verdura" | "legumbre" | "proteina" | "proteina-vegetal" | "cereal"
   | "grasa" | "frutos-secos" | "lacteo" | "otros" | "ultraprocesado";
 
 export const GRUPOS_ALIMENTOS: { key: GrupoAlimento; label: string }[] = [
@@ -111,6 +118,9 @@ export const GRUPOS_ALIMENTOS: { key: GrupoAlimento; label: string }[] = [
   { key: "verdura", label: "Verdura" },
   { key: "legumbre", label: "Legumbres" },
   { key: "proteina", label: "Proteína animal" },
+  // El tofu es soja y el seitán es trigo: ni legumbre ni cereal como se comen,
+  // y desde luego no proteína animal. Grupo propio para no forzarlos.
+  { key: "proteina-vegetal", label: "Proteína vegetal" },
   { key: "cereal", label: "Cereales" },
   { key: "grasa", label: "Grasas" },
   { key: "frutos-secos", label: "Frutos secos" },
@@ -205,14 +215,34 @@ export const ALIMENTOS: Alimento[] = [
   { key: "esparragos", nombre: "Espárragos", grupo: "verdura", emoji: "🌿", resumen: "Ricos en folato y fibra.",
     macros: { carbohidrato: 55, proteina: 35, grasa: 10 },
     moleculas: ["folato", "fibrasoluble", "fibrainsoluble", "vitamina-c", "vitamina-a", "potasio", "agua"] },
+  { key: "batata", nombre: "Batata", grupo: "verdura", emoji: "🍠", resumen: "Almidón dulce con muchísima vitamina A.",
+    descripcion: "La batata (o boniato) es la verdura que más se parece a un cereal: casi todo almidón. Lo que la separa de una patata es el naranja —carotenoides a espuertas, que tu cuerpo convierte en vitamina A— y su fibra, que hace que ese almidón entre más despacio de lo que su dulzor promete.",
+    macros: { carbohidrato: 92, proteina: 7, grasa: 1 },
+    moleculas: [
+      { key: "almidon", pct: 17 },
+      { key: "agua", pct: 77 },
+      { key: "fibrasoluble", pct: 2 },
+      { key: "carotenoides", pct: 1 },
+      "vitamina-a", "vitamina-c", "potasio",
+    ] },
 
   // ── Legumbres ──
   { key: "soja", nombre: "Soja", grupo: "legumbre", emoji: "🫛", resumen: "Proteína vegetal completa.",
     macros: { carbohidrato: 30, proteina: 40, grasa: 30 },
-    moleculas: ["proteina", "aminoacidos-esenciales", "fibrasoluble", "fibrainsoluble", "grasa-monoinsaturada", "hierro", "calcio", "folato"] },
+    moleculas: ["proteina", "aminoacidos-esenciales", "fibrasoluble", "fibrainsoluble", "grasa-monoinsaturada", "isoflavonas", "hierro", "calcio", "folato"] },
   { key: "garbanzos", nombre: "Garbanzos", grupo: "legumbre", emoji: "🫘", resumen: "Proteína vegetal con fibra y hierro.",
     macros: { carbohidrato: 60, proteina: 25, grasa: 15 },
     moleculas: ["proteina", "almidon", "fibrasoluble", "fibrainsoluble", "hierro", "folato", "magnesio"] },
+  { key: "lentejas", nombre: "Lentejas", grupo: "legumbre", emoji: "🍲", resumen: "Proteína y hierro con casi nada de grasa.",
+    descripcion: "La legumbre más magra: proteína y almidón sin apenas grasa. Su hierro es vegetal y cuesta más de absorber que el de la carne, así que un chorrito de limón o un tomate al lado —vitamina C— multiplican lo que de verdad te llevas.",
+    macros: { carbohidrato: 65, proteina: 31, grasa: 4 },
+    moleculas: ["proteina", "almidon", "fibrasoluble", "fibrainsoluble", "hierro", "folato", "magnesio", "potasio"] },
+
+  // ── Proteína vegetal ──
+  { key: "tofu-seitan", nombre: "Tofu y seitán", grupo: "proteina-vegetal", emoji: "🥢", resumen: "Proteína vegetal concentrada: soja prensada y gluten.",
+    descripcion: "Dos cosas distintas que se usan igual. El tofu es soja cuajada y prensada: proteína completa, calcio y grasa buena. El seitán es gluten de trigo puro: mucha más proteína aún, pero incompleta —le falta lisina—, así que pide un acompañamiento de legumbre para cerrarse.",
+    macros: { carbohidrato: 10, proteina: 45, grasa: 45 },
+    moleculas: ["proteina", "aminoacidos-esenciales", "isoflavonas", "grasa-monoinsaturada", "calcio", "hierro", "magnesio"] },
 
   // ── Proteína animal ──
   { key: "pollo", nombre: "Pollo", grupo: "proteina", emoji: "🍗", resumen: "Proteína magra.",
@@ -230,6 +260,14 @@ export const ALIMENTOS: Alimento[] = [
   { key: "atun", nombre: "Atún", grupo: "proteina", emoji: "🐟", resumen: "Proteína magra y omega-3.",
     macros: { carbohidrato: 0, proteina: 78, grasa: 22 },
     moleculas: ["proteina", "aminoacidos-esenciales", "omega3", "vitamina-d", "vitamina-b12"] },
+  { key: "salmon", nombre: "Salmón", grupo: "proteina", emoji: "🍣", resumen: "El pescado con más omega-3 y vitamina D.",
+    descripcion: "Un pescado graso, y ahí está justamente su valor: esa grasa es omega-3, la que tu cerebro y tus arterias necesitan y tú no sabes fabricar. Además es de los poquísimos alimentos que traen vitamina D de verdad, la que casi todo el mundo tiene baja por no ver el sol.",
+    macros: { carbohidrato: 0, proteina: 40, grasa: 60 },
+    moleculas: ["proteina", "aminoacidos-esenciales", "omega3", "vitamina-d", "vitamina-b12", "selenio", "potasio"] },
+  { key: "gambas", nombre: "Gambas", grupo: "proteina", emoji: "🦐", resumen: "Casi solo proteína; su colesterol no es el problema.",
+    descripcion: "Proteína casi pura: nada de hidratos y apenas grasa. Cargan con la fama de tener mucho colesterol, y es cierto, pero el colesterol que comes casi no mueve el de tu sangre —lo mueve la grasa saturada, que aquí no hay—. Lo que sí traen, y poca gente cuenta, es yodo, selenio y zinc.",
+    macros: { carbohidrato: 0, proteina: 90, grasa: 10 },
+    moleculas: ["proteina", "aminoacidos-esenciales", "colesterol", "vitamina-b12", "yodo", "selenio", "zinc", "agua"] },
 
   // ── Cereales ──
   { key: "pasta-integral", nombre: "Pasta integral", grupo: "cereal", emoji: "🍝", resumen: "Trigo integral: fibra y energía de liberación lenta.",
@@ -241,6 +279,16 @@ export const ALIMENTOS: Alimento[] = [
   { key: "pan", nombre: "Pan", grupo: "cereal", emoji: "🍞", resumen: "Depende mucho de si es integral o blanco.",
     macros: { carbohidrato: 75, proteina: 13, grasa: 12 },
     moleculas: ["almidon", "proteina", "fibrainsoluble"] },
+  { key: "avena", nombre: "Avena", grupo: "cereal", emoji: "🥣", resumen: "El cereal integral por definición: su fibra frena el azúcar.",
+    descripcion: "La avena se come entera, con su salvado puesto: por eso no hay que preguntarse si es integral. Su fibra soluble —los betaglucanos— forma un gel en el intestino que ralentiza la absorción del azúcar y arrastra parte del colesterol. Es, además, el cereal con más proteína.",
+    macros: { carbohidrato: 68, proteina: 15, grasa: 17 },
+    moleculas: [
+      { key: "almidon", pct: 50 },
+      { key: "fibrasoluble", pct: 5 },
+      { key: "fibrainsoluble", pct: 5 },
+      { key: "proteina", pct: 13 },
+      "grasa-monoinsaturada", "magnesio", "hierro",
+    ] },
 
   // ── Grasas ──
   { key: "aguacate", nombre: "Aguacate", grupo: "grasa", emoji: "🥑", resumen: "Grasa buena y fibra.",
@@ -257,11 +305,39 @@ export const ALIMENTOS: Alimento[] = [
   { key: "cacahuetes", nombre: "Cacahuetes", grupo: "frutos-secos", emoji: "🥜", resumen: "Técnicamente una legumbre; proteína y grasa.",
     macros: { carbohidrato: 16, proteina: 24, grasa: 60 },
     moleculas: ["proteina", "grasa-monoinsaturada", "fibrainsoluble", "magnesio", "folato"] },
+  { key: "almendras", nombre: "Almendras", grupo: "frutos-secos", emoji: "🌰", resumen: "Vitamina E y el fruto seco con más calcio.",
+    descripcion: "Grasa monoinsaturada, la misma familia que la del aceite de oliva, y la mayor cantidad de vitamina E de todo el grupo: el antioxidante que protege precisamente a las grasas. Es también el fruto seco con más calcio, que es lo que lo convierte en la bebida vegetal más razonable.",
+    macros: { carbohidrato: 15, proteina: 15, grasa: 70 },
+    moleculas: ["grasa-monoinsaturada", "proteina", "fibrainsoluble", "vitamina-e", "magnesio", "calcio", "zinc"] },
+  { key: "anacardos", nombre: "Anacardos", grupo: "frutos-secos", emoji: "🥜", resumen: "El fruto seco con más hidratos y menos fibra.",
+    descripcion: "El más suave y el más dulce del grupo, y no por casualidad: casi un tercio son hidratos —el doble que una almendra— y su fibra es la más baja. Sigue siendo un fruto seco cargado de grasa buena, hierro, magnesio y zinc, pero es el que más se parece a un snack.",
+    macros: { carbohidrato: 22, proteina: 13, grasa: 65 },
+    moleculas: ["grasa-monoinsaturada", "proteina", "almidon", "fibrainsoluble", "hierro", "magnesio", "zinc"] },
 
   // ── Lácteos ──
   { key: "queso", nombre: "Queso", grupo: "lacteo", emoji: "🧀", resumen: "Proteína y calcio, con grasa saturada.",
     macros: { carbohidrato: 5, proteina: 35, grasa: 60 },
     moleculas: ["proteina", "calcio", "grasa-saturada", "vitamina-b12"] },
+  { key: "queso-fresco", nombre: "Queso fresco", grupo: "lacteo", emoji: "🧀", resumen: "El mismo queso sin escurrir: mucha agua, la mitad de grasa.",
+    descripcion: "Un queso curado es leche a la que le han quitado el agua; el fresco es el paso anterior, y por eso más de la mitad sigue siendo agua. A igualdad de peso lleva la mitad de grasa y de sal que el curado, y bastante menos calcio, precisamente porque está menos concentrado.",
+    macros: { carbohidrato: 8, proteina: 30, grasa: 62 },
+    moleculas: [
+      { key: "agua", pct: 60 },
+      { key: "proteina", pct: 11 },
+      { key: "grasa-saturada", pct: 8 },
+      { key: "lactosa", pct: 3 },
+      "calcio", "vitamina-b12",
+    ] },
+  { key: "yogur-griego", nombre: "Yogur griego", grupo: "lacteo", emoji: "🥛", resumen: "En España casi siempre es nata: más grasa que proteína.",
+    descripcion: "Cuidado con el nombre. El griego de verdad es yogur colado —se le quita el suero— y sale con el doble de proteína. El «tipo griego» que se vende aquí casi siempre es yogur normal al que le han añadido nata: mismo cremoso, pero tres veces más grasa y la misma proteína que un yogur natural. Lee la etiqueta: si dice «nata», es lo segundo.",
+    macros: { carbohidrato: 13, proteina: 13, grasa: 74 },
+    moleculas: [
+      { key: "agua", pct: 80 },
+      { key: "grasa-saturada", pct: 10 },
+      { key: "proteina", pct: 4 },
+      { key: "lactosa", pct: 4 },
+      "calcio", "vitamina-b12",
+    ] },
 
   // ── Otros ──
   { key: "chocolate-negro", nombre: "Chocolate negro", grupo: "otros", emoji: "🍫", resumen: "Cuanto más puro, más cacao y menos azúcar.",
@@ -273,6 +349,15 @@ export const ALIMENTOS: Alimento[] = [
   { key: "miel", nombre: "Miel", grupo: "otros", emoji: "🍯", resumen: "Natural, sí, pero sigue siendo azúcar.",
     macros: { carbohidrato: 100, proteina: 0, grasa: 0 },
     moleculas: ["fructosa", "glucosa", "sacarosa", "polifenoles", "agua"] },
+  { key: "cerveza-vino", nombre: "Cerveza y vino", grupo: "otros", emoji: "🍺", resumen: "Su energía no es un macro: es alcohol.",
+    descripcion: "Aquí la barra de macros engaña, y por eso vale la pena mirarla. Los pocos hidratos que ves son casi todo lo que la cerveza tiene de comida; el vino ni eso. La energía de verdad la pone el ETANOL, que no es hidrato ni grasa ni proteína: es una cuarta molécula que da 7 kcal por gramo —casi tanto como la grasa— y que tu hígado deja todo lo demás para desmontar primero.",
+    macros: { carbohidrato: 100, proteina: 0, grasa: 0 },
+    moleculas: [
+      { key: "agua", pct: 90 },
+      { key: "etanol", pct: 5 },
+      { key: "glucosa", pct: 2 },
+      "polifenoles",
+    ] },
 
   // ── Ultraprocesados ──
   { key: "nutella", nombre: "Nutella", grupo: "ultraprocesado", emoji: "🍫", resumen: "Sobre todo azúcar y grasa; poca avellana.",
@@ -281,6 +366,14 @@ export const ALIMENTOS: Alimento[] = [
   { key: "oreo", nombre: "Oreo", grupo: "ultraprocesado", emoji: "🍪", resumen: "Energía vacía: azúcar, harina refinada y grasa.",
     macros: { carbohidrato: 63, proteina: 4, grasa: 33 },
     moleculas: ["azucar-anadido", "sacarosa", "almidon", "grasa-saturada"] },
+  { key: "cola", nombre: "Refresco de cola", grupo: "ultraprocesado", emoji: "🥤", resumen: "Agua con azúcar, cafeína y ácido: nada más.",
+    descripcion: "El ultraprocesado más honesto del catálogo, porque no disimula: no hay proteína, no hay grasa, no hay fibra, no hay una sola vitamina. Solo agua, azúcar líquido que llega de golpe, cafeína para que apetezca otro, y el ácido fosfórico que le da ese punto —y que en exceso le disputa el calcio a tus huesos—.",
+    macros: { carbohidrato: 100, proteina: 0, grasa: 0 },
+    moleculas: [
+      { key: "agua", pct: 89 },
+      { key: "azucar-anadido", pct: 11 },
+      "sacarosa", "cafeina", "fosfato",
+    ] },
 ];
 
 // Fotos reutilizadas de la Biblioteca de alimentos (/recorrido/nutricion/alimentos).
@@ -290,14 +383,18 @@ const FOTO_ALIMENTO: Record<string, string> = {
   manzana: "manzana", platano: "platano", naranja: "naranja", "zumo-naranja": "zumo",
   brocoli: "brocoli", espinaca: "espinaca", zanahoria: "zanahoria", tomate: "tomate",
   pimiento: "pimiento", calabacin: "calabacin", cebolla: "cebolla", berenjena: "berenjena",
-  esparragos: "esparragos",
-  soja: "soja", garbanzos: "garbanzos",
+  esparragos: "esparragos", batata: "batata",
+  soja: "soja", garbanzos: "garbanzos", lentejas: "lentejas",
+  "tofu-seitan": "tofuseitan",
   pollo: "pollo", vaca: "vaca", cerdo: "cerdo", huevo: "huevo", atun: "atun",
-  "pasta-integral": "pasta", "arroz-integral": "arroces", pan: "pan",
+  salmon: "salmon", gambas: "gambas",
+  "pasta-integral": "pasta", "arroz-integral": "arroces", pan: "pan", avena: "avena",
   aguacate: "aguacate", "aceite-oliva": "aceite",
   nueces: "frutossecos", cacahuetes: "frutossecos",
-  queso: "queso", "chocolate-negro": "choco", cafe: "cafe",
-  nutella: "procesados", oreo: "procesados",
+  almendras: "almendras", anacardos: "anacardo",
+  queso: "queso", "queso-fresco": "quesofresco", "yogur-griego": "yogurgriego",
+  "chocolate-negro": "choco", cafe: "cafe", "cerveza-vino": "cervezavino",
+  nutella: "nutella", oreo: "oreo", cola: "cola",
 };
 ALIMENTOS.forEach((a) => {
   const f = FOTO_ALIMENTO[a.key];

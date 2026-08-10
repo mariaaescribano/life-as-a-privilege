@@ -122,6 +122,11 @@ export const ALIMENTOS_MACROS: AlimentoMacros[] = [
     racion: "6 unidades (150 g)", proteina: 3.3, hidratos: 6, grasa: 0.2, kcal: 30,
     sorpresa: "Tres gramos de proteína en una guarnición de 30 kcal. Y su folato es de los más altos del reino vegetal.",
   },
+  {
+    key: "batata", nombre: "Batata", grupo: "verdura", emoji: "🍠", foto: `${F}/batata.webp`,
+    racion: "1 mediana asada (200 g)", proteina: 3, hidratos: 40, grasa: 0.2, kcal: 180,
+    sorpresa: "Aquí es donde se rompe la idea de «verdura = poco»: una batata lleva casi los mismos hidratos que un plato de arroz. Es la verdura que cuenta como guarnición de cereal, no como acompañamiento libre.",
+  },
 
   // ── Legumbres ────────────────────────────────────────────────────────────
   {
@@ -130,9 +135,19 @@ export const ALIMENTOS_MACROS: AlimentoMacros[] = [
     sorpresa: "El alimento más completo del juego: 18 g de proteína Y 54 de hidratos. Por eso un plato de legumbres es comida entera y no necesita carne al lado.",
   },
   {
+    key: "lentejas", nombre: "Lentejas", grupo: "legumbre", emoji: "🍲", foto: `${F}/lentejas.webp`,
+    racion: "1 plato cocidas (200 g)", proteina: 18, hidratos: 40, grasa: 0.8, kcal: 230,
+    sorpresa: "La misma proteína que los garbanzos con 100 kcal menos: la diferencia está en la grasa, que aquí es casi cero. Si un plato de lentejas «engorda», es del chorizo, no de la lenteja.",
+  },
+  {
     key: "soja", nombre: "Soja", grupo: "legumbre", emoji: "🫛", foto: `${F}/soja.webp`,
     racion: "1 taza cocida (100 g)", proteina: 17, hidratos: 8, grasa: 9, kcal: 173,
     sorpresa: "La única legumbre con proteína completa: tiene los nueve aminoácidos esenciales, como la carne. Y fíjate en la grasa, altísima para ser legumbre.",
+  },
+  {
+    key: "tofuseitan", nombre: "Tofu", grupo: "legumbre", emoji: "🥢", foto: `${F}/tofuseitan.webp`,
+    racion: "1 bloque (150 g)", proteina: 12, hidratos: 3, grasa: 7, kcal: 130,
+    sorpresa: "Menos proteína de la que casi todo el mundo dice: un bloque entero de tofu son dos huevos. El seitán, en cambio, dobla esta cifra —25 g— porque es gluten puro, aunque su proteína está incompleta y necesita una legumbre al lado.",
   },
 
   // ── Proteína animal ──────────────────────────────────────────────────────
@@ -161,6 +176,16 @@ export const ALIMENTOS_MACROS: AlimentoMacros[] = [
     racion: "1 lata al natural (80 g)", proteina: 21, hidratos: 0, grasa: 1, kcal: 95,
     sorpresa: "21 g de proteína por 95 kcal: la ratio más eficiente del juego. Al natural, claro; en aceite la lata suma unos 10 g de grasa más.",
   },
+  {
+    key: "salmon", nombre: "Salmón", grupo: "proteina", emoji: "🍣", foto: `${F}/salmon.webp`,
+    racion: "1 lomo (150 g)", proteina: 31, hidratos: 0, grasa: 20, kcal: 310,
+    sorpresa: "Tanta grasa como un filete de cerdo, y aquí es justo lo que buscas: son omega-3. El mismo número puede ser lo mejor o lo peor de un alimento según de qué grasa hablemos; por eso contar solo gramos no basta.",
+  },
+  {
+    key: "gambas", nombre: "Gambas", grupo: "proteina", emoji: "🦐", foto: `${F}/gambas.webp`,
+    racion: "8-10 unidades (100 g)", proteina: 20, hidratos: 0, grasa: 1, kcal: 95,
+    sorpresa: "Proteína casi pura por 95 kcal. Cargan con la fama del colesterol —lo tienen, sí—, pero el colesterol que comes casi no mueve el de tu sangre: lo mueve la grasa saturada, y aquí no hay.",
+  },
 
   // ── Cereales ─────────────────────────────────────────────────────────────
   {
@@ -177,6 +202,11 @@ export const ALIMENTOS_MACROS: AlimentoMacros[] = [
     key: "pan", nombre: "Pan", grupo: "cereal", emoji: "🍞", foto: `${F}/pan.webp`,
     racion: "2 rebanadas (60 g)", proteina: 5, hidratos: 30, grasa: 1.2, kcal: 160,
     sorpresa: "Dos rebanadas ya son 30 g de hidratos, lo mismo que un plato de arroz a la mitad. El pan cuenta mucho más de lo que parece porque nunca se pesa.",
+  },
+  {
+    key: "avena", nombre: "Avena", grupo: "cereal", emoji: "🥣", foto: `${F}/avena.webp`,
+    racion: "1 bol (60 g en seco)", proteina: 8, hidratos: 36, grasa: 4, kcal: 230,
+    sorpresa: "Ojo al dato: 60 g en SECO, que en el bol parecen poquísimos y se convierten en un desayuno entero. Y 8 g de proteína: es el cereal que más tiene, casi tanto como dos claras.",
   },
 
   // ── Grasas ───────────────────────────────────────────────────────────────
@@ -212,6 +242,16 @@ export const ALIMENTOS_MACROS: AlimentoMacros[] = [
     racion: "1 puñado (30 g)", proteina: 5, hidratos: 6, grasa: 16, kcal: 180,
     sorpresa: "El puñado es la medida honesta: 30 g. El problema nunca es el fruto seco, es el bol grande, del que salen tres o cuatro puñados sin darte cuenta.",
   },
+  {
+    key: "almendras", nombre: "Almendras", grupo: "frutos-secos", emoji: "🌰", foto: `${F}/almendras.webp`,
+    racion: "1 puñado (30 g)", proteina: 6.4, hidratos: 6, grasa: 15, kcal: 175,
+    sorpresa: "Un puñado de almendras tiene la proteína de un huevo. Y son el fruto seco con más calcio y más vitamina E: el antioxidante que protege precisamente a las grasas que traen.",
+  },
+  {
+    key: "anacardo", nombre: "Anacardos", grupo: "frutos-secos", emoji: "🥜", foto: `${F}/anacardo.webp`,
+    racion: "1 puñado (30 g)", proteina: 5.4, hidratos: 9, grasa: 13, kcal: 165,
+    sorpresa: "El único fruto seco con hidratos de verdad: el doble que la almendra, y con la fibra más baja del grupo. Por eso está más dulce y por eso es el más fácil de seguir comiendo.",
+  },
 
   // ── Lácteos ──────────────────────────────────────────────────────────────
   {
@@ -223,6 +263,16 @@ export const ALIMENTOS_MACROS: AlimentoMacros[] = [
     key: "leche", nombre: "Leche entera", grupo: "lacteo", emoji: "🥛", foto: `${F}/leche.webp`,
     racion: "1 vaso (250 ml)", proteina: 8, hidratos: 12, grasa: 8, kcal: 160,
     sorpresa: "El único alimento del juego con los tres macros repartidos casi por igual. Tiene sentido: está diseñado para alimentar a una cría entera.",
+  },
+  {
+    key: "quesofresco", nombre: "Queso fresco", grupo: "lacteo", emoji: "🧀", foto: `${F}/quesofresco.webp`,
+    racion: "1 porción (100 g)", proteina: 11, hidratos: 3, grasa: 11, kcal: 155,
+    sorpresa: "Cien gramos de queso fresco tienen la misma grasa que treinta de curado: más de la mitad de lo que te comes es agua. Por eso «fresco» sí significa más ligero… pero por ración, no por peso.",
+  },
+  {
+    key: "yogurgriego", nombre: "Yogur griego", grupo: "lacteo", emoji: "🥄", foto: `${F}/yogurgriego.webp`,
+    racion: "1 unidad (125 g)", proteina: 5, hidratos: 5, grasa: 12, kcal: 155,
+    sorpresa: "Aquí está la trampa del nombre: el griego de verdad es yogur COLADO y tiene el doble de proteína. El que se vende en España casi siempre es yogur con nata añadida —misma proteína que uno natural y tres veces la grasa—. Si la etiqueta dice «nata», es este.",
   },
 
   // ── Otros ────────────────────────────────────────────────────────────────
@@ -250,6 +300,26 @@ export const ALIMENTOS_MACROS: AlimentoMacros[] = [
     key: "procesados", nombre: "Galletas", grupo: "otros", emoji: "🍪", foto: `${F}/procesados.webp`,
     racion: "3 galletas (30 g)", proteina: 2, hidratos: 20, grasa: 6, kcal: 140,
     sorpresa: "Tres galletas: 140 kcal, casi lo mismo que un plátano y medio. La diferencia no está en el número, está en que estas no llenan y el plátano sí.",
+  },
+  {
+    key: "oreo", nombre: "Oreo", grupo: "otros", emoji: "🍪", foto: `${F}/oreo.webp`,
+    racion: "4 galletas (44 g)", proteina: 1.9, hidratos: 30, grasa: 8.5, kcal: 210,
+    sorpresa: "Cuatro galletas y casi nada de proteína: 2 g. Son harina refinada, azúcar y grasa —y la crema blanca del medio es azúcar y grasa otra vez, sin una gota de leche—.",
+  },
+  {
+    key: "nutella", nombre: "Nutella", grupo: "otros", emoji: "🍫", foto: `${F}/nutella.webp`,
+    racion: "2 cucharadas (30 g)", proteina: 1.9, hidratos: 17, grasa: 9, kcal: 160,
+    sorpresa: "Más de la mitad del bote es azúcar y casi un tercio es aceite: la avellana no llega al 13 % y el cacao ronda el 7 %. Dos cucharadas en una tostada suman más que la tostada.",
+  },
+  {
+    key: "cola", nombre: "Refresco de cola", grupo: "otros", emoji: "🥤", foto: `${F}/cola.webp`,
+    racion: "1 lata (330 ml)", proteina: 0, hidratos: 35, grasa: 0, kcal: 140,
+    sorpresa: "Una lata son nueve terrones de azúcar, y aquí no hay fibra, ni grasa, ni proteína que frenen nada: llega entero y de golpe. Las mismas calorías que tres galletas, bebidas en dos minutos y sin quitar el hambre.",
+  },
+  {
+    key: "cervezavino", nombre: "Cerveza", grupo: "otros", emoji: "🍺", foto: `${F}/cervezavino.webp`,
+    racion: "1 caña (250 ml)", proteina: 1, hidratos: 9, grasa: 0, kcal: 108,
+    sorpresa: "Haz la cuenta y no sale: 9 g de hidratos son 36 kcal, pero la caña tiene 108. Las que faltan las pone el ETANOL, que no es ninguno de los tres macros y da 7 kcal por gramo, casi como la grasa. Una copa de vino es lo mismo con menos hidratos aún: 125 kcal casi todas de alcohol.",
   },
 ];
 

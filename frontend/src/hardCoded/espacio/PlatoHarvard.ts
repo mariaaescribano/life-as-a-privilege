@@ -43,7 +43,7 @@ const GRUPOS_POR_SECTOR: Record<string, GrupoAlimento[]> = {
   verduras: ["verdura"],
   fruta: ["fruta"],
   cereales: ["cereal"],
-  proteina: ["proteina", "legumbre", "frutos-secos", "lacteo"],
+  proteina: ["proteina", "proteina-vegetal", "legumbre", "frutos-secos", "lacteo"],
 };
 
 // Alimentos que, aun siendo de un grupo saludable, NO van en el plato (trampas
