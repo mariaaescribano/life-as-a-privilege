@@ -191,6 +191,18 @@ interface ComicViewerProps {
 const DEFAULT_TEXT_SHADOW =
   "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.25)";
 
+// Con `separarFrases`, corte entre frases: el espacio que sigue a un punto…
+// …salvo cuando ese punto NO acaba la frase, sino que abrevia. Sin estas
+// excepciones, «hacia el 7000 a. C., sin calles» se partía en «hacia el 7000 a.»
+// y «C., sin calles», y las listas numeradas dejaban el «1.» solo en su línea.
+//   · una sola letra:  a. C.  ·  d. C.  ·  p. ej.  ·  J. S. Bach
+//   · una sola cifra:  1. MIRA ANTES DE JUZGAR  (numeración, no final de frase)
+//   · abreviaturas frecuentes en los textos del recorrido.
+// Excepción de la excepción: si esa letra sola viene detrás de «a.» o «d.», la
+// abreviatura ya está completa («476 d. C. Después…») y ahí sí se corta.
+const SALTO_DE_FRASE =
+  /(?<=\.)(?<!(?<![ad]\.\s)\b[\p{L}\d]\.)(?<!\bej\.)(?<!\betc\.)(?<!\baprox\.)(?<!\bDr\.)(?<!\bDra\.)(?<!\bSr\.)(?<!\bSra\.)(?<!\bvs\.)\s+/u;
+
 export function ComicViewer({
   vinetas,
   onClose,
@@ -996,7 +1008,7 @@ export function ComicViewer({
                   punto) es su propio bloque → texto más aireado y limpio. */}
               {(separarFrases
                 ? current.paragraphs
-                    .flatMap((p) => p.split(/(?<=\.)\s+/))
+                    .flatMap((p) => p.split(SALTO_DE_FRASE))
                     .map((s) => s.trim())
                     .filter(Boolean)
                 : current.paragraphs
