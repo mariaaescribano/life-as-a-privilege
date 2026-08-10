@@ -56,6 +56,12 @@ export function QigongComicModal({
             scrollbarColor="#ffffff"
             // Mismo caso que el cómic de los elementos: letra blanca sobre la
             // tinta china, que es clarísima. El velo la apaga lo justo.
+            //
+            // OJO: este «más oscurito» es EXCLUSIVO de dos visores —este y
+            // ElementoComicModal (los elementos)—. No se lleva a ningún otro
+            // cómic de la casa: fuera de las tintas chinas rompe la coherencia
+            // de color de la disciplina. Si hace falta legibilidad en otro
+            // sitio, se resuelve con `textShadow`, no oscureciendo la foto.
             veloOscuro={0.4}
             onClose={onClose}
             onComplete={onClose}
@@ -65,5 +71,15 @@ export function QigongComicModal({
     </Modal>
   );
 }
+
+/**
+ * El mismo visor, con el nombre por el que se lee en las páginas nuevas.
+ *
+ * Nació en la página de Qigong (de ahí el nombre del archivo), pero lo usan ya
+ * el Taoísmo y la cocina diaria: es EL cómic de Medicina China, no el de Qigong.
+ * Se exporta con este alias para no renombrar el archivo (y sus imports) y para
+ * que en el código nuevo se llame por lo que es.
+ */
+export const TcmComicModal = QigongComicModal;
 
 export default QigongComicModal;

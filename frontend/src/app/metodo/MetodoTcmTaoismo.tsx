@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -15,7 +15,7 @@ import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { QigongComicModal } from "../../components/metodo/QigongComicModal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
-  LEYES_TAO, LEYES_TAO_VINETAS, TAOISMO_CIERRE, type LeyTao,
+  FOTO_LEY, LEYES_TAO, LEYES_TAO_VINETAS, TAOISMO_CIERRE, type LeyTao,
 } from "../../components/metodo/tcmTaoismoContenido";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
@@ -90,15 +90,22 @@ export default function MetodoTcmTaoismo() {
           </Flex>
           </Reveal>
 
-          {/* ── LAS LEYES · un box por ley: el carácter chino, el nombre y «Ver» ──
+          {/* ── LAS LEYES · DE DOS EN DOS ──
+              Cada box: la ilustración de la ley arriba, y debajo, en una sola
+              línea, el carácter chino, el nombre y el botón «Ver» a la derecha
+              del todo. Las dos columnas juntas ocupan exactamente el ancho del
+              header (los 850px del contenedor).
+
               La explicación entera (la esencia, el párrafo y cómo se traduce en
-              el cuerpo) se lee en el visor, con la ilustración al lado:
-              LEYES_TAO_VINETAS abre por la que se pulse y desde dentro se pasa
-              de una a otra con las flechas. */}
-          <Box display="grid" gridTemplateColumns="1fr" gap={{ base: 3.5, md: 4 }} w="100%">
+              el cuerpo) se lee en el visor: LEYES_TAO_VINETAS lleva LAS DIEZ,
+              así que se abre por la que se pulse pero desde dentro se pasa a
+              cualquier otra con las flechas — abrir por una no encierra a nadie
+              en una sola página. */}
+          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "1fr 1fr" }}
+               gap={{ base: 3.5, md: 4 }} w="100%" alignItems="stretch">
             {LEYES_TAO.map((ley, i) => (
               <Reveal key={ley.key} inView direction="up" distance={20} scaleFrom={0.99} duration={0.6}
-                      amount={0.3} w="100%">
+                      amount={0.3} w="100%" h="100%" display="flex">
                 <LeyBox ley={ley} numero={i + 1} onVer={() => setLeyAbierta(i)} />
               </Reveal>
             ))}
@@ -150,25 +157,57 @@ export default function MetodoTcmTaoismo() {
   );
 }
 
-// ── Box de una ley · el carácter, el nombre y «Ver» ──────────────────────────
-// Una fila por ley: el carácter chino GRANDE a la izquierda (es lo primero que
-// se ve y lo que distingue una ley de otra de un vistazo), el nombre en medio y
-// el botón «Ver» a la derecha. Lo demás se lee en el visor, con la ilustración
-// al lado.
+// ── Box de una ley · la ilustración, y debajo carácter + nombre ──────────────
+// Van de dos en dos (grid de 2 columnas), así que cada box es estrecho y la
+// foto manda:
+//
+//   ┌──────────────────────┐
+//   │      ilustración     │   ← a sangre arriba (la foto de ESA ley)
+//   ├──────────────────────┤   ← línea separadora
+//   │ 道  1 · TAO          │   ← una sola línea: carácter y nombre
+//   │     El camino        │
+//   └──────────────────────┘
+//
+// SIN botón «Ver»: el box entero ya es el botón, así que el rótulo solo
+// repetía. Lo que invita a pulsar es el zoom lento de la foto al pasar el
+// puntero por encima. Es la regla de todas las tarjetas con foto de la casa.
+//
+// La foto es cuadrada; aquí se recorta a una banda 4:3 (cover) para que diez
+// boxes no conviertan la página en un scroll infinito. Entera se ve en el visor.
 function LeyBox({ ley, numero, onVer }: { ley: LeyTao; numero: number; onVer: () => void }) {
   return (
-    <Box as="button" onClick={onVer} w="100%" display="block" textAlign="left"
+    <Box as="button" onClick={onVer} w="100%" h="100%" display="flex" flexDirection="column" textAlign="left"
          position="relative" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}
          cursor="pointer" transition="transform 0.18s ease, box-shadow 0.18s ease"
          _hover={{ transform: "translateY(-2px)", boxShadow: `${CAJA_GLOW}, 0 0 30px ${tcmTxt}44` }}
          sx={{ WebkitTapHighlightColor: "transparent" }} role="group">
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
 
-      <Flex position="relative" zIndex={1} align="center" gap={{ base: 4, md: 6 }}
-            px={{ base: 5, md: 7 }} py={{ base: 4, md: 5 }}>
-        {/* El carácter chino: lo primero, a la izquierda. */}
-        <Text flexShrink={0} color={tcmTxt} fontSize={{ base: "4xl", md: "5xl" }} lineHeight="1"
-              fontWeight={700} w={{ base: "56px", md: "76px" }} textAlign="center"
+      {/* La ilustración de la ley, a sangre. Si el archivo aún no existe, el
+          hueco se queda con el fondo de la disciplina y el box no se rompe. */}
+      <Box position="relative" zIndex={1} w="100%" overflow="hidden" sx={{ aspectRatio: "4 / 3" }}>
+        <Image
+          src={FOTO_LEY(ley.key)}
+          alt=""
+          w="100%"
+          h="100%"
+          objectFit="cover"
+          objectPosition="center"
+          loading="lazy"
+          transition="transform 0.55s cubic-bezier(0.22,1,0.36,1)"
+          _groupHover={{ transform: "scale(1.07)" }}
+        />
+      </Box>
+
+      <Box position="relative" zIndex={1} h="1px" w="100%" bg={`${tcmTxt}66`} />
+
+      {/* El pie, en una línea: el carácter y el nombre.
+          `flex=1` para que, si en una fila un nombre ocupa dos líneas y el otro
+          una, los dos boxes queden igual de altos. */}
+      <Flex position="relative" zIndex={1} flex="1" align="center" gap={{ base: 3, md: 3.5 }}
+            px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
+        <Text flexShrink={0} color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} lineHeight="1"
+              fontWeight={700} textAlign="center"
               style={{ textShadow: `${INK_SHADOW}, 0 0 20px ${tcmTxt}44` }}>
           {ley.hanzi}
         </Text>
@@ -178,24 +217,12 @@ function LeyBox({ ley, numero, onVer }: { ley: LeyTao; numero: number; onVer: ()
                 opacity={0.75} style={{ textShadow: INK_SHADOW }}>
             {numero} · {ley.pinyin}
           </Text>
-          <Text color={tcmTxt} fontSize={{ base: "lg", md: "2xl" }} fontWeight={800} lineHeight="1.2" mt={0.5}
+          <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={800} lineHeight="1.25" mt={0.5}
                 style={{ textShadow: INK_SHADOW }}>
             {ley.nombre}
           </Text>
         </Box>
 
-        <Flex flexShrink={0} align="center" gap={1.5} px={{ base: 3, md: 4 }} py={1.5} borderRadius="full"
-              border={`1.5px solid ${tcmTxt}99`} bg="rgba(0,0,0,0.25)"
-              transition="all 0.18s" _groupHover={{ borderColor: tcmTxt, bg: "rgba(0,0,0,0.42)" }}>
-          <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase"
-                style={{ textShadow: INK_SHADOW }}>
-            Ver
-          </Text>
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px"
-               fill={tcmTxt} flexShrink={0} style={{ filter: `drop-shadow(0 1px 3px ${tcmBg})` }}>
-            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-          </Box>
-        </Flex>
       </Flex>
     </Box>
   );

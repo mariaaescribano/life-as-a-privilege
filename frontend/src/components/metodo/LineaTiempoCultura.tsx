@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { CulturaLoader } from "./comicLoaders";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 
 // Item genérico de la línea de tiempo. Sirve tanto para las ERAS (con época)
 // como para los SUB-HITOS de una era (solo título, sin fecha). Por eso `anio`
@@ -24,6 +26,57 @@ export interface TimelineHito {
 // ─────────────────────────────────────────────────────────────────────────
 
 const POR_PAGINA = 6;
+
+/** Las fotos de una tanda de hitos, listas para precargar. */
+const fotosDe = (hitos: TimelineHito[]): Array<string | null> =>
+  hitos.map((h) => (h.foto ? encodeURI(h.foto) : null));
+
+/**
+ * La espera de Cultura (la flor de la Vida) mientras llegan las fotos de la
+ * tanda siguiente. En blanco: va sobre el turquesa de la página.
+ *
+ * `minH` con las mismas medidas que el círculo para que el hueco no cambie de
+ * alto al entrar y salir la espera, y la fila no dé un salto.
+ */
+function EsperaCultura({ minH }: { minH?: Record<string, string> | string }) {
+  return (
+    <Flex w="100%" minH={minH} align="center" justify="center" py={minH ? 0 : 6}>
+      <CulturaLoader color="#ffffff" />
+    </Flex>
+  );
+}
+
+/**
+ * Precarga bajo demanda: devuelve `cargando` y una función para pedir una tanda
+ * de fotos y hacer algo CUANDO ya están todas.
+ *
+ * La gracia es que lo nuevo no se pinta hasta entonces: antes, al pasar de
+ * página, los seis círculos siguientes aparecían de golpe y sus fotos se iban
+ * rellenando una a una (o se quedaban en el corazón de reserva un rato). Ahora
+ * sale la espera de Cultura y, cuando están, aparece la tanda entera hecha.
+ *
+ * El `token` descarta las respuestas viejas: si se pulsa la flecha dos veces
+ * seguidas, solo se pinta la última tanda pedida (y nada si el componente ya se
+ * ha desmontado).
+ */
+function usePrecargaPorTandas() {
+  const [cargando, setCargando] = useState(false);
+  const token = useRef(0);
+  const vivo = useRef(true);
+  useEffect(() => () => { vivo.current = false; }, []);
+
+  const pedir = (fotos: Array<string | null>, alEstarListas: () => void) => {
+    const mio = ++token.current;
+    setCargando(true);
+    void precargarImagenes(fotos).then(() => {
+      if (!vivo.current || mio !== token.current) return;
+      alEstarListas();
+      setCargando(false);
+    });
+  };
+
+  return { cargando, pedir };
+}
 
 // Círculo con la foto del hito (o un marcador si aún no hay foto). Es solo la
 // parte visual: el click lo gestiona quien lo envuelve (para no anidar botones).
@@ -183,9 +236,20 @@ function TimelineDesktop({
   onSelect: (key: string) => void;
 }) {
   const [pagina, setPagina] = useState(0);
+  const { cargando, pedir } = usePrecargaPorTandas();
   const totalPaginas = Math.max(1, Math.ceil(hitos.length / POR_PAGINA));
   const paginaSeg = Math.min(pagina, totalPaginas - 1);
   const visibles = hitos.slice(paginaSeg * POR_PAGINA, paginaSeg * POR_PAGINA + POR_PAGINA);
+
+  // Pasar de tanda: primero se traen las fotos (con la espera de Cultura en el
+  // hueco de la fila) y solo cuando están todas se cambia de página. Así los
+  // círculos nuevos salen ya con su foto puesta, nunca a medio hacer.
+  const irAPagina = (objetivo: number) => {
+    const destino = Math.min(Math.max(0, objetivo), totalPaginas - 1);
+    if (destino === paginaSeg || cargando) return;
+    const tanda = hitos.slice(destino * POR_PAGINA, destino * POR_PAGINA + POR_PAGINA);
+    pedir(fotosDe(tanda), () => setPagina(destino));
+  };
 
   // TOPE del círculo, no su tamaño: los seis se reparten el ancho de la fila y
   // solo llegan hasta aquí. Antes eran medidas FIJAS y no encogían, así que en
@@ -199,8 +263,14 @@ function TimelineDesktop({
     <Flex direction="column" align="center" w="100%" gap={{ base: 6, md: 7 }}>
       {/* Fila de círculos con su línea. py deja hueco para las etiquetas. */}
       <Box w="100%" position="relative" py={{ md: "96px", lg: "104px" }}>
-        {/* Hueco y márgenes justos: cada píxel que se quita aquí se lo lleva el
-            diámetro de los círculos, que es lo que se quiere ver. */}
+        {/* Mientras llegan las fotos de la tanda siguiente, en el hueco de la
+            fila solo está la espera de Cultura: ni los círculos nuevos, ni la
+            línea, ni las etiquetas. */}
+        {cargando ? (
+          <EsperaCultura minH={size} />
+        ) : (
+        /* Hueco y márgenes justos: cada píxel que se quita aquí se lo lleva el
+           diámetro de los círculos, que es lo que se quiere ver. */
         <Flex position="relative" align="center" justify="center"
               gap={{ base: 4, md: 4, lg: 4, xl: 5 }} px={{ base: 4, md: 4, lg: 2, xl: 4 }}>
           {/* Línea horizontal que une los círculos (solo si hay más de uno). */}
@@ -244,15 +314,17 @@ function TimelineDesktop({
             </Box>
           ))}
         </Flex>
+        )}
       </Box>
 
-      {/* Flechas de paginación, centradas debajo de la línea. */}
+      {/* Flechas de paginación, centradas debajo de la línea. Apagadas mientras
+          se cargan las fotos: si no, se podrían encolar tandas. */}
       {totalPaginas > 1 && (
         <Flex align="center" justify="center" gap={{ base: 5, md: 6 }}>
-          <FlechaNav dir="izq" tinta={tinta} bg={bg} disabled={paginaSeg === 0}
-                     onClick={() => setPagina((p) => Math.max(0, p - 1))} />
-          <FlechaNav dir="der" tinta={tinta} bg={bg} disabled={paginaSeg >= totalPaginas - 1}
-                     onClick={() => setPagina((p) => Math.min(totalPaginas - 1, p + 1))} />
+          <FlechaNav dir="izq" tinta={tinta} bg={bg} disabled={cargando || paginaSeg === 0}
+                     onClick={() => irAPagina(paginaSeg - 1)} />
+          <FlechaNav dir="der" tinta={tinta} bg={bg} disabled={cargando || paginaSeg >= totalPaginas - 1}
+                     onClick={() => irAPagina(paginaSeg + 1)} />
         </Flex>
       )}
     </Flex>
@@ -275,6 +347,7 @@ function TimelineMovil({
   // añaden otros tantos, y así sus fotos se cargan solo al ir bajando.
   const [visibles, setVisibles] = useState(Math.min(POR_PAGINA, hitos.length));
   const sentinelaRef = useRef<HTMLDivElement>(null);
+  const { cargando, pedir } = usePrecargaPorTandas();
 
   useEffect(() => {
     if (visibles >= hitos.length) return;
@@ -282,15 +355,19 @@ function TimelineMovil({
     if (!el) return;
     const io = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setVisibles((c) => Math.min(c + POR_PAGINA, hitos.length));
-        }
+        if (!entries[0]?.isIntersecting || cargando) return;
+        // La tanda siguiente NO se pinta hasta tener sus fotos: mientras llegan,
+        // en su sitio está la espera de Cultura. Antes se añadían las filas
+        // vacías y las fotos iban cayendo detrás.
+        const siguiente = Math.min(visibles + POR_PAGINA, hitos.length);
+        pedir(fotosDe(hitos.slice(visibles, siguiente)), () => setVisibles(siguiente));
       },
       { rootMargin: "240px" },
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [visibles, hitos.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibles, hitos.length, cargando]);
 
   return (
     <Flex direction="column" w="100%" maxW="520px" mx="auto" gap={3}>
@@ -326,8 +403,13 @@ function TimelineMovil({
         </Flex>
       ))}
 
-      {/* Sentinela: al entrar en pantalla, carga la siguiente tanda. */}
-      {visibles < hitos.length && <Box ref={sentinelaRef} h="1px" w="100%" />}
+      {/* Sentinela: al entrar en pantalla, carga la siguiente tanda. Mientras
+          llegan sus fotos, en su sitio está la espera de Cultura. */}
+      {visibles < hitos.length && (
+        <Box ref={sentinelaRef} w="100%">
+          {cargando && <EsperaCultura />}
+        </Box>
+      )}
     </Flex>
   );
 }

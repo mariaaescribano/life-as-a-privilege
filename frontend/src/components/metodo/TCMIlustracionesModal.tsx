@@ -112,7 +112,8 @@ export const VINETAS_ELEMENTOS: Vineta[] = [
   {
     src: "/viñetas/tcm/elementos/fuegotcm.webp",
     paragraphs: [
-      "El Fuego es la expresión de la Vida en movimiento. Representa la alegría, la vitalidad, la pasión y la capacidad de conectar con los demás.",
+      "El Fuego es la expresión de la Vida en movimiento.",
+      "Representa la alegría, la vitalidad, la pasión y la capacidad de conectar con los demás.",
       "Nos aporta entusiasmo, inspiración y el impulso necesario para compartir aquello que hemos creado.",
     ],
   },

@@ -5,6 +5,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
+import { useComic } from "../../i18n/comics";
 import type { Vineta } from "./ComicViewer";
 
 // Datos del cómic del Inicio de Todo. Lo único que cambia respecto a los
@@ -130,6 +131,8 @@ interface ComicUniversoModalProps {
 }
 
 export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps) {
+  // El texto en el idioma activo; las fotos y el orden los manda el español.
+  const vinetas = useComic("origen-espiritualidad", ORIGEN_ESPIRITUALIDAD);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -144,7 +147,7 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
       >
         {/* key={isOpen}: al reabrir el modal, ComicViewer se remonta y
             empieza desde la viñeta 1 con estado limpio. */}
-        <ComicViewer key={String(isOpen)} vinetas={ORIGEN_ESPIRITUALIDAD} onClose={onClose} />
+        <ComicViewer key={String(isOpen)} vinetas={vinetas} onClose={onClose} />
       </ModalContent>
     </Modal>
   );

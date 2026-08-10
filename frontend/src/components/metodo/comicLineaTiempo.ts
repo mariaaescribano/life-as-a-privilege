@@ -8,6 +8,11 @@ import type { Vineta } from "./ComicViewer";
 // OJO: este cómic NO forma parte de las «Ilustraciones» del material; vive solo
 // en este paso del recorrido.
 //
+// VOZ: la primera viñeta va en «nosotros» (el hecho general) y las dos últimas
+// en «tú». Dentro de una misma viñeta NO se mezclan. Ojo también con el género:
+// nada de «estás listo» / «no estás solo», que la mayoría de quien lee esto es
+// mujer; las fórmulas van sin marca de género.
+//
 // Imágenes: /viñetas/psicologia/lineatiempo/lineatiempo1.png … lineatiempo3.png.
 export const COMIC_LINEA_TIEMPO: Vineta[] = [
   {
@@ -22,17 +27,17 @@ export const COMIC_LINEA_TIEMPO: Vineta[] = [
   {
     src: "/viñetas/psicologia/lineatiempo/lineatiempo2.webp",
     paragraphs: [
-      "Para cambiar nuestro presente, primero debemos entender nuestro pasado.",
-      "Hay que reunir las fragmentaciones de nuestros recuerdos para darles significado.",
-      "Solo así podemos empezar a cambiar, porque aquello que hoy quieres transformar fueron, en su día, patrones adaptativos que te ayudaron a sobrevivir a tus circunstancias.",
+      "Para cambiar tu presente, primero tienes que entender tu pasado.",
+      "Hay que reunir las fragmentaciones de tus recuerdos para darles significado.",
+      "Solo así puedes empezar a cambiar, porque aquello que hoy quieres transformar fueron, en su día, patrones adaptativos que te ayudaron a sobrevivir a tus circunstancias.",
     ],
   },
   {
     src: "/viñetas/psicologia/lineatiempo/lineatiempo3.webp",
     paragraphs: [
-      "Si estás aquí es porque estás listo para desarrollar las herramientas que te permitan navegar entre el caos y el dolor sin perderte.",
-      "Estás listo para empezar a reunir esas fragmentaciones y comprender la historia que te ha traído hasta aquí.",
-      "Empieza. Pero recuerda que no estás solo.",
+      "Si estás aquí es porque tienes la fuerza para desarrollar las herramientas que te permitan navegar entre el caos y el dolor sin perderte.",
+      "Tienes la fuerza para empezar a reunir esas fragmentaciones y comprender la historia que te ha traído hasta aquí.",
+      "Empieza. Pero recuerda que no caminas en soledad.",
     ],
   },
 ];

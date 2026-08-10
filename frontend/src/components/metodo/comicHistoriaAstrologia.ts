@@ -40,8 +40,9 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
       "La Astrología empezó gracias a la observación constante del cielo.",
       "Los sacerdotes registraban eclipses, planetas y estrellas para intentar comprender los presagios que afectaban al reino.",
       "No buscaban conocer el futuro de las personas. Querían entender el destino de los pueblos.",
-      "No se limitaron a mirar, lo escribieron. Noche tras noche, en tablillas de barro, durante más de seiscientos años seguidos.",
-      "Es la serie de observaciones más larga que ha hecho la humanidad hasta la época moderna. Con tantos siglos de datos dejaron de solo mirar y empezaron a predecir: sabían cuándo habría un eclipse antes de que ocurriera.",
+      "No se limitaron a mirar, sino que escribieron noche tras noche, en tablillas de barro, durante más de seiscientos años seguidos todo lo que observaban.",
+      "Es la serie de registros más larga que ha hecho la humanidad hasta la época moderna.",
+      "Gracias a todos los datos, pudieron empezar a predecir.",
     ],
   },
   // 2 — Los astrólogos del rey
@@ -73,7 +74,8 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
     titulo: "Alejandro Magno",
     paragraphs: [
       "Alejandro conquistó Babilonia pero no arrasó con lo que encontró, sino que lo incorporó en su legado.",
-      "Aquellos archivos milenarios empezaron a traducirse al griego. En la ciudad que fundó en Egipto, Alejandría, se juntaron dos mundos que habían caminado separados: el cálculo babilonio y la filosofía griega.",
+      "Aquellos archivos milenarios empezaron a traducirse al griego.",
+      "En la ciudad que fundó en Egipto, Alejandría, se juntaron dos mundos que habían caminado separados: el cálculo babilonio y la filosofía griega.",
       "Nació la Astrología helenística, y desde entonces, la Astrología también es una herramienta para comprender a las personas.",
       "En el siglo II, Ptolomeo recopiló la información hasta el momento en el Tetrabiblos: el diccionario de la Astrología durante más de 1.400 años.",
     ],
@@ -81,25 +83,27 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
   // 5 — Grecia: el ser humano y las casas
   {
     src: F("grecia"),
-    titulo: "Grecia",
+    titulo: "",
     paragraphs: [
-      "¿Por qué ocurrió justo ahí? Porque los griegos llevaban siglos buscando el sentido de la existencia.",
-      "Los babilonios le preguntaban al cielo qué va a pasar. Los griegos preguntaban qué es el ser humano, de qué está hecho y por qué actúa como actúa. En el templo de Delfos escribieron su propósito: «Conócete a ti mismo».",
-      "Desde ahí, el cielo dejó de ser un calendario para ser un mapa del papel de la persona en el cosmos.",
-      "Añadieron una pieza que en Babilonia no existía: las doce casas. Los signos cuentan CÓMO eres; las casas, DÓNDE — el trabajo, el dinero, la familia, el amor, la salud, los finales...",
+      "¿Por qué ocurrió justo en Grecia? Porque los griegos llevaban siglos buscando el sentido de la existencia.",
+      "Los babilonios le preguntaban al cielo qué va a pasar.",
+      "Los griegos preguntaban qué es el ser humano, de qué está hecho y por qué actúa como actúa. En el templo de Delfos escribieron su propósito: «Conócete a ti mismo».",
+      "Desde ahí, el cielo dejó de ser un calendario para ser el mapa de la persona en el cosmos.",
+      "Añadieron una pieza que en Babilonia no existía: las doce casas.",
+      "Los signos cuentan CÓMO eres; las casas, DÓNDE — el trabajo, el dinero, la familia, el amor, la salud, los finales...",
       "Para calcularlas no basta el día: hacen falta la hora y el lugar exactos.",
     ],
   },
   // 6 — Roma: los dioses prestados y el miedo
   {
     src: F("roma"),
-    titulo: "Roma",
+    titulo: "",
     paragraphs: [
       "Roma se enamoró de Grecia. Imitaron su filosofía, su arte y sus dioses.",
       "Ares pasó a llamarse Marte. Afrodita, Venus. Zeus, Júpiter. Hermes, Mercurio. Cronos, Saturno. Son exactamente los nombres que lees hoy en tu carta.",
       "Los emperadores confiaban en la Astrología. Pero también la temían.",
       "Buscar en las estrellas cuándo moriría un emperador podía considerarse una conspiración.",
-      "Por eso se expulsó a los astrólogos de Roma más de una vez. El mismo hombre que tenía astrólogos en su corte era el que prohibía consultarlos.",
+      "Por eso, se expulsó a los astrólogos de Roma más de una vez. El mismo hombre que tenía astrólogos en su corte era el que prohibía consultarlos.",
       "La Astrología solo era para la nobleza.",
     ],
   },
@@ -107,7 +111,7 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
   {
     src: F("nobleza"),
     eyebrow: "",
-    titulo: "Solo para unos pocos",
+    titulo: "",
     paragraphs: [
       "Para levantar una carta natal hacen falta cuatro cosas: la hora exacta del nacimiento, unas tablas con las posiciones de los planetas, saber calcular y saber leer.",
       "Nada de eso estaba al alcance de la inmensa mayoría. De la gente corriente no se anotaba la hora de nacer; a veces ni siquiera el día.",
@@ -121,7 +125,7 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
     titulo: "El astrólogo de la corte",
     paragraphs: [
       "En la Europa medieval el astrólogo era un cargo de la corte, como el médico o el tesorero. Se le consultaba para elegir el día de una coronación, de una boda o de una batalla.",
-      "Ningún rey hizo tanto por este saber como Alfonso X de Castilla. Montó en Toledo un taller donde trabajaban juntos sabios cristianos, musulmanes y judíos traduciendo todo el conocimiento astronómico y astrológico que llegaba del mundo árabe.",
+      "Ningún rey hizo tanto por este saber como Alfonso X de Castilla. Montó en Toledo un taller donde trabajaban juntos sabios cristianos, musulmanes y judíos traduciendo todo el conocimiento que llegaba del mundo árabe.",
       "De allí salieron las Tablas alfonsíes, usadas en toda Europa para calcular la posición de los planetas durante casi trescientos años. Y tomó una decisión enorme: mandó traducir al castellano, no al latín. La lengua de la calle sirviendo para la ciencia.",
       "No fue solo Castilla: Carlos V de Francia tuvo astrólogos a su servicio y una de las grandes bibliotecas de su tiempo, y en la corte de Ricardo II de Inglaterra se copiaron e ilustraron manuscritos astrológicos.",
       "Los Reyes Católicos consultaron astrólogos, y Felipe II reunió en El Escorial tratados de astrología y tuvo matemáticos a su servicio.",
@@ -131,10 +135,10 @@ export const HISTORIA_ASTROLOGIA: Vineta[] = [
   {
     src: F("universidades"),
     eyebrow: "Bolonia · 1088",
-    titulo: "En las universidades",
+    titulo: "",
     paragraphs: [
       "La Astrología se enseñaba en la universidad. No a escondidas. Con cátedra, temario y exámenes.",
-      "En 1088 nace Bolonia, la primera universidad europea, y la astronomía entra como lo que se consideraba: una disciplina matemática, la de calcular con exactitud dónde va a estar cada planeta.",
+      "En 1088 nace Bolonia, la primera universidad europea, y la astronomía entra como lo que se consideraba: una disciplina matemática.",
       "La Astrología usaba esos mismos cálculos para interpretar qué influencia tenían sobre las personas y sobre lo que iba a ocurrir.",
       "Por eso no eran dos oficios enfrentados: el mismo estudioso calculaba por la mañana la posición de los planetas y levantaba por la tarde un horóscopo, con las mismas tablas y la misma matemática.",
       "Gran parte de sus alumnos eran estudiantes de medicina, porque tratar a un enfermo sin mirar el cielo se consideraba negligencia.",

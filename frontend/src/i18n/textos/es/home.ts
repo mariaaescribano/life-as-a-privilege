@@ -16,6 +16,8 @@ export const home = {
   "home.desbloquea.otra":
     "Desbloquea {disciplina} cuando quieras — es la {ordinal} que aconsejamos, pero puedes empezar por aquí.",
 
+  /** Saludo grande del Mapa. `{coma}` trae ", Nombre" cuando se sabe el nombre. */
+  "home.bienvenida": "Te damos la bienvenida al Mapa{coma}",
   "home.continuar": "Continuar →",
   "home.foto": "Tu foto",
   "home.fotoError": "No se pudo subir la foto",

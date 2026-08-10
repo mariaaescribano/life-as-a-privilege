@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -46,6 +47,7 @@ const Candado = ({ size }: { size: any }) => (
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionCursos() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // ¿Ha pagado ya la Cábala? (7ª disciplina, el siguiente paso tras Nutrición).
@@ -100,8 +102,8 @@ export default function MetodoNutricionCursos() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← ¿De dónde vienen?", onClick: () => navigate("/metodo/nutricion/origen") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.origen")}`, onClick: () => navigate("/metodo/nutricion/origen") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={cabalaSuscrito
                 ? { label: "Cábala →", onClick: () => navigate("/metodo/cabala") }
                 : { label: "Cábala →", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cabala") }}

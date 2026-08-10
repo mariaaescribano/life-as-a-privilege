@@ -16,7 +16,8 @@ import { SaberMasModal } from "../../components/metodo/Planetas";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { ZODIAC_SIGNS, cuerpoByKey, soloClavesPlaneta, type Cuerpo, type CuerpoKey } from "../../components/metodo/astrologiaData";
-import { PASO_CARTA_TITULO, PASO_CARTA_TITULO_CORTO } from "../../components/metodo/astrologiaRecorrido";
+import { useNombresAstro } from "../../components/metodo/astrologiaNombres";
+import { useT, TextoRico } from "../../i18n";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
@@ -33,15 +34,6 @@ const CheckIcon = ({ color }: { color: string }) => (
   </Box>
 );
 
-// Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
-// llamada): explica esta página del recorrido. Edítalo libremente.
-const QUE_ES_ESTO = {
-  parrafos: [
-    "Ya has conocido a los doce Signos, que de una forma u otra viven en ti. Aquí empiezas por los tres arquetipos más básicos de la Astrología: tu Ascendente, tu Sol y tu Luna.",
-    "Léetelos con calma: esto es el calentamiento. En cuanto termines seguirás con el resto de tus arquetipos.",
-  ],
-};
-
 // Orden visual pedido: Luna (izq) · Sol (centro) · Ascendente (dcha).
 // En móvil se apila y el Sol queda en medio igualmente.
 const TRIO: CuerpoKey[] = ["luna", "sol", "ascendente"];
@@ -50,6 +42,7 @@ interface Valor { signo?: string; casa?: number; profundizadoSigno?: boolean; pr
 type Data = Partial<Record<CuerpoKey, Valor>>;
 
 export default function MetodoAstrologiaSolAscLuna() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Data>({});
@@ -149,11 +142,11 @@ export default function MetodoAstrologiaSolAscLuna() {
   const valorAbierto = abierto ? data[abierto] ?? {} : {};
 
   const headerNext = {
-    label: todosLeidos ? "Arquetipos →" : "Lee los tres para continuar",
+    label: todosLeidos ? `${t("metodo.astro.paso.arquetipos")} →` : t("metodo.astro.trioLeeLosTres"),
     // Antes de pasar a «Arquetipos» intercalamos el cómic de los planetas.
     onClick: () => setComicPlanetasOpen(true),
     disabled: !todosLeidos,
-    disabledTooltip: "Lee tu Sol, tu Luna y tu Ascendente antes de seguir",
+    disabledTooltip: t("metodo.astro.trioLeeLosTresTooltip"),
   };
 
   return (
@@ -167,8 +160,8 @@ export default function MetodoAstrologiaSolAscLuna() {
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
               title={
                 <>
-                  <Box as="span" display={{ base: "none", md: "inline" }}>{PASO_CARTA_TITULO}</Box>
-                  <Box as="span" display={{ base: "inline", md: "none" }}>{PASO_CARTA_TITULO_CORTO}</Box>
+                  <Box as="span" display={{ base: "none", md: "inline" }}>{t("metodo.astro.paso.loPrimero")}</Box>
+                  <Box as="span" display={{ base: "inline", md: "none" }}>{t("metodo.astro.paso.loPrimeroCorto")}</Box>
                 </>
               }
               bgColor={`${astrologiaBg}dd`}
@@ -176,8 +169,8 @@ export default function MetodoAstrologiaSolAscLuna() {
               space
               step={{ current: 2, total: 9 }}
               mb={0}
-              prev={{ label: "← Intro", onClick: () => navigate("/metodo/astrologia") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              prev={{ label: `← ${t("metodo.introCorto")}`, onClick: () => navigate("/metodo/astrologia") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={headerNext}
             />
           </Reveal>
@@ -196,9 +189,7 @@ export default function MetodoAstrologiaSolAscLuna() {
               mx="auto"
               fontStyle="italic"
             >
-              Tu carta se lee por partes, y esta es la primera: tu <Box as="strong" fontWeight="700">Luna</Box> (el
-              hogar al que llegaste y tus sentimientos), tu <Box as="strong" fontWeight="700">Sol</Box> (tu esencia) y
-              tu <Box as="strong" fontWeight="700">Ascendente</Box> (cómo percibes el mundo).
+              <TextoRico>{t("metodo.astro.trioIntro")}</TextoRico>
             </Text>
           </Reveal>
 
@@ -277,11 +268,14 @@ export default function MetodoAstrologiaSolAscLuna() {
         onClose={() => setComicPlanetasOpen(false)}
         onContinue={() => navigate("/metodo/astrologia/cartaAstral")}
         vinetas={VINETAS_PLANETAS}
-        continueLabel="Arquetipos"
+        continueLabel={t("metodo.astro.paso.arquetipos")}
         themeColor={astrologiaTxt}
       />
+      {/* El popup «¿Qué es esto?» (botón flotante, encima del de la llamada)
+          explica esta página del recorrido. Su texto vive en el diccionario. */}
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
-                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
+                     llamadaTitulo={t("metodo.astro.reservaLlamada")}
+                     queEsEsto={{ parrafos: [t("metodo.astro.trioQueEs1"), t("metodo.astro.trioQueEs2")] }} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>
@@ -304,6 +298,8 @@ function TrioCard({
   leido: boolean;
   onLeer: () => void;
 }) {
+  const t = useT();
+  const n = useNombresAstro();
   const c = cuerpo.color;
   const signoData = signo ? ZODIAC_SIGNS.find((s) => s.name === signo) : null;
   return (
@@ -327,7 +323,7 @@ function TrioCard({
       </Box>
       <Text color={c} fontSize={{ base: "lg", md: destacado ? "2xl" : "xl" }} fontWeight="700" letterSpacing="0.04em"
             style={{ textShadow: `0 0 12px ${c}66` }}>
-        {cuerpo.label}
+        {n.cuerpo(cuerpo.key)}
       </Text>
 
       {/* signo · casa */}
@@ -336,7 +332,7 @@ function TrioCard({
           <>
             <GlifoSigno nombre={signoData.name} color={c} size={24} />
             <Text color={`${c}dd`} fontSize={{ base: "sm", md: "md" }}>
-              {signoData.name}{casa != null ? ` · Casa ${casa}` : ""}
+              {n.signo(signoData.name)}{casa != null ? ` · ${n.casa(casa)}` : ""}
             </Text>
           </>
         ) : (
@@ -367,7 +363,7 @@ function TrioCard({
         whiteSpace="nowrap"
         _hover={{ boxShadow: `0 0 18px ${c}88`, transform: "translateY(-1px)" }}
       >
-        {leido ? <><CheckIcon color={c} /> Releer</> : "Leer"}
+        {leido ? <><CheckIcon color={c} /> {t("metodo.astro.releer")}</> : t("metodo.astro.leer")}
       </Box>
     </Flex>
   );

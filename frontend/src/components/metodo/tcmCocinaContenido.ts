@@ -6,10 +6,13 @@
 // el alimento se elige por su sabor, su naturaleza (fría/templada/caliente) y el
 // órgano al que entra; y la cocción es la mitad del remedio.
 //
-// OJO: la página solo pinta `principio`, `grupos` (los ingredientes) y
-// `cocciones` (las formas de cocinar). `cadaDia`, `baja` y `dia` se quedan aquí
-// escritos pero NO se muestran: la página se estaba yendo de texto. Si algún día
-// vuelven, es descomentar su bloque en MetodoTcmRecetas.tsx.
+// QUÉ SE VE Y DÓNDE:
+//   · `cadaDia` + `grupos` → dentro de la caja «Un gesto para hoy»: el gesto del
+//     día y, debajo, todos los ingredientes del elemento.
+//   · `principio` → la única línea de texto suelto de la página (bajo esa caja).
+//   · `cocciones` → las tarjetas de «Formas de cocinar».
+//   · `sabor`, `baja` y `dia` se quedan aquí escritos pero NO se muestran: la
+//     página se estaba yendo de texto.
 //
 // ✍️  EDITAR CONTENIDO: cambia los textos aquí. No cambies las `key`.
 // ─────────────────────────────────────────────────────────────────────────

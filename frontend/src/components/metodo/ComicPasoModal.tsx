@@ -54,8 +54,12 @@ interface ComicPasoModalProps {
    *  izquierda de la X). El único modo de avanzar es recorrer el cómic hasta el
    *  tick final. Lo usa Astrología para que sus ilustraciones no se salten. */
   sinBotonSaltar?: boolean;
-  /** Si true, el botón de avanzar muestra la imagen de la disciplina NÍTIDA: sin
-   *  velo y sin blur, a plena opacidad (la legibilidad se apoya en `textShadow`).
+  /** Si true, el botón de avanzar lleva la imagen de la disciplina con EL MISMO
+   *  tratamiento que el box del cómic: se ve (sin blur), pero rebajada con el
+   *  velo suave del color de la disciplina (33%) y el mismo `saturate`, en vez
+   *  del velo oscuro al 70% del modo normal. Así el botón y la caja son la
+   *  misma pintura y no una mancha oscura arriba a la derecha. La legibilidad
+   *  del texto se apoya en `textShadow`.
    *  Lo usan los cómics de Psicología para su botón «Continuar →». */
   botonNitido?: boolean;
 }
@@ -78,8 +82,14 @@ export function ComicPasoModal({
   // Astrología no pasa disciplinaBgImage → usa el fondo estrellado, igual que
   // hace el propio ComicViewer.
   const imgFondo = disciplinaBgImage ?? "/img/astrologia/space.jpg";
-  // Velo sobre la imagen para que el texto del botón se lea bien.
-  const veloBtn = disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)";
+  // Velo sobre la imagen para que el texto del botón se lea bien. Con
+  // `botonNitido` NO es un velo oscuro sino EL MISMO del box del cómic (el
+  // color de la disciplina al 33%, ver ComicViewer): la foto se sigue viendo,
+  // pero rebajada y del mismo tono que la caja, no un recorte a plena
+  // intensidad que canta al lado de la pintura clara.
+  const veloBtn = botonNitido
+    ? (disciplinaBgColor ? `${disciplinaBgColor}55` : "rgba(0,0,0,0.2)")
+    : (disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)");
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -140,11 +150,18 @@ export function ComicPasoModal({
           transition="all 0.2s"
           _hover={{ transform: "translateY(-1px)" }}
         >
-          {/* Fondo: imagen de la disciplina. Con `botonNitido` se ve nítida y a
-              plena opacidad (sin velo ni blur); si no, lleva velo para leer el texto. */}
+          {/* Fondo: imagen de la disciplina. Con `botonNitido` va sin blur pero
+              con el mismo `saturate` y el mismo velo suave que la caja del
+              cómic; si no, velo oscuro para leer el texto. */}
           <Box as="img" src={imgFondo} alt="" loading="eager" position="absolute" inset="0"
-               w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
-          {!botonNitido && <Box position="absolute" inset="0" bg={veloBtn} />}
+               w="100%" h="100%"
+               style={{
+                 objectFit: "cover",
+                 objectPosition: "center",
+                 filter: botonNitido ? "saturate(1.05)" : undefined,
+               }}
+               pointerEvents="none" />
+          <Box position="absolute" inset="0" bg={veloBtn} />
           <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" gap={2}
                style={botonNitido ? { textShadow } : undefined}>
             {continueLabel}

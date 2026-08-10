@@ -869,7 +869,7 @@ const Home = () => {
               textShadow="0 0 18px rgba(255,255,255,0.75), 0 0 38px rgba(255,255,255,0.45), 0 0 70px rgba(180,255,245,0.35)"
               mb={{ base: 10, md: 8 }}
             >
-              Te damos la bienvenida al Mapa{name ? `, ${name}` : ""}
+              {t("home.bienvenida", { coma: name ? `, ${name}` : "" })}
             </Text>
 
             {/* <Text

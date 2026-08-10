@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -105,6 +106,7 @@ function HambreBox({ v, numero, onVer }: { v: Vineta; numero: number; onVer: () 
 }
 
 export default function MetodoNutricionHambre() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // Cómic de transición «Lo integral» (se abre al pulsar «Crea tu plato →»).
@@ -150,9 +152,9 @@ export default function MetodoNutricionHambre() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Microbiota", onClick: () => navigate("/metodo/nutricion/microbiota") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Crea tu plato →", onClick: () => setComicIntegralOpen(true) }}
+              prev={{ label: `← ${t("metodo.nutri.paso.microbiota")}`, onClick: () => navigate("/metodo/nutricion/microbiota") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              next={{ label: `${t("metodo.nutri.paso.platoCrear")} →`, onClick: () => setComicIntegralOpen(true) }}
             />
           </Reveal>
 

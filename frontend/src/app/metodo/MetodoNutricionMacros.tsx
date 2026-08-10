@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT, type ClaveTexto } from "../../i18n";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import axios from "axios";
@@ -38,12 +39,17 @@ import {
 // no un examen que aprobar.
 // ═════════════════════════════════════════════════════════════════════════
 
-const MACROS = [
-  { key: "proteina" as const, label: "Proteína", color: "#b1584f" },
-  { key: "hidratos" as const, label: "Hidratos", color: "#c99a4e" },
-  { key: "grasa" as const,    label: "Grasa",    color: "#7d9a3c" },
+// `label` es la CLAVE i18n (constante de módulo: aquí no hay `t`).
+// Los tres macros del juego. El tipo va declarado APARTE y no derivado del
+// array: el array lo necesita en su propia anotación, y derivarlo sería
+// circular.
+type MacroKey = "proteina" | "hidratos" | "grasa";
+
+const MACROS: { key: MacroKey; label: ClaveTexto; color: string }[] = [
+  { key: "proteina", label: "metodo.nutri.macro.proteina", color: "#b1584f" },
+  { key: "hidratos", label: "metodo.nutri.macro.hidratos", color: "#c99a4e" },
+  { key: "grasa",    label: "metodo.nutri.macro.grasa",    color: "#7d9a3c" },
 ];
-type MacroKey = (typeof MACROS)[number]["key"];
 
 const aparecer = keyframes`
   from { opacity: 0; transform: translateY(10px); }
@@ -166,6 +172,7 @@ function Comparativa({
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionMacros() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const dataRef = useRef<Record<string, any>>({});
@@ -300,9 +307,9 @@ export default function MetodoNutricionMacros() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Diseña tu día", onClick: () => navigate("/metodo/nutricion/dia") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Preguntas y mitos →", onClick: () => navigate("/metodo/nutricion/mitos") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.dia")}`, onClick: () => navigate("/metodo/nutricion/dia") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              next={{ label: `${t("metodo.nutri.paso.mitos")} →`, onClick: () => navigate("/metodo/nutricion/mitos") }}
             />
           </Reveal>
 
@@ -385,7 +392,7 @@ export default function MetodoNutricionMacros() {
                         {MACROS.map((m) => (
                           <Regulador
                             key={m.key}
-                            label={m.label}
+                            label={t(m.label)}
                             color={m.color}
                             valor={est[m.key]}
                             tope={TOPES[m.key]}
@@ -409,7 +416,7 @@ export default function MetodoNutricionMacros() {
                         {MACROS.map((m) => (
                           <Comparativa
                             key={m.key}
-                            label={m.label}
+                            label={t(m.label)}
                             color={m.color}
                             estimado={est[m.key]}
                             real={actual[m.key]}

@@ -15,7 +15,9 @@ import { API_URL } from "../GlobalVariables";
 import { getTextoSigno, getTextoCasa } from "../components/metodo/astrologiaTextos";
 import { ARQUETIPOS_OVERRIDES } from "../components/metodo/astrologiaTextos.overrides";
 import { RESUMENES_SIGNO, RESUMENES_CASA } from "../components/metodo/astrologiaResumenes";
+import { RESUMENES_SIGNO_EN, RESUMENES_CASA_EN } from "../components/metodo/astrologiaResumenes.en";
 import type { CuerpoKey } from "../components/metodo/astrologiaData";
+import { getIdioma } from "../i18n";
 import { adminHeaders } from "../app/admin/useAdminGuard";
 import {
   cargarOverridesRemotos,
@@ -27,12 +29,23 @@ export type FacetaAstro = "signo" | "casa";
 
 export type { ArquetiposOverrides };
 
-/** El resumen (2-3 frases memorables) de un arquetipo, si existe. */
+/**
+ * El resumen (2-3 frases memorables) de un arquetipo, si existe.
+ *
+ * En inglés sale el traducido y, mientras no lo esté, el español. El resumen es
+ * un bloque cerrado —va arriba, separado del texto largo por una raya—, así que
+ * enseñarlo ya traducido aunque su texto largo siga pendiente se lee bien y hace
+ * que la traducción se note desde la primera frase. Lo ideal, de todas formas,
+ * es traducir el resumen y el texto del mismo arquetipo a la vez.
+ */
 function resumenDe(cuerpo: string, faceta: FacetaAstro, valor: string): string | null {
   const k = cuerpo as CuerpoKey;
-  return faceta === "signo"
-    ? RESUMENES_SIGNO[k]?.[valor] ?? null
-    : RESUMENES_CASA[k]?.[Number(valor)] ?? null;
+  const en = getIdioma() === "en";
+  if (faceta === "signo") {
+    return (en ? RESUMENES_SIGNO_EN[k]?.[valor] : null) ?? RESUMENES_SIGNO[k]?.[valor] ?? null;
+  }
+  const casa = Number(valor);
+  return (en ? RESUMENES_CASA_EN[k]?.[casa] : null) ?? RESUMENES_CASA[k]?.[casa] ?? null;
 }
 
 /**

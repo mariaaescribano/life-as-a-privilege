@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -127,6 +128,7 @@ function AlimentoContenido({ food, big }: { food: Pick<PlatoAlimento, "emoji" | 
 let ID_SEQ = 1;
 
 export default function MetodoNutricionPlato() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [macroSel, setMacroSel] = useState<string>(PLATO_MACROS[0].key);
@@ -308,10 +310,10 @@ export default function MetodoNutricionPlato() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← El hambre", onClick: () => navigate("/metodo/nutricion/hambre") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.hambre")}`, onClick: () => navigate("/metodo/nutricion/hambre") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{
-                label: "Tus calorías →",
+                label: `${t("metodo.nutri.paso.calorias")} →`,
                 // Esperamos a que el guardado del plato llegue al servidor antes
                 // de ir a Calorías; si no, esa página no vería el plato como hecho
                 // y rebotaría de vuelta aquí ("una y otra vez").

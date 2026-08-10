@@ -39,7 +39,7 @@ export const COMIC_VATA: Vineta[] = [
       "Ella siempre ha sido así. Una conversación cualquiera le abre tres caminos nuevos, y antes de terminar el primero ya está imaginando el siguiente.",
       "Aprende deprisa. Se entusiasma deprisa. Ve posibilidades donde otros solo ven un problema.",
       "Eso es Vata: el Aire y el Éter moviéndose dentro de alguien.",
-      "*Donde hay movimiento, está actuando Vata.*",
+      "Donde hay movimiento, está actuando Vata.",
     ],
   },
   {
@@ -48,9 +48,9 @@ export const COMIC_VATA: Vineta[] = [
     src: `${V}/vata2.webp`,
     paragraphs: [
       "Pero el viento no sabe parar.",
-      "— «Tengo diez cosas empezadas y ninguna terminada. Como que no duermo bien. Como cuando me acuerdo.»",
+      "— «Tengo diez cosas empezadas y ninguna terminada. Mi mente no se calla, no duermo bien, como cuando me acuerdo...»",
       "El mismo aire que le trae las ideas también le trae la dispersión, el sueño ligero, la preocupación que da vueltas de madrugada.",
-      "Y entonces aparece el pensamiento de siempre: *quizá el problema soy yo.*",
+      "Y entonces aparece el pensamiento de siempre: quizá el problema soy yo.",
       "No lo es. Es que el viento lleva demasiado tiempo soplando sin nada que lo sostenga.",
     ],
   },
@@ -61,9 +61,9 @@ export const COMIC_VATA: Vineta[] = [
     paragraphs: [
       "El Ayurveda no le pide que deje de moverse.",
       "Al viento no se le sujeta: se le da un lugar donde soplar.",
-      "Un horario. Comida caliente. Una hora de dormir. Unos minutos de silencio antes de que el día empiece a tirar de ella.",
+      "Un horario. Comida caliente. Una hora de dormir. Unos minutos de silencio antes de que el día empiece.",
       "Cosas pequeñas, repetidas. Nada espectacular.",
-      "**Vata no necesita ir más deprisa. Necesita raíces.**",
+      "Vata no necesita ir más deprisa. Necesita raíces.",
     ],
   },
   {
@@ -74,7 +74,7 @@ export const COMIC_VATA: Vineta[] = [
       "Meses después su mente sigue siendo rápida. No ha perdido nada.",
       "Pero ahora las ideas aterrizan. Termina lo que empieza. Descansa sin sentir que está perdiendo el tiempo.",
       "Su imaginación se ha vuelto inspiración; su sensibilidad, intuición; su facilidad para cambiar, una de sus mayores fortalezas.",
-      "*No necesitas perder tu creatividad. Necesitas darle raíces.*",
+      "No necesitas perder tu creatividad. Necesitas darle raíces.",
     ],
   },
 ];
@@ -90,7 +90,7 @@ export const COMIC_PITTA: Vineta[] = [
       "Él es de esos. Se le da bien decidir, organizar, ver el error que nadie ha visto y arreglarlo. Cuando algo le importa, no lo suelta hasta que sale bien.",
       "Los demás le buscan cuando hay que tomar una decisión difícil.",
       "Eso es Pitta: el Fuego y el Agua transformando todo lo que tocan.",
-      "*Donde hay transformación, está actuando Pitta.*",
+      "Donde hay transformación, está actuando Pitta.",
     ],
   },
   {
@@ -101,7 +101,7 @@ export const COMIC_PITTA: Vineta[] = [
       "Pero el fuego, cuando nadie lo cuida, deja de calentar y empieza a quemar.",
       "— «Ha salido bien, sí. Pero podría haber salido mejor.»",
       "Come tarde o no come. Se irrita con lo que no avanza. Le cuesta desconectar, pedir ayuda, perdonarse un error que a cualquier otro le habría perdonado sin pensarlo.",
-      "Y por dentro, la misma frase repitiéndose: *debería estar haciendo más.*",
+      "Y por dentro, la misma frase repitiéndose: debería estar haciendo más.",
       "No es una persona enfadada. Es un fuego que lleva mucho tiempo sin descansar.",
     ],
   },
@@ -113,7 +113,7 @@ export const COMIC_PITTA: Vineta[] = [
       "El Ayurveda no le pide que se apague.",
       "Un fuego sin límites arrasa el bosque; el mismo fuego, dentro de un círculo de piedras, da luz y calor a todos los que se sientan alrededor.",
       "Comer a sus horas. Parar antes de estar vacío. Elegir lo fresco cuando todo arde. Tratarse con la misma compasión con la que trata a los demás.",
-      "**Pitta no necesita ser más intenso. Necesita aprender a descansar.**",
+      "Pitta no necesita ser más intenso. Necesita aprender a descansar.",
     ],
   },
   {
@@ -124,7 +124,7 @@ export const COMIC_PITTA: Vineta[] = [
       "Sigue siendo exigente. Sigue queriendo hacer las cosas bien. No ha perdido nada.",
       "Pero ya no confunde su valor con lo que consigue.",
       "Su inteligencia se ha vuelto sabiduría; su disciplina, un ejemplo; su liderazgo, una forma de servir en lugar de una forma de exigirse.",
-      "*No necesitas apagar tu fuego. Necesitas aprender a dirigirlo.*",
+      "No necesitas apagar tu fuego. Necesitas aprender a dirigirlo.",
     ],
   },
 ];
@@ -140,7 +140,7 @@ export const COMIC_KAPHA: Vineta[] = [
       "Ella es una de ellas. Escucha antes de hablar. No se altera. Está cuando dice que va a estar, y eso hace que la gente respire distinto a su lado.",
       "Cuida, sostiene, acompaña. Su casa es un sitio donde apetece quedarse.",
       "Eso es Kapha: el Agua y la Tierra manteniendo unido lo que la Vida ha construido.",
-      "*Donde hay estabilidad, nutrición y cuidado, está actuando Kapha.*",
+      "Donde hay estabilidad, nutrición y cuidado, está actuando Kapha.",
     ],
   },
   {
@@ -149,10 +149,8 @@ export const COMIC_KAPHA: Vineta[] = [
     src: `${K}/kapha2.webp`,
     paragraphs: [
       "Pero la tierra que lleva demasiado tiempo sin moverse termina pesando.",
-      "— «Sé que tengo que hacer ese cambio. Lo sé desde hace dos años. Ya lo haré.»",
-      "Guarda lo que ya no usa, sostiene lo que ya no la sostiene, carga con lo de todos y aplaza lo suyo. Se acostumbra. Y acostumbrarse se parece mucho a estar bien.",
-      "Y por dentro: *si cambio algo, puedo perder lo que tengo.*",
-      "No es una persona perezosa. Es la tierra buscando quedarse quieta.",
+      "«Sé que tengo que hacer ese cambio. Lo sé desde hace dos años, pero...»",
+      "Guarda lo que ya no usa, sostiene lo que ya no la sostiene, carga con lo de todos y aplaza lo suyo. Se acostumbra y eso cree que es estar bien.",
     ],
   },
   {
@@ -163,7 +161,7 @@ export const COMIC_KAPHA: Vineta[] = [
       "El Ayurveda no le pide que pierda su calma.",
       "Los árboles crecen, las estaciones cambian, los ríos no dejan de fluir. Y aun así siguen siendo ellos mismos.",
       "Levantarse un poco antes. Caminar cada día. Comer más ligero. Hacer una sola cosa distinta esta semana. Soltar algo, aunque sea pequeño.",
-      "**Kapha no necesita desaparecer. Necesita volver a ponerse en movimiento.**",
+      "Kapha no necesita desaparecer. Necesita volver a ponerse en movimiento.",
     ],
   },
   {
@@ -174,7 +172,7 @@ export const COMIC_KAPHA: Vineta[] = [
       "Sigue siendo tranquila. Sigue siendo el sitio al que los demás acuden. No ha perdido nada.",
       "Pero ya no confunde quedarse con estar a salvo.",
       "Su calma se ha vuelto presencia; su constancia, fortaleza; y su manera de cuidar ha dejado de ser sacrificio para convertirse en una forma consciente de amar.",
-      "*No necesitas perder tu calma. Necesitas recordar que la Vida también crece cuando cambia.*",
+      "No necesitas perder tu calma. Necesitas recordar que la Vida también crece cuando cambia.",
     ],
   },
 ];

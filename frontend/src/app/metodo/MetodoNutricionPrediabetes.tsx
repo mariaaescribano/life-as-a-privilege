@@ -298,9 +298,9 @@ export default function MetodoNutricionPrediabetes() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Tus calorías", onClick: () => navigate("/metodo/nutricion/calorias") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Diseña tu día →", onClick: () => navigate("/metodo/nutricion/dia") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.calorias")}`, onClick: () => navigate("/metodo/nutricion/calorias") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              next={{ label: `${t("metodo.nutri.paso.dia")} →`, onClick: () => navigate("/metodo/nutricion/dia") }}
             />
           </Reveal>
 

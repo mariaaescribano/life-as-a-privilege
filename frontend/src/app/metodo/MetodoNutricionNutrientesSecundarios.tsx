@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -45,6 +46,7 @@ function NutrienteBox({ n, visto, onClick }: { n: Nutriente; visto: boolean; onC
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionNutrientesSecundarios() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [explorados, setExplorados] = useState<string[]>([]);
@@ -116,9 +118,9 @@ export default function MetodoNutricionNutrientesSecundarios() {
             color={nutricionTxt}
             nom={nutricionNom}
             mb={0}
-            prev={{ label: "← Los nutrientes", onClick: () => navigate("/metodo/nutricion/nutrientes") }}
-            extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-            next={{ label: "Microbiota →", onClick: () => setMicroOpen(true),
+            prev={{ label: `← ${t("metodo.nutri.paso.nutrientes")}`, onClick: () => navigate("/metodo/nutricion/nutrientes") }}
+            extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
+            next={{ label: `${t("metodo.nutri.paso.microbiota")} →`, onClick: () => setMicroOpen(true),
                     disabled: !todosSecVistos,
                     disabledTooltip: "Descubre todos los nutrientes secundarios primero" }}
           />

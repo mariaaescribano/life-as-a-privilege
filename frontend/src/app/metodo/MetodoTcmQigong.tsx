@@ -102,37 +102,47 @@ export default function MetodoTcmQigong() {
               venir de «Tu cocina», intercalado en el paso (ver MetodoTcmRecetas).
               El contenido sigue en tcmQigongContenido.ts por si vuelve. */}
 
-          {/* ── DAO YIN · un solo botón: el nombre en chino y una línea ── */}
-          <Reveal inView direction="up" distance={24} scaleFrom={0.99} duration={0.7} amount={0.12} w="100%">
-          <Box as="button" onClick={() => setDaoYinAbierto(true)} w="100%" display="block" textAlign="center"
-               position="relative" borderRadius="2xl" overflow="hidden"
+          {/* ── DAO YIN · una franja, no una caja ──
+              Antes era un box alto con el 導引 gigante, el pinyin, una raya y la
+              frase debajo: ocupaba media pantalla para decir una línea. Ahora es
+              un rectángulo estirado —el ancho del header, sin pasarse— con todo
+              en la MISMA línea: el chino, «Dao Yin», un filete vertical y la
+              frase. En móvil se apila, que ahí una sola línea no cabe. */}
+          <Reveal inView direction="up" distance={20} scaleFrom={0.995} duration={0.7} amount={0.12} w="100%">
+          <Box as="button" onClick={() => setDaoYinAbierto(true)} w="100%" display="block"
+               position="relative" borderRadius="xl" overflow="hidden"
                border={`1.5px solid ${tcmTxt}66`} boxShadow={CAJA_GLOW}
                cursor="pointer" transition="transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease"
                _hover={{ transform: "translateY(-3px)", borderColor: tcmTxt,
                          boxShadow: `${CAJA_GLOW}, 0 0 34px ${tcmTxt}44` }}
                sx={{ WebkitTapHighlightColor: "transparent" }} role="group">
-            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-            <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
-                  px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}>
-              <Text color={tcmTxt} fontSize={{ base: "6xl", md: "7xl" }} lineHeight="1" fontWeight={700}
-                    letterSpacing="0.08em" style={{ textShadow: `${INK_SHADOW}, 0 0 26px ${tcmTxt}55` }}>
+            <DisciplinaBgLayer nom={tcmNom} borderRadius="xl" />
+            <Flex position="relative" zIndex={1} align="center" justify="center"
+                  direction={{ base: "column", md: "row" }}
+                  gap={{ base: 2, md: 5 }} textAlign={{ base: "center", md: "left" }}
+                  px={{ base: 5, md: 8 }} py={{ base: 5, md: 4 }}>
+              <Text color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} lineHeight="1" fontWeight={700}
+                    letterSpacing="0.08em" flexShrink={0}
+                    style={{ textShadow: `${INK_SHADOW}, 0 0 22px ${tcmTxt}55` }}>
                 {DAO_YIN.hanzi}
               </Text>
-              <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.34em"
+              <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.3em" flexShrink={0}
                     textTransform="uppercase" opacity={0.8} style={{ textShadow: INK_SHADOW }}>
                 Dao Yin
               </Text>
-              <Box h="1px" w="42%" maxW="190px"
-                   bgGradient={`linear(to-r, transparent, ${tcmTxt}88, transparent)`} />
-              <Text color={tcmTxt} fontSize={{ base: "md", md: "xl" }} fontStyle="italic" lineHeight="1.75"
-                    maxW="560px" style={{ textShadow: INK_SHADOW }}>
+              {/* El filete vertical solo en ordenador: en móvil separa el apilado
+                  el propio `gap`. */}
+              <Box display={{ base: "none", md: "block" }} flexShrink={0} w="1px" h="26px"
+                   bgGradient={`linear(to-b, transparent, ${tcmTxt}88, transparent)`} />
+              <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.5"
+                    style={{ textShadow: INK_SHADOW }}>
                 La integración en el ser humano de la energía femenina del Dao (Dios)
               </Text>
             </Flex>
           </Box>
           </Reveal>
 
-          {/* ── LAS OCHO POSTURAS · solo la foto y «Ver» ──
+          {/* ── LAS POSTURAS · la foto y su nombre corto ──
               Tres por fila en ordenador y una en móvil. La explicación entera
               (para qué es, los pasos y la clave) se lee en el visor, con la
               ilustración al lado: BROCADOS_VINETAS abre por la que se pulse y
@@ -142,7 +152,7 @@ export default function MetodoTcmQigong() {
             {BROCADOS.map((p, i) => (
               <Reveal key={p.key} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7}
                       amount={0.12} w="100%" h="100%">
-                <BrocadoBox postura={p} numero={i + 1} onVer={() => setBrocadoAbierto(i)} />
+                <BrocadoBox postura={p} onVer={() => setBrocadoAbierto(i)} />
               </Reveal>
             ))}
           </Box>
@@ -201,16 +211,19 @@ export default function MetodoTcmQigong() {
   );
 }
 
-// ── Box de una postura · SOLO la foto y «Ver» ────────────────────────────────
+// ── Box de una postura · la foto y su nombre ─────────────────────────────────
 // La explicación entera se lee en el visor (BROCADOS_VINETAS), no aquí: la
-// rejilla es para elegir con los ojos, no para leer. Debajo de la foto, el
-// número con el nombre a la izquierda y el botón «Ver» a la derecha.
+// rejilla es para elegir con los ojos, no para leer.
+//
+// Sin número y sin botón «Ver»: el número no decía nada (el orden ya se ve en la
+// fila) y el botón repetía lo que la tarjeta entera ya hace. Lo que invita a
+// pulsar es la foto, que hace un zoom lento al pasar el puntero por encima.
+// Debajo, el nombre CORTO en una sola línea, para que las tarjetas de una fila
+// midan todas lo mismo.
 //
 // Mientras no exista la ilustración, el hueco enseña el verso chino en grande:
 // la rejilla no se descuadra y no se ve ninguna foto rota.
-function BrocadoBox({ postura, numero, onVer }: {
-  postura: Postura; numero: number; onVer: () => void;
-}) {
+function BrocadoBox({ postura, onVer }: { postura: Postura; onVer: () => void }) {
   const [sinFoto, setSinFoto] = useState(false);
   const E = ELEMENTOS[postura.elemento];
 
@@ -223,12 +236,15 @@ function BrocadoBox({ postura, numero, onVer }: {
          sx={{ WebkitTapHighlightColor: "transparent" }} role="group">
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
 
-      {/* La ilustración, cuadrada y a todo el ancho del box. */}
+      {/* La ilustración, cuadrada y a todo el ancho del box. El zoom al pasar
+          por encima es lo que hace de «Ver». */}
       <Box position="relative" zIndex={1} w="100%" overflow="hidden" bg={`${tcmBg}88`}
            sx={{ aspectRatio: "1" }}>
         {!sinFoto ? (
           <Image src={encodeURI(FOTO_POSTURA(postura.key))} alt={postura.nombre} w="100%" h="100%"
-                 objectFit="cover" onError={() => setSinFoto(true)} />
+                 objectFit="cover" onError={() => setSinFoto(true)}
+                 transition="transform 0.55s cubic-bezier(0.22,1,0.36,1)"
+                 _groupHover={{ transform: "scale(1.07)" }} />
         ) : (
           <Flex w="100%" h="100%" align="center" justify="center" px={4} textAlign="center">
             <Text color={tcmTxt} fontSize={{ base: "3xl", md: "2xl" }} lineHeight="1.3" fontWeight={700}
@@ -239,32 +255,13 @@ function BrocadoBox({ postura, numero, onVer }: {
         )}
       </Box>
 
-      {/* Pie: número y nombre a la izquierda, «Ver» a la derecha. */}
-      <Flex position="relative" zIndex={1} flex="1" align="center" justify="space-between" gap={3}
-            px={{ base: 5, md: 4 }} py={{ base: 4, md: 3.5 }}>
-        <Box minW={0}>
-          <Text color={tcmTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.14em" opacity={0.75}
-                style={{ textShadow: INK_SHADOW }}>
-            {numero}
-          </Text>
-          <Text color={tcmTxt} fontSize={{ base: "md", md: "sm" }} fontWeight={800} lineHeight="1.25"
-                style={{ textShadow: INK_SHADOW }}>
-            {postura.nombre}
-          </Text>
-        </Box>
-
-        <Flex flexShrink={0} align="center" gap={1.5} px={3.5} py={1.5} borderRadius="full"
-              border={`1.5px solid ${tcmTxt}99`} bg="rgba(0,0,0,0.25)"
-              transition="all 0.18s" _groupHover={{ borderColor: tcmTxt, bg: "rgba(0,0,0,0.42)" }}>
-          <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase"
-                style={{ textShadow: INK_SHADOW }}>
-            Ver
-          </Text>
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px"
-               fill={tcmTxt} flexShrink={0} style={{ filter: `drop-shadow(0 1px 3px ${tcmBg})` }}>
-            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-          </Box>
-        </Flex>
+      {/* Pie: el nombre corto, una sola línea. */}
+      <Flex position="relative" zIndex={1} flex="1" align="center"
+            px={{ base: 5, md: 4 }} py={{ base: 3.5, md: 3 }}>
+        <Text color={tcmTxt} fontSize={{ base: "md", md: "sm" }} fontWeight={800} lineHeight="1.3"
+              noOfLines={1} style={{ textShadow: INK_SHADOW }}>
+          {postura.corto}
+        </Text>
       </Flex>
     </Box>
   );

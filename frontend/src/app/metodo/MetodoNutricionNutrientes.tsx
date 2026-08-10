@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -48,6 +49,7 @@ function NutrienteBox({ n, visto, onClick }: { n: Nutriente; visto: boolean; onC
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionNutrientes() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [explorados, setExplorados] = useState<string[]>([]);
@@ -108,10 +110,10 @@ export default function MetodoNutricionNutrientes() {
             color={nutricionTxt}
             nom={nutricionNom}
             mb={0}
-            prev={{ label: "← Nutrición", onClick: () => navigate("/metodo/nutricion") }}
-            extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
+            prev={{ label: `← ${t("metodo.nutri.paso.nutricion")}`, onClick: () => navigate("/metodo/nutricion") }}
+            extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
             next={{
-              label: "Secundarios →",
+              label: `${t("metodo.nutri.paso.secundariosCorto")} →`,
               onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios"),
               disabled: faltanPrincipales,
               disabledTooltip: "Revisa todos los nutrientes para desbloquear",

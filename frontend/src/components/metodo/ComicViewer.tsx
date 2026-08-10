@@ -281,6 +281,7 @@ export function ComicViewer({
   }, [esperaFondo, disciplinaBgImage]);
   const contentRef = useRef<HTMLDivElement>(null);
   const textScrollRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const total = vinetas.length;
@@ -309,6 +310,32 @@ export function ComicViewer({
   const tituloBlanco =
     !textColor || textColor.toLowerCase() === "#ffffff" || textColor.toLowerCase() === "white";
   const tituloShadow = tituloBlanco ? "0 2px 8px rgba(0,0,0,0.9)" : textShadow;
+
+  // ── Nada de barra de scroll fuera de la caja ──────────────────────────────
+  // El visor ocupa la pantalla JUSTA (el ModalBody de abajo va a 100dvh con
+  // overflow hidden) y el texto scrollea DENTRO de la caja, pegado a su borde.
+  // Cualquier barra a pantalla completa, por tanto, es un error: sale porque los
+  // ~19 popups que montan este visor abren su <Modal> con
+  // scrollBehavior="outside", y eso pone `overflow: auto` en el contenedor del
+  // diálogo. Un píxel de más (100vh de `size="full"` contra 100dvh, el blur del
+  // fondo, un margen) y aparece la barra maligna a la derecha de todo.
+  //
+  // Se apaga aquí, en UN sitio, en vez de repetir tres props en los 19 popups
+  // (y en vez de tocar los que sí necesitan scroll de página: los MENÚS de las
+  // galerías de Ilustraciones, que no montan el visor y siguen intactos).
+  useEffect(() => {
+    const body = bodyRef.current;
+    if (!body) return;
+    const arriba = [
+      body.closest<HTMLElement>(".chakra-modal__content-container"),
+      body.closest<HTMLElement>(".chakra-modal__content"),
+    ].filter((el): el is HTMLElement => !!el);
+    const antes = arriba.map((el) => [el, el.style.overflow] as const);
+    for (const el of arriba) el.style.overflow = "hidden";
+    // Al cerrar el cómic se devuelve lo que hubiera: en las galerías el mismo
+    // modal vuelve a su menú, que sí scrollea.
+    return () => { for (const [el, valor] of antes) el.style.overflow = valor; };
+  }, []);
 
   // Al cambiar de viñeta, la nueva SIEMPRE empieza desde arriba, aunque en la
   // anterior se hubiera bajado hasta el final. Reseteamos el scroll interno
@@ -616,6 +643,7 @@ export function ComicViewer({
           scrollea dentro de la caja). El py deja un margen visible arriba y
           abajo para que la caja no se pegue a los bordes. */}
       <ModalBody
+        ref={bodyRef}
         position="relative"
         zIndex={2}
         display="flex"
@@ -626,7 +654,11 @@ export function ComicViewer({
         // lo que quede libre y hace su propio scroll por dentro, así que la
         // página NO necesita barra de scroll. `dvh` para que en móvil no cuente
         // de más la franja de la barra del navegador.
+        // `maxH` además de `h`: el ModalContent de algunos popups va con
+        // `minH="100dvh"`, y sin tope el body podía estirarse por encima de la
+        // pantalla y sacarle barra al contenedor del modal.
         h="100dvh"
+        maxH="100dvh"
         overflow="hidden"
         // Móvil: px = 5 para que el box quede EXACTAMENTE del ancho del header de
         // la disciplina (la página usa px base 5). py más corto para que el box +

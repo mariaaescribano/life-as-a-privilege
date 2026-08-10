@@ -10,11 +10,16 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { Reveal } from "../../components/global/Reveal";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { VINETAS_ENFERMEDADES } from "../../components/metodo/comicEnfermedades";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento, type DatosTcm } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { EstrellaCiclo, RelacionModal, FONDO_CICLO, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+
+// Sombra de la letra de los cómics de TCM (la misma que Recetas y Qigong).
+const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 
 export default function MetodoTcmCiclos() {
   const navigate = useNavigate();
@@ -29,6 +34,10 @@ export default function MetodoTcmCiclos() {
   // botón «Diagnóstico final» queda desbloqueado desde el principio, para siempre.
   const datosRef = useRef<DatosTcm>({});
   const [yaLeido, setYaLeido] = useState(false);
+  // Cómic «Las enfermedades»: se intercala al pasar de aquí al Diagnóstico
+  // final. Ya ha visto cómo se generan y se controlan los elementos; ahora,
+  // qué pasa cuando esos ciclos se rompen.
+  const [comicOpen, setComicOpen] = useState(false);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -140,8 +149,10 @@ export default function MetodoTcmCiclos() {
             prev={{ label: "← Los 5 elementos", onClick: () => navigate("/metodo/tcm/elementos") }}
             extra={ilustracionesBtn}
             next={{
+              // No salta al Diagnóstico: abre antes el cómic «Las enfermedades»,
+              // que es el puente entre los ciclos y el diagnóstico.
               label: "Diagnóstico final →",
-              onClick: () => navigate("/metodo/tcm/diagnostico"),
+              onClick: () => setComicOpen(true),
               disabled: !yaLeido && vistas.size < TOTAL_FLECHAS,
               disabledTooltip: "Toca todas las flechitas para descubrir cada relación",
             }}
@@ -200,6 +211,22 @@ export default function MetodoTcmCiclos() {
 
       {/* Popup de la relación (reutiliza el ComicViewer inmersivo) */}
       <RelacionModal rel={sel} onClose={() => setSel(null)} onView={verRelacion} />
+
+      {/* Cómic «Las enfermedades», entre los ciclos y el Diagnóstico final. Al
+          terminarlo (o pulsar «Diagnóstico final →») avanza; con la X se cierra
+          y se queda en los ciclos. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={() => navigate("/metodo/tcm/diagnostico")}
+        vinetas={VINETAS_ENFERMEDADES}
+        continueLabel="Diagnóstico final"
+        themeColor={tcmTxt}
+        textColor={tcmTxt}
+        disciplinaBgImage="/img/fondos/tcm.webp"
+        disciplinaBgColor={tcmBg}
+        textShadow={INK_SHADOW}
+      />
 
       <IndiceTcm />
 

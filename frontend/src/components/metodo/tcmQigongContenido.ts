@@ -69,7 +69,17 @@ export interface HitoQigong {
   key: string;
   fecha: string;
   titulo: string;
-  texto: string;
+  /** El texto del hito. Un string suelto es UN párrafo; un array es un párrafo
+   *  por elemento, que es como se meten los saltos de línea:
+   *
+   *    texto: [
+   *      "Primera idea.",
+   *      "Segunda idea, en su propio bloque.",
+   *    ],
+   *
+   *  Las dos formas valen: los hitos que ya estaban escritos de una tirada no
+   *  hay que tocarlos. */
+  texto: string | string[];
 }
 
 export const HISTORIA_QIGONG: HitoQigong[] = [
@@ -77,7 +87,10 @@ export const HISTORIA_QIGONG: HitoQigong[] = [
     key: "jade",
     fecha: "s. IV a.C.",
     titulo: "La inscripción del jade",
-    texto: "Un pequeño colgante de jade de doce caras (行氣玉佩銘) describe cómo hacer bajar la respiración hasta el vientre, dejarla asentarse y devolverla arriba. Es el texto más antiguo que se conserva sobre conducir el Qi: la práctica es anterior a los libros que la explican.",
+    texto: [
+      "Un pequeño colgante de jade de doce caras (行氣玉佩銘) describe cómo hacer bajar la respiración hasta el vientre, dejarla asentarse y devolverla arriba.",
+      "Es el texto más antiguo que se conserva sobre conducir el Qi: la práctica es anterior a los libros que la explican.",
+    ],
   },
   {
     key: "zhuangzi",
@@ -140,7 +153,7 @@ export const HISTORIA_QIGONG_VINETAS: Vineta[] = HISTORIA_QIGONG.map((h) => ({
   src: FOTO_HITO(h.key),
   eyebrow: h.fecha,
   titulo: h.titulo,
-  paragraphs: [h.texto],
+  paragraphs: Array.isArray(h.texto) ? h.texto : [h.texto],
 }));
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -246,6 +259,10 @@ export interface Postura {
   key: string;
   /** Nombre en castellano. */
   nombre: string;
+  /** Nombre CORTO, para la rejilla de la página: ahí cada tarjeta tiene una sola
+   *  línea de pie, y los nombres largos («Tensar el arco a un lado y al otro»)
+   *  se partían en dos y descuadraban la fila. El largo se lee en el cómic. */
+  corto: string;
   /** El verso chino original (así se nombran los brocados). */
   hanzi: string;
   pinyin: string;
@@ -267,6 +284,7 @@ export const BROCADOS: Postura[] = [
   {
     key: "brocado-1-sostener-cielo",
     nombre: "Sostener el cielo con las manos",
+    corto: "Sostener el cielo",
     hanzi: "雙手托天理三焦",
     pinyin: "shuāng shǒu tuō tiān lǐ sān jiāo",
     organo: "Triple Calentador (San Jiao)",
@@ -283,6 +301,7 @@ export const BROCADOS: Postura[] = [
   {
     key: "brocado-2-tensar-arco",
     nombre: "Tensar el arco a un lado y al otro",
+    corto: "Tensar el arco",
     hanzi: "左右開弓似射鵰",
     pinyin: "zuǒ yòu kāi gōng sì shè diāo",
     organo: "Pulmón y cintura",
@@ -299,6 +318,7 @@ export const BROCADOS: Postura[] = [
   {
     key: "brocado-3-separar-cielo-tierra",
     nombre: "Separar el cielo y la tierra",
+    corto: "Cielo y tierra",
     hanzi: "調理脾胃須單舉",
     pinyin: "tiáo lǐ pí wèi xū dān jǔ",
     organo: "Bazo y estómago",
@@ -315,6 +335,7 @@ export const BROCADOS: Postura[] = [
   {
     key: "brocado-4-mirar-atras",
     nombre: "Mirar atrás por encima del hombro",
+    corto: "Mirar atrás",
     hanzi: "五勞七傷往後瞧",
     pinyin: "wǔ láo qī shāng wǎng hòu qiáo",
     organo: "Corazón, cuello y ojos",
@@ -331,6 +352,7 @@ export const BROCADOS: Postura[] = [
   {
     key: "brocado-5-cabeza-y-cadera",
     nombre: "Balancear la cabeza y la cadera",
+    corto: "Cabeza y cadera",
     hanzi: "搖頭擺尾去心火",
     pinyin: "yáo tóu bǎi wěi qù xīn huǒ",
     organo: "Corazón (y riñón)",
@@ -356,13 +378,15 @@ export interface Animal {
   hanzi: string;
   elemento: Elemento;
   organo: string;
-  texto: string;
+  /** Igual que en HitoQigong: un string es un párrafo y un array, uno por
+   *  elemento. Los dos animales van al mismo cómic, así que se escriben igual. */
+  texto: string | string[];
 }
 
 export const CINCO_ANIMALES: Animal[] = [
   {
     key: "tigre",
-    animal: "El tigre",
+    animal: "五禽戲 Hua Tuo: El tigre",
     hanzi: "虎",
     elemento: "madera",
     organo: "Hígado",
@@ -370,7 +394,7 @@ export const CINCO_ANIMALES: Animal[] = [
   },
   {
     key: "ciervo",
-    animal: "El ciervo",
+    animal: "五禽戲 Hua Tuo: El ciervo",
     hanzi: "鹿",
     elemento: "agua",
     organo: "Riñón",
@@ -378,7 +402,7 @@ export const CINCO_ANIMALES: Animal[] = [
   },
   {
     key: "oso",
-    animal: "El oso",
+    animal: "五禽戲 Hua Tuo: El oso",
     hanzi: "熊",
     elemento: "tierra",
     organo: "Bazo y estómago",
@@ -386,7 +410,7 @@ export const CINCO_ANIMALES: Animal[] = [
   },
   {
     key: "mono",
-    animal: "El mono",
+    animal: "五禽戲 Hua Tuo: El mono",
     hanzi: "猴",
     elemento: "fuego",
     organo: "Corazón",
@@ -394,7 +418,7 @@ export const CINCO_ANIMALES: Animal[] = [
   },
   {
     key: "grulla",
-    animal: "La grulla",
+    animal: "五禽戲 Hua Tuo: La grulla",
     hanzi: "鶴",
     elemento: "metal",
     organo: "Pulmón",
@@ -442,16 +466,11 @@ export const FOTO_ANIMAL = (key: string) => `/recorrido/tcm/cincoanimales/${key}
  *  Cinco viñetas y no seis: hay una foto por animal y ninguna de portada, así
  *  que la presentación de la serie va como primer párrafo del tigre en vez de
  *  ocupar una viñeta suya que se vería sin ilustración. */
-export const CINCO_ANIMALES_VINETAS: Vineta[] = CINCO_ANIMALES.map((a, i) => ({
+export const CINCO_ANIMALES_VINETAS: Vineta[] = CINCO_ANIMALES.map((a) => ({
   src: FOTO_ANIMAL(a.key),
   eyebrow: `${a.hanzi} · ${a.organo}`,
   titulo: a.animal,
-  paragraphs: i === 0
-    ? [
-        "La otra gran serie es la de Hua Tuo (五禽戲): un animal por elemento, compuesta mirando cómo se mueven. Mira cuál te salió más cargado en tu mapa y empieza por el suyo.",
-        a.texto,
-      ]
-    : [a.texto],
+  paragraphs: Array.isArray(a.texto) ? a.texto : [a.texto],
 }));
 
 /** Nota al pie. */

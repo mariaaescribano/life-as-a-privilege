@@ -15,6 +15,7 @@ import { PagoPsicologiaModal } from "../../components/metodo/PagoPsicologiaModal
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { INTRO_PSICOLOGIA } from "../../components/metodo/comicPsicologiaIntro";
+import { useComic } from "../../i18n/comics";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { EXPERIENCIAS } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
@@ -35,6 +36,8 @@ const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicolog
 
 export default function MetodoPsicologia() {
   const t = useT();
+  // El cómic de intro, en el idioma activo.
+  const introVinetas = useComic("psicologia-intro", INTRO_PSICOLOGIA);
   const navigate = useNavigate();
   const experiencia = EXPERIENCIAS[0];
   const [loading, setLoading] = useState(true);
@@ -205,7 +208,7 @@ export default function MetodoPsicologia() {
       {/* Intro (1ª vez): cómic de psicología (nuestra historia / apego). */}
       <IntroComicModal
         isOpen={intro.open}
-        vinetas={INTRO_PSICOLOGIA}
+        vinetas={introVinetas}
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"
         disciplinaBgColor={neuropsicologiaBg}

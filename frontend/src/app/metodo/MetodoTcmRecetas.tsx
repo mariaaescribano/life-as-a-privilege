@@ -10,6 +10,7 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { TcmComicModal } from "../../components/metodo/QigongComicModal";
 import { HISTORIA_QIGONG_VINETAS } from "../../components/metodo/tcmQigongContenido";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
@@ -19,10 +20,14 @@ import {
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import {
-  COCINA_NOTA, FOTO_COCINA, cocinaDe, type Coccion,
+  COCINA_NOTA, FOTO_COCINA, cocinaDe, type Coccion, type GrupoAlimentos,
 } from "../../components/metodo/tcmCocinaContenido";
 
-const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
+// Sombra del texto DENTRO de las cajas: NEGRA, no del turquesa de la disciplina.
+// Las cajas llevan detrás la acuarela del elemento (clara en Tierra y Metal), y
+// una sombra de color no separaba la letra del fondo: se leía a medias. Negra
+// funciona con las cinco.
+const INK_SHADOW = "0 1px 3px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.8)";
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 // Toda la página vive dentro del mismo ancho que el header del recorrido
@@ -48,6 +53,10 @@ export default function MetodoTcmRecetas() {
   // Cómic del ORIGEN del Qigong («De dónde viene»): se ve al pasar de aquí a
   // Qigong, en vez de leerse dentro de aquella página.
   const [comicOpen, setComicOpen] = useState(false);
+  // Cómic de las FORMAS DE COCINAR del elemento activo: guarda por qué cocción
+  // se ha abierto (null = cerrado). Dentro se pasa de una a otra con las flechas
+  // del visor, así que basta con recordar la de entrada.
+  const [coccionAbierta, setCoccionAbierta] = useState<number | null>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -108,6 +117,17 @@ export default function MetodoTcmRecetas() {
   const E = ELEMENTOS[elActivo];
   const cocina = cocinaDe(elActivo);
 
+  // Las viñetas del cómic de las cocciones: una por forma de cocinar, en el
+  // mismo orden que las tarjetas (por eso el índice de la tarjeta vale como
+  // `initialIndex`). El antetítulo es el elemento, para no perder de vista de
+  // quién es esta cocina mientras se lee a pantalla completa.
+  const coccionVinetas = cocina.cocciones.map((c, i) => ({
+    src: FOTO_COCINA(elActivo, i),
+    eyebrow: E.nombre,
+    titulo: c.nombre,
+    paragraphs: [c.como, c.porque],
+  }));
+
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -162,81 +182,39 @@ export default function MetodoTcmRecetas() {
           <GestoDeHoy
             elemento={elActivo}
             gestos={cocina.cadaDia}
+            grupos={cocina.grupos}
             estado={datos.cocinaGesto?.[elActivo]}
             onCambiar={(cambio) => void guardarGesto(elActivo, cambio)}
           />
 
-          {/* ── CABECERA DEL ELEMENTO · foto de fondo + cómo se cocina ── */}
-          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
-            <FondoElemento elemento={elActivo} />
-
-            <Box key={elActivo} position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 6, md: 8 }}
-                 sx={{ "@keyframes elemIn": { from: { opacity: 0, transform: "translateY(12px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}
-                 style={{ animation: "elemIn 0.35s cubic-bezier(0.22,1,0.36,1)" }}>
-              <Flex align="center" justify="space-between" gap={3} wrap="wrap" mb={3}>
-                <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.15"
-                      style={{ textShadow: "0 2px 10px rgba(0,0,0,0.9)" }}>
-                  La cocina de la <Text as="span" color={E.color}>{E.nombre}</Text>
-                </Text>
-                <Box px={3} py={1} borderRadius="full" bg={`${E.color}44`} border={`1px solid ${E.color}`}
-                     sx={{ backdropFilter: "blur(4px)" }}>
-                  <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.04em">
-                    Sabor {cocina.sabor.toLowerCase()}
-                  </Text>
-                </Box>
-              </Flex>
-              <Box h="1px" w="100%" mb={4} bgGradient={`linear(to-r, ${E.color}, ${E.color}22, transparent)`} />
-              <Text color="rgba(255,255,255,0.96)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
-                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
-                {cocina.principio}
-              </Text>
-              <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={3}
-                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
-                Órganos: {E.organos} · Estación: {E.estacion.toLowerCase()}
-              </Text>
-            </Box>
-          </Box>
-
-          {/* ── LOS INGREDIENTES, POR FAMILIAS ── */}
-          <Seccion>Ingredientes que aportar</Seccion>
-          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
-               gap={{ base: 5, md: 6 }} w="100%">
-            {cocina.grupos.map((g) => (
-              // `key` con el elemento: al cambiar de elemento las tarjetas se
-              // remontan y vuelven a entrar en escena en vez de cambiar de texto.
-              <Reveal key={`${elActivo}-${g.key}`} inView direction="up" distance={24} scaleFrom={0.98}
-                      duration={0.68} amount={0.12} w="100%" h="100%">
-                <Panel h="100%" elemento={elActivo}>
-                  <Rotulo color={E.color}>{g.titulo}</Rotulo>
-                  <Flex direction="column" gap={3}>
-                    {g.alimentos.map((a, i) => (
-                      <Flex key={i} gap={2.5} align="flex-start" minW={0}>
-                        <Box flexShrink={0} mt={{ base: "9px", md: "10px" }} w="5px" h="5px" borderRadius="full"
-                             bg={E.color} boxShadow={`0 0 6px ${E.color}`} />
-                        <Box minW={0}>
-                          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700} lineHeight="1.5"
-                                style={{ textShadow: INK_SHADOW }}>{a.nombre}</Text>
-                          <Text color="rgba(255,255,255,0.86)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
-                                lineHeight="1.65" style={{ textShadow: INK_SHADOW }}>{a.aporta}</Text>
-                        </Box>
-                      </Flex>
-                    ))}
-                  </Flex>
-                </Panel>
-              </Reveal>
-            ))}
-          </Box>
+          {/* ── CÓMO SE COCINA PARA ESTE ELEMENTO · una sola línea ──
+              Antes esto era una caja entera («La cocina de la X», con el sabor y
+              los órganos) y, debajo, el título «Ingredientes que aportar» con
+              cuatro cajas de alimentos. Los ingredientes se han mudado dentro de
+              «Un gesto para hoy», así que de todo aquello queda solo esta frase,
+              en el hueco que ocupaba ese título. Va FUERA de las cajas: blanca y
+              sin sombra, como el resto del texto sobre el turquesa. */}
+          <Reveal key={`principio-${elActivo}`} inView direction="up" distance={12} duration={0.6} amount={0.4}
+                  display="flex" justifyContent="center">
+            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.85"
+                  textAlign="center" maxW="720px">
+              {cocina.principio}
+            </Text>
+          </Reveal>
 
           {/* ── FORMAS DE COCINAR ──
-              Una sola columna: las ilustraciones son CUADRADAS y van al lado del
-              texto (como los boxes de cómic), así que cada tarjeta necesita el
-              ancho entero. */}
+              Solo las tarjetas: foto de la cocción arriba, título abajo y el
+              botón «Ver» a la derecha. El texto (el cómo y el por qué) ya no se
+              lee aquí: se abre en el cómic inmersivo del elemento, por la
+              cocción que se haya pulsado, y allí se pasa de una a otra con las
+              flechas. La página se queda mirable de un vistazo. */}
           <Seccion>Formas de cocinar</Seccion>
-          <Box display="grid" gridTemplateColumns="1fr" gap={{ base: 5, md: 6 }} w="100%">
+          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
+               gap={{ base: 5, md: 6 }} w="100%">
             {cocina.cocciones.map((c, i) => (
               <Reveal key={`${elActivo}-${c.key}`} inView direction="up" distance={24} scaleFrom={0.98}
                       duration={0.68} amount={0.12} w="100%" h="100%">
-                <CoccionCard coccion={c} elemento={elActivo} numero={i + 1} color={E.color} />
+                <CoccionBox coccion={c} elemento={elActivo} numero={i} onVer={() => setCoccionAbierta(i)} />
               </Reveal>
             ))}
           </Box>
@@ -253,6 +231,16 @@ export default function MetodoTcmRecetas() {
       </Flex>
 
       {ilustracionesModal}
+
+      {/* Las formas de cocinar del elemento, en el cómic de la disciplina: una
+          viñeta por cocción (foto + el cómo y el por qué). Se abre por la que se
+          ha pulsado y desde ahí se navega adelante y atrás con las flechas. */}
+      <TcmComicModal
+        isOpen={coccionAbierta !== null}
+        vinetas={coccionVinetas}
+        initialIndex={coccionAbierta ?? 0}
+        onClose={() => setCoccionAbierta(null)}
+      />
 
       {/* Cómic del ORIGEN del Qigong: veintitrés siglos en nueve viñetas. Antes
           se leía dentro de la página de Qigong (línea del tiempo + cómic por
@@ -286,11 +274,17 @@ export default function MetodoTcmRecetas() {
 // El tick guarda el DÍA, no un sí/no: mañana vuelve a estar por hacer. Es la
 // diferencia entre un hábito diario y una casilla que se marca una vez y ya.
 //
+// Aquí dentro van TAMBIÉN todos los ingredientes del elemento. Antes vivían en
+// cuatro cajas aparte, y estaban lejos justo de lo único que se hace en la
+// página: si el gesto de hoy es «una cocción larga», lo que hace falta al lado
+// es la lista de la compra, no tres pantallas más abajo.
+//
 // Al cambiar de elemento la tarjeta se remonta (`key` en el padre no hace falta:
 // el índice y el «hecho» vienen de `estado`, que ya es del elemento activo).
-function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
+function GestoDeHoy({ elemento, gestos, grupos, estado, onCambiar }: {
   elemento: Elemento;
   gestos: string[];
+  grupos: GrupoAlimentos[];
   estado?: { i?: number; hecho?: string };
   onCambiar: (cambio: { i?: number; hecho?: string }) => void;
 }) {
@@ -310,7 +304,7 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
         <Flex position="relative" zIndex={1} direction="column" gap={4}
               px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>
           <Flex align="center" gap={3}>
-            <Rotulo color={E.color}>Un gesto para hoy</Rotulo>
+            <Rotulo>Un gesto para hoy</Rotulo>
             <Box h="1px" flex="1" mb={2.5} bgGradient={`linear(to-r, ${E.color}88, transparent)`} />
           </Flex>
 
@@ -372,11 +366,52 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
           </Flex>
 
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic"
-                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
+                style={{ textShadow: INK_SHADOW }}>
             {hecho
               ? "Mañana vuelve a estar por hacer: de eso va."
               : "Uno solo. Los otros cuatro seguirán aquí mañana."}
           </Text>
+
+          {/* ── Los ingredientes del elemento, dentro de la misma caja ──
+              Dos columnas en ordenador y una en móvil. `key` con el elemento en
+              la lista entera: al cambiar de elemento se remonta y entra en
+              escena, en vez de cambiarle el texto a las mismas líneas. */}
+          {grupos.length > 0 && (
+            <Box key={`ingr-${elemento}`}
+                 sx={{ "@keyframes ingrIn": { from: { opacity: 0, transform: "translateY(10px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}
+                 style={{ animation: "ingrIn 0.4s cubic-bezier(0.22,1,0.36,1)" }}>
+              <Box h="1px" w="100%" mt={2} mb={5}
+                   bgGradient="linear(to-r, transparent, rgba(255,255,255,0.5), transparent)" />
+              <Rotulo>Ingredientes que aportar</Rotulo>
+              <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
+                   columnGap={{ base: 0, md: 9 }} rowGap={{ base: 6, md: 7 }}>
+                {grupos.map((g) => (
+                  <Box key={g.key} minW={0}>
+                    <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={800} letterSpacing="0.02em"
+                          mb={2.5} style={{ textShadow: INK_SHADOW }}>
+                      {g.titulo}
+                    </Text>
+                    <Flex direction="column" gap={3}>
+                      {g.alimentos.map((a, j) => (
+                        <Flex key={j} gap={2.5} align="flex-start" minW={0}>
+                          {/* El punto sí lleva el color del elemento: es adorno,
+                              no texto, y ahí el color se ve sin estorbar. */}
+                          <Box flexShrink={0} mt={{ base: "9px", md: "10px" }} w="5px" h="5px" borderRadius="full"
+                               bg={E.color} boxShadow={`0 0 6px ${E.color}`} />
+                          <Box minW={0}>
+                            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700} lineHeight="1.5"
+                                  style={{ textShadow: INK_SHADOW }}>{a.nombre}</Text>
+                            <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
+                                  lineHeight="1.65" style={{ textShadow: INK_SHADOW }}>{a.aporta}</Text>
+                          </Box>
+                        </Flex>
+                      ))}
+                    </Flex>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          )}
         </Flex>
       </Box>
     </Reveal>
@@ -410,47 +445,53 @@ function BotonElemento({ elemento, activo, onClick }: {
 }
 
 // ── Tarjeta de una forma de cocinar ──────────────────────────────────────────
-// Las ilustraciones son CUADRADAS (1:1), así que van enteras a la izquierda y el
-// texto a la derecha —la estructura de los boxes con ilustración del recorrido—.
-// En móvil la ilustración pasa arriba, cuadrada y a todo el ancho. Si todavía no
-// existe el archivo, la tarjeta se queda solo con el texto, sin hueco.
-function CoccionCard({ coccion, elemento, numero, color }: {
-  coccion: Coccion; elemento: Elemento; numero: number; color: string;
+// La tarjeta de la casa para las cosas con foto (la de FotoBox): ilustración
+// CUADRADA arriba a sangre, línea a todo el ancho y el título en el pie.
+//
+// Aquí no se lee nada más: el cómo y el por qué se leen en el cómic inmersivo,
+// que se abre por esta cocción. Antes cada tarjeta traía los dos textos al lado
+// de la foto y la página era un muro.
+//
+// SIN botón «Ver»: la tarjeta entera ya es el botón, así que el rótulo solo
+// repetía. Lo que invita a pulsar es el zoom lento de la foto al pasar el
+// puntero por encima. Si la foto todavía no existe, se cae a la acuarela del
+// elemento, que ya está detrás.
+function CoccionBox({ coccion, elemento, numero, onVer }: {
+  coccion: Coccion; elemento: Elemento; numero: number; onVer: () => void;
 }) {
   const [sinFoto, setSinFoto] = useState(false);
+  const E = ELEMENTOS[elemento];
 
   return (
-    <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden"
-         boxShadow={CAJA_GLOW} display="flex" flexDirection="column">
+    <Box as="button" onClick={onVer} textAlign="left" position="relative" w="100%" h="100%"
+         display="flex" flexDirection="column" borderRadius="2xl" overflow="hidden" cursor="pointer"
+         fontFamily="'EB Garamond', serif" boxShadow={CAJA_GLOW} transition="all 0.22s ease"
+         role="group"
+         _hover={{ transform: "translateY(-4px)", boxShadow: `${CAJA_GLOW}, 0 0 26px ${E.color}44` }}
+         _active={{ transform: "translateY(-1px)" }}>
       <FondoElemento elemento={elemento} />
 
-      <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }} align="stretch" h="100%">
+      {/* Ilustración cuadrada, a sangre */}
+      <Box position="relative" zIndex={1} w="100%" flexShrink={0} overflow="hidden"
+           bg={`${tcmBg}88`} sx={{ aspectRatio: "1" }}>
         {!sinFoto && (
-          <Box position="relative" flexShrink={0} overflow="hidden" bg={`${tcmBg}88`}
-               w={{ base: "100%", md: "300px" }}
-               sx={{ aspectRatio: "1" }}
-               alignSelf={{ base: "auto", md: "flex-start" }}
-               m={{ base: 0, md: 5 }}
-               borderRadius={{ base: 0, md: "xl" }}>
-            <Image src={encodeURI(FOTO_COCINA(elemento, numero - 1))} alt={coccion.nombre}
-                   w="100%" h="100%" objectFit="cover" onError={() => setSinFoto(true)} />
-          </Box>
+          <Image src={encodeURI(FOTO_COCINA(elemento, numero))} alt={coccion.nombre}
+                 w="100%" h="100%" objectFit="cover" onError={() => setSinFoto(true)}
+                 transition="transform 0.55s cubic-bezier(0.22,1,0.36,1)"
+                 _groupHover={{ transform: "scale(1.06)" }} />
         )}
+      </Box>
 
-        <Box flex="1" minW={0} px={{ base: 6, md: 7 }} py={{ base: 5, md: 6 }}>
-          <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.2"
-                style={{ textShadow: `0 1px 8px rgba(0,0,0,0.8), 0 0 18px ${color}55` }}>
-            {coccion.nombre}
-          </Text>
-          <Box h="1px" w="100%" my={{ base: 3.5, md: 4 }}
-               bgGradient={`linear(to-r, transparent, ${tcmTxt}, transparent)`} />
-          <Rotulo color={color}>Cómo</Rotulo>
-          <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                style={{ textShadow: INK_SHADOW }}>{coccion.como}</Text>
-          <Rotulo color={color} mt={5}>Por qué</Rotulo>
-          <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{coccion.porque}</Text>
-        </Box>
+      {/* Línea separadora a todo el ancho */}
+      <Box position="relative" zIndex={1} h="1px" flexShrink={0} bg="rgba(255,255,255,0.35)" />
+
+      {/* Pie: solo el título. */}
+      <Flex position="relative" zIndex={1} flex="1" align="center"
+            px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
+        <Text color="white" fontWeight={800} fontSize={{ base: "md", md: "lg" }} lineHeight="1.3"
+              letterSpacing="0.02em" noOfLines={1} style={{ textShadow: INK_SHADOW }}>
+          {coccion.nombre}
+        </Text>
       </Flex>
     </Box>
   );
@@ -469,10 +510,14 @@ function Seccion({ children }: { children: React.ReactNode }) {
 }
 
 // ── Rótulo de apartado dentro de una caja ────────────────────────────────────
-function Rotulo({ children, color, mt }: { children: React.ReactNode; color: string; mt?: any }) {
+// BLANCO, nunca del color del elemento: en minúsculas de 12px y sobre la
+// acuarela, los colores de los cinco elementos (el ocre de la Tierra, el gris
+// del Metal) se perdían y el rótulo no se leía. Blanco con sombra negra se lee
+// en los cinco.
+function Rotulo({ children, mt }: { children: React.ReactNode; mt?: any }) {
   return (
-    <Text color={color} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase"
-          mt={mt} mb={2.5} style={{ textShadow: `0 0 10px ${color}55, ${INK_SHADOW}` }}>
+    <Text color="white" fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase"
+          mt={mt} mb={2.5} style={{ textShadow: INK_SHADOW }}>
       {children}
     </Text>
   );
@@ -493,18 +538,5 @@ function FondoElemento({ elemento }: { elemento: Elemento }) {
   );
 }
 
-// ── Box común (mismo que el resto del recorrido) ─────────────────────────────
-// El glow es SIEMPRE el del header (CAJA_GLOW), sin halos de color añadidos:
-// con ellos las cajas brillaban más que la cabecera.
-function Panel({ children, h, elemento }: {
-  children: React.ReactNode; h?: any; elemento: Elemento;
-}) {
-  return (
-    <Box position="relative" w="100%" h={h} borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
-      <FondoElemento elemento={elemento} />
-      <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 6, md: 7 }}>
-        {children}
-      </Box>
-    </Box>
-  );
-}
+// Aquí vivía `Panel`, el box común de las cuatro cajas de ingredientes. Ya no
+// hace falta: los ingredientes se pintan dentro de «Un gesto para hoy».

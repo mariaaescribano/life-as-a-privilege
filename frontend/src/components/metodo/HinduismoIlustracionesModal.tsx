@@ -77,7 +77,7 @@ export const VINETAS_ORIGEN: Vineta[] = [
   {
     src: "/viñetas/hinduismo/origen/origen8.webp",
     paragraphs: [
-      "La interacción de los elementos y los doṣhas da lugar a la naturaleza y al ser humano, que refleja en sí mismo las mismas leyes que gobiernan el universo.",
+      "La interacción de los elementos y los doṣhas da lugar a la naturaleza y al ser humano, que refleja en sí mismo las mismas leyes y cualidades que gobiernan el universo.",
     ],
   },
   {

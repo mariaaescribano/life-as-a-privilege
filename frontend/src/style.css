@@ -101,36 +101,43 @@ a:focus-visible,
    carril claro de Windows se veía como una raya blanca cortando el borde
    derecho. Carril transparente (se ve el fondo detrás, como en las cajas del
    cómic) y pulgar blanco translúcido.
-   OJO: solo se toca el scroll de la página y el de los contenedores de modal.
+   OJO: solo se toca el scroll de la página y el de los popups (contenedor del
+   modal Y el propio diálogo: el diálogo se quedaba fuera y era justo el que
+   sacaba la barra gorda con flechitas de Windows encima del cómic).
    Las cajas que ya pintan su barra con su color (ComicViewer, fichas, etc.)
    siguen mandando ellas: aquí no se usa el selector `*`, que habría dejado el
    pulgar blanco invisible en los boxes de fondo claro. */
 html,
 body,
-.chakra-modal__content-container {
+.chakra-modal__content-container,
+.chakra-modal__content {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.38) transparent;
 }
 html::-webkit-scrollbar,
 body::-webkit-scrollbar,
-.chakra-modal__content-container::-webkit-scrollbar {
+.chakra-modal__content-container::-webkit-scrollbar,
+.chakra-modal__content::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 html::-webkit-scrollbar-track,
 body::-webkit-scrollbar-track,
-.chakra-modal__content-container::-webkit-scrollbar-track {
+.chakra-modal__content-container::-webkit-scrollbar-track,
+.chakra-modal__content::-webkit-scrollbar-track {
   background: transparent;
 }
 html::-webkit-scrollbar-thumb,
 body::-webkit-scrollbar-thumb,
-.chakra-modal__content-container::-webkit-scrollbar-thumb {
+.chakra-modal__content-container::-webkit-scrollbar-thumb,
+.chakra-modal__content::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.38);
   border-radius: 4px;
 }
 html::-webkit-scrollbar-thumb:hover,
 body::-webkit-scrollbar-thumb:hover,
-.chakra-modal__content-container::-webkit-scrollbar-thumb:hover {
+.chakra-modal__content-container::-webkit-scrollbar-thumb:hover,
+.chakra-modal__content::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.6);
 }
 

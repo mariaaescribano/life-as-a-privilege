@@ -12,8 +12,8 @@ import { ComicAstrologiaModal, VINETAS_SIGNOS } from "../../components/metodo/Co
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { ORIGEN_ESPIRITUALIDAD } from "../../components/metodo/ComicUniversoModal";
+import { useComic } from "../../i18n/comics";
 import { HISTORIA_ASTROLOGIA } from "../../components/metodo/comicHistoriaAstrologia";
-import { PASO_CARTA_TITULO, PASO_CARTA_TITULO_CORTO } from "../../components/metodo/astrologiaRecorrido";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { TextoCartaExplicativo, CARTA_MAPA_IMGS } from "../../components/metodo/TextoCartaExplicativo";
@@ -61,16 +61,19 @@ const SPACE_IMG = "/img/astrologia/space.jpg";
 // Nombre del paso 2 («Lo primero de tu carta»), abreviado en móvil para que
 // quepa de una línea en los botones. Se resuelve por CSS y no con un hook, así
 // no hay un primer pintado con el texto equivocado.
-const TituloPaso2 = ({ flecha = false }: { flecha?: boolean }) => (
-  <>
-    <Box as="span" display={{ base: "none", md: "inline" }}>
-      {PASO_CARTA_TITULO}{flecha ? " →" : ""}
-    </Box>
-    <Box as="span" display={{ base: "inline", md: "none" }}>
-      {PASO_CARTA_TITULO_CORTO}{flecha ? " →" : ""}
-    </Box>
-  </>
-);
+const TituloPaso2 = ({ flecha = false }: { flecha?: boolean }) => {
+  const t = useT();
+  return (
+    <>
+      <Box as="span" display={{ base: "none", md: "inline" }}>
+        {t("metodo.astro.paso.loPrimero")}{flecha ? " →" : ""}
+      </Box>
+      <Box as="span" display={{ base: "inline", md: "none" }}>
+        {t("metodo.astro.paso.loPrimeroCorto")}{flecha ? " →" : ""}
+      </Box>
+    </>
+  );
+};
 
 // Precarga una imagen; resuelve al cargar o al fallar (para que el spinner
 // nunca se quede colgado si la foto no existe).
@@ -124,6 +127,8 @@ interface Estado {
 
 export default function MetodoAstrologia() {
   const t = useT();
+  // El cómic del Origen, en el idioma activo (mismo cómic que ComicUniversoModal).
+  const origenVinetas = useComic("origen-espiritualidad", ORIGEN_ESPIRITUALIDAD);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [estado, setEstado] = useState<Estado | null>(null);
@@ -720,7 +725,7 @@ export default function MetodoAstrologia() {
           Astrología». La X salta toda la intro y entra a la disciplina. */}
       <IntroComicModal
         isOpen={intro.open}
-        vinetas={ORIGEN_ESPIRITUALIDAD}
+        vinetas={origenVinetas}
         onFinish={intro.finish}
         onClose={intro.close}
         continueLabel={hayHistoria ? "Historia" : "Astrología"}

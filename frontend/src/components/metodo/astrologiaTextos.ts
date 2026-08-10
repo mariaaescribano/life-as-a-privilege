@@ -1,6 +1,8 @@
 import type { CuerpoKey } from "./astrologiaData";
 import { ARQUETIPOS_OVERRIDES } from "./astrologiaTextos.overrides";
 import { overridesRemotos } from "../../data/astrologiaOverridesRemotos";
+import { TEXTOS_SIGNO_EN, TEXTOS_CASA_EN } from "./astrologiaTextos.en";
+import { getIdioma } from "../../i18n";
 
 /**
  * Textos de Quirón — el mismo texto aplica tanto al signo como a la casa
@@ -3660,15 +3662,35 @@ function fuenteOverrides() {
   return overridesRemotos() ?? ARQUETIPOS_OVERRIDES;
 }
 
-// Texto efectivo: primero el override del editor de admin (si existe y no está
-// vacío), si no el original. Todos los consumidores del recorrido pasan por aquí.
+/**
+ * Texto efectivo, celda a celda:
+ *   1. Si el idioma activo es el inglés y esa celda está traducida, la inglesa.
+ *   2. Si no, el override del editor de admin (si existe y no está vacío).
+ *   3. Si no, el original hardcodeado en español.
+ *
+ * La traducción va DELANTE del override a propósito: el editor de /admin
+ * escribe siempre en español, así que si mandara el override, quien lee en
+ * inglés vería el texto en español justo en los arquetipos que María ha
+ * retocado — precisamente los mejores. Mientras una celda no esté traducida se
+ * cae al español, que es lo que hace el resto de la casa.
+ *
+ * Todos los consumidores del recorrido pasan por aquí.
+ */
 export function getTextoSigno(planetaKey: string, signo: string): string | null {
+  if (getIdioma() === "en") {
+    const en = TEXTOS_SIGNO_EN[planetaKey as CuerpoKey]?.[signo];
+    if (typeof en === "string" && en.trim() !== "") return en;
+  }
   const ov = fuenteOverrides().signo?.[planetaKey]?.[signo];
   if (typeof ov === "string" && ov.trim() !== "") return ov;
   return getTextoSignoOriginal(planetaKey, signo);
 }
 
 export function getTextoCasa(planetaKey: string, casa: number): string | null {
+  if (getIdioma() === "en") {
+    const en = TEXTOS_CASA_EN[planetaKey as CuerpoKey]?.[casa];
+    if (typeof en === "string" && en.trim() !== "") return en;
+  }
   const ov = fuenteOverrides().casa?.[planetaKey]?.[String(casa)];
   if (typeof ov === "string" && ov.trim() !== "") return ov;
   return getTextoCasaOriginal(planetaKey, casa);

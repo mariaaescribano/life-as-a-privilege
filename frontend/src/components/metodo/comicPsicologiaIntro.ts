@@ -12,7 +12,7 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
     src: `${P}/sufrimiento1.webp`,
     paragraphs: [
       "Mucho antes de nacer, ya existía una historia.",
-      "Las heridas, las historias, el Amor, el rencor, los miedos y la forma en que tus padres se trataban a sí mismos y entre ellos, ya empezaban a influir en tu percepción de la realidad.",
+      "Las heridas, las historias, el amor, el rencor, los miedos y la forma en que tus padres se trataban a sí mismos y entre ellos, ya empezaban a influir en tu percepción de la realidad.",
     ],
   },
   {
@@ -25,38 +25,38 @@ export const INTRO_PSICOLOGIA: Vineta[] = [
   {
     src: `${P}/sufrimiento3.webp`,
     paragraphs: [
-      "Nuestro cerebro se desarrolla adaptándose a quienes nos cuidan.",
-      "Muchas de las conexiones que hoy dirigen nuestra forma de sentir, pensar y relacionarnos nacieron cuando aún no podíamos comprender ni recordar con palabras lo que vivíamos.",
+      "Tu cerebro se desarrolla adaptándose a quienes te cuidan.",
+      "Muchas de las conexiones que hoy dirigen tu forma de sentir, pensar y relacionarte nacieron cuando aún no podías comprender ni recordar con palabras lo que vivías.",
     ],
   },
   {
     src: `${P}/sufrimiento4.webp`,
     paragraphs: [
-      "De niños haríamos cualquier cosa por conservar el amor de quienes nos cuidaban.",
-      "Deseábamos que nuestros padres fuesen felices, pero nunca estuvo ni estará en nuestra mano. No podemos hacer nada. Cada uno es responsable de su propia felicidad.",
-      "Si nos hicieron daño, era más seguro pensar que el problema estaba en nosotros que aceptar que quienes debían protegernos también podían herirnos.",
+      "De niño harías cualquier cosa por conservar el amor de quienes te cuidaban.",
+      "Deseabas que tus padres fuesen felices, lo que no sabías es que nunca estuvo en tu mano.",
+      "Si te hacían daño, pensabas que el problema estaba en ti, que había algo malo en ti y por eso te trataban de esa manera.",
     ],
   },
   {
     src: `${P}/sufrimiento5.webp`,
     paragraphs: [
-      "Entonces apareció un conflicto imposible con el que cargamos a día de hoy.",
+      "Entonces apareció un conflicto imposible con el que cargas a día de hoy.",
       "El sistema de apego dice: «Acércate, ahí está quien te protege.»",
       "El sistema de defensa responde: «Aléjate, ahí también está quien te hace daño.»",
-      "Para resolver esa contradicción, muchos niños llegan a una conclusión devastadora: «El problema debo ser yo.»",
+      "Para resolver esa contradicción, muchos niños llegan a una conclusión devastadora: «El problema soy yo.»",
     ],
   },
   {
     src: `${P}/sufrimiento6.webp`,
     paragraphs: [
-      "Con los años, muchas experiencias despiertan las mismas heridas. Sin darnos cuenta, volvemos una y otra vez al dolor de nuestra infancia y al vacío que se formó dentro de nosotros.",
+      "Con los años, muchas experiencias despiertan las mismas heridas. Sin darte cuenta, vuelves una y otra vez al dolor de tu infancia y al vacío que se formó dentro de ti.",
     ],
   },
   {
     src: `${P}/sufrimiento7.webp`,
     paragraphs: [
       "Así viven muchas personas: creyendo que no son suficientes, culpándose y repitiendo estrategias que un día les ayudaron a sobrevivir, pero que hoy las mantienen atrapadas.",
-      "«Si quienes debían quererme no pudieron hacerlo, significa que no soy merecedor de Amor. ¿Quién podría quererme?»",
+      "«Si quienes debían quererme no pudieron hacerlo, significa que no soy merecedor de amor. ¿Quién podría quererme?»",
     ],
   },
   {

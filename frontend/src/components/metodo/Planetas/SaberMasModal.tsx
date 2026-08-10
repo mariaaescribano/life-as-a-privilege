@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { ZODIAC_SIGNS, type Cuerpo } from "../astrologiaData";
+import { useNombresAstro } from "../astrologiaNombres";
 import { Glifo, GlifoSigno } from "../Glifo";
 import { SpaceBg } from "../SpaceBg";
 import { fetchAstroTexto } from "../../../data/astrologiaTextosApi";
+import { useT } from "../../../i18n";
 void React;
 
 interface SaberMasModalProps {
@@ -128,6 +130,8 @@ function ContenidoArquetipo({ texto, color }: { texto: string; color: string }) 
 
 export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: SaberMasModalProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const t = useT();
+  const n = useNombresAstro();
 
   // Textos: se piden al back (tabla astrologia_textos), con fallback al archivo
   // estático mientras la celda no esté sembrada. `cargando` mientras llega.
@@ -157,7 +161,9 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
       setCargando(false);
     })();
     return () => { cancel = true; };
-  }, [isOpen, cuerpo?.key, signo, casa, facet]);
+    // `n.idioma` en las dependencias: el texto del arquetipo depende del idioma
+    // activo, así que al cambiarlo hay que volver a resolverlo.
+  }, [isOpen, cuerpo?.key, signo, casa, facet, n.idioma]);
 
   // Al abrir / cambiar de cuerpo, vuelve al inicio del contenido y al 1er slide.
   useEffect(() => {
@@ -202,7 +208,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontWeight="700"
           letterSpacing="0.04em"
         >
-          {cuerpo.label} en
+          {n.cuerpo(cuerpo.key)} {n.idioma === "en" ? "in" : "en"}
         </Text>
         <GlifoSigno nombre={signoData.name} color={color} size={28} />
         <Text
@@ -211,18 +217,18 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontWeight="700"
           letterSpacing="0.04em"
         >
-          {signoData.name}
+          {n.signo(signoData.name)}
         </Text>
       </Flex>
 
       {/* Sin raya bajo el título: el título ya se separa por el gap. */}
       {cargando ? (
-        <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
+        <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">{t("comun.cargando")}</Text>
       ) : textoSigno ? (
         <ContenidoArquetipo texto={textoSigno} color={color} />
       ) : (
         <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
-          Texto de {cuerpo.label} en {signoData.name} aún no disponible.
+          {t("metodo.astro.textoNoDisponible", { arquetipo: n.enSigno(cuerpo.key, signoData.name) })}
         </Text>
       )}
     </Flex>
@@ -230,7 +236,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
     <Flex align="center" justify="center" gap={3}>
       <Glifo symbol={cuerpo.symbol} color={color} size={36} />
       <Text color={`${color}aa`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic">
-        {cuerpo.label} — Signo aún no elegido
+        {n.cuerpo(cuerpo.key)} — {t("metodo.astro.signoSinElegir")}
       </Text>
     </Flex>
   );
@@ -245,18 +251,18 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontWeight="700"
           letterSpacing="0.04em"
         >
-          {cuerpo.label} en Casa {casa}
+          {n.enCasa(cuerpo.key, casa)}
         </Text>
       </Flex>
 
       {/* Sin raya bajo el título: el título ya se separa por el gap. */}
       {cargando ? (
-        <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">Cargando…</Text>
+        <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">{t("comun.cargando")}</Text>
       ) : textoCasa ? (
         <ContenidoArquetipo texto={textoCasa} color={color} />
       ) : (
         <Text color={`${color}99`} fontSize="sm" fontStyle="italic" textAlign="center">
-          Texto de {cuerpo.label} en Casa {casa} aún no disponible.
+          {t("metodo.astro.textoNoDisponible", { arquetipo: n.enCasa(cuerpo.key, casa) })}
         </Text>
       )}
     </Flex>
@@ -264,15 +270,15 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
     <Flex align="center" justify="center" gap={3}>
       <Glifo symbol={cuerpo.symbol} color={color} size={36} />
       <Text color={`${color}aa`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic">
-        {cuerpo.label} — Casa aún no elegida
+        {n.cuerpo(cuerpo.key)} — {t("metodo.astro.casaSinElegir")}
       </Text>
     </Flex>
   );
 
   // Slides visibles según lo que toque mostrar. Con dos, se navegan con flechas.
   const slides: { key: "signo" | "casa"; label: string; node: React.ReactNode }[] = [];
-  if (verSigno) slides.push({ key: "signo", label: "Signo", node: bloqueSigno });
-  if (verCasa) slides.push({ key: "casa", label: "Casa", node: bloqueCasa });
+  if (verSigno) slides.push({ key: "signo", label: n.palabraSigno(), node: bloqueSigno });
+  if (verCasa) slides.push({ key: "casa", label: n.palabraCasa(), node: bloqueCasa });
   const multi = slides.length > 1;
   const idx = Math.min(slideIdx, slides.length - 1);
   const irSlide = (n: number) => {
@@ -396,7 +402,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
                 transition="all 0.18s"
                 boxShadow={`0 0 12px ${color}33`}
                 _hover={{ bg: "rgba(0,0,0,0.6)", borderColor: color, boxShadow: `0 0 20px ${color}66` }}
-                aria-label="Anterior"
+                aria-label={t("comun.anterior")}
               >
                 <Text fontSize="2xl" lineHeight="1">‹</Text>
               </Box>
@@ -441,7 +447,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
                 transition="all 0.18s"
                 boxShadow={`0 0 12px ${color}33`}
                 _hover={{ bg: "rgba(0,0,0,0.6)", borderColor: color, boxShadow: `0 0 20px ${color}66` }}
-                aria-label="Siguiente"
+                aria-label={t("comun.siguiente")}
               >
                 <Text fontSize="2xl" lineHeight="1">›</Text>
               </Box>

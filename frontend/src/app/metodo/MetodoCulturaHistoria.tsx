@@ -32,6 +32,11 @@ export default function MetodoCulturaHistoria() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+    // Al cambiar de Historia volvemos a esperar (loader + precarga de sus fotos):
+    // es la misma ruta, así que el componente NO se desmonta y sin esto la nueva
+    // línea del tiempo se pintaría con los círculos aún sin imagen. Igual que en
+    // la página de una era.
+    setLoading(true);
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }

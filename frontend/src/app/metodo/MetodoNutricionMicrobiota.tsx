@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -31,6 +32,7 @@ const CAMPO_BACTERIAS = "microbiota_bacterias_leidas";
 const CAMPO_MOLECULAS = "microbiota_moleculas_leidas";
 
 export default function MetodoNutricionMicrobiota() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [fichaIdx, setFichaIdx] = useState<number | null>(null);
@@ -91,9 +93,9 @@ export default function MetodoNutricionMicrobiota() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Nutrientes secundarios", onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "El hambre →", onClick: () => setComicHambreOpen(true) }}
+              prev={{ label: `← ${t("metodo.nutri.paso.secundarios")}`, onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              next={{ label: `${t("metodo.nutri.paso.hambre")} →`, onClick: () => setComicHambreOpen(true) }}
             />
           </Reveal>
 

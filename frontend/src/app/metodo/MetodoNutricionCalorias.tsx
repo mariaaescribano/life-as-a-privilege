@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useT } from "../../i18n";
+import { useT, type ClaveTexto } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Input, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -28,10 +28,12 @@ type Objetivo = "perder" | "mantener" | "ganar";
 
 // ── Actividad de BASE (lo que gastas viviendo tu día, SIN contar el ejercicio).
 // Factor que multiplica al metabolismo basal (NEAT: moverte, trabajar, tareas).
-const BASES: { key: string; label: string; desc: string; factor: number }[] = [
-  { key: "sentado", label: "Sobre todo sentada/o", desc: "oficina, estudio, conduzco", factor: 1.2 },
-  { key: "de-pie",  label: "De pie o andando",     desc: "tienda, aula, recados",       factor: 1.35 },
-  { key: "fisico",  label: "Trabajo físico",       desc: "obra, campo, cuidados, reparto", factor: 1.5 },
+// `label` es la CLAVE i18n, no el texto: estas constantes viven a nivel de
+// módulo, donde no hay `t`. Se traducen al pintar.
+const BASES: { key: string; label: ClaveTexto; desc: string; factor: number }[] = [
+  { key: "sentado", label: "metodo.nutri.act.sentada", desc: "oficina, estudio, conduzco", factor: 1.2 },
+  { key: "de-pie",  label: "metodo.nutri.act.andando",     desc: "tienda, aula, recados",       factor: 1.35 },
+  { key: "fisico",  label: "metodo.nutri.act.fisico",       desc: "obra, campo, cuidados, reparto", factor: 1.5 },
 ];
 
 // ── EJERCICIO deliberado. Preguntamos qué haces, cuánto y con qué intensidad.
@@ -39,19 +41,19 @@ const BASES: { key: string; label: string; desc: string; factor: number }[] = [
 // peso se quedan muy cortas), lo usamos para SUBIR el factor de actividad —igual
 // que los multiplicadores clásicos (sedentario 1.2 → muy activo ~1.9)—. `peso` es
 // el peso relativo de cada intensidad al acumular la carga semanal.
-const INTENSIDADES: { key: string; label: string; desc: string; peso: number }[] = [
-  { key: "suave",    label: "Suave",    desc: "andar, yoga, estiramientos", peso: 0.6 },
-  { key: "moderado", label: "Moderado", desc: "bici, pesas, nadar suave",   peso: 1 },
-  { key: "intenso",  label: "Intenso",  desc: "correr, HIIT, deporte fuerte", peso: 1.5 },
+const INTENSIDADES: { key: string; label: ClaveTexto; desc: string; peso: number }[] = [
+  { key: "suave",    label: "metodo.nutri.int.suave",    desc: "andar, yoga, estiramientos", peso: 0.6 },
+  { key: "moderado", label: "metodo.nutri.int.moderado", desc: "bici, pesas, nadar suave",   peso: 1 },
+  { key: "intenso",  label: "metodo.nutri.int.intenso",  desc: "correr, HIIT, deporte fuerte", peso: 1.5 },
 ];
 
 // Minutos por sesión (opciones rápidas).
 const MINUTOS_OPC = [20, 30, 45, 60, 90];
 
-const OBJETIVOS: { key: Objetivo; label: string; ajuste: number }[] = [
-  { key: "perder",   label: "Perder grasa", ajuste: -0.15 },
-  { key: "mantener", label: "Mantener",     ajuste: 0 },
-  { key: "ganar",    label: "Ganar músculo", ajuste: 0.10 },
+const OBJETIVOS: { key: Objetivo; label: ClaveTexto; ajuste: number }[] = [
+  { key: "perder",   label: "metodo.nutri.obj.perder", ajuste: -0.15 },
+  { key: "mantener", label: "metodo.nutri.obj.mantener",     ajuste: 0 },
+  { key: "ganar",    label: "metodo.nutri.obj.ganar", ajuste: 0.10 },
 ];
 
 // Suelo de seguridad: no recomendamos por debajo de un mínimo saludable (comer
@@ -352,10 +354,10 @@ export default function MetodoNutricionCalorias() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Tu plato", onClick: () => navigate("/metodo/nutricion/plato") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.plato")}`, onClick: () => navigate("/metodo/nutricion/plato") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{
-                label: "Test →",
+                label: `${t("metodo.nutri.paso.test")} →`,
                 disabled: !resultado,
                 disabledTooltip: "Calcula tus calorías para continuar",
                 onClick: async () => {
@@ -405,7 +407,7 @@ export default function MetodoNutricionCalorias() {
                   {BASES.map((b) => (
                     <Opcion key={b.key} activo={base === b.key}
                             label={<Flex direction="column" align="center" lineHeight="1.15">
-                                     <Text as="span">{b.label}</Text>
+                                     <Text as="span">{t(b.label)}</Text>
                                      <Text as="span" fontSize="2xs" fontWeight={500} opacity={0.75}>{b.desc}</Text>
                                    </Flex>}
                             onClick={() => setBase(b.key)} />
@@ -420,7 +422,7 @@ export default function MetodoNutricionCalorias() {
                   {INTENSIDADES.map((i) => (
                     <Opcion key={i.key} activo={ejIntensidad === i.key}
                             label={<Flex direction="column" align="center" lineHeight="1.15">
-                                     <Text as="span">{i.label}</Text>
+                                     <Text as="span">{t(i.label)}</Text>
                                      <Text as="span" fontSize="2xs" fontWeight={500} opacity={0.75}>{i.desc}</Text>
                                    </Flex>}
                             onClick={() => setEjIntensidad(i.key)} />
@@ -452,7 +454,7 @@ export default function MetodoNutricionCalorias() {
                 </Text>
                 <Flex gap={2.5} wrap="wrap">
                   {OBJETIVOS.map((o) => (
-                    <Opcion key={o.key} activo={objetivo === o.key} label={o.label} onClick={() => setObjetivo(o.key)} />
+                    <Opcion key={o.key} activo={objetivo === o.key} label={t(o.label)} onClick={() => setObjetivo(o.key)} />
                   ))}
                 </Flex>
               </Box>

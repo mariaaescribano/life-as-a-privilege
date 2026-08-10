@@ -20,6 +20,7 @@ import {
   esCuerpoCompleto,
 } from "../../components/metodo/Planetas";
 import { cuerpoByKey, CUERPOS, type CuerpoKey } from "../../components/metodo/astrologiaData";
+import { useT } from "../../i18n";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
@@ -38,16 +39,8 @@ const EyeIcon = () => (
   </Box>
 );
 
-// Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
-// llamada): explica esta página del recorrido. Edítalo libremente.
-const QUE_ES_ESTO = {
-  parrafos: [
-    "Ya sabes qué Planetas viven en tu carta. Aquí los recorres uno a uno, profundizando en lo que cada uno significa en ti.",
-    "Léelos sin prisa: mientras tú avanzas, yo estoy acabando de escribir tu carta.",
-  ],
-};
-
 export default function MetodoAstrologiaCartaAstral() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [carta, setCarta] = useState<CartaNatal | null>(null);
@@ -149,12 +142,12 @@ export default function MetodoAstrologiaCartaAstral() {
   }
 
   const headerNext = {
-    label: "Puntos clave →",
+    label: `${t("metodo.astro.paso.puntosClave")} →`,
     onClick: () => navigate("/metodo/astrologia/lectura"),
     disabled: !todoCompletado || !hayPdf,
     disabledTooltip: !hayPdf
-      ? "Estoy leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada."
-      : "Lee todos los planetas antes de continuar",
+      ? t("metodo.astro.cartaEnLectura")
+      : t("metodo.astro.leeTodosLosPlanetas"),
   };
 
   return (
@@ -178,14 +171,14 @@ export default function MetodoAstrologiaCartaAstral() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Arquetipos"
+              title={t("metodo.astro.paso.arquetipos")}
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
               step={{ current: 3, total: 9 }}
               mb={0}
-              prev={{ label: "← Lo primero", onClick: () => navigate("/metodo/astrologia/solascendenteluna") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              prev={{ label: `← ${t("metodo.astro.paso.loPrimeroCorto")}`, onClick: () => navigate("/metodo/astrologia/solascendenteluna") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
               next={headerNext}
             />
           </Reveal>
@@ -256,8 +249,11 @@ export default function MetodoAstrologiaCartaAstral() {
         onClose={() => setComicOpen(false)}
       />
 
+      {/* El popup «¿Qué es esto?» (botón flotante, encima del de la llamada)
+          explica esta página del recorrido. Su texto vive en el diccionario. */}
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
-                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
+                     llamadaTitulo={t("metodo.astro.reservaLlamada")}
+                     queEsEsto={{ parrafos: [t("metodo.astro.arquetiposQueEs1"), t("metodo.astro.arquetiposQueEs2")] }} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

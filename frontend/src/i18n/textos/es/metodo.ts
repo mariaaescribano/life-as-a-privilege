@@ -67,6 +67,42 @@ export const metodo = {
   "metodo.destino.plato": "Tu plato",
   "metodo.destino.microbiota": "la microbiota",
   "metodo.destino.test": "el test",
+
+  // ── Botones del recorrido de NUTRICIÓN ─────────────────────────────────
+  // El NOMBRE del paso va suelto, sin flecha: el mismo nombre sirve para el
+  // botón de ir (`Nombre →`) y para el de volver (`← Nombre`), que es como
+  // aparece en cada página vecina. Así un paso se escribe una vez.
+  "metodo.nutri.paso.nutricion": "Nutrición",
+  "metodo.nutri.paso.nutrientes": "Los nutrientes",
+  "metodo.nutri.paso.secundarios": "Nutrientes secundarios",
+  "metodo.nutri.paso.secundariosCorto": "Secundarios",
+  "metodo.nutri.paso.microbiota": "Microbiota",
+  "metodo.nutri.paso.hambre": "El hambre",
+  "metodo.nutri.paso.plato": "Tu plato",
+  "metodo.nutri.paso.platoCrear": "Crea tu plato",
+  "metodo.nutri.paso.calorias": "Tus calorías",
+  "metodo.nutri.paso.azucar": "Tu azúcar",
+  "metodo.nutri.paso.test": "Test",
+  "metodo.nutri.paso.dia": "Diseña tu día",
+  "metodo.nutri.paso.macros": "Cuenta lo que comes",
+  "metodo.nutri.paso.mitos": "Preguntas y mitos",
+  "metodo.nutri.paso.origen": "¿De dónde vienen?",
+  "metodo.nutri.paso.cursos": "Cursos",
+  "metodo.nutri.paso.biblioteca": "Biblioteca",
+
+  // ── Calculadora de calorías (botones de elección) ──────────────────────
+  "metodo.nutri.act.sentada": "Sobre todo sentada/o",
+  "metodo.nutri.act.andando": "De pie o andando",
+  "metodo.nutri.act.fisico": "Trabajo físico",
+  "metodo.nutri.int.suave": "Suave",
+  "metodo.nutri.int.moderado": "Moderado",
+  "metodo.nutri.int.intenso": "Intenso",
+  "metodo.nutri.obj.mantener": "Mantener",
+  "metodo.nutri.obj.perder": "Perder grasa",
+  "metodo.nutri.obj.ganar": "Ganar músculo",
+  "metodo.nutri.macro.proteina": "Proteína",
+  "metodo.nutri.macro.hidratos": "Hidratos",
+  "metodo.nutri.macro.grasa": "Grasa",
   "metodo.crearCelula": "Crea la célula",
 
   // ── Biblioteca de alimentos (nutrición) ────────────────────────────────
@@ -91,6 +127,53 @@ export const metodo = {
   "metodo.cartaParaTi": "Tu carta para ti",
   "metodo.cartaCuandoVuelvas": "Para cuando vuelvas a sentirte bloqueado:",
   "metodo.porQueExiste": "¿Por qué existe Life as a Privilege?",
+
+  // ── Astrología · los nueve pasos del recorrido ─────────────────────────
+  // Cada clave es el título de una página: lo pintan su cabecera, el índice y
+  // los botones «anterior/siguiente» que llevan hasta ella. Los `…Corto` son la
+  // versión de móvil, cuando el largo no cabe de una línea en un botón.
+  /** Botón «volver» de un paso 2 hacia la portada de su disciplina. */
+  "metodo.introCorto": "Intro",
+  "metodo.astro.paso.astrologia": "Astrología",
+  "metodo.astro.paso.loPrimero": "Lo primero de tu carta",
+  "metodo.astro.paso.loPrimeroCorto": "Lo primero",
+  "metodo.astro.paso.arquetipos": "Arquetipos",
+  "metodo.astro.paso.puntosClave": "Puntos clave",
+  "metodo.astro.paso.casas": "Casas",
+  "metodo.astro.paso.aspectos": "Aspectos",
+  "metodo.astro.paso.pdf": "Tu carta en PDF",
+  "metodo.astro.paso.pdfCorto": "PDF",
+  "metodo.astro.paso.llamada": "Llamada",
+  "metodo.astro.paso.cursos": "Cursos",
+
+  // ── Astrología · arquetipos (el popup de «Luna en Géminis») ────────────
+  "metodo.astro.textoNoDisponible": "Texto de {arquetipo} aún no disponible.",
+  "metodo.astro.signoSinElegir": "Signo aún no elegido",
+  "metodo.astro.casaSinElegir": "Casa aún no elegida",
+  "metodo.astro.leer": "Leer",
+  "metodo.astro.releer": "Releer",
+
+  // ── Astrología · «Lo primero de tu carta» (Sol · Luna · Ascendente) ────
+  "metodo.astro.trioIntro":
+    "Tu carta se lee por partes, y esta es la primera: tu **Luna** (el trato que recibiste por parte de tu madre y tu mundo emocional), tu **Sol** (tu esencia) y tu **Ascendente** (cómo percibes el mundo).",
+  "metodo.astro.trioLeeLosTres": "Lee los tres para continuar",
+  "metodo.astro.trioLeeLosTresTooltip": "Lee tu Sol, tu Luna y tu Ascendente antes de seguir",
+  "metodo.astro.trioQueEs1":
+    "Ya has conocido a los doce Signos, que de una forma u otra viven en ti. Aquí empiezas por los tres arquetipos más básicos de la Astrología: tu Ascendente, tu Sol y tu Luna.",
+  "metodo.astro.trioQueEs2":
+    "Léetelos con calma: esto es el calentamiento. En cuanto termines seguirás con el resto de tus arquetipos.",
+
+  // ── Astrología · «Arquetipos» (la rueda de la carta) ───────────────────
+  "metodo.astro.arquetiposQueEs1":
+    "Ya sabes qué Planetas viven en tu carta. Aquí los recorres uno a uno, profundizando en lo que cada uno significa en ti.",
+  "metodo.astro.arquetiposQueEs2":
+    "Léelos sin prisa: mientras tú avanzas, yo estoy acabando de escribir tu carta.",
+  "metodo.astro.leeTodosLosPlanetas": "Lee todos los planetas antes de continuar",
+  "metodo.astro.cartaEnLectura":
+    "Estoy leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada.",
+
+  // ── Astrología · la llamada ────────────────────────────────────────────
+  "metodo.astro.reservaLlamada": "Reserva tu llamada de astrología",
 
   // ── Astrología · datos de nacimiento ───────────────────────────────────
   "metodo.astro.fechaNacimiento": "Fecha de nacimiento",

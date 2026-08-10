@@ -374,22 +374,27 @@ const Pagina = ({
 
   return (
     <Box {...PAPEL}>
-      {/* Contenido con scroll interno SIEMPRE visible (móvil y ordenador),
-          barra gruesa para que quede clarísimo que se puede desplazar. */}
+      {/* Contenido con scroll interno cuando el año no cabe en la hoja, con
+          barra gruesa para que quede clarísimo que se puede desplazar.
+          `auto`, NO `scroll`: con `scroll` el carril se reserva siempre, y esos
+          14px se comían una franja de la hoja por la que asomaba el papel de
+          detrás, así que la lista no llegaba al borde de su página. Y el carril
+          va TRANSPARENTE (regla de la casa): la barra flota sobre la acuarela
+          en vez de pintar una banda de otro color. */}
       <Box
         ref={scrollRef}
         position="relative"
         zIndex={1}
         h="100%"
-        overflowY="scroll"
+        overflowY="auto"
         overscrollBehavior="contain"
         sx={{
           direction: scrollIzquierda ? "rtl" : "ltr",
           scrollbarWidth: "auto",
-          scrollbarColor: `${TINTA} ${neuropsicologiaBg}`,
+          scrollbarColor: `${TINTA} transparent`,
           "&::-webkit-scrollbar": { width: "14px" },
-          "&::-webkit-scrollbar-track": { background: `${TINTA}1f` },
-          "&::-webkit-scrollbar-thumb": { background: TINTA, borderRadius: "10px", border: `3px solid ${neuropsicologiaBg}`, backgroundClip: "content-box" },
+          "&::-webkit-scrollbar-track": { background: "transparent" },
+          "&::-webkit-scrollbar-thumb": { background: TINTA, borderRadius: "10px", border: "3px solid transparent", backgroundClip: "content-box" },
         }}
       >
        {/* `minH: 100%` + columna flexible: cuando los recuerdos no llenan la

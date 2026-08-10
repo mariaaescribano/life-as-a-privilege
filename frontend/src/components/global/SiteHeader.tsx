@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { rutaHome } from "../../api/sesion";
 import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
-import { BotonMusica } from "./MusicaFondo";
 import MenuHamburguesa, { type ItemMenu } from "./MenuHamburguesa";
 
 type SiteHeaderProps = {
@@ -150,7 +149,6 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           pegado al margen derecho. */}
       <Flex align="center" gap={{ base: 3, md: 5 }}>
         <SelectorIdioma compact={compact} />
-        <BotonMusica compact={compact} />
 
         {isPrivate && (
           <Box

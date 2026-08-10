@@ -27,7 +27,8 @@ export const COMIC_CREENCIAS: Vineta[] = [
     src: `${P}/creencias2.webp`,
     titulo: "",
     paragraphs: [
-      "Nadie puede conectar con las necesidades de un hijo si ha perdido el contacto con las propias. La desconexión emocional se transmite en la crianza.",
+      "Nadie puede conectar con las necesidades de un hijo si ha perdido el contacto con las propias.",
+      "La desconexión emocional se transmite en la crianza.",
       "No ve, no comprende y no responde a las necesidades emocionales de su hijo porque vive desconectada de las suyas.",
     ],
   },
@@ -35,7 +36,8 @@ export const COMIC_CREENCIAS: Vineta[] = [
     src: `${P}/creencias3.webp`,
     titulo: "",
     paragraphs: [
-      "El bebé depende de que alguien dé sentido a lo que siente. Cuando eso no ocurre, no concluye que sus padres no pudieron cuidarlo; concluye que él no merece ser cuidado, que hay algo inherentemente mal en él como persona.",
+      "El bebé depende de que alguien dé sentido a lo que siente.",
+      "Cuando eso no ocurre, no concluye que sus padres no pudieron cuidarlo; concluye que él no merece ser cuidado, que hay algo inherentemente mal en él como persona.",
       "Así nacen creencias profundas: «No soy suficiente.» «No merezco amor.» «El mundo no es seguro.»",
     ],
   },

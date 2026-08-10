@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -32,6 +33,7 @@ import { ORIGEN_NUTRIENTES, ORIGEN_LEIDOS_KEY } from "../../components/metodo/co
 // marquita de leída (useLeidos → metodo_nutricion.data.origen_leidos).
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionOrigen() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [abierta, setAbierta] = useState<number | null>(null);
@@ -83,9 +85,9 @@ export default function MetodoNutricionOrigen() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Preguntas y mitos", onClick: () => navigate("/metodo/nutricion/mitos") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "Cursos →", onClick: () => navigate("/metodo/nutricion/cursos") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.mitos")}`, onClick: () => navigate("/metodo/nutricion/mitos") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              next={{ label: `${t("metodo.nutri.paso.cursos")} →`, onClick: () => navigate("/metodo/nutricion/cursos") }}
             />
           </Reveal>
 

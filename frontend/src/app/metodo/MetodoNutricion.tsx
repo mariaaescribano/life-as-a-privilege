@@ -15,6 +15,7 @@ import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { AppleLoader } from "../../components/metodo/AppleLoader";
 import { ComicCaloriasModal } from "../../components/metodo/ComicCaloriasModal";
 import { NUTRICION_INTRO } from "../../components/metodo/comicNutricionIntro";
+import { useComic } from "../../i18n/comics";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
@@ -37,6 +38,8 @@ const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.
 
 export default function MetodoNutricion() {
   const t = useT();
+  // El cómic de intro, en el idioma activo.
+  const introVinetas = useComic("nutricion-intro", NUTRICION_INTRO);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -120,7 +123,7 @@ export default function MetodoNutricion() {
             nom={nutricionNom}
             mb={0}
             prev={{ label: "← Fisiología", onClick: () => navigate("/metodo/fisiologia/cursos") }}
-            extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
+            extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
             next={{ label: "Comenzar →", onClick: comenzar }}
           />
           </Reveal>
@@ -199,7 +202,7 @@ export default function MetodoNutricion() {
       {/* Intro (1ª vez): cómic de bienvenida de Nutrición. */}
       <IntroComicModal
         isOpen={intro.open}
-        vinetas={NUTRICION_INTRO}
+        vinetas={introVinetas}
         themeColor={nutricionBg}
         textColor={nutricionTxt}
         disciplinaBgImage="/img/fondos/nutri.webp"

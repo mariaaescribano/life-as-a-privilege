@@ -1,11 +1,17 @@
 // ─────────────────────────────────────────────────────────────────────────
 // PRĀṆĀYĀMA · contenido de la página. Ya NO forma parte del submapa de un
-// doṣha: se llega desde las tarjetas de los tres Doṣhas y se muestran las TRES
-// prácticas en la misma página (se elige con las pestañas de arriba).
+// doṣha: se llega desde las tarjetas de los tres Doṣhas.
 //
-// La página es de PRACTICAR, no de leer: el texto se mantiene corto a propósito.
-// Si en algún momento hace falta contar la teoría larga (los cinco vāyus, el
-// nervio vago, Patañjali…), va en un cómic de las Ilustraciones, no aquí.
+// QUÉ ES IMPARCIAL Y QUÉ NO. La teoría y los cuidados son iguales para los
+// tres doṣhas, así que NO están aquí: se cuentan en el cómic de tres viñetas
+// (components/metodo/comicPranayama.ts) que sale al entrar en la página. Lo
+// único que cambia de un doṣha a otro es su bloque: UNA práctica, su escrito
+// y sus preguntas. Nada de pestañas con las tres prácticas: cada quien ve la
+// suya.
+//
+// La página es de PRACTICAR, no de leer: el texto se mantiene corto a
+// propósito. Si hace falta contar teoría larga (los cinco vāyus, el nervio
+// vago, Patañjali…), va en un cómic, no aquí.
 //
 // Las fotos son OPCIONALES: mientras el campo `foto` esté vacío no se pinta
 // imagen. Cuando subas las tuyas a /img/ayurveda/pranayama/, rellena la ruta.
@@ -34,36 +40,19 @@ export interface PracticaPranayama {
   ciclos: number;
   fases: FasePranayama[];
   foto?: string;
+  /** Lo que se le dice a ESTE doṣha justo después de respirar. Dos frases: la
+   *  página es de practicar. */
+  escrito: string[];
+  /** Sus preguntas, cada una con su propio hueco para escribir. Van después
+   *  del ejercicio y son distintas para cada doṣha. */
+  preguntas: string[];
 }
 
-export const PRANAYAMA_HERO = {
-  titulo: "Prāṇāyāma",
-  subtitulo: "La respiración como puerta",
-  parrafos: [
-    "**Prāṇa** es la energía vital; **āyāma**, extender. Prāṇāyāma no es «respirar hondo»: es dirigir esa energía.",
-    "Respirar es la única función automática que también puedes gobernar a voluntad. Por eso es la puerta más directa que tienes al sistema nervioso.",
-  ],
-  foto: "",
-};
-
-/** Lo único que hay que saber antes de practicar. Cuatro líneas, no cinco
- *  secciones: lo demás se aprende respirando. */
-export const PRANAYAMA_ESENCIAL = {
-  titulo: "Antes de empezar",
-  items: [
-    "**El freno está en la salida.** Al inhalar el corazón se acelera; al exhalar, se frena. Si te llevas una sola cosa: alarga la exhalación.",
-    "**Sentada y con el estómago vacío**, o dos horas después de comer. Tumbada te dormirás, y dormir no es meditar.",
-    "**Por la nariz**, salvo que la técnica diga otra cosa.",
-    "**Sin forzar nunca.** Si te falta el aire o te mareas, sueltas y vuelves a tu respiración normal.",
-  ],
-  aviso: "Si estás embarazada, tienes la tensión alta, glaucoma, epilepsia o un problema cardíaco, evita las retenciones y las respiraciones rápidas. Ante la duda, pregunta a tu médica.",
-  foto: "",
-};
-
-// ── Las tres prácticas ───────────────────────────────────────────────────
+// ── Una práctica por doṣha ───────────────────────────────────────────────
 // Vata se calma, Pitta se refresca, Kapha se enciende. La misma lógica que el
 // resto del recorrido: lo semejante aumenta lo semejante, lo contrario equilibra.
-// Se muestran las tres en la página; se empieza por la del doṣha de la URL.
+// En la página se ve SOLO la del doṣha de la URL, con su escrito y sus
+// preguntas: es el único bloque que no es imparcial.
 
 export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
   vata: {
@@ -88,6 +77,14 @@ export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
       { tipo: "exhala",  texto: "Exhala por la izquierda",      segundos: 6 },
     ],
     foto: "",
+    escrito: [
+      "Vata no se calma con fuerza, se calma con ritmo. Lo que acabas de darle a tu mente no es silencio: es un compás al que volver cuando se disperse.",
+      "Por eso esta práctica funciona mejor a la misma hora que ayer que muy largo un solo día.",
+    ],
+    preguntas: [
+      "¿En qué momento has notado que la mente se te iba? ¿Adónde se fue?",
+      "¿Qué se te ha quedado más quieto al terminar: el cuerpo, la cabeza o ninguno de los dos?",
+    ],
   },
   pitta: {
     nombre: "Śītalī",
@@ -108,6 +105,14 @@ export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
       { tipo: "exhala", texto: "Exhala por la nariz, largo",     segundos: 6 },
     ],
     foto: "",
+    escrito: [
+      "Pitta no necesita entender mejor: necesita bajar la temperatura. Acabas de hacer algo que no se puede hacer con esfuerzo, y ese es justo el punto.",
+      "Si te has descubierto queriendo hacerlo bien, esa prisa por la nota también es Pitta.",
+    ],
+    preguntas: [
+      "¿Dónde tenías el calor antes de empezar: en la cabeza, en el pecho, en el estómago, en la mandíbula?",
+      "¿Qué te ha costado más, el frescor de la inhalación o soltar el control de la exhalación?",
+    ],
   },
   kapha: {
     nombre: "Bhastrikā",
@@ -126,13 +131,21 @@ export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
       { tipo: "descanso",  texto: "Suelta. Respira normal y observa",    segundos: 20 },
     ],
     foto: "",
+    escrito: [
+      "Kapha no arranca por convencimiento, arranca por movimiento. Lo interesante de Bhastrikā no es el fuelle: es el silencio de después, cuando el cuerpo sigue encendido y ya no hace nada.",
+      "Ahí es donde se nota que la pesadez no eras tú.",
+    ],
+    preguntas: [
+      "¿Qué te ha dado más pereza: empezar o volver a empezar la segunda ronda?",
+      "¿Cómo estaba tu cuerpo en el descanso, cuando ya no había que hacer nada?",
+    ],
   },
 };
 
+/** Lo imparcial de después: el hueco fijo. Las preguntas ya no viven aquí —
+ *  cada doṣha tiene las suyas en PRANAYAMA_PRACTICA. */
 export const PRANAYAMA_REFLEXION = {
   titulo: "Después de respirar",
-  pregunta: "¿Qué ha cambiado en ti desde que empezaste hasta ahora?",
-  nota: "Vale «nada», vale «me he aburrido» y vale «me han entrado ganas de llorar». Todo es información.",
   compromisoTitulo: "Tu momento",
   compromisoIntro: "La práctica que se hace es la que tiene un hueco fijo. Elige el tuyo:",
   compromisos: [

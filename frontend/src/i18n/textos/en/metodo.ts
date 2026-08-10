@@ -56,6 +56,41 @@ export const metodo = {
   "metodo.destino.plato": "Your plate",
   "metodo.destino.microbiota": "the microbiome",
   "metodo.destino.test": "the test",
+
+  // ── Buttons of the NUTRITION path ──────────────────────────────────────
+  // The step NAME on its own, without the arrow: the same name serves the
+  // forward button (`Name →`) and the back one (`← Name`).
+  "metodo.nutri.paso.nutricion": "Nutrition",
+  "metodo.nutri.paso.nutrientes": "The nutrients",
+  "metodo.nutri.paso.secundarios": "Secondary nutrients",
+  "metodo.nutri.paso.secundariosCorto": "Secondary",
+  "metodo.nutri.paso.microbiota": "Microbiome",
+  "metodo.nutri.paso.hambre": "Hunger",
+  "metodo.nutri.paso.plato": "Your plate",
+  "metodo.nutri.paso.platoCrear": "Build your plate",
+  "metodo.nutri.paso.calorias": "Your calories",
+  "metodo.nutri.paso.azucar": "Your blood sugar",
+  "metodo.nutri.paso.test": "Test",
+  "metodo.nutri.paso.dia": "Design your day",
+  "metodo.nutri.paso.macros": "Count what you eat",
+  "metodo.nutri.paso.mitos": "Questions and myths",
+  "metodo.nutri.paso.origen": "Where do they come from?",
+  "metodo.nutri.paso.cursos": "Courses",
+  "metodo.nutri.paso.biblioteca": "Library",
+
+  // ── Calorie calculator (choice buttons) ────────────────────────────────
+  "metodo.nutri.act.sentada": "Mostly sitting",
+  "metodo.nutri.act.andando": "On my feet or walking",
+  "metodo.nutri.act.fisico": "Physical work",
+  "metodo.nutri.int.suave": "Gentle",
+  "metodo.nutri.int.moderado": "Moderate",
+  "metodo.nutri.int.intenso": "Intense",
+  "metodo.nutri.obj.mantener": "Maintain",
+  "metodo.nutri.obj.perder": "Lose fat",
+  "metodo.nutri.obj.ganar": "Build muscle",
+  "metodo.nutri.macro.proteina": "Protein",
+  "metodo.nutri.macro.hidratos": "Carbs",
+  "metodo.nutri.macro.grasa": "Fat",
   "metodo.crearCelula": "Build the cell",
 
   // ── Food library (nutrition) ───────────────────────────────────────────
@@ -82,6 +117,50 @@ export const metodo = {
   "metodo.porQueExiste": "Why does Life as a Privilege exist?",
 
   // ── Astrology · birth details ──────────────────────────────────────────
+  // ── Astrología · los nueve pasos del recorrido ─────────────────────────
+  "metodo.introCorto": "Intro",
+  "metodo.astro.paso.astrologia": "Astrology",
+  "metodo.astro.paso.loPrimero": "The first part of your chart",
+  "metodo.astro.paso.loPrimeroCorto": "First part",
+  "metodo.astro.paso.arquetipos": "Archetypes",
+  "metodo.astro.paso.puntosClave": "Key points",
+  "metodo.astro.paso.casas": "Houses",
+  "metodo.astro.paso.aspectos": "Aspects",
+  "metodo.astro.paso.pdf": "Your chart as a PDF",
+  "metodo.astro.paso.pdfCorto": "PDF",
+  "metodo.astro.paso.llamada": "Call",
+  "metodo.astro.paso.cursos": "Courses",
+
+  // ── Astrología · arquetipos (el popup de «Luna en Géminis») ────────────
+  "metodo.astro.textoNoDisponible": "The text for {arquetipo} isn't available yet.",
+  "metodo.astro.signoSinElegir": "Sign not chosen yet",
+  "metodo.astro.casaSinElegir": "House not chosen yet",
+  "metodo.astro.leer": "Read",
+  "metodo.astro.releer": "Read again",
+
+  // ── Astrología · «Lo primero de tu carta» (Sol · Luna · Ascendente) ────
+  "metodo.astro.trioIntro":
+    "Your chart is read in parts, and this is the first one: your **Moon** (how your mother treated you, and your emotional world), your **Sun** (your essence) and your **Ascendant** (how you perceive the world).",
+  "metodo.astro.trioLeeLosTres": "Read all three to continue",
+  "metodo.astro.trioLeeLosTresTooltip": "Read your Sun, your Moon and your Ascendant before moving on",
+  "metodo.astro.trioQueEs1":
+    "You've already met the twelve Signs, which one way or another all live in you. Here you start with the three most basic archetypes in Astrology: your Ascendant, your Sun and your Moon.",
+  "metodo.astro.trioQueEs2":
+    "Read them slowly: this is the warm-up. As soon as you're done you'll move on to the rest of your archetypes.",
+
+  // ── Astrología · «Arquetipos» (la rueda de la carta) ───────────────────
+  "metodo.astro.arquetiposQueEs1":
+    "You already know which Planets live in your chart. Here you go through them one by one, going deeper into what each one means in you.",
+  "metodo.astro.arquetiposQueEs2":
+    "Read them without rushing: while you move forward, I'm finishing writing your chart.",
+  "metodo.astro.leeTodosLosPlanetas": "Read every planet before continuing",
+  "metodo.astro.cartaEnLectura":
+    "I'm reading your chart right now. When it's ready you'll get an email and you'll be able to open your personalized reading.",
+
+  // ── Astrología · la llamada ────────────────────────────────────────────
+  "metodo.astro.reservaLlamada": "Book your astrology call",
+
+  // ── Astrología · datos de nacimiento ───────────────────────────────────
   "metodo.astro.fechaNacimiento": "Date of birth",
   "metodo.astro.horaNacimiento": "Time of birth",
   "metodo.astro.dia": "Day",

@@ -13,6 +13,7 @@ export const home = {
   "home.desbloquea.otra":
     "Unlock {disciplina} whenever you like — it's the {ordinal} we suggest, but you can start right here.",
 
+  "home.bienvenida": "Welcome to the Map{coma}",
   "home.continuar": "Continue →",
   "home.foto": "Your photo",
   "home.fotoError": "The photo couldn't be uploaded",

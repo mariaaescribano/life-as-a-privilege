@@ -6,14 +6,19 @@ import type { Vineta } from "./ComicViewer";
 // hay algo que le importa. Es justo el giro que la página siguiente le pide dar.
 //
 // El arco: qué es el miedo → no siempre hay peligro real → qué hay detrás →
-// nuestros mayores tesoros → escuchar el miedo sin obedecerlo.
+// tus mayores tesoros.
 //
 // Sin títulos, como todos los cómics de Psicología: solo foto y texto.
+//
+// VOZ: las tres primeras viñetas van en «nosotros» (el hecho general, que da
+// distancia) y la última en «tú» (su miedo, que es lo que la página siguiente
+// le pide mirar). Dentro de una misma viñeta NO se mezclan: el cambio de
+// persona se hace al pasar de viñeta, nunca en la última frase.
 //
 // OJO: este cómic NO forma parte de las «Ilustraciones» del material; vive solo
 // en este paso del recorrido (igual que COMIC_ACE y COMIC_CREENCIAS).
 //
-// Imágenes: /viñetas/psicologia/miedo/miedo1.webp … miedo5.webp.
+// Imágenes: /viñetas/psicologia/miedo/miedo1.webp … miedo4.webp.
 const P = "/viñetas/psicologia/miedo";
 
 export const COMIC_MIEDO: Vineta[] = [
@@ -32,7 +37,8 @@ export const COMIC_MIEDO: Vineta[] = [
     paragraphs: [
       "Sin embargo, no todos nuestros miedos aparecen ante un peligro físico. También podemos sentir miedo ante situaciones sociales, decisiones, cambios o experiencias que podrían afectar a nuestra autoestima.",
       "— «Sé que hablar delante de todos no pone mi vida en peligro… pero tengo muchísimo miedo.»",
-      "Nuestro cerebro responde ante una amenaza física y ante una amenaza psicológica de formas similares. El miedo puede aparecer cuando sentimos que algo importante para nosotros está en riesgo.",
+      "Nuestro cerebro responde ante una amenaza física y ante una amenaza psicológica de formas similares.",
+      "El miedo puede aparecer cuando sentimos que algo importante para nosotros está en riesgo.",
     ],
   },
   {
@@ -43,28 +49,20 @@ export const COMIC_MIEDO: Vineta[] = [
       "— «Tengo miedo de fracasar.»",
       "— Psicólogo: «¿Y qué significaría para ti fracasar?»",
       "— «Que quizá no sea capaz de conseguir aquello que realmente quiero.»",
-      "A veces, detrás del miedo encontramos algo que valoramos profundamente. Tenemos miedo porque existe algo que podemos perder, pero también porque existe algo que deseamos.",
+      "A veces, detrás del miedo encontramos algo que valoramos profundamente.",
+      "Tenemos miedo porque existe algo que podemos perder, pero también porque existe algo que deseamos.",
     ],
   },
   {
     src: `${P}/miedo4.webp`,
     titulo: "",
     paragraphs: [
-      "Por eso puede decirse que detrás de algunos de nuestros mayores miedos se encuentran nuestros mayores tesoros.",
-      "Miedo al rechazo → porque necesitamos sentirnos queridos y aceptados.",
-      "Miedo al fracaso → porque tenemos metas que nos importan.",
-      "Miedo a perder → porque existen personas o vínculos que valoramos.",
-      "Miedo al cambio → porque abandonar lo conocido implica enfrentarnos a la incertidumbre.",
+      "Por eso detrás de tus mayores miedos se encuentran tus mayores tesoros.",
+      "Miedo al rechazo → porque necesitas que te quieran y te acepten.",
+      "Miedo al fracaso → porque tienes metas que te importan.",
+      "Miedo a perder → porque existen personas o vínculos que valoras.",
+      "Miedo al cambio → porque abandonar lo conocido implica enfrentarte a la incertidumbre.",
       "Quizá tu miedo también te está mostrando lo que realmente te importa.",
-    ],
-  },
-  {
-    src: `${P}/miedo5.webp`,
-    titulo: "",
-    paragraphs: [
-      "Comprender el miedo no significa obedecerlo siempre. A veces debemos protegernos de un peligro; otras veces necesitamos aprender a avanzar a pesar de sentir miedo.",
-      "La clave no consiste en eliminar todas las emociones desagradables, sino en aprender a escucharlas, comprender su origen y decidir cómo actuar.",
-      "El miedo intenta protegernos. Pero, a veces, cuando nos atrevemos a escucharlo, descubrimos que detrás de él no solo existe un peligro: también existe algo que nos importa profundamente.",
     ],
   },
 ];

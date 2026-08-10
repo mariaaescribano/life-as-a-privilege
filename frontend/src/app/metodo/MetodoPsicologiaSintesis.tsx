@@ -50,7 +50,7 @@ import {
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
-const ORO = "#c79a3c";            // dorado (los dones)
+const ORO = "#c79a3c";            // dorado (marco del panel, el número y el botón)
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 // Las 4 preguntas de integración por relación (las mismas que en /mapa). Se
@@ -309,9 +309,9 @@ export default function MetodoPsicologiaSintesis() {
         {dones.map((x, i) => (
           <Item key={i} distance={14} scaleFrom={0.9} duration={0.6}>
             <Flex align="center" gap={2} px={{ base: 4, md: 5 }} py={2} borderRadius="full"
-                  bg={`${ORO}1f`} border={`1px solid ${ORO}88`} boxShadow={`0 2px 8px ${ORO}22`}>
+                  bg={`${TINTA}1f`} border={`1px solid ${TINTA}88`} boxShadow={`0 2px 8px ${TINTA}22`}>
               <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w="14px" h="14px" flexShrink={0}>
-                <polygon points="12,2 14.9,8.6 22,9.3 16.5,14.1 18.3,21 12,17.3 5.7,21 7.5,14.1 2,9.3 9.1,8.6" fill={ORO} />
+                <polygon points="12,2 14.9,8.6 22,9.3 16.5,14.1 18.3,21 12,17.3 5.7,21 7.5,14.1 2,9.3 9.1,8.6" fill={TINTA} />
               </Box>
               <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.2">{x}</Text>
             </Flex>

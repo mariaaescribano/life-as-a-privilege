@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -121,6 +122,7 @@ function FotoPlaceholder({ label = "Foto", color }: { label?: string; color: str
 }
 
 export default function MetodoNutricionNutriente() {
+  const t = useT();
   const navigate = useNavigate();
   const { key } = useParams<{ key: string }>();
   const [loading, setLoading] = useState(true);
@@ -317,7 +319,7 @@ export default function MetodoNutricionNutriente() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
             />
           </Reveal>
 

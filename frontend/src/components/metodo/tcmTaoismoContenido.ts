@@ -6,8 +6,9 @@
 // la naturaleza— y baja cada una al cuerpo, que es donde la medicina las usa.
 //
 // FORMATO: cada principio son sus `parrafos`, los que necesite (hay de dos y de
-// cuatro). En la página NO se leen: allí solo está el carácter chino, el nombre
-// y el botón «Ver». El texto vive en el visor, con la ilustración al lado.
+// cuatro). En la página NO se leen: allí las leyes salen de dos en dos, con su
+// ilustración arriba y, debajo en una línea, el carácter chino, el nombre y el
+// botón «Ver». El texto vive en el visor, con la ilustración al lado.
 //
 // ✍️  EDITAR CONTENIDO: cambia los textos aquí. No cambies las `key` (son la
 //     clave de React y el nombre del archivo de la foto).
@@ -45,9 +46,10 @@ export const TAOISMO_CIERRE = {
 
 /**
  * Ilustración de cada ley: CUADRADA (1:1) y en WebP (las sube en PNG y se pasan
- * con `node scripts/webp/convertir.mjs --lote=9`). Solo se ve dentro del visor;
- * si el archivo no existe todavía, el visor avisa con su «próximamente» y el
- * texto se lee igual. La página no se entera: sus boxes son carácter y nombre.
+ * con `node scripts/webp/convertir.mjs --lote=9`). Se ve en DOS sitios: entera
+ * dentro del visor, y recortada a una banda 4:3 arriba de su box en la página.
+ * Si el archivo no existe todavía, el visor avisa con su «próximamente» y el
+ * texto se lee igual.
  */
 export const FOTO_LEY = (key: string) => `/recorrido/tcm/taoismo/${key}.webp`;
 

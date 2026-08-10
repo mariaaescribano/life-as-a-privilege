@@ -134,8 +134,7 @@ export default function MetodoPsicologiaCursos() {
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
               <IntroRecorrido>
-                Ya has recorrido tu mapa entero. Si quieres seguir tirando del hilo, estos
-                cursos te llevan más adentro de lo que aquí solo hemos podido asomar.
+              Si quieres profundizar en la psicología humana, estos cursos te acompañarán paso a paso.
               </IntroRecorrido>
             </Reveal>
 

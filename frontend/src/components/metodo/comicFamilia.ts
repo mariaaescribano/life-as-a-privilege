@@ -20,7 +20,8 @@ export const COMIC_FAMILIA: Vineta[] = [
     src: `${P}/familia1.webp`,
     titulo: "",
     paragraphs: [
-      "La familia es uno de los primeros grupos sociales con los que una persona entra en contacto. Desde la infancia, aprendemos en ella formas de comunicarnos, expresar emociones, establecer vínculos y relacionarnos con los demás.",
+      "La familia es uno de los primeros grupos sociales con los que una persona entra en contacto.",
+      "Desde la infancia, aprendemos en ella formas de comunicarnos, expresar emociones, establecer vínculos y relacionarnos con los demás.",
       "Por esta razón, las experiencias familiares pueden tener una influencia importante en nuestro desarrollo emocional, social y psicológico.",
     ],
   },
@@ -38,8 +39,8 @@ export const COMIC_FAMILIA: Vineta[] = [
     src: `${P}/familia3.webp`,
     titulo: "",
     paragraphs: [
-      "Pero no todas las familias gestionan los problemas de la misma manera. En algunas, los conflictos se ocultan o se evita hablar de ellos para mantener una apariencia de tranquilidad.",
-      "— Familiar: «No vamos a hablar de esto. Es mejor dejarlo así.»",
+      "Pero no todas las familias gestionan los problemas de la misma manera.",
+       "En algunas, los conflictos se ocultan o se evita hablar de ellos para mantener una apariencia de tranquilidad.",
       "Sin embargo, ignorar un problema no significa que desaparezca. Cuando las emociones y los conflictos se reprimen constantemente, pueden acumularse y generar tensión, frustración y malestar dentro del hogar.",
       "— Adolescente, pensando: «Aquí todos saben que algo ocurre, pero nadie quiere hablar de ello.»",
     ],
@@ -50,7 +51,8 @@ export const COMIC_FAMILIA: Vineta[] = [
     paragraphs: [
       "Las discusiones frecuentes, los gritos, la falta de comunicación o un ambiente familiar de tensión pueden crear sufrimiento, especialmente cuando estas situaciones se mantienen durante mucho tiempo.",
       "— Adolescente: «Cuando empiezan a discutir, intento encerrarme en mi habitación.»",
-      "Vivir constantemente en un ambiente de conflicto puede generar sentimientos de inseguridad, ansiedad, tristeza o impotencia. Además, los niños y adolescentes pueden aprender estos patrones de comportamiento y reproducirlos posteriormente en sus propias relaciones.",
+      "Vivir constantemente en un ambiente de conflicto puede generar sentimientos de inseguridad, ansiedad, tristeza o impotencia.",
+      "Además, los niños y adolescentes pueden aprender estos patrones de comportamiento y reproducirlos posteriormente en sus propias relaciones.",
       "Las buenas familias no son las que no tienen conflictos, son las que gestionan y hablan de esos conflictos para encontrar una solución.",
     ],
   },

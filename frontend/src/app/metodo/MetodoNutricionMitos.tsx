@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -25,6 +26,7 @@ import { MITOS_NUTRICION, MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/Mitos
 // pasando con las flechas dentro del visor).
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionMitos() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [fichaIdx, setFichaIdx] = useState<number | null>(null);
@@ -77,9 +79,9 @@ export default function MetodoNutricionMitos() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Cuenta lo que comes", onClick: () => navigate("/metodo/nutricion/macros") }}
-              extra={{ label: "Biblioteca", onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: "¿De dónde vienen? →", onClick: () => navigate("/metodo/nutricion/origen") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.macros")}`, onClick: () => navigate("/metodo/nutricion/macros") }}
+              extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
+              next={{ label: `${t("metodo.nutri.paso.origen")} →`, onClick: () => navigate("/metodo/nutricion/origen") }}
             />
           </Reveal>
 
