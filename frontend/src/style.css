@@ -3,7 +3,10 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  /* Igual que el <meta name="color-scheme"> de index.html: el navegador no
+     oscurece nada por su cuenta (venía en «light dark» de la plantilla de
+     Vite, y la propiedad CSS gana al meta). Ver la nota larga en index.html. */
+  color-scheme: only light;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
