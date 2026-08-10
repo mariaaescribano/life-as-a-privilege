@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT, type ClaveTexto } from "../../i18n";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
@@ -17,26 +17,29 @@ import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
-  ALIMENTOS_MACROS, GRUPOS_MACRO, RONDAS, TOPES, TINO, MACROS_CAMPO,
-  barajar, puntuarRonda, veredicto, margen,
-  type AlimentoMacros, type MacrosJuegoData, type Tino,
+  ALIMENTOS_MACROS, GRUPOS_MACRO, RONDAS, TOPES, TINO, CIERRE_PARTIDA,
+  barajar, tinosDeRonda,
+  type AlimentoMacros, type Tino,
 } from "../../hardCoded/espacio/MacrosAlimentos";
 
 // ═════════════════════════════════════════════════════════════════════════
 // «Cuenta lo que comes» · el paso que va DESPUÉS de «Diseña tu día».
 //
-// Un juego de estimación: sale un alimento con su ración normal y hay que
-// adivinar cuántos gramos de proteína, hidratos y grasa lleva moviendo tres
-// reguladores. Al comprobar, la barra de tu apuesta se compara con la real y se
-// revela el POR QUÉ del dato, que es lo que de verdad se queda.
+// Un juego de estimación y NADA MÁS: sale un alimento con su ración normal y hay
+// que adivinar cuántos gramos de proteína, hidratos y grasa lleva moviendo tres
+// reguladores. Al comprobar, la barra de tu apuesta se compara con la real y cada
+// macro dice si está clavado, cerca o lejos.
 //
-// Se puntúa por cercanía y no por exactitud (ver `tinoDe`): nadie sabe que un
+// Se valora por cercanía y no por exactitud (ver `tinoDe`): nadie sabe que un
 // huevo tiene 6,3 g de proteína, y no es lo que se quiere enseñar. Lo que se
 // entrena es el orden de magnitud —«un huevo son seis gramos, no veinte»—, que
 // es lo que sirve para mirar un plato el resto de tu vida.
 //
-// Diez rondas por partida, y solo se guarda el récord: es un juego para volver,
-// no un examen que aprobar.
+// SIN PUNTOS Y SIN LA CAJA DEL PORQUÉ. Antes cada ronda cerraba con una caja
+// blanca explicando el dato («tanta grasa como un filete de cerdo…») y el juego
+// llevaba puntos, racha y récord guardado. Las dos cosas fuera: la caja pedía
+// revisar un texto por alimento, y los puntos convertían en examen lo que es un
+// ojímetro. Del marcador queda solo la ronda en la que vas, y no se guarda nada.
 // ═════════════════════════════════════════════════════════════════════════
 
 // `label` es la CLAVE i18n (constante de módulo: aquí no hay `t`).
@@ -55,11 +58,6 @@ const aparecer = keyframes`
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 `;
-const latido = keyframes`
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.14); }
-`;
-
 /** Un gramo se escribe sin decimales salvo cuando el dato es menor que 10. */
 const g = (n: number) => (n < 10 && n % 1 !== 0 ? n.toFixed(1).replace(".", ",") : String(Math.round(n)));
 
@@ -175,12 +173,10 @@ export default function MetodoNutricionMacros() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const dataRef = useRef<Record<string, any>>({});
 
   // La partida: diez alimentos barajados. `useMemo` con `partida` como semilla
   // para poder empezar otra sin recargar la página.
   const [partida, setPartida] = useState(0);
-  const ronda = useRef(0);
   const [indice, setIndice] = useState(0);
   const alimentos = useMemo(
     () => barajar(ALIMENTOS_MACROS).slice(0, RONDAS),
@@ -191,15 +187,10 @@ export default function MetodoNutricionMacros() {
 
   const [est, setEst] = useState<Record<MacroKey, number>>({ proteina: 5, hidratos: 20, grasa: 5 });
   const [comprobado, setComprobado] = useState(false);
-  const [puntos, setPuntos] = useState(0);
-  const [racha, setRacha] = useState(0);
-  const [mejorRacha, setMejorRacha] = useState(0);
   const [terminada, setTerminada] = useState(false);
-  const [record, setRecord] = useState(0);
-  const [nuevoRecord, setNuevoRecord] = useState(false);
 
-  const resultado = useMemo(
-    () => (actual ? puntuarRonda(actual, est) : null),
+  const tinos = useMemo(
+    () => (actual ? tinosDeRonda(actual, est) : null),
     [actual, est],
   );
 
@@ -212,12 +203,8 @@ export default function MetodoNutricionMacros() {
       try {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
-        try {
-          const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
-          dataRef.current = r.data?.data ?? {};
-          const guardado: MacrosJuegoData = dataRef.current?.[MACROS_CAMPO] ?? {};
-          if (typeof guardado.mejor === "number") setRecord(guardado.mejor);
-        } catch { /* sin fila todavía: se crea al guardar */ }
+        // Aquí se leía el récord guardado. Ya no hay récord: el juego no guarda
+        // nada, así que tampoco hace falta pedir el `data` del recorrido.
 
         // Las fotos de los diez alimentos de esta partida, antes de empezar: que
         // no aparezca el hueco vacío justo cuando toca adivinar.
@@ -227,46 +214,13 @@ export default function MetodoNutricionMacros() {
     })();
   }, [navigate]);
 
-  /** Guarda el récord (un solo PATCH, con el blob entero como manda la casa). */
-  const guardarRecord = (total: number) => {
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    if (!userId || !token) return;
-    const previo: MacrosJuegoData = dataRef.current?.[MACROS_CAMPO] ?? {};
-    const data = {
-      ...dataRef.current,
-      [MACROS_CAMPO]: {
-        mejor: Math.max(previo.mejor ?? 0, total),
-        partidas: (previo.partidas ?? 0) + 1,
-      } satisfies MacrosJuegoData,
-    };
-    dataRef.current = data;
-    void axios.patch(`${API_URL}/metodo-nutricion/${userId}`, { data },
-      { headers: { Authorization: `Bearer ${token}` } })
-      .catch(() => { /* se reintenta la próxima partida */ });
-  };
-
   const comprobar = () => {
-    if (!resultado || comprobado) return;
+    if (!tinos || comprobado) return;
     setComprobado(true);
-    setPuntos((p) => p + resultado.puntos);
-    // La racha premia rondas buenas (200 de 300), no la perfección.
-    setRacha((r) => {
-      const siguiente = resultado.puntos >= 200 ? r + 1 : 0;
-      setMejorRacha((m) => Math.max(m, siguiente));
-      return siguiente;
-    });
   };
 
   const siguiente = () => {
-    const total = puntos;
-    if (indice + 1 >= alimentos.length) {
-      setTerminada(true);
-      if (total > record) { setNuevoRecord(true); setRecord(total); }
-      guardarRecord(total);
-      return;
-    }
-    ronda.current += 1;
+    if (indice + 1 >= alimentos.length) { setTerminada(true); return; }
     setIndice((i) => i + 1);
     setEst({ proteina: 5, hidratos: 20, grasa: 5 });
     setComprobado(false);
@@ -277,18 +231,13 @@ export default function MetodoNutricionMacros() {
     setIndice(0);
     setEst({ proteina: 5, hidratos: 20, grasa: 5 });
     setComprobado(false);
-    setPuntos(0);
-    setRacha(0);
-    setMejorRacha(0);
     setTerminada(false);
-    setNuevoRecord(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (loading) return <NutricionLoading />;
 
   const grupo = actual ? GRUPOS_MACRO[actual.grupo] : null;
-  const fin = veredicto(puntos);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -318,7 +267,7 @@ export default function MetodoNutricionMacros() {
             <Flex direction="column" align="center" gap={2} maxW="720px">
               <Text color="white" fontSize={{ base: "xl", md: "3xl" }} fontWeight={600} fontStyle="italic"
                     textAlign="center" lineHeight="1.5">
-                Aprende lo que de verdad te ayudará a ser mejor humano…
+                Aprende lo que de verdad te ayudará a ser tu mejor versión...
               </Text>
               <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} textAlign="center"
                     lineHeight="1.8">
@@ -329,13 +278,12 @@ export default function MetodoNutricionMacros() {
             </Flex>
           </Reveal>
 
-          {/* ── Marcador ── */}
+          {/* ── Marcador: SOLO la ronda ──
+              Aquí iban también Puntos, Racha y Tu récord. Fuera: el juego no
+              puntúa, así que lo único que hay que saber es por dónde vas. */}
           <Reveal inView direction="up" distance={14} duration={0.55} amount={0.3} w="100%">
-            <Flex align="center" justify="center" gap={{ base: 4, md: 8 }} wrap="wrap" w="100%">
+            <Flex align="center" justify="center" w="100%">
               <Marcador etiqueta="Ronda" valor={terminada ? `${RONDAS}/${RONDAS}` : `${indice + 1}/${RONDAS}`} />
-              <Marcador etiqueta="Puntos" valor={String(puntos)} />
-              <Marcador etiqueta="Racha" valor={String(racha)} destacado={racha >= 2} />
-              {record > 0 && <Marcador etiqueta="Tu récord" valor={String(record)} />}
             </Flex>
           </Reveal>
 
@@ -404,14 +352,9 @@ export default function MetodoNutricionMacros() {
                       </>
                     ) : (
                       <>
-                        <Flex align="baseline" justify="space-between" gap={3} wrap="wrap">
-                          <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700}>
-                            Tu apuesta (hueco) y el dato real (macizo)
-                          </Text>
-                          <Text color={nutricionTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight={800}>
-                            +{resultado?.puntos ?? 0}
-                          </Text>
-                        </Flex>
+                        <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700}>
+                          Tu apuesta (hueco) y el dato real (macizo)
+                        </Text>
 
                         {MACROS.map((m) => (
                           <Comparativa
@@ -420,22 +363,14 @@ export default function MetodoNutricionMacros() {
                             color={m.color}
                             estimado={est[m.key]}
                             real={actual[m.key]}
-                            tino={resultado!.tinos[m.key]}
+                            tino={tinos![m.key]}
                             tope={TOPES[m.key]}
                           />
                         ))}
 
-                        {/* El porqué: lo que de verdad se lleva de la ronda */}
-                        <Box borderRadius="xl" bg="rgba(255,255,255,0.9)" px={{ base: 4, md: 5 }}
-                             py={{ base: 3.5, md: 4 }} animation={`${aparecer} 0.5s ease 0.15s both`}>
-                          <Text color="#1a1a1a" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
-                            {actual.sorpresa}
-                          </Text>
-                          <Text color="#1a1a1a" fontSize="xs" mt={2.5} opacity={0.7} fontStyle="italic">
-                            {actual.racion} · {actual.kcal} kcal · margen aceptado: ±{g(margen(actual.proteina))} g
-                            en proteína, ±{g(margen(actual.hidratos))} en hidratos, ±{g(margen(actual.grasa))} en grasa
-                          </Text>
-                        </Box>
+                        {/* Aquí iba la caja blanca del porqué (`sorpresa`) con su
+                            pie de ración, kcal y márgenes. Quitada: la página es
+                            el juego y el dato ya se ve en las barras. */}
 
                         <Boton onClick={siguiente}>
                           {indice + 1 >= alimentos.length ? "Ver el resultado" : "Siguiente alimento →"}
@@ -454,32 +389,16 @@ export default function MetodoNutricionMacros() {
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                    boxShadow={`${glowHeader(nutricionTxt)}, 0 0 40px ${nutricionTxt}33`}>
                 <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
+                {/* Sin puntuación, sin récord y sin racha: solo que se ha
+                    terminado la vuelta y la invitación a otra. */}
                 <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
                       px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }} textAlign="center">
-                  {nuevoRecord && (
-                    <Text color={nutricionTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={800}
-                          letterSpacing="0.18em" textTransform="uppercase"
-                          animation={`${latido} 1.6s ease-in-out infinite`}>
-                      ★ Nuevo récord
-                    </Text>
-                  )}
-                  <Text color={nutricionTxt} fontSize={{ base: "3xl", md: "5xl" }} fontWeight={800} lineHeight="1">
-                    {puntos}
-                    <Box as="span" fontSize={{ base: "md", md: "xl" }} fontWeight={600} opacity={0.7}>
-                      {" "}/ {RONDAS * 300}
-                    </Box>
-                  </Text>
-                  <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700}>
-                    {fin.titulo}
+                  <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "4xl" }} fontWeight={800} lineHeight="1.1">
+                    {CIERRE_PARTIDA.titulo}
                   </Text>
                   <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" maxW="620px">
-                    {fin.texto}
+                    {CIERRE_PARTIDA.texto}
                   </Text>
-                  {mejorRacha >= 2 && (
-                    <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85}>
-                      Tu mejor racha: {mejorRacha} alimentos seguidos.
-                    </Text>
-                  )}
                   <Box mt={2}>
                     <Boton onClick={otraPartida}>Otra ronda de diez</Boton>
                   </Box>
@@ -501,15 +420,14 @@ export default function MetodoNutricionMacros() {
 }
 
 // ── Piezas pequeñas ─────────────────────────────────────────────────────────
-function Marcador({ etiqueta, valor, destacado }: { etiqueta: string; valor: string; destacado?: boolean }) {
+function Marcador({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   return (
     <Flex direction="column" align="center" gap={0.5}>
       <Text color="rgba(255,255,255,0.8)" fontSize="2xs" fontWeight={700} letterSpacing="0.16em"
             textTransform="uppercase">
         {etiqueta}
       </Text>
-      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1"
-            animation={destacado ? `${latido} 1.4s ease-in-out infinite` : undefined}>
+      <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1">
         {valor}
       </Text>
     </Flex>

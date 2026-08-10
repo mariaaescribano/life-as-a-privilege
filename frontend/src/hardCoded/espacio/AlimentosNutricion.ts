@@ -146,7 +146,10 @@ export interface Alimento {
   key: string;
   nombre: string;
   grupo: GrupoAlimento;
-  /** Emoji provisional (mientras no haya foto). */
+  /** NINGÚN alimento lleva emoji: los llevaban de provisionales y se quitaron
+   *  todos (la biblioteca va con sus ilustraciones, no con emojis). El campo se
+   *  queda porque las fichas y el plato siguen leyéndolo como reserva; si un
+   *  alimento no tiene foto, sale la inicial de su nombre. */
   emoji?: string;
   /** Foto del alimento (opcional). */
   foto?: string;
@@ -165,7 +168,7 @@ export interface Alimento {
 // Alimentos elegidos por María. Composición molecular = primera pasada (afinar).
 export const ALIMENTOS: Alimento[] = [
   // ── Fruta ──
-  { key: "manzana", nombre: "Manzana", grupo: "fruta", emoji: "🍎", resumen: "Azúcares con fibra y antioxidantes.",
+  { key: "manzana", nombre: "Manzana", grupo: "fruta", resumen: "Azúcares con fibra y antioxidantes.",
     descripcion: "La manzana es sobre todo agua y azúcares, pero envueltos en fibra (buena parte en la piel) y en antioxidantes. Esa fibra hace que su azúcar se absorba despacio, sin los picos de un zumo. [BORRADOR: corrige este texto]",
     macros: { carbohidrato: 95, proteina: 2, grasa: 3 },
     moleculas: [
@@ -177,45 +180,45 @@ export const ALIMENTOS: Alimento[] = [
       { key: "vitamina-c", pct: 1 },
       { key: "quercetina", pct: 1 },
     ] },
-  { key: "platano", nombre: "Plátano", grupo: "fruta", emoji: "🍌", resumen: "Energía y potasio.",
+  { key: "platano", nombre: "Plátano", grupo: "fruta", resumen: "Energía y potasio.",
     macros: { carbohidrato: 93, proteina: 4, grasa: 3 },
     moleculas: ["glucosa", "fructosa", "almidon", "fibrasoluble", "fibrainsoluble", "potasio", "vitamina-c", "agua"] },
-  { key: "naranja", nombre: "Naranja", grupo: "fruta", emoji: "🍊", resumen: "Vitamina C y fibra, con su pulpa entera.",
+  { key: "naranja", nombre: "Naranja", grupo: "fruta", resumen: "Vitamina C y fibra, con su pulpa entera.",
     macros: { carbohidrato: 92, proteina: 5, grasa: 3 },
     moleculas: ["fructosa", "glucosa", "sacarosa", "fibrainsoluble", "pectina", "vitamina-c", "folato", "potasio", "polifenoles", "agua"] },
-  { key: "zumo-naranja", nombre: "Zumo de naranja", grupo: "fruta", emoji: "🧃", resumen: "La misma fruta sin fibra: azúcar libre que llega de golpe.",
+  { key: "zumo-naranja", nombre: "Zumo de naranja", grupo: "fruta", resumen: "La misma fruta sin fibra: azúcar libre que llega de golpe.",
     macros: { carbohidrato: 95, proteina: 3, grasa: 2 },
     moleculas: ["fructosa", "glucosa", "sacarosa", "vitamina-c", "folato", "potasio", "agua"] },
 
   // ── Verdura ──
-  { key: "brocoli", nombre: "Brócoli", grupo: "verdura", emoji: "🥦", resumen: "Fibra, vitamina C y protectores.",
+  { key: "brocoli", nombre: "Brócoli", grupo: "verdura", resumen: "Fibra, vitamina C y protectores.",
     macros: { carbohidrato: 55, proteina: 35, grasa: 10 },
     moleculas: ["fibrasoluble", "fibrainsoluble", "vitamina-c", "folato", "potasio", "polifenoles", "agua"] },
-  { key: "espinaca", nombre: "Espinacas", grupo: "verdura", emoji: "🥬", resumen: "Hoja verde con hierro, folato y antioxidantes.",
+  { key: "espinaca", nombre: "Espinacas", grupo: "verdura", resumen: "Hoja verde con hierro, folato y antioxidantes.",
     macros: { carbohidrato: 50, proteina: 40, grasa: 10 },
     moleculas: ["fibrainsoluble", "hierro", "folato", "vitamina-a", "vitamina-c", "potasio", "magnesio", "agua"] },
-  { key: "zanahoria", nombre: "Zanahoria", grupo: "verdura", emoji: "🥕", resumen: "Dulce y cargada de vitamina A.",
+  { key: "zanahoria", nombre: "Zanahoria", grupo: "verdura", resumen: "Dulce y cargada de vitamina A.",
     macros: { carbohidrato: 85, proteina: 8, grasa: 7 },
     moleculas: ["glucosa", "fibrasoluble", "fibrainsoluble", "vitamina-a", "potasio", "polifenoles", "agua"] },
-  { key: "tomate", nombre: "Tomate", grupo: "verdura", emoji: "🍅", resumen: "Agua, vitamina C y antioxidantes.",
+  { key: "tomate", nombre: "Tomate", grupo: "verdura", resumen: "Agua, vitamina C y antioxidantes.",
     macros: { carbohidrato: 75, proteina: 15, grasa: 10 },
     moleculas: ["fibrainsoluble", "vitamina-c", "vitamina-a", "potasio", "polifenoles", "agua"] },
-  { key: "pimiento", nombre: "Pimiento rojo", grupo: "verdura", emoji: "🫑", resumen: "Récord de vitamina C y mucho color.",
+  { key: "pimiento", nombre: "Pimiento rojo", grupo: "verdura", resumen: "Récord de vitamina C y mucho color.",
     macros: { carbohidrato: 75, proteina: 15, grasa: 10 },
     moleculas: ["vitamina-c", "vitamina-a", "fibrainsoluble", "quercetina", "potasio", "agua"] },
-  { key: "calabacin", nombre: "Calabacín", grupo: "verdura", emoji: "🥒", resumen: "Suave y muy ligero, casi todo agua.",
+  { key: "calabacin", nombre: "Calabacín", grupo: "verdura", resumen: "Suave y muy ligero, casi todo agua.",
     macros: { carbohidrato: 60, proteina: 30, grasa: 10 },
     moleculas: ["agua", "fibrainsoluble", "vitamina-c", "folato", "potasio"] },
-  { key: "cebolla", nombre: "Cebolla", grupo: "verdura", emoji: "🧅", resumen: "Sabor y quercetina, un antioxidante potente.",
+  { key: "cebolla", nombre: "Cebolla", grupo: "verdura", resumen: "Sabor y quercetina, un antioxidante potente.",
     macros: { carbohidrato: 85, proteina: 10, grasa: 5 },
     moleculas: ["fibrasoluble", "quercetina", "vitamina-c", "potasio", "agua"] },
-  { key: "berenjena", nombre: "Berenjena", grupo: "verdura", emoji: "🍆", resumen: "Fibra y polifenoles en su piel morada.",
+  { key: "berenjena", nombre: "Berenjena", grupo: "verdura", resumen: "Fibra y polifenoles en su piel morada.",
     macros: { carbohidrato: 75, proteina: 15, grasa: 10 },
     moleculas: ["fibrainsoluble", "polifenoles", "potasio", "agua"] },
-  { key: "esparragos", nombre: "Espárragos", grupo: "verdura", emoji: "🌿", resumen: "Ricos en folato y fibra.",
+  { key: "esparragos", nombre: "Espárragos", grupo: "verdura", resumen: "Ricos en folato y fibra.",
     macros: { carbohidrato: 55, proteina: 35, grasa: 10 },
     moleculas: ["folato", "fibrasoluble", "fibrainsoluble", "vitamina-c", "vitamina-a", "potasio", "agua"] },
-  { key: "batata", nombre: "Batata", grupo: "verdura", emoji: "🍠", resumen: "Almidón dulce con muchísima vitamina A.",
+  { key: "batata", nombre: "Batata", grupo: "verdura", resumen: "Almidón dulce con muchísima vitamina A.",
     descripcion: "La batata (o boniato) es la verdura que más se parece a un cereal: casi todo almidón. Lo que la separa de una patata es el naranja —carotenoides a espuertas, que tu cuerpo convierte en vitamina A— y su fibra, que hace que ese almidón entre más despacio de lo que su dulzor promete.",
     macros: { carbohidrato: 92, proteina: 7, grasa: 1 },
     moleculas: [
@@ -227,59 +230,59 @@ export const ALIMENTOS: Alimento[] = [
     ] },
 
   // ── Legumbres ──
-  { key: "soja", nombre: "Soja", grupo: "legumbre", emoji: "🫛", resumen: "Proteína vegetal completa.",
+  { key: "soja", nombre: "Soja", grupo: "legumbre", resumen: "Proteína vegetal completa.",
     macros: { carbohidrato: 30, proteina: 40, grasa: 30 },
     moleculas: ["proteina", "aminoacidos-esenciales", "fibrasoluble", "fibrainsoluble", "grasa-monoinsaturada", "isoflavonas", "hierro", "calcio", "folato"] },
-  { key: "garbanzos", nombre: "Garbanzos", grupo: "legumbre", emoji: "🫘", resumen: "Proteína vegetal con fibra y hierro.",
+  { key: "garbanzos", nombre: "Garbanzos", grupo: "legumbre", resumen: "Proteína vegetal con fibra y hierro.",
     macros: { carbohidrato: 60, proteina: 25, grasa: 15 },
     moleculas: ["proteina", "almidon", "fibrasoluble", "fibrainsoluble", "hierro", "folato", "magnesio"] },
-  { key: "lentejas", nombre: "Lentejas", grupo: "legumbre", emoji: "🍲", resumen: "Proteína y hierro con casi nada de grasa.",
+  { key: "lentejas", nombre: "Lentejas", grupo: "legumbre", resumen: "Proteína y hierro con casi nada de grasa.",
     descripcion: "La legumbre más magra: proteína y almidón sin apenas grasa. Su hierro es vegetal y cuesta más de absorber que el de la carne, así que un chorrito de limón o un tomate al lado —vitamina C— multiplican lo que de verdad te llevas.",
     macros: { carbohidrato: 65, proteina: 31, grasa: 4 },
     moleculas: ["proteina", "almidon", "fibrasoluble", "fibrainsoluble", "hierro", "folato", "magnesio", "potasio"] },
 
   // ── Proteína vegetal ──
-  { key: "tofu-seitan", nombre: "Tofu y seitán", grupo: "proteina-vegetal", emoji: "🥢", resumen: "Proteína vegetal concentrada: soja prensada y gluten.",
+  { key: "tofu-seitan", nombre: "Tofu y seitán", grupo: "proteina-vegetal", resumen: "Proteína vegetal concentrada: soja prensada y gluten.",
     descripcion: "Dos cosas distintas que se usan igual. El tofu es soja cuajada y prensada: proteína completa, calcio y grasa buena. El seitán es gluten de trigo puro: mucha más proteína aún, pero incompleta —le falta lisina—, así que pide un acompañamiento de legumbre para cerrarse.",
     macros: { carbohidrato: 10, proteina: 45, grasa: 45 },
     moleculas: ["proteina", "aminoacidos-esenciales", "isoflavonas", "grasa-monoinsaturada", "calcio", "hierro", "magnesio"] },
 
   // ── Proteína animal ──
-  { key: "pollo", nombre: "Pollo", grupo: "proteina", emoji: "🍗", resumen: "Proteína magra.",
+  { key: "pollo", nombre: "Pollo", grupo: "proteina", resumen: "Proteína magra.",
     macros: { carbohidrato: 0, proteina: 75, grasa: 25 },
     moleculas: ["proteina", "aminoacidos-esenciales", "vitamina-b12"] },
-  { key: "vaca", nombre: "Carne de vaca", grupo: "proteina", emoji: "🥩", resumen: "Proteína, hierro y B12; más grasa saturada.",
+  { key: "vaca", nombre: "Carne de vaca", grupo: "proteina", resumen: "Proteína, hierro y B12; más grasa saturada.",
     macros: { carbohidrato: 0, proteina: 55, grasa: 45 },
     moleculas: ["proteina", "aminoacidos-esenciales", "grasa-saturada", "hierro", "vitamina-b12"] },
-  { key: "cerdo", nombre: "Cerdo", grupo: "proteina", emoji: "🥓", resumen: "Proteína con más o menos grasa según el corte.",
+  { key: "cerdo", nombre: "Cerdo", grupo: "proteina", resumen: "Proteína con más o menos grasa según el corte.",
     macros: { carbohidrato: 0, proteina: 50, grasa: 50 },
     moleculas: ["proteina", "aminoacidos-esenciales", "grasa-saturada", "vitamina-b12"] },
-  { key: "huevo", nombre: "Huevo", grupo: "proteina", emoji: "🥚", resumen: "La proteína completa de referencia.",
+  { key: "huevo", nombre: "Huevo", grupo: "proteina", resumen: "La proteína completa de referencia.",
     macros: { carbohidrato: 3, proteina: 34, grasa: 63 },
     moleculas: ["proteina", "aminoacidos-esenciales", "grasa-saturada", "colesterol", "vitamina-b12", "vitamina-d"] },
-  { key: "atun", nombre: "Atún", grupo: "proteina", emoji: "🐟", resumen: "Proteína magra y omega-3.",
+  { key: "atun", nombre: "Atún", grupo: "proteina", resumen: "Proteína magra y omega-3.",
     macros: { carbohidrato: 0, proteina: 78, grasa: 22 },
     moleculas: ["proteina", "aminoacidos-esenciales", "omega3", "vitamina-d", "vitamina-b12"] },
-  { key: "salmon", nombre: "Salmón", grupo: "proteina", emoji: "🍣", resumen: "El pescado con más omega-3 y vitamina D.",
+  { key: "salmon", nombre: "Salmón", grupo: "proteina", resumen: "El pescado con más omega-3 y vitamina D.",
     descripcion: "Un pescado graso, y ahí está justamente su valor: esa grasa es omega-3, la que tu cerebro y tus arterias necesitan y tú no sabes fabricar. Además es de los poquísimos alimentos que traen vitamina D de verdad, la que casi todo el mundo tiene baja por no ver el sol.",
     macros: { carbohidrato: 0, proteina: 40, grasa: 60 },
     moleculas: ["proteina", "aminoacidos-esenciales", "omega3", "vitamina-d", "vitamina-b12", "selenio", "potasio"] },
-  { key: "gambas", nombre: "Gambas", grupo: "proteina", emoji: "🦐", resumen: "Casi solo proteína; su colesterol no es el problema.",
+  { key: "gambas", nombre: "Gambas", grupo: "proteina", resumen: "Casi solo proteína; su colesterol no es el problema.",
     descripcion: "Proteína casi pura: nada de hidratos y apenas grasa. Cargan con la fama de tener mucho colesterol, y es cierto, pero el colesterol que comes casi no mueve el de tu sangre —lo mueve la grasa saturada, que aquí no hay—. Lo que sí traen, y poca gente cuenta, es yodo, selenio y zinc.",
     macros: { carbohidrato: 0, proteina: 90, grasa: 10 },
     moleculas: ["proteina", "aminoacidos-esenciales", "colesterol", "vitamina-b12", "yodo", "selenio", "zinc", "agua"] },
 
   // ── Cereales ──
-  { key: "pasta-integral", nombre: "Pasta integral", grupo: "cereal", emoji: "🍝", resumen: "Trigo integral: fibra y energía de liberación lenta.",
+  { key: "pasta-integral", nombre: "Pasta integral", grupo: "cereal", resumen: "Trigo integral: fibra y energía de liberación lenta.",
     macros: { carbohidrato: 78, proteina: 15, grasa: 7 },
     moleculas: ["almidon", "fibrainsoluble", "proteina", "magnesio"] },
-  { key: "arroz-integral", nombre: "Arroz integral", grupo: "cereal", emoji: "🍚", resumen: "Conserva el salvado: más fibra y minerales.",
+  { key: "arroz-integral", nombre: "Arroz integral", grupo: "cereal", resumen: "Conserva el salvado: más fibra y minerales.",
     macros: { carbohidrato: 82, proteina: 9, grasa: 9 },
     moleculas: ["almidon", "fibrainsoluble", "proteina", "magnesio"] },
-  { key: "pan", nombre: "Pan", grupo: "cereal", emoji: "🍞", resumen: "Depende mucho de si es integral o blanco.",
+  { key: "pan", nombre: "Pan", grupo: "cereal", resumen: "Depende mucho de si es integral o blanco.",
     macros: { carbohidrato: 75, proteina: 13, grasa: 12 },
     moleculas: ["almidon", "proteina", "fibrainsoluble"] },
-  { key: "avena", nombre: "Avena", grupo: "cereal", emoji: "🥣", resumen: "El cereal integral por definición: su fibra frena el azúcar.",
+  { key: "avena", nombre: "Avena", grupo: "cereal", resumen: "El cereal integral por definición: su fibra frena el azúcar.",
     descripcion: "La avena se come entera, con su salvado puesto: por eso no hay que preguntarse si es integral. Su fibra soluble —los betaglucanos— forma un gel en el intestino que ralentiza la absorción del azúcar y arrastra parte del colesterol. Es, además, el cereal con más proteína.",
     macros: { carbohidrato: 68, proteina: 15, grasa: 17 },
     moleculas: [
@@ -291,34 +294,34 @@ export const ALIMENTOS: Alimento[] = [
     ] },
 
   // ── Grasas ──
-  { key: "aguacate", nombre: "Aguacate", grupo: "grasa", emoji: "🥑", resumen: "Grasa buena y fibra.",
+  { key: "aguacate", nombre: "Aguacate", grupo: "grasa", resumen: "Grasa buena y fibra.",
     macros: { carbohidrato: 18, proteina: 5, grasa: 77 },
     moleculas: ["grasa-monoinsaturada", "fibrasoluble", "fibrainsoluble", "potasio", "vitamina-e", "magnesio"] },
-  { key: "aceite-oliva", nombre: "Aceite de oliva", grupo: "grasa", emoji: "🫒", resumen: "Grasa cardiosaludable (virgen extra).",
+  { key: "aceite-oliva", nombre: "Aceite de oliva", grupo: "grasa", resumen: "Grasa cardiosaludable (virgen extra).",
     macros: { carbohidrato: 0, proteina: 0, grasa: 100 },
     moleculas: ["grasa-monoinsaturada", "polifenoles", "vitamina-e"] },
 
   // ── Frutos secos ──
-  { key: "nueces", nombre: "Nueces", grupo: "frutos-secos", emoji: "🌰", resumen: "Grasa buena y omega-3 vegetal.",
+  { key: "nueces", nombre: "Nueces", grupo: "frutos-secos", resumen: "Grasa buena y omega-3 vegetal.",
     macros: { carbohidrato: 14, proteina: 15, grasa: 71 },
     moleculas: ["omega3", "grasa-monoinsaturada", "proteina", "fibrainsoluble", "magnesio", "polifenoles"] },
-  { key: "cacahuetes", nombre: "Cacahuetes", grupo: "frutos-secos", emoji: "🥜", resumen: "Técnicamente una legumbre; proteína y grasa.",
+  { key: "cacahuetes", nombre: "Cacahuetes", grupo: "frutos-secos", resumen: "Técnicamente una legumbre; proteína y grasa.",
     macros: { carbohidrato: 16, proteina: 24, grasa: 60 },
     moleculas: ["proteina", "grasa-monoinsaturada", "fibrainsoluble", "magnesio", "folato"] },
-  { key: "almendras", nombre: "Almendras", grupo: "frutos-secos", emoji: "🌰", resumen: "Vitamina E y el fruto seco con más calcio.",
+  { key: "almendras", nombre: "Almendras", grupo: "frutos-secos", resumen: "Vitamina E y el fruto seco con más calcio.",
     descripcion: "Grasa monoinsaturada, la misma familia que la del aceite de oliva, y la mayor cantidad de vitamina E de todo el grupo: el antioxidante que protege precisamente a las grasas. Es también el fruto seco con más calcio, que es lo que lo convierte en la bebida vegetal más razonable.",
     macros: { carbohidrato: 15, proteina: 15, grasa: 70 },
     moleculas: ["grasa-monoinsaturada", "proteina", "fibrainsoluble", "vitamina-e", "magnesio", "calcio", "zinc"] },
-  { key: "anacardos", nombre: "Anacardos", grupo: "frutos-secos", emoji: "🥜", resumen: "El fruto seco con más hidratos y menos fibra.",
+  { key: "anacardos", nombre: "Anacardos", grupo: "frutos-secos", resumen: "El fruto seco con más hidratos y menos fibra.",
     descripcion: "El más suave y el más dulce del grupo, y no por casualidad: casi un tercio son hidratos —el doble que una almendra— y su fibra es la más baja. Sigue siendo un fruto seco cargado de grasa buena, hierro, magnesio y zinc, pero es el que más se parece a un snack.",
     macros: { carbohidrato: 22, proteina: 13, grasa: 65 },
     moleculas: ["grasa-monoinsaturada", "proteina", "almidon", "fibrainsoluble", "hierro", "magnesio", "zinc"] },
 
   // ── Lácteos ──
-  { key: "queso", nombre: "Queso", grupo: "lacteo", emoji: "🧀", resumen: "Proteína y calcio, con grasa saturada.",
+  { key: "queso", nombre: "Queso", grupo: "lacteo", resumen: "Proteína y calcio, con grasa saturada.",
     macros: { carbohidrato: 5, proteina: 35, grasa: 60 },
     moleculas: ["proteina", "calcio", "grasa-saturada", "vitamina-b12"] },
-  { key: "queso-fresco", nombre: "Queso fresco", grupo: "lacteo", emoji: "🧀", resumen: "El mismo queso sin escurrir: mucha agua, la mitad de grasa.",
+  { key: "queso-fresco", nombre: "Queso fresco", grupo: "lacteo", resumen: "El mismo queso sin escurrir: mucha agua, la mitad de grasa.",
     descripcion: "Un queso curado es leche a la que le han quitado el agua; el fresco es el paso anterior, y por eso más de la mitad sigue siendo agua. A igualdad de peso lleva la mitad de grasa y de sal que el curado, y bastante menos calcio, precisamente porque está menos concentrado.",
     macros: { carbohidrato: 8, proteina: 30, grasa: 62 },
     moleculas: [
@@ -328,7 +331,7 @@ export const ALIMENTOS: Alimento[] = [
       { key: "lactosa", pct: 3 },
       "calcio", "vitamina-b12",
     ] },
-  { key: "yogur-griego", nombre: "Yogur griego", grupo: "lacteo", emoji: "🥛", resumen: "En España casi siempre es nata: más grasa que proteína.",
+  { key: "yogur-griego", nombre: "Yogur griego", grupo: "lacteo", resumen: "En España casi siempre es nata: más grasa que proteína.",
     descripcion: "Cuidado con el nombre. El griego de verdad es yogur colado —se le quita el suero— y sale con el doble de proteína. El «tipo griego» que se vende aquí casi siempre es yogur normal al que le han añadido nata: mismo cremoso, pero tres veces más grasa y la misma proteína que un yogur natural. Lee la etiqueta: si dice «nata», es lo segundo.",
     macros: { carbohidrato: 13, proteina: 13, grasa: 74 },
     moleculas: [
@@ -340,16 +343,16 @@ export const ALIMENTOS: Alimento[] = [
     ] },
 
   // ── Otros ──
-  { key: "chocolate-negro", nombre: "Chocolate negro", grupo: "otros", emoji: "🍫", resumen: "Cuanto más puro, más cacao y menos azúcar.",
+  { key: "chocolate-negro", nombre: "Chocolate negro", grupo: "otros", resumen: "Cuanto más puro, más cacao y menos azúcar.",
     macros: { carbohidrato: 45, proteina: 8, grasa: 47 },
     moleculas: ["teobromina", "polifenoles", "grasa-saturada", "fibrainsoluble", "hierro", "magnesio"] },
-  { key: "cafe", nombre: "Café", grupo: "otros", emoji: "☕", resumen: "Casi solo agua, cafeína y antioxidantes.",
+  { key: "cafe", nombre: "Café", grupo: "otros", resumen: "Casi solo agua, cafeína y antioxidantes.",
     macros: { carbohidrato: 0, proteina: 0, grasa: 0 },
     moleculas: ["cafeina", "polifenoles", "agua"] },
-  { key: "miel", nombre: "Miel", grupo: "otros", emoji: "🍯", resumen: "Natural, sí, pero sigue siendo azúcar.",
+  { key: "miel", nombre: "Miel", grupo: "otros", resumen: "Natural, sí, pero sigue siendo azúcar.",
     macros: { carbohidrato: 100, proteina: 0, grasa: 0 },
     moleculas: ["fructosa", "glucosa", "sacarosa", "polifenoles", "agua"] },
-  { key: "cerveza-vino", nombre: "Cerveza y vino", grupo: "otros", emoji: "🍺", resumen: "Su energía no es un macro: es alcohol.",
+  { key: "cerveza-vino", nombre: "Cerveza y vino", grupo: "otros", resumen: "Su energía no es un macro: es alcohol.",
     descripcion: "Aquí la barra de macros engaña, y por eso vale la pena mirarla. Los pocos hidratos que ves son casi todo lo que la cerveza tiene de comida; el vino ni eso. La energía de verdad la pone el ETANOL, que no es hidrato ni grasa ni proteína: es una cuarta molécula que da 7 kcal por gramo —casi tanto como la grasa— y que tu hígado deja todo lo demás para desmontar primero.",
     macros: { carbohidrato: 100, proteina: 0, grasa: 0 },
     moleculas: [
@@ -360,13 +363,13 @@ export const ALIMENTOS: Alimento[] = [
     ] },
 
   // ── Ultraprocesados ──
-  { key: "nutella", nombre: "Nutella", grupo: "ultraprocesado", emoji: "🍫", resumen: "Sobre todo azúcar y grasa; poca avellana.",
+  { key: "nutella", nombre: "Nutella", grupo: "ultraprocesado", resumen: "Sobre todo azúcar y grasa; poca avellana.",
     macros: { carbohidrato: 57, proteina: 6, grasa: 37 },
     moleculas: ["azucar-anadido", "sacarosa", "grasa-saturada", "grasa-monoinsaturada"] },
-  { key: "oreo", nombre: "Oreo", grupo: "ultraprocesado", emoji: "🍪", resumen: "Energía vacía: azúcar, harina refinada y grasa.",
+  { key: "oreo", nombre: "Oreo", grupo: "ultraprocesado", resumen: "Energía vacía: azúcar, harina refinada y grasa.",
     macros: { carbohidrato: 63, proteina: 4, grasa: 33 },
     moleculas: ["azucar-anadido", "sacarosa", "almidon", "grasa-saturada"] },
-  { key: "cola", nombre: "Refresco de cola", grupo: "ultraprocesado", emoji: "🥤", resumen: "Agua con azúcar, cafeína y ácido: nada más.",
+  { key: "cola", nombre: "Refresco de cola", grupo: "ultraprocesado", resumen: "Agua con azúcar, cafeína y ácido: nada más.",
     descripcion: "El ultraprocesado más honesto del catálogo, porque no disimula: no hay proteína, no hay grasa, no hay fibra, no hay una sola vitamina. Solo agua, azúcar líquido que llega de golpe, cafeína para que apetezca otro, y el ácido fosfórico que le da ese punto —y que en exceso le disputa el calcio a tus huesos—.",
     macros: { carbohidrato: 100, proteina: 0, grasa: 0 },
     moleculas: [
@@ -378,7 +381,8 @@ export const ALIMENTOS: Alimento[] = [
 
 // Fotos reutilizadas de la Biblioteca de alimentos (/recorrido/nutricion/alimentos).
 // Se asignan aquí en un solo sitio para no repetir la ruta en cada alimento. Los
-// que no tengan foto muestran su emoji como marcador. (Se irán añadiendo más.)
+// que no estén en esta lista salen con la inicial de su nombre, así que lo que
+// falta aquí es lo que falta por ilustrar. (Se irán añadiendo más.)
 const FOTO_ALIMENTO: Record<string, string> = {
   manzana: "manzana", platano: "platano", naranja: "naranja", "zumo-naranja": "zumo",
   brocoli: "brocoli", espinaca: "espinaca", zanahoria: "zanahoria", tomate: "tomate",

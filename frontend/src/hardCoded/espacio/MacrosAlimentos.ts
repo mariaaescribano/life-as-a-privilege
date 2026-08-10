@@ -14,8 +14,10 @@
 // manzanas nunca son iguales. Lo que se entrena es el ORDEN DE MAGNITUD —«un
 // huevo son seis gramos de proteína, no veinte»—, no la cifra exacta.
 //
-// `sorpresa` es lo que se revela al comprobar: el porqué que hace que el dato se
-// quede. Es el corazón didáctico del juego; sin ella esto sería un test.
+// `sorpresa` YA NO SE PINTA: la caja blanca con el porqué se quitó de la página
+// (era un texto largo por alimento, y la página se quería juego y nada más). Los
+// textos se quedan aquí escritos por si algún día vuelven a algún sitio; no los
+// borres al añadir alimentos nuevos, pero tampoco hace falta escribirlos.
 // ─────────────────────────────────────────────────────────────────────────
 
 const F = "/recorrido/nutricion/alimentos";
@@ -49,7 +51,7 @@ export interface AlimentoMacros {
   hidratos: number;
   grasa: number;
   kcal: number;
-  /** El porqué que se revela al comprobar. Lo que hace que el dato se recuerde. */
+  /** El porqué del dato. NO se muestra (ver la cabecera del archivo). */
   sorpresa: string;
 }
 
@@ -323,19 +325,24 @@ export const ALIMENTOS_MACROS: AlimentoMacros[] = [
   },
 ];
 
-// ── Puntuación ────────────────────────────────────────────────────────────
-// Se puntúa por CERCANÍA, no por exactitud: nadie sabe que un huevo tiene 6,3 g
+// ── Tino ──────────────────────────────────────────────────────────────────
+// Se valora por CERCANÍA, no por exactitud: nadie sabe que un huevo tiene 6,3 g
 // de proteína, y no es lo que se quiere enseñar. Lo que cuenta es acertar el
 // orden de magnitud, así que la tolerancia es proporcional al dato… con un
 // mínimo de 2 g, porque si no los alimentos con cifras pequeñas (el aceite, el
 // café) serían imposibles y los grandes, regalados.
+//
+// Sin PUNTOS: el juego decía «clavado / cerca / lejos» en cada macro y además
+// sumaba puntos, racha y récord. Los puntos se quitaron —convertían en examen lo
+// que es un ojímetro— y queda solo el tino de cada macro y la ronda en la que
+// vas.
 
 export type Tino = "clavado" | "cerca" | "lejos";
 
-export const TINO: Record<Tino, { label: string; puntos: number; color: string }> = {
-  clavado: { label: "Clavado",  puntos: 100, color: "#2f8f5b" },
-  cerca:   { label: "Cerca",    puntos: 50,  color: "#d69a2d" },
-  lejos:   { label: "Lejos",    puntos: 0,   color: "#b1584f" },
+export const TINO: Record<Tino, { label: string; color: string }> = {
+  clavado: { label: "Clavado",  color: "#2f8f5b" },
+  cerca:   { label: "Cerca",    color: "#d69a2d" },
+  lejos:   { label: "Lejos",    color: "#b1584f" },
 };
 
 /** Margen que se acepta como «clavado» para un valor real. */
@@ -349,18 +356,16 @@ export function tinoDe(estimado: number, real: number): Tino {
   return "lejos";
 }
 
-/** Los tres tinos de una ronda y sus puntos (máximo 300). */
-export function puntuarRonda(
+/** El tino de los tres macros de una ronda. */
+export function tinosDeRonda(
   a: AlimentoMacros,
   est: { proteina: number; hidratos: number; grasa: number },
-): { tinos: Record<"proteina" | "hidratos" | "grasa", Tino>; puntos: number } {
-  const tinos = {
+): Record<"proteina" | "hidratos" | "grasa", Tino> {
+  return {
     proteina: tinoDe(est.proteina, a.proteina),
     hidratos: tinoDe(est.hidratos, a.hidratos),
     grasa: tinoDe(est.grasa, a.grasa),
   };
-  const puntos = TINO[tinos.proteina].puntos + TINO[tinos.hidratos].puntos + TINO[tinos.grasa].puntos;
-  return { tinos, puntos };
 }
 
 /** Rondas de una partida. Diez: suficiente para aprender, corto para repetir. */
@@ -370,15 +375,9 @@ export const RONDAS = 10;
  *  valor más alto del juego, la posición del dedo delataría la respuesta. */
 export const TOPES = { proteina: 50, hidratos: 70, grasa: 40 } as const;
 
-/** Clave de metodo_nutricion.data donde vive el récord. */
-export const MACROS_CAMPO = "macros_juego";
-
-export interface MacrosJuegoData {
-  /** Mejor puntuación de una partida completa. */
-  mejor?: number;
-  /** Partidas terminadas. */
-  partidas?: number;
-}
+// El juego NO guarda nada en metodo_nutricion.data: aquí vivían la clave del
+// récord (`macros_juego`) y su tipo, y se fueron con los puntos. Es un juego para
+// volver, no un examen que aprobar ni una nota que quede.
 
 /** Baraja una copia del array (Fisher-Yates). */
 export function barajar<T>(xs: T[]): T[] {
@@ -390,24 +389,9 @@ export function barajar<T>(xs: T[]): T[] {
   return a;
 }
 
-/** Mensaje final según la puntuación (máximo RONDAS × 300). */
-export function veredicto(puntos: number): { titulo: string; texto: string } {
-  const max = RONDAS * 300;
-  const pct = puntos / max;
-  if (pct >= 0.85) return {
-    titulo: "Tienes el ojo hecho",
-    texto: "Ya no necesitas pesar nada: mirar un plato y saber lo que lleva es exactamente la habilidad que querías.",
-  };
-  if (pct >= 0.6) return {
-    titulo: "Vas muy bien",
-    texto: "Aciertas el orden de magnitud casi siempre. Repite otra vez fijándote en los que falles: se aprenden por sorpresa, no por repetición.",
-  };
-  if (pct >= 0.35) return {
-    titulo: "Ya estás calculando",
-    texto: "Estás empezando a distinguir lo que pesa de lo que abulta. Vuelve a jugar: la segunda vuelta siempre da un salto.",
-  };
-  return {
-    titulo: "Nadie acierta a la primera",
-    texto: "Y es justo la gracia: si esto fuera intuitivo, no haría falta aprenderlo. Vuelve a intentarlo y verás cuánto cambia.",
-  };
-}
+/** Cierre de la partida. Uno solo y siempre el mismo: sin puntos no hay nota que
+ *  dar, y lo único que se quiere decir al acabar es «vuelve a jugar». */
+export const CIERRE_PARTIDA = {
+  titulo: "Diez alimentos mirados",
+  texto: "Se aprende jugando otra vez: la segunda vuelta siempre da un salto, y los que fallas son justo los que se te quedan.",
+};

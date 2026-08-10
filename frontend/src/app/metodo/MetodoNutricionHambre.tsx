@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -9,14 +9,12 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { glowHeader } from "../../components/metodo/FotoBox";
+import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
 import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlustracionModal";
 import { HAMBRE_HOLISTICA, HAMBRE_CIERRE, sinNegrita } from "../../components/metodo/hambreHolistica";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
-import type { Vineta } from "../../components/metodo/ComicViewer";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -24,12 +22,14 @@ import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from 
 // plato de Harvard. Contenido: «El hambre, una mirada holística» — 4 lecturas y,
 // al final, una frase directamente sobre el fondo turquesa (sin box).
 //
-// La página NO trae el texto: enseña las cuatro fotos con su título numerado y
-// un botón «Ver». La lectura se hace en el visor inmersivo (el mismo de las
-// Ilustraciones), que abre por la que se pulse y deja pasar a las otras tres con
-// las flechas. Antes los cuatro textos iban en la propia página, en boxes con
-// scroll interno: había que leer cuatro columnas de texto seguidas sin salir del
-// turquesa, y la foto competía con la letra.
+// La página NO trae el texto: enseña las cuatro fotos en la MISMA tarjeta que la
+// Microbiota (TarjetaNutri → FotoBox: foto a sangre arriba, título abajo a la
+// izquierda, sin botón «Ver» porque la tarjeta entera es el botón). La lectura se
+// hace en el visor inmersivo (el mismo de las Ilustraciones), que abre por la que
+// se pulse y deja pasar a las otras tres con las flechas. Antes los cuatro textos
+// iban en la propia página, en boxes con scroll interno: había que leer cuatro
+// columnas de texto seguidas sin salir del turquesa, y la foto competía con la
+// letra.
 //
 // Los mismos 4 bloques (HAMBRE_HOLISTICA) son también un cómic de la galería de
 // «Ilustraciones» de Nutrición.
@@ -38,72 +38,6 @@ import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from 
 // Las viñetas tal como las lee el visor: sin las marcas **…** de negrita, que el
 // ComicViewer pinta en plano.
 const VINETAS_HAMBRE = sinNegrita(HAMBRE_HOLISTICA);
-
-// Placeholder mientras la foto no está subida (icono suave sobre fondo tenue).
-function FotoPlaceholder() {
-  return (
-    <Flex direction="column" align="center" justify="center" gap={2} w="100%" h="100%"
-          bg={`${nutricionTxt}12`} border={`1px dashed ${nutricionTxt}55`} borderRadius="lg">
-      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-           w={{ base: "34px", md: "40px" }} h={{ base: "34px", md: "40px" }} fill={`${nutricionTxt}88`}>
-        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
-      </Box>
-    </Flex>
-  );
-}
-
-// ── Box de una lectura · la foto, «1. Título» y «Ver» ────────────────────────
-// La foto arriba (cuadrada, como la ilustración) y debajo el número, el título y
-// el botón. La caja ENTERA es pulsable —el botón es la señal, no la única zona
-// que responde—.
-function HambreBox({ v, numero, onVer }: { v: Vineta; numero: number; onVer: () => void }) {
-  return (
-    <Box as="button" onClick={onVer} w="100%" h="100%" display="block" textAlign="left"
-         position="relative" borderRadius="2xl" overflow="hidden" boxShadow={glowHeader(nutricionTxt)}
-         cursor="pointer" transition="transform 0.18s ease, box-shadow 0.18s ease"
-         _hover={{ transform: "translateY(-2px)", boxShadow: `${glowHeader(nutricionTxt)}, 0 0 30px ${nutricionTxt}33` }}
-         sx={{ WebkitTapHighlightColor: "transparent" }} role="group">
-      <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}55`} />
-
-      {/* Líneas de luz arriba/abajo (como el visor de ilustraciones) */}
-      <Box position="absolute" top="-1px" left="15%" right="15%" h="1px" zIndex={2}
-           bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
-      <Box position="absolute" bottom="-1px" left="15%" right="15%" h="1px" zIndex={2}
-           bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
-
-      <Flex position="relative" zIndex={1} direction="column" h="100%"
-            px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }} gap={{ base: 4, md: 5 }}>
-        {/* La foto, protagonista */}
-        <Box w="100%" aspectRatio={1} position="relative" flexShrink={0}
-             filter={`drop-shadow(0 0 12px rgba(255,255,255,0.14)) drop-shadow(0 0 30px ${nutricionTxt}33)`}>
-          <Image src={encodeURI(v.src)} alt={v.titulo ?? ""} w="100%" h="100%" objectFit="cover"
-                 borderRadius="lg" fallback={<FotoPlaceholder />} />
-        </Box>
-
-        {/* Número + título a la izquierda y «Ver» a la derecha, abajo */}
-        <Flex align="center" justify="space-between" gap={{ base: 3, md: 4 }} mt="auto">
-          <Text color={nutricionTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight={700}
-                lineHeight="1.3" flex="1" minW={0}>
-            <Box as="span" fontWeight={800}>{numero}.</Box> {v.titulo}
-          </Text>
-
-          <Flex flexShrink={0} align="center" gap={1.5} px={{ base: 3, md: 4 }} py={1.5} borderRadius="full"
-                border={`1.5px solid ${nutricionTxt}99`} bg={`${nutricionBg}55`}
-                transition="all 0.18s" _groupHover={{ borderColor: nutricionTxt, bg: `${nutricionBg}99` }}>
-            <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.1em"
-                  textTransform="uppercase">
-              Ver
-            </Text>
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="14px" h="14px"
-                 fill={nutricionTxt} flexShrink={0}>
-              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-            </Box>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Box>
-  );
-}
 
 export default function MetodoNutricionHambre() {
   const t = useT();
@@ -165,17 +99,17 @@ export default function MetodoNutricionHambre() {
             </Text>
           </Reveal>
 
-          {/* Las cuatro lecturas: foto + título numerado + «Ver». En dos columnas
-              de md hacia arriba y una sola en móvil. */}
-          <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
-               gap={{ base: 5, md: 6 }} w="100%">
-            {HAMBRE_HOLISTICA.map((v, i) => (
-              <Reveal inView key={v.src} direction="up" distance={22} scaleFrom={0.98} delay={0.05}
-                      duration={0.65} w="100%" h="100%">
-                <HambreBox v={v} numero={i + 1} onVer={() => setLecturaAbierta(i)} />
-              </Reveal>
-            ))}
-          </Box>
+          {/* Las cuatro lecturas, en la tarjeta de la Microbiota: foto arriba y
+              título abajo. Una fila de cuatro en escritorio, dos en tablet y una
+              sola columna en móvil. */}
+          <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={{ base: 4, md: 6 }} w="100%">
+              {HAMBRE_HOLISTICA.map((v, i) => (
+                <TarjetaNutri key={v.src} titulo={v.titulo} foto={v.src}
+                              onClick={() => setLecturaAbierta(i)} />
+              ))}
+            </SimpleGrid>
+          </Reveal>
 
           {/* Frase de cierre, directamente sobre el fondo turquesa (sin box) */}
           <Reveal inView direction="up" distance={18} delay={0.2} duration={0.7} w="100%" display="flex" justifyContent="center">

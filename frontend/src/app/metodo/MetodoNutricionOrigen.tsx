@@ -12,8 +12,6 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
-import { glowSuave } from "../../components/metodo/FotoBox";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { useLeidos } from "../../hooks/useLeidos";
 import {
@@ -130,27 +128,9 @@ export default function MetodoNutricionOrigen() {
             ))}
           </RevealStagger>
 
-          {/* Cierre del paso: el viaje entero en una línea. Caja con el fondo de
-              la disciplina y el glow del acento (nunca sombra oscura ni halo
-              claro), y desde aquí se sigue a los cursos. */}
-          <Reveal inView direction="up" distance={18} delay={0.1} duration={0.6} w="100%"
-                  display="flex" justifyContent="center">
-            <Flex direction="column" align="center" gap={3} w="100%" maxW="680px" textAlign="center"
-                  position="relative" borderRadius="2xl" overflow="hidden"
-                  boxShadow={glowSuave(nutricionTxt)} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-              <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}cc`} />
-              <Text position="relative" zIndex={1} color={nutricionTxt} fontWeight={700}
-                    fontSize={{ base: "lg", md: "xl" }} lineHeight="1.3">
-                Y así llega hasta ti
-              </Text>
-              <Text position="relative" zIndex={1} color={nutricionTxt} fontSize={{ base: "sm", md: "md" }}
-                    fontStyle="italic" lineHeight="1.8" opacity={0.9}>
-                Una roca, el agua del suelo, un hongo, una raíz, dos tuberías, una hoja que atrapa la luz, una
-                flor que se convierte en fruto… y a veces un animal que lo llevó puesto antes que tú. Todo lo que
-                hoy eres estuvo dando vueltas por ahí, y volverá a hacerlo. Nada se inventa de cero: se presta.
-              </Text>
-            </Flex>
-          </Reveal>
+          {/* Aquí iba la caja de cierre «Y así llega hasta ti», con el viaje
+              entero resumido en una frase. Retirada: el paso ya se cierra con
+              las seis lecturas y el botón a los cursos. */}
 
         </Flex>
       </Flex>
