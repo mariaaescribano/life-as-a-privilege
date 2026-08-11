@@ -123,10 +123,10 @@ export const elMetodo = {
   "elMetodo.faq.titulo": "Lo que se suele preguntar",
   "elMetodo.faq.1.p": "¿Esto es esotérico? ¿Tengo que creerme la astrología?",
   "elMetodo.faq.1.r":
-    "No te pido que creas nada. La carta natal es un mapa simbólico de las circunstancias que han dado origen a tu inconsciente. No hace falta que creas, pero si te das la oportunidad, podrías sorprenderte y no arrepentirte., no un descuido.",
+    "No te pido que creas. La carta natal es un mapa simbólico de las circunstancias que han contribuido a formar tu mundo interior. No necesitas creer; solo estar dispuesto a mirar desde otra perspectiva. Date la oportunidad de explorarla. Puede que descubras en ella más de lo que esperabas.",
   "elMetodo.faq.2.p": "¿Cuánto tiempo necesito?",
   "elMetodo.faq.2.r":
-    "El que tú quieras. No hay clases en directo ni fechas: se avanza paso a paso y lo hecho queda guardado. Hay quien se hace una disciplina en un fin de semana y quien dos meses.",
+    "El que tú quieras. No hay clases en directo ni fechas: se avanza paso a paso y lo hecho queda guardado. Hay quien se hace una disciplina en un fin de semana y quien tarda dos meses.",
   "elMetodo.faq.3.p": "¿Hace falta tener base de algo?",
   "elMetodo.faq.3.r":
     "Ninguna. Todo empieza desde cero y está ilustrado. Si algo necesita un concepto previo, ese concepto se explica antes.",
