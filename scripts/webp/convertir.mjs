@@ -404,6 +404,64 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/fisiologia/profundiza/musculo"],
   },
+  // Las seis viñetas del cómic del CÁNCER (Profundiza, Fisiología): carpeta
+  // nueva. Llegaron a la carpeta de fichas del tema y se movieron aquí, que es
+  // donde las pide el código. Aquí el WebP NO es opcional: la ruta de cada
+  // viñeta se escribe con la extensión puesta en ProfundizaFisiologia.ts, así
+  // que en PNG dan 404 —y como este tema es `comicEnRejilla`, la página entera
+  // se queda sin cajas que pulsar—.
+  31: {
+    ladoMax: 1000,
+    carpetas: ["viñetas/fisiologia/cancer"],
+  },
+  // Tanda de Cultura del 11 de agosto: ocho momentos de Historia Universal
+  // repintados (llegaron en PNG encima de sus WebP), nueve momentos nuevos
+  // —Neandertales, la revolución neolítica, Julio César, Cleopatra,
+  // Al-Qarawiyyin, la Guerra de Secesión, sintoísmo, sijismo y el mundo
+  // religioso hoy—, los cuatro ilustrados de la Ilustración (Pascal,
+  // Montesquieu, Voltaire, Rousseau) y la portada de Historia de la ciencia.
+  //
+  // Aquí el WebP NO es opcional: la foto de un momento y la portada de una
+  // Historia se arman solas en `.webp` (culturaHistoria*.ts y culturaPortadas.ts),
+  // así que en PNG dan 404 —y la línea del tiempo se queda con el círculo vacío—.
+  32: {
+    ladoMax: 1000,
+    carpetas: [
+      "recorrido/cultura/historiageneral",
+      "recorrido/cultura/historiareligion",
+      "recorrido/cultura/historiafilosofia",
+      "recorrido/cultura/portadas",
+    ],
+  },
+  // Segunda tanda de Cultura del 11 de agosto: diecisiete momentos de Historia
+  // Universal repintados y `arte-rupestre`, que era el último hueco que le
+  // quedaba a esa Historia. Como en el lote 32, el WebP no es opcional: la ruta
+  // de un momento se arma sola en `.webp` (culturaHistoriaGeneral.ts).
+  33: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/cultura/historiageneral"],
+  },
+  // Arranca Historia de la ciencia (carpeta nueva): las diez portadas de era
+  // —del prólogo a la era de la información— y los dos primeros momentos del
+  // «Antes de empezar el viaje». Mismos ajustes que el resto de Cultura.
+  34: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/cultura/historiaciencia"],
+  },
+  // Rezagada del 34: `ciencia-se-corrige`, el tercer momento del «Antes de
+  // empezar el viaje». Va en lote aparte y no reejecutando el 34 porque cada
+  // lote reescribe su CSV, y ahí está el registro de las doce anteriores.
+  35: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/cultura/historiaciencia"],
+  },
+  // Historia de la ciencia, momentos: los seis griegos (Tales, Pitágoras,
+  // Aristóteles, Euclides, Arquímedes, Eratóstenes) y el fuego y las
+  // herramientas. Van llegando a chorro, así que un lote por tanda.
+  36: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/cultura/historiaciencia"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

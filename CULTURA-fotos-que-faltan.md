@@ -12,123 +12,22 @@ Formato: `.webp`, cuadradas (se recortan en círculo y se pintan también en el 
 
 | Historia | Faltan | Total |
 | --- | --- | --- |
-| Historia Universal | 7 | 111 |
-| Historia de las religiones | 3 | 49 |
-| Historia de la filosofía | 4 | 103 |
-| Historia de la ciencia | 59 | 59 |
+| Historia Universal | 0 | 111 |
+| Historia de las religiones | 0 | 49 |
+| Historia de la filosofía | 0 | 103 |
+| Historia de la ciencia | 38 | 59 |
 | Historia de la medicina | 96 | 96 |
 | Historia del arte y la literatura | 54 | 54 |
-| **TOTAL** | **223** | **472** |
+| **TOTAL** | **188** | **472** |
 
-## Historia Universal — faltan 7 de 111
-
-### Prehistoria — hasta ~3500 a. C.
-
-Carpeta: `frontend/public/recorrido/cultura/historiageneral/`
-
-- `neandertales.webp` — Neandertales y otros humanos
-- `arte-rupestre.webp` — El arte de las cuevas
-- `revolucion-neolitica.webp` — La revolución neolítica
-
-### Edad Antigua — 3500 a. C. – 476 d. C.
-
-Carpeta: `frontend/public/recorrido/cultura/historiageneral/`
-
-- `julio-cesar.webp` — Julio César
-- `cleopatra.webp` — Cleopatra
-
-### Edad Media — 476 – 1453/1492
-
-Carpeta: `frontend/public/recorrido/cultura/historiageneral/`
-
-- `al-qarawiyyin.webp` — La universidad más antigua del mundo
-
-### Era Industrial — 1789 – 1945
-
-Carpeta: `frontend/public/recorrido/cultura/historiageneral/`
-
-- `guerra-secesion.webp` — Guerra de Secesión y el fin de la esclavitud
-
-## Historia de las religiones — faltan 3 de 49
-
-### Los dioses cuentan historias — ≈2000 a. C.-500 d. C.
-
-Carpeta: `frontend/public/recorrido/cultura/historiareligion/`
-
-- `sintoismo.webp` — Sintoísmo
-
-### Cuando una fe se divide — 632-1517
-
-Carpeta: `frontend/public/recorrido/cultura/historiareligion/`
-
-- `sijismo.webp` — El sijismo
-
-### Un mundo, muchas creencias — Siglos XVI-Actualidad
-
-Carpeta: `frontend/public/recorrido/cultura/historiareligion/`
-
-- `secularizacion.webp` — El mundo religioso hoy
-
-## Historia de la filosofía — faltan 4 de 103
-
-### La revolución del pensamiento — Siglos XVII-XVIII
-
-Carpeta: `frontend/public/recorrido/cultura/historiafilosofia/`
-
-- `pascal.webp` — Blaise Pascal
-- `montesquieu.webp` — Montesquieu
-- `voltaire.webp` — Voltaire
-- `rousseau.webp` — Jean-Jacques Rousseau
-
-## Historia de la ciencia — faltan 59 de 59
-
-### Portada de la Historia
-
-Carpeta: `frontend/public/recorrido/cultura/portadas/`
-
-- `historiaciencia.webp` — Historia de la ciencia
-
-### Portadas de las eras (círculos de la línea del tiempo)
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/eras/`
-
-- `prologo.webp` — ¿Qué es la ciencia? (Antes de empezar el viaje)
-- `antes-ciencia.webp` — Antes de la ciencia (Prehistoria – Antigüedad)
-- `grecia-ciencia.webp` — Grecia: la razón mira la naturaleza (Siglos VI – III a. C.)
-- `ciencia-mundo.webp` — La ciencia viaja por el mundo (Siglos VIII – XV)
-- `revolucion-cientifica.webp` — La Revolución Científica (Siglos XVI – XVII)
-- `ilustracion-ciencia.webp` — La Ilustración: ordenar el mundo (Siglo XVIII)
-- `siglo-xix.webp` — El siglo XIX: energía, vida y materia (Siglo XIX)
-- `fisica-moderna.webp` — La revolución de la física (Primera mitad del siglo XX)
-- `descifrar-vida.webp` — Descifrar la vida (Siglo XX)
-- `era-informacion.webp` — La era de la información y el futuro (Siglos XX – XXI)
-
-### ¿Qué es la ciencia? — Antes de empezar el viaje
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `que-es-ciencia.webp` — ¿Qué es la ciencia?
-- `como-se-sabe.webp` — El método: preguntar y comprobar
-- `ciencia-se-corrige.webp` — La ciencia que se corrige
+## Historia de la ciencia — faltan 38 de 59
 
 ### Antes de la ciencia — Prehistoria – Antigüedad
 
 Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
 
-- `fuego-herramientas.webp` — El fuego y las herramientas
 - `contar-medir.webp` — Contar y medir
 - `leer-el-cielo.webp` — Leer el cielo
-
-### Grecia: la razón mira la naturaleza — Siglos VI – III a. C.
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `tales-presocraticos.webp` — Tales y los presocráticos
-- `pitagoras-numeros.webp` — Pitágoras y los números
-- `aristoteles-ciencia.webp` — Aristóteles
-- `euclides.webp` — Euclides
-- `arquimedes.webp` — Arquímedes
-- `eratostenes.webp` — Eratóstenes mide la Tierra
 
 ### La ciencia viaja por el mundo — Siglos VIII – XV
 
