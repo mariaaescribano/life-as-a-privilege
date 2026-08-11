@@ -14,6 +14,7 @@ import { Reveal, RevealStagger, RevealItem } from "../../components/global/Revea
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { useLeidos } from "../../hooks/useLeidos";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
@@ -62,7 +63,17 @@ export default function MetodoNutricionOrigen() {
     })();
   }, [navigate]);
 
-  if (loading) return <NutricionLoading />;
+  // Las portadas de las seis tarjetas, precargadas ANTES de pintar nada. Sin
+  // esto la rejilla salía con los seis huecos vacíos y las fotos iban cayendo
+  // una a una, cada una empujando el alto de su fila.
+  // `encodeURI` porque es exactamente lo que pide FotoBox al pintarlas (las
+  // rutas llevan «ñ»): si se precargara sin codificar serían dos URL distintas
+  // y la espera no serviría de nada.
+  const fotosListas = usePrecargarImagenes(
+    ORIGEN_NUTRIENTES.map((l) => encodeURI(l.cover)),
+  );
+
+  if (loading || !fotosListas) return <NutricionLoading />;
 
   const lectura = abierta !== null ? ORIGEN_NUTRIENTES[abierta] : null;
 
