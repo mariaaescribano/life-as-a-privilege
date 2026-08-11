@@ -462,21 +462,31 @@ export function BotonEmpezar({ d, onClick }: { d: PresentacionDisciplina; onClic
 /**
  * VÍDEO DE MUESTRA, en caja cuadrada.
  *
- * La caja es 1:1 porque es la proporción en la que se graban los vídeos nuevos.
- * Los antiguos (astro, psico, hinduismo) son verticales 1080×1920, así que se
- * mide el vídeo al cargar: cuadrado → `cover` (encaje exacto); vertical →
- * `contain`, para verlo entero en lugar de perderle el 44% del alto.
+ * Lo que se reproduce aquí es el CLIP corto (`/videos/muestra/<clave>.mp4`,
+ * ~100 KB, mudo y en bucle, lo genera `scripts/video/muestras.mjs`), NO el vídeo
+ * del recorrido. Este vídeo sale en pantalla sí o sí nada más abrir la página, y
+ * el original pesa entre 8 y 33 MB: ponerlo aquí es cobrarle esos megas a todo
+ * el que entra desde un cartel, la mayoría con datos del móvil. Al pulsar sí se
+ * abre el completo, en su popup (ver `global/VideoLargo.tsx`).
+ *
+ * La caja es 1:1 porque es la proporción en la que se graban los vídeos: hoy los
+ * ocho son 1080×1080. El clip conserva la proporción del original, así que se
+ * mide al cargar y se encaja en consecuencia: cuadrado → `cover` (encaje
+ * exacto); cualquier otra proporción → `contain`, para verlo entero en lugar de
+ * recortarlo.
  */
 export function VideoMuestra({
   d,
-  videoRef,
+  onAbrir,
 }: {
   d: PresentacionDisciplina;
-  /** Para que el botón «Ver por dentro» del box de al lado lo ponga en marcha. */
-  videoRef?: React.RefObject<HTMLVideoElement | null>;
+  /** Abre el vídeo completo. La caja ENTERA es el botón, sin rótulo encima: lo
+   *  que invita a pulsar es el zoom al pasar por encima. */
+  onAbrir?: () => void;
 }) {
   const [cuadrado, setCuadrado] = useState<boolean | null>(null);
-  useEffect(() => { setCuadrado(null); }, [d.video]);
+  const clip = `/videos/muestra/${d.clave}.mp4`;
+  useEffect(() => { setCuadrado(null); }, [clip]);
 
   return (
     <Box
@@ -491,19 +501,25 @@ export function VideoMuestra({
       // como si fuera una caja más, y no lo es.
       boxShadow={`0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
       sx={{ aspectRatio: "1 / 1" }}
+      onClick={onAbrir}
+      cursor={onAbrir ? "pointer" : undefined}
+      transition="transform 0.35s ease, box-shadow 0.35s ease"
+      _hover={onAbrir ? {
+        transform: "scale(1.02)",
+        boxShadow: `0 0 60px ${d.txt}88, 0 0 110px ${d.txt}44`,
+      } : undefined}
     >
       <Box
         as="video"
-        ref={videoRef as any}
-        key={d.video}
-        src={d.video}
+        key={clip}
+        src={clip}
         // Arranca solo y se repite en bucle: quien llega de un cartel ve el
         // recorrido en marcha sin tener que pulsar nada.
         autoPlay
         loop
-        // `muted` es OBLIGATORIO para que arranque solo: los vídeos son mudos,
-        // pero llevan pista de audio en silencio y sin esto Chrome y Safari
-        // bloquean el autoplay (se quedarían parados en el primer fotograma).
+        // `muted` es OBLIGATORIO para que arranque solo: los clips no llevan
+        // pista de audio, pero sin esto Chrome y Safari bloquean el autoplay
+        // igualmente (se quedarían parados en el primer fotograma).
         muted
         // En iOS, sin `playsInline` el vídeo se abriría a pantalla completa.
         playsInline

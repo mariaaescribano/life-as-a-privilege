@@ -2,6 +2,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
+import { VideoLargoModal } from "./VideoLargo";
 import { type DisciplinaClave } from "../../data/recorridoContenido";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
 import { useIdioma, useT, type Texto } from "../../i18n";
@@ -113,7 +114,7 @@ const disciplinas: Disciplina[] = [
     ],
     link: "/espacio/questions/" + neuropsicologiaNom,
     enabled: true,
-    video: "/videos/psicovideo.mp4",
+    video: "/videos/psicologiavideo.mp4",
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
   },
   {
@@ -148,7 +149,7 @@ const disciplinas: Disciplina[] = [
     ],
     link: "/espacio/questions/" + ayurvedaNomLink,
     enabled: true,
-    video: "/videos/hinduismovideo.mp4",
+    video: "/videos/ayurvedavideo.mp4",
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
   },
   {
@@ -159,7 +160,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/espacio/questions/" + tcmNomLink,
     enabled: false,
-    video: "/videos/tcm.mp4",
+    video: "/videos/tcmvideo.mp4",
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
   },
   {
@@ -170,7 +171,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/espacio/questions/" + fisiologiaNom,
     enabled: false,
-    video: "/videos/fisiologia.mp4",
+    video: "/videos/fisiovideo.mp4",
     renderIcon: (size) => <FisiologiaIcon size={size} />,
   },
   {
@@ -181,7 +182,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/espacio/questions/" + nutricionNomLink,
     enabled: false,
-    video: "/videos/nutricion.mp4",
+    video: "/videos/nutrivideo.mp4",
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
   },
   {
@@ -192,7 +193,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/espacio/questions/" + cabalaNom,
     enabled: false,
-    video: "/videos/cabala.mp4",
+    video: "/videos/cabalavideo.mp4",
     renderIcon: (size) => <CabalaIcon size={size} />,
   },
   {
@@ -203,7 +204,7 @@ const disciplinas: Disciplina[] = [
     capturas: [],
     link: "/aprendizaje/cursos/" + culturaNomLink,
     enabled: false,
-    video: "/videos/cultura.mp4",
+    video: "/videos/culturavideo.mp4",
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
   },
 ];
@@ -834,11 +835,13 @@ const CarruselCard = ({
 // moviéndose a la vez: es la única parte de la página de venta que no promete
 // nada, solo enseña.
 //
-// Lo que se reproduce en la baldosa NO es el vídeo de muestra: es un clip corto
-// y mudo (`/videos/muestra/<clave>.mp4`, ~200 KB) que genera
-// `scripts/video/muestras.mjs`. Los ocho originales pesan 53 MB juntos y aquí
-// habría que cargarlos TODOS: sería, con diferencia, la pantalla más cara de la
-// web. Al pulsar una baldosa sí se abre el vídeo entero, en el popup de siempre.
+// Lo que se reproduce en la baldosa NO es el vídeo entero: es un clip corto y
+// mudo (`/videos/muestra/<clave>.mp4`, ~100 KB) que genera
+// `scripts/video/muestras.mjs`. Los ocho originales pesan unos 144 MB juntos y
+// aquí habría que cargarlos TODOS: sería, con diferencia, la pantalla más cara
+// de la web. Al pulsar una baldosa sí se abre el vídeo entero, en el popup de
+// siempre — que antes de bajar los megas pregunta si la conexión parece de pago
+// (ver `VideoLargo.tsx`).
 //
 // Tres cosas que no son adorno:
 //   · van MUDOS. El autoplay sin permiso solo existe para vídeo sin sonido.
@@ -1083,116 +1086,13 @@ export const RecorridoCarruseles = () => {
   );
 };
 
-// ── Popup del vídeo de muestra ───────────────────────────────────────────────
-// Mismo velo oscuro con blur que el modal de disciplina de arriba (/elMetodo),
-// pero SIN caja contenedora: el propio vídeo lleva el borde y el brillo de la
-// disciplina directamente. La caja es CUADRADA (1:1) en móvil y en ordenador,
-// que es la proporción en la que se graban los vídeos del recorrido. La X flota
-// sobre la esquina del vídeo.
-const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => void }) => {
-  const accent = disc.txt;
-  // ¿El vídeo es cuadrado? Se sabe al cargar sus metadatos. La caja SIEMPRE es
-  // 1:1; lo que cambia es cómo se encaja el vídeo dentro:
-  //   · cuadrado (los nuevos, 1080×1080) → `cover`: encaje exacto, no se recorta.
-  //   · vertical (astro/psico/hinduismo, 1080×1920) → `contain`: se ve entero,
-  //     con franjas a los lados. Con `cover` perderían el 44% de su alto —
-  //     media pantalla de la app cortada por arriba y por abajo.
-  // Mientras no se sepa, `contain`: más vale una franja que un recorte.
-  const [cuadrado, setCuadrado] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
-  // Cada vídeo tiene su propia proporción: al cambiar de disciplina, a cero.
-  useEffect(() => { setCuadrado(null); }, [disc.video]);
-
-  return (
-    <Box
-      position="fixed"
-      inset={0}
-      zIndex={300}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      bg="rgba(0,0,0,0.85)"
-      sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
-      onClick={onClose}
-      px={{ base: 5, md: 10 }}
-    >
-      {/* El vídeo ES el elemento con el brillo (sin caja alrededor). La caja es
-          CUADRADA (1:1), la proporción en la que se graban los vídeos del
-          recorrido. Antes era 4:5, así que a un vídeo cuadrado le recortaba los
-          lados. */}
-      <Box
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        position="relative"
-        borderRadius="2xl"
-        overflow="hidden"
-        bg="#000"
-        border={`1.5px solid ${accent}66`}
-        boxShadow={`0 0 0 1px ${accent}55, 0 0 45px ${accent}66, 0 0 90px ${accent}33, 0 22px 70px rgba(0,0,0,0.6)`}
-        w={{ base: "min(92vw, 420px)", md: "auto" }}
-        h={{ base: "auto", md: "min(80vh, 600px)" }}
-        maxH="88vh"
-        sx={{ aspectRatio: "1 / 1" }}
-      >
-        {/* X cerrar — flota sobre la esquina del propio vídeo */}
-        <Box
-          position="absolute"
-          top={3}
-          right={3}
-          as="button"
-          onClick={onClose}
-          color={accent}
-          fontSize="md"
-          cursor="pointer"
-          bg="rgba(0,0,0,0.5)"
-          border={`1px solid ${accent}66`}
-          borderRadius="full"
-          w="38px"
-          h="38px"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: accent }}
-          transition="all 0.2s"
-          zIndex={2}
-          sx={{ backdropFilter: "blur(4px)" }}
-        >
-          ✕
-        </Box>
-
-        {disc.video && (
-          <Box
-            as="video"
-            key={disc.video}
-            src={disc.video}
-            autoPlay
-            // Los vídeos son mudos, pero llevan pista de audio en silencio y sin
-            // `muted` Chrome/Safari bloquean el autoPlay (se abrían parados).
-            muted
-            controls
-            playsInline
-            w="100%"
-            h="100%"
-            onLoadedMetadata={(e: React.SyntheticEvent<HTMLVideoElement>) => {
-              const v = e.currentTarget;
-              if (!v.videoWidth || !v.videoHeight) return;
-              // Margen del 2% para no descartar un 1080×1081 por un píxel.
-              setCuadrado(Math.abs(v.videoWidth / v.videoHeight - 1) < 0.02);
-            }}
-            // Cuadrado → `cover` (encaje exacto en la caja 1:1, sin recorte).
-            // Vertical → `contain`, para verlo entero en vez de perder el 44%.
-            sx={{ objectFit: cuadrado ? "cover" : "contain" }}
-          />
-        )}
-      </Box>
-    </Box>
-  );
-};
+// ── Popup del vídeo completo ─────────────────────────────────────────────────
+// El popup vive en global/VideoLargo.tsx porque lo comparte con las páginas de
+// presentación (/d/:disciplina): ahí es donde se decide si bajar los megas del
+// original o preguntar antes, y esa decisión tiene que ser la misma en toda la
+// web. Aquí solo se traduce la disciplina a lo que el popup necesita.
+const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => void }) =>
+  disc.video ? <VideoLargoModal src={disc.video} accent={disc.txt} onClose={onClose} /> : null;
 
 // -- Box de al lado del mandala ------------------------------------------------
 // El box vive en components/metodo/DisciplinaVideoBox.tsx porque lo comparte con

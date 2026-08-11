@@ -102,7 +102,7 @@ const base: Record<string, PresentacionDisciplina> = {
     ordinal: "Segunda disciplina",
     resumenPago:
       "Continúa el Mapa con Psicología: reconstruye tu historia y comprende cómo se fue construyendo tu mente, recorriendo tus huellas, tus miedos y tus heridas para habitarte con más libertad y coherencia.",
-    video: "/videos/psicovideo.mp4",
+    video: "/videos/psicologiavideo.mp4",
     alias: ["neuropsicologia"],
   },
   ayurveda: {
@@ -123,7 +123,7 @@ const base: Record<string, PresentacionDisciplina> = {
     ordinal: "Tercera disciplina",
     resumenPago:
       "Continúa el Mapa con el Hinduismo: descubre tu Doṣha —tu constitución— y la naturaleza que te define, y aprende a comer, moverte y descansar en equilibrio con lo que de verdad eres.",
-    video: "/videos/hinduismovideo.mp4",
+    video: "/videos/ayurvedavideo.mp4",
     alias: ["hinduismo"],
   },
   tcm: {
@@ -143,7 +143,7 @@ const base: Record<string, PresentacionDisciplina> = {
     ordinal: "Cuarta disciplina",
     resumenPago:
       "Continúa el Mapa con la Medicina China: descubre cómo los Cinco Elementos y sus ciclos te habitan, y lee las señales de tu cuerpo —hasta en tu lengua— para volver al equilibrio entre todo lo que nos forma, que es a lo que llamamos salud.",
-    video: "/videos/tcm.mp4",
+    video: "/videos/tcmvideo.mp4",
     alias: ["tcm"],
   },
   fisiologia: {
@@ -163,7 +163,7 @@ const base: Record<string, PresentacionDisciplina> = {
     ordinal: "Quinta disciplina",
     resumenPago:
       "Continúa el Mapa con la Fisiología: viaja desde las partículas que te forman hasta el milagro de ser un cuerpo vivo, conoce tus células y tus sistemas y redescúbrete como el ser complejo y fascinante que eres.",
-    video: "/videos/fisiologia.mp4",
+    video: "/videos/fisiovideo.mp4",
   },
   nutricion: {
     key: "nutricion",
@@ -182,7 +182,7 @@ const base: Record<string, PresentacionDisciplina> = {
     ordinal: "Sexta disciplina",
     resumenPago:
       "Continúa el Mapa con la Nutrición: descubre qué hay más allá de lo que comes cada día y nútrete con lo que de verdad te reconstruye. Recuerda cómo no destruirte con los alimentos.",
-    video: "/videos/nutricion.mp4",
+    video: "/videos/nutrivideo.mp4",
   },
   cabala: {
     key: "cabala",
@@ -201,7 +201,7 @@ const base: Record<string, PresentacionDisciplina> = {
     ordinal: "Séptima disciplina",
     resumenPago:
       "Adéntrate en la Cábala y recorre el Árbol de la Vida: descubre las diez sefirot que te habitan, los 22 senderos de la consciencia y aprende a reconocer en ti esas fuerzas para vivir desde tu esencia.",
-    video: "/videos/cabala.mp4",
+    video: "/videos/cabalavideo.mp4",
   },
   cultura: {
     key: "cultura",
@@ -220,7 +220,7 @@ const base: Record<string, PresentacionDisciplina> = {
     ordinal: "Octava disciplina",
     resumenPago:
       "Cierra El Mapa recorriendo la Historia de la Filosofía, la Medicina, la Religión y la cultura general: recuerda de dónde venimos para entender dónde estamos y poder crear un futuro más bonito.",
-    video: "/videos/cultura.mp4",
+    video: "/videos/culturavideo.mp4",
   },
 };
 

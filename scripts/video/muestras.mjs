@@ -38,13 +38,13 @@ const ANCHO = 480;
  *  que es lo que el componente pide (`/videos/muestra/<clave>.mp4`). */
 const VIDEOS = {
   astrologia: "astrovideo.mp4",
-  psicologia: "psicovideo.mp4",
-  ayurveda: "hinduismovideo.mp4",
-  tcm: "tcm.mp4",
-  fisiologia: "fisiologia.mp4",
-  nutricion: "nutricion.mp4",
-  cabala: "cabala.mp4",
-  cultura: "cultura.mp4",
+  psicologia: "psicologiavideo.mp4",
+  ayurveda: "ayurvedavideo.mp4",
+  tcm: "tcmvideo.mp4",
+  fisiologia: "fisiovideo.mp4",
+  nutricion: "nutrivideo.mp4",
+  cabala: "cabalavideo.mp4",
+  cultura: "culturavideo.mp4",
 };
 
 const forzar = process.argv.includes("--forzar");

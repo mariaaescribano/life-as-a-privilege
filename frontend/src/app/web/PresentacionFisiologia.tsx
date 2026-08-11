@@ -1,7 +1,8 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { useVideoLargo } from "../../components/global/VideoLargo";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
@@ -84,7 +85,10 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   const [sistema, setSistema] = useState<Sistema | null>(null);
   const [celulaIdx, setCelulaIdx] = useState<number | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  // El vídeo completo pesa entre 8 y 33 MB, así que en la caja de arriba va el
+  // clip corto y el original no se baja hasta que alguien pulsa — y aun pulsando,
+  // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
+  const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
 
   const comics = useMemo(
     () => ILUSTRACIONES.filter((i) => i.disciplina === d.ilustracionesLabel),
@@ -120,13 +124,6 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
   if (!fotosListas) return <LifeLoading variant="auto" />;
 
   const renderIcon = (size: string) => <FisiologiaIcon size={{ base: size, md: size }} />;
-
-  const verVideo = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.scrollIntoView({ behavior: "smooth", block: "center" });
-    void v.play().catch(() => { /* si el navegador lo bloquea, quedan los controles */ });
-  };
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -228,7 +225,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             />
           </Reveal>
           <Reveal inView direction="left" distance={26} duration={0.7} delay={0.1} h="100%">
-            <VideoMuestra d={d} videoRef={videoRef} />
+            <VideoMuestra d={d} onAbrir={verVideo} />
           </Reveal>
         </Grid>
 
@@ -385,6 +382,8 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
       </Flex>
 
       <SiteFooter />
+
+      {videoLargo}
 
       {/* Sistema abierto: el mismo popup inmersivo del recorrido, con flechas
           para recorrer los doce. */}

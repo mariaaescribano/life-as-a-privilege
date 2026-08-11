@@ -21,4 +21,10 @@ export const comun = {
   "comun.error": "Something went wrong. Please try again.",
   "comun.reintentar": "Try again",
   "comun.proximamente": "Coming soon",
+
+  "comun.video.titulo": "Play the full video?",
+  "comun.video.pesa": "It's about {mb} MB. If you're not on wifi, it will use your data.",
+  "comun.video.pesaSinCifra": "It's a long video. If you're not on wifi, it will use your data.",
+  "comun.video.ver": "Play it anyway",
+  "comun.video.ahoraNo": "Not now",
 };
