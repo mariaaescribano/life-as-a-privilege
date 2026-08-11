@@ -88,39 +88,6 @@ En aquellos gestos pacientes late el mismo impulso que millones de años despué
 
 ---
 
-## 2 · Contar y medir
-
-`contar-medir` · **El nacimiento de los números**
-
-**Cuerpo:**
-
-A medida que aparecieron la agricultura y el comercio, hizo falta contar: cuántos animales, cuántos sacos de grano, cuántos días hasta la cosecha. Así nacieron los números.
-
-Las primeras civilizaciones desarrollaron sistemas para calcular, medir terrenos y repartir cosechas. La geometría surgió, literalmente, de medir la tierra tras las crecidas de los ríos.
-
-Las matemáticas se convirtieron en el idioma con el que la humanidad empezaría a describir el mundo con precisión, mucho más allá de lo que las palabras podían.
-
-Sin ese lenguaje de números y figuras, la ciencia que vendría después habría sido sencillamente imposible.
-
----
-
-## 3 · Leer el cielo
-
-`leer-el-cielo` · **Astronomía antigua**
-
-**Cuerpo:**
-
-El cielo era el primer gran reloj y el primer gran calendario. Observando el Sol, la Luna y las estrellas, los pueblos antiguos aprendieron a prever las estaciones, las crecidas de los ríos y el momento de sembrar.
-
-Los babilonios registraron durante siglos los movimientos de los astros con una precisión asombrosa, y los egipcios orientaron sus templos y pirámides siguiendo el cielo.
-
-Aún mezclaban la observación con la astrología y la religión, pero acumularon datos tan cuidadosos que siglos después servirían de base a la verdadera astronomía.
-
-Mirar el cielo fue, quizá, el primer laboratorio de la humanidad: no se podía tocar, pero sí observar, anotar y buscar regularidades.
-
-**Dato curioso:** los babilonios ya sabían predecir eclipses observando los ciclos del cielo, miles de años antes de comprender por qué se producían.
-
-
 # ERA · Grecia: la razón mira la naturaleza
 
 `key: grecia-ciencia` · Época: **Siglos VI – III a. C.**

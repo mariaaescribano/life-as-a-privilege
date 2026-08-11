@@ -15,19 +15,12 @@ Formato: `.webp`, cuadradas (se recortan en círculo y se pintan también en el 
 | Historia Universal | 0 | 111 |
 | Historia de las religiones | 0 | 49 |
 | Historia de la filosofía | 0 | 103 |
-| Historia de la ciencia | 38 | 59 |
+| Historia de la ciencia | 36 | 57 |
 | Historia de la medicina | 96 | 96 |
 | Historia del arte y la literatura | 54 | 54 |
-| **TOTAL** | **188** | **472** |
+| **TOTAL** | **186** | **470** |
 
-## Historia de la ciencia — faltan 38 de 59
-
-### Antes de la ciencia — Prehistoria – Antigüedad
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `contar-medir.webp` — Contar y medir
-- `leer-el-cielo.webp` — Leer el cielo
+## Historia de la ciencia — faltan 36 de 57
 
 ### La ciencia viaja por el mundo — Siglos VIII – XV
 
