@@ -3,7 +3,7 @@ export const elMetodo = {
   "elMetodo.subtitulo": "by Life as a Privilege",
   "elMetodo.lema": "Eight disciplines. One order. One purpose: to understand yourself.",
   "elMetodo.intro":
-    "These aren't eight separate courses. It's a guided exploration of yourself through eight different perspectives, to find the root of your patterns and understand who you are.",
+    "These aren't eight separate courses.\nIt's a guided exploration of yourself through eight different perspectives, to find the root of your patterns and understand who you are.",
   "elMetodo.porDentro": "Meet the disciplines",
   "elMetodo.porDentroPista": "Click each circle to discover it",
   "elMetodo.cadaDisciplina": "Each discipline looks at a different part of the human being.",
@@ -38,7 +38,7 @@ export const elMetodo = {
   "elMetodo.espejo.2": "You've read a great deal and you're still in the same place.",
   "elMetodo.espejo.3": "You've tried therapy, diets and routines — each one on its own.",
   "elMetodo.espejo.4": "And the question was never how to change. It was who you are.",
-  "elMetodo.espejo.cierre": "The Map doesn't hand you one more technique. It hands you **the map**.",
+  "elMetodo.espejo.cierre": "The Map doesn't hand you one more technique.\nIt hands you **the map**.",
 
   // Under the mandala that comes right before the origin comic.
   "elMetodo.mandalaTu": "You",

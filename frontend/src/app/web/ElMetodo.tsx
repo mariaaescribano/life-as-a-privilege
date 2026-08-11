@@ -796,6 +796,9 @@ export default function ElMetodo() {
                 fontSize={{ base: "sm", md: "lg" }}
                 lineHeight="1.9"
                 letterSpacing="0.015em"
+                // La primera frase, sola en su línea (el \n del diccionario).
+                // En móvil no: ahí el ancho ya parte el párrafo.
+                whiteSpace={{ base: "normal", md: "pre-line" }}
                 textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
               >
                 {t("elMetodo.intro")}

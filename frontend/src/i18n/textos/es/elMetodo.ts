@@ -10,7 +10,7 @@ export const elMetodo = {
   "elMetodo.subtitulo": "del 'Vivir como Privilegio'",
   "elMetodo.lema": "Ocho disciplinas. Un orden. Un propósito: entenderte.",
   "elMetodo.intro":
-    "No son ocho cursos independientes. Es una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.",
+    "No son ocho cursos independientes.\nEs una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.",
   "elMetodo.porDentro": "Conoce las disciplinas",
   /** Va justo debajo del título: avisa de que el mandala se puede pinchar. */
   "elMetodo.porDentroPista": "Haz clic en cada círculo para descubrirla",
@@ -54,7 +54,7 @@ export const elMetodo = {
   "elMetodo.espejo.3": "Has probado terapia, dietas, rutinas, cursos… pero seguías sin comprender qué había detrás de todo ello.",
   "elMetodo.espejo.4": "La pregunta nunca fue qué te pasa, sino qué te ha pasado.",
   "elMetodo.espejo.cierre":
-    "El Mapa no te da otra técnica más. Te da **tu mapa de integración profunda**.",
+    "El Mapa no te da otra técnica más.\nTe da **tu mapa de integración profunda**.",
 
   // Debajo del mandala que va justo antes del cómic del origen: quien está en el
   // centro de las ocho disciplinas.
@@ -77,7 +77,7 @@ export const elMetodo = {
   // Justo antes del precio: hasta ahí la página promete, y aquí se enseña.
   "elMetodo.pruebas.titulo": "El Mapa por dentro",
   "elMetodo.pruebas.sub":
-    "Las ocho disciplinas grabadas por dentro, tal y como las verás. Pulsa cualquiera para ver su muestra completa.",
+    "Las ocho disciplinas grabadas por dentro, tal y como las verás. Pulsa cualquiera para verla.",
 
   // ── 8. PRECIO ──────────────────────────────────────────────────────────
   "elMetodo.precio.titulo": "Cuánto cuesta, sin misterio",
@@ -106,7 +106,7 @@ export const elMetodo = {
   // ── 10. ¿POR DÓNDE EMPIEZO? ────────────────────────────────────────────
   "elMetodo.empiezo.titulo": "¿Por dónde empiezo?",
   "elMetodo.empiezo.intro":
-    "No hay ningún orden obligatorio, pero sí recomendado. Si no sabes qué elegir, esta es mi recomendación.",
+    "No hay ningún orden obligatorio, pero sí recomendado.",
   "elMetodo.empiezo.a.titulo": "Si no sabes por dónde",
   "elMetodo.empiezo.a.texto":
     "Empieza por Astrología, pues se ve claro cómo las circunstancias se han formado para que tengas ciertas características y patrones.",

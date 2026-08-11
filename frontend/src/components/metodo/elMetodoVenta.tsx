@@ -148,6 +148,9 @@ export function EspejoBloque() {
           fontWeight="700"
           lineHeight="1.35"
           letterSpacing="0.02em"
+          // Las dos mitades, una debajo de otra (el \n del diccionario). En
+          // móvil no: ahí la frase ya se parte sola por el ancho.
+          whiteSpace={{ base: "normal", md: "pre-line" }}
           textShadow="0 0 14px rgba(255,255,255,0.45), 0 0 30px rgba(180,255,245,0.2)"
         >
           <TextoRico>{t("elMetodo.espejo.cierre")}</TextoRico>
