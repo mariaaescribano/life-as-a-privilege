@@ -55,6 +55,7 @@ export function CabalaSefiraIlustracionModal({
             onPageView={onPageView}
             themeColor={cabalaTxt}
             textColor={cabalaTxt}
+            luzFoto={cabalaTxt}
             disciplinaBgImage={CABALA_IMG}
             disciplinaBgColor={cabalaBg}
             onClose={onClose}

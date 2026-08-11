@@ -7,6 +7,7 @@ import SiteFooter from "../../components/global/Footer";
 import { CabalaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
+import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -27,6 +28,14 @@ import { generarPdfCabala } from "../../utils/generateCabalaPdf";
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
+
+// El ojo del botón «Ilustraciones»: el mismo de todas las páginas de Cábala.
+const EyeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"
+       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))", flexShrink: 0 }}>
+    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
+  </svg>
+);
 // El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
 // `talCual`: la acuarela de Cábala se ve al 100 %, sin velo ni opacidad que la
 // laven. El contraste del texto lo pone INK_SHADOW, no un velo sobre la foto.
@@ -61,6 +70,7 @@ export default function MetodoCabalaFinal() {
   const [senderos, setSenderos] = useState<Record<string, number[]>>({});
   const [nombre, setNombre] = useState("");
   const [generando, setGenerando] = useState(false);
+  const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -200,7 +210,7 @@ export default function MetodoCabalaFinal() {
               pageLabel={`${CABALA_PAG.final}/${CABALA_TOTAL_PAGINAS}`}
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
               prev={{ label: "← Senderos", onClick: () => navigate("/metodo/cabala/senderos/diagnostico") }}
-              extra={{ label: "El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
+              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
               next={{ label: "10 días →", onClick: () => navigate("/metodo/cabala/dias") }}
             />
           </Reveal>
@@ -305,6 +315,8 @@ export default function MetodoCabalaFinal() {
           </Reveal>
         </Flex>
       </Flex>
+
+      <CabalaIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
       <BotonCompania color={cabalaTxt} bgColor={cabalaBg} disciplinaNom={cabalaNom} />
       <SiteFooter />

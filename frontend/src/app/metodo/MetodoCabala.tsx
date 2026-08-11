@@ -167,6 +167,7 @@ export default function MetodoCabala() {
         vinetas={CABALA_INTRO}
         themeColor={cabalaTxt}
         textColor={cabalaTxt}
+        luzFoto={cabalaTxt}
         disciplinaBgImage="/img/fondos/cabala.webp"
         disciplinaBgColor={cabalaBg}
         continueLabel="Cábala"

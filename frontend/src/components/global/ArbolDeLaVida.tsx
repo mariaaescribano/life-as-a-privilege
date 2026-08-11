@@ -458,15 +458,23 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               <stop offset="0%"   stopColor={cabalaTxt} stopOpacity="0.9" />
               <stop offset="100%" stopColor={cabalaTxt} stopOpacity="0.1" />
             </linearGradient>
-            {/* Filtro de brillo dorado — reposo */}
+            {/* Filtro de brillo DORADO — reposo.
+                Ojo con estas matrices: son las que ponen el color del halo, y es
+                aquí donde se volvía amarillo. El cobre de la disciplina
+                (#bd814d) entraba multiplicado por 1.6 en rojo y 1.0 en verde, y
+                los dos canales SATURABAN a la vez: rojo 255 + verde 255 + azul 0
+                es amarillo puro, por bonito que fuera el color de partida.
+                El oro necesita tres cosas: que el rojo sature solo, que el verde
+                se quede en torno al 75 % y que el azul EXISTA (un cuarto del
+                rojo). Sin azul no hay oro, hay limón. */}
             <filter id="sefira-glow" x="-60%" y="-60%" width="220%" height="220%">
               <feGaussianBlur stdDeviation="6" result="blur" />
               <feColorMatrix
                 in="blur" type="matrix"
-                values="1.6 0.7 0   0 0
-                        1.0 0.5 0   0 0
-                        0   0   0.1 0 0
-                        0   0   0   1 0"
+                values="1.35 0.05 0    0 0
+                        0.75 0.35 0    0 0
+                        0.30 0.15 0.08 0 0
+                        0    0    0    1 0"
                 result="glow"
               />
               <feMerge>
@@ -483,10 +491,10 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               <feGaussianBlur stdDeviation="9" result="blur" />
               <feColorMatrix
                 in="blur" type="matrix"
-                values="2.2 1.0 0   0 0
-                        1.4 0.75 0  0 0
-                        0   0   0.1 0 0
-                        0   0   0   1 0"
+                values="1.55 0.06 0    0 0
+                        0.80 0.36 0    0 0
+                        0.34 0.17 0.08 0 0
+                        0    0    0    1 0"
                 result="glow"
               />
               <feMerge>
@@ -500,10 +508,10 @@ export default function ArbolDeLaVida({ onSefiraClick, maxWidth = '520px', suppr
               <feGaussianBlur stdDeviation="11" result="blur" />
               <feColorMatrix
                 in="blur" type="matrix"
-                values="2.0 0.9 0   0 0
-                        1.3 0.7 0   0 0
-                        0   0   0.1 0 0
-                        0   0   0   1 0"
+                values="1.48 0.06 0    0 0
+                        0.82 0.38 0    0 0
+                        0.33 0.16 0.08 0 0
+                        0    0    0    1 0"
                 result="glow"
               />
               <feMerge>

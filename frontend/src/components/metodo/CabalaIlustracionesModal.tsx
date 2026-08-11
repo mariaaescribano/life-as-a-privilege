@@ -290,6 +290,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
             vinetas={vinetas}
             themeColor={cabalaTxt}
             textColor={cabalaTxt}
+            luzFoto={cabalaTxt}
             disciplinaBgImage={CABALA_IMG}
             disciplinaBgColor={cabalaBg}
             onClose={onClose}

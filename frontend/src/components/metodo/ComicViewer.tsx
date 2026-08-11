@@ -187,6 +187,13 @@ interface ComicViewerProps {
    *  se ve que ahí hay una lectura entera, pero no se regala. Se desactiva la
    *  selección para que no se pueda copiar el texto de debajo del blur. */
   textoBorroso?: boolean;
+  /** Color de la LUZ que rodea a la ilustración. De serie, la capa interior de
+   *  ese halo es un filo BLANCO, que en la mayoría de disciplinas despega bien
+   *  la foto del box. En Cábala no: todo el recorrido es marrón y ámbar, y ese
+   *  filo blanco se leía como una mancha fría alrededor del dibujo. Pasando un
+   *  color aquí, las tres capas del halo se pintan con él y la luz sale del
+   *  tono de la disciplina. */
+  luzFoto?: string;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -232,6 +239,7 @@ export function ComicViewer({
   clavesTinta,
   veloOscuro,
   textoBorroso,
+  luzFoto,
 }: ComicViewerProps) {
   const t = useT();
   const isDisciplinaMode = !!disciplinaBgImage;
@@ -880,9 +888,16 @@ export function ComicViewer({
               // pintar justo donde menos potencia hay. Ojo: el corte tiene que
               // ser en `md` y no en `sm`, para que coincida con el cambio de
               // maquetación.
+              //
+              // Con `luzFoto`, las tres capas van del mismo color y desaparece
+              // el filo blanco (ver la prop). La interior se pinta más opaca que
+              // las de fuera para que siga habiendo un borde marcado y la foto
+              // no se funda con el box.
               filter={{
                 base: "none",
-                md: `drop-shadow(0 0 10px rgba(255,255,255,0.26)) drop-shadow(0 0 26px ${themeColor}55) drop-shadow(0 0 56px ${themeColor}2b)`,
+                md: luzFoto
+                  ? `drop-shadow(0 0 10px ${luzFoto}b3) drop-shadow(0 0 26px ${luzFoto}66) drop-shadow(0 0 56px ${luzFoto}33)`
+                  : `drop-shadow(0 0 10px rgba(255,255,255,0.26)) drop-shadow(0 0 26px ${themeColor}55) drop-shadow(0 0 56px ${themeColor}2b)`,
               }}
             >
               {!imgFailed[index] ? (

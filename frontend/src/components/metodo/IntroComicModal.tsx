@@ -89,6 +89,10 @@ interface IntroComicModalProps {
   /** Si true, no se muestra el cómic hasta que la foto de fondo cargue del todo
    *  (loader a pantalla completa mientras). Se pasa tal cual a ComicViewer. */
   esperarFondo?: boolean;
+  /** Color de la luz que rodea a la ilustración; sin él lleva un filo blanco
+   *  (se pasa tal cual a ComicViewer). Cábala la usa para que el halo salga
+   *  ámbar y no blanco. */
+  luzFoto?: string;
 }
 
 export function IntroComicModal({
@@ -114,6 +118,7 @@ export function IntroComicModal({
   textSize,
   flechasEnBox,
   esperarFondo,
+  luzFoto,
 }: IntroComicModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
@@ -136,6 +141,7 @@ export function IntroComicModal({
           onComplete={onComplete}
           onBack={onBack}
           themeColor={themeColor}
+          luzFoto={luzFoto}
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
