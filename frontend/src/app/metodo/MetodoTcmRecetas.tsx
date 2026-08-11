@@ -145,7 +145,7 @@ export default function MetodoTcmRecetas() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Tu cocina diaria"
-            pageLabel="8/10"
+            pageLabel="8/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

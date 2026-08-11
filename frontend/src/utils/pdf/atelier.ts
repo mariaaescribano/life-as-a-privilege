@@ -24,6 +24,7 @@
 import jsPDF from "jspdf";
 import { registerEbGaramond, GARAMOND } from "../fonts/ebGaramond";
 import type { Tema, RGB } from "./temas";
+import type { FotoPdf } from "./fotos";
 import { blindarFuente } from "./glifos";
 import {
   conAlfa,
@@ -749,6 +750,132 @@ export class Taller {
       l.forEach((x) => { this.doc.text(x, A4_W / 2, this.y, { align: "center" }); this.y += 4.8; });
       this.y += 3;
     }
+  }
+
+  /* ── Fotos ──────────────────────────────────────────────────────────── */
+  //
+  // Las ilustraciones llegan ya cargadas y comprimidas (fotos.ts): aquí solo se
+  // colocan, así que estos métodos son SÍNCRONOS como el resto del taller y se
+  // pueden intercalar con los párrafos sin romper el flujo de la página.
+  //
+  // Van montadas como una foto pegada en un cuaderno: un filete finísimo del
+  // acento alrededor y, debajo, el pie en cursiva. Sin sombras ni esquinas
+  // redondeadas, que jsPDF no recorta imágenes y quedaría un borde sucio.
+
+  /** Marco + imagen. Devuelve el alto ocupado. */
+  private pegarFoto(f: FotoPdf, x: number, y: number, w: number, h: number) {
+    const doc = this.doc;
+    const t = this.tema;
+    // Passe-partout: un pelín de papel alrededor de la foto para que no parezca
+    // pegada a la caja.
+    conAlfa(doc, t.oscuro ? 0.5 : 0.4, () => {
+      doc.setDrawColor(...t.acentoSuave);
+      doc.setLineWidth(0.3);
+      doc.rect(x - 1.1, y - 1.1, w + 2.2, h + 2.2, "S");
+    });
+    doc.addImage(f.data, "JPEG", x, y, w, h, undefined, "FAST");
+  }
+
+  /**
+   * Una foto a lo ancho de la caja (o del ancho que se pida), centrada.
+   * `altoMax` la recorta en alto: sin él, una foto vertical se come la página.
+   */
+  foto(f: FotoPdf | undefined, o?: { ancho?: number; altoMax?: number; pie?: string }): void {
+    if (!f) return;
+    const doc = this.doc;
+    const ancho = Math.min(o?.ancho ?? ANCHO, ANCHO);
+    const altoNatural = ancho * (f.h / f.w);
+    const alto = Math.min(altoNatural, o?.altoMax ?? 118);
+    // Si el tope de alto manda, se estrecha la foto para no deformarla.
+    const w = alto < altoNatural ? alto * (f.w / f.h) : ancho;
+    const x = MARGEN + (ANCHO - w) / 2;
+
+    this.reservar(alto + (o?.pie ? 12 : 6));
+    this.pegarFoto(f, x, this.y, w, alto);
+    this.y += alto + 4;
+
+    if (o?.pie) {
+      this.fuente("italic", 9, this.tema.apagado);
+      const l = doc.splitTextToSize(o.pie, ANCHO - 24) as string[];
+      l.forEach((line) => { doc.text(line, A4_W / 2, this.y, { align: "center" }); this.y += 4.6; });
+      this.y += 1.5;
+    }
+    this.y += 2.5;
+  }
+
+  /**
+   * Viñeta: la ilustración a la izquierda y su texto al lado, como se lee en la
+   * web. Es el bloque con el que se compone casi todo lo que se descarga.
+   *
+   * Se mide TODO antes de pintar nada (el alto de la foto y las líneas del
+   * texto) para decidir de una vez si el bloque cabe en esta página o empieza en
+   * la siguiente: así una viñeta no se parte nunca por la mitad.
+   */
+  vineta(
+    f: FotoPdf | undefined,
+    parrafos: string[],
+    o?: { titulo?: string; eyebrow?: string; anchoFoto?: number },
+  ): void {
+    const doc = this.doc;
+    const t = this.tema;
+    const textos = (parrafos ?? []).map((p) => (p || "").trim()).filter(Boolean);
+    if (!f) {
+      // Sin ilustración, la viñeta es texto corriente: título y párrafos.
+      if (o?.eyebrow) this.antetitulo(o.eyebrow);
+      if (o?.titulo) { this.fuente("bold", 12.5, t.tinta); this.reservar(9); doc.text(o.titulo, MARGEN, this.y); this.y += 7; }
+      textos.forEach((p) => this.parrafo(p));
+      this.y += 2;
+      return;
+    }
+
+    const wFoto = o?.anchoFoto ?? 62;
+    const hFoto = Math.min(wFoto * (f.h / f.w), 96);
+    const wFotoReal = hFoto < wFoto * (f.h / f.w) ? hFoto * (f.w / f.h) : wFoto;
+    const xTexto = MARGEN + wFoto + 8;
+    const wTexto = A4_W - MARGEN - xTexto;
+
+    // Medida del texto (mismos tamaños con los que se pintará después).
+    const tamCuerpo = 10.2;
+    const saltoCuerpo = tamCuerpo * 0.52;
+    this.fuente("normal", tamCuerpo, t.tinta);
+    const bloques = textos.map((p) => doc.splitTextToSize(p, wTexto) as string[]);
+    const altoTexto =
+      (o?.eyebrow ? 7 : 0) +
+      (o?.titulo ? 7.5 : 0) +
+      bloques.reduce((acc, b) => acc + b.length * saltoCuerpo + 3, 0);
+
+    const alto = Math.max(hFoto, altoTexto);
+    // Un bloque más alto que la caja de la página no cabe en ninguna: en ese
+    // caso se pone la foto sola y el texto fluye debajo, paginando solo.
+    const cajaUtil = A4_H - 22 - 36;
+    if (alto > cajaUtil) {
+      this.foto(f, { ancho: 108, pie: o?.titulo });
+      if (o?.eyebrow) this.antetitulo(o.eyebrow);
+      textos.forEach((p) => this.parrafo(p, { tam: tamCuerpo }));
+      return;
+    }
+    this.reservar(alto + 8);
+
+    const yTop = this.y;
+    this.pegarFoto(f, MARGEN + (wFoto - wFotoReal) / 2, yTop, wFotoReal, hFoto);
+
+    let yy = yTop + 1;
+    if (o?.eyebrow) {
+      this.versalitas(o.eyebrow, xTexto, yy + 3, 7.6, t.acento);
+      yy += 7;
+    }
+    if (o?.titulo) {
+      this.fuente("bold", 12.2, t.tinta);
+      doc.text(o.titulo, xTexto, yy + 4.5);
+      yy += 7.5;
+    }
+    bloques.forEach((lineas) => {
+      this.fuente("normal", tamCuerpo, t.tinta);
+      lineas.forEach((l, i) => doc.text(l, xTexto, yy + 4 + i * saltoCuerpo));
+      yy += lineas.length * saltoCuerpo + 3;
+    });
+
+    this.y = yTop + alto + 9;
   }
 
   /** Frase de cierre, centrada y en cursiva, con su rombo encima. */

@@ -59,6 +59,7 @@ export const TCM_INDICE: PasoRecorrido[] = [
   { n: 8, titulo: "Tu cocina diaria", ruta: () => "/metodo/tcm/recetas" },
   { n: 9, titulo: "Qigong", ruta: () => "/metodo/tcm/qigong" },
   { n: 10, titulo: "Cursos", ruta: () => "/metodo/tcm/cursos" },
+  { n: 11, titulo: "Crea tus apuntes", ruta: () => "/metodo/tcm/apuntes" },
 ];
 
 export const TCM_TOTAL = TCM_INDICE.length;

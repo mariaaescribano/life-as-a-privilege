@@ -70,7 +70,7 @@ export default function MetodoTcmQigong() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Qigong"
-            pageLabel="9/10"
+            pageLabel="9/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

@@ -124,7 +124,7 @@ export default function MetodoTcm() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="Medicina China"
-            pageLabel="1/10"
+            pageLabel="1/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

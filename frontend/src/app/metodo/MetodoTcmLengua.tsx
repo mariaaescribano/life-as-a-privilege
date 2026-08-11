@@ -116,7 +116,7 @@ export default function MetodoTcmLengua() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title="El diagnóstico de la lengua"
-            pageLabel="5/10"
+            pageLabel="5/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
