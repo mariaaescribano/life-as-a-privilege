@@ -7,8 +7,9 @@ import type { Vineta } from "./ComicViewer";
 // cinco elementos, y aquí se cuenta qué pasa cuando esos ciclos se rompen —
 // justo antes de que la página siguiente le dé su propio diagnóstico.
 //
-// OJO: este cómic NO está en las «Ilustraciones» de TCM (que son Origen, Yin
-// Yang, Los Cinco Elementos y El Alma Humana); vive solo en este paso.
+// Además de este paso, se puede releer en las «Ilustraciones» de TCM (que ahora
+// reúnen TODOS los cómics de la disciplina). Lo que NO hace es salir en la
+// galería pública /ilustraciones: esa lista es aparte (ilustracionesGaleria.ts).
 //
 // SIN TÍTULOS: el guion venía con encabezados (Introducción, Calor, Frío…) que
 // aquí NO se pintan; cada viñeta va solo con su texto, como los cómics de

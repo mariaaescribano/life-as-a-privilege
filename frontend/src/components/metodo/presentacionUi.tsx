@@ -369,6 +369,97 @@ export function BotonDisciplina({
 }
 
 /**
+ * BOTÓN «EMPEZAR» — la barra ancha que abre la sección «Empieza por aquí»,
+ * justo encima de la caja de crear cuenta.
+ *
+ * Va ARRIBA a propósito: quien llega convencido no tiene que leerse los dos
+ * párrafos de la caja para encontrar por dónde entrar. Es el mismo criterio con
+ * el que en /elMetodo el ACCEDER grande se puso delante de las preguntas.
+ * Duplica el destino de «Crear mi cuenta» (/signIn) y eso está bien: uno atiende
+ * a quien ya lo tiene decidido y el otro a quien necesita leer antes.
+ *
+ * Se pinta con la FOTO de la disciplina de fondo —no con su color plano— para
+ * que se lea como una puerta a ese recorrido y no como un botón más de la
+ * página. El icono va a la izquierda, dentro de su círculo, igual que en la
+ * cabecera del box del mandala.
+ */
+export function BotonEmpezar({ d, onClick }: { d: PresentacionDisciplina; onClick: () => void }) {
+  const t = useT();
+  const hasBg = hasDisciplinaBg(d.nom);
+  const sombra = sombraSoloContraste(d.nom);
+  return (
+    <Flex
+      as="button"
+      onClick={onClick}
+      position="relative"
+      overflow="hidden"
+      w="100%"
+      borderRadius="full"
+      align="center"
+      justify="center"
+      gap={{ base: 3, md: 5 }}
+      px={{ base: 5, md: 8 }}
+      py={{ base: 4, md: 5 }}
+      bg={hasBg ? "transparent" : `${d.bg}f0`}
+      border={`2px solid ${d.txt}`}
+      cursor="pointer"
+      boxShadow={`0 0 22px ${d.txt}55, 0 0 50px ${d.txt}2e`}
+      sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none" }}
+      transition="all 0.25s ease"
+      _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${d.txt}88, 0 0 68px ${d.txt}44` }}
+      _active={{ transform: "translateY(0)" }}
+    >
+      {hasBg && <DisciplinaBgLayer nom={d.nom} borderRadius="full" />}
+
+      {/* Icono a la izquierda, en su círculo. `flexShrink` para que no se
+          aplaste cuando el rótulo traducido es más largo. */}
+      <Flex
+        position="relative"
+        zIndex={1}
+        flexShrink={0}
+        align="center"
+        justify="center"
+        w={{ base: "38px", md: "46px" }}
+        h={{ base: "38px", md: "46px" }}
+        borderRadius="full"
+        border={`2px solid ${d.txt}`}
+        color={d.txt}
+      >
+        <d.Icon size="26px" />
+      </Flex>
+
+      <Text
+        position="relative"
+        zIndex={1}
+        color={d.txt}
+        fontSize={{ base: "lg", md: "2xl" }}
+        fontWeight="700"
+        letterSpacing="0.14em"
+        textTransform="uppercase"
+        whiteSpace="nowrap"
+        textShadow={sombra}
+      >
+        {t("presentacion.empezar")}
+      </Text>
+
+      <Box
+        as="svg"
+        position="relative"
+        zIndex={1}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 -960 960 960"
+        w={{ base: "18px", md: "22px" }}
+        h={{ base: "18px", md: "22px" }}
+        fill={d.txt}
+        flexShrink={0}
+      >
+        <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+      </Box>
+    </Flex>
+  );
+}
+
+/**
  * VÍDEO DE MUESTRA, en caja cuadrada.
  *
  * La caja es 1:1 porque es la proporción en la que se graban los vídeos nuevos.
@@ -493,6 +584,12 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
   const sombra = sombraSoloContraste(d.nom);
   return (
     <>
+    {/* La puerta de entrada, ANTES de la caja: quien llega decidido no tiene
+        que leerse los dos párrafos para encontrar por dónde se empieza. */}
+    <Reveal inView direction="up" distance={20} duration={0.6} w="100%">
+      <BotonEmpezar d={d} onClick={() => navigate("/signIn")} />
+    </Reveal>
+
     <Reveal inView direction="up" distance={24} scaleFrom={0.97} duration={0.75} w="100%">
       <CajaDisciplina d={d} destacada>
         <Flex direction="column" align="center" gap={{ base: 5, md: 7 }} textAlign="center">

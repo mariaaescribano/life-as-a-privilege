@@ -232,9 +232,11 @@ export default function MetodoPsicologiaMiedos() {
                   </Box>
                 </Flex>
 
-                {/* Ejemplos sugeridos (opcionales). La zona de chips tiene ALTURA
-                    FIJA con scroll: al ir añadiendo ejemplos el box no se encoge de
-                    golpe (evita el mareo). */}
+                {/* Ejemplos sugeridos (opcionales). Se ven TODOS a la vez: aquí no
+                    hay scroll.
+                    Para que el box no dé un salto cada vez que se elige uno, el
+                    elegido no se quita de la rejilla: se vuelve invisible y deja su
+                    hueco. Así el alto lo fija siempre la lista completa. */}
                 <>
                   {/* Separador horizontal completo (ancho del box) */}
                   <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
@@ -242,25 +244,19 @@ export default function MetodoPsicologiaMiedos() {
                     <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">
                       Si te sirven de inspiración
                     </Text>
-                    <Box
-                      w="100%"
-                      h={{ base: "120px", md: "132px" }}
-                      overflowY="auto"
-                      overflowX="hidden"
-                      sx={{
-                        "&::-webkit-scrollbar": { width: "6px" },
-                        "&::-webkit-scrollbar-thumb": { background: `${TINTA}44`, borderRadius: "9999px" },
-                        scrollbarWidth: "thin",
-                        scrollbarColor: `${TINTA}44 transparent`,
-                      }}
-                    >
-                      {ejemplosDisponibles.length > 0 ? (
-                        <Flex wrap="wrap" justify="center" gap={2} py={1}>
-                          {ejemplosDisponibles.map((e) => (
+                    <Box w="100%" position="relative">
+                      <Flex wrap="wrap" justify="center" gap={2} py={1}>
+                        {MIEDOS.ejemplos.map((e) => {
+                          const usado = !ejemplosDisponibles.includes(e);
+                          return (
                             <Box
                               key={e}
                               as="button"
                               onClick={() => añadirMiedo(e)}
+                              aria-hidden={usado || undefined}
+                              tabIndex={usado ? -1 : undefined}
+                              visibility={usado ? "hidden" : "visible"}
+                              pointerEvents={usado ? "none" : undefined}
                               px={4}
                               py={2}
                               borderRadius="full"
@@ -275,10 +271,15 @@ export default function MetodoPsicologiaMiedos() {
                             >
                               + {e}
                             </Box>
-                          ))}
-                        </Flex>
-                      ) : (
-                        <Flex h="100%" align="center" justify="center">
+                          );
+                        })}
+                      </Flex>
+
+                      {/* Cuando ya no queda ninguno, el aviso va ENCIMA de los
+                          huecos (posición absoluta): si ocupara sitio, el box
+                          cambiaría de alto justo al final. */}
+                      {ejemplosDisponibles.length === 0 && (
+                        <Flex position="absolute" inset={0} align="center" justify="center" pointerEvents="none">
                           <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.6} textAlign="center">
                             Ya has añadido todos los ejemplos ✓
                           </Text>

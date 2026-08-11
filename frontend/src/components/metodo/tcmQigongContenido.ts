@@ -382,7 +382,7 @@ export const CINCO_ANIMALES: Animal[] = [
     animal: "五禽戲 Hua Tuo: El tigre",
     hanzi: "虎",
     elemento: "madera",
-    organo: "Hígado",
+    organo: "Hígado · Madera",
     texto: "Zarpazo lento y mirada fija. Fuerza que sale de los tendones y de la cintura: mueve el Qi estancado y da salida a la frustración.",
   },
   {
@@ -390,7 +390,7 @@ export const CINCO_ANIMALES: Animal[] = [
     animal: "五禽戲 Hua Tuo: El ciervo",
     hanzi: "鹿",
     elemento: "agua",
-    organo: "Riñón",
+    organo: "Riñón · Agua",
     texto: "Cuello largo y cadera suelta, girando como quien mira atrás sin miedo. Abre las lumbares y calienta la reserva.",
   },
   {
@@ -398,7 +398,7 @@ export const CINCO_ANIMALES: Animal[] = [
     animal: "五禽戲 Hua Tuo: El oso",
     hanzi: "熊",
     elemento: "tierra",
-    organo: "Bazo y estómago",
+    organo: "Bazo y estómago · Tierra",
     texto: "Peso que rueda de un pie al otro desde el vientre. Amasa el centro por dentro: es un masaje digestivo hecho con el propio cuerpo.",
   },
   {
@@ -406,7 +406,7 @@ export const CINCO_ANIMALES: Animal[] = [
     animal: "五禽戲 Hua Tuo: El mono",
     hanzi: "猴",
     elemento: "fuego",
-    organo: "Corazón",
+    organo: "Corazón · Fuego",
     texto: "Ligereza, sorpresa, cambios rápidos de mirada. Despierta la alegría y saca a la mente de la rumia.",
   },
   {
@@ -414,7 +414,7 @@ export const CINCO_ANIMALES: Animal[] = [
     animal: "五禽戲 Hua Tuo: La grulla",
     hanzi: "鶴",
     elemento: "metal",
-    organo: "Pulmón",
+    organo: "Pulmón · Metal",
     texto: "Alas que se abren muy despacio y equilibrio sobre una pierna. Ensancha el pecho y alarga la respiración.",
   },
 ];

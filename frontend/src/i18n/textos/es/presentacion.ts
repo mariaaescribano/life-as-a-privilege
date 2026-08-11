@@ -16,6 +16,9 @@ export const presentacion = {
     "Puedes recorrer **solo {disciplina}**. Es un recorrido completo en sí mismo, con sus ilustraciones, sus ejercicios y su acompañamiento, y no hay ningún orden obligatorio: se empieza por donde tenga sentido para ti.",
   "presentacion.ochoMiradas":
     "Pero {disciplina} es una de las **ocho miradas** de El Mapa. Cada una explica una parte del ser humano —tu carácter, tu historia, tu cuerpo, tu alimentación, tu alma, tus ideas— y el propósito de recorrerlas es uno solo: **entenderte del todo**. Ninguna disciplina sola contesta la pregunta; juntas son un camino.",
+  /** Barra ancha que abre «Empieza por aquí», encima de la caja. Va en
+   *  versales, así que cuanto más corta, mejor. */
+  "presentacion.empezar": "Empezar",
   "presentacion.crearCuenta": "Crear mi cuenta",
   "presentacion.llamada": "Llamada de 20 min sin coste",
   "presentacion.verOcho": "Ver las ocho disciplinas",
@@ -61,7 +64,7 @@ export const presentacion = {
   // ── Fisiología ─────────────────────────────────────────────────────────
   "presentacion.fisio.sistemas": "Los sistemas",
   "presentacion.fisio.sistemasTexto":
-    "Varios órganos que colaboran forman un sistema. Pulsa cualquiera y lo lees entero, igual que dentro del recorrido.",
+    "Varios órganos que colaboran forman un sistema. Pulsa cualquiera y lo lees entero, igual que lo harás dentro del recorrido.",
   "presentacion.fisio.dentro": "Dentro los conocerás todos…",
   "presentacion.fisio.deQueEstasHecho": "De qué estás hecho",
   "presentacion.fisio.celulasTexto":

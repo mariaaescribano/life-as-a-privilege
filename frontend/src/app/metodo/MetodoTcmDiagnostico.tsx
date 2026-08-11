@@ -456,15 +456,16 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
             const veredicto = estados[el]?.veredicto ?? null;
             return (
               <Flex key={el} flex="1" direction="column" align="center" gap={1} minW={0}>
-                <Box w={{ base: "38px", md: "50px" }} h={{ base: "38px", md: "50px" }}
+                <Box w={{ base: "56px", md: "76px" }} h={{ base: "56px", md: "76px" }}
                      borderRadius="full" overflow="hidden" border={`2px solid ${E.color}`}
                      style={{ boxShadow: `0 0 8px ${E.color}88` }}>
                   <img src={ICONO_ELEMENTO[el]} alt={E.nombre}
                        style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </Box>
+                {/* Sin sombra: el nombre iba con doble halo del color del
+                    elemento y sobre la acuarela roja se leía emborronado. */}
                 <Text color="white" fontSize={{ base: "2xs", md: "sm" }} fontWeight={700}
-                      textAlign="center" noOfLines={1}
-                      style={{ textShadow: `0 0 8px ${E.color}, 0 0 15px ${E.color}aa, 0 1px 3px rgba(0,0,0,0.9)` }}>
+                      textAlign="center" noOfLines={1}>
                   {E.nombre}
                 </Text>
                 <Text color={veredicto ? ESTADO_COLOR[veredicto] : "rgba(255,255,255,0.45)"}

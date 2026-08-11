@@ -15,6 +15,16 @@ import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { comicLoaderPorColor } from "./comicLoaders";
+// Los demás cómics de Medicina China viven cada uno en su paso del recorrido;
+// aquí se reúnen TODOS para poder releerlos sin volver a la página.
+import { VINETAS_ENFERMEDADES } from "./comicEnfermedades";
+import { LEYES_TAO_VINETAS } from "./tcmTaoismoContenido";
+import {
+  BROCADOS_VINETAS, CINCO_ANIMALES_VINETAS, DAO_YIN_VINETAS, HISTORIA_QIGONG_VINETAS,
+} from "./tcmQigongContenido";
+import { COMIC_ELEMENTO, COMIC_INTRO_ELEMENTOS } from "./tcmElementosContenido";
+import { FOTO_COCINA, cocinaDe } from "./tcmCocinaContenido";
+import { ELEMENTOS, ORDEN_ELEMENTOS } from "./tcmRecorrido";
 
 // ────────────────────────────────────────────────────────────────────────────
 // CONTENIDO DE LOS CAPÍTULOS DE MEDICINA CHINA
@@ -201,22 +211,100 @@ export const VINETAS_ALMA: Vineta[] = [
   },
 ];
 
-type Capitulo = "origen" | "yin_yang" | "los_elementos" | "alma_humana";
+// ────────────────────────────────────────────────────────────────────────────
+// LOS CAPÍTULOS DEL SELECTOR
+//
+// Aquí están TODOS los cómics de Medicina China, no solo los cuatro de teoría:
+// los cinco elementos uno a uno, las enfermedades, las leyes del Tao, la
+// historia del Qigong, el Dao Yin, los Brocados, los Cinco Animales y las
+// formas de cocinar. Cada uno se lee además en su paso del recorrido; esto es
+// el sitio donde releerlos todos juntos.
+//
+// ⚠️  SOLO DENTRO DEL MAPA. La galería pública (/ilustraciones) NO sale de aquí:
+// tiene su propia lista en `ilustracionesGaleria.ts`, donde de Medicina China
+// solo están los cuatro de teoría (Origen, Yin Yang, Cinco Elementos y Alma
+// Humana). Añadir un capítulo aquí NO lo publica fuera; para eso habría que
+// añadirlo a mano allí, y no es lo que queremos.
+// ────────────────────────────────────────────────────────────────────────────
 
-const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
-  origen:        VINETAS_ORIGEN,
-  yin_yang:      VINETAS_YIN_YANG,
-  los_elementos: VINETAS_ELEMENTOS,
-  alma_humana:   VINETAS_ALMA,
-};
+/** Las viñetas del cómic de un elemento, sin sus pasos de mini-test: aquí se
+ *  lee, no se responde (el test vive en su página, donde puntúa el perfil). */
+const vinetasDeElemento = (el: (typeof ORDEN_ELEMENTOS)[number]): Vineta[] =>
+  COMIC_ELEMENTO[el]
+    .filter((p) => p.tipo === "vineta")
+    .map((p) => ({ src: p.src, paragraphs: "paragraphs" in p ? p.paragraphs : [] }));
 
-const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string; coverScale?: number }[] = [
-  { key: "origen",        title: "El Origen", cover: "/viñetas/tcm/origen/origentcm3.webp" },
-  { key: "yin_yang",      title: "El Yin Yang", cover: "/viñetas/tcm/yinyang/yinyang.webp" },
+/** La intro de los Cinco Elementos (Wu Xing) tiene su propio formato (`texto`
+ *  suelto o lista); se normaliza a viñetas del visor. */
+const VINETAS_WU_XING: Vineta[] = COMIC_INTRO_ELEMENTOS.map((v) => ({
+  src: v.src,
+  paragraphs: Array.isArray(v.texto) ? v.texto : [v.texto],
+}));
+
+/** Las formas de cocinar de los cinco elementos, seguidas: el antetítulo dice
+ *  de qué elemento es cada una (igual que en la página de Tu cocina). */
+const VINETAS_COCINA: Vineta[] = ORDEN_ELEMENTOS.flatMap((el) =>
+  cocinaDe(el).cocciones.map((c, i) => ({
+    src: FOTO_COCINA(el, i),
+    eyebrow: ELEMENTOS[el].nombre,
+    titulo: c.nombre,
+    paragraphs: [c.como, c.porque],
+  })),
+);
+
+interface CapituloOpcion {
+  key: string;
+  title: string;
+  vinetas: Vineta[];
+  cover?: string;
+  coverPosition?: string;
+  coverScale?: number;
+}
+
+const CAPITULOS: CapituloOpcion[] = [
+  // ── La teoría (los cuatro de siempre) ──
+  { key: "origen", title: "El Origen", vinetas: VINETAS_ORIGEN,
+    cover: "/viñetas/tcm/origen/origentcm3.webp" },
+  { key: "yin_yang", title: "El Yin Yang", vinetas: VINETAS_YIN_YANG,
+    cover: "/viñetas/tcm/yinyang/yinyang.webp" },
   // El pergamino de elementos trae un marco crema decorado alrededor; lo
   // ampliamos un poco para recortarlo y que llene la caja como las demás.
-  { key: "los_elementos", title: "Los Cinco Elementos", cover: "/viñetas/tcm/elementos/portadaelementos.webp", coverScale: 1.12 },
-  { key: "alma_humana",   title: "El Alma Humana", cover: "/viñetas/tcm/alma/alma7.webp" },
+  { key: "los_elementos", title: "Los Cinco Elementos", vinetas: VINETAS_ELEMENTOS,
+    cover: "/viñetas/tcm/elementos/portadaelementos.webp", coverScale: 1.12 },
+  { key: "alma_humana", title: "El Alma Humana", vinetas: VINETAS_ALMA,
+    cover: "/viñetas/tcm/alma/alma7.webp" },
+
+  // ── Los elementos, uno a uno (los cómics de la estrella) ──
+  { key: "wu_xing", title: "El Wu Xing", vinetas: VINETAS_WU_XING,
+    cover: "/recorrido/tcm/elementos/elementos1.webp" },
+  { key: "madera", title: "La Madera", vinetas: vinetasDeElemento("madera"),
+    cover: "/recorrido/tcm/madera/madera1.webp" },
+  { key: "fuego", title: "El Fuego", vinetas: vinetasDeElemento("fuego"),
+    cover: "/recorrido/tcm/fuego/fuego1.webp" },
+  { key: "tierra", title: "La Tierra", vinetas: vinetasDeElemento("tierra"),
+    cover: "/recorrido/tcm/tierra/tierra1.webp" },
+  { key: "metal", title: "El Metal", vinetas: vinetasDeElemento("metal"),
+    cover: "/recorrido/tcm/metal/metal1.webp" },
+  { key: "agua", title: "El Agua", vinetas: vinetasDeElemento("agua"),
+    cover: "/recorrido/tcm/agua/agua1.webp" },
+
+  // ── Lo que se rompe y lo que se hace ──
+  { key: "enfermedades", title: "Las Enfermedades", vinetas: VINETAS_ENFERMEDADES,
+    cover: "/viñetas/tcm/enfermedades/enfermedades1.webp" },
+  { key: "leyes_tao", title: "Las Leyes del Tao", vinetas: LEYES_TAO_VINETAS,
+    cover: "/recorrido/tcm/taoismo/tao.webp" },
+  { key: "cocina", title: "Formas de Cocinar", vinetas: VINETAS_COCINA,
+    cover: "/recorrido/tcm/cocina/madera1.webp" },
+
+  // ── El Qigong ──
+  { key: "qigong_historia", title: "La Historia del Qigong", vinetas: HISTORIA_QIGONG_VINETAS,
+    cover: "/recorrido/tcm/qigong/historia/mawangdui.webp" },
+  { key: "dao_yin", title: "El Dao Yin", vinetas: DAO_YIN_VINETAS,
+    cover: "/recorrido/tcm/qigong/daoyin/nombre.webp" },
+  { key: "brocados", title: "Los Brocados", vinetas: BROCADOS_VINETAS,
+    cover: "/recorrido/tcm/qigong/brocado-1-sostener-cielo.webp" },
+  { key: "animales", title: "Los Cinco Animales", vinetas: CINCO_ANIMALES_VINETAS,
+    cover: "/recorrido/tcm/cincoanimales/tigre.webp" },
 ];
 
 interface TCMIlustracionesModalProps {
@@ -231,22 +319,22 @@ export function TCMIlustracionesModal({
   onComplete,
 }: TCMIlustracionesModalProps) {
   const t = useT();
-  const [capitulo, setCapitulo] = useState<Capitulo | null>(null);
+  const [capitulo, setCapitulo] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) setCapitulo(null);
   }, [isOpen]);
 
   const volverAlSelector = () => setCapitulo(null);
-  const elegirCapitulo = (key: Capitulo) => setCapitulo(key);
+  const elegirCapitulo = (key: string) => setCapitulo(key);
 
-  const vinetas = capitulo ? VINETAS_BY_CAPITULO[capitulo] : [];
+  const vinetas = CAPITULOS.find((c) => c.key === capitulo)?.vinetas ?? [];
 
   // No mostramos nada hasta que la foto de fondo (tcm.png) y las portadas del
   // selector estén completamente cargadas: mientras tanto se ve solo el loader
   // de TCM, para que luego aparezca todo a la vez (fondo + tarjetas).
   const fondosListos = usePrecargarImagenes(
-    isOpen ? ["/img/fondos/tcm.webp", ...SELECTOR_OPTIONS.map((o) => o.cover)] : [],
+    isOpen ? ["/img/fondos/tcm.webp", ...CAPITULOS.map((o) => o.cover)] : [],
   );
 
   return (
@@ -314,7 +402,10 @@ export function TCMIlustracionesModal({
             display="flex"
             flexDirection="column"
             alignItems="center"
-            justifyContent={{ base: "flex-start", md: "center" }}
+            // Empieza arriba SIEMPRE: son diecisiete capítulos, no caben en una
+            // pantalla, y centrar contenido más alto que su caja con scroll deja
+            // las primeras filas cortadas y fuera de alcance.
+            justifyContent="flex-start"
             minH={{ base: "auto", md: "100vh" }}
             overflowY="auto"
             overflowX="hidden"
@@ -356,15 +447,22 @@ export function TCMIlustracionesModal({
                 </Text>
               </Flex>
 
-              <Flex
-                direction={{ base: "column", md: "row" }}
-                gap={{ base: 5, md: 6 }}
+              {/* Rejilla (no una fila que envuelve): con diecisiete capítulos, el
+                  `wrap` dejaba filas de anchos distintos porque las tarjetas se
+                  estiraban con `flex=1`. Con `auto-fill` todas miden igual y el
+                  número de columnas lo pone el ancho de la pantalla. */}
+              <Box
+                display="grid"
+                gridTemplateColumns={{
+                  base: "repeat(auto-fill, minmax(150px, 1fr))",
+                  md: "repeat(auto-fill, minmax(240px, 1fr))",
+                }}
+                gap={{ base: 4, md: 6 }}
                 w="100%"
-                justify="center"
-                align={{ base: "center", md: "stretch" }}
-                wrap="wrap"
+                alignItems="stretch"
+                justifyItems="stretch"
               >
-                {SELECTOR_OPTIONS.map((opt) => (
+                {CAPITULOS.map((opt) => (
                   <Box
                     key={opt.key}
                     as="button"
@@ -372,11 +470,9 @@ export function TCMIlustracionesModal({
                     position="relative"
                     display="flex"
                     flexDirection="column"
-                    flex="1"
                     w="100%"
+                    h="100%"
                     p={0}
-                    minW={{ base: "auto", sm: "280px", md: "300px" }}
-                    maxW={{ base: "300px", md: "360px" }}
                     borderRadius="2xl"
                     overflow="hidden"
                     border={`1px solid ${tcmTxt}55`}
@@ -422,16 +518,21 @@ export function TCMIlustracionesModal({
                         />
                       </Box>
                     )}
+                    {/* `flex=1` + `justify=center`: las tarjetas de la rejilla son
+                        igual de altas, así que el pie ocupa el resto y el «Leer»
+                        queda a la misma altura aunque un título ocupe dos líneas. */}
                     <Flex
                       direction="column"
                       align="center"
+                      justify="center"
+                      flex="1"
                       gap={1}
-                      py={opt.cover ? { base: 4, md: 5 } : { base: 10, md: 14 }}
+                      py={opt.cover ? { base: 3.5, md: 5 } : { base: 10, md: 14 }}
                       px={3}
                     >
                       <Text
                         color={tcmTxt}
-                        fontSize={{ base: "xl", md: "2xl" }}
+                        fontSize={{ base: "md", md: "xl" }}
                         fontWeight="700"
                         letterSpacing="0.18em"
                         textTransform="uppercase"
@@ -468,7 +569,7 @@ export function TCMIlustracionesModal({
                     </Flex>
                   </Box>
                 ))}
-              </Flex>
+              </Box>
             </Flex>
           </ModalBody>
         )}

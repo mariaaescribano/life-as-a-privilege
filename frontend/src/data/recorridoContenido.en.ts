@@ -23,8 +23,8 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       titulo: "Understand the map of the circumstances that shaped you.",
       puntos: [
         "A personal reading of your chart, written by me, not by an AI.",
-        "Understand your chart step by step, with no prior knowledge needed.",
-        "Discover how your personality, your strengths and your challenges connect.",
+        "Use your chart as a tool to understand your history, the way you feel and the patterns that keep repeating in your Life.",
+        "Discover patterns, contradictions and potential you may have been living for years without knowing how to read them.",
       ],
     },
     modalDesc:
@@ -134,9 +134,9 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
     videoIntro: {
       titulo: "Learn the language of your body.",
       puntos: [
-        "Discover the five elements and how they relate to your body and its natural cycles.",
-        "Spot which element in you may need more attention and what could be behind your imbalances.",
-        "Learn concrete ways to restore balance the Taoist way and care for your body, your mind and your wholeness day to day.",
+        "Discover the five elements and how they relate to your body, the way you are and your natural cycles.",
+        "Spot which elements may be asking for more attention, and understand how their imbalances show up in you.",
+        "Learn ways to restore balance and care for your body and your mind day to day, through the eyes of Chinese Medicine.",
       ],
     },
     modalDesc:
@@ -145,19 +145,19 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       {
         titulo: "The Five Elements",
         items: [
-          "You will learn to read the body as a system where everything is connected. No symptom ever appears on its own.",
+          "You will learn to read the body as a system in which everything is connected. No symptom ever appears on its own.",
         ],
       },
       {
         titulo: "Taoism, applied",
         items: [
-          "You will discover how to recover your balance without living in constant reaction to whatever happens around you.",
+          "Through the laws of Taoism, you will discover how to cultivate a deeper inner calm and stop living in constant reaction to whatever happens around you.",
         ],
       },
       {
         titulo: "Your imbalance today",
         items: [
-          "We will identify which system needs the most attention right now, and which concrete steps can help you regain your stability.",
+          "You will identify which system may need more attention at this point, and which concrete steps can help you recover your balance.",
         ],
       },
     ],
@@ -171,32 +171,31 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
     videoIntro: {
       titulo: "Understand the intricate cellular system that makes you.",
       puntos: [
-        "Discover the molecules, cells, organs and systems that build your body.",
-        "Understand what happens inside you at cell level and how your body works.",
-        "Learn physiology the fun way, to understand your body and make informed decisions.",
+        "Discover the molecules, cells, organs and systems that make it possible for you to be who you are.",
+        "Understand what happens inside you at cell level, and how the systems that keep your body in balance work together.",
+        "Learn physiology in a simple, visual way, to understand what goes on inside your body and make informed decisions.",
       ],
     },
     modalDesc:
       "So far we have worked with traditional knowledge. Here the register changes: science, evidence, cellular mechanisms. Not to cancel out what came before, but to hold it up. Once you understand what your liver does, why your gut becomes inflamed or how your blood sugar is regulated, the decisions you make about your body stop being guesswork.",
     contenido: [
       {
-        titulo: "You are your body — stop being a mystery to yourself",
+        titulo: "The body from the inside",
         items: [
-          "You will understand what is really going on inside you when you have energy, inflammation, fatigue or illness. You are your body: stop being a mystery to yourself.",
+          "Discover what goes on inside you, from your cells to the organs and systems that keep your body running.",
         ],
       },
       {
-        titulo: "Common imbalances",
+        titulo: "Learn visually",
         items: [
-          "You will learn to recognize the mechanisms behind many of the problems affecting millions of people today.",
+          "Grasp complex physiology through clear explanations, illustrations and examples that make it easy to understand how your body works.",
         ],
       },
       {
-        titulo: "One-to-one sessions",
+        titulo: "Physiology for you",
         items: [
-          "A space to translate the theory into your own situation and better understand what is happening in your own body.",
+          "Connect what you learn to your own body, and understand better why things like energy, fatigue, inflammation or recovery happen.",
         ],
-        aviso: "Optional. Charged separately",
       },
     ],
   },
@@ -211,7 +210,7 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       puntos: [
         "Understand which molecules food contains and how your body uses them.",
         "Discover why your microbiota matters far beyond digestion.",
-        "Learn to choose your food with judgement, take myths apart and decide for yourself.",
+        "Learn to choose your food with judgement, take myths apart and make your own decisions.",
       ],
     },
     modalDesc:
@@ -232,13 +231,13 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       {
         titulo: "Where nutrients come from",
         items: [
-          "No living thing makes an atom: you will follow the whole journey, from rock to soil, from soil to root, from root to leaf, and from the leaf to the fruit you eat. And you will understand why every colour in a vegetable is a different family of molecules.",
+          "No living thing makes an atom. You will follow the whole journey: from rock to soil, from soil to root, from root to leaf, and from the leaf to the fruit you eat. And you will understand why every colour in a vegetable stands for a different family of molecules.",
         ],
       },
       {
         titulo: "One-to-one sessions",
         items: [
-          "We will adapt the knowledge to your reality. I won't tell you what to eat; we will work through your questions about food, how it works and how to apply it day to day. If you like, we can also explore the link between certain eating habits and emotional factors or personal experiences.",
+          "We will adapt the knowledge to your reality. I won't tell you what to eat: we will work through your questions about food, how it works and how to apply it day to day. If you like, we can also explore the link between certain eating habits and emotional factors or personal experiences.",
         ],
         aviso: "Optional. Charged separately.",
       },
@@ -253,9 +252,9 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
     videoIntro: {
       titulo: "Discover the dimensions of your soul.",
       puntos: [
-        "Walk the Tree of Life and discover its ten Sefirot.",
-        "Understand your inner conflicts, your qualities and your potential.",
-        "Bring these principles into your everyday life and turn them into tools for change.",
+        "Walk the Tree of Life and discover its ten Sefirot as a map for understanding yourself.",
+        "Explore your inner conflicts, your qualities and your potential through the eyes of Kabbalah.",
+        "Bring these principles into your everyday life and turn them into tools to know yourself and to change.",
       ],
     },
     modalDesc:
@@ -270,13 +269,13 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       {
         titulo: "The Sefirot as tools",
         items: [
-          "You will learn to develop specific qualities that change the way you relate to yourself and to others.",
+          "You will learn to develop specific qualities that can change the way you relate to yourself and to others.",
         ],
       },
       {
         titulo: "One-to-one sessions",
         items: [
-          "A space to bring these principles down into real situations in your Life and turn them into something practical.",
+          "A space to bring these principles down into real situations in your life and turn them into practical tools for change.",
         ],
         aviso: "Optional. Charged separately",
       },
@@ -291,32 +290,32 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
     videoIntro: {
       titulo: "The great stories that shaped the world.",
       puntos: [
-        "Discover the stories of the civilisations that changed the way we understand life.",
-        "Meet the thinkers who asked the same questions you do, and discover their answers.",
-        "Travel through world history via science, philosophy, religion and culture.",
+        "Discover the stories of the civilisations that changed the way we understand the world and ourselves.",
+        "Meet the thinkers who asked some of the same questions you do, and discover how they tried to answer them.",
+        "Travel through world history via science, philosophy, religion and culture, and understand how we came to think the way we think today.",
       ],
     },
     modalDesc:
       "The last step is not learning one more thing: it is putting in order what you already know. You have been through seven different ways of understanding the human being. Here you build your own.",
     contenido: [
       {
-        titulo: "The stories that made humanity.",
+        titulo: "The stories that made humanity",
         items: [
-          "Don't forget the past. Discover it and carry it with you, to value your present and stop living on autopilot.",
+          "Discover the ideas, beliefs, discoveries and events that gave shape to the world you live in today.",
         ],
       },
       {
-        titulo: "Authors, leaders and kings who mattered",
+        titulo: "Authors, leaders and thinkers",
         items: [
-          "You will get to know stories, ideas, reigns and authors that changed humanity.",
+          "Meet the people who questioned the established order, changed how their own time thought, and left behind questions we are still asking.",
         ],
       },
       {
         titulo: "One-to-one sessions",
         items: [
-          "Now that you know your mind, your body and your history, reflect on who you are becoming and how you want to live. I will help you bring everything you have learned down into your everyday Life.",
+          "Now that you have been through your mind, your body, your history and the different ways of understanding the human being, stop and look at who you are being and who you want to become. I will help you bring everything you have learned into your everyday life.",
         ],
-        aviso: "Optional. Charged separately",
+        aviso: "Optional. Charged separately.",
       },
     ],
   },

@@ -75,7 +75,7 @@ const base: Record<string, PresentacionDisciplina> = {
     clave: "astrologia",
     Icon: AstrologiaIcon,
     gancho: {
-      es: "La carta natal es el mapa del inconsciente. Describe la estructura de tu mente.",
+      es: "La carta natal es el mapa de las circunstancias que te han dado forma. Es la estructura de tu mente, el mapa de tu inconsciente.",
       en: "Your birth chart is a map of the unconscious. It describes the structure of your mind.",
     },
     ilustracionesLabel: "Astrología",
@@ -135,8 +135,8 @@ const base: Record<string, PresentacionDisciplina> = {
     clave: "tcm",
     Icon: TCMIcon,
     gancho: {
-      es: "El cuerpo habla. Aprende a escucharlo y a leer sus señales.",
-      en: "The body speaks. Learn to listen to it and to read its signals.",
+      es: "Escucha. El cuerpo habla. Aprende a escucharlo y a leer sus señales.",
+      en: "Listen. The body speaks. Learn to listen to it and to read its signals.",
     },
     ilustracionesLabel: "Medicina China",
     paso: 4,
@@ -155,8 +155,8 @@ const base: Record<string, PresentacionDisciplina> = {
     clave: "fisiologia",
     Icon: FisiologiaIcon,
     gancho: {
-      es: "Eres un ecosistema celular en constante cooperación, segundo a segundo; conocer tus células también es conocerte a ti.",
-      en: "You are a cellular ecosystem in constant cooperation, second by second; to know your cells is also to know yourself.",
+      es: "Eres un ecosistema celular en constante cooperación, segundo a segundo. Comprender tus células también es comprenderte a ti.",
+      en: "You are a cellular ecosystem in constant cooperation, second by second. To understand your cells is also to understand yourself.",
     },
     ilustracionesLabel: "Fisiología",
     paso: 5,
@@ -212,8 +212,8 @@ const base: Record<string, PresentacionDisciplina> = {
     clave: "cultura",
     Icon: CulturaIcon,
     gancho: {
-      es: "¿Cómo hemos llegado hasta aquí? Conocer la historia nos permite no repetirla y valorar nuestra realidad.",
-      en: "How did we get here? Knowing history lets us avoid repeating it, and value the reality we live in.",
+      es: "¿Cómo hemos llegado hasta aquí? Comprender nuestra historia es comprender el mundo en el que vivimos y apreciar la realidad que hemos heredado.",
+      en: "How did we get here? To understand our history is to understand the world we live in, and to appreciate the reality we have inherited.",
     },
     ilustracionesLabel: "Cultura",
     paso: 8,

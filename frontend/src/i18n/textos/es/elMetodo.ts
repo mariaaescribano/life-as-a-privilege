@@ -51,10 +51,10 @@ export const elMetodo = {
   // nada. Van de menos a más y la cuarta gira la pregunta entera.
   "elMetodo.espejo.1": "Sabes lo que te pasa, pero no por qué te pasa.",
   "elMetodo.espejo.2": "Has leído muchísimo y sigues en el mismo sitio.",
-  "elMetodo.espejo.3": "Has probado terapia, dietas, rutinas, cursos… pero cada una solo te explicaba una parte.",
-  "elMetodo.espejo.4": "Y la pregunta nunca fue cómo cambiar. Era quién eres.",
+  "elMetodo.espejo.3": "Has probado terapia, dietas, rutinas, cursos… pero seguías sin comprender qué había detrás de todo ello.",
+  "elMetodo.espejo.4": "La pregunta nunca fue qué te pasa, sino qué te ha pasado.",
   "elMetodo.espejo.cierre":
-    "El Mapa no te da otra técnica más. Te da **tu mapa**.",
+    "El Mapa no te da otra técnica más. Te da **tu mapa de integración profunda**.",
 
   // Debajo del mandala que va justo antes del cómic del origen: quien está en el
   // centro de las ocho disciplinas.

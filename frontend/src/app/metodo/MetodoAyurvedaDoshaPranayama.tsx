@@ -587,7 +587,15 @@ export default function MetodoAyurvedaDoshaPranayama() {
               ))}
             </Flex>
 
-            <RevealStagger inView display="flex" flexDirection="column" gap={6} stagger={0.08} delayChildren={0.05} amount={0.1}>
+            {/* `key={sel}` EN EL CONTENEDOR, no solo en los hijos. Sus hijos ya
+                llevan el doṣha en la clave, así que al cambiar de botón se
+                remontan; pero la cascada NO se remontaba, y con `whileInView` +
+                `once` ya había gastado su disparo. Los hijos nuevos nacían en
+                `hidden` y nadie les decía «show»: quedaban invisibles ocupando
+                su hueco, y el box salía con un vacío del alto de las preguntas.
+                Remontando también el contenedor, el observador se rearma y
+                dispara de nuevo (ya está en pantalla, así que entra al vuelo). */}
+            <RevealStagger key={sel} inView display="flex" flexDirection="column" gap={6} stagger={0.08} delayChildren={0.05} amount={0.1}>
               {practica.preguntas.map((preg, i) => (
                 <RevealItem key={`${sel}-${i}`} direction="up" distance={14} duration={0.45} w="100%">
                   <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={3}>{preg}</Text>

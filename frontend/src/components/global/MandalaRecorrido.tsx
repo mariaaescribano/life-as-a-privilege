@@ -961,7 +961,7 @@ const VideoMuestraCard = ({
         gap={1.5}
         pointerEvents="none"
       >
-        <Text color={disc.txt} fontWeight="700" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2" flexShrink={0}
+        <Text color="white" fontWeight="700" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2" flexShrink={0}
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
           {step}.
         </Text>

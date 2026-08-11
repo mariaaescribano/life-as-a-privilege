@@ -9,7 +9,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { Reveal } from "../../components/global/Reveal";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { QigongComicModal } from "../../components/metodo/QigongComicModal";
@@ -47,7 +48,15 @@ export default function MetodoTcmTaoismo() {
     })();
   }, [navigate]);
 
-  if (loading) {
+  // Igual que en el resto del recorrido de TCM: el loader NO se va hasta tener
+  // descargadas la acuarela del fondo y las diez ilustraciones de las leyes.
+  // Sacar los boxes y que las fotos entren después, una a una, quedaba fatal.
+  const imagenesListas = usePrecargarImagenes([
+    disciplinaBgImg(tcmNom),
+    ...LEYES_TAO.map((ley) => FOTO_LEY(ley.key)),
+  ]);
+
+  if (loading || !imagenesListas) {
     return <TcmLoading />;
   }
 
@@ -193,7 +202,10 @@ function LeyBox({ ley, numero, onVer }: { ley: LeyTao; numero: number; onVer: ()
           h="100%"
           objectFit="cover"
           objectPosition="center"
-          loading="lazy"
+          // `eager`: la página ya no se pinta hasta tenerlas todas en caché
+          // (usePrecargarImagenes), así que diferirlas solo las haría aparecer
+          // tarde al bajar.
+          loading="eager"
           transition="transform 0.55s cubic-bezier(0.22,1,0.36,1)"
           _groupHover={{ transform: "scale(1.07)" }}
         />

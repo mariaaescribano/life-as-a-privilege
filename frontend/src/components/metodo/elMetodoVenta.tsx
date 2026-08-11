@@ -504,10 +504,10 @@ export function FaqBloque() {
   // en una pared de texto y deja de contestar nada.
   const [abierta, setAbierta] = useState<number | null>(0);
 
+  // Sin título ni rayita encima: las preguntas se explican solas y la cesura
+  // que va justo arriba ya dice que empieza otra cosa.
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
-      <TituloBloque>{t("elMetodo.faq.titulo")}</TituloBloque>
-
       <Flex direction="column" w="100%" maxW="820px" gap={{ base: 3, md: 3.5 }}>
         {FAQ.map((f, i) => {
           const open = abierta === i;

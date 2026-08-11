@@ -5,6 +5,7 @@ export const presentacion = {
     "You can walk **{disciplina} on its own**. It is a complete journey in itself, with its own illustrations, its exercises and its support, and there is no compulsory order: you start wherever it makes sense for you.",
   "presentacion.ochoMiradas":
     "But {disciplina} is one of the **eight ways of looking** that make up The Map. Each one explains a part of the human being — your character, your history, your body, your food, your soul, your ideas — and they all serve a single purpose: **to understand yourself completely**. No discipline answers the question alone; together they are a path.",
+  "presentacion.empezar": "Start",
   "presentacion.crearCuenta": "Create my account",
   "presentacion.llamada": "Free 20-minute call",
   "presentacion.verOcho": "See the eight disciplines",

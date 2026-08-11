@@ -149,7 +149,7 @@ function DoshaCard({
 
         <Text
           color={c}
-          fontSize={{ base: "2xl", md: "3xl" }}
+          fontSize={{ base: "3xl", md: "4xl" }}
           fontWeight="700"
           letterSpacing="0.1em"
           lineHeight="1.1"
@@ -160,7 +160,7 @@ function DoshaCard({
 
         <Text
           color={c}
-          fontSize={{ base: "xs", md: "sm" }}
+          fontSize={{ base: "sm", md: "md" }}
           fontWeight="600"
           letterSpacing="0.26em"
           textTransform="uppercase"
@@ -174,7 +174,7 @@ function DoshaCard({
 
         <Text
           color={c}
-          fontSize={{ base: "sm", md: "md" }}
+          fontSize={{ base: "md", md: "lg" }}
           lineHeight={{ base: "1.7", md: "1.75" }}
           textShadow={sombra}
         >
@@ -330,7 +330,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
           <Reveal inView direction="up" distance={16} duration={0.7}>
             <Text
               color="rgba(255,255,255,0.9)"
-              fontSize={{ base: "md", md: "lg" }}
+              fontSize={{ base: "lg", md: "xl" }}
               fontStyle="italic"
               textAlign="center"
               lineHeight="1.65"
@@ -362,7 +362,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
           <Reveal inView direction="up" distance={14} duration={0.65}>
             <Text
               color="rgba(255,255,255,0.85)"
-              fontSize={{ base: "sm", md: "md" }}
+              fontSize={{ base: "md", md: "lg" }}
               fontStyle="italic"
               textAlign="center"
               lineHeight="1.6"

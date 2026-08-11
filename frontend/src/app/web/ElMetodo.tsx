@@ -915,6 +915,12 @@ export default function ElMetodo() {
           hay opiniones en la base de datos, no pinta nada. */}
       <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 16, md: 24 }}>
         <Box maxW="1200px" mx="auto">
+          {/* Aquí cambia QUIÉN habla: hasta arriba la página habla de sí misma,
+              y a partir de esta línea hablan otros.
+              El `mb` no es igual al `pt` de este bloque (16/24) sino 4/6 más:
+              encima hay además el `pb` del box del mandala, y sin sumarlo la
+              línea caía alta. Así queda centrada en el hueco de verdad. */}
+          <SeparadorLinea mb={{ base: 20, md: 30 }} />
           <ExperienciasReales />
         </Box>
       </Box>
@@ -1008,6 +1014,14 @@ export default function ElMetodo() {
               Lo último que se ve antes de hablar de dinero: pantallas REALES del
               recorrido. Toda la página de aquí para arriba promete; esto es lo
               único que enseña, y va justo antes del precio a propósito. */}
+          {/* LA CESURA DE LA MITAD DE ABAJO. De aquí para arriba la página
+              explica y promete; de aquí para abajo enseña y cobra (capturas →
+              qué obtienes → precio → por dónde empiezo). Entre el mandala de
+              «Qué recibirás» y el de la creadora había seis bloques seguidos
+              sin una sola pausa, y era el tramo que se hacía muro.
+              Mismo hueco arriba y abajo, para que caiga justo en el medio. */}
+          <SeparadorLinea mt={{ base: 16, md: 24 }} />
+
           <Box mt={{ base: 16, md: 24 }}>
             <PruebasBloque />
           </Box>
@@ -1038,6 +1052,11 @@ export default function ElMetodo() {
               Ocho puertas iguales paralizan. Tres caminos según lo que traiga
               cada uno, y ya no hay que elegir entre ocho. Y con el botón otra
               vez al final: es el segundo momento en el que se decide. */}
+          {/* El hueco entre el botón de «Empezar por 30 €» y esta sección era de
+              los más grandes de la página y no tenía nada en medio. Mismo aire
+              arriba y abajo (16/24), así la línea cae justo en el centro. */}
+          <SeparadorLinea mt={{ base: 16, md: 24 }} />
+
           <Box mt={{ base: 16, md: 24 }}>
             <PorDondeEmpiezoBloque onAcceder={handleAcceder} />
           </Box>
@@ -1291,6 +1310,12 @@ export default function ElMetodo() {
               propio hueco (`pb`) para que la última pregunta no toque el footer.
               Los testimonios ya NO van aquí — subieron a su sitio, justo
               después del mandala (ver arriba). */}
+          {/* Las preguntas son de otro registro: ya no convencen, resuelven. Y
+              venían colgando del botón de ACCEDER solo con un hueco, sin nada
+              que dijera «esto ya es otra cosa». Fina, para no rematar la página
+              con un tercer mandala a un palmo del de la creadora. */}
+          <SeparadorLinea mt={{ base: 20, md: 28 }} />
+
           <Box pt={{ base: 20, md: 28 }} pb={{ base: 24, md: 32 }}>
             <FaqBloque />
           </Box>

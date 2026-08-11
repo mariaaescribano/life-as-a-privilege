@@ -51,11 +51,11 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   astrologia: {
     desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
     videoIntro: {
-      titulo: "Comprende el mapa de las circunstancias que te han dado forma.",
+      titulo: "El mapa de las circunstancias que te han dado forma.",
       puntos: [
         "Una interpretación personal de tu carta, realizada por mí, no por una IA.",
-        "Entiende tu carta paso a paso, sin necesidad de conocimientos previos.",
-        "Descubre cómo se relacionan tu personalidad, tus fortalezas y tus desafíos.",
+        "Utiliza tu carta como una herramienta para comprender tu historia, tu forma de sentir y los patrones que se repiten en tu Vida.",
+        "Descubre patrones, contradicciones y potenciales que quizá llevas años experimentando sin saber cómo interpretar.",
       ],
     },
     modalDesc:
@@ -130,7 +130,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       puntos: [
         "Descubre cuál es tu Doṣha predominante y qué revela sobre ti.",
         "Comprende las tendencias naturales de tu cuerpo y de tu mente.",
-        "Aprende qué favorece tu equilibrio y adapta tus hábitos, alimentación y rutinas a tu constitución.",
+        "Descubre qué favorece tu equilibrio y aprende a adaptar tus hábitos, alimentación y rutinas a tu constitución.",
       ],
     },
     modalDesc:
@@ -165,9 +165,9 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
     videoIntro: {
       titulo: "Aprende el lenguaje de tu cuerpo.",
       puntos: [
-        "Descubre los cinco elementos y cómo se relacionan con tu cuerpo y sus ciclos naturales.",
-        "Identifica qué elemento en ti puede necesitar más atención y qué puede estar detrás de tus desequilibrios.",
-        "Aprende formas concretas de recuperar el equilibrio según el taoísmo y cuidar tu cuerpo, tu mente y tu integridad en el día a día.",
+        "Descubre los cinco elementos y cómo se relacionan con tu cuerpo, tu forma de ser y tus ciclos naturales.",
+        "Identifica qué elementos pueden estar pidiendo más atención y comprende cómo se manifiestan sus desequilibrios en ti.",
+        "Aprende formas de recuperar el equilibrio y cuidar tu cuerpo y tu mente en el día a día desde la mirada de la Medicina China.",
       ],
     },
     modalDesc:
@@ -176,19 +176,19 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       {
         titulo: "Los cinco elementos",
         items: [
-          "Aprenderás a leer el cuerpo como un sistema donde todo está conectado. Ningún síntoma aparece aislado.",
+          "Aprenderás a leer el cuerpo como un sistema en el que todo está conectado. Ningún síntoma aparece de forma aislada.",
         ],
       },
       {
         titulo: "Taoísmo aplicado",
         items: [
-          "Descubrirás cómo recuperar equilibrio sin vivir reaccionando constantemente a lo que ocurre fuera de ti.",
+          "Descubrirás, a través de las leyes del taoísmo, cómo cultivar una mayor serenidad interior y dejar de reaccionar constantemente a lo que ocurre fuera de ti.",
         ],
       },
       {
         titulo: "Tu desequilibrio hoy",
         items: [
-          "Identificaremos qué sistema necesita más atención ahora mismo y qué acciones concretas pueden ayudarte a recuperar estabilidad.",
+          "Identificarás qué sistema puede necesitar más atención en este momento y qué acciones concretas pueden ayudarte a recuperar el equilibrio.",
         ],
       },
     ],
@@ -202,32 +202,31 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
     videoIntro: {
       titulo: "Comprende el complejo sistema celular que te forma.",
       puntos: [
-        "Descubre las moléculas, células, órganos y sistemas que construyen tu cuerpo.",
-        "Entiende qué ocurre dentro de ti a nivel celular y cómo funciona tu organismo.",
-        "Aprende fisiología de forma divertida para comprender tu cuerpo y tomar decisiones con criterio.",
+        "Descubre las moléculas, células, órganos y sistemas que hacen posible que seas quien eres.",
+        "Entiende qué ocurre dentro de ti a nivel celular y cómo trabajan juntos los sistemas que mantienen tu organismo en equilibrio.",
+        "Aprende fisiología de forma sencilla y visual para comprender qué ocurre en tu cuerpo y tomar decisiones con criterio.",
       ],
     },
     modalDesc:
       "Hasta ahora hemos trabajado con conocimiento tradicional. Aquí cambia el registro: ciencia, evidencia, mecanismos celulares. No para anular lo anterior, para sostenerlo. Cuando entiendes qué hace tu hígado, por qué se inflama tu intestino o cómo se regula tu glucosa, las decisiones que tomas sobre tu cuerpo dejan de ser intuición.",
     contenido: [
       {
-        titulo: "Eres tu cuerpo, deja de ser un misterio",
+        titulo: "El cuerpo por dentro",
         items: [
-          "Entenderás qué ocurre realmente en ti cuando tienes energía, inflamación, fatiga o enfermedad. Eres tu cuerpo, deja de ser un misterio.",
+          "Descubre qué ocurre dentro de ti, desde tus células hasta los órganos y sistemas que mantienen tu organismo en funcionamiento.",
         ],
       },
       {
-        titulo: "Desequilibrios frecuentes",
+        titulo: "Aprende de forma visual",
         items: [
-          "Aprenderás a reconocer los mecanismos detrás de muchos de los problemas que afectan a millones de personas hoy.",
+          "Comprende conceptos complejos de fisiología a través de explicaciones claras, ilustraciones y ejemplos que hacen fácil entender cómo funciona tu cuerpo.",
         ],
       },
       {
-        titulo: "Sesiones individuales",
+        titulo: "Fisiología para ti",
         items: [
-          "Un espacio para traducir la teoría a tu situación concreta y comprender mejor lo que ocurre en tu propio organismo.",
+          "Conecta lo que aprendes con tu propio cuerpo y comprende mejor por qué ocurren procesos como la energía, la fatiga, la inflamación o la recuperación.",
         ],
-        aviso: "Opcional. Se cobra aparte",
       },
     ],
   },
@@ -242,7 +241,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       puntos: [
         "Comprende qué moléculas contienen los alimentos y cómo las utiliza tu organismo.",
         "Descubre por qué tu microbiota influye mucho más allá de la digestión.",
-        "Aprende a elegir tu alimentación con criterio, desmontar mitos y decidir por ti mismo.",
+        "Aprende a elegir tu alimentación con criterio, desmontar mitos y tomar decisiones por ti mismo.",
       ],
     },
     modalDesc:
@@ -251,25 +250,25 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       {
         titulo: "Macronutrientes y micronutrientes",
         items: [
-          "Déjate de pensar en «esto es sano y esto no». Comprenderás, de forma sencilla, qué moléculas componen los alimentos y qué función cumplen en tu organismo.",
+          "Olvídate de pensar en «esto es sano y esto no». Comprenderás, de forma sencilla, qué moléculas componen los alimentos y qué función cumplen en tu organismo.",
         ],
       },
       {
         titulo: "Microbiota",
         items: [
-          "Entenderás por qué la microbiota va mucho más allá de la digestión y cómo se relaciona con tu salud, energía y bienestar general.",
+          "Entenderás por qué la microbiota va mucho más allá de la digestión y cómo se relaciona con tu salud, tu energía y tu bienestar general.",
         ],
       },
       {
         titulo: "De dónde vienen los nutrientes",
         items: [
-          "Ningún ser vivo fabrica un átomo: verás el viaje completo, de la roca al suelo, del suelo a la raíz, de la raíz a la hoja y de la hoja al fruto que te comes. Y entenderás por qué cada color de una verdura es una familia distinta de moléculas.",
+          "Ningún ser vivo fabrica un átomo. Seguirás el viaje completo: de la roca al suelo, del suelo a la raíz, de la raíz a la hoja y de la hoja al fruto que comes. Y entenderás por qué cada color de una verdura representa una familia distinta de moléculas.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "Adaptaremos el conocimiento a tu realidad. No te diré qué comer; resolveremos tus dudas sobre los alimentos, cómo funcionan y cómo aplicarlo a tu día a día. Si lo deseas, también podremos explorar la relación entre ciertos hábitos alimentarios y factores emocionales o experiencias personales.",
+          "Adaptaremos el conocimiento a tu realidad. No te diré qué comer: resolveremos tus dudas sobre los alimentos, cómo funcionan y cómo aplicarlo a tu día a día. Si lo deseas, también podremos explorar la relación entre ciertos hábitos alimentarios y factores emocionales o experiencias personales.",
         ],
         aviso: "Opcional. Se cobra aparte.",
       },
@@ -284,9 +283,9 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
     videoIntro: {
       titulo: "Descubre las dimensiones de tu alma.",
       puntos: [
-        "Recorre el Árbol de la Vida y descubre sus diez Sefirot.",
-        "Comprende tus conflictos internos, tus cualidades y tu potencial.",
-        "Lleva estos principios a tu vida cotidiana y conviértelos en herramientas de transformación.",
+        "Recorre el Árbol de la Vida y descubre sus diez Sefirot como un mapa para comprenderte.",
+        "Explora tus conflictos internos, tus cualidades y tu potencial a través de la mirada de la Cábala.",
+        "Lleva estos principios a tu vida cotidiana y conviértelos en herramientas para conocerte y transformarte.",
       ],
     },
     modalDesc:
@@ -301,15 +300,15 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       {
         titulo: "Las Sefirot como herramientas",
         items: [
-          "Aprenderás a desarrollar cualidades concretas que transforman la manera en que te relacionas contigo mismo y con los demás.",
+          "Aprenderás a desarrollar cualidades concretas que pueden transformar la manera en que te relacionas contigo mismo y con los demás.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "Un espacio para aterrizar estos principios en situaciones reales de tu Vida y convertirlos en algo práctico.",
+          "Un espacio para aterrizar estos principios en situaciones reales de tu vida y convertirlos en herramientas prácticas de transformación.",
         ],
-         aviso: "Opcional. Se cobra aparte",
+        aviso: "Opcional. Se cobra aparte",
       },
     ],
   },
@@ -325,32 +324,32 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
     videoIntro: {
       titulo: "Las grandes historias que dieron forma al mundo.",
       puntos: [
-        "Descubre las historias de las civilizaciones que transformaron nuestra forma de entender la Vida.",
-        "Conoce a los pensadores que se hicieron las mismas preguntas que tú y descubre sus ideas.",
-        "Recorre la historia universal desde la ciencia, la filosofía, la religión y la cultura.",
+        "Descubre las historias de las civilizaciones que transformaron nuestra forma de entender el mundo y a nosotros mismos.",
+        "Conoce a los pensadores que se hicieron algunas de las mismas preguntas que tú y descubre cómo intentaron responderlas.",
+        "Recorre la historia universal a través de la ciencia, la filosofía, la religión y la cultura, y comprende cómo hemos llegado a pensar como pensamos hoy.",
       ],
     },
     modalDesc:
       "El último paso no es aprender otra cosa: es ordenar lo que ya sabes. Has pasado por siete formas distintas de entender al ser humano. Aquí construyes la tuya.",
     contenido: [
       {
-        titulo: "Las historias que formaron la humanidad.",
+        titulo: "Las historias que formaron la humanidad",
         items: [
-          "No te olvides del pasado. Descúbrelo, llévalo contigo par valorar tu presente y dejar de vivir en modo automático.",
+          "Descubre las ideas, creencias, descubrimientos y acontecimientos que han dado forma al mundo que hoy habitas.",
         ],
       },
       {
-        titulo: "Autores, líderes y reyes importantes",
+        titulo: "Autores, líderes y pensadores",
         items: [
-          "Conocerás historias, ideas, reinados y autores que han cambiado la humanidad.",
+          "Conoce a las personas que cuestionaron lo establecido, cambiaron la forma de pensar de su tiempo y dejaron preguntas que todavía seguimos haciéndonos.",
         ],
       },
       {
         titulo: "Sesiones individuales",
         items: [
-          "Ahora que conoces tu mente, tu cuerpo y tu historia, reflexiona sobre quién te estás convirtiendo y cómo quieres vivir. Te acompaño a aterrizar todo lo aprendido en tu Vida cotidiana.",
+          "Ahora que has recorrido tu mente, tu cuerpo, tu historia y las distintas formas de comprender al ser humano, detente a mirar quién estás siendo y quién quieres llegar a ser. Te acompaño a llevar todo lo aprendido a tu vida cotidiana.",
         ],
-        aviso: "Opcional. Se cobra aparte",
+        aviso: "Opcional. Se cobra aparte.",
       },
     ],
   },
