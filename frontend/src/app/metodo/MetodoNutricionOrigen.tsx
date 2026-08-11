@@ -93,10 +93,7 @@ export default function MetodoNutricionOrigen() {
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="680px">
-              Ya sabes qué hace tu cuerpo con la comida. Pero ¿quieres entender de dónde sale? Ningún ser vivo
-              fabrica un átomo: todos los que hoy son tú venían de una roca, del aire y del agua, y alguien los
-              tuvo que recoger por ti. Estas seis lecturas cuentan ese viaje, desde el planeta entero hasta el
-              color de una fresa.
+              ¿Cómo se crean los alimentos?
             </Text>
           </Reveal>
 

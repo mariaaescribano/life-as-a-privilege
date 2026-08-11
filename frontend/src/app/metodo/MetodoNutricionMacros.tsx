@@ -320,9 +320,14 @@ export default function MetodoNutricionMacros() {
                       </Flex>
                     )}
 
+                    {/* Sin el emoji delante: encima ya está la foto del
+                        alimento, así que el icono no añadía nada y le quitaba
+                        seriedad al título. El campo `emoji` sigue en los datos
+                        porque lo usan «Diseña tu día», «Tu plato» y la ficha de
+                        alimento, donde sí hace de icono. */}
                     <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={800}
                           lineHeight="1.15" textAlign="center">
-                      {actual.emoji} {actual.nombre}
+                      {actual.nombre}
                     </Text>
                     <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                           textAlign="center" opacity={0.85}>

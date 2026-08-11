@@ -15,71 +15,24 @@ Formato: `.webp`, cuadradas (se recortan en círculo y se pintan también en el 
 | Historia Universal | 0 | 111 |
 | Historia de las religiones | 0 | 49 |
 | Historia de la filosofía | 0 | 103 |
-| Historia de la ciencia | 36 | 57 |
+| Historia de la ciencia | 9 | 57 |
 | Historia de la medicina | 96 | 96 |
 | Historia del arte y la literatura | 54 | 54 |
-| **TOTAL** | **186** | **470** |
+| **TOTAL** | **159** | **470** |
 
-## Historia de la ciencia — faltan 36 de 57
-
-### La ciencia viaja por el mundo — Siglos VIII – XV
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `cero-india.webp` — El cero y los números
-- `al-juarismi.webp` — Al-Juarismi y el álgebra
-- `alhacen.webp` — Alhacén y la óptica
-- `china-inventos.webp` — Los grandes inventos de China
-- `saber-no-se-pierde.webp` — El saber no se pierde
-
-### La Revolución Científica — Siglos XVI – XVII
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `copernico.webp` — Copérnico
-- `galileo.webp` — Galileo Galilei
-- `kepler.webp` — Kepler
-- `nace-metodo.webp` — Nace el método científico
-- `newton.webp` — Isaac Newton
-
-### La Ilustración: ordenar el mundo — Siglo XVIII
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `linneo.webp` — Linneo clasifica la vida
-- `lavoisier.webp` — Lavoisier y la química moderna
-- `franklin-electricidad.webp` — Franklin y la electricidad
-- `academias-enciclopedia.webp` — Academias y enciclopedias
-
-### El siglo XIX: energía, vida y materia — Siglo XIX
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `edad-de-la-tierra.webp` — La Tierra tiene una edad
-- `teoria-celular.webp` — Todo está hecho de células
-- `darwin.webp` — Darwin y la evolución
-- `mendel.webp` — Mendel y la herencia
-- `maxwell.webp` — Maxwell y el electromagnetismo
-- `mendeleyev.webp` — Mendeléyev y la tabla periódica
-- `termodinamica.webp` — La energía y la termodinámica
+## Historia de la ciencia — faltan 9 de 57
 
 ### La revolución de la física — Primera mitad del siglo XX
 
 Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
 
-- `curie.webp` — Marie Curie y la radiactividad
-- `einstein.webp` — Einstein y la relatividad
-- `cuantica.webp` — El mundo cuántico
 - `atomo-energia.webp` — El átomo: poder y peligro
-- `big-bang.webp` — El universo tiene una historia
 - `explorar-cosmos.webp` — Salir a mirar de cerca
-- `tectonica-placas.webp` — Los continentes se mueven
 
 ### Descifrar la vida — Siglo XX
 
 Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
 
-- `adn.webp` — El ADN: la molécula de la vida
 - `rosalind-franklin.webp` — Rosalind Franklin
 - `editar-vida.webp` — Leer y editar la vida
 

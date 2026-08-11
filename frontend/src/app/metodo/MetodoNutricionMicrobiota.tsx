@@ -103,7 +103,7 @@ export default function MetodoNutricionMicrobiota() {
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
-              Algunas de las bacterias más conocidas que habitan tu intestino, cada una con su función.
+              No estás viendo bacterias. Estás viendo a los habitantes de tu intestino.
             </Text>
           </Reveal>
 

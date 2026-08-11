@@ -462,6 +462,20 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/cultura/historiaciencia"],
   },
+  // La portada del CÁNCER en Profundiza (Fisiología), que era el único tema del
+  // hub sin foto de tarjeta. Mismos ajustes que sus hermanas de la carpeta. El
+  // WebP no es opcional: el helper PORTADA la pide con la extensión escrita.
+  37: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/fisiologia/profundiza/portadas"],
+  },
+  // Los 27 momentos de Historia de la ciencia que llegaron de una tacada: del
+  // cero indio al ADN. Llegaron EN EL ORDEN de CULTURA-fotos-que-faltan.md,
+  // saltándose `atomo-energia` y `explorar-cosmos`.
+  38: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/cultura/historiaciencia"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────
