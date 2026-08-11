@@ -16,6 +16,7 @@ import {
   emblemaHoja,
   emblemaSol,
   emblemaMandala,
+  emblemaGlobo,
 } from "./formas";
 
 export type { RGB };
@@ -142,6 +143,25 @@ export const TEMA_ASTROLOGIA: Tema = {
   acuarela: "",
   emblema: emblemaSol,
   veloPortada: ["rgba(4,7,20,0.66)", "rgba(4,7,20,0.30)", "rgba(4,7,20,0.74)"],
+};
+
+/* ── Cultura (papel oscuro) ───────────────────────────────────────────────── */
+// La disciplina va en verde azulado muy oscuro con la tinta menta (#79dcd4 en la
+// web), subida un punto para que la letra pequeña aguante en papel.
+export const TEMA_CULTURA: Tema = {
+  disciplina: "Cultura",
+  oscuro: true,
+  papel: [10, 32, 32],
+  papelVeta: [18, 52, 52],
+  tinta: [226, 246, 242],
+  tintaSuave: [150, 220, 212],
+  apagado: [104, 152, 148],
+  acento: [121, 220, 212],
+  acentoSuave: [176, 236, 230],
+  trama: [24, 62, 62],
+  acuarela: "/img/fondos/cultura.webp",
+  emblema: emblemaGlobo,
+  veloPortada: ["rgba(4,22,22,0.72)", "rgba(4,22,22,0.42)", "rgba(4,22,22,0.86)"],
 };
 
 /* ── Colores de los tres doṣhas (comunes a todos los PDF de Ayurveda) ─────── */

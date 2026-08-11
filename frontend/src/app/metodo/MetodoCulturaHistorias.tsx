@@ -8,19 +8,10 @@ import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { FotoBox } from "../../components/metodo/FotoBox";
-import { CulturaIlustracionesModal } from "../../components/metodo/CulturaIlustracionesModal";
 import { historiaVisual } from "../../components/metodo/culturaPortadas";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
-
-// Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
-const EyeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"
-       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))", flexShrink: 0 }}>
-    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
-  </svg>
-);
 
 // Las 6 grandes Historias del recorrido de Cultura, en orden. La portada y el
 // emoji de reserva de cada una salen de `culturaPortadas` (compartido con la
@@ -47,7 +38,6 @@ const HISTORIAS: Historia[] = [
 export default function MetodoCulturaHistorias() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -96,7 +86,10 @@ export default function MetodoCulturaHistorias() {
               nom={culturaNom}
               mb={0}
               prev={{ label: "← Introducción", onClick: () => navigate("/metodo/cultura") }}
-              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
+              // A la derecha, el taller de apuntes: de aquí se sale con lo
+              // recorrido por escrito. Las Ilustraciones siguen en el header de
+              // la portada de Cultura (/metodo/cultura), que es su sitio.
+              next={{ label: "Tus apuntes", arrow: "next", onClick: () => navigate("/metodo/cultura/apuntes") }}
             />
           </Reveal>
 
@@ -121,8 +114,6 @@ export default function MetodoCulturaHistorias() {
           </SimpleGrid>
         </Flex>
       </Flex>
-
-      <CulturaIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
       <BotonCompania color={culturaTxt} bgColor={culturaBg} disciplinaNom={culturaNom} />
 

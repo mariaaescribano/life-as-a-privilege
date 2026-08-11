@@ -147,6 +147,7 @@ const MetodoCabalaDiezDias = lazy(() => import("./app/metodo/MetodoCabalaDiezDia
 const MetodoCabalaCursos = lazy(() => import("./app/metodo/MetodoCabalaCursos"));
 const MetodoCultura = lazy(() => import("./app/metodo/MetodoCultura"));
 const MetodoCulturaHistorias = lazy(() => import("./app/metodo/MetodoCulturaHistorias"));
+const MetodoCulturaApuntes = lazy(() => import("./app/metodo/MetodoCulturaApuntes"));
 const MetodoCulturaHistoria = lazy(() => import("./app/metodo/MetodoCulturaHistoria"));
 const MetodoCulturaHistoriaEra = lazy(() => import("./app/metodo/MetodoCulturaHistoriaEra"));
 const AyurvedaMiEspacio = lazy(() => import("./app/web/AyurvedaMiEspacio"));
@@ -413,6 +414,9 @@ export default function App()
 
       <Route path="/metodo/cultura" element={<PrivateRoute><MetodoCultura /></PrivateRoute>} />
       <Route path="/metodo/cultura/historias" element={<PrivateRoute><MetodoCulturaHistorias /></PrivateRoute>} />
+      {/* «Tus apuntes»: sin clave se elige la Historia, con clave es su taller. */}
+      <Route path="/metodo/cultura/apuntes" element={<PrivateRoute><MetodoCulturaApuntes /></PrivateRoute>} />
+      <Route path="/metodo/cultura/apuntes/:historiaKey" element={<PrivateRoute><MetodoCulturaApuntes /></PrivateRoute>} />
       <Route path="/metodo/cultura/historia/:historiaKey" element={<PrivateRoute><MetodoCulturaHistoria /></PrivateRoute>} />
       <Route path="/metodo/cultura/historia/:historiaKey/:eraKey" element={<PrivateRoute><MetodoCulturaHistoriaEra /></PrivateRoute>} />
 

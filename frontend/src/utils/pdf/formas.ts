@@ -283,6 +283,49 @@ export const emblemaSol: Emblema = (doc, cx, cy, r, color) => {
   doc.circle(cx, cy, r * 0.07, "F");
 };
 
+/**
+ * Globo con sus meridianos — Cultura.
+ *
+ * El icono de la disciplina en la web es un globo terráqueo, así que el emblema
+ * del papel es el mismo dibujo: el círculo, el ecuador y dos meridianos que se
+ * estrechan al acercarse al borde (los paralelos y meridianos de un globo
+ * visto de frente son elipses, no líneas rectas). jsPDF no tiene elipse con
+ * giro, así que cada meridiano se traza como una polilínea de puntos.
+ */
+export const emblemaGlobo: Emblema = (doc, cx, cy, r, color) => {
+  doc.setDrawColor(...color);
+  doc.setLineWidth(0.4);
+  doc.circle(cx, cy, r, "S");
+
+  // Ecuador y dos paralelos, achatados: el de en medio es recto y los de arriba
+  // y abajo se curvan hacia el polo.
+  doc.setLineWidth(0.22);
+  [-0.55, 0, 0.55].forEach((k) => {
+    const y = cy + r * k;
+    // Media cuerda del círculo a esa altura: donde el paralelo toca el borde.
+    const semi = r * Math.sqrt(Math.max(0, 1 - k * k));
+    const pts: Punto[] = [];
+    for (let i = 0; i <= 24; i++) {
+      const t = -1 + (2 * i) / 24;
+      // Comba del paralelo: nula en el ecuador y mayor cerca de los polos.
+      pts.push([cx + semi * t, y + r * 0.1 * k * (1 - t * t)]);
+    }
+    poligono(doc, pts, "S", false);
+  });
+
+  // Meridianos: el central recto y dos elipses a los lados.
+  doc.line(cx, cy - r, cx, cy + r);
+  [-0.62, 0.62].forEach((k) => {
+    const pts: Punto[] = [];
+    for (let i = 0; i <= 32; i++) {
+      const a = -90 + (180 * i) / 32;
+      const rad = (a * Math.PI) / 180;
+      pts.push([cx + r * k * Math.cos(rad), cy + r * Math.sin(rad)]);
+    }
+    poligono(doc, pts, "S", false);
+  });
+};
+
 /** Mandala de anillos y pétalos — emblema de la casa (genérico). */
 export const emblemaMandala: Emblema = (doc, cx, cy, r, color) => {
   doc.setDrawColor(...color);
