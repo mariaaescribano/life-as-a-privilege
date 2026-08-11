@@ -344,15 +344,19 @@ const Pagina = ({
   preguntasPorAno: { key: string }[];
   onToggle: (edadAno: number, texto: string) => void;
 }) => {
-  if (edadAno === undefined) {
-    // Página en blanco (cuando el nº de años es impar). Tiene que seguir
-    // PINTÁNDOSE como papel para que el cuaderno ocupe el ancho completo: en
-    // blanco significa «sin nada escrito», no «transparente».
-    // En móvil no existe, que allí las páginas van una debajo de otra.
-    return <Box {...PAPEL} display={{ base: "none", md: "block" }} />;
-  }
-  const items = itemsDelAno(data, edadAno, preguntasPorAno);
+  // Página en blanco: cuando el nº de años es impar, la derecha del último
+  // cuaderno se queda sin año.
+  const blanca = edadAno === undefined;
+  const items = blanca ? [] : itemsDelAno(data, edadAno, preguntasPorAno);
 
+  // TODOS los hooks van AQUÍ, antes del `return` de la página en blanco. Esta
+  // instancia se reutiliza al pasar de hoja (no lleva `key`), así que la misma
+  // página pasa de blanca a escrita y al revés; con los hooks debajo del return,
+  // unas veces se llaman y otras no, y React los identifica POR ORDEN. Hoy no
+  // reventaba de casualidad —la rama en blanco no llamaba a NINGUNO, y entonces
+  // React trata el render siguiente como un montaje— pero en cuanto la rama en
+  // blanco use un hook, se cae con «Rendered fewer hooks than expected».
+  //
   // La franja final vacía solo debe aparecer cuando el contenido desborda la
   // página (es decir, cuando SÍ hay scroll). Con listas cortas que caben sin
   // desplazamiento, ese renglón vacío colgaría feo, así que lo ocultamos.
@@ -371,6 +375,14 @@ const Pagina = ({
     window.addEventListener("resize", medir);
     return () => window.removeEventListener("resize", medir);
   }, [items.length]);
+
+  // La página en blanco tiene que seguir PINTÁNDOSE como papel para que el
+  // cuaderno ocupe el ancho completo: en blanco significa «sin nada escrito», no
+  // «transparente». En móvil no existe, que allí las páginas van una debajo de
+  // otra.
+  if (blanca) {
+    return <Box {...PAPEL} display={{ base: "none", md: "block" }} />;
+  }
 
   return (
     <Box {...PAPEL}>

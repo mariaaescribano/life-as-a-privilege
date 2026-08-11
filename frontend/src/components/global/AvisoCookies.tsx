@@ -48,6 +48,11 @@ const Boton = ({
 export default function AvisoCookies() {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
+  // OJO: `useT()` (y cualquier hook) va SIEMPRE aquí arriba, nunca debajo del
+  // `return null` de más abajo. Este componente arranca invisible y se muestra
+  // 600 ms después, así que un hook puesto tras ese return se llamaría solo en el
+  // segundo render: React los identifica POR ORDEN, y ahí ya no cuadran.
+  const t = useT();
 
   useEffect(() => {
     // Solo se muestra si todavía no hay decisión guardada.
@@ -58,8 +63,6 @@ export default function AvisoCookies() {
   }, []);
 
   if (!visible) return null;
-
-  const t = useT();
 
   const decidir = (valor: "aceptadas" | "rechazadas") => {
     guardarConsentimiento(valor);
