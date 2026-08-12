@@ -24,13 +24,6 @@ const MotionBox = motion(Box) as any;
 
 interface Reto { id: string; titulo: string; texto: string; }
 
-const EyeIcon = () => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
-       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
-    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
-  </Box>
-);
-
 // PRNG determinista (mulberry32): mismo reparto en cada render, no "salta".
 function mulberry32(seed: number) {
   let a = seed >>> 0;
@@ -197,7 +190,7 @@ export default function MetodoAstrologiaLectura() {
               step={{ current: 4, total: 9 }}
               mb={0}
               prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
               next={{
                 label: "Casas →",
                 // Antes de pasar a «Casas» intercalamos el cómic de las casas.

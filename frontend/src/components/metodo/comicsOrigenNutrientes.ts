@@ -1,4 +1,5 @@
 import type { Vineta } from "./ComicViewer";
+import type { ClaveTexto } from "../../i18n";
 import { NUTRICION_CICLOS } from "./comicNutricionCiclos";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -262,6 +263,15 @@ export const NUTRICION_ANIMAL: Vineta[] = [
 export interface LecturaOrigen {
   /** Clave estable: es la que se guarda como «leída» y la del id de galería. */
   key: string;
+  /** Título y frase corta de la tarjeta, POR CLAVE: este array se calcula al
+   *  importar el módulo, así que un texto ya resuelto se quedaría congelado en el
+   *  idioma con el que arrancó la página. La página los pide con `t()`. */
+  tituloKey: ClaveTexto;
+  resumenKey: ClaveTexto;
+  /** Su entrada en `i18n/comics/comics.en.ts`: de ahí sale la prosa en inglés. */
+  claveComic: string;
+  /** El título en español, suelto. Lo sigue usando la galería de Ilustraciones
+   *  (nutricionIlustraciones.ts), que todavía no está traducida. */
   titulo: string;
   /** Frase corta bajo el título en la tarjeta del paso. */
   resumen: string;
@@ -275,6 +285,9 @@ export interface LecturaOrigen {
 export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
   {
     key: "ciclos",
+    tituloKey: "metodo.nutri.origen.ciclos.titulo",
+    resumenKey: "metodo.nutri.origen.ciclos.resumen",
+    claveComic: "nutricion-ciclos",
     titulo: "Los grandes ciclos de la naturaleza",
     resumen: "El agua, el carbono, el oxígeno, el nitrógeno y el fósforo dando vueltas: tus átomos son prestados.",
     cover: "/viñetas/nutricion/biologia/ciclos/carbono.webp",
@@ -283,6 +296,9 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
   },
   {
     key: "tierra",
+    tituloKey: "metodo.nutri.origen.tierra.titulo",
+    resumenKey: "metodo.nutri.origen.tierra.resumen",
+    claveComic: "nutricion-origen-tierra",
     titulo: "La tierra y la raíz",
     resumen: "Cómo sale un mineral de una roca, se disuelve en el suelo y entra en una planta.",
     cover: portada("tierra"),
@@ -291,6 +307,9 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
   },
   {
     key: "planta",
+    tituloKey: "metodo.nutri.origen.planta.titulo",
+    resumenKey: "metodo.nutri.origen.planta.resumen",
+    claveComic: "nutricion-origen-planta",
     titulo: "Una planta por dentro",
     resumen: "Dos tuberías, una pared de fibra y una despensa. Y sube el agua sin tener corazón.",
     cover: portada("planta"),
@@ -299,6 +318,9 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
   },
   {
     key: "hoja",
+    tituloKey: "metodo.nutri.origen.hoja.titulo",
+    resumenKey: "metodo.nutri.origen.hoja.resumen",
+    claveComic: "nutricion-origen-hoja",
     titulo: "Una hoja por dentro",
     resumen: "La fábrica: aire, agua y luz entran; salen comida y el oxígeno que respiras.",
     cover: portada("hoja"),
@@ -307,6 +329,9 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
   },
   {
     key: "fruta",
+    tituloKey: "metodo.nutri.origen.fruta.titulo",
+    resumenKey: "metodo.nutri.origen.fruta.resumen",
+    claveComic: "nutricion-origen-fruta",
     titulo: "La fruta, la verdura y sus colores",
     resumen: "De la flor al fruto, la orden de madurar y qué hace cada color.",
     cover: portada("fruta"),
@@ -315,6 +340,9 @@ export const ORIGEN_NUTRIENTES: LecturaOrigen[] = [
   },
   {
     key: "animal",
+    tituloKey: "metodo.nutri.origen.animal.titulo",
+    resumenKey: "metodo.nutri.origen.animal.resumen",
+    claveComic: "nutricion-origen-animal",
     titulo: "Cuando el nutriente pasa por un animal",
     resumen: "La otra rama: la cadena, lo que el animal concentra, la B12 y el omega-3 que era de un alga.",
     cover: portada("animal"),

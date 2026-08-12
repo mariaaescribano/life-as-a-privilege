@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useT } from "../../i18n";
+import { useIdioma, useT, type ClaveTexto } from "../../i18n";
+import { useComic } from "../../i18n/comics";
 import {
   Box,
   Flex,
@@ -24,7 +25,10 @@ import {
 } from "./tcmQigongContenido";
 import { COMIC_ELEMENTO, COMIC_INTRO_ELEMENTOS } from "./tcmElementosContenido";
 import { FOTO_COCINA, cocinaDe } from "./tcmCocinaContenido";
+import { COCINA_ELEMENTO_EN } from "./tcmCocinaContenido.en";
+import { CONTENIDO_ELEMENTOS_EN } from "./tcmElementosContenido.en";
 import { ELEMENTOS, ORDEN_ELEMENTOS } from "./tcmRecorrido";
+import { barraVisibleSx } from "../global/barraDeScroll";
 
 // ────────────────────────────────────────────────────────────────────────────
 // CONTENIDO DE LOS CAPÍTULOS DE MEDICINA CHINA
@@ -252,9 +256,30 @@ const VINETAS_COCINA: Vineta[] = ORDEN_ELEMENTOS.flatMap((el) =>
   })),
 );
 
+/** Las mismas, en inglés. La cocina NO vive en el diccionario de cómics: su
+ *  texto ya está traducido en `tcmCocinaContenido.en.ts` y se arma igual que el
+ *  español —mismo orden, misma foto—, así que no hay que escribirlo dos veces.
+ *  Un elemento sin traducir se queda con su versión española. */
+const VINETAS_COCINA_EN: Vineta[] = ORDEN_ELEMENTOS.flatMap((el) =>
+  (COCINA_ELEMENTO_EN[el] ?? cocinaDe(el)).cocciones.map((c, i) => ({
+    src: FOTO_COCINA(el, i),
+    eyebrow: CONTENIDO_ELEMENTOS_EN[el]?.nombre ?? ELEMENTOS[el].nombre,
+    titulo: c.nombre,
+    paragraphs: [c.como, c.porque],
+  })),
+);
+
 interface CapituloOpcion {
   key: string;
-  title: string;
+  /** Título POR CLAVE: este array se calcula al importar el módulo, así que un
+   *  texto ya resuelto se quedaría congelado en el idioma de arranque. */
+  tituloKey: ClaveTexto;
+  /** Su entrada en `i18n/comics/comics.en.ts`, si ya está traducida. Vacío = se
+   *  lee en español (que es lo que hace `useComic` con una clave que no existe). */
+  claveComic: string;
+  /** Capítulo cuyo inglés NO vive en el diccionario de cómics, sino en su propio
+   *  `.en.ts` (la cocina). Cuando lo hay, sustituye a `vinetas` en inglés. */
+  vinetasEn?: Vineta[];
   vinetas: Vineta[];
   cover?: string;
   coverPosition?: string;
@@ -263,47 +288,47 @@ interface CapituloOpcion {
 
 const CAPITULOS: CapituloOpcion[] = [
   // ── La teoría (los cuatro de siempre) ──
-  { key: "origen", title: "El Origen", vinetas: VINETAS_ORIGEN,
+  { key: "origen", tituloKey: "metodo.tcmIlus.origen", claveComic: "tcm-origen", vinetas: VINETAS_ORIGEN,
     cover: "/viñetas/tcm/origen/origentcm3.webp" },
-  { key: "yin_yang", title: "El Yin Yang", vinetas: VINETAS_YIN_YANG,
+  { key: "yin_yang", tituloKey: "metodo.tcmIlus.yinYang", claveComic: "tcm-yin-yang", vinetas: VINETAS_YIN_YANG,
     cover: "/viñetas/tcm/yinyang/yinyang.webp" },
   // El pergamino de elementos trae un marco crema decorado alrededor; lo
   // ampliamos un poco para recortarlo y que llene la caja como las demás.
-  { key: "los_elementos", title: "Los Cinco Elementos", vinetas: VINETAS_ELEMENTOS,
+  { key: "los_elementos", tituloKey: "metodo.tcmIlus.elementos", claveComic: "tcm-elementos", vinetas: VINETAS_ELEMENTOS,
     cover: "/viñetas/tcm/elementos/portadaelementos.webp", coverScale: 1.12 },
-  { key: "alma_humana", title: "El Alma Humana", vinetas: VINETAS_ALMA,
+  { key: "alma_humana", tituloKey: "metodo.tcmIlus.alma", claveComic: "tcm-alma", vinetas: VINETAS_ALMA,
     cover: "/viñetas/tcm/alma/alma7.webp" },
 
   // ── Los elementos, uno a uno (los cómics de la estrella) ──
-  { key: "wu_xing", title: "El Wu Xing", vinetas: VINETAS_WU_XING,
+  { key: "wu_xing", tituloKey: "metodo.tcmIlus.wuXing", claveComic: "tcm-wu-xing", vinetas: VINETAS_WU_XING,
     cover: "/recorrido/tcm/elementos/elementos1.webp" },
-  { key: "madera", title: "La Madera", vinetas: vinetasDeElemento("madera"),
+  { key: "madera", tituloKey: "metodo.tcmIlus.madera", claveComic: "tcm-madera", vinetas: vinetasDeElemento("madera"),
     cover: "/recorrido/tcm/madera/madera1.webp" },
-  { key: "fuego", title: "El Fuego", vinetas: vinetasDeElemento("fuego"),
+  { key: "fuego", tituloKey: "metodo.tcmIlus.fuego", claveComic: "tcm-fuego", vinetas: vinetasDeElemento("fuego"),
     cover: "/recorrido/tcm/fuego/fuego1.webp" },
-  { key: "tierra", title: "La Tierra", vinetas: vinetasDeElemento("tierra"),
+  { key: "tierra", tituloKey: "metodo.tcmIlus.tierra", claveComic: "tcm-tierra", vinetas: vinetasDeElemento("tierra"),
     cover: "/recorrido/tcm/tierra/tierra1.webp" },
-  { key: "metal", title: "El Metal", vinetas: vinetasDeElemento("metal"),
+  { key: "metal", tituloKey: "metodo.tcmIlus.metal", claveComic: "tcm-metal", vinetas: vinetasDeElemento("metal"),
     cover: "/recorrido/tcm/metal/metal1.webp" },
-  { key: "agua", title: "El Agua", vinetas: vinetasDeElemento("agua"),
+  { key: "agua", tituloKey: "metodo.tcmIlus.agua", claveComic: "tcm-agua", vinetas: vinetasDeElemento("agua"),
     cover: "/recorrido/tcm/agua/agua1.webp" },
 
   // ── Lo que se rompe y lo que se hace ──
-  { key: "enfermedades", title: "Las Enfermedades", vinetas: VINETAS_ENFERMEDADES,
+  { key: "enfermedades", tituloKey: "metodo.tcmIlus.enfermedades", claveComic: "tcm-enfermedades", vinetas: VINETAS_ENFERMEDADES,
     cover: "/viñetas/tcm/enfermedades/enfermedades1.webp" },
-  { key: "leyes_tao", title: "Las Leyes del Tao", vinetas: LEYES_TAO_VINETAS,
+  { key: "leyes_tao", tituloKey: "metodo.tcmIlus.leyesTao", claveComic: "tcm-leyes-tao", vinetas: LEYES_TAO_VINETAS,
     cover: "/recorrido/tcm/taoismo/tao.webp" },
-  { key: "cocina", title: "Formas de Cocinar", vinetas: VINETAS_COCINA,
-    cover: "/recorrido/tcm/cocina/madera1.webp" },
+  { key: "cocina", tituloKey: "metodo.tcmIlus.cocina", claveComic: "", vinetas: VINETAS_COCINA,
+    vinetasEn: VINETAS_COCINA_EN, cover: "/recorrido/tcm/cocina/madera1.webp" },
 
   // ── El Qigong ──
-  { key: "qigong_historia", title: "La Historia del Qigong", vinetas: HISTORIA_QIGONG_VINETAS,
+  { key: "qigong_historia", tituloKey: "metodo.tcmIlus.qigongHistoria", claveComic: "tcm-qigong-historia", vinetas: HISTORIA_QIGONG_VINETAS,
     cover: "/recorrido/tcm/qigong/historia/mawangdui.webp" },
-  { key: "dao_yin", title: "El Dao Yin", vinetas: DAO_YIN_VINETAS,
+  { key: "dao_yin", tituloKey: "metodo.tcmIlus.daoYin", claveComic: "tcm-dao-yin", vinetas: DAO_YIN_VINETAS,
     cover: "/recorrido/tcm/qigong/daoyin/nombre.webp" },
-  { key: "brocados", title: "Los Brocados", vinetas: BROCADOS_VINETAS,
+  { key: "brocados", tituloKey: "metodo.tcmIlus.brocados", claveComic: "tcm-brocados", vinetas: BROCADOS_VINETAS,
     cover: "/recorrido/tcm/qigong/brocado-1-sostener-cielo.webp" },
-  { key: "animales", title: "Los Cinco Animales", vinetas: CINCO_ANIMALES_VINETAS,
+  { key: "animales", tituloKey: "metodo.tcmIlus.animales", claveComic: "tcm-cinco-animales", vinetas: CINCO_ANIMALES_VINETAS,
     cover: "/recorrido/tcm/cincoanimales/tigre.webp" },
 ];
 
@@ -319,6 +344,7 @@ export function TCMIlustracionesModal({
   onComplete,
 }: TCMIlustracionesModalProps) {
   const t = useT();
+  const { idioma } = useIdioma();
   const [capitulo, setCapitulo] = useState<string | null>(null);
 
   useEffect(() => {
@@ -328,7 +354,12 @@ export function TCMIlustracionesModal({
   const volverAlSelector = () => setCapitulo(null);
   const elegirCapitulo = (key: string) => setCapitulo(key);
 
-  const vinetas = CAPITULOS.find((c) => c.key === capitulo)?.vinetas ?? [];
+  const cap = CAPITULOS.find((c) => c.key === capitulo);
+  // Las viñetas del capítulo abierto, en el idioma activo. El hook se llama
+  // siempre (con clave vacía mientras no hay capítulo elegido, o si ese capítulo
+  // todavía no está traducido): en los dos casos devuelve el español tal cual.
+  const base = (idioma === "en" && cap?.vinetasEn) || cap?.vinetas || [];
+  const vinetas = useComic(cap?.claveComic ?? "", base);
 
   // No mostramos nada hasta que la foto de fondo (tcm.png) y las portadas del
   // selector estén completamente cargadas: mientras tanto se ve solo el loader
@@ -407,8 +438,11 @@ export function TCMIlustracionesModal({
             // las primeras filas cortadas y fuera de alcance.
             justifyContent="flex-start"
             minH={{ base: "auto", md: "100vh" }}
-            overflowY="auto"
+            // `scroll` + barra clásica: en el móvil también se ve que la lista
+            // de capítulos sigue por debajo (ver barraDeScroll.ts).
+            overflowY="scroll"
             overflowX="hidden"
+            sx={barraVisibleSx(tcmTxt)}
           >
             <Flex
               direction="column"
@@ -504,7 +538,7 @@ export function TCMIlustracionesModal({
                         <Box
                           as="img"
                           src={encodeURI(opt.cover)}
-                          alt={opt.title}
+                          alt={t(opt.tituloKey)}
                           loading="eager"
                           position="absolute"
                           inset="0"
@@ -542,7 +576,7 @@ export function TCMIlustracionesModal({
                           textShadow: `0 0 12px ${tcmTxt}cc, 0 0 28px ${tcmTxt}77`,
                         }}
                       >
-                        {opt.title}
+                        {t(opt.tituloKey)}
                       </Text>
                       <Flex
                         align="center"

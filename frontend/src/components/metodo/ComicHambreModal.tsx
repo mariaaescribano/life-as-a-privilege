@@ -4,6 +4,7 @@ import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
 import { AppleLoader } from "./AppleLoader";
 import { NUTRICION_HAMBRE } from "./comicNutricionHambre";
+import { useComic } from "../../i18n/comics";
 import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -19,6 +20,8 @@ interface ComicHambreModalProps {
 
 export function ComicHambreModal({ isOpen, onClose, onContinue }: ComicHambreModalProps) {
   const t = useT();
+  // Sus viñetas en el idioma activo.
+  const vinetas = useComic("nutricion-hambre", NUTRICION_HAMBRE);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -27,7 +30,7 @@ export function ComicHambreModal({ isOpen, onClose, onContinue }: ComicHambreMod
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer
           key={String(isOpen)}
-          vinetas={NUTRICION_HAMBRE}
+          vinetas={vinetas}
           onClose={onClose}
           onComplete={onContinue}
           themeColor={nutricionBg}

@@ -16,6 +16,7 @@ import { DisciplinaFichaBox } from "../../components/metodo/DisciplinaFicha";
 import { CartaAstral3D } from "../../components/metodo/CartaAstral3D/CartaAstral3D";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
+import { ilustracionTraducida } from "../../components/metodo/ilustracionesGaleria.en";
 import {
   CierreCrearCuenta,
   ComicMiniCard,
@@ -45,7 +46,7 @@ import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 const COMICS = ["astro-historia", "astro-planetas", "astro-signos"];
 
 export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplina }) {
-  const { segunIdioma } = useIdioma();
+  const { idioma, segunIdioma } = useIdioma();
   const t = useT();
   // El nombre visible; `d.titulo` solo vale para casar la URL.
   const disciplina = useNombreDisciplinaEnMapa()(d.nom);
@@ -59,9 +60,12 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
 
+  // Los tres cómics, con su título en el idioma activo: aquí no se pintan con
+  // IlustracionCard (que ya lo traduce por su cuenta) sino con ComicMiniCard.
   const comics = useMemo(
-    () => COMICS.map((id) => ILUSTRACIONES.find((i) => i.id === id)).filter(Boolean) as IlustracionEntry[],
-    [],
+    () => (COMICS.map((id) => ILUSTRACIONES.find((i) => i.id === id)).filter(Boolean) as IlustracionEntry[])
+      .map((e) => ilustracionTraducida(e, idioma)),
+    [idioma],
   );
 
   // Astrología no tiene foto de fondo (usa el cielo estrellado), así que solo

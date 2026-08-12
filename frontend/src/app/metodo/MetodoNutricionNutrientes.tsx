@@ -16,8 +16,9 @@ import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
 import {
-  NUTRIENTES_PRINCIPALES, type Nutriente,
+  type Nutriente,
 } from "../../hardCoded/espacio/NutrientesNutricion";
+import { useNutrientesPrincipales } from "../../hardCoded/espacio/useNutrientes";
 
 // Tarjeta de un grupo de nutrientes. Mismo aspecto que las de Fisiología ·
 // Profundiza (fondo de la disciplina difuminado + imagen dentro + título), pero
@@ -49,6 +50,8 @@ function NutrienteBox({ n, visto, onClick }: { n: Nutriente; visto: boolean; onC
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionNutrientes() {
+  // Los seis grupos en el idioma activo (el orden y las fotos, del español).
+  const NUTRIENTES_PRINCIPALES = useNutrientesPrincipales();
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);

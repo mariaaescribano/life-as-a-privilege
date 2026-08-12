@@ -108,7 +108,7 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       {
         titulo: "The doshas",
         items: [
-          "Vata, Pitta and Kapha are the three energies Ayurveda describes. We all have all three, but in different proportions. Understanding that balance is the first step towards understanding what you need.",
+          "Vata, Pitta and Kapha are the three energies Ayurveda describes. We all have all three, but in different proportions. Understanding that balance is the first step toward understanding what you need.",
         ],
       },
       {
@@ -210,7 +210,7 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       puntos: [
         "Understand which molecules food contains and how your body uses them.",
         "Discover why your microbiota matters far beyond digestion.",
-        "Learn to choose your food with judgement, take myths apart and make your own decisions.",
+        "Learn to choose your food with judgment, take myths apart and make your own decisions.",
       ],
     },
     modalDesc:
@@ -231,7 +231,7 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       {
         titulo: "Where nutrients come from",
         items: [
-          "No living thing makes an atom. You will follow the whole journey: from rock to soil, from soil to root, from root to leaf, and from the leaf to the fruit you eat. And you will understand why every colour in a vegetable stands for a different family of molecules.",
+          "No living thing makes an atom. You will follow the whole journey: from rock to soil, from soil to root, from root to leaf, and from the leaf to the fruit you eat. And you will understand why every color in a vegetable stands for a different family of molecules.",
         ],
       },
       {
@@ -290,7 +290,7 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
     videoIntro: {
       titulo: "The great stories that shaped the world.",
       puntos: [
-        "Discover the stories of the civilisations that changed the way we understand the world and ourselves.",
+        "Discover the stories of the civilizations that changed the way we understand the world and ourselves.",
         "Meet the thinkers who asked some of the same questions you do, and discover how they tried to answer them.",
         "Travel through world history via science, philosophy, religion and culture, and understand how we came to think the way we think today.",
       ],

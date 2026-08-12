@@ -43,12 +43,6 @@ const FALLBACK_MODALIDADES: Record<string, Omit<ModalidadInfo, "cursos">> = {
   [culturaNom]:       { nom: culturaNom,       bgColor: culturaBg,   color: culturaTxt,   icon: <CulturaIcon size={{ base: "40px", md: "56px" }} /> },
 };
 
-// Iconos pequeños (16-18px) para los botones dentro del header de la disciplina.
-const EyeIcon = () => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor" style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.38))" }}>
-    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
-  </Box>
-);
 const TestConstitucionIcon = ({ size = "16px" }: { size?: string } = {}) => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" w={size} h={size} viewBox="0 -960 960 960" fill="currentColor">
     <path d="M343.5-743.5Q320-767 320-800t23.5-56.5Q367-880 400-880t56.5 23.5Q480-833 480-800t-23.5 56.5Q433-720 400-720t-56.5-23.5ZM731-269q29-29 29-71t-29-71q-29-29-71-29t-71 29q-29 29-29 71t29 71q29 29 71 29t71-29ZM864-80 756-188q-22 14-46 21t-50 7q-75 0-127.5-52.5T480-340q0-75 52.5-127.5T660-520q75 0 127.5 52.5T840-340q0 26-7 50t-21 46l108 108-56 56Zm-424 0v-121q15 24 35.5 44t44.5 36v41h-80Zm-160 0v-520q-61-5-121-14.5T40-640l20-80q84 23 168.5 31.5T400-680q87 0 171.5-8.5T740-720l20 80q-59 16-119 25.5T520-600v41q-54 35-87 92.5T400-340v10q0 5 1 10h-41v240h-80Z"/>
@@ -113,13 +107,13 @@ export default function CursosModalidad() {
   const headerButtons: { prev?: any; extra?: any; next?: any } = (() => {
     if (moduloId === tcmNomLink) {
       return {
-        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesTCMOpen(true), icon: <EyeIcon /> },
+        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesTCMOpen(true) },
       };
     }
     if (moduloId === ayurvedaNomLink) {
       return {
         prev: { label: t("aprendizaje.btn.testDoshas"),    onClick: () => navigate("/aprendizaje/test-doshas"),    icon: <DoshasIcon /> },
-        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesHinduismoOpen(true),    icon: <EyeIcon /> },
+        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesHinduismoOpen(true) },
       };
     }
     if (moduloId === astrologiaNom) {
@@ -129,7 +123,7 @@ export default function CursosModalidad() {
           onClick: () => window.open("https://docs.google.com/document/d/1OWQUl5Nz2AgzDow4O1-PQKoakzDwEo9KwY9qOk6QKWg/edit?usp=sharing", "_blank"),
           icon: <CartasIcon />,
         },
-        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesAstroOpen(true), icon: <EyeIcon /> },
+        next: { label: t("aprendizaje.btn.ilustraciones"), onClick: () => setIlustracionesAstroOpen(true) },
       };
     }
     if (moduloId === nutricionNomLink) {

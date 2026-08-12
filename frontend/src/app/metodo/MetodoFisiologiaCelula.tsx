@@ -3,16 +3,21 @@ import { useNavigate } from "react-router-dom";
 import ConstruirFisio from "../../components/metodo/ConstruirFisio";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { CELULAS_ORGANOS } from "../../components/metodo/comicCelulasOrganos";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 
 const PRE = "/recorrido/fisiologia/pre";
 
 // Nivel 2 · La Vida — Célula: reúne las estructuras en una célula viva.
 export default function MetodoFisiologiaCelula() {
+  const t = useT();
   const navigate = useNavigate();
   // Cómic «De una célula a un órgano»: se intercala al pulsar «Órganos →», antes
   // de entrar a «Todas tus células».
   const [comicOpen, setComicOpen] = useState(false);
+  // Sus viñetas en el idioma activo.
+  const comicVinetas = useComic("fisiologia-celulas-organos", CELULAS_ORGANOS);
 
   return (
     <>
@@ -51,8 +56,8 @@ export default function MetodoFisiologiaCelula() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={() => navigate("/metodo/fisiologia/todas-tus-celulas")}
-        vinetas={CELULAS_ORGANOS}
-        continueLabel="Órganos"
+        vinetas={comicVinetas}
+        continueLabel={t("fisiologia.organos.titulo")}
         themeColor={fisiologiaTxt}
         disciplinaBgImage="/img/fondos/fisio.webp"
         disciplinaBgColor={fisiologiaBg}

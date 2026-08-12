@@ -12,6 +12,8 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { MEDITACION_CEREBRO } from "../../components/metodo/comicMeditacion";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
@@ -175,6 +177,7 @@ function NivelBox({ nivel, locked, done, onEnter }: { nivel: Nivel; locked: bool
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaNiveles() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // Flags de progreso (metodo_fisiologia.data) que desbloquean cada nivel.
@@ -183,6 +186,8 @@ export default function MetodoFisiologiaNiveles() {
   // interior →», antes de entrar en la práctica.
   const [comicOpen, setComicOpen] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Las viñetas del cómic de la meditación, en el idioma activo.
+  const meditacionVinetas = useComic("fisiologia-meditacion", MEDITACION_CEREBRO);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -278,11 +283,11 @@ export default function MetodoFisiologiaNiveles() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={() => navigate("/metodo/fisiologia/sonrisa")}
-        vinetas={MEDITACION_CEREBRO}
+        vinetas={meditacionVinetas}
         continueLabel={
           <>
-            <Box as="span" display={{ base: "none", md: "inline" }}>La sonrisa interior</Box>
-            <Box as="span" display={{ base: "inline", md: "none" }}>Sonrisa</Box>
+            <Box as="span" display={{ base: "none", md: "inline" }}>{t("fisiologia.sonrisa.titulo")}</Box>
+            <Box as="span" display={{ base: "inline", md: "none" }}>{t("fisiologia.sonrisa.corto")}</Box>
           </>
         }
         themeColor={fisiologiaTxt}

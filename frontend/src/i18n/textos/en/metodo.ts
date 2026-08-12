@@ -47,6 +47,36 @@ export const metodo = {
   // ── Courses for the discipline ─────────────────────────────────────────
   "metodo.cursosOrientativos": "{disciplina} courses to guide you",
   "metodo.cursosPronto": "The {disciplina} courses will be here soon.",
+  "metodo.cursosIntro": "If you want to go deeper into {disciplina}, these courses walk you through it step by step.",
+
+  // ── «Create your own notes» · the shared screen ────────────────────────
+  // Labels only. The chapters of the notebook (title and summary) come from
+  // each discipline's `libroApuntes…` and are still in Spanish: the whole PDF
+  // is composed in Spanish for now.
+  "metodo.apuntes.portada": "The cover",
+  "metodo.apuntes.queTeLlevas": "What you're taking",
+  "metodo.apuntes.todo": "All",
+  "metodo.apuntes.nada": "None",
+  "metodo.apuntes.foto": "image",
+  "metodo.apuntes.fotos": "images",
+  "metodo.apuntes.comoLoQuieres": "How you want it",
+  "metodo.apuntes.conFotos": "With illustrations",
+  "metodo.apuntes.conFotosPie": "as it looks on the web",
+  "metodo.apuntes.soloTexto": "Text only",
+  "metodo.apuntes.soloTextoPie": "light on your phone",
+  "metodo.apuntes.sinMarcar": "You haven't picked anything yet: choose above what you want to take with you.",
+  "metodo.apuntes.capitulo": "chapter",
+  "metodo.apuntes.capitulos": "chapters",
+  "metodo.apuntes.nIlustraciones": "{n} illustrations",
+  "metodo.apuntes.sinIlustraciones": "no illustrations",
+  "metodo.apuntes.unos": "about {peso}",
+  "metodo.apuntes.preparandoFotos": "Getting the illustrations ready… {hechas}/{total}",
+  "metodo.apuntes.componiendo": "Putting the notebook together… {hechas}/{total}",
+  "metodo.apuntes.error":
+    "We couldn't put the PDF together. Try again; if it keeps failing, try it without illustrations.",
+  "metodo.apuntes.descargar": "Download my notes",
+  "metodo.apuntes.verlo": "See it first",
+  "metodo.apuntes.cerrar": "Close",
 
   // ── Buttons that lead from a comic to the next step ────────────────────
   "metodo.irA": "Go to {destino}",
@@ -74,9 +104,33 @@ export const metodo = {
   "metodo.nutri.paso.dia": "Design your day",
   "metodo.nutri.paso.macros": "Count what you eat",
   "metodo.nutri.paso.mitos": "Questions and myths",
+  "metodo.nutri.mitos.intro":
+    "These are some of the questions and myths that come up most. Tap each one to find out what the science actually says.",
   "metodo.nutri.paso.origen": "Where do they come from?",
   "metodo.nutri.paso.cursos": "Courses",
   "metodo.nutri.paso.biblioteca": "Library",
+  "metodo.nutri.hambreCierre":
+    "You have seen it for yourself: you rebuild yourself with what you eat. How do you choose to rebuild yourself today?",
+
+  // ── Nutrition · «Where do the nutrients come from?» ────────────────────
+  "metodo.nutri.origen.ciclos.titulo": "The great cycles of nature",
+  "metodo.nutri.origen.ciclos.resumen":
+    "Water, carbon, oxygen, nitrogen and phosphorus going round and round: your atoms are on loan.",
+  "metodo.nutri.origen.tierra.titulo": "The soil and the root",
+  "metodo.nutri.origen.tierra.resumen":
+    "How a mineral gets out of a rock, dissolves into the soil and enters a plant.",
+  "metodo.nutri.origen.planta.titulo": "Inside a plant",
+  "metodo.nutri.origen.planta.resumen":
+    "Two sets of pipes, a wall of fiber and a pantry. And water climbing with no heart to pump it.",
+  "metodo.nutri.origen.hoja.titulo": "Inside a leaf",
+  "metodo.nutri.origen.hoja.resumen":
+    "The factory: air, water and light go in; out come food and the oxygen you breathe.",
+  "metodo.nutri.origen.fruta.titulo": "Fruit, vegetables and their colors",
+  "metodo.nutri.origen.fruta.resumen":
+    "From flower to fruit, the order to ripen, and what each color does.",
+  "metodo.nutri.origen.animal.titulo": "When the nutrient goes through an animal",
+  "metodo.nutri.origen.animal.resumen":
+    "The other branch: the food chain, what an animal concentrates, B12, and the omega-3 that belonged to an alga.",
 
   // ── Calorie calculator (choice buttons) ────────────────────────────────
   "metodo.nutri.act.sentada": "Mostly sitting",
@@ -311,6 +365,201 @@ export const metodo = {
   "metodo.dia.proteina": "Protein",
   "metodo.dia.grasa": "Fat",
 
+  // ── Chinese Medicine · page texts (not part of any comic) ──────────────
+  // Lao Tzu and the Tao Te Ching keep their usual English spelling (the one the
+  // reader will find in any edition), not the Spanish «Lao-Tse / Tao Te King».
+  "metodo.tcm.tao.titulo": "Taoism",
+  "metodo.tcm.tao.citaApertura": "«The Tao that can be named is not the eternal Tao.»",
+  "metodo.tcm.tao.citaAperturaAutor": "— Lao Tzu",
+  "metodo.tcm.tao.intro1":
+    "Taoism isn't a religion: it's a way of looking. Lao Tzu called the Tao the «way», the natural order that runs everything there is. Out of that way of looking comes everything you've already been through: the Qi that connects us, the Yin and Yang that balance each other, the Five Elements that generate and control one another.",
+  "metodo.tcm.tao.intro2":
+    "They aren't rules to be obeyed, they're how nature works. You can ignore them, the same way you can ignore gravity: your body is the one that pays the difference.",
+  "metodo.tcm.tao.cierreTitulo": "So then, what is healing?",
+  "metodo.tcm.tao.cierre":
+    "Taoism doesn't ask you to be better than you were yesterday, but to stop going against yourself. Health, seen this way, isn't a prize: it's what happens when you stop getting in your own way.",
+  "metodo.tcm.tao.cita":
+    "«Man follows the earth, the earth follows heaven, heaven follows the Tao, and the Tao follows itself.»",
+  "metodo.tcm.tao.citaAutor": "— Lao Tzu, Tao Te Ching",
+  "metodo.tcm.qigong.intro": "Qi (氣) is the energy that circulates through you. Gong (功) is steady work.",
+  "metodo.tcm.qigong.nota":
+    "Qigong is a health practice, not a treatment: it goes alongside, it doesn't replace. If you're pregnant, or you have uncontrolled high blood pressure, a hernia, vertigo or a recent injury, adapt the postures with someone who knows how before doing them on your own.",
+  "metodo.tcm.qigong.titulo": "Qigong",
+  "metodo.tcm.qigong.daoYinLinea":
+    "The way the feminine energy of the Tao (God) is taken into a human being",
+  "metodo.tcm.qigong.reg.cuerpo": "Regulating the body",
+  "metodo.tcm.qigong.reg.cuerpoTexto":
+    "Feet hip-width apart, knees soft, tailbone down, crown up. Before you move anything, set yourself in place.",
+  "metodo.tcm.qigong.reg.respiracion": "Regulating the breath",
+  "metodo.tcm.qigong.reg.respiracionTexto":
+    "Through the nose, down to the belly, slow and quiet. Don't force it: stay with it until it lengthens on its own.",
+  "metodo.tcm.qigong.reg.mente": "Regulating the mind",
+  "metodo.tcm.qigong.reg.menteTexto":
+    "Your attention inside the movement, not on the shopping list. When the three of them melt into one, that is the practice (三調合一).",
+  "metodo.tcm.qigong.queEs1":
+    "In China it isn't a trend: it's the fourth branch of their medicine, alongside acupuncture, herbal medicine and dietetics. People practice it in the parks at seven in the morning.",
+  "metodo.tcm.qigong.queEs2":
+    "The movement is slow on purpose: slowness forces you to hold, and holding is what moves the Qi.",
+  "metodo.tcm.qigong.queEs3": "It isn't after strength, it's after circulation. It doesn't add anything to you: it unblocks you.",
+
+  // ── Chinese Medicine · Your daily kitchen ──────────────────────────────
+  "metodo.tcm.cocina.titulo": "Your daily kitchen",
+  "metodo.tcm.cocina.cita":
+    "«The excellent physician first treats illness through food; only when food is not enough does he use medicine.»",
+  "metodo.tcm.cocina.citaAutor": "— Sun Simiao,",
+  "metodo.tcm.cocina.citaObra": "Qianjin Yaofang",
+  "metodo.tcm.cocina.gestoHoy": "One thing to do today",
+  "metodo.tcm.cocina.dameOtro": "Give me another",
+  "metodo.tcm.cocina.hechoHoy": "Done today",
+  "metodo.tcm.cocina.loHagoHoy": "I'll do it today",
+  "metodo.tcm.cocina.formas": "Ways of cooking",
+  "metodo.tcm.cocina.aviso":
+    "All of this is for education and self-care: it doesn't replace the assessment of a qualified professional or medical treatment.",
+
+  // ── Chinese Medicine · the page of each element ────────────────────────
+  "metodo.tcm.el.elemento": "The element",
+  "metodo.tcm.el.rige": "What it governs",
+  "metodo.tcm.el.funciones": "Functions",
+  "metodo.tcm.el.equilibrio": "In balance",
+  "metodo.tcm.el.exceso": "In excess",
+  "metodo.tcm.el.deficiencia": "In deficiency",
+  "metodo.tcm.el.desequilibrio": "Signs of imbalance",
+  "metodo.tcm.el.cuidarlo": "How to care for it",
+  "metodo.tcm.el.guia": "Practical guide",
+  "metodo.tcm.el.test": "How is this element doing in you?",
+  "metodo.tcm.el.guiaNutricion": "Food",
+  "metodo.tcm.el.guiaEvitar": "Avoid",
+  "metodo.tcm.el.guiaEstiloDeVida": "Lifestyle",
+  "metodo.tcm.el.guiaEjercicio": "Exercise",
+  "metodo.tcm.el.guiaTerapia": "Therapy",
+  "metodo.tcm.el.guiaDescanso": "Best time to rest",
+  "metodo.tcm.el.laEstrella": "The star",
+  "metodo.tcm.el.atras": "‹ Back",
+  "metodo.tcm.el.seguir": "Next ›",
+  "metodo.tcm.el.heLeido": "Read ✓",
+  "metodo.tcm.el.respondeTest": "Answer the mini-test to finish",
+
+  // ── Chinese Medicine · step names (the buttons out of a comic) ──────────
+  "metodo.tcm.paso.elementos": "The 5 elements",
+  "metodo.tcm.paso.diagnostico": "Final diagnosis",
+  "metodo.tcm.paso.taoismo": "Taoism",
+  "metodo.tcm.paso.cocina": "Your kitchen",
+  "metodo.tcm.paso.qigong": "Qigong",
+  "metodo.tcm.paso.lengua": "Read your tongue",
+  "metodo.tcm.paso.cursos": "Courses",
+  "metodo.tcm.paso.cincoElementos": "The Five Elements",
+  "metodo.tcm.paso.ciclos": "The cycles",
+  "metodo.tcm.paso.tuLengua": "Your tongue",
+  "metodo.tcm.paso.apuntes": "Create your notes",
+  "metodo.tcm.paso.apuntesCorto": "Your notes",
+
+  // ── Chinese Medicine · The Five Elements (the star, step 2) ─────────────
+  "metodo.tcm.elementos.queSon": "What are the Five Elements?",
+  "metodo.tcm.elementos.orden":
+    "The elements open in order (Wood → Fire → Earth → Metal → Water). Reading one marks it with a ✓.",
+  "metodo.tcm.elementos.testsPendientes": "Answer the tests of all five elements to continue",
+
+  // ── Chinese Medicine · The cycles (step 3) ─────────────────────────────
+  "metodo.tcm.ciclos.titulo": "The Cycles",
+  "metodo.tcm.ciclos.intro":
+    "The Five Elements don't live in isolation: they relate to each other in two cycles. When they flow, there is balance; when they are disturbed, imbalance shows up. Tap each arrow to discover the relationship.",
+  "metodo.tcm.ciclos.nota":
+    "In the generating cycle the energy moves around the perimeter (Wood → Fire → Earth → Metal → Water). In the controlling cycle it crosses the star: each element restrains the one facing it to keep the whole in harmony.",
+  "metodo.tcm.ciclos.flechitas": "Tap every arrow to discover each relationship",
+  "metodo.tcm.ciclos.sheng": "Generating cycle",
+  "metodo.tcm.ciclos.ke": "Controlling cycle",
+  "metodo.tcm.ciclos.genera": "generates",
+  "metodo.tcm.ciclos.controla": "controls",
+
+  // ── Chinese Medicine · Final diagnosis (step 4) ─────────────────────────
+  "metodo.tcm.diag.cita":
+    "«Before you heal someone, ask him if he's willing to give up the things that make him sick.»",
+  "metodo.tcm.diag.citaAutor": "— Hippocrates",
+  "metodo.tcm.diag.iluminados": "The elements that light up are the ones asking for your attention.",
+  "metodo.tcm.diag.barras":
+    "Each element pulls to one side: up if it has energy to spare, down if it's short. The closer to the line, the more in balance.",
+  "metodo.tcm.diag.repasa":
+    "Go through each relationship calmly. They all matter to you, because they're all part of you.",
+  "metodo.tcm.diag.aviso":
+    "This assessment is for learning and self-knowledge. It is not a clinical diagnosis and does not replace the judgment of a qualified professional.",
+  "metodo.tcm.diag.sinDatos": "no data",
+  "metodo.tcm.diag.sinDatosSuficientes": "not enough data yet",
+
+  // ── Chinese Medicine · Tongue diagnosis (step 5) ────────────────────────
+  "metodo.tcm.lengua.titulo": "Tongue diagnosis",
+  "metodo.tcm.lengua.intro":
+    "The tongue is the mirror of the organs. You read it in layers: the color, the shape, the movement, the coating, the moisture and the small details. Learn to recognize each one, then look at your own.",
+  "metodo.tcm.lengua.comoMirar": "How to look at your tongue",
+  "metodo.tcm.lengua.mirar1": "In the morning, before brushing your teeth and before eating or drinking.",
+  "metodo.tcm.lengua.mirar2": "In natural light whenever you can.",
+  "metodo.tcm.lengua.mirar3": "Stick your tongue out relaxed, without straining it.",
+  "metodo.tcm.lengua.mirar4": "Notice where the change shows up too: each area speaks for an organ.",
+  "metodo.tcm.lengua.mapa": "The map of the tongue",
+  "metodo.tcm.lengua.mapaAlt": "Map of the tongue",
+  "metodo.tcm.lengua.mapaPie": "The map of the tongue: each area corresponds to certain organs.",
+  "metodo.tcm.lengua.mapaTexto":
+    "It isn't only what changes that matters, but where on the tongue it shows up: each area relates to certain organs.",
+  "metodo.tcm.lengua.grupoForma": "The body · shape",
+  "metodo.tcm.lengua.grupoMovimiento": "Movement",
+  "metodo.tcm.lengua.grupoSuperficie": "The surface · moisture and details",
+  "metodo.tcm.lengua.sana": "· healthy",
+  "metodo.tcm.lengua.aviso":
+    "Educational material. Tongue diagnosis is a tool of Traditional Chinese Medicine; it is not a medical diagnosis and does not replace the judgment of a qualified health professional.",
+
+  // ── Chinese Medicine · Read your tongue (step 6) ────────────────────────
+  "metodo.tcm.leer.intro":
+    "Now that you know how to read a tongue, look at your own. Stand in front of a mirror in good natural light, in the morning and before eating or drinking, and stick your tongue out without straining.",
+  "metodo.tcm.leer.rotulo": "Read your own tongue",
+  "metodo.tcm.leer.elige": "Pick whatever looks most like yours in each section. There are no right answers.",
+  "metodo.tcm.leer.hoy": "Your tongue today",
+  "metodo.tcm.leer.sano":
+    "Your tongue reflects a good balance: the Blood nourishes, the Qi circulates and Yin and Yang hold each other up. Take care of it with what you already know from your journey, and come back to look every now and then: the tongue changes along with you.",
+  "metodo.tcm.leer.sugiere":
+    "This is what your tongue suggests today and how you can support your balance. The more signs point to the same pattern, the more present it is.",
+  "metodo.tcm.leer.comoEquilibrarlo": "How to bring it back into balance",
+  "metodo.tcm.leer.senal": "sign",
+  "metodo.tcm.leer.senales": "signs",
+  "metodo.tcm.leer.vuelve":
+    "Look at your tongue again in a few days and compare: that's how you get to see, little by little, how the care you take is bringing you back into balance.",
+  "metodo.tcm.leer.aviso":
+    "Reading your tongue is a self-knowledge tool for educational purposes. It is not a clinical diagnosis and does not replace the judgment of a qualified professional.",
+
+  // ── Chinese Medicine · Create your notes (step 11) ──────────────────────
+  "metodo.tcm.apuntes.intro1":
+    "You've walked the whole of Chinese Medicine. Now decide what you take with you: check whatever you want —your diagnosis, the reading of your tongue, the kitchens, the laws of the Tao, the practices— and we'll put it together as a notebook you can read away from a screen.",
+  "metodo.tcm.apuntes.intro2":
+    "It's made right here, in your browser. You can come back and put it together again as many times as you like.",
+
+  // ── Chinese Medicine · chapters of its Illustrations ───────────────────
+  "metodo.tcmIlus.origen": "The Origin",
+  "metodo.tcmIlus.yinYang": "Yin and Yang",
+  "metodo.tcmIlus.elementos": "The Five Elements",
+  "metodo.tcmIlus.alma": "The Human Soul",
+  "metodo.tcmIlus.wuXing": "The Wu Xing",
+  "metodo.tcmIlus.madera": "Wood",
+  "metodo.tcmIlus.fuego": "Fire",
+  "metodo.tcmIlus.tierra": "Earth",
+  "metodo.tcmIlus.metal": "Metal",
+  "metodo.tcmIlus.agua": "Water",
+  "metodo.tcmIlus.enfermedades": "Illness",
+  "metodo.tcmIlus.leyesTao": "The Laws of the Tao",
+  "metodo.tcmIlus.cocina": "Ways of Cooking",
+  "metodo.tcmIlus.qigongHistoria": "The History of Qigong",
+  "metodo.tcmIlus.daoYin": "Dao Yin",
+  "metodo.tcmIlus.brocados": "The Brocades",
+  "metodo.tcmIlus.animales": "The Five Animals",
+
+  // ── Ayurveda · chapters of its Illustrations ───────────────────────────
+  "metodo.ayurIlus.origen": "1. The Origin",
+  "metodo.ayurIlus.elementos": "2. The Elements",
+  "metodo.ayurIlus.doshas": "3. The Doshas",
+
+  // ── Ayurveda · step names (the buttons that come out of a comic) ────────
+  // Sanskrit without diacritics: the PDF font doesn't draw «ṣ» or «ā».
+  "metodo.ayur.paso.descubrete": "Discover yourself",
+  "metodo.ayur.paso.doshas": "Doshas",
+  "metodo.ayur.paso.pranayama": "Pranayama",
+
   // ── Ayurveda · «Build your balanced day» ───────────────────────────────
   "metodo.ayurDia.titulo": "Build your balanced day",
   "metodo.ayurDia.intro":
@@ -411,6 +660,11 @@ export const metodo = {
   "fisiologia.lasCelulas.titulo": "The cells of your organs",
   "fisiologia.sistemas.titulo": "Systems",
   "fisiologia.organismo.titulo": "The body",
+  "fisiologia.organos.titulo": "Organs",
+  "fisiologia.niveles.titulo": "Levels",
+  "fisiologia.sonrisa.titulo": "The inner smile",
+  "fisiologia.sonrisa.corto": "Smile",
+  "fisiologia.tablaFrase": "You will never look at the periodic table the same way again...",
 
   "metodo.pago.ordinal.1": "First discipline",
   "metodo.pago.ordinal.2": "Second discipline",

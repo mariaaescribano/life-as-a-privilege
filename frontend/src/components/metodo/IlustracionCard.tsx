@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import type { IlustracionEntry } from "./ilustracionesGaleria";
+import { useIlustracionTraducida } from "./ilustracionesGaleria.en";
 import { StarsLayer } from "../global/StarsLayer";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -33,7 +34,7 @@ const useReveal = (threshold = 0.15) => {
 };
 
 export function IlustracionCard({
-  entry,
+  entry: entrada,
   i,
   onOpen,
   columnas = 4,
@@ -46,6 +47,10 @@ export function IlustracionCard({
   columnas?: number;
 }) {
   const t = useT();
+  // El título y el rótulo de disciplina, en el idioma activo. Se traduce AQUÍ
+  // porque por esta tarjeta pasan las dos galerías (la pública y la de cada
+  // presentación) y porque el array se calcula al importar el módulo.
+  const entry = useIlustracionTraducida(entrada);
   const [coverFailed, setCoverFailed] = useState(false);
   const { ref, visible } = useReveal();
   // Color del texto/borde de la tarjeta: `cardColor` si la entrada lo define

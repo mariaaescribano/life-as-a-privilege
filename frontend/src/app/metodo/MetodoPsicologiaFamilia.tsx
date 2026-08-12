@@ -32,6 +32,8 @@ import { useMapaFamilia } from "../../hooks/useMapaFamilia";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_HERENCIA } from "../../components/metodo/comicHerencia";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import {
   simboloSrc,
   SIMBOLOS_FAMILIA,
@@ -62,6 +64,7 @@ const PAPEL = "#fbf4e8";          // crema claro
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaFamilia() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -71,6 +74,8 @@ export default function MetodoPsicologiaFamilia() {
   const [abiertoId, setAbiertoId] = useState<string | null>(null);
   // Cómic «Lo que se hereda», intercalado antes de pasar al Genograma.
   const [comicOpen, setComicOpen] = useState(false);
+  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
+  const comicVinetas = useComic("psicologia-herencia", COMIC_HERENCIA);
 
   if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
@@ -170,8 +175,8 @@ export default function MetodoPsicologiaFamilia() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/genograma`); }}
-        vinetas={COMIC_HERENCIA}
-        continueLabel="Continuar"
+        vinetas={comicVinetas}
+        continueLabel={t("comun.continuar")}
         botonNitido
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"

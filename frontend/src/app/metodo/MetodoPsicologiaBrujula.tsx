@@ -20,6 +20,8 @@ import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_SINTESIS } from "../../components/metodo/comicSintesis";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import { Reveal } from "../../components/global/Reveal";
 import { type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -44,6 +46,7 @@ const PAPEL = "#fbf4e8";          // crema claro
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaBrujula() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -54,6 +57,8 @@ export default function MetodoPsicologiaBrujula() {
   // Cómic «El problema nunca es el problema»: se intercala antes de la Síntesis.
   // Se puede saltar.
   const [comicOpen, setComicOpen] = useState(false);
+  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
+  const comicVinetas = useComic("psicologia-sintesis", COMIC_SINTESIS);
   const dataRef = useRef<LineaDeVidaData>({});
 
   const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -238,8 +243,8 @@ export default function MetodoPsicologiaBrujula() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/sintesis`); }}
-        vinetas={COMIC_SINTESIS}
-        continueLabel="Continuar"
+        vinetas={comicVinetas}
+        continueLabel={t("comun.continuar")}
         botonNitido
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"

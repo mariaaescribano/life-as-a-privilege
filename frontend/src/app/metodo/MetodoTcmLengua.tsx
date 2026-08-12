@@ -16,9 +16,11 @@ import { FotoAmpliable } from "../../components/global/FotoAmpliable";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
-  LENGUA_DIMENSIONES, LENGUA_ZONAS,
-  type LenguaDim, type OpcionLengua,
+  LENGUA_DIMENSIONES,
+  type DimensionLengua, type LenguaDim, type OpcionLengua,
 } from "../../components/metodo/tcmLenguaContenido";
+import { useLenguaDimensiones, useLenguaZonas } from "../../components/metodo/tcmLenguaEn";
+import { useT, type ClaveTexto } from "../../i18n";
 
 const MAPA_LENGUA = "/recorrido/tcm/lengua/mapalengua.webp";
 
@@ -31,49 +33,62 @@ const MAPA_LENGUA = "/recorrido/tcm/lengua/mapalengua.webp";
 // de tcmLenguaContenido cambiara en el futuro), NO revientan el import — devuelven
 // undefined/[] y las opciones que falten se filtran al montar los grupos. Así la
 // página nunca queda en blanco por un desajuste del contenido.
-const dimOf = (d: LenguaDim) => LENGUA_DIMENSIONES.find((x) => x.dim === d);
-const opOf = (d: LenguaDim, key: string): OpcionLengua | undefined => dimOf(d)?.opciones.find((o) => o.key === key);
-const sin = (d: LenguaDim, keys: string[]) => (dimOf(d)?.opciones ?? []).filter((o) => !keys.includes(o.key));
 // Junta opciones (algunas pueden venir undefined si una key ya no existe) y
 // descarta las que falten.
 const juntar = (...ops: (OpcionLengua | undefined)[]): OpcionLengua[] => ops.filter(Boolean) as OpcionLengua[];
 
 interface GrupoLengua { titulo: string; subtitulo: string; opciones: OpcionLengua[]; }
-const GRUPOS_LENGUA: GrupoLengua[] = [
-  // El color (6)
-  { titulo: dimOf("color")?.titulo ?? "", subtitulo: dimOf("color")?.subtitulo ?? "", opciones: dimOf("color")?.opciones ?? [] },
-  // El cuerpo · la forma (6): forma ×5 + la lengua estable (referencia de movimiento)
-  { titulo: "El cuerpo · la forma", subtitulo: dimOf("forma")?.subtitulo ?? "",
-    opciones: juntar(...(dimOf("forma")?.opciones ?? []), opOf("movimiento", "normal")) },
-  // El cuerpo · el movimiento (3)
-  { titulo: "El movimiento", subtitulo: dimOf("movimiento")?.subtitulo ?? "",
-    opciones: sin("movimiento", ["normal"]) },
-  // La superficie · la saburra (6)
-  { titulo: dimOf("saburra")?.titulo ?? "", subtitulo: dimOf("saburra")?.subtitulo ?? "",
-    opciones: sin("saburra", ["pelada"]) },
-  // La superficie · humedad y detalles (6): saburra pelada + humedad ×4 + lengua sin puntos
-  { titulo: "La superficie · humedad y detalles", subtitulo: dimOf("humedad")?.subtitulo ?? "",
-    opciones: juntar(opOf("saburra", "pelada"), ...(dimOf("humedad")?.opciones ?? []), opOf("puntos", "normal")) },
-  // Puntos y venas (3)
-  { titulo: dimOf("puntos")?.titulo ?? "", subtitulo: dimOf("puntos")?.subtitulo ?? "",
-    opciones: sin("puntos", ["normal"]) },
-];
+
+// Los grupos se montan AL PINTAR, sobre las capas ya traducidas: si se armaran
+// al importar el módulo se quedarían con el texto del idioma con el que arrancó
+// la página. Los tres títulos que no son el de una capa entera (mezclan dos)
+// salen del diccionario.
+function gruposLengua(capas: DimensionLengua[], t: (k: ClaveTexto) => string): GrupoLengua[] {
+  const dimOf = (d: LenguaDim) => capas.find((x) => x.dim === d);
+  const opOf = (d: LenguaDim, key: string): OpcionLengua | undefined => dimOf(d)?.opciones.find((o) => o.key === key);
+  const sin = (d: LenguaDim, keys: string[]) => (dimOf(d)?.opciones ?? []).filter((o) => !keys.includes(o.key));
+  return [
+    // El color (6)
+    { titulo: dimOf("color")?.titulo ?? "", subtitulo: dimOf("color")?.subtitulo ?? "", opciones: dimOf("color")?.opciones ?? [] },
+    // El cuerpo · la forma (6): forma ×5 + la lengua estable (referencia de movimiento)
+    { titulo: t("metodo.tcm.lengua.grupoForma"), subtitulo: dimOf("forma")?.subtitulo ?? "",
+      opciones: juntar(...(dimOf("forma")?.opciones ?? []), opOf("movimiento", "normal")) },
+    // El cuerpo · el movimiento (3)
+    { titulo: t("metodo.tcm.lengua.grupoMovimiento"), subtitulo: dimOf("movimiento")?.subtitulo ?? "",
+      opciones: sin("movimiento", ["normal"]) },
+    // La superficie · la saburra (6)
+    { titulo: dimOf("saburra")?.titulo ?? "", subtitulo: dimOf("saburra")?.subtitulo ?? "",
+      opciones: sin("saburra", ["pelada"]) },
+    // La superficie · humedad y detalles (6): saburra pelada + humedad ×4 + lengua sin puntos
+    { titulo: t("metodo.tcm.lengua.grupoSuperficie"), subtitulo: dimOf("humedad")?.subtitulo ?? "",
+      opciones: juntar(opOf("saburra", "pelada"), ...(dimOf("humedad")?.opciones ?? []), opOf("puntos", "normal")) },
+    // Puntos y venas (3)
+    { titulo: dimOf("puntos")?.titulo ?? "", subtitulo: dimOf("puntos")?.subtitulo ?? "",
+      opciones: sin("puntos", ["normal"]) },
+  ];
+}
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 // Consejos prácticos de observación (Módulo "el método"): breves, no teoría.
-const COMO_MIRAR = [
-  "Por la mañana, antes de lavarte los dientes y antes de comer o beber.",
-  "Con luz natural siempre que puedas.",
-  "Saca la lengua relajada y sin forzarla.",
-  "Fíjate también en dónde aparece el cambio: cada zona habla de un órgano.",
+const COMO_MIRAR: ClaveTexto[] = [
+  "metodo.tcm.lengua.mirar1",
+  "metodo.tcm.lengua.mirar2",
+  "metodo.tcm.lengua.mirar3",
+  "metodo.tcm.lengua.mirar4",
 ];
 
 export default function MetodoTcmLengua() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+  // Las capas de la lengua y las zonas del mapa, en el idioma activo (las fotos
+  // y el orden siguen saliendo del español).
+  const capas = useLenguaDimensiones();
+  const zonas = useLenguaZonas();
+  const grupos = gruposLengua(capas, t);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -115,37 +130,36 @@ export default function MetodoTcmLengua() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="El diagnóstico de la lengua"
+            title={t("metodo.tcm.lengua.titulo")}
             pageLabel="5/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Diagnóstico", onClick: () => navigate("/metodo/tcm/diagnostico") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.diagnostico")}`, onClick: () => navigate("/metodo/tcm/diagnostico") }}
             extra={ilustracionesBtn}
-            next={{ label: "Lee tu lengua →", onClick: () => navigate("/metodo/tcm/lengua/leer") }}
+            next={{ label: `${t("metodo.tcm.paso.lengua")} →`, onClick: () => navigate("/metodo/tcm/lengua/leer") }}
           />
           </Reveal>
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="680px">
-            La lengua es el espejo de las vísceras. Se lee por capas: el color, la forma, el movimiento,
-            la saburra, la humedad y los pequeños detalles. Aprende a reconocer cada una y luego mira la tuya.
+            {t("metodo.tcm.lengua.intro")}
           </Text>
           </Reveal>
 
           {/* ── Cómo mirar (práctico) ── */}
           <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
-          <Panel titulo="Cómo mirar tu lengua" color={tcmTxt}>
+          <Panel titulo={t("metodo.tcm.lengua.comoMirar")} color={tcmTxt}>
             <Flex direction="column" gap={2.5}>
-              {COMO_MIRAR.map((t, i) => (
-                <Flex key={i} gap={2.5} align="flex-start">
+              {COMO_MIRAR.map((clave) => (
+                <Flex key={clave} gap={2.5} align="flex-start">
                   <Box flexShrink={0} mt={{ base: "9px", md: "11px" }} w="5px" h="5px" borderRadius="full"
                        bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
                   <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                        style={{ textShadow: INK_SHADOW }}>{t}</Text>
+                        style={{ textShadow: INK_SHADOW }}>{t(clave)}</Text>
                 </Flex>
               ))}
             </Flex>
@@ -154,7 +168,7 @@ export default function MetodoTcmLengua() {
 
           {/* ── Mapa de las zonas (primero: foto a la izquierda + zonas a la derecha) ── */}
           <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
-          <Panel titulo="El mapa de la lengua" color={tcmTxt}>
+          <Panel titulo={t("metodo.tcm.lengua.mapa")} color={tcmTxt}>
             <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align={{ base: "stretch", md: "flex-start" }}>
               {/* Los rótulos del mapa son diminutos a este tamaño: se puede
                   pulsar la foto para verla a pantalla completa. */}
@@ -162,19 +176,18 @@ export default function MetodoTcmLengua() {
                    border={`1px solid ${tcmTxt}55`} boxShadow={`0 0 18px ${tcmTxt}33`}>
                 <FotoAmpliable
                   src={MAPA_LENGUA}
-                  alt="Mapa de la lengua"
+                  alt={t("metodo.tcm.lengua.mapaAlt")}
                   acento={tcmTxt}
-                  pie="El mapa de la lengua: cada zona se corresponde con unos órganos."
+                  pie={t("metodo.tcm.lengua.mapaPie")}
                 />
               </Box>
               <Box flex="1" minW={0}>
                 <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                       lineHeight="1.7" mb={4} style={{ textShadow: INK_SHADOW }}>
-                  No solo importa qué cambia, sino en qué parte de la lengua aparece: cada zona se relaciona
-                  con unos órganos.
+                  {t("metodo.tcm.lengua.mapaTexto")}
                 </Text>
                 <Flex direction="column" gap={2.5}>
-                  {LENGUA_ZONAS.map((z) => (
+                  {zonas.map((z) => (
                     <Flex key={z.key} gap={2.5} align="flex-start">
                       <Box flexShrink={0} mt={{ base: "9px", md: "11px" }} w="5px" h="5px" borderRadius="full"
                            bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
@@ -191,7 +204,7 @@ export default function MetodoTcmLengua() {
           </Reveal>
 
           {/* ── Las capas de observación (cajitas ilustradas, agrupadas de 6) ── */}
-          {GRUPOS_LENGUA.map((g) => (
+          {grupos.map((g) => (
             <Reveal key={g.titulo} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.12} w="100%">
               <DimensionBloque grupo={g} />
             </Reveal>
@@ -200,9 +213,7 @@ export default function MetodoTcmLengua() {
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.5} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="680px"
                 lineHeight="1.6">
-            Material con fin formativo. El diagnóstico por la lengua es una herramienta propia de la Medicina
-            Tradicional China; no constituye un diagnóstico médico ni sustituye la valoración de un
-            profesional sanitario cualificado.
+            {t("metodo.tcm.lengua.aviso")}
           </Text>
           </Reveal>
 
@@ -233,7 +244,7 @@ export default function MetodoTcmLengua() {
           >
             {/* Fondo de la disciplina (imagen TCM) + velo para que se lea el texto. */}
             <DisciplinaBgLayer nom={tcmNom} borderRadius="full" overlay={`${tcmBg}a6`} />
-            <Box as="span" position="relative" zIndex={1}>Lee tu lengua →</Box>
+            <Box as="span" position="relative" zIndex={1}>{t("metodo.tcm.paso.lengua")} →</Box>
           </Box>
           </Reveal>
         </Flex>
@@ -278,6 +289,7 @@ function DimensionBloque({ grupo }: { grupo: GrupoLengua }) {
 
 // ── Cajita ilustrada: foto + título · separador · texto (todas mismo alto/ancho) ─
 function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: number; enter: boolean }) {
+  const t = useT();
   return (
     <Flex direction="column"
           w={{ base: "100%", sm: "calc(50% - 8px)", md: "calc(33.333% - 11px)" }}
@@ -298,7 +310,7 @@ function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: n
           </Text>
           {opcion.equilibrio && (
             <Text color={tcmTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.06em"
-                  textTransform="uppercase">· sana</Text>
+                  textTransform="uppercase">{t("metodo.tcm.lengua.sana")}</Text>
           )}
         </Flex>
         <Box h="1px" w="100%" my={2.5} bgGradient={`linear(to-r, ${tcmTxt}aa, transparent)`} />

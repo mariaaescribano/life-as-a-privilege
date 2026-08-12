@@ -252,6 +252,15 @@ export function ComicViewer({
   // baja), para que se vea que el texto continúa aunque no se toque nada; el
   // CARRIL va totalmente transparente (nada de franja tenue: se ve la foto/el
   // fondo del box detrás de la barra).
+  //
+  // En MÓVIL la barra tiene que verse igual que en escritorio. De serie, el
+  // navegador del móvil usa barras «overlay»: no ocupan sitio y solo aparecen
+  // mientras se arrastra el dedo, así que la viñeta parecía terminar donde
+  // terminaba la pantalla y no se veía que el texto seguía. Declarar
+  // `::-webkit-scrollbar` con un ancho concreto obliga al navegador a pintar
+  // una barra CLÁSICA (permanente, con su hueco) también en táctil; el
+  // contenedor va con `overflow-y: scroll` —no `auto`— para que el carril esté
+  // siempre ahí aunque el texto sea corto.
   const scrollSx = {
     "&::-webkit-scrollbar": { width: "8px", background: "transparent" },
     "&::-webkit-scrollbar-track": { background: "transparent" },
@@ -813,7 +822,10 @@ export function ComicViewer({
             zIndex={2}
             flex="1"
             minH={0}
-            overflowY={{ base: "auto", md: "hidden" }}
+            // Móvil: `scroll` (no `auto`) para que la barra vertical se VEA
+            // siempre — en móvil el scroll de la viñeta ocurre aquí, en la
+            // columna entera (foto + texto), no en la columna de texto.
+            overflowY={{ base: "scroll", md: "hidden" }}
             overflowX="hidden"
             // En móvil SIN padding para que la foto sea hero (full-bleed) arriba;
             // el texto añade su propio padding. En desktop, padding normal.

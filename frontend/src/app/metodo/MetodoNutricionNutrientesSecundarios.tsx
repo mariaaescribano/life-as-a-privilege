@@ -17,8 +17,9 @@ import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
 import {
-  NUTRIENTES_PRINCIPALES, NUTRIENTES_SECUNDARIOS, type Nutriente,
+  NUTRIENTES_PRINCIPALES, type Nutriente,
 } from "../../hardCoded/espacio/NutrientesNutricion";
+import { useNutrientesSecundarios } from "../../hardCoded/espacio/useNutrientes";
 
 // Tarjeta de un grupo de nutrientes. Mismo aspecto que las de Fisiología ·
 // Profundiza (fondo de la disciplina difuminado + imagen dentro + título), pero
@@ -46,6 +47,10 @@ function NutrienteBox({ n, visto, onClick }: { n: Nutriente; visto: boolean; onC
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionNutrientesSecundarios() {
+  // Los seis grupos secundarios en el idioma activo (el orden y las fotos, del
+  // español). Los principales solo se usan para el candado, así que se leen
+  // directamente del fichero: de ellos no se pinta ni una palabra.
+  const NUTRIENTES_SECUNDARIOS = useNutrientesSecundarios();
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);

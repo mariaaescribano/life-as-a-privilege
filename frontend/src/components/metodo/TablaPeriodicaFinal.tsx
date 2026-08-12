@@ -122,7 +122,7 @@ export function TablaPeriodicaFinal({ onClose, onContinue }: TablaPeriodicaFinal
           animation={`${subir} 0.8s ease both`}
           style={{ textShadow: "0 2px 10px rgba(0,0,0,0.85), 0 0 26px rgba(0,0,0,0.6)" }}
         >
-          {CIERRE_TABLA.frase}
+          {t("fisiologia.tablaFrase")}
         </Text>
 
         {/* La tabla, protagonista: se queda con TODO el hueco que dejan la frase

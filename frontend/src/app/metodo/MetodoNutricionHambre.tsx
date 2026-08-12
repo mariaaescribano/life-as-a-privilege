@@ -13,7 +13,8 @@ import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
 import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlustracionModal";
-import { HAMBRE_HOLISTICA, HAMBRE_CIERRE, sinNegrita } from "../../components/metodo/hambreHolistica";
+import { HAMBRE_HOLISTICA, sinNegrita } from "../../components/metodo/hambreHolistica";
+import { useComic } from "../../i18n/comics";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
@@ -35,12 +36,14 @@ import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from 
 // «Ilustraciones» de Nutrición.
 // ═════════════════════════════════════════════════════════════════════════
 
-// Las viñetas tal como las lee el visor: sin las marcas **…** de negrita, que el
-// ComicViewer pinta en plano.
-const VINETAS_HAMBRE = sinNegrita(HAMBRE_HOLISTICA);
-
 export default function MetodoNutricionHambre() {
   const t = useT();
+  // Las cuatro lecturas en el idioma activo. NO se pueden resolver al importar el
+  // módulo (como antes): el texto se quedaría congelado en el idioma con el que
+  // arrancó la página. Y para el visor van sin las marcas **…** de negrita, que
+  // el ComicViewer pinta en plano.
+  const lecturas = useComic("nutricion-hambre-holistica", HAMBRE_HOLISTICA);
+  const vinetasHambre = sinNegrita(lecturas);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // Cómic de transición «Lo integral» (se abre al pulsar «Crea tu plato →»).
@@ -104,7 +107,7 @@ export default function MetodoNutricionHambre() {
               sola columna en móvil. */}
           <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
             <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {HAMBRE_HOLISTICA.map((v, i) => (
+              {lecturas.map((v, i) => (
                 <TarjetaNutri key={v.src} titulo={v.titulo} foto={v.src}
                               onClick={() => setLecturaAbierta(i)} />
               ))}
@@ -116,7 +119,7 @@ export default function MetodoNutricionHambre() {
             <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="400"
                   textAlign="center" maxW="740px" lineHeight="1.7" mt={{ base: 2, md: 4 }}
                   style={{ textShadow: "0 1px 12px rgba(0,0,0,0.4)" }}>
-              {HAMBRE_CIERRE}
+              {t("metodo.nutri.hambreCierre")}
             </Text>
           </Reveal>
 
@@ -127,7 +130,7 @@ export default function MetodoNutricionHambre() {
           deja pasar a las otras tres con las flechas. */}
       <NutrienteIlustracionModal
         isOpen={lecturaAbierta !== null}
-        vinetas={VINETAS_HAMBRE}
+        vinetas={vinetasHambre}
         initialIndex={lecturaAbierta ?? 0}
         onClose={() => setLecturaAbierta(null)}
       />

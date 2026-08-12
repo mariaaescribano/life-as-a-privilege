@@ -15,6 +15,7 @@ import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { VINETAS_ORIGEN as ORIGEN_HINDUISMO } from "../../components/metodo/HinduismoIlustracionesModal";
+import { useComic } from "../../i18n/comics";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -37,6 +38,8 @@ const glowPanel = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.
 
 export default function MetodoAyurveda() {
   const t = useT();
+  // El cómic del Origen (con las ilustraciones de Hinduismo) en el idioma activo.
+  const origenVinetas = useComic("hinduismo-origen", ORIGEN_HINDUISMO);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -202,7 +205,7 @@ export default function MetodoAyurveda() {
       {/* Intro (1ª vez): cómic del Origen con ilustraciones de hinduismo. */}
       <IntroComicModal
         isOpen={intro.open}
-        vinetas={ORIGEN_HINDUISMO}
+        vinetas={origenVinetas}
         themeColor={ayurvedaTxt}
         disciplinaBgImage="/img/fondos/hinduismo.webp"
         disciplinaBgColor={ayurvedaBg}
@@ -212,7 +215,7 @@ export default function MetodoAyurveda() {
         // Botón «Ayurveda →» a la izquierda de la X: entra a la portada (cerrar el
         // cómic la revela). Fondo con la imagen de la disciplina + velo y letra en
         // ayurvedaTxt. Sin «Saltar» (el botón de continuar ya cumple esa función).
-        continueLabel="Ayurveda"
+        continueLabel={t("disciplina.ayurveda")}
         onContinue={intro.close}
         continueConImagen
       />

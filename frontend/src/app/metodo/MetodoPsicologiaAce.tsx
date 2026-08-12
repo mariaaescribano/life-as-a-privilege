@@ -25,6 +25,8 @@ import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_ACE } from "../../components/metodo/comicAce";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import {
   experienciaById,
   ACE_INTRO,
@@ -50,6 +52,7 @@ const PAPEL = "#fbf4e8";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaAce() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -60,6 +63,8 @@ export default function MetodoPsicologiaAce() {
   // Cómic «Los ACE»: se intercala al ir al resultado (desde el header o el
   // botón). Solo aquí — no forma parte de las Ilustraciones del material.
   const [comicOpen, setComicOpen] = useState(false);
+  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
+  const comicVinetas = useComic("psicologia-ace", COMIC_ACE);
   const dataRef = useRef<LineaDeVidaData>({});
   const resultadoRef = useRef<HTMLDivElement | null>(null);
   // Último guardado en vuelo: se espera (flush) antes de navegar al resultado,
@@ -295,8 +300,8 @@ export default function MetodoPsicologiaAce() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={async () => { await savePromiseRef.current; await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); }}
-        vinetas={COMIC_ACE}
-        continueLabel="Continuar"
+        vinetas={comicVinetas}
+        continueLabel={t("comun.continuar")}
         botonNitido
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"

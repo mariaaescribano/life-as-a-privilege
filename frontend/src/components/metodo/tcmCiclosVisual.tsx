@@ -9,12 +9,16 @@ import {
   type Elemento,
 } from "./tcmRecorrido";
 import { ICONO_ELEMENTO } from "./tcmElementosContenido";
+import { SHENG_EXPLICACION_EN, KE_EXPLICACION_EN } from "./tcmCiclosContenido.en";
+import { useNombresElementos } from "./tcmElementosEn";
 import { ComicViewer } from "./ComicViewer";
 import { TcmLoader } from "./comicLoaders";
+import { useIdioma, useT } from "../../i18n";
 
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 // Artículo de cada elemento, para redactar los títulos ("La Madera genera el Fuego").
+// Solo en español: en inglés el título va sin artículos ("Wood generates Fire").
 export const ARTICULO: Record<Elemento, string> = {
   madera: "la", fuego: "el", tierra: "la", metal: "el", agua: "el",
 };
@@ -125,6 +129,9 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge,
 }) {
   const mapa = ciclo === "sheng" ? CICLO_SHENG : CICLO_KE;
   const [hover, setHover] = useState<Elemento | null>(null);
+  // Los nombres de los cinco elementos en el idioma activo (las etiquetas del
+  // pentágono). El color y el orden siguen saliendo del español.
+  const nombres = useNombresElementos();
 
   // Disparo al asomar en pantalla; `walk` = orden de recorrido para escalonar
   // las flechas (madera→fuego→… en Sheng, madera→tierra→… en Ke).
@@ -249,7 +256,7 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge,
                   <text x={label.x} y={label.y} fill="white" fontSize={15} fontWeight={700}
                         textAnchor="middle" dominantBaseline="middle"
                         style={{ textShadow: `0 0 9px ${color}, 0 0 18px ${color}aa, 0 1px 4px rgba(0,0,0,0.95)` }}>
-                    {ELEMENTOS[el].nombre}
+                    {nombres[el]}
                   </text>
                 </MotionG>
               );
@@ -290,6 +297,11 @@ export function RelacionModal({ rel, onClose, onView, textoBorroso }: {
    *  sale difuminado. En el recorrido va SIEMPRE nítido: ahí se paga por leerlo. */
   textoBorroso?: boolean;
 }) {
+  // El idioma se pide AQUÍ, no dentro del IIFE de abajo: allí los hooks se
+  // llamarían solo cuando hay relación abierta y React perdería el orden.
+  const t = useT();
+  const { idioma } = useIdioma();
+  const nombres = useNombresElementos();
   return (
     <Modal isOpen={!!rel} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
       <ModalOverlay bg="rgba(0,0,0,0.6)" />
@@ -299,16 +311,23 @@ export function RelacionModal({ rel, onClose, onView, textoBorroso }: {
           const { ciclo } = rel;
           const mapa = ciclo === "sheng" ? CICLO_SHENG : CICLO_KE;
           const orden = ordenCiclo(ciclo);
-          const eyebrow = ciclo === "sheng" ? "Ciclo generador" : "Ciclo de control";
-          const verbo = ciclo === "sheng" ? "genera" : "controla a";
+          const eyebrow = t(ciclo === "sheng" ? "metodo.tcm.ciclos.sheng" : "metodo.tcm.ciclos.ke");
+          const verbo = t(ciclo === "sheng" ? "metodo.tcm.ciclos.genera" : "metodo.tcm.ciclos.controla");
+          // La prosa de cada relación, en el idioma activo. La que no esté
+          // traducida se lee en español (la rueda la manda siempre el español).
+          const explicacion = ciclo === "sheng"
+            ? (origen: Elemento) => (idioma === "en" ? SHENG_EXPLICACION_EN[origen] : undefined) ?? SHENG_EXPLICACION[origen]
+            : (origen: Elemento) => (idioma === "en" ? KE_EXPLICACION_EN[origen] : undefined) ?? KE_EXPLICACION[origen];
           const vinetas = orden.map((origen) => {
             const destino = mapa[origen];
-            const O = ELEMENTOS[origen], D = ELEMENTOS[destino];
             return {
               src: FOTO_RELACION[ciclo][origen],
               eyebrow,
-              titulo: `${cap(ARTICULO[origen])} ${O.nombre} ${verbo} ${ARTICULO[destino]} ${D.nombre}`,
-              paragraphs: ciclo === "sheng" ? SHENG_EXPLICACION[origen] : KE_EXPLICACION[origen],
+              // En inglés el título va sin artículos: «Wood generates Fire».
+              titulo: idioma === "en"
+                ? `${nombres[origen]} ${verbo} ${nombres[destino]}`
+                : `${cap(ARTICULO[origen])} ${nombres[origen]} ${verbo} ${ARTICULO[destino]} ${nombres[destino]}`,
+              paragraphs: explicacion(origen),
             };
           });
           const initialIndex = Math.max(orden.indexOf(rel.origen), 0);

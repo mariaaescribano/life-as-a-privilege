@@ -3,13 +3,17 @@
 // TCM (junto a BotonCompania), igual que astrología y psicología lo tienen.
 import React from "react";
 import { IndiceRecorrido } from "./IndiceRecorrido";
-import { TCM_INDICE, TCM_TOTAL, pasoAlcanzableTcm } from "./tcmRecorrido";
+import { tcmIndice, TCM_TOTAL, pasoAlcanzableTcm } from "./tcmRecorrido";
+import { useIdioma } from "../../i18n";
 import { API_URL, tcmBg, tcmNom, tcmTxt } from "../../GlobalVariables";
 
 export function IndiceTcm() {
+  // Los títulos del índice vienen del diccionario: al cambiar de idioma hay que
+  // volver a construirlo, y para eso hace falta estar suscrito al contexto.
+  useIdioma();
   return (
     <IndiceRecorrido
-      indice={TCM_INDICE}
+      indice={tcmIndice()}
       total={TCM_TOTAL}
       tinta={tcmTxt}
       bg={tcmBg}

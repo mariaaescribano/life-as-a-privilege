@@ -5,6 +5,8 @@ import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { tcmBg, tcmNom, tcmTxt } from "../../GlobalVariables";
 import { ELEMENTOS, ORDEN_ELEMENTOS, type Elemento, type EstadoDiagnostico, type VeredictoBalance } from "./tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO, CONTENIDO_ELEMENTOS } from "./tcmElementosContenido";
+import { useContenidoElemento, useNombresElementos } from "./tcmElementosEn";
+import { useT, type ClaveTexto } from "../../i18n";
 
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
@@ -13,8 +15,12 @@ const MotionG = motion.g as any;
 const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
 const STAR_BASE = 0.1, STAR_STEP = 0.13, STAR_DUR = 0.55;
 
-const ESTADO_LABEL: Record<VeredictoBalance, string> = {
-  equilibrio: "En equilibrio", exceso: "En exceso", deficiencia: "En deficiencia",
+// El rótulo del estado es el mismo que titula esa sección en la página de cada
+// elemento: se pide por su clave, no se escribe otra vez.
+const ESTADO_CLAVE: Record<VeredictoBalance, ClaveTexto> = {
+  equilibrio: "metodo.tcm.el.equilibrio",
+  exceso: "metodo.tcm.el.exceso",
+  deficiencia: "metodo.tcm.el.deficiencia",
 };
 const ESTADO_COLOR: Record<VeredictoBalance, string> = {
   equilibrio: "#6f9463", exceso: "#d1495b", deficiencia: "#c8963e",
@@ -48,6 +54,8 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
   estados: Partial<Record<Elemento, EstadoElemento>>;
   predominante: Elemento;
 }) {
+  const t = useT();
+  const nombres = useNombresElementos();
   const [elActivo, setElActivo] = useState<Elemento>(predominante);
   useEffect(() => { setElActivo(predominante); }, [predominante]);
 
@@ -57,7 +65,9 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
   const enter = reduce || inView;
 
   const E = ELEMENTOS[elActivo];
-  const C = CONTENIDO_ELEMENTOS[elActivo];
+  // El texto del elemento en el idioma activo (el hanzi y el color siguen
+  // saliendo del español, que es quien manda la estructura).
+  const C = useContenidoElemento(elActivo) ?? CONTENIDO_ELEMENTOS[elActivo];
   const veredicto = estados[elActivo]?.veredicto ?? null;
   // Defensivo: si `veredicto` no fuese válido o faltase el contenido, se cae a
   // intro / a un array vacío en vez de reventar el .map (pantalla en blanco).
@@ -111,7 +121,7 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                       <text x={label.x} y={label.y} fill="white" fontSize={15} fontWeight={activo ? 800 : 600}
                             textAnchor="middle" dominantBaseline="middle"
                             style={{ textShadow: `0 0 ${activo ? 10 : 7}px ${Ei.color}, 0 0 ${activo ? 20 : 13}px ${Ei.color}aa, 0 1px 4px rgba(58,10,10,0.95)` }}>
-                        {Ei.nombre}
+                        {nombres[el]}
                       </text>
                     </MotionG>
                   );
@@ -161,12 +171,12 @@ export function TcmEstrellaDetalle({ estados, predominante }: {
                 <Box px={3} py={1} borderRadius="full" bg={`${ESTADO_COLOR[veredicto]}44`}
                      border={`1px solid ${ESTADO_COLOR[veredicto]}`} sx={{ backdropFilter: "blur(4px)" }}>
                   <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.04em">
-                    {ESTADO_LABEL[veredicto]}
+                    {t(ESTADO_CLAVE[veredicto])}
                   </Text>
                 </Box>
               ) : (
                 <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic">
-                  sin datos suficientes
+                  {t("metodo.tcm.diag.sinDatosSuficientes")}
                 </Text>
               )}
             </Flex>

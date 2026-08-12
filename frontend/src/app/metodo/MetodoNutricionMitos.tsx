@@ -15,7 +15,8 @@ import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useLeidos } from "../../hooks/useLeidos";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { MITOS_NUTRICION, MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/MitosNutricion";
+import { MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/MitosNutricion";
+import { useMitosNutricion } from "../../hardCoded/espacio/useMitosNutricion";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Apartado «Preguntas y mitos» del recorrido de Nutrición. Se llega desde la
@@ -26,6 +27,9 @@ import { MITOS_NUTRICION, MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/Mitos
 // pasando con las flechas dentro del visor).
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionMitos() {
+  // Los mitos en el idioma activo (el orden, la foto y la `key` con la que se
+  // guarda lo leído siguen saliendo del español).
+  const MITOS_NUTRICION = useMitosNutricion();
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -72,7 +76,7 @@ export default function MetodoNutricionMitos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Preguntas y mitos"
+              title={t("metodo.nutri.paso.mitos")}
               compact
               maxW="1000px"
               bgColor={`${nutricionBg}dd`}
@@ -88,8 +92,7 @@ export default function MetodoNutricionMitos() {
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
-              Estas son algunas de las preguntas y mitos que más se repiten. Toca cada uno para descubrir qué dice
-              de verdad la ciencia.
+              {t("metodo.nutri.mitos.intro")}
             </Text>
           </Reveal>
 

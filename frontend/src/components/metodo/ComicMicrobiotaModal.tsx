@@ -4,6 +4,7 @@ import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
 import { AppleLoader } from "./AppleLoader";
 import { NUTRICION_MICROBIOTA } from "./comicNutricionMicrobiota";
+import { useComic } from "../../i18n/comics";
 import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -19,6 +20,8 @@ interface ComicMicrobiotaModalProps {
 
 export function ComicMicrobiotaModal({ isOpen, onClose, onContinue }: ComicMicrobiotaModalProps) {
   const t = useT();
+  // Sus viñetas en el idioma activo.
+  const vinetas = useComic("nutricion-microbiota", NUTRICION_MICROBIOTA);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -27,7 +30,7 @@ export function ComicMicrobiotaModal({ isOpen, onClose, onContinue }: ComicMicro
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer
           key={String(isOpen)}
-          vinetas={NUTRICION_MICROBIOTA}
+          vinetas={vinetas}
           onClose={onClose}
           onComplete={onContinue}
           themeColor={nutricionBg}

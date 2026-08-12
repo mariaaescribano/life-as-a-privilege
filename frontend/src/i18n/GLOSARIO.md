@@ -60,6 +60,12 @@ va en las URLs y en la base de datos. Ver `nombreDisciplina.ts`.
 | Predominante | Predominant | La etiqueta del dosha que más puntúa. |
 | los cinco elementos | the Five Elements | En MTC van con mayúscula, es un término técnico. |
 | autoconocimiento | self-knowledge | |
+| órgano Zang / Fu | Zang organ / Fu organ | Invariables, con mayúscula. |
+| la Sangre (MTC) | Blood | Con mayúscula: no es la sangre del análisis. Igual con *Qi*, *Yin*, *Yang*, *Shen*, *Wei Qi*. |
+| la Esencia (Jing) | the Essence (Jing) | |
+| ácido / amargo / dulce / picante / salado | sour / bitter / sweet / pungent / salty | Los cinco sabores. *Picante* es siempre *pungent*, nunca *spicy*. |
+| Lao-Tse, Tao Te King | Lao Tzu, Tao Te Ching | La grafía inglesa de siempre, la que sale en cualquier edición. |
+| s. IV a.C. / s. II d.C. | 4th c. BC / 2nd c. AD | Las fechas de una línea del tiempo. |
 | recorrido (el camino guiado) | journey | Cuando es el producto → *The Map*. |
 | disciplina | discipline | |
 | ficha | card | |

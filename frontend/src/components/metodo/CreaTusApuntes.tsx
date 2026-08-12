@@ -23,6 +23,7 @@ import {
   capitulosElegidos, fotosDeSeleccion, type ApuntesLibro,
 } from "../../utils/pdf/apuntesTipos";
 import { PESO_FOTO_KB } from "../../utils/pdf/fotos";
+import { useT } from "../../i18n";
 
 type Progreso = { fase: "fotos" | "papel"; hechas: number; total: number } | null;
 
@@ -53,6 +54,7 @@ export function CreaTusApuntes({
   /** Sombra/halo de las cajas de esta disciplina. */
   glow?: string;
 }) {
+  const t = useT();
   const disponibles = useMemo(() => libro.capitulos.filter((c) => !c.bloqueado), [libro]);
 
   const [seleccion, setSeleccion] = useState<string[]>(() =>
@@ -129,7 +131,7 @@ export function CreaTusApuntes({
       });
       return hecho;
     } catch {
-      setError("No hemos podido montar el PDF. Vuelve a intentarlo; si sigue fallando, prueba sin ilustraciones.");
+      setError(t("metodo.apuntes.error"));
       return null;
     } finally {
       if (vivo.current) setProgreso(null);
@@ -180,7 +182,7 @@ export function CreaTusApuntes({
       {/* ── LA PORTADA ─────────────────────────────────────────────────── */}
       <Reveal inView direction="up" distance={20} duration={0.6} amount={0.2} w="100%">
       <Caja>
-        <Rotulo>La portada</Rotulo>
+        <Rotulo>{t("metodo.apuntes.portada")}</Rotulo>
         <Box h="1px" w="100%" mb={5} bg={`${txt}66`} />
         <Flex gap={{ base: 3, md: 4 }} wrap="wrap">
           {libro.portadas.map((p) => {
@@ -216,14 +218,17 @@ export function CreaTusApuntes({
         <Flex align="center" justify="space-between" gap={3} wrap="wrap" mb={3}>
           <Text color={txt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.1em"
                 textTransform="uppercase">
-            Qué te llevas
+            {t("metodo.apuntes.queTeLlevas")}
           </Text>
           <Flex gap={2}>
-            {[{ t: "Todo", f: todos }, { t: "Nada", f: ninguno }].map(({ t, f }) => (
-              <Box key={t} as="button" onClick={f} px={3} py={1} borderRadius="full"
+            {[
+              { rotulo: t("metodo.apuntes.todo"), f: todos },
+              { rotulo: t("metodo.apuntes.nada"), f: ninguno },
+            ].map(({ rotulo, f }) => (
+              <Box key={rotulo} as="button" onClick={f} px={3} py={1} borderRadius="full"
                    border={`1px solid ${txt}66`} color={txt} fontSize="xs" letterSpacing="0.08em"
                    _hover={{ borderColor: txt }}>
-                {t}
+                {rotulo}
               </Box>
             ))}
           </Flex>
@@ -279,7 +284,7 @@ export function CreaTusApuntes({
                 {c.fotos.length > 0 && !bloqueado && (
                   <Text flexShrink={0} color={txt} fontSize="2xs" opacity={0.7} letterSpacing="0.06em"
                         textTransform="uppercase" mt={1.5}>
-                    {c.fotos.length} {c.fotos.length === 1 ? "foto" : "fotos"}
+                    {c.fotos.length} {t(c.fotos.length === 1 ? "metodo.apuntes.foto" : "metodo.apuntes.fotos")}
                   </Text>
                 )}
               </Flex>
@@ -292,13 +297,13 @@ export function CreaTusApuntes({
       {/* ── CÓMO LO QUIERES + DESCARGA ─────────────────────────────────── */}
       <Reveal inView direction="up" distance={22} delay={0.14} duration={0.65} amount={0.15} w="100%">
       <Caja>
-        <Rotulo>Cómo lo quieres</Rotulo>
+        <Rotulo>{t("metodo.apuntes.comoLoQuieres")}</Rotulo>
         <Box h="1px" w="100%" mb={5} bg={`${txt}66`} />
 
         <Flex gap={2.5} wrap="wrap" mb={5}>
           {[
-            { v: true, t: "Con ilustraciones", d: "como se ve en la web" },
-            { v: false, t: "Solo texto", d: "ligero para el móvil" },
+            { v: true, t: t("metodo.apuntes.conFotos"), d: t("metodo.apuntes.conFotosPie") },
+            { v: false, t: t("metodo.apuntes.soloTexto"), d: t("metodo.apuntes.soloTextoPie") },
           ].map((op) => (
             <Flex
               key={String(op.v)}
@@ -322,19 +327,18 @@ export function CreaTusApuntes({
 
         <Text color={txt} fontSize={{ base: "sm", md: "md" }} opacity={0.9} mb={5}>
           {nada
-            ? "No has marcado nada todavía: elige arriba lo que quieres llevarte."
-            : `${elegidos.length} ${elegidos.length === 1 ? "capítulo" : "capítulos"}` +
-              (nFotos ? ` · ${nFotos} ilustraciones` : " · sin ilustraciones") +
-              ` · unos ${pesoAproximado(nFotos)}`}
+            ? t("metodo.apuntes.sinMarcar")
+            : `${elegidos.length} ${t(elegidos.length === 1 ? "metodo.apuntes.capitulo" : "metodo.apuntes.capitulos")}` +
+              ` · ${nFotos ? t("metodo.apuntes.nIlustraciones", { n: nFotos }) : t("metodo.apuntes.sinIlustraciones")}` +
+              ` · ${t("metodo.apuntes.unos", { peso: pesoAproximado(nFotos) })}`}
         </Text>
 
         {/* Mientras trabaja: qué está haciendo y por dónde va. */}
         {trabajando && (
           <Box mb={5}>
             <Text color={txt} fontSize="sm" mb={2}>
-              {progreso!.fase === "fotos"
-                ? `Preparando las ilustraciones… ${progreso!.hechas}/${progreso!.total}`
-                : `Componiendo el cuaderno… ${progreso!.hechas}/${progreso!.total}`}
+              {t(progreso!.fase === "fotos" ? "metodo.apuntes.preparandoFotos" : "metodo.apuntes.componiendo",
+                 { hechas: progreso!.hechas, total: progreso!.total })}
             </Text>
             <Box w="100%" h="4px" borderRadius="full" bg={`${txt}26`} overflow="hidden">
               <Box
@@ -369,7 +373,7 @@ export function CreaTusApuntes({
             transition="all 0.2s"
             _hover={nada || trabajando ? undefined : { transform: "translateY(-2px)" }}
           >
-            Descargar mis apuntes
+            {t("metodo.apuntes.descargar")}
           </Box>
           <Box
             as="button"
@@ -387,7 +391,7 @@ export function CreaTusApuntes({
             transition="all 0.2s"
             _hover={nada || trabajando ? undefined : { bg: `${txt}1f` }}
           >
-            Verlo antes
+            {t("metodo.apuntes.verlo")}
           </Box>
         </Flex>
       </Caja>
@@ -404,7 +408,7 @@ export function CreaTusApuntes({
             <Box as="button" onClick={() => { URL.revokeObjectURL(previewUrl); setPreviewUrl(null); }}
                  px={4} py={2} borderRadius="lg" border={`1px solid ${txt}88`} color={txt} fontSize="sm"
                  _hover={{ bg: `${txt}1f` }}>
-              Cerrar
+              {t("metodo.apuntes.cerrar")}
             </Box>
           </Flex>
           {/* El visor de PDF del propio navegador: ni librerías ni descargas. */}

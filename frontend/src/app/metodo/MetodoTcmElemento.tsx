@@ -15,7 +15,9 @@ import {
   ELEMENTOS, ORDEN_ELEMENTOS, puntuarTest, elementoDesbloqueado,
   type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
-import { CONTENIDO_ELEMENTOS, IMAGEN_ELEMENTO, tieneContenido } from "../../components/metodo/tcmElementosContenido";
+import { IMAGEN_ELEMENTO, tieneContenido } from "../../components/metodo/tcmElementosContenido";
+import { useContenidoElemento } from "../../components/metodo/tcmElementosEn";
+import { useT } from "../../i18n";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const TXT_SHADOW = "0 1px 4px rgba(58,10,10,0.75)";
@@ -37,6 +39,7 @@ const Parrafos = ({ textos }: { textos: string[] }) => (
 );
 
 export default function MetodoTcmElemento() {
+  const t = useT();
   const navigate = useNavigate();
   const { elemento } = useParams<{ elemento: string }>();
   const el = esElemento(elemento) ? elemento : null;
@@ -72,7 +75,9 @@ export default function MetodoTcmElemento() {
     })();
   }, [navigate, el]);
 
-  const c = el ? CONTENIDO_ELEMENTOS[el] : null;
+  // Las siete secciones en el idioma activo (del inglés solo sale el texto: el
+  // hanzi, las fotos y el mini-test siguen saliendo del español).
+  const c = useContenidoElemento(el);
   const meta = el ? ELEMENTOS[el] : null;
   const acento = meta?.color ?? tcmTxt;
   const miniTest = meta?.miniTest ?? [];
@@ -82,9 +87,9 @@ export default function MetodoTcmElemento() {
   const momentos = useMemo(() => {
     if (!c) return [] as { titulo: string; nodo: React.ReactNode }[];
     return [
-      { titulo: "El elemento", nodo: <Parrafos textos={c.intro} /> },
+      { titulo: t("metodo.tcm.el.elemento"), nodo: <Parrafos textos={c.intro} /> },
       {
-        titulo: "Qué rige",
+        titulo: t("metodo.tcm.el.rige"),
         nodo: (
           <SimpleGrid columns={{ base: 1, sm: 2 }} spacingX={6} spacingY={3}>
             {c.rige.map((r) => (
@@ -102,7 +107,7 @@ export default function MetodoTcmElemento() {
         ),
       },
       {
-        titulo: "Funciones",
+        titulo: t("metodo.tcm.el.funciones"),
         nodo: (
           <Flex direction="column" gap={5}>
             {c.funciones.map((f, i) => (
@@ -120,10 +125,10 @@ export default function MetodoTcmElemento() {
           </Flex>
         ),
       },
-      { titulo: "En equilibrio", nodo: <Parrafos textos={c.equilibrio} /> },
-      { titulo: "En exceso", nodo: <Parrafos textos={c.exceso} /> },
+      { titulo: t("metodo.tcm.el.equilibrio"), nodo: <Parrafos textos={c.equilibrio} /> },
+      { titulo: t("metodo.tcm.el.exceso"), nodo: <Parrafos textos={c.exceso} /> },
       {
-        titulo: "En deficiencia",
+        titulo: t("metodo.tcm.el.deficiencia"),
         nodo: (
           <Flex direction="column" gap={5}>
             <Parrafos textos={c.deficiencia} />
@@ -136,19 +141,19 @@ export default function MetodoTcmElemento() {
           </Flex>
         ),
       },
-      { titulo: "Señales de desequilibrio", nodo: <Parrafos textos={c.desequilibrio} /> },
-      { titulo: "Cómo cuidarlo", nodo: <Parrafos textos={c.equilibrar} /> },
+      { titulo: t("metodo.tcm.el.desequilibrio"), nodo: <Parrafos textos={c.desequilibrio} /> },
+      { titulo: t("metodo.tcm.el.cuidarlo"), nodo: <Parrafos textos={c.equilibrar} /> },
       {
-        titulo: "Guía práctica",
+        titulo: t("metodo.tcm.el.guia"),
         nodo: (
           <Flex direction="column" gap={5}>
-            <GuiaLista titulo="Nutrición" items={c.guia.nutricion} acento={acento} />
-            {c.guia.evitar && <GuiaLista titulo="Evita" items={c.guia.evitar} acento={acento} />}
-            <GuiaLista titulo="Estilo de Vida" items={c.guia.estiloDeVida} acento={acento} />
-            <GuiaLista titulo="Ejercicio" items={c.guia.ejercicio} acento={acento} />
-            <GuiaLista titulo="Terapia" items={c.guia.terapia} acento={acento} />
+            <GuiaLista titulo={t("metodo.tcm.el.guiaNutricion")} items={c.guia.nutricion} acento={acento} />
+            {c.guia.evitar && <GuiaLista titulo={t("metodo.tcm.el.guiaEvitar")} items={c.guia.evitar} acento={acento} />}
+            <GuiaLista titulo={t("metodo.tcm.el.guiaEstiloDeVida")} items={c.guia.estiloDeVida} acento={acento} />
+            <GuiaLista titulo={t("metodo.tcm.el.guiaEjercicio")} items={c.guia.ejercicio} acento={acento} />
+            <GuiaLista titulo={t("metodo.tcm.el.guiaTerapia")} items={c.guia.terapia} acento={acento} />
             <Box>
-              <Text color={acento} fontWeight={700} mb={1}>Mejor momento para descansar</Text>
+              <Text color={acento} fontWeight={700} mb={1}>{t("metodo.tcm.el.guiaDescanso")}</Text>
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
                     style={{ textShadow: TXT_SHADOW }}>{c.guia.descanso}</Text>
             </Box>
@@ -160,7 +165,7 @@ export default function MetodoTcmElemento() {
         ),
       },
       {
-        titulo: "¿Cómo está este elemento en ti?",
+        titulo: t("metodo.tcm.el.test"),
         nodo: (
           <Flex direction="column" gap={6}>
             {miniTest.map((p, i) => (
@@ -193,7 +198,7 @@ export default function MetodoTcmElemento() {
         ),
       },
     ];
-  }, [c, acento, miniTest, respuestas]);
+  }, [c, acento, miniTest, respuestas, t]);
 
   const total = momentos.length;
   const esUltimo = paso === total - 1;
@@ -249,7 +254,7 @@ export default function MetodoTcmElemento() {
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← La estrella", onClick: () => navigate("/metodo/tcm/elementos") }}
+            prev={{ label: `← ${t("metodo.tcm.el.laEstrella")}`, onClick: () => navigate("/metodo/tcm/elementos") }}
             extra={ilustracionesBtn}
           />
           </Reveal>
@@ -298,16 +303,16 @@ export default function MetodoTcmElemento() {
           {/* Navegación atrás / seguir */}
           <Reveal direction="up" distance={16} delay={0.26} duration={0.6} w="100%">
           <Flex w="100%" justify="space-between" align="center" gap={4}>
-            <NavBtn label={paso === 0 ? "‹ La estrella" : "‹ Atrás"} onClick={retroceder} />
+            <NavBtn label={paso === 0 ? `‹ ${t("metodo.tcm.el.laEstrella")}` : t("metodo.tcm.el.atras")} onClick={retroceder} />
             <Text color="rgba(255,255,255,0.5)" fontSize="sm" fontStyle="italic">
               {paso + 1} / {total}
             </Text>
             <NavBtn
-              label={esUltimo ? "He leído ✓" : "Seguir ›"}
+              label={esUltimo ? t("metodo.tcm.el.heLeido") : t("metodo.tcm.el.seguir")}
               onClick={avanzar}
               primary
               disabled={avanzarBloqueado}
-              tooltip={avanzarBloqueado ? "Responde el mini-test para terminar" : undefined}
+              tooltip={avanzarBloqueado ? t("metodo.tcm.el.respondeTest") : undefined}
             />
           </Flex>
           </Reveal>

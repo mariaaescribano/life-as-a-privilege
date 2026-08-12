@@ -33,14 +33,6 @@ import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
 const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 22px rgba(0,0,0,0.5)";
 
-// El ojo del botón «Ilustraciones»: el mismo de todas las páginas de Cábala.
-const EyeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"
-       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))", flexShrink: 0 }}>
-    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
-  </svg>
-);
-
 // Velo de las cajas: EL MISMO que el header (el que pone DisciplinaBgLayer para
 // Cábala, un negro al 40 %). Nada de velo marrón casi opaco: la acuarela tiene
 // que verse igual de nítida en la caja que en el header. El contraste del texto
@@ -202,7 +194,7 @@ export default function MetodoCabalaDiagnostico() {
               nom={cabalaNom}
               mb={0}
               prev={{ label: "← Malkhut", onClick: () => navigate("/metodo/cabala/sefira/malkuth") }}
-              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true), icon: <EyeIcon /> }}
+              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
               next={{ label: "Los Senderos →", onClick: () => navigate("/metodo/cabala/senderos") }}
             />
           </Reveal>

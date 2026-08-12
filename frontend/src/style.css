@@ -95,6 +95,27 @@ a:focus-visible,
   outline: none;
 }
 
+/* MÓVIL: nada de rectángulo azul al pulsar.
+   Al tocar un botón (o cualquier cosa pulsable), Android y iOS pintan encima un
+   rectángulo translúcido —azul clarito— del tamaño exacto del elemento. Se veía
+   como un parche que tapaba el botón entero durante el toque, por encima de los
+   colores de cada disciplina.
+   `-webkit-tap-highlight-color` se hereda, así que apagándolo en <html> queda
+   apagado en TODA la app, incluidos los muchos `Box as="button"` y los divs con
+   onClick. El `touch-callout` de los botones evita, además, el otro parche azul:
+   el de la selección de texto cuando se deja el dedo apoyado.
+   Ojo: solo se apaga el resaltado del navegador. El `_active` de cada botón
+   (escala, sombra…) sigue funcionando, que es el feedback que sí queremos. */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+a,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

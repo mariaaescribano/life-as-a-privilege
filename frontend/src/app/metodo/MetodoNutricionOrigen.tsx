@@ -19,6 +19,7 @@ import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
 import { ORIGEN_NUTRIENTES, ORIGEN_LEIDOS_KEY } from "../../components/metodo/comicsOrigenNutrientes";
+import { useComic } from "../../i18n/comics";
 
 // ═════════════════════════════════════════════════════════════════════════
 // «¿De dónde vienen los nutrientes?» — último paso del recorrido de Nutrición
@@ -76,6 +77,10 @@ export default function MetodoNutricionOrigen() {
   if (loading || !fotosListas) return <NutricionLoading />;
 
   const lectura = abierta !== null ? ORIGEN_NUTRIENTES[abierta] : null;
+  // Las viñetas de la lectura abierta, en el idioma activo. El hook se llama
+  // siempre (con clave vacía mientras no hay ninguna abierta, que devuelve el
+  // español tal cual): así no queda una llamada condicional.
+  const vinetasLectura = useComic(lectura?.claveComic ?? "", lectura?.vinetas ?? []);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -123,11 +128,11 @@ export default function MetodoNutricionOrigen() {
                   titulo={
                     <Flex direction="column" gap={1}>
                       <Text as="span" fontWeight={700} fontSize={{ base: "sm", md: "md" }} lineHeight="1.25">
-                        {l.titulo}
+                        {t(l.tituloKey)}
                       </Text>
                       <Text as="span" fontWeight={400} fontStyle="italic" fontSize={{ base: "xs", md: "sm" }}
                             lineHeight="1.4" opacity={0.85}>
-                        {l.resumen}
+                        {t(l.resumenKey)}
                       </Text>
                     </Flex>
                   }
@@ -148,7 +153,7 @@ export default function MetodoNutricionOrigen() {
       <ComicModal
         isOpen={!!lectura}
         onClose={() => setAbierta(null)}
-        vinetas={lectura?.vinetas ?? []}
+        vinetas={vinetasLectura}
         themeColor={nutricionBg}
         textColor={nutricionTxt}
         textShadow="none"

@@ -17,6 +17,7 @@ import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { VINETAS_ORIGEN as ORIGEN_TAOISMO, VINETAS_ELEMENTOS } from "../../components/metodo/TCMIlustracionesModal";
+import { useComic } from "../../i18n/comics";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
@@ -32,6 +33,10 @@ const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.
 
 export default function MetodoTcm() {
   const t = useT();
+  // Los dos cómics de entrada, en el idioma activo: el Origen según el taoísmo
+  // y el capítulo de los Cinco Elementos.
+  const origenVinetas = useComic("tcm-origen", ORIGEN_TAOISMO);
+  const elementosVinetas = useComic("tcm-elementos", VINETAS_ELEMENTOS);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -123,7 +128,7 @@ export default function MetodoTcm() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Medicina China"
+            title={t("disciplina.medicinaChina")}
             pageLabel="1/11"
             compact
             bgColor={`${tcmBg}dd`}
@@ -196,7 +201,7 @@ export default function MetodoTcm() {
       {/* Intro (1ª vez): cómic del Origen según el taoísmo. */}
       <IntroComicModal
         isOpen={intro.open}
-        vinetas={ORIGEN_TAOISMO}
+        vinetas={origenVinetas}
         themeColor={tcmTxt}
         disciplinaBgImage="/img/fondos/tcm.webp"
         disciplinaBgColor={tcmBg}
@@ -205,7 +210,7 @@ export default function MetodoTcm() {
         // Botón «Medicina China →» con la imagen de la disciplina + velo (como
         // «Saltar») y letra en tcmTxt. Se conserva también el «Saltar» a la
         // izquierda, en tcmTxt.
-        continueLabel="Medicina China"
+        continueLabel={t("disciplina.medicinaChina")}
         onContinue={intro.close}
         continueConImagen
         mantenerSaltar
@@ -217,8 +222,8 @@ export default function MetodoTcm() {
         isOpen={comicElementosOpen}
         onClose={() => setComicElementosOpen(false)}
         onContinue={() => navigate("/metodo/tcm/elementos")}
-        vinetas={VINETAS_ELEMENTOS}
-        continueLabel="Los 5 elementos"
+        vinetas={elementosVinetas}
+        continueLabel={t("metodo.tcm.paso.elementos")}
         themeColor={tcmTxt}
         disciplinaBgImage="/img/fondos/tcm.webp"
         disciplinaBgColor={tcmBg}

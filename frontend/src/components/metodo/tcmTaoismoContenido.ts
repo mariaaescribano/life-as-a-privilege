@@ -30,7 +30,12 @@ export interface LeyTao {
   parrafos: string[];
 }
 
-/** Intro de la página (bajo el header). */
+/** Intro de la página (bajo el header). Ahora mismo no se pinta.
+ *
+ *  OJO al volver a sacarla: su texto está también en los dos idiomas en los
+ *  `metodo.ts` de `i18n/textos` (`metodo.tcm.tao.intro1` e `intro2`). Píntala desde
+ *  ahí con `t(...)`, no desde esta constante, o en inglés saldrá en español. El
+ *  cierre y su cita ya se pintan así (`metodo.tcm.tao.cierre`). */
 export const TAOISMO_INTRO: string[] = [
   "El taoísmo no es una religión: es una forma de mirar. Lao-Tse llamó Tao al «camino», el orden natural que rige todo lo que existe. De esa mirada nace lo que ya has recorrido: el Qi que nos une, el Yin y el Yang que se equilibran, los cinco elementos que se generan y se controlan.",
   "No son normas que haya que obedecer, sino cómo funciona la naturaleza. Puedes ignorarlas, igual que puedes ignorar la gravedad: la diferencia la paga tu cuerpo.",
@@ -76,6 +81,7 @@ export const LEYES_TAO: LeyTao[] = [
       "Yin y Yang no son enemigos. Son dos movimientos complementarios que se necesitan para que la Vida pueda tener una manifestación tangible.",
       "Yang expresa calor, movimiento, expansión y actividad. Yin expresa frío, quietud, interiorización y nutrición. Ninguno es absoluto: en el Yin existe Yang y en el Yang existe Yin.",
       "La medicina china observa constantemente estas relaciones: calor y frío, exceso y vacío, actividad y reposo. La salud no consiste en eliminar uno de los dos, sino en permitir que se regulen entre sí.",
+      "En otras palabras, todos inherentemente tenemos un ciclo natural, el cual tenemos que permitirnos escuchar y seguir. No debemos dejarnos llevar por la quietud cuando deseamos movernos, ni por la sobreexigencia cuando necesitamos descansar."
     ],
   },
   {
@@ -140,7 +146,7 @@ export const LEYES_TAO: LeyTao[] = [
     parrafos: [
       "Lo más valioso de una vasija no es la arcilla, sino el espacio que queda dentro.",
       "El vacío no es ausencia inútil. Es lo que permite que algo pueda ser habitado, utilizado y transformado.",
-      "También el cuerpo necesita espacio: entre una actividad y otra, entre una comida y la siguiente, entre el esfuerzo y el descanso. Cuando llenamos cada momento, dejamos de tener espacio para recuperarnos, digerir, integrar y simplemente respirar.",
+      "También el cuerpo y la mente necesitan espacio: entre una actividad y otra, entre una comida y la siguiente, entre el esfuerzo y el descanso. Cuando llenamos cada momento, dejamos de tener espacio para recuperarnos, digerir, integrar y simplemente respirar.",
     ],
   },
   {

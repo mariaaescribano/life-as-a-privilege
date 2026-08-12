@@ -3,6 +3,7 @@ import { useT } from "../../i18n";
 import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { COMIC_POR_QUE_EXISTE } from "./comicElMapa";
+import { useComicElMapa } from "./comicElMapa.en";
 import { MapaSeArma } from "./MapaSeArma";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -51,9 +52,10 @@ function FlechaComic({
   onClick: () => void;
   disabled: boolean;
 }) {
+  const t = useT();
   return (
     <IconButton
-      aria-label={dir === "prev" ? "Viñeta anterior" : "Viñeta siguiente"}
+      aria-label={t(dir === "prev" ? "elMetodo.comic.anterior" : "elMetodo.comic.siguiente")}
       onClick={disabled ? undefined : onClick}
       isDisabled={disabled}
       variant="ghost"
@@ -97,6 +99,10 @@ function FlechaComic({
 
 export function ComicPorQueExiste() {
   const t = useT();
+  // El guion en el idioma activo. Solo cambia la PROSA: las fotos, el orden y
+  // la disciplina que coloca cada viñeta salen del español (COMIC_POR_QUE_EXISTE),
+  // y por eso lo estructural de aquí abajo sigue leyéndose de él.
+  const vinetas = useComicElMapa();
   const [index, setIndex] = useState(0);
   // Viñeta más lejana alcanzada: de aquí sale lo que está colocado en el mapa.
   const [maxVisto, setMaxVisto] = useState(0);
@@ -104,7 +110,7 @@ export function ComicPorQueExiste() {
   const [falladas, setFalladas] = useState<Record<number, boolean>>({});
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  const vineta = COMIC_POR_QUE_EXISTE[index];
+  const vineta = vinetas[index];
   const esPrimera = index === 0;
   const esUltima = index === total - 1;
   // Número del rótulo = el PASO DEL MAPA, no la posición en el cómic: «El
@@ -349,11 +355,11 @@ export function ComicPorQueExiste() {
             <FlechaComic dir="prev" onClick={goPrev} disabled={esPrimera} />
 
             <Flex align="center" gap="6px" flexWrap="wrap" justify="center">
-              {COMIC_POR_QUE_EXISTE.map((v, i) => (
+              {vinetas.map((v, i) => (
                 <Box
                   key={v.titulo}
                   as="button"
-                  aria-label={`Ir a la viñeta: ${v.titulo}`}
+                  aria-label={t("elMetodo.comic.irA", { titulo: v.titulo })}
                   aria-current={i === index ? "true" : undefined}
                   onClick={() => setIndex(i)}
                   w={i === index ? "9px" : "6px"}

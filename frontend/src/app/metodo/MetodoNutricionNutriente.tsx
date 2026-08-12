@@ -16,9 +16,11 @@ import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { comicNutrienteByKey } from "../../components/metodo/comicsNutrientes";
+import { useComic } from "../../i18n/comics";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { NUTRIENTES, rutaListaNutriente, type Nutriente, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
+import { NUTRIENTES, rutaListaNutriente, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
+import { useNutriente } from "../../hardCoded/espacio/useNutrientes";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Página de detalle de UN grupo de nutrientes (Carbohidratos, Grasas…).
@@ -33,9 +35,6 @@ import { NUTRIENTES, rutaListaNutriente, type Nutriente, type NutrienteTarjeta }
 //      ofrece al FINAL de la página, cuando ya has leído).
 // ═════════════════════════════════════════════════════════════════════════
 
-const nutrienteByKey = (key: string): Nutriente | undefined =>
-  NUTRIENTES.find((n) => n.key === key);
-
 // Ilustraciones (cómics) de grupo ya leídas, en metodo_nutricion.data: string[]
 // con las keys de los grupos cuyo cómic se ha abierto.
 const CAMPO_COMICS = "nutrientes_comics_leidos";
@@ -46,6 +45,7 @@ const CAMPO_COMICS = "nutrientes_comics_leidos";
 // Vale para los nutrientes primarios y para los secundarios: los dos se pintan
 // con esta página (/metodo/nutricion/nutrientes/:key).
 function VolverNutri({ onClick }: { onClick: () => void }) {
+  const t = useT();
   return (
     <Box
       as="button"
@@ -81,7 +81,7 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
              w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
           <path d="M480-160 160-480l320-320 56 57-223 223h487v80H313l224 224-57 56Z" />
         </Box>
-        Volver
+        {t("comun.volver")}
       </Box>
     </Box>
   );
@@ -142,7 +142,13 @@ export default function MetodoNutricionNutriente() {
   const [yaVistas, setYaVistas] = useState<number[]>([]);
   const dataRef = useRef<Record<string, any>>({}); // copia del blob para mergear al guardar
 
-  const n = nutrienteByKey(key || "");
+  // El grupo en el idioma activo (del inglés sale solo el texto: la foto, el
+  // color y el orden de las tarjetas siguen saliendo del español).
+  const n = useNutriente(key || "");
+  // La ilustración del grupo, en el idioma activo. Se pide aquí arriba y no
+  // junto a su uso: allí ya se ha pasado por el `return` de la carga, y los
+  // hooks van todos antes del primer return.
+  const comic = useComic(`nutriente-${n?.key ?? ""}`, comicNutrienteByKey(n?.key ?? "") ?? []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -287,7 +293,6 @@ export default function MetodoNutricionNutriente() {
   if (loading) return <NutricionLoading />;
   if (!n) return null;
 
-  const comic = comicNutrienteByKey(n.key);
   const esSecundario = rutaListaNutriente(n.key).endsWith("secundarios");
 
   // Subgrupos de tarjetas (p.ej. «⚡ Electrolitos» / «🧱 Minerales»): agrupamos
@@ -319,6 +324,10 @@ export default function MetodoNutricionNutriente() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
+              // «← Volver» a la izquierda, como en los temas de Fisiología: desde
+              // el detalle de un grupo se vuelve a SU rejilla (principales o
+              // secundarios), sin tener que bajar hasta el final de la página.
+              prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate(rutaListaNutriente(n.key)) }}
               extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
             />
           </Reveal>
@@ -360,7 +369,7 @@ export default function MetodoNutricionNutriente() {
                            fallback={<FotoPlaceholder label={n.label} color={n.color} />} />
                   </Box>
 
-                  {comic && (
+                  {comic.length > 0 && (
                     <Box as="button" onClick={abrirComic}
                          w="100%" position="relative" overflow="hidden"
                          display="inline-flex" alignItems="center" justifyContent="center" gap={2.5}
@@ -493,7 +502,7 @@ export default function MetodoNutricionNutriente() {
 
       {/* Ilustración (cómic) del grupo, a pantalla completa (misma estructura que
           las ilustraciones de otras disciplinas). */}
-      {comic && (
+      {comic.length > 0 && (
         <NutrienteIlustracionModal isOpen={comicOpen} vinetas={comic} leida={comicYaLeido}
                                    onClose={() => setComicOpen(false)} />
       )}

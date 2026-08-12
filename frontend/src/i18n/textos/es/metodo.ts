@@ -58,6 +58,37 @@ export const metodo = {
   // ── Cursos de la disciplina ────────────────────────────────────────────
   "metodo.cursosOrientativos": "Cursos orientativos de {disciplina}",
   "metodo.cursosPronto": "Pronto encontrarás aquí los cursos de {disciplina}.",
+  "metodo.cursosIntro": "Si quieres profundizar en {disciplina}, estos cursos te acompañan paso a paso.",
+
+  // ── «Crea tus propios apuntes» · la pantalla compartida ────────────────
+  // Solo los rótulos de la pantalla: los capítulos del cuaderno (su título y su
+  // resumen) los pone cada disciplina en su `libroApuntes…`, y de momento van
+  // en español —el PDF entero se compone en español—.
+  "metodo.apuntes.portada": "La portada",
+  "metodo.apuntes.queTeLlevas": "Qué te llevas",
+  "metodo.apuntes.todo": "Todo",
+  "metodo.apuntes.nada": "Nada",
+  "metodo.apuntes.foto": "foto",
+  "metodo.apuntes.fotos": "fotos",
+  "metodo.apuntes.comoLoQuieres": "Cómo lo quieres",
+  "metodo.apuntes.conFotos": "Con ilustraciones",
+  "metodo.apuntes.conFotosPie": "como se ve en la web",
+  "metodo.apuntes.soloTexto": "Solo texto",
+  "metodo.apuntes.soloTextoPie": "ligero para el móvil",
+  "metodo.apuntes.sinMarcar": "No has marcado nada todavía: elige arriba lo que quieres llevarte.",
+  /** El resumen de abajo: «3 capítulos · 12 ilustraciones · unos 4,2 MB». */
+  "metodo.apuntes.capitulo": "capítulo",
+  "metodo.apuntes.capitulos": "capítulos",
+  "metodo.apuntes.nIlustraciones": "{n} ilustraciones",
+  "metodo.apuntes.sinIlustraciones": "sin ilustraciones",
+  "metodo.apuntes.unos": "unos {peso}",
+  "metodo.apuntes.preparandoFotos": "Preparando las ilustraciones… {hechas}/{total}",
+  "metodo.apuntes.componiendo": "Componiendo el cuaderno… {hechas}/{total}",
+  "metodo.apuntes.error":
+    "No hemos podido montar el PDF. Vuelve a intentarlo; si sigue fallando, prueba sin ilustraciones.",
+  "metodo.apuntes.descargar": "Descargar mis apuntes",
+  "metodo.apuntes.verlo": "Verlo antes",
+  "metodo.apuntes.cerrar": "Cerrar",
 
   // ── Botones que salen de un cómic hacia el paso siguiente ──────────────
   "metodo.irA": "Ir a {destino}",
@@ -86,9 +117,39 @@ export const metodo = {
   "metodo.nutri.paso.dia": "Diseña tu día",
   "metodo.nutri.paso.macros": "Cuenta lo que comes",
   "metodo.nutri.paso.mitos": "Preguntas y mitos",
+  /** Frase bajo el header de la página de mitos. */
+  "metodo.nutri.mitos.intro":
+    "Estas son algunas de las preguntas y mitos que más se repiten. Toca cada uno para descubrir qué dice de verdad la ciencia.",
   "metodo.nutri.paso.origen": "¿De dónde vienen?",
   "metodo.nutri.paso.cursos": "Cursos",
   "metodo.nutri.paso.biblioteca": "Biblioteca",
+  /** Frase de cierre de «El hambre», sobre el turquesa y sin caja. */
+  "metodo.nutri.hambreCierre":
+    "Lo has visto tú mismo; te reconstruyes con lo que comes, ¿cómo eliges hoy reconstruirte?",
+
+  // ── Nutrición · «¿De dónde vienen los nutrientes?» ─────────────────────
+  // Título y frase corta de cada una de las seis lecturas del paso. Están en
+  // claves porque el array de lecturas (comicsOrigenNutrientes.ts) se calcula al
+  // importar el módulo: un texto ya resuelto ahí se quedaría congelado en el
+  // idioma con el que arrancó la página.
+  "metodo.nutri.origen.ciclos.titulo": "Los grandes ciclos de la naturaleza",
+  "metodo.nutri.origen.ciclos.resumen":
+    "El agua, el carbono, el oxígeno, el nitrógeno y el fósforo dando vueltas: tus átomos son prestados.",
+  "metodo.nutri.origen.tierra.titulo": "La tierra y la raíz",
+  "metodo.nutri.origen.tierra.resumen":
+    "Cómo sale un mineral de una roca, se disuelve en el suelo y entra en una planta.",
+  "metodo.nutri.origen.planta.titulo": "Una planta por dentro",
+  "metodo.nutri.origen.planta.resumen":
+    "Dos tuberías, una pared de fibra y una despensa. Y sube el agua sin tener corazón.",
+  "metodo.nutri.origen.hoja.titulo": "Una hoja por dentro",
+  "metodo.nutri.origen.hoja.resumen":
+    "La fábrica: aire, agua y luz entran; salen comida y el oxígeno que respiras.",
+  "metodo.nutri.origen.fruta.titulo": "La fruta, la verdura y sus colores",
+  "metodo.nutri.origen.fruta.resumen":
+    "De la flor al fruto, la orden de madurar y qué hace cada color.",
+  "metodo.nutri.origen.animal.titulo": "Cuando el nutriente pasa por un animal",
+  "metodo.nutri.origen.animal.resumen":
+    "La otra rama: la cadena, lo que el animal concentra, la B12 y el omega-3 que era de un alga.",
 
   // ── Calculadora de calorías (botones de elección) ──────────────────────
   "metodo.nutri.act.sentada": "Sobre todo sentada/o",
@@ -327,6 +388,225 @@ export const metodo = {
   "metodo.dia.proteina": "Proteína",
   "metodo.dia.grasa": "Grasa",
 
+  // ── Medicina China · textos de página (no van en cómic) ────────────────
+  /** Apertura de la página del taoísmo: la cita y la intro bajo el header. */
+  "metodo.tcm.tao.titulo": "Taoísmo",
+  "metodo.tcm.tao.citaApertura": "«El Tao que puede ser nombrado no es el Tao eterno.»",
+  "metodo.tcm.tao.citaAperturaAutor": "— Lao-Tse",
+  "metodo.tcm.tao.intro1":
+    "El taoísmo no es una religión: es una forma de mirar. Lao-Tse llamó Tao al «camino», el orden natural que rige todo lo que existe. De esa mirada nace lo que ya has recorrido: el Qi que nos une, el Yin y el Yang que se equilibran, los cinco elementos que se generan y se controlan.",
+  "metodo.tcm.tao.intro2":
+    "No son normas que haya que obedecer, sino cómo funciona la naturaleza. Puedes ignorarlas, igual que puedes ignorar la gravedad: la diferencia la paga tu cuerpo.",
+  "metodo.tcm.tao.cierreTitulo": "Y entonces, ¿qué es curarse?",
+  /** Cierre de la página del taoísmo, con su cita del Tao Te King. */
+  "metodo.tcm.tao.cierre":
+    "El taoísmo no te pide ser mejor que ayer, sino dejar de ir en contra de ti. La salud, desde esta mirada, no es un premio: es lo que ocurre cuando dejas de estorbarte.",
+  "metodo.tcm.tao.cita":
+    "«El hombre sigue a la tierra, la tierra sigue al cielo, el cielo sigue al Tao, y el Tao se sigue a sí mismo.»",
+  "metodo.tcm.tao.citaAutor": "— Lao-Tse, Tao Te King",
+  /** Intro y nota al pie de la página del Qigong. */
+  "metodo.tcm.qigong.intro": "Qi (氣) es la energía que circula por ti. Gong (功) es el trabajo constante.",
+  "metodo.tcm.qigong.nota":
+    "El qigong es una práctica de salud, no un tratamiento: acompaña, no sustituye. Si estás embarazada, tienes hipertensión no controlada, una hernia, vértigos o una lesión reciente, adapta las posturas con alguien que sepa antes de hacerlas por tu cuenta.",
+  "metodo.tcm.qigong.titulo": "Qigong",
+  /** La línea del Dao Yin (la franja que abre su cómic). */
+  "metodo.tcm.qigong.daoYinLinea":
+    "La integración en el ser humano de la energía femenina del Dao (Dios)",
+  /** Las tres regulaciones (三調): la base de cualquier práctica. */
+  "metodo.tcm.qigong.reg.cuerpo": "Regular el cuerpo",
+  "metodo.tcm.qigong.reg.cuerpoTexto":
+    "Pies al ancho de las caderas, rodillas blandas, coxis abajo, coronilla arriba. Antes de mover nada, colócate.",
+  "metodo.tcm.qigong.reg.respiracion": "Regular la respiración",
+  "metodo.tcm.qigong.reg.respiracionTexto":
+    "Por la nariz, al vientre, lenta y silenciosa. No la fuerces: acompáñala hasta que sea larga sola.",
+  "metodo.tcm.qigong.reg.mente": "Regular la mente",
+  "metodo.tcm.qigong.reg.menteTexto":
+    "La atención dentro del movimiento, no en la lista de la compra. Cuando las tres se funden, eso es la práctica (三調合一).",
+  /** Qué es (y qué no es) el qigong. Tres frases; ni una más. */
+  "metodo.tcm.qigong.queEs1":
+    "En China no es una moda: es la cuarta rama de su medicina, junto con la acupuntura, la farmacopea y la dietética. Se practica en los parques a las siete de la mañana.",
+  "metodo.tcm.qigong.queEs2":
+    "El movimiento es lento a propósito: la lentitud te obliga a sostener, y sostener es lo que mueve el Qi.",
+  "metodo.tcm.qigong.queEs3": "No busca fuerza, busca circulación. No te añade nada: te desatasca.",
+
+  // ── Medicina China · Tu cocina diaria ──────────────────────────────────
+  // El contenido (los gestos, el principio y las veinte formas de cocinar) va
+  // en tcmCocinaContenido(.en).ts; aquí solo los rótulos de la página.
+  "metodo.tcm.cocina.titulo": "Tu cocina diaria",
+  "metodo.tcm.cocina.cita":
+    "«El médico excelente trata primero la enfermedad mediante la alimentación; solo cuando la alimentación no basta, utiliza medicamentos.»",
+  "metodo.tcm.cocina.citaAutor": "— Sun Simiao,",
+  "metodo.tcm.cocina.citaObra": "Qianjin Yaofang",
+  "metodo.tcm.cocina.gestoHoy": "Un gesto para hoy",
+  "metodo.tcm.cocina.dameOtro": "Dame otro",
+  "metodo.tcm.cocina.hechoHoy": "Hecho hoy",
+  "metodo.tcm.cocina.loHagoHoy": "Lo hago hoy",
+  "metodo.tcm.cocina.formas": "Formas de cocinar",
+  "metodo.tcm.cocina.aviso":
+    "Todo esto tiene un fin educativo y de autocuidado: no sustituye la valoración de un profesional cualificado ni un tratamiento médico.",
+
+  // ── Medicina China · la página de cada elemento ────────────────────────
+  // Los rótulos de los diez «momentos» y de la guía práctica. El contenido de
+  // cada elemento (las siete secciones) va en tcmElementosContenido(.en).ts.
+  "metodo.tcm.el.elemento": "El elemento",
+  "metodo.tcm.el.rige": "Qué rige",
+  "metodo.tcm.el.funciones": "Funciones",
+  "metodo.tcm.el.equilibrio": "En equilibrio",
+  "metodo.tcm.el.exceso": "En exceso",
+  "metodo.tcm.el.deficiencia": "En deficiencia",
+  "metodo.tcm.el.desequilibrio": "Señales de desequilibrio",
+  "metodo.tcm.el.cuidarlo": "Cómo cuidarlo",
+  "metodo.tcm.el.guia": "Guía práctica",
+  "metodo.tcm.el.test": "¿Cómo está este elemento en ti?",
+  "metodo.tcm.el.guiaNutricion": "Nutrición",
+  "metodo.tcm.el.guiaEvitar": "Evita",
+  "metodo.tcm.el.guiaEstiloDeVida": "Estilo de Vida",
+  "metodo.tcm.el.guiaEjercicio": "Ejercicio",
+  "metodo.tcm.el.guiaTerapia": "Terapia",
+  "metodo.tcm.el.guiaDescanso": "Mejor momento para descansar",
+  "metodo.tcm.el.laEstrella": "La estrella",
+  "metodo.tcm.el.atras": "‹ Atrás",
+  "metodo.tcm.el.seguir": "Seguir ›",
+  "metodo.tcm.el.heLeido": "He leído ✓",
+  "metodo.tcm.el.respondeTest": "Responde el mini-test para terminar",
+
+  // ── Medicina China · nombres de paso (los botones de los cómics) ────────
+  "metodo.tcm.paso.elementos": "Los 5 elementos",
+  "metodo.tcm.paso.diagnostico": "Diagnóstico final",
+  "metodo.tcm.paso.taoismo": "Taoísmo",
+  "metodo.tcm.paso.cocina": "Tu cocina",
+  "metodo.tcm.paso.qigong": "Qigong",
+  "metodo.tcm.paso.lengua": "Lee tu lengua",
+  "metodo.tcm.paso.cursos": "Cursos",
+  /** Nombre largo del paso 2 (el del índice y del header de su página). El
+   *  corto, «Los 5 elementos», es el que cabe en un botón de al lado. */
+  "metodo.tcm.paso.cincoElementos": "Los Cinco Elementos",
+  "metodo.tcm.paso.ciclos": "Los ciclos",
+  /** Paso 5 (aprender a leer una lengua). El 6, donde se lee la propia, es
+   *  `metodo.tcm.paso.lengua`. */
+  "metodo.tcm.paso.tuLengua": "Tu lengua",
+  "metodo.tcm.paso.apuntes": "Crea tus apuntes",
+  "metodo.tcm.paso.apuntesCorto": "Tus apuntes",
+
+  // ── Medicina China · Los Cinco Elementos (la estrella, paso 2) ──────────
+  "metodo.tcm.elementos.queSon": "¿Qué son los Cinco Elementos?",
+  "metodo.tcm.elementos.orden":
+    "Los elementos se abren en orden (Madera → Fuego → Tierra → Metal → Agua). Al leer cada uno, se marca con ✓.",
+  "metodo.tcm.elementos.testsPendientes": "Rellena los tests de los cinco elementos para continuar",
+
+  // ── Medicina China · Los ciclos (paso 3) ───────────────────────────────
+  // Los dos ciclos salen también en el Diagnóstico final, con los mismos
+  // rótulos: de ahí que no vivan en la página.
+  "metodo.tcm.ciclos.titulo": "Los Ciclos",
+  "metodo.tcm.ciclos.intro":
+    "Los Cinco Elementos no viven aislados: se relacionan en dos ciclos. Cuando fluyen, hay equilibrio; cuando se alteran, aparece el desequilibrio. Toca cada flechita para descubrir la relación.",
+  "metodo.tcm.ciclos.nota":
+    "En el ciclo generador la energía avanza por el perímetro (Madera → Fuego → Tierra → Metal → Agua). En el ciclo de control cruza la estrella: cada elemento frena al que tiene enfrente para mantener el conjunto en armonía.",
+  "metodo.tcm.ciclos.flechitas": "Toca todas las flechitas para descubrir cada relación",
+  "metodo.tcm.ciclos.sheng": "Ciclo generador",
+  "metodo.tcm.ciclos.ke": "Ciclo de control",
+  /** El verbo del título de una relación: «La Madera GENERA el Fuego». En
+   *  inglés no lleva artículos: «Wood generates Fire». */
+  "metodo.tcm.ciclos.genera": "genera",
+  "metodo.tcm.ciclos.controla": "controla a",
+
+  // ── Medicina China · Diagnóstico final (paso 4) ─────────────────────────
+  "metodo.tcm.diag.cita":
+    "«Antes de sanar a alguien, pregúntale si está dispuesto a renunciar a las cosas que lo enferman.»",
+  "metodo.tcm.diag.citaAutor": "— Hipócrates",
+  "metodo.tcm.diag.iluminados": "Los elementos iluminados son los que más necesitan de tu atención.",
+  "metodo.tcm.diag.barras":
+    "Cada elemento tira hacia un lado: hacia arriba si le sobra energía, hacia abajo si le falta. Cuanto más cerca de la línea, más en equilibrio.",
+  "metodo.tcm.diag.repasa":
+    "Repasa cada relación con calma. Todas te interesan, pues todas forman parte de ti.",
+  "metodo.tcm.diag.aviso":
+    "Esta valoración tiene un fin educativo y de autoconocimiento. No constituye un diagnóstico clínico ni sustituye la valoración de un profesional cualificado.",
+  /** Cuando un elemento no tiene su mini-test respondido. */
+  "metodo.tcm.diag.sinDatos": "sin datos",
+  "metodo.tcm.diag.sinDatosSuficientes": "sin datos suficientes",
+
+  // ── Medicina China · El diagnóstico de la lengua (paso 5) ───────────────
+  // Las variantes de lengua (el color, la forma, la saburra…) NO van aquí:
+  // son contenido y viven en tcmLenguaContenido(.en).ts.
+  "metodo.tcm.lengua.titulo": "El diagnóstico de la lengua",
+  "metodo.tcm.lengua.intro":
+    "La lengua es el espejo de las vísceras. Se lee por capas: el color, la forma, el movimiento, la saburra, la humedad y los pequeños detalles. Aprende a reconocer cada una y luego mira la tuya.",
+  "metodo.tcm.lengua.comoMirar": "Cómo mirar tu lengua",
+  "metodo.tcm.lengua.mirar1": "Por la mañana, antes de lavarte los dientes y antes de comer o beber.",
+  "metodo.tcm.lengua.mirar2": "Con luz natural siempre que puedas.",
+  "metodo.tcm.lengua.mirar3": "Saca la lengua relajada y sin forzarla.",
+  "metodo.tcm.lengua.mirar4": "Fíjate también en dónde aparece el cambio: cada zona habla de un órgano.",
+  "metodo.tcm.lengua.mapa": "El mapa de la lengua",
+  "metodo.tcm.lengua.mapaAlt": "Mapa de la lengua",
+  "metodo.tcm.lengua.mapaPie": "El mapa de la lengua: cada zona se corresponde con unos órganos.",
+  "metodo.tcm.lengua.mapaTexto":
+    "No solo importa qué cambia, sino en qué parte de la lengua aparece: cada zona se relaciona con unos órganos.",
+  /** Los tres grupos de cajitas que NO son una dimensión entera (mezclan
+   *  variantes de dos capas para que las filas queden completas). */
+  "metodo.tcm.lengua.grupoForma": "El cuerpo · la forma",
+  "metodo.tcm.lengua.grupoMovimiento": "El movimiento",
+  "metodo.tcm.lengua.grupoSuperficie": "La superficie · humedad y detalles",
+  /** Marca de la variante de referencia (la lengua sana de cada capa). */
+  "metodo.tcm.lengua.sana": "· sana",
+  "metodo.tcm.lengua.aviso":
+    "Material con fin formativo. El diagnóstico por la lengua es una herramienta propia de la Medicina Tradicional China; no constituye un diagnóstico médico ni sustituye la valoración de un profesional sanitario cualificado.",
+
+  // ── Medicina China · Lee tu lengua (paso 6) ─────────────────────────────
+  "metodo.tcm.leer.intro":
+    "Ahora que sabes leer una lengua, mira la tuya. Colócate frente a un espejo con buena luz natural, por la mañana y antes de comer o beber, y saca la lengua sin forzar.",
+  "metodo.tcm.leer.rotulo": "Lee tu propia lengua",
+  "metodo.tcm.leer.elige": "Elige lo que más se parezca a la tuya en cada apartado. No hay respuestas correctas.",
+  "metodo.tcm.leer.hoy": "Tu lengua hoy",
+  "metodo.tcm.leer.sano":
+    "Tu lengua refleja un buen equilibrio: la Sangre nutre, el Qi circula y el Yin y el Yang se sostienen. Cuídalo con lo que ya sabes de tu recorrido y vuelve a observarte de vez en cuando: la lengua cambia contigo.",
+  "metodo.tcm.leer.sugiere":
+    "Esto es lo que tu lengua sugiere hoy y cómo puedes acompañar tu equilibrio. Cuantas más señales apuntan a un mismo patrón, más presente está.",
+  "metodo.tcm.leer.comoEquilibrarlo": "Cómo equilibrarlo",
+  /** Cuántos signos de la lengua apuntan a un mismo patrón. */
+  "metodo.tcm.leer.senal": "señal",
+  "metodo.tcm.leer.senales": "señales",
+  "metodo.tcm.leer.vuelve":
+    "Vuelve a mirar tu lengua dentro de unos días y compara: es tu forma de ver, poco a poco, cómo tus cuidados van reequilibrándote.",
+  "metodo.tcm.leer.aviso":
+    "La lectura de la lengua es una herramienta de autoconocimiento con fines educativos. No constituye un diagnóstico clínico ni sustituye la valoración de un profesional cualificado.",
+
+  // ── Medicina China · Crea tus apuntes (paso 11) ─────────────────────────
+  "metodo.tcm.apuntes.intro1":
+    "Has recorrido la Medicina China entera. Ahora decide qué te llevas: marca lo que quieras —tu diagnóstico, la lectura de tu lengua, las cocinas, las leyes del Tao, las prácticas— y te lo montamos en un cuaderno para leer sin pantalla.",
+  "metodo.tcm.apuntes.intro2":
+    "Se prepara aquí mismo, en tu navegador. Puedes volver y montarlo otra vez cuantas veces quieras.",
+
+  // ── Medicina China · capítulos de sus Ilustraciones ────────────────────
+  // Diecisiete capítulos: los cuatro de teoría, los cinco elementos uno a uno,
+  // lo que se rompe (enfermedades) y lo que se hace (Tao, cocina, Qigong).
+  "metodo.tcmIlus.origen": "El Origen",
+  "metodo.tcmIlus.yinYang": "El Yin Yang",
+  "metodo.tcmIlus.elementos": "Los Cinco Elementos",
+  "metodo.tcmIlus.alma": "El Alma Humana",
+  "metodo.tcmIlus.wuXing": "El Wu Xing",
+  "metodo.tcmIlus.madera": "La Madera",
+  "metodo.tcmIlus.fuego": "El Fuego",
+  "metodo.tcmIlus.tierra": "La Tierra",
+  "metodo.tcmIlus.metal": "El Metal",
+  "metodo.tcmIlus.agua": "El Agua",
+  "metodo.tcmIlus.enfermedades": "Las Enfermedades",
+  "metodo.tcmIlus.leyesTao": "Las Leyes del Tao",
+  "metodo.tcmIlus.cocina": "Formas de Cocinar",
+  "metodo.tcmIlus.qigongHistoria": "La Historia del Qigong",
+  "metodo.tcmIlus.daoYin": "El Dao Yin",
+  "metodo.tcmIlus.brocados": "Los Brocados",
+  "metodo.tcmIlus.animales": "Los Cinco Animales",
+
+  // ── Ayurveda · capítulos de sus Ilustraciones ──────────────────────────
+  "metodo.ayurIlus.origen": "1. El Origen",
+  "metodo.ayurIlus.elementos": "2. Los Elementos",
+  "metodo.ayurIlus.doshas": "3. Los Doṣhas",
+
+  // ── Ayurveda · nombres de paso (los botones que salen de un cómic) ──────
+  "metodo.ayur.paso.descubrete": "Descúbrete",
+  "metodo.ayur.paso.doshas": "Doṣhas",
+  "metodo.ayur.paso.pranayama": "Prāṇāyāma",
+
   // ── Ayurveda · «Crea tu día equilibrado» ───────────────────────────────
   "metodo.ayurDia.titulo": "Crea tu día equilibrado",
   "metodo.ayurDia.intro":
@@ -432,6 +712,13 @@ export const metodo = {
   "fisiologia.lasCelulas.titulo": "Las células de tus órganos",
   "fisiologia.sistemas.titulo": "Sistemas",
   "fisiologia.organismo.titulo": "El cuerpo",
+  /** Nombres de paso que citan los botones de los cómics intercalados. */
+  "fisiologia.organos.titulo": "Órganos",
+  "fisiologia.niveles.titulo": "Niveles",
+  "fisiologia.sonrisa.titulo": "La sonrisa interior",
+  "fisiologia.sonrisa.corto": "Sonrisa",
+  /** Cierre del cómic de las estrellas: la tabla periódica a pantalla completa. */
+  "fisiologia.tablaFrase": "Nunca más mirarás la tabla periódica con los mismos ojos...",
 
   // Ordinal de cada disciplina en la cabecera del box de pago. Va como frase
   // entera y no «{n}ª disciplina» porque en inglés el ordinal es irregular.

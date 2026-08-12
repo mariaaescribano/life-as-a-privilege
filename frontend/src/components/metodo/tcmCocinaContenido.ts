@@ -104,10 +104,10 @@ export const COCINA_ELEMENTO: Record<Elemento, CocinaElemento> = {
       "El Fuego se calma con lo amargo y lo ligeramente refrescante: lo que baja el calor del corazón y devuelve el sueño. Nada de exceso de picante ni de alcohol, y cenas ligeras.",
     cadaDia: [
       "Un toque amargo al día y en poca cantidad: unas hojas de escarola o endivia antes del plato principal.",
-      "Algo rojo cada día: granada, cereza, arándanos, remolacha, judía azuki.",
+      "Algo rojo cada día: manzana, granada, cereza, arándanos, remolacha, judía azuki.",
       "Cambia el segundo café por una infusión de crisantemo y menta.",
       "Cena ligera y temprana: el corazón necesita que la digestión esté cerrada al acostarse.",
-      "Come sentada, despacio y acompañada cuando puedas: el Fuego también se nutre de la mesa.",
+      "Come sentado, despacio y acompañada cuando puedas: el Fuego también se nutre de la mesa.",
     ],
     cocciones: [
       {
@@ -197,7 +197,7 @@ export const COCINA_ELEMENTO: Record<Elemento, CocinaElemento> = {
     principio:
       "El Metal pide blanco, jugoso y ligeramente picante: lo que humedece el pulmón y abre la respiración. En otoño, cuando la sequedad aprieta, lo dulce-húmedo es medicina.",
     cadaDia: [
-      "Algo blanco y jugoso al día: pera, nabo daikon, coliflor, hongo blanco, almendra.",
+      "Algo blanco y jugoso al día: pera, nabo daikon, coliflor, hongo blanco, champiñón, anacardo.",
       "Un picante suave que abra el pecho: jengibre, puerro, cebolla, rábano. Abrir, no quemar.",
       "Una elaboración al vapor: el vapor es humedad que entra por el plato y por la cara.",
       "Fibra suave para el intestino grueso: manzana cocida, lino remojado, avena.",

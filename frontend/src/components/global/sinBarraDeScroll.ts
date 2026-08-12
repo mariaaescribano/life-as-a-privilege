@@ -29,7 +29,48 @@ import type { RefObject } from "react";
 //
 //  Vale igual en ordenador y en móvil: en móvil, además, evita el rebote de la
 //  página por debajo del popup.
+//
+//  ── POR QUÉ SE CUENTAN LOS CANDADOS ─────────────────────────────────────────
+//  <body> y <html> los comparten TODOS los popups, y dos visores pueden estar
+//  vivos a la vez: cuando un cómic encadena con el siguiente (Tu cocina →
+//  Qigong: la historia del Qigong y, detrás, los cinco animales), Chakra deja el
+//  que se va montado unos milisegundos mientras se desvanece, y el que entra ya
+//  se ha montado encima.
+//
+//  Guardando cada uno «el valor que había» eso terminaba fatal: el segundo se
+//  encontraba el `overflow: hidden` que había puesto el primero, lo apuntaba
+//  como valor original y, al cerrarse, lo DEVOLVÍA. La página quedaba con
+//  `overflow: hidden` puesto para siempre y ya no se podía bajar (se veía al
+//  aterrizar en /metodo/tcm/qigong: la página no scrolleaba).
+//
+//  Por eso el candado se cuenta por elemento: el PRIMERO que llega apunta el
+//  valor de verdad y lo apaga; los de en medio solo suman; y el ÚLTIMO en irse
+//  es el que devuelve el valor original. Mientras quede un popup abierto, el
+//  scroll sigue bloqueado; cuando no queda ninguno, vuelve como estaba.
 // ─────────────────────────────────────────────────────────────────────────────
+
+/** Candados vivos por elemento: cuántos popups lo están tapando y qué
+ *  `style.overflow` tenía ANTES del primero de todos. */
+const candados = new WeakMap<HTMLElement, { n: number; original: string }>();
+
+function apagarOverflow(el: HTMLElement) {
+  const abierto = candados.get(el);
+  if (abierto) {
+    abierto.n += 1;
+    return;
+  }
+  candados.set(el, { n: 1, original: el.style.overflow });
+  el.style.overflow = "hidden";
+}
+
+function devolverOverflow(el: HTMLElement) {
+  const abierto = candados.get(el);
+  if (!abierto) return;
+  abierto.n -= 1;
+  if (abierto.n > 0) return; // aún queda algún popup encima
+  candados.delete(el);
+  el.style.overflow = abierto.original;
+}
 
 /**
  * Apaga el scroll de todo lo que hay por encima de `ref` mientras `activo`.
@@ -46,16 +87,17 @@ export function useSinBarraDeScroll(
     const inicio = ref.current;
     if (!inicio) return;
 
-    // Camino completo hasta <html>. Se apunta el `style.overflow` que tenía cada
-    // uno (casi siempre "") para poder dejarlo exactamente como estaba.
-    const antes: [HTMLElement, string][] = [];
+    // Camino completo hasta <html>. Se apunta la lista para soltar EXACTAMENTE
+    // los mismos elementos al cerrar, aunque para entonces el popup ya no
+    // cuelgue del documento.
+    const tapados: HTMLElement[] = [];
     for (let el: HTMLElement | null = inicio; el; el = el.parentElement) {
-      antes.push([el, el.style.overflow]);
-      el.style.overflow = "hidden";
+      tapados.push(el);
+      apagarOverflow(el);
     }
 
     return () => {
-      for (const [el, valor] of antes) el.style.overflow = valor;
+      for (const el of tapados) devolverOverflow(el);
     };
   }, [activo, ref]);
 }

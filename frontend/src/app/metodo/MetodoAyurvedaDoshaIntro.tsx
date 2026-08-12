@@ -14,6 +14,8 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_DOSHA } from "../../components/metodo/comicDoshas";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import {
   API_URL,
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -111,6 +113,7 @@ function CheckRow({ label, checked, onToggle, color }: { label: string; checked:
 }
 
 export default function MetodoAyurvedaDoshaIntro() {
+  const t = useT();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
@@ -124,6 +127,11 @@ export default function MetodoAyurvedaDoshaIntro() {
   const [guardando, setGuardando] = useState(false);
   // Cómic del dosha: se intercala al pulsar «Descúbrete →», antes de navegar.
   const [comicOpen, setComicOpen] = useState(false);
+  // Sus viñetas en el idioma activo. Se piden SIEMPRE (los hooks, antes del
+  // primer return): si la ruta trae un doṣha que no existe, la página ya se va
+  // a /tarjetas y esto no llega a pintarse.
+  const doshaComic = doshaKey ?? "vata";
+  const comicVinetas = useComic(`ayurveda-${doshaComic}`, COMIC_DOSHA[doshaComic]);
   const dataRef = useRef<Record<string, any>>({});
   const finalRef = useRef<HTMLDivElement>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
@@ -508,8 +516,8 @@ export default function MetodoAyurvedaDoshaIntro() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={irADescubrete}
-        vinetas={COMIC_DOSHA[doshaKey]}
-        continueLabel="Descúbrete"
+        vinetas={comicVinetas}
+        continueLabel={t("metodo.ayur.paso.descubrete")}
         themeColor={meta.color}
         disciplinaBgImage="/img/fondos/hinduismo.webp"
         disciplinaBgColor={ayurvedaBg}

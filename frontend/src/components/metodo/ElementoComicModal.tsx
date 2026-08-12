@@ -10,6 +10,8 @@ import {
   type DatosTcm, type Elemento, type PreguntaTest, type TestElemento,
 } from "./tcmRecorrido";
 import { FOTO_ELEMENTO, COMIC_ELEMENTO } from "./tcmElementosContenido";
+import { pasosElementoEn } from "./tcmElementosEn";
+import { useIdioma } from "../../i18n";
 
 // Preposición del título del test según el género del elemento ("de la Madera",
 // "del Fuego"…), para que quede "TEST DE LA MADERA".
@@ -36,6 +38,7 @@ export function ElementoComicModal({
   /** Se llama al terminar el cómic (además de marcar el elemento como leído). */
   onComplete?: (el: Elemento) => void;
 }) {
+  const { idioma } = useIdioma();
   // Respuestas del mini-test embebido en el cómic del elemento abierto.
   const [respuestasTest, setRespuestasTest] = useState<Record<string, string>>({});
 
@@ -87,7 +90,11 @@ export function ElementoComicModal({
       <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
       <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0} minH="100dvh" position="relative" sx={{ transform: "none !important" }}>
         {elemento && (() => {
-          const pasos = COMIC_ELEMENTO[elemento];
+          // El español manda: de él salen el orden, las fotos y los tests. Del
+          // inglés, solo el texto de las viñetas.
+          const pasos = idioma === "en"
+            ? pasosElementoEn(elemento, COMIC_ELEMENTO[elemento])
+            : COMIC_ELEMENTO[elemento];
           const tests = testsDeElemento(elemento);
           const miniTest = ELEMENTOS[elemento].miniTest; // legacy (elementos sin migrar)
           const vinetas = pasos.map((p) => ({

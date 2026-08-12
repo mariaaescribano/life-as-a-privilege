@@ -3,6 +3,7 @@ import { useT } from "../../i18n";
 import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
 import { ESTRELLA_ATOMOS } from "./comicEstrellaAtomos";
+import { useComic } from "../../i18n/comics";
 import { TablaPeriodicaFinal } from "./TablaPeriodicaFinal";
 import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 
@@ -25,6 +26,8 @@ interface ComicEstrellaModalProps {
 
 export function ComicEstrellaModal({ isOpen, onClose, onContinue }: ComicEstrellaModalProps) {
   const t = useT();
+  // Sus viñetas en el idioma activo.
+  const vinetas = useComic("fisiologia-estrella-atomos", ESTRELLA_ATOMOS);
   // El cierre del cómic: al terminar la última viñeta (la estrella que colapsa)
   // el visor da paso a la tabla periódica a pantalla completa. Es la misma
   // ventana, no un modal encima de otro: el cómic se retira y deja la pantalla
@@ -57,7 +60,7 @@ export function ComicEstrellaModal({ isOpen, onClose, onContinue }: ComicEstrell
         {!tabla && (
         <ComicViewer
           key={String(isOpen)}
-          vinetas={ESTRELLA_ATOMOS}
+          vinetas={vinetas}
           onClose={cerrar}
           // El tick de la última viñeta ya no salta a Moléculas: abre la tabla.
           onComplete={() => setTabla(true)}

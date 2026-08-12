@@ -160,4 +160,11 @@ export const elMetodo = {
   "elMetodo.dudas": "Tengo dudas",
   "elMetodo.dudas.asunto": "Consulta — Life as a Privilege",
   "elMetodo.dudas.placeholder": "Escribe aquí tu consulta...",
+
+  // ── Cómic del origen (ComicPorQueExiste) ───────────────────────────────
+  // Solo los rótulos de navegación (los leen los lectores de pantalla). Las
+  // once viñetas se traducen en `components/metodo/comicElMapa.en.ts`.
+  "elMetodo.comic.anterior": "Viñeta anterior",
+  "elMetodo.comic.siguiente": "Viñeta siguiente",
+  "elMetodo.comic.irA": "Ir a la viñeta: {titulo}",
 } as const;

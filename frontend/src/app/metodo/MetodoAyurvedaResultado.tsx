@@ -11,6 +11,8 @@ import { Reveal } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { VINETAS_DOSHAS } from "../../components/metodo/HinduismoIlustracionesModal";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
@@ -78,11 +80,14 @@ interface Resultado {
 }
 
 export default function MetodoAyurvedaResultado() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [resultado, setResultado] = useState<Resultado | null>(null);
   // Cómic de los doshas: se intercala después del resultado, antes de «Energías».
   const [comicDoshasOpen, setComicDoshasOpen] = useState(false);
+  // Sus viñetas en el idioma activo (las mismas que la galería de Ilustraciones).
+  const doshasVinetas = useComic("hinduismo-doshas", VINETAS_DOSHAS);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
   const reduce = useReducedMotion();
 
@@ -265,8 +270,8 @@ export default function MetodoAyurvedaResultado() {
         isOpen={comicDoshasOpen}
         onClose={() => setComicDoshasOpen(false)}
         onContinue={() => navigate("/metodo/ayurveda/tarjetas")}
-        vinetas={VINETAS_DOSHAS}
-        continueLabel="Doṣhas"
+        vinetas={doshasVinetas}
+        continueLabel={t("metodo.ayur.paso.doshas")}
         themeColor={ayurvedaTxt}
         continueBtnColor={ayurvedaTxt}
         continueBtnBg={ayurvedaBg}

@@ -16,13 +16,19 @@ import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { QigongComicModal } from "../../components/metodo/QigongComicModal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
-  FOTO_LEY, LEYES_TAO, LEYES_TAO_VINETAS, TAOISMO_CIERRE, type LeyTao,
+  FOTO_LEY, LEYES_TAO, LEYES_TAO_VINETAS, type LeyTao,
 } from "../../components/metodo/tcmTaoismoContenido";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 export default function MetodoTcmTaoismo() {
+  const t = useT();
+  // Las diez leyes en el idioma activo. De aquí sale tanto el texto del visor
+  // como el NOMBRE de cada ley en su box (el `titulo` de la viñeta).
+  const leyes = useComic("tcm-leyes-tao", LEYES_TAO_VINETAS);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
@@ -72,16 +78,16 @@ export default function MetodoTcmTaoismo() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Taoísmo"
+            title={t("metodo.tcm.tao.titulo")}
             pageLabel="7/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Lee tu lengua", onClick: () => navigate("/metodo/tcm/lengua/leer") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.lengua")}`, onClick: () => navigate("/metodo/tcm/lengua/leer") }}
             extra={ilustracionesBtn}
-            next={{ label: "Tu cocina →", onClick: () => navigate("/metodo/tcm/recetas") }}
+            next={{ label: `${t("metodo.tcm.paso.cocina")} →`, onClick: () => navigate("/metodo/tcm/recetas") }}
           />
           </Reveal>
 
@@ -90,11 +96,11 @@ export default function MetodoTcmTaoismo() {
           <Flex direction="column" align="center" gap={2} maxW="680px">
             <Text color="white" fontStyle="italic" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8"
                   textAlign="center">
-              «El Tao que puede ser nombrado no es el Tao eterno.»
+              {t("metodo.tcm.tao.citaApertura")}
             </Text>
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight={600} letterSpacing="0.06em"
                   textAlign="center" opacity={0.85}>
-              — Lao-Tse
+              {t("metodo.tcm.tao.citaAperturaAutor")}
             </Text>
           </Flex>
           </Reveal>
@@ -115,33 +121,38 @@ export default function MetodoTcmTaoismo() {
             {LEYES_TAO.map((ley, i) => (
               <Reveal key={ley.key} inView direction="up" distance={20} scaleFrom={0.99} duration={0.6}
                       amount={0.3} w="100%" h="100%" display="flex">
-                <LeyBox ley={ley} numero={i + 1} onVer={() => setLeyAbierta(i)} />
+                <LeyBox ley={ley} nombre={leyes[i]?.titulo ?? ley.nombre}
+                        numero={i + 1} onVer={() => setLeyAbierta(i)} />
               </Reveal>
             ))}
           </Box>
 
           {/* ── CIERRE ── */}
           <Reveal inView direction="up" distance={24} scaleFrom={0.98} duration={0.7} amount={0.2} w="100%">
-          <Panel titulo="Y entonces, ¿qué es curarse?">
+          <Panel titulo={t("metodo.tcm.tao.cierreTitulo")}>
             <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
                   style={{ textShadow: INK_SHADOW }}>
-              {TAOISMO_CIERRE.texto}
+              {t("metodo.tcm.tao.cierre")}
             </Text>
             <Box h="1px" w="100%" my={{ base: 5, md: 6 }} bgGradient={`linear(to-r, transparent, ${tcmTxt}, transparent)`} />
+            {/* La cita y su autor van en el MISMO párrafo: el autor sigue a la
+                frase y se queda al final de esa línea. Puesto en dos <Text>, en
+                móvil se leía como dos cosas distintas —la frase arriba y una
+                línea suelta debajo— en vez de como una cita firmada. */}
             <Text color={tcmTxt} fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                   textAlign="center" style={{ textShadow: INK_SHADOW }}>
-              {TAOISMO_CIERRE.cita}
-            </Text>
-            <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={600} letterSpacing="0.06em"
-                  textAlign="center" mt={2} opacity={0.85} style={{ textShadow: INK_SHADOW }}>
-              {TAOISMO_CIERRE.autor}
+              {t("metodo.tcm.tao.cita")}{" "}
+              <Box as="span" fontStyle="normal" fontWeight={600} letterSpacing="0.06em"
+                   fontSize={{ base: "sm", md: "md" }} opacity={0.85}>
+                {t("metodo.tcm.tao.citaAutor")}
+              </Box>
             </Text>
           </Panel>
           </Reveal>
 
           {/* El paso siguiente, abajo a la derecha: el header ya se ha quedado
               muy arriba después de las diez leyes. Mismo texto que su botón. */}
-          <BotonPaso label="Tu cocina" nom={tcmNom} color={tcmTxt} bg={tcmBg}
+          <BotonPaso label={t("metodo.tcm.paso.cocina")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
                      onClick={() => navigate("/metodo/tcm/recetas")} />
         </Flex>
       </Flex>
@@ -152,7 +163,7 @@ export default function MetodoTcmTaoismo() {
           lado. Abre por esa y deja pasar a las demás con las flechas. */}
       <QigongComicModal
         isOpen={leyAbierta !== null}
-        vinetas={LEYES_TAO_VINETAS}
+        vinetas={leyes}
         initialIndex={leyAbierta ?? 0}
         onClose={() => setLeyAbierta(null)}
       />
@@ -183,7 +194,8 @@ export default function MetodoTcmTaoismo() {
 //
 // La foto es cuadrada; aquí se recorta a una banda 4:3 (cover) para que diez
 // boxes no conviertan la página en un scroll infinito. Entera se ve en el visor.
-function LeyBox({ ley, numero, onVer }: { ley: LeyTao; numero: number; onVer: () => void }) {
+function LeyBox({ ley, nombre, numero, onVer }:
+  { ley: LeyTao; nombre: string; numero: number; onVer: () => void }) {
   return (
     <Box as="button" onClick={onVer} w="100%" h="100%" display="flex" flexDirection="column" textAlign="left"
          position="relative" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}
@@ -231,7 +243,7 @@ function LeyBox({ ley, numero, onVer }: { ley: LeyTao; numero: number; onVer: ()
           </Text>
           <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={800} lineHeight="1.25" mt={0.5}
                 style={{ textShadow: INK_SHADOW }}>
-            {ley.nombre}
+            {nombre}
           </Text>
         </Box>
 

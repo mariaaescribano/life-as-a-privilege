@@ -3,6 +3,7 @@ import { useT } from "../../i18n";
 import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
 import { CELULA_VIVA } from "./comicCelulaViva";
+import { useComic } from "../../i18n/comics";
 import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -21,6 +22,8 @@ interface ComicCelulaModalProps {
 
 export function ComicCelulaModal({ isOpen, onClose, onContinue }: ComicCelulaModalProps) {
   const t = useT();
+  // Sus viñetas en el idioma activo.
+  const vinetas = useComic("fisiologia-celula-viva", CELULA_VIVA);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -36,7 +39,7 @@ export function ComicCelulaModal({ isOpen, onClose, onContinue }: ComicCelulaMod
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer
           key={String(isOpen)}
-          vinetas={CELULA_VIVA}
+          vinetas={vinetas}
           onClose={onClose}
           onComplete={onContinue}
           themeColor={fisiologiaTxt}

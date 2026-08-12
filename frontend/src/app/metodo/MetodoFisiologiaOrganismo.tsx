@@ -13,6 +13,8 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { RECONSTRUCCION } from "../../components/metodo/comicReconstruccion";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
@@ -136,6 +138,7 @@ function posEnAnillo(i: number, total: number, radio = 37): { x: number; y: numb
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaOrganismo() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [colocados, setColocados] = useState<string[]>([]); // keys en orden de colocación
@@ -146,6 +149,8 @@ export default function MetodoFisiologiaOrganismo() {
   // «Niveles →», como puente hacia lo que viene (hábitos, nutrición…).
   const [comicOpen, setComicOpen] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Las viñetas de «Te reconstruyes cada día», en el idioma activo.
+  const reconstruccionVinetas = useComic("fisiologia-reconstruccion", RECONSTRUCCION);
   // Reserva la altura del box de sistemas para que no encoja al arrastrarlos fuera.
   const { ref: piezasRef, minH: piezasMinH } = useReservarAltura();
   const dataRef = useRef<Record<string, any>>({});
@@ -450,8 +455,8 @@ export default function MetodoFisiologiaOrganismo() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={() => navigate("/metodo/fisiologia/niveles")}
-        vinetas={RECONSTRUCCION}
-        continueLabel="Niveles"
+        vinetas={reconstruccionVinetas}
+        continueLabel={t("fisiologia.niveles.titulo")}
         themeColor={fisiologiaTxt}
         textColor={fisiologiaTxt}
         disciplinaBgImage="/img/fondos/fisio.webp"

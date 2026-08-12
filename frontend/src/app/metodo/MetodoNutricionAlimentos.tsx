@@ -15,7 +15,8 @@ import { NutricionMaterialesModal } from "../../components/metodo/NutricionMater
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { useLeidos } from "../../hooks/useLeidos";
-import { MITOS_NUTRICION, MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/MitosNutricion";
+import { MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/MitosNutricion";
+import { useMitosNutricion } from "../../hardCoded/espacio/useMitosNutricion";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -115,6 +116,9 @@ const IconoRespuestas = (
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionAlimentos() {
+  // Los mitos en el idioma activo (el orden, la foto y la `key` con la que se
+  // guarda lo leído siguen saliendo del español).
+  const MITOS_NUTRICION = useMitosNutricion();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [molecularOpen, setMolecularOpen] = useState(false);   // alimentos + desglose

@@ -29,14 +29,6 @@ const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 
 // legible (además lleva INK_SHADOW).
 const CAJA_OVERLAY = "rgba(0,0,0,0.45)";
 
-// Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto).
-const EyeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="16" height="16" fill="currentColor"
-       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))", flexShrink: 0 }}>
-    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
-  </svg>
-);
-
 // Un día por SEFIRÁ (las 10 clásicas, sin Da'at). Cada día toma el ejercicio de
 // esa dimensión; si no tiene, se usan sus preguntas de reflexión.
 const DIAS = CABALA_SEFIROT_ORDEN.filter((k) => k !== "daat").map((k) => cabalaSefirotMap[k]);
@@ -96,7 +88,6 @@ export default function MetodoCabalaDiezDias() {
               extra={{
                 label: <Box as="span" display={{ base: "none", md: "inline" }}>Ilustraciones</Box>,
                 onClick: () => setIlustracionesOpen(true),
-                icon: <EyeIcon />,
               }}
               next={{ label: "Cursos →", onClick: () => navigate("/metodo/cabala/cursos") }}
             />

@@ -13,6 +13,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { AgendarLlamada } from "../../components/global/AgendarLlamada";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_FAMILIA } from "../../components/metodo/comicFamilia";
+import { useComic } from "../../i18n/comics";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
@@ -70,6 +71,8 @@ export default function MetodoPsicologiaExperiencia() {
   const [llamadaOpen, setLlamadaOpen] = useState(false);
   // Cómic «La familia», intercalado antes de pasar a componer el mapa familiar.
   const [comicOpen, setComicOpen] = useState(false);
+  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
+  const comicVinetas = useComic("psicologia-familia", COMIC_FAMILIA);
 
   const anioActual = new Date().getFullYear();
 
@@ -582,8 +585,8 @@ export default function MetodoPsicologiaExperiencia() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/familia`); }}
-        vinetas={COMIC_FAMILIA}
-        continueLabel="Continuar"
+        vinetas={comicVinetas}
+        continueLabel={t("comun.continuar")}
         botonNitido
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"

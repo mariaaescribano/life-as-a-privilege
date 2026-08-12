@@ -12,6 +12,7 @@ import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { TcmComicModal } from "../../components/metodo/QigongComicModal";
 import { CINCO_ANIMALES_VINETAS, HISTORIA_QIGONG_VINETAS } from "../../components/metodo/tcmQigongContenido";
+import { useComic } from "../../i18n/comics";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -19,9 +20,10 @@ import {
   ELEMENTOS, ORDEN_ELEMENTOS, elementoMasCargado, type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
-import {
-  COCINA_NOTA, FOTO_COCINA, cocinaDe, type Coccion,
-} from "../../components/metodo/tcmCocinaContenido";
+import { FOTO_COCINA, type Coccion } from "../../components/metodo/tcmCocinaContenido";
+import { useCocina, useCocinaNota } from "../../components/metodo/tcmCocinaEn";
+import { useContenidoElemento } from "../../components/metodo/tcmElementosEn";
+import { useT } from "../../i18n";
 
 // Sombra del texto DENTRO de las cajas: NEGRA, no del turquesa de la disciplina.
 // Las cajas llevan detrás la acuarela del elemento (clara en Tierra y Metal), y
@@ -43,6 +45,10 @@ function hoyISO(): string {
 }
 
 export default function MetodoTcmRecetas() {
+  const t = useT();
+  // La línea del tiempo del Qigong, en el idioma activo.
+  const historiaVinetas = useComic("tcm-qigong-historia", HISTORIA_QIGONG_VINETAS);
+  const animalesVinetas = useComic("tcm-cinco-animales", CINCO_ANIMALES_VINETAS);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // Se abre por el elemento que hoy más te pide atención; luego el usuario elige.
@@ -50,6 +56,13 @@ export default function MetodoTcmRecetas() {
   // El blob ENTERO del recorrido: hay que devolverlo completo en cada PATCH,
   // porque el backend reemplaza `data` de una pieza.
   const [datos, setDatos] = useState<DatosTcm>({});
+  // La cocina del elemento activo y su nota al pie, en el idioma activo. Son
+  // hooks, así que van AQUÍ ARRIBA: por debajo hay un return temprano con el
+  // loader y no se pueden llamar después de él.
+  const cocina = useCocina(elActivo);
+  const cocinaNota = useCocinaNota();
+  // Solo para el antetítulo del cómic: el nombre del elemento traducido.
+  const nombreElemento = useContenidoElemento(elActivo)?.nombre ?? ELEMENTOS[elActivo].nombre;
   // El paso de aquí a Qigong son DOS cómics seguidos, en este orden:
   //   1. «historia»  → el ORIGEN del Qigong (veintitrés siglos en nueve viñetas).
   //   2. «animales»  → los CINCO ANIMALES de Hua Tuo, uno por elemento.
@@ -120,16 +133,13 @@ export default function MetodoTcmRecetas() {
     return <TcmLoading />;
   }
 
-  const E = ELEMENTOS[elActivo];
-  const cocina = cocinaDe(elActivo);
-
   // Las viñetas del cómic de las cocciones: una por forma de cocinar, en el
   // mismo orden que las tarjetas (por eso el índice de la tarjeta vale como
   // `initialIndex`). El antetítulo es el elemento, para no perder de vista de
   // quién es esta cocina mientras se lee a pantalla completa.
   const coccionVinetas = cocina.cocciones.map((c, i) => ({
     src: FOTO_COCINA(elActivo, i),
-    eyebrow: E.nombre,
+    eyebrow: nombreElemento,
     titulo: c.nombre,
     paragraphs: [c.como, c.porque],
   }));
@@ -144,7 +154,7 @@ export default function MetodoTcmRecetas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Tu cocina diaria"
+            title={t("metodo.tcm.cocina.titulo")}
             pageLabel="8/11"
             compact
             bgColor={`${tcmBg}dd`}
@@ -152,9 +162,9 @@ export default function MetodoTcmRecetas() {
             nom={tcmNom}
             maxW={ANCHO}
             mb={0}
-            prev={{ label: "← Taoísmo", onClick: () => navigate("/metodo/tcm/taoismo") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.taoismo")}`, onClick: () => navigate("/metodo/tcm/taoismo") }}
             extra={ilustracionesBtn}
-            next={{ label: "Qigong →", onClick: () => setComicPaso("historia") }}
+            next={{ label: `${t("metodo.tcm.paso.qigong")} →`, onClick: () => setComicPaso("historia") }}
           />
           </Reveal>
 
@@ -163,11 +173,10 @@ export default function MetodoTcmRecetas() {
           <Flex direction="column" align="center" gap={2} maxW="700px">
             <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                   textAlign="center">
-              «El médico excelente trata primero la enfermedad mediante la alimentación;
-              solo cuando la alimentación no basta, utiliza medicamentos.»
+              {t("metodo.tcm.cocina.cita")}
             </Text>
             <Text color="white" fontSize={{ base: "sm", md: "md" }} textAlign="center" opacity={0.85}>
-              — Sun Simiao, <Box as="span" fontStyle="italic">Qianjin Yaofang</Box>
+              {t("metodo.tcm.cocina.citaAutor")} <Box as="span" fontStyle="italic">{t("metodo.tcm.cocina.citaObra")}</Box>
             </Text>
           </Flex>
           </Reveal>
@@ -213,7 +222,7 @@ export default function MetodoTcmRecetas() {
               lee aquí: se abre en el cómic inmersivo del elemento, por la
               cocción que se haya pulsado, y allí se pasa de una a otra con las
               flechas. La página se queda mirable de un vistazo. */}
-          <Seccion>Formas de cocinar</Seccion>
+          <Seccion>{t("metodo.tcm.cocina.formas")}</Seccion>
           <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }}
                gap={{ base: 5, md: 6 }} w="100%">
             {cocina.cocciones.map((c, i) => (
@@ -228,8 +237,7 @@ export default function MetodoTcmRecetas() {
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="680px"
                 lineHeight="1.7">
-            {COCINA_NOTA} Todo esto tiene un fin educativo y de autocuidado: no sustituye la
-            valoración de un profesional cualificado ni un tratamiento médico.
+            {cocinaNota} {t("metodo.tcm.cocina.aviso")}
           </Text>
           </Reveal>
         </Flex>
@@ -257,7 +265,7 @@ export default function MetodoTcmRecetas() {
         isOpen={comicPaso === "historia"}
         onClose={() => setComicPaso(null)}
         onContinue={() => setComicPaso("animales")}
-        vinetas={HISTORIA_QIGONG_VINETAS}
+        vinetas={historiaVinetas}
         continueLabel="Los animales"
         themeColor={tcmTxt}
         textColor={tcmTxt}
@@ -272,7 +280,7 @@ export default function MetodoTcmRecetas() {
         isOpen={comicPaso === "animales"}
         onClose={() => setComicPaso(null)}
         onContinue={() => navigate("/metodo/tcm/qigong")}
-        vinetas={CINCO_ANIMALES_VINETAS}
+        vinetas={animalesVinetas}
         continueLabel="Qigong"
         themeColor={tcmTxt}
         textColor={tcmTxt}
@@ -309,6 +317,7 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
   estado?: { i?: number; hecho?: string };
   onCambiar: (cambio: { i?: number; hecho?: string }) => void;
 }) {
+  const t = useT();
   const E = ELEMENTOS[elemento];
   if (!gestos.length) return null;
 
@@ -325,7 +334,7 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
         <Flex position="relative" zIndex={1} direction="column" gap={4}
               px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>
           <Flex align="center" gap={3}>
-            <Rotulo>Un gesto para hoy</Rotulo>
+            <Rotulo>{t("metodo.tcm.cocina.gestoHoy")}</Rotulo>
             <Box h="1px" flex="1" mb={2.5} bgGradient={`linear(to-r, ${E.color}88, transparent)`} />
           </Flex>
 
@@ -352,7 +361,7 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
               </Box>
               <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700}
                     style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
-                Dame otro
+                {t("metodo.tcm.cocina.dameOtro")}
               </Text>
               <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontWeight={700}>
                 {i + 1}/{gestos.length}
@@ -381,7 +390,7 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
               </Flex>
               <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700}
                     style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
-                {hecho ? "Hecho hoy" : "Lo hago hoy"}
+                {hecho ? t("metodo.tcm.cocina.hechoHoy") : t("metodo.tcm.cocina.loHagoHoy")}
               </Text>
             </Flex>
           </Flex>

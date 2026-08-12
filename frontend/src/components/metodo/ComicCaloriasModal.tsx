@@ -4,6 +4,7 @@ import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
 import { AppleLoader } from "./AppleLoader";
 import { NUTRICION_CALORIAS } from "./comicNutricionCalorias";
+import { useComic } from "../../i18n/comics";
 import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -26,6 +27,8 @@ interface ComicCaloriasModalProps {
 
 export function ComicCaloriasModal({ isOpen, onClose, onContinue }: ComicCaloriasModalProps) {
   const t = useT();
+  // Sus viñetas en el idioma activo.
+  const vinetas = useComic("nutricion-calorias", NUTRICION_CALORIAS);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -41,7 +44,7 @@ export function ComicCaloriasModal({ isOpen, onClose, onContinue }: ComicCaloria
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer
           key={String(isOpen)}
-          vinetas={NUTRICION_CALORIAS}
+          vinetas={vinetas}
           onClose={onClose}
           onComplete={onContinue}
           themeColor={nutricionBg}

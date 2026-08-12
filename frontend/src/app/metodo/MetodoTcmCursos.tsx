@@ -15,11 +15,13 @@ import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useT } from "../../i18n";
 import {
   API_URL, tcmBg, tcmNom, tcmNomLink, tcmTxt, TCMIcon,
 } from "../../GlobalVariables";
 
 export default function MetodoTcmCursos() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { cursosData, loading: cursosLoading } = useCursosData();
@@ -63,18 +65,18 @@ export default function MetodoTcmCursos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Cursos de Medicina China"
+            title={t("aprendizaje.cursosDe", { disciplina: t("disciplina.medicinaChina") })}
             pageLabel="10/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Qigong", onClick: () => navigate("/metodo/tcm/qigong") }}
+            prev={{ label: `← ${t("metodo.tcm.qigong.titulo")}`, onClick: () => navigate("/metodo/tcm/qigong") }}
             extra={ilustracionesBtn}
             // El último paso ya no es este: la disciplina termina en «Crea tus
             // apuntes», y desde allí se sigue a la Fisiología (o al Mapa).
-            next={{ label: "Tus apuntes →", onClick: () => navigate("/metodo/tcm/apuntes") }}
+            next={{ label: `${t("metodo.tcm.paso.apuntesCorto")} →`, onClick: () => navigate("/metodo/tcm/apuntes") }}
           />
           </Reveal>
 
@@ -87,7 +89,7 @@ export default function MetodoTcmCursos() {
             lineHeight="1.8"
             maxW="680px"
           >
-            Si quieres profundizar en la Medicina China, estos cursos te acompañan paso a paso.
+            {t("metodo.cursosIntro", { disciplina: t("disciplina.medicinaChina") })}
           </Text>
           </Reveal>
 
@@ -128,7 +130,7 @@ export default function MetodoTcmCursos() {
               <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" overlay={`${tcmBg}22`} />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">
                 <Text color={`${tcmTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8">
-                  Pronto encontrarás aquí los cursos de Medicina China.
+                  {t("metodo.cursosPronto", { disciplina: t("disciplina.medicinaChina") })}
                 </Text>
               </Box>
             </Box>

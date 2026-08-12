@@ -22,6 +22,9 @@ import {
   type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
 import { tieneContenido, COMIC_INTRO_ELEMENTOS, ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
+import { useNombresElementos } from "../../components/metodo/tcmElementosEn";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 
 // Mismo glow ligero que el header, para uniformar los boxes.
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
@@ -32,8 +35,10 @@ const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.
 const BOTON_GLOW = `0 0 12px ${tcmTxt}33, 0 0 26px ${tcmTxt}1a`;
 
 // Viñetas del cómic de intro (Módulo 1) en el formato del ComicViewer: cada
-// viñeta lleva su foto y un único párrafo de texto.
-const INTRO_VINETAS = COMIC_INTRO_ELEMENTOS.map((v) => ({
+// viñeta lleva su foto y un único párrafo de texto. La forma se normaliza aquí,
+// pero el TEXTO se pide al pintar (useComic, más abajo): resuelto en el módulo se
+// quedaría congelado en el idioma con el que arrancó la página.
+const INTRO_VINETAS_ES = COMIC_INTRO_ELEMENTOS.map((v) => ({
   src: v.src,
   paragraphs: Array.isArray(v.texto) ? v.texto : [v.texto],
 }));
@@ -55,6 +60,11 @@ function vertice(i: number, radio: number) {
 }
 
 export default function MetodoTcmElementos() {
+  const t = useT();
+  // El cómic de intro de los Cinco Elementos, en el idioma activo.
+  const introVinetas = useComic("tcm-wu-xing", INTRO_VINETAS_ES);
+  // Los nombres de los cinco elementos (las etiquetas de la estrella).
+  const nombres = useNombresElementos();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
@@ -156,20 +166,20 @@ export default function MetodoTcmElementos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Los Cinco Elementos"
+            title={t("metodo.tcm.paso.cincoElementos")}
             pageLabel="2/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Medicina China", onClick: () => navigate("/metodo/tcm") }}
+            prev={{ label: `← ${t("disciplina.medicinaChina")}`, onClick: () => navigate("/metodo/tcm") }}
             extra={ilustracionesBtn}
             next={{
-              label: "Los ciclos →",
+              label: `${t("metodo.tcm.paso.ciclos")} →`,
               onClick: () => navigate("/metodo/tcm/ciclos"),
               disabled: !elementosTestsCompletos(data),
-              disabledTooltip: "Rellena los tests de los cinco elementos para continuar",
+              disabledTooltip: t("metodo.tcm.elementos.testsPendientes"),
             }}
           />
           </Reveal>
@@ -215,7 +225,7 @@ export default function MetodoTcmElementos() {
               <Box position="relative" zIndex={1} display="flex" flexShrink={0}>
                 <TCMIcon size={{ base: "18px", md: "20px" }} />
               </Box>
-              <Box as="span" position="relative" zIndex={1}>¿Qué son los Cinco Elementos?</Box>
+              <Box as="span" position="relative" zIndex={1}>{t("metodo.tcm.elementos.queSon")}</Box>
             </Box>
           </Reveal>
 
@@ -287,7 +297,7 @@ export default function MetodoTcmElementos() {
                       <text x={label.x} y={label.y} fill="white" fontSize={14} fontWeight={700}
                             textAnchor="middle" dominantBaseline="middle"
                             style={{ textShadow: "0 1px 4px rgba(58,10,10,0.95)" }}>
-                        {ELEMENTOS[el].nombre}
+                        {nombres[el]}
                       </text>
                     </MotionG>
                   );
@@ -299,7 +309,7 @@ export default function MetodoTcmElementos() {
 
           <Reveal direction="up" distance={14} delay={0.2} duration={0.6} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="560px" lineHeight="1.8">
-            Los elementos se abren en orden (Madera → Fuego → Tierra → Metal → Agua). Al leer cada uno, se marca con ✓.
+            {t("metodo.tcm.elementos.orden")}
           </Text>
           </Reveal>
         </Flex>
@@ -328,7 +338,7 @@ export default function MetodoTcmElementos() {
       <IntroComicModal
         isOpen={intro.open}
         onClose={intro.finish}
-        vinetas={INTRO_VINETAS}
+        vinetas={introVinetas}
         themeColor={tcmTxt}
         textColor={tcmTxt}
         textShadow={INTRO_TEXT_SHADOW}

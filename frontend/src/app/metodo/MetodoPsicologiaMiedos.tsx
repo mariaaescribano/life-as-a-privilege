@@ -20,6 +20,8 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_MIEDO } from "../../components/metodo/comicMiedo";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import {
   experienciaById,
   MIEDOS,
@@ -46,6 +48,7 @@ const nuevoId = (): string =>
     : `m-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
 
 export default function MetodoPsicologiaMiedos() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -56,6 +59,8 @@ export default function MetodoPsicologiaMiedos() {
   const [guardando, setGuardando] = useState(false);
   // Cómic «El miedo», intercalado antes de pasar a Atrévete.
   const [comicOpen, setComicOpen] = useState(false);
+  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
+  const comicVinetas = useComic("psicologia-miedo", COMIC_MIEDO);
   const dataRef = useRef<LineaDeVidaData>({});
 
   useEffect(() => {
@@ -401,8 +406,8 @@ export default function MetodoPsicologiaMiedos() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/miedos-preguntas`); }}
-        vinetas={COMIC_MIEDO}
-        continueLabel="Continuar"
+        vinetas={comicVinetas}
+        continueLabel={t("comun.continuar")}
         botonNitido
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"

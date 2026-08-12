@@ -16,18 +16,25 @@ import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { ELEMENTOS, type DatosTcm } from "../../components/metodo/tcmRecorrido";
 import {
-  DIMENSIONES_SELECCIONABLES, lenguaObsKey, opcionElegida, lenguaCompleta, patronesPredominantes,
-  type OpcionLengua, type LenguaDim,
+  DIMENSIONES_SELECCIONABLES, lenguaObsKey, lenguaCompleta,
+  type DimensionLengua, type OpcionLengua, type LenguaDim,
 } from "../../components/metodo/tcmLenguaContenido";
+import { useLenguaSeleccionables, usePatronesLengua } from "../../components/metodo/tcmLenguaEn";
+import { useNombresElementos } from "../../components/metodo/tcmElementosEn";
+import { useT } from "../../i18n";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
 export default function MetodoTcmLenguaLeer() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
+  // Las cuatro capas que se eligen, en el idioma activo. Las `key` —lo que se
+  // guarda— y las fotos siguen saliendo del español.
+  const capas = useLenguaSeleccionables();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -89,24 +96,23 @@ export default function MetodoTcmLenguaLeer() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Lee tu lengua"
+            title={t("metodo.tcm.paso.lengua")}
             pageLabel="6/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← El curso", onClick: () => navigate("/metodo/tcm/lengua") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.tuLengua")}`, onClick: () => navigate("/metodo/tcm/lengua") }}
             extra={ilustracionesBtn}
-            next={{ label: "Taoísmo →", onClick: () => navigate("/metodo/tcm/taoismo") }}
+            next={{ label: `${t("metodo.tcm.tao.titulo")} →`, onClick: () => navigate("/metodo/tcm/taoismo") }}
           />
           </Reveal>
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="680px">
-            Ahora que sabes leer una lengua, mira la tuya. Colócate frente a un espejo con buena luz
-            natural, por la mañana y antes de comer o beber, y saca la lengua sin forzar.
+            {t("metodo.tcm.leer.intro")}
           </Text>
           </Reveal>
 
@@ -121,18 +127,20 @@ export default function MetodoTcmLenguaLeer() {
             <Banda>
               <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700} letterSpacing="0.1em"
                     textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
-                Lee tu propia lengua
+                {t("metodo.tcm.leer.rotulo")}
               </Text>
               <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                     lineHeight="1.7" maxW="720px" style={{ textShadow: INK_SHADOW }}>
-                Elige lo que más se parezca a la tuya en cada apartado. No hay respuestas correctas.
+                {t("metodo.tcm.leer.elige")}
               </Text>
             </Banda>
             <Separador />
 
-            {DIMENSIONES_SELECCIONABLES.map((d, i) => {
-              const elegida = opcionElegida(d.dim, data.observarte);
-              const last = i === DIMENSIONES_SELECCIONABLES.length - 1;
+            {capas.map((d, i) => {
+              // La opción elegida se busca EN LA CAPA TRADUCIDA (mismas `key`),
+              // para que la tarjeta marcada lleve su nombre en el idioma activo.
+              const elegida = d.opciones.find((o) => o.key === data.observarte?.[lenguaObsKey(d.dim)]) ?? null;
+              const last = i === capas.length - 1;
               return (
                 <React.Fragment key={d.dim}>
                   <Banda>
@@ -161,8 +169,7 @@ export default function MetodoTcmLenguaLeer() {
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.5} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="640px"
                 lineHeight="1.6">
-            La lectura de la lengua es una herramienta de autoconocimiento con fines educativos. No constituye
-            un diagnóstico clínico ni sustituye la valoración de un profesional cualificado.
+            {t("metodo.tcm.leer.aviso")}
           </Text>
           </Reveal>
         </Flex>
@@ -256,14 +263,21 @@ function LenguaImg({ src, alt }: { src: string; alt: string }) {
 
 // ── Síntesis: reúne las elecciones del usuario en una lectura ────────────────
 function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
-  const elegidas = DIMENSIONES_SELECCIONABLES.map((d) => ({
-    dim: d, opcion: opcionElegida(d.dim, observarte),
-  })).filter((x): x is { dim: typeof x.dim; opcion: OpcionLengua } => !!x.opcion);
-  if (elegidas.length < DIMENSIONES_SELECCIONABLES.length) return null;
+  const t = useT();
+  const nombres = useNombresElementos();
+  // El resumen («pálida · fina · amarilla…») se arma con las capas traducidas;
+  // los patrones y cuántas señales apuntan a cada uno los sigue calculando el
+  // español, y aquí llegan solo con el texto cambiado.
+  const capas = useLenguaSeleccionables();
+  const patrones = usePatronesLengua(observarte);
+  const elegidas = capas.map((d) => ({
+    dim: d,
+    opcion: d.opciones.find((o) => o.key === observarte?.[lenguaObsKey(d.dim)]) ?? null,
+  })).filter((x): x is { dim: DimensionLengua; opcion: OpcionLengua } => !!x.opcion);
+  if (elegidas.length < capas.length) return null;
 
   const todasSanas = elegidas.every((x) => x.opcion.equilibrio);
   const resumen = elegidas.map((x) => x.opcion.nombre.toLowerCase()).join(" · ");
-  const patrones = patronesPredominantes(observarte);
   const sano = todasSanas || patrones.length === 0;
 
   // Ya no es UN box: es un apartado. Un separador con mandala lo abre; luego la
@@ -280,7 +294,7 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
           <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
             <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.1em"
                   textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
-              Tu lengua hoy
+              {t("metodo.tcm.leer.hoy")}
             </Text>
             <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight={700} lineHeight="1.4"
                   style={{ textShadow: "0 1px 8px rgba(0,0,0,0.7)" }}>
@@ -289,15 +303,12 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
             {sano ? (
               <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" mt={5}
                     style={{ textShadow: INK_SHADOW }}>
-                Tu lengua refleja un buen equilibrio: la Sangre nutre, el Qi circula y el Yin y el Yang se
-                sostienen. Cuídalo con lo que ya sabes de tu recorrido y vuelve a observarte de vez en cuando:
-                la lengua cambia contigo.
+                {t("metodo.tcm.leer.sano")}
               </Text>
             ) : (
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                     lineHeight="1.7" mt={4} style={{ textShadow: INK_SHADOW }}>
-                Esto es lo que tu lengua sugiere hoy y cómo puedes acompañar tu equilibrio. Cuantas más
-                señales apuntan a un mismo patrón, más presente está.
+                {t("metodo.tcm.leer.sugiere")}
               </Text>
             )}
           </Box>
@@ -322,11 +333,11 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
                          style={{ boxShadow: `0 0 8px ${E.color}` }} />
                     <Text color={E.color} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"
                           style={{ textShadow: `0 0 10px ${E.color}66` }}>
-                      {E.nombre}
+                      {nombres[info.elemento]}
                     </Text>
                   </Flex>
                   <Text color="rgba(255,255,255,0.5)" fontSize="2xs" fontStyle="italic" letterSpacing="0.04em">
-                    {veces} {veces === 1 ? "señal" : "señales"}
+                    {veces} {t(veces === 1 ? "metodo.tcm.leer.senal" : "metodo.tcm.leer.senales")}
                   </Text>
                 </Flex>
                 {/* Título del patrón · p.ej. «Calor» */}
@@ -348,7 +359,7 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
                 {/* Cómo equilibrarlo — en el color del elemento (el de los puntos) */}
                 <Text color={E.color} fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase"
                       mt={6} mb={2.5} style={{ textShadow: `0 0 10px ${E.color}55, ${INK_SHADOW}` }}>
-                  Cómo equilibrarlo
+                  {t("metodo.tcm.leer.comoEquilibrarlo")}
                 </Text>
                 <Flex direction="column" gap={1.5}>
                   {info.comoEquilibrar.map((c, i) => (
@@ -373,8 +384,7 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
         <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic" lineHeight="1.6" textAlign="center"
                 maxW="640px" style={{ textShadow: INK_SHADOW }}>
-            Vuelve a mirar tu lengua dentro de unos días y compara: es tu forma de ver, poco a poco, cómo
-            tus cuidados van reequilibrándote.
+            {t("metodo.tcm.leer.vuelve")}
           </Text>
         </Reveal>
       )}

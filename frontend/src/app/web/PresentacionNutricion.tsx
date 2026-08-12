@@ -16,6 +16,8 @@ import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { NUTRIENTES, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
+import { mitosTraducidos } from "../../hardCoded/espacio/MitosNutricion.en";
+import { nutrientesTraducidos } from "../../hardCoded/espacio/NutrientesNutricion.en";
 import { MITOS_NUTRICION } from "../../hardCoded/espacio/MitosNutricion";
 import {
   BLANCO_GLOW_SUAVE,
@@ -56,7 +58,7 @@ const MITOS_MUESTRA = [
 ];
 
 /** De los once nutrientes se enseñan los CUATRO primeros: dentro están todos. */
-const NUTRIENTES_MUESTRA = NUTRIENTES.slice(0, 4);
+const NUTRIENTES_MUESTRA_ES = NUTRIENTES.slice(0, 4);
 
 /** Mosaico de muestra: SEIS acuarelas de lo que hay dentro (tres filas de dos).
  *  No se abren (ver MosaicoMuestra). ✍️ Cambia las fotos o los títulos a gusto.
@@ -82,7 +84,7 @@ const FOTOS_MUESTRA: { foto: string; tituloKey: ClaveTexto }[] = [
 // (ver ideasDesdeContenido), que es el mismo texto que enseña /elMetodo.
 
 export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina }) {
-  const { segunIdioma } = useIdioma();
+  const { idioma, segunIdioma } = useIdioma();
   const t = useT();
   // El nombre visible; `d.titulo` solo vale para casar la URL.
   const disciplina = useNombreDisciplinaEnMapa()(d.nom);
@@ -104,6 +106,12 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
 
   // Los nutrientes, como tarjetas para el visor de Nutrición: su foto de portada
   // y su descripción larga (si no la tiene, su resumen de una línea).
+  // Los cuatro de la muestra en el idioma activo (el orden y las fotos siempre
+  // salen del español).
+  const NUTRIENTES_MUESTRA = useMemo(
+    () => nutrientesTraducidos(NUTRIENTES_MUESTRA_ES, idioma),
+    [idioma],
+  );
   const nutrientesTarjetas: NutrienteTarjeta[] = useMemo(
     () => NUTRIENTES_MUESTRA.map((n) => ({
       key: n.key,
@@ -111,7 +119,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
       foto: n.img,
       parrafos: n.descripcion?.length ? n.descripcion : [n.resumen],
     })),
-    [],
+    [NUTRIENTES_MUESTRA],
   );
 
   // Los ocho mitos escogidos, en el orden de MITOS_MUESTRA.
@@ -121,6 +129,8 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
       .filter(Boolean) as NutrienteTarjeta[],
     [],
   );
+  // Los ocho de la muestra en el idioma activo (el orden lo fija MITOS_MUESTRA).
+  const mitosEnIdioma = useMemo(() => mitosTraducidos(mitos, idioma), [mitos, idioma]);
 
   const fotosListas = useImagesReady([
     "/img/icono/life.png",
@@ -331,7 +341,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
               gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
               gap={{ base: 4, md: 5 }}
             >
-              {mitos.map((m, i) => (
+              {mitosEnIdioma.map((m, i) => (
                 <RevealItem key={m.key} direction="up" distance={18} scaleFrom={0.96} duration={0.6}>
                   <FotoBox
                     titulo={m.titulo}
@@ -409,7 +419,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
           64: aquí se abre boca, no se vacía la despensa). */}
       {mitoIdx != null && (
         <NutrienteFichaModal
-          tarjetas={mitos}
+          tarjetas={mitosEnIdioma}
           index={mitoIdx}
           onClose={() => setMitoIdx(null)}
           sinSaltar

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useT } from "../../i18n";
+import { useT, type ClaveTexto } from "../../i18n";
+import { useComic } from "../../i18n/comics";
 import {
   Box,
   Flex,
@@ -15,6 +16,7 @@ import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { AyurvedaLoader } from "./comicLoaders";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { barraVisibleSx } from "../global/barraDeScroll";
 
 // ────────────────────────────────────────────────────────────────────────────
 // CONTENIDO DE LOS 2 SUB-CÓMICS DE HINDUISMO
@@ -173,11 +175,21 @@ const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
   los_doshas: VINETAS_DOSHAS,
 };
 
-const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string; coverPosition?: string }[] = [
-  { key: "el_origen",     title: "1. El Origen",     cover: "/viñetas/hinduismo/origen/portada.webp"              },
-  { key: "los_elementos", title: "2. Los Elementos", cover: "/viñetas/hinduismo/elementos/elementosayurveda.webp" },
-  { key: "los_doshas",    title: "3. Los Doṣhas",    cover: "/viñetas/hinduismo/doshas/doshasportada.webp"        },
+// El título va por CLAVE y no escrito: este array se calcula una vez al importar
+// el módulo, así que un texto ya traducido se quedaría congelado en el idioma con
+// el que arrancó la página. Se resuelve al pintar, con `t(opt.tituloKey)`.
+const SELECTOR_OPTIONS: { key: Capitulo; tituloKey: ClaveTexto; cover?: string; coverPosition?: string }[] = [
+  { key: "el_origen",     tituloKey: "metodo.ayurIlus.origen",    cover: "/viñetas/hinduismo/origen/portada.webp"              },
+  { key: "los_elementos", tituloKey: "metodo.ayurIlus.elementos", cover: "/viñetas/hinduismo/elementos/elementosayurveda.webp" },
+  { key: "los_doshas",    tituloKey: "metodo.ayurIlus.doshas",    cover: "/viñetas/hinduismo/doshas/doshasportada.webp"        },
 ];
+
+/** Los tres capítulos, traducidos en `i18n/comics/comics.en.ts`. */
+const CLAVE_COMIC: Record<Capitulo, string> = {
+  el_origen: "hinduismo-origen",
+  los_elementos: "hinduismo-elementos",
+  los_doshas: "hinduismo-doshas",
+};
 
 // Portadas del selector (con la misma codificación que usa el <img>), para
 // precargarlas y mostrar la animación de espera mientras descargan.
@@ -209,7 +221,13 @@ export function HinduismoIlustracionesModal({
   const volverAlSelector = () => setCapitulo(null);
   const elegirCapitulo = (key: Capitulo) => setCapitulo(key);
 
-  const vinetas = capitulo ? VINETAS_BY_CAPITULO[capitulo] : [];
+  // Las viñetas del capítulo abierto, en el idioma activo. El hook se llama
+  // siempre (con clave vacía mientras no hay capítulo elegido, que devuelve el
+  // español tal cual): así no queda una llamada condicional.
+  const vinetas = useComic(
+    capitulo ? CLAVE_COMIC[capitulo] : "",
+    capitulo ? VINETAS_BY_CAPITULO[capitulo] : [],
+  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
@@ -287,8 +305,11 @@ export function HinduismoIlustracionesModal({
             alignItems="center"
             justifyContent={{ base: "flex-start", md: "center" }}
             minH={{ base: "auto", md: "100vh" }}
-            overflowY="auto"
+            // `scroll` + barra clásica: en el móvil también se ve que la lista
+            // de capítulos sigue por debajo (ver barraDeScroll.ts).
+            overflowY="scroll"
             overflowX="hidden"
+            sx={barraVisibleSx(ayurvedaTxt)}
           >
             {!portadasListas ? (
               // Mientras cargan las portadas: animación de Ayurveda centrada.
@@ -379,7 +400,7 @@ export function HinduismoIlustracionesModal({
                         <Box
                           as="img"
                           src={encodeURI(opt.cover)}
-                          alt={opt.title}
+                          alt={t(opt.tituloKey)}
                           loading="eager"
                           position="absolute"
                           inset="0"
@@ -405,7 +426,7 @@ export function HinduismoIlustracionesModal({
                         textAlign="center"
                         lineHeight="1.1"
                       >
-                        {opt.title}
+                        {t(opt.tituloKey)}
                       </Text>
                       <Flex
                         align="center"

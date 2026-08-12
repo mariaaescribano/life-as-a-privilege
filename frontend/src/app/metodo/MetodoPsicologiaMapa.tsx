@@ -28,6 +28,8 @@ import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { EjemplosPulsables } from "../../components/metodo/EjemplosPulsables";
 import { COMIC_COMPROMISO } from "../../components/metodo/comicCompromiso";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import {
   experienciaById,
   arquetipoKey,
@@ -132,6 +134,7 @@ const relRespondidas = (c: Constelacion): number =>
   BLOQUES.filter((b) => ((c[b.key] as string) || "").trim().length > 0).length;
 
 export default function MetodoPsicologiaMapa() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -143,6 +146,8 @@ export default function MetodoPsicologiaMapa() {
   // Cómic «Cómo te construiste»: se intercala tras la felicitación, antes de
   // entrar a Compromiso. Se puede saltar.
   const [comicOpen, setComicOpen] = useState(false);
+  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
+  const comicVinetas = useComic("psicologia-compromiso", COMIC_COMPROMISO);
   const dataRef = useRef<LineaDeVidaData>({});
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -379,8 +384,8 @@ export default function MetodoPsicologiaMapa() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={() => ir("compromiso")}
-        vinetas={COMIC_COMPROMISO}
-        continueLabel="Continuar"
+        vinetas={comicVinetas}
+        continueLabel={t("comun.continuar")}
         botonNitido
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"

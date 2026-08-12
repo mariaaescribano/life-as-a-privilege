@@ -16,8 +16,10 @@ import { ELEMENTOS } from "../../components/metodo/tcmRecorrido";
 import { QigongComicModal } from "../../components/metodo/QigongComicModal";
 import {
   BROCADOS, BROCADOS_VINETAS, DAO_YIN, DAO_YIN_VINETAS,
-  FOTO_POSTURA, QIGONG_INTRO, QIGONG_NOTA, type Postura,
+  FOTO_POSTURA, type Postura,
 } from "../../components/metodo/tcmQigongContenido";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
@@ -26,6 +28,10 @@ const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.
 const ANCHO = "850px";
 
 export default function MetodoTcmQigong() {
+  const t = useT();
+  // El cómic del Dao Yin, en el idioma activo.
+  const daoYinVinetas = useComic("tcm-dao-yin", DAO_YIN_VINETAS);
+  const brocadosVinetas = useComic("tcm-brocados", BROCADOS_VINETAS);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
@@ -69,7 +75,7 @@ export default function MetodoTcmQigong() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Qigong"
+            title={t("metodo.tcm.qigong.titulo")}
             pageLabel="9/11"
             compact
             bgColor={`${tcmBg}dd`}
@@ -77,16 +83,16 @@ export default function MetodoTcmQigong() {
             nom={tcmNom}
             maxW={ANCHO}
             mb={0}
-            prev={{ label: "← Tu cocina", onClick: () => navigate("/metodo/tcm/recetas") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.cocina")}`, onClick: () => navigate("/metodo/tcm/recetas") }}
             extra={ilustracionesBtn}
-            next={{ label: "Cursos →", onClick: () => navigate("/metodo/tcm/cursos") }}
+            next={{ label: `${t("metodo.tcm.paso.cursos")} →`, onClick: () => navigate("/metodo/tcm/cursos") }}
           />
           </Reveal>
 
           {/* Intro bajo el header · sin sombra (va sobre el turquesa limpio) */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Flex direction="column" gap={3} maxW="700px">
-            {QIGONG_INTRO.map((p, i) => (
+            {[t("metodo.tcm.qigong.intro")].map((p, i) => (
               <Text key={i} color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                     textAlign="center">
                 {p}
@@ -135,7 +141,7 @@ export default function MetodoTcmQigong() {
                    bgGradient={`linear(to-b, transparent, ${tcmTxt}88, transparent)`} />
               <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.5"
                     style={{ textShadow: INK_SHADOW }}>
-                La integración en el ser humano de la energía femenina del Dao (Dios)
+                {t("metodo.tcm.qigong.daoYinLinea")}
               </Text>
             </Flex>
           </Box>
@@ -164,7 +170,7 @@ export default function MetodoTcmQigong() {
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="680px"
                 lineHeight="1.7">
-            {QIGONG_NOTA}
+            {t("metodo.tcm.qigong.nota")}
           </Text>
           </Reveal>
         </Flex>
@@ -175,7 +181,7 @@ export default function MetodoTcmQigong() {
       {/* Cómic del Dao Yin y el rostro femenino del Dao. */}
       <QigongComicModal
         isOpen={daoYinAbierto}
-        vinetas={DAO_YIN_VINETAS}
+        vinetas={daoYinVinetas}
         onClose={() => setDaoYinAbierto(false)}
       />
 
@@ -183,7 +189,7 @@ export default function MetodoTcmQigong() {
           lado. Abre por esa y deja pasar a las demás con las flechas. */}
       <QigongComicModal
         isOpen={brocadoAbierto !== null}
-        vinetas={BROCADOS_VINETAS}
+        vinetas={brocadosVinetas}
         initialIndex={brocadoAbierto ?? 0}
         onClose={() => setBrocadoAbierto(null)}
       />

@@ -7,12 +7,14 @@ import SiteFooter from "../../components/global/Footer";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
-import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
+import { AyurvedaPanel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { COMIC_PRANAYAMA } from "../../components/metodo/comicPranayama";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import {
   API_URL,
   AyurvedaIcon, ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -34,6 +36,21 @@ const DOSHA_META: Record<DoshaKey, { label: string; color: string; Icon: any }> 
   pitta: { label: "Pitta", color: pittaColor, Icon: PittaIcon },
   kapha: { label: "Kapha", color: kaphaColor, Icon: KaphaIcon },
 };
+
+/** Los boxes de esta página, con la acuarela EN BANDAS (`tile`).
+ *
+ *  Las tres cajas de Prāṇāyāma son largísimas —los pasos, el guía de
+ *  respiración, una pregunta con su hueco de escribir detrás de otra—, y en
+ *  móvil, que además son estrechas, quedan altas y finas. Con el fondo normal
+ *  (la acuarela «cover», estirada de arriba abajo para tapar todo el box) la
+ *  foto salía deformada: un borrón vertical sin dibujo.
+ *
+ *  Con `tile` la acuarela se pinta a su tamaño, con su proporción intacta, y se
+ *  REPITE hacia abajo: cada vez que se acaba, empieza otra vez. Esas costuras
+ *  horizontales son las separaciones que se ven entre banda y banda. */
+const Panel = (p: React.ComponentProps<typeof AyurvedaPanel>) => (
+  <AyurvedaPanel {...p} tile />
+);
 
 function parseRich(s: string): React.ReactNode[] {
   const parts = s.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
@@ -342,6 +359,7 @@ function SelectorDosha({ sel, onSelect }: { sel: DoshaKey; onSelect: (k: DoshaKe
 }
 
 export default function MetodoAyurvedaDoshaPranayama() {
+  const t = useT();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   // La URL ya solo decide con cuál se ENTRA: dentro se cambia con los botones.
@@ -357,6 +375,8 @@ export default function MetodoAyurvedaDoshaPranayama() {
   // El cómic imparcial (teoría + cuidados) sale al entrar, ANTES de la página:
   // no persiste, se cierra con la X o con el botón «Prāṇāyāma →».
   const [comicOpen, setComicOpen] = useState(true);
+  // Sus viñetas en el idioma activo (el cómic es el mismo para los tres doṣhas).
+  const comicVinetas = useComic("ayurveda-pranayama", COMIC_PRANAYAMA);
   const [guardando, setGuardando] = useState(false);
   const dataRef = useRef<Record<string, any>>({});
   const practicaRef = useRef<HTMLDivElement | null>(null);
@@ -709,9 +729,9 @@ export default function MetodoAyurvedaDoshaPranayama() {
           próxima vez, que es justo lo que queremos con los cuidados. */}
       <IntroComicModal
         isOpen={comicOpen}
-        vinetas={COMIC_PRANAYAMA}
+        vinetas={comicVinetas}
         onClose={() => setComicOpen(false)}
-        continueLabel="Prāṇāyāma"
+        continueLabel={t("metodo.ayur.paso.pranayama")}
         onContinue={() => setComicOpen(false)}
         themeColor={ayurvedaTxt}
         disciplinaBgImage="/img/fondos/hinduismo.webp"

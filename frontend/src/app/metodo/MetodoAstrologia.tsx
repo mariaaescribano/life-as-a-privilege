@@ -30,20 +30,6 @@ import {
 } from "../../GlobalVariables";
 
 /* Icono ojo para el botón del cómic */
-const EyeIcon = () => (
-  <Box
-    as="svg"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -960 960 960"
-    w="16px"
-    h="16px"
-    fill="currentColor"
-    style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}
-  >
-    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
-  </Box>
-);
-
 // Contenido del popup «¿Qué es esto?»: explica esta primera pantalla del
 // recorrido (qué es, qué se hace aquí y qué pasa después). Edítalo libremente.
 const QUE_ES_ESTO: { titulo: string; parrafos: string[] } = {
@@ -129,6 +115,8 @@ export default function MetodoAstrologia() {
   const t = useT();
   // El cómic del Origen, en el idioma activo (mismo cómic que ComicUniversoModal).
   const origenVinetas = useComic("origen-espiritualidad", ORIGEN_ESPIRITUALIDAD);
+  // El segundo cómic de intro, «La Historia de la Astrología», también traducido.
+  const historiaVinetas = useComic("astrologia-historia", HISTORIA_ASTROLOGIA);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [estado, setEstado] = useState<Estado | null>(null);
@@ -342,7 +330,6 @@ export default function MetodoAstrologia() {
   const headerExtra = {
     label: "Ilustraciones",
     onClick: () => setComicAstroOpen(true),
-    icon: <EyeIcon />,
   };
   const headerNext = (yaConPdf || yaSolicitado)
     // Antes de pasar a «Lo primero de tu carta» intercalamos el cómic de los signos.
@@ -738,9 +725,9 @@ export default function MetodoAstrologia() {
           Origen). Al terminar / continuar, entra a la disciplina. */}
       <IntroComicModal
         isOpen={historiaOpen}
-        vinetas={HISTORIA_ASTROLOGIA}
+        vinetas={historiaVinetas}
         onClose={() => setHistoriaOpen(false)}
-        continueLabel="Astrología"
+        continueLabel={t("disciplina.astrologia")}
         continueBgImage={SPACE_IMG}
         onContinue={() => setHistoriaOpen(false)}
         onComplete={() => setHistoriaOpen(false)}

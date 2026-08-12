@@ -21,6 +21,8 @@ import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_LINEA_TIEMPO } from "../../components/metodo/comicLineaTiempo";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import {
   experienciaById,
   ACE_ESPERANZA,
@@ -44,6 +46,7 @@ const PAPEL = "#fbf4e8";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaAceResultado() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -52,6 +55,8 @@ export default function MetodoPsicologiaAceResultado() {
   // Cómic «antesala de la Línea de Vida»: se intercala al ir a la timeline (desde
   // el header o el botón), antes de que cargue y de su popup de edad. Se salta.
   const [comicOpen, setComicOpen] = useState(false);
+  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
+  const comicVinetas = useComic("psicologia-linea-tiempo", COMIC_LINEA_TIEMPO);
   const dataRef = useRef<LineaDeVidaData>({});
   const [data, setData] = useState<LineaDeVidaData>({});
 
@@ -218,8 +223,8 @@ export default function MetodoPsicologiaAceResultado() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={() => navigate(`/metodo/psicologia/${exp.id}`)}
-        vinetas={COMIC_LINEA_TIEMPO}
-        continueLabel="Continuar"
+        vinetas={comicVinetas}
+        continueLabel={t("comun.continuar")}
         botonNitido
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"

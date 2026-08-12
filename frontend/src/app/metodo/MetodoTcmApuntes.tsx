@@ -27,6 +27,7 @@ import { CreaTusApuntes } from "../../components/metodo/CreaTusApuntes";
 import { libroApuntesTcm } from "../../components/metodo/apuntes/tcmApuntes";
 import { disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useT } from "../../i18n";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import type { DatosTcm } from "../../components/metodo/tcmRecorrido";
 
@@ -44,6 +45,7 @@ const Candado = ({ size }: { size: any }) => (
 );
 
 export default function MetodoTcmApuntes() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [datos, setDatos] = useState<DatosTcm>({});
@@ -106,18 +108,18 @@ export default function MetodoTcmApuntes() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Crea tus propios apuntes"
+            title={t("metodo.tcm.paso.apuntes")}
             pageLabel="11/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Cursos", onClick: () => navigate("/metodo/tcm/cursos") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.cursos")}`, onClick: () => navigate("/metodo/tcm/cursos") }}
             extra={ilustracionesBtn}
             next={fisioSuscrito
-              ? { label: "Fisiología →", onClick: () => navigate("/metodo/fisiologia") }
-              : { label: "Fisiología →", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/fisiologia") }}
+              ? { label: `${t("disciplina.fisiologia")} →`, onClick: () => navigate("/metodo/fisiologia") }
+              : { label: `${t("disciplina.fisiologia")} →`, icon: <Candado size="15px" />, onClick: () => navigate("/metodo/fisiologia") }}
           />
           </Reveal>
 
@@ -125,13 +127,11 @@ export default function MetodoTcmApuntes() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Flex direction="column" align="center" gap={2} maxW="680px">
             <Text color="white" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" textAlign="center">
-              Has recorrido la Medicina China entera. Ahora decide qué te llevas: marca lo que quieras
-              —tu diagnóstico, la lectura de tu lengua, las cocinas, las leyes del Tao, las prácticas— y
-              te lo montamos en un cuaderno para leer sin pantalla.
+              {t("metodo.tcm.apuntes.intro1")}
             </Text>
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.9}
                   textAlign="center">
-              Se prepara aquí mismo, en tu navegador. Puedes volver y montarlo otra vez cuantas veces quieras.
+              {t("metodo.tcm.apuntes.intro2")}
             </Text>
           </Flex>
           </Reveal>
@@ -146,7 +146,7 @@ export default function MetodoTcmApuntes() {
           />
 
           {/* Mismo texto que el botón del header, como en todo el recorrido. */}
-          <BotonPaso label="Fisiología" nom={tcmNom} color={tcmTxt} bg={tcmBg}
+          <BotonPaso label={t("disciplina.fisiologia")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
                      onClick={() => navigate("/metodo/fisiologia")} />
         </Flex>
       </Flex>

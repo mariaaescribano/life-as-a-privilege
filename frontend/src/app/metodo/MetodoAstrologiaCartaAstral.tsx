@@ -25,20 +25,6 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
-const EyeIcon = () => (
-  <Box
-    as="svg"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -960 960 960"
-    w="16px"
-    h="16px"
-    fill="currentColor"
-    style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}
-  >
-    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
-  </Box>
-);
-
 export default function MetodoAstrologiaCartaAstral() {
   const t = useT();
   const navigate = useNavigate();
@@ -178,7 +164,7 @@ export default function MetodoAstrologiaCartaAstral() {
               step={{ current: 3, total: 9 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.loPrimeroCorto")}`, onClick: () => navigate("/metodo/astrologia/solascendenteluna") }}
-              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
               next={headerNext}
             />
           </Reveal>

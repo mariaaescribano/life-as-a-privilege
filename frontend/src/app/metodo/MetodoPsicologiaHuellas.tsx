@@ -9,6 +9,8 @@ import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_CREENCIAS } from "../../components/metodo/comicCreencias";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -35,6 +37,7 @@ const CREMA = "rgba(255,255,255,0.92)";    // texto sobre el fondo teal de la p�
 const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaHuellas() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -44,6 +47,8 @@ export default function MetodoPsicologiaHuellas() {
   const [guardando, setGuardando] = useState(false);
   const [spread, setSpread] = useState(0); // par de páginas visible (2 años)
   const [comicOpen, setComicOpen] = useState(false);
+  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
+  const comicVinetas = useComic("psicologia-creencias", COMIC_CREENCIAS);
   const guardadoRef = useRef<LineaDeVidaData>({});
 
   const anioActual = new Date().getFullYear();
@@ -287,8 +292,8 @@ export default function MetodoPsicologiaHuellas() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/nudos`); }}
-        vinetas={COMIC_CREENCIAS}
-        continueLabel="Continuar"
+        vinetas={comicVinetas}
+        continueLabel={t("comun.continuar")}
         botonNitido
         themeColor={neuropsicologiaTxt}
         disciplinaBgImage="/img/fondos/psciologia.webp"

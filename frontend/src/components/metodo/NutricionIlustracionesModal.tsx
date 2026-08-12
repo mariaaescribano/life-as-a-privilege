@@ -9,6 +9,7 @@ import { NUTRICION_ILUSTRACIONES } from "./nutricionIlustraciones";
 import type { IlustracionEntry } from "./ilustracionesGaleria";
 import { useLeidos } from "../../hooks/useLeidos";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
+import { barraVisibleSx } from "../global/barraDeScroll";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Galería de ILUSTRACIONES de Nutrición. Se abre desde la Biblioteca (popup del
@@ -99,7 +100,10 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
 
   return (
     <>
-      <Box position="fixed" inset={0} zIndex={1300} overflowY="auto" fontFamily="'EB Garamond', serif">
+      {/* `scroll` + barra clásica: en el móvil también se ve que las tarjetas
+          siguen por debajo (ver barraDeScroll.ts). */}
+      <Box position="fixed" inset={0} zIndex={1300} overflowY="scroll" fontFamily="'EB Garamond', serif"
+           sx={barraVisibleSx(nutricionTxt)}>
         {/* Fondo de la disciplina — en su propia capa FIJA para que cubra SIEMPRE
             el viewport. Si fuera hijo absoluto del contenedor scrolleable, solo
             mediría el alto del viewport y, al hacer scroll, se vería la página de

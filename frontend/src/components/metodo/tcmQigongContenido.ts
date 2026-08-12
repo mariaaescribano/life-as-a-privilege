@@ -18,7 +18,12 @@ export const QIGONG_INTRO: string[] = [
   "Qi (氣) es la energía que circula por ti. Gong (功) es el trabajo constante.",
 ];
 
-/** Las tres regulaciones (三調): la base de cualquier práctica. */
+/** Las tres regulaciones (三調): la base de cualquier práctica.
+ *
+ *  OJO al volver a sacarlas en la página: su texto está también en los dos
+ *  idiomas en los `metodo.ts` de `i18n/textos` (`metodo.tcm.qigong.reg.*`). Píntalas
+ *  desde ahí con `t(...)`, no desde esta constante, o en inglés saldrán en
+ *  español. Lo mismo vale para QIGONG_QUE_ES (`metodo.tcm.qigong.queEs1-3`). */
 export interface Regulacion {
   key: string;
   hanzi: string;
@@ -205,7 +210,7 @@ export const DAO_YIN_VINETAS: Vineta[] = [
   {
     src: FOTO_DAOYIN("madre"),
     eyebrow: "",
-    titulo: "A Lao-Tse le sale una madre",
+    titulo: "",
     paragraphs: [
       "Cuando Lao-Tse tiene que decir qué es el Dao, no le sale una figura de padre ni de rey. Le sale una madre, un valle, un útero, una hondonada.",
       "Lo que recibe, lo que sostiene, lo que da Vida sin quedarse con nada.",

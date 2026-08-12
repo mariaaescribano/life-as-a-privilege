@@ -19,6 +19,7 @@ import { CABALA_ILUSTRACIONES_VINETAS } from "./cabalaIlustraciones";
 import { CABALA_SENDERO_VINETAS } from "./cabalaSenderoIlustraciones";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { comicLoaderPorColor } from "./comicLoaders";
+import { barraVisibleSx } from "../global/barraDeScroll";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Popup "Ilustraciones de Cábala". Se abre desde el botón "Ilustraciones" del
@@ -134,8 +135,11 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
             alignItems="center"
             justifyContent={{ base: "flex-start", md: "center" }}
             minH={{ base: "auto", md: "100vh" }}
-            overflowY="auto"
+            // `scroll` + barra clásica: en el móvil también se ve que la lista
+            // de capítulos sigue por debajo (ver barraDeScroll.ts).
+            overflowY="scroll"
             overflowX="hidden"
+            sx={barraVisibleSx(cabalaTxt)}
           >
             <Flex
               direction="column"

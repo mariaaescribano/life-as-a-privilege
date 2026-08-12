@@ -35,6 +35,7 @@ import {
   letratcm21, letratcm22, letratcm23, letratcm24, letratcm25,
 } from "../../hardCoded/aprendizajes/TCM/LetraTCM";
 import { RECS_ELEMENTOS, type Recs } from "../espacio/data/tcmRecommendations";
+import { traducir } from "../../i18n";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 
 // ── Los cinco elementos ──────────────────────────────────────────────────
@@ -48,21 +49,25 @@ export const ORDEN_ELEMENTOS: Elemento[] = ["madera", "fuego", "tierra", "metal"
 // se construyan los pasos pendientes (perfil, ciclos, tu mapa, escucharte…).
 // OJO: al añadir o quitar un paso hay que retocar el `pageLabel` («n/9») del
 // MetodoStepHeader de TODAS las páginas y los botones prev/next de las vecinas.
-export const TCM_INDICE: PasoRecorrido[] = [
-  { n: 1, titulo: "Medicina China",     ruta: () => "/metodo/tcm" },
-  { n: 2, titulo: "Los Cinco Elementos", ruta: () => "/metodo/tcm/elementos" },
-  { n: 3, titulo: "Los ciclos", ruta: () => "/metodo/tcm/ciclos" },
-  { n: 4, titulo: "Diagnóstico final", ruta: () => "/metodo/tcm/diagnostico" },
-  { n: 5, titulo: "Tu lengua", ruta: () => "/metodo/tcm/lengua" },
-  { n: 6, titulo: "Lee tu lengua", ruta: () => "/metodo/tcm/lengua/leer" },
-  { n: 7, titulo: "Taoísmo", ruta: () => "/metodo/tcm/taoismo" },
-  { n: 8, titulo: "Tu cocina diaria", ruta: () => "/metodo/tcm/recetas" },
-  { n: 9, titulo: "Qigong", ruta: () => "/metodo/tcm/qigong" },
-  { n: 10, titulo: "Cursos", ruta: () => "/metodo/tcm/cursos" },
-  { n: 11, titulo: "Crea tus apuntes", ruta: () => "/metodo/tcm/apuntes" },
+// Es una FUNCIÓN, no una constante: los títulos salen del diccionario y hay que
+// volver a construirlos al cambiar de idioma (ver `IndiceTcm`). Congelados al
+// importar el módulo, el índice se quedaría en el idioma con el que arrancó.
+export const tcmIndice = (): PasoRecorrido[] => [
+  { n: 1, titulo: traducir("disciplina.medicinaChina"), ruta: () => "/metodo/tcm" },
+  { n: 2, titulo: traducir("metodo.tcm.paso.cincoElementos"), ruta: () => "/metodo/tcm/elementos" },
+  { n: 3, titulo: traducir("metodo.tcm.paso.ciclos"), ruta: () => "/metodo/tcm/ciclos" },
+  { n: 4, titulo: traducir("metodo.tcm.paso.diagnostico"), ruta: () => "/metodo/tcm/diagnostico" },
+  { n: 5, titulo: traducir("metodo.tcm.paso.tuLengua"), ruta: () => "/metodo/tcm/lengua" },
+  { n: 6, titulo: traducir("metodo.tcm.paso.lengua"), ruta: () => "/metodo/tcm/lengua/leer" },
+  { n: 7, titulo: traducir("metodo.tcm.tao.titulo"), ruta: () => "/metodo/tcm/taoismo" },
+  { n: 8, titulo: traducir("metodo.tcm.cocina.titulo"), ruta: () => "/metodo/tcm/recetas" },
+  { n: 9, titulo: traducir("metodo.tcm.qigong.titulo"), ruta: () => "/metodo/tcm/qigong" },
+  { n: 10, titulo: traducir("metodo.tcm.paso.cursos"), ruta: () => "/metodo/tcm/cursos" },
+  { n: 11, titulo: traducir("metodo.tcm.paso.apuntes"), ruta: () => "/metodo/tcm/apuntes" },
 ];
 
-export const TCM_TOTAL = TCM_INDICE.length;
+/** Cuántos pasos tiene el recorrido. Constante: no depende del idioma. */
+export const TCM_TOTAL = 11;
 
 // ── Tipos de test ──────────────────────────────────────────────────────────
 export interface OpcionPuntuada {

@@ -12,6 +12,8 @@ import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { Reveal } from "../../components/global/Reveal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { VINETAS_ENFERMEDADES } from "../../components/metodo/comicEnfermedades";
+import { useComic } from "../../i18n/comics";
+import { useT } from "../../i18n";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento, type DatosTcm } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
@@ -22,6 +24,7 @@ import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 
 export default function MetodoTcmCiclos() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [sel, setSel] = useState<Relacion | null>(null);
@@ -38,6 +41,8 @@ export default function MetodoTcmCiclos() {
   // final. Ya ha visto cómo se generan y se controlan los elementos; ahora,
   // qué pasa cuando esos ciclos se rompen.
   const [comicOpen, setComicOpen] = useState(false);
+  // Sus viñetas en el idioma activo.
+  const comicVinetas = useComic("tcm-enfermedades", VINETAS_ENFERMEDADES);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -139,22 +144,22 @@ export default function MetodoTcmCiclos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Los Ciclos"
+            title={t("metodo.tcm.ciclos.titulo")}
             pageLabel="3/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Los 5 elementos", onClick: () => navigate("/metodo/tcm/elementos") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.elementos")}`, onClick: () => navigate("/metodo/tcm/elementos") }}
             extra={ilustracionesBtn}
             next={{
               // No salta al Diagnóstico: abre antes el cómic «Las enfermedades»,
               // que es el puente entre los ciclos y el diagnóstico.
-              label: "Diagnóstico final →",
+              label: `${t("metodo.tcm.paso.diagnostico")} →`,
               onClick: () => setComicOpen(true),
               disabled: !yaLeido && vistas.size < TOTAL_FLECHAS,
-              disabledTooltip: "Toca todas las flechitas para descubrir cada relación",
+              disabledTooltip: t("metodo.tcm.ciclos.flechitas"),
             }}
           />
           </Reveal>
@@ -162,9 +167,7 @@ export default function MetodoTcmCiclos() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="640px">
-            Los Cinco Elementos no viven aislados: se relacionan en dos ciclos. Cuando
-            fluyen, hay equilibrio; cuando se alteran, aparece el desequilibrio. Toca
-            cada flechita para descubrir la relación.
+            {t("metodo.tcm.ciclos.intro")}
           </Text>
           </Reveal>
 
@@ -176,7 +179,7 @@ export default function MetodoTcmCiclos() {
           <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">
             <Reveal inView direction="right" distance={30} scaleFrom={0.97} duration={0.6} amount={0.2} w="100%" display="flex">
             <EstrellaCiclo
-              titulo="Ciclo generador"
+              titulo={t("metodo.tcm.ciclos.sheng")}
               pinyin="Sheng"
               hanzi="生"
               subtitulo=""
@@ -186,7 +189,7 @@ export default function MetodoTcmCiclos() {
             </Reveal>
             <Reveal inView direction="left" distance={30} scaleFrom={0.97} duration={0.6} amount={0.2} w="100%" display="flex">
             <EstrellaCiclo
-              titulo="Ciclo de control"
+              titulo={t("metodo.tcm.ciclos.ke")}
               pinyin="Ke"
               hanzi="克"
               subtitulo=""
@@ -199,9 +202,7 @@ export default function MetodoTcmCiclos() {
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.3} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="640px"
                 lineHeight="1.6">
-            En el ciclo generador la energía avanza por el perímetro (Madera → Fuego →
-            Tierra → Metal → Agua). En el ciclo de control cruza la estrella: cada
-            elemento frena al que tiene enfrente para mantener el conjunto en armonía.
+            {t("metodo.tcm.ciclos.nota")}
           </Text>
           </Reveal>
         </Flex>
@@ -219,8 +220,8 @@ export default function MetodoTcmCiclos() {
         isOpen={comicOpen}
         onClose={() => setComicOpen(false)}
         onContinue={() => navigate("/metodo/tcm/diagnostico")}
-        vinetas={VINETAS_ENFERMEDADES}
-        continueLabel="Diagnóstico final"
+        vinetas={comicVinetas}
+        continueLabel={t("metodo.tcm.paso.diagnostico")}
         themeColor={tcmTxt}
         textColor={tcmTxt}
         disciplinaBgImage="/img/fondos/tcm.webp"

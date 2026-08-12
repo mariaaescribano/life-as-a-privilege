@@ -21,6 +21,7 @@ import {
   type DatosTcm, type Elemento, type EstadoDiagnostico, type VeredictoBalance,
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
+import { useNombresElementos } from "../../components/metodo/tcmElementosEn";
 import {
   EstrellaCiclo, RelacionModal,
   verticePentagono, segmentoPentagono, idxElemento,
@@ -28,15 +29,18 @@ import {
 } from "../../components/metodo/tcmCiclosVisual";
 import { TcmEstrellaDetalle } from "../../components/metodo/TcmEstrellaDetalle";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useT, type ClaveTexto } from "../../i18n";
 
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
-// Estado de balance (traído de la antigua «Tu equilibrio»): etiqueta y color.
-const ESTADO_LABEL: Record<VeredictoBalance, string> = {
-  equilibrio: "En equilibrio",
-  exceso: "En exceso",
-  deficiencia: "En deficiencia",
+// Estado de balance (traído de la antigua «Tu equilibrio»): su rótulo y su color.
+// El rótulo es el MISMO que titula esa sección en la página de cada elemento, así
+// que se pide al diccionario por su clave en vez de escribirlo dos veces.
+const ESTADO_CLAVE: Record<VeredictoBalance, ClaveTexto> = {
+  equilibrio: "metodo.tcm.el.equilibrio",
+  exceso: "metodo.tcm.el.exceso",
+  deficiencia: "metodo.tcm.el.deficiencia",
 };
 const ESTADO_COLOR: Record<VeredictoBalance, string> = {
   equilibrio: "#6f9463",
@@ -63,6 +67,7 @@ const DP_SHENG_BASE = 1.0, DP_KE_BASE = 2.0, DP_ARROW_STEP = 0.18, DP_ARROW_DUR 
 type EstadoElemento = EstadoDiagnostico | null;
 
 export default function MetodoTcmDiagnostico() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
@@ -131,16 +136,16 @@ export default function MetodoTcmDiagnostico() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
-            title="Diagnóstico final"
+            title={t("metodo.tcm.paso.diagnostico")}
             pageLabel="4/11"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: "← Los ciclos", onClick: () => navigate("/metodo/tcm/ciclos") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.ciclos")}`, onClick: () => navigate("/metodo/tcm/ciclos") }}
             extra={ilustracionesBtn}
-            next={{ label: "La lengua →", onClick: () => navigate("/metodo/tcm/lengua") }}
+            next={{ label: `${t("metodo.tcm.paso.tuLengua")} →`, onClick: () => navigate("/metodo/tcm/lengua") }}
           />
           </Reveal>
 
@@ -148,11 +153,11 @@ export default function MetodoTcmDiagnostico() {
           <Flex direction="column" align="center" gap={2} maxW="660px">
             <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                   textAlign="center">
-              «Antes de sanar a alguien, pregúntale si está dispuesto a renunciar a las cosas que lo enferman.»
+              {t("metodo.tcm.diag.cita")}
             </Text>
             <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={600} letterSpacing="0.06em"
                   textAlign="center">
-              — Hipócrates
+              {t("metodo.tcm.diag.citaAutor")}
             </Text>
           </Flex>
           </Reveal>
@@ -165,7 +170,7 @@ export default function MetodoTcmDiagnostico() {
             <EstrellaPerfil estados={estados} onElemento={(el) => setComicEl(el)} />
             <Text color="rgba(255,255,255,0.6)" fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" textAlign="center"
                   mt={1} lineHeight="1.6">
-              Los elementos iluminados son los que más necesitan de tu atención.
+              {t("metodo.tcm.diag.iluminados")}
             </Text>
           </Panel>
           </Reveal>
@@ -188,13 +193,13 @@ export default function MetodoTcmDiagnostico() {
           <Reveal inView direction="up" distance={16} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
                 textAlign="center" maxW="660px" mt={1} style={{ textShadow: INK_SHADOW }}>
-            Repasa cada relación con calma. Todas te interesan, pues todas forman parte de ti.
+            {t("metodo.tcm.diag.repasa")}
           </Text>
           </Reveal>
           <Flex direction={{ base: "column", md: "row" }} gap={5} w="100%" align="stretch">
             <Reveal inView direction="right" distance={28} scaleFrom={0.97} duration={0.72} amount={0.15} w="100%" display="flex">
             <EstrellaCiclo
-              titulo="Ciclo generador"
+              titulo={t("metodo.tcm.ciclos.sheng")}
               pinyin="Sheng"
               hanzi="生"
               subtitulo=""
@@ -204,7 +209,7 @@ export default function MetodoTcmDiagnostico() {
             </Reveal>
             <Reveal inView direction="left" distance={28} scaleFrom={0.97} duration={0.72} amount={0.15} w="100%" display="flex">
             <EstrellaCiclo
-              titulo="Ciclo de control"
+              titulo={t("metodo.tcm.ciclos.ke")}
               pinyin="Ke"
               hanzi="克"
               subtitulo=""
@@ -217,14 +222,13 @@ export default function MetodoTcmDiagnostico() {
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.5} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="660px"
                 lineHeight="1.6">
-            Esta valoración tiene un fin educativo y de autoconocimiento. No constituye un
-            diagnóstico clínico ni sustituye la valoración de un profesional cualificado.
+            {t("metodo.tcm.diag.aviso")}
           </Text>
           </Reveal>
 
           {/* El paso siguiente, abajo a la derecha: mismo texto que el botón
               del header, que aquí se ha quedado muy arriba. */}
-          <BotonPaso label="La lengua" nom={tcmNom} color={tcmTxt} bg={tcmBg}
+          <BotonPaso label={t("metodo.tcm.paso.tuLengua")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
                      onClick={() => navigate("/metodo/tcm/lengua")} />
         </Flex>
       </Flex>
@@ -302,6 +306,7 @@ function EstrellaPerfil({ estados, onElemento }: {
   estados: Partial<Record<Elemento, EstadoElemento>>;
   onElemento: (el: Elemento) => void;
 }) {
+  const nombres = useNombresElementos();
   const [hover, setHover] = useState<Elemento | null>(null);
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -374,7 +379,7 @@ function EstrellaPerfil({ estados, onElemento }: {
               <text x={label.x} y={label.y} fill="white" fontSize={13} fontWeight={deseq ? 800 : 600}
                     textAnchor="middle" dominantBaseline="middle"
                     style={{ textShadow: `0 0 ${deseq ? 10 : 7}px ${E.color}, 0 0 ${deseq ? 20 : 13}px ${E.color}aa, 0 1px 4px rgba(0,0,0,0.95)` }}>
-                {E.nombre}
+                {nombres[el]}
               </text>
             </MotionG>
           );
@@ -414,6 +419,8 @@ function Panel({ titulo, color, children }: {
 // elemento con señales de los dos tipos que se compensan se queda pegado a la
 // línea: eso es, exactamente, estar en equilibrio.
 function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, EstadoElemento>> }) {
+  const t = useT();
+  const nombres = useNombresElementos();
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement | null>(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
@@ -422,7 +429,7 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
     <>
       <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
             textAlign="center" lineHeight="1.7" mb={5} style={{ textShadow: INK_SHADOW }}>
-        Cada elemento tira hacia un lado: hacia arriba si le sobra energía, hacia abajo si le falta. Cuanto más cerca de la línea, más en equilibrio.
+        {t("metodo.tcm.diag.barras")}
       </Text>
 
       {/* Leyenda de estados */}
@@ -432,7 +439,7 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
             <Box w="12px" h="12px" borderRadius="sm" bg={ESTADO_COLOR[b]}
                  style={{ boxShadow: `0 0 8px ${ESTADO_COLOR[b]}` }} />
             <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "2xs", md: "xs" }} fontWeight={600}>
-              {ESTADO_LABEL[b]}
+              {t(ESTADO_CLAVE[b])}
             </Text>
           </Flex>
         ))}
@@ -459,19 +466,19 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
                 <Box w={{ base: "56px", md: "76px" }} h={{ base: "56px", md: "76px" }}
                      borderRadius="full" overflow="hidden" border={`2px solid ${E.color}`}
                      style={{ boxShadow: `0 0 8px ${E.color}88` }}>
-                  <img src={ICONO_ELEMENTO[el]} alt={E.nombre}
+                  <img src={ICONO_ELEMENTO[el]} alt={nombres[el]}
                        style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </Box>
                 {/* Sin sombra: el nombre iba con doble halo del color del
                     elemento y sobre la acuarela roja se leía emborronado. */}
                 <Text color="white" fontSize={{ base: "2xs", md: "sm" }} fontWeight={700}
                       textAlign="center" noOfLines={1}>
-                  {E.nombre}
+                  {nombres[el]}
                 </Text>
                 <Text color={veredicto ? ESTADO_COLOR[veredicto] : "rgba(255,255,255,0.45)"}
                       fontSize={{ base: "3xs", md: "2xs" }} fontWeight={700} textAlign="center"
                       fontStyle={veredicto ? "normal" : "italic"} noOfLines={1} lineHeight="1.2">
-                  {veredicto ? ESTADO_LABEL[veredicto] : "sin datos"}
+                  {veredicto ? t(ESTADO_CLAVE[veredicto]) : t("metodo.tcm.diag.sinDatos")}
                 </Text>
               </Flex>
             );

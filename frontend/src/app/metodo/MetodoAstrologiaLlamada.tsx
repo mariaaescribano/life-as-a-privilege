@@ -10,13 +10,6 @@ import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaMod
 import { Reveal } from "../../components/global/Reveal";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
-const EyeIcon = () => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor"
-       style={{ filter: "drop-shadow(0 0 4px rgba(255,255,255,0.5))" }}>
-    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z" />
-  </Box>
-);
-
 /**
  * Penúltima pantalla del Recorrido de Astrología: reservar una llamada (de pago,
  * pago simulado por ahora) con María. Estilo astrología (fondo estrellado +
@@ -47,7 +40,7 @@ export default function MetodoAstrologiaLlamada() {
               step={{ current: 8, total: 9 }}
               mb={0}
               prev={{ label: "← Tu carta en PDF", onClick: () => navigate("/metodo/astrologia/pdf") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true), icon: <EyeIcon /> }}
+              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
               next={{ label: "Cursos →", onClick: () => navigate("/metodo/astrologia/cursos") }}
             />
           </Reveal>
