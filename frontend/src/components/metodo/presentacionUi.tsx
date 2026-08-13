@@ -465,7 +465,7 @@ export function BotonEmpezar({ d, onClick }: { d: PresentacionDisciplina; onClic
  * Lo que se reproduce aquí es el CLIP corto (`/videos/muestra/<clave>.mp4`,
  * ~100 KB, mudo y en bucle, lo genera `scripts/video/muestras.mjs`), NO el vídeo
  * del recorrido. Este vídeo sale en pantalla sí o sí nada más abrir la página, y
- * el original pesa entre 8 y 33 MB: ponerlo aquí es cobrarle esos megas a todo
+ * el original pesa entre 8 y 27 MB: ponerlo aquí es cobrarle esos megas a todo
  * el que entra desde un cartel, la mayoría con datos del móvil. Al pulsar sí se
  * abre el completo, en su popup (ver `global/VideoLargo.tsx`).
  *

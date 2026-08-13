@@ -16,6 +16,42 @@ export const espacio = {
     "You haven't flagged any significant symptoms. Keep looking after yourself with natural food and enough rest.",
   "espacio.fisio.repetir": "Retake the test",
 
+  // ── Phytotherapy · favorite plants ─────────────────────────────────────
+  "espacio.fito.inicia": "Log in to see your favorite plants.",
+  "espacio.fito.cargando": "Loading your favorites…",
+  "espacio.fito.explorar": "Explore the herbarium",
+
+  // ── Astrology · the saved chart ────────────────────────────────────────
+  "espacio.astro.arquetipos": "Want to know which archetypes make you who you are?",
+  "espacio.astro.lectura": "Would you like a professional reading of your birth chart?",
+  "espacio.astro.transcripcion": "Transcript",
+  "espacio.astro.tuCartaNatal": "Your birth chart",
+  "espacio.astro.perfil": "Profile",
+  "espacio.astro.campoEn": "{campo} in",
+  "espacio.astro.tuCampo": "Your {campo}",
+  "espacio.astro.sol": "Sun",
+  "espacio.astro.luna": "Moon",
+  "espacio.astro.ascendente": "Ascendant",
+
+  // ── Kabbalah · the Tree test ───────────────────────────────────────────
+  "espacio.cabala.comenzar": "Start the test →",
+  "espacio.cabala.repetir": "Take the test again",
+
+  // ── The two saved tests (Doṣhas and Chinese Medicine) ──────────────────
+  "espacio.test.doshas": "The Doṣha test",
+  "espacio.test.descubreDosha": "Discover your Doṣha",
+  "espacio.test.doshaPrincipal": "Your main Doṣha is",
+  "espacio.test.eligeOpcion":
+    "For each question, pick the option that describes you best. There are no right or wrong answers: trust your first instinct.",
+  "espacio.test.recalcular": "Recalculate",
+  "espacio.test.consejos": "Your personalized advice",
+  "espacio.test.descargarConsejos": "Download the advice",
+  "espacio.test.descargarRespuestas": "Download my answers",
+  "espacio.test.verResultados": "See my results",
+  "espacio.test.tusResultados": "Your results",
+  "espacio.test.predominante": "PREDOMINANT",
+  "espacio.test.volver": "Back to My Space",
+
   // ── Vata ───────────────────────────────────────────────────────────────
   "espacio.dosha.vata.subtitulo": "Air and Ether · Movement and Creativity",
   "espacio.dosha.vata.descripcion":

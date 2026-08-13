@@ -108,7 +108,7 @@ export interface PasoRecorrido {
   bloqueado?: boolean;
 }
 
-/** Los 23 pasos del recorrido, con los títulos ya en el idioma activo.
+/** Los 25 pasos del recorrido, con los títulos ya en el idioma activo.
  *  Es una FUNCIÓN y no un array: un array de nivel de módulo se calcula una vez
  *  al importar el fichero y se quedaría con los títulos congelados en el idioma
  *  de arranque. Quien lo pinte tiene que llamar a `useIdioma()` para volver a
@@ -118,25 +118,27 @@ export const psicologiaIndice = (): PasoRecorrido[] => [
   { n: 2,  titulo: traducir("metodo.psico.paso.problemas"),     ruta: (id) => `/metodo/psicologia/${id}/problema` },
   { n: 3,  titulo: traducir("metodo.psico.paso.ace"),           ruta: (id) => `/metodo/psicologia/${id}/ace` },
   { n: 4,  titulo: traducir("metodo.psico.paso.resultadoAce"),  ruta: (id) => `/metodo/psicologia/${id}/ace-resultado` },
-  { n: 5,  titulo: traducir("metodo.psico.lineaDeVida"),        ruta: (id) => `/metodo/psicologia/${id}` },
-  { n: 6,  titulo: traducir("metodo.psico.paso.familia"),       ruta: (id) => `/metodo/psicologia/${id}/familia` },
-  { n: 7,  titulo: traducir("metodo.psico.paso.genograma"),     ruta: (id) => `/metodo/psicologia/${id}/genograma` },
-  { n: 8,  titulo: traducir("metodo.psico.paso.huellas"),       ruta: (id) => `/metodo/psicologia/${id}/huellas` },
-  { n: 9,  titulo: traducir("metodo.psico.paso.nudos"),         ruta: (id) => `/metodo/psicologia/${id}/nudos` },
-  { n: 10, titulo: traducir("metodo.psico.paso.necesidades"),   ruta: (id) => `/metodo/psicologia/${id}/necesidades` },
-  { n: 11, titulo: traducir("metodo.psico.paso.heridas"),       ruta: (id) => `/metodo/psicologia/${id}/huellas-nudos` },
-  { n: 12, titulo: traducir("metodo.psico.paso.tusHeridas"),    ruta: (id) => `/metodo/psicologia/${id}/heridas-lista` },
-  { n: 13, titulo: traducir("metodo.psico.narra"),              ruta: (id) => `/metodo/psicologia/${id}/regulacion` },
-  { n: 14, titulo: traducir("metodo.psico.paso.relacion"),      ruta: (id) => `/metodo/psicologia/${id}/integracion` },
-  { n: 15, titulo: traducir("metodo.psico.paso.recuerdate"),    ruta: (id) => `/metodo/psicologia/${id}/dones` },
-  { n: 16, titulo: traducir("metodo.psico.paso.dones"),         ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
-  { n: 17, titulo: traducir("metodo.psico.paso.miedos"),        ruta: (id) => `/metodo/psicologia/${id}/miedos` },
-  { n: 18, titulo: traducir("metodo.psico.paso.atrevete"),      ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
-  { n: 19, titulo: traducir("metodo.psico.paso.integracion"),   ruta: (id) => `/metodo/psicologia/${id}/mapa` },
-  { n: 20, titulo: traducir("metodo.psico.paso.compromiso"),    ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
-  { n: 21, titulo: traducir("metodo.psico.paso.carta"),         ruta: (id) => `/metodo/psicologia/${id}/brujula` },
-  { n: 22, titulo: traducir("metodo.psico.paso.sintesis"),      ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
-  { n: 23, titulo: traducir("metodo.psico.paso.cursosCorto"),   ruta: (id) => `/metodo/psicologia/${id}/cursos` },
+  { n: 5,  titulo: traducir("metodo.psico.paso.des"),           ruta: (id) => `/metodo/psicologia/${id}/des` },
+  { n: 6,  titulo: traducir("metodo.psico.paso.desResultado"),  ruta: (id) => `/metodo/psicologia/${id}/des-resultado` },
+  { n: 7,  titulo: traducir("metodo.psico.lineaDeVida"),        ruta: (id) => `/metodo/psicologia/${id}` },
+  { n: 8,  titulo: traducir("metodo.psico.paso.familia"),       ruta: (id) => `/metodo/psicologia/${id}/familia` },
+  { n: 9,  titulo: traducir("metodo.psico.paso.genograma"),     ruta: (id) => `/metodo/psicologia/${id}/genograma` },
+  { n: 10, titulo: traducir("metodo.psico.paso.huellas"),       ruta: (id) => `/metodo/psicologia/${id}/huellas` },
+  { n: 11, titulo: traducir("metodo.psico.paso.nudos"),         ruta: (id) => `/metodo/psicologia/${id}/nudos` },
+  { n: 12, titulo: traducir("metodo.psico.paso.necesidades"),   ruta: (id) => `/metodo/psicologia/${id}/necesidades` },
+  { n: 13, titulo: traducir("metodo.psico.paso.heridas"),       ruta: (id) => `/metodo/psicologia/${id}/huellas-nudos` },
+  { n: 14, titulo: traducir("metodo.psico.paso.tusHeridas"),    ruta: (id) => `/metodo/psicologia/${id}/heridas-lista` },
+  { n: 15, titulo: traducir("metodo.psico.narra"),              ruta: (id) => `/metodo/psicologia/${id}/regulacion` },
+  { n: 16, titulo: traducir("metodo.psico.paso.relacion"),      ruta: (id) => `/metodo/psicologia/${id}/integracion` },
+  { n: 17, titulo: traducir("metodo.psico.paso.recuerdate"),    ruta: (id) => `/metodo/psicologia/${id}/dones` },
+  { n: 18, titulo: traducir("metodo.psico.paso.dones"),         ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
+  { n: 19, titulo: traducir("metodo.psico.paso.miedos"),        ruta: (id) => `/metodo/psicologia/${id}/miedos` },
+  { n: 20, titulo: traducir("metodo.psico.paso.atrevete"),      ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
+  { n: 21, titulo: traducir("metodo.psico.paso.integracion"),   ruta: (id) => `/metodo/psicologia/${id}/mapa` },
+  { n: 22, titulo: traducir("metodo.psico.paso.compromiso"),    ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
+  { n: 23, titulo: traducir("metodo.psico.paso.carta"),         ruta: (id) => `/metodo/psicologia/${id}/brujula` },
+  { n: 24, titulo: traducir("metodo.psico.paso.sintesis"),      ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
+  { n: 25, titulo: traducir("metodo.psico.paso.cursosCorto"),   ruta: (id) => `/metodo/psicologia/${id}/cursos` },
 ];
 
 /** Total de pasos del recorrido (para las etiquetas X/total). */
@@ -249,6 +251,11 @@ export interface LineaDeVidaData {
    *  por `key` de pregunta ("si" | "no"). La puntuación es el número de "si".
    *  No es un diagnóstico: es material de autoconocimiento (ver `AceData`). */
   ace?: AceData;
+  /** «DES-II» (Escala de Experiencias Disociativas): las 28 respuestas del test,
+   *  por `key` de pregunta, en PORCENTAJE de tiempo (0–100, de diez en diez).
+   *  Va justo después del ACE: si el ACE cuenta qué pasó, este cuenta cómo se
+   *  sobrevivió. Tampoco es un diagnóstico (ver `DesData`). */
+  des?: DesData;
   /** «Compromiso» (cierre del recorrido): el compromiso concreto que la persona
    *  define consigo misma para empezar a vivir desde la integración y no desde
    *  la herida. Dos preguntas de texto libre (ver `CompromisoData`). */
@@ -1270,6 +1277,358 @@ export const ACE_ESPERANZA = {
   // Recordatorio honesto (coherente con el «Aviso importante» del inicio).
 };
 
+// ─────────────────────────────────────────────────────────────────────────
+// «DES-II» — Escala de Experiencias Disociativas (test + resultado).
+//
+// Dissociative Experiences Scale, de Eve Bernstein Carlson y Frank W. Putnam
+// (1986; DES-II, 1993). 28 experiencias cotidianas de desconexión; para cada una
+// la persona marca QUÉ PORCENTAJE DEL TIEMPO le pasa (0–100, de diez en diez).
+// La puntuación es la MEDIA de las 28.
+//
+// Va justo después del ACE y ANTES de la Línea de Vida, a propósito: el ACE
+// cuenta qué pasó, esto cuenta cómo se sobrevivió — y así, cuando la persona
+// recorra su vida año a año y se encuentre huecos, el hueco no será un fracaso
+// suyo sino información («ahí me fui»).
+//
+// Aquí NO es un instrumento clínico ni un diagnóstico: es un espejo de
+// autoconocimiento. Por eso el resultado no se queda en una cifra —se separa en
+// sus tres caras, porque un 35 hecho todo de absorción no es un 35 con lagunas
+// de memoria— y por eso una puntuación alta lleva a pedir una llamada, no a una
+// etiqueta.
+//
+// Flujo:
+//   1. Test: 28 preguntas de porcentaje (se guarda cada respuesta al instante).
+//   2. Cómic «La desconexión», intercalado (explica qué es disociar).
+//   3. Resultado: media + banda + las tres subescalas + cierre esperanzador.
+//
+// Persistencia: data.des.respuestas = { [key]: 0..100 }.
+//
+// ✍️  No cambies las `key` tras publicar (se perderían las respuestas guardadas).
+// ─────────────────────────────────────────────────────────────────────────
+
+export interface DesData {
+  /** Porcentaje de tiempo por clave de pregunta (0–100). Sin responder = ausente.
+   *  OJO: 0 es una respuesta válida — nunca comprobar con `if (valor)`. */
+  respuestas?: Record<string, number>;
+}
+
+/** El resultado del test, tal y como queda guardado en la BD.
+ *
+ *  NO va en el blob `data` con las respuestas, sino en su propia tabla
+ *  (`psicologia_des`, ver backend/sql/psicologia-des.sql y data/psicologiaDesApi.ts),
+ *  igual que el resultado del test de Ayurveda o el de Medicina China: es un dato
+ *  con fecha que se quiere poder consultar y comparar entre personas sin abrir el
+ *  blob de cada una. Y se guarda una sola vez, en un sitio: dos copias del mismo
+ *  número calculado acabarían contándose distinto.
+ *
+ *  Lo que se guarda son datos, no texto: la `banda` es su etiqueta estable
+ *  («30+»), nunca su título traducido. */
+export interface DesResultado {
+  /** Media de las 28 respuestas (0–100). */
+  score: number;
+  /** Etiqueta de la banda en la que cae: "0–9" | "10–19" | "20–29" | "30+". */
+  banda: string;
+  /** Puntuación de cada subescala, por su `key` (amnesia, despersonalizacion, absorcion). */
+  subescalas: Record<string, number>;
+  /** ¿Pide cuidado antes de los ejercicios que remueven? (ver `desAlto`). */
+  alto: boolean;
+}
+
+export interface PreguntaDes {
+  /** Clave estable (no cambiar tras publicar). */
+  key: string;
+  /** Etiqueta corta de la tarjeta. */
+  categoria: string;
+  /** El enunciado. Se conserva el «Algunas personas…» del original: no es
+   *  literatura, es lo que hace que la persona no se sienta un bicho raro. */
+  pregunta: string;
+  /** Matiz aclaratorio opcional (más pequeño, bajo la pregunta). */
+  apoyo?: string;
+}
+
+/** Los valores que se pueden marcar: 0, 10, 20 … 100 (como los círculos del
+ *  cuestionario en papel). */
+export const DES_VALORES: number[] = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+
+export const DES_INTRO = {
+  titulo: "Desconexión",
+  subtitulo: "El test DES-II",
+  // Texto del popup «¿Qué es esto?». Aquí NO se explica todavía qué es disociar:
+  // eso lo cuenta el cómic, después de responder, para no contaminar el test.
+  que: [
+    "El DES-II (Escala de Experiencias Disociativas) lo crearon Eve Bernstein Carlson y Frank Putnam. Son 28 preguntas sobre experiencias cotidianas de desconexión: momentos en los que la memoria, el cuerpo o el mundo dejan de sentirse del todo tuyos.",
+    "En cada una marcas qué porcentaje del tiempo te pasa, de 0 (nunca) a 100 (siempre). Cuentan solo los momentos en los que NO estás bajo los efectos del alcohol ni de otras drogas.",
+    "No hay respuestas buenas ni malas, y esto no es un diagnóstico. Responde sin pensarlo mucho: la primera intuición suele ser la más honesta. Nadie más lo verá.",
+  ],
+  // Frase breve sobre el turquesa, encima del test.
+  subtituloTurquesa: "¿Qué parte del tiempo te pasa esto? Marca un porcentaje en cada una.",
+  // Extremos de la regleta de porcentajes.
+  nunca: "nunca",
+  siempre: "siempre",
+  // Crédito del instrumento (al pie del test), como el ACE cita el CDC-Kaiser.
+  credito:
+    "Escala de Experiencias Disociativas (DES-II), de Eve Bernstein Carlson y Frank W. Putnam. Traducción al castellano de Olaf Holm.",
+};
+
+// Las 28 preguntas del DES-II, en el orden original (el número de la `key` es el
+// del cuestionario: de él salen las subescalas). Redactadas en castellano claro
+// pero SIN tocar lo que cada ítem pregunta.
+export const DES_PREGUNTAS: PreguntaDes[] = [
+  { key: "des-1-conducir",      categoria: "El viaje en blanco",
+    pregunta: "Algunas personas van conduciendo y de repente se dan cuenta de que no recuerdan lo que ha pasado durante todo el viaje o parte de él." },
+  { key: "des-2-escuchar",      categoria: "Lo que no oíste",
+    pregunta: "Algunas personas están escuchando hablar a alguien y de repente se dan cuenta de que no han oído todo o parte de lo que les decían." },
+  { key: "des-3-lugar",         categoria: "Aparecer en un sitio",
+    pregunta: "Algunas personas se encuentran en un lugar y no saben cómo llegaron hasta allí." },
+  { key: "des-4-ropa",          categoria: "Ropa que no recuerdas",
+    pregunta: "Algunas personas se ven vestidas con ropa que no recuerdan haberse puesto." },
+  { key: "des-5-cosas",         categoria: "Cosas que no compraste",
+    pregunta: "Algunas personas encuentran cosas nuevas entre sus pertenencias que no recuerdan haber comprado." },
+  { key: "des-6-desconocidos",  categoria: "Gente que dice conocerte",
+    pregunta: "A algunas personas se les acerca gente que no conocen, que las llama por otro nombre o insiste en conocerlas de antes." },
+  { key: "des-7-junto-a-si",    categoria: "Verte desde fuera",
+    pregunta: "Algunas personas sienten como si estuvieran junto a sí mismas, u observándose hacer algo como si fueran otra persona." },
+  { key: "des-8-no-reconocer",  categoria: "No reconocer a los tuyos",
+    pregunta: "A algunas personas les dicen que a veces no reconocen a sus amigos o a miembros de su familia." },
+  { key: "des-9-acontecimientos", categoria: "Días importantes sin recuerdo",
+    pregunta: "Algunas personas no tienen recuerdo de acontecimientos importantes de su vida (una boda, una Navidad, un viaje)." },
+  { key: "des-10-mentir",       categoria: "Te acusan de mentir",
+    pregunta: "A algunas personas las acusan de mentir cuando ellas creen que no han mentido." },
+  { key: "des-11-espejo",       categoria: "El espejo",
+    pregunta: "Algunas personas se miran en un espejo y no se reconocen." },
+  { key: "des-12-irreal",       categoria: "El mundo irreal",
+    pregunta: "Algunas personas sienten que las personas, los objetos y el mundo que las rodea no son reales." },
+  { key: "des-13-cuerpo",       categoria: "El cuerpo ajeno",
+    pregunta: "Algunas personas sienten que su cuerpo no les pertenece." },
+  { key: "des-14-revivir",      categoria: "Revivir el pasado",
+    pregunta: "Algunas personas recuerdan el pasado tan intensamente que sienten que lo están volviendo a vivir." },
+  { key: "des-15-sonado",       categoria: "¿Pasó o lo soñé?",
+    pregunta: "Algunas personas no están seguras de si lo que recuerdan sucedió de verdad o solo lo soñaron." },
+  { key: "des-16-lugar-extrano", categoria: "Lo conocido, extraño",
+    pregunta: "Algunas personas están en un lugar conocido y de pronto lo encuentran extraño y poco familiar." },
+  { key: "des-17-television",   categoria: "Absorberse en una historia",
+    pregunta: "Algunas personas se absorben tanto en una película o en la televisión que no se dan cuenta de lo que ocurre a su alrededor." },
+  { key: "des-18-fantasia",     categoria: "Fantasía que parece real",
+    pregunta: "Algunas personas se meten tanto en una fantasía o en un sueño despierto que sienten como si estuviera ocurriendo de verdad." },
+  { key: "des-19-dolor",        categoria: "Ignorar el dolor",
+    pregunta: "Algunas personas son capaces de ignorar el dolor." },
+  { key: "des-20-vacio",        categoria: "Mirar al vacío",
+    pregunta: "Algunas personas se quedan mirando al vacío, sin pensar en nada, y no se dan cuenta del paso del tiempo." },
+  { key: "des-21-hablarse",     categoria: "Hablarte en voz alta",
+    pregunta: "Algunas personas, cuando están solas, se hablan a sí mismas en voz alta." },
+  { key: "des-22-otra-persona", categoria: "Ser otra según dónde",
+    pregunta: "Algunas personas actúan de forma tan distinta en una situación y en otra que sienten como si fueran dos personas diferentes." },
+  { key: "des-23-facilidad",    categoria: "Facilidad asombrosa",
+    pregunta: "Algunas personas, en ciertas situaciones, hacen con asombrosa facilidad algo que normalmente les costaría (en el deporte, en el trabajo, con la gente…)." },
+  { key: "des-24-hecho-pensado", categoria: "¿Lo hice o lo pensé?",
+    pregunta: "Algunas personas no pueden recordar si hicieron algo o solo pensaron en hacerlo (por ejemplo, si echaron una carta o solo lo pensaron)." },
+  { key: "des-25-evidencias",   categoria: "Pruebas de lo que no recuerdas",
+    pregunta: "Algunas personas encuentran pruebas de que hicieron cosas que no recuerdan haber hecho." },
+  { key: "des-26-escritos",     categoria: "Escritos que no recuerdas",
+    pregunta: "Algunas personas encuentran entre sus cosas escritos, dibujos o notas que hicieron ellas mismas y no recuerdan." },
+  { key: "des-27-voces",        categoria: "Voces dentro",
+    pregunta: "Algunas personas oyen voces dentro de su cabeza que les dicen que hagan cosas o que comentan lo que están haciendo." },
+  { key: "des-28-neblina",      categoria: "El mundo con neblina",
+    pregunta: "Algunas personas sienten como si vieran el mundo a través de una neblina, y las personas y los objetos les parecen distantes o poco claros." },
+];
+
+/** El valor guardado de una pregunta (0–100), o `undefined` si no está respondida.
+ *  Blindado: los datos guardados con otra forma no pueden reventar la media. */
+export const desValor = (data: LineaDeVidaData, key: string): number | undefined => {
+  const v = data?.des?.respuestas?.[key];
+  return typeof v === "number" && Number.isFinite(v) ? Math.min(100, Math.max(0, v)) : undefined;
+};
+
+/** Cuántas de las 28 se han respondido (para la barra de progreso). */
+export const desRespondidas = (data: LineaDeVidaData): number =>
+  DES_PREGUNTAS.filter((p) => desValor(data, p.key) !== undefined).length;
+
+/** ¿Están las 28 respondidas? (desbloquea el resultado). */
+export const desCompleto = (data: LineaDeVidaData): boolean =>
+  desRespondidas(data) === DES_PREGUNTAS.length;
+
+/** Media de un grupo de preguntas (0–100), redondeada. Las no respondidas no
+ *  cuentan; si no hay ninguna respondida, es 0. */
+function mediaDe(data: LineaDeVidaData, keys: string[]): number {
+  const vals = keys.map((k) => desValor(data, k)).filter((v): v is number => v !== undefined);
+  if (vals.length === 0) return 0;
+  return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+}
+
+/** Puntuación DES-II: la media de las 28 (0–100). */
+export const desScore = (data: LineaDeVidaData): number =>
+  mediaDe(data, DES_PREGUNTAS.map((p) => p.key));
+
+// ── Las tres caras de la desconexión (modelo de tres factores de Carlson) ──
+//
+// Seis ítems del test (1, 9, 16, 19, 21 y 24) no cargan con claridad en ninguno
+// de los tres factores: cuentan para la media total y NO se asignan a ninguna
+// subescala. Preferimos dejarlos fuera antes que inventar un reparto.
+export interface SubescalaDes {
+  key: string;
+  titulo: string;
+  descripcion: string;
+  /** Color de acento de su barra. */
+  color: string;
+  /** Ítems que la forman (`key` de DES_PREGUNTAS). */
+  preguntas: string[];
+}
+
+export const DES_SUBESCALAS: SubescalaDes[] = [
+  {
+    key: "amnesia",
+    titulo: "Lagunas de memoria",
+    descripcion:
+      "Trozos de tiempo que no están: viajes, conversaciones, cosas que hiciste y no recuerdas haber hecho.",
+    color: "#c5613e",
+    preguntas: [
+      "des-3-lugar", "des-4-ropa", "des-5-cosas", "des-6-desconocidos",
+      "des-8-no-reconocer", "des-10-mentir", "des-25-evidencias", "des-26-escritos",
+    ],
+  },
+  {
+    key: "despersonalizacion",
+    titulo: "Estar fuera de ti",
+    descripcion:
+      "Verte desde fuera, no reconocer tu cara, sentir el cuerpo como si no fuera tuyo o el mundo como si no fuera real.",
+    color: "#a8452f",
+    preguntas: [
+      "des-7-junto-a-si", "des-11-espejo", "des-12-irreal", "des-13-cuerpo",
+      "des-27-voces", "des-28-neblina",
+    ],
+  },
+  {
+    key: "absorcion",
+    titulo: "Irte con la mente",
+    descripcion:
+      "Ensimismarte, meterte en una historia o en un recuerdo hasta perder de vista lo que hay alrededor. Es la más común y la más benigna de las tres.",
+    color: "#caa23c",
+    preguntas: [
+      "des-2-escuchar", "des-14-revivir", "des-15-sonado", "des-17-television",
+      "des-18-fantasia", "des-20-vacio", "des-22-otra-persona", "des-23-facilidad",
+    ],
+  },
+];
+
+/** La puntuación (0–100) de cada subescala, en el orden de `DES_SUBESCALAS`. */
+export const desSubescalas = (data: LineaDeVidaData): { sub: SubescalaDes; score: number }[] =>
+  DES_SUBESCALAS.map((sub) => ({ sub, score: mediaDe(data, sub.preguntas) }));
+
+/** Umbral de cribado del instrumento: 30 o más se considera motivo para una
+ *  evaluación profesional (no un diagnóstico). */
+export const DES_UMBRAL_ALTO = 30;
+
+/** ¿Conviene avisar antes de los ejercicios que remueven (paso «Narra»)?
+ *  Solo si lo alto es la media total, las lagunas o el estar fuera de sí: una
+ *  puntuación alta hecha SOLO de absorción no dispara ningún aviso. */
+export function desAlto(data: LineaDeVidaData): boolean {
+  if (!desCompleto(data)) return false;
+  if (desScore(data) >= DES_UMBRAL_ALTO) return true;
+  return desSubescalas(data).some(
+    (s) => s.sub.key !== "absorcion" && s.score >= DES_UMBRAL_ALTO,
+  );
+}
+
+/** Banda interpretativa de la puntuación. Honesta, sin alarmismo y sin etiquetas. */
+export interface DesBanda {
+  min: number;
+  max: number;
+  etiqueta: string;
+  titulo: string;
+  color: string;
+  texto: string;
+}
+
+export const DES_BANDAS: DesBanda[] = [
+  {
+    min: 0, max: 9,
+    etiqueta: "0–9",
+    titulo: "Te desconectas poco",
+    color: "#3f9d6b",
+    texto:
+      "Tu memoria y tu cuerpo te acompañan casi siempre. Es una buena base para lo que viene: vas a poder recordar y sentir a la vez, que es justo lo que pide este recorrido.",
+  },
+  {
+    min: 10, max: 19,
+    etiqueta: "10–19",
+    titulo: "Te desconectas de vez en cuando",
+    color: "#caa23c",
+    texto:
+      "Es lo más frecuente: casi todo el mundo se va un poco. Merece la pena que aprendas a notar cuándo te ocurre, porque casi siempre avisa de que algo te está pesando más de lo que reconoces.",
+  },
+  {
+    min: 20, max: 29,
+    etiqueta: "20–29",
+    titulo: "Te desconectas bastante",
+    color: "#c5613e",
+    texto:
+      "No es un diagnóstico, pero sí una señal que conviene no dejar pasar: es probable que tu sistema aprendiera a marcharse cuando algo dolía demasiado, y que siga haciéndolo hoy sin que haga falta. Ve despacio en las páginas que vienen y para cuando lo necesites.",
+  },
+  {
+    min: 30, max: 100,
+    etiqueta: "30+",
+    titulo: "Te desconectas mucho",
+    color: "#a8452f",
+    texto:
+      "Tu puntuación es alta. En la investigación, un 30 o más se considera motivo para mirarlo con un profesional — motivo para mirarlo con alguien, no un diagnóstico ni una etiqueta. Si es tu caso, este mapa no deberías recorrerlo en solitario: pide una llamada y lo hacemos juntos, a tu ritmo.",
+  },
+];
+
+export const desBanda = (score: number): DesBanda =>
+  DES_BANDAS.find((b) => score >= b.min && score <= b.max) ?? DES_BANDAS[DES_BANDAS.length - 1];
+
+// ── El resultado, para guardarlo en su tabla ───────────────────────────────
+//
+// Las respuestas se guardan con el resto del recorrido (data.des.respuestas).
+// El resultado se calcula de ellas y se manda a la tabla `psicologia_des`
+// (ver data/psicologiaDesApi.ts). Aquí solo están las cuentas: quién las guarda
+// y cuándo es cosa de las páginas.
+//
+// Solo existe resultado si el test está COMPLETO: uno a medias no significa nada
+// y sería peor que no tenerlo.
+
+/** El resultado de un test completo, listo para guardar. `undefined` si aún
+ *  faltan respuestas.
+ *
+ *  Sin fecha: la pone la BD. Y no es `now()` a secas — el backend conserva la de
+ *  la fila anterior si el resultado no ha cambiado, para que la fecha diga cuándo
+ *  salió ESE resultado y no cuándo se tocó la página por última vez. */
+export function desResultado(data: LineaDeVidaData): DesResultado | undefined {
+  if (!desCompleto(data)) return undefined;
+  const subescalas: Record<string, number> = {};
+  desSubescalas(data).forEach(({ sub, score }) => { subescalas[sub.key] = score; });
+  const score = desScore(data);
+  return { score, banda: desBanda(score).etiqueta, subescalas, alto: desAlto(data) };
+}
+
+/** ¿Dicen lo mismo dos resultados? Lo usa la página del test para no repetir el
+ *  guardado cuando cambiar una respuesta no mueve ninguna cifra. */
+export function desResultadoIgual(a?: DesResultado, b?: DesResultado): boolean {
+  if (!a || !b) return !a && !b;
+  if (a.score !== b.score || a.banda !== b.banda || a.alto !== b.alto) return false;
+  return DES_SUBESCALAS.every((s) => a.subescalas?.[s.key] === b.subescalas?.[s.key]);
+}
+
+/** El cierre del resultado: por qué desconectarse no es un defecto y cómo se
+ *  vuelve. Imprescindible para no dejar a la persona en su síntoma. */
+export const DES_ESPERANZA = {
+  titulo: "Irse fue lo que te salvó",
+  texto: [
+    "Desconectarse no es un defecto ni una rareza: es lo que hace un sistema nervioso inteligente cuando no puede huir ni pelear. Si de pequeña no podías salir de la habitación, salías de ti. Y te funcionó.",
+    "El problema es que ese mecanismo no distingue épocas: sigue disparándose hoy —en una discusión, en una consulta, en medio de una conversación cualquiera— cuando ya no hace falta.",
+    "Y se reaprende, pero no por la cabeza: por el cuerpo. Los pies en el suelo, la respiración, la temperatura del agua, la voz de alguien que te acompaña. La presencia se entrena. Cada vez que te quedas un poco más, vuelves un poco más a casa.",
+  ],
+  /** Aviso del paso «Narra» cuando la desconexión es alta (ver `desAlto`). */
+  avisoNarra: {
+    titulo: "Antes de este ejercicio",
+    texto: [
+      "En tu test de desconexión salió una puntuación alta. Eso no te impide hacer nada, pero cambia el orden de las cosas: primero se aprende a volver al cuerpo, y solo después se remueve el recuerdo.",
+      "Si notas que te vas, que el cuerpo se te queda lejos o que el mundo se pone raro, para el audio y haz el cierre. No es rendirse: es exactamente lo que hay que hacer.",
+      "Y si puede ser, esta parte no la hagas sola.",
+    ],
+  },
+};
+
 /** Ruta pública del audio de estimulación bilateral (auriculares recomendados). */
 export const REGULACION_AUDIO_SRC = "/audio/estimulacion-bilateral.mp3";
 
@@ -1333,25 +1692,26 @@ export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolea
   switch (n) {
     case 2:  return t(data["problema-actual"]) !== "";                         // Problemas: escrito
     case 3:  return aceCompleto(data);                                         // ACE: 10 respondidas
-    case 5:  return aniosRecorridos(data, Number(data.edad) || 0) >= 1;        // Línea de Vida: ≥1 año
-    case 6:  return familiaConSimbolo(data);                                   // Tu familia: ≥1 con personaje
-    case 7:  return personasGenograma(data).length > 0;                        // Genograma: ≥1 persona
-    case 8:  return Object.values(data.anos || {}).some((a) => (a?.huellas?.length ?? 0) > 0); // Huellas: ≥1 marcada
-    case 9:  return (data.nudos || []).length > 0;                             // Nudos: ≥1
-    case 10: return necesidadesCompletas(data);                                // Necesidades: las 18
-    case 11: return (data.heridas || []).length > 0;                           // Heridas: ≥1
-    case 14: return (data.constelaciones || []).some(                          // Relación: ≥1 con contenido
+    case 5:  return desCompleto(data);                                         // Desconexión: las 28
+    case 7:  return aniosRecorridos(data, Number(data.edad) || 0) >= 1;        // Línea de Vida: ≥1 año
+    case 8:  return familiaConSimbolo(data);                                   // Tu familia: ≥1 con personaje
+    case 9:  return personasGenograma(data).length > 0;                        // Genograma: ≥1 persona
+    case 10: return Object.values(data.anos || {}).some((a) => (a?.huellas?.length ?? 0) > 0); // Huellas: ≥1 marcada
+    case 11: return (data.nudos || []).length > 0;                             // Nudos: ≥1
+    case 12: return necesidadesCompletas(data);                                // Necesidades: las 18
+    case 13: return (data.heridas || []).length > 0;                           // Heridas: ≥1
+    case 16: return (data.constelaciones || []).some(                          // Relación: ≥1 con contenido
                (c) => (c?.nudos?.length ?? 0) > 0 || (c?.arquetipos?.length ?? 0) > 0 || t(c?.titulo) !== "" || t(c?.texto) !== "");
-    case 15: return DONES_PREGUNTAS.every(                                      // Recuérdate: todas resueltas
+    case 17: return DONES_PREGUNTAS.every(                                      // Recuérdate: todas resueltas
                (q) => t(data.dones?.respuestas?.[q.key]) !== "" || (data.dones?.sinIdeas || []).includes(q.key));
-    case 16: return (data.dones?.lista || []).some((d) => t(d.texto) !== "");  // Dones: ≥1 don escrito
-    case 17: return (data.miedos || []).length > 0;                            // Miedos: ≥1
-    case 18: return (data.miedos || []).length > 0 &&                          // Atrévete: todos respondidos
+    case 18: return (data.dones?.lista || []).some((d) => t(d.texto) !== "");  // Dones: ≥1 don escrito
+    case 19: return (data.miedos || []).length > 0;                            // Miedos: ≥1
+    case 20: return (data.miedos || []).length > 0 &&                          // Atrévete: todos respondidos
                     (data.miedos || []).every((m) => miedoRespondidas(m) >= MIEDOS_PREGUNTAS.length);
-    case 19: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
-    case 20: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
-    case 21: return t(data.brujula?.mensaje) !== "";                           // Carta
-    default: return true;  // 1, 4, 12, 13, 22, 23 y cualquier otro: sin requisito
+    case 21: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
+    case 22: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
+    case 23: return t(data.brujula?.mensaje) !== "";                           // Carta
+    default: return true;  // 1, 4, 6, 14, 15, 24, 25 y cualquier otro: sin requisito
   }
 }
 

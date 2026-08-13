@@ -1,10 +1,15 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · ¿Qué significa tu resultado ACE?  ·  4/16
+// PÁGINA · ¿Qué significa tu resultado ACE?  ·  4/25
 //
 // El resultado del test ACE, separado del test (página 3). Muestra la
 // puntuación + su interpretación (banda), qué se sabe de estas experiencias
 // (dosis-respuesta) y —con honestidad y esperanza— cómo pueden influir en la
 // Vida actual. NO es un diagnóstico (ver ACE_ESPERANZA.caveat).
+//
+// De aquí se pasa al test de desconexión (DES-II, paso 5): el ACE cuenta qué
+// pasó y el siguiente, cómo se sobrevivió. El cómic antesala de la Línea de Vida
+// ya no vive aquí: se ha mudado al resultado del DES, que es la página que ahora
+// precede a la timeline.
 //
 // Si el test no está completo, se vuelve a la página del test.
 // ─────────────────────────────────────────────────────────────────────────
@@ -19,18 +24,14 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
-import { COMIC_LINEA_TIEMPO } from "../../components/metodo/comicLineaTiempo";
-import { useComic } from "../../i18n/comics";
 import { useT } from "../../i18n";
 import {
   experienciaById,
-  ACE_ESPERANZA,
   aceScore,
-  aceBanda,
   aceCompleto,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useAceBanda, useAceEsperanza } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { Reveal } from "../../components/global/Reveal";
 import {
@@ -52,13 +53,13 @@ export default function MetodoPsicologiaAceResultado() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  // Cómic «antesala de la Línea de Vida»: se intercala al ir a la timeline (desde
-  // el header o el botón), antes de que cargue y de su popup de edad. Se salta.
-  const [comicOpen, setComicOpen] = useState(false);
-  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
-  const comicVinetas = useComic("psicologia-linea-tiempo", COMIC_LINEA_TIEMPO);
   const dataRef = useRef<LineaDeVidaData>({});
   const [data, setData] = useState<LineaDeVidaData>({});
+  // La puntuación y su banda, arriba del todo: los hooks no pueden ir después
+  // del `return` del loading.
+  const score = aceScore(data);
+  const banda = useAceBanda(score);
+  const aceEsperanza = useAceEsperanza();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -96,9 +97,6 @@ export default function MetodoPsicologiaAceResultado() {
   }
   if (!exp) return null;
 
-  const score = aceScore(data);
-  const banda = aceBanda(score);
-
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
@@ -113,11 +111,11 @@ export default function MetodoPsicologiaAceResultado() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 4, total: 23 }}
+              step={{ current: 4, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.ace")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}
-              next={{ label: `${t("metodo.psico.lineaDeVida")} →`, onClick: () => setComicOpen(true) }}
+              next={{ label: `${t("metodo.psico.paso.des")} →`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/des`) }}
             />
           </Reveal>
 
@@ -179,11 +177,11 @@ export default function MetodoPsicologiaAceResultado() {
                     px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
                 <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
                       lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                  {ACE_ESPERANZA.titulo}
+                  {aceEsperanza.titulo}
                 </Text>
                 <Box h="1px" w="55%" maxW="240px" mx="auto"
                      bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                {ACE_ESPERANZA.texto.map((t, i) => (
+                {aceEsperanza.texto.map((t, i) => (
                   <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
                         style={{ textShadow: INK_SHADOW }}>
                     {t}
@@ -192,14 +190,14 @@ export default function MetodoPsicologiaAceResultado() {
 
                 {/* Seguir el recorrido */}
                 <Flex justify="center" pt={2}>
-                  <Box as="button" onClick={() => setComicOpen(true)}
+                  <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/des`)}
                        position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
                        bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
                        fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
                        boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
                        _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
                     <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.continuarLinea")}</Box>
+                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("comun.continuar")} →</Box>
                   </Box>
                 </Flex>
               </Flex>
@@ -210,21 +208,6 @@ export default function MetodoPsicologiaAceResultado() {
       </Flex>
 
       <AyudaRecorrido pagina="ace" />
-
-      {/* Cómic antesala de la Línea de Vida — sale al pasar de botón, antes de
-          cargar la timeline y su popup de edad. Se puede saltar (Saltar →). */}
-      <ComicPasoModal
-        isOpen={comicOpen}
-        onClose={() => setComicOpen(false)}
-        onContinue={() => navigate(`/metodo/psicologia/${exp.id}`)}
-        vinetas={comicVinetas}
-        continueLabel={t("comun.continuar")}
-        botonNitido
-        themeColor={neuropsicologiaTxt}
-        disciplinaBgImage="/img/fondos/psciologia.webp"
-        disciplinaBgColor={neuropsicologiaBg}
-        textShadow={`0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`}
-      />
 
       <SiteFooter />
     </Box>

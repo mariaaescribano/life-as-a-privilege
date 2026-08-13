@@ -77,6 +77,18 @@ va en las URLs y en la base de datos. Ver `nombreDisciplina.ts`.
 | Acceso Libre | Free access | El precio «gratis» de un curso. |
 | Precauciones | Cautions | En las fichas de plantas y alimentos. |
 | Datos curiosos | Fun facts | |
+| adrenalina / noradrenalina | adrenaline / noradrenaline | NO *epinephrine*, aunque sea lo académico en EE. UU.: se dicen así en la calle y encajan con *adrenal gland* y *adrenergic receptors*, que no tienen otra forma. |
+| la Vida (con mayúscula) | Life | Ya está arriba, pero ojo en Fisiología: aparece dentro de frases largas y se cuela en minúscula. |
+| 37 °C · pH 7,4 | 37 °C · pH 7.4 | La coma decimal pasa a punto. Los grados se quedan en Celsius. |
+| nudo (Psicología) | knot | El nudo del recorrido, no un nudo cualquiera. |
+| huella | mark | «Las Huellas» = the marks that a memory left. |
+| herida | wound | Nunca *trauma*: el español evita la palabra clínica a propósito. |
+| Línea de Vida | Life Line | El nombre de la experiencia. |
+| ACE | ACE | Adverse Childhood Experiences. Las 10 preguntas vuelven al original de Felitti & Anda, no se retraducen del español. |
+| solo/a, querido/a | (sin marca) | El inglés no lleva género y no se inventa un equivalente. |
+| relación (Psicología) | connection | El paso del recorrido y sus «boxes». Nunca *relationship*: no habla de parejas, sino de lo que la persona relaciona. |
+| necesidad no cubierta | uncovered need | Igual que en `heridasIntro`: *uncovered*, no *unmet*. |
+| Cuándo la notas: | When you notice it: | Rótulo que abre párrafo en Profundiza. Igual con *How it's made:*, *Its receptor:*, *When it matters:*. Son el ritmo del texto: se repiten literales, no se varían. |
 
 ## Registro
 

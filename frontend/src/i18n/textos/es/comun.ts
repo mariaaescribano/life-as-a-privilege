@@ -25,7 +25,7 @@ export const comun = {
   "comun.proximamente": "Próximamente",
 
   /* Aviso antes de bajar el vídeo completo de una disciplina (VideoLargo.tsx).
-     En pantalla siempre va el clip corto; el original, que pesa entre 8 y 33 MB,
+     En pantalla siempre va el clip corto; el original, que pesa entre 8 y 27 MB,
      solo se pide al pulsar, y con estas palabras si la conexión parece de pago. */
   "comun.video.titulo": "¿Vemos el vídeo completo?",
   "comun.video.pesa": "Pesa unos {mb} MB. Si no estás en wifi, te va a gastar datos.",

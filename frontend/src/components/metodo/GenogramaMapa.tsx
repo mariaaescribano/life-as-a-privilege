@@ -16,8 +16,6 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { simboloSrc, simboloNombre } from "./familiaSimbolos";
 import {
-  GENOGRAMA,
-  GENOGRAMA_PREGUNTAS,
   ocupacionFamilia,
   personaEscritas,
   personaLabel,
@@ -25,6 +23,7 @@ import {
   posKeyFamilia,
   type PersonaGenograma,
 } from "./psicologiaRecorrido";
+import { useGenograma, useGenogramaPreguntas } from "./psicologiaRecorrido.en";
 import { glowPanel, azulBorde, scrollAcuarela } from "./psicologiaGlow";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
@@ -130,9 +129,11 @@ function Celda({
   onAbrir: () => void;
   onAñadir: (dir: DirFamilia) => void;
 }) {
+  const genograma = useGenograma();
+  const genogramaPreguntas = useGenogramaPreguntas();
   const esYo = quien === "yo";
   const p = esYo ? null : (quien as PersonaGenograma);
-  const nombre = esYo ? GENOGRAMA.yo : personaLabel(p!);
+  const nombre = esYo ? genograma.yo : personaLabel(p!);
   const foto = esYo ? miFoto : p!.foto;
   const simbolos = p ? personaSimbolos(p) : [];
   const escritas = p ? personaEscritas(p) : 0;
@@ -201,7 +202,7 @@ function Celda({
         {!esYo && mostrarProgreso && escritas > 0 && (
           <Box px={2} py={0.5} borderRadius="full" bg={`${TINTA}18`} border={`1px solid ${TINTA}33`}>
             <Text color={TINTA} fontSize="2xs" fontWeight="700" lineHeight="1.2">
-              {escritas === GENOGRAMA_PREGUNTAS.length ? "✓" : `${escritas}/${GENOGRAMA_PREGUNTAS.length}`}
+              {escritas === genogramaPreguntas.length ? "✓" : `${escritas}/${genogramaPreguntas.length}`}
             </Text>
           </Box>
         )}

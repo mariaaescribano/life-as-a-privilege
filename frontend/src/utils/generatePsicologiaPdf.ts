@@ -20,12 +20,17 @@ import { TEMA_PSICOLOGIA } from "./pdf/temas";
 import { polar, conAlfa, medidorArco } from "./pdf/formas";
 import {
   aceScore,
-  aceBanda,
   aceCompleto,
   necesidadesNoCubiertas,
-  MIEDOS_PREGUNTAS,
   type LineaDeVidaData,
 } from "../components/metodo/psicologiaRecorrido";
+// El cuaderno se escribe en el idioma de la pantalla. Al no ser un componente,
+// lee el texto con los lectores de fuera de React (no con los hooks).
+import {
+  aceBandaTraducida,
+  miedosPreguntasTraducidas,
+} from "../components/metodo/psicologiaRecorrido.en";
+import { traducir } from "../i18n";
 import { arquetipoLabel } from "../components/metodo/integracionSimbolos";
 import { GARAMOND } from "./fonts/ebGaramond";
 
@@ -86,7 +91,7 @@ function espiralDeRecorrido(
 
 export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void> {
   const t = TEMA_PSICOLOGIA;
-  const taller = await Taller.abrir(t, { titulo: "Mi mapa" });
+  const taller = await Taller.abrir(t, { titulo: traducir("metodo.psico.pdf.miMapa") });
   const doc = taller.doc;
 
   /* ── Se recoge todo primero: hace falta para el resumen y para la portada ── */
@@ -100,10 +105,10 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
     .filter((h) => (h.titulo || "").trim() || (h.texto || "").trim());
 
   const INTEGRACION_PREGUNTAS: { key: "proteger" | "coste" | "verdadSana" | "recordatorio"; label: string }[] = [
-    { key: "proteger", label: "Qué intentaba proteger" },
-    { key: "coste", label: "Qué me cuesta mantenerlo" },
-    { key: "verdadSana", label: "La verdad más sana que quiero practicar" },
-    { key: "recordatorio", label: "Lo que quiero recordar" },
+    { key: "proteger", label: traducir("metodo.psico.integra.proteger") },
+    { key: "coste", label: traducir("metodo.psico.integra.coste") },
+    { key: "verdadSana", label: traducir("metodo.psico.integra.verdadSana") },
+    { key: "recordatorio", label: traducir("metodo.psico.integra.recordatorio") },
   ];
   const relaciones = (Array.isArray(data.constelaciones) ? data.constelaciones : []).filter(
     (c) => (c.titulo || "").trim() || (c.texto || "").trim() ||
@@ -127,13 +132,13 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
 
   /* ── PORTADA ── */
   taller.portada({
-    titulo: "Mi mapa",
-    subtitulo: "Psicología · Tu historia, contada por ti",
+    titulo: traducir("metodo.psico.pdf.miMapa"),
+    subtitulo: traducir("metodo.psico.pdf.subtitulo"),
     pieLamina:
       bloquesConContenido > 1
-        ? `Cada punto es uno de los ${bloquesConContenido} pasos que dejaste escritos.`
+        ? traducir("metodo.psico.pdf.pieLamina", { n: bloquesConContenido })
         : undefined,
-    cierre: "Mi recorrido",
+    cierre: traducir("metodo.psico.pdf.miRecorrido"),
     lamina: (d, cx, yTop, ancho) => {
       const r = Math.min(ancho / 2 - 18, 46);
       espiralDeRecorrido(d, cx, yTop + r + 14, r, bloquesConContenido, [246, 226, 206], [255, 246, 236]);
@@ -143,19 +148,18 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   /* ── TU MAPA DE UN VISTAZO ── */
   taller.nuevaPagina();
   taller.capitulo(
-    "De un vistazo",
-    "Lo que hay dentro de este cuaderno. Sirve para volver dentro de unos meses sin " +
-      "tener que releerlo entero.",
+    traducir("metodo.psico.pdf.deUnVistazo"),
+    traducir("metodo.psico.pdf.deUnVistazoApoyo"),
   );
 
   const inventario: [string, number][] = [
-    ["Huellas", huellas.length],
-    ["Nudos", nudos.length],
-    ["Necesidades", necesidades.length],
-    ["Heridas", heridas.length],
-    ["Relaciones", relaciones.length],
-    ["Miedos", miedos.length],
-    ["Dones", dones.length],
+    [traducir("metodo.psico.paso.huellas"), huellas.length],
+    [traducir("metodo.psico.paso.nudos"), nudos.length],
+    [traducir("metodo.psico.paso.necesidades"), necesidades.length],
+    [traducir("metodo.psico.paso.heridas"), heridas.length],
+    [traducir("metodo.psico.pdf.relaciones"), relaciones.length],
+    [traducir("metodo.psico.paso.miedos"), miedos.length],
+    [traducir("metodo.psico.paso.dones"), dones.length],
   ].filter(([, n]) => (n as number) > 0) as [string, number][];
 
   if (inventario.length) {
@@ -186,7 +190,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   }
 
   if (aceHecho) {
-    const banda = aceBanda(ace);
+    const banda = aceBandaTraducida(ace);
     taller.espacio(2);
     taller.reservar(46);
     const arriba = taller.y;
@@ -199,11 +203,11 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
     doc.setFont(GARAMOND, "normal");
     doc.setFontSize(9);
     doc.setTextColor(...t.apagado);
-    doc.text("de 10", MARGEN + 22, arriba + 38.5, { align: "center" });
+    doc.text(traducir("metodo.psico.pdf.deDiez"), MARGEN + 22, arriba + 38.5, { align: "center" });
 
     const x = MARGEN + 48;
     const w = ANCHO - 48;
-    taller.versalitas("Puntuación ACE", x, arriba + 6, 8, t.apagado);
+    taller.versalitas(traducir("metodo.psico.pdf.puntuacionAce"), x, arriba + 6, 8, t.apagado);
     doc.setFont(GARAMOND, "bold");
     doc.setFontSize(14);
     doc.setTextColor(...t.acento);
@@ -214,8 +218,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
     doc.setFontSize(10.2);
     doc.setTextColor(...t.tintaSuave);
     const lineas = doc.splitTextToSize(
-      `De las diez preguntas del cuestionario ACE respondiste que sí a ${ace}. ` +
-        "En «Lo que cargué» tienes qué significa eso y qué no.",
+      traducir("metodo.psico.pdf.aceResumen", { n: ace }),
       w,
     ) as string[];
     lineas.forEach((l, i) => doc.text(l, x, arriba + 21 + i * 5));
@@ -223,24 +226,22 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   }
 
   taller.espacio(2);
-  taller.parrafo(
-    "Nada de lo que sigue es un diagnóstico. Son tus palabras, ordenadas. El valor de este " +
-      "cuaderno no está en lo que dice, sino en que lo escribiste tú y puedes volver a él.",
-    { cursiva: true, color: t.apagado, tam: 10.4 },
-  );
+  taller.parrafo(traducir("metodo.psico.pdf.noEsDiagnostico"), {
+    cursiva: true, color: t.apagado, tam: 10.4,
+  });
 
   /* ── 1 · DE DÓNDE VENGO ── */
   if (problemas.length > 0) {
-    taller.capitulo("De dónde vengo");
+    taller.capitulo(traducir("metodo.psico.sin.deDondeVengo"));
     problemas.forEach((p, i) => taller.parrafo(p, { cursiva: true, capitular: i === 0, tam: 11.5 }));
   }
 
   /* ── 2 · LO QUE CARGUÉ ── */
   if (aceHecho) {
-    const banda = aceBanda(ace);
-    taller.capitulo("Lo que cargué");
+    const banda = aceBandaTraducida(ace);
+    taller.capitulo(traducir("metodo.psico.sin.loQueCargue"));
     taller.filaBarra({
-      etiqueta: "Puntuación ACE",
+      etiqueta: traducir("metodo.psico.pdf.puntuacionAce"),
       coletilla: banda.titulo,
       valor: `${ace} / 10`,
       fraccion: ace / 10,
@@ -250,29 +251,29 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
 
   /* ── 3 · LO QUE DEJÓ HUELLA ── */
   if (huellas.length > 0) {
-    taller.capitulo("Lo que dejó huella");
+    taller.capitulo(traducir("metodo.psico.sin.loQueDejoHuella"));
     taller.listaDoble(huellas);
   }
 
   /* ── 4 · LOS NUDOS ── */
   if (nudos.length > 0) {
-    taller.capitulo("Los nudos");
+    taller.capitulo(traducir("metodo.psico.sin.losNudos"));
     taller.listaDoble(nudos);
   }
 
   /* ── 5 · LO QUE ME FALTÓ ── */
   if (necesidades.length > 0) {
-    taller.capitulo("Lo que me faltó");
+    taller.capitulo(traducir("metodo.psico.sin.loQueMeFalto"));
     taller.listaDoble(necesidades);
   }
 
   /* ── 6 · MIS HERIDAS ── */
   if (heridas.length > 0) {
-    taller.capitulo("Mis heridas");
+    taller.capitulo(traducir("metodo.psico.sin.misHeridas"));
     heridas.forEach((h) => {
       const piezas = [...(h.huellas || []), ...(h.nudos || []), ...(h.necesidades || [])].join("   ·   ");
       taller.tarjeta({
-        titulo: limpio(h.titulo) || "Herida",
+        titulo: limpio(h.titulo) || traducir("metodo.psico.sin.herida"),
         cuerpo: limpio(h.texto),
         extra: piezas || undefined,
       });
@@ -281,14 +282,14 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
 
   /* ── 7 · CÓMO ME RELACIONO ── */
   if (relaciones.length > 0) {
-    taller.capitulo("Cómo me relaciono");
+    taller.capitulo(traducir("metodo.psico.sin.comoMeRelaciono"));
     relaciones.forEach((c) => {
       const piezas = [
         ...(c.nudos || []),
         ...(c.arquetipos || []).map((a) => arquetipoLabel(a)),
       ].join("   ·   ");
       taller.tarjeta({
-        titulo: limpio(c.titulo) || "Relación",
+        titulo: limpio(c.titulo) || traducir("metodo.psico.paso.relacion"),
         cuerpo: limpio(c.texto),
         extra: piezas || undefined,
       });
@@ -302,7 +303,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
 
   /* ── 8 · MIS MIEDOS ── */
   if (miedos.length > 0) {
-    taller.capitulo("Mis miedos");
+    taller.capitulo(traducir("metodo.psico.sin.misMiedos"));
     miedos.forEach((m) => {
       taller.reservar(14);
       doc.setFont(GARAMOND, "bold");
@@ -317,7 +318,7 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
       doc.setTextColor(...t.tinta);
       lineas.forEach((l, i) => doc.text(l, MARGEN + 7, taller.y + i * 6.4));
       taller.y += lineas.length * 6.4 + 3;
-      MIEDOS_PREGUNTAS.forEach((p) => {
+      miedosPreguntasTraducidas().forEach((p) => {
         const r = limpio(m.respuestas?.[p.key] || "");
         if (r) taller.preguntaRespuesta(p.pregunta, r);
       });
@@ -327,14 +328,14 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
 
   /* ── 9 · MIS DONES ── */
   if (dones.length > 0) {
-    taller.capitulo("Mis dones", "Lo que sabes que tienes, escrito por ti y no por nadie más.");
+    taller.capitulo(traducir("metodo.psico.sin.misDones"), traducir("metodo.psico.pdf.donesApoyo"));
     taller.lista(dones, { tam: 11.5 });
   }
 
   /* ── 10 · MI CARTA ── */
   if (limpio(b.mensaje as string)) {
     // Formato nuevo: un mensaje libre a su yo del futuro. Va en papel de carta.
-    taller.capitulo("Mi carta", "Para cuando vuelva a sentirme bloqueado.");
+    taller.capitulo(traducir("metodo.psico.sin.miCarta"), traducir("metodo.psico.pdf.cartaApoyo"));
     taller.reservar(40);
     const arriba = taller.y - 3;
     doc.setFont(GARAMOND, "italic");
@@ -362,32 +363,29 @@ export async function generatePsicologiaPdf(data: LineaDeVidaData): Promise<void
   } else {
     // Formato antiguo (recorridos guardados con las cuatro preguntas guía).
     const brujula: [string, string | undefined][] = [
-      ["¿Qué herida se ha activado?", b.herida],
-      ["¿Qué necesidad hay debajo?", b.necesidad],
-      ["¿Qué miedo está hablando?", b.miedo],
-      ["¿Qué don puedes utilizar ahora?", b.don],
+      [traducir("metodo.psico.bru.herida"), b.herida],
+      [traducir("metodo.psico.bru.necesidad"), b.necesidad],
+      [traducir("metodo.psico.bru.miedo"), b.miedo],
+      [traducir("metodo.psico.bru.don"), b.don],
     ];
     if (brujula.some(([, v]) => limpio(v || ""))) {
-      taller.capitulo("Mi carta", "Para cuando vuelva a sentirme bloqueado.");
+      taller.capitulo(traducir("metodo.psico.sin.miCarta"), traducir("metodo.psico.pdf.cartaApoyo"));
       brujula.forEach(([q, v]) => { if (limpio(v || "")) taller.preguntaRespuesta(q, v as string); });
     }
   }
 
   /* ── 11 · MI COMPROMISO ── */
   if (limpio(comp.necesitaste as string) || limpio(comp.dartelo as string)) {
-    taller.capitulo("Mi compromiso conmigo mismo");
+    taller.capitulo(traducir("metodo.psico.sin.miCompromiso"));
     if (limpio(comp.necesitaste as string)) {
-      taller.preguntaRespuesta("¿Qué necesitaste que nadie pudo darte?", comp.necesitaste as string);
+      taller.preguntaRespuesta(traducir("metodo.psico.compromisoP1"), comp.necesitaste as string);
     }
     if (limpio(comp.dartelo as string)) {
-      taller.preguntaRespuesta("¿Cómo puedes empezar a dártelo hoy?", comp.dartelo as string);
+      taller.preguntaRespuesta(traducir("metodo.psico.compromisoP2"), comp.dartelo as string);
     }
   }
 
-  taller.cierre(
-    "No mirabas tu historia para quedarte en ella, sino para transformarla. " +
-      "Este mapa es la prueba de que ya empezaste.",
-  );
+  taller.cierre(traducir("metodo.psico.pdf.cierre"));
 
-  taller.guardar("mi-mapa-psicologia.pdf");
+  taller.guardar(traducir("metodo.psico.pdf.archivo"));
 }

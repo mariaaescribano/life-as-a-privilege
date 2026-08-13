@@ -75,7 +75,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   // Índice dentro de CABALA_ILUSTRACIONES_VINETAS de la sefirá abierta.
   const [sefiraIdx, setSefiraIdx] = useState<number | null>(null);
-  // El vídeo completo pesa entre 8 y 33 MB, así que en la caja de arriba va el
+  // El vídeo completo pesa entre 8 y 27 MB, así que en la caja de arriba va el
   // clip corto y el original no se baja hasta que alguien pulsa — y aun pulsando,
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });

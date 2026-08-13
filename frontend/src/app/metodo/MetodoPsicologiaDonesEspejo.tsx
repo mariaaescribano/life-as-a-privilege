@@ -31,14 +31,13 @@ import { type CartaData } from "../../components/metodo/Planetas/useCartaPlaneta
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
 import {
   experienciaById,
-  DONES_PREGUNTAS,
-  DONES_INTRO,
   arquetipoKey,
   type LineaDeVidaData,
   type DonesData,
   type DonReconocido,
   type ArquetipoRef,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useDonesIntro, useDonesPreguntas } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -138,6 +137,8 @@ export default function MetodoPsicologiaDonesEspejo() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const donesPreguntas = useDonesPreguntas();
+  const donesIntro = useDonesIntro();
 
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, string>>({});
@@ -307,7 +308,7 @@ export default function MetodoPsicologiaDonesEspejo() {
   const recuerdoEnActiva = (texto: string) => !!activa?.recuerdos?.includes(texto);
 
   // Solo las RESPUESTAS (sin la pregunta) — más impactante.
-  const respondidas = DONES_PREGUNTAS
+  const respondidas = donesPreguntas
     .map((p) => (respuestas[p.key] || "").trim())
     .filter((x) => x.length > 0);
 
@@ -326,7 +327,7 @@ export default function MetodoPsicologiaDonesEspejo() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 16, total: 23 }}
+              step={{ current: 18, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.recuerdate")}`, onClick: irARecuerdate }}
@@ -334,14 +335,14 @@ export default function MetodoPsicologiaDonesEspejo() {
                 label: `${t("metodo.psico.paso.miedos")} →`,
                 onClick: irAMiedos,
                 disabled: !hayDon,
-                disabledTooltip: "Escribe al menos un don para continuar.",
+                disabledTooltip: t("metodo.psico.faltaDon"),
               }}
             />
             </Reveal>
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-            <IntroRecorrido>{DONES_INTRO.espejo}</IntroRecorrido>
+            <IntroRecorrido>{donesIntro.espejo}</IntroRecorrido>
             </Reveal>
 
             {/* ════════ TRES COLUMNAS: lo que escribiste · arquetipos · unir ════════ */}
@@ -410,8 +411,8 @@ export default function MetodoPsicologiaDonesEspejo() {
                     <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />}
                                       titulo={t("metodo.psico.tusArquetipos")}
                                       apoyo={arquetipos.length === 0
-                                        ? "Se abren cuando tengas hecha tu carta astral."
-                                        : "Toca una carta para unirla al don activo; el ojo abre su lectura."} />
+                                        ? t("metodo.psico.arquetiposSinCarta")
+                                        : t("metodo.psico.arquetiposUnirDon")} />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_CLARO}>
                       {arquetipos.length === 0 ? (
                         // Sin carta astral la columna va BLOQUEADA: se explica qué
@@ -419,8 +420,8 @@ export default function MetodoPsicologiaDonesEspejo() {
                         <ArquetiposBloqueados
                           onIr={() => navigate("/metodo/astrologia")}
                           texto={[
-                            "En esta página pones frente a frente lo que reconoces de ti y los arquetipos de tu carta: el espejo te devuelve tus dones con nombre propio.",
-                            "Puedes escribir tus dones igualmente, pero para hacerlo completo necesitas tu carta astrológica.",
+                            t("metodo.psico.bloqEspejo1"),
+                            t("metodo.psico.bloqEspejo2"),
                           ]}
                         />
                       ) : (
@@ -450,7 +451,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox
                       icono={<DonIcon color={TINTA} size={22} />}
-                      titulo={t("metodo.psico.tusDones")} apoyo="Nombra tu don y une tus arquetipos." />
+                      titulo={t("metodo.psico.tusDones")} apoyo={t("metodo.psico.donesApoyo")} />
                     <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX_TINTA}>
                       {dones.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2.5} textAlign="center" px={4}>
@@ -632,7 +633,7 @@ function DonCard({ d, activa, color, onActivar, onTexto, onQuitarArq, onQuitarRe
           {vacio ? (
             <Flex align="center" justify="center" minH="30px" textAlign="center">
               <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize="sm">
-                {activa ? "Toca arriba lo que recordaste o una carta de «Tus arquetipos» para unirlo." : "Pulsa este don para activarlo."}
+                {activa ? t("metodo.psico.donUne") : t("metodo.psico.donActivar")}
               </Text>
             </Flex>
           ) : (

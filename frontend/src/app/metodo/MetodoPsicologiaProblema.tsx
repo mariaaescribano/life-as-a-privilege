@@ -10,9 +10,9 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import {
-  experienciaById,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useExperiencia } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import { Reveal } from "../../components/global/Reveal";
@@ -32,7 +32,9 @@ export default function MetodoPsicologiaProblema() {
   const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
-  const exp = experienciaById(experienciaId || "");
+  // La experiencia en el idioma activo: de ella salen el enunciado y el
+  // placeholder de esta página.
+  const exp = useExperiencia(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
   const [problema, setProblema] = useState("");
@@ -117,7 +119,7 @@ export default function MetodoPsicologiaProblema() {
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title={t("metodo.psico.paso.problemas")}
-              pageLabel="2/22"
+              step={{ current: 2, total: 25 }}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
@@ -129,7 +131,7 @@ export default function MetodoPsicologiaProblema() {
                 onClick: irAAce,
                 // No se puede avanzar a ACE sin haber escrito algo en el box.
                 disabled: problema.trim().length === 0,
-                disabledTooltip: "Escribe primero tu problema para continuar",
+                disabledTooltip: t("metodo.psico.faltaProblema"),
               }}
             />
           </Reveal>
@@ -166,7 +168,7 @@ export default function MetodoPsicologiaProblema() {
               <Textarea
                 value={problema}
                 onChange={(e) => setProblema(e.target.value)}
-                placeholder={exp.problemaInicial.placeholder || "Escribe aquí…"}
+                placeholder={exp.problemaInicial.placeholder || t("metodo.psico.escribeAqui")}
                 w="100%"
                 maxW="640px"
                 minH={{ base: "200px", md: "260px" }}

@@ -781,6 +781,7 @@ export class UserService {
     // (Los nombres de columna difieren entre tablas: user_id, userId, userid, idUser…)
     const relatedTables: { table: string; column: string }[] = [
       { table: 'metodo_psicologia', column: 'user_id' },
+      { table: 'psicologia_des', column: 'user_id' },
       { table: 'metodo_astrologia', column: 'user_id' },
       { table: 'metodo_ayurveda', column: 'user_id' },
       { table: 'metodo_tcm', column: 'user_id' },

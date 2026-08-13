@@ -9,11 +9,13 @@ import { DisciplineHeader } from "../../global/DisciplineHeader";
 import { CabalaIcon, cabalaNom, cabalaBg, cabalaTxt } from "../../../GlobalVariables";
 import ArbolDeLaVida, { type Sefira } from "../../global/ArbolDeLaVida";
 import { testCabala, type TestSefirot } from "../../../hardCoded/espacio/TestCabala";
+import { useT } from "../../../i18n";
 
 // ─────────────────────────────────────────────────────────
 //  TEST COMPONENT
 // ─────────────────────────────────────────────────────────
 function CabalaTest({ datos }: { datos: TestSefirot }) {
+  const t = useT();
   const [fase, setFase]       = useState<"intro" | "test" | "resultado">("intro");
   const [idx, setIdx]         = useState(0);
   const [respuestas, setResp] = useState<number[]>([]);
@@ -88,7 +90,7 @@ function CabalaTest({ datos }: { datos: TestSefirot }) {
           transition="all 0.2s"
           _hover={{ bg: `${cabalaTxt}28`, borderColor: cabalaTxt }}
         >
-          Comenzar el test →
+          {t("espacio.cabala.comenzar")}
         </Box>
       </Box>
     );
@@ -283,7 +285,7 @@ function CabalaTest({ datos }: { datos: TestSefirot }) {
         transition="all 0.18s"
         _hover={{ bg: `${cabalaTxt}0e`, borderColor: `${cabalaTxt}55`, color: cabalaTxt }}
       >
-        Repetir el test
+        {t("espacio.cabala.repetir")}
       </Box>
     </Box>
   );

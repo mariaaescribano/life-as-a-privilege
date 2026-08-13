@@ -16,18 +16,17 @@ import { COMIC_FAMILIA } from "../../components/metodo/comicFamilia";
 import { useComic } from "../../i18n/comics";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
-  experienciaById,
   estadoDelAno,
   lineaCompleta,
   aniosRecorridos,
   anoNatural,
   tramosDeAnios,
   itemsDeRespuesta,
-  preguntasDeAno,
   ANO_GESTACION,
   type LineaDeVidaData,
   type EstadoAno,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useExperiencia, usePreguntasGestacion } from "../../components/metodo/psicologiaRecorrido.en";
 import { AZUL, glowPanel, glowHeader, azulBorde, scrollAcuarela } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import { Reveal } from "../../components/global/Reveal";
@@ -54,7 +53,9 @@ export default function MetodoPsicologiaExperiencia() {
   const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
-  const exp = experienciaById(experienciaId || "");
+  const exp = useExperiencia(experienciaId || "");
+  // Las preguntas de la gestación no cuelgan de la experiencia: van aparte.
+  const preguntasGestacion = usePreguntasGestacion();
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<LineaDeVidaData>({});
@@ -215,14 +216,19 @@ export default function MetodoPsicologiaExperiencia() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title={t("metodo.psico.lineaDeVida")}
-                pageLabel="5/22"
+                step={{ current: 7, total: 25 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: `← ${t("metodo.psico.paso.resultadoAce")}`, onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
-                next={{ label: puedeAvanzar ? "Tu familia →" : "Rellena al menos un año", onClick: irAFamilia, disabled: !puedeAvanzar, disabledTooltip: "Rellena al menos un año (o márcalo sin recuerdos) para continuar" }}
+                prev={{ label: `← ${t("metodo.psico.paso.desResultado")}`, onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/des-resultado`); } }}
+                next={{
+                  label: puedeAvanzar ? `${t("metodo.psico.paso.familia")} →` : t("metodo.psico.faltaAnioCorto"),
+                  onClick: irAFamilia,
+                  disabled: !puedeAvanzar,
+                  disabledTooltip: t("metodo.psico.faltaAnio"),
+                }}
               />
             </Reveal>
 
@@ -247,7 +253,9 @@ export default function MetodoPsicologiaExperiencia() {
                         const tr = tramos[tramoIdx];
                         if (!tr) return "";
                         const fin = tr[tr.length - 1];
-                        return tr[0] === ANO_GESTACION ? `Antes de nacer – ${fin} años` : `Años ${tr[0]} – ${fin}`;
+                        return tr[0] === ANO_GESTACION
+                          ? t("metodo.psico.tramoAntesDeNacer", { fin })
+                          : t("metodo.psico.tramoAnios", { desde: tr[0], hasta: fin });
                       })()}
                     </Text>
 
@@ -333,7 +341,7 @@ export default function MetodoPsicologiaExperiencia() {
                                 // no cambia de altura al pasar de un tramo a otro.
                                 minH="2.3em"
                               >
-                                {edadAno === ANO_GESTACION ? "Antes de nacer" : anoNatural(edad, edadAno, anioActual)}
+                                {edadAno === ANO_GESTACION ? t("metodo.psico.antesDeNacer") : anoNatural(edad, edadAno, anioActual)}
                               </Text>
                             </MotionBox>
                           </React.Fragment>
@@ -413,7 +421,7 @@ export default function MetodoPsicologiaExperiencia() {
                 value={edadInput}
                 onChange={(e) => setEdadInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && edadValida) void confirmarEdad(); }}
-                placeholder={exp.preguntaEdad.placeholder || "Tu edad"}
+                placeholder={exp.preguntaEdad.placeholder || t("metodo.psico.tuEdad")}
                 w="150px"
                 textAlign="center"
                 bg="rgba(255,251,243,0.45)"
@@ -464,7 +472,7 @@ export default function MetodoPsicologiaExperiencia() {
           key={anoAbierto}
           edadAno={anoAbierto}
           anioNatural={anoNatural(edad, anoAbierto, anioActual)}
-          preguntas={preguntasDeAno(exp, anoAbierto)}
+          preguntas={anoAbierto === ANO_GESTACION ? preguntasGestacion : exp.preguntasPorAno}
           inicial={data.anos?.[String(anoAbierto)]}
           onCerrar={() => setAnoAbierto(null)}
           onGuardar={async (estado) => { await guardarAno(anoAbierto, estado); setAnoAbierto(null); }}
@@ -857,7 +865,7 @@ function PaginaDeAno({
                     value={draft[p.key] || ""}
                     onChange={(e) => cambiarDraft(p.key, e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); añadirItem(p.key); } }}
-                    placeholder={items.length ? "Añade otro…" : "Escribe y pulsa Enter…"}
+                    placeholder={items.length ? t("metodo.psico.anadeOtro") : t("metodo.psico.escribeYEnter")}
                     variant="unstyled"
                     color={TINTA}
                     fontFamily="'EB Garamond', serif"
@@ -901,7 +909,7 @@ function PaginaDeAno({
                 transition="background 0.2s, border-color 0.2s, transform 0.2s"
                 _hover={{ bg: sinRecuerdos ? `${TINTA}` : `${TINTA}14`, borderColor: TINTA }}
               >
-                {sinRecuerdos ? "✓ Sin recuerdos" : "Sin recuerdos"}
+                {sinRecuerdos ? t("metodo.psico.sinRecuerdosMarcado") : t("metodo.psico.sinRecuerdosBoton")}
               </Box>
               <Box
                 as="button"
@@ -924,7 +932,7 @@ function PaginaDeAno({
                 transition="background 0.2s, transform 0.2s"
                 _hover={guardando ? {} : { bg: `${TINTA}14`, transform: "translateY(-1px)" }}
               >
-                {guardando ? "Guardando…" : guardadoOk ? "Guardado ✓" : "Guardar"}
+                {guardando ? t("comun.guardando") : guardadoOk ? t("metodo.psico.guardadoOk") : t("comun.guardar")}
               </Box>
               <Box
                 as="button"

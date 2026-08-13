@@ -837,7 +837,7 @@ const CarruselCard = ({
 //
 // Lo que se reproduce en la baldosa NO es el vídeo entero: es un clip corto y
 // mudo (`/videos/muestra/<clave>.mp4`, ~100 KB) que genera
-// `scripts/video/muestras.mjs`. Los ocho originales pesan unos 144 MB juntos y
+// `scripts/video/muestras.mjs`. Los ocho originales pesan unos 139 MB juntos y
 // aquí habría que cargarlos TODOS: sería, con diferencia, la pantalla más cara
 // de la web. Al pulsar una baldosa sí se abre el vídeo entero, en el popup de
 // siempre — que antes de bajar los megas pregunta si la conexión parece de pago

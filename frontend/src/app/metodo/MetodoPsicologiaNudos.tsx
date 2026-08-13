@@ -12,9 +12,9 @@ import { Reveal } from "../../components/global/Reveal";
 import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
 import {
   experienciaById,
-  NUDOS,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useNudos } from "../../components/metodo/psicologiaRecorrido.en";
 import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -36,6 +36,7 @@ export default function MetodoPsicologiaNudos() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const nudosTxt = useNudos();
 
   const [loading, setLoading] = useState(true);
   const [nudos, setNudos] = useState<string[]>([]);
@@ -113,7 +114,7 @@ export default function MetodoPsicologiaNudos() {
   }
   if (!exp) return null;
 
-  const ejemplosDisponibles = NUDOS.ejemplos.filter(
+  const ejemplosDisponibles = nudosTxt.ejemplos.filter(
     (e) => !nudos.some((n) => n.toLowerCase() === e.toLowerCase()),
   );
 
@@ -132,7 +133,7 @@ export default function MetodoPsicologiaNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 9, total: 23 }}
+              step={{ current: 11, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.huellas")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
@@ -143,7 +144,7 @@ export default function MetodoPsicologiaNudos() {
                 // siguiente página queda bloqueada. Si los borra todos, se vuelve
                 // a bloquear (nudos.length se recalcula).
                 disabled: nudos.length === 0,
-                disabledTooltip: "Elige o escribe al menos un nudo para continuar.",
+                disabledTooltip: t("metodo.psico.faltaNudo"),
               }}
             />
             </Reveal>
@@ -167,7 +168,7 @@ export default function MetodoPsicologiaNudos() {
                   <Flex align="center" justify="center" gap={3}>
                     <NudoEspiralIcon size={34} color={TINTA} strokeWidth={1.7} />
                     <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                      {NUDOS.pregunta}
+                      {nudosTxt.pregunta}
                     </Text>
                   </Flex>
                 </Flex>
@@ -228,7 +229,7 @@ export default function MetodoPsicologiaNudos() {
                     <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">{t("metodo.psico.siTeSirven")}</Text>
                     <Box w="100%" position="relative">
                       <Flex wrap="wrap" justify="center" gap={2} py={1}>
-                        {NUDOS.ejemplos.map((e) => {
+                        {nudosTxt.ejemplos.map((e) => {
                           const usado = !ejemplosDisponibles.includes(e);
                           return (
                             <Box
@@ -362,7 +363,7 @@ export default function MetodoPsicologiaNudos() {
                 </Box>
 
                 <Text color={TINTA} fontSize="xs" opacity={0.55} fontStyle="italic" minH="1.2em">
-                  {guardando ? "Guardando…" : nudos.length > 0 ? "Cada nudo se guarda según lo seleccionas." : ""}
+                  {guardando ? t("comun.guardando") : nudos.length > 0 ? t("metodo.psico.nudosSeGuardan") : ""}
                 </Text>
               </Flex>
             </Box>

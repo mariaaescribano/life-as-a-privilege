@@ -12,6 +12,7 @@ import { API_URL, turquesa } from "../../../GlobalVariables";
 import axios from "axios";
 import type { Respuesta } from "../../../dtos/respuesta.type";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../../i18n";
 
 const EditableCard = (props:{
   idPregunta:string, pregunta:string,
@@ -19,6 +20,7 @@ const EditableCard = (props:{
   apiPath?: string
 }) => {
 
+  const t = useT();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [text, setText] = useState<string | null>(null);
@@ -151,7 +153,7 @@ const EditableCard = (props:{
                 _hover={{ bg: "rgba(255,255,255,0.28)" }}
                 transition="all 0.2s"
               >
-                Guardar
+                {t("comun.guardar")}
               </Button>
             </Flex>
           </Box>

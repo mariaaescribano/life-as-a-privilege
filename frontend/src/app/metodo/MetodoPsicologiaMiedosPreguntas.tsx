@@ -23,12 +23,11 @@ import { Reveal, RevealStagger, RevealItem } from "../../components/global/Revea
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
-  MIEDOS_PREGUNTAS,
-  MIEDOS_ENFRENTAR_INTRO,
   miedoRespondidas,
   type LineaDeVidaData,
   type MiedoItem,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useMiedosEnfrentarIntro, useMiedosPreguntas } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -49,6 +48,8 @@ export default function MetodoPsicologiaMiedosPreguntas() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const miedosPreguntas = useMiedosPreguntas();
+  const miedosIntro = useMiedosEnfrentarIntro();
 
   const [loading, setLoading] = useState(true);
   const [miedos, setMiedos] = useState<MiedoItem[]>([]);
@@ -136,7 +137,7 @@ export default function MetodoPsicologiaMiedosPreguntas() {
   const irAMiedos = async () => { flushGuardado(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/miedos`); };
   const irAIntegracion = async () => { flushGuardado(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/mapa`); };
 
-  const total = MIEDOS_PREGUNTAS.length;
+  const total = miedosPreguntas.length;
   const abierto = miedos.find((m) => m.id === abiertoId) || null;
   // No se puede avanzar hasta que TODOS los miedos tengan TODAS sus preguntas
   // respondidas (y haya al menos un miedo nombrado).
@@ -157,7 +158,7 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 18, total: 23 }}
+                step={{ current: 20, total: 25 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.miedos")}`, onClick: irAMiedos }}
@@ -165,14 +166,14 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                   label: `${t("metodo.psico.paso.integracion")} →`,
                   onClick: irAIntegracion,
                   disabled: !todoRespondido,
-                  disabledTooltip: "Responde todas las preguntas de cada miedo para continuar.",
+                  disabledTooltip: t("metodo.psico.faltaMiedosPreguntas"),
                 }}
               />
             </Reveal>
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>{MIEDOS_ENFRENTAR_INTRO.intro}</IntroRecorrido>
+              <IntroRecorrido>{miedosIntro.intro}</IntroRecorrido>
             </Reveal>
 
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
@@ -264,7 +265,7 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
   onClose: () => void;
 }) {
   const t = useT();
-  const preguntas = MIEDOS_PREGUNTAS;
+  const preguntas = useMiedosPreguntas();
   const total = preguntas.length;
   const [paso, setPaso] = useState(0);
   const esPrimero = paso === 0;
@@ -350,7 +351,7 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
                   ref={actualRef}
                   value={respuesta}
                   onChange={(e) => onUpdate(q.key, e.target.value)}
-                  placeholder={q.placeholder || "Escribe aquí…"}
+                  placeholder={q.placeholder || t("metodo.psico.escribeAqui")}
                   mt={4}
                   minH={{ base: "120px", md: "150px" }}
                   bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
@@ -405,7 +406,7 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
                  letterSpacing="0.04em" cursor="pointer"
                  boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
                  _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-              {esUltimo ? "Hecho ✓" : "Siguiente ›"}
+              {esUltimo ? t("metodo.psico.hecho") : t("metodo.psico.siguiente")}
             </Box>
           </Flex>
         </Box>

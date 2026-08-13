@@ -15,9 +15,6 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import {
   experienciaById,
-  NECESIDADES,
-  NECESIDADES_INTRO,
-  ESTADOS_NECESIDAD,
   opcionNecesidad,
   necesidadesRespondidas,
   necesidadesCompletas,
@@ -26,6 +23,7 @@ import {
   type Necesidad,
   type EstadoNecesidad,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useEstadosNecesidad, useNecesidades, useNecesidadesIntro } from "../../components/metodo/psicologiaRecorrido.en";
 import { AZUL, glowHeader } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -46,6 +44,11 @@ export default function MetodoPsicologiaNecesidades() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  // Las necesidades en el idioma activo; las `key` y los colores los sigue
+  // poniendo el español, que es lo que se guarda.
+  const necesidades = useNecesidades();
+  const necesidadesIntro = useNecesidadesIntro();
+  const estadosNecesidad = useEstadosNecesidad();
 
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, EstadoNecesidad>>({});
@@ -107,7 +110,7 @@ export default function MetodoPsicologiaNecesidades() {
   if (!exp) return null;
 
   const respondidas = necesidadesRespondidas({ necesidades: respuestas });
-  const total = NECESIDADES.length;
+  const total = necesidades.length;
   const completas = necesidadesCompletas({ necesidades: respuestas });
 
   return (
@@ -124,7 +127,7 @@ export default function MetodoPsicologiaNecesidades() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 10, total: 23 }}
+            step={{ current: 12, total: 25 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: `← ${t("metodo.psico.paso.nudos")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
@@ -132,7 +135,7 @@ export default function MetodoPsicologiaNecesidades() {
               label: `${t("metodo.psico.paso.heridas")} →`,
               onClick: async () => { await savePromiseRef.current; await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); },
               disabled: !completas,
-              disabledTooltip: "Responde todas las necesidades para continuar a Heridas.",
+              disabledTooltip: t("metodo.psico.faltaNecesidades"),
             }}
           />
           </Reveal>
@@ -140,7 +143,7 @@ export default function MetodoPsicologiaNecesidades() {
           {/* ── Directo sobre el turquesa: subtítulo + acceso a la explicación + progreso ── */}
           <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
           <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} w="100%" maxW="640px">
-            <IntroRecorrido>{NECESIDADES_INTRO.subtitulo}</IntroRecorrido>
+            <IntroRecorrido>{necesidadesIntro.subtitulo}</IntroRecorrido>
 
             {/* Progreso — sobre el turquesa, en color psicología */}
             <Flex align="center" gap={3} w="100%" maxW="380px">
@@ -164,7 +167,7 @@ export default function MetodoPsicologiaNecesidades() {
             gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
             gap={{ base: 4, md: 5 }}
           >
-            {NECESIDADES.map((n, idx) => {
+            {necesidades.map((n, idx) => {
               const op = opcionNecesidad(respuestas[n.key]);
               const marcada = !!op;
               const acento = op?.color ?? AZUL;
@@ -288,7 +291,7 @@ export default function MetodoPsicologiaNecesidades() {
                   <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.comoLoViviste")}</Text>
 
                   <Flex direction={{ base: "column", sm: "row" }} gap={3} w="100%" maxW="460px" justify="center">
-                    {ESTADOS_NECESIDAD.map((o) => {
+                    {estadosNecesidad.map((o) => {
                       const elegido = respuestas[abierta.key] === o.value;
                       return (
                         <Box

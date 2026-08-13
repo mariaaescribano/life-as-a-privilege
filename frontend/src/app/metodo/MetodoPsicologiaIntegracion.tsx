@@ -37,7 +37,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
-import { useT } from "../../i18n";
+import { traducir, useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
@@ -76,7 +76,8 @@ const relVacia = (): Constelacion => ({ id: nuevoId(), titulo: "", nudos: [], ar
 
 // Etiqueta visible de una herida (reutilizamos el campo `nudos` de la
 // constelación para guardar estas etiquetas, que es lo que el usuario relaciona).
-const heridaLabel = (h: RelacionHuellaNudo): string => (h.titulo || "").trim() || "Herida sin título";
+const heridaLabel = (h: RelacionHuellaNudo): string =>
+  (h.titulo || "").trim() || traducir("metodo.psico.heridaSinTitulo");
 
 // Cada box de relación toma un color distinto (misma paleta que las heridas).
 const PALETA_RELACION = [
@@ -373,7 +374,7 @@ export default function MetodoPsicologiaIntegracion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 14, total: 23 }}
+              step={{ current: 16, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.narra")}`, onClick: irANarra }}
@@ -381,7 +382,7 @@ export default function MetodoPsicologiaIntegracion() {
                 label: `${t("metodo.psico.paso.recuerdate")} →`,
                 onClick: irARecuerdate,
                 disabled: !hayRelacion,
-                disabledTooltip: "Crea al menos una relación para continuar.",
+                disabledTooltip: t("metodo.psico.faltaRelacion"),
               }}
             />
             </Reveal>
@@ -401,10 +402,10 @@ export default function MetodoPsicologiaIntegracion() {
                      border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo={t("metodo.psico.paso.tusHeridas")} apoyo="Tócalas o arrástralas para relacionarlas." />
+                    <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo={t("metodo.psico.paso.tusHeridas")} apoyo={t("metodo.psico.heridasApoyo")} />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                       {heridas.length === 0 ? (
-                        <EstadoVacio texto={t("metodo.psico.sinHeridasAun")} accion="Ir a Heridas →"
+                        <EstadoVacio texto={t("metodo.psico.sinHeridasAun")} accion={t("metodo.psico.irAHeridas")}
                                      onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`)} />
                       ) : (
                         <Flex direction="column" gap={2.5}>
@@ -437,8 +438,8 @@ export default function MetodoPsicologiaIntegracion() {
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={{ base: 3, md: 4 }}>
                     <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />} titulo={t("metodo.psico.tusArquetipos")}
                                       apoyo={arquetipos.length === 0
-                                        ? "Se abren cuando tengas hecha tu carta astral."
-                                        : "Toca una carta para relacionarla; el ojo abre su lectura."} />
+                                        ? t("metodo.psico.arquetiposSinCarta")
+                                        : t("metodo.psico.arquetiposRelacionar")} />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }}
                          sx={{ ...SCROLL_SX, scrollbarColor: `${PAPEL}55 transparent`,
                                "&::-webkit-scrollbar": { width: "7px" },
@@ -449,8 +450,8 @@ export default function MetodoPsicologiaIntegracion() {
                         <ArquetiposBloqueados
                           onIr={() => navigate("/metodo/astrologia")}
                           texto={[
-                            "En esta página reúnes en cada relación tus heridas y los arquetipos de tu carta: así ves con qué energía te relacionas y de dónde viene.",
-                            "Puedes crear tus relaciones y colocar en ellas tus heridas igualmente, pero para hacerla completa necesitas tu carta astrológica.",
+                            t("metodo.psico.bloqRelacion1"),
+                            t("metodo.psico.bloqRelacion2"),
                           ]}
                         />
                       ) : (
@@ -486,7 +487,7 @@ export default function MetodoPsicologiaIntegracion() {
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox icono={<RelacionIcon size={22} color={TINTA} opacity={0.9} />} titulo={t("metodo.psico.tusRelaciones")} apoyo="Cada relación es un box. Ponle título y escribe lo que tú ves." />
+                    <ColumnaHeaderBox icono={<RelacionIcon size={22} color={TINTA} opacity={0.9} />} titulo={t("metodo.psico.tusRelaciones")} apoyo={t("metodo.psico.relacionesApoyo")} />
                     <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
                       {relaciones.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2} textAlign="center" px={4}>
@@ -656,7 +657,7 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
           {vacio ? (
             <Flex align="center" justify="center" h="100%" minH="38px" textAlign="center">
               <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize="sm">
-                {activa ? "Toca o arrastra aquí heridas y arquetipos." : "Pulsa este box para activarlo."}
+                {activa ? t("metodo.psico.relacionArrastra") : t("metodo.psico.relacionActivar")}
               </Text>
             </Flex>
           ) : (

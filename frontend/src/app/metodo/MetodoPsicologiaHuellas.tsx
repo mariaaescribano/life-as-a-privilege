@@ -143,7 +143,7 @@ export default function MetodoPsicologiaHuellas() {
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
             title={t("metodo.psico.paso.huellas")}
-            pageLabel="8/22"
+            step={{ current: 10, total: 25 }}
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
@@ -154,7 +154,7 @@ export default function MetodoPsicologiaHuellas() {
               label: `${t("metodo.psico.paso.nudos")} →`,
               onClick: () => setComicOpen(true),
               disabled: !algunaHuella,
-              disabledTooltip: "Marca con ◈ al menos un recuerdo que dejó huella para continuar.",
+              disabledTooltip: t("metodo.psico.faltaHuella"),
             }}
           />
           </Reveal>
@@ -274,7 +274,7 @@ export default function MetodoPsicologiaHuellas() {
           )}
 
           <Text color={CREMA} fontSize="xs" opacity={0.6} fontStyle="italic" minH="1.2em">
-            {guardando ? "Guardando…" : "Tus huellas se guardan solas."}
+            {guardando ? t("comun.guardando") : t("metodo.psico.huellasSeGuardan")}
           </Text>
         </Flex>
       </Flex>
@@ -425,7 +425,7 @@ const Pagina = ({
           <FotoFranja posicion="center top" />
           <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center" gap={3}>
             <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.02em" lineHeight="1.1" style={{ textShadow: INK_SHADOW }}>
-              Año {edadAno}{"  "}
+              {t("metodo.psico.anioN", { n: edadAno })}{"  "}
               <Box as="span" fontWeight="500" opacity={0.6}>{anoNatural(edad, edadAno, anioActual)}</Box>
             </Text>
           </Flex>
@@ -483,7 +483,7 @@ const Pagina = ({
                     transition="all 0.2s ease"
                     style={{ textShadow: marcado ? `0 1px 2px #fbf4e8, 0 0 9px ${TINTA}99` : `0 1px 2px #fbf4e8` }}
                     _hover={{ opacity: 1, transform: "scale(1.18)" }}
-                    title={marcado ? "Dejó huella (pulsa para quitar)" : "Marcar que dejó huella"}
+                    title={marcado ? t("metodo.psico.dejoHuella") : t("metodo.psico.marcarHuella")}
                     aria-label={t("metodo.psico.marcarHuella")}
                   >
                     ◈

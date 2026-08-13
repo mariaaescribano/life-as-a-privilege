@@ -19,6 +19,7 @@ import {
   PROFUNDIZA_LEIDAS_KEY,
   type TemaProfundiza,
 } from "../../hardCoded/espacio/ProfundizaFisiologia";
+import { useTemasProfundiza } from "../../hardCoded/espacio/useTemaProfundiza";
 
 // Tarjeta de un tema: box por defecto (FotoBox), imagen arriba + nombre abajo.
 function TemaBox({ tema, onClick, delay, completo = false }: { tema: TemaProfundiza; onClick: () => void; delay: number; completo?: boolean }) {
@@ -44,6 +45,9 @@ export default function MetodoFisiologiaProfundiza() {
   const [loading, setLoading] = useState(true);
   const [leidasMap, setLeidasMap] = useState<Record<string, string[]>>({});
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Los nombres de las tarjetas, en el idioma activo (el orden y las fotos los
+  // sigue mandando el español).
+  const temas = useTemasProfundiza();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -108,7 +112,7 @@ export default function MetodoFisiologiaProfundiza() {
 
           {/* Todos los temas en una sola rejilla (sin rótulos de bloque). */}
           <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-            {TEMAS_PROFUNDIZA.map((tema, i) => (
+            {temas.map((tema, i) => (
               <TemaBox key={tema.key} tema={tema} delay={0.05 * i} completo={temaCompleto(tema)}
                        onClick={() => navigate(`/metodo/fisiologia/profundiza/${tema.key}`)} />
             ))}

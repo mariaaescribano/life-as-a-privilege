@@ -6,6 +6,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import type { Curso } from "../../hardCoded/cursos";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
+import { useIdioma } from "../../i18n";
 
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
@@ -67,6 +68,7 @@ export function CursoDetalleModal({
   nom: string;
   onClose: () => void;
 }) {
+  const { idioma, t } = useIdioma();
   const navigate = useNavigate();
   const [leccionesOpen, setLeccionesOpen] = useState(false);
   // Al abrir/cambiar de curso, el desplegable de lecciones empieza cerrado.
@@ -76,8 +78,14 @@ export function CursoDetalleModal({
     if (c.precio === null) navigate(c.cursoLink);
     else window.open(STRIPE_PAYMENT_LINK, "_blank");
   };
+  // Mismo criterio que CursoCardDetalle: «19,90 €» en español, «€19.90» en
+  // inglés. La moneda es la misma (los cobra Stripe en euros).
   const formatPrecio = (precio: number | null) =>
-    precio === null ? "Acceso Libre" : `${precio.toFixed(2).replace(".", ",")} €`;
+    precio === null
+      ? t("curso.accesoLibre")
+      : idioma === "es"
+      ? `${precio.toFixed(2).replace(".", ",")} €`
+      : `€${precio.toFixed(2)}`;
 
   return (
     <Modal isOpen={curso !== null} onClose={onClose} size="xl" isCentered scrollBehavior="inside">
@@ -194,7 +202,7 @@ export function CursoDetalleModal({
                         </Box>
                       ))}
                       {(!curso.modulos || curso.modulos.length === 0) && (
-                        <Text color={color} opacity={0.8} fontStyle="italic" fontSize="sm" style={{ textShadow: tShadow }}>Próximamente.</Text>
+                        <Text color={color} opacity={0.8} fontStyle="italic" fontSize="sm" style={{ textShadow: tShadow }}>{t("comun.proximamente")}.</Text>
                       )}
                     </Box>
                   </Collapse>

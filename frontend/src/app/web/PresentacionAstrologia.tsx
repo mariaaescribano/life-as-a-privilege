@@ -55,7 +55,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   // El vídeo grande de al lado del box. El botón «Ver por dentro» del box lo pone
   // en marcha aquí mismo, en vez de abrir el popup: el vídeo ya está a la vista.
-  // El vídeo completo pesa entre 8 y 33 MB, así que en la caja de arriba va el
+  // El vídeo completo pesa entre 8 y 27 MB, así que en la caja de arriba va el
   // clip corto y el original no se baja hasta que alguien pulsa — y aun pulsando,
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });

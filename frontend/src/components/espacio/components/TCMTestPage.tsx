@@ -10,6 +10,7 @@ import { API_URL, EspacioPersonalIcon, tcmBg, tcmNom, TCMIcon, tcmTxt } from "..
 import { getTheme } from "../data/tcmTheme";
 import { generateTcmPdf, generateTcmConsejosPdf, type TcmRespuesta } from "../../../utils/generateTcmPdf";
 import type { Recs } from "../../espacio/data/tcmRecommendations";
+import { useT } from "../../../i18n";
 
 /* ══════════════════════════════════════════════
    TIPOS
@@ -151,6 +152,7 @@ export default function TCMTestPage({
   // Con 3 o menos etiquetas de escala caben las 3 en una sola línea; con más
   // (tests de 4 niveles) dejamos que hagan wrap para no desbordar.
 
+  const t = useT();
   const [answers, setAnswers] = useState<(number | null)[][]>(
     secciones.map((s) => s.preguntas.map(() => null))
   );
@@ -350,7 +352,7 @@ export default function TCMTestPage({
                 <DisciplinaBgLayer nom={tcmNom} borderRadius="full" overlay={`${tcmBg}77`} />
               )}
               <Box as="span" position="relative" zIndex={1}>
-                Ver mis resultados
+                {t("espacio.test.verResultados")}
               </Box>
             </Box>
           </Box>
@@ -379,7 +381,7 @@ export default function TCMTestPage({
                   textAlign="center"
                   fontFamily="'EB Garamond', serif"
                 >
-                  Tus Resultados
+                  {t("espacio.test.tusResultados")}
                 </Text>
 
                 <Flex direction="column" gap={5}>
@@ -412,7 +414,7 @@ export default function TCMTestPage({
                                 boxShadow={`0 0 10px ${barColor}28`}
                               >
                                 <Text color={barColor} fontSize="xs" fontWeight="700" letterSpacing="0.16em">
-                                  PREDOMINANTE
+                                  {t("espacio.test.predominante")}
                                 </Text>
                               </Box>
                             )}
@@ -584,7 +586,7 @@ export default function TCMTestPage({
                     <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
                       <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
                     </svg>
-                    Descargar mis respuestas
+                    {t("espacio.test.descargarRespuestas")}
                   </Box>
                 </Flex>
               )}
@@ -617,7 +619,7 @@ export default function TCMTestPage({
                       textAlign="center"
                       fontFamily="'EB Garamond', serif"
                     >
-                      Tus consejos personalizados
+                      {t("espacio.test.consejos")}
                     </Text>
 
                     <Flex direction="column" gap={4}>
@@ -698,7 +700,7 @@ export default function TCMTestPage({
                         <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
                           <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
                         </svg>
-                        Descargar consejos
+                        {t("espacio.test.descargarConsejos")}
                       </Box>
                     </Flex>
                   </Box>
@@ -734,7 +736,7 @@ export default function TCMTestPage({
                     }}
                   >
                     <EspacioPersonalIcon color={tcmTxt} size="22px" />
-                    Volver a Mi Espacio
+                    {t("espacio.test.volver")}
                   </Box>
                 </Flex>
               )}
@@ -755,7 +757,7 @@ export default function TCMTestPage({
           letterSpacing="0.05em"
           textAlign="center"
         >
-          © 2026 Life as a Privilege · María Escribano · Todos los derechos reservados
+          {t("footer.derechos")}
         </Text>
         <Text
           as="a"
@@ -769,7 +771,7 @@ export default function TCMTestPage({
           textDecoration="underline"
           cursor="pointer"
         >
-          Contactar
+          {t("contacto.titulo")}
         </Text>
       </Box>
     </Box>

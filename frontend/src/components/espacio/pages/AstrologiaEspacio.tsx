@@ -19,6 +19,8 @@ import {
 import axios from "axios";
 import { modulosAstrologia } from "../../../hardCoded/aprendizajes/Astrologia/ModulosAstrologia";
 import SiteFooter from "../../global/Footer";
+import { traducir, useT, type ClaveTexto } from "../../../i18n";
+import { signInfoEn } from "./astrologiaEspacio.en";
 import { GlifoSigno } from "../../metodo/Glifo";
 import { FUENTE_GLIFOS } from "../../metodo/glifosAstro";
 import { FloatingActionButton } from "../../aprendizaje/FloatingActionButton";
@@ -185,10 +187,13 @@ const TrashIcon = () => (
 
 // Sin `img`: apuntaba a fotos que no existen y además nunca se leía — lo que se
 // pinta es el `icon`.
-const FIELD_META: Record<SignField, { label: string; icon: (size?: number) => React.ReactNode }> = {
-  sol:        { label: "Sol",        icon: (s) => <SolFieldIcon size={s} /> },
-  luna:       { label: "Luna",       icon: (s) => <LunaFieldIcon size={s} /> },
-  ascendente: { label: "Ascendente", icon: (s) => <AscendenteFieldIcon size={s} /> },
+const FIELD_META: Record<SignField, { label: ClaveTexto; icon: (size?: number) => React.ReactNode }> = {
+  // El rótulo se resuelve al pintar (`traducir`, no una constante ya traducida):
+  // este objeto es de nivel de módulo y se quedaría congelado en el idioma de
+  // arranque.
+  sol:        { label: "espacio.astro.sol",        icon: (s) => <SolFieldIcon size={s} /> },
+  luna:       { label: "espacio.astro.luna",       icon: (s) => <LunaFieldIcon size={s} /> },
+  ascendente: { label: "espacio.astro.ascendente", icon: (s) => <AscendenteFieldIcon size={s} /> },
 };
 
 /* ══════════════════════════════════════════════
@@ -201,6 +206,7 @@ const PlanetTeaserModal = ({
   planet: Planet;
   onClose: () => void;
 }) => {
+  const t = useT();
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -287,7 +293,7 @@ const PlanetTeaserModal = ({
             lineHeight="1.65"
             letterSpacing="0.02em"
           >
-            ¿Quieres saber qué arquetipos te forman?
+            {t("espacio.astro.arquetipos")}
           </Text>
           <Text
             color={`${astrologiaTxt}cc`}
@@ -297,7 +303,7 @@ const PlanetTeaserModal = ({
             lineHeight="1.65"
             letterSpacing="0.02em"
           >
-            ¿Quieres una lectura profesional de tu Carta Astral?
+            {t("espacio.astro.lectura")}
           </Text>
         </Flex>
 
@@ -329,7 +335,7 @@ const PlanetTeaserModal = ({
             transform: "scale(1.04)",
           }}
         >
-          Contactar
+          {t("contacto.titulo")}
         </Box>
       </Box>
     </Box>
@@ -350,6 +356,7 @@ const ZodiacModal = ({
   onClear: () => void;
   saving?: boolean;
 }) => {
+  const t = useT();
   const meta = FIELD_META[field];
   const showInfo = !!currentSign;
   const [letraOpen, setLetraOpen] = useState(false);
@@ -359,7 +366,8 @@ const ZodiacModal = ({
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
   }, []);
-  const info = currentSign ? SIGN_INFO[field][currentSign] : null;
+  // El inglés, si esa casilla lo tiene; si no, el español (SIGN_INFO).
+  const info = currentSign ? (signInfoEn(field, currentSign) ?? SIGN_INFO[field][currentSign]) : null;
   const signIndex = currentSign ? ZODIAC_SIGNS.findIndex((s) => s.name === currentSign) : -1;
   const submoduleData = signIndex >= 0
     ? field === "ascendente" ? modulosAstrologia[2]?.submodules[signIndex]
@@ -445,7 +453,9 @@ const ZodiacModal = ({
                     fontFamily="'EB Garamond', serif" letterSpacing="0.07em"
                     style={{ textShadow: `0 0 10px ${astrologiaTxt}bb, 0 0 20px ${astrologiaTxt}66` }}
                   >
-                    {field === "ascendente" ? meta.label : `${meta.label} en`}
+                    {field === "ascendente"
+                      ? t(meta.label)
+                      : t("espacio.astro.campoEn", { campo: t(meta.label) })}
                   </Text>
                   <Box
                     color={astrologiaTxt}
@@ -505,7 +515,7 @@ const ZodiacModal = ({
                       fontSize="md" fontWeight="600"
                       fontFamily="'EB Garamond', serif" letterSpacing="0.04em"
                     >
-                      Transcripción
+                      {t("espacio.astro.transcripcion")}
                     </Text>
                     <Text
                       color={astrologiaTxt} fontSize="xl"
@@ -564,7 +574,7 @@ const ZodiacModal = ({
                 </Box>
                 <Text color={astrologiaTxt} fontSize="lg" fontWeight="700"
                   fontFamily="'EB Garamond', serif" letterSpacing="0.05em">
-                  Tu {meta.label}
+                  {t("espacio.astro.tuCampo", { campo: t(meta.label) })}
                 </Text>
               </Flex>
               <Box maxH="56vh" overflowY="auto" px={3} py={2}>
@@ -683,7 +693,7 @@ const ProfileCircle = ({ imgUrl, size }: { imgUrl: string; size: number }) => (
     boxShadow={`0 0 24px ${astrologiaTxt}44, 0 0 48px ${astrologiaTxt}18`}
     flexShrink={0}
   >
-    <Box as="img" src={imgUrl} alt="Perfil" w="100%" h="100%" style={{ objectFit: "cover" }} />
+    <Box as="img" src={imgUrl} alt={traducir("espacio.astro.perfil")} w="100%" h="100%" style={{ objectFit: "cover" }} />
   </Box>
 );
 
@@ -691,6 +701,7 @@ const ProfileCircle = ({ imgUrl, size }: { imgUrl: string; size: number }) => (
    PÁGINA PRINCIPAL
 ══════════════════════════════════════════════ */
 export default function AstrologiaEspacio() {
+  const t                             = useT();
   const [data, setData]               = useState<AstrologiaData | null>(null);
   const [loading, setLoading]         = useState(true);
   const [openModal, setOpenModal]     = useState<SignField | null>(null);
@@ -803,7 +814,7 @@ export default function AstrologiaEspacio() {
         >
           <DisciplineHeader
             icon={<AstrologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Astrología"
+            title={t("disciplina.astrologia")}
             bgColor={`${astrologiaBg}dd`}
             color={astrologiaTxt}
             maxW="900px"
@@ -833,7 +844,7 @@ export default function AstrologiaEspacio() {
                     fontFamily="'EB Garamond', serif" letterSpacing="0.08em"
                     filter={`drop-shadow(0 0 8px ${astrologiaTxt}55)`}
                   >
-                    Tu Carta Natal
+                    {t("espacio.astro.tuCartaNatal")}
                   </Text>
                   <Box flex="1" h="1px" bg={`${astrologiaTxt}1a`} borderRadius="full" />
                 </Flex>

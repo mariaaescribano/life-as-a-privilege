@@ -4,7 +4,7 @@
 // El mapa de la familia YA COMPUESTO en la página anterior («Tu familia», paso
 // 6), ahora para escribir sobre cada persona. Al tocar una tarjeta se abre su
 // FICHA (popup): foto, nombre, parentesco y las preguntas de
-// GENOGRAMA_PREGUNTAS. También se puede seguir colocando a quien falte con los
+// genogramaPreguntas. También se puede seguir colocando a quien falte con los
 // «+» que rodean cada foto.
 //
 // El dibujo del mapa vive en GenogramaMapa (común con «Tu familia») y la carga /
@@ -30,11 +30,10 @@ import { useMapaFamilia } from "../../hooks/useMapaFamilia";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
-  GENOGRAMA,
-  GENOGRAMA_PREGUNTAS,
   personaLabel,
   type PersonaGenograma,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useGenograma, useGenogramaPreguntas } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowHeader } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -54,6 +53,7 @@ export default function MetodoPsicologiaGenograma() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const genograma = useGenograma();
 
   const { loading, personas, miFoto, añadir, actualizar, actualizarNota, eliminar, flushGuardado } =
     useMapaFamilia(experienciaId);
@@ -83,8 +83,8 @@ export default function MetodoPsicologiaGenograma() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title={GENOGRAMA.titulo}
-                pageLabel="7/22"
+                title={genograma.titulo}
+                step={{ current: 9, total: 25 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
@@ -95,13 +95,13 @@ export default function MetodoPsicologiaGenograma() {
                   label: `${t("metodo.psico.paso.huellas")} →`,
                   onClick: () => ir(`/metodo/psicologia/${exp.id}/huellas`),
                   disabled: personas.length === 0,
-                  disabledTooltip: "Añade al menos a una persona de tu familia para continuar.",
+                  disabledTooltip: t("metodo.psico.faltaPersona"),
                 }}
               />
             </Reveal>
 
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>{GENOGRAMA.intro}</IntroRecorrido>
+              <IntroRecorrido>{genograma.intro}</IntroRecorrido>
             </Reveal>
 
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
@@ -155,6 +155,8 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
   onClose: () => void;
 }) {
   const t = useT();
+  const genograma = useGenograma();
+  const genogramaPreguntas = useGenogramaPreguntas();
   useLockBodyScroll(true);
   const [error, setError] = useState<string | null>(null);
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
@@ -227,7 +229,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
 
           {/* Parentescos sugeridos */}
           <Flex wrap="wrap" gap={1.5} mt={3}>
-            {GENOGRAMA.parentescos.map((par) => (
+            {genograma.parentescos.map((par) => (
               <Box as="button" key={par} onClick={() => onCampo({ parentesco: par })}
                    px={3} py={1.5} borderRadius="full"
                    bg={p.parentesco === par ? TINTA : "rgba(255,251,243,0.72)"}
@@ -248,7 +250,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
              sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
           <Flex direction="column" gap={{ base: 5, md: 6 }}>
-            {GENOGRAMA_PREGUNTAS.map((q) => (
+            {genogramaPreguntas.map((q) => (
               <Box key={q.key}>
                 <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.35"
                       style={{ textShadow: INK_SHADOW }}>
@@ -263,7 +265,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
                 <Textarea
                   value={p.notas?.[q.key] || ""}
                   onChange={(e) => onNota(q.key, e.target.value)}
-                  placeholder={q.placeholder || "Escribe lo que quieras…"}
+                  placeholder={q.placeholder || t("metodo.psico.escribeLoQueQuieras")}
                   mt={2}
                   minH={{ base: "90px", md: "104px" }}
                   bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}

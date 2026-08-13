@@ -12,7 +12,9 @@ import { LlamadaIcon } from "../global/BotonCompania";
 import { CursoCardDetalle } from "../aprendizaje/CursoCardDetalle";
 import { useCursosData } from "../../data/cursosApi";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
-import { NUDOS, MIEDOS, NECESIDADES_INTRO, REGULACION } from "./psicologiaRecorrido";
+import { NUDOS, MIEDOS, NECESIDADES_INTRO } from "./psicologiaRecorrido";
+import { useMiedos, useNecesidadesIntro, useNudos, useRegulacion } from "./psicologiaRecorrido.en";
+import { useAyudaEn, useEjemplosBoxEn } from "./ayudaRecorrido.en";
 import { IndiceRecorrido } from "./IndiceRecorrido";
 
 const TINTA = neuropsicologiaTxt;
@@ -240,6 +242,30 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       cuerpo: [
         "Una puntuación alta no es una condena: es un factor de riesgo, no un destino.",
         "Este test no es un diagnóstico. Si algo remueve demasiado, busca apoyo: pedir ayuda también es cuidarse.",
+      ],
+    },
+  },
+  des: {
+    ejemplo: {
+      titulo: "¿Qué es esto?",
+      cuerpo: [
+        "El DES-II (Escala de Experiencias Disociativas, de Carlson y Putnam) recoge 28 experiencias cotidianas de desconexión: momentos en los que la memoria, el cuerpo o el mundo dejan de sentirse del todo tuyos.",
+        "En cada una marcas qué porcentaje del tiempo te pasa, de 0 (nunca) a 100 (siempre). No es una nota ni un diagnóstico.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se hace?",
+      cuerpo: [
+        "Lee cada frase y marca el porcentaje de tiempo que te ocurre. Puedes cambiar tu respuesta cuando quieras.",
+        "Cuenta solo los momentos en los que NO estás bajo los efectos del alcohol ni de otras drogas.",
+        "No le des muchas vueltas: la primera intuición suele ser la más honesta. Todo se guarda solo.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "Desconectarse no es locura ni debilidad: es lo que hace la mente cuando no puede huir ni pelear. Casi todo el mundo lo hace un poco.",
+        "Si al leer las preguntas te reconoces demasiado y te asusta, no lo mires sola: pide una llamada y lo vemos juntas.",
       ],
     },
   },
@@ -679,6 +705,18 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
   const [ejemplosOpen, setEjemplosOpen] = useState(false);           // box de ejemplos (págs. con EJEMPLOS_BOX)
   const [preparacionOpen, setPreparacionOpen] = useState(false);     // box «Antes de empezar» (pág. regulación)
 
+  // El texto de esta ayuda se pega encima AL PINTAR: `AYUDA_RECORRIDO` y
+  // `EJEMPLOS_BOX` son objetos de nivel de módulo y se quedarían congelados en
+  // el idioma con el que arrancó la página. El inglés de los tres popups vive
+  // en `ayudaRecorrido.en.ts`; los cuatro trozos que salen de los ficheros de
+  // datos (nudos, miedos, Necesidades y la preparación de Narra) traen el suyo.
+  const ayudaEn = useAyudaEn(pagina as string);
+  const ejemplosEn = useEjemplosBoxEn(pagina as string);
+  const nudosTxt = useNudos();
+  const miedosTxt = useMiedos();
+  const necesidadesIntro = useNecesidadesIntro();
+  const regulacion = useRegulacion();
+
   const contenido = AYUDA_RECORRIDO[pagina];
   const esInicio = pagina === "inicio";
 
@@ -690,13 +728,25 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
     : undefined;
 
   // Box de ejemplos de esta página (si lo hay).
-  const ejemplosBox = EJEMPLOS_BOX[pagina as string];
+  const ejemplosBoxEs = EJEMPLOS_BOX[pagina as string];
+  // El inglés encima del español y, en nudos y miedos, la lista que ya sirve
+  // traducida el fichero de datos (allí es donde vive, no aquí).
+  const ejemplosBox = ejemplosBoxEs && {
+    ...ejemplosBoxEs,
+    ...(ejemplosEn ?? {}),
+    ...(pagina === "nudos" ? { ejemplos: nudosTxt.ejemplos } : {}),
+    ...(pagina === "miedos" ? { ejemplos: miedosTxt.ejemplos } : {}),
+  };
 
   // Bloquea el scroll del fondo mientras cualquier popup esté abierto.
   useLockBodyScroll(!!abierto || acompPreguntaOpen || companiaOpen || cursoOpen || ejemplosOpen || preparacionOpen);
 
   if (!contenido) return null;
-  const sec = abierto ? contenido[abierto] : null;
+  // El popup abierto, con el inglés pegado encima si esa página lo tiene.
+  const secEs = abierto ? (ayudaEn?.[abierto] ?? contenido[abierto]) : null;
+  const sec = secEs && pagina === "necesidades" && abierto === "orientacion"
+    ? { ...secEs, titulo: necesidadesIntro.titulo, cuerpo: [necesidadesIntro.subtitulo, necesidadesIntro.texto] }
+    : secEs;
 
   return (
     <>
@@ -989,11 +1039,11 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                    _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" lineHeight="1.3"
                     pr={6} style={{ textShadow: INK_SHADOW }}>
-                {REGULACION.preparacion.titulo}
+                {regulacion.preparacion.titulo}
               </Text>
               <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
               <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
-                {REGULACION.preparacion.pasos.map((p, i) => (
+                {regulacion.preparacion.pasos.map((p, i) => (
                   <Flex key={i} align="flex-start" gap={3}>
                     <Box flexShrink={0} w="26px" h="26px" borderRadius="full" bg={TINTA} color={PAPEL}
                          display="flex" alignItems="center" justifyContent="center" fontSize="sm" fontWeight="700" mt="2px"

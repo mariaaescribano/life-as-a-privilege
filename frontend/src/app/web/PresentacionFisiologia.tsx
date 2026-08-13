@@ -16,10 +16,11 @@ import { SistemaModal } from "../../components/metodo/SistemaModal";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
-import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
+import type { Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
+import { useSistemas } from "../../hardCoded/espacio/SistemasFisiologia.en";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 import { useCelulas } from "../../hardCoded/espacio/useCelulas";
-import { TEMAS_PROFUNDIZA } from "../../hardCoded/espacio/ProfundizaFisiologia";
+import { useTemasProfundiza } from "../../hardCoded/espacio/useTemaProfundiza";
 import {
   BLANCO_GLOW_SUAVE,
   CierreCrearCuenta,
@@ -66,7 +67,7 @@ const CELULAS_MUESTRA = [
 ];
 
 /** De los doce sistemas se enseñan los CUATRO primeros: dentro están todos. */
-const SISTEMAS_MUESTRA = SISTEMAS.slice(0, 4);
+const SISTEMAS_MUESTRA = 4;
 
 /** Cuatro temas de «Profundiza» como ventana a lo que hay dentro (no se abren:
  *  solo se ven, para que se note que la página no cabe en la página). */
@@ -86,7 +87,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   const [sistema, setSistema] = useState<Sistema | null>(null);
   const [celulaIdx, setCelulaIdx] = useState<number | null>(null);
-  // El vídeo completo pesa entre 8 y 33 MB, así que en la caja de arriba va el
+  // El vídeo completo pesa entre 8 y 27 MB, así que en la caja de arriba va el
   // clip corto y el original no se baja hasta que alguien pulsa — y aun pulsando,
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
@@ -106,19 +107,25 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
   const saltaCelula = (paso: number) =>
     setCelulaIdx((i) => (i == null ? i : (i + paso + muestra.length) % muestra.length));
 
+  // Los sistemas y los temas de «Profundiza» del mosaico, en el idioma activo:
+  // esta página es pública y su rótulo tiene que cambiar con el selector.
+  const sistemas = useSistemas();
+  const sistemasMuestra = useMemo(() => sistemas.slice(0, SISTEMAS_MUESTRA), [sistemas]);
+
+  const temas = useTemasProfundiza();
   // Los cuatro temas de «Profundiza» del mosaico, con su portada y su nombre.
   const temasMuestra = useMemo(
     () => TEMAS_MUESTRA
-      .map((k) => TEMAS_PROFUNDIZA.find((t) => t.key === k))
+      .map((k) => temas.find((t) => t.key === k))
       .filter((t): t is NonNullable<typeof t> => !!t)
       .map((t) => ({ foto: t.foto, titulo: t.label })),
-    [],
+    [temas],
   );
 
   const fotosListas = useImagesReady([
     "/img/icono/life.png",
     "/img/fondos/fisio.webp",
-    ...SISTEMAS_MUESTRA.map((s) => s.foto),
+    ...sistemasMuestra.map((s) => s.foto),
     ...muestra.map((c) => c.foto),
     ...temasMuestra.map((t) => t.foto),
     ...comics.map((c) => c.cover),
@@ -262,7 +269,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
             gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }}
             gap={{ base: 4, md: 6 }}
           >
-            {SISTEMAS_MUESTRA.map((s) => (
+            {sistemasMuestra.map((s) => (
               <RevealItem key={s.key} direction="up" distance={18} scaleFrom={0.96} duration={0.6}>
                 <FotoBox
                   titulo={s.label}
@@ -393,7 +400,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
           eso está el recorrido). */}
       <SistemaModal
         sistema={sistema}
-        sistemas={SISTEMAS_MUESTRA}
+        sistemas={sistemasMuestra}
         onSelect={setSistema}
         onClose={() => setSistema(null)}
       />

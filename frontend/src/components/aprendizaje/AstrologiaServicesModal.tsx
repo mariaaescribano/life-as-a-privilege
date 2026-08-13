@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { Box, Flex, Input, Text, Modal, ModalOverlay, ModalContent, ModalBody } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
+import { traducir, useT } from "../../i18n";
 
 const COLOR = "#feffe4";
 
+// El `label` guarda la CLAVE, no el texto: este array es de nivel de módulo y
+// con el texto ya traducido se quedaría congelado en el idioma de arranque.
 const SERVICES = [
-  { id: "asc-sol-luna", label: "Conocer mi Ascendente, Sol y Luna en profundidad", price: "5€" },
-  { id: "lectura-carta", label: "Lectura de carta astral", price: "15€" },
-  { id: "lectura-profundidad", label: "Lectura en profundidad de carta astral", price: "30€" },
-];
+  { id: "asc-sol-luna", label: "astroServicios.ascSolLuna", price: "5€" },
+  { id: "lectura-carta", label: "astroServicios.lectura", price: "15€" },
+  { id: "lectura-profundidad", label: "astroServicios.lecturaProfunda", price: "30€" },
+] as const;
 
 interface Props {
   isOpen: boolean;
@@ -17,6 +20,7 @@ interface Props {
 }
 
 export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
+  const t = useT();
   const [selected, setSelected] = useState<string | null>(null);
   const [email, setEmail]       = useState("");
   const [sending, setSending]   = useState(false);
@@ -31,13 +35,16 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
   const handleSubmit = async () => {
     if (!email.trim() || !selected) return;
     const service = SERVICES.find(s => s.id === selected);
+    // El correo lo lee María: el nombre del servicio va SIEMPRE en español,
+    // aunque la web esté en inglés (misma regla que en ContactModal).
+    const servicioEs = service ? traducir(service.label, undefined, "es") : "—";
     setSending(true); setError(false);
     try {
       await axios.post(`${API_URL}/contact`, {
         nombre: "—",
         email: email.trim(),
-        titulo: `Servicio Astrológico — ${service?.label}`,
-        mensaje: `Servicio: ${service?.label} (${service?.price})`,
+        titulo: `Servicio Astrológico — ${servicioEs}`,
+        mensaje: `Servicio: ${servicioEs} (${service?.price})`,
       });
       setSent(true);
     } catch {
@@ -99,10 +106,10 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
                 <Flex direction="column" align="center" gap={4} py={6} textAlign="center">
                   <Text fontSize="3xl" color={COLOR}>✦</Text>
                   <Text color={COLOR} fontSize={{ base: "xl", md: "2xl" }} fontFamily="'EB Garamond', serif" fontWeight="700" letterSpacing="0.04em">
-                    ¡Mensaje enviado!
+                    {t("astroServicios.enviado")}
                   </Text>
                   <Text color="rgba(254,255,228,0.92)" fontSize={{ base: "md", md: "lg" }} fontFamily="'EB Garamond', serif" lineHeight="1.75">
-                    Muy pronto me pondré en contacto contigo.
+                    {t("astroServicios.enviadoPie")}
                   </Text>
                   <Box
                     as="button" onClick={handleClose} mt={2}
@@ -117,7 +124,7 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
                     transition="all 0.2s"
                     _hover={{ bg: "rgba(254,255,228,0.08)", color: COLOR }}
                   >
-                    Cerrar
+                    {t("comun.cerrar")}
                   </Box>
                 </Flex>
               ) : (
@@ -132,14 +139,14 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
                       letterSpacing="0.08em"
                       textShadow="0 0 20px rgba(254,255,228,0.3)"
                     >
-                      ✦ Servicios Astrológicos ✦
+                      {t("astroServicios.titulo")}
                     </Text>
                     <Box mt={2} h="1px" bg="linear-gradient(90deg, transparent, rgba(254,255,228,0.25), transparent)" />
                   </Box>
 
                   {/* Email */}
                   <Input
-                    placeholder="Tu email"
+                    placeholder={t("astroServicios.tuEmail")}
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -199,7 +206,7 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
                               lineHeight="1.4"
                               transition="all 0.18s"
                             >
-                              {s.label}
+                              {t(s.label)}
                             </Text>
                           </Box>
 
@@ -222,7 +229,7 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
 
                   {error && (
                     <Text color="rgba(254,255,228,0.6)" fontSize="sm" textAlign="center" fontFamily="'EB Garamond', serif">
-                      Ha ocurrido un error. Por favor, inténtalo de nuevo.
+                      {t("astroServicios.error")}
                     </Text>
                   )}
 
@@ -251,7 +258,7 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
                       boxShadow: "0 0 30px rgba(254,255,228,0.2)",
                     }}
                   >
-                    {sending ? "Enviando..." : "Enviar"}
+                    {sending ? t("comun.enviando") : t("comun.enviar")}
                   </Box>
                 </Flex>
               )}

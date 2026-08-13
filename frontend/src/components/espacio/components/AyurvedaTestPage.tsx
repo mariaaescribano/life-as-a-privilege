@@ -18,6 +18,7 @@ import { preguntasAyurveda } from "../../../hardCoded/espacio/PreguntasAyurveda"
 import { generateAyurvedaPdf } from "../../../utils/generateAyurvedaPdf";
 import { DOSHA_CONSEJOS } from "../../../hardCoded/espacio/DoshaConsejos";
 import { generateDoshaConsejosPdf } from "../../../utils/generateDoshaConsejosPdf";
+import { useT } from "../../../i18n";
 
 type Dosha = "vata" | "pitta" | "kapha";
 const GLOW = "0 4px 20px rgba(0,0,0,0.22), 0 0 22px rgba(107,196,200,0.8)";
@@ -36,7 +37,7 @@ export default function AyurvedaTestPage({
   onComplete,
   isGuest = false,
   prevTo = "/aprendizaje/cursos/ayurveda",
-  prevLabel = "← Volver",
+  prevLabel,
   pageLabel,
   headerNext,
 }: {
@@ -54,6 +55,7 @@ export default function AyurvedaTestPage({
    *  mueve al centro (extra) y este botón ocupa la derecha. */
   headerNext?: { label: string; onClick: () => void; disabled?: boolean; disabledTooltip?: string; icon?: React.ReactNode };
 }) {
+  const t = useT();
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<(Dosha | null)[]>(preguntasAyurveda.map(() => null));
   const [saving, setSaving] = useState(false);
@@ -128,13 +130,13 @@ export default function AyurvedaTestPage({
           >
             <MetodoStepHeader
               icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Test de los Doṣhas"
+              title={t("espacio.test.doshas")}
               pageLabel={pageLabel}
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
               mb={{ base: 0, md: 0 }}
-              prev={{ label: prevLabel, onClick: () => navigate(prevTo) }}
+              prev={{ label: prevLabel ?? `← ${t("comun.volver")}`, onClick: () => navigate(prevTo) }}
               extra={headerNext ? { label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)} : undefined}
               next={headerNext ?? { label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
             />
@@ -151,7 +153,7 @@ export default function AyurvedaTestPage({
               <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
               <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
                 <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
-                  Tu Doṣha principal es
+                  {t("espacio.test.doshaPrincipal")}
                 </Text>
                 <Flex align="center" justify="center" gap={3} mb={5}>
                   <Box>{DOSHA_CONFIG[guestResult.dosha].icon && React.cloneElement(DOSHA_CONFIG[guestResult.dosha].icon as React.ReactElement<any>, { size: "38px" })}</Box>
@@ -209,7 +211,7 @@ export default function AyurvedaTestPage({
                 _hover={{ opacity: 0.88, transform: "translateY(-2px)", borderColor: ayurvedaTxt }}
               >
                 <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="full" overlay={`${ayurvedaBg}22`} />
-                <Box as="span" position="relative" zIndex={1}>Descargar PDF</Box>
+                <Box as="span" position="relative" zIndex={1}>{t("espacio.dosha.descargarPdf")}</Box>
               </Box>
               <Box
                 as="button"
@@ -228,7 +230,7 @@ export default function AyurvedaTestPage({
                 transition="all 0.22s"
                 _hover={{ opacity: 0.88, transform: "translateY(-2px)", borderColor: ayurvedaTxt }}
               >
-                Recalcular
+                {t("espacio.test.recalcular")}
               </Box>
             </Flex>
 
@@ -261,7 +263,7 @@ export default function AyurvedaTestPage({
                         textAlign="center"
                         fontFamily="'EB Garamond', serif"
                       >
-                        Tus consejos personalizados
+                        {t("espacio.test.consejos")}
                       </Text>
                     </Box>
                   </Box>
@@ -364,7 +366,7 @@ export default function AyurvedaTestPage({
                         <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor" style={{ flexShrink: 0 }}>
                           <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
                         </svg>
-                        Descargar consejos
+                        {t("espacio.test.descargarConsejos")}
                       </Box>
                     </Box>
                   </Flex>
@@ -394,12 +396,12 @@ export default function AyurvedaTestPage({
         >
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Test de los Doṣhas"
+            title={t("espacio.test.doshas")}
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={{ base: 0, md: 0 }}
-            prev={{ label: "← Volver", onClick: () => navigate(prevTo) }}
+            prev={{ label: prevLabel ?? `← ${t("comun.volver")}`, onClick: () => navigate(prevTo) }}
             next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
           />
 
@@ -415,10 +417,10 @@ export default function AyurvedaTestPage({
             <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }}>
               <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={3}>
-                Descubre tu Doṣha
+                {t("espacio.test.descubreDosha")}
               </Text>
               <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9">
-                Para cada pregunta, elige la opción que mejor te describa. No hay respuestas correctas ni incorrectas: confía en tu primera impresión.
+                {t("espacio.test.eligeOpcion")}
               </Text>
             </Box>
           </Box>

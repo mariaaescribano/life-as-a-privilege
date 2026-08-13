@@ -472,6 +472,40 @@ export const COMICS_EN: Record<string, ComicEn> = {
     },
   ],
 
+  // ── «La desconexión» · entre el test DES-II y su resultado ────────────────
+  // Cuatro viñetas: lo que nos sobrepasa, la disociación como separación, verlo
+  // desde fuera y por qué queda registrado sin procesar. Voz en «nosotros», con
+  // el «tú» apareciendo en la viñeta 2 igual que en el español.
+  "psicologia-disociacion": [
+    {
+      paragraphs: [
+        "When something happens that goes beyond our ability to cope, beyond our way of understanding what's going on, or beyond what we can bear, we may struggle to process and integrate everything we're living through.",
+        "When an experience is bigger than the tools we have to face it, our mind may look for other ways to protect us.",
+      ],
+    },
+    {
+      paragraphs: [
+        "That's when dissociation can appear.",
+        "We can think of it as a kind of separation: one part of our experience stays connected to what's happening while another part moves away from it.",
+        "It's as if one part of you were living the problem while another stepped back from it, so as not to feel all of its pain.",
+      ],
+    },
+    {
+      paragraphs: [
+        "That's why we sometimes experience what's happening as if we were watching it from outside, as if it were happening to someone else.",
+        "By putting distance between ourselves and what we're living, we can look at it without feeling it with the same intensity.",
+        "The event has happened, but emotionally we've moved away from it.",
+      ],
+    },
+    {
+      paragraphs: [
+        "This doesn't mean the event disappears. It happened, and it stays recorded in our memory — but at the time it may not have been possible to process it in an integrated way.",
+        "When the pain is too great and we don't have the tools we'd need to face it, the mind can step back from the experience in order to protect us.",
+        "It isn't that it didn't happen. It's that, in order to bear it, a part of our experience had to move away.",
+      ],
+    },
+  ],
+
   // ── Antesala de la «Línea de Vida» ────────────────────────────────────────
   // Viñeta 1 en «nosotros»; las dos últimas, en «tú».
   "psicologia-linea-tiempo": [
@@ -3172,6 +3206,109 @@ export const COMICS_EN: Record<string, ComicEn> = {
       titulo: "五禽戲 Hua Tuo: The crane",
       paragraphs: [
         "Wings that open very slowly, and balance on one leg. It widens the chest and lengthens the breath.",
+      ],
+    },
+  ],
+
+  // ── PROFUNDIZA de Fisiología · «Cómo se sintetiza un neurotransmisor» ────
+  // Seis viñetas, sin título. Es el cómic «antes de empezar» del tema de los
+  // Neurotransmisores. Tono de cuento corto: frases breves y en presente.
+  "profundiza-neurotransmisores": [
+    {
+      paragraphs: [
+        "It all starts on your plate.",
+        "Many neurotransmitters are born from amino acids you get out of food: tryptophan, tyrosine…",
+        "They're the bricks your brain will build its messengers with.",
+      ],
+    },
+    {
+      paragraphs: [
+        "The amino acid travels to the neuron. Inside, enzymes transform it step by step, like a factory line.",
+        "That's how tyrosine ends up turned into dopamine; tryptophan, into serotonin.",
+      ],
+    },
+    {
+      paragraphs: [
+        "The freshly made neurotransmitter is stored in small bags: the vesicles.",
+        "They wait, loaded, at the end of the neuron, ready to fire.",
+      ],
+    },
+    {
+      paragraphs: [
+        "An electrical impulse arrives.",
+        "The vesicles fuse with the membrane and release the neurotransmitter into the small space between two neurons: the synapse.",
+      ],
+    },
+    {
+      paragraphs: [
+        "The neurotransmitter crosses over and fits into its receptor, like a key into its lock.",
+        "That fit IS the message: the next neuron receives it and reacts.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Afterward, the message switches off.",
+        "Part of the neurotransmitter is recycled back into the neuron (reuptake), the astrocytes clean it up or part of it is broken down.",
+        "Everything is left clean for the next thought.",
+      ],
+    },
+  ],
+
+  // ── PROFUNDIZA de Fisiología · «¿Qué es realmente el cáncer?» ────────────
+  // Seis viñetas, sin título: son las cajas de la rejilla del tema (el cómic ES
+  // la página). Los títulos van vacíos en español y aquí no se inventan.
+  //
+  // ⚠️  TONO: mecanismo, nunca culpa. Se explica un proceso, no se reparte
+  // responsabilidad; en inglés se mantiene igual de seco, sin suavizarlo.
+  "profundiza-cancer": [
+    {
+      paragraphs: [
+        "Every day, our body produces billions of cells. To do it, each cell has to copy some 3 billion bases of DNA.",
+        "The copy is checked and repaired, but some errors stay. Most of them have no consequences.",
+        "Cancer appears when a cell piles up alterations affecting genes that control proliferation, DNA repair and cell death.",
+        "That's why cancer is usually a process of years or decades, not the result of a single mutation.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Oncogenes favor proliferation. Tumor suppressor genes hold it back.",
+        "One of the most important is TP53, which produces the p53 protein (a very large enzyme). When it detects serious damage to the DNA, it can stop the cell dividing or switch on apoptosis.",
+        "If these mechanisms fail, the cell can keep dividing despite piling up damage.",
+        "On top of that, many tumor cells switch on telomerase, which maintains the telomeres and lets them extend how long they can go on dividing.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Mitochondria take part in producing energy and in processes such as apoptosis.",
+        "In 1920, Otto Warburg observed that many tumor cells consume large amounts of glucose and produce lactate even when they have oxygen available: the Warburg effect.",
+        "Warburg proposed that a defect in mitochondrial respiration could be the fundamental cause of cancer. That idea gave rise to the mitochondrial theory of cancer.",
+        "Today we know it's more complex: many tumor cells keep functional mitochondria and combine mitochondrial respiration with a high rate of glycolysis, which produces lactate and can contribute to a more acidic environment. That way they obtain ATP and the building blocks they need to keep growing and dividing.",
+      ],
+    },
+    {
+      paragraphs: [
+        "A growing tumor needs oxygen and nutrients.",
+        "To get them it can release factors such as VEGF, which stimulate the growth of new blood vessels. This process is called angiogenesis.",
+        "Tumor metabolism can change too. Some tumors consume a lot of glucose, a feature that PET scans make use of in order to locate certain tumor tissues.",
+        "That's why changing your diet can help prevent cancer.",
+      ],
+    },
+    {
+      paragraphs: [
+        "The immune system recognizes and clears out many abnormal cells before they ever manage to form a tumor.",
+        "The tumor cells that survive can develop mechanisms to avoid that surveillance. Some, for instance, can inhibit the activity of certain T cells.",
+        "Immunotherapy can block those inhibitory signals and let the immune system attack the tumor again.",
+        "Not all cancers respond the same way: it depends on their genetic, molecular and immunological features.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Metastasis happens when tumor cells leave the original tumor, cross tissues, get into the circulation, survive the journey and manage to settle in another organ.",
+        "Most of them fail, but a single cell can start a new tumor.",
+        "That's why early detection matters so much.",
+        "Treatment depends on the type of cancer and on its alterations: surgery, radiotherapy, chemotherapy, targeted treatments and immunotherapy.",
+        "There is no single “cancer.” There are hundreds of different tumor diseases.",
+        "In every case, understanding how a cell loses control is what makes it possible to develop better ways to prevent, detect and treat the disease.",
       ],
     },
   ],

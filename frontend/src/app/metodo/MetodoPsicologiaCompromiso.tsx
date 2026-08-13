@@ -148,7 +148,7 @@ export default function MetodoPsicologiaCompromiso() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 20, total: 23 }}
+                step={{ current: 22, total: 25 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.integracion")}`, onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/mapa`); } }}
@@ -156,7 +156,7 @@ export default function MetodoPsicologiaCompromiso() {
                   label: `${t("metodo.psico.paso.carta")} →`,
                   onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/brujula`); },
                   disabled: !compromisoCompleto,
-                  disabledTooltip: "Responde las dos preguntas del compromiso para continuar.",
+                  disabledTooltip: t("metodo.psico.faltaCompromiso"),
                 }}
               />
             </Reveal>
@@ -175,7 +175,7 @@ export default function MetodoPsicologiaCompromiso() {
                 <Flex direction="column" gap={{ base: 6, md: 7 }}>
                   <PreguntaCompromiso
                     numero={1}
-                    pregunta="¿Qué necesitaste que nadie pudo darte?"
+                    pregunta={t("metodo.psico.compromisoP1")}
                     valor={compromiso.necesitaste || ""}
                     onChange={(v) => commit({ ...compromiso, necesitaste: v })}
                     placeholder={t("metodo.psico.compromisoFalta")}
@@ -183,7 +183,7 @@ export default function MetodoPsicologiaCompromiso() {
                   <SeparadorPreguntas />
                   <PreguntaCompromiso
                     numero={2}
-                    pregunta="¿Cómo puedes empezar a dártelo hoy?"
+                    pregunta={t("metodo.psico.compromisoP2")}
                     valor={compromiso.dartelo || ""}
                     onChange={(v) => commit({ ...compromiso, dartelo: v })}
                     placeholder={t("metodo.psico.compromisoHoy")}
@@ -206,7 +206,7 @@ export default function MetodoPsicologiaCompromiso() {
         </Flex>
       </Box>
 
-      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
+      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo={t("metodo.psico.reservaLlamada")} />
 
       <AyudaRecorrido pagina="compromiso" ocultarCompania />
       <SiteFooter />

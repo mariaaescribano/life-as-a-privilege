@@ -319,6 +319,20 @@ export const metodo = {
   // ── Astrología · la llamada ────────────────────────────────────────────
   "metodo.astro.reservaLlamada": "Reserva tu llamada de astrología",
 
+  // ── Astrología · ajustar a mano un cuerpo de la carta ──────────────────
+  // Quirón, Lilith y los Nodos no siempre los da la efemérides: este popup
+  // (EditarCuerpoModal) deja escribir su grado.
+  "metodo.astro.ajustar.titulo": "Ajustar grados manualmente",
+  "metodo.astro.ajustar.nodos":
+    "Si editas el Nodo Norte, el Sur se sincroniza automáticamente (siempre 180° opuesto).",
+  "metodo.astro.ajustar.cuerpo": "Cuerpo",
+  "metodo.astro.ajustar.signo": "Signo",
+  "metodo.astro.ajustar.grado": "Grado (0-29)",
+  "metodo.astro.ajustar.minutos": "Minutos (0-59)",
+  "metodo.astro.ajustar.errorGrado": "El grado dentro del Signo debe estar entre 0 y 29",
+  "metodo.astro.ajustar.errorMinutos": "Los minutos deben estar entre 0 y 59",
+  "metodo.astro.ajustar.errorGuardar": "No se pudo guardar",
+
   // ── Astrología · datos de nacimiento ───────────────────────────────────
   "metodo.astro.fechaNacimiento": "Fecha de nacimiento",
   "metodo.astro.horaNacimiento": "Hora de nacimiento",
@@ -971,6 +985,8 @@ export const metodo = {
   "metodo.psico.paso.cursosCorto": "Cursos",
   "metodo.psico.paso.ace": "ACE",
   "metodo.psico.paso.aceResultado": "Tu resultado",
+  "metodo.psico.paso.des": "Desconexión",
+  "metodo.psico.paso.desResultado": "Tu desconexión",
   "metodo.psico.paso.familia": "Tu familia",
   "metodo.psico.paso.genograma": "Genograma",
   "metodo.psico.paso.huellas": "Huellas",
@@ -1000,6 +1016,22 @@ export const metodo = {
   "metodo.psico.aceRiesgo":
     "Cuantas más experiencias adversas, mayor es el riesgo de enfermedades y dificultades.",
   "metodo.psico.continuarLinea": "Continuar a Línea de Vida →",
+
+  // ── Psicología · test DES-II (desconexión) ─────────────────────────────
+  // El «Has terminado el test.» es el mismo del ACE (metodo.psico.testTerminado).
+  "metodo.psico.desTerminadoPie":
+    "Antes de ver tu resultado, deja que te cuente qué es esto de desconectarse y por qué tu mente aprendió a hacerlo.",
+  "metodo.psico.queSignificaDes": "¿Qué significa tu resultado?",
+  "metodo.psico.tuPuntuacionDes": "Tu puntuación DES-II",
+  "metodo.psico.desMedia": "media de las 28 respuestas, de 0 a 100",
+  "metodo.psico.desTresCaras": "Las tres caras de tu desconexión",
+  "metodo.psico.desTresCarasPie":
+    "Una misma puntuación no significa lo mismo según de dónde venga: irte con la mente es lo más común y lo más inofensivo; las lagunas de memoria y el estar fuera de ti piden más cuidado.",
+  "metodo.psico.desSinEtiqueta":
+    "Esto no es un diagnóstico ni una etiqueta: es información sobre cómo aprendiste a protegerte.",
+  "metodo.psico.desNoSola":
+    "Con una puntuación así, este mapa no deberías recorrerlo en solitario.",
+  "metodo.psico.responderTodas": "Responde las 28 preguntas para ver tu resultado.",
 
   // ── Psicología · la carta a tu yo del futuro ───────────────────────────
   "metodo.psico.cartaIntro":
@@ -1119,6 +1151,185 @@ export const metodo = {
     "Descárgalo en un cuaderno en PDF, cuidado y bonito, para releerlo siempre que lo necesites.",
   "metodo.psico.volverArriba": "Volver arriba",
   "metodo.psico.leer": "Leer",
+
+  // ── Psicología · «te falta algo» ───────────────────────────────────────
+  // Un paso no se abre hasta que el anterior está hecho: esto es lo que dice
+  // el botón bloqueado al pasar por encima.
+  "metodo.psico.faltaProblema": "Escribe primero tu problema para continuar",
+  "metodo.psico.faltaAce": "Responde las 10 preguntas para ver tu resultado.",
+  "metodo.psico.faltaAnio": "Rellena al menos un año (o márcalo sin recuerdos) para continuar",
+  "metodo.psico.faltaAnioCorto": "Rellena al menos un año",
+  "metodo.psico.faltaFamiliaVacia":
+    "Coloca a tu familia con los «+» y elige el personaje o animal de cada uno.",
+  "metodo.psico.faltaFamiliaSimbolo": "Elige el personaje o animal de al menos una persona para continuar.",
+  "metodo.psico.faltaPersona": "Añade al menos a una persona de tu familia para continuar.",
+  "metodo.psico.faltaHuella": "Marca con ◈ al menos un recuerdo que dejó huella para continuar.",
+  "metodo.psico.faltaNudo": "Elige o escribe al menos un nudo para continuar.",
+  "metodo.psico.faltaNecesidades": "Responde todas las necesidades para continuar a Heridas.",
+  "metodo.psico.faltaHerida": "Crea al menos una herida para continuar.",
+  "metodo.psico.faltaRelacion": "Crea al menos una relación para continuar.",
+  "metodo.psico.faltaDones": "Responde o marca «Sin ideas» las 15 preguntas para descubrir tus dones.",
+  "metodo.psico.faltaDon": "Escribe al menos un don para continuar.",
+  "metodo.psico.faltaMiedo": "Escribe o elige al menos un miedo para continuar.",
+  "metodo.psico.faltaMiedosPreguntas": "Responde todas las preguntas de cada miedo para continuar.",
+  "metodo.psico.faltaMapa": "Rellena al menos una relación para continuar.",
+  "metodo.psico.faltaCompromiso": "Responde las dos preguntas del compromiso para continuar.",
+  "metodo.psico.faltaCarta": "Escribe tu carta para continuar.",
+
+  /** El título del popup de la llamada en todas las páginas de psicología. */
+  "metodo.psico.reservaLlamada": "Reserva tu llamada de psicología",
+
+  // ── Psicología · el cuaderno año a año ─────────────────────────────────
+  "metodo.psico.tramoAntesDeNacer": "Antes de nacer – {fin} años",
+  "metodo.psico.tramoAnios": "Años {desde} – {hasta}",
+  "metodo.psico.tuEdad": "Tu edad",
+  "metodo.psico.anadeOtro": "Añade otro…",
+  "metodo.psico.escribeYEnter": "Escribe y pulsa Enter…",
+  "metodo.psico.sinRecuerdosBoton": "Sin recuerdos",
+  "metodo.psico.sinRecuerdosMarcado": "✓ Sin recuerdos",
+  "metodo.psico.guardadoOk": "Guardado ✓",
+  "metodo.psico.escribeAqui": "Escribe aquí…",
+  "metodo.psico.escribeLoQueQuieras": "Escribe lo que quieras…",
+  "metodo.psico.preguntaN": "Pregunta {n}",
+  "metodo.psico.siguiente": "Siguiente ›",
+  "metodo.psico.siguienteFlecha": "Siguiente →",
+  "metodo.psico.familiaAyuda":
+    "Toca a cualquiera de los tuyos para elegir el personaje o el animal que se le parece.",
+
+  // ── Psicología · huellas ───────────────────────────────────────────────
+  "metodo.psico.anioN": "Año {n}",
+  "metodo.psico.huellasSeGuardan": "Tus huellas se guardan solas.",
+  "metodo.psico.dejoHuella": "Dejó huella (pulsa para quitar)",
+
+  // ── Psicología · las tres columnas con las que se forma una herida ─────
+  "metodo.psico.tusHuellas": "Tus huellas",
+  "metodo.psico.tusHuellasApoyo": "Las experiencias que marcaste.",
+  "metodo.psico.sinHuellasAun": "Aún no has marcado huellas en tu línea de Vida.",
+  "metodo.psico.irAHuellas": "Ir a Huellas →",
+  "metodo.psico.necesidadesNoCubiertas": "Necesidades no cubiertas",
+  "metodo.psico.necesidadesNoCubiertasApoyo": "Lo que necesitabas y no recibiste.",
+  "metodo.psico.sinNecesidadesAun": "Aún no has marcado necesidades no cubiertas.",
+  "metodo.psico.irANecesidades": "Ir a Necesidades →",
+  "metodo.psico.tusNudos": "Tus nudos",
+  "metodo.psico.tusNudosApoyo": "La creencia o conflicto que dejó.",
+  "metodo.psico.sinNudosAun": "Aún no has nombrado tus nudos.",
+  "metodo.psico.irANudos": "Ir a Nudos →",
+  "metodo.psico.heridaSinTitulo": "Herida sin título",
+  "metodo.psico.miedosSeGuardan": "Cada miedo se guarda según lo escribes.",
+  "metodo.psico.nudosSeGuardan": "Cada nudo se guarda según lo seleccionas.",
+
+  // ── Psicología · los arquetipos (columna de Relación y de Dones) ───────
+  // La columna que lee la carta astral. Sin carta va bloqueada, y entonces se
+  // explica qué se hace aquí y qué falta para completarlo.
+  "metodo.psico.arquetiposSinCarta": "Se abren cuando tengas hecha tu carta astral.",
+  "metodo.psico.arquetiposRelacionar": "Toca una carta para relacionarla; el ojo abre su lectura.",
+  "metodo.psico.arquetiposUnirDon": "Toca una carta para unirla al don activo; el ojo abre su lectura.",
+  "metodo.psico.bloqRelacion1":
+    "En esta página reúnes en cada relación tus heridas y los arquetipos de tu carta: así ves con qué energía te relacionas y de dónde viene.",
+  "metodo.psico.bloqRelacion2":
+    "Puedes crear tus relaciones y colocar en ellas tus heridas igualmente, pero para hacerla completa necesitas tu carta astrológica.",
+  "metodo.psico.bloqEspejo1":
+    "En esta página pones frente a frente lo que reconoces de ti y los arquetipos de tu carta: el espejo te devuelve tus dones con nombre propio.",
+  "metodo.psico.bloqEspejo2":
+    "Puedes escribir tus dones igualmente, pero para hacerlo completo necesitas tu carta astrológica.",
+  "metodo.psico.heridasApoyo": "Tócalas o arrástralas para relacionarlas.",
+  "metodo.psico.irAHeridas": "Ir a Heridas →",
+  "metodo.psico.relacionesApoyo": "Cada relación es un box. Ponle título y escribe lo que tú ves.",
+  "metodo.psico.relacionArrastra": "Toca o arrastra aquí heridas y arquetipos.",
+  "metodo.psico.relacionActivar": "Pulsa este box para activarlo.",
+  "metodo.psico.relacionSinTitulo": "Relación sin título",
+  "metodo.psico.donesApoyo": "Nombra tu don y une tus arquetipos.",
+  "metodo.psico.donUne": "Toca arriba lo que recordaste o una carta de «Tus arquetipos» para unirlo.",
+  "metodo.psico.donActivar": "Pulsa este don para activarlo.",
+
+  // ── Psicología · los rótulos del cuaderno de la Síntesis ───────────────
+  "metodo.psico.sin.deDondeVengo": "De dónde vengo",
+  "metodo.psico.sin.loQueCargue": "Lo que cargué",
+  "metodo.psico.sin.loQueDejoHuella": "Lo que dejó huella",
+  "metodo.psico.sin.losNudos": "Los nudos",
+  "metodo.psico.sin.loQueMeFalto": "Lo que me faltó",
+  "metodo.psico.sin.misHeridas": "Mis heridas",
+  "metodo.psico.sin.herida": "Herida",
+  "metodo.psico.sin.seFormoDe": "Se formó de",
+  "metodo.psico.sin.comoMeRelaciono": "Cómo me relaciono",
+  "metodo.psico.sin.piezasQueUniste": "Piezas que uniste",
+  "metodo.psico.sin.misMiedos": "Mis miedos",
+  "metodo.psico.sin.misDones": "Mis dones",
+  "metodo.psico.sin.miCarta": "Mi carta",
+  "metodo.psico.sin.miCompromiso": "Mi compromiso conmigo mismo",
+  "metodo.psico.sin.descargarMapa": "Descargar mi mapa",
+  "metodo.psico.sin.descargarLinea": "Descargar mi línea de Vida",
+  "metodo.psico.sin.preparandoPdf": "Preparando tu PDF…",
+
+  // ── Psicología · las cuatro preguntas de la brújula ────────────────────
+  // Ya no se preguntan (la carta es texto libre), pero los datos guardados
+  // siguen apareciendo en la Síntesis y en el PDF.
+  "metodo.psico.bru.herida": "¿Qué herida se ha activado?",
+  "metodo.psico.bru.necesidad": "¿Qué necesidad hay debajo?",
+  "metodo.psico.bru.miedo": "¿Qué miedo está hablando?",
+  "metodo.psico.bru.don": "¿Qué don puedes utilizar ahora?",
+
+  // ── Psicología · las dos preguntas del compromiso ──────────────────────
+  "metodo.psico.compromisoP1": "¿Qué necesitaste que nadie pudo darte?",
+  "metodo.psico.compromisoP2": "¿Cómo puedes empezar a dártelo hoy?",
+
+  // ── Psicología · el cuaderno «Mi mapa» (PDF) ───────────────────────────
+  // Los rótulos de los capítulos NO se repiten aquí: el PDF usa los mismos
+  // (`metodo.psico.sin.*`) que la Síntesis, para que el papel y la pantalla
+  // digan lo mismo. Aquí va solo lo que es del cuaderno.
+  // OJO al traducir: la Garamond embebida se come «→» y «✓» sin avisar.
+  "metodo.psico.pdf.miMapa": "Mi mapa",
+  "metodo.psico.pdf.subtitulo": "Psicología · Tu historia, contada por ti",
+  "metodo.psico.pdf.pieLamina": "Cada punto es uno de los {n} pasos que dejaste escritos.",
+  "metodo.psico.pdf.miRecorrido": "Mi recorrido",
+  "metodo.psico.pdf.deUnVistazo": "De un vistazo",
+  "metodo.psico.pdf.deUnVistazoApoyo":
+    "Lo que hay dentro de este cuaderno. Sirve para volver dentro de unos meses sin tener que releerlo entero.",
+  "metodo.psico.pdf.relaciones": "Relaciones",
+  "metodo.psico.pdf.deDiez": "de 10",
+  "metodo.psico.pdf.puntuacionAce": "Puntuación ACE",
+  "metodo.psico.pdf.aceResumen":
+    "De las diez preguntas del cuestionario ACE respondiste que sí a {n}. En «Lo que cargué» tienes qué significa eso y qué no.",
+  "metodo.psico.pdf.noEsDiagnostico":
+    "Nada de lo que sigue es un diagnóstico. Son tus palabras, ordenadas. El valor de este cuaderno no está en lo que dice, sino en que lo escribiste tú y puedes volver a él.",
+  "metodo.psico.pdf.donesApoyo": "Lo que sabes que tienes, escrito por ti y no por nadie más.",
+  "metodo.psico.pdf.cartaApoyo": "Para cuando vuelva a sentirme bloqueado.",
+  "metodo.psico.pdf.cierre":
+    "No mirabas tu historia para quedarte en ella, sino para transformarla. Este mapa es la prueba de que ya empezaste.",
+  "metodo.psico.pdf.archivo": "mi-mapa-psicologia.pdf",
+
+  // ── Psicología · el cuaderno «Mi línea de Vida» (PDF) ──────────────────
+  "metodo.psico.pdfLinea.titulo": "Mi línea de Vida",
+  "metodo.psico.pdfLinea.subtitulo": "Psicología · Año a año, contado por ti",
+  "metodo.psico.pdfLinea.recorridos": "{n} de {total} años recorridos",
+  "metodo.psico.pdfLinea.huellaUna": ". {n} recuerdo dejó huella.",
+  "metodo.psico.pdfLinea.huellaVarias": ". {n} recuerdos dejaron huella.",
+  "metodo.psico.pdfLinea.miHistoria": "Mi historia",
+  "metodo.psico.pdfLinea.vistazoApoyo":
+    "Cuánta Vida hay escrita aquí dentro. Los años en blanco no son un fallo: son sitio que dejaste para cuando vuelvas.",
+  "metodo.psico.pdfLinea.aniosEscritos": "Años escritos",
+  "metodo.psico.pdfLinea.aniosDeVida": "Años de Vida",
+  "metodo.psico.pdfLinea.vidaRecorrida": "Vida recorrida",
+  "metodo.psico.pdfLinea.entera": "entera",
+  "metodo.psico.pdfLinea.loEscribisteTu":
+    "Todo lo que sigue lo escribiste tú, con tus palabras y en el orden en que pasó. Nadie ha interpretado nada: esto es tu memoria, puesta en limpio.",
+  "metodo.psico.pdfLinea.gestacionApoyo":
+    "Lo que sabes, te contaron o imaginas del tiempo en que te esperaban.",
+  /** El subtítulo del capítulo de una etapa: un año suelto o un tramo. */
+  "metodo.psico.pdfLinea.etapaUnAnio": "{n} años",
+  "metodo.psico.pdfLinea.etapaTramo": "De los {desde} a los {hasta} años",
+  /** El encabezado de cada año dentro de la etapa. */
+  "metodo.psico.pdfLinea.unAnio": "1 año",
+  "metodo.psico.pdfLinea.nAnios": "{n} años",
+  "metodo.psico.pdfLinea.enBlancoUno": "De los {a} años no guardas recuerdos.",
+  "metodo.psico.pdfLinea.enBlancoVarios": "De estos años no guardas recuerdos: {lista}.",
+  "metodo.psico.pdfLinea.enBlancoCierre": " Dejarlos en blanco también es contar tu historia.",
+  "metodo.psico.pdfLinea.vaciaTitulo": "Tu línea, todavía en blanco",
+  "metodo.psico.pdfLinea.vaciaTexto":
+    "Aún no hay ningún año escrito. En cuanto empieces a recorrer tu línea de Vida, cada año que cuentes aparecerá aquí, con sus preguntas y tus palabras.",
+  "metodo.psico.pdfLinea.cierre":
+    "Esta es tu Vida contada por ti, que es la única versión que importa. Vuelve cuando quieras: siempre queda un año por escribir.",
+  "metodo.psico.pdfLinea.archivo": "mi-linea-de-vida.pdf",
 
   // ── Cultura · nombres de paso ──────────────────────────────────────────
   // Un paso se escribe UNA vez: el mismo nombre sirve para el título de su

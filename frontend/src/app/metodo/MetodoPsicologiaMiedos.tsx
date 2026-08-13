@@ -24,10 +24,10 @@ import { useComic } from "../../i18n/comics";
 import { useT } from "../../i18n";
 import {
   experienciaById,
-  MIEDOS,
   type LineaDeVidaData,
   type MiedoItem,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useMiedos } from "../../components/metodo/psicologiaRecorrido.en";
 import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -52,6 +52,7 @@ export default function MetodoPsicologiaMiedos() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const miedosTxt = useMiedos();
 
   const [loading, setLoading] = useState(true);
   const [miedos, setMiedos] = useState<MiedoItem[]>([]);
@@ -133,7 +134,7 @@ export default function MetodoPsicologiaMiedos() {
   }
   if (!exp) return null;
 
-  const ejemplosDisponibles = MIEDOS.ejemplos.filter(
+  const ejemplosDisponibles = miedosTxt.ejemplos.filter(
     (e) => !miedos.some((m) => m.texto.toLowerCase() === e.toLowerCase()),
   );
 
@@ -152,7 +153,7 @@ export default function MetodoPsicologiaMiedos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 17, total: 23 }}
+              step={{ current: 19, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.dones")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`) }}
@@ -163,7 +164,7 @@ export default function MetodoPsicologiaMiedos() {
                 // siguiente página queda bloqueada. Si los borra todos, se vuelve
                 // a bloquear (miedos.length se recalcula).
                 disabled: miedos.length === 0,
-                disabledTooltip: "Escribe o elige al menos un miedo para continuar.",
+                disabledTooltip: t("metodo.psico.faltaMiedo"),
               }}
             />
             </Reveal>
@@ -184,10 +185,10 @@ export default function MetodoPsicologiaMiedos() {
                 {/* Pregunta principal */}
                 <Flex direction="column" align="center" textAlign="center" gap={3} maxW="620px">
                   <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                    {MIEDOS.pregunta}
+                    {miedosTxt.pregunta}
                   </Text>
                   <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" opacity={0.9} style={{ textShadow: INK_SHADOW }}>
-                    {MIEDOS.apoyo}
+                    {miedosTxt.apoyo}
                   </Text>
                 </Flex>
 
@@ -247,7 +248,7 @@ export default function MetodoPsicologiaMiedos() {
                     <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">{t("metodo.psico.siTeSirven")}</Text>
                     <Box w="100%" position="relative">
                       <Flex wrap="wrap" justify="center" gap={2} py={1}>
-                        {MIEDOS.ejemplos.map((e) => {
+                        {miedosTxt.ejemplos.map((e) => {
                           const usado = !ejemplosDisponibles.includes(e);
                           return (
                             <Box
@@ -379,7 +380,7 @@ export default function MetodoPsicologiaMiedos() {
                 </Box>
 
                 <Text color={TINTA} fontSize="xs" opacity={0.55} fontStyle="italic" minH="1.2em">
-                  {guardando ? "Guardando…" : miedos.length > 0 ? "Cada miedo se guarda según lo escribes." : ""}
+                  {guardando ? t("comun.guardando") : miedos.length > 0 ? t("metodo.psico.miedosSeGuardan") : ""}
                 </Text>
               </Flex>
             </Box>

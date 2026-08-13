@@ -70,6 +70,17 @@ export const aprendizaje = {
   "alimentos.sinFavoritos": "Aún no tienes alimentos marcados como favoritos.",
 
   // Secciones de la ficha de una planta o un alimento.
+  // ── Modal de servicios de astrología (lecturas de carta) ───────────────
+  // El precio NO está aquí: lo pone el propio modal, con su moneda.
+  "astroServicios.titulo": "✦ Servicios Astrológicos ✦",
+  "astroServicios.ascSolLuna": "Conocer mi Ascendente, Sol y Luna en profundidad",
+  "astroServicios.lectura": "Lectura de carta astral",
+  "astroServicios.lecturaProfunda": "Lectura en profundidad de carta astral",
+  "astroServicios.tuEmail": "Tu email",
+  "astroServicios.enviado": "¡Mensaje enviado!",
+  "astroServicios.enviadoPie": "Muy pronto me pondré en contacto contigo.",
+  "astroServicios.error": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
+
   "ficha.beneficios": "Beneficios",
   "ficha.formaDeUso": "Forma de uso",
   "ficha.comoConsumirlo": "Cómo consumirlo",

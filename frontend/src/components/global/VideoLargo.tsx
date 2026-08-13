@@ -4,7 +4,7 @@
  * REGLA: el vídeo completo NUNCA se pone en pantalla solo. Donde el vídeo sale
  * sí o sí —la rejilla de «El Mapa por dentro» y la caja de /d/<disciplina>— va
  * el clip de muestra (`/videos/muestra/<clave>.mp4`, ~100 KB, mudo y en bucle,
- * lo genera `scripts/video/muestras.mjs`). Los originales pesan entre 8 y 33 MB
+ * lo genera `scripts/video/muestras.mjs`). Los originales pesan entre 8 y 27 MB
  * cada uno: cargarlos por si acaso es regalarle la factura de datos a quien
  * entra desde el móvil, y son largos porque tienen que serlo.
  *

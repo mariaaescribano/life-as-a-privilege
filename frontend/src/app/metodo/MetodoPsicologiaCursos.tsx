@@ -125,7 +125,7 @@ export default function MetodoPsicologiaCursos() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 23, total: 23 }}
+                step={{ current: 25, total: 25 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.sintesis")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/sintesis`) }}
@@ -203,7 +203,7 @@ export default function MetodoPsicologiaCursos() {
         error={pagoError}
       />
 
-      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
+      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo={t("metodo.psico.reservaLlamada")} />
 
       <IndiceRecorrido progresoKey="psicologia" />
       <SiteFooter />

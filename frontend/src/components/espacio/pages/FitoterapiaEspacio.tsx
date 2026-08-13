@@ -13,6 +13,7 @@ import {
 import { plantas, type Planta } from "../../recursos/fitoterapia/PlantasData";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteFooter from "../../global/Footer";
+import { useT } from "../../../i18n";
 
 const CARD_COLOR  = fitoterapiaTxt;
 const MODAL_COLOR = fitoterapiaBg;
@@ -107,6 +108,7 @@ const PlantModal = ({
   onClose: () => void;
   onRemove: () => void;
 }) => {
+  const t = useT();
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -196,7 +198,7 @@ const PlantModal = ({
           <BotanicalDivider color={MODAL_COLOR} />
 
           {/* BENEFICIOS */}
-          <SeccionModal titulo="Beneficios" color={MODAL_COLOR} textMid={textMid}>
+          <SeccionModal titulo={t("ficha.beneficios")} color={MODAL_COLOR} textMid={textMid}>
             <Flex direction="column" gap={2}>
               {planta.beneficios.map((b, i) => (
                 <Flex key={i} gap={3} align="flex-start">
@@ -218,7 +220,7 @@ const PlantModal = ({
           <BotanicalDivider color={MODAL_COLOR} />
 
           {/* FORMA DE USO */}
-          <SeccionModal titulo="Forma de uso" color={MODAL_COLOR} textMid={textMid}>
+          <SeccionModal titulo={t("ficha.formaDeUso")} color={MODAL_COLOR} textMid={textMid}>
             <Box bg={accentBg} border={`1px solid ${accentBorder}`} borderRadius="xl" px={5} py={4}>
               <Text color={textDark} fontSize={{ base: "sm", md: "md" }} lineHeight="1.9" opacity={0.88}>
                 {planta.formaDeUso}
@@ -230,7 +232,7 @@ const PlantModal = ({
           {planta.datosCuriosos && planta.datosCuriosos.length > 0 && (
             <>
               <BotanicalDivider color={MODAL_COLOR} />
-              <SeccionModal titulo="Datos curiosos" color={MODAL_COLOR} textMid={textMid}>
+              <SeccionModal titulo={t("ficha.datosCuriosos")} color={MODAL_COLOR} textMid={textMid}>
                 <Flex direction="column" gap={3}>
                   {planta.datosCuriosos.map((d, i) => (
                     <Flex key={i} gap={3} align="flex-start">
@@ -257,7 +259,7 @@ const PlantModal = ({
           {planta.precauciones && planta.precauciones.length > 0 && (
             <>
               <BotanicalDivider color="#b05a2a" />
-              <SeccionModal titulo="Precauciones" color="#b05a2a" textMid="#8a3e18">
+              <SeccionModal titulo={t("ficha.precauciones")} color="#b05a2a" textMid="#8a3e18">
                 <Box
                   bg="rgba(176,90,42,0.08)" border="1px solid rgba(176,90,42,0.28)"
                   borderRadius="xl" px={5} py={4}
@@ -296,7 +298,7 @@ const PlantModal = ({
               transition="all 0.22s"
               _hover={{ bg: "rgba(176,90,42,0.18)", borderColor: "#b05a2a" }}
             >
-              Eliminar de favoritas
+              {t("productos.quitarFavorito")}
             </Box>
           </Flex>
 
@@ -421,6 +423,7 @@ const useReveal = () => {
    PÁGINA PRINCIPAL
 ═══════════════════════════════════════════ */
 export default function FitoterapiaEspacio() {
+  const t                           = useT();
   const navigate                    = useNavigate();
   const [selected, setSelected]     = useState<Planta | null>(null);
   const [favoritas, setFavoritas]   = useState<Planta[]>([]);
@@ -499,7 +502,7 @@ export default function FitoterapiaEspacio() {
           {!userId && (
             <Flex justify="center" py={16}>
               <Text color="rgba(255,255,255,0.45)" fontStyle="italic" fontSize="lg" textAlign="center">
-                Inicia sesión para ver tus plantas favoritas.
+                {t("espacio.fito.inicia")}
               </Text>
             </Flex>
           )}
@@ -508,7 +511,7 @@ export default function FitoterapiaEspacio() {
           {userId && loading && (
             <Flex justify="center" py={16}>
               <Text color="rgba(255,255,255,0.45)" fontStyle="italic" fontSize="lg">
-                Cargando tus favoritas...
+                {t("espacio.fito.cargando")}
               </Text>
             </Flex>
           )}
@@ -523,7 +526,7 @@ export default function FitoterapiaEspacio() {
                 textAlign="center"
                 letterSpacing="0.03em"
               >
-                Aún no tienes plantas favoritas.
+                {t("herbario.sinFavoritos")}
               </Text>
               <Box
                 as="button"
@@ -556,7 +559,7 @@ export default function FitoterapiaEspacio() {
                   textAlign="center"
                   lineHeight="1.5"
                 >
-                  Explorar el herbario
+                  {t("espacio.fito.explorar")}
                 </Text>
               </Box>
             </Flex>

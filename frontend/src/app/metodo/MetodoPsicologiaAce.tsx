@@ -29,13 +29,12 @@ import { useComic } from "../../i18n/comics";
 import { useT } from "../../i18n";
 import {
   experienciaById,
-  ACE_INTRO,
-  ACE_PREGUNTAS,
   aceRespondidas,
   aceCompleto,
   type LineaDeVidaData,
   type AceRespuesta,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useAceIntro, useAcePreguntas } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -56,6 +55,9 @@ export default function MetodoPsicologiaAce() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  // El texto del test, en el idioma activo (la estructura la manda el español).
+  const aceIntro = useAceIntro();
+  const acePreguntas = useAcePreguntas();
 
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, AceRespuesta>>({});
@@ -135,7 +137,7 @@ export default function MetodoPsicologiaAce() {
 
   const data: LineaDeVidaData = { ...dataRef.current, ace: { respuestas } };
   const respondidas = aceRespondidas(data);
-  const total = ACE_PREGUNTAS.length;
+  const total = acePreguntas.length;
   const completo = aceCompleto(data);
 
   return (
@@ -152,7 +154,7 @@ export default function MetodoPsicologiaAce() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 3, total: 23 }}
+              step={{ current: 3, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.problemas")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/problema`) }}
@@ -160,7 +162,7 @@ export default function MetodoPsicologiaAce() {
                 label: `${t("metodo.psico.paso.aceResultado")} →`,
                 onClick: () => setComicOpen(true),
                 disabled: !completo,
-                disabledTooltip: "Responde las 10 preguntas para ver tu resultado.",
+                disabledTooltip: t("metodo.psico.faltaAce"),
               }}
             />
           </Reveal>
@@ -168,7 +170,7 @@ export default function MetodoPsicologiaAce() {
           {/* ── Sobre el turquesa: subtítulo + acceso a la explicación + progreso ── */}
           <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
           <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} w="100%" maxW="640px">
-            <IntroRecorrido>{ACE_INTRO.subtituloTurquesa}</IntroRecorrido>
+            <IntroRecorrido>{aceIntro.subtituloTurquesa}</IntroRecorrido>
 
             {/* Progreso */}
             <Flex align="center" gap={3} w="100%" maxW="380px">
@@ -187,7 +189,7 @@ export default function MetodoPsicologiaAce() {
           {/* ── Las 10 preguntas · entran EN CASCADA, una tras otra ── */}
           <RevealStagger stagger={0.12} delayChildren={0.1} amount={0.15}
                          display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }}>
-            {ACE_PREGUNTAS.map((p) => {
+            {acePreguntas.map((p) => {
               const elegido = respuestas[p.key];
               return (
                 <RevealItem key={p.key} w="100%">

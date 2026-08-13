@@ -2,7 +2,7 @@
  * CLIPS DE MUESTRA — los ocho vídeos en bucle de /elMetodo
  *
  * La sección «El Mapa por dentro» pone los ocho vídeos en una rejilla y los
- * reproduce a la vez. Los vídeos originales de `public/videos` pesan ~53 MB
+ * reproduce a la vez. Los vídeos originales de `public/videos` pesan ~139 MB
  * entre todos: servirlos ahí sería la página más cara de la web y en móvil con
  * datos, un abuso.
  *

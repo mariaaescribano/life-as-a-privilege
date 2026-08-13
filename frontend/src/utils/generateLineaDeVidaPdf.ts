@@ -22,15 +22,21 @@ import { conAlfa } from "./pdf/formas";
 import type { RGB } from "./pdf/temas";
 import {
   ANO_GESTACION,
-  ETAPAS_VITALES,
   EXPERIENCIAS,
   anoNatural,
   estadoDelAno,
   itemsDeRespuesta,
-  preguntasDeAno,
   type EstadoAno,
   type LineaDeVidaData,
 } from "../components/metodo/psicologiaRecorrido";
+// El cuaderno se escribe en el idioma de la pantalla. Al no ser un componente,
+// lee el texto con los lectores de fuera de React (no con los hooks).
+import {
+  etapasVitalesTraducidas,
+  experienciaTraducida,
+  preguntasDeAnoTraducidas,
+} from "../components/metodo/psicologiaRecorrido.en";
+import { traducir } from "../i18n";
 import { GARAMOND } from "./fonts/ebGaramond";
 
 const limpio = (s: string) => (s || "").replace(/\*\*/g, "").replace(/\*/g, "").trim();
@@ -100,8 +106,8 @@ function laminaLinea(
 
 export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<void> {
   const t = TEMA_PSICOLOGIA;
-  const exp = EXPERIENCIAS[0];
-  const taller = await Taller.abrir(t, { titulo: "Mi línea de Vida" });
+  const exp = experienciaTraducida(EXPERIENCIAS[0].id) ?? EXPERIENCIAS[0];
+  const taller = await Taller.abrir(t, { titulo: traducir("metodo.psico.pdfLinea.titulo") });
   const doc = taller.doc;
 
   const edad = Math.max(0, Math.floor(Number(data.edad) || 0));
@@ -116,7 +122,7 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
 
   /** Las respuestas escritas de un año, pregunta a pregunta. */
   const respuestasDe = (edadAno: number): { pregunta: string; items: string[] }[] =>
-    preguntasDeAno(exp, edadAno)
+    preguntasDeAnoTraducidas(exp, edadAno)
       .map((p) => ({
         pregunta: p.pregunta,
         items: itemsDeRespuesta(data?.anos?.[String(edadAno)]?.respuestas?.[p.key])
@@ -146,16 +152,21 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
 
   /* ── PORTADA ── */
   taller.portada({
-    titulo: "Mi línea de Vida",
-    subtitulo: "Psicología · Año a año, contado por ti",
+    titulo: traducir("metodo.psico.pdfLinea.titulo"),
+    subtitulo: traducir("metodo.psico.pdfLinea.subtitulo"),
     pieLamina:
       recorridos > 0
-        ? `${recorridos} de ${edad + 1} años recorridos` +
+        ? traducir("metodo.psico.pdfLinea.recorridos", { n: recorridos, total: edad + 1 }) +
           (totalHuellas > 0
-            ? `. ${totalHuellas} ${totalHuellas === 1 ? "recuerdo dejó huella" : "recuerdos dejaron huella"}.`
+            ? traducir(
+                totalHuellas === 1
+                  ? "metodo.psico.pdfLinea.huellaUna"
+                  : "metodo.psico.pdfLinea.huellaVarias",
+                { n: totalHuellas },
+              )
             : ".")
         : undefined,
-    cierre: "Mi historia",
+    cierre: traducir("metodo.psico.pdfLinea.miHistoria"),
     lamina: (d, cx, yTop, ancho) => {
       laminaLinea(d, cx, yTop + 12, ancho - 10, nodos, [246, 226, 206], [255, 246, 236]);
     },
@@ -164,16 +175,15 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
   /* ── DE UN VISTAZO ── */
   taller.nuevaPagina();
   taller.capitulo(
-    "De un vistazo",
-    "Cuánta Vida hay escrita aquí dentro. Los años en blanco no son un fallo: " +
-      "son sitio que dejaste para cuando vuelvas.",
+    traducir("metodo.psico.pdf.deUnVistazo"),
+    traducir("metodo.psico.pdfLinea.vistazoApoyo"),
   );
 
   const inventario: [string, number][] = ([
-    ["Años escritos", escritos.length],
-    ["Sin recuerdos", sinRecuerdos.length],
-    ["Huellas", totalHuellas],
-    ["Años de Vida", edad + 1],
+    [traducir("metodo.psico.pdfLinea.aniosEscritos"), escritos.length],
+    [traducir("metodo.psico.sinRecuerdosBoton"), sinRecuerdos.length],
+    [traducir("metodo.psico.paso.huellas"), totalHuellas],
+    [traducir("metodo.psico.pdfLinea.aniosDeVida"), edad + 1],
   ] as [string, number][]).filter(([, n]) => n > 0);
 
   if (inventario.length) {
@@ -206,18 +216,16 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
   if (edad > 0) {
     taller.espacio(2);
     taller.filaBarra({
-      etiqueta: "Vida recorrida",
-      coletilla: recorridos >= edad + 1 ? "entera" : undefined,
+      etiqueta: traducir("metodo.psico.pdfLinea.vidaRecorrida"),
+      coletilla: recorridos >= edad + 1 ? traducir("metodo.psico.pdfLinea.entera") : undefined,
       valor: `${recorridos} / ${edad + 1}`,
       fraccion: recorridos / (edad + 1),
     });
   }
 
-  taller.parrafo(
-    "Todo lo que sigue lo escribiste tú, con tus palabras y en el orden en que pasó. " +
-      "Nadie ha interpretado nada: esto es tu memoria, puesta en limpio.",
-    { cursiva: true, color: t.apagado, tam: 10.4 },
-  );
+  taller.parrafo(traducir("metodo.psico.pdfLinea.loEscribisteTu"), {
+    cursiva: true, color: t.apagado, tam: 10.4,
+  });
 
   /* ── El encabezado de cada año, con su año natural al lado ── */
   const encabezadoAno = (titulo: string, natural?: string) => {
@@ -252,7 +260,7 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
     });
     const huellas = huellasDe(edadAno);
     if (huellas.length > 0) {
-      taller.antetitulo("Lo que dejó huella");
+      taller.antetitulo(traducir("metodo.psico.sin.loQueDejoHuella"));
       taller.lista(huellas, { tam: 10.8, color: t.tintaSuave });
     }
     taller.espacio(3);
@@ -261,14 +269,14 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
   /* ── ANTES DE NACER (la gestación) ── */
   if (hayGestacion) {
     taller.capitulo(
-      "Antes de nacer",
-      "Lo que sabes, te contaron o imaginas del tiempo en que te esperaban.",
+      traducir("metodo.psico.antesDeNacer"),
+      traducir("metodo.psico.pdfLinea.gestacionApoyo"),
     );
     cuerpoAno(ANO_GESTACION);
   }
 
   /* ── UNA ETAPA VITAL POR CAPÍTULO ── */
-  ETAPAS_VITALES.forEach((etapa) => {
+  etapasVitalesTraducidas().forEach((etapa) => {
     const deLaEtapa = anios.filter((a) => a >= etapa.min && a <= etapa.max);
     const conTexto = deLaEtapa.filter((a) => estadoDelAno(data, a) === "completado");
     const enBlanco = deLaEtapa.filter((a) => estadoDelAno(data, a) === "sin-recuerdos");
@@ -278,12 +286,16 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
     const hasta = deLaEtapa[deLaEtapa.length - 1];
     taller.capitulo(
       etapa.nombre,
-      desde === hasta ? `${desde} años` : `De los ${desde} a los ${hasta} años`,
+      desde === hasta
+        ? traducir("metodo.psico.pdfLinea.etapaUnAnio", { n: desde })
+        : traducir("metodo.psico.pdfLinea.etapaTramo", { desde, hasta }),
     );
 
     conTexto.forEach((a) => {
       encabezadoAno(
-        a === 1 ? "1 año" : `${a} años`,
+        a === 1
+          ? traducir("metodo.psico.pdfLinea.unAnio")
+          : traducir("metodo.psico.pdfLinea.nAnios", { n: a }),
         String(anoNatural(edad, a, anioActual)),
       );
       cuerpoAno(a);
@@ -292,9 +304,9 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
     if (enBlanco.length > 0) {
       taller.parrafo(
         (enBlanco.length === 1
-          ? `De los ${enBlanco[0]} años no guardas recuerdos.`
-          : `De estos años no guardas recuerdos: ${enBlanco.join(", ")}.`) +
-          " Dejarlos en blanco también es contar tu historia.",
+          ? traducir("metodo.psico.pdfLinea.enBlancoUno", { a: enBlanco[0] })
+          : traducir("metodo.psico.pdfLinea.enBlancoVarios", { lista: enBlanco.join(", ") })) +
+          traducir("metodo.psico.pdfLinea.enBlancoCierre"),
         { cursiva: true, color: t.apagado, tam: 10.2 },
       );
     }
@@ -302,18 +314,11 @@ export async function generateLineaDeVidaPdf(data: LineaDeVidaData): Promise<voi
 
   /* ── Si aún no hay nada escrito, el cuaderno lo dice sin dramatismo ── */
   if (!hayGestacion && escritos.length === 0) {
-    taller.capitulo("Tu línea, todavía en blanco");
-    taller.parrafo(
-      "Aún no hay ningún año escrito. En cuanto empieces a recorrer tu línea de Vida, " +
-        "cada año que cuentes aparecerá aquí, con sus preguntas y tus palabras.",
-      { cursiva: true },
-    );
+    taller.capitulo(traducir("metodo.psico.pdfLinea.vaciaTitulo"));
+    taller.parrafo(traducir("metodo.psico.pdfLinea.vaciaTexto"), { cursiva: true });
   }
 
-  taller.cierre(
-    "Esta es tu Vida contada por ti, que es la única versión que importa. " +
-      "Vuelve cuando quieras: siempre queda un año por escribir.",
-  );
+  taller.cierre(traducir("metodo.psico.pdfLinea.cierre"));
 
-  taller.guardar("mi-linea-de-vida.pdf");
+  taller.guardar(traducir("metodo.psico.pdfLinea.archivo"));
 }

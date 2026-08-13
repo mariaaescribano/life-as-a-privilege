@@ -17,7 +17,7 @@ import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { INTRO_PSICOLOGIA } from "../../components/metodo/comicPsicologiaIntro";
 import { useComic } from "../../i18n/comics";
 import { useIntroComic } from "../../hooks/useIntroComic";
-import { EXPERIENCIAS } from "../../components/metodo/psicologiaRecorrido";
+import { useExperiencias } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { Reveal } from "../../components/global/Reveal";
 import {
@@ -39,7 +39,7 @@ export default function MetodoPsicologia() {
   // El cómic de intro, en el idioma activo.
   const introVinetas = useComic("psicologia-intro", INTRO_PSICOLOGIA);
   const navigate = useNavigate();
-  const experiencia = EXPERIENCIAS[0];
+  const experiencia = useExperiencias()[0];
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
   const [pagoOpen, setPagoOpen] = useState(false);
@@ -113,7 +113,7 @@ export default function MetodoPsicologia() {
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />}
               title={t("metodo.gate.psico.titulo")}
-              pageLabel="1/22"
+              step={{ current: 1, total: 25 }}
               bgColor={`${neuropsicologiaBg}dd`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}

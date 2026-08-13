@@ -197,7 +197,7 @@ export default function MetodoPsicologiaHuellasNudos() {
 
   const guardarHerida = async () => {
     if (totalSel === 0) return;
-    const titulo = nombre.trim() || "Herida sin título";
+    const titulo = nombre.trim() || t("metodo.psico.heridaSinTitulo");
     const nueva: RelacionHuellaNudo = {
       id: nuevoId(), titulo, huellas: selHuellas, nudos: selNudos, necesidades: selNec, texto: "",
     };
@@ -230,23 +230,23 @@ export default function MetodoPsicologiaHuellasNudos() {
     vacio: { texto: string; accion: string; ruta: string };
   }[] = [
     {
-      key: "huella", titulo: "Tus huellas", apoyo: "Las experiencias que marcaste.",
+      key: "huella", titulo: t("metodo.psico.tusHuellas"), apoyo: t("metodo.psico.tusHuellasApoyo"),
       icono: <HuellaIcon size={20} color={TINTA} />, piezaIcono: <HuellaIcon size={18} color={TINTA} />,
       items: huellas, sel: selHuellas, set: setSelHuellas,
-      vacio: { texto: "Aún no has marcado huellas en tu línea de Vida.", accion: "Ir a Huellas →", ruta: `/metodo/psicologia/${exp.id}/huellas` },
+      vacio: { texto: t("metodo.psico.sinHuellasAun"), accion: t("metodo.psico.irAHuellas"), ruta: `/metodo/psicologia/${exp.id}/huellas` },
     },
     {
-      key: "nec", titulo: "Necesidades no cubiertas", apoyo: "Lo que necesitabas y no recibiste.",
+      key: "nec", titulo: t("metodo.psico.necesidadesNoCubiertas"), apoyo: t("metodo.psico.necesidadesNoCubiertasApoyo"),
       icono: <NecesidadIcon size={20} color={TINTA} />, piezaIcono: <NecesidadIcon size={18} color={TINTA} />,
       items: necesidades, sel: selNec, set: setSelNec,
-      vacio: { texto: "Aún no has marcado necesidades no cubiertas.", accion: "Ir a Necesidades →", ruta: `/metodo/psicologia/${exp.id}/necesidades` },
+      vacio: { texto: t("metodo.psico.sinNecesidadesAun"), accion: t("metodo.psico.irANecesidades"), ruta: `/metodo/psicologia/${exp.id}/necesidades` },
     },
     {
-      key: "nudo", titulo: "Tus nudos", apoyo: "La creencia o conflicto que dejó.",
+      key: "nudo", titulo: t("metodo.psico.tusNudos"), apoyo: t("metodo.psico.tusNudosApoyo"),
       icono: <NudoEspiralIcon size={20} color={TINTA} strokeWidth={1.7} opacity={0.9} />,
       piezaIcono: <NudoEspiralIcon size={18} color={TINTA} strokeWidth={1.7} opacity={0.9} />,
       items: nudos, sel: selNudos, set: setSelNudos,
-      vacio: { texto: "Aún no has nombrado tus nudos.", accion: "Ir a Nudos →", ruta: `/metodo/psicologia/${exp.id}/nudos` },
+      vacio: { texto: t("metodo.psico.sinNudosAun"), accion: t("metodo.psico.irANudos"), ruta: `/metodo/psicologia/${exp.id}/nudos` },
     },
   ];
 
@@ -265,7 +265,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 11, total: 23 }}
+              step={{ current: 13, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.necesidades")}`, onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/necesidades`); } }}
@@ -273,7 +273,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                 label: `${t("metodo.psico.paso.tusHeridas")} →`,
                 onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/heridas-lista`); },
                 disabled: heridas.length === 0,
-                disabledTooltip: "Crea al menos una herida para continuar.",
+                disabledTooltip: t("metodo.psico.faltaHerida"),
               }}
             />
             </Reveal>

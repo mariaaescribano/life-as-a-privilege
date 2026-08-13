@@ -27,6 +27,45 @@ export const espacio = {
     "No has marcado síntomas significativos. Sigue cuidándote con una alimentación natural y descanso suficiente.",
   "espacio.fisio.repetir": "Repetir test",
 
+  // ── Fitoterapia · las plantas favoritas ────────────────────────────────
+  "espacio.fito.inicia": "Inicia sesión para ver tus plantas favoritas.",
+  "espacio.fito.cargando": "Cargando tus favoritas…",
+  "espacio.fito.explorar": "Explorar el herbario",
+
+  // ── Astrología · la carta guardada ─────────────────────────────────────
+  "espacio.astro.arquetipos": "¿Quieres saber qué arquetipos te forman?",
+  "espacio.astro.lectura": "¿Quieres una lectura profesional de tu Carta Astral?",
+  "espacio.astro.transcripcion": "Transcripción",
+  "espacio.astro.tuCartaNatal": "Tu Carta Natal",
+  "espacio.astro.perfil": "Perfil",
+  /** Los tres campos de la carta que se guardan en Mi Espacio. */
+  /** «Sol en» ~ «Luna en»: el rótulo del signo elegido. El español pega la
+   *  preposición al final y el inglés no siempre, así que va con hueco. */
+  "espacio.astro.campoEn": "{campo} en",
+  "espacio.astro.tuCampo": "Tu {campo}",
+  "espacio.astro.sol": "Sol",
+  "espacio.astro.luna": "Luna",
+  "espacio.astro.ascendente": "Ascendente",
+
+  // ── Cábala · el test del Árbol ─────────────────────────────────────────
+  "espacio.cabala.comenzar": "Comenzar el test →",
+  "espacio.cabala.repetir": "Repetir el test",
+
+  // ── Los dos test guardados (Doṣhas y Medicina China) ───────────────────
+  "espacio.test.doshas": "Test de los Doṣhas",
+  "espacio.test.descubreDosha": "Descubre tu Doṣha",
+  "espacio.test.doshaPrincipal": "Tu Doṣha principal es",
+  "espacio.test.eligeOpcion":
+    "Para cada pregunta, elige la opción que mejor te describa. No hay respuestas correctas ni incorrectas: confía en tu primera intuición.",
+  "espacio.test.recalcular": "Recalcular",
+  "espacio.test.consejos": "Tus consejos personalizados",
+  "espacio.test.descargarConsejos": "Descargar consejos",
+  "espacio.test.descargarRespuestas": "Descargar mis respuestas",
+  "espacio.test.verResultados": "Ver mis resultados",
+  "espacio.test.tusResultados": "Tus Resultados",
+  "espacio.test.predominante": "PREDOMINANTE",
+  "espacio.test.volver": "Volver a Mi Espacio",
+
   // ── Vata ───────────────────────────────────────────────────────────────
   "espacio.dosha.vata.subtitulo": "Aire y Éter · Movimiento y Creatividad",
   "espacio.dosha.vata.descripcion":

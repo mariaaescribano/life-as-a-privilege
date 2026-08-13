@@ -29,7 +29,7 @@ import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { EjemplosPulsables } from "../../components/metodo/EjemplosPulsables";
 import { COMIC_COMPROMISO } from "../../components/metodo/comicCompromiso";
 import { useComic } from "../../i18n/comics";
-import { useT } from "../../i18n";
+import { traducir, useIdioma, useT } from "../../i18n";
 import {
   experienciaById,
   arquetipoKey,
@@ -129,7 +129,72 @@ const BLOQUES: {
   },
 ];
 
-const relTitulo = (c: Constelacion): string => (c.titulo || "").trim() || "Relación sin título";
+// Los mismos cuatro bloques EN INGLÉS. Aquí va solo el texto: la `key`, el
+// orden y el `topeEjemplos` los sigue poniendo BLOQUES, que es donde vive la
+// estructura (si se duplicara, un tope cambiado en un idioma y no en el otro
+// haría que el popup creciera solo en uno). Va en este fichero, al lado del
+// español, porque los ejemplos son listas y no caben en el diccionario de
+// textos, que solo guarda cadenas.
+const BLOQUES_EN: Record<(typeof BLOQUES)[number]["key"], {
+  pregunta: string; apoyo: string; ejemplos: string[]; placeholder: string;
+}> = {
+  proteger: {
+    pregunta: "What was this pattern trying to protect?",
+    apoyo: "Recognize the positive intention behind the mechanism.",
+    ejemplos: [
+      "Avoiding rejection", "Protecting myself from abandonment", "Avoiding conflict", "Feeling like enough",
+      "Avoiding criticism", "Not letting anyone down", "Feeling safe", "Feeling like I'm in control",
+      "Avoiding pain", "Being accepted", "Not showing myself vulnerable", "Keeping the peace",
+      "Not being hurt", "Feeling loved", "Avoiding humiliation", "Never going through that again",
+    ],
+    placeholder: "What it was really trying to take care of in me…",
+  },
+  coste: {
+    pregunta: "What does keeping this pattern cost you?",
+    apoyo: "Take in the consequences it has in your Life today.",
+    ejemplos: [
+      "Anxiety", "Exhaustion", "Loneliness", "Holding back what I feel",
+      "Surface-level relationships", "Not being myself", "Constant fear", "Missing out on chances",
+      "Not enjoying the present", "Tension in my body", "Dissatisfaction", "Pushing away the people I love",
+      "Always living on guard", "Losing myself",
+    ],
+    placeholder: "What it costs me to keep holding it up…",
+  },
+  verdadSana: {
+    pregunta: "What healthier truth do you want to practice?",
+    apoyo: "The heart of it: turn the old story into a new one.",
+    ejemplos: [
+      "“I'm not enough” → “I am enough exactly as I am”",
+      "“I need to please to be loved” → “I can be loved being myself”",
+      "“If I set limits they'll leave me” → “Setting limits brings me closer to whoever respects me”",
+      "“My worth depends on doing it perfectly” → “My worth doesn't depend on doing it perfectly”",
+      "“I have to handle everything on my own” → “Asking for help is brave too”",
+      "“Getting it wrong makes me less” → “Getting it wrong is part of learning”",
+      "“I have to control everything” → “I can trust and let go”",
+    ],
+    placeholder: "The new truth I want to start believing…",
+  },
+  recordatorio: {
+    pregunta: "What would you like to remember when you fall back into this pattern?",
+    apoyo: "A short line of support, just for you.",
+    ejemplos: [
+      "I am enough", "I can ask for help", "It's okay to say no", "My emotions are valid",
+      "It's okay to get it wrong", "My voice matters too", "I can set limits with love",
+      "I don't have to handle everything", "I deserve to rest",
+      "I don't need everyone to like me", "I can trust myself", "I treat myself kindly",
+    ],
+    placeholder: "A line I want to remember…",
+  },
+};
+
+/** Los cuatro bloques, con el texto en el idioma activo. */
+const useBloques = (): typeof BLOQUES => {
+  const { idioma } = useIdioma();
+  return idioma === "en" ? BLOQUES.map((b) => ({ ...b, ...BLOQUES_EN[b.key] })) : BLOQUES;
+};
+
+const relTitulo = (c: Constelacion): string =>
+  (c.titulo || "").trim() || traducir("metodo.psico.relacionSinTitulo");
 const relRespondidas = (c: Constelacion): number =>
   BLOQUES.filter((b) => ((c[b.key] as string) || "").trim().length > 0).length;
 
@@ -264,7 +329,7 @@ export default function MetodoPsicologiaMapa() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 19, total: 23 }}
+                step={{ current: 21, total: 25 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.atrevete")}`, onClick: () => ir("miedos-preguntas") }}
@@ -272,7 +337,7 @@ export default function MetodoPsicologiaMapa() {
                   label: `${t("metodo.psico.paso.compromiso")} →`,
                   onClick: () => setFelicitarOpen(true),
                   disabled: !algunoRelleno,
-                  disabledTooltip: "Rellena al menos una relación para continuar.",
+                  disabledTooltip: t("metodo.psico.faltaMapa"),
                 }}
               />
             </Reveal>
@@ -454,7 +519,8 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
   onClose: () => void;
 }) {
   const t = useT();
-  const total = BLOQUES.length;
+  const bloques = useBloques();
+  const total = bloques.length;
   const [paso, setPaso] = useState(0);
   const esPrimero = paso === 0;
   const esUltimo = paso === total - 1;
@@ -475,7 +541,7 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
   const anterior = () => setPaso((i) => Math.max(0, i - 1));
   const siguiente = () => { if (esUltimo) onClose(); else setPaso((i) => Math.min(total - 1, i + 1)); };
 
-  const b = BLOQUES[paso];
+  const b = bloques[paso];
   const respuesta = (c[b.key] as string) || "";
 
   // Pulsar un ejemplo lo AÑADE al texto (nunca borra lo ya escrito). Si ya hay
@@ -594,7 +660,7 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
                  letterSpacing="0.04em" cursor="pointer"
                  boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
                  _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-              {esUltimo ? "Hecho ✓" : "Siguiente ›"}
+              {esUltimo ? t("metodo.psico.hecho") : t("metodo.psico.siguiente")}
             </Box>
           </Flex>
         </Box>

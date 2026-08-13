@@ -147,7 +147,7 @@ export default function MetodoPsicologiaBrujula() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 21, total: 23 }}
+                step={{ current: 23, total: 25 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.compromiso")}`, onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}
@@ -155,7 +155,7 @@ export default function MetodoPsicologiaBrujula() {
                   label: `${t("metodo.psico.paso.sintesis")} →`,
                   onClick: () => { void persistir(brujula); setComicOpen(true); },
                   disabled: !brujulaCompleta,
-                  disabledTooltip: "Escribe tu carta para continuar.",
+                  disabledTooltip: t("metodo.psico.faltaCarta"),
                 }}
               />
             </Reveal>
@@ -213,7 +213,9 @@ export default function MetodoPsicologiaBrujula() {
                     _hover={estadoGuardado === "guardando" ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 26px ${TINTA}88, 0 0 60px ${TINTA}44` }}
                     style={{ textShadow: "0 1px 3px rgba(60,28,10,0.45)" }}
                   >
-                    {estadoGuardado === "guardando" ? "Guardando…" : estadoGuardado === "ok" ? "Guardado ✓" : "Guardar"}
+                    {estadoGuardado === "guardando"
+                      ? t("comun.guardando")
+                      : estadoGuardado === "ok" ? t("metodo.psico.guardadoOk") : t("comun.guardar")}
                   </Box>
                 </Flex>
               </Box>
@@ -245,7 +247,7 @@ export default function MetodoPsicologiaBrujula() {
         textShadow={INK_SHADOW}
       />
 
-      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
+      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo={t("metodo.psico.reservaLlamada")} />
 
       <AyudaRecorrido pagina="brujula" ocultarCompania />
       <SiteFooter />

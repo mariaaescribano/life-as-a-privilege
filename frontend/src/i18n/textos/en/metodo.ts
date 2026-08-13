@@ -21,7 +21,7 @@ export const metodo = {
     "Walk the path with me. Book a call · mainland Spain time",
   "metodo.ayuda.herida": "Wound",
   "metodo.ayuda.arquetipo": "Archetype",
-  "metodo.ayuda.relacion": "Relationship",
+  "metodo.ayuda.relacion": "Connection",
 
   // ── Commitments (psychology, and its reminder in other disciplines) ────
   "metodo.compromiso.noOlvides": "Don't forget the commitments you made to yourself",
@@ -291,6 +291,18 @@ export const metodo = {
 
   // ── Astrología · la llamada ────────────────────────────────────────────
   "metodo.astro.reservaLlamada": "Book your astrology call",
+
+  // ── Astrology · adjusting a body of the chart by hand ──────────────────
+  "metodo.astro.ajustar.titulo": "Set the degrees by hand",
+  "metodo.astro.ajustar.nodos":
+    "If you edit the North Node, the South one syncs automatically (always 180° opposite).",
+  "metodo.astro.ajustar.cuerpo": "Body",
+  "metodo.astro.ajustar.signo": "Sign",
+  "metodo.astro.ajustar.grado": "Degree (0-29)",
+  "metodo.astro.ajustar.minutos": "Minutes (0-59)",
+  "metodo.astro.ajustar.errorGrado": "The degree within the Sign has to be between 0 and 29",
+  "metodo.astro.ajustar.errorMinutos": "The minutes have to be between 0 and 59",
+  "metodo.astro.ajustar.errorGuardar": "It couldn't be saved",
 
   // ── Astrología · datos de nacimiento ───────────────────────────────────
   "metodo.astro.fechaNacimiento": "Date of birth",
@@ -865,7 +877,7 @@ export const metodo = {
   "metodo.psico.miLinea": "My timeline",
   "metodo.psico.antesDeContinuar": "Before you carry on",
   "metodo.psico.cuantoMasCompletes":
-    "The more of your Life line you fill in, the more clearly you'll see your imprints, your knots and your wounds later on.",
+    "The more of your Life line you fill in, the more clearly you'll see your marks, your knots and your wounds later on.",
   "metodo.psico.rellenaEntera": "Fill it in completely, or as much as you can.",
   "metodo.psico.siRemueve":
     "And if remembering is very hard, or it stirs up too much, you don't have to do it alone: you can ask for a call and we'll do it together.",
@@ -901,6 +913,8 @@ export const metodo = {
   "metodo.psico.paso.cursosCorto": "Courses",
   "metodo.psico.paso.ace": "ACE",
   "metodo.psico.paso.aceResultado": "Your result",
+  "metodo.psico.paso.des": "Checking out",
+  "metodo.psico.paso.desResultado": "How you check out",
   "metodo.psico.paso.familia": "Your family",
   "metodo.psico.paso.genograma": "Genogram",
   "metodo.psico.paso.huellas": "Marks",
@@ -930,6 +944,22 @@ export const metodo = {
   "metodo.psico.aceRiesgo":
     "The more adverse experiences, the higher the risk of illness and difficulty.",
   "metodo.psico.continuarLinea": "Continue to your Life Line →",
+
+  // ── Psychology · the DES-II test (checking out) ─────────────────────────
+  // «You've finished the test.» is the ACE one (metodo.psico.testTerminado).
+  "metodo.psico.desTerminadoPie":
+    "Before you see your result, let me tell you what this checking out is, and why your mind learned to do it.",
+  "metodo.psico.queSignificaDes": "What does your result mean?",
+  "metodo.psico.tuPuntuacionDes": "Your DES-II score",
+  "metodo.psico.desMedia": "the average of all 28 answers, from 0 to 100",
+  "metodo.psico.desTresCaras": "The three faces of your checking out",
+  "metodo.psico.desTresCarasPie":
+    "The same score doesn't mean the same thing depending on where it comes from: leaving with your mind is the most common and the most harmless; gaps in memory and being outside yourself ask for more care.",
+  "metodo.psico.desSinEtiqueta":
+    "This isn't a diagnosis and it isn't a label: it's information about how you learned to protect yourself.",
+  "metodo.psico.desNoSola":
+    "With a score like this, this map isn't one to walk on your own.",
+  "metodo.psico.responderTodas": "Answer all 28 questions to see your result.",
 
   // ── Psychology · the letter to your future self ────────────────────────
   "metodo.psico.cartaIntro":
@@ -1048,6 +1078,173 @@ export const metodo = {
     "Download it as a PDF notebook, carefully made and beautiful, to read again whenever you need it.",
   "metodo.psico.volverArriba": "Back to the top",
   "metodo.psico.leer": "Read",
+
+  // ── Psychology · “something's missing” ─────────────────────────────────
+  "metodo.psico.faltaProblema": "Write your problem first to continue",
+  "metodo.psico.faltaAce": "Answer the 10 questions to see your result.",
+  "metodo.psico.faltaAnio": "Fill in at least one year (or mark it as having no memories) to continue",
+  "metodo.psico.faltaAnioCorto": "Fill in at least one year",
+  "metodo.psico.faltaFamiliaVacia":
+    "Place your family with the “+” signs and choose the character or animal for each one.",
+  "metodo.psico.faltaFamiliaSimbolo": "Choose the character or animal for at least one person to continue.",
+  "metodo.psico.faltaPersona": "Add at least one person from your family to continue.",
+  "metodo.psico.faltaHuella": "Mark at least one memory with ◈ that left a mark on you to continue.",
+  "metodo.psico.faltaNudo": "Pick or write at least one knot to continue.",
+  "metodo.psico.faltaNecesidades": "Answer every need to continue to Wounds.",
+  "metodo.psico.faltaHerida": "Put at least one wound together to continue.",
+  "metodo.psico.faltaRelacion": "Create at least one connection to continue.",
+  "metodo.psico.faltaDones": "Answer all 15 questions, or mark them “Out of ideas”, to discover your gifts.",
+  "metodo.psico.faltaDon": "Write at least one gift to continue.",
+  "metodo.psico.faltaMiedo": "Write or pick at least one fear to continue.",
+  "metodo.psico.faltaMiedosPreguntas": "Answer every question for each fear to continue.",
+  "metodo.psico.faltaMapa": "Fill in at least one connection to continue.",
+  "metodo.psico.faltaCompromiso": "Answer both commitment questions to continue.",
+  "metodo.psico.faltaCarta": "Write your letter to continue.",
+
+  "metodo.psico.reservaLlamada": "Book your psychology call",
+
+  // ── Psychology · the year-by-year notebook ─────────────────────────────
+  "metodo.psico.tramoAntesDeNacer": "Before you were born – age {fin}",
+  "metodo.psico.tramoAnios": "Ages {desde} – {hasta}",
+  "metodo.psico.tuEdad": "Your age",
+  "metodo.psico.anadeOtro": "Add another…",
+  "metodo.psico.escribeYEnter": "Write and press Enter…",
+  "metodo.psico.sinRecuerdosBoton": "No memories",
+  "metodo.psico.sinRecuerdosMarcado": "✓ No memories",
+  "metodo.psico.guardadoOk": "Saved ✓",
+  "metodo.psico.escribeAqui": "Write here…",
+  "metodo.psico.escribeLoQueQuieras": "Write whatever you want…",
+  "metodo.psico.preguntaN": "Question {n}",
+  "metodo.psico.siguiente": "Next ›",
+  "metodo.psico.siguienteFlecha": "Next →",
+  "metodo.psico.familiaAyuda":
+    "Tap any of your people to choose the character or the animal that looks like them.",
+
+  // ── Psychology · marks ─────────────────────────────────────────────────
+  "metodo.psico.anioN": "Year {n}",
+  "metodo.psico.huellasSeGuardan": "Your marks save themselves.",
+  "metodo.psico.dejoHuella": "It left a mark (tap to remove)",
+
+  // ── Psychology · the three columns a wound is made of ──────────────────
+  "metodo.psico.tusHuellas": "Your marks",
+  "metodo.psico.tusHuellasApoyo": "The experiences you marked.",
+  "metodo.psico.sinHuellasAun": "You haven't marked anything in your Life Line yet.",
+  "metodo.psico.irAHuellas": "Go to Marks →",
+  "metodo.psico.necesidadesNoCubiertas": "Uncovered needs",
+  "metodo.psico.necesidadesNoCubiertasApoyo": "What you needed and didn't get.",
+  "metodo.psico.sinNecesidadesAun": "You haven't marked any uncovered needs yet.",
+  "metodo.psico.irANecesidades": "Go to Needs →",
+  "metodo.psico.tusNudos": "Your knots",
+  "metodo.psico.tusNudosApoyo": "The belief or the conflict it left behind.",
+  "metodo.psico.sinNudosAun": "You haven't named your knots yet.",
+  "metodo.psico.irANudos": "Go to Knots →",
+  "metodo.psico.heridaSinTitulo": "Untitled wound",
+  "metodo.psico.miedosSeGuardan": "Each fear is saved as you write it.",
+  "metodo.psico.nudosSeGuardan": "Each knot is saved as you pick it.",
+
+  // ── Psychology · the archetypes (Connection and Gifts share this column) ─
+  "metodo.psico.arquetiposSinCarta": "They open once you've done your birth chart.",
+  "metodo.psico.arquetiposRelacionar": "Tap a card to connect it; the eye opens its reading.",
+  "metodo.psico.arquetiposUnirDon": "Tap a card to join it to the active gift; the eye opens its reading.",
+  "metodo.psico.bloqRelacion1":
+    "On this page you bring your wounds and the archetypes of your chart together in each connection: that's how you see which energy you relate from, and where it comes from.",
+  "metodo.psico.bloqRelacion2":
+    "You can create your connections and place your wounds in them anyway, but to make it complete you need your birth chart.",
+  "metodo.psico.bloqEspejo1":
+    "On this page you set what you recognize in yourself face to face with the archetypes of your chart: the mirror gives your gifts back to you with a name of their own.",
+  "metodo.psico.bloqEspejo2":
+    "You can write your gifts anyway, but to make it complete you need your birth chart.",
+  "metodo.psico.heridasApoyo": "Tap them or drag them to connect them.",
+  "metodo.psico.irAHeridas": "Go to Wounds →",
+  "metodo.psico.relacionesApoyo": "Each connection is a box. Give it a title and write what you see.",
+  "metodo.psico.relacionArrastra": "Tap or drag wounds and archetypes here.",
+  "metodo.psico.relacionActivar": "Press this box to make it active.",
+  "metodo.psico.relacionSinTitulo": "Untitled connection",
+  "metodo.psico.donesApoyo": "Name your gift and join your archetypes.",
+  "metodo.psico.donUne": "Tap what you remembered above, or a card from “Your archetypes”, to join it.",
+  "metodo.psico.donActivar": "Press this gift to make it active.",
+
+  // ── Psychology · the labels of the Synthesis notebook ──────────────────
+  "metodo.psico.sin.deDondeVengo": "Where I come from",
+  "metodo.psico.sin.loQueCargue": "What I carried",
+  "metodo.psico.sin.loQueDejoHuella": "What left a mark",
+  "metodo.psico.sin.losNudos": "The knots",
+  "metodo.psico.sin.loQueMeFalto": "What I didn't get",
+  "metodo.psico.sin.misHeridas": "My wounds",
+  "metodo.psico.sin.herida": "Wound",
+  "metodo.psico.sin.seFormoDe": "Made up of",
+  "metodo.psico.sin.comoMeRelaciono": "How I relate",
+  "metodo.psico.sin.piezasQueUniste": "The pieces you joined",
+  "metodo.psico.sin.misMiedos": "My fears",
+  "metodo.psico.sin.misDones": "My gifts",
+  "metodo.psico.sin.miCarta": "My letter",
+  "metodo.psico.sin.miCompromiso": "My commitment to myself",
+  "metodo.psico.sin.descargarMapa": "Download my map",
+  "metodo.psico.sin.descargarLinea": "Download my Life Line",
+  "metodo.psico.sin.preparandoPdf": "Preparing your PDF…",
+
+  // ── Psychology · the four compass questions ────────────────────────────
+  "metodo.psico.bru.herida": "Which wound has been activated?",
+  "metodo.psico.bru.necesidad": "What need is underneath?",
+  "metodo.psico.bru.miedo": "Which fear is talking?",
+  "metodo.psico.bru.don": "Which gift can you use now?",
+
+  // ── Psychology · the two commitment questions ──────────────────────────
+  "metodo.psico.compromisoP1": "What did you need that no one could give you?",
+  "metodo.psico.compromisoP2": "How can you start giving it to yourself today?",
+
+  // ── Psychology · the “My map” notebook (PDF) ───────────────────────────
+  // No arrows and no ✓ in here: the embedded Garamond drops them silently.
+  "metodo.psico.pdf.miMapa": "My map",
+  "metodo.psico.pdf.subtitulo": "Psychology · Your story, told by you",
+  "metodo.psico.pdf.pieLamina": "Each dot is one of the {n} steps you left written down.",
+  "metodo.psico.pdf.miRecorrido": "My journey",
+  "metodo.psico.pdf.deUnVistazo": "At a glance",
+  "metodo.psico.pdf.deUnVistazoApoyo":
+    "What's inside this notebook. It's here so you can come back in a few months without having to read it all again.",
+  "metodo.psico.pdf.relaciones": "Connections",
+  "metodo.psico.pdf.deDiez": "out of 10",
+  "metodo.psico.pdf.puntuacionAce": "ACE score",
+  "metodo.psico.pdf.aceResumen":
+    "Out of the ten questions in the ACE questionnaire, you answered yes to {n}. “What I carried” tells you what that means, and what it doesn't.",
+  "metodo.psico.pdf.noEsDiagnostico":
+    "None of what follows is a diagnosis. These are your words, put in order. The worth of this notebook isn't in what it says, but in the fact that you wrote it and can come back to it.",
+  "metodo.psico.pdf.donesApoyo": "What you know you have, written by you and by nobody else.",
+  "metodo.psico.pdf.cartaApoyo": "For when I feel stuck again.",
+  "metodo.psico.pdf.cierre":
+    "You weren't looking at your story to stay in it, but to transform it. This map is proof that you already started.",
+  "metodo.psico.pdf.archivo": "my-psychology-map.pdf",
+
+  // ── Psychology · the “My Life Line” notebook (PDF) ─────────────────────
+  "metodo.psico.pdfLinea.titulo": "My Life Line",
+  "metodo.psico.pdfLinea.subtitulo": "Psychology · Year by year, told by you",
+  "metodo.psico.pdfLinea.recorridos": "{n} of {total} years walked",
+  "metodo.psico.pdfLinea.huellaUna": ". {n} memory left a mark.",
+  "metodo.psico.pdfLinea.huellaVarias": ". {n} memories left a mark.",
+  "metodo.psico.pdfLinea.miHistoria": "My story",
+  "metodo.psico.pdfLinea.vistazoApoyo":
+    "How much Life is written in here. The blank years aren't a failure: they're room you left for when you come back.",
+  "metodo.psico.pdfLinea.aniosEscritos": "Years written",
+  "metodo.psico.pdfLinea.aniosDeVida": "Years of Life",
+  "metodo.psico.pdfLinea.vidaRecorrida": "Life walked",
+  "metodo.psico.pdfLinea.entera": "all of it",
+  "metodo.psico.pdfLinea.loEscribisteTu":
+    "Everything that follows you wrote yourself, in your words and in the order it happened. Nobody has interpreted anything: this is your memory, written out clean.",
+  "metodo.psico.pdfLinea.gestacionApoyo":
+    "What you know, were told or imagine about the time they were waiting for you.",
+  "metodo.psico.pdfLinea.etapaUnAnio": "age {n}",
+  "metodo.psico.pdfLinea.etapaTramo": "from age {desde} to age {hasta}",
+  "metodo.psico.pdfLinea.unAnio": "1 year old",
+  "metodo.psico.pdfLinea.nAnios": "{n} years old",
+  "metodo.psico.pdfLinea.enBlancoUno": "You don't keep any memories from age {a}.",
+  "metodo.psico.pdfLinea.enBlancoVarios": "You don't keep any memories from these years: {lista}.",
+  "metodo.psico.pdfLinea.enBlancoCierre": " Leaving them blank is telling your story too.",
+  "metodo.psico.pdfLinea.vaciaTitulo": "Your line, still blank",
+  "metodo.psico.pdfLinea.vaciaTexto":
+    "There's no year written yet. As soon as you start walking your Life line, every year you tell will show up here, with its questions and your words.",
+  "metodo.psico.pdfLinea.cierre":
+    "This is your Life told by you, which is the only version that matters. Come back whenever you like: there's always a year left to write.",
+  "metodo.psico.pdfLinea.archivo": "my-life-line.pdf",
 
   // ── Culture · step names ───────────────────────────────────────────────
   "metodo.cultura.paso.intro": "Introduction",

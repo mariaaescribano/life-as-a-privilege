@@ -43,13 +43,12 @@ import {
 import { useImagesReady } from "../../hooks/useImagesReady";
 import {
   experienciaById,
-  FAMILIA,
-  GENOGRAMA,
   personaLabel,
   personaSimbolos,
   SIMBOLOS_POR_PERSONA,
   type PersonaGenograma,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useFamilia, useGenograma } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowHeader, scrollAcuarela } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -68,6 +67,7 @@ export default function MetodoPsicologiaFamilia() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const familia = useFamilia();
 
   const { loading, personas, miFoto, añadir, actualizar, eliminar, flushGuardado } =
     useMapaFamilia(experienciaId);
@@ -109,8 +109,8 @@ export default function MetodoPsicologiaFamilia() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title={FAMILIA.titulo}
-                pageLabel="6/22"
+                title={familia.titulo}
+                step={{ current: 8, total: 25 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
@@ -123,14 +123,14 @@ export default function MetodoPsicologiaFamilia() {
                   disabled: !algunSimbolo,
                   disabledTooltip:
                     personas.length === 0
-                      ? "Coloca a tu familia con los «+» y elige el personaje o animal de cada uno."
-                      : "Elige el personaje o animal de al menos una persona para continuar.",
+                      ? t("metodo.psico.faltaFamiliaVacia")
+                      : t("metodo.psico.faltaFamiliaSimbolo"),
                 }}
               />
             </Reveal>
 
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>{FAMILIA.intro}</IntroRecorrido>
+              <IntroRecorrido>{familia.intro}</IntroRecorrido>
             </Reveal>
 
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
@@ -145,8 +145,8 @@ export default function MetodoPsicologiaFamilia() {
             <Reveal direction="up" distance={26} scaleFrom={0.97} delay={0.34} duration={0.7} w="100%">
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
                 {personas.length === 0
-                  ? "Toca un «+» junto a tu foto para colocar a alguien: arriba tus padres y abuelos, a los lados tus hermanos o tu pareja."
-                  : "Toca a cualquiera de los tuyos para elegir el personaje o el animal que se le parece."}
+                  ? t("metodo.psico.genogramaIntro")
+                  : t("metodo.psico.familiaAyuda")}
               </Text>
             </Reveal>
 
@@ -210,6 +210,8 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
   onClose: () => void;
 }) {
   const t = useT();
+  const familia = useFamilia();
+  const genograma = useGenograma();
   useLockBodyScroll(true);
   const [error, setError] = useState<string | null>(null);
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
@@ -306,7 +308,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
 
           {/* Parentescos sugeridos */}
           <Flex wrap="wrap" gap={1.5} mt={3}>
-            {GENOGRAMA.parentescos.map((par) => (
+            {genograma.parentescos.map((par) => (
               <Box as="button" key={par} onClick={() => onCampo({ parentesco: par })}
                    px={3} py={1.5} borderRadius="full"
                    bg={p.parentesco === par ? TINTA : "rgba(255,251,243,0.72)"}
@@ -328,11 +330,11 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
 
           <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3"
                 style={{ textShadow: INK_SHADOW }}>
-            {FAMILIA.eligeTitulo}
+            {familia.eligeTitulo}
           </Text>
           <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} mt={1} lineHeight="1.6"
                 style={{ textShadow: INK_SHADOW }}>
-            {FAMILIA.eligeApoyo}
+            {familia.eligeApoyo}
           </Text>
 
           {/* Cuántas lleva elegidas */}

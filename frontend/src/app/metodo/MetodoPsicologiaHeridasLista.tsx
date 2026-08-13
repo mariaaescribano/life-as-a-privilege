@@ -27,10 +27,10 @@ import { useComic } from "../../i18n/comics";
 import { useT } from "../../i18n";
 import {
   experienciaById,
-  HERIDAS_LISTA,
   type LineaDeVidaData,
   type RelacionHuellaNudo,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useHeridasLista } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -51,6 +51,7 @@ export default function MetodoPsicologiaHeridasLista() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const heridasLista = useHeridasLista();
 
   const [loading, setLoading] = useState(true);
   const [heridas, setHeridas] = useState<RelacionHuellaNudo[]>([]);
@@ -118,7 +119,7 @@ export default function MetodoPsicologiaHeridasLista() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 12, total: 23 }}
+            step={{ current: 14, total: 25 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: `← ${t("metodo.psico.paso.heridas")}`, onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); } }}
@@ -128,7 +129,7 @@ export default function MetodoPsicologiaHeridasLista() {
 
           {/* Frase de reconocimiento sobre el turquesa */}
           <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
-          <IntroRecorrido>{HERIDAS_LISTA.frase}</IntroRecorrido>
+          <IntroRecorrido>{heridasLista.frase}</IntroRecorrido>
           </Reveal>
 
           {heridas.length === 0 ? (

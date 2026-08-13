@@ -1,11 +1,16 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · REGULACIÓN (estimulación bilateral)  ·  8/13
+// PÁGINA · REGULACIÓN (estimulación bilateral)  ·  15/25
 //
 // Un espacio de DESCARGA y regulación del sistema nervioso. NO es EMDR clínico
 // ni sustituye a una terapia (así se le dice al usuario, sin ambigüedad).
 //
 //   1. Preparación · lugar seguro + la regla «trabaja con UNA cosa».
 //   2. Durante · audio bilateral (auriculares) + escritura libre.
+//
+// Si el test de desconexión (DES-II, paso 5) salió alto, ANTES del reproductor
+// aparece un aviso: primero volver al cuerpo, y solo después remover el
+// recuerdo. Es el cribado que se hace en EMDR antes de procesar — de ahí que el
+// resultado de aquel test se vuelva a usar justo aquí (ver `desAlto`).
 //
 // Datos: data.regulacion.texto = string  (autoguardado con debounce).
 // ─────────────────────────────────────────────────────────────────────────
@@ -29,11 +34,12 @@ import { Reveal } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
-  REGULACION,
+  desAlto,
   REGULACION_AUDIO_SRC,
   type LineaDeVidaData,
   type RegulacionData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useDesEsperanza, useRegulacion } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -62,8 +68,12 @@ export default function MetodoPsicologiaRegulacion() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const regulacion = useRegulacion();
+  const desEsperanza = useDesEsperanza();
 
   const [loading, setLoading] = useState(true);
+  // ¿Salió alta la desconexión (DES-II)? Entonces, antes del audio, un aviso.
+  const [avisoDes, setAvisoDes] = useState(false);
   // La persona puede añadir tantos fragmentos como quiera, uno debajo de otro.
   const [fragmentos, setFragmentos] = useState<string[]>([""]);
   // Cierre de grounding (popup): volver al presente antes de salir.
@@ -104,6 +114,7 @@ export default function MetodoPsicologiaRegulacion() {
         });
         const d: LineaDeVidaData = psi.data?.data || {};
         dataRef.current = d;
+        setAvisoDes(desAlto(d));
         // Migración: si ya hay fragmentos, los usamos; si no, arrancamos con el
         // texto legado (un único bloque) o con un box vacío para empezar.
         const frags = d.regulacion?.fragmentos;
@@ -252,7 +263,7 @@ export default function MetodoPsicologiaRegulacion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 13, total: 23 }}
+              step={{ current: 15, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.heridas")}`, onClick: irAHeridas }}
@@ -262,11 +273,31 @@ export default function MetodoPsicologiaRegulacion() {
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-            <IntroRecorrido>{REGULACION.intro}</IntroRecorrido>
+            <IntroRecorrido>{regulacion.intro}</IntroRecorrido>
             </Reveal>
 
             {/* «Antes de empezar» (preparación) ya no vive aquí: se abre como popup
                 desde el botón «Orientación» (ver AyudaRecorrido). */}
+
+            {/* ── Aviso si la desconexión salió alta (DES-II, paso 5) ── */}
+            {avisoDes && (
+              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
+              <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                   bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
+                <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+                <Flex position="relative" zIndex={1} direction="column" gap={{ base: 3.5, md: 4 }}
+                      px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
+                  <SeccionTitulo>{desEsperanza.avisoNarra.titulo}</SeccionTitulo>
+                  {desEsperanza.avisoNarra.texto.map((p, i) => (
+                    <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
+                          style={{ textShadow: INK_SHADOW }}>
+                      {p}
+                    </Text>
+                  ))}
+                </Flex>
+              </Box>
+              </Reveal>
+            )}
 
             {/* ── Reproductor del audio de estimulación bilateral ── */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%">
@@ -366,7 +397,7 @@ export default function MetodoPsicologiaRegulacion() {
                       <Textarea
                         value={frag}
                         onChange={(e) => editarFragmento(i, e.target.value)}
-                        placeholder={i === 0 ? REGULACION.placeholder : "Escribe lo que recuerdes…"}
+                        placeholder={regulacion.placeholder}
                         h={{ base: "180px", md: "220px" }}
                         maxH={{ base: "180px", md: "220px" }}
                         resize="none"
@@ -444,11 +475,11 @@ export default function MetodoPsicologiaRegulacion() {
 
               <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" pr={6} mb={2}
                     style={{ textShadow: INK_SHADOW }}>
-                {REGULACION.cierre.titulo}
+                {regulacion.cierre.titulo}
               </Text>
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.9} lineHeight="1.7" mb={6}
                     style={{ textShadow: INK_SHADOW }}>
-                {REGULACION.cierre.intro}
+                {regulacion.cierre.intro}
               </Text>
 
               <Box borderRadius="xl" bg="rgba(255,251,243,0.66)" border={`1px solid ${TINTA}33`}
@@ -456,10 +487,10 @@ export default function MetodoPsicologiaRegulacion() {
                    sx={{ backdropFilter: "blur(4px)" }}>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" fontStyle="italic"
                       lineHeight="1.6" mb={4} textAlign="center">
-                  {REGULACION.cierre.respiracion}
+                  {regulacion.cierre.respiracion}
                 </Text>
                 <Flex direction="column" gap={2.5}>
-                  {REGULACION.cierre.grounding.map((g, i) => (
+                  {regulacion.cierre.grounding.map((g, i) => (
                     <Flex key={i} align="center" gap={2.5}>
                       <Box as="span" color={ORO} fontSize="sm" flexShrink={0}
                            style={{ textShadow: `0 0 8px ${ORO}66` }}>✦</Box>
@@ -471,7 +502,7 @@ export default function MetodoPsicologiaRegulacion() {
 
               <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6" mb={7}
                     style={{ textShadow: INK_SHADOW }}>
-                {REGULACION.cierre.frase}
+                {regulacion.cierre.frase}
               </Text>
 
               <Box as="button" onClick={() => setCierreAbierto(false)} px={9} py={3} borderRadius="full"

@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL } from "../../../GlobalVariables";
 import { ZODIAC_SIGNS } from "../astrologiaData";
 import type { CartaNatal } from "./types";
+import { useT } from "../../../i18n";
 
 type CuerpoManual = "quiron" | "lilith" | "nodoNorte" | "nodoSur";
 
@@ -22,6 +23,7 @@ interface EditarCuerpoModalProps {
 }
 
 export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarCuerpoModalProps) {
+  const t = useT();
   const [planeta, setPlaneta] = useState<CuerpoManual>("quiron");
   const [signoIdx, setSignoIdx] = useState(0);
   const [gradoSigno, setGradoSigno] = useState("0");
@@ -36,11 +38,11 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
     const g = parseFloat(gradoSigno);
     const m = parseFloat(minutos);
     if (!Number.isFinite(g) || g < 0 || g >= 30) {
-      setError("El grado dentro del Signo debe estar entre 0 y 29");
+      setError(t("metodo.astro.ajustar.errorGrado"));
       return;
     }
     if (!Number.isFinite(m) || m < 0 || m >= 60) {
-      setError("Los minutos deben estar entre 0 y 59");
+      setError(t("metodo.astro.ajustar.errorMinutos"));
       return;
     }
     const gradoAbsoluto = signoIdx * 30 + g + m / 60;
@@ -60,7 +62,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
         { headers: { Authorization: `Bearer ${token}` } },
       );
       if (!res.data.success) {
-        setError(res.data.message || "No se pudo guardar");
+        setError(res.data.message || t("metodo.astro.ajustar.errorGuardar"));
         return;
       }
       if (res.data.carta) onUpdated(res.data.carta);
@@ -107,16 +109,16 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
           textAlign="center"
           style={{ textShadow: `0 0 12px ${color}99` }}
         >
-          Ajustar grados manualmente
+          {t("metodo.astro.ajustar.titulo")}
         </Text>
 
         <Text color={`${color}cc`} fontSize="sm" textAlign="center" fontStyle="italic" lineHeight="1.55">
-          Si edites el Nodo Norte, el Sur se sincroniza automáticamente (siempre 180° opuesto).
+          {t("metodo.astro.ajustar.nodos")}
         </Text>
 
         <Box>
           <Text color={`${color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
-            Cuerpo
+            {t("metodo.astro.ajustar.cuerpo")}
           </Text>
           <Select
             value={planeta}
@@ -135,7 +137,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
 
         <Box>
           <Text color={`${color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
-            Signo
+            {t("metodo.astro.ajustar.signo")}
           </Text>
           <Select
             value={signoIdx}
@@ -154,7 +156,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
         <Flex gap={3}>
           <Box flex="1">
             <Text color={`${color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
-              Grado (0-29)
+              {t("metodo.astro.ajustar.grado")}
             </Text>
             <Input
               type="number"
@@ -170,7 +172,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
           </Box>
           <Box flex="1">
             <Text color={`${color}aa`} fontSize="xs" letterSpacing="0.14em" mb={1.5} fontWeight="600" textTransform="uppercase">
-              Minutos (0-59)
+              {t("metodo.astro.ajustar.minutos")}
             </Text>
             <Input
               type="number"
@@ -205,7 +207,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
             _hover={{ bg: `${color}1a` }}
             transition="background 0.2s ease"
           >
-            Cancelar
+            {t("comun.cancelar")}
           </Box>
           <Box
             as="button"
@@ -224,7 +226,7 @@ export function EditarCuerpoModal({ isOpen, onClose, onUpdated, color }: EditarC
             _hover={{ boxShadow: `0 0 28px ${color}88` }}
             transition="box-shadow 0.2s ease"
           >
-            {saving ? "Guardando…" : "Guardar"}
+            {saving ? t("comun.guardando") : t("comun.guardar")}
           </Box>
         </Flex>
       </Box>

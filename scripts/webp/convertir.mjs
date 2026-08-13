@@ -476,6 +476,16 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/cultura/historiaciencia"],
   },
+  // Las 4 viñetas del cómic «La desconexión» (Psicología, test DES-II). Como el
+  // resto de viñetas nuevas: 1000 px de lado, que en el visor se ven a 440. La
+  // calidad sube a 88 y no 80 porque estas acuarelas van casi todas en oscuro y
+  // el dibujo son hilos dorados de un píxel: a 80 se empastan sobre el azul.
+  // El WebP no es opcional: comicDisociacion.ts las pide con la extensión escrita.
+  39: {
+    ladoMax: 1000,
+    calidad: 88,
+    carpetas: ["viñetas/psicologia/disociacion"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

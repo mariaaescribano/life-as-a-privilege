@@ -20,6 +20,7 @@ import { INTRO_PSICOLOGIA } from "./comicPsicologiaIntro";
 import { COMIC_COMPROMISO } from "./comicCompromiso";
 import { COMIC_ACE } from "./comicAce";
 import { COMIC_CREENCIAS } from "./comicCreencias";
+import { COMIC_DISOCIACION } from "./comicDisociacion";
 import { COMIC_LINEA_TIEMPO } from "./comicLineaTiempo";
 import { COMIC_SINTESIS } from "./comicSintesis";
 import {
@@ -102,7 +103,7 @@ const psicoEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]
 });
 
 // ── Cómics de Psicología que van INTERCALADOS en el recorrido ──────────────
-// Estos cuatro no forman parte de las «Ilustraciones» del material (así lo dice
+// Estos cinco no forman parte de las «Ilustraciones» del material (así lo dice
 // cada uno de sus archivos): viven dentro de su paso del recorrido, no en la
 // galería. Aquí se listan aparte, SIN entrar en ILUSTRACIONES, porque la
 // presentación pública de Psicología (/d/psicologia) sí los enseña: son
@@ -110,6 +111,7 @@ const psicoEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]
 export const PSICOLOGIA_COMICS_RECORRIDO: IlustracionEntry[] = [
   psicoEntry("psico-creencias", "Cómo nacen las creencias", "/viñetas/psicologia/creencias/creencias1.webp", COMIC_CREENCIAS, "psicologia-creencias"),
   psicoEntry("psico-ace", "Los ACE", "/viñetas/psicologia/ace/ace1.webp", COMIC_ACE, "psicologia-ace"),
+  psicoEntry("psico-disociacion", "La desconexión", "/viñetas/psicologia/disociacion/disociacion1.webp", COMIC_DISOCIACION, "psicologia-disociacion"),
   psicoEntry("psico-linea", "La Línea de Vida", "/viñetas/psicologia/lineatiempo/lineatiempo1.webp", COMIC_LINEA_TIEMPO, "psicologia-linea-tiempo"),
   psicoEntry("psico-sintesis", "El problema nunca es el problema", "/viñetas/psicologia/sintesis/sintesis1.webp", COMIC_SINTESIS, "psicologia-sintesis"),
 ];

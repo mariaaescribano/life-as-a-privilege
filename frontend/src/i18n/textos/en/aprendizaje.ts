@@ -48,6 +48,16 @@ export const aprendizaje = {
   "alimentos.favoritos": "My favorite foods",
   "alimentos.sinFavoritos": "You haven't marked any foods as favorites yet.",
 
+  // ── Astrology services modal (chart readings) ──────────────────────────
+  "astroServicios.titulo": "✦ Astrology Services ✦",
+  "astroServicios.ascSolLuna": "Getting to know my Ascendant, Sun and Moon in depth",
+  "astroServicios.lectura": "Birth chart reading",
+  "astroServicios.lecturaProfunda": "In-depth birth chart reading",
+  "astroServicios.tuEmail": "Your email",
+  "astroServicios.enviado": "Message sent!",
+  "astroServicios.enviadoPie": "I'll get in touch with you very soon.",
+  "astroServicios.error": "Something went wrong. Please try again.",
+
   "ficha.beneficios": "Benefits",
   "ficha.formaDeUso": "How to use it",
   "ficha.comoConsumirlo": "How to eat it",

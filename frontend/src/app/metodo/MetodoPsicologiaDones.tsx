@@ -23,10 +23,10 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import {
   experienciaById,
-  DONES_PREGUNTAS,
   type LineaDeVidaData,
   type DonesData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useDonesPreguntas } from "../../components/metodo/psicologiaRecorrido.en";
 import { AZUL, glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
@@ -36,7 +36,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
-import { useT } from "../../i18n";
+import { traducir, useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
@@ -47,6 +47,7 @@ export default function MetodoPsicologiaDones() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const donesPreguntas = useDonesPreguntas();
 
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, string>>({});
@@ -135,8 +136,8 @@ export default function MetodoPsicologiaDones() {
   if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
-  const total = DONES_PREGUNTAS.length;
-  const p = DONES_PREGUNTAS[paso];
+  const total = donesPreguntas.length;
+  const p = donesPreguntas[paso];
   const esPrimera = paso === 0;
   const esUltima = paso === total - 1;
   const anterior = () => setPaso((i) => Math.max(0, i - 1));
@@ -176,7 +177,7 @@ export default function MetodoPsicologiaDones() {
   // Una pregunta queda resuelta con texto o marcada «sin ideas». El espejo solo
   // se abre cuando TODAS están resueltas.
   const estaResuelta = (key: string) => (respuestas[key] || "").trim().length > 0 || sinIdeas.includes(key);
-  const resueltas = DONES_PREGUNTAS.filter((q) => estaResuelta(q.key)).length;
+  const resueltas = donesPreguntas.filter((q) => estaResuelta(q.key)).length;
   const todoResuelto = resueltas === total;
 
   // Antes de navegar (atrás o adelante) forzamos el guardado del estado actual y
@@ -199,7 +200,7 @@ export default function MetodoPsicologiaDones() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 15, total: 23 }}
+              step={{ current: 17, total: 25 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.relacion")}`, onClick: irARelacion }}
@@ -207,7 +208,7 @@ export default function MetodoPsicologiaDones() {
                 label: `${t("metodo.psico.paso.dones")} →`,
                 onClick: irAEspejo,
                 disabled: !todoResuelto,
-                disabledTooltip: "Responde o marca «Sin ideas» las 15 preguntas para descubrir tus dones.",
+                disabledTooltip: t("metodo.psico.faltaDones"),
               }}
             />
             </Reveal>
@@ -259,7 +260,7 @@ export default function MetodoPsicologiaDones() {
                          fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
                          boxShadow={`0 2px 12px ${TINTA}3a`} transition="all 0.18s"
                          _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 16px ${TINTA}5a` }}>
-                      {esUltima ? "Guardar" : "Siguiente →"}
+                      {esUltima ? t("comun.guardar") : t("metodo.psico.siguienteFlecha")}
                     </Box>
                   </Flex>
                 </Flex>
@@ -273,11 +274,11 @@ export default function MetodoPsicologiaDones() {
             <Flex align="center" justify="center" gap={{ base: 3, md: 5 }} w="100%">
               <FlechaPagina dir="prev" disabled={esPrimera} onClick={anterior} />
               <Flex justify="center" align="center" wrap="wrap" gap={2} maxW="520px">
-                {DONES_PREGUNTAS.map((q, i) => {
+                {donesPreguntas.map((q, i) => {
                   const hecha = estaResuelta(q.key);
                   const activo = i === paso;
                   return (
-                    <Box key={q.key} as="button" onClick={() => setPaso(i)} title={`Pregunta ${i + 1}`}
+                    <Box key={q.key} as="button" onClick={() => setPaso(i)} title={t("metodo.psico.preguntaN", { n: i + 1 })}
                          w={activo ? "24px" : "10px"} h="10px" borderRadius="full"
                          bg={activo ? PAPEL : hecha ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.28)"}
                          boxShadow={activo ? "0 0 10px rgba(255,255,255,0.6)" : "none"}
@@ -321,7 +322,7 @@ const FlechaPagina = ({ dir, disabled, onClick }: { dir: "prev" | "next"; disabl
     opacity={disabled ? 0.5 : 1}
     transition="all 0.2s ease"
     _hover={disabled ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 14px ${AZUL}66, 0 0 30px ${AZUL}33` }}
-    aria-label={dir === "prev" ? "Anterior" : "Siguiente"}
+    aria-label={dir === "prev" ? traducir("comun.anterior") : traducir("comun.siguiente")}
   >
     {dir === "prev" ? "←" : "→"}
   </Box>

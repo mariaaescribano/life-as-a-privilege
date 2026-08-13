@@ -36,9 +36,9 @@ import {
   aceScore,
   aceBanda,
   aceCompleto,
-  MIEDOS_PREGUNTAS,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
+import { useMiedosPreguntas } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
   API_URL,
@@ -85,6 +85,7 @@ export default function MetodoPsicologiaSintesis() {
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
+  const miedosPreguntas = useMiedosPreguntas();
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<LineaDeVidaData>({});
@@ -192,10 +193,10 @@ export default function MetodoPsicologiaSintesis() {
   const b = data.brujula || {};
   const brujulaMensaje = (b.mensaje || "").trim();
   const brujulaPreg: [string, string][] = [
-    ["¿Qué herida se ha activado?", (b.herida || "").trim()],
-    ["¿Qué necesidad hay debajo?", (b.necesidad || "").trim()],
-    ["¿Qué miedo está hablando?", (b.miedo || "").trim()],
-    ["¿Qué don puedes utilizar ahora?", (b.don || "").trim()],
+    [t("metodo.psico.bru.herida"), (b.herida || "").trim()],
+    [t("metodo.psico.bru.necesidad"), (b.necesidad || "").trim()],
+    [t("metodo.psico.bru.miedo"), (b.miedo || "").trim()],
+    [t("metodo.psico.bru.don"), (b.don || "").trim()],
   ].filter(([, v]) => v) as [string, string][];
   const hayBrujula = !!brujulaMensaje || brujulaPreg.length > 0;
 
@@ -210,7 +211,7 @@ export default function MetodoPsicologiaSintesis() {
   const bloques: { titulo: string; node: React.ReactNode }[] = [];
 
   if (problemas.length > 0) bloques.push({
-    titulo: "De dónde vengo",
+    titulo: t("metodo.psico.sin.deDondeVengo"),
     node: (
       <Cascada gap={{ base: 3, md: 3.5 }}>
         {problemas.map((p, i) => <Item key={i}><Cita texto={p} /></Item>)}
@@ -219,7 +220,7 @@ export default function MetodoPsicologiaSintesis() {
   });
 
   if (aceListo && banda) bloques.push({
-    titulo: "Lo que cargué",
+    titulo: t("metodo.psico.sin.loQueCargue"),
     node: (
       <RevealStagger inView once amount={0.18} stagger={0.22} delayChildren={0.1}
         display="flex" flexDirection={{ base: "column", md: "row" }}
@@ -245,21 +246,21 @@ export default function MetodoPsicologiaSintesis() {
     ),
   });
 
-  if (huellas.length > 0) bloques.push({ titulo: "Lo que dejó huella", node: <Puntos items={huellas} /> });
-  if (nudos.length > 0) bloques.push({ titulo: "Los nudos", node: <Puntos items={nudos} /> });
-  if (necesidades.length > 0) bloques.push({ titulo: "Lo que me faltó", node: <Chips items={necesidades} /> });
+  if (huellas.length > 0) bloques.push({ titulo: t("metodo.psico.sin.loQueDejoHuella"), node: <Puntos items={huellas} /> });
+  if (nudos.length > 0) bloques.push({ titulo: t("metodo.psico.sin.losNudos"), node: <Puntos items={nudos} /> });
+  if (necesidades.length > 0) bloques.push({ titulo: t("metodo.psico.sin.loQueMeFalto"), node: <Chips items={necesidades} /> });
 
   if (heridas.length > 0) bloques.push({
-    titulo: "Mis heridas",
+    titulo: t("metodo.psico.sin.misHeridas"),
     node: (
       <Cascada gap={{ base: 3.5, md: 4 }}>
         {heridas.map((h) => (
           <Item key={h.id}>
             <Cita
-              titulo={(h.titulo || "").trim() || "Herida"}
+              titulo={(h.titulo || "").trim() || t("metodo.psico.sin.herida")}
               texto={(h.texto || "").trim()}
               piezas={[...(h.huellas || []), ...(h.nudos || []), ...(h.necesidades || [])].filter(Boolean)}
-              piezasLabel="Se formó de"
+              piezasLabel={t("metodo.psico.sin.seFormoDe")}
             />
           </Item>
         ))}
@@ -268,16 +269,16 @@ export default function MetodoPsicologiaSintesis() {
   });
 
   if (relaciones.length > 0) bloques.push({
-    titulo: "Cómo me relaciono",
+    titulo: t("metodo.psico.sin.comoMeRelaciono"),
     node: (
       <Cascada gap={{ base: 3.5, md: 4 }}>
         {relaciones.map((c) => (
           <Item key={c.id}>
             <Cita
-              titulo={(c.titulo || "").trim() || "Relación"}
+              titulo={(c.titulo || "").trim() || t("metodo.psico.paso.relacion")}
               texto={(c.texto || "").trim()}
               piezas={[...(c.nudos || []), ...(c.arquetipos || []).map((a) => arquetipoLabel(a))].filter(Boolean)}
-              piezasLabel="Piezas que uniste"
+              piezasLabel={t("metodo.psico.sin.piezasQueUniste")}
               preguntas={INTEGRACION_PREGUNTAS
                 .map((p) => ({ pregunta: t(p.label), resp: ((c[p.key] as string) || "").trim() }))
                 .filter((x) => x.resp)}
@@ -289,14 +290,14 @@ export default function MetodoPsicologiaSintesis() {
   });
 
   if (miedos.length > 0) bloques.push({
-    titulo: "Mis miedos",
+    titulo: t("metodo.psico.sin.misMiedos"),
     node: (
       <Cascada gap={{ base: 3.5, md: 4 }}>
         {miedos.map((m) => (
           <Item key={m.id}>
             <MiedoCard
               texto={(m.texto || "").trim()}
-              respuestas={MIEDOS_PREGUNTAS
+              respuestas={miedosPreguntas
                 .map((p) => ({ pregunta: p.pregunta, resp: (m.respuestas?.[p.key] || "").trim() }))
                 .filter((x) => x.resp)}
             />
@@ -307,7 +308,7 @@ export default function MetodoPsicologiaSintesis() {
   });
 
   if (dones.length > 0) bloques.push({
-    titulo: "Mis dones",
+    titulo: t("metodo.psico.sin.misDones"),
     node: (
       <Cascada wrap gap={2.5}>
         {dones.map((x, i) => (
@@ -326,7 +327,7 @@ export default function MetodoPsicologiaSintesis() {
   });
 
   if (hayBrujula) bloques.push({
-    titulo: "Mi carta",
+    titulo: t("metodo.psico.sin.miCarta"),
     node: (
       <Box>
         <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} mb={3} style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.paraCuandoVuelva")}</Text>
@@ -342,14 +343,14 @@ export default function MetodoPsicologiaSintesis() {
   });
 
   if (hayCompromiso) bloques.push({
-    titulo: "Mi compromiso conmigo mismo",
+    titulo: t("metodo.psico.sin.miCompromiso"),
     node: (
       <Cascada gap={{ base: 3.5, md: 4 }}>
         {(comp.necesitaste || "").trim() && (
-          <Item><PreguntaRespuesta pregunta="¿Qué necesitaste que nadie pudo darte?" respuesta={(comp.necesitaste as string).trim()} /></Item>
+          <Item><PreguntaRespuesta pregunta={t("metodo.psico.compromisoP1")} respuesta={(comp.necesitaste as string).trim()} /></Item>
         )}
         {(comp.dartelo || "").trim() && (
-          <Item><PreguntaRespuesta pregunta="¿Cómo puedes empezar a dártelo hoy?" respuesta={(comp.dartelo as string).trim()} /></Item>
+          <Item><PreguntaRespuesta pregunta={t("metodo.psico.compromisoP2")} respuesta={(comp.dartelo as string).trim()} /></Item>
         )}
       </Cascada>
     ),
@@ -371,7 +372,7 @@ export default function MetodoPsicologiaSintesis() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 22, total: 23 }}
+                step={{ current: 24, total: 25 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.carta")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
@@ -418,7 +419,7 @@ export default function MetodoPsicologiaSintesis() {
                 <CajaDescarga
                   titulo={t("metodo.psico.llevateMapa")}
                   texto={t("metodo.psico.descargaCuaderno")}
-                  boton="Descargar mi mapa"
+                  boton={t("metodo.psico.sin.descargarMapa")}
                   descargando={descargando}
                   onClick={descargarPdf}
                   mt={{ base: 9, md: 12 }}
@@ -427,7 +428,7 @@ export default function MetodoPsicologiaSintesis() {
                 <CajaDescarga
                   titulo={t("metodo.psico.llevateLinea")}
                   texto={t("metodo.psico.descargaCuaderno")}
-                  boton="Descargar mi línea de Vida"
+                  boton={t("metodo.psico.sin.descargarLinea")}
                   descargando={descargandoLinea}
                   onClick={descargarLineaPdf}
                   mt={{ base: 5, md: 7 }}
@@ -439,7 +440,7 @@ export default function MetodoPsicologiaSintesis() {
         </Flex>
       </Box>
 
-      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de psicología" />
+      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo={t("metodo.psico.reservaLlamada")} />
 
       {/* «Volver arriba» · discreto, abajo a la derecha (sobre «¿Quieres compañía?»).
           Sube hasta la cabecera para que el usuario pueda seguir el recorrido. */}
@@ -481,6 +482,7 @@ function CajaDescarga({ titulo, texto, boton, descargando, onClick, mt }: {
   onClick: () => void;
   mt?: any;
 }) {
+  const t = useT();
   const icono = (
     <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
   );
@@ -534,7 +536,7 @@ function CajaDescarga({ titulo, texto, boton, descargando, onClick, mt }: {
                 {icono}
               </Box>
             )}
-            {descargando ? "Preparando tu PDF…" : boton}
+            {descargando ? t("metodo.psico.sin.preparandoPdf") : boton}
           </Box>
         </Flex>
       </Box>
