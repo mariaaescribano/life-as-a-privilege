@@ -116,15 +116,15 @@ export default function MetodoNutricion() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-            title="Nutrición"
+            title={t("disciplina.nutricion")}
             compact
             bgColor={`${nutricionBg}dd`}
             color={nutricionTxt}
             nom={nutricionNom}
             mb={0}
-            prev={{ label: "← Fisiología", onClick: () => navigate("/metodo/fisiologia/cursos") }}
+            prev={{ label: `← ${t("disciplina.fisiologia")}`, onClick: () => navigate("/metodo/fisiologia/cursos") }}
             extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
-            next={{ label: "Comenzar →", onClick: comenzar }}
+            next={{ label: `${t("fisiologia.comenzar")} →`, onClick: comenzar }}
           />
           </Reveal>
 

@@ -19,6 +19,7 @@ import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
@@ -32,6 +33,7 @@ const Candado = ({ size }: { size: any }) => (
 );
 
 export default function MetodoAyurvedaDoshaCursos() {
+  const t = useT();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
@@ -108,12 +110,12 @@ export default function MetodoAyurvedaDoshaCursos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "52px" }} />}
-            title="Cursos de Ayurveda"
+            title={t("metodo.ayur.paso.cursos")}
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Prāṇāyāma", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/pranayama`) }}
+            prev={{ label: `← ${t("metodo.ayur.paso.pranayama")}`, onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/pranayama`) }}
             extra={ilustracionesBtn}
             next={tcmSuscrito
               ? { label: "Med. China →", onClick: onMedChina }
@@ -129,9 +131,7 @@ export default function MetodoAyurvedaDoshaCursos() {
             textAlign="center"
             lineHeight="1.8"
             maxW="680px"
-          >
-            Si quieres profundizar en el Ayurveda, estos cursos te acompañan paso a paso.
-          </Text>
+          >{t("metodo.cursosIntro", { disciplina: t("disciplina.ayurveda") })}</Text>
           </Reveal>
 
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
@@ -174,9 +174,7 @@ export default function MetodoAyurvedaDoshaCursos() {
             >
               <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">
-                <Text color={`${ayurvedaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8">
-                  Pronto encontrarás aquí los cursos de Ayurveda.
-                </Text>
+                <Text color={`${ayurvedaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8">{t("metodo.cursosPronto", { disciplina: t("disciplina.ayurveda") })}</Text>
               </Box>
             </Box>
           )}

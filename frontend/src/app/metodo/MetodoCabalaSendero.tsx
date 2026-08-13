@@ -13,12 +13,11 @@ import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustrac
 import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
 import { CabalaFotoIlustracion } from "../../components/metodo/CabalaFotoIlustracion";
 import {
-  CABALA_SENDERO_VINETAS,
   fotoSenderoIlustracion,
   indiceIlustracionSendero,
 } from "../../components/metodo/cabalaSenderoIlustraciones";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
-import { ESCALA } from "../../components/metodo/cabalaTest";
+import { useEscala, useSendero, useVinetasSenderos } from "../../components/metodo/cabalaEn";
 import { CABALA_TOTAL_PAGINAS, paginaSendero } from "../../components/metodo/cabalaSefirot";
 import {
   CABALA_SENDEROS,
@@ -32,6 +31,7 @@ import {
 } from "../../components/metodo/cabalaSenderos";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
+import { useT } from "../../i18n";
 import { flushSaves } from "../../utils/flushSaves";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
@@ -83,9 +83,14 @@ const Parrafos = ({ items }: { items: string[] }) => (
 
 // Ojo del botón "Ilustraciones" (se pinta a la izquierda del texto). El mismo
 export default function MetodoCabalaSendero() {
+  const t = useT();
   const navigate = useNavigate();
   const { num } = useParams<{ num: string }>();
-  const sendero: SenderoContenido | undefined = num ? senderoPorNum[Number(num)] : undefined;
+  // El contenido del sendero en el idioma activo (lo que falte se lee en
+  // español). El `num`, la letra y el signo hebreo no se traducen.
+  const sendero: SenderoContenido | undefined = useSendero(num ? Number(num) : undefined);
+  const escala = useEscala();
+  const vinetasSenderos = useVinetasSenderos();
 
   const [loading, setLoading] = useState(true);
   const [ilusOpen, setIlusOpen] = useState(false);
@@ -196,12 +201,12 @@ export default function MetodoCabalaSendero() {
               nom={cabalaNom}
               mb={0}
               prev={prevNum
-                ? { label: `← ${senderoPorNum[prevNum]?.letra ?? "Anterior"}`, onClick: () => void ir(`/metodo/cabala/sendero/${prevNum}`) }
-                : { label: "← Los senderos", onClick: () => void ir("/metodo/cabala/senderos") }}
-              extra={{ label: "Ilustraciones", onClick: () => setIlusOpen(true)}}
+                ? { label: `← ${senderoPorNum[prevNum]?.letra ?? t("comun.anterior")}`, onClick: () => void ir(`/metodo/cabala/sendero/${prevNum}`) }
+                : { label: `← ${t("metodo.cabala.paso.senderos")}`, onClick: () => void ir("/metodo/cabala/senderos") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlusOpen(true)}}
               next={nextNum
-                ? { label: `${senderoPorNum[nextNum]?.letra ?? "Siguiente"} →`, onClick: () => void ir(`/metodo/cabala/sendero/${nextNum}`), disabled: !completo, disabledTooltip: "Completa el test de este sendero para pasar a la siguiente letra" }
-                : { label: "Diagnóstico →", onClick: () => void ir("/metodo/cabala/senderos/diagnostico"), disabled: !contenidoSenderos, disabledTooltip: "Completa el test de los 22 senderos para ver tu Diagnóstico" }}
+                ? { label: `${senderoPorNum[nextNum]?.letra ?? t("comun.siguiente")} →`, onClick: () => void ir(`/metodo/cabala/sendero/${nextNum}`), disabled: !completo, disabledTooltip: t("metodo.cabala.sendero.completaEste") }
+                : { label: `${t("metodo.cabala.paso.diagnostico")} →`, onClick: () => void ir("/metodo/cabala/senderos/diagnostico"), disabled: !contenidoSenderos, disabledTooltip: t("metodo.cabala.sendero.completaLos22") }}
             />
           </Reveal>
 
@@ -233,7 +238,7 @@ export default function MetodoCabalaSendero() {
                 <Box>
                   <Text color={`${cabalaTxt}cc`} fontSize="sm" letterSpacing="0.18em" textTransform="uppercase"
                         style={{ textShadow: INK_SHADOW }}>
-                    Sendero {sendero.letra}
+                    {t("metodo.cabala.sendero.sendero", { letra: sendero.letra })}
                   </Text>
                   <Text color={cabalaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.15" mt={1}
                         style={{ textShadow: `0 0 20px ${cabalaTxt}55` }}>
@@ -258,7 +263,7 @@ export default function MetodoCabalaSendero() {
 
           {!tieneContenido && (
             <Text color="rgba(255,255,255,0.85)" fontStyle="italic" textAlign="center" style={{ textShadow: INK_SHADOW }}>
-              Contenido próximamente.
+              {t("metodo.cabala.sefira.contenidoPronto")}
             </Text>
           )}
 
@@ -266,7 +271,7 @@ export default function MetodoCabalaSendero() {
           {sendero.significadoTradicional && (
             <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
               <Caja>
-                <TituloCaja>Significado tradicional</TituloCaja>
+                <TituloCaja>{t("metodo.cabala.sendero.significado")}</TituloCaja>
                 <Divisor />
                 <Text color={`${cabalaTxt}f2`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" whiteSpace="pre-line"
                       style={{ textShadow: INK_SHADOW }}>
@@ -280,7 +285,7 @@ export default function MetodoCabalaSendero() {
           {sendero.traduccionPsicologica && (
             <Reveal direction="up" distance={20} delay={0.14} duration={0.6} w="100%">
               <Caja>
-                <TituloCaja>Traducción psicológica</TituloCaja>
+                <TituloCaja>{t("metodo.cabala.sendero.psicologica")}</TituloCaja>
                 <Divisor />
                 <Text color={`${cabalaTxt}f2`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" whiteSpace="pre-line"
                       style={{ textShadow: INK_SHADOW }}>
@@ -304,7 +309,7 @@ export default function MetodoCabalaSendero() {
           {sendero.une.length > 0 && (
             <Reveal direction="up" distance={20} delay={0.18} duration={0.6} w="100%">
               <Caja>
-                <TituloCaja>¿Qué une este sendero?</TituloCaja>
+                <TituloCaja>{t("metodo.cabala.sendero.queUne")}</TituloCaja>
                 <Divisor />
                 <Parrafos items={sendero.une} />
               </Caja>
@@ -315,7 +320,7 @@ export default function MetodoCabalaSendero() {
           {sendero.test.length > 0 && (
             <Reveal direction="up" distance={22} delay={0.2} duration={0.65} w="100%">
               <Caja>
-                <TituloCaja>Test</TituloCaja>
+                <TituloCaja>{t("metodo.cabala.sendero.test")}</TituloCaja>
                 <Divisor />
                 {sendero.testTitulo && (
                   <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.5" mb={2} style={{ textShadow: INK_SHADOW }}>
@@ -324,7 +329,7 @@ export default function MetodoCabalaSendero() {
                 )}
                 {/* Leyenda de la escala (qué significa cada número 1–5) */}
                 <Flex gap={{ base: 2, md: 4 }} mb={5} wrap="wrap">
-                  {ESCALA.map((op) => (
+                  {escala.map((op) => (
                     <Text key={op.valor} color={`${cabalaTxt}cc`} fontSize="xs" style={{ textShadow: INK_SHADOW }}>
                       <Box as="span" fontWeight="800" color={cabalaTxt}>{op.valor}</Box> {op.label}
                     </Text>
@@ -354,7 +359,7 @@ export default function MetodoCabalaSendero() {
                             inputMode="numeric"
                             pattern="[0-9]*"
                             maxLength={1}
-                            aria-label={`Respuesta pregunta ${qi + 1} (1 a 5)`}
+                            aria-label={t("metodo.cabala.sendero.respuestaN", { n: qi + 1 })}
                             placeholder="—"
                             value={relleno ? String(val) : ""}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -395,16 +400,16 @@ export default function MetodoCabalaSendero() {
             <Reveal direction="up" distance={22} delay={0.24} duration={0.65} w="100%">
               <Caja>
                 <Flex align="baseline" justify="space-between" gap={3} wrap="wrap">
-                  <TituloCaja>Interpretación</TituloCaja>
+                  <TituloCaja>{t("metodo.cabala.sendero.interpretacion")}</TituloCaja>
                   {completo && (
-                    <Text color={cabalaTxt} fontSize="sm" fontWeight="700">Tu puntuación: {total}</Text>
+                    <Text color={cabalaTxt} fontSize="sm" fontWeight="700">{t("metodo.cabala.sendero.tuPuntuacion", { total })}</Text>
                   )}
                 </Flex>
                 <Divisor />
                 {!completo && (
                   <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={4}
                         style={{ textShadow: INK_SHADOW }}>
-                    Responde las 5 preguntas para ver tu interpretación.
+                    {t("metodo.cabala.sendero.responde5")}
                   </Text>
                 )}
                 <RevealStagger inView display="flex" flexDirection="column" gap={3}>
@@ -436,11 +441,11 @@ export default function MetodoCabalaSendero() {
           {sendero.senales.length > 0 && (
             <Reveal direction="up" distance={20} delay={0.28} duration={0.6} w="100%">
               <Caja>
-                <TituloCaja>Señales de desequilibrio</TituloCaja>
+                <TituloCaja>{t("metodo.cabala.sendero.senales")}</TituloCaja>
                 <Divisor />
                 <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5}
                       style={{ textShadow: INK_SHADOW }}>
-                  Durante esta semana observa si…
+                  {t("metodo.cabala.sendero.observaSi")}
                 </Text>
                 <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
                   {sendero.senales.map((s, i) => (
@@ -462,7 +467,7 @@ export default function MetodoCabalaSendero() {
           {sendero.umbral && (
             <Reveal direction="up" distance={20} delay={0.3} duration={0.6} w="100%">
               <Caja>
-                <TituloCaja>Has cruzado este umbral cuando…</TituloCaja>
+                <TituloCaja>{t("metodo.cabala.sendero.umbral")}</TituloCaja>
                 <Divisor />
                 <Text color={`${cabalaTxt}ff`} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.8"
                       style={{ textShadow: INK_SHADOW }}>
@@ -491,8 +496,8 @@ export default function MetodoCabalaSendero() {
             // este sendero; en el último, se exige tener los 22 completos.
             const bloqueado = nextNum ? !completo : !contenidoSenderos;
             const tooltip = nextNum
-              ? "Completa el test de este sendero para pasar a la siguiente letra"
-              : "Completa el test de los 22 senderos para ver tu Diagnóstico";
+              ? t("metodo.cabala.sendero.completaEste")
+              : t("metodo.cabala.sendero.completaLos22");
             return (
               <Reveal direction="up" distance={14} delay={0.4} duration={0.6} display="flex" justifyContent="center">
                 <Box as="button"
@@ -514,7 +519,7 @@ export default function MetodoCabalaSendero() {
                      style={bloqueado ? undefined : { textShadow: `0 0 14px ${cabalaTxt}66` }}
                      cursor={bloqueado ? "not-allowed" : "pointer"} transition="all 0.18s" sx={{ backdropFilter: "blur(2px)" }}
                      _hover={bloqueado ? undefined : { bg: `${cabalaTxt}2e`, transform: "translateY(-2px)", boxShadow: `0 0 26px ${cabalaTxt}88, 0 0 60px ${cabalaTxt}3a, 0 8px 26px rgba(0,0,0,0.4)` }}>
-                  {nextNum ? "Siguiente sendero" : "Ver diagnóstico"}
+                  {nextNum ? t("metodo.cabala.sendero.siguiente") : t("metodo.cabala.sendero.verDiagnostico")}
                   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
                     <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
                   </Box>
@@ -537,7 +542,7 @@ export default function MetodoCabalaSendero() {
           secuencia de los 22 para poder seguir con las flechas. */}
       <CabalaSefiraIlustracionModal
         isOpen={fotoOpen}
-        vinetas={CABALA_SENDERO_VINETAS}
+        vinetas={vinetasSenderos}
         initialIndex={indiceIlustracionSendero(sendero.num)}
         onClose={() => setFotoOpen(false)}
       />

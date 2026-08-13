@@ -18,6 +18,7 @@ import {
   VataIcon, PittaIcon, KaphaIcon,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 import { DOSHA_CUIDARTE } from "../../hardCoded/metodo/doshaCuidarte";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 
@@ -127,6 +128,7 @@ function CheckRow({ label, checked, onToggle, tono }: { label: string; checked: 
 }
 
 export default function MetodoAyurvedaDoshaCuidarte() {
+  const t = useT();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
@@ -217,7 +219,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           <Flex direction="column" align="center" w="100%" maxW="640px" gap={6}>
             <MetodoStepHeader
               icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-              title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+              title={<>{t("metodo.ayur.doshaRotulo")} <Box as="span" color={meta.color}>{meta.label}</Box></>}
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
@@ -227,7 +229,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
             />
             <Panel color={meta.color}>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={3} style={{ textShadow: INK_SHADOW }}>
-                Estoy preparando esta sección
+                {t("metodo.ayur.preparando")}
               </Text>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
                 Tu alimentación ideal para {meta.label} estará disponible muy pronto.
@@ -251,7 +253,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            title={<>{t("metodo.ayur.doshaRotulo")} <Box as="span" color={meta.color}>{meta.label}</Box></>}
             pageLabel="5/7"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
@@ -259,7 +261,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
             mb={0}
             prev={{ label: "← Equilibrio", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/desequilibrio`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Estilo de Vida →", onClick: irEstilo }}
+            next={{ label: `${t("metodo.ayur.paso.estilo")} →`, onClick: irEstilo }}
           />
           </Reveal>
 
@@ -434,7 +436,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
                 display="inline-flex" alignItems="center" gap={2.5}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` }}
               >
-                Estilo de Vida →
+                {`${t("metodo.ayur.paso.estilo")} →`}
               </Box>
             </Flex>
           </Panel>

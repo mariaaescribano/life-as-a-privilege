@@ -7,7 +7,9 @@
  */
 export const elMetodo = {
   "elMetodo.titulo": "EL MAPA",
-  "elMetodo.subtitulo": "del 'Vivir como Privilegio'",
+  /** El nombre de la casa es un nombre propio: se escribe en inglés también en
+   *  español (ver `header.marca` y src/i18n/GLOSARIO.md). */
+  "elMetodo.subtitulo": "de 'Life as a Privilege'",
   "elMetodo.lema": "Ocho disciplinas. Un orden. Un propósito: entenderte.",
   "elMetodo.intro":
     "No son ocho cursos independientes.\nEs una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.",
@@ -37,7 +39,7 @@ export const elMetodo = {
   // ── 1. HERO ────────────────────────────────────────────────────────────
   // Lo primero que lee un desconocido. El titular NO nombra el producto: nombra
   // lo que le pasa a quien llega. La marca queda arriba, en pequeño.
-  "elMetodo.hero.marca": "EL MAPA · del 'Vivir como Privilegio'",
+  "elMetodo.hero.marca": "EL MAPA · de 'Life as a Privilege'",
   "elMetodo.hero.titulo": "Llevas años intentando cambiarte.\n Pero quizá antes necesitas entenderte.",
   "elMetodo.hero.sub":
     "El Mapa reúne ocho perspectivas sobre ti —mente, historia, cuerpo, naturaleza y cultura— para ayudarte a comprender de dónde vienen tus patrones y cómo encajan las piezas.",

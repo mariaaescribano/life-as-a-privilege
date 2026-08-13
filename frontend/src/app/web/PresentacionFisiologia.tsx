@@ -17,7 +17,8 @@ import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
-import { celulas, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
+import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
+import { useCelulas } from "../../hardCoded/espacio/useCelulas";
 import { TEMAS_PROFUNDIZA } from "../../hardCoded/espacio/ProfundizaFisiologia";
 import {
   BLANCO_GLOW_SUAVE,
@@ -96,9 +97,10 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
   );
 
   // Las células que se enseñan, en el orden de CELULAS_MUESTRA.
+  const celulas = useCelulas();
   const muestra = useMemo(
     () => CELULAS_MUESTRA.map((id) => celulas.find((c) => c.id === id)).filter(Boolean) as Celula[],
-    [],
+    [celulas],
   );
   const celula = celulaIdx != null ? muestra[celulaIdx] : null;
   const saltaCelula = (paso: number) =>

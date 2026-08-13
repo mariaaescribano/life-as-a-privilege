@@ -114,15 +114,15 @@ export default function MetodoPsicologiaHeridasLista() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-            title="Tus heridas"
+            title={t("metodo.psico.paso.tusHeridas")}
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             step={{ current: 12, total: 23 }}
             mb={0}
             boxShadow={glowHeader}
-            prev={{ label: "← Heridas", onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); } }}
-            next={{ label: "Narra →", onClick: async () => { await flushSaves(); setComicOpen(true); } }}
+            prev={{ label: `← ${t("metodo.psico.paso.heridas")}`, onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); } }}
+            next={{ label: `${t("metodo.psico.narra")} →`, onClick: async () => { await flushSaves(); setComicOpen(true); } }}
           />
           </Reveal>
 
@@ -138,14 +138,12 @@ export default function MetodoPsicologiaHeridasLista() {
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={4} px={6} py={{ base: 12, md: 16 }} textAlign="center">
                 <HeridaIcon size={30} color={TINTA} opacity={0.45} />
                 <Text color={TINTA} fontStyle="italic" opacity={0.85} fontSize={{ base: "md", md: "lg" }}
-                      style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                  Todavía no has guardado ninguna herida.
-                </Text>
+                      style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{t("metodo.psico.sinHeridas")}</Text>
                 <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`)}
                      px={6} py={2.5} borderRadius="full" bg={TINTA} fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                      letterSpacing="0.04em" cursor="pointer" boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`}
                      _hover={{ transform: "translateY(-2px)" }} transition="all 0.18s">
-                  <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>← Crear mis heridas</Box>
+                  <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.crearMisHeridas")}</Box>
                 </Box>
               </Flex>
             </Box>

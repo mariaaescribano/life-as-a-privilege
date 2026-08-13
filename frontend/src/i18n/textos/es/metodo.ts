@@ -59,6 +59,11 @@ export const metodo = {
   "metodo.cursosOrientativos": "Cursos orientativos de {disciplina}",
   "metodo.cursosPronto": "Pronto encontrarás aquí los cursos de {disciplina}.",
   "metodo.cursosIntro": "Si quieres profundizar en {disciplina}, estos cursos te acompañan paso a paso.",
+  /** Estado vacío de la página de cursos: dos frases, título y explicación. */
+  "metodo.cursosPreparando": "Estoy preparando los cursos",
+  "metodo.cursosDe": "Cursos de {disciplina}",
+  "metodo.cursosAvanzadosPronto":
+    "Pronto podrás profundizar aquí con cursos avanzados de {disciplina}. Mientras tanto, continúa el Mapa con la siguiente disciplina.",
 
   // ── «Crea tus propios apuntes» · la pantalla compartida ────────────────
   // Solo los rótulos de la pantalla: los capítulos del cuaderno (su título y su
@@ -122,7 +127,56 @@ export const metodo = {
     "Estas son algunas de las preguntas y mitos que más se repiten. Toca cada uno para descubrir qué dice de verdad la ciencia.",
   "metodo.nutri.paso.origen": "¿De dónde vienen?",
   "metodo.nutri.paso.cursos": "Cursos",
+  /** Los dos nombres largos que solo se ven en el Índice. */
+  "metodo.nutri.paso.prediabetes": "Test de prevención",
+  "metodo.nutri.paso.cursosProfundizar": "Cursos para profundizar",
   "metodo.nutri.paso.biblioteca": "Biblioteca",
+  "metodo.nutri.paso.bibliotecaTitulo": "Biblioteca de Nutrición",
+  "metodo.nutri.paso.hambreTitulo": "El hambre: una mirada holística",
+  "metodo.nutri.paso.microbiotaTitulo": "La microbiota",
+  "metodo.nutri.paso.platoTitulo": "Crea el plato de Harvard",
+  "metodo.nutri.paso.caloriasTitulo": "Tus calorías y macros",
+  "metodo.nutri.paso.origenTitulo": "¿Cómo se crean los alimentos?",
+
+  // ── Nutrición · la Biblioteca ──────────────────────────────────────────
+  "metodo.nutri.biblioteca.intro":
+    "Todo lo que has descubierto en Nutrición, reunido en un mismo sitio. Elige por dónde entrar.",
+  "metodo.nutri.biblioteca.molecular": "Alimentación molecular",
+  "metodo.nutri.biblioteca.molecularPie":
+    "Elige un alimento y descubre de qué moléculas está hecho.",
+  "metodo.nutri.biblioteca.ilustracionesPie":
+    "Todos los cómics de Nutrición reunidos para releerlos.",
+  "metodo.nutri.biblioteca.respuestas": "Respuestas",
+  "metodo.nutri.biblioteca.respuestasPie":
+    "Las preguntas y mitos más frecuentes, uno a uno.",
+
+  // ── Nutrición · sueltos de los pasos ───────────────────────────────────
+  "metodo.nutri.entendido": "Entendido",
+  "metodo.nutri.tocaMolecula": "Toca cada molécula para ver qué hace dentro de ti.",
+  "metodo.nutri.tocaGrupo":
+    "Toca cada grupo para descubrir sus tipos, qué hacen dentro de ti y dónde encontrarlo.",
+  "metodo.nutri.verIlustracion": "Ver ilustración",
+  "metodo.nutri.foto": "Foto",
+  "metodo.nutri.crearAlimento": "Crea tu alimento",
+  "metodo.nutri.microbiotaIntro":
+    "No estás viendo bacterias. Estás viendo a los habitantes de tu intestino.",
+  "metodo.nutri.microbiotaMoleculas":
+    "Tres de las moléculas más importantes que fabrican las bacterias de tu intestino.",
+  /** «Crea el plato de Harvard». */
+  "metodo.nutri.platoIntro":
+    "Pulsa cada parte del plato para ver sus alimentos y arrástralos encima. Construye un plato equilibrado con algo de cada grupo.",
+  "metodo.nutri.platoHecho": "¡Plato equilibrado! 🎉 Tienes algo de cada grupo.",
+  "metodo.nutri.platoVaciar": "Vaciar plato",
+  "metodo.nutri.platoArrastra": "Arrastra estos alimentos al plato",
+  /** «Cuenta lo que comes». */
+  "metodo.nutri.macros.lema": "Aprende lo que de verdad te ayudará a ser tu mejor versión...",
+  "metodo.nutri.macros.intro":
+    "Nadie te enseñó a mirar un plato y saber lo que lleva. Se aprende como se aprende a calcular distancias: fallando y volviendo a mirar. No hace falta acertar el gramo exacto —basta con no equivocarte de tamaño—.",
+  "metodo.nutri.macros.cuantosGramos": "¿Cuántos gramos crees que lleva esta ración?",
+  "metodo.nutri.macros.comprobar": "Comprobar",
+  "metodo.nutri.macros.tuApuesta": "Tu apuesta (hueco) y el dato real (macizo)",
+  "metodo.nutri.macros.otraRonda": "Otra ronda de diez",
+  "metodo.nutri.macros.ronda": "Ronda",
   /** Frase de cierre de «El hambre», sobre el turquesa y sin caja. */
   "metodo.nutri.hambreCierre":
     "Lo has visto tú mismo; te reconstruyes con lo que comes, ¿cómo eliges hoy reconstruirte?",
@@ -212,6 +266,35 @@ export const metodo = {
   "metodo.astro.signoSinElegir": "Signo aún no elegido",
   "metodo.astro.casaSinElegir": "Casa aún no elegida",
   "metodo.astro.leer": "Leer",
+  "metodo.astro.yaLeido": "Ya leído",
+  "metodo.astro.yaLeida": "Ya leída",
+  "metodo.astro.leida": "Leída",
+  "metodo.astro.completado": "Completado",
+  "metodo.astro.regente": "Regente",
+  "metodo.astro.regenteCorto": "Reg.",
+  "metodo.astro.giraLaRueda": "Gira la rueda o toca una Casa",
+  "metodo.astro.sinAspectos": "No hay aspectos calculados todavía.",
+  "metodo.astro.aspectoSinLectura":
+    "Aún no he escrito la lectura de este aspecto. Estará disponible pronto.",
+  "metodo.astro.casaSinLectura":
+    "Aún no he escrito la lectura de esta Casa. Estará disponible pronto.",
+  "metodo.astro.profundizarSinTexto":
+    "El texto de profundización para esta combinación aún no está disponible. Lo añadiré pronto.",
+  /** Bloqueo secuencial de los aspectos: se lee planeta a planeta. */
+  "metodo.astro.terminaAspectosDe":
+    "Termina de leer los aspectos de {planeta} para desbloquear este planeta.",
+  "metodo.astro.pulsaEstrella": "Pulsa sobre cada estrella para descubrir tus puntos clave.",
+  "metodo.astro.puntosClavePronto": "Tus puntos clave aparecerán aquí muy pronto.",
+  "metodo.astro.llamadaIntro":
+    "Integra tus arquetipos: agenda una llamada y no te quedes con dudas.",
+  "metodo.astro.pdfIntro": "Tu lectura entera, en un archivo que ya es tuyo para siempre.",
+  "metodo.astro.pdfTitular": "Toda tu carta, página a página",
+  "metodo.astro.pdfSinLecturas":
+    "Tu carta todavía no tiene lecturas escritas. En cuanto estén, aquí podrás descargarla completa.",
+  "metodo.astro.pdfDescargado":
+    "Descargado. Si no lo ves, mira en la carpeta de descargas de tu navegador.",
+  "metodo.astro.pdfAviso":
+    "Se monta en tu propio dispositivo, así que puede tardar unos segundos y conviene no cerrar la página mientras avanza.",
   "metodo.astro.releer": "Releer",
 
   // ── Astrología · «Lo primero de tu carta» (Sol · Luna · Ascendente) ────
@@ -606,6 +689,63 @@ export const metodo = {
   "metodo.ayur.paso.descubrete": "Descúbrete",
   "metodo.ayur.paso.doshas": "Doṣhas",
   "metodo.ayur.paso.pranayama": "Prāṇāyāma",
+  "metodo.ayur.paso.cuerpo": "Cuerpo",
+  "metodo.ayur.paso.equilibrio": "Equilibrio",
+  "metodo.ayur.paso.cuidarte": "Cuidarte",
+  "metodo.ayur.paso.estilo": "Estilo de Vida",
+  "metodo.ayur.paso.tuDia": "Tu día",
+  "metodo.ayur.paso.tuMapa": "Tu Mapa",
+  "metodo.ayur.paso.resultado": "Resultado",
+  "metodo.ayur.paso.test": "Test",
+  "metodo.ayur.paso.testDoshas": "Test de los Doṣhas",
+  "metodo.ayur.paso.equilibra": "Equilibra",
+  "metodo.ayur.paso.naturaleza": "Naturaleza",
+  "metodo.ayur.elMapa": "El mapa de Ayurveda",
+  "metodo.ayur.tuDosha": "Tu doṣha · {dosha}",
+  "metodo.ayur.recorridoDosha": "El recorrido de un doṣha",
+  "metodo.ayur.notaSubmapa":
+    "Estas páginas son de cada doṣha. Entra en uno desde «Doṣhas» y se abren aquí.",
+  "metodo.ayur.paso.alimentacion": "Alimentación",
+  "metodo.ayur.paso.energias": "Energías",
+  "metodo.ayur.paso.tresDoshas": "Los tres Doṣhas",
+  "metodo.ayur.paso.cursos": "Cursos de Ayurveda",
+
+  // ── Ayurveda · las páginas del doṣha (las seis comparten andamiaje) ─────
+  /** Cabecera de cada página: «Doṣha: Vata». El nombre lo pinta la página con
+   *  el color del doṣha, así que la clave solo trae el rótulo de delante. */
+  "metodo.ayur.doshaRotulo": "Doṣha:",
+  "metodo.ayur.preparando": "Estoy preparando esta sección",
+  "metodo.ayur.escribela": "Escríbela aquí…",
+  "metodo.ayur.escribelo": "Escríbelo aquí…",
+  "metodo.ayur.guardaReflexion": "Guarda tu reflexión de arriba para continuar.",
+  "metodo.ayur.guardaRespuesta": "Guarda tu respuesta de arriba para continuar.",
+  /** Aviso del botón bloqueado (más corto: cabe en un tooltip). */
+  "metodo.ayur.guardaReflexionCorto": "Guarda tu reflexión para continuar.",
+  "metodo.ayur.guardaRespuestaCorto": "Guarda tu respuesta para continuar.",
+  "metodo.ayur.bienvenido": "Bienvenido a tu naturaleza",
+  "metodo.ayur.hasMarcado": "Has marcado",
+  "metodo.ayur.tuDoshaPrincipal": "Tu Doṣha principal es",
+  "metodo.ayur.resultadoPie":
+    "Esta es tu constitución según el test. En los siguientes pasos del Mapa iremos descubriendo qué significa para ti.",
+  "metodo.ayur.tarjetasIntro":
+    "Los tres Doṣhas viven en ti, pero unos predominan más que otros. Descúbrelos primero.",
+  "metodo.ayur.predomina": "Predomina en ti",
+  "metodo.ayur.mapaTitulo": "Este ha sido tu mapa",
+  "metodo.ayur.mapaIntro":
+    "A lo largo del camino te has ido escuchando. Estas son las palabras que te dejaste a ti mismo.",
+  "metodo.ayur.descargarMapa": "Descargar mi mapa",
+  /** Prāṇāyāma. */
+  "metodo.ayur.practicado": "Practicado ✓",
+  "metodo.ayur.empezar": "Empezar",
+  "metodo.ayur.parar": "Parar",
+  "metodo.ayur.repetir": "Repetir",
+  "metodo.ayur.yaHicisteTest": "Ya hiciste el test",
+  "metodo.ayur.verMiResultado": "Ver mi resultado →",
+  "metodo.ayur.repetirTest": "Repetir el test",
+  "metodo.ayur.cuidado": "Cuidado: ",
+  "metodo.ayur.sigueElCirculo":
+    "Sigue el círculo: crece cuando entra el aire y se encoge cuando sale. Si te agobia, para.",
+  "metodo.ayur.pararEsPracticar": "Parar también es practicar.",
 
   // ── Ayurveda · «Crea tu día equilibrado» ───────────────────────────────
   "metodo.ayurDia.titulo": "Crea tu día equilibrado",
@@ -659,6 +799,134 @@ export const metodo = {
   "metodo.cabala.exceso":
     "la tienes de sobra y empieza a volverse en tu contra (rigidez, autoexigencia, no saber parar). El trabajo es soltar, no añadir.",
 
+  // ── Cábala · capítulos de sus Ilustraciones ────────────────────────────
+  "metodo.cabalaIlus.origen": "El Origen",
+  "metodo.cabalaIlus.sefirot": "Las 10 Sefirot",
+  "metodo.cabalaIlus.senderos": "Los 22 Senderos",
+
+  // ── Cábala · el relato de cada transición del Mapa Evolutivo ───────────
+  // Cuando la transición NO es un bloqueo, el texto se arma con el nombre de las
+  // dos sefirot y su tema. El relato de los bloqueos es contenido y vive en
+  // cabalaDiagnostico(.en).ts.
+  "metodo.cabala.diag.sinBase":
+    "Todavía no hay base suficiente en {from}. Antes de trabajar este sendero conviene desarrollar primero {from} ({eFrom}).",
+  "metodo.cabala.diag.invertida":
+    "Has desarrollado más {eTo} ({to}) que {eFrom} ({from}). Conviene reforzar la base de {from} para que {to} tenga una dirección más sólida.",
+  "metodo.cabala.diag.fluida":
+    "Conviertes con fluidez {eFrom} en {eTo}. Esta transición fluye bien.",
+  "metodo.cabala.diag.repasar": "Repasar {sefira}",
+  "metodo.cabala.diag.trabajar": "Trabajar {sefira}",
+  "metodo.cabala.diag.ningunaDestaca": "Ninguna destaca todavía.",
+  "metodo.cabala.diag.ningunaBaja": "Ninguna especialmente baja.",
+
+  // ── Cábala · nombres de paso (índice y botones «anterior/siguiente») ────
+  // Un paso se escribe UNA vez: el mismo nombre sirve para el índice, para el
+  // botón que lleva a él («Nombre →») y para el que vuelve («← Nombre») desde
+  // la página vecina. Los títulos del índice salen de aquí, así que `cabalaIndice`
+  // es una función (ver la nota en cabalaRecorrido.ts).
+  "metodo.cabala.paso.intro": "Introducción",
+  "metodo.cabala.paso.arbol": "El Árbol de la Vida",
+  "metodo.cabala.paso.arbolCorto": "El Árbol",
+  "metodo.cabala.paso.diagnostico": "Diagnóstico",
+  "metodo.cabala.paso.senderos": "Los Senderos",
+  "metodo.cabala.paso.senderos22": "Los 22 Senderos",
+  "metodo.cabala.paso.senderosDiag": "Diagnóstico de los Senderos",
+  "metodo.cabala.paso.senderosDiagCorto": "Senderos",
+  "metodo.cabala.paso.final": "Diagnóstico final",
+  "metodo.cabala.paso.dias": "10 días con tus dimensiones",
+  "metodo.cabala.paso.diasCorto": "10 días",
+
+  // ── Cábala · El Árbol de la Vida (paso 2) ──────────────────────────────
+  "metodo.cabala.arbolDesbloquea":
+    "Descubre la ilustración de todas las sefirot para desbloquear el recorrido",
+
+  // ── Cábala · la página de cada sefirá ──────────────────────────────────
+  // Solo los rótulos: el contenido de cada dimensión (su intro, sus listas, su
+  // clave de desarrollo) vive en cabalaSefirot(.en).ts.
+  "metodo.cabala.sefira.escala": "Escala de equilibrio",
+  "metodo.cabala.sefira.puntua": "Puntúa cada frase del **1** (nunca) al **10** (siempre).",
+  "metodo.cabala.sefira.equilibrado": "Equilibrado",
+  "metodo.cabala.sefira.desequilibrado": "Desequilibrado",
+  "metodo.cabala.sefira.autoevaluacion": "Autoevaluación (1–10)",
+  "metodo.cabala.sefira.autoevalCorto": "Autoevaluación",
+  "metodo.cabala.sefira.clave": "Clave de desarrollo",
+  "metodo.cabala.sefira.contenidoPronto": "Contenido próximamente.",
+  "metodo.cabala.sefira.noGuardado":
+    "No se ha podido guardar. Revisa tu conexión y vuelve a intentarlo.",
+  "metodo.cabala.sefira.teQueda": "Para seguir te queda por completar {falta}.",
+  "metodo.cabala.sefira.faltaAutoeval": "la autoevaluación",
+  "metodo.cabala.sefira.faltaEscala": "la escala de equilibrio",
+  "metodo.cabala.sefira.faltaOtra":
+    "Para ver tu Diagnóstico falta el contenido de alguna otra sefirá.",
+  "metodo.cabala.sefira.completaDimension":
+    "Completa todo lo que se pide en esta dimensión para continuar",
+  "metodo.cabala.sefira.rellenaTodas":
+    "Rellena el contenido de todas las sefirot para ver tu Diagnóstico",
+
+  // ── Cábala · Los 22 Senderos (el Árbol en modo senderos) ───────────────
+  "metodo.cabala.senderos.intro":
+    "Si las sefirot son estados, los senderos son el movimiento entre ellos. Toca cualquiera de los 22 caminos para ver su ilustración. Cuando los hayas descubierto todos, se desbloqueará el recorrido.",
+  "metodo.cabala.senderos.recorrer": "Recorrer",
+  "metodo.cabala.senderos.desbloquea":
+    "Descubre la ilustración de los 22 senderos para recorrerlos uno a uno",
+  "metodo.cabala.senderos.comenzarPor": "Comenzar por {letra}",
+  "metodo.cabala.senderos.descubreTodos": "Descubre los 22 senderos para empezar",
+
+  // ── Cábala · la página de cada sendero ─────────────────────────────────
+  // Rótulos de la plantilla. El contenido de los 22 (significado, test, bandas)
+  // vive en cabalaSenderos(.en).ts.
+  "metodo.cabala.sendero.sendero": "Sendero {letra}",
+  "metodo.cabala.sendero.significado": "Significado tradicional",
+  "metodo.cabala.sendero.psicologica": "Traducción psicológica",
+  "metodo.cabala.sendero.queUne": "¿Qué une este sendero?",
+  "metodo.cabala.sendero.test": "Test",
+  "metodo.cabala.sendero.interpretacion": "Interpretación",
+  "metodo.cabala.sendero.tuPuntuacion": "Tu puntuación: {total}",
+  "metodo.cabala.sendero.responde5": "Responde las 5 preguntas para ver tu interpretación.",
+  "metodo.cabala.sendero.senales": "Señales de desequilibrio",
+  "metodo.cabala.sendero.observaSi": "Durante esta semana observa si…",
+  "metodo.cabala.sendero.umbral": "Has cruzado este umbral cuando…",
+  "metodo.cabala.sendero.siguiente": "Siguiente sendero",
+  "metodo.cabala.sendero.verDiagnostico": "Ver diagnóstico",
+  "metodo.cabala.sendero.respuestaN": "Respuesta pregunta {n} (1 a 5)",
+  "metodo.cabala.sendero.completaEste":
+    "Completa el test de este sendero para pasar a la siguiente letra",
+  "metodo.cabala.sendero.completaLos22":
+    "Completa el test de los 22 senderos para ver tu Diagnóstico",
+
+  // ── Cábala · Diagnóstico de los Senderos ───────────────────────────────
+  "metodo.cabala.senderosDiag.intro":
+    "Cada sendero es una transición entre dos capacidades. Aquí se reúne el resultado de tus 22 tests para mostrar qué caminos fluyen y cuáles piden más trabajo.",
+  "metodo.cabala.senderosDiag.completados": "{n}/{total} senderos completados",
+  "metodo.cabala.senderosDiag.faltan": "Aún faltan senderos por recorrer",
+  "metodo.cabala.senderosDiag.faltanTexto":
+    "Completa el test de los 22 senderos para recibir tu diagnóstico final. Cada respuesta se guarda automáticamente; puedes continuar cuando quieras.",
+  "metodo.cabala.senderosDiag.prioritarios": "Tus senderos prioritarios",
+  "metodo.cabala.senderosDiag.fluyen": "Tus transiciones fluyen",
+  "metodo.cabala.senderosDiag.fluyenTexto":
+    "No aparece ningún sendero con una resistencia marcada. Sigue observándote: el equilibrio se sostiene practicándolo.",
+  "metodo.cabala.senderosDiag.los22": "Los 22 senderos",
+
+  // ── Cábala · Diagnóstico final ─────────────────────────────────────────
+  "metodo.cabala.final.intro":
+    "Aquí se reúne todo tu recorrido: tus dimensiones (las sefirot) y tus transiciones (los senderos). Puedes descargarlo para guardarlo y volver a él cuando quieras.",
+  "metodo.cabala.final.descargar": "Descargar mi diagnóstico",
+  "metodo.cabala.final.preparando": "Preparando tu PDF…",
+  "metodo.cabala.final.tusDimensiones": "Tus dimensiones",
+  "metodo.cabala.final.tusSenderos": "Tus senderos",
+
+  // ── Cábala · 10 días con tus dimensiones ───────────────────────────────
+  "metodo.cabala.dias.intro":
+    "Diez días, una dimensión cada día. Dedica la jornada a observar y practicar la sefirá que toca, apoyándote en su ejercicio. No se trata de hacerlo perfecto, sino de habitar cada energía un día entero.",
+  "metodo.cabala.dias.omerTitulo": "Una tradición: la Cuenta del Omer (Sefirat HaOmer)",
+  /** Las **negritas** se pintan en cursiva aquí: es el nombre de la práctica. */
+  "metodo.cabala.dias.omerTexto":
+    "En la Cábala existe una práctica milenaria en la que, día a día, uno se centra en un atributo concreto del alma: la **Cuenta del Omer** (Sefirat HaOmer). Dura 49 días (siete semanas por siete sefirot) y cada jornada trabaja una combinación —por ejemplo, «Gevurah dentro de Chesed»—. Este trabajo de 10 días es una adaptación más breve: una sefirá por día, para que empieces a reconocer cada energía en tu Vida cotidiana.",
+  "metodo.cabala.dias.dia": "Día {n}",
+  "metodo.cabala.dias.reflexiona": "Reflexiona a lo largo del día",
+  "metodo.cabala.dias.cierre":
+    "“Al décimo día, el Árbol ya no está fuera de ti: lo reconoces en tu forma de vivir.”",
+
   // ── Psicología · Línea de Vida ─────────────────────────────────────────
   "metodo.psico.lineaEnhorabuena": "Has reconstruido tu Vida entera. Enhorabuena por no abandonarte.",
   "metodo.psico.buscaFotos": "Se recomienda buscar fotos de todas las edades de tu Vida.",
@@ -694,6 +962,205 @@ export const metodo = {
   "metodo.psico.volumen": "Volumen",
   "metodo.psico.quitarFragmento": "Quitar este fragmento",
 
+  // ── Psicología · nombres de los pasos ──────────────────────────────────
+  // Los pinta la cabecera de cada página, el índice y los botones que llevan
+  // de un paso al de al lado: una sola clave para los tres sitios.
+  "metodo.psico.paso.vuelveATi": "Vuelve a ti",
+  "metodo.psico.paso.problemas": "Problemas",
+  "metodo.psico.paso.resultadoAce": "Resultado ACE",
+  "metodo.psico.paso.cursosCorto": "Cursos",
+  "metodo.psico.paso.ace": "ACE",
+  "metodo.psico.paso.aceResultado": "Tu resultado",
+  "metodo.psico.paso.familia": "Tu familia",
+  "metodo.psico.paso.genograma": "Genograma",
+  "metodo.psico.paso.huellas": "Huellas",
+  "metodo.psico.paso.nudos": "Nudos",
+  "metodo.psico.paso.necesidades": "Necesidades",
+  "metodo.psico.paso.heridas": "Heridas",
+  "metodo.psico.paso.tusHeridas": "Tus heridas",
+  "metodo.psico.paso.relacion": "Relación",
+  "metodo.psico.paso.recuerdate": "Recuérdate",
+  "metodo.psico.paso.dones": "Dones",
+  "metodo.psico.paso.miedos": "Miedos",
+  "metodo.psico.paso.atrevete": "Atrévete",
+  "metodo.psico.paso.integracion": "Integración",
+  "metodo.psico.paso.compromiso": "Compromiso",
+  "metodo.psico.paso.carta": "Carta",
+  "metodo.psico.paso.sintesis": "Síntesis",
+  "metodo.psico.paso.cursos": "Cursos para profundizar",
+
+  // ── Psicología · test ACE ──────────────────────────────────────────────
+  "metodo.psico.guardando": "Guardando…",
+  "metodo.psico.testTerminado": "Has terminado el test.",
+  "metodo.psico.testTerminadoPie":
+    "Vamos a ver qué significa tu resultado y cómo estas experiencias influyen en ti hoy.",
+  "metodo.psico.verMiResultado": "Ver mi resultado →",
+  "metodo.psico.queSignificaAce": "¿Qué significa tu resultado ACE?",
+  "metodo.psico.tuPuntuacionAce": "Tu puntuación ACE",
+  "metodo.psico.aceRiesgo":
+    "Cuantas más experiencias adversas, mayor es el riesgo de enfermedades y dificultades.",
+  "metodo.psico.continuarLinea": "Continuar a Línea de Vida →",
+
+  // ── Psicología · la carta a tu yo del futuro ───────────────────────────
+  "metodo.psico.cartaIntro":
+    "Escríbete una carta para el próximo momento difícil. No para juzgarte: para recordar el camino que ya conoces.",
+  "metodo.psico.cartaTitular": "Cuando vuelvas a bloquearte, recuerda...",
+  "metodo.psico.cartaGracias": "Gracias por no abandonarte.",
+  "metodo.psico.cartaPlaceholder":
+    "Yo del futuro, cuando vuelvas a sentirte bloqueado, recuerda…",
+
+  // ── Psicología · compromiso ────────────────────────────────────────────
+  "metodo.psico.compromisoIntro":
+    "Ya entiendes tu historia. Toma conciencia de lo que no pudieron darte y comprométete a tratarte con un poco más de cariño cada día.",
+  "metodo.psico.compromisoFalta": "Lo que más eché en falta fue…",
+  "metodo.psico.compromisoHoy": "Hoy puedo empezar a dármelo…",
+
+  // ── Psicología · cursos ────────────────────────────────────────────────
+  "metodo.psico.cursosIntro":
+    "Si quieres profundizar en la psicología humana, estos cursos te acompañarán paso a paso.",
+
+  // ── Psicología · Recuérdate y Dones ────────────────────────────────────
+  "metodo.psico.sinIdeas": "Sin ideas",
+  "metodo.psico.escribeLoPrimero": "Escribe lo primero que te venga, sin pensarlo mucho…",
+  "metodo.psico.loQueRecordaste": "Lo que recordaste de ti",
+  "metodo.psico.tocaParaUnir": "Toca lo que quieras unir al don activo.",
+  "metodo.psico.sinRecuerdate": "Aún no has respondido las preguntas de «Recuérdate».",
+  "metodo.psico.irARecuerdate": "Ir a Recuérdate →",
+  "metodo.psico.donesVacio":
+    "Pulsa «Añadir don», ponle nombre y toca las cartas de «Tus arquetipos» para unirlas.",
+  "metodo.psico.anadirDon": "+ Añadir don",
+  "metodo.psico.tusArquetipos": "Tus arquetipos",
+  "metodo.psico.tusDones": "Tus dones",
+  "metodo.psico.nombraTuDon": "Nombra tu don…",
+  "metodo.psico.borrarDon": "Borrar don",
+
+  // ── Psicología · familia y genograma ───────────────────────────────────
+  "metodo.psico.tocaParaCambiarla": "· toca una elegida para cambiarla",
+  "metodo.psico.genogramaIntro":
+    "Toca un «+» junto a tu foto para colocar a alguien: arriba tus padres y abuelos, a los lados tus hermanos o tu pareja.",
+  "metodo.psico.quitarDelMapa": "¿Quitarla del mapa?",
+  "metodo.psico.siQuitar": "Sí, quitar",
+  "metodo.psico.no": "No",
+  "metodo.psico.hecho": "Hecho ✓",
+  "metodo.psico.suNombre": "Su nombre…",
+  "metodo.psico.parentesco": "Parentesco (madre, abuelo…)",
+
+  // ── Psicología · huellas, nudos y heridas ──────────────────────────────
+  "metodo.psico.sinHeridas": "Todavía no has guardado ninguna herida.",
+  "metodo.psico.crearMisHeridas": "← Crear mis heridas",
+  "metodo.psico.huellasIntro": "Recorre tu historia. Marca con ◈ los recuerdos que dejaron huella en ti.",
+  "metodo.psico.sinRecuerdos":
+    "Todavía no has escrito recuerdos en tu línea de Vida. Vuelve atrás y visita los años que quieras recordar.",
+  "metodo.psico.sinRecuerdosAnio": "Sin recuerdos escritos este año.",
+  "metodo.psico.marcarHuella": "Marcar que dejó huella",
+  "metodo.psico.heridasIntro":
+    "Una experiencia que deja Huella puede dejar una necesidad emocional sin cubrir. Para dar sentido a ese dolor y evitar que vuelva a repetirse, la mente crea un Nudo: una creencia protectora que, aunque nace para ayudarnos, acaba limitando nuestra forma de vivir. La unión de la experiencia, la necesidad no cubierta y ese nudo constituye una Herida emocional.",
+  "metodo.psico.heridaEnCurso": "Tu herida en curso",
+  "metodo.psico.tocaParaReunir": "Toca huellas, nudos y necesidades para reunir una herida.",
+  "metodo.psico.heTerminadoHerida": "He terminado esta herida",
+  "metodo.psico.ponleNombreHerida": "Ponle nombre a tu herida",
+  "metodo.psico.seguirEligiendo": "Seguir eligiendo",
+  "metodo.psico.guardarHerida": "Guardar herida",
+  "metodo.psico.ejHerida": "Ej.: La herida del abandono…",
+
+  // ── Psicología · relación e integración ────────────────────────────────
+  "metodo.psico.relacionIntro":
+    "Tus arquetipos muestran dónde y cómo fuiste herido. Relaciona tus Heridas con tus Arquetipos, ponles nombre y deja de cargar con ellas en silencio.",
+  "metodo.psico.relacionVacio": "Pulsa «Añadir relación» y empieza a reunir heridas y arquetipos.",
+  "metodo.psico.anadirRelacion": "+ Añadir relación",
+  "metodo.psico.sinHeridasAun": "Aún no has creado tus heridas.",
+  "metodo.psico.tusRelaciones": "Tus relaciones",
+  "metodo.psico.tituloRelacion": "Título de la relación…",
+  "metodo.psico.borrarRelacion": "Borrar relación",
+  "metodo.psico.queRelacion": "¿Qué relación encuentras? Escribe lo que tú ves…",
+  "metodo.psico.integracionIntro":
+    "Nada de lo que has vivido puede cambiarse. Pero sí puedes cambiar el significado que tiene en tu historia. Dale un sentido a tu dolor para que deje de convertirse en sufrimiento.",
+  "metodo.psico.sinRelaciones":
+    "Aún no has compuesto tus relaciones. Vuelve a la página «Relación» para reunirlas y aquí les darás un sentido.",
+  "metodo.psico.irARelacion": "Ir a Relación →",
+  "metodo.psico.enhorabuenaLlegar": "Enhorabuena por haber llegado hasta aquí.",
+  "metodo.psico.eresValiente": "Eres muy valiente.",
+  "metodo.psico.continuar": "Continuar →",
+  "metodo.psico.tuRelacion": "Tu relación",
+  "metodo.psico.anterior": "‹ Anterior",
+
+  // ── Psicología · miedos y nudos (las dos listas se escriben igual) ─────
+  "metodo.psico.anadirCorto": "Añadir",
+  "metodo.psico.siTeSirven": "Si te sirven de inspiración",
+  "metodo.psico.todosLosEjemplos": "Ya has añadido todos los ejemplos ✓",
+  "metodo.psico.aquiMiedos": "Aquí aparecerán los miedos que vayas escribiendo.",
+  "metodo.psico.escribeMiedo": "Escribe un miedo y pulsa Añadir…",
+  "metodo.psico.aquiNudos": "Aquí aparecerán los nudos que vayas seleccionando.",
+  "metodo.psico.escribeNudo": "Escribe un nudo y pulsa Añadir…",
+  "metodo.psico.sinMiedos": "Aún no has nombrado tus miedos. Vuelve a la página anterior para escribirlos.",
+  "metodo.psico.irAMiedos": "Ir a Miedos →",
+
+  // ── Psicología · necesidades ───────────────────────────────────────────
+  "metodo.psico.bloqueada": "Bloqueada",
+  "metodo.psico.necesidadDelNino": "Necesidad del niño",
+  "metodo.psico.comoLoViviste": "¿Cómo lo viviste tú?",
+  "metodo.psico.respondeAnterior": "Responde la necesidad anterior para desbloquearla.",
+
+  // ── Psicología · síntesis ──────────────────────────────────────────────
+  /** Las 4 preguntas de integración por relación (se ven en Integración y en Síntesis). */
+  "metodo.psico.integra.proteger": "Qué intentaba proteger",
+  "metodo.psico.integra.coste": "Qué me cuesta mantenerlo",
+  "metodo.psico.integra.verdadSana": "La verdad más sana que quiero practicar",
+  "metodo.psico.integra.recordatorio": "Lo que quiero recordar",
+  "metodo.psico.deDiez": "DE 10",
+  "metodo.psico.paraCuandoVuelva": "Para cuando vuelva a sentirme bloqueado:",
+  "metodo.psico.sintesisIntro":
+    "Aquí está todo tu mapa, de principio a fin. Desde el problema con el que llegaste hasta la carta que te escribiste. Léelo entero: esto eres tú.",
+  "metodo.psico.sintesisVacia":
+    "Aún no hay nada que sintetizar. A medida que recorras el camino, aquí aparecerá todo lo que escribas.",
+  "metodo.psico.llevateMapa": "Llévate todo tu mapa",
+  "metodo.psico.llevateLinea": "Llévate tu línea de Vida",
+  "metodo.psico.descargaCuaderno":
+    "Descárgalo en un cuaderno en PDF, cuidado y bonito, para releerlo siempre que lo necesites.",
+  "metodo.psico.volverArriba": "Volver arriba",
+  "metodo.psico.leer": "Leer",
+
+  // ── Cultura · nombres de paso ──────────────────────────────────────────
+  // Un paso se escribe UNA vez: el mismo nombre sirve para el título de su
+  // cabecera y para el botón que vuelve a él («← Nombre») desde la página
+  // vecina. El CONTENIDO de las seis Historias (eras, momentos y sus viñetas)
+  // no cabe aquí: vive en los `culturaHistoria*.ts`, y lo que no esté traducido
+  // se sigue leyendo en español.
+  "metodo.cultura.paso.intro": "Introducción",
+  "metodo.cultura.paso.historias": "Las Historias",
+  "metodo.cultura.paso.historia": "La Historia",
+  "metodo.cultura.paso.apuntes": "Tus apuntes",
+
+  // ── Cultura · las seis Historias ───────────────────────────────────────
+  // El título sale de aquí y no de `culturaHistorias.ts` porque se cita en tres
+  // sitios —la rejilla de Historias, la cabecera de su línea del tiempo y el
+  // taller de apuntes— y los tres tienen que decir lo mismo. La rejilla lo pinta
+  // en mayúsculas ella sola.
+  "metodo.cultura.historia.universal": "Historia Universal",
+  "metodo.cultura.historia.religiones": "Historia de las religiones",
+  "metodo.cultura.historia.filosofia": "Historia de la filosofía",
+  "metodo.cultura.historia.ciencia": "Historia de la ciencia",
+  "metodo.cultura.historia.medicina": "Historia de la medicina",
+  "metodo.cultura.historia.arte": "Historia del arte y la literatura",
+
+  // ── Cultura · la página de una era ─────────────────────────────────────
+  // En la primera y en la última era el botón se queda puesto pero apagado (con
+  // su explicación), para que no baile la fila de botones de una era a otra.
+  "metodo.cultura.era.anterior": "Era anterior",
+  "metodo.cultura.era.siguiente": "Era siguiente",
+  "metodo.cultura.era.esPrimera": "Es la primera era de la Historia",
+  "metodo.cultura.era.esUltima": "Es la última era de la Historia",
+
+  // ── Cultura · Tus apuntes ──────────────────────────────────────────────
+  "metodo.cultura.apuntes.intro1":
+    "Llévate por escrito lo que has recorrido. Elige de qué Historia quieres los apuntes y dentro marcas las etapas que te interesan: se te monta un cuaderno con eso y nada más.",
+  "metodo.cultura.apuntes.intro2":
+    "Un cuaderno por Historia, porque las seis juntas no caben en un solo archivo. Puedes volver y montarlos cuantas veces quieras.",
+  /** Lo que trae dentro cada Historia, para decidir sin entrar. */
+  "metodo.cultura.apuntes.etapa": "{n} etapa",
+  "metodo.cultura.apuntes.etapas": "{n} etapas",
+  "metodo.cultura.apuntes.momentos": "{n} momentos",
+
   // ── Pago de una disciplina ─────────────────────────────────────────────
   "metodo.pago.precioReducido": "Aprovecha que está en un precio reducido",
   "metodo.pago.ahoraNo": "Ahora no",
@@ -703,22 +1170,7 @@ export const metodo = {
   "metodo.pago.realizado": "Pago de {disciplina} realizado",
   "metodo.pago.yaPuedes": "Ya puedes acceder.",
 
-  // ── Fisiología · nivel «La Vida» ────────────────────────────────────────
-  // Títulos de los pasos. Están aquí y no en cada página porque los pasos se
-  // citan unos a otros en los botones «← anterior» / «siguiente →»: si se
-  // escribieran a mano en cada sitio, bastaría cambiar un título para que el
-  // botón de la página de al lado dejara de coincidir.
-  "fisiologia.celula.titulo": "Célula",
-  "fisiologia.lasCelulas.titulo": "Las células de tus órganos",
-  "fisiologia.sistemas.titulo": "Sistemas",
-  "fisiologia.organismo.titulo": "El cuerpo",
-  /** Nombres de paso que citan los botones de los cómics intercalados. */
-  "fisiologia.organos.titulo": "Órganos",
-  "fisiologia.niveles.titulo": "Niveles",
-  "fisiologia.sonrisa.titulo": "La sonrisa interior",
-  "fisiologia.sonrisa.corto": "Sonrisa",
-  /** Cierre del cómic de las estrellas: la tabla periódica a pantalla completa. */
-  "fisiologia.tablaFrase": "Nunca más mirarás la tabla periódica con los mismos ojos...",
+  // Fisiología tiene módulo propio: `textos/es/fisiologia.ts`.
 
   // Ordinal de cada disciplina en la cabecera del box de pago. Va como frase
   // entera y no «{n}ª disciplina» porque en inglés el ordinal es irregular.

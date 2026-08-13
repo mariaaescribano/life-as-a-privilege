@@ -4,35 +4,39 @@
 // de «Mis notas», igual que el índice del resto de disciplinas.
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { useT, type ClaveTexto } from "../../i18n";
 import { IndiceRecorrido } from "./IndiceRecorrido";
 import { useTusCelulasAbierto } from "./TusCelulasModal";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 import { fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
 
-// Pasos agrupados por nivel del recorrido de Fisiología.
-const NIVELES: { label: string; pasos: { titulo: string; path: string }[] }[] = [
+// Pasos agrupados por nivel del recorrido de Fisiología. El nombre de cada paso
+// se cita por su clave —la misma que usan los botones «← anterior / siguiente →»
+// de cada página—, así que el Índice y los botones dicen siempre lo mismo.
+const NIVELES: { label: string; pasos: { clave: ClaveTexto; path: string }[] }[] = [
   {
     label: "MATERIA",
     pasos: [
-      { titulo: "Partículas",     path: "/metodo/fisiologia/particulas" },
-      { titulo: "Átomos",         path: "/metodo/fisiologia/atomos" },
-      { titulo: "Moléculas",      path: "/metodo/fisiologia/moleculas" },
-      { titulo: "Macromoléculas", path: "/metodo/fisiologia/macromoleculas" },
-      { titulo: "Estructuras",    path: "/metodo/fisiologia/estructuras" },
+      { clave: "fisiologia.particulas.titulo",     path: "/metodo/fisiologia/particulas" },
+      { clave: "fisiologia.atomos.titulo",         path: "/metodo/fisiologia/atomos" },
+      { clave: "fisiologia.moleculas.titulo",      path: "/metodo/fisiologia/moleculas" },
+      { clave: "fisiologia.macromoleculas.titulo", path: "/metodo/fisiologia/macromoleculas" },
+      { clave: "fisiologia.estructuras.corto",     path: "/metodo/fisiologia/estructuras" },
     ],
   },
   {
     label: "VIDA",
     pasos: [
-      { titulo: "Célula",      path: "/metodo/fisiologia/celula" },
-      { titulo: "Las células", path: "/metodo/fisiologia/todas-tus-celulas" },
-      { titulo: "Sistemas",    path: "/metodo/fisiologia/sistemas" },
-      { titulo: "El cuerpo",   path: "/metodo/fisiologia/organismo" },
+      { clave: "fisiologia.celula.titulo",     path: "/metodo/fisiologia/celula" },
+      { clave: "fisiologia.lasCelulas.corto",  path: "/metodo/fisiologia/todas-tus-celulas" },
+      { clave: "fisiologia.sistemas.titulo",   path: "/metodo/fisiologia/sistemas" },
+      { clave: "fisiologia.organismo.titulo",  path: "/metodo/fisiologia/organismo" },
     ],
   },
 ];
 
 export function IndiceFisiologia() {
+  const t = useT();
   const { pathname } = useLocation();
   const clean = pathname.replace(/\/+$/, "");
   // Con el popup «Tus células» abierto (pantalla completa) el Índice no pinta
@@ -46,7 +50,7 @@ export function IndiceFisiologia() {
 
   const indice: PasoRecorrido[] = nivel.pasos.map((p, i) => ({
     n: i + 1,
-    titulo: p.titulo,
+    titulo: t(p.clave),
     ruta: () => p.path,
   }));
 

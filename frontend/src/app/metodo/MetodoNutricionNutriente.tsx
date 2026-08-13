@@ -105,7 +105,9 @@ function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
 
 // Recuadro de imagen placeholder (mientras no haya foto): un icono suave sobre
 // un fondo tenue del color del grupo.
-function FotoPlaceholder({ label = "Foto", color }: { label?: string; color: string }) {
+function FotoPlaceholder({ label, color }: { label?: string; color: string }) {
+  const t = useT();
+  const txt = label ?? t("metodo.nutri.foto");
   return (
     <Flex direction="column" align="center" justify="center" gap={2} w="100%" h="100%"
           minH="160px" bg={`${color}1f`} border={`1px dashed ${nutricionTxt}55`} borderRadius="xl">
@@ -115,7 +117,7 @@ function FotoPlaceholder({ label = "Foto", color }: { label?: string; color: str
       </Box>
       <Text color={`${nutricionTxt}99`} fontSize="2xs" fontWeight="700" letterSpacing="0.14em"
             textTransform="uppercase">
-        {label}
+        {txt}
       </Text>
     </Flex>
   );
@@ -387,7 +389,7 @@ export default function MetodoNutricionNutriente() {
                            w={{ base: "20px", md: "22px" }} h={{ base: "20px", md: "22px" }} fill="currentColor" flexShrink={0}>
                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
                       </Box>
-                      Ver ilustración
+                      {t("metodo.nutri.verIlustracion")}
                     </Box>
                   )}
                 </Flex>

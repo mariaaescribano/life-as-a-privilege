@@ -16,6 +16,7 @@ import {
   AyurvedaIcon, ayurvedaBg, ayurvedaNom, ayurvedaTxt,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 type Dosha = "vata" | "pitta" | "kapha";
 const DOSHA_LABEL: Record<Dosha, { label: string; color: string }> = {
@@ -31,6 +32,7 @@ const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${ayurvedaBg}
 // componente del test (que ya guarda el resultado en la tabla `ayurveda` vía
 // POST /ayurveda/resultado) y, al terminar, lleva a la página de resultado.
 export default function MetodoAyurvedaTest() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // ¿El backend ya conoce tu dosha? Hasta entonces, el botón "Resultado →" del
@@ -87,15 +89,15 @@ export default function MetodoAyurvedaTest() {
           <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 6, md: 7 }}>
             <MetodoStepHeader
               icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Test de los Doṣhas"
+              title={t("metodo.ayur.paso.testDoshas")}
               pageLabel="2/4"
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
               mb={0}
-              prev={{ label: "← Equilibra", onClick: () => navigate("/metodo/ayurveda") }}
+              prev={{ label: `← ${t("metodo.ayur.paso.equilibra")}`, onClick: () => navigate("/metodo/ayurveda") }}
               extra={ilustracionesBtn}
-              next={{ label: "Resultado →", onClick: () => navigate("/metodo/ayurveda/resultado") }}
+              next={{ label: `${t("metodo.ayur.paso.resultado")} →`, onClick: () => navigate("/metodo/ayurveda/resultado") }}
             />
 
             <Box
@@ -123,9 +125,7 @@ export default function MetodoAyurvedaTest() {
                   </Box>
                 </Flex>
                 <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
-                      style={{ textShadow: INK_SHADOW }}>
-                  Ya hiciste el test
-                </Text>
+                      style={{ textShadow: INK_SHADOW }}>{t("metodo.ayur.yaHicisteTest")}</Text>
                 <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" maxW="520px">
                   Tu Doṣha ya está calculada:{" "}
                   <Box as="span" fontWeight="700" color={cfg.color}>{cfg.label}</Box>.
@@ -143,9 +143,7 @@ export default function MetodoAyurvedaTest() {
                     boxShadow={`0 4px 18px rgba(0,0,0,0.25), 0 0 18px ${ayurvedaTxt}55`}
                     transition="all 0.2s" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}
                     _hover={{ transform: "translateY(-2px)" }}
-                  >
-                    Ver mi resultado →
-                  </Box>
+                  >{t("metodo.ayur.verMiResultado")}</Box>
                   <Box
                     as="button"
                     onClick={() => setRepetir(true)}
@@ -156,9 +154,7 @@ export default function MetodoAyurvedaTest() {
                     letterSpacing="0.05em" cursor="pointer"
                     transition="all 0.2s"
                     _hover={{ transform: "translateY(-2px)", borderColor: ayurvedaTxt, bg: "rgba(255,251,243,0.35)" }}
-                  >
-                    Repetir el test
-                  </Box>
+                  >{t("metodo.ayur.repetirTest")}</Box>
                 </Flex>
               </Flex>
             </Box>
@@ -180,8 +176,8 @@ export default function MetodoAyurvedaTest() {
         pageLabel="2/4"
         onComplete={async () => { navigate("/metodo/ayurveda/resultado"); }}
         headerNext={doshaGuardada
-          ? { label: "Resultado →", onClick: () => navigate("/metodo/ayurveda/resultado") }
-          : { label: "Resultado →", onClick: () => {}, disabled: true, disabledTooltip: "Completa el test para ver tu resultado." }}
+          ? { label: `${t("metodo.ayur.paso.resultado")} →`, onClick: () => navigate("/metodo/ayurveda/resultado") }
+          : { label: `${t("metodo.ayur.paso.resultado")} →`, onClick: () => {}, disabled: true, disabledTooltip: "Completa el test para ver tu resultado." }}
       />
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
       <IndiceAyurveda />

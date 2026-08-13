@@ -148,6 +148,7 @@ interface GuiaProps {
 }
 
 function GuiaRespiracion({ fases, ciclos, color, onCompletar, completado }: GuiaProps) {
+  const t = useT();
   const [activo, setActivo] = useState(false);
   // Único estado que avanza: los segundos que llevas. La fase, el ciclo y la
   // cuenta atrás se DERIVAN de él, así el reloj no puede desincronizarse.
@@ -272,13 +273,13 @@ function GuiaRespiracion({ fases, ciclos, color, onCompletar, completado }: Guia
           style={{ textShadow: activo ? undefined : "0 1px 2px rgba(0,0,0,0.3)" }}
           _hover={{ transform: "translateY(-2px)" }}
         >
-          {activo ? "Parar" : completado ? "Repetir" : "Empezar"}
+          {activo ? t("metodo.ayur.parar") : completado ? t("metodo.ayur.repetir") : t("metodo.ayur.empezar")}
         </Box>
       </Flex>
 
       {completado && !activo && (
         <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
-          Practicado ✓
+          {t("metodo.ayur.practicado")}
         </Text>
       )}
     </Flex>
@@ -507,7 +508,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
             mb={0}
             prev={{ label: "← Doṣhas", onClick: () => { void persist(sel, slice); navigate("/metodo/ayurveda/tarjetas"); } }}
             extra={ilustracionesBtn}
-            next={{ label: "Cursos →", onClick: () => { void persist(sel, slice); irCursos(); } }}
+            next={{ label: `${t("metodo.nutri.paso.cursos")} →`, onClick: () => { void persist(sel, slice); irCursos(); } }}
           />
           </Reveal>
 
@@ -567,7 +568,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
               sx={{ backdropFilter: "blur(4px)" }}
             >
               <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
-                <Box as="span" fontWeight="700">Cuidado: </Box>{practica.precaucion}
+                <Box as="span" fontWeight="700">{t("metodo.ayur.cuidado")}</Box>{practica.precaucion}
               </Text>
             </Box>
             <Foto src={practica.foto} alt={practica.nombre} color={meta.color} />
@@ -575,8 +576,8 @@ export default function MetodoAyurvedaDoshaPranayama() {
             {/* El guía, en el mismo box que los pasos. */}
             <Box mt={8}>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={6} textAlign="center">
-                Sigue el círculo: crece cuando entra el aire y se encoge cuando sale.
-                Si te agobia, para. <Box as="span" fontStyle="italic">Parar también es practicar.</Box>
+                {t("metodo.ayur.sigueElCirculo")}{" "}
+                <Box as="span" fontStyle="italic">{t("metodo.ayur.pararEsPracticar")}</Box>
               </Text>
               {/* `key` con el doṣha: al cambiar de botón el guía se monta de
                   nuevo, y así el reloj no sigue contando el de antes. */}
@@ -631,7 +632,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
                       parche({ respuestas: next });
                       setGuardado((prev) => ({ ...prev, [sel]: false }));
                     }}
-                    placeholder="Escríbelo aquí…"
+                    placeholder={t("metodo.ayur.escribelo")}
                     w="100%"
                     minH={{ base: "100px", md: "120px" }}
                     bg="rgba(255,251,243,0.45)"
@@ -714,7 +715,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${ayurvedaTxt}aa` }}
               >
-                Cursos →
+                {`${t("metodo.nutri.paso.cursos")} →`}
               </Box>
             </Flex>
           </Panel>

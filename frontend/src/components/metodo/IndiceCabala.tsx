@@ -11,9 +11,15 @@ import { CABALA_SEFIROT } from "./cabalaSefirot";
 import { CABALA_ILUSTRACIONES_KEYS } from "./cabalaIlustraciones";
 import { CABALA_SENDEROS, senderoCompleto, senderosContenidoCompleto } from "./cabalaSenderos";
 import { sefiraDimensionCompleta, sefirotContenidoCompleto } from "./cabalaDiagnostico";
+import { useT } from "../../i18n";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt } from "../../GlobalVariables";
 
 export function IndiceCabala() {
+  // Los títulos del índice salen del diccionario: `useT` deja el componente
+  // suscrito al idioma, así que al pulsar EN se vuelven a construir. Los nombres
+  // de las sefirot y las letras hebreas NO se traducen: son los mismos en los
+  // dos idiomas y salen del contenido español.
+  const t = useT();
   // Progreso guardado (null = aún cargando: no bloqueamos nada para no parpadear).
   const [data, setData] = useState<any>(null);
   const [releyendo, setReleyendo] = useState(false);
@@ -94,15 +100,15 @@ export function IndiceCabala() {
   const lock = (cond: boolean) => (cargado ? !cond : false);
 
   const PASOS: { titulo: string; path: string; bloqueado: boolean }[] = [
-    { titulo: "Cábala", path: "/metodo/cabala", bloqueado: false },
-    { titulo: "El Árbol de la Vida", path: "/metodo/cabala/arbol", bloqueado: false },
+    { titulo: t("disciplina.cabala"), path: "/metodo/cabala", bloqueado: false },
+    { titulo: t("metodo.cabala.paso.arbol"), path: "/metodo/cabala/arbol", bloqueado: false },
     ...CABALA_SEFIROT.map((s, i) => ({
       titulo: s.titulo,
       path: `/metodo/cabala/sefira/${s.key}`,
       bloqueado: lock(sefiraUnlockedAt(i) || sefirotVistas.has(s.key)),
     })),
-    { titulo: "Diagnóstico", path: "/metodo/cabala/diagnostico", bloqueado: lock(diagnosticoUnlocked || diagnosticoVisto) },
-    { titulo: "Los Senderos", path: "/metodo/cabala/senderos", bloqueado: lock(senderosUnlocked) },
+    { titulo: t("metodo.cabala.paso.diagnostico"), path: "/metodo/cabala/diagnostico", bloqueado: lock(diagnosticoUnlocked || diagnosticoVisto) },
+    { titulo: t("metodo.cabala.paso.senderos"), path: "/metodo/cabala/senderos", bloqueado: lock(senderosUnlocked) },
     // Los 22 senderos, uno a uno: forman parte de la misma cuenta del índice
     // (no reinician la numeración), justo detrás de «Los Senderos».
     ...CABALA_SENDEROS.map((s, i) => ({
@@ -110,9 +116,9 @@ export function IndiceCabala() {
       path: `/metodo/cabala/sendero/${s.num}`,
       bloqueado: lock(senderoUnlockedAt(i)),
     })),
-    { titulo: "Diagnóstico de senderos", path: "/metodo/cabala/senderos/diagnostico", bloqueado: lock(senderosDiagUnlocked) },
-    { titulo: "Diagnóstico final", path: "/metodo/cabala/final", bloqueado: lock(finalUnlocked) },
-    { titulo: "Trabajo de 10 días", path: "/metodo/cabala/dias", bloqueado: lock(diasUnlocked) },
+    { titulo: t("metodo.cabala.paso.senderosDiag"), path: "/metodo/cabala/senderos/diagnostico", bloqueado: lock(senderosDiagUnlocked) },
+    { titulo: t("metodo.cabala.paso.final"), path: "/metodo/cabala/final", bloqueado: lock(finalUnlocked) },
+    { titulo: t("metodo.cabala.paso.dias"), path: "/metodo/cabala/dias", bloqueado: lock(diasUnlocked) },
   ];
 
   const indice: PasoRecorrido[] = PASOS.map((p, i) => ({

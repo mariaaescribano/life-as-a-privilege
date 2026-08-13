@@ -1,6 +1,7 @@
 import React from "react";
 import { Text } from "@chakra-ui/react";
 import { fisiologiaTxt } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 import { FichaFisioModal } from "./celulasUi";
 import type { Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
 
@@ -28,6 +29,7 @@ export function SistemaModal({
   /** Ya se había leído antes de abrirlo → aviso «✓ Leída» arriba. */
   leida?: boolean;
 }) {
+  const t = useT();
   const puedeNavegar = !!sistemas && sistemas.length > 1 && !!onSelect;
   const idx = sistema && sistemas ? sistemas.findIndex((s) => s.key === sistema.key) : -1;
   const salta = (d: number) => {
@@ -41,7 +43,10 @@ export function SistemaModal({
     <FichaFisioModal
       foto={sistema.foto}
       alt={sistema.label}
-      titulo={`Sistema ${sistema.label.toLowerCase()}`}
+      // El nombre se arma distinto en cada idioma: en español «Sistema
+      // nervioso» (el nombre en minúscula) y en inglés «Nervous system» (el
+      // nombre tal cual, que abre la frase). Por eso van los dos valores.
+      titulo={t("fisiologia.sistemas.ficha", { sistema: sistema.label.toLowerCase(), Sistema: sistema.label })}
       claves={sistema.claves}
       parrafos={[sistema.descripcion]}
       onClose={onClose}

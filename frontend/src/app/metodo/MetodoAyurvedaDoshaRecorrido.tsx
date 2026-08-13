@@ -19,6 +19,7 @@ import {
   VataIcon, PittaIcon, KaphaIcon,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 import { DOSHA_INTRO, type DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 import { DOSHA_DESCUBRE } from "../../hardCoded/metodo/doshaDescubre";
 import { DOSHA_CUERPO } from "../../hardCoded/metodo/doshaCuerpo";
@@ -49,6 +50,7 @@ function Separador() {
 // y se importa arriba como `Panel`.
 
 export default function MetodoAyurvedaDoshaRecorrido() {
+  const t = useT();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
@@ -143,14 +145,14 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title="Tu mapa"
+            title={t("metodo.ayur.paso.tuMapa")}
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Tu día", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/dia`) }}
+            prev={{ label: `← ${t("metodo.ayur.paso.tuDia")}`, onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/dia`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Doṣhas →", onClick: irDoshas }}
+            next={{ label: `${t("metodo.ayur.paso.doshas")} →`, onClick: irDoshas }}
           />
           </Reveal>
 
@@ -159,11 +161,11 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
-                Este ha sido tu mapa
+                {t("metodo.ayur.mapaTitulo")}
               </Text>
               <Separador />
               <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" maxW="600px">
-                A lo largo del camino te has ido escuchando. Estas son las palabras que te dejaste a ti mismo.
+                {t("metodo.ayur.mapaIntro")}
               </Text>
               <Flex
                 as="button" onClick={descargarRecorrido} mt={2}
@@ -175,7 +177,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${meta.color}aa` }}
               >
-                <Download size={18} /> Descargar mi mapa
+                <Download size={18} /> {t("metodo.ayur.descargarMapa")}
               </Flex>
               <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic">
                 Incluye tus respuestas, tu día ideal y, de regalo, qué equilibra y desequilibra tu {meta.label}.

@@ -17,6 +17,7 @@ import {
   VataIcon, PittaIcon, KaphaIcon,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 type Dosha = "vata" | "pitta" | "kapha";
 
@@ -61,6 +62,7 @@ interface Resultado {
 }
 
 export default function MetodoAyurvedaTarjetas() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [scores, setScores] = useState<Record<Dosha, number> | null>(null);
@@ -123,15 +125,15 @@ export default function MetodoAyurvedaTarjetas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Los tres Doṣhas"
+            title={t("metodo.ayur.paso.tresDoshas")}
             pageLabel="4/4"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Resultado", onClick: () => navigate("/metodo/ayurveda/resultado") }}
+            prev={{ label: `← ${t("metodo.ayur.paso.resultado")}`, onClick: () => navigate("/metodo/ayurveda/resultado") }}
             extra={ilustracionesBtn}
-            next={{ label: "Prāṇāyāma →", onClick: () => navigate(`/metodo/ayurveda/dosha/${principal}/pranayama`) }}
+            next={{ label: `${t("metodo.ayur.paso.pranayama")} →`, onClick: () => navigate(`/metodo/ayurveda/dosha/${principal}/pranayama`) }}
           />
           </Reveal>
 
@@ -144,7 +146,7 @@ export default function MetodoAyurvedaTarjetas() {
             maxW="680px"
             lineHeight="1.8"
           >
-            Los tres Doṣhas viven en ti, pero unos predominan más que otros. Descúbrelos primero.
+            {t("metodo.ayur.tarjetasIntro")}
           </Text>
           </Reveal>
 
@@ -205,7 +207,7 @@ export default function MetodoAyurvedaTarjetas() {
                       boxShadow={`0 0 14px ${cfg.color}aa`}
                       style={{ textShadow: "0 1px 2px rgba(0,0,0,0.35)" }}
                     >
-                      Predomina en ti
+                      {t("metodo.ayur.predomina")}
                     </Box>
                   )}
 

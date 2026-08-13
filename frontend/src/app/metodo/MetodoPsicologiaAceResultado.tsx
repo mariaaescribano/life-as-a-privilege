@@ -109,21 +109,21 @@ export default function MetodoPsicologiaAceResultado() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Tu resultado"
+              title={t("metodo.psico.paso.aceResultado")}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               step={{ current: 4, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← ACE", onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}
-              next={{ label: "Línea de Vida →", onClick: () => setComicOpen(true) }}
+              prev={{ label: `← ${t("metodo.psico.paso.ace")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}
+              next={{ label: `${t("metodo.psico.lineaDeVida")} →`, onClick: () => setComicOpen(true) }}
             />
           </Reveal>
 
           {/* Sobre el turquesa: el título de la página */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.7} w="100%" display="flex" justifyContent="center">
-            <IntroRecorrido>¿Qué significa tu resultado ACE?</IntroRecorrido>
+            <IntroRecorrido>{t("metodo.psico.queSignificaAce")}</IntroRecorrido>
           </Reveal>
 
           <Flex direction="column" w="100%" gap={{ base: 5, md: 6 }}>
@@ -136,9 +136,7 @@ export default function MetodoPsicologiaAceResultado() {
               <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center"
                     gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}>
                 <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em"
-                      textTransform="uppercase" opacity={0.65} style={{ textShadow: INK_SHADOW }}>
-                  Tu puntuación ACE
-                </Text>
+                      textTransform="uppercase" opacity={0.65} style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.tuPuntuacionAce")}</Text>
 
                 {/* Círculo con la cifra — siempre en marrón oscuro (neutro) */}
                 <Flex align="center" justify="center" w={{ base: "116px", md: "134px" }} h={{ base: "116px", md: "134px" }}
@@ -169,9 +167,7 @@ export default function MetodoPsicologiaAceResultado() {
             {/* Consecuencias (dosis-respuesta) — una sola frase entre los boxes */}
             <Reveal direction="up" distance={20} delay={0.32} duration={0.7} w="100%">
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" fontWeight="600"
-                  textAlign="center" lineHeight="1.7" maxW="560px" mx="auto">
-              Cuantas más experiencias adversas, mayor es el riesgo de enfermedades y dificultades.
-            </Text>
+                  textAlign="center" lineHeight="1.7" maxW="560px" mx="auto">{t("metodo.psico.aceRiesgo")}</Text>
             </Reveal>
 
             {/* Esperanza / resiliencia */}
@@ -203,9 +199,7 @@ export default function MetodoPsicologiaAceResultado() {
                        boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
                        _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
                     <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
-                      Continuar a Línea de Vida →
-                    </Box>
+                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.continuarLinea")}</Box>
                   </Box>
                 </Flex>
               </Flex>

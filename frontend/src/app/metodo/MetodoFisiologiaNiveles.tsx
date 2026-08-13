@@ -13,7 +13,7 @@ import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { MEDITACION_CEREBRO } from "../../components/metodo/comicMeditacion";
 import { useComic } from "../../i18n/comics";
-import { useT } from "../../i18n";
+import { useT, type ClaveTexto } from "../../i18n";
 import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
@@ -26,10 +26,14 @@ import {
 // «Bajar a lo más pequeño y volver a subir, nivel a nivel». No son disciplinas:
 // son bloques dentro de Fisiología. Solo el Nivel 1 (La materia) está abierto;
 // los otros dos se irán construyendo y desbloqueando.
+// OJO: `titulo`, `sub` y `eyebrow` guardan la CLAVE del diccionario, no el
+// texto. Este array se calcula UNA vez al importar el fichero: si guardara ya
+// el texto traducido, se quedaría congelado en el idioma de arranque y no
+// cambiaría al pulsar EN.
 interface Nivel {
   n: number;
-  titulo: string;
-  sub: string;
+  titulo: ClaveTexto;
+  sub: ClaveTexto;
   ruta?: string;
   /** Flag(es) de metodo_fisiologia.data que deben estar en true para desbloquear
    *  este nivel. Ausente = siempre abierto (Nivel 1). El Nivel 2 se abre al
@@ -41,17 +45,17 @@ interface Nivel {
    *  Nivel 1 acaba en estructuras; Nivel 2 (VIDA) acaba en organismo. */
   superado?: string;
   /** Antetítulo (por defecto «Nivel {n}»). P.ej. la práctica usa «Práctica». */
-  eyebrow?: string;
+  eyebrow?: ClaveTexto;
   /** Icono del círculo en vez del número: "avanzado" (PROFUNDIZA). */
   iconKind?: "avanzado";
 }
 
 const NIVELES: Nivel[] = [
-  { n: 1, titulo: "MATERIA", sub: "De qué estás hecho.", ruta: "/metodo/fisiologia/particulas", superado: "estructuras_hecho" },
+  { n: 1, titulo: "fisiologia.niveles.materia", sub: "fisiologia.niveles.materia.sub", ruta: "/metodo/fisiologia/particulas", superado: "estructuras_hecho" },
   // VIDA absorbe Sistemas: célula → todas-tus-células → sistemas → organismo.
-  { n: 2, titulo: "VIDA", sub: "El milagro de ser un cuerpo.", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho", superado: "organismo_hecho" },
+  { n: 2, titulo: "fisiologia.niveles.vida", sub: "fisiologia.niveles.vida.sub", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho", superado: "organismo_hecho" },
   // 3ª tarjeta · contenido avanzado: bloqueado hasta superar los dos primeros niveles.
-  { n: 3, titulo: "PROFUNDIZA", sub: "Para los que quieren toda la verdad.", ruta: "/metodo/fisiologia/profundiza", requiere: ["estructuras_hecho", "organismo_hecho"], eyebrow: "Avanzado", iconKind: "avanzado" },
+  { n: 3, titulo: "fisiologia.niveles.profundiza", sub: "fisiologia.niveles.profundiza.sub", ruta: "/metodo/fisiologia/profundiza", requiere: ["estructuras_hecho", "organismo_hecho"], eyebrow: "fisiologia.niveles.avanzado", iconKind: "avanzado" },
 ];
 
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
@@ -74,12 +78,14 @@ const Profundiza = ({ size }: { size: any }) => (
 
 // Tick de «nivel superado» (esquina superior derecha de la tarjeta). Es la
 // marquita común del recorrido (MarcaLeido), la misma que en las tarjetas.
-const TickSuperado = () => (
-  <MarcaLeido tinta={fisiologiaTxt} bg={fisiologiaBg} title="Superado" />
-);
+const TickSuperado = () => {
+  const t = useT();
+  return <MarcaLeido tinta={fisiologiaTxt} bg={fisiologiaBg} title={t("fisiologia.niveles.superado")} />;
+};
 
 // ── Caja de un nivel (tarjeta VERTICAL, para ir las 3 en fila) ──────────────
 function NivelBox({ nivel, locked, done, onEnter }: { nivel: Nivel; locked: boolean; done: boolean; onEnter: () => void }) {
+  const t = useT();
   return (
     <Box
       as={locked ? "div" : "button"}
@@ -138,15 +144,15 @@ function NivelBox({ nivel, locked, done, onEnter }: { nivel: Nivel; locked: bool
 
         <Text color={fisiologiaTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.16em" textTransform="uppercase"
               style={{ textShadow: `0 1px 3px ${fisiologiaBg}f0` }}>
-          {nivel.eyebrow ?? `Nivel ${nivel.n}`}
+          {nivel.eyebrow ? t(nivel.eyebrow) : t("fisiologia.niveles.nivel", { n: nivel.n })}
         </Text>
         <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight={700} lineHeight="1.2"
               style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
-          {nivel.titulo}
+          {t(nivel.titulo)}
         </Text>
         <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" lineHeight="1.55"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-          {locked ? "Próximamente" : nivel.sub}
+          {locked ? t("comun.proximamente") : t(nivel.sub)}
         </Text>
 
         {/* Empuja la pista de acción al fondo para que las 3 tarjetas cuadren */}
@@ -155,13 +161,13 @@ function NivelBox({ nivel, locked, done, onEnter }: { nivel: Nivel; locked: bool
         {locked ? (
           <Text color={`${fisiologiaTxt}99`} fontSize="2xs" fontWeight={700} letterSpacing="0.12em"
                  textTransform="uppercase">
-            Bloqueado
+            {t("fisiologia.niveles.bloqueado")}
           </Text>
         ) : (
           <Flex align="center" gap={1.5} color={fisiologiaTxt}>
             <Text fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.04em"
                   style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
-              Entrar
+              {t("fisiologia.niveles.entrar")}
             </Text>
             <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
                  w="18px" h="18px" fill="currentColor"
@@ -231,22 +237,22 @@ export default function MetodoFisiologiaNiveles() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Niveles"
+            title={t("fisiologia.niveles.titulo")}
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Introducción", onClick: () => navigate("/metodo/fisiologia") }}
+            prev={{ label: `← ${t("fisiologia.introduccion")}`, onClick: () => navigate("/metodo/fisiologia") }}
             extra={celulasBtn}
-            next={{ label: "La sonrisa interior →", onClick: () => setComicOpen(true) }}
+            next={{ label: `${t("fisiologia.sonrisa.titulo")} →`, onClick: () => setComicOpen(true) }}
           />
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
-              Descubre poco a poco, de las partículas que te forman hasta el ecosistema complejo y mágico que eres.
+              {t("fisiologia.niveles.intro")}
             </Text>
           </Reveal>
 

@@ -7,7 +7,7 @@
 // aparece en todo el recorrido sin tocar cada página.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useState } from "react";
-import { useT } from "../../i18n";
+import { useIdioma, useT } from "../../i18n";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
@@ -15,7 +15,7 @@ import { comicLoaderPorColor } from "./comicLoaders";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
 import { useRecorridoAlcanzable } from "../../hooks/useRecorridoAlcanzable";
-import { RECORRIDO_INDICE, RECORRIDO_TOTAL, pasoAlcanzablePsicologia, type PasoRecorrido } from "./psicologiaRecorrido";
+import { psicologiaIndice, RECORRIDO_TOTAL, pasoAlcanzablePsicologia, type PasoRecorrido } from "./psicologiaRecorrido";
 import { flushSaves } from "../../utils/flushSaves";
 import { API_URL, neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
@@ -46,7 +46,7 @@ export interface SeccionIndice {
 // recorrido y los colores de psicología; pásale `indice`/`total` y los colores
 // de otra disciplina para reutilizarlo (p. ej. astrología).
 export function IndiceRecorrido({
-  indice = RECORRIDO_INDICE,
+  indice: indiceProp,
   total = RECORRIDO_TOTAL,
   tinta = neuropsicologiaTxt,
   bg = neuropsicologiaBg,
@@ -104,6 +104,10 @@ export function IndiceRecorrido({
   onOpen?: () => void;
 } = {}) {
   const t = useT();
+  // `useIdioma()` para volver a renderizar al cambiar de idioma: los títulos
+  // del índice salen del diccionario, no de un array congelado al importar.
+  useIdioma();
+  const indice = indiceProp ?? psicologiaIndice();
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams<Record<string, string>>();

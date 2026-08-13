@@ -32,6 +32,7 @@ import {
   type RetoPdf,
 } from "../../components/metodo/pdf/pdfCartaAstral";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const DescargaIcon = () => (
   <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill="currentColor"
@@ -66,6 +67,7 @@ function fechaBonita(iso?: string | null): string | null {
 }
 
 export default function MetodoAstrologiaPdf() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [comicOpen, setComicOpen] = useState(false);
@@ -178,15 +180,15 @@ export default function MetodoAstrologiaPdf() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Tu carta en PDF"
+              title={t("metodo.astro.paso.pdf")}
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
               step={{ current: 7, total: 9 }}
               mb={0}
-              prev={{ label: "← Aspectos", onClick: () => navigate("/metodo/astrologia/aspectos") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
-              next={{ label: "Llamada →", onClick: () => navigate("/metodo/astrologia/llamada") }}
+              prev={{ label: `← ${t("metodo.astro.paso.aspectos")}`, onClick: () => navigate("/metodo/astrologia/aspectos") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
+              next={{ label: `${t("metodo.astro.paso.llamada")} →`, onClick: () => navigate("/metodo/astrologia/llamada") }}
             />
           </Reveal>
 
@@ -197,9 +199,7 @@ export default function MetodoAstrologiaPdf() {
               fontStyle="italic"
               textAlign="center"
               lineHeight="1.8"
-            >
-              Tu lectura entera, en un archivo que ya es tuyo para siempre.
-            </Text>
+            >{t("metodo.astro.pdfIntro")}</Text>
           </Reveal>
 
           <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.24} duration={0.75} w="100%">
@@ -212,14 +212,11 @@ export default function MetodoAstrologiaPdf() {
                     px={{ base: 5, md: 10 }} py={{ base: 8, md: 10 }} textAlign="center">
                 <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                       letterSpacing="0.04em" style={{ textShadow: `0 0 14px ${astrologiaTxt}55` }}>
-                  Toda tu carta, página a página
+                  {t("metodo.astro.pdfTitular")}
                 </Text>
 
                 {sinTextos ? (
-                  <Text color="#ffd9a0" fontSize="sm" fontStyle="italic" maxW="560px">
-                    Tu carta todavía no tiene lecturas escritas. En cuanto estén, aquí podrás
-                    descargarla completa.
-                  </Text>
+                  <Text color="#ffd9a0" fontSize="sm" fontStyle="italic" maxW="560px">{t("metodo.astro.pdfSinLecturas")}</Text>
                 ) : (
                   <Flex
                     as="button"
@@ -260,7 +257,7 @@ export default function MetodoAstrologiaPdf() {
 
                 {listo && !generando && (
                   <Text color={astrologiaTxt} fontSize="sm" fontStyle="italic">
-                    Descargado. Si no lo ves, mira en la carpeta de descargas de tu navegador.
+                    {t("metodo.astro.pdfDescargado")}
                   </Text>
                 )}
 
@@ -270,10 +267,7 @@ export default function MetodoAstrologiaPdf() {
                   </Text>
                 )}
 
-                <Text color={`${astrologiaTxt}99`} fontSize="xs" fontStyle="italic" maxW="560px">
-                  Se monta en tu propio dispositivo, así que puede tardar unos segundos y
-                  conviene no cerrar la página mientras avanza.
-                </Text>
+                <Text color={`${astrologiaTxt}99`} fontSize="xs" fontStyle="italic" maxW="560px">{t("metodo.astro.pdfAviso")}</Text>
               </Flex>
             </Box>
           </Reveal>

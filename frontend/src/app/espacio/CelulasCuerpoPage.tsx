@@ -6,7 +6,8 @@ import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { CelulaCard, CelulaModal } from "../../components/metodo/celulasUi";
 import { CelulasOrganosIcon, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
+import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
+import { useCelulas } from "../../hardCoded/espacio/useCelulas";
 import { useT } from "../../i18n";
 
 const BG = fisiologiaBg;
@@ -18,6 +19,7 @@ const TXT = fisiologiaTxt;
 export default function CelulasCuerpoPage() {
   const navigate = useNavigate();
   const t = useT();
+  const CELULAS = useCelulas();
   const [selected, setSelected] = useState<Celula | null>(null);
 
   useEffect(() => {

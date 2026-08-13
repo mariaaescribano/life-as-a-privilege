@@ -11,16 +11,17 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
-import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
-import { CABALA_TEST, testCompleto, testsAEscala10 } from "../../components/metodo/cabalaTest";
+import { CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
+import { testCompleto, testsAEscala10 } from "../../components/metodo/cabalaTest";
+import {
+  useNarrativa, usePolaridadLabel, useSefirotMap, useTestCabala, useTipoLabel,
+} from "../../components/metodo/cabalaEn";
 import {
   calcularTransiciones,
   nivelCombinado,
   sefiraEvaluable,
   sefirotContenidoCompleto,
   polaridadSefira,
-  POLARIDAD_LABEL,
-  TIPO_LABEL,
   esBloqueo,
   type TransicionResultado,
   type Polaridad,
@@ -59,9 +60,6 @@ function Caja({
   );
 }
 
-const nombre = (k: string) => cabalaSefirotMap[k as keyof typeof cabalaSefirotMap]?.titulo ?? k;
-const etiquetaDe = (k: string) => CABALA_TEST[k as keyof typeof CABALA_TEST]?.etiqueta ?? "";
-
 /* ── Barra de nivel (0-10) ── */
 function BarraNivel({ nivel }: { nivel: number }) {
   const pct = Math.max(0, Math.min(100, (nivel / 10) * 100));
@@ -72,26 +70,41 @@ function BarraNivel({ nivel }: { nivel: number }) {
   );
 }
 
-/* ── Texto del diagnóstico según el tipo de transición ── */
-function narrativaTransicion(t: TransicionResultado): string {
-  const from = nombre(t.from), to = nombre(t.to);
-  const eFrom = etiquetaDe(t.from), eTo = etiquetaDe(t.to);
-  switch (t.tipo) {
-    case "sin_base":
-      return `Todavía no hay base suficiente en ${from}. Antes de trabajar este sendero conviene desarrollar primero ${from} (${eFrom}).`;
-    case "invertida":
-      return `Has desarrollado más ${eTo} (${to}) que ${eFrom} (${from}). Conviene reforzar la base de ${from} para que ${to} tenga una dirección más sólida.`;
-    case "integrada":
-    case "parcial":
-      return `Conviertes con fluidez ${eFrom} en ${eTo}. Esta transición fluye bien.`;
-    default:
-      return t.narrativa; // bloqueos: relato del paso evolutivo
-  }
-}
-
 export default function MetodoCabalaDiagnostico() {
   const t = useT();
   const navigate = useNavigate();
+  // Contenido y etiquetas en el idioma activo: los niveles, los umbrales y la
+  // clasificación de cada transición siguen saliendo del cálculo español.
+  const sefirotMap = useSefirotMap();
+  const testCabala = useTestCabala();
+  const polaridadLabel = usePolaridadLabel();
+  const tipoLabel = useTipoLabel();
+  const narrativaBloqueo = useNarrativa();
+
+  const nombre = (k: string) => sefirotMap[k as keyof typeof sefirotMap]?.titulo ?? k;
+  const etiquetaDe = (k: string) => testCabala[k as keyof typeof testCabala]?.etiqueta ?? "";
+
+  /* Texto del diagnóstico según el tipo de transición. Cuando NO es un bloqueo
+     se arma con el nombre de las dos sefirot y su tema; el relato de los
+     bloqueos es contenido y viene ya traducido. */
+  const narrativaTransicion = (tr: TransicionResultado): string => {
+    const valores = {
+      from: nombre(tr.from), to: nombre(tr.to),
+      eFrom: etiquetaDe(tr.from), eTo: etiquetaDe(tr.to),
+    };
+    switch (tr.tipo) {
+      case "sin_base":
+        return t("metodo.cabala.diag.sinBase", valores);
+      case "invertida":
+        return t("metodo.cabala.diag.invertida", valores);
+      case "integrada":
+      case "parcial":
+        return t("metodo.cabala.diag.fluida", valores);
+      default:
+        return narrativaBloqueo(tr); // bloqueos: relato del paso evolutivo
+    }
+  };
+
   const [loading, setLoading] = useState(true);
   const [test, setTest] = useState<Record<string, number[]>>({});
   const [autoeval, setAutoeval] = useState<Record<string, number[]>>({});
@@ -148,9 +161,9 @@ export default function MetodoCabalaDiagnostico() {
       const completo = sefiraEvaluable(r, a);
       return {
         key,
-        titulo: cabalaSefirotMap[key].titulo,
-        numero: cabalaSefirotMap[key].numero,
-        etiqueta: CABALA_TEST[key].etiqueta,
+        titulo: sefirotMap[key].titulo,
+        numero: sefirotMap[key].numero,
+        etiqueta: testCabala[key].etiqueta,
         completo,
         nivel: completo ? nivelCombinado(r, a) : -1,
         polaridad: (testCompleto(r) ? polaridadSefira(r) : "equilibrio") as Polaridad,
@@ -194,8 +207,8 @@ export default function MetodoCabalaDiagnostico() {
               nom={cabalaNom}
               mb={0}
               prev={{ label: "← Malkhut", onClick: () => navigate("/metodo/cabala/sefira/malkuth") }}
-              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
-              next={{ label: "Los Senderos →", onClick: () => navigate("/metodo/cabala/senderos") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
+              next={{ label: `${t("metodo.cabala.paso.senderos")} →`, onClick: () => navigate("/metodo/cabala/senderos") }}
             />
           </Reveal>
 
@@ -243,7 +256,7 @@ export default function MetodoCabalaDiagnostico() {
                       </Text>
                     </Flex>
                     <Text color={`${cabalaTxt}aa`} fontSize="sm" letterSpacing="0.08em" textTransform="uppercase" mb={4}>
-                      {etiquetaDe(principal.from)} → {etiquetaDe(principal.to)} · {TIPO_LABEL[principal.tipo]}
+                      {etiquetaDe(principal.from)} → {etiquetaDe(principal.to)} · {tipoLabel[principal.tipo]}
                     </Text>
 
                     <Flex gap={5} mb={5} wrap="wrap">
@@ -275,8 +288,8 @@ export default function MetodoCabalaDiagnostico() {
                       {t("metodo.cabala.siguientePaso")}
                     </Text>
                     <Flex gap={3} wrap="wrap">
-                      <BotonSefira label={`Repasar ${nombre(principal.from)}`} onClick={() => navigate(`/metodo/cabala/sefira/${principal.from}`)} />
-                      <BotonSefira label={`Trabajar ${nombre(principal.to)}`} onClick={() => navigate(`/metodo/cabala/sefira/${principal.to}`)} />
+                      <BotonSefira label={t("metodo.cabala.diag.repasar", { sefira: nombre(principal.from) })} onClick={() => navigate(`/metodo/cabala/sefira/${principal.from}`)} />
+                      <BotonSefira label={t("metodo.cabala.diag.trabajar", { sefira: nombre(principal.to) })} onClick={() => navigate(`/metodo/cabala/sefira/${principal.to}`)} />
                     </Flex>
                   </Caja>
                 </Reveal>
@@ -309,7 +322,7 @@ export default function MetodoCabalaDiagnostico() {
                               {nombre(t.from)} → {nombre(t.to)}
                             </Text>
                             <Text color={`${cabalaTxt}88`} fontSize="xs" letterSpacing="0.1em" textTransform="uppercase">
-                              {TIPO_LABEL[t.tipo]} · {t.origen}/10 → {t.destino}/10
+                              {tipoLabel[t.tipo]} · {t.origen}/10 → {t.destino}/10
                             </Text>
                           </Flex>
                           <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
@@ -327,10 +340,10 @@ export default function MetodoCabalaDiagnostico() {
                 <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 5 }} w="100%">
                   <ListaChips titulo={t("metodo.cabala.desarrolladas")}
                               items={desarrolladas.map((n) => `${n.titulo} · ${n.etiqueta}`)}
-                              vacio="Ninguna destaca todavía." />
+                              vacio={t("metodo.cabala.diag.ningunaDestaca")} />
                   <ListaChips titulo={t("metodo.cabala.porFortalecer")}
                               items={porFortalecer.map((n) => `${n.titulo} · ${n.etiqueta}`)}
-                              vacio="Ninguna especialmente baja." />
+                              vacio={t("metodo.cabala.diag.ningunaBaja")} />
                 </Flex>
               </Reveal>
 
@@ -353,11 +366,11 @@ export default function MetodoCabalaDiagnostico() {
                     {t("metodo.cabala.seDesequilibra")}
                   </Text>
                   <Flex direction="column" gap={1.5} mb={5}>
-                    <LeyendaPolaridad label={POLARIDAD_LABEL.deficit}
+                    <LeyendaPolaridad label={polaridadLabel.deficit}
                                       texto={t("metodo.cabala.falta")} />
-                    <LeyendaPolaridad label={POLARIDAD_LABEL.equilibrio}
+                    <LeyendaPolaridad label={polaridadLabel.equilibrio}
                                       texto={t("metodo.cabala.equilibrio")} />
-                    <LeyendaPolaridad label={POLARIDAD_LABEL.exceso}
+                    <LeyendaPolaridad label={polaridadLabel.exceso}
                                       texto={t("metodo.cabala.exceso")} />
                   </Flex>
 
@@ -371,7 +384,7 @@ export default function MetodoCabalaDiagnostico() {
                           </Text>
                           {n.completo ? (
                             <Text color={cabalaTxt} fontSize="xs" fontWeight="700">
-                              {n.nivel}/10 · <Box as="span" color={`${cabalaTxt}99`}>{POLARIDAD_LABEL[n.polaridad]}</Box>
+                              {n.nivel}/10 · <Box as="span" color={`${cabalaTxt}99`}>{polaridadLabel[n.polaridad]}</Box>
                             </Text>
                           ) : (
                             <Text color={`${cabalaTxt}66`} fontSize="xs" fontStyle="italic">{t("metodo.cabala.sinResponder")}</Text>

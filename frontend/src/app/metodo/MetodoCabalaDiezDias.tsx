@@ -11,8 +11,9 @@ import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustrac
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
-import { CABALA_TEST } from "../../components/metodo/cabalaTest";
+import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
+import { useSefirot, useTestCabala } from "../../components/metodo/cabalaEn";
+import { useT, TextoRico } from "../../i18n";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
@@ -28,10 +29,6 @@ const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 
 // Con negro al 45 % la foto conserva sus colores y el texto ámbar sigue
 // legible (además lleva INK_SHADOW).
 const CAJA_OVERLAY = "rgba(0,0,0,0.45)";
-
-// Un día por SEFIRÁ (las 10 clásicas, sin Da'at). Cada día toma el ejercicio de
-// esa dimensión; si no tiene, se usan sus preguntas de reflexión.
-const DIAS = CABALA_SEFIROT_ORDEN.filter((k) => k !== "daat").map((k) => cabalaSefirotMap[k]);
 
 const Caja = ({ children, ...rest }: React.ComponentProps<typeof Box>) => (
   <Box position="relative" overflow="hidden" w="100%"
@@ -49,7 +46,14 @@ const ItemLista = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function MetodoCabalaDiezDias() {
+  const t = useT();
   const navigate = useNavigate();
+  // Un día por SEFIRÁ (las 10 clásicas, sin Da'at). Cada día toma el ejercicio
+  // de esa dimensión; si no tiene, se usan sus preguntas de reflexión.
+  // Se calcula AL PINTAR, no al importar el módulo: si no, el contenido se
+  // quedaría congelado en el idioma con el que arrancó la página.
+  const DIAS = useSefirot().filter((s) => s.key !== "daat");
+  const testCabala = useTestCabala();
   const [loading, setLoading] = useState(true);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
 
@@ -79,17 +83,17 @@ export default function MetodoCabalaDiezDias() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-              title="10 días con tus dimensiones"
+              title={t("metodo.cabala.paso.dias")}
               pageLabel={`${CABALA_PAG.dias}/${CABALA_TOTAL_PAGINAS}`}
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
-              prev={{ label: "← Diagnóstico final", onClick: () => navigate("/metodo/cabala/final") }}
+              prev={{ label: `← ${t("metodo.cabala.paso.final")}`, onClick: () => navigate("/metodo/cabala/final") }}
               // "Ilustraciones" nunca falta en los headers de Cábala. En móvil se
               // queda solo el ojo, para que los botones sigan en una fila.
               extra={{
-                label: <Box as="span" display={{ base: "none", md: "inline" }}>Ilustraciones</Box>,
+                label: <Box as="span" display={{ base: "none", md: "inline" }}>{t("metodo.ilustraciones")}</Box>,
                 onClick: () => setIlustracionesOpen(true),
               }}
-              next={{ label: "Cursos →", onClick: () => navigate("/metodo/cabala/cursos") }}
+              next={{ label: `${t("header.cursos")} →`, onClick: () => navigate("/metodo/cabala/cursos") }}
             />
           </Reveal>
 
@@ -97,8 +101,7 @@ export default function MetodoCabalaDiezDias() {
             {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
-              Diez días, una dimensión cada día. Dedica la jornada a observar y practicar la sefirá que toca,
-              apoyándote en su ejercicio. No se trata de hacerlo perfecto, sino de habitar cada energía un día entero.
+              {t("metodo.cabala.dias.intro")}
             </Text>
           </Reveal>
 
@@ -112,14 +115,14 @@ export default function MetodoCabalaDiezDias() {
                 </Box>
                 <Box>
                   <Text color={cabalaTxt} fontWeight="800" fontSize={{ base: "lg", md: "xl" }} mb={1} style={{ textShadow: INK_SHADOW }}>
-                    Una tradición: la Cuenta del Omer (Sefirat HaOmer)
+                    {t("metodo.cabala.dias.omerTitulo")}
                   </Text>
-                  <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
-                    En la Cábala existe una práctica milenaria en la que, día a día, uno se centra en un atributo
-                    concreto del alma: la <Box as="span" fontStyle="italic">Cuenta del Omer</Box> (Sefirat HaOmer).
-                    Dura 49 días (siete semanas por siete sefirot) y cada jornada trabaja una combinación —por ejemplo,
-                    «Gevurah dentro de Chesed»—. Este trabajo de 10 días es una adaptación más breve: una sefirá por día,
-                    para que empieces a reconocer cada energía en tu Vida cotidiana.
+                  {/* El nombre de la práctica va en cursiva: la frase entera vive
+                      en el diccionario y sus **negritas** se pintan así (en inglés
+                      el énfasis no cae en el mismo sitio, trocearla la rompería). */}
+                  <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}
+                        sx={{ b: { fontStyle: "italic", fontWeight: "inherit" } }}>
+                    <TextoRico>{t("metodo.cabala.dias.omerTexto")}</TextoRico>
                   </Text>
                 </Box>
               </Flex>
@@ -128,7 +131,7 @@ export default function MetodoCabalaDiezDias() {
 
           {/* Los 10 días */}
           {DIAS.map((s, i) => {
-            const etiqueta = CABALA_TEST[s.key]?.etiqueta ?? "";
+            const etiqueta = testCabala[s.key]?.etiqueta ?? "";
             const ej = s.ejercicio;
             return (
               <Reveal key={s.key} direction="up" distance={20} delay={0.12} duration={0.6} w="100%" inView>
@@ -142,7 +145,7 @@ export default function MetodoCabalaDiezDias() {
                     </Flex>
                     <Box>
                       <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" style={{ textShadow: INK_SHADOW }}>
-                        Día {i + 1}{etiqueta ? ` · ${etiqueta}` : ""}
+                        {t("metodo.cabala.dias.dia", { n: i + 1 })}{etiqueta ? ` · ${etiqueta}` : ""}
                       </Text>
                       <Text color={cabalaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.1"
                             style={{ textShadow: `0 0 16px ${cabalaTxt}44` }}>
@@ -189,7 +192,7 @@ export default function MetodoCabalaDiezDias() {
                   ) : (
                     <>
                       <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} mb={3} style={{ textShadow: INK_SHADOW }}>
-                        Reflexiona a lo largo del día
+                        {t("metodo.cabala.dias.reflexiona")}
                       </Text>
                       <Flex direction="column" gap={2.5}>
                         {s.preguntas.items.slice(0, 5).map((q, qi) => <ItemLista key={qi}>{q}</ItemLista>)}
@@ -204,7 +207,7 @@ export default function MetodoCabalaDiezDias() {
           <Reveal direction="up" distance={16} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center" inView>
             <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" fontWeight="600" textAlign="center"
                   maxW="620px" lineHeight="1.7" mt={2} style={{ textShadow: INK_SHADOW }}>
-              “Al décimo día, el Árbol ya no está fuera de ti: lo reconoces en tu forma de vivir.”
+              {t("metodo.cabala.dias.cierre")}
             </Text>
           </Reveal>
         </Flex>

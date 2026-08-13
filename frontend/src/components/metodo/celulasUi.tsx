@@ -524,6 +524,12 @@ export interface Consejo {
   /** Las 3 ideas clave de la curiosidad (resumen del texto). Se muestran en
    *  cajas blancas bajo el titular, para captarla en 3-5 s. */
   claves?: string[];
+  /** Clave estable con la que se guarda «esto ya está leído». Solo la ponen las
+   *  curiosidades traducidas, y siempre con el titular ESPAÑOL: si se guardara
+   *  el titular en inglés, la misma curiosidad contaría como dos y la marca de
+   *  leída se perdería al cambiar de idioma. Sin traducir, basta el titular
+   *  (ver `claveConsejo` en `todasCelulasEn.tsx`). */
+  id?: string;
 }
 
 /* ─────────────────────────────────────────

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
@@ -9,6 +10,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { FotoBox } from "../../components/metodo/FotoBox";
 import { historiaVisual } from "../../components/metodo/culturaPortadas";
+import { tituloHistoria } from "../../components/metodo/culturaHistorias";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
@@ -16,26 +18,27 @@ import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../G
 // Las 6 grandes Historias del recorrido de Cultura, en orden. La portada y el
 // emoji de reserva de cada una salen de `culturaPortadas` (compartido con la
 // presentación pública /d/cultura): las que aún no tienen portada muestran su
-// emoji en el FotoBox.
-type Historia = { key: string; titulo: string; emoji: string; ruta: string; portada?: string };
+// emoji en el FotoBox. El título NO se escribe aquí: sale del diccionario
+// (`tituloHistoria`), que es el mismo que lee la cabecera de cada Historia.
+type Historia = { key: string; emoji: string; ruta: string; portada?: string };
 
-const historia = (key: string, titulo: string): Historia => ({
+const historia = (key: string): Historia => ({
   key,
-  titulo,
   ruta: `/metodo/cultura/historia/${key}`,
   ...historiaVisual(key),
 });
 
 const HISTORIAS: Historia[] = [
-  historia("universal",  "HISTORIA UNIVERSAL"),
-  historia("religiones", "HISTORIA DE LAS RELIGIONES"),
-  historia("filosofia",  "HISTORIA DE LA FILOSOFÍA"),
-  historia("ciencia",    "HISTORIA DE LA CIENCIA"),
-  historia("medicina",   "HISTORIA DE LA MEDICINA"),
-  historia("arte",       "HISTORIA DEL ARTE Y LA LITERATURA"),
+  historia("universal"),
+  historia("religiones"),
+  historia("filosofia"),
+  historia("ciencia"),
+  historia("medicina"),
+  historia("arte"),
 ];
 
 export default function MetodoCulturaHistorias() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -79,17 +82,17 @@ export default function MetodoCulturaHistorias() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CulturaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cultura"
+              title={t("disciplina.cultura")}
               compact
               bgColor={`${culturaBg}dd`}
               color={culturaTxt}
               nom={culturaNom}
               mb={0}
-              prev={{ label: "← Introducción", onClick: () => navigate("/metodo/cultura") }}
+              prev={{ label: `← ${t("metodo.cultura.paso.intro")}`, onClick: () => navigate("/metodo/cultura") }}
               // A la derecha, el taller de apuntes: de aquí se sale con lo
               // recorrido por escrito. Las Ilustraciones siguen en el header de
               // la portada de Cultura (/metodo/cultura), que es su sitio.
-              next={{ label: "Tus apuntes", arrow: "next", onClick: () => navigate("/metodo/cultura/apuntes") }}
+              next={{ label: t("metodo.cultura.paso.apuntes"), arrow: "next", onClick: () => navigate("/metodo/cultura/apuntes") }}
             />
           </Reveal>
 
@@ -99,7 +102,7 @@ export default function MetodoCulturaHistorias() {
               <Reveal key={h.key} direction="up" distance={26} scaleFrom={0.97} delay={0.1 + i * 0.08} duration={0.7}>
                 <Box h="100%">
                   <FotoBox
-                    titulo={h.titulo}
+                    titulo={tituloHistoria(h.key).toUpperCase()}
                     emoji={h.emoji}
                     foto={h.portada}
                     nom={culturaNom}

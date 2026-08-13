@@ -151,16 +151,16 @@ export default function MetodoAyurvedaResultado() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Resultado"
+            title={t("metodo.ayur.paso.resultado")}
             pageLabel="3/4"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Test", onClick: () => navigate("/metodo/ayurveda/test") }}
+            prev={{ label: `← ${t("metodo.ayur.paso.test")}`, onClick: () => navigate("/metodo/ayurveda/test") }}
             extra={ilustracionesBtn}
             // Después del resultado, antes de «Energías», intercalamos el cómic de los doshas.
-            next={{ label: "Energías →", onClick: () => setComicDoshasOpen(true) }}
+            next={{ label: `${t("metodo.ayur.paso.energias")} →`, onClick: () => setComicDoshasOpen(true) }}
           />
           </Reveal>
 
@@ -224,7 +224,7 @@ export default function MetodoAyurvedaResultado() {
                 transition={{ duration: 0.8, delay: titleDelay, ease: POP }}
               >
                 <Text color={ayurvedaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.15em" textTransform="uppercase" mb={4}>
-                  Tu Doṣha principal es
+                  {t("metodo.ayur.tuDoshaPrincipal")}
                 </Text>
                 <MotionBox
                   display="flex"
@@ -257,7 +257,7 @@ export default function MetodoAyurvedaResultado() {
             lineHeight="1.7"
             mt={1}
           >
-            Esta es tu constitución según el test. En los siguientes pasos del Mapa iremos descubriendo qué significa para ti.
+            {t("metodo.ayur.resultadoPie")}
           </Text>
           </Reveal>
         </Flex>

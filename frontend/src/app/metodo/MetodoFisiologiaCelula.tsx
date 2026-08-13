@@ -4,7 +4,7 @@ import ConstruirFisio from "../../components/metodo/ConstruirFisio";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { CELULAS_ORGANOS } from "../../components/metodo/comicCelulasOrganos";
 import { useComic } from "../../i18n/comics";
-import { useT } from "../../i18n";
+import { useT, TextoRico } from "../../i18n";
 import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 
 const PRE = "/recorrido/fisiologia/pre";
@@ -22,32 +22,32 @@ export default function MetodoFisiologiaCelula() {
   return (
     <>
       <ConstruirFisio
-        title="Célula"
+        title={t("fisiologia.celula.titulo")}
         pageLabel="1/4"
-        prev={{ label: "← Estructuras", ruta: "/metodo/fisiologia/estructuras" }}
+        prev={{ label: `← ${t("fisiologia.estructuras.corto")}`, ruta: "/metodo/fisiologia/estructuras" }}
         introTitulo=""
-        instruccion="Construye una célula."
-        zonaLabel="el citoplasma"
+        instruccion={t("fisiologia.celula.instruccion")}
+        zonaLabel={t("fisiologia.celula.zona")}
         forma="cluster"
         glow="#8fd6a8"
         piezas={[
-          { tipo: "nucleo", color: "#b79af0", glyph: "Nu", label: "núcleo", n: 1, img: `${PRE}/nucleo.webp` },
-          { tipo: "adn", color: "#9ab6f0", glyph: "N", label: "ADN", n: 1, img: `${PRE}/adn.webp` },
-          { tipo: "membrana", color: "#f2c86b", glyph: "L", label: "membrana", n: 1, img: `${PRE}/membrana.webp` },
-          { tipo: "mitocondria", color: "#e08a8a", glyph: "M", label: "mitocondria", n: 2, img: `${PRE}/mitocondria.webp` },
-          { tipo: "ribosoma", color: "#7fd6c2", glyph: "R", label: "ribosoma", n: 3, img: `${PRE}/ribosoma.webp` },
+          { tipo: "nucleo", color: "#b79af0", glyph: "Nu", label: t("fisiologia.pieza.nucleo"), n: 1, img: `${PRE}/nucleo.webp` },
+          { tipo: "adn", color: "#9ab6f0", glyph: "N", label: t("fisiologia.pieza.adn"), n: 1, img: `${PRE}/adn.webp` },
+          { tipo: "membrana", color: "#f2c86b", glyph: "L", label: t("fisiologia.pieza.membrana"), n: 1, img: `${PRE}/membrana.webp` },
+          { tipo: "mitocondria", color: "#e08a8a", glyph: "M", label: t("fisiologia.pieza.mitocondria"), n: 2, img: `${PRE}/mitocondria.webp` },
+          { tipo: "ribosoma", color: "#7fd6c2", glyph: "R", label: t("fisiologia.pieza.ribosoma"), n: 3, img: `${PRE}/ribosoma.webp` },
         ]}
         resultImg={`${PRE}/celulaentera.webp`}
-        resultTitulo="¡Has construido una célula!"
+        resultTitulo={t("fisiologia.celula.hecho")}
         resultParrafos={[
-          <>Una <b>célula</b> es la unidad más pequeña con Vida propia: dentro de su membrana, el núcleo guarda el ADN con las instrucciones, los ribosomas fabrican proteínas y las mitocondrias generan energía.</>,
-          <>Todo funciona a la vez, como una ciudad diminuta. Tu cuerpo tiene alrededor de <b>37 billones</b> de ellas.</>,
+          <TextoRico>{t("fisiologia.celula.p1")}</TextoRico>,
+          <TextoRico>{t("fisiologia.celula.p2")}</TextoRico>,
         ]}
         dataKey="celula_hecho"
-        headerNext={{ label: "Órganos →", onClick: () => setComicOpen(true) }}
+        headerNext={{ label: `${t("fisiologia.organos.titulo")} →`, onClick: () => setComicOpen(true) }}
         lockNextUntilComplete
-        lockNextTooltip="Primero crea la célula"
-        notaPie="Una célula real tiene muchos más orgánulos; aquí la hemos simplificado con fines de estudio."
+        lockNextTooltip={t("fisiologia.celula.bloqueo")}
+        notaPie={t("fisiologia.celula.nota")}
       />
 
       {/* Cómic de paso: de una sola célula (cigoto) a un órgano completo. Al

@@ -12,6 +12,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
+import { useT, type ClaveTexto } from "../../i18n";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -40,61 +41,52 @@ const MACRO: Record<Macro, { color: string; glyph: string; img: string }> = {
 type EstId = "nucleo" | "membrana" | "mitocondria" | "ribosoma";
 type Forma = "helice" | "membrana" | "cluster";
 
-interface Ingrediente { macro: Macro; n: number; label: string;
+// OJO: todo el texto va como CLAVE del diccionario. Este array se calcula UNA
+// vez al importar el fichero y, con el texto dentro, se quedaria congelado en
+// el idioma de arranque.
+interface Ingrediente { macro: Macro; n: number; label: ClaveTexto;
   /** Foto propia de este ingrediente (si no, se usa la genérica del macro). */
   img?: string;
 }
 interface EstDef {
   id: EstId;
-  nombre: string;
+  nombre: ClaveTexto;
   glow: string;          // acento de la estructura
   forma: Forma;
-  desc: string;          // frase de la tarjeta
+  desc: ClaveTexto;      // frase de la tarjeta
   ingredientes: Ingrediente[];
-  resultado: string[];
+  resultado: ClaveTexto[];
   resultadoImg: string;   // circular · se usa en el resultado (Fase B)
   cuadradoImg: string;    // cuadrada · se usa en el box de la rejilla
 }
 
 const ESTRUCTURAS: EstDef[] = [
   {
-    id: "nucleo", nombre: "Núcleo", glow: "#9ab6f0", forma: "cluster",
-    desc: "Guarda y protege tu información genética.",
-    ingredientes: [{ macro: "adn", n: 3, label: "ADN" }, { macro: "lipido", n: 2, label: "Barrera nuclear", img: `${PRE}/barreranuclear.webp` }],
-    resultado: [
-      "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
-      "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la Vida.",
-    ],
+    id: "nucleo", nombre: "fisiologia.est.nucleo", glow: "#9ab6f0", forma: "cluster",
+    desc: "fisiologia.est.nucleo.desc",
+    ingredientes: [{ macro: "adn", n: 3, label: "fisiologia.pieza.adn" }, { macro: "lipido", n: 2, label: "fisiologia.pieza.barreraNuclear", img: `${PRE}/barreranuclear.webp` }],
+    resultado: ["fisiologia.est.nucleo.r1", "fisiologia.est.nucleo.r2"],
     resultadoImg: `${PRE}/nucleocircular.webp`, cuadradoImg: `${PRE}/nucleo.webp`,
   },
   {
-    id: "membrana", nombre: "Membrana celular", glow: "#f2c86b", forma: "membrana",
-    desc: "Envuelve la célula y decide qué entra y qué sale.",
-    ingredientes: [{ macro: "lipido", n: 4, label: "lípido" }, { macro: "proteina", n: 2, label: "Receptores hormonales", img: `${PRE}/receptoresmembranacelular.webp` }],
-    resultado: [
-      "Los fosfolípidos se ordenan solos en una doble capa, y las proteínas se incrustan como puertas y sensores.",
-      "Así nace la membrana: la frontera viva que separa el interior de la célula del mundo exterior y controla el paso.",
-    ],
+    id: "membrana", nombre: "fisiologia.est.membrana", glow: "#f2c86b", forma: "membrana",
+    desc: "fisiologia.est.membrana.desc",
+    ingredientes: [{ macro: "lipido", n: 4, label: "fisiologia.pieza.lipido" }, { macro: "proteina", n: 2, label: "fisiologia.pieza.receptoresHormonales", img: `${PRE}/receptoresmembranacelular.webp` }],
+    resultado: ["fisiologia.est.membrana.r1", "fisiologia.est.membrana.r2"],
     resultadoImg: `${PRE}/circularmembrana.webp`, cuadradoImg: `${PRE}/membrana.webp`,
   },
   {
-    id: "mitocondria", nombre: "Mitocondria", glow: "#e08a8a", forma: "cluster",
-    desc: "La central de energía de la célula.",
-    ingredientes: [{ macro: "lipido", n: 2, label: "Membrana mitocondrial", img: `${PRE}/membranamitocondria.webp` }, { macro: "proteina", n: 3, label: "Receptores", img: `${PRE}/receptoresmitocondria.webp` }],
-    resultado: [
-      "Con sus membranas plegadas y muchísimas proteínas y enzimas, la mitocondria transforma los nutrientes y el oxígeno en energía.",
-      "Es la central eléctrica que fabrica el ATP, el combustible que mantiene en marcha cada proceso de tu cuerpo.",
-    ],
+    id: "mitocondria", nombre: "fisiologia.est.mitocondria", glow: "#e08a8a", forma: "cluster",
+    desc: "fisiologia.est.mitocondria.desc",
+    ingredientes: [{ macro: "lipido", n: 2, label: "fisiologia.pieza.membranaMitocondrial", img: `${PRE}/membranamitocondria.webp` }, { macro: "proteina", n: 3, label: "fisiologia.pieza.receptores", img: `${PRE}/receptoresmitocondria.webp` }],
+    resultado: ["fisiologia.est.mitocondria.r1", "fisiologia.est.mitocondria.r2"],
     resultadoImg: `${PRE}/circularmitocondria.webp`, cuadradoImg: `${PRE}/mitocondria.webp`,
   },
   {
-    id: "ribosoma", nombre: "Ribosoma", glow: "#7fd6c2", forma: "cluster",
-    desc: "La fábrica de enzimas.",
-    ingredientes: [{ macro: "proteina", n: 3, label: "Enzimas", img: `${PRE}/enzimasribosoma.webp` }, { macro: "adn", n: 1, label: "ARN", img: `${PRE}/ARN.webp` }],
-    resultado: [
-      "Hecho de proteínas y de ARN(r), el ribosoma lee las instrucciones ARN(m), que vienen del ADN.",
-      "Con ellas ensambla aminoácidos uno tras otro y fabrica nuevas enzimas: convierte la información genética en materia viva.",
-    ],
+    id: "ribosoma", nombre: "fisiologia.est.ribosoma", glow: "#7fd6c2", forma: "cluster",
+    desc: "fisiologia.est.ribosoma.desc",
+    ingredientes: [{ macro: "proteina", n: 3, label: "fisiologia.pieza.enzimas", img: `${PRE}/enzimasribosoma.webp` }, { macro: "adn", n: 1, label: "fisiologia.pieza.arn", img: `${PRE}/ARN.webp` }],
+    resultado: ["fisiologia.est.ribosoma.r1", "fisiologia.est.ribosoma.r2"],
     resultadoImg: `${PRE}/circularribosoma.webp`, cuadradoImg: `${PRE}/ribosoma.webp`,
   },
 ];
@@ -112,7 +104,7 @@ const perlaBg = (c: string): string =>
   `radial-gradient(circle at 34% 30%, #ffffff 0%, ${c} 36%, ${c}dd 64%, ${c}77 100%)`;
 
 // Piezas planas a arrastrar en una estación.
-interface Pieza { id: string; macro: Macro; label: string; img?: string; }
+interface Pieza { id: string; macro: Macro; label: ClaveTexto; img?: string; }
 const piezasDe = (def: EstDef): Pieza[] =>
   def.ingredientes.flatMap((ing) =>
     Array.from({ length: ing.n }, (_, i) => ({ id: `${def.id}-${ing.macro}-${i}`, macro: ing.macro, label: ing.label, img: ing.img })));
@@ -145,6 +137,7 @@ function Perla({ macro, size, img }: { macro: Macro; size: any; img?: string }) 
 
 // ── Ficha arrastrable ───────────────────────────────────────────────────────
 function LadrilloFicha({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (r: DOMRect) => void }) {
+  const t = useT();
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const st = MACRO[pieza.macro];
@@ -185,7 +178,7 @@ function LadrilloFicha({ pieza, onSoltar }: { pieza: Pieza; onSoltar: (r: DOMRec
             letterSpacing="0.02em" textTransform="uppercase" textAlign="center"
             lineHeight="1.15" noOfLines={2} maxW={{ base: "62px", md: "80px" }}
             style={{ textShadow: INK }}>
-        {pieza.label}
+        {t(pieza.label)}
       </Text>
     </MBox>
   );
@@ -233,6 +226,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
   /** Avanza a la siguiente estructura sin construir; en la última vuelve al menú. */
   onSiguiente: () => void;
 }) {
+  const t = useT();
   const [pendientes, setPendientes] = useState<Pieza[]>(() => piezasDe(def));
   const [puestas, setPuestas] = useState<Pieza[]>(() => (yaFormada ? piezasDe(def) : []));
   const [completo, setCompleto] = useState(yaFormada);
@@ -268,7 +262,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
              bg="rgba(255,255,255,0.1)" color={fisiologiaTxt}
              fontFamily="'EB Garamond', serif" fontWeight="600" fontSize="sm" cursor="pointer"
              transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)" }}>
-          ← Las 4 estructuras
+          {`← ${t("fisiologia.estructuras.volver")}`}
         </Box>
       </Flex>
 
@@ -277,11 +271,11 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
           <MBox key="a" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {/* Título y frase FUERA del box, arriba (no dentro del panel) */}
             <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK }}>
-              {def.nombre}
+              {t(def.nombre)}
             </Text>
             <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
-              Arrastra las macromoléculas a la zona para ensamblarla.
+              {t("fisiologia.estructuras.instruccion")}
             </Text>
 
             {/* Un poco más alto que antes: los nombres de las piezas pasaron de
@@ -307,7 +301,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
               {puestas.length === 0 && (
                 <Flex position="absolute" inset="0" align="center" justify="center" pointerEvents="none">
                   <Text color={`${def.glow}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>zona de ensamblaje</Text>
+                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>{t("fisiologia.estructuras.zona")}</Text>
                 </Flex>
               )}
             </Box>
@@ -324,7 +318,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
                 ))}
               </AnimatePresence>
               {pendientes.length === 0 && (
-                <Text color={`${def.glow}bb`} fontSize="md" fontStyle="italic">…organizándose…</Text>
+                <Text color={`${def.glow}bb`} fontSize="md" fontStyle="italic">{t("fisiologia.estructuras.organizandose")}</Text>
               )}
             </Flex>
 
@@ -351,7 +345,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
                     <Box position="absolute" inset="-4%" borderRadius="full" pointerEvents="none"
                          animation={`${shimmer} 3.6s ease-in-out infinite`}
                          sx={{ boxShadow: `0 0 46px ${def.glow}55, 0 0 88px ${def.glow}33` }} />
-                    <Image src={def.resultadoImg} alt={def.nombre} w="100%" h="100%" objectFit="contain"
+                    <Image src={def.resultadoImg} alt={t(def.nombre)} w="100%" h="100%" objectFit="contain"
                            style={{ filter: `drop-shadow(0 0 16px ${def.glow}55)` }}
                            fallback={<EstDibujada def={def} />} />
                   </Flex>
@@ -366,9 +360,9 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
                   </Text>
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
-                  {def.resultado.map((p, i) => (
-                    <Text key={i} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
-                          lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
+                  {def.resultado.map((clave) => (
+                    <Text key={clave} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
+                          lineHeight="1.9" style={{ textShadow: INK }}>{t(clave)}</Text>
                   ))}
                 </Flex>
               </PanelBox>
@@ -384,7 +378,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                ↺ Volver a hacer
+                {t("metodo.volverAHacer")}
               </Box>
               <Box as="button" onClick={onSiguiente}
                    display="inline-flex" alignItems="center" gap={2} px={7} py={2} borderRadius="full"
@@ -393,7 +387,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
                    letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
                    boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                Siguiente →
+                {t("fisiologia.estructuras.siguiente")}
               </Box>
             </Flex>
           </MBox>
@@ -408,6 +402,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
 // (nombre, descripción, acción) siempre visible. Al construirla aparece la foto
 // + un tick y el borde se ilumina → sensación de recorrido.
 function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: () => void }) {
+  const t = useT();
   return (
     <MBox whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 300, damping: 24 }} w="100%">
       <Box
@@ -446,7 +441,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
             justifyContent="center"
           >
             {hecha ? (
-              <Image src={e.cuadradoImg} alt={e.nombre} w="100%" h="100%" objectFit="cover"
+              <Image src={e.cuadradoImg} alt={t(e.nombre)} w="100%" h="100%" objectFit="cover"
                      fallback={<EstDibujada def={e} />} />
             ) : (
               <Text color={fisiologiaTxt} fontSize={{ base: "4xl", md: "5xl" }} fontWeight="800"
@@ -458,16 +453,16 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
           <Box flex="1" minW={0}>
             <Flex align="center" gap={2.5}>
               <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                    style={{ textShadow: INK }}>{e.nombre}</Text>
+                    style={{ textShadow: INK }}>{t(e.nombre)}</Text>
               {/* Marca común del recorrido (MarcaLeido), con el color de la
                   estructura: misma forma que el resto de marcas. */}
-              {hecha && <MarcaLeido inline tinta={e.glow} bg={fisiologiaBg} title="Construida" />}
+              {hecha && <MarcaLeido inline tinta={e.glow} bg={fisiologiaBg} title={t("fisiologia.estructuras.construida")} />}
             </Flex>
             <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
-                  style={{ textShadow: INK }}>{e.desc}</Text>
+                  style={{ textShadow: INK }}>{t(e.desc)}</Text>
             <Text color={hecha ? e.glow : `${fisiologiaTxt}cc`} fontSize="xs" fontWeight="700"
                   letterSpacing="0.05em" textTransform="uppercase" mt={2.5}>
-              {hecha ? "Construida · ver de nuevo" : "Construir"}
+              {hecha ? t("fisiologia.estructuras.verDeNuevo") : t("fisiologia.estructuras.construir")}
             </Text>
           </Box>
         </Flex>
@@ -478,6 +473,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaEstructuras() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [formadas, setFormadas] = useState<EstId[]>([]);
@@ -569,16 +565,16 @@ export default function MetodoFisiologiaEstructuras() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Estructuras celulares"
+            title={t("fisiologia.estructuras.titulo")}
             pageLabel="5/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Macromoléculas", onClick: () => navigate("/metodo/fisiologia/macromoleculas") }}
+            prev={{ label: `← ${t("fisiologia.macromoleculas.titulo")}`, onClick: () => navigate("/metodo/fisiologia/macromoleculas") }}
             extra={celulasBtn}
-            next={{ label: "Crea la célula →", onClick: irSiguiente, disabled: formadas.length < ESTRUCTURAS.length, disabledTooltip: "Primero construye las cuatro estructuras" }}
+            next={{ label: t("fisiologia.estructuras.crearCelula"), onClick: irSiguiente, disabled: formadas.length < ESTRUCTURAS.length, disabledTooltip: t("fisiologia.estructuras.bloqueo") }}
           />
           </Reveal>
 
@@ -586,7 +582,7 @@ export default function MetodoFisiologiaEstructuras() {
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
               <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                     maxW="640px">
-                Proteínas, ADN y lípidos se ensamblan para formar las partes de la célula. Construye las cuatro.
+                {t("fisiologia.estructuras.intro")}
               </Text>
             </MBox>
           )}

@@ -44,6 +44,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
@@ -103,6 +104,7 @@ function ColumnaHeaderBox({ icono, titulo, apoyo }: { icono: React.ReactNode; ti
 }
 
 export default function MetodoPsicologiaHuellasNudos() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -259,16 +261,16 @@ export default function MetodoPsicologiaHuellasNudos() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Heridas"
+              title={t("metodo.psico.paso.heridas")}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               step={{ current: 11, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Necesidades", onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/necesidades`); } }}
+              prev={{ label: `← ${t("metodo.psico.paso.necesidades")}`, onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/necesidades`); } }}
               next={{
-                label: "Tus heridas →",
+                label: `${t("metodo.psico.paso.tusHeridas")} →`,
                 onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/heridas-lista`); },
                 disabled: heridas.length === 0,
                 disabledTooltip: "Crea al menos una herida para continuar.",
@@ -278,9 +280,7 @@ export default function MetodoPsicologiaHuellasNudos() {
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
-            <IntroRecorrido>
-             Una experiencia que deja Huella puede dejar una necesidad emocional sin cubrir. Para dar sentido a ese dolor y evitar que vuelva a repetirse, la mente crea un Nudo: una creencia protectora que, aunque nace para ayudarnos, acaba limitando nuestra forma de vivir. La unión de la experiencia, la necesidad no cubierta y ese nudo constituye una Herida emocional.
-            </IntroRecorrido>
+            <IntroRecorrido>{t("metodo.psico.heridasIntro")}</IntroRecorrido>
             </Reveal>
 
             {/* ════════ TRES COLUMNAS DE FUENTES · aparecen de izquierda a derecha ════════ */}
@@ -319,17 +319,13 @@ export default function MetodoPsicologiaHuellasNudos() {
                 <Flex align="center" gap={2.5}>
                   <HeridaIcon size={20} color={TINTA} />
                   <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.03em"
-                        style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                    Tu herida en curso
-                  </Text>
+                        style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{t("metodo.psico.heridaEnCurso")}</Text>
                 </Flex>
                 <Box h="1px" w="60%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 
                 {totalSel === 0 ? (
                   <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85} textAlign="center"
-                        style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                    Toca huellas, nudos y necesidades para reunir una herida.
-                  </Text>
+                        style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{t("metodo.psico.tocaParaReunir")}</Text>
                 ) : (
                   <Flex wrap="wrap" gap={2} justify="center">
                     {selHuellas.map((t) => (
@@ -356,7 +352,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                        letterSpacing="0.04em" cursor={totalSel > 0 ? "pointer" : "not-allowed"} opacity={totalSel > 0 ? 1 : 0.7}
                        boxShadow={totalSel > 0 ? `0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a` : "none"} transition="all 0.18s"
                        _hover={totalSel > 0 ? { transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` } : {}}>
-                    <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>He terminado esta herida</Box>
+                    <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.heTerminadoHerida")}</Box>
                   </Box>
                   <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
                 </Flex>
@@ -371,9 +367,7 @@ export default function MetodoPsicologiaHuellasNudos() {
                 <MandalaDivider />
                 <Flex ref={heridasRef} direction="column" align="center" gap={4} w="100%" scrollMarginTop="90px">
                   <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em"
-                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
-                    Tus heridas
-                  </Text>
+                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>{t("metodo.psico.paso.tusHeridas")}</Text>
                   <HeridaGrid heridas={heridas} onBorrar={(id) => void borrarHerida(id)} />
                 </Flex>
               </>
@@ -398,9 +392,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               <Flex align="center" justify="center" gap={2.5} mb={4}>
                 <HeridaIcon size={22} color={TINTA} />
                 <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
-                      style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}` }}>
-                  Ponle nombre a tu herida
-                </Text>
+                      style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}` }}>{t("metodo.psico.ponleNombreHerida")}</Text>
               </Flex>
 
               {/* Raya horizontal de separación */}
@@ -425,7 +417,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               <Input
                 autoFocus value={nombre} onChange={(e) => setNombre(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && totalSel > 0) void guardarHerida(); }}
-                placeholder="Ej.: La herida del abandono…"
+                placeholder={t("metodo.psico.ejHerida")}
                 bg="rgba(255,251,243,0.55)" border={`1px solid ${TINTA}44`} color={TINTA} borderRadius="xl"
                 size="lg" textAlign="center" fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
                 fontWeight="600" sx={{ caretColor: TINTA }}
@@ -437,15 +429,13 @@ export default function MetodoPsicologiaHuellasNudos() {
                 <Box as="button" onClick={() => setNombreOpen(false)} px={6} py={2.5} borderRadius="full"
                      bg="transparent" color={TINTA} border={`1.5px solid ${TINTA}66`} fontFamily="'EB Garamond', serif"
                      fontWeight="600" fontSize={{ base: "sm", md: "md" }} cursor="pointer" transition="all 0.18s"
-                     _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>
-                  Seguir eligiendo
-                </Box>
+                     _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>{t("metodo.psico.seguirEligiendo")}</Box>
                 <Box as="button" onClick={() => void guardarHerida()} px={8} py={2.5} borderRadius="full"
                      bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
                      fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
                      boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
                      _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                  <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>Guardar herida</Box>
+                  <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.guardarHerida")}</Box>
                 </Box>
               </Flex>
             </Box>
@@ -495,6 +485,7 @@ function PiezaRect({ texto, activo, colorSel, icono, onTap }: {
 function Chip({ icon, label, onRemove, tint }: {
   icon: React.ReactNode; label: string; onRemove: () => void; tint?: string;
 }) {
+  const t = useT();
   return (
     <Flex align="center" gap={1.5} pl={2.5} pr={1.5} py={1} borderRadius="full"
           bg={tint || `${TINTA}12`} color={TINTA} border={`1px solid ${TINTA}40`} boxShadow="none">
@@ -502,7 +493,7 @@ function Chip({ icon, label, onRemove, tint }: {
       <Text fontSize="xs" fontWeight="600" lineHeight="1.2">{label}</Text>
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemove(); }} w="18px" h="18px" borderRadius="full"
            bg={`${TINTA}1a`} display="flex" alignItems="center" justifyContent="center"
-           fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title="Quitar">✕</Box>
+           fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title={t("metodo.psico.quitar")}>✕</Box>
     </Flex>
   );
 }

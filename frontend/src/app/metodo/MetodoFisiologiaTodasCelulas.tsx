@@ -16,6 +16,8 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useT } from "../../i18n";
+import { claveConsejo, useOrganosCelulas } from "../../components/metodo/todasCelulasEn";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
@@ -67,6 +69,11 @@ interface FichaOrgano extends Consejo {
 
 // Posiciones PROVISIONALES (se ajustarán sobre la imagen real). Las fotos de
 // los órganos están en /recorrido/fisiologia/organos/{key}.png.
+//
+// El texto de aquí es el ESPAÑOL, que es el que manda: el inglés vive en
+// `todasCelulasContenido.en.ts` y se pega encima al pintar (`useOrganosCelulas`).
+// Si se añade o se mueve una curiosidad aquí, hay que tocar también su hueco
+// allí, porque las curiosidades se emparejan por posición.
 const ORGANOS: Organo[] = [
   { key: "cerebro",   label: "Cerebro",   foto: "/recorrido/fisiologia/organos/cerebro.webp",   hotspot: { top: 10, left: 47 }, celulas: pick("neuronas", "astrocitos", "microglia", "oligodendrocitos", "ependimarias", "endotelial-cerebral", "pericito", "celula-madre-neural"),
     descripcion: <>Es el centro de mando de todo tu cuerpo. Desde aquí piensas, sientes, recuerdas y controlas cada movimiento y casi cada función, muchas veces sin darte cuenta. Aunque pesa poco más de un kilo, gasta cerca de una quinta parte de toda tu energía.</>,
@@ -894,6 +901,7 @@ function OrganoCard({
   vistas: Set<string>;
   onClick: () => void;
 }) {
+  const t = useT();
   const [imgErr, setImgErr] = useState(false);
   const total = organo.celulas.length;
   const hechas = organo.celulas.filter((c) => vistas.has(c.id)).length;
@@ -953,7 +961,9 @@ function OrganoCard({
           <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "2xs", md: "sm" }} fontWeight={700}
                 textAlign="center" letterSpacing="0.04em"
                 style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-            {total > 0 ? `${hechas}/${total} células` : "próximamente"}
+            {total > 0
+              ? t("fisiologia.lasCelulas.tarjeta", { hechas, total })
+              : t("fisiologia.lasCelulas.pronto")}
           </Text>
           {total > 0 && (
             <Box w="100%" h="7px" borderRadius="full" bg="rgba(255,255,255,0.18)" overflow="hidden">
@@ -970,11 +980,12 @@ function OrganoCard({
 // Flecha redonda del carrusel de células. Cuando no hay más hacia ese lado se
 // muestra desactivada (atenuada y sin click), para no engañar al usuario.
 function CarouselArrow({ dir, onClick, disabled }: { dir: "left" | "right"; onClick: () => void; disabled: boolean }) {
+  const t = useT();
   const left = dir === "left";
   return (
     <Box
       as="button"
-      aria-label={left ? "Anterior" : "Siguiente"}
+      aria-label={left ? t("comun.anterior") : t("comun.siguiente")}
       aria-disabled={disabled}
       onClick={disabled ? undefined : onClick}
       flexShrink={0}
@@ -1007,11 +1018,14 @@ function CarouselArrow({ dir, onClick, disabled }: { dir: "left" | "right"; onCl
 
 // Flecha para navegar entre los consejos (uno visible cada vez).
 function ConsejoArrow({ dir, onClick }: { dir: "left" | "right"; onClick: () => void }) {
+  const t = useT();
   const left = dir === "left";
   return (
     <Box
       as="button"
-      aria-label={left ? "Consejo anterior" : "Consejo siguiente"}
+      aria-label={left
+        ? t("fisiologia.lasCelulas.consejoAnterior")
+        : t("fisiologia.lasCelulas.consejoSiguiente")}
       onClick={onClick}
       flexShrink={0}
       display="flex"
@@ -1130,14 +1144,14 @@ function FichasGrid({ fichas, leidos, onFicha }: {
          gap={{ base: 3, md: 4 }}>
       {fichas.map((f) => (
         <FotoBox
-          key={f.titular}
+          key={claveConsejo(f)}
           titulo={f.nombre}
           foto={f.foto}
           nom={fisiologiaNom}
           tinta={fisiologiaTxt}
           bg={fisiologiaBg}
           colorTint={fisiologiaBg}
-          visto={leidos.has(f.titular)}
+          visto={leidos.has(claveConsejo(f))}
           onClick={() => onFicha(f)}
         />
       ))}
@@ -1163,6 +1177,7 @@ function OrganoDetalle({
   consejosLeidos: Set<string>;
   onBack: () => void;
 }) {
+  const t = useT();
   const [imgErr, setImgErr] = useState(false);
   // Índice del consejo visible (se ve uno cada vez y se navega con flechas).
   const [consejoIdx, setConsejoIdx] = useState(0);
@@ -1174,7 +1189,7 @@ function OrganoDetalle({
   const consejos = organo.consejos ?? [];
   const idx = consejos.length ? Math.min(consejoIdx, consejos.length - 1) : 0;
   const consejoActual = consejos.length ? consejos[idx] : null;
-  const consejoLeido = !!consejoActual && consejosLeidos.has(consejoActual.titular);
+  const consejoLeido = !!consejoActual && consejosLeidos.has(claveConsejo(consejoActual));
   const prevConsejo = () => setConsejoIdx((i) => (i - 1 + consejos.length) % consejos.length);
   const nextConsejo = () => setConsejoIdx((i) => (i + 1) % consejos.length);
 
@@ -1198,7 +1213,7 @@ function OrganoDetalle({
         </Box>
         <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} letterSpacing="0.04em"
               style={{ textShadow: `0 1px 4px ${fisiologiaBg}, 0 0 8px ${fisiologiaBg}` }}>
-          Volver
+          {t("comun.volver")}
         </Text>
       </Box>
 
@@ -1221,7 +1236,7 @@ function OrganoDetalle({
             ) : (
               <Flex w="100%" h="100%" align="center" justify="center" textAlign="center" px={3}>
                 <Text color={`${fisiologiaTxt}aa`} fontSize="xs" fontStyle="italic">
-                  Foto del órgano (próximamente)
+                  {t("fisiologia.lasCelulas.sinFoto")}
                 </Text>
               </Flex>
             )}
@@ -1238,14 +1253,18 @@ function OrganoDetalle({
               <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
                     style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
                 {organoCompleto
-                  ? "✓ Has descubierto todas sus células"
-                  : `${vistasOrgano} de ${organo.celulas.length} células descubiertas`}
+                  ? t("fisiologia.lasCelulas.organoCompleto")
+                  : t("fisiologia.lasCelulas.progreso", {
+                      hechas: vistasOrgano,
+                      total: organo.celulas.length,
+                    })}
               </Text>
             )}
             <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
                   mt={{ base: 1, md: 2 }} fontStyle={organo.descripcion ? "normal" : "italic"}
                   style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
-              {organo.descripcion ?? `Descripción del ${organo.label.toLowerCase()} (próximamente).`}
+              {organo.descripcion
+                ?? t("fisiologia.lasCelulas.sinDescripcion", { organo: organo.label.toLowerCase() })}
             </Text>
           </Flex>
         </Flex>
@@ -1257,7 +1276,7 @@ function OrganoDetalle({
       ) : (
         <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
               textAlign="center" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>
-          Pronto podrás explorar las células de este órgano.
+          {t("fisiologia.lasCelulas.sinCelulas")}
         </Text>
       )}
 
@@ -1267,7 +1286,7 @@ function OrganoDetalle({
           <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
                 letterSpacing="0.04em" textAlign="center"
                 style={{ textShadow: "0 1px 6px rgba(0,0,0,0.55)" }}>
-            {organo.fichasTitulo ?? "En detalle"}
+            {organo.fichasTitulo ?? t("fisiologia.lasCelulas.enDetalle")}
           </Text>
           <FichasGrid fichas={organo.fichas!} leidos={consejosLeidos} onFicha={onConsejo} />
         </Flex>
@@ -1281,7 +1300,8 @@ function OrganoDetalle({
               {/* Marca de curiosidad ya leída — la misma marca que en las
                   tarjetas, aquí en el flujo de la fila de arriba. */}
               {consejoLeido
-                ? <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} title="Leída" />
+                ? <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg}
+                              title={t("fisiologia.lasCelulas.leida")} />
                 : <Box />}
               {consejos.length > 1 && (
                 <Text color={`${fisiologiaTxt}bb`} fontSize={{ base: "2xs", md: "xs" }} fontWeight={700} letterSpacing="0.06em">
@@ -1310,7 +1330,9 @@ function OrganoDetalle({
                      letterSpacing="0.04em" cursor="pointer" transition="all 0.2s"
                      boxShadow={`0 0 14px ${fisiologiaTxt}55`}
                      _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 22px ${fisiologiaTxt}88` }}>
-                  {consejoLeido ? "Leer de nuevo →" : "Leer más →"}
+                  {consejoLeido
+                    ? t("fisiologia.lasCelulas.leerDeNuevo")
+                    : t("fisiologia.lasCelulas.leerMas")}
                 </Box>
               </Flex>
 
@@ -1322,7 +1344,7 @@ function OrganoDetalle({
                  display="flex" alignItems="center" justifyContent="center" textAlign="center" px={4} py={5}>
               <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                     style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
-                Consejos para cuidar tu {organo.label.toLowerCase()} (próximamente)
+                {t("fisiologia.lasCelulas.sinConsejos", { organo: organo.label.toLowerCase() })}
               </Text>
             </Box>
           )}
@@ -1334,6 +1356,9 @@ function OrganoDetalle({
 
 export default function MetodoFisiologiaTodasCelulas() {
   const navigate = useNavigate();
+  const t = useT();
+  // Los mismos órganos, con el texto del idioma activo pegado encima.
+  const organos = useOrganosCelulas(ORGANOS);
   const [loading, setLoading] = useState(true);
   // Mientras precargamos las fotos del órgano que se acaba de abrir (foto grande
   // + todas las fotos de sus células), mostramos el spinner: la ficha del órgano
@@ -1342,7 +1367,10 @@ export default function MetodoFisiologiaTodasCelulas() {
   // "galeria" = cuerpo-navegador + cuadrícula de órganos; "detalle" = ficha del
   // órgano a pantalla completa (como una Pokédex).
   const [vista, setVista] = useState<"galeria" | "detalle">("galeria");
-  const [organo, setOrgano] = useState<Organo>(ORGANOS[0]);
+  // Guardamos la CLAVE, no el objeto: así el órgano abierto se repinta en el
+  // idioma nuevo si se cambia de idioma con la ficha delante.
+  const [organoKey, setOrganoKey] = useState<string>(ORGANOS[0].key);
+  const organo = organos.find((o) => o.key === organoKey) ?? organos[0];
   const [celula, setCelula] = useState<Celula | null>(null);
   const [consejo, setConsejo] = useState<Consejo | null>(null);
   // Lo abierto ya estaba leído ANTES de abrirlo (aviso «✓ Leída» en el popup).
@@ -1358,7 +1386,7 @@ export default function MetodoFisiologiaTodasCelulas() {
   // descargadas: mientras tanto, spinner a pantalla completa.
   const abrirOrgano = async (o: Organo) => {
     setOrganoLoading(true);
-    setOrgano(o);
+    setOrganoKey(o.key);
     window.scrollTo({ top: 0, behavior: "auto" });
     await precargarImagenes([
       encodeURI(o.foto),
@@ -1431,12 +1459,15 @@ export default function MetodoFisiologiaTodasCelulas() {
   // Abre una curiosidad y la marca como leída (se guarda en BD). Se usa tanto al
   // pulsar «Leer más» como al navegar con las flechas dentro del modal.
   const verConsejo = (c: Consejo) => {
+    // La clave es siempre el titular ESPAÑOL, para que lo leído no se duplique
+    // ni se pierda al cambiar de idioma.
+    const clave = claveConsejo(c);
     // Antes de marcarla: si ya venía leída, el popup lo dice arriba.
-    setConsejoYaLeido(curiosidadesLeidas.has(c.titular));
+    setConsejoYaLeido(curiosidadesLeidas.has(clave));
     setConsejo(c);
-    if (curiosidadesLeidas.has(c.titular)) return;
+    if (curiosidadesLeidas.has(clave)) return;
     const next = new Set(curiosidadesLeidas);
-    next.add(c.titular);
+    next.add(clave);
     setCuriosidadesLeidas(next);
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
@@ -1465,16 +1496,16 @@ export default function MetodoFisiologiaTodasCelulas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Las células de tus órganos"
+              title={t("fisiologia.lasCelulas.titulo")}
               pageLabel="2/4"
               compact
               bgColor={`${fisiologiaBg}dd`}
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: "← Célula", onClick: () => navigate("/metodo/fisiologia/celula") }}
+              prev={{ label: `← ${t("fisiologia.celula.titulo")}`, onClick: () => navigate("/metodo/fisiologia/celula") }}
               extra={celulasBtn}
-              next={{ label: "Sistemas →", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
+              next={{ label: `${t("fisiologia.sistemas.titulo")} →`, onClick: () => navigate("/metodo/fisiologia/sistemas") }}
             />
           </Reveal>
 
@@ -1488,8 +1519,11 @@ export default function MetodoFisiologiaTodasCelulas() {
                     <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.06em"
                           style={{ textShadow: `0 1px 4px ${fisiologiaBg}` }}>
                       {vistasTotal === TOTAL_CELULAS && TOTAL_CELULAS > 0
-                        ? "✓ Has recorrido todas tus células"
-                        : `${vistasTotal} de ${TOTAL_CELULAS} células descubiertas`}
+                        ? t("fisiologia.lasCelulas.completo")
+                        : t("fisiologia.lasCelulas.progreso", {
+                            hechas: vistasTotal,
+                            total: TOTAL_CELULAS,
+                          })}
                     </Text>
                     <Text color={`${fisiologiaTxt}bb`} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}>
                       {pct}%
@@ -1512,7 +1546,7 @@ export default function MetodoFisiologiaTodasCelulas() {
                 gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
                 gap={{ base: 4, md: 6 }}
               >
-                {ORGANOS.map((o) => (
+                {organos.map((o) => (
                   <RevealItem key={o.key} direction="up" distance={22} scaleFrom={0.97} display="flex">
                     <OrganoCard organo={o} vistas={vistas} onClick={() => abrirOrgano(o)} />
                   </RevealItem>
@@ -1551,7 +1585,9 @@ export default function MetodoFisiologiaTodasCelulas() {
           // Las flechas del modal navegan por la lista a la que pertenece lo que
           // está abierto: si es una ficha (un tipo de colágeno), se pasa por los
           // demás tipos; si es un consejo, por los consejos.
-          consejos={organo.fichas?.includes(consejo as FichaOrgano) ? organo.fichas : organo.consejos}
+          consejos={organo.fichas?.some((f) => claveConsejo(f) === claveConsejo(consejo))
+            ? organo.fichas
+            : organo.consejos}
           leida={consejoYaLeido}
           onSelect={verConsejo}
         />

@@ -6,6 +6,7 @@ import {
 } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
+import { useComic } from "../../i18n/comics";
 import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
 
 // Cómic del Origen «según la ciencia». Usa el mismo frontend (ComicViewer) que
@@ -78,6 +79,7 @@ interface ComicCienciaModalProps {
 }
 
 export function ComicCienciaModal({ isOpen, onClose }: ComicCienciaModalProps) {
+  const vinetas = useComic("origen-ciencia", ORIGEN_CIENCIA);
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
@@ -94,7 +96,7 @@ export function ComicCienciaModal({ isOpen, onClose }: ComicCienciaModalProps) {
             empieza desde la viñeta 1 con estado limpio. */}
         <ComicViewer
           key={String(isOpen)}
-          vinetas={ORIGEN_CIENCIA}
+          vinetas={vinetas}
           onClose={onClose}
           themeColor={fisiologiaTxt}
           disciplinaBgImage="/img/fondos/fisio.webp"

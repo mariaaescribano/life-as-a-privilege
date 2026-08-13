@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useT } from "../../i18n";
+import { useT, TextoRico } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Portal, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
@@ -166,7 +166,7 @@ export default function MetodoAstrologiaAspectos() {
   }
 
   const headerNext = {
-    label: "Tu carta en PDF →",
+    label: `${t("metodo.astro.paso.pdf")} →`,
     onClick: () => navigate("/metodo/astrologia/pdf"),
   };
 
@@ -209,14 +209,14 @@ export default function MetodoAstrologiaAspectos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Aspectos"
+              title={t("metodo.astro.paso.aspectos")}
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
               step={{ current: 6, total: 9 }}
               mb={0}
-              prev={{ label: "← Casas", onClick: () => navigate("/metodo/astrologia/casas") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
+              prev={{ label: `← ${t("metodo.astro.paso.casas")}`, onClick: () => navigate("/metodo/astrologia/casas") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
               next={headerNext}
             />
           </Reveal>
@@ -236,7 +236,7 @@ export default function MetodoAstrologiaAspectos() {
 
           {aspectos.length === 0 ? (
             <Text color={`${astrologiaTxt}aa`} fontStyle="italic" textAlign="center" py={6}>
-              No hay aspectos calculados todavía.
+              {t("metodo.astro.sinAspectos")}
             </Text>
           ) : (
             <RevealStagger w="100%" display="flex" flexDirection="column" gap={{ base: 5, md: 6 }}
@@ -269,7 +269,7 @@ export default function MetodoAstrologiaAspectos() {
                               bg={`${cuerpo.color}22`} border={`1px solid ${cuerpo.color}66`} ml={1}>
                           <CheckIcon color={cuerpo.color} size={12} />
                           <Text color={cuerpo.color} fontSize="2xs" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase">
-                            Completado
+                            {t("metodo.astro.completado")}
                           </Text>
                         </Flex>
                       )}
@@ -278,7 +278,7 @@ export default function MetodoAstrologiaAspectos() {
                     {!desbloqueada && anterior && (
                       <Text color={`${astrologiaTxt}aa`} fontSize={{ base: "2xs", md: "xs" }} textAlign="center" mb={2}
                             fontStyle="italic" letterSpacing="0.04em">
-                        Termina de leer los aspectos de <b>{anterior}</b> para desbloquear este planeta.
+                        <TextoRico>{t("metodo.astro.terminaAspectosDe", { planeta: `**${anterior}**` })}</TextoRico>
                       </Text>
                     )}
                     <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${cuerpo.color}55, transparent)`} />
@@ -336,7 +336,7 @@ export default function MetodoAstrologiaAspectos() {
                             >
                               {leido && (
                                 <Box position="absolute" top={{ base: 1, md: 1.5 }} right={{ base: 1.5, md: 2 }}
-                                     title="Ya leído" pointerEvents="none">
+                                     title={t("metodo.astro.yaLeido")} pointerEvents="none">
                                   <CheckIcon color={colorAsp} size={13} />
                                 </Box>
                               )}
@@ -456,7 +456,7 @@ export default function MetodoAstrologiaAspectos() {
                   renderParrafos(textoAbierto, astrologiaTxt)
                 ) : (
                   <Text color={`${astrologiaTxt}aa`} fontStyle="italic" textAlign="center" fontSize={{ base: "md", md: "lg" }}>
-                    Aún no he escrito la lectura de este aspecto. Estará disponible pronto.
+                    {t("metodo.astro.aspectoSinLectura")}
                   </Text>
                 )}
               </Box>

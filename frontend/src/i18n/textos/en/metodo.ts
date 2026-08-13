@@ -48,6 +48,10 @@ export const metodo = {
   "metodo.cursosOrientativos": "{disciplina} courses to guide you",
   "metodo.cursosPronto": "The {disciplina} courses will be here soon.",
   "metodo.cursosIntro": "If you want to go deeper into {disciplina}, these courses walk you through it step by step.",
+  "metodo.cursosPreparando": "I'm putting the courses together",
+  "metodo.cursosDe": "{disciplina} courses",
+  "metodo.cursosAvanzadosPronto":
+    "Advanced {disciplina} courses will soon let you go deeper here. In the meantime, keep walking The Map with the next discipline.",
 
   // ── «Create your own notes» · the shared screen ────────────────────────
   // Labels only. The chapters of the notebook (title and summary) come from
@@ -108,7 +112,53 @@ export const metodo = {
     "These are some of the questions and myths that come up most. Tap each one to find out what the science actually says.",
   "metodo.nutri.paso.origen": "Where do they come from?",
   "metodo.nutri.paso.cursos": "Courses",
+  "metodo.nutri.paso.prediabetes": "Prevention test",
+  "metodo.nutri.paso.cursosProfundizar": "Courses to go deeper",
   "metodo.nutri.paso.biblioteca": "Library",
+  "metodo.nutri.paso.bibliotecaTitulo": "Nutrition library",
+  "metodo.nutri.paso.hambreTitulo": "Hunger: a holistic look",
+  "metodo.nutri.paso.microbiotaTitulo": "The microbiome",
+  "metodo.nutri.paso.platoTitulo": "Build the Harvard plate",
+  "metodo.nutri.paso.caloriasTitulo": "Your calories and macros",
+  "metodo.nutri.paso.origenTitulo": "How is food created?",
+
+  // ── Nutrition · the Library ────────────────────────────────────────────
+  "metodo.nutri.biblioteca.intro":
+    "Everything you've discovered in Nutrition, gathered in one place. Choose where to go in.",
+  "metodo.nutri.biblioteca.molecular": "Food at the molecular level",
+  "metodo.nutri.biblioteca.molecularPie":
+    "Pick a food and discover what molecules it's made of.",
+  "metodo.nutri.biblioteca.ilustracionesPie":
+    "Every Nutrition comic gathered here to read again.",
+  "metodo.nutri.biblioteca.respuestas": "Answers",
+  "metodo.nutri.biblioteca.respuestasPie":
+    "The most common questions and myths, one by one.",
+
+  // ── Nutrition · odds and ends from the steps ───────────────────────────
+  "metodo.nutri.entendido": "Got it",
+  "metodo.nutri.tocaMolecula": "Tap each molecule to see what it does inside you.",
+  "metodo.nutri.tocaGrupo":
+    "Tap each group to discover its types, what they do inside you and where to find them.",
+  "metodo.nutri.verIlustracion": "See illustration",
+  "metodo.nutri.foto": "Photo",
+  "metodo.nutri.crearAlimento": "Create your food",
+  "metodo.nutri.microbiotaIntro":
+    "You're not looking at bacteria. You're looking at the residents of your gut.",
+  "metodo.nutri.microbiotaMoleculas":
+    "Three of the most important molecules the bacteria in your gut make.",
+  "metodo.nutri.platoIntro":
+    "Press each part of the plate to see its foods and drag them onto it. Build a balanced plate with something from every group.",
+  "metodo.nutri.platoHecho": "A balanced plate! 🎉 You've got something from every group.",
+  "metodo.nutri.platoVaciar": "Empty the plate",
+  "metodo.nutri.platoArrastra": "Drag these foods onto the plate",
+  "metodo.nutri.macros.lema": "Learn what will really help you be your best version...",
+  "metodo.nutri.macros.intro":
+    "Nobody taught you to look at a plate and know what's on it. You learn it the way you learn to judge distances: by getting it wrong and looking again. You don't have to hit the exact gram — just don't be wrong about the size.",
+  "metodo.nutri.macros.cuantosGramos": "How many grams do you think this serving has?",
+  "metodo.nutri.macros.comprobar": "Check",
+  "metodo.nutri.macros.tuApuesta": "Your guess (outline) and the real figure (solid)",
+  "metodo.nutri.macros.otraRonda": "Another round of ten",
+  "metodo.nutri.macros.ronda": "Round",
   "metodo.nutri.hambreCierre":
     "You have seen it for yourself: you rebuild yourself with what you eat. How do you choose to rebuild yourself today?",
 
@@ -190,6 +240,34 @@ export const metodo = {
   "metodo.astro.signoSinElegir": "Sign not chosen yet",
   "metodo.astro.casaSinElegir": "House not chosen yet",
   "metodo.astro.leer": "Read",
+  "metodo.astro.yaLeido": "Already read",
+  "metodo.astro.yaLeida": "Already read",
+  "metodo.astro.leida": "Read",
+  "metodo.astro.completado": "Complete",
+  "metodo.astro.regente": "Ruler",
+  "metodo.astro.regenteCorto": "Rul.",
+  "metodo.astro.giraLaRueda": "Spin the wheel or tap a House",
+  "metodo.astro.sinAspectos": "No aspects calculated yet.",
+  "metodo.astro.aspectoSinLectura":
+    "I haven't written the reading for this aspect yet. It'll be here soon.",
+  "metodo.astro.casaSinLectura":
+    "I haven't written the reading for this House yet. It'll be here soon.",
+  "metodo.astro.profundizarSinTexto":
+    "The deeper reading for this combination isn't available yet. I'll add it soon.",
+  "metodo.astro.terminaAspectosDe":
+    "Finish reading the aspects of {planeta} to unlock this planet.",
+  "metodo.astro.pulsaEstrella": "Tap each star to discover your key points.",
+  "metodo.astro.puntosClavePronto": "Your key points will appear here very soon.",
+  "metodo.astro.llamadaIntro":
+    "Integrate your archetypes: book a call and don't stay with your doubts.",
+  "metodo.astro.pdfIntro": "Your whole reading, in a file that's yours for good.",
+  "metodo.astro.pdfTitular": "Your entire chart, page by page",
+  "metodo.astro.pdfSinLecturas":
+    "Your chart has no written readings yet. As soon as they're there, you'll be able to download it in full.",
+  "metodo.astro.pdfDescargado":
+    "Downloaded. If you can't see it, check your browser's downloads folder.",
+  "metodo.astro.pdfAviso":
+    "It's put together on your own device, so it can take a few seconds — best not to close the page while it works.",
   "metodo.astro.releer": "Read again",
 
   // ── Astrología · «Lo primero de tu carta» (Sol · Luna · Ascendente) ────
@@ -557,6 +635,59 @@ export const metodo = {
   // ── Ayurveda · step names (the buttons that come out of a comic) ────────
   // Sanskrit without diacritics: the PDF font doesn't draw «ṣ» or «ā».
   "metodo.ayur.paso.descubrete": "Discover yourself",
+  "metodo.ayur.paso.cuerpo": "Body",
+  "metodo.ayur.paso.equilibrio": "Balance",
+  "metodo.ayur.paso.cuidarte": "Caring for yourself",
+  "metodo.ayur.paso.estilo": "Way of Life",
+  "metodo.ayur.paso.tuDia": "Your day",
+  "metodo.ayur.paso.tuMapa": "Your Map",
+  "metodo.ayur.paso.resultado": "Result",
+  "metodo.ayur.paso.test": "Test",
+  "metodo.ayur.paso.testDoshas": "The Doṣha test",
+  "metodo.ayur.paso.equilibra": "Find your balance",
+  "metodo.ayur.paso.naturaleza": "Nature",
+  "metodo.ayur.elMapa": "The Ayurveda map",
+  "metodo.ayur.tuDosha": "Your doṣha · {dosha}",
+  "metodo.ayur.recorridoDosha": "One doṣha's journey",
+  "metodo.ayur.notaSubmapa":
+    "These pages belong to each doṣha. Go into one from “Doṣhas” and they open up here.",
+  "metodo.ayur.paso.alimentacion": "Food",
+  "metodo.ayur.paso.energias": "Energies",
+  "metodo.ayur.paso.tresDoshas": "The three Doṣhas",
+  "metodo.ayur.paso.cursos": "Ayurveda courses",
+
+  // ── Ayurveda · the doṣha pages ─────────────────────────────────────────
+  "metodo.ayur.doshaRotulo": "Doṣha:",
+  "metodo.ayur.preparando": "I'm putting this section together",
+  "metodo.ayur.escribela": "Write it here…",
+  "metodo.ayur.escribelo": "Write it here…",
+  "metodo.ayur.guardaReflexion": "Save the reflection above to continue.",
+  "metodo.ayur.guardaRespuesta": "Save your answer above to continue.",
+  "metodo.ayur.guardaReflexionCorto": "Save your reflection to continue.",
+  "metodo.ayur.guardaRespuestaCorto": "Save your answer to continue.",
+  "metodo.ayur.bienvenido": "Welcome to your nature",
+  "metodo.ayur.hasMarcado": "You checked",
+  "metodo.ayur.tuDoshaPrincipal": "Your main Doṣha is",
+  "metodo.ayur.resultadoPie":
+    "This is your constitution according to the test. In the next steps of The Map we'll uncover what it means for you.",
+  "metodo.ayur.tarjetasIntro":
+    "All three Doṣhas live in you, but some are stronger than others. Get to know them first.",
+  "metodo.ayur.predomina": "Predominant in you",
+  "metodo.ayur.mapaTitulo": "This has been your map",
+  "metodo.ayur.mapaIntro":
+    "All along the way you've been listening to yourself. These are the words you left for yourself.",
+  "metodo.ayur.descargarMapa": "Download my map",
+  "metodo.ayur.practicado": "Practiced ✓",
+  "metodo.ayur.empezar": "Start",
+  "metodo.ayur.parar": "Stop",
+  "metodo.ayur.repetir": "Again",
+  "metodo.ayur.yaHicisteTest": "You already took the test",
+  "metodo.ayur.verMiResultado": "See my result →",
+  "metodo.ayur.repetirTest": "Take the test again",
+  "metodo.ayur.cuidado": "Careful: ",
+  "metodo.ayur.sigueElCirculo":
+    "Follow the circle: it grows as the air comes in and shrinks as it goes out. If it feels like too much, stop.",
+  "metodo.ayur.pararEsPracticar": "Stopping is practice too.",
   "metodo.ayur.paso.doshas": "Doshas",
   "metodo.ayur.paso.pranayama": "Pranayama",
 
@@ -612,6 +743,122 @@ export const metodo = {
   "metodo.cabala.exceso":
     "you have it in excess and it's starting to turn against you (rigidity, self-demand, not knowing when to stop). The work is to let go, not to add.",
 
+  // ── Kabbalah · chapters of its Illustrations ───────────────────────────
+  "metodo.cabalaIlus.origen": "The Origin",
+  "metodo.cabalaIlus.sefirot": "The 10 Sefirot",
+  "metodo.cabalaIlus.senderos": "The 22 Paths",
+
+  // ── Kabbalah · the story of each transition on the Evolution Map ───────
+  "metodo.cabala.diag.sinBase":
+    "There isn't enough foundation in {from} yet. Before working on this path, it's worth developing {from} ({eFrom}) first.",
+  "metodo.cabala.diag.invertida":
+    "You've developed more {eTo} ({to}) than {eFrom} ({from}). It's worth reinforcing the foundation of {from} so that {to} has a more solid direction.",
+  "metodo.cabala.diag.fluida":
+    "You turn {eFrom} into {eTo} fluidly. This transition flows well.",
+  "metodo.cabala.diag.repasar": "Review {sefira}",
+  "metodo.cabala.diag.trabajar": "Work on {sefira}",
+  "metodo.cabala.diag.ningunaDestaca": "None stands out yet.",
+  "metodo.cabala.diag.ningunaBaja": "None especially low.",
+
+  // ── Kabbalah · step names (the index and the prev/next buttons) ─────────
+  "metodo.cabala.paso.intro": "Introduction",
+  "metodo.cabala.paso.arbol": "The Tree of Life",
+  "metodo.cabala.paso.arbolCorto": "The Tree",
+  "metodo.cabala.paso.diagnostico": "Diagnosis",
+  "metodo.cabala.paso.senderos": "The Paths",
+  "metodo.cabala.paso.senderos22": "The 22 Paths",
+  "metodo.cabala.paso.senderosDiag": "Diagnosis of the Paths",
+  "metodo.cabala.paso.senderosDiagCorto": "Paths",
+  "metodo.cabala.paso.final": "Final diagnosis",
+  "metodo.cabala.paso.dias": "10 days with your dimensions",
+  "metodo.cabala.paso.diasCorto": "10 days",
+
+  // ── Kabbalah · The Tree of Life (step 2) ───────────────────────────────
+  "metodo.cabala.arbolDesbloquea":
+    "Discover the illustration of every Sefirah to unlock the journey",
+
+  // ── Kabbalah · the page of each Sefirah ────────────────────────────────
+  "metodo.cabala.sefira.escala": "Balance scale",
+  "metodo.cabala.sefira.puntua": "Score each statement from **1** (never) to **10** (always).",
+  "metodo.cabala.sefira.equilibrado": "In balance",
+  "metodo.cabala.sefira.desequilibrado": "Out of balance",
+  "metodo.cabala.sefira.autoevaluacion": "Self-assessment (1–10)",
+  "metodo.cabala.sefira.autoevalCorto": "Self-assessment",
+  "metodo.cabala.sefira.clave": "Key to development",
+  "metodo.cabala.sefira.contenidoPronto": "Content coming soon.",
+  "metodo.cabala.sefira.noGuardado":
+    "We couldn't save it. Check your connection and try again.",
+  "metodo.cabala.sefira.teQueda": "To move on, you still need to complete {falta}.",
+  "metodo.cabala.sefira.faltaAutoeval": "the self-assessment",
+  "metodo.cabala.sefira.faltaEscala": "the balance scale",
+  "metodo.cabala.sefira.faltaOtra":
+    "Another Sefirah is still missing its content before you can see your Diagnosis.",
+  "metodo.cabala.sefira.completaDimension":
+    "Complete everything this dimension asks for to continue",
+  "metodo.cabala.sefira.rellenaTodas":
+    "Fill in the content of every Sefirah to see your Diagnosis",
+
+  // ── Kabbalah · The 22 Paths (the Tree in paths mode) ───────────────────
+  "metodo.cabala.senderos.intro":
+    "If the Sefirot are states, the paths are the movement between them. Touch any of the 22 roads to see its illustration. Once you've discovered them all, the journey unlocks.",
+  "metodo.cabala.senderos.recorrer": "Walk them",
+  "metodo.cabala.senderos.desbloquea":
+    "Discover the illustration of the 22 paths to walk them one by one",
+  "metodo.cabala.senderos.comenzarPor": "Start with {letra}",
+  "metodo.cabala.senderos.descubreTodos": "Discover the 22 paths to begin",
+
+  // ── Kabbalah · the page of each path ───────────────────────────────────
+  "metodo.cabala.sendero.sendero": "Path {letra}",
+  "metodo.cabala.sendero.significado": "Traditional meaning",
+  "metodo.cabala.sendero.psicologica": "Psychological translation",
+  "metodo.cabala.sendero.queUne": "What does this path connect?",
+  "metodo.cabala.sendero.test": "Test",
+  "metodo.cabala.sendero.interpretacion": "Interpretation",
+  "metodo.cabala.sendero.tuPuntuacion": "Your score: {total}",
+  "metodo.cabala.sendero.responde5": "Answer the 5 questions to see your interpretation.",
+  "metodo.cabala.sendero.senales": "Signs of imbalance",
+  "metodo.cabala.sendero.observaSi": "This week, notice whether…",
+  "metodo.cabala.sendero.umbral": "You've crossed this threshold when…",
+  "metodo.cabala.sendero.siguiente": "Next path",
+  "metodo.cabala.sendero.verDiagnostico": "See diagnosis",
+  "metodo.cabala.sendero.respuestaN": "Answer to question {n} (1 to 5)",
+  "metodo.cabala.sendero.completaEste":
+    "Complete this path's test to move on to the next letter",
+  "metodo.cabala.sendero.completaLos22":
+    "Complete the test of the 22 paths to see your Diagnosis",
+
+  // ── Kabbalah · Diagnosis of the Paths ──────────────────────────────────
+  "metodo.cabala.senderosDiag.intro":
+    "Each path is a transition between two capacities. Here your 22 tests come together to show which roads flow and which ones ask for more work.",
+  "metodo.cabala.senderosDiag.completados": "{n}/{total} paths completed",
+  "metodo.cabala.senderosDiag.faltan": "There are still paths to walk",
+  "metodo.cabala.senderosDiag.faltanTexto":
+    "Complete the test of the 22 paths to receive your final diagnosis. Every answer is saved automatically; you can carry on whenever you like.",
+  "metodo.cabala.senderosDiag.prioritarios": "Your priority paths",
+  "metodo.cabala.senderosDiag.fluyen": "Your transitions are flowing",
+  "metodo.cabala.senderosDiag.fluyenTexto":
+    "No path shows marked resistance. Keep watching yourself: balance is held by practicing it.",
+  "metodo.cabala.senderosDiag.los22": "The 22 paths",
+
+  // ── Kabbalah · Final diagnosis ─────────────────────────────────────────
+  "metodo.cabala.final.intro":
+    "Your whole journey comes together here: your dimensions (the Sefirot) and your transitions (the paths). You can download it to keep it and come back to it whenever you want.",
+  "metodo.cabala.final.descargar": "Download my diagnosis",
+  "metodo.cabala.final.preparando": "Preparing your PDF…",
+  "metodo.cabala.final.tusDimensiones": "Your dimensions",
+  "metodo.cabala.final.tusSenderos": "Your paths",
+
+  // ── Kabbalah · 10 days with your dimensions ────────────────────────────
+  "metodo.cabala.dias.intro":
+    "Ten days, one dimension a day. Give the day to observing and practicing the Sefirah of the moment, leaning on its exercise. It isn't about doing it perfectly, but about inhabiting each energy for a whole day.",
+  "metodo.cabala.dias.omerTitulo": "A tradition: the Counting of the Omer (Sefirat HaOmer)",
+  "metodo.cabala.dias.omerTexto":
+    "Kabbalah holds an ancient practice in which, day by day, you focus on one particular attribute of the soul: the **Counting of the Omer** (Sefirat HaOmer). It lasts 49 days (seven weeks by seven Sefirot) and each day works on a combination — «Gevurah within Chesed», for example. This 10-day practice is a shorter adaptation: one Sefirah a day, so you begin to recognize each energy in your everyday Life.",
+  "metodo.cabala.dias.dia": "Day {n}",
+  "metodo.cabala.dias.reflexiona": "Reflect throughout the day",
+  "metodo.cabala.dias.cierre":
+    "“By the tenth day, the Tree is no longer outside you: you recognize it in the way you live.”",
+
   // ── Psychology · Life Line ─────────────────────────────────────────────
   "metodo.psico.lineaEnhorabuena": "You've rebuilt your whole Life. Well done for not abandoning yourself.",
   "metodo.psico.buscaFotos": "It helps to look for photos from every age of your Life.",
@@ -647,6 +894,192 @@ export const metodo = {
   "metodo.psico.volumen": "Volume",
   "metodo.psico.quitarFragmento": "Remove this fragment",
 
+  // ── Psychology · step names ────────────────────────────────────────────
+  "metodo.psico.paso.vuelveATi": "Come back to yourself",
+  "metodo.psico.paso.problemas": "Problems",
+  "metodo.psico.paso.resultadoAce": "ACE result",
+  "metodo.psico.paso.cursosCorto": "Courses",
+  "metodo.psico.paso.ace": "ACE",
+  "metodo.psico.paso.aceResultado": "Your result",
+  "metodo.psico.paso.familia": "Your family",
+  "metodo.psico.paso.genograma": "Genogram",
+  "metodo.psico.paso.huellas": "Marks",
+  "metodo.psico.paso.nudos": "Knots",
+  "metodo.psico.paso.necesidades": "Needs",
+  "metodo.psico.paso.heridas": "Wounds",
+  "metodo.psico.paso.tusHeridas": "Your wounds",
+  "metodo.psico.paso.relacion": "Connection",
+  "metodo.psico.paso.recuerdate": "Remember yourself",
+  "metodo.psico.paso.dones": "Gifts",
+  "metodo.psico.paso.miedos": "Fears",
+  "metodo.psico.paso.atrevete": "Dare",
+  "metodo.psico.paso.integracion": "Integration",
+  "metodo.psico.paso.compromiso": "Commitment",
+  "metodo.psico.paso.carta": "Letter",
+  "metodo.psico.paso.sintesis": "Synthesis",
+  "metodo.psico.paso.cursos": "Courses to go deeper",
+
+  // ── Psychology · the ACE test ──────────────────────────────────────────
+  "metodo.psico.guardando": "Saving…",
+  "metodo.psico.testTerminado": "You've finished the test.",
+  "metodo.psico.testTerminadoPie":
+    "Let's look at what your result means and how these experiences shape you today.",
+  "metodo.psico.verMiResultado": "See my result →",
+  "metodo.psico.queSignificaAce": "What does your ACE result mean?",
+  "metodo.psico.tuPuntuacionAce": "Your ACE score",
+  "metodo.psico.aceRiesgo":
+    "The more adverse experiences, the higher the risk of illness and difficulty.",
+  "metodo.psico.continuarLinea": "Continue to your Life Line →",
+
+  // ── Psychology · the letter to your future self ────────────────────────
+  "metodo.psico.cartaIntro":
+    "Write yourself a letter for the next hard moment. Not to judge yourself: to remember the path you already know.",
+  "metodo.psico.cartaTitular": "When you get stuck again, remember...",
+  "metodo.psico.cartaGracias": "Thank you for not abandoning yourself.",
+  "metodo.psico.cartaPlaceholder":
+    "Future me, when you feel stuck again, remember…",
+
+  // ── Psychology · commitment ────────────────────────────────────────────
+  "metodo.psico.compromisoIntro":
+    "You understand your story now. Take in what they couldn't give you, and commit to treating yourself with a little more kindness every day.",
+  "metodo.psico.compromisoFalta": "What I missed most was…",
+  "metodo.psico.compromisoHoy": "Today I can start giving it to myself by…",
+
+  // ── Psychology · courses ───────────────────────────────────────────────
+  "metodo.psico.cursosIntro":
+    "If you want to go deeper into human psychology, these courses will walk you through it step by step.",
+
+  // ── Psychology · Remember yourself, and Gifts ──────────────────────────
+  "metodo.psico.sinIdeas": "Out of ideas",
+  "metodo.psico.escribeLoPrimero": "Write the first thing that comes to mind, don't overthink it…",
+  "metodo.psico.loQueRecordaste": "What you remembered about yourself",
+  "metodo.psico.tocaParaUnir": "Tap whatever you want to join to the active gift.",
+  "metodo.psico.sinRecuerdate": "You haven't answered the “Remember yourself” questions yet.",
+  "metodo.psico.irARecuerdate": "Go to Remember yourself →",
+  "metodo.psico.donesVacio":
+    "Press “Add gift”, give it a name and tap the cards in “Your archetypes” to join them.",
+  "metodo.psico.anadirDon": "+ Add gift",
+  "metodo.psico.tusArquetipos": "Your archetypes",
+  "metodo.psico.tusDones": "Your gifts",
+  "metodo.psico.nombraTuDon": "Name your gift…",
+  "metodo.psico.borrarDon": "Delete gift",
+
+  // ── Psychology · family and genogram ───────────────────────────────────
+  "metodo.psico.tocaParaCambiarla": "· tap one you chose to change it",
+  "metodo.psico.genogramaIntro":
+    "Tap a “+” next to your photo to place someone: your parents and grandparents above, your siblings or partner to the sides.",
+  "metodo.psico.quitarDelMapa": "Remove them from the map?",
+  "metodo.psico.siQuitar": "Yes, remove",
+  "metodo.psico.no": "No",
+  "metodo.psico.hecho": "Done ✓",
+  "metodo.psico.suNombre": "Their name…",
+  "metodo.psico.parentesco": "Relationship (mother, grandfather…)",
+
+  // ── Psychology · marks, knots and wounds ───────────────────────────────
+  "metodo.psico.sinHeridas": "You haven't saved any wounds yet.",
+  "metodo.psico.crearMisHeridas": "← Create my wounds",
+  "metodo.psico.huellasIntro": "Walk back through your story. Mark with ◈ the memories that left a mark on you.",
+  "metodo.psico.sinRecuerdos":
+    "You haven't written any memories in your Life Line yet. Go back and visit the years you want to remember.",
+  "metodo.psico.sinRecuerdosAnio": "No memories written for this year.",
+  "metodo.psico.marcarHuella": "Mark that it left a mark",
+  "metodo.psico.heridasIntro":
+    "An experience that leaves a Mark can leave an emotional need uncovered. To make sense of that pain and keep it from happening again, the mind creates a Knot: a protective belief that, however much it was born to help us, ends up limiting how we live. The experience, the uncovered need and that knot together make up an emotional Wound.",
+  "metodo.psico.heridaEnCurso": "The wound you're working on",
+  "metodo.psico.tocaParaReunir": "Tap marks, knots and needs to put a wound together.",
+  "metodo.psico.heTerminadoHerida": "I've finished this wound",
+  "metodo.psico.ponleNombreHerida": "Give your wound a name",
+  "metodo.psico.seguirEligiendo": "Keep choosing",
+  "metodo.psico.guardarHerida": "Save wound",
+  "metodo.psico.ejHerida": "E.g.: The wound of abandonment…",
+
+  // ── Psychology · connection and integration ────────────────────────────
+  "metodo.psico.relacionIntro":
+    "Your archetypes show where and how you were wounded. Connect your Wounds to your Archetypes, name them, and stop carrying them in silence.",
+  "metodo.psico.relacionVacio": "Press “Add connection” and start bringing wounds and archetypes together.",
+  "metodo.psico.anadirRelacion": "+ Add connection",
+  "metodo.psico.sinHeridasAun": "You haven't created your wounds yet.",
+  "metodo.psico.tusRelaciones": "Your connections",
+  "metodo.psico.tituloRelacion": "Title of the connection…",
+  "metodo.psico.borrarRelacion": "Delete connection",
+  "metodo.psico.queRelacion": "What connection do you find? Write what you see…",
+  "metodo.psico.integracionIntro":
+    "Nothing you've lived can be changed. But you can change the meaning it has in your story. Give your pain a meaning so it stops turning into suffering.",
+  "metodo.psico.sinRelaciones":
+    "You haven't put your connections together yet. Go back to the “Connection” page to bring them together, and here you'll give them a meaning.",
+  "metodo.psico.irARelacion": "Go to Connection →",
+  "metodo.psico.enhorabuenaLlegar": "Well done for making it this far.",
+  "metodo.psico.eresValiente": "You are very brave.",
+  "metodo.psico.continuar": "Continue →",
+  "metodo.psico.tuRelacion": "Your connection",
+  "metodo.psico.anterior": "‹ Previous",
+
+  // ── Psychology · fears and knots ───────────────────────────────────────
+  "metodo.psico.anadirCorto": "Add",
+  "metodo.psico.siTeSirven": "In case they help you",
+  "metodo.psico.todosLosEjemplos": "You've added every example ✓",
+  "metodo.psico.aquiMiedos": "The fears you write will show up here.",
+  "metodo.psico.escribeMiedo": "Write a fear and press Add…",
+  "metodo.psico.aquiNudos": "The knots you pick will show up here.",
+  "metodo.psico.escribeNudo": "Write a knot and press Add…",
+  "metodo.psico.sinMiedos": "You haven't named your fears yet. Go back to the previous page to write them.",
+  "metodo.psico.irAMiedos": "Go to Fears →",
+
+  // ── Psychology · needs ─────────────────────────────────────────────────
+  "metodo.psico.bloqueada": "Locked",
+  "metodo.psico.necesidadDelNino": "The child's need",
+  "metodo.psico.comoLoViviste": "How did you live it?",
+  "metodo.psico.respondeAnterior": "Answer the previous need to unlock it.",
+
+  // ── Psychology · synthesis ─────────────────────────────────────────────
+  "metodo.psico.integra.proteger": "What it was trying to protect",
+  "metodo.psico.integra.coste": "What it costs me to keep it",
+  "metodo.psico.integra.verdadSana": "The healthier truth I want to practice",
+  "metodo.psico.integra.recordatorio": "What I want to remember",
+  "metodo.psico.deDiez": "OUT OF 10",
+  "metodo.psico.paraCuandoVuelva": "For when I feel stuck again:",
+  "metodo.psico.sintesisIntro":
+    "Here is your whole map, from beginning to end. From the problem you arrived with to the letter you wrote yourself. Read it all: this is you.",
+  "metodo.psico.sintesisVacia":
+    "There's nothing to synthesize yet. As you walk the path, everything you write will show up here.",
+  "metodo.psico.llevateMapa": "Take your whole map with you",
+  "metodo.psico.llevateLinea": "Take your Life Line with you",
+  "metodo.psico.descargaCuaderno":
+    "Download it as a PDF notebook, carefully made and beautiful, to read again whenever you need it.",
+  "metodo.psico.volverArriba": "Back to the top",
+  "metodo.psico.leer": "Read",
+
+  // ── Culture · step names ───────────────────────────────────────────────
+  "metodo.cultura.paso.intro": "Introduction",
+  "metodo.cultura.paso.historias": "The Histories",
+  "metodo.cultura.paso.historia": "The History",
+  "metodo.cultura.paso.apuntes": "Your notes",
+
+  // ── Culture · the six Histories ────────────────────────────────────────
+  // All six read «History of …» on purpose: they sit next to each other in a
+  // grid, and the parallel wording is what makes them look like one series.
+  "metodo.cultura.historia.universal": "History of the World",
+  "metodo.cultura.historia.religiones": "History of Religions",
+  "metodo.cultura.historia.filosofia": "History of Philosophy",
+  "metodo.cultura.historia.ciencia": "History of Science",
+  "metodo.cultura.historia.medicina": "History of Medicine",
+  "metodo.cultura.historia.arte": "History of Art and Literature",
+
+  // ── Culture · a single era ─────────────────────────────────────────────
+  "metodo.cultura.era.anterior": "Previous era",
+  "metodo.cultura.era.siguiente": "Next era",
+  "metodo.cultura.era.esPrimera": "This is the first era of the History",
+  "metodo.cultura.era.esUltima": "This is the last era of the History",
+
+  // ── Culture · Your notes ───────────────────────────────────────────────
+  "metodo.cultura.apuntes.intro1":
+    "Take what you've walked through with you, in writing. Choose which History you want the notes from, and inside you check the stages you care about: you get a notebook with that and nothing else.",
+  "metodo.cultura.apuntes.intro2":
+    "One notebook per History, because the six of them together don't fit in a single file. You can come back and build them as many times as you want.",
+  "metodo.cultura.apuntes.etapa": "{n} stage",
+  "metodo.cultura.apuntes.etapas": "{n} stages",
+  "metodo.cultura.apuntes.momentos": "{n} moments",
+
   // ── Paying for a discipline ────────────────────────────────────────────
   "metodo.pago.precioReducido": "Take advantage — it's at a reduced price",
   "metodo.pago.ahoraNo": "Not now",
@@ -655,16 +1088,6 @@ export const metodo = {
     "I give you my word of honor that every text here is my own, written by me. I have leaned on artificial intelligence tools, but the ideas, the words and the content are entirely mine.",
   "metodo.pago.realizado": "{disciplina} payment complete",
   "metodo.pago.yaPuedes": "You can go in now.",
-
-  "fisiologia.celula.titulo": "Cell",
-  "fisiologia.lasCelulas.titulo": "The cells of your organs",
-  "fisiologia.sistemas.titulo": "Systems",
-  "fisiologia.organismo.titulo": "The body",
-  "fisiologia.organos.titulo": "Organs",
-  "fisiologia.niveles.titulo": "Levels",
-  "fisiologia.sonrisa.titulo": "The inner smile",
-  "fisiologia.sonrisa.corto": "Smile",
-  "fisiologia.tablaFrase": "You will never look at the periodic table the same way again...",
 
   "metodo.pago.ordinal.1": "First discipline",
   "metodo.pago.ordinal.2": "Second discipline",

@@ -347,7 +347,7 @@ export default function MetodoNutricionCalorias() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Tus calorías y macros"
+              title={t("metodo.nutri.paso.caloriasTitulo")}
               compact
               maxW="1000px"
               bgColor={`${nutricionBg}dd`}

@@ -12,6 +12,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
+import { useT, type ClaveTexto } from "../../i18n";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
@@ -33,21 +34,24 @@ const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px 
 type MacroId = "proteina" | "adn" | "lipido" | "carbohidrato";
 type Forma = "cadena" | "helice" | "membrana";
 
+// OJO: todo el texto va como CLAVE del diccionario, no como texto. Este array
+// se calcula UNA vez al importar el fichero: con el texto ya traducido dentro,
+// se quedaría congelado en el idioma de arranque.
 interface MacroDef {
   id: MacroId;
-  nombre: string;
-  /** Artículo del nombre, para el botón «Ahora, {articulo} {nombre} →». Va en
-   *  los datos y no deducido: aquí conviven «el ADN», «las Enzimas» y «los
-   *  Lípidos», y no hay regla que los saque del nombre. */
-  articulo: string;
-  monomero: string;       // singular
-  monomeroPl: string;     // plural
+  nombre: ClaveTexto;
+  /** El nombre CON su artículo, para el botón «Ahora, el ADN →». Va como clave
+   *  aparte porque aquí conviven «el ADN», «las Enzimas» y «los Lípidos», no hay
+   *  regla que lo saque del nombre, y en inglés el artículo desaparece. */
+  articulo: ClaveTexto;
+  monomero: ClaveTexto;       // singular
+  monomeroPl: ClaveTexto;     // plural
   glow: string;           // color de acento
   glyph: string;          // símbolo de la perla dibujada
   n: number;              // cuántos monómeros hay que arrastrar
   forma: Forma;
-  desc: string;           // frase de la tarjeta
-  resultado: string[];    // párrafos al formarla
+  desc: ClaveTexto;           // frase de la tarjeta
+  resultado: ClaveTexto[];    // párrafos al formarla
   monomeroImg: string;    // /recorrido/fisiologia/pre/aminoacido.webp …
   resultadoImg: string;   // circular · se usa en el resultado (Fase B)
   cuadradoImg: string;    // cuadrada · se usa en el box de la rejilla
@@ -61,8 +65,9 @@ interface MacroDef {
   monomerosVariados?: PiezaMacro[];
 }
 
-/** Una pieza arrastrable (monómero o componente) con su foto propia. */
-interface PiezaMacro { label: string; img: string; glyph: string; }
+/** Una pieza arrastrable (monómero o componente) con su foto propia.
+ *  `label` es la CLAVE del diccionario, no el texto. */
+interface PiezaMacro { label: ClaveTexto; img: string; glyph: string; }
 
 const PRE = "/recorrido/fisiologia/pre";
 
@@ -73,55 +78,47 @@ const piezasDe = (def: MacroDef): PiezaMacro[] =>
 
 const MACROS: MacroDef[] = [
   {
-    id: "proteina", nombre: "Enzimas", articulo: "las", monomero: "aminoácido", monomeroPl: "aminoácidos",
+    id: "proteina", nombre: "fisiologia.macro.proteina", articulo: "fisiologia.macro.proteina.articulo",
+    monomero: "fisiologia.macro.proteina.monomero", monomeroPl: "fisiologia.macro.proteina.monomeroPl",
     glow: "#7fd6c2", glyph: "A", n: 4, forma: "cadena",
-    desc: "Realizan la mayoría de las funciones de la célula.",
-    resultado: [
-      "Una proteína es una larga cadena de aminoácidos que se construye voluntariamente cuando la célula lo necesita y que cumple una función concreta.",
-      "De esa forma depende su función: hay proteínas que transportan, defienden, construyen o aceleran reacciones. Son las obreras de la célula.",
-    ],
+    desc: "fisiologia.macro.proteina.desc",
+    resultado: ["fisiologia.macro.proteina.r1", "fisiologia.macro.proteina.r2"],
     monomeroImg: `${PRE}/aminoacido.webp`, resultadoImg: `${PRE}/circularenzima.webp`, cuadradoImg: `${PRE}/enzima.webp`,
   },
   {
-    id: "adn", nombre: "ADN", articulo: "el", monomero: "nucleótido", monomeroPl: "nucleótidos",
+    id: "adn", nombre: "fisiologia.macro.adn", articulo: "fisiologia.macro.adn.articulo",
+    monomero: "fisiologia.macro.adn.monomero", monomeroPl: "fisiologia.macro.adn.monomeroPl",
     glow: "#9ab6f0", glyph: "N", n: 4, forma: "helice",
-    desc: "Contiene la información genética.",
-    resultado: [
-      "El ADN es una cadena de nucleótidos —las letras A, T, C y G— enrollada en una doble hélice.",
-      "El orden de esas letras es el manual de instrucciones para fabricar todas tus proteínas: es tu información genética.",
-    ],
+    desc: "fisiologia.macro.adn.desc",
+    resultado: ["fisiologia.macro.adn.r1", "fisiologia.macro.adn.r2"],
     monomeroImg: `${PRE}/nucleotido.webp`, resultadoImg: `${PRE}/circularadn.webp`, cuadradoImg: `${PRE}/adn.webp`,
     monomerosVariados: [
-      { label: "A", img: `${PRE}/nucleotidoa.webp`, glyph: "A" },
-      { label: "T", img: `${PRE}/nucleotidot.webp`, glyph: "T" },
-      { label: "C", img: `${PRE}/nucleotidoc.webp`, glyph: "C" },
-      { label: "G", img: `${PRE}/nucleotidog.webp`, glyph: "G" },
+      { label: "fisiologia.pieza.nucleotidoA", img: `${PRE}/nucleotidoa.webp`, glyph: "A" },
+      { label: "fisiologia.pieza.nucleotidoT", img: `${PRE}/nucleotidot.webp`, glyph: "T" },
+      { label: "fisiologia.pieza.nucleotidoC", img: `${PRE}/nucleotidoc.webp`, glyph: "C" },
+      { label: "fisiologia.pieza.nucleotidoG", img: `${PRE}/nucleotidog.webp`, glyph: "G" },
     ],
   },
   {
-    id: "lipido", nombre: "Lípidos", articulo: "los", monomero: "fosfolípido", monomeroPl: "piezas",
+    id: "lipido", nombre: "fisiologia.macro.lipido", articulo: "fisiologia.macro.lipido.articulo",
+    monomero: "fisiologia.macro.lipido.monomero", monomeroPl: "fisiologia.macro.lipido.monomeroPl",
     glow: "#f2c86b", glyph: "L", n: 4, forma: "membrana",
-    desc: "Forman las membranas celulares.",
-    resultado: [
-      "Un fosfolípido se forma uniendo un fosfato y un glicerol (la cabeza, que ama el agua) con dos ácidos grasos (las colas, que la repelen).",
-      "Por eso los fosfolípidos se ordenan solos en una doble capa: la membrana que envuelve y protege cada una de tus células.",
-    ],
+    desc: "fisiologia.macro.lipido.desc",
+    resultado: ["fisiologia.macro.lipido.r1", "fisiologia.macro.lipido.r2"],
     monomeroImg: `${PRE}/fosfolipido.webp`, resultadoImg: `${PRE}/circularfolipido.webp`, cuadradoImg: `${PRE}/fosfolipido.webp`,
     componentes: [
-      { label: "fosfato", img: `${PRE}/fosfato.webp`, glyph: "P" },
-      { label: "glicerol", img: `${PRE}/glicerol.webp`, glyph: "G" },
-      { label: "ácido graso saturado", img: `${PRE}/acidosgrasossaturados.webp`, glyph: "A" },
-      { label: "ácido graso insaturado", img: `${PRE}/acidosgrasosinsaturados.webp`, glyph: "A" },
+      { label: "fisiologia.pieza.fosfato", img: `${PRE}/fosfato.webp`, glyph: "P" },
+      { label: "fisiologia.pieza.glicerol", img: `${PRE}/glicerol.webp`, glyph: "G" },
+      { label: "fisiologia.pieza.grasaSaturada", img: `${PRE}/acidosgrasossaturados.webp`, glyph: "A" },
+      { label: "fisiologia.pieza.grasaInsaturada", img: `${PRE}/acidosgrasosinsaturados.webp`, glyph: "A" },
     ],
   },
   {
-    id: "carbohidrato", nombre: "Carbohidratos", articulo: "los", monomero: "glucosa", monomeroPl: "glucosas",
+    id: "carbohidrato", nombre: "fisiologia.macro.carbohidrato", articulo: "fisiologia.macro.carbohidrato.articulo",
+    monomero: "fisiologia.macro.carbohidrato.monomero", monomeroPl: "fisiologia.macro.carbohidrato.monomeroPl",
     glow: "#e79ac0", glyph: "G", n: 4, forma: "cadena",
-    desc: "Almacenan y proporcionan energía.",
-    resultado: [
-      "Uniendo muchas glucosas se forman los carbohidratos, como el glucógeno.",
-      "Son la reserva de energía rápida del cuerpo: se guardan cuando sobra y se rompen cuando hace falta combustible.",
-    ],
+    desc: "fisiologia.macro.carbohidrato.desc",
+    resultado: ["fisiologia.macro.carbohidrato.r1", "fisiologia.macro.carbohidrato.r2"],
     monomeroImg: `${PRE}/glucosa.webp`, resultadoImg: `${PRE}/circularcarbohidrato.webp`, cuadradoImg: `${PRE}/carbohidrato.webp`,
   },
 ];
@@ -140,10 +137,11 @@ const perla = (c: string): string =>
 
 // ── Perla de una pieza (imagen con reserva a esfera dibujada) ───────────────
 function Perla({ pieza, glow, size }: { pieza: PiezaMacro; glow: string; size: any }) {
+  const t = useT();
   return (
     <Box w={size} h={size} borderRadius="full" overflow="hidden" pointerEvents="none"
          sx={{ boxShadow: `0 0 12px ${glow}aa, 0 0 24px ${glow}55` }}>
-      <Image src={pieza.img} alt={pieza.label} w="100%" h="100%" objectFit="cover" draggable={false}
+      <Image src={pieza.img} alt={t(pieza.label)} w="100%" h="100%" objectFit="cover" draggable={false}
              fallbackStrategy="onError"
              fallback={
                <Box w="100%" h="100%" display="flex" alignItems="center" justifyContent="center" sx={{ background: perla(glow) }}>
@@ -159,6 +157,7 @@ function Perla({ pieza, glow, size }: { pieza: PiezaMacro; glow: string; size: a
 function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0, colocada = false }: {
   pieza: PiezaMacro; glow: string; mostrarLabel?: boolean; onSoltar: (rect: DOMRect) => void; enterDelay?: number; colocada?: boolean;
 }) {
+  const t = useT();
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   // Hueco invisible: mantiene el sitio de la pieza ya colocada (las hermanas no se mueven).
@@ -168,7 +167,7 @@ function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0, co
         <Perla pieza={pieza} glow={glow} size={{ base: "80px", md: "100px" }} />
         {mostrarLabel && (
           <Text color={fisiologiaTxt} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700"
-                letterSpacing="0.05em" textTransform="uppercase">{pieza.label}</Text>
+                letterSpacing="0.05em" textTransform="uppercase">{t(pieza.label)}</Text>
         )}
       </Box>
     );
@@ -202,7 +201,7 @@ function MonomeroFicha({ pieza, glow, mostrarLabel, onSoltar, enterDelay = 0, co
         <Text color={fisiologiaTxt} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700"
               letterSpacing="0.05em" textTransform="uppercase" pointerEvents="none"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-          {pieza.label}
+          {t(pieza.label)}
         </Text>
       )}
     </MBox>
@@ -251,6 +250,7 @@ function Estacion({
    *  calcula el padre, que es quien sabe cuáles quedan sin formar. */
   labelSiguiente: string;
 }) {
+  const t = useT();
   // Piezas a arrastrar (monómeros iguales o componentes distintos) y estado.
   const piezas = piezasDe(def);
   const total = piezas.length;
@@ -310,7 +310,7 @@ function Estacion({
           <Box className="volver-velo" position="absolute" inset={0} borderRadius="full"
                bg="rgba(0,0,0,0.18)" opacity={1} transition="opacity 0.2s" pointerEvents="none" />
           <Box position="relative" zIndex={1} style={{ textShadow: INK }}>
-            ← Las 4 macromoléculas
+            {`← ${t("fisiologia.macro.volver")}`}
           </Box>
         </Box>
       </Flex>
@@ -322,17 +322,17 @@ function Estacion({
             {/* Texto FUERA de las cajas: va en blanco, no en el color de la
                 disciplina, para que se lea sobre el turquesa de la página. */}
             <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center"
-                  style={{ textShadow: INK }}>{def.nombre}</Text>
+                  style={{ textShadow: INK }}>{t(def.nombre)}</Text>
             <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.18em"
                   textTransform="uppercase" textAlign="center" mt={2} opacity={0.75}
                   style={{ textShadow: INK }}>
-              Explicación
+              {t("fisiologia.macro.explicacion")}
             </Text>
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
               {heterogenea
-                ? `Arrastra las ${total} piezas a la bandeja para formar el ${def.monomero}.`
-                : `Arrastra ${total} ${def.monomeroPl} a la bandeja para encadenarlos.`}
+                ? t("fisiologia.macro.instruccionPiezas", { total, monomero: t(def.monomero) })
+                : t("fisiologia.macro.instruccionCadena", { total, monomeros: t(def.monomeroPl) })}
             </Text>
 
             <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
@@ -362,7 +362,7 @@ function Estacion({
                       {puestas.length === 0 && (
                         <Flex position="absolute" inset="0" align="center" justify="center" pointerEvents="none">
                           <Text color={`${def.glow}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>bandeja de ensamblaje</Text>
+                                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>{t("fisiologia.macro.bandeja")}</Text>
                         </Flex>
                       )}
                     </Box>
@@ -388,7 +388,7 @@ function Estacion({
                       </AnimatePresence>
                     </Box>
                     {pendientes.length === 0 && (
-                      <Text color={`${def.glow}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">…plegándose…</Text>
+                      <Text color={`${def.glow}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">{t("fisiologia.macro.plegandose")}</Text>
                     )}
 
                     {/* progreso */}
@@ -418,7 +418,7 @@ function Estacion({
                     <Box position="absolute" inset="-4%" borderRadius="full" pointerEvents="none"
                          animation={`${shimmer} 3.6s ease-in-out infinite`}
                          sx={{ boxShadow: `0 0 46px ${def.glow}55, 0 0 88px ${def.glow}33` }} />
-                    <Image src={def.resultadoImg} alt={def.nombre} w="100%" h="100%" objectFit="contain"
+                    <Image src={def.resultadoImg} alt={t(def.nombre)} w="100%" h="100%" objectFit="contain"
                            fallbackStrategy="onError"
                            style={{ filter: `drop-shadow(0 0 16px ${def.glow}55)` }}
                            fallback={<MacroDibujada def={def} />} />
@@ -430,12 +430,12 @@ function Estacion({
               <PanelBox flex="1">
                 <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
                   <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
-                        style={{ textShadow: INK }}>¡Has formado {def.nombre.toLowerCase()}!</Text>
+                        style={{ textShadow: INK }}>{t("fisiologia.macro.hecho", { macro: t(def.nombre).toLowerCase(), Macro: t(def.nombre) })}</Text>
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
-                  {def.resultado.map((p, i) => (
-                    <Text key={i} color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }}
-                          lineHeight="1.9" style={{ textShadow: INK }}>{p}</Text>
+                  {def.resultado.map((clave) => (
+                    <Text key={clave} color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }}
+                          lineHeight="1.9" style={{ textShadow: INK }}>{t(clave)}</Text>
                   ))}
 
                   {/* «Siguiente →» va DENTRO de la caja del texto, al final y a la
@@ -465,7 +465,7 @@ function Estacion({
                    fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
                    letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                    _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                ↺ Volver a hacer
+                {t("metodo.volverAHacer")}
               </Box>
             </Flex>
           </MBox>
@@ -499,6 +499,7 @@ function MacroDibujada({ def }: { def: MacroDef }) {
 // descripción, acción) siempre visible. Al formarla aparece la foto + un tick y
 // el borde se ilumina → sensación de recorrido.
 function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick: () => void }) {
+  const t = useT();
   return (
     <MBox whileHover={{ y: -3 }} transition={{ type: "spring", stiffness: 300, damping: 24 }} w="100%">
       <Box
@@ -537,7 +538,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
             justifyContent="center"
           >
             {hecha ? (
-              <Image src={m.cuadradoImg} alt={m.nombre} w="100%" h="100%" objectFit="cover"
+              <Image src={m.cuadradoImg} alt={t(m.nombre)} w="100%" h="100%" objectFit="cover"
                      fallbackStrategy="onError"
                      fallback={<MacroDibujada def={m} />} />
             ) : (
@@ -550,16 +551,18 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
           <Box flex="1" minW={0}>
             <Flex align="center" gap={2.5}>
               <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-                    style={{ textShadow: INK }}>{m.nombre}</Text>
+                    style={{ textShadow: INK }}>{t(m.nombre)}</Text>
               {/* Marca común del recorrido (MarcaLeido), con el color de la
                   macromolécula: misma forma que el resto de marcas. */}
-              {hecha && <MarcaLeido inline tinta={m.glow} bg={fisiologiaBg} title="Formada" />}
+              {hecha && <MarcaLeido inline tinta={m.glow} bg={fisiologiaBg} title={t("fisiologia.macro.formada")} />}
             </Flex>
             <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" mt={1.5}
-                  style={{ textShadow: INK }}>{m.desc}</Text>
+                  style={{ textShadow: INK }}>{t(m.desc)}</Text>
             <Text color={hecha ? m.glow : `${fisiologiaTxt}cc`} fontSize={{ base: "xs", md: "sm" }} fontWeight="700"
                   letterSpacing="0.05em" textTransform="uppercase" mt={2.5}>
-              {hecha ? "Formada · ver de nuevo" : `Construir · ${m.n} ${m.monomeroPl}`}
+              {hecha
+                ? t("fisiologia.macro.verDeNuevo")
+                : t("fisiologia.macro.construir", { n: m.n, monomeros: t(m.monomeroPl) })}
             </Text>
           </Box>
         </Flex>
@@ -570,6 +573,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaMacromoleculas() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [formadas, setFormadas] = useState<MacroId[]>([]);
@@ -655,8 +659,8 @@ export default function MetodoFisiologiaMacromoleculas() {
   // el ADN →»), igual que en /metodo/fisiologia/atomos y /moleculas.
   const irSiguiente = () => setActiva(proxima ? proxima.id : null);
   const labelSiguiente = proxima
-    ? `Ahora, ${proxima.articulo} ${proxima.nombre} →`
-    : "Las 4 macromoléculas →";
+    ? t("fisiologia.macro.ahora", { macro: t(proxima.articulo) })
+    : `${t("fisiologia.macro.volver")} →`;
 
   if (loading) {
     return <FisiologiaLoading />;
@@ -674,16 +678,16 @@ export default function MetodoFisiologiaMacromoleculas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Macromoléculas"
+            title={t("fisiologia.macromoleculas.titulo")}
             pageLabel="4/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Moléculas", onClick: () => navigate("/metodo/fisiologia/moleculas") }}
+            prev={{ label: `← ${t("fisiologia.moleculas.titulo")}`, onClick: () => navigate("/metodo/fisiologia/moleculas") }}
             extra={celulasBtn}
-            next={{ label: "Estructuras →", onClick: () => navigate("/metodo/fisiologia/estructuras"), disabled: formadas.length < MACROS.length, disabledTooltip: "Primero forma las cuatro macromoléculas" }}
+            next={{ label: `${t("fisiologia.estructuras.corto")} →`, onClick: () => navigate("/metodo/fisiologia/estructuras"), disabled: formadas.length < MACROS.length, disabledTooltip: t("fisiologia.macro.bloqueo") }}
           />
           </Reveal>
 
@@ -691,7 +695,7 @@ export default function MetodoFisiologiaMacromoleculas() {
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
               <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="400" fontStyle="italic" mt={1}
                     letterSpacing="0.02em" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                Las grandes moléculas de la Vida.
+                {t("fisiologia.macro.intro")}
               </Text>
             </MBox>
           )}

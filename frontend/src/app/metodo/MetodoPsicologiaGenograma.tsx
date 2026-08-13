@@ -43,12 +43,14 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt; // #5e2d10 — marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaGenograma() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -88,9 +90,9 @@ export default function MetodoPsicologiaGenograma() {
                 nom={neuropsicologiaNom}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Tu familia", onClick: () => ir(`/metodo/psicologia/${exp.id}/familia`) }}
+                prev={{ label: `← ${t("metodo.psico.paso.familia")}`, onClick: () => ir(`/metodo/psicologia/${exp.id}/familia`) }}
                 next={{
-                  label: "Huellas →",
+                  label: `${t("metodo.psico.paso.huellas")} →`,
                   onClick: () => ir(`/metodo/psicologia/${exp.id}/huellas`),
                   disabled: personas.length === 0,
                   disabledTooltip: "Añade al menos a una persona de tu familia para continuar.",
@@ -114,9 +116,7 @@ export default function MetodoPsicologiaGenograma() {
 
             {personas.length === 0 && (
               <Reveal direction="up" distance={26} scaleFrom={0.97} delay={0.34} duration={0.7} w="100%">
-                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
-                  Toca un «+» junto a tu foto para colocar a alguien: arriba tus padres y abuelos, a los lados tus hermanos o tu pareja.
-                </Text>
+                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">{t("metodo.psico.genogramaIntro")}</Text>
               </Reveal>
             )}
 
@@ -154,6 +154,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
   onEliminar: () => void;
   onClose: () => void;
 }) {
+  const t = useT();
   useLockBodyScroll(true);
   const [error, setError] = useState<string | null>(null);
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
@@ -195,7 +196,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
               <Input
                 value={p.nombre}
                 onChange={(e) => onCampo({ nombre: e.target.value })}
-                placeholder="Su nombre…"
+                placeholder={t("metodo.psico.suNombre")}
                 bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
                 borderRadius="lg" fontFamily="'EB Garamond', serif"
                 fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
@@ -207,7 +208,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
               <Input
                 value={p.parentesco || ""}
                 onChange={(e) => onCampo({ parentesco: e.target.value })}
-                placeholder="Parentesco (madre, abuelo…)"
+                placeholder={t("metodo.psico.parentesco")}
                 bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
                 borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
                 sx={{ caretColor: TINTA }}
@@ -286,29 +287,21 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
           <Flex justify="space-between" align="center" gap={3}>
             {confirmarBorrado ? (
               <Flex align="center" gap={2}>
-                <Text color={TINTA} fontSize="md" fontWeight="600" style={{ textShadow: INK_SHADOW }}>
-                  ¿Quitarla del mapa?
-                </Text>
+                <Text color={TINTA} fontSize="md" fontWeight="600" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.quitarDelMapa")}</Text>
                 <Box as="button" onClick={onEliminar} px={3.5} py={2} borderRadius="full"
                      bg="#8c2f13" color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="md"
-                     cursor="pointer" _hover={{ filter: "brightness(1.1)" }}>
-                  Sí, quitar
-                </Box>
+                     cursor="pointer" _hover={{ filter: "brightness(1.1)" }}>{t("metodo.psico.siQuitar")}</Box>
                 <Box as="button" onClick={() => setConfirmarBorrado(false)} px={3.5} py={2} borderRadius="full"
                      bg="transparent" border={`1.5px solid ${TINTA}88`} color={TINTA}
                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="md" cursor="pointer"
-                     _hover={{ bg: `${TINTA}14` }}>
-                  No
-                </Box>
+                     _hover={{ bg: `${TINTA}14` }}>{t("metodo.psico.no")}</Box>
               </Flex>
             ) : (
               <Box as="button" onClick={() => setConfirmarBorrado(true)}
                    px={{ base: 4, md: 5 }} py={2} borderRadius="full" bg="transparent"
                    border={`1.5px solid ${TINTA}66`} color={TINTA}
                    fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
-                   cursor="pointer" transition="all 0.18s" _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>
-                Quitar
-              </Box>
+                   cursor="pointer" transition="all 0.18s" _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>{t("metodo.psico.quitar")}</Box>
             )}
 
             <Box as="button" onClick={onClose}
@@ -316,9 +309,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                  letterSpacing="0.04em" cursor="pointer"
                  boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-              Hecho ✓
-            </Box>
+                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>{t("metodo.psico.hecho")}</Box>
           </Flex>
         </Box>
       </Box>

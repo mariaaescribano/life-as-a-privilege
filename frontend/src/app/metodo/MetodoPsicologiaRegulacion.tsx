@@ -255,8 +255,8 @@ export default function MetodoPsicologiaRegulacion() {
               step={{ current: 13, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Heridas", onClick: irAHeridas }}
-              next={{ label: "Relación →", onClick: irARelacion }}
+              prev={{ label: `← ${t("metodo.psico.paso.heridas")}`, onClick: irAHeridas }}
+              next={{ label: `${t("metodo.psico.paso.relacion")} →`, onClick: irARelacion }}
             />
             </Reveal>
 

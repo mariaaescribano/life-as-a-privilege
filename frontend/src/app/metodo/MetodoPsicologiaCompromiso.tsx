@@ -39,12 +39,14 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaCompromiso() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -141,7 +143,7 @@ export default function MetodoPsicologiaCompromiso() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title="Compromiso"
+                title={t("metodo.psico.paso.compromiso")}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
@@ -149,9 +151,9 @@ export default function MetodoPsicologiaCompromiso() {
                 step={{ current: 20, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Integración", onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/mapa`); } }}
+                prev={{ label: `← ${t("metodo.psico.paso.integracion")}`, onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/mapa`); } }}
                 next={{
-                  label: "Carta →",
+                  label: `${t("metodo.psico.paso.carta")} →`,
                   onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/brujula`); },
                   disabled: !compromisoCompleto,
                   disabledTooltip: "Responde las dos preguntas del compromiso para continuar.",
@@ -161,9 +163,7 @@ export default function MetodoPsicologiaCompromiso() {
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>
-               Ya entiendes tu historia. Toma conciencia de lo que no pudieron darte y comprométete a tratarte con un poco más de cariño cada día.
-              </IntroRecorrido>
+              <IntroRecorrido>{t("metodo.psico.compromisoIntro")}</IntroRecorrido>
             </Reveal>
 
             {/* ── Mi compromiso conmigo mismo: las dos preguntas ── */}
@@ -178,7 +178,7 @@ export default function MetodoPsicologiaCompromiso() {
                     pregunta="¿Qué necesitaste que nadie pudo darte?"
                     valor={compromiso.necesitaste || ""}
                     onChange={(v) => commit({ ...compromiso, necesitaste: v })}
-                    placeholder="Lo que más eché en falta fue…"
+                    placeholder={t("metodo.psico.compromisoFalta")}
                   />
                   <SeparadorPreguntas />
                   <PreguntaCompromiso
@@ -186,7 +186,7 @@ export default function MetodoPsicologiaCompromiso() {
                     pregunta="¿Cómo puedes empezar a dártelo hoy?"
                     valor={compromiso.dartelo || ""}
                     onChange={(v) => commit({ ...compromiso, dartelo: v })}
-                    placeholder="Hoy puedo empezar a dármelo…"
+                    placeholder={t("metodo.psico.compromisoHoy")}
                   />
                 </Flex>
 
@@ -196,9 +196,7 @@ export default function MetodoPsicologiaCompromiso() {
                        px={{ base: 6, md: 8 }} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
                        fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                        letterSpacing="0.04em" cursor="pointer" boxShadow={`0 4px 16px rgba(94,45,16,0.3)`}
-                       transition="all 0.2s" _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 24px rgba(94,45,16,0.42)` }}>
-                    Guardar
-                  </Box>
+                       transition="all 0.2s" _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 24px rgba(94,45,16,0.42)` }}>{t("comun.guardar")}</Box>
                 </Flex>
               </Box>
             </Box>

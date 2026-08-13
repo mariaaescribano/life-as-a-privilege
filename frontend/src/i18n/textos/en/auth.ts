@@ -64,4 +64,31 @@ export const auth = {
   "auth.error.generico": "Error",
   "auth.error.masTarde": "Please try again later",
   "auth.error.desconocido": "Unknown error",
+
+  // ── My account (/cuenta) ───────────────────────────────────────────────
+  "cuenta.titulo": "My account",
+  "cuenta.foto.tocaParaCambiar": "Tap the photo to change it",
+  "cuenta.foto.subiendo": "Uploading…",
+  "cuenta.nuevaContrasena": "New password",
+  "cuenta.cambiosGuardados": "Changes saved",
+  "cuenta.panelAdmin": "Admin panel",
+  "cuenta.cerrarSesion": "Log out",
+  "cuenta.eliminarCuenta": "Delete account",
+  "cuenta.error.cargar": "Couldn't load your details",
+  "cuenta.error.guardar": "Couldn't save your changes",
+  "cuenta.error.foto": "Couldn't upload the photo",
+  "cuenta.error.eliminar": "Couldn't delete the account",
+
+  // ── My account · the delete pop-up ─────────────────────────────────────
+  // The word to type is translated too, and the check reads it from here: in
+  // English the form has to ask for DELETE, not for BORRAR.
+  "cuenta.borrar.titulo": "Are you sure you want to delete your account?",
+  "cuenta.borrar.aviso":
+    "All your data will be erased and you won't be able to get it back. Nothing you've paid will be refunded. None of your personalized information will be kept.",
+  "cuenta.borrar.tuContrasena": "YOUR PASSWORD",
+  "cuenta.borrar.contrasena": "Password",
+  "cuenta.borrar.palabra": "DELETE",
+  "cuenta.borrar.escribe": "TYPE",
+  "cuenta.borrar.paraConfirmar": "TO CONFIRM",
+  "cuenta.borrar.eliminando": "Deleting…",
 };

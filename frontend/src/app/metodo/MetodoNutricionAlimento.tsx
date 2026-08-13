@@ -10,6 +10,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 import {
   alimentoByKey, molsDeAlimento, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
   MACRO_COLOR, MACRO_LABEL, type Alimento, type Molecula,
@@ -29,6 +30,7 @@ function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
 
 // Botón «← Volver» a la biblioteca.
 function VolverNutri({ onClick }: { onClick: () => void }) {
+  const t = useT();
   return (
     <Box as="button" onClick={onClick} alignSelf="flex-start"
          display="inline-flex" alignItems="center" gap={2}
@@ -41,7 +43,7 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
            w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
         <path d="M480-160 160-480l320-320 56 57-223 223h487v80H313l224 224-57 56Z" />
       </Box>
-      Biblioteca
+      {t("metodo.nutri.paso.biblioteca")}
     </Box>
   );
 }
@@ -109,6 +111,7 @@ function MoleculaCard({ m, onClick }: { m: Molecula; onClick: () => void }) {
 
 // Modal ligero (tema claro de Nutrición) con la explicación de una molécula.
 function MoleculaModal({ m, onClose }: { m: Molecula | null; onClose: () => void }) {
+  const t = useT();
   useEffect(() => {
     if (!m) return;
     document.body.style.overflow = "hidden";
@@ -143,7 +146,7 @@ function MoleculaModal({ m, onClose }: { m: Molecula | null; onClose: () => void
                px={5} py={2} borderRadius="full" bg={nutricionTxt} color={nutricionBg}
                fontFamily="'EB Garamond', serif" fontWeight={700} fontSize={{ base: "sm", md: "md" }}
                cursor="pointer" transition="all 0.18s" _hover={{ transform: "translateY(-1px)" }}>
-            Entendido
+            {t("metodo.nutri.entendido")}
           </Box>
         </Flex>
       </Box>
@@ -153,6 +156,7 @@ function MoleculaModal({ m, onClose }: { m: Molecula | null; onClose: () => void
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionAlimento() {
+  const t = useT();
   const navigate = useNavigate();
   const { key } = useParams<{ key: string }>();
   const [loading, setLoading] = useState(true);
@@ -227,7 +231,7 @@ export default function MetodoNutricionAlimento() {
                     {a.resumen}
                   </Text>
                   <Text color={`${nutricionTxt}aa`} fontSize="2xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase" mt={1}>
-                    De qué está hecho
+                    {t("metodo.alimentos.deQueEstaHecho")}
                   </Text>
                   <BarraMacros macros={a.macros} />
                 </Flex>
@@ -239,7 +243,7 @@ export default function MetodoNutricionAlimento() {
           <Reveal inView direction="up" distance={18} delay={0.18} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center">
-              Toca cada molécula para ver qué hace dentro de ti.
+              {t("metodo.nutri.tocaMolecula")}
             </Text>
           </Reveal>
 

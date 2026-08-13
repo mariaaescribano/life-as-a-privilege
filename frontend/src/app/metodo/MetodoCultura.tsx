@@ -85,14 +85,14 @@ export default function MetodoCultura() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CulturaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cultura"
+              title={t("disciplina.cultura")}
               bgColor={`${culturaBg}dd`}
               color={culturaTxt}
               nom={culturaNom}
               mb={0}
-              prev={{ label: "← Cábala", onClick: () => navigate("/metodo/cabala/cursos") }}
-              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
-              next={{ label: "Las Historias →", onClick: () => {
+              prev={{ label: `← ${t("disciplina.cabala")}`, onClick: () => navigate("/metodo/cabala/cursos") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
+              next={{ label: `${t("metodo.cultura.paso.historias")} →`, onClick: () => {
                 if (!suscrito) { setPagoError(null); setPagoOpen(true); return; }
                 navigate("/metodo/cultura/historias");
               } }}

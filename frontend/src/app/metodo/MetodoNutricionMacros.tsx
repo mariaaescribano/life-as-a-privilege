@@ -249,7 +249,7 @@ export default function MetodoNutricionMacros() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cuenta lo que comes"
+              title={t("metodo.nutri.paso.macros")}
               compact
               maxW="900px"
               bgColor={`${nutricionBg}dd`}
@@ -267,13 +267,11 @@ export default function MetodoNutricionMacros() {
             <Flex direction="column" align="center" gap={2} maxW="720px">
               <Text color="white" fontSize={{ base: "xl", md: "3xl" }} fontWeight={600} fontStyle="italic"
                     textAlign="center" lineHeight="1.5">
-                Aprende lo que de verdad te ayudará a ser tu mejor versión...
+                {t("metodo.nutri.macros.lema")}
               </Text>
               <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} textAlign="center"
                     lineHeight="1.8">
-                Nadie te enseñó a mirar un plato y saber lo que lleva. Se aprende como se aprende a calcular
-                distancias: fallando y volviendo a mirar. No hace falta acertar el gramo exacto —basta con no
-                equivocarte de tamaño—.
+                {t("metodo.nutri.macros.intro")}
               </Text>
             </Flex>
           </Reveal>
@@ -283,7 +281,7 @@ export default function MetodoNutricionMacros() {
               puntúa, así que lo único que hay que saber es por dónde vas. */}
           <Reveal inView direction="up" distance={14} duration={0.55} amount={0.3} w="100%">
             <Flex align="center" justify="center" w="100%">
-              <Marcador etiqueta="Ronda" valor={terminada ? `${RONDAS}/${RONDAS}` : `${indice + 1}/${RONDAS}`} />
+              <Marcador etiqueta={t("metodo.nutri.macros.ronda")} valor={terminada ? `${RONDAS}/${RONDAS}` : `${indice + 1}/${RONDAS}`} />
             </Flex>
           </Reveal>
 
@@ -340,7 +338,7 @@ export default function MetodoNutricionMacros() {
                     {!comprobado ? (
                       <>
                         <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700}>
-                          ¿Cuántos gramos crees que lleva esta ración?
+                          {t("metodo.nutri.macros.cuantosGramos")}
                         </Text>
                         {MACROS.map((m) => (
                           <Regulador
@@ -353,12 +351,12 @@ export default function MetodoNutricionMacros() {
                             onChange={(v) => setEst((s) => ({ ...s, [m.key]: v }))}
                           />
                         ))}
-                        <Boton onClick={comprobar}>Comprobar</Boton>
+                        <Boton onClick={comprobar}>{t("metodo.nutri.macros.comprobar")}</Boton>
                       </>
                     ) : (
                       <>
                         <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700}>
-                          Tu apuesta (hueco) y el dato real (macizo)
+                          {t("metodo.nutri.macros.tuApuesta")}
                         </Text>
 
                         {MACROS.map((m) => (
@@ -405,14 +403,14 @@ export default function MetodoNutricionMacros() {
                     {CIERRE_PARTIDA.texto}
                   </Text>
                   <Box mt={2}>
-                    <Boton onClick={otraPartida}>Otra ronda de diez</Boton>
+                    <Boton onClick={otraPartida}>{t("metodo.nutri.macros.otraRonda")}</Boton>
                   </Box>
                 </Flex>
               </Box>
             </Reveal>
           )}
 
-          <BotonPaso label="Preguntas y mitos" nom={nutricionNom} color={nutricionTxt} bg={nutricionBg}
+          <BotonPaso label={t("metodo.nutri.paso.mitos")} nom={nutricionNom} color={nutricionTxt} bg={nutricionBg}
                      onClick={() => navigate("/metodo/nutricion/mitos")} />
         </Flex>
       </Flex>

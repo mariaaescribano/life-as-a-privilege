@@ -6,6 +6,7 @@ import { contacto } from "./contacto";
 import { disciplinas } from "./disciplinas";
 import { elMetodo } from "./elMetodo";
 import { espacio } from "./espacio";
+import { fisiologia } from "./fisiologia";
 import { header } from "./header";
 import { home } from "./home";
 import { landing } from "./landing";
@@ -33,6 +34,7 @@ export const en: Partial<Record<ClaveTexto, string>> = {
   ...disciplinas,
   ...elMetodo,
   ...espacio,
+  ...fisiologia,
   ...header,
   ...home,
   ...landing,

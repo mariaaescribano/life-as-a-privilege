@@ -216,7 +216,7 @@ export default function MetodoAyurvedaDoshaDia() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            title={<>{t("metodo.ayur.doshaRotulo")} <Box as="span" color={meta.color}>{meta.label}</Box></>}
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
@@ -224,7 +224,7 @@ export default function MetodoAyurvedaDoshaDia() {
             mb={0}
             prev={{ label: "← Estilo de Vida", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/estilo`) }}
             extra={ilustracionesBtn}
-            next={{ label: "Tu Mapa →", onClick: irRecorrido, disabled: !guardado, disabledTooltip: "Guarda tu día para continuar." }}
+            next={{ label: `${t("metodo.ayur.paso.tuMapa")} →`, onClick: irRecorrido, disabled: !guardado, disabledTooltip: "Guarda tu día para continuar." }}
           />
           </Reveal>
 
@@ -393,7 +393,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 display="inline-flex" alignItems="center" gap={2.5}
                 _hover={guardado ? { transform: "translateY(-2px)", boxShadow: `0 0 34px ${meta.color}aa` } : {}}
               >
-                Tu Mapa →
+                {`${t("metodo.ayur.paso.tuMapa")} →`}
               </Box>
               {!guardado && (
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">

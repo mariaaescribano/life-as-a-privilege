@@ -106,7 +106,7 @@ export default function MetodoNutricionNutrientes() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-            title="Los nutrientes"
+            title={t("metodo.nutri.paso.nutrientes")}
             compact
             maxW="1000px"
             bgColor={`${nutricionBg}dd`}
@@ -127,7 +127,7 @@ export default function MetodoNutricionNutrientes() {
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
-              Toca cada grupo para descubrir sus tipos, qué hacen dentro de ti y dónde encontrarlo.
+              {t("metodo.nutri.tocaGrupo")}
             </Text>
           </Reveal>
 

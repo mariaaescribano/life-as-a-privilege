@@ -35,12 +35,14 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaNecesidades() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -118,16 +120,16 @@ export default function MetodoPsicologiaNecesidades() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-            title="Necesidades"
+            title={t("metodo.psico.paso.necesidades")}
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             step={{ current: 10, total: 23 }}
             mb={0}
             boxShadow={glowHeader}
-            prev={{ label: "← Nudos", onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
+            prev={{ label: `← ${t("metodo.psico.paso.nudos")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
             next={{
-              label: "Heridas →",
+              label: `${t("metodo.psico.paso.heridas")} →`,
               onClick: async () => { await savePromiseRef.current; await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`); },
               disabled: !completas,
               disabledTooltip: "Responde todas las necesidades para continuar a Heridas.",
@@ -246,14 +248,12 @@ export default function MetodoPsicologiaNecesidades() {
                       letterSpacing="0.03em"
                       whiteSpace="nowrap"
                       cursor="not-allowed"
-                      title="Responde la necesidad anterior para desbloquearla."
+                      title={t("metodo.psico.respondeAnterior")}
                     >
                       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
                            w="15px" h="15px" fill="currentColor" flexShrink={0}>
                         <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
-                      </Box>
-                      Bloqueada
-                    </Flex>
+                      </Box>{t("metodo.psico.bloqueada")}</Flex>
                   )}
                 </Flex>
                 </Reveal>
@@ -273,9 +273,7 @@ export default function MetodoPsicologiaNecesidades() {
             <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
               {abierta && (
                 <Flex direction="column" align="center" textAlign="center" gap={4}>
-                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase" opacity={0.65}>
-                    Necesidad del niño
-                  </Text>
+                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase" opacity={0.65}>{t("metodo.psico.necesidadDelNino")}</Text>
                   <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK_SHADOW }}>
                     {abierta.necesidad}
                   </Text>
@@ -287,9 +285,7 @@ export default function MetodoPsicologiaNecesidades() {
 
                   <Box h="1px" w="55%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} mt={1} />
 
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
-                    ¿Cómo lo viviste tú?
-                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.comoLoViviste")}</Text>
 
                   <Flex direction={{ base: "column", sm: "row" }} gap={3} w="100%" maxW="460px" justify="center">
                     {ESTADOS_NECESIDAD.map((o) => {

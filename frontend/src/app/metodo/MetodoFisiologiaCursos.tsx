@@ -5,6 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { useT } from "../../i18n";
 import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
 import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
@@ -51,6 +52,7 @@ const Candado = ({ size }: { size: any }) => (
 
 // ── Tarjeta de un curso ──────────────────────────────────────────────────────
 function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
+  const t = useT();
   const [imgErr, setImgErr] = useState(false);
   const bloqueado = !!curso.proximamente || !curso.ruta;
   return (
@@ -106,7 +108,7 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
         <Box flex="1" minH={{ base: 1, md: 2 }} />
         <Text color={`${fisiologiaTxt}cc`} fontSize="2xs" fontWeight={700} letterSpacing="0.12em"
               textTransform="uppercase">
-          {bloqueado ? "Próximamente" : "Entrar →"}
+          {bloqueado ? t("comun.proximamente") : t("fisiologia.cursos.entrar")}
         </Text>
       </Flex>
     </Box>
@@ -115,6 +117,7 @@ function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaCursos() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // ¿Ha pagado ya la Nutrición? (6ª disciplina, el siguiente paso tras Fisiología).
@@ -156,17 +159,17 @@ export default function MetodoFisiologiaCursos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cursos de Fisiología"
+              title={t("fisiologia.cursos.titulo")}
               compact
               bgColor={`${fisiologiaBg}dd`}
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: "← La sonrisa interior", onClick: () => navigate("/metodo/fisiologia/sonrisa") }}
+              prev={{ label: `← ${t("fisiologia.sonrisa.titulo")}`, onClick: () => navigate("/metodo/fisiologia/sonrisa") }}
               extra={celulasBtn}
               next={nutriSuscrito
-                ? { label: "Nutrición →", onClick: () => navigate("/metodo/nutricion") }
-                : { label: "Nutrición", icon: <Candado size="15px" />, arrow: "next", onClick: () => navigate("/metodo/nutricion") }}
+                ? { label: `${t("disciplina.nutricion")} →`, onClick: () => navigate("/metodo/nutricion") }
+                : { label: t("disciplina.nutricion"), icon: <Candado size="15px" />, arrow: "next", onClick: () => navigate("/metodo/nutricion") }}
             />
           </Reveal>
 
@@ -174,7 +177,7 @@ export default function MetodoFisiologiaCursos() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="680px">
-              Si quieres profundizar en la Fisiología, estos cursos te acompañan paso a paso.
+              {t("fisiologia.cursos.intro")}
             </Text>
           </Reveal>
 
@@ -196,11 +199,11 @@ export default function MetodoFisiologiaCursos() {
                 <Text position="relative" zIndex={1} fontSize="4xl">🎓</Text>
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
-                  Estoy preparando los cursos
+                  {t("metodo.cursosPreparando")}
                 </Text>
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }}
                       fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-                  Pronto podrás profundizar aquí con cursos avanzados de Fisiología. Mientras tanto, sigue explorando el recorrido.
+                  {t("fisiologia.cursos.pronto")}
                 </Text>
               </Flex>
             </Reveal>

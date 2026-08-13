@@ -142,7 +142,7 @@ export default function MetodoPsicologiaBrujula() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title="Carta"
+                title={t("metodo.psico.paso.carta")}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
@@ -150,9 +150,9 @@ export default function MetodoPsicologiaBrujula() {
                 step={{ current: 21, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Compromiso", onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}
+                prev={{ label: `← ${t("metodo.psico.paso.compromiso")}`, onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}
                 next={{
-                  label: "Síntesis →",
+                  label: `${t("metodo.psico.paso.sintesis")} →`,
                   onClick: () => { void persistir(brujula); setComicOpen(true); },
                   disabled: !brujulaCompleta,
                   disabledTooltip: "Escribe tu carta para continuar.",
@@ -162,10 +162,7 @@ export default function MetodoPsicologiaBrujula() {
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>
-                Escríbete una carta para el próximo momento difícil. No para juzgarte:
-                para recordar el camino que ya conoces.
-              </IntroRecorrido>
+              <IntroRecorrido>{t("metodo.psico.cartaIntro")}</IntroRecorrido>
             </Reveal>
 
             {/* ── La brújula: un mensaje libre a tu yo del futuro ── */}
@@ -176,15 +173,13 @@ export default function MetodoPsicologiaBrujula() {
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
                 <Flex direction="column" align="center" gap={3} mb={{ base: 7, md: 8 }} textAlign="center">
                   <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-                        lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                    Cuando vuelvas a bloquearte, recuerda...
-                  </Text>
+                        lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.cartaTitular")}</Text>
                 </Flex>
 
                 <Textarea
                   value={brujula.mensaje || ""}
                   onChange={(e) => { setBrujula({ ...brujula, mensaje: e.target.value }); setEstadoGuardado("idle"); }}
-                  placeholder="Yo del futuro, cuando vuelvas a sentirte bloqueado, recuerda…"
+                  placeholder={t("metodo.psico.cartaPlaceholder")}
                   minH={{ base: "200px", md: "240px" }}
                   bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
                   borderRadius="lg" px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }} fontFamily="'EB Garamond', serif"
@@ -228,9 +223,7 @@ export default function MetodoPsicologiaBrujula() {
             {/* Cierre */}
             <Reveal direction="up" distance={20} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
-                  lineHeight="1.7" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-              Gracias por no abandonarte.
-            </Text>
+                  lineHeight="1.7" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{t("metodo.psico.cartaGracias")}</Text>
             </Reveal>
 
           </Flex>

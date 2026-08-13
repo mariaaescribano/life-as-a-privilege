@@ -14,6 +14,7 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
+import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import {
   API_URL,
   fisiologiaBg,
@@ -55,7 +56,12 @@ const TODAS_IMAGENES = [
   PROTON_IMG,
 ];
 const GLOW: Record<Tipo, string> = { up: "#8ab6e6", down: "#e08a8a", gluon: "#f2c86b" };
-const LABEL: Record<Tipo, string> = { up: "up quark", down: "down quark", gluon: "gluón" };
+// La CLAVE del diccionario, no el texto: este mapa se calcula al importar.
+const LABEL: Record<Tipo, ClaveTexto> = {
+  up: "fisiologia.pieza.quarkUp",
+  down: "fisiologia.pieza.quarkDown",
+  gluon: "fisiologia.pieza.gluon",
+};
 
 // Posiciones (en %) FIJAS por pieza dentro del núcleo, para reproducir el
 // esquema clásico del protón: los 3 quarks en los vértices de un triángulo y
@@ -101,6 +107,7 @@ function FichaArrastrable({
    *  sitio, para que las fichas hermanas NO se recoloquen (no se mueven). */
   colocada?: boolean;
 }) {
+  const t = useT();
   const [arrastrando, setArrastrando] = useState(false);
   const [imgOk, setImgOk] = useState(false); // foto de la ficha ya cargada
   const ref = useRef<HTMLDivElement>(null);
@@ -122,7 +129,7 @@ function FichaArrastrable({
            visibility="hidden" aria-hidden>
         <Box w={{ base: "58px", md: "72px" }} h={{ base: "58px", md: "72px" }} borderRadius="full" />
         <Text fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700" letterSpacing="0.06em" textTransform="uppercase">
-          {LABEL[pieza.tipo]}
+          {t(LABEL[pieza.tipo])}
         </Text>
       </Box>
     );
@@ -177,7 +184,7 @@ function FichaArrastrable({
       >
         <Image
           src={IMG[pieza.tipo]}
-          alt={LABEL[pieza.tipo]}
+          alt={t(LABEL[pieza.tipo])}
           w="100%" h="100%" objectFit="cover"
           draggable={false}
           pointerEvents="none"
@@ -202,7 +209,7 @@ function FichaArrastrable({
         pointerEvents="none"
         style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}
       >
-        {LABEL[pieza.tipo]}
+        {t(LABEL[pieza.tipo])}
       </Text>
     </MBox>
   );
@@ -247,6 +254,7 @@ function PiezaInterna({ tipo, x, y }: { tipo: Tipo; x: number; y: number }) {
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaParticulas() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // La página no se muestra hasta que las fotos del dinamismo estén cargadas.
@@ -373,16 +381,16 @@ export default function MetodoFisiologiaParticulas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Partículas"
+            title={t("fisiologia.particulas.titulo")}
             pageLabel="1/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
+            prev={{ label: `← ${t("fisiologia.niveles.titulo")}`, onClick: () => navigate("/metodo/fisiologia/niveles") }}
             extra={celulasBtn}
-            next={{ label: "Átomo →", onClick: () => navigate("/metodo/fisiologia/atomos"), disabled: !completo, disabledTooltip: "Primero construye la partícula" }}
+            next={{ label: `${t("fisiologia.atomos.titulo")} →`, onClick: () => navigate("/metodo/fisiologia/atomos"), disabled: !completo, disabledTooltip: t("fisiologia.particulas.bloqueo") }}
           />
           </Reveal>
 
@@ -392,7 +400,7 @@ export default function MetodoFisiologiaParticulas() {
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
                 <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                       style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  Construye una partícula.
+                  {t("fisiologia.particulas.instruccion")}
                 </Text>
               </MBox>
             )}
@@ -434,7 +442,7 @@ export default function MetodoFisiologiaParticulas() {
                           <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}
                                 fontSize={{ base: "sm", md: "md" }} fontStyle="italic" pointerEvents="none"
                                 style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
-                            el núcleo
+                            {t("fisiologia.particulas.nucleo")}
                           </Text>
                         )}
                       </Box>
@@ -462,7 +470,7 @@ export default function MetodoFisiologiaParticulas() {
                         </AnimatePresence>
                       </Box>
                       {pendientes.length === 0 && (
-                        <Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">…uniéndose…</Text>
+                        <Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">{t("fisiologia.particulas.uniendose")}</Text>
                       )}
 
                       {/* progreso */}
@@ -497,7 +505,7 @@ export default function MetodoFisiologiaParticulas() {
                         <Box position="absolute" inset="-6%" borderRadius="full"
                              animation={`${shimmer} 3.6s ease-in-out infinite`} pointerEvents="none"
                              sx={{ boxShadow: `0 0 50px ${fisiologiaTxt}55, 0 0 90px ${GLOW.down}33` }} />
-                        <Image src={PROTON_IMG} alt="Protón: dos quarks up y un quark down unidos por gluones"
+                        <Image src={PROTON_IMG} alt={t("fisiologia.particulas.protonAlt")}
                                w="100%" h="100%" objectFit="contain"
                                fallbackStrategy="onError"
                                onLoad={() => setProtonImgOk(true)}
@@ -522,16 +530,15 @@ export default function MetodoFisiologiaParticulas() {
                           textAlign={{ base: "center", md: "left" }}>
                       <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
                             letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
-                        ¡Enhorabuena! Has construido una partícula.
+                        {t("fisiologia.particulas.hecho")}
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
                       <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" style={{ textShadow: INK }}>
-                        Las partículas están formadas por <b>quarks</b>, unas partículas fundamentales que aparecen y desaparecen constantemente, y por
-                        <b> gluones</b>, que los mantienen unidos.
+                        <TextoRico>{t("fisiologia.particulas.p1")}</TextoRico>
                       </Text>
                       <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" fontWeight="600" style={{ textShadow: INK }}>
-                        Todo lo que existe, incluido tu cuerpo, está construido a partir de estas partículas.
+                        {t("fisiologia.particulas.p2")}
                       </Text>
                     </Flex>
                   </Box>
@@ -545,7 +552,7 @@ export default function MetodoFisiologiaParticulas() {
                        fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                        _hover={{ bg: "rgba(255,255,255,0.16)", color: fisiologiaTxt, borderColor: `${fisiologiaTxt}aa` }}>
-                    ↺ Volver a hacer
+                    {t("metodo.volverAHacer")}
                   </Box>
                 </Flex>
               </MBox>

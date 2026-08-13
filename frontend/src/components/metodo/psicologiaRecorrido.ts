@@ -1,3 +1,4 @@
+import { traducir } from "../../i18n";
 // ─────────────────────────────────────────────────────────────────────────
 // EL RECORRIDO · PSICOLOGÍA
 //
@@ -107,34 +108,39 @@ export interface PasoRecorrido {
   bloqueado?: boolean;
 }
 
-export const RECORRIDO_INDICE: PasoRecorrido[] = [
-  { n: 1,  titulo: "Vuelve a ti",     ruta: () => "/metodo/psicologia" },
-  { n: 2,  titulo: "Problemas",       ruta: (id) => `/metodo/psicologia/${id}/problema` },
-  { n: 3,  titulo: "ACE",             ruta: (id) => `/metodo/psicologia/${id}/ace` },
-  { n: 4,  titulo: "Resultado ACE",   ruta: (id) => `/metodo/psicologia/${id}/ace-resultado` },
-  { n: 5,  titulo: "Línea de Vida",   ruta: (id) => `/metodo/psicologia/${id}` },
-  { n: 6,  titulo: "Tu familia",      ruta: (id) => `/metodo/psicologia/${id}/familia` },
-  { n: 7,  titulo: "Genograma",       ruta: (id) => `/metodo/psicologia/${id}/genograma` },
-  { n: 8,  titulo: "Huellas",         ruta: (id) => `/metodo/psicologia/${id}/huellas` },
-  { n: 9,  titulo: "Nudos",           ruta: (id) => `/metodo/psicologia/${id}/nudos` },
-  { n: 10, titulo: "Necesidades",     ruta: (id) => `/metodo/psicologia/${id}/necesidades` },
-  { n: 11, titulo: "Heridas",         ruta: (id) => `/metodo/psicologia/${id}/huellas-nudos` },
-  { n: 12, titulo: "Tus heridas",     ruta: (id) => `/metodo/psicologia/${id}/heridas-lista` },
-  { n: 13, titulo: "Narra",           ruta: (id) => `/metodo/psicologia/${id}/regulacion` },
-  { n: 14, titulo: "Relación",        ruta: (id) => `/metodo/psicologia/${id}/integracion` },
-  { n: 15, titulo: "Recuérdate",      ruta: (id) => `/metodo/psicologia/${id}/dones` },
-  { n: 16, titulo: "Dones",           ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
-  { n: 17, titulo: "Miedos",          ruta: (id) => `/metodo/psicologia/${id}/miedos` },
-  { n: 18, titulo: "Atrévete",        ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
-  { n: 19, titulo: "Integración",     ruta: (id) => `/metodo/psicologia/${id}/mapa` },
-  { n: 20, titulo: "Compromiso",      ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
-  { n: 21, titulo: "Carta",      ruta: (id) => `/metodo/psicologia/${id}/brujula` },
-  { n: 22, titulo: "Síntesis",     ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
-  { n: 23, titulo: "Cursos",       ruta: (id) => `/metodo/psicologia/${id}/cursos` },
+/** Los 23 pasos del recorrido, con los títulos ya en el idioma activo.
+ *  Es una FUNCIÓN y no un array: un array de nivel de módulo se calcula una vez
+ *  al importar el fichero y se quedaría con los títulos congelados en el idioma
+ *  de arranque. Quien lo pinte tiene que llamar a `useIdioma()` para volver a
+ *  renderizarse al cambiar de idioma. */
+export const psicologiaIndice = (): PasoRecorrido[] => [
+  { n: 1,  titulo: traducir("metodo.psico.paso.vuelveATi"),     ruta: () => "/metodo/psicologia" },
+  { n: 2,  titulo: traducir("metodo.psico.paso.problemas"),     ruta: (id) => `/metodo/psicologia/${id}/problema` },
+  { n: 3,  titulo: traducir("metodo.psico.paso.ace"),           ruta: (id) => `/metodo/psicologia/${id}/ace` },
+  { n: 4,  titulo: traducir("metodo.psico.paso.resultadoAce"),  ruta: (id) => `/metodo/psicologia/${id}/ace-resultado` },
+  { n: 5,  titulo: traducir("metodo.psico.lineaDeVida"),        ruta: (id) => `/metodo/psicologia/${id}` },
+  { n: 6,  titulo: traducir("metodo.psico.paso.familia"),       ruta: (id) => `/metodo/psicologia/${id}/familia` },
+  { n: 7,  titulo: traducir("metodo.psico.paso.genograma"),     ruta: (id) => `/metodo/psicologia/${id}/genograma` },
+  { n: 8,  titulo: traducir("metodo.psico.paso.huellas"),       ruta: (id) => `/metodo/psicologia/${id}/huellas` },
+  { n: 9,  titulo: traducir("metodo.psico.paso.nudos"),         ruta: (id) => `/metodo/psicologia/${id}/nudos` },
+  { n: 10, titulo: traducir("metodo.psico.paso.necesidades"),   ruta: (id) => `/metodo/psicologia/${id}/necesidades` },
+  { n: 11, titulo: traducir("metodo.psico.paso.heridas"),       ruta: (id) => `/metodo/psicologia/${id}/huellas-nudos` },
+  { n: 12, titulo: traducir("metodo.psico.paso.tusHeridas"),    ruta: (id) => `/metodo/psicologia/${id}/heridas-lista` },
+  { n: 13, titulo: traducir("metodo.psico.narra"),              ruta: (id) => `/metodo/psicologia/${id}/regulacion` },
+  { n: 14, titulo: traducir("metodo.psico.paso.relacion"),      ruta: (id) => `/metodo/psicologia/${id}/integracion` },
+  { n: 15, titulo: traducir("metodo.psico.paso.recuerdate"),    ruta: (id) => `/metodo/psicologia/${id}/dones` },
+  { n: 16, titulo: traducir("metodo.psico.paso.dones"),         ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
+  { n: 17, titulo: traducir("metodo.psico.paso.miedos"),        ruta: (id) => `/metodo/psicologia/${id}/miedos` },
+  { n: 18, titulo: traducir("metodo.psico.paso.atrevete"),      ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
+  { n: 19, titulo: traducir("metodo.psico.paso.integracion"),   ruta: (id) => `/metodo/psicologia/${id}/mapa` },
+  { n: 20, titulo: traducir("metodo.psico.paso.compromiso"),    ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
+  { n: 21, titulo: traducir("metodo.psico.paso.carta"),         ruta: (id) => `/metodo/psicologia/${id}/brujula` },
+  { n: 22, titulo: traducir("metodo.psico.paso.sintesis"),      ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
+  { n: 23, titulo: traducir("metodo.psico.paso.cursosCorto"),   ruta: (id) => `/metodo/psicologia/${id}/cursos` },
 ];
 
 /** Total de pasos del recorrido (para las etiquetas X/total). */
-export const RECORRIDO_TOTAL = RECORRIDO_INDICE.length;
+export const RECORRIDO_TOTAL = psicologiaIndice().length;
 
 // ─────────────────────────────────────────────────────────────────────────
 // La gestación · un nodo ANTES del año 0.

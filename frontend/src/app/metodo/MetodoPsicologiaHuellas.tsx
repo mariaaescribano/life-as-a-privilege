@@ -142,16 +142,16 @@ export default function MetodoPsicologiaHuellas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-            title="Huellas"
+            title={t("metodo.psico.paso.huellas")}
             pageLabel="8/22"
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
             mb={0}
             boxShadow={glowHeader}
-            prev={{ label: "← Genograma", onClick: () => navigate(`/metodo/psicologia/${exp.id}/genograma`) }}
+            prev={{ label: `← ${t("metodo.psico.paso.genograma")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/genograma`) }}
             next={{
-              label: "Nudos →",
+              label: `${t("metodo.psico.paso.nudos")} →`,
               onClick: () => setComicOpen(true),
               disabled: !algunaHuella,
               disabledTooltip: "Marca con ◈ al menos un recuerdo que dejó huella para continuar.",
@@ -161,9 +161,7 @@ export default function MetodoPsicologiaHuellas() {
 
           <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
           <Flex direction="column" align="center" textAlign="center" gap={2} maxW="620px">
-            <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.9} lineHeight="1.8">
-              Recorre tu historia. Marca con ◈ los recuerdos que dejaron huella en ti.
-            </Text>
+            <Text color={CREMA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.9} lineHeight="1.8">{t("metodo.psico.huellasIntro")}</Text>
           </Flex>
           </Reveal>
 
@@ -172,9 +170,7 @@ export default function MetodoPsicologiaHuellas() {
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={8} py={12}>
-                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                  Todavía no has escrito recuerdos en tu línea de Vida. Vuelve atrás y visita los años que quieras recordar.
-                </Text>
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.sinRecuerdos")}</Text>
               </Box>
             </Box>
             </Reveal>
@@ -349,6 +345,7 @@ const Pagina = ({
   preguntasPorAno: { key: string }[];
   onToggle: (edadAno: number, texto: string) => void;
 }) => {
+  const t = useT();
   // Página en blanco: cuando el nº de años es impar, la derecha del último
   // cuaderno se queda sin año.
   const blanca = edadAno === undefined;
@@ -439,9 +436,7 @@ const Pagina = ({
         {items.length === 0 ? (
           <Box position="relative" flex="1" display="flex" alignItems="center" px={{ base: 6, md: 8 }} py={8} borderTop={`2px solid ${TINTA}`} borderBottom={`2px solid ${TINTA}55`}>
             <FotoFranja posicion="center 40%" />
-            <Text position="relative" zIndex={1} w="100%" color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>
-              Sin recuerdos escritos este año.
-            </Text>
+            <Text position="relative" zIndex={1} w="100%" color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.8} textAlign="center" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.sinRecuerdosAnio")}</Text>
           </Box>
         ) : (
           // Los recuerdos entran de uno en uno (cascada suave). `delayChildren`
@@ -489,7 +484,7 @@ const Pagina = ({
                     style={{ textShadow: marcado ? `0 1px 2px #fbf4e8, 0 0 9px ${TINTA}99` : `0 1px 2px #fbf4e8` }}
                     _hover={{ opacity: 1, transform: "scale(1.18)" }}
                     title={marcado ? "Dejó huella (pulsa para quitar)" : "Marcar que dejó huella"}
-                    aria-label="Marcar que dejó huella"
+                    aria-label={t("metodo.psico.marcarHuella")}
                   >
                     ◈
                   </Box>

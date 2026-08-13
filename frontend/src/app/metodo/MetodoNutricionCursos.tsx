@@ -96,7 +96,7 @@ export default function MetodoNutricionCursos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cursos de Nutrición"
+              title={t("metodo.cursosDe", { disciplina: t("disciplina.nutricion") })}
               compact
               bgColor={`${nutricionBg}dd`}
               color={nutricionTxt}
@@ -105,8 +105,8 @@ export default function MetodoNutricionCursos() {
               prev={{ label: `← ${t("metodo.nutri.paso.origen")}`, onClick: () => navigate("/metodo/nutricion/origen") }}
               extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={cabalaSuscrito
-                ? { label: "Cábala →", onClick: () => navigate("/metodo/cabala") }
-                : { label: "Cábala →", icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cabala") }}
+                ? { label: `${t("disciplina.cabala")} →`, onClick: () => navigate("/metodo/cabala") }
+                : { label: `${t("disciplina.cabala")} →`, icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cabala") }}
             />
           </Reveal>
 
@@ -114,7 +114,7 @@ export default function MetodoNutricionCursos() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="680px">
-              Si quieres profundizar en la Nutrición, estos cursos te acompañan paso a paso.
+              {t("metodo.cursosIntro", { disciplina: t("disciplina.nutricion") })}
             </Text>
           </Reveal>
 
@@ -147,13 +147,10 @@ export default function MetodoNutricionCursos() {
                 <Text position="relative" zIndex={1} fontSize="4xl">🎓</Text>
                 <Text position="relative" zIndex={1} color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
-                  Estoy preparando los cursos
+                  {t("metodo.cursosPreparando")}
                 </Text>
                 <Text position="relative" zIndex={1} color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }}
-                      fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-                  Pronto podrás profundizar aquí con cursos avanzados de Nutrición. Mientras tanto, continúa el
-                  Mapa con la siguiente disciplina.
-                </Text>
+                      fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{t("metodo.cursosAvanzadosPronto", { disciplina: t("disciplina.nutricion") })}</Text>
               </Flex>
             </Reveal>
           )}

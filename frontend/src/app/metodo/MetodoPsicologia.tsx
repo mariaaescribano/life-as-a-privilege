@@ -119,9 +119,9 @@ export default function MetodoPsicologia() {
               nom={neuropsicologiaNom}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Volver a Astrología", onClick: () => navigate("/metodo/astrologia/cursos") }}
+              prev={{ label: `← ${t("disciplina.astrologia")}`, onClick: () => navigate("/metodo/astrologia/cursos") }}
               next={{
-                label: "Problema →",
+                label: `${t("metodo.psico.paso.problemas")} →`,
                 onClick: irAProblema,
               }}
             />

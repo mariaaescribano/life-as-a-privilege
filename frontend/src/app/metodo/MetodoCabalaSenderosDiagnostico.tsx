@@ -12,13 +12,14 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import {
-  CABALA_SENDEROS,
   NOMBRE_SEFIRA,
   senderoCompleto,
   senderosContenidoCompleto,
   puntuacionSendero,
   interpretacionSendero,
 } from "../../components/metodo/cabalaSenderos";
+import { useSenderos } from "../../components/metodo/cabalaEn";
+import { useT } from "../../i18n";
 import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW, CAJA_GLOW_FUERTE } from "../../components/metodo/cabalaGlow";
@@ -43,7 +44,11 @@ const Caja = ({ children, destacado = false }: { children: React.ReactNode; dest
 );
 
 export default function MetodoCabalaSenderosDiagnostico() {
+  const t = useT();
   const navigate = useNavigate();
+  // Los 22 en el idioma activo: de ellos sale el nombre de la banda de cada
+  // sendero. Los límites de las bandas son los mismos en los dos idiomas.
+  const senderos22 = useSenderos();
   const [loading, setLoading] = useState(true);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
   const [senderos, setSenderos] = useState<Record<string, number[]>>({});
@@ -81,7 +86,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
   // Resultado por sendero: completado, puntuación y banda (mayor puntuación =
   // más resistencia; bandIdx mayor = transición más bloqueada).
   const resultados = useMemo(() => {
-    return CABALA_SENDEROS.map((s) => {
+    return senderos22.map((s) => {
       const r = senderos[String(s.num)] ?? senderos[s.num as any];
       const completo = senderoCompleto(s, r);
       const total = completo ? puntuacionSendero(s, r!) : -1;
@@ -89,7 +94,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
       const bandIdx = band ? s.interpretaciones.findIndex((b) => b.min === band.min && b.max === band.max) : -1;
       return { s, completo, total, band, bandIdx };
     });
-  }, [senderos]);
+  }, [senderos, senderos22]);
 
   const completados = resultados.filter((r) => r.completo).length;
   const todos = resultados.length;
@@ -115,16 +120,16 @@ export default function MetodoCabalaSenderosDiagnostico() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Diagnóstico de los Senderos"
+              title={t("metodo.cabala.paso.senderosDiag")}
               pageLabel={`${CABALA_PAG.senderosDiag}/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: "← Los senderos", onClick: () => navigate("/metodo/cabala/senderos") }}
-              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
-              next={{ label: "Diagnóstico final →", onClick: () => navigate("/metodo/cabala/final") }}
+              prev={{ label: `← ${t("metodo.cabala.paso.senderos")}`, onClick: () => navigate("/metodo/cabala/senderos") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
+              next={{ label: `${t("metodo.cabala.paso.final")} →`, onClick: () => navigate("/metodo/cabala/final") }}
             />
           </Reveal>
 
@@ -135,15 +140,14 @@ export default function MetodoCabalaSenderosDiagnostico() {
                 las cajas. */}
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
-              Cada sendero es una transición entre dos capacidades. Aquí se reúne el resultado de tus 22 tests
-              para mostrar qué caminos fluyen y cuáles piden más trabajo.
+              {t("metodo.cabala.senderosDiag.intro")}
             </Text>
           </Reveal>
 
           <Reveal direction="up" distance={14} delay={0.14} duration={0.5} display="flex" justifyContent="center">
             <Text color={`${cabalaTxt}cc`} fontSize="sm" letterSpacing="0.1em" textTransform="uppercase"
                   bg={`${cabalaBg}cc`} border={`1px solid ${cabalaTxt}44`} borderRadius="full" px={4} py={1.5}>
-              {completados}/{todos} senderos completados
+              {t("metodo.cabala.senderosDiag.completados", { n: completados, total: todos })}
             </Text>
           </Reveal>
 
@@ -151,11 +155,10 @@ export default function MetodoCabalaSenderosDiagnostico() {
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%">
               <Caja>
                 <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                  Aún faltan senderos por recorrer
+                  {t("metodo.cabala.senderosDiag.faltan")}
                 </Text>
                 <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                  Completa el test de los 22 senderos para recibir tu diagnóstico final. Cada respuesta se guarda
-                  automáticamente; puedes continuar cuando quieras.
+                  {t("metodo.cabala.senderosDiag.faltanTexto")}
                 </Text>
               </Caja>
             </Reveal>
@@ -166,7 +169,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
                 {prioritarios.length > 0 ? (
                   <Caja destacado>
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
-                      Tus senderos prioritarios
+                      {t("metodo.cabala.senderosDiag.prioritarios")}
                     </Text>
                     <Flex direction="column" gap={4}>
                       {prioritarios.map(({ s, band, total }) => (
@@ -189,11 +192,10 @@ export default function MetodoCabalaSenderosDiagnostico() {
                 ) : (
                   <Caja>
                     <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                      Tus transiciones fluyen
+                      {t("metodo.cabala.senderosDiag.fluyen")}
                     </Text>
                     <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                      No aparece ningún sendero con una resistencia marcada. Sigue observándote: el equilibrio se
-                      sostiene practicándolo.
+                      {t("metodo.cabala.senderosDiag.fluyenTexto")}
                     </Text>
                   </Caja>
                 )}
@@ -203,7 +205,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
               <Reveal direction="up" distance={18} delay={0.24} duration={0.6} w="100%">
                 <Caja>
                   <Text color={cabalaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.08em" mb={5} style={{ textShadow: INK_SHADOW }}>
-                    Los 22 senderos
+                    {t("metodo.cabala.senderosDiag.los22")}
                   </Text>
                   <Flex direction="column" gap={3.5}>
                     {resultados.map(({ s, band, total }) => (
@@ -219,7 +221,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
                         <Text color={band ? cabalaTxt : `${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }}
                               fontWeight={band ? "700" : "400"} letterSpacing="0.04em"
                               fontStyle={band ? "normal" : "italic"} style={{ textShadow: INK_SHADOW }}>
-                          {band ? `${band.titulo} · ${total}` : "sin responder"}
+                          {band ? `${band.titulo} · ${total}` : t("metodo.cabala.sinResponder")}
                         </Text>
                       </Flex>
                     ))}

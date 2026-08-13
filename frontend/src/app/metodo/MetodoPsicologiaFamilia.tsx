@@ -116,9 +116,9 @@ export default function MetodoPsicologiaFamilia() {
                 nom={neuropsicologiaNom}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Línea de Vida", onClick: () => ir(`/metodo/psicologia/${exp.id}`) }}
+                prev={{ label: `← ${t("metodo.psico.lineaDeVida")}`, onClick: () => ir(`/metodo/psicologia/${exp.id}`) }}
                 next={{
-                  label: "Genograma →",
+                  label: `${t("metodo.psico.paso.genograma")} →`,
                   onClick: irAlGenograma,
                   disabled: !algunSimbolo,
                   disabledTooltip:
@@ -209,6 +209,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
   onEliminar: () => void;
   onClose: () => void;
 }) {
+  const t = useT();
   useLockBodyScroll(true);
   const [error, setError] = useState<string | null>(null);
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
@@ -274,7 +275,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
               <Input
                 value={p.nombre}
                 onChange={(e) => onCampo({ nombre: e.target.value })}
-                placeholder="Su nombre…"
+                placeholder={t("metodo.psico.suNombre")}
                 bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
                 borderRadius="lg" fontFamily="'EB Garamond', serif"
                 fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
@@ -286,7 +287,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
               <Input
                 value={p.parentesco || ""}
                 onChange={(e) => onCampo({ parentesco: e.target.value })}
-                placeholder="Parentesco (madre, abuelo…)"
+                placeholder={t("metodo.psico.parentesco")}
                 bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
                 borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
                 sx={{ caretColor: TINTA }}
@@ -341,9 +342,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
               {elegidos.length} de {SIMBOLOS_POR_PERSONA} elegidas
             </Text>
             {completo && (
-              <Text color={TINTA} fontSize="xs" fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>
-                · toca una elegida para cambiarla
-              </Text>
+              <Text color={TINTA} fontSize="xs" fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.tocaParaCambiarla")}</Text>
             )}
           </Flex>
 
@@ -383,29 +382,21 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
           <Flex justify="space-between" align="center" gap={3}>
             {confirmarBorrado ? (
               <Flex align="center" gap={2}>
-                <Text color={TINTA} fontSize="md" fontWeight="600" style={{ textShadow: INK_SHADOW }}>
-                  ¿Quitarla del mapa?
-                </Text>
+                <Text color={TINTA} fontSize="md" fontWeight="600" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.quitarDelMapa")}</Text>
                 <Box as="button" onClick={onEliminar} px={3.5} py={2} borderRadius="full"
                      bg="#8c2f13" color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="md"
-                     cursor="pointer" _hover={{ filter: "brightness(1.1)" }}>
-                  Sí, quitar
-                </Box>
+                     cursor="pointer" _hover={{ filter: "brightness(1.1)" }}>{t("metodo.psico.siQuitar")}</Box>
                 <Box as="button" onClick={() => setConfirmarBorrado(false)} px={3.5} py={2} borderRadius="full"
                      bg="transparent" border={`1.5px solid ${TINTA}88`} color={TINTA}
                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="md" cursor="pointer"
-                     _hover={{ bg: `${TINTA}14` }}>
-                  No
-                </Box>
+                     _hover={{ bg: `${TINTA}14` }}>{t("metodo.psico.no")}</Box>
               </Flex>
             ) : (
               <Box as="button" onClick={() => setConfirmarBorrado(true)}
                    px={{ base: 4, md: 5 }} py={2} borderRadius="full" bg="transparent"
                    border={`1.5px solid ${TINTA}66`} color={TINTA}
                    fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
-                   cursor="pointer" transition="all 0.18s" _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>
-                Quitar
-              </Box>
+                   cursor="pointer" transition="all 0.18s" _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>{t("metodo.psico.quitar")}</Box>
             )}
 
             <Box as="button" onClick={onClose}
@@ -413,9 +404,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                  letterSpacing="0.04em" cursor="pointer"
                  boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-              Hecho ✓
-            </Box>
+                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>{t("metodo.psico.hecho")}</Box>
           </Flex>
         </Box>
         </>

@@ -1,3 +1,4 @@
+import { traducir, type ClaveTexto } from "../../i18n";
 import type { HitoHistoria } from "./culturaHistoriaUniversal";
 import { HISTORIA_UNIVERSAL_HITOS } from "./culturaHistoriaUniversal";
 import { HISTORIA_RELIGIONES_HITOS } from "./culturaHistoriaReligiones";
@@ -41,3 +42,24 @@ export const HISTORIAS_CULTURA: Record<string, HistoriaDef> = {
 
 export const getHistoria = (key: string | undefined): HistoriaDef | undefined =>
   key ? HISTORIAS_CULTURA[key] : undefined;
+
+/**
+ * El título de una Historia en el idioma activo.
+ *
+ * El `titulo` de arriba se queda como respaldo (y como lo que se lee en el
+ * código), pero lo que se PINTA sale del diccionario: la misma Historia se cita
+ * en la rejilla, en la cabecera de su línea del tiempo y en el taller de
+ * apuntes, y los tres tienen que decir lo mismo en los dos idiomas.
+ *
+ * No es un hook a propósito: se llama desde páginas que ya usan `useT()`, así
+ * que se vuelven a pintar solas al cambiar de idioma.
+ */
+export const tituloHistoria = (key: string | undefined): string => {
+  const historia = getHistoria(key);
+  if (!historia) return "";
+  // `traducir` devuelve la propia clave cuando no existe: en ese caso (una
+  // Historia nueva a la que aún no se le ha puesto su clave) se pinta su título.
+  const clave = `metodo.cultura.historia.${key}` as ClaveTexto;
+  const texto = traducir(clave);
+  return texto === clave ? historia.titulo : texto;
+};

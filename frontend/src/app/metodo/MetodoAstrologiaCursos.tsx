@@ -17,6 +17,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
@@ -35,6 +36,7 @@ const QUE_ES_ESTO = {
  * pago que antes estaba en la Llamada, que ahora es el paso previo).
  */
 export default function MetodoAstrologiaCursos() {
+  const t = useT();
   const navigate = useNavigate();
   const { cursosData, loading } = useCursosData();
   const [comicOpen, setComicOpen] = useState(false);
@@ -103,16 +105,16 @@ export default function MetodoAstrologiaCursos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Cursos de Astrología"
+              title={t("metodo.cursosDe", { disciplina: t("disciplina.astrologia") })}
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
               step={{ current: 9, total: 9 }}
               mb={0}
-              prev={{ label: "← Llamada", onClick: () => navigate("/metodo/astrologia/llamada") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
+              prev={{ label: `← ${t("metodo.astro.paso.llamada")}`, onClick: () => navigate("/metodo/astrologia/llamada") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
               next={{
-                label: "Psicología →",
+                label: `${t("disciplina.psicologia")} →`,
                 onClick: onPsicologia,
                 // Mismo estilo que el resto de botones del header (Astrología),
                 // sin el color de la disciplina de destino.
@@ -143,7 +145,7 @@ export default function MetodoAstrologiaCursos() {
               textAlign="center"
               lineHeight="1.8"
             >
-              Si quieres profundizar en la Astrología, estos cursos te acompañan paso a paso.
+              {t("metodo.cursosIntro", { disciplina: t("disciplina.astrologia") })}
             </Text>
           </Reveal>
 
@@ -207,7 +209,7 @@ export default function MetodoAstrologiaCursos() {
                   lineHeight="1.8"
                   style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}
                 >
-                  Pronto encontrarás aquí los cursos de Astrología.
+                  {t("metodo.cursosPronto", { disciplina: t("disciplina.astrologia") })}
                 </Text>
               </Box>
             </Reveal>

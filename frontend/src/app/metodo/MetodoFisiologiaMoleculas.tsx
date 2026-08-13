@@ -13,6 +13,7 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
@@ -31,7 +32,12 @@ const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px 
 type Tipo = "oxigeno" | "hidrogeno" | "carbono";
 
 const GLOW: Record<Tipo, string> = { oxigeno: "#e08a8a", hidrogeno: "#8ab6e6", carbono: "#a9a2b3" };
-const LABEL: Record<Tipo, string> = { oxigeno: "oxígeno", hidrogeno: "hidrógeno", carbono: "carbono" };
+// La CLAVE del diccionario, no el texto: este mapa se calcula al importar.
+const LABEL: Record<Tipo, ClaveTexto> = {
+  oxigeno: "fisiologia.pieza.oxigeno",
+  hidrogeno: "fisiologia.pieza.hidrogeno",
+  carbono: "fisiologia.pieza.carbono",
+};
 const GLYPH: Record<Tipo, string> = { oxigeno: "O", hidrogeno: "H", carbono: "C" };
 const IMG: Record<Tipo, string> = {
   oxigeno: "/recorrido/fisiologia/pre/oxigeno.webp",
@@ -60,15 +66,19 @@ const S_MINI: Record<Tipo, any> = {
 interface Slot { tipo: Tipo; x: number; y: number; }
 interface Mol {
   key: string;
-  nombre: string;
-  /** Artículo del nombre, para el botón «Ahora, {articulo} {nombre} →».
-   *  Por defecto «el»; ponlo cuando la molécula sea femenina («la glucosa»). */
-  articulo?: string;
+  /** Todo el texto va como CLAVE del diccionario: el array se calcula UNA vez
+   *  al importar el fichero y, con el texto ya dentro, se quedaría congelado en
+   *  el idioma de arranque. */
+  nombre: ClaveTexto;
+  /** El nombre CON su artículo, para el botón «Ahora, el agua →». Va como clave
+   *  aparte porque el artículo cambia de género en español y desaparece en
+   *  inglés: no se puede componer pegando dos trozos. */
+  articulo: ClaveTexto;
   formula: string;
-  instruccion: string;
+  instruccion: ClaveTexto;
   slots: Slot[];
-  titulo: string;
-  parrafos: React.ReactNode[];
+  titulo: ClaveTexto;
+  parrafos: ClaveTexto[];
   /** Foto de la molécula ya formada (celebración/resumen). Fallback: los átomos. */
   resultadoImg?: string;
 }
@@ -76,49 +86,46 @@ interface Mol {
 const MOLS: Mol[] = [
   {
     key: "agua",
-    nombre: "agua",
+    nombre: "fisiologia.moleculas.agua",
+    articulo: "fisiologia.moleculas.agua.articulo",
     formula: "H₂O",
-    instruccion: "Une un oxígeno y dos hidrógenos dentro de la zona de enlace.",
+    instruccion: "fisiologia.moleculas.agua.instruccion",
     slots: [
       { tipo: "oxigeno", x: 50, y: 55 },
       { tipo: "hidrogeno", x: 34, y: 44 },
       { tipo: "hidrogeno", x: 66, y: 44 },
     ],
-    titulo: "¡Has formado una molécula de agua!",
-    parrafos: [
-      <>El agua es la <b>molécula de la Vida</b>: disuelve, transporta y hace posible casi todo lo que ocurre dentro de tus células. Alrededor del <b>60% de tu cuerpo es agua</b>. En buena parte, eres agua.</>,
-    ],
+    titulo: "fisiologia.moleculas.agua.hecho",
+    parrafos: ["fisiologia.moleculas.agua.p1"],
     resultadoImg: "/recorrido/fisiologia/pre/h2o.webp",
   },
   {
     key: "co2",
-    nombre: "dióxido de carbono",
+    nombre: "fisiologia.moleculas.co2",
+    articulo: "fisiologia.moleculas.co2.articulo",
     formula: "CO₂",
-    instruccion: "Une un carbono y dos oxígenos dentro de la zona de enlace.",
+    instruccion: "fisiologia.moleculas.co2.instruccion",
     slots: [
       { tipo: "carbono", x: 50, y: 50 },
       { tipo: "oxigeno", x: 28, y: 50 },
       { tipo: "oxigeno", x: 72, y: 50 },
     ],
-    titulo: "¡Has formado dióxido de carbono!",
-    parrafos: [
-      <>Tus células lo liberan al obtener energía, y las plantas lo capturan para crecer. Es una pieza clave del <b>ciclo de la Vida</b>.</>,
-    ],
+    titulo: "fisiologia.moleculas.co2.hecho",
+    parrafos: ["fisiologia.moleculas.co2.p1"],
     resultadoImg: "/recorrido/fisiologia/pre/co2.webp",
   },
   {
     key: "o2",
-    nombre: "oxígeno",
+    nombre: "fisiologia.moleculas.o2",
+    articulo: "fisiologia.moleculas.o2.articulo",
     formula: "O₂",
-    instruccion: "Une dos oxígenos dentro de la zona de enlace.",
+    instruccion: "fisiologia.moleculas.o2.instruccion",
     slots: [
       { tipo: "oxigeno", x: 37, y: 50 },
       { tipo: "oxigeno", x: 63, y: 50 },
     ],
-    titulo: "¡Has formado una molécula de oxígeno!",
-    parrafos: [
-      <>Cada célula lo necesita para <b>transformar los alimentos en energía</b>. Sin él, la Vida tal como la conoces no existiría.</>,
-    ],
+    titulo: "fisiologia.moleculas.o2.hecho",
+    parrafos: ["fisiologia.moleculas.o2.p1"],
     resultadoImg: "/recorrido/fisiologia/pre/o2.webp",
   },
 ];
@@ -145,11 +152,12 @@ const sway = keyframes`
 
 // ── Átomo (imagen con reserva a esfera dibujada) ────────────────────────────
 function Atomo({ tipo, size }: { tipo: Tipo; size: any }) {
+  const t = useT();
   const c = GLOW[tipo];
   return (
     <Box w={size} h={size} borderRadius="full" overflow="hidden" pointerEvents="none"
          sx={{ boxShadow: `0 0 12px ${c}aa, 0 0 26px ${c}55` }}>
-      <Image src={IMG[tipo]} alt={LABEL[tipo]} w="100%" h="100%" objectFit="cover" draggable={false}
+      <Image src={IMG[tipo]} alt={t(LABEL[tipo])} w="100%" h="100%" objectFit="cover" draggable={false}
              fallback={
                <Box w="100%" h="100%" display="flex" alignItems="center" justifyContent="center" sx={{ background: esfera(tipo) }}>
                  <Text color="rgba(0,0,0,0.5)" fontWeight="900" lineHeight="1"
@@ -162,6 +170,7 @@ function Atomo({ tipo, size }: { tipo: Tipo; size: any }) {
 
 // ── Ficha arrastrable ───────────────────────────────────────────────────────
 function FichaArrastrable({ pieza, onSoltar, colocada = false }: { pieza: Pieza; onSoltar: (p: Pieza, r: DOMRect) => void; colocada?: boolean }) {
+  const t = useT();
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const glow = GLOW[pieza.tipo];
@@ -172,7 +181,7 @@ function FichaArrastrable({ pieza, onSoltar, colocada = false }: { pieza: Pieza;
       <Box display="flex" flexDirection="column" alignItems="center" gap={1} flexShrink={0} visibility="hidden" aria-hidden>
         <Atomo tipo={pieza.tipo} size={S_DRAG[pieza.tipo]} />
         <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
-              letterSpacing="0.06em" textTransform="uppercase">{LABEL[pieza.tipo]}</Text>
+              letterSpacing="0.06em" textTransform="uppercase">{t(LABEL[pieza.tipo])}</Text>
       </Box>
     );
   }
@@ -207,7 +216,7 @@ function FichaArrastrable({ pieza, onSoltar, colocada = false }: { pieza: Pieza;
       <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
             letterSpacing="0.06em" textTransform="uppercase" pointerEvents="none"
             style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-        {LABEL[pieza.tipo]}
+        {t(LABEL[pieza.tipo])}
       </Text>
     </MBox>
   );
@@ -231,10 +240,11 @@ function MoleculaFormada({ mol, tam }: { mol: Mol; tam: Record<Tipo, any> }) {
 // ── Molécula formada VISUAL: usa la foto de la molécula si existe; si falta o
 // falla, cae a los átomos ensamblados (MoleculaFormada). ─────────────────────
 function MoleculaVisual({ mol, tam }: { mol: Mol; tam: Record<Tipo, any> }) {
+  const t = useT();
   const [err, setErr] = useState(false);
   if (!mol.resultadoImg || err) return <MoleculaFormada mol={mol} tam={tam} />;
   return (
-    <Image src={encodeURI(mol.resultadoImg)} alt={mol.nombre} w="100%" h="100%" objectFit="contain"
+    <Image src={encodeURI(mol.resultadoImg)} alt={t(mol.nombre)} w="100%" h="100%" objectFit="contain"
            draggable={false} onError={() => setErr(true)}
            style={{ filter: "drop-shadow(0 0 16px rgba(255,255,255,0.18))" }} />
   );
@@ -272,6 +282,7 @@ function AccionesBox({ children }: { children: React.ReactNode }) {
 // paso. Idéntico al de /metodo/fisiologia/atomos: es la misma acción en la
 // misma disciplina y tiene que verse igual en las dos páginas.
 function BotonVolverAHacer({ onClick }: { onClick: () => void }) {
+  const t = useT();
   return (
     <Flex justify="flex-end" w="100%" mt={{ base: 5, md: 6 }}>
       <Box as="button" onClick={onClick}
@@ -280,7 +291,7 @@ function BotonVolverAHacer({ onClick }: { onClick: () => void }) {
            fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
            letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
            _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-        ↺ Volver a hacer
+        {t("metodo.volverAHacer")}
       </Box>
     </Flex>
   );
@@ -302,6 +313,7 @@ function PanelBox({ children, minH, px, py, ...rest }: any) {
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaMoleculas() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [indice, setIndice] = useState(0);
@@ -421,8 +433,7 @@ export default function MetodoFisiologiaMoleculas() {
   // datos y no deducido del nombre: en cuanto entre una molécula femenina
   // («la glucosa»), un «el» fijo cantaría.
   const siguienteMol = esUltima ? null : MOLS[indice + 1];
-  const nombreSiguiente = siguienteMol?.nombre ?? "";
-  const articuloSiguiente = siguienteMol?.articulo ?? "el";
+  const articuloSiguiente = siguienteMol?.articulo ?? "fisiologia.moleculas.agua.articulo";
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
@@ -434,16 +445,16 @@ export default function MetodoFisiologiaMoleculas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Moléculas"
+            title={t("fisiologia.moleculas.titulo")}
             pageLabel="3/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Átomos", onClick: () => navigate("/metodo/fisiologia/atomos") }}
+            prev={{ label: `← ${t("fisiologia.atomos.titulo")}`, onClick: () => navigate("/metodo/fisiologia/atomos") }}
             extra={celulasBtn}
-            next={{ label: "Macromoléculas →", onClick: () => navigate("/metodo/fisiologia/macromoleculas"), disabled: !terminado, disabledTooltip: "Primero forma las tres moléculas de la Vida" }}
+            next={{ label: `${t("fisiologia.macromoleculas.titulo")} →`, onClick: () => navigate("/metodo/fisiologia/macromoleculas"), disabled: !terminado, disabledTooltip: t("fisiologia.moleculas.bloqueo") }}
           />
           </Reveal>
 
@@ -453,7 +464,7 @@ export default function MetodoFisiologiaMoleculas() {
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
                 <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  Una molécula es la unión de átomos. Forma una molécula de {mol.nombre}.
+                  {t("fisiologia.moleculas.instruccionGeneral", { molecula: t(mol.nombre) })}
                 </Text>
               </MBox>
             )}
@@ -462,7 +473,7 @@ export default function MetodoFisiologiaMoleculas() {
                     textAlign="center" maxW="640px">
                 <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" lineHeight="1.35" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  Las moléculas son la unión de varios átomos. Son el fundamento de la Vida y forman parte de ti.
+                  {t("fisiologia.moleculas.intro")}
                 </Text>
               </MBox>
             )}
@@ -508,7 +519,7 @@ export default function MetodoFisiologiaMoleculas() {
                               <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}
                                     fontSize={{ base: "sm", md: "md" }} fontStyle="italic" pointerEvents="none"
                                     style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
-                                zona de enlace
+                                {t("fisiologia.moleculas.zona")}
                               </Text>
                             )}
                           </Box>
@@ -531,7 +542,7 @@ export default function MetodoFisiologiaMoleculas() {
                             </AnimatePresence>
                           </Box>
                           {pendientes.length === 0 && (
-                            <Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">…enlazando…</Text>
+                            <Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">{t("fisiologia.moleculas.enlazando")}</Text>
                           )}
 
                           <Flex justify="center" gap={2}>
@@ -575,17 +586,17 @@ export default function MetodoFisiologiaMoleculas() {
                         <Flex direction="column" gap={4} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
                           <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                                 letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
-                            {mol.titulo}
+                            {t(mol.titulo)}
                           </Text>
                           <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                                bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
                           {/* Peso normal: lo que destaca son las palabras con
                               <b> dentro de la frase, no el párrafo entero. */}
-                          {mol.parrafos.map((p, i) => (
-                            <Text key={i} color={fisiologiaTxt}
+                          {mol.parrafos.map((clave) => (
+                            <Text key={clave} color={fisiologiaTxt}
                                   fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
                                   fontWeight="400" style={{ textShadow: INK }}>
-                              {p}
+                              <TextoRico>{t(clave)}</TextoRico>
                             </Text>
                           ))}
 
@@ -594,7 +605,9 @@ export default function MetodoFisiologiaMoleculas() {
                               /metodo/fisiologia/atomos. */}
                           <AccionesBox>
                             <BotonAccion onClick={siguiente}>
-                              {esUltima ? "Ver las moléculas de la Vida →" : `Ahora, ${articuloSiguiente} ${nombreSiguiente} →`}
+                              {esUltima
+                                ? t("fisiologia.moleculas.verLasTres")
+                                : t("fisiologia.moleculas.ahora", { molecula: t(articuloSiguiente) })}
                             </BotonAccion>
                           </AccionesBox>
                         </Flex>
@@ -629,7 +642,7 @@ export default function MetodoFisiologiaMoleculas() {
                             <Text color={fisiologiaTxt} fontWeight="700" fontSize={{ base: "sm", md: "xl" }}
                                   style={{ textShadow: INK }}>{m.formula}</Text>
                             <Text color={`${fisiologiaTxt}dd`} fontSize={{ base: "2xs", md: "md" }} fontStyle="italic"
-                                  textAlign="center" lineHeight="1.2">{m.nombre}</Text>
+                                  textAlign="center" lineHeight="1.2">{t(m.nombre)}</Text>
                           </MBox>
                         ))}
                       </Flex>

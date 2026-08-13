@@ -216,7 +216,9 @@ Cuando hay poca miostatina o no funciona bien, el músculo puede crecer mucho m�
 
 Por eso la miostatina se estudia como posible tratamiento para enfermedades que provocan pérdida de músculo.
 
-El problema es que tener más músculo no significa necesariamente tener más fuerza. El tamaño y la función no siempre crecen al mismo ritmo.
+El problema es que tener más músculo no significa necesariamente tener más fuerza. 
+
+Se puede tener un gran volumen de fibras musculares y poca fuerza relativa. Esto ocurre cuando el músculo es grande, pero el sistema nervioso no activa esas fibras de forma eficiente.
 
 ---
 

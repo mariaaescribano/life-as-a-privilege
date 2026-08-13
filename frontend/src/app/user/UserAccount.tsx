@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useT } from "../../i18n";
 import { Box, Flex, Image, Input, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -29,6 +30,7 @@ const inputStyles = {
 };
 
 export default function UserAccount() {
+  const t = useT();
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId") ?? "";
   const token  = localStorage.getItem("token")  ?? "";
@@ -66,10 +68,10 @@ export default function UserAccount() {
         setIsAdmin(!!u.is_admin);
         initialRef.current = { name: u.name ?? "", email: u.email ?? "" };
       })
-      .catch(() => setError("Error al cargar los datos"))
+      .catch(() => setError(t("cuenta.error.cargar")))
       .finally(() => setLoading(false));
-    const t = setTimeout(() => setMounted(true), 60);
-    return () => clearTimeout(t);
+    const temporizador = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(temporizador);
   }, []);
 
   const handleGuardar = async () => {
@@ -106,7 +108,7 @@ export default function UserAccount() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2200);
     } catch {
-      setError("Error al guardar los cambios");
+      setError(t("cuenta.error.guardar"));
     } finally {
       setSaving(false);
     }
@@ -125,8 +127,13 @@ export default function UserAccount() {
     setDelError("");
   };
 
-  // Para eliminar hace falta: contraseña + escribir exactamente «BORRAR».
-  const puedeBorrar = delPassword.trim().length > 0 && delWord.trim().toUpperCase() === "BORRAR";
+  // Para eliminar hace falta: contraseña + escribir exactamente la palabra que
+  // se pide. La palabra sale del diccionario («BORRAR» / «DELETE»): si se
+  // escribiera aquí, en inglés la pantalla pediría una palabra y la
+  // comprobación esperaría otra.
+  const palabraBorrar = t("cuenta.borrar.palabra");
+  const puedeBorrar =
+    delPassword.trim().length > 0 && delWord.trim().toUpperCase() === palabraBorrar.toUpperCase();
 
   const handleDelete = async () => {
     if (!puedeBorrar || deleting) return;
@@ -143,12 +150,13 @@ export default function UserAccount() {
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
-        throw new Error(data?.message || "Error al eliminar la cuenta");
+        // OJO: cuando el backend manda su propio `message`, llega en español.
+        throw new Error(data?.message || t("cuenta.error.eliminar"));
       }
       cerrarSesionLocal();
       navigate("/welcome");
     } catch (err: any) {
-      setDelError(err?.message || "Error al eliminar la cuenta");
+      setDelError(err?.message || t("cuenta.error.eliminar"));
       setDeleting(false);
     }
   };
@@ -170,7 +178,7 @@ export default function UserAccount() {
       setImg(newUrl);
       localStorage.setItem("img", newUrl);
     } catch {
-      setError("Error al subir la foto");
+      setError(t("cuenta.error.foto"));
     } finally {
       setUploading(false);
     }
@@ -228,7 +236,7 @@ export default function UserAccount() {
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          Mi cuenta
+          {t("cuenta.titulo")}
         </Text>
       </Flex>
 
@@ -290,7 +298,7 @@ export default function UserAccount() {
               fontStyle="italic"
               textShadow="0 0 8px rgba(255,255,255,0.3)"
             >
-              {uploading ? "Subiendo…" : "Toca la foto para cambiarla"}
+              {uploading ? t("cuenta.foto.subiendo") : t("cuenta.foto.tocaParaCambiar")}
             </Text>
             <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileChange} />
           </Flex>
@@ -299,7 +307,7 @@ export default function UserAccount() {
           <VStack spacing={5} align="stretch">
             <Box>
               <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-                NOMBRE
+                {t("auth.campo.nombre")}
               </Text>
               <Input
                 value={name}
@@ -310,7 +318,7 @@ export default function UserAccount() {
 
             <Box>
               <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-                EMAIL
+                {t("auth.campo.email")}
               </Text>
               <Input
                 type="email"
@@ -322,13 +330,13 @@ export default function UserAccount() {
 
             <Box>
               <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-                CONTRASEÑA
+                {t("auth.campo.contrasena")}
               </Text>
               <Input
                 type="password"
                 value={contra}
                 onChange={(e) => setContra(e.target.value)}
-                placeholder="Nueva contraseña"
+                placeholder={t("cuenta.nuevaContrasena")}
                 {...inputStyles}
               />
             </Box>
@@ -342,7 +350,7 @@ export default function UserAccount() {
 
           {saved && (
             <Text color={turquesa} fontSize="sm" textAlign="center" fontStyle="italic" style={{ textShadow: `0 0 10px ${turquesa}88, 0 0 22px ${turquesa}55` }}>
-              ✓ Cambios guardados
+              ✓ {t("cuenta.cambiosGuardados")}
             </Text>
           )}
 
@@ -387,7 +395,7 @@ export default function UserAccount() {
                 textTransform="uppercase"
                 textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
               >
-                {saving ? "Guardando…" : "Guardar"}
+                {saving ? t("comun.guardando") : t("comun.guardar")}
               </Text>
             </Flex>
           </Flex>
@@ -410,7 +418,7 @@ export default function UserAccount() {
                 _hover={{ color: "white", textShadow: `0 0 14px ${turquesa}, 0 0 28px ${turquesa}88` }}
                 transition="all 0.22s ease"
               >
-                Panel de administración
+                {t("cuenta.panelAdmin")}
               </Text>
             )}
             <Text
@@ -426,7 +434,7 @@ export default function UserAccount() {
               _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
               transition="all 0.22s ease"
             >
-              Cerrar sesión
+              {t("cuenta.cerrarSesion")}
             </Text>
 
             <Text
@@ -442,7 +450,7 @@ export default function UserAccount() {
               _hover={{ color: "rgba(255,200,200,1)", textShadow: "0 0 12px rgba(255,140,140,0.55)" }}
               transition="all 0.22s ease"
             >
-              Eliminar cuenta
+              {t("cuenta.eliminarCuenta")}
             </Text>
           </Flex>
         </VStack>
@@ -488,7 +496,7 @@ export default function UserAccount() {
               lineHeight="1.25"
               textShadow="0 0 18px rgba(255,120,120,0.5), 0 0 40px rgba(255,90,90,0.3)"
             >
-              ¿Seguro que quieres eliminar tu cuenta?
+              {t("cuenta.borrar.titulo")}
             </Text>
 
             {/* Línea horizontal separadora bajo el título */}
@@ -506,33 +514,35 @@ export default function UserAccount() {
               fontStyle="italic"
               textShadow="0 0 8px rgba(255,150,150,0.2)"
             >
-              Todos tus datos se borrarán y no podrás recuperarlos. No se devolverá lo abonado. No se guardará tu información personalizada.
+              {t("cuenta.borrar.aviso")}
             </Text>
 
             {/* Confirmación: contraseña + escribir la palabra BORRAR */}
             <VStack w="100%" spacing={4} align="stretch">
               <Box>
                 <Text color="rgba(255,225,225,0.82)" fontSize="sm" letterSpacing="0.14em" mb={2} fontWeight="600" textAlign="center">
-                  TU CONTRASEÑA
+                  {t("cuenta.borrar.tuContrasena")}
                 </Text>
                 <Input
                   type="password"
                   value={delPassword}
                   onChange={(e) => { setDelPassword(e.target.value); setDelError(""); }}
-                  placeholder="Contraseña"
+                  placeholder={t("cuenta.borrar.contrasena")}
                   autoComplete="current-password"
                   {...inputStyles}
                 />
               </Box>
               <Box>
                 <Text color="rgba(255,225,225,0.82)" fontSize="sm" letterSpacing="0.14em" mb={2} fontWeight="600" textAlign="center">
-                  ESCRIBE <Box as="span" fontWeight="800" color="white">BORRAR</Box> PARA CONFIRMAR
+                  {t("cuenta.borrar.escribe")}{" "}
+                  <Box as="span" fontWeight="800" color="white">{palabraBorrar}</Box>{" "}
+                  {t("cuenta.borrar.paraConfirmar")}
                 </Text>
                 <Input
                   type="text"
                   value={delWord}
                   onChange={(e) => { setDelWord(e.target.value); setDelError(""); }}
-                  placeholder="BORRAR"
+                  placeholder={palabraBorrar}
                   {...inputStyles}
                 />
               </Box>
@@ -567,7 +577,7 @@ export default function UserAccount() {
                 _hover={puedeBorrar && !deleting ? { color: "white", bg: "rgba(0,0,0,0.32)", borderColor: "rgba(255,210,210,0.6)" } : undefined}
                 transition="all 0.22s ease"
               >
-                {deleting ? "Eliminando…" : "Aceptar"}
+                {deleting ? t("cuenta.borrar.eliminando") : t("comun.aceptar")}
               </Text>
 
               {/* Cancelar (destacado) */}
@@ -599,7 +609,7 @@ export default function UserAccount() {
                   textTransform="uppercase"
                   textShadow="0 0 12px rgba(255,255,255,0.7), 0 0 26px rgba(255,255,255,0.4)"
                 >
-                  Cancelar
+                  {t("comun.cancelar")}
                 </Text>
               </Flex>
             </Flex>

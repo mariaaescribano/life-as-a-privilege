@@ -18,6 +18,7 @@ import { useLeidos } from "../../hooks/useLeidos";
 import { MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/MitosNutricion";
 import { useMitosNutricion } from "../../hardCoded/espacio/useMitosNutricion";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 // ═════════════════════════════════════════════════════════════════════════
 // BIBLIOTECA DE NUTRICIÓN. Es el hub que se abre desde el botón «Biblioteca» de
@@ -40,6 +41,7 @@ function BibliotecaCard({
   onClick: () => void;
   delay: number;
 }) {
+  const t = useT();
   return (
     <Reveal direction="up" distance={22} delay={delay} duration={0.55} w="100%" display="flex">
       <Box
@@ -84,7 +86,7 @@ function BibliotecaCard({
           </Text>
           <Flex align="center" gap={1} color={nutricionTxt} mt={0.5}
                 fontSize="2xs" letterSpacing="0.16em" textTransform="uppercase">
-            <Text as="span">Ver</Text>
+            <Text as="span">{t("metodo.ver")}</Text>
             <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="12px" h="12px" fill="currentColor"
                  transition="transform 0.3s cubic-bezier(0.22,1,0.36,1)"
                  _groupHover={{ transform: "translateX(4px)" }}>
@@ -116,6 +118,7 @@ const IconoRespuestas = (
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionAlimentos() {
+  const t = useT();
   // Los mitos en el idioma activo (el orden, la foto y la `key` con la que se
   // guarda lo leído siguen saliendo del español).
   const MITOS_NUTRICION = useMitosNutricion();
@@ -159,42 +162,42 @@ export default function MetodoNutricionAlimentos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Biblioteca de Nutrición"
+              title={t("metodo.nutri.paso.bibliotecaTitulo")}
               compact
               maxW="960px"
               bgColor={`${nutricionBg}dd`}
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: "← Volver", onClick: () => navigate(-1) }}
+              prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate(-1) }}
             />
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
-              Todo lo que has descubierto en Nutrición, reunido en un mismo sitio. Elige por dónde entrar.
+              {t("metodo.nutri.biblioteca.intro")}
             </Text>
           </Reveal>
 
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, md: 6 }} w="100%">
             <BibliotecaCard
-              titulo="Alimentación molecular"
-              subtitulo="Elige un alimento y descubre de qué moléculas está hecho."
+              titulo={t("metodo.nutri.biblioteca.molecular")}
+              subtitulo={t("metodo.nutri.biblioteca.molecularPie")}
               icono={IconoMolecular}
               onClick={() => setMolecularOpen(true)}
               delay={0.06}
             />
             <BibliotecaCard
-              titulo="Ilustraciones"
-              subtitulo="Todos los cómics de Nutrición reunidos para releerlos."
+              titulo={t("metodo.ilustraciones")}
+              subtitulo={t("metodo.nutri.biblioteca.ilustracionesPie")}
               icono={IconoIlustraciones}
               onClick={() => setIlustracionesOpen(true)}
               delay={0.12}
             />
             <BibliotecaCard
-              titulo="Respuestas"
-              subtitulo="Las preguntas y mitos más frecuentes, uno a uno."
+              titulo={t("metodo.nutri.biblioteca.respuestas")}
+              subtitulo={t("metodo.nutri.biblioteca.respuestasPie")}
               icono={IconoRespuestas}
               onClick={abrirRespuestas}
               delay={0.18}

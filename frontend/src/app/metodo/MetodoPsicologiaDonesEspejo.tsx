@@ -49,6 +49,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
@@ -133,6 +134,7 @@ function coercionarDones(raw: unknown): DonReconocido[] {
 }
 
 export default function MetodoPsicologiaDonesEspejo() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -320,16 +322,16 @@ export default function MetodoPsicologiaDonesEspejo() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Dones"
+              title={t("metodo.psico.paso.dones")}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               step={{ current: 16, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Recuérdate", onClick: irARecuerdate }}
+              prev={{ label: `← ${t("metodo.psico.paso.recuerdate")}`, onClick: irARecuerdate }}
               next={{
-                label: "Miedos →",
+                label: `${t("metodo.psico.paso.miedos")} →`,
                 onClick: irAMiedos,
                 disabled: !hayDon,
                 disabledTooltip: "Escribe al menos un don para continuar.",
@@ -354,13 +356,9 @@ export default function MetodoPsicologiaDonesEspejo() {
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={COL_PB}>
                     <Box flexShrink={0} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={3}>
                       <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
-                            letterSpacing="0.03em" style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                        Lo que recordaste de ti
-                      </Text>
+                            letterSpacing="0.03em" style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{t("metodo.psico.loQueRecordaste")}</Text>
                       <Text color={TINTA} fontSize="xs" fontStyle="italic" textAlign="center" opacity={0.82} mt={1.5}
-                            style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                        Toca lo que quieras unir al don activo.
-                      </Text>
+                            style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{t("metodo.psico.tocaParaUnir")}</Text>
                       <Box mt={3} h="1px" w="82%" maxW="260px" mx="auto"
                            bgGradient={`linear(to-r, transparent, ${TINTA}88, transparent)`} />
                     </Box>
@@ -388,15 +386,11 @@ export default function MetodoPsicologiaDonesEspejo() {
                       ) : (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={4} textAlign="center" px={4}>
                           <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.75}
-                                style={{ textShadow: INK_SHADOW }}>
-                            Aún no has respondido las preguntas de «Recuérdate».
-                          </Text>
+                                style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.sinRecuerdate")}</Text>
                           <Box as="button" onClick={irARecuerdate} px={6} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
                                fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
                                boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                               _hover={{ transform: "translateY(-2px)" }}>
-                            Ir a Recuérdate →
-                          </Box>
+                               _hover={{ transform: "translateY(-2px)" }}>{t("metodo.psico.irARecuerdate")}</Box>
                         </Flex>
                       )}
                     </Box>
@@ -414,7 +408,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                        bgSize="cover" bgPosition="center" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={COL_PB}>
                     <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />}
-                                      titulo="Tus arquetipos"
+                                      titulo={t("metodo.psico.tusArquetipos")}
                                       apoyo={arquetipos.length === 0
                                         ? "Se abren cuando tengas hecha tu carta astral."
                                         : "Toca una carta para unirla al don activo; el ojo abre su lectura."} />
@@ -456,15 +450,13 @@ export default function MetodoPsicologiaDonesEspejo() {
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox
                       icono={<DonIcon color={TINTA} size={22} />}
-                      titulo="Tus dones" apoyo="Nombra tu don y une tus arquetipos." />
+                      titulo={t("metodo.psico.tusDones")} apoyo="Nombra tu don y une tus arquetipos." />
                     <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX_TINTA}>
                       {dones.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2.5} textAlign="center" px={4}>
                           <DonIcon color={ORO} size={30} glow={`${ORO}66`} />
                           <Text color={TINTA} opacity={0.75} fontStyle="italic" fontSize={{ base: "sm", md: "md" }}
-                                style={{ textShadow: INK_SHADOW }}>
-                            Pulsa «Añadir don», ponle nombre y toca las cartas de «Tus arquetipos» para unirlas.
-                          </Text>
+                                style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.donesVacio")}</Text>
                         </Flex>
                       ) : (
                         <Flex direction="column" gap={{ base: 4, md: 5 }}>
@@ -486,9 +478,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                            bg={TINTA} color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700"
                            fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
                            boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                        + Añadir don
-                      </Box>
+                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>{t("metodo.psico.anadirDon")}</Box>
                       <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
                     </Flex>
                   </Flex>
@@ -566,6 +556,7 @@ const DonIcon = ({ color, size = 20, glow }: { color: string; size?: number; glo
 function MiniCard({ item, color, symbol, activo, onTap, onLeer }: {
   item: ArqItem; color: string; symbol: string; activo: boolean; onTap: () => void; onLeer: () => void;
 }) {
+  const t = useT();
   return (
     <Box position="relative" flex="1" minW={0} borderRadius="14px" overflow="hidden"
          border={`1.5px solid ${activo ? color : `${color}77`}`}
@@ -583,7 +574,7 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer }: {
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onLeer(); }}
            position="absolute" top="6px" right="6px" zIndex={2} w="24px" h="24px" borderRadius="full"
            bg="rgba(0,0,0,0.5)" border={`1px solid ${color}66`} display="flex" alignItems="center" justifyContent="center"
-           cursor="pointer" title="Leer" _hover={{ bg: "rgba(0,0,0,0.78)", borderColor: color }}>
+           cursor="pointer" title={t("metodo.psico.leer")} _hover={{ bg: "rgba(0,0,0,0.78)", borderColor: color }}>
         <EyeIcon color={color} />
       </Box>
 
@@ -610,6 +601,7 @@ function DonCard({ d, activa, color, onActivar, onTexto, onQuitarArq, onQuitarRe
   onActivar: () => void; onTexto: (v: string) => void;
   onQuitarArq: (a: ArquetipoRef) => void; onQuitarRecuerdo: (t: string) => void; onBorrar: () => void;
 }) {
+  const t = useT();
   const recuerdos = d.recuerdos || [];
   const vacio = d.arquetipos.length === 0 && recuerdos.length === 0;
   return (
@@ -624,14 +616,14 @@ function DonCard({ d, activa, color, onActivar, onTexto, onQuitarArq, onQuitarRe
         <Flex align="center" gap={2.5} mb={3}>
           <DonIcon color={color} size={20} glow={`${color}66`} />
           <Input value={d.texto} onChange={(e) => onTexto(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                 placeholder="Nombra tu don…" variant="unstyled" flex="1"
+                 placeholder={t("metodo.psico.nombraTuDon")} variant="unstyled" flex="1"
                  color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
                  fontSize={{ base: "lg", md: "xl" }} sx={{ caretColor: TINTA }}
                  _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 600 }} />
           <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onBorrar(); }}
                w="24px" h="24px" borderRadius="full" bg={`${TINTA}14`} color={TINTA} flexShrink={0}
                display="flex" alignItems="center" justifyContent="center" fontSize="11px" cursor="pointer"
-               _hover={{ bg: `${TINTA}26` }} title="Borrar don">✕</Box>
+               _hover={{ bg: `${TINTA}26` }} title={t("metodo.psico.borrarDon")}>✕</Box>
         </Flex>
 
         {/* Recuerdos + arquetipos unidos */}
@@ -670,6 +662,7 @@ const RecuerdoGlyph = () => (
 function Chip({ icon, label, onRemove, maxLabelW }: {
   icon: React.ReactNode; label: string; onRemove: () => void; maxLabelW?: string;
 }) {
+  const t = useT();
   return (
     <Flex align="center" gap={1.5} pl={2.5} pr={1.5} py={1} borderRadius="full"
           bg={`${TINTA}12`} color={TINTA} border={`1px solid ${TINTA}44`} maxW="100%">
@@ -679,7 +672,7 @@ function Chip({ icon, label, onRemove, maxLabelW }: {
       </Text>
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemove(); }} w="18px" h="18px" borderRadius="full"
            bg={`${TINTA}1a`} display="flex" alignItems="center" justifyContent="center"
-           fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title="Quitar">✕</Box>
+           fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title={t("metodo.psico.quitar")}>✕</Box>
     </Flex>
   );
 }

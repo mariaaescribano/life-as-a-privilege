@@ -18,8 +18,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { IndiceRecorrido, type SeccionIndice } from "./IndiceRecorrido";
 import {
-  AYURVEDA_MAPA,
-  AYURVEDA_DOSHA_INDICE,
+  ayurvedaMapa,
+  ayurvedaDoshaIndice,
   AYURVEDA_DOSHA_TOTAL,
   pasoAlcanzableAyurveda,
 } from "./ayurvedaRecorrido";
@@ -28,6 +28,7 @@ import {
   ayurvedaBg, ayurvedaNom, ayurvedaTxt,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const DOSHA_COLOR: Record<string, string> = {
   vata: vataColor,
@@ -45,6 +46,7 @@ const esDosha = (d: unknown): d is string =>
   typeof d === "string" && d in DOSHA_COLOR;
 
 export function IndiceAyurveda() {
+  const t = useT();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaUrl = esDosha(dosha) ? dosha : null;
   // Doṣha principal del test. Solo para poder enlazar Prāṇāyāma y Cursos desde
@@ -77,8 +79,8 @@ export function IndiceAyurveda() {
   // Nivel 1 · el mapa. Prāṇāyāma (5) y Cursos (6) solo se pueden enlazar si hay
   // un doṣha del que colgarlos.
   const mapa: SeccionIndice = {
-    titulo: "El mapa de Ayurveda",
-    pasos: AYURVEDA_MAPA.map((p) =>
+    titulo: t("metodo.ayur.elMapa"),
+    pasos: ayurvedaMapa().map((p) =>
       p.n >= 5 && !doshaEnlace ? { ...p, bloqueado: true } : p,
     ),
     expId: doshaEnlace ?? "",
@@ -87,11 +89,13 @@ export function IndiceAyurveda() {
 
   // Nivel 2 · el submapa del doṣha. Sin doṣha en la URL, entero bloqueado.
   const submapa: SeccionIndice = {
-    titulo: doshaUrl ? `Tu doṣha · ${DOSHA_LABEL[doshaUrl]}` : "El recorrido de un doṣha",
-    pasos: AYURVEDA_DOSHA_INDICE,
+    titulo: doshaUrl
+      ? t("metodo.ayur.tuDosha", { dosha: DOSHA_LABEL[doshaUrl] })
+      : t("metodo.ayur.recorridoDosha"),
+    pasos: ayurvedaDoshaIndice(),
     expId: doshaUrl ?? "",
     habilitada: !!doshaUrl,
-    nota: "Estas páginas son de cada doṣha. Entra en uno desde «Doṣhas» y se abren aquí.",
+    nota: t("metodo.ayur.notaSubmapa"),
   };
 
   return (

@@ -20,6 +20,7 @@ import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 // Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
 // llamada): explica esta página del recorrido. Edítalo libremente.
@@ -91,6 +92,7 @@ interface Row {
 }
 
 export default function MetodoAstrologiaCasas() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [carta, setCarta] = useState<CartaNatal | null>(null);
@@ -200,7 +202,7 @@ export default function MetodoAstrologiaCasas() {
   const todasCasasLeidas = casasEscritas.length === 0 || casasEscritas.every((n) => leidos.has(n));
 
   const headerNext = {
-    label: "Aspectos →",
+    label: `${t("metodo.astro.paso.aspectos")} →`,
     onClick: () => navigate("/metodo/astrologia/aspectos"),
     disabled: !todasCasasLeidas,
     disabledTooltip: "Lee todas tus Casas para continuar.",
@@ -215,14 +217,14 @@ export default function MetodoAstrologiaCasas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Casas"
+              title={t("metodo.astro.paso.casas")}
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
               step={{ current: 5, total: 9 }}
               mb={0}
-              prev={{ label: "← Puntos clave", onClick: () => navigate("/metodo/astrologia/lectura") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
+              prev={{ label: `← ${t("metodo.astro.paso.puntosClave")}`, onClick: () => navigate("/metodo/astrologia/lectura") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
               next={headerNext}
             />
           </Reveal>
@@ -362,7 +364,7 @@ export default function MetodoAstrologiaCasas() {
                     )}
                   </Box>
                   <Text color={`${astrologiaTxt}99`} fontSize="xs" textAlign="center" mt={2} fontStyle="italic" letterSpacing="0.04em">
-                    Gira la rueda o toca una Casa
+                    {t("metodo.astro.giraLaRueda")}
                   </Text>
                   {casasEscritas.length > 0 && (
                     <Text color={todasCasasLeidas ? astrologiaTxt : `${astrologiaTxt}aa`} fontSize="sm" fontWeight="600"
@@ -402,6 +404,7 @@ function CasaBox({
   leida: boolean;
   onLeer: () => void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
 
   // Color del planeta REGENTE de esta casa: se usa para el glow/sombra del popup,
@@ -442,8 +445,8 @@ function CasaBox({
         <Flex align="center" gap={2} flexShrink={0} mr={reserveClose ? { base: "40px", md: "48px" } : undefined}>
           <Text color={`${info.regente.color}cc`} fontSize="2xs" letterSpacing="0.18em" fontWeight="700" textTransform="uppercase"
                 whiteSpace="nowrap" style={{ textShadow: `0 0 8px ${info.regente.color}66` }}>
-            <Box as="span" display={{ base: "inline", lg: "none" }}>Regente</Box>
-            <Box as="span" display={{ base: "none", lg: "inline" }}>Reg.</Box>
+            <Box as="span" display={{ base: "inline", lg: "none" }}>{t("metodo.astro.regente")}</Box>
+            <Box as="span" display={{ base: "none", lg: "inline" }}>{t("metodo.astro.regenteCorto")}</Box>
           </Text>
           <Flex align="center" justify="center" w="44px" h="44px" borderRadius="full" flexShrink={0}
                 bg={`${info.regente.color}1f`} border={`1px solid ${info.regente.color}44`}
@@ -502,10 +505,10 @@ function CasaBox({
         {textoSel && (
           <Flex justify="flex-end" align="center" gap={3} mt={3}>
             {leida && (
-              <Flex align="center" gap={1} title="Ya leída">
+              <Flex align="center" gap={1} title={t("metodo.astro.yaLeida")}>
                 <CheckIcon color={astrologiaTxt} size={14} />
                 <Text color={`${astrologiaTxt}cc`} fontSize="xs" fontWeight="700" letterSpacing="0.1em" textTransform="uppercase">
-                  Leída
+                  {t("metodo.astro.leida")}
                 </Text>
               </Flex>
             )}

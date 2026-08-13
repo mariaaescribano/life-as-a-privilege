@@ -37,6 +37,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 const TINTA = neuropsicologiaTxt;  // marrón tinta
@@ -44,6 +45,7 @@ const PAPEL = "#fbf4e8";           // crema claro
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaCursos() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -119,23 +121,21 @@ export default function MetodoPsicologiaCursos() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title="Cursos para profundizar"
+                title={t("metodo.psico.paso.cursos")}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 step={{ current: 23, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Síntesis", onClick: () => navigate(`/metodo/psicologia/${exp.id}/sintesis`) }}
-                next={{ label: "Ayurveda →", onClick: onAyurveda }}
+                prev={{ label: `← ${t("metodo.psico.paso.sintesis")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/sintesis`) }}
+                next={{ label: `${t("disciplina.ayurveda")} →`, onClick: onAyurveda }}
               />
             </Reveal>
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>
-              Si quieres profundizar en la psicología humana, estos cursos te acompañarán paso a paso.
-              </IntroRecorrido>
+              <IntroRecorrido>{t("metodo.psico.cursosIntro")}</IntroRecorrido>
             </Reveal>
 
             {/* ── Cursos del catálogo ──
@@ -186,9 +186,7 @@ export default function MetodoPsicologiaCursos() {
                 <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                 <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">
                   <Text color={`${TINTA}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                        lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>
-                    Pronto encontrarás aquí los cursos de Psicología.
-                  </Text>
+                        lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>{t("metodo.cursosPronto", { disciplina: t("disciplina.psicologia") })}</Text>
                 </Box>
               </Reveal>
             )}

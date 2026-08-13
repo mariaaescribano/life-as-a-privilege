@@ -11,14 +11,18 @@ import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustrac
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { cabalaSefirotMap, CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
-import { CABALA_TEST, testCompleto, testsAEscala10 } from "../../components/metodo/cabalaTest";
+import { CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
+import { testCompleto, testsAEscala10 } from "../../components/metodo/cabalaTest";
+import {
+  useNarrativa, usePolaridadLabel, useSefirotMap, useSenderos, useTestCabala, useTipoLabel,
+} from "../../components/metodo/cabalaEn";
+import { useT } from "../../i18n";
 import {
   calcularTransiciones, nivelCombinado, sefiraEvaluable, sefirotContenidoCompleto, polaridadSefira,
-  POLARIDAD_LABEL, TIPO_LABEL, esBloqueo,
+  esBloqueo,
 } from "../../components/metodo/cabalaDiagnostico";
 import {
-  CABALA_SENDEROS, NOMBRE_SEFIRA, senderoCompleto, senderosContenidoCompleto, puntuacionSendero, interpretacionSendero,
+  NOMBRE_SEFIRA, senderoCompleto, senderosContenidoCompleto, puntuacionSendero, interpretacionSendero,
 } from "../../components/metodo/cabalaSenderos";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW, CAJA_GLOW_HOVER } from "../../components/metodo/cabalaGlow";
@@ -56,7 +60,16 @@ function BarraNivel({ nivel }: { nivel: number }) {
 }
 
 export default function MetodoCabalaFinal() {
+  const t = useT();
   const navigate = useNavigate();
+  // Contenido y etiquetas en el idioma activo. Los umbrales, los niveles y las
+  // bandas siguen saliendo del calculo espanol: solo cambia como se cuenta.
+  const sefirotMap = useSefirotMap();
+  const senderos22 = useSenderos();
+  const testCabala = useTestCabala();
+  const polaridadLabel = usePolaridadLabel();
+  const tipoLabel = useTipoLabel();
+  const narrativa = useNarrativa();
   const [loading, setLoading] = useState(true);
   const [test, setTest] = useState<Record<string, number[]>>({});
   const [autoeval, setAutoeval] = useState<Record<string, number[]>>({});
@@ -108,12 +121,12 @@ export default function MetodoCabalaFinal() {
     const a = autoeval[key] ?? [];
     const completo = sefiraEvaluable(r, a);
     return {
-      key, titulo: cabalaSefirotMap[key].titulo, numero: cabalaSefirotMap[key].numero,
-      etiqueta: CABALA_TEST[key].etiqueta, completo,
+      key, titulo: sefirotMap[key].titulo, numero: sefirotMap[key].numero,
+      etiqueta: testCabala[key].etiqueta, completo,
       nivel: completo ? nivelCombinado(r, a) : -1,
       polaridad: testCompleto(r) ? polaridadSefira(r) : "equilibrio" as const,
     };
-  }), [test, autoeval]);
+  }), [test, autoeval, sefirotMap, testCabala]);
   const bloqueos = useMemo(() =>
     calcularTransiciones(test, autoeval).filter((t) => t.completa && esBloqueo(t.tipo)).sort((a, b) => b.gravedad - a.gravedad),
     [test, autoeval]);
@@ -121,14 +134,14 @@ export default function MetodoCabalaFinal() {
   const dimsCompletas = niveles.filter((n) => n.completo).length;
 
   // ── Senderos ──
-  const senderoRes = useMemo(() => CABALA_SENDEROS.map((s) => {
+  const senderoRes = useMemo(() => senderos22.map((s) => {
     const r = senderos[String(s.num)];
     const completo = senderoCompleto(s, r);
     const total = completo ? puntuacionSendero(s, r!) : -1;
     const band = completo ? interpretacionSendero(s, total) : null;
     const bandIdx = band ? s.interpretaciones.findIndex((b) => b.min === band.min && b.max === band.max) : -1;
     return { s, completo, total, band, bandIdx };
-  }), [senderos]);
+  }), [senderos, senderos22]);
   const sendCompletos = senderoRes.filter((r) => r.completo).length;
   const senderosPrioritarios = senderoRes.filter((r) => r.completo && r.bandIdx >= 2).sort((a, b) => b.total - a.total).slice(0, 3);
 
@@ -152,14 +165,14 @@ export default function MetodoCabalaFinal() {
           etiqueta: n.etiqueta,
           completo: n.completo,
           nivel: n.nivel,
-          estado: POLARIDAD_LABEL[n.polaridad],
+          estado: polaridadLabel[n.polaridad],
         })),
         bloqueo: bloqueoPrincipal
           ? {
-              de: cabalaSefirotMap[bloqueoPrincipal.from].titulo,
-              a: cabalaSefirotMap[bloqueoPrincipal.to].titulo,
-              tipo: TIPO_LABEL[bloqueoPrincipal.tipo],
-              narrativa: bloqueoPrincipal.narrativa,
+              de: sefirotMap[bloqueoPrincipal.from].titulo,
+              a: sefirotMap[bloqueoPrincipal.to].titulo,
+              tipo: tipoLabel[bloqueoPrincipal.tipo],
+              narrativa: narrativa(bloqueoPrincipal),
             }
           : null,
         senderos: senderoRes.map(({ s, band, total, completo }) => ({
@@ -199,12 +212,12 @@ export default function MetodoCabalaFinal() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Diagnóstico Final"
+              title={t("metodo.cabala.paso.final")}
               pageLabel={`${CABALA_PAG.final}/${CABALA_TOTAL_PAGINAS}`}
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
-              prev={{ label: "← Senderos", onClick: () => navigate("/metodo/cabala/senderos/diagnostico") }}
-              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
-              next={{ label: "10 días →", onClick: () => navigate("/metodo/cabala/dias") }}
+              prev={{ label: `← ${t("metodo.cabala.paso.senderosDiagCorto")}`, onClick: () => navigate("/metodo/cabala/senderos/diagnostico") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
+              next={{ label: `${t("metodo.cabala.paso.diasCorto")} →`, onClick: () => navigate("/metodo/cabala/dias") }}
             />
           </Reveal>
 
@@ -212,8 +225,7 @@ export default function MetodoCabalaFinal() {
             {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
-              Aquí se reúne todo tu recorrido: tus dimensiones (las sefirot) y tus transiciones (los senderos).
-              Puedes descargarlo para guardarlo y volver a él cuando quieras.
+              {t("metodo.cabala.final.intro")}
             </Text>
           </Reveal>
 
@@ -229,24 +241,24 @@ export default function MetodoCabalaFinal() {
               <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="20px" h="20px" fill="currentColor">
                 <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
               </Box>
-              {generando ? "Preparando tu PDF…" : "Descargar mi diagnóstico"}
+              {generando ? t("metodo.cabala.final.preparando") : t("metodo.cabala.final.descargar")}
             </Box>
           </Reveal>
 
           {/* Dimensiones */}
           <Reveal direction="up" distance={18} delay={0.2} duration={0.6} w="100%">
             <Caja>
-              <Titulo>Tus dimensiones · {dimsCompletas}/{niveles.length}</Titulo>
+              <Titulo>{t("metodo.cabala.final.tusDimensiones")} · {dimsCompletas}/{niveles.length}</Titulo>
               {bloqueoPrincipal && (
                 <Box mb={5} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 4, md: 5 }}>
                   <Text color={`${cabalaTxt}99`} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" textTransform="uppercase" mb={1} style={{ textShadow: INK_SHADOW }}>
-                    Paso evolutivo prioritario
+                    {t("metodo.cabala.pasoPrioritario")}
                   </Text>
                   <Text color={cabalaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
-                    {cabalaSefirotMap[bloqueoPrincipal.from].titulo} → {cabalaSefirotMap[bloqueoPrincipal.to].titulo}
-                    <Box as="span" color={`${cabalaTxt}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="400"> · {TIPO_LABEL[bloqueoPrincipal.tipo]}</Box>
+                    {sefirotMap[bloqueoPrincipal.from].titulo} → {sefirotMap[bloqueoPrincipal.to].titulo}
+                    <Box as="span" color={`${cabalaTxt}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="400"> · {tipoLabel[bloqueoPrincipal.tipo]}</Box>
                   </Text>
-                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>{bloqueoPrincipal.narrativa}</Text>
+                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>{narrativa(bloqueoPrincipal)}</Text>
                 </Box>
               )}
               <Flex direction="column" gap={3}>
@@ -258,8 +270,8 @@ export default function MetodoCabalaFinal() {
                         {n.titulo} <Box as="span" color={`${cabalaTxt}77`}>· {n.etiqueta}</Box>
                       </Text>
                       {n.completo
-                        ? <Text color={cabalaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight="700">{n.nivel}/10 · <Box as="span" color={`${cabalaTxt}99`}>{POLARIDAD_LABEL[n.polaridad]}</Box></Text>
-                        : <Text color={`${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">sin responder</Text>}
+                        ? <Text color={cabalaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight="700">{n.nivel}/10 · <Box as="span" color={`${cabalaTxt}99`}>{polaridadLabel[n.polaridad]}</Box></Text>
+                        : <Text color={`${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">{t("metodo.cabala.sinResponder")}</Text>}
                     </Flex>
                     {n.completo ? <BarraNivel nivel={n.nivel} /> : <Box w="100%" h="7px" borderRadius="full" bg={`${cabalaTxt}12`} />}
                   </Box>
@@ -271,11 +283,11 @@ export default function MetodoCabalaFinal() {
           {/* Senderos */}
           <Reveal direction="up" distance={18} delay={0.26} duration={0.6} w="100%">
             <Caja>
-              <Titulo>Tus senderos · {sendCompletos}/{senderoRes.length}</Titulo>
+              <Titulo>{t("metodo.cabala.final.tusSenderos")} · {sendCompletos}/{senderoRes.length}</Titulo>
               {senderosPrioritarios.length > 0 && (
                 <Box mb={5}>
                   <Text color={`${cabalaTxt}99`} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" textTransform="uppercase" mb={2} style={{ textShadow: INK_SHADOW }}>
-                    Senderos prioritarios
+                    {t("metodo.cabala.senderosDiag.prioritarios")}
                   </Text>
                   <Flex direction="column" gap={3}>
                     {senderosPrioritarios.map(({ s, band }) => (
@@ -299,7 +311,7 @@ export default function MetodoCabalaFinal() {
                       {s.letra} <Box as="span" color={`${cabalaTxt}77`}>· {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}</Box>
                     </Text>
                     <Text color={band ? cabalaTxt : `${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }} fontWeight={band ? "700" : "400"} fontStyle={band ? "normal" : "italic"}>
-                      {band ? `${band.titulo} · ${total}` : "sin responder"}
+                      {band ? `${band.titulo} · ${total}` : t("metodo.cabala.sinResponder")}
                     </Text>
                   </Flex>
                 ))}

@@ -214,14 +214,14 @@ export default function MetodoPsicologiaExperiencia() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title="Línea de Vida"
+                title={t("metodo.psico.lineaDeVida")}
                 pageLabel="5/22"
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Resultado ACE", onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
+                prev={{ label: `← ${t("metodo.psico.paso.resultadoAce")}`, onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/ace-resultado`); } }}
                 next={{ label: puedeAvanzar ? "Tu familia →" : "Rellena al menos un año", onClick: irAFamilia, disabled: !puedeAvanzar, disabledTooltip: "Rellena al menos un año (o márcalo sin recuerdos) para continuar" }}
               />
             </Reveal>

@@ -38,12 +38,14 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaMiedosPreguntas() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -151,16 +153,16 @@ export default function MetodoPsicologiaMiedosPreguntas() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title="Atrévete"
+                title={t("metodo.psico.paso.atrevete")}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 step={{ current: 18, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Miedos", onClick: irAMiedos }}
+                prev={{ label: `← ${t("metodo.psico.paso.miedos")}`, onClick: irAMiedos }}
                 next={{
-                  label: "Integración →",
+                  label: `${t("metodo.psico.paso.integracion")} →`,
                   onClick: irAIntegracion,
                   disabled: !todoRespondido,
                   disabledTooltip: "Responde todas las preguntas de cada miedo para continuar.",
@@ -181,15 +183,11 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                 <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                 <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
                       px={{ base: 7, md: 11 }} py={{ base: 12, md: 16 }} textAlign="center">
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                    Aún no has nombrado tus miedos. Vuelve a la página anterior para escribirlos.
-                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.sinMiedos")}</Text>
                   <Box as="button" onClick={irAMiedos} px={6} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
                        fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
                        boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                       _hover={{ transform: "translateY(-2px)" }}>
-                    Ir a Miedos →
-                  </Box>
+                       _hover={{ transform: "translateY(-2px)" }}>{t("metodo.psico.irAMiedos")}</Box>
                 </Flex>
               </Box>
             ) : (
@@ -265,6 +263,7 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
   onUpdate: (key: string, valor: string) => void;
   onClose: () => void;
 }) {
+  const t = useT();
   const preguntas = MIEDOS_PREGUNTAS;
   const total = preguntas.length;
   const [paso, setPaso] = useState(0);
@@ -394,9 +393,7 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
                  color={esPrimero ? `${TINTA}44` : TINTA}
                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                  cursor={esPrimero ? "not-allowed" : "pointer"} transition="all 0.18s"
-                 _hover={esPrimero ? {} : { bg: `${TINTA}14` }}>
-              ‹ Anterior
-            </Box>
+                 _hover={esPrimero ? {} : { bg: `${TINTA}14` }}>{t("metodo.psico.anterior")}</Box>
 
             <Flex align="center" gap={2.5} flexShrink={0}>
               <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6}>{paso + 1} / {total}</Text>

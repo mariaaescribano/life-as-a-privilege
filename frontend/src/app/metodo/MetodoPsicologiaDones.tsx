@@ -36,12 +36,14 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaDones() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -193,16 +195,16 @@ export default function MetodoPsicologiaDones() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Recuérdate"
+              title={t("metodo.psico.paso.recuerdate")}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               step={{ current: 15, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Relación", onClick: irARelacion }}
+              prev={{ label: `← ${t("metodo.psico.paso.relacion")}`, onClick: irARelacion }}
               next={{
-                label: "Dones →",
+                label: `${t("metodo.psico.paso.dones")} →`,
                 onClick: irAEspejo,
                 disabled: !todoResuelto,
                 disabledTooltip: "Responde o marca «Sin ideas» las 15 preguntas para descubrir tus dones.",
@@ -227,7 +229,7 @@ export default function MetodoPsicologiaDones() {
                 <Textarea
                   value={respuestas[p.key] || ""}
                   onChange={(e) => updateRespuesta(p.key, e.target.value)}
-                  placeholder="Escribe lo primero que te venga, sin pensarlo mucho…"
+                  placeholder={t("metodo.psico.escribeLoPrimero")}
                   mt={4}
                   minH={{ base: "120px", md: "140px" }}
                   bg="rgba(255,251,243,0.75)" border={`1px solid ${TINTA}3a`} color={TINTA}
@@ -250,9 +252,7 @@ export default function MetodoPsicologiaDones() {
                          bg="transparent" border={`1.5px solid ${TINTA}66`} color={TINTA}
                          fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
                          letterSpacing="0.02em" cursor="pointer" transition="all 0.18s"
-                         _hover={{ bg: `${TINTA}12`, borderColor: TINTA }}>
-                      Sin ideas
-                    </Box>
+                         _hover={{ bg: `${TINTA}12`, borderColor: TINTA }}>{t("metodo.psico.sinIdeas")}</Box>
                     <Box as="button" onClick={guardarYSeguir}
                          px={{ base: 5, md: 6 }} py={2} borderRadius="full"
                          bg={TINTA} color={PAPEL} fontFamily="'EB Garamond', serif" fontWeight="700"

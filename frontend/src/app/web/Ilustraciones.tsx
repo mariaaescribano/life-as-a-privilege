@@ -7,6 +7,7 @@ import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { useT } from "../../i18n";
+import { useComic } from "../../i18n/comics";
 
 // Página /ilustraciones — galería con TODAS las series de viñetas de todas las
 // disciplinas. Al pulsar una, se abre el popup inmersivo con el estilo de su
@@ -19,6 +20,10 @@ export default function Ilustraciones() {
   // La galería no se muestra hasta que TODAS las portadas están descargadas:
   // entra ya completa (nada de imágenes cargando a trozos).
   const [imagesReady, setImagesReady] = useState(false);
+  // El cómic abierto, en el idioma activo. Un cómic sin traducir se lee en
+  // español (`useComic` respeta el original viñeta a viñeta), así que no hace
+  // falta distinguir aquí cuáles están hechos y cuáles no.
+  const vinetasAbierta = useComic(abierta?.comicKey ?? abierta?.id ?? "", abierta?.vinetas ?? []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -147,7 +152,7 @@ export default function Ilustraciones() {
       <ComicModal
         isOpen={!!abierta}
         onClose={() => setAbierta(null)}
-        vinetas={abierta?.vinetas ?? []}
+        vinetas={vinetasAbierta}
         themeColor={abierta?.themeColor}
         disciplinaBgImage={abierta?.disciplinaBgImage}
         disciplinaBgColor={abierta?.disciplinaBgColor}

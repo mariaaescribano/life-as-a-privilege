@@ -17,6 +17,7 @@ import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { PROFUNDIZA_LEIDAS_KEY, PROFUNDIZA_COMICS_KEY, type Ficha, type TemaProfundiza } from "../../hardCoded/espacio/ProfundizaFisiologia";
 import { useTemaProfundiza } from "../../hardCoded/espacio/useTemaProfundiza";
+import { useT } from "../../i18n";
 
 // Tarjeta de una ficha (neurotransmisor, hormona…): imagen + nombre. Rejilla de 3.
 // Todos los temas usan la MISMA iluminación (la de Neurotransmisores/Hormonas):
@@ -104,6 +105,7 @@ export default function MetodoFisiologiaTema() {
   // Foto fija de las viñetas ya leídas al abrir el cómic en rejilla: con ella el
   // visor decide el aviso «✓ Leída» sin marcarse sola la que estás leyendo.
   const [vinetasYaLeidas, setVinetasYaLeidas] = useState<Set<string>>(new Set());
+  const t = useT();
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
   const dataRef = useRef<Record<string, any>>({});
 
@@ -264,7 +266,7 @@ export default function MetodoFisiologiaTema() {
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: "← Volver", onClick: () => navigate("/metodo/fisiologia/profundiza") }}
+              prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/metodo/fisiologia/profundiza") }}
               extra={celulasBtn}
             />
           </Reveal>
@@ -403,11 +405,11 @@ export default function MetodoFisiologiaTema() {
                 <Text position="relative" zIndex={1} fontSize="4xl">🔬</Text>
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
-                  Estamos construyendo este apartado
+                  {t("fisiologia.tema.construyendo")}
                 </Text>
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }}
                       fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-                  Muy pronto podrás explorarlo aquí. Sigue avanzando por el resto del recorrido.
+                  {t("fisiologia.tema.construyendoPie")}
                 </Text>
               </Flex>
             </Reveal>

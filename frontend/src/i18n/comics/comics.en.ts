@@ -124,6 +124,63 @@ export const COMICS_EN: Record<string, ComicEn> = {
     },
   ],
 
+  // ── El cómic del Origen «según la ciencia» ───────────────────────────────
+  // El hermano del de espiritualidad: la misma historia contada por el Big Bang.
+  // Se lee en Fisiología y en la galería de Ilustraciones. 8 viñetas.
+  // Ojo con las cifras: «13.800 millones» son *13.8 billion* en inglés.
+  "origen-ciencia": [
+    {
+      paragraphs: [
+        "About 13.8 billion years ago, the whole universe was concentrated in a tiny, extremely dense point.",
+        "Then the Big Bang happened: space began to expand and the first particles were born.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Gravity gathered those particles together.",
+        "That's how the first stars were born — factories where nuclear fusion joined particles to create new atoms, like carbon, oxygen or iron.",
+      ],
+    },
+    {
+      paragraphs: [
+        "When those stars died, they released the atoms they had formed into space.",
+        "New stars, planets and solar systems took shape out of that material.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Planets are born from atoms made by stars. One of those planets was the Earth.",
+        "Over millions of years, it kept changing until it became a place able to hold Life.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Atoms combined into molecules.",
+        "Some of them managed to organize into cells, and over millions of years those first cells gave rise to every living thing there is.",
+      ],
+    },
+    {
+      paragraphs: [
+        "In nature, nothing is wasted.",
+        "Atoms pass constantly from one being to another through cycles like those of water, carbon, nitrogen or oxygen.",
+        "There's no such thing as what we call death — everything is transformed.",
+      ],
+    },
+    {
+      paragraphs: [
+        "The atoms that make up your body were born inside stars.",
+        "Before they were in you, they may have been part of a mountain, an ocean, an animal or a flower.",
+        "Today they make you; tomorrow they may not.",
+      ],
+    },
+    {
+      paragraphs: [
+        "We're not individuals made of stardust.",
+        "We're the universe experiencing itself.",
+      ],
+    },
+  ],
+
   // ── El cómic del Origen «según la espiritualidad» ─────────────────────────
   // El más leído de la casa: se abre al entrar en cualquier disciplina y es
   // también la intro de Astrología. 14 viñetas.
@@ -2164,6 +2221,226 @@ export const COMICS_EN: Record<string, ComicEn> = {
         "The human being is an emanation of the One as well.",
         "Although we live in the material world and experience separation, our essence is still the same Light that emanated from the Ein Sof.",
         "That is why the purpose of the spiritual path is to remember who we are, and to raise our consciousness until we recognize our oneness with the Infinite once again.",
+      ],
+    },
+  ],
+
+  // ── Las 10 Sefirot · una ilustración por dimensión ────────────────────────
+  // Mismo orden que CABALA_ILUSTRACIONES_KEYS: Keter, Chokhmah, Binah, Da'at,
+  // Chesed, Gevurah, Tiferet, Netzach, Hod, Yesod, Malkhut. Los nombres no se
+  // traducen; «Árbol de la Vida» sí (Tree of Life).
+  "cabala-sefirot": [
+    {
+      paragraphs: [
+        "Keter is the origin of all existence and stands for the divine will, infinite potential and the purpose that gives Life meaning.",
+        "On a personal level, it invites you to discover the principles that guide your decisions and to live from coherence, beyond recognition or ego.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Chokhmah stands for the divine light, intuitive wisdom, inspiration and the spark of knowledge that appears before reasoning.",
+        "It also stands for the ability to look at reality with openness, setting prejudice and interpretation aside to perceive things more clearly.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Binah turns intuition into understanding through analysis, structure, classification and reflection.",
+        "In personal growth, it's about learning from experience, revisiting your beliefs and turning knowledge into practical wisdom that changes the way you act.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Da'at stands for the integration of knowledge and experience. It's the point where wisdom stops being an idea and becomes a way of living, joining mind, heart and action.",
+        "It stands for the consciousness that connects every dimension of the Tree of Life and lets learning really transform the person.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Chesed stands for love, compassion and generosity.",
+        "It invites us to share the best of ourselves from freedom and inner abundance, helping without expecting recognition and always respecting other people's autonomy and timing.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Gevurah stands for discipline, justice and the ability to set boundaries.",
+        "It teaches you to protect what matters, to manage your energy responsibly and to find the balance between firmness and flexibility.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Tiferet sits at the center of the Tree of Life and stands for the harmony between love and rigor.",
+        "It's the balance of the heart: acting with honesty, empathy and wisdom, integrating reason and emotion to respond to each situation in the best way.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Netzach stands for perseverance, determination and the ability to sustain effort over the long run.",
+        "It reminds us that real growth doesn't depend on the initial intensity, but on steadiness and the ability to keep going even in the face of difficulty.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Hod stands for communication, humility and mental clarity.",
+        "It complements Netzach by helping us express our ideas authentically, listen with openness and recognize that our vision is valuable, but not the only one possible.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Yesod is the bridge between the spiritual and the material world, where ideas become reality.",
+        "On a personal level, it stands for building coherent habits and actions that turn the values we agree with into a consistent way of Life.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Malkhut stands for the physical world and the manifestation of all the energy of the Tree of Life.",
+        "It's the ability to turn inner growth into concrete actions, building a reality that reflects our values, our purpose and the person we choose to be.",
+      ],
+    },
+  ],
+
+  // ── Los 22 Senderos · una ilustración por letra ───────────────────────────
+  // Mismo orden que el recorrido: Aleph (11) → Tav (32). Las letras hebreas no
+  // se traducen; los nombres largos de cada sendero viven en
+  // `components/metodo/cabalaSenderos.en.ts`, que es su página.
+  "cabala-senderos": [
+    {
+      paragraphs: [
+        "Aleph stands for the first movement between purpose and wisdom.",
+        "It teaches that a real purpose isn't about clinging to our ideas, but about letting reality and experience enrich or redefine them.",
+        "It's the path of open-mindedness, flexibility and the ability to learn.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Beth stands for the step from purpose to understanding.",
+        "It reminds us that great ideas need a structure to grow in, and that reflection turns inspiration into solid knowledge.",
+        "It's the path of the pause, of learning and of inner building.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Gimel stands for the journey of purpose down to the heart.",
+        "It teaches that values stop being mere ideas when they become a way of living.",
+        "It's the path where coherence joins what we think, feel and do.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Daleth stands for the step from perception to understanding.",
+        "It teaches that intuition opens a door, but only reflection lets you walk through it and discover a deeper reality.",
+        "It's the path of the conscious decision.",
+      ],
+    },
+    {
+      paragraphs: [
+        "He stands for the ability to let a truth transform the heart.",
+        "Understanding an idea isn't enough; real change happens when it shifts the way we feel, decide and live.",
+        "It's the path of emotional integration.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Vav stands for the bridge between understanding and generosity.",
+        "It teaches that knowledge comes into its own when it turns into service and help for others.",
+        "It's the path that joins wisdom with love in action.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Zayin stands for the step from knowledge to wisdom.",
+        "It teaches you to tell the essential from the superficial and to turn learning into a way of living.",
+        "It's the path of coherence, where decisions reflect what really matters.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Chet stands for the step from understanding to healthy boundaries.",
+        "It teaches that understanding others doesn't mean giving yourself up, and that boundaries are a way of protecting what has value.",
+        "Real maturity combines empathy with firmness.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Tet stands for the integration of generosity and firmness.",
+        "It teaches that the wisest love knows when to help and when to let others grow on their own.",
+        "Balance turns compassion into a conscious choice.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Yod stands for the power of small actions carried out with intention.",
+        "It teaches that real compassion is about doing what genuinely helps the other person grow.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Kaf stands for the ability to hold what we value over time.",
+        "It teaches that enthusiasm starts the road, but only steady commitment lets you build something lasting.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Lamed stands for the step from boundaries to balance.",
+        "It teaches that real strength isn't born from control or rigidity, but from knowing how to combine firmness and compassion with serenity.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Mem stands for the ability to express our needs with clarity and respect.",
+        "It teaches that communicating our boundaries strengthens relationships and keeps silence from turning into resentment.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Nun stands for the perseverance born of holding on to our values during and despite difficulty.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Samekh stands for building a coherent Life through steady habits.",
+        "It teaches that values only settle when they show up in the small decisions we repeat each day.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Ayin stands for the ability to express to the world what we really are.",
+        "It teaches that authenticity isn't only about knowing ourselves, but about having the courage to communicate our truth with respect.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Pe stands for the transforming power of the word.",
+        "It teaches that authentically sharing what we've learned can inspire, create and help other people grow.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Tsadi stands for the turning of perseverance into habits.",
+        "It teaches that real change doesn't depend on extraordinary effort, but on small actions repeated until they become part of our identity.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Qof stands for the step from perseverance to visible results.",
+        "It teaches that every outer transformation is born from a long invisible process, and that trusting the road matters as much as reaching the goal.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Resh stands for the coherence and union between what we think, say and do.",
+        "It teaches that expressing our values only makes sense when our everyday routine reflects what we say.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Shin stands for the moment when what we express stops being an idea and becomes a visible reality.",
+        "It teaches that words and decisions only reach their real value when they translate into actions that transform our Life and our surroundings.",
+      ],
+    },
+    {
+      paragraphs: [
+        "Tav stands for the last step of the journey: turning values, habits and learning into a stable way of living.",
+        "It stands for the culmination of the inner process, where the person stops chasing an ideal identity and simply embodies it in everyday Life.",
       ],
     },
   ],

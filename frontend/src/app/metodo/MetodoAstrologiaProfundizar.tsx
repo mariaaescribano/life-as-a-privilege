@@ -14,6 +14,7 @@ import { SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 /* Fondo espacial reutilizado */
 const SpaceBg = ({ overlay = "rgba(8,13,30,0.65)" }: { overlay?: string }) => (
@@ -68,6 +69,7 @@ function renderConNegritas(texto: string, color: string): React.ReactNode {
 }
 
 export default function MetodoAstrologiaProfundizar() {
+  const t = useT();
   const navigate = useNavigate();
   const { planetaKey, campo } = useParams<{ planetaKey: string; campo: "signo" | "casa" }>();
   const cuerpo = cuerpoByKey(planetaKey || "");
@@ -196,7 +198,7 @@ export default function MetodoAstrologiaProfundizar() {
                   fontStyle="italic"
                   textAlign="center"
                 >
-                  El texto de profundización para esta combinación aún no está disponible. Lo añadiré pronto.
+                  {t("metodo.astro.profundizarSinTexto")}
                 </Text>
               )}
             </Box>

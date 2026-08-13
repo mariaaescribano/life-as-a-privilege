@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex } from "@chakra-ui/react";
@@ -8,7 +9,7 @@ import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { LineaTiempoCultura } from "../../components/metodo/LineaTiempoCultura";
-import { getHistoria } from "../../components/metodo/culturaHistorias";
+import { getHistoria, tituloHistoria } from "../../components/metodo/culturaHistorias";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
@@ -24,6 +25,7 @@ const VOLVER_HISTORIAS = "/metodo/cultura/historias";
 const PRIMERA_RONDA = 6;
 
 export default function MetodoCulturaHistoria() {
+  const t = useT();
   const navigate = useNavigate();
   const { historiaKey } = useParams<{ historiaKey: string }>();
   const [loading, setLoading] = useState(true);
@@ -80,14 +82,14 @@ export default function MetodoCulturaHistoria() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CulturaIcon size={{ base: "40px", md: "56px" }} />}
-              title={historia.titulo}
+              title={tituloHistoria(historiaKey)}
               compact
               maxW="1000px"
               bgColor={`${culturaBg}dd`}
               color={culturaTxt}
               nom={culturaNom}
               mb={0}
-              prev={{ label: "← Las Historias", onClick: () => navigate(VOLVER_HISTORIAS) }}
+              prev={{ label: `← ${t("metodo.cultura.paso.historias")}`, onClick: () => navigate(VOLVER_HISTORIAS) }}
             />
           </Reveal>
 

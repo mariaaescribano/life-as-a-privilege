@@ -418,7 +418,7 @@ export default function MetodoNutricionDia() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Diseña tu día"
+              title={t("metodo.nutri.paso.dia")}
               // Header NORMAL, como el resto de Nutrición: sin `dense`/`compact`
               // (que lo dejaban bajito y con el título pequeño) y con el ancho
               // por defecto (850px), no estirado a los 1200 del contenido.
@@ -766,9 +766,7 @@ export default function MetodoNutricionDia() {
           <Box onClick={(e) => e.stopPropagation()} w="100%" maxW="480px" borderRadius="2xl"
                px={{ base: 5, md: 7 }} py={{ base: 6, md: 7 }} bg={nutricionBg}
                border={`1px solid ${nutricionTxt}44`} style={{ boxShadow: glowHeader(nutricionTxt) }}>
-            <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center">
-              Crea tu alimento
-            </Text>
+            <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center">{t("metodo.nutri.crearAlimento")}</Text>
             <Text color={`${nutricionTxt}aa`} fontSize="sm" textAlign="center" mt={1} mb={5}>
               Se añadirá al grupo «{GRUPOS_DIA.find((g) => g.key === grupoSel)?.label}».
             </Text>

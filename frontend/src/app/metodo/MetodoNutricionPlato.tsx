@@ -303,7 +303,7 @@ export default function MetodoNutricionPlato() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title="Crea el plato de Harvard"
+              title={t("metodo.nutri.paso.platoTitulo")}
               compact
               maxW="1000px"
               bgColor={`${nutricionBg}dd`}
@@ -326,10 +326,7 @@ export default function MetodoNutricionPlato() {
 
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" lineHeight="1.8" maxW="640px">
-              Pulsa cada parte del plato para ver sus alimentos y arrástralos encima. Construye un plato equilibrado
-              con algo de cada grupo.
-            </Text>
+                  textAlign="center" lineHeight="1.8" maxW="640px">{t("metodo.nutri.platoIntro")}</Text>
           </Reveal>
 
           <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
@@ -480,7 +477,7 @@ export default function MetodoNutricionPlato() {
                 {completo && (
                   <Float amplitude={4} duration={2.8}>
                     <Text color={nutricionTxt} fontWeight="800" fontSize={{ base: "md", md: "lg" }} textAlign="center">
-                      ¡Plato equilibrado! 🎉 Tienes algo de cada grupo.
+                      {t("metodo.nutri.platoHecho")}
                     </Text>
                   </Float>
                 )}
@@ -499,7 +496,7 @@ export default function MetodoNutricionPlato() {
                      cursor={puestos.length > 0 ? "pointer" : "not-allowed"}
                      transition="background 0.15s, color 0.15s, border-color 0.15s"
                      _hover={puestos.length > 0 ? { bg: `${nutricionTxt}22` } : undefined}>
-                  Vaciar plato
+                  {t("metodo.nutri.platoVaciar")}
                 </Box>
               </Flex>
             </SeccionBox>
@@ -524,7 +521,7 @@ export default function MetodoNutricionPlato() {
 
                 <Text color={`${nutricionTxt}cc`} fontSize="xs" fontWeight="700" letterSpacing="0.08em"
                       textTransform="uppercase">
-                  Arrastra estos alimentos al plato
+                  {t("metodo.nutri.platoArrastra")}
                 </Text>
 
                 {/* Los alimentos del macro entran UNO A UNO (cascada). La `key`

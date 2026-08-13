@@ -260,16 +260,16 @@ export default function MetodoPsicologiaMapa() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title="Integración"
+                title={t("metodo.psico.paso.integracion")}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 step={{ current: 19, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Atrévete", onClick: () => ir("miedos-preguntas") }}
+                prev={{ label: `← ${t("metodo.psico.paso.atrevete")}`, onClick: () => ir("miedos-preguntas") }}
                 next={{
-                  label: "Compromiso →",
+                  label: `${t("metodo.psico.paso.compromiso")} →`,
                   onClick: () => setFelicitarOpen(true),
                   disabled: !algunoRelleno,
                   disabledTooltip: "Rellena al menos una relación para continuar.",
@@ -279,9 +279,7 @@ export default function MetodoPsicologiaMapa() {
 
             {/* Frase bajo el header */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>
-                Nada de lo que has vivido puede cambiarse. Pero sí puedes cambiar el significado que tiene en tu historia. Dale un sentido a tu dolor para que deje de convertirse en sufrimiento.
-              </IntroRecorrido>
+              <IntroRecorrido>{t("metodo.psico.integracionIntro")}</IntroRecorrido>
             </Reveal>
 
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
@@ -291,15 +289,11 @@ export default function MetodoPsicologiaMapa() {
                 <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                 <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
                       px={{ base: 7, md: 11 }} py={{ base: 12, md: 16 }} textAlign="center">
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                    Aún no has compuesto tus relaciones. Vuelve a la página «Relación» para reunirlas y aquí les darás un sentido.
-                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.sinRelaciones")}</Text>
                   <Box as="button" onClick={() => ir("integracion")} px={6} py={2.5} borderRadius="full" bg={TINTA} color={PAPEL}
                        fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
                        boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                       _hover={{ transform: "translateY(-2px)" }}>
-                    Ir a Relación →
-                  </Box>
+                       _hover={{ transform: "translateY(-2px)" }}>{t("metodo.psico.irARelacion")}</Box>
                 </Flex>
               </Box>
             ) : (
@@ -405,6 +399,7 @@ export default function MetodoPsicologiaMapa() {
 // de haber recorrido todo el camino antes de dar el último paso.
 // ─────────────────────────────────────────────────────────────────────────
 function PopupFelicitacion({ onClose, onContinuar }: { onClose: () => void; onContinuar: () => void }) {
+  const t = useT();
   useLockBodyScroll(true);
   return (
     <Box position="fixed" inset={0} zIndex={2100} display="flex" alignItems="center" justifyContent="center"
@@ -423,22 +418,16 @@ function PopupFelicitacion({ onClose, onContinuar }: { onClose: () => void; onCo
           <Flex align="center" justify="center" gap={{ base: 2.5, md: 3 }} mb={3}>
             <Corazon size={30} color={TINTA} />
             <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3"
-                  style={{ textShadow: INK_SHADOW }}>
-              Enhorabuena por haber llegado hasta aquí.
-            </Text>
+                  style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.enhorabuenaLlegar")}</Text>
           </Flex>
           <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.7" mb={8}
-                style={{ textShadow: INK_SHADOW }}>
-            Eres muy valiente.
-          </Text>
+                style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.eresValiente")}</Text>
 
           <Box as="button" onClick={onContinuar} position="relative" overflow="hidden"
                px={9} py={3} borderRadius="full" bg={TINTA} color={PAPEL} border={`1px solid ${TINTA}`}
                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
                cursor="pointer" boxShadow={`0 6px 20px rgba(94,45,16,0.32)`} transition="all 0.2s"
-               _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}>
-            Continuar →
-          </Box>
+               _hover={{ transform: "translateY(-2px)", boxShadow: `0 10px 28px rgba(94,45,16,0.42)` }}>{t("metodo.psico.continuar")}</Box>
         </Box>
       </Box>
     </Box>
@@ -464,6 +453,7 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
   onUpdate: (campo: keyof Constelacion, valor: string) => void;
   onClose: () => void;
 }) {
+  const t = useT();
   const total = BLOQUES.length;
   const [paso, setPaso] = useState(0);
   const esPrimero = paso === 0;
@@ -525,9 +515,7 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
              px={{ base: 6, md: 9 }} pt={{ base: 6, md: 7 }} pb={{ base: 3.5, md: 4 }}>
           <Flex direction="column" align="center" textAlign="center" gap={0.5}>
             <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
-                  opacity={0.6} style={{ textShadow: INK_SHADOW }}>
-              Tu relación
-            </Text>
+                  opacity={0.6} style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.tuRelacion")}</Text>
             <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.25"
                   style={{ textShadow: INK_SHADOW }}>
               {relTitulo(c)}
@@ -594,9 +582,7 @@ function PopupIntegracion({ c, onUpdate, onClose }: {
                  color={esPrimero ? `${TINTA}44` : TINTA}
                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
                  cursor={esPrimero ? "not-allowed" : "pointer"} transition="all 0.18s"
-                 _hover={esPrimero ? {} : { bg: `${TINTA}14` }}>
-              ‹ Anterior
-            </Box>
+                 _hover={esPrimero ? {} : { bg: `${TINTA}14` }}>{t("metodo.psico.anterior")}</Box>
 
             <Flex align="center" gap={2.5} flexShrink={0}>
               <Text color={TINTA} fontSize="xs" fontWeight="600" opacity={0.6}>{paso + 1} / {total}</Text>

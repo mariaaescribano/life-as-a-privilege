@@ -22,8 +22,10 @@ import {
   astrologiaTxt,
   AstrologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 export default function MetodoAstrologiaPlanetas() {
+  const t = useT();
   const navigate = useNavigate();
   const { carta, loading, saving, actualizar, todoCompletado } = useCartaPlanetas();
   const [picker, setPicker] = useState<PickerState | null>(null);
@@ -43,13 +45,13 @@ export default function MetodoAstrologiaPlanetas() {
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }}>
         <MetodoStepHeader
           icon={<AstrologiaIcon size={{ base: "28px", md: "38px" }} />}
-          title="Astrología"
+          title={t("disciplina.astrologia")}
           bgColor={`${astrologiaBg}dd`}
           color={astrologiaTxt}
           space
           mb={0}
-          prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
-          extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
+          prev={{ label: `← ${t("metodo.astro.paso.arquetipos")}`, onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
+          extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
           next={{
             label: todoCompletado ? "Psicología →" : "Completa primero la carta",
             onClick: () => navigate("/metodo/psicologia"),

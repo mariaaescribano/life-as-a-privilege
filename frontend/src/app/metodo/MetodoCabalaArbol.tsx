@@ -16,14 +16,18 @@ import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefi
 import { CABALA_TOTAL_PAGINAS, type CabalaPageKey } from "../../components/metodo/cabalaSefirot";
 import {
   CABALA_ILUSTRACIONES_KEYS,
-  CABALA_ILUSTRACIONES_VINETAS,
   CABALA_ILUSTRACIONES_VINETA_KEYS,
 } from "../../components/metodo/cabalaIlustraciones";
+import { useVinetasSefirot } from "../../components/metodo/cabalaEn";
+import { useT } from "../../i18n";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 export default function MetodoCabalaArbol() {
+  const t = useT();
   const navigate = useNavigate();
+  // Las ilustraciones en el idioma activo (el orden y las fotos, del español).
+  const vinetasSefirot = useVinetasSefirot();
   const [loading, setLoading] = useState(true);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
   // Sefirot con su ilustración ya leída, y la que se está viendo en el modal.
@@ -95,20 +99,20 @@ export default function MetodoCabalaArbol() {
             <Box position="relative" w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-                title="El Árbol de la Vida"
+                title={t("metodo.cabala.paso.arbol")}
                 pageLabel={`2/${CABALA_TOTAL_PAGINAS}`}
                 compact
                 bgColor={`${cabalaBg}dd`}
                 color={cabalaTxt}
                 nom={cabalaNom}
                 mb={0}
-                prev={{ label: "← Introducción", onClick: () => navigate("/metodo/cabala") }}
-                extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
+                prev={{ label: `← ${t("metodo.cabala.paso.intro")}`, onClick: () => navigate("/metodo/cabala") }}
+                extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
                 next={{
                   label: "Keter →",
                   onClick: () => navigate("/metodo/cabala/sefira/kether"),
                   disabled: !todasLeidas,
-                  disabledTooltip: "Descubre la ilustración de todas las sefirot para desbloquear el recorrido",
+                  disabledTooltip: t("metodo.cabala.arbolDesbloquea"),
                 }}
               />
             </Box>
@@ -152,7 +156,7 @@ export default function MetodoCabalaArbol() {
       {modalKey && (
         <CabalaSefiraIlustracionModal
           isOpen={!!modalKey}
-          vinetas={CABALA_ILUSTRACIONES_VINETAS}
+          vinetas={vinetasSefirot}
           initialIndex={Math.max(0, CABALA_ILUSTRACIONES_VINETA_KEYS.indexOf(modalKey))}
           onPageView={(i) => marcarLeida(CABALA_ILUSTRACIONES_VINETA_KEYS[i])}
           onClose={() => setModalKey(null)}

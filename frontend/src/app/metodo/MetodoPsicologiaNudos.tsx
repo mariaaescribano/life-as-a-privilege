@@ -24,6 +24,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
@@ -31,6 +32,7 @@ const PAPEL = "#fbf4e8";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaNudos() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -126,16 +128,16 @@ export default function MetodoPsicologiaNudos() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Nudos"
+              title={t("metodo.psico.paso.nudos")}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               step={{ current: 9, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Huellas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
+              prev={{ label: `← ${t("metodo.psico.paso.huellas")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
               next={{
-                label: "Necesidades →",
+                label: `${t("metodo.psico.paso.necesidades")} →`,
                 onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/necesidades`); },
                 // Hasta que no haya al menos un nudo (elegido o escrito), la
                 // siguiente página queda bloqueada. Si los borra todos, se vuelve
@@ -176,7 +178,7 @@ export default function MetodoPsicologiaNudos() {
                     value={entrada}
                     onChange={(e) => setEntrada(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") añadirNudo(entrada); }}
-                    placeholder="Escribe un nudo y pulsa Añadir…"
+                    placeholder={t("metodo.psico.escribeNudo")}
                     flex="1"
                     bg="rgba(255,251,243,0.72)"
                     border={`1px solid ${TINTA}33`}
@@ -210,9 +212,7 @@ export default function MetodoPsicologiaNudos() {
                     _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}
                   >
                     <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
-                      Añadir
-                    </Box>
+                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.anadirCorto")}</Box>
                   </Box>
                 </Flex>
 
@@ -225,9 +225,7 @@ export default function MetodoPsicologiaNudos() {
                   {/* Separador horizontal completo (ancho del box) */}
                   <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
                   <Flex direction="column" align="center" gap={3} w="100%" maxW="620px" pt={{ base: 1, md: 2 }}>
-                    <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">
-                      Si te sirven de inspiración
-                    </Text>
+                    <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">{t("metodo.psico.siTeSirven")}</Text>
                     <Box w="100%" position="relative">
                       <Flex wrap="wrap" justify="center" gap={2} py={1}>
                         {NUDOS.ejemplos.map((e) => {
@@ -264,9 +262,7 @@ export default function MetodoPsicologiaNudos() {
                           cambiaría de alto justo al final. */}
                       {ejemplosDisponibles.length === 0 && (
                         <Flex position="absolute" inset={0} align="center" justify="center" pointerEvents="none">
-                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.6} textAlign="center">
-                            Ya has añadido todos los ejemplos ✓
-                          </Text>
+                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.6} textAlign="center">{t("metodo.psico.todosLosEjemplos")}</Text>
                         </Flex>
                       )}
                     </Box>
@@ -351,7 +347,7 @@ export default function MetodoPsicologiaNudos() {
                             flexShrink={0}
                             transition="all 0.18s"
                             _hover={{ bg: "rgba(94,45,16,0.22)" }}
-                            title="Quitar"
+                            title={t("metodo.psico.quitar")}
                           >
                             ✕
                           </Box>
@@ -360,9 +356,7 @@ export default function MetodoPsicologiaNudos() {
                     </Flex>
                   ) : (
                     <Flex h="100%" align="center" justify="center">
-                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                        Aquí aparecerán los nudos que vayas seleccionando.
-                      </Text>
+                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.aquiNudos")}</Text>
                     </Flex>
                   )}
                 </Box>

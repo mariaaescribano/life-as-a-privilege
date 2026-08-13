@@ -1,4 +1,4 @@
-/** Pantallas de acceso: iniciar sesión, crear cuenta y recuperar contraseña. */
+/** Pantallas de acceso: iniciar sesión, crear cuenta, recuperar contraseña y «Mi cuenta». */
 export const auth = {
   // ── Etiquetas de campo (van en mayúsculas) ─────────────────────────────
   "auth.campo.nombreOEmail": "NOMBRE O EMAIL",
@@ -65,4 +65,36 @@ export const auth = {
   "auth.error.generico": "Error",
   "auth.error.masTarde": "Inténtalo de nuevo más tarde",
   "auth.error.desconocido": "Error desconocido",
+
+  // ── Mi cuenta (/cuenta) ────────────────────────────────────────────────
+  // Los rótulos de los campos son los mismos de arriba (`auth.campo.*`): es la
+  // misma ficha, solo que aquí se edita en vez de rellenarse.
+  "cuenta.titulo": "Mi cuenta",
+  "cuenta.foto.tocaParaCambiar": "Toca la foto para cambiarla",
+  "cuenta.foto.subiendo": "Subiendo…",
+  "cuenta.nuevaContrasena": "Nueva contraseña",
+  "cuenta.cambiosGuardados": "Cambios guardados",
+  "cuenta.panelAdmin": "Panel de administración",
+  "cuenta.cerrarSesion": "Cerrar sesión",
+  "cuenta.eliminarCuenta": "Eliminar cuenta",
+  "cuenta.error.cargar": "Error al cargar los datos",
+  "cuenta.error.guardar": "Error al guardar los cambios",
+  "cuenta.error.foto": "Error al subir la foto",
+  "cuenta.error.eliminar": "Error al eliminar la cuenta",
+
+  // ── Mi cuenta · el pop-up de eliminar ──────────────────────────────────
+  // Para borrar hacen falta dos cosas: la contraseña y escribir una palabra
+  // exacta. La palabra se traduce (`cuenta.borrar.palabra`) y la comprobación
+  // la lee de aquí: si se escribiera a mano en el código, en inglés pediría una
+  // palabra española y no habría manera de acertarla.
+  "cuenta.borrar.titulo": "¿Seguro que quieres eliminar tu cuenta?",
+  "cuenta.borrar.aviso":
+    "Todos tus datos se borrarán y no podrás recuperarlos. No se devolverá lo abonado. No se guardará tu información personalizada.",
+  "cuenta.borrar.tuContrasena": "TU CONTRASEÑA",
+  "cuenta.borrar.contrasena": "Contraseña",
+  "cuenta.borrar.palabra": "BORRAR",
+  /** «ESCRIBE **BORRAR** PARA CONFIRMAR», partido porque la palabra va en negrita. */
+  "cuenta.borrar.escribe": "ESCRIBE",
+  "cuenta.borrar.paraConfirmar": "PARA CONFIRMAR",
+  "cuenta.borrar.eliminando": "Eliminando…",
 } as const;

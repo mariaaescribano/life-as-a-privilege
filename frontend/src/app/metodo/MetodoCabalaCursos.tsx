@@ -15,6 +15,7 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { useT } from "../../i18n";
 import {
   API_URL,
   cabalaBg,
@@ -43,6 +44,7 @@ const Candado = ({ size }: { size: any }) => (
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoCabalaCursos() {
+  const t = useT();
   const navigate = useNavigate();
   const [accesoOk, setAccesoOk] = useState(false);
   // ¿Tiene ya Cultura? De eso depende que el botón de «siguiente» lleve candado
@@ -96,24 +98,24 @@ export default function MetodoCabalaCursos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cursos de Cábala"
+              title={t("aprendizaje.cursosDe", { disciplina: t("disciplina.cabala") })}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: "← 10 días", onClick: () => navigate("/metodo/cabala/dias") }}
+              prev={{ label: `← ${t("metodo.cabala.paso.diasCorto")}`, onClick: () => navigate("/metodo/cabala/dias") }}
               // "Ilustraciones" nunca falta en los headers de Cábala. En móvil se
               // queda solo el ojo, para que los botones sigan en una fila.
               extra={{
-                label: <Box as="span" display={{ base: "none", md: "inline" }}>Ilustraciones</Box>,
+                label: <Box as="span" display={{ base: "none", md: "inline" }}>{t("metodo.ilustraciones")}</Box>,
                 onClick: () => setIlustracionesOpen(true),
               }}
               // El candado SOLO si Cultura está bloqueada. Estaba fijo, así que
               // salía también a quien ya la tenía comprada.
               next={culturaSuscrito
-                ? { label: "Cultura →", onClick: () => navigate("/metodo/cultura") }
-                : { label: "Cultura", icon: <Candado size="15px" />, arrow: "next", onClick: () => navigate("/metodo/cultura") }}
+                ? { label: `${t("disciplina.cultura")} →`, onClick: () => navigate("/metodo/cultura") }
+                : { label: t("disciplina.cultura"), icon: <Candado size="15px" />, arrow: "next", onClick: () => navigate("/metodo/cultura") }}
             />
           </Reveal>
 
@@ -122,7 +124,7 @@ export default function MetodoCabalaCursos() {
             {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "lg", md: "xl" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="680px">
-              Si quieres profundizar en la Cábala, estos cursos te acompañan paso a paso.
+              {t("metodo.cursosIntro", { disciplina: t("disciplina.cabala") })}
             </Text>
           </Reveal>
 
@@ -152,12 +154,11 @@ export default function MetodoCabalaCursos() {
                 <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay="rgba(0,0,0,0.5)" />
                 <Text position="relative" zIndex={1} color="white" fontWeight={700} fontSize={{ base: "lg", md: "xl" }}
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
-                  Estoy preparando los cursos
+                  {t("metodo.cursosPreparando")}
                 </Text>
                 <Text position="relative" zIndex={1} color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }}
                       fontStyle="italic" lineHeight="1.7" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>
-                  Pronto podrás profundizar aquí con cursos avanzados de Cábala. Mientras tanto, continúa el
-                  Mapa con la siguiente disciplina.
+                  {t("metodo.cursosAvanzadosPronto", { disciplina: t("disciplina.cabala") })}
                 </Text>
               </Flex>
             </Reveal>

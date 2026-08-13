@@ -12,7 +12,8 @@ import {
   fisiologiaBg,
   fisiologiaTxt,
 } from "../../GlobalVariables";
-import { celulas as CELULAS, type Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
+import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
+import { useCelulas } from "../../hardCoded/espacio/useCelulas";
 
 const TXT = fisiologiaTxt;
 const BG = fisiologiaBg;
@@ -48,7 +49,7 @@ export function TusCelulasModal({
   isOpen,
   onClose,
   titulo,
-  celulas = CELULAS,
+  celulas: celulasProp,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -58,6 +59,10 @@ export function TusCelulasModal({
   celulas?: Celula[];
 }) {
   const t = useT();
+  // Por defecto, todas las de Fisiología en el idioma activo (no se puede poner
+  // en el valor por defecto del parámetro: es un hook).
+  const todas = useCelulas();
+  const celulas = celulasProp ?? todas;
   const [selected, setSelected] = useState<Celula | null>(null);
   // Células que el usuario ya ha visto (para pintar el tick arriba a la derecha).
   const [vistas, setVistas] = useState<Set<string>>(new Set());
@@ -213,7 +218,7 @@ export function TusCelulasModal({
           ) : (
             <Text color={`${TXT}dd`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   style={{ textShadow: "0 1px 6px rgba(0,0,0,0.6)" }}>
-              Pronto podrás explorar las células de este órgano.
+              {t("fisiologia.lasCelulas.sinCelulas")}
             </Text>
           )}
         </Flex>

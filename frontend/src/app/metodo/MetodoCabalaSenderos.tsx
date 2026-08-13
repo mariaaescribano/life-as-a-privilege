@@ -13,15 +13,20 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import ArbolDeLaVida from "../../components/global/ArbolDeLaVida";
 import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
 import { CABALA_SENDEROS } from "../../components/metodo/cabalaSenderos";
-import { CABALA_SENDERO_VINETAS, CABALA_SENDERO_VINETA_NUMS } from "../../components/metodo/cabalaSenderoIlustraciones";
+import { CABALA_SENDERO_VINETA_NUMS } from "../../components/metodo/cabalaSenderoIlustraciones";
+import { useVinetasSenderos } from "../../components/metodo/cabalaEn";
 import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
+import { useT } from "../../i18n";
 import { flushSaves } from "../../utils/flushSaves";
 
 export default function MetodoCabalaSenderos() {
+  const t = useT();
   const navigate = useNavigate();
+  // Las ilustraciones en el idioma activo (el orden y las fotos, del español).
+  const vinetasSenderos = useVinetasSenderos();
   const [loading, setLoading] = useState(true);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
   // Senderos con su ilustración ya vista, y el que se está viendo en el modal.
@@ -96,20 +101,20 @@ export default function MetodoCabalaSenderos() {
           <Reveal direction="down" distance={22} duration={1.2} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Los 22 Senderos"
+              title={t("metodo.cabala.paso.senderos22")}
               pageLabel={`${CABALA_PAG.senderos}/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: "← Mapa Evolutivo", onClick: () => void ir("/metodo/cabala/diagnostico") }}
-              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
+              prev={{ label: `← ${t("metodo.cabala.mapaEvolutivo")}`, onClick: () => void ir("/metodo/cabala/diagnostico") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
               next={{
-                label: "Recorrer →",
+                label: `${t("metodo.cabala.senderos.recorrer")} →`,
                 onClick: () => void ir(`/metodo/cabala/sendero/${primero.num}`),
                 disabled: !todosVistos,
-                disabledTooltip: "Descubre la ilustración de los 22 senderos para recorrerlos uno a uno",
+                disabledTooltip: t("metodo.cabala.senderos.desbloquea"),
               }}
             />
           </Reveal>
@@ -118,8 +123,7 @@ export default function MetodoCabalaSenderos() {
             {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.8" maxW="600px">
-              Si las sefirot son estados, los senderos son el movimiento entre ellos. Toca cualquiera de los
-              22 caminos para ver su ilustración. Cuando los hayas descubierto todos, se desbloqueará el recorrido.
+              {t("metodo.cabala.senderos.intro")}
             </Text>
           </Reveal>
 
@@ -169,8 +173,8 @@ export default function MetodoCabalaSenderos() {
                  boxShadow={todosVistos ? `0 0 18px ${cabalaTxt}44` : "none"}
                  _hover={todosVistos ? { bg: `${cabalaTxt}2e`, borderColor: cabalaTxt, transform: "translateY(-2px)" } : undefined}>
               {todosVistos
-                ? `Comenzar por ${primero.letra} (${primero.hebreo}) →`
-                : "Descubre los 22 senderos para empezar"}
+                ? `${t("metodo.cabala.senderos.comenzarPor", { letra: `${primero.letra} (${primero.hebreo})` })} →`
+                : t("metodo.cabala.senderos.descubreTodos")}
             </Box>
           </Reveal>
         </Flex>
@@ -182,7 +186,7 @@ export default function MetodoCabalaSenderos() {
       {modalNum !== null && (
         <CabalaSefiraIlustracionModal
           isOpen={modalNum !== null}
-          vinetas={CABALA_SENDERO_VINETAS}
+          vinetas={vinetasSenderos}
           initialIndex={Math.max(0, CABALA_SENDERO_VINETA_NUMS.indexOf(modalNum))}
           onPageView={(i) => marcarLeido(CABALA_SENDERO_VINETA_NUMS[i])}
           onClose={() => setModalNum(null)}

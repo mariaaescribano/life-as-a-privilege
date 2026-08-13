@@ -12,29 +12,34 @@
 //   · Diseña tu día           → hasta tener el cálculo de calorías.
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useT, type ClaveTexto } from "../../i18n";
 import { IndiceRecorrido } from "./IndiceRecorrido";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import { NUTRIENTES_PRINCIPALES } from "../../hardCoded/espacio/NutrientesNutricion";
 
-// Todas las páginas del recorrido de Nutrición, en orden.
-const PASOS: { titulo: string; path: string }[] = [
-  { titulo: "Nutrición",              path: "/metodo/nutricion" },
-  { titulo: "Los nutrientes",         path: "/metodo/nutricion/nutrientes" },
-  { titulo: "Nutrientes secundarios", path: "/metodo/nutricion/nutrientes-secundarios" },
-  { titulo: "La microbiota",          path: "/metodo/nutricion/microbiota" },
-  { titulo: "El hambre",              path: "/metodo/nutricion/hambre" },
-  { titulo: "Tu plato",               path: "/metodo/nutricion/plato" },
-  { titulo: "Tus calorías y macros",  path: "/metodo/nutricion/calorias" },
-  { titulo: "Test de prevención",    path: "/metodo/nutricion/prediabetes" },
-  { titulo: "Diseña tu día",          path: "/metodo/nutricion/dia" },
-  { titulo: "Cuenta lo que comes",    path: "/metodo/nutricion/macros" },
-  { titulo: "Preguntas y mitos",      path: "/metodo/nutricion/mitos" },
-  { titulo: "¿De dónde vienen?",      path: "/metodo/nutricion/origen" },
-  { titulo: "Cursos para profundizar", path: "/metodo/nutricion/cursos" },
+// Todas las páginas del recorrido de Nutrición, en orden. El nombre de cada
+// paso NO se escribe aquí: se cita por su clave, la misma que usan los botones
+// «← anterior / siguiente →» de cada página. Así el Índice y los botones nunca
+// pueden decir cosas distintas.
+const PASOS: { clave: ClaveTexto; path: string }[] = [
+  { clave: "metodo.nutri.paso.nutricion",          path: "/metodo/nutricion" },
+  { clave: "metodo.nutri.paso.nutrientes",         path: "/metodo/nutricion/nutrientes" },
+  { clave: "metodo.nutri.paso.secundarios",        path: "/metodo/nutricion/nutrientes-secundarios" },
+  { clave: "metodo.nutri.paso.microbiotaTitulo",   path: "/metodo/nutricion/microbiota" },
+  { clave: "metodo.nutri.paso.hambre",             path: "/metodo/nutricion/hambre" },
+  { clave: "metodo.nutri.paso.plato",              path: "/metodo/nutricion/plato" },
+  { clave: "metodo.nutri.paso.caloriasTitulo",     path: "/metodo/nutricion/calorias" },
+  { clave: "metodo.nutri.paso.prediabetes",        path: "/metodo/nutricion/prediabetes" },
+  { clave: "metodo.nutri.paso.dia",                path: "/metodo/nutricion/dia" },
+  { clave: "metodo.nutri.paso.macros",             path: "/metodo/nutricion/macros" },
+  { clave: "metodo.nutri.paso.mitos",              path: "/metodo/nutricion/mitos" },
+  { clave: "metodo.nutri.paso.origen",             path: "/metodo/nutricion/origen" },
+  { clave: "metodo.nutri.paso.cursosProfundizar",  path: "/metodo/nutricion/cursos" },
 ];
 
 export function IndiceNutricion() {
+  const t = useT();
   // Empezamos pesimistas (todo lo condicionado, bloqueado) hasta leer el
   // progreso: así no se puede saltar por el índice en el instante de carga.
   const [flags, setFlags] = useState({ principales: false, plato: false, calorias: false });
@@ -75,7 +80,7 @@ export function IndiceNutricion() {
 
   const indice: PasoRecorrido[] = PASOS.map((p, i) => ({
     n: i + 1,
-    titulo: p.titulo,
+    titulo: t(p.clave),
     ruta: () => p.path,
     bloqueado: bloqueoPorPath[p.path] ?? false,
   }));

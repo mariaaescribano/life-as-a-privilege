@@ -1233,7 +1233,8 @@ const MUSCULO: Ficha[] = [
       "Se une a receptores y activa señales que reducen la fabricación de nuevas proteínas musculares. También influye en las células satélite, que ayudan a reparar y adaptar las fibras.",
       "Cuando hay poca miostatina o no funciona bien, el músculo puede crecer mucho más de lo normal. Ocurre en algunos animales, como el ganado Belgian Blue, y en casos humanos muy poco frecuentes.",
       "Por eso la miostatina se estudia como posible tratamiento para enfermedades que provocan pérdida de músculo.",
-      "El problema es que tener más músculo no significa necesariamente tener más fuerza. El tamaño y la función no siempre crecen al mismo ritmo.",
+      "El problema es que tener más músculo no significa necesariamente tener más fuerza.",
+      "Se puede tener un gran volumen de fibras musculares y poca fuerza relativa. Esto ocurre cuando el músculo es grande, pero el sistema nervioso no activa esas fibras de forma eficiente.",
     ],
   },
 ];

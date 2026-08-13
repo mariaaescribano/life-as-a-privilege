@@ -15,6 +15,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { ComicEstrellaModal } from "../../components/metodo/ComicEstrellaModal";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
+import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import {
   API_URL,
   fisiologiaBg,
@@ -29,7 +30,12 @@ const GLOW_BOX = `0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.1
 // ── Partículas del átomo ────────────────────────────────────────────────────
 type Tipo = "proton" | "neutron" | "electron";
 const GLOW: Record<Tipo, string> = { proton: "#e08a8a", neutron: "#b7b3c9", electron: "#8ab6e6" };
-const LABEL: Record<Tipo, string> = { proton: "protón", neutron: "neutrón", electron: "electrón" };
+// La CLAVE del diccionario, no el texto: este mapa se calcula al importar.
+const LABEL: Record<Tipo, ClaveTexto> = {
+  proton: "fisiologia.pieza.proton",
+  neutron: "fisiologia.pieza.neutron",
+  electron: "fisiologia.pieza.electron",
+};
 const GLYPH: Record<Tipo, string> = { proton: "+", neutron: "0", electron: "–" };
 const IMG: Record<Tipo, string> = {
   proton: "/recorrido/fisiologia/pre/proton.webp",
@@ -42,43 +48,41 @@ const esfera = (c: Tipo): string =>
 // ── Los dos átomos del recorrido (en orden) ──────────────────────────────────
 interface AtomoDef {
   key: string;
-  nombre: string;
   piezas: Tipo[];              // en el orden en que aparecen para arrastrar
   nucleoCluster: { x: number; y: number }[]; // posiciones de protones/neutrones (% del núcleo)
   orbitaPos: { x: number; y: number }[];      // posiciones de electrones (% de la órbita)
   img: string;
-  instruccion: string;
-  titulo: string;
-  parrafos: React.ReactNode[];
+  /** Todo el texto va como CLAVE del diccionario: el array se calcula UNA vez
+   *  al importar el fichero y, con el texto ya traducido dentro, se quedaría
+   *  congelado en el idioma de arranque. */
+  nombreKey: ClaveTexto;
+  instruccion: ClaveTexto;
+  titulo: ClaveTexto;
+  parrafos: ClaveTexto[];
 }
 
 const ATOMOS: AtomoDef[] = [
   {
     key: "hidrogeno",
-    nombre: "Hidrógeno",
+    nombreKey: "fisiologia.atomos.hidrogeno",
     piezas: ["proton", "electron"],
     nucleoCluster: [{ x: 50, y: 50 }],
     orbitaPos: [{ x: 14, y: 50 }],
     img: "/recorrido/fisiologia/pre/hidrogeno.webp",
-    instruccion: "Lleva el protón al núcleo y el electrón a su órbita.",
-    titulo: "¡Has construido un átomo de Hidrógeno!",
-    parrafos: [
-      <>El <b>hidrógeno</b> es el átomo más simple y abundante del universo: un solo <b>protón</b> en el núcleo y un <b>electrón</b> orbitando a su alrededor. Fue el primer elemento en existir tras el Big Bang.</>,
-    ],
+    instruccion: "fisiologia.atomos.hidrogeno.instruccion",
+    titulo: "fisiologia.atomos.hidrogeno.hecho",
+    parrafos: ["fisiologia.atomos.hidrogeno.p1"],
   },
   {
     key: "helio",
-    nombre: "Helio",
+    nombreKey: "fisiologia.atomos.helio",
     piezas: ["proton", "proton", "neutron", "neutron", "electron", "electron"],
     nucleoCluster: [{ x: 39, y: 41 }, { x: 61, y: 41 }, { x: 39, y: 61 }, { x: 61, y: 61 }],
     orbitaPos: [{ x: 14, y: 50 }, { x: 86, y: 50 }],
     img: "/recorrido/fisiologia/pre/helio.webp",
-    instruccion: "Lleva los 2 protones y 2 neutrones al núcleo, y los 2 electrones a su órbita.",
-    titulo: "¡Has construido un átomo de Helio!",
-    parrafos: [
-      <>El <b>helio</b> fue el segundo elemento del universo en ser creado.</>,
-      <>Cambiando el número de protones se obtienen todos los elementos: tu cuerpo es, sobre todo, hidrógeno, oxígeno, carbono y nitrógeno, los mismos átomos que forman las estrellas.</>,
-    ],
+    instruccion: "fisiologia.atomos.helio.instruccion",
+    titulo: "fisiologia.atomos.helio.hecho",
+    parrafos: ["fisiologia.atomos.helio.p1", "fisiologia.atomos.helio.p2"],
   },
 ];
 
@@ -97,11 +101,12 @@ const shimmer = keyframes`
 
 // ── Esfera reutilizable (protón / neutrón / electrón) ───────────────────────
 function Esfera({ tipo, size, glow = true }: { tipo: Tipo; size: any; glow?: boolean }) {
+  const t = useT();
   const c = GLOW[tipo];
   return (
     <Box w={size} h={size} pointerEvents="none"
          sx={{ filter: glow ? `drop-shadow(0 0 8px ${c}aa) drop-shadow(0 0 18px ${c}55)` : "none" }}>
-      <Image src={IMG[tipo]} alt={LABEL[tipo]} w="100%" h="100%" objectFit="contain" draggable={false}
+      <Image src={IMG[tipo]} alt={t(LABEL[tipo])} w="100%" h="100%" objectFit="contain" draggable={false}
              fallback={
                <Box w="100%" h="100%" borderRadius="full" display="flex" alignItems="center" justifyContent="center" sx={{ background: esfera(tipo) }}>
                  <Text color="rgba(0,0,0,0.5)" fontWeight="900" lineHeight="1"
@@ -114,6 +119,7 @@ function Esfera({ tipo, size, glow = true }: { tipo: Tipo; size: any; glow?: boo
 
 // ── Ficha arrastrable ───────────────────────────────────────────────────────
 function FichaArrastrable({ pieza, onSoltar, enterDelay = 0, colocada = false }: { pieza: Pieza; onSoltar: (pieza: Pieza, rect: DOMRect) => boolean; enterDelay?: number; colocada?: boolean }) {
+  const t = useT();
   const [arrastrando, setArrastrando] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const controls = useAnimationControls();
@@ -128,7 +134,7 @@ function FichaArrastrable({ pieza, onSoltar, enterDelay = 0, colocada = false }:
       <Box display="flex" flexDirection="column" alignItems="center" gap={1} flexShrink={0} visibility="hidden" aria-hidden>
         <Esfera tipo={pieza.tipo} size={{ base: "48px", md: "58px" }} />
         <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
-              letterSpacing="0.06em" textTransform="uppercase">{LABEL[pieza.tipo]}</Text>
+              letterSpacing="0.06em" textTransform="uppercase">{t(LABEL[pieza.tipo])}</Text>
       </Box>
     );
   }
@@ -158,7 +164,7 @@ function FichaArrastrable({ pieza, onSoltar, enterDelay = 0, colocada = false }:
       <Text color={fisiologiaTxt} fontSize={{ base: "3xs", md: "2xs" }} fontWeight="700"
             letterSpacing="0.06em" textTransform="uppercase" pointerEvents="none"
             style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-        {LABEL[pieza.tipo]}
+        {t(LABEL[pieza.tipo])}
       </Text>
     </MBox>
   );
@@ -202,6 +208,7 @@ function AtomoDibujado({ def }: { def: AtomoDef }) {
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaAtomos() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [idx, setIdx] = useState(0);
@@ -327,16 +334,16 @@ export default function MetodoFisiologiaAtomos() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Átomos"
+            title={t("fisiologia.atomos.titulo")}
             pageLabel="2/5"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Partículas", onClick: () => navigate("/metodo/fisiologia/particulas") }}
+            prev={{ label: `← ${t("fisiologia.particulas.titulo")}`, onClick: () => navigate("/metodo/fisiologia/particulas") }}
             extra={celulasBtn}
-            next={{ label: "Moléculas →", onClick: continuar, disabled: !todoHecho, disabledTooltip: "Primero construye los dos átomos" }}
+            next={{ label: `${t("fisiologia.moleculas.titulo")} →`, onClick: continuar, disabled: !todoHecho, disabledTooltip: t("fisiologia.atomos.bloqueo") }}
           />
           </Reveal>
 
@@ -346,7 +353,7 @@ export default function MetodoFisiologiaAtomos() {
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
                   <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                                       style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                    Construye un átomo de {def.nombre}.
+                    {t("fisiologia.atomos.instruccionGeneral", { atomo: t(def.nombreKey) })}
                 </Text>
               </MBox>
             )}
@@ -394,7 +401,7 @@ export default function MetodoFisiologiaAtomos() {
                             <Text position="relative" zIndex={2} color={`${fisiologiaTxt}cc`}
                                   fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" pointerEvents="none"
                                   style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
-                              el núcleo
+                              {t("fisiologia.atomos.nucleo")}
                             </Text>
                           )}
                         </Box>
@@ -419,7 +426,7 @@ export default function MetodoFisiologiaAtomos() {
                                                                        colocada={colocadas.some((c) => c.id === p.id)} />))}
                         </AnimatePresence>
                       </Box>
-                      {pendientes.length === 0 && (<Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">…formándose…</Text>)}
+                      {pendientes.length === 0 && (<Text color={`${fisiologiaTxt}bb`} fontSize="md" fontStyle="italic">{t("fisiologia.atomos.formandose")}</Text>)}
                       <Flex justify="center" gap={2} wrap="wrap" maxW="320px">
                         {Array.from({ length: total }).map((_, i) => (
                           <Box key={i} w="9px" h="9px" borderRadius="full"
@@ -449,7 +456,7 @@ export default function MetodoFisiologiaAtomos() {
                         <Box position="absolute" inset="-6%" borderRadius="full"
                              animation={`${shimmer} 3.6s ease-in-out infinite`} pointerEvents="none"
                              sx={{ boxShadow: `0 0 50px ${GLOW.electron}44, 0 0 90px ${GLOW.proton}33` }} />
-                        <Image src={def.img} alt={`Átomo de ${def.nombre}`} w="100%" h="100%" objectFit="contain"
+                        <Image src={def.img} alt={t("fisiologia.atomos.alt", { atomo: t(def.nombreKey) })} w="100%" h="100%" objectFit="contain"
                                fallbackStrategy="onError"
                                onLoad={() => setImgOk(true)}
                                opacity={imgOk ? 1 : 0} transition="opacity 0.5s ease"
@@ -471,15 +478,15 @@ export default function MetodoFisiologiaAtomos() {
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
                       <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                             letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
-                        {def.titulo}
+                        {t(def.titulo)}
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />
-                      {def.parrafos.map((p, i) => (
-                        <Text key={i} color={i === def.parrafos.length - 1 ? fisiologiaTxt : fisiologiaTxt}
+                      {def.parrafos.map((clave, i) => (
+                        <Text key={clave} color={fisiologiaTxt}
                               fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
                               fontWeight={i === def.parrafos.length - 1 ? "600" : "400"} style={{ textShadow: INK }}>
-                          {p}
+                          <TextoRico>{t(clave)}</TextoRico>
                         </Text>
                       ))}
 
@@ -492,7 +499,7 @@ export default function MetodoFisiologiaAtomos() {
                              letterSpacing="0.05em" cursor="pointer" transition="all 0.2s"
                              boxShadow={`0 0 18px ${fisiologiaTxt}66, 0 0 40px ${fisiologiaTxt}33`}
                              _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88` }}>
-                          Ahora, el Helio →
+                          {t("fisiologia.atomos.siguiente")}
                         </Box>
                       )}
                     </Flex>
@@ -507,7 +514,7 @@ export default function MetodoFisiologiaAtomos() {
                        fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                        _hover={{ bg: "rgba(255,255,255,0.16)", color: "white", borderColor: `${fisiologiaTxt}aa` }}>
-                    ↺ Volver a hacer
+                    {t("metodo.volverAHacer")}
                   </Box>
                 </Flex>
               </MBox>

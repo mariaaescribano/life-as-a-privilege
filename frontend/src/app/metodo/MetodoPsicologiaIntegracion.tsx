@@ -37,6 +37,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
@@ -140,6 +141,7 @@ function ColumnaHeaderBox({ icono, titulo, apoyo, dark }: { icono: React.ReactNo
 }
 
 export default function MetodoPsicologiaIntegracion() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -367,16 +369,16 @@ export default function MetodoPsicologiaIntegracion() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Relación"
+              title={t("metodo.psico.paso.relacion")}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               step={{ current: 14, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Narra", onClick: irANarra }}
+              prev={{ label: `← ${t("metodo.psico.narra")}`, onClick: irANarra }}
               next={{
-                label: "Recuérdate →",
+                label: `${t("metodo.psico.paso.recuerdate")} →`,
                 onClick: irARecuerdate,
                 disabled: !hayRelacion,
                 disabledTooltip: "Crea al menos una relación para continuar.",
@@ -386,8 +388,7 @@ export default function MetodoPsicologiaIntegracion() {
 
             {/* Intro: la idea de la proyección */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-            <IntroRecorrido>
-              Tus arquetipos muestran dónde y cómo fuiste herido. Relaciona tus Heridas con tus Arquetipos, ponles nombre y deja de cargar con ellas en silencio. </IntroRecorrido>
+            <IntroRecorrido>{t("metodo.psico.relacionIntro")}</IntroRecorrido>
             </Reveal>
 
             {/* ════════ TRES COLUMNAS ════════ */}
@@ -400,10 +401,10 @@ export default function MetodoPsicologiaIntegracion() {
                      border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo="Tus heridas" apoyo="Tócalas o arrástralas para relacionarlas." />
+                    <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo={t("metodo.psico.paso.tusHeridas")} apoyo="Tócalas o arrástralas para relacionarlas." />
                     <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                       {heridas.length === 0 ? (
-                        <EstadoVacio texto="Aún no has creado tus heridas." accion="Ir a Heridas →"
+                        <EstadoVacio texto={t("metodo.psico.sinHeridasAun")} accion="Ir a Heridas →"
                                      onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`)} />
                       ) : (
                         <Flex direction="column" gap={2.5}>
@@ -434,7 +435,7 @@ export default function MetodoPsicologiaIntegracion() {
                        bgSize="cover" bgPosition="center" />
                   {/* pb permanente: siempre deja un respiro al fondo del scroll. */}
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={{ base: 3, md: 4 }}>
-                    <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />} titulo="Tus arquetipos"
+                    <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />} titulo={t("metodo.psico.tusArquetipos")}
                                       apoyo={arquetipos.length === 0
                                         ? "Se abren cuando tengas hecha tu carta astral."
                                         : "Toca una carta para relacionarla; el ojo abre su lectura."} />
@@ -485,14 +486,12 @@ export default function MetodoPsicologiaIntegracion() {
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox icono={<RelacionIcon size={22} color={TINTA} opacity={0.9} />} titulo="Tus relaciones" apoyo="Cada relación es un box. Ponle título y escribe lo que tú ves." />
+                    <ColumnaHeaderBox icono={<RelacionIcon size={22} color={TINTA} opacity={0.9} />} titulo={t("metodo.psico.tusRelaciones")} apoyo="Cada relación es un box. Ponle título y escribe lo que tú ves." />
                     <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
                       {relaciones.length === 0 ? (
                         <Flex direction="column" align="center" justify="center" h="100%" gap={2} textAlign="center" px={4}>
                           <RelacionIcon size={26} color={TINTA} opacity={0.45} />
-                          <Text color={TINTA} opacity={0.7} fontStyle="italic" fontSize="sm">
-                            Pulsa «Añadir relación» y empieza a reunir heridas y arquetipos.
-                          </Text>
+                          <Text color={TINTA} opacity={0.7} fontStyle="italic" fontSize="sm">{t("metodo.psico.relacionVacio")}</Text>
                         </Flex>
                       ) : (
                         relaciones.map((c) => (
@@ -517,7 +516,7 @@ export default function MetodoPsicologiaIntegracion() {
                            boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
                            _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
                         <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                             style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>+ Añadir relación</Box>
+                             style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.anadirRelacion")}</Box>
                       </Box>
                       <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
                     </Flex>
@@ -581,6 +580,7 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer, onDragStart, onD
   item: ArqItem; color: string; symbol: string; activo: boolean;
   onTap: () => void; onLeer: () => void; onDragStart: () => void; onDragEnd: () => void;
 }) {
+  const t = useT();
   return (
     <Box position="relative" flex="1" minW={0} borderRadius="14px" overflow="hidden"
          border={`1.5px solid ${activo ? color : `${color}77`}`}
@@ -598,7 +598,7 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer, onDragStart, onD
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onLeer(); }}
            position="absolute" top="6px" right="6px" zIndex={2} w="24px" h="24px" borderRadius="full"
            bg="rgba(0,0,0,0.5)" border={`1px solid ${color}66`} display="flex" alignItems="center" justifyContent="center"
-           cursor="pointer" title="Leer" _hover={{ bg: "rgba(0,0,0,0.78)", borderColor: color }}>
+           cursor="pointer" title={t("metodo.psico.leer")} _hover={{ bg: "rgba(0,0,0,0.78)", borderColor: color }}>
         <EyeIcon color={color} />
       </Box>
 
@@ -626,6 +626,7 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
   onActivar: () => void; onTitulo: (v: string) => void; onTexto: (v: string) => void;
   onQuitarNudo: (n: string) => void; onQuitarArq: (a: ArquetipoRef) => void; onBorrar: () => void;
 }) {
+  const t = useT();
   const vacio = c.nudos.length === 0 && c.arquetipos.length === 0;
   const color = colorRelacion(c.id);
   return (
@@ -639,14 +640,14 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
         <Flex align="center" gap={2} mb={3}>
           <RelacionIcon size={18} color={color} />
           <Input value={c.titulo} onChange={(e) => onTitulo(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                 placeholder="Título de la relación…" variant="unstyled" flex="1"
+                 placeholder={t("metodo.psico.tituloRelacion")} variant="unstyled" flex="1"
                  color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
                  fontSize={{ base: "md", md: "lg" }} sx={{ caretColor: TINTA }}
                  _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 600 }} />
           <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onBorrar(); }}
                w="22px" h="22px" borderRadius="full" bg={`${TINTA}14`} color={TINTA} flexShrink={0}
                display="flex" alignItems="center" justifyContent="center" fontSize="11px" cursor="pointer"
-               _hover={{ bg: `${TINTA}26` }} title="Borrar relación">✕</Box>
+               _hover={{ bg: `${TINTA}26` }} title={t("metodo.psico.borrarRelacion")}>✕</Box>
         </Flex>
 
         {/* Piezas reunidas */}
@@ -674,7 +675,7 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
         </Box>
 
         <Textarea value={c.texto} onChange={(e) => onTexto(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                  placeholder="¿Qué relación encuentras? Escribe lo que tú ves…"
+                  placeholder={t("metodo.psico.queRelacion")}
                   minH="78px" bg="rgba(255,255,255,0.6)" border={`1px solid ${TINTA}3a`} color={TINTA}
                   borderRadius="lg" px={3} py={2} fontFamily="'EB Garamond', serif"
                   fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" sx={{ caretColor: TINTA }}
@@ -689,6 +690,7 @@ function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQui
 function Chip({ icon, label, onRemove, fuerte }: {
   icon: React.ReactNode; label: string; onRemove: () => void; fuerte?: boolean;
 }) {
+  const t = useT();
   return (
     <Flex align="center" gap={1.5} pl={2.5} pr={1.5} py={1} borderRadius="full"
           bg={fuerte ? TINTA : `${TINTA}12`} color={fuerte ? PAPEL : TINTA}
@@ -697,7 +699,7 @@ function Chip({ icon, label, onRemove, fuerte }: {
       <Text fontSize="xs" fontWeight="600" lineHeight="1.2">{label}</Text>
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemove(); }} w="18px" h="18px" borderRadius="full"
            bg={fuerte ? `${PAPEL}33` : `${TINTA}1a`} display="flex" alignItems="center" justifyContent="center"
-           fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title="Quitar">✕</Box>
+           fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title={t("metodo.psico.quitar")}>✕</Box>
     </Flex>
   );
 }

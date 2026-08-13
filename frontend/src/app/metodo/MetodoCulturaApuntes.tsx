@@ -17,6 +17,7 @@
 // enseña un error: devuelve a la pantalla de elegir.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useMemo, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
@@ -31,6 +32,7 @@ import { CreaTusApuntes } from "../../components/metodo/CreaTusApuntes";
 import {
   esHistoriaConApuntes, historiasParaElegir, libroApuntesCultura,
 } from "../../components/metodo/apuntes/culturaApuntes";
+import { tituloHistoria } from "../../components/metodo/culturaHistorias";
 import { disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
@@ -40,6 +42,7 @@ import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../G
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${culturaTxt}1a, 0 0 48px ${culturaTxt}10`;
 
 export default function MetodoCulturaApuntes() {
+  const t = useT();
   const navigate = useNavigate();
   const { historiaKey } = useParams<{ historiaKey?: string }>();
   const [loading, setLoading] = useState(true);
@@ -102,15 +105,15 @@ export default function MetodoCulturaApuntes() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CulturaIcon size={{ base: "40px", md: "56px" }} />}
-              title={eligiendo ? "Tus apuntes" : libro!.titulo.replace(/^Mis apuntes de /, "")}
+              title={eligiendo ? t("metodo.cultura.paso.apuntes") : tituloHistoria(historiaKey)}
               compact
               bgColor={`${culturaBg}dd`}
               color={culturaTxt}
               nom={culturaNom}
               mb={0}
               prev={eligiendo
-                ? { label: "Historias", arrow: "prev", onClick: () => navigate("/metodo/cultura/historias") }
-                : { label: "Tus apuntes", arrow: "prev", onClick: () => navigate("/metodo/cultura/apuntes") }}
+                ? { label: t("metodo.cultura.paso.historias"), arrow: "prev", onClick: () => navigate("/metodo/cultura/historias") }
+                : { label: t("metodo.cultura.paso.apuntes"), arrow: "prev", onClick: () => navigate("/metodo/cultura/apuntes") }}
             />
           </Reveal>
 
@@ -120,13 +123,11 @@ export default function MetodoCulturaApuntes() {
               <Reveal direction="up" distance={20} delay={0.1} duration={0.65} display="flex" justifyContent="center">
                 <Flex direction="column" align="center" gap={2} maxW="680px">
                   <Text color="white" fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" textAlign="center">
-                    Llévate por escrito lo que has recorrido. Elige de qué Historia quieres los apuntes
-                    y dentro marcas las etapas que te interesan: se te monta un cuaderno con eso y nada más.
+                    {t("metodo.cultura.apuntes.intro1")}
                   </Text>
                   <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.9}
                         textAlign="center">
-                    Un cuaderno por Historia, porque las seis juntas no caben en un solo archivo.
-                    Puedes volver y montarlos cuantas veces quieras.
+                    {t("metodo.cultura.apuntes.intro2")}
                   </Text>
                 </Flex>
               </Reveal>
@@ -136,7 +137,7 @@ export default function MetodoCulturaApuntes() {
                   <Reveal key={h.key} direction="up" distance={26} scaleFrom={0.97} delay={0.14 + i * 0.08} duration={0.7}>
                     <Box h="100%">
                       <FotoBox
-                        titulo={h.titulo}
+                        titulo={tituloHistoria(h.key)}
                         emoji={h.emoji}
                         foto={h.portada}
                         nom={culturaNom}
@@ -147,7 +148,9 @@ export default function MetodoCulturaApuntes() {
                       />
                       {/* Cuánto trae dentro, para decidir sin entrar. */}
                       <Text color="white" fontSize="sm" textAlign="center" mt={2.5} opacity={0.9}>
-                        {h.etapas} {h.etapas === 1 ? "etapa" : "etapas"} · {h.momentos} momentos
+                        {t(h.etapas === 1 ? "metodo.cultura.apuntes.etapa" : "metodo.cultura.apuntes.etapas", { n: h.etapas })}
+                        {" · "}
+                        {t("metodo.cultura.apuntes.momentos", { n: h.momentos })}
                       </Text>
                     </Box>
                   </Reveal>

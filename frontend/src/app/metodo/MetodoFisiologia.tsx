@@ -103,15 +103,15 @@ export default function MetodoFisiologia() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Fisiología"
+            title={t("disciplina.fisiologia")}
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Med. China", onClick: () => navigate("/metodo/tcm/cursos") }}
+            prev={{ label: `← ${t("disciplina.medicinaChina.corto")}`, onClick: () => navigate("/metodo/tcm/cursos") }}
             extra={celulasBtn}
-            next={{ label: "Comenzar →", onClick: comenzar }}
+            next={{ label: `${t("fisiologia.comenzar")} →`, onClick: comenzar }}
           />
           </Reveal>
 
@@ -156,7 +156,7 @@ export default function MetodoFisiologia() {
         themeColor={fisiologiaTxt}
         disciplinaBgImage="/img/fondos/fisio.webp"
         disciplinaBgColor={fisiologiaBg}
-        continueLabel="Fisiología"
+        continueLabel={t("disciplina.fisiologia")}
         onContinue={intro.close}
         // El botón «Fisiología →» usa la imagen de la disciplina de fondo + velo
         // (como el botón «Saltar»), en vez de un relleno de color sólido.

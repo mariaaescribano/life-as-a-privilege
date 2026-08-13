@@ -19,6 +19,7 @@ import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const MotionBox = motion(Box) as any;
 
@@ -128,6 +129,7 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
 }
 
 export default function MetodoAstrologiaLectura() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [retos, setRetos] = useState<Reto[]>([]);
@@ -183,16 +185,16 @@ export default function MetodoAstrologiaLectura() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Puntos clave"
+              title={t("metodo.astro.paso.puntosClave")}
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
               step={{ current: 4, total: 9 }}
               mb={0}
-              prev={{ label: "← Arquetipos", onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
+              prev={{ label: `← ${t("metodo.astro.paso.arquetipos")}`, onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
               next={{
-                label: "Casas →",
+                label: `${t("metodo.astro.paso.casas")} →`,
                 // Antes de pasar a «Casas» intercalamos el cómic de las casas.
                 onClick: () => setComicCasasOpen(true),
                 disabled: !todosRetosLeidos,
@@ -207,7 +209,7 @@ export default function MetodoAstrologiaLectura() {
                   display="flex" flexDirection="column" alignItems="center" gap={3}>
             {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
             <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" textAlign="center" maxW="560px">
-              Pulsa sobre cada estrella para descubrir tus puntos clave.
+              {t("metodo.astro.pulsaEstrella")}
             </Text>
             {retos.length > 0 && (
               <Text color={todosRetosLeidos ? astrologiaTxt : `${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }}
@@ -243,7 +245,7 @@ export default function MetodoAstrologiaLectura() {
                 </Box>
               ) : (
                 <Text color={`${astrologiaTxt}aa`} fontSize="md" fontStyle="italic" textAlign="center" mt={8}>
-                  Tus puntos clave aparecerán aquí muy pronto.
+                  {t("metodo.astro.puntosClavePronto")}
                 </Text>
               )}
             </Box>

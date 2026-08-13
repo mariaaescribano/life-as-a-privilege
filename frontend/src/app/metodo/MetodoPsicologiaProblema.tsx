@@ -23,11 +23,13 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
 const INK_SHADOW = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaProblema() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -114,16 +116,16 @@ export default function MetodoPsicologiaProblema() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="Problemas"
+              title={t("metodo.psico.paso.problemas")}
               pageLabel="2/22"
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Vuelve", onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate("/metodo/psicologia"); } }}
+              prev={{ label: `← ${t("metodo.psico.paso.vuelveATi")}`, onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate("/metodo/psicologia"); } }}
               next={{
-                label: "ACE →",
+                label: `${t("metodo.psico.paso.ace")} →`,
                 onClick: irAAce,
                 // No se puede avanzar a ACE sin haber escrito algo en el box.
                 disabled: problema.trim().length === 0,

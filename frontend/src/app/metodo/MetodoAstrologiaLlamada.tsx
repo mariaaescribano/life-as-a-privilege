@@ -9,6 +9,7 @@ import { AgendarLlamada } from "../../components/global/AgendarLlamada";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { Reveal } from "../../components/global/Reveal";
 import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 
 /**
  * Penúltima pantalla del Recorrido de Astrología: reservar una llamada (de pago,
@@ -17,6 +18,7 @@ import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../.
  * siguiente son los Cursos de Astrología (MetodoAstrologiaCursos).
  */
 export default function MetodoAstrologiaLlamada() {
+  const t = useT();
   const navigate = useNavigate();
   const [comicOpen, setComicOpen] = useState(false);
 
@@ -33,15 +35,15 @@ export default function MetodoAstrologiaLlamada() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Llamada"
+              title={t("metodo.astro.paso.llamada")}
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
               step={{ current: 8, total: 9 }}
               mb={0}
-              prev={{ label: "← Tu carta en PDF", onClick: () => navigate("/metodo/astrologia/pdf") }}
-              extra={{ label: "Ilustraciones", onClick: () => setComicOpen(true)}}
-              next={{ label: "Cursos →", onClick: () => navigate("/metodo/astrologia/cursos") }}
+              prev={{ label: `← ${t("metodo.astro.paso.pdf")}`, onClick: () => navigate("/metodo/astrologia/pdf") }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
+              next={{ label: `${t("metodo.astro.paso.cursos")} →`, onClick: () => navigate("/metodo/astrologia/cursos") }}
             />
           </Reveal>
 
@@ -53,7 +55,7 @@ export default function MetodoAstrologiaLlamada() {
               textAlign="center"
               lineHeight="1.8"
             >
-              Integra tus arquetipos: agenda una llamada y no te quedes con dudas.
+              {t("metodo.astro.llamadaIntro")}
             </Text>
           </Reveal>
 
@@ -63,7 +65,7 @@ export default function MetodoAstrologiaLlamada() {
               bgColor={astrologiaBg}
               disciplinaNom={astrologiaNom}
               precio={20}
-              titulo="Reserva tu llamada de astrología"
+              titulo={t("metodo.astro.reservaLlamada")}
             />
           </Reveal>
         </Flex>

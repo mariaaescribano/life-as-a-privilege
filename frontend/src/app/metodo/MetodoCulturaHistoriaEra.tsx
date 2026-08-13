@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex } from "@chakra-ui/react";
@@ -27,6 +28,7 @@ const CULTURA_IMG = "/img/fondos/cultura.webp";
 const PRIMERA_RONDA = 6;
 
 export default function MetodoCulturaHistoriaEra() {
+  const t = useT();
   const navigate = useNavigate();
   const { historiaKey, eraKey } = useParams<{ historiaKey: string; eraKey: string }>();
   const [loading, setLoading] = useState(true);
@@ -131,18 +133,18 @@ export default function MetodoCulturaHistoriaEra() {
               color={culturaTxt}
               nom={culturaNom}
               mb={0}
-              prev={{ label: "← La Historia", onClick: () => navigate(volverHistoria) }}
+              prev={{ label: `← ${t("metodo.cultura.paso.historia")}`, onClick: () => navigate(volverHistoria) }}
               // Avanzar/retroceder entre eras sin volver al índice. En la última
               // era el botón se queda deshabilitado (con su explicación) para que
               // no baile la fila de botones de una era a otra.
               extra={eraAnterior
                 ? { label: eraAnterior.titulo, arrow: "prev", onClick: () => irAEra(eraAnterior.key) }
-                : { label: "Era anterior", arrow: "prev", onClick: () => {}, disabled: true,
-                    disabledTooltip: "Es la primera era de la Historia" }}
+                : { label: t("metodo.cultura.era.anterior"), arrow: "prev", onClick: () => {}, disabled: true,
+                    disabledTooltip: t("metodo.cultura.era.esPrimera") }}
               next={eraSiguiente
                 ? { label: eraSiguiente.titulo, arrow: "next", onClick: () => irAEra(eraSiguiente.key) }
-                : { label: "Era siguiente", arrow: "next", onClick: () => {}, disabled: true,
-                    disabledTooltip: "Es la última era de la Historia" }}
+                : { label: t("metodo.cultura.era.siguiente"), arrow: "next", onClick: () => {}, disabled: true,
+                    disabledTooltip: t("metodo.cultura.era.esUltima") }}
             />
           </Reveal>
 

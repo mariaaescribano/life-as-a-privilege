@@ -26,10 +26,11 @@ import {
 } from "../../GlobalVariables";
 import {
   ESPEJO_FOTO,
-  ORGANOS_SONRISA,
   SONRISA_CAMPO,
   type OrganoSonrisa,
 } from "../../hardCoded/espacio/SonrisaFisiologia";
+import { useOrganosSonrisa } from "../../hardCoded/espacio/SonrisaFisiologia.en";
+import { useT, type ClaveTexto } from "../../i18n";
 
 // ── La sonrisa interior ──────────────────────────────────────────────────────
 // Práctica que cierra el recorrido de Fisiología (entre Niveles y Cursos). Todo
@@ -116,6 +117,7 @@ function PuntoOrgano({ organo, hecho, onClick }: { organo: OrganoSonrisa; hecho:
 // El cuerpo es bonito pero los puntos son pequeños, sobre todo en el móvil: esta
 // fila da la lista completa y deja claro cuántos quedan.
 function ChipOrgano({ organo, hecho, onClick }: { organo: OrganoSonrisa; hecho: boolean; onClick: () => void }) {
+  const t = useT();
   return (
     <Flex
       as="button"
@@ -147,7 +149,7 @@ function ChipOrgano({ organo, hecho, onClick }: { organo: OrganoSonrisa; hecho: 
       {hecho && (
         <Box position="relative" zIndex={1}>
           <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} size="20px" iconSize="11px"
-                      title="Gracias dadas" />
+                      title={t("fisiologia.sonrisa.graciasDadas")} />
         </Box>
       )}
     </Flex>
@@ -155,14 +157,19 @@ function ChipOrgano({ organo, hecho, onClick }: { organo: OrganoSonrisa; hecho: 
 }
 
 // ── Los tres pasos de la práctica (mira · respira · agradece) ────────────────
-const PASOS: { n: string; titulo: string; texto: string }[] = [
-  { n: "1", titulo: "Mira", texto: "Pulsa un órgano y míralo. Eso está dentro de ti ahora mismo." },
-  { n: "2", titulo: "Respira", texto: "Toma aire despacio y llévalo, con la atención, hasta ese lugar de tu cuerpo." },
-  { n: "3", titulo: "Agradece", texto: "Dale las gracias por lo que lleva haciendo por ti toda tu vida." },
+// `titulo` y `texto` guardan la CLAVE del diccionario, no el texto: el array se
+// calcula UNA vez al importar el fichero y se quedaría congelado en el idioma
+// de arranque.
+const PASOS: { n: string; titulo: ClaveTexto; texto: ClaveTexto }[] = [
+  { n: "1", titulo: "fisiologia.sonrisa.paso1", texto: "fisiologia.sonrisa.paso1.texto" },
+  { n: "2", titulo: "fisiologia.sonrisa.paso2", texto: "fisiologia.sonrisa.paso2.texto" },
+  { n: "3", titulo: "fisiologia.sonrisa.paso3", texto: "fisiologia.sonrisa.paso3.texto" },
 ];
 
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaSonrisa() {
+  const t = useT();
+  const ORGANOS_SONRISA = useOrganosSonrisa();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [abierto, setAbierto] = useState<OrganoSonrisa | null>(null);
@@ -228,15 +235,15 @@ export default function MetodoFisiologiaSonrisa() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-              title="La sonrisa interior"
+              title={t("fisiologia.sonrisa.titulo")}
               compact
               bgColor={`${fisiologiaBg}dd`}
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
+              prev={{ label: `← ${t("fisiologia.niveles.titulo")}`, onClick: () => navigate("/metodo/fisiologia/niveles") }}
               extra={celulasBtn}
-              next={{ label: "Cursos →", onClick: () => navigate("/metodo/fisiologia/cursos") }}
+              next={{ label: `${t("metodo.nutri.paso.cursos")} →`, onClick: () => navigate("/metodo/fisiologia/cursos") }}
             />
           </Reveal>
 
@@ -244,9 +251,7 @@ export default function MetodoFisiologiaSonrisa() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
             <Flex direction="column" align="center" gap={3} maxW="760px" textAlign="center">
               <Text color="white" fontSize={{ base: "md", md: "xl" }} fontStyle="italic" lineHeight="1.8">
-                Has recorrido tu cuerpo de la partícula al organismo. Ahora mírate: todo eso está dentro de ti
-                mientras lees esto. Esta práctica es antigua y se llama «la sonrisa interior»: consiste en visitar tus órganos uno a uno
-                y darles las gracias.
+                {t("fisiologia.sonrisa.intro")}
               </Text>
             </Flex>
           </Reveal>
@@ -275,12 +280,12 @@ export default function MetodoFisiologiaSonrisa() {
                   <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700}
                         fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.04em"
                         style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
-                    {p.titulo}
+                    {t(p.titulo)}
                   </Text>
                   <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
                         fontStyle="italic" lineHeight="1.6"
                         style={{ textShadow: "0 1px 5px rgba(0,0,0,0.8)" }}>
-                    {p.texto}
+                    {t(p.texto)}
                   </Text>
                 </Flex>
               ))}
@@ -316,7 +321,7 @@ export default function MetodoFisiologiaSonrisa() {
                   negro. Sin zIndex se pinta encima del fondo igual (va después
                   en el DOM) y el `screen` sí alcanza al fondo. */}
               <Box position="relative" w="100%" aspectRatio={1024 / 1536}>
-                <Box as="img" src={encodeURI(ESPEJO_FOTO)} alt="Tu cuerpo"
+                <Box as="img" src={encodeURI(ESPEJO_FOTO)} alt={t("fisiologia.sonrisa.cuerpoAlt")}
                      position="absolute" inset={0} w="100%" h="100%"
                      style={{ objectFit: "contain", mixBlendMode: "screen" }} />
 
@@ -339,8 +344,8 @@ export default function MetodoFisiologiaSonrisa() {
                   <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700}
                         letterSpacing="0.04em" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
                     {completo
-                      ? "Has sonreído a todo tu cuerpo"
-                      : `Has sonreído a ${hechos} de ${ORGANOS_SONRISA.length}`}
+                      ? t("fisiologia.sonrisa.completo")
+                      : t("fisiologia.sonrisa.progreso", { hechos, total: ORGANOS_SONRISA.length })}
                   </Text>
                 </Flex>
                 <Box w="100%" maxW="260px" h="4px" borderRadius="full" bg={`${fisiologiaTxt}2a`} overflow="hidden">
@@ -375,13 +380,12 @@ export default function MetodoFisiologiaSonrisa() {
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700}
                       fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.3"
                       style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
-                  Todo tu cuerpo ha recibido tu sonrisa
+                  {t("fisiologia.sonrisa.todoElCuerpo")}
                 </Text>
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }}
                       fontStyle="italic" lineHeight="1.8"
                       style={{ textShadow: "0 1px 5px rgba(0,0,0,0.85)" }}>
-                  Nada de lo que has leído en este recorrido era teoría: todo estaba pasando dentro de ti mientras lo
-                  leías, y sigue pasando ahora. Vuelve a esta página cuando quieras acordarte.
+                  {t("fisiologia.sonrisa.cierre")}
                 </Text>
               </Flex>
             </Reveal>
@@ -411,10 +415,10 @@ export default function MetodoFisiologiaSonrisa() {
             leido(SONRISA_CAMPO, abierto.key) ? (
               <Flex align="center" gap={2.5} color={fisiologiaTxt}>
                 <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} size="26px" iconSize="15px"
-                            title="Gracias dadas" />
+                            title={t("fisiologia.sonrisa.graciasDadas")} />
                 <Text fontSize={{ base: "md", md: "lg" }} fontWeight={700} letterSpacing="0.04em"
                       style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
-                  Ya le has sonreído
+                  {t("fisiologia.sonrisa.yaSonreido")}
                 </Text>
               </Flex>
             ) : (
@@ -433,7 +437,7 @@ export default function MetodoFisiologiaSonrisa() {
                 <Text position="relative" zIndex={1} color={fisiologiaTxt} fontWeight={700}
                       fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.04em"
                       style={{ textShadow: "0 1px 5px rgba(0,0,0,0.8)" }}>
-                  Gracias
+                  {t("fisiologia.sonrisa.gracias")}
                 </Text>
               </Flex>
             )

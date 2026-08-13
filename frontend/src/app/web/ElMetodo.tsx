@@ -598,7 +598,7 @@ export default function ElMetodo() {
       </Flex>
 
       {/* ══ 1. HERO ══
-          Antes esto era «EL MAPA / del Vivir como Privilegio»: el nombre del
+          Antes esto era «EL MAPA / de Life as a Privilege»: el nombre del
           producto y nada más. Quien llega de fuera no sabe todavía qué es El
           Mapa, así que un nombre no le dice nada y no se queda.
           Ahora el titular nombra lo que le PASA a quien lee, el subtítulo dice

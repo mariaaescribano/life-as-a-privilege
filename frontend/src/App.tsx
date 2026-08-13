@@ -251,7 +251,7 @@ export default function App()
           as a Privilege (Welcome), como antes. `/welcome` se mantiene para que
           no se rompa ningún enlace antiguo: lleva a la misma página.
 
-          La landing de DOS proyectos (elegir entre «Vida como privilegio» y
+          La landing de DOS proyectos (elegir entre «Life as a Privilege» y
           «Nace una madre») está hecha y esperando en `app/web/Landing.tsx`,
           con sus textos en `i18n/textos/{es,en}/landing.ts` y sus datos en
           `data/landingProyectos.ts`. El día que «Nace una madre» exista, esto

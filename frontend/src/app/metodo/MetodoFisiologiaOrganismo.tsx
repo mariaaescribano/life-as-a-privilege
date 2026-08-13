@@ -14,12 +14,13 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { RECONSTRUCCION } from "../../components/metodo/comicReconstruccion";
 import { useComic } from "../../i18n/comics";
-import { useT } from "../../i18n";
+import { useT, TextoRico } from "../../i18n";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
   API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
-import { SISTEMAS, FRASE_ORGANISMO, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
+import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
+import { useSistemas, useFraseOrganismo } from "../../hardCoded/espacio/SistemasFisiologia.en";
 
 const MBox = motion(Box);
 const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
@@ -141,6 +142,8 @@ export default function MetodoFisiologiaOrganismo() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const SISTEMAS = useSistemas();
+  const FRASE_ORGANISMO = useFraseOrganismo();
   const [colocados, setColocados] = useState<string[]>([]); // keys en orden de colocación
   const [completo, setCompleto] = useState(false);
   const [frase, setFrase] = useState<string | null>(null);
@@ -249,7 +252,7 @@ export default function MetodoFisiologiaOrganismo() {
 
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="El cuerpo"
+            title={t("fisiologia.organismo.titulo")}
             pageLabel="4/4"
             compact
             maxW="1000px"
@@ -257,10 +260,10 @@ export default function MetodoFisiologiaOrganismo() {
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Sistemas", onClick: () => navigate("/metodo/fisiologia/sistemas") }}
+            prev={{ label: `← ${t("fisiologia.sistemas.titulo")}`, onClick: () => navigate("/metodo/fisiologia/sistemas") }}
             extra={celulasBtn}
-            next={{ label: "Niveles →", onClick: () => setComicOpen(true),
-                    disabled: !completo, disabledTooltip: "Primero crea al ser humano" }}
+            next={{ label: `${t("fisiologia.niveles.titulo")} →`, onClick: () => setComicOpen(true),
+                    disabled: !completo, disabledTooltip: t("fisiologia.organismo.bloqueo") }}
           />
 
           {/* Instrucción inicial que, al colocar un sistema, se sustituye por su
@@ -282,7 +285,7 @@ export default function MetodoFisiologiaOrganismo() {
                         textAlign="center">
                     <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                           maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                      Construye un ser humano.
+                      {t("fisiologia.organismo.instruccion")}
                     </Text>
                   </MBox>
                 )}
@@ -335,7 +338,7 @@ export default function MetodoFisiologiaOrganismo() {
                           <Flex position="absolute" inset="0" align="center" justify="center" pointerEvents="none">
                             <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                                   textAlign="center" px={6} style={{ textShadow: "0 1px 6px rgba(0,0,0,0.85)" }}>
-                              su lugar en el cuerpo
+                              {t("fisiologia.organismo.zona")}
                             </Text>
                           </Flex>
                         )}
@@ -350,7 +353,7 @@ export default function MetodoFisiologiaOrganismo() {
                       <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}
                             letterSpacing="0.12em" textTransform="uppercase" textAlign="center" mb={4}
                             style={{ textShadow: INK }}>
-                        Los sistemas · {colocados.length}/{total}
+                        {t("fisiologia.organismo.losSistemas")} · {colocados.length}/{total}
                       </Text>
                       {/* 6 HUECOS FIJOS en un grid de 3 columnas (2 filas). Cada
                           pieza tiene su celda: al soltar una en el círculo, en SU
@@ -392,7 +395,7 @@ export default function MetodoFisiologiaOrganismo() {
                         <Box position="absolute" inset="-4%" borderRadius="full" pointerEvents="none"
                              animation={`${shimmer} 3.6s ease-in-out infinite`}
                              sx={{ boxShadow: `0 0 50px ${fisiologiaTxt}55, 0 0 90px ${fisiologiaTxt}33` }} />
-                        <Image src={`${PRE}/cuerpo.png`} alt="Un ser humano" w="100%" h="100%" objectFit="contain"
+                        <Image src={`${PRE}/cuerpo.png`} alt={t("fisiologia.organismo.alt")} w="100%" h="100%" objectFit="contain"
                                fallbackStrategy="onError"
                                onLoad={() => setCuerpoOk(true)}
                                opacity={cuerpoOk ? 1 : 0} transition="opacity 0.5s ease"
@@ -409,21 +412,21 @@ export default function MetodoFisiologiaOrganismo() {
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} textAlign={{ base: "center", md: "left" }}>
                       <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
                             style={{ textShadow: INK }}>
-                        Has construido un ser humano.
+                        {t("fisiologia.organismo.hecho")}
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}aa, transparent)`} />
                       <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
                             style={{ textShadow: INK }}>
-                        Todos los <b>sistemas</b>, funcionando en armonía, forman un <b>organismo</b> completo.
+                        <TextoRico>{t("fisiologia.organismo.p1")}</TextoRico>
                       </Text>
                       <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
                             style={{ textShadow: INK }}>
-                        Has subido desde una sola partícula: átomos, moléculas, células, tejidos, órganos y sistemas.
+                        {t("fisiologia.organismo.p2")}
                       </Text>
                       <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.7"
                             style={{ textShadow: INK }}>
-                        Ese organismo entero, vivo y en marcha en este mismo instante, <b>eres tú</b>.
+                        <TextoRico>{t("fisiologia.organismo.p3")}</TextoRico>
                       </Text>
                     </Flex>
                   </PanelBox>
@@ -438,7 +441,7 @@ export default function MetodoFisiologiaOrganismo() {
                        fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }}
                        letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
                        _hover={{ bg: "rgba(255,255,255,0.16)", color: fisiologiaTxt, borderColor: `${fisiologiaTxt}aa` }}>
-                    ↺ Volver a hacer
+                    {t("metodo.volverAHacer")}
                   </Box>
                 </Flex>
               </MBox>
@@ -472,6 +475,7 @@ export default function MetodoFisiologiaOrganismo() {
 
 // ── Reserva del cuerpo: anillo de TODOS los sistemas iluminado (si falta cuerpo.png) ──
 function AnilloFinal() {
+  const t = useT();
   const total = SISTEMAS.length;
   return (
     <Box position="absolute" inset="0" borderRadius="full"
@@ -488,7 +492,7 @@ function AnilloFinal() {
       <Flex position="absolute" inset="0" align="center" justify="center" pointerEvents="none">
         <Text color={fisiologiaTxt} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="800"
               style={{ textShadow: `0 0 18px ${fisiologiaTxt}, 0 1px 4px rgba(0,0,0,0.7)` }}>
-          Tú
+          {t("fisiologia.organismo.tu")}
         </Text>
       </Flex>
     </Box>

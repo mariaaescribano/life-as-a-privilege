@@ -17,6 +17,7 @@ import {
   VataIcon, PittaIcon, KaphaIcon,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
+import { useT } from "../../i18n";
 import { DOSHA_CUERPO } from "../../hardCoded/metodo/doshaCuerpo";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 
@@ -113,6 +114,7 @@ function CheckRow({ label, checked, onToggle, color }: { label: string; checked:
 }
 
 export default function MetodoAyurvedaDoshaCuerpo() {
+  const t = useT();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
@@ -209,17 +211,17 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           <Flex direction="column" align="center" w="100%" maxW="640px" gap={6}>
             <MetodoStepHeader
               icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-              title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+              title={<>{t("metodo.ayur.doshaRotulo")} <Box as="span" color={meta.color}>{meta.label}</Box></>}
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
               mb={0}
-              prev={{ label: "← Descúbrete", onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/comenzar`) }}
+              prev={{ label: `← ${t("metodo.ayur.paso.descubrete")}`, onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/comenzar`) }}
               extra={ilustracionesBtn}
             />
             <Panel color={meta.color}>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={3} style={{ textShadow: INK_SHADOW }}>
-                Estoy preparando esta sección
+                {t("metodo.ayur.preparando")}
               </Text>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
                 «Así funciona tu cuerpo» para {meta.label} estará disponible muy pronto.
@@ -243,15 +245,15 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            title={<>{t("metodo.ayur.doshaRotulo")} <Box as="span" color={meta.color}>{meta.label}</Box></>}
             pageLabel="3/7"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Descúbrete", onClick: () => { void persist(reflexion); navigate(`/metodo/ayurveda/dosha/${doshaKey}/comenzar`); } }}
+            prev={{ label: `← ${t("metodo.ayur.paso.descubrete")}`, onClick: () => { void persist(reflexion); navigate(`/metodo/ayurveda/dosha/${doshaKey}/comenzar`); } }}
             extra={ilustracionesBtn}
-            next={{ label: "Equilibrio →", onClick: irSiguiente, disabled: !guardado, disabledTooltip: "Guarda tu reflexión para continuar." }}
+            next={{ label: `${t("metodo.ayur.paso.equilibrio")} →`, onClick: irSiguiente, disabled: !guardado, disabledTooltip: t("metodo.ayur.guardaReflexionCorto") }}
           />
           </Reveal>
 
@@ -336,7 +338,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
               <Textarea
                 value={reflexion}
                 onChange={(e) => { setReflexion(e.target.value); setGuardado(false); }}
-                placeholder="Escríbela aquí…"
+                placeholder={t("metodo.ayur.escribela")}
                 w="100%"
                 minH={{ base: "120px", md: "150px" }}
                 bg="rgba(255,251,243,0.45)"
@@ -393,11 +395,11 @@ export default function MetodoAyurvedaDoshaCuerpo() {
                 display="inline-flex" alignItems="center" gap={2.5}
                 _hover={{ transform: "translateY(-2px)", boxShadow: guardado ? `0 0 34px ${meta.color}aa` : `0 0 18px ${meta.color}55` }}
               >
-                Equilibrio →
+                {`${t("metodo.ayur.paso.equilibrio")} →`}
               </Box>
               {!guardado && (
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                  Guarda tu reflexión de arriba para continuar.
+                  {t("metodo.ayur.guardaReflexion")}
                 </Text>
               )}
             </Flex>

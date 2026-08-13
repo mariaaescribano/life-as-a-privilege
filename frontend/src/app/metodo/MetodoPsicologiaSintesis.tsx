@@ -47,6 +47,7 @@ import {
   neuropsicologiaTxt,
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
+import { useT, type ClaveTexto } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
@@ -55,11 +56,13 @@ const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicol
 
 // Las 4 preguntas de integración por relación (las mismas que en /mapa). Se
 // vuelcan aquí en Síntesis con lo que el usuario escribió.
-const INTEGRACION_PREGUNTAS: { key: "proteger" | "coste" | "verdadSana" | "recordatorio"; label: string }[] = [
-  { key: "proteger", label: "Qué intentaba proteger" },
-  { key: "coste", label: "Qué me cuesta mantenerlo" },
-  { key: "verdadSana", label: "La verdad más sana que quiero practicar" },
-  { key: "recordatorio", label: "Lo que quiero recordar" },
+// `label` guarda la CLAVE del diccionario: el array se calcula al importar y,
+// con el texto dentro, se quedaría congelado en el idioma de arranque.
+const INTEGRACION_PREGUNTAS: { key: "proteger" | "coste" | "verdadSana" | "recordatorio"; label: ClaveTexto }[] = [
+  { key: "proteger", label: "metodo.psico.integra.proteger" },
+  { key: "coste", label: "metodo.psico.integra.coste" },
+  { key: "verdadSana", label: "metodo.psico.integra.verdadSana" },
+  { key: "recordatorio", label: "metodo.psico.integra.recordatorio" },
 ];
 
 /** Todas las huellas marcadas a lo largo de la línea de Vida (sin duplicar). */
@@ -78,6 +81,7 @@ function todasLasHuellas(d: LineaDeVidaData): string[] {
 }
 
 export default function MetodoPsicologiaSintesis() {
+  const t = useT();
   const navigate = useNavigate();
   const { experienciaId } = useParams<{ experienciaId: string }>();
   const exp = experienciaById(experienciaId || "");
@@ -226,7 +230,7 @@ export default function MetodoPsicologiaSintesis() {
                 bg="rgba(255,251,243,0.72)" border={`2px solid ${TINTA}`}
                 boxShadow={`0 4px 16px rgba(94,45,16,0.18)`}>
             <Text color={TINTA} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" lineHeight="1">{score}</Text>
-            <Text color={`${TINTA}aa`} fontSize="xs" fontWeight="600" letterSpacing="0.08em">DE 10</Text>
+            <Text color={`${TINTA}aa`} fontSize="xs" fontWeight="600" letterSpacing="0.08em">{t("metodo.psico.deDiez")}</Text>
           </Flex>
         </Item>
         <Item flex="1" textAlign={{ base: "center", md: "left" }}>
@@ -275,7 +279,7 @@ export default function MetodoPsicologiaSintesis() {
               piezas={[...(c.nudos || []), ...(c.arquetipos || []).map((a) => arquetipoLabel(a))].filter(Boolean)}
               piezasLabel="Piezas que uniste"
               preguntas={INTEGRACION_PREGUNTAS
-                .map((p) => ({ pregunta: p.label, resp: ((c[p.key] as string) || "").trim() }))
+                .map((p) => ({ pregunta: t(p.label), resp: ((c[p.key] as string) || "").trim() }))
                 .filter((x) => x.resp)}
             />
           </Item>
@@ -325,9 +329,7 @@ export default function MetodoPsicologiaSintesis() {
     titulo: "Mi carta",
     node: (
       <Box>
-        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} mb={3} style={{ textShadow: INK_SHADOW }}>
-          Para cuando vuelva a sentirme bloqueado:
-        </Text>
+        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} mb={3} style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.paraCuandoVuelva")}</Text>
         {brujulaMensaje ? (
           <Cita texto={brujulaMensaje} />
         ) : (
@@ -364,7 +366,7 @@ export default function MetodoPsicologiaSintesis() {
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-                title="Síntesis"
+                title={t("metodo.psico.paso.sintesis")}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
@@ -372,17 +374,14 @@ export default function MetodoPsicologiaSintesis() {
                 step={{ current: 22, total: 23 }}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: "← Carta", onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
-                next={{ label: "Cursos →", onClick: () => navigate(`/metodo/psicologia/${exp.id}/cursos`) }}
+                prev={{ label: `← ${t("metodo.psico.paso.carta")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
+                next={{ label: `${t("metodo.psico.paso.cursosCorto")} →`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/cursos`) }}
               />
             </Reveal>
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
-              <IntroRecorrido>
-                Aquí está todo tu mapa, de principio a fin. Desde el problema con el que
-                llegaste hasta la carta que te escribiste. Léelo entero: esto eres tú.
-              </IntroRecorrido>
+              <IntroRecorrido>{t("metodo.psico.sintesisIntro")}</IntroRecorrido>
             </Reveal>
 
             {nada ? (
@@ -391,9 +390,7 @@ export default function MetodoPsicologiaSintesis() {
                    border={azulBorde} boxShadow={glowPanel} bgColor={neuropsicologiaBg}>
                 <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                 <Box position="relative" zIndex={1} px={{ base: 7, md: 11 }} py={{ base: 12, md: 16 }} textAlign="center">
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                    Aún no hay nada que sintetizar. A medida que recorras el camino, aquí aparecerá todo lo que escribas.
-                  </Text>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.sintesisVacia")}</Text>
                 </Box>
               </Box>
               </Reveal>
@@ -419,8 +416,8 @@ export default function MetodoPsicologiaSintesis() {
                     línea de Vida año a año, que es el documento más largo y no
                     cabía dentro del otro. */}
                 <CajaDescarga
-                  titulo="Llévate todo tu mapa"
-                  texto="Descárgalo en un cuaderno en PDF, cuidado y bonito, para releerlo siempre que lo necesites."
+                  titulo={t("metodo.psico.llevateMapa")}
+                  texto={t("metodo.psico.descargaCuaderno")}
                   boton="Descargar mi mapa"
                   descargando={descargando}
                   onClick={descargarPdf}
@@ -428,8 +425,8 @@ export default function MetodoPsicologiaSintesis() {
                 />
 
                 <CajaDescarga
-                  titulo="Llévate tu línea de Vida"
-                  texto="Descárgalo en un cuaderno en PDF, cuidado y bonito, para releerlo siempre que lo necesites."
+                  titulo={t("metodo.psico.llevateLinea")}
+                  texto={t("metodo.psico.descargaCuaderno")}
                   boton="Descargar mi línea de Vida"
                   descargando={descargandoLinea}
                   onClick={descargarLineaPdf}
@@ -447,7 +444,7 @@ export default function MetodoPsicologiaSintesis() {
       {/* «Volver arriba» · discreto, abajo a la derecha (sobre «¿Quieres compañía?»).
           Sube hasta la cabecera para que el usuario pueda seguir el recorrido. */}
       {mostrarArriba && (
-        <Box as="button" onClick={volverArriba} aria-label="Volver arriba" title="Volver arriba"
+        <Box as="button" onClick={volverArriba} aria-label={t("metodo.psico.volverArriba")} title={t("metodo.psico.volverArriba")}
              position="fixed" right={{ base: 4, md: 6 }} bottom={{ base: "66px", md: "84px" }} zIndex={20}
              w={{ base: "42px", md: "46px" }} h={{ base: "42px", md: "46px" }} borderRadius="full"
              display="flex" alignItems="center" justifyContent="center"

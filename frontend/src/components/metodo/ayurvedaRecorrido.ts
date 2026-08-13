@@ -1,3 +1,4 @@
+import { traducir } from "../../i18n";
 // ─────────────────────────────────────────────────────────────────────────
 // ÍNDICE DEL RECORRIDO · AYURVEDA
 //
@@ -17,28 +18,28 @@
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 
 /** Nivel 1 · las páginas comunes, las mismas sea cual sea tu doṣha. */
-export const AYURVEDA_MAPA: PasoRecorrido[] = [
-  { n: 1, titulo: "Ayurveda",   ruta: () => "/metodo/ayurveda" },
-  { n: 2, titulo: "Test",       ruta: () => "/metodo/ayurveda/test" },
-  { n: 3, titulo: "Resultado",  ruta: () => "/metodo/ayurveda/resultado" },
-  { n: 4, titulo: "Doṣhas",     ruta: () => "/metodo/ayurveda/tarjetas" },
-  { n: 5, titulo: "Prāṇāyāma",  ruta: (d) => `/metodo/ayurveda/dosha/${d}/pranayama` },
-  { n: 6, titulo: "Cursos",     ruta: (d) => `/metodo/ayurveda/dosha/${d}/cursos` },
+export const ayurvedaMapa = (): PasoRecorrido[] => [
+  { n: 1, titulo: traducir("disciplina.ayurveda"),           ruta: () => "/metodo/ayurveda" },
+  { n: 2, titulo: traducir("metodo.ayur.paso.test"),         ruta: () => "/metodo/ayurveda/test" },
+  { n: 3, titulo: traducir("metodo.ayur.paso.resultado"),    ruta: () => "/metodo/ayurveda/resultado" },
+  { n: 4, titulo: traducir("metodo.ayur.paso.doshas"),       ruta: () => "/metodo/ayurveda/tarjetas" },
+  { n: 5, titulo: traducir("metodo.ayur.paso.pranayama"),    ruta: (d) => `/metodo/ayurveda/dosha/${d}/pranayama` },
+  { n: 6, titulo: traducir("metodo.nutri.paso.cursos"),      ruta: (d) => `/metodo/ayurveda/dosha/${d}/cursos` },
 ];
 
 /** Nivel 2 · el submapa de UN doṣha. Fuera de un doṣha no es pulsable. */
-export const AYURVEDA_DOSHA_INDICE: PasoRecorrido[] = [
-  { n: 1, titulo: "Naturaleza",     ruta: (d) => `/metodo/ayurveda/dosha/${d}` },
-  { n: 2, titulo: "Descúbrete",     ruta: (d) => `/metodo/ayurveda/dosha/${d}/comenzar` },
-  { n: 3, titulo: "Cuerpo",         ruta: (d) => `/metodo/ayurveda/dosha/${d}/cuerpo` },
-  { n: 4, titulo: "Equilibrio",     ruta: (d) => `/metodo/ayurveda/dosha/${d}/desequilibrio` },
-  { n: 5, titulo: "Alimentación",   ruta: (d) => `/metodo/ayurveda/dosha/${d}/cuidarte` },
-  { n: 6, titulo: "Estilo de Vida", ruta: (d) => `/metodo/ayurveda/dosha/${d}/estilo` },
-  { n: 7, titulo: "Tu día",         ruta: (d) => `/metodo/ayurveda/dosha/${d}/dia` },
-  { n: 8, titulo: "Tu mapa",        ruta: (d) => `/metodo/ayurveda/dosha/${d}/recorrido` },
+export const ayurvedaDoshaIndice = (): PasoRecorrido[] => [
+  { n: 1, titulo: traducir("metodo.ayur.paso.naturaleza"),   ruta: (d) => `/metodo/ayurveda/dosha/${d}` },
+  { n: 2, titulo: traducir("metodo.ayur.paso.descubrete"),   ruta: (d) => `/metodo/ayurveda/dosha/${d}/comenzar` },
+  { n: 3, titulo: traducir("metodo.ayur.paso.cuerpo"),       ruta: (d) => `/metodo/ayurveda/dosha/${d}/cuerpo` },
+  { n: 4, titulo: traducir("metodo.ayur.paso.equilibrio"),   ruta: (d) => `/metodo/ayurveda/dosha/${d}/desequilibrio` },
+  { n: 5, titulo: traducir("metodo.ayur.paso.alimentacion"), ruta: (d) => `/metodo/ayurveda/dosha/${d}/cuidarte` },
+  { n: 6, titulo: traducir("metodo.ayur.paso.estilo"),       ruta: (d) => `/metodo/ayurveda/dosha/${d}/estilo` },
+  { n: 7, titulo: traducir("metodo.ayur.paso.tuDia"),        ruta: (d) => `/metodo/ayurveda/dosha/${d}/dia` },
+  { n: 8, titulo: traducir("metodo.ayur.paso.tuMapa"),       ruta: (d) => `/metodo/ayurveda/dosha/${d}/recorrido` },
 ];
 
-export const AYURVEDA_DOSHA_TOTAL = AYURVEDA_DOSHA_INDICE.length;
+export const AYURVEDA_DOSHA_TOTAL = ayurvedaDoshaIndice().length;
 
 // ─────────────────────────────────────────────────────────────────────────
 // ALCANZABILIDAD · «hasta dónde puede llegar» el usuario dentro del submapa de

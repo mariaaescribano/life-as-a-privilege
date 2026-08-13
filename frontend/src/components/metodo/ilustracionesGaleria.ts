@@ -55,6 +55,10 @@ import { CABALA_SENDERO_VINETAS } from "./cabalaSenderoIlustraciones";
 
 export interface IlustracionEntry {
   id: string;
+  /** Clave del cómic en `i18n/comics/comics.en.ts`, para leerlo en el idioma
+   *  activo. Se omite cuando coincide con el `id`. Un cómic sin traducir no
+   *  lleva clave: se lee en español, que es lo que ya hacía. */
+  comicKey?: string;
   titulo: string;
   /** Etiqueta pequeña de la disciplina / procedencia. */
   disciplina: string;
@@ -84,14 +88,14 @@ const psicoTextShadow = `0 1px 2px #fbf4e8, 0 0 6px #fbf4e8, 0 0 13px ${neuropsi
 // Nutrición: acento claro (nutricionBg) + letra oscura (nutricionTxt), sin
 // sombra. Las negritas **…** se limpian con `sinNegrita` (hambreHolistica), que
 // es donde vive esa convención: el visor pinta en plano.
-const nutriEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]): IlustracionEntry => ({
-  id, titulo, disciplina: "Nutrición", cover, vinetas,
+const nutriEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[], comicKey?: string): IlustracionEntry => ({
+  id, comicKey, titulo, disciplina: "Nutrición", cover, vinetas,
   themeColor: nutricionBg, textColor: nutricionTxt, cardColor: nutricionTxt,
   disciplinaBgImage: "/img/fondos/nutri.webp", disciplinaBgColor: nutricionBg, textShadow: "none",
 });
 
-const psicoEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]): IlustracionEntry => ({
-  id, titulo, disciplina: "Psicología", cover, vinetas,
+const psicoEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[], comicKey?: string): IlustracionEntry => ({
+  id, comicKey, titulo, disciplina: "Psicología", cover, vinetas,
   themeColor: neuropsicologiaTxt,
   disciplinaBgImage: "/img/fondos/psciologia.webp", disciplinaBgColor: neuropsicologiaBg,
   textShadow: psicoTextShadow,
@@ -104,10 +108,10 @@ const psicoEntry = (id: string, titulo: string, cover: string, vinetas: Vineta[]
 // presentación pública de Psicología (/d/psicologia) sí los enseña: son
 // justamente los que explican en qué consiste el método.
 export const PSICOLOGIA_COMICS_RECORRIDO: IlustracionEntry[] = [
-  psicoEntry("psico-creencias", "Cómo nacen las creencias", "/viñetas/psicologia/creencias/creencias1.webp", COMIC_CREENCIAS),
-  psicoEntry("psico-ace", "Los ACE", "/viñetas/psicologia/ace/ace1.webp", COMIC_ACE),
-  psicoEntry("psico-linea", "La Línea de Vida", "/viñetas/psicologia/lineatiempo/lineatiempo1.webp", COMIC_LINEA_TIEMPO),
-  psicoEntry("psico-sintesis", "El problema nunca es el problema", "/viñetas/psicologia/sintesis/sintesis1.webp", COMIC_SINTESIS),
+  psicoEntry("psico-creencias", "Cómo nacen las creencias", "/viñetas/psicologia/creencias/creencias1.webp", COMIC_CREENCIAS, "psicologia-creencias"),
+  psicoEntry("psico-ace", "Los ACE", "/viñetas/psicologia/ace/ace1.webp", COMIC_ACE, "psicologia-ace"),
+  psicoEntry("psico-linea", "La Línea de Vida", "/viñetas/psicologia/lineatiempo/lineatiempo1.webp", COMIC_LINEA_TIEMPO, "psicologia-linea-tiempo"),
+  psicoEntry("psico-sintesis", "El problema nunca es el problema", "/viñetas/psicologia/sintesis/sintesis1.webp", COMIC_SINTESIS, "psicologia-sintesis"),
 ];
 
 export const ILUSTRACIONES: IlustracionEntry[] = [
@@ -134,6 +138,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
   {
     id: "origen-hinduismo",
+    comicKey: "hinduismo-origen",
     titulo: "El Origen · según el Hinduismo",
     disciplina: "Ayurveda",
     cover: "/viñetas/hinduismo/origen/portada.webp",
@@ -145,6 +150,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
   {
     id: "origen-taoismo",
+    comicKey: "tcm-origen",
     titulo: "El Origen · según el Taoísmo",
     disciplina: "Medicina China",
     cover: "/viñetas/tcm/origen/origentcm3.webp",
@@ -155,6 +161,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
   {
     id: "origen-cabala",
+    comicKey: "cabala-intro",
     titulo: "El Origen · según la Cábala",
     disciplina: "Cábala",
     cover: "/viñetas/cabala/origen/cabalaorigen1.webp",
@@ -167,6 +174,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   // ── Fisiología ──
   {
     id: "fisio-estrella",
+    comicKey: "fisiologia-estrella-atomos",
     titulo: "La Estrella",
     disciplina: "Fisiología",
     cover: "/viñetas/fisiologia/estrellas/star6.webp",
@@ -177,6 +185,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
   {
     id: "fisio-celula",
+    comicKey: "fisiologia-celula-viva",
     titulo: "La Vida secreta de la célula",
     disciplina: "Fisiología",
     cover: "/viñetas/fisiologia/celulacomic/celula1.webp",
@@ -191,6 +200,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     // esta sigue además el orden de la historia: la estrella, la célula y cómo
     // esa célula se convierte en un cuerpo entero.
     id: "fisio-cigoto",
+    comicKey: "fisiologia-celulas-organos",
     titulo: "De una célula a un órgano",
     disciplina: "Fisiología",
     cover: "/viñetas/fisiologia/cigoto/cigoto1.webp",
@@ -206,6 +216,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   // ── Astrología ──
   {
     id: "astro-historia",
+    comicKey: "astrologia-historia",
     titulo: "La historia de la Astrología",
     disciplina: "Astrología",
     cover: "/viñetas/astrologia/historia/mesopotamia.webp",
@@ -244,6 +255,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   // ── Ayurveda / Hinduismo ──
   {
     id: "hindu-elementos",
+    comicKey: "hinduismo-elementos",
     titulo: "Los Elementos",
     disciplina: "Ayurveda",
     cover: "/viñetas/hinduismo/elementos/elementosayurveda.webp",
@@ -255,6 +267,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
   {
     id: "hindu-doshas",
+    comicKey: "hinduismo-doshas",
     titulo: "Los Doṣhas",
     disciplina: "Ayurveda",
     cover: "/viñetas/hinduismo/doshas/doshasportada.webp",
@@ -279,6 +292,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   },
   {
     id: "psicologia-etapas",
+    comicKey: "psicologia-compromiso",
     titulo: "Cómo te construiste",
     disciplina: "Psicología",
     cover: "/viñetas/psicologia/compromiso/compromiso1.webp",
@@ -353,6 +367,7 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   // ── Medicina China ──
   {
     id: "tcm-yinyang",
+    comicKey: "tcm-yin-yang",
     titulo: "El Yin Yang",
     disciplina: "Medicina China",
     cover: "/viñetas/tcm/yinyang/yinyang.webp",

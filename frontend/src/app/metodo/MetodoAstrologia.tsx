@@ -328,7 +328,7 @@ export default function MetodoAstrologia() {
   // si no (rutaHome()). Antes iba siempre al del recorrido.
   const headerPrev = { label: "← Home", onClick: () => navigate(rutaHome()) };
   const headerExtra = {
-    label: "Ilustraciones",
+    label: t("metodo.ilustraciones"),
     onClick: () => setComicAstroOpen(true),
   };
   const headerNext = (yaConPdf || yaSolicitado)
@@ -347,7 +347,7 @@ export default function MetodoAstrologia() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%">
             <MetodoStepHeader
               icon={<AstrologiaIcon size={{ base: "40px", md: "52px" }} />}
-              title="Astrología"
+              title={t("disciplina.astrologia")}
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space

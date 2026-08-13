@@ -15,7 +15,6 @@ import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustrac
 import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
 import { CabalaFotoIlustracion } from "../../components/metodo/CabalaFotoIlustracion";
 import {
-  CABALA_ILUSTRACIONES_VINETAS,
   fotoSefira,
   indiceIlustracionSefira,
 } from "../../components/metodo/cabalaIlustraciones";
@@ -26,8 +25,10 @@ import {
   type SefiraContenido,
   type CabalaPageKey,
 } from "../../components/metodo/cabalaSefirot";
-import { CABALA_TEST, NUM_PREGUNTAS, TEST_MAX, normalizarEscalaTest, type DimensionTest } from "../../components/metodo/cabalaTest";
+import { NUM_PREGUNTAS, TEST_MAX, normalizarEscalaTest, type DimensionTest } from "../../components/metodo/cabalaTest";
+import { useSefira, useTestCabala, useVinetasSefirot } from "../../components/metodo/cabalaEn";
 import { sefirotContenidoCompleto } from "../../components/metodo/cabalaDiagnostico";
+import { useT, TextoRico } from "../../i18n";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
@@ -172,20 +173,24 @@ function EscalaAutoeval({ statement, value, onChange, max = 10 }: { statement: s
 
 /* ── Test de la sefirá (Escala de Equilibrio, 1-10 como la autoevaluación) ── */
 function TestBox({ dim, answers, onAnswer }: { dim: DimensionTest; answers: number[]; onAnswer: (idx: number, valor: number) => void }) {
+  const t = useT();
   return (
     <Caja>
       <Flex align="baseline" justify="space-between" gap={3} wrap="wrap">
-        <TituloCaja>Escala de equilibrio</TituloCaja>
+        <TituloCaja>{t("metodo.cabala.sefira.escala")}</TituloCaja>
         <Text color={`${cabalaTxt}88`} fontSize="xs" letterSpacing="0.12em" textTransform="uppercase" style={{ textShadow: INK_SHADOW }}>
           {dim.etiqueta}
         </Text>
       </Flex>
       <Divisor mt={3} mb={4} />
 
-      {/* Con diez notas, la lista de etiquetas no cabe: se dicen los extremos. */}
-      <Text color={`${cabalaTxt}bb`} fontSize="sm" mb={5} style={{ textShadow: INK_SHADOW }}>
-        Puntúa cada frase del <Box as="span" fontWeight="800" color={cabalaTxt}>1</Box> (nunca) al{" "}
-        <Box as="span" fontWeight="800" color={cabalaTxt}>10</Box> (siempre).
+      {/* Con diez notas, la lista de etiquetas no cabe: se dicen los extremos.
+          La frase va entera en el diccionario (con sus **negritas**): en inglés
+          el énfasis no cae en el mismo sitio, así que trocearla la rompería. El
+          `sx` deja las negritas del color de la disciplina, como estaban. */}
+      <Text color={`${cabalaTxt}bb`} fontSize="sm" mb={5} style={{ textShadow: INK_SHADOW }}
+            sx={{ b: { fontWeight: 800, color: cabalaTxt } }}>
+        <TextoRico>{t("metodo.cabala.sefira.puntua")}</TextoRico>
       </Text>
 
       <RevealStagger inView display="flex" flexDirection="column" gap={5}>
@@ -233,9 +238,16 @@ const FlechaCarrusel = ({ dir, onClick }: { dir: "left" | "right"; onClick: () =
 );
 
 export default function MetodoCabalaSefira() {
+  const t = useT();
   const navigate = useNavigate();
   const { key } = useParams<{ key: CabalaPageKey }>();
-  const sefira: SefiraContenido | undefined = key ? cabalaSefirotMap[key] : undefined;
+  // El contenido de la dimensión en el idioma activo (lo que falte por traducir
+  // se lee en español). La estructura —clave, número, fotos— sigue saliendo del
+  // fichero español, así que `cabalaSefirotMap` se usa para los NOMBRES de las
+  // sefirot vecinas, que no se traducen.
+  const sefira: SefiraContenido | undefined = useSefira(key);
+  const testCabala = useTestCabala();
+  const vinetasSefirot = useVinetasSefirot();
 
   const [loading, setLoading] = useState(true);
   const [ilusOpen, setIlusOpen] = useState(false);
@@ -433,7 +445,7 @@ export default function MetodoCabalaSefira() {
   // ¿Está relleno todo lo que se pide en la dimensión? (autoevaluación + escala).
   const autoevalCompleta = sefira.autoevaluacion.items.length === 0
     || (autoeval.length === sefira.autoevaluacion.items.length && autoeval.every((v) => v >= 1));
-  const testDim = CABALA_TEST[sefira.key];
+  const testDim = testCabala[sefira.key];
   const testCompletado = !testDim || (testAnswers.length === NUM_PREGUNTAS && testAnswers.every((v) => v >= 1 && v <= TEST_MAX));
   const dimensionCompleta = autoevalCompleta && testCompletado;
   const bloquearSiguiente = SEFIROT_GATE && !dimensionCompleta;
@@ -454,33 +466,33 @@ export default function MetodoCabalaSefira() {
         label: `${cabalaSefirotMap[nextKey].titulo} →`,
         onClick: () => navigate(`/metodo/cabala/sefira/${nextKey}`),
         disabled: bloquearSiguiente,
-        disabledTooltip: "Completa todo lo que se pide en esta dimensión para continuar",
+        disabledTooltip: t("metodo.cabala.sefira.completaDimension"),
       }
     : {
-        label: "Diagnóstico →",
+        label: `${t("metodo.cabala.paso.diagnostico")} →`,
         onClick: () => navigate("/metodo/cabala/diagnostico"),
         disabled: bloquearSiguiente || !contenidoSefirot,
         disabledTooltip: !contenidoSefirot
-          ? "Rellena el contenido de todas las sefirot para ver tu Diagnóstico"
-          : "Completa todo lo que se pide en esta dimensión para continuar",
+          ? t("metodo.cabala.sefira.rellenaTodas")
+          : t("metodo.cabala.sefira.completaDimension"),
       };
 
   /** Lo que falta para poder seguir, dicho con nombres, no con un «completa todo». */
   const queFalta = [
-    !autoevalCompleta && "la autoevaluación",
-    !testCompletado && "la escala de equilibrio",
+    !autoevalCompleta && t("metodo.cabala.sefira.faltaAutoeval"),
+    !testCompletado && t("metodo.cabala.sefira.faltaEscala"),
   ].filter(Boolean) as string[];
 
   /** Progreso de la dimensión, en números: se pinta al pie con sus barras para
    *  que en todo momento se vea cuánto queda (antes solo se decía «te falta X»). */
   const progresoDimension = [
     sefira.autoevaluacion.items.length > 0 && {
-      etiqueta: "Autoevaluación",
+      etiqueta: t("metodo.cabala.sefira.autoevalCorto"),
       hechas: sefira.autoevaluacion.items.filter((_, i) => (autoeval[i] ?? 0) >= 1).length,
       total: sefira.autoevaluacion.items.length,
     },
     testDim && {
-      etiqueta: "Escala de equilibrio",
+      etiqueta: t("metodo.cabala.sefira.escala"),
       hechas: testAnswers.filter((v) => v >= 1).length,
       total: NUM_PREGUNTAS,
     },
@@ -533,8 +545,8 @@ export default function MetodoCabalaSefira() {
                 mb={0}
                 prev={prevKey
                   ? { label: `← ${cabalaSefirotMap[prevKey].titulo}`, onClick: () => navigate(`/metodo/cabala/sefira/${prevKey}`) }
-                  : { label: "← El Árbol", onClick: () => navigate("/metodo/cabala/arbol") }}
-                extra={{ label: "Ilustraciones", onClick: () => setIlusOpen(true)}}
+                  : { label: `← ${t("metodo.cabala.paso.arbolCorto")}`, onClick: () => navigate("/metodo/cabala/arbol") }}
+                extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlusOpen(true)}}
                 next={siguiente}
               />
             </Box>
@@ -593,7 +605,7 @@ export default function MetodoCabalaSefira() {
           {!tieneContenido && (
             /* Fuera de caja: blanco y sin sombra, como la frase de arriba. */
             <Text color="white" fontStyle="italic" textAlign="center">
-              Contenido próximamente.
+              {t("metodo.cabala.sefira.contenidoPronto")}
             </Text>
           )}
 
@@ -678,7 +690,7 @@ export default function MetodoCabalaSefira() {
                 {sefira.equilibrado.items.length > 0 && (
                   <Box flex="1" display="flex">
                     <Caja h="100%">
-                      <TituloCaja>Equilibrado</TituloCaja>
+                      <TituloCaja>{t("metodo.cabala.sefira.equilibrado")}</TituloCaja>
                       <Divisor mt={3} mb={4} />
                       {sefira.equilibrado.intro && (
                         <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
@@ -707,7 +719,7 @@ export default function MetodoCabalaSefira() {
                 {sefira.desequilibrado.items.length > 0 && (
                   <Box flex="1" display="flex">
                     <Caja h="100%">
-                      <TituloCaja>Desequilibrado</TituloCaja>
+                      <TituloCaja>{t("metodo.cabala.sefira.desequilibrado")}</TituloCaja>
                       <Divisor mt={3} mb={4} />
                       {sefira.desequilibrado.intro && (
                         <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
@@ -745,7 +757,7 @@ export default function MetodoCabalaSefira() {
           {sefira.autoevaluacion.items.length > 0 && (
             <Reveal direction="up" distance={22} delay={0.24} duration={0.65} w="100%">
               <Caja>
-                <TituloCaja>Autoevaluación (1–10)</TituloCaja>
+                <TituloCaja>{t("metodo.cabala.sefira.autoevaluacion")}</TituloCaja>
                 <Divisor mt={3} mb={4} />
                 {sefira.autoevaluacion.intro && (
                   <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
@@ -768,9 +780,9 @@ export default function MetodoCabalaSefira() {
           )}
 
           {/* Test de la dimensión (Escala de Equilibrio) */}
-          {CABALA_TEST[sefira.key] && (
+          {testCabala[sefira.key] && (
             <Reveal direction="up" distance={22} delay={0.3} duration={0.65} w="100%">
-              <TestBox dim={CABALA_TEST[sefira.key]} answers={testAnswers} onAnswer={guardarTest} />
+              <TestBox dim={testCabala[sefira.key]} answers={testAnswers} onAnswer={guardarTest} />
             </Reveal>
           )}
 
@@ -778,7 +790,7 @@ export default function MetodoCabalaSefira() {
           {sefira.clave.length > 0 && (
             <Reveal direction="up" distance={22} delay={0.34} duration={0.65} w="100%">
               <Caja>
-                <TituloCaja>Clave de desarrollo</TituloCaja>
+                <TituloCaja>{t("metodo.cabala.sefira.clave")}</TituloCaja>
                 <Divisor mt={3} mb={4} />
                 {/* Cascada corta y que arranca en cuanto asoma el box: si no,
                     el párrafo largo reserva su alto pero se queda invisible y
@@ -848,18 +860,18 @@ export default function MetodoCabalaSefira() {
               <Flex direction="column" gap={1.5} minW={0} flex="1">
                 {errorGuardado && (
                   <Text color="#ffb3b3" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                    No se ha podido guardar. Revisa tu conexión y vuelve a intentarlo.
+                    {t("metodo.cabala.sefira.noGuardado")}
                   </Text>
                 )}
                 {/* Si el paso está bloqueado, se dice QUÉ falta por nombre. */}
                 {siguiente.disabled && queFalta.length > 0 && (
                   <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                    Para seguir te queda por completar {queFalta.join(", ")}.
+                    {t("metodo.cabala.sefira.teQueda", { falta: queFalta.join(", ") })}
                   </Text>
                 )}
                 {siguiente.disabled && queFalta.length === 0 && !contenidoSefirot && (
                   <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                    Para ver tu Diagnóstico falta el contenido de alguna otra sefirá.
+                    {t("metodo.cabala.sefira.faltaOtra")}
                   </Text>
                 )}
               </Flex>
@@ -875,7 +887,7 @@ export default function MetodoCabalaSefira() {
                        boxShadow={CAJA_GLOW} transition="all 0.2s"
                        _hover={{ bg: `${cabalaTxt}1a`, borderColor: cabalaTxt }}
                        style={{ textShadow: INK_SHADOW }}>
-                    Reintentar
+                    {t("comun.reintentar")}
                   </Box>
                 )}
                 <Box as="button"
@@ -910,7 +922,7 @@ export default function MetodoCabalaSefira() {
           secuencia completa para poder seguir con las flechas a las demás. */}
       <CabalaSefiraIlustracionModal
         isOpen={fotoOpen}
-        vinetas={CABALA_ILUSTRACIONES_VINETAS}
+        vinetas={vinetasSefirot}
         initialIndex={indiceIlustracionSefira(sefira.key)}
         onClose={() => setFotoOpen(false)}
       />

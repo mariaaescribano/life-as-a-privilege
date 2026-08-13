@@ -148,16 +148,16 @@ export default function MetodoPsicologiaAce() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
-              title="ACE"
+              title={t("metodo.psico.paso.ace")}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
               step={{ current: 3, total: 23 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: "← Problemas", onClick: () => navigate(`/metodo/psicologia/${exp.id}/problema`) }}
+              prev={{ label: `← ${t("metodo.psico.paso.problemas")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/problema`) }}
               next={{
-                label: "Resultado →",
+                label: `${t("metodo.psico.paso.aceResultado")} →`,
                 onClick: () => setComicOpen(true),
                 disabled: !completo,
                 disabledTooltip: "Responde las 10 preguntas para ver tu resultado.",
@@ -253,7 +253,7 @@ export default function MetodoPsicologiaAce() {
           </RevealStagger>
 
           {guardando && (
-            <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic">Guardando…</Text>
+            <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic">{t("metodo.psico.guardando")}</Text>
           )}
 
           {/* ── Al completar las 10: invitación a ver el resultado ── */}
@@ -266,13 +266,9 @@ export default function MetodoPsicologiaAce() {
                 <Flex position="relative" zIndex={1} direction="column" align="center" textAlign="center"
                       gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 14, md: 20 }}>
                   <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3"
-                        style={{ textShadow: INK_SHADOW }}>
-                    Has terminado el test.
-                  </Text>
+                        style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.testTerminado")}</Text>
                   <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-                        maxW="520px" style={{ textShadow: INK_SHADOW }}>
-                    Vamos a ver qué significa tu resultado y cómo estas experiencias influyen en ti hoy.
-                  </Text>
+                        maxW="520px" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.testTerminadoPie")}</Text>
                   <Box as="button" onClick={() => setComicOpen(true)}
                        position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
                        bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
@@ -280,9 +276,7 @@ export default function MetodoPsicologiaAce() {
                        boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
                        _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
                     <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>
-                      Ver mi resultado →
-                    </Box>
+                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.verMiResultado")}</Box>
                   </Box>
                 </Flex>
               </Box>

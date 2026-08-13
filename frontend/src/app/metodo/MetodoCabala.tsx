@@ -105,18 +105,18 @@ export default function MetodoCabala() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<CabalaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Cábala"
+              title={t("disciplina.cabala")}
               pageLabel={`1/${CABALA_TOTAL_PAGINAS}`}
               compact
               bgColor={`${cabalaBg}dd`}
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: "← Nutrición", onClick: () => navigate("/metodo/nutricion/cursos") }}
+              prev={{ label: `← ${t("disciplina.nutricion")}`, onClick: () => navigate("/metodo/nutricion/cursos") }}
               // Ilustraciones de Cábala: abre el popup con la galería (de momento,
               // estado vacío con las ilustraciones que llegarán).
-              extra={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
-              next={{ label: "El Árbol de la Vida →", onClick: comenzar }}
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
+              next={{ label: `${t("metodo.cabala.paso.arbol")} →`, onClick: comenzar }}
             />
           </Reveal>
 

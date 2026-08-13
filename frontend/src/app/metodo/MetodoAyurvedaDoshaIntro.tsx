@@ -238,7 +238,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           <Flex direction="column" align="center" w="100%" maxW="640px" gap={6}>
             <MetodoStepHeader
               icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-              title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+              title={<>{t("metodo.ayur.doshaRotulo")} <Box as="span" color={meta.color}>{meta.label}</Box></>}
               bgColor={`${ayurvedaBg}dd`}
               color={ayurvedaTxt}
               nom={ayurvedaNom}
@@ -248,7 +248,7 @@ export default function MetodoAyurvedaDoshaIntro() {
             />
             <Panel color={meta.color}>
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={3} style={{ textShadow: INK_SHADOW }}>
-                Estoy preparando esta sección
+                {t("metodo.ayur.preparando")}
               </Text>
               <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
                 La introducción a {meta.label} estará disponible muy pronto.
@@ -272,7 +272,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<Icon size={{ base: "40px", md: "56px" }} color={meta.color} />}
-            title={<>Doṣha: <Box as="span" color={meta.color}>{meta.label}</Box></>}
+            title={<>{t("metodo.ayur.doshaRotulo")} <Box as="span" color={meta.color}>{meta.label}</Box></>}
             pageLabel="1/7"
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
@@ -281,10 +281,10 @@ export default function MetodoAyurvedaDoshaIntro() {
             prev={{ label: "← Energías", onClick: () => { void persist(cambio); navigate("/metodo/ayurveda/tarjetas"); } }}
             extra={ilustracionesBtn}
             next={{
-              label: "Descúbrete →",
+              label: `${t("metodo.ayur.paso.descubrete")} →`,
               onClick: irSiguiente,
               disabled: !guardado,
-              disabledTooltip: "Guarda tu respuesta para continuar.",
+              disabledTooltip: t("metodo.ayur.guardaRespuestaCorto"),
             }}
           />
           </Reveal>
@@ -294,7 +294,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
               <Text color={TINTA} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700" lineHeight="1.15" letterSpacing="0.02em" style={{ textShadow: INK_SHADOW }}>
-                Bienvenido a tu naturaleza
+                {t("metodo.ayur.bienvenido")}
               </Text>
               <Separador />
               <Flex direction="column" gap={3.5} maxW="640px">
@@ -412,7 +412,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               <Textarea
                 value={cambio}
                 onChange={(e) => { setCambio(e.target.value); setGuardado(false); }}
-                placeholder="Escríbela aquí…"
+                placeholder={t("metodo.ayur.escribela")}
                 w="100%"
                 minH={{ base: "120px", md: "150px" }}
                 bg="rgba(255,251,243,0.45)"
@@ -495,12 +495,12 @@ export default function MetodoAyurvedaDoshaIntro() {
                 gap={2.5}
                 _hover={{ transform: "translateY(-2px)", boxShadow: guardado ? `0 0 34px ${meta.color}aa` : `0 0 18px ${meta.color}55` }}
               >
-                Descúbrete →
+                {`${t("metodo.ayur.paso.descubrete")} →`}
               </Box>
 
               {!guardado && (
                 <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                  Guarda tu respuesta de arriba para continuar.
+                  {t("metodo.ayur.guardaRespuesta")}
                 </Text>
               )}
             </Flex>

@@ -11,6 +11,7 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
+import { useT } from "../../i18n";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import {
@@ -38,6 +39,7 @@ function TemaBox({ tema, onClick, delay, completo = false }: { tema: TemaProfund
 }
 
 export default function MetodoFisiologiaProfundiza() {
+  const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [leidasMap, setLeidasMap] = useState<Record<string, string[]>>({});
@@ -86,13 +88,13 @@ export default function MetodoFisiologiaProfundiza() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-              title="Profundiza"
+              title={t("fisiologia.profundiza.titulo")}
               compact
               bgColor={`${fisiologiaBg}dd`}
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: "← Niveles", onClick: () => navigate("/metodo/fisiologia/niveles") }}
+              prev={{ label: `← ${t("fisiologia.niveles.titulo")}`, onClick: () => navigate("/metodo/fisiologia/niveles") }}
               extra={celulasBtn}
             />
           </Reveal>
@@ -100,19 +102,19 @@ export default function MetodoFisiologiaProfundiza() {
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
-              Para los que quieren toda la verdad. Elige por dónde empezar.
+              {t("fisiologia.profundiza.intro")}
             </Text>
           </Reveal>
 
           {/* Todos los temas en una sola rejilla (sin rótulos de bloque). */}
           <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-            {TEMAS_PROFUNDIZA.map((t, i) => (
-              <TemaBox key={t.key} tema={t} delay={0.05 * i} completo={temaCompleto(t)}
-                       onClick={() => navigate(`/metodo/fisiologia/profundiza/${t.key}`)} />
+            {TEMAS_PROFUNDIZA.map((tema, i) => (
+              <TemaBox key={tema.key} tema={tema} delay={0.05 * i} completo={temaCompleto(tema)}
+                       onClick={() => navigate(`/metodo/fisiologia/profundiza/${tema.key}`)} />
             ))}
           </SimpleGrid>
 
-          <BotonPaso label="Volver a arriba" direction="up"
+          <BotonPaso label={t("fisiologia.profundiza.volverArriba")} direction="up"
                      nom={fisiologiaNom} color={fisiologiaTxt} bg={fisiologiaBg}
                      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} />
 

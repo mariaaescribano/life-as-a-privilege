@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useT } from "../../i18n";
+import { useT, type ClaveTexto } from "../../i18n";
+import { useComic } from "../../i18n/comics";
+import { useVinetasSefirot, useVinetasSenderos } from "./cabalaEn";
 import {
   Box,
   Flex,
@@ -35,16 +37,24 @@ const CABALA_IMG = "/img/fondos/cabala.webp";
 
 type Capitulo = "origen" | "sefirot" | "senderos";
 
-const VINETAS_BY_CAPITULO: Record<Capitulo, Vineta[]> = {
-  origen:   CABALA_INTRO,
-  sefirot:  CABALA_ILUSTRACIONES_VINETAS,
-  senderos: CABALA_SENDERO_VINETAS,
+// Las viñetas de cada capítulo EN EL IDIOMA ACTIVO. Es un hook y no un mapa
+// suelto porque un mapa a nivel de módulo se calcularía al importar el fichero y
+// la galería se quedaría en el idioma con el que arrancó la página.
+const useVinetasCapitulo = (capitulo: Capitulo | null): Vineta[] => {
+  const origen = useComic("cabala-intro", CABALA_INTRO);
+  const sefirot = useVinetasSefirot();
+  const senderos = useVinetasSenderos();
+  if (!capitulo) return [];
+  return { origen, sefirot, senderos }[capitulo];
 };
 
-const SELECTOR_OPTIONS: { key: Capitulo; title: string; cover?: string }[] = [
-  { key: "origen",   title: "El Origen",        cover: CABALA_INTRO[0]?.src },
-  { key: "sefirot",  title: "Las 10 Sefirot",   cover: CABALA_ILUSTRACIONES_VINETAS[0]?.src },
-  { key: "senderos", title: "Los 22 Senderos",  cover: CABALA_SENDERO_VINETAS[0]?.src },
+// El TÍTULO va como clave, no como texto: este array se calcula al importar el
+// módulo, así que un texto ya traducido se quedaría congelado en el idioma con
+// el que arrancó la página. Se traduce al pintar.
+const SELECTOR_OPTIONS: { key: Capitulo; tituloKey: ClaveTexto; cover?: string }[] = [
+  { key: "origen",   tituloKey: "metodo.cabalaIlus.origen",   cover: CABALA_INTRO[0]?.src },
+  { key: "sefirot",  tituloKey: "metodo.cabalaIlus.sefirot",  cover: CABALA_ILUSTRACIONES_VINETAS[0]?.src },
+  { key: "senderos", tituloKey: "metodo.cabalaIlus.senderos", cover: CABALA_SENDERO_VINETAS[0]?.src },
 ];
 
 interface CabalaIlustracionesModalProps {
@@ -64,7 +74,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
   const volverAlSelector = () => setCapitulo(null);
   const elegirCapitulo = (key: Capitulo) => setCapitulo(key);
 
-  const vinetas = capitulo ? VINETAS_BY_CAPITULO[capitulo] : [];
+  const vinetas = useVinetasCapitulo(capitulo);
 
   // No mostramos nada hasta que el fondo (cabala.png) y las portadas del
   // selector estén cargadas: mientras tanto solo el loader, para que luego
@@ -228,7 +238,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                         <Box
                           as="img"
                           src={encodeURI(opt.cover)}
-                          alt={opt.title}
+                          alt={t(opt.tituloKey)}
                           loading="eager"
                           position="absolute"
                           inset="0"
@@ -255,7 +265,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                         lineHeight="1.1"
                         style={{ textShadow: `0 0 12px ${cabalaTxt}cc, 0 0 28px ${cabalaTxt}77` }}
                       >
-                        {opt.title}
+                        {t(opt.tituloKey)}
                       </Text>
                       <Flex
                         align="center"

@@ -276,7 +276,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                 else navigate(props.headerNext!.ruta!);
               },
               disabled: props.lockNextUntilComplete ? !completo : false,
-              disabledTooltip: props.lockNextTooltip ?? "Termina de construirlo primero",
+              disabledTooltip: props.lockNextTooltip ?? t("fisiologia.construir.bloqueo"),
             } : undefined}
           />
           </Reveal>

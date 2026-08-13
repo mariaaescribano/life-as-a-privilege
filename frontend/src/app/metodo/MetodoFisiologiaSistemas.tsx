@@ -15,7 +15,9 @@ import { SistemaModal } from "../../components/metodo/SistemaModal";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
-import { SISTEMAS, type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
+import { type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
+import { useSistemas } from "../../hardCoded/espacio/SistemasFisiologia.en";
+import { useT } from "../../i18n";
 
 // Tarjeta de un sistema: box por defecto (FotoBox), imagen arriba + nombre abajo.
 function SistemaBox({
@@ -46,6 +48,8 @@ function SistemaBox({
 const SISTEMAS_VISTOS_KEY = "sistemas_vistos";
 
 export default function MetodoFisiologiaSistemas() {
+  const t = useT();
+  const SISTEMAS = useSistemas();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [sistema, setSistema] = useState<Sistema | null>(null);
@@ -128,25 +132,25 @@ export default function MetodoFisiologiaSistemas() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
-            title="Sistemas"
+            title={t("fisiologia.sistemas.titulo")}
             pageLabel="3/4"
             compact
             bgColor={`${fisiologiaBg}dd`}
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: "← Las células", onClick: () => navigate("/metodo/fisiologia/todas-tus-celulas") }}
+            prev={{ label: `← ${t("fisiologia.lasCelulas.corto")}`, onClick: () => navigate("/metodo/fisiologia/todas-tus-celulas") }}
             extra={celulasBtn}
-            next={{ label: "El cuerpo →", onClick: () => navigate("/metodo/fisiologia/organismo"),
+            next={{ label: `${t("fisiologia.organismo.titulo")} →`, onClick: () => navigate("/metodo/fisiologia/organismo"),
                     disabled: vistos.size < SISTEMAS.length,
-                    disabledTooltip: "Primero lee todos los sistemas" }}
+                    disabledTooltip: t("fisiologia.sistemas.bloqueo") }}
           />
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
-              Varios órganos que colaboran forman un sistema. Pulsa cada sistema para conocerlo.
+              {t("fisiologia.sistemas.intro")}
             </Text>
           </Reveal>
 
