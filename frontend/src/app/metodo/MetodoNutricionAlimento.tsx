@@ -12,9 +12,11 @@ import { Reveal } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import {
-  alimentoByKey, molsDeAlimento, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
-  MACRO_COLOR, MACRO_LABEL, type Alimento, type Molecula,
+  ORDEN_GRUPOS_MOLECULA, MACRO_COLOR, type Alimento, type Molecula,
 } from "../../hardCoded/espacio/AlimentosNutricion";
+import {
+  useAlimento, useMolsDeAlimento, useEtiquetasAlimentos,
+} from "../../hardCoded/espacio/useAlimentos";
 
 // Caja base con el fondo de Nutrición + velo claro (mismo tratamiento que el
 // resto de la disciplina). El contenido va sobre zIndex 1.
@@ -50,7 +52,7 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
 
 // Etiqueta (píldora) de la función de una molécula, con su color.
 function FuncionPill({ funcion, size = "sm" }: { funcion: Molecula["funcion"]; size?: "sm" | "xs" }) {
-  const f = FUNCIONES[funcion];
+  const f = useEtiquetasAlimentos().funcion(funcion);
   return (
     <Flex align="center" gap={1.5} flexShrink={0} px={size === "sm" ? 2.5 : 2} py={size === "sm" ? 1 : 0.5}
           borderRadius="full" bg={f.color}
@@ -65,6 +67,7 @@ function FuncionPill({ funcion, size = "sm" }: { funcion: Molecula["funcion"]; s
 
 // Barra apilada de macros: «de qué está hecho».
 function BarraMacros({ macros }: { macros: Alimento["macros"] }) {
+  const et = useEtiquetasAlimentos();
   const total = Math.max(1, macros.carbohidrato + macros.proteina + macros.grasa);
   const segs = (["carbohidrato", "proteina", "grasa"] as const)
     .map((k) => ({ k, pct: Math.round((macros[k] / total) * 100) }))
@@ -82,7 +85,7 @@ function BarraMacros({ macros }: { macros: Alimento["macros"] }) {
           <Flex key={s.k} align="center" gap={1.5}>
             <Box w="10px" h="10px" borderRadius="full" bg={MACRO_COLOR[s.k]} />
             <Text color={nutricionTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={600}>
-              {MACRO_LABEL[s.k]} · {s.pct}%
+              {et.macro(s.k)} · {s.pct}%
             </Text>
           </Flex>
         ))}
@@ -112,6 +115,7 @@ function MoleculaCard({ m, onClick }: { m: Molecula; onClick: () => void }) {
 // Modal ligero (tema claro de Nutrición) con la explicación de una molécula.
 function MoleculaModal({ m, onClose }: { m: Molecula | null; onClose: () => void }) {
   const t = useT();
+  const et = useEtiquetasAlimentos();
   useEffect(() => {
     if (!m) return;
     document.body.style.overflow = "hidden";
@@ -130,7 +134,7 @@ function MoleculaModal({ m, onClose }: { m: Molecula | null; onClose: () => void
         <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}dd`} />
         <Flex position="relative" zIndex={1} direction="column" gap={3} px={{ base: 6, md: 7 }} py={{ base: 6, md: 7 }}>
           <Text color={`${nutricionTxt}99`} fontSize="2xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase">
-            {GRUPO_MOLECULA_LABEL[m.grupo]}
+            {et.grupoMolecula(m.grupo)}
           </Text>
           <Flex align="center" gap={3} wrap="wrap">
             <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.15">
@@ -138,7 +142,7 @@ function MoleculaModal({ m, onClose }: { m: Molecula | null; onClose: () => void
             </Text>
             <FuncionPill funcion={m.funcion} />
           </Flex>
-          <Box h="2px" w="56px" bgGradient={`linear(to-r, ${FUNCIONES[m.funcion].color}, transparent)`} />
+          <Box h="2px" w="56px" bgGradient={`linear(to-r, ${et.funcion(m.funcion).color}, transparent)`} />
           <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" fontWeight={500}>
             {m.queHace}
           </Text>
@@ -161,8 +165,14 @@ export default function MetodoNutricionAlimento() {
   const { key } = useParams<{ key: string }>();
   const [loading, setLoading] = useState(true);
   const [abierta, setAbierta] = useState<Molecula | null>(null);
+  const et = useEtiquetasAlimentos();
 
-  const a = alimentoByKey(key || "");
+  // El texto, en el idioma activo; la `key` de la URL, la foto y los macros
+  // siguen saliendo del español.
+  const a = useAlimento(key);
+  // Las moléculas se resuelven ARRIBA: son un hook y no pueden ir después de
+  // los `return` de carga.
+  const molsConPct = useMolsDeAlimento(a);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -184,7 +194,7 @@ export default function MetodoNutricionAlimento() {
   if (!a) return null;
 
   // Moléculas del alimento, agrupadas por tipo y en el orden establecido.
-  const mols = molsDeAlimento(a).map((x) => x.m);
+  const mols = molsConPct.map((x) => x.m);
   const gruposConMols = ORDEN_GRUPOS_MOLECULA
     .map((g) => ({ grupo: g, items: mols.filter((m) => m.grupo === g) }))
     .filter((s) => s.items.length > 0);
@@ -253,7 +263,7 @@ export default function MetodoNutricionAlimento() {
                 <Box px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
                   <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={800} mb={3.5}
                         letterSpacing="0.01em">
-                    {GRUPO_MOLECULA_LABEL[s.grupo]}
+                    {et.grupoMolecula(s.grupo)}
                   </Text>
                   <Flex direction="column" gap={{ base: 2.5, md: 3 }}>
                     {s.items.map((m) => (

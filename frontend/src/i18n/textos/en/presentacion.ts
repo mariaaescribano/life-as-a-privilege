@@ -44,6 +44,8 @@ export const presentacion = {
   "presentacion.cultura.lineasTiempo": "Their timelines",
   "presentacion.cultura.lineasTexto":
     "Each History is walked along its own timeline, era by era. Here they are, just so you can see them.",
+  "presentacion.cultura.eras": "{n} eras",
+  "presentacion.cultura.aviso": "Find out inside",
 
   // ── Physiology ─────────────────────────────────────────────────────────
   "presentacion.fisio.sistemas": "The systems",

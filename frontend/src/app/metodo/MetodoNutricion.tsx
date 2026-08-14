@@ -136,7 +136,7 @@ export default function MetodoNutricion() {
               <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 8, md: 10 }} pb={{ base: 10, md: 14 }} textAlign="center">
                 {[
-                  "En esta disciplina explorarás cómo eres lo que comes; para ser exactos, eres lo que absorbes. Descubrirás cómo las moléculas que componen tus alimentos están al servicio de tu reconstrucción o de tu destrucción.",
+                  t("metodo.gate.nutri.intro1"),
                 ].map((parrafo, i) => (
                   <Text
                     key={`a-${i}`}
@@ -152,7 +152,7 @@ export default function MetodoNutricion() {
                 ))}
 
                 {[
-                  "Aquí no hay juicios: ningún alimento es, por sí mismo, bueno o malo, pero sus moléculas sí pueden ser dañinas o beneficiosas. Comprenderás cómo las moléculas de tu comida se transforman, literalmente, en ti.",
+                  t("metodo.gate.nutri.intro2"),
                 ].map((parrafo, i) => (
                   <Text
                     key={`b-${i}`}
@@ -210,7 +210,7 @@ export default function MetodoNutricion() {
         textShadow="none"
         loader={<AppleLoader />}
         cerrarColor={nutricionTxt}
-        continueLabel="Nutrición"
+        continueLabel={t("disciplina.nutricion")}
         onContinue={intro.close}
         onFinish={intro.finish}
         onClose={intro.close}

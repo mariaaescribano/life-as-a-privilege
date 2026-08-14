@@ -30,19 +30,19 @@ import { glowHeader } from "../../components/metodo/FotoBox";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
-  PREDIABETES_INTRO,
   PREDIABETES_PREGUNTAS,
-  PREDIABETES_ESPERANZA,
-  SENALES_INTRO,
-  SENALES_ALERTA,
-  CINTURA_AYUDA,
-  calcularPrediabetes,
-  bandaPrediabetes,
   prediabetesRespondidas,
   prediabetesCompleto,
   type PrediabetesData,
   type Sexo,
 } from "../../hardCoded/espacio/PrediabetesNutricion";
+import {
+  usePreguntasPrediabetes,
+  useSenalesAlerta,
+  useTextosPrediabetes,
+  useResultadoPrediabetes,
+  useBandaPrediabetes,
+} from "../../hardCoded/espacio/usePrediabetes";
 
 // ── Marco de sección con el fondo acuarela de Nutrición (igual que Calorías) ──
 function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
@@ -123,6 +123,7 @@ const Rotulo = ({ children }: { children: React.ReactNode }) => (
 // ── Popup «¿Qué es esto?» ──
 function QueEsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const t = useT();
+  const { intro: PREDIABETES_INTRO } = useTextosPrediabetes();
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior="inside" size="xl">
       <ModalOverlay bg="rgba(0,0,0,0.55)" sx={{ backdropFilter: "blur(6px)" }} />
@@ -232,7 +233,14 @@ export default function MetodoNutricionPrediabetes() {
     base: { sexo, edad: Number(edad) || undefined, peso: Number(peso) || undefined, altura: Number(altura) || undefined },
   }), [sexo, edad, peso, altura, cintura, sinCintura, respuestas]);
 
-  const resultado = useMemo(() => calcularPrediabetes(estado), [estado]);
+  const resultado = useResultadoPrediabetes(estado);
+  // La banda se resuelve ARRIBA: es un hook y no puede ir tras el `return` de
+  // carga. Sin resultado todavía no se pinta (`banda` queda a null más abajo).
+  const bandaDeLaPuntuacion = useBandaPrediabetes(resultado?.puntos ?? 0);
+  // Todo el texto de la página, en el idioma activo.
+  const preguntas = usePreguntasPrediabetes();
+  const senales = useSenalesAlerta();
+  const textos = useTextosPrediabetes();
   const respondidas = prediabetesRespondidas(estado);
   const total = PREDIABETES_PREGUNTAS.length;
   // La cintura cuenta como paso hecho cuando se mide o se declina medirse.
@@ -275,7 +283,9 @@ export default function MetodoNutricionPrediabetes() {
 
   if (loading) return <NutricionLoading />;
 
-  const banda = resultado ? bandaPrediabetes(resultado.puntos) : null;
+  const banda = resultado ? bandaDeLaPuntuacion : null;
+  const { intro: PREDIABETES_INTRO, senales: SENALES_INTRO, cintura: CINTURA_AYUDA,
+          esperanza: PREDIABETES_ESPERANZA } = textos;
   // Separamos lo que no se elige de lo que sí está en tu mano: es la diferencia
   // entre informar y culpabilizar.
   const heredados = resultado?.desglose.filter((d) => !d.modificable && d.puntos > 0) ?? [];
@@ -343,9 +353,10 @@ export default function MetodoNutricionPrediabetes() {
                 {!editarDatos ? (
                   <Flex align="center" justify="space-between" gap={4} wrap="wrap">
                     <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
-                      Usamos lo que ya nos contaste en «Tus calorías»:{" "}
+                      {t("metodo.nutri.usamosTusCalorias")}{" "}
                       <Text as="span" fontWeight={700}>
-                        {edad || "—"} años · {altura || "—"} cm · {peso || "—"} kg · {sexo === "hombre" ? "hombre" : "mujer"}
+                        {edad || "—"} {t("metodo.nutri.anos")} · {altura || "—"} cm · {peso || "—"} kg ·{" "}
+                        {sexo === "hombre" ? t("metodo.nutri.hombre") : t("metodo.nutri.mujer")}
                       </Text>
                     </Text>
                     <Box as="button" onClick={() => setEditarDatos(true)}
@@ -362,7 +373,7 @@ export default function MetodoNutricionPrediabetes() {
                       <Opcion activo={sexo === "hombre"} label={t("metodo.nutri.hombre")} onClick={() => setSexo("hombre")} />
                     </Flex>
                     <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={{ base: 4, md: 5 }}>
-                      <CampoNum label={t("metodo.nutri.edad")} sufijo="años" value={edad} onChange={setEdad} />
+                      <CampoNum label={t("metodo.nutri.edad")} sufijo={t("metodo.nutri.anos")} value={edad} onChange={setEdad} />
                       <CampoNum label={t("metodo.nutri.altura")} sufijo="cm" value={altura} onChange={setAltura} />
                       <CampoNum label={t("metodo.nutri.peso")} sufijo="kg" value={peso} onChange={setPeso} />
                     </SimpleGrid>
@@ -423,7 +434,7 @@ export default function MetodoNutricionPrediabetes() {
           {/* ── LAS PREGUNTAS ── */}
           <RevealStagger inView stagger={0.1} delayChildren={0.05} amount={0.15}
                          display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }}>
-            {PREDIABETES_PREGUNTAS.map((p) => (
+            {preguntas.map((p) => (
               <RevealItem key={p.key} w="100%">
                 <SeccionBox>
                   <Flex direction={{ base: "column", md: "row" }} align={{ base: "stretch", md: "center" }}
@@ -588,7 +599,7 @@ export default function MetodoNutricionPrediabetes() {
                 </Text>
 
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 3, md: 4 }}>
-                  {SENALES_ALERTA.map((s) => (
+                  {senales.map((s) => (
                     <Box key={s.key} px={4} py={3.5} borderRadius="xl"
                          bg="#ffffff66" border={`1px solid ${nutricionTxt}33`}>
                       <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700} lineHeight="1.4" mb={1}>

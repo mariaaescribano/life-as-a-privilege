@@ -41,6 +41,7 @@ export const fisiologia = {
 
   /** Cierre del cómic de las estrellas: la tabla periódica a pantalla completa. */
   "fisiologia.tablaFrase": "Nunca más mirarás la tabla periódica con los mismos ojos...",
+  "fisiologia.tablaAlt": "La tabla periódica de los elementos",
 
   // ── Niveles ────────────────────────────────────────────────────────────
   "fisiologia.niveles.intro":

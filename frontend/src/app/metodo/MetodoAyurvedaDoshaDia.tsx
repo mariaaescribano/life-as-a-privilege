@@ -25,7 +25,7 @@ import {
   VataIcon, PittaIcon, KaphaIcon,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
-import { DOSHA_CUIDARTE } from "../../hardCoded/metodo/doshaCuidarte";
+import { useDoshaCuidarte } from "../../hardCoded/metodo/useDoshaContenido";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 
 const TINTA = ayurvedaTxt;
@@ -94,6 +94,7 @@ function Chip({ label, checked, onToggle, color }: { label: string; checked: boo
 
 export default function MetodoAyurvedaDoshaDia() {
   const t = useT();
+  const DOSHA_CUIDARTE = useDoshaCuidarte();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;
@@ -477,7 +478,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 <Box>
                   <Box h="1px" w="100%" bgGradient={`linear(to-r, ${ayurvedaTxt}66, transparent)`} mb={3} />
                   <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.06em" textTransform="uppercase" mb={1}>
-                    Recomendaciones para {meta.label}
+                    {t("metodo.ayurDia.recomendacionesPara", { dosha: meta.label })}
                   </Text>
                   <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" mb={3}>
                     {t("metodo.ayurDia.pulsaPuntoPartida")}

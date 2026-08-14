@@ -57,7 +57,7 @@ export function DisciplinaVideoBox({
   sinBoton = false,
   sinPrecio = false,
   textoGrande = false,
-  onSaberMas,
+  saberMasHref,
   ...rest
 }: {
   nom: string;
@@ -82,10 +82,16 @@ export function DisciplinaVideoBox({
   /** Letra más grande en ordenador, para que el texto llene el box cuando va a
    *  media página (en el mandala de /elMetodo el box es estrecho y no toca). */
   textoGrande?: boolean;
-  /** Si se pasa, sale un «Saber más ›» discreto arriba a la derecha del box, que
-   *  lleva a la presentación de la disciplina (/d/:disciplina). No se pone en la
-   *  propia presentación: allí ya estás dentro. */
-  onSaberMas?: () => void;
+  /** Si se pasa, sale un «Saber más ›» que lleva a la presentación de la
+   *  disciplina (/d/:disciplina). No se pone en la propia presentación: allí ya
+   *  estás dentro.
+   *
+   *  Es una RUTA, no una función: el botón se pinta como enlace de verdad
+   *  (`<a href target="_blank">`), así que abre la presentación en una PESTAÑA
+   *  NUEVA y quien está mirando el mandala no lo pierde ni tiene que volver
+   *  atrás. Y por ser un enlace real funcionan el clic con el botón central,
+   *  ctrl/⌘+clic y «copiar la dirección del enlace». */
+  saberMasHref?: string;
   // Solo lo que necesitan los dos sitios donde se usa. Aceptar FlexProps entero
   // hace explotar el chequeo de tipos («union type too complex»).
 } & Pick<FlexProps, "h" | "minH" | "flex">) {
@@ -280,10 +286,12 @@ export function DisciplinaVideoBox({
             con el precio, que es lo que decide abajo.
             Solo cuando HAY precio: sin él, el «Saber más» vive abajo y en
             grande, y tenerlo dos veces en el mismo box parte la mirada. */}
-        {onSaberMas && !sinPrecio && (
+        {saberMasHref && !sinPrecio && (
           <Flex
-            as="button"
-            onClick={onSaberMas}
+            as="a"
+            href={saberMasHref}
+            target="_blank"
+            rel="noopener noreferrer"
             ml="auto"
             flexShrink={0}
             align="center"
@@ -294,10 +302,13 @@ export function DisciplinaVideoBox({
             border={`1px solid ${accent}66`}
             color={accent}
             cursor="pointer"
+            // Es un <a>: sin esto el navegador (o los estilos globales) le
+            // subraya el texto y deja de parecer un botón.
+            textDecoration="none"
             sx={{
               WebkitTapHighlightColor: "transparent",
               transition: "all 0.2s ease",
-              _hover: { bg: `${accent}22`, borderColor: accent, transform: "translateY(-1px)" },
+              _hover: { bg: `${accent}22`, borderColor: accent, transform: "translateY(-1px)", textDecoration: "none" },
               _active: { transform: "translateY(0)" },
             }}
           >
@@ -482,10 +493,12 @@ export function DisciplinaVideoBox({
               mirada ya se para (esquina de cierre del box), así que es el que
               tiene que llevarse la llamada, no un importe. */}
           {sinPrecio ? (
-            onSaberMas && (
+            saberMasHref && (
               <Flex
-                as="button"
-                onClick={onSaberMas}
+                as="a"
+                href={saberMasHref}
+                target="_blank"
+                rel="noopener noreferrer"
                 align="center"
                 justify="center"
                 gap={2.5}
@@ -500,9 +513,10 @@ export function DisciplinaVideoBox({
                 bg={`${accent}33`}
                 color={accent}
                 cursor="pointer"
+                textDecoration="none"
                 boxShadow={`0 0 20px ${accent}44, 0 3px 14px rgba(0,0,0,0.28)`}
                 sx={{ WebkitTapHighlightColor: "transparent", userSelect: "none", backdropFilter: "blur(4px)" }}
-                _hover={{ bg: `${accent}4d`, boxShadow: `0 0 30px ${accent}66, 0 5px 18px rgba(0,0,0,0.32)`, transform: "translateY(-2px)" }}
+                _hover={{ bg: `${accent}4d`, boxShadow: `0 0 30px ${accent}66, 0 5px 18px rgba(0,0,0,0.32)`, transform: "translateY(-2px)", textDecoration: "none" }}
                 _active={{ transform: "translateY(0) scale(0.98)" }}
                 transition="all 0.2s ease"
               >

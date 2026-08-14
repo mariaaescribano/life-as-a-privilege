@@ -6,7 +6,7 @@ import ThemeSection from "../../../components/espacio/components/ThemeSection";
 import { DisciplineHeader } from "../../../components/global/DisciplineHeader";
 import SiteHeader from "../../../components/global/SiteHeader";
 import type { Bloque, ThemeTitleObject } from "../../../dtos/espacio.type";
-import { preguntasNeuroPsicologia } from "../../../hardCoded/espacio/PreguntasNeuroPsicologia";
+import { usePreguntasNeuro } from "../../../hardCoded/espacio/usePreguntasNeuro";
 import {
   neuropsicologiaBg,
   NeuropsicologiaIcon,
@@ -14,9 +14,14 @@ import {
   neuropsicologiaTxt,
 } from "../../../GlobalVariables";
 import SiteFooter from "../../global/Footer";
+import { useNombreDisciplina } from "../../../i18n/nombreDisciplina";
 
 const ThemePreguntas = () => {
   const { themeId } = useParams<{ themeId: string }>();
+  const nombreDisc = useNombreDisciplina();
+  // Las preguntas en el idioma activo (el `idPregunta` con el que se guarda la
+  // respuesta no cambia: solo cambia el texto que se lee).
+  const preguntas = usePreguntasNeuro();
 
   const [bloques, setBloques] = useState<Bloque[]>([]);
   const [theme, settheme]     = useState<ThemeTitleObject>();
@@ -28,20 +33,22 @@ const ThemePreguntas = () => {
   const getThemeData = () => {
     if (themeId == neuropsicologiaNom) {
       settheme({
-        title:   neuropsicologiaNom,
+        title:   nombreDisc(neuropsicologiaNom),
         icon:    <NeuropsicologiaIcon size={{ base: "40px", md: "56px" }} />,
         color:   neuropsicologiaTxt,
         bgColor: neuropsicologiaBg,
       });
-      return preguntasNeuroPsicologia;
+      return preguntas;
     }
   };
 
+  // Se recalcula también al cambiar de idioma: `preguntas` y el título salen de
+  // hooks, así que la dependencia es la lista, no solo el tema.
   useEffect(() => {
     if (!themeId) return;
     const data = getThemeData();
     if (data) setBloques(data);
-  }, [themeId]);
+  }, [themeId, preguntas]);
 
   return (
     <Box

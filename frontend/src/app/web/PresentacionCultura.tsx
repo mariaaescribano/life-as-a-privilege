@@ -10,7 +10,8 @@ import { Reveal, RevealItem, RevealStagger } from "../../components/global/Revea
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaVideoBox } from "../../components/metodo/DisciplinaVideoBox";
-import { HISTORIAS_CULTURA } from "../../components/metodo/culturaHistorias";
+import { HISTORIAS_CULTURA, tituloHistoria } from "../../components/metodo/culturaHistorias";
+import { historiaTraducida } from "../../components/metodo/culturaHistorias.en";
 import { historiaVisual } from "../../components/metodo/culturaPortadas";
 import type { HitoHistoria } from "../../components/metodo/culturaHistoriaUniversal";
 import {
@@ -48,10 +49,10 @@ const CULTURA_IMG = "/img/fondos/cultura.webp";
 const ORDEN_HISTORIAS = ["universal", "religiones", "filosofia", "ciencia", "medicina", "arte"];
 
 /** Lo que sale al tocar una línea del tiempo: aquí no se abre nada. */
-const AVISO = "Descúbrelo dentro";
+const AVISO = "presentacion.cultura.aviso" as const;
 
 export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }) {
-  const { segunIdioma } = useIdioma();
+  const { segunIdioma, idioma } = useIdioma();
   // El nombre visible; `d.titulo` solo vale para casar la URL.
   const disciplina = useNombreDisciplinaEnMapa()(d.nom);
   const t = useT();
@@ -62,11 +63,21 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
 
+  // Las seis Historias en el idioma activo. El título sale del diccionario
+  // (`tituloHistoria`), que es el mismo que se lee dentro del recorrido; las
+  // eras salen del texto traducido, y lo que no esté traducido se queda en
+  // español (ver `culturaHistorias.en.ts`).
   const historias = useMemo(
     () => ORDEN_HISTORIAS
-      .map((k) => ({ key: k, ...HISTORIAS_CULTURA[k], ...historiaVisual(k) }))
+      .map((k) => ({
+        key: k,
+        ...HISTORIAS_CULTURA[k],
+        ...historiaTraducida(HISTORIAS_CULTURA[k], k, idioma),
+        titulo: tituloHistoria(k),
+        ...historiaVisual(k),
+      }))
       .filter((h) => h.hitos?.length),
-    [],
+    [idioma],
   );
 
   const fotosListas = useImagesReady([
@@ -453,7 +464,7 @@ function LineaEjemplo({
               textTransform="uppercase"
               whiteSpace="nowrap"
             >
-              {hitos.length} eras
+              {t("presentacion.cultura.eras", { n: hitos.length })}
             </Text>
           </Flex>
         </Flex>
@@ -578,7 +589,7 @@ function LineaEjemplo({
               whiteSpace="nowrap"
               boxShadow="0 8px 26px rgba(0,0,0,0.5)"
             >
-              {AVISO}
+              {t(AVISO)}
             </Text>
           </Flex>
         </Box>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SiteHeader from "../../global/SiteHeader";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
-import { API_URL, tcmBg, TCMIcon, tcmTxt } from "../../../GlobalVariables";
+import { API_URL, tcmBg, TCMIcon, tcmNom, tcmTxt } from "../../../GlobalVariables";
 import { ContactModal } from "../../global/ContactModal";
 import {
   RECS_CONSTITUCIONES,
@@ -16,6 +16,21 @@ import {
 import { getTheme } from "../data/tcmTheme";
 import SiteFooter from "../../global/Footer";
 import { generateTcmPdf, type TcmRespuesta } from "../../../utils/generateTcmPdf";
+import {
+  RECS_CONSTITUCIONES_EN,
+  RECS_DESEQUILIBRIOS_EN,
+  RECS_ELEMENTOS_EN,
+} from "../data/tcmRecommendations.en";
+import {
+  DESC_CONSTITUCION_EN,
+  DESC_DESEQUILIBRIO_EN,
+  DESC_ELEMENTO_EN,
+  useDescripcionesTcm,
+  useNombreResultado,
+  useRecsTcm,
+} from "../data/tcmEspacio.en";
+import { useT } from "../../../i18n";
+import { useNombreDisciplina } from "../../../i18n/nombreDisciplina";
 
 /* ══════════════════════════════════════════════
    TIPOS
@@ -28,6 +43,10 @@ interface TcmData {
 
 /* ══════════════════════════════════════════════
    DESCRIPCIONES POR RESULTADO
+
+   La clave es el resultado tal y como lo guarda la base de datos: se
+   queda en español siempre. El inglés se pega encima AL PINTAR, desde
+   `data/tcmEspacio.en.ts` (`useDescripcionesTcm`).
 ══════════════════════════════════════════════ */
 const DESC_CONSTITUCION: Record<string, string> = {
   "Equilibrado":
@@ -250,7 +269,10 @@ const TestStatusCard = ({
 ══════════════════════════════════════════════ */
 type ResultSectionProps = {
   testNum: number;
+  /** El título de la sección, ya traducido. */
   testLabel: string;
+  /** El resultado guardado, ya traducido para pintar (`result` no se toca). */
+  resultLabel?: string;
   testLink: string;
   headerIcon: React.ReactNode;
   result: string | null;
@@ -265,6 +287,7 @@ type ResultSectionProps = {
 const ResultSection = ({
   testNum,
   testLabel,
+  resultLabel,
   testLink,
   headerIcon,
   result,
@@ -275,6 +298,7 @@ const ResultSection = ({
   onSaberMas,
   onDownloadPdf,
 }: ResultSectionProps) => {
+  const t = useT();
   const locked = !result;
   const rec = result ? recs[result] : null;
   const description = result ? descriptions[result] : undefined;
@@ -355,7 +379,7 @@ const ResultSection = ({
                 fontFamily="'EB Garamond', serif"
                 filter={`drop-shadow(0 0 6px ${elTheme ? elTheme.accent + "88" : tcmTxt + "88"})`}
               >
-                {result}
+                {resultLabel ?? result}
               </Text>
             </Flex>
           </Box>
@@ -389,7 +413,7 @@ const ResultSection = ({
             letterSpacing="0.03em"
             textAlign="center"
           >
-            Completa el test para desbloquear tu resultado personalizado
+            {t("espacio.tcm.bloqueado")}
           </Text>
           <Box
             as="button"
@@ -413,7 +437,7 @@ const ResultSection = ({
               color: tcmTxt,
             }}
           >
-            Hacer test de {testLabel}
+            {t("espacio.tcm.hacerTest", { test: testLabel })}
           </Box>
         </Flex>
       ) : (
@@ -463,15 +487,15 @@ const ResultSection = ({
                     textTransform="uppercase"
                     fontFamily="'EB Garamond', serif"
                   >
-                    Recomendaciones
+                    {t("espacio.tcm.recomendaciones")}
                   </Text>
                   <Box flex="1" h="1px" bg={`${c}22`} borderRadius="full" />
                 </Flex>
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                  <RecBox title="Infusiones y Tés" icon={<TeaIcon />} items={rec.infusiones} accentColor={c} />
-                  <RecBox title="Hierbas Medicinales" icon={<HerbIcon />} items={rec.hierbas} accentColor={c} />
-                  <RecBox title="Estilo de Vida" icon={<LifestyleIconSm />} items={rec.estiloDeVida} accentColor={c} />
-                  <RecBox title="Nutrición" icon={<NutriIconCustom />} items={rec.nutricion} accentColor={c} />
+                  <RecBox title={t("espacio.tcm.rec.infusiones")} icon={<TeaIcon />} items={rec.infusiones} accentColor={c} />
+                  <RecBox title={t("espacio.tcm.rec.hierbas")} icon={<HerbIcon />} items={rec.hierbas} accentColor={c} />
+                  <RecBox title={t("espacio.tcm.rec.estiloDeVida")} icon={<LifestyleIconSm />} items={rec.estiloDeVida} accentColor={c} />
+                  <RecBox title={t("espacio.tcm.rec.nutricion")} icon={<NutriIconCustom />} items={rec.nutricion} accentColor={c} />
                 </SimpleGrid>
               </Box>
             );
@@ -505,7 +529,7 @@ const ResultSection = ({
               }}
               _active={{ transform: "translateY(0)" }}
             >
-              Quiero saber más
+              {t("espacio.tcm.saberMas")}
             </Box>
             {onDownloadPdf && (
               <Box
@@ -528,7 +552,7 @@ const ResultSection = ({
                   borderColor: "#da7171",
                 }}
               >
-                Descargar PDF
+                {t("espacio.descargarPdf")}
               </Box>
             )}
             <Box
@@ -552,7 +576,7 @@ const ResultSection = ({
                 color: tcmTxt,
               }}
             >
-              Rehacer test
+              {t("espacio.tcm.rehacer")}
             </Box>
           </Flex>
         </Flex>
@@ -586,6 +610,15 @@ const IconDesequilibrio = () => (
    PÁGINA PRINCIPAL
 ══════════════════════════════════════════════ */
 export default function TCMespacio() {
+  const t = useT();
+  const nombreDisc = useNombreDisciplina();
+  const nombreResultado = useNombreResultado();
+  const recsConstituciones = useRecsTcm(RECS_CONSTITUCIONES, RECS_CONSTITUCIONES_EN);
+  const recsElementos = useRecsTcm(RECS_ELEMENTOS, RECS_ELEMENTOS_EN);
+  const recsDesequilibrios = useRecsTcm(RECS_DESEQUILIBRIOS, RECS_DESEQUILIBRIOS_EN);
+  const descConstitucion = useDescripcionesTcm(DESC_CONSTITUCION, DESC_CONSTITUCION_EN);
+  const descElemento = useDescripcionesTcm(DESC_ELEMENTO, DESC_ELEMENTO_EN);
+  const descDesequilibrio = useDescripcionesTcm(DESC_DESEQUILIBRIO, DESC_DESEQUILIBRIO_EN);
   const navigate = useNavigate();
   const [tcmData, setTcmData] = useState<TcmData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -652,7 +685,7 @@ export default function TCMespacio() {
         >
           <DisciplineHeader
             icon={<TCMIcon size={{ base: "40px", md: "60px" }} />}
-            title="Medicina China"
+            title={nombreDisc(tcmNom)}
             bgColor={tcmBg}
             color={tcmTxt}
             maxW="900px"
@@ -696,27 +729,27 @@ export default function TCMespacio() {
                     filter={`drop-shadow(0 0 6px ${tcmTxt}66)`}
                     fontFamily="'EB Garamond', serif"
                   >
-                    Tests para el Autoconocimiento
+                    {t("espacio.tcm.tests")}
                   </Text>
                 </Flex>
 
                 <SimpleGrid w="100%" columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 5 }}>
                   <TestStatusCard
-                    label="Conoce tu constitución"
+                    label={t("espacio.tcm.t1.tarjeta")}
                     link="/tcm/test/1"
                     result={constitucion}
                     icon={<IconConstitucion />}
                     navigate={navigate}
                   />
                   <TestStatusCard
-                    label="Tu elemento predominante"
+                    label={t("espacio.tcm.t2.tarjeta")}
                     link="/tcm/test/2"
                     result={elemento}
                     icon={<IconElemento />}
                     navigate={navigate}
                   />
                   <TestStatusCard
-                    label="Tu desequilibrio actual"
+                    label={t("espacio.tcm.t3.tarjeta")}
                     link="/tcm/test/3"
                     result={desequilibrio}
                     icon={<IconDesequilibrio />}
@@ -728,12 +761,13 @@ export default function TCMespacio() {
               {/* ══ SECCIÓN 1: CONSTITUCIÓN ══ */}
               <ResultSection
                 testNum={1}
-                testLabel="Tu Constitución"
+                testLabel={t("espacio.tcm.t1.seccion")}
+                resultLabel={constitucion ? nombreResultado(constitucion) : undefined}
                 testLink="/tcm/test/1"
                 headerIcon={<IconConstitucion />}
                 result={constitucion}
-                recs={RECS_CONSTITUCIONES}
-                descriptions={DESC_CONSTITUCION}
+                recs={recsConstituciones}
+                descriptions={descConstitucion}
                 navigate={navigate}
                 onSaberMas={() => setSaberMasOpen(true)}
                 onDownloadPdf={constitucion ? () => handleDownloadPdf(1, constitucion) : undefined}
@@ -742,12 +776,13 @@ export default function TCMespacio() {
               {/* ══ SECCIÓN 2: ELEMENTO ══ */}
               <ResultSection
                 testNum={2}
-                testLabel="Tu Elemento Predominante"
+                testLabel={t("espacio.tcm.t2.seccion")}
+                resultLabel={elemento ? nombreResultado(elemento) : undefined}
                 testLink="/tcm/test/2"
                 headerIcon={<IconElemento />}
                 result={elemento}
-                recs={RECS_ELEMENTOS}
-                descriptions={DESC_ELEMENTO}
+                recs={recsElementos}
+                descriptions={descElemento}
                 navigate={navigate}
                 useElementColor
                 onSaberMas={() => setSaberMasOpen(true)}
@@ -757,12 +792,13 @@ export default function TCMespacio() {
               {/* ══ SECCIÓN 3: DESEQUILIBRIO ══ */}
               <ResultSection
                 testNum={3}
-                testLabel="Tu Desequilibrio Actual"
+                testLabel={t("espacio.tcm.t3.seccion")}
+                resultLabel={desequilibrio ? nombreResultado(desequilibrio) : undefined}
                 testLink="/tcm/test/3"
                 headerIcon={<IconDesequilibrio />}
                 result={desequilibrio}
-                recs={RECS_DESEQUILIBRIOS}
-                descriptions={DESC_DESEQUILIBRIO}
+                recs={recsDesequilibrios}
+                descriptions={descDesequilibrio}
                 navigate={navigate}
                 useElementColor
                 onSaberMas={() => setSaberMasOpen(true)}
@@ -779,22 +815,23 @@ export default function TCMespacio() {
       <ContactModal
         isOpen={saberMasOpen}
         onClose={() => setSaberMasOpen(false)}
-        title="Evaluación personalizada"
+        title={t("espacio.tcm.evaluacion")}
         icon={<TCMIcon size="24px" />}
         bgColor={tcmBg}
         color={tcmTxt}
+        // El asunto del correo va siempre en español: lo lee María.
         emailSubject="Solicitud de autoevaluación personalizada — TCM"
         showDescription={true}
         showCheckboxes={false}
         emailOrPhone={true}
-        textareaPlaceholder="¿Te gustaría contarme algo por adelantado?"
+        textareaPlaceholder={t("espacio.tcm.evaluacion.placeholder")}
       />
 
       <ContactModal
         isOpen={diagModalOpen}
         onClose={() => setDiagModalOpen(false)}
-        title="Diagnóstico completo"
-        subtitle="Déjame tus datos y me pondré en contacto contigo para ofrecerte un diagnóstico personalizado de Medicina China."
+        title={t("espacio.tcm.diagnostico")}
+        subtitle={t("espacio.tcm.diagnostico.sub")}
         bgColor={tcmBg}
         color={tcmTxt}
         emailSubject="Solicitud de diagnóstico completo TCM"

@@ -11,6 +11,8 @@ import { PagoCabalaModal } from "../../components/metodo/PagoCabalaModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { CABALA_INTRO } from "../../components/metodo/comicCabalaIntro";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { CABALA_HISTORIA } from "../../components/metodo/comicCabalaHistoria";
 import { useComic } from "../../i18n/comics";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
@@ -32,6 +34,8 @@ export default function MetodoCabala() {
   const t = useT();
   // El cómic del Origen de Cábala, en el idioma activo.
   const introVinetas = useComic("cabala-intro", CABALA_INTRO);
+  // Cómic de la historia de la Cábala: se intercala al pasar al Árbol de la Vida.
+  const historiaVinetas = useComic("cabala-historia", CABALA_HISTORIA);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [suscrito, setSuscrito] = useState(false);
@@ -39,6 +43,7 @@ export default function MetodoCabala() {
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
   const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
+  const [comicHistoriaOpen, setComicHistoriaOpen] = useState(false);
   const intro = useIntroComic("metodo-cabala"); // cómic del Origen, 1ª vez
 
   useEffect(() => {
@@ -86,9 +91,10 @@ export default function MetodoCabala() {
     }
   };
 
+  // Antes del Árbol de la Vida se pasa por el cómic de la historia de la Cábala.
   const comenzar = () => {
     if (!suscrito) { setPagoOpen(true); return; }
-    navigate("/metodo/cabala/arbol");
+    setComicHistoriaOpen(true);
   };
 
   if (loading) {
@@ -169,6 +175,21 @@ export default function MetodoCabala() {
         onContinue={intro.close}
         onFinish={intro.finish}
         onClose={intro.close}
+      />
+
+      {/* Cómic de la historia de la Cábala: intercalado antes del Árbol de la Vida. */}
+      <ComicPasoModal
+        isOpen={comicHistoriaOpen}
+        onClose={() => setComicHistoriaOpen(false)}
+        onContinue={() => navigate("/metodo/cabala/arbol")}
+        vinetas={historiaVinetas}
+        continueLabel={t("metodo.cabala.paso.arbol")}
+        themeColor={cabalaTxt}
+        textColor={cabalaTxt}
+        textShadow={INK_SHADOW}
+        disciplinaBgImage="/img/fondos/cabala.webp"
+        disciplinaBgColor={cabalaBg}
+        botonNitido
       />
 
       <CabalaIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />

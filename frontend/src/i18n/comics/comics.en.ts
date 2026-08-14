@@ -1635,9 +1635,12 @@ export const COMICS_EN: Record<string, ComicEn> = {
     {
       titulo: "The nitrogen cycle",
       paragraphs: [
-        "The nitrogen cycle turns atmospheric nitrogen into forms that living beings can use.",
-        "Nitrogen-fixing bacteria convert nitrogen from the air into compounds plants can take up, and those plants are then eaten by animals.",
-        "After death, or once waste is excreted, other microorganisms recycle the nitrogen and finally return it to the atmosphere through denitrification, closing the cycle.",
+        "The nitrogen cycle turns atmospheric nitrogen into forms that living beings can take in and use.",
+        "Nitrogen-fixing bacteria convert nitrogen from the air into compounds plants can make use of, and those plants are then eaten by animals.",
+        "When animals eat plants —or eat other animals that ate them— they get that nitrogen.",
+        "That nitrogen ends up as part of amino acids, which are the components of proteins. And proteins build, among other things, muscle structures and a great many enzymes.",
+        "After death, or once waste is excreted, other microorganisms recycle the nitrogen.",
+        "Finally, part of it can go back to the atmosphere as N₂ through denitrification, closing the cycle.",
       ],
     },
     {
@@ -1687,8 +1690,9 @@ export const COMICS_EN: Record<string, ComicEn> = {
     {
       paragraphs: [
         "Almost every plant in the world makes a deal with fungi in the soil. The fungus enters the root and spreads its threads far beyond anywhere the root could reach: a network that multiplies its range.",
-        "The fungus hands over water, phosphorus and other minerals that are hard to come by. The plant pays in sugar freshly made in its leaves. Neither of them could live nearly this well apart.",
-        "And legumes go one step further: they house bacteria in little lumps on their roots, bacteria that know how to split the nitrogen in the air — something the plant can't do alone. That's why legumes are so rich in protein, and why they leave the soil better than they found it.",
+        "The fungus hands over water, phosphorus and other minerals that are hard to come by. The plant pays in glucose freshly made in its leaves. Neither of them could live nearly this well apart.",
+        "And legumes go one step further: on their roots they form small nodules where bacteria live that can fix the nitrogen in the air. Atmospheric nitrogen is mostly there as N₂, a molecule plants can't use directly. These bacteria can turn it into nitrogen compounds the plant can take in and use.",
+        "Thanks to that relationship, legumes can build up a substantial amount of nitrogen in their tissues and use it to make amino acids and proteins. And when the roots and what's left of the plant stay in the soil and break down, part of that nitrogen can become available to other organisms, helping keep the soil fertile.",
         "A plant depends on its microbes to feed itself. Exactly like you.",
       ],
     },
@@ -1696,7 +1700,7 @@ export const COMICS_EN: Record<string, ComicEn> = {
       paragraphs: [
         "Living soil, with organic matter and its fungi and bacteria, hands over minerals; exhausted, compacted soil hands over less, and whatever grows on it comes out poorer.",
         "A plant can't put into its fruit what it never found below. And you can't absorb what the plant never managed to store.",
-        "The iron carrying oxygen around your blood right now went through a rock, through the water of the soil, through a fungus and through a root before it reached you. Every link in the chain had to work.",
+        "The iron carrying oxygen around your blood right now went through a rock, through the water of the soil, through a fungus and through a root before it reached you.",
       ],
     },
   ],
@@ -1712,9 +1716,13 @@ export const COMICS_EN: Record<string, ComicEn> = {
     {
       paragraphs: [
         "Inside, a plant is crossed from top to bottom by two channels running side by side. The xylem carries water and minerals up from the root to the furthest leaf: hollow tubes, cells that emptied out and died to leave the way clear. Wood is xylem.",
-        "The phloem goes down, sharing out the sugar freshly made in the leaves to wherever it's needed — a growing root, a flower, a fruit filling out. This one is made of living cells. When you bite into the stalk of a chard leaf, you're chewing those pipes.",
-        "And a tree lifts water tens of meters every day with no heart and no pump. It doesn't push from below: it pulls from above. The leaf loses water by evaporation and, because water molecules hold on to each other by their poles, each one that escapes drags along the one behind it.",
-        "The result is an unbroken thread of water from the leaf down to the hair on the root. The plant doesn't pump: the Sun moves the water.",
+        "The phloem goes down, sharing out the glucose freshly made in the leaves to wherever it's needed — a growing root, a flower, a fruit filling out. This one is made of living cells. When you bite into the stalk of a chard leaf, you're chewing those pipes.",
+        "A tree can carry water from its roots up to leaves tens of meters above, with no heart and no pump pushing it from below.",
+        "How does it manage that?",
+        "The key is in the leaves. When water reaches them, part of it evaporates into the atmosphere through tiny pores called stomata. That loss of water creates a kind of pull upward.",
+        "But that pull is only possible because water molecules stay joined to one another. Thanks to cohesion, when a water molecule leaves the leaf it pulls on the ones behind it inside the vessels of the xylem. Those, in turn, pull on the next ones, forming an unbroken column of water that runs from the leaves down to the roots.",
+        "That's how water can climb the whole tree. Evaporation in the leaves creates the pull, cohesion holds the column of water together, and the roots supply the water that joins the system.",
+        "The Sun's energy provides the heat needed for the water to evaporate in the leaves, and it's that evaporation that drives the water upward.",
       ],
     },
     {
@@ -1726,10 +1734,9 @@ export const COMICS_EN: Record<string, ComicEn> = {
     },
     {
       paragraphs: [
-        "The plant makes sugar in its leaves, but it doesn't leave it there: it sends it off to be stored. And depending on where it stores it, a different food appears.",
+        "The plant makes glucose in its leaves, but it doesn't leave it there: it sends it off to be stored. And depending on where it stores it, a different food appears.",
         "In roots and tubers it builds a pantry of starch for the winter or for sprouting —carrot, beetroot, potato, sweet potato— and that's why they're sweeter and denser. In seeds it keeps the most valuable things, because that's where the next generation goes: protein, fat and minerals. In leaves and stems there's hardly any store at all: water, fiber, vitamins and minerals, a lot of bulk and very few calories.",
         "That's why a potato and a spinach leaf are nothing alike, even though both are plants: you aren't eating the same part of the story.",
-        "And wherever you look —a lentil, an avocado, a grain of wheat— it's always the same architecture. There's no shortcut with meat, eggs or milk either, because the animal ate plants. All the food in the world comes through here first.",
       ],
     },
   ],
@@ -1738,7 +1745,8 @@ export const COMICS_EN: Record<string, ComicEn> = {
     {
       paragraphs: [
         "If the plant is the house, the leaf is the factory. And its shape gives it away: flat, so light falls on the largest possible surface, and paper-thin, so light gets through every layer and air can come and go without delay.",
-        "Outside it wears a waterproof layer of wax —which is why water beads off a cabbage leaf— and under that a skin of transparent cells that lets light through without using it. In the middle is the layer that works: tall cells packed together like columns, crammed with chloroplasts. Below them, air spaces where the gases circulate. And running through all of it, the veins: xylem and phloem.",
+        "Outside it wears a waterproof layer of wax —which is why water beads off it— and under that a skin of transparent cells that lets light through without using it.",
+        "In the middle is the layer that works: tall cells packed together like columns, crammed with chloroplasts. Below them, air spaces where the gases circulate. And running through all of it, the veins: xylem and phloem.",
         "Every leaf is a solar panel, a lung and a kitchen all at once. And out of what happens inside it comes, without exception, all the food on the planet.",
       ],
     },
@@ -1752,7 +1760,7 @@ export const COMICS_EN: Record<string, ComicEn> = {
     },
     {
       paragraphs: [
-        "Inside the cells of the leaf there are green sacs, the chloroplasts, full of chlorophyll: the molecule that catches light. It absorbs red and blue very well, and bounces green back — the green you see is, precisely, the part of the light the leaf did NOT want to keep.",
+        "Inside the cells of the leaf there are green sacs, the chloroplasts, full of chlorophyll: the molecule that catches light. It absorbs red and blue very well, and bounces green back — which is why leaves are usually green.",
         "With the energy it does catch, it does something extraordinary: it breaks water molecules apart to steal their electrons and their hydrogen.",
         "And splitting water leaves oxygen over, which the leaf releases into the air because it has no use for it. The oxygen you're breathing right now is a leaf's waste.",
       ],
@@ -1770,9 +1778,9 @@ export const COMICS_EN: Record<string, ComicEn> = {
   "nutricion-origen-fruta": [
     {
       paragraphs: [
-        "Every fruit starts out as a flower. Pollen arrives, it joins the ovule, and a seed is born there: a whole new plant, in miniature. And then the plant starts building a box around it: walls, water, sugar, color, scent.",
-        "That box is the fruit. And here's the part almost nobody tells you: the fruit wasn't made for you. It was made for the seed.",
-        "That's why, while the seed is still forming, the fruit is green, hard, sour and sometimes bitter or even toxic. It isn't a fault: if anyone ate it now, the seed would be good for nothing. So it camouflages itself among the leaves and makes itself unpleasant on purpose. It's a sign saying «not yet».",
+        "Before spending energy on reproducing, a plant needs to know whether the moment has come. It reads the light, the temperature, the water and the nutrients around it. If the signals say conditions are right, it switches on a signal called florigen that travels from the leaves to the growing points. It's like a message running through the plant saying: «Now. It's time to flower».",
+        "Then it all begins. The flower appears, pollen arrives, it joins the ovule and a seed starts to form: a whole new plant, in miniature. And around that small life, the plant starts building a box: walls, water, sugar, color and scent. That box is the fruit.",
+        "Here's the part almost nobody tells you: the fruit wasn't made for you. It was made for the seed. That's why, while the seed is still forming, the fruit is usually green, hard, sour and, in some species, even bitter or toxic. It isn't a fault. It's protection. The plant doesn't want anyone eating its fruit too soon and destroying the seed. It's like a sign saying: «Not yet».",
       ],
     },
     {
@@ -1813,7 +1821,7 @@ export const COMICS_EN: Record<string, ComicEn> = {
         "If all it did was lose, there'd be no point eating it. What happens is that it also transforms and concentrates.",
         "It arranges amino acids in a proportion very close to the one you need, and that's where «complete protein» comes from. It keeps iron inside a molecule your gut absorbs far better than the iron in plants. It stores vitamins in its liver and its fat. And it lengthens the short fats from the plant into the long ones your brain uses. Eating animal food is, in part, taking advantage of work already done.",
         "And there's one vitamin that breaks the pattern: B12. No plant makes it… but no animal makes it either. Bacteria make it: the animal carries them in its digestive tract or swallows them with soil, and stores the vitamin in its liver and its muscle. We get it from there.",
-        "That's why it's the only one a fully plant-based diet needs to take separately. It isn't a shortcoming of plants: that work is done by microbes, and you have to go where it is. Once again, the same thing you saw with your microbiome and with roots.",
+        "That's why it's the only one a fully plant-based diet needs to take separately. It isn't a shortcoming of plants: that work is done by microbes.",
       ],
     },
     {

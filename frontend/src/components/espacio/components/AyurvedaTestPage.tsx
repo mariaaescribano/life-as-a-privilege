@@ -15,8 +15,9 @@ import {
   vataColor, pittaColor, kaphaColor,
 } from "../../../GlobalVariables";
 import { preguntasAyurveda } from "../../../hardCoded/espacio/PreguntasAyurveda";
+import { usePreguntasAyurveda } from "../../../hardCoded/espacio/usePreguntasAyurveda";
 import { generateAyurvedaPdf } from "../../../utils/generateAyurvedaPdf";
-import { DOSHA_CONSEJOS } from "../../../hardCoded/espacio/DoshaConsejos";
+import { useDoshaConsejos } from "../../../hardCoded/espacio/useDoshaConsejos";
 import { generateDoshaConsejosPdf } from "../../../utils/generateDoshaConsejosPdf";
 import { useT } from "../../../i18n";
 
@@ -56,6 +57,11 @@ export default function AyurvedaTestPage({
   headerNext?: { label: string; onClick: () => void; disabled?: boolean; disabledTooltip?: string; icon?: React.ReactNode };
 }) {
   const t = useT();
+  // Las preguntas y los consejos que se PINTAN. Lo que se guarda en la base de
+  // datos y lo que sale en el PDF sigue saliendo de `preguntasAyurveda`, en
+  // español, para que el histórico no quede a medias en dos idiomas.
+  const preguntas = usePreguntasAyurveda();
+  const doshaConsejos = useDoshaConsejos();
   const navigate = useNavigate();
   const [answers, setAnswers] = useState<(Dosha | null)[]>(preguntasAyurveda.map(() => null));
   const [saving, setSaving] = useState(false);
@@ -137,8 +143,8 @@ export default function AyurvedaTestPage({
               nom={ayurvedaNom}
               mb={{ base: 0, md: 0 }}
               prev={{ label: prevLabel ?? `← ${t("comun.volver")}`, onClick: () => navigate(prevTo) }}
-              extra={headerNext ? { label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)} : undefined}
-              next={headerNext ?? { label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
+              extra={headerNext ? { label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)} : undefined}
+              next={headerNext ?? { label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
             />
 
             {/* Resultado principal */}
@@ -236,13 +242,13 @@ export default function AyurvedaTestPage({
 
             {/* Consejos personalizados */}
             {(() => {
-              const recs = DOSHA_CONSEJOS[guestResult.dosha];
+              const recs = doshaConsejos[guestResult.dosha];
               if (!recs) return null;
               const categories = [
-                { key: "alimentacion" as const, label: "Alimentación" },
-                { key: "hierbas" as const, label: "Hierbas" },
-                { key: "estiloDeVida" as const, label: "Estilo de Vida" },
-                { key: "evitar" as const, label: "Evitar" },
+                { key: "alimentacion" as const, label: t("espacio.cons.alimentacion") },
+                { key: "hierbas" as const, label: t("espacio.cons.hierbas") },
+                { key: "estiloDeVida" as const, label: t("espacio.cons.estiloDeVida") },
+                { key: "evitar" as const, label: t("espacio.cons.evitar") },
               ];
               return (
                 <Box w="100%" maxW="850px" mt={4}>
@@ -402,7 +408,7 @@ export default function AyurvedaTestPage({
             nom={ayurvedaNom}
             mb={{ base: 0, md: 0 }}
             prev={{ label: prevLabel ?? `← ${t("comun.volver")}`, onClick: () => navigate(prevTo) }}
-            next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
+            next={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
           />
 
           {/* Instrucciones */}
@@ -426,7 +432,7 @@ export default function AyurvedaTestPage({
           </Box>
 
           {/* Preguntas · cada box va apareciendo al bajar (los visibles ya salen al cargar) */}
-          {preguntasAyurveda.map((p, qi) => (
+          {preguntas.map((p, qi) => (
             <Reveal key={qi} inView direction="up" distance={26} duration={0.5} amount={0.15} w="100%" maxW="850px">
             <Box
               position="relative"
@@ -497,7 +503,7 @@ export default function AyurvedaTestPage({
           <Box w="100%" maxW="850px" textAlign="center" mt={4}>
             {!allAnswered && (
               <Text color="rgba(255,255,255,0.4)" fontSize="md" letterSpacing="0.06em" fontStyle="italic" mb={4}>
-                Responde todas las preguntas para ver tu Doṣha ({answered} / {preguntasAyurveda.length})
+                {t("espacio.ayur.responde", { hechas: answered, total: preguntas.length })}
               </Text>
             )}
             <Box

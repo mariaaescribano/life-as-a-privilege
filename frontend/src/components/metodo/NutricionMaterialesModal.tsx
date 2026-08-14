@@ -7,9 +7,11 @@ import { AppleLoader } from "./AppleLoader";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import {
-  ALIMENTOS, molsDeAlimento, FUNCIONES, GRUPO_MOLECULA_LABEL, ORDEN_GRUPOS_MOLECULA,
-  MACRO_COLOR, MACRO_LABEL, type Alimento, type Molecula,
+  ORDEN_GRUPOS_MOLECULA, MACRO_COLOR, type Alimento, type Molecula,
 } from "../../hardCoded/espacio/AlimentosNutricion";
+import {
+  useAlimentos, useMolsDeAlimento, useEtiquetasAlimentos,
+} from "../../hardCoded/espacio/useAlimentos";
 
 // ─────────────────────────────────────────────────────────────────────────
 // «Los materiales de los alimentos». Se abre desde la Biblioteca (popup del
@@ -22,7 +24,7 @@ import {
 
 // Píldora de la función de una molécula (constructora / combustible / …).
 function FuncionPill({ funcion }: { funcion: Molecula["funcion"] }) {
-  const f = FUNCIONES[funcion];
+  const f = useEtiquetasAlimentos().funcion(funcion);
   return (
     <Flex align="center" flexShrink={0} px={2} py={0.5} borderRadius="full" bg={f.color}
           boxShadow={`0 1px 6px ${f.color}77`}>
@@ -36,6 +38,7 @@ function FuncionPill({ funcion }: { funcion: Molecula["funcion"] }) {
 
 // Barra apilada de macros («de qué está hecho»).
 function BarraMacros({ macros }: { macros: Alimento["macros"] }) {
+  const et = useEtiquetasAlimentos();
   const total = Math.max(1, macros.carbohidrato + macros.proteina + macros.grasa);
   const segs = (["carbohidrato", "proteina", "grasa"] as const)
     .map((k) => ({ k, pct: Math.round((macros[k] / total) * 100) }))
@@ -53,7 +56,7 @@ function BarraMacros({ macros }: { macros: Alimento["macros"] }) {
           <Flex key={s.k} align="center" gap={1.5}>
             <Box w="10px" h="10px" borderRadius="full" bg={MACRO_COLOR[s.k]} />
             <Text color={nutricionTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={600}>
-              {MACRO_LABEL[s.k]} · {s.pct}%
+              {et.macro(s.k)} · {s.pct}%
             </Text>
           </Flex>
         ))}
@@ -116,7 +119,8 @@ function MoleculaCard({ m, pct }: { m: Molecula; pct?: number }) {
 // moléculas (foto, %, función y qué hace).
 function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void }) {
   const t = useT();
-  const mols = molsDeAlimento(a);
+  const et = useEtiquetasAlimentos();
+  const mols = useMolsDeAlimento(a);
   const grupos = ORDEN_GRUPOS_MOLECULA
     .map((g) => ({ grupo: g, items: mols.filter((x) => x.m.grupo === g) }))
     .filter((s) => s.items.length > 0);
@@ -194,7 +198,7 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
           {grupos.map((s) => (
             <Box key={s.grupo}>
               <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={800} mb={2.5}>
-                {GRUPO_MOLECULA_LABEL[s.grupo]}
+                {et.grupoMolecula(s.grupo)}
               </Text>
               <Flex direction="column" gap={{ base: 2.5, md: 3 }}>
                 {s.items.map(({ m, pct }) => <MoleculaCard key={m.key} m={m} pct={pct} />)}
@@ -225,12 +229,13 @@ function AlimentoBox({ a, onClick }: { a: Alimento; onClick: () => void }) {
 
 export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const t = useT();
+  const alimentos = useAlimentos();
   const [sel, setSel] = useState<Alimento | null>(null);
 
   // No mostramos la rejilla hasta que TODAS las fotos de los alimentos estén
   // cargadas; mientras tanto, la manzanita de Nutrición (AppleLoader). Así la
   // cuadrícula aparece completa y no se va rellenando de fotos a trompicones.
-  const fotosListas = usePrecargarImagenes(isOpen ? ALIMENTOS.map((a) => a.foto) : []);
+  const fotosListas = usePrecargarImagenes(isOpen ? alimentos.map((a) => a.foto) : []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -288,7 +293,7 @@ export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean;
             </Flex>
 
             <SimpleGrid columns={{ base: 2, sm: 3, md: 4 }} spacing={{ base: 4, md: 5 }} w="100%">
-              {ALIMENTOS.map((a) => (
+              {alimentos.map((a) => (
                 <AlimentoBox key={a.key} a={a} onClick={() => { setSel(a); window.scrollTo({ top: 0 }); }} />
               ))}
             </SimpleGrid>

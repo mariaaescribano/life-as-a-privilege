@@ -217,6 +217,10 @@ export const CINTURA_AYUDA = {
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface DesglosePunto {
+  /** Clave estable del factor: los tres corporales («edad», «imc», «cintura») y
+   *  la `key` de cada pregunta. Es por donde entra la traducción, para no tener
+   *  que emparejar por el texto español. */
+  key: string;
   /** Etiqueta del factor. */
   etiqueta: string;
   puntos: number;
@@ -251,8 +255,9 @@ export function calcularPrediabetes(d: PrediabetesData): ResultadoPrediabetes | 
   if (!prediabetesCompleto(d)) return null;
 
   const desglose: DesglosePunto[] = [
-    { etiqueta: "Tu edad", puntos: puntosEdad(edad), modificable: false },
+    { key: "edad", etiqueta: "Tu edad", puntos: puntosEdad(edad), modificable: false },
     {
+      key: "imc",
       etiqueta: "Tu complexión",
       puntos: puntosImc(peso, altura),
       modificable: true,
@@ -260,6 +265,7 @@ export function calcularPrediabetes(d: PrediabetesData): ResultadoPrediabetes | 
         "No hace falta una transformación: en los estudios, bajar entre un 5 % y un 7 % del peso ya reduce el riesgo a la mitad.",
     },
     {
+      key: "cintura",
       etiqueta: "Tu cintura",
       puntos: puntosCintura(d.cintura, sexo),
       modificable: true,
@@ -273,6 +279,7 @@ export function calcularPrediabetes(d: PrediabetesData): ResultadoPrediabetes | 
     if (!elegida) continue;
     const modificable = p.key === "actividad" || p.key === "vegetales";
     desglose.push({
+      key: p.key,
       etiqueta: p.categoria,
       puntos: elegida.puntos,
       modificable,

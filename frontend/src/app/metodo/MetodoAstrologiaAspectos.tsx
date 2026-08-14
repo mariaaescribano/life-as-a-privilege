@@ -15,7 +15,8 @@ import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaMod
 import { cuerpoByKey, CUERPOS } from "../../components/metodo/astrologiaData";
 import type { CartaNatal, Aspecto } from "../../components/metodo/CartaAstral3D/types";
 import { COLOR_ASPECTO } from "../../components/metodo/CartaAstral3D/types";
-import { ASPECTO_LABEL, ASPECTO_SYMBOL, aspectoKey } from "../../components/metodo/casasAspectos";
+import { ASPECTO_SYMBOL, aspectoKey } from "../../components/metodo/casasAspectos";
+import { useNombresAstro } from "../../components/metodo/astrologiaNombres";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
@@ -75,6 +76,9 @@ const boxAspectoKey = (cuerpoKey: string, a: Aspecto): string => `${cuerpoKey}|$
 
 export default function MetodoAstrologiaAspectos() {
   const t = useT();
+  // Los rótulos (planeta y aspecto) en el idioma activo. El DATO —la clave del
+  // cuerpo y el tipo de aspecto— sigue siendo el de siempre.
+  const n = useNombresAstro();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [aspectos, setAspectos] = useState<Aspecto[]>([]);
@@ -262,7 +266,7 @@ export default function MetodoAstrologiaAspectos() {
                       <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={36} />
                       <Text color={cuerpo.color} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                             letterSpacing="0.03em" style={{ textShadow: `0 0 12px ${cuerpo.color}66` }}>
-                        {cuerpo.label}
+                        {n.cuerpo(cuerpo.key)}
                       </Text>
                       {completa && (
                         <Flex align="center" gap={1} px={2.5} py={1} borderRadius="full"
@@ -347,7 +351,7 @@ export default function MetodoAstrologiaAspectos() {
                                 <Text display={{ base: "none", md: "block" }} w={{ md: "120px" }} flexShrink={0}
                                       color={`${cuerpo.color}ee`} fontSize="md" fontWeight="600" noOfLines={1}
                                       style={{ textShadow: `0 0 8px ${cuerpo.color}55` }}>
-                                  {cuerpo.label}
+                                  {n.cuerpo(cuerpo.key)}
                                 </Text>
                               </Flex>
 
@@ -362,7 +366,7 @@ export default function MetodoAstrologiaAspectos() {
                                 <Text w={{ md: "110px" }} flexShrink={0} fontSize={{ base: "2xs", md: "sm" }}
                                       color={`${colorAsp}dd`} letterSpacing="0.08em"
                                       textTransform="uppercase" whiteSpace="nowrap">
-                                  {ASPECTO_LABEL[aspecto.tipo]}
+                                  {n.aspecto(aspecto.tipo)}
                                 </Text>
                               </Flex>
 
@@ -373,7 +377,7 @@ export default function MetodoAstrologiaAspectos() {
                                   <Text display={{ base: "none", md: "block" }} w={{ md: "120px" }} flexShrink={0}
                                         color={`${co.color}ee`} fontSize="md" fontWeight="600" noOfLines={1}
                                         style={{ textShadow: `0 0 8px ${co.color}55` }}>
-                                    {co.label}
+                                    {n.cuerpo(co.key)}
                                   </Text>
                                 )}
                               </Flex>
@@ -446,7 +450,7 @@ export default function MetodoAstrologiaAspectos() {
                 </Flex>
                 <Text color={colorAsp} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" mb={4}
                       letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${colorAsp}66` }}>
-                  {cuerpoA?.label} {ASPECTO_LABEL[abierto.tipo].toLowerCase()} {cuerpoB?.label}
+                  {cuerpoA && n.cuerpo(cuerpoA.key)} {n.aspecto(abierto.tipo).toLowerCase()} {cuerpoB && n.cuerpo(cuerpoB.key)}
                 </Text>
 
                 {/* línea separadora con el color del aspecto */}

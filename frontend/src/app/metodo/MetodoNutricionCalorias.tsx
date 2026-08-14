@@ -359,7 +359,7 @@ export default function MetodoNutricionCalorias() {
               next={{
                 label: `${t("metodo.nutri.paso.test")} →`,
                 disabled: !resultado,
-                disabledTooltip: "Calcula tus calorías para continuar",
+                disabledTooltip: t("metodo.nutri.calculaParaSeguir"),
                 onClick: async () => {
                   if (!resultado) return;
                   await guardarCaloriasAhora(); // flush antes de navegar (evita el candado por debounce)
@@ -394,7 +394,7 @@ export default function MetodoNutricionCalorias() {
 
                 {/* Edad / peso / altura */}
                 <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={{ base: 4, md: 5 }} mb={5}>
-                  <CampoNum label={t("metodo.nutri.edad")} sufijo="años" value={edad} onChange={setEdad} />
+                  <CampoNum label={t("metodo.nutri.edad")} sufijo={t("metodo.nutri.anos")} value={edad} onChange={setEdad} />
                   <CampoNum label={t("metodo.nutri.peso")} sufijo="kg" value={peso} onChange={setPeso} />
                   <CampoNum label={t("metodo.nutri.altura")} sufijo="cm" value={altura} onChange={setAltura} />
                 </SimpleGrid>
@@ -429,7 +429,7 @@ export default function MetodoNutricionCalorias() {
                   ))}
                 </Flex>
                 <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={{ base: 4, md: 6 }} mb={2}>
-                  <Stepper label={t("metodo.nutri.diasSemana")} value={ejDias} min={0} max={7} sufijo="días/sem" onChange={setEjDias} />
+                  <Stepper label={t("metodo.nutri.diasSemana")} value={ejDias} min={0} max={7} sufijo={t("metodo.nutri.diasSem")} onChange={setEjDias} />
                   <Flex direction="column" gap={1.5}>
                     <Text color={nutricionTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={600} letterSpacing="0.04em">
                       {t("metodo.nutri.minutosSesion")}
@@ -488,9 +488,9 @@ export default function MetodoNutricionCalorias() {
                   </Text>
 
                   <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={{ base: 3, md: 5 }} mt={5}>
-                    <MacroBox nombre="Proteínas" gramos={resultado.prot.g} kcal={resultado.prot.kcal} color="#d75f5a" />
-                    <MacroBox nombre="Hidratos" gramos={resultado.carb.g} kcal={resultado.carb.kcal} color="#e0a92e" />
-                    <MacroBox nombre="Grasas" gramos={resultado.fat.g} kcal={resultado.fat.kcal} color="#e58a3c" />
+                    <MacroBox nombre={t("metodo.nutri.proteinas")} gramos={resultado.prot.g} kcal={resultado.prot.kcal} color="#d75f5a" />
+                    <MacroBox nombre={t("metodo.nutri.hidratos")} gramos={resultado.carb.g} kcal={resultado.carb.kcal} color="#e0a92e" />
+                    <MacroBox nombre={t("metodo.nutri.grasas")} gramos={resultado.fat.g} kcal={resultado.fat.kcal} color="#e58a3c" />
                   </SimpleGrid>
                 </Box>
               </SeccionBox>

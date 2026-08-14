@@ -2,11 +2,21 @@ import React from "react";
 import { Text } from "@chakra-ui/react";
 import TCMTestPage from "./TCMTestPage";
 import { RECS_DESEQUILIBRIOS } from "../data/tcmRecommendations";
+import { RECS_DESEQUILIBRIOS_EN } from "../data/tcmRecommendations.en";
+import {
+  TEST3_INTERPRETACIONES_EN,
+  TEST3_SECCIONES_EN,
+  useInterpretacionesTcm,
+  useRecsTcm,
+  useSeccionesTcm,
+} from "../data/tcmEspacio.en";
+import { useT } from "../../../i18n";
 
 /* ══════════════════════════════════════════════
    DATOS DEL TEST
+   El nombre del elemento es la clave que se guarda: se queda en
+   español y se traduce solo para pintar (`tcmEspacio.en.ts`).
 ══════════════════════════════════════════════ */
-const SCALE_LABELS = ["Ausente", "Ocasional", "Frecuente", "Persistente / intenso"];
 
 const ELEMENTOS = [
   {
@@ -129,30 +139,37 @@ const ICON = (
 );
 
 export default function TCMTest3() {
+  const t = useT();
+  const secciones = useSeccionesTcm(ELEMENTOS, TEST3_SECCIONES_EN);
+  const interpretaciones = useInterpretacionesTcm(INTERPRETACIONES, TEST3_INTERPRETACIONES_EN);
+  const recs = useRecsTcm(RECS_DESEQUILIBRIOS, RECS_DESEQUILIBRIOS_EN);
   return (
     <TCMTestPage
       pageIcon={ICON}
       tcmField="desequilibrio"
-      pageTitle="Tu desequilibrio actual"
-      instruccionesTitle="Patrón de Desequilibrio Actual"
-      instruccionesText="Evaluación sintomática según diferenciación por Cinco Movimientos. Responde según los últimos 2–3 meses."
+      pageTitle={t("espacio.tcm.t3.tarjeta")}
+      instruccionesTitle={t("espacio.tcm.t3.instruccionesTitulo")}
+      instruccionesText={t("espacio.tcm.t3.instrucciones")}
       scaleValues={[0, 1, 2, 3]}
-      scaleLabels={SCALE_LABELS}
-      scaleMobileHint="0 = Ausente · 3 = Persistente"
-      secciones={ELEMENTOS}
+      scaleLabels={[
+        t("espacio.tcm.t3.escala1"),
+        t("espacio.tcm.t3.escala2"),
+        t("espacio.tcm.t3.escala3"),
+        t("espacio.tcm.t3.escala4"),
+      ]}
+      scaleMobileHint={t("espacio.tcm.t3.escalaMovil")}
+      secciones={secciones}
       resultadosNota={() => (
         <Text color="rgba(255,255,255,0.48)" fontSize="xs" fontStyle="italic" letterSpacing="0.03em" lineHeight="1.9">
-          El puntaje más alto indica el patrón de desequilibrio predominante en este momento.
-          Dos puntajes elevados pueden sugerir interacción entre ciclos de generación o control.
-          La coincidencia entre terreno constitucional (Test II) y patrón actual puede indicar sobrecarga del movimiento base.
+          {t("espacio.tcm.t3.nota")}
         </Text>
       )}
-      interpretacionTitle="Interpretación Clínica Orientativa"
-      interpretaciones={INTERPRETACIONES}
-      resultadoEtiqueta="Actual"
+      interpretacionTitle={t("espacio.tcm.t3.interpretacion")}
+      interpretaciones={interpretaciones}
+      resultadoEtiqueta={t("espacio.tcm.t3.etiqueta")}
       localStorageKey="tcm_test3_result"
       savePrimaryKey="primaryDesequilibrio"
-      recsMap={RECS_DESEQUILIBRIOS}
+      recsMap={recs}
       backToSpaceLink="/espacio/questions/medicinachina"
     />
   );

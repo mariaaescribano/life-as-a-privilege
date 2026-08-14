@@ -14,7 +14,8 @@ import { glowHeader } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { Reveal, Float, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { PLATO_MACROS, platoMacroByKey, type PlatoAlimento } from "../../hardCoded/espacio/PlatoHarvard";
+import { PLATO_MACROS, type PlatoAlimento } from "../../hardCoded/espacio/PlatoHarvard";
+import { usePlatoMacros, usePlatoMacroByKey } from "../../hardCoded/espacio/usePlatoHarvard";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Actividad «Crea el plato de Harvard».
@@ -141,6 +142,12 @@ export default function MetodoNutricionPlato() {
   // Última petición de guardado en curso. Se espera antes de navegar para que la
   // página siguiente (Calorías) no lea el plato como "no hecho" por una carrera.
   const savingRef = useRef<Promise<void> | null>(null);
+
+  // El texto, en el idioma activo; la geometría del plato (SECTORES), las `key`
+  // y los colores siguen saliendo del español.
+  const platoMacros = usePlatoMacros();
+  const platoMacroByKey = usePlatoMacroByKey();
+  const sectores = SECTORES.map((s) => ({ ...s, macro: platoMacroByKey(s.macro.key) ?? s.macro }));
 
   const macro = platoMacroByKey(macroSel)!;
 
@@ -405,7 +412,7 @@ export default function MetodoNutricionPlato() {
                     <circle cx={CX} cy={CY} r={R_RIM} fill="none" stroke="rgba(0,0,0,0.08)" strokeWidth={1} pointerEvents="none" />
 
                     {/* Etiquetas de cada sector (nombre + %), encima de la cúpula */}
-                    {SECTORES.map(({ macro: m, label, pct }) => {
+                    {sectores.map(({ macro: m, label, pct }) => {
                       const activo = m.key === macroSel;
                       return (
                         <g key={`lbl-${m.key}`} pointerEvents="none">
@@ -459,7 +466,7 @@ export default function MetodoNutricionPlato() {
 
                 {/* Progreso: un punto por macro, relleno cuando tiene algún alimento */}
                 <Flex align="center" gap={2.5} wrap="wrap" justify="center">
-                  {PLATO_MACROS.map((m) => {
+                  {platoMacros.map((m) => {
                     const ok = macrosConAlimento.has(m.key);
                     return (
                       <Flex key={m.key} align="center" gap={1.5}>

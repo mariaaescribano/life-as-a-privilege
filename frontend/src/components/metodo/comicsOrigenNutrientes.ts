@@ -75,8 +75,9 @@ export const NUTRICION_TIERRA: Vineta[] = [
     titulo: "",
     paragraphs: [
       "Casi todas las plantas del mundo hacen un trato con hongos del suelo. El hongo entra en la raíz y extiende sus hilos muchísimo más lejos de lo que la raíz podría llegar: es una red que le multiplica el alcance.",
-      "El hongo le entrega agua, fósforo y otros minerales difíciles de conseguir. La planta le paga con azúcar recién fabricado en las hojas. Ninguno de los dos podría vivir así de bien por separado.",
-      "Y las legumbres van un paso más allá: alojan bacterias en unos bultitos de sus raíces que saben partir el nitrógeno del aire, algo que la planta no puede hacer sola. Por eso las legumbres son tan ricas en proteína y dejan la tierra mejor de lo que la encontraron.",
+      "El hongo le entrega agua, fósforo y otros minerales difíciles de conseguir. La planta le paga con glucosa recién fabricado en las hojas. Ninguno de los dos podría vivir así de bien por separado.",
+      "Y las legumbres van un paso más allá: en sus raíces forman pequeños nódulos donde viven bacterias capaces de fijar el nitrógeno del aire. El nitrógeno atmosférico se encuentra principalmente en forma de N₂, una molécula que las plantas no pueden utilizar directamente. Estas bacterias son capaces de transformarlo en compuestos nitrogenados que la planta sí puede incorporar y utilizar.",
+      "Gracias a esta relación, las legumbres pueden acumular una cantidad importante de nitrógeno en sus tejidos y utilizarlo para fabricar aminoácidos y proteínas. Además, cuando las raíces y los restos de la planta quedan en el suelo y se descomponen, parte de ese nitrógeno puede quedar disponible para otros organismos, contribuyendo a mantener la fertilidad del suelo.", 
       "La planta depende de sus microbios para nutrirse. Exactamente igual que tú.",
     ],
   },
@@ -86,7 +87,7 @@ export const NUTRICION_TIERRA: Vineta[] = [
     paragraphs: [
       "Un suelo vivo, con materia orgánica y con sus hongos y bacterias, entrega minerales; un suelo agotado y compacto entrega menos, y lo que crece encima viene más pobre.",
       "La planta no puede poner en la fruta lo que no encontró abajo. Y tú no puedes absorber lo que la planta no llegó a guardar.",
-      "El hierro que ahora mismo transporta el oxígeno por tu sangre pasó por una roca, por el agua del suelo, por un hongo y por una raíz antes de llegar a ti. Toda la cadena tenía que funcionar.",
+      "El hierro que ahora mismo transporta el oxígeno por tu sangre pasó por una roca, por el agua del suelo, por un hongo y por una raíz antes de llegar a ti.",
     ],
   },
 ];
@@ -107,9 +108,13 @@ export const NUTRICION_PLANTA: Vineta[] = [
     titulo: "",
     paragraphs: [
       "Por dentro, una planta está atravesada de arriba abajo por dos conducciones pegadas la una a la otra. El xilema sube el agua y los minerales desde la raíz hasta la última hoja: son tubos huecos, células que se vaciaron y murieron para dejar el paso libre. La madera es xilema.",
-      "El floema baja y reparte el azúcar recién fabricado en las hojas hacia donde haga falta —una raíz que crece, una flor, un fruto que se está llenando—. Este sí está hecho de células vivas. Cuando le das un mordisco al tallo de una acelga, estás masticando esas tuberías.",
-      "Y un árbol levanta agua decenas de metros todos los días sin tener corazón ni bomba. No empuja desde abajo: tira desde arriba. La hoja pierde agua por evaporación, y como las moléculas de agua se agarran unas a otras por sus polos, al escaparse una arrastra a la de detrás.",
-      "El resultado es un hilo de agua continuo desde la hoja hasta el pelillo de la raíz. La planta no bombea: la mueve el Sol.",
+      "El floema baja y reparte la glucosa recién fabricada en las hojas hacia donde haga falta —una raíz que crece, una flor, un fruto que se está llenando—. Este sí está hecho de células vivas. Cuando le das un mordisco al tallo de una acelga, estás masticando esas tuberías.",
+      "Un árbol puede transportar agua desde sus raíces hasta las hojas situadas a decenas de metros de altura sin tener corazón ni una bomba que la empuje desde abajo.",
+      "¿Cómo consigue hacerlo?",
+      "La clave está en las hojas. Cuando el agua llega hasta ellas, parte se evapora hacia la atmósfera a través de unos pequeños poros llamados estomas. Esta pérdida de agua genera una especie de tirón hacia arriba.",
+      "Pero ese tirón solo es posible porque las moléculas de agua permanecen unidas entre sí. Gracias a la cohesión, cuando una molécula de agua sale de la hoja, tira de las que están detrás de ella dentro de los vasos del xilema. Estas, a su vez, tiran de las siguientes, formando una columna continua de agua que se extiende desde las hojas hasta las raíces.",
+      "Así, el agua puede ascender por todo el árbol. La evaporación en las hojas genera el tirón, la cohesión mantiene unida la columna de agua y las raíces aportan el agua que se incorpora al sistema.",
+      "La energía del Sol proporciona el calor necesario para que el agua se evapore en las hojas, y esa evaporación es la que genera el movimiento del agua hacia arriba.",
     ],
   },
   {
@@ -125,10 +130,9 @@ export const NUTRICION_PLANTA: Vineta[] = [
     src: src("planta", 4),
     titulo: "",
     paragraphs: [
-      "La planta fabrica azúcar en las hojas, pero no lo deja ahí: lo manda a guardar. Y según dónde lo guarde, aparece un alimento distinto.",
+      "La planta fabrica glucosa en las hojas, pero no lo deja ahí: lo manda a guardar. Y según dónde lo guarde, aparece un alimento distinto.",
       "En raíces y tubérculos hace despensa de almidón para el invierno o para brotar —zanahoria, remolacha, patata, boniato—, y por eso son más dulces y más densas. En las semillas guarda lo más valioso, porque ahí va la siguiente generación: proteína, grasa y minerales. En hojas y tallos apenas hay reserva: agua, fibra, vitaminas y minerales, mucho volumen y muy pocas calorías.",
       "Por eso una patata y una espinaca no se parecen en nada, aunque las dos sean plantas: no estás comiendo la misma parte de la historia.",
-      "Y mires donde mires —una lenteja, un aguacate, un grano de trigo—, siempre es la misma arquitectura. Tampoco hay atajo con la carne, el huevo o la leche, porque el animal comió planta. Toda la comida del mundo pasa primero por aquí.",
     ],
   },
 ];
@@ -140,7 +144,8 @@ export const NUTRICION_HOJA: Vineta[] = [
     titulo: "",
     paragraphs: [
       "Si la planta es la casa, la hoja es la fábrica. Y su forma lo delata: plana para que la luz caiga sobre la mayor superficie posible, y finísima para que la luz atraviese todas sus capas y el aire pueda entrar y salir sin tardar.",
-      "Por fuera lleva una capa de cera impermeable —lo que hace que el agua resbale en una hoja de col— y debajo una piel de células transparentes que deja pasar la luz sin usarla. En el medio está la capa que trabaja: células altas y apretadas como columnas, atiborradas de cloroplastos. Más abajo, huecos de aire por donde circulan los gases. Y atravesándolo todo, los nervios: el xilema y el floema.",
+      "Por fuera lleva una capa de cera impermeable —lo que hace que el agua resbale— y debajo una piel de células transparentes que deja pasar la luz sin usarla.",
+      "En el medio está la capa que trabaja: células altas y apretadas como columnas, atiborradas de cloroplastos. Más abajo, huecos de aire por donde circulan los gases. Y atravesándolo todo, los nervios: el xilema y el floema.",
       "Cada hoja es a la vez un panel solar, un pulmón y una cocina. Y de lo que ocurre aquí dentro sale, sin excepción, toda la comida del planeta.",
     ],
   },
@@ -158,7 +163,7 @@ export const NUTRICION_HOJA: Vineta[] = [
     src: src("hoja", 3),
     titulo: "",
     paragraphs: [
-      "Dentro de las células de la hoja hay unos sacos verdes, los cloroplastos, llenos de clorofila, la molécula que atrapa la luz. Absorbe muy bien la roja y la azul, y en cambio rebota la verde: el verde que tú ves es, exactamente, la parte de la luz que la hoja NO quiso quedarse.",
+      "Dentro de las células de la hoja hay unos sacos verdes, los cloroplastos, llenos de clorofila, la molécula que atrapa la luz. Absorbe muy bien la roja y la azul, y en cambio rebota la verde, por eso las hojas suelen ser verdes.",
       "Con la energía que sí atrapa hace algo brutal: rompe moléculas de agua para robarles los electrones y el hidrógeno.",
       "Y al partir el agua sobra oxígeno, que la hoja suelta al aire porque no lo necesita. El oxígeno que respiras ahora mismo es el desecho de una hoja.",
     ],
@@ -181,10 +186,13 @@ export const NUTRICION_FRUTA: Vineta[] = [
     src: src("fruta", 1),
     titulo: "",
     paragraphs: [
-      "Todo fruto empieza siendo una flor. Llega el polen, se une al óvulo y ahí nace una semilla: una planta nueva, entera, en miniatura. Y entonces la planta empieza a construir una caja alrededor: paredes, agua, azúcar, color, olor.",
-      "Esa caja es el fruto. Y aquí está lo que casi nunca se cuenta: el fruto no se hizo para ti. Se hizo para la semilla.",
-      "Por eso, mientras la semilla se forma, el fruto es verde, duro, ácido y a veces amargo o incluso tóxico. No es un fallo: si alguien se lo comiera ahora, la semilla no serviría para nada. Así que se camufla entre las hojas y se hace desagradable a propósito. Es un cartel de «todavía no».",
-    ],
+    "Antes de invertir energía en reproducirse, la planta necesita saber si ha llegado el momento. Lee la luz, la temperatura, el agua y los nutrientes de su alrededor. Si las señales indican que las condiciones son favorables, activa una señal llamada florígeno que viaja desde las hojas hasta las zonas de crecimiento. Es como un mensaje que recorre la planta diciendo: «Ahora sí. Es el momento de florecer».",
+
+"Entonces empieza todo. Aparece la flor, llega el polen, se une al óvulo y comienza a formarse una semilla: una planta nueva, entera, en miniatura. Y alrededor de esa pequeña vida, la planta empieza a construir una caja: paredes, agua, azúcar, color y olor. Esa caja es el fruto.",
+
+"Aquí está lo que casi nunca se cuenta: el fruto no se hizo para ti. Se hizo para la semilla. Por eso, mientras la semilla todavía se está formando, el fruto suele ser verde, duro, ácido y, en algunas especies, incluso amargo o tóxico. No es un fallo. Es protección. La planta no quiere que alguien se coma su fruto antes de tiempo y destruya la semilla. Es como un cartel que dice: «Todavía no».",
+
+],
   },
   {
     src: src("fruta", 2),
@@ -235,7 +243,7 @@ export const NUTRICION_ANIMAL: Vineta[] = [
       "Si solo perdiera, no tendría sentido comerlo. Lo que pasa es que además transforma y concentra.",
       "Ordena los aminoácidos en una proporción muy parecida a la que necesitas tú, y de ahí viene eso de «proteína completa». Guarda el hierro dentro de una molécula que tu intestino absorbe mucho mejor que el de las plantas. Acumula vitaminas en su hígado y en su grasa. Y alarga las grasas cortas del vegetal hasta las largas que usa tu cerebro. Comer animal es, en parte, aprovechar un trabajo ya hecho.",
       "Y hay una vitamina que rompe el esquema: la B12. No la fabrica ninguna planta… pero tampoco ningún animal. La fabrican bacterias: el animal las lleva en su tubo digestivo o las traga con la tierra, y va guardando la vitamina en su hígado y en su músculo. Nosotros la sacamos de ahí.",
-      "Por eso es la única que una alimentación totalmente vegetal necesita tomar aparte. No es un defecto de las plantas: ese trabajo lo hacen microbios y hay que ir a buscarlo donde esté. Otra vez lo mismo que viste con tu microbiota y con las raíces.",
+      "Por eso es la única que una alimentación totalmente vegetal necesita tomar aparte. No es un defecto de las plantas: ese trabajo lo hacen microbios.",
     ],
   },
   {

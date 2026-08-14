@@ -18,7 +18,7 @@ import {
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
 import { useT } from "../../i18n";
-import { DOSHA_DESCUBRE } from "../../hardCoded/metodo/doshaDescubre";
+import { useDoshaDescubre } from "../../hardCoded/metodo/useDoshaContenido";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
 
 const TINTA = ayurvedaTxt;
@@ -116,6 +116,7 @@ function CheckRow({ label, checked, onToggle, color }: { label: string; checked:
 
 export default function MetodoAyurvedaDoshaDescubre() {
   const t = useT();
+  const DOSHA_DESCUBRE = useDoshaDescubre();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;

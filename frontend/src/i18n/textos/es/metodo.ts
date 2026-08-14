@@ -393,6 +393,10 @@ export const metodo = {
   "metodo.gate.fisio.intro2":
     "En este recorrido descenderás hasta lo más pequeño que te forma y volverás a subir, nivel a nivel, hasta el milagro entero que eres. Empecemos por el principio de todo.",
 
+  "metodo.gate.nutri.intro1":
+    "En esta disciplina explorarás cómo eres lo que comes; para ser exactos, eres lo que absorbes. Descubrirás cómo las moléculas que componen tus alimentos están al servicio de tu reconstrucción o de tu destrucción.",
+  "metodo.gate.nutri.intro2":
+    "Aquí no hay juicios: ningún alimento es, por sí mismo, bueno o malo, pero sus moléculas sí pueden ser dañinas o beneficiosas. Comprenderás cómo las moléculas de tu comida se transforman, literalmente, en ti.",
   "metodo.gate.nutri.aviso":
     "Todo lo que encontrarás aquí es contenido educativo para que entiendas mejor tu cuerpo y tu alimentación. No sustituye el consejo médico. Si de verdad necesitas una ayuda concreta con tu dieta —por una condición, un objetivo de salud o cualquier duda personal— acude a un profesional (médico o dietista-nutricionista colegiado) que pueda acompañarte de forma individual.",
 
@@ -422,6 +426,11 @@ export const metodo = {
   "metodo.nutri.diaADia": "Tu día a día",
   "metodo.nutri.ejercicio": "Ejercicio",
   "metodo.nutri.diasSemana": "Días por semana",
+  "metodo.nutri.diasSem": "días/sem",
+  "metodo.nutri.calculaParaSeguir": "Calcula tus calorías para continuar",
+  "metodo.nutri.proteinas": "Proteínas",
+  "metodo.nutri.hidratos": "Hidratos",
+  "metodo.nutri.grasas": "Grasas",
   "metodo.nutri.minutosSesion": "Minutos por sesión",
   "metodo.nutri.alMenosUnDia": "Pon al menos 1 día para contar el ejercicio.",
   "metodo.nutri.objetivo": "Objetivo",
@@ -433,6 +442,8 @@ export const metodo = {
   // ── Nutrición · test de prevención ─────────────────────────────────────
   "metodo.nutri.prediabetes": "Prediabetes: qué es y qué no",
   "metodo.nutri.tusDatos": "Tus datos",
+  "metodo.nutri.anos": "años",
+  "metodo.nutri.usamosTusCalorias": "Usamos lo que ya nos contaste en «Tus calorías»:",
   "metodo.nutri.corregirNoCambia": "Corregirlos aquí no cambia el cálculo de tus calorías.",
   "metodo.nutri.tuCintura": "Tu cintura",
   "metodo.nutri.perimetro": "Perímetro",
@@ -466,6 +477,9 @@ export const metodo = {
   "metodo.dia.creaAlimento": "Crea tu alimento",
   "metodo.dia.elTuyo": "el tuyo, las veces que quieras",
   "metodo.dia.aOjo": "A ojo:",
+  "metodo.dia.porRacion": "por ración",
+  "metodo.dia.seAnadiraAlGrupo": "Se añadirá al grupo «{grupo}».",
+  "metodo.dia.aTuMedida": "a tu medida",
   "metodo.dia.manoBascula":
     "Tu mano es tu báscula: un puño ≈ una ración de fruta o cereal cocido · la palma ≈ tu proteína · el pulgar ≈ una cucharada de grasa · dos manos ahuecadas ≈ tus verduras. Aprende a mirar el plato, no la báscula. Esto es orientativo y educativo; no sustituye a un profesional.",
   "metodo.dia.susMoleculas": "Sus moléculas",
@@ -776,6 +790,8 @@ export const metodo = {
   "metodo.ayurDia.guardaParaSeguir": "Guarda tu día para continuar.",
   "metodo.ayurDia.esComida": "¿Es una comida?",
   "metodo.ayurDia.alimentosEquilibran": "Alimentos que te equilibran",
+  // {dosha} = Vata / Pitta / Kapha (el nombre no se traduce).
+  "metodo.ayurDia.recomendacionesPara": "Recomendaciones para {dosha}",
   "metodo.ayurDia.pulsaPuntoPartida":
     "Pulsa una para usarla como punto de partida. Puedes cambiarla a tu gusto.",
   "metodo.ayurDia.diaEjemplo": "Un día de ejemplo",
@@ -815,6 +831,7 @@ export const metodo = {
 
   // ── Cábala · capítulos de sus Ilustraciones ────────────────────────────
   "metodo.cabalaIlus.origen": "El Origen",
+  "metodo.cabalaIlus.historia": "La historia",
   "metodo.cabalaIlus.sefirot": "Las 10 Sefirot",
   "metodo.cabalaIlus.senderos": "Los 22 Senderos",
 

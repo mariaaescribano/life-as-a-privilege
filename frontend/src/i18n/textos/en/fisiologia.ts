@@ -30,6 +30,7 @@ export const fisiologia = {
   "fisiologia.comenzar": "Start",
 
   "fisiologia.tablaFrase": "You will never look at the periodic table the same way again...",
+  "fisiologia.tablaAlt": "The periodic table of the elements",
 
   // ── Levels ─────────────────────────────────────────────────────────────
   "fisiologia.niveles.intro":

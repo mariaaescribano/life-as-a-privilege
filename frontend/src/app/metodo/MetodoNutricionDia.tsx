@@ -15,10 +15,13 @@ import { glowHeader } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
-  ALIMENTOS_DIA, GRUPOS_DIA, grupoDiaColor, grupoDiaFondo, alimentoDiaByKey, infoAlimento,
-  REPARTO_COMIDAS, NUM_COMIDAS_OPCIONES, MACRO_COLOR, type GrupoDia,
+  grupoDiaColor, grupoDiaFondo, NUM_COMIDAS_OPCIONES, MACRO_COLOR, type GrupoDia,
 } from "../../hardCoded/espacio/DiaSaludable";
-import { MOLECULAS, MACRO_LABEL, type AlimentoMolecula } from "../../hardCoded/espacio/AlimentosNutricion";
+import {
+  useAlimentosDia, useAlimentoDiaByKey, useGruposDia, useRepartoComidas,
+} from "../../hardCoded/espacio/useDiaSaludable";
+import { type AlimentoMolecula } from "../../hardCoded/espacio/AlimentosNutricion";
+import { useMoleculas, useEtiquetasAlimentos, useAlimentos } from "../../hardCoded/espacio/useAlimentos";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Actividad «Diseña tu día» (recorrido de Nutrición). Dos columnas:
@@ -107,6 +110,17 @@ function MacroBarra({ seg }: { seg: { c: number; p: number; g: number } | null }
 export default function MetodoNutricionDia() {
   const t = useT();
   const navigate = useNavigate();
+  // Todo el texto, en el idioma activo; las `key`, las kcal, los gramos y el
+  // reparto de porcentajes siguen saliendo del español (es lo que se guarda).
+  const moleculas = useMoleculas();
+  const et = useEtiquetasAlimentos();
+  const ALIMENTOS_DIA = useAlimentosDia();
+  const GRUPOS_DIA = useGruposDia();
+  const REPARTO_COMIDAS = useRepartoComidas();
+  const alimentoDiaByKey = useAlimentoDiaByKey();
+  const alimentos = useAlimentos();
+  // Foto/nombre/macros salen de la biblioteca molecular (fuente única).
+  const infoAlimento = useCallback((k: string) => alimentos.find((a) => a.key === k), [alimentos]);
   const [loading, setLoading] = useState(true);
   const [kcalObjetivo, setKcalObjetivo] = useState<number | null>(null);
   const [numComidas, setNumComidas] = useState<number | null>(null);
@@ -159,7 +173,7 @@ export default function MetodoNutricionDia() {
                   key: c.key, grupo: GRUPOS_DIA.some((g) => g.key === c.grupo) ? c.grupo : "capricho",
                   nombre: String(c.nombre), kcalRacion: Number(c.kcalRacion) || 0,
                   porcionG: Number(c.porcionG) > 0 ? Number(c.porcionG) : 100,
-                  aOjo: typeof c.aOjo === "string" ? c.aOjo : "a tu medida",
+                  aOjo: typeof c.aOjo === "string" ? c.aOjo : t("metodo.dia.aTuMedida"),
                   macros: {
                     carbohidrato: Number(c.macros?.carbohidrato) || 0,
                     proteina: Number(c.macros?.proteina) || 0,
@@ -215,7 +229,7 @@ export default function MetodoNutricionDia() {
       kcalRacion: (ad.kcal100 * ad.porcionG) / 100, porcionG: ad.porcionG, aOjo: ad.aOjo,
       macros: info.macros, moleculas: info.moleculas, descripcion: info.descripcion ?? info.resumen,
     };
-  }, [customFoods]);
+  }, [customFoods, alimentoDiaByKey, infoAlimento]);
 
   const kcalDe = useCallback((f: PlacedFood) => {
     const r = resolveFood(f.key); return r ? r.kcalRacion * f.porciones : 0;
@@ -687,7 +701,7 @@ export default function MetodoNutricionDia() {
                     {infoFood.nombre}
                   </Text>
                   <Text color={`${nutricionTxt}aa`} fontSize="sm">
-                    {infoFood.porcionG} g · {Math.round(infoFood.kcalRacion)} kcal por ración
+                    {infoFood.porcionG} g · {Math.round(infoFood.kcalRacion)} kcal {t("metodo.dia.porRacion")}
                   </Text>
                 </Box>
               </Flex>
@@ -717,7 +731,7 @@ export default function MetodoNutricionDia() {
                       <Flex key={m} align="center" gap={1.5}>
                         <Box w="10px" h="10px" borderRadius="full" bg={MACRO_COLOR[m]} />
                         <Text color={`${nutricionTxt}cc`} fontSize="2xs" fontWeight={600}>
-                          {MACRO_LABEL[m]} {infoFood.macros[m]}%
+                          {et.macro(m)} {infoFood.macros[m]}%
                         </Text>
                       </Flex>
                     ))}
@@ -735,7 +749,7 @@ export default function MetodoNutricionDia() {
                     {infoFood.moleculas.map((m) => {
                       const key = typeof m === "string" ? m : m.key;
                       const pct = typeof m === "string" ? undefined : m.pct;
-                      const nombre = MOLECULAS[key]?.nombre ?? key;
+                      const nombre = moleculas[key]?.nombre ?? key;
                       return (
                         <Box key={key} px={2.5} py={1} borderRadius="full" bg={`${nutricionTxt}12`}
                              border={`1px solid ${nutricionTxt}22`}>
@@ -768,7 +782,7 @@ export default function MetodoNutricionDia() {
                border={`1px solid ${nutricionTxt}44`} style={{ boxShadow: glowHeader(nutricionTxt) }}>
             <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center">{t("metodo.nutri.crearAlimento")}</Text>
             <Text color={`${nutricionTxt}aa`} fontSize="sm" textAlign="center" mt={1} mb={5}>
-              Se añadirá al grupo «{GRUPOS_DIA.find((g) => g.key === grupoSel)?.label}».
+              {t("metodo.dia.seAnadiraAlGrupo", { grupo: GRUPOS_DIA.find((g) => g.key === grupoSel)?.label ?? "" })}
             </Text>
 
             <Flex direction="column" gap={3.5}>

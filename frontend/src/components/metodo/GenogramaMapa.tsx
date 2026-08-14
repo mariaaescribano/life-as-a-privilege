@@ -14,7 +14,7 @@
 import React from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
-import { simboloSrc, simboloNombre } from "./familiaSimbolos";
+import { simboloSrc, useSimbolosFamilia } from "./familiaSimbolos";
 import {
   ocupacionFamilia,
   personaEscritas,
@@ -221,6 +221,7 @@ function Celda({
  *  inicial de su nombre en vez de un icono roto. */
 export function SimboloImg({ keyName }: { keyName: string }) {
   const [falla, setFalla] = React.useState(false);
+  const { nombre: simboloNombre } = useSimbolosFamilia();
   const nombre = simboloNombre(keyName);
   if (falla) {
     return (

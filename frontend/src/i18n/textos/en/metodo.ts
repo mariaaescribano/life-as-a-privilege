@@ -363,6 +363,10 @@ export const metodo = {
   "metodo.gate.fisio.intro2":
     "In this journey you'll go all the way down to the smallest thing that makes you, and then climb back up, level by level, to the whole miracle you are. Let's start at the beginning of everything.",
 
+  "metodo.gate.nutri.intro1":
+    "In this discipline you'll explore how you are what you eat; to be exact, you are what you absorb. You'll discover how the molecules that make up your food are working either to rebuild you or to destroy you.",
+  "metodo.gate.nutri.intro2":
+    "There are no judgments here: no food is good or bad in itself, but its molecules can be harmful or beneficial. You'll understand how the molecules in your food turn, literally, into you.",
   "metodo.gate.nutri.aviso":
     "Everything you'll find here is educational content, so you can understand your body and your food better. It doesn't replace medical advice. If you genuinely need specific help with your diet — because of a condition, a health goal or any personal question — see a professional (a doctor or a registered dietitian) who can support you one to one.",
 
@@ -392,6 +396,11 @@ export const metodo = {
   "metodo.nutri.diaADia": "Your day to day",
   "metodo.nutri.ejercicio": "Exercise",
   "metodo.nutri.diasSemana": "Days per week",
+  "metodo.nutri.diasSem": "days/wk",
+  "metodo.nutri.calculaParaSeguir": "Work out your calories to continue",
+  "metodo.nutri.proteinas": "Protein",
+  "metodo.nutri.hidratos": "Carbs",
+  "metodo.nutri.grasas": "Fat",
   "metodo.nutri.minutosSesion": "Minutes per session",
   "metodo.nutri.alMenosUnDia": "Put at least 1 day in for the exercise to count.",
   "metodo.nutri.objetivo": "Goal",
@@ -403,6 +412,8 @@ export const metodo = {
   // ── Nutrition · prevention test ────────────────────────────────────────
   "metodo.nutri.prediabetes": "Prediabetes: what it is and what it isn't",
   "metodo.nutri.tusDatos": "Your details",
+  "metodo.nutri.anos": "years",
+  "metodo.nutri.usamosTusCalorias": "We're using what you already told us in «Your calories»:",
   "metodo.nutri.corregirNoCambia": "Correcting them here doesn't change your calorie calculation.",
   "metodo.nutri.tuCintura": "Your waist",
   "metodo.nutri.perimetro": "Circumference",
@@ -436,6 +447,9 @@ export const metodo = {
   "metodo.dia.creaAlimento": "Create your own food",
   "metodo.dia.elTuyo": "yours, as many times as you like",
   "metodo.dia.aOjo": "By eye:",
+  "metodo.dia.porRacion": "per portion",
+  "metodo.dia.seAnadiraAlGrupo": "It will be added to the «{grupo}» group.",
+  "metodo.dia.aTuMedida": "your own measure",
   "metodo.dia.manoBascula":
     "Your hand is your scale: a fist ≈ a portion of fruit or cooked grain · your palm ≈ your protein · your thumb ≈ a spoonful of fat · two cupped hands ≈ your vegetables. Learn to look at the plate, not the scale. This is a guide and it's educational; it doesn't replace a professional.",
   "metodo.dia.susMoleculas": "Its molecules",
@@ -718,6 +732,7 @@ export const metodo = {
   "metodo.ayurDia.guardaParaSeguir": "Save your day to carry on.",
   "metodo.ayurDia.esComida": "Is it a meal?",
   "metodo.ayurDia.alimentosEquilibran": "Foods that bring you into balance",
+  "metodo.ayurDia.recomendacionesPara": "Recommendations for {dosha}",
   "metodo.ayurDia.pulsaPuntoPartida":
     "Press one to use it as a starting point. You can change it however you like.",
   "metodo.ayurDia.diaEjemplo": "An example day",
@@ -757,6 +772,7 @@ export const metodo = {
 
   // ── Kabbalah · chapters of its Illustrations ───────────────────────────
   "metodo.cabalaIlus.origen": "The Origin",
+  "metodo.cabalaIlus.historia": "The history",
   "metodo.cabalaIlus.sefirot": "The 10 Sefirot",
   "metodo.cabalaIlus.senderos": "The 22 Paths",
 

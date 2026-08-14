@@ -8,7 +8,8 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, FitoterapiaIcon,
 } from "../../GlobalVariables";
-import { plantas, type Planta } from "../../components/recursos/fitoterapia/PlantasData";
+import { type Planta } from "../../components/recursos/fitoterapia/PlantasData";
+import { usePlantas } from "../../components/recursos/fitoterapia/usePlantas";
 import { useT } from "../../i18n";
 
 const CARD_COLOR  = nutricionTxt;
@@ -339,7 +340,13 @@ function PlantCard({ planta, isFavorite, onOpen, onToggleFavorite, showFavorite 
 export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?: boolean }) {
   const navigate = useNavigate();
   const t = useT();
-  const [selected, setSelected]   = useState<Planta | null>(null);
+  // El herbario en el idioma activo. La ficha abierta se guarda por su `id`
+  // para que cambie de idioma con la página, y no se quede con el texto del
+  // idioma en el que se abrió.
+  const plantas = usePlantas();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const selected = plantas.find((p) => p.id === selectedId) ?? null;
+  const setSelected = (p: Planta | null) => setSelectedId(p?.id ?? null);
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
   const userId = localStorage.getItem("userId");
 
@@ -381,7 +388,7 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
       const bFav = favoritos.has(b.id) ? 0 : 1;
       return aFav - bFav;
     });
-  }, [favoritos, favoritesOnly]);
+  }, [plantas, favoritos, favoritesOnly]);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">

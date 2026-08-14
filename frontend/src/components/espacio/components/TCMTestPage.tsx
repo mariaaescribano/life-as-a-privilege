@@ -16,7 +16,11 @@ import { useT } from "../../../i18n";
    TIPOS
 ══════════════════════════════════════════════ */
 export interface TCMSeccion {
+  /** Nombre INTERNO: es lo que se guarda en la base de datos y en el PDF, y
+   *  con lo que emparejan `tcmTheme` y las recomendaciones. No se traduce. */
   nombre: string;
+  /** Cómo se muestra en pantalla. Si no viene, se pinta `nombre`. */
+  titulo?: string;
   preguntas: string[];
   numero?: string;
   dominio?: string;
@@ -26,7 +30,10 @@ export interface TCMSeccion {
 const TXT_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.75), 0 0 5px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.19)";
 
 export interface TCMInterpretacion {
+  /** Nombre INTERNO, igual que en `TCMSeccion`: no se traduce. */
   nombre: string;
+  /** Cómo se muestra en pantalla. Si no viene, se pinta `nombre`. */
+  titulo?: string;
   subtitulo?: string;
   descripcion: string;
 }
@@ -263,8 +270,8 @@ export default function TCMTestPage({
             nom={tcmNom}
             mb={{ base: 0, md: 0 }}
             compact
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/medicinachina") }}
-            next={{ label: "Ilustraciones", onClick: () => setIlustracionesOpen(true)}}
+            prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/aprendizaje/cursos/medicinachina") }}
+            next={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
           />
 
           {/* ── INSTRUCCIONES ── */}
@@ -403,7 +410,7 @@ export default function TCMTestPage({
                               transition="all 0.3s"
                               textShadow={isMax ? `0 0 12px ${barColor}50` : "none"}
                             >
-                              {sec.nombre}
+                              {sec.titulo ?? sec.nombre}
                             </Text>
                             {isMax && (
                               <Box
@@ -501,7 +508,7 @@ export default function TCMTestPage({
                               fontSize={{ base: "2xl", md: "3xl" }}
                               letterSpacing="0.06em"
                             >
-                              {interp.nombre}
+                              {interp.titulo ?? interp.nombre}
                             </Text>
                             {interp.subtitulo && (
                               <Text
@@ -600,10 +607,10 @@ export default function TCMTestPage({
                 if (!recs) return null;
 
                 const categories = [
-                  { key: "infusiones", label: "Infusiones" },
-                  { key: "hierbas", label: "Hierbas" },
-                  { key: "nutricion", label: "Nutrici\u00f3n" },
-                  { key: "estiloDeVida", label: "Estilo de Vida" },
+                  { key: "infusiones", label: t("espacio.cons.infusiones") },
+                  { key: "hierbas", label: t("espacio.cons.hierbas") },
+                  { key: "nutricion", label: t("espacio.cons.nutricion") },
+                  { key: "estiloDeVida", label: t("espacio.cons.estiloDeVida") },
                 ] as const;
 
                 const elTheme = getTheme(resultadoNombre);

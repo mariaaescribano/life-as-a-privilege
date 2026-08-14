@@ -7,6 +7,8 @@ import { AppleLoader } from "./AppleLoader";
 import { MarcaLeido } from "./MarcaLeido";
 import { NUTRICION_ILUSTRACIONES } from "./nutricionIlustraciones";
 import type { IlustracionEntry } from "./ilustracionesGaleria";
+import { useIlustracionTraducida } from "./ilustracionesGaleria.en";
+import { useComic } from "../../i18n/comics";
 import { useLeidos } from "../../hooks/useLeidos";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import { barraVisibleSx } from "../global/barraDeScroll";
@@ -22,10 +24,13 @@ import { barraVisibleSx } from "../global/barraDeScroll";
 // Lista de ilustraciones leídas dentro de metodo_nutricion.data.
 const CAMPO_LEIDAS = "ilustraciones_leidas";
 
-function IlustracionCard({ entry, leida, onOpen }: {
+function IlustracionCard({ entry: entrada, leida, onOpen }: {
   entry: IlustracionEntry; leida: boolean; onOpen: () => void;
 }) {
   const t = useT();
+  // El título, en el idioma activo. El array se calcula al importar el módulo,
+  // así que llega siempre en español: se traduce aquí, al pintar.
+  const entry = useIlustracionTraducida(entrada);
   const [coverErr, setCoverErr] = useState(false);
   return (
     <Box as="button" onClick={onOpen} position="relative" w="100%" h="100%" display="flex"
@@ -80,6 +85,9 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
   // Si el cómic ya venía leído, el visor lo dice arriba («✓ Leída»). Se mira
   // ANTES de marcarlo, que si no lo diría siempre.
   const [abiertaLeida, setAbiertaLeida] = useState(false);
+  // Las viñetas del cómic abierto, en el idioma activo (el orden y las fotos
+  // los sigue mandando el español).
+  const vinetasAbierta = useComic(abierta?.comicKey ?? abierta?.id ?? "", abierta?.vinetas ?? []);
 
   // Abrir un cómic = leerlo: se queda con su marquita.
   const abrir = (e: IlustracionEntry) => {
@@ -149,7 +157,7 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
       <ComicModal
         isOpen={!!abierta}
         onClose={() => setAbierta(null)}
-        vinetas={abierta?.vinetas ?? []}
+        vinetas={vinetasAbierta}
         themeColor={abierta?.themeColor}
         disciplinaBgImage={abierta?.disciplinaBgImage}
         disciplinaBgColor={abierta?.disciplinaBgColor}

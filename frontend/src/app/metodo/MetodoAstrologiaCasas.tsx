@@ -15,6 +15,7 @@ import { trazosSigno } from "../../components/metodo/signosIconos";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import { infoCasa, NUMEROS_ROMANOS } from "../../components/metodo/casasAspectos";
+import { useNombresAstro } from "../../components/metodo/astrologiaNombres";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -405,6 +406,7 @@ function CasaBox({
   onLeer: () => void;
 }) {
   const t = useT();
+  const n = useNombresAstro();
   const [open, setOpen] = useState(false);
 
   // Color del planeta REGENTE de esta casa: se usa para el glow/sombra del popup,
@@ -427,14 +429,14 @@ function CasaBox({
       <Flex align="center" gap={3} flex="1" minW={0}>
         <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em"
               whiteSpace="nowrap" flexShrink={0} style={{ textShadow: `0 0 12px ${astrologiaTxt}66` }}>
-          Casa {NUMEROS_ROMANOS[sel - 1]}
+          {n.palabraCasa()} {NUMEROS_ROMANOS[sel - 1]}
         </Text>
         {info && (
           <>
             <Box w="1px" h="22px" bg={`${astrologiaTxt}33`} flexShrink={0} />
             <Flex align="center" gap={1.5} minW={0}>
               <Box flexShrink={0}><GlifoSigno nombre={info.signo.name} color={astrologiaTxt} size={22} /></Box>
-              <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} noOfLines={1}>{info.signo.name}</Text>
+              <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} noOfLines={1}>{n.signo(info.signo.name)}</Text>
             </Flex>
           </>
         )}

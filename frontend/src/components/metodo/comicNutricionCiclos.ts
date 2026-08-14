@@ -43,9 +43,11 @@ export const NUTRICION_CICLOS: Vineta[] = [
     src: "/viñetas/nutricion/biologia/ciclos/nitrogeno.webp",
     titulo: "Ciclo del nitrógeno",
     paragraphs: [
-      "El ciclo del nitrógeno permite transformar el nitrógeno atmosférico en formas que pueden ser utilizadas por los seres vivos.",
-      "Las bacterias fijadoras convierten el nitrógeno del aire en compuestos aprovechables por las plantas, que posteriormente son consumidas por los animales.",
-      "Tras la muerte o la eliminación de desechos, otros microorganismos reciclan el nitrógeno y finalmente lo devuelven a la atmósfera mediante la desnitrificación, cerrando el ciclo.",
+    "El ciclo del nitrógeno permite transformar el nitrógeno atmosférico en formas que pueden ser incorporadas y utilizadas por los seres vivos.",
+    "Las bacterias fijadoras convierten el nitrógeno del aire en compuestos que pueden ser aprovechados por las plantas, que posteriormente son consumidas por los animales.",
+    "Cuando los animales comen plantas —o comen otros animales que las han consumido— obtienen ese nitrógeno.",
+    "Ese nitrógeno acaba formando parte de aminoácidos, que son componentes de las proteínas. Y las proteínas forman, entre otras cosas, estructuras musculares y numerosas enzimas.",
+    "Tras la muerte o la eliminación de desechos, otros microorganismos reciclan el nitrógeno.", "Finalmente, parte de él puede volver a la atmósfera en forma de N₂ mediante la desnitrificación, cerrando el ciclo.",
     ],
   },
   {

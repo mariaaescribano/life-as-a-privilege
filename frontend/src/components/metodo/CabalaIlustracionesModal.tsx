@@ -17,6 +17,7 @@ import { CAJA_GLOW, CAJA_GLOW_HOVER } from "./cabalaGlow";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { CABALA_INTRO } from "./comicCabalaIntro";
+import { CABALA_HISTORIA } from "./comicCabalaHistoria";
 import { CABALA_ILUSTRACIONES_VINETAS } from "./cabalaIlustraciones";
 import { CABALA_SENDERO_VINETAS } from "./cabalaSenderoIlustraciones";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -35,17 +36,18 @@ import { barraVisibleSx } from "../global/barraDeScroll";
 
 const CABALA_IMG = "/img/fondos/cabala.webp";
 
-type Capitulo = "origen" | "sefirot" | "senderos";
+type Capitulo = "origen" | "historia" | "sefirot" | "senderos";
 
 // Las viñetas de cada capítulo EN EL IDIOMA ACTIVO. Es un hook y no un mapa
 // suelto porque un mapa a nivel de módulo se calcularía al importar el fichero y
 // la galería se quedaría en el idioma con el que arrancó la página.
 const useVinetasCapitulo = (capitulo: Capitulo | null): Vineta[] => {
   const origen = useComic("cabala-intro", CABALA_INTRO);
+  const historia = useComic("cabala-historia", CABALA_HISTORIA);
   const sefirot = useVinetasSefirot();
   const senderos = useVinetasSenderos();
   if (!capitulo) return [];
-  return { origen, sefirot, senderos }[capitulo];
+  return { origen, historia, sefirot, senderos }[capitulo];
 };
 
 // El TÍTULO va como clave, no como texto: este array se calcula al importar el
@@ -53,6 +55,7 @@ const useVinetasCapitulo = (capitulo: Capitulo | null): Vineta[] => {
 // el que arrancó la página. Se traduce al pintar.
 const SELECTOR_OPTIONS: { key: Capitulo; tituloKey: ClaveTexto; cover?: string }[] = [
   { key: "origen",   tituloKey: "metodo.cabalaIlus.origen",   cover: CABALA_INTRO[0]?.src },
+  { key: "historia", tituloKey: "metodo.cabalaIlus.historia", cover: CABALA_HISTORIA[0]?.src },
   { key: "sefirot",  tituloKey: "metodo.cabalaIlus.sefirot",  cover: CABALA_ILUSTRACIONES_VINETAS[0]?.src },
   { key: "senderos", tituloKey: "metodo.cabalaIlus.senderos", cover: CABALA_SENDERO_VINETAS[0]?.src },
 ];

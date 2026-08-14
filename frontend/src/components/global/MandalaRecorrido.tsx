@@ -7,7 +7,6 @@ import { type DisciplinaClave } from "../../data/recorridoContenido";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
 import { useIdioma, useT, type Texto } from "../../i18n";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
-import { useNavigate } from "react-router-dom";
 import { DisciplinaVideoBox } from "../metodo/DisciplinaVideoBox";
 import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 import {
@@ -1101,7 +1100,6 @@ const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () =>
 // datos de la disciplina seleccionada en el mandala.
 const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; onVerVideo: () => void }) => {
   const contenido = useRecorridoContenido();
-  const navigate = useNavigate();
   // Presentación pública de esta disciplina (/d/:disciplina). La búsqueda acepta
   // el nombre interno, así que «Hinduismo» encuentra su ficha igual.
   const presentacion = presentacionPorKey(disc.nom);
@@ -1118,7 +1116,10 @@ const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; 
       // Sin precio en el mandala: aquí el visitante todavía está descubriendo
       // qué es cada disciplina. En su hueco, el «Saber más» en grande.
       sinPrecio
-      onSaberMas={presentacion ? () => navigate(`/d/${presentacion.key}`) : undefined}
+      // Enlace de verdad, y a una pestaña NUEVA (lo abre DisciplinaVideoBox):
+      // quien está mirando el mandala no lo pierde de vista ni tiene que volver
+      // atrás para seguir curioseando las otras disciplinas.
+      saberMasHref={presentacion ? `/d/${presentacion.key}` : undefined}
     />
   );
 };

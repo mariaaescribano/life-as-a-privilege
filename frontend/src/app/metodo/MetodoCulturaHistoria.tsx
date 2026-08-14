@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -9,7 +9,8 @@ import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { LineaTiempoCultura } from "../../components/metodo/LineaTiempoCultura";
-import { getHistoria, tituloHistoria } from "../../components/metodo/culturaHistorias";
+import { tituloHistoria } from "../../components/metodo/culturaHistorias";
+import { useHistoriaCultura } from "../../components/metodo/useHistoriaCultura";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
@@ -30,7 +31,7 @@ export default function MetodoCulturaHistoria() {
   const { historiaKey } = useParams<{ historiaKey: string }>();
   const [loading, setLoading] = useState(true);
 
-  const historia = useMemo(() => getHistoria(historiaKey), [historiaKey]);
+  const historia = useHistoriaCultura(historiaKey);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });

@@ -34,8 +34,182 @@ export const espacio = {
   "espacio.astro.ascendente": "Ascendant",
 
   // ── Kabbalah · the Tree test ───────────────────────────────────────────
+  "espacio.cabala.autoconocimiento": "Self-knowledge · {n} questions",
   "espacio.cabala.comenzar": "Start the test →",
   "espacio.cabala.repetir": "Take the test again",
+
+  // ── Button shared by the My Space pages ────────────────────────────────
+  "espacio.descargarPdf": "Download PDF",
+
+  // ── The categories of "Your personalized advice" ───────────────────────
+  "espacio.cons.infusiones": "Teas",
+  "espacio.cons.hierbas": "Herbs",
+  "espacio.cons.nutricion": "Nutrition",
+  "espacio.cons.alimentacion": "Food",
+  "espacio.cons.estiloDeVida": "Lifestyle",
+  "espacio.cons.evitar": "What to avoid",
+
+  // ── Chinese Medicine · My Space and the three tests ────────────────────
+  "espacio.tcm.tests": "Tests for self-knowledge",
+  "espacio.tcm.bloqueado": "Take the test to unlock your personalized result",
+  "espacio.tcm.hacerTest": "Take the test — {test}",
+  "espacio.tcm.recomendaciones": "Recommendations",
+  "espacio.tcm.rec.infusiones": "Teas and Infusions",
+  "espacio.tcm.rec.hierbas": "Medicinal Herbs",
+  "espacio.tcm.rec.estiloDeVida": "Lifestyle",
+  "espacio.tcm.rec.nutricion": "Nutrition",
+  "espacio.tcm.saberMas": "I want to know more",
+  "espacio.tcm.rehacer": "Take the test again",
+  "espacio.tcm.evaluacion": "A personalized assessment",
+  "espacio.tcm.evaluacion.placeholder": "Would you like to tell me anything beforehand?",
+  "espacio.tcm.diagnostico": "A full diagnosis",
+  "espacio.tcm.diagnostico.sub":
+    "Leave me your details and I'll get in touch to offer you a personalized Chinese Medicine diagnosis.",
+
+  "espacio.tcm.t1.tarjeta": "Get to know your constitution",
+  "espacio.tcm.t1.seccion": "Your constitution",
+  "espacio.tcm.t2.tarjeta": "Your predominant element",
+  "espacio.tcm.t2.seccion": "Your predominant element",
+  "espacio.tcm.t3.tarjeta": "Your current imbalance",
+  "espacio.tcm.t3.seccion": "Your current imbalance",
+
+  // Test 1 · "Get to know your constitution"
+  "espacio.tcm.t1.instruccionesTitulo": "Instructions",
+  "espacio.tcm.t1.instrucciones":
+    "Answer each statement with the option that describes you best at this point in your Life. Add up the points of each pattern: the highest score points to your predominant constitution.",
+  "espacio.tcm.t1.nota":
+    "The results are a guide, not a diagnosis. A tie can mean a mixed constitution, which is very common.",
+  "espacio.tcm.t1.escala1": "Rarely",
+  "espacio.tcm.t1.escala2": "Sometimes",
+  "espacio.tcm.t1.escala3": "Often",
+  "espacio.tcm.t1.escalaMovil": "0 = Never · 2 = Always",
+  "espacio.tcm.t1.interpretacion": "Your reading, as a guide",
+  "espacio.tcm.t1.etiqueta": "Your constitution",
+
+  // Test 2 · "Your predominant element"
+  "espacio.tcm.t2.instruccionesTitulo": "Constitutional ground",
+  "espacio.tcm.t2.instrucciones":
+    "An assessment of your baseline energetic tendency according to the Five Elements. Answer for how most of your adult Life has been, not for how you are right now.",
+  "espacio.tcm.t2.escala1": "Doesn't describe me",
+  "espacio.tcm.t2.escala2": "A slight tendency",
+  "espacio.tcm.t2.escala3": "Fairly characteristic",
+  "espacio.tcm.t2.escala4": "Very characteristic",
+  "espacio.tcm.t2.escalaMovil": "0 = Doesn't describe me · 3 = Very characteristic",
+  "espacio.tcm.t2.nota1":
+    "The highest score points to your predominant constitutional ground. The second one is the element that supports it.",
+  "espacio.tcm.t2.notaMixta":
+    " Less than 3 points between the top two suggests a mixed constitution.",
+  "espacio.tcm.t2.nota2":
+    "This reading follows the principles of the Huangdi Neijing on telling one energetic ground from another.",
+  "espacio.tcm.t2.interpretacion": "Your constitutional reading",
+  "espacio.tcm.t2.etiqueta": "Your ground",
+
+  // Test 3 · "Your current imbalance"
+  "espacio.tcm.t3.instruccionesTitulo": "Your current pattern of imbalance",
+  "espacio.tcm.t3.instrucciones":
+    "An assessment of your symptoms, sorted by the Five Elements. Answer for the last 2–3 months.",
+  "espacio.tcm.t3.escala1": "Absent",
+  "espacio.tcm.t3.escala2": "Now and then",
+  "espacio.tcm.t3.escala3": "Often",
+  "espacio.tcm.t3.escala4": "Constant / intense",
+  "espacio.tcm.t3.escalaMovil": "0 = Absent · 3 = Constant",
+  "espacio.tcm.t3.nota":
+    "The highest score points to the pattern of imbalance that predominates right now. Two high scores can mean the generating and controlling cycles are interacting. If your constitutional ground (Test II) and your current pattern are the same element, that base element may be overloaded.",
+  "espacio.tcm.t3.interpretacion": "A clinical reading, as a guide",
+  "espacio.tcm.t3.etiqueta": "Right now",
+
+  // ── Nutrition · "Work out what you need" ───────────────────────────────
+  "espacio.nutri.invitada": "Work out what you need",
+  "espacio.nutri.misPlantas": "My plants",
+  "espacio.nutri.misAlimentos": "My foods",
+  "espacio.nutri.calc.titulo": "Work out what you need",
+  "espacio.nutri.calc.sub": "An estimate of your daily calories and how to split your macronutrients.",
+  // Kilograms and centimeters on purpose: they feed the formula and the
+  // database. See the note in the Spanish file.
+  "espacio.nutri.campo.peso": "Weight (kg)",
+  "espacio.nutri.campo.altura": "Height (cm)",
+  "espacio.nutri.campo.edad": "Age (years)",
+  "espacio.nutri.genero": "Gender",
+  "espacio.nutri.genero.mujer": "Woman",
+  "espacio.nutri.genero.hombre": "Man",
+  "espacio.nutri.actividad": "Activity level",
+  "espacio.nutri.act1.label": "Sedentary",
+  "espacio.nutri.act1.desc": "Little or no exercise",
+  "espacio.nutri.act2.label": "Lightly active",
+  "espacio.nutri.act2.desc": "1–3 days a week",
+  "espacio.nutri.act3.label": "Moderately active",
+  "espacio.nutri.act3.desc": "3–5 days a week",
+  "espacio.nutri.act4.label": "Very active",
+  "espacio.nutri.act4.desc": "6–7 days a week",
+  "espacio.nutri.act5.label": "Extremely active",
+  "espacio.nutri.act5.desc": "Hard physical work",
+  "espacio.nutri.calcular": "Calculate",
+  "espacio.nutri.err.campos": "Please fill in every field.",
+  "espacio.nutri.err.peso": "Enter a weight between 20 and 300 kg.",
+  "espacio.nutri.err.altura": "Enter a height between 100 and 250 cm.",
+  "espacio.nutri.err.edad": "Enter an age between 10 and 120 years.",
+  "espacio.nutri.tdee": "Estimated daily calories",
+  "espacio.nutri.tdee.unidad": "kcal / day",
+  "espacio.nutri.macro.proteinas": "Protein",
+  "espacio.nutri.macro.carbos": "Carbohydrates",
+  "espacio.nutri.macro.grasas": "Fat",
+  "espacio.nutri.fuentes": "Recommended sources",
+  "espacio.nutri.valores": "Nutrition facts (per 100 g)",
+  "espacio.nutri.recalcular": "Recalculate",
+  "espacio.nutri.disclaimer":
+    "This is only an estimate. What you actually need varies with your body composition and your own metabolism.",
+  "espacio.nutri.info.titulo": "Important information",
+  "espacio.nutri.info.texto":
+    "This is only a guide to get to know yourself better; if you want a personalized diet, see a nutritionist. If you'd like to understand your body further and go deeper into what food does inside the human body, get in touch with me.",
+  "espacio.nutri.info.gracias": "Thank you for wanting to look after yourself with coherence.",
+
+  // ── Nutrition · the labels of each food's table ─────────────────────────
+  "espacio.nutri.v.calorias": "Calories",
+  "espacio.nutri.v.proteinas": "Protein",
+  "espacio.nutri.v.insaturadas": "Unsat. fat",
+  "espacio.nutri.v.saturadas": "Sat. fat",
+  "espacio.nutri.v.carbohidratos": "Carbs",
+  "espacio.nutri.v.grasas": "Fat",
+  "espacio.nutri.v.fibra": "Fiber",
+  "espacio.nutri.v.fibraSoluble": "Soluble fiber",
+  "espacio.nutri.v.fibraInsoluble": "Insoluble fiber",
+
+  // ── Nutrition · the twelve foods under "Recommended sources" ───────────
+  "espacio.nutri.al.huevo.nom": "Egg",
+  "espacio.nutri.al.huevo.desc":
+    "One of the most complete and bioavailable proteins there is. It has every essential amino acid, in almost perfect proportions.",
+  "espacio.nutri.al.legumbres.nom": "Legumes",
+  "espacio.nutri.al.legumbres.desc":
+    "An excellent source of plant protein, together with fiber and complex carbohydrates. Lentils, chickpeas and beans are staples of a balanced diet.",
+  "espacio.nutri.al.pescado.nom": "Fish",
+  "espacio.nutri.al.pescado.desc":
+    "High-quality protein together with omega-3, which lowers inflammation and protects the cardiovascular system.",
+  "espacio.nutri.al.tofu.nom": "Tofu",
+  "espacio.nutri.al.tofu.desc":
+    "A complete plant protein made from soybeans. Versatile and mild, it's an excellent alternative to animal protein.",
+  "espacio.nutri.al.soja.nom": "Soybeans",
+  "espacio.nutri.al.soja.desc":
+    "One of the few complete plant proteins. Rich in every essential amino acid, and in fiber and healthy fats too.",
+  "espacio.nutri.al.guisantes.nom": "Peas",
+  "espacio.nutri.al.guisantes.desc":
+    "Plant protein that comes with fiber, which slows down how fast it's absorbed and keeps you full for longer.",
+  "espacio.nutri.al.verduras.nom": "Vegetables",
+  "espacio.nutri.al.verduras.desc": "A source of fiber, vitamins and good energy.",
+  "espacio.nutri.al.frutas.nom": "Fruit",
+  "espacio.nutri.al.frutas.desc":
+    "Its fiber is perfect for letting its fructose come into us little by little.",
+  "espacio.nutri.al.legumbresCarb.nom": "Legumes",
+  "espacio.nutri.al.legumbresCarb.desc":
+    "For all their bad reputation, they're among the best sources of carbohydrates — and they come with fiber and protein.",
+  "espacio.nutri.al.aguacate.nom": "Avocado",
+  "espacio.nutri.al.aguacate.desc":
+    "Rich in oleic acid, the same one as olive oil. It nourishes the cell membrane and is naturally anti-inflammatory.",
+  "espacio.nutri.al.aceite.nom": "Olive oil",
+  "espacio.nutri.al.aceite.desc":
+    "Its high oleic acid content protects the cells and lowers chronic inflammation. One of the pillars of eating well.",
+  "espacio.nutri.al.frutosSecos.nom": "Nuts",
+  "espacio.nutri.al.frutosSecos.desc":
+    "They pack unsaturated fat, protein and fiber into small doses. A snack that really nourishes.",
 
   // ── The two saved tests (Doṣhas and Chinese Medicine) ──────────────────
   "espacio.test.doshas": "The Doṣha test",
@@ -51,6 +225,7 @@ export const espacio = {
   "espacio.test.tusResultados": "Your results",
   "espacio.test.predominante": "PREDOMINANT",
   "espacio.test.volver": "Back to My Space",
+  "espacio.ayur.responde": "Answer every question to see your Doṣha ({hechas} / {total})",
 
   // ── Vata ───────────────────────────────────────────────────────────────
   "espacio.dosha.vata.subtitulo": "Air and Ether · Movement and Creativity",

@@ -68,6 +68,21 @@ export const TITULO_ILUSTRACION_EN: Record<string, string> = {
   "nutricion-origen-hoja": "Inside a leaf",
   "nutricion-origen-fruta": "Fruit, vegetables and their colors",
   "nutricion-origen-animal": "When the nutrient passes through an animal",
+  // Los doce grupos de «Los nutrientes». Su título en la galería sale del
+  // `label` del grupo (NUTRIENTES), que se lee al importar el módulo y por eso
+  // llega siempre en español: se traduce aquí, por el `id` de la entrada.
+  "nutriente-carbohidratos": "Carbohydrates",
+  "nutriente-grasas": "Fats",
+  "nutriente-proteinas": "Proteins",
+  "nutriente-vitaminas": "Vitamins",
+  "nutriente-minerales": "Minerals",
+  "nutriente-fibra": "Fiber",
+  "nutriente-colesterol": "Cholesterol",
+  "nutriente-etanol": "Ethanol",
+  "nutriente-agua": "Water",
+  "nutriente-fitoquimicos": "Phytochemicals",
+  "nutriente-edulcorantes": "Sweeteners",
+  "nutriente-drogas": "Drugs",
 
   // ── Cábala ──
   "cabala-sefirot": "The ten dimensions of the soul",

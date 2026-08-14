@@ -337,7 +337,10 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   nutriEntry("nutricion-minerales", "Minerales", "/viñetas/nutricion/minerales/minerales1.webp", COMICS_NUTRIENTES.minerales),
   nutriEntry("nutricion-agua", "Agua", "/viñetas/nutricion/agua/agua1.webp", COMICS_NUTRIENTES.agua),
   nutriEntry("nutricion-microbiota", "La microbiota", "/viñetas/nutricion/microbiota/microbiota1.webp", NUTRICION_MICROBIOTA),
-  nutriEntry("nutricion-hambre", "El hambre: una mirada holística", "/recorrido/nutricion/hambre/hambre1.webp", sinNegrita(HAMBRE_HOLISTICA)),
+  // OJO con la clave: el `id` es «nutricion-hambre», pero sus viñetas son las de
+  // la LECTURA holística, no las del cómic de transición que se llama igual. Sin
+  // `comicKey` el inglés le pondría el texto del otro cómic encima.
+  nutriEntry("nutricion-hambre", "El hambre: una mirada holística", "/recorrido/nutricion/hambre/hambre1.webp", sinNegrita(HAMBRE_HOLISTICA), "nutricion-hambre-holistica"),
   nutriEntry("nutricion-integral", "Lo integral", "/viñetas/nutricion/integral/integral1.webp", NUTRICION_INTEGRAL),
   // ── Las cinco lecturas de «¿De dónde vienen los nutrientes?» ──
   // (los ciclos de la naturaleza, el suelo, la planta, la hoja y el fruto)

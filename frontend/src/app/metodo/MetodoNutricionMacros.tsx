@@ -17,10 +17,11 @@ import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
-  ALIMENTOS_MACROS, GRUPOS_MACRO, RONDAS, TOPES, TINO, CIERRE_PARTIDA,
+  ALIMENTOS_MACROS, RONDAS, TOPES,
   barajar, tinosDeRonda,
   type AlimentoMacros, type Tino,
 } from "../../hardCoded/espacio/MacrosAlimentos";
+import { useAlimentosMacros, useEtiquetasMacros } from "../../hardCoded/espacio/useMacrosJuego";
 
 // ═════════════════════════════════════════════════════════════════════════
 // «Cuenta lo que comes» · el paso que va DESPUÉS de «Diseña tu día».
@@ -135,6 +136,7 @@ function Comparativa({
 }: {
   label: string; color: string; estimado: number; real: number; tino: Tino; tope: number;
 }) {
+  const tn = useEtiquetasMacros().tino(tino);
   const pct = (v: number) => `${Math.min((v / tope) * 100, 100)}%`;
   return (
     <Box w="100%">
@@ -143,9 +145,9 @@ function Comparativa({
               letterSpacing="0.06em" textTransform="uppercase">
           {label}
         </Text>
-        <Text color={TINO[tino].color} fontSize={{ base: "xs", md: "sm" }} fontWeight={800}
+        <Text color={tn.color} fontSize={{ base: "xs", md: "sm" }} fontWeight={800}
               letterSpacing="0.08em" textTransform="uppercase">
-          {TINO[tino].label}
+          {tn.label}
         </Text>
       </Flex>
 
@@ -178,12 +180,20 @@ export default function MetodoNutricionMacros() {
   // para poder empezar otra sin recargar la página.
   const [partida, setPartida] = useState(0);
   const [indice, setIndice] = useState(0);
+  const etiquetas = useEtiquetasMacros();
+  // La baraja se hace SIEMPRE sobre el español: así cambiar de idioma a mitad
+  // de partida no reparte otros diez alimentos. El texto se traduce al pintar.
+  const alimentosMacros = useAlimentosMacros();
   const alimentos = useMemo(
     () => barajar(ALIMENTOS_MACROS).slice(0, RONDAS),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [partida],
   );
-  const actual: AlimentoMacros | undefined = alimentos[indice];
+  // El alimento de la ronda, ya con su nombre y su ración en el idioma activo.
+  const sorteado: AlimentoMacros | undefined = alimentos[indice];
+  const actual: AlimentoMacros | undefined = sorteado
+    ? alimentosMacros.find((a) => a.key === sorteado.key) ?? sorteado
+    : undefined;
 
   const [est, setEst] = useState<Record<MacroKey, number>>({ proteina: 5, hidratos: 20, grasa: 5 });
   const [comprobado, setComprobado] = useState(false);
@@ -237,7 +247,8 @@ export default function MetodoNutricionMacros() {
 
   if (loading) return <NutricionLoading />;
 
-  const grupo = actual ? GRUPOS_MACRO[actual.grupo] : null;
+  const grupo = actual ? etiquetas.grupo(actual.grupo) : null;
+  const CIERRE_PARTIDA = etiquetas.cierre;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">

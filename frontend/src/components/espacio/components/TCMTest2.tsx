@@ -2,16 +2,21 @@ import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 import TCMTestPage from "./TCMTestPage";
 import { RECS_ELEMENTOS } from "../data/tcmRecommendations";
+import { RECS_ELEMENTOS_EN } from "../data/tcmRecommendations.en";
+import {
+  TEST2_INTERPRETACIONES_EN,
+  TEST2_SECCIONES_EN,
+  useInterpretacionesTcm,
+  useRecsTcm,
+  useSeccionesTcm,
+} from "../data/tcmEspacio.en";
+import { useT } from "../../../i18n";
 
 /* ══════════════════════════════════════════════
    DATOS DEL TEST
+   El nombre del elemento es la clave que se guarda: se queda en
+   español y se traduce solo para pintar (`tcmEspacio.en.ts`).
 ══════════════════════════════════════════════ */
-const SCALE_LABELS = [
-  "No me describe",
-  "Leve tendencia",
-  "Moderadamente característico",
-  "Muy característico",
-];
 
 const ELEMENTOS = [
   {
@@ -129,40 +134,48 @@ const ICON = (
 );
 
 export default function TCMTest2() {
+  const t = useT();
+  const secciones = useSeccionesTcm(ELEMENTOS, TEST2_SECCIONES_EN);
+  const interpretaciones = useInterpretacionesTcm(INTERPRETACIONES, TEST2_INTERPRETACIONES_EN);
+  const recs = useRecsTcm(RECS_ELEMENTOS, RECS_ELEMENTOS_EN);
   return (
     <TCMTestPage
       pageIcon={ICON}
       tcmField="elemento"
-      pageTitle="Tu elemento predominante"
-      instruccionesTitle="Terreno Constitucional"
-      instruccionesText="Evaluación de Tendencia Energética Base según los Cinco Movimientos. Responde según cómo ha sido la mayor parte de tu Vidaadulta, no según el estado actual."
+      pageTitle={t("espacio.tcm.t2.tarjeta")}
+      instruccionesTitle={t("espacio.tcm.t2.instruccionesTitulo")}
+      instruccionesText={t("espacio.tcm.t2.instrucciones")}
       scaleValues={[0, 1, 2, 3]}
-      scaleLabels={SCALE_LABELS}
-      scaleMobileHint="0 = No me describe · 3 = Muy característico"
-      secciones={ELEMENTOS}
+      scaleLabels={[
+        t("espacio.tcm.t2.escala1"),
+        t("espacio.tcm.t2.escala2"),
+        t("espacio.tcm.t2.escala3"),
+        t("espacio.tcm.t2.escala4"),
+      ]}
+      scaleMobileHint={t("espacio.tcm.t2.escalaMovil")}
+      secciones={secciones}
       resultadosNota={(totals) => {
-        const sortedIdx = [...totals.map((t, i) => ({ t, i }))].sort((a, b) => b.t - a.t);
+        const sortedIdx = [...totals.map((tot, i) => ({ t: tot, i }))].sort((a, b) => b.t - a.t);
         const isMixed = sortedIdx.length >= 2 && sortedIdx[0] && sortedIdx[1] &&
           Math.abs((sortedIdx[0].t ?? 0) - (sortedIdx[1].t ?? 0)) < 3;
         return (
           <Flex direction="column" gap={1.5}>
             <Text color="rgba(255,255,255,0.48)" fontSize="md" fontStyle="italic" lineHeight="1.9">
-              El mayor puntaje indica tu terreno constitucional predominante.
-              El segundo puntaje corresponde al movimiento de soporte.
-              {isMixed && " La diferencia menor a 3 puntos entre los dos primeros sugiere constitución mixta."}
+              {t("espacio.tcm.t2.nota1")}
+              {isMixed && t("espacio.tcm.t2.notaMixta")}
             </Text>
             <Text color="rgba(255,255,255,0.35)" fontSize="md" fontStyle="italic">
-              Esta lectura se alinea con los principios del Huangdi Neijing respecto a la diferenciación del terreno energético.
+              {t("espacio.tcm.t2.nota2")}
             </Text>
           </Flex>
         );
       }}
-      interpretacionTitle="Interpretación Constitucional"
-      interpretaciones={INTERPRETACIONES}
-      resultadoEtiqueta="Tu Terreno"
+      interpretacionTitle={t("espacio.tcm.t2.interpretacion")}
+      interpretaciones={interpretaciones}
+      resultadoEtiqueta={t("espacio.tcm.t2.etiqueta")}
       localStorageKey="tcm_test2_result"
       savePrimaryKey="primaryElemento"
-      recsMap={RECS_ELEMENTOS}
+      recsMap={recs}
       backToSpaceLink="/espacio/questions/medicinachina"
     />
   );

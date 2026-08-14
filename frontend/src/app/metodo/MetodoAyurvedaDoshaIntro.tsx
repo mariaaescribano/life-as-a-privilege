@@ -22,7 +22,8 @@ import {
   VataIcon, PittaIcon, KaphaIcon,
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
-import { DOSHA_INTRO, type DoshaKey, type DescubreIcon } from "../../hardCoded/metodo/doshaIntro";
+import { type DoshaKey, type DescubreIcon } from "../../hardCoded/metodo/doshaIntro";
+import { useDoshaIntro } from "../../hardCoded/metodo/useDoshaContenido";
 
 const TINTA = ayurvedaTxt;
 const PAPEL = "#fbf4e8";
@@ -114,6 +115,7 @@ function CheckRow({ label, checked, onToggle, color }: { label: string; checked:
 
 export default function MetodoAyurvedaDoshaIntro() {
   const t = useT();
+  const DOSHA_INTRO = useDoshaIntro();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;

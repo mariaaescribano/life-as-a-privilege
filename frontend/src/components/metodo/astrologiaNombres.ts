@@ -19,6 +19,8 @@
 import { getIdioma, useIdioma } from "../../i18n";
 import type { Idioma } from "../../i18n";
 import { cuerpoByKey, type CuerpoKey } from "./astrologiaData";
+import { ASPECTO_LABEL } from "./casasAspectos";
+import type { TipoAspecto } from "./CartaAstral3D/types";
 
 /** Los doce signos. Clave = nombre español (el dato), valor = rótulo inglés. */
 const SIGNOS_EN: Record<string, string> = {
@@ -55,6 +57,17 @@ const CUERPOS_EN: Record<CuerpoKey, string> = {
   nodoSur: "South Node",
 };
 
+/** Los siete aspectos. Clave = `TipoAspecto` (el dato, tampoco se traduce). */
+const ASPECTOS_EN: Record<string, string> = {
+  conjuncion: "Conjunction",
+  oposicion: "Opposition",
+  trigono: "Trine",
+  cuadratura: "Square",
+  sextil: "Sextile",
+  semisextil: "Semisextile",
+  quincuncio: "Quincunx",
+};
+
 /** El rótulo de un signo. Lo que no esté traducido se queda en español. */
 export const nombreSigno = (
   signo?: string | null,
@@ -73,6 +86,17 @@ export const nombreCuerpo = (
   const cuerpo = cuerpoByKey(String(key));
   if (idioma !== "en") return cuerpo?.label ?? String(key);
   return CUERPOS_EN[key as CuerpoKey] ?? cuerpo?.label ?? String(key);
+};
+
+/** El rótulo de un aspecto: «Trígono» / "Trine". El símbolo (☌ △ □…) es el
+ *  mismo en los dos idiomas y sale siempre de `ASPECTO_SYMBOL`. */
+export const nombreAspecto = (
+  tipo?: string | null,
+  idioma: Idioma = getIdioma(),
+): string => {
+  if (!tipo) return "";
+  const es = ASPECTO_LABEL[tipo as TipoAspecto] ?? tipo;
+  return idioma === "en" ? ASPECTOS_EN[tipo] ?? es : es;
 };
 
 /** «Casa 7» / «House 7». */
@@ -118,6 +142,7 @@ export function useNombresAstro() {
     idioma,
     signo: (s?: string | null) => nombreSigno(s, idioma),
     cuerpo: (k?: CuerpoKey | string | null) => nombreCuerpo(k, idioma),
+    aspecto: (tipo?: string | null) => nombreAspecto(tipo, idioma),
     casa: (c: number | string) => etiquetaCasa(c, idioma),
     palabraCasa: () => palabraCasa(idioma),
     palabraSigno: () => palabraSigno(idioma),

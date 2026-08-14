@@ -486,6 +486,16 @@ const LOTES = {
     calidad: 88,
     carpetas: ["viñetas/psicologia/disociacion"],
   },
+  // Las 10 viñetas del cómic de la historia de la Cábala (de las primeras
+  // preguntas a Isaac Luria), intercalado antes del Árbol de la Vida. Llegaron
+  // como `historiaN.png` y se renombran a `cabalahistoriaN.png` —el nombre que
+  // pide comicCabalaHistoria.ts— antes de convertir. Como el resto de viñetas:
+  // 1000 px de lado, que en el visor se ven a 440. El WebP no es opcional: las
+  // viñetas se piden con la extensión escrita, así que en PNG dan 404.
+  40: {
+    ladoMax: 1000,
+    carpetas: ["viñetas/cabala/historia"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

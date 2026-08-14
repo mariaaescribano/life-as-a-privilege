@@ -38,6 +38,7 @@ import {
   simboloSrc,
   SIMBOLOS_FAMILIA,
   SIMBOLOS_GRUPOS,
+  useSimbolosFamilia,
   type SimboloFamilia,
 } from "../../components/metodo/familiaSimbolos";
 import { useImagesReady } from "../../hooks/useImagesReady";
@@ -203,6 +204,8 @@ export default function MetodoPsicologiaFamilia() {
  *  así `useImagesReady` no vuelve a esperar en cada render. */
 const SIMBOLOS_SRCS = SIMBOLOS_FAMILIA.map((s) => simboloSrc(s.key));
 
+/* El selector de personajes/animales: nombres y grupos en el idioma activo. La
+   `key` (lo que se guarda) sigue saliendo del español. */
 function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
   p: PersonaGenograma;
   onCampo: (campos: Partial<PersonaGenograma>) => void;
@@ -210,6 +213,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
   onClose: () => void;
 }) {
   const t = useT();
+  const { simbolos, grupo: grupoRotulo } = useSimbolosFamilia();
   const familia = useFamilia();
   const genograma = useGenograma();
   useLockBodyScroll(true);
@@ -351,13 +355,13 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
           {/* Rejilla por grupos (Animales / Personajes) */}
           <Flex direction="column" gap={{ base: 5, md: 6 }} mt={4}>
             {SIMBOLOS_GRUPOS.map((grupo) => {
-              const delGrupo = SIMBOLOS_FAMILIA.filter((s) => s.grupo === grupo);
+              const delGrupo = simbolos.filter((s) => s.grupo === grupo);
               if (delGrupo.length === 0) return null;
               return (
                 <Box key={grupo}>
                   <Text color={TINTA} fontSize="xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
                         opacity={0.65} mb={2.5} style={{ textShadow: INK_SHADOW }}>
-                    {grupo}
+                    {grupoRotulo(grupo)}
                   </Text>
                   <Box display="grid" gap={{ base: 2.5, md: 3 }}
                        gridTemplateColumns={{ base: "repeat(auto-fill, minmax(76px, 1fr))",

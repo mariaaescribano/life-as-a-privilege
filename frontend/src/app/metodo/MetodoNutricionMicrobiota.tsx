@@ -17,6 +17,7 @@ import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useLeidos } from "../../hooks/useLeidos";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { MICROBIOTA_BACTERIAS, MICROBIOTA_TARJETAS } from "../../hardCoded/espacio/MicrobiotaNutricion";
+import { useMicrobiotaBacterias, useMicrobiotaTarjetas } from "../../hardCoded/espacio/useMicrobiota";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Apartado «Microbiota» del recorrido de Nutrición. Se llega desde Los
@@ -34,6 +35,10 @@ const CAMPO_MOLECULAS = "microbiota_moleculas_leidas";
 export default function MetodoNutricionMicrobiota() {
   const t = useT();
   const navigate = useNavigate();
+  // El texto, en el idioma activo; el orden, la foto y la `key` (lo que se
+  // guarda como leído) siguen saliendo del español.
+  const bacterias = useMicrobiotaBacterias();
+  const moleculas = useMicrobiotaTarjetas();
   const [loading, setLoading] = useState(true);
   const [fichaIdx, setFichaIdx] = useState<number | null>(null);
   const [bacteriaIdx, setBacteriaIdx] = useState<number | null>(null);
@@ -109,7 +114,7 @@ export default function MetodoNutricionMicrobiota() {
 
           <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {MICROBIOTA_BACTERIAS.map((bac, i) => (
+              {bacterias.map((bac, i) => (
                 <TarjetaNutri key={bac.key} titulo={bac.titulo} foto={bac.foto}
                               visto={leido(CAMPO_BACTERIAS, bac.key)}
                               onClick={() => abrirBacteria(i)} />
@@ -143,7 +148,7 @@ export default function MetodoNutricionMicrobiota() {
 
           <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {MICROBIOTA_TARJETAS.map((tar, i) => (
+              {moleculas.map((tar, i) => (
                 <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto}
                               visto={leido(CAMPO_MOLECULAS, tar.key)}
                               onClick={() => abrirMolecula(i)} />
@@ -156,23 +161,23 @@ export default function MetodoNutricionMicrobiota() {
 
       {/* Ficha tipo cómic de la bacteria seleccionada. */}
       {bacteriaIdx !== null && (
-        <NutrienteFichaModal tarjetas={MICROBIOTA_BACTERIAS} index={bacteriaIdx}
+        <NutrienteFichaModal tarjetas={bacterias} index={bacteriaIdx}
                              onLeida={(i) => {
-                               const bac = MICROBIOTA_BACTERIAS[i];
+                               const bac = bacterias[i];
                                if (bac) marcarLeido(CAMPO_BACTERIAS, bac.key);
                              }}
-                             leida={(i) => yaLeidas.has(MICROBIOTA_BACTERIAS[i]?.key)}
+                             leida={(i) => yaLeidas.has(bacterias[i]?.key)}
                              onClose={() => setBacteriaIdx(null)} onSelect={setBacteriaIdx} />
       )}
 
       {/* Ficha tipo cómic de la molécula seleccionada. */}
       {fichaIdx !== null && (
-        <NutrienteFichaModal tarjetas={MICROBIOTA_TARJETAS} index={fichaIdx}
+        <NutrienteFichaModal tarjetas={moleculas} index={fichaIdx}
                              onLeida={(i) => {
-                               const tar = MICROBIOTA_TARJETAS[i];
+                               const tar = moleculas[i];
                                if (tar) marcarLeido(CAMPO_MOLECULAS, tar.key);
                              }}
-                             leida={(i) => yaLeidas.has(MICROBIOTA_TARJETAS[i]?.key)}
+                             leida={(i) => yaLeidas.has(moleculas[i]?.key)}
                              onClose={() => setFichaIdx(null)} onSelect={setFichaIdx} />
       )}
 

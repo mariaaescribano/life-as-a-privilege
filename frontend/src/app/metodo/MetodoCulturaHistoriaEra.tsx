@@ -10,7 +10,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { LineaTiempoCultura } from "../../components/metodo/LineaTiempoCultura";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
-import { getHistoria } from "../../components/metodo/culturaHistorias";
+import { useHistoriaCultura } from "../../components/metodo/useHistoriaCultura";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
@@ -35,7 +35,7 @@ export default function MetodoCulturaHistoriaEra() {
   // Sub-hito abierto (su cómic). null = ninguno.
   const [activeKey, setActiveKey] = useState<string | null>(null);
 
-  const historia = useMemo(() => getHistoria(historiaKey), [historiaKey]);
+  const historia = useHistoriaCultura(historiaKey);
   const era = useMemo(
     () => historia?.hitos.find((h) => h.key === eraKey) ?? null,
     [historia, eraKey],

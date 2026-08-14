@@ -1,11 +1,21 @@
 import React from "react";
 import TCMTestPage from "./TCMTestPage";
 import { RECS_CONSTITUCIONES } from "../data/tcmRecommendations";
+import { RECS_CONSTITUCIONES_EN } from "../data/tcmRecommendations.en";
+import {
+  TEST1_INTERPRETACIONES_EN,
+  TEST1_SECCIONES_EN,
+  useInterpretacionesTcm,
+  useRecsTcm,
+  useSeccionesTcm,
+} from "../data/tcmEspacio.en";
+import { useT } from "../../../i18n";
 
 /* ══════════════════════════════════════════════
    DATOS DEL TEST
 ══════════════════════════════════════════════ */
-const SCALE_LABELS = ["Rara vez", "A veces", "Frecuente"];
+// El nombre de cada constitución es lo que se guarda en la base de datos: se
+// queda en español y se traduce solo para pintar (`tcmEspacio.en.ts`).
 
 const CONSTITUCIONES = [
   {
@@ -127,27 +137,35 @@ const ICON = (
 );
 
 export default function TCMTest1() {
+  const t = useT();
+  const secciones = useSeccionesTcm(CONSTITUCIONES, TEST1_SECCIONES_EN);
+  const interpretaciones = useInterpretacionesTcm(INTERPRETACIONES, TEST1_INTERPRETACIONES_EN);
+  const recs = useRecsTcm(RECS_CONSTITUCIONES, RECS_CONSTITUCIONES_EN);
   return (
     <TCMTestPage
       pageBg="#008080"
       pageIcon={ICON}
       tcmField="constitucion"
-      pageTitle="Conoce tu constitución"
-      instruccionesTitle="Instrucciones"
-      instruccionesText="Responde cada afirmación eligiendo la opción que mejor te describa en este momento de tu Vida. Suma los puntos de cada patrón: el que mayor puntaje obtenga indica tu constitución predominante."
-      instruccionesNota="Los resultados son orientativos, no diagnósticos. Si hay empates, puede indicar constituciones mixtas, lo cual es muy común."
+      pageTitle={t("espacio.tcm.t1.tarjeta")}
+      instruccionesTitle={t("espacio.tcm.t1.instruccionesTitulo")}
+      instruccionesText={t("espacio.tcm.t1.instrucciones")}
+      instruccionesNota={t("espacio.tcm.t1.nota")}
       scaleValues={[0, 1, 2]}
-      scaleLabels={SCALE_LABELS}
-      scaleMobileHint="0 = Nunca · 2 = Siempre"
-      secciones={CONSTITUCIONES}
-      interpretacionTitle="Interpretación Orientativa"
-      interpretaciones={INTERPRETACIONES}
-      resultadoEtiqueta="Tu Constitución"
+      scaleLabels={[
+        t("espacio.tcm.t1.escala1"),
+        t("espacio.tcm.t1.escala2"),
+        t("espacio.tcm.t1.escala3"),
+      ]}
+      scaleMobileHint={t("espacio.tcm.t1.escalaMovil")}
+      secciones={secciones}
+      interpretacionTitle={t("espacio.tcm.t1.interpretacion")}
+      interpretaciones={interpretaciones}
+      resultadoEtiqueta={t("espacio.tcm.t1.etiqueta")}
       localStorageKey="tcm_test1_result"
       savePrimaryKey="primaryConstitution"
       monoColor={true}
       showInterpretacion={false}
-      recsMap={RECS_CONSTITUCIONES}
+      recsMap={recs}
       backToSpaceLink="/espacio/questions/medicinachina"
     />
   );

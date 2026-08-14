@@ -10,7 +10,8 @@ import {
   fitoterapiaNom,
   fitoterapiaTxt,
 } from "../../../GlobalVariables";
-import { plantas, type Planta } from "../../recursos/fitoterapia/PlantasData";
+import { type Planta } from "../../recursos/fitoterapia/PlantasData";
+import { usePlantas } from "../../recursos/fitoterapia/usePlantas";
 import { DisciplineHeader } from "../../global/DisciplineHeader";
 import SiteFooter from "../../global/Footer";
 import { useT } from "../../../i18n";
@@ -425,8 +426,15 @@ const useReveal = () => {
 export default function FitoterapiaEspacio() {
   const t                           = useT();
   const navigate                    = useNavigate();
-  const [selected, setSelected]     = useState<Planta | null>(null);
-  const [favoritas, setFavoritas]   = useState<Planta[]>([]);
+  // El herbario en el idioma activo. Se guardan los IDS de las favoritas, no
+  // las plantas: así al cambiar de idioma la ficha cambia con él en vez de
+  // quedarse con el texto del idioma en el que se cargó.
+  const plantas                     = usePlantas();
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [favIds, setFavIds]         = useState<number[]>([]);
+  const favoritas                   = plantas.filter((p) => favIds.includes(p.id));
+  const selected                    = plantas.find((p) => p.id === selectedId) ?? null;
+  const setSelected                 = (p: Planta | null) => setSelectedId(p?.id ?? null);
   const [loading, setLoading]       = useState(true);
   const gridReveal                  = useReveal();
   const userId                      = localStorage.getItem("userId");
@@ -442,8 +450,7 @@ export default function FitoterapiaEspacio() {
       .get(`${API_URL}/fitoterapia/${userId}`)
       .then((res) => {
         const ids: number[] = (res.data || []).map((f: { idPlanta: number }) => f.idPlanta);
-        const plantasFav = plantas.filter((p) => ids.includes(p.id));
-        setFavoritas(plantasFav);
+        setFavIds(ids);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -454,8 +461,8 @@ export default function FitoterapiaEspacio() {
     if (!userId) return;
     try {
       await axios.delete(`${API_URL}/fitoterapia/${userId}/${planta.id}`);
-      setFavoritas((prev) => prev.filter((p) => p.id !== planta.id));
-      if (selected?.id === planta.id) setSelected(null);
+      setFavIds((prev) => prev.filter((id) => id !== planta.id));
+      if (selectedId === planta.id) setSelectedId(null);
     } catch (e) {
       console.error("Error al eliminar favorita", e);
     }

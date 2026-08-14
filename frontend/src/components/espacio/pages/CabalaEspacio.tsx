@@ -62,7 +62,7 @@ function CabalaTest({ datos }: { datos: TestSefirot }) {
           fontFamily="'EB Garamond', serif"
           mb={3}
         >
-          Autoconocimiento · {datos.preguntas.length} preguntas
+          {t("espacio.cabala.autoconocimiento", { n: datos.preguntas.length })}
         </Text>
         <Text
           color={`${cabalaTxt}cc`}

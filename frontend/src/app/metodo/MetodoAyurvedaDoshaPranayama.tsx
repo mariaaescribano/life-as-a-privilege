@@ -22,10 +22,8 @@ import {
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
-import {
-  PRANAYAMA_PRACTICA, PRANAYAMA_REFLEXION, PRANAYAMA_CIERRE,
-  type FasePranayama,
-} from "../../hardCoded/metodo/pranayama";
+import { type FasePranayama } from "../../hardCoded/metodo/pranayama";
+import { usePranayama } from "../../hardCoded/metodo/useDoshaContenido";
 
 const TINTA = ayurvedaTxt;
 const PAPEL = "#fbf4e8";
@@ -361,6 +359,11 @@ function SelectorDosha({ sel, onSelect }: { sel: DoshaKey; onSelect: (k: DoshaKe
 
 export default function MetodoAyurvedaDoshaPranayama() {
   const t = useT();
+  const {
+    practica: PRANAYAMA_PRACTICA,
+    reflexion: PRANAYAMA_REFLEXION,
+    cierre: PRANAYAMA_CIERRE,
+  } = usePranayama();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   // La URL ya solo decide con cuál se ENTRA: dentro se cambia con los botones.

@@ -90,6 +90,100 @@ va en las URLs y en la base de datos. Ver `nombreDisciplina.ts`.
 | necesidad no cubierta | uncovered need | Igual que en `heridasIntro`: *uncovered*, no *unmet*. |
 | Cuándo la notas: | When you notice it: | Rótulo que abre párrafo en Profundiza. Igual con *How it's made:*, *Its receptor:*, *When it matters:*. Son el ritmo del texto: se repiten literales, no se varían. |
 
+## Medicina China · los resultados de los test
+
+Los nombres van SIEMPRE con la grafía inglesa de la MTC, no con una traducción
+literal. La clave interna se queda en español (es lo que guarda la BD): esto es
+solo lo que se pinta. Ver `components/espacio/data/tcmEspacio.en.ts`.
+
+| Español | Inglés | Nota |
+|---|---|---|
+| Equilibrado | Balanced | Constitución del Test 1. |
+| Deficiencia de Qi / Yang / Yin | Qi Deficiency / Yang Deficiency / Yin Deficiency | En este orden: el término va delante. |
+| Flema-Humedad | Phlegm-Dampness | |
+| Calor-Humedad | Damp-Heat | El orden se invierte, es la forma consagrada en inglés. |
+| Estancamiento de Qi | Qi Stagnation | |
+| Humedad / Calor / Flema / Frío (patógenos) | Dampness / Heat / Phlegm / Cold | Con mayúscula, como *Blood* o *Qi*: no es la humedad del salón. |
+| Movimiento Madera | the Wood Element | Nunca *Wood Movement*. Los cinco juntos, *the Five Elements*. |
+| terreno constitucional | constitutional ground | El resultado del Test 2. |
+| desarmonía de Madera | Wood disharmony | |
+| Infusiones y Tés | Teas and Infusions | Título de la caja de recomendaciones; la categoría suelta es *Teas*. |
+| Hierbas Medicinales | Medicinal Herbs | La categoría suelta es *Herbs*. |
+| Estilo de Vida | Lifestyle | |
+| acostarse antes de las 23 h | in bed before 11 p.m. | Las horas, en formato de EE. UU. Igual «de 23 a 3 h» → *from 11 p.m. to 3 a.m.* |
+| hígado / bazo / riñón / pulmón | liver / spleen / kidney / lung | En MINÚSCULA, como en español y como en el resto de los ficheros de MTC. |
+
+## Ayurveda · el submapa del doṣha
+
+Los seis textos del recorrido del doṣha (`hardCoded/metodo/dosha*.en.ts` y
+`pranayama.en.ts`). La clave del doṣha (`vata` / `pitta` / `kapha`) es lo que
+guarda la BD y no se traduce; de aquí sale solo el rótulo.
+
+| Español | Inglés | Nota |
+|---|---|---|
+| Doṣha | Doṣha | Con su grafía, como ya hace `en/espacio.ts`. En genérico y en minúscula, *dosha*. |
+| Prakṛti | Prakriti | Sin diacrítico, como el resto de la casa. |
+| Tu tendencia mental | How your mind leans | Título de la página. No *Your mental tendency*. |
+| Así funciona tu cuerpo | This is how your body works | |
+| ¿Qué te desequilibra? | What throws you off balance? | Y «Lo que aumenta Vata» → *What increases Vata*. |
+| Tu alimentación ideal | The way of eating that suits you | Nunca *Your ideal diet*: no es una dieta. Igual «Tu estilo de Vida ideal» → *The way of living that suits you*. |
+| Dulce · Ácido · Salado · Picante · Amargo · Astringente | Sweet · Sour · Salty · Pungent · Bitter · Astringent | Los seis sabores. «Picante» es *pungent* (el sabor), no *spicy* (el plato). |
+| ¿Te reconoces? | Do you recognize yourself? | |
+| Lo que el Ayurveda quiere que recuerdes | What Ayurveda wants you to remember | Sin artículo: *Ayurveda*, no *the Ayurveda*. |
+| Reflexiona · Mi compromiso | Reflect · My commitment | |
+| Un día de ejemplo | A sample day | |
+| Abhyanga · ghee · dhal · chai | Abhyanga · ghee · dhal · chai | No se traducen. |
+| Nāḍī Śodhana · Śītalī · Śītkārī · Bhastrikā · Viṣṇu mudrā | (igual) | Los nombres de las técnicas se quedan con sus diacríticos. |
+| Inhala · Retén · Exhala | Inhale · Hold · Exhale | Los rótulos del guía de respiración. |
+
+## Astrología y psicología · los rótulos
+
+Aquí no hay ficheros `.en.ts`: son etiquetas cortas y viven junto al dato
+(`astrologiaNombres.ts`, `familiaSimbolos.ts`). El dato se guarda SIEMPRE en
+español porque es la clave con la que se indexa el texto.
+
+| Español | Inglés | Nota |
+|---|---|---|
+| Conjunción · Oposición · Trígono · Cuadratura | Conjunction · Opposition · Trine · Square | Los aspectos. *Cuadratura* es *Square*, nunca *Quadrature*. |
+| Sextil · Semisextil · Quincuncio | Sextile · Semisextile · Quincunx | |
+| Casa VII | House VII | El número romano no cambia. |
+| Regente | Ruler | |
+| Animales · Personajes | Animals · Characters | Los dos grupos del selector de «Tu familia». |
+| Niña (el personaje) | Child | Sin género: el personaje lo elige cualquiera. |
+| Sombra · Sabio · Mago · Payaso | Shadow · Sage · Magician · Clown | |
+
+## Nutrición · la calculadora
+
+| Español | Inglés | Nota |
+|---|---|---|
+| Peso (kg) · Altura (cm) | Weight (kg) · Height (cm) | ⚠️ NO se pasa a libras ni a pulgadas: son los números que entran en la fórmula de Mifflin-St Jeor y los que se guardan en la BD. |
+| Género · Mujer · Hombre | Gender · Woman · Man | Se mantiene la palabra del original, no se cambia a *Sex / Female / Male*. |
+| Valores nutricionales (por 100 g) | Nutrition facts (per 100 g) | |
+| G. insaturadas / G. saturadas | Unsat. fat / Sat. fat | Abreviado, como en español: son rótulos de una tabla estrecha. |
+| Frutos secos | Nuts | Y *Soja* → *Soybeans*, *Aceite de oliva* → *Olive oil*. |
+
+## Nutrición · la biblioteca, el plato y los juegos
+
+| Español | Inglés | Nota |
+|---|---|---|
+| fibra | fiber | Y *fibra soluble / insoluble* → *soluble / insoluble fiber*. |
+| ácidos grasos de cadena corta | short-chain fatty acids | Siempre entero, sin siglas: en español tampoco se dice «AGCC». |
+| microbiota | microbiota | Nunca *gut flora*. |
+| intestino (el ecosistema) | gut | *pared intestinal* → *gut wall*; *barrera intestinal* → *gut barrier*. |
+| Constructora · Combustible · Protectora · Dañina en exceso | Builder · Fuel · Protector · Harmful in excess | Las cuatro píldoras de función de una molécula. |
+| Protectores vegetales | Plant protectors | El grupo de los fitoquímicos en la ficha del alimento. |
+| Almidón · Grasa monoinsaturada · Azúcar añadido | Starch · Monounsaturated fat · Added sugar | Grafía química inglesa de siempre. |
+| Verduras · Fruta · Cereales integrales · Proteína saludable | Vegetables · Fruit · Whole grains · Healthy protein | Los cuatro sectores del plato de Harvard: los nombres con los que se conoce en inglés. |
+| a ojo | by eye | Las medidas son con el cuerpo: *a fist*, *your palm*, *a tablespoon*, *a teaspoon*, *your cupped hand*. Se dicen igual siempre. |
+| Desayuno · Media mañana · Comida · Merienda · Cena | Breakfast · Mid-morning · Lunch · Afternoon snack · Dinner | Las comidas españolas (cinco). Se traducen por lo que son, no se cambian por el horario anglosajón. |
+| ración | portion | Y en el juego de macros, la ración se dice como en la cocina: *1 medium (180 g)*, *1 handful (30 g)*. |
+| cocido / en seco | cooked / dry | Media lección depende de que se distingan. |
+| Clavado · Cerca · Lejos | Spot on · Close · Way off | El tino de «Cuenta los macros». No son notas: el juego no tiene puntos. |
+| prediabetes | prediabetes | *glucosa en ayunas* → *fasting glucose*; *hemoglobina glicosilada (HbA1c)* → *HbA1c*; *resistencia a la insulina* → *insulin resistance*; *acantosis nigricans* no se traduce. |
+| tu médica o médico | your doctor | El inglés no lleva género y no se inventa un equivalente. |
+| ⚠️ etiqueta de peso | (no existe) | En el test de prediabetes NUNCA se escribe *overweight* ni *obese*: el IMC puntúa por dentro y no se enseña. Tampoco se traducen «Tu complexión» / «Tu cintura» por algo más clínico: *Your build* / *Your waist*. |
+| g · ml · cm · kg | g · ml · cm · kg | ⚠️ NO se pasan a onzas, tazas ni pulgadas: son los números que se estiman, se suman y se guardan. |
+
 ## Registro
 
 La voz de María es cercana y directa, tutea y a veces corta la frase en seco

@@ -16,6 +16,9 @@
 //     recorrido de cada usuaria (se perdería su elección).
 // ─────────────────────────────────────────────────────────────────────────
 
+import { useMemo } from "react";
+import { getIdioma, useIdioma, type Idioma } from "../../i18n";
+
 export interface SimboloFamilia {
   /** Clave estable = nombre del archivo sin extensión (no cambiar tras publicar). */
   key: string;
@@ -66,8 +69,56 @@ export const SIMBOLOS_FAMILIA: SimboloFamilia[] = [
 export const simboloByKey = (key: string): SimboloFamilia | undefined =>
   SIMBOLOS_FAMILIA.find((s) => s.key === key);
 
-/** Nombre visible de una clave guardada (si ya no está en el catálogo, la key). */
-export const simboloNombre = (key: string): string => simboloByKey(key)?.nombre ?? key;
-
 /** Los grupos en el orden en que se pintan en el selector. */
 export const SIMBOLOS_GRUPOS: SimboloFamilia["grupo"][] = ["Animales", "Personajes"];
+
+// ─────────────────────────────────────────────────────────────────────────
+// EN INGLÉS (solo el rótulo)
+//
+// La `key` es el dato: es lo que queda guardado en el recorrido de cada
+// usuaria, así que no se traduce nunca. Aquí solo está su nombre visible,
+// indexado por esa misma clave. Lo que no esté traducido se queda en español
+// en vez de desaparecer. Misma regla que en astrologiaNombres.ts.
+// ─────────────────────────────────────────────────────────────────────────
+const NOMBRES_EN: Record<string, string> = {
+  // Animales
+  leon: "Lion", lobo: "Wolf", oso: "Bear", ciervo: "Deer", buho: "Owl",
+  gato: "Cat", perro: "Dog", caballo: "Horse", aguila: "Eagle",
+  tortuga: "Turtle", zorro: "Fox", oveja: "Sheep", elefante: "Elephant",
+  serpiente: "Snake", erizo: "Hedgehog", mariposa: "Butterfly",
+  // Personajes
+  rey: "King", reina: "Queen", guerrero: "Warrior", sabio: "Sage",
+  mago: "Magician", payaso: "Clown", angel: "Angel", gigante: "Giant",
+  nina: "Child", sombra: "Shadow",
+};
+
+const GRUPOS_EN: Record<SimboloFamilia["grupo"], string> = {
+  Animales: "Animals",
+  Personajes: "Characters",
+};
+
+/** Nombre visible de una clave guardada (si ya no está en el catálogo, la key). */
+export const simboloNombre = (key: string, idioma: Idioma = getIdioma()): string => {
+  const es = simboloByKey(key)?.nombre ?? key;
+  return idioma === "en" ? NOMBRES_EN[key] ?? es : es;
+};
+
+/** El rótulo del grupo en el selector («Animales» / "Animals"). */
+export const grupoLabel = (
+  grupo: SimboloFamilia["grupo"],
+  idioma: Idioma = getIdioma(),
+): string => (idioma === "en" ? GRUPOS_EN[grupo] ?? grupo : grupo);
+
+/**
+ * El catálogo con los nombres del idioma activo. Es un hook: el selector y el
+ * mapa repintan solos al cambiar de idioma. La `key` y el `grupo` (con los que
+ * se filtra y se guarda) siguen siendo los del español.
+ */
+export function useSimbolosFamilia() {
+  const { idioma } = useIdioma();
+  return useMemo(() => ({
+    simbolos: SIMBOLOS_FAMILIA.map((s) => ({ ...s, nombre: simboloNombre(s.key, idioma) })),
+    nombre: (key: string) => simboloNombre(key, idioma),
+    grupo: (g: SimboloFamilia["grupo"]) => grupoLabel(g, idioma),
+  }), [idioma]);
+}

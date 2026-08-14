@@ -7,6 +7,8 @@ import SiteFooter from "../../global/Footer";
 import { MetodoStepHeader } from "../../metodo/MetodoStepHeader";
 import { NutricionIcon, CalculadoraIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../../GlobalVariables";
 import { generateNutricionPdf } from "../../../utils/generateNutricionPdf";
+import { traducir, useT, type ClaveTexto } from "../../../i18n";
+import { useNombreDisciplina } from "../../../i18n/nombreDisciplina";
 
 const BG   = nutricionBg;
 const TXT  = nutricionTxt;
@@ -23,24 +25,28 @@ const nutriBoxBg = {
 };
 
 // ── Types ──────────────────────────────────────────────────────────────────
+// Los arrays de esta página son de nivel de módulo: se calculan UNA vez al
+// importar el fichero. Por eso guardan la CLAVE del texto (`ClaveTexto`) y no
+// el texto: si guardaran el texto ya traducido, se quedaría congelado en el
+// idioma con el que arrancó la web y no cambiaría al pulsar EN.
 type Genero = "mujer" | "hombre";
-type Actividad = { label: string; desc: string; factor: number };
+type Actividad = { label: ClaveTexto; desc: ClaveTexto; factor: number };
 type Resultado = {
   tdee: number;
   protKcal: number; protG: number;
   carbKcal: number; carbG: number;
   fatKcal: number;  fatG: number;
 };
-type Alimento = { id: string; nom: string; emoji: string; imgPath: string; descripcion: string; valores: { label: string; valor: string }[] };
+type Alimento = { id: string; nom: ClaveTexto; emoji: string; imgPath: string; descripcion: ClaveTexto; valores: { label: ClaveTexto; valor: string }[] };
 type ModalData = { alimento: Alimento };
 
 // ── Activity options ───────────────────────────────────────────────────────
 const ACTIVIDADES: Actividad[] = [
-  { label: "Sedentario",            desc: "Poco o sin ejercicio",   factor: 1.2   },
-  { label: "Ligeramente activo",    desc: "1–3 días por semana",    factor: 1.375 },
-  { label: "Moderadamente activo",  desc: "3–5 días por semana",    factor: 1.55  },
-  { label: "Muy activo",            desc: "6–7 días por semana",    factor: 1.725 },
-  { label: "Extremadamente activo", desc: "Trabajo físico intenso", factor: 1.9   },
+  { label: "espacio.nutri.act1.label", desc: "espacio.nutri.act1.desc", factor: 1.2   },
+  { label: "espacio.nutri.act2.label", desc: "espacio.nutri.act2.desc", factor: 1.375 },
+  { label: "espacio.nutri.act3.label", desc: "espacio.nutri.act3.desc", factor: 1.55  },
+  { label: "espacio.nutri.act4.label", desc: "espacio.nutri.act4.desc", factor: 1.725 },
+  { label: "espacio.nutri.act5.label", desc: "espacio.nutri.act5.desc", factor: 1.9   },
 ];
 
 // ── Mifflin-St Jeor ────────────────────────────────────────────────────────
@@ -56,30 +62,34 @@ function calcular(peso: number, altura: number, edad: number, genero: Genero, fa
 }
 
 // ── Food data ──────────────────────────────────────────────────────────────
+// Los gramos y las kilocalorías no se traducen (son números); el nombre, la
+// descripción y el rótulo de cada valor, sí: van por clave.
 const proteinasAlimentos: Alimento[] = [
-  { id: "p1", nom: "Huevo",     emoji: "🥚", imgPath: BASE+"/huevo.jpg",      descripcion: "Una de las proteínas más completas y biodisponibles que existen. Contiene todos los aminoácidos esenciales en proporciones casi perfectas.",    valores: [{ label: "Calorías", valor: "~155 kcal" }, { label: "Proteínas", valor: "~13 g" }, { label: "G. insaturadas", valor: "~6 g" }, { label: "G. saturadas", valor: "~3 g" }, { label: "Carbohidratos", valor: "~1 g" }, { label: "Fibra", valor: "~0 g" }] },
-  { id: "p2", nom: "Legumbres",  emoji: "🫘", imgPath: BASE+"/legumbres.jpg",  descripcion: "Fuente excelente de proteína vegetal combinada con fibra y carbohidratos complejos. Lentejas, garbanzos y alubias son básicos de una dieta equilibrada.", valores: [{ label: "Calorías", valor: "~130 kcal" }, { label: "Proteínas", valor: "~9 g" }, { label: "G. insaturadas", valor: "~0.3 g" }, { label: "G. saturadas", valor: "~0.1 g" }, { label: "Carbohidratos", valor: "~22 g" }, { label: "Fibra", valor: "~8 g" }] },
-  { id: "p3", nom: "Pescado",   emoji: "🐟", imgPath: BASE+"/pescado.jpg",    descripcion: "Proteína de alta calidad combinada con omega-3, que reduce la inflamación y protege el sistema cardiovascular.",                               valores: [{ label: "Calorías", valor: "~130 kcal" }, { label: "Proteínas", valor: "~22 g" }, { label: "G. insaturadas", valor: "~3 g" }, { label: "G. saturadas", valor: "~1 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }] },
-  { id: "p4", nom: "Tofu",      emoji: "🧱", imgPath: BASE+"/tofu.jpg",       descripcion: "Proteína vegetal completa derivada de la soja. Versátil y suave, es una excelente alternativa a la proteína animal.",                           valores: [{ label: "Calorías", valor: "~76 kcal" }, { label: "Proteínas", valor: "~8 g" }, { label: "G. insaturadas", valor: "~3 g" }, { label: "G. saturadas", valor: "~0.5 g" }, { label: "Carbohidratos", valor: "~2 g" }, { label: "Fibra soluble", valor: "~0.1 g" }] },
-  { id: "p5", nom: "Soja",      emoji: "🫘", imgPath: BASE+"/soja.jpg",       descripcion: "Una de las pocas proteínas vegetales completas. Rica en todos los aminoácidos esenciales, además de fibra y grasas saludables.",                  valores: [{ label: "Calorías", valor: "~446 kcal" }, { label: "Proteínas", valor: "~36 g" }, { label: "G. insaturadas", valor: "~15 g" }, { label: "G. saturadas", valor: "~3 g" }, { label: "Carbohidratos", valor: "~30 g" }, { label: "Fibra soluble", valor: "~3 g" }] },
-  { id: "p6", nom: "Guisantes", emoji: "🫛", imgPath: BASE+"/guisantes.webp", descripcion: "Proteína vegetal acompañada de fibra, lo que ralentiza su absorción y ayuda a mantener la saciedad por más tiempo.",                           valores: [{ label: "Calorías", valor: "~81 kcal" }, { label: "Proteínas", valor: "~5 g" }, { label: "G. insaturadas", valor: "~0.2 g" }, { label: "G. saturadas", valor: "~0.1 g" }, { label: "Carbohidratos", valor: "~14 g" }, { label: "Fibra soluble", valor: "~2 g" }] },
+  { id: "p1", nom: "espacio.nutri.al.huevo.nom",     emoji: "🥚", imgPath: BASE+"/huevo.jpg",      descripcion: "espacio.nutri.al.huevo.desc",     valores: [{ label: "espacio.nutri.v.calorias", valor: "~155 kcal" }, { label: "espacio.nutri.v.proteinas", valor: "~13 g" }, { label: "espacio.nutri.v.insaturadas", valor: "~6 g" }, { label: "espacio.nutri.v.saturadas", valor: "~3 g" }, { label: "espacio.nutri.v.carbohidratos", valor: "~1 g" }, { label: "espacio.nutri.v.fibra", valor: "~0 g" }] },
+  { id: "p2", nom: "espacio.nutri.al.legumbres.nom", emoji: "🫘", imgPath: BASE+"/legumbres.jpg",  descripcion: "espacio.nutri.al.legumbres.desc", valores: [{ label: "espacio.nutri.v.calorias", valor: "~130 kcal" }, { label: "espacio.nutri.v.proteinas", valor: "~9 g" }, { label: "espacio.nutri.v.insaturadas", valor: "~0.3 g" }, { label: "espacio.nutri.v.saturadas", valor: "~0.1 g" }, { label: "espacio.nutri.v.carbohidratos", valor: "~22 g" }, { label: "espacio.nutri.v.fibra", valor: "~8 g" }] },
+  { id: "p3", nom: "espacio.nutri.al.pescado.nom",   emoji: "🐟", imgPath: BASE+"/pescado.jpg",    descripcion: "espacio.nutri.al.pescado.desc",   valores: [{ label: "espacio.nutri.v.calorias", valor: "~130 kcal" }, { label: "espacio.nutri.v.proteinas", valor: "~22 g" }, { label: "espacio.nutri.v.insaturadas", valor: "~3 g" }, { label: "espacio.nutri.v.saturadas", valor: "~1 g" }, { label: "espacio.nutri.v.carbohidratos", valor: "~0 g" }, { label: "espacio.nutri.v.fibra", valor: "~0 g" }] },
+  { id: "p4", nom: "espacio.nutri.al.tofu.nom",      emoji: "🧱", imgPath: BASE+"/tofu.jpg",       descripcion: "espacio.nutri.al.tofu.desc",      valores: [{ label: "espacio.nutri.v.calorias", valor: "~76 kcal" }, { label: "espacio.nutri.v.proteinas", valor: "~8 g" }, { label: "espacio.nutri.v.insaturadas", valor: "~3 g" }, { label: "espacio.nutri.v.saturadas", valor: "~0.5 g" }, { label: "espacio.nutri.v.carbohidratos", valor: "~2 g" }, { label: "espacio.nutri.v.fibraSoluble", valor: "~0.1 g" }] },
+  { id: "p5", nom: "espacio.nutri.al.soja.nom",      emoji: "🫘", imgPath: BASE+"/soja.jpg",       descripcion: "espacio.nutri.al.soja.desc",      valores: [{ label: "espacio.nutri.v.calorias", valor: "~446 kcal" }, { label: "espacio.nutri.v.proteinas", valor: "~36 g" }, { label: "espacio.nutri.v.insaturadas", valor: "~15 g" }, { label: "espacio.nutri.v.saturadas", valor: "~3 g" }, { label: "espacio.nutri.v.carbohidratos", valor: "~30 g" }, { label: "espacio.nutri.v.fibraSoluble", valor: "~3 g" }] },
+  { id: "p6", nom: "espacio.nutri.al.guisantes.nom", emoji: "🫛", imgPath: BASE+"/guisantes.webp", descripcion: "espacio.nutri.al.guisantes.desc", valores: [{ label: "espacio.nutri.v.calorias", valor: "~81 kcal" }, { label: "espacio.nutri.v.proteinas", valor: "~5 g" }, { label: "espacio.nutri.v.insaturadas", valor: "~0.2 g" }, { label: "espacio.nutri.v.saturadas", valor: "~0.1 g" }, { label: "espacio.nutri.v.carbohidratos", valor: "~14 g" }, { label: "espacio.nutri.v.fibraSoluble", valor: "~2 g" }] },
 ];
 
 const carbosAlimentos: Alimento[] = [
-  { id: "c1", nom: "Verduras",  emoji: "🥦", imgPath: BASE+"/verduras.jpg",  descripcion: "Fuente de fibra, vitaminas y energía de calidad.",                                                                                                  valores: [{ label: "Calorías", valor: "~25 kcal" }, { label: "Carbohidratos", valor: "~5 g" }, { label: "Fibra soluble", valor: "~0.5 g" }, { label: "Fibra insoluble", valor: "~1.5 g" }, { label: "Proteínas", valor: "~1.5 g" }, { label: "Grasas", valor: "~0.2 g" }] },
-  { id: "c2", nom: "Frutas",    emoji: "🍎", imgPath: BASE+"/frutas.jpg",    descripcion: "Su fibra es perfecta para permitir que su fructosa sea incorporada en nosotros poco a poco.",                                                      valores: [{ label: "Calorías", valor: "~52 kcal" }, { label: "Carbohidratos", valor: "~14 g" }, { label: "Fibra soluble", valor: "~1 g" }, { label: "Fibra insoluble", valor: "~1 g" }, { label: "Proteínas", valor: "~0.5 g" }, { label: "Grasas", valor: "~0.2 g" }] },
-  { id: "c3", nom: "Legumbres", emoji: "🫘", imgPath: BASE+"/legumbres.jpg", descripcion: "A pesar de su mala fama, son de las mejores fuentes de carbohidratos además de venir acompañada de fibra y proteína.",                          valores: [{ label: "Calorías", valor: "~130 kcal" }, { label: "Carbohidratos", valor: "~22 g" }, { label: "Fibra soluble", valor: "~3 g" }, { label: "Fibra insoluble", valor: "~5 g" }, { label: "Proteínas", valor: "~8 g" }, { label: "Grasas", valor: "~0.5 g" }] },
+  { id: "c1", nom: "espacio.nutri.al.verduras.nom",      emoji: "🥦", imgPath: BASE+"/verduras.jpg",  descripcion: "espacio.nutri.al.verduras.desc",      valores: [{ label: "espacio.nutri.v.calorias", valor: "~25 kcal" }, { label: "espacio.nutri.v.carbohidratos", valor: "~5 g" }, { label: "espacio.nutri.v.fibraSoluble", valor: "~0.5 g" }, { label: "espacio.nutri.v.fibraInsoluble", valor: "~1.5 g" }, { label: "espacio.nutri.v.proteinas", valor: "~1.5 g" }, { label: "espacio.nutri.v.grasas", valor: "~0.2 g" }] },
+  { id: "c2", nom: "espacio.nutri.al.frutas.nom",        emoji: "🍎", imgPath: BASE+"/frutas.jpg",    descripcion: "espacio.nutri.al.frutas.desc",        valores: [{ label: "espacio.nutri.v.calorias", valor: "~52 kcal" }, { label: "espacio.nutri.v.carbohidratos", valor: "~14 g" }, { label: "espacio.nutri.v.fibraSoluble", valor: "~1 g" }, { label: "espacio.nutri.v.fibraInsoluble", valor: "~1 g" }, { label: "espacio.nutri.v.proteinas", valor: "~0.5 g" }, { label: "espacio.nutri.v.grasas", valor: "~0.2 g" }] },
+  { id: "c3", nom: "espacio.nutri.al.legumbresCarb.nom", emoji: "🫘", imgPath: BASE+"/legumbres.jpg", descripcion: "espacio.nutri.al.legumbresCarb.desc", valores: [{ label: "espacio.nutri.v.calorias", valor: "~130 kcal" }, { label: "espacio.nutri.v.carbohidratos", valor: "~22 g" }, { label: "espacio.nutri.v.fibraSoluble", valor: "~3 g" }, { label: "espacio.nutri.v.fibraInsoluble", valor: "~5 g" }, { label: "espacio.nutri.v.proteinas", valor: "~8 g" }, { label: "espacio.nutri.v.grasas", valor: "~0.5 g" }] },
 ];
 
 const grasasAlimentos: Alimento[] = [
-  { id: "g1", nom: "Aguacate",        emoji: "🥑", imgPath: BASE+"/aguacate.jpg",    descripcion: "Rico en ácido oleico, el mismo del aceite de oliva. Nutre la membrana celular y tiene un efecto antiinflamatorio natural.",                valores: [{ label: "Calorías", valor: "~160 kcal" }, { label: "G. insaturadas", valor: "~13 g" }, { label: "G. saturadas", valor: "~2 g" }, { label: "Proteínas", valor: "~2 g" }, { label: "Fibra soluble", valor: "~2 g" }, { label: "Fibra insoluble", valor: "~5 g" }] },
-  { id: "g2", nom: "Aceite de oliva", emoji: "🫙", imgPath: BASE+"/aceite.webp",     descripcion: "Su alto contenido en ácido oleico protege las células y reduce la inflamación crónica. Uno de los pilares de la alimentación saludable.",  valores: [{ label: "Calorías", valor: "~884 kcal" }, { label: "G. insaturadas", valor: "~84 g" }, { label: "G. saturadas", valor: "~14 g" }, { label: "Proteínas", valor: "~0 g" }, { label: "Carbohidratos", valor: "~0 g" }, { label: "Fibra", valor: "~0 g" }] },
-  { id: "g3", nom: "Frutos secos",    emoji: "🥜", imgPath: BASE+"/frutossecos.jpg", descripcion: "Concentran grasas insaturadas, proteína y fibra en pequeñas dosis. Un snack que nutre de verdad.",                                        valores: [{ label: "Calorías", valor: "~607 kcal" }, { label: "G. insaturadas", valor: "~44 g" }, { label: "G. saturadas", valor: "~7 g" }, { label: "Proteínas", valor: "~14 g" }, { label: "Carbohidratos", valor: "~21 g" }, { label: "Fibra soluble", valor: "~2 g" }] },
+  { id: "g1", nom: "espacio.nutri.al.aguacate.nom",    emoji: "🥑", imgPath: BASE+"/aguacate.jpg",    descripcion: "espacio.nutri.al.aguacate.desc",    valores: [{ label: "espacio.nutri.v.calorias", valor: "~160 kcal" }, { label: "espacio.nutri.v.insaturadas", valor: "~13 g" }, { label: "espacio.nutri.v.saturadas", valor: "~2 g" }, { label: "espacio.nutri.v.proteinas", valor: "~2 g" }, { label: "espacio.nutri.v.fibraSoluble", valor: "~2 g" }, { label: "espacio.nutri.v.fibraInsoluble", valor: "~5 g" }] },
+  { id: "g2", nom: "espacio.nutri.al.aceite.nom",      emoji: "🫙", imgPath: BASE+"/aceite.webp",     descripcion: "espacio.nutri.al.aceite.desc",      valores: [{ label: "espacio.nutri.v.calorias", valor: "~884 kcal" }, { label: "espacio.nutri.v.insaturadas", valor: "~84 g" }, { label: "espacio.nutri.v.saturadas", valor: "~14 g" }, { label: "espacio.nutri.v.proteinas", valor: "~0 g" }, { label: "espacio.nutri.v.carbohidratos", valor: "~0 g" }, { label: "espacio.nutri.v.fibra", valor: "~0 g" }] },
+  { id: "g3", nom: "espacio.nutri.al.frutosSecos.nom", emoji: "🥜", imgPath: BASE+"/frutossecos.jpg", descripcion: "espacio.nutri.al.frutosSecos.desc", valores: [{ label: "espacio.nutri.v.calorias", valor: "~607 kcal" }, { label: "espacio.nutri.v.insaturadas", valor: "~44 g" }, { label: "espacio.nutri.v.saturadas", valor: "~7 g" }, { label: "espacio.nutri.v.proteinas", valor: "~14 g" }, { label: "espacio.nutri.v.carbohidratos", valor: "~21 g" }, { label: "espacio.nutri.v.fibraSoluble", valor: "~2 g" }] },
 ];
 
 // ── AlimentoCirculo ────────────────────────────────────────────────────────
 function AlimentoCirculo({ alimento, onClick }: { alimento: Alimento; onClick: (d: ModalData) => void }) {
+  const t = useT();
   const [imgFailed, setImgFailed] = useState(false);
+  const nom = t(alimento.nom);
   return (
     <Flex direction="column" align="center" gap={2} cursor="pointer" role="button"
       onClick={() => onClick({ alimento })}
@@ -92,11 +102,11 @@ function AlimentoCirculo({ alimento, onClick }: { alimento: Alimento; onClick: (
       >
         {imgFailed
           ? <Text fontSize="2xl" lineHeight="1">{alimento.emoji}</Text>
-          : <Box as="img" src={alimento.imgPath} alt={alimento.nom} w="100%" h="100%" objectFit="cover" onError={() => setImgFailed(true)} />
+          : <Box as="img" src={alimento.imgPath} alt={nom} w="100%" h="100%" objectFit="cover" onError={() => setImgFailed(true)} />
         }
       </Box>
       <Text color={TXT} fontSize={{ base: "xs", md: "sm" }} fontFamily="'EB Garamond', serif" textAlign="center" fontWeight="600" maxW="80px" lineHeight="1.2">
-        {alimento.nom}
+        {nom}
       </Text>
     </Flex>
   );
@@ -104,7 +114,9 @@ function AlimentoCirculo({ alimento, onClick }: { alimento: Alimento; onClick: (
 
 // ── AlimentoModal ──────────────────────────────────────────────────────────
 function AlimentoModal({ data, onClose }: { data: ModalData; onClose: () => void }) {
+  const t = useT();
   const { alimento } = data;
+  const nom = t(alimento.nom);
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -128,25 +140,25 @@ function AlimentoModal({ data, onClose }: { data: ModalData; onClose: () => void
         <Box px={{ base: 6, md: 8 }} pt={8} pb={7}>
           <Flex align="center" gap={4} mb={5}>
             <Box w="72px" h="72px" borderRadius="xl" overflow="hidden" flexShrink={0} border={`2px solid ${TXT}33`}>
-              <Box as="img" src={alimento.imgPath} alt={alimento.nom} w="100%" h="100%" objectFit="cover" />
+              <Box as="img" src={alimento.imgPath} alt={nom} w="100%" h="100%" objectFit="cover" />
             </Box>
             <Text color={TXT} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" fontFamily="'EB Garamond', serif" lineHeight="1.2">
-              {alimento.nom}
+              {nom}
             </Text>
           </Flex>
           <Box bg={TXT + "0c"} borderLeft={`3px solid ${TXT}55`} borderRadius="0 xl xl 0" px={{ base: 4, md: 5 }} py={4} mb={5}>
             <Text color={TXT} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" fontFamily="'EB Garamond', serif" fontStyle="italic">
-              {alimento.descripcion}
+              {t(alimento.descripcion)}
             </Text>
           </Box>
           <Box h="1px" bg={TXT + "22"} mb={4} />
           <Text color={TXT} fontSize="sm" fontFamily="'EB Garamond', serif" fontWeight="600" letterSpacing="0.05em" mb={3}>
-            Valores nutricionales (por 100 g)
+            {t("espacio.nutri.valores")}
           </Text>
           <Flex flexWrap="wrap" gap={2}>
             {alimento.valores.map((v) => (
               <Box key={v.label} flex="1" minW="90px" bg={TXT + "0a"} border={`1px solid ${TXT}1a`} borderRadius="xl" px={3} py={2}>
-                <Text color={TXT + "77"} fontSize="11px" fontFamily="'EB Garamond', serif" mb={0.5}>{v.label}</Text>
+                <Text color={TXT + "77"} fontSize="11px" fontFamily="'EB Garamond', serif" mb={0.5}>{t(v.label)}</Text>
                 <Text color={TXT} fontSize="md" fontWeight="700" fontFamily="'EB Garamond', serif">{v.valor}</Text>
               </Box>
             ))}
@@ -179,6 +191,7 @@ function MacroCard({ label, grams, kcal, alimentos, onSelect }: {
   label: string; grams: number; kcal: number;
   alimentos: Alimento[]; onSelect: (d: ModalData) => void;
 }) {
+  const t = useT();
   return (
     <Box {...nutriBoxBg} borderRadius="2xl" border={`1px solid ${TXT}22`} boxShadow={GLOW}
       px={{ base: 5, md: 8 }} py={{ base: 5, md: 7 }} w="100%" maxW="780px"
@@ -203,7 +216,7 @@ function MacroCard({ label, grams, kcal, alimentos, onSelect }: {
 
       {/* Food circles */}
       <Text color={TXT + "77"} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="600" letterSpacing="0.08em" textTransform="uppercase" mb={4}>
-        Fuentes recomendadas
+        {t("espacio.nutri.fuentes")}
       </Text>
       <Box
         display={{ base: "grid", md: "flex" }}
@@ -220,6 +233,8 @@ function MacroCard({ label, grams, kcal, alimentos, onSelect }: {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolean }) {
+  const t = useT();
+  const nombreDisc = useNombreDisciplina();
   const navigate = useNavigate();
   const [peso,     setPeso]    = useState("");
   const [altura,   setAltura]  = useState("");
@@ -260,10 +275,10 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
 
   const handleCalcular = () => {
     const p = parseFloat(peso); const h = parseFloat(altura); const e = parseFloat(edad);
-    if (!p || !h || !e || actIdx === null) { setError("Por favor completa todos los campos."); return; }
-    if (p < 20 || p > 300)  { setError("Introduce un peso válido (20–300 kg)."); return; }
-    if (h < 100 || h > 250) { setError("Introduce una altura válida (100–250 cm)."); return; }
-    if (e < 10 || e > 120)  { setError("Introduce una edad válida (10–120 años)."); return; }
+    if (!p || !h || !e || actIdx === null) { setError(t("espacio.nutri.err.campos")); return; }
+    if (p < 20 || p > 300)  { setError(t("espacio.nutri.err.peso")); return; }
+    if (h < 100 || h > 250) { setError(t("espacio.nutri.err.altura")); return; }
+    if (e < 10 || e > 120)  { setError(t("espacio.nutri.err.edad")); return; }
     setError("");
     const r = calcular(p, h, e, genero, ACTIVIDADES[actIdx].factor);
     setResult(r);
@@ -300,10 +315,10 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
               ? <CalculadoraIcon />
               : <NutricionIcon size={{ base: "35px", md: "45px" }} />
             }
-            title={isGuest ? "Calcular necesidades" : nutricionNom}
+            title={isGuest ? t("espacio.nutri.invitada") : nombreDisc(nutricionNom)}
             bgColor={BG} color={TXT} mb={{ base: 0, md: 0 }}
             nom={nutricionNom}
-            prev={{ label: "← Volver", onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
+            prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
           />
 
           {/* ── Accesos rápidos favoritos ── */}
@@ -326,7 +341,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                 <Text color={TXT} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
                   fontFamily="'EB Garamond', serif" letterSpacing="0.03em"
                 >
-                  🌿 Mis plantas
+                  🌿 {t("espacio.nutri.misPlantas")}
                 </Text>
               </Box>
               <Box
@@ -346,7 +361,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                 <Text color={TXT} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
                   fontFamily="'EB Garamond', serif" letterSpacing="0.03em"
                 >
-                  🍎 Mis alimentos
+                  🍎 {t("espacio.nutri.misAlimentos")}
                 </Text>
               </Box>
             </Flex>
@@ -358,20 +373,20 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
               px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} w="100%" maxW="780px"
             >
               <Text color={TXT} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" fontFamily="'EB Garamond', serif" mb={1}>
-                Calcula tus necesidades
+                {t("espacio.nutri.calc.titulo")}
               </Text>
               <Text color={TXT + "88"} fontSize={{ base: "sm", md: "md" }} fontFamily="'EB Garamond', serif" mb={7} fontStyle="italic">
-                Estimación de calorías diarias y distribución de macronutrientes.
+                {t("espacio.nutri.calc.sub")}
               </Text>
 
               <Flex gap={4} mb={6} flexWrap={{ base: "wrap", md: "nowrap" }}>
-                <NumInput label="Peso (kg)"   value={peso}   onChange={setPeso}   placeholder="70" />
-                <NumInput label="Altura (cm)" value={altura} onChange={setAltura} placeholder="165" />
-                <NumInput label="Edad (años)" value={edad}   onChange={setEdad}   placeholder="30" />
+                <NumInput label={t("espacio.nutri.campo.peso")}   value={peso}   onChange={setPeso}   placeholder="70" />
+                <NumInput label={t("espacio.nutri.campo.altura")} value={altura} onChange={setAltura} placeholder="165" />
+                <NumInput label={t("espacio.nutri.campo.edad")}   value={edad}   onChange={setEdad}   placeholder="30" />
               </Flex>
 
               <Box mb={6}>
-                <Text color={TXT + "88"} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="600" mb={2} letterSpacing="0.06em" textTransform="uppercase">Género</Text>
+                <Text color={TXT + "88"} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="600" mb={2} letterSpacing="0.06em" textTransform="uppercase">{t("espacio.nutri.genero")}</Text>
                 <Flex gap={3}>
                   {(["mujer", "hombre"] as Genero[]).map(g => (
                     <Box key={g} as="button" onClick={() => setGenero(g)} flex={1} py={2} borderRadius="xl"
@@ -379,13 +394,13 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                       bg={genero === g ? TXT + "18" : "transparent"} color={TXT}
                       fontFamily="'EB Garamond', serif" fontSize="md" fontWeight={genero === g ? "700" : "400"}
                       cursor="pointer" transition="all 0.18s" _hover={{ bg: TXT + "10" }} textTransform="capitalize"
-                    >{g === "mujer" ? "Mujer" : "Hombre"}</Box>
+                    >{g === "mujer" ? t("espacio.nutri.genero.mujer") : t("espacio.nutri.genero.hombre")}</Box>
                   ))}
                 </Flex>
               </Box>
 
               <Box mb={7}>
-                <Text color={TXT + "88"} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="600" mb={2} letterSpacing="0.06em" textTransform="uppercase">Nivel de actividad</Text>
+                <Text color={TXT + "88"} fontSize="xs" fontFamily="'EB Garamond', serif" fontWeight="600" mb={2} letterSpacing="0.06em" textTransform="uppercase">{t("espacio.nutri.actividad")}</Text>
                 <Flex direction="column" gap={2}>
                   {ACTIVIDADES.map((act, i) => (
                     <Box key={i} as="button" onClick={() => setActIdx(i)}
@@ -396,8 +411,8 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                       transition="all 0.18s" _hover={{ bg: TXT + "0e" }} textAlign="left"
                     >
                       <Box>
-                        <Text color={TXT} fontFamily="'EB Garamond', serif" fontSize="md" fontWeight={actIdx === i ? "700" : "500"} lineHeight="1.2">{act.label}</Text>
-                        <Text color={TXT + "66"} fontFamily="'EB Garamond', serif" fontSize="sm">{act.desc}</Text>
+                        <Text color={TXT} fontFamily="'EB Garamond', serif" fontSize="md" fontWeight={actIdx === i ? "700" : "500"} lineHeight="1.2">{t(act.label)}</Text>
+                        <Text color={TXT + "66"} fontFamily="'EB Garamond', serif" fontSize="sm">{t(act.desc)}</Text>
                       </Box>
                       {actIdx === i && (
                         <Box w="20px" h="20px" borderRadius="full" bg={TXT + "22"} border={`2px solid ${TXT}88`}
@@ -417,7 +432,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                 fontFamily="'EB Garamond', serif" fontSize="lg" fontWeight="700" letterSpacing="0.06em"
                 cursor={canCalc ? "pointer" : "not-allowed"} transition="all 0.2s"
                 _hover={canCalc ? { opacity: 0.88 } : {}} boxShadow={canCalc ? `0 4px 16px ${TXT}44` : "none"}
-              >Calcular</Box>
+              >{t("espacio.nutri.calcular")}</Box>
             </Box>
           )}
 
@@ -431,29 +446,32 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                 px={{ base: 6, md: 10 }} py={{ base: 6, md: 8 }} w="100%" textAlign="center"
               >
                 <Text color={TXT + "77"} fontSize="sm" fontFamily="'EB Garamond', serif" fontWeight="600" letterSpacing="0.08em" textTransform="uppercase" mb={1}>
-                  Calorías diarias estimadas
+                  {t("espacio.nutri.tdee")}
                 </Text>
                 <Text color={TXT} fontSize={{ base: "5xl", md: "6xl" }} fontWeight="700" fontFamily="'EB Garamond', serif" lineHeight="1" mb={1}>
                   {result.tdee.toLocaleString()}
                 </Text>
-                <Text color={TXT + "66"} fontSize="lg" fontFamily="'EB Garamond', serif">kcal / día</Text>
+                <Text color={TXT + "66"} fontSize="lg" fontFamily="'EB Garamond', serif">{t("espacio.nutri.tdee.unidad")}</Text>
               </Box>
 
               {/* Macros */}
-              <MacroCard label="Proteínas"     grams={result.protG} kcal={result.protKcal} alimentos={proteinasAlimentos} onSelect={setSelected} />
-              <MacroCard label="Carbohidratos" grams={result.carbG} kcal={result.carbKcal} alimentos={carbosAlimentos}    onSelect={setSelected} />
-              <MacroCard label="Grasas"        grams={result.fatG}  kcal={result.fatKcal}  alimentos={grasasAlimentos}     onSelect={setSelected} />
+              <MacroCard label={t("espacio.nutri.macro.proteinas")} grams={result.protG} kcal={result.protKcal} alimentos={proteinasAlimentos} onSelect={setSelected} />
+              <MacroCard label={t("espacio.nutri.macro.carbos")}    grams={result.carbG} kcal={result.carbKcal} alimentos={carbosAlimentos}    onSelect={setSelected} />
+              <MacroCard label={t("espacio.nutri.macro.grasas")}    grams={result.fatG}  kcal={result.fatKcal}  alimentos={grasasAlimentos}     onSelect={setSelected} />
 
               {/* Disclaimer + botones */}
               <Box w="100%" px={2} display="flex" flexDirection="column" alignItems="center" gap={3}>
                 <Text color="rgba(255,255,255,0.5)" fontSize="xs" fontFamily="'EB Garamond', serif" textAlign="center" fontStyle="italic">
-                  Esta estimación es orientativa. Las necesidades reales varían según la composición corporal y el metabolismo individual.
+                  {t("espacio.nutri.disclaimer")}
                 </Text>
                 <Flex gap={3} flexWrap="wrap" justify="center">
                   {result && (
                     <Box as="button" onClick={() => generateNutricionPdf(result, {
                         peso, altura, edad, genero,
-                        actividad: actIdx !== null ? ACTIVIDADES[actIdx].label : "",
+                        // El cuaderno se imprime en español (como el resto de
+                        // `utils/`), así que el nivel de actividad va forzado a
+                        // español aunque la pantalla esté en inglés.
+                        actividad: actIdx !== null ? traducir(ACTIVIDADES[actIdx].label, undefined, "es") : "",
                       })}
                       px={6} py={2} borderRadius="full" bg={TXT}
                       color={BG} fontFamily="'EB Garamond', serif" fontSize="sm" fontWeight="700" cursor="pointer"
@@ -464,14 +482,14 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                       <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
                         <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/>
                       </svg>
-                      Descargar PDF
+                      {t("espacio.descargarPdf")}
                     </Box>
                   )}
                   <Box as="button" onClick={handleRecalcular}
                     px={6} py={2} borderRadius="full" border={`1px solid ${TXT}44`} bg={TXT + "0a"}
                     color={TXT} fontFamily="'EB Garamond', serif" fontSize="sm" fontWeight="600" cursor="pointer"
                     _hover={{ bg: TXT + "18" }} transition="all 0.18s"
-                  >Recalcular</Box>
+                  >{t("espacio.nutri.recalcular")}</Box>
                 </Flex>
               </Box>
             </Box>
@@ -503,7 +521,7 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
               <Text color={`${TXT}99`} fontSize="md" fontFamily="'EB Garamond', serif"
                 fontWeight="700" letterSpacing="0.1em" textTransform="uppercase"
               >
-                Información importante
+                {t("espacio.nutri.info.titulo")}
               </Text>
               <Text color={TXT} fontSize="sm" transition="transform 0.22s"
                 transform={infoOpen ? "rotate(180deg)" : "rotate(0deg)"}
@@ -520,10 +538,9 @@ export default function NutricionEspacio({ isGuest = false }: { isGuest?: boolea
                 <Text color={TXT + "cc"} fontSize={{ base: "md", md: "lg" }} fontFamily="'EB Garamond', serif"
                   lineHeight="1.8" fontStyle="italic"
                 >
-                  Esto es solo una orientación para conocerse mejor, si deseas una dieta personalizada, contacta con un nutricionista.
-                  Si deseas entender más tu cuerpo y profundizar en el efecto de los alimentos en el cuerpo humano, contáctame.
+                  {t("espacio.nutri.info.texto")}
                   <br /><br />
-                  Gracias por querer cuidarte con coherencia.
+                  {t("espacio.nutri.info.gracias")}
                 </Text>
               </Box>
             </Collapse>

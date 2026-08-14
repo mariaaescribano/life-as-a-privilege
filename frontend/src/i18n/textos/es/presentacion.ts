@@ -40,7 +40,7 @@ export const presentacion = {
   "presentacion.masDentro": "más dentro",
 
   // ── Astrología ─────────────────────────────────────────────────────────
-  "presentacion.astro.cartaMuestra": "Carta de muestra",
+  "presentacion.astro.cartaMuestra": "Esta podría ser tu carta",
 
   // ── Ayurveda ───────────────────────────────────────────────────────────
   "presentacion.ayurveda.tresDoshas": "Los tres Doṣhas",
@@ -60,6 +60,10 @@ export const presentacion = {
   "presentacion.cultura.lineasTiempo": "Sus líneas del tiempo",
   "presentacion.cultura.lineasTexto":
     "Cada Historia se recorre por su línea del tiempo, era por era. Estas son, solo para que las veas.",
+  /** La píldora de la cabecera de cada línea: cuántas eras trae dentro. */
+  "presentacion.cultura.eras": "{n} eras",
+  /** Aquí las líneas no se abren: al tocarlas sale este aviso y se va solo. */
+  "presentacion.cultura.aviso": "Descúbrelo dentro",
 
   // ── Fisiología ─────────────────────────────────────────────────────────
   "presentacion.fisio.sistemas": "Los sistemas",

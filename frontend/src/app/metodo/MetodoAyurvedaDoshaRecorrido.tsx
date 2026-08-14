@@ -20,11 +20,11 @@ import {
   vataColor, pittaColor, kaphaColor,
 } from "../../GlobalVariables";
 import { useT } from "../../i18n";
-import { DOSHA_INTRO, type DoshaKey } from "../../hardCoded/metodo/doshaIntro";
-import { DOSHA_DESCUBRE } from "../../hardCoded/metodo/doshaDescubre";
-import { DOSHA_CUERPO } from "../../hardCoded/metodo/doshaCuerpo";
-import { DOSHA_DESEQUILIBRIO } from "../../hardCoded/metodo/doshaDesequilibrio";
-import { DOSHA_CUIDARTE } from "../../hardCoded/metodo/doshaCuidarte";
+import { type DoshaKey } from "../../hardCoded/metodo/doshaIntro";
+import {
+  useDoshaIntro, useDoshaDescubre, useDoshaCuerpo,
+  useDoshaDesequilibrio, useDoshaCuidarte,
+} from "../../hardCoded/metodo/useDoshaContenido";
 
 const TINTA = ayurvedaTxt;
 const PAPEL = "#fbf4e8";
@@ -51,6 +51,12 @@ function Separador() {
 
 export default function MetodoAyurvedaDoshaRecorrido() {
   const t = useT();
+  // Las preguntas que se recogen en el PDF, en el idioma activo.
+  const DOSHA_INTRO = useDoshaIntro();
+  const DOSHA_DESCUBRE = useDoshaDescubre();
+  const DOSHA_CUERPO = useDoshaCuerpo();
+  const DOSHA_DESEQUILIBRIO = useDoshaDesequilibrio();
+  const DOSHA_CUIDARTE = useDoshaCuidarte();
   const navigate = useNavigate();
   const { dosha } = useParams<{ dosha: string }>();
   const doshaKey = (["vata", "pitta", "kapha"].includes(dosha || "") ? dosha : null) as DoshaKey | null;

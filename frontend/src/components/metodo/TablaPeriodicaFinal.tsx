@@ -135,7 +135,7 @@ export function TablaPeriodicaFinal({ onClose, onContinue }: TablaPeriodicaFinal
           <Box
             as="img"
             src={encodeURI(CIERRE_TABLA.src)}
-            alt="La tabla periódica de los elementos"
+            alt={t("fisiologia.tablaAlt")}
             maxW="100%"
             maxH="100%"
             borderRadius="xl"
