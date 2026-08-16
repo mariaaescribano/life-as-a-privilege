@@ -627,27 +627,80 @@ export default function ElMetodo() {
           {t("elMetodo.hero.marca")}
         </Text>
 
-        {/* El titular lleva un salto de línea escrito en el texto (\n) para
-            poder decidir en cada idioma dónde parte la frase: «Llevas años
-            intentando cambiarte. / Nadie te ha enseñado a leerte.» son dos
-            golpes, y si el navegador los junta se pierde el segundo.
-            En móvil se deja fluir (`pre-line` solo de md hacia arriba), que si
-            no las líneas se salen. */}
-        <Text
-          color="white"
-          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
-          fontWeight="700"
-          letterSpacing="0.02em"
-          lineHeight="1.15"
-          maxW="1000px"
-          whiteSpace={{ base: "normal", md: "pre-line" }}
-          textShadow="0 0 16px rgba(255,255,255,0.6), 0 0 34px rgba(255,255,255,0.36), 0 0 63px rgba(180,255,245,0.3)"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(22px)"}
-          transition="opacity 0.85s ease, transform 0.85s ease"
-        >
-          {t("elMetodo.hero.titulo")}
-        </Text>
+        {/* El titular es una sola frase en dos alturas: arriba la entradilla
+            («Para cambiar, pregúntate», con la última palabra en cursiva) y
+            debajo la pregunta a la que lleva.
+            La entradilla va en UNA línea y a un tamaño que se sostenga solo
+            (la mitad larga de la pregunta): partida en dos renglones diminutos
+            se leía como una nota al pie de un titular gigante, y el salto de
+            tamaño rompía la frase en vez de encadenarla. */}
+        <Flex direction="column" align="center">
+          <Text
+            color="rgba(255,255,255,0.95)"
+            fontSize={{ base: "23px", md: "30px", lg: "36px" }}
+            fontWeight="400"
+            letterSpacing="0.05em"
+            lineHeight="1.35"
+            textShadow="0 0 14px rgba(255,255,255,0.34)"
+            opacity={mounted ? 1 : 0}
+            transform={mounted ? "translateY(0)" : "translateY(14px)"}
+            transition="opacity 0.85s ease, transform 0.85s ease"
+          >
+            {t("elMetodo.hero.tituloAntes")}{" "}
+            {/* La única cursiva del titular: la palabra que hace de bisagra
+                entre la entradilla y la pregunta. Va un puntito más clara que
+                el resto, como quien baja la voz justo antes de preguntar. */}
+            <Box as="span" fontStyle="italic" color="rgba(255,255,255,0.86)">
+              {t("elMetodo.hero.tituloPide")}
+            </Box>
+          </Text>
+
+          {/* La pregunta manda, pero sin dejar sola a la entradilla: va en
+              medidas escritas a mano (no en los pasos de Chakra) para afinar
+              esa proporción sin que se salga de la pantalla en las anchuras
+              justas. Los huecos de arriba y abajo son los que la separan de la
+              entradilla y del párrafo; sin ellos se apelotona.
+              A este tamaño la letra pide lo contrario que en un párrafo: las
+              letras MÁS juntas (letterSpacing negativo) y las líneas pegadas,
+              que es lo que hace que una frase enorme se lea como una pieza y no
+              como palabras sueltas.
+              El resplandor respira muy despacio (7 s) en vez de quedarse fijo:
+              es la misma luz del mandala de arriba. Con `prefers-reduced-motion`
+              se queda quieto en su punto medio. */}
+          <Text
+            color="white"
+            fontSize={{ base: "50px", md: "66px", lg: "80px" }}
+            fontWeight="700"
+            letterSpacing={{ base: "-0.015em", md: "-0.022em" }}
+            /* En móvil la pregunta cae en dos renglones: se les deja un pelín
+               más de aire que en escritorio para que no se toquen. */
+            lineHeight={{ base: "1.12", md: "1.05" }}
+            maxW="1100px"
+            mt={{ base: 3, md: "18px" }}
+            mb={{ base: 5, md: 8 }}
+            whiteSpace={{ base: "normal", md: "pre-line" }}
+            textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 38px rgba(255,255,255,0.34), 0 0 70px rgba(180,255,245,0.3)"
+            opacity={mounted ? 1 : 0}
+            transform={mounted ? "translateY(0)" : "translateY(22px)"}
+            transition="opacity 0.9s ease 0.18s, transform 0.9s ease 0.18s"
+            sx={{
+              "@keyframes tituloBrilla": {
+                "0%, 100%": {
+                  textShadow:
+                    "0 0 14px rgba(255,255,255,0.48), 0 0 32px rgba(255,255,255,0.26), 0 0 60px rgba(180,255,245,0.24)",
+                },
+                "50%": {
+                  textShadow:
+                    "0 0 24px rgba(255,255,255,0.8), 0 0 50px rgba(255,255,255,0.44), 0 0 92px rgba(180,255,245,0.4)",
+                },
+              },
+              animation: "tituloBrilla 7s ease-in-out infinite",
+              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+            }}
+          >
+            {t("elMetodo.hero.titulo")}
+          </Text>
+        </Flex>
 
         <Text
           color="rgba(255,255,255,0.92)"

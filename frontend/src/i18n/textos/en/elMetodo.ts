@@ -35,7 +35,9 @@ export const elMetodo = {
 
   // ── 1. Hero ────────────────────────────────────────────────────────────
   "elMetodo.hero.marca": "THE MAP · by Life as a Privilege",
-  "elMetodo.hero.titulo": "You've spent years trying to change yourself.\nMaybe what you need first is to understand yourself.",
+  "elMetodo.hero.tituloAntes": "To change,",
+  "elMetodo.hero.tituloPide": "ask yourself",
+  "elMetodo.hero.titulo": "What happened to you?",
   "elMetodo.hero.sub":
     "The Map brings together eight perspectives on you —mind, history, body, nature and culture— to help you understand where your patterns come from and how the pieces fit together.",
   "elMetodo.hero.cta": "Start my Map",

@@ -40,7 +40,12 @@ export const elMetodo = {
   // Lo primero que lee un desconocido. El titular NO nombra el producto: nombra
   // lo que le pasa a quien llega. La marca queda arriba, en pequeño.
   "elMetodo.hero.marca": "EL MAPA · de 'Life as a Privilege'",
-  "elMetodo.hero.titulo": "Llevas años intentando cambiarte.\n Pero quizá antes necesitas entenderte.",
+  /** Entradilla del titular, en dos golpes: el primero en letra normal y el
+   *  segundo en cursiva (es el que deja caer la pregunta grande de debajo).
+   *  Van en dos claves porque se pintan con estilos distintos. */
+  "elMetodo.hero.tituloAntes": "Para cambiar,",
+  "elMetodo.hero.tituloPide": "pregúntate",
+  "elMetodo.hero.titulo": "¿Qué te ha pasado?",
   "elMetodo.hero.sub":
     "El Mapa reúne ocho perspectivas sobre ti —mente, historia, cuerpo, naturaleza y cultura— para ayudarte a comprender de dónde vienen tus patrones y cómo encajan las piezas.",
   "elMetodo.hero.cta": "Empezar mi Mapa",
