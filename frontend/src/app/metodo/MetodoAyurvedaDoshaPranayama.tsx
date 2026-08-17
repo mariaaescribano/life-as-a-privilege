@@ -480,7 +480,8 @@ export default function MetodoAyurvedaDoshaPranayama() {
     });
   };
 
-  const irCursos = () => navigate(`/metodo/ayurveda/dosha/${sel}/cursos`);
+  // El siguiente paso del mapa ya no son los Cursos: son los chakras.
+  const irChakras = () => navigate(`/metodo/ayurveda/dosha/${sel}/chakras`);
 
   if (loading) {
     return <AyurvedaLoading />;
@@ -511,7 +512,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
             mb={0}
             prev={{ label: "← Doṣhas", onClick: () => { void persist(sel, slice); navigate("/metodo/ayurveda/tarjetas"); } }}
             extra={ilustracionesBtn}
-            next={{ label: `${t("metodo.nutri.paso.cursos")} →`, onClick: () => { void persist(sel, slice); irCursos(); } }}
+            next={{ label: `${t("metodo.ayur.paso.chakras")} →`, onClick: () => { void persist(sel, slice); irChakras(); } }}
           />
           </Reveal>
 
@@ -708,7 +709,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
               ))}
               <Box
                 as="button"
-                onClick={() => { void persist(sel, slice); irCursos(); }}
+                onClick={() => { void persist(sel, slice); irChakras(); }}
                 mt={1}
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={ayurvedaTxt} color="#fff"
@@ -718,7 +719,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 34px ${ayurvedaTxt}aa` }}
               >
-                {`${t("metodo.nutri.paso.cursos")} →`}
+                {`${t("metodo.ayur.paso.chakras")} →`}
               </Box>
             </Flex>
           </Panel>

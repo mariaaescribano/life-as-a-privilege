@@ -80,6 +80,7 @@ const MetodoPsicologiaMiedosPreguntas = lazy(() => import("./app/metodo/MetodoPs
 const MetodoPsicologiaCompromiso = lazy(() => import("./app/metodo/MetodoPsicologiaCompromiso"));
 const MetodoPsicologiaBrujula = lazy(() => import("./app/metodo/MetodoPsicologiaBrujula"));
 const MetodoPsicologiaSintesis = lazy(() => import("./app/metodo/MetodoPsicologiaSintesis"));
+const MetodoPsicologiaEmociones = lazy(() => import("./app/metodo/MetodoPsicologiaEmociones"));
 const MetodoPsicologiaCursos = lazy(() => import("./app/metodo/MetodoPsicologiaCursos"));
 const MetodoAyurveda = lazy(() => import("./app/metodo/MetodoAyurveda"));
 const MetodoAyurvedaTest = lazy(() => import("./app/metodo/MetodoAyurvedaTest"));
@@ -94,6 +95,7 @@ const MetodoAyurvedaDoshaEstilo = lazy(() => import("./app/metodo/MetodoAyurveda
 const MetodoAyurvedaDoshaDia = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaDia"));
 const MetodoAyurvedaDoshaPranayama = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaPranayama"));
 const MetodoAyurvedaDoshaCursos = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaCursos"));
+const MetodoAyurvedaChakras = lazy(() => import("./app/metodo/MetodoAyurvedaChakras"));
 const MetodoAyurvedaDoshaRecorrido = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaRecorrido"));
 const MetodoTcm = lazy(() => import("./app/metodo/MetodoTcm"));
 const MetodoTcmElementos = lazy(() => import("./app/metodo/MetodoTcmElementos"));
@@ -336,6 +338,7 @@ export default function App()
       <Route path="/metodo/psicologia/:experienciaId/compromiso" element={<PrivateRoute><MetodoPsicologiaCompromiso /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/brujula" element={<PrivateRoute><MetodoPsicologiaBrujula /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/sintesis" element={<PrivateRoute><MetodoPsicologiaSintesis /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/emociones" element={<PrivateRoute><MetodoPsicologiaEmociones /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/cursos" element={<PrivateRoute><MetodoPsicologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId" element={<PrivateRoute><MetodoPsicologiaExperiencia /></PrivateRoute>} />
       <Route path="/metodo/ayurveda" element={<PrivateRoute><MetodoAyurveda /></PrivateRoute>} />
@@ -350,6 +353,12 @@ export default function App()
       <Route path="/metodo/ayurveda/dosha/:dosha/estilo" element={<PrivateRoute><MetodoAyurvedaDoshaEstilo /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/dia" element={<PrivateRoute><MetodoAyurvedaDoshaDia /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/pranayama" element={<PrivateRoute><MetodoAyurvedaDoshaPranayama /></PrivateRoute>} />
+      {/* Los chakras: la penúltima parada del mapa, justo antes de los Cursos.
+          UNA sola página (el mapa); el texto de cada chakra se lee en su cómic,
+          que se abre al pulsar su caja. No dependen del doṣha (son los mismos
+          para los tres); la ruta cuelga de `/dosha/:dosha/` como Prāṇāyāma y
+          Cursos, por herencia. */}
+      <Route path="/metodo/ayurveda/dosha/:dosha/chakras" element={<PrivateRoute><MetodoAyurvedaChakras /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/cursos" element={<PrivateRoute><MetodoAyurvedaDoshaCursos /></PrivateRoute>} />
       <Route path="/metodo/ayurveda/dosha/:dosha/recorrido" element={<PrivateRoute><MetodoAyurvedaDoshaRecorrido /></PrivateRoute>} />
       <Route path="/ayurveda/miEspacio" element={<AyurvedaMiEspacio />} />

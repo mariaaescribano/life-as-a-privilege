@@ -682,6 +682,12 @@ export const metodo = {
   "metodo.ayur.paso.tresDoshas": "The three Doṣhas",
   "metodo.ayur.paso.cursos": "Ayurveda courses",
 
+  // ── Ayurveda · the chakras (the map and each chakra's page) ─────────────
+  "metodo.ayur.paso.chakras": "The chakras",
+  "metodo.ayur.chakras.pie": "Your seven points, from root to crown.",
+  "metodo.ayur.chakras.pulsa": "Tap each point to read what it is telling you.",
+  "metodo.ayur.chakras.todos": "You have been through all seven.",
+
   // ── Ayurveda · the doṣha pages ─────────────────────────────────────────
   "metodo.ayur.doshaRotulo": "Doṣha:",
   "metodo.ayur.preparando": "I'm putting this section together",
@@ -947,7 +953,25 @@ export const metodo = {
   "metodo.psico.paso.compromiso": "Commitment",
   "metodo.psico.paso.carta": "Letter",
   "metodo.psico.paso.sintesis": "Synthesis",
+  "metodo.psico.paso.emociones": "Emotions",
   "metodo.psico.paso.cursos": "Courses to go deeper",
+
+  // ── Psychology · the wheel of emotions (step 25) ───────────────────────
+  // The words on the wheel itself are still in Spanish: they live in
+  // `hardCoded/metodo/ruedaEmociones.ts` and haven't been translated yet.
+  "metodo.psico.emocionesIntro":
+    "Come back here to put words to what you feel. It's almost never just «I feel bad»: there's an exact word, and finding it already helps.",
+  "metodo.psico.ruedaMensajeras": "Emotions are messengers",
+  "metodo.psico.ruedaMensajerasTexto":
+    "None of them comes to torment you: every one carries a message about what you need. Anger tells you a boundary of yours has been crossed; fear, that something could be lost; sadness, that something is gone; joy, that you're on the right path. Once you listen to the message, the emotion no longer has to shout.",
+  "metodo.psico.ruedaTitulo": "The wheel of emotions",
+  "metodo.psico.ruedaToca":
+    "Start at the centre, with the emotion closest to what you feel, and work outwards. Tap any word and I'll tell you how it shows up.",
+  "metodo.psico.ruedaDesliza": "Swipe to see the whole wheel.",
+  "metodo.psico.ruedaPalabras": "words for what you feel",
+  "metodo.psico.emocionBasica": "Core emotion",
+  "metodo.psico.seDefinePor": "This emotion looks like:",
+  "metodo.psico.ruedaCerrar": "I recognise it",
 
   // ── Psychology · the ACE test ──────────────────────────────────────────
   "metodo.psico.guardando": "Saving…",

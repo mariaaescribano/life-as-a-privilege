@@ -12,6 +12,8 @@ import { DOSHA_CUIDARTE, type DoshaCuidarte } from "./doshaCuidarte";
 import { DOSHA_CUIDARTE_EN } from "./doshaCuidarte.en";
 import { PRANAYAMA_CIERRE, PRANAYAMA_PRACTICA, PRANAYAMA_REFLEXION, type PracticaPranayama } from "./pranayama";
 import { PRANAYAMA_CIERRE_EN, PRANAYAMA_PRACTICA_EN, PRANAYAMA_REFLEXION_EN } from "./pranayama.en";
+import { CHAKRAS, CHAKRAS_INTRO, CHAKRAS_ORDEN, type Chakra, type ChakraKey } from "./chakras";
+import { CHAKRAS_EN, CHAKRAS_INTRO_EN } from "./chakras.en";
 
 /**
  * El submapa del doṣha (Ayurveda) en el idioma activo.
@@ -84,6 +86,28 @@ export const usePranayama = () => {
       practica,
       reflexion: idioma === "en" ? PRANAYAMA_REFLEXION_EN : PRANAYAMA_REFLEXION,
       cierre: idioma === "en" ? PRANAYAMA_CIERRE_EN : PRANAYAMA_CIERRE,
+    };
+  }, [idioma]);
+};
+
+/**
+ * Los chakras en el idioma activo. Igual que los doṣhas: el español dice
+ * cuáles hay y en qué orden, y del inglés se toma solo el texto de los que
+ * estén traducidos (el resto se lee en español).
+ */
+export const useChakras = () => {
+  const { idioma } = useIdioma();
+  return useMemo(() => {
+    const porChakra: Record<ChakraKey, Chakra> =
+      idioma === "en"
+        ? (Object.fromEntries(
+            CHAKRAS_ORDEN.map((k) => [k, CHAKRAS_EN[k] ?? CHAKRAS[k]]),
+          ) as Record<ChakraKey, Chakra>)
+        : CHAKRAS;
+    return {
+      chakras: porChakra,
+      lista: CHAKRAS_ORDEN.map((k) => porChakra[k]),
+      intro: idioma === "en" ? CHAKRAS_INTRO_EN : CHAKRAS_INTRO,
     };
   }, [idioma]);
 };

@@ -5,9 +5,10 @@ import { traducir } from "../../i18n";
 // El recorrido tiene DOS niveles, y el Índice los enseña como dos secciones:
 //
 //   1. EL MAPA (neutral) · Ayurveda → Test → Resultado → Doṣhas → Prāṇāyāma →
-//      Cursos. No depende de ningún doṣha concreto: son las páginas comunes.
-//      Prāṇāyāma y Cursos viven en una ruta con doṣha por herencia, pero ya no
-//      pertenecen al submapa: se llega a ellos desde las tarjetas.
+//      Los chakras → Cursos. No depende de ningún doṣha concreto: son las
+//      páginas comunes. Prāṇāyāma, los chakras y Cursos viven en una ruta con
+//      doṣha por herencia, pero ya no pertenecen al submapa: se llega a ellos
+//      desde las tarjetas.
 //
 //   2. EL SUBMAPA DE UN DOṢHA · Naturaleza → … → Tu mapa. Solo tiene sentido
 //      dentro de un doṣha concreto: fuera de él, el Índice lo enseña bloqueado.
@@ -24,7 +25,8 @@ export const ayurvedaMapa = (): PasoRecorrido[] => [
   { n: 3, titulo: traducir("metodo.ayur.paso.resultado"),    ruta: () => "/metodo/ayurveda/resultado" },
   { n: 4, titulo: traducir("metodo.ayur.paso.doshas"),       ruta: () => "/metodo/ayurveda/tarjetas" },
   { n: 5, titulo: traducir("metodo.ayur.paso.pranayama"),    ruta: (d) => `/metodo/ayurveda/dosha/${d}/pranayama` },
-  { n: 6, titulo: traducir("metodo.nutri.paso.cursos"),      ruta: (d) => `/metodo/ayurveda/dosha/${d}/cursos` },
+  { n: 6, titulo: traducir("metodo.ayur.paso.chakras"),      ruta: (d) => `/metodo/ayurveda/dosha/${d}/chakras` },
+  { n: 7, titulo: traducir("metodo.nutri.paso.cursos"),      ruta: (d) => `/metodo/ayurveda/dosha/${d}/cursos` },
 ];
 
 /** Nivel 2 · el submapa de UN doṣha. Fuera de un doṣha no es pulsable. */

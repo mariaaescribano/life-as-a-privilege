@@ -76,8 +76,8 @@ export function IndiceAyurveda() {
   // Para las rutas del mapa que aún necesitan doṣha.
   const doshaEnlace = doshaUrl ?? principal;
 
-  // Nivel 1 · el mapa. Prāṇāyāma (5) y Cursos (6) solo se pueden enlazar si hay
-  // un doṣha del que colgarlos.
+  // Nivel 1 · el mapa. Prāṇāyāma (5), los chakras (6) y Cursos (7) solo se
+  // pueden enlazar si hay un doṣha del que colgarlos.
   const mapa: SeccionIndice = {
     titulo: t("metodo.ayur.elMapa"),
     pasos: ayurvedaMapa().map((p) =>

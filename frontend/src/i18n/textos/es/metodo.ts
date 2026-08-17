@@ -738,6 +738,12 @@ export const metodo = {
   "metodo.ayur.paso.tresDoshas": "Los tres Doṣhas",
   "metodo.ayur.paso.cursos": "Cursos de Ayurveda",
 
+  // ── Ayurveda · los chakras (el mapa y la página de cada uno) ────────────
+  "metodo.ayur.paso.chakras": "Los chakras",
+  "metodo.ayur.chakras.pie": "Tus siete puntos, de la raíz a la corona.",
+  "metodo.ayur.chakras.pulsa": "Pulsa cada punto para leer lo que te está contando.",
+  "metodo.ayur.chakras.todos": "Has recorrido los siete.",
+
   // ── Ayurveda · las páginas del doṣha (las seis comparten andamiaje) ─────
   /** Cabecera de cada página: «Doṣha: Vata». El nombre lo pinta la página con
    *  el color del doṣha, así que la clave solo trae el rótulo de delante. */
@@ -1020,7 +1026,24 @@ export const metodo = {
   "metodo.psico.paso.compromiso": "Compromiso",
   "metodo.psico.paso.carta": "Carta",
   "metodo.psico.paso.sintesis": "Síntesis",
+  "metodo.psico.paso.emociones": "Emociones",
   "metodo.psico.paso.cursos": "Cursos para profundizar",
+
+  // ── Psicología · la rueda de las emociones (paso 25) ───────────────────
+  // Página de consulta: no guarda nada, se toca una palabra y se lee.
+  "metodo.psico.emocionesIntro":
+    "Vuelve aquí para poner palabras a tus emociones. Casi nunca es solo «estoy mal»: hay una palabra exacta, y encontrarla ya alivia.",
+  "metodo.psico.ruedaMensajeras": "Las emociones son mensajeras",
+  "metodo.psico.ruedaMensajerasTexto":
+    "Ninguna viene a fastidiarte: todas traen un recado sobre lo que necesitas. La ira avisa de un límite que alguien ha pasado; el miedo, de algo que puedes perder; la tristeza, de algo que se ha ido; la alegría, de que estás en el buen camino. Cuando escuchas el mensaje, la emoción deja de tener que gritar.",
+  "metodo.psico.ruedaTitulo": "La rueda de las emociones",
+  "metodo.psico.ruedaToca":
+    "Empieza por el centro, en la emoción que más se parezca a lo que sientes, y ve hacia fuera. Toca cualquier palabra y te digo cómo se reconoce.",
+  "metodo.psico.ruedaDesliza": "Desliza la rueda para verla entera.",
+  "metodo.psico.ruedaPalabras": "palabras para lo que sientes",
+  "metodo.psico.emocionBasica": "Emoción básica",
+  "metodo.psico.seDefinePor": "Esta emoción se define por:",
+  "metodo.psico.ruedaCerrar": "Ya la reconozco",
 
   // ── Psicología · test ACE ──────────────────────────────────────────────
   "metodo.psico.guardando": "Guardando…",

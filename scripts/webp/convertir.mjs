@@ -496,6 +496,29 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["viñetas/cabala/historia"],
   },
+  // Los chakras. Llegaron en tres carpetas con tres usos distintos, y van en
+  // DOS lotes porque no se ven al mismo tamaño:
+  //  · comic/     → las 4 viñetas del cómic de entrada, a pantalla completa.
+  //  · unoporuno/ → la persona con su chakra encendido (una por chakra) y
+  //                 `fotopantalla`, la de los siete, que preside el mapa.
+  // Las rutas del código se arman solas (`${carpeta}/${n}.webp`), así que la
+  // carpeta va ENTERA o se rompe: de ahí el `forzar`.
+  41: {
+    ladoMax: 1000,
+    forzar: ["viñetas/hinduismo/chakras/comic", "viñetas/hinduismo/chakras/unoporuno"],
+    carpetas: [
+      "viñetas/hinduismo/chakras/comic",      //  4 archivos · 12 MB
+      "viñetas/hinduismo/chakras/unoporuno",  //  8 archivos · 25 MB
+    ],
+  },
+  // Los mandalas de los botones: son la foto PEQUEÑA de la caja del mapa (se
+  // ven a ~96 px), así que con 500 px sobra hasta en retina. Van recortados
+  // sobre transparente, y de eso ya se encarga `alphaQuality: 100`.
+  42: {
+    ladoMax: 500,
+    forzar: ["viñetas/hinduismo/chakras/botones"],
+    carpetas: ["viñetas/hinduismo/chakras/botones"], // 7 archivos · 20 MB
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────
