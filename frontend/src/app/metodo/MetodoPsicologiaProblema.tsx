@@ -119,7 +119,7 @@ export default function MetodoPsicologiaProblema() {
             <MetodoStepHeader
               icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
               title={t("metodo.psico.paso.problemas")}
-              step={{ current: 2, total: 25 }}
+              step={{ current: 2, total: 26 }}
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}

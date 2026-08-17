@@ -84,7 +84,7 @@ export default function MetodoPsicologiaGenograma() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title={genograma.titulo}
-                step={{ current: 9, total: 25 }}
+                step={{ current: 9, total: 26 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}

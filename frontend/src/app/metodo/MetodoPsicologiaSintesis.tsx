@@ -372,11 +372,11 @@ export default function MetodoPsicologiaSintesis() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 24, total: 25 }}
+                step={{ current: 24, total: 26 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.carta")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
-                next={{ label: `${t("metodo.psico.paso.cursosCorto")} →`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/cursos`) }}
+                next={{ label: `${t("metodo.psico.paso.emociones")} →`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/emociones`) }}
               />
             </Reveal>
 

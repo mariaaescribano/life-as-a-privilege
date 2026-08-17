@@ -111,7 +111,7 @@ export default function MetodoPsicologiaAceResultado() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 4, total: 25 }}
+              step={{ current: 4, total: 26 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.ace")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}

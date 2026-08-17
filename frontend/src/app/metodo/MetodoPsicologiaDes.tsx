@@ -183,7 +183,7 @@ export default function MetodoPsicologiaDes() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 5, total: 25 }}
+              step={{ current: 5, total: 26 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.resultadoAce")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace-resultado`) }}

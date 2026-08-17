@@ -147,7 +147,7 @@ export default function MetodoPsicologiaBrujula() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 23, total: 25 }}
+                step={{ current: 23, total: 26 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.compromiso")}`, onClick: () => void irA(`/metodo/psicologia/${exp.id}/compromiso`) }}

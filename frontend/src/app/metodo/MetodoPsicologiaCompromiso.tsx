@@ -148,7 +148,7 @@ export default function MetodoPsicologiaCompromiso() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 22, total: 25 }}
+                step={{ current: 22, total: 26 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.integracion")}`, onClick: async () => { guardarAhora(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/mapa`); } }}

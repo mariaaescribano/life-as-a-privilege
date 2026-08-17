@@ -265,7 +265,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 13, total: 25 }}
+              step={{ current: 13, total: 26 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.necesidades")}`, onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/necesidades`); } }}

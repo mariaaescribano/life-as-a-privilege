@@ -108,7 +108,7 @@ export interface PasoRecorrido {
   bloqueado?: boolean;
 }
 
-/** Los 25 pasos del recorrido, con los títulos ya en el idioma activo.
+/** Los 26 pasos del recorrido, con los títulos ya en el idioma activo.
  *  Es una FUNCIÓN y no un array: un array de nivel de módulo se calcula una vez
  *  al importar el fichero y se quedaría con los títulos congelados en el idioma
  *  de arranque. Quien lo pinte tiene que llamar a `useIdioma()` para volver a
@@ -138,7 +138,8 @@ export const psicologiaIndice = (): PasoRecorrido[] => [
   { n: 22, titulo: traducir("metodo.psico.paso.compromiso"),    ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
   { n: 23, titulo: traducir("metodo.psico.paso.carta"),         ruta: (id) => `/metodo/psicologia/${id}/brujula` },
   { n: 24, titulo: traducir("metodo.psico.paso.sintesis"),      ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
-  { n: 25, titulo: traducir("metodo.psico.paso.cursosCorto"),   ruta: (id) => `/metodo/psicologia/${id}/cursos` },
+  { n: 25, titulo: traducir("metodo.psico.paso.emociones"),     ruta: (id) => `/metodo/psicologia/${id}/emociones` },
+  { n: 26, titulo: traducir("metodo.psico.paso.cursosCorto"),   ruta: (id) => `/metodo/psicologia/${id}/cursos` },
 ];
 
 /** Total de pasos del recorrido (para las etiquetas X/total). */
@@ -1711,7 +1712,7 @@ export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolea
     case 21: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
     case 22: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
     case 23: return t(data.brujula?.mensaje) !== "";                           // Carta
-    default: return true;  // 1, 4, 6, 14, 15, 24, 25 y cualquier otro: sin requisito
+    default: return true;  // 1, 4, 6, 14, 15, 24, 25 (la rueda), 26 y cualquier otro: sin requisito
   }
 }
 

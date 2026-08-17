@@ -665,6 +665,31 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       ],
     },
   },
+  emociones: {
+    ejemplo: {
+      titulo: "Un ejemplo",
+      cuerpo: [
+        "«Estoy mal» casi nunca es la palabra exacta.",
+        "Por ejemplo: empiezas en Miedo, sigues por Inseguro y acabas en Insuficiente. Y entonces reconoces lo que te pasa de verdad.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se usa?",
+      cuerpo: [
+        "Empieza por el centro: la emoción básica que más se parezca a lo que sientes.",
+        "Ve hacia fuera, hasta la palabra que te haga decir «esto es».",
+        "Toca cualquier palabra y verás las tres cosas por las que se reconoce.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "Esta página no guarda nada: es tuya para consultarla cuando quieras.",
+        "Vuelve aquí siempre que no sepas nombrar lo que sientes.",
+        "Puedes sentir dos emociones a la vez, y de familias distintas. También es normal.",
+      ],
+    },
+  },
 };
 
 function BotonAyuda({ children, onClick, icon }: { children: React.ReactNode; onClick: () => void; icon?: React.ReactNode }) {

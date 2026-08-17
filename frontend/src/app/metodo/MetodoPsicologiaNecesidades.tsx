@@ -127,7 +127,7 @@ export default function MetodoPsicologiaNecesidades() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 12, total: 25 }}
+            step={{ current: 12, total: 26 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: `← ${t("metodo.psico.paso.nudos")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}

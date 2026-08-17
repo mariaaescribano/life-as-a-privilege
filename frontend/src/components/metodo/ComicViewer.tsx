@@ -462,6 +462,23 @@ export function ComicViewer({
   const arrowPos = flechasEnBox
     ? ({ position: "absolute", zIndex: 4 } as const)
     : ({ position: "fixed", zIndex: 10 } as const);
+  // Nada de parches azules al pulsar (móvil). Son DOS cosas distintas y las dos
+  // salían en las flechas: el rectángulo translúcido que el navegador pinta
+  // sobre lo que tocas, y —cuando se dan varios toques seguidos, que es
+  // exactamente lo que se hace pasando viñetas— la selección de texto, que pinta
+  // del mismo azul el botón y lo que tenga debajo. Se apagan las dos, más el aro
+  // de foco que algunos navegadores dejan puesto después del toque.
+  // Y `_active` va explícito: si no, el botón `ghost` de Chakra mete su gris
+  // claro al pulsar, que sobre el cómic se ve como otro parche.
+  const sinParcheAlPulsar = {
+    backdropFilter: "blur(4px)",
+    WebkitTapHighlightColor: "transparent",
+    userSelect: "none" as const,
+    WebkitUserSelect: "none",
+    WebkitTouchCallout: "none",
+    outline: "none",
+    "&:focus, &:focus-visible, &:active": { outline: "none" },
+  };
   const prevArrow = (
     <IconButton
       aria-label={t("comun.anterior")}
@@ -481,8 +498,9 @@ export function ComicViewer({
       h={{ base: "40px", md: "60px" }}
       minW={{ base: "40px", md: "60px" }}
       boxShadow={isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
-      sx={{ backdropFilter: "blur(4px)" }}
+      sx={sinParcheAlPulsar}
       _hover={isFirst ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
+      _active={isFirst ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
       _focus={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       _focusVisible={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       icon={
@@ -512,8 +530,9 @@ export function ComicViewer({
       h={{ base: "40px", md: "60px" }}
       minW={{ base: "40px", md: "60px" }}
       boxShadow={blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
-      sx={{ backdropFilter: "blur(4px)" }}
+      sx={sinParcheAlPulsar}
       _hover={blocked ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
+      _active={blocked ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
       _focus={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       _focusVisible={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       icon={
@@ -593,7 +612,7 @@ export function ComicViewer({
         bg={cerrarColor ? `${disciplinaBgColor ?? "#ffffff"}d9` : "rgba(0,0,0,0.5)"}
         border={cerrarColor ? `2px solid ${cerrarColor}` : `1px solid ${themeColor}aa`}
         boxShadow="0 2px 12px rgba(0,0,0,0.45)"
-        sx={{ backdropFilter: "blur(4px)" }}
+        sx={sinParcheAlPulsar}
         _hover={cerrarColor
           ? { bg: disciplinaBgColor ?? "#ffffff", transform: "translateY(-1px)" }
           : { bg: "rgba(0,0,0,0.7)", borderColor: themeColor }}
@@ -822,10 +841,12 @@ export function ComicViewer({
             zIndex={2}
             flex="1"
             minH={0}
-            // Móvil: `scroll` (no `auto`) para que la barra vertical se VEA
-            // siempre — en móvil el scroll de la viñeta ocurre aquí, en la
-            // columna entera (foto + texto), no en la columna de texto.
-            overflowY={{ base: "scroll", md: "hidden" }}
+            // Aquí NO se scrollea en ninguna anchura: el scroll vive en la
+            // columna de texto (abajo), tanto en móvil como en escritorio.
+            // Antes, en móvil, scrolleaba esta fila entera (foto + texto) y su
+            // barra le robaba 8 px por la derecha a la foto, que por eso no
+            // llegaba al borde de la caja.
+            overflowY="hidden"
             overflowX="hidden"
             // En móvil SIN padding para que la foto sea hero (full-bleed) arriba;
             // el texto añade su propio padding. En desktop, padding normal.
@@ -923,7 +944,12 @@ export function ComicViewer({
                     // `contain` la enseña entera sin recortar nada, igual que en
                     // escritorio. Vertical (9:16): contain SIEMPRE.
                     objectFit="contain"
-                    borderRadius="lg"
+                    // Móvil: sin esquinas propias. La foto va pegada a los
+                    // bordes de la caja y es la caja (overflow hidden + su
+                    // radio) la que la redondea arriba: con un radio propio
+                    // asomaban cuatro esquinitas del fondo oscuro y la foto
+                    // parecía flotar en vez de cubrir la parte de arriba.
+                    borderRadius={{ base: "none", md: "lg" }}
                     opacity={imgLoaded[index] ? 1 : 0}
                     transition="opacity 0.4s ease"
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
@@ -966,13 +992,16 @@ export function ComicViewer({
               minW={0}
               w={{ base: "100%", md: "auto" }}
               alignSelf={{ base: "auto", md: "stretch" }}
-              // Escritorio: contenedor con su propio scroll vertical. El texto
-              // arranca arriba (flex-start) con un margen superior constante, así
-              // que empieza siempre en el mismo sitio sin cortarse por arriba.
-              maxH={{ base: "none", md: "100%" }}
+              // Contenedor con su propio scroll vertical (en móvil también: así
+              // la foto se queda quieta arriba, cubriendo la caja de lado a
+              // lado, y lo que corre por debajo es el texto). El texto arranca
+              // arriba (flex-start) con un margen superior constante, así que
+              // empieza siempre en el mismo sitio sin cortarse por arriba.
+              maxH="100%"
+              minH={0}
               // `scroll` (no `auto`): el carril de la barra está SIEMPRE ahí, así
               // que se ve de un vistazo que la columna de texto es scrollable.
-              overflowY={{ base: "visible", md: "scroll" }}
+              overflowY="scroll"
               overflowX="hidden"
               display="flex"
               flexDirection="column"

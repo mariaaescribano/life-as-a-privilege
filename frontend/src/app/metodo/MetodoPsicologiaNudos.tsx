@@ -133,7 +133,7 @@ export default function MetodoPsicologiaNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 11, total: 25 }}
+              step={{ current: 11, total: 26 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.huellas")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
