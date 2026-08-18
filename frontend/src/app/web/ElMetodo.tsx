@@ -679,7 +679,7 @@ export default function ElMetodo() {
             mt={{ base: 3, md: "18px" }}
             mb={{ base: 5, md: 8 }}
             whiteSpace={{ base: "normal", md: "pre-line" }}
-            textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 38px rgba(255,255,255,0.34), 0 0 70px rgba(180,255,245,0.3)"
+            textShadow="0 0 18px rgba(255,255,255,0.48), 0 0 38px rgba(255,255,255,0.27), 0 0 70px rgba(180,255,245,0.24)"
             opacity={mounted ? 1 : 0}
             transform={mounted ? "translateY(0)" : "translateY(22px)"}
             transition="opacity 0.9s ease 0.18s, transform 0.9s ease 0.18s"
@@ -687,11 +687,11 @@ export default function ElMetodo() {
               "@keyframes tituloBrilla": {
                 "0%, 100%": {
                   textShadow:
-                    "0 0 14px rgba(255,255,255,0.48), 0 0 32px rgba(255,255,255,0.26), 0 0 60px rgba(180,255,245,0.24)",
+                    "0 0 14px rgba(255,255,255,0.38), 0 0 32px rgba(255,255,255,0.21), 0 0 60px rgba(180,255,245,0.19)",
                 },
                 "50%": {
                   textShadow:
-                    "0 0 24px rgba(255,255,255,0.8), 0 0 50px rgba(255,255,255,0.44), 0 0 92px rgba(180,255,245,0.4)",
+                    "0 0 24px rgba(255,255,255,0.64), 0 0 50px rgba(255,255,255,0.35), 0 0 92px rgba(180,255,245,0.32)",
                 },
               },
               animation: "tituloBrilla 7s ease-in-out infinite",
@@ -1144,11 +1144,10 @@ export default function ElMetodo() {
           </Text> */}
 
           {/* ── LA CREADORA ── */}
-          {/* Separador con mandala en medio. La tarjeta de la creadora (debajo)
-              aporta su propio pt (40px móvil / 56px escritorio); compensamos con
-              mt igual y mb=0 para que el separador quede JUSTO en medio de los
-              dos paneles visibles. */}
-          <SeparadorMandala mt={{ base: 10, md: 14 }} mb={0} />
+          {/* Aquí había un separador de mandala entre el botón de «empezar» y la
+              tarjeta de la creadora. Fuera: el botón ya cierra la sección y la
+              tarjeta abre la suya con su propio pt, así que la cesura solo
+              estiraba la página. */}
 
           {/* Tarjeta de la creadora (componente compartido con Welcome) */}
           <CreadoraCard />

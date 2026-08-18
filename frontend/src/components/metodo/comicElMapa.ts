@@ -74,7 +74,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     titulo: "Astrología",
     disciplina: astrologiaNom,
     lineas: [
-      "¿Y si muchos de mis patrones siempre hubieran estado ahí?",
+      "Mis circunstancias me marcaron desde el principio.",
       "Empiezo a verme con otros ojos.",
     ],
   },
@@ -92,8 +92,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     titulo: "Ayurveda",
     disciplina: ayurvedaNom,
     lineas: [
-      "Quizá el equilibrio no consiste en hacer lo mismo que todos.",
-      "Quizá consiste en comprender mi propia naturaleza.",
+      "Quizá el equilibrio no consiste en hacer lo mismo que todos. Quizá consiste en comprender mi propia naturaleza.",
     ],
   },
   {
@@ -157,9 +156,8 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     titulo: "Life as a Privilege",
     cierre: true,
     lineas: [
-      "Durante siglos hemos acumulado conocimiento sobre el ser humano.",
-      "Ese conocimiento ha permanecido disperso entre disciplinas que rara vez dialogan entre sí.",
-      "Life as a Privilege nace para reconstruir ese mapa y ponerlo al servicio del crecimiento.",
+      "Durante siglos hemos acumulado conocimiento, pero ha permanecido disperso.",
+      "Life as a Privilege nace para unirlo y reconstruir el mapa de cada ser humano."
     ],
   },
 ];
