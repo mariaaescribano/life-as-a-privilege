@@ -54,6 +54,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
   const isMaterialesPage = path.startsWith("/materiales") || path.startsWith("/aprendizaje") || path.startsWith("/libros");
   const isEstudioPage = path.startsWith("/estudio");
+  const isVideosPage = path.startsWith("/videos");
   // La última opción del menú: con sesión es «Mi cuenta», sin ella «Iniciar
   // sesión». Es el mismo sitio visto desde los dos lados de la puerta.
   //
@@ -71,8 +72,11 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   useEffect(() => { setMenuAbierto(false); }, [location.pathname]);
 
   // Destinos del menú: en administración, las dos pestañas de admin; con sesión,
-  // Materiales, Estudio y Mi cuenta; y sin sesión, además, El Mapa, y de última
-  // Iniciar sesión.
+  // Materiales, Vídeos, Estudio y Mi cuenta; y sin sesión, además, El Mapa, y de
+  // última Iniciar sesión.
+  //
+  // «Vídeos» va justo detrás de «Materiales»: son las dos secciones de contenido
+  // suelto (lo que se ve sin recorrer el mapa).
   //
   // Mi cuenta va también en el menú aunque el avatar lleve al mismo sitio: el
   // avatar es un icono sin rótulo y no todo el mundo lo lee como un botón.
@@ -84,12 +88,14 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         ]
       : [
           { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
+          { etiqueta: t("header.videos"),     onSelect: () => navigate("/videos"),       activo: isVideosPage },
           { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),      activo: isEstudioPage },
           { etiqueta: t("header.miCuenta"),   onSelect: () => navigate("/user/account"), activo: isCuentaPage },
         ]
     : [
         { etiqueta: t("header.mapa"),          onSelect: () => navigate("/elMetodo"),   activo: isRecorridoPage },
         { etiqueta: t("header.materiales"),    onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
+        { etiqueta: t("header.videos"),        onSelect: () => navigate("/videos"),     activo: isVideosPage },
         { etiqueta: t("header.estudio"),       onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
         { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn") },
       ];

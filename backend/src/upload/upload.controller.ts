@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadService } from './upload.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { OwnerGuard } from '../auth/owner.guard';
+import { AdminGuard } from '../auth/admin.guard';
 import * as multer from 'multer';
 
 @Controller('upload')
@@ -43,5 +44,14 @@ export class UploadController {
     @Param('userId') userId: string
   ) {
     return this.uploadService.uploadGenogramaPic(userId, file);
+  }
+
+  // Portada de un VÍDEO (sección «Vídeos»). Solo la admin: es contenido del
+  // sitio, no del usuario, así que aquí no vale OwnerGuard sino AdminGuard.
+  @Post('portada-video')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @UseInterceptors(FileInterceptor('file', { storage: multer.memoryStorage() }))
+  async uploadPortadaVideo(@UploadedFile() file: Express.Multer.File) {
+    return this.uploadService.uploadPortadaVideo(file);
   }
 }

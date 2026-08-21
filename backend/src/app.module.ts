@@ -36,6 +36,7 @@ import { CursosModule } from './cursos/cursos.module';
 import { AstrologiaTextosModule } from './astrologiaTextos/astrologiaTextos.module';
 import { RecorridoProgresoModule } from './recorridoProgreso/recorridoProgreso.module';
 import { EstudioModule } from './estudio/estudio.module';
+import { VideosModule } from './videos/videos.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -80,6 +81,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     AstrologiaTextosModule,
     RecorridoProgresoModule,
     EstudioModule,
+    VideosModule,
   ],
   providers: [
     DatabaseService,

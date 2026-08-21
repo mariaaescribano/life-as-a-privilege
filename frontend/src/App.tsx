@@ -30,6 +30,7 @@ const Opiniones = lazy(() => import("./app/web/Opiniones"));
 const ElMetodo = lazy(() => import("./app/web/ElMetodo"));
 const MaterialesGratuitos = lazy(() => import("./app/web/MaterialesGratuitos"));
 const Ilustraciones = lazy(() => import("./app/web/Ilustraciones"));
+const VideosPage = lazy(() => import("./app/web/VideosPage"));
 const PresentacionDisciplina = lazy(() => import("./app/web/PresentacionDisciplina"));
 const CheckoutMetodo = lazy(() => import("./app/web/CheckoutMetodo"));
 const MetodoAstrologia = lazy(() => import("./app/metodo/MetodoAstrologia"));
@@ -55,6 +56,7 @@ const AdminCursoEditor = lazy(() => import("./app/admin/AdminCursoEditor"));
 const AdminAstrologiaTextos = lazy(() => import("./app/admin/AdminAstrologiaTextos"));
 const AdminAccesos = lazy(() => import("./app/admin/AdminAccesos"));
 const AdminEstudio = lazy(() => import("./app/admin/AdminEstudio"));
+const AdminVideos = lazy(() => import("./app/admin/AdminVideos"));
 const NoEncontrada = lazy(() => import("./app/web/NoEncontrada"));
 const MetodoPsicologia = lazy(() => import("./app/metodo/MetodoPsicologia"));
 const MetodoPsicologiaProblema = lazy(() => import("./app/metodo/MetodoPsicologiaProblema"));
@@ -286,6 +288,8 @@ export default function App()
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/materiales" element={<MaterialesGratuitos />} />
       <Route path="/ilustraciones" element={<Ilustraciones />} />
+      {/* Vídeos: shorts de YouTube, con su portada y su disciplina (los gestiona /admin/videos). */}
+      <Route path="/videos" element={<VideosPage />} />
       {/* Presentación pública de una disciplina — destino del QR de los carteles.
           Ruta corta porque va impresa: /d/cabala, /d/nutricion, … */}
       <Route path="/d/:disciplina" element={<PresentacionDisciplina />} />
@@ -310,6 +314,7 @@ export default function App()
       <Route path="/admin/accesos" element={<AdminRoute><AdminAccesos /></AdminRoute>} />
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/estudio" element={<AdminRoute><AdminEstudio /></AdminRoute>} />
+      <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} />
       <Route path="/admin/astrologia/:userId" element={<AdminRoute><AdminAstrologiaEditor /></AdminRoute>} />
       <Route path="/admin/psicologia/:userId" element={<AdminRoute><AdminPsicologiaLectura /></AdminRoute>} />
       <Route path="/admin/ayurveda/:userId" element={<AdminRoute><AdminAyurvedaLectura /></AdminRoute>} />

@@ -16,6 +16,10 @@ export const web = {
   "materiales.ilustraciones": "Illustrations",
   "materiales.libros": "Books",
 
+  // ── Videos (/videos) ───────────────────────────────────────────────────
+  "videos.subtitulo": "Short ideas you can watch in a minute, one for each discipline on the map",
+  "videos.vacio": "No videos published yet. Come back soon.",
+
   // ── Creator card (CreadoraCard) ────────────────────────────────────────
   "creadora.accion": "Meet the creator",
   // «Ingeniera informática» es la titulación: se traduce como el título, no como

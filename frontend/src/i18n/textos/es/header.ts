@@ -6,6 +6,7 @@ export const header = {
   "header.marca": "LIFE AS A PRIVILEGE",
   "header.mapa": "El Mapa",
   "header.materiales": "Materiales",
+  "header.videos": "Vídeos",
   "header.estudio": "Estudio",
   "header.cursos": "Cursos",
   "header.miCuenta": "Mi cuenta",

@@ -76,6 +76,30 @@ export class UploadService {
     return { url: bucket.getPublicUrl(`genograma/${fileName}`).data.publicUrl };
   }
 
+  // Portada de un vídeo de la sección «Vídeos». Como el genograma, no toca
+  // ninguna tabla: sube el archivo y devuelve la URL, y quien la guarda es la
+  // fila de `video` que se está creando o editando en /admin/videos.
+  async uploadPortadaVideo(file: Express.Multer.File) {
+    if (!file) throw new Error('No se ha recibido ninguna portada');
+    const extension = (file.originalname.split('.').pop() || 'jpg').toLowerCase();
+    // Nombre único por subida: la URL pública siempre cambia y ninguna caché
+    // (navegador o CDN de Supabase) puede servir la portada antigua.
+    const fileName = `portada-${Date.now()}.${extension}`;
+    const bucket = this.databaseService.getClient().storage.from('img');
+
+    const { error: uploadError } = await bucket.upload(
+      `videos/${fileName}`,
+      file.buffer,
+      { contentType: file.mimetype, upsert: true }
+    );
+    if (uploadError) {
+      console.log('Error al subir la portada del vídeo:', uploadError);
+      throw new Error(uploadError.message);
+    }
+
+    return { url: bucket.getPublicUrl(`videos/${fileName}`).data.publicUrl };
+  }
+
   async getProfilePic(userId: string) {
     const { data } = await this.databaseService.getClient()
       .from('user')
