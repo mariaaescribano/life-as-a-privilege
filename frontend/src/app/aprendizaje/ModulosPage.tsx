@@ -51,6 +51,9 @@ export default function ModulosPage() {
               color={modalidad.color}
               nom={modalidad.nom}
               hideCursos
+              // Este header va GRANDE, como el del recorrido: es la portada del
+              // curso y la página más importante de Materiales. El resto de la
+              // sección (cursos, lección, herbario, alimentos) va en `dense`.
               // Botón de vuelta, discreto (small). Si se llegó desde El Recorrido
               // se respeta ese destino; en cualquier otro caso vuelve a los cursos
               // de la propia disciplina (misma clave que la ruta /cursos/:slug).

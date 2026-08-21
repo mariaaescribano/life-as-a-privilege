@@ -196,6 +196,10 @@ export default function CursosModalidad() {
             color={modalidad.color}
             nom={modalidad.nom}
             hideCursos
+            // Header GRANDE, como el de la portada del curso: las dos páginas
+            // que presentan («los cursos de X» y «los módulos de este curso»)
+            // llevan el header del recorrido. En `dense` se quedan solo las
+            // páginas de contenido: la lección, el herbario y los alimentos.
             prev={headerButtons.prev}
             extra={headerButtons.extra}
             next={headerButtons.next}

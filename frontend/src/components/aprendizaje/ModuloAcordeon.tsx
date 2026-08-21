@@ -1,6 +1,6 @@
 import { Box, Flex, Text, Collapse, HStack } from "@chakra-ui/react";
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Play } from "lucide-react";
 import React from "react";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ export function ModuloAcordeon(props:{
   onToggle?: (isOpen: boolean) => void,
 }) {
 
+  // Todos los módulos empiezan cerrados, incluido el del podcast.
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const disc = props.disciplina;
@@ -78,10 +79,22 @@ export function ModuloAcordeon(props:{
               _hover={{ transform: "translateY(-2px)" }}
             >
               {hasBg && <DisciplinaBgLayer nom={disc!} borderRadius="2xl" />}
-              <Flex position="relative" zIndex={1} align="center" justify="space-between" color={props.color} p={4}>
-                <Text fontWeight="600" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: tShadow }}>
-                  {sub.nom}
-                </Text>
+              <Flex position="relative" zIndex={1} align="center" justify="space-between" color={props.color} p={4} gap={3}>
+                <Flex align="center" gap={3} minW={0}>
+                  {/* Las lecciones de vídeo se ven de un golpe: llevan el ▶ */}
+                  {sub.tipo === "video" && (
+                    <Flex
+                      align="center" justify="center" flexShrink={0}
+                      w="30px" h="30px" borderRadius="full"
+                      border={`1px solid ${props.color}66`}
+                    >
+                      <Box as={Play} w="14px" h="14px" fill="currentColor" ml="1px" />
+                    </Flex>
+                  )}
+                  <Text fontWeight="600" fontSize={{ base: "md", md: "lg" }} style={{ textShadow: tShadow }}>
+                    {sub.nom}
+                  </Text>
+                </Flex>
               </Flex>
             </Box>
           ))}

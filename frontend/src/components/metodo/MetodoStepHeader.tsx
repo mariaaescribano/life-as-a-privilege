@@ -341,7 +341,10 @@ export function MetodoStepHeader({
               quieto en las otras siete. Ahora lo hace el componente, así que ni
               hay que acordarse ni se puede olvidar. `Float` respeta «reducir
               movimiento» del sistema: quien lo tenga puesto lo verá quieto. */}
-          <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center">
+          {/* En `dense` el icono se encoge con el título (las páginas lo pasan
+              a su tamaño normal y no hay que tocarlas una por una). */}
+          <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center"
+               sx={dense ? { transform: "scale(0.95)", transformOrigin: "center" } : undefined}>
             <Float amplitude={5} duration={5} display="flex" alignItems="center" justifyContent="center">
               {icon}
             </Float>
@@ -358,11 +361,21 @@ export function MetodoStepHeader({
                   fitTitle
                     ? (tallTitle
                         ? { base: pxTitulo(34), md: pxTitulo(60) }
+                        // `dense` también manda cuando el título se mide (los
+                        // mismos px que la rama de abajo), así los headers de
+                        // Materiales salen todos igual aunque unos midan el
+                        // título y otros no.
+                        : dense
+                        ? { base: pxTitulo(26), md: pxTitulo(42) }
                         : { base: pxTitulo(30), md: pxTitulo(48) })
                     : dense
-                    // Modo denso: título contenido. Manda sobre `tituloUniforme`,
-                    // que es lo que anula el `compact` en estas disciplinas.
-                    ? { base: "xl", md: "3xl" }
+                    // Modo denso: la CAJA va baja (poco relleno, botones
+                    // bajitos), pero la letra del título se queda en un tamaño
+                    // que se lee de lejos — casi el normal. Lo que sobraba en
+                    // estos headers era el alto, no el texto. Manda sobre
+                    // `tituloUniforme`, que es lo que anula el `compact` en
+                    // estas disciplinas.
+                    ? { base: "26px", md: "42px" }
                     : tallTitle
                     ? (compactEff ? { base: "3xl", md: "4xl" } : { base: "4xl", md: "6xl" })
                     : (compactEff ? { base: "2xl", md: "3xl" } : { base: "3xl", md: "5xl" })

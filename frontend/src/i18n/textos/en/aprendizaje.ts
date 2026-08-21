@@ -28,6 +28,8 @@ export const aprendizaje = {
   "leccion.esLaPrimera": "This is the first lesson",
   "leccion.esLaUltima": "This is the last lesson",
   "leccion.transcripcion": "Transcript",
+  "leccion.velocidad": "Speed",
+  "leccion.videoNoDisponible": "This video isn't available yet.",
 
   "test.sinEjercicios": "This test doesn't have any exercises yet.",
   "test.verdadero": "True",

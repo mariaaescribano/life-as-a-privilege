@@ -13,6 +13,8 @@ import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinas
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { Markdown } from "../../components/global/Markdown";
 import { CursoTestEditor } from "../../components/aprendizaje/CursoTestEditor";
+import { VideoYoutube } from "../../components/aprendizaje/VideoYoutube";
+import { youtubeId } from "../../components/aprendizaje/youtube";
 import type { Ejercicio } from "../../dtos/aprendizaje.type";
 
 interface Leccion { id: string; nom: string; tipo: "texto" | "video" | "test"; contenido?: string; video?: string; ejercicios?: Ejercicio[]; }
@@ -123,6 +125,15 @@ export default function AdminCursoEditor() {
     const arr = [...curso.contenido];
     [arr[mi], arr[j]] = [arr[j], arr[mi]];
     setModulos(arr);
+  };
+  // Módulo de podcast: el primero del curso, con una única lección de vídeo
+  // (el podcast del curso entero). Se coloca arriba, delante de todo.
+  const addPodcastArriba = () => {
+    if (!curso) return;
+    setModulos([
+      { title: "Podcast del curso", submodules: [{ id: genId(), nom: "Escucha el curso entero", tipo: "video", video: "" }] },
+      ...curso.contenido,
+    ]);
   };
   // Inserta un módulo nuevo justo después del índice indicado.
   const insertModulo = (mi: number) => {
@@ -334,7 +345,14 @@ export default function AdminCursoEditor() {
           {/* ── Módulos y lecciones ── */}
           <Flex justify="space-between" align="center" mb={3}>
             <Text fontSize="lg" fontWeight="700" letterSpacing="0.04em">Contenido</Text>
-            <Box as="button" onClick={addModulo} {...btn} px={5} py="8px" bg="rgba(255,255,255,0.92)" color="#008080" fontSize="sm">+ Módulo</Box>
+            <Flex gap={3} align="center" flexWrap="wrap">
+              <Box as="button" onClick={addPodcastArriba} {...btn} px={5} py="8px" fontSize="sm"
+                   border="1px solid rgba(255,255,255,0.35)" _hover={{ bg: "rgba(255,255,255,0.12)" }}
+                   title="Crea el primer módulo con el podcast del curso (vídeo de YouTube)">
+                + Podcast arriba
+              </Box>
+              <Box as="button" onClick={addModulo} {...btn} px={5} py="8px" bg="rgba(255,255,255,0.92)" color="#008080" fontSize="sm">+ Módulo</Box>
+            </Flex>
           </Flex>
 
           {/* Buscador interno: encuentra una frase en cualquier lección y salta a ella */}
@@ -432,9 +450,27 @@ export default function AdminCursoEditor() {
 
                         {lec.tipo === "video" ? (
                           <Box>
-                            <Text fontSize="xs" mb={1} opacity={0.7}>ID de YouTube (lo que va después de v=)</Text>
+                            <Text fontSize="xs" mb={1} opacity={0.7}>
+                              Enlace de YouTube — pega el link tal cual (Compartir, la barra del navegador, un Short o un directo). También vale el ID suelto.
+                            </Text>
                             <Input value={lec.video ?? ""} onChange={(e) => updLeccion(mi, li, { video: e.target.value })}
-                                   placeholder="dQw4w9WgXcQ" {...fieldStyle} />
+                                   placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ" {...fieldStyle} />
+                            {/* Aviso de si el enlace se ha entendido, y el vídeo
+                                tal cual se va a ver en la lección. */}
+                            {youtubeId(lec.video) ? (
+                              <Box mt={3}>
+                                <Text fontSize="xs" opacity={0.8} mb={2}>
+                                  Vídeo reconocido · ID <Box as="span" fontFamily="monospace">{youtubeId(lec.video)}</Box>
+                                </Text>
+                                <Box maxW="520px">
+                                  <VideoYoutube video={lec.video} titulo={lec.nom} color={color} bgColor={bg} nom={discNom} />
+                                </Box>
+                              </Box>
+                            ) : (lec.video ?? "").trim() ? (
+                              <Text fontSize="xs" mt={2} color="#ffb3b3">
+                                No reconozco ningún vídeo de YouTube en eso. Copia el enlace desde «Compartir» en YouTube.
+                              </Text>
+                            ) : null}
                           </Box>
                         ) : lec.tipo === "test" ? (
                           <CursoTestEditor

@@ -1,0 +1,179 @@
+{
+  "id": "8be7bb99-cdfa-4c17-807a-6d3855abf37e",
+  "modalidad": "Psicología",
+  "titulo": "Neurobiología interpersonal",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "1. La mente",
+      "submodules": [
+        {
+          "id": "l-idy3lrg",
+          "nom": "1.1 La vida mental",
+          "tipo": "texto",
+          "contenido": "La vida mental es un proceso autoorganizado emergente del flujo incorporado y relacional de energía e información. \n\nLa mente no es independiente del cuerpo ni de las relaciones: **se origina en ellas y a la vez las regula**.\n\nLa palabra «regula» es el rasgo notable de esta definición. La regulación tiene dos partes:\n\n1. **Observación** — notar cómo se mueve algo.\n2. **Modelación** — darle forma, transformarlo.\n\n---\n\nLos procesos mentales no están solo en el cuerpo: también en las relaciones personales y en la cultura. Por eso esta perspectiva abarca tanto la ciencia del cerebro como el estudio de familias, grupos, comunidades, culturas y sociedades.\n\nLa mente no es «solo actividad de la mente», sino un proceso emergente autoorganizado que nace del conjunto de los procesos corporales **y** de las relaciones: incorporada y relacional.\n\n¿Y qué es «lo» que se regula, ese algo compartido por el cuerpo y por la comunicación relacional? La respuesta: **la energía**."
+        },
+        {
+          "id": "l-majfyp4",
+          "nom": "1.2 La energía",
+          "tipo": "texto",
+          "contenido": "Los físicos describen la **energía** como la capacidad de hacer algo: un potencial de crear, de inducir movimiento, cambio o acción.\n\nLa **información** es un remolino de energía con significado: un patrón energético que simboliza algo distinto de sí mismo. Decir «torre Eiffel» es un patrón que representa la torre, pero no es la torre.\n\n---\n\nEse patrón viaja de distintas formas: ondas sonoras y energía cinética al oír palabras, fotones al leerlas, energía electroquímica entre **neuronas** en el cerebro.\n\nLa información es un patrón particular en el movimiento de la energía en el tiempo: eso es el **flujo**.\n\nLa realidad del flujo tiene al menos tres facetas: el intercambio en las «relaciones», el mecanismo incorporado en el «cerebro» y la regulación en la «mente».\n\n---\n\nDistinción clave: la energía transporta información, **pero no todo flujo energético contiene información**. Un sonido fuerte tiene texturas y dimensiones medibles, y eso son datos, no información en este sentido. El **significado y el valor simbólico** son la esencia de la información."
+        },
+        {
+          "id": "l-t3koxpv",
+          "nom": "1.3 Proceso",
+          "tipo": "texto",
+          "contenido": "«Proceso» implica que la mente es un **verbo, no un nombre**: emerge de la interacción de los elementos del sistema en cuestión.\n\nEse sistema comprende el cuerpo y el mundo de las interacciones, en especial las relaciones interpersonales y las señales sociales que compartimos con el prójimo.\n\nLos **sistemas complejos** son grupos de entidades interrelacionadas, abiertos a influencias del exterior y capaces de estados caóticos.\n\nLa salud nace de la conexión de partes diferenciadas de un sistema. Por tanto, **la integración es la clave de la buena salud**.\n\n---\n\nEl planteamiento central: la mente es un proceso emergente autoorganizado que determina el movimiento de la energía y la información a través del tiempo. Es un proceso dinámico, natural, emergente y autoorganizado que surge como propiedad del sistema de flujo del cuerpo y de las interacciones con los demás y con el entorno."
+        },
+        {
+          "id": "l-91c3k9i",
+          "nom": "1.4 Sistemas complejos",
+          "tipo": "texto",
+          "contenido": "Un rasgo de los sistemas complejos es que cuentan con un **proceso autoorganizado** que surge como propiedad emergente de las interacciones entre sus elementos. \n\n**No hay programador ni planes o instrucciones previas** que condicionen el despliegue de la autoorganización: es producto de las interacciones y, a su vez, incide en las funciones de los elementos de los que procede.\n\n---\n\nLa autoorganización indica que lo más probable es que un sistema complejo persiga la **«máxima complejidad»**.\n\n**Consecuencia destacada: los sistemas complejos tienden por naturaleza a la integración.** Por tanto, educadores, padres o profesionales médicos pueden deducir que su trabajo consiste en **liberar la inclinación natural** de cada individuo a buscar el bienestar y la salud, es decir, a perseguir la integración. Esa propiedad innata se traduce en una **propensión natural a la salud**.\n\n---\n\nSegún la **teoría de la complejidad**, cuando un sistema diferencia sus partes y luego las conecta, tiene un flujo autoorganizativo que maximiza la complejidad.\n\n**Nota terminológica:** en matemáticas «integración» significa suma (la integración de 3 y 5 es 8, y los rasgos únicos de 3 y 5 desaparecen). Aquí el sentido es el contrario: las partes conservan su singularidad."
+        },
+        {
+          "id": "l-qumvnk0",
+          "nom": "1.5 Modelo manual del cerebro",
+          "tipo": "texto",
+          "contenido": "**Modelo manual del cerebro** (cierra la mano en puño sobre el pulgar):\n\n  - **Dedos por arriba** = neocórtex o córtex: percibimos el mundo exterior y pensamos.\n\n  - **Pulgar** (debajo de la parte frontal cortical) = zona **límbica**: emociones, motivaciones, tipos de recuerdo, valoración del significado, relaciones de apego.\n\n  - **Palma** = **tronco encefálico**: mecanismo de alerta básica y respuesta de lucha/huida/parálisis ante amenazas.\n\n  - **Muñeca** = médula espinal, de donde ascienden los estímulos corporales.\n\n  - **Uñas de los dos dedos centrales** = región prefrontal integradora."
+        },
+        {
+          "id": "l-lszmql0",
+          "nom": "1.6 \"Perder la cabeza\"",
+          "tipo": "texto",
+          "contenido": "El córtex prefrontal conecta estas zonas entre sí. Tiene influencia dominante en la modulación de los estímulos de las zonas inferiores: proceso llamado **inhibición descendente**. \n\nPuede haber «anulación cortical», donde las activaciones **subcorticales** quedan anuladas por la intervención inhibidora del córtex.\n\nEstas regiones coordinan y equilibran los estímulos corticales, límbicos, del tronco encefálico y corporales, que están conectados por igual a los estímulos de **otros cerebros** (otras personas). Así, el córtex prefrontal integra los sistemas social, somático, límbico, cortical y del tronco encefálico en un todo funcional.\n\nPero puede **«desconectarse»** cuando «nos desmadramos»: en el modelo manual, levantar de golpe los dedos por encima del pulgar límbico. \n\nEntonces:\n\n  - Se pierden muchas **funciones prefrontales medias**: equilibrio emocional, empatía, integridad.\n\n  - Dejamos de ser flexibles al responder, perdemos perspectiva sobre nosotros mismos y actuamos por impulsos irracionales que en el momento parecen justificados.\n\n  - Aparecen comportamientos molestos y perjudiciales.\n\n---\n\nEs un **estado temporal de liberación frontal**: las regiones prefrontales reguladoras dejan de equilibrar los procesos subcorticales desde abajo.\n\nEsa **ruptura** hace añicos el sentido interconectado de «nosotros» que nace de la comunicación integradora: prueba de que al impedirse la integración neuronal se limita la integración interpersonal."
+        },
+        {
+          "id": "l-edhi6j5",
+          "nom": "1.7 La vergüenza",
+          "tipo": "texto",
+          "contenido": "Entender la «desviación» permite transformar una crisis en oportunidad de crecimiento. \n\nSin comprender que el cerebro a veces se desconecta, mucha gente es durísima consigo misma y se **avergüenza** tanto de su comportamiento que no vuelve al hijo, amigo, cónyuge o compañero para **reparar** la situación.\n\nEntonces el remordimiento se vuelve persistente, en forma de odio hacia sí mismo, con hostilidad y desprecio propios. Eso aumenta las probabilidades de más comportamientos «desviados», cada vez más intensos y frecuentes, y sin reparar.\n\n---\n\nLo que antes solo se intuía desde la práctica clínica hoy se sabe con seguridad: **la mente puede cambiar la actividad y la estructura cerebrales.**"
+        },
+        {
+          "id": "l-8rv3125",
+          "nom": "1.8 La atención",
+          "tipo": "texto",
+          "contenido": "**La atención** es el proceso por el cual la energía y la información se dirigen a través de los **circuitos** cerebrales. Al dominar el poder de la conciencia para cambiar deliberadamente el foco, puede alterarse la **activación neuronal**.\n\nCuando centramos la atención de modo integrador, cultivamos la **diferenciación** de las regiones y a la vez las **conectamos** entre sí.\n\n---\n\nLa máxima científica de que **«las neuronas que se activan juntas permanecen conectadas»** muestra en qué medida la activación neuronal cambia las conexiones entre ellas. \n\nUsar la atención para modificar la actividad del cerebro —y por tanto su arquitectura— es parte del proceso más amplio por el que la experiencia cambia la estructura neuronal: la **neuroplasticidad**."
+        }
+      ]
+    },
+    {
+      "title": "2. El cerebro",
+      "submodules": [
+        {
+          "id": "l-k57jb8s",
+          "nom": "2.1 La integración",
+          "tipo": "texto",
+          "contenido": "Un modo de agrupar conceptualmente las zonas integradoras: el **grupo medio prefrontal** de regiones del córtex frontal, que se activa con la conciencia plena y que conecta el tronco encefálico, la zona límbica, el córtex y los estímulos.\n\n**Las nueve funciones** que surgen de ese procesamiento integrador:\n  1. Regulación corporal\n  2. Comunicación en sintonía\n  3. Equilibrio emocional\n  4. Ajuste del miedo\n  5. Flexibilidad de respuesta\n  6. Introspección\n  7. Empatía\n  8. Integridad\n  9. Intuición"
+        },
+        {
+          "id": "l-yc9tsfk",
+          "nom": "2.2 La conciencia",
+          "tipo": "texto",
+          "contenido": "La conciencia es la vía para fomentar y respetar la **diferenciación** de los demás y para cultivar los **vínculos** mediante comunicación compasiva y empática, en relaciones dinámicas.\n\nPara la neurobiología interpersonal, **la conciencia es el sendero del cambio**: brinda la oportunidad de canalizar el flujo de energía e información de modos nuevos y más integradores.\n\n---\n\nCon conciencia se activa la **memoria explícita**, una forma más flexible y adaptativa del **aprendizaje descendente**. Y de ahí pueden surgir **narraciones** que doten de sentido a las experiencias."
+        },
+        {
+          "id": "l-ylk257n",
+          "nom": "2.3 Atención no focal",
+          "tipo": "texto",
+          "contenido": "La **atención no focal** también determina la memoria, pero influye sobre todo en la **memoria implícita**, que codifica y almacena emociones, percepciones, hábito y respuesta corporal.\n\nAl bloquearse la atención focal —por ejemplo durante una experiencia **traumática**— no se puede crear el recuerdo explícito que genera el **hipocampo** en la zona límbica. En esa situación la conectividad entre neuronas (base de la memoria) se incrementa, pero intervienen regiones del cerebro no conectadas por el hipocampo.\n\nEsos vínculos neuronales implícitos fluyen luego en sentimientos, pensamientos, decisiones y reacciones conductuales, muchas veces sin que sepamos de dónde vienen. "
+        },
+        {
+          "id": "l-gzllcfw",
+          "nom": "2.4 Atención dividida",
+          "tipo": "texto",
+          "contenido": "La **atención dividida** es el proceso por el cual la atención focal se dirige a un aspecto de la experiencia —por ejemplo, un elemento no traumático del entorno durante un ataque— mientras la atención no focal se dirige a otro, como el aspecto traumático del episodio.\n\nConsecuencia: no somos conscientes de los elementos presenciados de modo no focal, pero se codifican y almacenan de forma **implícita**. La atención dividida puede bloquear la codificación **explícita** del aspecto traumático, porque este no estaba en el foco de la atención.\n\nAdemás de este mecanismo, la secreción de grandes cantidades de **cortisol** durante el trauma afecta al hipocampo (la página contigua desarrolla su papel en la codificación).\n\n---\n\nLa secreción de grandes cantidades de **cortisol** puede inhibir la activación del hipocampo y bloquear la codificación explícita de una vivencia angustiosa.\n\nAl secretarse además **catecolamina norepinefrina** (adrenalina), puede aumentar la codificación de recuerdos de los aspectos de un trauma no presenciados focalmente: los emocionalmente perturbadores y los físicamente dolorosos.\n\nPor desgracia, dividir la atención no inhibe la atención no focal ni la creación de recuerdos implícitos del trauma; la liberación de norepinefrina puede incluso intensificarlos.\n\n---\n\n**Ese perfil —memoria implícita aumentada más bloqueo de la codificación explícita— puede ser un mecanismo decisivo en la aparición del trastorno por estrés postraumático. Para la neurobiología interpersonal, el trauma es un ejemplo doloroso de mala integración.**"
+        },
+        {
+          "id": "l-5fkxw9p",
+          "nom": "2.5 La activación neuronal",
+          "tipo": "texto",
+          "contenido": "La activación neuronal se asocia a la experiencia mental: percibir, pensar, sentir o **recordar**. \n\nAl recordar, las neuronas se activan según un patrón determinado por una experiencia pasada.\n\nAprendemos y recordamos gracias a que el pasado influye en el funcionamiento actual, y esa influencia nace de los cambios en las conexiones neurales. El modo en que la experiencia moldea la estructura neuronal es la **neuroplasticidad**.\n\n--- \n\nEl mecanismo es sencillo: la activación puede alterar la solidez de las conexiones entre las neuronas que se activan juntas.\n\n**¿Cómo ocurre?** Cuando las neuronas se movilizan, segregan transmisores y forman parte de una ola de activaciones. A veces esa actividad desemboca en la **expresión genética** de la información del núcleo celular:\n\nEn el núcleo está el **ADN**, con los componentes básicos —el alfabeto— de los genes. La secuencia de nucleótidos de los cromosomas, heredada de nuestros antepasados, lleva la información para fabricar el cuerpo y definir la arquitectura neuronal.\n\n---\n\nLa **expresión de los genes** produce proteínas que pueden alterar la estructura del cuerpo y del cerebro.\n\n**Analogía:** los genes son como libros en una biblioteca — para tener impacto en el mundo, hay que leerlos.\n\nMecanismo: al expresarse un gen, la doble hélice del ADN se despliega, se transcribe el **ARN** monocatenario, este sale del núcleo al citoplasma y un **ribosoma** traduce su secuencia en aminoácidos que forman proteínas. Esas proteínas son decisivas para que las neuronas formen sinapsis nuevas o más firmes.\n\n---\n\n**Escala del sistema:** una neurona media tiene unas diez mil conexiones con otras; con cien mil millones de neuronas, hablamos de cientos de billones de conexiones sinápticas. Y las neuronas están rodeadas y apoyadas por billones de **células gliales** (oligodendrocitos, astrocitos). \n\nAnte esas cifras, **conmueve lo poco que sabemos de «cómo funciona el cerebro»**."
+        },
+        {
+          "id": "l-idoxnoe",
+          "nom": "2.6 Las conexiones",
+          "tipo": "texto",
+          "contenido": "La pérdida de conexiones neuronales por falta de uso se llama **poda neuronal**, **parcelación** o **apoptosis**.\n\nLas novedades estimulan el desarrollo de nuevas neuronas en el hipocampo (neurogénesis).\n\n**Eric Kandel**: Premio Nobel por averiguar cómo la activación neuronal acciona la **expresión génica** y contribuye a los patrones asociativos de desarrollo sináptico.\n\n**Michael Meaney** y otros: la experiencia previa no solo condiciona las conexiones en las regiones que regulan la respuesta al **estrés**, sino que altera el control **epigenético** de la expresión génica en esas áreas."
+        },
+        {
+          "id": "l-bqbntf1",
+          "nom": "2.7 El presente",
+          "tipo": "texto",
+          "contenido": "En el modelo manual, los segundos nudillos representan el lóbulo frontal y, hasta las uñas, el **córtex prefrontal**.\n\nEn esa área podemos hacer **mapas del tiempo**, conectando pasado, presente y futuro: el **viaje en el tiempo mental**. Es lo que permite hacer planes… y también preocuparse. Con la **memoria prospectiva** dibujamos mapas del futuro basados en lo ocurrido, y esos mapas condicionan cómo percibimos el aquí y ahora.\n\n---\n\nConfeccionamos mapas de nuestra propia mente y de la de otros: los **mapas mindsight** (visión mental). \n\nPermiten ver la mente como mente, no solo como pensamientos, sentimientos y recuerdos: vemos las **actividades mentales** como tales, sabiendo que son el origen subjetivo interior de la experiencia personal, propia y ajena. Ese es el poder del **mindsight**.\n\n---\n\nLa misma región genera mapas de **integridad**, aporta imaginación y razonamiento éticos y permite acciones éticas. \n\nHace mapas mindsight del «nosotros», del «tú» (empatía) y del «yo» (introspección); todos esos procesos se coordinan en el área prefrontal.\n\n---\n\nEn el modelo manual, la parte media del córtex prefrontal está en los dos dedos del medio, entre el último nudillo y las uñas. Al tapar el pulgar con los dedos, esa región toca directamente las áreas límbica y del tronco encefálico: es una región **integradora** que mantiene conectadas áreas muy separadas.\n\nEl córtex prefrontal medio recibe estímulos directos del tronco a través de una capa de la médula espinal llamada **lámina I** y del **nervio vago**. \n\nProcesa las señales de los demás —sobre todo las **no verbales**— y crea un mapa neuronal de sus estados mentales, e incluso nuestra propia imagen interior de la vida mental.\n\nCuando «nos desmadramos» y perdemos el control, quedamos **«des-integrados»**: la región prefrontal media deja de coordinar y equilibrar los patrones de activación de las regiones subcorticales. También se le llama **secuestro amigdalino**.\n\nEn el modelo manual: levantar los dedos de golpe.\n\n---\n\nHallazgo notable: tener un modelo visual del cerebro vuelve a la persona más compasiva con los demás y consigo misma. Visualizar el cerebro ayuda a ver que, cuando se activó de un modo determinado, estaba «fuera de control». Así se entiende que un comportamiento negativo tal vez «no sea culpa nuestra», pero sí es nuestra responsabilidad aprender a usar la mente para cambiar cómo nos funciona el cerebro. Al liberarnos de la culpa y de la falta de autoestima, podemos dejar atrás la hostilidad interior y reemplazarla por compasión."
+        },
+        {
+          "id": "l-z8c5lrg",
+          "nom": "2.8 La sabiduría del cuerpo",
+          "tipo": "texto",
+          "contenido": "Conocer las partes del cerebro permite usar la atención para concentrarnos en funciones de regiones concretas, **diferenciar** su funcionamiento y **fomentar su unión**. \n\nEl modelo manual muestra con claridad que la región **prefrontal** conecta el córtex, el área límbica, el tronco encefálico, el propio cuerpo e incluso las señales neurales de otras personas.\n\n---\n\nEl cuerpo envía señales desde músculos y huesos y desde los órganos internos (intestinos, corazón) a través de la médula espinal (la muñeca) y del **nervio vago** (el décimo nervio craneal, que va directo del cuerpo al tronco encefálico) hasta la región prefrontal (las yemas de los dedos).\n\nEstas fuentes de información **no racionales** condicionan en buena medida nuestro razonamiento: es la **«sabiduría del cuerpo»**, determinante al tomar toda clase de decisiones.\n\n---\n\nComo el corazón y los intestinos participan en el proceso, expresiones como **«corazonada»** o **«sensación visceral»** se entienden como la **integración corporal** de datos del cuerpo en un enfoque integrado de la vida: el «cerebro del corazón» y el «cerebro de las tripas».\n\nEsa información corporal se registra en la región **prefrontal media** integradora e interactúa con otros procesos corticales como la **empatía**, la **introspección** y la **integridad**."
+        }
+      ]
+    },
+    {
+      "title": "3. El apego",
+      "submodules": [
+        {
+          "id": "l-t0qjlr4",
+          "nom": "3.1 La teoría del apego seguro",
+          "tipo": "texto",
+          "contenido": "La **teoría del apego** propone que los patrones de comunicación entre un **cuidador** (a menudo el progenitor, pero no siempre) y un niño dan lugar a una relación con un **patrón de apego**, que generará un **modelo de trabajo interno** si el progenitor cuida con sensibilidad.\n\n**Sensibilidad parental:** el modo en que el progenitor percibe las señales de comunicación del niño, las **dota de sentido** comprendiendo su **significado** para el mundo interior mental del niño, y responde de forma efectiva y oportuna a sus necesidades.\n\nEsa sensibilidad permite comprometerse de forma **responsable**, con una **comunicación contingente**: la señal que emite el niño recibe del adulto una señal que encaja con la enviada. Desde la neurobiología interpersonal, esa contingencia es un ejemplo de **integración personal** — cada persona se respeta como individuo único y a la vez está conectada mediante una comunicación contingente, compasiva y afectuosa.\n\nCon el tiempo, esos patrones repetidos de interacción forman el **crisol de experiencias** del que sale el modelo de trabajo interno. Si la comunicación es congruente, predecible y llena de **reparaciones** ante las **rupturas** inevitables de la sintonía, se crea un **modelo de trabajo de seguridad**: una **representación** mental de la relación como algo contingente y fiable.\n\nEse **modelo mental** permite al niño usar la figura de apego como **base segura** desde la que salir a explorar el mundo. El mero hecho de ver a la figura de apego activa el modelo, que luego sirve de fuente interna de calma y comodidad.\n\nEl patrón de **apoyo seguro** permite al niño salir al mundo y alcanzar su pleno potencial, comprometerse con otros de manera significativa y **regular** bien sus **emociones** para tener una vida plena y equilibrada.\n\nCuando el niño sufre una ruptura de la comunicación contingente —lo que ocurrirá inevitablemente—, el cuidador sensible toma nota de modo **mindful** y se compromete en el proceso crucial de **reparación interactiva**, que restablece la conexión en sintonía. "
+        },
+        {
+          "id": "l-fk4tpvp",
+          "nom": "3.2 La reparación",
+          "tipo": "texto",
+          "contenido": "**La clave de la seguridad no está en una sintonía perfecta, sino en la intención de conectar y reparar** cuando aparecen las malas comunicaciones inevitables.\n\nCuando se produce una **ruptura**, se genera una intensificación de las emociones que interrumpe aún más las conexiones estrechamente alineadas. El resultado es un **derrumbe del alineamiento**: sentimiento de desconexión y desesperanza, y anhelo de reconexión.\n\nTodo ello queda ilustrado con fuerza en el **Experimento de la cara inexpresiva**. Tras una desconexión, el equilibrio se restablece mediante el **realineamiento diádico** en el eje de la reparación."
+        },
+        {
+          "id": "l-8axb8ub",
+          "nom": "3.3 La figura de apego",
+          "tipo": "texto",
+          "contenido": "**Cuando la figura de apego y fuente biológica de seguridad es al mismo tiempo el origen del terror, la estrategia adaptativa del niño se viene abajo irremediablemente.** Es una paradoja biológica que genera miedo sin solución.\n\nEl mundo interior del individuo se rompe: aparece un **sentido fragmentado del yo**, propenso a desarrollar **disociación** clínica.\n\nPor eso la combinación de apego y retraimiento es una forma **desorganizada** de apego inseguro, y una de las que peores consecuencias tienen para el niño."
+        },
+        {
+          "id": "l-ky1sfit",
+          "nom": "3.4 Entrevista de apego adulto",
+          "tipo": "texto",
+          "contenido": "La **Entrevista de apego adulto** aplicada a padres cuyos hijos muestran apego desorganizado revela un **duelo o trauma no resuelto** del adulto que, aun siendo grave, **se puede tratar**.\n\nEs una entrevista semiestructurada; en la transcripción de sus noventa minutos se observa **disociación o desorden en la respuesta lingüística** ante preguntas sobre pérdidas o traumas. Esa narración desordenada muestra una **intrusión de la memoria no integrada** en el relato lineal de la historia autobiográfica del adulto.\n\nEsa desorientación narrativa del adulto es **cualitativamente paralela** a la fragmentación interna del niño y a la respuesta conductual desorganizada ante el regreso del progenitor en el **Protocolo de situación extraña**. Son ejemplos de lo que la neurobiología interpersonal consideraría **patrones caóticos** en el flujo de energía e información, en y entre las personas.\n\n**Hallazgo clínico de vital importancia:** haber sufrido un trauma o una gran pérdida **no** implica que los descendientes vayan a tener apego desorganizado; tenerlo **sin resolver**, sí. **Los progenitores que resuelven sus traumas y pérdidas pueden evitar legar esa experiencia de apego desorganizado a la generación siguiente.**"
+        },
+        {
+          "id": "l-uksh3ik",
+          "nom": "3.5 Los tipos de apego",
+          "tipo": "texto",
+          "contenido": "- **Apego seguro** — fomenta la integración: se respeta la esencia única del niño, diferenciada de la del progenitor, y las conexiones se establecen mediante **comunicación en sintonía** afectuosa. Surge de una relación integrada.\n\n  - **Apego evitativo** — se estimula la diferenciación pero la conexión no llega a establecerse; hay autonomía excesiva. El resultado no es armonía sino **rigidez**.\n\n  - **Apego ambivalente** — vinculación inconsecuente y a veces entrometida, con conexión excesiva y diferenciación deficiente. El resultado es **caos**, con un impulso de apego demasiado activado, sobrealerta y angustia.\n\n  - **Apego desorganizado** — incluye caos y rigidez a la vez, porque no es posible una estrategia organizada de respuesta y el estado interno del niño cae en la **disociación**: ejemplo claro de deficiencia de integración."
+        },
+        {
+          "id": "l-ct0fakc",
+          "nom": "3.6 La comunicación",
+          "tipo": "texto",
+          "contenido": "La **comunicación integradora** surge cuando la **sintonía** de una persona con el **estado** de otra se completa con una actitud **compasiva** y afectuosa. \n\nCuando un niño es pequeño, las **relaciones** integradoras con sus cuidadores demuestran que **la sintonía interpersonal determina la autorregulación**.\n\n---\n\nLa integración implica **conexión de elementos diferenciados** de un **sistema** social y produce flexibilidad, adaptabilidad, **coherencia**, energía y estabilidad.\n\nCuando el flujo interpersonal de **energía e información** es integrador, los **procesos** neurales del individuo devienen integradores. En el **sistema nervioso**, la integración es el modo en que varios **circuitos** pasan a estar coordinados y equilibrados: la esencia de la **autorregulación**. \n\nDicho de otro modo, la integración del flujo entre las personas crea patrones de flujo que permiten los procesos **autoorganizados** del sistema nervioso.\n\n---\n\nLa integración interpersonal estimula la integración interna. De este modo, la sintonía interpersonal **cataliza** la regulación interpersonal, que se convierte entonces en **autorregulación más autónoma**."
+        }
+      ]
+    },
+    {
+      "title": "4. La compasión",
+      "submodules": [
+        {
+          "id": "l-gi7ar6b",
+          "nom": "4.1 La autocompasión",
+          "tipo": "texto",
+          "contenido": "Ayudar a la gente a desarrollar compasión por los demás y, sobre todo, **por sí misma no siempre es fácil**. A mucha gente le aterroriza la idea y se resiste: ven la autocompasión y la bondad hacia sí mismos como una **debilidad o un lujo**, algo que significa ablandarse o bajar la guardia.\n\nSi esas personas empezaran a ser bondadosas consigo mismas podrían **empezar a sentir dolor**, porque reconocerían lo solas que se han sentido durante mucho tiempo.\n\n---\n\n**Bowlby** sugirió que mostrar bondad en terapia puede **activar recuerdos de apego** en los pacientes. Si esos recuerdos son de abandono o crueldad, los sentimientos asociados vuelven a surgir.\n\nResultado paradójico: en lugar de sentir que el procedimiento o la terapia están siendo buenos, los pacientes los viven **a través de sus recuerdos emotivos** y se sienten incómodos, ansiosos y **reticentes a la compasión**."
+        },
+        {
+          "id": "l-9wkdbmd",
+          "nom": "4.2 Los cuatro términos budistas",
+          "tipo": "texto",
+          "contenido": "**Metta** — el cariño o la preocupación, orientado tanto hacia uno mismo como hacia los demás.\n\n**Mudita** — apreciar y disfrutar la alegría de estar vivo **«en este momento»**: los colores de las nubes, un arcoíris, una puesta de sol, el sabor de la comida. Incluye la «alegría por simpatía», la alegría por el bienestar ajeno. Es el origen del **bienestar apacible**.\n\n**Karuna** — la compasión, que implica comportamiento ético, paciencia y **generosidad activa**.\n\n**Upekkha** — la ecuanimidad y un cierto sentido de conexión y parecido con los demás humanos y seres vivos: **todos buscamos la felicidad y ninguno problemas**."
+        },
+        {
+          "id": "l-uhd2ql6",
+          "nom": "4.3 El camino óctuple de Buda",
+          "tipo": "texto",
+          "contenido": "La compasión también genera patrones en el cerebro y organiza motivaciones y competencias de maneras que contribuyen al bienestar; pero hay que **entrenar el cerebro** para desarrollar esas capacidades.\n\n---\n\n**El camino óctuple** de Buda, tal como lo presenta el libro: visión correcta (conocimiento de las causas del sufrimiento, ligadas a apegos y deseos), concentración correcta (consciencia plena y compasión), determinación correcta (motivación de cuidar), hablar correcto (decir más cosas buenas que hirientes), actuar correcto (comportamiento que cura más que destruye), medio de vida correcto (elección de carrera y conducta en el trabajo), esfuerzo correcto (practicar con dedicación) y consciencia plena correcta (atención «al momento» de forma compasiva)."
+        }
+      ]
+    }
+  ]
+}

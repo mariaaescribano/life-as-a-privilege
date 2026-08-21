@@ -8,6 +8,8 @@ import { LifeLoading } from "../../components/global/LifeLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Markdown } from "../../components/global/Markdown";
 import { CursoTest } from "../../components/aprendizaje/CursoTest";
+import { VideoYoutube } from "../../components/aprendizaje/VideoYoutube";
+import { esVideoYoutube } from "../../components/aprendizaje/youtube";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { useCursosData, useLeccionTraducida } from "../../data/cursosApi";
 import { useT } from "../../i18n";
@@ -87,6 +89,10 @@ export default function TextLessonPage() {
   const { bgColor, color, icon, nom: disciplinaNom } = modalidad;
   const hasBg = hasDisciplinaBg(disciplinaNom);
   const esTest = leccion.tipo === "test";
+  // Lección de vídeo: el reproductor manda, y el Markdown (si lo hay) queda
+  // debajo como notas del episodio. Si el enlace pegado no es de YouTube, cae
+  // al artículo de texto de siempre.
+  const esVideo = leccion.tipo === "video" && esVideoYoutube(leccion.video);
   const cuerpo = traducida?.contenido ?? leccion.contenido ?? leccion.letra ?? "";
   const ejercicios = traducida?.ejercicios ?? leccion.ejercicios ?? [];
 
@@ -136,9 +142,13 @@ export default function TextLessonPage() {
             color={color}
             nom={disciplinaNom}
             compact
-            tallTitle
             fitTitle
-            titleScale={1.2}
+            // Header de perfil bajo, igual que en el resto de Materiales (la
+            // lista de cursos, los módulos, el herbario…): aquí manda el
+            // contenido — el vídeo o el artículo — y el header solo orienta.
+            // Antes iba un 20% MÁS grande que el recorrido y se comía la
+            // pantalla.
+            dense
             maxW={ANCHO}
             hideCursos
             mb={{ base: 7, md: 8 }}
@@ -161,9 +171,44 @@ export default function TextLessonPage() {
             }}
           />
 
-          {/* Test o artículo de texto. Las lecciones de tipo «vídeo» ya no
-              tienen reproductor: caen aquí y se muestran como texto. */}
-          {esTest ? (
+          {/* Vídeo (podcast), test o artículo de texto. */}
+          {esVideo ? (
+            <Box maxW={ANCHO} w="100%" mt={{ base: 2, md: 4 }}>
+              <VideoYoutube
+                video={leccion.video}
+                titulo={leccion.nom}
+                color={color}
+                bgColor={bgColor}
+                nom={disciplinaNom}
+              />
+
+              {/* Notas del episodio: lo que se escriba en el Markdown de la
+                  lección se pinta debajo, en la caja de siempre. */}
+              {cuerpo.trim() && (
+                <Box
+                  mt={{ base: 6, md: 8 }}
+                  w="100%"
+                  position="relative"
+                  overflow="hidden"
+                  borderRadius="2xl"
+                  bg={bgColor}
+                  boxShadow={HEADER_GLOW}
+                >
+                  {splitSecciones(cuerpo).map((sec, si) => (
+                    <Box key={si} position="relative">
+                      {si > 0 && <Box position="relative" zIndex={1} h="1px" bg={`${color}44`} />}
+                      {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="0" />}
+                      <Box position="relative" zIndex={1} px={{ base: 6, md: 0 }} py={{ base: 10, md: 14 }} sx={{ textShadow: TEXT_GLOW }}>
+                        <Box w="100%" maxW={{ base: "100%", md: "82%" }} mx="auto">
+                          <Markdown text={sec} color={color} bigger="xl" />
+                        </Box>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </Box>
+          ) : esTest ? (
             <Box
               maxW={ANCHO}
               w="100%"

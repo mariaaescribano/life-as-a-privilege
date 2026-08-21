@@ -1,0 +1,213 @@
+{
+  "id": "2619852d-9c27-436a-915d-439170e640db",
+  "modalidad": "Psicología",
+  "titulo": "Psicoterapia breve con niños",
+  "descripcion": "",
+  "descripcion_contenido": "",
+  "contenido": [
+    {
+      "title": "Introducción",
+      "submodules": [
+        {
+          "id": "l-w2s7osm",
+          "nom": "Breve mensaje",
+          "tipo": "texto",
+          "contenido": "Estos son mis apuntes del libro de Begoña Aznárez de \"Psicoterapia breve con niños y adolescentes\". \n\nLa lectura de este curso no sustituye una lectura de su libro, el cual recomiendo profundamente."
+        }
+      ]
+    },
+    {
+      "title": "1. Psicoterapia",
+      "submodules": [
+        {
+          "id": "l-0jq9g0p",
+          "nom": "1.1 ¿Qué es?",
+          "tipo": "texto",
+          "contenido": "Considero la psicoterapia un arte. Decía Pablo Picasso que «el arte es la mentira que nos ayuda a ver la verdad».\n\nCada terapeuta deberá elaborar la «mentira» necesaria y exigida para que su paciente pueda alcanzar a vislumbrar y hacerse cargo de la verdad.\n\n"
+        },
+        {
+          "id": "l-32c8k57",
+          "nom": "1.2 ¿Existe la Psicoterapia Infantil?",
+          "tipo": "texto",
+          "contenido": "Las familias son sistemas que tienden a favorecer la disfuncionalidad para mantener equilibrios internos y esto, con frecuencia, provoca y sostiene el sufrimiento.\n\nPertenecer nos configura. Nos construimos a través de relaciones dentro de un sistema, sus leyes no nos van a ser ajenas.\n\nLa participación de los padres en el supuesto proceso psicoterapéutico de sus hijos es incuestionable."
+        },
+        {
+          "id": "l-iz6cjbs",
+          "nom": "1.3 La primera sesión",
+          "tipo": "texto",
+          "contenido": "Neguémonos a recibir en primera consulta a solo uno de los papás. Deben de ir los dos.\n\n---\n\nSentados frente a los padres en la consulta, mi sugerencia es la de tomar notas lo menos posible.\n\nPodemos utilizar una grabadora. Esta nos va a permitir mantener el contacto visual necesario para comenzar a vincularnos adecuadamente y no perdernos información sobre el lenguaje corporal y otras particularidades de la interacción.\n\nEs buena idea sacar un folio para pedirles hacer una línea del tiempo.\n\nEn muchos, muchos casos, vamos a poder encontrar un antes y un después de eso que reconocen los padres, o el colegio, o ambos, como conducta problema. Ahí es cuando hay que preguntar: ¿Qué estaba ocurriendo entonces? Y procurar ir reflejándolo todo en la línea de vida.\n\n---\n\n**No olvidemos que los padres tienen miedo.**\n\nLos padres quieren ver felices a su hijo, pero se dan cuenta de que alguna parte de ellos mismos, a su vez, lo teme. Les sobrecoge que descubramos a esa parte tanto como anhelan que la veamos, la legitimemos y les ayudemos a manejarse con ella. \n\nNo olvidemos que un niño agresivo es un niño asustado. Los padres en el fondo son eso, niños asustados.\n\n---\n\nPara el psicoterapeuta: haber realizado nuestra propia psicoterapia garantizará que no nos identifiquemos con el niño ni nos pongamos en guardia con los padres. Nos proporcionará la distancia emocional necesaria para poder desarrollar adecuadamente nuestra labor."
+        },
+        {
+          "id": "l-2pq4x0e",
+          "nom": "1.4 La primera sesión con el niño",
+          "tipo": "texto",
+          "contenido": "Podemos definir al psicólogo, como el médico de los miedos. Los niños esto lo entienden muy bien. Saben mucho de sentir miedo.\n\nLos niños tienen miedos y necesitan hablar de ellos, pero no suelen encontrar interlocutores para dicha tarea. No está bien visto hacerlo. No lo ha estado nunca históricamente en nuestra cultura. Así que, aunque preferirían hablar con sus papás, no está nada mal poder tener a alguien con quien hacerlo.\n\n---\n\nEn la primera sesión con él le pido fe. Es decir, le comento que ya sé que está harto de consultar profesionales, de intentar cosas que no dan resultado, de ir de acá para allá...\n\nSi después de esa hora no le parece que la cosa vaya a ser muy diferente a lo que ha vivido hasta ese momento, no le haré volver. Pero durante esa hora tiene que colaborar completamente conmigo, responder a mis preguntas, hacer lo que le pida, confiar… \n\nCreo que es clave legitimar sus dudas, darles el espacio que merecen, demostrarles que entendemos y respetamos su postura, que nos importa mucho lo que les ocurre y que tenemos una sincera intención de servirles de ayuda.\n\n---\n\nRecuerden que decíamos que se trataba de ver y escuchar al niño, no de competir con los papás a ver quién lo hace mejor y quién tiene razón.\n\nSi uno de los dos es de la profesión, puede tener más problemas para reconocer nuestro éxito porque lo vivirá como mayor expresión de su fracaso. Ojo con esto. \n\nMimemos a ese papá o a esa mamá porque lo necesita, y nosotros necesitamos que esta persona esté bien con nosotros para que el niño pueda seguir viniendo."
+        },
+        {
+          "id": "l-p74otbk",
+          "nom": "1.5 El diagrama familiar",
+          "tipo": "texto",
+          "contenido": "Se aconseja hacer un diagrama familiar de al menos tres generaciones.\n\nEl proceso más interesante y revelador: queremos saberlo todo de todos.\n\n¿Hay alguna anécdota familiar que se haya ido transmitiendo de generación en generación, o una clásica batallita que haya calado y que se cuente siempre que se reúne la familia para alguna celebración? \n\n¿Se os ocurre alguna a vosotros que hayáis escuchado y que os parezca digna de contarse?"
+        },
+        {
+          "id": "l-9v80eyr",
+          "nom": "1.6 Imprescindible",
+          "tipo": "texto",
+          "contenido": "Último dato imprescindible por recoger: **la mirada de los progenitores hacia el niño y la nuestra hacia todos ellos**.\n\nEn la mirada se sostiene el vínculo. En la mirada se construye. Las miradas nos definen, nos explican, nos legitiman, nos cimientan y nos elevan…\n\n«Si el rostro de la madre es poco receptivo, entonces un espejo es algo que se puede mirar, pero no sirve para mirarse». Esto lo decía Winnicott allá por 1971.\n\nMiremos cómo le miran. Cómo se miran."
+        }
+      ]
+    },
+    {
+      "title": "2. Proceso de evaluación",
+      "submodules": [
+        {
+          "id": "l-vu7hyle",
+          "nom": "2.1 La disociación",
+          "tipo": "texto",
+          "contenido": "La disociación es, esencialmente, un fenómeno defensivo resultante de la necesidad de separar y mantener fuera de la consciencia material que, aunque forma parte de la experiencia vivida por el niño (o el adulto), debe permanecer oculto por no poder ser procesado de forma adecuada.\n\nDejar fuera de la conciencia una parte tan importante de la experiencia (la emocional y, por ende, a menudo asociada también, la corporal) nos hace responder de forma poco coherente, desadaptativa.\n\nAdemás, genera en nosotros multitud de creencias erróneas sobre el mundo que nos rodea y sobre nosotros mismos."
+        },
+        {
+          "id": "l-13ypa6g",
+          "nom": "2.2 Evaluación para niños entre los 5 y 13 años",
+          "tipo": "texto",
+          "contenido": "¿Desde cuándo empezó? \n¿Qué estaba pasando entonces? \nAprovechamos para comenzar a trazar la línea de vida con los padres o con el adolescente. \n¿Qué habéis venido haciendo en este tiempo para contrarrestar las dificultades? \n¿Qué han hecho otros y qué has hecho tú?\n¿Tienen algo que no les gustaría tener o no tienen algo que desearían mucho?\n¿Qué cosas te enfadan?\n¿Qué te hace sentir vergüenza?\n\n---\n\nEmociones negativas: si no ha podido hablar espontáneamente de los «contras» en sus relaciones, pasamos a preguntarle muy delicadamente por estas cuestiones, y valoramos, según la respuesta, la oportunidad de dejarlo para próximas sesiones. \n\n---\n\nTomamos nota mental de si, al hablar de la familia, destaca los aspectos positivos o si introduce también, de forma espontánea, los aspectos negativos en relación con lo hablado."
+        },
+        {
+          "id": "l-e84qa8u",
+          "nom": "2.3 Preguntas para los padres",
+          "tipo": "texto",
+          "contenido": "Decisión de tenerlo. ¿Cuándo empezaron a imaginárselo? Cómo escogieron el nombre que lleva. Cómo fue el embarazo. Tabaco y otros tóxicos durante el embarazo. Cómo fue el parto.\n\n¿Qué es lo que más te gusta de tu hijo? – ¿Qué admiras en él? – ¿Qué valoras de él? – ¿Qué disfrutas?\n\n¿Qué destacarías como peculiaridades suyas? – ¿Qué es lo que más te molesta? – ¿Qué cambiarías de él si pudieras hacerlo como por arte de magia? – ¿Podrías darme tres adjetivos que definan a tu hijo? – ¿Es el niño como pensaste que sería? – Muy brevemente: ¿Qué crees que le está pasando ahora?\n\n¿Cómo te sientes ante lo que ocurre con el niño? – ¿Te trae recuerdos concretos de tu propia historia? – ¿Compartes alguno de sus temores, anhelos, conductas, modos? – ¿Podrías decirme tres adjetivos que definieran a la niña/niño que fuiste? – ¿Podrías contarme tres sucesos/episodios positivos de tu infancia?"
+        },
+        {
+          "id": "l-pwx1j3x",
+          "nom": "2.4 El informe",
+          "tipo": "texto",
+          "contenido": "*Bowlby sostenía que la **salud mental** supone la gestión satisfactoria de los conflictos.*\n\n---\n\nInteligencia emocional. Solo conociendo mis emociones y las de los demás, aprendiendo a etiquetarlas correctamente, a regularlas y a expresarlas de forma adecuada voy a poder conocer y entender qué me está pasando y cómo y a quién pedir la ayuda que necesito.\n\n---\n\nLa consciencia y la integración son el asiento de la mentalización: destinada a una reconstrucción histórica que produzca una narrativa coherente e integradora sobre quién soy, sobre qué papel represento en mi familia y sobre cómo explicarme lo que he sido. \n\nTodo esto con el objetivo final de ir transformando la experiencia en aprendizaje y de conseguir que mi conducta, de esta manera, sea cada vez más adaptativa y más resiliente. \n\nResiliencia: maravilloso concepto que expresa la capacidad para responder ante la adversidad doblándose sin romperse.\n\n---\n\nRecordemos lo que decía Erickson allá por 1950: «Un buen parentaje provee al niño de la confianza básica interna para establecer relaciones y manejar situaciones difíciles en la vida». \n\nSabemos que el modelo de funcionamiento interno lo construye el niño a través de la mirada y de las interacciones con sus padres.\n\n---\n\nEjemplo: ella está buscando ayuda y la está buscando donde debe hacerlo, pero su manera de hacerlo no es la más idónea ni la más eficaz, lo cual demuestra que no ha podido interiorizar un modelo de sí misma como alguien suficientemente capaz y con el derecho a pedir esa ayuda.\n\nTras la pérdida de la persona con la que tenía un vínculo tan fuerte y significativo, el vínculo con la madre se le antoja frágil y en peligro."
+        }
+      ]
+    },
+    {
+      "title": "3. Psicoeducación",
+      "submodules": [
+        {
+          "id": "l-vojt7d6",
+          "nom": "3.1 La importancia de la narración",
+          "tipo": "texto",
+          "contenido": "Cuando una madre discrimina, en el llanto de su bebé, lo que este necesita y lo traduce en miedo, hambre o sueño, está permitiendo al niño hacer consciencia de lo que le ocurre y etiquetarlo con una palabra que lo simboliza. \n\nSi, además, resuelve lo que el niño necesita y calma, entonces le estará enseñando a dar sentido a lo ocurrido.\n\n---\n\nPlanteo que el mencionado movimiento evolutivo-adaptativo del bebé está condicionado, en principio, por la contingencia de la respuesta del cuidador. \n\nA mayor contingencia, mejor traducción. Y a mejor traducción, mejor desarrollo de la mentalización que conlleva el conocimiento y la regulación de los estados.\n\nNo ser traducido genera angustia, lo que supone la falta de legitimación, significado y permisos. Lleva a la disociación.\n\n---\n\nEsa disociación supone la producción de todo un acervo de creencias negativas sobre uno mismo que, aunque falso e incongruente con la realidad sentida, permite al niño seguir vinculado, adaptarse.\n\nNarrar supone la elaboración de los duelos correspondientes a las muchas pérdidas que conlleva seguir vivo y en contacto (con consciencia) con la realidad y sus conflictos.\n\nNada otorga más significado y, por lo tanto, más poder que una narrativa completa y coherente."
+        },
+        {
+          "id": "l-vodak4g",
+          "nom": "3.2 El cuadrante I",
+          "tipo": "texto",
+          "contenido": "El cuadrante 1 contempla la realidad externa e interna del bebé que viene al mundo. \n\nRecogiendo los datos que nos aportarán herramientas como el genograma o la línea de vida (y que están esencialmente relacionados con su realidad externa), podremos hacer inferencias.\n\nNo importa qué entrevista o técnica concreta utilicemos para la valoración de la disociación, lo que importa es que hagamos una apreciación consciente de cómo se ha ido produciendo la traducción por parte de las figuras vinculares. \n\nAlgo muy importante en relación con las narrativas y que hay que comprobar sin ninguna duda también es la cantidad de creencias sobre uno mismo y sobre el mundo que lo rodea que ha generado el paciente y que, en su gran mayoría, serán tan negativas como erróneas.\n\n---\n\nResumen: es la información de que dispongo (como terapeuta) de la realidad interna de mi paciente y de la influencia, sobre ella, de la realidad externa concreta que ha vivido y vive (realidad cultural, social, laboral, familiar, vincular y de los acontecimientos concretos vividos).\n\nLa clave es, por tanto, el reconocimiento por parte del terapeuta de cuánto material ha quedado sin pasar a la consciencia y cómo se ha venido expresando y se está expresando ahora para poder ofrecer un plan que ayude al paciente a esa necesaria toma de conciencia."
+        },
+        {
+          "id": "l-l7h7to9",
+          "nom": "3.3 Las emociones",
+          "tipo": "texto",
+          "contenido": "La emoción se acomoda en nuestro cuerpo y altera también su estado.\n\nDefinimos: el amor, la alegría, la curiosidad, el miedo, la ira, la tristeza y la vergüenza.\n\n---\n\nLa palabra emoción proviene de otra latina: emovere. Movere significa 'movimiento', y el prefijo e, 'hacia'. La emoción supondría así un 'movimiento hacia'. ¿Hacia dónde? Depende de la emoción que experimentemos."
+        },
+        {
+          "id": "l-yjt1kvl",
+          "nom": "3.4 El vínculo",
+          "tipo": "texto",
+          "contenido": "Todos tenemos dos sistemas psicobiológicos destinados a la adaptación: el de la aproximación y el de la defensa. \n\nEl primero nos conducirá a vincularnos a los otros, y el segundo, a aprender a distinguir los estímulos que puedan resultar amenazantes y que, por tanto, debamos mantener a raya.\n\n---\n\n¿Qué pasa cuando son mamá o papá los que me atemorizan o me agreden?\n\nLo adaptativo, ya decíamos, es mantenerme vinculado. \n\n¿Qué hago entonces? Considero mi experiencia interna equivocada. \n\n«Mamá y papá no son amenazantes, yo no debo estar entendiendo bien las cosas. Yo soy el erróneo, yo el culpable, yo el malo, yo el inadecuado».\n\n---\n\nEn consulta, podemos hacer la reparación. Es decir, en ese proceso por el que los papás van a darse cuenta (ayudados y acompañados por nosotros) de lo que ha ido saliendo mal, de lo que no han sabido gestionar, de su falta de sintonía…, de sus fallos, en definitiva; y van a poder empatizar con el niño y sus mensajes."
+        },
+        {
+          "id": "l-8gjx81t",
+          "nom": "3.5 La distinción de las emociones",
+          "tipo": "texto",
+          "contenido": "**Las sensaciones**: son percepciones corporales que tenemos gracias a nuestros sentidos. Las describimos empleando el verbo notar: noto cosquilleo, frío, sed, dolor...\n\n**Las acciones**: son los comportamientos que tenemos las personas al reaccionar ante diferentes estímulos en nuestra relación con nosotros mismos y con los demás.\n\n**Las emociones**: son alteraciones, cambios de mi estado de ánimo. Son intensas, pero duran poco y habitualmente vienen acompañadas de alguna sensación en mi cuerpo.\n\n**Las cogniciones o pensamientos**: son ideas que formamos en la mente al reflexionar sobre las cosas.\n\n---\n\n**El miedo** tiene como meta la evitación de aquello que nos está generando.\n\n**La rabia** tiene como meta la superación de obstáculos, así que la acción que suele provocar es el ataque.\n\n**La tristeza** tiene como meta algo muy difícil, pero muy importante también, que es poder aceptar las pérdidas.\n\n**La alegría** tiene como meta aportar ánimo e incitarme a acercarme a los demás y hacer amigos.\n\n**La vergüenza** es una emoción muy especial. La incluimos por eso entre las básicas aunque no la desarrollamos hasta que tenemos casi los tres añitos (justo cuando termina de madurar una estructura en el cerebro que se llama hipocampo y que se encarga de la memoria a largo plazo)."
+        },
+        {
+          "id": "l-dsg2z4p",
+          "nom": "3.6 Legitimar",
+          "tipo": "texto",
+          "contenido": "Todo esto, debemos legitimarlo, es decir, decirme a mí mismo que no es malo sentir lo que siento, que está bien sentir así. \n\nDebemos aprender a regularlas. O sea, que aunque esté bien que yo sienta eso, a lo mejor no puedo actuar haciendo lo que inmediatamente me apetece hacer y, entonces, tendré que poder estar con eso que siento. Pero no significa que mi emoción esté equivocada.\n\n---\n\nRecuerda: las emociones, cuando las experimento, no las puedo cambiar. Y no debo intentarlo. Tengo que sentirlas, reconocerlas y aceptarlas. Así, si las escucho y aprendo a descifrar su mensaje, mis sensaciones serán más agradables; mis pensamientos, más positivos, y mis acciones, más adaptativas.\n\nEl deseo es legítimo, ¡claro! Es tan normal soñar con que aquello malo que nos ocurrió no nos hubiese ocurrido… Y desearlo. Pero si lo convierto en necesidad y me digo: «solo voy a ser feliz si recupero mi pierna, o sea, necesito mi pierna para ser feliz», entonces, ¿voy a conseguir ser feliz algún día?"
+        },
+        {
+          "id": "l-wh1bpch",
+          "nom": "3.7 El trauma psíquico",
+          "tipo": "texto",
+          "contenido": "«Oh! ¡Horror! ¡Horror! ¡Ni la lengua ni el corazón pueden concebir ni nombrar esto!». Macbeth, Shakespeare\n\n---\n\nEl trauma es un impacto emocional de considerable intensidad, estaremos de acuerdo en que eso dejará alguna secuela que podemos calificar de herida.\n\nSi podemos hablar de ello, pensar en ello y soñar con ello. Si podemos llevar a cabo estas tareas con nuestras figuras de cuidado, la herida cicatrizará adecuadamente y la experiencia podrá transformarse en aprendizaje, pues la narrativa resultante contendrá todo el material necesario para una integración.\n\n---\n\nSi esto no ha sido posible, el aparentemente sencillo mecanismo protector que consigue, indiscutiblemente, su objetivo: evitar a toda costa (a costa sobre todo de la integración de la experiencia) la desvinculación. Así, a mayor riesgo de desvinculación, mayor nivel de disociación.\n\n---\n\nEn resumen, a pesar de la importancia que tiene el equilibrio para estar bien, para tener salud, el ser humano está preparado para saboteársela y perderla, en aras de un fin más grande: la vinculación, la pertenencia."
+        },
+        {
+          "id": "l-1nj1wzp",
+          "nom": "3.8 El trauma y su normalidad",
+          "tipo": "texto",
+          "contenido": "Por desgracia, según estudios recientes, el trauma en la infancia es tan frecuente que debe ser considerado normativo. Es la norma, lo normal.\n\n---\n\nTraumático es para un niño tener que guardar silencio en relación con cualquier cosa que le ocurre. Traumático es que sus experiencias no sean vistas.\n\nSi traumático es tener que guardar silencio, reparador será poder dar voz a eso que se ha silenciado ¿no les parece? Si el problema es la disociación, habrá que trabajar la integración. Integrar dando voz a la experiencia interna.\n\n---\n\nPara esto, tenemos dos vías fundamentales: 1) generando memoria semántica y autobiográfica y 2) transformando memoria implícita en explícita.\n\nY, además, si eso lo hacemos con la línea de vida delante, nos permite generar la memoria autobiográfica necesaria para terminar de ver el sentido a todo lo que nos ha venido ocurriendo.\n\n---\n\nLa información acerca del suceso traumático que ha quedado aislada se almacena de forma excitatoria en espera a ser atendida, narrada, explicada, legitimada y, en consecuencia, correctamente integrada. Por eso produce, como ya hemos venido diciendo, diferentes síntomas."
+        },
+        {
+          "id": "l-q1g6tcy",
+          "nom": "3.9 La estimulación bilateral",
+          "tipo": "texto",
+          "contenido": "Parece que el poder de la estimulación bilateral está asociado, esencialmente, con el efecto que produce sobre la amígdala (estructura límbica responsable de la desconexión por sobrecarga emocional) que responde maravillosamente a los efectos desensibilizantes (o relajantes).\n\nCon esta técnica podemos hacer la resincronización de los hemisferios o el aumento de la actividad de estructuras cerebrales como el cíngulo o el tálamo.\n\n---\n\nEl arousal amigdaloideo elevado que se observa tras la experimentación de un acontecimiento emocionalmente impactante.\n\nSe ve, pues, claramente disminuido tras la aplicación de la técnica y esto es lo que permite la integración de la información que una vez fue disociada y que nuevamente va a poder circular por las vías apropiadas. Estas vías favorecen la conexión y, en consecuencia, la integración de esa información."
+        },
+        {
+          "id": "l-6fr1m05",
+          "nom": "3.10 EMDR",
+          "tipo": "texto",
+          "contenido": "En el trabajo con los más pequeños, la aplicación de EMDR resulta extremadamente eficaz, puesto que las redes neuronales que sostienen las creencias desafortunadamente erróneas no son muy gruesas y la posibilidad de generar probabilidades de nuevas respuestas alternativas más eficaces es muy alta.\n\n---\n\nEstá dividido en ocho fases: 1. Historia, 2. Preparación, 3. Medición, 4. Desensibilización, 5. Instalación de la cognición positiva, 6. Chequeo corporal, 7. Cierre y 8. Reevaluación. La base de trabajo con la estimulación bilateral es el enfoque en los siguientes aspectos del suceso diana."
+        },
+        {
+          "id": "l-d3n72hd",
+          "nom": "3.11 La caja de arena",
+          "tipo": "texto",
+          "contenido": "La base de todo el concepto teórico que alberga el trabajo con la caja de arena es que, **si a los niños se les dan los materiales apropiados, ellos encontrarán la manera de comunicar su experiencia interior**.\n\nHemos quedado en que el niño que viene a la consulta trae una importante cantidad de experiencia interna silenciada y que nuestro principal objetivo es que pueda hacer consciencia de esa experiencia.\n\n---\n\nCuando es colocado frente a la caja de arena, ya se le está dando la oportunidad de expresarse, sin duda. Pero necesita más. Necesita ayuda para más.\n\nLo que nunca ha existido y todos han experimentado encuentra una manifestación inicial como formas crípticas en la arena. Estas formas están acompañadas por emociones. Estas emociones poco a poco asumen la forma de imágenes visuales cargadas con contenido simbólico.\n\n---\n\nHay una sugerencia que yo me atrevo a hacer en la mayor parte de los casos y que me ha dado muy buenos resultados. \n\nComo el niño tiene más dificultades para conectar con aquello que molesta y que de alguna manera considera (o es considerado por su entorno) como malo...\n\nLo primero es traducir las emociones asociadas, legitimarlas y actuarlas a través de la historia, los personajes y la arena. Y continuaremos desarrollando un hilo conductor narrativo que le explique y le dé significado."
+        },
+        {
+          "id": "l-eo1k5p2",
+          "nom": "3.12 Caso real",
+          "tipo": "texto",
+          "contenido": "Caso real que merece la pena ser leído:\n\n---\n\nDada la urgencia por intervenir para que Dani volviese a comer cuanto antes, trabajé con el niño sin hacer una evaluación previa. Trabajamos durante cinco sesiones hasta que Dani pudo volver a comer con normalidad.\n\n> Primera sesión: como ya se imaginan por lo que hemos comentado. Jugamos en la arena en el centro de la sala y los materiales con los que vamos a abordar la tarea de crear un mundo, o una aventura, en dicha caja. También, sobre la mesa, tengo papeles y lápices para pintar. Le pregunto qué prefiere hacer y se acerca a la caja con entusiasmo evidente. Hunde las manos en la arena, tras pedir permiso.\n\nAprovecho para empezar a hacer EMDR con él. Le digo que conozco una magia que ayuda a niños y mayores cuando están tristes o cuando tienen miedo. Cojo una varita que suelo utilizar con los niños para contribuir a crear el efecto de estar haciendo magia… Según vamos hablando de cómo está mamá, pues ella estaba en el hospital.\n\n---\n\nSiguientes tres sesiones: las siguientes tres sesiones son todas muy parecidas. En ellas, Dani entra en la sala y va derecho a la caja de arena y a por el castillo. Reproduce el juego del primer día, pero yo voy introduciendo variaciones. \n\nÉl inicia el juego, yo lo provoco con mis alusiones a la garganta y la comida e, incluso, en la tercera sesión, traigo una caja de juguetes llena de comidas de plástico para poder hacer más real la dramatización de la garganta tragándose un huevo, pollo o manzanas…\n\nDani volvió a comer con normalidad después de esta sesión."
+        },
+        {
+          "id": "l-a53ffh3",
+          "nom": "3.13 Reflexión final",
+          "tipo": "texto",
+          "contenido": "Yo insisto siempre a mis alumnos, cuando me preguntan, que nuestro miedo es nuestro peor enemigo. Los niños lo ven y confirman el suyo. Eso no les ayuda. Les ayudan nuestra seguridad y nuestra confianza en lo que hacemos.\n\n---\n\nA los niños y adolescentes que vemos, solo les ocurre una cosa: su profundo deseo de amar y ser amado por aquellos que les concibieron les obliga a silenciar y silenciarse, a ocultarse, a romperse, a sabotearse y traicionarse detrás de un miedo insoportable a perderlos y perderse.\n\n---\n\nTermino con otra frase de Edith Eger: «Si no nos permitimos afligirnos por nuestras pérdidas, heridas y decepciones, estamos condenados a revivirlas». \n\n«La libertad reside en aceptar lo sucedido. La libertad significa armarnos de valor para desmantelar la prisión pieza a pieza»."
+        }
+      ]
+    },
+    {
+      "title": "4. La narrativa",
+      "submodules": [
+        {
+          "id": "l-dbhyrcf",
+          "nom": "4.1 Las historias",
+          "tipo": "texto",
+          "contenido": "Organizamos la realidad mediante historias, pues la experiencia debe relatarse para adquirir significado. \n\nJerome Bruner sostenía que la necesidad de contar y, consecuentemente, de compartir, precede al lenguaje.\n"
+        },
+        {
+          "id": "l-ajpn882",
+          "nom": "4.2 Los esquemas mentales",
+          "tipo": "texto",
+          "contenido": "Kant sostiene que construimos nuestro conocimiento a partir de los datos de nuestra experiencia. La mente ordena los datos de dicha experiencia elaborando esquemas y reglas que pretenderán ser universales y que, sin embargo, pertenecen a dicha concreta experiencia.\n\nEs decir, que habrá tantas realidades como mentes construyéndolas. Imposible hablar de una verdad universal.\n\n---\n\nAbandonar los esquemas que nos han sostenido durante años no es tarea fácil. Según Platón, es asunto del filósofo acompañar a los demás para poder llevar a cabo esta difícil tarea. Es el que ayudaría en el camino de la liberación del sufrimiento."
+        },
+        {
+          "id": "l-qbokxt4",
+          "nom": "4.3 La realidad construida",
+          "tipo": "texto",
+          "contenido": "Partimos de la idea de que el ser humano necesita narrar su experiencia (interna y externa) para construir una representación de la realidad que le permita dar significado a lo que le ocurre.\n\nDesde este enfoque el cambio se estructura sobre las representaciones simbólicas del paciente. Hay una íntima conexión entre la historia de sufrimiento de un paciente y los síntomas de su enfermedad (Freud, 1981)."
+        },
+        {
+          "id": "l-0h417ff",
+          "nom": "4.4 Las memorias",
+          "tipo": "texto",
+          "contenido": "En definitiva, el ser humano necesita construir esquemas, modelos de explicación y de respuesta que le permitan convertir el mundo en predecible. En la construcción de estos modelos mentales juega un papel fundamental lo que llamamos memoria implícita.\n\nLa memoria explícita se construye sobre la base de la memoria implícita y se divide, a su vez, en dos tipos, semántica o factual y episódica o autobiográfica: recuerdo los hechos ocurridos y soy capaz de situarme a mí mismo dentro de esa secuencia de acontecimientos.\n\n---\n\n«Para hacer que crezca la mente del niño, alimenta el corazón del bebé» dice uno de los lemas de la Organización Cero a Tres (Zero to Three, ONG destinada a informar, educar, y apoyar a los adultos involucrados en la educación de niños en el tramo de 0 a 3 años)."
+        }
+      ]
+    },
+    {
+      "title": "Recursos",
+      "submodules": [
+        {
+          "id": "l-i5jpc0r",
+          "nom": "Tests aconsejados",
+          "tipo": "texto",
+          "contenido": "Algunos test de screening son imprescindibles. Nos parecen muy útiles, en este sentido, la escala de disociación para niños de Putnam y la escala de experiencias disociativas en adolescentes (A-ADES) de Armstrong, Bernstein y Putnam.\n\nTest desiderativo - Test de Rorschach - Test del árbol - Test de los colores de Max Lüscher - Genograma Test de la figura humana EPQ-R (Cuestionario revisado de personalidad de Eysenck) - Lista de palabras para asociación libre"
+        }
+      ]
+    }
+  ]
+}

@@ -408,6 +408,7 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
             bgColor={nutricionBg}
             color={nutricionTxt}
             nom={nutricionNom}
+            dense
             prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
           />
 

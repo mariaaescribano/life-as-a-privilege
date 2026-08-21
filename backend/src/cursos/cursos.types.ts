@@ -1,10 +1,11 @@
-// Una lección = submódulo. Puede ser de texto (Markdown) o de vídeo (YouTube).
+// Una lección = submódulo. De texto (Markdown), de vídeo (YouTube) o un test.
 export interface LeccionDB {
   id: string;
   nom: string;
-  tipo: 'texto' | 'video';
-  contenido?: string; // Markdown — para tipo 'texto'
-  video?: string;     // id de YouTube — para tipo 'video'
+  tipo: 'texto' | 'video' | 'test';
+  contenido?: string; // Markdown — para tipo 'texto' (y notas del vídeo)
+  video?: string;     // enlace de YouTube tal cual se pegó (o el id suelto)
+  ejercicios?: unknown[]; // para tipo 'test'
 }
 
 export interface ModuloDB {

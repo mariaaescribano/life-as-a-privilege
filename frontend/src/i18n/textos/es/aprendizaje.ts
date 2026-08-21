@@ -45,6 +45,8 @@ export const aprendizaje = {
   "leccion.esLaPrimera": "Es la primera lección",
   "leccion.esLaUltima": "Es la última lección",
   "leccion.transcripcion": "Transcripción",
+  "leccion.velocidad": "Velocidad",
+  "leccion.videoNoDisponible": "Este vídeo todavía no está disponible.",
 
   // ── Test dentro de un curso ─────────────────────────────────────────────
   "test.sinEjercicios": "Este test todavía no tiene ejercicios.",

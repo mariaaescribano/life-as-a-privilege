@@ -6,6 +6,17 @@
   "descripcion_contenido": "",
   "contenido": [
     {
+      "title": "Podcast del curso",
+      "submodules": [
+        {
+          "id": "l-podcast",
+          "nom": "El Trauma sin filtros",
+          "tipo": "video",
+          "video": "https://youtu.be/JlEVd79uWt8?si=08x_NN-f2k3wm8qk"
+        }
+      ]
+    },
+    {
       "title": "1. ¿Qué es?",
       "submodules": [
         {
