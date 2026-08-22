@@ -4,8 +4,9 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer"
 import { useIdioma, useT } from "../../i18n";
 import { youtubeEmbedUrl, youtubeId } from "./youtube";
 
-// Velocidades de la barra (las mismas de siempre).
-const VELOCIDADES = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+// Velocidades de la barra: de 1× hacia arriba. Nada por debajo de 1× — el
+// podcast se escucha a su ritmo o más rápido, nunca más lento.
+const VELOCIDADES = [1, 1.25, 1.5, 1.75, 2];
 const CLAVE = "videoSpeed";
 
 // El player contesta desde uno de estos dos dominios, según el que lleve el
@@ -22,7 +23,7 @@ function velocidadGuardada(): number {
  *
  * Recibe lo que se pegó en el admin — un enlace o un ID — y se encarga de todo:
  * saca el ID, mantiene el 16:9 en cualquier pantalla y pone debajo la barra de
- * velocidad (0,5× a 2×). Los colores son los de la disciplina, como el resto de
+ * velocidad (1× a 2×). Los colores son los de la disciplina, como el resto de
  * las cajas del curso.
  */
 export function VideoYoutube(props: {
