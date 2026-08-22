@@ -23,7 +23,7 @@ export const web = {
   "materiales.libros": "Libros",
 
   // ── Vídeos (/videos) ───────────────────────────────────────────────────
-  "videos.subtitulo": "Ideas breves para ver en un minuto, una por cada disciplina del mapa",
+  "videos.subtitulo": "",
   "videos.vacio": "Todavía no hay vídeos publicados. Vuelve pronto.",
 
   // ── Tarjeta de la creadora (CreadoraCard) ──────────────────────────────
