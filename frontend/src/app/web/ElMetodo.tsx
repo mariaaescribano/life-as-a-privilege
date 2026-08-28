@@ -322,9 +322,17 @@ function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
   const t = useT();
   const nombreEnMapa = useNombreDisciplinaEnMapa();
-  // En El Mapa, "Hinduismo" se muestra como "Ayurveda". En móvil se pide la
-  // versión corta, que solo tiene Medicina China («Med. China»).
-  const displayName = nombreEnMapa(data.name, isMobile);
+  // En El Mapa, "Hinduismo" se muestra como "Ayurveda".
+  //
+  // El nombre va SIEMPRE en una línea: si salta a dos, la tarjeta crece de alto
+  // y descuadra la fila. Se pide la versión corta en móvil y también cuando el
+  // idioma alarga el nombre («Chinese Medicine» → «Chinese Med.»); en español
+  // «Medicina China» cabe entera y se queda como está. Solo Medicina China
+  // tiene versión corta: el resto devuelve su nombre largo tal cual. Mismo
+  // criterio que en las tarjetas de Welcome.
+  const nombreLargo = nombreEnMapa(data.name);
+  const displayName =
+    isMobile || nombreLargo.length > 14 ? nombreEnMapa(data.name, true) : nombreLargo;
   // Entrada: la tarjeta sube a su sitio y se enfoca, y las de una misma fila lo
   // hacen UNA DETRÁS DE OTRA, de izquierda a derecha.
   //

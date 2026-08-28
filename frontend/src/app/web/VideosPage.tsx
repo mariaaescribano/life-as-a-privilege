@@ -11,23 +11,32 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useSinBarraDeScroll } from "../../components/global/sinBarraDeScroll";
 import { disciplinaCursoBySlug } from "../../data/disciplinasCurso";
-import { portadaDe, youtubeId, useVideos, type VideoApi } from "../../data/videosApi";
+import { portadaDe, useVideos, type VideoApi } from "../../data/videosApi";
+import { nombreProveedor, proveedorVideo, videoEmbedUrl } from "../../data/videoLink";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { useT } from "../../i18n";
 
 // ─────────────────────────────────────────────────────────────────────────
-// VisorShort — el short se ve AQUÍ, no en YouTube.
+// VisorShort — el vídeo se ve AQUÍ, no en la red de la que viene.
 //
 // Un popup con el reproductor incrustado en vertical (9:16, lo que mide un
-// short). El alto manda: el ancho sale de él, y `maxH` impide que en una
-// pantalla estrecha se salga por los lados. El <iframe> solo existe mientras el
-// popup está abierto — al cerrarlo se desmonta y el vídeo para solo.
+// short, un TikTok o un reel). El alto manda: el ancho sale de él, y `maxH`
+// impide que en una pantalla estrecha se salga por los lados. El <iframe> solo
+// existe mientras el popup está abierto — al cerrarlo se desmonta y el vídeo
+// para solo.
+//
+// De dónde venga el vídeo da igual: `videoEmbedUrl` reconoce YouTube, TikTok e
+// Instagram y devuelve la dirección de su reproductor. Si de un enlace no sale
+// reproductor (los enlaces cortos de TikTok, por ejemplo), en vez de un hueco
+// negro se ofrece abrirlo en su red.
 // ─────────────────────────────────────────────────────────────────────────
 function VisorShort({ video, onClose }: { video: VideoApi | null; onClose: () => void }) {
   const cuerpoRef = useRef<HTMLDivElement>(null);
   useSinBarraDeScroll(cuerpoRef, !!video);
 
-  const id = video ? youtubeId(video.url) : "";
+  const t = useT();
+  const src = video ? videoEmbedUrl(video.url) : "";
+  const proveedor = video ? proveedorVideo(video.url) : "";
   const disc = video ? disciplinaCursoBySlug(video.disciplina) : undefined;
   const tinta = disc?.color ?? "#ffffff";
 
@@ -69,17 +78,56 @@ function VisorShort({ video, onClose }: { video: VideoApi | null; onClose: () =>
             // El halo de siempre (el del header), no una sombra oscura.
             boxShadow={glowHeader(tinta)}
           >
-            {id && (
+            {src ? (
               <Box
                 as="iframe"
-                src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0&playsinline=1`}
+                src={src}
                 title={video?.titulo ?? ""}
                 w="100%"
                 h="100%"
                 border="none"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                // `autoplay` aquí es lo que deja al reproductor arrancar solo:
+                // el permiso del clic de la tarjeta no entra en el iframe si no
+                // se le cede. Instagram no arranca solo ni con esto — pide un
+                // toque, y es cosa suya.
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                 allowFullScreen
               />
+            ) : (
+              video && (
+                <Flex
+                  direction="column"
+                  align="center"
+                  justify="center"
+                  gap={5}
+                  h="100%"
+                  px={7}
+                  textAlign="center"
+                  fontFamily="'EB Garamond', serif"
+                >
+                  <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
+                    {t("videos.fuera")}
+                  </Text>
+                  <Box
+                    as="a"
+                    href={video.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    px={6}
+                    py={3}
+                    borderRadius="full"
+                    color={tinta}
+                    fontWeight="700"
+                    letterSpacing="0.06em"
+                    border={`1.5px solid ${tinta}`}
+                    boxShadow={glowHeader(tinta)}
+                    transition="transform 0.25s ease"
+                    _hover={{ transform: "translateY(-2px)" }}
+                  >
+                    {t("videos.abrirEn", { red: nombreProveedor(proveedor) || "…" })}
+                  </Box>
+                </Flex>
+              )
             )}
           </Box>
         </ModalBody>

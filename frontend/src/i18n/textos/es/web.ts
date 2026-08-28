@@ -25,6 +25,8 @@ export const web = {
   // ── Vídeos (/videos) ───────────────────────────────────────────────────
   "videos.subtitulo": "",
   "videos.vacio": "Todavía no hay vídeos publicados. Vuelve pronto.",
+  "videos.fuera": "Este vídeo no se puede ver aquí dentro.",
+  "videos.abrirEn": "Abrir en {red}",
 
   // ── Tarjeta de la creadora (CreadoraCard) ──────────────────────────────
   "creadora.accion": "Conocer a la creadora",

@@ -19,6 +19,8 @@ export const web = {
   // ── Videos (/videos) ───────────────────────────────────────────────────
   "videos.subtitulo": "Short ideas you can watch in a minute, one for each discipline on the map",
   "videos.vacio": "No videos published yet. Come back soon.",
+  "videos.fuera": "This video can't be played here.",
+  "videos.abrirEn": "Open on {red}",
 
   // ── Creator card (CreadoraCard) ────────────────────────────────────────
   "creadora.accion": "Meet the creator",

@@ -93,7 +93,7 @@ const SiteFooter = () => {
         </Box>
         <Box
           as="a"
-          href="https://www.instagram.com/_maria__escribano/"
+          href="https://www.instagram.com/maria_escribano_arce/"
           target="_blank"
           rel="noopener noreferrer"
           display="inline-flex"

@@ -1,6 +1,6 @@
-// Un vídeo corto (short de YouTube) de la sección «Vídeos».
+// Un vídeo corto (short de YouTube, TikTok o reel de Instagram) de «Vídeos».
 //
-// No se aloja nada: el vídeo vive en YouTube y aquí solo se guarda el enlace,
+// No se aloja nada: el vídeo vive en su red y aquí solo se guarda el enlace,
 // la portada que sube la admin y a qué disciplina pertenece (mismo slug que
 // usan los cursos, para poder pintar su icono y su color).
 export interface VideoDB {
@@ -8,7 +8,7 @@ export interface VideoDB {
   disciplina: string;  // slug de la disciplina (el mismo de `curso.modalidad`)
   titulo: string;
   portada: string;     // URL de la portada subida (o ruta a /img)
-  url: string;         // enlace al short de YouTube
+  url: string;         // enlace al vídeo (YouTube, TikTok o Instagram)
   publicado: boolean;
   orden: number;
   created_at?: string;

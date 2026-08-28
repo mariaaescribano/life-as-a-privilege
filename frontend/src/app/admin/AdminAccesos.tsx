@@ -6,8 +6,9 @@
 // /user/admin/acceso, que exige el token de admin desbloqueado (email en
 // ADMIN_EMAILS + contraseña).
 //
-// Como el recorrido va en orden, conceder una disciplina concede también todas
-// las anteriores. «Quitar acceso» cierra las ocho.
+// Cada disciplina se abre y se cierra por separado: dar Cábala no obliga a dar
+// astrología, porque el recorrido no lleva orden obligatorio. Se toca la pastilla
+// para abrirla y se vuelve a tocar para cerrarla; «Quitar acceso» cierra las ocho.
 //
 // Aquí también se BORRAN cuentas (DELETE /user/admin/usuario/:id). Eso se lleva
 // la cuenta y todos sus datos —recorrido, notas, reservas, foto— y no tiene
@@ -96,18 +97,20 @@ export default function AdminAccesos() {
         (u) => (u.name ?? "").toLowerCase().includes(t) || (u.email ?? "").toLowerCase().includes(t),
       );
 
-  const conceder = async (userId: string, hasta: string) => {
+  // Abre o cierra UNA disciplina (o las ocho con "all"). El backend solo toca la
+  // que se le pide, así que las demás se quedan como estaban.
+  const cambiar = async (userId: string, disciplina: string, abierta: boolean) => {
     setGuardando(userId);
     setAviso(null);
     try {
       const { data } = await axios.post<CuentaAdmin>(
         `${API_URL}/user/admin/acceso`,
-        { userId, hasta },
+        { userId, disciplina, abierta },
         { headers: adminHeaders() },
       );
       setUsuarios((prev) => prev.map((u) => (u.id === userId ? { ...u, ...data } : u)));
     } catch {
-      setAviso("No se pudo conceder el acceso.");
+      setAviso(abierta ? "No se pudo conceder el acceso." : "No se pudo cerrar la disciplina.");
     } finally {
       setGuardando(null);
     }
@@ -265,7 +268,8 @@ export default function AdminAccesos() {
                           </Text>
                         )}
                         <Text color="rgba(255,255,255,0.7)" fontSize="sm" mb={3}>
-                          Abre hasta la disciplina que elijas (incluye las anteriores):
+                          Toca una disciplina para abrirla; tócala otra vez para cerrarla. Van sueltas:
+                          abrir una no abre las anteriores.
                         </Text>
 
                         <Flex wrap="wrap" gap={2} mb={4}>
@@ -275,7 +279,8 @@ export default function AdminAccesos() {
                               <Box
                                 key={d.scope}
                                 as="button"
-                                onClick={() => conceder(u.id, d.scope)}
+                                onClick={() => cambiar(u.id, d.scope, !abiertaYa)}
+                                title={abiertaYa ? `Cerrar ${d.nombre}` : `Abrir ${d.nombre}`}
                                 disabled={ocupado}
                                 px={3}
                                 py={1.5}
@@ -299,7 +304,7 @@ export default function AdminAccesos() {
                         <Flex gap={3} wrap="wrap">
                           <Box
                             as="button"
-                            onClick={() => conceder(u.id, "all")}
+                            onClick={() => cambiar(u.id, "all", true)}
                             disabled={ocupado}
                             px={5}
                             py={2}

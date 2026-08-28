@@ -13,7 +13,8 @@ import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 import { API_URL } from "../../GlobalVariables";
 import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinasCurso";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
-import { portadaDe, youtubeId, type VideoApi } from "../../data/videosApi";
+import { portadaDe, type VideoApi } from "../../data/videosApi";
+import { nombreProveedor, proveedorVideo, videoEmbedUrl } from "../../data/videoLink";
 
 const btnStyle = {
   fontFamily: "'EB Garamond', serif", fontWeight: 700, letterSpacing: "0.06em",
@@ -181,7 +182,10 @@ export default function AdminVideos() {
             <Flex gap={2} mt={1.5} align="center" flexWrap="wrap">
               <Badge colorScheme={v.publicado ? "teal" : "gray"}>{v.publicado ? "Publicado" : "Oculto"}</Badge>
               {!v.portada?.trim() && <Badge colorScheme="orange">Sin portada propia</Badge>}
-              {!youtubeId(v.url) && <Badge colorScheme="red">Enlace raro</Badge>}
+              {proveedorVideo(v.url) && <Badge colorScheme="purple">{nombreProveedor(proveedorVideo(v.url))}</Badge>}
+              {/* Rojo solo si de ese enlace NO sale reproductor: entonces la
+                  web no puede pintarlo dentro y solo ofrece abrirlo fuera. */}
+              {!videoEmbedUrl(v.url) && <Badge colorScheme="red">No se puede incrustar</Badge>}
               <Text color={color} fontSize="sm" opacity={0.85} noOfLines={1} style={{ textShadow: tShadow }}>
                 {v.url}
               </Text>
@@ -233,7 +237,7 @@ export default function AdminVideos() {
           Vídeos
         </Text>
         <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" maxW="620px">
-          Cada vídeo es un short de YouTube: aquí se guardan el enlace, la portada y la disciplina a la que pertenece.
+          Cada vídeo es un short de YouTube, un TikTok o un reel de Instagram: aquí se guardan el enlace, la portada y la disciplina a la que pertenece.
         </Text>
         <Box as="button" onClick={abrirNuevo} {...btnStyle}
              color="#008080" bg="white" px={6} py="11px" fontSize={{ base: "md", md: "lg" }}
@@ -315,7 +319,7 @@ export default function AdminVideos() {
                        placeholder="…o una ruta: /miniaturas/…" size="sm" {...inputStyle} />
                 {!form.portada.trim() && (
                   <Text fontSize="xs" opacity={0.65} textAlign="center" fontStyle="italic">
-                    Si no pones ninguna, se usa la miniatura de YouTube.
+                    Si no pones ninguna, se usa la miniatura de YouTube. TikTok e Instagram no dan miniatura: ahí hay que subirla.
                   </Text>
                 )}
               </Flex>
@@ -334,9 +338,24 @@ export default function AdminVideos() {
                          placeholder="Qué es el dosha Vata" {...inputStyle} />
                 </Box>
                 <Box>
-                  <Text fontSize="sm" mb={1} opacity={0.8}>Enlace del short de YouTube</Text>
+                  <Text fontSize="sm" mb={1} opacity={0.8}>Enlace del vídeo (YouTube, TikTok o Instagram)</Text>
                   <Input value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })}
-                         placeholder="https://www.youtube.com/shorts/XXXXXXXXXXX" {...inputStyle} />
+                         placeholder="https://www.youtube.com/shorts/… · https://www.tiktok.com/@usuaria/video/… · https://www.instagram.com/reel/…" {...inputStyle} />
+                  {/* Aviso en vivo: si de lo pegado no sale reproductor, se dice
+                      aquí y no se descubre luego en la web. El caso típico es el
+                      enlace corto de TikTok (vm.tiktok.com / tiktok.com/t/…),
+                      que es una redirección y no lleva dentro el número. */}
+                  {form.url.trim() && !videoEmbedUrl(form.url) && (
+                    <Text fontSize="xs" mt={1.5} color="#ffd0d0" fontStyle="italic">
+                      De este enlace no sale reproductor: en la web solo se podrá abrir fuera.
+                      {proveedorVideo(form.url) === "tiktok" && " Pega el enlace largo de TikTok, el que lleva /video/<número>."}
+                    </Text>
+                  )}
+                  {form.url.trim() && !!videoEmbedUrl(form.url) && (
+                    <Text fontSize="xs" mt={1.5} opacity={0.7} fontStyle="italic">
+                      {nombreProveedor(proveedorVideo(form.url))}: se verá dentro de la web.
+                    </Text>
+                  )}
                 </Box>
                 <Flex gap={4} align="flex-end" flexWrap="wrap">
                   <Box w="120px">

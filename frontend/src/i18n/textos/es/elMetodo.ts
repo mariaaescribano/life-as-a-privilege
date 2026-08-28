@@ -47,7 +47,7 @@ export const elMetodo = {
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",
   "elMetodo.hero.sub":
-    "El Mapa reúne ocho perspectivas sobre ti —mente, historia, cuerpo, naturaleza y cultura— para ayudarte a comprender de dónde vienen tus patrones y cómo encajan las piezas.",
+    "El Mapa reúne ocho perspectivas sobre ti —mente, historia, cuerpo, naturaleza y cultura— para ayudarte a comprender de dónde vienen tus patrones.",
   "elMetodo.hero.cta": "Empezar mi Mapa",
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).
@@ -61,7 +61,7 @@ export const elMetodo = {
   "elMetodo.espejo.3": "Salir, distraerte, pasarlo bien, reír…pero al día siguiente, vuelves al mismo sitio.",
   "elMetodo.espejo.4": "La pregunta no es qué te pasa, sino qué te ha pasado.",
   "elMetodo.espejo.cierre":
-    "El Mapa no te da otra técnica más.\nTe acompaña a **descubrir tu mente, tu historia y tu ser**.",
+    "El Mapa no te da otra técnica más.\nTe acompaña a **descubrir tu mente, tu historia y tu cuerpo**.",
 
   // Debajo del mandala que va justo antes del cómic del origen: quien está en el
   // centro de las ocho disciplinas.

@@ -283,18 +283,23 @@ export class UserService {
     return data ?? [];
   }
 
-  // --------- Conceder acceso gratis a una cuenta (panel admin) ---------
+  // --------- Abrir o cerrar acceso a una cuenta (panel admin) ---------
   // Marca las disciplinas como suscritas SIN pasar por Stripe. Solo lo puede
   // llamar el controlador tras JwtAuthGuard + AdminGuard, así que no es una vía
-  // para que un usuario se desbloquee a sí mismo. Como el recorrido es en orden,
-  // conceder una disciplina concede también todas las anteriores.
-  async concederAcceso(id: string, hasta: DisciplinaKey | 'all' = 'all') {
-    const limite = hasta === 'all' ? DISCIPLINAS_ORDEN.length - 1 : DISCIPLINAS_ORDEN.indexOf(hasta);
-    if (limite < 0) throw new ConflictException('Disciplina desconocida');
+  // para que un usuario se desbloquee a sí mismo.
+  //
+  // Cada disciplina va SUELTA: abrir una NO arrastra a las anteriores, porque el
+  // recorrido no obliga a un orden (se puede empezar por donde se quiera). Con
+  // 'all' se abren —o se cierran— las ocho de golpe.
+  async concederAcceso(id: string, disciplina: DisciplinaKey | 'all' = 'all', abierta = true) {
+    if (disciplina !== 'all' && !DISCIPLINAS_ORDEN.includes(disciplina)) {
+      throw new ConflictException('Disciplina desconocida');
+    }
 
     await this.getUserById(id); // 404 si la cuenta no existe
-    for (const key of DISCIPLINAS_ORDEN.slice(0, limite + 1)) {
-      await this.setSuscripcion(id, key, true);
+    const claves = disciplina === 'all' ? DISCIPLINAS_ORDEN : [disciplina];
+    for (const key of claves) {
+      await this.setSuscripcion(id, key, abierta);
     }
     return await this.getUserById(id);
   }

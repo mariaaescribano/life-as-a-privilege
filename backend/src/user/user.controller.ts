@@ -122,15 +122,20 @@ export class UserController {
     return (usuarios as any[]).map((u) => ({ ...u, acceso_libre: isAccesoLibreEmail(u?.email) }));
   }
 
+  // Abre o cierra UNA disciplina suelta (o las ocho con 'all'). No arrastra a las
+  // anteriores: el recorrido no lleva orden obligatorio, así que se puede regalar
+  // solo Cábala sin regalar astrología.
   @Post("admin/acceso")
   @UseGuards(JwtAuthGuard, AdminGuard)
-  async concederAcceso(@Body() body: { userId?: string; hasta?: DisciplinaKey | 'all' }) {
+  async concederAcceso(
+    @Body() body: { userId?: string; disciplina?: DisciplinaKey | 'all'; abierta?: boolean },
+  ) {
     if (!body?.userId) throw new BadRequestException('userId requerido');
-    const hasta = body.hasta ?? 'all';
-    if (hasta !== 'all' && !DISCIPLINAS_ORDEN.includes(hasta)) {
+    const disciplina = body.disciplina ?? 'all';
+    if (disciplina !== 'all' && !DISCIPLINAS_ORDEN.includes(disciplina)) {
       throw new BadRequestException('Disciplina desconocida');
     }
-    return await this.usersService.concederAcceso(body.userId, hasta);
+    return await this.usersService.concederAcceso(body.userId, disciplina, body.abierta !== false);
   }
 
   @Post("admin/acceso/revocar")
