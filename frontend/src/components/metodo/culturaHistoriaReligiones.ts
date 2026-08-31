@@ -41,7 +41,7 @@ const FOTOS: Record<string, string> = {
   "grecia-conquista-roma": "conquista",
   "mitologia-hindu": "hindu",
   "mitologia-china": "china",
-  sintoismo: "sintoismo",          // FALTA la foto (se pinta el marcador)
+  sintoismo: "sintoismo",
   "religiones-africanas": "africa",
   "america-precolombina": "america",
   // IV · La gran revolución espiritual
@@ -67,11 +67,11 @@ const FOTOS: Record<string, string> = {
   "sunies-chiies": "sunies",
   "gran-cisma": "cisma",
   "reforma-protestante": "reforma",
-  sijismo: "sijismo",              // FALTA la foto (se pinta el marcador)
+  sijismo: "sijismo",              
   // VIII · Un mundo, muchas creencias
   "expansion-religiones": "expansion",
   "mundo-conectado": "conectado",
-  secularizacion: "secularizacion", // FALTA la foto (se pinta el marcador)
+  secularizacion: "secularizacion", 
   viaje: "viaje",
 };
 

@@ -223,7 +223,9 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                         fontSize={{ base: "md", md: "lg" }}
                         letterSpacing="0.18em"
                         textTransform="uppercase"
-                        whiteSpace="nowrap"
+                        // Sin «nowrap»: hay etiquetas largas («ESTUDIO
+                        // ASTROLÓGICO») y en un móvil estrecho se saldrían del
+                        // panel. Que pasen a dos líneas antes que desbordar.
                         opacity={item.activo ? 1 : 0.82}
                         textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 24px rgba(255,255,255,0.22)"
                         transition="opacity 0.3s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1)"

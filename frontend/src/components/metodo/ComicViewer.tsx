@@ -32,6 +32,11 @@ const twinkle = keyframes`
 
 export interface Vineta {
   src: string;
+  /** Ilustración de reserva: si `src` no existe todavía, se pinta esta en su
+   *  lugar (en vez del cartel «próximamente»). La usan las páginas
+   *  «Profundiza» de Cultura, que van estrenando ilustración propia una a una
+   *  y mientras tanto siguen enseñando la del momento al que pertenecen. */
+  srcFallback?: string;
   paragraphs: string[];
   /** Encabezado opcional sobre el texto (p.ej. "La Madera genera el Fuego"). */
   titulo?: string;
@@ -293,6 +298,25 @@ export function ComicViewer({
     Math.min(Math.max(initialIndex, 0), Math.max(vinetas.length - 1, 0)));
   const [imgFailed, setImgFailed] = useState<Record<number, boolean>>({});
   const [imgLoaded, setImgLoaded] = useState<Record<number, boolean>>({}); // viñeta ya cargada
+  // Viñetas que se han pasado a su ilustración de reserva (`srcFallback`)
+  // porque la suya todavía no está subida.
+  const [imgReserva, setImgReserva] = useState<Record<number, boolean>>({});
+  // La foto que toca pintar en la viñeta `i`: la suya o, si ya falló y tiene
+  // reserva, la de reserva.
+  const fotoDe = (i: number) => {
+    const v = vinetas[i];
+    if (!v) return undefined;
+    return imgReserva[i] && v.srcFallback ? v.srcFallback : v.src;
+  };
+  // Una foto que no carga: si la viñeta tiene reserva y aún no la ha usado, se
+  // reintenta con ella; si no, se da por fallida (cartel «próximamente»).
+  const fotoFallo = (i: number) => {
+    if (vinetas[i]?.srcFallback && !imgReserva[i]) {
+      setImgReserva((s) => ({ ...s, [i]: true }));
+      return;
+    }
+    setImgFailed((s) => (s[i] ? s : { ...s, [i]: true }));
+  };
   // Espera de la foto de FONDO de la disciplina (solo con `esperarFondo`): hasta
   // que cargue del todo se muestra el loader a pantalla completa y no el box.
   const esperaFondo = !!(esperarFondo && disciplinaBgImage);
@@ -392,19 +416,21 @@ export function ComicViewer({
     const imgs: HTMLImageElement[] = [];
     vecinas.forEach((i) => {
       if (sinFoto?.(i)) return;
-      const src = vinetas[i]?.src;
+      const src = fotoDe(i);
       if (!src) return;
       const img = new window.Image();
       img.onload = () => setImgLoaded((s) => (s[i] ? s : { ...s, [i]: true }));
-      img.onerror = () => setImgFailed((s) => (s[i] ? s : { ...s, [i]: true }));
+      img.onerror = () => fotoFallo(i);
       img.src = encodeURI(src);
       imgs.push(img);
     });
     return () => {
       imgs.forEach((img) => { img.onload = null; img.onerror = null; });
     };
+    // `imgReserva` entra en las dependencias para que, cuando una viñeta se pase
+    // a su ilustración de reserva, la precarga vuelva a lanzarse con esa.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, total]);
+  }, [index, total, imgReserva]);
 
   const handleComplete = () => {
     if (onComplete) onComplete();
@@ -873,7 +899,7 @@ export function ComicViewer({
               >
                 {loader ?? comicLoaderPorColor(themeColor)}
                 <Image
-                  src={encodeURI(current.src)}
+                  src={encodeURI(fotoDe(index) ?? current.src)}
                   alt=""
                   position="absolute"
                   w="1px"
@@ -881,7 +907,7 @@ export function ComicViewer({
                   opacity={0}
                   pointerEvents="none"
                   onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
-                  onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
+                  onError={() => fotoFallo(index)}
                 />
               </Flex>
             )}
@@ -936,7 +962,7 @@ export function ComicViewer({
               {!imgFailed[index] ? (
                 <>
                   <Image
-                    src={encodeURI(current.src)}
+                    src={encodeURI(fotoDe(index) ?? current.src)}
                     alt={`Viñeta ${index + 1}`}
                     w="100%"
                     h="100%"
@@ -953,7 +979,7 @@ export function ComicViewer({
                     opacity={imgLoaded[index] ? 1 : 0}
                     transition="opacity 0.4s ease"
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
-                    onError={() => setImgFailed((s) => ({ ...s, [index]: true }))}
+                    onError={() => fotoFallo(index)}
                   />
                   {/* Mientras la viñeta carga, el loader de la disciplina. */}
                   {!imgLoaded[index] && (

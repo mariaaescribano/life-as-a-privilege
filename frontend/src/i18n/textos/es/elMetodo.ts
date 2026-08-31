@@ -56,12 +56,12 @@ export const elMetodo = {
   // ── 2. EL ESPEJO ───────────────────────────────────────────────────────
   // Cuatro frases para que quien lee se reconozca antes de que le contemos
   // nada. Van de menos a más y la cuarta gira la pregunta entera.
-  "elMetodo.espejo.1": "Sabes lo que te pasa, pero no por qué te pasa.",
-  "elMetodo.espejo.2": "Has intentado dejar de sentirte mal.",
-  "elMetodo.espejo.3": "Salir, distraerte, pasarlo bien, reír…pero al día siguiente, vuelves al mismo sitio.",
+  "elMetodo.espejo.1": "Sabes que te pasa algo, pero no por qué te pasa.",
+  "elMetodo.espejo.2": "Te dicen que deberías de alegrarte, de relajarte y ser feliz.",
+  "elMetodo.espejo.3": "Por eso, has intentado salir, distraerte, pasarlo bien, reír…pero al día siguiente, vuelves al mismo sitio.",
   "elMetodo.espejo.4": "La pregunta no es qué te pasa, sino qué te ha pasado.",
   "elMetodo.espejo.cierre":
-    "El Mapa no te da otra técnica más.\nTe acompaña a **descubrir tu mente, tu historia y tu cuerpo**.",
+    "El Mapa no te da otra técnica más.\nTe acompaña a **descubrir tu mente, tu historia, tus heridas y tu cuerpo**.",
 
   // Debajo del mandala que va justo antes del cómic del origen: quien está en el
   // centro de las ocho disciplinas.
@@ -152,6 +152,9 @@ export const elMetodo = {
   "elMetodo.faq.8.p": "¿Sirve si ya estoy en terapia?",
   "elMetodo.faq.8.r":
     "Sí, y suele acompañar muy bien. Esto no sustituye a un tratamiento ni lo pretende: es una exploración de ti mismo que te da material y palabras para entenderte por completo, no por partes.",
+  "elMetodo.faq.9.p": "¿Los dibujos están hechos con IA generativa?",
+  "elMetodo.faq.9.r":
+    "Sí. La intención de los dibujos es que puedas ponerte en contexto y sumergirte en la explicación. Si quieres arte, te recomiendo de corazón que vayas a museos.",
 
   // ── 13. BARRA FIJA (móvil) ─────────────────────────────────────────────
   "elMetodo.barra.desde": "Desde {precio}",
@@ -167,6 +170,19 @@ export const elMetodo = {
   "elMetodo.dudas": "Tengo dudas",
   "elMetodo.dudas.asunto": "Consulta — Life as a Privilege",
   "elMetodo.dudas.placeholder": "Escribe aquí tu consulta...",
+
+  // ── Llamada gratuita (botón flotante + popup) ──────────────────────────
+  // Sale solo a los 5 s de entrar (una vez por sesión) y con el botón flotante.
+  "elMetodo.llamada.boton": "Llamada",
+  // El título va en DOS líneas: el «sin coste» cae debajo, más pequeño y en
+  // cursiva. Por eso son dos claves y no una con salto de línea: cada línea
+  // tiene su tipografía, y en inglés el reparto de palabras no es el mismo.
+  "elMetodo.llamada.titulo": "Agendar una llamada",
+  "elMetodo.llamada.tituloSufijo": "sin coste",
+  "elMetodo.llamada.texto": "Permíteme conocerte y contarte cómo puedo acompañarte.",
+  "elMetodo.llamada.remate": "No tienes que hacerlo todo solo/a.",
+  "elMetodo.llamada.cta": "Agendar llamada",
+  "elMetodo.llamada.cerrar": "Cerrar",
 
   // ── Cómic del origen (ComicPorQueExiste) ───────────────────────────────
   // Solo los rótulos de navegación (los leen los lectores de pantalla). Las

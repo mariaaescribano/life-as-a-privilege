@@ -12,7 +12,7 @@ import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
 import { ComicPorQueExiste } from "../../components/metodo/ComicPorQueExiste";
-import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { precargarImagenes, usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { BloqueDiferido } from "../../components/global/BloqueDiferido";
@@ -21,8 +21,8 @@ import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../compone
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
+import { BotonLlamadaFlotante, PopupLlamada } from "../../components/metodo/LlamadaCta";
 import {
-  BarraFijaMovil,
   EspejoBloque,
   FaqBloque,
   MecanismoBloque,
@@ -53,6 +53,8 @@ import {
  * a partir de este.
  */
 const ZOOM_PAGINA = 1.01;
+/** Marca de sesión: el popup de la llamada se abre solo UNA vez por visita. */
+const LLAMADA_VISTA = "elMetodo.llamadaVista";
 /** El inverso exacto, para las 8 tarjetas: deshace el zoom de la página. */
 const ZOOM_TARJETAS = 1 / ZOOM_PAGINA;
 
@@ -141,12 +143,26 @@ const modalidades: ModalidadData[] = [
   },
 ];
 
-// Todas las fotos que deben estar cargadas antes de revelar la página (el logo
-// + los fondos propios de cada disciplina). Mientras, se ve <LifeLoading/>.
-const METODO_IMGS: string[] = [
-  "/img/icono/life.png",
-  ...(modalidades.map((m) => disciplinaBgImg(m.name)).filter(Boolean) as string[]),
-];
+// Las fotos que deben estar cargadas antes de revelar la página: solo el logo de
+// la cabecera, que es la única de la primera pantalla. Mientras, se ve
+// <LifeLoading/>.
+//
+// Aquí estaban también los siete fondos de disciplina, y eran 542 kB de los
+// 1,3 MB que había que esperar: con cobertura mala, 2-3 s de mandala girando por
+// unas acuarelas que no se ven hasta 4.400 px más abajo. Ahora se piden aparte
+// (METODO_IMGS_DIFERIDAS), sin bloquear la entrada.
+const METODO_IMGS: string[] = ["/img/icono/life.png"];
+
+// Los fondos de las ocho tarjetas. Se piden EN CUANTO la página ya se ve, no
+// antes: media página de scroll por delante da tiempo de sobra a que lleguen, y
+// así las tarjetas siguen entrando con su acuarela puesta.
+//
+// Si alguien baja a toda prisa con mala cobertura y una tarjeta se adelanta a su
+// foto, no queda un hueco blanco: DisciplinaBgLayer pinta debajo el color sólido
+// de la disciplina (su `fallbackBg`) y la acuarela entra encima.
+const METODO_IMGS_DIFERIDAS: string[] = modalidades
+  .map((m) => disciplinaBgImg(m.name))
+  .filter(Boolean) as string[];
 
 // ── Sombras de texto del recorrido ──
 // La mayoría de disciplinas usan una "luz" suave basada en su color (natural).
@@ -501,6 +517,9 @@ export default function ElMetodo() {
   const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
   const [dudasOpen, setDudasOpen] = useState(false);
   const [bookCallOpen, setBookCallOpen] = useState(false);
+  // Popup de la llamada gratuita: se abre SOLO a los 15 s de entrar (una vez por
+  // sesión) y, a partir de ahí, con el botón flotante.
+  const [llamadaOpen, setLlamadaOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(METODO_IMGS);
@@ -540,6 +559,36 @@ export default function ElMetodo() {
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
   }, [listo]);
 
+  // ── El popup de la llamada, a los 15 segundos ──
+  // La cuenta arranca cuando la página ya se VE (`listo`), no cuando se monta:
+  // si empezara antes, se comería parte de la espera con la pantalla de carga.
+  // Eran 5 s, y a los 5 s quien acaba de llegar todavía está leyendo el titular:
+  // la tarjeta le caía encima antes de entender dónde está. Con 15 s ya ha leído
+  // la primera pantalla y probablemente ha empezado a bajar.
+  // La marca va en sessionStorage: se ofrece una vez por visita, no en cada
+  // vuelta a la página; al volver otro día se ofrece de nuevo.
+  useEffect(() => {
+    if (!listo) return;
+    if (sessionStorage.getItem(LLAMADA_VISTA) === "1") return;
+    const id = setTimeout(() => {
+      sessionStorage.setItem(LLAMADA_VISTA, "1");
+      setLlamadaOpen(true);
+    }, 15000);
+    return () => clearTimeout(id);
+  }, [listo]);
+
+  // ── Los fondos de las tarjetas, en cuanto la página ya se ve ──
+  // Fuera del camino crítico: no retienen la pantalla de carga, pero se piden
+  // enseguida para que estén en caché mucho antes de que la primera tarjeta
+  // asome (están media página más abajo). Un respiro antes de pedirlos para no
+  // competir con la entrada de la primera pantalla, que es lo que se está
+  // mirando en ese momento.
+  useEffect(() => {
+    if (!listo) return;
+    const id = setTimeout(() => { void precargarImagenes(METODO_IMGS_DIFERIDAS); }, 400);
+    return () => clearTimeout(id);
+  }, [listo]);
+
   useEffect(() => {
     if (selectedCard) {
       document.body.style.overflow = "hidden";
@@ -559,9 +608,9 @@ export default function ElMetodo() {
       flexDirection="column"
       bg="#008080"
       fontFamily="'EB Garamond', serif"
-      // Hueco para la barra fija de móvil: sin él tapa la última línea del
-      // footer. En ordenador no hay barra, así que no hay hueco.
-      pb={{ base: "76px", md: 0 }}
+      // Hueco para que el botón flotante de la llamada no se coma la última
+      // línea del footer. Es turquesa sobre turquesa, así que no se nota.
+      pb={{ base: "84px", md: "56px" }}
     >
       <SiteHeader variant="auto" />
 
@@ -1677,13 +1726,21 @@ export default function ElMetodo() {
 
       <SiteFooter />
 
-      {/* ══ 13. BARRA FIJA (solo móvil) ══
-          Va FUERA del <Box> que lleva el zoom de la página: un `position:fixed`
+      {/* ══ 13. LA LLAMADA: botón flotante + popup ══
+          Sustituye a la vieja barra fija de móvil («Empezar / desde 30 €»): lo
+          que más importa es que la gente hable conmigo, no el precio. Por eso
+          el botón acompaña ahora también en ordenador, abajo a la derecha.
+          Van FUERA del <Box> que lleva el zoom de la página: un `position:fixed`
           dentro de un elemento con `zoom` no se ancla a la ventana sino a él, y
-          la barra se quedaría flotando a media página.
-          El hueco para que no tape el final del footer lo pone el `pb` del
-          contenedor de esta misma página (más abajo, en el Box exterior). */}
-      <BarraFijaMovil onAcceder={handleAcceder} />
+          se quedarían flotando a media página.
+          El hueco para que no tapen el final del footer lo pone el `pb` del
+          contenedor de esta misma página (más arriba, en el Box exterior). */}
+      <BotonLlamadaFlotante onClick={() => setLlamadaOpen(true)} />
+      <PopupLlamada
+        isOpen={llamadaOpen}
+        onClose={() => setLlamadaOpen(false)}
+        onAgendar={() => setBookCallOpen(true)}
+      />
     </Box>
   );
 }

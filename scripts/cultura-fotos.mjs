@@ -99,15 +99,26 @@ for (const [clave, historia] of Object.entries(HISTORIAS_CULTURA)) {
   }
 
   for (const era of historia.hitos) {
-    const conFoto = era.subhitos.filter((sub) => sub.foto);
-    const sinArchivo = conFoto.filter((sub) => !existe(sub.foto));
-    todas += conFoto.length;
+    // Cada momento pide su foto y, además, la de cada página «Profundiza» que
+    // tenga ilustración propia (viñetas de la 2ª en adelante con `src` distinto
+    // al del momento). Se recogen por ruta única: si dos comparten foto a
+    // propósito, cuenta una sola vez y no se pide dos veces.
+    const pedidas = new Map(); // ruta → título con el que pedir la ilustración
+    for (const sub of era.subhitos) {
+      if (sub.foto && !pedidas.has(sub.foto)) pedidas.set(sub.foto, sub.titulo);
+      for (const vin of sub.vinetas ?? []) {
+        if (!vin.src || vin.src === sub.foto || pedidas.has(vin.src)) continue;
+        pedidas.set(vin.src, `${sub.titulo} → ${vin.titulo}`);
+      }
+    }
+    const sinArchivo = [...pedidas].filter(([ruta]) => !existe(ruta));
+    todas += pedidas.size;
     faltan += sinArchivo.length;
     if (sinArchivo.length) {
       bloques.push({
         titulo: `${era.titulo} — ${era.anio}`,
-        carpeta: carpeta(sinArchivo[0].foto),
-        filas: sinArchivo.map((sub) => [archivo(sub.foto), sub.titulo]),
+        carpeta: carpeta(sinArchivo[0][0]),
+        filas: sinArchivo.map(([ruta, titulo]) => [archivo(ruta), titulo]),
       });
     }
   }

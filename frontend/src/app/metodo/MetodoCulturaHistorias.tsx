@@ -54,10 +54,11 @@ export default function MetodoCulturaHistorias() {
         // vive el popup de pago). Blinda el acceso por URL directa.
         if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }
 
-        // No mostramos la página hasta que las portadas visibles estén cargadas
-        // (son solo 3 y se ven todas de golpe: no hay flechas aquí).
+        // No mostramos la página hasta que las portadas estén cargadas (se ven
+        // todas de golpe: no hay flechas aquí). Las Historias que aún no tienen
+        // portada no esperan a nada: salen ya con su emoji.
         await precargarImagenes(
-          HISTORIAS.slice(0, 3).map((h) => (h.portada ? encodeURI(h.portada) : null)),
+          HISTORIAS.map((h) => (h.portada ? encodeURI(h.portada) : null)),
         );
       } catch {
         navigate("/metodo/cultura", { replace: true });
@@ -96,9 +97,10 @@ export default function MetodoCulturaHistorias() {
             />
           </Reveal>
 
-          {/* ── Las 3 primeras Historias (las demás llegarán). Foto 1:1. ── */}
+          {/* ── Las 6 Historias. Foto 1:1; las que aún no tienen portada
+                 muestran su emoji hasta que se suba. ── */}
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 5, md: 7 }} w="100%">
-            {HISTORIAS.slice(0, 3).map((h, i) => (
+            {HISTORIAS.map((h, i) => (
               <Reveal key={h.key} direction="up" distance={26} scaleFrom={0.97} delay={0.1 + i * 0.08} duration={0.7}>
                 <Box h="100%">
                   <FotoBox

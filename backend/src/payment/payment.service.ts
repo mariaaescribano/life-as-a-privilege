@@ -58,6 +58,38 @@ export class PaymentService {
   }
 
   // ═════════════════════════════════════════════════════════════════════════
+  // MÉTODOS DE PAGO (tarjeta, Bizum…)
+  // ═════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Qué formas de pago se le ofrecen a la persona en el Checkout.
+   *
+   * Por defecto, TARJETA y nada más: exactamente lo que había siempre, para que
+   * un despliegue no cambie el cobro por sorpresa.
+   *
+   * Si en el entorno está `STRIPE_PMC` (el id `pmc_…` de una «configuración de
+   * métodos de pago» de Stripe), se usa esa configuración y manda el panel de
+   * Stripe. Así se añade **Bizum** —o se quita— desde el panel, sin tocar una
+   * línea de código ni volver a desplegar.
+   *
+   * Por qué una configuración y no `payment_method_types: ['card', 'bizum']`:
+   * Bizum es un método local que Stripe sirve a través de las configuraciones
+   * (ni siquiera figura en los tipos del SDK), y enumerar los métodos a mano
+   * obligaría a tocar los diez checkouts cada vez que cambie uno.
+   *
+   * Ojo: los Payment Links (las ocho disciplinas, los cursos, la donación) NO
+   * pasan por aquí. Esos se configuran enteros en el panel de Stripe.
+   */
+  private metodosDePago(): Pick<
+    Stripe.Checkout.SessionCreateParams,
+    'payment_method_types' | 'payment_method_configuration'
+  > {
+    const pmc = process.env.STRIPE_PMC?.trim();
+    if (pmc) return { payment_method_configuration: pmc };
+    return { payment_method_types: ['card'] };
+  }
+
+  // ═════════════════════════════════════════════════════════════════════════
   // WEBHOOK DE STRIPE
   //
   // Los `verify*` de más abajo solo se ejecutan si el navegador vuelve al
@@ -231,7 +263,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {
@@ -297,7 +329,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {
@@ -363,7 +395,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {
@@ -429,7 +461,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {
@@ -495,7 +527,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {
@@ -561,7 +593,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {
@@ -627,7 +659,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {
@@ -693,7 +725,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {
@@ -852,7 +884,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       customer_email: email || undefined,
       line_items: [
         {
@@ -941,7 +973,7 @@ export class PaymentService {
 
     const session = await this.stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      ...this.metodosDePago(),
       line_items: [
         {
           price_data: {

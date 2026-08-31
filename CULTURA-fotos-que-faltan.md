@@ -12,93 +12,20 @@ Formato: `.webp`, cuadradas (se recortan en círculo y se pintan también en el 
 
 | Historia | Faltan | Total |
 | --- | --- | --- |
-| Historia Universal | 0 | 111 |
+| Historia Universal | 0 | 143 |
 | Historia de las religiones | 0 | 49 |
 | Historia de la filosofía | 0 | 103 |
-| Historia de la ciencia | 9 | 57 |
-| Historia de la medicina | 96 | 96 |
-| Historia del arte y la literatura | 54 | 54 |
-| **TOTAL** | **159** | **470** |
+| Historia de la ciencia | 0 | 57 |
+| Historia de la medicina | 69 | 95 |
+| Historia del arte y la literatura | 53 | 53 |
+| **TOTAL** | **122** | **500** |
 
-## Historia de la ciencia — faltan 9 de 57
-
-### La revolución de la física — Primera mitad del siglo XX
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `atomo-energia.webp` — El átomo: poder y peligro
-- `explorar-cosmos.webp` — Salir a mirar de cerca
-
-### Descifrar la vida — Siglo XX
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `rosalind-franklin.webp` — Rosalind Franklin
-- `editar-vida.webp` — Leer y editar la vida
-
-### La era de la información y el futuro — Siglos XX – XXI
-
-Carpeta: `frontend/public/recorrido/cultura/historiaciencia/`
-
-- `turing.webp` — Alan Turing y el ordenador
-- `internet.webp` — La red que conectó el mundo
-- `inteligencia-artificial.webp` — La inteligencia artificial
-- `ciencia-del-clima.webp` — La ciencia que avisa: el clima
-- `ciencia-no-termina.webp` — La ciencia no termina
-
-## Historia de la medicina — faltan 96 de 96
-
-### Portada de la Historia
-
-Carpeta: `frontend/public/recorrido/cultura/portadas/`
-
-- `historiamedicina.webp` — Historia de la medicina
-
-### Portadas de las eras (círculos de la línea del tiempo)
-
-Carpeta: `frontend/public/recorrido/cultura/historiamedicina/eras/`
-
-- `prologo.webp` — ¿Qué significa estar enfermo? (Antes de hablar de culturas)
-- `chaman.webp` — El chamán (Prehistoria)
-- `egipto.webp` — Egipto: observar la naturaleza (≈3000-500 a. C.)
-- `india.webp` — India: el equilibrio (≈1500 a. C. en adelante)
-- `china.webp` — China: la energía (≈2000 a. C. en adelante)
-- `grecia.webp` — Grecia: nace la medicina racional (≈siglo V a. C.)
-- `galeno-roma.webp` — Galeno y Roma: ordenar el cuerpo (≈siglo II d. C.)
-- `islam.webp` — El mundo islámico (≈siglos VIII-XIII)
-- `renacimiento.webp` — Renacimiento: mirar dentro (Siglos XVI-XVII)
-- `revolucion-cientifica.webp` — La revolución científica (Siglos XVII-XVIII)
-- `microbios.webp` — Los microbios cambian el mundo (Siglos XVIII-XIX)
-- `medicina-moderna.webp` — La medicina moderna (Siglos XIX-XX)
-- `psiquiatria.webp` — La psiquiatría: curar la mente (Siglos XIX-XX)
-- `integrativa.webp` — La medicina integrativa (Siglos XX-XXI)
-
-### ¿Qué significa estar enfermo? — Antes de hablar de culturas
-
-Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
-
-- `que-es-enfermedad.webp` — ¿Qué es una enfermedad?
-- `cuatro-tipos.webp` — Los cuatro tipos de enfermedad
-- `tres-formas-curar.webp` — Las tres formas de curar
-- `que-haces-tu.webp` — ¿Qué haces tú cuando enfermas?
-
-### El chamán — Prehistoria
-
-Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
-
-- `primeros-sanadores.webp` — Los primeros sanadores
-- `ritual-esperanza.webp` — El ritual y la esperanza
-- `placebo.webp` — El poder de la mente: el placebo
-- `comunidad-vinculo.webp` — La comunidad y el vínculo
-- `chaman-aplicalo.webp` — Aplícalo a tu vida
+## Historia de la medicina — faltan 69 de 95
 
 ### Egipto: observar la naturaleza — ≈3000-500 a. C.
 
 Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
 
-- `imhotep.webp` — Imhotep
-- `papiros-medicos.webp` — Los papiros médicos
-- `higiene-dieta.webp` — Higiene y dieta
 - `especializacion.webp` — Los primeros especialistas
 - `egipto-aplicalo.webp` — Aplícalo a tu vida
 
@@ -224,13 +151,7 @@ Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
 - `avicena-steiner.webp` — Inspiraciones y matices
 - `mensaje-final.webp` — Mensaje final
 
-## Historia del arte y la literatura — faltan 54 de 54
-
-### Portada de la Historia
-
-Carpeta: `frontend/public/recorrido/cultura/portadas/`
-
-- `historiaarte.webp` — Historia del arte y la literatura
+## Historia del arte y la literatura — faltan 53 de 53
 
 ### Portadas de las eras (círculos de la línea del tiempo)
 

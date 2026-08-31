@@ -7,7 +7,7 @@ export const header = {
   "header.mapa": "El Mapa",
   "header.materiales": "Materiales",
   "header.videos": "Vídeos",
-  "header.estudio": "Estudio",
+  "header.estudio": "Estudio astrológico",
   "header.cursos": "Cursos",
   "header.miCuenta": "Mi cuenta",
   /** Última opción del menú SIN sesión. Es una acción, no un sitio: quien no ha

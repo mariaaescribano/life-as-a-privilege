@@ -63,12 +63,17 @@ export interface HitoHistoria {
   subhitos: SubHito[];
 }
 
-/** Página «Profundiza» de un momento: una viñeta más, con la misma foto. */
+/** Página «Profundiza» de un momento: una viñeta más. */
 interface Profundiza {
   titulo: string;
   cuerpo: string[];
   /** Uno o dos datos curiosos (ver `Datos`). */
   dato?: Datos;
+  /** Ilustración PROPIA de esta página: nombre del .webp en la carpeta plana
+   *  (sin ruta ni extensión), para que no repita la foto del momento. Mientras
+   *  el archivo no esté subido se sigue viendo la del momento (`srcFallback`
+   *  del ComicViewer), así que se puede dejar puesto antes de tener la foto. */
+  foto?: string;
 }
 
 /** Los datos curiosos de un momento: uno («Dato curioso: …»), dos (el segundo
@@ -113,7 +118,9 @@ const hito = (
   const vinetas: Vineta[] = [{ src, eyebrow: fecha, titulo, paragraphs }];
   (extras ?? []).forEach((e) => {
     vinetas.push({
-      src,
+      src: e.foto ? foto(era, e.foto) : src,
+      // Hasta que la ilustración propia esté subida, la del momento.
+      srcFallback: e.foto ? src : undefined,
       eyebrow: "Profundiza",
       titulo: e.titulo,
       paragraphs: [...e.cuerpo, ...enLista(e.dato)],
@@ -253,7 +260,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         ],
         [
           {
-            titulo: "Las señas de las Dos Tierras",
+            titulo: "Las señas de las Dos Tierras", foto: "dos-tierras",
             cuerpo: [
               "Los egipcios eran obsesivos con el equilibrio:",
               "La planta del Alto Egipto era el loto; la del Bajo Egipto, el papiro. En muchas columnas y decoraciones aparecen las dos entrelazadas: es el símbolo de la unión de las Dos Tierras.",
@@ -261,7 +268,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
             ],
           },
           {
-            titulo: "Los dioses de Egipto",
+            titulo: "Los dioses de Egipto", foto: "dioses-egipto",
             cuerpo: [
               "Los egipcios no tenían un dios: tenían cientos, y no les molestaba que un mismo fenómeno se explicara de dos maneras a la vez. Su religión no era un dogma, era un modo de mantener el orden del mundo.",
               "Ra era el sol, que cada noche moría y cada mañana volvía a nacer tras atravesar el mundo de los muertos. Su viaje diario era la garantía de que el universo seguía funcionando.",
@@ -285,7 +292,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         ],
         [
           {
-            titulo: "Cómo vivía la gente de Egipto",
+            titulo: "Cómo vivía la gente de Egipto", foto: "vida-egipto",
             cuerpo: [
               "Sabemos cómo vivían los obreros porque se han excavado sus poblados y, sobre todo, porque escribían: miles de trozos de cerámica y piedra (ostraca) con listas, cartas, quejas y bromas.",
               "Los obreros de Guiza vivían en un pueblo junto a la obra con panaderías, fábricas de cerveza y talleres. En sus basureros hay huesos de vacuno, oveja y pescado en cantidad: comían carne, algo que un campesino normal casi no probaba. Y sus esqueletos muestran fracturas curadas, amputaciones y artrosis: trabajaban durísimo, pero recibían atención médica y no se los tiraba cuando se rompían.",
@@ -296,7 +303,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
             dato: "Dato curioso: las mujeres egipcias podían poseer tierras, heredar, divorciarse, declarar en juicio y firmar contratos con su propio nombre, algo impensable en Grecia o Roma mil años después. En los contratos de divorcio se especificaba qué se llevaba ella.",
           },
           {
-            titulo: "Qué pasaba cuando alguien moría",
+            titulo: "Qué pasaba cuando alguien moría", foto: "muerte-egipto",
             cuerpo: [
               "Los egipcios no eran unos obsesionados con la muerte: eran unos obsesionados con la Vida, tanto que querían que continuara.",
               "El proceso duraba unos setenta días. Se extraían los órganos internos (el cerebro se sacaba por la nariz y se tiraba, porque no le veían utilidad) y se guardaban hígado, pulmones, estómago e intestinos en cuatro vasos canopos protegidos por los hijos de Horus. El corazón se dejaba dentro: era la sede de la inteligencia, la memoria y la conciencia, y hacía falta para el juicio final. El cuerpo se cubría de natrón, una sal que lo deshidrataba, y luego se ungía con resinas y aceites y se vendaba con centenares de metros de lino, colocando amuletos entre las capas.",
@@ -340,7 +347,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: nuestras letras siguen guardando el dibujo original. La «A» viene de alef, «buey» (gírala: verás los cuernos); la «B» de bet, «casa»; la «M» de mem, «agua», con su forma de olas. Y las palabras «alfabeto» y «abecedario» no son más que sus dos primeras letras dichas seguidas.",
         [
           {
-            titulo: "Los fenicios: el pueblo que vendía de todo",
+            titulo: "Los fenicios: el pueblo que vendía de todo", foto: "fenicios",
             cuerpo: [
               "Los fenicios no fueron un imperio, y precisamente por eso son fascinantes. Eran ciudades independientes —Tiro, Sidón, Biblos, Berito— apretadas entre las montañas del Líbano y el mar, sin territorio para expandirse; por eso se hicieron marineros.",
               "Su nombre nos lo pusieron los griegos: phoínikes, «los rojos» o «los púrpuras», por el producto que los hizo célebres. De un molusco marino, el múrex, extraían un tinte púrpura tan difícil de obtener (miles de conchas para unos gramos, y un hedor insoportable en los talleres) que valía más que su peso en plata y quedó reservado para reyes. De ahí viene que el púrpura sea todavía hoy el color de la realeza.",
@@ -370,7 +377,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         ],
         [
           {
-            titulo: "Ciro el Grande",
+            titulo: "Ciro el Grande", foto: "ciro",
             cuerpo: [
               "Ciro II era el rey de un pequeño reino vasallo, Persia, sometido a los medos. En unos veinte años derrotó a los medos, conquistó Lidia y tomó Babilonia en el 539 a. C.",
               "Y ahí hizo algo insólito para la época: entró en Babilonia sin destruirla, se presentó no como conquistador extranjero sino como restaurador del dios local Marduk, respetó los templos y liberó a los pueblos deportados.",
@@ -380,7 +387,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
             ],
           },
           {
-            titulo: "Darío el Grande",
+            titulo: "Darío el Grande", foto: "dario",
             cuerpo: [
               "Si Ciro conquistó el imperio, Darío I lo convirtió en un Estado. Llegó al trono en el 522 a. C. de forma turbia, en medio de una crisis sucesoria y de rebeliones por todas partes, y pasó su primer año aplastándolas.",
               "Su versión de los hechos la dejó escrita en un lugar imposible: la inscripción de Behistún, grabada a 100 metros de altura en un acantilado, en tres idiomas (persa antiguo, elamita y babilonio), para que nadie pudiera borrarla ni alcanzarla. Siglos después, esa triple inscripción sirvió para descifrar la escritura cuneiforme, igual que la piedra de Rosetta sirvió para los jeroglíficos.",
@@ -424,7 +431,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         ],
         [
           {
-            titulo: "Batalla por batalla",
+            titulo: "Batalla por batalla", foto: "batallas-medicas",
             cuerpo: [
               "MARATÓN (490 a. C.): Los atenienses y platenses derrotaron a un ejército persa superior gracias a la estrategia de Milcíades. La leyenda del mensajero que corrió hasta Atenas dio origen al nombre de la maratón.",
               "LAS TERMÓPILAS (480 a. C.): Leónidas y unos 7.000 griegos resistieron durante dos días a los persas en un estrecho paso hasta ser rodeados por una traición. Su sacrificio permitió a los griegos ganar tiempo para evacuar y reorganizarse.",
@@ -448,7 +455,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         ],
         [
           {
-            titulo: "El hombre detrás de la leyenda",
+            titulo: "El hombre detrás de la leyenda", foto: "alejandro-hombre",
             cuerpo: [
               "De niño lo educó Aristóteles, nada menos. Le enseñó filosofía, biología y literatura, y Alejandro llevó toda su vida una copia de la Ilíada; dormía con ella y con un puñal bajo la almohada. Su modelo era Aquiles: gloria breve antes que vida larga.",
               "A los doce años domó un caballo que nadie podía montar, Bucéfalo, al darse cuenta de que se asustaba de su propia sombra: lo giró hacia el sol. Lo montó en sus campañas durante veinte años y cuando murió, en la India, le puso su nombre a una ciudad.",
@@ -472,7 +479,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: Su consejero escribió el Arthashastra, un manual de gobierno frío y práctico —sobre impuestos, espías, diplomacia y guerra— que se compara con «El Príncipe» de Maquiavelo, escrito 1.800 años después.",
         [
           {
-            titulo: "Aśoka: el rey que escribió su remordimiento en las rocas",
+            titulo: "Aśoka: el rey que escribió su remordimiento en las rocas", foto: "asoka",
             cuerpo: [
               "Lo que sabemos de Ashoka lo sabemos porque él mismo lo mandó grabar. Repartió por todo el imperio decenas de inscripciones en rocas, cuevas y columnas de piedra pulida, escritas no en el latín culto de la corte sino en las lenguas populares de cada región, para que la gente pudiera entenderlas. En el noroeste, en la actual Kandahar, hay un edicto bilingüe en griego y arameo: hablaba a cada pueblo en su idioma.",
               "En el llamado Edicto XIII cuenta la guerra de Kalinga con una franqueza que no tiene igual en ningún otro documento antiguo: dice que 100.000 personas murieron en combate, que 150.000 fueron deportadas y que muchísimas más murieron después, y añade que «el Amado de los Dioses siente profundo remordimiento». Ningún otro rey de la Antigüedad puso por escrito que su victoria le pareciera una desgracia.",
@@ -537,7 +544,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: la Roma imperial llegó al millón de habitantes, con edificios de pisos de varias alturas, más de 800 baños públicos y once acueductos que traían agua corriente a las fuentes de los barrios. Ninguna ciudad europea volvió a tener un millón de habitantes hasta el Londres de 1800.",
         [
           {
-            titulo: "Los emperadores: de Augusto a Nerón",
+            titulo: "Los emperadores: de Augusto a Nerón", foto: "emperadores-romanos",
             cuerpo: [
               "El sistema de Augusto tenía un fallo de origen: si el poder no es oficialmente hereditario pero de hecho lo es, cada muerte es una crisis.",
               "AUGUSTO (27 a. C.-14 d. C.) reinó 41 años, reformó el ejército, la administración, los impuestos y la ciudad, y se murió en la cama. Su balance, dicho por él: «encontré una Roma de ladrillo y dejé una de mármol».",
@@ -573,7 +580,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: la palabra «mártir» significa simplemente «testigo». Los propios cristianos vieron pronto el efecto que producía morir sin resistirse: Tertuliano escribió que «la sangre de los mártires es semilla».",
         [
           {
-            titulo: "Las persecuciones: qué les hacían de verdad",
+            titulo: "Las persecuciones: qué les hacían de verdad", foto: "persecuciones",
             cuerpo: [
               "Conviene decir dos cosas a la vez: las persecuciones fueron atroces, y no fueron continuas. Durante casi tres siglos hubo largos periodos de tranquilidad y estallidos locales terribles.",
               "NERÓN (64). Tras el incendio de Roma, según cuenta el historiador romano Tácito —que no era cristiano y los despreciaba—, fueron destrozados por perros, crucificados, o untados de brea y encendidos como antorchas vivientes para iluminar de noche los jardines del emperador. La tradición sitúa aquí la muerte de Pedro y de Pablo.",
@@ -585,7 +592,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
             dato: "Dato curioso: en muchos procesos, lo que más desconcertaba a los jueces romanos era la calma de los condenados. Hay actas en las que el magistrado insiste, casi suplicando, en que el reo diga la fórmula y se marche a su casa.",
           },
           {
-            titulo: "Constantino: por qué un emperador cambió de dios",
+            titulo: "Constantino: por qué un emperador cambió de dios", foto: "constantino",
             cuerpo: [
               "En 312, Constantino se jugaba el imperio contra su rival Majencio a las puertas de Roma. Según sus biógrafos, antes de la batalla vio en el cielo un signo y le dijeron «con esto vencerás»; mandó pintar el símbolo de Cristo en los escudos, y ganó.",
               "Al año siguiente proclamó la libertad de culto para todos y la devolución de los bienes confiscados a las iglesias. Conviene ser exacto: Constantino NO hizo del cristianismo la religión oficial. Legalizó, protegió y financió. La religión del Estado llegaría casi setenta años después, con Teodosio.",
@@ -596,7 +603,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
             dato: "Dato curioso: el símbolo que mandó pintar, el crismón, son las dos primeras letras griegas de «Cristo» superpuestas. Es probablemente el primer logotipo político de la historia europea.",
           },
           {
-            titulo: "Cómo cayeron los dioses griegos y romanos",
+            titulo: "Cómo cayeron los dioses griegos y romanos", foto: "caida-dioses",
             cuerpo: [
               "Los dioses del Olimpo no desaparecieron en un día ni por una derrota militar. Se fueron apagando durante dos siglos, y en ese apagón hubo de todo: desprestigio, leyes, dinero y violencia.",
               "Primero, el desgaste. La religión clásica era sobre todo ritual público: sacrificios, procesiones, augurios. No prometía salvación personal, no consolaba en la muerte, no exigía una moral, no tenía libros sagrados ni comunidad de apoyo. En un imperio en crisis, mucha gente buscó precisamente eso.",
@@ -621,7 +628,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: en el año 166 llegó a la corte china una embajada procedente del Imperio romano, en nombre del emperador Marco Aurelio. Los dos mayores imperios del planeta sabían el uno del otro, comerciaban indirectamente… y nunca llegaron a tratarse de verdad.",
         [
           {
-            titulo: "Qué se intercambiaba de verdad en la Ruta de la Seda",
+            titulo: "Qué se intercambiaba de verdad en la Ruta de la Seda", foto: "ruta-seda-comercio",
             cuerpo: [
               "Primero, un malentendido que conviene deshacer: casi nadie recorría la ruta entera. Las mercancías iban pasando de mano en mano, de oasis en oasis, con intermediarios que cobraban en cada paso. Por eso lo que llegaba al otro extremo valía una fortuna.",
               "DE CHINA HACIA OCCIDENTE: seda, cuyo secreto (que sale de un gusano que come hojas de morera) se guardó celosamente durante siglos, con pena de muerte para quien lo exportara. También laca, espejos y objetos de bronce, canela, plantas medicinales y, más adelante, papel.",
@@ -655,7 +662,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: cuando llegó a Belén la noticia del saqueo de 410, san Jerónimo escribió una frase que resume el shock de aquella generación: «la ciudad que conquistó el mundo entero ha sido conquistada».",
         [
           {
-            titulo: "Por qué cayó, en concreto",
+            titulo: "Por qué cayó, en concreto", foto: "por-que-cayo-roma",
             cuerpo: [
               "No hay una causa única, y desconfía de quien te la venda. Hay un conjunto de problemas que se alimentan entre sí:",
               "DINERO. El imperio dejó de crecer, y con él dejó de entrar botín. Para pagar un ejército cada vez más caro se devaluó la moneda y llegó una inflación brutal. Diocleciano intentó arreglarlo fijando por ley los precios de cientos de productos, y fracasó.",
@@ -688,7 +695,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: en la balaustrada de la galería de Santa Sofía hay un grafiti rúnico grabado en la piedra que dice «Halfdan estuvo aquí». Lo dejó, aburrido durante una ceremonia, un mercenario vikingo de la guardia imperial.",
         [
           {
-            titulo: "Qué hicieron los bizantinos",
+            titulo: "Qué hicieron los bizantinos", foto: "bizantinos",
             cuerpo: [
               "SALVARON EL DERECHO. El emperador Justiniano (527-565) encargó a un equipo de juristas recopilar, ordenar y depurar mil años de leyes romanas en el Corpus Iuris Civilis. Cuando en el siglo XI se redescubrió en la universidad de Bolonia, se convirtió en la base del derecho civil de casi toda Europa continental y de América Latina. Buena parte de lo que un abogado estudia hoy pasó por aquel encargo.",
               "SALVARON A LOS GRIEGOS. Casi todo lo que conservamos de Platón, Aristóteles, Homero, Sófocles, Euclides o Arquímedes nos ha llegado porque monjes y funcionarios bizantinos lo copiaron una y otra vez durante siglos. Cuando el imperio se hundió, sus eruditos huyeron a Italia con sus libros… y encendieron el Renacimiento.",
@@ -712,7 +719,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: el Corán no se escribió como un libro: se recitaba y se memorizaba. La palabra «Corán» significa «recitación», y todavía hoy hay millones de personas que lo saben entero de memoria. Se compiló por escrito en las décadas siguientes a su muerte.",
         [
           {
-            titulo: "Cosas de Mahoma que casi nunca se cuentan",
+            titulo: "Cosas de Mahoma que casi nunca se cuentan", foto: "mahoma",
             cuerpo: [
               "Su matrimonio con Jadiya. Ella era una comerciante viuda y rica, quince años mayor que él, y fue su jefa antes de ser su esposa: él trabajaba llevando sus caravanas. Estuvieron casados unos veinticinco años y mientras ella vivió no tomó otra esposa. Cuando murió, junto con su tío protector Abu Talib, aquel año se recordó como «el año del duelo».",
               "Sus primeros seguidores dicen mucho de su mensaje: su esposa; su primo Alí, un adolescente; su amigo Abu Bakr, un comerciante; Zayd, un esclavo liberado al que adoptó; y Bilal, un esclavo abisinio torturado por creer, que acabaría siendo el primer almuédano, la voz que llamaba a la oración. En una sociedad tribal y esclavista, eso era una declaración política.",
@@ -746,7 +753,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: en 690 subió al trono Wu Zetian, la única mujer que ha gobernado China con el título de emperador. Llegó al poder por pura habilidad política, promovió a funcionarios por mérito y no por familia, apoyó el budismo… y fue implacable con sus rivales. La historiografía posterior, escrita por hombres confucianos, la retrató como un monstruo.",
         [
           {
-            titulo: "El monje que fue a la India a por libros",
+            titulo: "El monje que fue a la India a por libros", foto: "xuanzang",
             cuerpo: [
               "En 629, un monje llamado Xuanzang salió de Chang'an sin permiso imperial —estaba prohibido salir del país— para ir a la India a buscar los textos budistas originales, porque desconfiaba de las traducciones chinas que circulaban.",
               "Tardó diecisiete años. Cruzó el desierto del Gobi, donde perdió el agua y estuvo a punto de morir, atravesó las montañas de Asia Central con temperaturas mortales, fue asaltado por bandidos, retenido por reyes que no querían dejarlo marchar y aprendió sánscrito.",
@@ -777,7 +784,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: nuestro vocabulario laboral viene de ahí. «Vasallo», «señor», «feudo», «villano» (el que vivía en la villa, y que acabó significando malvado) y «trabajo» —del latín tripalium, un instrumento de tortura de tres palos— cuentan bastante bien cómo era aquello.",
         [
           {
-            titulo: "Cómo vivía de verdad un campesino",
+            titulo: "Cómo vivía de verdad un campesino", foto: "campesino",
             cuerpo: [
               "Era el 90 % de la población, así que hablar de la Edad Media es hablar de ellos, no de los caballeros.",
               "SU CASA. Una sola habitación de madera, barro y paja, con suelo de tierra apisonada, sin chimenea (el humo salía por un agujero o por la puerta, y las paredes estaban negras), sin ventanas de cristal, con un fuego en el centro, un jergón de paja compartido por toda la familia y los animales dentro en invierno, porque daban calor. Pulgas, piojos y humo, siempre.",
@@ -803,7 +810,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: en Suecia se han encontrado decenas de miles de monedas de plata árabes. Su comercio con el mundo islámico era tan intenso que en las tumbas nórdicas aparecen sedas, cuentas de vidrio persas e incluso un anillo con una inscripción en árabe.",
         [
           {
-            titulo: "Cómo eran, más allá del casco con cuernos",
+            titulo: "Cómo eran, más allá del casco con cuernos", foto: "vikingos-cuernos",
             cuerpo: [
               "LOS CUERNOS NO EXISTIERON. Ni un solo casco vikingo encontrado tiene cuernos. Son un invento del vestuario de una ópera de Wagner del siglo XIX. Los cascos reales eran gorros de hierro o cuero, sencillos y sin adornos, porque un cuerno en combate solo sirve para que te agarren la cabeza.",
               "ERAN LIMPIOS. En sus tumbas aparecen peines, pinzas, palillos para las orejas y navajas con una frecuencia asombrosa. Se lavaban una vez por semana, el sábado, y en las lenguas escandinavas el sábado se sigue llamando «día del baño» (laugardagur). Hay una queja de un clérigo inglés advirtiendo de que los daneses seducían a las mujeres inglesas porque se peinaban a diario y se bañaban los sábados. Comparados con la media europea de la época, eran unos coquetos.",
@@ -839,7 +846,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: la palabra «asesino» viene de aquellos años. Los cruzados llamaban hashashin a los miembros de una secta ismailí de Siria especializada en matar a dirigentes enemigos, y el término se quedó en las lenguas europeas.",
         [
           {
-            titulo: "Cruzada por cruzada",
+            titulo: "Cruzada por cruzada", foto: "cruzada-por-cruzada",
             cuerpo: [
               "LA CRUZADA POPULAR (1096). Antes de que salieran los ejércitos, un predicador, Pedro el Ermitaño, arrastró a miles de campesinos sin armas ni provisiones. Saquearon a su paso por Hungría y los Balcanes, masacraron a los judíos de Renania y, al llegar a Asia Menor, fueron aniquilados por los turcos en Civetot. No llegó ninguno a Jerusalén.",
               "PRIMERA CRUZADA (1096-1099). La única que consiguió su objetivo. Tomaron Nicea, cruzaron Anatolia con enormes pérdidas y pasaron ocho meses sitiando Antioquía, comiendo cuero y ratas; cuando la tomaron, quedaron sitiados dentro. El 15 de julio de 1099 asaltaron Jerusalén y siguió una matanza atroz de musulmanes y judíos, incluidos los refugiados en la mezquita y en la sinagoga. Fundaron cuatro Estados cruzados y nacieron las órdenes militares: templarios y hospitalarios.",
@@ -873,7 +880,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: cuando en Bolonia se juntó el primer gremio de estudiantes, en 1088, en Fez llevaban ya doscientos treinta años dando clase sin interrupción.",
         [
           {
-            titulo: "La universidad más antigua del mundo la fundó una mujer",
+            titulo: "La universidad más antigua del mundo la fundó una mujer", foto: "fatima-al-fihri",
             cuerpo: [
               "QUIÉN ERA. Su familia venía de Cairuán, en la actual Túnez, y emigró a Fez, que entonces era una ciudad nueva y en plena expansión. Su padre, Muhammad al-Fihri, se hizo comerciante rico. Cuando murió, la herencia pasó a sus dos hijas, Fátima y Mariam, porque no había hijos varones. Y las dos hicieron lo mismo con el dinero: construir. Mariam levantó la mezquita de los Andaluces; Fátima, la de al-Qarawiyyin, llamada así en recuerdo de la ciudad de la que venía su familia.",
               "QUÉ HIZO EXACTAMENTE. No dio una donación y se apartó: según las crónicas, supervisó la obra de principio a fin, quiso que todos los materiales salieran del propio terreno para que nada fuera de procedencia dudosa, y ayunó cada día que duró la construcción. Empezó siendo una mezquita con una escuela al lado, que es como nacían entonces los centros de estudio, y en pocas décadas se convirtió en el gran centro intelectual del occidente islámico.",
@@ -897,7 +904,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: montó un servicio postal, el yam, con estaciones de relevo cada 40 kilómetros donde los correos cambiaban de caballo. Un mensaje podía cruzar el imperio a más de 300 kilómetros al día en el siglo XIII. Europa no tuvo nada parecido hasta el siglo XIX.",
         [
           {
-            titulo: "La cara salvaje: el precio de aquel imperio",
+            titulo: "La cara salvaje: el precio de aquel imperio", foto: "mongoles-terror",
             cuerpo: [
               "Nada de lo anterior se puede contar sin esto. El método mongol de conquista era el terror calculado, y funcionaba porque cumplían las dos partes del trato: la ciudad que se rendía sin luchar pagaba tributo y seguía viviendo; la ciudad que resistía era borrada del mapa, sin excepciones y sin negociación posterior.",
               "El detonante de la guerra contra Persia lo resume todo: el gobernador de Otrar hizo matar a los embajadores y comerciantes que Gengis Kan había enviado. La respuesta fue la destrucción sistemática del imperio de Corasmia entre 1219 y 1221. Bujará, Samarcanda, Merv, Nishapur —algunas de las ciudades más cultas y ricas del mundo islámico— fueron arrasadas, sus habitantes masacrados o deportados como artesanos útiles, sus bibliotecas quemadas y sus canales de riego destruidos, lo que convirtió comarcas enteras en desierto durante generaciones.",
@@ -930,7 +937,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: de esta epidemia viene la palabra «cuarentena». Venecia y Ragusa obligaron a los barcos sospechosos a esperar aislados antes de desembarcar: primero treinta días (trentina) y después cuarenta (quaranta). La medida sanitaria más eficaz de la historia se inventó sin saber qué era un microbio.",
         [
           {
-            titulo: "Lo que cambió después de la peste",
+            titulo: "Lo que cambió después de la peste", foto: "despues-peste",
             cuerpo: [
               "Aquí está lo más interesante, y lo que casi nunca se cuenta: la mayor catástrofe demográfica de la historia europea acabó mejorando la vida de los supervivientes y desmontando el orden medieval.",
               "LOS SALARIOS SE DISPARARON. De pronto faltaban brazos en todas partes. Los campesinos y artesanos que quedaban vivos podían exigir el doble, negociar o marcharse a otro señorío. Los sueldos reales subieron mucho y durante décadas: para el trabajador inglés, el siglo posterior a la peste fue el de mayor poder de compra hasta el siglo XIX.",
@@ -955,7 +962,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: por esta guerra, Inglaterra dejó de hablar francés. Sus reyes y su nobleza llevaban tres siglos usándolo como lengua de la corte, y el enfrentamiento con Francia convirtió el inglés en la lengua de los tribunales (1362) y del Parlamento.",
         [
           {
-            titulo: "Juana de Arco: a quién abandonó Francia",
+            titulo: "Juana de Arco: a quién abandonó Francia", foto: "juana-de-arco",
             cuerpo: [
               "Juana nació hacia 1412 en Domrémy, en una familia de labradores. No sabía leer ni escribir. Desde los trece años decía oír voces que le encargaban una misión: expulsar a los ingleses y llevar al Delfín a coronarse en Reims.",
               "Lo asombroso es que lo consiguió. Convenció a un capitán de que le diera una escolta, cruzó 600 kilómetros de territorio enemigo, fue examinada por teólogos, obtuvo una armadura y un estandarte y, en mayo de 1429, levantó en nueve días el asedio de Orleans, que llevaba medio año resistiendo. Fue herida por una flecha y volvió al combate el mismo día. Después vino Patay, y el 17 de julio de 1429 el Delfín fue coronado en Reims como Carlos VII, con ella de pie a su lado.",
@@ -1001,7 +1008,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: se imprimieron unos 180 ejemplares de su Biblia y hoy sobreviven 49. Cerca de cuarenta y cinco de aquellos ejemplares se hicieron en pergamino, y para cada uno hicieron falta las pieles de unos 170 terneros.",
         [
           {
-            titulo: "Cómo funcionaba la imprenta, paso a paso",
+            titulo: "Cómo funcionaba la imprenta, paso a paso", foto: "imprenta-paso-a-paso",
             cuerpo: [
               "1. EL PUNZÓN. Un grabador tallaba a mano la letra, del revés y en relieve, en la punta de una barra de acero. Cada letra, cada acento y cada signo tenían su punzón, y hacerlos bien era un oficio de altísima precisión.",
               "2. LA MATRIZ. Ese punzón de acero se golpeaba contra una barra de cobre, más blando, dejando la letra hundida. Eso es la matriz: el molde de una sola letra.",
@@ -1037,7 +1044,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: Colón anotó en su diario que aquella gente era «muy mansa» y que «con cincuenta hombres los tendría a todos sojuzgados». La misma persona que abrió el contacto entre dos mundos escribió el manual de lo que vendría después.",
         [
           {
-            titulo: "Isabel la Católica: «vasallos libres», y lo que pasó de verdad",
+            titulo: "Isabel la Católica: «vasallos libres», y lo que pasó de verdad", foto: "isabel-catolica",
             cuerpo: [
               "En 1495, Colón envió a España unos cientos de indígenas taínos capturados para venderlos como esclavos. Isabel ordenó suspender la venta y, en 1500, mandó liberar a los que quedaban vivos y devolverlos a su tierra a costa de la Corona. La tradición le atribuye una frase furiosa al enterarse: «¿Con qué autoridad da mi Almirante mis vasallos a nadie?».",
               "El punto jurídico es exactamente ese: no eran cosas ni botín, eran VASALLOS de la Corona de Castilla. Y si eran vasallos, eran personas libres con derechos, no esclavos.",
@@ -1092,7 +1099,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: casi ninguno de ellos era «científico» de profesión: la palabra no existía (se acuñó en el siglo XIX). Eran clérigos, médicos, abogados, nobles ricos o funcionarios que investigaban en su tiempo libre y se escribían cartas entre países.",
         [
           {
-            titulo: "El método científico, explicado",
+            titulo: "El método científico, explicado", foto: "metodo-cientifico",
             cuerpo: [
               "El método científico no es una lista de pasos que hay que recitar: es una manera de protegerse de uno mismo, porque el ser humano es buenísimo encontrando lo que ya quiere encontrar. Funciona así:",
               "1. OBSERVAR y hacer una PREGUNTA concreta. No «¿por qué enfermamos?», sino «¿por qué mueren más mujeres de fiebres en esta sala que en aquella?».",
@@ -1181,7 +1188,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: la palabra «salario» viene de la sal, con la que se pagaba a los soldados romanos. Pero la palabra «fábrica» viene de fabrica, «taller de artesano». El nombre de aquellos edificios inmensos conservó el recuerdo del taller que habían destruido.",
         [
           {
-            titulo: "La especialización: la idea que multiplicó la producción",
+            titulo: "La especialización: la idea que multiplicó la producción", foto: "especializacion",
             cuerpo: [
               "El invento más potente de la Revolución Industrial no fue una máquina: fue una forma de organizar el trabajo. Y quien lo explicó mejor fue Adam Smith en 1776, con el ejemplo de una fábrica de alfileres.",
               "Un artesano trabajando solo, haciendo un alfiler entero de principio a fin —estirar el alambre, cortarlo, afilar la punta, forjar la cabeza, pulir, empaquetar— podía sacar unos veinte alfileres al día. Diez trabajadores repartiéndose esas mismas operaciones, cada uno haciendo una sola, producían unos 48.000 al día. Es decir, unos 4.800 por persona: doscientas cuarenta veces más.",
@@ -1216,7 +1223,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: los propios revolucionarios eran conscientes del riesgo. El diputado Vergniaud, poco antes de ser guillotinado, dijo que la Revolución, como Saturno, podía acabar devorando a sus propios hijos.",
         [
           {
-            titulo: "El Reino del Terror de Robespierre",
+            titulo: "El Reino del Terror de Robespierre", foto: "robespierre",
             cuerpo: [
               "Entre septiembre de 1793 y julio de 1794, la República se defendió mediante el terror organizado por ley. El contexto importa para entenderlo, aunque no lo justifique: Francia estaba invadida por Austria, Prusia, Gran Bretaña y España a la vez, con una guerra civil en la Vendée, revueltas en Lyon, Marsella y Tolón, hambre en las ciudades y el líder popular Marat asesinado en su bañera.",
               "El poder real pasó a un comité de doce hombres, el Comité de Salvación Pública, con facultades dictatoriales. Su figura central fue Maximilien Robespierre, un abogado de provincias apodado «el Incorruptible»: austero, honesto en lo personal, vivía en casa de un carpintero, y años antes había defendido en la Asamblea la abolición de la pena de muerte.",
@@ -1309,7 +1316,7 @@ export const HISTORIA_UNIVERSAL_HITOS: HitoHistoria[] = [
         "Dato curioso: en el discurso de Gettysburg, en 1863, Lincoln habló durante dos minutos y usó 272 palabras. El orador que le precedió habló dos horas. Nadie recuerda una sola frase de aquel discurso largo.",
         [
           {
-            titulo: "Los soldados negros: 180.000 hombres que se ganaron un país",
+            titulo: "Los soldados negros: 180.000 hombres que se ganaron un país", foto: "soldados-negros",
             cuerpo: [
               "Al empezar la guerra, el ejército de la Unión no aceptaba soldados negros. Se decían de ellos las cosas de siempre: que no servirían, que no aguantarían el fuego, que su presencia ofendería a los blancos. Frederick Douglass, que había nacido esclavo y se había convertido en el orador más influyente del país, llevaba años insistiendo en lo contrario, y su argumento era político: «dejad que el hombre negro se ponga en el pecho las letras U.S. … y no habrá poder en la tierra que pueda negarle que se ha ganado el derecho a la ciudadanía».",
               "En 1863, con la Proclamación de Emancipación, se autorizó el reclutamiento y se creó una oficina específica para organizar los regimientos de Tropas de Color de Estados Unidos. Al final de la guerra habían servido alrededor de 180.000 soldados negros —cerca del 10 % del ejército de la Unión— más unos 19.000 en la Marina. Muchos eran hombres que acababan de ser liberados y se alistaban semanas después.",

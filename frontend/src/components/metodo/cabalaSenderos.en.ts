@@ -783,7 +783,7 @@ const SHIN: SenderoTexto = {
 
 const TAV: SenderoTexto = {
   palabraClave: "Manifestation",
-  titulo: "From Understanding to Manifestation",
+  titulo: "From Coherence to Manifestation",
   significadoTradicional:
     "Tav (ת) is the last letter of the Hebrew alphabet and means \"mark\", \"seal\" or \"signature\". In the kabbalistic tradition it stands for the culmination of a process, the materializing of what's been learned and the mark we leave in the world. It represents the moment when a truth stops being a possibility and becomes a reality.\n\nBy connecting Yesod with Malkhut, this path is the step from inner foundations toward concrete manifestation. It teaches that knowledge only reaches its purpose when it translates into actions that transform reality.",
   traduccionPsicologica:

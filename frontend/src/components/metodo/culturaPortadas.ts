@@ -22,8 +22,10 @@ export const CULTURA_HISTORIA_VISUAL: Record<string, HistoriaVisual> = {
   religiones: { portada: `${P}/historiareligion.webp`,  emoji: "🕊️" },
   filosofia:  { portada: `${P}/historiafilosofia.webp`, emoji: "🏛️" },
   ciencia:    { portada: `${P}/historiaciencia.webp`,   emoji: "🔬" },
-  medicina:   { portada: `${P}/historiamedicina.webp`,  emoji: "⚕️" },
-  arte:       { portada: `${P}/historiaarte.webp`,      emoji: "🎭" },
+  // ⛔ Sin portada todavía: salen con su emoji (en cuanto exista el archivo,
+  //    basta con añadir aquí su `portada`).
+  medicina:   { emoji: "⚕️" },
+  arte:       { emoji: "🎭" },
 };
 
 export const historiaVisual = (key: string): HistoriaVisual =>

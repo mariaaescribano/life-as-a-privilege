@@ -119,6 +119,9 @@ export const elMetodo = {
   "elMetodo.faq.8.p": "Does it work if I'm already in therapy?",
   "elMetodo.faq.8.r":
     "Yes, and it usually sits alongside it very well. This doesn't replace treatment and doesn't try to: it's an exploration of yourself that gives you material —and words— to understand yourself as a whole, not in pieces.",
+  "elMetodo.faq.9.p": "Are the drawings made with generative AI?",
+  "elMetodo.faq.9.r":
+    "Yes. The point of the drawings is to give you context and let you sink into the explanation. If what you want is art, I wholeheartedly recommend going to museums.",
 
   // ── 13. Sticky bar (mobile) ────────────────────────────────────────────
   "elMetodo.barra.desde": "From {precio}",
@@ -132,6 +135,15 @@ export const elMetodo = {
   "elMetodo.dudas": "I have a question",
   "elMetodo.dudas.asunto": "Question — Life as a Privilege",
   "elMetodo.dudas.placeholder": "Write your question here...",
+
+  // ── Free call (floating button + popup) ────────────────────────────────
+  "elMetodo.llamada.boton": "Call",
+  "elMetodo.llamada.titulo": "Book a call",
+  "elMetodo.llamada.tituloSufijo": "at no cost",
+  "elMetodo.llamada.texto": "Let me get to know you and tell you how I can walk with you.",
+  "elMetodo.llamada.remate": "You don't have to do it all on your own.",
+  "elMetodo.llamada.cta": "Book a call",
+  "elMetodo.llamada.cerrar": "Close",
 
   // ── The origin comic (ComicPorQueExiste) ───────────────────────────────
   // Only the navigation labels: the eleven panels are translated in

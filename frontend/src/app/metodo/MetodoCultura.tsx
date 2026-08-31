@@ -9,7 +9,6 @@ import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { CulturaIlustracionesModal } from "../../components/metodo/CulturaIlustracionesModal";
 import { PagoCulturaModal } from "../../components/metodo/PagoCulturaModal";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
@@ -27,7 +26,6 @@ export default function MetodoCultura() {
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
-  const [ilustracionesOpen, setIlustracionesOpen] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -91,7 +89,6 @@ export default function MetodoCultura() {
               nom={culturaNom}
               mb={0}
               prev={{ label: `← ${t("disciplina.cabala")}`, onClick: () => navigate("/metodo/cabala/cursos") }}
-              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
               next={{ label: `${t("metodo.cultura.paso.historias")} →`, onClick: () => {
                 if (!suscrito) { setPagoError(null); setPagoOpen(true); return; }
                 navigate("/metodo/cultura/historias");
@@ -135,8 +132,6 @@ export default function MetodoCultura() {
           </Reveal>
         </Flex>
       </Flex>
-
-      <CulturaIlustracionesModal isOpen={ilustracionesOpen} onClose={() => setIlustracionesOpen(false)} />
 
       <BotonCompania color={culturaTxt} bgColor={culturaBg} disciplinaNom={culturaNom} />
 

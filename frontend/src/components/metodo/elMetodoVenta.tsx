@@ -499,6 +499,7 @@ const FAQ: { p: ClaveTexto; r: ClaveTexto }[] = [
   { p: "elMetodo.faq.6.p", r: "elMetodo.faq.6.r" },
   { p: "elMetodo.faq.7.p", r: "elMetodo.faq.7.r" },
   { p: "elMetodo.faq.8.p", r: "elMetodo.faq.8.r" },
+  { p: "elMetodo.faq.9.p", r: "elMetodo.faq.9.r" },
 ];
 
 export function FaqBloque() {

@@ -975,7 +975,7 @@ const TAV: SenderoContenido = {
   letra: "Tav",
   hebreo: "ת",
   palabraClave: "Manifestación",
-  titulo: "De la Comprensión a la Manifestación",
+  titulo: "De la Coherencia a la Manifestación",
   from: "yesod",
   to: "malkuth",
   significadoTradicional:

@@ -3,7 +3,7 @@ export const header = {
   "header.mapa": "The Map",
   "header.materiales": "Materials",
   "header.videos": "Videos",
-  "header.estudio": "Study",
+  "header.estudio": "Astrology study",
   "header.cursos": "Courses",
   "header.miCuenta": "My account",
   "header.iniciarSesion": "Log in",

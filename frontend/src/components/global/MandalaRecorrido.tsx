@@ -1145,6 +1145,42 @@ export const RecorridoMandalaVideo = () => {
   // Disciplina cuyo vídeo de muestra está abierto en el popup (null = cerrado).
   const [videoModal, setVideoModal] = useState<Disciplina | null>(null);
 
+  // ── El mandala se presenta solo ─────────────────────────────────────────
+  // Los ocho círculos parecen un dibujo, y por eso encima del bloque hay una
+  // pista escrita («Haz clic en cada círculo para descubrirla»). Una pista que
+  // hay que leer llega tarde: lo que de verdad enseña que esto se toca es ver
+  // el box de la derecha cambiar. Así que hasta el PRIMER clic la selección va
+  // rotando sola, una disciplina cada 2 s.
+  //
+  // Al primer clic se para para siempre —no se reanuda tras una pausa—: a
+  // partir de ahí manda la persona, y que la selección se te mueva sola
+  // mientras lees una disciplina es un incordio, no una ayuda.
+  const [autoRota, setAutoRota] = useState(true);
+
+  // Elegir a mano: además de seleccionar, apaga la rotación.
+  const elegir = (nom: string) => {
+    setAutoRota(false);
+    setSelectedNom(nom);
+  };
+
+  useEffect(() => {
+    if (!autoRota) return;
+    // Con el vídeo de muestra abierto no rota: el cambio no se ve detrás del
+    // popup, y al cerrarlo te encontrarías en otra disciplina.
+    if (videoModal) return;
+    // A quien pide menos movimiento no se le mueve nada solo: le queda la
+    // pista escrita, que dice lo mismo.
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+
+    const id = window.setInterval(() => {
+      setSelectedNom((nom) => {
+        const i = disciplinas.findIndex((d) => d.nom === nom);
+        return disciplinas[(i + 1) % disciplinas.length].nom;
+      });
+    }, 3000);
+    return () => window.clearInterval(id);
+  }, [autoRota, videoModal]);
+
   useEffect(() => {
     document.body.style.overflow = videoModal ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -1255,7 +1291,7 @@ export const RecorridoMandalaVideo = () => {
                 circleSize={circleSize}
                 iconSize={iconSize}
                 isSelected={disc.nom === selectedNom}
-                onSelect={() => setSelectedNom(disc.nom)}
+                onSelect={() => elegir(disc.nom)}
               />
             );
           })}

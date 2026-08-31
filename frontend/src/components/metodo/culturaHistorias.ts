@@ -9,9 +9,8 @@ import { HISTORIA_ARTE_HITOS } from "./culturaHistoriaArte";
 
 // Registro de las Historias de Cultura. La clave coincide con el segmento de la
 // ruta /metodo/cultura/historia/<historiaKey>. Las páginas genéricas
-// (MetodoCulturaHistoria y MetodoCulturaHistoriaEra) leen de aquí. Las Historias
-// que aún no tienen datos (filosofía, ciencia, medicina, arte…) no aparecen: su
-// tarjeta navega a una clave inexistente y la página rebota al listado.
+// (MetodoCulturaHistoria y MetodoCulturaHistoriaEra) leen de aquí. Las seis están
+// montadas: la tarjeta de una clave que no exista aquí rebotaría al listado.
 export interface HistoriaDef {
   /** Título que se muestra en la cabecera de la Historia. */
   titulo: string;
