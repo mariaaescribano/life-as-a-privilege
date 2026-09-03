@@ -177,7 +177,7 @@ export const elMetodo = {
   // El título va en DOS líneas: el «sin coste» cae debajo, más pequeño y en
   // cursiva. Por eso son dos claves y no una con salto de línea: cada línea
   // tiene su tipografía, y en inglés el reparto de palabras no es el mismo.
-  "elMetodo.llamada.titulo": "Agendar una llamada",
+  "elMetodo.llamada.titulo": "Agenda una llamada",
   "elMetodo.llamada.tituloSufijo": "sin coste",
   "elMetodo.llamada.texto": "Permíteme conocerte y contarte cómo puedo acompañarte.",
   "elMetodo.llamada.remate": "No tienes que hacerlo todo solo/a.",
