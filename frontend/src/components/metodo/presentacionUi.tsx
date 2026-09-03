@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { sombraSoloContraste, sombraTexto } from "../global/disciplinaSombras";
 import { Reveal } from "../global/Reveal";
+import { useVideoLargoSrc } from "../global/videoCalidad";
 import { BookCallModal } from "../global/BookCallModal";
 import { ContactModal } from "../global/ContactModal";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
@@ -460,33 +461,38 @@ export function BotonEmpezar({ d, onClick }: { d: PresentacionDisciplina; onClic
 }
 
 /**
- * VÍDEO DE MUESTRA, en caja cuadrada.
+ * VÍDEO DE LA DISCIPLINA, en caja cuadrada.
  *
- * Lo que se reproduce aquí es el CLIP corto (`/videos/muestra/<clave>.mp4`,
- * ~100 KB, mudo y en bucle, lo genera `scripts/video/muestras.mjs`), NO el vídeo
- * del recorrido. Este vídeo sale en pantalla sí o sí nada más abrir la página, y
- * el original pesa entre 8 y 27 MB: ponerlo aquí es cobrarle esos megas a todo
- * el que entra desde un cartel, la mayoría con datos del móvil. Al pulsar sí se
- * abre el completo, en su popup (ver `global/VideoLargo.tsx`).
+ * Aquí va el vídeo LARGO, el completo del recorrido, y se pone a andar solo al
+ * abrir la página. Antes en este hueco iba el clip corto de `/videos/muestra/`
+ * (~100 KB) porque los originales pesaban entre 8 y 27 MB, y cobrarle eso a todo
+ * el que entra desde un cartel era demasiado. Ya no: los originales pesan entre
+ * 1,4 y 3,5 MB y, si la conexión parece de datos del móvil, lo que se sirve es
+ * la versión ligera —el MISMO vídeo entero, a 540×540 y menos de 1 MB—. La
+ * decisión la toma `videoCalidad.ts`, la misma que usa el popup.
+ *
+ * Al pulsar, el vídeo se abre en su popup: más grande y con mandos (ver
+ * `global/VideoLargo.tsx`).
  *
  * La caja es 1:1 porque es la proporción en la que se graban los vídeos: hoy los
- * ocho son 1080×1080. El clip conserva la proporción del original, así que se
- * mide al cargar y se encaja en consecuencia: cuadrado → `cover` (encaje
- * exacto); cualquier otra proporción → `contain`, para verlo entero en lugar de
- * recortarlo.
+ * ocho son 1080×1080. El vídeo conserva su proporción, así que se mide al cargar
+ * y se encaja en consecuencia: cuadrado → `cover` (encaje exacto); cualquier
+ * otra proporción → `contain`, para verlo entero en lugar de recortarlo.
  */
 export function VideoMuestra({
   d,
   onAbrir,
 }: {
   d: PresentacionDisciplina;
-  /** Abre el vídeo completo. La caja ENTERA es el botón, sin rótulo encima: lo
-   *  que invita a pulsar es el zoom al pasar por encima. */
+  /** Abre el vídeo en el popup. La caja ENTERA es el botón, sin rótulo encima:
+   *  lo que invita a pulsar es el zoom al pasar por encima. */
   onAbrir?: () => void;
 }) {
   const [cuadrado, setCuadrado] = useState<boolean | null>(null);
-  const clip = `/videos/muestra/${d.clave}.mp4`;
-  useEffect(() => { setCuadrado(null); }, [clip]);
+  // El original por wifi, la versión ligera por datos del móvil. Largo en los
+  // dos casos.
+  const { src, onError } = useVideoLargoSrc(d.video);
+  useEffect(() => { setCuadrado(null); }, [src]);
 
   return (
     <Box
@@ -509,23 +515,30 @@ export function VideoMuestra({
         boxShadow: `0 0 60px ${d.txt}88, 0 0 110px ${d.txt}44`,
       } : undefined}
     >
+      {/* Debajo del vídeo, la foto de la disciplina: es lo que se ve el segundo
+          que tarda en llegar el vídeo largo, en vez de un cuadro negro. */}
+      {hasDisciplinaBg(d.nom) && <DisciplinaBgLayer nom={d.nom} borderRadius="3xl" />}
+
       <Box
         as="video"
-        key={clip}
-        src={clip}
+        key={src}
+        src={src}
         // Arranca solo y se repite en bucle: quien llega de un cartel ve el
         // recorrido en marcha sin tener que pulsar nada.
         autoPlay
         loop
-        // `muted` es OBLIGATORIO para que arranque solo: los clips no llevan
-        // pista de audio, pero sin esto Chrome y Safari bloquean el autoplay
-        // igualmente (se quedarían parados en el primer fotograma).
+        // `muted` es OBLIGATORIO para que arranque solo: aunque el vídeo vaya en
+        // silencio, sin esto Chrome y Safari bloquean el autoplay igualmente (se
+        // quedaría parado en el primer fotograma).
         muted
         // En iOS, sin `playsInline` el vídeo se abriría a pantalla completa.
         playsInline
         preload="auto"
+        position="relative"
         w="100%"
         h="100%"
+        // Si la versión ligera todavía no existe, se cae al original.
+        onError={onError}
         onLoadedMetadata={(e: React.SyntheticEvent<HTMLVideoElement>) => {
           const v = e.currentTarget;
           if (!v.videoWidth || !v.videoHeight) return;

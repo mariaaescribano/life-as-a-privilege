@@ -1,88 +1,24 @@
 /**
- * VÍDEO LARGO — el vídeo completo de una disciplina, y el aviso antes de bajarlo.
+ * VÍDEO LARGO — el popup del vídeo completo de una disciplina.
  *
- * REGLA: el vídeo completo NUNCA se pone en pantalla solo. Donde el vídeo sale
- * sí o sí —la rejilla de «El Mapa por dentro» y la caja de /d/<disciplina>— va
- * el clip de muestra (`/videos/muestra/<clave>.mp4`, ~100 KB, mudo y en bucle,
- * lo genera `scripts/video/muestras.mjs`). Los originales pesan entre 8 y 27 MB
- * cada uno: cargarlos por si acaso es regalarle la factura de datos a quien
- * entra desde el móvil, y son largos porque tienen que serlo.
+ * El vídeo que sale aquí es SIEMPRE el largo, el entero. Antes este popup
+ * preguntaba primero («pesa 20 MB, ¿lo bajamos?») porque los originales pesaban
+ * entre 8 y 27 MB; hoy pesan entre 1,4 y 3,5 MB (los apretó
+ * `scripts/video/adelgazar.mjs`) y quien navega con datos del móvil recibe la
+ * versión ligera —el mismo vídeo, a 540×540 y menos de 1 MB— sin que se le
+ * pregunte nada. Esa decisión vive en `videoCalidad.ts`, para que sea la misma
+ * en el popup y en la caja de /d/<disciplina>.
  *
- * El original solo se pide cuando alguien PULSA. Y aun pulsando, si parece que
- * la conexión se paga por megas, primero se pregunta diciendo lo que pesa.
- *
- * Sobre detectar el wifi, la verdad incómoda: no hay forma fiable. La Network
- * Information API (`navigator.connection`) solo existe en Chrome —en Android da
- * hasta el tipo de red, en escritorio solo una estimación de velocidad—, y
- * Safari y Firefox no la tienen, así que en iPhone es imposible saberlo. Por eso
- * `hayQuePreguntar()` mezcla lo que sí se sabe con una regla de sentido común
- * para el resto: ver el comentario de la función.
+ * El clip corto de `/videos/muestra/` sigue existiendo, pero solo para la
+ * rejilla de ocho baldosas de /elMetodo: ahí se cargarían los ocho vídeos a la
+ * vez, y eso sí es una pantalla cara. Al pulsar una baldosa se abre este popup
+ * con el vídeo largo.
  */
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { useT } from "../../i18n";
 import { useSinBarraDeScroll } from "./sinBarraDeScroll";
-
-/** Ancho de pantalla por debajo del cual damos por hecho que es un móvil. El
- *  mismo corte que usa Chakra para `md`. */
-const MOVIL = 768;
-
-type InfoDeRed = { type?: string; effectiveType?: string; saveData?: boolean };
-
-/** Lo que el navegador cuenta de la conexión, si es que cuenta algo. */
-const infoDeRed = (): InfoDeRed | undefined => {
-  if (typeof navigator === "undefined") return undefined;
-  const nav = navigator as Navigator & {
-    connection?: InfoDeRed;
-    mozConnection?: InfoDeRed;
-    webkitConnection?: InfoDeRed;
-  };
-  return nav.connection ?? nav.mozConnection ?? nav.webkitConnection;
-};
-
-/**
- * ¿Preguntamos antes de bajar los megas?
- *
- *   · «Ahorro de datos» activado → SÍ. Da igual por dónde vaya: lo ha pedido.
- *   · red de móvil → SÍ; wifi o cable → NO. (Solo lo dice Chrome en Android.)
- *   · sin tipo de red pero con velocidad estimada: 2g/3g → SÍ. Ahí 20 MB no es
- *     que cuesten dinero, es que no terminan de bajar nunca.
- *   · no se sabe nada (Safari, Firefox) → se pregunta SOLO en pantalla de móvil.
- *     En un escritorio se da por hecho que hay wifi o cable; quien navega desde
- *     el móvil es justamente quien puede estar pagando los megas.
- */
-export const hayQuePreguntar = (): boolean => {
-  const red = infoDeRed();
-  if (red?.saveData) return true;
-  if (red?.type === "wifi" || red?.type === "ethernet") return false;
-  if (red?.type === "cellular") return true;
-  if (red?.effectiveType) return red.effectiveType !== "4g";
-  return typeof window !== "undefined" && window.innerWidth < MOVIL;
-};
-
-/**
- * Lo que pesa el vídeo, preguntándoselo al servidor SIN bajarlo: un HEAD trae
- * solo las cabeceras. Si no se puede saber, el aviso sale sin cifra en vez de
- * inventarse una.
- */
-const usePeso = (src: string, activo: boolean): number | null => {
-  const [mb, setMb] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!activo) return;
-    let vivo = true;
-    void fetch(src, { method: "HEAD" })
-      .then((r) => {
-        const bytes = Number(r.headers.get("content-length"));
-        if (vivo && bytes > 0) setMb(Math.round(bytes / 1024 / 1024));
-      })
-      .catch(() => { /* sin cifra: el aviso lo dice con palabras */ });
-    return () => { vivo = false; };
-  }, [src, activo]);
-
-  return mb;
-};
+import { useVideoLargoSrc } from "./videoCalidad";
 
 /**
  * POPUP DEL VÍDEO COMPLETO.
@@ -91,9 +27,6 @@ const usePeso = (src: string, activo: boolean): number | null => {
  * el brillo de la disciplina. La caja es CUADRADA (1:1) en móvil y en ordenador,
  * que es la proporción en la que se graban los vídeos del recorrido; la X flota
  * sobre su esquina.
- *
- * Si toca preguntar, en el hueco del vídeo va el aviso: misma caja, mismo
- * brillo, para que no parezca un error sino un paso más.
  */
 export const VideoLargoModal = ({
   src,
@@ -104,10 +37,9 @@ export const VideoLargoModal = ({
   accent: string;
   onClose: () => void;
 }) => {
-  const t = useT();
-  // Se decide UNA vez al abrir: si luego cambia la red, cambiarle el popup
-  // debajo de las manos a quien ya está viendo el vídeo sería peor.
-  const [confirmado, setConfirmado] = useState(() => !hayQuePreguntar());
+  // El original por wifi, la versión ligera por datos del móvil. Largo en los
+  // dos casos.
+  const { src: fuente, onError } = useVideoLargoSrc(src);
   // ¿El vídeo es cuadrado? Se sabe al cargar sus metadatos. La caja SIEMPRE es
   // 1:1; lo que cambia es cómo se encaja el vídeo dentro:
   //   · cuadrado → `cover`: encaje exacto, no se recorta.
@@ -117,9 +49,6 @@ export const VideoLargoModal = ({
   // con `cover` perdería el 44% del alto. Mientras no se sepa, `contain`
   // también: más vale una franja que un recorte.
   const [cuadrado, setCuadrado] = useState<boolean | null>(null);
-  // El peso solo se pide mientras el aviso está en pantalla: si no hay aviso, no
-  // hay a quién contárselo y sobra la petición.
-  const peso = usePeso(src, !confirmado);
 
   // El popup ocupa la pantalla justa: por fuera no hay nada que recorrer, así
   // que la barra de la página de detrás se apaga mientras está abierto.
@@ -188,90 +117,32 @@ export const VideoLargoModal = ({
           ✕
         </Box>
 
-        {confirmado ? (
-          <Box
-            as="video"
-            key={src}
-            src={src}
-            autoPlay
-            // Los vídeos son mudos, pero llevan pista de audio en silencio y sin
-            // `muted` Chrome/Safari bloquean el autoPlay (se abrían parados).
-            muted
-            controls
-            playsInline
-            w="100%"
-            h="100%"
-            onLoadedMetadata={(e: React.SyntheticEvent<HTMLVideoElement>) => {
-              const v = e.currentTarget;
-              if (!v.videoWidth || !v.videoHeight) return;
-              // Margen del 2% para no descartar un 1080×1081 por un píxel.
-              setCuadrado(Math.abs(v.videoWidth / v.videoHeight - 1) < 0.02);
-            }}
-            // Cuadrado → `cover` (encaje exacto en la caja 1:1, sin recorte).
-            // Vertical → `contain`, para verlo entero en vez de perder el 44%.
-            sx={{ objectFit: cuadrado ? "cover" : "contain" }}
-          />
-        ) : (
-          <Flex
-            direction="column"
-            align="center"
-            justify="center"
-            textAlign="center"
-            h="100%"
-            gap={5}
-            px={{ base: 7, md: 10 }}
-          >
-            <Text color={accent} fontSize={{ base: "xl", md: "2xl" }} fontWeight="600" letterSpacing="0.04em">
-              {t("comun.video.titulo")}
-            </Text>
-
-            <Text color="whiteAlpha.900" fontSize={{ base: "sm", md: "md" }} lineHeight="1.65">
-              {peso ? t("comun.video.pesa", { mb: peso }) : t("comun.video.pesaSinCifra")}
-            </Text>
-
-            <Flex gap={3} wrap="wrap" justify="center" pt={1}>
-              <Box
-                as="button"
-                onClick={() => setConfirmado(true)}
-                px={7}
-                py={2.5}
-                borderRadius="full"
-                bg={`${accent}22`}
-                border={`1.5px solid ${accent}`}
-                color={accent}
-                fontSize={{ base: "sm", md: "md" }}
-                fontWeight="600"
-                letterSpacing="0.06em"
-                cursor="pointer"
-                transition="all 0.25s ease"
-                _hover={{ bg: `${accent}33`, transform: "translateY(-2px)" }}
-                _active={{ transform: "translateY(0)" }}
-              >
-                {t("comun.video.ver")}
-              </Box>
-
-              <Box
-                as="button"
-                onClick={onClose}
-                px={7}
-                py={2.5}
-                borderRadius="full"
-                bg="transparent"
-                border="1.5px solid rgba(255,255,255,0.35)"
-                color="whiteAlpha.800"
-                fontSize={{ base: "sm", md: "md" }}
-                fontWeight="600"
-                letterSpacing="0.06em"
-                cursor="pointer"
-                transition="all 0.25s ease"
-                _hover={{ borderColor: "whiteAlpha.700", color: "white", transform: "translateY(-2px)" }}
-                _active={{ transform: "translateY(0)" }}
-              >
-                {t("comun.video.ahoraNo")}
-              </Box>
-            </Flex>
-          </Flex>
-        )}
+        <Box
+          as="video"
+          key={fuente}
+          src={fuente}
+          autoPlay
+          // Los vídeos son mudos, pero llevan pista de audio en silencio y sin
+          // `muted` Chrome/Safari bloquean el autoPlay (se abrían parados).
+          muted
+          controls
+          playsInline
+          // Se pide entero desde el principio: aquí ya ha pulsado, y lo que se
+          // ahorraba antes esperando ya se ahorra con la versión ligera.
+          preload="auto"
+          w="100%"
+          h="100%"
+          onError={onError}
+          onLoadedMetadata={(e: React.SyntheticEvent<HTMLVideoElement>) => {
+            const v = e.currentTarget;
+            if (!v.videoWidth || !v.videoHeight) return;
+            // Margen del 2% para no descartar un 1080×1081 por un píxel.
+            setCuadrado(Math.abs(v.videoWidth / v.videoHeight - 1) < 0.02);
+          }}
+          // Cuadrado → `cover` (encaje exacto en la caja 1:1, sin recorte).
+          // Vertical → `contain`, para verlo entero en vez de perder el 44%.
+          sx={{ objectFit: cuadrado ? "cover" : "contain" }}
+        />
       </Box>
     </Box>
   );

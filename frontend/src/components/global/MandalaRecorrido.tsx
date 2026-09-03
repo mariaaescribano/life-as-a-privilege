@@ -838,9 +838,10 @@ const CarruselCard = ({
 // mudo (`/videos/muestra/<clave>.mp4`, ~100 KB) que genera
 // `scripts/video/muestras.mjs`. Los ocho originales pesan unos 139 MB juntos y
 // aquí habría que cargarlos TODOS: sería, con diferencia, la pantalla más cara
-// de la web. Al pulsar una baldosa sí se abre el vídeo entero, en el popup de
-// siempre — que antes de bajar los megas pregunta si la conexión parece de pago
-// (ver `VideoLargo.tsx`).
+// de la web. Al pulsar una baldosa se abre el vídeo LARGO en su popup, y sin
+// preguntar nada: si la conexión parece de datos del móvil, lo que se sirve es
+// la versión ligera del mismo vídeo entero (ver `VideoLargo.tsx` y
+// `videoCalidad.ts`).
 //
 // Tres cosas que no son adorno:
 //   · van MUDOS. El autoplay sin permiso solo existe para vídeo sin sonido.
@@ -1087,9 +1088,9 @@ export const RecorridoCarruseles = () => {
 
 // ── Popup del vídeo completo ─────────────────────────────────────────────────
 // El popup vive en global/VideoLargo.tsx porque lo comparte con las páginas de
-// presentación (/d/:disciplina): ahí es donde se decide si bajar los megas del
-// original o preguntar antes, y esa decisión tiene que ser la misma en toda la
-// web. Aquí solo se traduce la disciplina a lo que el popup necesita.
+// presentación (/d/:disciplina): ahí es donde se decide con qué calidad se baja
+// el vídeo largo, y esa decisión tiene que ser la misma en toda la web. Aquí
+// solo se traduce la disciplina a lo que el popup necesita.
 const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () => void }) =>
   disc.video ? <VideoLargoModal src={disc.video} accent={disc.txt} onClose={onClose} /> : null;
 
