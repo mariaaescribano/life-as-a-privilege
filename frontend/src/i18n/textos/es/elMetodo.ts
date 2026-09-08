@@ -179,7 +179,7 @@ export const elMetodo = {
   // tiene su tipografía, y en inglés el reparto de palabras no es el mismo.
   "elMetodo.llamada.titulo": "Agenda una llamada",
   "elMetodo.llamada.tituloSufijo": "sin coste",
-  "elMetodo.llamada.texto": "Permíteme conocerte y contarte cómo puedo acompañarte.",
+  "elMetodo.llamada.texto": "Descubre cómo puedo acompañarte.",
   "elMetodo.llamada.remate": "No tienes que hacerlo todo solo/a.",
   "elMetodo.llamada.cta": "Agendar llamada",
   "elMetodo.llamada.cerrar": "Cerrar",
