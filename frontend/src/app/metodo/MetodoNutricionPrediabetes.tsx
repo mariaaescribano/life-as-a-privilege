@@ -17,7 +17,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Input, Modal, ModalContent, ModalOverlay, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -120,51 +120,11 @@ const Rotulo = ({ children }: { children: React.ReactNode }) => (
   </Text>
 );
 
-// ── Popup «¿Qué es esto?» ──
-function QueEsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const t = useT();
-  const { intro: PREDIABETES_INTRO } = useTextosPrediabetes();
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior="inside" size="xl">
-      <ModalOverlay bg="rgba(0,0,0,0.55)" sx={{ backdropFilter: "blur(6px)" }} />
-      <ModalContent bg="transparent" boxShadow="none" border="none" m={4}
-                    fontFamily="'EB Garamond', serif" maxH="86vh">
-        <SeccionBox>
-          <Box px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }} maxH="86vh" overflowY="auto"
-               sx={{ "&::-webkit-scrollbar": { width: "6px" },
-                     "&::-webkit-scrollbar-thumb": { background: `${nutricionTxt}55`, borderRadius: "3px" } }}>
-            <Flex justify="space-between" align="flex-start" gap={4} mb={3}>
-              <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} lineHeight="1.25">
-                {t("metodo.nutri.prediabetes")}
-              </Text>
-              <Box as="button" onClick={onClose} flexShrink={0} w="32px" h="32px" borderRadius="full"
-                   display="flex" alignItems="center" justifyContent="center"
-                   color={nutricionTxt} bg={`${nutricionTxt}14`} border={`1px solid ${nutricionTxt}44`}
-                   fontSize="lg" fontWeight={700} lineHeight="1" cursor="pointer"
-                   _hover={{ bg: `${nutricionTxt}2a` }}>
-                ×
-              </Box>
-            </Flex>
-            <Flex direction="column" gap={3.5}>
-              {PREDIABETES_INTRO.que.map((p, i) => (
-                <Text key={i} color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.85">
-                  {p}
-                </Text>
-              ))}
-            </Flex>
-          </Box>
-        </SeccionBox>
-      </ModalContent>
-    </Modal>
-  );
-}
-
 export default function MetodoNutricionPrediabetes() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [guardando, setGuardando] = useState(false);
-  const [queAbierto, setQueAbierto] = useState(false);
   const [comoMedirse, setComoMedirse] = useState(false);
   const [editarDatos, setEditarDatos] = useState(false);
 
@@ -314,22 +274,18 @@ export default function MetodoNutricionPrediabetes() {
             />
           </Reveal>
 
-          {/* ── Sobre el turquesa: la frase + «¿Qué es esto?» + progreso ── */}
+          {/* ── Sobre el turquesa: la frase + progreso ──
+              El «¿Qué es esto?» ya no va aquí: es la pastilla flotante de la
+              esquina, encima de «Agenda una llamada» (ver BotonCompania al final
+              de la página), igual que en todo el recorrido de astrología. Aquí
+              partía en dos el camino de la vista —frase, botón, progreso— y lo
+              que tiene que llevar la vista es el progreso. */}
           <Reveal direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Flex direction="column" align="center" gap={4} w="100%" maxW="640px">
               <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                     textAlign="center" lineHeight="1.8">
                 {PREDIABETES_INTRO.subtitulo}
               </Text>
-
-              <Box as="button" onClick={() => setQueAbierto(true)}
-                   px={5} py={2} borderRadius="full" cursor="pointer"
-                   color={nutricionTxt} bg="#ffffffcc" border={`1px solid ${nutricionTxt}55`}
-                   fontSize={{ base: "sm", md: "md" }} fontWeight={600}
-                   transition="all 0.18s ease"
-                   _hover={{ transform: "translateY(-1px)", bg: "#ffffff", borderColor: nutricionTxt }}>
-                {t("llamada.queEsEsto")}
-              </Box>
 
               <Flex align="center" gap={3} w="100%" maxW="380px">
                 <Box flex="1" h="7px" borderRadius="full" bg="rgba(255,255,255,0.22)" overflow="hidden">
@@ -644,10 +600,14 @@ export default function MetodoNutricionPrediabetes() {
         </Flex>
       </Flex>
 
-      <QueEsModal isOpen={queAbierto} onClose={() => setQueAbierto(false)} />
-
       <IndiceNutricion />
-      <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom} />
+      {/* El «¿Qué es esto?» de esta página: la pastilla flotante encima de la de
+          la llamada, con el mismo texto que antes abría el botón de arriba. El
+          popup lo pinta BotonCompania sobre el fondo de Nutrición (la acuarela
+          de `nutri.webp`), que es el que llevan todos los popups de la
+          disciplina. */}
+      <BotonCompania color={nutricionTxt} bgColor={nutricionBg} disciplinaNom={nutricionNom}
+                     queEsEsto={{ titulo: t("metodo.nutri.prediabetes"), parrafos: PREDIABETES_INTRO.que }} />
       <SiteFooter />
     </Box>
   );

@@ -68,7 +68,19 @@ function CajaCristal(props: CajaCristalProps) {
 }
 
 /** Título de sección + su rayita corta. Igual que el de «Qué obtienes». */
-function TituloBloque({ children, sub }: { children: React.ReactNode; sub?: React.ReactNode }) {
+function TituloBloque({
+  children,
+  sub,
+  sinRaya,
+}: {
+  children: React.ReactNode;
+  sub?: React.ReactNode;
+  /** Sin la rayita entre el título y la frase. La lleva por defecto —es la que
+   *  separa el titular de su bajada en el resto de bloques—, pero «El Mapa por
+   *  dentro» va precedido de una cesura horizontal a media pantalla, y las dos
+   *  líneas tan seguidas se leían como un tropiezo. */
+  sinRaya?: boolean;
+}) {
   return (
     <Flex direction="column" align="center" gap={{ base: 3, md: 4 }} textAlign="center">
       <Text
@@ -81,7 +93,7 @@ function TituloBloque({ children, sub }: { children: React.ReactNode; sub?: Reac
       >
         {children}
       </Text>
-      <Box w={{ base: "70px", md: "90px" }} h="1px" bg="rgba(255,255,255,0.35)" />
+      {!sinRaya && <Box w={{ base: "70px", md: "90px" }} h="1px" bg="rgba(255,255,255,0.35)" />}
       {sub && (
         <Text
           color="rgba(255,255,255,0.88)"
@@ -219,7 +231,7 @@ export function PruebasBloque() {
   const t = useT();
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
-      <TituloBloque sub={t("elMetodo.pruebas.sub")}>{t("elMetodo.pruebas.titulo")}</TituloBloque>
+      <TituloBloque sinRaya sub={t("elMetodo.pruebas.sub")}>{t("elMetodo.pruebas.titulo")}</TituloBloque>
 
       <Reveal inView direction="up" distance={24} duration={0.8} w="100%">
         <RecorridoVideosMuestra />

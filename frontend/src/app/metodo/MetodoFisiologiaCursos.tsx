@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { useT } from "../../i18n";
-import { recordarOrigenCurso } from "../../components/global/VolverAlMapa";
 import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { Reveal } from "../../components/global/Reveal";
+import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
+import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
+import { useCursosData } from "../../data/cursosApi";
+import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
   API_URL,
   fisiologiaBg,
@@ -22,24 +25,14 @@ import {
 } from "../../GlobalVariables";
 
 // ── Cursos para profundizar (Fisiología) ────────────────────────────────────
-// Página-hub que va DESPUÉS de La sonrisa interior. Aquí se listarán los cursos avanzados de
-// Fisiología. De momento no hay ninguno: se deja el enrutado y el diseño listos;
-// María solo tendrá que ir añadiendo objetos a CURSOS y el resto funciona solo.
-interface Curso {
-  key: string;
-  titulo: string;
-  /** Frase corta bajo el título en la tarjeta. */
-  resumen: string;
-  /** Foto de portada del curso (opcional; si falta, se pinta la inicial). */
-  foto?: string;
-  /** Ruta a la que lleva el curso (cuando exista). */
-  ruta?: string;
-  /** Si true, la tarjeta se muestra como «Próximamente» (no navegable). */
-  proximamente?: boolean;
-}
-
-// Aún no hay cursos de Fisiología. Al añadir objetos aquí, aparecerán solos.
-const CURSOS: Curso[] = [];
+// Página-hub que va DESPUÉS de La sonrisa interior. Su «siguiente» arranca la
+// 6ª disciplina: Nutrición.
+//
+// Los cursos NO se escriben aquí: salen del CATÁLOGO (tabla `curso`, vía
+// useCursosData, modalidad «Fisiología»), igual que en el resto de disciplinas.
+// Antes había un array local vacío y por eso la página seguía enseñando «estoy
+// preparando los cursos» aunque el catálogo ya tuviera los suyos. Al publicar
+// uno nuevo aparece solo, sin tocar este archivo.
 
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
 const Candado = ({ size }: { size: any }) => (
@@ -50,71 +43,6 @@ const Candado = ({ size }: { size: any }) => (
   </Box>
 );
 
-// ── Tarjeta de un curso ──────────────────────────────────────────────────────
-function CursoBox({ curso, onEnter }: { curso: Curso; onEnter: () => void }) {
-  const t = useT();
-  const [imgErr, setImgErr] = useState(false);
-  const bloqueado = !!curso.proximamente || !curso.ruta;
-  return (
-    <Box
-      as={bloqueado ? "div" : "button"}
-      onClick={bloqueado ? undefined : onEnter}
-      position="relative"
-      w="100%"
-      h="100%"
-      borderRadius="2xl"
-      overflow="hidden"
-      cursor={bloqueado ? "default" : "pointer"}
-      aria-disabled={bloqueado}
-      border={`1px solid ${bloqueado ? `${fisiologiaTxt}33` : `${fisiologiaTxt}77`}`}
-      opacity={bloqueado ? 0.78 : 1}
-      boxShadow={bloqueado
-        ? "inset 0 0 24px rgba(0,0,0,0.35)"
-        : `0 0 16px ${fisiologiaTxt}26, 0 0 40px ${fisiologiaTxt}16, inset 0 0 24px rgba(0,0,0,0.25)`}
-      transition="all 0.25s ease"
-      _hover={bloqueado ? undefined : {
-        transform: "translateY(-6px)",
-        borderColor: fisiologiaTxt,
-        boxShadow: `0 0 26px ${fisiologiaTxt}88, 0 0 64px ${fisiologiaTxt}44, inset 0 0 24px rgba(0,0,0,0.2)`,
-      }}
-      _active={bloqueado ? undefined : { transform: "translateY(-2px)" }}
-    >
-      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl"
-                         overlay={bloqueado ? "rgba(0,0,0,0.55)" : `${fisiologiaBg}66`} />
-
-      <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
-            p={{ base: 4, md: 5 }} h="100%">
-        <Box w="100%" aspectRatio={1} borderRadius="xl" overflow="hidden" flexShrink={0}
-             bg={`${fisiologiaTxt}14`} boxShadow="0 4px 16px rgba(0,0,0,0.28)"
-             display="flex" alignItems="center" justifyContent="center">
-          {curso.foto && !imgErr ? (
-            <Image src={encodeURI(curso.foto)} alt={curso.titulo} w="100%" h="100%" objectFit="cover"
-                   onError={() => setImgErr(true)} />
-          ) : (
-            <Text color={fisiologiaTxt} fontWeight="800" fontSize={{ base: "3xl", md: "4xl" }}
-                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.6)" }}>
-              {curso.titulo.charAt(0)}
-            </Text>
-          )}
-        </Box>
-        <Text color={fisiologiaTxt} fontWeight={700} fontSize={{ base: "lg", md: "xl" }} textAlign="center"
-              lineHeight="1.25" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.7)" }}>
-          {curso.titulo}
-        </Text>
-        <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
-              textAlign="center" lineHeight="1.5" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.7)" }}>
-          {curso.resumen}
-        </Text>
-        <Box flex="1" minH={{ base: 1, md: 2 }} />
-        <Text color={`${fisiologiaTxt}cc`} fontSize="2xs" fontWeight={700} letterSpacing="0.12em"
-              textTransform="uppercase">
-          {bloqueado ? t("comun.proximamente") : t("fisiologia.cursos.entrar")}
-        </Text>
-      </Flex>
-    </Box>
-  );
-}
-
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaCursos() {
   const t = useT();
@@ -123,6 +51,7 @@ export default function MetodoFisiologiaCursos() {
   // ¿Ha pagado ya la Nutrición? (6ª disciplina, el siguiente paso tras Fisiología).
   const [nutriSuscrito, setNutriSuscrito] = useState(false);
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  const { cursosData, loading: cursosLoading } = useCursosData();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -145,7 +74,16 @@ export default function MetodoFisiologiaCursos() {
     })();
   }, [navigate]);
 
-  if (loading) {
+  // Los cursos de Fisiología del catálogo, en orden de publicación: esta página
+  // acompaña «paso a paso», igual que en Cábala.
+  const cursos = [...(cursosData[fisiologiaNom]?.cursos ?? [])].sort(
+    (a, b) => (a.createdAt ?? "").localeCompare(b.createdAt ?? ""),
+  );
+  // No se enseña la página hasta tener las portadas: si no, las tarjetas se
+  // rellenan a trozos.
+  const fotosListas = usePrecargarImagenes(cursos.map((c) => c.foto));
+
+  if (loading || cursosLoading || !fotosListas) {
     return <FisiologiaLoading />;
   }
 
@@ -154,7 +92,7 @@ export default function MetodoFisiologiaCursos() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1100px" gap={7}>
+        <Flex direction="column" align="center" w="100%" maxW="1280px" gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
@@ -181,14 +119,22 @@ export default function MetodoFisiologiaCursos() {
             </Text>
           </Reveal>
 
-          {CURSOS.length > 0 ? (
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {CURSOS.map((c, i) => (
-                <Reveal key={c.key} direction="up" distance={20} delay={0.06 * i} duration={0.55} w="100%" display="flex">
-                  <CursoBox curso={c} onEnter={() => { if (c.ruta) { recordarOrigenCurso(); navigate(c.ruta); } }} />
-                </Reveal>
-              ))}
-            </SimpleGrid>
+          {/* El catálogo manda: con un solo curso, su tarjeta centrada (no una
+              rejilla con dos huecos vacíos); con varios, la rejilla común. */}
+          {cursos.length > 0 ? (
+            cursos.length === 1 ? (
+              <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+                <Flex w="100%" justify="center">
+                  <Box w="100%" maxW="520px">
+                    <CursoCardDetalle curso={cursos[0]} bgColor={fisiologiaBg} color={fisiologiaTxt} nom={fisiologiaNom} />
+                  </Box>
+                </Flex>
+              </Reveal>
+            ) : (
+              <CursosGrid
+                items={cursos.map((curso) => ({ curso, color: fisiologiaTxt, bgColor: fisiologiaBg, nom: fisiologiaNom }))}
+              />
+            )
           ) : (
             /* ── Aún no hay cursos: estado vacío elegante ── */
             <Reveal direction="up" distance={16} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">

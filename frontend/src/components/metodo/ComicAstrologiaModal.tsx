@@ -138,7 +138,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/aries.webp",
     paragraphs: [
-      "Aries.",
+      "ARIES",
       "Acaba de nacer. No conoce las reglas.",
       "Actúa sin ser consciente de que sus actos tienen consecuencias. Cuando rompe la barrera, pierde interés en lo que hay detrás y busca la siguiente.",
       "Necesita novedad constante, por eso le cuesta acabar lo que empieza. Prefiere pelear antes que aceptar su derrota.",
@@ -147,7 +147,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/tauro.webp",
     paragraphs: [
-      "Tauro.",
+      "TAURO",
       "Materializa la energía. Conectado con la naturaleza.",
       "Vive en los sentidos. Disfruta despacio y trabaja constante. Termina lo que empieza.",
       "Necesita anclarse en algo sólido y estable. Confunde seguridad con apego a patrones tóxicos.",
@@ -156,7 +156,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/geminis.webp",
     paragraphs: [
-      "Géminis.",
+      "GÉMINIS",
       "La inteligencia en alta frecuencia. El ruido si no se pone consciencia.",
       "Le cuesta el mundo emocional, por eso se queda en lo mental. Piensa antes de sentir.",
       "No tolera el aburrimiento ni lo ya sabido. Cambia constantemente porque desea novedad.",
@@ -166,7 +166,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/cancer.webp",
     paragraphs: [
-      "Cáncer.",
+      "CÁNCER",
       "Necesita sentir para saber quién es. Necesita pertenecer.",
       "Su identidad viene de sus raíces. Hace familia a aquellos que ama.",
       "Es vulnerable por dentro. Por eso construye un escudo por fuera. Le cuesta soltar el pasado, incluso cuando duele.",
@@ -175,7 +175,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/leo.webp",
     paragraphs: [
-      "Leo",
+      "LEO",
       "Brillante, carismático, encantador. Atrae atención y además la necesita.",
       "Busca la validación de otros, pero debe aprender a validarse a sí mismo.",
       "Domina de forma natural. Puede cazar para demostrar su supremacía. Le calma más el halago que la razón.",
@@ -184,7 +184,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/virgo.webp",
     paragraphs: [
-      "Virgo.",
+      "VIRGO",
       "Analiza, ordena, cuida, sirve.",
       "Vive sin querer ver su propio caos. Somatiza lo que niega.",
       "Es el crítico y juzgador más duro consigo mismo y con los demás.",
@@ -194,7 +194,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/libra.webp",
     paragraphs: [
-      "Libra.",
+      "LIBRA",
       "La diplomacia. Necesita al otro para descubrirse a sí mismo.",
       "Quiere encajar y ser aceptado en la sociedad. Indeciso. Quiere que otros decidan por él.",
       "No le gustan las peleas. Recopila datos de todos para evitar desencuentros.",
@@ -203,7 +203,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/escorpio.webp",
     paragraphs: [
-      "Escorpio.",
+      "ESCORPIO",
       "Intensidad, profundidad, transformación. Todo o nada.",
       "Paseos por los infiernos para descubrirse a sí mismo y a su sombra.",
       "Desea fundirse con el otro. La separación después de la fusión le duele mucho, pero debe de aprender a que sin uno no existe el otro.",
@@ -212,7 +212,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/sagitario.webp",
     paragraphs: [
-      "Sagitario",
+      "SAGITARIO",
       "El filósofo. Busca el sentido de la Vida. Encuentra el para qué de sus experiencias.",
       "Nómada por naturaleza. La libertad no se negocia.",
       "El maestro. El que va más allá.",
@@ -221,7 +221,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/capricornio.webp",
     paragraphs: [
-      "Capricornio",
+      "CAPRICORNIO",
       "La responsabilidad. Desea que lo que construye repercuta positivamente en las siguientes generaciones.",
       "Espera. Renuncia. Aguanta. Pone el deber antes que el deseo. Planificador meticuloso.",
       "Por dentro es frágil. No lo va a contar ni quiere que se note.",
@@ -231,7 +231,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/acuario.webp",
     paragraphs: [
-      "Acuario.",
+      "ACUARIO",
       "Ama a la humanidad, odia a los humanos.",
       "Desea pertenecer, pero no quiere perder su individualidad. Original. Innovador.",
       "Analiza a todos antes de fiarse. No le gustan los vínculos ni compromisos emocionales.",
@@ -240,7 +240,7 @@ export const VINETAS_SIGNOS: Vineta[] = [
   {
     src: "/viñetas/astrologia/signos/piscis.webp",
     paragraphs: [
-      "Piscis.",      
+      "PISCIS",
       "Debe diferenciar si lo que siente es suyo o si lo ha absorbido sin querer.",
       "Carga la basura psíquica de otros, debe aprender a liberarse. Ese dolor no es suyo.",
       "Necesita periodos de soledad. Sensible, dulce. Su gran corazón es rosa.",
@@ -252,6 +252,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa1.webp",
     paragraphs: [
+      "CASA I",
       "El instante del nacimiento.",
       "La forma en que nos perciben y nos percibimos. No es lo que somos. Es la herramienta con la que avanzamos hacia el Sol natal.",
       "También la energía de los inicios.",
@@ -260,6 +261,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa2.webp",
     paragraphs: [
+      "CASA II",
       "El contacto con el mundo tangible.",
       "Nuestra valía y la valía que aportamos al mundo. Habla de la relación con los recursos y el dinero.",
       "Revela las capacidades que queremos desarrollar en esta Vida y que nos darán seguridad.",
@@ -268,6 +270,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa3.webp",
     paragraphs: [
+      "CASA III",
       "La comunicación. El pensamiento estructurado.",
       "Cómo creamos nuestra realidad con palabras. Habla de los hermanos y los vecinos.",
       "Revela cómo fueron la infancia y los años de escuela.",
@@ -276,6 +279,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa4.webp",
     paragraphs: [
+      "CASA IV",
       "La familia de origen y sus raíces.",
       "La seguridad interna.",
       "El niño interior que sigue viviendo dentro.",
@@ -287,6 +291,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa5.webp",
     paragraphs: [
+      "CASA V",
       "El niño que fuimos. El romance, la creatividad, el placer.",
       "La Casa de las ideas sin garantía. Los hijos y las creaciones.",
       "Revela la intensidad con la que necesitamos sentirnos únicos.",
@@ -296,6 +301,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa6.webp",
     paragraphs: [
+      "CASA VI",
       "Qué hacemos a diario con nuestra energía y nuestro tiempo.",
       "Rutina, el cómo cuidamos a otros y a nosotros mismos. Necesidad de orden y limpieza.",
       "Debes encontrar tu orden interno y aplicarlo, si no, somatizas.",
@@ -304,6 +310,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa7.webp",
     paragraphs: [
+      "CASA VII",
       "La pareja. Las relaciones de igualdad. Los socios.",
       "Muestra cómo vives estas relaciones, qué personas atraes y te atraen.",
       "Lo que proyectamos en el otro es nuestro. El otro como espejo.",
@@ -312,6 +319,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa8.webp",
     paragraphs: [
+      "CASA VIII",
       "El territorio de la sombra.",
       "La Muerte del ego, la Muerte del 'yo',",
       "Lo que tiene poder sobre nosotros sin que lo sepamos. Muerte, intensidad, destrucción, transformación, dolor.",
@@ -321,6 +329,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa9.webp",
     paragraphs: [
+      "CASA IX",
       "La búsqueda de sentido.",
       "La Vida como algo que vale la pena entender. Filosofías, misticismos, universidades, culturas.",
       "Los viajes largos que cambian la forma de ver el mundo.",
@@ -329,6 +338,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa10.webp",
     paragraphs: [
+      "CASA X",
       "La vocación, la profesión, el estatus, el perfil público.",
       "La relación con la autoridad.",
       "La necesidad de dejar algo que trascienda la propia Vida.",
@@ -337,6 +347,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa11.webp",
     paragraphs: [
+      "CASA XI",
       "Los amigos, los grupos, las asociaciones.",
       "Los anhelos del alma. Salir de la individualidad y conectar con algo mayor.",
       "En baja frecuencia: necesidad de pertenencia.",
@@ -346,6 +357,7 @@ export const VINETAS_CASAS: Vineta[] = [
   {
     src: "/viñetas/astrologia/casas/casa12.webp",
     paragraphs: [
+      "CASA XII",
       "Lo trascendental.",
       "El inconsciente colectivo y lo no digerido por nuestros ancestros. Heridas que se heredan hasta que se sanan.",
       "Aquí el ego teme su disolución, porque es la vuelta al origen, al Uno y al todo.",

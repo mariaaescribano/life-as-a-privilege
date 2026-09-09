@@ -147,7 +147,9 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                 right={0}
                 zIndex={320}
                 direction="column"
-                w={{ base: "min(86vw, 340px)", md: "380px" }}
+                // 420 y no 380 en escritorio: es lo que hace falta para que
+                // «ESTUDIO ASTROLÓGICO» quepa en una línea con su rayita.
+                w={{ base: "min(86vw, 340px)", md: "420px" }}
                 // `100dvh` y no `100vh`: en el móvil la barra del navegador se
                 // esconde al hacer scroll y con `vh` el panel quedaba cortado.
                 h="100dvh"
@@ -201,19 +203,28 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                         WebkitTapHighlightColor: "transparent",
                         // La rayita de la izquierda crece al pasar por encima:
                         // es la marca de «estás señalando esto».
-                        "&:hover .marca": { width: "26px", opacity: 1 },
+                        "&:hover .marca": { transform: "scaleX(1)", opacity: 1 },
                         "&:hover .texto": { opacity: 1, transform: "translateX(2px)" },
                       }}
                     >
+                      {/* La rayita ocupa SIEMPRE sus 26px y crece con
+                          `scaleX`, no con `width`. Antes crecía de 0 a 26px al
+                          pasar por encima y esos 26px se los quitaba a la
+                          etiqueta: «ESTUDIO ASTROLÓGICO» se partía en dos
+                          líneas solo mientras tenías el ratón encima. Una
+                          transformación no ocupa sitio, así que la fila mide lo
+                          mismo con ratón y sin él. Se ve exactamente igual. */}
                       <Box
                         className="marca"
                         h="1px"
-                        w={item.activo ? "26px" : "0px"}
+                        w="26px"
+                        transform={item.activo ? "scaleX(1)" : "scaleX(0)"}
+                        transformOrigin="left center"
                         opacity={item.activo ? 1 : 0}
                         bg="white"
                         flexShrink={0}
                         boxShadow="0 0 8px rgba(255,255,255,0.7)"
-                        transition="width 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease"
+                        transition="transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease"
                       />
                       <Text
                         className="texto"
@@ -223,9 +234,12 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                         fontSize={{ base: "md", md: "lg" }}
                         letterSpacing="0.18em"
                         textTransform="uppercase"
-                        // Sin «nowrap»: hay etiquetas largas («ESTUDIO
-                        // ASTROLÓGICO») y en un móvil estrecho se saldrían del
-                        // panel. Que pasen a dos líneas antes que desbordar.
+                        // En escritorio, SIEMPRE una línea: la etiqueta más
+                        // larga («ESTUDIO ASTROLÓGICO») cabe de sobra en el
+                        // panel de 420px. En móvil se deja saltar de línea: ahí
+                        // el panel es estrecho y es mejor dos líneas que
+                        // desbordar por el lado.
+                        whiteSpace={{ base: "normal", md: "nowrap" }}
                         opacity={item.activo ? 1 : 0.82}
                         textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 24px rgba(255,255,255,0.22)"
                         transition="opacity 0.3s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1)"

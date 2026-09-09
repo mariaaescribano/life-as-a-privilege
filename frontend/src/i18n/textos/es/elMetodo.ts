@@ -13,10 +13,10 @@ export const elMetodo = {
   "elMetodo.lema": "Ocho disciplinas. Un orden. Un propósito: entenderte.",
   "elMetodo.intro":
     "No son ocho cursos independientes.\nEs una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.",
-  "elMetodo.porDentro": "Conoce las disciplinas",
+  "elMetodo.porDentro": "No estudias la disciplina, te descubres a ti con ella.",
   /** Va justo debajo del título: avisa de que el mandala se puede pinchar. */
   "elMetodo.porDentroPista": "Haz clic en cada círculo para descubrirla",
-  "elMetodo.cadaDisciplina": "Cada disciplina observa una parte distinta del ser humano.",
+  "elMetodo.cadaDisciplina": "Cada disciplina observa una parte distinta de ti.",
   /** Cabecera de las cajas de la ficha de disciplina (DisciplinaFicha). */
   "elMetodo.queIncluye": "Qué incluye",
 
@@ -47,11 +47,13 @@ export const elMetodo = {
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",
   "elMetodo.hero.sub":
-    "El Mapa reúne ocho perspectivas sobre ti —mente, historia, cuerpo, naturaleza y cultura— para ayudarte a comprender de dónde vienen tus patrones.",
+    "El Mapa reúne ocho perspectivas sobre ti —tu mente, tu historia y tu cuerpo— para ayudarte a comprender de dónde vienen tus patrones.",
   "elMetodo.hero.cta": "Empezar mi Mapa",
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).
   "elMetodo.hero.ctaPie": "Desde 30 € · Sin suscripción · Sin compromiso",
+  /** El botón de al lado, el de la comunidad de WhatsApp. */
+  "elMetodo.hero.comunidad": "Únete a la comunidad",
 
   // ── 2. EL ESPEJO ───────────────────────────────────────────────────────
   // Cuatro frases para que quien lee se reconozca antes de que le contemos
@@ -74,8 +76,8 @@ export const elMetodo = {
   // Dos frases sueltas, una debajo de otra y las dos centradas: la primera dice
   // lo que NO es y la segunda lo que sí. Separadas de verdad (no con un \n
   // dentro de la misma línea) para que ninguna herede la sangría de la otra.
-  "elMetodo.mecanismo.clave": "Esta es la diferencia: aquí **no estudias la disciplina.**",
-  "elMetodo.mecanismo.clave2": "**Te estudias a ti con ella.**",
+  "elMetodo.mecanismo.clave":"**No estudias la disciplina, te estudias a ti con ella.**",
+  "elMetodo.mecanismo.clave2": "",
 
   // Aquí vivía el bloque 4, «Al terminar no tienes apuntes. Tienes esto.»: una
   // tarjeta por disciplina con lo que se lleva puesto de cada una. Retirado.
@@ -84,7 +86,7 @@ export const elMetodo = {
   // Justo antes del precio: hasta ahí la página promete, y aquí se enseña.
   "elMetodo.pruebas.titulo": "El Mapa por dentro",
   "elMetodo.pruebas.sub":
-    "Las ocho disciplinas grabadas por dentro, tal y como las verás. Pulsa cualquiera para verla.",
+    "Las ocho disciplinas por dentro, tal y como las verás. Pulsa cualquiera para verla.",
 
   // ── 8. PRECIO ──────────────────────────────────────────────────────────
   "elMetodo.precio.titulo": "Cuánto cuesta, sin misterio",
@@ -174,6 +176,10 @@ export const elMetodo = {
   // ── Llamada gratuita (botón flotante + popup) ──────────────────────────
   // Sale solo a los 5 s de entrar (una vez por sesión) y con el botón flotante.
   "elMetodo.llamada.boton": "Llamada",
+  /** El hermano del botón flotante. «Mensaje» y no «Escríbeme»: al lado de
+   *  «Llamada» las dos palabras nombran el canal, y el glifo de al lado ya dice
+   *  que el canal es WhatsApp. */
+  "elMetodo.llamada.botonMensaje": "Mensaje",
   // El título va en DOS líneas: el «sin coste» cae debajo, más pequeño y en
   // cursiva. Por eso son dos claves y no una con salto de línea: cada línea
   // tiene su tipografía, y en inglés el reparto de palabras no es el mismo.
@@ -181,6 +187,10 @@ export const elMetodo = {
   "elMetodo.llamada.tituloSufijo": "sin coste",
   "elMetodo.llamada.texto": "Descubre cómo puedo acompañarte.",
   "elMetodo.llamada.remate": "No tienes que hacerlo todo solo/a.",
+  "elMetodo.llamada.whatsapp": "Escribe por WhatsApp",
+  /** Mensaje ya escrito al abrir el chat: que no tenga que pensar cómo empezar,
+   *  que es justo donde la gente se cae. */
+  "elMetodo.llamada.whatsappTexto": "¡Hola María! Te escribo desde Life as a Privilege.",
   "elMetodo.llamada.cta": "Agendar llamada",
   "elMetodo.llamada.cerrar": "Cerrar",
 

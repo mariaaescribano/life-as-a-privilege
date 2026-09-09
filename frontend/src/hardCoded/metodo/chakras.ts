@@ -87,7 +87,7 @@ export const CHAKRAS: Record<ChakraKey, Chakra> = {
     vinetas: [
       {
         src: foto(7),
-        eyebrow: "Sahasrāra · El chakra de la corona",
+        eyebrow: "",
         titulo: "",
         paragraphs: [
           "Sahasrāra representa la consciencia, la conexión, la trascendencia y la búsqueda de sentido.",
@@ -129,7 +129,7 @@ export const CHAKRAS: Record<ChakraKey, Chakra> = {
     vinetas: [
       {
         src: foto(6),
-        eyebrow: "Ājñā · El chakra del tercer ojo",
+        eyebrow: "",
         titulo: "",
         paragraphs: [
           "Ājñā representa la percepción, la intuición, la comprensión y la capacidad de observar más allá de lo evidente.",
@@ -170,7 +170,7 @@ export const CHAKRAS: Record<ChakraKey, Chakra> = {
     vinetas: [
       {
         src: foto(5),
-        eyebrow: "Viśuddha · El chakra de la garganta",
+        eyebrow: "",
         titulo: "",
         paragraphs: [
           "Viśuddha representa la expresión, la comunicación, la verdad y la capacidad de dar voz a aquello que somos y sentimos.",
@@ -211,7 +211,7 @@ export const CHAKRAS: Record<ChakraKey, Chakra> = {
     vinetas: [
       {
         src: foto(4),
-        eyebrow: "Anāhata · El chakra del corazón",
+        eyebrow: "",
         titulo: "",
         paragraphs: [
           "Anāhata representa el amor, la conexión, la compasión, la aceptación y la capacidad de relacionarnos desde un lugar más allá del ego.",
@@ -252,7 +252,7 @@ export const CHAKRAS: Record<ChakraKey, Chakra> = {
     vinetas: [
       {
         src: foto(3),
-        eyebrow: "Maṇipūra · El chakra del plexo solar",
+        eyebrow:"",
         titulo: "",
         paragraphs: [
           "Maṇipūra representa la voluntad, la identidad, el poder personal, la autoestima y la capacidad de actuar.",
@@ -293,7 +293,7 @@ export const CHAKRAS: Record<ChakraKey, Chakra> = {
     vinetas: [
       {
         src: foto(2),
-        eyebrow: "Svādhiṣṭhāna · El chakra sacro",
+        eyebrow: "",
         titulo: "",
         paragraphs: [
           "Svādhiṣṭhāna representa el deseo, el placer, las emociones, la creatividad y nuestra capacidad de relacionarnos con lo que sentimos.",
@@ -334,7 +334,7 @@ export const CHAKRAS: Record<ChakraKey, Chakra> = {
     vinetas: [
       {
         src: foto(1),
-        eyebrow: "Mūlādhāra · El chakra raíz",
+        eyebrow: "",
         titulo: "",
         paragraphs: [
           "Mūlādhāra, «soporte de la raíz», representa el fundamento de nuestra existencia: seguridad, supervivencia, cuerpo, hogar y pertenencia.",

@@ -11,7 +11,6 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
-import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
 import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlustracionModal";
 import { HAMBRE_HOLISTICA, sinNegrita } from "../../components/metodo/hambreHolistica";
 import { useComic } from "../../i18n/comics";
@@ -47,7 +46,6 @@ export default function MetodoNutricionHambre() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // Cómic de transición «Lo integral» (se abre al pulsar «Crea tu plato →»).
-  const [comicIntegralOpen, setComicIntegralOpen] = useState(false);
   // La lectura abierta en el visor (índice dentro de HAMBRE_HOLISTICA).
   const [lecturaAbierta, setLecturaAbierta] = useState<number | null>(null);
 
@@ -91,7 +89,7 @@ export default function MetodoNutricionHambre() {
               mb={0}
               prev={{ label: `← ${t("metodo.nutri.paso.microbiota")}`, onClick: () => navigate("/metodo/nutricion/microbiota") }}
               extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={{ label: `${t("metodo.nutri.paso.platoCrear")} →`, onClick: () => setComicIntegralOpen(true) }}
+              next={{ label: `${t("metodo.nutri.paso.ultraCorto")} →`, onClick: () => navigate("/metodo/nutricion/ultraprocesados") }}
             />
           </Reveal>
 
@@ -133,13 +131,6 @@ export default function MetodoNutricionHambre() {
         vinetas={vinetasHambre}
         initialIndex={lecturaAbierta ?? 0}
         onClose={() => setLecturaAbierta(null)}
-      />
-
-      {/* Cómic de transición «Lo integral» hacia el plato de Harvard. */}
-      <ComicIntegralModal
-        isOpen={comicIntegralOpen}
-        onClose={() => setComicIntegralOpen(false)}
-        onContinue={() => navigate("/metodo/nutricion/plato")}
       />
 
       <IndiceNutricion />

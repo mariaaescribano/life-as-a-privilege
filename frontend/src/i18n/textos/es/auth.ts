@@ -22,7 +22,7 @@ export const auth = {
 
   // ── Crear cuenta ───────────────────────────────────────────────────────
   "auth.signin.titulo": "Crear cuenta",
-  "auth.signin.subtitulo": "Crea tu cuenta sin coste ninguno",
+  "auth.signin.subtitulo": "Sin coste ninguno",
   "auth.signin.trato": "¿CÓMO PREFIERES QUE ME DIRIJA HACIA TI?",
   "auth.signin.tratoEl": "Él",
   "auth.signin.tratoElla": "Ella",

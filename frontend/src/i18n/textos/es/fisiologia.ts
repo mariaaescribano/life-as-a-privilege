@@ -45,7 +45,7 @@ export const fisiologia = {
 
   // ── Niveles ────────────────────────────────────────────────────────────
   "fisiologia.niveles.intro":
-    "Descubre poco a poco, de las partículas que te forman hasta el ecosistema complejo y mágico que eres.",
+    "Descubre poco a poco, de las partículas que te forman hasta el ecosistema complejo y magnífico que eres.",
   /** Antetítulo de una tarjeta: «Nivel 1», «Nivel 2»… */
   "fisiologia.niveles.nivel": "Nivel {n}",
   "fisiologia.niveles.avanzado": "Avanzado",

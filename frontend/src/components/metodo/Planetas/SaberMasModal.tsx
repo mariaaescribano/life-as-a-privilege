@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, type BoxProps } from "@chakra-ui/react";
 import { ZODIAC_SIGNS, type Cuerpo } from "../astrologiaData";
 import { useNombresAstro } from "../astrologiaNombres";
 import { Glifo, GlifoSigno } from "../Glifo";
@@ -17,6 +17,31 @@ interface SaberMasModalProps {
   /** Si se indica, el popup muestra SOLO esa faceta (signo o casa). Sin él,
    *  muestra ambas (comportamiento por defecto en Astrología). */
   facet?: "signo" | "casa";
+}
+
+/**
+ * RAYA FINA — la separación horizontal de la tarjeta: un hilo de 1 px que nace y
+ * muere en transparente, con el color del cuerpo encendido en el centro y un
+ * halo suave alrededor. Sobre el cielo estrellado no hace de borde, hace de
+ * respiración.
+ *
+ * En un solo sitio porque en cada tarjeta salen hasta TRES: bajo el título, entre
+ * el resumen y el texto largo, y antes de las flechas del carrusel. Tienen que
+ * ser la misma raya: dos rayas parecidas pero distintas se notan a la primera.
+ * Lo único que cambia de una a otra es el aire de alrededor, que se le pasa por
+ * fuera (`my` / `mt`).
+ */
+function RayaFina({ color, ...rest }: { color: string } & BoxProps) {
+  return (
+    <Box
+      h="1px"
+      w="60%"
+      mx="auto"
+      bgGradient={`linear(to-r, transparent, ${color}66, transparent)`}
+      boxShadow={`0 0 6px ${color}33`}
+      {...rest}
+    />
+  );
 }
 
 /** Renderiza el contenido inline de un párrafo, aplicando **negritas** del color del cuerpo. */
@@ -113,14 +138,7 @@ function ContenidoArquetipo({ texto, color }: { texto: string; color: string }) 
 
       {cuerpo && (
         <>
-          <Box
-            h="1px"
-            w="60%"
-            mx="auto"
-            my={{ base: 5, md: 6 }}
-            bgGradient={`linear(to-r, transparent, ${color}66, transparent)`}
-            boxShadow={`0 0 6px ${color}33`}
-          />
+          <RayaFina color={color} my={{ base: 5, md: 6 }} />
           <Box w="100%">{renderTextoLargo(cuerpo, color)}</Box>
         </>
       )}
@@ -221,7 +239,12 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         </Text>
       </Flex>
 
-      {/* Sin raya bajo el título: el título ya se separa por el gap. */}
+      {/* Raya bajo el título: el título deja de ser una línea más del bloque y
+          pasa a ser el encabezado de la tarjeta. Es LA MISMA raya que la de
+          abajo, y con el mismo aire: el `gap={4}` del Flex ya pone 16 px a cada
+          lado, así que el `my` solo añade los 4-8 px que faltan para igualar los
+          20 (base) y 24 (md) de `ContenidoArquetipo`. */}
+      <RayaFina color={color} my={{ base: 1, md: 2 }} />
       {cargando ? (
         <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">{t("comun.cargando")}</Text>
       ) : textoSigno ? (
@@ -255,7 +278,12 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         </Text>
       </Flex>
 
-      {/* Sin raya bajo el título: el título ya se separa por el gap. */}
+      {/* Raya bajo el título: el título deja de ser una línea más del bloque y
+          pasa a ser el encabezado de la tarjeta. Es LA MISMA raya que la de
+          abajo, y con el mismo aire: el `gap={4}` del Flex ya pone 16 px a cada
+          lado, así que el `my` solo añade los 4-8 px que faltan para igualar los
+          20 (base) y 24 (md) de `ContenidoArquetipo`. */}
+      <RayaFina color={color} my={{ base: 1, md: 2 }} />
       {cargando ? (
         <Text color={`${color}aa`} fontSize="sm" fontStyle="italic" textAlign="center">{t("comun.cargando")}</Text>
       ) : textoCasa ? (
@@ -376,15 +404,8 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
               Se lee una, y con el botón se pasa a la siguiente (y se puede volver). */}
           {multi && (
             <>
-            {/* Ralla horizontal que separa el texto de la navegación */}
-            <Box
-              h="1px"
-              w="60%"
-              mx="auto"
-              mt={{ base: 7, md: 8 }}
-              bgGradient={`linear(to-r, transparent, ${color}66, transparent)`}
-              boxShadow={`0 0 6px ${color}33`}
-            />
+            {/* Raya horizontal que separa el texto de la navegación */}
+            <RayaFina color={color} mt={{ base: 7, md: 8 }} />
             <Flex align="center" justify="center" gap={4} mt={{ base: 5, md: 6 }}>
               <Box
                 as="button"

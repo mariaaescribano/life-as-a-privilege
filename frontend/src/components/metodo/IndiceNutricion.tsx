@@ -28,6 +28,7 @@ const PASOS: { clave: ClaveTexto; path: string }[] = [
   { clave: "metodo.nutri.paso.secundarios",        path: "/metodo/nutricion/nutrientes-secundarios" },
   { clave: "metodo.nutri.paso.microbiotaTitulo",   path: "/metodo/nutricion/microbiota" },
   { clave: "metodo.nutri.paso.hambre",             path: "/metodo/nutricion/hambre" },
+  { clave: "metodo.nutri.paso.ultraCorto",         path: "/metodo/nutricion/ultraprocesados" },
   { clave: "metodo.nutri.paso.plato",              path: "/metodo/nutricion/plato" },
   { clave: "metodo.nutri.paso.caloriasTitulo",     path: "/metodo/nutricion/calorias" },
   { clave: "metodo.nutri.paso.prediabetes",        path: "/metodo/nutricion/prediabetes" },

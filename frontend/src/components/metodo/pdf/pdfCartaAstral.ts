@@ -22,10 +22,12 @@
 //    nunca se corta ni se mezcla con la lectura siguiente.
 //  · Una ÚNICA línea horizontal por página, larga, justo debajo del título. Nada
 //    más corta el texto.
-//  · Al lado del título va el SÍMBOLO del planeta de esa lectura (dos, en los
+//  · DELANTE del título va el SÍMBOLO del planeta de esa lectura (dos, en los
 //    aspectos), con su color y un poco de brillo; el título toma ese mismo color
-//    cuando hay un planeta solo. El símbolo se rasteriza en un canvas porque los
-//    tipos internos del PDF no tienen glifo para ☉ ☽ ♀ — igual que en la rueda.
+//    cuando hay un planeta solo. Va delante y no detrás porque así se lee como
+//    se nombra: el icono de la Luna y después «Luna en la Casa 7». El símbolo se
+//    rasteriza en un canvas porque los tipos internos del PDF no tienen glifo
+//    para ☉ ☽ ♀ — igual que en la rueda.
 //
 //  · MEDIR Y PINTAR SON EL MISMO CÓDIGO (`cabecera`, `repartirBloque`) llamado
 //    con `dibujar` a false o a true. Es lo que hace que los números del índice
@@ -403,27 +405,40 @@ function cabecera(doc: jsPDF, b: Bloque, continua: boolean, dibujar: boolean): n
   const tam = continua ? 15 : 19;
   doc.setFont("times", "bold");
   doc.setFontSize(tam);
+
+  // Los símbolos van DELANTE del título: primero el icono de la Luna y después
+  // «Luna en la Casa 7». Se lee como se nombra.
+  //
+  // El cálculo va aquí ARRIBA, fuera del `if (dibujar)`, y no es un detalle: el
+  // hueco de los iconos le quita ancho al título, así que puede cambiar en
+  // cuántas líneas se parte. Si solo lo supiera la pasada que pinta, la que mide
+  // devolvería otra altura y los números del índice empezarían a mentir.
+  const lado = tam * PT * 1.15;
+  const presentes = b.cuerpos.filter((k) => glifos.has(k));
+  const hueco = lado * 0.18;
+  // `glifoPlaneta` dibuja el símbolo en el 66% central de su cuadro, así que cada
+  // cuadro trae un 17% de aire a cada lado. Se descuenta las dos veces: el cuadro
+  // se corre a la izquierda para que sea el DIBUJO —y no su caja— el que cuadre
+  // con el margen de la página, y el título se pega al dibujo, no a la caja.
+  const aire = lado * 0.17;
+  const anchoDibujado = presentes.length * lado + (presentes.length - 1) * hueco - aire * 2;
+  // Separación entre el último icono y la primera letra: un espacio y pico.
+  const anchoGlifos = presentes.length ? anchoDibujado + lado * 0.25 : 0;
+
   const titulo = latin1(continua ? `${b.titulo} (continúa)` : b.titulo);
-  const lineas: string[] = doc.splitTextToSize(titulo, ANCHO_TEXTO);
+  const lineas: string[] = doc.splitTextToSize(titulo, ANCHO_TEXTO - anchoGlifos);
   if (dibujar) {
     doc.setTextColor(...color);
-    doc.text(lineas, MARGEN_X, y);
+    // Si el título se parte en dos, la segunda línea arranca donde la primera
+    // (no debajo del icono): el icono queda colgando a la izquierda del bloque.
+    doc.text(lineas, MARGEN_X + anchoGlifos, y);
 
-    // Los símbolos, pegados al final de la última línea del título.
-    const lado = tam * PT * 1.15;
-    const presentes = b.cuerpos.filter((k) => glifos.has(k));
-    if (presentes.length) {
-      const ultima = lineas[lineas.length - 1] ?? "";
-      const base = y + (lineas.length - 1) * tam * PT * 1.15;
-      const hueco = lado * 0.18;
-      const total = presentes.length * lado + (presentes.length - 1) * hueco;
-      let x = MARGEN_X + doc.getTextWidth(ultima) + lado * 0.28;
-      // Si no cabe detrás del título, se pega al margen derecho.
-      if (x + total > A4_W - MARGEN_X) x = A4_W - MARGEN_X - total;
-      for (const k of presentes) {
-        doc.addImage(glifos.get(k)!, "PNG", x, base - lado * 0.82, lado, lado, `glifo-${k}`, "FAST");
-        x += lado + hueco;
-      }
+    let x = MARGEN_X - aire;
+    for (const k of presentes) {
+      // Alto del cuadro: el 82% por encima de la línea base deja el dibujo
+      // óptimamente centrado con las mayúsculas del título.
+      doc.addImage(glifos.get(k)!, "PNG", x, y - lado * 0.82, lado, lado, `glifo-${k}`, "FAST");
+      x += lado + hueco;
     }
   }
   y += lineas.length * (continua ? 6.5 : 8);

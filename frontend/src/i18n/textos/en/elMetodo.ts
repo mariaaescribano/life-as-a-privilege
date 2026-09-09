@@ -42,6 +42,7 @@ export const elMetodo = {
     "The Map brings together eight perspectives on you —mind, history, body, nature and culture— to help you understand where your patterns come from and how the pieces fit together.",
   "elMetodo.hero.cta": "Start my Map",
   "elMetodo.hero.ctaPie": "From €30 · No subscription · No commitment",
+  "elMetodo.hero.comunidad": "Join the community",
 
   // ── 2. The mirror ──────────────────────────────────────────────────────
   "elMetodo.espejo.1": "You know what's happening to you, but not why.",
@@ -138,10 +139,13 @@ export const elMetodo = {
 
   // ── Free call (floating button + popup) ────────────────────────────────
   "elMetodo.llamada.boton": "Call",
+  "elMetodo.llamada.botonMensaje": "Message",
   "elMetodo.llamada.titulo": "Book a call",
   "elMetodo.llamada.tituloSufijo": "at no cost",
   "elMetodo.llamada.texto": "Let me get to know you and tell you how I can walk with you.",
   "elMetodo.llamada.remate": "You don't have to do it all on your own.",
+  "elMetodo.llamada.whatsapp": "Message me on WhatsApp",
+  "elMetodo.llamada.whatsappTexto": "Hi María! I'm writing from Life as a Privilege.",
   "elMetodo.llamada.cta": "Book a call",
   "elMetodo.llamada.cerrar": "Close",
 

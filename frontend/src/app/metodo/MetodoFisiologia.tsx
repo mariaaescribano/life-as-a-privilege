@@ -109,7 +109,7 @@ export default function MetodoFisiologia() {
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: `← ${t("disciplina.medicinaChina.corto")}`, onClick: () => navigate("/metodo/tcm/cursos") }}
+            prev={{ label: `← ${t("disciplina.medicinaChina.corto")}`, onClick: () => navigate("/metodo/tcm/apuntes") }}
             extra={celulasBtn}
             next={{ label: `${t("fisiologia.comenzar")} →`, onClick: comenzar }}
           />

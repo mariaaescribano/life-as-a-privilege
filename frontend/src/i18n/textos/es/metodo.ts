@@ -114,6 +114,8 @@ export const metodo = {
   "metodo.nutri.paso.secundariosCorto": "Secundarios",
   "metodo.nutri.paso.microbiota": "Microbiota",
   "metodo.nutri.paso.hambre": "El hambre",
+  "metodo.nutri.paso.ultraprocesados": "Los ultraprocesados",
+  "metodo.nutri.paso.ultraCorto": "Ultraprocesados",
   "metodo.nutri.paso.plato": "Tu plato",
   "metodo.nutri.paso.platoCrear": "Crea tu plato",
   "metodo.nutri.paso.calorias": "Tus calorías",
@@ -125,6 +127,29 @@ export const metodo = {
   /** Frase bajo el header de la página de mitos. */
   "metodo.nutri.mitos.intro":
     "Estas son algunas de las preguntas y mitos que más se repiten. Toca cada uno para descubrir qué dice de verdad la ciencia.",
+  /** ── Página «Los ultraprocesados» ────────────────────────────────────────
+   *  Ojo al tono: NO es una lista de venenos. La tesis es que el daño está en
+   *  cómo está hecha la comida, no en una molécula concreta, y las fichas van
+   *  ordenadas por lo sólido que es el dato. Si se reescribe algo de aquí,
+   *  que no se pierda eso. */
+  "metodo.nutri.ultra.tesis":
+    "El problema no es una molécula escondida: es lo que le han hecho a la comida.",
+  "metodo.nutri.ultra.intro":
+    "Un ultraprocesado no es comida con cosas añadidas. Es una formulación industrial hecha con sustancias que ya no reconocerías por separado, diseñada para que sea barata, dure meses y no puedas parar. Vamos a mirar de qué está hecha.",
+  "metodo.nutri.ultra.ensayoEtiqueta": "El experimento que lo demostró",
+  "metodo.nutri.ultra.ensayoDato": "+500 kcal al día",
+  "metodo.nutri.ultra.ensayoTexto":
+    "En 2019, un equipo del Instituto Nacional de Salud de Estados Unidos encerró a veinte voluntarios y les dio dos semanas de comida ultraprocesada y dos semanas de comida sin procesar. Las mismas calorías ofrecidas, los mismos macronutrientes, la misma sal y el mismo azúcar sobre el papel, y podían comer todo lo que quisieran. Con los ultraprocesados comieron unas 500 kcal más al día y ganaron casi un kilo en dos semanas. Con la comida de verdad lo perdieron.",
+  "metodo.nutri.ultra.ensayoPie":
+    "Hall et al., Cell Metabolism, 2019. Nadie les escondió nada: es la comida la que hace que comas más.",
+  "metodo.nutri.ultra.etiquetaTitulo": "Cómo leer una etiqueta",
+  "metodo.nutri.ultra.etiquetaIntro":
+    "Si solo te llevas una cosa de esta página, que sea esta. Cuatro señales que puedes usar hoy mismo, con el envase en la mano.",
+  "metodo.nutri.ultra.fichasTitulo": "Qué llevan de verdad",
+  "metodo.nutri.ultra.fichasIntro":
+    "Casi todo lo que viene ahora está autorizado a las dosis que se usan, y por eso están agrupadas por lo segura que es la evidencia y no por lo que asustan. Toca cada una para leer qué se sabe, y qué todavía no.",
+  "metodo.nutri.ultra.cierre":
+    "Cada aditivo se aprueba solo, en su ensayo, a su dosis. Pero tú no te comes uno: te comes quince a la vez, tres veces al día, durante cuarenta años. Esa suma no la ha estudiado nadie.",
   "metodo.nutri.paso.origen": "¿De dónde vienen?",
   "metodo.nutri.paso.cursos": "Cursos",
   /** Los dos nombres largos que solo se ven en el Índice. */

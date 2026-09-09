@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { BotonAviso } from "../../components/metodo/BotonAviso";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { Reveal } from "../../components/global/Reveal";
@@ -161,28 +162,7 @@ export default function MetodoAyurveda() {
 
           {/* ── Disparador del aviso ── */}
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
-          <Box
-            as="button"
-            onClick={() => setAvisoOpen(true)}
-            display="inline-flex"
-            alignItems="center"
-            gap={2}
-            px={6}
-            py={2.5}
-            borderRadius="full"
-            bg="rgba(255,255,255,0.08)"
-            border="1px solid rgba(255,255,255,0.4)"
-            color="rgba(255,255,255,0.92)"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="600"
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.04em"
-            cursor="pointer"
-            transition="all 0.2s"
-            _hover={{ bg: "rgba(255,255,255,0.16)", transform: "translateY(-1px)" }}
-          >
-            <Box as="span" fontSize="md">⚠</Box> {t("metodo.gate.avisoImportante")}
-          </Box>
+          <BotonAviso onClick={() => setAvisoOpen(true)} />
           </Reveal>
         </Flex>
       </Flex>

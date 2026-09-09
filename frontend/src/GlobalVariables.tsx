@@ -5,6 +5,22 @@ import React from "react";
 
 export const API_URL = "https://life-as-a-privilege.onrender.com"; //"http://localhost:3000"; //
 
+// ── CONTACTO ────────────────────────────────────────────────────────────────
+// El WhatsApp al que escribe la gente. En formato internacional y SIN el «+»,
+// ni espacios ni guiones: es lo que exige `wa.me`. Si algún día cambia el
+// número, se cambia AQUÍ y nada más.
+export const WHATSAPP_TELEFONO = "34647859892";
+
+// ⚠️ PENDIENTE: el enlace de invitación de la COMUNIDAD de WhatsApp. NO es el
+// número de arriba: es un `https://chat.whatsapp.com/…` que da el propio grupo
+// (Info del grupo → Invitar al grupo por enlace). Mientras esté vacío, el botón
+// del hero se pinta igual pero no lleva a ningún sitio.
+export const WHATSAPP_COMUNIDAD_URL = "";
+
+/** Enlace de WhatsApp con el mensaje ya escrito (opcional). */
+export const whatsappUrl = (texto?: string): string =>
+  `https://wa.me/${WHATSAPP_TELEFONO}${texto ? `?text=${encodeURIComponent(texto)}` : ""}`;
+
 // COLORES
 export const turquesa = "#48C0B5";
 

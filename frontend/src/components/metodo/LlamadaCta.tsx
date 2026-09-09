@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, type FlexProps } from "@chakra-ui/react";
 import { useT } from "../../i18n";
+import { whatsappUrl } from "../../GlobalVariables";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { Reveal } from "../global/Reveal";
@@ -85,6 +86,35 @@ function IconoLlamada({
   );
 }
 
+/** El glifo de WhatsApp. Este va MACIZO y no de línea como el del teléfono: es
+ *  una marca que se reconoce por su silueta, y dibujada a trazo se convierte en
+ *  un bocadillo cualquiera. Va en `currentColor`, así que hereda el color del
+ *  botón (y su cambio al pasar por encima) en vez de meter el verde de WhatsApp
+ *  en una tarjeta de mármol, azul y oro. */
+export function IconoWhatsapp({
+  size = "16px",
+  color = "currentColor",
+}: {
+  size?: string | Record<string, string>;
+  color?: string;
+}) {
+  return (
+    <Box
+      as="svg"
+      viewBox="0 0 24 24"
+      w={size}
+      h={size}
+      fill={color}
+      stroke="none"
+      flexShrink={0}
+      aria-hidden="true"
+    >
+      <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.79.97-.97 1.17-.18.2-.35.22-.65.07-.3-.15-1.13-.42-2.15-1.33-.8-.71-1.33-1.59-1.48-1.89-.15-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.2 5.07 4.37 2.98 1.17 2.98.78 3.52.73.54-.05 1.75-.71 2-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.19-.57-.34z" />
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.91 6.45 17.5 2 12.04 2zm0 18.15h-.01c-1.48 0-2.94-.4-4.21-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23z" />
+    </Box>
+  );
+}
+
 /* ════════════════════════════════════════════════════════════════════════════
  *  1. BOTÓN FLOTANTE
  * ════════════════════════════════════════════════════════════════════════════ */
@@ -105,52 +135,106 @@ function IconoLlamada({
  * Se monta FUERA del <Box> que lleva el `zoom` de la página: un `position:
  * fixed` dentro de un elemento con zoom se ancla a él y no a la ventana.
  */
+/** El estilo de las píldoras flotantes.
+ *
+ *  Las dos son la MISMA pastilla —crema, letra azul, el mismo latido y el mismo
+ *  hover— y solo cambian el icono, el rótulo y lo que hacen al pulsarlas. Está
+ *  en una constante a propósito: si el estilo estuviera escrito dos veces,
+ *  tocar una y olvidarse de la otra las dejaría desparejadas, y aquí lo que se
+ *  quiere es justo lo contrario.
+ *
+ *  El latido lo llevan las dos, así que van acompasadas: arrancan al cargar la
+ *  página y tienen la misma duración, así que laten a la vez y se leen como un
+ *  solo elemento de dos partes en vez de como dos cosas parpadeando cada una a
+ *  su ritmo. */
+const PILDORA_FLOTANTE: FlexProps = {
+  align: "center",
+  justify: "center",
+  gap: { base: "9px", md: "11px" },
+  px: { base: "18px", md: "22px" },
+  py: { base: "12px", md: "14px" },
+  borderRadius: "full",
+  overflow: "hidden",
+  bg: CREMA,
+  border: `1px solid ${TINTA}1f`,
+  color: TINTA,
+  cursor: "pointer",
+  sx: {
+    "@keyframes llamadaLatido": {
+      "0%, 100%": { boxShadow: "0 8px 24px rgba(0,0,0,0.3), 0 0 0 0 rgba(255,255,255,0)" },
+      "50%": { boxShadow: "0 8px 24px rgba(0,0,0,0.3), 0 0 0 9px rgba(255,255,255,0.14)" },
+    },
+    animation: "llamadaLatido 3.4s ease-in-out infinite",
+  },
+  _hover: { bg: "#fbf6ec", transform: "translateY(-2px) scale(1.03)", borderColor: `${TINTA}33` },
+  _active: { transform: "translateY(0) scale(1)" },
+  transition: "background 0.22s ease, transform 0.22s ease, border-color 0.22s ease",
+};
+
+/** El rótulo de una píldora: la misma tipografía en las dos. */
+const LETRA_PILDORA = {
+  fontFamily: "'EB Garamond', serif",
+  fontWeight: "600",
+  fontSize: { base: "17px", md: "19px" },
+  letterSpacing: "0.03em",
+  whiteSpace: "nowrap",
+} as const;
+
 export function BotonLlamadaFlotante({ onClick }: { onClick: () => void }) {
   const t = useT();
 
   return (
+    /* Los dos botones van en UNA columna fija, no como dos `position: fixed`
+       con sus propias distancias al borde: apilados en un flex, el de arriba
+       se coloca solo y sigue cuadrando si alguno cambia de alto o de texto.
+       Con dos posiciones sueltas habría que ir ajustando a mano el hueco. */
     <Flex
-      as="button"
-      onClick={onClick}
-      aria-label={t("elMetodo.llamada.boton")}
+      direction="column"
+      align="flex-end"
+      gap={{ base: "10px", md: "12px" }}
       position="fixed"
       right={{ base: "14px", md: "26px" }}
       bottom={{ base: "calc(14px + env(safe-area-inset-bottom))", md: "26px" }}
       zIndex={150}
-      align="center"
-      justify="center"
-      gap={{ base: "9px", md: "11px" }}
-      px={{ base: "18px", md: "22px" }}
-      py={{ base: "12px", md: "14px" }}
-      borderRadius="full"
-      overflow="hidden"
-      bg={CREMA}
-      border={`1px solid ${TINTA}1f`}
-      color={TINTA}
-      cursor="pointer"
-      sx={{
-        "@keyframes llamadaLatido": {
-          "0%, 100%": { boxShadow: "0 8px 24px rgba(0,0,0,0.3), 0 0 0 0 rgba(255,255,255,0)" },
-          "50%": { boxShadow: "0 8px 24px rgba(0,0,0,0.3), 0 0 0 9px rgba(255,255,255,0.14)" },
-        },
-        animation: "llamadaLatido 3.4s ease-in-out infinite",
-      }}
-      _hover={{ bg: "#fbf6ec", transform: "translateY(-2px) scale(1.03)", borderColor: `${TINTA}33` }}
-      _active={{ transform: "translateY(0) scale(1)" }}
-      transition="background 0.22s ease, transform 0.22s ease, border-color 0.22s ease"
     >
-      <Box as="span" display="flex">
-        <IconoLlamada size={{ base: "17px", md: "19px" }} color={TINTA} />
-      </Box>
-      <Text
-        fontFamily="'EB Garamond', serif"
-        fontWeight="600"
-        fontSize={{ base: "17px", md: "19px" }}
-        letterSpacing="0.03em"
-        whiteSpace="nowrap"
+      {/* ── MENSAJE (WhatsApp) ──────────────────────────────────────────────
+          Encima del de la llamada y con EXACTAMENTE su misma pastilla: mismo
+          crema, misma letra azul, mismo latido y mismo hover. Lo único distinto
+          es el icono, el rótulo y lo que hace: en vez de abrir el popup, abre
+          el chat de WhatsApp en otra pestaña con el mensaje ya escrito. Por eso
+          es un enlace (`as="a"`) y no un botón. */}
+      <Flex
+        {...PILDORA_FLOTANTE}
+        as="a"
+        href={whatsappUrl(t("elMetodo.llamada.whatsappTexto"))}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t("elMetodo.llamada.whatsapp")}
+        textDecoration="none"
       >
-        {t("elMetodo.llamada.boton")}
-      </Text>
+        <Box as="span" display="flex">
+          <IconoWhatsapp size={{ base: "17px", md: "19px" }} color={TINTA} />
+        </Box>
+        <Text {...LETRA_PILDORA}>
+          {t("elMetodo.llamada.botonMensaje")}
+        </Text>
+      </Flex>
+
+      {/* ── LLAMADA ─────────────────────────────────────────────────────────
+          La misma pastilla, y al pulsarla abre el popup de la llamada. */}
+      <Flex
+        {...PILDORA_FLOTANTE}
+        as="button"
+        onClick={onClick}
+        aria-label={t("elMetodo.llamada.boton")}
+      >
+        <Box as="span" display="flex">
+          <IconoLlamada size={{ base: "17px", md: "19px" }} color={TINTA} />
+        </Box>
+        <Text {...LETRA_PILDORA}>
+          {t("elMetodo.llamada.boton")}
+        </Text>
+      </Flex>
     </Flex>
   );
 }
@@ -329,6 +413,55 @@ export function PopupLlamada({ isOpen, onClose, onAgendar }: PopupLlamadaProps) 
 
             {/* Empuja el botón al fondo de la tarjeta. */}
             <Box flex="1" minH={prop(0.06)} />
+
+            {/* ── ESCRIBE POR WHATSAPP ──────────────────────────────────
+                Va ENCIMA de agendar y con SU MISMO botón fantasma: sin relleno,
+                solo el filo y la letra en el azul del título, y al pasar por
+                encima se rellena de azul con la letra en crema. Estuvo macizo
+                para marcar jerarquía, pero un rectángulo azul sólido sobre el
+                mármol pesaba demasiado y se comía la tarjeta: aquí el fondo es
+                una ilustración, no un color liso, y tapársela es perderla. */}
+            <Flex
+              as="a"
+              href={whatsappUrl(t("elMetodo.llamada.whatsappTexto"))}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
+              align="center"
+              justify="center"
+              gap="9px"
+              w="100%"
+              maxW={prop(0.78)}
+              py={prop(0.036)}
+              borderRadius="full"
+              bg="transparent"
+              border={`1.5px solid ${TINTA}`}
+              color={TINTA}
+              cursor="pointer"
+              textDecoration="none"
+              _hover={{
+                bg: TINTA,
+                color: CREMA,
+                borderColor: TINTA,
+                transform: "translateY(-2px)",
+                boxShadow: "0 10px 24px rgba(22,48,94,0.3)",
+              }}
+              _active={{ transform: "translateY(0)" }}
+              transition="background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease"
+              flexShrink={0}
+              mb={prop(0.028)}
+            >
+              <IconoWhatsapp size={prop(0.05)} />
+              <Text
+                fontFamily="'EB Garamond', serif"
+                fontWeight="600"
+                fontSize={prop(0.045)}
+                letterSpacing="0.04em"
+                whiteSpace="nowrap"
+              >
+                {t("elMetodo.llamada.whatsapp")}
+              </Text>
+            </Flex>
 
             <Flex
               as="button"

@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { BotonAviso } from "../../components/metodo/BotonAviso";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { PagoNutricionModal } from "../../components/metodo/PagoNutricionModal";
@@ -173,28 +174,7 @@ export default function MetodoNutricion() {
 
           {/* ── Disparador del aviso (botón discreto, centrado) ── */}
           <Reveal inView direction="up" distance={18} delay={0.24} duration={0.6} display="flex" justifyContent="center">
-            <Box
-              as="button"
-              onClick={() => setAvisoOpen(true)}
-              display="inline-flex"
-              alignItems="center"
-              gap={2}
-              px={6}
-              py={2.5}
-              borderRadius="full"
-              bg="rgba(255,255,255,0.12)"
-              border="1px solid rgba(255,255,255,0.55)"
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="700"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.04em"
-              cursor="pointer"
-              transition="all 0.2s"
-              _hover={{ bg: "rgba(255,255,255,0.22)", transform: "translateY(-1px)" }}
-            >
-              <Box as="span" fontSize="md">⚠</Box> {t("metodo.gate.avisoImportante")}
-            </Box>
+            <BotonAviso onClick={() => setAvisoOpen(true)} />
           </Reveal>
         </Flex>
       </Flex>

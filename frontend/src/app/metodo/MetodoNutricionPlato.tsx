@@ -317,7 +317,7 @@ export default function MetodoNutricionPlato() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: `← ${t("metodo.nutri.paso.hambre")}`, onClick: () => navigate("/metodo/nutricion/hambre") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.ultraCorto")}`, onClick: () => navigate("/metodo/nutricion/ultraprocesados") }}
               extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{
                 label: `${t("metodo.nutri.paso.calorias")} →`,

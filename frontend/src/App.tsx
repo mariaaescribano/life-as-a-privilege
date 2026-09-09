@@ -134,6 +134,7 @@ const MetodoNutricionPrediabetes = lazy(() => import("./app/metodo/MetodoNutrici
 const MetodoNutricionDia = lazy(() => import("./app/metodo/MetodoNutricionDia"));
 const MetodoNutricionMacros = lazy(() => import("./app/metodo/MetodoNutricionMacros"));
 const MetodoNutricionMitos = lazy(() => import("./app/metodo/MetodoNutricionMitos"));
+const MetodoNutricionUltraprocesados = lazy(() => import("./app/metodo/MetodoNutricionUltraprocesados"));
 const MetodoNutricionOrigen = lazy(() => import("./app/metodo/MetodoNutricionOrigen"));
 const MetodoNutricionNutriente = lazy(() => import("./app/metodo/MetodoNutricionNutriente"));
 const MetodoNutricionMicrobiota = lazy(() => import("./app/metodo/MetodoNutricionMicrobiota"));
@@ -414,6 +415,7 @@ export default function App()
       <Route path="/metodo/nutricion/dia" element={<PrivateRoute><MetodoNutricionDia /></PrivateRoute>} />
       <Route path="/metodo/nutricion/macros" element={<PrivateRoute><MetodoNutricionMacros /></PrivateRoute>} />
       <Route path="/metodo/nutricion/mitos" element={<PrivateRoute><MetodoNutricionMitos /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/ultraprocesados" element={<PrivateRoute><MetodoNutricionUltraprocesados /></PrivateRoute>} />
       <Route path="/metodo/nutricion/origen" element={<PrivateRoute><MetodoNutricionOrigen /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos" element={<PrivateRoute><MetodoNutricionAlimentos /></PrivateRoute>} />
       <Route path="/metodo/nutricion/alimentos/:key" element={<PrivateRoute><MetodoNutricionAlimento /></PrivateRoute>} />

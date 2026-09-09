@@ -11,7 +11,7 @@ import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
-import { ComicPorQueExiste } from "../../components/metodo/ComicPorQueExiste";
+// Aparcado con su bloque, más abajo: import { ComicPorQueExiste } from "../../components/metodo/ComicPorQueExiste";
 import { precargarImagenes, usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
@@ -21,11 +21,9 @@ import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../compone
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
-import { BotonLlamadaFlotante, PopupLlamada } from "../../components/metodo/LlamadaCta";
+import { BotonLlamadaFlotante, IconoWhatsapp, PopupLlamada } from "../../components/metodo/LlamadaCta";
 import {
-  EspejoBloque,
   FaqBloque,
-  MecanismoBloque,
   PorDondeEmpiezoBloque,
   PrecioBloque,
   PruebasBloque,
@@ -39,6 +37,7 @@ import {
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
+  WHATSAPP_COMUNIDAD_URL,
 } from "../../GlobalVariables";
 // Descomentar junto con el párrafo de PRECIO (más abajo, ahora comentado):
 // sin él, estos tres no se usan y noUnusedLocals rompe la compilación.
@@ -772,170 +771,140 @@ export default function ElMetodo() {
           <TextoRico>{t("elMetodo.hero.sub")}</TextoRico>
         </Text>
 
-        {/* Botón de la primera pantalla. Es el MISMO destino que el de abajo
-            (handleAcceder), en versión más contenida: aquí acompaña, no manda. */}
+        {/* ── LOS DOS BOTONES DE LA PRIMERA PANTALLA ─────────────────────
+            En fila y centrados, para que el pie de abajo caiga en el medio de
+            la PAREJA y no debajo del primero. En móvil se apilan: dos pastillas
+            de 84vw no caben una al lado de la otra.
+            Son dos escalones, no dos botones iguales. El de empezar conserva su
+            filo grueso y su halo; el de la comunidad va con el filo fino, sin
+            halo y con la letra más suave. Si los dos brillaran, el ojo no
+            sabría cuál manda —y el que manda es el de pago—. */}
         <Flex
-          as="button"
-          onClick={handleAcceder}
+          direction={{ base: "column", md: "row" }}
           align="center"
           justify="center"
-          gap={3}
+          gap={{ base: 3, md: 4 }}
           mt={{ base: 2, md: 3 }}
-          px={{ base: 8, md: 12 }}
-          py={{ base: "12px", md: "15px" }}
-          w={{ base: "min(84vw, 380px)", md: "auto" }}
-          borderRadius="full"
-          border="1.5px solid rgba(255,255,255,0.65)"
-          bg="rgba(255,255,255,0.10)"
-          cursor="pointer"
-          boxShadow="0 0 20px rgba(255,255,255,0.34), 0 0 44px rgba(180,255,245,0.2)"
-          _hover={{
-            bg: "rgba(255,255,255,0.2)",
-            borderColor: "white",
-            boxShadow: "0 0 30px rgba(255,255,255,0.55), 0 0 62px rgba(180,255,245,0.36)",
-          }}
-          transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(16px)"}
-          sx={{ transition: "opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
         >
-          <Text
-            color="white"
-            fontWeight="700"
-            fontSize={{ base: "md", md: "xl" }}
-            letterSpacing="0.12em"
-            textTransform="uppercase"
-            whiteSpace="nowrap"
-            textShadow="0 0 12px rgba(255,255,255,0.45)"
+          {/* El MISMO destino que el botón de abajo (handleAcceder). */}
+          <Flex
+            as="button"
+            onClick={handleAcceder}
+            align="center"
+            justify="center"
+            gap={3}
+            px={{ base: 8, md: 12 }}
+            py={{ base: "12px", md: "15px" }}
+            w={{ base: "min(84vw, 380px)", md: "auto" }}
+            borderRadius="full"
+            border="1.5px solid rgba(255,255,255,0.65)"
+            bg="rgba(255,255,255,0.10)"
+            cursor="pointer"
+            boxShadow="0 0 20px rgba(255,255,255,0.34), 0 0 44px rgba(180,255,245,0.2)"
+            _hover={{
+              bg: "rgba(255,255,255,0.2)",
+              borderColor: "white",
+              boxShadow: "0 0 30px rgba(255,255,255,0.55), 0 0 62px rgba(180,255,245,0.36)",
+            }}
+            transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
+            opacity={mounted ? 1 : 0}
+            transform={mounted ? "translateY(0)" : "translateY(16px)"}
+            sx={{ transition: "opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
           >
-            {t("elMetodo.hero.cta")}
-          </Text>
+            <Text
+              color="white"
+              fontWeight="700"
+              fontSize={{ base: "md", md: "xl" }}
+              letterSpacing="0.12em"
+              textTransform="uppercase"
+              whiteSpace="nowrap"
+              textShadow="0 0 12px rgba(255,255,255,0.45)"
+            >
+              {t("elMetodo.hero.cta")}
+            </Text>
+          </Flex>
+
+          {/* ── ÚNETE A LA COMUNIDAD ──
+              Entra 0,13s después que el de empezar: se leen en orden, primero
+              el que manda. Es un enlace y no un botón porque lleva FUERA de la
+              web (a WhatsApp), y abre en otra pestaña para no perder a quien
+              estaba leyendo la página. */}
+          <Flex
+            as="a"
+            href={WHATSAPP_COMUNIDAD_URL || undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            align="center"
+            justify="center"
+            gap={{ base: "9px", md: "11px" }}
+            px={{ base: 7, md: 9 }}
+            py={{ base: "12px", md: "15px" }}
+            w={{ base: "min(84vw, 380px)", md: "auto" }}
+            borderRadius="full"
+            border="1px solid rgba(255,255,255,0.32)"
+            bg="rgba(255,255,255,0.04)"
+            color="rgba(255,255,255,0.88)"
+            cursor="pointer"
+            textDecoration="none"
+            _hover={{
+              bg: "rgba(255,255,255,0.13)",
+              borderColor: "rgba(255,255,255,0.7)",
+              color: "white",
+            }}
+            transition="background 0.25s ease, border-color 0.25s ease, color 0.25s ease"
+            opacity={mounted ? 1 : 0}
+            transform={mounted ? "translateY(0)" : "translateY(16px)"}
+            sx={{ transition: "opacity 0.8s ease 0.58s, transform 0.8s ease 0.58s, background 0.25s ease, border-color 0.25s ease, color 0.25s ease" }}
+          >
+            <IconoWhatsapp size={{ base: "17px", md: "19px" }} />
+            <Text
+              fontWeight="600"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.09em"
+              textTransform="uppercase"
+              whiteSpace="nowrap"
+            >
+              {t("elMetodo.hero.comunidad")}
+            </Text>
+          </Flex>
         </Flex>
 
-        {/* Letra pequeña del botón: entra un pelín después que él, para que se
-            lea como su pie y no como una línea más del hero. */}
+        {/* Letra pequeña del botón de empezar: entra la última, para que se lea
+            como el pie de la pareja y no como una línea más del hero. Va
+            centrada bajo las DOS pastillas —el contenedor de arriba está
+            centrado—, que es lo que deja el conjunto a plomo. */}
         <Text
           color="rgba(255,255,255,0.8)"
           fontSize={{ base: "xs", md: "sm" }}
           letterSpacing="0.04em"
           textAlign="center"
-          mt={{ base: -1, md: -1 }}
+          mt={{ base: 1, md: 2 }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(12px)"}
-          transition="opacity 0.8s ease 0.6s, transform 0.8s ease 0.6s"
+          transition="opacity 0.8s ease 0.72s, transform 0.8s ease 0.72s"
         >
           {t("elMetodo.hero.ctaPie")}
         </Text>
 
       </Flex>
 
-      {/* Cierre del hero: la cesura con el mandala en medio, la misma que marca
-          los cortes de sección en el resto de la página.
-          Aquí iban tres pruebas rápidas («8 disciplinas · Ilustraciones propias
-          · Los PDF, tuyos para siempre»): colgaban del botón como un pie de
-          página y le quitaban fuerza en vez de dársela. */}
-      <Box px={{ base: 5, md: 10, lg: 16 }}>
-        <SeparadorMandala mt={{ base: "52px", md: "76px" }} />
-      </Box>
+      {/* El hero cierra sin cesura. Tenía la del mandala, y con los tres
+          bloques de texto retirados se quedaba pegada a la línea del título de
+          abajo: dos separadores seguidos con nada en medio. El aire ya lo pone
+          el `pt` del bloque siguiente. */}
 
-      {/* ══ 2. EL ESPEJO ══
-          Antes de contar nada del producto, cuatro frases para que quien lee se
-          reconozca. Sin caja y sobre el turquesa a propósito: no son contenido
-          de la web, son su propia voz. */}
-      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }}>
-        <EspejoBloque />
-      </Box>
-
-      {/* Cesura entre «Te da tu mapa» y «Ocho disciplinas. Un orden…»: son dos
-          frases fuertes seguidas y sin nada en medio se pisaban.
-          El «TÚ» NO va aquí: vive en el CENTRO del mapa que se arma (MapaSeArma,
-          dentro del cómic del origen), debajo de su mandala. Ahí sí se entiende
-          —el anillo son las ocho disciplinas y quien las mira desde el medio es
-          quien lee—; colgando de esta rayita parecía un rótulo de sección. */}
-      <Box px={{ base: 5, md: 10, lg: 16 }}>
-        <SeparadorMandala mt={{ base: "52px", md: "76px" }} />
-      </Box>
-
-      {/* ── ¿POR QUÉ EXISTE LIFE AS A PRIVILEGE? ──
-          Primero las frases que explican qué es El Mapa, centradas sobre el
-          turquesa; DEBAJO, el cómic del origen a todo el ancho (panel
-          rectangular: acuarela a la izquierda, texto a la derecha).
-          Antes iban al lado del cómic, en dos columnas: el cómic quedaba
-          reducido a un cuadradito del 46% y la historia —que es lo importante de
-          este bloque— competía con el texto en vez de tener su sitio. */}
-      {/* El `pt` es EL MISMO que el `mt` del separador de arriba: así el
-          mandala queda justo en medio de las dos frases y no más pegado a una
-          que a otra. Si se cambia uno, se cambia el otro. */}
-      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: "52px", md: "76px" }}>
-        <Flex
-          maxW="1200px"
-          mx="auto"
-          direction="column"
-          align="center"
-          gap={{ base: 10, md: 14 }}
-        >
-          {/* Las dos frases que explican El Mapa, centradas encima del panel.
-              El título «¿Por qué existe Life as a Privilege?» NO va aquí: es el
-              título del cómic y vive dentro del propio panel.
-              Con un ancho tope para que las líneas no se hagan larguísimas de
-              lado a lado de la pantalla. */}
-          <Flex
-            direction="column"
-            align="center"
-            gap={{ base: 4, md: 5 }}
-            maxW="900px"
-            textAlign="center"
-          >
-            <Reveal inView direction="up" distance={16} duration={0.8} delay={0.1}>
-              <Text
-                color="white"
-                fontSize={{ base: "md", md: "xl" }}
-                fontWeight="700"
-                fontStyle="italic"
-                lineHeight="1.8"
-                letterSpacing="0.015em"
-                textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
-              >
-                {t("elMetodo.lema")}
-              </Text>
-            </Reveal>
-
-            <Reveal inView direction="up" distance={16} duration={0.8} delay={0.22}>
-              <Text
-                color="white"
-                fontSize={{ base: "sm", md: "lg" }}
-                lineHeight="1.9"
-                letterSpacing="0.015em"
-                // La primera frase, sola en su línea (el \n del diccionario).
-                // En móvil no: ahí el ancho ya parte el párrafo.
-                whiteSpace={{ base: "normal", md: "pre-line" }}
-                textShadow="0 0 11px rgba(255,255,255,0.38), 0 0 25px rgba(255,255,255,0.19)"
-              >
-                {t("elMetodo.intro")}
-              </Text>
-            </Reveal>
-          </Flex>
-
-          {/* El cómic del origen, a todo el ancho del bloque. */}
-          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.8} w="100%">
-            <ComicPorQueExiste />
-          </Reveal>
-        </Flex>
-      </Box>
-
-      {/* ══ 3. LA FRASE DEL MÉTODO ══
-          Lo que diferencia esto de un curso, en una línea. Aquí había además un
-          bloque con las ocho disciplinas enumeradas («Astrología ve tu
-          estructura»…): quitado, porque el mandala y las tarjetas de más abajo
-          ya las enumeran. */}
-      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 16, md: 24 }}>
-        <Box maxW="1200px" mx="auto">
-          <MecanismoBloque />
-        </Box>
-      </Box>
-
-      {/* Aquí iba «Al terminar no tienes apuntes. Tienes esto.»: ocho tarjetas
-          con lo que se lleva puesto de cada disciplina. Retirado. */}
+      {/* Aquí vivían tres bloques de texto seguidos, y se han retirado los
+          tres: «EL ESPEJO» (las cuatro frases de «Sabes que te pasa algo…» y su
+          remate), las dos frases de «Ocho disciplinas. Un orden…» / «No son
+          ocho cursos independientes…», y «LA FRASE DEL MÉTODO» («No estudias la
+          disciplina, te estudias a ti con ella»).
+          Eran cuatro pantallas de argumentario antes de que se viera nada, y
+          decían tres veces lo mismo con distintas palabras. Ahora el mandala de
+          las ocho disciplinas —que es lo que la gente viene a ver— llega justo
+          detrás de la cabecera.
+          Los componentes siguen enteros en components/metodo/elMetodoVenta.tsx
+          (EspejoBloque y MecanismoBloque) y sus textos en el diccionario, por si
+          alguno vuelve. */}
 
       {/* ── SEPARADOR + TÍTULO DEL MANDALA ──
           Las frases van con su bloque: este título encabeza el mandala de las
@@ -945,13 +914,19 @@ export default function ElMetodo() {
         direction="column"
         align="center"
         px={{ base: 5, md: 10, lg: 16 }}
-        // Sin `pt` propio: el aire de arriba lo pone el `mt` del separador, que
-        // es EL MISMO que su `mb`. Así la línea queda a la misma distancia del
-        // cómic que del título, y para cambiar el hueco se toca un solo sitio
-        // (si el aire viniera de dos paddings distintos, nunca cuadran).
+        // Sin `pt` propio: el aire de arriba lo pone el separador de aquí
+        // debajo, con el MISMO hueco por arriba que por abajo. Así la línea cae
+        // exactamente en el centro del vacío entre el botón del hero y el
+        // titular, y para mover el conjunto se toca un solo sitio (si el aire
+        // viniera de un padding por un lado y de un margen por el otro, nunca
+        // cuadran).
       >
-        {/* En px y no en tokens de Chakra: 17 no existe en la escala de
-            espaciado, y un token que no existe NO cae en 68px sino en 17px
+        {/* La cesura entre el hero y el mapa. La línea fina y NO el separador
+            con el mandala: arriba está el mandala de la cabecera y justo debajo
+            el de las ocho disciplinas, y un tercero en medio serían tres
+            mandalas casi seguidos.
+            En px y no en tokens de Chakra: 67 no existe en la escala de
+            espaciado, y un token que no existe NO cae en 268px sino en 67px
             (se cuela como valor crudo). Con px se ve lo que mide. */}
         <SeparadorLinea
           mt={{ base: "48px", md: "67px" }}
@@ -1017,6 +992,57 @@ export default function ElMetodo() {
               <RecorridoMandalaVideo />
             </Reveal>
           </BloqueDiferido>
+        </Box>
+      </Box>
+
+      {/* ══ LA PRUEBA (los ocho vídeos) ══
+          Pantallas REALES del recorrido, subidas aquí desde justo antes del
+          precio. Va pegado al mandala a propósito: ahí acabas de ver CÓMO está
+          ordenado el recorrido, y esto es lo que hay dentro de cada pieza. Toda
+          la página promete; este bloque es el único que enseña.
+          Y ANTES de Experiencias reales: primero se ve la cosa, y después lo que
+          dicen de ella los que ya la han hecho. */}
+      <Box px={{ base: 5, md: 10, lg: 16 }}>
+        <Box maxW="1200px" mx="auto">
+          {/* La cesura de en medio: la línea fina y no el separador con el
+              mandala. Justo encima está el mandala de las ocho disciplinas, y
+              el otro separador le habría puesto un segundo mandala a un palmo
+              del primero.
+              El `mt` es MAYOR que el `mb`, y no al revés como parecería: por
+              abajo, entre la línea y el titular, están además el hueco propio
+              del bloque de los vídeos y el aire del titular; y por arriba, el
+              box del mandala termina bastante más abajo de lo que parece a la
+              vista (la columna del mandala sigue más allá del canto de la
+              tarjeta roja). Contando eso, la línea cae en el centro real del
+              hueco. La suma de los dos márgenes se mantiene, así que el aire
+              entre secciones es el mismo: solo se ha bajado la línea. */}
+          <SeparadorLinea mt={{ base: 16, md: 28 }} mb={{ base: 12, md: 14 }} />
+          <PruebasBloque />
+
+          {/* LA CESURA DEL DINERO. De aquí para arriba la página explica y
+              enseña; de aquí para abajo cobra. Ha subido con sus dos bloques:
+              el precio va pegado a la prueba, que es cuando de verdad se está
+              decidiendo, y no cinco pantallas más abajo.
+              Mismo hueco arriba y abajo, para que caiga justo en el medio. */}
+          <SeparadorLinea mt={{ base: 16, md: 24 }} mb={{ base: 16, md: 24 }} />
+
+          {/* ── QUÉ OBTIENES ──
+              Abre la parte del dinero: es la letra pequeña de la compra
+              (acceso, PDF, sin suscripción), así que va pegada al precio y no
+              suelta a media página. */}
+          <Box mt={{ base: 12, md: 16 }}>
+            <QueObtienesBox />
+          </Box>
+
+          {/* ══ EL PRECIO ══
+              Un precio escondido no evita la objeción del dinero: la empeora,
+              porque quien no lo encuentra se imagina la cifra más alta y se va
+              sin preguntar.
+              Lleva su propio botón al final (onAcceder): quien ve el precio y
+              le cuadra tiene que poder entrar ahí mismo. */}
+          <Box mt={{ base: 16, md: 24 }}>
+            <PrecioBloque onAcceder={handleAcceder} />
+          </Box>
         </Box>
       </Box>
 
@@ -1123,42 +1149,16 @@ export default function ElMetodo() {
 
         <Box maxW="1200px" mx="auto">
 
-          {/* ══ 7. LA PRUEBA ══
-              Lo último que se ve antes de hablar de dinero: pantallas REALES del
-              recorrido. Toda la página de aquí para arriba promete; esto es lo
-              único que enseña, y va justo antes del precio a propósito. */}
-          {/* LA CESURA DE LA MITAD DE ABAJO. De aquí para arriba la página
-              explica y promete; de aquí para abajo enseña y cobra (capturas →
-              qué obtienes → precio → por dónde empiezo). Entre el mandala de
-              «Qué recibirás» y el de la creadora había seis bloques seguidos
-              sin una sola pausa, y era el tramo que se hacía muro.
-              Mismo hueco arriba y abajo, para que caiga justo en el medio. */}
-          <SeparadorLinea mt={{ base: 16, md: 24 }} />
-
-          <Box mt={{ base: 16, md: 24 }}>
-            <PruebasBloque />
-          </Box>
-
-          {/* ── QUÉ OBTIENES ──
-              Ya no cierra la parte comercial: ahora abre la del dinero. Es la
-              letra pequeña de la compra (acceso, PDF, sin suscripción), así que
-              va pegada al precio y no suelta a media página. */}
-          <Box mt={{ base: 12, md: 16 }}>
-            <QueObtienesBox />
-          </Box>
-
-          {/* ══ 8. EL PRECIO ══
-              Estaba comentado. Un precio escondido no evita la objeción del
-              dinero: la empeora, porque quien no lo encuentra se imagina la
-              cifra más alta y se va sin preguntar.
-              Lleva su propio botón al final (onAcceder): quien ve el precio y le
-              cuadra tiene que poder entrar ahí mismo. */}
-          <Box mt={{ base: 16, md: 24 }}>
-            <PrecioBloque onAcceder={handleAcceder} />
-          </Box>
-
-          {/* Aquí iba una garantía de devolución de 14 días. Fuera: no se
-              ofrece, y prometer una devolución que no existe es peor que no
+          {/* De este tramo se han ido tres cosas, todas hacia arriba: «LA
+              PRUEBA» (los ocho vídeos de «El Mapa por dentro»), «QUÉ OBTIENES»
+              y «EL PRECIO». Ahora los tres cuelgan del mandala, que es donde se
+              decide: se ve cómo está ordenado el recorrido, se ve por dentro,
+              y ahí mismo está lo que incluye y lo que cuesta, sin tener que
+              bajar cinco pantallas a buscarlo.
+              Aquí ya no hace falta cesura: la que abre «¿Por dónde empiezo?»
+              está justo debajo y dos seguidas no separan nada.
+              Aquí iba también una garantía de devolución de 14 días. Fuera: no
+              se ofrece, y prometer una devolución que no existe es peor que no
               tener ninguna. */}
 
           {/* ══ 10. ¿POR DÓNDE EMPIEZO? ══

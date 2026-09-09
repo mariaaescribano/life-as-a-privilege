@@ -305,9 +305,14 @@ export default function MetodoNutricionMacros() {
                 <Box position="absolute" top="-1px" left="15%" right="15%" h="1px" zIndex={2}
                      bgGradient={`linear(to-r, transparent, ${nutricionTxt}aa, transparent)`} />
 
-                <Flex position="relative" zIndex={1} direction={{ base: "column", md: "row" }}
-                      gap={{ base: 6, md: 9 }} px={{ base: 5, md: 9 }} py={{ base: 6, md: 9 }}
-                      align={{ base: "stretch", md: "flex-start" }}>
+                {/* El interior del box, en dos plantas: arriba la foto y los
+                    reguladores; abajo, a la derecha y a lo ancho del box entero,
+                    el botón de la ronda. */}
+                <Flex position="relative" zIndex={1} direction="column"
+                      gap={{ base: 6, md: 8 }} px={{ base: 5, md: 9 }} py={{ base: 6, md: 9 }}>
+
+                  <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6, md: 9 }}
+                        align={{ base: "stretch", md: "flex-start" }}>
 
                   {/* El alimento */}
                   <Flex direction="column" align="center" flexShrink={0} w={{ base: "100%", md: "300px" }} gap={3}>
@@ -362,7 +367,6 @@ export default function MetodoNutricionMacros() {
                             onChange={(v) => setEst((s) => ({ ...s, [m.key]: v }))}
                           />
                         ))}
-                        <Boton onClick={comprobar}>{t("metodo.nutri.macros.comprobar")}</Boton>
                       </>
                     ) : (
                       <>
@@ -385,12 +389,23 @@ export default function MetodoNutricionMacros() {
                         {/* Aquí iba la caja blanca del porqué (`sorpresa`) con su
                             pie de ración, kcal y márgenes. Quitada: la página es
                             el juego y el dato ya se ve en las barras. */}
-
-                        <Boton onClick={siguiente}>
-                          {indice + 1 >= alimentos.length ? "Ver el resultado" : "Siguiente alimento →"}
-                        </Boton>
                       </>
                     )}
+                  </Flex>
+                  </Flex>
+
+                  {/* EL BOTÓN DE LA RONDA, abajo a la derecha del box.
+                      Es UNO solo, no dos: antes de comprobar dice «Comprobar» y
+                      después «Siguiente alimento». Así no se mueve del sitio al
+                      pulsar —el dedo se queda donde estaba para la siguiente
+                      ronda— y la esquina de abajo a la derecha es siempre la de
+                      «seguir», el mismo sitio que en el resto del recorrido. */}
+                  <Flex justify={{ base: "center", md: "flex-end" }} w="100%">
+                    <Boton onClick={comprobado ? siguiente : comprobar}>
+                      {!comprobado
+                        ? t("metodo.nutri.macros.comprobar")
+                        : indice + 1 >= alimentos.length ? "Ver el resultado" : "Siguiente alimento →"}
+                    </Boton>
                   </Flex>
                 </Flex>
               </Box>
@@ -448,15 +463,23 @@ function Marcador({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   );
 }
 
+// El botón de la ronda. Grande —es la única cosa que hay que pulsar en toda la
+// página—, pero SIN relleno macizo: llevaba la menta de la disciplina al 85% y
+// eso era un parche de otro color pegado sobre la acuarela. Ahora el fondo es un
+// velo de esa misma menta, así que la acuarela del box se sigue viendo por
+// debajo y lo que dibuja el botón son su filo y su halo, el mismo lenguaje que
+// las pastillas de la cabecera. Se ve más que antes ocupando menos.
 function Boton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
-    <Box as="button" onClick={onClick} alignSelf={{ base: "stretch", md: "flex-start" }}
+    <Box as="button" onClick={onClick} w={{ base: "100%", md: "auto" }}
          position="relative" overflow="hidden" display="inline-flex" alignItems="center" justifyContent="center"
-         px={{ base: 7, md: 9 }} py={3} borderRadius="full"
-         border={`2px solid ${nutricionTxt}`} bg={`${nutricionBg}d9`} color={nutricionTxt}
-         fontFamily="'EB Garamond', serif" fontWeight={800} fontSize={{ base: "md", md: "lg" }}
-         letterSpacing="0.04em" cursor="pointer" transition="transform 0.18s ease, background 0.18s ease"
-         _hover={{ transform: "translateY(-2px)", bg: nutricionBg }}
+         px={{ base: 8, md: 12 }} py={{ base: 3.5, md: 4 }} borderRadius="full"
+         border={`2px solid ${nutricionTxt}`} bg={`${nutricionBg}33`} color={nutricionTxt}
+         fontFamily="'EB Garamond', serif" fontWeight={800} fontSize={{ base: "lg", md: "xl" }}
+         letterSpacing="0.04em" cursor="pointer"
+         boxShadow={`0 0 18px ${nutricionTxt}26`}
+         transition="transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease"
+         _hover={{ transform: "translateY(-2px)", bg: `${nutricionBg}66`, boxShadow: `0 0 26px ${nutricionTxt}3d` }}
          sx={{ WebkitTapHighlightColor: "transparent" }}>
       {children}
     </Box>
