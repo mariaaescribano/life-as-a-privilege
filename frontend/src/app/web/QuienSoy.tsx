@@ -1,5 +1,5 @@
 import {
-  Box, Flex, Image, SimpleGrid, Text,
+  Box, Flex, Image, Text,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import React, { useEffect, useState } from "react";
@@ -594,15 +594,28 @@ const QuienSoy = () => {
                 </Flex>
               )}
 
-              {/* Grid de la sección */}
-              <SimpleGrid
-                columns={{ base: 2, md: 4 }}
-                spacing={{ base: 4, md: 6 }}
-                {...(seccion.items.length === 1 && {
-                  maxW: { base: "50%", md: "25%" },
-                  mx: "auto",
-                  sx: { "& > *": { gridColumn: "1 / -1" } },
-                })}
+              {/* Rejilla de la sección · 2 por fila en móvil, 4 en ordenador.
+                  Va con flex-wrap CENTRADO y no con una rejilla de columnas
+                  fijas: ninguna sección tiene un número de diplomas múltiplo de
+                  4 (son 3, 6 y 30), así que con columnas la última fila se
+                  quedaba pegada a la izquierda con el resto del ancho vacío.
+                  Centrando, una fila incompleta parece querida. El ancho de la
+                  tarjeta se calcula descontando su parte del hueco, para que
+                  sea EXACTAMENTE el mismo que tendría en la rejilla —así todas
+                  las secciones siguen teniendo el diploma del mismo tamaño. */}
+              <Flex
+                wrap="wrap"
+                justify="center"
+                gap={{ base: 4, md: 6 }}
+                sx={{
+                  "& > *": {
+                    flex: "0 0 auto",
+                    // 2 por fila (1 hueco de 16 px → 8 px por tarjeta)
+                    width: "calc(50% - 8px)",
+                    // 4 por fila (3 huecos de 24 px → 18 px por tarjeta)
+                    "@media (min-width: 48em)": { width: "calc(25% - 18px)" },
+                  },
+                }}
               >
                 {seccion.items.map((cert, i) => {
                   const globalIdx = certificados.indexOf(cert);
@@ -629,7 +642,7 @@ const QuienSoy = () => {
                     </Box>
                   );
                 })}
-              </SimpleGrid>
+              </Flex>
             </Box>
           ))}
         </Flex>
