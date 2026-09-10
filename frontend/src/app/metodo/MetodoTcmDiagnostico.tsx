@@ -17,7 +17,8 @@ import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, CICLO_SHENG, CICLO_KE,
-  diagnosticoElemento, elementoMasCargado, viajeCompleto,
+  diagnosticoElemento, elementoMasCargado, tiposAdaptacion,
+  viajeCompleto, elementosTestsCompletos,
   type DatosTcm, type Elemento, type EstadoDiagnostico, type VeredictoBalance,
 } from "../../components/metodo/tcmRecorrido";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
@@ -34,18 +35,19 @@ import { useT, type ClaveTexto } from "../../i18n";
 const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
 
-// Estado de balance (traído de la antigua «Tu equilibrio»): su rótulo y su color.
-// El rótulo es el MISMO que titula esa sección en la página de cada elemento, así
-// que se pide al diccionario por su clave en vez de escribirlo dos veces.
+// Los tres veredictos del diagnóstico: su rótulo (del diccionario) y su color.
+// «En carga» = lo que ese elemento te pesa gana a tus recursos; «Te sostiene» =
+// al revés. Ojo con los colores: el verde es el del lado que te SUMA (recurso),
+// no el del equilibrio, que aquí es el punto medio.
 const ESTADO_CLAVE: Record<VeredictoBalance, ClaveTexto> = {
   equilibrio: "metodo.tcm.el.equilibrio",
-  exceso: "metodo.tcm.el.exceso",
-  deficiencia: "metodo.tcm.el.deficiencia",
+  carga: "metodo.tcm.el.enCarga",
+  recurso: "metodo.tcm.el.teSostiene",
 };
 const ESTADO_COLOR: Record<VeredictoBalance, string> = {
-  equilibrio: "#6f9463",
-  exceso: "#d1495b",
-  deficiencia: "#c8963e",
+  equilibrio: "#c8963e",
+  carga: "#d1495b",
+  recurso: "#6f9463",
 };
 
 // El desequilibrio neto de un elemento raramente pasa del 50%, así que para lo
@@ -87,7 +89,15 @@ export default function MetodoTcmDiagnostico() {
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
         const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: DatosTcm = res.data?.data ?? {};
-        if (!viajeCompleto(d)) { navigate("/metodo/tcm/elementos"); return; }
+        // Hacen falta las dos cosas: haber pasado por los cinco elementos y
+        // tener sus tests respondidos. Lo segundo NO se deduce de lo primero:
+        // quien hizo el recorrido con los tests antiguos tiene los elementos
+        // marcados como leídos pero sus respuestas ya no puntúan, y aquí se
+        // encontraría las cinco barras vacías. Se le devuelve a la estrella.
+        if (!viajeCompleto(d) || !elementosTestsCompletos(d)) {
+          navigate("/metodo/tcm/elementos");
+          return;
+        }
         setData(d);
       } catch {
         navigate("/metodo/tcm");
@@ -99,6 +109,8 @@ export default function MetodoTcmDiagnostico() {
   }, [navigate]);
 
   const predominante = useMemo(() => elementoMasCargado(data), [data]);
+  // Los dos elementos de más carga neta: por ahí pasa tu forma de adaptarte.
+  const tipos = useMemo(() => tiposAdaptacion(data), [data]);
 
   // Diagnóstico honesto por elemento: veredicto por umbrales (no por mayoría) +
   // magnitud (cuánto) y dirección (exceso/deficiencia). null = sin respuestas.
@@ -181,6 +193,7 @@ export default function MetodoTcmDiagnostico() {
           <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
           <Panel titulo="" color={tcmTxt}>
             <MetricasBalance estados={estados} />
+            <TiposAdaptacion tipos={tipos} estados={estados} />
           </Panel>
           </Reveal>
 
@@ -258,8 +271,9 @@ export default function MetodoTcmDiagnostico() {
 // ── Estrella-perfil ──────────────────────────────────────────────────────────
 // TODAS las flechas de los dos ciclos se dibujan siempre (Sheng continua dorada,
 // Ke entrecortada marrón). Solo se ILUMINAN las que hoy afectan al usuario (las
-// que salen de un elemento en desequilibrio); el resto quedan tenues pero
-// visibles. Los elementos en desequilibrio brillan más, con aro blanco.
+// que salen de un elemento EN CARGA); el resto quedan tenues pero visibles. Un
+// elemento que te sostiene NO se ilumina: la estrella señala lo que pide
+// atención, y ese no la pide.
 // Una arista de un ciclo (origen → destino), con su punta de flecha. Es un
 // componente de MÓDULO (no anidado) y memoizado: así NO se vuelve a montar en
 // cada render de la estrella (hover, abrir un cómic…) y su animación de entrada
@@ -271,7 +285,7 @@ const AristaPerfil = React.memo(function AristaPerfil({ ciclo, origen, delay, es
   const destino = ciclo === "sheng" ? CICLO_SHENG[origen] : CICLO_KE[origen];
   const { inicio, fin, ux, uy } = segmentoPentagono(idxElemento(origen), idxElemento(destino));
   const st = estados[origen];
-  const activa = !!st && st.veredicto !== "equilibrio";
+  const activa = st?.veredicto === "carga";
   const nivel = intensidad(st?.magnitud ?? 0);
   // Cada flecha lleva el color de su elemento de origen. El ciclo se distingue
   // por el trazo: Sheng (generador) continuo, Ke (control) entrecortado.
@@ -313,10 +327,7 @@ function EstrellaPerfil({ estados, onElemento }: {
   const inView = useInView(ref, { once: true, amount: 0.3 });
   const enter = reduce || inView;
 
-  const afecta = (el: Elemento) => {
-    const st = estados[el];
-    return !!st && st.veredicto !== "equilibrio";
-  };
+  const afecta = (el: Elemento) => estados[el]?.veredicto === "carga";
 
   return (
     <Flex ref={ref} justify="center" py={{ base: 1, md: 1.5 }}>
@@ -413,11 +424,11 @@ function Panel({ titulo, color, children }: {
 
 // ── Box de métricas · una barra por elemento, hacia UN solo lado ─────────────
 // Cada elemento tiene su línea central (= equilibrio) y UNA barra: hacia ARRIBA
-// si le sobra energía (rojo) o hacia ABAJO si le falta (ámbar), nunca las dos
-// —un elemento no puede estar en exceso y en deficiencia a la vez—. Lo que mide
-// es el balance NETO de sus respuestas (ver `diagnosticoElemento`), así que un
-// elemento con señales de los dos tipos que se compensan se queda pegado a la
-// línea: eso es, exactamente, estar en equilibrio.
+// si lo que le pesa gana a sus recursos (rojo) o hacia ABAJO si sus recursos
+// ganan y ese elemento te sostiene (verde), nunca las dos. Lo que mide es la
+// resta CARGA − RECURSOS (ver `diagnosticoElemento`), así que un elemento con
+// mucho de los dos lados se queda pegado a la línea: eso es, exactamente,
+// estar en equilibrio.
 function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, EstadoElemento>> }) {
   const t = useT();
   const nombres = useNombresElementos();
@@ -434,7 +445,7 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
 
       {/* Leyenda de estados */}
       <Flex justify="center" gap={{ base: 3, md: 6 }} wrap="wrap" mb={5}>
-        {(["equilibrio", "exceso", "deficiencia"] as VeredictoBalance[]).map((b) => (
+        {(["carga", "equilibrio", "recurso"] as VeredictoBalance[]).map((b) => (
           <Flex key={b} align="center" gap={2}>
             <Box w="12px" h="12px" borderRadius="sm" bg={ESTADO_COLOR[b]}
                  style={{ boxShadow: `0 0 8px ${ESTADO_COLOR[b]}` }} />
@@ -489,18 +500,88 @@ function MetricasBalance({ estados }: { estados: Partial<Record<Elemento, Estado
   );
 }
 
+
+// ── Por dónde te adaptas · los dos elementos de más carga neta ───────────────
+// Va al pie del box de barras porque se lee de él: son sus dos columnas más
+// altas hacia arriba. Es la lectura de los tres cuestionarios cuando se miran
+// juntos —el elemento principal y el secundario por los que hoy te adaptas—,
+// y no una etiqueta de personalidad: cambia con el momento que estés viviendo.
+function TiposAdaptacion({ tipos, estados }: {
+  tipos: { primario: Elemento; secundario: Elemento };
+  estados: Partial<Record<Elemento, EstadoElemento>>;
+}) {
+  const t = useT();
+  const nombres = useNombresElementos();
+  const fila = [
+    { el: tipos.primario, rotulo: t("metodo.tcm.diag.tipoPrimario") },
+    { el: tipos.secundario, rotulo: t("metodo.tcm.diag.tipoSecundario") },
+  ];
+  return (
+    <>
+      <Box h="1px" w="100%" my={{ base: 6, md: 7 }} bg={`${tcmTxt}55`} />
+
+      <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.1em"
+            textTransform="uppercase" textAlign="center" mb={2} style={{ textShadow: INK_SHADOW }}>
+        {t("metodo.tcm.diag.tipos")}
+      </Text>
+      <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            textAlign="center" lineHeight="1.7" mb={4} style={{ textShadow: INK_SHADOW }}>
+        {t("metodo.tcm.diag.tiposTexto")}
+      </Text>
+
+      <Flex justify="center" gap={{ base: 3, md: 6 }} wrap="wrap">
+        {fila.map(({ el, rotulo }, i) => {
+          const E = ELEMENTOS[el];
+          const pct = Math.round(Math.abs(estados[el]?.posicion ?? 0) * 100);
+          const enCarga = estados[el]?.veredicto === "carga";
+          return (
+            <Flex key={el} align="center" gap={3} px={{ base: 4, md: 5 }} py={3} borderRadius="xl"
+                  bg="rgba(0,0,0,0.32)" border={`1px solid ${E.color}88`}
+                  style={{ boxShadow: i === 0 ? `0 0 18px ${E.color}55` : "none" }}>
+              <Box w={{ base: "44px", md: "54px" }} h={{ base: "44px", md: "54px" }} flexShrink={0}
+                   borderRadius="full" overflow="hidden" border={`2px solid ${E.color}`}
+                   style={{ boxShadow: `0 0 10px ${E.color}88` }}>
+                <img src={ICONO_ELEMENTO[el]} alt={nombres[el]}
+                     style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </Box>
+              <Box>
+                <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "2xs", md: "xs" }} fontWeight={700}
+                      letterSpacing="0.1em" textTransform="uppercase">
+                  {rotulo}
+                </Text>
+                <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight={800} lineHeight="1.2">
+                  {nombres[el]}
+                </Text>
+                <Text color={enCarga ? ESTADO_COLOR.carga : "rgba(255,255,255,0.6)"}
+                      fontSize={{ base: "2xs", md: "xs" }} fontWeight={700}>
+                  {enCarga ? `${pct}% ${t("metodo.tcm.el.enCarga").toLowerCase()}` : t(ESTADO_CLAVE[estados[el]?.veredicto ?? "equilibrio"])}
+                </Text>
+              </Box>
+            </Flex>
+          );
+        })}
+      </Flex>
+
+      <Text color="rgba(255,255,255,0.6)" fontSize={{ base: "2xs", md: "xs" }} fontStyle="italic"
+            textAlign="center" lineHeight="1.6" mt={4}>
+        {t("metodo.tcm.diag.formula")}
+      </Text>
+    </>
+  );
+}
+
 // ── Columna de un elemento ───────────────────────────────────────────────────
 // Estructura fija e idéntica en las 5 columnas (para que las líneas centrales
 // queden alineadas): [% arriba] · [mitad superior] · [línea] · [mitad inferior]
 // · [% abajo]. Solo UNA de las dos mitades tiene barra, la del lado hacia el que
-// tira el elemento, y su altura es el desequilibrio NETO (sin estirar: un 20%
-// neto ocupa un quinto de su mitad).
-const EXC = ESTADO_COLOR.exceso;
-const DEF = ESTADO_COLOR.deficiencia;
+// tira el elemento, y su altura es la diferencia NETA entre carga y recursos
+// (sin estirar: un 20% neto ocupa un quinto de su mitad).
+const CARGA = ESTADO_COLOR.carga;
+const RECURSO = ESTADO_COLOR.recurso;
 function ColumnaBalance({ estado, index, enter, reduce }: {
   estado: EstadoElemento; index: number; enter: boolean; reduce: boolean | null;
 }) {
-  // Hacia dónde y cuánto. `posicion` > 0 = le sobra; < 0 = le falta.
+  // Hacia dónde y cuánto. `posicion` > 0 = le pesa más de lo que te da; < 0 = al revés.
   const neto = estado?.posicion ?? 0;
   const pct = Math.round(Math.abs(neto) * 100);
   const arriba = neto > 0;
@@ -523,9 +604,9 @@ function ColumnaBalance({ estado, index, enter, reduce }: {
       {/* % del exceso (solo si el elemento tira hacia arriba) */}
       <Box h="16px" display="flex" alignItems="flex-end" justifyContent="center">
         {pct > 0 && arriba && (
-          <Text color={EXC} fontSize={{ base: "3xs", md: "2xs" }} fontWeight={800} lineHeight="1"
+          <Text color={CARGA} fontSize={{ base: "3xs", md: "2xs" }} fontWeight={800} lineHeight="1"
                 opacity={shown ? 1 : 0} transition="opacity 0.4s ease"
-                style={{ textShadow: `0 0 8px ${EXC}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
+                style={{ textShadow: `0 0 8px ${CARGA}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
             {pct}%
           </Text>
         )}
@@ -534,8 +615,8 @@ function ColumnaBalance({ estado, index, enter, reduce }: {
       {/* Mitad superior · le sobra (crece hacia arriba, anclada a la línea) */}
       <Flex flex="1" w="100%" align="flex-end" justify="center">
         <Box w={barW} maxW="46px" h={shown && arriba ? `${pct}%` : "0%"}
-             borderTopRadius="md" bgGradient={`linear(to-t, ${EXC}cc, ${EXC})`}
-             style={{ boxShadow: arriba && pct > 0 ? `0 0 12px ${EXC}88, inset 0 1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
+             borderTopRadius="md" bgGradient={`linear(to-t, ${CARGA}cc, ${CARGA})`}
+             style={{ boxShadow: arriba && pct > 0 ? `0 0 12px ${CARGA}88, inset 0 1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
       </Flex>
 
       {/* Línea central = equilibrio */}
@@ -545,16 +626,16 @@ function ColumnaBalance({ estado, index, enter, reduce }: {
       {/* Mitad inferior · le falta (crece hacia abajo, anclada a la línea) */}
       <Flex flex="1" w="100%" align="flex-start" justify="center">
         <Box w={barW} maxW="46px" h={shown && !arriba ? `${pct}%` : "0%"}
-             borderBottomRadius="md" bgGradient={`linear(to-b, ${DEF}cc, ${DEF})`}
-             style={{ boxShadow: !arriba && pct > 0 ? `0 0 12px ${DEF}88, inset 0 -1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
+             borderBottomRadius="md" bgGradient={`linear(to-b, ${RECURSO}cc, ${RECURSO})`}
+             style={{ boxShadow: !arriba && pct > 0 ? `0 0 12px ${RECURSO}88, inset 0 -1px 0 rgba(255,255,255,0.4)` : "none", transition: ease }} />
       </Flex>
 
       {/* % de la deficiencia (solo si tira hacia abajo) */}
       <Box h="16px" display="flex" alignItems="flex-start" justifyContent="center">
         {pct > 0 && !arriba && (
-          <Text color={DEF} fontSize={{ base: "3xs", md: "2xs" }} fontWeight={800} lineHeight="1"
+          <Text color={RECURSO} fontSize={{ base: "3xs", md: "2xs" }} fontWeight={800} lineHeight="1"
                 opacity={shown ? 1 : 0} transition="opacity 0.4s ease"
-                style={{ textShadow: `0 0 8px ${DEF}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
+                style={{ textShadow: `0 0 8px ${RECURSO}aa, 0 1px 2px rgba(0,0,0,0.6)` }}>
             {pct}%
           </Text>
         )}

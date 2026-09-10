@@ -39,8 +39,8 @@ import { VINETAS_ENFERMEDADES } from "../comicEnfermedades";
 
 const ETIQUETA_VEREDICTO: Record<VeredictoBalance, string> = {
   equilibrio: "en equilibrio",
-  exceso: "en exceso",
-  deficiencia: "en deficiencia",
+  carga: "en carga",
+  recurso: "te sostiene",
 };
 
 /**
@@ -109,13 +109,16 @@ export function libroApuntesTcm(data: DatosTcm | null | undefined): ApuntesLibro
             estados.map(({ el, d: est }) => ({
               etiqueta: ELEMENTOS[el].nombre,
               color: COLOR_ELEMENTO[el],
-              // El disco crece con el desequilibrio NETO, que es lo que mide la web.
-              valor: Math.round((est?.magnitud ?? 0) * 100),
+              // El disco crece con la CARGA neta (lo que le pesa menos lo que
+              // te da). Un elemento que te sostiene tira hacia el otro lado, así
+              // que su disco se queda a cero: la lámina señala lo que pide
+              // atención, igual que la estrella de la web.
+              valor: Math.max(0, Math.round((est?.posicion ?? 0) * 100)),
             })),
             100,
             tema.apagado,
           ),
-        "El anillo de fuera es el ciclo de generación; la estrella de dentro, el de control. Cada disco crece con su desequilibrio.",
+        "El anillo de fuera es el ciclo de generación; la estrella de dentro, el de control. Cada disco crece con la carga de su elemento.",
       );
 
       estados.forEach(({ el, d }) => {
@@ -124,6 +127,8 @@ export function libroApuntesTcm(data: DatosTcm | null | undefined): ApuntesLibro
           etiqueta: E.nombre,
           coletilla: d ? ETIQUETA_VEREDICTO[d.veredicto] : "sin responder",
           valor: d ? `${Math.round(d.magnitud * 100)} %` : "—",
+          // La barra mide cuánto se aleja del equilibrio, hacia el lado que sea;
+          // el lado lo dice la coletilla («en carga» / «te sostiene»).
           fraccion: d?.magnitud ?? 0,
           color: COLOR_ELEMENTO[el],
         });

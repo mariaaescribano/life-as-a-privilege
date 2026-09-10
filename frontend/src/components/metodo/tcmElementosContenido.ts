@@ -4,8 +4,8 @@
 // Cada elemento tiene las mismas 7 secciones, así que UNA plantilla de página
 // (MetodoTcmElemento.tsx) las renderiza todas. Editar contenido = editar aquí.
 //
-// El texto es la voz del curso de Medicina China. La puntuación/mini-test de
-// cada elemento vive en tcmRecorrido.ts (ELEMENTOS[el].miniTest).
+// El texto es la voz del curso de Medicina China. Los tres cuestionarios de
+// cada elemento viven en tcmRecorrido.ts (TESTS_ELEMENTO).
 // ─────────────────────────────────────────────────────────────────────────
 import { testsDeElemento, type Elemento } from "./tcmRecorrido";
 
@@ -563,14 +563,13 @@ export const tieneContenido = (el: Elemento): boolean => !!CONTENIDO_ELEMENTOS[e
 // ─────────────────────────────────────────────────────────────────────────
 // CÓMIC de cada elemento (se abre al pinchar el elemento en la estrella).
 //
-// Es una secuencia de PASOS. La mayoría son viñetas (foto + texto), pero uno
-// —a mitad del recorrido del elemento— es un mini-TEST: sus preguntas viven en
-// ELEMENTOS[el].miniTest (tcmRecorrido.ts) y su resultado se SUMA a la
-// puntuación agregada del recorrido (puntuaciones()), acercándonos al perfil
-// final. No se puede pasar del paso de test sin responderlo.
+// Es una secuencia de PASOS. La mayoría son viñetas (foto + texto), y los tres
+// primeros son los TRES CUESTIONARIOS del elemento: sus frases viven en
+// TESTS_ELEMENTO (tcmRecorrido.ts) y de ellas sale el diagnóstico. No se puede
+// pasar de un paso de test sin responderlo entero.
 //
 // El objetivo del recorrido es reconocer los DESEQUILIBRIOS de cada elemento:
-// por eso el arco es intro → exceso → deficiencia → test → cómo reequilibrar.
+// por eso el arco es tests → intro → exceso → deficiencia → cómo reequilibrar.
 // ─────────────────────────────────────────────────────────────────────────
 export interface PasoVineta { tipo: "vineta"; src: string; paragraphs: string[]; }
 /** Paso de test. `testKey` indica QUÉ test de balance pinta (cada elemento tiene
@@ -893,12 +892,11 @@ const comicDesdeRico = (
   ];
 };
 
-// Coloca los 2 tests de balance del elemento AL PRINCIPIO del cómic (antes del
+// Coloca los 3 cuestionarios del elemento AL PRINCIPIO del cómic (antes del
 // contenido educativo). Es deliberado: si el usuario leyera antes las
 // descripciones de exceso/deficiencia, se autoetiquetaría y respondería sesgado.
 // Respondiendo primero, la autoevaluación es más espontánea y el perfil, más
 // fiable. Luego llega el aprendizaje (intro → exceso → deficiencia → reequilibrar).
-// Si el elemento aún no tiene tests nuevos, deja el marcador legacy en su sitio.
 const expandirTests = (el: Elemento, pasos: PasoComic[]): PasoComic[] => {
   const tests = testsDeElemento(el);
   if (tests.length === 0) return pasos;

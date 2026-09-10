@@ -590,10 +590,18 @@ export const metodo = {
   "metodo.tcm.el.equilibrio": "En equilibrio",
   "metodo.tcm.el.exceso": "En exceso",
   "metodo.tcm.el.deficiencia": "En deficiencia",
+  /** Los tres veredictos del diagnóstico (carga contra recursos). «En
+   *  equilibrio» comparte rótulo con la sección de arriba. */
+  "metodo.tcm.el.enCarga": "En carga",
+  "metodo.tcm.el.teSostiene": "Te sostiene",
   "metodo.tcm.el.desequilibrio": "Señales de desequilibrio",
   "metodo.tcm.el.cuidarlo": "Cómo cuidarlo",
   "metodo.tcm.el.guia": "Guía práctica",
   "metodo.tcm.el.test": "¿Cómo está este elemento en ti?",
+  /** Los tres cuestionarios que se responden dentro del cómic de cada elemento. */
+  "metodo.tcm.el.cuestionario": "Cuestionario",
+  "metodo.tcm.el.respondeEscala": "Puntúa cada frase de 0 a 4.",
+  "metodo.tcm.el.frasesHechas": "respondidas",
   "metodo.tcm.el.guiaNutricion": "Nutrición",
   "metodo.tcm.el.guiaEvitar": "Evita",
   "metodo.tcm.el.guiaEstiloDeVida": "Estilo de Vida",
@@ -650,9 +658,18 @@ export const metodo = {
   "metodo.tcm.diag.cita":
     "«Antes de sanar a alguien, pregúntale si está dispuesto a renunciar a las cosas que lo enferman.»",
   "metodo.tcm.diag.citaAutor": "— Hipócrates",
-  "metodo.tcm.diag.iluminados": "Los elementos iluminados son los que más necesitan de tu atención.",
+  "metodo.tcm.diag.iluminados": "Los elementos iluminados son los que hoy cargan con más de lo que pueden sostener.",
   "metodo.tcm.diag.barras":
-    "Cada elemento tira hacia un lado: hacia arriba si le sobra energía, hacia abajo si le falta. Cuanto más cerca de la línea, más en equilibrio.",
+    "Cada elemento tira hacia un lado: hacia arriba si lo que te pesa gana a tus recursos, hacia abajo si tus recursos ganan y ese elemento te sostiene. Cuanto más cerca de la línea, más en equilibrio.",
+  /** Pie del box de barras: de dónde sale el número. */
+  "metodo.tcm.diag.formula":
+    "El número es la resta: lo que ese elemento te pesa hoy (tu respuesta al estrés y tus rasgos) menos lo que te da (tu capacidad de adaptación).",
+  /** Los dos elementos de más carga neta. */
+  "metodo.tcm.diag.tipos": "Por dónde te adaptas",
+  "metodo.tcm.diag.tipoPrimario": "Principal",
+  "metodo.tcm.diag.tipoSecundario": "Secundario",
+  "metodo.tcm.diag.tiposTexto":
+    "Estos son los dos elementos por los que hoy pasa tu forma de adaptarte: los que más se cargan cuando la Vida aprieta.",
   "metodo.tcm.diag.repasa":
     "Repasa cada relación con calma. Todas te interesan, pues todas forman parte de ti.",
   "metodo.tcm.diag.aviso":

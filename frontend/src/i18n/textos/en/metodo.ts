@@ -527,10 +527,15 @@ export const metodo = {
   "metodo.tcm.el.equilibrio": "In balance",
   "metodo.tcm.el.exceso": "In excess",
   "metodo.tcm.el.deficiencia": "In deficiency",
+  "metodo.tcm.el.enCarga": "Under strain",
+  "metodo.tcm.el.teSostiene": "Holds you up",
   "metodo.tcm.el.desequilibrio": "Signs of imbalance",
   "metodo.tcm.el.cuidarlo": "How to care for it",
   "metodo.tcm.el.guia": "Practical guide",
   "metodo.tcm.el.test": "How is this element doing in you?",
+  "metodo.tcm.el.cuestionario": "Questionnaire",
+  "metodo.tcm.el.respondeEscala": "Score each statement from 0 to 4.",
+  "metodo.tcm.el.frasesHechas": "answered",
   "metodo.tcm.el.guiaNutricion": "Food",
   "metodo.tcm.el.guiaEvitar": "Avoid",
   "metodo.tcm.el.guiaEstiloDeVida": "Lifestyle",
@@ -579,9 +584,16 @@ export const metodo = {
   "metodo.tcm.diag.cita":
     "«Before you heal someone, ask him if he's willing to give up the things that make him sick.»",
   "metodo.tcm.diag.citaAutor": "— Hippocrates",
-  "metodo.tcm.diag.iluminados": "The elements that light up are the ones asking for your attention.",
+  "metodo.tcm.diag.iluminados": "The elements that light up are carrying more than they can hold today.",
+  "metodo.tcm.diag.formula":
+    "The number is a subtraction: what this element weighs on you today (your stress response and your traits) minus what it gives you (your adaptation abilities).",
+  "metodo.tcm.diag.tipos": "How you adapt",
+  "metodo.tcm.diag.tipoPrimario": "Primary",
+  "metodo.tcm.diag.tipoSecundario": "Secondary",
+  "metodo.tcm.diag.tiposTexto":
+    "These are the two elements your way of adapting runs through: the ones that take the strain when life presses.",
   "metodo.tcm.diag.barras":
-    "Each element pulls to one side: up if it has energy to spare, down if it's short. The closer to the line, the more in balance.",
+    "Each element pulls to one side: up if what weighs on you outruns your resources, down if your resources win and that element holds you up. The closer to the line, the more in balance.",
   "metodo.tcm.diag.repasa":
     "Go through each relationship calmly. They all matter to you, because they're all part of you.",
   "metodo.tcm.diag.aviso":

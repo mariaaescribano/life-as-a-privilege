@@ -15,20 +15,20 @@ const MotionG = motion.g as any;
 const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
 const STAR_BASE = 0.1, STAR_STEP = 0.13, STAR_DUR = 0.55;
 
-// El rótulo del estado es el mismo que titula esa sección en la página de cada
-// elemento: se pide por su clave, no se escribe otra vez.
+// El rótulo de cada veredicto (carga contra recursos), pedido al diccionario.
 const ESTADO_CLAVE: Record<VeredictoBalance, ClaveTexto> = {
   equilibrio: "metodo.tcm.el.equilibrio",
-  exceso: "metodo.tcm.el.exceso",
-  deficiencia: "metodo.tcm.el.deficiencia",
+  carga: "metodo.tcm.el.enCarga",
+  recurso: "metodo.tcm.el.teSostiene",
 };
 const ESTADO_COLOR: Record<VeredictoBalance, string> = {
-  equilibrio: "#6f9463", exceso: "#d1495b", deficiencia: "#c8963e",
+  equilibrio: "#c8963e", carga: "#d1495b", recurso: "#6f9463",
 };
 // Qué texto del elemento mostrar según el veredicto. Son los tres únicos estados
-// posibles: un elemento tira hacia un lado, hacia el otro, o está en equilibrio.
-const CONTENT_KEY: Record<VeredictoBalance, "equilibrio" | "exceso" | "deficiencia"> = {
-  equilibrio: "equilibrio", exceso: "exceso", deficiencia: "deficiencia",
+// posibles: al elemento le pesa más de lo que te da, te da más de lo que le pesa,
+// o los dos lados se compensan.
+const CONTENT_KEY: Record<VeredictoBalance, "desequilibrio" | "equilibrio" | "intro"> = {
+  carga: "desequilibrio", equilibrio: "intro", recurso: "equilibrio",
 };
 
 // Altura FIJA del box en escritorio (md+). El detalle de cada elemento tiene un

@@ -6,8 +6,9 @@ import { ComicViewer } from "./ComicViewer";
 import { TcmLoader } from "./comicLoaders";
 import { API_URL } from "../../GlobalVariables";
 import {
-  ELEMENTOS, testsDeElemento, testCompleto, puntosElemento,
-  type DatosTcm, type Elemento, type PreguntaTest, type TestElemento,
+  ELEMENTOS, ESCALAS, testsDeElemento, testCompleto, respondidasTest,
+  puntoRespuesta, puntosElemento,
+  type DatosTcm, type Elemento, type TestElemento,
 } from "./tcmRecorrido";
 import { FOTO_ELEMENTO, COMIC_ELEMENTO } from "./tcmElementosContenido";
 import { pasosElementoEn } from "./tcmElementosEn";
@@ -96,12 +97,10 @@ export function ElementoComicModal({
             ? pasosElementoEn(elemento, COMIC_ELEMENTO[elemento])
             : COMIC_ELEMENTO[elemento];
           const tests = testsDeElemento(elemento);
-          const miniTest = ELEMENTOS[elemento].miniTest; // legacy (elementos sin migrar)
           const vinetas = pasos.map((p) => ({
             src: p.src,
             paragraphs: p.tipo === "vineta" ? p.paragraphs : (p.intro ?? []),
           }));
-          const legacyRespondido = miniTest.every((q) => !!respuestasTest[q.key]);
           const testDePaso = (i: number): TestElemento | null => {
             const p = pasos[i];
             if (p?.tipo !== "test" || !p.testKey) return null;
@@ -138,37 +137,27 @@ export function ElementoComicModal({
               bloqueado={(i) => {
                 if (pasos[i]?.tipo !== "test") return false;
                 const t = testDePaso(i);
-                return t ? !testCompleto(t, respuestasTest) : !legacyRespondido;
+                return !t || !testCompleto(t, respuestasTest);
               }}
               sinFoto={(i) => pasos[i]?.tipo === "test"}
               separarFrases
               pageExtra={(i, api) => {
                 if (pasos[i]?.tipo !== "test") return null;
                 const t = testDePaso(i);
-                if (t) {
-                  const idx = tests.findIndex((x) => x.key === t.key);
-                  return (
-                    <TestBalanceComic
-                      key={t.key}
-                      test={t}
-                      testNum={idx + 1}
-                      testTotal={tests.length}
-                      cabecera={cabecera}
-                      respuestas={respuestasTest}
-                      onElegir={elegirTest}
-                      color={ELEMENTOS[elemento].color}
-                      completo={testCompleto(t, respuestasTest)}
-                      onContinuar={api.goNext}
-                    />
-                  );
-                }
+                if (!t) return null;
+                const idx = tests.findIndex((x) => x.key === t.key);
                 return (
-                  <MiniTestComic
-                    titulo={cabecera}
-                    preguntas={miniTest}
+                  <TestEscalaComic
+                    key={t.key}
+                    test={t}
+                    testNum={idx + 1}
+                    testTotal={tests.length}
+                    cabecera={cabecera}
                     respuestas={respuestasTest}
                     onElegir={elegirTest}
                     color={ELEMENTOS[elemento].color}
+                    completo={testCompleto(t, respuestasTest)}
+                    onContinuar={api.goNext}
                   />
                 );
               }}
@@ -182,65 +171,12 @@ export function ElementoComicModal({
   );
 }
 
-// ── Mini-test embebido en el cómic del elemento (legacy) ────────────────────
-function MiniTestComic({
-  titulo, preguntas, respuestas, onElegir, color,
-}: {
-  titulo: string;
-  preguntas: PreguntaTest[];
-  respuestas: Record<string, string>;
-  onElegir: (preguntaKey: string, opcionKey: string) => void;
-  color: string;
-}) {
-  const faltan = preguntas.some((q) => !respuestas[q.key]);
-  return (
-    <Flex direction="column" gap={5} textAlign="left">
-      <Box>
-        <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="800" letterSpacing="0.14em"
-              textAlign="center" textTransform="uppercase" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
-          {titulo}
-        </Text>
-        <Box mt={3} h="1px" w="100%" bgGradient={`linear(to-r, transparent, ${color}cc, transparent)`} />
-      </Box>
-
-      {preguntas.map((q, i) => (
-        <Box key={q.key}>
-          <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" mb={2.5}
-                style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
-            {i + 1}. {q.pregunta}
-          </Text>
-          <Flex direction="column" gap={2}>
-            {q.opciones.map((op) => {
-              const sel = respuestas[q.key] === op.key;
-              return (
-                <Box key={op.key} as="button" onClick={() => onElegir(q.key, op.key)} textAlign="left"
-                  px={{ base: 3.5, md: 4 }} py={{ base: 2, md: 2.5 }} borderRadius="lg"
-                  bg={sel ? `${color}44` : "rgba(255,255,255,0.08)"}
-                  border={`1px solid ${sel ? color : "rgba(255,255,255,0.15)"}`}
-                  color="white" fontFamily="'EB Garamond', serif" fontSize={{ base: "sm", md: "md" }}
-                  lineHeight="1.5" cursor="pointer" transition="all 0.15s"
-                  boxShadow={sel ? `0 0 14px ${color}88` : "none"}
-                  _hover={{ bg: sel ? `${color}55` : "rgba(255,255,255,0.14)" }}
-                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
-                  {op.texto}
-                </Box>
-              );
-            })}
-          </Flex>
-          {/* Separador tras cada pregunta: da aire al test */}
-          <Box h="1px" w="100%" mt={5} bgGradient={`linear(to-r, transparent, ${color}55, transparent)`} />
-        </Box>
-      ))}
-      <Text color="rgba(255,255,255,0.75)" fontSize="xs" fontStyle="italic"
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
-        {faltan ? "Responde para continuar →" : "¡Listo! Ya puedes continuar →"}
-      </Text>
-    </Flex>
-  );
-}
-
-// ── Test de balance (A/B/C = equilibrio/exceso/deficiencia) ─────────────────
-function TestBalanceComic({
+// ── Test de escala (0-4) embebido en el cómic del elemento ──────────────────
+// Los tres cuestionarios se responden aquí: una frase por línea y, debajo, los
+// cinco botones de la escala. El número es lo que se guarda (como texto), y el
+// rótulo de la escala se enseña arriba una sola vez y en el botón elegido, para
+// no repetir cinco palabras largas en cada frase.
+function TestEscalaComic({
   test, testNum, testTotal, cabecera, respuestas, onElegir, color, completo, onContinuar,
 }: {
   test: TestElemento;
@@ -255,6 +191,10 @@ function TestBalanceComic({
 }) {
   const t = useT();
   const [guardado, setGuardado] = useState(false);
+  const rotulos = ESCALAS[test.escala];
+  const hechas = respondidasTest(test, respuestas);
+  const totalFrases = test.preguntas.length;
+
   return (
     <Flex direction="column" gap={5} textAlign="left">
       <Box>
@@ -262,46 +202,89 @@ function TestBalanceComic({
               textAlign="center" textTransform="uppercase" style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
           {cabecera}{testTotal > 1 ? ` · ${testNum} de ${testTotal}` : ""}
         </Text>
-        {test.titulo && (
-          <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                textAlign="center" mt={1.5} style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
-            {test.titulo}
-          </Text>
-        )}
+        <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+              textAlign="center" mt={1.5} style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
+          {test.titulo}
+        </Text>
         <Box mt={3} h="1px" w="100%" bgGradient={`linear(to-r, transparent, ${color}cc, transparent)`} />
       </Box>
 
-      {test.preguntas.map((q, i) => (
-        <Box key={q.key}>
-          <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={3}
-                style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
-            {i + 1}. {q.pregunta}{q.opcional ? " (opcional)" : ""}
-          </Text>
-          <Flex direction="column" gap={2}>
-            {q.opciones.map((op) => {
-              const sel = respuestas[q.key] === op.key;
-              return (
-                <Box key={op.key} as="button" onClick={() => { setGuardado(false); onElegir(q.key, op.key); }}
-                  textAlign="left" px={{ base: 4, md: 5 }} py={{ base: 2.5, md: 3 }} borderRadius="lg"
-                  bg={sel ? `${color}66` : "rgba(0,0,0,0.42)"}
-                  border={`1px solid ${sel ? color : "rgba(255,255,255,0.22)"}`}
-                  color="white" fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
-                  lineHeight="1.55" cursor="pointer" transition="all 0.15s"
-                  boxShadow={sel ? `0 0 14px ${color}88` : "none"}
-                  _hover={{ bg: sel ? `${color}77` : "rgba(0,0,0,0.55)" }}
-                  sx={{ backdropFilter: "blur(8px)" }}
-                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
-                  {op.texto}
-                </Box>
-              );
-            })}
-          </Flex>
-          {/* Separador tras cada pregunta: da aire al test */}
-          <Box h="1px" w="100%" mt={5} bgGradient={`linear(to-r, transparent, ${color}55, transparent)`} />
-        </Box>
-      ))}
+      {/* Enunciado del cuestionario + la escala, una sola vez arriba */}
+      {test.enunciado && (
+        <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.65"
+              style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
+          {test.enunciado}
+        </Text>
+      )}
+
+      <Box borderRadius="lg" px={{ base: 3.5, md: 5 }} py={{ base: 3, md: 3.5 }}
+           bg="rgba(0,0,0,0.42)" border={`1px solid ${color}66`} sx={{ backdropFilter: "blur(8px)" }}>
+        <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" mb={2}
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
+          {t("metodo.tcm.el.respondeEscala")}
+        </Text>
+        <Flex wrap="wrap" gap={{ base: 2, md: 3.5 }}>
+          {rotulos.map((r, n) => (
+            <Flex key={n} align="center" gap={1.5}>
+              <Text color={color} fontSize={{ base: "sm", md: "md" }} fontWeight="800"
+                    style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}>{n}</Text>
+              <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "xs", md: "sm" }}
+                    style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>{r}</Text>
+            </Flex>
+          ))}
+        </Flex>
+      </Box>
+
+      {test.preguntas.map((q, i) => {
+        const valor = puntoRespuesta(respuestas[q.key]);
+        return (
+          <Box key={q.key}>
+            <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2.5}
+                  style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
+              {i + 1}. {q.texto}
+            </Text>
+            <Flex align="center" gap={{ base: 2, md: 2.5 }} wrap="wrap">
+              {rotulos.map((rotulo, n) => {
+                const sel = valor === n;
+                return (
+                  <Box key={n} as="button" title={rotulo}
+                       onClick={() => { setGuardado(false); onElegir(q.key, String(n)); }}
+                       w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }}
+                       flexShrink={0} borderRadius="full"
+                       display="flex" alignItems="center" justifyContent="center"
+                       bg={sel ? color : "rgba(0,0,0,0.42)"}
+                       border={`1px solid ${sel ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.22)"}`}
+                       color="white" fontFamily="'EB Garamond', serif"
+                       fontSize={{ base: "lg", md: "xl" }} fontWeight="800"
+                       cursor="pointer" transition="all 0.15s"
+                       boxShadow={sel ? `0 0 16px ${color}` : "none"}
+                       _hover={{ bg: sel ? color : "rgba(0,0,0,0.6)", transform: "translateY(-1px)" }}
+                       sx={{ backdropFilter: "blur(8px)" }}
+                       style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}>
+                    {n}
+                  </Box>
+                );
+              })}
+              {/* El rótulo de lo elegido, al lado: así la escala no hay que
+                  releerla arriba en cada frase. */}
+              {valor !== null && (
+                <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
+                      ml={1} style={{ textShadow: `0 1px 4px rgba(0,0,0,0.95), 0 0 12px ${color}` }}>
+                  {rotulos[valor]}
+                </Text>
+              )}
+            </Flex>
+            {/* Separador tras cada frase: da aire al test */}
+            <Box h="1px" w="100%" mt={5} bgGradient={`linear(to-r, transparent, ${color}55, transparent)`} />
+          </Box>
+        );
+      })}
 
       <Flex justify="flex-end" align="center" gap={3} mt={1}>
+        <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mr="auto"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
+          {hechas} / {totalFrases} {t("metodo.tcm.el.frasesHechas")}
+        </Text>
         {guardado && (
           <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
                 style={{ textShadow: `0 1px 4px rgba(0,0,0,0.85), 0 0 12px ${color}` }}>
