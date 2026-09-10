@@ -467,7 +467,7 @@ export function PorDondeEmpiezoBloque({ onAcceder }: { onAcceder?: () => void })
 
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
-      <TituloBloque sub={t("elMetodo.empiezo.intro")}>{t("elMetodo.empiezo.titulo")}</TituloBloque>
+      <TituloBloque sinRaya sub={t("elMetodo.empiezo.intro")}>{t("elMetodo.empiezo.titulo")}</TituloBloque>
 
       <Grid
         w="100%"

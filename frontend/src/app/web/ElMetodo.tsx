@@ -941,6 +941,12 @@ export default function ElMetodo() {
           letterSpacing="0.04em"
           lineHeight="1.2"
           textAlign="center"
+          // El titular va en DOS frases: el salto de linea del diccionario solo
+          // se respeta con `pre-line` (si no, el navegador lo convierte en un
+          // espacio y las dos frases salen seguidas).
+          // En movil no: ahi el ancho ya parte la frase donde toca, y forzar el
+          // salto dejaria renglones cojos.
+          whiteSpace={{ base: "normal", md: "pre-line" }}
           textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(14px)"}

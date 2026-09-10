@@ -13,7 +13,7 @@ export const elMetodo = {
   "elMetodo.lema": "Ocho disciplinas. Un orden. Un propósito: entenderte.",
   "elMetodo.intro":
     "No son ocho cursos independientes.\nEs una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.",
-  "elMetodo.porDentro": "No estudias ocho disciplinas. Te descubres a ti desde ocho perspectivas.",
+  "elMetodo.porDentro": "No estudias ocho disciplinas.\nTe descubres a ti desde ocho perspectivas.",
   /** Va justo debajo del título: avisa de que el mandala se puede pinchar. */
   "elMetodo.porDentroPista": "Haz clic en cada círculo para descubrirla",
   "elMetodo.cadaDisciplina": "Ocho disciplinas. Un orden. Un propósito: entenderte.\nCada disciplina observa una parte distinta de ti.",
