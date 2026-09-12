@@ -16,7 +16,22 @@ interface RecorridoUser {
   name: string;
   email: string;
   img?: string | null;
+  /** flags de pago: `<scope>_suscrito` y `<scope>_fecha_compra`. */
+  [flag: string]: any;
 }
+
+/** slug del panel → columna de la cuenta. Solo Astrología cambia de nombre:
+ *  su scope de pago es `metodo` (es la primera disciplina, la del Mapa). */
+const SCOPE_POR_KEY: Record<string, string> = { astrologia: "metodo" };
+const scopeDe = (key: string) => SCOPE_POR_KEY[key] ?? key;
+
+/** «12 sept 2026», o null si no hay fecha guardada (accesos antiguos o regalados). */
+const fechaCorta = (iso?: string | null) => {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });
+};
 
 export default function AdminUsuarios() {
   const navigate = useNavigate();
@@ -43,13 +58,23 @@ export default function AdminUsuarios() {
     })();
   }, [verificando, disc, navigate]);
 
+  // La lista trae TODAS las cuentas, así que arriba van las que tienen pagada
+  // la disciplina que se está mirando y debajo el resto (por orden de nombre).
+  const scope = scopeDe(disc?.key ?? "");
   const filtrados = useMemo(() => {
     const t = q.trim().toLowerCase();
-    if (!t) return usuarios;
-    return usuarios.filter(
-      (u) => (u.name ?? "").toLowerCase().includes(t) || (u.email ?? "").toLowerCase().includes(t),
-    );
-  }, [q, usuarios]);
+    const base = !t
+      ? usuarios
+      : usuarios.filter(
+          (u) => (u.name ?? "").toLowerCase().includes(t) || (u.email ?? "").toLowerCase().includes(t),
+        );
+    return [...base].sort((a, b) => {
+      const pa = a[`${scope}_suscrito`] ? 0 : 1;
+      const pb = b[`${scope}_suscrito`] ? 0 : 1;
+      if (pa !== pb) return pa - pb;
+      return (a.name ?? "").localeCompare(b.name ?? "", "es");
+    });
+  }, [q, usuarios, scope]);
 
   if (verificando || !disc) {
     return <LoadingDisciplina color={disc?.txt} />;
@@ -74,7 +99,7 @@ export default function AdminUsuarios() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
         <Box w="100%" maxW="720px">
-          <AdminDisciplinaHeader disc={disc} subtitle="Usuarios del mapa" fotoTalCual={fotoTalCual} />
+          <AdminDisciplinaHeader disc={disc} subtitle="Cuentas y quién ha pagado" fotoTalCual={fotoTalCual} />
 
           {!disc.disponible && (
             <Text color="rgba(255,220,180,0.85)" fontSize="sm" fontStyle="italic" mb={4}>
@@ -152,12 +177,44 @@ export default function AdminUsuarios() {
                     <Text color={disc.txt} fontWeight="600" noOfLines={1} style={{ textShadow: glow }}>{u.name}</Text>
                     <Text color={`${disc.txt}b3`} fontSize="sm" noOfLines={1} style={{ textShadow: glow }}>{u.email}</Text>
                   </Box>
+                  {/* Pagada o no ESTA disciplina. Ojo: «pagada» significa que la
+                      tiene abierta, sea por Stripe o porque se la regalaste desde
+                      /admin/accesos; el cobro de verdad se mira en Stripe. */}
+                  {(() => {
+                    const pagada = !!u[`${scope}_suscrito`];
+                    const fecha = fechaCorta(u[`${scope}_fecha_compra`]);
+                    return (
+                      <Box
+                        position="relative"
+                        zIndex={1}
+                        flexShrink={0}
+                        px={2}
+                        py="2px"
+                        borderRadius="full"
+                        whiteSpace="nowrap"
+                        border={`1px solid ${pagada ? disc.txt : `${disc.txt}44`}`}
+                        bg={pagada ? `${disc.txt}22` : "transparent"}
+                      >
+                        <Text
+                          fontSize="xs"
+                          color={pagada ? disc.txt : `${disc.txt}88`}
+                          style={{ textShadow: glow }}
+                        >
+                          {pagada ? "Pagada" : "Sin pagar"}
+                          {pagada && fecha && (
+                            <Box as="span" display={{ base: "none", md: "inline" }}> · {fecha}</Box>
+                          )}
+                        </Text>
+                      </Box>
+                    );
+                  })()}
+
                   <Text position="relative" zIndex={1} color={disc.txt} fontSize="lg" style={{ textShadow: glow }}>→</Text>
                 </Flex>
               ))}
               {filtrados.length === 0 && (
                 <Text color="rgba(255,255,255,0.6)" fontStyle="italic" textAlign="center" py={8}>
-                  {usuarios.length === 0 ? "No hay usuarios en el mapa todavía." : "Ningún usuario coincide con la búsqueda."}
+                  {usuarios.length === 0 ? "No hay cuentas todavía." : "Ninguna cuenta coincide con la búsqueda."}
                 </Text>
               )}
             </Flex>

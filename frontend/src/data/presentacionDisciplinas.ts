@@ -16,13 +16,13 @@
 
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
+  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   culturaBg, CulturaIcon, culturaNom, culturaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmTxt,
+  nutricionBg, NutricionIcon, nutricionNom, nutricionNomLink, nutricionTxt,
+  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../GlobalVariables";
 import { type DisciplinaClave } from "./recorridoContenido";
 import { type Texto } from "../i18n";
@@ -49,6 +49,10 @@ export type PresentacionDisciplina = {
   /** Etiqueta con la que esta disciplina aparece en ILUSTRACIONES (galería).
    *  No siempre coincide con `nom`: Hinduismo está etiquetado "Ayurveda". */
   ilustracionesLabel: string;
+  /** Nombre con el que sus cursos viven en el catálogo: /aprendizaje/cursos/<esto>.
+   *  Unas van con su nombre ("Astrología") y otras con el slug ("medicinachina"),
+   *  según cómo esté escrito el campo `modalidad` de esa fila en la BD. */
+  cursosLink: string;
   /** Numero de paso en el Mapa (1..8). Lo pinta el box de la disciplina. */
   paso: number;
   /** «Primera disciplina», «Segunda disciplina»… el mismo ordinal del box de
@@ -79,6 +83,7 @@ const base: Record<string, PresentacionDisciplina> = {
       en: "Your birth chart is a map of the unconscious. It describes the structure of your mind.",
     },
     ilustracionesLabel: "Astrología",
+    cursosLink: astrologiaNom,
     paso: 1,
     ordinal: "Primera disciplina",
     resumenPago:
@@ -98,6 +103,7 @@ const base: Record<string, PresentacionDisciplina> = {
       en: "You are not broken. You are not a label. You are a human being with a history that deserves to be understood.",
     },
     ilustracionesLabel: "Psicología",
+    cursosLink: neuropsicologiaNom,
     paso: 2,
     ordinal: "Segunda disciplina",
     resumenPago:
@@ -119,6 +125,7 @@ const base: Record<string, PresentacionDisciplina> = {
       en: "We are not all alike. Discover your constitution and your mental tendencies, and live in step with yourself.",
     },
     ilustracionesLabel: "Ayurveda",
+    cursosLink: ayurvedaNomLink,
     paso: 3,
     ordinal: "Tercera disciplina",
     resumenPago:
@@ -139,6 +146,7 @@ const base: Record<string, PresentacionDisciplina> = {
       en: "Listen. The body speaks. Learn to listen to it and to read its signals.",
     },
     ilustracionesLabel: "Medicina China",
+    cursosLink: tcmNomLink,
     paso: 4,
     ordinal: "Cuarta disciplina",
     resumenPago:
@@ -159,6 +167,7 @@ const base: Record<string, PresentacionDisciplina> = {
       en: "You are a cellular ecosystem in constant cooperation, second by second. To understand your cells is also to understand yourself.",
     },
     ilustracionesLabel: "Fisiología",
+    cursosLink: fisiologiaNom,
     paso: 5,
     ordinal: "Quinta disciplina",
     resumenPago:
@@ -178,6 +187,7 @@ const base: Record<string, PresentacionDisciplina> = {
       en: "You are built from the molecules of the food you choose every day.",
     },
     ilustracionesLabel: "Nutrición",
+    cursosLink: nutricionNomLink,
     paso: 6,
     ordinal: "Sexta disciplina",
     resumenPago:
@@ -197,6 +207,7 @@ const base: Record<string, PresentacionDisciplina> = {
       en: "Explore the structure of the soul according to Kabbalah, the Jewish mysticism Jesus Christ was born into.",
     },
     ilustracionesLabel: "Cábala",
+    cursosLink: cabalaNom,
     paso: 7,
     ordinal: "Séptima disciplina",
     resumenPago:
@@ -216,6 +227,7 @@ const base: Record<string, PresentacionDisciplina> = {
       en: "How did we get here? To understand our history is to understand the world we live in, and to appreciate the reality we have inherited.",
     },
     ilustracionesLabel: "Cultura",
+    cursosLink: culturaNom,
     paso: 8,
     ordinal: "Octava disciplina",
     resumenPago:

@@ -49,6 +49,12 @@ const OPCIONES_WEBP = { quality: 75, effort: 6, alphaQuality: 100, smartSubsampl
  * Desempates hechos a mano: nombres que faltan en DOS Historias a la vez, así
  * que el nombre no basta y hay que mirar el dibujo. Clave: el PNG suelto.
  * Valor: la ruta pública elegida.
+ *
+ * Un desempate CADUCA en cuanto su destino ya tiene la foto: a partir de ahí el
+ * mismo nombre solo puede ser para la otra Historia. Por eso un desempate nunca
+ * pisa un WebP que ya existe —se avisa y se salta—, igual que el resto.
+ * Aquí vivían `prologo.png` y `renacimiento.png`, apuntados a la Historia de la
+ * Medicina; una vez servida, el siguiente lote traía los de Arte.
  */
 const DESTINOS = {
   // Cadena de montaje de una fábrica → la Revolución Industrial de la Historia
@@ -57,12 +63,6 @@ const DESTINOS = {
   // Sabios del XVII con matraz y telescopio, sin nada médico → Revolución
   // Científica de la Historia Universal.
   "metodo-cientifico.png": "/recorrido/cultura/historiageneral/metodo-cientifico.webp",
-  // Sanador junto a una niña enferma → «¿Qué significa estar enfermo?», el
-  // prólogo de la Historia de la Medicina (no el de Arte).
-  "prologo.png": "/recorrido/cultura/historiamedicina/eras/prologo.webp",
-  // Disección anatómica + astronomía en Florencia → «Renacimiento: mirar
-  // dentro», la era de la Historia de la Medicina.
-  "renacimiento.png": "/recorrido/cultura/historiamedicina/eras/renacimiento.webp",
 };
 
 const unix = (p) => p.split(path.sep).join("/");
@@ -142,6 +142,10 @@ for (const png of pngs) {
     const elegido = destinos.find((d) => d.ruta === DESTINOS[png]);
     if (!elegido) {
       huerfanas.push([png, `DESTINOS apunta a ${DESTINOS[png]}, que ya no está en los datos`]);
+      continue;
+    }
+    if (fs.existsSync(path.join(PUB, elegido.ruta))) {
+      pisarian.push([png, [`${elegido.ruta}   (desempate caducado: bórralo de DESTINOS)`]]);
       continue;
     }
     plan.push([png, elegido]);

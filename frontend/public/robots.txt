@@ -1,0 +1,36 @@
+# Qué puede mirar Google (y cualquier otro buscador) de Life as a Privilege.
+#
+# Se deja abierto TODO lo público: la portada, las presentaciones de cada
+# disciplina (/d/...), las ilustraciones, los libros, los vídeos y las páginas
+# legales. Eso es lo que queremos que la gente encuentre buscando.
+#
+# Se cierra lo que hay detrás de una cuenta: no porque sea secreto (ya lo
+# protege el login), sino porque a Google no le sirve de nada indexar pantallas
+# que nadie va a poder abrir desde el buscador, y de paso no gasta banda de
+# Render recorriéndolas.
+#
+# OJO: al cambiar de dominio hay que reescribir la línea «Sitemap» de abajo,
+# todas las <loc> de sitemap.xml y las meta og:url/canonical de index.html.
+
+User-agent: *
+Allow: /
+
+# Lo que va con cuenta iniciada
+Disallow: /home
+Disallow: /metodo/
+Disallow: /user/account
+Disallow: /espacio/
+Disallow: /checkoutMetodo
+Disallow: /libros/descargar
+
+# Administración
+Disallow: /admin
+Disallow: /admin/
+
+# Pantallas de entrada: no aportan nada en el buscador
+Disallow: /logIn
+Disallow: /signIn
+Disallow: /recuperar
+Disallow: /auth/
+
+Sitemap: https://lifeasaprivilege.onrender.com/sitemap.xml

@@ -97,7 +97,7 @@ export default function MetodoTcmLenguaLeer() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("metodo.tcm.paso.lengua")}
-            pageLabel="6/11"
+            pageLabel="7/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

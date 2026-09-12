@@ -3,6 +3,10 @@ export const tienda = {
   // ── Ilustraciones (/ilustraciones) ─────────────────────────────────────
   "ilustraciones.titulo": "Ilustraciones",
   "ilustraciones.subtitulo": "Todas las ilustraciones del Mapa, reunidas. Pulsa una para leerla.",
+  // Subtítulo cuando la galería va filtrada por una disciplina
+  // (/ilustraciones/:disciplina). El titular es el nombre de la disciplina.
+  "ilustraciones.deDisciplina": "Las ilustraciones de esta disciplina. Pulsa una para leerla.",
+  "ilustraciones.vacio": "Esta disciplina todavía no tiene ilustraciones. Están de camino.",
 
   // ── Libros (/libros) ───────────────────────────────────────────────────
   "libros.titulo": "Libros",

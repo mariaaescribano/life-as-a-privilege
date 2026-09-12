@@ -1,20 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { ComicModal } from "../../components/metodo/ComicModal";
-import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
+import { ILUSTRACIONES, ILUSTRACIONES_GALERIA, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { useT } from "../../i18n";
+import { useParams } from "react-router-dom";
+import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
+import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 import { useComic } from "../../i18n/comics";
 
 // Página /ilustraciones — galería con TODAS las series de viñetas de todas las
 // disciplinas. Al pulsar una, se abre el popup inmersivo con el estilo de su
 // disciplina (ComicModal). Grid: 4 por fila en escritorio, 1 en móvil.
+//
+// Con disciplina en la URL (/ilustraciones/:disciplina, la puerta izquierda de
+// la portada de cada disciplina) es la MISMA página, pero enseñando solo las
+// ilustraciones de esa disciplina y con su nombre de titular. Es un filtro
+// sobre la misma lista: una serie nueva aparece en las dos sin tocar nada.
 
 export default function Ilustraciones() {
   const t = useT();
+  // Slug de la URL (/ilustraciones/astrologia). Sin slug → la galería entera.
+  const { disciplina: slug } = useParams<{ disciplina?: string }>();
+  const nombreDe = useNombreDisciplina();
+  const disciplina = presentacionPorKey(slug);
+  // Con disciplina: TODAS las suyas, en su orden (el filtro casa por la
+  // ETIQUETA de la galería, que no siempre es el nombre interno: Hinduismo se
+  // etiqueta "Ayurveda"). Sin disciplina: la selección barajada, que alterna
+  // disciplinas y deja fuera media Nutrición (ver ilustracionesGaleria.ts).
+  const entradas = useMemo(
+    () => (disciplina
+      ? ILUSTRACIONES.filter((e) => e.disciplina === disciplina.ilustracionesLabel)
+      : ILUSTRACIONES_GALERIA),
+    [disciplina],
+  );
   const [mounted, setMounted] = useState(false);
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
   // La galería no se muestra hasta que TODAS las portadas están descargadas:
@@ -31,7 +53,7 @@ export default function Ilustraciones() {
 
   // Precarga de todas las portadas de la galería.
   useEffect(() => {
-    const urls = ILUSTRACIONES
+    const urls = entradas
       .map((e) => e.cover)
       .filter((src): src is string => Boolean(src))
       .map((src) => encodeURI(src));
@@ -59,7 +81,7 @@ export default function Ilustraciones() {
     const failSafe = setTimeout(() => { if (!cancelled) setImagesReady(true); }, 10000);
 
     return () => { cancelled = true; clearTimeout(failSafe); };
-  }, []);
+  }, [entradas]);
 
   // Una vez cargadas las imágenes, disparamos la animación de entrada.
   useEffect(() => {
@@ -114,7 +136,7 @@ export default function Ilustraciones() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          {t("ilustraciones.titulo")}
+          {disciplina ? nombreDe(disciplina.nom) : t("ilustraciones.titulo")}
         </Text>
         <Text
           color="rgba(255,255,255,0.88)"
@@ -128,22 +150,36 @@ export default function Ilustraciones() {
           transform={mounted ? "translateY(0)" : "translateY(13px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
         >
-          {t("ilustraciones.subtitulo")}
+          {disciplina ? t("ilustraciones.deDisciplina") : t("ilustraciones.subtitulo")}
         </Text>
       </Flex>
 
       {/* Grid: 4/fila en escritorio, 2 en tablet, 1 en móvil */}
       <Flex flex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }} pb={{ base: 20, md: 28 }}>
-        <Grid
-          w="100%"
-          maxW="1180px"
-          templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
-          gap={{ base: 6, md: 6 }}
-        >
-          {ILUSTRACIONES.map((entry, i) => (
-            <IlustracionCard key={entry.id} entry={entry} i={i} onOpen={() => setAbierta(entry)} />
-          ))}
-        </Grid>
+        {entradas.length === 0 ? (
+          // Una disciplina puede no tener ilustraciones todavía (Cultura). Se
+          // dice, en vez de dejar un hueco turquesa sin explicación.
+          <Text
+            color="rgba(255,255,255,0.88)"
+            fontSize={{ base: "md", md: "xl" }}
+            fontStyle="italic"
+            textAlign="center"
+            maxW="560px"
+          >
+            {t("ilustraciones.vacio")}
+          </Text>
+        ) : (
+          <Grid
+            w="100%"
+            maxW="1180px"
+            templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
+            gap={{ base: 6, md: 6 }}
+          >
+            {entradas.map((entry, i) => (
+              <IlustracionCard key={entry.id} entry={entry} i={i} onOpen={() => setAbierta(entry)} />
+            ))}
+          </Grid>
+        )}
       </Flex>
 
       <SiteFooter />

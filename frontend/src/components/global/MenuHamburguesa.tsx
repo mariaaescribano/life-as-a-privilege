@@ -60,12 +60,20 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
 
   // Las tres rayas. La de en medio se desvanece; las otras dos se juntan en el
   // centro y giran: es el mismo trazo, no un icono que se cambia por otro.
+  //
+  // Trazo de 2,2px y no de pelo: a 1,4px las rayas se perdían sobre el turquesa
+  // y el menú no se encontraba. Sigue siendo una línea limpia y sin relleno —lo
+  // que gana es cuerpo y luz, no adornos—. Si se toca el alto o el hueco, hay
+  // que recalcular la `y` de la X: es la distancia entre centros, `h + gap`.
+  const RAYA_H = 2.2;
+  const RAYA_GAP = 7;
+  const RAYA_Y = RAYA_H + RAYA_GAP; // 9.2 — lo que viaja cada raya al cerrarse en X
   const raya = {
-    h: "1.4px",
-    w: "26px",
+    h: `${RAYA_H}px`,
+    w: "30px",
     borderRadius: "full",
     bg: "white",
-    boxShadow: "0 0 8px rgba(255,255,255,0.6), 0 0 18px rgba(180,255,245,0.35)",
+    boxShadow: "0 0 10px rgba(255,255,255,0.75), 0 0 22px rgba(180,255,245,0.45)",
   } as const;
 
   return (
@@ -81,27 +89,31 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
         direction="column"
         align="center"
         justify="center"
-        gap="6px"
-        w={{ base: "42px", md: "48px" }}
-        h={{ base: "42px", md: "48px" }}
+        gap={`${RAYA_GAP}px`}
+        w={{ base: "46px", md: "52px" }}
+        h={{ base: "46px", md: "52px" }}
         flexShrink={0}
         borderRadius="full"
-        // El aro solo se insinúa: en reposo es transparente y aparece al pasar
-        // por encima, para que el botón sea tres rayas de luz y no un botón más.
-        border="1px solid transparent"
-        bg="transparent"
+        // El aro ya no espera al ratón: se queda puesto, muy tenue. Es lo que
+        // convierte las rayas en un botón (y en el móvil, donde no hay hover,
+        // era la única forma de que se leyera como tal). Tenue a propósito —un
+        // aro de luz al 22%, como el del avatar de al lado—: gana presencia sin
+        // volverse una pastilla clara sobre el turquesa.
+        border="1px solid rgba(255,255,255,0.22)"
+        bg="rgba(255,255,255,0.06)"
+        boxShadow="0 0 14px rgba(255,255,255,0.16)"
         cursor="pointer"
         _hover={{
-          borderColor: "rgba(255,255,255,0.38)",
-          bg: "rgba(255,255,255,0.08)",
-          boxShadow: "0 0 16px rgba(255,255,255,0.28), 0 0 34px rgba(180,255,245,0.22)",
+          borderColor: "rgba(255,255,255,0.55)",
+          bg: "rgba(255,255,255,0.12)",
+          boxShadow: "0 0 20px rgba(255,255,255,0.34), 0 0 40px rgba(180,255,245,0.26)",
         }}
         transition="border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease"
         sx={{ WebkitTapHighlightColor: "transparent" }}
       >
         <MotionBox
           {...raya}
-          animate={abierto ? { rotate: 45, y: 7.4 } : { rotate: 0, y: 0 }}
+          animate={abierto ? { rotate: 45, y: RAYA_Y } : { rotate: 0, y: 0 }}
           transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         />
         <MotionBox
@@ -111,7 +123,7 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
         />
         <MotionBox
           {...raya}
-          animate={abierto ? { rotate: -45, y: -7.4 } : { rotate: 0, y: 0 }}
+          animate={abierto ? { rotate: -45, y: -RAYA_Y } : { rotate: 0, y: 0 }}
           transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         />
       </Flex>

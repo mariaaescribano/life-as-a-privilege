@@ -596,9 +596,10 @@ const QuienSoy = () => {
 
               {/* Rejilla de la sección · 2 por fila en móvil, 4 en ordenador.
                   Va con flex-wrap CENTRADO y no con una rejilla de columnas
-                  fijas: ninguna sección tiene un número de diplomas múltiplo de
-                  4 (son 3, 6 y 30), así que con columnas la última fila se
-                  quedaba pegada a la izquierda con el resto del ancho vacío.
+                  fijas: el número de diplomas de cada sección cambia cada vez
+                  que se añade uno y casi nunca es múltiplo de 4, así que con
+                  columnas la última fila se quedaba pegada a la izquierda con
+                  el resto del ancho vacío.
                   Centrando, una fila incompleta parece querida. El ancho de la
                   tarjeta se calcula descontando su parte del hueco, para que
                   sea EXACTAMENTE el mismo que tendría en la rejilla —así todas

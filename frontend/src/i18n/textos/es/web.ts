@@ -22,6 +22,13 @@ export const web = {
   "materiales.ilustraciones": "Ilustraciones",
   "materiales.libros": "Libros",
 
+  // ── Portada de disciplina (/disciplina/:disciplina) ────────────────────
+  // Las tres puertas, iguales para las ocho disciplinas.
+  "portada.ilustraciones": "Ilustraciones",
+  "portada.cursos": "Cursos",
+  "portada.recorrido": "El Recorrido",
+  "portada.recorridoPack": "El pack",
+
   // ── Vídeos (/videos) ───────────────────────────────────────────────────
   "videos.subtitulo": "",
   "videos.vacio": "Todavía no hay vídeos publicados. Vuelve pronto.",

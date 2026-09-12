@@ -16,6 +16,12 @@ export const web = {
   "materiales.ilustraciones": "Illustrations",
   "materiales.libros": "Books",
 
+  // ── Discipline landing (/disciplina/:disciplina) ───────────────────────
+  "portada.ilustraciones": "Illustrations",
+  "portada.cursos": "Courses",
+  "portada.recorrido": "The Journey",
+  "portada.recorridoPack": "The pack",
+
   // ── Videos (/videos) ───────────────────────────────────────────────────
   "videos.subtitulo": "Short ideas you can watch in a minute, one for each discipline on the map",
   "videos.vacio": "No videos published yet. Come back soon.",

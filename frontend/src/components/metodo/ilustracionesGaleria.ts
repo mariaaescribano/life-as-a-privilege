@@ -402,3 +402,88 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplinaBgColor: tcmBg,
   },
 ];
+
+// ─────────────────────────────────────────────────────────────────────────
+//  LA GALERÍA GENERAL (/ilustraciones) — una selección, y BARAJADA
+//
+//  `ILUSTRACIONES` de arriba es la lista COMPLETA y ordenada por disciplina:
+//  la usan las presentaciones (/d/:disciplina) y la galería de una sola
+//  disciplina (/ilustraciones/:disciplina), donde ver quince seguidas de
+//  Nutrición tiene todo el sentido.
+//
+//  La página con TODAS mezcladas es otra cosa: ahí, un bloque largo de la
+//  misma disciplina agobia y apaga el color. Por eso esta lista (a) deja
+//  fuera media Nutrición y (b) reparte el resto para que dos vecinas nunca
+//  sean de la misma disciplina.
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Ilustraciones que solo se ven en SU disciplina, no en la galería general.
+ *  Nutrición tiene quince series —los cuatro nutrientes y las seis lecturas de
+ *  «¿De dónde vienen los nutrientes?» se parecen mucho entre sí—, así que en la
+ *  general va la mitad: una de cada familia, como muestra. Las demás siguen
+ *  enteras en /ilustraciones/nutricion y en su recorrido. */
+const SOLO_EN_SU_DISCIPLINA = new Set<string>([
+  // De los cuatro nutrientes se queda «Carbohidratos».
+  "nutricion-vitaminas",
+  "nutricion-minerales",
+  "nutricion-agua",
+  // De «¿De dónde vienen los nutrientes?» se quedan «Los grandes ciclos».
+  "nutricion-origen-tierra",
+  "nutricion-origen-planta",
+  "nutricion-origen-hoja",
+  "nutricion-origen-fruta",
+  "nutricion-origen-animal",
+]);
+
+/**
+ * Reparte las entradas de forma que las disciplinas se alternen: cada una
+ * estira las suyas a lo largo de toda la lista (la que tiene tres las deja a
+ * un tercio, a dos tercios y al final), y después un repaso separa las vecinas
+ * que hayan caído juntas.
+ *
+ * Es un reparto FIJO, no un azar: la misma lista sale siempre en el mismo
+ * orden, así que la galería no baila entre visitas ni entre recargas.
+ */
+const repartirPorDisciplina = (lista: IlustracionEntry[]): IlustracionEntry[] => {
+  const porDisciplina = new Map<string, IlustracionEntry[]>();
+  for (const e of lista) {
+    const suyas = porDisciplina.get(e.disciplina);
+    if (suyas) suyas.push(e);
+    else porDisciplina.set(e.disciplina, [e]);
+  }
+
+  // Posición ideal de cada entrada dentro del total (0..1). El desfase por
+  // disciplina evita que dos caigan exactamente en el mismo hueco.
+  const disciplinas = [...porDisciplina.keys()];
+  const colocadas: { entry: IlustracionEntry; pos: number }[] = [];
+  disciplinas.forEach((disc, iDisc) => {
+    const suyas = porDisciplina.get(disc)!;
+    const desfase = iDisc / (disciplinas.length * suyas.length);
+    suyas.forEach((entry, i) => {
+      colocadas.push({ entry, pos: (i + 0.5) / suyas.length + desfase });
+    });
+  });
+  colocadas.sort((a, b) => a.pos - b.pos);
+  const orden = colocadas.map((c) => c.entry);
+
+  // Repaso: si dos vecinas son de la misma disciplina, se trae hacia atrás la
+  // primera de más adelante que rompa la repetición.
+  for (let i = 1; i < orden.length; i++) {
+    if (orden[i].disciplina !== orden[i - 1].disciplina) continue;
+    const j = orden.findIndex(
+      (e, k) => k > i
+        && e.disciplina !== orden[i - 1].disciplina
+        && e.disciplina !== (orden[i + 1]?.disciplina ?? ""),
+    );
+    if (j > i) {
+      const [movida] = orden.splice(j, 1);
+      orden.splice(i, 0, movida);
+    }
+  }
+  return orden;
+};
+
+/** Lo que se ve en /ilustraciones: la selección, ya repartida. */
+export const ILUSTRACIONES_GALERIA: IlustracionEntry[] = repartirPorDisciplina(
+  ILUSTRACIONES.filter((e) => !SOLO_EN_SU_DISCIPLINA.has(e.id)),
+);

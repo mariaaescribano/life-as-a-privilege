@@ -130,14 +130,19 @@ export class UserService {
   }
 
   /**
-   * Manda la bienvenida en segundo plano. Va aparte (y sin `await`) porque el
-   * envío tarda un par de segundos contra el SMTP de Gmail y no tiene por qué
-   * retrasar la respuesta del registro.
+   * Manda la bienvenida en segundo plano, y con ella el aviso a la creadora de
+   * que hay una cuenta nueva. Va aparte (y sin `await`) porque el envío tarda un
+   * par de segundos contra el SMTP de Gmail y no tiene por qué retrasar la
+   * respuesta del registro. Si el correo falla, la cuenta ya está creada: se
+   * anota en el log y nada más.
    */
   private enviarBienvenidaSinBloquear(email: string, nombre: string, conGoogle = false) {
     void this.mailService
       .enviarBienvenidaCuenta(email, nombre ?? '', { conGoogle })
       .catch((err) => console.error('[createUser] no se pudo enviar la bienvenida:', err));
+    void this.mailService
+      .enviarAvisoRegistro(email, nombre ?? '', { conGoogle })
+      .catch((err) => console.error('[createUser] no se pudo enviar el aviso de registro:', err));
   }
 
   // --------- Login ---------
@@ -243,21 +248,30 @@ export class UserService {
     return data;
   }
 
-  // --------- Usuarios que se han unido al recorrido (para el panel admin) ---------
+  // --------- Cuentas para las listas del panel admin ---------
+  // Antes solo devolvía a quien tuviera `metodo_suscrito`, y eso dejaba fuera a
+  // quien entra por acceso libre o ha pagado otra disciplina: si esa persona
+  // mandaba su solicitud de carta, no aparecía en la lista por ningún lado.
+  // Ahora vienen todas las cuentas con sus ocho flags y sus fechas de compra, y
+  // es el panel el que marca «pagada / sin pagar» de la disciplina que se está
+  // mirando y pone arriba a quien la tiene.
   async getRecorridoUsers() {
     const client = this.databaseService.getClient();
-    // Intento con filtro por metodo_suscrito; si la columna no existe, devolvemos todos.
-    const full = await client
-      .from('user')
-      .select('id, name, email, img, metodo_suscrito')
-      .eq('metodo_suscrito', true)
-      .order('name', { ascending: true });
-    if (!full.error) return full.data ?? [];
+    const flags = DISCIPLINAS_ORDEN.map((k) => `${k}_suscrito`).join(', ');
+    const fechas = DISCIPLINAS_ORDEN.map((k) => `${k}_fecha_compra`).join(', ');
 
-    const { data } = await client
-      .from('user')
-      .select('id, name, email, img')
-      .order('name', { ascending: true });
+    const consulta = (select: string) =>
+      client.from('user').select(select).order('name', { ascending: true }).limit(500);
+
+    // Si alguna columna aún no existe (falta el ALTER TABLE de esa disciplina),
+    // caemos a menos datos en vez de quedarnos sin lista.
+    const conFechas = await consulta(`id, name, email, img, ${flags}, ${fechas}`);
+    if (!conFechas.error) return conFechas.data ?? [];
+
+    const soloFlags = await consulta(`id, name, email, img, ${flags}`);
+    if (!soloFlags.error) return soloFlags.data ?? [];
+
+    const { data } = await consulta('id, name, email, img');
     return data ?? [];
   }
 

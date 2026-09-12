@@ -14,10 +14,8 @@ import {
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
   nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
+  tcmBg, TCMIcon, tcmNom, tcmTxt,
   // AprendizajeIcon, // comentado: el botón APRENDER está desactivado para v1
-  nutricionNomLink,
-  ayurvedaNomLink,
 } from "../../GlobalVariables";
 import { useT, type ClaveTexto } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
@@ -34,6 +32,7 @@ type Discipline = {
   renderIcon: (size: string) => React.ReactNode;
   /** Clave del texto del modal — se traduce al pintar, no aquí. */
   descKey: ClaveTexto;
+  /** Su portada común: /disciplina/<slug> (Ilustraciones · Cursos · El Recorrido). */
   link: string;
   available:boolean;
   /** Clave del lema de la tarjeta. */
@@ -49,7 +48,7 @@ const disciplines: Discipline[] = [
     txt: astrologiaTxt,
     renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
     descKey: "welcome.desc.astrologia",
-    link: "/aprendizaje/cursos/" + astrologiaNom,
+    link: "/disciplina/astrologia",
     available: true,
     lemaKey: "welcome.lema.astrologia",
   },
@@ -59,7 +58,7 @@ const disciplines: Discipline[] = [
     txt: neuropsicologiaTxt,
     renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
     descKey: "welcome.desc.psicologia",
-    link: "/aprendizaje/cursos/" + neuropsicologiaNom,
+    link: "/disciplina/psicologia",
     available: true,
     lemaKey: "welcome.lema.psicologia",
   },
@@ -69,7 +68,7 @@ const disciplines: Discipline[] = [
     txt: ayurvedaTxt,
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
     descKey: "welcome.desc.hinduismo",
-    link: "/aprendizaje/cursos/" + ayurvedaNomLink,
+    link: "/disciplina/ayurveda",
     available: true,
     lemaKey: "welcome.lema.hinduismo",
   },
@@ -79,7 +78,7 @@ const disciplines: Discipline[] = [
     txt: tcmTxt,
     renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
     descKey: "welcome.desc.medicinaChina",
-    link: "/aprendizaje/cursos/" + tcmNomLink,
+    link: "/disciplina/medicinachina",
     available: true,
     lemaKey: "welcome.lema.medicinaChina",
   },
@@ -89,7 +88,7 @@ const disciplines: Discipline[] = [
     txt: fisiologiaTxt,
     renderIcon: (size) => <FisiologiaIcon size={size} />,
     descKey: "welcome.desc.fisiologia",
-    link: "/aprendizaje/cursos/" + fisiologiaNom,
+    link: "/disciplina/fisiologia",
     available: true,
     lemaKey: "welcome.lema.fisiologia",
   },
@@ -99,7 +98,7 @@ const disciplines: Discipline[] = [
     txt: nutricionTxt,
     renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
     descKey: "welcome.desc.nutricion",
-    link: "/aprendizaje/cursos/" + nutricionNomLink,
+    link: "/disciplina/nutricion",
     available: true,
     lemaKey: "welcome.lema.nutricion",
   },
@@ -109,7 +108,7 @@ const disciplines: Discipline[] = [
     txt: cabalaTxt,
     renderIcon: (size) => <CabalaIcon size={{ base: size, md: size }} />,
     descKey: "welcome.desc.cabala",
-    link: "/aprendizaje/cursos/" + cabalaNom,
+    link: "/disciplina/cabala",
     available: true,
     lemaKey: "welcome.lema.cabala",
   },
@@ -119,7 +118,7 @@ const disciplines: Discipline[] = [
     txt: culturaTxt,
     renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
     descKey: "welcome.desc.cultura",
-    link: "/aprendizaje/cursos/" + culturaNom,
+    link: "/disciplina/cultura",
     available: true,
     lemaKey: "welcome.lema.cultura",
   },
@@ -131,30 +130,6 @@ const WELCOME_IMGS: string[] = [
   "/img/icono/life.png",
   ...(disciplines.map((d) => disciplinaBgImg(d.name)).filter(Boolean) as string[]),
 ];
-
-// ── Sombras de texto de los popups (mismo criterio que El Recorrido) ──
-// La mayoría de disciplinas usan una "luz" suave basada en su color (natural).
-// TCM lleva sombra granate; Cábala, Fisiología y Cultura sombra negra.
-const SHADOW_BLACK = "0 0 3px rgba(0,0,0,1), 0 1px 5px rgba(0,0,0,0.95), 0 2px 14px rgba(0,0,0,0.85), 0 0 24px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.19)";
-const SHADOW_GRANATE = "0 0 3px rgba(40,2,2,1), 0 1px 5px rgba(40,2,2,0.98), 0 2px 14px rgba(40,2,2,0.9), 0 0 24px rgba(40,2,2,0.78), 0 0 18px rgba(255,255,255,0.17)";
-
-const esOscuraNegra = (name: string) =>
-  name === fisiologiaNom || name === cabalaNom || name === culturaNom;
-
-const nameShadow = (d: Discipline) =>
-  d.name === tcmNom
-    ? SHADOW_GRANATE
-    : esOscuraNegra(d.name)
-    ? SHADOW_BLACK
-    : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 16px ${d.bg}88, 0 0 14px rgba(255,255,255,0.41), 0 0 30px rgba(255,255,255,0.22)`;
-
-const descShadow = (d: Discipline) =>
-  d.name === tcmNom
-    ? SHADOW_GRANATE
-    : esOscuraNegra(d.name)
-    ? SHADOW_BLACK
-    : `0 1px 3px ${d.bg}f5, 0 0 8px ${d.bg}cc, 0 2px 14px ${d.bg}88, 0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)`;
-
 
 // callback ref: el observer se engancha en cuanto el nodo aparece en el DOM.
 // (Importante porque la página se monta primero mostrando <LifeLoading/> y el
@@ -392,8 +367,6 @@ function TarjetaDisciplina({
 const Welcome = () => {
   const navigate = useNavigate();
   const t = useT();
-  const nombreDe = useNombreDisciplina();
-  const [selected, setSelected] = useState<Discipline | null>(null);
   const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
   const disciplinasTitleReveal = useReveal(0.2);
@@ -426,15 +399,6 @@ const Welcome = () => {
     const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setMounted(true)); });
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
   }, [listo]);
-
-  useEffect(() => {
-    if (selected) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [selected]);
 
   // Mientras cargan las fotos: pantalla de carga con el mandala animado.
   if (!listo) return <LifeLoading variant="public" />;
@@ -599,7 +563,7 @@ const Welcome = () => {
               // la segunda hacia abajo, cada tarjeta entra al asomar.
               entraAlCargar={i < columnas}
               cargado={mounted}
-              onSelect={() => setSelected(d)}
+              onSelect={() => navigate(d.link)}
               onExplorar={() => navigate(d.link)}
             />
           ))}
@@ -765,210 +729,6 @@ const Welcome = () => {
         </Box>
       )}
 
-      {/* ── MODAL ── */}
-      {selected && (
-        <Box
-          position="fixed"
-          inset={0}
-          zIndex={1000}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          bg="rgba(0,0,0,0.85)"
-          sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
-          onClick={() => setSelected(null)}
-          px={{ base: 5, md: 10 }}
-        >
-          <Box
-            onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            bg={hasDisciplinaBg(selected.name) ? "transparent" : selected.bg + "e8"}
-            border={`1.5px solid ${selected.txt}55`}
-            borderRadius="2xl"
-            boxShadow={`0 0 0 1px ${selected.txt}55, 0 0 45px ${selected.txt}66, 0 0 90px ${selected.txt}33, 0 22px 70px rgba(0,0,0,0.6)`}
-            maxW="560px"
-            w="100%"
-            maxH="92vh"
-            position="relative"
-            overflow="hidden"
-          >
-            {hasDisciplinaBg(selected.name) && <DisciplinaBgLayer nom={selected.name} borderRadius="2xl" />}
-            {/* X */}
-            <Box
-              position="absolute"
-              top={4}
-              right={5}
-              as="button"
-              onClick={() => setSelected(null)}
-              color={selected.txt}
-              fontSize="xl"
-              cursor="pointer"
-              bg={selected.txt + "22"}
-              borderRadius="full"
-              w="36px"
-              h="36px"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              _hover={{ bg: selected.txt + "44" }}
-              transition="background 0.2s"
-              zIndex={2}
-            >
-              ✕
-            </Box>
-
-            {/* Flecha abajo a la derecha — eco del indicador "Explorar
-                disciplina →" de la tarjeta; fija sobre el modal y enlaza con
-                la página de la disciplina. */}
-            <Flex
-              as="button"
-              onClick={() => navigate(selected.link)}
-              position="absolute"
-              bottom={4}
-              right={5}
-              align="center"
-              gap={1.5}
-              color={selected.txt}
-              fontSize={{ base: "10px", md: "xs" }}
-              fontWeight="600"
-              letterSpacing="0.14em"
-              textTransform="uppercase"
-              opacity={0.75}
-              zIndex={2}
-              whiteSpace="nowrap"
-              cursor="pointer"
-              textShadow={descShadow(selected)}
-              transition="opacity 0.2s ease"
-              _hover={{ opacity: 1 }}
-              sx={{ "&:hover span": { transform: "translateX(4px)" } }}
-            >
-              {t("welcome.explorarDisciplina")}
-              <Box as="span" transition="transform 0.2s ease">→</Box>
-            </Flex>
-
-            {/* Contenido scrollable interno — el modal exterior se queda fijo
-                (con el bg y la X), y aquí dentro se hace scroll si el contenido
-                desborda. Así nunca se corta contra el viewport. */}
-            <Box
-              p={{ base: 8, md: 12 }}
-              pb={{ base: 16, md: 20 }}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              gap={6}
-              position="relative"
-              zIndex={1}
-              maxH="92vh"
-              overflowY="auto"
-              sx={{
-                scrollbarWidth: "thin",
-                "&::-webkit-scrollbar": { width: "6px" },
-                "&::-webkit-scrollbar-thumb": { background: `${selected.txt}55`, borderRadius: "3px" },
-              }}
-            >
-              {/* Icono */}
-              <Box
-                bg={hasDisciplinaBg(selected.name) ? "transparent" : selected.bg}
-                borderRadius="full"
-                w={{ base: "88px", md: "108px" }}
-                h={{ base: "88px", md: "108px" }}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                border={`3px solid ${selected.txt}`}
-                boxShadow={`0 0 20px ${selected.txt}bb, 0 2px 14px ${selected.txt}77`}
-                position="relative"
-                zIndex={1}
-                overflow={hasDisciplinaBg(selected.name) ? "hidden" : undefined}
-                flexShrink={0}
-              >
-                {hasDisciplinaBg(selected.name) && <DisciplinaBgLayer nom={selected.name} borderRadius="full" />}
-                <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
-                  {selected.renderIcon("52px")}
-                </Box>
-              </Box>
-
-              {/* Nombre */}
-              <Text
-                position="relative"
-                zIndex={1}
-                color={selected.txt}
-                fontSize={{ base: "4xl", md: "5xl" }}
-                fontWeight="700"
-                letterSpacing="0.04em"
-                textAlign="center"
-                textShadow={nameShadow(selected)}
-              >
-                {nombreDe(selected.name)}
-              </Text>
-
-              {/* Descripción */}
-              <Text
-                position="relative"
-                zIndex={1}
-                color={selected.txt}
-                fontSize={{ base: "xl", md: "2xl" }}
-                textAlign="center"
-                lineHeight="1.9"
-                letterSpacing="0.02em"
-                opacity={0.82}
-                textShadow={descShadow(selected)}
-              >
-                {t(selected.descKey)}
-              </Text>
-
-            {/* Botón APRENDER — desactivado temporalmente para v1, mostramos solo "Próximamente"
-            {(() => {
-              const isAvailable = selected.available === true;
-              return (
-                <Flex direction="column" align="center" gap={3} mt={2}>
-                  <Flex
-                    align="center" gap={3}
-                    cursor={isAvailable ? "pointer" : "not-allowed"}
-                    onClick={isAvailable ? () => navigate(selected.link) : undefined}
-                    bg={selected.txt + "18"}
-                    border={`1px solid ${selected.txt}66`}
-                    borderRadius="full"
-                    px={{ base: 10, md: 14 }} py={3}
-                    opacity={isAvailable ? 1 : 0.45}
-                    boxShadow={isAvailable ? `0 0 10px ${selected.txt}55, 0 2px 8px ${selected.txt}33` : "none"}
-                    _hover={isAvailable ? { bg: selected.txt + "33", border: `1px solid ${selected.txt}`, boxShadow: `0 0 18px ${selected.txt}88, 0 4px 12px ${selected.txt}55` } : {}}
-                    transition="all 0.2s"
-                  >
-                    <AprendizajeIcon color={selected.txt} size="30px" shadow={false} />
-                    <Text color={selected.txt} fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} letterSpacing="0.1em">
-                      APRENDER
-                    </Text>
-                  </Flex>
-                  {!isAvailable && (
-                    <Text
-                      color={selected.txt}
-                      fontSize="xs"
-                      letterSpacing="0.1em"
-                      opacity={0.6}
-                      fontStyle="italic"
-                    >
-                      Próximamente
-                    </Text>
-                  )}
-                </Flex>
-              );
-            })()}
-            */}
-            {/* <Text
-              color={selected.txt}
-              fontSize="sm"
-              letterSpacing="0.14em"
-              opacity={0.7}
-              fontStyle="italic"
-              mt={2}
-              textTransform="uppercase"
-            >
-              Próximamente
-            </Text> */}
-            </Box>
-          </Box>
-        </Box>
-      )}
     </Box>
   );
 };

@@ -167,7 +167,7 @@ export default function MetodoTcmElementos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("metodo.tcm.paso.cincoElementos")}
-            pageLabel="2/11"
+            pageLabel="2/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -176,8 +176,8 @@ export default function MetodoTcmElementos() {
             prev={{ label: `← ${t("disciplina.medicinaChina")}`, onClick: () => navigate("/metodo/tcm") }}
             extra={ilustracionesBtn}
             next={{
-              label: `${t("metodo.tcm.paso.ciclos")} →`,
-              onClick: () => navigate("/metodo/tcm/ciclos"),
+              label: `${t("metodo.tcm.paso.constitucion")} →`,
+              onClick: () => navigate("/metodo/tcm/constitucion"),
               disabled: !elementosTestsCompletos(data),
               disabledTooltip: t("metodo.tcm.elementos.testsPendientes"),
             }}

@@ -131,7 +131,7 @@ export default function MetodoTcmLengua() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("metodo.tcm.lengua.titulo")}
-            pageLabel="5/11"
+            pageLabel="6/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

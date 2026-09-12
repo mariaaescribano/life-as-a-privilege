@@ -558,6 +558,34 @@ export const metodo = {
   "metodo.tcm.paso.cursos": "Courses",
   "metodo.tcm.paso.cincoElementos": "The Five Elements",
   "metodo.tcm.paso.ciclos": "The cycles",
+
+  "metodo.tcm.paso.constitucion": "Your Constitution",
+
+  // ── Chinese Medicine · Your Constitution (step 3) ──────────────────────
+  "metodo.tcm.constitucion.intro":
+    "The three questionnaires of each element measure what weighs on you today. Your constitution is something else: the element underneath, the one that barely changes over the years. Read all five and take the test to find out which one is yours.",
+  "metodo.tcm.constitucion.hacer": "Take the test",
+  "metodo.tcm.constitucion.repetir": "Retake the test",
+  "metodo.tcm.constitucion.deUnaSentada":
+    "The test is taken in one sitting: 200 statements, and nothing is saved half-way. If you leave, next time you start over; only your result is saved, once you finish.",
+  "metodo.tcm.constitucion.bloqueo":
+    "Take the test to move on: the cycles and the diagnosis are read already knowing your constitution.",
+  "metodo.tcm.constitucion.hecho": "Test completed",
+  "metodo.tcm.constitucion.tuElemento": "Your constitution",
+  "metodo.tcm.constitucion.segundo": "And behind it",
+  "metodo.tcm.constitucion.laTuya": "Yours",
+  "metodo.tcm.constitucion.leAtrae": "What it is drawn to",
+  "metodo.tcm.constitucion.leIncomoda": "What it shies away from",
+  "metodo.tcm.constitucion.nudos": "Its knots",
+  "metodo.tcm.constitucion.nudosPie":
+    "Both halves are true at once: that is why they pull.",
+  "metodo.tcm.constitucion.cuerpo": "Where its body speaks first",
+  "metodo.tcm.constitucion.enSuLuz": "At its best",
+  "metodo.tcm.constitucion.enSuSombra": "At its worst",
+  "metodo.tcm.constitucion.noEsDiagnostico":
+    "This is who you are, not what is happening to you today. Today's reading is the Final Diagnosis: if they match, your own element is the one giving you a hard time; if they don't, what weighs on you comes from somewhere else.",
+  "metodo.tcm.constitucion.aviso":
+    "No element is better than another, and nobody is a pure element: you are all five, with one ringing louder.",
   "metodo.tcm.paso.tuLengua": "Your tongue",
   "metodo.tcm.paso.apuntes": "Create your notes",
   "metodo.tcm.paso.apuntesCorto": "Your notes",
@@ -594,6 +622,14 @@ export const metodo = {
     "These are the two elements your way of adapting runs through: the ones that take the strain when life presses.",
   "metodo.tcm.diag.barras":
     "Each element pulls to one side: up if what weighs on you outruns your resources, down if your resources win and that element holds you up. The closer to the line, the more in balance.",
+  "metodo.tcm.diag.constitucion": "And underneath, your constitution",
+  "metodo.tcm.diag.constitucionTexto":
+    "The bars above say what is happening to you today. This says who you are, and it barely changes over the years: it is the ground everything else is read on.",
+  "metodo.tcm.diag.constEres": "Your constitution",
+  "metodo.tcm.diag.constMismo":
+    "Your constitution and what weighs on you most today are the same element: {el}. What defines you is the very thing giving you a hard time, which is why this tiredness feels so much like yours. Caring for {el} is, here, caring for yourself.",
+  "metodo.tcm.diag.constDistinto":
+    "Your ground is {fondo} and what weighs on you most today is {hoy}: the strain does not come from your character, but from a season asking you for something that is not your terrain. Lean on {fondo}, which is what you are made of, to hold {hoy} up.",
   "metodo.tcm.diag.repasa":
     "Go through each relationship calmly. They all matter to you, because they're all part of you.",
   "metodo.tcm.diag.aviso":

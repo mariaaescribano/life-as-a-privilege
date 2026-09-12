@@ -15,16 +15,21 @@
 //
 // Pasos del recorrido:
 //   0 · Bienvenida            /metodo/tcm
-//   1 · ¿Cómo está tu         /metodo/tcm/equilibrio      (test inicial)
-//       equilibrio hoy?
-//   2 · Tu mapa energético    /metodo/tcm/mapa            (primer resultado)
-//   3 · La estrella           /metodo/tcm/elementos       (estrella interactiva)
-//   4-8 · El viaje            /metodo/tcm/elemento/:elemento  (5 elementos + mini-test)
-//   9 · Tu perfil completo    /metodo/tcm/perfil          (integra todos los tests)
-//   10 · Cómo interactúan     /metodo/tcm/ciclos          (Sheng / Ke)
-//   11 · Tu propio mapa       /metodo/tcm/tu-mapa         (ciclos aplicados a ti)
-//   12 · Aprende a escucharte /metodo/tcm/observarte(+/lengua)
-//   13 · Cierre               /metodo/tcm/compromiso
+//   1 · Bienvenida           /metodo/tcm
+//   2 · Los Cinco Elementos  /metodo/tcm/elementos     (estrella + los 3 tests de cada elemento)
+//   3 · Tu Constitución      /metodo/tcm/constitucion  (QUIÉN eres · ver tcmConstitucion.ts)
+//   4 · Los ciclos           /metodo/tcm/ciclos        (Sheng / Ke)
+//   5 · Diagnóstico final    /metodo/tcm/diagnostico   (QUÉ te pasa hoy, carga − recursos)
+//   6-7 · La lengua          /metodo/tcm/lengua(+/leer)
+//   8 · Taoísmo              /metodo/tcm/taoismo
+//   9 · Tu cocina            /metodo/tcm/recetas
+//   10 · Qigong              /metodo/tcm/qigong
+//   11 · Cursos              /metodo/tcm/cursos
+//   12 · Tus apuntes         /metodo/tcm/apuntes
+//
+// Ojo con los pasos 3 y 5, que es fácil confundirlos: la Constitución es el
+// elemento de FONDO (estable, sale de un test propio de frases sí/no) y el
+// Diagnóstico es lo que te pesa HOY (se mueve con la temporada).
 //
 // Persistencia (tabla `metodo_tcm`, columna `data` JSONB): ver DatosTcm abajo.
 //
@@ -53,7 +58,7 @@ export const ORDEN_ELEMENTOS: Elemento[] = ["madera", "fuego", "tierra", "metal"
 // ── Índice del recorrido (botón «Índice», reutiliza IndiceRecorrido) ────────
 // Solo las páginas ya navegables (sin enlaces muertos). Se irá ampliando según
 // se construyan los pasos pendientes (perfil, ciclos, tu mapa, escucharte…).
-// OJO: al añadir o quitar un paso hay que retocar el `pageLabel` («n/9») del
+// OJO: al añadir o quitar un paso hay que retocar el `pageLabel` («n/12») del
 // MetodoStepHeader de TODAS las páginas y los botones prev/next de las vecinas.
 // Es una FUNCIÓN, no una constante: los títulos salen del diccionario y hay que
 // volver a construirlos al cambiar de idioma (ver `IndiceTcm`). Congelados al
@@ -61,19 +66,20 @@ export const ORDEN_ELEMENTOS: Elemento[] = ["madera", "fuego", "tierra", "metal"
 export const tcmIndice = (): PasoRecorrido[] => [
   { n: 1, titulo: traducir("disciplina.medicinaChina"), ruta: () => "/metodo/tcm" },
   { n: 2, titulo: traducir("metodo.tcm.paso.cincoElementos"), ruta: () => "/metodo/tcm/elementos" },
-  { n: 3, titulo: traducir("metodo.tcm.paso.ciclos"), ruta: () => "/metodo/tcm/ciclos" },
-  { n: 4, titulo: traducir("metodo.tcm.paso.diagnostico"), ruta: () => "/metodo/tcm/diagnostico" },
-  { n: 5, titulo: traducir("metodo.tcm.paso.tuLengua"), ruta: () => "/metodo/tcm/lengua" },
-  { n: 6, titulo: traducir("metodo.tcm.paso.lengua"), ruta: () => "/metodo/tcm/lengua/leer" },
-  { n: 7, titulo: traducir("metodo.tcm.tao.titulo"), ruta: () => "/metodo/tcm/taoismo" },
-  { n: 8, titulo: traducir("metodo.tcm.cocina.titulo"), ruta: () => "/metodo/tcm/recetas" },
-  { n: 9, titulo: traducir("metodo.tcm.qigong.titulo"), ruta: () => "/metodo/tcm/qigong" },
-  { n: 10, titulo: traducir("metodo.tcm.paso.cursos"), ruta: () => "/metodo/tcm/cursos" },
-  { n: 11, titulo: traducir("metodo.tcm.paso.apuntes"), ruta: () => "/metodo/tcm/apuntes" },
+  { n: 3, titulo: traducir("metodo.tcm.paso.constitucion"), ruta: () => "/metodo/tcm/constitucion" },
+  { n: 4, titulo: traducir("metodo.tcm.paso.ciclos"), ruta: () => "/metodo/tcm/ciclos" },
+  { n: 5, titulo: traducir("metodo.tcm.paso.diagnostico"), ruta: () => "/metodo/tcm/diagnostico" },
+  { n: 6, titulo: traducir("metodo.tcm.paso.tuLengua"), ruta: () => "/metodo/tcm/lengua" },
+  { n: 7, titulo: traducir("metodo.tcm.paso.lengua"), ruta: () => "/metodo/tcm/lengua/leer" },
+  { n: 8, titulo: traducir("metodo.tcm.tao.titulo"), ruta: () => "/metodo/tcm/taoismo" },
+  { n: 9, titulo: traducir("metodo.tcm.cocina.titulo"), ruta: () => "/metodo/tcm/recetas" },
+  { n: 10, titulo: traducir("metodo.tcm.qigong.titulo"), ruta: () => "/metodo/tcm/qigong" },
+  { n: 11, titulo: traducir("metodo.tcm.paso.cursos"), ruta: () => "/metodo/tcm/cursos" },
+  { n: 12, titulo: traducir("metodo.tcm.paso.apuntes"), ruta: () => "/metodo/tcm/apuntes" },
 ];
 
 /** Cuántos pasos tiene el recorrido. Constante: no depende del idioma. */
-export const TCM_TOTAL = 11;
+export const TCM_TOTAL = 12;
 
 // ── LEGADO · el mini-test de opción múltiple ────────────────────────────────
 // El modelo viejo (una opción con puntos por elemento). Ya NO alimenta ningún
@@ -1108,6 +1114,12 @@ export interface DatosTcm {
    *  (Sheng + Ke) una vez. Se guarda para que el botón «Diagnóstico final» quede
    *  desbloqueado para siempre en visitas posteriores, sin repetir las flechitas. */
   ciclosLeidos?: boolean;
+  /** Tu Constitución (paso 3): las respuestas del test de predominancia, con
+   *  la key de cada frase («cons-p-agua-3») apuntando a "1" (sí) o "0" (no).
+   *  El elemento que sale de ahí se calcula al vuelo en `tcmConstitucion.ts`:
+   *  aquí NO se guarda un resultado, para poder afinar el cálculo sin dejar
+   *  colgados los tests ya hechos. */
+  constitucion?: { respuestas?: Record<string, string> };
   /** «Un gesto para hoy» de Tu cocina diaria, por elemento: cuál se está
    *  mostrando (`i`) y el día en que se marcó como hecho (`hecho`, aaaa-mm-dd).
    *  Guardar el DÍA y no un booleano es lo que hace que el tick se apague solo

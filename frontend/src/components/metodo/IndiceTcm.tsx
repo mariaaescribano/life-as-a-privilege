@@ -4,6 +4,7 @@
 import React from "react";
 import { IndiceRecorrido } from "./IndiceRecorrido";
 import { tcmIndice, TCM_TOTAL, pasoAlcanzableTcm } from "./tcmRecorrido";
+import { constitucionHecha } from "./tcmConstitucion";
 import { useIdioma } from "../../i18n";
 import { API_URL, tcmBg, tcmNom, tcmTxt } from "../../GlobalVariables";
 
@@ -19,11 +20,12 @@ export function IndiceTcm() {
       bg={tcmBg}
       nom={tcmNom}
       luz={false}
-      // Bloqueo secuencial: hasta rellenar los cinco tests de elementos, el Índice
-      // solo abre «Los Cinco Elementos» (paso 2); el resto queda con candado.
+      // Bloqueo secuencial en dos puertas: hasta rellenar los cinco tests de
+      // elementos, el Índice solo abre «Los Cinco Elementos» (paso 2); y hasta
+      // hacer el test de constitución, no pasa de «Tu Constitución» (paso 3).
       progresoKey="tcm"
       alcanzableUrl={(userId) => `${API_URL}/metodo-tcm/${userId}`}
-      alcanzableDe={(data) => pasoAlcanzableTcm(data)}
+      alcanzableDe={(data) => Math.min(pasoAlcanzableTcm(data), constitucionHecha(data) ? TCM_TOTAL : 3)}
     />
   );
 }

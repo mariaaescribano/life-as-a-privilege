@@ -21,6 +21,7 @@ import {
   viajeCompleto, elementosTestsCompletos,
   type DatosTcm, type Elemento, type EstadoDiagnostico, type VeredictoBalance,
 } from "../../components/metodo/tcmRecorrido";
+import { CONSTITUCIONES, constitucionDe, constitucionHecha } from "../../components/metodo/tcmConstitucion";
 import { ICONO_ELEMENTO, FOTO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { useNombresElementos } from "../../components/metodo/tcmElementosEn";
 import {
@@ -98,6 +99,9 @@ export default function MetodoTcmDiagnostico() {
           navigate("/metodo/tcm/elementos");
           return;
         }
+        // Y el test de constitución: la mitad de esta página es cruzar lo que
+        // te pasa hoy con quién eres de fondo.
+        if (!constitucionHecha(d)) { navigate("/metodo/tcm/constitucion"); return; }
         setData(d);
       } catch {
         navigate("/metodo/tcm");
@@ -149,7 +153,7 @@ export default function MetodoTcmDiagnostico() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("metodo.tcm.paso.diagnostico")}
-            pageLabel="4/11"
+            pageLabel="5/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
@@ -194,6 +198,13 @@ export default function MetodoTcmDiagnostico() {
           <Panel titulo="" color={tcmTxt}>
             <MetricasBalance estados={estados} />
             <TiposAdaptacion tipos={tipos} estados={estados} />
+          </Panel>
+          </Reveal>
+
+          {/* ── BOX CONSTITUCIÓN · quién eres de fondo, cruzado con lo de hoy ── */}
+          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
+          <Panel titulo="" color={tcmTxt}>
+            <TuConstitucion data={data} cargado={tipos.primario} />
           </Panel>
           </Reveal>
 
@@ -565,6 +576,77 @@ function TiposAdaptacion({ tipos, estados }: {
       <Text color="rgba(255,255,255,0.6)" fontSize={{ base: "2xs", md: "xs" }} fontStyle="italic"
             textAlign="center" lineHeight="1.6" mt={4}>
         {t("metodo.tcm.diag.formula")}
+      </Text>
+    </>
+  );
+}
+
+// ── Box de la constitución · QUIÉN ERES, frente al QUÉ TE PASA de arriba ─────
+// El test del paso 3 (200 frases) da el elemento de fondo, el que no se mueve
+// con la temporada. Aquí se enseña junto al elemento que hoy más te carga,
+// porque la lectura interesante es el cruce: si coinciden, lo que te define se
+// te está haciendo cuesta arriba; si no, la carga viene de otro sitio.
+function TuConstitucion({ data, cargado }: {
+  data: DatosTcm;
+  /** El elemento con más carga neta hoy (el primario de los tipos). */
+  cargado: Elemento;
+}) {
+  const t = useT();
+  const nombres = useNombresElementos();
+  const cons = constitucionDe(data);
+  if (!cons) return null;
+  const { primaria, secundaria } = cons;
+  const C = CONSTITUCIONES[primaria];
+  const E = ELEMENTOS[primaria];
+  const coincide = primaria === cargado;
+
+  return (
+    <>
+      <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.1em"
+            textTransform="uppercase" textAlign="center" mb={2} style={{ textShadow: INK_SHADOW }}>
+        {t("metodo.tcm.diag.constitucion")}
+      </Text>
+      <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            textAlign="center" lineHeight="1.7" mb={4} style={{ textShadow: INK_SHADOW }}>
+        {t("metodo.tcm.diag.constitucionTexto")}
+      </Text>
+
+      <Flex justify="center">
+        <Flex align="center" gap={{ base: 3, md: 5 }} px={{ base: 4, md: 6 }} py={4} borderRadius="xl"
+              bg="rgba(0,0,0,0.32)" border={`1px solid ${E.color}88`} maxW="620px"
+              style={{ boxShadow: `0 0 18px ${E.color}55` }}>
+          <Box w={{ base: "58px", md: "76px" }} h={{ base: "58px", md: "76px" }} flexShrink={0}
+               borderRadius="full" overflow="hidden" border={`2px solid ${E.color}`}
+               style={{ boxShadow: `0 0 10px ${E.color}88` }}>
+            <img src={ICONO_ELEMENTO[primaria]} alt={nombres[primaria]}
+                 style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </Box>
+          <Box>
+            <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "2xs", md: "xs" }} fontWeight={700}
+                  letterSpacing="0.1em" textTransform="uppercase">
+              {t("metodo.tcm.diag.constEres")}
+            </Text>
+            <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight={800} lineHeight="1.2">
+              {nombres[primaria]} · {C.arquetipo}
+            </Text>
+            <Text color={E.color} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+              {C.lema}
+            </Text>
+            <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "2xs", md: "xs" }} mt={1}>
+              {t("metodo.tcm.constitucion.segundo")}: {nombres[secundaria]} ({CONSTITUCIONES[secundaria].arquetipo}).
+            </Text>
+          </Box>
+        </Flex>
+      </Flex>
+
+      {/* El cruce: tu fondo contra lo que hoy te pesa. */}
+      <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.75" textAlign="center"
+            maxW="680px" mx="auto" mt={4} style={{ textShadow: INK_SHADOW }}>
+        {coincide
+          ? t("metodo.tcm.diag.constMismo").replace("{el}", nombres[primaria])
+          : t("metodo.tcm.diag.constDistinto")
+              .replace("{fondo}", nombres[primaria])
+              .replace("{hoy}", nombres[cargado])}
       </Text>
     </>
   );

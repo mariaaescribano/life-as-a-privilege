@@ -3,7 +3,28 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
-export const API_URL = "https://life-as-a-privilege.onrender.com"; //"http://localhost:3000"; //
+// ── DIRECCIÓN DEL SERVIDOR (backend) ────────────────────────────────────────
+// Esto YA NO se cambia a mano. Antes había que acordarse de conmutar la línea
+// antes de cada subida, y subirla en «localhost» dejaba la web publicada viva
+// pero muerta: se veía entera y no funcionaba nada (ni entrar, ni pagar), sin
+// ningún aviso.
+//
+// Ahora se decide solo:
+//   · `npm run dev` (tu ordenador) → http://localhost:3000
+//   · web publicada  (npm run build) → el servidor de Render
+//
+// Si alguna vez quieres otra cosa (por ejemplo, programar en local pero contra
+// el servidor de verdad), crea el archivo `frontend/.env.local` con una línea:
+//   VITE_API_URL=https://life-as-a-privilege.onrender.com
+// Ese archivo es solo tuyo, no se sube, y manda por encima de todo lo demás.
+//
+// El día que cambie el servidor, se toca SOLO la constante de aquí abajo.
+const API_EN_PRODUCCION = "https://life-as-a-privilege.onrender.com";
+const API_EN_LOCAL = "http://localhost:3000";
+
+export const API_URL =
+  import.meta.env.VITE_API_URL?.trim() ||
+  (import.meta.env.DEV ? API_EN_LOCAL : API_EN_PRODUCCION);
 
 // ── CONTACTO ────────────────────────────────────────────────────────────────
 // El WhatsApp al que escribe la gente. En formato internacional y SIN el «+»,

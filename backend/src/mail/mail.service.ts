@@ -246,6 +246,89 @@ export class MailService {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // AVISOS A LA CREADORA (van a NOTIFY_EMAIL, nunca a la persona)
+  //
+  // Ojo con no confundirlos con «Nueva solicitud de carta astral»: ese sale
+  // cuando alguien manda sus datos de nacimiento dentro de Astrología, y no
+  // dice nada del dinero. Los dos de aquí son los que cuentan quién entra
+  // (cuenta creada) y quién paga (disciplina comprada).
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /** Ficha con los datos de la persona, igual en los dos avisos. */
+  private fichaPersona(filas: [string, string][]): string {
+    return `
+      <div style="margin-top: 20px; padding: 16px 20px; background: rgba(255,255,255,0.12); border-radius: 12px;">
+        ${filas
+          .map(
+            ([etiqueta, valor]) =>
+              `<p style="margin: 6px 0; font-size: 15px;"><strong>${etiqueta}:</strong> ${valor}</p>`,
+          )
+          .join('')}
+      </div>
+    `;
+  }
+
+  /** Fecha y hora de ahora mismo, en horario de España. */
+  private get ahoraLegible(): string {
+    return new Date().toLocaleString('es-ES', {
+      timeZone: 'Europe/Madrid',
+      dateStyle: 'short',
+      timeStyle: 'short',
+    });
+  }
+
+  // Alguien se ha CREADO UNA CUENTA. Todavía no ha pagado nada: solo está
+  // dentro de la web. Sale igual si entra con Google o con contraseña.
+  async enviarAvisoRegistro(
+    email: string,
+    nombre: string,
+    opciones?: { conGoogle?: boolean },
+  ): Promise<void> {
+    const html = this.plantilla(
+      'Cuenta nueva',
+      `
+        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
+          <strong>${nombre || 'Sin nombre'}</strong> se ha registrado en
+          <strong>Life as a Privilege</strong>. Todavía no ha pagado nada.
+        </p>
+        ${this.fichaPersona([
+          ['Nombre', nombre || '—'],
+          ['Email', email],
+          ['Entra con', opciones?.conGoogle ? 'Google' : 'contraseña'],
+          ['Cuándo', this.ahoraLegible],
+        ])}
+      `,
+    );
+    await this.enviar(this.copiaAdmin, `Cuenta nueva: ${email}`, html, 'aviso de registro');
+  }
+
+  // Alguien ha PAGADO una disciplina de El Recorrido. Este es el correo que
+  // dice que ha entrado dinero; sale una sola vez por compra.
+  async enviarAvisoCompra(email: string, nombre: string, disciplina: string): Promise<void> {
+    const html = this.plantilla(
+      'Disciplina pagada',
+      `
+        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
+          <strong>${nombre || 'Sin nombre'}</strong> ha pagado
+          <strong>${disciplina}</strong>.
+        </p>
+        ${this.fichaPersona([
+          ['Nombre', nombre || '—'],
+          ['Email', email],
+          ['Disciplina', disciplina],
+          ['Cuándo', this.ahoraLegible],
+        ])}
+      `,
+    );
+    await this.enviar(
+      this.copiaAdmin,
+      `Ha pagado ${disciplina}: ${email}`,
+      html,
+      'aviso de compra',
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // CORREOS DE LA CARTA ASTRAL (al usuario)
   //
   // Van con el turquesa del fondo de la web (#008080) y letra blanca, mandala

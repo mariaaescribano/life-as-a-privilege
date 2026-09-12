@@ -109,7 +109,7 @@ export default function MetodoTcmApuntes() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("metodo.tcm.paso.apuntes")}
-            pageLabel="11/11"
+            pageLabel="12/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

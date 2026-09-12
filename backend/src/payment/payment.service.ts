@@ -179,20 +179,37 @@ export class PaymentService {
       return;
     }
 
-    const def = DISCIPLINAS[ref.scope];
     // Ojo: aquí NO se comprueba la cadena de prerrequisitos. El dinero ya está
     // cobrado, así que negar el acceso por orden sería lo peor de los dos mundos.
     // El orden se hace cumplir ANTES, al crear el checkout.
-    await (this.userService as any)[def.marcar](ref.userId);
-    console.log(`[${origen}] ${ref.scope} concedida a ${ref.userId}`);
+    await this.conceder(ref.scope, ref.userId, origen);
+  }
+
+  /**
+   * Tronco ÚNICO de «esta persona ya tiene pagada esta disciplina»: lo llaman
+   * tanto el webhook como los verify de la vuelta del pago, y por eso mismo se
+   * repite (cada recarga de /home vuelve a verificar, y Stripe puede reintentar
+   * el evento). Marcar el flag dos veces da igual, pero mandar dos veces los
+   * correos no, así que se mira el estado ANTES de marcarlo y los avisos salen
+   * SOLO la primera vez: uno a la persona («ya es tuya») y otro a la creadora
+   * («ha pagado»), que es el correo con el que se entera de que ha entrado
+   * dinero.
+   */
+  private async conceder(scope: DisciplinaScope, userId: string, origen: string) {
+    const def = DISCIPLINAS[scope];
+    const antes = (await this.userService.getUserById(userId).catch(() => null)) as any;
+    const yaLaTenia = !!antes?.[`${scope}_suscrito`];
+
+    await (this.userService as any)[def.marcar](userId);
+    console.log(`[${origen}] ${scope} concedida a ${userId}${yaLaTenia ? ' (ya la tenía)' : ''}`);
+
+    if (yaLaTenia || !antes?.email) return;
 
     try {
-      const user = (await this.userService.getUserById(ref.userId)) as any;
-      if (user?.email) {
-        await this.mailService.enviarDisciplinaDesbloqueada(user.email, user.name ?? '', def.nombre);
-      }
+      await this.mailService.enviarDisciplinaDesbloqueada(antes.email, antes.name ?? '', def.nombre);
+      await this.mailService.enviarAvisoCompra(antes.email, antes.name ?? '', def.nombre);
     } catch (err) {
-      // El email es un extra: si falla, el acceso ya está concedido y no
+      // Los emails son un extra: si fallan, el acceso ya está concedido y no
       // queremos que Stripe reintente el evento por esto.
       console.error(`[${origen}] no se pudo enviar el email de ${def.nombre}:`, err);
     }
@@ -306,7 +323,7 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoMetodo(userId);
+    await this.conceder('metodo', userId, 'verify:metodo');
     return { ok: true as const };
   }
 
@@ -372,7 +389,7 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoPsicologia(userId);
+    await this.conceder('psicologia', userId, 'verify:psicologia');
     return { ok: true as const };
   }
 
@@ -438,7 +455,7 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoAyurveda(userId);
+    await this.conceder('ayurveda', userId, 'verify:ayurveda');
     return { ok: true as const };
   }
 
@@ -504,7 +521,7 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoTcm(userId);
+    await this.conceder('tcm', userId, 'verify:tcm');
     return { ok: true as const };
   }
 
@@ -570,7 +587,7 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoFisiologia(userId);
+    await this.conceder('fisiologia', userId, 'verify:fisiologia');
     return { ok: true as const };
   }
 
@@ -636,7 +653,7 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoNutricion(userId);
+    await this.conceder('nutricion', userId, 'verify:nutricion');
     return { ok: true as const };
   }
 
@@ -702,7 +719,7 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoCabala(userId);
+    await this.conceder('cabala', userId, 'verify:cabala');
     return { ok: true as const };
   }
 
@@ -768,7 +785,7 @@ export class PaymentService {
       return { ok: false as const, reason: 'wrong-user' };
     }
 
-    await this.userService.marcarSuscritoCultura(userId);
+    await this.conceder('cultura', userId, 'verify:cultura');
     return { ok: true as const };
   }
 
@@ -827,8 +844,9 @@ export class PaymentService {
       }
     }
 
-    // Idempotente: si el verify se repite (recarga de /home), solo re-marca el flag.
-    await (this.userService as any)[def.marcar](userId);
+    // Idempotente: si el verify se repite (recarga de /home), solo re-marca el
+    // flag — los correos de `conceder` salen una única vez.
+    await this.conceder(scope, userId, 'verify:link');
     return { ok: true as const, scope, nombre: def.nombre };
   }
 

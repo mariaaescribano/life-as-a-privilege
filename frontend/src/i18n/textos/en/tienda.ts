@@ -2,6 +2,8 @@ export const tienda = {
   // ── Illustrations (/ilustraciones) ─────────────────────────────────────
   "ilustraciones.titulo": "Illustrations",
   "ilustraciones.subtitulo": "Every illustration from The Map, in one place. Tap one to read it.",
+  "ilustraciones.deDisciplina": "The illustrations for this discipline. Tap one to read it.",
+  "ilustraciones.vacio": "This discipline has no illustrations yet. They are on their way.",
 
   // ── Books (/libros) ────────────────────────────────────────────────────
   "libros.titulo": "Books",

@@ -16,6 +16,7 @@ import { useComic } from "../../i18n/comics";
 import { useT } from "../../i18n";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento, type DatosTcm } from "../../components/metodo/tcmRecorrido";
+import { constitucionHecha } from "../../components/metodo/tcmConstitucion";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { EstrellaCiclo, RelacionModal, FONDO_CICLO, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -61,6 +62,9 @@ export default function MetodoTcmCiclos() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const d: DatosTcm = res.data?.data ?? {};
+        // Puerta del paso 3: los ciclos se leen ya sabiendo cuál es tu
+        // constitución, así que sin el test hecho se vuelve a por él.
+        if (!constitucionHecha(d)) { navigate("/metodo/tcm/constitucion"); return; }
         datosRef.current = d;
         // Ya visto antes: desbloqueamos y damos TODAS las relaciones por vistas,
         // para que la página cargue como completada (flechitas marcadas + botón
@@ -145,13 +149,13 @@ export default function MetodoTcmCiclos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("metodo.tcm.ciclos.titulo")}
-            pageLabel="3/11"
+            pageLabel="4/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}
             nom={tcmNom}
             mb={0}
-            prev={{ label: `← ${t("metodo.tcm.paso.elementos")}`, onClick: () => navigate("/metodo/tcm/elementos") }}
+            prev={{ label: `← ${t("metodo.tcm.paso.constitucion")}`, onClick: () => navigate("/metodo/tcm/constitucion") }}
             extra={ilustracionesBtn}
             next={{
               // No salta al Diagnóstico: abre antes el cómic «Las enfermedades»,

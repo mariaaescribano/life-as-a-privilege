@@ -51,6 +51,29 @@ const existe = (ruta) => fs.existsSync(path.join(PUB, ruta));
 const archivo = (ruta) => ruta.split("/").pop();
 const carpeta = (ruta) => ruta.slice(0, ruta.lastIndexOf("/"));
 
+// ── Portadas todavía sin declarar ────────────────────────────────────────────
+// Una Historia sin `portada` en `culturaPortadas.ts` sale con su emoji, y eso la
+// dejaba FUERA de esta lista: su portada no estaba pedida, así que no podía
+// faltar. Pero sí falta —solo que aún no se ha escrito la línea—, y por eso se
+// quedaron sin pedir las de Medicina y Arte.
+//
+// Ahora, cuando no hay portada declarada, se espera `historia<clave>.webp` en la
+// misma carpeta que las demás. Si prefieres otro nombre, decláralo en
+// `culturaPortadas.ts` y manda ese: lo declarado siempre gana.
+const CARPETA_PORTADAS =
+  Object.values(CULTURA_HISTORIA_VISUAL).map((v) => v.portada).filter(Boolean).map(carpeta)[0] ??
+  "/recorrido/cultura/portadas";
+
+/** Ruta de la portada de una Historia: la declarada, o la que se espera. */
+const portadaDe = (clave) => {
+  const declarada = CULTURA_HISTORIA_VISUAL[clave]?.portada;
+  if (declarada) return { ruta: declarada, declarada: true };
+  return { ruta: `${CARPETA_PORTADAS}/historia${clave}.webp`, declarada: false };
+};
+
+/** Portadas que ya están en disco pero que nadie ha declarado: no se ven. */
+const sinDeclarar = [];
+
 const lineas = [
   "# Fotos que faltan — recorrido de Cultura",
   "",
@@ -73,17 +96,24 @@ for (const [clave, historia] of Object.entries(HISTORIAS_CULTURA)) {
   let faltan = 0;
   let todas = 0;
 
-  const visual = CULTURA_HISTORIA_VISUAL[clave];
-  if (visual?.portada) {
-    todas++;
-    if (!existe(visual.portada)) {
-      faltan++;
-      bloques.push({
-        titulo: "Portada de la Historia",
-        carpeta: carpeta(visual.portada),
-        filas: [[archivo(visual.portada), historia.titulo]],
-      });
-    }
+  const portada = portadaDe(clave);
+  todas++;
+  if (!existe(portada.ruta)) {
+    faltan++;
+    bloques.push({
+      titulo: "Portada de la Historia",
+      carpeta: carpeta(portada.ruta),
+      filas: [[
+        archivo(portada.ruta),
+        portada.declarada
+          ? historia.titulo
+          : `${historia.titulo} — y después añade su \`portada\` en culturaPortadas.ts`,
+      ]],
+    });
+  } else if (!portada.declarada) {
+    // El archivo está, pero sin la línea en `culturaPortadas.ts` la Historia
+    // sigue saliendo con su emoji: la foto no se ve en ningún sitio.
+    sinDeclarar.push([clave, portada.ruta]);
   }
 
   const eras = historia.hitos.filter((era) => era.foto);
@@ -151,3 +181,10 @@ fs.writeFileSync(SALIDA, lineas.join("\n") + "\n", "utf8");
 console.log(`Faltan ${faltanTotal} fotos de ${todasTotal}.`);
 for (const [titulo, faltan, todas] of resumen) console.log(`  ${titulo}: ${faltan} de ${todas}`);
 console.log(`\nEscrito: ${path.relative(RAIZ, SALIDA)}`);
+
+if (sinDeclarar.length) {
+  console.log("");
+  console.log("OJO — portadas que YA están en disco pero que nadie ha declarado:");
+  console.log("(sin su línea en culturaPortadas.ts la Historia sigue saliendo con el emoji)");
+  for (const [clave, ruta] of sinDeclarar) console.log(`  ${clave}:  portada: \`${ruta}\``);
+}

@@ -25,7 +25,7 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer"
 const PATH_CHEVRON = "M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z";
 const PATH_ARRIBA = "M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z";
 
-export function BotonPaso({ label, onClick, nom, color, bg, direction = "next" }: {
+export function BotonPaso({ label, onClick, nom, color, bg, direction = "next", disabled, title }: {
   /** El mismo texto que el botón del header, SIN la flecha (la dibuja él). */
   label: string;
   onClick: () => void;
@@ -37,6 +37,10 @@ export function BotonPaso({ label, onClick, nom, color, bg, direction = "next" }
   bg: string;
   /** «next» lleva adelante (derecha); «prev» y «up» son volver (izquierda). */
   direction?: "next" | "prev" | "up";
+  /** Apagado: el paso siguiente aún no está desbloqueado (no se puede pulsar). */
+  disabled?: boolean;
+  /** Por qué está apagado (sale al pasar por encima). */
+  title?: string;
 }) {
   const esVolver = direction !== "next";
   // OJO con el relleno: iba en `currentColor`, y como el <svg> es HERMANO del
@@ -58,7 +62,10 @@ export function BotonPaso({ label, onClick, nom, color, bg, direction = "next" }
   return (
     <Box
       as="button"
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      title={disabled ? title : undefined}
+      opacity={disabled ? 0.42 : 1}
       alignSelf={esVolver ? "flex-start" : "flex-end"}
       mt={{ base: 2, md: 3 }}
       position="relative"
@@ -67,14 +74,14 @@ export function BotonPaso({ label, onClick, nom, color, bg, direction = "next" }
       border={`1.5px solid ${color}aa`}
       bg={hasDisciplinaBg(nom) ? "transparent" : bg}
       boxShadow={`0 0 10px rgba(255,255,255,0.16), 0 0 22px ${color}44, inset 0 0 12px ${color}22`}
-      cursor="pointer"
+      cursor={disabled ? "not-allowed" : "pointer"}
       transition="transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease"
-      _hover={{
+      _hover={disabled ? undefined : {
         borderColor: color,
         transform: "translateY(-2px)",
         boxShadow: `0 0 14px rgba(255,255,255,0.35), 0 0 34px ${color}55`,
       }}
-      _active={{ transform: "scale(0.97)" }}
+      _active={disabled ? undefined : { transform: "scale(0.97)" }}
       sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", userSelect: "none" }}
     >
       {hasDisciplinaBg(nom) && <DisciplinaBgLayer nom={nom} borderRadius="full" />}

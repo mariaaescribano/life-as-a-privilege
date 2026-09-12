@@ -626,6 +626,37 @@ export const metodo = {
    *  corto, «Los 5 elementos», es el que cabe en un botón de al lado. */
   "metodo.tcm.paso.cincoElementos": "Los Cinco Elementos",
   "metodo.tcm.paso.ciclos": "Los ciclos",
+
+  "metodo.tcm.paso.constitucion": "Tu Constitución",
+
+  // ── Medicina China · Tu Constitución (paso 3) ──────────────────────────
+  // Los textos de las cinco constituciones y las 200 frases del test NO están
+  // aquí: son contenido y viven en tcmConstitucion.ts (en español, como los
+  // tres cuestionarios de cada elemento).
+  "metodo.tcm.constitucion.intro":
+    "Los cuestionarios de cada elemento miden tu estado actual. Tu constitución es el elemento de fondo, el que casi no cambia con los años.",
+  "metodo.tcm.constitucion.hacer": "Hacer el test",
+  "metodo.tcm.constitucion.repetir": "Repetir el test",
+  "metodo.tcm.constitucion.deUnaSentada":
+    "El test se hace de una sentada: son 200 frases y no se guarda a medias. Si lo dejas, la próxima vez empiezas de cero; solo se guarda tu resultado al terminarlo.",
+  "metodo.tcm.constitucion.bloqueo":
+    "Haz el test para seguir: los ciclos y el diagnóstico se leen sabiendo ya cuál es tu constitución.",
+  "metodo.tcm.constitucion.hecho": "Test completado",
+  "metodo.tcm.constitucion.tuElemento": "Tu constitución",
+  "metodo.tcm.constitucion.segundo": "Y detrás",
+  "metodo.tcm.constitucion.laTuya": "La tuya",
+  "metodo.tcm.constitucion.leAtrae": "Lo que le atrae",
+  "metodo.tcm.constitucion.leIncomoda": "Lo que le incomoda",
+  "metodo.tcm.constitucion.nudos": "Sus nudos",
+  "metodo.tcm.constitucion.nudosPie":
+    "Las dos mitades son verdad a la vez: por eso aprietan.",
+  "metodo.tcm.constitucion.cuerpo": "Por dónde avisa su cuerpo",
+  "metodo.tcm.constitucion.enSuLuz": "En su luz",
+  "metodo.tcm.constitucion.enSuSombra": "En su sombra",
+  "metodo.tcm.constitucion.noEsDiagnostico":
+    "Esto es quién eres, no lo que te pasa hoy. Lo de hoy sale en el Diagnóstico final: si coinciden, tu propio elemento se te está haciendo cuesta arriba; si no coinciden, lo que te pesa viene de otro sitio.",
+  "metodo.tcm.constitucion.aviso":
+    "Ningún elemento es mejor que otro, y nadie es un elemento puro: eres los cinco, con uno que suena más fuerte.",
   /** Paso 5 (aprender a leer una lengua). El 6, donde se lee la propia, es
    *  `metodo.tcm.paso.lengua`. */
   "metodo.tcm.paso.tuLengua": "Tu lengua",
@@ -670,6 +701,16 @@ export const metodo = {
   "metodo.tcm.diag.tipoSecundario": "Secundario",
   "metodo.tcm.diag.tiposTexto":
     "Estos son los dos elementos por los que hoy pasa tu forma de adaptarte: los que más se cargan cuando la Vida aprieta.",
+  /** Box de la constitución: quién eres de fondo, cruzado con la carga de hoy.
+   *  {el}, {fondo} y {hoy} se sustituyen por el nombre del elemento. */
+  "metodo.tcm.diag.constitucion": "Y de fondo, tu constitución",
+  "metodo.tcm.diag.constitucionTexto":
+    "Las barras de arriba dicen lo que te pasa hoy. Esto dice quién eres, y casi no cambia con los años: es el suelo sobre el que se lee todo lo demás.",
+  "metodo.tcm.diag.constEres": "Tu constitución",
+  "metodo.tcm.diag.constMismo":
+    "Tu constitución y lo que hoy más te pesa son el mismo elemento: el {el}. Lo que te define se te está haciendo cuesta arriba, y por eso el cansancio te suena tan tuyo. Cuidar al {el} es aquí cuidarte a ti.",
+  "metodo.tcm.diag.constDistinto":
+    "Tu fondo es {fondo} y lo que hoy más te pesa es {hoy}: la carga no viene de tu carácter, sino de una temporada que te está pidiendo algo que no es tu terreno. Apóyate en el {fondo}, que es de lo que estás hecho, para sostener al {hoy}.",
   "metodo.tcm.diag.repasa":
     "Repasa cada relación con calma. Todas te interesan, pues todas forman parte de ti.",
   "metodo.tcm.diag.aviso":

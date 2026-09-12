@@ -66,7 +66,7 @@ export default function MetodoTcmCursos() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("aprendizaje.cursosDe", { disciplina: t("disciplina.medicinaChina") })}
-            pageLabel="10/11"
+            pageLabel="11/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

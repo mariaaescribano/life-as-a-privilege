@@ -79,7 +79,7 @@ export default function MetodoTcmTaoismo() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("metodo.tcm.tao.titulo")}
-            pageLabel="7/11"
+            pageLabel="8/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

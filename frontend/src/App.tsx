@@ -30,7 +30,9 @@ const Opiniones = lazy(() => import("./app/web/Opiniones"));
 const ElMetodo = lazy(() => import("./app/web/ElMetodo"));
 const MaterialesGratuitos = lazy(() => import("./app/web/MaterialesGratuitos"));
 const Ilustraciones = lazy(() => import("./app/web/Ilustraciones"));
-const VideosPage = lazy(() => import("./app/web/VideosPage"));
+const DisciplinaPortada = lazy(() => import("./app/web/DisciplinaPortada"));
+// Vídeos: apartado aparcado (la página y su panel de admin siguen en el repo).
+// const VideosPage = lazy(() => import("./app/web/VideosPage"));
 const PresentacionDisciplina = lazy(() => import("./app/web/PresentacionDisciplina"));
 const CheckoutMetodo = lazy(() => import("./app/web/CheckoutMetodo"));
 const MetodoAstrologia = lazy(() => import("./app/metodo/MetodoAstrologia"));
@@ -101,6 +103,7 @@ const MetodoAyurvedaChakras = lazy(() => import("./app/metodo/MetodoAyurvedaChak
 const MetodoAyurvedaDoshaRecorrido = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaRecorrido"));
 const MetodoTcm = lazy(() => import("./app/metodo/MetodoTcm"));
 const MetodoTcmElementos = lazy(() => import("./app/metodo/MetodoTcmElementos"));
+const MetodoTcmConstitucion = lazy(() => import("./app/metodo/MetodoTcmConstitucion"));
 const MetodoTcmCiclos = lazy(() => import("./app/metodo/MetodoTcmCiclos"));
 const MetodoTcmDiagnostico = lazy(() => import("./app/metodo/MetodoTcmDiagnostico"));
 const MetodoTcmLengua = lazy(() => import("./app/metodo/MetodoTcmLengua"));
@@ -289,8 +292,14 @@ export default function App()
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/materiales" element={<MaterialesGratuitos />} />
       <Route path="/ilustraciones" element={<Ilustraciones />} />
-      {/* Vídeos: shorts de YouTube, con su portada y su disciplina (los gestiona /admin/videos). */}
-      <Route path="/videos" element={<VideosPage />} />
+      {/* La misma galería, filtrada por disciplina (puerta izquierda de su portada). */}
+      <Route path="/ilustraciones/:disciplina" element={<Ilustraciones />} />
+      {/* Portada COMÚN de una disciplina: Ilustraciones · Cursos · El Recorrido.
+          Es a donde lleva pulsar una disciplina en la página de bienvenida. */}
+      <Route path="/disciplina/:disciplina" element={<DisciplinaPortada />} />
+      {/* Vídeos: shorts de YouTube, con su portada y su disciplina (los gestiona
+          /admin/videos). Apartado aparcado: la ruta pública queda comentada. */}
+      {/* <Route path="/videos" element={<VideosPage />} /> */}
       {/* Presentación pública de una disciplina — destino del QR de los carteles.
           Ruta corta porque va impresa: /d/cabala, /d/nutricion, … */}
       <Route path="/d/:disciplina" element={<PresentacionDisciplina />} />
@@ -374,6 +383,7 @@ export default function App()
       <Route path="/metodo/tcm/elementos" element={<PrivateRoute><MetodoTcmElementos /></PrivateRoute>} />
       {/* "Tu equilibrio" se fusionó en el Diagnóstico: redirigimos los enlaces antiguos. */}
       <Route path="/metodo/tcm/perfil" element={<Navigate to="/metodo/tcm/diagnostico" replace />} />
+      <Route path="/metodo/tcm/constitucion" element={<PrivateRoute><MetodoTcmConstitucion /></PrivateRoute>} />
       <Route path="/metodo/tcm/ciclos" element={<PrivateRoute><MetodoTcmCiclos /></PrivateRoute>} />
       <Route path="/metodo/tcm/diagnostico" element={<PrivateRoute><MetodoTcmDiagnostico /></PrivateRoute>} />
       <Route path="/metodo/tcm/lengua" element={<PrivateRoute><MetodoTcmLengua /></PrivateRoute>} />

@@ -155,7 +155,7 @@ export default function MetodoTcmRecetas() {
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}
             title={t("metodo.tcm.cocina.titulo")}
-            pageLabel="8/11"
+            pageLabel="9/12"
             compact
             bgColor={`${tcmBg}dd`}
             color={tcmTxt}

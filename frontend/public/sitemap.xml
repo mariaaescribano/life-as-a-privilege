@@ -64,18 +64,54 @@
     <loc>https://lifeasaprivilege.onrender.com/ilustraciones</loc>
     <priority>0.6</priority>
   </url>
+  <!-- La galería filtrada por disciplina (puerta izquierda de cada portada). -->
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/astrologia</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/psicologia</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/ayurveda</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/medicinachina</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/fisiologia</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/nutricion</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/cabala</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/cultura</loc>
+    <priority>0.6</priority>
+  </url>
+  <!-- Estudio estadístico de astrología: público, sin cuenta. -->
+  <url>
+    <loc>https://lifeasaprivilege.onrender.com/estudio</loc>
+    <priority>0.5</priority>
+  </url>
   <url>
     <loc>https://lifeasaprivilege.onrender.com/materiales</loc>
     <priority>0.6</priority>
   </url>
+  <!-- Vídeos: apartado aparcado, la ruta /videos está comentada en App.tsx.
   <url>
     <loc>https://lifeasaprivilege.onrender.com/videos</loc>
     <priority>0.6</priority>
   </url>
-  <url>
-    <loc>https://lifeasaprivilege.onrender.com/reels</loc>
-    <priority>0.5</priority>
-  </url>
+  -->
   <url>
     <loc>https://lifeasaprivilege.onrender.com/aprendizaje/aprendizajeHome</loc>
     <priority>0.5</priority>

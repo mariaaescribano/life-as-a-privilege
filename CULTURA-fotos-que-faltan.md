@@ -16,11 +16,17 @@ Formato: `.webp`, cuadradas (se recortan en círculo y se pintan también en el 
 | Historia de las religiones | 0 | 49 |
 | Historia de la filosofía | 0 | 103 |
 | Historia de la ciencia | 0 | 57 |
-| Historia de la medicina | 69 | 95 |
-| Historia del arte y la literatura | 53 | 53 |
-| **TOTAL** | **122** | **500** |
+| Historia de la medicina | 47 | 96 |
+| Historia del arte y la literatura | 1 | 54 |
+| **TOTAL** | **48** | **502** |
 
-## Historia de la medicina — faltan 69 de 95
+## Historia de la medicina — faltan 47 de 96
+
+### Portada de la Historia
+
+Carpeta: `frontend/public/recorrido/cultura/portadas/`
+
+- `historiamedicina.webp` — Historia de la medicina — y después añade su `portada` en culturaPortadas.ts
 
 ### Egipto: observar la naturaleza — ≈3000-500 a. C.
 
@@ -55,37 +61,11 @@ Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
 
 - `hipocrates.webp` — Hipócrates
 - `cuatro-humores.webp` — La teoría de los cuatro humores
-- `observacion-clinica.webp` — La observación clínica
-- `herofilo-erasistrato.webp` — Herófilo y Erasístrato
-- `grecia-aplicalo.webp` — Aplícalo a tu vida
-
-### Galeno y Roma: ordenar el cuerpo — ≈siglo II d. C.
-
-Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
-
-- `galeno.webp` — Galeno
-- `anatomia-organos.webp` — Anatomía y función de los órganos
-- `roma-salud-publica.webp` — Roma y la salud pública
-- `error-1500-anios.webp` — El error que duró 1500 años
-
-### El mundo islámico — ≈siglos VIII-XIII
-
-Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
-
-- `avicena.webp` — Avicena
-- `rhazes.webp` — Rhazes
-- `abulcasis.webp` — Abulcasis
-- `maimonides.webp` — Maimónides
-- `averroes.webp` — Averroes
-- `hospitales.webp` — Los primeros hospitales
-- `metodo-humanismo.webp` — Método clínico y humanismo
-- `islam-aplicalo.webp` — Aplícalo a tu vida
 
 ### Renacimiento: mirar dentro — Siglos XVI-XVII
 
 Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
 
-- `paracelso.webp` — Paracelso
 - `vesalio.webp` — Vesalio
 - `harvey.webp` — William Harvey
 - `hooke-microscopio.webp` — Hooke y el microscopio
@@ -138,126 +118,12 @@ Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
 - `locura-historia.webp` — La locura, de la posesión a la enfermedad
 - `pinel.webp` — Philippe Pinel
 - `freud.webp` — Sigmund Freud
-- `psicofarmacos.webp` — El nacimiento de los psicofármacos
-- `psiquiatria-aplicalo.webp` — Aplícalo a tu vida
 
-### La medicina integrativa — Siglos XX-XXI
+## Historia del arte y la literatura — faltan 1 de 54
 
-Carpeta: `frontend/public/recorrido/cultura/historiamedicina/`
+### Portada de la Historia
 
-- `que-es-integrativa.webp` — ¿Qué es la medicina integrativa?
-- `pilares-integrativa.webp` — Los pilares del cuidado
-- `andrew-weil.webp` — Andrew Weil
-- `avicena-steiner.webp` — Inspiraciones y matices
-- `mensaje-final.webp` — Mensaje final
+Carpeta: `frontend/public/recorrido/cultura/portadas/`
 
-## Historia del arte y la literatura — faltan 53 de 53
-
-### Portadas de las eras (círculos de la línea del tiempo)
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/eras/`
-
-- `prologo.webp` — ¿Qué es el arte? (Antes de empezar el viaje)
-- `arte-nace.webp` — El arte nace (Prehistoria)
-- `primeras-civilizaciones.webp` — Las primeras civilizaciones (≈3000 – 500 a. C.)
-- `grecia-roma.webp` — Grecia y Roma: la belleza y el ideal (Siglos VIII a. C. – V d. C.)
-- `edad-media.webp` — La Edad Media: fe y símbolo (Siglos V – XV)
-- `renacimiento.webp` — El Renacimiento: el ser humano en el centro (Siglos XV – XVI)
-- `barroco.webp` — El Barroco: emoción y movimiento (Siglo XVII)
-- `siglos-xviii-xix.webp` — Romanticismo y Realismo (Siglos XVIII – XIX)
-- `vanguardias.webp` — El arte se rompe: las vanguardias (Primera mitad del siglo XX)
-- `arte-hoy.webp` — El arte hoy y el futuro (Siglos XX – XXI)
-
-### ¿Qué es el arte? — Antes de empezar el viaje
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `que-es-arte.webp` — ¿Qué es el arte?
-- `por-que-creamos.webp` — ¿Por qué creamos?
-- `arte-y-palabra.webp` — El arte y la palabra
-
-### El arte nace — Prehistoria
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `cuevas-rupestres.webp` — Las cuevas pintadas
-- `primeras-esculturas.webp` — Las primeras esculturas
-- `relatos-orales.webp` — Antes de escribir: los relatos
-
-### Las primeras civilizaciones — ≈3000 – 500 a. C.
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `arte-egipcio.webp` — El arte egipcio
-- `escritura-nace.webp` — Nace la escritura
-- `gilgamesh.webp` — La Epopeya de Gilgamesh
-
-### Grecia y Roma: la belleza y el ideal — Siglos VIII a. C. – V d. C.
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `escultura-griega.webp` — La escultura griega
-- `templos-arquitectura.webp` — Templos y armonía
-- `homero.webp` — Homero
-- `teatro-griego.webp` — El teatro griego
-- `arte-romano.webp` — El arte de Roma
-
-### La Edad Media: fe y símbolo — Siglos V – XV
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `romanico-gotico.webp` — Catedrales: románico y gótico
-- `manuscritos-iluminados.webp` — Los libros hechos a mano
-- `dante.webp` — Dante y la Divina Comedia
-- `musica-escrita.webp` — La música aprende a escribirse
-- `arte-islamico.webp` — El arte islámico: la letra y la geometría
-- `arte-asiatico.webp` — China y Japón: el vacío y el trazo
-
-### El Renacimiento: el ser humano en el centro — Siglos XV – XVI
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `perspectiva.webp` — El descubrimiento de la perspectiva
-- `leonardo.webp` — Leonardo da Vinci
-- `miguel-angel.webp` — Miguel Ángel
-- `imprenta-libro.webp` — La imprenta y el libro
-
-### El Barroco: emoción y movimiento — Siglo XVII
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `caravaggio-barroco.webp` — El Barroco y la luz
-- `velazquez.webp` — Velázquez
-- `cervantes.webp` — Cervantes y el Quijote
-- `shakespeare.webp` — Shakespeare
-
-### Romanticismo y Realismo — Siglos XVIII – XIX
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `goya-romanticismo.webp` — Goya y el Romanticismo
-- `novela-xix.webp` — La gran novela del siglo XIX
-- `musica-clasica.webp` — Bach, Mozart, Beethoven
-- `fotografia.webp` — La fotografía cambia el arte para siempre
-- `impresionismo.webp` — El Impresionismo
-
-### El arte se rompe: las vanguardias — Primera mitad del siglo XX
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `picasso-cubismo.webp` — Picasso y el cubismo
-- `surrealismo-dali.webp` — El surrealismo
-- `literatura-moderna.webp` — La literatura se transforma
-- `bauhaus-diseno.webp` — La forma y la función
-
-### El arte hoy y el futuro — Siglos XX – XXI
-
-Carpeta: `frontend/public/recorrido/cultura/historiaarte/`
-
-- `arte-contemporaneo.webp` — El arte contemporáneo
-- `cine-nuevas-artes.webp` — El cine y las nuevas artes
-- `arte-digital.webp` — El arte digital y el futuro
-- `musica-grabada.webp` — El siglo en que la música se pudo guardar
-- `realismo-magico.webp` — Borges, García Márquez y el boom
-- `por-que-crea.webp` — Por qué seguimos creando
+- `historiaarte.webp` — Historia del arte y la literatura — y después añade su `portada` en culturaPortadas.ts
 
