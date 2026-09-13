@@ -19,7 +19,7 @@ import {
 import type { CabalaPageKey } from "../../components/metodo/cabalaSefirot";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
-import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
+import { ilustracionesMuestra, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import {
   CajaLisa,
   CierreCrearCuenta,
@@ -80,8 +80,11 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
 
+  // La MUESTRA, no el catálogo: aquí se decide si comprar el recorrido, así que
+  // se enseñan las series que cuentan de qué va la disciplina. Las que se leen
+  // intercaladas entre pasos se quedan para /ilustraciones/<disciplina>.
   const comics = useMemo(
-    () => ILUSTRACIONES.filter((i) => i.disciplina === d.ilustracionesLabel),
+    () => ilustracionesMuestra(d.ilustracionesLabel),
     [d.ilustracionesLabel],
   );
 

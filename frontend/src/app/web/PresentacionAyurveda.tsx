@@ -14,7 +14,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaVideoBox } from "../../components/metodo/DisciplinaVideoBox";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
-import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
+import { ilustracionesMuestra, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import {
   BLANCO_GLOW_SUAVE,
   CierreCrearCuenta,
@@ -199,8 +199,11 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
 
+  // La MUESTRA, no el catálogo: aquí se decide si comprar el recorrido, así que
+  // se enseñan las series que cuentan de qué va la disciplina. Las que se leen
+  // intercaladas entre pasos se quedan para /ilustraciones/<disciplina>.
   const comics = useMemo(
-    () => ILUSTRACIONES.filter((i) => i.disciplina === d.ilustracionesLabel),
+    () => ilustracionesMuestra(d.ilustracionesLabel),
     [d.ilustracionesLabel],
   );
 

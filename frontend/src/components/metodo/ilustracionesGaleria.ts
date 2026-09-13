@@ -718,3 +718,17 @@ const repartirPorDisciplina = (lista: IlustracionEntry[]): IlustracionEntry[] =>
 export const ILUSTRACIONES_GALERIA: IlustracionEntry[] = repartirPorDisciplina(
   ILUSTRACIONES.filter((e) => !SOLO_EN_SU_DISCIPLINA.has(e.id)),
 );
+
+/**
+ * Las ilustraciones de una disciplina para su PRESENTACIÓN (/d/:disciplina):
+ * la MUESTRA, no el catálogo.
+ *
+ * La página de la presentación es donde se decide si comprar el recorrido, y
+ * ahí no se enseña todo: solo las series que cuentan de qué va la disciplina.
+ * Las que se leen intercaladas entre pasos —y media Nutrición, que se repite—
+ * se quedan para /ilustraciones/<disciplina>, que sí las lleva todas.
+ *
+ * Es la misma lista que deja fuera la galería general: `SOLO_EN_SU_DISCIPLINA`.
+ */
+export const ilustracionesMuestra = (disciplina: string): IlustracionEntry[] =>
+  ILUSTRACIONES.filter((e) => e.disciplina === disciplina && !SOLO_EN_SU_DISCIPLINA.has(e.id));

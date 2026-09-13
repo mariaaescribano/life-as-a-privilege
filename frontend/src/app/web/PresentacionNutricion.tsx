@@ -14,7 +14,7 @@ import { FotoBox } from "../../components/metodo/FotoBox";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
-import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
+import { ilustracionesMuestra, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import { NUTRIENTES, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
 import { mitosTraducidos } from "../../hardCoded/espacio/MitosNutricion.en";
 import { nutrientesTraducidos } from "../../hardCoded/espacio/NutrientesNutricion.en";
@@ -99,8 +99,11 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
 
+  // La MUESTRA, no el catálogo: aquí se decide si comprar el recorrido, así que
+  // se enseñan las series que cuentan de qué va la disciplina. Las que se leen
+  // intercaladas entre pasos se quedan para /ilustraciones/<disciplina>.
   const comics = useMemo(
-    () => ILUSTRACIONES.filter((i) => i.disciplina === d.ilustracionesLabel),
+    () => ilustracionesMuestra(d.ilustracionesLabel),
     [d.ilustracionesLabel],
   );
 

@@ -15,7 +15,7 @@ import { FichaFisioModal } from "../../components/metodo/celulasUi";
 import { SistemaModal } from "../../components/metodo/SistemaModal";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
-import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
+import { ilustracionesMuestra, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import type { Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
 import { useSistemas } from "../../hardCoded/espacio/SistemasFisiologia.en";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
@@ -92,8 +92,11 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
 
+  // La MUESTRA, no el catálogo: aquí se decide si comprar el recorrido, así que
+  // se enseñan las series que cuentan de qué va la disciplina. Las que se leen
+  // intercaladas entre pasos se quedan para /ilustraciones/<disciplina>.
   const comics = useMemo(
-    () => ILUSTRACIONES.filter((i) => i.disciplina === d.ilustracionesLabel),
+    () => ilustracionesMuestra(d.ilustracionesLabel),
     [d.ilustracionesLabel],
   );
 

@@ -11,7 +11,7 @@ import { sombraTexto } from "../../components/global/disciplinaSombras";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
-import { ILUSTRACIONES, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
+import { ilustracionesMuestra, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
 import {
   BLANCO_GLOW_SUAVE,
   CajaDisciplina,
@@ -46,11 +46,13 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
   const cont = useRecorridoContenido()[d.clave];
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
 
-  // Las series de ilustraciones de ESTA disciplina, tal cual están en la galería
-  // (misma portada, mismo popup inmersivo). Cultura todavía no tiene ninguna:
-  // la sección entera se oculta si el filtro sale vacío.
+  // Las series de ilustraciones de ESTA disciplina: la MUESTRA, no el catálogo.
+  // Aquí se decide si comprar el recorrido, así que solo salen las que cuentan
+  // de qué va la disciplina; las intercaladas entre pasos se quedan para
+  // /ilustraciones/<disciplina>. Cultura todavía no tiene ninguna: la sección
+  // entera se oculta si la lista sale vacía.
   const ilustraciones = useMemo(
-    () => ILUSTRACIONES.filter((i) => i.disciplina === d.ilustracionesLabel),
+    () => ilustracionesMuestra(d.ilustracionesLabel),
     [d.ilustracionesLabel],
   );
 

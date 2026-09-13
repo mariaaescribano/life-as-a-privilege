@@ -96,9 +96,9 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
   // se pregunta si la conexión parece de pago. Ver global/VideoLargo.tsx.
   const { abrir: verVideo, modal: videoLargo } = useVideoLargo({ src: d.video, accent: d.txt });
 
-  // Los cómics de Psicología: los dos de la galería + los cuatro que van
-  // intercalados en el recorrido (esos no están en /ilustraciones a propósito,
-  // pero aquí son justamente los que explican el método).
+  // Los cómics de Psicología: los de la galería + los que van intercalados en el
+  // recorrido (esos se releen en /ilustraciones/psicologia, no en la galería
+  // general, pero aquí son justamente los que explican el método).
   const comics = useMemo(() => {
     const galeria = ILUSTRACIONES.filter((i) => i.disciplina === d.ilustracionesLabel);
     const intro = galeria.filter((i) => i.id === "psicologia-intro");
