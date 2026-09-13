@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useBreakpointValue, type FlexProps } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -32,6 +32,10 @@ export default function ProgramaPage() {
   const t = useT();
   const programa = programaPorSlug(slug);
   const [i, setI] = useState(0);
+  // En el móvil manda la diapositiva: la cabecera va con el título resumido
+  // (tituloCorto) y los saltos de programa se quedan en la flecha sola, sin la
+  // palabra. Todo lo que ahorre la cabecera es diapositiva más grande.
+  const esMovil = useBreakpointValue({ base: true, md: false }) ?? false;
   // La proporción REAL de la diapositiva, medida de la primera foto que carga
   // (todas las de una presentación miden igual). 16:9 mientras no se sabe, que
   // es lo que exporta PowerPoint por defecto. Con ella el hueco de la foto se
@@ -87,10 +91,10 @@ export default function ProgramaPage() {
         flex={1}
         direction="column"
         align="center"
-        px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 8, md: 12 }}
-        pb={{ base: 16, md: 24 }}
-        gap={{ base: 8, md: 10 }}
+        px={{ base: 4, md: 10, lg: 16 }}
+        pt={{ base: 5, md: 12 }}
+        pb={{ base: 10, md: 24 }}
+        gap={{ base: 5, md: 10 }}
       >
         {/* ── LA CABECERA DE SIEMPRE ──
             El número abre el título («1. El origen del universo»), a media
@@ -107,7 +111,7 @@ export default function ProgramaPage() {
             title={
               <>
                 <Box as="span" opacity={0.55}>{programa.numero}.</Box>{" "}
-                {programa.titulo}
+                {esMovil ? (programa.tituloCorto ?? programa.titulo) : programa.titulo}
               </>
             }
             multiline
@@ -117,7 +121,9 @@ export default function ProgramaPage() {
             maxW="1000px"
             mb={0}
             prev={{
-              label: `← ${t("programas.anterior")}`,
+              // En el móvil, solo la flecha: «← Anterior» y «Siguiente →» se
+              // comían la fila entera y hacían crecer la cabecera.
+              label: esMovil ? "←" : `← ${t("programas.anterior")}`,
               disabled: !anterior,
               onClick: () => anterior && navigate(`/programas/${anterior.slug}`),
             }}
@@ -126,7 +132,7 @@ export default function ProgramaPage() {
               onClick: () => navigate("/programas"),
             }}
             next={{
-              label: `${t("programas.siguiente")} →`,
+              label: esMovil ? "→" : `${t("programas.siguiente")} →`,
               disabled: !siguiente,
               onClick: () => siguiente && navigate(`/programas/${siguiente.slug}`),
             }}
@@ -149,12 +155,16 @@ export default function ProgramaPage() {
               </Flex>
             ) : (
               <>
-                <Flex align="center" gap={{ base: 2, md: 5 }}>
+                <Flex align="center" gap={{ base: 0, md: 5 }}>
                   {total > 1 && (
                     <Flecha
                       direccion="izq"
                       disabled={i === 0}
                       onClick={() => setI((n) => Math.max(n - 1, 0))}
+                      // En el móvil las flechas van DEBAJO (la fila de más
+                      // abajo): a los lados le robaban ~90px de ancho a la
+                      // diapositiva, que es justo a lo que se viene.
+                      display={{ base: "none", md: "flex" }}
                     />
                   )}
                   <Flex flex={1} minW={0} justify="center">
@@ -175,8 +185,12 @@ export default function ProgramaPage() {
                       // diapositiva. Aquí el tope de alto (76vh) se traduce a
                       // ancho multiplicándolo por la proporción, así la caja
                       // ES la diapositiva.
+                      // MÓVIL: la diapositiva ocupa TODO el ancho, el mismo que
+                      // la cabecera de arriba (ya no hay flechas a los lados
+                      // quitándole sitio). El tope de alto solo entra en juego
+                      // con diapositivas verticales.
                       maxW={{
-                        base: `calc(56vh * ${proporcion})`,
+                        base: `min(100%, calc(78vh * ${proporcion}))`,
                         md: `min(1100px, calc(76vh * ${proporcion}))`,
                       }}
                       sx={{ aspectRatio: String(proporcion) }}
@@ -192,14 +206,43 @@ export default function ProgramaPage() {
                       direccion="der"
                       disabled={i === total - 1}
                       onClick={() => setI((n) => Math.min(n + 1, total - 1))}
+                      display={{ base: "none", md: "flex" }}
                     />
                   )}
                 </Flex>
+
+                {/* MÓVIL: las dos flechas debajo de la diapositiva, con la
+                    cuenta en medio. Así la diapositiva se lleva el ancho entero
+                    y pasar página queda donde está el pulgar. */}
+                {total > 1 && (
+                  <Flex
+                    display={{ base: "flex", md: "none" }}
+                    align="center"
+                    justify="center"
+                    gap={6}
+                    pt={4}
+                  >
+                    <Flecha
+                      direccion="izq"
+                      disabled={i === 0}
+                      onClick={() => setI((n) => Math.max(n - 1, 0))}
+                    />
+                    <Text color="white" fontSize="xs" opacity={0.8} letterSpacing="0.14em" whiteSpace="nowrap">
+                      {t("programas.diapositiva", { n: i + 1, total })}
+                    </Text>
+                    <Flecha
+                      direccion="der"
+                      disabled={i === total - 1}
+                      onClick={() => setI((n) => Math.min(n + 1, total - 1))}
+                    />
+                  </Flex>
+                )}
 
                 {/* Por dónde vas. Una línea fina, sin la fila de puntos: en un
                     programa de veinte diapositivas eran veinte bolitas. */}
                 {total > 1 && (
                   <Text
+                    display={{ base: "none", md: "block" }}
                     color="white"
                     fontSize="xs"
                     opacity={0.8}
@@ -224,26 +267,31 @@ export default function ProgramaPage() {
 /** Flecha de pasar diapositiva. Va sobre el turquesa de la página, así que en
  *  blanco: el color de la disciplina se queda para lo que va dentro de cajas. */
 function Flecha({
-  direccion, disabled, onClick,
+  direccion, disabled, onClick, display,
 }: {
   direccion: "izq" | "der";
   disabled: boolean;
   onClick: () => void;
+  /** En qué anchuras se ve: a los lados en escritorio, debajo en móvil. */
+  display?: FlexProps["display"];
 }) {
   return (
     <Flex
       as="button"
+      display={display}
       onClick={onClick}
       aria-label={direccion === "izq" ? "anterior" : "siguiente"}
       align="center"
       justify="center"
-      w={{ base: "36px", md: "46px" }}
-      h={{ base: "36px", md: "46px" }}
+      // En móvil son el mando principal (van debajo de la diapositiva), así
+      // que se hacen del tamaño de un dedo.
+      w={{ base: "44px", md: "46px" }}
+      h={{ base: "44px", md: "46px" }}
       flexShrink={0}
       borderRadius="full"
       border="1px solid rgba(255,255,255,0.75)"
       color="white"
-      fontSize={{ base: "lg", md: "2xl" }}
+      fontSize={{ base: "2xl", md: "2xl" }}
       lineHeight="1"
       opacity={disabled ? 0.25 : 1}
       cursor={disabled ? "default" : "pointer"}

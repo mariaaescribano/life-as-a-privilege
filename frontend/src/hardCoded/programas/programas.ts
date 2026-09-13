@@ -31,6 +31,12 @@ export type Programa = {
    *  "medicinachina", "Fisiología", "nutricion", "Cábala", "Cultura". */
   disciplina: string;
   titulo: string;
+  /** El título RESUMIDO, para el móvil. Los títulos de aquí son frases largas
+   *  («Cuando la mente se protege del dolor: trauma complejo, disociación y
+   *  EMDR») y en la cabecera de un móvil ocupaban cuatro líneas, dejando la
+   *  diapositiva —que es a lo que se viene— arrinconada abajo. Si no se pone,
+   *  en el móvil se usa el título entero. */
+  tituloCorto?: string;
   /** Una línea de qué se cuenta aquí. Sale al desplegar el programa. */
   descripcion?: string;
   /** Portada de la tarjeta. Si falta, se usa la primera diapositiva. */
@@ -49,6 +55,7 @@ export const programas: Programa[] = [
     numero: 1,
     disciplina: "Astrología",
     titulo: "El origen del universo según las distintas disciplinas",
+    tituloCorto: "El origen del universo",
     diapositivas: [
       "https://lrdenqkwfrrsvhcuqpyy.supabase.co/storage/v1/object/public/img/programas/origen-del-universo/01.webp",
       "https://lrdenqkwfrrsvhcuqpyy.supabase.co/storage/v1/object/public/img/programas/origen-del-universo/02.webp",
@@ -109,6 +116,7 @@ export const programas: Programa[] = [
     numero: 3,
     disciplina: "Astrología",
     titulo: "Astrología y psicología evolutiva: explorando las casas",
+    tituloCorto: "Las casas astrológicas",
     descripcion: "Las doce casas, una por una, leídas desde el desarrollo: qué área de la vida nombra cada una y cómo se fue construyendo.",
     diapositivas: [
       "https://lrdenqkwfrrsvhcuqpyy.supabase.co/storage/v1/object/public/img/programas/astrologia-y-psicologia-evolutiva-las-casas/01.webp",
@@ -159,6 +167,7 @@ export const programas: Programa[] = [
     numero: 4,
     disciplina: "Astrología",
     titulo: "Signos y planetas: qué haces, cómo lo haces y por qué",
+    tituloCorto: "Signos y planetas",
     descripcion: "Cada planeta con su signo al lado: el Sol y Leo, la Luna y Cáncer, Mercurio y Géminis… los diez planetas y los doce signos, emparejados.",
     diapositivas: [
       "https://lrdenqkwfrrsvhcuqpyy.supabase.co/storage/v1/object/public/img/programas/signos-y-planetas/01.webp",
@@ -192,6 +201,7 @@ export const programas: Programa[] = [
     numero: 5,
     disciplina: "Astrología",
     titulo: "Aspectos planetarios: ¿cómo se llevan las distintas partes de ti?",
+    tituloCorto: "Aspectos planetarios",
     diapositivas: [],
   },
   {
@@ -199,6 +209,7 @@ export const programas: Programa[] = [
     numero: 6,
     disciplina: "Astrología",
     titulo: "Carta astral y psicología: ¿qué puede aportar realmente?",
+    tituloCorto: "Carta astral y psicología",
     diapositivas: [],
   },
 
@@ -208,6 +219,7 @@ export const programas: Programa[] = [
     numero: 1,
     disciplina: "Psicología",
     titulo: "Las heridas que nacen en la infancia: trauma, infancia y apego",
+    tituloCorto: "Las heridas de la infancia",
     diapositivas: [],
   },
   {
@@ -215,6 +227,7 @@ export const programas: Programa[] = [
     numero: 2,
     disciplina: "Psicología",
     titulo: "Cuando la mente se protege del dolor: trauma complejo, disociación y EMDR",
+    tituloCorto: "Trauma, disociación y EMDR",
     diapositivas: [],
   },
   {
@@ -222,6 +235,7 @@ export const programas: Programa[] = [
     numero: 3,
     disciplina: "Psicología",
     titulo: "La historia que contamos sobre nosotros mismos: alexitimia y autonarración",
+    tituloCorto: "Alexitimia y autonarración",
     diapositivas: [],
   },
   {
@@ -229,6 +243,7 @@ export const programas: Programa[] = [
     numero: 4,
     disciplina: "Psicología",
     titulo: "Cuando el cuerpo aprende a vivir en alerta: ansiedad y ACE",
+    tituloCorto: "Ansiedad y ACE",
     diapositivas: [],
   },
   {
@@ -236,6 +251,7 @@ export const programas: Programa[] = [
     numero: 5,
     disciplina: "Psicología",
     titulo: "Lo que heredamos sin saberlo: el transgeneracional",
+    tituloCorto: "El transgeneracional",
     diapositivas: [],
   },
 
@@ -245,6 +261,7 @@ export const programas: Programa[] = [
     numero: 1,
     disciplina: "ayurveda",
     titulo: "El hinduismo y su visión del ser humano",
+    tituloCorto: "El hinduismo",
     diapositivas: [],
   },
   {
@@ -252,6 +269,7 @@ export const programas: Programa[] = [
     numero: 2,
     disciplina: "ayurveda",
     titulo: "Las constituciones ayurvédicas: Vata, Pitta, Kapha",
+    tituloCorto: "Vata, Pitta y Kapha",
     diapositivas: [],
   },
   {
@@ -259,6 +277,7 @@ export const programas: Programa[] = [
     numero: 3,
     disciplina: "ayurveda",
     titulo: "Nutrición y bienestar ayurvédico validado por la ciencia",
+    tituloCorto: "Nutrición ayurvédica",
     diapositivas: [],
   },
   {
@@ -266,6 +285,7 @@ export const programas: Programa[] = [
     numero: 4,
     disciplina: "ayurveda",
     titulo: "Pranayama, chakras y su explicación neurocientífica: los beneficios de la respiración, teóricos y prácticos",
+    tituloCorto: "Pranayama y chakras",
     diapositivas: [],
   },
 
@@ -275,6 +295,7 @@ export const programas: Programa[] = [
     numero: 1,
     disciplina: "medicinachina",
     titulo: "El taoísmo y la medicina tradicional china",
+    tituloCorto: "Taoísmo y medicina china",
     diapositivas: [],
   },
   {
@@ -282,6 +303,7 @@ export const programas: Programa[] = [
     numero: 2,
     disciplina: "medicinachina",
     titulo: "Los cinco elementos, sus significados y sus constituciones",
+    tituloCorto: "Los cinco elementos",
     diapositivas: [],
   },
   {
@@ -305,6 +327,7 @@ export const programas: Programa[] = [
     numero: 1,
     disciplina: "Fisiología",
     titulo: "Partículas, estrellas y de lo que estamos hechos: introducción a lo más pequeño e imprescindible de nosotros",
+    tituloCorto: "Partículas y estrellas",
     diapositivas: [],
   },
   {
@@ -312,6 +335,7 @@ export const programas: Programa[] = [
     numero: 2,
     disciplina: "Fisiología",
     titulo: "Las células y sus magníficos tipos",
+    tituloCorto: "Las células y sus tipos",
     diapositivas: [],
   },
   {
@@ -354,6 +378,7 @@ export const programas: Programa[] = [
     numero: 8,
     disciplina: "Fisiología",
     titulo: "Metabolismo, epigenética y envejecimiento: la Muerte no existe",
+    tituloCorto: "Metabolismo y envejecimiento",
     diapositivas: [],
   },
   {
@@ -370,6 +395,7 @@ export const programas: Programa[] = [
     numero: 1,
     disciplina: "nutricion",
     titulo: "Introducción: las calorías no existen y los macronutrientes (incluye fibra y edulcorantes)",
+    tituloCorto: "Las calorías no existen",
     diapositivas: [],
   },
   {
@@ -377,6 +403,7 @@ export const programas: Programa[] = [
     numero: 2,
     disciplina: "nutricion",
     titulo: "Colesterol, vitaminas y minerales (incluye fitoquímicos)",
+    tituloCorto: "Vitaminas y minerales",
     diapositivas: [],
   },
   {
@@ -384,6 +411,7 @@ export const programas: Programa[] = [
     numero: 3,
     disciplina: "nutricion",
     titulo: "Las drogas y su efecto en nosotros: el azúcar, el alcohol, los fármacos, el tabaco y la marihuana",
+    tituloCorto: "Las drogas y su efecto",
     diapositivas: [],
   },
   {
@@ -398,6 +426,7 @@ export const programas: Programa[] = [
     numero: 5,
     disciplina: "nutricion",
     titulo: "Plato de Harvard: comida procesada vs real",
+    tituloCorto: "Plato de Harvard",
     diapositivas: [],
   },
   {
@@ -405,6 +434,7 @@ export const programas: Programa[] = [
     numero: 6,
     disciplina: "nutricion",
     titulo: "Ciclo de la naturaleza que nos da los alimentos",
+    tituloCorto: "El ciclo de la naturaleza",
     diapositivas: [],
   },
 
@@ -414,6 +444,7 @@ export const programas: Programa[] = [
     numero: 1,
     disciplina: "Cábala",
     titulo: "Historia, fundamentos e importancia (incluye Or y Kli, Tzimtzum, historia de la Cábala, los cuatro universos, el mal en la Cábala)",
+    tituloCorto: "Historia y fundamentos",
     diapositivas: [],
   },
   {
@@ -421,6 +452,7 @@ export const programas: Programa[] = [
     numero: 2,
     disciplina: "Cábala",
     titulo: "Árbol de la Vida: las diez sefirot",
+    tituloCorto: "Las diez sefirot",
     diapositivas: [],
   },
   {
@@ -475,6 +507,7 @@ export const programas: Programa[] = [
     numero: 6,
     disciplina: "Cultura",
     titulo: "Historia del arte y la literatura",
+    tituloCorto: "Arte y literatura",
     diapositivas: [],
   },
 ];

@@ -11,7 +11,7 @@ export const contacto = {
   "contacto.via.conocernos": "Conozcámonos",
   "contacto.via.conocernosTexto": "Veinte minutos, sin coste, para conocernos.",
   "contacto.via.email": "Escríbeme",
-  "contacto.via.emailTexto": "Cuéntame lo que quieras y te respondo por correo.",
+  "contacto.via.emailTexto": "Cuéntame lo que quieras y te respondo por correo lo antes posible.",
   "contacto.via.whatsapp": "WhatsApp",
   "contacto.via.whatsappTexto": "Si prefieres escribirme por aquí, también estoy.",
   "contacto.via.whatsappMensaje": "Hola María, te escribo desde la web porque…",
