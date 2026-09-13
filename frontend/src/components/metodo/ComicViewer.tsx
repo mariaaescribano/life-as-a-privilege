@@ -216,6 +216,92 @@ const DEFAULT_TEXT_SHADOW =
 const SALTO_DE_FRASE =
   /(?<=\.)(?<!(?<![ad]\.\s)\b[\p{L}\d]\.)(?<!\bej\.)(?<!\betc\.)(?<!\baprox\.)(?<!\bDr\.)(?<!\bDra\.)(?<!\bSr\.)(?<!\bSra\.)(?<!\bvs\.)\s+/u;
 
+// ── Barra de scroll del texto, pintada a mano ────────────────────────────────
+// La barra del NAVEGADOR no sirve para esto: en el móvil (Safari y Chrome de
+// Android) es «overlay» —aparece solo mientras el dedo arrastra y se desvanece
+// enseguida—, así que la viñeta parecía acabar donde acababa la pantalla y no
+// había ninguna pista de que el texto seguía más abajo.
+//
+// Esta se dibuja nosotros: una barrita del color de la letra, pegada al borde
+// derecho de la columna de texto, SIEMPRE visible mientras quede algo por bajar.
+// Se acorta o se alarga según lo que falte por leer y se mueve con el scroll,
+// igual que la de verdad; al llegar al final se apaga a medias (ya no queda
+// nada que decirle al usuario). El carril va transparente, como el resto de
+// barras de la app: lo que se ve es el pulgar, con la foto detrás.
+function BarraScrollTexto({
+  contenedorRef,
+  color,
+  vineta,
+}: {
+  contenedorRef: React.RefObject<HTMLDivElement | null>;
+  color: string;
+  /** Índice de la viñeta: al cambiar, el texto es otro y hay que volver a medir. */
+  vineta: number;
+}) {
+  // alto y top van en % del alto de la caja; `hay` = hay algo que bajar.
+  const [barra, setBarra] = useState({ hay: false, alto: 0, top: 0, alFinal: false });
+
+  useEffect(() => {
+    const el = contenedorRef.current;
+    if (!el) return;
+    const medir = () => {
+      const sobra = el.scrollHeight - el.clientHeight;
+      // Margen de 6px: un par de píxeles de más no es «se puede bajar».
+      if (sobra <= 6) {
+        setBarra((b) => (b.hay ? { ...b, hay: false } : b));
+        return;
+      }
+      // El pulgar mide lo que se ve respecto al total, con un mínimo del 14%
+      // para que en los textos largos no quede un puntito imposible de ver.
+      const alto = Math.max((el.clientHeight / el.scrollHeight) * 100, 14);
+      const top = (el.scrollTop / sobra) * (100 - alto);
+      setBarra({ hay: true, alto, top, alFinal: sobra - el.scrollTop < 8 });
+    };
+    medir();
+    el.addEventListener("scroll", medir, { passive: true });
+    window.addEventListener("resize", medir);
+    // El alto del texto cambia después de pintar (fuentes, imágenes, el giro del
+    // móvil): se vigila la caja y sus bloques, y se vuelve a medir al ratito.
+    const ro = new ResizeObserver(medir);
+    ro.observe(el);
+    Array.from(el.children).forEach((hijo) => ro.observe(hijo));
+    const espera = setTimeout(medir, 400);
+    return () => {
+      el.removeEventListener("scroll", medir);
+      window.removeEventListener("resize", medir);
+      ro.disconnect();
+      clearTimeout(espera);
+    };
+  }, [contenedorRef, vineta]);
+
+  return (
+    <Box
+      position="absolute"
+      right={{ base: "4px", md: "7px" }}
+      top={{ base: "8px", md: "20px" }}
+      bottom={{ base: "8px", md: "20px" }}
+      w="6px"
+      zIndex={4}
+      pointerEvents="none"
+      opacity={barra.hay ? 1 : 0}
+      transition="opacity 0.25s ease"
+    >
+      <Box
+        position="absolute"
+        left={0}
+        w="100%"
+        top={`${barra.top}%`}
+        h={`${barra.alto}%`}
+        borderRadius="full"
+        bg={color}
+        opacity={barra.alFinal ? 0.45 : 0.95}
+        boxShadow="0 0 6px rgba(0,0,0,0.5)"
+        transition="opacity 0.25s ease"
+      />
+    </Box>
+  );
+}
+
 export function ComicViewer({
   vinetas,
   onClose,
@@ -282,6 +368,12 @@ export function ComicViewer({
   // el texto de las viñetas y en el resto de disciplinas sí.
   const textoSx = {
     ...scrollSx,
+    // La barra del navegador se apaga en la columna de texto: ahí manda
+    // <BarraScrollTexto>, que se ve igual en escritorio y en móvil (la del
+    // navegador, en táctil, solo aparece mientras se arrastra). Dos barras
+    // pegadas al mismo borde se pisarían.
+    "&::-webkit-scrollbar": { width: 0, height: 0, background: "transparent" },
+    scrollbarWidth: "none" as const,
     userSelect: "text" as const,
     WebkitUserSelect: "text",
   };
@@ -1013,11 +1105,22 @@ export function ComicViewer({
 
             {imgReady && (
             <Box
-              ref={textScrollRef}
+              // Envoltorio de la columna de texto: coge el hueco que le da la
+              // fila y sirve de ancla a la barra de scroll pintada a mano (va al
+              // final de este bloque). El que scrollea es el hijo, no este.
+              position="relative"
               flex="1"
               minW={0}
               w={{ base: "100%", md: "auto" }}
               alignSelf={{ base: "auto", md: "stretch" }}
+              maxH="100%"
+              minH={0}
+              display="flex"
+            >
+            <Box
+              ref={textScrollRef}
+              flex="1"
+              minW={0}
               // Contenedor con su propio scroll vertical (en móvil también: así
               // la foto se queda quieta arriba, cubriendo la caja de lado a
               // lado, y lo que corre por debajo es el texto). El texto arranca
@@ -1113,6 +1216,10 @@ export function ComicViewer({
                 const extra = pageExtra(index, { goNext, isLast });
                 return extra ? <Box mt={{ base: 6, md: 7 }}>{extra}</Box> : null;
               })()}
+            </Box>
+            {/* La barra: fuera de la caja que scrollea (si fuera dentro, subiría
+                y bajaría con el texto) y pegada a su borde derecho. */}
+            <BarraScrollTexto contenedorRef={textScrollRef} color={sbColor} vineta={index} />
             </Box>
             )}
           </Flex>

@@ -43,6 +43,29 @@ import { ORIGEN_NUTRIENTES } from "./comicsOrigenNutrientes";
 import { CABALA_INTRO } from "./comicCabalaIntro";
 import { CABALA_ILUSTRACIONES_VINETAS } from "./cabalaIlustraciones";
 import { CABALA_SENDERO_VINETAS } from "./cabalaSenderoIlustraciones";
+// Series que viven INTERCALADAS en su paso del recorrido. Hasta ahora no
+// estaban en esta lista y por eso no salían en /ilustraciones/<disciplina>:
+// se podían ver una vez, al pasar por su paso, y nunca más.
+import { RECONSTRUCCION } from "./comicReconstruccion";
+import { MEDITACION_CEREBRO } from "./comicMeditacion";
+import { COMIC_FAMILIA } from "./comicFamilia";
+import { COMIC_HERENCIA } from "./comicHerencia";
+import { COMIC_MIEDO } from "./comicMiedo";
+import { COMIC_NARRAR } from "./comicNarrar";
+import { COMIC_CHAKRAS } from "./comicChakras";
+import { COMIC_PRANAYAMA } from "./comicPranayama";
+import { COMIC_VATA, COMIC_PITTA, COMIC_KAPHA } from "./comicDoshas";
+import { CABALA_HISTORIA } from "./comicCabalaHistoria";
+import { NUTRICION_DIABETES } from "./comicNutricionDiabetes";
+import { NUTRICION_HAMBRE } from "./comicNutricionHambre";
+import { VINETAS_ENFERMEDADES } from "./comicEnfermedades";
+import { LEYES_TAO_VINETAS } from "./tcmTaoismoContenido";
+import {
+  HISTORIA_QIGONG_VINETAS,
+  DAO_YIN_VINETAS,
+  BROCADOS_VINETAS,
+  CINCO_ANIMALES_VINETAS,
+} from "./tcmQigongContenido";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Galería de ILUSTRACIONES (página /ilustraciones). Reúne todas las series de
@@ -211,6 +234,28 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplinaBgImage: "/img/fondos/fisio.webp",
     disciplinaBgColor: fisiologiaBg,
   },
+  // Las dos que se leen dentro del recorrido (una al terminar de construir el
+  // organismo, la otra antes de «La sonrisa interior»).
+  {
+    id: "fisio-reconstruccion",
+    titulo: "Te reconstruyes cada día",
+    disciplina: "Fisiología",
+    cover: "/viñetas/fisiologia/reconstruccion/1.webp",
+    vinetas: RECONSTRUCCION,
+    themeColor: fisiologiaTxt,
+    disciplinaBgImage: "/img/fondos/fisio.webp",
+    disciplinaBgColor: fisiologiaBg,
+  },
+  {
+    id: "fisio-meditacion",
+    titulo: "La meditación y el cerebro",
+    disciplina: "Fisiología",
+    cover: "/viñetas/fisiologia/meditacion/1.webp",
+    vinetas: MEDITACION_CEREBRO,
+    themeColor: fisiologiaTxt,
+    disciplinaBgImage: "/img/fondos/fisio.webp",
+    disciplinaBgColor: fisiologiaBg,
+  },
   // OJO: «Los grandes ciclos de la naturaleza» era de Fisiología y ahora vive en
   // Nutrición (paso «¿De dónde vienen los nutrientes?»), así que su entrada está
   // más abajo, con el resto de las de Nutrición.
@@ -279,6 +324,65 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplinaBgColor: ayurvedaBg,
     textShadow: hinduTextShadow,
   },
+  // Los tres doṣhas, cada uno en su cómic (se leen dentro del paso 1 del
+  // recorrido, al terminar la introducción), y las dos lecturas que son
+  // IGUALES para Vata, Pitta y Kapha: por eso van en el color de Ayurveda y no
+  // en el de un doṣha.
+  {
+    id: "hindu-vata",
+    titulo: "Vata",
+    disciplina: "Ayurveda",
+    cover: "/viñetas/hinduismo/vata/vata1.webp",
+    vinetas: COMIC_VATA,
+    themeColor: ayurvedaTxt,
+    disciplinaBgImage: "/img/fondos/hinduismo.webp",
+    disciplinaBgColor: ayurvedaBg,
+    textShadow: hinduTextShadow,
+  },
+  {
+    id: "hindu-pitta",
+    titulo: "Pitta",
+    disciplina: "Ayurveda",
+    cover: "/viñetas/hinduismo/pitta/pitta1.webp",
+    vinetas: COMIC_PITTA,
+    themeColor: ayurvedaTxt,
+    disciplinaBgImage: "/img/fondos/hinduismo.webp",
+    disciplinaBgColor: ayurvedaBg,
+    textShadow: hinduTextShadow,
+  },
+  {
+    id: "hindu-kapha",
+    titulo: "Kapha",
+    disciplina: "Ayurveda",
+    cover: "/viñetas/hinduismo/kapha/kapha1.webp",
+    vinetas: COMIC_KAPHA,
+    themeColor: ayurvedaTxt,
+    disciplinaBgImage: "/img/fondos/hinduismo.webp",
+    disciplinaBgColor: ayurvedaBg,
+    textShadow: hinduTextShadow,
+  },
+  {
+    id: "hindu-chakras",
+    titulo: "Los chakras",
+    disciplina: "Ayurveda",
+    cover: "/viñetas/hinduismo/chakras/comic/1.webp",
+    vinetas: COMIC_CHAKRAS,
+    themeColor: ayurvedaTxt,
+    disciplinaBgImage: "/img/fondos/hinduismo.webp",
+    disciplinaBgColor: ayurvedaBg,
+    textShadow: hinduTextShadow,
+  },
+  {
+    id: "hindu-pranayama",
+    titulo: "Prāṇāyāma",
+    disciplina: "Ayurveda",
+    cover: "/viñetas/hinduismo/pranayama/pranayama1.webp",
+    vinetas: COMIC_PRANAYAMA,
+    themeColor: ayurvedaTxt,
+    disciplinaBgImage: "/img/fondos/hinduismo.webp",
+    disciplinaBgColor: ayurvedaBg,
+    textShadow: hinduTextShadow,
+  },
 
   // ── Psicología ──
   {
@@ -304,6 +408,15 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplinaBgColor: neuropsicologiaBg,
     textShadow: psicoTextShadow,
   },
+  // Las cuatro que se intercalan entre pasos del recorrido.
+  psicoEntry("psico-familia", "La familia", "/viñetas/psicologia/familia/familia1.webp", COMIC_FAMILIA),
+  psicoEntry("psico-herencia", "Lo que se hereda", "/viñetas/psicologia/herencia/herencia1.webp", COMIC_HERENCIA),
+  psicoEntry("psico-miedo", "El miedo", "/viñetas/psicologia/miedo/miedo1.webp", COMIC_MIEDO),
+  psicoEntry("psico-narrar", "Narrar", "/viñetas/psicologia/narrar/narrar1.webp", COMIC_NARRAR),
+  // Y las cinco que ya estaban escritas arriba para la presentación
+  // (/d/psicologia): son las que explican en qué consiste el método, y quien
+  // entra por «Ilustraciones» de Psicología también tiene que poder releerlas.
+  ...PSICOLOGIA_COMICS_RECORRIDO,
 
   // ── Nutrición ── (acento claro nutricionBg + letra oscura nutricionTxt, sin sombra)
   {
@@ -342,12 +455,26 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
   // `comicKey` el inglés le pondría el texto del otro cómic encima.
   nutriEntry("nutricion-hambre", "El hambre: una mirada holística", "/recorrido/nutricion/hambre/hambre1.webp", sinNegrita(HAMBRE_HOLISTICA), "nutricion-hambre-holistica"),
   nutriEntry("nutricion-integral", "Lo integral", "/viñetas/nutricion/integral/integral1.webp", NUTRICION_INTEGRAL),
+  // Las dos de transición: se leen al pasar de un paso al siguiente.
+  nutriEntry("nutricion-diabetes", "La diabetes", "/viñetas/nutricion/diabetes/diabetes1.webp", NUTRICION_DIABETES),
+  nutriEntry("nutricion-hambre-cuerpo", "El hambre en tu cuerpo", "/viñetas/nutricion/hambre/hambre1.webp", NUTRICION_HAMBRE),
+
   // ── Las cinco lecturas de «¿De dónde vienen los nutrientes?» ──
   // (los ciclos de la naturaleza, el suelo, la planta, la hoja y el fruto)
   ...ORIGEN_NUTRIENTES.map((l) =>
     nutriEntry(`nutricion-origen-${l.key}`, l.titulo, l.cover, l.vinetas)),
 
-  // ── Cábala ── (el Origen ya va arriba; aquí las dos series del Árbol)
+  // ── Cábala ── (el Origen ya va arriba; aquí la historia y las dos del Árbol)
+  {
+    id: "cabala-historia",
+    titulo: "La historia de la Cábala",
+    disciplina: "Cábala",
+    cover: "/viñetas/cabala/historia/cabalahistoria1.webp",
+    vinetas: CABALA_HISTORIA,
+    themeColor: cabalaTxt,
+    disciplinaBgImage: "/img/fondos/cabala.webp",
+    disciplinaBgColor: cabalaBg,
+  },
   {
     id: "cabala-sefirot",
     titulo: "Las diez dimensiones del alma",
@@ -401,6 +528,72 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplinaBgImage: "/img/fondos/tcm.webp",
     disciplinaBgColor: tcmBg,
   },
+  // Las seis que se leen DENTRO de sus páginas del recorrido: las leyes del
+  // Tao, las enfermedades, y las cuatro del Qigong. Las tres últimas se
+  // generan de sus propias listas (una viñeta por ley, por postura, por
+  // animal), así que aquí no hay texto que se pueda desincronizar.
+  {
+    id: "tcm-leyes-tao",
+    titulo: "Las leyes del Tao",
+    disciplina: "Medicina China",
+    cover: "/recorrido/tcm/taoismo/tao.webp",
+    vinetas: LEYES_TAO_VINETAS,
+    themeColor: tcmTxt,
+    disciplinaBgImage: "/img/fondos/tcm.webp",
+    disciplinaBgColor: tcmBg,
+  },
+  {
+    id: "tcm-enfermedades",
+    titulo: "Las enfermedades",
+    disciplina: "Medicina China",
+    cover: "/viñetas/tcm/enfermedades/enfermedades1.webp",
+    vinetas: VINETAS_ENFERMEDADES,
+    themeColor: tcmTxt,
+    disciplinaBgImage: "/img/fondos/tcm.webp",
+    disciplinaBgColor: tcmBg,
+  },
+  // La portada es Mawangdui y no el primer hito: los dos primeros («el cuerpo»
+  // y «la respiración») todavía no tienen foto.
+  {
+    id: "tcm-qigong-historia",
+    titulo: "De dónde viene el Qigong",
+    disciplina: "Medicina China",
+    cover: "/recorrido/tcm/qigong/historia/mawangdui.webp",
+    vinetas: HISTORIA_QIGONG_VINETAS,
+    themeColor: tcmTxt,
+    disciplinaBgImage: "/img/fondos/tcm.webp",
+    disciplinaBgColor: tcmBg,
+  },
+  {
+    id: "tcm-daoyin",
+    titulo: "Dao Yin",
+    disciplina: "Medicina China",
+    cover: "/recorrido/tcm/qigong/daoyin/nombre.webp",
+    vinetas: DAO_YIN_VINETAS,
+    themeColor: tcmTxt,
+    disciplinaBgImage: "/img/fondos/tcm.webp",
+    disciplinaBgColor: tcmBg,
+  },
+  {
+    id: "tcm-brocados",
+    titulo: "Los ocho brocados",
+    disciplina: "Medicina China",
+    cover: "/recorrido/tcm/qigong/brocado-1-sostener-cielo.webp",
+    vinetas: BROCADOS_VINETAS,
+    themeColor: tcmTxt,
+    disciplinaBgImage: "/img/fondos/tcm.webp",
+    disciplinaBgColor: tcmBg,
+  },
+  {
+    id: "tcm-cinco-animales",
+    titulo: "Los cinco animales",
+    disciplina: "Medicina China",
+    cover: "/recorrido/tcm/cincoanimales/tigre.webp",
+    vinetas: CINCO_ANIMALES_VINETAS,
+    themeColor: tcmTxt,
+    disciplinaBgImage: "/img/fondos/tcm.webp",
+    disciplinaBgColor: tcmBg,
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -418,12 +611,23 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
 // ─────────────────────────────────────────────────────────────────────────
 
 /** Ilustraciones que solo se ven en SU disciplina, no en la galería general.
- *  Nutrición tiene quince series —los cuatro nutrientes y las seis lecturas de
- *  «¿De dónde vienen los nutrientes?» se parecen mucho entre sí—, así que en la
- *  general va la mitad: una de cada familia, como muestra. Las demás siguen
- *  enteras en /ilustraciones/nutricion y en su recorrido. */
+ *
+ *  Dos motivos distintos, y conviene no mezclarlos:
+ *
+ *  1. SERIES PARECIDAS ENTRE SÍ. Nutrición tiene quince: los cuatro nutrientes
+ *     y las seis lecturas de «¿De dónde vienen los nutrientes?» se repiten
+ *     mucho, así que en la general va una de cada familia, como muestra.
+ *
+ *  2. SERIES DE PASO. Las que se leen intercaladas entre dos pasos del
+ *     recorrido. Están en `ILUSTRACIONES` para que se puedan RELEER en
+ *     /ilustraciones/<disciplina> —antes se veían una vez y nunca más—, pero
+ *     la galería general es una portada, no un índice: si entraran todas,
+ *     pasaría de treinta y pico tarjetas a más de cincuenta y las que enseñan
+ *     de qué va cada disciplina se perderían entre ellas.
+ *
+ *  Todas siguen enteras en la página de su disciplina y en su recorrido. */
 const SOLO_EN_SU_DISCIPLINA = new Set<string>([
-  // De los cuatro nutrientes se queda «Carbohidratos».
+  // ── (1) De los cuatro nutrientes se queda «Carbohidratos».
   "nutricion-vitaminas",
   "nutricion-minerales",
   "nutricion-agua",
@@ -433,6 +637,33 @@ const SOLO_EN_SU_DISCIPLINA = new Set<string>([
   "nutricion-origen-hoja",
   "nutricion-origen-fruta",
   "nutricion-origen-animal",
+
+  // ── (2) Las series de paso, por disciplina.
+  "fisio-reconstruccion",
+  "fisio-meditacion",
+  "hindu-vata",
+  "hindu-pitta",
+  "hindu-kapha",
+  "hindu-chakras",
+  "hindu-pranayama",
+  "psico-familia",
+  "psico-herencia",
+  "psico-miedo",
+  "psico-narrar",
+  "psico-creencias",
+  "psico-ace",
+  "psico-disociacion",
+  "psico-linea",
+  "psico-sintesis",
+  "nutricion-diabetes",
+  "nutricion-hambre-cuerpo",
+  "cabala-historia",
+  "tcm-leyes-tao",
+  "tcm-enfermedades",
+  "tcm-qigong-historia",
+  "tcm-daoyin",
+  "tcm-brocados",
+  "tcm-cinco-animales",
 ]);
 
 /**

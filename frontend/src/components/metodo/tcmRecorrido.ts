@@ -1120,6 +1120,12 @@ export interface DatosTcm {
    *  aquí NO se guarda un resultado, para poder afinar el cálculo sin dejar
    *  colgados los tests ya hechos. */
   constitucion?: { respuestas?: Record<string, string> };
+  /** El test del PAR DE CONTROL (paso 4, Los ciclos): las seis frases de
+   *  oscilación del par que los cuestionarios proponen, con su key apuntando a
+   *  "0".."4". El par y su sentido NO se guardan: se recalculan de los
+   *  cuestionarios en `tcmCicloKe.ts`, para poder afinar el cálculo sin dejar
+   *  colgado un resultado viejo (igual que en Tu Constitución). */
+  parKe?: { respuestas?: Record<string, string> };
   /** «Un gesto para hoy» de Tu cocina diaria, por elemento: cuál se está
    *  mostrando (`i`) y el día en que se marcó como hecho (`hecho`, aaaa-mm-dd).
    *  Guardar el DÍA y no un booleano es lo que hace que el tick se apague solo

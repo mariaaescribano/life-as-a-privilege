@@ -34,3 +34,36 @@ export const ADMIN_DISCIPLINAS: AdminDisciplina[] = [
 
 export const disciplinaByKey = (key: string): AdminDisciplina | undefined =>
   ADMIN_DISCIPLINAS.find((d) => d.key === key);
+
+/**
+ * Las ocho disciplinas con su SCOPE de pago, en el orden del recorrido.
+ *
+ * El scope es el nombre de la columna en la tabla `user` (`<scope>_suscrito`,
+ * `<scope>_fecha_compra`), y NO siempre coincide con el slug del panel: la
+ * primera, Astrología, se guarda como `metodo` porque fue la del Mapa. Esa es
+ * la única excepción, y es justo la que se olvida, así que vive escrita en un
+ * solo sitio: lo usan /admin/accesos y /admin/usuarios.
+ */
+export interface DisciplinaPago {
+  /** Columna de la cuenta: `<scope>_suscrito`. */
+  scope: string;
+  /** Slug del panel: /admin/<adminKey>. */
+  adminKey: string;
+  nombre: string;
+  txt: string;
+  bg: string;
+}
+
+export const DISCIPLINAS_PAGO: DisciplinaPago[] = [
+  { scope: "metodo", adminKey: "astrologia" },
+  { scope: "psicologia", adminKey: "psicologia" },
+  { scope: "ayurveda", adminKey: "ayurveda" },
+  { scope: "tcm", adminKey: "tcm" },
+  { scope: "fisiologia", adminKey: "fisiologia" },
+  { scope: "nutricion", adminKey: "nutricion" },
+  { scope: "cabala", adminKey: "cabala" },
+  { scope: "cultura", adminKey: "cultura" },
+].map((d) => {
+  const disc = disciplinaByKey(d.adminKey) ?? ADMIN_DISCIPLINAS[0];
+  return { ...d, nombre: disc.nombre, txt: disc.txt, bg: disc.bg };
+});

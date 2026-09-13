@@ -114,6 +114,26 @@ a,
 [role="button"] {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+  /* Y tampoco se SELECCIONAN. Al pulsar un botón (o al dejar el dedo medio
+     segundo de más), el móvil seleccionaba su texto y lo pintaba con la franja
+     azul del sistema: el botón quedaba con un parche azul encima, como si
+     fuera texto de un documento. Un botón no es texto que copiar, así que no
+     se selecciona. OJO: solo los botones y enlaces — el texto de los cómics y
+     de las fichas se sigue pudiendo seleccionar y copiar. */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Y donde SÍ se puede seleccionar (el texto de lectura), que la franja no sea
+   el azul del sistema, que no pinta nada sobre el turquesa y los boxes de cada
+   disciplina: un velo blanco translúcido, y la letra se queda de su color. */
+::selection {
+  background: rgba(255, 255, 255, 0.3);
+  color: inherit;
+}
+::-moz-selection {
+  background: rgba(255, 255, 255, 0.3);
+  color: inherit;
 }
 
 @keyframes spin {

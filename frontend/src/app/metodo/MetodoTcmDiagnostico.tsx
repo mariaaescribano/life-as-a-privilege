@@ -30,6 +30,7 @@ import {
   type Ciclo, type Relacion,
 } from "../../components/metodo/tcmCiclosVisual";
 import { TcmEstrellaDetalle } from "../../components/metodo/TcmEstrellaDetalle";
+import { ResultadoParKe } from "../../components/metodo/ResultadoParKe";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useT, type ClaveTexto } from "../../i18n";
 
@@ -198,6 +199,16 @@ export default function MetodoTcmDiagnostico() {
           <Panel titulo="" color={tcmTxt}>
             <MetricasBalance estados={estados} />
             <TiposAdaptacion tipos={tipos} estados={estados} />
+          </Panel>
+          </Reveal>
+
+          {/* ── BOX PAR DE CONTROL · qué relación Ke va descompensada ──
+              Va DESPUÉS de las métricas porque se apoya en ellas (el par sale de
+              la carga neta de sus dos elementos) y antes de la constitución, que
+              ya es otra pregunta: esto es lo de hoy, aquella es el fondo. */}
+          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
+          <Panel titulo="" color={tcmTxt}>
+            <ResultadoParKe data={data} color={tcmTxt} />
           </Panel>
           </Reveal>
 

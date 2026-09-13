@@ -53,6 +53,7 @@ const MetodoAstrologiaCursos = lazy(() => import("./app/metodo/MetodoAstrologiaC
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
 const AdminLogin = lazy(() => import("./app/admin/AdminLogin"));
 const AdminUsuarios = lazy(() => import("./app/admin/AdminUsuarios"));
+const AdminTodosUsuarios = lazy(() => import("./app/admin/AdminTodosUsuarios"));
 const AdminAstrologiaEditor = lazy(() => import("./app/admin/AdminAstrologiaEditor"));
 const AdminPsicologiaLectura = lazy(() => import("./app/admin/AdminPsicologiaLectura"));
 const AdminAyurvedaLectura = lazy(() => import("./app/admin/AdminAyurvedaLectura"));
@@ -333,6 +334,9 @@ export default function App()
       <Route path="/admin/astrologia-textos" element={<AdminRoute><AdminAstrologiaTextos /></AdminRoute>} />
       {/* antes de /admin/:disciplina, que si no se traga «accesos» como slug */}
       <Route path="/admin/accesos" element={<AdminRoute><AdminAccesos /></AdminRoute>} />
+      {/* Ojo al orden: «usuarios» tiene que ir ANTES de /admin/:disciplina o la
+          ruta de disciplina se lo tragaría como si fuera una novena. */}
+      <Route path="/admin/usuarios" element={<AdminRoute><AdminTodosUsuarios /></AdminRoute>} />
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/estudio" element={<AdminRoute><AdminEstudio /></AdminRoute>} />
       <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} />

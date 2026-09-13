@@ -26,24 +26,14 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
-import { ADMIN_DISCIPLINAS, disciplinaByKey } from "../../data/adminDisciplinas";
+import { DISCIPLINAS_PAGO } from "../../data/adminDisciplinas";
 import { API_URL } from "../../GlobalVariables";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 
-/** scope de pago ↔ disciplina del panel, en el orden del recorrido. */
-const DISCIPLINAS = [
-  { scope: "metodo", adminKey: "astrologia" },
-  { scope: "psicologia", adminKey: "psicologia" },
-  { scope: "ayurveda", adminKey: "ayurveda" },
-  { scope: "tcm", adminKey: "tcm" },
-  { scope: "fisiologia", adminKey: "fisiologia" },
-  { scope: "nutricion", adminKey: "nutricion" },
-  { scope: "cabala", adminKey: "cabala" },
-  { scope: "cultura", adminKey: "cultura" },
-].map((d) => {
-  const disc = disciplinaByKey(d.adminKey) ?? ADMIN_DISCIPLINAS[0];
-  return { ...d, nombre: disc.nombre, txt: disc.txt, bg: disc.bg };
-});
+/** scope de pago ↔ disciplina del panel, en el orden del recorrido.
+ *  Vive en data/adminDisciplinas.ts porque /admin/usuarios necesita la misma
+ *  tabla: la excepción de Astrología (`metodo`) se escribe una sola vez. */
+const DISCIPLINAS = DISCIPLINAS_PAGO;
 
 interface CuentaAdmin {
   id: string;

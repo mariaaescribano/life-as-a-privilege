@@ -9,6 +9,7 @@ export const header = {
   "header.videos": "Vídeos",
   "header.estudio": "Estudio astrológico",
   "header.cursos": "Cursos",
+  "header.usuarios": "Usuarios",
   "header.programas": "Programas",
   "header.contacto": "Contactar",
   "header.miCuenta": "Mi cuenta",

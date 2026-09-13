@@ -364,6 +364,12 @@ function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
     <Box
       mt="42px"
       mb={{ base: 3, md: 5 }}
+      // Las tarjetas de una misma fila miden lo MISMO: la rejilla estira este
+      // envoltorio hasta el alto de la fila y la tarjeta de dentro lo ocupa
+      // entero (`flex: 1`), así la del lema corto crece hasta igualar a la del
+      // lema largo en vez de quedarse a media altura.
+      display="flex"
+      flexDirection="column"
       ref={enPantalla.ref}
       opacity={enPantalla.visto ? 1 : 0}
       transform={enPantalla.visto ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
@@ -374,6 +380,8 @@ function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
     <Box
       role="group"
       position="relative"
+      // `flex: 1` = ocupa todo el alto que le da la fila (ver arriba).
+      flex="1"
       pt="46px"
       pb={{ base: 5, md: 7 }}
       px={{ base: 3, md: 5 }}

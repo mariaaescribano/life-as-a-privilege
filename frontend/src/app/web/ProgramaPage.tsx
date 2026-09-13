@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { Reveal } from "../../components/global/Reveal";
-import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { MetodoStepHeader, glowHeaderDisciplina } from "../../components/metodo/MetodoStepHeader";
 import { BotonBarra } from "../../components/programas/BotonBarra";
 import { disciplinaCursoBySlug } from "../../data/disciplinasCurso";
 import {
@@ -32,6 +32,12 @@ export default function ProgramaPage() {
   const t = useT();
   const programa = programaPorSlug(slug);
   const [i, setI] = useState(0);
+  // La proporción REAL de la diapositiva, medida de la primera foto que carga
+  // (todas las de una presentación miden igual). 16:9 mientras no se sabe, que
+  // es lo que exporta PowerPoint por defecto. Con ella el hueco de la foto se
+  // ajusta clavado al PowerPoint: ni franjas a los lados ni el halo separado
+  // del borde de la imagen.
+  const [proporcion, setProporcion] = useState(16 / 9);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -151,19 +157,36 @@ export default function ProgramaPage() {
                       onClick={() => setI((n) => Math.max(n - 1, 0))}
                     />
                   )}
-                  <Image
-                    src={programa.diapositivas[i]}
-                    alt={`${programa.titulo} — ${i + 1}`}
-                    flex={1}
-                    minW={0}
-                    w="100%"
-                    maxH={{ base: "56vh", md: "76vh" }}
-                    objectFit="contain"
-                    borderRadius="lg"
-                    // Una sombra bajita, solo para que no parezca pegada al
-                    // turquesa. Nada de halo claro ni de borde.
-                    boxShadow="0 10px 34px rgba(0,0,0,0.3)"
-                  />
+                  <Flex flex={1} minW={0} justify="center">
+                    <Image
+                      src={programa.diapositivas[i]}
+                      alt={`${programa.titulo} — ${i + 1}`}
+                      onLoad={(e) => {
+                        const img = e.currentTarget;
+                        if (img.naturalWidth && img.naturalHeight) {
+                          setProporcion(img.naturalWidth / img.naturalHeight);
+                        }
+                      }}
+                      w="100%"
+                      // El alto se limita por el ANCHO, no con `maxH`. Con
+                      // `maxH` la caja se quedaba más baja que la foto y
+                      // `objectFit: contain` metía franjas vacías a los lados:
+                      // el halo se pintaba en el borde de la caja, lejos de la
+                      // diapositiva. Aquí el tope de alto (76vh) se traduce a
+                      // ancho multiplicándolo por la proporción, así la caja
+                      // ES la diapositiva.
+                      maxW={{
+                        base: `calc(56vh * ${proporcion})`,
+                        md: `min(1100px, calc(76vh * ${proporcion}))`,
+                      }}
+                      sx={{ aspectRatio: String(proporcion) }}
+                      objectFit="contain"
+                      borderRadius="lg"
+                      // El mismo halo que el header, para que las dos piezas de
+                      // la página se lean como una sola.
+                      boxShadow={glowHeaderDisciplina(color)}
+                    />
+                  </Flex>
                   {total > 1 && (
                     <Flecha
                       direccion="der"

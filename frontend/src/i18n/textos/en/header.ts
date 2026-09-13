@@ -5,6 +5,7 @@ export const header = {
   "header.videos": "Videos",
   "header.estudio": "Astrology study",
   "header.cursos": "Courses",
+  "header.usuarios": "Users",
   "header.programas": "Programs",
   "header.contacto": "Contact",
   "header.miCuenta": "My account",

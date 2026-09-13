@@ -19,6 +19,8 @@ import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento, type DatosTcm } 
 import { constitucionHecha } from "../../components/metodo/tcmConstitucion";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { EstrellaCiclo, RelacionModal, FONDO_CICLO, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
+import { TestParKe } from "../../components/metodo/TestParKe";
+import { testParHecho } from "../../components/metodo/tcmCicloKe";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 
 // Sombra de la letra de los cómics de TCM (la misma que Recetas y Qigong).
@@ -42,6 +44,9 @@ export default function MetodoTcmCiclos() {
   // final. Ya ha visto cómo se generan y se controlan los elementos; ahora,
   // qué pasa cuando esos ciclos se rompen.
   const [comicOpen, setComicOpen] = useState(false);
+  // Las seis frases del par de control. Se guardan con el mismo goteo que el
+  // resto del recorrido: se responde y se manda el blob entero (ver `guardarPar`).
+  const [parResp, setParResp] = useState<Record<string, string>>({});
   // Sus viñetas en el idioma activo.
   const comicVinetas = useComic("tcm-enfermedades", VINETAS_ENFERMEDADES);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
@@ -66,6 +71,8 @@ export default function MetodoTcmCiclos() {
         // constitución, así que sin el test hecho se vuelve a por él.
         if (!constitucionHecha(d)) { navigate("/metodo/tcm/constitucion"); return; }
         datosRef.current = d;
+        // Lo ya respondido del test del par (prerrellenado: que no repita).
+        setParResp(d.parKe?.respuestas ?? {});
         // Ya visto antes: desbloqueamos y damos TODAS las relaciones por vistas,
         // para que la página cargue como completada (flechitas marcadas + botón
         // «Diagnóstico final» abierto) y no haya que volver a tocarlas.
@@ -100,6 +107,22 @@ export default function MetodoTcmCiclos() {
       { headers: { Authorization: `Bearer ${token}` } })
       .catch(() => { /* el estado local ya lo refleja; se reintenta al volver a completar */ });
   }, [vistas, yaLeido, TOTAL_FLECHAS]);
+
+  // Guarda una frase del test del par. Igual que el resto del recorrido: se
+  // actualiza el blob COMPLETO y se manda entero, que es lo que el backend
+  // reemplaza (ver persistencia-recorrido-blob-unico).
+  const responderPar = (key: string, valor: string) => {
+    const respuestas = { ...parResp, [key]: valor };
+    setParResp(respuestas);
+    const next: DatosTcm = { ...datosRef.current, parKe: { respuestas } };
+    datosRef.current = next;
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
+    if (!userId || !token) return;
+    axios.patch(`${API_URL}/metodo-tcm/${userId}`, { data: next },
+      { headers: { Authorization: `Bearer ${token}` } })
+      .catch(() => { /* queda en pantalla; se reintenta al responder la siguiente */ });
+  };
 
   // Marca una relación como vista. Se llama tanto al pulsar su flechita como al
   // pasar por ella dentro del cómic (onView), porque el usuario puede recorrer
@@ -162,7 +185,12 @@ export default function MetodoTcmCiclos() {
               // que es el puente entre los ciclos y el diagnóstico.
               label: `${t("metodo.tcm.paso.diagnostico")} →`,
               onClick: () => setComicOpen(true),
-              disabled: !yaLeido && vistas.size < TOTAL_FLECHAS,
+              // Dos puertas: haber tocado las diez flechitas y haber contestado
+              // el test del par. Si no hay par candidato, `testParHecho` da true
+              // y el paso no se bloquea por algo que no existe.
+              disabled:
+                (!yaLeido && vistas.size < TOTAL_FLECHAS) ||
+                !testParHecho({ ...datosRef.current, parKe: { respuestas: parResp } }),
               disabledTooltip: t("metodo.tcm.ciclos.flechitas"),
             }}
           />
@@ -208,6 +236,19 @@ export default function MetodoTcmCiclos() {
                 lineHeight="1.6">
             {t("metodo.tcm.ciclos.nota")}
           </Text>
+          </Reveal>
+
+          {/* ── TU PAR DE CONTROL ──
+              Va AL FINAL y no arriba: primero se aprenden las diez relaciones
+              en abstracto, y solo después se mira cuál de ellas es la tuya. */}
+          <Reveal inView direction="up" distance={22} duration={0.65} amount={0.05} w="100%" display="flex" justifyContent="center">
+            <TestParKe
+              data={datosRef.current}
+              respuestas={parResp}
+              onElegir={responderPar}
+              color={tcmTxt}
+              bg={tcmBg}
+            />
           </Reveal>
         </Flex>
       </Flex>

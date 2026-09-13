@@ -204,7 +204,14 @@ function TarjetaDisciplina({
   return (
     <Box
       role="group"
-      mt="42px"
+      mt={{ base: "30px", md: "42px" }}
+      // Las tarjetas de una misma fila miden lo MISMO: la rejilla estira este
+      // envoltorio hasta el alto de la fila (align-items: stretch) y la tarjeta
+      // de dentro lo ocupa entero (`flex: 1`). Así, si un lema ocupa dos líneas
+      // y el de al lado una, la corta crece hasta igualar a la larga en vez de
+      // dejar un escalón entre las dos.
+      display="flex"
+      flexDirection="column"
       cursor="pointer"
       onClick={onSelect}
       // Dispara cuando ESTA tarjeta asoma en pantalla, no al cargar la página ni
@@ -227,8 +234,12 @@ function TarjetaDisciplina({
           del reveal de entrada para que no se pisen los transforms. */}
       <Box
         position="relative"
-        pt="46px"
-        pb={{ base: 5, md: 7 }}
+        // `flex: 1` = ocupa todo el alto que le da la fila (ver arriba).
+        flex="1"
+        display="flex"
+        flexDirection="column"
+        pt={{ base: "36px", md: "46px" }}
+        pb={{ base: 3.5, md: 7 }}
         px={{ base: 3, md: 5, lg: 6 }}
         bg={hasBg ? "transparent" : d.bg}
         borderRadius="2xl"
@@ -250,16 +261,16 @@ function TarjetaDisciplina({
             fuerte; en hover crece un 5% y aumenta su brillo. */}
         <Box
           position="absolute"
-          top="-36px"
+          top={{ base: "-27px", md: "-36px" }}
           left="50%"
           transform="translateX(-50%)"
           bg={hasBg ? "transparent" : d.bg}
           borderRadius="full"
-          p="8px"
+          p={{ base: "6px", md: "8px" }}
           border={"4px solid "+ d.txt}
           boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
-          w="72px"
-          h="72px"
+          w={{ base: "56px", md: "72px" }}
+          h={{ base: "56px", md: "72px" }}
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -281,7 +292,7 @@ function TarjetaDisciplina({
             transition="filter 0.28s ease"
             _groupHover={{ filter: "brightness(1.12)" }}
           >
-            {d.renderIcon("42px")}
+            {d.renderIcon(isMobile ? "32px" : "42px")}
           </Box>
         </Box>
   
@@ -309,7 +320,7 @@ function TarjetaDisciplina({
           <Text
             position="relative"
             zIndex={1}
-            mt={{ base: 2, md: 3 }}
+            mt={{ base: 1.5, md: 3 }}
             minH="2em"
             color={d.txt}
             fontWeight="500"
@@ -335,7 +346,11 @@ function TarjetaDisciplina({
           align="center"
           justify="center"
           gap={1.5}
-          mt={{ base: 3, md: 3 }}
+          // `auto`: la fila de «Explorar» se va SIEMPRE al fondo de la tarjeta,
+          // así queda a la misma altura en las dos de la fila aunque una tenga
+          // el lema más largo. El `pt` es el aire mínimo con el texto de arriba.
+          mt="auto"
+          pt={{ base: 2, md: 3 }}
           color={d.txt}
           fontSize={{ base: "10px", md: "xs", lg: "sm" }}
           fontWeight="600"
@@ -377,6 +392,9 @@ const Welcome = () => {
   // Tarjetas por fila (2 en móvil, 4 en escritorio): define la cascada y cuáles
   // son «la primera fila», la que tiene que verse sin hacer scroll.
   const columnas = isMobile ? 2 : 4;
+  // Filas que se ven sin hacer scroll (y que por tanto entran con la página):
+  // en móvil dos —las cuatro primeras disciplinas—, en escritorio una de cuatro.
+  const filasAlCargar = isMobile ? 2 : 1;
   // La página no se revela hasta que las fotos estén cargadas Y haya pasado un
   // tiempo mínimo (para que se vea la animación de carga aunque las fotos vengan
   // de caché). Mientras, se muestra <LifeLoading/>.
@@ -418,7 +436,7 @@ const Welcome = () => {
       {/* ── MANDALA (elemento central, encima del título) ── */}
       {/* Wrapper con flotación + latido perpetuos (vida continua); la imagen
           hace la entrada épica (surge girando desde muy pequeña y se enfoca). */}
-      <Flex justify="center" pt={{ base: 7, md: 9 }}>
+      <Flex justify="center" pt={{ base: 4, md: 9 }}>
         <Box
           sx={{
             "@keyframes mandalaFloat": {
@@ -431,7 +449,7 @@ const Welcome = () => {
           <Image
             src="/img/icono/life.png"
             alt=""
-            h={{ base: "54px", md: "72px" }}
+            h={{ base: "44px", md: "72px" }}
             objectFit="contain"
             style={{
               opacity: mounted ? 1 : 0,
@@ -447,7 +465,7 @@ const Welcome = () => {
       </Flex>
 
       {/* ── BIENVENIDA (título + subtítulo + frase) ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 6, md: 8 }} pb={{ base: 4, md: 6 }}>
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 3, md: 8 }} pb={{ base: 2, md: 6 }}>
         <Box
           ref={bienvenidaReveal.ref}
           w={{ base: "100%", md: "78%" }}
@@ -455,7 +473,7 @@ const Welcome = () => {
           flexDirection="column"
           alignItems="center"
           textAlign="center"
-          gap={{ base: 3, md: 4 }}
+          gap={{ base: 2, md: 4 }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0) scale(1)" : "translateY(30px) scale(0.94)"}
           filter={mounted ? "blur(0px)" : "blur(8px)"}
@@ -463,7 +481,7 @@ const Welcome = () => {
         >
           <Text
             color="white"
-            fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
+            fontSize={{ base: "2xl", md: "5xl", lg: "6xl" }}
             fontWeight="700"
             letterSpacing="0.1em"
             lineHeight="1.1"
@@ -478,7 +496,7 @@ const Welcome = () => {
           {/* Subtítulo (estructura de Materiales) */}
           <Text
             color="rgba(255,255,255,0.88)"
-            fontSize={{ base: "md", md: "xl" }}
+            fontSize={{ base: "sm", md: "xl" }}
             fontStyle="italic"
             fontWeight="400"
             letterSpacing="0.05em"
@@ -537,12 +555,14 @@ const Welcome = () => {
       </Flex>
 
       {/* ── CARDS DE DISCIPLINAS ── */}
-      {/* `pt` corto a propósito: la primera fila tiene que asomar al entrar, sin
-          scroll. Ojo al subirlo: cada píxel de aquí empuja esa fila hacia abajo.
-          (Las tarjetas ya traen 42px de `mt` propios para el icono que sobresale.) */}
+      {/* `pt` corto a propósito: en móvil tienen que entrar LAS CUATRO PRIMERAS
+          sin hacer scroll (dos filas de dos), si no parece que la web se acaba en
+          Astrología y Psicología. Ojo al subirlo: cada píxel de aquí —y del héroe
+          de arriba— empuja la segunda fila por debajo del pliegue.
+          (Las tarjetas ya traen su `mt` propio para el icono que sobresale.) */}
       <Box
         px={{ base: 5, md: 6, lg: 8 }}
-        pt={{ base: 2, md: 4 }}
+        pt={{ base: 1, md: 4 }}
         pb={{ base: 9, md: 13 }}
       >
         {/* Hueco corto y padding lateral corto: las tarjetas mandan, así que se
@@ -550,7 +570,7 @@ const Welcome = () => {
             en consecuencia). */}
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-          gap={{ base: 3, md: 5 }}
+          gap={{ base: 2, md: 5 }}
         >
           {disciplines.map((d, i) => (
             <TarjetaDisciplina
@@ -558,10 +578,13 @@ const Welcome = () => {
               d={d}
               isMobile={isMobile}
               // La columna dentro de su fila: 2 columnas en móvil, 4 en escritorio.
-              delay={0.1 + (i % columnas) * 0.15}
-              // La primera fila entra con la página (se ve sin hacer scroll); de
-              // la segunda hacia abajo, cada tarjeta entra al asomar.
-              entraAlCargar={i < columnas}
+              // En móvil la segunda fila también entra con la página, así que se
+              // le suma un hueco para que vaya DETRÁS de la primera, no a la vez.
+              delay={0.1 + (i % columnas) * 0.15 + (isMobile && i >= columnas ? 0.3 : 0)}
+              // Lo que se ve sin hacer scroll entra con la página: la primera fila
+              // en escritorio y las DOS primeras en móvil (las cuatro disciplinas).
+              // De ahí hacia abajo, cada tarjeta entra al asomar.
+              entraAlCargar={i < filasAlCargar * columnas}
               cargado={mounted}
               onSelect={() => navigate(d.link)}
               onExplorar={() => navigate(d.link)}
