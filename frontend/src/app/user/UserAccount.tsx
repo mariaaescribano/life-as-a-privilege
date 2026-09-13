@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL, turquesa } from "../../GlobalVariables";
 import { cerrarSesionLocal } from "../../api/sesion";
+import { encogerFoto } from "../../utils/encogerFoto";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 
 const inputStyles = {
@@ -166,7 +167,8 @@ export default function UserAccount() {
     if (!file) return;
     setUploading(true);
     const formData = new FormData();
-    formData.append("file", file);
+    // Encogida en el navegador antes de viajar: ~40 kB en vez de varios MB.
+    formData.append("file", await encogerFoto(file));
     try {
       const res = await fetch(`${API_URL}/upload/profile-pic/${userId}`, {
         method: "POST",

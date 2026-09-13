@@ -96,6 +96,10 @@ interface MetodoStepHeaderProps {
   /** Sombra/glow del box completo. Si se pasa, sustituye al glow por defecto
    *  (útil para darle un brillo propio a una página, p.ej. dorado). */
   boxShadow?: string;
+  /** Deja que el título ocupe VARIAS LÍNEAS en vez de encogerse hasta caber en
+   *  una. Es la excepción, no la norma: solo para páginas cuyo título es una
+   *  frase de verdad (los programas), donde encogerlo lo dejaba diminuto. */
+  multiline?: boolean;
   /** Header de perfil bajo: menos padding, título más pequeño, menos hueco
    *  antes de los botones y botones algo más bajos. Para páginas donde el
    *  contenido manda y el header solo tiene que orientar (p.ej. «Diseña tu
@@ -226,6 +230,7 @@ export function MetodoStepHeader({
   hideCursos = false,
   fitTitle = false,
   titleScale = 1,
+  multiline = false,
   dense = false,
 }: MetodoStepHeaderProps) {
   const t = useT();
@@ -266,6 +271,8 @@ export function MetodoStepHeader({
   useLayoutEffect(() => {
     const wrapper = titleWrapperRef.current;
     if (!wrapper) return;
+    // Si el título puede envolver, no hay nada que encoger: cabe siempre.
+    if (multiline) return;
     const ajustar = () => {
       const el = wrapper.querySelector("p, .chakra-text") as HTMLElement | null;
       if (!el) return;
@@ -302,7 +309,7 @@ export function MetodoStepHeader({
     // texto cambia de ancho: se mide otra vez cuando esté lista.
     document.fonts?.ready.then(ajustar).catch(() => {});
     return () => { cancelAnimationFrame(raf); window.clearTimeout(tardia); ro.disconnect(); };
-  }, [title, fitTitle, tallTitle, titleScale, compact, dense, tituloUniforme]);
+  }, [title, fitTitle, tallTitle, titleScale, compact, dense, tituloUniforme, multiline]);
   // TCM quiere sus títulos igual de GRANDES que el resto de disciplinas, así que
   // ignoramos el `compact` que traen sus páginas (era el que los encogía). Fuera
   // de TCM, `compact` sigue funcionando igual (tests con nombres largos).
@@ -386,8 +393,10 @@ export function MetodoStepHeader({
                 textAlign="center"
                 // SIEMPRE una línea: el ajuste de tamaño se encarga de que
                 // quepa, así que ni envuelve ni hace falta cortar con «…».
-                whiteSpace="nowrap"
-                overflow="hidden"
+                // Salvo en `multiline`, donde el título es una frase y lo que
+                // queremos es justo lo contrario: que baje de línea.
+                whiteSpace={multiline ? "normal" : "nowrap"}
+                overflow={multiline ? "visible" : "hidden"}
                 // El rabito de la "g" (descendente) baja por debajo de la línea
                 // base; con overflow:hidden se recortaría. Este padding inferior
                 // entra dentro de la zona visible y deja espacio para que se vea

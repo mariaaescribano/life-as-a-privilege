@@ -447,7 +447,7 @@ const Welcome = () => {
       </Flex>
 
       {/* ── BIENVENIDA (título + subtítulo + frase) ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 6, md: 8 }}>
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 6, md: 8 }} pb={{ base: 4, md: 6 }}>
         <Box
           ref={bienvenidaReveal.ref}
           w={{ base: "100%", md: "78%" }}

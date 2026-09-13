@@ -5,6 +5,8 @@ export const header = {
   "header.videos": "Videos",
   "header.estudio": "Astrology study",
   "header.cursos": "Courses",
+  "header.programas": "Programs",
+  "header.contacto": "Contact",
   "header.miCuenta": "My account",
   "header.iniciarSesion": "Log in",
   "header.idioma": "Change language",

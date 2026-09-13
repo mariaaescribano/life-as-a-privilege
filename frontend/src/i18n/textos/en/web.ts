@@ -15,6 +15,25 @@ export const web = {
   "materiales.subtitulo": "Content created and curated by María",
   "materiales.ilustraciones": "Illustrations",
   "materiales.libros": "Books",
+  "materiales.programas": "Programs",
+
+  // ── Programs (/programas) ──────────────────────────────────────────────
+  "programas.subtitulo": "Each idea, as a slide and as its podcast",
+  "programas.vacio": "No programs published yet. Come back soon.",
+  "programas.numero": "Program {n}",
+  "programas.cuenta": "{n} programs",
+  "programas.cuentaUno": "1 program",
+  "programas.diapositiva": "Slide {n} of {total}",
+  "programas.podcast": "The podcast",
+  "programas.verDiapositivas": "See the slides",
+  "programas.escucharPodcast": "Listen to the podcast",
+  "programas.enPreparacion": "In preparation: neither the slides nor the podcast are ready yet.",
+  "programas.sinPodcast": "The podcast for this program isn't published yet.",
+  "programas.sinDiapositivas": "The slides for this program aren't published yet.",
+  "programas.volver": "All programs",
+  "programas.anterior": "Previous",
+  "programas.siguiente": "Next",
+  "programas.noExiste": "This program doesn't exist",
 
   // ── Discipline landing (/disciplina/:disciplina) ───────────────────────
   "portada.ilustraciones": "Illustrations",

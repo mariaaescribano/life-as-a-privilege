@@ -15,6 +15,7 @@ import { DISCIPLINAS_CURSO, disciplinaCursoBySlug } from "../../data/disciplinas
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { portadaDe, type VideoApi } from "../../data/videosApi";
 import { nombreProveedor, proveedorVideo, videoEmbedUrl } from "../../data/videoLink";
+import { encogerFoto } from "../../utils/encogerFoto";
 
 const btnStyle = {
   fontFamily: "'EB Garamond', serif", fontWeight: 700, letterSpacing: "0.06em",
@@ -96,7 +97,8 @@ export default function AdminVideos() {
     setSubiendo(true);
     try {
       const fd = new FormData();
-      fd.append("file", file);
+      // Encogida en el navegador: una portada no necesita mas de 600 px.
+      fd.append("file", await encogerFoto(file));
       const r = await axios.post(`${API_URL}/upload/portada-video`, fd, { headers: adminHeaders() });
       if (!r.data?.url) throw new Error("sin url");
       setForm((f) => ({ ...f, portada: r.data.url }));

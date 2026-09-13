@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { LifeLoader } from "../../../components/metodo/comicLoaders";
 import SiteFooter from "../../../components/global/Footer";
 import { useT } from "../../../i18n";
+import { encogerFoto } from "../../../utils/encogerFoto";
 
 const popIn = keyframes`
   from {
@@ -83,7 +84,8 @@ const EspacioHome = () => {
       setUploading(true);
       try {
         const formData = new FormData();
-        formData.append("file", e.target.files[0]);
+        // Encogida en el navegador antes de viajar: ~40 kB en vez de varios MB.
+        formData.append("file", await encogerFoto(e.target.files[0]));
         const res  = await fetch(`${API_URL}/upload/profile-pic/${userId}`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },

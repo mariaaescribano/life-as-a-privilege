@@ -21,6 +21,27 @@ export const web = {
   "materiales.subtitulo": "Contenido creado y seleccionado por María",
   "materiales.ilustraciones": "Ilustraciones",
   "materiales.libros": "Libros",
+  "materiales.programas": "Programas",
+
+  // ── Programas (/programas) ─────────────────────────────────────────────
+  // Cada programa es una diapositiva (o varias) y su podcast: lo mismo visto
+  // y escuchado. Van numerados dentro de su disciplina.
+  "programas.subtitulo": "Cada idea, en una diapositiva y en su podcast",
+  "programas.vacio": "Todavía no hay programas publicados. Vuelve pronto.",
+  "programas.numero": "Programa {n}",
+  "programas.cuenta": "{n} programas",
+  "programas.cuentaUno": "1 programa",
+  "programas.diapositiva": "Diapositiva {n} de {total}",
+  "programas.podcast": "El podcast",
+  "programas.verDiapositivas": "Ver las diapositivas",
+  "programas.escucharPodcast": "Escuchar el podcast",
+  "programas.enPreparacion": "En preparación: todavía no están ni las diapositivas ni el podcast.",
+  "programas.sinPodcast": "El podcast de este programa todavía no está publicado.",
+  "programas.sinDiapositivas": "Las diapositivas de este programa todavía no están publicadas.",
+  "programas.volver": "Todos los programas",
+  "programas.anterior": "Anterior",
+  "programas.siguiente": "Siguiente",
+  "programas.noExiste": "Este programa no existe",
 
   // ── Portada de disciplina (/disciplina/:disciplina) ────────────────────
   // Las tres puertas, iguales para las ocho disciplinas.

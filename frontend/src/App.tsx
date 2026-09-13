@@ -26,9 +26,13 @@ const Productos = lazy(() => import("./app/web/Productos"));
 const LibrosPage = lazy(() => import("./app/web/LibrosPage"));
 const DescargarLibroPage = lazy(() => import("./app/web/DescargarLibroPage"));
 const Contacto = lazy(() => import("./app/web/Contacto"));
+const ContactoFormulario = lazy(() => import("./app/web/ContactoFormulario"));
 const Opiniones = lazy(() => import("./app/web/Opiniones"));
 const ElMetodo = lazy(() => import("./app/web/ElMetodo"));
 const MaterialesGratuitos = lazy(() => import("./app/web/MaterialesGratuitos"));
+const ProgramasPage = lazy(() => import("./app/web/ProgramasPage"));
+const ProgramaPage = lazy(() => import("./app/web/ProgramaPage"));
+const ProgramaPodcastPage = lazy(() => import("./app/web/ProgramaPodcastPage"));
 const Ilustraciones = lazy(() => import("./app/web/Ilustraciones"));
 const DisciplinaPortada = lazy(() => import("./app/web/DisciplinaPortada"));
 // Vídeos: apartado aparcado (la página y su panel de admin siguen en el repo).
@@ -288,9 +292,16 @@ export default function App()
       <Route path="/libros" element={<LibrosPage />} />
       <Route path="/libros/descargar" element={<DescargarLibroPage />} />
       <Route path="/contacto" element={<Contacto />} />
+      {/* El formulario, en su propia página: se llega desde la tarjeta «Escríbeme». */}
+      <Route path="/contacto/escribir" element={<ContactoFormulario />} />
       <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/materiales" element={<MaterialesGratuitos />} />
+      {/* Programas: la diapositiva y su podcast. Cuarta caja de Materiales. */}
+      <Route path="/programas" element={<ProgramasPage />} />
+      {/* Las dos mitades de un programa: el visor de diapositivas y el podcast. */}
+      <Route path="/programas/:slug" element={<ProgramaPage />} />
+      <Route path="/programas/:slug/podcast" element={<ProgramaPodcastPage />} />
       <Route path="/ilustraciones" element={<Ilustraciones />} />
       {/* La misma galería, filtrada por disciplina (puerta izquierda de su portada). */}
       <Route path="/ilustraciones/:disciplina" element={<Ilustraciones />} />

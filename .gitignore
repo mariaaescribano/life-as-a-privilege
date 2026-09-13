@@ -27,3 +27,10 @@ yarn-error.log*
 # para comparar a ojo PNG vs WebP. No es material del proyecto.
 scripts/webp/muestra/
 scripts/webp/descartes/
+
+# Presentaciones: los PDF originales de PowerPoint y lo que genera el script
+# (scripts/pdf/programas.mjs). El material de partida no hace falta en el
+# despliegue, y las diapositivas ya viven en el bucket.
+presentaciones-entrada/
+scripts/pdf/muestra/
+scripts/pdf/entradas-para-programas.txt

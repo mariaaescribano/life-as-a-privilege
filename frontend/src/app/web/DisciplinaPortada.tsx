@@ -40,13 +40,6 @@ const IconoIlustraciones = (color: string) => (
   </Box>
 );
 
-/** Icono de EL RECORRIDO: el camino con sus paradas. */
-const IconoRecorrido = (color: string) => (
-  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="52px" height="52px" fill={color}>
-    <path d="M280-600q-33 0-56.5-23.5T200-680q0-33 23.5-56.5T280-760q33 0 56.5 23.5T360-680q0 33-23.5 56.5T280-600Zm400 400q-33 0-56.5-23.5T600-280q0-33 23.5-56.5T680-360q33 0 56.5 23.5T760-280q0 33-23.5 56.5T680-200Zm0 80q66 0 113-47t47-113q0-66-47-113t-113-47H440q-33 0-56.5-23.5T360-520q0-33 23.5-56.5T440-600h60q0-25 5-45t15-35H440q-66 0-113 47t-47 113q0 66 47 113t113 47h240q33 0 56.5 23.5T760-280q0 33-23.5 56.5T680-200h-60q0 25-5 45t-15 35h80ZM280-440q-66 0-113-47T120-600q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Z" />
-  </Box>
-);
-
 function Portada({ d }: { d: PresentacionDisciplina }) {
   const navigate = useNavigate();
   const t = useT();
@@ -80,7 +73,9 @@ function Portada({ d }: { d: PresentacionDisciplina }) {
       pie: t("portada.recorridoPack"),
       link: `/d/${d.key}`,
       delay: 0.25,
-      renderIcon: IconoRecorrido,
+      // El Recorrido lleva el icono de SU disciplina (ya viene pintado con su
+      // color), en vez de un icono genérico de camino.
+      renderIcon: () => <d.Icon size="52px" />,
     },
   ];
 

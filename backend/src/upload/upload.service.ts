@@ -6,6 +6,10 @@ export class UploadService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async uploadProfilePic(userId: string, file: Express.Multer.File) {
+    // Sin esto, una petición sin archivo (o con uno que el filtro ha
+    // rechazado por no ser una imagen) revienta en la línea siguiente con un
+    // «cannot read properties of undefined».
+    if (!file) throw new Error('No se ha recibido ninguna foto');
     const extension = file.originalname.split('.').pop();
     // Nombre único en cada subida: así la URL pública SIEMPRE cambia y ninguna
     // caché (navegador o CDN de Supabase) puede seguir sirviendo la foto vieja.

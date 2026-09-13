@@ -142,7 +142,7 @@ const base: Record<string, PresentacionDisciplina> = {
     clave: "tcm",
     Icon: TCMIcon,
     gancho: {
-      es: "Escucha. El cuerpo habla. Aprende a escucharlo y a leer sus señales.",
+      es: "Escucha. El cuerpo habla. Aprende a leer sus señales.",
       en: "Listen. The body speaks. Learn to listen to it and to read its signals.",
     },
     ilustracionesLabel: "Medicina China",

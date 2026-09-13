@@ -17,6 +17,13 @@ van solo en español, a propósito) y los `nombre=` de los glifos dibujados.
 """
 import io, os, re, sys
 
+# La consola de Windows escribe en cp1252, y en cuanto el informe encontraba una
+# flecha («↔», «→») el script se moría con UnicodeEncodeError a media lista.
+# Esto lo deja en UTF-8, y lo que la fuente de la consola no sepa pintar sale
+# como «?» en vez de tirar todo abajo.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 POR_DEFECTO = ["app/web", "app/home", "app/auth", "app/aprendizaje", "app/espacio",
                "components/global", "components/welcome", "components/aprendizaje",
                "components/espacio", "app/metodo", "components/metodo"]
@@ -44,7 +51,10 @@ def sospechosas(src: str):
         s = " ".join(m.group(1).split())
         if re.search(r"[A-Za-zÁÉÍÓÚÑáéíóúñ]{2,}", s) and not TECNICO.match(s) and not RUIDO.search(s):
             yield "jsx", s
-    for m in re.finditer(rf'\b{PROPS}\s*=\s*[{{"]?\s*"([^"]{{3,}})"', src):
+    # `alt="…"` o `alt={"…"}`, pero NUNCA saltándose una prop vacía: con el
+    # `["{]?` de antes, un `alt=""` se comía sus dos comillas y capturaba lo que
+    # venía DETRÁS, así que el informe se llenaba de «h={{ base:» y compañía.
+    for m in re.finditer(rf'\b{PROPS}\s*=\s*(?:\{{\s*)?"([^"]{{3,}})"', src):
         s = m.group(2).strip()
         if not TECNICO.match(s) and not RUIDO.search(s):
             yield m.group(1), s

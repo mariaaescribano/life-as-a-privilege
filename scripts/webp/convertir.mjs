@@ -28,9 +28,9 @@ import { pathToFileURL } from "node:url";
 
 const RAIZ = path.resolve(import.meta.dirname, "../..");
 const PUBLIC = path.join(RAIZ, "frontend/public");
-const sharp = (await import(
-  pathToFileURL(path.join(RAIZ, "frontend/node_modules/sharp/dist/index.cjs")).href
-)).default;
+// sharp vive en la RAÍZ del repo (devDependency), no en frontend: estaba ahí
+// de rebote, sin declarar, y un `npm audit fix` se lo llevó por delante.
+const sharp = (await import('sharp')).default;
 
 // Calidad 80: en las pruebas no se distingue del PNG original a tamaño de
 // pantalla. Cada lote puede subirla con `calidad` (ver LOTES). El lado máximo
@@ -518,6 +518,19 @@ const LOTES = {
     ladoMax: 500,
     forzar: ["viñetas/hinduismo/chakras/botones"],
     carpetas: ["viñetas/hinduismo/chakras/botones"], // 7 archivos · 20 MB
+  },
+  // Las PORTADAS DE LOS CURSOS. Eran las últimas imágenes grandes que quedaban
+  // sin convertir: 36 PNG y 18 MB, con cinco de ellas por encima de 2 MB para
+  // enseñarse en una tarjeta de ~400 px.
+  //
+  // OJO, estas son distintas a todas las anteriores: su ruta NO está escrita en
+  // el código, sino guardada en la columna `portada` de la tabla `curso`. Por
+  // eso `rutas.mjs` no basta y hay que actualizar también esas filas (lo hace
+  // scripts/webp/cursos-bd.mjs, que se corre justo después).
+  43: {
+    ladoMax: 900,
+    forzar: ["cursos"],
+    carpetas: ["cursos"], // 36 archivos · 18 MB
   },
 };
 

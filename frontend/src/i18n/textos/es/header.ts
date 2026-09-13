@@ -9,6 +9,8 @@ export const header = {
   "header.videos": "Vídeos",
   "header.estudio": "Estudio astrológico",
   "header.cursos": "Cursos",
+  "header.programas": "Programas",
+  "header.contacto": "Contactar",
   "header.miCuenta": "Mi cuenta",
   /** Última opción del menú SIN sesión. Es una acción, no un sitio: quien no ha
    *  entrado todavía no tiene ninguna «cuenta» que visitar. */

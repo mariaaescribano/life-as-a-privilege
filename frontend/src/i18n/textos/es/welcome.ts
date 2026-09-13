@@ -9,7 +9,7 @@
 export const welcome = {
   // El titular de la portada es el nombre de la casa y sale de `header.marca`
   // (ahí también se lee el rótulo del header): un solo sitio donde cambiarlo.
-  "welcome.subtitulo": "El Mapa en el que se combinan la ciencia, la psicología y la tradición para ofrecerte una visión integral de ti, sin fragmentarte.",
+  "welcome.subtitulo": "El Mapa en el que se combinan la ciencia, la psicología y la tradición para ofrecerte una visión integral de ti, sin fragmentaciones.",
   "welcome.explorar": "Explorar",
   "welcome.explorarDisciplina": "Explorar disciplina",
   "welcome.modal.cuenta": "Crea una cuenta o inicia sesión",

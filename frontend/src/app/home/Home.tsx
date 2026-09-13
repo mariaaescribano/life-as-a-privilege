@@ -29,6 +29,7 @@ import {
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import { useT, type ClaveTexto } from "../../i18n";
+import { encogerFoto } from "../../utils/encogerFoto";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 
 const popIn = keyframes`
@@ -737,7 +738,8 @@ const Home = () => {
     setUploading(true);
     try {
       const formData = new FormData();
-      formData.append("file", e.target.files[0]);
+      // Encogida en el navegador antes de viajar: ~40 kB en vez de varios MB.
+      formData.append("file", await encogerFoto(e.target.files[0]));
       const res  = await fetch(`${API_URL}/upload/profile-pic/${userId}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },

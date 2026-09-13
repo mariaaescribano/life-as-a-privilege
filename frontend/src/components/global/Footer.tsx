@@ -1,4 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { INSTAGRAM_URL } from "../../GlobalVariables";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -93,7 +94,7 @@ const SiteFooter = () => {
         </Box>
         <Box
           as="a"
-          href="https://www.instagram.com/maria_escribano_arce/"
+          href={INSTAGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
           display="inline-flex"

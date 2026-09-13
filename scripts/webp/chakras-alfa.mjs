@@ -25,9 +25,9 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const RAIZ = path.resolve(import.meta.dirname, "../..");
-const sharp = (await import(
-  pathToFileURL(path.join(RAIZ, "frontend/node_modules/sharp/dist/index.cjs")).href
-)).default;
+// sharp vive en la RAÍZ del repo (devDependency), no en frontend: estaba ahí
+// de rebote, sin declarar, y un `npm audit fix` se lo llevó por delante.
+const sharp = (await import('sharp')).default;
 
 const DIR = path.join(RAIZ, "frontend/public/viñetas/hinduismo/chakras/botones");
 

@@ -1,6 +1,22 @@
 export const contacto = {
   "contacto.titulo": "Contact",
-  "contacto.subtitulo": "Have a question, or just want to get in touch? Write to me.",
+  "contacto.subtitulo": "Choose where you'd rather we talk.",
+  "contacto.formSubtitulo": "Write whatever you like and I'll reply to the email you leave me.",
+
+  "contacto.via.llamada": "A call",
+  "contacto.via.llamadaTexto": "An unhurried hour, for whatever you'd like to look at.",
+  "contacto.via.conocernos": "Getting to know each other",
+  "contacto.via.conocernosTexto": "Twenty minutes, free, just to meet each other.",
+  "contacto.via.email": "Write to me",
+  "contacto.via.emailTexto": "Tell me whatever you like and I'll reply by email.",
+  "contacto.via.whatsapp": "WhatsApp",
+  "contacto.via.whatsappTexto": "If you'd rather write to me here, I'm around too.",
+  "contacto.via.whatsappMensaje": "Hi María, I'm writing from the website because…",
+  "contacto.via.instagram": "Instagram",
+  "contacto.via.instagramTexto": "This is where I share the day to day.",
+  "contacto.via.comunidad": "The WhatsApp community",
+  "contacto.via.comunidadTexto": "A group to keep each other company and share.",
+  "contacto.via.comunidadPendiente": "Opening soon.",
 
   "contacto.campo.nombre": "NAME",
   "contacto.campo.email": "EMAIL",

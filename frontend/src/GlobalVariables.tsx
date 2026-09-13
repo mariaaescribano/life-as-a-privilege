@@ -32,11 +32,15 @@ export const API_URL =
 // número, se cambia AQUÍ y nada más.
 export const WHATSAPP_TELEFONO = "34647859892";
 
-// ⚠️ PENDIENTE: el enlace de invitación de la COMUNIDAD de WhatsApp. NO es el
-// número de arriba: es un `https://chat.whatsapp.com/…` que da el propio grupo
-// (Info del grupo → Invitar al grupo por enlace). Mientras esté vacío, el botón
-// del hero se pinta igual pero no lleva a ningún sitio.
-export const WHATSAPP_COMUNIDAD_URL = "";
+/** El Instagram de María. Se escribe UNA vez: lo usan el pie y Contactar. */
+export const INSTAGRAM_URL = "https://www.instagram.com/maria_escribano_arce/";
+
+// El enlace de invitación de la COMUNIDAD de WhatsApp. NO es el número de
+// arriba: es el `https://chat.whatsapp.com/…` que da el propio grupo (Info del
+// grupo → Invitar al grupo por enlace). Lo usan el botón «Únete a la comunidad»
+// de /elMetodo y la tarjeta de Contactar; si algún día se revoca el enlace, se
+// cambia AQUÍ y los dos sitios se enteran. Vacío = los dos salen apagados.
+export const WHATSAPP_COMUNIDAD_URL = "https://chat.whatsapp.com/G4UeoaKrrSoLrAi6vfAaVF";
 
 /** Enlace de WhatsApp con el mensaje ya escrito (opcional). */
 export const whatsappUrl = (texto?: string): string =>

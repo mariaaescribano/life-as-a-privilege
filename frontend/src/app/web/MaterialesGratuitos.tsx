@@ -41,7 +41,7 @@ export default function MaterialesGratuitos() {
     return () => clearTimeout(t);
   }, []);
 
-  // Orden: Ilustraciones (izquierda) · Cursos (medio) · Libros (derecha).
+  // Orden: Ilustraciones · Cursos · Libros · Programas.
   const cajitas: Cajita[] = [
     // ── «Vídeos» comentado a petición: se oculta el box y su página (la ruta
     // /aprendizaje/todosVideos queda comentada en App.tsx). Se conserva por si
@@ -99,6 +99,25 @@ export default function MaterialesGratuitos() {
       delay: 0.45,
       link: "/libros",
       renderIcon: () => <LibrosIcon color="white" size="52px" shadow={false} />,
+    },
+    {
+      // Programas: la diapositiva y su podcast. Icono = el atril con la
+      // presentación y el play al lado: lo que se mira y lo que se escucha.
+      titulo: t("materiales.programas"),
+      delay: 0.6,
+      link: "/programas",
+      renderIcon: () => (
+        <Box
+          as="svg"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 -960 960 960"
+          width="52px"
+          height="52px"
+          fill="white"
+        >
+          <path d="M160-80q-17 0-28.5-11.5T120-120v-558q0-15 6-25.5t20-16.5l400-160q20-8 37 5.5t17 34.5v120h40q17 0 28.5 11.5T680-680v120h-80v-80H200v480h207l80 80H160Zm200-640h160v-62l-160 62Zm178.5 581.5Q480-197 480-280t58.5-141.5Q597-480 680-480t141.5 58.5Q880-363 880-280t-58.5 141.5Q763-80 680-80t-141.5-58.5ZM630-180l160-100-160-100v200Zm-430 20v-480 480Z" />
+        </Box>
+      ),
     },
   ];
 
@@ -160,7 +179,7 @@ export default function MaterialesGratuitos() {
         </Text>
       </Flex>
 
-      {/* ── 3 CAJITAS ── */}
+      {/* ── 4 CAJITAS ── */}
       <Flex
         flex={1}
         justify="center"
@@ -171,8 +190,8 @@ export default function MaterialesGratuitos() {
         <Grid
           ref={cardsReveal.ref}
           w="100%"
-          maxW="900px"
-          templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+          maxW={{ base: "900px", lg: "1120px" }}
+          templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
           gap={{ base: 6, md: 6 }}
         >
           {cajitas.map((c) => (

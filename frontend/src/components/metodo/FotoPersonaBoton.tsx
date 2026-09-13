@@ -12,6 +12,7 @@ import React, { useRef, useState } from "react";
 import { useT } from "../../i18n";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { API_URL, neuropsicologiaTxt } from "../../GlobalVariables";
+import { encogerFoto } from "../../utils/encogerFoto";
 
 const TINTA = neuropsicologiaTxt;
 
@@ -37,15 +38,24 @@ export function FotoPersonaBoton({
     e.target.value = "";            // permite volver a elegir la misma foto
     if (!file) return;
     if (!file.type.startsWith("image/")) { onError?.("Elige un archivo de imagen."); return; }
-    if (file.size > MAX_MB * 1024 * 1024) { onError?.(`La foto es demasiado grande (máximo ${MAX_MB} MB).`); return; }
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) return;
     onError?.(null);
     setSubiendo(true);
     try {
+      // Se encoge aquí, en el móvil: al bucket sube una foto de ~40 kB en vez
+      // de los 3-4 MB que saca la cámara. El límite se mira DESPUÉS de
+      // encoger: una foto de 12 MP pesa más de 8 MB recién salida de la
+      // cámara y sería absurdo rechazarla cuando va a viajar hecha 40 kB.
+      const foto = await encogerFoto(file);
+      if (foto.size > MAX_MB * 1024 * 1024) {
+        onError?.(`La foto es demasiado grande (máximo ${MAX_MB} MB).`);
+        setSubiendo(false);
+        return;
+      }
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", foto);
       const res = await fetch(`${API_URL}/upload/genograma/${userId}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },

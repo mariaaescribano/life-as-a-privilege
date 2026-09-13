@@ -53,6 +53,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const path = location.pathname.toLowerCase();
   const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
   const isMaterialesPage = path.startsWith("/materiales") || path.startsWith("/aprendizaje") || path.startsWith("/libros");
+  const isProgramasPage = path.startsWith("/programas");
+  const isContactoPage = path.startsWith("/contacto");
   const isEstudioPage = path.startsWith("/estudio");
   // Vídeos: apartado aparcado (ver más abajo, en los destinos del menú).
   // const isVideosPage = path.startsWith("/videos");
@@ -72,9 +74,14 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // seguiría abierto encima de la página nueva.
   useEffect(() => { setMenuAbierto(false); }, [location.pathname]);
 
-  // Destinos del menú: en administración, las dos pestañas de admin; con sesión,
-  // Materiales, Vídeos, Estudio y Mi cuenta; y sin sesión, además, El Mapa, y de
-  // última Iniciar sesión.
+  // Destinos del menú: en administración, las dos pestañas de admin; y fuera de
+  // ella los mismos sitios con sesión y sin ella —El Mapa, Materiales,
+  // Programas, Estudio y Contactar— cambiando solo la última opción: «Mi
+  // cuenta» con sesión, «Iniciar sesión» sin ella.
+  //
+  // «Programas» va pegado a «Materiales» —son las dos puertas al contenido que
+  // se ve sin recorrer el mapa— y además es su cuarta cajita: quien entre por
+  // cualquiera de los dos sitios llega al mismo apartado.
   //
   // «Vídeos» iba justo detrás de «Materiales» (las dos secciones de contenido
   // suelto, lo que se ve sin recorrer el mapa), pero el apartado está aparcado:
@@ -89,16 +96,25 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           { etiqueta: t("header.cursos"), onSelect: () => navigate("/admin/cursos"), activo: adminCursosActive },
         ]
       : [
+          // «El Mapa» va también con la sesión abierta. Antes solo salía sin
+          // ella, y quien entraba a su cuenta perdía la única puerta del menú a
+          // /elMetodo: para volver a la casa del recorrido había que adivinar
+          // la URL. Es la primera opción en los dos lados de la puerta.
+          { etiqueta: t("header.mapa"),       onSelect: () => navigate("/elMetodo"),     activo: isRecorridoPage },
           { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
+          { etiqueta: t("header.programas"),  onSelect: () => navigate("/programas"),    activo: isProgramasPage },
           // { etiqueta: t("header.videos"),     onSelect: () => navigate("/videos"),       activo: isVideosPage },
           { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),      activo: isEstudioPage },
+          { etiqueta: t("header.contacto"),   onSelect: () => navigate("/contacto"),     activo: isContactoPage },
           { etiqueta: t("header.miCuenta"),   onSelect: () => navigate("/user/account"), activo: isCuentaPage },
         ]
     : [
         { etiqueta: t("header.mapa"),          onSelect: () => navigate("/elMetodo"),   activo: isRecorridoPage },
         { etiqueta: t("header.materiales"),    onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
+        { etiqueta: t("header.programas"),     onSelect: () => navigate("/programas"),  activo: isProgramasPage },
         // { etiqueta: t("header.videos"),        onSelect: () => navigate("/videos"),     activo: isVideosPage },
         { etiqueta: t("header.estudio"),       onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
+        { etiqueta: t("header.contacto"),      onSelect: () => navigate("/contacto"),   activo: isContactoPage },
         { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn") },
       ];
 

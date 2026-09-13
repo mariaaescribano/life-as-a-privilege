@@ -1,7 +1,25 @@
 /** Página de contacto (/contacto). */
 export const contacto = {
   "contacto.titulo": "Contactar",
-  "contacto.subtitulo": "¿Tienes alguna pregunta o quieres ponerte en contacto? Escríbeme.",
+  "contacto.subtitulo": "Elige por dónde prefieres que hablemos.",
+  // Subtítulo de la página del formulario (/contacto/escribir).
+  "contacto.formSubtitulo": "Escribe lo que quieras y te respondo al correo que me dejes.",
+
+  // ── Las vías (tarjetas de arriba) ────────────────────────────────────
+  "contacto.via.llamada": "Una llamada",
+  "contacto.via.llamadaTexto": "Una hora con calma, para lo que quieras mirar.",
+  "contacto.via.conocernos": "Conozcámonos",
+  "contacto.via.conocernosTexto": "Veinte minutos, sin coste, para conocernos.",
+  "contacto.via.email": "Escríbeme",
+  "contacto.via.emailTexto": "Cuéntame lo que quieras y te respondo por correo.",
+  "contacto.via.whatsapp": "WhatsApp",
+  "contacto.via.whatsappTexto": "Si prefieres escribirme por aquí, también estoy.",
+  "contacto.via.whatsappMensaje": "Hola María, te escribo desde la web porque…",
+  "contacto.via.instagram": "Instagram",
+  "contacto.via.instagramTexto": "Por aquí comparto el día a día.",
+  "contacto.via.comunidad": "La comunidad de WhatsApp",
+  "contacto.via.comunidadTexto": "Un grupo para acompañarnos y compartir.",
+  "contacto.via.comunidadPendiente": "Abrirá pronto.",
 
   "contacto.campo.nombre": "NOMBRE",
   "contacto.campo.email": "EMAIL",

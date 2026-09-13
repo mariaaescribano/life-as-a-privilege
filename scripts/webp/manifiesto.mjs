@@ -17,9 +17,9 @@ import { pathToFileURL } from "node:url";
 
 const RAIZ = path.resolve(import.meta.dirname, "../..");
 const PUBLIC = path.join(RAIZ, "frontend/public");
-const sharp = (await import(
-  pathToFileURL(path.join(RAIZ, "frontend/node_modules/sharp/dist/index.cjs")).href
-)).default;
+// sharp vive en la RAÍZ del repo (devDependency), no en frontend: estaba ahí
+// de rebote, sin declarar, y un `npm audit fix` se lo llevó por delante.
+const sharp = (await import('sharp')).default;
 
 const lote = Number((process.argv.slice(2).find((a) => a.startsWith("--lote=")) ?? "--lote=1").split("=")[1]);
 
