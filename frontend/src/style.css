@@ -124,6 +124,36 @@ a,
   user-select: none;
 }
 
+/* MÓVIL (y cualquier pantalla táctil): NADA se selecciona al tocar.
+   Lo de arriba solo cubría `button`, `a` y `[role="button"]`, y resulta que casi
+   todos los botones de la app NO son <button>: son <Box onClick> —divs—, y ahí
+   el móvil seguía seleccionando el texto al tocar y pintándolo con el cuadro
+   azul del sistema. En una app que se usa con el dedo, seleccionar texto no es
+   algo que se busque nunca: se pide apuntando, no arrastrando.
+   Se apaga de golpe para toda la app y se vuelve a encender SOLO donde escribir
+   y seleccionar es el trabajo: campos de texto y áreas editables.
+
+   Ojo al `@media`: (hover: none) + (pointer: coarse) = dedo. En el ordenador
+   esta regla NO entra, así que ahí se sigue pudiendo seleccionar y copiar
+   cualquier texto del recorrido, como hasta ahora. */
+@media (hover: none) and (pointer: coarse) {
+  html {
+    -webkit-user-select: none;
+    user-select: none;
+    /* Y nada de menú de iOS al dejar el dedo apoyado (el que sale con
+       «Copiar / Buscar» y de paso selecciona lo que hay debajo). */
+    -webkit-touch-callout: none;
+  }
+  input,
+  textarea,
+  select,
+  [contenteditable],
+  [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
 /* Y donde SÍ se puede seleccionar (el texto de lectura), que la franja no sea
    el azul del sistema, que no pinta nada sobre el turquesa y los boxes de cada
    disciplina: un velo blanco translúcido, y la letra se queda de su color. */
