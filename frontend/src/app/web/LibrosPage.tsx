@@ -9,6 +9,10 @@ import { API_URL } from "../../GlobalVariables";
 
 const PRECIO_LIBRO_PAGO = "5 €";
 
+// Portadas que se esperan antes de pintar la página (las de la primera
+// pantalla). Las demás cargan al bajar.
+const PORTADAS_PRECARGA = 9;
+
 // Reveal por scroll: cada tarjeta se enciende al entrar en el viewport.
 // rootMargin negativo abajo → aparece un pelín antes de estar del todo dentro,
 // que es lo que da la sensación de que los libros van "brotando" al bajar.
@@ -47,9 +51,14 @@ function DescargarBtn({
   const commonProps = {
     align: "center" as const,
     justify: "center" as const,
-    gap: 2,
-    px: { base: 5, md: 6 },
-    py: { base: "8px", md: "10px" },
+    // MÓVIL: en la rejilla de dos columnas cada celda tiene ~135px útiles, y
+    // «DESCARGAR PDF» en versales con 0.16em de espaciado medía más que eso: el
+    // botón se salía de su celda. Aquí se aprieta (letra más pequeña, menos
+    // espaciado entre letras y menos aire a los lados) para que quepa entero.
+    // En escritorio se queda exactamente como estaba.
+    gap: { base: 1.5, md: 2 },
+    px: { base: 3, md: 6 },
+    py: { base: "7px", md: "10px" },
     borderRadius: "full",
     border: "1px solid rgba(255,255,255,0.5)",
     bg: "rgba(255,255,255,0.06)",
@@ -57,8 +66,9 @@ function DescargarBtn({
     color: "white",
     fontFamily: "'EB Garamond', serif",
     fontWeight: "600",
-    fontSize: "xs",
-    letterSpacing: "0.16em",
+    fontSize: { base: "10px", md: "xs" },
+    letterSpacing: { base: "0.06em", md: "0.16em" },
+    maxW: "100%",
     textTransform: "uppercase" as const,
     textDecoration: "none",
     boxShadow: "0 0 12px rgba(255,255,255,0.25), 0 0 28px rgba(255,255,255,0.12)",
@@ -69,7 +79,8 @@ function DescargarBtn({
       boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 42px rgba(180,255,245,0.28)",
     },
     transition: "all 0.25s ease",
-    whiteSpace: "nowrap" as const,
+    whiteSpace: { base: "normal", md: "nowrap" },
+    textAlign: "center" as const,
     opacity: disabled ? 0.6 : 1,
   };
 
@@ -140,10 +151,13 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
   return (
     <Flex
       ref={ref}
-      direction="row"
+      // MÓVIL: en columna (portada arriba, texto debajo). En fila, la columna de
+      // texto se quedaba en ~110px —con la portada comiéndose media pantalla— y
+      // ni el botón de comprar ni la línea del consentimiento cabían.
+      direction={{ base: "column", md: "row" }}
       align="center"
-      gap={{ base: 5, md: 7 }}
-      px={{ base: 5, md: 8 }}
+      gap={{ base: 4, md: 7 }}
+      px={{ base: 4, md: 8 }}
       py={{ base: 7, md: 10 }}
       opacity={visible ? 1 : 0}
       transform={visible ? "translateY(0)" : "translateY(24px)"}
@@ -161,7 +175,7 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
       {item.img && (
         <Box
           flexShrink={0}
-          w={{ base: "150px", md: "210px" }}
+          w={{ base: "180px", md: "210px" }}
           aspectRatio={1}
           borderRadius="lg"
           overflow="hidden"
@@ -180,7 +194,17 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
         </Box>
       )}
 
-      <Flex direction="column" gap={{ base: 2, md: 3 }} flex="1" minW={0}>
+      <Flex
+        direction="column"
+        gap={{ base: 2, md: 3 }}
+        flex="1"
+        minW={0}
+        // En móvil todo centrado bajo la portada; en escritorio, a la izquierda
+        // como estaba.
+        w={{ base: "100%", md: "auto" }}
+        align={{ base: "center", md: "flex-start" }}
+        textAlign={{ base: "center", md: "left" }}
+      >
         <Text
           color="white"
           fontFamily="'EB Garamond', serif"
@@ -202,7 +226,13 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
         >
           {item.descripcion}
         </Text>
-        <Flex align="center" gap={{ base: 3, md: 4 }} mt={{ base: 1, md: 2 }} flexWrap="wrap">
+        <Flex
+          align="center"
+          justify={{ base: "center", md: "flex-start" }}
+          gap={{ base: 3, md: 4 }}
+          mt={{ base: 1, md: 2 }}
+          flexWrap="wrap"
+        >
           <Text
             color="white"
             fontFamily="'EB Garamond', serif"
@@ -224,6 +254,8 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
         {/* Consentimiento previo al pago (ver comentario del estado `acepta`). */}
         <Flex
           align="flex-start"
+          justify={{ base: "center", md: "flex-start" }}
+          textAlign="left"
           gap={2.5}
           mt={2}
           cursor="pointer"
@@ -282,8 +314,12 @@ function BookCell({ item, i, total }: { item: Item; i: number; total: number }) 
       direction={{ base: "column", md: "row" }}
       align="center"
       gap={{ base: 3, md: 5 }}
-      px={{ base: 3, md: 7 }}
+      px={{ base: 2, md: 7 }}
       py={{ base: 5, md: 8 }}
+      // La celda ocupa todo el alto de su fila: así, con títulos de una y de
+      // cuatro líneas, los botones de las dos celdas quedan a la misma altura
+      // en vez de bailar cada uno por su lado.
+      h="100%"
       opacity={visible ? 1 : 0}
       transform={visible ? "translateY(0)" : "translateY(24px)"}
       transition={`opacity 0.7s ease ${(i % 3) * 0.1}s, transform 0.7s ease ${(i % 3) * 0.1}s`}
@@ -315,7 +351,7 @@ function BookCell({ item, i, total }: { item: Item; i: number; total: number }) 
             h="100%"
             objectFit="cover"
             objectPosition="center"
-            loading="eager"
+            loading={i < PORTADAS_PRECARGA ? "eager" : "lazy"}
             decoding="async"
           />
         </Box>
@@ -334,7 +370,9 @@ function BookCell({ item, i, total }: { item: Item; i: number; total: number }) 
         <Text
           color="white"
           fontFamily="'EB Garamond', serif"
-          fontSize={{ base: "sm", md: "lg" }}
+          // 13px en móvil: los títulos largos («El Sistema Inmunitario (In a
+          // Nutshell)») caben en menos líneas dentro de una celda estrecha.
+          fontSize={{ base: "13px", md: "lg" }}
           fontWeight="700"
           letterSpacing="0.04em"
           lineHeight="1.3"
@@ -342,7 +380,11 @@ function BookCell({ item, i, total }: { item: Item; i: number; total: number }) 
         >
           {item.titulo}
         </Text>
-        <DescargarBtn href={item.link} />
+        {/* `auto`: el botón se va al fondo de la celda (ver el h="100%" de
+            arriba), así queda alineado con el de la celda de al lado. */}
+        <Box mt="auto" maxW="100%">
+          <DescargarBtn href={item.link} />
+        </Box>
       </Flex>
     </Flex>
   );
@@ -360,7 +402,11 @@ export default function LibrosPage() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  // Precarga de todas las portadas (pago + gratis + apuntes).
+  // Precarga de portadas — SOLO las primeras. Antes esperaba a las ~47: con
+  // datos móviles eso son varios segundos de pantalla de carga (hasta los 10 del
+  // failsafe) en los que la página parecía rota. Ahora se espera a lo que se ve
+  // al entrar y el resto va cargando solo al bajar (loading="lazy" en las celdas
+  // de más abajo).
   useEffect(() => {
     const urls = [
       ...(librosPago as LibroPago[]),
@@ -368,7 +414,8 @@ export default function LibrosPage() {
       ...(apuntes as Apunte[]),
     ]
       .map((x) => x.img)
-      .filter((src): src is string => Boolean(src));
+      .filter((src): src is string => Boolean(src))
+      .slice(0, PORTADAS_PRECARGA);
 
     if (urls.length === 0) {
       setImagesReady(true);
@@ -389,8 +436,9 @@ export default function LibrosPage() {
       img.src = src;
     });
 
-    // Red de seguridad: si alguna imagen nunca resuelve, mostramos igualmente.
-    const failSafe = setTimeout(() => { if (!cancelled) setImagesReady(true); }, 10000);
+    // Red de seguridad: si alguna imagen tarda o nunca resuelve, se muestra
+    // igualmente. 3s, no 10: más que eso la persona ya cree que no carga.
+    const failSafe = setTimeout(() => { if (!cancelled) setImagesReady(true); }, 3000);
 
     return () => { cancelled = true; clearTimeout(failSafe); };
   }, []);
@@ -509,7 +557,7 @@ export default function LibrosPage() {
             justify="center"
             w="100%"
             px={{ base: 5, md: 10, lg: 16 }}
-            pt={{ base: 20, md: 28 }}
+            pt={{ base: 12, md: 28 }}
             pb={{ base: 4, md: 6 }}
           >
             <Box w="100%" maxW="1080px" mx="auto">
@@ -551,7 +599,7 @@ export default function LibrosPage() {
         flex={1}
         justify="center"
         w="100%"
-        px={{ base: 5, md: 10, lg: 16 }}
+        px={{ base: 3, md: 10, lg: 16 }}
         pt={{ base: 11, md: 16 }}
         pb={{ base: 24, md: 32 }}
       >
