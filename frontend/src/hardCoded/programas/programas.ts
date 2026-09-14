@@ -84,6 +84,7 @@ export const programas: Programa[] = [
       "https://lrdenqkwfrrsvhcuqpyy.supabase.co/storage/v1/object/public/img/programas/origen-del-universo/25.webp",
       "https://lrdenqkwfrrsvhcuqpyy.supabase.co/storage/v1/object/public/img/programas/origen-del-universo/26.webp",
     ],
+    podcast: "https://www.youtube.com/watch?v=BG-3gfarR7k",
   },
   {
     slug: "historia-de-la-astrologia",

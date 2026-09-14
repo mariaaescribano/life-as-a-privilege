@@ -57,20 +57,16 @@ const OPCIONES_WEBP = { quality: 75, effort: 6, alphaQuality: 100, smartSubsampl
  * Medicina; una vez servida, el siguiente lote traía los de Arte.
  */
 const DESTINOS = {
-  // Cadena de montaje de una fábrica → la Revolución Industrial de la Historia
-  // Universal, no los especialistas de Egipto de la Historia de la Medicina.
-  "especializacion.png": "/recorrido/cultura/historiageneral/especializacion.webp",
-  // Sabios del XVII con matraz y telescopio, sin nada médico → Revolución
-  // Científica de la Historia Universal.
-  "metodo-cientifico.png": "/recorrido/cultura/historiageneral/metodo-cientifico.webp",
+  // Aquí vivían `especializacion.png` y `metodo-cientifico.png`, apuntados a la
+  // Historia Universal; servida esa, la tanda siguiente traía los de Medicina
+  // (escribas del Nilo y sabios del XVII con cráneo y láminas de botánica).
 };
 
 const unix = (p) => p.split(path.sep).join("/");
 const requerir = createRequire(path.join(FRONT, "package.json"));
 const esbuild = requerir("esbuild");
-const sharp = (await import(
-  pathToFileURL(path.join(FRONT, "node_modules/sharp/dist/index.cjs")).href
-)).default;
+// sharp vive en la RAÍZ del repo (devDependency), no en frontend.
+const sharp = (await import("sharp")).default;
 
 // ── Las rutas que espera el recorrido ────────────────────────────────────────
 // Los datos son TypeScript: se compilan a un módulo suelto y se evalúan, igual
