@@ -532,6 +532,13 @@ const LOTES = {
     forzar: ["cursos"],
     carpetas: ["cursos"], // 36 archivos · 18 MB
   },
+  // Las seis viñetas del cómic de LOS ASPECTOS (el que se lee entre «Casas» y
+  // «Aspectos»). Mismos ajustes que el resto de viñetas de Astrología: se ven
+  // a 440 px en el visor, así que 1000 px de lado sobra.
+  44: {
+    ladoMax: 1000,
+    carpetas: ["viñetas/astrologia/aspectos"], // 6 archivos · 16 MB
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

@@ -36,6 +36,7 @@ import {
 } from "./TCMIlustracionesModal";
 import { VINETAS_SIGNOS, VINETAS_CASAS, VINETAS_PLANETAS } from "./ComicAstrologiaModal";
 import { HISTORIA_ASTROLOGIA } from "./comicHistoriaAstrologia";
+import { VINETAS_ASPECTOS } from "./comicAspectos";
 import { ESTRELLA_ATOMOS } from "./comicEstrellaAtomos";
 import { CELULA_VIVA } from "./comicCelulaViva";
 import { CELULAS_ORGANOS } from "./comicCelulasOrganos";
@@ -295,6 +296,16 @@ export const ILUSTRACIONES: IlustracionEntry[] = [
     disciplina: "Astrología",
     cover: "/viñetas/astrologia/portadaplanetas.webp",
     vinetas: VINETAS_PLANETAS,
+    themeColor: astrologiaTxt,
+    textShadow: astroTextShadow,
+  },
+  // La que se lee DENTRO del recorrido, al pasar de «Casas» a «Aspectos».
+  {
+    id: "astro-aspectos",
+    titulo: "Los Aspectos",
+    disciplina: "Astrología",
+    cover: "/viñetas/astrologia/aspectos/conjuncion.webp",
+    vinetas: VINETAS_ASPECTOS,
     themeColor: astrologiaTxt,
     textShadow: astroTextShadow,
   },
@@ -639,6 +650,7 @@ const SOLO_EN_SU_DISCIPLINA = new Set<string>([
   "nutricion-origen-animal",
 
   // ── (2) Las series de paso, por disciplina.
+  "astro-aspectos",
   "fisio-reconstruccion",
   "fisio-meditacion",
   "hindu-vata",
