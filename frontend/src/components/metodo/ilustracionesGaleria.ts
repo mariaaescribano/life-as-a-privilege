@@ -714,10 +714,30 @@ const repartirPorDisciplina = (lista: IlustracionEntry[]): IlustracionEntry[] =>
   return orden;
 };
 
-/** Lo que se ve en /ilustraciones: la selección, ya repartida. */
-export const ILUSTRACIONES_GALERIA: IlustracionEntry[] = repartirPorDisciplina(
-  ILUSTRACIONES.filter((e) => !SOLO_EN_SU_DISCIPLINA.has(e.id)),
-);
+/** Las cuatro que ABREN la galería, en este orden. La rejilla es de cuatro en
+ *  pantalla grande, así que la primera fila entera es EL ORIGEN: la misma
+ *  historia contada por la Ciencia, la Espiritualidad, el Hinduismo y el
+ *  Taoísmo. El de la Cábala se queda en el reparto, con el resto.
+ *
+ *  Sin esto, el reparto automático colaba «Eres lo que absorbes» en la primera
+ *  fila y partía el cuarteto. Lo de después da igual: se reparte solo. */
+const ABREN_LA_GALERIA = [
+  "origen-ciencia",
+  "origen-espiritualidad",
+  "origen-hinduismo",
+  "origen-taoismo",
+];
+
+/** Lo que se ve en /ilustraciones: la selección, con El Origen delante y el
+ *  resto repartido. */
+export const ILUSTRACIONES_GALERIA: IlustracionEntry[] = (() => {
+  const seleccion = ILUSTRACIONES.filter((e) => !SOLO_EN_SU_DISCIPLINA.has(e.id));
+  const primeras = ABREN_LA_GALERIA
+    .map((id) => seleccion.find((e) => e.id === id))
+    .filter(Boolean) as IlustracionEntry[];
+  const resto = seleccion.filter((e) => !ABREN_LA_GALERIA.includes(e.id));
+  return [...primeras, ...repartirPorDisciplina(resto)];
+})();
 
 /**
  * Las ilustraciones de una disciplina para su PRESENTACIÓN (/d/:disciplina):
