@@ -1,3 +1,5 @@
+# YA NO SE USA. Los suscriptores estan en la tabla 'suscriptor' de Supabase
+# y se leen en /admin/suscriptores. Esto es la copia vieja (hasta sept. 2026).
 SUSCRIBERS
 
 mariaescribanoarce3@gmail.com
@@ -13,6 +15,10 @@ evelynmontano20@gmail.com
 susana.izquierdo.danot@gmail.com
 ekaterina.artamonova.korneeva@gmail.com
 mariagb71@hotmail.com
+antoniogolmar@yahoo.com
+lmengibarmartinez@gmail.com
+jmr.vadillo@gmail.com
+miscomprasyolanda@gmail.com
 
 
 cristianburgos2004@gmail.com

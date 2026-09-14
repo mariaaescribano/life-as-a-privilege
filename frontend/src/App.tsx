@@ -64,6 +64,7 @@ const AdminAstrologiaTextos = lazy(() => import("./app/admin/AdminAstrologiaText
 const AdminAccesos = lazy(() => import("./app/admin/AdminAccesos"));
 const AdminEstudio = lazy(() => import("./app/admin/AdminEstudio"));
 const AdminVideos = lazy(() => import("./app/admin/AdminVideos"));
+const AdminSuscriptores = lazy(() => import("./app/admin/AdminSuscriptores"));
 const NoEncontrada = lazy(() => import("./app/web/NoEncontrada"));
 const MetodoPsicologia = lazy(() => import("./app/metodo/MetodoPsicologia"));
 const MetodoPsicologiaProblema = lazy(() => import("./app/metodo/MetodoPsicologiaProblema"));
@@ -340,6 +341,8 @@ export default function App()
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/estudio" element={<AdminRoute><AdminEstudio /></AdminRoute>} />
       <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} />
+      {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
+      <Route path="/admin/suscriptores" element={<AdminRoute><AdminSuscriptores /></AdminRoute>} />
       <Route path="/admin/astrologia/:userId" element={<AdminRoute><AdminAstrologiaEditor /></AdminRoute>} />
       <Route path="/admin/psicologia/:userId" element={<AdminRoute><AdminPsicologiaLectura /></AdminRoute>} />
       <Route path="/admin/ayurveda/:userId" element={<AdminRoute><AdminAyurvedaLectura /></AdminRoute>} />

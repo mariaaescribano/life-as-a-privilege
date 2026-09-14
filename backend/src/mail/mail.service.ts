@@ -625,7 +625,7 @@ export class MailService {
               0,
             )}
             ${this.parrafo('Ahí tienes lo que más me ha llamado la atención de tu cielo: cada punto es una estrella que puedes abrir para leer lo que he escrito sobre ti.')}
-            ${this.parrafo('Léela sin prisa y sin juzgarte: en tu carta no hay nada bueno ni malo. Si quieres que la recorramos juntas, puedes agendar una llamada desde tu recorrido.')}
+            ${this.parrafo('Léela sin prisa y sin juzgarte: en tu carta no hay nada bueno ni malo. Si quieres que la recorramos juntos, puedes agendar una llamada desde tu recorrido.')}
             ${this.boton(destino, 'Leer mi carta')}`,
     });
 
