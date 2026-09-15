@@ -111,6 +111,7 @@ export const programas: Programa[] = [
       "https://lrdenqkwfrrsvhcuqpyy.supabase.co/storage/v1/object/public/img/programas/historia-de-la-astrologia/17.webp",
       "https://lrdenqkwfrrsvhcuqpyy.supabase.co/storage/v1/object/public/img/programas/historia-de-la-astrologia/18.webp",
     ],
+    podcast: "https://youtu.be/LAnS0uBiGGo",
   },
   {
     slug: "astrologia-y-psicologia-evolutiva-las-casas",
