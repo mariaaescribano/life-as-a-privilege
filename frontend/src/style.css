@@ -1,97 +1,44 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Hoja de estilo GLOBAL de la app. Se importa en `main.tsx`.
+
+   OJO: aquí NO se pinta nada de la estética (colores, tipos, cajas): de eso
+   se encargan Chakra y cada página. Aquí solo van las reglas de navegador que
+   Chakra no cubre —el resaltado del toque en el móvil, la selección de texto,
+   las barras de scroll, el modo oscuro automático—, que son globales por
+   naturaleza y no se pueden poner componente a componente.
+
+   (Este fichero venía de la plantilla de Vite con sus colores de demo —fondo
+   #242424, enlaces morados, botones negros—. Se borraron: si esas reglas
+   llegan a entrar, se llevan por delante los botones de todo el recorrido.)
+   ───────────────────────────────────────────────────────────────────────── */
+
 :root {
-  font-family: "Times New Roman", Times, serif;
-  line-height: 1.5;
-  font-weight: 400;
-
   /* Igual que el <meta name="color-scheme"> de index.html: el navegador no
-     oscurece nada por su cuenta (venía en «light dark» de la plantilla de
-     Vite, y la propiedad CSS gana al meta). Ver la nota larga en index.html. */
+     oscurece nada por su cuenta. Ver la nota larga en index.html. */
   color-scheme: only light;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
-  font-synthesis: none;
+  /* Glifos astrológicos (y cualquier símbolo con doble versión): que el
+     navegador use SIEMPRE la versión de TEXTO (icono monocromo) y no la de
+     emoji de color. Sin esto, en Windows los signos del zodíaco salían en
+     morado con su recuadro de emoji. */
+  font-variant-emoji: text;
+
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #3178c6aa);
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
 /* El foco NUNCA se ve. Al abrir un modal, Chakra enfoca el primer botón: eso
    está bien —así basta con pulsar Enter— pero no debe pintarse nada, ni el
-   anillo azul del navegador ni el borde morado del hover, que venían de la
-   plantilla de Vite y rompían la estética de los boxes de pago y de los cómics.
-   Cada botón se pinta solo con los colores de su disciplina.
-   El foco sigue existiendo (Enter y Tab funcionan igual), simplemente es
-   invisible.
+   anillo azul del navegador ni ningún cerco. Cada botón se pinta solo con los
+   colores de su disciplina. El foco sigue existiendo (Enter y Tab funcionan
+   igual), simplemente es invisible.
    Solo se quita el `outline`: el `box-shadow` NO se toca, porque muchos botones
    lo usan de resplandor decorativo (el «Pagar» de los boxes de pago, sin ir más
-   lejos) y apagarlo al enfocarlos sería el mismo problema al revés. */
-button:focus,
-button:focus-visible,
-a:focus,
-a:focus-visible,
-[role="button"]:focus,
-[role="button"]:focus-visible,
-[tabindex]:focus,
-[tabindex]:focus-visible {
+   lejos) y apagarlo al enfocarlos sería el mismo problema al revés. El aro azul
+   de Chakra, que sí es un box-shadow, se apaga en el TEMA (main.tsx). */
+:focus,
+:focus-visible {
   outline: none;
 }
 
@@ -102,17 +49,18 @@ a:focus-visible,
    colores de cada disciplina.
    `-webkit-tap-highlight-color` se hereda, así que apagándolo en <html> queda
    apagado en TODA la app, incluidos los muchos `Box as="button"` y los divs con
-   onClick. El `touch-callout` de los botones evita, además, el otro parche azul:
-   el de la selección de texto cuando se deja el dedo apoyado.
+   onClick. El `*` es el cinturón además de los tirantes: hay componentes que lo
+   vuelven a poner por su cuenta.
    Ojo: solo se apaga el resaltado del navegador. El `_active` de cada botón
    (escala, sombra…) sigue funcionando, que es el feedback que sí queremos. */
-html {
+html,
+* {
   -webkit-tap-highlight-color: transparent;
 }
+
 button,
 a,
 [role="button"] {
-  -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   /* Y tampoco se SELECCIONAN. Al pulsar un botón (o al dejar el dedo medio
      segundo de más), el móvil seleccionaba su texto y lo pintaba con la franja
@@ -166,10 +114,6 @@ a,
   color: inherit;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 /* Barras de scroll de PÁGINA y de POPUP: nunca la blanca del navegador.
    La app va sobre turquesa y los popups a pantalla completa son casi negros: el
    carril claro de Windows se veía como una raya blanca cortando el borde
@@ -213,27 +157,4 @@ body::-webkit-scrollbar-thumb:hover,
 .chakra-modal__content-container::-webkit-scrollbar-thumb:hover,
 .chakra-modal__content::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.6);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-/* Glifos astrológicos (y cualquier símbolo con doble versión): que el navegador
-   use SIEMPRE la versión de TEXTO (icono monocromo) y no la de emoji de color.
-   Sin esto, en Windows los signos del zodíaco (♈ ♉ ♊ …) salían en morado con
-   su recuadro de emoji, mientras los de los planetas (☉ ☽ ♀ …) se veían bien.
-   Se complementa con FUENTE_GLIFOS (components/metodo/glifosAstro.ts), que pide
-   explícitamente las fuentes de símbolos donde se pintan los glifos. */
-:root {
-  font-variant-emoji: text;
 }

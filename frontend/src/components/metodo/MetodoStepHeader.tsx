@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Text, Tooltip, useBreakpointValue } from "@chakra-ui/react";
 import { astrologiaNom, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { Float } from "../global/Reveal";
@@ -108,7 +108,7 @@ interface MetodoStepHeaderProps {
   dense?: boolean;
 }
 
-const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, dense, arrow, btnColor, btnBg }: StepButton & { color: string; bgColor: string; whiteBg?: boolean }) => {
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, dense, arrow, btnColor, btnBg, soloFlecha }: StepButton & { color: string; bgColor: string; whiteBg?: boolean; soloFlecha?: "prev" | "next" }) => {
   // Colores efectivos: si el botón trae los suyos (p.ej. lleva a otra disciplina),
   // mandan sobre los del header. `c` = texto/borde; `fillBg` = fondo.
   const c = btnColor ?? color;
@@ -123,7 +123,9 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       as="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      px={small ? { base: 2, md: 3.5 } : dense ? { base: 2.5, sm: 4, md: 6 } : { base: 3, sm: 5, md: 8 }}
+      // Solo flecha (móvil): el botón se queda redondo, con el mismo hueco a
+      // los dos lados en vez del ancho que pedía el texto.
+      px={soloFlecha ? (small ? 2 : dense ? 3 : 3.5) : small ? { base: 2, md: 3.5 } : dense ? { base: 2.5, sm: 4, md: 6 } : { base: 3, sm: 5, md: 8 }}
       py={small ? { base: 1, md: 1.5 } : dense ? { base: 1.5, md: 2 } : { base: 2, md: 3 }}
       borderRadius="full"
       bg={disabled ? (whiteBg ? "rgba(255,255,255,0.14)" : `${c}12`) : baseBg}
@@ -163,6 +165,9 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
         transform: "scale(0.96)",
         boxShadow: `0 0 22px rgba(255,255,255,0.5), 0 0 42px ${c}66`,
       }}
+      // Sin texto visible, el botón se queda mudo para los lectores de pantalla:
+      // se le pone de nombre la etiqueta que llevaba (sin la flecha del texto).
+      aria-label={soloFlecha && typeof label === "string" ? label.replace(/[←→]/g, "").trim() || undefined : undefined}
       whiteSpace="nowrap"
       overflow="hidden"
       textOverflow="ellipsis"
@@ -172,10 +177,16 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       minW={0}
       flex="0 1 auto"
     >
-      {arrow === "prev" && <ArrowIcon dir="prev" />}
-      {icon}
-      {label}
-      {arrow === "next" && <ArrowIcon dir="next" />}
+      {soloFlecha ? (
+        <ArrowIcon dir={soloFlecha} />
+      ) : (
+        <>
+          {arrow === "prev" && <ArrowIcon dir="prev" />}
+          {icon}
+          {label}
+          {arrow === "next" && <ArrowIcon dir="next" />}
+        </>
+      )}
     </Box>
   );
 
@@ -253,6 +264,14 @@ export function MetodoStepHeader({
   // El botón "Cursos" de Psicología puede ocultarse en páginas concretas.
   const showPsicoCursos = isPsico && !hideCursos;
   const [cursosOpen, setCursosOpen] = useState(false);
+  // ── MÓVIL: los botones de paso van SIN nombre, solo la flecha ──────────
+  // En el móvil la fila de botones no cabe: «← Los elementos» + «Planetas →»
+  // se estrujaban hasta quedar en dos etiquetas ilegibles pegadas. De md hacia
+  // abajo, los botones «anterior» y «siguiente» se quedan en la flecha sola
+  // (redonda), que es lo único que hace falta para saber a dónde llevan. Los
+  // botones de en medio (Cómic, Ilustraciones, Cursos…) SÍ conservan su
+  // nombre: son los que no se adivinan.
+  const soloFlechas = useBreakpointValue({ base: true, md: false }, { ssr: false }) ?? false;
   // bgColor suele venir con alpha pegado (#RRGGBBaa). Para el textShadow
   // queremos solo #RRGGBB y aplicar nuestras propias alphas.
   const bgHex = bgColor.length >= 7 ? bgColor.slice(0, 7) : bgColor;
@@ -441,11 +460,11 @@ export function MetodoStepHeader({
             direction="row"
             wrap="nowrap"
           >
-            {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={soloFlechas ? prev.arrow ?? "prev" : undefined} />}
             {extra && <StepBtn {...extra} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={soloFlechas ? next.arrow ?? "next" : undefined} />}
           </Flex>
         )}
       </Box>
