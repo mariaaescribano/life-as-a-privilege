@@ -6,6 +6,66 @@ import * as nodemailer from 'nodemailer';
 // como último recurso si la variable no estuviera configurada.
 const CARTA_ASTRAL_FALLBACK = 'darkcake141@gmail.com';
 
+// La web, para los enlaces de los correos. Lo normal es que venga de
+// FRONTEND_URL; esto es el respaldo por si esa variable faltara.
+//
+// El respaldo es el dominio de VERDAD y no `localhost`, que es lo que había: un
+// correo con enlaces a localhost no lo puede abrir nadie, y el fallo no se ve
+// hasta que a alguien le llega. Al cambiar de dominio, cámbialo aquí también
+// (ver la lista de sitios en index.html).
+const WEB = 'https://lifeasaprivilege.onrender.com';
+
+/**
+ * La letra de todos los correos.
+ *
+ * OJO con lo que se puede esperar aquí: **Gmail no carga tipografías de la web**
+ * (ni @font-face ni Google Fonts), así que «EB Garamond» solo la ve quien la
+ * tenga instalada. Por eso detrás van los Garamond de verdad que la gente sí
+ * suele tener puestos —la `Garamond` que trae Office en Windows, y `Hoefler
+ * Text`, `Baskerville` y `Palatino` en Mac—, y Georgia queda ya como último
+ * recurso. Antes se saltaba de EB Garamond a Georgia directamente, que es de
+ * otra familia: por eso los correos no parecían Garamond.
+ */
+const SERIF =
+  "'EB Garamond', Garamond, 'Hoefler Text', Baskerville, 'Palatino Linotype', Palatino, Georgia, serif";
+
+/**
+ * El traje de cada disciplina para los correos: su foto de fondo, sus dos
+ * colores y la palabra con la que se nombra su conocimiento.
+ *
+ * `txt` es el MISMO `<disc>Txt` de `frontend/src/GlobalVariables.tsx`, así que
+ * el correo se lee con la letra de su disciplina. Va copiado a mano porque el
+ * backend no importa del frontend: si cambias un color allí, cámbialo aquí.
+ *
+ * `velo` es el color con el que se tiñe la foto, y tiene que ser EL MISMO que
+ * la tabla `VELO` de `scripts/correo-fondos.mjs` —que es quien de verdad lo
+ * pinta sobre el JPEG—. Aquí sirve de respaldo: es lo que ve quien no recibe la
+ * foto (Outlook de escritorio), y por eso se parece al tono de la foto teñida.
+ *
+ * `foto` es un JPEG, no el WebP de la web: Outlook de escritorio no pinta WebP.
+ * Vive en el frontend (`/img/correo/<clave>.jpg`), que es público, porque un
+ * correo no puede llevar rutas locales — se generan con `scripts/correo-fondos.mjs`.
+ */
+export type DisciplinaClave =
+  | 'metodo' | 'psicologia' | 'ayurveda' | 'tcm'
+  | 'fisiologia' | 'nutricion' | 'cabala' | 'cultura';
+
+const TRAJE: Record<DisciplinaClave, { txt: string; velo: string; saber: string }> = {
+  metodo:     { txt: '#feffe4', velo: '#1e296b', saber: 'ancestral' },
+  // El velo va un poco MÁS CLARO que su fondo: el marrón de Psicología con
+  // letra marrón oscura se queda justo de contraste en cuanto la foto asoma.
+  psicologia: { txt: '#5e2d10', velo: '#e1b99f', saber: 'profundo' },
+  ayurveda:   { txt: '#853e0b', velo: '#ffffff', saber: 'ancestral' },
+  tcm:        { txt: '#ffa2a2', velo: '#6b0404', saber: 'ancestral' },
+  fisiologia: { txt: '#c8b5d1', velo: '#331c35', saber: 'científico' },
+  nutricion:  { txt: '#2b362a', velo: '#e4f8e1', saber: 'científico' },
+  // Cábala es la de siempre: nebulosa con destellos y letra ámbar. Su propio
+  // marrón no da contraste suficiente, así que su velo se va casi al negro (el
+  // mismo apaño que lleva la disciplina por dentro).
+  cabala:     { txt: '#bd814d', velo: '#1a1008', saber: 'ancestral' },
+  cultura:    { txt: '#79dcd4', velo: '#0c3c3c', saber: 'ancestral' },
+};
+
 @Injectable()
 export class MailService {
   private getTransporter() {
@@ -21,14 +81,98 @@ export class MailService {
     });
   }
 
-  // Envuelve el HTML en la tarjeta turquesa común a todos los correos.
-  private plantilla(titulo: string, cuerpo: string): string {
+  /**
+   * El sobre de TODOS los correos: título y cuerpo sobre un fondo, sin cajas ni
+   * recuadros por medio. El texto se lee directamente encima, igual que en la
+   * web.
+   *
+   * `foto` es opcional. Con ella, el fondo es esa imagen y `fondo` queda de
+   * respaldo para quien no la reciba; sin ella, el fondo es el color a secas.
+   */
+  private sobre({
+    titulo,
+    cuerpo,
+    fondo,
+    tinta,
+    foto,
+  }: {
+    titulo: string;
+    cuerpo: string;
+    fondo: string;
+    tinta: string;
+    foto?: string;
+  }): string {
+    const conFoto = foto
+      ? `background="${foto}" `
+      : '';
+    const fondoCss = foto
+      ? `background-image:url('${foto}');background-size:cover;background-position:center;background-repeat:no-repeat;`
+      : '';
     return `
-      <div style="font-family: 'EB Garamond', Georgia, serif; max-width: 560px; margin: 0 auto; padding: 32px; background: #008080; color: #ffffff; border-radius: 16px;">
-        <h1 style="margin: 0 0 16px; letter-spacing: 0.04em;">${titulo}</h1>
-        ${cuerpo}
-      </div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${fondo}" ${conFoto}
+             style="max-width:600px;margin:0 auto;border-radius:16px;background-color:${fondo};${fondoCss}">
+        <tr>
+          <td style="padding:48px 38px;font-family:${SERIF};color:${tinta};">
+            <h1 style="margin:0 0 20px;font-size:29px;line-height:1.25;letter-spacing:0.03em;color:${tinta};">${titulo}</h1>
+            ${cuerpo}
+          </td>
+        </tr>
+      </table>
     `;
+  }
+
+  /** El sobre de los correos que no son de ninguna disciplina (bienvenida,
+   *  contraseña, libro): el turquesa de la marca, liso, y letra blanca. */
+  private plantilla(titulo: string, cuerpo: string): string {
+    return this.sobre({ titulo, cuerpo, fondo: '#008080', tinta: '#ffffff' });
+  }
+
+  /**
+   * La tarjeta de una DISCIPLINA: su foto de fondo, su color de fondo y su
+   * color de letra.
+   *
+   * El texto va DIRECTAMENTE sobre la foto: no hay caja, ni recuadro, ni velo
+   * por CSS. Lo que hace que se lea es que la foto ya viene teñida con el color
+   * de su disciplina desde `scripts/correo-fondos.mjs`, que calcula cuánto tinte
+   * necesita cada una midiendo sus propios píxeles. Así el tinte es parte del
+   * JPEG y lo ve igual todo el mundo, en vez de depender de una capa translúcida
+   * que la mitad de los clientes de correo no pintan.
+   *
+   * Lo único que queda por CSS es la foto de fondo, con su `bgcolor` debajo: si
+   * la foto no carga —o el cliente no pinta fondos, que es el caso de Outlook de
+   * escritorio— queda el color sólido, que es casi el mismo tono que la foto
+   * teñida. Por eso tampoco hace falta el apaño de VML para Outlook.
+   */
+  private plantillaDisciplina(clave: DisciplinaClave, titulo: string, cuerpo: string): string {
+    const { txt, velo } = TRAJE[clave];
+    return this.sobre({
+      titulo,
+      cuerpo,
+      fondo: velo,
+      tinta: txt,
+      foto: `${this.frontendUrl}/img/correo/${clave}.jpg`,
+    });
+  }
+
+  /** Un botón de los correos de disciplina: relleno con la LETRA de la
+   *  disciplina y texto con su fondo, que es el contraste más alto que tiene
+   *  la pareja de colores. */
+  private botonDisciplina(clave: DisciplinaClave, href: string, label: string, principal = true): string {
+    const { velo, txt } = TRAJE[clave];
+    const estilo = principal
+      ? `background:${txt};color:${velo};`
+      : `border:1.5px solid ${txt}99;color:${txt};`;
+    return `<a href="${href}" style="display:inline-block;margin:0 10px 12px 0;padding:14px 26px;border-radius:999px;
+              font-family:${SERIF};font-size:16px;line-height:1;
+              font-weight:600;text-decoration:none;${estilo}">${label}</a>`;
+  }
+
+  /** La web, para los enlaces de los correos. */
+  private get frontendUrl(): string {
+    const url = (process.env.FRONTEND_URL ?? '').trim();
+    if (url) return url.replace(/\/+$/, '');
+    console.warn(`[MailService] FRONTEND_URL no configurado — los enlaces de los correos van a ${WEB}.`);
+    return WEB;
   }
 
   /** Dirección donde se guarda copia de lo que se manda (NOTIFY_EMAIL). */
@@ -94,13 +238,19 @@ export class MailService {
   }
 
   // ───────────────────────────────────────────────────────────────────────────
-  // Bienvenida al crear la cuenta. Su razón de ser es el ENLACE: quien se
-  // registra y cierra la pestaña no siempre sabe volver (la web no vive en su
-  // historial ni tiene la dirección a mano), así que el correo le deja
-  // guardada la puerta de entrada a su cuenta.
+  // Bienvenida al crear la cuenta. Tiene dos razones de ser:
   //
-  // No lleva contraseña ni token: es un enlace público a /logIn, así que si el
-  // correo se reenvía o se filtra no da acceso a nada.
+  //  1. El ENLACE. Quien se registra y cierra la pestaña no siempre sabe volver
+  //     (la web no vive en su historial ni tiene la dirección a mano), así que
+  //     el correo le deja guardada la puerta de entrada a su cuenta.
+  //  2. La LLAMADA sin coste. Quien acaba de registrarse todavía no ha comprado
+  //     nada y suele estar justo en la duda de por dónde empezar; los veinte
+  //     minutos de conocernos son la forma de resolverla. Va aquí dentro y no
+  //     en un correo aparte a propósito: dos correos en el mismo segundo se
+  //     leen como spam, y este ya lo abre todo el mundo.
+  //
+  // No lleva contraseña ni token: los dos enlaces son públicos (/logIn y
+  // /contacto), así que si el correo se reenvía o se filtra no da acceso a nada.
   // ───────────────────────────────────────────────────────────────────────────
   async enviarBienvenidaCuenta(
     email: string,
@@ -108,45 +258,98 @@ export class MailService {
     /** Cuenta creada con Google: ahí no hay contraseña que recordar ni recuperar. */
     opciones?: { conGoogle?: boolean },
   ): Promise<void> {
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = this.frontendUrl;
     const enlace = `${frontendUrl}/logIn`;
+    // `?conocernos=1` abre el calendario de los veinte minutos sin coste nada
+    // más aterrizar, sin tener que buscar la tarjeta en /contacto.
+    const enlaceLlamada = `${frontendUrl}/contacto?conocernos=1`;
     const comoEntrar = opciones?.conGoogle
       ? 'Entras con el botón de Google, con este mismo correo.'
-      : 'Entras con tu nombre o tu email y la contraseña que elegiste. Si algún día la olvidas, puedes recuperarla desde esa misma página.';
+      : 'Entras con tu nombre o tu email y la contraseña que elegiste. Y si algún día se te olvida, no pasa nada: se recupera desde esa misma página.';
+    // El nombre es de la persona, pero entra en el HTML del correo: se escapa
+    // por si alguien se registra con un `<` en el nombre. Y puede venir vacío
+    // (las cuentas de Google no siempre traen nombre), así que el saludo se
+    // queda sin él en vez de soltar un «Muy buenas, :».
+    const nombreSeguro = this.escaparHtml(nombre).trim();
+    const saludo = nombreSeguro ? `Muy buenas, <strong>${nombreSeguro}</strong>.` : 'Muy buenas.';
     const html = this.plantilla(
-      'Tu cuenta ya existe',
+      'Qué alegría tenerte aquí',
       `
-        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
-          Hola <strong>${nombre}</strong>, bienvenida a <strong>Life as a Privilege</strong>.
-          Tu cuenta ya está creada.
+        <p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">
+          ${saludo}
         </p>
-        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
-          <strong>Guarda este enlace para iniciar sesión en tu cuenta:</strong>
+        <p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">
+          Tu cuenta en <strong>Life as a Privilege</strong> ya está creada, y te espera.
+        </p>
+        <p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">
+          Te dejo aquí el enlace para entrar:
         </p>
         <p style="margin: 28px 0;">
-          <a href="${enlace}"
-             style="display: inline-block; padding: 14px 28px; border-radius: 999px;
-                    border: 1.5px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.12);
-                    color: #ffffff; text-decoration: none; letter-spacing: 0.14em;
-                    text-transform: uppercase; font-weight: 700;">
-            Iniciar sesión
-          </a>
+          ${this.pildora(enlace, 'Iniciar sesión')}
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
-          Si el botón no funciona, copia esta dirección en tu navegador:<br />
+          Si el botón no te funciona, puedes copiar esta dirección en tu navegador:<br />
           <span style="word-break: break-all;">${enlace}</span>
         </p>
-        <p style="margin-top: 24px; font-size: 14px; opacity: 0.78;">
+        <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
           ${comoEntrar}
         </p>
+
+        <div style="margin: 34px 0 0; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.25);">
+          <p style="margin: 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+            Déjame decirte una cosa: abrir esta cuenta no es poca cosa. Querer
+            conocerte es un acto que requiere valor, y me alegra mucho que quieras
+            empezar este viaje.
+          </p>
+          <p style="margin: 18px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+            Si aún no sabes por dónde empezar, o dudas entre una disciplina y otra,
+            podemos hablarlo con calma. Son <strong>veinte minutos, sin coste y sin
+            ningún compromiso</strong>. Hablemos de cómo estás y qué disciplina te
+            puede ayudar mejor ahora mismo.
+          </p>
+          <p style="margin: 28px 0;">
+            <a href="${enlaceLlamada}"
+               style="display:inline-block;padding:14px 28px;border-radius:999px;
+                      background:#ffffff;color:#008080;text-decoration:none;
+                      font-size:16px;font-weight:600;">Buscamos un hueco</a>
+          </p>
+          <p style="margin: 0; font-size: 14px; line-height: 1.7; opacity: 0.78;">
+            Y si prefieres curiosear tú primero, también me parece muy bien. La
+            llamada seguirá aquí el día que te apetezca.
+          </p>
+          <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+            Un abrazo,<br />María
+          </p>
+        </div>
       `,
     );
     await this.enviar(
       email,
-      'Guarda este enlace para entrar en tu cuenta — Life as a Privilege',
+      'Tu cuenta ya está lista',
       html,
       'email de bienvenida',
     );
+  }
+
+  /**
+   * Un botón de los correos que no son de disciplina: blanco tenue sobre el
+   * turquesa. En minúsculas y sin apretar las letras, a propósito — un botón en
+   * mayúsculas se lee como una orden, y estos son invitaciones.
+   */
+  private pildora(href: string, label: string): string {
+    return `<a href="${href}"
+             style="display:inline-block;padding:14px 28px;border-radius:999px;
+                    border:1px solid rgba(255,255,255,0.45);background:rgba(255,255,255,0.12);
+                    color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;">${label}</a>`;
+  }
+
+  /** Escapa el texto que viene de la persona antes de meterlo en el HTML. */
+  private escaparHtml(texto: string): string {
+    return String(texto ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -165,13 +368,7 @@ export class MailService {
           solo se puede usar una vez.
         </p>
         <p style="margin: 28px 0;">
-          <a href="${enlace}"
-             style="display: inline-block; padding: 14px 28px; border-radius: 999px;
-                    border: 1.5px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.12);
-                    color: #ffffff; text-decoration: none; letter-spacing: 0.14em;
-                    text-transform: uppercase; font-weight: 700;">
-            Elegir nueva contraseña
-          </a>
+          ${this.pildora(enlace, 'Elegir nueva contraseña')}
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no funciona, copia esta dirección en tu navegador:<br />
@@ -198,13 +395,7 @@ export class MailService {
           Gracias por tu compra de <strong>${titulo}</strong>. Aquí tienes tu descarga:
         </p>
         <p style="margin: 28px 0;">
-          <a href="${pdfLink}"
-             style="display: inline-block; padding: 14px 28px; border-radius: 999px;
-                    border: 1.5px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.12);
-                    color: #ffffff; text-decoration: none; letter-spacing: 0.14em;
-                    text-transform: uppercase; font-weight: 700;">
-            Descargar el PDF
-          </a>
+          ${this.pildora(pdfLink, 'Descargar el PDF')}
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no funciona, copia esta dirección en tu navegador:<br />
@@ -221,28 +412,47 @@ export class MailService {
   // ───────────────────────────────────────────────────────────────────────────
   // Confirmación de que una disciplina de El Recorrido ha quedado desbloqueada.
   // También la dispara el webhook, por el mismo motivo.
+  //
+  // Va vestido con los colores y la foto de la disciplina comprada (ver TRAJE):
+  // quien abre el correo reconoce de un vistazo qué ha comprado, y al entrar se
+  // encuentra lo mismo que ha visto aquí.
   // ───────────────────────────────────────────────────────────────────────────
-  async enviarDisciplinaDesbloqueada(email: string, nombre: string, disciplina: string): Promise<void> {
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-    const html = this.plantilla(
-      `${disciplina} ya es tuya`,
+  async enviarDisciplinaDesbloqueada(
+    email: string,
+    nombre: string,
+    disciplina: string,
+    clave: DisciplinaClave,
+  ): Promise<void> {
+    const frontendUrl = this.frontendUrl;
+    const { txt, saber } = TRAJE[clave];
+    const nombreSeguro = this.escaparHtml(nombre).trim();
+    const saludo = nombreSeguro ? `Muy buenas, <strong>${nombreSeguro}</strong>.` : 'Muy buenas.';
+    const parrafo = (texto: string, mt = 18) =>
+      `<p style="margin:${mt}px 0 0;font-size:16px;line-height:1.8;color:${txt};">${texto}</p>`;
+
+    const html = this.plantillaDisciplina(
+      clave,
+      `Qué bonito que empieces con ${disciplina}`,
       `
-        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
-          Hola <strong>${nombre}</strong>, tu pago se ha confirmado y
-          <strong>${disciplina}</strong> ya está abierta en tu Mapa.
+        ${parrafo(saludo, 0)}
+        ${parrafo(`Ya está todo listo: <strong>${disciplina}</strong> te espera abierta en tu Mapa.`)}
+        ${parrafo(
+          `Me hace mucha ilusión que hayas elegido esta, y creo que te va a sentar bien. Ve sin
+           prisa: poco a poco irás notando cómo el conocimiento ${saber} se te va colando en el
+           día a día — no para saber más, sino para entenderte un poco mejor.`,
+        )}
+        ${parrafo(
+          `Y si en algún momento te apetece que lo hablemos, aquí estoy: una duda, un atasco, o
+           simplemente contarme cómo lo llevas.`,
+        )}
+        <p style="margin:32px 0 0;">
+          ${this.botonDisciplina(clave, `${frontendUrl}/home`, 'Entrar en mi Mapa')}
+          ${this.botonDisciplina(clave, `${frontendUrl}/contacto`, 'Hablamos cuando quieras', false)}
         </p>
-        <p style="margin: 28px 0;">
-          <a href="${frontendUrl}/home"
-             style="display: inline-block; padding: 14px 28px; border-radius: 999px;
-                    border: 1.5px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.12);
-                    color: #ffffff; text-decoration: none; letter-spacing: 0.14em;
-                    text-transform: uppercase; font-weight: 700;">
-            Entrar en El Mapa
-          </a>
-        </p>
+        ${parrafo('Un abrazo,<br />María', 28)}
       `,
     );
-    await this.enviar(email, `${disciplina} desbloqueada — Life as a Privilege`, html, 'email de disciplina');
+    await this.enviar(email, `${disciplina} ya te espera en tu Mapa`, html, 'email de disciplina');
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -359,8 +569,7 @@ export class MailService {
     pie: '#c6e9e5',        // menta pálida del pie
   };
 
-  private static readonly SERIF =
-    "'EB Garamond', Garamond, Georgia, 'Times New Roman', serif";
+  private static readonly SERIF = SERIF;
 
   /** Sobre de los correos de Astrología: mandala, filete, antetítulo,
    *  título y cuerpo. `preheader` es la línea que se lee en la bandeja de
@@ -378,7 +587,7 @@ export class MailService {
   }): string {
     const c = MailService.PALETA;
     const serif = MailService.SERIF;
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = this.frontendUrl;
     const logo = `${frontendUrl}/img/icono/life.png`;
 
     return `
@@ -520,7 +729,7 @@ export class MailService {
   ): Promise<void> {
     const c = MailService.PALETA;
     const serif = MailService.SERIF;
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = this.frontendUrl;
 
     // YYYY-MM-DD → DD-MM-YYYY (si no viene en ese formato, se deja tal cual).
     const fechaLegible = /^\d{4}-\d{2}-\d{2}/.test(datos.fecha_nacimiento)
@@ -587,7 +796,7 @@ export class MailService {
   // ── 2. A mano (panel): la carta está en proceso de ser leída ───────────────
   async enviarCartaEnProceso(email: string, nombre: string): Promise<void> {
     const c = MailService.PALETA;
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = this.frontendUrl;
 
     const html = this.sobreAstro({
       titulo: 'Tu carta está en proceso de ser leída',
@@ -613,7 +822,7 @@ export class MailService {
   // la carta. (Ya no se manda ningún PDF de Drive.)
   async enviarCartaLeida(email: string, nombre: string): Promise<void> {
     const c = MailService.PALETA;
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = this.frontendUrl;
     const destino = `${frontendUrl}/metodo/astrologia/lectura`;
 
     const html = this.sobreAstro({
@@ -669,7 +878,7 @@ export class MailService {
   ): Promise<boolean> {
     const c = MailService.PALETA;
     const serif = MailService.SERIF;
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = this.frontendUrl;
     // A crear la cuenta directamente: el correo ya le ha explicado qué hay
     // dentro, así que el botón hace lo siguiente y no lo vuelve a contar. Y al
     // lado, la salida para quien todavía quiere mirar antes de decidir: El Mapa
@@ -791,7 +1000,7 @@ export class MailService {
       : datos.fecha_nacimiento;
 
     const html = `
-      <div style="font-family: 'EB Garamond', Georgia, serif; max-width: 560px; margin: 0 auto; padding: 32px; background: #008080; color: #ffffff; border-radius: 16px;">
+      <div style="font-family: ${SERIF}; max-width: 560px; margin: 0 auto; padding: 32px; background: #008080; color: #ffffff; border-radius: 16px;">
         <h1 style="margin: 0 0 16px; letter-spacing: 0.04em;">${
           esCorreccion ? 'Datos corregidos de carta astral' : 'Nueva solicitud de carta astral'
         }</h1>

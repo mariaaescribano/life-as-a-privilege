@@ -206,7 +206,7 @@ export class PaymentService {
     if (yaLaTenia || !antes?.email) return;
 
     try {
-      await this.mailService.enviarDisciplinaDesbloqueada(antes.email, antes.name ?? '', def.nombre);
+      await this.mailService.enviarDisciplinaDesbloqueada(antes.email, antes.name ?? '', def.nombre, scope);
       await this.mailService.enviarAvisoCompra(antes.email, antes.name ?? '', def.nombre);
     } catch (err) {
       // Los emails son un extra: si fallan, el acceso ya está concedido y no

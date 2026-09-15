@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import { AgendarLlamada } from "../global/AgendarLlamada";
 import { BookCallModal } from "../global/BookCallModal";
@@ -140,12 +141,31 @@ function Via({
 
 export function ViasDeContacto({ onEscribir }: { onEscribir: () => void }) {
   const t = useT();
+  const [params, setParams] = useSearchParams();
   const [llamadaAbierta, setLlamadaAbierta] = useState(false);
   // La de CONOCERNOS es otra cosa: 20 minutos sin coste. Ya existía montada
   // (BookCallModal, la misma de /elMetodo), así que se abre esa y no se
   // duplica ni el calendario ni la reserva.
-  const [conocernosAbierta, setConocernosAbierta] = useState(false);
+  //
+  // `/contacto?conocernos=1` la abre sola: es el destino del botón del correo
+  // de bienvenida, que invita a la llamada sin coste. Sin el parámetro habría
+  // que aterrizar en la página y encontrar la tarjeta, y ahí se pierde media
+  // gente.
+  const [conocernosAbierta, setConocernosAbierta] = useState(
+    () => params.get("conocernos") === "1",
+  );
   useLockBodyScroll(llamadaAbierta);
+
+  // Al cerrarla se quita el parámetro: si no, recargar o volver atrás la
+  // vuelve a abrir.
+  const cerrarConocernos = () => {
+    setConocernosAbierta(false);
+    if (params.has("conocernos")) {
+      const limpio = new URLSearchParams(params);
+      limpio.delete("conocernos");
+      setParams(limpio, { replace: true });
+    }
+  };
 
   return (
     <>
@@ -198,7 +218,7 @@ export function ViasDeContacto({ onEscribir }: { onEscribir: () => void }) {
       </Box>
 
       {/* ── LOS 20 MINUTOS DE CONOCERNOS ── */}
-      <BookCallModal isOpen={conocernosAbierta} onClose={() => setConocernosAbierta(false)} />
+      <BookCallModal isOpen={conocernosAbierta} onClose={cerrarConocernos} />
 
       {/* ── POPUP DE LA LLAMADA ──
           El mismo calendario del recorrido, sin disciplina: aquí no estamos
