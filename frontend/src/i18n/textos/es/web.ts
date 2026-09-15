@@ -70,6 +70,7 @@ export const web = {
   "suscribir.gracias": "Gracias por querer aprender",
   "suscribir.invalido": "Introduce un email válido",
   "suscribir.error": "No se pudo enviar. Inténtalo de nuevo en un momento.",
+  "suscribir.baja": "Puedes darte de baja cuando quieras",
 
   // ── Aviso de cookies (la barra de abajo, no la página legal) ───────────
   "cookies.aviso":

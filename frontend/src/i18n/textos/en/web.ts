@@ -63,6 +63,7 @@ export const web = {
   "suscribir.gracias": "Thank you for wanting to learn",
   "suscribir.invalido": "Enter a valid email address",
   "suscribir.error": "It couldn't be sent. Please try again in a moment.",
+  "suscribir.baja": "You can unsubscribe whenever you want",
 
   // ── Cookie banner (the bar at the bottom, not the legal page) ──────────
   "cookies.aviso":

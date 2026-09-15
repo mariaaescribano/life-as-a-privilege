@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { INSTAGRAM_URL } from "../../GlobalVariables";
+import { API_URL, INSTAGRAM_URL } from "../../GlobalVariables";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -151,16 +151,22 @@ const SiteFooter = () => {
           { texto: t("footer.privacidad"), ruta: "/privacidad" },
           { texto: t("footer.cookies"), ruta: "/cookies" },
           { texto: t("footer.terminos"), ruta: "/terminos" },
+          // Baja de la lista de correo: siempre a mano, sin tener que buscar un
+          // correo viejo. La página la pinta el backend (subscribe/baja.pagina).
+          { texto: t("footer.baja"), ruta: "/subscribe/baja", externo: true },
         ].map((l) => (
           <Text
             key={l.ruta}
-            as="button"
-            onClick={() => navigate(l.ruta)}
+            as={l.externo ? "a" : "button"}
+            {...(l.externo
+              ? { href: `${API_URL}${l.ruta}`, rel: "nofollow" }
+              : { onClick: () => navigate(l.ruta) })}
             color="rgba(255,255,255,0.45)"
             fontSize="xs"
             letterSpacing="0.06em"
             bg="transparent"
             cursor="pointer"
+            textDecoration="none"
             transition="color 0.2s"
             _hover={{ color: "rgba(255,255,255,0.85)" }}
           >

@@ -3,6 +3,7 @@ import { Box, Flex, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
+import { EnlaceBaja } from "./EnlaceBaja";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -213,6 +214,9 @@ export function SubscribeBox() {
             </Box>
           </Flex>
         )}
+
+        {/* La salida de la lista, a la vista desde el momento de entrar. */}
+        <EnlaceBaja mt={6} />
       </Box>
     </Flex>
   );

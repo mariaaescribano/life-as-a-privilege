@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
+import { EnlaceBaja } from "./EnlaceBaja";
 
 interface WaitlistModalProps {
   isOpen: boolean;
@@ -147,6 +148,8 @@ export function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     {submitting ? "Enviando…" : "Avísame"}
                   </Box>
                 </Flex>
+
+                <EnlaceBaja mt={0} />
               </Flex>
             ) : (
               <Flex direction="column" align="center" gap={4} py={2}>

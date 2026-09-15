@@ -46,10 +46,10 @@ export function paginaBaja(estado: EstadoBaja, email: string): string {
         : p('No hemos encontrado ese correo en la lista, o el enlace está incompleto. Puedes intentarlo aquí:') +
           formulario(email);
 
+  // El botón de volver sale SIEMPRE, también en el formulario: a esta página
+  // se llega desde el pie de la web, no solo desde un correo.
   const boton =
-    estado === 'formulario'
-      ? ''
-      : `<p style="margin:30px 0 0;">
+    `<p style="margin:30px 0 0;">
         <a href="${web}" style="display:inline-block;padding:12px 22px;border:1px solid #5fc9c0;border-radius:999px;color:#ffffff;text-decoration:none;font-size:16px;">
           Volver a la web
         </a>

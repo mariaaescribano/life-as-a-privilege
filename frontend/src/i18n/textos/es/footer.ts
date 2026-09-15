@@ -9,4 +9,5 @@ export const footer = {
   "footer.privacidad": "Privacidad",
   "footer.cookies": "Cookies",
   "footer.terminos": "Términos de contratación",
+  "footer.baja": "Darse de baja",
 } as const;

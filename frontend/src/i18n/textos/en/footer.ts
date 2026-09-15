@@ -8,4 +8,5 @@ export const footer = {
   "footer.privacidad": "Privacy",
   "footer.cookies": "Cookies",
   "footer.terminos": "Terms of service",
+  "footer.baja": "Unsubscribe",
 };
