@@ -1,0 +1,609 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1874" height="1962" viewBox="0 0 1874 1962">
+<defs>
+  <marker id="flecha-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f5f5f"/>
+  </marker>
+  <marker id="flecha-verde" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f7a4f"/>
+  </marker>
+</defs>
+<rect width="1874" height="1962" fill="#ffffff"/>
+<text x="42" y="46" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="27" font-weight="600" fill="#1b1b1b">Modelo de datos</text>
+<text x="42" y="74" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="15" fill="#555">29 tablas y 1 vista en PostgreSQL, agrupadas por la función que cumplen.</text>
+<rect x="42" y="104" width="1790" height="198" rx="5" fill="#ffffff" stroke="#0f5f5f" stroke-width="1.6"/>
+<path d="M 42 109 a 5 5 0 0 1 5 -5 h 1780 a 5 5 0 0 1 5 5 v 25 h -1790 z" fill="#0f5f5f"/>
+<text x="53" y="124" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="15" font-weight="700" fill="#ffffff">user</text>
+<text x="1821" y="124" text-anchor="end" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="12.5" fill="#ffffffcc">identidad, credenciales y permiso de acceso a cada disciplina</text>
+<text x="54" y="154" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="344" y="154" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#0f5f5f">PK · text</text>
+<text x="54" y="173" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">name</text>
+<text x="344" y="173" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">único · text</text>
+<text x="54" y="192" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">email</text>
+<text x="344" y="192" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">único · text</text>
+<text x="54" y="211" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">password</text>
+<text x="344" y="211" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<text x="54" y="230" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">img</text>
+<text x="344" y="230" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<text x="54" y="249" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">trato</text>
+<text x="344" y="249" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<text x="642.6666666666666" y="154" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">metodo_suscrito</text>
+<text x="932.6666666666666" y="154" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<text x="642.6666666666666" y="173" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">psicologia_suscrito</text>
+<text x="932.6666666666666" y="173" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<text x="642.6666666666666" y="192" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">ayurveda_suscrito</text>
+<text x="932.6666666666666" y="192" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<text x="642.6666666666666" y="211" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">tcm_suscrito</text>
+<text x="932.6666666666666" y="211" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<text x="642.6666666666666" y="230" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">fisiologia_suscrito</text>
+<text x="932.6666666666666" y="230" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<text x="642.6666666666666" y="249" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">nutricion_suscrito</text>
+<text x="932.6666666666666" y="249" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<text x="642.6666666666666" y="268" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">cabala_suscrito</text>
+<text x="932.6666666666666" y="268" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<text x="642.6666666666666" y="287" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">cultura_suscrito</text>
+<text x="932.6666666666666" y="287" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<text x="1231.3333333333333" y="154" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">metodo_fecha_compra</text>
+<text x="1521.3333333333333" y="154" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<text x="1231.3333333333333" y="173" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">psicologia_fecha_compra</text>
+<text x="1521.3333333333333" y="173" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<text x="1231.3333333333333" y="192" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">ayurveda_fecha_compra</text>
+<text x="1521.3333333333333" y="192" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<text x="1231.3333333333333" y="211" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">tcm_fecha_compra</text>
+<text x="1521.3333333333333" y="211" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<text x="1231.3333333333333" y="230" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">fisiologia_fecha_compra</text>
+<text x="1521.3333333333333" y="230" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<text x="1231.3333333333333" y="249" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">nutricion_fecha_compra</text>
+<text x="1521.3333333333333" y="249" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<text x="1231.3333333333333" y="268" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">cabala_fecha_compra</text>
+<text x="1521.3333333333333" y="268" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<text x="1231.3333333333333" y="287" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">cultura_fecha_compra</text>
+<text x="1521.3333333333333" y="287" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="42" y="364" width="452" height="1556" rx="9" fill="#eef3f9" stroke="#2f5d8a" stroke-width="1.2" stroke-opacity="0.45"/>
+<text x="57" y="388" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="15.5" font-weight="700" fill="#2f5d8a">El Recorrido</text>
+<text x="57" y="404" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="12" fill="#666">un documento JSONB por usuario y disciplina</text>
+<rect x="57" y="410" width="422" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 415 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="430" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">recorrido_progreso</text>
+<text x="68" y="460" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="460" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="466" x2="478" y2="466" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="479" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">disciplina</text>
+<text x="468" y="479" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="485" x2="478" y2="485" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="498" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">paso_max</text>
+<text x="468" y="498" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="58" y1="504" x2="478" y2="504" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="517" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="468" y="517" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="544" width="422" height="198" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 549 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="564" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">metodo_astrologia</text>
+<text x="68" y="594" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="594" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="600" x2="478" y2="600" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="613" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">data</text>
+<text x="468" y="613" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="58" y1="619" x2="478" y2="619" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="632" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">intro_visto</text>
+<text x="468" y="632" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="58" y1="638" x2="478" y2="638" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="651" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">solicitud_enviada_at</text>
+<text x="468" y="651" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<line x1="58" y1="657" x2="478" y2="657" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="670" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">link_carta</text>
+<text x="468" y="670" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="58" y1="676" x2="478" y2="676" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="689" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">casas_texto</text>
+<text x="468" y="689" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="58" y1="695" x2="478" y2="695" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="708" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">aspectos_texto</text>
+<text x="468" y="708" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="58" y1="714" x2="478" y2="714" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="727" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="468" y="727" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="754" width="422" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 759 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="774" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">metodo_psicologia</text>
+<text x="68" y="804" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="804" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="810" x2="478" y2="810" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="823" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">data</text>
+<text x="468" y="823" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="58" y1="829" x2="478" y2="829" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="842" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">intro_visto</text>
+<text x="468" y="842" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="58" y1="848" x2="478" y2="848" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="861" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="468" y="861" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="888" width="422" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 893 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="908" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">metodo_ayurveda</text>
+<text x="68" y="938" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="938" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="944" x2="478" y2="944" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="957" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">data</text>
+<text x="468" y="957" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="58" y1="963" x2="478" y2="963" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="976" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">intro_visto</text>
+<text x="468" y="976" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="58" y1="982" x2="478" y2="982" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="995" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="468" y="995" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="1022" width="422" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 1027 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="1042" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">metodo_tcm</text>
+<text x="68" y="1072" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="1072" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="1078" x2="478" y2="1078" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1091" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">data</text>
+<text x="468" y="1091" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="58" y1="1097" x2="478" y2="1097" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1110" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">intro_visto</text>
+<text x="468" y="1110" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="58" y1="1116" x2="478" y2="1116" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1129" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="468" y="1129" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="1156" width="422" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 1161 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="1176" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">metodo_fisiologia</text>
+<text x="68" y="1206" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="1206" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="1212" x2="478" y2="1212" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1225" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">data</text>
+<text x="468" y="1225" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="58" y1="1231" x2="478" y2="1231" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1244" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">intro_visto</text>
+<text x="468" y="1244" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="58" y1="1250" x2="478" y2="1250" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1263" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="468" y="1263" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="1290" width="422" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 1295 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="1310" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">metodo_nutricion</text>
+<text x="68" y="1340" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="1340" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="1346" x2="478" y2="1346" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1359" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">data</text>
+<text x="468" y="1359" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="58" y1="1365" x2="478" y2="1365" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1378" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">intro_visto</text>
+<text x="468" y="1378" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="58" y1="1384" x2="478" y2="1384" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1397" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="468" y="1397" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="1424" width="422" height="103" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 1429 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="1444" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">metodo_cabala</text>
+<text x="68" y="1474" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="1474" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="1480" x2="478" y2="1480" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1493" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">data</text>
+<text x="468" y="1493" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="58" y1="1499" x2="478" y2="1499" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1512" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="468" y="1512" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="1539" width="422" height="198" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 1544 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="1559" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">psicologia_des</text>
+<text x="68" y="1589" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">user_id</text>
+<text x="468" y="1589" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · text</text>
+<line x1="58" y1="1595" x2="478" y2="1595" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1608" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">score</text>
+<text x="468" y="1608" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">smallint</text>
+<line x1="58" y1="1614" x2="478" y2="1614" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1627" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">banda</text>
+<text x="468" y="1627" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="58" y1="1633" x2="478" y2="1633" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1646" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">amnesia</text>
+<text x="468" y="1646" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">smallint</text>
+<line x1="58" y1="1652" x2="478" y2="1652" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1665" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">despersonalizacion</text>
+<text x="468" y="1665" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">smallint</text>
+<line x1="58" y1="1671" x2="478" y2="1671" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1684" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">absorcion</text>
+<text x="468" y="1684" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">smallint</text>
+<line x1="58" y1="1690" x2="478" y2="1690" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1703" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">alto</text>
+<text x="468" y="1703" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="58" y1="1709" x2="478" y2="1709" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1722" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">fecha</text>
+<text x="468" y="1722" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="57" y="1749" width="422" height="141" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 57 1754 a 5 5 0 0 1 5 -5 h 412 a 5 5 0 0 1 5 5 v 25 h -422 z" fill="#2f5d8a"/>
+<text x="68" y="1769" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">notas</text>
+<text x="68" y="1799" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="468" y="1799" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f5d8a">PK · uuid</text>
+<line x1="58" y1="1805" x2="478" y2="1805" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1818" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">user_id</text>
+<text x="468" y="1818" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="58" y1="1824" x2="478" y2="1824" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1837" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">contenido</text>
+<text x="468" y="1837" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="58" y1="1843" x2="478" y2="1843" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1856" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">categoria</text>
+<text x="468" y="1856" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="58" y1="1862" x2="478" y2="1862" stroke="#eeeeee" stroke-width="1"/>
+<text x="68" y="1875" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">created_at</text>
+<text x="468" y="1875" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="518" y="364" width="420" height="1384" rx="9" fill="#f4f1f8" stroke="#6b4f8a" stroke-width="1.2" stroke-opacity="0.45"/>
+<text x="533" y="388" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="15.5" font-weight="700" fill="#6b4f8a">Tests y resultados</text>
+<text x="533" y="404" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="12" fill="#666">resultado y respuestas crudas, en forma relacional</text>
+<rect x="533" y="410" width="390" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 415 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="430" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">astrologia</text>
+<text x="544" y="460" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">userId</text>
+<text x="912" y="460" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#6b4f8a">PK · text</text>
+<line x1="534" y1="466" x2="922" y2="466" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="479" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">sol</text>
+<text x="912" y="479" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="485" x2="922" y2="485" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="498" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">luna</text>
+<text x="912" y="498" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="504" x2="922" y2="504" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="517" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">ascendente</text>
+<text x="912" y="517" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<rect x="533" y="544" width="390" height="160" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 549 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="564" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">ayurveda</text>
+<text x="544" y="594" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">userId</text>
+<text x="912" y="594" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#6b4f8a">PK · text</text>
+<line x1="534" y1="600" x2="922" y2="600" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="613" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">dosha</text>
+<text x="912" y="613" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="619" x2="922" y2="619" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="632" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">vata_score</text>
+<text x="912" y="632" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="534" y1="638" x2="922" y2="638" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="651" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">pitta_score</text>
+<text x="912" y="651" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="534" y1="657" x2="922" y2="657" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="670" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">kapha_score</text>
+<text x="912" y="670" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="534" y1="676" x2="922" y2="676" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="689" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">fecha</text>
+<text x="912" y="689" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">date</text>
+<rect x="533" y="716" width="390" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 721 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="736" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">ayurveda_respuestas</text>
+<text x="544" y="766" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">user_id</text>
+<text x="912" y="766" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="772" x2="922" y2="772" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="785" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">pregunta_idx</text>
+<text x="912" y="785" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="534" y1="791" x2="922" y2="791" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="804" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">pregunta</text>
+<text x="912" y="804" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="810" x2="922" y2="810" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="823" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">dosha_elegida</text>
+<text x="912" y="823" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<rect x="533" y="850" width="390" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 855 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="870" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">tcm</text>
+<text x="544" y="900" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">userId</text>
+<text x="912" y="900" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#6b4f8a">PK · text</text>
+<line x1="534" y1="906" x2="922" y2="906" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="919" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">constitucion</text>
+<text x="912" y="919" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="925" x2="922" y2="925" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="938" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">elemento</text>
+<text x="912" y="938" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="944" x2="922" y2="944" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="957" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">desequilibrio</text>
+<text x="912" y="957" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<rect x="533" y="984" width="390" height="160" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 989 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="1004" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">tcm_respuestas</text>
+<text x="544" y="1034" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">user_id</text>
+<text x="912" y="1034" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1040" x2="922" y2="1040" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1053" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">test_num</text>
+<text x="912" y="1053" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="534" y1="1059" x2="922" y2="1059" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1072" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">seccion</text>
+<text x="912" y="1072" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1078" x2="922" y2="1078" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1091" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">pregunta_idx</text>
+<text x="912" y="1091" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="534" y1="1097" x2="922" y2="1097" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1110" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">pregunta</text>
+<text x="912" y="1110" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1116" x2="922" y2="1116" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1129" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">respuesta</text>
+<text x="912" y="1129" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<rect x="533" y="1156" width="390" height="236" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 1161 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="1176" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">nutricion</text>
+<text x="544" y="1206" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">userId</text>
+<text x="912" y="1206" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#6b4f8a">PK · text</text>
+<line x1="534" y1="1212" x2="922" y2="1212" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1225" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">peso</text>
+<text x="912" y="1225" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">numeric</text>
+<line x1="534" y1="1231" x2="922" y2="1231" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1244" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">altura</text>
+<text x="912" y="1244" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">numeric</text>
+<line x1="534" y1="1250" x2="922" y2="1250" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1263" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">edad</text>
+<text x="912" y="1263" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="534" y1="1269" x2="922" y2="1269" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1282" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">genero</text>
+<text x="912" y="1282" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1288" x2="922" y2="1288" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1301" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">actividadIdx</text>
+<text x="912" y="1301" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="534" y1="1307" x2="922" y2="1307" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1320" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">tdee</text>
+<text x="912" y="1320" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">numeric</text>
+<line x1="534" y1="1326" x2="922" y2="1326" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1339" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">protG</text>
+<text x="912" y="1339" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">numeric</text>
+<line x1="534" y1="1345" x2="922" y2="1345" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1358" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">carbG</text>
+<text x="912" y="1358" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">numeric</text>
+<line x1="534" y1="1364" x2="922" y2="1364" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1377" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">fatG</text>
+<text x="912" y="1377" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">numeric</text>
+<rect x="533" y="1404" width="390" height="103" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 1409 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="1424" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">cabala</text>
+<text x="544" y="1454" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">idUser</text>
+<text x="912" y="1454" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1460" x2="922" y2="1460" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1473" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">idPregunta</text>
+<text x="912" y="1473" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1479" x2="922" y2="1479" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1492" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">respuesta</text>
+<text x="912" y="1492" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<rect x="533" y="1519" width="390" height="103" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 1524 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="1539" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">neuroPsicologia</text>
+<text x="544" y="1569" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">userid</text>
+<text x="912" y="1569" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1575" x2="922" y2="1575" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1588" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">pregid</text>
+<text x="912" y="1588" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1594" x2="922" y2="1594" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1607" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">respuesta</text>
+<text x="912" y="1607" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<rect x="533" y="1634" width="390" height="84" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 533 1639 a 5 5 0 0 1 5 -5 h 380 a 5 5 0 0 1 5 5 v 25 h -390 z" fill="#6b4f8a"/>
+<text x="544" y="1654" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">fitoterapia</text>
+<text x="544" y="1684" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">idUser</text>
+<text x="912" y="1684" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="534" y1="1690" x2="922" y2="1690" stroke="#eeeeee" stroke-width="1"/>
+<text x="544" y="1703" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">idPlanta</text>
+<text x="912" y="1703" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<rect x="962" y="364" width="436" height="656" rx="9" fill="#eef6f1" stroke="#2f7a4f" stroke-width="1.2" stroke-opacity="0.45"/>
+<text x="977" y="388" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="15.5" font-weight="700" fill="#2f7a4f">Estudio estadístico abierto</text>
+<text x="977" y="404" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="12" fill="#666">la única clave ajena declarada del esquema</text>
+<rect x="977" y="410" width="406" height="255" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 977 415 a 5 5 0 0 1 5 -5 h 396 a 5 5 0 0 1 5 5 v 25 h -406 z" fill="#2f7a4f"/>
+<text x="988" y="430" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">estudio_participante</text>
+<text x="988" y="460" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="1372" y="460" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f7a4f">PK · uuid</text>
+<line x1="978" y1="466" x2="1382" y2="466" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="479" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">email</text>
+<text x="1372" y="479" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">único · text</text>
+<line x1="978" y1="485" x2="1382" y2="485" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="498" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">fecha_nacimiento</text>
+<text x="1372" y="498" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">date</text>
+<line x1="978" y1="504" x2="1382" y2="504" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="517" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">hora_nacimiento</text>
+<text x="1372" y="517" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="523" x2="1382" y2="523" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="536" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">pais / region / lugar</text>
+<text x="1372" y="536" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="542" x2="1382" y2="542" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="555" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">latitud / longitud</text>
+<text x="1372" y="555" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">float8</text>
+<line x1="978" y1="561" x2="1382" y2="561" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="574" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">timezone</text>
+<text x="1372" y="574" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="580" x2="1382" y2="580" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="593" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">carta_natal_json</text>
+<text x="1372" y="593" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="978" y1="599" x2="1382" y2="599" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="612" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">signos</text>
+<text x="1372" y="612" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="978" y1="618" x2="1382" y2="618" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="631" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">casas</text>
+<text x="1372" y="631" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="978" y1="637" x2="1382" y2="637" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="650" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">user_id</text>
+<text x="1372" y="650" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<rect x="977" y="677" width="406" height="160" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 977 682 a 5 5 0 0 1 5 -5 h 396 a 5 5 0 0 1 5 5 v 25 h -406 z" fill="#2f7a4f"/>
+<text x="988" y="697" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">estudio_respuesta</text>
+<text x="988" y="727" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">participante_id</text>
+<text x="1372" y="727" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f7a4f">FK · uuid</text>
+<line x1="978" y1="733" x2="1382" y2="733" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="746" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">planeta</text>
+<text x="1372" y="746" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f7a4f">PK · text</text>
+<line x1="978" y1="752" x2="1382" y2="752" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="765" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">pregunta_id</text>
+<text x="1372" y="765" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#2f7a4f">PK · text</text>
+<line x1="978" y1="771" x2="1382" y2="771" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="784" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">eje</text>
+<text x="1372" y="784" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="790" x2="1382" y2="790" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="803" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">posicion</text>
+<text x="1372" y="803" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="809" x2="1382" y2="809" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="822" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">respuesta</text>
+<text x="1372" y="822" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<path d="M 970 666 v 26 h 7" fill="none" stroke="#2f7a4f" stroke-width="1.6" marker-end="url(#flecha-verde)"/>
+<rect x="977" y="849" width="406" height="141" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 977 854 a 5 5 0 0 1 5 -5 h 396 a 5 5 0 0 1 5 5 v 25 h -406 z" fill="#2f7a4f"/>
+<text x="988" y="869" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">estudio_stats</text>
+<text x="1372" y="869" text-anchor="end" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="11" letter-spacing="0.08em" fill="#ffffffcc">VISTA</text>
+<text x="988" y="899" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">planeta / eje / posicion</text>
+<text x="1372" y="899" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="905" x2="1382" y2="905" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="918" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">pregunta_id</text>
+<text x="1372" y="918" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="924" x2="1382" y2="924" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="937" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">total</text>
+<text x="1372" y="937" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="978" y1="943" x2="1382" y2="943" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="956" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">si</text>
+<text x="1372" y="956" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="978" y1="962" x2="1382" y2="962" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="975" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">no</text>
+<text x="1372" y="975" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<path d="M 970 838 v 26 h 7" fill="none" stroke="#2f7a4f" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#flecha-verde)"/>
+<rect x="962" y="1046" width="436" height="523" rx="9" fill="#f9eff3" stroke="#8a2f4f" stroke-width="1.2" stroke-opacity="0.45"/>
+<text x="977" y="1070" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="15.5" font-weight="700" fill="#8a2f4f">Relación con el público</text>
+<text x="977" y="1086" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="12" fill="#666">sin cuenta: se identifican por su correo</text>
+<rect x="977" y="1092" width="406" height="122" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 977 1097 a 5 5 0 0 1 5 -5 h 396 a 5 5 0 0 1 5 5 v 25 h -406 z" fill="#8a2f4f"/>
+<text x="988" y="1112" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">suscriptor</text>
+<text x="988" y="1142" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="1372" y="1142" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a2f4f">PK · uuid</text>
+<line x1="978" y1="1148" x2="1382" y2="1148" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1161" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">email</text>
+<text x="1372" y="1161" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">único · text</text>
+<line x1="978" y1="1167" x2="1382" y2="1167" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1180" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">origen</text>
+<text x="1372" y="1180" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="1186" x2="1382" y2="1186" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1199" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">created_at</text>
+<text x="1372" y="1199" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="977" y="1226" width="406" height="141" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 977 1231 a 5 5 0 0 1 5 -5 h 396 a 5 5 0 0 1 5 5 v 25 h -406 z" fill="#8a2f4f"/>
+<text x="988" y="1246" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">opinion</text>
+<text x="988" y="1276" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="1372" y="1276" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a2f4f">PK · text</text>
+<line x1="978" y1="1282" x2="1382" y2="1282" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1295" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">nombre</text>
+<text x="1372" y="1295" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="1301" x2="1382" y2="1301" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1314" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">texto</text>
+<text x="1372" y="1314" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="1320" x2="1382" y2="1320" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1333" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">email</text>
+<text x="1372" y="1333" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="1339" x2="1382" y2="1339" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1352" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">aprobada</text>
+<text x="1372" y="1352" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<rect x="977" y="1379" width="406" height="160" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 977 1384 a 5 5 0 0 1 5 -5 h 396 a 5 5 0 0 1 5 5 v 25 h -406 z" fill="#8a2f4f"/>
+<text x="988" y="1399" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">bookings</text>
+<text x="988" y="1429" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="1372" y="1429" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a2f4f">PK · uuid</text>
+<line x1="978" y1="1435" x2="1382" y2="1435" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1448" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">nombre</text>
+<text x="1372" y="1448" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="1454" x2="1382" y2="1454" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1467" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">email</text>
+<text x="1372" y="1467" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="1473" x2="1382" y2="1473" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1486" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">fecha</text>
+<text x="1372" y="1486" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">date</text>
+<line x1="978" y1="1492" x2="1382" y2="1492" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1505" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">slot</text>
+<text x="1372" y="1505" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="978" y1="1511" x2="1382" y2="1511" stroke="#eeeeee" stroke-width="1"/>
+<text x="988" y="1524" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">tema</text>
+<text x="1372" y="1524" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<rect x="1422" y="364" width="410" height="752" rx="9" fill="#f9f4ee" stroke="#8a5a2f" stroke-width="1.2" stroke-opacity="0.45"/>
+<text x="1437" y="388" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="15.5" font-weight="700" fill="#8a5a2f">Catálogo y contenido</text>
+<text x="1437" y="404" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="12" fill="#666">editable desde el panel, sin publicar código</text>
+<rect x="1437" y="410" width="380" height="255" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 1437 415 a 5 5 0 0 1 5 -5 h 370 a 5 5 0 0 1 5 5 v 25 h -380 z" fill="#8a5a2f"/>
+<text x="1448" y="430" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">curso</text>
+<text x="1448" y="460" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="1806" y="460" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a5a2f">PK · uuid</text>
+<line x1="1438" y1="466" x2="1816" y2="466" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="479" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">modalidad</text>
+<text x="1806" y="479" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="485" x2="1816" y2="485" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="498" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">titulo</text>
+<text x="1806" y="498" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="504" x2="1816" y2="504" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="517" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">foto</text>
+<text x="1806" y="517" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="523" x2="1816" y2="523" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="536" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">descripcion</text>
+<text x="1806" y="536" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="542" x2="1816" y2="542" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="555" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">descripcion_contenido</text>
+<text x="1806" y="555" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="561" x2="1816" y2="561" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="574" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">de_pago</text>
+<text x="1806" y="574" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="1438" y1="580" x2="1816" y2="580" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="593" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">publicado</text>
+<text x="1806" y="593" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="1438" y1="599" x2="1816" y2="599" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="612" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">completado</text>
+<text x="1806" y="612" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="1438" y1="618" x2="1816" y2="618" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="631" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">orden</text>
+<text x="1806" y="631" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<line x1="1438" y1="637" x2="1816" y2="637" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="650" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">contenido</text>
+<text x="1806" y="650" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<rect x="1437" y="677" width="380" height="103" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 1437 682 a 5 5 0 0 1 5 -5 h 370 a 5 5 0 0 1 5 5 v 25 h -380 z" fill="#8a5a2f"/>
+<text x="1448" y="697" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">curso_revisado</text>
+<text x="1448" y="727" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">curso_id</text>
+<text x="1806" y="727" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a5a2f">PK · uuid</text>
+<line x1="1438" y1="733" x2="1816" y2="733" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="746" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">revisado</text>
+<text x="1806" y="746" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="1438" y1="752" x2="1816" y2="752" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="765" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="1806" y="765" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<rect x="1437" y="792" width="380" height="179" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 1437 797 a 5 5 0 0 1 5 -5 h 370 a 5 5 0 0 1 5 5 v 25 h -380 z" fill="#8a5a2f"/>
+<text x="1448" y="812" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">video</text>
+<text x="1448" y="842" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="1806" y="842" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a5a2f">PK · uuid</text>
+<line x1="1438" y1="848" x2="1816" y2="848" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="861" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">disciplina</text>
+<text x="1806" y="861" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="867" x2="1816" y2="867" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="880" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">titulo</text>
+<text x="1806" y="880" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="886" x2="1816" y2="886" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="899" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">portada</text>
+<text x="1806" y="899" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="905" x2="1816" y2="905" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="918" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">url</text>
+<text x="1806" y="918" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">text</text>
+<line x1="1438" y1="924" x2="1816" y2="924" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="937" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">publicado</text>
+<text x="1806" y="937" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">bool</text>
+<line x1="1438" y1="943" x2="1816" y2="943" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="956" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">orden</text>
+<text x="1806" y="956" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">int</text>
+<rect x="1437" y="983" width="380" height="103" rx="5" fill="#ffffff" stroke="#c3c3c3" stroke-width="1"/>
+<path d="M 1437 988 a 5 5 0 0 1 5 -5 h 370 a 5 5 0 0 1 5 5 v 25 h -380 z" fill="#8a5a2f"/>
+<text x="1448" y="1003" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="14.5" font-weight="700" fill="#ffffff">astrologia_arquetipos</text>
+<text x="1448" y="1033" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="700" fill="#1b1b1b">id</text>
+<text x="1806" y="1033" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a5a2f">PK · text</text>
+<line x1="1438" y1="1039" x2="1816" y2="1039" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="1052" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">data</text>
+<text x="1806" y="1052" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">jsonb</text>
+<line x1="1438" y1="1058" x2="1816" y2="1058" stroke="#eeeeee" stroke-width="1"/>
+<text x="1448" y="1071" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12.5" font-weight="400" fill="#1b1b1b">updated_at</text>
+<text x="1806" y="1071" text-anchor="end" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" fill="#8a8a8a">timestamptz</text>
+<path d="M 268 302 V 354" fill="none" stroke="#0f5f5f" stroke-width="1.5" stroke-dasharray="6 4" stroke-opacity="0.85" marker-end="url(#flecha-teal)"/>
+<text x="276" y="330" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12" fill="#0f5f5f" fill-opacity="1">user_id</text>
+<path d="M 728 302 V 354" fill="none" stroke="#0f5f5f" stroke-width="1.5" stroke-dasharray="6 4" stroke-opacity="0.85" marker-end="url(#flecha-teal)"/>
+<text x="736" y="330" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12" fill="#0f5f5f" fill-opacity="1">user_id</text>
+<path d="M 1180 302 V 354" fill="none" stroke="#0f5f5f" stroke-width="1.5" stroke-dasharray="6 4" stroke-opacity="0.45" marker-end="url(#flecha-teal)"/>
+<text x="1188" y="330" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="12" fill="#0f5f5f" fill-opacity="0.6">user_id (opcional)</text>
+<rect x="1422" y="1142" width="410" height="168" rx="9" fill="#fafafa" stroke="#cccccc" stroke-width="1"/>
+<text x="1437" y="1166" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="14.5" font-weight="700" fill="#333">Leyenda</text>
+<text x="1437" y="1190" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" font-weight="700" fill="#555">PK</text>
+<text x="1485" y="1190" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="11.5" fill="#444">clave primaria (en negrita dentro de la tabla)</text>
+<g><line x1="1437" y1="1211" x2="1453" y2="1211" stroke="#2f7a4f" stroke-width="1.6"/><text x="1457" y="1215" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" font-weight="700" fill="#2f7a4f">FK</text></g>
+<text x="1485" y="1215" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="11.5" fill="#444">clave ajena declarada: sólo hay una en todo el</text>
+<text x="1485" y="1230" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="11.5" fill="#444">esquema</text>
+<line x1="1437" y1="1251" x2="1471" y2="1251" stroke="#0f5f5f" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="1485" y="1255" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="11.5" fill="#444">relación lógica por user_id, sin clave ajena:</text>
+<text x="1485" y="1270" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="11.5" fill="#444">la integridad la mantiene el servidor</text>
+<text x="1437" y="1295" font-family="Consolas, 'DejaVu Sans Mono', 'Courier New', monospace" font-size="11.5" font-weight="700" fill="#555">jsonb</text>
+<text x="1485" y="1295" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="11.5" fill="#444">documento que sólo se lee entero y para un</text>
+<text x="1485" y="1310" font-family="'Segoe UI', Calibri, 'DejaVu Sans', Arial, sans-serif" font-size="11.5" fill="#444">usuario</text>
+</svg>

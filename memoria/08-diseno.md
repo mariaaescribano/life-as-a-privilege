@@ -41,7 +41,7 @@ Y una desventaja, que costó cara y que se documenta en el capítulo 9: **la bas
 
 El esquema resultante, representado en la Figura 5, tiene por tanto dos mitades bien diferenciadas: un núcleo relacional sobre el que se consulta y se agrega, y ocho documentos que solo se leen enteros y solo para un usuario.
 
-[FIGURA 5: esquema del modelo de datos completo]
+[FIGURA 5: `memoria/figuras/fig05-modelo-datos.png`]
 
 *Figura 5. Esquema del modelo de datos: tablas relacionales y documentos JSONB.*
 *(Fuente propia)*
@@ -55,10 +55,16 @@ El esquema resultante, representado en la Figura 5, tiene por tanto dos mitades 
 - **`astrologia_arquetipos`** — textos interpretativos editables desde el panel sin publicar código (RF-53).
 - **`estudio_participante`** y **`estudio_respuesta`** — datos del estudio estadístico abierto, separados en dos tablas porque sobre las respuestas hay que hacer agregaciones por planeta, signo y pregunta (RF-41).
 - **`recorrido_progreso`** — posición alcanzada por cada usuario en cada disciplina, en tabla aparte porque se consulta con frecuencia y de forma independiente al contenido (RF-21, RF-24).
+- **`opinion`** y **`bookings`** — testimonios enviados desde la web y reservas de llamada. Como `suscriptor`, son de personas que no necesitan cuenta: se identifican por su correo (RF-16, RF-58).
+- **Nueve tablas de tests y resultados** —`astrologia`, `ayurveda`, `tcm`, `nutricion`, `cabala`, `neuroPsicologia`, `fitoterapia` y las dos de respuestas crudas— anteriores al modelo documental. Guardan por separado el resultado de cada prueba y las respuestas que lo produjeron, de modo que un cambio en el algoritmo de puntuación pueda recalcularse sobre los datos originales.
+
+El apéndice IV recoge el diccionario de datos completo: cada objeto del esquema, campo a campo.
 
 **Documentos por disciplina**
 
-Ocho tablas de la forma descrita —`metodo_astrologia`, `metodo_psicologia`, `metodo_ayurveda`, `metodo_tcm`, `metodo_fisiologia`, `metodo_nutricion`, `metodo_cabala` y la de cultura— más `psicologia_des` para el cuestionario DES-II, separado del resto por tratarse de un instrumento con estructura propia y estable.
+Siete tablas de la forma descrita —`metodo_astrologia`, `metodo_psicologia`, `metodo_ayurveda`, `metodo_tcm`, `metodo_fisiologia`, `metodo_nutricion` y `metodo_cabala`— más `psicologia_des` para el cuestionario DES-II, separado del resto por tratarse de un instrumento con estructura propia y estable, y `notas` para el diario breve del recorrido.
+
+Son siete y no ocho porque Cultura no guarda progreso: su recorrido es de lectura y no pide nada al usuario. Su columna de acceso en `user` existe igual que la de las demás, pero no necesita documento.
 
 A modo de ejemplo, esta es la forma del documento de Psicología, el más complejo del sistema:
 
