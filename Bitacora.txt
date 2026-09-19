@@ -4,10 +4,10 @@ USAR OBJ+ID : userId
 ---------------------------------------------
 
 
-- poder descargar materiales con fotos /sin fotos / fondo blanco/ fondo disciplina
 
-
-
+Un cerebro de perfil mirando a la izquierda, en tu estilo, fondo transparente (PNG o WebP), proporción 10:8, unos 1200×960 px. Es la que sustituiría al dibujo SVG: las cuatro luces van colocadas en porcentajes, así que encajan solas sobre tu dibujo. Se enchufa en una línea (FOTO_CEREBRO en CerebroTrauma.tsx) y tendría que ser un cerebro de lado, con el cerebelo abajo a la derecha y el tronco bajando — si no, las luces caerían en sitios que no son.
+Opcional, una ilustración por zona (cuatro), cuadradas, para acompañar cada ficha: la alarma, el archivo, quien piensa y el freno de emergencia. Si las haces, van a /img/psicologia/cerebro/<alarma|archivo|freno|cuerpo>.webp y las conecto
+-
 
 
 

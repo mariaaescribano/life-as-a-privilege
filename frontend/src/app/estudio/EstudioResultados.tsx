@@ -52,7 +52,7 @@ export default function EstudioResultados() {
   const location = useLocation();
   const [datos, setDatos] = useState<EstadisticasEstudio | null>(null);
   const [cargando, setCargando] = useState(true);
-  const fotosListas = useImagesReady([SPACE_IMG, "/img/icono/life.png"]);
+  const fotosListas = useImagesReady([SPACE_IMG, "/img/icono/life.webp"]);
 
   const params = new URLSearchParams(location.search);
   // Vista de ejemplo: /estudio/resultados?demo — datos inventados, para poder
@@ -162,7 +162,7 @@ export default function EstudioResultados() {
         <Reveal direction="down" distance={18} duration={0.8}>
           <Flex direction="column" align="center" gap={4} textAlign="center">
             <Float amplitude={6} duration={6}>
-              <Image src="/img/icono/life.png" alt="" h={{ base: "60px", md: "84px" }} objectFit="contain"
+              <Image src="/img/icono/life.webp" alt="" h={{ base: "60px", md: "84px" }} objectFit="contain"
                      style={{ filter: "drop-shadow(0 0 12px rgba(255,255,255,0.6)) drop-shadow(0 0 28px rgba(180,255,245,0.3))" }} />
             </Float>
             <Text color="white" fontSize={{ base: "3xl", md: "5xl" }} fontWeight="700"

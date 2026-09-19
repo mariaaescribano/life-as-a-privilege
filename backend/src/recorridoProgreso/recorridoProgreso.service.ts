@@ -10,6 +10,29 @@ import { DatabaseService } from '../database.service';
 export class RecorridoProgresoService {
   constructor(private readonly databaseService: DatabaseService) {}
 
+  /**
+   * TODO el progreso del usuario de una vez: { disciplina: paso_max }.
+   *
+   * Lo pide el «camino» de la Home, que enseña por dónde va en cada disciplina
+   * comprada. Una sola consulta en vez de ocho: la Home es la página que más se
+   * abre y no puede permitirse una petición por disciplina.
+   */
+  async getTodo(userId: string): Promise<Record<string, number>> {
+    const { data, error } = await this.databaseService.getClient()
+      .from('recorrido_progreso')
+      .select('disciplina, paso_max')
+      .eq('user_id', userId);
+    if (error || !data) return {};
+    const salida: Record<string, number> = {};
+    for (const fila of data as any[]) {
+      const n = Number(fila?.paso_max);
+      if (typeof fila?.disciplina === 'string' && Number.isFinite(n)) {
+        salida[fila.disciplina] = n;
+      }
+    }
+    return salida;
+  }
+
   async getPasoMax(userId: string, disciplina: string): Promise<number> {
     const { data, error } = await this.databaseService.getClient()
       .from('recorrido_progreso')

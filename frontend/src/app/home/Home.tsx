@@ -28,6 +28,8 @@ import {
 } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
+import CaminoUsuario from "./CaminoUsuario";
+import DiarioUsuario from "./DiarioUsuario";
 import { useT, type ClaveTexto } from "../../i18n";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
@@ -781,6 +783,19 @@ const Home = () => {
   // el color de esa disciplina. Solo aparece si hay un recorrido guardado Y la
   // usuaria ha comprado al menos una disciplina (metodoSuscrito) — si acaba de
   // llegar y no ha comprado nada, no tiene sentido ofrecerle «Continuar».
+  // Lo que ha comprado, en la forma que espera «Tu camino» (la columna de la
+  // izquierda): mismas claves que los `<key>_suscrito` del usuario.
+  const suscritasCamino = {
+    metodo: metodoSuscrito,
+    psicologia: psicologiaSuscrito,
+    ayurveda: ayurvedaSuscrito,
+    tcm: tcmSuscrito,
+    fisiologia: fisiologiaSuscrito,
+    nutricion: nutricionSuscrito,
+    cabala: cabalaSuscrito,
+    cultura: culturaSuscrito,
+  };
+
   const ultimoRecorrido = (() => { try { return localStorage.getItem("ultimoRecorrido"); } catch { return null; } })();
   const contDisc = ultimoRecorrido ? disciplinaDeRuta(ultimoRecorrido) : null;
   const ContIcon = contDisc?.Icon;
@@ -843,6 +858,26 @@ const Home = () => {
         </Box>
       )}
 
+      {/* Tu camino — escritorio: fijo a la IZQUIERDA, a la misma altura que
+          «Continuar» (que va a la derecha). Desde `lg`: por debajo de ese ancho
+          la columna se comería el sitio del mandala, así que ahí baja y se pinta
+          debajo (ver más abajo). */}
+      <Box position="fixed" top={{ lg: "120px" }} left={{ lg: "22px" }} zIndex={30}
+           display={{ base: "none", lg: "block" }}
+           // Con las ocho disciplinas compradas la columna es alta: en una
+           // pantalla baja se queda con su propio scroll en vez de salirse por
+           // debajo del pie.
+           maxH="calc(100vh - 150px)" overflowY="auto"
+           sx={{ "&::-webkit-scrollbar": { width: "6px" },
+                 "&::-webkit-scrollbar-track": { background: "transparent" },
+                 "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "3px" } }}>
+        <Flex direction="column" gap={4}>
+          <CaminoUsuario suscritas={suscritasCamino} />
+          {/* Las notas de sus sesiones. Si no tiene ninguna no pinta nada. */}
+          <DiarioUsuario />
+        </Flex>
+      </Box>
+
       {/* En móvil el mandala se centra en el hueco que queda entre el header y
           el footer (antes se pegaba arriba y dejaba un turquesa enorme debajo).
           En escritorio sigue anclado arriba, que ahí sí llena la pantalla. */}
@@ -904,7 +939,7 @@ const Home = () => {
                   content: '""',
                   position: "absolute",
                   inset: 0,
-                  backgroundImage: "url('/img/icono/life.png')",
+                  backgroundImage: "url('/img/icono/life.webp')",
                   backgroundSize: "100%",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
@@ -1146,6 +1181,13 @@ const Home = () => {
                 {continuarBtn}
               </Box>
             )}
+
+            {/* Tu camino — en pantallas estrechas no cabe a la izquierda del
+                mandala sin pisarlo, así que ahí se pone debajo. */}
+            <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={8} w="100%">
+              <CaminoUsuario suscritas={suscritasCamino} />
+              <DiarioUsuario />
+            </Flex>
           </Flex>
         ) : (
           // Carga: mientras espera, la animación del mandala de LIFE (misma que

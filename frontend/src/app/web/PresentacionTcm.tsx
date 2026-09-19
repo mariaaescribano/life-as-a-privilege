@@ -175,7 +175,7 @@ export default function PresentacionTcm({ d }: { d: PresentacionDisciplina }) {
   );
 
   const fotosListas = useImagesReady([
-    "/img/icono/life.png",
+    "/img/icono/life.webp",
     "/img/fondos/tcm.webp",
     ...ORDEN_ELEMENTOS.map((el) => ICONO_ELEMENTO[el]),
     FONDO_CICLO.sheng,

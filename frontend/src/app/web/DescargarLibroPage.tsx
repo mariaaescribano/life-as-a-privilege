@@ -84,7 +84,7 @@ export default function DescargarLibroPage() {
 
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"

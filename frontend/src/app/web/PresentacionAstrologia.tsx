@@ -70,7 +70,7 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
 
   // Astrología no tiene foto de fondo (usa el cielo estrellado), así que solo
   // hay que esperar al mandala y a las portadas de los tres cómics.
-  const fotosListas = useImagesReady(["/img/icono/life.png", ...comics.map((c) => c.cover)]);
+  const fotosListas = useImagesReady(["/img/icono/life.webp", ...comics.map((c) => c.cover)]);
   if (!fotosListas) return <LifeLoading variant="auto" />;
 
   const renderIcon = (size: string) => <AstrologiaIcon size={{ base: size, md: size }} />;

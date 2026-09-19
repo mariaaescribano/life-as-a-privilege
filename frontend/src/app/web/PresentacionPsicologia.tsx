@@ -132,7 +132,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
   };
 
   const fotosListas = useImagesReady([
-    "/img/icono/life.png",
+    "/img/icono/life.webp",
     "/img/fondos/psciologia.webp",
     ...comics.map((c) => c.cover),
   ]);

@@ -82,7 +82,7 @@ export const PROYECTOS: ProyectoLanding[] = [
     txt: "#F3FBF9",
     // El mandala es el logo de ESTE proyecto (no de la casa): por eso vive
     // dentro de su caja y ya no en la cabecera de la landing.
-    logo: "/img/icono/life.png",
+    logo: "/img/icono/life.webp",
     lemaKey: "landing.lema.elMapa",
     descKey: "landing.desc.elMapa",
     // La portada de siempre sigue en /welcome, tal cual estaba.

@@ -127,7 +127,7 @@ export default function MetodoNutricionMicrobiota() {
             <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" py={{ base: 2, md: 3 }}>
               <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.75))" />
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 alt=""
                 h={{ base: "44px", md: "56px" }}
                 objectFit="contain"

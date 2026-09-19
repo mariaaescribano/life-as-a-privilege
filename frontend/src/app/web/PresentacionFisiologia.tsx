@@ -126,7 +126,7 @@ export default function PresentacionFisiologia({ d }: { d: PresentacionDisciplin
   );
 
   const fotosListas = useImagesReady([
-    "/img/icono/life.png",
+    "/img/icono/life.webp",
     "/img/fondos/fisio.webp",
     ...sistemasMuestra.map((s) => s.foto),
     ...muestra.map((c) => c.foto),

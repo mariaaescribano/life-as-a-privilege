@@ -707,7 +707,7 @@ export default function AstrologiaEspacio() {
   const [openModal, setOpenModal]     = useState<SignField | null>(null);
   const [teaserPlanet, setTeaserPlanet] = useState<Planet | null>(null);
   const [saving, setSaving]           = useState(false);
-  const [imgUrl, setImgUrl]           = useState("/img/icono/noImg.png");
+  const [imgUrl, setImgUrl]           = useState("/img/icono/noImg.webp");
   const chartWrapperRef = useRef<HTMLDivElement>(null);
   const [wrapperWidth, setWrapperWidth] = useState(0);
 

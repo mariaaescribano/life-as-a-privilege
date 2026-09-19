@@ -206,7 +206,7 @@ export function ExitIntentSubscribeModal() {
           ) : (
             <Flex direction="column" align="center" gap={4}>
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 h={{ base: "52px", md: "64px" }}
                 objectFit="contain"
                 opacity={0.9}

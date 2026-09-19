@@ -85,6 +85,8 @@ export function IndiceAyurveda() {
     ),
     expId: doshaEnlace ?? "",
     libre: true,
+    // El camino de /home cuenta los 7 del mapa y luego los 8 del doṣha.
+    registroOffset: 0,
   };
 
   // Nivel 2 · el submapa del doṣha. Sin doṣha en la URL, entero bloqueado.
@@ -96,6 +98,9 @@ export function IndiceAyurveda() {
     expId: doshaUrl ?? "",
     habilitada: !!doshaUrl,
     nota: t("metodo.ayur.notaSubmapa"),
+    // …así que el submapa empieza a contar donde acaba el mapa (ver camino.ts:
+    // ayurveda son 7 + 8 = 15 pasos).
+    registroOffset: ayurvedaMapa().length,
   };
 
   return (
@@ -111,6 +116,7 @@ export function IndiceAyurveda() {
       defaultExpId={doshaEnlace ?? ""}
       acento={doshaUrl ? DOSHA_COLOR[doshaUrl] : ayurvedaTxt}
       progresoKey="ayurveda"
+      registroKey="ayurveda"
       alcanzableUrl={(userId) => `${API_URL}/metodo-ayurveda/${userId}`}
       alcanzableDe={(data, d) => pasoAlcanzableAyurveda(data, d)}
     />

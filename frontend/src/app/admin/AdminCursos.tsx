@@ -283,7 +283,7 @@ export default function AdminCursos() {
       {/* ── MANDALA ── */}
       <Flex justify="center" pt={{ base: 8, md: 12 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"
@@ -340,7 +340,7 @@ export default function AdminCursos() {
           <Box p={{ base: 6, md: 8 }}>
               {/* Título con el mandala como pequeño adorno a la izquierda */}
               <Flex align="center" gap={3}>
-                <Image src="/img/icono/life.png" alt="" h="30px" w="auto" flexShrink={0} objectFit="contain"
+                <Image src="/img/icono/life.webp" alt="" h="30px" w="auto" flexShrink={0} objectFit="contain"
                   style={{ filter: "drop-shadow(0 0 7px rgba(255,255,255,0.5)) drop-shadow(0 0 16px rgba(180,255,245,0.3))" }} />
                 <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.12em" textTransform="uppercase"
                       textShadow="0 0 12px rgba(255,255,255,0.5)">
@@ -408,7 +408,7 @@ export default function AdminCursos() {
         >
           <ModalCloseButton color="white" />
           <Box p={{ base: 6, md: 8 }} textAlign="center">
-            <Image src="/img/icono/life.png" alt="" h="34px" mx="auto" mb={4} objectFit="contain"
+            <Image src="/img/icono/life.webp" alt="" h="34px" mx="auto" mb={4} objectFit="contain"
               style={{ filter: "drop-shadow(0 0 7px rgba(255,255,255,0.5)) drop-shadow(0 0 16px rgba(180,255,245,0.3))" }} />
             <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={2}
                   textShadow="0 0 12px rgba(255,255,255,0.45)">

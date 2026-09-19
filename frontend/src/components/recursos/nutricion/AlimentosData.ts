@@ -127,7 +127,7 @@ export const alimentos: Alimento[] = [
     nombre: "Limón",
     nombreCientifico: "Citrus limon",
     tipo: "fruta",
-    foto: "/img/alimentos/limon.png",
+    foto: "/img/alimentos/limon.webp",
     uso: "Fruta alcalinizante y depurativa que estimula el hígado, favorece la digestión y protege el sistema inmunitario.",
     beneficios: [
       "Muy rico en vitamina C",

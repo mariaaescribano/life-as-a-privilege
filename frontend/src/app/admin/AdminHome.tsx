@@ -23,7 +23,7 @@ export default function AdminHome() {
       {/* ── MANDALA ── */}
       <Flex justify="center" pt={{ base: 8, md: 12 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"
@@ -133,6 +133,13 @@ export default function AdminHome() {
                  fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
                  transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
               ✦ Accesos (regalar el recorrido)
+            </Box>
+            <Box as="button" onClick={() => navigate("/admin/usuarios")}
+                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
+                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
+                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
+                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
+              ✦ Diario de sesiones (elige a quién)
             </Box>
             <Box as="button" onClick={() => navigate("/admin/videos")}
                  px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"

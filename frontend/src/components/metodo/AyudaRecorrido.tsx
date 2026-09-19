@@ -269,6 +269,30 @@ export const AYUDA_RECORRIDO: Record<string, Ayuda> = {
       ],
     },
   },
+  cerebro: {
+    ejemplo: {
+      titulo: "¿Qué es esto?",
+      cuerpo: [
+        "Un mapa de cuatro zonas del cerebro que la adversidad sostenida deja tocadas: la alarma, el archivo de los recuerdos, la parte que piensa y el freno de emergencia del cuerpo.",
+        "Lo que enciende cada zona son TUS respuestas a los dos tests que acabas de hacer. No es una prueba de imagen: nadie te ha mirado el cerebro.",
+      ],
+    },
+    ayuda: {
+      titulo: "¿Cómo se lee?",
+      cuerpo: [
+        "Toca una zona del dibujo (o su nombre) para abrir su ficha: qué hace, qué le hizo lo que viviste, cómo se nota hoy y qué la cambia.",
+        "Debajo de cada barra tienes de dónde sale, para que sepas siempre qué estás mirando.",
+        "No hay nada que rellenar: esta página solo se lee.",
+      ],
+    },
+    orientacion: {
+      titulo: "Orientación",
+      cuerpo: [
+        "Si te reconoces en varias zonas, no es que estés rota: es que tu cerebro hizo bien su trabajo cuando tocaba sobrevivir.",
+        "Nada de esto es permanente. Lo que se aprendió con miedo se reaprende con seguridad, y eso es justo lo que viene a partir de aquí.",
+      ],
+    },
+  },
   "linea-de-Vida": {
     ejemplo: {
       titulo: "Un ejemplo",
@@ -778,7 +802,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
       {/* Índice del recorrido (botón flotante abajo a la izquierda). Con bloqueo
           secuencial persistido en BD: bloquea los pasos posteriores al máximo
           desbloqueado y los va abriendo al llegar al siguiente. */}
-      <IndiceRecorrido progresoKey="psicologia" />
+      <IndiceRecorrido progresoKey="psicologia" registroKey="psicologia" />
 
       <Flex position="fixed" bottom={{ base: 4, md: 6 }} right={{ base: 4, md: 6 }} zIndex={20}
             direction="column" align="flex-end" gap={2}>

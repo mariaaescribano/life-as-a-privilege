@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · GENOGRAMA  ·  7/22   (ruta interna /genograma)
+// PÁGINA · GENOGRAMA  ·  10/27   (ruta interna /genograma)
 //
 // El mapa de la familia YA COMPUESTO en la página anterior («Tu familia», paso
 // 6), ahora para escribir sobre cada persona. Al tocar una tarjeta se abre su
@@ -84,7 +84,7 @@ export default function MetodoPsicologiaGenograma() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title={genograma.titulo}
-                step={{ current: 9, total: 26 }}
+                step={{ current: 10, total: 27 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}

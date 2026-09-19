@@ -23,6 +23,15 @@ export const home = {
   "home.fotoError": "No se pudo subir la foto",
   "home.fotoErrorTexto": "Inténtalo de nuevo en un momento.",
 
+  // ── Tu camino (columna de la izquierda: por dónde va en lo que ha comprado) ──
+  "home.camino.titulo": "Tu camino",
+  "home.camino.andado": "{hechos} de {total} pasos",
+  "home.camino.paso": "paso {paso} de {total}",
+  /** Cultura no lleva orden: lo que se cuenta son sus Historias. */
+  "home.camino.piezas": "{hechos} de {total} historias",
+  "home.camino.completa": "completada",
+  "home.camino.sinEmpezar": "sin empezar",
+
   "home.pago.titulo": "Pago de {disciplina} realizado",
   "home.pago.puedesEmpezar": "Ya puedes empezar la {ordinal} disciplina del Mapa.",
   "home.pago.lineaDeVida": "Ya puedes empezar tu Línea de Vida.",

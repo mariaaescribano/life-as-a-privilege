@@ -77,7 +77,7 @@ const BotonPrincipal = ({
       transition="all 0.25s ease"
     >
       <Image
-        src="/img/icono/life.png"
+        src="/img/icono/life.webp"
         alt=""
         h={{ base: "26px", md: "32px" }}
         objectFit="contain"
@@ -208,7 +208,7 @@ export default function RecuperarPassword() {
         {/* ── MANDALA ── */}
         <Flex justify="center" pt={{ base: 10, md: 14 }}>
           <Image
-            src="/img/icono/life.png"
+            src="/img/icono/life.webp"
             alt=""
             h={{ base: "60px", md: "80px" }}
             objectFit="contain"

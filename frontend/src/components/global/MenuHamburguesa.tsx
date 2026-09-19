@@ -275,7 +275,7 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                 >
                   <Box
                     as="img"
-                    src="/img/icono/life.png"
+                    src="/img/icono/life.webp"
                     alt=""
                     w="64px"
                     h="64px"

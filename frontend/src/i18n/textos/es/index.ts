@@ -2,6 +2,7 @@ import { aprendizaje } from "./aprendizaje";
 import { auth } from "./auth";
 import { comun } from "./comun";
 import { contacto } from "./contacto";
+import { diario } from "./diario";
 import { disciplinas } from "./disciplinas";
 import { elMetodo } from "./elMetodo";
 import { espacio } from "./espacio";
@@ -29,6 +30,7 @@ export const es = {
   ...auth,
   ...comun,
   ...contacto,
+  ...diario,
   ...disciplinas,
   ...elMetodo,
   ...espacio,

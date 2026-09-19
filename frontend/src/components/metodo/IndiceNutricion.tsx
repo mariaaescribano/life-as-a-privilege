@@ -93,6 +93,7 @@ export function IndiceNutricion() {
       tinta={nutricionTxt}
       bg={nutricionBg}
       nom={nutricionNom}
+      registroKey="nutricion"
       luz={false}
       cargando={!cargado}
     />

@@ -17,6 +17,8 @@ import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
 import { useRecorridoAlcanzable } from "../../hooks/useRecorridoAlcanzable";
 import { psicologiaIndice, RECORRIDO_TOTAL, pasoAlcanzablePsicologia, type PasoRecorrido } from "./psicologiaRecorrido";
 import { flushSaves } from "../../utils/flushSaves";
+import { apuntarCamino } from "../../utils/apuntarCamino";
+import { CAMINO, type CaminoKey } from "../../data/camino";
 import { API_URL, neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
 const PAPEL = "#fbf4e8";
@@ -40,6 +42,10 @@ export interface SeccionIndice {
   /** true → sin bloqueo secuencial: la sección se abre entera y solo respeta el
    *  flag `bloqueado` de cada paso. Lo usa el nivel neutral del mapa. */
   libre?: boolean;
+  /** Cuántos pasos van DELANTE de esta sección en el camino de /home. Ayurveda
+   *  tiene dos secciones que empiezan por «1» cada una: la segunda lleva el
+   *  offset de la primera para que el camino no cuente dos veces el mismo paso. */
+  registroOffset?: number;
 }
 
 // Botón + índice, reutilizable por cualquier disciplina. Por defecto usa el
@@ -56,6 +62,8 @@ export function IndiceRecorrido({
   acento,
   luz = true,
   progresoKey,
+  registroKey,
+  registroOffset = 0,
   alcanzableUrl = (userId: string) => `${API_URL}/metodo-psicologia/${userId}`,
   alcanzableDe = pasoAlcanzablePsicologia,
   cargando = false,
@@ -102,6 +110,14 @@ export function IndiceRecorrido({
    *  en esta misma página ya cuente en los candados (si no, el índice enseñaría
    *  la foto del progreso de cuando cargó la página). */
   onOpen?: () => void;
+  /** Disciplina con la que se apunta «por dónde vas» para el camino de /home
+   *  (data/camino.ts). Es INDEPENDIENTE de `progresoKey`: aquí solo se MIDE el
+   *  avance; `progresoKey` es lo que ABRE o CIERRA páginas. Las disciplinas sin
+   *  bloqueo secuencial (astrología, cábala, nutrición…) pasan solo esta. */
+  registroKey?: CaminoKey;
+  /** Pasos que van delante, para los índices que numeran por tramos (fisiología
+   *  reinicia la cuenta en cada nivel). Se suma al número del paso actual. */
+  registroOffset?: number;
 } = {}) {
   const t = useT();
   // `useIdioma()` para volver a renderizar al cambiar de idioma: los títulos
@@ -194,6 +210,30 @@ export function IndiceRecorrido({
     if (!progresoKey || !progresoCargado || actualSecuencial == null) return;
     if (actualSecuencial > pasoMax) avanzar(actualSecuencial);
   }, [progresoKey, progresoCargado, actualSecuencial, pasoMax, avanzar]);
+
+  // ── EL CAMINO de /home ────────────────────────────────────────────────────
+  // Cada vez que se llega a una página del recorrido se apunta su número, para
+  // que la Home pueda decir «vas por el paso 7 de 26». Va aparte del bloqueo de
+  // arriba: esto solo MIDE (ver data/camino.ts). Se apunta el paso de CUALQUIER
+  // sección, también las libres: para el camino, haber estado es haber andado.
+  const pasoCamino =
+    actual != null
+      ? actual + (grupos[actualGrupo ?? 0]?.registroOffset ?? registroOffset)
+      : null;
+  useEffect(() => {
+    if (!registroKey || pasoCamino == null) return;
+    if (import.meta.env.DEV) {
+      const total = CAMINO[registroKey]?.total ?? 0;
+      if (total && pasoCamino > total) {
+        // El índice ha crecido y el total de data/camino.ts se quedó corto: el
+        // porcentaje de la Home se recortará al 100% y dejará de moverse.
+        console.warn(
+          `[camino] ${registroKey}: paso ${pasoCamino} > total declarado ${total}. Sube el total en data/camino.ts.`,
+        );
+      }
+    }
+    apuntarCamino(registroKey, pasoCamino);
+  }, [registroKey, pasoCamino]);
 
   // ¿Está bloqueado el paso n? Con `progresoKey`: todo lo posterior al máximo
   // desbloqueado. Sin él: el flag `bloqueado` de la propia entrada (astrología).

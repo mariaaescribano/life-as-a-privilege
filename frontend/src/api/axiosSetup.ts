@@ -1,5 +1,6 @@
 import axios from "axios";
 import { cerrarSesionLocal } from "./sesion";
+import { salirDeLaSuplantacion, suplantacionActiva } from "./suplantar";
 
 /**
  * DÓNDE VIVE LA SESIÓN — token, userId, name, img e isAdmin se guardan en
@@ -56,7 +57,12 @@ axios.interceptors.response.use(
     if (error?.response?.status === 401) {
       const path = window.location.pathname;
       const enAuth = AUTH_PATHS.some((p) => path.toLowerCase().startsWith(p.toLowerCase()));
-      if (!enAuth) {
+      // Si la sesión era prestada (una admin «entrando como» otra persona), lo
+      // que ha caducado es ESE token, no el suyo: se le devuelve su sesión de
+      // admin en vez de echarla al login y hacerle empezar de cero.
+      if (!enAuth && suplantacionActiva()) {
+        salirDeLaSuplantacion();
+      } else if (!enAuth) {
         cerrarSesionLocal();
         window.location.assign("/logIn");
       }

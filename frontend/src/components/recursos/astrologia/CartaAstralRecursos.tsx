@@ -481,7 +481,7 @@ const ObtenerCartaCard = () => {
             <Flex justify="center">
               <Box
                 as="img"
-                src="/img/astrologia/curso0.png"
+                src="/img/astrologia/curso0.webp"
                 alt="Carta Astral"
                 maxH={{ base: "200px", md: "280px" }}
                 maxW="100%"
@@ -670,7 +670,7 @@ export default function CartaAstralRecursos() {
                   >
                     <Box
                       as="img"
-                      src="/img/astrologia/cartastralej.png"
+                      src="/img/astrologia/cartastralej.webp"
                       alt="Carta Astral"
                       w="100%" h="100%"
                       style={{ objectFit: "cover", objectPosition: "center center" }}

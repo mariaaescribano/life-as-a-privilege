@@ -546,7 +546,7 @@ function CardEjeIntestinoCerebro() {
             bg={BG}
           >
             <Image
-              src="/img/nutri/microbiotaRecursos/estrobolome.png"
+              src="/img/nutri/microbiotaRecursos/estrobolome.webp"
               alt="Estroboloma"
               w="100%"
               h="100%"

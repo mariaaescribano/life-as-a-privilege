@@ -22,6 +22,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       email: payload.email,
       // Solo es true si el token se emitió tras verificar la contraseña de admin.
       admin: payload.admin === true,
+      // Si la sesión la abrió una admin «entrando como» esta persona, aquí viene
+      // su id. En una sesión normal es undefined.
+      suplantadoPor: typeof payload.sup === 'string' ? payload.sup : undefined,
     };
   }
 }

@@ -171,7 +171,7 @@ export default function AdminUsuarios() {
 
                   <Box position="relative" zIndex={1} w="40px" h="40px" borderRadius="full" overflow="hidden" flexShrink={0}
                        border={`1px solid ${disc.txt}88`} bg={disc.bg}>
-                    <Image src={u.img || "/img/icono/noImg.png"} w="100%" h="100%" objectFit="cover" alt="" />
+                    <Image src={u.img || "/img/icono/noImg.webp"} w="100%" h="100%" objectFit="cover" alt="" />
                   </Box>
                   <Box position="relative" zIndex={1} minW={0} flex="1">
                     <Text color={disc.txt} fontWeight="600" noOfLines={1} style={{ textShadow: glow }}>{u.name}</Text>

@@ -23,6 +23,7 @@ import axios from "axios";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -167,6 +168,10 @@ export default function MetodoCulturaApuntes() {
               glow={CAJA_GLOW}
             />
           )}
+
+          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
+              /opiniones y trae de vuelta a esta misma página. */}
+          <PedirOpinion bg={culturaBg} txt={culturaTxt} nom={culturaNom} />
         </Flex>
       </Flex>
 

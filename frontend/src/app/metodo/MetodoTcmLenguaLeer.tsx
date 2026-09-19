@@ -418,7 +418,7 @@ function MandalaSeparador() {
     <Reveal inView direction="none" scaleFrom={0.8} duration={0.8} amount={0.6} w="100%">
       <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" py={{ base: 1, md: 2 }}>
         <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${tcmTxt})`} />
-        <Image src="/img/icono/life.png" alt="" h={{ base: "42px", md: "56px" }} objectFit="contain" flexShrink={0}
+        <Image src="/img/icono/life.webp" alt="" h={{ base: "42px", md: "56px" }} objectFit="contain" flexShrink={0}
                style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.55)) drop-shadow(0 0 24px rgba(180,255,245,0.28))" }} />
         <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${tcmTxt})`} />
       </Flex>

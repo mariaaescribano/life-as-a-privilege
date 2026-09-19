@@ -72,7 +72,7 @@ const OpinionesSection: React.FC = () => {
             transition="all 0.25s ease"
           >
             <Image
-              src="/img/icono/life.png"
+              src="/img/icono/life.webp"
               alt=""
               h={{ base: "42px", md: "60px" }}
               objectFit="contain"

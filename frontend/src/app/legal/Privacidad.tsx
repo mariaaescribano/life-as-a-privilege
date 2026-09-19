@@ -90,6 +90,13 @@ export default function Privacidad() {
           automatizadas con ellos. Escribe solo lo que quieras: ningún campo del recorrido es
           obligatorio.
         </P>
+        <P>
+          {TITULAR.nombre}, como única responsable del sitio, puede acceder a lo que escribes dentro
+          del recorrido para acompañarte y preparar tus lecturas personalizadas. Es lo que autorizas
+          expresamente al comprar cada disciplina, con una casilla aparte de la de las condiciones de
+          compra. Nadie más tiene acceso, y puedes retirar esa autorización en cualquier momento
+          escribiendo a {TITULAR.email}.
+        </P>
       </Seccion>
 
       <Seccion titulo="4. Para qué y con qué base legal">

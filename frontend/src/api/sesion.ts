@@ -16,7 +16,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Claves que NO son de sesión y sobreviven al cierre. */
-const PREFERENCIAS = ["cookieConsent"];
+const PREFERENCIAS = ["cookieConsent", "idioma"];
 
 /**
  * ¿Esta sesión tiene el panel de administración DESBLOQUEADO?

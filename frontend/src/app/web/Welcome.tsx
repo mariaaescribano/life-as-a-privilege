@@ -127,7 +127,7 @@ const disciplines: Discipline[] = [
 // Todas las fotos de la portada: el mandala de bienvenida no aparece hasta que
 // TODAS estén descargadas, para que la página no se rellene a trozos.
 const WELCOME_IMGS: string[] = [
-  "/img/icono/life.png",
+  "/img/icono/life.webp",
   ...(disciplines.map((d) => disciplinaBgImg(d.name)).filter(Boolean) as string[]),
 ];
 
@@ -447,7 +447,7 @@ const Welcome = () => {
           }}
         >
           <Image
-            src="/img/icono/life.png"
+            src="/img/icono/life.webp"
             alt=""
             h={{ base: "44px", md: "72px" }}
             objectFit="contain"
@@ -607,7 +607,7 @@ const Welcome = () => {
           bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
         />
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "26px", md: "34px" }}
           objectFit="contain"
@@ -706,7 +706,7 @@ const Welcome = () => {
 
             {/* Logo */}
             <Image
-              src="/img/icono/life.png"
+              src="/img/icono/life.webp"
               alt="Life as a Privilege"
               w="110px"
               objectFit="contain"

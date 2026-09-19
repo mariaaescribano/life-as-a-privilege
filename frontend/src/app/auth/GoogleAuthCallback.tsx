@@ -17,7 +17,7 @@ export default function GoogleAuthCallback() {
       localStorage.setItem("token",  token);
       localStorage.setItem("userId", userId);
       localStorage.setItem("name",   name);
-      localStorage.setItem("img",    img && img !== "" ? img : "/img/icono/noImg.png");
+      localStorage.setItem("img",    img && img !== "" ? img : "/img/icono/noImg.webp");
 
       const next = localStorage.getItem("postAuthNext");
       localStorage.removeItem("postAuthNext");

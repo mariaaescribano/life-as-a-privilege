@@ -23,7 +23,7 @@ export const plantas: Planta[] =
     nombre: "Perejil",
     nombreCientifico: "Petroselinum crispum",
     color: "#2e7d32",
-    foto: "/img/plantas/Perejil.png",
+    foto: "/img/plantas/Perejil.webp",
     videoUrl: "https://youtu.be/tUB4apNjgcY?si=HmAEv1eMND5fQ2-H",
     uso: "Planta depurativa y diurética que apoya la función renal y fortalece el sistema inmunitario.",
     beneficios: [
@@ -47,7 +47,7 @@ export const plantas: Planta[] =
     nombre: "Manzanilla",
     nombreCientifico: "Matricaria chamomilla",
     color: "#f4c542",
-    foto: "/img/plantas/Manzanilla.png",
+    foto: "/img/plantas/Manzanilla.webp",
     videoUrl: "https://youtu.be/uuFbrCorj7Y?si=XH-Z_LfWXkETLaK_",
     uso: "Planta digestiva, calmante y antiinflamatoria ideal para molestias digestivas y nerviosas.",
     beneficios: [
@@ -71,7 +71,7 @@ export const plantas: Planta[] =
     nombre: "Orégano",
     nombreCientifico: "Origanum vulgare",
     color: "#4a6b2f",
-    foto: "/img/plantas/Oregano.png",
+    foto: "/img/plantas/Oregano.webp",
     videoUrl: "https://youtu.be/NFft0FeeVnE?si=e2SRy3TIQf_Pi6DW",
     uso: "Planta digestiva y antimicrobiana que favorece la microbiota y la salud cardiovascular.",
     beneficios: [
@@ -95,7 +95,7 @@ export const plantas: Planta[] =
     nombre: "Tomillo",
     nombreCientifico: "Thymus vulgaris",
     color: "#6a8f3c",
-    foto: "/img/plantas/Tomillo.png",
+    foto: "/img/plantas/Tomillo.webp",
     videoUrl: "https://youtu.be/xF0HvXVkMYY?si=9g1zEnjzUW_GzvnY",
     uso: "Planta antibacteriana y digestiva que fortalece el sistema inmunitario.",
     beneficios: [
@@ -119,7 +119,7 @@ export const plantas: Planta[] =
     nombre: "Laurel",
     nombreCientifico: "Laurus nobilis",
     color: "#3f6b3f",
-    foto: "/img/plantas/Laurel.png",
+    foto: "/img/plantas/Laurel.webp",
     videoUrl: "https://youtu.be/YY2EP3FoBj0?si=P1i8bvCPck5hVxgp",
     uso: "Planta digestiva y protectora usada tradicionalmente para comidas pesadas.",
     beneficios: [
@@ -141,7 +141,7 @@ export const plantas: Planta[] =
     nombre: "Canela",
     nombreCientifico: "Cinnamomum verum",
     color: "#a0522d",
-    foto: "/img/plantas/Canela.png",
+    foto: "/img/plantas/Canela.webp",
     videoUrl: "https://youtu.be/-4PgvcvE_k0?si=MWQlLoJpMNpoKD42",
     uso: "Especia reguladora del azúcar en sangre y estimulante circulatoria.",
     beneficios: [
@@ -163,7 +163,7 @@ export const plantas: Planta[] =
     nombre: "Jengibre",
     nombreCientifico: "Zingiber officinale",
     color: "#c68642",
-    foto: "/img/plantas/Jengibre.png",
+    foto: "/img/plantas/Jengibre.webp",
     videoUrl: "https://youtu.be/Fprj4svcHOc?si=8XS0G67roIHAEkjP",
     uso: "Raíz digestiva y antiinflamatoria que mejora la circulación.",
     beneficios: [
@@ -187,7 +187,7 @@ export const plantas: Planta[] =
     nombre: "Cúrcuma",
     nombreCientifico: "Curcuma longa",
     color: "#d4a017",
-    foto: "/img/plantas/Curcuma.png",
+    foto: "/img/plantas/Curcuma.webp",
     videoUrl: "https://youtu.be/QRgp0yhtCoc?si=nt9KRA0RZUO8uZC8",
     uso: "Especia antiinflamatoria y antioxidante que favorece la salud hepática.",
     beneficios: [
@@ -209,7 +209,7 @@ export const plantas: Planta[] =
     nombre: "Pimienta",
     nombreCientifico: "Piper nigrum",
     color: "#1c1c1c",
-    foto: "/img/plantas/Pimienta.png",
+    foto: "/img/plantas/Pimienta.webp",
     videoUrl: "https://youtu.be/HXqVq14MM6U?si=YCmfJNHY9bu6Xsrh",
     uso: "Especia estimulante que activa el metabolismo y mejora la digestión.",
     beneficios: [

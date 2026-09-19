@@ -1093,6 +1093,18 @@ export const metodo = {
   "metodo.psico.paso.aceResultado": "Tu resultado",
   "metodo.psico.paso.des": "Desconexión",
   "metodo.psico.paso.desResultado": "Tu desconexión",
+  "metodo.psico.paso.cerebro": "Tu cerebro",
+  "metodo.psico.cerebroContinuar": "Ver qué pasó en tu cerebro",
+
+  // ── Paso 7 · El trauma en tu cerebro ──
+  "metodo.psico.cerebroIntro": "Cómo se guardó en tu cerebro lo que viviste",
+  "metodo.psico.cerebroToca": "Toca cada zona para leer qué hace, qué le pasó y qué la cambia.",
+  "metodo.psico.cerebroTusRespuestas": "Lo que dicen tus respuestas",
+  "metodo.psico.cerebroParaQue": "Para qué sirve",
+  "metodo.psico.cerebroQueLeHizo": "Qué le hizo lo que viviste",
+  "metodo.psico.cerebroComoSeNota": "Cómo se nota hoy",
+  "metodo.psico.cerebroLoQueLaCambia": "Lo que la cambia",
+  "metodo.psico.cerebroDeDonde": "Tu barra sale de aquí: {origen}",
   "metodo.psico.paso.familia": "Tu familia",
   "metodo.psico.paso.genograma": "Genograma",
   "metodo.psico.paso.huellas": "Huellas",
@@ -1501,6 +1513,15 @@ export const metodo = {
   "metodo.pago.stripe": "Pago seguro a través de Stripe",
   "metodo.pago.palabra":
     "Doy mi palabra de honor de que todos los textos son obra mía, escritos por mí. Aunque me he apoyado en herramientas de inteligencia artificial, las ideas, las palabras y el contenido son enteramente míos.",
+  // Las dos casillas del box de pago. La segunda es un permiso aparte: para
+  // preparar una lectura personalizada hay que leer lo que la persona escribe,
+  // y eso se pide, no se da por supuesto.
+  "metodo.pago.acepto": "Acepto las",
+  "metodo.pago.condicionesEnlace": "condiciones de compra",
+  "metodo.pago.autorizo":
+    "Autorizo a María Escribano a acceder a los textos y respuestas que escriba dentro del recorrido, con la finalidad de acompañarme y preparar mis lecturas personalizadas.",
+  "metodo.pago.autorizoNota":
+    "No se comparten con nadie más ni se usan para ninguna otra cosa. Puedes retirar esta autorización cuando quieras desde Contacto.",
   "metodo.pago.realizado": "Pago de {disciplina} realizado",
   "metodo.pago.yaPuedes": "Ya puedes acceder.",
 

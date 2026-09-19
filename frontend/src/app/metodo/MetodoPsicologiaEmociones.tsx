@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · LA RUEDA DE LAS EMOCIONES  ·  25/26
+// PÁGINA · LA RUEDA DE LAS EMOCIONES  ·  26/27
 //
 // «Vuelve aquí para poner palabras a tus emociones.»
 //
@@ -95,7 +95,7 @@ export default function MetodoPsicologiaEmociones() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 25, total: 26 }}
+            step={{ current: 26, total: 27 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: `← ${t("metodo.psico.paso.sintesis")}`, onClick: irASintesis }}

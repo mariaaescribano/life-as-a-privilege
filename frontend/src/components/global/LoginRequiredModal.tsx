@@ -77,7 +77,7 @@ export function LoginRequiredModal({ isOpen, onClose }: LoginRequiredModalProps)
         </Box>
 
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt="Life as a Privilege"
           w="110px"
           objectFit="contain"

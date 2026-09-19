@@ -29,6 +29,7 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { DISCIPLINAS_PAGO } from "../../data/adminDisciplinas";
 import { API_URL } from "../../GlobalVariables";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
+import BotonEntrarComo from "./BotonEntrarComo";
 
 /** scope de pago ↔ disciplina del panel, en el orden del recorrido.
  *  Vive en data/adminDisciplinas.ts porque /admin/usuarios necesita la misma
@@ -225,7 +226,7 @@ export default function AdminAccesos() {
                     >
                       <Box w="40px" h="40px" borderRadius="full" overflow="hidden" flexShrink={0}
                            border="1px solid rgba(255,255,255,0.3)" bg="rgba(255,255,255,0.08)">
-                        <Image src={u.img || "/img/icono/noImg.png"} w="100%" h="100%" objectFit="cover" alt="" />
+                        <Image src={u.img || "/img/icono/noImg.webp"} w="100%" h="100%" objectFit="cover" alt="" />
                       </Box>
                       <Box minW={0} flex="1">
                         <Text color="white" fontWeight="600" noOfLines={1}>{u.name}</Text>
@@ -330,6 +331,9 @@ export default function AdminAccesos() {
                           >
                             Quitar acceso
                           </Box>
+                          {/* Ver la web desde dentro de su cuenta (sale una barra
+                              abajo a la derecha para volver a ser admin). */}
+                          <BotonEntrarComo usuario={u} variante="boton" />
                         </Flex>
 
                         {/* Borrar la cuenta: separado del resto, porque no es
@@ -403,7 +407,7 @@ export default function AdminAccesos() {
         >
           <ModalCloseButton color="white" />
           <Box p={{ base: 6, md: 8 }} textAlign="center">
-            <Image src="/img/icono/life.png" alt="" h="34px" mx="auto" mb={4} objectFit="contain"
+            <Image src="/img/icono/life.webp" alt="" h="34px" mx="auto" mb={4} objectFit="contain"
                    style={{ filter: "drop-shadow(0 0 7px rgba(255,255,255,0.5)) drop-shadow(0 0 16px rgba(180,255,245,0.3))" }} />
             <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={2}
                   textShadow="0 0 12px rgba(255,255,255,0.45)">

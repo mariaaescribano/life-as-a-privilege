@@ -150,7 +150,7 @@ const modalidades: ModalidadData[] = [
 // 1,3 MB que había que esperar: con cobertura mala, 2-3 s de mandala girando por
 // unas acuarelas que no se ven hasta 4.400 px más abajo. Ahora se piden aparte
 // (METODO_IMGS_DIFERIDAS), sin bloquear la entrada.
-const METODO_IMGS: string[] = ["/img/icono/life.png"];
+const METODO_IMGS: string[] = ["/img/icono/life.webp"];
 
 // Los fondos de las ocho tarjetas. Se piden EN CUANTO la página ya se ve, no
 // antes: media página de scroll por delante da tiempo de sobra a que lleguen, y
@@ -280,7 +280,7 @@ function SeparadorMandala({ mt, mb }: { mt?: BoxProps["mt"]; mb?: BoxProps["mb"]
         />
         <Float amplitude={4} duration={6.5}>
           <Image
-            src="/img/icono/life.png"
+            src="/img/icono/life.webp"
             alt=""
             h={{ base: "26px", md: "34px" }}
             objectFit="contain"
@@ -644,7 +644,7 @@ export default function ElMetodo() {
           }}
         >
           <Image
-            src="/img/icono/life.png"
+            src="/img/icono/life.webp"
             alt=""
             h={{ base: "63px", md: "86px" }}
             objectFit="contain"
@@ -1270,7 +1270,7 @@ export default function ElMetodo() {
               transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
             >
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 alt=""
                 h={{ base: "30px", md: "44px" }}
                 objectFit="contain"

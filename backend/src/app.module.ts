@@ -31,6 +31,7 @@ import { MetodoFisiologiaModule } from './metodoFisiologia/metodoFisiologia.modu
 import { MetodoNutricionModule } from './metodoNutricion/metodoNutricion.module';
 import { MetodoCabalaModule } from './metodoCabala/metodoCabala.module';
 import { MetodoNotasModule } from './metodoNotas/metodoNotas.module';
+import { DiarioSesionModule } from './diarioSesion/diarioSesion.module';
 import { BookingModule } from './booking/booking.module';
 import { CursosModule } from './cursos/cursos.module';
 import { AstrologiaTextosModule } from './astrologiaTextos/astrologiaTextos.module';
@@ -76,6 +77,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     MetodoNutricionModule,
     MetodoCabalaModule,
     MetodoNotasModule,
+    DiarioSesionModule,
     BookingModule,
     CursosModule,
     AstrologiaTextosModule,

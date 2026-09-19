@@ -54,6 +54,10 @@ export function IndiceFisiologia() {
     ruta: () => p.path,
   }));
 
+  // Para el camino de /home, en cambio, los niveles se cuentan SEGUIDOS: el
+  // primer paso de VIDA es el 6º del recorrido, no otro «1».
+  const pasosAntes = NIVELES.slice(0, NIVELES.indexOf(nivel)).reduce((a, g) => a + g.pasos.length, 0);
+
   return (
     <IndiceRecorrido
       indice={indice}
@@ -62,6 +66,8 @@ export function IndiceFisiologia() {
       bg={fisiologiaBg}
       nom={fisiologiaNom}
       luz={false}
+      registroKey="fisiologia"
+      registroOffset={pasosAntes}
     />
   );
 }

@@ -134,7 +134,7 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
         <Box
           position="absolute"
           inset="0"
-          backgroundImage="url('/img/icono/life.png')"
+          backgroundImage="url('/img/icono/life.webp')"
           backgroundSize="86%"
           backgroundPosition="center"
           backgroundRepeat="no-repeat"
@@ -230,7 +230,7 @@ export function MapaSeArma({ colocadas, completo, ultima }: MapaSeArmaProps) {
           zIndex={2}
         >
           <Image
-            src="/img/icono/life.png"
+            src="/img/icono/life.webp"
             alt=""
             w="46%"
             h="46%"

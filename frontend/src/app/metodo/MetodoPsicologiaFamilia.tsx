@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · TU FAMILIA  ·  6/22   (ruta interna /familia)
+// PÁGINA · TU FAMILIA  ·  9/27   (ruta interna /familia)
 //
 // Aquí la usuaria COMPONE su familia y le pone cara simbólica. Empieza sola en
 // el centro (su foto de perfil, etiqueta «Tú») y con los «+» que rodean cada
@@ -111,7 +111,7 @@ export default function MetodoPsicologiaFamilia() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title={familia.titulo}
-                step={{ current: 8, total: 26 }}
+                step={{ current: 9, total: 27 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL, turquesa } from "../../GlobalVariables";
 import { cerrarSesionLocal } from "../../api/sesion";
+import { salirDeLaSuplantacion, suplantacionActiva } from "../../api/suplantar";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 
@@ -116,6 +117,13 @@ export default function UserAccount() {
   };
 
   const handleLogout = () => {
+    // Si la sesión es prestada (una admin «entrando como» otra persona), cerrar
+    // sesión aquí cerraría la de ELLA y la dejaría fuera del panel. Lo que toca
+    // es devolverle la suya.
+    if (suplantacionActiva()) {
+      salirDeLaSuplantacion();
+      return;
+    }
     cerrarSesionLocal();
     navigate("/welcome");
   };
@@ -206,7 +214,7 @@ export default function UserAccount() {
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
@@ -381,7 +389,7 @@ export default function UserAccount() {
               transition="all 0.25s ease"
             >
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 alt=""
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"

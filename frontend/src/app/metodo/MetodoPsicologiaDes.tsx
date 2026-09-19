@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · DESCONEXIÓN (test DES-II)  ·  5/25
+// PÁGINA · DESCONEXIÓN (test DES-II)  ·  5/27
 //
 // Entre el resultado del ACE (paso 4) y la Línea de Vida (paso 7): si el ACE
 // cuenta qué pasó, este cuenta cómo se sobrevivió. Y llega ANTES de recorrer la
@@ -183,7 +183,7 @@ export default function MetodoPsicologiaDes() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 5, total: 26 }}
+              step={{ current: 5, total: 27 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.resultadoAce")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace-resultado`) }}

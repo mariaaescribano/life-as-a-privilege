@@ -13,6 +13,7 @@ import { tituloHistoria } from "../../components/metodo/culturaHistorias";
 import { useHistoriaCultura } from "../../components/metodo/useHistoriaCultura";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { apuntarCamino } from "../../utils/apuntarCamino";
 import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // Página de nivel 1 de una Historia de Cultura: su línea del tiempo de ERAS.
@@ -50,6 +51,10 @@ export default function MetodoCulturaHistoria() {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
         // Gate de pago: sin suscripción a Cultura, a la portada (con el popup de pago).
         if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }
+
+        // Camino de /home: Cultura no lleva orden, así que lo que se cuenta es
+        // cuántas Historias ha abierto — cada una apunta su propia pieza.
+        if (historiaKey) apuntarCamino("cultura", 1, historiaKey);
 
         // No mostramos la línea del tiempo hasta que las fotos de la primera
         // ronda de eras estén cargadas (las de más allá se cargan al usar las

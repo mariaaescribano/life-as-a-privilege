@@ -14,17 +14,17 @@ en `CULTURA-fotos-que-faltan.md`, que además trae el título de cada hueco.
 
 | Disciplina | Faltan |
 | --- | --- |
-| Cultura | 48 |
-| Fisiología | 6 |
+| Cultura | 1 |
+| Fisiología | 3 |
 | Nutrición | 9 |
 | Medicina China | 5 |
-| **TOTAL** | **68** |
+| **TOTAL** | **18** |
 
-## Cultura — faltan 48
+## Cultura — faltan 1
 
 Están una a una, con su momento, en `CULTURA-fotos-que-faltan.md`.
 
-## Fisiología — faltan 6
+## Fisiología — faltan 3
 
 ### `frontend/public/recorrido/fisiologia/colageno/`
 
@@ -32,11 +32,8 @@ Están una a una, con su momento, en `CULTURA-fotos-que-faltan.md`.
 
 ### `frontend/public/recorrido/fisiologia/pre/`
 
-- `celula.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaTejidos.tsx`
 - `cuerpo.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaOrganismo.tsx`
-- `organo.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaOrganos.tsx`
 - `proteina.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaEstructuras.tsx`
-- `tejido.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaOrganos.tsx`, `frontend/src/app/metodo/MetodoFisiologiaTejidos.tsx`
 
 ## Nutrición — faltan 9
 

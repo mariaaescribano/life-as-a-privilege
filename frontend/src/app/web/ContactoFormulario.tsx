@@ -118,7 +118,7 @@ const ContactoFormulario = () => {
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
@@ -345,7 +345,7 @@ const ContactoFormulario = () => {
                   pointerEvents={status === "sending" ? "none" : "auto"}
                 >
                   <Image
-                    src="/img/icono/life.png"
+                    src="/img/icono/life.webp"
                     alt=""
                     h={{ base: "20px", md: "32px" }}
                     objectFit="contain"

@@ -18,4 +18,13 @@ export const opiniones = {
   "opiniones.graciasTexto": "It will be published shortly.",
   "opiniones.otra": "Leave another review",
   "opiniones.error": "There was a problem sending your review. Please try again.",
+
+  "opinion.pedir.titulo": "Has this journey kept you company?",
+  "opinion.pedir.texto":
+    "If you feel like it, say so in a few lines. For someone still wondering whether to start, reading a person who has already walked it says far more than anything we could write.",
+  "opinion.pedir.boton": "Write my review",
+  "opinion.pedir.ahoraNo": "Not now",
+
+  "opiniones.volver": "← Back to where I was",
+  "opiniones.volverRecorrido": "Back to my journey",
 };

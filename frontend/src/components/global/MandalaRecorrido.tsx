@@ -59,25 +59,25 @@ const disciplinas: Disciplina[] = [
     bg: astrologiaBg,
     txt: astrologiaTxt,
     capturas: [
-      { src: "/capturasRecorrido/astro/1.png",  titulo: { es: "Tus datos para que te haga la lectura.", en: "Your details, so I can do your reading." } },
-      { src: "/capturasRecorrido/astro/2.png",  titulo: { es: "Minicomic: entiende qué es una carta astral", en: "Mini-comic: what a birth chart actually is" } },
-      { src: "/capturasRecorrido/astro/3.png",  titulo: { es: "Básico", en: "The basics" } },
-      { src: "/capturasRecorrido/astro/4.png",  titulo: { es: "La lectura de todas las partes de ti", en: "The reading of every part of you" } },
-      { src: "/capturasRecorrido/astro/5.png",  titulo: { es: "Tus nudos, conflictos y dones", en: "Your knots, conflicts and gifts" } },
-      { src: "/capturasRecorrido/astro/6.png",  titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/astro/7.png",  titulo: { es: "Léelos todos", en: "Read them all" } },
-      { src: "/capturasRecorrido/astro/8.png",  titulo: { es: "Las áreas de tu Vida y cómo te mueves por ellas", en: "The areas of your Life, and how you move through them" } },
-      { src: "/capturasRecorrido/astro/9.png",  titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/astro/10.png", titulo: { es: "¿Cómo te llevas contigo?", en: "How do you get along with yourself?" } },
-      { src: "/capturasRecorrido/astro/11.png", titulo: { es: "Tus patrones y su para qué", en: "Your patterns, and what they're for" } },
-      { src: "/capturasRecorrido/astro/13.png", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/astro/14.png", titulo: { es: "No te quedarán dudas de quién eres", en: "You'll be left in no doubt about who you are" } },
-      { src: "/capturasRecorrido/astro/15.png", titulo: { es: "Llamada si lo deseas", en: "A call, if you want one" } },
-      { src: "/capturasRecorrido/astro/16.png", titulo: { es: "Cursos de acceso libre", en: "Freely available courses" } },
-      { src: "/capturasRecorrido/astro/18.png", titulo: { es: "No te olvides de las Ilustraciones", en: "Don't forget the Illustrations" } },
-      { src: "/capturasRecorrido/astro/19.png", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/astro/20.png", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/astro/21.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/1.webp",  titulo: { es: "Tus datos para que te haga la lectura.", en: "Your details, so I can do your reading." } },
+      { src: "/capturasRecorrido/astro/2.webp",  titulo: { es: "Minicomic: entiende qué es una carta astral", en: "Mini-comic: what a birth chart actually is" } },
+      { src: "/capturasRecorrido/astro/3.webp",  titulo: { es: "Básico", en: "The basics" } },
+      { src: "/capturasRecorrido/astro/4.webp",  titulo: { es: "La lectura de todas las partes de ti", en: "The reading of every part of you" } },
+      { src: "/capturasRecorrido/astro/5.webp",  titulo: { es: "Tus nudos, conflictos y dones", en: "Your knots, conflicts and gifts" } },
+      { src: "/capturasRecorrido/astro/6.webp",  titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/7.webp",  titulo: { es: "Léelos todos", en: "Read them all" } },
+      { src: "/capturasRecorrido/astro/8.webp",  titulo: { es: "Las áreas de tu Vida y cómo te mueves por ellas", en: "The areas of your Life, and how you move through them" } },
+      { src: "/capturasRecorrido/astro/9.webp",  titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/10.webp", titulo: { es: "¿Cómo te llevas contigo?", en: "How do you get along with yourself?" } },
+      { src: "/capturasRecorrido/astro/11.webp", titulo: { es: "Tus patrones y su para qué", en: "Your patterns, and what they're for" } },
+      { src: "/capturasRecorrido/astro/13.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/14.webp", titulo: { es: "No te quedarán dudas de quién eres", en: "You'll be left in no doubt about who you are" } },
+      { src: "/capturasRecorrido/astro/15.webp", titulo: { es: "Llamada si lo deseas", en: "A call, if you want one" } },
+      { src: "/capturasRecorrido/astro/16.webp", titulo: { es: "Cursos de acceso libre", en: "Freely available courses" } },
+      { src: "/capturasRecorrido/astro/18.webp", titulo: { es: "No te olvides de las Ilustraciones", en: "Don't forget the Illustrations" } },
+      { src: "/capturasRecorrido/astro/19.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/20.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/astro/21.webp", titulo: { es: "Ejemplo", en: "Example" } },
     ],
     link: "/espacio/questions/" + astrologiaNom,
     enabled: true,
@@ -90,26 +90,26 @@ const disciplinas: Disciplina[] = [
     bg: neuropsicologiaBg,
     txt: neuropsicologiaTxt,
     capturas: [
-      { src: "/capturasRecorrido/psico/1.png",  titulo: { es: "Bienvenido a la segunda disciplina.", en: "Welcome to the second discipline." } },
-      { src: "/capturasRecorrido/psico/2.png",  titulo: { es: "Introducción", en: "Introduction" } },
-      { src: "/capturasRecorrido/psico/3.png",  titulo: { es: "Aviso", en: "A note" } },
-      { src: "/capturasRecorrido/psico/20.png", titulo: { es: "En cualquier momento puedes agendar una llamada.", en: "You can book a call at any time." } },
-      { src: "/capturasRecorrido/psico/4.png",  titulo: { es: "Tus problemas", en: "Your problems" } },
-      { src: "/capturasRecorrido/psico/5.png",  titulo: { es: "Tu edad para tu línea de Vida", en: "Your age, for your Life line" } },
-      { src: "/capturasRecorrido/psico/6.png",  titulo: { es: "Línea de Vida", en: "Life line" } },
-      { src: "/capturasRecorrido/psico/7.png",  titulo: { es: "Ejemplo de año", en: "A sample year" } },
-      { src: "/capturasRecorrido/psico/8.png",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
-      { src: "/capturasRecorrido/psico/9.png",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
-      { src: "/capturasRecorrido/psico/10.png", titulo: { es: "¿Qué experiencia te marcó?", en: "Which experience marked you?" } },
-      { src: "/capturasRecorrido/psico/11.png", titulo: { es: "Tus nudos", en: "Your knots" } },
-      { src: "/capturasRecorrido/psico/12.png", titulo: { es: "Las necesidades en la infancia", en: "Childhood needs" } },
-      { src: "/capturasRecorrido/psico/13.png", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/psico/14.png", titulo: { es: "Tus heridas", en: "Your wounds" } },
-      { src: "/capturasRecorrido/psico/15.png", titulo: { es: "Relaciona heridas con tus arquetipos", en: "Link your wounds to your archetypes" } },
-      { src: "/capturasRecorrido/psico/16.png", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/psico/17.png", titulo: { es: "Intégralas en la persona que eres hoy", en: "Integrate them into the person you are today" } },
-      { src: "/capturasRecorrido/psico/18.png", titulo: { es: "Comprométete", en: "Commit" } },
-      { src: "/capturasRecorrido/psico/19.png", titulo: { es: "No te olvides de los cursos", en: "Don't forget the courses" } },
+      { src: "/capturasRecorrido/psico/1.webp",  titulo: { es: "Bienvenido a la segunda disciplina.", en: "Welcome to the second discipline." } },
+      { src: "/capturasRecorrido/psico/2.webp",  titulo: { es: "Introducción", en: "Introduction" } },
+      { src: "/capturasRecorrido/psico/3.webp",  titulo: { es: "Aviso", en: "A note" } },
+      { src: "/capturasRecorrido/psico/20.webp", titulo: { es: "En cualquier momento puedes agendar una llamada.", en: "You can book a call at any time." } },
+      { src: "/capturasRecorrido/psico/4.webp",  titulo: { es: "Tus problemas", en: "Your problems" } },
+      { src: "/capturasRecorrido/psico/5.webp",  titulo: { es: "Tu edad para tu línea de Vida", en: "Your age, for your Life line" } },
+      { src: "/capturasRecorrido/psico/6.webp",  titulo: { es: "Línea de Vida", en: "Life line" } },
+      { src: "/capturasRecorrido/psico/7.webp",  titulo: { es: "Ejemplo de año", en: "A sample year" } },
+      { src: "/capturasRecorrido/psico/8.webp",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
+      { src: "/capturasRecorrido/psico/9.webp",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
+      { src: "/capturasRecorrido/psico/10.webp", titulo: { es: "¿Qué experiencia te marcó?", en: "Which experience marked you?" } },
+      { src: "/capturasRecorrido/psico/11.webp", titulo: { es: "Tus nudos", en: "Your knots" } },
+      { src: "/capturasRecorrido/psico/12.webp", titulo: { es: "Las necesidades en la infancia", en: "Childhood needs" } },
+      { src: "/capturasRecorrido/psico/13.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/psico/14.webp", titulo: { es: "Tus heridas", en: "Your wounds" } },
+      { src: "/capturasRecorrido/psico/15.webp", titulo: { es: "Relaciona heridas con tus arquetipos", en: "Link your wounds to your archetypes" } },
+      { src: "/capturasRecorrido/psico/16.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/psico/17.webp", titulo: { es: "Intégralas en la persona que eres hoy", en: "Integrate them into the person you are today" } },
+      { src: "/capturasRecorrido/psico/18.webp", titulo: { es: "Comprométete", en: "Commit" } },
+      { src: "/capturasRecorrido/psico/19.webp", titulo: { es: "No te olvides de los cursos", en: "Don't forget the courses" } },
     ],
     link: "/espacio/questions/" + neuropsicologiaNom,
     enabled: true,
@@ -122,29 +122,29 @@ const disciplinas: Disciplina[] = [
     bg: ayurvedaBg,
     txt: ayurvedaTxt,
     capturas: [
-      { src: "/capturasRecorrido/hinduismo/1.png",  titulo: { es: "Bienvenido a la tercera disciplina: Ayurveda", en: "Welcome to the third discipline: Ayurveda" } },
-      { src: "/capturasRecorrido/hinduismo/2.png",  titulo: { es: "Introducción", en: "Introduction" } },
-      { src: "/capturasRecorrido/hinduismo/3.png",  titulo: { es: "Aviso", en: "A note" } },
-      { src: "/capturasRecorrido/hinduismo/4.png",  titulo: { es: "El test", en: "The test" } },
-      { src: "/capturasRecorrido/hinduismo/5.png",  titulo: { es: "El test", en: "The test" } },
-      { src: "/capturasRecorrido/hinduismo/6.png",  titulo: { es: "Tu resultado", en: "Your result" } },
-      { src: "/capturasRecorrido/hinduismo/7.png",  titulo: { es: "Las energías", en: "The energies" } },
-      { src: "/capturasRecorrido/hinduismo/8.png",  titulo: { es: "" } },
-      { src: "/capturasRecorrido/hinduismo/9.png",  titulo: { es: "" } },
-      { src: "/capturasRecorrido/hinduismo/10.png", titulo: { es: "" } },
-      { src: "/capturasRecorrido/hinduismo/11.png", titulo: { es: "" } },
-      { src: "/capturasRecorrido/hinduismo/12.png", titulo: { es: "" } },
-      { src: "/capturasRecorrido/hinduismo/13.png", titulo: { es: "Con test interactivos", en: "With interactive tests" } },
-      { src: "/capturasRecorrido/hinduismo/14.png", titulo: { es: "" } },
-      { src: "/capturasRecorrido/hinduismo/17.png", titulo: { es: "Actividad: crea tu día", en: "Activity: build your day" } },
-      { src: "/capturasRecorrido/hinduismo/18.png", titulo: { es: "¡Muy bien, creaste tu día!", en: "Nicely done — you built your day!" } },
-      { src: "/capturasRecorrido/hinduismo/19.png", titulo: { es: "Descárgalo en PDF", en: "Download it as a PDF" } },
-      { src: "/capturasRecorrido/hinduismo/20.png", titulo: { es: "" } },
-      { src: "/capturasRecorrido/hinduismo/21.png", titulo: { es: "Descarga en PDF tu mapa", en: "Download your map as a PDF" } },
-      { src: "/capturasRecorrido/hinduismo/23.png", titulo: { es: "No te olvides de las ilustraciones", en: "Don't forget the illustrations" } },
-      { src: "/capturasRecorrido/hinduismo/24.png", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/hinduismo/25.png", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/hinduismo/26.png", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/hinduismo/1.webp",  titulo: { es: "Bienvenido a la tercera disciplina: Ayurveda", en: "Welcome to the third discipline: Ayurveda" } },
+      { src: "/capturasRecorrido/hinduismo/2.webp",  titulo: { es: "Introducción", en: "Introduction" } },
+      { src: "/capturasRecorrido/hinduismo/3.webp",  titulo: { es: "Aviso", en: "A note" } },
+      { src: "/capturasRecorrido/hinduismo/4.webp",  titulo: { es: "El test", en: "The test" } },
+      { src: "/capturasRecorrido/hinduismo/5.webp",  titulo: { es: "El test", en: "The test" } },
+      { src: "/capturasRecorrido/hinduismo/6.webp",  titulo: { es: "Tu resultado", en: "Your result" } },
+      { src: "/capturasRecorrido/hinduismo/7.webp",  titulo: { es: "Las energías", en: "The energies" } },
+      { src: "/capturasRecorrido/hinduismo/8.webp",  titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/9.webp",  titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/10.webp", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/11.webp", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/12.webp", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/13.webp", titulo: { es: "Con test interactivos", en: "With interactive tests" } },
+      { src: "/capturasRecorrido/hinduismo/14.webp", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/17.webp", titulo: { es: "Actividad: crea tu día", en: "Activity: build your day" } },
+      { src: "/capturasRecorrido/hinduismo/18.webp", titulo: { es: "¡Muy bien, creaste tu día!", en: "Nicely done — you built your day!" } },
+      { src: "/capturasRecorrido/hinduismo/19.webp", titulo: { es: "Descárgalo en PDF", en: "Download it as a PDF" } },
+      { src: "/capturasRecorrido/hinduismo/20.webp", titulo: { es: "" } },
+      { src: "/capturasRecorrido/hinduismo/21.webp", titulo: { es: "Descarga en PDF tu mapa", en: "Download your map as a PDF" } },
+      { src: "/capturasRecorrido/hinduismo/23.webp", titulo: { es: "No te olvides de las ilustraciones", en: "Don't forget the illustrations" } },
+      { src: "/capturasRecorrido/hinduismo/24.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/hinduismo/25.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/hinduismo/26.webp", titulo: { es: "Ejemplo", en: "Example" } },
     ],
     link: "/espacio/questions/" + ayurvedaNomLink,
     enabled: true,
@@ -1238,7 +1238,7 @@ export const RecorridoMandalaVideo = () => {
             position="absolute"
             w="100%"
             h="100%"
-            backgroundImage="url('/img/icono/life.png')"
+            backgroundImage="url('/img/icono/life.webp')"
             backgroundSize="90%"
             backgroundPosition="center"
             backgroundRepeat="no-repeat"
@@ -1267,7 +1267,7 @@ export const RecorridoMandalaVideo = () => {
             transition={{ duration: 0.7 }}
           >
             <Image
-              src="/img/icono/life.png"
+              src="/img/icono/life.webp"
               alt=""
               w="70%"
               h="70%"
@@ -1368,7 +1368,7 @@ const MandalaRecorrido = () => {
             position="absolute"
             w="100%"
             h="100%"
-            backgroundImage="url('/img/icono/life.png')"
+            backgroundImage="url('/img/icono/life.webp')"
             backgroundSize="90%"
             backgroundPosition="center"
             backgroundRepeat="no-repeat"
@@ -1397,7 +1397,7 @@ const MandalaRecorrido = () => {
             transition={{ duration: 0.7 }}
           >
             <Image
-              src="/img/icono/life.png"
+              src="/img/icono/life.webp"
               alt=""
               w="70%"
               h="70%"

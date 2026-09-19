@@ -66,7 +66,7 @@ export function PagoExitoModal({
             <Flex align="center" justify="center" gap={3}>
               {Icon
                 ? <Icon size={{ base: "42px", md: "52px" }} />
-                : <Image src="/img/icono/life.png" h="36px" objectFit="contain" />}
+                : <Image src="/img/icono/life.webp" h="36px" objectFit="contain" />}
               <Text
                 color={txtColor}
                 // Siempre en UNA sola línea horizontal (nowrap); el tamaño se

@@ -327,7 +327,7 @@ export default function MetodoPsicologiaDonesEspejo() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 18, total: 26 }}
+              step={{ current: 19, total: 27 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.recuerdate")}`, onClick: irARecuerdate }}

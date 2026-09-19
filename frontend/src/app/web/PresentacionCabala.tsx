@@ -95,7 +95,7 @@ export default function PresentacionCabala({ d }: { d: PresentacionDisciplina })
   };
 
   const fotosListas = useImagesReady([
-    "/img/icono/life.png",
+    "/img/icono/life.webp",
     "/img/fondos/cabala.webp",
     ...comics.map((c) => c.cover),
   ]);

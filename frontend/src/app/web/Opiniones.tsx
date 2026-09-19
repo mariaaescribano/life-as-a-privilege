@@ -1,10 +1,58 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Flex, Image, Input, SimpleGrid, Text, Textarea } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { API_URL } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
 import { useT } from "../../i18n";
+import { marcarOpinionEnviada } from "../../components/metodo/PedirOpinion";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LA VUELTA — a esta página se puede llegar desde el final de un recorrido
+// (ver components/metodo/PedirOpinion), que manda en `?volver=` la página
+// exacta de la que se salió. Con eso se pintan los botones de vuelta y se baja
+// directamente al formulario: quien viene a escribir su reseña no tiene que
+// buscarla debajo de todas las demás.
+//
+// Solo se aceptan rutas de la propia web: si llegara una dirección de fuera
+// («//otra-web.com», «https://…»), este botón sería un puente para llevarse a
+// la gente a cualquier sitio desde un enlace nuestro.
+// ─────────────────────────────────────────────────────────────────────────────
+function rutaInterna(valor: string | null): string | null {
+  if (!valor) return null;
+  const limpio = valor.trim();
+  if (!limpio.startsWith("/") || limpio.startsWith("//")) return null;
+  return limpio;
+}
+
+/** Botón de vuelta: el mismo arriba y en la pantalla de gracias. */
+function BotonVolver({ a, texto, onIr }: { a: string; texto: string; onIr: (a: string) => void }) {
+  return (
+    <Flex
+      as="button"
+      onClick={() => onIr(a)}
+      align="center"
+      justify="center"
+      px={{ base: 6, md: 8 }}
+      py={{ base: "10px", md: "12px" }}
+      borderRadius="full"
+      border="1px solid rgba(255,255,255,0.55)"
+      bg="rgba(255,255,255,0.08)"
+      color="white"
+      fontFamily="'EB Garamond', serif"
+      fontWeight="600"
+      fontSize={{ base: "sm", md: "md" }}
+      letterSpacing="0.08em"
+      cursor="pointer"
+      whiteSpace="nowrap"
+      transition="all 0.25s ease"
+      _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "white" }}
+    >
+      {texto}
+    </Flex>
+  );
+}
 
 const useReveal = (threshold = 0.1) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -120,9 +168,24 @@ function OpinionesList({ opiniones, loading, listReveal }: { opiniones: Opinion[
   );
 }
 
-function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLDivElement | null>; visible: boolean } }) {
+function DejarOpinion({
+  formReveal,
+  volver,
+  onVolver,
+}: {
+  formReveal: { ref: React.RefObject<HTMLDivElement | null>; visible: boolean };
+  /** Página del recorrido desde la que se vino, si se vino de una. */
+  volver?: string | null;
+  onVolver: (a: string) => void;
+}) {
   const t = useT();
-  const [form, setForm] = useState({ nombre: "", texto: "", email: "" });
+  // Con la sesión abierta ya sabemos cómo se llama: no se le pide otra vez lo
+  // que ya nos dijo. Puede cambiarlo si prefiere firmar de otra manera.
+  const [form, setForm] = useState(() => {
+    let nombre = "";
+    try { nombre = localStorage.getItem("name") ?? ""; } catch { /* modo privado */ }
+    return { nombre, texto: "", email: "" };
+  });
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -144,8 +207,12 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
         }),
       });
       if (!res.ok) throw new Error();
+      // Ya ha dejado la suya: el final de los recorridos deja de pedírsela.
+      marcarOpinionEnviada();
       setStatus("ok");
-      setForm({ nombre: "", texto: "", email: "" });
+      // Se limpia lo escrito, pero no quién lo firma: si deja otra, no tiene que
+      // volver a teclear su nombre.
+      setForm((prev) => ({ ...prev, texto: "" }));
     } catch {
       setStatus("error");
     }
@@ -194,6 +261,12 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
           >
             {t("opiniones.graciasTexto")}
           </Text>
+          {/* Si vino del final de un recorrido, lo primero es devolverlo allí:
+              acaba de escribir su reseña, no ha venido a quedarse aquí. */}
+          {volver && (
+            <BotonVolver a={volver} texto={t("opiniones.volverRecorrido")} onIr={onVolver} />
+          )}
+
           <Flex
             as="button"
             onClick={() => setStatus("idle")}
@@ -302,7 +375,7 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
               pointerEvents={status === "sending" ? "none" : "auto"}
             >
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 alt=""
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"
@@ -330,12 +403,17 @@ function DejarOpinion({ formReveal }: { formReveal: { ref: React.RefObject<HTMLD
 
 export default function Opiniones() {
   const t = useT();
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
   const [opiniones, setOpiniones] = useState<Opinion[]>([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const listReveal = useReveal(0.05);
   const formReveal = useReveal(0.1);
   const dejarTitleReveal = useReveal(0.2);
+  // De dónde vino (el final de un recorrido), si es que vino de algún sitio.
+  const volver = rutaInterna(params.get("volver"));
+  const zonaDejar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -348,6 +426,17 @@ export default function Opiniones() {
     return () => clearTimeout(t);
   }, []);
 
+  // Viene a escribir: se baja solo hasta el formulario en vez de dejarlo arriba
+  // del todo con las reseñas de los demás por delante. Con un respiro, para que
+  // se vea el movimiento y entienda a dónde ha ido la página.
+  useEffect(() => {
+    if (!volver) return;
+    const id = setTimeout(() => {
+      zonaDejar.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 420);
+    return () => clearTimeout(id);
+  }, [volver]);
+
   return (
     <Box
       minH="100vh"
@@ -358,10 +447,19 @@ export default function Opiniones() {
     >
       <SiteHeader variant="auto" />
 
+      {/* ── LA VUELTA (solo si vino del final de un recorrido) ──
+          Arriba del todo y siempre visible: puede arrepentirse antes de
+          escribir nada, y el camino de vuelta tiene que estar a la vista. */}
+      {volver && (
+        <Flex justify="center" pt={{ base: 6, md: 8 }} px={{ base: 5, md: 10 }}>
+          <BotonVolver a={volver} texto={t("opiniones.volver")} onIr={(a) => navigate(a)} />
+        </Flex>
+      )}
+
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"
@@ -428,6 +526,9 @@ export default function Opiniones() {
       </Flex>
 
       {/* ── TÍTULO DEJAR OPINIÓN ── */}
+      {/* `zonaDejar` es a donde baja sola la página cuando se llega desde el
+          final de un recorrido. */}
+      <Box ref={zonaDejar} />
       <Flex
         ref={dejarTitleReveal.ref}
         direction="column"
@@ -474,7 +575,7 @@ export default function Opiniones() {
         pt={{ base: 11, md: 14 }}
         pb={{ base: 24, md: 32 }}
       >
-        <DejarOpinion formReveal={formReveal} />
+        <DejarOpinion formReveal={formReveal} volver={volver} onVolver={(a) => navigate(a)} />
       </Flex>
 
       <SiteFooter />

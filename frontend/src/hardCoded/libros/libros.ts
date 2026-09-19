@@ -25,26 +25,26 @@ const drivePdf = (id: string) => `https://drive.google.com/uc?export=download&id
 const DONATION_LINK = "https://buy.stripe.com/14A7sEfdJbLm9E3gr22VG00";
 
 export const apuntes: Apunte[] = [
-  { id: "tao-fisica",          titulo: "El Tao de la física",    link: drivePdf("1XJ5RpF7Sk9Z-EgXqvV1SAa1E_l9dVS3N"), img: "/libros/img/taofisica.png" },
-  { id: "proteinas",           titulo: "Las proteínas",          link: drivePdf("1lROz605oU6EEMuPgPKkDrRLMZJqsveRF"), img: "/libros/img/proteins.png" },
-  { id: "filosofia",           titulo: "Filosofía",              link: drivePdf("1Fz9l-O9JkpTsoRF9qvHp585wZrAcJFsA"), img: "/libros/img/filosofia.png"  },
-  { id: "neurotransmisores",   titulo: "Neurotransmisores",      link: drivePdf("1m5ecq6fKV4lsu4S1uEQL2BnxskJr4eol"), img: "/libros/img/neurotransmisores.png" },
-  { id: "medicina-integral",   titulo: "Medicina Integral",      link: drivePdf("1CJKRT7n7dD_UFmokDsD7oR1WlyajADt6"), img: "/libros/img/integrativo.png" },
-  { id: "sistema-inmunitario", titulo: "El Sistema Inmunitario (In a Nutshell)", link: drivePdf("1LIBkRIDy_hGabD5pLC6k96DOkHogJT06"), img: "/libros/img/inmune.png" },
-  { id: "fitoterapia",         titulo: "Fitoterapia",            link: drivePdf("1HBNMD_PPvvZHe7Xgdihq2v30F5jIr2ML"), img: "/libros/img/fitoterapia.png" },
-  { id: "ayurveda",            titulo: "Ayurveda",               link: drivePdf("1jjhFjyxkfXNwExBQnPYjRh_66v5O3hgn"), img: "/libros/img/ayurveda.png"  },
+  { id: "tao-fisica",          titulo: "El Tao de la física",    link: drivePdf("1XJ5RpF7Sk9Z-EgXqvV1SAa1E_l9dVS3N"), img: "/libros/img/taofisica.webp" },
+  { id: "proteinas",           titulo: "Las proteínas",          link: drivePdf("1lROz605oU6EEMuPgPKkDrRLMZJqsveRF"), img: "/libros/img/proteins.webp" },
+  { id: "filosofia",           titulo: "Filosofía",              link: drivePdf("1Fz9l-O9JkpTsoRF9qvHp585wZrAcJFsA"), img: "/libros/img/filosofia.webp"  },
+  { id: "neurotransmisores",   titulo: "Neurotransmisores",      link: drivePdf("1m5ecq6fKV4lsu4S1uEQL2BnxskJr4eol"), img: "/libros/img/neurotransmisores.webp" },
+  { id: "medicina-integral",   titulo: "Medicina Integral",      link: drivePdf("1CJKRT7n7dD_UFmokDsD7oR1WlyajADt6"), img: "/libros/img/integrativo.webp" },
+  { id: "sistema-inmunitario", titulo: "El Sistema Inmunitario (In a Nutshell)", link: drivePdf("1LIBkRIDy_hGabD5pLC6k96DOkHogJT06"), img: "/libros/img/inmune.webp" },
+  { id: "fitoterapia",         titulo: "Fitoterapia",            link: drivePdf("1HBNMD_PPvvZHe7Xgdihq2v30F5jIr2ML"), img: "/libros/img/fitoterapia.webp" },
+  { id: "ayurveda",            titulo: "Ayurveda",               link: drivePdf("1jjhFjyxkfXNwExBQnPYjRh_66v5O3hgn"), img: "/libros/img/ayurveda.webp"  },
   { id: "anatomia-fisiologia", titulo: "Anatomía y fisiología",  link: drivePdf("1nJmZ1jRRQ7bKXYoao0t7mxbR1mrMrISz"), img: "/libros/img/anatomiayfisiologia.jpg"  },
 ];
 
 export const libros: Libro[] = [
-  { id: "historia-astrologia",        titulo: "The History of Astrology",                 link: drivePdf("1fVuqyAtUm3E1I2BcAOLHRK3zleLC3DCm"), img: "/libros/img/historyastrology.png" },
+  { id: "historia-astrologia",        titulo: "The History of Astrology",                 link: drivePdf("1fVuqyAtUm3E1I2BcAOLHRK3zleLC3DCm"), img: "/libros/img/historyastrology.webp" },
   { id: "psicologia-general",         titulo: "Psicología general",                       link: drivePdf("1--MYyxlZvYCEQ0wab1GzHJTn6_lyrvOg"), img: "/libros/img/psicologia.jpg" },
   { id: "historia-matematicas",       titulo: "Historia de las matemáticas",              link: drivePdf("1KOMOGBOr_CiIPRVPQrBs43kFIgGyIcq3"), img: "/libros/img/maths.jpg" },
   { id: "tcm-coursera",               titulo: "Medicina China (Coursera)",                link: drivePdf("1lBu9ACzSrZ-4WTav8ELpjfkz0spFZePc"), img: "/libros/img/medicina-tradicional-china.jpg" },
   { id: "la-tierra",                  titulo: "La Tierra",                                link: drivePdf("1pzT529GXniv74tqXLDoUvMzeG41koIcN"), img: "/libros/img/earth.jpg" },
   { id: "cuerpo-humano",              titulo: "El cuerpo humano",                         link: drivePdf("1dRlUlB9yz9hyWGVV0HH7AZeBe9-xT-Nv"), img: "/libros/img/cuerpohumano.jpg" },
   { id: "diagnostico-lengua",         titulo: "Diagnóstico de lengua",                    link: drivePdf("1AXPL-rOx5HbAMFAnGDsvMbYtw-mXsN4S"), img: "/libros/img/tonguediagnosis.jpg" },
-  { id: "trauma",                     titulo: "Las heridas que no vemos (Begoña Aznárez)",                                   link: drivePdf("1_AjmAmh1otjLjfwrcRaLUGPl6mAyFNQ-"), img: "/libros/img/traumas.png" },
+  { id: "trauma",                     titulo: "Las heridas que no vemos (Begoña Aznárez)",                                   link: drivePdf("1_AjmAmh1otjLjfwrcRaLUGPl6mAyFNQ-"), img: "/libros/img/traumas.webp" },
   { id: "virginia-blanes",            titulo: "Virginia Blanes",                          link: drivePdf("1bmWpebgVLlX_5E5yVfA5-GbxaPUMnhFU"), img: "/libros/img/virginiablanes.jpg" },
   { id: "el-cerebro",                 titulo: "El cerebro",                               link: drivePdf("1p5ki_-AumpW-a06zbkk_PHDyZMGdXiIE"), img: "/libros/img/brain.jpg" },
   { id: "historia-psicologia",        titulo: "Historia de la psicología",                link: drivePdf("1Ca6ns6nZxmKcKc1IPpRICt3Xr5zSjipY"), img: "/libros/img/psicologiahistoria.jpg" },
@@ -74,7 +74,7 @@ export const librosPago: LibroPago[] = [
     descripcion: "El libro fundacional del método. Una invitación a entender la Vida como un camino de despertar.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1YKcYYSjxZudK112Ohsn4pSK449nCwLgk"),
-    img: "/libros/img/book.png",
+    img: "/libros/img/book.webp",
   },
   // {
   //   id: "psicopatologia",
@@ -82,7 +82,7 @@ export const librosPago: LibroPago[] = [
   //   descripcion: "Un recorrido por los trastornos mentales y las raíces psicológicas del sufrimiento.",
   //   link: DONATION_LINK,
   //   pdfLink: drivePdf("1HtBS3RqBnBSFpfiIhpExM45nDJmp0XK-"),
-  //   img: "/libros/img/psychopathology.png",
+  //   img: "/libros/img/psychopathology.webp",
   // },
   {
     id: "fisiologia",
@@ -90,7 +90,7 @@ export const librosPago: LibroPago[] = [
     descripcion: "Los fundamentos de cómo funciona el cuerpo humano.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1vzgDPnQcuChl-5sm2Wv_iTiY2NcR_SjV"),
-    img: "/libros/img/fisiologia(pago).png",
+    img: "/libros/img/fisiologia(pago).webp",
   },
   {
     id: "chinese-medicine",
@@ -98,7 +98,7 @@ export const librosPago: LibroPago[] = [
     descripcion: "Una recopilación profunda de los principios de la medicina tradicional china.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1lX1ahYlzjFaWvuk-tlhS3ar5f_ht7Ww3"),
-    img: "/libros/img/tcm.png",
+    img: "/libros/img/tcm.webp",
   },
   {
     id: "the-kabbalah",
@@ -106,7 +106,7 @@ export const librosPago: LibroPago[] = [
     descripcion: "Una introducción a los misterios de la Cábala: el árbol de la Vida y las sefirot.",
     link: DONATION_LINK,
     pdfLink: drivePdf("1hFXw_92WF82V0kS6C1nlkW6ZR0zpixKX"),
-    img: "/libros/img/cabala.png",
+    img: "/libros/img/cabala.webp",
   },
   // {
   //   id: "psicosomatica",
@@ -114,6 +114,6 @@ export const librosPago: LibroPago[] = [
   //   descripcion: "Cómo las emociones, los traumas y la mente nos enferman.",
   //   link: DONATION_LINK,
   //   pdfLink: drivePdf("1uzpahRZoDr47SefN83pELg4urj61GkNE"),
-  //   img: "/libros/img/psicosomatica.png",
+  //   img: "/libros/img/psicosomatica.webp",
   // },
 ];

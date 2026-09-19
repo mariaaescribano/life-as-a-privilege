@@ -71,7 +71,7 @@ export function SubscribeBox() {
             bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
           />
           <Image
-            src="/img/icono/life.png"
+            src="/img/icono/life.webp"
             alt=""
             h={{ base: "26px", md: "34px" }}
             objectFit="contain"
@@ -102,7 +102,7 @@ export function SubscribeBox() {
         transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
       >
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           h={{ base: "48px", md: "60px" }}
           objectFit="contain"
           mx="auto"

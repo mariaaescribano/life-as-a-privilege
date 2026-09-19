@@ -68,7 +68,7 @@ export interface DatosPdfCarta {
 }
 
 /** El mandala de la marca, que va arriba en la portada. */
-const IMG_MANDALA = "/img/icono/life.png";
+const IMG_MANDALA = "/img/icono/life.webp";
 
 // ── Medidas de la página (A4 en mm) ───────────────────────────────────────
 const A4_W = 210;

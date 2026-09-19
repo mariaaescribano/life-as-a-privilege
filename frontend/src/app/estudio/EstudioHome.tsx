@@ -26,7 +26,7 @@ export default function EstudioHome() {
   const [info, setInfo] = useState<CuerpoKey | null>(null);
   // La portada no se pinta hasta que el cielo está descargado: el botón EMPEZAR
   // y los boxes lo llevan de fondo y quedaría feo entrando a trozos.
-  const fotosListas = useImagesReady([SPACE_IMG, "/img/icono/life.png"]);
+  const fotosListas = useImagesReady([SPACE_IMG, "/img/icono/life.webp"]);
 
   if (!fotosListas) return <LifeLoading />;
 
@@ -39,7 +39,7 @@ export default function EstudioHome() {
         <Reveal direction="down" distance={18} duration={0.8}>
           <Float amplitude={7} duration={6}>
             <Image
-              src="/img/icono/life.png"
+              src="/img/icono/life.webp"
               alt=""
               h={{ base: "72px", md: "104px" }}
               objectFit="contain"

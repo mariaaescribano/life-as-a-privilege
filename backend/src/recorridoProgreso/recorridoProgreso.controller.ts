@@ -6,6 +6,15 @@ import { JwtAuthGuard } from '../auth/jwt.guard';
 export class RecorridoProgresoController {
   constructor(private readonly service: RecorridoProgresoService) {}
 
+  // Sin parámetro: el progreso de TODAS las disciplinas. Va antes que
+  // `@Get(':disciplina')` por claridad; Nest ya los distingue por la forma de
+  // la ruta.
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getTodo(@Req() req: any) {
+    return await this.service.getTodo(req.user.userId);
+  }
+
   @Get(':disciplina')
   @UseGuards(JwtAuthGuard)
   async get(@Req() req: any, @Param('disciplina') disciplina: string) {

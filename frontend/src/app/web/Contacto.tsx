@@ -35,7 +35,7 @@ const Contacto = () => {
       {/* MANDALA SEPARADOR */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
@@ -95,7 +95,7 @@ const Contacto = () => {
       <Flex justify="center" pt={{ base: 8, md: 10 }}>
         <Reveal inView amount={0.02} direction="up" distance={20} scaleFrom={0.94} duration={0.7}>
           <Image
-            src="/img/me/me.png"
+            src="/img/me/me.webp"
             alt=""
             w={{ base: "104px", md: "132px" }}
             h={{ base: "104px", md: "132px" }}

@@ -372,7 +372,7 @@ export default function MetodoPsicologiaSintesis() {
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
                 maxW="100%"
-                step={{ current: 24, total: 26 }}
+                step={{ current: 25, total: 27 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.carta")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/brujula`) }}
@@ -460,7 +460,7 @@ export default function MetodoPsicologiaSintesis() {
         </Box>
       )}
 
-      <IndiceRecorrido progresoKey="psicologia" />
+      <IndiceRecorrido progresoKey="psicologia" registroKey="psicologia" />
       <SiteFooter />
     </Box>
   );

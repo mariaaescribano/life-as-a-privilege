@@ -24,6 +24,7 @@ export function IndiceTcm() {
       // elementos, el Índice solo abre «Los Cinco Elementos» (paso 2); y hasta
       // hacer el test de constitución, no pasa de «Tu Constitución» (paso 3).
       progresoKey="tcm"
+      registroKey="tcm"
       alcanzableUrl={(userId) => `${API_URL}/metodo-tcm/${userId}`}
       alcanzableDe={(data) => Math.min(pasoAlcanzableTcm(data), constitucionHecha(data) ? TCM_TOTAL : 3)}
     />

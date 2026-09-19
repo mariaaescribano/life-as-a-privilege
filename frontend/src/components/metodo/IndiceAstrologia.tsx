@@ -21,6 +21,7 @@ export function IndiceAstrologia() {
     <IndiceRecorrido
       indice={indice}
       total={ASTROLOGIA_TOTAL}
+      registroKey="metodo"
       tinta={astrologiaTxt}
       bg={astrologiaBg}
       nom={astrologiaNom}

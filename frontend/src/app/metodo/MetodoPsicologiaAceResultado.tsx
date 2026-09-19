@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · ¿Qué significa tu resultado ACE?  ·  4/25
+// PÁGINA · ¿Qué significa tu resultado ACE?  ·  4/27
 //
 // El resultado del test ACE, separado del test (página 3). Muestra la
 // puntuación + su interpretación (banda), qué se sabe de estas experiencias
@@ -111,7 +111,7 @@ export default function MetodoPsicologiaAceResultado() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 4, total: 26 }}
+              step={{ current: 4, total: 27 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.ace")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/ace`) }}

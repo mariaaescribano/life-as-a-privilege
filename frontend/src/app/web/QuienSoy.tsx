@@ -108,7 +108,7 @@ const QuienSoy = () => {
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
@@ -159,7 +159,7 @@ const QuienSoy = () => {
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
           <Image
-            src="/img/me/me.png"
+            src="/img/me/me.webp"
             alt="María Escribano"
             w="100%"
             h="auto"
@@ -552,7 +552,7 @@ const QuienSoy = () => {
                 >
                   <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))" boxShadow="0 0 6px rgba(255,255,255,0.35)" />
                   <Image
-                    src="/img/icono/life.png"
+                    src="/img/icono/life.webp"
                     alt=""
                     h={{ base: "34px", md: "44px" }}
                     objectFit="contain"

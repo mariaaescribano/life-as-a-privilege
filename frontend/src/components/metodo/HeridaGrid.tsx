@@ -39,7 +39,7 @@ export function MandalaDivider() {
   return (
     <Flex align="center" w="100%" maxW="720px" mx="auto" gap={{ base: 4, md: 6 }} py={{ base: 1, md: 2 }}>
       <Box flex="1" h="1px" bgGradient={`linear(to-r, transparent, ${PAPEL}55)`} />
-      <Image src="/img/icono/life.png" alt="" w={{ base: "40px", md: "52px" }} h={{ base: "40px", md: "52px" }}
+      <Image src="/img/icono/life.webp" alt="" w={{ base: "40px", md: "52px" }} h={{ base: "40px", md: "52px" }}
              objectFit="contain" opacity={0.9} flexShrink={0}
              style={{ filter: "drop-shadow(0 0 10px rgba(255,251,243,0.45))" }} />
       <Box flex="1" h="1px" bgGradient={`linear(to-l, transparent, ${PAPEL}55)`} />

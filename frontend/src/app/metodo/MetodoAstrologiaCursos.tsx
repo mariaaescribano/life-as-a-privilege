@@ -4,6 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader, glowHeaderDisciplina } from "../../components/metodo/MetodoStepHeader";
@@ -214,6 +215,10 @@ export default function MetodoAstrologiaCursos() {
               </Box>
             </Reveal>
           )}
+
+          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
+              /opiniones y trae de vuelta a esta misma página. */}
+          <PedirOpinion bg={astrologiaBg} txt={astrologiaTxt} nom={astrologiaNom} />
         </Flex>
       </Flex>
 

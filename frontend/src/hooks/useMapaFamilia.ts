@@ -26,7 +26,7 @@ export function useMapaFamilia(expId?: string) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [personas, setPersonas] = useState<PersonaGenograma[]>([]);
-  const [miFoto, setMiFoto] = useState<string>("/img/icono/noImg.png");
+  const [miFoto, setMiFoto] = useState<string>("/img/icono/noImg.webp");
   const dataRef = useRef<LineaDeVidaData>({});
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendiente = useRef<PersonaGenograma[] | null>(null);

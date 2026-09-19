@@ -19,7 +19,7 @@ export default function NoEncontrada() {
       <Flex flex="1" direction="column" align="center" justify="center" textAlign="center"
             px={{ base: 6, md: 10 }} py={{ base: 12, md: 20 }} gap={{ base: 5, md: 6 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "64px", md: "84px" }}
           objectFit="contain"

@@ -23,6 +23,7 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { DISCIPLINAS_PAGO } from "../../data/adminDisciplinas";
 import { API_URL } from "../../GlobalVariables";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
+import BotonEntrarComo from "./BotonEntrarComo";
 
 interface CuentaAdmin {
   id: string;
@@ -162,7 +163,7 @@ export default function AdminTodosUsuarios() {
                         flexShrink={0}
                         border="1px solid rgba(255,255,255,0.45)"
                       >
-                        <Image src={u.img || "/img/icono/noImg.png"} w="100%" h="100%" objectFit="cover" alt="" />
+                        <Image src={u.img || "/img/icono/noImg.webp"} w="100%" h="100%" objectFit="cover" alt="" />
                       </Box>
                       <Box minW={0}>
                         <Text color="white" fontWeight="600" noOfLines={1}>{u.name}</Text>
@@ -212,16 +213,42 @@ export default function AdminTodosUsuarios() {
                       )}
                     </Flex>
 
-                    {/* cuántas de ocho */}
-                    <Text
-                      color="rgba(255,255,255,0.75)"
-                      fontSize="sm"
-                      whiteSpace="nowrap"
+                    {/* cuántas de ocho + entrar en su cuenta */}
+                    <Flex
+                      align="center"
+                      gap={3}
                       flexShrink={0}
                       alignSelf={{ base: "flex-end", md: "center" }}
                     >
-                      {suyas.length}/{DISCIPLINAS_PAGO.length}
-                    </Text>
+                      <Text color="rgba(255,255,255,0.75)" fontSize="sm" whiteSpace="nowrap">
+                        {suyas.length}/{DISCIPLINAS_PAGO.length}
+                      </Text>
+                      {/* Diario de sesiones: las notas que le escribo tras cada
+                          sesión y que lee en su Home. No depende de ninguna
+                          disciplina, así que va aquí y no en las pastillas. */}
+                      <Box
+                        as="button"
+                        onClick={() => navigate(`/admin/diario/${u.id}`)}
+                        px={3}
+                        py="5px"
+                        borderRadius="full"
+                        bg="rgba(255,255,255,0.1)"
+                        border="1px solid rgba(255,255,255,0.4)"
+                        color="white"
+                        fontSize="xs"
+                        fontWeight="600"
+                        whiteSpace="nowrap"
+                        cursor="pointer"
+                        transition="all 0.15s"
+                        _hover={{ bg: "rgba(255,255,255,0.2)", borderColor: "white", transform: "translateY(-1px)" }}
+                        title={`Diario de sesiones de ${u.name}`}
+                      >
+                        Diario
+                      </Box>
+                      {/* Ver la web como ella: su sesión de verdad, no una copia
+                          de solo lectura. Al entrar sale la barra para volver. */}
+                      <BotonEntrarComo usuario={u} />
+                    </Flex>
                   </Flex>
                 );
               })}

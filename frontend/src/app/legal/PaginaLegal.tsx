@@ -76,7 +76,7 @@ export default function PaginaLegal({
       <Box flex="1">
         <Flex justify="center" pt={{ base: 8, md: 12 }}>
           <Image
-            src="/img/icono/life.png"
+            src="/img/icono/life.webp"
             alt=""
             h={{ base: "48px", md: "62px" }}
             objectFit="contain"

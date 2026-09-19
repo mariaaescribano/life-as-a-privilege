@@ -261,7 +261,7 @@ export function ComicPorQueExiste() {
               pointerEvents="none"
             >
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 alt=""
                 w="38%"
                 objectFit="contain"

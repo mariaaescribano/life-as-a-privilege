@@ -19,6 +19,13 @@ export const home = {
   "home.fotoError": "The photo couldn't be uploaded",
   "home.fotoErrorTexto": "Please try again in a moment.",
 
+  "home.camino.titulo": "Your path",
+  "home.camino.andado": "{hechos} of {total} steps",
+  "home.camino.paso": "step {paso} of {total}",
+  "home.camino.piezas": "{hechos} of {total} histories",
+  "home.camino.completa": "completed",
+  "home.camino.sinEmpezar": "not started yet",
+
   "home.pago.titulo": "{disciplina} payment complete",
   "home.pago.puedesEmpezar": "You can now start the {ordinal} discipline of The Map.",
   "home.pago.lineaDeVida": "You can now start your Life line.",

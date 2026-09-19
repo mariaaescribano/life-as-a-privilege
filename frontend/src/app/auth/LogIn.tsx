@@ -84,7 +84,7 @@ export default function LogIn() {
           "img",
           data.url && data.url != ""
             ? data.url
-            : "/img/icono/noImg.png"
+            : "/img/icono/noImg.webp"
         );
 
         // Si el email es de admin, aún NO está desbloqueado (hace falta la
@@ -147,7 +147,7 @@ export default function LogIn() {
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
@@ -261,7 +261,7 @@ export default function LogIn() {
               transition="all 0.25s ease"
             >
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 alt=""
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"

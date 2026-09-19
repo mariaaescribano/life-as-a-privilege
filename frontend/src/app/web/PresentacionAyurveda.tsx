@@ -210,7 +210,7 @@ export default function PresentacionAyurveda({ d }: { d: PresentacionDisciplina 
   // La página espera al mandala, al fondo de la disciplina y a las portadas de
   // los cómics: entra de una pieza.
   const fotosListas = useImagesReady([
-    "/img/icono/life.png",
+    "/img/icono/life.webp",
     "/img/fondos/hinduismo.webp",
     ...comics.map((c) => c.cover),
   ]);

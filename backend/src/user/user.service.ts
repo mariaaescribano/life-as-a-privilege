@@ -808,6 +808,7 @@ export class UserService {
       { table: 'metodo_nutricion', column: 'user_id' },
       { table: 'metodo_cabala', column: 'user_id' },
       { table: 'notas', column: 'user_id' },
+      { table: 'diario_sesion', column: 'user_id' },
       { table: 'recorrido_progreso', column: 'user_id' },
       { table: 'astrologia', column: 'userId' },
       { table: 'ayurveda', column: 'userId' },

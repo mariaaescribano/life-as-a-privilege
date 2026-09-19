@@ -48,12 +48,14 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // mandala de dentro del proyecto no puede echarte fuera de él.
   const homeTarget = isPrivate ? rutaHome() : "/";
   const logoTarget = homeTarget;
-  const avatarSrc  = userImg ?? sessionImg ?? "/img/icono/noImg.png";
+  const avatarSrc  = userImg ?? sessionImg ?? "/img/icono/noImg.webp";
 
   const path = location.pathname.toLowerCase();
   const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
   const isMaterialesPage = path.startsWith("/materiales") || path.startsWith("/aprendizaje") || path.startsWith("/libros");
-  const isProgramasPage = path.startsWith("/programas");
+  // Programas: fuera del menú (ver más abajo, en los destinos). La sección
+  // sigue existiendo como cuarta caja de Materiales.
+  // const isProgramasPage = path.startsWith("/programas");
   const isContactoPage = path.startsWith("/contacto");
   const isEstudioPage = path.startsWith("/estudio");
   // Vídeos: apartado aparcado (ver más abajo, en los destinos del menú).
@@ -76,13 +78,13 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   useEffect(() => { setMenuAbierto(false); }, [location.pathname]);
 
   // Destinos del menú: en administración, las dos pestañas de admin; y fuera de
-  // ella los mismos sitios con sesión y sin ella —El Mapa, Materiales,
-  // Programas, Estudio y Contactar— cambiando solo la última opción: «Mi
-  // cuenta» con sesión, «Iniciar sesión» sin ella.
+  // ella los mismos sitios con sesión y sin ella —El Mapa, Materiales, Estudio
+  // y Contactar— cambiando solo la última opción: «Mi cuenta» con sesión,
+  // «Iniciar sesión» sin ella.
   //
-  // «Programas» va pegado a «Materiales» —son las dos puertas al contenido que
-  // se ve sin recorrer el mapa— y además es su cuarta cajita: quien entre por
-  // cualquiera de los dos sitios llega al mismo apartado.
+  // «Programas» estaba pegado a «Materiales», pero se ha quitado del menú: ya
+  // es la cuarta cajita DENTRO de Materiales, así que aquí solo repetía puerta.
+  // La sección sigue viva (/programas y su página), solo desaparece de aquí.
   //
   // «Vídeos» iba justo detrás de «Materiales» (las dos secciones de contenido
   // suelto, lo que se ve sin recorrer el mapa), pero el apartado está aparcado:
@@ -106,7 +108,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           // la URL. Es la primera opción en los dos lados de la puerta.
           { etiqueta: t("header.mapa"),       onSelect: () => navigate("/elMetodo"),     activo: isRecorridoPage },
           { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
-          { etiqueta: t("header.programas"),  onSelect: () => navigate("/programas"),    activo: isProgramasPage },
+          // { etiqueta: t("header.programas"),  onSelect: () => navigate("/programas"),    activo: isProgramasPage },
           // { etiqueta: t("header.videos"),     onSelect: () => navigate("/videos"),       activo: isVideosPage },
           { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),      activo: isEstudioPage },
           { etiqueta: t("header.contacto"),   onSelect: () => navigate("/contacto"),     activo: isContactoPage },
@@ -115,7 +117,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
     : [
         { etiqueta: t("header.mapa"),          onSelect: () => navigate("/elMetodo"),   activo: isRecorridoPage },
         { etiqueta: t("header.materiales"),    onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
-        { etiqueta: t("header.programas"),     onSelect: () => navigate("/programas"),  activo: isProgramasPage },
+        // { etiqueta: t("header.programas"),     onSelect: () => navigate("/programas"),  activo: isProgramasPage },
         // { etiqueta: t("header.videos"),        onSelect: () => navigate("/videos"),     activo: isVideosPage },
         { etiqueta: t("header.estudio"),       onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
         { etiqueta: t("header.contacto"),      onSelect: () => navigate("/contacto"),   activo: isContactoPage },
@@ -151,7 +153,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         gap="2px"
       >
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           h={{ base: compact ? "36px" : "40px", md: compact ? "63px" : "70px" }}
           objectFit="contain"
           style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 20px rgba(255,255,255,0.38)) drop-shadow(0 0 42px rgba(180,255,245,0.28))" }}

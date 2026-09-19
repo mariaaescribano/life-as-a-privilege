@@ -985,6 +985,17 @@ export const metodo = {
   "metodo.psico.paso.aceResultado": "Your result",
   "metodo.psico.paso.des": "Checking out",
   "metodo.psico.paso.desResultado": "How you check out",
+  "metodo.psico.paso.cerebro": "Your brain",
+  "metodo.psico.cerebroContinuar": "See what happened in your brain",
+
+  "metodo.psico.cerebroIntro": "How what you lived through was stored in your brain",
+  "metodo.psico.cerebroToca": "Tap each area to read what it does, what happened to it and what changes it.",
+  "metodo.psico.cerebroTusRespuestas": "What your answers say",
+  "metodo.psico.cerebroParaQue": "What it is for",
+  "metodo.psico.cerebroQueLeHizo": "What your experience did to it",
+  "metodo.psico.cerebroComoSeNota": "How it shows up today",
+  "metodo.psico.cerebroLoQueLaCambia": "What changes it",
+  "metodo.psico.cerebroDeDonde": "Your bar comes from this: {origen}",
   "metodo.psico.paso.familia": "Your family",
   "metodo.psico.paso.genograma": "Genogram",
   "metodo.psico.paso.huellas": "Marks",
@@ -1371,6 +1382,12 @@ export const metodo = {
   "metodo.pago.stripe": "Secure payment through Stripe",
   "metodo.pago.palabra":
     "I give you my word of honor that every text here is my own, written by me. I have leaned on artificial intelligence tools, but the ideas, the words and the content are entirely mine.",
+  "metodo.pago.acepto": "I accept the",
+  "metodo.pago.condicionesEnlace": "purchase terms",
+  "metodo.pago.autorizo":
+    "I authorise María Escribano to access the texts and answers I write inside the journey, in order to accompany me and prepare my personalised readings.",
+  "metodo.pago.autorizoNota":
+    "They are not shared with anyone else, nor used for anything else. You can withdraw this authorisation at any time through Contact.",
   "metodo.pago.realizado": "{disciplina} payment complete",
   "metodo.pago.yaPuedes": "You can go in now.",
 

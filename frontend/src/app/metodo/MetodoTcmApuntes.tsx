@@ -16,6 +16,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { TcmLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
@@ -144,6 +145,11 @@ export default function MetodoTcmApuntes() {
             nombre={nombre}
             glow={CAJA_GLOW}
           />
+
+          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
+              /opiniones y trae de vuelta a esta misma página. Va ANTES del botón
+              de seguir, que es el que cierra la página. */}
+          <PedirOpinion bg={tcmBg} txt={tcmTxt} nom={tcmNom} />
 
           {/* Mismo texto que el botón del header, como en todo el recorrido. */}
           <BotonPaso label={t("disciplina.fisiologia")} nom={tcmNom} color={tcmTxt} bg={tcmBg}

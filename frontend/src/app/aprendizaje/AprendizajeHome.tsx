@@ -143,7 +143,7 @@ export const AprendizajeHome = () => {
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "48px", md: "64px" }}
           objectFit="contain"
@@ -234,7 +234,7 @@ export const AprendizajeHome = () => {
             <Flex align="center" gap={{ base: 4, md: 6 }} my={{ base: 12, md: 16 }}>
               <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 alt=""
                 h={{ base: "40px", md: "52px" }}
                 objectFit="contain"

@@ -6,6 +6,7 @@ import axios from "axios";
 import { generateRecorridoPdf } from "../../utils/generateRecorridoPdf";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
@@ -192,6 +193,10 @@ export default function MetodoAyurvedaDoshaRecorrido() {
           </Panel>
           </Reveal>
 
+
+          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
+              /opiniones y trae de vuelta a esta misma página. */}
+          <PedirOpinion bg={ayurvedaBg} txt={ayurvedaTxt} nom={ayurvedaNom} />
         </Flex>
       </Flex>
 

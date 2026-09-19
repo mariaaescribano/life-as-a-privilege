@@ -127,7 +127,7 @@ export default function SignIn() {
         localStorage.setItem("userId", response.data.user.id);
         localStorage.setItem("name", response.data.user.name);
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("img", "/img/icono/noImg.png");
+        localStorage.setItem("img", "/img/icono/noImg.webp");
 
         // Si el email es de admin, hace falta la contraseña de administración:
         // lo mandamos a la pantalla de desbloqueo (estar en la lista no basta).
@@ -210,7 +210,7 @@ export default function SignIn() {
       {/* ── MANDALA SEPARADOR ── */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
         <Image
-          src="/img/icono/life.png"
+          src="/img/icono/life.webp"
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
@@ -365,7 +365,7 @@ export default function SignIn() {
               transition="all 0.25s ease"
             >
               <Image
-                src="/img/icono/life.png"
+                src="/img/icono/life.webp"
                 alt=""
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"

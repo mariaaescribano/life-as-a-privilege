@@ -16,6 +16,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { PsicologiaLoading, PsicologiaLoader } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
@@ -125,7 +126,7 @@ export default function MetodoPsicologiaCursos() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 26, total: 26 }}
+                step={{ current: 27, total: 27 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.emociones")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/emociones`) }}
@@ -191,6 +192,10 @@ export default function MetodoPsicologiaCursos() {
               </Reveal>
             )}
 
+
+          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
+              /opiniones y trae de vuelta a esta misma página. */}
+          <PedirOpinion bg={neuropsicologiaBg} txt={neuropsicologiaTxt} nom={neuropsicologiaNom} />
           </Flex>
         </Flex>
       </Box>
@@ -205,7 +210,7 @@ export default function MetodoPsicologiaCursos() {
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo={t("metodo.psico.reservaLlamada")} />
 
-      <IndiceRecorrido progresoKey="psicologia" />
+      <IndiceRecorrido progresoKey="psicologia" registroKey="psicologia" />
       <SiteFooter />
     </Box>
   );

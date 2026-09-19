@@ -81,7 +81,7 @@ export default function PresentacionCultura({ d }: { d: PresentacionDisciplina }
   );
 
   const fotosListas = useImagesReady([
-    "/img/icono/life.png",
+    "/img/icono/life.webp",
     CULTURA_IMG,
     ...historias.map((h) => h.portada).filter((p): p is string => !!p),
   ]);

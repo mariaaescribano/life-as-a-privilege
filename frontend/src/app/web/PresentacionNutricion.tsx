@@ -136,7 +136,7 @@ export default function PresentacionNutricion({ d }: { d: PresentacionDisciplina
   const mitosEnIdioma = useMemo(() => mitosTraducidos(mitos, idioma), [mitos, idioma]);
 
   const fotosListas = useImagesReady([
-    "/img/icono/life.png",
+    "/img/icono/life.webp",
     "/img/fondos/nutri.webp",
     ...NUTRIENTES_MUESTRA.map((n) => n.img),
     ...mitos.map((m) => m.foto),

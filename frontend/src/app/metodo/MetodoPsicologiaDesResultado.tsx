@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · ¿Qué significa tu desconexión?  ·  6/25
+// PÁGINA · ¿Qué significa tu desconexión?  ·  6/27
 //
 // El resultado del DES-II, separado del test (paso 5) y detrás del cómic «La
 // desconexión». Muestra:
@@ -23,9 +23,6 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
-import { COMIC_LINEA_TIEMPO } from "../../components/metodo/comicLineaTiempo";
-import { useComic } from "../../i18n/comics";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useT } from "../../i18n";
 import {
@@ -64,14 +61,9 @@ export default function MetodoPsicologiaDesResultado() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  // Cómic «antesala de la Línea de Vida»: se intercala al ir a la timeline (desde
-  // el header o el botón), antes de que cargue y de su popup de edad. Se salta.
-  const [comicOpen, setComicOpen] = useState(false);
   // Reserva de llamada (la ofrece la banda alta).
   const [llamadaOpen, setLlamadaOpen] = useState(false);
   useLockBodyScroll(llamadaOpen);
-  // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
-  const comicVinetas = useComic("psicologia-linea-tiempo", COMIC_LINEA_TIEMPO);
   const dataRef = useRef<LineaDeVidaData>({});
   const [data, setData] = useState<LineaDeVidaData>({});
   // La puntuación, su banda y las tres caras, arriba del todo: los hooks no
@@ -140,11 +132,11 @@ export default function MetodoPsicologiaDesResultado() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 6, total: 26 }}
+              step={{ current: 6, total: 27 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.des")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/des`) }}
-              next={{ label: `${t("metodo.psico.lineaDeVida")} →`, onClick: () => setComicOpen(true) }}
+              next={{ label: `${t("metodo.psico.paso.cerebro")} →`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/cerebro`) }}
             />
           </Reveal>
 
@@ -311,14 +303,14 @@ export default function MetodoPsicologiaDesResultado() {
 
                 {/* Seguir el recorrido */}
                 <Flex justify="center" pt={2}>
-                  <Box as="button" onClick={() => setComicOpen(true)}
+                  <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/cerebro`)}
                        position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
                        bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
                        fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
                        boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
                        _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
                     <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.continuarLinea")}</Box>
+                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.cerebroContinuar")}</Box>
                   </Box>
                 </Flex>
               </Flex>
@@ -358,21 +350,6 @@ export default function MetodoPsicologiaDesResultado() {
           </Box>
         </Box>
       )}
-
-      {/* Cómic antesala de la Línea de Vida — sale al pasar de botón, antes de
-          cargar la timeline y su popup de edad. Se puede saltar (Saltar →). */}
-      <ComicPasoModal
-        isOpen={comicOpen}
-        onClose={() => setComicOpen(false)}
-        onContinue={() => navigate(`/metodo/psicologia/${exp.id}`)}
-        vinetas={comicVinetas}
-        continueLabel={t("comun.continuar")}
-        botonNitido
-        themeColor={neuropsicologiaTxt}
-        disciplinaBgImage="/img/fondos/psciologia.webp"
-        disciplinaBgColor={neuropsicologiaBg}
-        textShadow={`0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`}
-      />
 
       <SiteFooter />
     </Box>

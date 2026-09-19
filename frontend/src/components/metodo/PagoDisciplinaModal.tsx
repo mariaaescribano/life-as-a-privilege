@@ -62,6 +62,78 @@ interface BaseProps extends PagoDisciplinaModalProps {
 }
 
 /**
+ * Una casilla del box de pago: el cuadradito, su texto y (si hace falta) una
+ * línea de letra pequeña debajo. Está aquí y no suelta en cada sitio porque
+ * ahora hay dos y tienen que verse exactamente igual.
+ *
+ * Toda la fila es el interruptor —también el texto—, que es lo que espera
+ * cualquiera que haya marcado una casilla alguna vez. Los enlaces de dentro
+ * paran el clic con `stopPropagation` para no marcarla al abrirlos.
+ */
+function Casilla({
+  marcada,
+  onToggle,
+  bg,
+  txt,
+  nota,
+  children,
+}: {
+  marcada: boolean;
+  onToggle: () => void;
+  bg: string;
+  txt: string;
+  /** Letra pequeña bajo el texto (para matizar el alcance del permiso). */
+  nota?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Flex
+      align="flex-start"
+      gap={3}
+      cursor="pointer"
+      onClick={onToggle}
+      role="checkbox"
+      aria-checked={marcada}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === " " || e.key === "Enter") { e.preventDefault(); onToggle(); }
+      }}
+      _focusVisible={{ outline: "none" }}
+    >
+      <Flex
+        flexShrink={0}
+        mt="3px"
+        w="20px"
+        h="20px"
+        borderRadius="4px"
+        border={`1.5px solid ${marcada ? txt : `${txt}80`}`}
+        bg={marcada ? txt : "transparent"}
+        align="center"
+        justify="center"
+        transition="all 0.18s"
+      >
+        {marcada && (
+          <Box as="svg" viewBox="0 0 24 24" w="14px" h="14px" fill="none" stroke={bg} strokeWidth="3.5">
+            <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+          </Box>
+        )}
+      </Flex>
+
+      <Box minW={0}>
+        <Text color={`${txt}e0`} fontSize="sm" lineHeight="1.6">
+          {children}
+        </Text>
+        {nota && (
+          <Text color={`${txt}99`} fontSize="xs" lineHeight="1.5" fontStyle="italic" mt={1}>
+            {nota}
+          </Text>
+        )}
+      </Box>
+    </Flex>
+  );
+}
+
+/**
  * Box de pago común a todas las disciplinas. Se pinta con los colores de cada
  * disciplina (disciplinaBg de fondo, disciplinaTxt para texto y acentos), de
  * modo que el estilo coincide con el recorrido que se va a desbloquear.
@@ -83,10 +155,21 @@ export function PagoDisciplinaModal({
   errorColor = "#ffb4b4",
 }: BaseProps) {
   const t = useT();
-  // Consentimiento de términos + renuncia al desistimiento. Se reinicia cada vez
-  // que se abre el modal: nunca debe quedar marcado «de la vez anterior».
+  // DOS consentimientos, y los dos hacen falta para pagar:
+  //   · `acepta`  — términos + renuncia al desistimiento.
+  //   · `autoriza` — permiso para que María lea lo que se escriba dentro del
+  //     recorrido. Sin él no se puede preparar ninguna lectura personalizada,
+  //     pero es un permiso que se pide, no algo que se dé por supuesto.
+  // Los dos se reinician cada vez que se abre el modal: nunca deben quedar
+  // marcados «de la vez anterior».
   const [acepta, setAcepta] = React.useState(false);
-  React.useEffect(() => { if (isOpen) setAcepta(false); }, [isOpen]);
+  const [autoriza, setAutoriza] = React.useState(false);
+  React.useEffect(() => {
+    if (isOpen) { setAcepta(false); setAutoriza(false); }
+  }, [isOpen]);
+
+  // Las dos casillas tienen que estar marcadas para que el botón se encienda.
+  const listo = acepta && autoriza;
 
   return (
     // scrollBehavior="inside": si el contenido es más alto que la pantalla, el
@@ -152,54 +235,46 @@ export function PagoDisciplinaModal({
               )}
             </Flex>
 
-            {/* Una sola casilla, con texto corto. El detalle de qué se acepta
+            {/* Las DOS casillas, con texto corto. El detalle de qué se acepta
                 —incluido que el pago no se devuelve— vive en la lista de
                 condiciones de /terminos, no aquí: el box de pago no es sitio
                 para un párrafo jurídico. */}
-            <Flex
-              align="center"
-              justify="center"
-              gap={3}
-              mt={2}
-              cursor="pointer"
-              onClick={() => setAcepta((v) => !v)}
-              role="checkbox"
-              aria-checked={acepta}
-            >
-              <Flex
-                flexShrink={0}
-                w="20px"
-                h="20px"
-                borderRadius="4px"
-                border={`1.5px solid ${acepta ? txt : `${txt}80`}`}
-                bg={acepta ? txt : "transparent"}
-                align="center"
-                justify="center"
-                transition="all 0.18s"
+            <Flex direction="column" gap={3} mt={2} maxW="520px" mx="auto" w="100%">
+              <Casilla
+                marcada={acepta}
+                onToggle={() => setAcepta((v) => !v)}
+                bg={bg}
+                txt={txt}
               >
-                {acepta && (
-                  <Box as="svg" viewBox="0 0 24 24" w="14px" h="14px" fill="none" stroke={bg} strokeWidth="3.5">
-                    <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                  </Box>
-                )}
-              </Flex>
-              <Text color={`${txt}e0`} fontSize="sm" lineHeight="1.6">
-                Acepto las{" "}
+                {t("metodo.pago.acepto")}{" "}
                 <Text
                   as="span"
                   textDecoration="underline"
                   onClick={(e) => { e.stopPropagation(); window.open("/terminos", "_blank"); }}
                   _hover={{ color: txt }}
                 >
-                  condiciones de compra
+                  {t("metodo.pago.condicionesEnlace")}
                 </Text>
-              </Text>
+              </Casilla>
+
+              {/* El permiso para leer lo que escribe. Va aparte y con su letra
+                  pequeña porque no es lo mismo aceptar unas condiciones que
+                  dejar que otra persona lea lo que escribes. */}
+              <Casilla
+                marcada={autoriza}
+                onToggle={() => setAutoriza((v) => !v)}
+                bg={bg}
+                txt={txt}
+                nota={t("metodo.pago.autorizoNota")}
+              >
+                {t("metodo.pago.autorizo")}
+              </Casilla>
             </Flex>
 
             <Flex justify="center" mt={3} gap={4} wrap="wrap">
               <Box
                 as="button"
-                onClick={loading || !acepta ? undefined : onPagar}
+                onClick={loading || !listo ? undefined : onPagar}
                 px={10}
                 py={3}
                 borderRadius="full"
@@ -209,11 +284,11 @@ export function PagoDisciplinaModal({
                 fontSize={{ base: "lg", md: "xl" }}
                 fontWeight="700"
                 letterSpacing="0.08em"
-                cursor={loading || !acepta ? "not-allowed" : "pointer"}
-                opacity={loading || !acepta ? 0.5 : 1}
+                cursor={loading || !listo ? "not-allowed" : "pointer"}
+                opacity={loading || !listo ? 0.5 : 1}
                 boxShadow={`0 4px 24px ${txt}47`}
                 transition="all 0.22s"
-                _hover={loading || !acepta ? {} : { transform: "translateY(-2px)", boxShadow: `0 8px 32px ${txt}66` }}
+                _hover={loading || !listo ? {} : { transform: "translateY(-2px)", boxShadow: `0 8px 32px ${txt}66` }}
               >
                 {loading ? "Conectando…" : "Pagar"}
               </Box>

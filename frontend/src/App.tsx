@@ -10,6 +10,7 @@ const LogIn = lazy(() => import("./app/auth/LogIn"));
 const SignIn = lazy(() => import("./app/auth/SignIn"));
 const GoogleAuthCallback = lazy(() => import("./app/auth/GoogleAuthCallback"));
 const Home = lazy(() => import("./app/home/Home"));
+const Diario = lazy(() => import("./app/home/Diario"));
 const AprendizajeHome = lazy(() => import("./app/aprendizaje/AprendizajeHome").then((m) => ({ default: m.AprendizajeHome })));
 const ModulosPage = lazy(() => import("./app/aprendizaje/ModulosPage"));
 const VideoLessonPage = lazy(() => import("./app/aprendizaje/VideoLessonPage"));
@@ -65,6 +66,7 @@ const AdminAccesos = lazy(() => import("./app/admin/AdminAccesos"));
 const AdminEstudio = lazy(() => import("./app/admin/AdminEstudio"));
 const AdminVideos = lazy(() => import("./app/admin/AdminVideos"));
 const AdminSuscriptores = lazy(() => import("./app/admin/AdminSuscriptores"));
+const AdminDiario = lazy(() => import("./app/admin/AdminDiario"));
 const NoEncontrada = lazy(() => import("./app/web/NoEncontrada"));
 const MetodoPsicologia = lazy(() => import("./app/metodo/MetodoPsicologia"));
 const MetodoPsicologiaProblema = lazy(() => import("./app/metodo/MetodoPsicologiaProblema"));
@@ -73,6 +75,7 @@ const MetodoPsicologiaAce = lazy(() => import("./app/metodo/MetodoPsicologiaAce"
 const MetodoPsicologiaAceResultado = lazy(() => import("./app/metodo/MetodoPsicologiaAceResultado"));
 const MetodoPsicologiaDes = lazy(() => import("./app/metodo/MetodoPsicologiaDes"));
 const MetodoPsicologiaDesResultado = lazy(() => import("./app/metodo/MetodoPsicologiaDesResultado"));
+const MetodoPsicologiaCerebro = lazy(() => import("./app/metodo/MetodoPsicologiaCerebro"));
 const MetodoPsicologiaExperiencia = lazy(() => import("./app/metodo/MetodoPsicologiaExperiencia"));
 const MetodoPsicologiaFamilia = lazy(() => import("./app/metodo/MetodoPsicologiaFamilia"));
 const MetodoPsicologiaGenograma = lazy(() => import("./app/metodo/MetodoPsicologiaGenograma"));
@@ -189,6 +192,8 @@ const Privacidad = lazy(() => import("./app/legal/Privacidad"));
 const Cookies = lazy(() => import("./app/legal/Cookies"));
 const Terminos = lazy(() => import("./app/legal/Terminos"));
 import AvisoCookies from "./components/global/AvisoCookies";
+// Solo se pinta si la admin ha «entrado como» otra persona (api/suplantar.ts).
+import BarraSuplantacion from "./components/global/BarraSuplantacion";
 // Pantalla de espera mientras se descarga el trozo de código de cada página.
 // Va EAGER a propósito: es justo lo que hay que poder pintar antes de que llegue
 // lo demás.
@@ -256,6 +261,7 @@ export default function App()
     <ExitIntentSubscribeModal />
     <MiniDiario />
     <AvisoCookies />
+    <BarraSuplantacion />
     {/* Suspense: cada pagina viaja en su propio fichero y se descarga solo
         cuando se entra en ella. Mientras llega, se ve la pantalla de carga de la
         casa. Antes todo iba en un unico bundle de 6 MB que habia que bajar
@@ -287,6 +293,8 @@ export default function App()
       <Route path="/cookies" element={<Cookies />} />
       <Route path="/terminos" element={<Terminos />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+      {/* El diario de sus sesiones: lo escribe la admin en /admin/diario/:userId. */}
+      <Route path="/diario" element={<PrivateRoute><Diario /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
 
       <Route path="/productos" element={<Productos />} />
@@ -343,6 +351,8 @@ export default function App()
       <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} />
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/suscriptores" element={<AdminRoute><AdminSuscriptores /></AdminRoute>} />
+      {/* Antes de /admin/:disciplina/:userId, que si no se tragaria «diario» como disciplina. */}
+      <Route path="/admin/diario/:userId" element={<AdminRoute><AdminDiario /></AdminRoute>} />
       <Route path="/admin/astrologia/:userId" element={<AdminRoute><AdminAstrologiaEditor /></AdminRoute>} />
       <Route path="/admin/psicologia/:userId" element={<AdminRoute><AdminPsicologiaLectura /></AdminRoute>} />
       <Route path="/admin/ayurveda/:userId" element={<AdminRoute><AdminAyurvedaLectura /></AdminRoute>} />
@@ -355,6 +365,7 @@ export default function App()
       <Route path="/metodo/psicologia/:experienciaId/ace-resultado" element={<PrivateRoute><MetodoPsicologiaAceResultado /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/des" element={<PrivateRoute><MetodoPsicologiaDes /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/des-resultado" element={<PrivateRoute><MetodoPsicologiaDesResultado /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/cerebro" element={<PrivateRoute><MetodoPsicologiaCerebro /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/familia" element={<PrivateRoute><MetodoPsicologiaFamilia /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/genograma" element={<PrivateRoute><MetodoPsicologiaGenograma /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/huellas" element={<PrivateRoute><MetodoPsicologiaHuellas /></PrivateRoute>} />

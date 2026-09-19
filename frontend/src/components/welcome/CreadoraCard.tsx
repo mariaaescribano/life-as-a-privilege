@@ -239,7 +239,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           sx={{ aspectRatio: "4 / 3" }}
         >
           <Image
-            src="/img/me/me.png"
+            src="/img/me/me.webp"
             alt="María Escribano"
             w="100%"
             h="100%"

@@ -59,7 +59,7 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
   // La página no se pinta hasta que están el mandala, la foto de fondo de la
   // disciplina y las portadas de sus ilustraciones: así entra de una pieza.
   const fotosListas = useImagesReady([
-    "/img/icono/life.png",
+    "/img/icono/life.webp",
     disciplinaBgImg(d.nom),
     ...ilustraciones.map((i) => i.cover),
   ]);
@@ -374,7 +374,7 @@ export default function PresentacionGenerica({ d }: { d: Presentacion }) {
         <Reveal inView direction="none" scaleFrom={0.7} duration={1}>
           <Float amplitude={6} duration={7}>
             <Image
-              src="/img/icono/life.png"
+              src="/img/icono/life.webp"
               alt=""
               h={{ base: "52px", md: "68px" }}
               objectFit="contain"

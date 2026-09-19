@@ -145,6 +145,39 @@ export class UserController {
     return await this.usersService.revocarAcceso(body.userId);
   }
 
+  // ── ENTRAR COMO otra persona ─────────────────────────────────────────────
+  // Devuelve un token de ESA cuenta, para poder ver la web exactamente como la
+  // ve ella: sus disciplinas, por dónde va, lo que ha escrito. No es un modo de
+  // lectura aparte (eso obligaría a duplicar cada página): es su sesión de
+  // verdad, así que lo que se escriba aquí se guarda en su recorrido.
+  //
+  // Tres cosas lo mantienen a raya:
+  //   · Exige token de admin DESBLOQUEADO (email en ADMIN_EMAILS + contraseña).
+  //   · El token que sale NO es de admin (`admin: false`), así que desde dentro
+  //     de la cuenta no se puede volver a tocar el panel ni suplantar en cadena.
+  //   · Lleva el claim `sup` con el id de quien está mirando y caduca en 12h,
+  //     no en 30 días como una sesión normal.
+  @Post("admin/suplantar")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async suplantar(@Req() req: any, @Body() body: { userId?: string }) {
+    if (!body?.userId?.trim()) throw new BadRequestException('userId requerido');
+
+    const user: any = await this.usersService.getUserById(body.userId.trim());
+    if (!user?.id) throw new BadRequestException('Esa cuenta no existe');
+
+    // Queda en el registro del servidor: entrar en la cuenta de alguien no
+    // debería poder hacerse sin dejar rastro.
+    console.log(
+      `[suplantacion] ${req.user?.email} entra como ${user.email} (${user.id}) — ${new Date().toISOString()}`,
+    );
+
+    const token = this.authService.generateToken(user.id, user.email, false, {
+      suplantadoPor: req.user.userId,
+      duracionSegundos: 12 * 60 * 60, // 12 horas
+    });
+    return { token, user: { id: user.id, name: user.name, email: user.email, img: user.img ?? null } };
+  }
+
   // Borrar una cuenta entera desde el panel (irreversible: se va la cuenta y
   // todos sus datos de recorrido, notas y reservas). Va aquí arriba, antes de
   // @Delete(":id"), que es el borrado de la propia cuenta y pide contraseña.
@@ -169,7 +202,13 @@ export class UserController {
 
   @Delete(":id")
   @UseGuards(JwtAuthGuard, OwnerGuard)
-  async remove(@Param("id") id: string, @Body() body: { password?: string }) {
+  async remove(@Param("id") id: string, @Body() body: { password?: string }, @Req() req: any) {
+    // Desde una sesión prestada (admin «entrando como») no se borra la cuenta:
+    // es lo único de aquí que no tiene vuelta atrás. Para eso está
+    // DELETE /user/admin/usuario/:id, que se hace a cara descubierta.
+    if (req.user?.suplantadoPor) {
+      throw new ForbiddenException('No se puede borrar la cuenta desde una sesión de administración');
+    }
     return await this.usersService.deleteUser(id, body?.password);
   }
 

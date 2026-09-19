@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · REGULACIÓN (estimulación bilateral)  ·  15/25
+// PÁGINA · REGULACIÓN (estimulación bilateral)  ·  16/27
 //
 // Un espacio de DESCARGA y regulación del sistema nervioso. NO es EMDR clínico
 // ni sustituye a una terapia (así se le dice al usuario, sin ambigüedad).
@@ -263,7 +263,7 @@ export default function MetodoPsicologiaRegulacion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 15, total: 26 }}
+              step={{ current: 16, total: 27 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.heridas")}`, onClick: irAHeridas }}
