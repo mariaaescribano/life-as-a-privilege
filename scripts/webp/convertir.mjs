@@ -553,6 +553,16 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["recorrido/nutricion/ultraprocesados"], // 9 archivos · 21 MB
   },
+  // Portadas de curso que llegaron DESPUÉS del lote 43: neptuno, fitoquimicos y
+  // las dos de Fisiología. Mismos ajustes que aquél, porque se ven en la misma
+  // tarjeta. Y como aquél, hay que correr `cursos-bd.mjs --lote=47` detrás: la
+  // ruta de una portada vive en la columna `foto` de la tabla `curso`, no en
+  // el código, así que `rutas.mjs` no se entera de nada.
+  47: {
+    ladoMax: 900,
+    forzar: ["cursos"],
+    carpetas: ["cursos"], // los .png que queden sin convertir
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────
