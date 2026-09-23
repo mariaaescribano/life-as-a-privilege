@@ -37,7 +37,7 @@ import {
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  WHATSAPP_COMUNIDAD_URL,
+  whatsappUrl,
 } from "../../GlobalVariables";
 // Descomentar junto con el párrafo de PRECIO (más abajo, ahora comentado):
 // sin él, estos tres no se usan y noUnusedLocals rompe la compilación.
@@ -832,14 +832,20 @@ export default function ElMetodo() {
             </Text>
           </Flex>
 
-          {/* ── ÚNETE A LA COMUNIDAD ──
+          {/* ── ESCRÍBEME POR WHATSAPP ──
+              Aquí estaba el botón de «Únete a la comunidad»; se ha bajado a
+              «¿Por dónde empiezo?». En la primera pantalla nadie se mete en un
+              grupo de desconocidos —todavía no sabe qué es esto—, pero sí
+              pregunta una cosa suelta, y preguntar abre una conversación
+              conmigo, que es lo que de verdad convierte.
               Entra 0,13s después que el de empezar: se leen en orden, primero
               el que manda. Es un enlace y no un botón porque lleva FUERA de la
               web (a WhatsApp), y abre en otra pestaña para no perder a quien
-              estaba leyendo la página. */}
+              estaba leyendo la página. El mensaje va ya escrito: que no tenga
+              que pensar cómo empezar, que es justo donde la gente se cae. */}
           <Flex
             as="a"
-            href={WHATSAPP_COMUNIDAD_URL || undefined}
+            href={whatsappUrl(t("elMetodo.hero.escribemeTexto"))}
             target="_blank"
             rel="noopener noreferrer"
             align="center"
@@ -872,7 +878,7 @@ export default function ElMetodo() {
               textTransform="uppercase"
               whiteSpace="nowrap"
             >
-              {t("elMetodo.hero.comunidad")}
+              {t("elMetodo.hero.escribeme")}
             </Text>
           </Flex>
         </Flex>

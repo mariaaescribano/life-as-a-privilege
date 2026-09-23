@@ -42,7 +42,9 @@ export const elMetodo = {
     "The Map brings together eight perspectives on you —mind, history, body, nature and culture— to help you understand where your patterns come from and how the pieces fit together.",
   "elMetodo.hero.cta": "Start my Map",
   "elMetodo.hero.ctaPie": "From €30 · No subscription · No commitment",
+  "elMetodo.hero.escribeme": "Message me on WhatsApp",
   "elMetodo.hero.comunidad": "Join the community",
+  "elMetodo.hero.escribemeTexto": "Hi María! I'm writing from Life as a Privilege.",
 
   // ── 2. The mirror ──────────────────────────────────────────────────────
   "elMetodo.espejo.1": "You know what's happening to you, but not why.",

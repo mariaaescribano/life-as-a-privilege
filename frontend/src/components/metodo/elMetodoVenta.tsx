@@ -4,6 +4,8 @@ import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
 import { RecorridoVideosMuestra } from "../global/MandalaRecorrido";
 import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import { PrecioConAntes } from "./PrecioConAntes";
+import { IconoWhatsapp } from "./LlamadaCta";
+import { WHATSAPP_COMUNIDAD_URL } from "../../GlobalVariables";
 import {
   NUM_DISCIPLINAS,
   PRECIO_DISCIPLINA,
@@ -402,11 +404,32 @@ export function PrecioBloque({ onAcceder }: { onAcceder?: () => void }) {
 // los que alguien decide. Lleva la cifra en el propio botón (no un «Acceder» a
 // secas) porque el compromiso que se pide es exactamente ese y decirlo quita
 // miedo. Es EL MISMO destino que el botón grande del final de la página.
-export function CtaEmpezar({ onAcceder }: { onAcceder: () => void }) {
+/**
+ * El botón de empezar con el precio dentro.
+ *
+ * `conComunidad` le pone al lado el de «Únete a la comunidad». Solo lo usa
+ * «¿Por dónde empiezo?»: ahí ya ha leído la página entera y sabe qué es esto,
+ * que es cuando entrar en un grupo de desconocidos apetece. En el bloque del
+ * precio va solo, porque ahí lo único que se decide es comprar.
+ */
+export function CtaEmpezar({ onAcceder, conComunidad = false }: { onAcceder: () => void; conComunidad?: boolean }) {
   const t = useT();
   return (
     <Reveal inView direction="up" distance={16} delay={0.1} duration={0.7}>
       <Flex direction="column" align="center" gap={{ base: 2, md: 2.5 }}>
+        {/* Los botones, en fila y centrados: así la letra pequeña de abajo cae
+            en el medio de la PAREJA y no debajo del primero. En móvil se
+            apilan, que dos pastillas de 84vw no caben una al lado de la otra.
+            Son dos escalones, no dos botones iguales: el de empezar conserva su
+            filo grueso y su halo, y el de la comunidad va con el filo fino, sin
+            halo y con la letra más suave. Si los dos brillaran, el ojo no
+            sabría cuál manda —y el que manda es el de pago—. */}
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          align="center"
+          justify="center"
+          gap={{ base: 3, md: 4 }}
+        >
         <Flex
           as="button"
           onClick={onAcceder}
@@ -439,6 +462,50 @@ export function CtaEmpezar({ onAcceder }: { onAcceder: () => void }) {
           >
             {t("elMetodo.empezarPor", { precio: PRECIO_DISCIPLINA })}
           </Text>
+        </Flex>
+
+        {/* ── ÚNETE A LA COMUNIDAD ──
+            Es un enlace y no un botón porque lleva FUERA de la web (a
+            WhatsApp), y abre en otra pestaña para no perder a quien estaba
+            leyendo la página. Si `WHATSAPP_COMUNIDAD_URL` se queda vacío el
+            botón no se pinta: mejor que no esté a que lleve a ningún sitio. */}
+        {conComunidad && WHATSAPP_COMUNIDAD_URL && (
+          <Flex
+            as="a"
+            href={WHATSAPP_COMUNIDAD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            align="center"
+            justify="center"
+            gap={{ base: "9px", md: "11px" }}
+            px={{ base: 7, md: 9 }}
+            py={{ base: "13px", md: "16px" }}
+            w={{ base: "min(84vw, 380px)", md: "auto" }}
+            borderRadius="full"
+            border="1px solid rgba(255,255,255,0.32)"
+            bg="rgba(255,255,255,0.04)"
+            color="rgba(255,255,255,0.88)"
+            cursor="pointer"
+            textDecoration="none"
+            _hover={{
+              bg: "rgba(255,255,255,0.13)",
+              borderColor: "rgba(255,255,255,0.7)",
+              color: "white",
+            }}
+            transition="background 0.25s ease, border-color 0.25s ease, color 0.25s ease"
+          >
+            <IconoWhatsapp size={{ base: "17px", md: "19px" }} />
+            <Text
+              fontWeight="600"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.09em"
+              textTransform="uppercase"
+              whiteSpace="nowrap"
+            >
+              {t("elMetodo.hero.comunidad")}
+            </Text>
+          </Flex>
+        )}
         </Flex>
 
         <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.04em" textAlign="center">
@@ -491,8 +558,10 @@ export function PorDondeEmpiezoBloque({ onAcceder }: { onAcceder?: () => void })
       </Grid>
 
       {/* Ya sabe cuánto cuesta y por dónde entrar: aquí es donde se decide, así
-          que el botón va aquí y no a media página de scroll. */}
-      {onAcceder && <CtaEmpezar onAcceder={onAcceder} />}
+          que el botón va aquí y no a media página de scroll. Y al lado, la
+          comunidad: quien todavía no se decide a pagar tiene una puerta que no
+          cuesta nada en vez de cerrar la pestaña. */}
+      {onAcceder && <CtaEmpezar onAcceder={onAcceder} conComunidad />}
     </Flex>
   );
 }

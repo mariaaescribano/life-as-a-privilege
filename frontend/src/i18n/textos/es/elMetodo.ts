@@ -52,8 +52,16 @@ export const elMetodo = {
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).
   "elMetodo.hero.ctaPie": "Desde 30 € · Sin suscripción · Sin compromiso",
-  /** El botón de al lado, el de la comunidad de WhatsApp. */
+  /** El botón de al lado del de empezar. Ya no lleva a la comunidad: lleva a MI
+   *  WhatsApp. En la primera pantalla todavía no hay confianza para meterse en
+   *  un grupo de desconocidos, pero sí para preguntar una cosa; la comunidad se
+   *  ofrece más abajo, en «¿Por dónde empiezo?», cuando ya sabe qué es esto. */
+  "elMetodo.hero.escribeme": "Escríbeme por WhatsApp",
+  /** El botón de al lado del de «Empezar por 30 €», en «¿Por dónde empiezo?». */
   "elMetodo.hero.comunidad": "Únete a la comunidad",
+  /** Mensaje ya escrito al abrir el chat desde el hero: que no tenga que pensar
+   *  cómo empezar, que es justo donde la gente se cae. */
+  "elMetodo.hero.escribemeTexto": "¡Hola María! Te escribo desde Life as a Privilege.",
 
   // ── 2. EL ESPEJO ───────────────────────────────────────────────────────
   // Cuatro frases para que quien lee se reconozca antes de que le contemos
