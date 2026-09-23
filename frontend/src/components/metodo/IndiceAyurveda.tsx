@@ -52,12 +52,16 @@ export function IndiceAyurveda() {
   // Doṣha principal del test. Solo para poder enlazar Prāṇāyāma y Cursos desde
   // las páginas donde la URL no trae doṣha.
   const [principal, setPrincipal] = useState<string | null>(null);
+  // ¿Ya sabemos si hay test hecho? Hasta saberlo no ponemos candado en las
+  // páginas de ruta fija (Resultado, Doṣhas): más vale esperar que enseñar un
+  // candado falso a quien sí hizo el test.
+  const [testCargado, setTestCargado] = useState(false);
 
   useEffect(() => {
-    if (doshaUrl) return; // la URL ya dice de qué doṣha es este recorrido
+    if (doshaUrl) { setTestCargado(true); return; } // la URL ya dice de qué doṣha es
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    if (!userId || !token) return;
+    if (!userId || !token) { setTestCargado(true); return; }
     let cancel = false;
     (async () => {
       try {
@@ -68,6 +72,8 @@ export function IndiceAyurveda() {
         if (!cancel && esDosha(d)) setPrincipal(d);
       } catch {
         // Sin test todavía (o error): Prāṇāyāma y Cursos quedan con candado.
+      } finally {
+        if (!cancel) setTestCargado(true);
       }
     })();
     return () => { cancel = true; };
@@ -76,13 +82,19 @@ export function IndiceAyurveda() {
   // Para las rutas del mapa que aún necesitan doṣha.
   const doshaEnlace = doshaUrl ?? principal;
 
-  // Nivel 1 · el mapa. Prāṇāyāma (5), los chakras (6) y Cursos (7) solo se
-  // pueden enlazar si hay un doṣha del que colgarlos.
+  // Nivel 1 · el mapa. Del Resultado (3) en adelante todo necesita el test
+  // hecho: Resultado y Doṣhas rebotan al test si no hay resultado, y Prāṇāyāma
+  // (5), los chakras (6) y Cursos (7) además cuelgan de un doṣha concreto. Sin
+  // test, esos cinco van con candado: si no se puede entrar, no se deja ir.
   const mapa: SeccionIndice = {
     titulo: t("metodo.ayur.elMapa"),
-    pasos: ayurvedaMapa().map((p) =>
-      p.n >= 5 && !doshaEnlace ? { ...p, bloqueado: true } : p,
-    ),
+    pasos: ayurvedaMapa().map((p) => {
+      // 5, 6 y 7 cuelgan de un doṣha: sin él no hay ni ruta que construir.
+      if (p.n >= 5 && !doshaEnlace) return { ...p, bloqueado: true };
+      // 3 y 4 tienen ruta fija, pero rebotan al test si no hay resultado.
+      if (p.n >= 3 && testCargado && !doshaEnlace) return { ...p, bloqueado: true };
+      return p;
+    }),
     expId: doshaEnlace ?? "",
     libre: true,
     // El camino de /home cuenta los 7 del mapa y luego los 8 del doṣha.

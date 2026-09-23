@@ -37,15 +37,11 @@ const DOSHA_META: Record<DoshaKey, { label: string; color: string; Icon: any }> 
 
 /** Los boxes de esta página, con la acuarela EN BANDAS (`tile`).
  *
- *  Las tres cajas de Prāṇāyāma son largísimas —los pasos, el guía de
- *  respiración, una pregunta con su hueco de escribir detrás de otra—, y en
- *  móvil, que además son estrechas, quedan altas y finas. Con el fondo normal
- *  (la acuarela «cover», estirada de arriba abajo para tapar todo el box) la
- *  foto salía deformada: un borrón vertical sin dibujo.
- *
  *  Con `tile` la acuarela se pinta a su tamaño, con su proporción intacta, y se
  *  REPITE hacia abajo: cada vez que se acaba, empieza otra vez. Esas costuras
- *  horizontales son las separaciones que se ven entre banda y banda. */
+ *  horizontales son las separaciones que se ven entre banda y banda. Con el
+ *  fondo normal («cover», estirado de arriba abajo) una caja alta y estrecha
+ *  —el móvil— deformaba la foto en un borrón vertical sin dibujo. */
 const Panel = (p: React.ComponentProps<typeof AyurvedaPanel>) => (
   <AyurvedaPanel {...p} tile />
 );
@@ -70,47 +66,6 @@ function SeccionTitulo({ children, color }: { children: React.ReactNode; color: 
       </Flex>
       <Box h="1px" w="100%" bgGradient={`linear(to-r, ${ayurvedaTxt}aa, ${ayurvedaTxt}33, transparent)`} />
     </Box>
-  );
-}
-
-/** Ilustración de sección. Si no hay ruta, no ocupa sitio. */
-function Foto({ src, alt, color }: { src?: string; alt: string; color: string }) {
-  if (!src) return null;
-  return (
-    <Box mt={5} borderRadius="xl" overflow="hidden" border={`1px solid ${color}44`} boxShadow={`0 0 18px ${color}22`}>
-      <Box as="img" src={src} alt={alt} w="100%" display="block" loading="lazy" />
-    </Box>
-  );
-}
-
-function RadioRow({ label, checked, onSelect, color }: { label: string; checked: boolean; onSelect: () => void; color: string }) {
-  return (
-    <Flex
-      as="button"
-      onClick={onSelect}
-      align="center"
-      gap={3}
-      w="100%"
-      textAlign="left"
-      px={{ base: 4, md: 5 }}
-      py={{ base: 3, md: 3.5 }}
-      borderRadius="xl"
-      bg={checked ? `${color}24` : "rgba(255,251,243,0.4)"}
-      border={`1.5px solid ${checked ? color : `${TINTA}2a`}`}
-      cursor="pointer"
-      transition="all 0.16s"
-      sx={{ backdropFilter: "blur(4px)" }}
-      _hover={{ bg: checked ? `${color}30` : "rgba(255,251,243,0.6)", borderColor: `${color}99` }}
-    >
-      <Box
-        w="22px" h="22px" flexShrink={0} borderRadius="full"
-        border={`2px solid ${checked ? color : `${TINTA}66`}`}
-        display="flex" alignItems="center" justifyContent="center" transition="all 0.16s"
-      >
-        {checked && <Box w="11px" h="11px" borderRadius="full" bg={color} />}
-      </Box>
-      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.5">{label}</Text>
-    </Flex>
   );
 }
 
@@ -284,7 +239,10 @@ function GuiaRespiracion({ fases, ciclos, color, onCompletar, completado }: Guia
   );
 }
 
-/** Lo que se guarda de CADA doṣha. La página tiene los tres a la vez. */
+/** Lo que se guarda de CADA doṣha. La página tiene los tres a la vez.
+ *  `compromiso` («Tu momento») ya no se pinta —la página se simplificó a
+ *  cuatro cajas—, pero se sigue leyendo y guardando para no borrarle a nadie
+ *  lo que eligió en su día. */
 interface SlicePranayama {
   respuestas: string[];
   compromiso: string;
@@ -487,13 +445,13 @@ export default function MetodoAyurvedaDoshaPranayama() {
     return <AyurvedaLoading />;
   }
 
-  // El doṣha ELEGIDO manda en los dos bloques que no son imparciales: su
-  // práctica y su escrito con sus preguntas. Todo lo demás (cabecera, «Tu
-  // momento» y el cierre) va en el color de Ayurveda, no en el suyo.
+  // El doṣha ELEGIDO manda en las tres primeras cajas (su explicación, su
+  // guía y sus preguntas). El cierre es imparcial: va en el color de
+  // Ayurveda, no en el suyo.
   const meta = DOSHA_META[sel];
   const DoshaIcon = meta.Icon;
   const practica = PRANAYAMA_PRACTICA[sel];
-  const { respuestas, compromiso, practicado } = slice;
+  const { respuestas, practicado } = slice;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -523,94 +481,53 @@ export default function MetodoAyurvedaDoshaPranayama() {
             <SelectorDosha sel={sel} onSelect={cambiarDosha} />
           </Reveal>
 
-          {/* LA PRÁCTICA DEL DOṢHA ELEGIDO — uno de los dos bloques que no son
-              imparciales. Se ve una sola práctica, la del botón pulsado. La
-              teoría y los cuidados los ha contado ya el cómic de la entrada. */}
+          {/* 1 · QUÉ VAS A HACER — una caja pequeña, 3-4 líneas y ya. Los
+              nombres sánscritos y la teoría los ha contado el cómic de la
+              entrada; aquí solo se respira. */}
           <Box ref={practicaRef} w="100%" scrollMarginTop={{ base: 4, md: 6 }}>
           <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex align="center" gap={3} mb={4}>
-              <DoshaIcon size={{ base: "30px", md: "36px" }} color={meta.color} />
+              <DoshaIcon size={{ base: "28px", md: "32px" }} color={meta.color} />
               <Text color={meta.color} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.14em" textTransform="uppercase">
                 La práctica de {meta.label}
               </Text>
             </Flex>
-
-            <Flex direction="column" align="center" textAlign="center" gap={1} mb={4}>
-              <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
-                {practica.nombre}
-              </Text>
-              <Text color={`${TINTA}bb`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
-                {practica.traduccion}
-              </Text>
-            </Flex>
-            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}>
-              {parseRich(practica.porQue)}
-            </Text>
-
-            <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
-              {practica.pasos.map((paso, i) => (
-                <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%">
-                  <Flex align="flex-start" gap={3.5}>
-                    <Flex
-                      flexShrink={0} w="28px" h="28px" borderRadius="full" mt="2px"
-                      bg={`${meta.color}26`} border={`1.5px solid ${meta.color}88`}
-                      align="center" justify="center"
-                    >
-                      <Text color={meta.color} fontSize="sm" fontWeight="700">{i + 1}</Text>
-                    </Flex>
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{parseRich(paso)}</Text>
-                  </Flex>
-                </RevealItem>
+            <Flex direction="column" gap={2.5}>
+              {practica.resumen.map((linea, i) => (
+                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">
+                  {parseRich(linea)}
+                </Text>
               ))}
-            </RevealStagger>
-
-            <Box
-              mt={6} px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}
-              borderRadius="xl" bg="rgba(255,251,243,0.4)"
-              borderLeft={`3px solid ${meta.color}`}
-              sx={{ backdropFilter: "blur(4px)" }}
-            >
-              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
-                <Box as="span" fontWeight="700">{t("metodo.ayur.cuidado")}</Box>{practica.precaucion}
-              </Text>
-            </Box>
-            <Foto src={practica.foto} alt={practica.nombre} color={meta.color} />
-
-            {/* El guía, en el mismo box que los pasos. */}
-            <Box mt={8}>
-              <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={6} textAlign="center">
-                {t("metodo.ayur.sigueElCirculo")}{" "}
-                <Box as="span" fontStyle="italic">{t("metodo.ayur.pararEsPracticar")}</Box>
-              </Text>
-              {/* `key` con el doṣha: al cambiar de botón el guía se monta de
-                  nuevo, y así el reloj no sigue contando el de antes. */}
-              <GuiaRespiracion
-                key={sel}
-                fases={practica.fases}
-                ciclos={practica.ciclos}
-                color={meta.color}
-                completado={practicado}
-                onCompletar={marcarPracticado}
-              />
-            </Box>
+            </Flex>
           </Panel>
           </Reveal>
           </Box>
 
-          {/* DESPUÉS DE RESPIRAR — también del doṣha: su escrito y SUS
-              preguntas, una caja por pregunta. Lo único imparcial de este box
-              es «Tu momento», que es igual para los tres. (SE GUARDA) */}
+          {/* 2 · EMPEZAR — el guía, solo. El círculo te va diciendo en cada
+              momento qué hacer, así que no hace falta nada más en esta caja. */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          <Panel color={meta.color}>
+            {/* `key` con el doṣha: al cambiar de botón el guía se monta de
+                nuevo, y así el reloj no sigue contando el de antes. */}
+            <GuiaRespiracion
+              key={sel}
+              fases={practica.fases}
+              ciclos={practica.ciclos}
+              color={meta.color}
+              completado={practicado}
+              onCompletar={marcarPracticado}
+            />
+            <Text color={`${TINTA}bb`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" mt={7} textAlign="center" fontStyle="italic">
+              <Box as="span" fontWeight="700" fontStyle="normal">{t("metodo.ayur.cuidado")}</Box>{practica.precaucion}
+            </Text>
+          </Panel>
+          </Reveal>
+
+          {/* 3 · LAS PREGUNTAS — una caja de escribir por pregunta. (SE GUARDA) */}
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{PRANAYAMA_REFLEXION.titulo}</SeccionTitulo>
-
-            {/* El escrito de su doṣha: qué acaba de pasarle, en dos frases. */}
-            <Flex direction="column" gap={3.5} mb={7}>
-              {practica.escrito.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{parseRich(p)}</Text>
-              ))}
-            </Flex>
 
             {/* `key={sel}` EN EL CONTENEDOR, no solo en los hijos. Sus hijos ya
                 llevan el doṣha en la clave, así que al cambiar de botón se
@@ -656,30 +573,6 @@ export default function MetodoAyurvedaDoshaPranayama() {
                 </RevealItem>
               ))}
             </RevealStagger>
-
-            <Box mt={8}>
-              <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={1.5} style={{ textShadow: INK_SHADOW }}>
-                {PRANAYAMA_REFLEXION.compromisoTitulo}
-              </Text>
-              <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={4}>
-                {PRANAYAMA_REFLEXION.compromisoIntro}
-              </Text>
-              <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
-                {PRANAYAMA_REFLEXION.compromisos.map((op) => (
-                  <RevealItem key={op} direction="up" distance={14} duration={0.45} w="100%">
-                    <RadioRow
-                      label={op}
-                      color={meta.color}
-                      checked={compromiso === op}
-                      onSelect={() => {
-                        parche({ compromiso: compromiso === op ? "" : op });
-                        setGuardado((prev) => ({ ...prev, [sel]: false }));
-                      }}
-                    />
-                  </RevealItem>
-                ))}
-              </RevealStagger>
-            </Box>
 
             <Flex justify="flex-end" mt={6}>
               <Box

@@ -234,9 +234,24 @@ export const CONSTITUCIONES: Record<Elemento, Constitucion> = {
 };
 
 // ── El test ────────────────────────────────────────────────────────────────
+//
+// 50 FRASES, NO 200. El test largo del libro (200 frases, 20 por elemento y
+// bloque) era inabarcable: se abandonaba a medias, y una constitución a medias
+// no dice nada. Aquí va una SELECCIÓN de diez frases por elemento —cinco de
+// cómo eres y cinco de cómo va tu cuerpo—, las más reconocibles de cada lista.
+//
+// ⚠️  LAS `key` SON LAS DEL TEST LARGO. Cada frase conserva el número que
+// tenía en su lista original (por eso se escriben `[n, "texto"]`): así, a quien
+// ya hizo el test de 200 no se le pierde el resultado —sus respuestas a estas
+// 50 siguen guardadas— y los porcentajes se recalculan sobre la selección.
+// Si añades una frase nueva, dale un número que NO esté usado en su grupo.
+// ───────────────────────────────────────────────────────────────────────────
 
 /** Los dos bloques del test: cómo eres y cómo va tu cuerpo. */
 export type BloqueConstitucion = "psicologico" | "fisiologico";
+
+/** Los dos bloques, en el orden en que se leen. */
+export const BLOQUES: BloqueConstitucion[] = ["psicologico", "fisiologico"];
 
 /** Lo que se lee arriba de cada bloque, antes de las frases. */
 export const ENUNCIADO: Record<BloqueConstitucion, string> = {
@@ -250,6 +265,12 @@ export const NOMBRE_BLOQUE: Record<BloqueConstitucion, string> = {
   fisiologico: "Cómo va tu cuerpo",
 };
 
+/** La letra pequeña de cada bloque, bajo el enunciado. */
+export const PIE_BLOQUE: Record<BloqueConstitucion, string> = {
+  psicologico: "Responde sin pensarlo mucho: lo primero que te salga.",
+  fisiologico: "Responde por lo que te pasa de forma habitual, no por algo puntual.",
+};
+
 export interface FraseConstitucion {
   /** Clave estable con la que se guarda la respuesta ("cons-p-agua-3"). */
   key: string;
@@ -257,7 +278,8 @@ export interface FraseConstitucion {
 }
 
 /** Un grupo de frases del test. El ELEMENTO no se enseña mientras se responde:
- *  saber que un bloque entero es «de Madera» condicionaría las respuestas. */
+ *  saber que un bloque entero es «de Madera» condicionaría las respuestas. Por
+ *  eso en la página salen mezcladas entre elementos (ver `FRASES_BLOQUE`). */
 export interface GrupoConstitucion {
   key: string;
   bloque: BloqueConstitucion;
@@ -269,245 +291,95 @@ export interface GrupoConstitucion {
 export const SI = "1";
 export const NO = "0";
 
-// Monta un grupo numerando las frases (las keys salen del índice: no reordenes
-// una lista ya publicada, cambiarían todas las respuestas guardadas de debajo).
+// Monta un grupo. Cada frase llega como [número original, texto]: ese número es
+// el que forma la `key` y NO se toca nunca (ver el aviso de arriba).
 const grupo = (
   bloque: BloqueConstitucion,
   elemento: Elemento,
-  frases: string[],
+  frases: [number, string][],
 ): GrupoConstitucion => {
   const b = bloque === "psicologico" ? "p" : "f";
   return {
     key: `cons-${b}-${elemento}`,
     bloque,
     elemento,
-    frases: frases.map((texto, i) => ({ key: `cons-${b}-${elemento}-${i + 1}`, texto })),
+    frases: frases.map(([n, texto]) => ({ key: `cons-${b}-${elemento}-${n}`, texto })),
   };
 };
 
 export const GRUPOS_CONSTITUCION: GrupoConstitucion[] = [
   // ── Bloque 1 · psicológico ────────────────────────────────────────────
   grupo("psicologico", "agua", [
-    "Decir la verdad de forma directa, aunque no sea lo más diplomático.",
-    "Ir con cautela y con sentido común.",
-    "Disfrutar de ratos largos de soledad y de introspección.",
-    "Dejarme llevar por mi imaginación y mi curiosidad.",
-    "Guardarme para mí lo que siento, lo que pienso y lo que opino.",
-    "Estar a gusto pasando desapercibido, en la periferia de lo social.",
-    "Que me consideren una persona rara o excéntrica.",
-    "Meterme en asuntos intelectuales.",
-    "Tener pocos amigos buenos y poca vida social, y estar bien así.",
-    "Preferir resolver las cosas por mi cuenta.",
-    "Medir mucho lo que enseño de mí a los demás.",
-    "Defender con terquedad la verdad tal y como la veo.",
-    "Tener paciencia y perseverar aunque llegue a un callejón sin salida.",
-    "Mirar las cosas con objetividad, sin apasionarme.",
-    "Sentirme autosuficiente, tenga pareja o no.",
-    "Elegir lo privado antes que la intimidad, y la soledad antes que la vida social.",
-    "Observar a la gente y lo que ocurre desde lejos, con ojo crítico y escéptico.",
-    "Perseguir mis intereses aunque a los demás les parezcan poco importantes.",
-    "Disfrutar de proyectos en los que no hay más gente implicada.",
-    "Apartarme de lo cotidiano y mirar hacia dentro para pensar con calma qué lugar ocupa mi vida en el conjunto de las cosas.",
+    [3,  "Disfrutar de ratos largos de soledad y de introspección."],
+    [4,  "Dejarme llevar por mi imaginación y mi curiosidad."],
+    [5,  "Guardarme para mí lo que siento, lo que pienso y lo que opino."],
+    [15, "Sentirme autosuficiente, tenga pareja o no."],
+    [17, "Observar a la gente y lo que ocurre desde lejos, con ojo crítico y escéptico."],
   ]),
   grupo("psicologico", "madera", [
-    "Tener confianza en mí y actuar con determinación.",
-    "Disfrutar de competir y tener ambición.",
-    "Sentirme con poder y a prueba de todo.",
-    "Reconocer a regañadientes que otra persona está a mi altura.",
-    "Hablar abiertamente de lo que valgo y de lo que he conseguido.",
-    "Estar a gusto en el conflicto o bajo presión.",
-    "Disfrutar de ser el primero, el mejor, el distinto o incluso el estrafalario.",
-    "Actuar con aplomo, dé igual lo que los demás piensen o sientan.",
-    "Decidir rápido y comprometerme con un camino aunque las probabilidades estén en mi contra.",
-    "Estar a gusto en tareas difíciles o en emergencias que exigen pensar sobre la marcha.",
-    "Sentir que llevo razón aunque los demás estén en contra o me desaprueben.",
-    "Sentirme bien siguiendo mi instinto y satisfaciendo mis impulsos.",
-    "Ser directo o provocador aunque incomode o avergüence a otros.",
-    "Disfrutar del reconocimiento público y de que admiren mi talento y mis logros.",
-    "Estar a gusto dirigiendo o liderando a otras personas.",
-    "Guiarme por mi propia corazonada de lo que está bien y lo que está mal.",
-    "Tomar las riendas cuando hay que sacar algo adelante rápido y bien.",
-    "Actuar con audacia y decisión aunque no tenga toda la información ni toda la experiencia.",
-    "Disfrutar de pelear contra las probabilidades por el gusto de hacerlo.",
-    "Querer rechazar o discutir la valoración que otros hacen de mí.",
+    [2,  "Disfrutar de competir y tener ambición."],
+    [6,  "Estar a gusto en el conflicto o bajo presión."],
+    [9,  "Decidir rápido y comprometerme con un camino aunque las probabilidades estén en mi contra."],
+    [15, "Estar a gusto dirigiendo o liderando a otras personas."],
+    [18, "Actuar con audacia y decisión aunque no tenga toda la información ni toda la experiencia."],
   ]),
   grupo("psicologico", "fuego", [
-    "Ser una persona viva y entusiasta.",
-    "Disfrutar del placer de mis sentidos.",
-    "Saber enseguida lo que otra persona piensa y siente.",
-    "Disfrutar del contacto físico y de la intimidad emocional.",
-    "Estar a gusto en un ambiente muy estimulante.",
-    "Compartir abiertamente lo que siento y lo que deseo más adentro.",
-    "Vivir en el aquí y el ahora, sin preocuparme del futuro ni quedarme en el pasado.",
-    "Verle el lado divertido a la Vida.",
-    "Disfrutar a fondo cuando consigo lo que quiero y lo que necesito.",
-    "Tener ternura e intimidad y permitirme ser vulnerable con otra persona.",
-    "Estar a gusto recibiendo y mostrando afecto y placer.",
-    "Disfrutar de emocionarme.",
-    "Meterme de lleno, casi sin querer, en lo que pasa a mi alrededor.",
-    "Identificarme profundamente con lo que otra persona siente, piensa y vive.",
-    "Tener sensibilidad e intuición para lo emocional, y responder a ello.",
-    "Mantener el optimismo y la esperanza a pesar de lo que otros digan o crean.",
-    "Mostrarme del todo, sin corazas.",
-    "Sentir la alegría o el dolor de otra persona como si fueran míos.",
-    "Mostrar mi entusiasmo y mi emoción sin ningún reparo.",
-    "Disfrutar de atraer y de tener magnetismo.",
+    [1,  "Ser una persona viva y entusiasta."],
+    [3,  "Saber enseguida lo que otra persona piensa y siente."],
+    [4,  "Disfrutar del contacto físico y de la intimidad emocional."],
+    [7,  "Vivir en el aquí y el ahora, sin preocuparme del futuro ni quedarme en el pasado."],
+    [17, "Mostrarme del todo, sin corazas."],
   ]),
   grupo("psicologico", "tierra", [
-    "Cuidar y sostener a los demás.",
-    "Poner las necesidades de otros por delante de las mías.",
-    "Disfrutar de estar a menudo con mis amigos y mi familia.",
-    "Ocuparme de los demás y tratar de cubrir lo que necesitan.",
-    "Disfrutar de que cuenten conmigo para consolar y para ayudar.",
-    "Disfrutar de ser el centro de mi red de familia y amistades.",
-    "Ser de trato fácil y acomodarme a los demás.",
-    "Disfrutar resolviendo disputas de forma que todas las partes queden satisfechas.",
-    "Ayudar a que la gente trabaje junta en armonía.",
-    "Crear un ambiente relajado en el que gente muy distinta esté a gusto junta.",
-    "Ser leal y estar disponible para quienes son mis amigos, mi familia o parte importante de mi vida y mi trabajo.",
-    "Implicarme en la vida de otras personas.",
-    "Disfrutar de mantener muchas relaciones distintas, incluso enfrentadas entre sí.",
-    "Tener diplomacia y tacto.",
-    "Apoyarme en la habilidad y la inteligencia de los demás.",
-    "Aceptar la idea que los demás tienen de quién soy.",
-    "Disfrutar del simple hecho de estar en compañía.",
-    "Ponerme en la situación de los demás y sentirla.",
-    "Encontrar la manera de resolver un conflicto y llegar a un acuerdo.",
-    "Acercarme a alguien lo bastante como para llegar a necesitarlo.",
-    "Estar a gusto y ser sociable con gente a la que apenas conozco.",
+    [1,  "Cuidar y sostener a los demás."],
+    [2,  "Poner las necesidades de otros por delante de las mías."],
+    [7,  "Ser de trato fácil y acomodarme a los demás."],
+    [9,  "Ayudar a que la gente trabaje junta en armonía."],
+    [17, "Disfrutar del simple hecho de estar en compañía."],
   ]),
   grupo("psicologico", "metal", [
-    "Mantener mi vida ordenada y pulcra.",
-    "Tener una vida social agradable pero que no me exija demasiado.",
-    "Tener el control de mi entorno y de cómo hago las cosas.",
-    "Sostener con firmeza mis principios morales y mi forma de conducirme.",
-    "Sentirme seguro en el trabajo cuando sé que todos siguen el procedimiento correcto.",
-    "Disfrutar de las tareas que piden lógica, análisis y método.",
-    "Que me tengan por alguien meticuloso y con criterio.",
-    "Pensar de mí que soy impecable y que no se me puede reprochar nada.",
-    "Bastarme a mí mismo y no meterme demasiado en los asuntos de otros.",
-    "Trabajar con facilidad cuando los objetivos y las normas están bien definidos.",
-    "Que me valoren por mi destreza y mi conocimiento antes que por mi carácter o mi entusiasmo.",
-    "Que me juzguen por criterios objetivos y no por simpatías ni intuiciones.",
-    "Aceptar la autoridad de quien sabe más que yo.",
-    "Trabajar de forma sistemática y metódica.",
-    "Disfrutar del proceso de resolver enigmas y misterios.",
-    "Estar bien con pocos vínculos estrechos y pocas relaciones exigentes.",
-    "Poner la virtud y los principios por delante del placer y la satisfacción.",
-    "Contenerme al expresar lo que siento o lo que opino.",
-    "Disfrutar de la templanza y de la moderación.",
-    "Tener buen gusto y saber distinguir.",
+    [1,  "Mantener mi vida ordenada y pulcra."],
+    [4,  "Sostener con firmeza mis principios morales y mi forma de conducirme."],
+    [6,  "Disfrutar de las tareas que piden lógica, análisis y método."],
+    [18, "Contenerme al expresar lo que siento o lo que opino."],
+    [20, "Tener buen gusto y saber distinguir."],
   ]),
 
   // ── Bloque 2 · fisiológico ────────────────────────────────────────────
   grupo("fisiologico", "agua", [
-    "Falta de semen o de otras secreciones sexuales",
-    "Infertilidad, impotencia o falta de libido",
-    "Bajón o cansancio después del sexo",
-    "Olvidar lo que acabo de vivir o de aprender",
-    "Menos agudeza en la vista o en el oído",
-    "Hinchazón o dolor en el lagrimal (la esquina interna del ojo)",
-    "Dolor en el arco, el talón o la planta del pie",
-    "Vista y oído hipersensibles",
-    "Rigidez o dolor en articulaciones o columna",
-    "Bultos en el hueso, raros o dolorosos",
-    "Orinar a menudo, con poca fuerza o con dificultad",
-    "Incontinencia de semen, de orina o de heces",
-    "Caída de pelo, en la cabeza o en el pubis",
-    "Granos en la barbilla o entre la nariz y el labio de arriba",
-    "Fatiga o apatía tras un esfuerzo mental largo",
-    "Rigidez o dolor al agacharme o al incorporarme",
-    "Ojeras marrones, moradas o negras",
-    "Dolor de huesos por cansancio, por estar de pie o por exceso de trabajo",
-    "Molestia o dureza en próstata, testículos, ovarios o cuello del útero",
+    [2,  "Falta de libido, o dificultades de fertilidad o de potencia sexual"],
+    [4,  "Olvidar lo que acabo de vivir o de aprender"],
+    [9,  "Rigidez o dolor en articulaciones o columna"],
+    [11, "Orinar a menudo, con poca fuerza o con dificultad"],
+    [17, "Ojeras marrones, moradas o negras"],
   ]),
   grupo("fisiologico", "madera", [
-    "Dolor en las sienes, los laterales, la nuca o la coronilla",
-    "Vértigo y náuseas",
-    "Vista borrosa de repente o pitidos en los oídos",
-    "Ojos secos",
-    "Dolor de cabeza, de oído o de ojos al darme el aire",
-    "Dificultad para tragar o garganta cerrada",
-    "Dolor punzante en ojos, oídos, nariz o garganta, sobre todo de noche",
-    "Sensación de plenitud o de dolor bajo las costillas",
-    "Pinchazos repentinos en el pecho, entre las costillas, en las axilas o en algún órgano interno o genital",
-    "Sensibilidad a la luz fuerte o al ruido alto",
-    "Uñas partidas, endurecidas o engrosadas",
-    "Piel grasa, sobre todo en cara, nariz y cuero cabelludo",
-    "Tensión frecuente en el cuello y los hombros",
-    "Mal humor y bajón antes de la regla",
-    "Irritabilidad después del sexo",
-    "Libido excesiva o excitación sexual frecuente e incómoda",
-    "Forúnculos o bultos dolorosos en axilas o ingles",
-    "Calambres fuertes al empezar la regla",
-    "Calambres o tics en los músculos de los ojos, la cara, las orejas, las pantorrillas o los pies",
-    "Ojos que lagrimean mucho",
+    [1,  "Dolor en las sienes, los laterales, la nuca o la coronilla"],
+    [4,  "Ojos secos"],
+    [8,  "Sensación de plenitud o de dolor bajo las costillas"],
+    [10, "Sensibilidad a la luz fuerte o al ruido alto"],
+    [13, "Tensión frecuente en el cuello y los hombros"],
   ]),
   grupo("fisiologico", "fuego", [
-    "Sudor excesivo",
-    "Sofocos o sensación de estar acalorado",
-    "Sed o antojo de bebidas y comidas frías",
-    "Latido rápido o irregular",
-    "Llagas en la boca o en la lengua",
-    "Ardor en la boca, la uretra, el recto o la vagina",
-    "Excitarme con facilidad y no poder frenarlo",
-    "Mareo o desorientación cuando me sobresalto o me emociono",
-    "Memoria a largo plazo más floja",
-    "Tartamudear o hablar demasiado rápido",
-    "Risa nerviosa o hablar sin parar",
-    "Eyaculación u orgasmo precoz",
-    "Insomnio cuando estoy nervioso o emocionado",
-    "Ansiedad o temor al caer la tarde",
-    "Sueños muy vívidos o inquietantes",
-    "Despertarme con angustia o con el corazón acelerado",
-    "Ponerme rojo al sobresaltarme, al ponerme nervioso o al disgustarme",
-    "Erupciones o eccemas secos, rojos y con picor, sobre todo en la flexura del codo, detrás de la rodilla o en palmas y plantas",
-    "Percepciones o imágenes mentales distorsionadas",
-    "Inflamación de los vasos sanguíneos, la lengua, la oreja o el borde del ojo",
+    [2,  "Sofocos o sensación de estar acalorado"],
+    [4,  "Latido rápido o irregular"],
+    [5,  "Llagas en la boca o en la lengua"],
+    [13, "Insomnio cuando estoy nervioso o emocionado"],
+    [17, "Ponerme rojo al sobresaltarme, al ponerme nervioso o al disgustarme"],
   ]),
   grupo("fisiologico", "tierra", [
-    "Engordar rápido y costarme adelgazar",
-    "Deseo obsesivo de comer, o justo lo contrario",
-    "Hinchazón de tripa, sobre todo por la tarde-noche",
-    "Músculos blandos y sensibles, sobre todo en brazos y muslos",
-    "Debilidad en cuello, muñecas, tobillos y zona lumbar",
-    "Párpados inflamados que tienden a pegarse",
-    "Antojos frecuentes de dulce y de harinas",
-    "Encías hinchadas, doloridas o que sangran",
-    "Uñas deformes que se rompen con facilidad",
-    "Cutículas que se levantan o se inflaman con facilidad",
-    "Músculos y articulaciones hinchados",
-    "Hinchazón general o retención de líquidos",
-    "Moratones fáciles o frecuentes",
-    "Sensación de estar lleno, pesado y aletargado",
-    "Sequedad sin sed",
-    "Falta de aguante",
-    "Bajón, hinchazón y retención antes de la regla",
-    "Granos en el cuero cabelludo, orzuelos, granos en la nariz o alrededor de la boca",
-    "Dolor de cabeza tras darle muchas vueltas a algo, preocuparme, discutir o llevarme una decepción",
-    "Varices o hemorroides",
+    [1,  "Engordar rápido y costarme adelgazar"],
+    [3,  "Hinchazón de tripa, sobre todo por la tarde-noche"],
+    [7,  "Antojos frecuentes de dulce y de harinas"],
+    [14, "Sensación de estar lleno, pesado y aletargado"],
+    [19, "Dolor de cabeza tras darle muchas vueltas a algo, preocuparme, discutir o llevarme una decepción"],
   ]),
   grupo("fisiologico", "metal", [
-    "Sequedad de nariz, garganta, piel o pelo",
-    "Granitos secos y descamados, sobre todo en las mejillas, al lado de la nariz o en la espalda alta",
-    "No sudar ni con calor",
-    "Picor por sequedad",
-    "Orina escasa",
-    "Falta de mucosidad",
-    "Ganglios grandes o duros, sobre todo a los lados del cuello o bajo la mandíbula",
-    "Poros abiertos en la cara, la nariz y la espalda alta",
-    "Muchos lunares o verrugas",
-    "Estornudos o tos al cambiar la temperatura o la humedad del aire",
-    "Arrugas, o piel y mucosas que se encogen",
-    "Piel tirante o que se agrieta con facilidad",
-    "Congestión de nariz, senos nasales o laringe",
-    "Dolor de cabeza en la frente por sequedad o por mocos",
-    "Dolor de cabeza o de pecho tras una decepción o una pérdida",
-    "Respiración superficial",
-    "Muchas arañitas vasculares",
-    "Pólipos nasales o intestinales",
-    "Piel fina y delicada",
-    "Grietas secas y dolorosas en las fosas nasales, los labios o las comisuras",
+    [1,  "Sequedad de nariz, garganta, piel o pelo"],
+    [10, "Estornudos o tos al cambiar la temperatura o la humedad del aire"],
+    [13, "Congestión de nariz, senos nasales o laringe"],
+    [15, "Dolor de cabeza o de pecho tras una decepción o una pérdida"],
+    [16, "Respiración superficial"],
   ]),
 ];
 
@@ -516,14 +388,35 @@ export const TOTAL_FRASES_CONSTITUCION = GRUPOS_CONSTITUCION.reduce(
   (n, g) => n + g.frases.length, 0,
 );
 
+// Las frases de un bloque, MEZCLADAS entre elementos (la primera de cada uno,
+// luego la segunda...). Van seguidas en la página, así que si fueran en tandas
+// de cinco se vería el patrón y eso condicionaría las respuestas.
+const mezclar = (bloque: BloqueConstitucion): FraseConstitucion[] => {
+  const grupos = ORDEN_ELEMENTOS.map(
+    (el) => GRUPOS_CONSTITUCION.find((g) => g.bloque === bloque && g.elemento === el)!,
+  );
+  const largo = Math.max(...grupos.map((g) => g.frases.length));
+  const out: FraseConstitucion[] = [];
+  for (let i = 0; i < largo; i++) {
+    for (const g of grupos) if (g.frases[i]) out.push(g.frases[i]);
+  }
+  return out;
+};
+
+/** Las frases de cada bloque tal y como se pintan en la página. */
+export const FRASES_BLOQUE: Record<BloqueConstitucion, FraseConstitucion[]> = {
+  psicologico: mezclar("psicologico"),
+  fisiologico: mezclar("fisiologico"),
+};
+
 // ─────────────────────────────────────────────────────────────────────────
 // PUNTUACIÓN
 //
 // Cada elemento se lleva un porcentaje: cuántos «sí» ha dicho de las frases
 // que le tocan. Se cuenta sobre las CONTESTADAS y no sobre el total, para que
 // un test a medias no hunda a los elementos que aún no ha leído. Y va en
-// porcentaje, no en número bruto, porque los grupos no tienen todos el mismo
-// número de frases (la Tierra psicológica tiene 21, el Agua física 19).
+// porcentaje, no en número bruto, para que siga siendo comparable si algún
+// grupo cambia de número de frases.
 // ─────────────────────────────────────────────────────────────────────────
 
 export interface PuntoConstitucion {
@@ -586,15 +479,6 @@ export function respondidasConstitucion(
     for (const f of g.frases) if (respuestas[f.key] !== undefined) n += 1;
   }
   return n;
-}
-
-/** Cuántas frases de un grupo están respondidas. */
-export function respondidasGrupo(
-  g: GrupoConstitucion,
-  respuestas: Record<string, string> | undefined,
-): number {
-  if (!respuestas) return 0;
-  return g.frases.filter((f) => respuestas[f.key] !== undefined).length;
 }
 
 /** El test entero, contestado de arriba abajo. */

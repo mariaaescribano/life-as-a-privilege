@@ -8,7 +8,7 @@ import SiteFooter from "../../components/global/Footer";
 import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { ComicAstrologiaModal, VINETAS_SIGNOS } from "../../components/metodo/ComicAstrologiaModal";
+import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { ORIGEN_ESPIRITUALIDAD } from "../../components/metodo/ComicUniversoModal";
@@ -16,7 +16,7 @@ import { useComic } from "../../i18n/comics";
 import { HISTORIA_ASTROLOGIA } from "../../components/metodo/comicHistoriaAstrologia";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { useIntroComic } from "../../hooks/useIntroComic";
-import { TextoCartaExplicativo, CARTA_MAPA_IMGS } from "../../components/metodo/TextoCartaExplicativo";
+import { VINETAS_CARTA, CARTA_MAPA_IMGS } from "../../components/metodo/comicCartaAstral";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
@@ -133,8 +133,11 @@ export default function MetodoAstrologia() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [comicAstroOpen, setComicAstroOpen] = useState(false);
-  // Cómic de los signos: se intercala antes de pasar a «Lo primero de tu carta».
-  const [comicSignosOpen, setComicSignosOpen] = useState(false);
+  // TERCER cómic de la entrada: «¿Qué es una carta astral?». Va detrás de los
+  // otros dos cuando el usuario YA dio sus datos, y detrás del formulario
+  // cuando acaba de darlos. En los dos casos desemboca en «Lo primero de tu
+  // carta»: es la puerta de entrada a la lectura, no un extra de la página.
+  const [comicCartaOpen, setComicCartaOpen] = useState(false);
   const intro = useIntroComic("metodo-astrologia"); // cómic del Origen (espiritualidad), 1ª vez
   // Segundo cómic de intro: «La Historia de la Astrología». Va SEGUIDO del cómic
   // del Origen (son distintos). Solo se encadena si tiene viñetas cargadas.
@@ -188,7 +191,15 @@ export default function MetodoAstrologia() {
         });
         setEstado(res.data ?? null);
         solicitado = !!res.data?.solicitud_enviada_at;
-        intro.openNow();
+        // Viene de «Corregir mis datos» en «Lo primero de tu carta»: se abre
+        // directamente el formulario con sus datos puestos, y NADA de cómics
+        // (no ha entrado a la disciplina, ha venido a arreglar una fecha).
+        if (new URLSearchParams(window.location.search).get("corregir") === "1") {
+          rellenarDesdeEstado(res.data ?? null);
+          setEditando(true);
+        } else {
+          intro.openNow();
+        }
       } catch {
         setEstado(null);
       }
@@ -212,6 +223,12 @@ export default function MetodoAstrologia() {
           : []),
       ]);
       setLoading(false);
+      // Quien todavía no ha dado sus datos verá el cómic de la carta al
+      // enviarlos. No retiene la entrada de la página —aún le queda rellenar el
+      // formulario—, pero se pide ya para que llegue descargado.
+      if (!solicitado) {
+        void Promise.all(CARTA_MAPA_IMGS.map((src) => precargarImagen(encodeURI(src))));
+      }
     })();
   }, []);
 
@@ -331,9 +348,13 @@ export default function MetodoAstrologia() {
     label: t("metodo.ilustraciones"),
     onClick: () => setComicAstroOpen(true),
   };
-  const headerNext = (yaConPdf || yaSolicitado)
-    // Antes de pasar a «Lo primero de tu carta» intercalamos el cómic de los signos.
-    ? { label: <TituloPaso2 flecha />, onClick: () => setComicSignosOpen(true) }
+  // Mientras está CORRIGIENDO, la puerta de delante se cierra: los datos con los
+  // que se calculó la carta están mal (por eso los corrige), así que no tiene
+  // sentido dejarle seguir leyéndola. Vuelve a abrirse al reenviarlos.
+  const headerNext = (yaConPdf || yaSolicitado) && !editando
+    // Directo: el cómic de los signos ya no va aquí, sino encadenado con el de
+    // los planetas al salir de «Lo primero de tu carta».
+    ? { label: <TituloPaso2 flecha />, onClick: () => navigate("/metodo/astrologia/solascendenteluna") }
     : { label: "Leer carta →", onClick: abrirConfirmacion, disabled: !camposCompletos };
 
   return (
@@ -455,9 +476,11 @@ export default function MetodoAstrologia() {
             </Reveal>
           )}
 
-          {/* ── Tras enviar la solicitud: cómic "¿Qué es una carta astral?" con la
-                MISMA caja que las Ilustraciones (la trae el propio componente, por
-                eso aquí NO se envuelve en la caja espacial, para no anidar dos). ── */}
+          {/* ── Tras enviar la solicitud: la puerta a la lectura ──
+                «¿Qué es una carta astral?» ya no se lee aquí metido en un box:
+                es un cómic a pantalla completa (el tercero de la entrada) que
+                sale solo al entrar y termina en «Lo primero de tu carta». Esta
+                caja es para quien vuelve: relee el cómic o sigue adelante. ── */}
           {yaSolicitado && !editando && (
             <Reveal
               direction="up"
@@ -467,8 +490,49 @@ export default function MetodoAstrologia() {
               duration={0.75}
               position="relative"
               w="100%"
+              borderRadius="2xl"
+              overflow="hidden"
+              boxShadow={glowHeader(astrologiaTxt)}
             >
-              <TextoCartaExplicativo color={astrologiaTxt} />
+              <SpaceBg overlay="rgba(8,13,30,0.65)" />
+
+              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
+                <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.09} delayChildren={0.35}>
+                  <RevealItem>
+                    <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center">
+                      {t("metodo.astro.queEsCarta")}
+                    </Text>
+                  </RevealItem>
+                  <RevealItem>
+                    <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto">
+                      {t("metodo.astro.queEsCartaResumen")}
+                    </Text>
+                  </RevealItem>
+                  <RevealItem>
+                    <Box h="1px" my={2} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
+                  </RevealItem>
+                  <RevealItem display="flex" justifyContent="center">
+                    <Box
+                      as="button"
+                      onClick={() => setComicCartaOpen(true)}
+                      px={8}
+                      py={2.5}
+                      borderRadius="full"
+                      bg="transparent"
+                      color={astrologiaTxt}
+                      border={`1px solid ${astrologiaTxt}66`}
+                      fontFamily="'EB Garamond', serif"
+                      fontWeight="700"
+                      letterSpacing="0.06em"
+                      cursor="pointer"
+                      transition="all 0.2s"
+                      _hover={{ borderColor: astrologiaTxt, boxShadow: `0 0 22px ${astrologiaTxt}55` }}
+                    >
+                      {t("metodo.astro.queEsCartaLeer")}
+                    </Box>
+                  </RevealItem>
+                </RevealStagger>
+              </Box>
             </Reveal>
           )}
 
@@ -697,12 +761,15 @@ export default function MetodoAstrologia() {
         onClose={() => setComicAstroOpen(false)}
       />
 
-      {/* Cómic de los signos: intercalado antes de «Lo primero de tu carta». */}
+      {/* Tercer cómic de la entrada: «¿Qué es una carta astral?». Tanto el tick
+          final como el botón «Saltar →» llevan a «Lo primero de tu carta»: este
+          cómic es el camino a la lectura. La X, en cambio, se queda en esta
+          página (por si solo venía a repasar sus datos). */}
       <ComicPasoModal
-        isOpen={comicSignosOpen}
-        onClose={() => setComicSignosOpen(false)}
+        isOpen={comicCartaOpen}
+        onClose={() => setComicCartaOpen(false)}
         onContinue={() => navigate("/metodo/astrologia/solascendenteluna")}
-        vinetas={VINETAS_SIGNOS}
+        vinetas={VINETAS_CARTA}
         continueLabel={<TituloPaso2 />}
         themeColor={astrologiaTxt}
       />
@@ -727,10 +794,14 @@ export default function MetodoAstrologia() {
         isOpen={historiaOpen}
         vinetas={historiaVinetas}
         onClose={() => setHistoriaOpen(false)}
-        continueLabel={t("disciplina.astrologia")}
+        continueLabel={yaSolicitado ? t("metodo.astro.queEsCarta") : t("disciplina.astrologia")}
         continueBgImage={SPACE_IMG}
-        onContinue={() => setHistoriaOpen(false)}
-        onComplete={() => setHistoriaOpen(false)}
+        // Con los datos ya dados, la entrada son los TRES cómics seguidos: aquí
+        // encadena el de la carta, que al acabar lleva a «Lo primero de tu
+        // carta». Sin datos, se cierra y queda el formulario, que es lo que
+        // toca rellenar.
+        onContinue={() => { setHistoriaOpen(false); if (yaSolicitado) setComicCartaOpen(true); }}
+        onComplete={() => { setHistoriaOpen(false); if (yaSolicitado) setComicCartaOpen(true); }}
         // Volver al cómic anterior de la cadena: el Origen según la espiritualidad.
         onBack={() => { setHistoriaOpen(false); intro.openNow(); }}
       />
@@ -827,7 +898,9 @@ export default function MetodoAstrologia() {
                   : "Tu carta está en proceso. Yo misma leeré tu carta. Mientras tanto, puedes continuar para ver tus arquetipos."}
               </Text>
               <Flex justify="flex-end" mt={6}>
-                <Box as="button" onClick={() => setProcesoOpen(false)}
+                {/* Aceptar = seguir: se cierra el aviso y entra el tercer
+                    cómic, que es lo que lleva a «Lo primero de tu carta». */}
+                <Box as="button" onClick={() => { setProcesoOpen(false); setComicCartaOpen(true); }}
                      px={8} py={2.5} borderRadius="full" bg={astrologiaTxt} color="#0a0a1a"
                      border={`1px solid ${astrologiaTxt}88`} fontFamily="'EB Garamond', serif" fontWeight="700"
                      letterSpacing="0.06em" cursor="pointer" boxShadow={`0 0 18px ${astrologiaTxt}66`}

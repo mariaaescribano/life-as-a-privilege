@@ -218,7 +218,7 @@ export default function MetodoPsicologiaDes() {
           {/* ── Las 28 frases · entran EN CASCADA, una tras otra ── */}
           <RevealStagger stagger={0.06} delayChildren={0.1} amount={0.15}
                          display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }}>
-            {desPreguntas.map((p, i) => {
+            {desPreguntas.map((p) => {
               const elegido = respuestas[p.key];
               return (
                 <RevealItem key={p.key} w="100%">
@@ -228,12 +228,8 @@ export default function MetodoPsicologiaDes() {
                   <Flex position="relative" zIndex={1} direction="column"
                         gap={{ base: 4, md: 5 }} px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
 
-                    {/* Número + categoría + enunciado */}
+                    {/* El enunciado, a secas (sin número ni rótulo: la frase manda) */}
                     <Box>
-                      <Text color={`${TINTA}bb`} fontSize="2xs" fontWeight="700" letterSpacing="0.18em"
-                            textTransform="uppercase" mb={1.5} style={{ textShadow: INK_SHADOW }}>
-                        {i + 1} · {p.categoria}
-                      </Text>
                       <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="600" lineHeight="1.5"
                             style={{ textShadow: INK_SHADOW }}>
                         {p.pregunta}

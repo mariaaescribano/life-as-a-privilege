@@ -32,16 +32,27 @@ export function recordarOrigenCurso(): void {
   } catch { /* sessionStorage no disponible: sin botón */ }
 }
 
+/** La URL del Mapa de la que se salió, si se entró al curso desde el recorrido.
+ *  La usan el botón flotante y el botón «atrás» del header del curso, para que
+ *  los dos devuelvan al MISMO sitio. */
+export function origenCurso(): string | null {
+  try { return sessionStorage.getItem(KEY); } catch { return null; }
+}
+
+/** Se gasta la miga de pan: ya se ha vuelto al Mapa. */
+export function olvidarOrigenCurso(): void {
+  try { sessionStorage.removeItem(KEY); } catch { /* noop */ }
+}
+
 export function VolverAlMapa() {
   const navigate = useNavigate();
   const t = useT();
-  let url: string | null = null;
-  try { url = sessionStorage.getItem(KEY); } catch { url = null; }
+  const url = origenCurso();
   if (!url) return null;
 
   const volver = () => {
-    try { sessionStorage.removeItem(KEY); } catch { /* noop */ }
-    navigate(url!);
+    olvidarOrigenCurso();
+    navigate(url);
   };
 
   return (

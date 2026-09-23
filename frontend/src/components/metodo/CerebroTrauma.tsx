@@ -1,9 +1,10 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// El dibujo del cerebro con las cuatro zonas, encendidas según SUS respuestas.
+// El dibujo del cerebro con sus cuatro zonas, cada una con su luz.
 //
-// Va dibujado (SVG) y no en foto porque tiene que ENCENDERSE: cada zona brilla
-// más o menos según lo que la persona contestó en los dos tests, y eso una
-// imagen fija no lo puede hacer. El dibujo es de perfil, mirando a la izquierda.
+// Las cuatro laten IGUAL: aquí no se mide a nadie (ver la cabecera de
+// psicologiaCerebro.ts). Va dibujado (SVG) y no en foto porque las zonas tienen
+// que poder encenderse y responder al toque. El dibujo es de perfil, mirando a
+// la izquierda.
 //
 // Si algún día hay una ilustración propia del cerebro, se pone en `FOTO_CEREBRO`
 // y las zonas se pintan encima sin tocar nada más: sus posiciones van en % del
@@ -25,15 +26,13 @@ const latido = keyframes`
 
 /** Dónde cae cada zona dentro del dibujo (en % del ancho y del alto). */
 const POSICION: Record<ZonaKey, { x: number; y: number }> = {
-  freno:   { x: 24, y: 37 },  // corteza prefrontal — delante y arriba
-  alarma:  { x: 43, y: 58 },  // amígdala — dentro, en el lóbulo temporal
-  archivo: { x: 55, y: 62 },  // hipocampo — justo detrás de la amígdala
-  cuerpo:  { x: 64, y: 84 },  // tronco encefálico — abajo, hacia la médula
+  razonador:  { x: 24, y: 37 },  // corteza prefrontal — delante y arriba
+  alarma:     { x: 43, y: 58 },  // amígdala — dentro, en el lóbulo temporal
+  biblioteca: { x: 55, y: 62 },  // hipocampo — justo detrás de la amígdala
+  freno:      { x: 64, y: 84 },  // tronco encefálico — abajo, hacia la médula
 };
 
 export interface CerebroTraumaProps {
-  /** Cuánto se enciende cada zona (0-100). */
-  valores: Record<ZonaKey, number>;
   /** La zona abierta ahora mismo, si hay alguna. */
   activa: ZonaKey | null;
   onZona: (key: ZonaKey) => void;
@@ -41,7 +40,7 @@ export interface CerebroTraumaProps {
   tinta: string;
 }
 
-export function CerebroTrauma({ valores, activa, onZona, tinta }: CerebroTraumaProps) {
+export function CerebroTrauma({ activa, onZona, tinta }: CerebroTraumaProps) {
   return (
     <Box position="relative" w="100%" maxW="560px" mx="auto">
       {/* ── El cerebro ── */}
@@ -99,18 +98,17 @@ export function CerebroTrauma({ valores, activa, onZona, tinta }: CerebroTraumaP
 
         {/* ── Las cuatro zonas, encendidas ── */}
         {ZONAS.map((zona) => {
-          const valor = valores[zona.key] ?? 0;
           const pos = POSICION[zona.key];
           const abierta = activa === zona.key;
-          // Cuanto más dice su test, más grande y más viva la luz.
-          const tamano = 13 + (valor / 100) * 13;
+          // Todas del mismo tamaño; la abierta es la única que destaca.
+          const tamano = 19;
 
           return (
             <Box
               key={zona.key}
               as="button"
               onClick={() => onZona(zona.key)}
-              aria-label={`${zona.nombre} — ${zona.apodo}`}
+              aria-label={`${zona.apodo} — ${zona.nombre}`}
               position="absolute"
               left={`${pos.x}%`}
               top={`${pos.y}%`}
@@ -121,14 +119,14 @@ export function CerebroTrauma({ valores, activa, onZona, tinta }: CerebroTraumaP
               cursor="pointer"
               zIndex={abierta ? 3 : 2}
             >
-              {/* el halo que late: más fuerte cuanto más alta es su lectura */}
+              {/* el halo que late; la zona abierta late un punto más fuerte */}
               <Box
                 position="absolute"
                 inset="0"
                 borderRadius="full"
                 bg={zona.color}
-                opacity={0.18 + (valor / 100) * 0.5}
-                sx={{ animation: `${latido} ${3.6 - (valor / 100) * 1.4}s ease-in-out infinite` }}
+                opacity={abierta ? 0.55 : 0.34}
+                sx={{ animation: `${latido} 2.9s ease-in-out infinite` }}
               />
               {/* el punto */}
               <Box

@@ -42,6 +42,7 @@ import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicol
 import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
+  astrologiaTxt,
   AstrologiaIcon,
   neuropsicologiaBg,
   neuropsicologiaNom,
@@ -50,6 +51,7 @@ import {
 } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
+const ARQUETIPOS_IMG = "/img/astrologia/space.jpg";
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
 const ORO = "#caa24a";
@@ -143,6 +145,8 @@ export default function MetodoPsicologiaDonesEspejo() {
   const [loading, setLoading] = useState(true);
   const [respuestas, setRespuestas] = useState<Record<string, string>>({});
   const [arquetipos, setArquetipos] = useState<ArqPlaneta[]>([]);
+  // ¿Ha pasado ya por Astrología? Sin carta, el espejo se queda tras el cristal.
+  const [astroHecha, setAstroHecha] = useState(false);
   const [dones, setDones] = useState<DonReconocido[]>([]);
   const [activaId, setActivaId] = useState<string | null>(null);
   const [saberMas, setSaberMas] = useState<{ cuerpo: Cuerpo; signo?: string; casa?: number; facet: "signo" | "casa" } | null>(null);
@@ -187,8 +191,11 @@ export default function MetodoPsicologiaDonesEspejo() {
           if (lista.length > 0) setActivaId(lista[lista.length - 1].id);
         }
         if (astroRes.status === "fulfilled") {
-          const carta: CartaData = astroRes.value.data?.data || {};
-          setArquetipos(arquetiposDeCarta(carta));
+          // Se da por hecha en cuanto envió sus datos de nacimiento, que es
+          // cuando el servidor le calcula la carta.
+          const lista = arquetiposDeCarta(astroRes.value.data?.data || {});
+          setAstroHecha(!!astroRes.value.data?.solicitud_enviada_at || lista.length > 0);
+          setArquetipos(lista);
         }
       } catch {
         // silencioso
@@ -316,7 +323,16 @@ export default function MetodoPsicologiaDonesEspejo() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Box position="relative" flex="1">
+      {/* El cuerpo de la página. Sin carta astral se ve DETRÁS de un cristal:
+          desenfocado y sin poder tocar nada (el popup de abajo explica por
+          qué). El header de la web se queda nítido y usable, para poder irse a
+          otro sitio sin pelearse con el popup. */}
+      <Box position="relative" flex="1"
+           filter={astroHecha ? undefined : "blur(7px)"}
+           pointerEvents={astroHecha ? undefined : "none"}
+           userSelect={astroHecha ? undefined : "none"}
+           aria-hidden={astroHecha ? undefined : true}
+           transition="filter 0.4s ease">
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
           <Flex direction="column" align="center" w="100%" maxW="1240px" gap={{ base: 7, md: 9 }}>
 
@@ -494,6 +510,74 @@ export default function MetodoPsicologiaDonesEspejo() {
 
       <SaberMasModal isOpen={!!saberMas} onClose={() => setSaberMas(null)}
                      cuerpo={saberMas?.cuerpo || null} signo={saberMas?.signo} casa={saberMas?.casa} facet={saberMas?.facet} />
+
+
+      {/* ── Sin carta astral: la página se queda detrás de un cristal ──
+          Aquí los dones se ponen frente a los arquetipos de la carta, así que
+          sin Astrología falta la mitad del espejo. Se ve el fondo desenfocado
+          (para saber qué hay) pero no se puede tocar, y el popup explica qué se
+          gana con la carta. Astrología no es obligatoria en el Mapa: por eso el
+          popup lo dice con todas las letras en vez de dar un portazo. */}
+      {!astroHecha && (
+        <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.55)"
+             fontFamily="'EB Garamond', serif">
+          <Box position="relative" w="100%" maxW={{ base: "420px", md: "520px" }}
+               borderRadius="2xl" overflow="hidden"
+               bgImage={`url('${ARQUETIPOS_IMG}')`} bgSize="cover" bgPosition="center"
+               boxShadow={`0 0 40px ${astrologiaTxt}44, 0 24px 70px rgba(0,0,0,0.6)`}
+               border={`1px solid ${astrologiaTxt}55`}>
+            {/* Velo: la foto sola no da contraste para la letra clara. */}
+            <Box position="absolute" inset={0} bg="rgba(8,13,30,0.72)" pointerEvents="none" />
+
+            <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
+                  px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }} textAlign="center">
+              {/* Chapa del candado */}
+              <Flex align="center" justify="center" w="62px" h="62px" borderRadius="full" flexShrink={0}
+                    bg="rgba(0,0,0,0.42)" border={`1.5px solid ${astrologiaTxt}66`}
+                    boxShadow={`0 0 20px ${astrologiaTxt}44, inset 0 0 18px rgba(0,0,0,0.5)`}>
+                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="30px" h="30px"
+                     fill={astrologiaTxt} flexShrink={0}
+                     style={{ filter: `drop-shadow(0 0 10px ${astrologiaTxt}77) drop-shadow(0 2px 4px rgba(0,0,0,0.6))` }}>
+                  <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
+                </Box>
+              </Flex>
+
+              <Text color={PAPEL} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.03em"
+                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.65)" }}>
+                {t("metodo.psico.espejoBloqTitulo")}
+              </Text>
+
+              <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" opacity={0.95}
+                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.65)" }}>
+                {t("metodo.psico.bloqEspejo1")}
+              </Text>
+              <Text color={PAPEL} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" opacity={0.9} fontStyle="italic"
+                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.65)" }}>
+                {t("metodo.psico.espejoBloqNoHaceFalta")}
+              </Text>
+
+              <Flex gap={3} mt={2} wrap="wrap" justify="center">
+                <Box as="button" onClick={() => navigate("/metodo/astrologia")}
+                     px={6} py={2.5} borderRadius="full" bg={PAPEL} color={TINTA}
+                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
+                     cursor="pointer" boxShadow={`0 0 18px ${astrologiaTxt}44`} transition="all 0.18s"
+                     _hover={{ boxShadow: `0 0 26px ${astrologiaTxt}77`, transform: "translateY(-1px)" }}>
+                  {t("metodo.psico.espejoBloqIr")}
+                </Box>
+                <Box as="button" onClick={irARecuerdate}
+                     px={6} py={2.5} borderRadius="full" bg="transparent" color={PAPEL}
+                     border={`1.5px solid ${PAPEL}88`}
+                     fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
+                     cursor="pointer" transition="all 0.18s"
+                     _hover={{ borderColor: PAPEL, bg: "rgba(255,255,255,0.12)" }}>
+                  {t("comun.volver")}
+                </Box>
+              </Flex>
+            </Flex>
+          </Box>
+        </Box>
+      )}
 
       <AyudaRecorrido pagina="dones-espejo" />
 

@@ -27,6 +27,24 @@ export type Valores = Record<string, string | number>;
  */
 const DICCIONARIOS: Record<Idioma, Partial<Record<ClaveTexto, string>>> = { es, en: {} };
 
+/**
+ * Los textos del RECORRIDO (`metodo.*`), que NO viajan en el paquete de
+ * entrada (ver `textos/es/index.ts`). Se piden EN PARALELO con la página que
+ * los necesita y se vuelcan sobre el diccionario español; la ruta no se pinta
+ * hasta que están (`lazyConMetodo` en App.tsx), así que nadie llega a ver una
+ * clave pelada.
+ */
+let peticionMetodo: Promise<void> | null = null;
+
+export const cargarTextosMetodo = (): Promise<void> => {
+  if (!peticionMetodo) {
+    peticionMetodo = import("./textos/es/metodo")
+      .then((modulo) => { Object.assign(DICCIONARIOS.es, modulo.metodo); })
+      .catch(() => { peticionMetodo = null; /* que se pueda reintentar */ });
+  }
+  return peticionMetodo;
+};
+
 /** La peticion del diccionario ingles, una sola vez aunque se pida mil veces. */
 let peticionIngles: Promise<void> | null = null;
 
@@ -85,7 +103,7 @@ export const traducir = (
   if (import.meta.env.DEV && idioma !== IDIOMA_ORIGINAL && propio === undefined) {
     avisarFalta(clave, idioma);
   }
-  return interpolar(propio ?? es[clave] ?? clave, valores);
+  return interpolar(propio ?? DICCIONARIOS.es[clave] ?? clave, valores);
 };
 
 type ContextoIdioma = {

@@ -671,7 +671,7 @@ export interface Necesidad {
 
 export const NECESIDADES_INTRO = {
   titulo: "Necesidades no cubiertas",
-  subtitulo: "¿Qué necesitabas y no recibiste? Cada celda representa una necesidad. Cuando una queda insatisfecha, puede ser tan doloroso que parezca borrar el impacto de aquellas que sí fueron satisfechas.",
+  subtitulo: "¿Qué necesitabas y no recibiste? Cada celda representa una necesidad. Cuando una queda insatisfecha, puede ser tan doloroso que puede borrar aquellas que sí fueron satisfechas.",
   texto:
     "Ya has recordado tu historia y nombrado tus nudos. Detente ahora en lo que un niño necesita para crecer sano: abre cada necesidad y, sin juzgar a nadie, marca cómo lo viviste tú. No hay respuestas correctas: solo tu verdad.",
 };
@@ -1339,10 +1339,9 @@ export interface DesResultado {
 export interface PreguntaDes {
   /** Clave estable (no cambiar tras publicar). */
   key: string;
-  /** Etiqueta corta de la tarjeta. */
-  categoria: string;
-  /** El enunciado. Se conserva el «Algunas personas…» del original: no es
-   *  literatura, es lo que hace que la persona no se sienta un bicho raro. */
+  /** El enunciado, en primera persona del singular («A veces voy conduciendo
+   *  y me doy cuenta de que…»): la persona se lo lee como algo suyo, no como
+   *  algo que les pasa a otros. Sin marca de género. */
   pregunta: string;
   /** Matiz aclaratorio opcional (más pequeño, bajo la pregunta). */
   apoyo?: string;
@@ -1374,64 +1373,36 @@ export const DES_INTRO = {
 
 // Las 28 preguntas del DES-II, en el orden original (el número de la `key` es el
 // del cuestionario: de él salen las subescalas). Redactadas en castellano claro
-// pero SIN tocar lo que cada ítem pregunta.
+// y en primera persona, pero SIN tocar lo que cada ítem pregunta.
 export const DES_PREGUNTAS: PreguntaDes[] = [
-  { key: "des-1-conducir",      categoria: "El viaje en blanco",
-    pregunta: "Algunas personas van conduciendo y de repente se dan cuenta de que no recuerdan lo que ha pasado durante todo el viaje o parte de él." },
-  { key: "des-2-escuchar",      categoria: "Lo que no oíste",
-    pregunta: "Algunas personas están escuchando hablar a alguien y de repente se dan cuenta de que no han oído todo o parte de lo que les decían." },
-  { key: "des-3-lugar",         categoria: "Aparecer en un sitio",
-    pregunta: "Algunas personas se encuentran en un lugar y no saben cómo llegaron hasta allí." },
-  { key: "des-4-ropa",          categoria: "Ropa que no recuerdas",
-    pregunta: "Algunas personas se ven vestidas con ropa que no recuerdan haberse puesto." },
-  { key: "des-5-cosas",         categoria: "Cosas que no compraste",
-    pregunta: "Algunas personas encuentran cosas nuevas entre sus pertenencias que no recuerdan haber comprado." },
-  { key: "des-6-desconocidos",  categoria: "Gente que dice conocerte",
-    pregunta: "A algunas personas se les acerca gente que no conocen, que las llama por otro nombre o insiste en conocerlas de antes." },
-  { key: "des-7-junto-a-si",    categoria: "Verte desde fuera",
-    pregunta: "Algunas personas sienten como si estuvieran junto a sí mismas, u observándose hacer algo como si fueran otra persona." },
-  { key: "des-8-no-reconocer",  categoria: "No reconocer a los tuyos",
-    pregunta: "A algunas personas les dicen que a veces no reconocen a sus amigos o a miembros de su familia." },
-  { key: "des-9-acontecimientos", categoria: "Días importantes sin recuerdo",
-    pregunta: "Algunas personas no tienen recuerdo de acontecimientos importantes de su vida (una boda, una Navidad, un viaje)." },
-  { key: "des-10-mentir",       categoria: "Te acusan de mentir",
-    pregunta: "A algunas personas las acusan de mentir cuando ellas creen que no han mentido." },
-  { key: "des-11-espejo",       categoria: "El espejo",
-    pregunta: "Algunas personas se miran en un espejo y no se reconocen." },
-  { key: "des-12-irreal",       categoria: "El mundo irreal",
-    pregunta: "Algunas personas sienten que las personas, los objetos y el mundo que las rodea no son reales." },
-  { key: "des-13-cuerpo",       categoria: "El cuerpo ajeno",
-    pregunta: "Algunas personas sienten que su cuerpo no les pertenece." },
-  { key: "des-14-revivir",      categoria: "Revivir el pasado",
-    pregunta: "Algunas personas recuerdan el pasado tan intensamente que sienten que lo están volviendo a vivir." },
-  { key: "des-15-sonado",       categoria: "¿Pasó o lo soñé?",
-    pregunta: "Algunas personas no están seguras de si lo que recuerdan sucedió de verdad o solo lo soñaron." },
-  { key: "des-16-lugar-extrano", categoria: "Lo conocido, extraño",
-    pregunta: "Algunas personas están en un lugar conocido y de pronto lo encuentran extraño y poco familiar." },
-  { key: "des-17-television",   categoria: "Absorberse en una historia",
-    pregunta: "Algunas personas se absorben tanto en una película o en la televisión que no se dan cuenta de lo que ocurre a su alrededor." },
-  { key: "des-18-fantasia",     categoria: "Fantasía que parece real",
-    pregunta: "Algunas personas se meten tanto en una fantasía o en un sueño despierto que sienten como si estuviera ocurriendo de verdad." },
-  { key: "des-19-dolor",        categoria: "Ignorar el dolor",
-    pregunta: "Algunas personas son capaces de ignorar el dolor." },
-  { key: "des-20-vacio",        categoria: "Mirar al vacío",
-    pregunta: "Algunas personas se quedan mirando al vacío, sin pensar en nada, y no se dan cuenta del paso del tiempo." },
-  { key: "des-21-hablarse",     categoria: "Hablarte en voz alta",
-    pregunta: "Algunas personas, cuando están solas, se hablan a sí mismas en voz alta." },
-  { key: "des-22-otra-persona", categoria: "Ser otra según dónde",
-    pregunta: "Algunas personas actúan de forma tan distinta en una situación y en otra que sienten como si fueran dos personas diferentes." },
-  { key: "des-23-facilidad",    categoria: "Facilidad asombrosa",
-    pregunta: "Algunas personas, en ciertas situaciones, hacen con asombrosa facilidad algo que normalmente les costaría (en el deporte, en el trabajo, con la gente…)." },
-  { key: "des-24-hecho-pensado", categoria: "¿Lo hice o lo pensé?",
-    pregunta: "Algunas personas no pueden recordar si hicieron algo o solo pensaron en hacerlo (por ejemplo, si echaron una carta o solo lo pensaron)." },
-  { key: "des-25-evidencias",   categoria: "Pruebas de lo que no recuerdas",
-    pregunta: "Algunas personas encuentran pruebas de que hicieron cosas que no recuerdan haber hecho." },
-  { key: "des-26-escritos",     categoria: "Escritos que no recuerdas",
-    pregunta: "Algunas personas encuentran entre sus cosas escritos, dibujos o notas que hicieron ellas mismas y no recuerdan." },
-  { key: "des-27-voces",        categoria: "Voces dentro",
-    pregunta: "Algunas personas oyen voces dentro de su cabeza que les dicen que hagan cosas o que comentan lo que están haciendo." },
-  { key: "des-28-neblina",      categoria: "El mundo con neblina",
-    pregunta: "Algunas personas sienten como si vieran el mundo a través de una neblina, y las personas y los objetos les parecen distantes o poco claros." },
+  { key: "des-1-conducir",      pregunta: "A veces voy conduciendo (o en el autobús) y de repente me doy cuenta de que no recuerdo lo que ha pasado durante todo el viaje o parte de él." },
+  { key: "des-2-escuchar",      pregunta: "A veces estoy escuchando hablar a alguien y de repente me doy cuenta de que no he oído todo o parte de lo que me decían." },
+  { key: "des-3-lugar",         pregunta: "A veces me encuentro en un lugar y no sé cómo llegué hasta allí." },
+  { key: "des-4-ropa",          pregunta: "A veces me veo con ropa que no recuerdo haberme puesto." },
+  { key: "des-5-cosas",         pregunta: "A veces encuentro cosas nuevas entre mis pertenencias que no recuerdo haber comprado." },
+  { key: "des-6-desconocidos",  pregunta: "A veces se me acerca gente que no conozco, que me llama por otro nombre o que insiste en que me conoce de antes." },
+  { key: "des-7-junto-a-si",    pregunta: "A veces siento como si estuviera junto a mí, u observándome hacer algo como si fuera otra persona." },
+  { key: "des-8-no-reconocer",  pregunta: "A veces me dicen que no he reconocido a mis amigos o a alguien de mi familia." },
+  { key: "des-9-acontecimientos", pregunta: "A veces no tengo ningún recuerdo de acontecimientos importantes de mi vida (una boda, una Navidad, un viaje)." },
+  { key: "des-10-mentir",       pregunta: "A veces me acusan de mentir cuando yo creo que no he mentido." },
+  { key: "des-11-espejo",       pregunta: "A veces me miro en un espejo y no me reconozco." },
+  { key: "des-12-irreal",       pregunta: "A veces siento que las personas, los objetos y el mundo que me rodea no son reales." },
+  { key: "des-13-cuerpo",       pregunta: "A veces siento que mi cuerpo no me pertenece." },
+  { key: "des-14-revivir",      pregunta: "A veces recuerdo el pasado tan intensamente que siento que lo estoy volviendo a vivir." },
+  { key: "des-15-sonado",       pregunta: "A veces no sé con seguridad si lo que recuerdo sucedió de verdad o solo lo soñé." },
+  { key: "des-16-lugar-extrano", pregunta: "A veces estoy en un lugar conocido y de pronto lo encuentro extraño y poco familiar." },
+  { key: "des-17-television",   pregunta: "A veces me absorbo tanto en una película o en la televisión que no me doy cuenta de lo que ocurre a mi alrededor." },
+  { key: "des-18-fantasia",     pregunta: "A veces me meto tanto en una fantasía o en un sueño despierto que siento como si estuviera ocurriendo de verdad." },
+  { key: "des-19-dolor",        pregunta: "A veces soy capaz de ignorar el dolor." },
+  { key: "des-20-vacio",        pregunta: "A veces me quedo mirando al vacío, sin pensar en nada, y no me doy cuenta del paso del tiempo." },
+  { key: "des-21-hablarse",     pregunta: "A veces, cuando no hay nadie delante, me hablo en voz alta." },
+  { key: "des-22-otra-persona", pregunta: "A veces actúo de forma tan distinta en una situación y en otra que siento como si fuera dos personas diferentes." },
+  { key: "des-23-facilidad",    pregunta: "A veces, en ciertas situaciones, hago con asombrosa facilidad algo que normalmente me costaría (en el deporte, en el trabajo, con la gente…)." },
+  { key: "des-24-hecho-pensado", pregunta: "A veces no puedo recordar si hice algo o solo pensé en hacerlo (por ejemplo, si eché una carta o solo lo pensé)." },
+  { key: "des-25-evidencias",   pregunta: "A veces encuentro pruebas de que hice cosas que no recuerdo haber hecho." },
+  { key: "des-26-escritos",     pregunta: "A veces encuentro entre mis cosas escritos, dibujos o notas que tuve que hacer yo y no recuerdo." },
+  { key: "des-27-voces",        pregunta: "A veces oigo voces dentro de mi cabeza que me dicen que haga cosas o que comentan lo que estoy haciendo." },
+  { key: "des-28-neblina",      pregunta: "A veces siento como si viera el mundo a través de una neblina, y las personas y los objetos me parecen distantes o poco claros." },
 ];
 
 /** El valor guardado de una pregunta (0–100), o `undefined` si no está respondida.
@@ -1618,7 +1589,7 @@ export const DES_ESPERANZA = {
   texto: [
     "Desconectarse no es un defecto ni una rareza: es lo que hace un sistema nervioso inteligente cuando no puede huir ni pelear. Si de pequeña no podías salir de la habitación, salías de ti. Y te funcionó.",
     "El problema es que ese mecanismo no distingue épocas: sigue disparándose hoy —en una discusión, en una consulta, en medio de una conversación cualquiera— cuando ya no hace falta.",
-    "Y se reaprende, pero no por la cabeza: por el cuerpo. Los pies en el suelo, la respiración, la temperatura del agua, la voz de alguien que te acompaña. La presencia se entrena. Cada vez que te quedas un poco más, vuelves un poco más a casa.",
+    "Y se reaprende, pero no por la cabeza: por el cuerpo. Los pies en el suelo, la respiración, la temperatura del agua, la voz de alguien que te acompaña. La presencia se entrena.",
   ],
   /** Aviso del paso «Narra» cuando la desconexión es alta (ver `desAlto`). */
   avisoNarra: {

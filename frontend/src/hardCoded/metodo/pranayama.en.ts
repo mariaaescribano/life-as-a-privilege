@@ -9,21 +9,16 @@ import type { PracticaPranayama, PRANAYAMA_REFLEXION, PRANAYAMA_CIERRE } from ".
  *
  * OJO con las `fases`: el `tipo` y los `segundos` son los que mueven el círculo
  * del guía y NO se tocan; del inglés se toma solo el `texto`. Igual con
- * `ciclos`. Los nombres sánscritos (Nāḍī Śodhana, Śītalī, Śītkārī, Bhastrikā,
- * Viṣṇu mudrā) se quedan tal cual, con sus diacríticos: son el nombre de la
- * técnica, no una palabra a traducir.
+ * `ciclos`. Los nombres sánscritos ya no salen en la página (están en el
+ * cómic): aquí solo hay el resumen de 3-4 líneas, el cuidado y las preguntas.
  */
 export const PRANAYAMA_PRACTICA_EN: Partial<Record<DoshaKey, PracticaPranayama>> = {
   vata: {
-    nombre: "Nāḍī Śodhana",
-    traduccion: "Alternate nostril breathing — «cleansing the channels»",
-    porQue: "Vata is mobile, fast and irregular. Alternating the nostrils **imposes a rhythm**: it gives a scattered mind something simple and regular to hold on to.",
-    pasos: [
-      "Long spine, shoulders loose.",
-      "Right hand in **Viṣṇu mudrā**: your thumb closes the right nostril and your ring finger the left.",
-      "Close the right and **inhale through the left**. Close both for an instant.",
-      "Release the right and **exhale through the right**, long.",
-      "Inhale through the right, hold, and exhale through the left. **That's one cycle.**",
+    resumen: [
+      "You're going to breathe alternating your nostrils: the air comes in through one and goes out through the other.",
+      "Close the right one with your thumb and the left one with your ring finger, and keep switching.",
+      "Vata is fast and scattered: what suits it isn't silence, it's a rhythm to hold on to.",
+      "Follow the circle: it tells you when the air comes in and when it goes out.",
     ],
     precaucion: "If you're very congested, do it in your mind only: picture the air coming in through one nostril and out through the other.",
     ciclos: 6,
@@ -36,27 +31,19 @@ export const PRANAYAMA_PRACTICA_EN: Partial<Record<DoshaKey, PracticaPranayama>>
       { tipo: "exhala",  texto: "Exhale through the left",         segundos: 6 },
     ],
     foto: "",
-    escrito: [
-      "Vata doesn't settle by force, it settles by rhythm. What you've just given your mind isn't silence: it's a beat to come back to whenever it scatters.",
-      "That's why this practice works better at the same hour as yesterday than for a long stretch on one single day.",
-    ],
     preguntas: [
       "At what point did you notice your mind wandering off? Where did it go?",
       "What settled more by the end: your body, your head, or neither of the two?",
     ],
   },
   pitta: {
-    nombre: "Śītalī",
-    traduccion: "Cooling breath — «the one that cools»",
-    porQue: "Pitta is fire: hot and sharp. Śītalī is one of the very few techniques that **really cool you down** — the air comes in over a moist tongue and arrives tempered.",
-    pasos: [
-      "Long spine, jaw loose.",
-      "Stick your tongue out a little and **roll it into a small channel**. If you can't (it's genetic), press your teeth together and smile: that's *Śītkārī* and it works just as well.",
-      "**Inhale through your tongue**, as if you were sipping the air. You'll feel the coolness.",
-      "Bring your tongue in, close your mouth and hold for an instant.",
-      "**Exhale through your nose**, slowly. That's one cycle.",
+    resumen: [
+      "You're going to inhale through your mouth, with your tongue rolled into a little channel, and exhale through your nose.",
+      "If you can't roll it, press your teeth together and smile: it works just the same.",
+      "Pitta is heat, and this is one of the very few breaths that really do cool you down.",
+      "Follow the circle: it tells you when the air comes in and when it goes out.",
     ],
-    precaucion: "Don't do it when you're cold, when you have a cold, or with a cough: it really does cool you down. In winter, swap it for slow diaphragmatic breathing.",
+    precaucion: "Don't do it when you're cold, when you have a cold, or with a cough: it really does cool you down. In winter, swap it for slow breathing through your nose.",
     ciclos: 8,
     fases: [
       { tipo: "inhala", texto: "Inhale through your rolled tongue", segundos: 4 },
@@ -64,24 +51,17 @@ export const PRANAYAMA_PRACTICA_EN: Partial<Record<DoshaKey, PracticaPranayama>>
       { tipo: "exhala", texto: "Exhale through your nose, long",   segundos: 6 },
     ],
     foto: "",
-    escrito: [
-      "Pitta doesn't need to understand better: it needs to bring the temperature down. You've just done something that can't be done by effort, and that's exactly the point.",
-      "If you caught yourself wanting to do it well, that hurry for a good grade is Pitta too.",
-    ],
     preguntas: [
       "Where was the heat before you started: your head, your chest, your stomach, your jaw?",
       "Which was harder, the coolness of the inhale or letting go of control on the exhale?",
     ],
   },
   kapha: {
-    nombre: "Bhastrikā",
-    traduccion: "Bellows breath — «the one that lights the fire»",
-    porQue: "Kapha is heavy and slow. Bhastrikā is a bellows: it **moves, warms and clears**. The only one of the three that raises your energy instead of lowering it.",
-    pasos: [
-      "Straight spine, hands on your knees.",
-      "Inhale and exhale through your nose **strongly and at the same pace**, one breath a second, moving your belly like a bellows.",
-      "It's the abdomen, not the shoulders: if they start rising, slow down.",
-      "When the round ends, **come back to your normal breath** and stay still. That's where the interesting part happens.",
+    resumen: [
+      "You're going to breathe fast through your nose, strongly, moving your belly like a bellows.",
+      "It's the abdomen doing the work, not the shoulders: if they start rising, slow down.",
+      "Kapha is heavy and slow, and this moves it, warms it and clears it.",
+      "After each round you come back to your normal breath: that's where the interesting part happens.",
     ],
     precaucion: "Don't do it while pregnant, with high blood pressure, with heart problems, glaucoma, epilepsy, or during your period. If you get dizzy, stop: you were going too fast.",
     ciclos: 3,
@@ -90,10 +70,6 @@ export const PRANAYAMA_PRACTICA_EN: Partial<Record<DoshaKey, PracticaPranayama>>
       { tipo: "descanso",  texto: "Let go. Breathe normally and notice",     segundos: 20 },
     ],
     foto: "",
-    escrito: [
-      "Kapha doesn't start because it's convinced, it starts because it moves. The interesting part of Bhastrikā isn't the bellows: it's the silence afterwards, when the body is still lit up and no longer doing anything.",
-      "That's where you notice the heaviness was never you.",
-    ],
     preguntas: [
       "What felt like more of a drag: starting, or starting the second round?",
       "How was your body in the rest, once there was nothing left to do?",
@@ -101,18 +77,9 @@ export const PRANAYAMA_PRACTICA_EN: Partial<Record<DoshaKey, PracticaPranayama>>
   },
 };
 
-/** Lo imparcial de después, en inglés. Las opciones van en el MISMO orden. */
+/** Lo imparcial de después, en inglés: solo el título del box de preguntas. */
 export const PRANAYAMA_REFLEXION_EN: typeof PRANAYAMA_REFLEXION = {
   titulo: "After breathing",
-  compromisoTitulo: "Your moment",
-  compromisoIntro: "The practice that actually happens is the one with a fixed slot. Choose yours:",
-  compromisos: [
-    "Right after waking up, before I pick up my phone",
-    "Mid-morning, to break the inertia",
-    "Before lunch, so I come to the table whole",
-    "When I finish work, to close the day",
-    "Before sleep, in bed",
-  ],
 };
 
 export const PRANAYAMA_CIERRE_EN: typeof PRANAYAMA_CIERRE = [

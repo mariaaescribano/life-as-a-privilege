@@ -32,11 +32,15 @@ export function CursoCardDetalle({
   color,
   bgColor,
   nom,
+  prioritaria = true,
 }: {
   curso: Curso;
   color: string;
   bgColor: string;
   nom: string;
+  /** ¿Está en la primera pantalla? Si no, su portada espera a acercarse
+   *  (`loading="lazy"`) en vez de bajar con las demás. */
+  prioritaria?: boolean;
 }) {
   const navigate = useNavigate();
   const t = useT();
@@ -96,6 +100,7 @@ export function CursoCardDetalle({
         sx={{ aspectRatio: "16 / 9" }}
       >
         <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block"
+          loading={prioritaria ? "eager" : "lazy"}
                onLoad={() => setFotoOk(true)}
                opacity={fotoOk ? 1 : 0} transition="opacity 0.5s ease" />
         {!fotoOk && (

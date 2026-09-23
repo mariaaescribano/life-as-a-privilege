@@ -226,6 +226,17 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
   const elegidos = personaSimbolos(p);
   const completo = elegidos.length >= SIMBOLOS_POR_PERSONA;
 
+  // ── El popup tiene DOS pasos, uno debajo del otro, en un solo scroll ──
+  //   1 · ¿Quién es?            foto, nombre y parentesco (con sus 18 atajos)
+  //   2 · ¿A quién se parece?   el catálogo de personajes y animales
+  //
+  // El primero se PLIEGA en cuanto se sabe a quién estamos definiendo: la lista
+  // de parentescos son cuatro filas de chapas y, una vez elegido el suyo, solo
+  // estorban. Plegado deja una línea con la foto, el nombre y el parentesco, y
+  // un botón para volver a abrirlo. Así el catálogo —que es a lo que se viene—
+  // se lleva el popup entero en vez de un carril de 200 px.
+  const [identidadAbierta, setIdentidadAbierta] = useState(!(p.parentesco || "").trim());
+
   // Tocar una imagen la elige; volver a tocarla la quita. Con las dos ya
   // elegidas, las demás quedan apagadas hasta que quite una (así nunca se
   // sustituye por sorpresa lo que acaba de elegir).
@@ -237,6 +248,21 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
     if (completo) return;
     onCampo({ simbolos: [...elegidos, key] });
   };
+
+  /** Rótulo de paso: «1 · ¿Quién es?». El número ordena la lectura sin gastar
+   *  una línea de instrucciones. */
+  const Paso = ({ n, titulo }: { n: number; titulo: string }) => (
+    <Flex align="center" gap={2.5} minW={0}>
+      <Flex flexShrink={0} align="center" justify="center" w="26px" h="26px" borderRadius="full"
+            bg={`${TINTA}1f`} border={`1px solid ${TINTA}55`}>
+        <Text color={TINTA} fontSize="sm" fontWeight="700" lineHeight="1">{n}</Text>
+      </Flex>
+      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.25"
+            noOfLines={1} style={{ textShadow: INK_SHADOW }}>
+        {titulo}
+      </Text>
+    </Flex>
+  );
 
   return (
     <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
@@ -259,127 +285,189 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
           </Flex>
         ) : (
         <>
-        {/* Cerrar */}
-        <Box as="button" onClick={onClose} position="absolute" top={3} right={3} zIndex={3}
-             w="38px" h="38px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
+        {/* Cerrar — flota sobre el contenido, que ahora scrollea entero */}
+        <Box as="button" onClick={onClose} position="absolute" top={3} right={3} zIndex={4}
+             w="38px" h="38px" borderRadius="full" bg="rgba(255,251,243,0.85)" border={`1px solid ${TINTA}44`}
              color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="lg" cursor="pointer"
-             _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>
+             sx={{ backdropFilter: "blur(4px)" }}
+             _hover={{ bg: "rgba(255,251,243,1)", borderColor: TINTA }}>
           ✕
         </Box>
 
-        {/* Cabecera: quién es */}
-        <Box position="relative" zIndex={1} flexShrink={0} borderBottom={`1px solid ${TINTA}55`}
-             px={{ base: 5, md: 8 }} pt={{ base: 6, md: 7 }} pb={{ base: 4, md: 5 }}>
-          <Flex align="center" gap={{ base: 4, md: 5 }}>
-            <FotoPersonaBoton
-              foto={p.foto}
-              alt={personaLabel(p)}
-              onSubida={(url) => onCampo({ foto: url })}
-              onError={setError}
-            />
-            <Flex direction="column" gap={2} flex="1" minW={0} pr={9}>
-              <Input
-                value={p.nombre}
-                onChange={(e) => onCampo({ nombre: e.target.value })}
-                placeholder={t("metodo.psico.suNombre")}
-                bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                borderRadius="lg" fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                sx={{ caretColor: TINTA }}
-                _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 400 }}
-                _hover={{ borderColor: `${TINTA}55` }}
-                _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
-              />
-              <Input
-                value={p.parentesco || ""}
-                onChange={(e) => onCampo({ parentesco: e.target.value })}
-                placeholder={t("metodo.psico.parentesco")}
-                bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
-                sx={{ caretColor: TINTA }}
-                _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                _hover={{ borderColor: `${TINTA}55` }}
-                _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.9)" }}
-              />
-            </Flex>
-          </Flex>
-
-          {error && (
-            <Text color="#8c2f13" fontSize="md" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
-              {error}
-            </Text>
-          )}
-
-          {/* Parentescos sugeridos */}
-          <Flex wrap="wrap" gap={1.5} mt={3}>
-            {genograma.parentescos.map((par) => (
-              <Box as="button" key={par} onClick={() => onCampo({ parentesco: par })}
-                   px={3} py={1.5} borderRadius="full"
-                   bg={p.parentesco === par ? TINTA : "rgba(255,251,243,0.72)"}
-                   border={`1px solid ${p.parentesco === par ? TINTA : `${TINTA}33`}`}
-                   cursor="pointer" transition="all 0.15s"
-                   _hover={{ borderColor: TINTA, transform: "translateY(-1px)" }}>
-                <Text color={p.parentesco === par ? PAPEL : TINTA} fontSize="sm" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
-                  {par}
-                </Text>
-              </Box>
-            ))}
-          </Flex>
-        </Box>
-
-        {/* Cuerpo scrollable: el selector de personajes/animales */}
+        {/* ── UN SOLO scroll vertical para todo el popup ── */}
         <Box position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
-             px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}
              sx={scrollAcuarela(TINTA)}>
 
-          <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3"
-                style={{ textShadow: INK_SHADOW }}>
-            {familia.eligeTitulo}
-          </Text>
-          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} mt={1} lineHeight="1.6"
-                style={{ textShadow: INK_SHADOW }}>
-            {familia.eligeApoyo}
-          </Text>
-
-          {/* Cuántas lleva elegidas */}
-          <Flex align="center" gap={2} mt={3}>
-            <Text color={TINTA} fontSize="xs" fontWeight="700" letterSpacing="0.14em" textTransform="uppercase"
-                  opacity={0.7} style={{ textShadow: INK_SHADOW }}>
-              {elegidos.length} de {SIMBOLOS_POR_PERSONA} elegidas
-            </Text>
-            {completo && (
-              <Text color={TINTA} fontSize="xs" fontStyle="italic" opacity={0.7} style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.tocaParaCambiarla")}</Text>
-            )}
-          </Flex>
-
-          {/* Rejilla por grupos (Animales / Personajes) */}
-          <Flex direction="column" gap={{ base: 5, md: 6 }} mt={4}>
-            {SIMBOLOS_GRUPOS.map((grupo) => {
-              const delGrupo = simbolos.filter((s) => s.grupo === grupo);
-              if (delGrupo.length === 0) return null;
-              return (
-                <Box key={grupo}>
-                  <Text color={TINTA} fontSize="xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
-                        opacity={0.65} mb={2.5} style={{ textShadow: INK_SHADOW }}>
-                    {grupoRotulo(grupo)}
-                  </Text>
-                  <Box display="grid" gap={{ base: 2.5, md: 3 }}
-                       gridTemplateColumns={{ base: "repeat(auto-fill, minmax(76px, 1fr))",
-                                              md: "repeat(auto-fill, minmax(88px, 1fr))" }}>
-                    {delGrupo.map((s) => (
-                      <TarjetaSimbolo
-                        key={s.key}
-                        s={s}
-                        elegido={elegidos.includes(s.key)}
-                        apagado={completo && !elegidos.includes(s.key)}
-                        onClick={() => toggleSimbolo(s.key)}
-                      />
-                    ))}
-                  </Box>
+          {/* ── PASO 1 · ¿Quién es? ── */}
+          <Box px={{ base: 5, md: 8 }} pt={{ base: 6, md: 7 }} pb={{ base: 4, md: 5 }}>
+            {identidadAbierta ? (
+              <>
+                <Box pr={10}>
+                  <Paso n={1} titulo={t("metodo.psico.familiaQuienEs")} />
                 </Box>
-              );
-            })}
-          </Flex>
+
+                <Flex align="center" gap={{ base: 4, md: 5 }} mt={4}>
+                  <FotoPersonaBoton
+                    foto={p.foto}
+                    alt={personaLabel(p)}
+                    onSubida={(url) => onCampo({ foto: url })}
+                    onError={setError}
+                  />
+                  <Flex direction="column" gap={2} flex="1" minW={0}>
+                    <Input
+                      value={p.nombre}
+                      onChange={(e) => onCampo({ nombre: e.target.value })}
+                      placeholder={t("metodo.psico.suNombre")}
+                      bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                      borderRadius="lg" fontFamily="'EB Garamond', serif"
+                      fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+                      sx={{ caretColor: TINTA }}
+                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 400 }}
+                      _hover={{ borderColor: `${TINTA}55` }}
+                      _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
+                    />
+                    <Input
+                      value={p.parentesco || ""}
+                      onChange={(e) => onCampo({ parentesco: e.target.value })}
+                      placeholder={t("metodo.psico.parentesco")}
+                      bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                      borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
+                      sx={{ caretColor: TINTA }}
+                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                      _hover={{ borderColor: `${TINTA}55` }}
+                      _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.9)" }}
+                    />
+                  </Flex>
+                </Flex>
+
+                {error && (
+                  <Text color="#8c2f13" fontSize="md" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
+                    {error}
+                  </Text>
+                )}
+
+                {/* Parentescos sugeridos: al tocar uno ya sabemos a quién
+                    estamos definiendo, así que el paso se pliega solo. */}
+                <Flex wrap="wrap" gap={1.5} mt={3.5}>
+                  {genograma.parentescos.map((par) => (
+                    <Box as="button" key={par}
+                         onClick={() => { onCampo({ parentesco: par }); setIdentidadAbierta(false); }}
+                         px={3} py={1.5} borderRadius="full"
+                         bg={p.parentesco === par ? TINTA : "rgba(255,251,243,0.72)"}
+                         border={`1px solid ${p.parentesco === par ? TINTA : `${TINTA}33`}`}
+                         cursor="pointer" transition="all 0.15s"
+                         _hover={{ borderColor: TINTA, transform: "translateY(-1px)" }}>
+                      <Text color={p.parentesco === par ? PAPEL : TINTA} fontSize="sm" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
+                        {par}
+                      </Text>
+                    </Box>
+                  ))}
+                </Flex>
+
+                {/* Con el parentesco escrito a mano se puede plegar sin tocar
+                    ninguna chapa. */}
+                {!!(p.parentesco || "").trim() && (
+                  <Flex justify="flex-end" mt={3}>
+                    <Box as="button" onClick={() => setIdentidadAbierta(false)}
+                         px={4} py={1.5} borderRadius="full" bg="transparent"
+                         border={`1px solid ${TINTA}55`} color={TINTA}
+                         fontFamily="'EB Garamond', serif" fontSize="sm" fontWeight="700"
+                         cursor="pointer" transition="all 0.18s" _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>
+                      {t("metodo.psico.familiaListo")}
+                    </Box>
+                  </Flex>
+                )}
+              </>
+            ) : (
+              // ── Plegado: quién es, en una línea, y el lápiz para corregirlo ──
+              <Flex align="center" gap={3} pr={10}>
+                <FotoPersonaBoton
+                  foto={p.foto}
+                  alt={personaLabel(p)}
+                  onSubida={(url) => onCampo({ foto: url })}
+                  onError={setError}
+                  size={{ base: "48px", md: "52px" }}
+                />
+                <Box flex="1" minW={0}>
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" noOfLines={1}
+                        style={{ textShadow: INK_SHADOW }}>
+                    {personaLabel(p)}
+                  </Text>
+                  {!!(p.parentesco || "").trim() && !!(p.nombre || "").trim() && (
+                    <Text color={TINTA} fontSize="sm" opacity={0.75} noOfLines={1}
+                          style={{ textShadow: INK_SHADOW }}>
+                      {p.parentesco}
+                    </Text>
+                  )}
+                </Box>
+                <Box as="button" onClick={() => setIdentidadAbierta(true)}
+                     flexShrink={0} display="inline-flex" alignItems="center" gap={1.5}
+                     px={3} py={1.5} borderRadius="full" bg="rgba(255,251,243,0.72)"
+                     border={`1px solid ${TINTA}33`} color={TINTA}
+                     fontFamily="'EB Garamond', serif" fontSize="sm" fontWeight="700"
+                     cursor="pointer" transition="all 0.18s"
+                     _hover={{ borderColor: TINTA, transform: "translateY(-1px)" }}>
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                       w="13px" h="13px" fill="currentColor" flexShrink={0}>
+                    <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                  </Box>
+                  {t("metodo.psico.familiaEditar")}
+                </Box>
+              </Flex>
+            )}
+          </Box>
+
+          <Box h="1px" mx={{ base: 5, md: 8 }} bg={`${TINTA}44`} />
+
+          {/* ── PASO 2 · ¿A quién se parece? ── */}
+          <Box px={{ base: 5, md: 8 }} pt={{ base: 5, md: 6 }} pb={{ base: 5, md: 6 }}>
+            <Flex align="center" justify="space-between" gap={3} wrap="wrap">
+              <Paso n={2} titulo={familia.eligeTitulo} />
+              {/* Cuántas lleva elegidas, en una chapa: se lee de un vistazo y no
+                  gasta una línea propia. */}
+              <Flex flexShrink={0} align="center" px={3} py={1} borderRadius="full"
+                    bg={completo ? TINTA : "rgba(255,251,243,0.72)"}
+                    border={`1px solid ${completo ? TINTA : `${TINTA}33`}`}>
+                <Text color={completo ? PAPEL : TINTA} fontSize="xs" fontWeight="700" letterSpacing="0.1em">
+                  {elegidos.length}/{SIMBOLOS_POR_PERSONA}
+                </Text>
+              </Flex>
+            </Flex>
+
+            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} opacity={0.85} mt={2} lineHeight="1.6"
+                  style={{ textShadow: INK_SHADOW }}>
+              {completo ? t("metodo.psico.tocaParaCambiarla") : familia.eligeApoyo}
+            </Text>
+
+            {/* Rejilla por grupos (Animales / Personajes) */}
+            <Flex direction="column" gap={{ base: 5, md: 6 }} mt={4}>
+              {SIMBOLOS_GRUPOS.map((grupo) => {
+                const delGrupo = simbolos.filter((s) => s.grupo === grupo);
+                if (delGrupo.length === 0) return null;
+                return (
+                  <Box key={grupo}>
+                    <Text color={TINTA} fontSize="xs" fontWeight="700" letterSpacing="0.18em" textTransform="uppercase"
+                          opacity={0.65} mb={2.5} style={{ textShadow: INK_SHADOW }}>
+                      {grupoRotulo(grupo)}
+                    </Text>
+                    <Box display="grid" gap={{ base: 2.5, md: 3 }}
+                         gridTemplateColumns={{ base: "repeat(auto-fill, minmax(76px, 1fr))",
+                                                md: "repeat(auto-fill, minmax(88px, 1fr))" }}>
+                      {delGrupo.map((s) => (
+                        <TarjetaSimbolo
+                          key={s.key}
+                          s={s}
+                          elegido={elegidos.includes(s.key)}
+                          apagado={completo && !elegidos.includes(s.key)}
+                          onClick={() => toggleSimbolo(s.key)}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Flex>
+          </Box>
         </Box>
 
         {/* Footer: quitar del mapa · hecho */}

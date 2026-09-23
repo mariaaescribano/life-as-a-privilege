@@ -97,11 +97,14 @@
     <loc>https://lifeasaprivilege.onrender.com/ilustraciones/cultura</loc>
     <priority>0.6</priority>
   </url>
-  <!-- Estudio estadístico de astrología: público, sin cuenta. -->
+  <!-- Estudio estadístico de astrología: apartado aparcado, sus rutas están
+       comentadas en App.tsx. Se saca del sitemap para no mandar a Google a una
+       página que ya no existe.
   <url>
     <loc>https://lifeasaprivilege.onrender.com/estudio</loc>
     <priority>0.5</priority>
   </url>
+  -->
   <url>
     <loc>https://lifeasaprivilege.onrender.com/materiales</loc>
     <priority>0.6</priority>

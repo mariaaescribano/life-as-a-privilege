@@ -2,8 +2,8 @@ import type { Vineta } from "./ComicViewer";
 
 // Cómic de transición «Las calorías no existen» (moléculas / ATP / valores
 // nutricionales). Va ENTRE la portada de Nutrición (/metodo/nutricion) y la
-// pantalla de Los nutrientes (/metodo/nutricion/nutrientes): se abre al pulsar
-// «Comenzar» y termina navegando a nutrientes.
+// pantalla de los Macronutrientes (/metodo/nutricion/macronutrientes): se abre
+// al pulsar «Comenzar» y termina navegando allí.
 //
 // Imágenes: /viñetas/nutricion/calorias/calorias1.png … calorias9.png
 // (mientras no existan, el ComicViewer pinta un placeholder «próximamente»).

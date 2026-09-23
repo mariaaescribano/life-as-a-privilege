@@ -57,7 +57,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // sigue existiendo como cuarta caja de Materiales.
   // const isProgramasPage = path.startsWith("/programas");
   const isContactoPage = path.startsWith("/contacto");
-  const isEstudioPage = path.startsWith("/estudio");
+  // const isEstudioPage = path.startsWith("/estudio");   // estudio aparcado
   // Vídeos: apartado aparcado (ver más abajo, en los destinos del menú).
   // const isVideosPage = path.startsWith("/videos");
   // La última opción del menú: con sesión es «Mi cuenta», sin ella «Iniciar
@@ -110,7 +110,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
           // { etiqueta: t("header.programas"),  onSelect: () => navigate("/programas"),    activo: isProgramasPage },
           // { etiqueta: t("header.videos"),     onSelect: () => navigate("/videos"),       activo: isVideosPage },
-          { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),      activo: isEstudioPage },
+          // { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),      activo: isEstudioPage },
           { etiqueta: t("header.contacto"),   onSelect: () => navigate("/contacto"),     activo: isContactoPage },
           { etiqueta: t("header.miCuenta"),   onSelect: () => navigate("/user/account"), activo: isCuentaPage },
         ]
@@ -119,7 +119,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         { etiqueta: t("header.materiales"),    onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
         // { etiqueta: t("header.programas"),     onSelect: () => navigate("/programas"),  activo: isProgramasPage },
         // { etiqueta: t("header.videos"),        onSelect: () => navigate("/videos"),     activo: isVideosPage },
-        { etiqueta: t("header.estudio"),       onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
+        // { etiqueta: t("header.estudio"),       onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
         { etiqueta: t("header.contacto"),      onSelect: () => navigate("/contacto"),   activo: isContactoPage },
         { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn") },
       ];

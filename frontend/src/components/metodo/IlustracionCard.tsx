@@ -58,6 +58,10 @@ export function IlustracionCard({
   // acento del cómic (themeColor).
   const c = entry.cardColor ?? entry.themeColor;
   const retraso = (i % columnas) * 0.08;
+  // Las dos primeras filas son lo que se ve sin bajar: sus portadas se piden ya.
+  // El resto espera a acercarse (`loading="lazy"`), que además es justo cuando
+  // la tarjeta se enciende con su reveal — para cuando llegas, la foto está.
+  const portadaPrioritaria = i < columnas * 2;
   return (
     <Box
       ref={ref}
@@ -100,7 +104,7 @@ export function IlustracionCard({
             as="img"
             src={encodeURI(entry.cover)}
             alt={entry.titulo}
-            loading="eager"
+            loading={portadaPrioritaria ? "eager" : "lazy"}
             position="absolute"
             inset="0"
             w="100%"

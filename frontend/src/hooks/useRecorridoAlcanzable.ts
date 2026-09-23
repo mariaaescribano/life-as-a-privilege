@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { flushSaves } from "../utils/flushSaves";
 
 /**
  * Calcula «hasta dónde puede llegar» el usuario en un recorrido: descarga los
@@ -31,6 +32,10 @@ export function useRecorridoAlcanzable(
 
   useEffect(() => {
     if (!activo) return;
+    // Cada vez que se ABRE el Índice se vuelve a preguntar: así lo que la usuaria
+    // acaba de responder en esta misma página ya cuenta. Mientras tanto, el
+    // Índice enseña su animación de espera en vez de la foto anterior.
+    setCargado(false);
     const u = urlRef.current;
     const c = computarRef.current;
     const userId = localStorage.getItem("userId");
@@ -38,8 +43,11 @@ export function useRecorridoAlcanzable(
     // Nada que consultar (sin endpoint/función o sin sesión): se da por revisado.
     if (!u || !c || !userId || !token) { setCargado(true); return; }
     let cancel = false;
-    axios
-      .get(u(userId), { headers: { Authorization: `Bearer ${token}` } })
+    // Antes de leer, esperamos a que terminen los guardados en vuelo de la
+    // página actual: si no, el Índice leería el progreso de ANTES de la última
+    // respuesta y enseñaría un candado de más (ver flushSaves).
+    flushSaves()
+      .then(() => axios.get(u(userId), { headers: { Authorization: `Bearer ${token}` } }))
       .then((r) => { if (!cancel) setMaxAlcanzable(c(r.data?.data || {}, expId)); })
       .catch(() => { /* deja el valor previo; el Índice cae en pasoMax */ })
       .finally(() => { if (!cancel) setCargado(true); });

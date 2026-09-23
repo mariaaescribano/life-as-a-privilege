@@ -121,7 +121,9 @@ export default function MetodoAyurvedaChakras() {
       <SiteHeader variant="private" />
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1150px" gap={{ base: 6, md: 8 }}>
+        {/* El ancho de la columna es el del header (su `maxW` por defecto):
+            así las siete cajas no se salen por los lados de la cabecera. */}
+        <Flex direction="column" align="center" w="100%" maxW="850px" gap={{ base: 6, md: 8 }}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader

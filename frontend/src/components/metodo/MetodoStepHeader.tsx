@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import { Box, Flex, Text, Tooltip, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { astrologiaNom, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { Float } from "../global/Reveal";
@@ -123,9 +123,13 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       as="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      // Solo flecha (móvil): el botón se queda redondo, con el mismo hueco a
-      // los dos lados en vez del ancho que pedía el texto.
-      px={soloFlecha ? (small ? 2 : dense ? 3 : 3.5) : small ? { base: 2, md: 3.5 } : dense ? { base: 2.5, sm: 4, md: 6 } : { base: 3, sm: 5, md: 8 }}
+      // Botón lateral (anterior/siguiente): en MÓVIL se queda redondo con solo
+      // la flecha, y de `md` en adelante recupera su ancho y su nombre. El
+      // reparto lo hace el CSS (no un `useBreakpointValue`): así sale bien ya en
+      // el primer fotograma, sin el parpadeo de pintar el nombre y quitarlo.
+      px={soloFlecha
+        ? (small ? { base: 2, md: 3.5 } : dense ? { base: 3, md: 6 } : { base: 3.5, md: 8 })
+        : small ? { base: 2, md: 3.5 } : dense ? { base: 2.5, sm: 4, md: 6 } : { base: 3, sm: 5, md: 8 }}
       py={small ? { base: 1, md: 1.5 } : dense ? { base: 1.5, md: 2 } : { base: 2, md: 3 }}
       borderRadius="full"
       bg={disabled ? (whiteBg ? "rgba(255,255,255,0.14)" : `${c}12`) : baseBg}
@@ -178,7 +182,18 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       flex="0 1 auto"
     >
       {soloFlecha ? (
-        <ArrowIcon dir={soloFlecha} />
+        <>
+          {soloFlecha === "prev" && <ArrowIcon dir="prev" />}
+          {/* El nombre desaparece en móvil: en una fila de tres botones, «← Los
+              elementos» y «Planetas →» se estrujaban hasta quedar ilegibles. El
+              de en medio (Cómic, Ilustraciones, Cursos…) sí lo conserva: ese no
+              se adivina por una flecha. */}
+          <Box as="span" display={{ base: "none", md: "inline-flex" }} alignItems="center" gap={2} minW={0}>
+            {icon}
+            {label}
+          </Box>
+          {soloFlecha === "next" && <ArrowIcon dir="next" />}
+        </>
       ) : (
         <>
           {arrow === "prev" && <ArrowIcon dir="prev" />}
@@ -271,7 +286,7 @@ export function MetodoStepHeader({
   // (redonda), que es lo único que hace falta para saber a dónde llevan. Los
   // botones de en medio (Cómic, Ilustraciones, Cursos…) SÍ conservan su
   // nombre: son los que no se adivinan.
-  const soloFlechas = useBreakpointValue({ base: true, md: false }, { ssr: false }) ?? false;
+  // (El reparto móvil/escritorio lo hace el CSS dentro de StepBtn.)
   // bgColor suele venir con alpha pegado (#RRGGBBaa). Para el textShadow
   // queremos solo #RRGGBB y aplicar nuestras propias alphas.
   const bgHex = bgColor.length >= 7 ? bgColor.slice(0, 7) : bgColor;
@@ -460,11 +475,11 @@ export function MetodoStepHeader({
             direction="row"
             wrap="nowrap"
           >
-            {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={soloFlechas ? prev.arrow ?? "prev" : undefined} />}
+            {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={prev.arrow ?? "prev"} />}
             {extra && <StepBtn {...extra} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
-            {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={soloFlechas ? next.arrow ?? "next" : undefined} />}
+            {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={next.arrow ?? "next"} />}
           </Flex>
         )}
       </Box>

@@ -319,11 +319,18 @@ export default function ProgramasPage() {
     return () => clearTimeout(id);
   }, []);
 
-  // Solo las disciplinas que tienen programas, en el orden de siempre.
+  // Solo lo PUBLICADO: un programa sin diapositivas y sin podcast no tiene
+  // nada que enseñar todavía, y una disciplina entera sin publicar no abre una
+  // caja vacía —se cae sola del índice y vuelve el día que se publique el
+  // primero. La lista de `programas.ts` sigue completa: es el guion de lo que
+  // falta, no lo que se enseña.
   const bloques = useMemo(
     () =>
       DISCIPLINAS_CURSO
-        .map((d) => ({ disciplina: d, lista: programasDe(d.slug) }))
+        .map((d) => ({
+          disciplina: d,
+          lista: programasDe(d.slug).filter((p) => tieneDiapositivas(p) || tienePodcast(p)),
+        }))
         .filter((b) => b.lista.length > 0),
     []
   );

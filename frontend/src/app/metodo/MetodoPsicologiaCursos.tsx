@@ -52,7 +52,8 @@ export default function MetodoPsicologiaCursos() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState(false);
+  // null = aún no se sabe (ver MetodoAyurvedaDoshaCursos).
+  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState<boolean | null>(null);
   const [pagoOpen, setPagoOpen] = useState(false);
   const [pagoLoading, setPagoLoading] = useState(false);
   const [pagoError, setPagoError] = useState<string | null>(null);
@@ -81,8 +82,8 @@ export default function MetodoPsicologiaCursos() {
 
   // Enlace con Ayurveda: abre el pago si aún no está desbloqueado.
   const onAyurveda = () => {
-    if (ayurvedaSuscrito) navigate("/metodo/ayurveda");
-    else { setPagoError(null); setPagoOpen(true); }
+    if (ayurvedaSuscrito === false) { setPagoError(null); setPagoOpen(true); }
+    else navigate("/metodo/ayurveda");
   };
 
   const pagarAyurveda = async () => {

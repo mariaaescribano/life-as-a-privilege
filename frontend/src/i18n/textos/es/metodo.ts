@@ -109,9 +109,10 @@ export const metodo = {
   // botón de ir (`Nombre →`) y para el de volver (`← Nombre`), que es como
   // aparece en cada página vecina. Así un paso se escribe una vez.
   "metodo.nutri.paso.nutricion": "Nutrición",
-  "metodo.nutri.paso.nutrientes": "Los nutrientes",
-  "metodo.nutri.paso.secundarios": "Nutrientes secundarios",
-  "metodo.nutri.paso.secundariosCorto": "Secundarios",
+  "metodo.nutri.paso.macro": "Macronutrientes",
+  "metodo.nutri.paso.macroCorto": "Macro",
+  "metodo.nutri.paso.micro": "Micronutrientes",
+  "metodo.nutri.paso.microCorto": "Micro",
   "metodo.nutri.paso.microbiota": "Microbiota",
   "metodo.nutri.paso.hambre": "El hambre",
   "metodo.nutri.paso.ultraprocesados": "Los ultraprocesados",
@@ -133,7 +134,7 @@ export const metodo = {
    *  ordenadas por lo sólido que es el dato. Si se reescribe algo de aquí,
    *  que no se pierda eso. */
   "metodo.nutri.ultra.tesis":
-    "El problema no es una molécula escondida: es lo que le han hecho a la comida.",
+    "",
   "metodo.nutri.ultra.intro":
     "Un ultraprocesado no es comida con cosas añadidas. Es una formulación industrial hecha con sustancias que ya no reconocerías por separado, diseñada para que sea barata, dure meses y no puedas parar. Vamos a mirar de qué está hecha.",
   "metodo.nutri.ultra.ensayoEtiqueta": "El experimento que lo demostró",
@@ -178,8 +179,16 @@ export const metodo = {
   // ── Nutrición · sueltos de los pasos ───────────────────────────────────
   "metodo.nutri.entendido": "Entendido",
   "metodo.nutri.tocaMolecula": "Toca cada molécula para ver qué hace dentro de ti.",
-  "metodo.nutri.tocaGrupo":
-    "Toca cada grupo para descubrir sus tipos, qué hacen dentro de ti y dónde encontrarlo.",
+  // Entradilla de cada una de las dos páginas de nutrientes.
+  "metodo.nutri.macroIntro":
+    "Se miden en gramos y son los que llenan el plato: de ellos sale la energía y con ellos se construye el cuerpo. Toca cada grupo para ver sus tipos, qué hacen dentro de ti y dónde encontrarlo.",
+  "metodo.nutri.microIntro":
+    "Se miden en miligramos y microgramos, no aportan ni una caloría y, sin ellos, nada de lo anterior funciona. Toca cada grupo para descubrirlos.",
+  "metodo.nutri.macroBloqueo": "Revisa todos los macronutrientes para desbloquear",
+  "metodo.nutri.microBloqueo": "Descubre todos los micronutrientes primero",
+  // La senda de los nutrientes (SendaNutrientes): se andan en fila.
+  "metodo.nutri.senda.progreso": "{hechos} de {total} del camino",
+  "metodo.nutri.senda.bloqueado": "Lee el grupo anterior para abrir este",
   "metodo.nutri.verIlustracion": "Ver ilustración",
   "metodo.nutri.foto": "Foto",
   "metodo.nutri.crearAlimento": "Crea tu alimento",
@@ -311,7 +320,7 @@ export const metodo = {
   "metodo.astro.pulsaEstrella": "Pulsa sobre cada estrella para descubrir tus puntos clave.",
   "metodo.astro.puntosClavePronto": "Tus puntos clave aparecerán aquí muy pronto.",
   "metodo.astro.llamadaIntro":
-    "Integra tus arquetipos: agenda una llamada y no te quedes con dudas.",
+    "Haz las paces contigo. Agenda una llamada y no te quedes con dudas. Todo lo que has descubierto son partes de ti. Ahora, intégralas.",
   "metodo.astro.pdfIntro": "Tu lectura entera, en un archivo que ya es tuyo para siempre.",
   "metodo.astro.pdfTitular": "Toda tu carta, página a página",
   "metodo.astro.pdfSinLecturas":
@@ -370,6 +379,14 @@ export const metodo = {
   "metodo.astro.lugarEj": "Ej: Madrid",
   "metodo.astro.region": "Región / provincia",
   "metodo.astro.regionEj": "Ej: Comunidad de Madrid",
+  // ── El tercer cómic de la entrada: «¿Qué es una carta astral?» ──
+  // ── Volver a los datos desde «Lo primero de tu carta» ──
+  "metodo.astro.comicPlanetas": "Planetas",
+  "metodo.astro.corregirAviso": "¿No te reconoces en tu Sol, tu Luna o tu Ascendente? Casi siempre es la hora o el lugar de nacimiento. Corrígelos y tu carta se calcula de nuevo.",
+  "metodo.astro.corregirDatos": "Corregir mis datos de nacimiento",
+  "metodo.astro.queEsCarta": "¿Qué es una carta astral?",
+  "metodo.astro.queEsCartaResumen": "Dónde están tus mayores capacidades, tus dones, tus dificultades y cuál es el propósito de tu Vida. También tus heridas más profundas y dónde fueron creadas.",
+  "metodo.astro.queEsCartaLeer": "Leerlo de nuevo",
   "metodo.astro.cambiar": "Cambiar",
   "metodo.astro.seguroDatos": "¿Seguro que estos son tus datos?",
   "metodo.astro.volverRevisar": "Volver a revisar",
@@ -630,18 +647,25 @@ export const metodo = {
   "metodo.tcm.paso.constitucion": "Tu Constitución",
 
   // ── Medicina China · Tu Constitución (paso 3) ──────────────────────────
-  // Los textos de las cinco constituciones y las 200 frases del test NO están
+  // Los textos de las cinco constituciones y las frases del test NO están
   // aquí: son contenido y viven en tcmConstitucion.ts (en español, como los
   // tres cuestionarios de cada elemento).
   "metodo.tcm.constitucion.intro":
     "Los cuestionarios de cada elemento miden tu estado actual. Tu constitución es el elemento de fondo, el que casi no cambia con los años.",
-  "metodo.tcm.constitucion.hacer": "Hacer el test",
   "metodo.tcm.constitucion.repetir": "Repetir el test",
-  "metodo.tcm.constitucion.deUnaSentada":
-    "El test se hace de una sentada: son 200 frases y no se guarda a medias. Si lo dejas, la próxima vez empiezas de cero; solo se guarda tu resultado al terminarlo.",
   "metodo.tcm.constitucion.bloqueo":
     "Haz el test para seguir: los ciclos y el diagnóstico se leen sabiendo ya cuál es tu constitución.",
   "metodo.tcm.constitucion.hecho": "Test completado",
+  "metodo.tcm.constitucion.hechoTexto":
+    "Tu constitución ya está calculada: la tienes arriba, con los cinco porcentajes. Puedes repetir el test cuando quieras.",
+  "metodo.tcm.constitucion.si": "Sí",
+  "metodo.tcm.constitucion.no": "No",
+  "metodo.tcm.constitucion.llevas": "{hechas} de {total}",
+  "metodo.tcm.constitucion.seGuardaSolo":
+    "Se guarda solo según respondes: si lo dejas a medias, al volver sigue donde lo dejaste.",
+  "metodo.tcm.constitucion.faltan":
+    "Te faltan {faltan} frases para ver tu constitución.",
+  "metodo.tcm.constitucion.verResultado": "Ver mi resultado ↑",
   "metodo.tcm.constitucion.tuElemento": "Tu constitución",
   "metodo.tcm.constitucion.segundo": "Y detrás",
   "metodo.tcm.constitucion.laTuya": "La tuya",
@@ -1097,14 +1121,12 @@ export const metodo = {
   "metodo.psico.cerebroContinuar": "Ver qué pasó en tu cerebro",
 
   // ── Paso 7 · El trauma en tu cerebro ──
-  "metodo.psico.cerebroIntro": "Cómo se guardó en tu cerebro lo que viviste",
+  "metodo.psico.cerebroIntro": "Cómo se guardó en tu cerebro lo que viviste.",
   "metodo.psico.cerebroToca": "Toca cada zona para leer qué hace, qué le pasó y qué la cambia.",
-  "metodo.psico.cerebroTusRespuestas": "Lo que dicen tus respuestas",
   "metodo.psico.cerebroParaQue": "Para qué sirve",
   "metodo.psico.cerebroQueLeHizo": "Qué le hizo lo que viviste",
   "metodo.psico.cerebroComoSeNota": "Cómo se nota hoy",
   "metodo.psico.cerebroLoQueLaCambia": "Lo que la cambia",
-  "metodo.psico.cerebroDeDonde": "Tu barra sale de aquí: {origen}",
   "metodo.psico.paso.familia": "Tu familia",
   "metodo.psico.paso.genograma": "Genograma",
   "metodo.psico.paso.huellas": "Huellas",
@@ -1155,7 +1177,7 @@ export const metodo = {
   // ── Psicología · test DES-II (desconexión) ─────────────────────────────
   // El «Has terminado el test.» es el mismo del ACE (metodo.psico.testTerminado).
   "metodo.psico.desTerminadoPie":
-    "Antes de ver tu resultado, deja que te cuente qué es esto de desconectarse y por qué tu mente aprendió a hacerlo.",
+    "Antes de descubrir tu resultado, déjame contarte por qué quizá aprendiste a desconectarte de ti.",
   "metodo.psico.queSignificaDes": "¿Qué significa tu resultado?",
   "metodo.psico.tuPuntuacionDes": "Tu puntuación DES-II",
   "metodo.psico.desMedia": "media de las 28 respuestas, de 0 a 100",
@@ -1209,6 +1231,9 @@ export const metodo = {
   "metodo.psico.siQuitar": "Sí, quitar",
   "metodo.psico.no": "No",
   "metodo.psico.hecho": "Hecho ✓",
+  "metodo.psico.familiaQuienEs": "¿Quién es?",
+  "metodo.psico.familiaEditar": "Editar",
+  "metodo.psico.familiaListo": "Listo",
   "metodo.psico.suNombre": "Su nombre…",
   "metodo.psico.parentesco": "Parentesco (madre, abuelo…)",
 
@@ -1363,6 +1388,11 @@ export const metodo = {
     "En esta página reúnes en cada relación tus heridas y los arquetipos de tu carta: así ves con qué energía te relacionas y de dónde viene.",
   "metodo.psico.bloqRelacion2":
     "Puedes crear tus relaciones y colocar en ellas tus heridas igualmente, pero para hacerla completa necesitas tu carta astrológica.",
+  "metodo.psico.bloqRelacionPagina":
+    "Hazla y vuelve: esta página se abre sola en cuanto tus arquetipos existan.",
+  "metodo.psico.espejoBloqTitulo": "El espejo necesita tu carta",
+  "metodo.psico.espejoBloqNoHaceFalta": "Astrología no es obligatoria para terminar tu recorrido, pero esta parte es de las que más te devuelven: sin tu carta, el espejo se queda a medias.",
+  "metodo.psico.espejoBloqIr": "Hacer mi carta astral →",
   "metodo.psico.bloqEspejo1":
     "En esta página pones frente a frente lo que reconoces de ti y los arquetipos de tu carta: el espejo te devuelve tus dones con nombre propio.",
   "metodo.psico.bloqEspejo2":
@@ -1511,8 +1541,6 @@ export const metodo = {
   "metodo.pago.precioReducido": "Aprovecha que está en un precio reducido",
   "metodo.pago.ahoraNo": "Ahora no",
   "metodo.pago.stripe": "Pago seguro a través de Stripe",
-  "metodo.pago.palabra":
-    "Doy mi palabra de honor de que todos los textos son obra mía, escritos por mí. Aunque me he apoyado en herramientas de inteligencia artificial, las ideas, las palabras y el contenido son enteramente míos.",
   // Las dos casillas del box de pago. La segunda es un permiso aparte: para
   // preparar una lectura personalizada hay que leer lo que la persona escribe,
   // y eso se pide, no se da por supuesto.

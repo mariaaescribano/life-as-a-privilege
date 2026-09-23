@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+import { flushSaves } from "../utils/flushSaves";
 import { API_URL } from "../GlobalVariables";
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -34,20 +35,27 @@ export function useAstrologiaProgreso() {
   const [row, setRow] = useState<Row | null>(null);
   const [cargado, setCargado] = useState(false);
 
-  useEffect(() => {
-    let cancel = false;
+  // Lee el progreso de la BD. Antes de leer espera a que terminen los guardados
+  // en vuelo de la página actual (flushSaves): si no, leería el progreso de
+  // ANTES de lo que la usuaria acaba de marcar y enseñaría un candado de más.
+  const recargar = useCallback(async (): Promise<void> => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) { setCargado(true); return; }
-    axios
-      .get<Row | null>(`${API_URL}/metodo-astrologia/${userId}`, {
+    await flushSaves();
+    try {
+      const res = await axios.get<Row | null>(`${API_URL}/metodo-astrologia/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => { if (!cancel) setRow(res.data ?? null); })
-      .catch(() => { if (!cancel) setRow(null); })
-      .finally(() => { if (!cancel) setCargado(true); });
-    return () => { cancel = true; };
+      });
+      setRow(res.data ?? null);
+    } catch {
+      // Si falla, nos quedamos con lo que ya teníamos (mejor que re-bloquearlo todo).
+    } finally {
+      setCargado(true);
+    }
   }, []);
+
+  useEffect(() => { void recargar(); }, [recargar]);
 
   const solicitud = !!row?.solicitud_enviada_at;
   const retos = Array.isArray(row?.retos) ? row!.retos! : [];
@@ -77,5 +85,5 @@ export function useAstrologiaProgreso() {
   // por error como bloqueada una página que sí es accesible durante ese instante.
   const bloqueada = (n: number): boolean => cargado && !(desbloqueado[n] ?? true);
 
-  return { bloqueada, cargado };
+  return { bloqueada, cargado, recargar };
 }

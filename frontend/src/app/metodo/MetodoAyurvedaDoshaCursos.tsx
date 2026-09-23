@@ -44,7 +44,11 @@ export default function MetodoAyurvedaDoshaCursos() {
   // Astrología→Psicología: botón con candado que abre el pago. El backend de
   // pago de TCM (endpoint /payment/tcm, columna tcm_suscrito, scope 'tcm') aún
   // no existe; el flujo queda cableado para cuando se añada.
-  const [tcmSuscrito, setTcmSuscrito] = useState(false);
+  // TRES estados, no dos: true (pagada), false (no pagada) y null (AÚN NO LO
+  // SÉ: /user/me no ha contestado, o ha fallado). Con dos, mientras el servidor
+  // tardaba —o si la petición se caía— la página daba por hecho que no estaba
+  // pagada y sacaba el pago de una disciplina que la persona ya tiene.
+  const [tcmSuscrito, setTcmSuscrito] = useState<boolean | null>(null);
   const [pagoTcmOpen, setPagoTcmOpen] = useState(false);
   const [pagoTcmLoading, setPagoTcmLoading] = useState(false);
   const [pagoTcmError, setPagoTcmError] = useState<string | null>(null);
@@ -60,14 +64,17 @@ export default function MetodoAyurvedaDoshaCursos() {
         if (!res.data?.ayurveda_suscrito) navigate("/metodo/ayurveda");
         setTcmSuscrito(!!res.data?.tcm_suscrito);
       })
+      // Si la consulta falla, `tcmSuscrito` se queda en null (no en false): no
+      // sabemos nada, así que no damos por hecho lo peor.
       .catch(() => {});
   }, [navigate, doshaKey]);
 
-  // El botón "Med. China" se desbloquea al pagar la 4ª disciplina. Mientras no
-  // esté pagada, el clic abre el pago (en vez de navegar directamente).
+  // El botón "Med. China" lleva a Medicina China. Solo se abre el pago cuando CONSTA que no está pagada. Si aún no se sabe,
+  // se va a /metodo/tcm, que hace la comprobación de verdad y enseña su pago
+  // si hace falta. Así nunca se le dice «no lo tienes» a quien sí lo tiene.
   const onMedChina = () => {
-    if (tcmSuscrito) navigate("/metodo/tcm");
-    else { setPagoTcmError(null); setPagoTcmOpen(true); }
+    if (tcmSuscrito === false) { setPagoTcmError(null); setPagoTcmOpen(true); }
+    else navigate("/metodo/tcm");
   };
 
   const pagarTcm = async () => {
@@ -117,9 +124,9 @@ export default function MetodoAyurvedaDoshaCursos() {
             mb={0}
             prev={{ label: `← ${t("metodo.ayur.paso.chakras")}`, onClick: () => navigate(`/metodo/ayurveda/dosha/${doshaKey}/chakras`) }}
             extra={ilustracionesBtn}
-            next={tcmSuscrito
-              ? { label: "Med. China →", onClick: onMedChina }
-              : { label: "Med. China →", icon: <Candado size="15px" />, onClick: onMedChina }}
+            next={tcmSuscrito === false
+              ? { label: "Med. China →", icon: <Candado size="15px" />, onClick: onMedChina }
+              : { label: "Med. China →", onClick: onMedChina }}
           />
           </Reveal>
 

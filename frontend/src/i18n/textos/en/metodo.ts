@@ -95,9 +95,10 @@ export const metodo = {
   // The step NAME on its own, without the arrow: the same name serves the
   // forward button (`Name →`) and the back one (`← Name`).
   "metodo.nutri.paso.nutricion": "Nutrition",
-  "metodo.nutri.paso.nutrientes": "The nutrients",
-  "metodo.nutri.paso.secundarios": "Secondary nutrients",
-  "metodo.nutri.paso.secundariosCorto": "Secondary",
+  "metodo.nutri.paso.macro": "Macronutrients",
+  "metodo.nutri.paso.macroCorto": "Macro",
+  "metodo.nutri.paso.micro": "Micronutrients",
+  "metodo.nutri.paso.microCorto": "Micro",
   "metodo.nutri.paso.microbiota": "Microbiome",
   "metodo.nutri.paso.hambre": "Hunger",
   "metodo.nutri.paso.plato": "Your plate",
@@ -137,8 +138,14 @@ export const metodo = {
   // ── Nutrition · odds and ends from the steps ───────────────────────────
   "metodo.nutri.entendido": "Got it",
   "metodo.nutri.tocaMolecula": "Tap each molecule to see what it does inside you.",
-  "metodo.nutri.tocaGrupo":
-    "Tap each group to discover its types, what they do inside you and where to find them.",
+  "metodo.nutri.macroIntro":
+    "They are measured in grams and they fill the plate: they bring the energy and they build the body. Tap each group to see its types, what they do inside you and where to find them.",
+  "metodo.nutri.microIntro":
+    "They are measured in milligrams and micrograms, they carry no calories at all and, without them, none of the above works. Tap each group to discover them.",
+  "metodo.nutri.macroBloqueo": "Go through every macronutrient to unlock",
+  "metodo.nutri.microBloqueo": "Discover every micronutrient first",
+  "metodo.nutri.senda.progreso": "{hechos} of {total} of the path",
+  "metodo.nutri.senda.bloqueado": "Read the previous group to open this one",
   "metodo.nutri.verIlustracion": "See illustration",
   "metodo.nutri.foto": "Photo",
   "metodo.nutri.crearAlimento": "Create your food",
@@ -316,6 +323,12 @@ export const metodo = {
   "metodo.astro.lugarEj": "e.g. Madrid",
   "metodo.astro.region": "Region / province",
   "metodo.astro.regionEj": "e.g. Community of Madrid",
+  "metodo.astro.comicPlanetas": "Planets",
+  "metodo.astro.corregirAviso": "Don't recognise yourself in your Sun, Moon or Ascendant? It is almost always the time or the place of birth. Correct them and your chart is calculated again.",
+  "metodo.astro.corregirDatos": "Correct my birth details",
+  "metodo.astro.queEsCarta": "What is a birth chart?",
+  "metodo.astro.queEsCartaResumen": "Where your greatest capacities, your gifts and your difficulties are, and what the purpose of your Life is. Also your deepest wounds and where they were created.",
+  "metodo.astro.queEsCartaLeer": "Read it again",
   "metodo.astro.cambiar": "Change",
   "metodo.astro.seguroDatos": "Are you sure these are your details?",
   "metodo.astro.volverRevisar": "Let me check again",
@@ -564,13 +577,20 @@ export const metodo = {
   // ── Chinese Medicine · Your Constitution (step 3) ──────────────────────
   "metodo.tcm.constitucion.intro":
     "The three questionnaires of each element measure what weighs on you today. Your constitution is something else: the element underneath, the one that barely changes over the years. Read all five and take the test to find out which one is yours.",
-  "metodo.tcm.constitucion.hacer": "Take the test",
   "metodo.tcm.constitucion.repetir": "Retake the test",
-  "metodo.tcm.constitucion.deUnaSentada":
-    "The test is taken in one sitting: 200 statements, and nothing is saved half-way. If you leave, next time you start over; only your result is saved, once you finish.",
   "metodo.tcm.constitucion.bloqueo":
     "Take the test to move on: the cycles and the diagnosis are read already knowing your constitution.",
   "metodo.tcm.constitucion.hecho": "Test completed",
+  "metodo.tcm.constitucion.hechoTexto":
+    "Your constitution is already worked out: it is up there, with the five percentages. You can retake the test whenever you like.",
+  "metodo.tcm.constitucion.si": "Yes",
+  "metodo.tcm.constitucion.no": "No",
+  "metodo.tcm.constitucion.llevas": "{hechas} of {total}",
+  "metodo.tcm.constitucion.seGuardaSolo":
+    "It saves itself as you answer: if you stop half-way, you pick up where you left off.",
+  "metodo.tcm.constitucion.faltan":
+    "{faltan} statements to go before you see your constitution.",
+  "metodo.tcm.constitucion.verResultado": "See my result ↑",
   "metodo.tcm.constitucion.tuElemento": "Your constitution",
   "metodo.tcm.constitucion.segundo": "And behind it",
   "metodo.tcm.constitucion.laTuya": "Yours",
@@ -990,12 +1010,10 @@ export const metodo = {
 
   "metodo.psico.cerebroIntro": "How what you lived through was stored in your brain",
   "metodo.psico.cerebroToca": "Tap each area to read what it does, what happened to it and what changes it.",
-  "metodo.psico.cerebroTusRespuestas": "What your answers say",
   "metodo.psico.cerebroParaQue": "What it is for",
   "metodo.psico.cerebroQueLeHizo": "What your experience did to it",
   "metodo.psico.cerebroComoSeNota": "How it shows up today",
   "metodo.psico.cerebroLoQueLaCambia": "What changes it",
-  "metodo.psico.cerebroDeDonde": "Your bar comes from this: {origen}",
   "metodo.psico.paso.familia": "Your family",
   "metodo.psico.paso.genograma": "Genogram",
   "metodo.psico.paso.huellas": "Marks",
@@ -1101,6 +1119,9 @@ export const metodo = {
   "metodo.psico.siQuitar": "Yes, remove",
   "metodo.psico.no": "No",
   "metodo.psico.hecho": "Done ✓",
+  "metodo.psico.familiaQuienEs": "Who is it?",
+  "metodo.psico.familiaEditar": "Edit",
+  "metodo.psico.familiaListo": "Done",
   "metodo.psico.suNombre": "Their name…",
   "metodo.psico.parentesco": "Relationship (mother, grandfather…)",
 
@@ -1249,6 +1270,11 @@ export const metodo = {
     "On this page you bring your wounds and the archetypes of your chart together in each connection: that's how you see which energy you relate from, and where it comes from.",
   "metodo.psico.bloqRelacion2":
     "You can create your connections and place your wounds in them anyway, but to make it complete you need your birth chart.",
+  "metodo.psico.bloqRelacionPagina":
+    "Do it and come back: this page opens by itself as soon as your archetypes exist.",
+  "metodo.psico.espejoBloqTitulo": "The mirror needs your chart",
+  "metodo.psico.espejoBloqNoHaceFalta": "Astrology is not required to finish your path, but this is one of the parts that gives the most back: without your chart, the mirror is only half there.",
+  "metodo.psico.espejoBloqIr": "Make my birth chart →",
   "metodo.psico.bloqEspejo1":
     "On this page you set what you recognize in yourself face to face with the archetypes of your chart: the mirror gives your gifts back to you with a name of their own.",
   "metodo.psico.bloqEspejo2":
@@ -1380,8 +1406,6 @@ export const metodo = {
   "metodo.pago.precioReducido": "Take advantage — it's at a reduced price",
   "metodo.pago.ahoraNo": "Not now",
   "metodo.pago.stripe": "Secure payment through Stripe",
-  "metodo.pago.palabra":
-    "I give you my word of honor that every text here is my own, written by me. I have leaned on artificial intelligence tools, but the ideas, the words and the content are entirely mine.",
   "metodo.pago.acepto": "I accept the",
   "metodo.pago.condicionesEnlace": "purchase terms",
   "metodo.pago.autorizo":

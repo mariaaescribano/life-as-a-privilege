@@ -8,9 +8,10 @@ import { IndiceAstrologia } from "../../components/metodo/IndiceAstrologia";
 import { RecorridoLoading } from "../../components/metodo/RecorridoLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
+import { glowHeader } from "../../components/metodo/FotoBox";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { Glifo, GlifoSigno } from "../../components/metodo/Glifo";
-import { ComicAstrologiaModal, VINETAS_PLANETAS } from "../../components/metodo/ComicAstrologiaModal";
+import { ComicAstrologiaModal, VINETAS_PLANETAS, VINETAS_SIGNOS } from "../../components/metodo/ComicAstrologiaModal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { SaberMasModal } from "../../components/metodo/Planetas";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -40,7 +41,10 @@ export default function MetodoAstrologiaSolAscLuna() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Data>({});
   const [comicOpen, setComicOpen] = useState(false);
-  // Cómic de los planetas: se intercala antes de pasar a «Arquetipos».
+  // Los DOS cómics que se intercalan antes de «Arquetipos», encadenados: primero
+  // los signos (cómo se expresa cada energía) y después los planetas (qué
+  // energía es). Ese es el orden en que hacen falta para leer la carta.
+  const [comicSignosOpen, setComicSignosOpen] = useState(false);
   const [comicPlanetasOpen, setComicPlanetasOpen] = useState(false);
   const [abierto, setAbierto] = useState<CuerpoKey | null>(null);
   const fotosListas = useImagesReady([SPACE_IMG]);
@@ -136,8 +140,8 @@ export default function MetodoAstrologiaSolAscLuna() {
 
   const headerNext = {
     label: todosLeidos ? `${t("metodo.astro.paso.arquetipos")} →` : t("metodo.astro.trioLeeLosTres"),
-    // Antes de pasar a «Arquetipos» intercalamos el cómic de los planetas.
-    onClick: () => setComicPlanetasOpen(true),
+    // Antes de «Arquetipos» van los dos cómics: signos → planetas.
+    onClick: () => setComicSignosOpen(true),
     disabled: !todosLeidos,
     disabledTooltip: t("metodo.astro.trioLeeLosTresTooltip"),
   };
@@ -242,6 +246,64 @@ export default function MetodoAstrologiaSolAscLuna() {
               </RevealStagger>
             </Box>
           </Reveal>
+
+          {/* ── Corregir los datos de nacimiento ──
+                Su propia caja, debajo de las tarjetas: si el Sol, la Luna o el
+                Ascendente no le cuadran, casi siempre es que la hora o el lugar
+                están mal. Lleva de vuelta a la página anterior con el
+                formulario abierto; hasta que no reenvíe los datos, el camino
+                hacia delante se queda cerrado (la carta de ahí en adelante
+                estaría calculada con datos equivocados). */}
+          <Reveal
+            direction="up"
+            distance={24}
+            delay={0.18}
+            duration={0.7}
+            position="relative"
+            w="100%"
+            borderRadius="2xl"
+            overflow="hidden"
+            boxShadow={glowHeader(astrologiaTxt)}
+          >
+            <SpaceBg overlay="rgba(8,13,30,0.65)" />
+
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 6, md: 7 }}>
+              <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
+                    textAlign="center" maxW="620px" mx="auto" mb={4}>
+                {t("metodo.astro.corregirAviso")}
+              </Text>
+
+              <Box
+                as="button"
+                onClick={() => navigate("/metodo/astrologia?corregir=1")}
+                w="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                gap={2.5}
+                px={6}
+                py={{ base: 3, md: 3.5 }}
+                borderRadius="xl"
+                bg="rgba(8,13,30,0.45)"
+                color={astrologiaTxt}
+                border={`1px solid ${astrologiaTxt}55`}
+                fontFamily="'EB Garamond', serif"
+                fontSize={{ base: "md", md: "lg" }}
+                fontWeight="700"
+                letterSpacing="0.05em"
+                cursor="pointer"
+                transition="all 0.2s"
+                _hover={{ borderColor: astrologiaTxt, bg: "rgba(8,13,30,0.62)", boxShadow: `0 0 24px ${astrologiaTxt}55` }}
+              >
+                {/* Lápiz vectorial (el mismo de la chapa de datos). */}
+                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                     w="17px" h="17px" fill="currentColor" flexShrink={0}>
+                  <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                </Box>
+                {t("metodo.astro.corregirDatos")}
+              </Box>
+            </Box>
+          </Reveal>
         </Flex>
       </Flex>
 
@@ -255,7 +317,19 @@ export default function MetodoAstrologiaSolAscLuna() {
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
 
-      {/* Cómic de los planetas: intercalado antes de «Arquetipos». */}
+      {/* Cómic de los signos: el primero de los dos. Su botón de continuar es
+          «Planetas →», que es lo que viene justo después (el otro cómic), no la
+          página siguiente del recorrido. */}
+      <ComicPasoModal
+        isOpen={comicSignosOpen}
+        onClose={() => setComicSignosOpen(false)}
+        onContinue={() => { setComicSignosOpen(false); setComicPlanetasOpen(true); }}
+        vinetas={VINETAS_SIGNOS}
+        continueLabel={t("metodo.astro.comicPlanetas")}
+        themeColor={astrologiaTxt}
+      />
+
+      {/* Cómic de los planetas: el segundo. Ahora sí, desemboca en «Arquetipos». */}
       <ComicPasoModal
         isOpen={comicPlanetasOpen}
         onClose={() => setComicPlanetasOpen(false)}

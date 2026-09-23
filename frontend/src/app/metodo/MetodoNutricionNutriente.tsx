@@ -19,12 +19,13 @@ import { comicNutrienteByKey } from "../../components/metodo/comicsNutrientes";
 import { useComic } from "../../i18n/comics";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { NUTRIENTES, rutaListaNutriente, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
+import { NUTRIENTES, esMicronutriente, nutrienteAlcanzable, rutaListaNutriente, type NutrienteTarjeta } from "../../hardCoded/espacio/NutrientesNutricion";
 import { useNutriente } from "../../hardCoded/espacio/useNutrientes";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Página de detalle de UN grupo de nutrientes (Carbohidratos, Grasas…).
-// Se llega desde /metodo/nutricion/nutrientes al pulsar una tarjeta.
+// Se llega desde /metodo/nutricion/macronutrientes o /micronutrientes al
+// pulsar una tarjeta.
 //
 // Estructura (en construcción, se irá rellenando):
 //   1. Header.
@@ -157,7 +158,7 @@ export default function MetodoNutricionNutriente() {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
-    if (!n) { navigate("/metodo/nutricion/nutrientes", { replace: true }); return; }
+    if (!n) { navigate("/metodo/nutricion/macronutrientes", { replace: true }); return; }
     (async () => {
       try {
         const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
@@ -167,6 +168,13 @@ export default function MetodoNutricionNutriente() {
           const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
           const data = r.data?.data ?? {};
           dataRef.current = data;
+          // El camino también se respeta entrando por la URL: si este grupo aún
+          // no toca, de vuelta a su rejilla (ver SendaNutrientes).
+          const explorados: string[] = Array.isArray(data.nutrientes_explorados) ? data.nutrientes_explorados : [];
+          if (!nutrienteAlcanzable(n.key, explorados)) {
+            navigate(rutaListaNutriente(n.key), { replace: true });
+            return;
+          }
           const previas = data.nutrientes_fichas?.[n.key];
           const vistas = Array.isArray(previas) ? previas.map(Number) : [];
           vistasRef.current = vistas;
@@ -295,7 +303,9 @@ export default function MetodoNutricionNutriente() {
   if (loading) return <NutricionLoading />;
   if (!n) return null;
 
-  const esSecundario = rutaListaNutriente(n.key).endsWith("secundarios");
+  // De qué página viene este grupo: así el header dice «Macronutrientes» o
+  // «Micronutrientes», igual que la rejilla de la que se ha entrado.
+  const esMicro = esMicronutriente(n.key);
 
   // Subgrupos de tarjetas (p.ej. «⚡ Electrolitos» / «🧱 Minerales»): agrupamos
   // las tarjetas consecutivas por su `grupo` conservando el índice GLOBAL (el que
@@ -319,7 +329,7 @@ export default function MetodoNutricionNutriente() {
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<NutricionIcon size={{ base: "40px", md: "56px" }} />}
-              title={esSecundario ? "Nutrientes secundarios" : "Los nutrientes"}
+              title={t(esMicro ? "metodo.nutri.paso.micro" : "metodo.nutri.paso.macro")}
               compact
               maxW="1000px"
               bgColor={`${nutricionBg}dd`}
@@ -327,8 +337,8 @@ export default function MetodoNutricionNutriente() {
               nom={nutricionNom}
               mb={0}
               // «← Volver» a la izquierda, como en los temas de Fisiología: desde
-              // el detalle de un grupo se vuelve a SU rejilla (principales o
-              // secundarios), sin tener que bajar hasta el final de la página.
+              // el detalle de un grupo se vuelve a SU rejilla (macro o micro),
+              // sin tener que bajar hasta el final de la página.
               prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate(rutaListaNutriente(n.key)) }}
               extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
             />

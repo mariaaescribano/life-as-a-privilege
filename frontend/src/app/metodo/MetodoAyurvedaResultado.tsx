@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -36,6 +36,7 @@ const POP = [0.34, 1.56, 0.64, 1] as const; // rebote suave para el "pop" del t�
 const BARS_START = 0.35;  // arranque del pintado tras montar la tarjeta
 const BAR_STAGGER = 0.62; // separación entre una barra y la siguiente
 const BAR_DUR = 0.85;     // lo que tarda cada barra en rellenarse
+const TARJETA_ESCALA = 0.8; // la tarjeta del resultado se pinta reducida
 
 // Cuenta ascendente de un número (0 → target) sincronizada con el relleno de la
 // barra. Respeta prefers-reduced-motion (salta directo al valor).
@@ -90,6 +91,21 @@ export default function MetodoAyurvedaResultado() {
   const doshasVinetas = useComic("hinduismo-doshas", VINETAS_DOSHAS);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
   const reduce = useReducedMotion();
+
+  // La tarjeta del resultado se pinta a escala 0.8, pero el layout sigue
+  // reservando su alto entero: sobra un 20% de hueco vacío debajo. Lo medimos
+  // para descontarlo y que la nota de pie suba justo bajo la tarjeta.
+  const tarjetaRef = useRef<HTMLDivElement | null>(null);
+  const [huecoEscala, setHuecoEscala] = useState(0);
+  useLayoutEffect(() => {
+    const el = tarjetaRef.current;
+    if (!el) return;
+    const medir = () => setHuecoEscala(el.offsetHeight * (1 - TARJETA_ESCALA));
+    medir();
+    const ro = new ResizeObserver(medir);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [resultado]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -173,9 +189,11 @@ export default function MetodoAyurvedaResultado() {
             borderRadius="2xl"
             boxShadow={GLOW}
             textAlign="center"
-            mt={{ base: 2, md: 4 }}
-            transform="scale(0.8)"
+            mt={{ base: 0, md: 1 }}
+            transform={`scale(${TARJETA_ESCALA})`}
             transformOrigin="top center"
+            ref={tarjetaRef}
+            mb={`-${huecoEscala}px`}
           >
             <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
@@ -255,7 +273,7 @@ export default function MetodoAyurvedaResultado() {
             textAlign="center"
             maxW="620px"
             lineHeight="1.7"
-            mt={1}
+            mt={0}
           >
             {t("metodo.ayur.resultadoPie")}
           </Text>

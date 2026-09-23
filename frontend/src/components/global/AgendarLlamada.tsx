@@ -281,12 +281,16 @@ export function AgendarLlamada({
     </Box>
   );
 
+  // Sin disciplina (por ejemplo en /contacto) no hay imagen de fondo, y sin
+  // nada debajo la caja sale transparente: se ve la página a través del
+  // calendario. En ese caso el color de fondo hace de fondo sólido.
   return (
     <Box
       position="relative"
       w="100%"
       borderRadius="2xl"
       overflow="hidden"
+      bg={hasBg ? undefined : bgColor}
       boxShadow={`0 0 22px rgba(255,255,255,0.12), 0 0 50px rgba(255,255,255,0.06), 0 0 30px ${color}1a`}
       fontFamily="'EB Garamond', serif"
     >

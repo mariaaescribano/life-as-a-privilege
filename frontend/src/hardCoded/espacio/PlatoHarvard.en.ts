@@ -35,13 +35,13 @@ export const PLATO_SECTORES_EN: Record<string, PlatoSectorTexto> = {
     label: "Whole grains",
     labelCorto: "Grains",
     descripcion:
-      "Whole grains like oats, rice or whole-grain bread: slow-release energy.",
+      "Whole grains like oats, rice or whole-grain bread, and tubers like sweet potato: slow-release energy.",
   },
   proteina: {
     label: "Healthy protein",
     labelCorto: "Protein",
     descripcion:
-      "Healthy protein: legumes, soy, egg, tofu or nuts. Skip the meat and fish, choose plant protein.",
+      "Healthy protein: legumes, soy, egg or tofu. Skip the meat and fish, choose plant protein.",
   },
 };
 

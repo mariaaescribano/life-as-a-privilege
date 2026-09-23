@@ -378,7 +378,7 @@ export const CHAKRAS_PERSONA = `${FOTOS}/unoporuno/fotopantalla.webp`;
 
 /** Lo que se lee arriba del mapa, sobre el turquesa. */
 export const CHAKRAS_INTRO =
-  "Los chakras son puntos de energía que conectan más intensamente a nuestro cuerpo con la energía que nos da Vida. Nuestra alma está conectada con todo nuestro cuerpo, pero en ciertos puntos la podemos sentir más. Esos puntos son los chakras.";
+  "Los chakras son puntos de energía que conectan más intensamente a nuestro cuerpo con nuestra alma.";
 
 export const esChakra = (k: unknown): k is ChakraKey =>
   typeof k === "string" && k in CHAKRAS;

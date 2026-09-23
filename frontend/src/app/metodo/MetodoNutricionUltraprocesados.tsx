@@ -14,7 +14,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
-import { glowHeader } from "../../components/metodo/FotoBox";
+import { glowHeader, glowSuave, glowSuaveHover } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useLeidos } from "../../hooks/useLeidos";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
@@ -126,7 +126,10 @@ export default function MetodoNutricionUltraprocesados() {
           <Reveal inView direction="up" distance={22} delay={0.1} duration={0.65} amount={0.15} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  boxShadow={glowHeader(nutricionTxt)}>
-              <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}d9`} />
+              {/* La acuarela de Nutrición se VE: el velo es fino (antes casi
+                  opaco, y la caja parecía un rectángulo verde plano). La foto
+                  es clara y uniforme, así que el texto oscuro se lee igual. */}
+              <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}66`} />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 3, md: 4 }}
                     px={{ base: 5, md: 10 }} py={{ base: 7, md: 10 }}>
                 <Text color={`${nutricionTxt}cc`} fontSize="2xs" fontWeight={700} letterSpacing="0.14em"
@@ -135,18 +138,18 @@ export default function MetodoNutricionUltraprocesados() {
                 </Text>
                 <Text color={nutricionTxt} fontWeight={800} lineHeight="1.1" textAlign="center"
                       fontSize={{ base: "3xl", md: "5xl" }}
-                      style={{ textShadow: "0 1px 8px rgba(0,0,0,0.55)" }}>
+                      style={{ textShadow: `0 2px 10px ${nutricionBg}` }}>
                   {t("metodo.nutri.ultra.ensayoDato")}
                 </Text>
                 <Box w="72px" h="1px" bg={`${nutricionTxt}55`} />
                 <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.85"
                       textAlign="center" maxW="700px"
-                      style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
+                      style={{ textShadow: `0 1px 5px ${nutricionBg}` }}>
                   {t("metodo.nutri.ultra.ensayoTexto")}
                 </Text>
                 <Text color={`${nutricionTxt}bb`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
                       textAlign="center" lineHeight="1.6" maxW="620px"
-                      style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
+                      style={{ textShadow: `0 1px 5px ${nutricionBg}` }}>
                   {t("metodo.nutri.ultra.ensayoPie")}
                 </Text>
               </Flex>
@@ -172,19 +175,29 @@ export default function MetodoNutricionUltraprocesados() {
               <Reveal inView key={s.titulo} direction="up" distance={20} scaleFrom={0.97} duration={0.55}
                       amount={0.2} delay={(i % 2) * 0.07} w="100%" display="flex">
                 <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                     boxShadow={glowHeader(nutricionTxt)}>
-                  <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}cc`} />
-                  <Flex position="relative" zIndex={1} direction="column" gap={2}
+                     boxShadow={glowSuave(nutricionTxt)} transition="transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease"
+                     _hover={{ transform: "translateY(-4px)", boxShadow: glowSuaveHover(nutricionTxt) }}>
+                  <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}59`} />
+                  <Flex position="relative" zIndex={1} direction="row" gap={{ base: 3.5, md: 4 }}
                         px={{ base: 5, md: 6 }} py={{ base: 5, md: 6 }} h="100%">
-                    <Text color={nutricionTxt} fontWeight={700} fontSize={{ base: "md", md: "lg" }}
-                          lineHeight="1.3" style={{ textShadow: "0 1px 5px rgba(0,0,0,0.55)" }}>
-                      {s.titulo}
-                    </Text>
-                    <Box w="44px" h="1px" bg={`${nutricionTxt}55`} />
-                    <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8"
-                          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
-                      {s.texto}
-                    </Text>
+                    {/* El número de la señal: la etiqueta se lee en orden. */}
+                    <Flex flexShrink={0} align="center" justify="center" mt="2px"
+                          w={{ base: "28px", md: "32px" }} h={{ base: "28px", md: "32px" }} borderRadius="full"
+                          bg={nutricionTxt} color={nutricionBg} fontWeight={800}
+                          fontSize={{ base: "sm", md: "md" }} lineHeight="1">
+                      {i + 1}
+                    </Flex>
+                    <Flex direction="column" gap={2} minW={0}>
+                      <Text color={nutricionTxt} fontWeight={700} fontSize={{ base: "md", md: "lg" }}
+                            lineHeight="1.3" style={{ textShadow: `0 1px 5px ${nutricionBg}` }}>
+                        {s.titulo}
+                      </Text>
+                      <Box w="44px" h="1px" bg={`${nutricionTxt}55`} />
+                      <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8"
+                            style={{ textShadow: `0 1px 4px ${nutricionBg}` }}>
+                        {s.texto}
+                      </Text>
+                    </Flex>
                   </Flex>
                 </Box>
               </Reveal>

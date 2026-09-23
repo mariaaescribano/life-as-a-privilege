@@ -47,7 +47,7 @@ export const elMetodo = {
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",
   "elMetodo.hero.sub":
-    "El Mapa reúne ocho perspectivas sobre ti —tu mente, tu historia y tu cuerpo— para ayudarte a comprender de dónde vienen tus patrones.",
+    "El Mapa combina ciencia y tradición para comprender tu mente, tu historia y tu cuerpo.",
   "elMetodo.hero.cta": "Empezar mi Mapa",
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).

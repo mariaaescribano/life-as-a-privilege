@@ -41,7 +41,9 @@ export default function MetodoAstrologiaCursos() {
   const navigate = useNavigate();
   const { cursosData, loading } = useCursosData();
   const [comicOpen, setComicOpen] = useState(false);
-  const [psicologiaSuscrito, setPsicologiaSuscrito] = useState(false);
+  // null = aún no se sabe (ver MetodoAyurvedaDoshaCursos): nunca se confunde
+  // «todavía no ha contestado el servidor» con «no lo ha pagado».
+  const [psicologiaSuscrito, setPsicologiaSuscrito] = useState<boolean | null>(null);
   const [pagoPsicoOpen, setPagoPsicoOpen] = useState(false);
   const [pagoPsicoLoading, setPagoPsicoLoading] = useState(false);
   const [pagoPsicoError, setPagoPsicoError] = useState<string | null>(null);
@@ -74,8 +76,8 @@ export default function MetodoAstrologiaCursos() {
   // El botón "Psicología →" del header se desbloquea al pagar Psicología.
   // Mientras no esté pagada, el clic abre el pago (en vez de quedar inerte).
   const onPsicologia = () => {
-    if (psicologiaSuscrito) navigate("/metodo/psicologia");
-    else { setPagoPsicoError(null); setPagoPsicoOpen(true); }
+    if (psicologiaSuscrito === false) { setPagoPsicoError(null); setPagoPsicoOpen(true); }
+    else navigate("/metodo/psicologia");
   };
 
   // Cursos de Astrología ordenados por fecha de publicación (recientes primero),
@@ -119,7 +121,7 @@ export default function MetodoAstrologiaCursos() {
                 onClick: onPsicologia,
                 // Mismo estilo que el resto de botones del header (Astrología),
                 // sin el color de la disciplina de destino.
-                icon: psicologiaSuscrito ? undefined : (
+                icon: psicologiaSuscrito !== false ? undefined : (
                   <Box
                     as="svg"
                     xmlns="http://www.w3.org/2000/svg"

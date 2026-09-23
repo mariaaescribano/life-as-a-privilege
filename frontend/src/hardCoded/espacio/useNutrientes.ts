@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useIdioma } from "../../i18n";
 import {
-  NUTRIENTES, NUTRIENTES_PRINCIPALES, NUTRIENTES_SECUNDARIOS, type Nutriente,
+  NUTRIENTES, NUTRIENTES_MACRO, NUTRIENTES_MICRO, type Nutriente,
 } from "./NutrientesNutricion";
 import { nutrientesTraducidos } from "./NutrientesNutricion.en";
 
@@ -23,16 +23,18 @@ export const useNutrientes = (): Nutriente[] => {
   return useMemo(() => nutrientesTraducidos(NUTRIENTES, idioma), [idioma]);
 };
 
-/** Los seis grupos principales (los de la primera página). */
-export const useNutrientesPrincipales = (): Nutriente[] => {
+/** Macronutrientes (carbohidratos, fibra, grasas, colesterol, proteínas, agua,
+ *  etanol): los de la primera página. */
+export const useNutrientesMacro = (): Nutriente[] => {
   const { idioma } = useIdioma();
-  return useMemo(() => nutrientesTraducidos(NUTRIENTES_PRINCIPALES, idioma), [idioma]);
+  return useMemo(() => nutrientesTraducidos(NUTRIENTES_MACRO, idioma), [idioma]);
 };
 
-/** Los secundarios (colesterol, etanol, agua, fitoquímicos, edulcorantes, drogas). */
-export const useNutrientesSecundarios = (): Nutriente[] => {
+/** Micronutrientes (vitaminas, minerales, fitoquímicos, edulcorantes, drogas):
+ *  los de la segunda página. */
+export const useNutrientesMicro = (): Nutriente[] => {
   const { idioma } = useIdioma();
-  return useMemo(() => nutrientesTraducidos(NUTRIENTES_SECUNDARIOS, idioma), [idioma]);
+  return useMemo(() => nutrientesTraducidos(NUTRIENTES_MICRO, idioma), [idioma]);
 };
 
 /** Un grupo suelto por su `key`, en el idioma activo. */

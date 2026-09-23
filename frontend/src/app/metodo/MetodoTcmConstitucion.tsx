@@ -14,7 +14,8 @@ import { Reveal } from "../../components/global/Reveal";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { TestConstitucionModal } from "../../components/metodo/TestConstitucionModal";
+import { TestConstitucion } from "../../components/metodo/TestConstitucion";
+import { flushSaves } from "../../utils/flushSaves";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, type DatosTcm, type Elemento,
@@ -30,9 +31,10 @@ import { useT } from "../../i18n";
 // ─────────────────────────────────────────────────────────────────────────
 // PASO 3 · TU CONSTITUCIÓN
 //
-// Cinco tarjetas (una por constitución) y, arriba, el botón del test. Al
-// terminarlo aparece el resultado aquí mismo —el pentágono con los cinco
-// porcentajes y tu elemento— y la tarjeta que te toca se enciende.
+// El test se responde AQUÍ MISMO, sin popup (como el de Ayurveda): 50 frases
+// de Sí/No que se guardan solas según se marcan. Al terminarlas aparece arriba
+// el resultado —el pentágono con los cinco porcentajes y tu elemento—, el test
+// se pliega y la tarjeta de tu constitución, de las cinco de abajo, se enciende.
 //
 // Es el «quién eres», NO el «qué te pasa hoy»: ese es el Diagnóstico (paso 5).
 // El texto lo dice en voz alta porque, si no, se confunden.
@@ -51,7 +53,6 @@ export default function MetodoTcmConstitucion() {
   const nombres = useNombresElementos();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
-  const [testAbierto, setTestAbierto] = useState(false);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   const fondosListos = usePrecargarImagenes([
@@ -86,6 +87,13 @@ export default function MetodoTcmConstitucion() {
   const tuya: Elemento | null = completo ? puntos[0].elemento : null;
   const segunda: Elemento | null = completo ? puntos[1].elemento : null;
 
+  // Los ciclos piden el test hecho: si el último «Sí/No» sigue viajando a la
+  // BD, se espera a que llegue o la página de al lado rebotaría.
+  const irAlSiguiente = async () => {
+    await flushSaves();
+    navigate("/metodo/tcm/ciclos");
+  };
+
   if (loading || !fondosListos) {
     return (
       <Box minH="100vh" bg="#008080" display="flex" alignItems="center" justifyContent="center">
@@ -117,7 +125,7 @@ export default function MetodoTcmConstitucion() {
               label: `${t("metodo.tcm.paso.ciclos")} →`,
               // Sin el test hecho no se pasa: los ciclos y todo lo que viene
               // después se leen ya sabiendo cuál es tu elemento de fondo.
-              onClick: () => { if (completo) navigate("/metodo/tcm/ciclos"); else setTestAbierto(true); },
+              onClick: () => { if (completo) void irAlSiguiente(); },
               disabled: !completo,
               disabledTooltip: t("metodo.tcm.constitucion.bloqueo"),
             }}
@@ -130,33 +138,6 @@ export default function MetodoTcmConstitucion() {
                   textAlign="center" maxW="680px">
               {t("metodo.tcm.constitucion.intro")}
             </Text>
-          </Reveal>
-
-          {/* El botón del test, arriba del todo */}
-          <Reveal direction="up" distance={14} delay={0.16} duration={0.6} display="flex" justifyContent="center">
-            <Flex direction="column" align="center" gap={2}>
-              <Box as="button" onClick={() => setTestAbierto(true)}
-                   position="relative" overflow="hidden"
-                   px={{ base: 8, md: 12 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
-                   border={`1px solid ${tcmTxt}99`} boxShadow={glowHeader(tcmTxt)}
-                   transition="transform 0.18s ease" _hover={{ transform: "translateY(-2px)" }}>
-                <DisciplinaBgLayer nom={tcmNom} borderRadius="full" />
-                <Box position="absolute" inset={0} bg={`${tcmBg}cc`} />
-                <Text position="relative" color={tcmTxt} fontSize={{ base: "lg", md: "xl" }}
-                      fontWeight="800" letterSpacing="0.08em">
-                  {completo
-                    ? t("metodo.tcm.constitucion.repetir")
-                    : t("metodo.tcm.constitucion.hacer")}
-                </Text>
-              </Box>
-              {/* Fuera del botón, ni cuentas ni números: solo si está hecho o
-                  el aviso de que el test se hace de una sentada. */}
-              <Text color="white" fontSize="sm" opacity={0.9} textAlign="center" maxW="560px" lineHeight="1.6">
-                {completo
-                  ? t("metodo.tcm.constitucion.hecho")
-                  : t("metodo.tcm.constitucion.deUnaSentada")}
-              </Text>
-            </Flex>
           </Reveal>
 
           {/* ── El resultado (solo con el test terminado) ───────────────── */}
@@ -201,6 +182,13 @@ export default function MetodoTcmConstitucion() {
             </Reveal>
           )}
 
+          {/* ── El test, en la propia página ─────────────────────────────── */}
+          <TestConstitucion
+            data={data}
+            onChangeData={setData}
+            onCompletar={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          />
+
           {/* ── Las cinco constituciones ─────────────────────────────────── */}
           <Flex direction="column" gap={5} w="100%">
             {ORDEN_ELEMENTOS.map((el, i) => (
@@ -227,20 +215,12 @@ export default function MetodoTcmConstitucion() {
           <Flex w="100%" justify="flex-end">
             <BotonPaso label={t("metodo.tcm.paso.ciclos")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
                        disabled={!completo} title={t("metodo.tcm.constitucion.bloqueo")}
-                       onClick={() => navigate("/metodo/tcm/ciclos")} />
+                       onClick={() => void irAlSiguiente()} />
           </Flex>
         </Flex>
       </Flex>
 
       {ilustracionesModal}
-
-      <TestConstitucionModal
-        abierto={testAbierto}
-        data={data}
-        onChangeData={setData}
-        onClose={() => setTestAbierto(false)}
-        onCompletar={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      />
 
       <IndiceTcm />
 

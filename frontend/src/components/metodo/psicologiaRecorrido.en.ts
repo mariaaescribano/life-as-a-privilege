@@ -526,118 +526,90 @@ const DES_INTRO_EN = {
     "Dissociative Experiences Scale (DES-II), by Eve Bernstein Carlson and Frank W. Putnam.",
 };
 
-const DES_PREGUNTAS_EN: Record<string, { categoria?: string; pregunta?: string; apoyo?: string }> = {
+const DES_PREGUNTAS_EN: Record<string, { pregunta?: string; apoyo?: string }> = {
   "des-1-conducir": {
-    categoria: "The blank journey",
-    pregunta: "Some people have the experience of driving or riding in a car or a bus and suddenly realizing that they don't remember what has happened during all or part of the trip.",
+    pregunta: "Sometimes I'm driving (or riding in a car or a bus) and I suddenly realize that I don't remember what has happened during all or part of the trip.",
   },
   "des-2-escuchar": {
-    categoria: "What you didn't hear",
-    pregunta: "Some people find that sometimes they are listening to someone talk and they suddenly realize that they did not hear part or all of what was said.",
+    pregunta: "Sometimes I'm listening to someone talk and I suddenly realize that I didn't hear part or all of what was said.",
   },
   "des-3-lugar": {
-    categoria: "Turning up somewhere",
-    pregunta: "Some people have the experience of finding themselves in a place and having no idea how they got there.",
+    pregunta: "Sometimes I find myself somewhere and have no idea how I got there.",
   },
   "des-4-ropa": {
-    categoria: "Clothes you don't remember",
-    pregunta: "Some people have the experience of finding themselves dressed in clothes that they don't remember putting on.",
+    pregunta: "Sometimes I find myself dressed in clothes that I don't remember putting on.",
   },
   "des-5-cosas": {
-    categoria: "Things you didn't buy",
-    pregunta: "Some people have the experience of finding new things among their belongings that they do not remember buying.",
+    pregunta: "Sometimes I find new things among my belongings that I don't remember buying.",
   },
   "des-6-desconocidos": {
-    categoria: "People who say they know you",
-    pregunta: "Some people sometimes find that they are approached by people they do not know, who call them by another name or insist that they have met them before.",
+    pregunta: "Sometimes I'm approached by people I don't know, who call me by another name or insist that they have met me before.",
   },
   "des-7-junto-a-si": {
-    categoria: "Watching yourself",
-    pregunta: "Some people sometimes have the experience of feeling as though they are standing next to themselves, or watching themselves do something, as if they were looking at another person.",
+    pregunta: "Sometimes I feel as though I'm standing next to myself, or watching myself do something, as if I were looking at another person.",
   },
   "des-8-no-reconocer": {
-    categoria: "Not recognizing your own people",
-    pregunta: "Some people are told that they sometimes do not recognize friends or family members.",
+    pregunta: "Sometimes I'm told that I didn't recognize friends or family members.",
   },
   "des-9-acontecimientos": {
-    categoria: "Big days with no memory",
-    pregunta: "Some people find that they have no memory for some important events in their lives (for example, a wedding or a graduation).",
+    pregunta: "Sometimes I have no memory of important events in my life (a wedding, a Christmas, a trip).",
   },
   "des-10-mentir": {
-    categoria: "Being accused of lying",
-    pregunta: "Some people have the experience of being accused of lying when they do not think that they have lied.",
+    pregunta: "Sometimes I'm accused of lying when I don't think that I have lied.",
   },
   "des-11-espejo": {
-    categoria: "The mirror",
-    pregunta: "Some people have the experience of looking in a mirror and not recognizing themselves.",
+    pregunta: "Sometimes I look in a mirror and don't recognize myself.",
   },
   "des-12-irreal": {
-    categoria: "An unreal world",
-    pregunta: "Some people have the experience of feeling that other people, objects and the world around them are not real.",
+    pregunta: "Sometimes I feel that other people, objects and the world around me are not real.",
   },
   "des-13-cuerpo": {
-    categoria: "A body that isn't yours",
-    pregunta: "Some people have the experience of feeling that their body does not belong to them.",
+    pregunta: "Sometimes I feel that my body does not belong to me.",
   },
   "des-14-revivir": {
-    categoria: "Reliving the past",
-    pregunta: "Some people have the experience of sometimes remembering a past event so vividly that they feel as if they were reliving that event.",
+    pregunta: "Sometimes I remember a past event so vividly that I feel as if I were living it again.",
   },
   "des-15-sonado": {
-    categoria: "Did it happen, or did I dream it?",
-    pregunta: "Some people have the experience of not being sure whether things that they remember happening really did happen, or whether they just dreamed them.",
+    pregunta: "Sometimes I'm not sure whether the things I remember really happened or whether I just dreamed them.",
   },
   "des-16-lugar-extrano": {
-    categoria: "The familiar turned strange",
-    pregunta: "Some people have the experience of being in a familiar place but finding it strange and unfamiliar.",
+    pregunta: "Sometimes I'm in a familiar place and suddenly find it strange and unfamiliar.",
   },
   "des-17-television": {
-    categoria: "Lost in a story",
-    pregunta: "Some people find that when they are watching television or a movie they become so absorbed in the story that they are unaware of other events happening around them.",
+    pregunta: "Sometimes I become so absorbed in a film or in the television that I'm unaware of what is happening around me.",
   },
   "des-18-fantasia": {
-    categoria: "A daydream that feels real",
-    pregunta: "Some people find that they become so involved in a fantasy or a daydream that it feels as though it were really happening to them.",
+    pregunta: "Sometimes I become so involved in a fantasy or a daydream that it feels as though it were really happening.",
   },
   "des-19-dolor": {
-    categoria: "Ignoring pain",
-    pregunta: "Some people find that they sometimes are able to ignore pain.",
+    pregunta: "Sometimes I'm able to ignore pain.",
   },
   "des-20-vacio": {
-    categoria: "Staring into space",
-    pregunta: "Some people find that they sometimes sit staring off into space, thinking of nothing, and are not aware of the passage of time.",
+    pregunta: "Sometimes I sit staring off into space, thinking of nothing, and I'm not aware of the passage of time.",
   },
   "des-21-hablarse": {
-    categoria: "Talking out loud to yourself",
-    pregunta: "Some people sometimes find that when they are alone they talk out loud to themselves.",
+    pregunta: "Sometimes, when there's nobody else around, I talk out loud to myself.",
   },
   "des-22-otra-persona": {
-    categoria: "Someone else depending on where",
-    pregunta: "Some people find that in one situation they may act so differently compared with another situation that they feel almost as if they were two different people.",
+    pregunta: "Sometimes I act so differently in one situation compared with another that I feel almost as if I were two different people.",
   },
   "des-23-facilidad": {
-    categoria: "Startling ease",
-    pregunta: "Some people sometimes find that in certain situations they are able to do things with amazing ease and spontaneity that would usually be difficult for them (for example, sports, work, social situations).",
+    pregunta: "Sometimes, in certain situations, I can do things with amazing ease that would usually be difficult for me (sports, work, being with people…).",
   },
   "des-24-hecho-pensado": {
-    categoria: "Did I do it, or think it?",
-    pregunta: "Some people sometimes find that they cannot remember whether they have done something or have just thought about doing it (for example, whether they have mailed a letter or only thought about mailing it).",
+    pregunta: "Sometimes I can't remember whether I have done something or have just thought about doing it (for example, whether I posted a letter or only thought about posting it).",
   },
   "des-25-evidencias": {
-    categoria: "Evidence of what you don't remember",
-    pregunta: "Some people find evidence that they have done things that they do not remember doing.",
+    pregunta: "Sometimes I find evidence that I have done things that I don't remember doing.",
   },
   "des-26-escritos": {
-    categoria: "Writing you don't remember",
-    pregunta: "Some people sometimes find writings, drawings or notes among their belongings that they must have done but cannot remember doing.",
+    pregunta: "Sometimes I find writings, drawings or notes among my belongings that I must have done and can't remember doing.",
   },
   "des-27-voces": {
-    categoria: "Voices inside",
-    pregunta: "Some people find that they sometimes hear voices inside their head that tell them to do things, or that comment on the things they are doing.",
+    pregunta: "Sometimes I hear voices inside my head that tell me to do things, or that comment on the things I'm doing.",
   },
   "des-28-neblina": {
-    categoria: "The world through a fog",
-    pregunta: "Some people have the experience of feeling as though they are looking at the world through a fog, so that people and objects appear far away or unclear.",
+    pregunta: "Sometimes I feel as though I'm looking at the world through a fog, so that people and objects appear far away or unclear.",
   },
 };
 

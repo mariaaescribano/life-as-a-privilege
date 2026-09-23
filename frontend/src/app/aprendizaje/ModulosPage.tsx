@@ -6,7 +6,7 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
-import { VolverAlMapa } from "../../components/global/VolverAlMapa";
+import { VolverAlMapa, olvidarOrigenCurso, origenCurso } from "../../components/global/VolverAlMapa";
 import { useCursosData } from "../../data/cursosApi";
 import { useT } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
@@ -18,8 +18,12 @@ export default function ModulosPage() {
   const nombreDisciplina = useNombreDisciplina();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  // Ruta de origen: solo presente si se llegó desde el recorrido (modal Cursos).
-  const volver = searchParams.get("volver");
+  // De dónde se vino. Dos maneras de llegar desde El Recorrido y las dos valen:
+  //  · `?volver=` en la URL (el modal de Cursos de Psicología, la presentación),
+  //  · la miga de pan de `VolverAlMapa`, que guarda el origen al pulsar la
+  //    tarjeta del curso (las páginas «Cursos de X» de cada disciplina).
+  // Sin ninguna de las dos se vino de Materiales, y ahí es donde se devuelve.
+  const volver = searchParams.get("volver") ?? origenCurso();
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
@@ -55,11 +59,12 @@ export default function ModulosPage() {
               // curso y la página más importante de Materiales. El resto de la
               // sección (cursos, lección, herbario, alimentos) va en `dense`.
               // Botón de vuelta, discreto (small). Si se llegó desde El Recorrido
-              // se respeta ese destino; en cualquier otro caso vuelve a los cursos
-              // de la propia disciplina (misma clave que la ruta /cursos/:slug).
+              // devuelve EXACTAMENTE a la página de la que se salió (lo mismo que
+              // el botón flotante); en cualquier otro caso, a los cursos de la
+              // propia disciplina (misma clave que la ruta /cursos/:slug).
               prev={
                 volver
-                  ? { label: `← ${t("comun.volverAlMapa")}`, onClick: () => navigate(volver), small: true }
+                  ? { label: `← ${t("comun.volverAlMapa")}`, onClick: () => { olvidarOrigenCurso(); navigate(volver); }, small: true }
                   : { label: `← ${t("aprendizaje.cursosDe", { disciplina: nombreDisciplina(modalidad.nom) })}`, onClick: () => navigate(`/aprendizaje/cursos/${modalidadId}`), small: true }
               }
             />

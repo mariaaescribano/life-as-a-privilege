@@ -11,7 +11,7 @@ export const aprendizaje = {
   // En mayúsculas porque el título va con `textTransform: uppercase`; se deja
   // así en el diccionario para que se vea igual que en pantalla.
   "aprendizaje.titulo": "CURSOS Y DISCIPLINAS",
-  "aprendizaje.lema": "Ocho perspectivas. Un ser humano.",
+  "aprendizaje.lema": "Ocho miradas. Un ser humano.",
 
   // ── Cursos de una disciplina (/aprendizaje/cursos/:disciplina) ──────────
   "aprendizaje.enConstruccion": "Disciplina en construcción.",

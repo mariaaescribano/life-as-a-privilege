@@ -539,6 +539,13 @@ const LOTES = {
     ladoMax: 1000,
     carpetas: ["viñetas/astrologia/aspectos"], // 6 archivos · 16 MB
   },
+  // Las cuatro zonas del cerebro de «El trauma en tu cerebro» (paso 7 de
+  // Psicología). Se abren a pantalla casi completa en el popup de la zona, así
+  // que se les deja 1200 px de lado, más que a una viñeta normal.
+  45: {
+    ladoMax: 1200,
+    carpetas: ["recorrido/psicologia/cerebro"], // 4 archivos · 11 MB
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

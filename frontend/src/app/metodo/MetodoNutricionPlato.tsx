@@ -14,7 +14,7 @@ import { glowHeader } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { Reveal, Float, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
-import { PLATO_MACROS, type PlatoAlimento } from "../../hardCoded/espacio/PlatoHarvard";
+import { PLATO_MACROS, sectorDeAlimento, type PlatoAlimento } from "../../hardCoded/espacio/PlatoHarvard";
 import { usePlatoMacros, usePlatoMacroByKey } from "../../hardCoded/espacio/usePlatoHarvard";
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -168,11 +168,19 @@ export default function MetodoNutricionPlato() {
           if (Array.isArray(guardados)) {
             const validos = guardados.filter(
               (a: any) => a && typeof a.foodKey === "string" && typeof a.macroKey === "string"
-            ).map((a: any) => ({
-              id: String(a.id ?? `p${ID_SEQ++}`),
-              foodKey: a.foodKey, macroKey: a.macroKey,
-              xPct: Number(a.xPct) || 0.5, yPct: Number(a.yPct) || 0.5,
-            }));
+            ).map((a: any) => {
+              // El reparto de sectores puede haber cambiado desde que guardó el
+              // plato: se recoloca el alimento en el sector que le toca HOY y,
+              // si ya no está en el plato, se cae (si no, quedaría una pieza
+              // invisible que seguiría dando el sector por relleno).
+              const sector = sectorDeAlimento(a.foodKey);
+              if (!sector) return null;
+              return {
+                id: String(a.id ?? `p${ID_SEQ++}`),
+                foodKey: a.foodKey, macroKey: sector,
+                xPct: Number(a.xPct) || 0.5, yPct: Number(a.yPct) || 0.5,
+              };
+            }).filter((a: any): a is AlimentoPuesto => a !== null);
             setPuestos(validos);
           }
         } catch { /* sin fila todavía */ }

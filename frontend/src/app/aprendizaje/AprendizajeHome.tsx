@@ -5,6 +5,7 @@ import SiteFooter from "../../components/global/Footer";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { useT } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
@@ -41,13 +42,17 @@ const useReveal = (threshold = 0.05, enabled = true) => {
   return { ref, visible };
 };
 
+// Cuántas portadas de curso se piden por adelantado: las dos primeras filas de
+// la cuadrícula (3 columnas en escritorio). El resto baja al acercarse.
+const PORTADAS_PRIMERA_PANTALLA = 6;
+
 export const AprendizajeHome = () => {
   const t = useT();
   const nombreDisciplina = useNombreDisciplina();
   const [mounted, setMounted] = useState(false);
-  // La página no se muestra hasta que TODAS las portadas de los cursos están
-  // descargadas: entra ya completa (nada de portadas cargando a trozos), que
-  // transmite que el material está cuidado.
+  // La página entra en cuanto llegan los datos de los cursos. Las portadas ya
+  // no la retienen (ver la precarga de abajo): lo primero que se ve son los
+  // ocho boxes de disciplina, que son iconos y no tienen foto que esperar.
   const [imagesReady, setImagesReady] = useState(false);
   const { cursosData, loading } = useCursosData();
   // El reveal solo se arma cuando la página real ya está en pantalla (datos +
@@ -66,36 +71,22 @@ export const AprendizajeHome = () => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  // Precarga de todas las portadas de curso — solo cuando ya llegaron los datos.
+  // Precarga de portadas de curso. NO retiene la página: lo primero que se ve
+  // aquí son los ocho boxes de disciplina (iconos, sin fotos), y las tarjetas de
+  // curso están media página más abajo. Antes se esperaba a las ~36 portadas
+  // antes de pintar nada. Ahora se piden en cuanto llegan los datos, en paralelo
+  // con la entrada de la página, y las de más abajo bajan solas al acercarse
+  // (`loading="lazy"` en la tarjeta).
   useEffect(() => {
     if (loading) return; // esperamos a que useCursosData termine
-    const urls = Object.values(cursosData)
-      .flatMap((m) => m.cursos.map((c) => c.foto))
-      .filter((src): src is string => Boolean(src));
-
-    if (urls.length === 0) {
-      setImagesReady(true);
-      return;
-    }
-
-    let cancelled = false;
-    let done = 0;
-    const marcarUna = () => {
-      done += 1;
-      if (!cancelled && done >= urls.length) setImagesReady(true);
-    };
-
-    urls.forEach((src) => {
-      const img = new window.Image();
-      img.onload = marcarUna;
-      img.onerror = marcarUna; // una portada rota no debe colgar la página
-      img.src = src;
-    });
-
-    // Red de seguridad: si alguna imagen nunca resuelve, mostramos igualmente.
-    const failSafe = setTimeout(() => { if (!cancelled) setImagesReady(true); }, 10000);
-
-    return () => { cancelled = true; clearTimeout(failSafe); };
+    setImagesReady(true);
+    const urls = allCourses
+      .map((e) => e.curso.foto)
+      .filter((src): src is string => Boolean(src))
+      .slice(0, PORTADAS_PRIMERA_PANTALLA);
+    if (urls.length === 0) return;
+    const id = setTimeout(() => { void precargarImagenes(urls); }, 400);
+    return () => clearTimeout(id);
   }, [loading, cursosData]);
 
   // Una vez listas las imágenes, disparamos la animación de entrada.

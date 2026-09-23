@@ -2,19 +2,26 @@
 // PÁGINA · El trauma en tu cerebro  ·  7/27
 //
 // Entre los dos tests (ACE, desconexión) y la Línea de Vida. Acaba de ver dos
-// cifras sobre sí misma; aquí ve qué hicieron por dentro esas experiencias, con
-// SUS respuestas encendiendo cada zona del dibujo.
+// cifras sobre sí mismo; aquí ve qué hicieron por dentro esas experiencias.
+//
+// Aquí NO se le mide nada: no hay barras ni porcentajes por zona. Se intentó
+// (una mezcla de su ACE y su DES-II) y se quitó a propósito — no existe ninguna
+// fórmula validada que traduzca esos dos tests a «cuánto te pasa en la
+// amígdala», y una cifra inventada sobre el propio cerebro pesa demasiado.
 //
 // Lo que esta página tiene que conseguir: que deje de leerse como defectos de
-// carácter («soy exagerada», «no me acuerdo de nada», «me quedo en blanco») y
+// carácter («soy exagerado», «no me acuerdo de nada», «me quedo en blanco») y
 // empiece a leerse como lo que es — un cerebro que aprendió a sobrevivir. Por
 // eso cada zona termina en «lo que la cambia», y la página entera termina en la
 // neuroplasticidad: nadie se queda mirando su herida sin salida.
 //
+// Cada zona se lee en un POPUP con su foto (CerebroZonaModal), no dentro de la
+// página: se abre tocándola en el dibujo, en la leyenda o en su barra.
+//
 // El aviso de que esto NO es un escáner va en la página, en su caja, no en letra
 // pequeña (ver CEREBRO_AVISO).
 // ─────────────────────────────────────────────────────────────────────────
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -36,16 +43,13 @@ import {
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
 import {
-  bandaDe,
-  lecturaCerebro,
-  zonaPorKey,
-  ZONAS,
   CEREBRO_AVISO,
   CEREBRO_ESPERANZA,
   CEREBRO_INTRO,
   type ZonaKey,
 } from "../../components/metodo/psicologiaCerebro";
 import { CerebroTrauma } from "../../components/metodo/CerebroTrauma";
+import { CerebroZonaModal } from "../../components/metodo/CerebroZonaModal";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { Reveal } from "../../components/global/Reveal";
 import {
@@ -81,18 +85,13 @@ export default function MetodoPsicologiaCerebro() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<LineaDeVidaData>({});
-  // La zona abierta. Arranca en la que más alto tiene: así lo primero que lee es
-  // lo suyo, no una zona cualquiera.
+  // La zona abierta EN EL POPUP. Arranca cerrado: la página se lee entera y
+  // cada zona se abre cuando se toca (en el dibujo, en la leyenda o en su barra).
   const [zonaKey, setZonaKey] = useState<ZonaKey | null>(null);
   // Cómic antesala de la Línea de Vida: ahora se intercala AQUÍ, que es el paso
   // que precede a la timeline.
   const [comicOpen, setComicOpen] = useState(false);
   const comicVinetas = useComic("psicologia-linea-tiempo", COMIC_LINEA_TIEMPO);
-  const fichaRef = useRef<HTMLDivElement>(null);
-
-  const valores = lecturaCerebro(data);
-  const zona = zonaKey ? zonaPorKey(zonaKey) : null;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -112,16 +111,10 @@ export default function MetodoPsicologiaCerebro() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const d: LineaDeVidaData = psi.data?.data || {};
-        // Esta página LEE los dos tests: sin ellos no hay nada suyo que enseñar,
-        // y un cerebro con las cuatro zonas a cero no le dice nada a nadie.
+        // Los dos tests van ANTES que esta página en el recorrido: si faltan,
+        // se vuelve a ellos. (Aquí no se leen: esta página no mide nada suyo.)
         if (!aceCompleto(d)) { navigate(`/metodo/psicologia/${exp.id}/ace`, { replace: true }); return; }
         if (!desCompleto(d)) { navigate(`/metodo/psicologia/${exp.id}/des`, { replace: true }); return; }
-        setData(d);
-
-        // Se abre por su zona más encendida.
-        const lectura = lecturaCerebro(d);
-        const mayor = ZONAS.reduce((a, z) => (lectura[z.key] > lectura[a.key] ? z : a), ZONAS[0]);
-        setZonaKey(mayor.key);
       } catch {
         // silencioso: si falla la lectura, la página se queda con lo que haya
       } finally {
@@ -134,13 +127,8 @@ export default function MetodoPsicologiaCerebro() {
   if (loading) return <PsicologiaLoading />;
   if (!exp) return null;
 
-  /** Al elegir zona, se baja a su ficha: en el móvil queda fuera de pantalla. */
-  const abrirZona = (key: ZonaKey) => {
-    setZonaKey(key);
-    setTimeout(() => {
-      fichaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 60);
-  };
+  /** Tocar una zona abre su popup, con su foto. */
+  const abrirZona = (key: ZonaKey) => setZonaKey(key);
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -183,7 +171,7 @@ export default function MetodoPsicologiaCerebro() {
               <Box h="1px" w="55%" maxW="240px" mx="auto"
                    bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 
-              <CerebroTrauma valores={valores} activa={zonaKey} onZona={abrirZona} tinta={TINTA} />
+              <CerebroTrauma activa={zonaKey} onZona={abrirZona} tinta={TINTA} />
 
               <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85}
                     textAlign="center" style={{ textShadow: INK_SHADOW }}>
@@ -191,105 +179,6 @@ export default function MetodoPsicologiaCerebro() {
               </Text>
             </Panel>
             </Reveal>
-
-            {/* ── Lo que dicen tus respuestas: las cuatro barras ── */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.3} duration={0.75} w="100%">
-            <Panel>
-              <Box>
-                <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
-                      lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                  {t("metodo.psico.cerebroTusRespuestas")}
-                </Text>
-                <Box mt={{ base: 3, md: 3.5 }} h="1px" w="55%" maxW="240px" mx="auto"
-                     bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-              </Box>
-
-              <Flex direction="column" gap={{ base: 5, md: 6 }}>
-                {ZONAS.map((z) => {
-                  const valor = valores[z.key] ?? 0;
-                  const banda = bandaDe(valor, z.key);
-                  return (
-                    <Box key={z.key} as="button" textAlign="left" w="100%" onClick={() => abrirZona(z.key)} cursor="pointer">
-                      <Flex align="baseline" justify="space-between" gap={3} mb={2}>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
-                              style={{ textShadow: INK_SHADOW }}>
-                          {z.nombre} <Text as="span" fontWeight="500" fontStyle="italic" opacity={0.8}>· {z.apodo}</Text>
-                        </Text>
-                        <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="700" whiteSpace="nowrap"
-                              style={{ textShadow: INK_SHADOW }}>
-                          {banda.etiqueta}
-                        </Text>
-                      </Flex>
-
-                      <Box position="relative" h="10px" borderRadius="full"
-                           bg="rgba(255,251,243,0.55)" border={`1px solid ${TINTA}33`} overflow="hidden">
-                        <Box position="absolute" inset={0} h="100%" borderRadius="full"
-                             w={`${valor}%`} bg={z.color} transition="width 0.8s ease" />
-                      </Box>
-
-                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.65" opacity={0.88}
-                            mt={2} style={{ textShadow: INK_SHADOW }}>
-                        {banda.frase}
-                      </Text>
-                    </Box>
-                  );
-                })}
-              </Flex>
-            </Panel>
-            </Reveal>
-
-            {/* ── La ficha de la zona abierta ── */}
-            <Box ref={fichaRef} w="100%">
-            {zona && (
-              <Reveal key={zona.key} direction="up" distance={24} duration={0.6} w="100%">
-              <Panel>
-                <Flex align="center" gap={3} justify="center">
-                  <Box w="14px" h="14px" borderRadius="full" bg={zona.color} flexShrink={0}
-                       style={{ boxShadow: `0 0 12px ${zona.color}` }} />
-                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
-                        lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                    {zona.nombre}
-                  </Text>
-                </Flex>
-                <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center"
-                      opacity={0.8} mt={-2} style={{ textShadow: INK_SHADOW }}>
-                  {zona.apodo}
-                </Text>
-
-                <Box h="1px" w="55%" maxW="240px" mx="auto"
-                     bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-
-                <Apartado titulo={t("metodo.psico.cerebroParaQue")} texto={zona.paraQueSirve} />
-                <Apartado titulo={t("metodo.psico.cerebroQueLeHizo")} texto={zona.queLeHizo} />
-
-                <Box>
-                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
-                        opacity={0.65} mb={2} style={{ textShadow: INK_SHADOW }}>
-                    {t("metodo.psico.cerebroComoSeNota")}
-                  </Text>
-                  <Flex direction="column" gap={2}>
-                    {zona.comoSeNota.map((linea, i) => (
-                      <Flex key={i} align="flex-start" gap={2.5}>
-                        <Box mt="9px" w="5px" h="5px" borderRadius="full" bg={zona.color} flexShrink={0} />
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" opacity={0.92}
-                              style={{ textShadow: INK_SHADOW }}>
-                          {linea}
-                        </Text>
-                      </Flex>
-                    ))}
-                  </Flex>
-                </Box>
-
-                <Apartado titulo={t("metodo.psico.cerebroLoQueLaCambia")} texto={zona.loQueLaCambia} />
-
-                <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" opacity={0.75}
-                      style={{ textShadow: INK_SHADOW }}>
-                  {t("metodo.psico.cerebroDeDonde", { origen: zona.deDondeSale })}
-                </Text>
-              </Panel>
-              </Reveal>
-            )}
-            </Box>
 
             {/* ── El aviso, a la vista y no en letra pequeña ── */}
             <Reveal direction="up" distance={20} delay={0.1} duration={0.7} w="100%">
@@ -334,6 +223,10 @@ export default function MetodoPsicologiaCerebro() {
 
       <AyudaRecorrido pagina="cerebro" />
 
+      {/* La ficha de cada zona: popup con su foto. Las flechas pasan de una a
+          otra sin cerrarlo. */}
+      <CerebroZonaModal zonaKey={zonaKey} onZona={setZonaKey} onClose={() => setZonaKey(null)} />
+
       {/* Cómic antesala de la Línea de Vida — sale al pasar de página, antes de
           cargar la timeline y su popup de edad. Se puede saltar (Saltar →). */}
       <ComicPasoModal
@@ -350,22 +243,6 @@ export default function MetodoPsicologiaCerebro() {
       />
 
       <SiteFooter />
-    </Box>
-  );
-}
-
-/** Un apartado de la ficha: su antetítulo y su párrafo. */
-function Apartado({ titulo, texto }: { titulo: string; texto: string }) {
-  return (
-    <Box>
-      <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase"
-            opacity={0.65} mb={1.5} style={{ textShadow: INK_SHADOW }}>
-        {titulo}
-      </Text>
-      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-            style={{ textShadow: INK_SHADOW }}>
-        {texto}
-      </Text>
     </Box>
   );
 }

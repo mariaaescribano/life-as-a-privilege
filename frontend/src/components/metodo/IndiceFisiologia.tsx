@@ -1,73 +1,55 @@
-// Botón «Índice» del recorrido de FISIOLOGÍA. A diferencia de las otras
-// disciplinas, el índice NO muestra todo el recorrido: solo los pasos del NIVEL
-// en el que está el usuario (La materia / La Vida / El cuerpo). Se coloca encima
-// de «Mis notas», igual que el índice del resto de disciplinas.
+// Botón «Índice» del recorrido de FISIOLOGÍA. Muestra el recorrido entero en
+// DOS BLOQUES (La materia · La Vida), con bloqueo SECUENCIAL: un paso solo se
+// abre cuando se ha llegado a él (o cuando ya se cumple su requisito, el mismo
+// que pide el botón «siguiente» de la página anterior). Se coloca encima de
+// «Mis notas», igual que el índice del resto de disciplinas.
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { useT, type ClaveTexto } from "../../i18n";
-import { IndiceRecorrido } from "./IndiceRecorrido";
+import { useIdioma } from "../../i18n";
+import { IndiceRecorrido, type SeccionIndice } from "./IndiceRecorrido";
 import { useTusCelulasAbierto } from "./TusCelulasModal";
-import type { PasoRecorrido } from "./psicologiaRecorrido";
-import { fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
-
-// Pasos agrupados por nivel del recorrido de Fisiología. El nombre de cada paso
-// se cita por su clave —la misma que usan los botones «← anterior / siguiente →»
-// de cada página—, así que el Índice y los botones dicen siempre lo mismo.
-const NIVELES: { label: string; pasos: { clave: ClaveTexto; path: string }[] }[] = [
-  {
-    label: "MATERIA",
-    pasos: [
-      { clave: "fisiologia.particulas.titulo",     path: "/metodo/fisiologia/particulas" },
-      { clave: "fisiologia.atomos.titulo",         path: "/metodo/fisiologia/atomos" },
-      { clave: "fisiologia.moleculas.titulo",      path: "/metodo/fisiologia/moleculas" },
-      { clave: "fisiologia.macromoleculas.titulo", path: "/metodo/fisiologia/macromoleculas" },
-      { clave: "fisiologia.estructuras.corto",     path: "/metodo/fisiologia/estructuras" },
-    ],
-  },
-  {
-    label: "VIDA",
-    pasos: [
-      { clave: "fisiologia.celula.titulo",     path: "/metodo/fisiologia/celula" },
-      { clave: "fisiologia.lasCelulas.corto",  path: "/metodo/fisiologia/todas-tus-celulas" },
-      { clave: "fisiologia.sistemas.titulo",   path: "/metodo/fisiologia/sistemas" },
-      { clave: "fisiologia.organismo.titulo",  path: "/metodo/fisiologia/organismo" },
-    ],
-  },
-];
+import {
+  fisiologiaNiveles,
+  fisiologiaRutas,
+  pasoAlcanzableFisiologia,
+  FISIOLOGIA_TOTAL,
+} from "./fisiologiaRecorrido";
+import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt } from "../../GlobalVariables";
 
 export function IndiceFisiologia() {
-  const t = useT();
+  // Los títulos del índice salen del diccionario: al cambiar de idioma hay que
+  // volver a construirlo, y para eso hace falta estar suscrito al contexto.
+  useIdioma();
   const { pathname } = useLocation();
   const clean = pathname.replace(/\/+$/, "");
   // Con el popup «Tus células» abierto (pantalla completa) el Índice no pinta
   // nada: lo ocultamos mientras esté abierto.
   const tusCelulasAbierto = useTusCelulasAbierto();
 
-  // Nivel actual = el que contiene el paso de la ruta actual. Si estamos fuera
-  // de un paso (intro, niveles…), no mostramos índice.
-  const nivel = NIVELES.find((g) => g.pasos.some((p) => p.path === clean));
-  if (!nivel || tusCelulasAbierto) return null;
+  // Fuera de un paso del recorrido (intro, niveles…) no hay índice que enseñar.
+  const enUnPaso = fisiologiaRutas().includes(clean);
+  if (!enUnPaso || tusCelulasAbierto) return null;
 
-  const indice: PasoRecorrido[] = nivel.pasos.map((p, i) => ({
-    n: i + 1,
-    titulo: t(p.clave),
-    ruta: () => p.path,
+  const secciones: SeccionIndice[] = fisiologiaNiveles().map((g) => ({
+    titulo: g.label,
+    pasos: g.pasos,
   }));
-
-  // Para el camino de /home, en cambio, los niveles se cuentan SEGUIDOS: el
-  // primer paso de VIDA es el 6º del recorrido, no otro «1».
-  const pasosAntes = NIVELES.slice(0, NIVELES.indexOf(nivel)).reduce((a, g) => a + g.pasos.length, 0);
 
   return (
     <IndiceRecorrido
-      indice={indice}
-      total={indice.length}
+      secciones={secciones}
+      total={FISIOLOGIA_TOTAL}
       tinta={fisiologiaTxt}
       bg={fisiologiaBg}
       nom={fisiologiaNom}
       luz={false}
+      // Bloqueo secuencial: cada página se abre al llegar a ella, y además se
+      // abre sola en cuanto se cumple el requisito del paso anterior (montar el
+      // átomo, la célula, abrir los 12 sistemas…).
+      progresoKey="fisiologia"
       registroKey="fisiologia"
-      registroOffset={pasosAntes}
+      alcanzableUrl={(userId) => `${API_URL}/metodo-fisiologia/${userId}`}
+      alcanzableDe={pasoAlcanzableFisiologia}
     />
   );
 }

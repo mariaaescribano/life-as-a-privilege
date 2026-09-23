@@ -20,7 +20,7 @@ import {
 import { useT, type ClaveTexto } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
-import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
+import { precargarImagenes, usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
 
@@ -39,19 +39,9 @@ type Discipline = {
   lemaKey?: ClaveTexto;
 };
 
-// Orden del Método: Astrología → Psicología → Hinduismo → TCM →
-// Fisiología → Nutrición → Cultura → Cábala
+// Orden del Método: Psicología → Fisiología → Nutrición → Cultura →
+// TCM → Astrología → Cábala → Hinduismo
 const disciplines: Discipline[] = [
-  {
-    name: astrologiaNom,
-    bg: astrologiaBg,
-    txt: astrologiaTxt,
-    renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
-    descKey: "welcome.desc.astrologia",
-    link: "/disciplina/astrologia",
-    available: true,
-    lemaKey: "welcome.lema.astrologia",
-  },
   {
     name: neuropsicologiaNom,
     bg: neuropsicologiaBg,
@@ -61,26 +51,6 @@ const disciplines: Discipline[] = [
     link: "/disciplina/psicologia",
     available: true,
     lemaKey: "welcome.lema.psicologia",
-  },
-  {
-    name: ayurvedaNom,
-    bg: ayurvedaBg,
-    txt: ayurvedaTxt,
-    renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
-    descKey: "welcome.desc.hinduismo",
-    link: "/disciplina/ayurveda",
-    available: true,
-    lemaKey: "welcome.lema.hinduismo",
-  },
-  {
-    name: tcmNom,
-    bg: tcmBg,
-    txt: tcmTxt,
-    renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
-    descKey: "welcome.desc.medicinaChina",
-    link: "/disciplina/medicinachina",
-    available: true,
-    lemaKey: "welcome.lema.medicinaChina",
   },
   {
     name: fisiologiaNom,
@@ -103,6 +73,36 @@ const disciplines: Discipline[] = [
     lemaKey: "welcome.lema.nutricion",
   },
   {
+    name: culturaNom,
+    bg: culturaBg,
+    txt: culturaTxt,
+    renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
+    descKey: "welcome.desc.cultura",
+    link: "/disciplina/cultura",
+    available: true,
+    lemaKey: "welcome.lema.cultura",
+  },
+  {
+    name: tcmNom,
+    bg: tcmBg,
+    txt: tcmTxt,
+    renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
+    descKey: "welcome.desc.medicinaChina",
+    link: "/disciplina/medicinachina",
+    available: true,
+    lemaKey: "welcome.lema.medicinaChina",
+  },
+  {
+    name: astrologiaNom,
+    bg: astrologiaBg,
+    txt: astrologiaTxt,
+    renderIcon: (size) => <AstrologiaIcon size={{ base: size, md: size }} />,
+    descKey: "welcome.desc.astrologia",
+    link: "/disciplina/astrologia",
+    available: true,
+    lemaKey: "welcome.lema.astrologia",
+  },
+  {
     name: cabalaNom,
     bg: cabalaBg,
     txt: cabalaTxt,
@@ -113,23 +113,39 @@ const disciplines: Discipline[] = [
     lemaKey: "welcome.lema.cabala",
   },
   {
-    name: culturaNom,
-    bg: culturaBg,
-    txt: culturaTxt,
-    renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
-    descKey: "welcome.desc.cultura",
-    link: "/disciplina/cultura",
+    name: ayurvedaNom,
+    bg: ayurvedaBg,
+    txt: ayurvedaTxt,
+    renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
+    descKey: "welcome.desc.hinduismo",
+    link: "/disciplina/ayurveda",
     available: true,
-    lemaKey: "welcome.lema.cultura",
+    lemaKey: "welcome.lema.hinduismo",
   },
 ];
 
-// Todas las fotos de la portada: el mandala de bienvenida no aparece hasta que
-// TODAS estén descargadas, para que la página no se rellene a trozos.
+// Lo que la portada espera ANTES de pintarse: el mandala y las acuarelas de la
+// primera pantalla (las cuatro primeras tarjetas, que en móvil son dos filas de
+// dos y en escritorio una fila de cuatro). Así lo primero que se ve entra
+// completo, sin esperar a las ocho.
+const DISCIPLINAS_PRIMERA_PANTALLA = 4;
 const WELCOME_IMGS: string[] = [
   "/img/icono/life.webp",
-  ...(disciplines.map((d) => disciplinaBgImg(d.name)).filter(Boolean) as string[]),
+  ...(disciplines
+    .slice(0, DISCIPLINAS_PRIMERA_PANTALLA)
+    .map((d) => disciplinaBgImg(d.name))
+    .filter(Boolean) as string[]),
 ];
+
+// Las acuarelas de la segunda fila. Se piden EN CUANTO la página ya se ve, no
+// antes: media pantalla de scroll por delante da tiempo de sobra a que lleguen.
+// Si alguien baja a toda prisa con mala cobertura y una tarjeta se adelanta a su
+// foto, no queda un hueco blanco: DisciplinaBgLayer pinta debajo el color sólido
+// de la disciplina y la acuarela entra encima.
+const WELCOME_IMGS_DIFERIDAS: string[] = disciplines
+  .slice(DISCIPLINAS_PRIMERA_PANTALLA)
+  .map((d) => disciplinaBgImg(d.name))
+  .filter(Boolean) as string[];
 
 // callback ref: el observer se engancha en cuanto el nodo aparece en el DOM.
 // (Importante porque la página se monta primero mostrando <LifeLoading/> y el
@@ -418,6 +434,17 @@ const Welcome = () => {
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
   }, [listo]);
 
+  // Las acuarelas de la segunda fila, fuera del camino crítico: no retienen la
+  // pantalla de carga, pero se piden enseguida para que estén en caché mucho
+  // antes de que esas tarjetas asomen. Un respiro de 400 ms antes de pedirlas
+  // para no competir con la entrada de la primera pantalla, que es lo que se
+  // está mirando en ese momento.
+  useEffect(() => {
+    if (!listo) return;
+    const id = setTimeout(() => { void precargarImagenes(WELCOME_IMGS_DIFERIDAS); }, 400);
+    return () => clearTimeout(id);
+  }, [listo]);
+
   // Mientras cargan las fotos: pantalla de carga con el mandala animado.
   if (!listo) return <LifeLoading variant="public" />;
 
@@ -557,7 +584,7 @@ const Welcome = () => {
       {/* ── CARDS DE DISCIPLINAS ── */}
       {/* `pt` corto a propósito: en móvil tienen que entrar LAS CUATRO PRIMERAS
           sin hacer scroll (dos filas de dos), si no parece que la web se acaba en
-          Astrología y Psicología. Ojo al subirlo: cada píxel de aquí —y del héroe
+          Psicología y Fisiología. Ojo al subirlo: cada píxel de aquí —y del héroe
           de arriba— empuja la segunda fila por debajo del pliegue.
           (Las tarjetas ya traen su `mt` propio para el icono que sobresale.) */}
       <Box

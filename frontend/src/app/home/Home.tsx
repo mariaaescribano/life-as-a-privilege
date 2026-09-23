@@ -27,6 +27,7 @@ import {
   tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
 } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import CaminoUsuario from "./CaminoUsuario";
 import DiarioUsuario from "./DiarioUsuario";
@@ -681,6 +682,19 @@ const Home = () => {
 
   // Precarga de TODAS las fotos del mandala. Hasta que no estén todas cargadas
   // (o fallen) no se muestra nada — evita que aparezcan círculos sin su fondo.
+  //
+  // Los fondos de las disciplinas son FIJOS: no dependen de la respuesta del
+  // servidor, así que se piden en cuanto se monta la página. Antes este efecto
+  // esperaba a `img` (la foto del usuario) y eso encadenaba en serie
+  // chunk → /user/me → fotos; ahora los fondos viajan a la vez que la llamada.
+  useEffect(() => {
+    if (imagesReadyCache) return;
+    const fondos = disciplines
+      .map((d) => disciplinaBgImg(d.name))
+      .filter((s): s is string => !!s);
+    void precargarImagenes(fondos);
+  }, []);
+
   useEffect(() => {
     if (img == null) return;
     // Ya precargadas en una visita anterior de la sesión → nada que hacer.

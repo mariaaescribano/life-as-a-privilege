@@ -11,6 +11,8 @@ import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
 const TXT = fisiologiaTxt;
 const BG = fisiologiaBg;
+/** La sombra de siempre: letra clara sobre box oscuro. */
+const SOMBRA_OSCURA = "0 2px 8px rgba(0,0,0,0.9)";
 const FISIO_IMG = disciplinaBgImg(fisiologiaNom) ?? "/img/fondos/fisio.webp";
 
 const fadeIn = keyframes`
@@ -73,6 +75,7 @@ export function FichaFisioModal({
   bgImage = FISIO_IMG,
   bgColor = BG,
   txtColor = TXT,
+  textShadow = SOMBRA_OSCURA,
 }: {
   /** Ruta de la imagen cuadrada de la izquierda. */
   foto: string;
@@ -108,6 +111,11 @@ export function FichaFisioModal({
   bgColor?: string;
   /** Color del texto de los párrafos. Por defecto el de Fisiología. */
   txtColor?: string;
+  /** Sombra del título y de los párrafos. Por defecto la oscura, que es la que
+   *  necesita un box oscuro con letra clara (Fisiología, Nutrición). Las
+   *  disciplinas de box CLARO y tinta oscura —psicología— pasan la suya, el
+   *  resplandor de papel, o la letra sale con una mancha negra detrás. */
+  textShadow?: string;
 }) {
   const t = useT();
   const [imgErr, setImgErr] = useState(false);
@@ -395,7 +403,7 @@ export function FichaFisioModal({
             sx={textoSx}
           >
             {/* Aviso discreto de «ya la habías leído», encima del título. */}
-            {leida && <AvisoLeida color={accent} textShadow="0 2px 8px rgba(0,0,0,0.9)" />}
+            {leida && <AvisoLeida color={accent} textShadow={textShadow} />}
 
             <Text
               color={accent}
@@ -406,7 +414,7 @@ export function FichaFisioModal({
               lineHeight="1.2"
               mb={{ base: 4, md: 5 }}
               textAlign={{ base: "center", md: "left" }}
-              style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+              style={{ textShadow }}
             >
               {titulo}
             </Text>
@@ -427,7 +435,7 @@ export function FichaFisioModal({
                   fontWeight="400"
                   fontFamily="'EB Garamond', serif"
                   textAlign={{ base: "center", md: "left" }}
-                  style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}
+                  style={{ textShadow }}
                 >
                   {p}
                 </Text>

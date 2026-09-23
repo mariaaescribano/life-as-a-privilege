@@ -14,6 +14,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Las ocho, con la misma clave que los `<key>_suscrito` del usuario. */
+// El orden del MAPA (no el de la portada: ese es el escaparate público y se
+// reordena para enseñar primero lo más reconocible, pero el recorrido se anda
+// en este orden).
 export const DISCIPLINAS_CAMINO = [
   'metodo', 'psicologia', 'ayurveda', 'tcm',
   'fisiologia', 'nutricion', 'cabala', 'cultura',

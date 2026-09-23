@@ -37,6 +37,10 @@ const useReveal = (threshold = 0.15) => {
   return { ref, visible };
 };
 
+// Las dos primeras filas (3 columnas en escritorio) bajan su portada ya; el
+// resto espera a acercarse, que es cuando la tarjeta se enciende con su reveal.
+const FILAS_PRIORITARIAS = 2;
+
 function CursoRevealCell({ it, i }: { it: CursoGridItem; i: number }) {
   const { ref, visible } = useReveal();
   return (
@@ -47,7 +51,7 @@ function CursoRevealCell({ it, i }: { it: CursoGridItem; i: number }) {
       transform={visible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)"}
       transition={`opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.1}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.1}s`}
     >
-      <CursoCardDetalle curso={it.curso} bgColor={it.bgColor} color={it.color} nom={it.nom} />
+      <CursoCardDetalle curso={it.curso} bgColor={it.bgColor} color={it.color} nom={it.nom} prioritaria={i < FILAS_PRIORITARIAS * 3} />
     </Box>
   );
 }

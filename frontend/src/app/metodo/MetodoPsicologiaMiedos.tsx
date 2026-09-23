@@ -2,8 +2,9 @@
 // PÁGINA · MIEDOS (nombrarlos)  ·  12/15
 //
 // Entre «Dones» y «Enfrenta tus miedos». La persona escribe sus miedos más
-// profundos, uno a uno (mismo patrón que «Nudos»). En la página siguiente los
-// enfrentará respondiendo a unas preguntas.
+// profundos, uno a uno (misma página que «Nudos», hasta la maqueta: los dos
+// boxes en horizontal en escritorio, para ver crecer la lista mientras añade).
+// En la página siguiente los enfrentará respondiendo a unas preguntas.
 //
 // Datos: data.miedos = MiedoItem[]  (cada uno con id, texto y respuestas).
 // ─────────────────────────────────────────────────────────────────────────
@@ -144,7 +145,7 @@ export default function MetodoPsicologiaMiedos() {
 
       <Box position="relative" flex="1">
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
-          <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 7, md: 9 }}>
+          <Flex direction="column" align="center" w="100%" maxW={{ base: "760px", lg: "1080px" }} gap={{ base: 7, md: 9 }}>
 
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
@@ -169,22 +170,37 @@ export default function MetodoPsicologiaMiedos() {
             />
             </Reveal>
 
+            {/* Los dos boxes, UNO AL LADO DEL OTRO en escritorio: a la
+                izquierda se escribe o se elige, y el miedo aparece al momento en
+                el de la derecha. Viéndolo a la vez se entiende que una cosa
+                alimenta la otra; apilados, el resultado quedaba fuera de
+                pantalla y parecían dos ejercicios distintos. En móvil, donde no
+                caben dos columnas, siguen uno debajo del otro (y en ese orden:
+                primero se escribe, luego se ve). Igual que «Nudos». */}
+            <Flex w="100%" direction={{ base: "column", lg: "row" }} align="stretch"
+                  gap={{ base: 7, md: 9, lg: 6 }}>
+
             {/* Box principal: pregunta + entrada + ejemplos */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75}
+                    w="100%" flex={{ lg: "1.1" }} minW={0} display="flex">
             <Box
               position="relative"
               w="100%"
+              h="100%"
+              display="flex"
+              flexDirection="column"
               borderRadius="2xl"
               overflow="hidden"
               border={azulBorde}
               boxShadow={glowPanel}
             >
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 7, md: 9 }} px={{ base: 6, md: 10 }} py={{ base: 10, md: 14 }}>
+              <Flex position="relative" zIndex={1} flex="1" direction="column" align="center"
+                    gap={{ base: 6, md: 7 }} px={{ base: 6, md: 8 }} py={{ base: 8, md: 10 }}>
 
                 {/* Pregunta principal */}
                 <Flex direction="column" align="center" textAlign="center" gap={3} maxW="620px">
-                  <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
+                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
                     {miedosTxt.pregunta}
                   </Text>
                   <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" opacity={0.9} style={{ textShadow: INK_SHADOW }}>
@@ -294,17 +310,22 @@ export default function MetodoPsicologiaMiedos() {
             </Reveal>
 
             {/* Box «Mis Miedos»: la selección final */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75}
+                    w="100%" flex={{ lg: "1" }} minW={0} display="flex">
             <Box
               position="relative"
               w="100%"
+              h="100%"
+              display="flex"
+              flexDirection="column"
               borderRadius="2xl"
               overflow="hidden"
               border={azulBorde}
               boxShadow={glowPanel}
             >
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} direction="column" align="center" gap={{ base: 4, md: 5 }} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }}>
+              <Flex position="relative" zIndex={1} flex="1" direction="column" align="center"
+                    gap={{ base: 4, md: 5 }} px={{ base: 6, md: 8 }} py={{ base: 7, md: 9 }}>
                 <Flex align="center" justify="center" gap={2.5}>
                   <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: INK_SHADOW }}>
                     Mis Miedos
@@ -320,7 +341,12 @@ export default function MetodoPsicologiaMiedos() {
                 <Box
                   w="100%"
                   maxW="620px"
-                  h={{ base: "180px", md: "220px" }}
+                  // Apilados, el alto es fijo para que el box no dé saltos al
+                  // añadir o borrar. En dos columnas, además, se estira hasta
+                  // igualar al box de la izquierda, que es el que manda.
+                  flex={{ lg: "1" }}
+                  h={{ base: "180px", md: "220px", lg: "auto" }}
+                  minH={{ lg: "200px" }}
                   overflowY="auto"
                   overflowX="hidden"
                   sx={{
@@ -385,6 +411,7 @@ export default function MetodoPsicologiaMiedos() {
               </Flex>
             </Box>
             </Reveal>
+            </Flex>
           </Flex>
         </Flex>
       </Box>

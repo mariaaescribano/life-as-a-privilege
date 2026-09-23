@@ -1,4 +1,5 @@
 export {
+  cargarTextosMetodo,
   IdiomaProvider,
   useIdioma,
   useT,

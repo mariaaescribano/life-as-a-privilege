@@ -21,6 +21,11 @@ import { useComic } from "../../i18n/comics";
 // ilustraciones de esa disciplina y con su nombre de titular. Es un filtro
 // sobre la misma lista: una serie nueva aparece en las dos sin tocar nada.
 
+// Cuántas portadas retienen la pantalla de carga: dos filas de cuatro, que es
+// lo que cabe sin bajar en escritorio (en móvil, de sobra). Tiene que ir a la
+// par con el corte `eager`/`lazy` de IlustracionCard.
+const PORTADAS_PRIMERA_PANTALLA = 8;
+
 export default function Ilustraciones() {
   const t = useT();
   // Slug de la URL (/ilustraciones/astrologia). Sin slug → la galería entera.
@@ -39,8 +44,11 @@ export default function Ilustraciones() {
   );
   const [mounted, setMounted] = useState(false);
   const [abierta, setAbierta] = useState<IlustracionEntry | null>(null);
-  // La galería no se muestra hasta que TODAS las portadas están descargadas:
-  // entra ya completa (nada de imágenes cargando a trozos).
+  // La galería no se muestra hasta que están descargadas las portadas de la
+  // PRIMERA PANTALLA: lo que se ve sin bajar entra ya completo. Las de más
+  // abajo se piden solas al acercarse (`loading="lazy"` en la tarjeta), que es
+  // cuando además se encienden con su reveal. Esperar a las 38 eran 4,6 MB de
+  // mandala girando.
   const [imagesReady, setImagesReady] = useState(false);
   // El cómic abierto, en el idioma activo. Un cómic sin traducir se lee en
   // español (`useComic` respeta el original viñeta a viñeta), así que no hace
@@ -51,9 +59,11 @@ export default function Ilustraciones() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  // Precarga de todas las portadas de la galería.
+  // Precarga de las portadas de la primera pantalla (dos filas de cuatro: el
+  // mismo corte que usa la tarjeta para decidir `eager`/`lazy`).
   useEffect(() => {
     const urls = entradas
+      .slice(0, PORTADAS_PRIMERA_PANTALLA)
       .map((e) => e.cover)
       .filter((src): src is string => Boolean(src))
       .map((src) => encodeURI(src));

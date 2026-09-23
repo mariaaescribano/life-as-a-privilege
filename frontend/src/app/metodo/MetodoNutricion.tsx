@@ -101,7 +101,7 @@ export default function MetodoNutricion() {
     if (!suscrito) { setPagoOpen(true); return; }
     setCaloriasOpen(true); // cómic de transición «Las calorías no existen»
   };
-  const caloriasContinuar = () => { setCaloriasOpen(false); navigate("/metodo/nutricion/nutrientes"); };
+  const caloriasContinuar = () => { setCaloriasOpen(false); navigate("/metodo/nutricion/macronutrientes"); };
 
   if (loading) {
     return <NutricionLoading />;

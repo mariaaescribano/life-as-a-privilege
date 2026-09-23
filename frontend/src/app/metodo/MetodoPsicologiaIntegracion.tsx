@@ -153,6 +153,8 @@ export default function MetodoPsicologiaIntegracion() {
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>("idle");
   const [heridas, setHeridas] = useState<RelacionHuellaNudo[]>([]);
   const [arquetipos, setArquetipos] = useState<ArqPlaneta[]>([]);
+  // ¿Ha pasado ya por Astrología? De eso depende que esta página se abra.
+  const [astroHecha, setAstroHecha] = useState(false);
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
   const [activaId, setActivaId] = useState<string | null>(null);
   const dataRef = useRef<LineaDeVidaData>({});
@@ -218,6 +220,12 @@ export default function MetodoPsicologiaIntegracion() {
         }
 
         if (astroRes.status === "fulfilled") {
+          // Esta página CRUZA dos disciplinas: sus nudos (psicología) con sus
+          // arquetipos (astrología). Sin carta astral no hay media página, así
+          // que se entra solo si ya pasó por Astrología — se da por hecha en
+          // cuanto envió sus datos de nacimiento, que es cuando el servidor le
+          // calcula la carta.
+          setAstroHecha(!!astroRes.value.data?.solicitud_enviada_at);
           const carta: CartaData = astroRes.value.data?.data || {};
           const lista: ArqPlaneta[] = [];
           for (const c of CUERPOS) {
@@ -228,6 +236,7 @@ export default function MetodoPsicologiaIntegracion() {
             if (signo || casa != null) lista.push({ cuerpoKey: c.key, symbol: c.symbol, color: c.color, signo, casa });
           }
           setArquetipos(lista);
+          if (lista.length > 0) setAstroHecha(true);
         }
       } catch {
         // silencioso
@@ -387,6 +396,32 @@ export default function MetodoPsicologiaIntegracion() {
             />
             </Reveal>
 
+            {!astroHecha ? (
+              /* ── Sin carta astral: la página entera va con candado ──
+                 Aquí se reúnen sus nudos con sus arquetipos; sin la mitad
+                 astrológica no hay ejercicio que hacer, así que en vez de abrir
+                 media página se explica qué se hace y se le lleva a por su
+                 carta. Al volver con ella, la página se abre sola. */
+              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+                <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
+                     minH={{ base: "380px", md: "440px" }} display="flex"
+                     bgImage={`url('${ARQUETIPOS_IMG}')`} bgSize="cover" bgPosition="center"
+                     border={azulBorde} boxShadow={glowPanel}>
+                  {/* Velo: la foto sola no da contraste para la letra clara. */}
+                  <Box position="absolute" inset={0} bg="rgba(8,13,30,0.62)" pointerEvents="none" />
+                  <Box position="relative" zIndex={1} flex="1" px={{ base: 5, md: 8 }} py={{ base: 8, md: 10 }}>
+                    <ArquetiposBloqueados
+                      onIr={() => navigate("/metodo/astrologia")}
+                      texto={[
+                        t("metodo.psico.bloqRelacion1"),
+                        t("metodo.psico.bloqRelacionPagina"),
+                      ]}
+                    />
+                  </Box>
+                </Box>
+              </Reveal>
+            ) : (
+            <>
             {/* Intro: la idea de la proyección */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
             <IntroRecorrido>{t("metodo.psico.relacionIntro")}</IntroRecorrido>
@@ -526,6 +561,8 @@ export default function MetodoPsicologiaIntegracion() {
               </Flex>
               </RevealItem>
             </RevealStagger>
+            </>
+            )}
 
           </Flex>
         </Flex>

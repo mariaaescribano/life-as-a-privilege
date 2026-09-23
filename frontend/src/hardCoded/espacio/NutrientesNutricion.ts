@@ -1,4 +1,5 @@
-// ── Datos de la Página 1 del recorrido de Nutrición: los 6 grupos de nutrientes.
+// ── Datos de las páginas de nutrientes del recorrido de Nutrición: los 12
+// grupos, repartidos más abajo entre Macronutrientes y Micronutrientes.
 // Cada uno con sus tipos, qué hacen en el cuerpo y dónde encontrarlo.
 
 export interface NutrienteTipo {
@@ -1306,18 +1307,58 @@ export const NUTRIENTES: Nutriente[] = [
   },
 ];
 
-// El recorrido de nutrientes se divide en DOS páginas para hacer más trayecto:
-//   · /metodo/nutricion/nutrientes            → NUTRIENTES_PRINCIPALES (hasta Fibra)
-//   · /metodo/nutricion/nutrientes-secundarios → NUTRIENTES_SECUNDARIOS (el resto)
+// ─────────────────────────────────────────────────────────────────────────
+// LAS DOS PÁGINAS DEL RECORRIDO DE NUTRIENTES
+//   · /metodo/nutricion/macronutrientes → lo que se come a CUCHARADAS: se mide
+//     en gramos, da energía y construye el cuerpo.
+//   · /metodo/nutricion/micronutrientes → lo que se come a PELLIZCOS: se mide
+//     en miligramos o microgramos y no da energía, pero sin ello nada funciona.
+//
+// El orden de CADA página se escribe aquí, no en el array de arriba: así se
+// puede mover un grupo de página (o cambiarlo de sitio) tocando una sola línea,
+// sin mover cientos de líneas de contenido.
+//
+// Los tres últimos del micro (etanol vive en macro) no son nutrientes de
+// verdad: etanol da calorías y se cuenta en gramos, por eso va con los macro;
+// edulcorantes y drogas se toman en dosis mínimas, por eso van con los micro.
+// Si prefieres otro reparto, mueve la `key` de una lista a la otra.
 // La página de detalle sigue buscando en NUTRIENTES (la lista completa), así que
 // ambos grupos funcionan igual al abrir una tarjeta.
-const CORTE_SECUNDARIOS = NUTRIENTES.findIndex((n) => n.key === "fibra") + 1;
-export const NUTRIENTES_PRINCIPALES = NUTRIENTES.slice(0, CORTE_SECUNDARIOS);
-export const NUTRIENTES_SECUNDARIOS = NUTRIENTES.slice(CORTE_SECUNDARIOS);
+// ─────────────────────────────────────────────────────────────────────────
+const MACRO_KEYS = [
+  "carbohidratos", "fibra", "grasas", "colesterol", "proteinas", "agua", "etanol",
+];
+const MICRO_KEYS = [
+  "vitaminas", "minerales", "fitoquimicos", "edulcorantes", "drogas",
+];
+
+const porKeys = (keys: string[]): Nutriente[] =>
+  keys.map((k) => NUTRIENTES.find((n) => n.key === k)).filter((n): n is Nutriente => !!n);
+
+/** Página 1 · Macronutrientes (gramos: energía y estructura). */
+export const NUTRIENTES_MACRO = porKeys(MACRO_KEYS);
+/** Página 2 · Micronutrientes (mg/µg: sin calorías, imprescindibles). */
+export const NUTRIENTES_MICRO = porKeys(MICRO_KEYS);
+
+/** ¿Este grupo se ve en la página de micronutrientes? */
+export const esMicronutriente = (key: string): boolean =>
+  NUTRIENTES_MICRO.some((n) => n.key === key);
+
+/** ¿Se puede entrar ya a este grupo? Dentro de su página los grupos se andan en
+ *  FILA (ver SendaNutrientes): uno se abre si ya está leído —lo andado no se
+ *  vuelve a cerrar— o si lo están todos los anteriores de su lista. */
+export const nutrienteAlcanzable = (key: string, explorados: Iterable<string>): boolean => {
+  const vistos = new Set(explorados);
+  if (vistos.has(key)) return true;
+  const lista = esMicronutriente(key) ? NUTRIENTES_MICRO : NUTRIENTES_MACRO;
+  const i = lista.findIndex((n) => n.key === key);
+  if (i < 0) return true; // grupo fuera de las dos páginas: sin camino que respetar
+  return lista.slice(0, i).every((n) => vistos.has(n.key));
+};
 
 // Dado un key de nutriente, indica a qué página de la rejilla pertenece (para
 // que el botón «Volver» del detalle regrese a la página correcta).
 export const rutaListaNutriente = (key: string): string =>
-  NUTRIENTES_SECUNDARIOS.some((n) => n.key === key)
-    ? "/metodo/nutricion/nutrientes-secundarios"
-    : "/metodo/nutricion/nutrientes";
+  esMicronutriente(key)
+    ? "/metodo/nutricion/micronutrientes"
+    : "/metodo/nutricion/macronutrientes";

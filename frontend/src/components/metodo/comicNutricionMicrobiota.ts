@@ -1,7 +1,7 @@
 import type { Vineta } from "./ComicViewer";
 
-// Cómic de transición «La microbiota». Va ENTRE la pantalla de Los nutrientes
-// (/metodo/nutricion/nutrientes) y el apartado de la Microbiota
+// Cómic de transición «La microbiota». Va ENTRE la pantalla de los
+// Micronutrientes (/metodo/nutricion/micronutrientes) y el apartado de la Microbiota
 // (/metodo/nutricion/microbiota): se abre al pulsar «Microbiota →» y termina
 // navegando a la microbiota.
 //

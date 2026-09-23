@@ -61,7 +61,7 @@ export interface PrediabetesData {
 // ─────────────────────────────────────────────────────────────────────────
 
 export const PREDIABETES_INTRO = {
-  titulo: "¿Cómo va tu azúcar?",
+  titulo: "Test de prediabetes",
   // Frase sobre el turquesa, bajo el header.
   subtitulo:
     "La prediabetes no duele, no se nota y se puede dar la vuelta. Por eso merece la pena mirarla a tiempo.",

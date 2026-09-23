@@ -39,11 +39,25 @@ const toPlato = (a: Alimento): PlatoAlimento => ({
 });
 
 // Qué grupo(s) de la biblioteca molecular caen en cada sector del plato.
+// Los frutos secos y los lácteos NO están en «proteína»: en el plato cuentan
+// como GRASA (las nueces son grasa buena; el queso y el yogur griego, grasa
+// saturada), y la grasa no tiene sector propio en el plato de Harvard.
 const GRUPOS_POR_SECTOR: Record<string, GrupoAlimento[]> = {
   verduras: ["verdura"],
   fruta: ["fruta"],
   cereales: ["cereal"],
-  proteina: ["proteina", "proteina-vegetal", "legumbre", "frutos-secos", "lacteo"],
+  proteina: ["proteina", "proteina-vegetal", "legumbre"],
+};
+
+// Alimentos que van a un sector DISTINTO del que les tocaría por su grupo, o
+// que se rescatan de un grupo que no está en el plato.
+const SECTOR_POR_ALIMENTO: Record<string, string> = {
+  // La batata es verdura de huerta, pero en el plato es un HIDRATO: un 17 % de
+  // almidón, como el arroz o la patata, no una hortaliza para llenar el plato.
+  batata: "cereales",
+  // El queso fresco sí es proteína: escurrido tiene más proteína que grasa
+  // (11 % frente a 8 %), al revés que el queso curado y el yogur griego.
+  "queso-fresco": "proteina",
 };
 
 // Alimentos que, aun siendo de un grupo saludable, NO van en el plato (trampas
@@ -52,7 +66,13 @@ const FUERA_DEL_PLATO = new Set<string>(["zumo-naranja"]);
 
 const alimentosDeSector = (sectorKey: string): PlatoAlimento[] =>
   ALIMENTOS
-    .filter((a) => (GRUPOS_POR_SECTOR[sectorKey] ?? []).includes(a.grupo) && !FUERA_DEL_PLATO.has(a.key))
+    .filter((a) => {
+      if (FUERA_DEL_PLATO.has(a.key)) return false;
+      // El alimento con sitio propio manda sobre la regla de su grupo.
+      const propio = SECTOR_POR_ALIMENTO[a.key];
+      if (propio) return propio === sectorKey;
+      return (GRUPOS_POR_SECTOR[sectorKey] ?? []).includes(a.grupo);
+    })
     .map(toPlato);
 
 // Metadatos de los 4 sectores (los alimentos se rellenan desde ALIMENTOS).
@@ -82,7 +102,7 @@ const SECTORES_META: Omit<PlatoMacro, "alimentos">[] = [
     color: "#c9a86a",
     proporcion: 25,
     descripcion:
-      "Cereales integrales como la avena, el arroz o el pan integral: energía de liberación lenta.",
+      "Cereales integrales como la avena, el arroz o el pan integral, y tubérculos como la batata: energía de liberación lenta.",
   },
   {
     key: "proteina",
@@ -91,7 +111,7 @@ const SECTORES_META: Omit<PlatoMacro, "alimentos">[] = [
     color: "#ffffff",
     proporcion: 25,
     descripcion:
-      "Proteína saludable: legumbres, soja, huevo, tofu o frutos secos. Evita carnes y pescados, elige proteína vegetal.",
+      "Proteína saludable: legumbres, soja, huevo o tofu. Evita carnes y pescados, elige proteína vegetal.",
   },
 ];
 
@@ -108,3 +128,10 @@ export const PLATO_FUERA: PlatoAlimento[] = ALIMENTOS
 
 export const platoMacroByKey = (key: string): PlatoMacro | undefined =>
   PLATO_MACROS.find((m) => m.key === key);
+
+/** En qué sector del plato cae hoy un alimento (undefined si ya no está en el
+ *  plato). Sirve para recolocar los platos YA GUARDADOS cuando se cambia el
+ *  reparto: la batata pasó de verduras a cereales, y los frutos secos, el queso
+ *  y el yogur griego salieron de proteína. */
+export const sectorDeAlimento = (foodKey: string): string | undefined =>
+  PLATO_MACROS.find((m) => m.alimentos.some((a) => a.key === foodKey))?.key;

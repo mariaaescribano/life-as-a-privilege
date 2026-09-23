@@ -9,11 +9,11 @@ import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Cómic de transición «Las calorías no existen». Va ENTRE la portada de
-// Nutrición y la pantalla de Los nutrientes: se abre al pulsar «Comenzar» y
-// termina navegando a /metodo/nutricion/nutrientes.
+// Nutrición y la pantalla de los Macronutrientes: se abre al pulsar «Comenzar»
+// y termina navegando a /metodo/nutricion/macronutrientes.
 //
 //   · onContinue → botón «Ir a los nutrientes →» de la última viñeta (o el tick
-//                  final). El padre cierra y navega a nutrientes.
+//                  final). El padre cierra y navega a los macronutrientes.
 //   · onClose    → la X / Escape. El padre cierra, quedándose en la portada.
 //
 // Colores: acento claro (nutricionBg) para líneas/contador/botón y letra oscura

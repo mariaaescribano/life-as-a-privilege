@@ -98,7 +98,7 @@ export default function MetodoNutricionMicrobiota() {
               color={nutricionTxt}
               nom={nutricionNom}
               mb={0}
-              prev={{ label: `← ${t("metodo.nutri.paso.secundarios")}`, onClick: () => navigate("/metodo/nutricion/nutrientes-secundarios") }}
+              prev={{ label: `← ${t("metodo.nutri.paso.microCorto")}`, onClick: () => navigate("/metodo/nutricion/micronutrientes") }}
               extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
               next={{ label: `${t("metodo.nutri.paso.hambre")} →`, onClick: () => setComicHambreOpen(true) }}
             />

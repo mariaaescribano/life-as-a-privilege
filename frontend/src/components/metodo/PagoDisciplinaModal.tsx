@@ -336,18 +336,6 @@ export function PagoDisciplinaModal({
             >
               {t("metodo.pago.stripe")}
             </Text>
-
-            <Box h="1px" bgGradient={`linear(to-r, transparent, ${txt}40, transparent)`} mt={1} />
-
-            <Text
-              color={`${txt}99`}
-              fontSize="xs"
-              lineHeight="1.6"
-              fontStyle="italic"
-              textAlign="center"
-            >
-              {t("metodo.pago.palabra")}
-            </Text>
           </Flex>
         </ModalBody>
       </ModalContent>

@@ -6,22 +6,42 @@ import { Box } from "@chakra-ui/react";
 // import Landing from "./app/web/Landing";
 import Welcome from "./app/web/Welcome";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { cargarTextosMetodo } from "./i18n";
+
+/**
+ * Igual que `lazy()`, pero además se trae los textos del RECORRIDO
+ * (`metodo.*`: 1.035 claves, ~100 KB) antes de dar por buena la página.
+ *
+ * Esos textos ya no viajan en el paquete de entrada —que descarga TODO el
+ * mundo, también quien solo entra a leer «Quién soy»—, sino en un archivo
+ * aparte. Las DOS descargas salen a la vez, así que no se pierde ni un viaje:
+ * mientras baja la página, baja el diccionario. Y como la ruta no se pinta
+ * hasta que las dos han llegado, no hay ni un fotograma con claves peladas.
+ *
+ * Quién la lleva puesta: /metodo/* y todo lo que use sus componentes (la
+ * galería de ilustraciones, el mandala de /home, las presentaciones /d/…).
+ * Se calcula siguiendo los imports, no a ojo: si una página nueva usa una
+ * clave `metodo.*`, tiene que declararse aquí con `lazyConMetodo`.
+ */
+const lazyConMetodo = <T extends { default: React.ComponentType<any> }>(
+  carga: () => Promise<T>,
+) => lazy(() => Promise.all([carga(), cargarTextosMetodo()]).then(([modulo]) => modulo));
 const LogIn = lazy(() => import("./app/auth/LogIn"));
 const SignIn = lazy(() => import("./app/auth/SignIn"));
 const GoogleAuthCallback = lazy(() => import("./app/auth/GoogleAuthCallback"));
-const Home = lazy(() => import("./app/home/Home"));
+const Home = lazyConMetodo(() => import("./app/home/Home"));
 const Diario = lazy(() => import("./app/home/Diario"));
 const AprendizajeHome = lazy(() => import("./app/aprendizaje/AprendizajeHome").then((m) => ({ default: m.AprendizajeHome })));
-const ModulosPage = lazy(() => import("./app/aprendizaje/ModulosPage"));
+const ModulosPage = lazyConMetodo(() => import("./app/aprendizaje/ModulosPage"));
 const VideoLessonPage = lazy(() => import("./app/aprendizaje/VideoLessonPage"));
-const CursosModalidad = lazy(() => import("./app/aprendizaje/CursosModalidad"));
-const TextLessonPage = lazy(() => import("./app/aprendizaje/TextLessonPage"));
-const HerbarioPage = lazy(() => import("./app/aprendizaje/HerbarioPage"));
-const AlimentosPage = lazy(() => import("./app/aprendizaje/AlimentosPage"));
-const CalcularNecesidadesPage = lazy(() => import("./app/aprendizaje/CalcularNecesidadesPage"));
-const TestDoshasPage = lazy(() => import("./app/aprendizaje/TestDoshasPage"));
+const CursosModalidad = lazyConMetodo(() => import("./app/aprendizaje/CursosModalidad"));
+const TextLessonPage = lazyConMetodo(() => import("./app/aprendizaje/TextLessonPage"));
+const HerbarioPage = lazyConMetodo(() => import("./app/aprendizaje/HerbarioPage"));
+const AlimentosPage = lazyConMetodo(() => import("./app/aprendizaje/AlimentosPage"));
+const CalcularNecesidadesPage = lazyConMetodo(() => import("./app/aprendizaje/CalcularNecesidadesPage"));
+const TestDoshasPage = lazyConMetodo(() => import("./app/aprendizaje/TestDoshasPage"));
 const EspacioHome = lazy(() => import("./app/espacio/main/EspacioHome"));
-const ExpandablePage = lazy(() => import("./app/espacio/main/ThemePreguntas"));
+const ExpandablePage = lazyConMetodo(() => import("./app/espacio/main/ThemePreguntas"));
 const QuienSoy = lazy(() => import("./app/web/QuienSoy"));
 const Productos = lazy(() => import("./app/web/Productos"));
 const LibrosPage = lazy(() => import("./app/web/LibrosPage"));
@@ -31,159 +51,159 @@ const ContactoFormulario = lazy(() => import("./app/web/ContactoFormulario"));
 const Opiniones = lazy(() => import("./app/web/Opiniones"));
 const ElMetodo = lazy(() => import("./app/web/ElMetodo"));
 const MaterialesGratuitos = lazy(() => import("./app/web/MaterialesGratuitos"));
-const ProgramasPage = lazy(() => import("./app/web/ProgramasPage"));
-const ProgramaPage = lazy(() => import("./app/web/ProgramaPage"));
-const ProgramaPodcastPage = lazy(() => import("./app/web/ProgramaPodcastPage"));
-const Ilustraciones = lazy(() => import("./app/web/Ilustraciones"));
+// const ProgramasPage = lazy(() => import("./app/web/ProgramasPage"));
+// const ProgramaPage = lazyConMetodo(() => import("./app/web/ProgramaPage"));
+// const ProgramaPodcastPage = lazy(() => import("./app/web/ProgramaPodcastPage"));
+const Ilustraciones = lazyConMetodo(() => import("./app/web/Ilustraciones"));
 const DisciplinaPortada = lazy(() => import("./app/web/DisciplinaPortada"));
 // Vídeos: apartado aparcado (la página y su panel de admin siguen en el repo).
-// const VideosPage = lazy(() => import("./app/web/VideosPage"));
-const PresentacionDisciplina = lazy(() => import("./app/web/PresentacionDisciplina"));
+// const VideosPage = lazyConMetodo(() => import("./app/web/VideosPage"));
+const PresentacionDisciplina = lazyConMetodo(() => import("./app/web/PresentacionDisciplina"));
 const CheckoutMetodo = lazy(() => import("./app/web/CheckoutMetodo"));
-const MetodoAstrologia = lazy(() => import("./app/metodo/MetodoAstrologia"));
-const MetodoAstrologiaCartaAstral = lazy(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
-const MetodoAstrologiaPlanetas = lazy(() => import("./app/metodo/MetodoAstrologiaPlanetas"));
-const MetodoAstrologiaProfundizar = lazy(() => import("./app/metodo/MetodoAstrologiaProfundizar"));
-const MetodoAstrologiaSolAscLuna = lazy(() => import("./app/metodo/MetodoAstrologiaSolAscLuna"));
-const MetodoAstrologiaLectura = lazy(() => import("./app/metodo/MetodoAstrologiaLectura"));
-const MetodoAstrologiaCasas = lazy(() => import("./app/metodo/MetodoAstrologiaCasas"));
-const MetodoAstrologiaAspectos = lazy(() => import("./app/metodo/MetodoAstrologiaAspectos"));
-const MetodoAstrologiaPdf = lazy(() => import("./app/metodo/MetodoAstrologiaPdf"));
-const MetodoAstrologiaLlamada = lazy(() => import("./app/metodo/MetodoAstrologiaLlamada"));
-const MetodoAstrologiaCursos = lazy(() => import("./app/metodo/MetodoAstrologiaCursos"));
+const MetodoAstrologia = lazyConMetodo(() => import("./app/metodo/MetodoAstrologia"));
+const MetodoAstrologiaCartaAstral = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
+const MetodoAstrologiaPlanetas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPlanetas"));
+const MetodoAstrologiaProfundizar = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaProfundizar"));
+const MetodoAstrologiaSolAscLuna = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaSolAscLuna"));
+const MetodoAstrologiaLectura = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaLectura"));
+const MetodoAstrologiaCasas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCasas"));
+const MetodoAstrologiaAspectos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaAspectos"));
+const MetodoAstrologiaPdf = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPdf"));
+const MetodoAstrologiaLlamada = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaLlamada"));
+const MetodoAstrologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCursos"));
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
 const AdminLogin = lazy(() => import("./app/admin/AdminLogin"));
-const AdminUsuarios = lazy(() => import("./app/admin/AdminUsuarios"));
+const AdminUsuarios = lazyConMetodo(() => import("./app/admin/AdminUsuarios"));
 const AdminTodosUsuarios = lazy(() => import("./app/admin/AdminTodosUsuarios"));
-const AdminAstrologiaEditor = lazy(() => import("./app/admin/AdminAstrologiaEditor"));
-const AdminPsicologiaLectura = lazy(() => import("./app/admin/AdminPsicologiaLectura"));
-const AdminAyurvedaLectura = lazy(() => import("./app/admin/AdminAyurvedaLectura"));
+const AdminAstrologiaEditor = lazyConMetodo(() => import("./app/admin/AdminAstrologiaEditor"));
+const AdminPsicologiaLectura = lazyConMetodo(() => import("./app/admin/AdminPsicologiaLectura"));
+const AdminAyurvedaLectura = lazyConMetodo(() => import("./app/admin/AdminAyurvedaLectura"));
 const AdminEditorPlaceholder = lazy(() => import("./app/admin/AdminEditorPlaceholder"));
 const AdminCursos = lazy(() => import("./app/admin/AdminCursos"));
 const AdminCursoEditor = lazy(() => import("./app/admin/AdminCursoEditor"));
 const AdminAstrologiaTextos = lazy(() => import("./app/admin/AdminAstrologiaTextos"));
 const AdminAccesos = lazy(() => import("./app/admin/AdminAccesos"));
-const AdminEstudio = lazy(() => import("./app/admin/AdminEstudio"));
+// const AdminEstudio = lazy(() => import("./app/admin/AdminEstudio"));
 const AdminVideos = lazy(() => import("./app/admin/AdminVideos"));
 const AdminSuscriptores = lazy(() => import("./app/admin/AdminSuscriptores"));
 const AdminDiario = lazy(() => import("./app/admin/AdminDiario"));
 const NoEncontrada = lazy(() => import("./app/web/NoEncontrada"));
-const MetodoPsicologia = lazy(() => import("./app/metodo/MetodoPsicologia"));
-const MetodoPsicologiaProblema = lazy(() => import("./app/metodo/MetodoPsicologiaProblema"));
-const MetodoPsicologiaNecesidades = lazy(() => import("./app/metodo/MetodoPsicologiaNecesidades"));
-const MetodoPsicologiaAce = lazy(() => import("./app/metodo/MetodoPsicologiaAce"));
-const MetodoPsicologiaAceResultado = lazy(() => import("./app/metodo/MetodoPsicologiaAceResultado"));
-const MetodoPsicologiaDes = lazy(() => import("./app/metodo/MetodoPsicologiaDes"));
-const MetodoPsicologiaDesResultado = lazy(() => import("./app/metodo/MetodoPsicologiaDesResultado"));
-const MetodoPsicologiaCerebro = lazy(() => import("./app/metodo/MetodoPsicologiaCerebro"));
-const MetodoPsicologiaExperiencia = lazy(() => import("./app/metodo/MetodoPsicologiaExperiencia"));
-const MetodoPsicologiaFamilia = lazy(() => import("./app/metodo/MetodoPsicologiaFamilia"));
-const MetodoPsicologiaGenograma = lazy(() => import("./app/metodo/MetodoPsicologiaGenograma"));
-const MetodoPsicologiaHuellas = lazy(() => import("./app/metodo/MetodoPsicologiaHuellas"));
-const MetodoPsicologiaNudos = lazy(() => import("./app/metodo/MetodoPsicologiaNudos"));
-const MetodoPsicologiaHuellasNudos = lazy(() => import("./app/metodo/MetodoPsicologiaHuellasNudos"));
-const MetodoPsicologiaHeridasLista = lazy(() => import("./app/metodo/MetodoPsicologiaHeridasLista"));
-const MetodoPsicologiaIntegracion = lazy(() => import("./app/metodo/MetodoPsicologiaIntegracion"));
-const MetodoPsicologiaMapa = lazy(() => import("./app/metodo/MetodoPsicologiaMapa"));
-const MetodoPsicologiaRegulacion = lazy(() => import("./app/metodo/MetodoPsicologiaRegulacion"));
-const MetodoPsicologiaDones = lazy(() => import("./app/metodo/MetodoPsicologiaDones"));
-const MetodoPsicologiaDonesEspejo = lazy(() => import("./app/metodo/MetodoPsicologiaDonesEspejo"));
-const MetodoPsicologiaMiedos = lazy(() => import("./app/metodo/MetodoPsicologiaMiedos"));
-const MetodoPsicologiaMiedosPreguntas = lazy(() => import("./app/metodo/MetodoPsicologiaMiedosPreguntas"));
-const MetodoPsicologiaCompromiso = lazy(() => import("./app/metodo/MetodoPsicologiaCompromiso"));
-const MetodoPsicologiaBrujula = lazy(() => import("./app/metodo/MetodoPsicologiaBrujula"));
-const MetodoPsicologiaSintesis = lazy(() => import("./app/metodo/MetodoPsicologiaSintesis"));
-const MetodoPsicologiaEmociones = lazy(() => import("./app/metodo/MetodoPsicologiaEmociones"));
-const MetodoPsicologiaCursos = lazy(() => import("./app/metodo/MetodoPsicologiaCursos"));
-const MetodoAyurveda = lazy(() => import("./app/metodo/MetodoAyurveda"));
-const MetodoAyurvedaTest = lazy(() => import("./app/metodo/MetodoAyurvedaTest"));
-const MetodoAyurvedaResultado = lazy(() => import("./app/metodo/MetodoAyurvedaResultado"));
-const MetodoAyurvedaTarjetas = lazy(() => import("./app/metodo/MetodoAyurvedaTarjetas"));
-const MetodoAyurvedaDoshaIntro = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaIntro"));
-const MetodoAyurvedaDoshaDescubre = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaDescubre"));
-const MetodoAyurvedaDoshaCuerpo = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaCuerpo"));
-const MetodoAyurvedaDoshaDesequilibrio = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaDesequilibrio"));
-const MetodoAyurvedaDoshaCuidarte = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaCuidarte"));
-const MetodoAyurvedaDoshaEstilo = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaEstilo"));
-const MetodoAyurvedaDoshaDia = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaDia"));
-const MetodoAyurvedaDoshaPranayama = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaPranayama"));
-const MetodoAyurvedaDoshaCursos = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaCursos"));
-const MetodoAyurvedaChakras = lazy(() => import("./app/metodo/MetodoAyurvedaChakras"));
-const MetodoAyurvedaDoshaRecorrido = lazy(() => import("./app/metodo/MetodoAyurvedaDoshaRecorrido"));
-const MetodoTcm = lazy(() => import("./app/metodo/MetodoTcm"));
-const MetodoTcmElementos = lazy(() => import("./app/metodo/MetodoTcmElementos"));
-const MetodoTcmConstitucion = lazy(() => import("./app/metodo/MetodoTcmConstitucion"));
-const MetodoTcmCiclos = lazy(() => import("./app/metodo/MetodoTcmCiclos"));
-const MetodoTcmDiagnostico = lazy(() => import("./app/metodo/MetodoTcmDiagnostico"));
-const MetodoTcmLengua = lazy(() => import("./app/metodo/MetodoTcmLengua"));
-const MetodoTcmLenguaLeer = lazy(() => import("./app/metodo/MetodoTcmLenguaLeer"));
-const MetodoTcmTaoismo = lazy(() => import("./app/metodo/MetodoTcmTaoismo"));
-const MetodoTcmRecetas = lazy(() => import("./app/metodo/MetodoTcmRecetas"));
-const MetodoTcmQigong = lazy(() => import("./app/metodo/MetodoTcmQigong"));
-const MetodoTcmCursos = lazy(() => import("./app/metodo/MetodoTcmCursos"));
-const MetodoTcmApuntes = lazy(() => import("./app/metodo/MetodoTcmApuntes"));
-const MetodoFisiologia = lazy(() => import("./app/metodo/MetodoFisiologia"));
-const MetodoFisiologiaNiveles = lazy(() => import("./app/metodo/MetodoFisiologiaNiveles"));
-const MetodoFisiologiaSonrisa = lazy(() => import("./app/metodo/MetodoFisiologiaSonrisa"));
-const MetodoFisiologiaCursos = lazy(() => import("./app/metodo/MetodoFisiologiaCursos"));
-const MetodoFisiologiaParticulas = lazy(() => import("./app/metodo/MetodoFisiologiaParticulas"));
-const MetodoFisiologiaAtomos = lazy(() => import("./app/metodo/MetodoFisiologiaAtomos"));
-const MetodoFisiologiaMoleculas = lazy(() => import("./app/metodo/MetodoFisiologiaMoleculas"));
-const MetodoFisiologiaMacromoleculas = lazy(() => import("./app/metodo/MetodoFisiologiaMacromoleculas"));
-const MetodoFisiologiaEstructuras = lazy(() => import("./app/metodo/MetodoFisiologiaEstructuras"));
-const MetodoFisiologiaCelula = lazy(() => import("./app/metodo/MetodoFisiologiaCelula"));
-const MetodoFisiologiaTodasCelulas = lazy(() => import("./app/metodo/MetodoFisiologiaTodasCelulas"));
-const MetodoFisiologiaSistemas = lazy(() => import("./app/metodo/MetodoFisiologiaSistemas"));
-const MetodoFisiologiaOrganismo = lazy(() => import("./app/metodo/MetodoFisiologiaOrganismo"));
-const MetodoFisiologiaProfundiza = lazy(() => import("./app/metodo/MetodoFisiologiaProfundiza"));
-const MetodoFisiologiaTema = lazy(() => import("./app/metodo/MetodoFisiologiaTema"));
-const MetodoNutricion = lazy(() => import("./app/metodo/MetodoNutricion"));
-const MetodoNutricionNutrientes = lazy(() => import("./app/metodo/MetodoNutricionNutrientes"));
-const MetodoNutricionNutrientesSecundarios = lazy(() => import("./app/metodo/MetodoNutricionNutrientesSecundarios"));
-const MetodoNutricionPlato = lazy(() => import("./app/metodo/MetodoNutricionPlato"));
-const MetodoNutricionCalorias = lazy(() => import("./app/metodo/MetodoNutricionCalorias"));
-const MetodoNutricionPrediabetes = lazy(() => import("./app/metodo/MetodoNutricionPrediabetes"));
-const MetodoNutricionDia = lazy(() => import("./app/metodo/MetodoNutricionDia"));
-const MetodoNutricionMacros = lazy(() => import("./app/metodo/MetodoNutricionMacros"));
-const MetodoNutricionMitos = lazy(() => import("./app/metodo/MetodoNutricionMitos"));
-const MetodoNutricionUltraprocesados = lazy(() => import("./app/metodo/MetodoNutricionUltraprocesados"));
-const MetodoNutricionOrigen = lazy(() => import("./app/metodo/MetodoNutricionOrigen"));
-const MetodoNutricionNutriente = lazy(() => import("./app/metodo/MetodoNutricionNutriente"));
-const MetodoNutricionMicrobiota = lazy(() => import("./app/metodo/MetodoNutricionMicrobiota"));
-const MetodoNutricionHambre = lazy(() => import("./app/metodo/MetodoNutricionHambre"));
-const MetodoNutricionAlimentos = lazy(() => import("./app/metodo/MetodoNutricionAlimentos"));
-const MetodoNutricionAlimento = lazy(() => import("./app/metodo/MetodoNutricionAlimento"));
-const MetodoNutricionCursos = lazy(() => import("./app/metodo/MetodoNutricionCursos"));
-const MetodoCabala = lazy(() => import("./app/metodo/MetodoCabala"));
-const MetodoCabalaArbol = lazy(() => import("./app/metodo/MetodoCabalaArbol"));
-const MetodoCabalaSefira = lazy(() => import("./app/metodo/MetodoCabalaSefira"));
-const MetodoCabalaDiagnostico = lazy(() => import("./app/metodo/MetodoCabalaDiagnostico"));
-const MetodoCabalaSenderos = lazy(() => import("./app/metodo/MetodoCabalaSenderos"));
-const MetodoCabalaSendero = lazy(() => import("./app/metodo/MetodoCabalaSendero"));
-const MetodoCabalaSenderosDiagnostico = lazy(() => import("./app/metodo/MetodoCabalaSenderosDiagnostico"));
-const MetodoCabalaFinal = lazy(() => import("./app/metodo/MetodoCabalaFinal"));
-const MetodoCabalaDiezDias = lazy(() => import("./app/metodo/MetodoCabalaDiezDias"));
-const MetodoCabalaCursos = lazy(() => import("./app/metodo/MetodoCabalaCursos"));
-const MetodoCultura = lazy(() => import("./app/metodo/MetodoCultura"));
-const MetodoCulturaHistorias = lazy(() => import("./app/metodo/MetodoCulturaHistorias"));
-const MetodoCulturaApuntes = lazy(() => import("./app/metodo/MetodoCulturaApuntes"));
-const MetodoCulturaHistoria = lazy(() => import("./app/metodo/MetodoCulturaHistoria"));
-const MetodoCulturaHistoriaEra = lazy(() => import("./app/metodo/MetodoCulturaHistoriaEra"));
-const AyurvedaMiEspacio = lazy(() => import("./app/web/AyurvedaMiEspacio"));
+const MetodoPsicologia = lazyConMetodo(() => import("./app/metodo/MetodoPsicologia"));
+const MetodoPsicologiaProblema = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaProblema"));
+const MetodoPsicologiaNecesidades = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaNecesidades"));
+const MetodoPsicologiaAce = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaAce"));
+const MetodoPsicologiaAceResultado = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaAceResultado"));
+const MetodoPsicologiaDes = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaDes"));
+const MetodoPsicologiaDesResultado = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaDesResultado"));
+const MetodoPsicologiaCerebro = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaCerebro"));
+const MetodoPsicologiaExperiencia = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaExperiencia"));
+const MetodoPsicologiaFamilia = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaFamilia"));
+const MetodoPsicologiaGenograma = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaGenograma"));
+const MetodoPsicologiaHuellas = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaHuellas"));
+const MetodoPsicologiaNudos = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaNudos"));
+const MetodoPsicologiaHuellasNudos = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaHuellasNudos"));
+const MetodoPsicologiaHeridasLista = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaHeridasLista"));
+const MetodoPsicologiaIntegracion = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaIntegracion"));
+const MetodoPsicologiaMapa = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaMapa"));
+const MetodoPsicologiaRegulacion = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaRegulacion"));
+const MetodoPsicologiaDones = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaDones"));
+const MetodoPsicologiaDonesEspejo = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaDonesEspejo"));
+const MetodoPsicologiaMiedos = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaMiedos"));
+const MetodoPsicologiaMiedosPreguntas = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaMiedosPreguntas"));
+const MetodoPsicologiaCompromiso = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaCompromiso"));
+const MetodoPsicologiaBrujula = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaBrujula"));
+const MetodoPsicologiaSintesis = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaSintesis"));
+const MetodoPsicologiaEmociones = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaEmociones"));
+const MetodoPsicologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaCursos"));
+const MetodoAyurveda = lazyConMetodo(() => import("./app/metodo/MetodoAyurveda"));
+const MetodoAyurvedaTest = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaTest"));
+const MetodoAyurvedaResultado = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaResultado"));
+const MetodoAyurvedaTarjetas = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaTarjetas"));
+const MetodoAyurvedaDoshaIntro = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaIntro"));
+const MetodoAyurvedaDoshaDescubre = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaDescubre"));
+const MetodoAyurvedaDoshaCuerpo = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaCuerpo"));
+const MetodoAyurvedaDoshaDesequilibrio = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaDesequilibrio"));
+const MetodoAyurvedaDoshaCuidarte = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaCuidarte"));
+const MetodoAyurvedaDoshaEstilo = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaEstilo"));
+const MetodoAyurvedaDoshaDia = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaDia"));
+const MetodoAyurvedaDoshaPranayama = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaPranayama"));
+const MetodoAyurvedaDoshaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaCursos"));
+const MetodoAyurvedaChakras = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaChakras"));
+const MetodoAyurvedaDoshaRecorrido = lazyConMetodo(() => import("./app/metodo/MetodoAyurvedaDoshaRecorrido"));
+const MetodoTcm = lazyConMetodo(() => import("./app/metodo/MetodoTcm"));
+const MetodoTcmElementos = lazyConMetodo(() => import("./app/metodo/MetodoTcmElementos"));
+const MetodoTcmConstitucion = lazyConMetodo(() => import("./app/metodo/MetodoTcmConstitucion"));
+const MetodoTcmCiclos = lazyConMetodo(() => import("./app/metodo/MetodoTcmCiclos"));
+const MetodoTcmDiagnostico = lazyConMetodo(() => import("./app/metodo/MetodoTcmDiagnostico"));
+const MetodoTcmLengua = lazyConMetodo(() => import("./app/metodo/MetodoTcmLengua"));
+const MetodoTcmLenguaLeer = lazyConMetodo(() => import("./app/metodo/MetodoTcmLenguaLeer"));
+const MetodoTcmTaoismo = lazyConMetodo(() => import("./app/metodo/MetodoTcmTaoismo"));
+const MetodoTcmRecetas = lazyConMetodo(() => import("./app/metodo/MetodoTcmRecetas"));
+const MetodoTcmQigong = lazyConMetodo(() => import("./app/metodo/MetodoTcmQigong"));
+const MetodoTcmCursos = lazyConMetodo(() => import("./app/metodo/MetodoTcmCursos"));
+const MetodoTcmApuntes = lazyConMetodo(() => import("./app/metodo/MetodoTcmApuntes"));
+const MetodoFisiologia = lazyConMetodo(() => import("./app/metodo/MetodoFisiologia"));
+const MetodoFisiologiaNiveles = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaNiveles"));
+const MetodoFisiologiaSonrisa = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaSonrisa"));
+const MetodoFisiologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaCursos"));
+const MetodoFisiologiaParticulas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaParticulas"));
+const MetodoFisiologiaAtomos = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaAtomos"));
+const MetodoFisiologiaMoleculas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaMoleculas"));
+const MetodoFisiologiaMacromoleculas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaMacromoleculas"));
+const MetodoFisiologiaEstructuras = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaEstructuras"));
+const MetodoFisiologiaCelula = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaCelula"));
+const MetodoFisiologiaTodasCelulas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaTodasCelulas"));
+const MetodoFisiologiaSistemas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaSistemas"));
+const MetodoFisiologiaOrganismo = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaOrganismo"));
+const MetodoFisiologiaProfundiza = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaProfundiza"));
+const MetodoFisiologiaTema = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaTema"));
+const MetodoNutricion = lazyConMetodo(() => import("./app/metodo/MetodoNutricion"));
+const MetodoNutricionMacronutrientes = lazyConMetodo(() => import("./app/metodo/MetodoNutricionMacronutrientes"));
+const MetodoNutricionMicronutrientes = lazyConMetodo(() => import("./app/metodo/MetodoNutricionMicronutrientes"));
+const MetodoNutricionPlato = lazyConMetodo(() => import("./app/metodo/MetodoNutricionPlato"));
+const MetodoNutricionCalorias = lazyConMetodo(() => import("./app/metodo/MetodoNutricionCalorias"));
+const MetodoNutricionPrediabetes = lazyConMetodo(() => import("./app/metodo/MetodoNutricionPrediabetes"));
+const MetodoNutricionDia = lazyConMetodo(() => import("./app/metodo/MetodoNutricionDia"));
+const MetodoNutricionMacros = lazyConMetodo(() => import("./app/metodo/MetodoNutricionMacros"));
+const MetodoNutricionMitos = lazyConMetodo(() => import("./app/metodo/MetodoNutricionMitos"));
+const MetodoNutricionUltraprocesados = lazyConMetodo(() => import("./app/metodo/MetodoNutricionUltraprocesados"));
+const MetodoNutricionOrigen = lazyConMetodo(() => import("./app/metodo/MetodoNutricionOrigen"));
+const MetodoNutricionNutriente = lazyConMetodo(() => import("./app/metodo/MetodoNutricionNutriente"));
+const MetodoNutricionMicrobiota = lazyConMetodo(() => import("./app/metodo/MetodoNutricionMicrobiota"));
+const MetodoNutricionHambre = lazyConMetodo(() => import("./app/metodo/MetodoNutricionHambre"));
+const MetodoNutricionAlimentos = lazyConMetodo(() => import("./app/metodo/MetodoNutricionAlimentos"));
+const MetodoNutricionAlimento = lazyConMetodo(() => import("./app/metodo/MetodoNutricionAlimento"));
+const MetodoNutricionCursos = lazyConMetodo(() => import("./app/metodo/MetodoNutricionCursos"));
+const MetodoCabala = lazyConMetodo(() => import("./app/metodo/MetodoCabala"));
+const MetodoCabalaArbol = lazyConMetodo(() => import("./app/metodo/MetodoCabalaArbol"));
+const MetodoCabalaSefira = lazyConMetodo(() => import("./app/metodo/MetodoCabalaSefira"));
+const MetodoCabalaDiagnostico = lazyConMetodo(() => import("./app/metodo/MetodoCabalaDiagnostico"));
+const MetodoCabalaSenderos = lazyConMetodo(() => import("./app/metodo/MetodoCabalaSenderos"));
+const MetodoCabalaSendero = lazyConMetodo(() => import("./app/metodo/MetodoCabalaSendero"));
+const MetodoCabalaSenderosDiagnostico = lazyConMetodo(() => import("./app/metodo/MetodoCabalaSenderosDiagnostico"));
+const MetodoCabalaFinal = lazyConMetodo(() => import("./app/metodo/MetodoCabalaFinal"));
+const MetodoCabalaDiezDias = lazyConMetodo(() => import("./app/metodo/MetodoCabalaDiezDias"));
+const MetodoCabalaCursos = lazyConMetodo(() => import("./app/metodo/MetodoCabalaCursos"));
+const MetodoCultura = lazyConMetodo(() => import("./app/metodo/MetodoCultura"));
+const MetodoCulturaHistorias = lazyConMetodo(() => import("./app/metodo/MetodoCulturaHistorias"));
+const MetodoCulturaApuntes = lazyConMetodo(() => import("./app/metodo/MetodoCulturaApuntes"));
+const MetodoCulturaHistoria = lazyConMetodo(() => import("./app/metodo/MetodoCulturaHistoria"));
+const MetodoCulturaHistoriaEra = lazyConMetodo(() => import("./app/metodo/MetodoCulturaHistoriaEra"));
+const AyurvedaMiEspacio = lazyConMetodo(() => import("./app/web/AyurvedaMiEspacio"));
 const RecursosPage = lazy(() => import("./app/recursos/RecursosPage"));
-// Estudio estadístico sobre astrología (público: no hace falta cuenta)
-const EstudioHome = lazy(() => import("./app/estudio/EstudioHome"));
-const EstudioDatos = lazy(() => import("./app/estudio/EstudioDatos"));
-const EstudioPreguntas = lazy(() => import("./app/estudio/EstudioPreguntas"));
-const EstudioResultados = lazy(() => import("./app/estudio/EstudioResultados"));
-const EstudioEstadisticas = lazy(() => import("./app/estudio/EstudioEstadisticas"));
+// Estudio estadístico sobre astrología: APARCADO (ver las rutas, más abajo).
+// const EstudioHome = lazy(() => import("./app/estudio/EstudioHome"));
+// const EstudioDatos = lazy(() => import("./app/estudio/EstudioDatos"));
+// const EstudioPreguntas = lazy(() => import("./app/estudio/EstudioPreguntas"));
+// const EstudioResultados = lazy(() => import("./app/estudio/EstudioResultados"));
+// const EstudioEstadisticas = lazy(() => import("./app/estudio/EstudioEstadisticas"));
 const UserAccount = lazy(() => import("./app/user/UserAccount"));
-const TCMTest1 = lazy(() => import("./components/espacio/components/TCMTest1"));
-const TCMTest2 = lazy(() => import("./components/espacio/components/TCMTest2"));
-const TCMTest3 = lazy(() => import("./components/espacio/components/TCMTest3"));
+const TCMTest1 = lazyConMetodo(() => import("./components/espacio/components/TCMTest1"));
+const TCMTest2 = lazyConMetodo(() => import("./components/espacio/components/TCMTest2"));
+const TCMTest3 = lazyConMetodo(() => import("./components/espacio/components/TCMTest3"));
 const FisiologiaEspacio = lazy(() => import("./components/espacio/pages/FisiologiaEspacio"));
 const FitoterapiaEspacio = lazy(() => import("./components/espacio/pages/FitoterapiaEspacio"));
-const CelulasCuerpoPage = lazy(() => import("./app/espacio/CelulasCuerpoPage"));
+const CelulasCuerpoPage = lazyConMetodo(() => import("./app/espacio/CelulasCuerpoPage"));
 import { ExitIntentSubscribeModal } from "./components/global/ExitIntentSubscribeModal";
 import { MiniDiario } from "./components/global/MiniDiario";
 const RecuperarPassword = lazy(() => import("./app/auth/RecuperarPassword"));
@@ -307,11 +327,11 @@ export default function App()
       <Route path="/opiniones" element={<Opiniones />} />
       <Route path="/elMetodo" element={<ElMetodo />} />
       <Route path="/materiales" element={<MaterialesGratuitos />} />
-      {/* Programas: la diapositiva y su podcast. Cuarta caja de Materiales. */}
-      <Route path="/programas" element={<ProgramasPage />} />
-      {/* Las dos mitades de un programa: el visor de diapositivas y el podcast. */}
-      <Route path="/programas/:slug" element={<ProgramaPage />} />
-      <Route path="/programas/:slug/podcast" element={<ProgramaPodcastPage />} />
+      {/* Programas: aparcado, como «Vídeos». Las tres rutas y la caja de
+          Materiales quedan comentadas; las páginas siguen en el repositorio. */}
+      {/* <Route path="/programas" element={<ProgramasPage />} /> */}
+      {/* <Route path="/programas/:slug" element={<ProgramaPage />} /> */}
+      {/* <Route path="/programas/:slug/podcast" element={<ProgramaPodcastPage />} /> */}
       <Route path="/ilustraciones" element={<Ilustraciones />} />
       {/* La misma galería, filtrada por disciplina (puerta izquierda de su portada). */}
       <Route path="/ilustraciones/:disciplina" element={<Ilustraciones />} />
@@ -346,8 +366,8 @@ export default function App()
       {/* Ojo al orden: «usuarios» tiene que ir ANTES de /admin/:disciplina o la
           ruta de disciplina se lo tragaría como si fuera una novena. */}
       <Route path="/admin/usuarios" element={<AdminRoute><AdminTodosUsuarios /></AdminRoute>} />
-      {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
-      <Route path="/admin/estudio" element={<AdminRoute><AdminEstudio /></AdminRoute>} />
+      {/* El panel del estudio, aparcado con el resto del estudio. */}
+      {/* <Route path="/admin/estudio" element={<AdminRoute><AdminEstudio /></AdminRoute>} /> */}
       <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} />
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/suscriptores" element={<AdminRoute><AdminSuscriptores /></AdminRoute>} />
@@ -443,8 +463,12 @@ export default function App()
 
       {/* El Recorrido · Nutrición (6ª disciplina) */}
       <Route path="/metodo/nutricion" element={<PrivateRoute><MetodoNutricion /></PrivateRoute>} />
-      <Route path="/metodo/nutricion/nutrientes" element={<PrivateRoute><MetodoNutricionNutrientes /></PrivateRoute>} />
-      <Route path="/metodo/nutricion/nutrientes-secundarios" element={<PrivateRoute><MetodoNutricionNutrientesSecundarios /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/macronutrientes" element={<PrivateRoute><MetodoNutricionMacronutrientes /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/micronutrientes" element={<PrivateRoute><MetodoNutricionMicronutrientes /></PrivateRoute>} />
+      {/* Los nutrientes se partieron en Macro y Micro: las rutas de antes siguen
+          respondiendo para no romper enlaces guardados ni el historial. */}
+      <Route path="/metodo/nutricion/nutrientes" element={<Navigate to="/metodo/nutricion/macronutrientes" replace />} />
+      <Route path="/metodo/nutricion/nutrientes-secundarios" element={<Navigate to="/metodo/nutricion/micronutrientes" replace />} />
       <Route path="/metodo/nutricion/nutrientes/:key" element={<PrivateRoute><MetodoNutricionNutriente /></PrivateRoute>} />
       <Route path="/metodo/nutricion/microbiota" element={<PrivateRoute><MetodoNutricionMicrobiota /></PrivateRoute>} />
       <Route path="/metodo/nutricion/hambre" element={<PrivateRoute><MetodoNutricionHambre /></PrivateRoute>} />
@@ -506,14 +530,16 @@ export default function App()
 
       <Route path="/recursos/:moduloId" element={<RecursosPage />} />
 
-      {/* ── Estudio estadístico sobre astrología ──
-          Públicas a propósito: participar no exige cuenta, solo un email. */}
-      <Route path="/estudio" element={<EstudioHome />} />
-      <Route path="/estudio/datos" element={<EstudioDatos />} />
-      <Route path="/estudio/preguntas" element={<EstudioPreguntas />} />
-      <Route path="/estudio/resultados" element={<EstudioResultados />} />
-      {/* Los totales del estudio: medias de grupo, sin nadie dentro. */}
-      <Route path="/estudio/estadisticas" element={<EstudioEstadisticas />} />
+      {/* ── Estudio estadístico sobre astrología: APARCADO ──
+          Se retira de la web por ahora (las preguntas de verdad nunca llegaron
+          a escribirse). Las páginas, el panel de administración y la tabla
+          `estudio_*` siguen intactos: descomentar aquí, en SiteHeader y en
+          AdminHome lo devuelve entero, con sus participantes. */}
+      {/* <Route path="/estudio" element={<EstudioHome />} /> */}
+      {/* <Route path="/estudio/datos" element={<EstudioDatos />} /> */}
+      {/* <Route path="/estudio/preguntas" element={<EstudioPreguntas />} /> */}
+      {/* <Route path="/estudio/resultados" element={<EstudioResultados />} /> */}
+      {/* <Route path="/estudio/estadisticas" element={<EstudioEstadisticas />} /> */}
 
 
       <Route path="*" element={<NoEncontrada />} />

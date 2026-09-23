@@ -31,7 +31,6 @@ const F = (n: string) => `/viñetas/astrologia/aspectos/${n}.webp`;
 export const VINETAS_ASPECTOS: Vineta[] = [
   {
     src: F("conjuncion"),
-    eyebrow: "0°",
     titulo: "Conjunción",
     paragraphs: [
       "Dos energías se fusionan y funcionan como una sola: cuesta distinguir dónde termina una y empieza la otra.",
@@ -43,7 +42,6 @@ export const VINETAS_ASPECTOS: Vineta[] = [
   },
   {
     src: F("oposicion"),
-    eyebrow: "180°",
     titulo: "Oposición",
     paragraphs: [
       "Dos energías se enfrentan y podemos identificarnos con una mientras proyectamos la otra en los demás.",
@@ -55,7 +53,6 @@ export const VINETAS_ASPECTOS: Vineta[] = [
   },
   {
     src: F("cuadratura"),
-    eyebrow: "90°",
     titulo: "Cuadratura",
     paragraphs: [
       "Es el aspecto de mayor tensión y conflicto, pero también uno de los mayores motores de crecimiento.",
@@ -67,7 +64,6 @@ export const VINETAS_ASPECTOS: Vineta[] = [
   },
   {
     src: F("trigono"),
-    eyebrow: "120°",
     titulo: "Trígono",
     paragraphs: [
       "Representa talentos y capacidades que fluyen con naturalidad.",
@@ -79,7 +75,6 @@ export const VINETAS_ASPECTOS: Vineta[] = [
   },
   {
     src: F("sextil"),
-    eyebrow: "60°",
     titulo: "Sextil",
     paragraphs: [
       "Es una energía de cooperación y facilidad, similar al trígono, pero necesita ser activada conscientemente.",
@@ -91,7 +86,6 @@ export const VINETAS_ASPECTOS: Vineta[] = [
   },
   {
     src: F("quincuncio"),
-    eyebrow: "150°",
     titulo: "Quincuncio",
     paragraphs: [
       "Genera una sensación de incomodidad, desajuste o falta de perspectiva.",
