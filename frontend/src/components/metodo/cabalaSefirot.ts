@@ -83,7 +83,7 @@ export interface SefiraContenido {
 //   15   Los Senderos
 //   16   Diagnóstico de los Senderos
 //   17   Diagnóstico Final
-//   18   Trabajo de 10 días
+//   (el «Trabajo de 10 días» que iba detrás está APARCADO: ver App.tsx)
 export const CABALA_PAG = {
   intro: 1,
   arbol: 2,
@@ -93,11 +93,14 @@ export const CABALA_PAG = {
   // Aleph = 16, Beth = 17, … Tav = 37.
   senderosDiag: 38,
   final: 39,
+  // APARCADO · «10 días con tus dimensiones»: su página sigue en el repo (y por
+  // eso este número se queda), pero está descolgada del recorrido, así que NO
+  // cuenta para el total de abajo. Ver App.tsx.
   dias: 40,
 } as const;
 
 // Nº total de páginas del recorrido.
-export const CABALA_TOTAL_PAGINAS = CABALA_PAG.dias; // 40
+export const CABALA_TOTAL_PAGINAS = CABALA_PAG.final; // 39
 
 // Página real de un sendero individual dentro del recorrido completo (Aleph=16,
 // Beth=17, … Tav=37). `orden` es la posición del sendero (1..22).

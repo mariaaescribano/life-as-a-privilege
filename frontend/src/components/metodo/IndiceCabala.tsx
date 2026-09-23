@@ -94,7 +94,8 @@ export function IndiceCabala() {
       senderoCompleto(s, senderosData[String(s.num)] ?? (senderosData as any)[s.num]));
   const senderosDiagUnlocked = senderosContenidoOk;
   const finalUnlocked = sefirotContenidoOk && senderosContenidoOk;
-  const diasUnlocked = finalUnlocked;
+  // APARCADO · «10 días con tus dimensiones».
+  // const diasUnlocked = finalUnlocked;
 
   // Bloqueado solo si ya cargó el progreso y la condición no se cumple.
   const lock = (cond: boolean) => (cargado ? !cond : false);
@@ -118,7 +119,8 @@ export function IndiceCabala() {
     })),
     { titulo: t("metodo.cabala.paso.senderosDiag"), path: "/metodo/cabala/senderos/diagnostico", bloqueado: lock(senderosDiagUnlocked) },
     { titulo: t("metodo.cabala.paso.final"), path: "/metodo/cabala/final", bloqueado: lock(finalUnlocked) },
-    { titulo: t("metodo.cabala.paso.dias"), path: "/metodo/cabala/dias", bloqueado: lock(diasUnlocked) },
+    // APARCADO · «10 días con tus dimensiones»: fuera del recorrido.
+    // { titulo: t("metodo.cabala.paso.dias"), path: "/metodo/cabala/dias", bloqueado: lock(diasUnlocked) },
   ];
 
   const indice: PasoRecorrido[] = PASOS.map((p, i) => ({

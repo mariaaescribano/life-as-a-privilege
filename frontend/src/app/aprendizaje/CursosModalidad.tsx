@@ -15,6 +15,7 @@ import { TCMIlustracionesModal } from "../../components/metodo/TCMIlustracionesM
 import { ContactModal } from "../../components/global/ContactModal";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
+import { VolverAlMapa, useVolverAlMapa } from "../../components/global/VolverAlMapa";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCursosData } from "../../data/cursosApi";
 import type { ModalidadInfo } from "../../hardCoded/cursos";
@@ -100,6 +101,8 @@ export default function CursosModalidad() {
   const [testsTCMOpen, setTestsTCMOpen] = useState(false);
   // Popup inmersivo "Tus células" (solo Fisiología).
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
+  // Vuelta al paso del Mapa del que se salió (solo si se venía del recorrido).
+  const { boton: botonMapa } = useVolverAlMapa();
 
   // Botones contextuales que entran dentro del header de la disciplina.
   // Cada disciplina con tests/material extra define los suyos; el resto deja
@@ -179,6 +182,7 @@ export default function CursosModalidad() {
     >
       {/* HEADER */}
       <SiteHeader variant="auto" />
+      <VolverAlMapa />
 
       {/* MAIN */}
       <Box flex="1">
@@ -202,6 +206,9 @@ export default function CursosModalidad() {
             // páginas de contenido: la lección, el herbario y los alimentos.
             prev={headerButtons.prev}
             extra={headerButtons.extra}
+            // La vuelta al Mapa va detrás de los botones propios de la
+            // disciplina, y solo si se llegó aquí desde el recorrido.
+            extra2={botonMapa}
             next={headerButtons.next}
             mb={{ base: 12, md: 16 }}
           />

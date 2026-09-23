@@ -51,7 +51,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   astrologia: {
     desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
     videoIntro: {
-      titulo: "El mapa de las circunstancias que te han dado forma.",
+      titulo: "Las características de cada área de tu vida y cómo se relacionan.",
       puntos: [
         "Una interpretación personal de tu carta, realizada por mí, no por una IA.",
         "Utiliza tu carta como una herramienta para comprender tu historia, tu forma de sentir y los patrones que se repiten en tu Vida.",
@@ -126,7 +126,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   ayurveda: {
     desc: "No todos necesitamos lo mismo. Descubre tu constitución única y aprende a cuidar tu cuerpo y tu mente de acuerdo con tu naturaleza.",
     videoIntro: {
-      titulo: "Descubre tu constitución única y aprende a cuidar tu cuerpo y tu mente de acuerdo con tu naturaleza.",
+      titulo: "Descubre tu constitución única y aprende a cuidarte de acuerdo con tu naturaleza.",
       puntos: [
         "Descubre cuál es tu Doṣha predominante y qué revela sobre ti.",
         "Comprende las tendencias naturales de tu cuerpo y de tu mente.",

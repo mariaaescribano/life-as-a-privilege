@@ -31,12 +31,16 @@ const INK_SHADOW = "0 1px 4px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.72), 0 0 
 // El glow vive en cabalaGlow.ts: TODO el recorrido comparte el halo del header.
 
 // Box con la imagen de Cábala de fondo (letra dorada).
-// `talCual`: la acuarela de Cábala se ve al 100 %, sin velo ni opacidad que la
-// laven. El contraste del texto lo pone INK_SHADOW, no un velo encima de la foto.
+// VELO OSCURO, no `talCual`: la acuarela de Cábala tiene manchas ocres y
+// destellos dorados —el mismo tono que la letra—, así que sin velo el texto
+// desaparecía justo encima de ellos. Con el velo se sigue viendo el dibujo y el
+// ámbar se lee en toda la caja (INK_SHADOW solo no basta: es una página con
+// mucha lista y letra pequeña).
+const CAJA_OVERLAY = "rgba(0,0,0,0.5)";
 const Caja = ({ children, destacado = false }: { children: React.ReactNode; destacado?: boolean }) => (
   <Box position="relative" overflow="hidden" w="100%" border={`1.5px solid ${destacado ? cabalaTxt : `${cabalaTxt}44`}`}
        borderRadius="2xl" boxShadow={destacado ? CAJA_GLOW_FUERTE : CAJA_GLOW}>
-    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" talCual />
+    <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" overlay={CAJA_OVERLAY} />
     <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>
       {children}
     </Box>
@@ -178,7 +182,9 @@ export default function MetodoCabalaSenderosDiagnostico() {
                             <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
                               {s.orden} · {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}
                             </Text>
-                            <Text color={`${cabalaTxt}88`} fontSize="xs" letterSpacing="0.08em" textTransform="uppercase">
+                            <Text color={`${cabalaTxt}cc`} fontSize={{ base: "xs", md: "sm" }}
+                                  letterSpacing="0.08em" textTransform="uppercase"
+                                  style={{ textShadow: INK_SHADOW }}>
                               {band?.titulo} · {total}
                             </Text>
                           </Flex>
@@ -210,15 +216,20 @@ export default function MetodoCabalaSenderosDiagnostico() {
                   <Flex direction="column" gap={3.5}>
                     {resultados.map(({ s, band, total }) => (
                       <Flex key={s.num} align="baseline" justify="space-between" gap={3} wrap="wrap"
-                            borderBottom={`1px solid ${cabalaTxt}1c`} pb={3}>
-                        <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} style={{ textShadow: INK_SHADOW }}>
-                          <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{s.orden}.</Box>
-                          {s.letra} <Box as="span" color={`${cabalaTxt}77`}>· {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}</Box>
+                            borderBottom={`1px solid ${cabalaTxt}33`} pb={3}>
+                        {/* Nada por debajo de `aa`: el ámbar a media tinta sobre
+                            la acuarela era lo que no se leía. La jerarquía la dan
+                            el peso y el tamaño, no la transparencia. */}
+                        <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} style={{ textShadow: INK_SHADOW }}>
+                          <Box as="span" color={`${cabalaTxt}aa`} fontWeight="700" mr={1.5}>{s.orden}.</Box>
+                          <Box as="span" fontWeight="700">{s.letra}</Box>
+                          {" "}
+                          <Box as="span" color={`${cabalaTxt}bb`}>· {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}</Box>
                         </Text>
                         {/* El veredicto de cada sendero sube con la lista: en `xs`
                             quedaba como una nota al pie al lado de una línea que
                             ahora es bastante mayor. */}
-                        <Text color={band ? cabalaTxt : `${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }}
+                        <Text color={band ? cabalaTxt : `${cabalaTxt}99`} fontSize={{ base: "md", md: "lg" }}
                               fontWeight={band ? "700" : "400"} letterSpacing="0.04em"
                               fontStyle={band ? "normal" : "italic"} style={{ textShadow: INK_SHADOW }}>
                           {band ? `${band.titulo} · ${total}` : t("metodo.cabala.sinResponder")}

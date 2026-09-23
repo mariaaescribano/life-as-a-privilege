@@ -182,7 +182,11 @@ const MetodoCabalaSenderos = lazyConMetodo(() => import("./app/metodo/MetodoCaba
 const MetodoCabalaSendero = lazyConMetodo(() => import("./app/metodo/MetodoCabalaSendero"));
 const MetodoCabalaSenderosDiagnostico = lazyConMetodo(() => import("./app/metodo/MetodoCabalaSenderosDiagnostico"));
 const MetodoCabalaFinal = lazyConMetodo(() => import("./app/metodo/MetodoCabalaFinal"));
-const MetodoCabalaDiezDias = lazyConMetodo(() => import("./app/metodo/MetodoCabalaDiezDias"));
+// APARCADO · «10 días con tus dimensiones». La página y sus textos siguen en
+// el repo intactos; solo está descolgada del recorrido. Para volver a ponerla:
+// descomentar esto, su <Route> más abajo, su paso en IndiceCabala, la página
+// `dias` de CABALA_PAG y los botones de Diagnóstico final ↔ Cursos.
+// const MetodoCabalaDiezDias = lazyConMetodo(() => import("./app/metodo/MetodoCabalaDiezDias"));
 const MetodoCabalaCursos = lazyConMetodo(() => import("./app/metodo/MetodoCabalaCursos"));
 const MetodoCultura = lazyConMetodo(() => import("./app/metodo/MetodoCultura"));
 const MetodoCulturaHistorias = lazyConMetodo(() => import("./app/metodo/MetodoCulturaHistorias"));
@@ -214,6 +218,7 @@ const Terminos = lazy(() => import("./app/legal/Terminos"));
 import AvisoCookies from "./components/global/AvisoCookies";
 // Solo se pinta si la admin ha «entrado como» otra persona (api/suplantar.ts).
 import BarraSuplantacion from "./components/global/BarraSuplantacion";
+import { MigaDelMapa } from "./components/global/VolverAlMapa";
 // Pantalla de espera mientras se descarga el trozo de código de cada página.
 // Va EAGER a propósito: es justo lo que hay que poder pintar antes de que llegue
 // lo demás.
@@ -278,6 +283,9 @@ export default function App()
   return (
     <>
     <ScrollToTop />
+    {/* Apunta por dónde va el usuario dentro del Mapa, para que los cursos y
+        los materiales puedan devolverle exactamente a ese paso. */}
+    <MigaDelMapa />
     <ExitIntentSubscribeModal />
     <MiniDiario />
     <AvisoCookies />
@@ -491,7 +499,8 @@ export default function App()
       <Route path="/metodo/cabala/senderos" element={<PrivateRoute><MetodoCabalaSenderos /></PrivateRoute>} />
       <Route path="/metodo/cabala/senderos/diagnostico" element={<PrivateRoute><MetodoCabalaSenderosDiagnostico /></PrivateRoute>} />
       <Route path="/metodo/cabala/final" element={<PrivateRoute><MetodoCabalaFinal /></PrivateRoute>} />
-      <Route path="/metodo/cabala/dias" element={<PrivateRoute><MetodoCabalaDiezDias /></PrivateRoute>} />
+      {/* APARCADO · «10 días con tus dimensiones» (ver arriba). */}
+      {/* <Route path="/metodo/cabala/dias" element={<PrivateRoute><MetodoCabalaDiezDias /></PrivateRoute>} /> */}
       <Route path="/metodo/cabala/cursos" element={<PrivateRoute><MetodoCabalaCursos /></PrivateRoute>} />
       <Route path="/metodo/cabala/sendero/:num" element={<PrivateRoute><MetodoCabalaSendero /></PrivateRoute>} />
 

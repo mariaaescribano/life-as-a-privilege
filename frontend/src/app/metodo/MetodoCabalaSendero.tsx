@@ -505,24 +505,28 @@ export default function MetodoCabalaSendero() {
                      disabled={bloqueado}
                      title={bloqueado ? tooltip : undefined}
                      mt={{ base: 2, md: 4 }}
-                     display="inline-flex" alignItems="center" gap={2.5}
+                     position="relative" overflow="hidden" display="inline-flex" alignItems="center"
                      // Es el botón que lleva al siguiente sendero: tiene que
-                     // CANTAR sobre el turquesa. Relleno oscuro de la disciplina,
-                     // contorno ámbar entero y halo, en vez del contorno fino que
-                     // casi no se veía. Bloqueado sí va apagado: es una puerta.
+                     // CANTAR sobre el turquesa. Lleva el cielo de Cábala de
+                     // fondo (el mismo de las cajas de la página), contorno
+                     // ámbar entero y halo. Bloqueado va apagado: es una puerta.
                      px={{ base: 8, md: 10 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
-                     bg={bloqueado ? "transparent" : `${cabalaBg}ee`}
                      border={`2px solid ${bloqueado ? `${cabalaTxt}33` : cabalaTxt}`}
                      color={bloqueado ? `${cabalaTxt}55` : cabalaTxt}
+                     opacity={bloqueado ? 0.5 : 1}
                      fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.06em"
                      boxShadow={bloqueado ? "none" : `0 0 18px ${cabalaTxt}55, 0 0 44px ${cabalaTxt}26, 0 6px 22px rgba(0,0,0,0.35)`}
-                     style={bloqueado ? undefined : { textShadow: `0 0 14px ${cabalaTxt}66` }}
-                     cursor={bloqueado ? "not-allowed" : "pointer"} transition="all 0.18s" sx={{ backdropFilter: "blur(2px)" }}
-                     _hover={bloqueado ? undefined : { bg: `${cabalaTxt}2e`, transform: "translateY(-2px)", boxShadow: `0 0 26px ${cabalaTxt}88, 0 0 60px ${cabalaTxt}3a, 0 8px 26px rgba(0,0,0,0.4)` }}>
-                  {nextNum ? t("metodo.cabala.sendero.siguiente") : t("metodo.cabala.sendero.verDiagnostico")}
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
-                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-                  </Box>
+                     style={bloqueado ? undefined : { textShadow: INK_SHADOW }}
+                     cursor={bloqueado ? "not-allowed" : "pointer"} transition="all 0.18s"
+                     _hover={bloqueado ? undefined : { transform: "translateY(-2px)", boxShadow: `0 0 26px ${cabalaTxt}88, 0 0 60px ${cabalaTxt}3a, 0 8px 26px rgba(0,0,0,0.4)` }}>
+                  {/* Mismo fondo y mismo velo que las cajas (ver `Caja` arriba). */}
+                  <DisciplinaBgLayer nom={cabalaNom} borderRadius="full" />
+                  <Flex position="relative" zIndex={1} align="center" gap={2.5}>
+                    {nextNum ? t("metodo.cabala.sendero.siguiente") : t("metodo.cabala.sendero.verDiagnostico")}
+                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="16px" h="16px" fill="currentColor">
+                      <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                    </Box>
+                  </Flex>
                 </Box>
               </Reveal>
             );

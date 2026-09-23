@@ -123,7 +123,7 @@ export const metodo = {
   "metodo.nutri.paso.azucar": "Tu azúcar",
   "metodo.nutri.paso.test": "Test",
   "metodo.nutri.paso.dia": "Diseña tu día",
-  "metodo.nutri.paso.macros": "Cuenta lo que comes",
+  "metodo.nutri.paso.macros": "Valores nutricionales",
   "metodo.nutri.paso.mitos": "Preguntas y mitos",
   /** Frase bajo el header de la página de mitos. */
   "metodo.nutri.mitos.intro":
@@ -166,15 +166,15 @@ export const metodo = {
 
   // ── Nutrición · la Biblioteca ──────────────────────────────────────────
   "metodo.nutri.biblioteca.intro":
-    "Todo lo que has descubierto en Nutrición, reunido en un mismo sitio. Elige por dónde entrar.",
+    "Esenciales de la nutrición. Elige por dónde empezar.",
   "metodo.nutri.biblioteca.molecular": "Alimentación molecular",
   "metodo.nutri.biblioteca.molecularPie":
-    "Elige un alimento y descubre de qué moléculas está hecho.",
+    "Elige y descubre las moléculas con las que está hecho.",
   "metodo.nutri.biblioteca.ilustracionesPie":
-    "Todos los cómics de Nutrición reunidos para releerlos.",
+    "Todos los cómics de Nutrición reunidos.",
   "metodo.nutri.biblioteca.respuestas": "Respuestas",
   "metodo.nutri.biblioteca.respuestasPie":
-    "Las preguntas y mitos más frecuentes, uno a uno.",
+    "Las preguntas y mitos más frecuentes.",
 
   // ── Nutrición · sueltos de los pasos ───────────────────────────────────
   "metodo.nutri.entendido": "Entendido",
@@ -202,7 +202,7 @@ export const metodo = {
   "metodo.nutri.platoHecho": "¡Plato equilibrado! 🎉 Tienes algo de cada grupo.",
   "metodo.nutri.platoVaciar": "Vaciar plato",
   "metodo.nutri.platoArrastra": "Arrastra estos alimentos al plato",
-  /** «Cuenta lo que comes». */
+  /** «Valores nutricionales». */
   "metodo.nutri.macros.lema": "Aprende lo que de verdad te ayudará a ser tu mejor versión...",
   "metodo.nutri.macros.intro":
     "Nadie te enseñó a mirar un plato y saber lo que lleva. Se aprende como se aprende a calcular distancias: fallando y volviendo a mirar. No hace falta acertar el gramo exacto —basta con no equivocarte de tamaño—.",
@@ -255,7 +255,7 @@ export const metodo = {
   "metodo.crearCelula": "Crea la célula",
 
   // ── Biblioteca de alimentos (nutrición) ────────────────────────────────
-  "metodo.alimentos.materiales": "Los materiales de los alimentos",
+  "metodo.alimentos.materiales": "Los nutrientes de los alimentos",
   "metodo.alimentos.elige": "Elige un alimento y descubre de qué moléculas está hecho.",
   "metodo.alimentos.todos": "Todos los alimentos",
   "metodo.alimentos.deQueEstaHecho": "De qué está hecho",
@@ -977,6 +977,7 @@ export const metodo = {
   "metodo.cabala.paso.senderosDiag": "Diagnóstico de los Senderos",
   "metodo.cabala.paso.senderosDiagCorto": "Senderos",
   "metodo.cabala.paso.final": "Diagnóstico final",
+  "metodo.cabala.paso.cursos": "Cursos",
   "metodo.cabala.paso.dias": "10 días con tus dimensiones",
   "metodo.cabala.paso.diasCorto": "10 días",
 

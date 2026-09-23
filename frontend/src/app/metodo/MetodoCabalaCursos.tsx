@@ -104,7 +104,7 @@ export default function MetodoCabalaCursos() {
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: `← ${t("metodo.cabala.paso.diasCorto")}`, onClick: () => navigate("/metodo/cabala/dias") }}
+              prev={{ label: `← ${t("metodo.cabala.paso.final")}`, onClick: () => navigate("/metodo/cabala/final") }}
               // "Ilustraciones" nunca falta en los headers de Cábala. En móvil se
               // queda solo el ojo, para que los botones sigan en una fila.
               extra={{

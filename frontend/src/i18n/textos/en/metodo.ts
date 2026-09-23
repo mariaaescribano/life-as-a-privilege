@@ -107,7 +107,7 @@ export const metodo = {
   "metodo.nutri.paso.azucar": "Your blood sugar",
   "metodo.nutri.paso.test": "Test",
   "metodo.nutri.paso.dia": "Design your day",
-  "metodo.nutri.paso.macros": "Count what you eat",
+  "metodo.nutri.paso.macros": "Nutrition facts",
   "metodo.nutri.paso.mitos": "Questions and myths",
   "metodo.nutri.mitos.intro":
     "These are some of the questions and myths that come up most. Tap each one to find out what the science actually says.",
@@ -872,6 +872,7 @@ export const metodo = {
   "metodo.cabala.paso.senderosDiag": "Diagnosis of the Paths",
   "metodo.cabala.paso.senderosDiagCorto": "Paths",
   "metodo.cabala.paso.final": "Final diagnosis",
+  "metodo.cabala.paso.cursos": "Courses",
   "metodo.cabala.paso.dias": "10 days with your dimensions",
   "metodo.cabala.paso.diasCorto": "10 days",
 

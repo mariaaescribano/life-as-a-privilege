@@ -880,27 +880,32 @@ export default function MetodoCabalaSefira() {
                 {errorGuardado && (
                   <Box as="button"
                        onClick={guardando ? undefined : () => void persistir(dataRef.current ?? {})}
+                       position="relative" overflow="hidden"
                        px={6} py={2.5} borderRadius="full"
                        border={`1.5px solid ${cabalaTxt}88`} color={cabalaTxt}
                        fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
                        cursor={guardando ? "wait" : "pointer"} opacity={guardando ? 0.6 : 1}
                        boxShadow={CAJA_GLOW} transition="all 0.2s"
-                       _hover={{ bg: `${cabalaTxt}1a`, borderColor: cabalaTxt }}
+                       _hover={{ borderColor: cabalaTxt }}
                        style={{ textShadow: INK_SHADOW }}>
-                    {t("comun.reintentar")}
+                    <DisciplinaBgLayer nom={cabalaNom} borderRadius="full" overlay={CAJA_OVERLAY} />
+                    <Box as="span" position="relative" zIndex={1}>{t("comun.reintentar")}</Box>
                   </Box>
                 )}
                 <Box as="button"
                      onClick={siguiente.disabled ? undefined : () => void seguir()}
                      title={siguiente.disabled ? siguiente.disabledTooltip : undefined}
+                     position="relative" overflow="hidden"
                      px={7} py={2.5} borderRadius="full"
-                     bg={siguiente.disabled ? "transparent" : `${cabalaTxt}1f`}
                      border={`1.5px solid ${siguiente.disabled ? `${cabalaTxt}44` : cabalaTxt}`}
                      color={siguiente.disabled ? `${cabalaTxt}66` : cabalaTxt}
+                     // Bloqueado: el mismo botón, apagado. No hace falta quitarle
+                     // el fondo para que se note que no se puede pulsar.
+                     opacity={siguiente.disabled ? 0.45 : 1}
                      fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em"
                      cursor={siguiente.disabled ? "not-allowed" : "pointer"}
                      boxShadow={siguiente.disabled ? "none" : CAJA_GLOW} transition="all 0.2s"
-                     _hover={siguiente.disabled ? {} : { bg: `${cabalaTxt}33`, transform: "translateY(-1px)", boxShadow: `0 0 26px ${cabalaTxt}88` }}
+                     _hover={siguiente.disabled ? {} : { transform: "translateY(-1px)", boxShadow: `0 0 26px ${cabalaTxt}88` }}
                      _active={siguiente.disabled ? {} : { transform: "scale(0.97)" }}
                      // Al quedar la dimensión completa, el botón late: se ve que
                      // se acaba de desbloquear sin tener que leer nada.
@@ -908,7 +913,10 @@ export default function MetodoCabalaSefira() {
                        textShadow: INK_SHADOW,
                        ...(siguiente.disabled ? {} : { animation: "cabalaListo 2.4s ease-in-out infinite" }),
                      }}>
-                  {siguiente.label}
+                  {/* El cielo de Cábala de fondo, igual que las cajas de la
+                      página (mismo velo, así el ámbar se sigue leyendo). */}
+                  <DisciplinaBgLayer nom={cabalaNom} borderRadius="full" overlay={CAJA_OVERLAY} />
+                  <Box as="span" position="relative" zIndex={1}>{siguiente.label}</Box>
                 </Box>
               </Flex>
             </Flex>

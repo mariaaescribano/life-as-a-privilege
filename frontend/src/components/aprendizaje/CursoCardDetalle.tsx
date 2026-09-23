@@ -47,6 +47,13 @@ export function CursoCardDetalle({
   const { idioma } = useIdioma();
   const [leccionesOpen, setLeccionesOpen] = useState(false);
   const [fotoOk, setFotoOk] = useState(false); // portada del curso ya cargada
+  const [fotoFallo, setFotoFallo] = useState(false); // la portada no se pudo cargar
+  // ¿Hay portada? Un curso recién creado en el admin puede no tenerla todavía
+  // (`curso.foto` vacío). Sin esto, la tarjeta se quedaba con el LifeLoader
+  // girando PARA SIEMPRE en el hueco de la foto —el `<img src="">` no dispara
+  // ni `load` ni `error`— y, como el nombre del curso vive en la propia
+  // portada, la tarjeta no decía ni cómo se llamaba el curso.
+  const hayFoto = !!curso.foto && !fotoFallo;
 
   const handleAcceder = () => {
     if (curso.precio === null) {
@@ -99,14 +106,31 @@ export function CursoCardDetalle({
         overflow="hidden"
         sx={{ aspectRatio: "16 / 9" }}
       >
-        <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block"
-          loading={prioritaria ? "eager" : "lazy"}
-               onLoad={() => setFotoOk(true)}
-               opacity={fotoOk ? 1 : 0} transition="opacity 0.5s ease" />
-        {!fotoOk && (
-          <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
-            <LifeLoader color={color} size={{ base: "52px", md: "60px" }} />
-          </Box>
+        {hayFoto ? (
+          <>
+            <Image src={curso.foto} alt={curso.titulo} w="100%" h="100%" objectFit="cover" display="block"
+                   loading={prioritaria ? "eager" : "lazy"}
+                   onLoad={() => setFotoOk(true)}
+                   onError={() => setFotoFallo(true)}
+                   opacity={fotoOk ? 1 : 0} transition="opacity 0.5s ease" />
+            {!fotoOk && (
+              <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
+                <LifeLoader color={color} size={{ base: "52px", md: "60px" }} />
+              </Box>
+            )}
+          </>
+        ) : (
+          /* Sin portada: en su sitio, el icono de la disciplina y el NOMBRE del
+             curso (que normalmente lo lleva la propia foto), sobre el fondo de
+             la disciplina que ya pinta la tarjeta. */
+          <Flex position="absolute" inset="0" direction="column" align="center" justify="center"
+                gap={{ base: 2, md: 3 }} px={{ base: 5, md: 7 }} textAlign="center">
+            <Box opacity={0.9}>{curso.icon}</Box>
+            <Text color={color} fontWeight="700" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.25"
+                  letterSpacing="0.02em" style={{ textShadow: tShadow }}>
+              {curso.titulo}
+            </Text>
+          </Flex>
         )}
       </Box>
 

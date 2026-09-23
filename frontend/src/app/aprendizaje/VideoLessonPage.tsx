@@ -8,7 +8,7 @@ import { FloatingActionButton } from "../../components/aprendizaje/FloatingActio
 import type { Modulo, ModuloContenido, Submodulo } from "../../dtos/aprendizaje.type";
 import { modulosNeuroPsicologia, modulosEsquizofrenia, modulosAnorexia, modulosDepresion, modulosPadresHeridos } from "../../hardCoded/aprendizajes/NeuroPsicologia/ModulosNeuroPsicologia";
 import SiteHeader from "../../components/global/SiteHeader";
-import { VolverAlMapa } from "../../components/global/VolverAlMapa";
+import { VolverAlMapa, useVolverAlMapa } from "../../components/global/VolverAlMapa";
 import SiteFooter from "../../components/global/Footer";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -42,6 +42,8 @@ export default function VideoLessonPage() {
   const [moduloDatos, setModuloDatos] = useState<Modulo | null>(null);
   const [letraOpen, setLetraOpen] = useState(false);
   const navigate = useNavigate();
+  // Vuelta al paso del Mapa del que se salió (solo si se venía del recorrido).
+  const { boton: botonMapa } = useVolverAlMapa();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -246,6 +248,34 @@ export default function VideoLessonPage() {
               >
                 ←
               </Box>
+
+              {/* Vuelta al Mapa, entre las dos flechas: quien entró al curso
+                  desde el recorrido puede leer lo que quiera y volver al paso
+                  exacto del que salió, sin buscar el botón flotante. */}
+              {botonMapa && (
+                <Box
+                  as="button"
+                  onClick={botonMapa.onClick}
+                  h="44px"
+                  px={{ base: 4, md: 6 }}
+                  borderRadius="full"
+                  boxShadow={GLOW}
+                  border="2px solid rgba(255,255,255,0.55)"
+                  color="white"
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "sm", md: "md" }}
+                  fontStyle="italic"
+                  bg="rgba(255,255,255,0.08)"
+                  cursor="pointer"
+                  whiteSpace="nowrap"
+                  transition="all 0.2s"
+                  display="flex" alignItems="center" justifyContent="center"
+                  _hover={{ bg: "rgba(255,255,255,0.2)", borderColor: "white" }}
+                >
+                  ← {botonMapa.label}
+                </Box>
+              )}
+
               <Box
                 as="button"
                 disabled={!datos.linkNext}

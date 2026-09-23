@@ -24,7 +24,7 @@ import {
 import { useAlimentosMacros, useEtiquetasMacros } from "../../hardCoded/espacio/useMacrosJuego";
 
 // ═════════════════════════════════════════════════════════════════════════
-// «Cuenta lo que comes» · el paso que va DESPUÉS de «Diseña tu día».
+// «Valores nutricionales» · el paso que va DESPUÉS de «Diseña tu día».
 //
 // Un juego de estimación y NADA MÁS: sale un alimento con su ración normal y hay
 // que adivinar cuántos gramos de proteína, hidratos y grasa lleva moviendo tres

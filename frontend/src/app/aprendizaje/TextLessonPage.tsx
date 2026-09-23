@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
-import { VolverAlMapa } from "../../components/global/VolverAlMapa";
+import { VolverAlMapa, useVolverAlMapa } from "../../components/global/VolverAlMapa";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
@@ -59,6 +59,10 @@ export default function TextLessonPage() {
   // Cuerpo de la lección en el idioma activo (null si es español o si esta
   // lección todavía no está traducida: entonces se lee la del API).
   const traducida = useLeccionTraducida(cursoId, submoduloId);
+  // Aquí es donde se lee un rato de verdad: el botón del header tiene que
+  // devolver al paso del Mapa del que se salió, sin depender de que el usuario
+  // encuentre el botón flotante. Solo aparece si se venía del recorrido.
+  const { boton: botonMapa } = useVolverAlMapa();
 
   React.useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, [submoduloId]);
 
@@ -163,6 +167,10 @@ export default function TextLessonPage() {
               onClick: () => navigate(`/aprendizaje/modulosPage/${modalidadId}/${cursoId}`),
               small: true,
             }}
+            // Los laterales son las flechas de lección anterior/siguiente, así
+            // que la vuelta al Mapa va en medio: ahí conserva su nombre también
+            // en el móvil.
+            extra2={botonMapa}
             next={{
               label: "→",
               onClick: () => siguiente && navigate(siguiente.link),

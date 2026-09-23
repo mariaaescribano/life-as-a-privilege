@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { VolverAlMapa, useVolverAlMapa } from "../../components/global/VolverAlMapa";
 import {
   API_URL, nutricionBg, nutricionNom, nutricionTxt, FitoterapiaIcon,
 } from "../../GlobalVariables";
@@ -339,6 +340,8 @@ function PlantCard({ planta, isFavorite, onOpen, onToggleFavorite, showFavorite 
 ══════════════════════════════════════════════ */
 export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?: boolean }) {
   const navigate = useNavigate();
+  // Vuelta al paso del Mapa, si se llegó aquí desde el recorrido.
+  const { boton: botonMapa } = useVolverAlMapa();
   const t = useT();
   // El herbario en el idioma activo. La ficha abierta se guarda por su `id`
   // para que cambie de idioma con la página, y no se quede con el texto del
@@ -393,6 +396,7 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
+      <VolverAlMapa />
 
       <Box flex="1">
         <Flex
@@ -410,6 +414,8 @@ export default function HerbarioPage({ favoritesOnly = false }: { favoritesOnly?
             nom={nutricionNom}
             dense
             prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
+            // Si se llegó desde el recorrido, la vuelta al paso del Mapa.
+            extra={botonMapa}
           />
 
           {favoritesOnly && plantasMostradas.length === 0 && (

@@ -122,7 +122,9 @@ export default function MetodoNutricionCursos() {
           {/* El catálogo manda. Mientras carga, la animación de Nutrición; con un
               solo curso, su tarjeta centrada (no una rejilla de tres huecos con
               dos vacíos); con varios, la rejilla común. */}
-          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
+          {/* Sin <Reveal> alrededor: la rejilla ya enciende sus tarjetas UNA A UNA
+              al asomar (CursosGrid). Envolverla entera hacía que aquí entraran
+              todas de golpe, que es lo que no pasa en la página de Cursos. */}
           {cursosLoading || !fotosListas ? (
             <Flex direction="column" align="center" justify="center" gap={4} w="100%"
                   minH={{ base: "260px", md: "340px" }}>
@@ -155,8 +157,6 @@ export default function MetodoNutricionCursos() {
               </Flex>
             </Reveal>
           )}
-          </Reveal>
-
 
           {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
               /opiniones y trae de vuelta a esta misma página. */}

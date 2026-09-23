@@ -46,7 +46,7 @@ export interface CaminoDisciplina {
  *   · tcm                 → TCM_TOTAL (tcmRecorrido.ts)
  *   · fisiologia          → NIVELES de IndiceFisiologia (materia + vida)
  *   · nutricion           → PASOS de IndiceNutricion
- *   · cabala              → los PASOS de IndiceCabala (2 + 11 sefirot + 2 + 22 senderos + 3)
+ *   · cabala              → los PASOS de IndiceCabala (2 + 11 sefirot + 2 + 22 senderos + 2; los «10 días» están aparcados)
  *   · cultura             → las Historias de HISTORIAS_CULTURA
  *
  * Si se queda corto no pasa nada grave: el porcentaje se recorta al 100%, nunca
@@ -60,7 +60,7 @@ export const CAMINO: Record<CaminoKey, CaminoDisciplina> = {
   tcm:        { total: 12, ruta: "/metodo/tcm" },
   fisiologia: { total: 9,  ruta: "/metodo/fisiologia" },
   nutricion:  { total: 14, ruta: "/metodo/nutricion" },
-  cabala:     { total: 40, ruta: "/metodo/cabala" },
+  cabala:     { total: 39, ruta: "/metodo/cabala" },
   cultura:    { total: 6,  ruta: "/metodo/cultura", porPiezas: true },
 };
 

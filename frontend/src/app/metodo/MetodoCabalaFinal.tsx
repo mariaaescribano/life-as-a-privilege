@@ -217,7 +217,8 @@ export default function MetodoCabalaFinal() {
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
               prev={{ label: `← ${t("metodo.cabala.paso.senderosDiagCorto")}`, onClick: () => navigate("/metodo/cabala/senderos/diagnostico") }}
               extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
-              next={{ label: `${t("metodo.cabala.paso.diasCorto")} →`, onClick: () => navigate("/metodo/cabala/dias") }}
+              // Con los «10 días» aparcados, de aquí se pasa directo a Cursos.
+              next={{ label: `${t("metodo.cabala.paso.cursos")} →`, onClick: () => navigate("/metodo/cabala/cursos") }}
             />
           </Reveal>
 
@@ -232,16 +233,26 @@ export default function MetodoCabalaFinal() {
           {/* Descargar */}
           <Reveal direction="up" distance={14} delay={0.16} duration={0.55} display="flex" justifyContent="center">
             <Box as="button" onClick={() => void descargar()} disabled={generando}
-                 display="inline-flex" alignItems="center" gap={2.5} px={{ base: 7, md: 8 }} py={{ base: 2.5, md: 3 }}
-                 borderRadius="full" bg={cabalaTxt} color={cabalaBg} fontWeight="800" fontSize={{ base: "sm", md: "md" }}
+                 position="relative" overflow="hidden"
+                 display="inline-flex" alignItems="center" px={{ base: 7, md: 8 }} py={{ base: 2.5, md: 3 }}
+                 // El cielo de Cábala de fondo (antes era un relleno ámbar liso,
+                 // el único botón del recorrido que no llevaba la foto), con el
+                 // contorno ámbar entero de 2 px del «Siguiente sendero».
+                 borderRadius="full" border={`2px solid ${cabalaTxt}`}
+                 color={cabalaTxt} fontWeight="800" fontSize={{ base: "sm", md: "md" }}
                  letterSpacing="0.06em" cursor={generando ? "wait" : "pointer"} opacity={generando ? 0.75 : 1}
                  transition="all 0.2s"
                  boxShadow={CAJA_GLOW}
+                 style={{ textShadow: INK_SHADOW }}
                  _hover={generando ? undefined : { transform: "translateY(-2px)", boxShadow: CAJA_GLOW_HOVER }}>
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="20px" h="20px" fill="currentColor">
-                <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-              </Box>
-              {generando ? t("metodo.cabala.final.preparando") : t("metodo.cabala.final.descargar")}
+              <DisciplinaBgLayer nom={cabalaNom} borderRadius="full" />
+              <Flex position="relative" zIndex={1} align="center" gap={2.5}>
+                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="20px" h="20px" fill="currentColor"
+                     style={{ filter: "drop-shadow(0 1px 4px rgba(0,0,0,0.9))" }}>
+                  <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                </Box>
+                {generando ? t("metodo.cabala.final.preparando") : t("metodo.cabala.final.descargar")}
+              </Flex>
             </Box>
           </Reveal>
 

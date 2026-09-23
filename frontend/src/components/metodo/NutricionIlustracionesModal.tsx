@@ -10,6 +10,7 @@ import type { IlustracionEntry } from "./ilustracionesGaleria";
 import { useIlustracionTraducida } from "./ilustracionesGaleria.en";
 import { useComic } from "../../i18n/comics";
 import { useLeidos } from "../../hooks/useLeidos";
+import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import { barraVisibleSx } from "../global/barraDeScroll";
 
@@ -48,7 +49,7 @@ function IlustracionCard({ entry: entrada, leida, onOpen }: {
       <Box position="relative" w="100%" aspectRatio={1} flexShrink={0} overflow="hidden" bg={`${nutricionTxt}12`}>
         {!coverErr && entry.cover ? (
           <Image src={encodeURI(entry.cover)} alt={entry.titulo} w="100%" h="100%" objectFit="cover"
-                 loading="lazy" onError={() => setCoverErr(true)} />
+                 onError={() => setCoverErr(true)} />
         ) : (
           <Flex position="absolute" inset="0" align="center" justify="center" color={`${nutricionTxt}66`}>
             <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="46px" h="46px" fill="currentColor">
@@ -88,6 +89,20 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
   // Las viñetas del cómic abierto, en el idioma activo (el orden y las fotos
   // los sigue mandando el español).
   const vinetasAbierta = useComic(abierta?.comicKey ?? abierta?.id ?? "", abierta?.vinetas ?? []);
+
+  // Las portadas de TODAS las tarjetas, descargadas antes de enseñar la rejilla:
+  // si no, los boxes salían vacíos y se iban rellenando de uno en uno. Mientras
+  // tanto, la manzana de Nutrición. Se pide al ABRIR (no al montar la página),
+  // para no bajarse la galería entera a quien nunca la abre.
+  const [portadasListas, setPortadasListas] = useState(false);
+  useEffect(() => {
+    if (!isOpen) { setPortadasListas(false); return; }
+    let vivo = true;
+    precargarImagenes(
+      NUTRICION_ILUSTRACIONES.map((e) => (e.cover ? encodeURI(e.cover) : null)),
+    ).then(() => { if (vivo) setPortadasListas(true); });
+    return () => { vivo = false; };
+  }, [isOpen]);
 
   // Abrir un cómic = leerlo: se queda con su marquita.
   const abrir = (e: IlustracionEntry) => {
@@ -143,12 +158,18 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
               </Text>
             </Flex>
 
-            <SimpleGrid columns={{ base: 2, sm: 3, lg: 4 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {NUTRICION_ILUSTRACIONES.map((e) => (
-                <IlustracionCard key={e.id} entry={e} leida={leido(CAMPO_LEIDAS, e.id)}
-                                 onOpen={() => abrir(e)} />
-              ))}
-            </SimpleGrid>
+            {portadasListas ? (
+              <SimpleGrid columns={{ base: 2, sm: 3, lg: 4 }} spacing={{ base: 4, md: 6 }} w="100%">
+                {NUTRICION_ILUSTRACIONES.map((e) => (
+                  <IlustracionCard key={e.id} entry={e} leida={leido(CAMPO_LEIDAS, e.id)}
+                                   onOpen={() => abrir(e)} />
+                ))}
+              </SimpleGrid>
+            ) : (
+              <Flex align="center" justify="center" w="100%" minH={{ base: "40vh", md: "50vh" }}>
+                <AppleLoader color={nutricionTxt} label={null} />
+              </Flex>
+            )}
           </Flex>
         </Box>
       </Box>

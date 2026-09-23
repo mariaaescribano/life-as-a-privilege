@@ -5,6 +5,7 @@ import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { VolverAlMapa, useVolverAlMapa } from "../../components/global/VolverAlMapa";
 import { NutricionIcon, nutricionBg, nutricionNom, nutricionTxt, API_URL } from "../../GlobalVariables";
 import { alimentos, type Alimento } from "../../components/recursos/nutricion/AlimentosData";
 import { useT } from "../../i18n";
@@ -344,6 +345,8 @@ function AlimentoCard({ alimento, onOpen, isFavorite, onToggleFavorite, showFavo
 ══════════════════════════════════════════════ */
 export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly?: boolean }) {
   const navigate = useNavigate();
+  // Vuelta al paso del Mapa, si se llegó aquí desde el recorrido.
+  const { boton: botonMapa } = useVolverAlMapa();
   const t = useT();
   const [selected, setSelected] = useState<Alimento | null>(null);
   const [favoritos, setFavoritos] = useState<Set<number>>(new Set());
@@ -384,6 +387,7 @@ export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
+      <VolverAlMapa />
 
       <Box flex="1">
         <Flex
@@ -401,6 +405,8 @@ export default function AlimentosPage({ favoritesOnly = false }: { favoritesOnly
             nom={nutricionNom}
             dense
             prev={{ label: `← ${t("comun.volver")}`, onClick: () => navigate("/aprendizaje/cursos/nutricion") }}
+            // Si se llegó desde el recorrido, la vuelta al paso del Mapa.
+            extra={botonMapa}
           />
 
           {favoritesOnly && alimentosMostrados.length === 0 && (

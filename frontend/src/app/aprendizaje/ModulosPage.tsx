@@ -6,7 +6,7 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
-import { VolverAlMapa, olvidarOrigenCurso, origenCurso } from "../../components/global/VolverAlMapa";
+import { VolverAlMapa, useVolverAlMapa } from "../../components/global/VolverAlMapa";
 import { useCursosData } from "../../data/cursosApi";
 import { useT } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
@@ -20,10 +20,10 @@ export default function ModulosPage() {
   const [searchParams] = useSearchParams();
   // De dónde se vino. Dos maneras de llegar desde El Recorrido y las dos valen:
   //  · `?volver=` en la URL (el modal de Cursos de Psicología, la presentación),
-  //  · la miga de pan de `VolverAlMapa`, que guarda el origen al pulsar la
-  //    tarjeta del curso (las páginas «Cursos de X» de cada disciplina).
-  // Sin ninguna de las dos se vino de Materiales, y ahí es donde se devuelve.
-  const volver = searchParams.get("volver") ?? origenCurso();
+  //  · la miga de pan del Mapa, que apunta sola el último paso del recorrido.
+  // Sin ninguna de las dos se vino de Materiales, y ahí no hay Mapa al que
+  // devolver: el botón no aparece.
+  const { url: volver, boton: botonMapa } = useVolverAlMapa(searchParams.get("volver"));
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
 
@@ -37,7 +37,7 @@ export default function ModulosPage() {
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
-      <VolverAlMapa />
+      <VolverAlMapa url={volver} />
 
       <Box flex="1">
         {modalidad && curso ? (
@@ -58,15 +58,20 @@ export default function ModulosPage() {
               // Este header va GRANDE, como el del recorrido: es la portada del
               // curso y la página más importante de Materiales. El resto de la
               // sección (cursos, lección, herbario, alimentos) va en `dense`.
-              // Botón de vuelta, discreto (small). Si se llegó desde El Recorrido
-              // devuelve EXACTAMENTE a la página de la que se salió (lo mismo que
-              // el botón flotante); en cualquier otro caso, a los cursos de la
-              // propia disciplina (misma clave que la ruta /cursos/:slug).
-              prev={
-                volver
-                  ? { label: `← ${t("comun.volverAlMapa")}`, onClick: () => { olvidarOrigenCurso(); navigate(volver); }, small: true }
-                  : { label: `← ${t("aprendizaje.cursosDe", { disciplina: nombreDisciplina(modalidad.nom) })}`, onClick: () => navigate(`/aprendizaje/cursos/${modalidadId}`), small: true }
-              }
+              // Dos vueltas, discretas (small) y con destinos distintos:
+              //  · `prev` sube un escalón dentro de Materiales (los cursos de
+              //    esta disciplina),
+              //  · `extra` devuelve EXACTAMENTE al paso del Mapa del que se
+              //    salió —lo mismo que el botón flotante— y solo sale si se
+              //    venía de ahí. Va en medio a propósito: los botones laterales
+              //    se quedan en flecha suelta en el móvil y «volver al Mapa» no
+              //    se adivina por una flecha.
+              prev={{
+                label: `← ${t("aprendizaje.cursosDe", { disciplina: nombreDisciplina(modalidad.nom) })}`,
+                onClick: () => navigate(`/aprendizaje/cursos/${modalidadId}`),
+                small: true,
+              }}
+              extra={botonMapa}
             />
 
             <Box

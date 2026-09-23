@@ -16,7 +16,7 @@ export const elMetodo = {
   "elMetodo.porDentro": "No estudias ocho disciplinas.\nTe descubres a ti desde ocho perspectivas.",
   /** Va justo debajo del título: avisa de que el mandala se puede pinchar. */
   "elMetodo.porDentroPista": "Haz clic en cada círculo para descubrirla",
-  "elMetodo.cadaDisciplina": "Ocho disciplinas. Un orden. Un propósito: entenderte.\nCada disciplina observa una parte distinta de ti.",
+  "elMetodo.cadaDisciplina": "Ocho disciplinas. Un orden. Un propósito: entenderte.\nCada disciplina observa una parte distinta de ti. Puedes elegir el orden que quieras, pero este es el que propongo:",
   /** Cabecera de las cajas de la ficha de disciplina (DisciplinaFicha). */
   "elMetodo.queIncluye": "Qué incluye",
 
