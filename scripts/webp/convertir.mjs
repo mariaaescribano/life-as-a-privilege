@@ -546,6 +546,13 @@ const LOTES = {
     ladoMax: 1200,
     carpetas: ["recorrido/psicologia/cerebro"], // 4 archivos · 11 MB
   },
+  // Las moléculas de «Los ultraprocesados». Mismo trato que el resto de
+  // ilustraciones de Nutrición (lote 1): se ven en una tarjeta, no a pantalla
+  // completa, así que con 1000 px de lado sobra.
+  46: {
+    ladoMax: 1000,
+    carpetas: ["recorrido/nutricion/ultraprocesados"], // 9 archivos · 21 MB
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

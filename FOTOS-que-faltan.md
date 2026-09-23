@@ -16,9 +16,8 @@ en `CULTURA-fotos-que-faltan.md`, que además trae el título de cada hueco.
 | --- | --- |
 | Cultura | 1 |
 | Fisiología | 3 |
-| Nutrición | 9 |
 | Medicina China | 5 |
-| **TOTAL** | **18** |
+| **TOTAL** | **9** |
 
 ## Cultura — faltan 1
 
@@ -34,20 +33,6 @@ Están una a una, con su momento, en `CULTURA-fotos-que-faltan.md`.
 
 - `cuerpo.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaOrganismo.tsx`
 - `proteina.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaEstructuras.tsx`
-
-## Nutrición — faltan 9
-
-### `frontend/public/recorrido/nutricion/ultraprocesados/`
-
-- `acrilamida.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
-- `bpa-ftalatos.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
-- `colorantes-azoicos.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
-- `dioxido-titanio.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
-- `edulcorantes.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
-- `emulgentes.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
-- `fosfatos.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
-- `grasas-trans.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
-- `nitritos.webp` — la pide `frontend/src/hardCoded/espacio/UltraprocesadosNutricion.ts`
 
 ## Medicina China — faltan 5
 

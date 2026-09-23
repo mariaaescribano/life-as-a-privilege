@@ -11,9 +11,9 @@ import type { NutrienteTarjeta } from "./NutrientesNutricion";
 // ES EL DATO (el campo `grupo`), diciendo en cada una qué se sabe y qué no. Es
 // lo que la hace creíble, y lo que ningún documental de sobremesa hace.
 //
-// Fotos: /recorrido/nutricion/ultraprocesados/<key>.webp — PENDIENTES de subir.
-// Mientras no existan, la tarjeta enseña la inicial del título (FotoBox lo
-// resuelve solo con su `onError`, no hay que tocar nada al ir subiéndolas).
+// Fotos: /recorrido/nutricion/ultraprocesados/<key>.webp — las NUEVE están ya
+// subidas (lote 46 de WebP). Si alguna faltara, la tarjeta enseña la inicial del
+// título en su hueco: FotoBox lo resuelve solo con su `onError`.
 
 // Clave en metodo_nutricion.data con las fichas ya leídas (string[] de keys).
 export const ULTRAPROCESADOS_LEIDOS_KEY = "ultraprocesados_leidos";
