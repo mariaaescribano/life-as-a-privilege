@@ -49,10 +49,91 @@ type Disciplina = {
   renderIcon: (size: string) => React.ReactNode;
 };
 
-// Orden del Recorrido (igual que las cards de /elMetodo): cada disciplina lleva
-// su número de paso. Solo Astrología está abierta de momento; el resto se ven
-// dentro del mandala (para mostrar la estructura completa) pero aún no abren.
+// ORDEN DE LECTURA, que NO es el orden del Mapa: es el mismo de la portada
+// (app/web/Welcome.tsx) — Psicología → Fisiología → Nutrición → Cultura → TCM →
+// Astrología → Cábala → Ayurveda. Abriendo por Astrología, a quien llega
+// escéptico se le cae la página en el primer círculo; abriendo por Psicología
+// se queda a mirar. Por eso aquí NO hay números de paso: ordenar y numerar a la
+// vez diría que el recorrido empieza por Psicología, y no es verdad.
+// El orden que se PROPONE —ese sí numerado— vive en ElMetodo.tsx (`modalidades`),
+// en el bloque de «Ocho disciplinas. Un orden. Un propósito: entenderte».
 const disciplinas: Disciplina[] = [
+  {
+    nom: neuropsicologiaNom,
+    clave: "psicologia",
+    bg: neuropsicologiaBg,
+    txt: neuropsicologiaTxt,
+    capturas: [
+      { src: "/capturasRecorrido/psico/1.webp",  titulo: { es: "Bienvenido a la segunda disciplina.", en: "Welcome to the second discipline." } },
+      { src: "/capturasRecorrido/psico/2.webp",  titulo: { es: "Introducción", en: "Introduction" } },
+      { src: "/capturasRecorrido/psico/3.webp",  titulo: { es: "Aviso", en: "A note" } },
+      { src: "/capturasRecorrido/psico/20.webp", titulo: { es: "En cualquier momento puedes agendar una llamada.", en: "You can book a call at any time." } },
+      { src: "/capturasRecorrido/psico/4.webp",  titulo: { es: "Tus problemas", en: "Your problems" } },
+      { src: "/capturasRecorrido/psico/5.webp",  titulo: { es: "Tu edad para tu línea de Vida", en: "Your age, for your Life line" } },
+      { src: "/capturasRecorrido/psico/6.webp",  titulo: { es: "Línea de Vida", en: "Life line" } },
+      { src: "/capturasRecorrido/psico/7.webp",  titulo: { es: "Ejemplo de año", en: "A sample year" } },
+      { src: "/capturasRecorrido/psico/8.webp",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
+      { src: "/capturasRecorrido/psico/9.webp",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
+      { src: "/capturasRecorrido/psico/10.webp", titulo: { es: "¿Qué experiencia te marcó?", en: "Which experience marked you?" } },
+      { src: "/capturasRecorrido/psico/11.webp", titulo: { es: "Tus nudos", en: "Your knots" } },
+      { src: "/capturasRecorrido/psico/12.webp", titulo: { es: "Las necesidades en la infancia", en: "Childhood needs" } },
+      { src: "/capturasRecorrido/psico/13.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/psico/14.webp", titulo: { es: "Tus heridas", en: "Your wounds" } },
+      { src: "/capturasRecorrido/psico/15.webp", titulo: { es: "Relaciona heridas con tus arquetipos", en: "Link your wounds to your archetypes" } },
+      { src: "/capturasRecorrido/psico/16.webp", titulo: { es: "Ejemplo", en: "Example" } },
+      { src: "/capturasRecorrido/psico/17.webp", titulo: { es: "Intégralas en la persona que eres hoy", en: "Integrate them into the person you are today" } },
+      { src: "/capturasRecorrido/psico/18.webp", titulo: { es: "Comprométete", en: "Commit" } },
+      { src: "/capturasRecorrido/psico/19.webp", titulo: { es: "No te olvides de los cursos", en: "Don't forget the courses" } },
+    ],
+    link: "/espacio/questions/" + neuropsicologiaNom,
+    enabled: true,
+    video: "/videos/psicologiavideo.mp4",
+    renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
+  },
+  {
+    nom: fisiologiaNom,
+    clave: "fisiologia",
+    bg: fisiologiaBg,
+    txt: fisiologiaTxt,
+    capturas: [],
+    link: "/espacio/questions/" + fisiologiaNom,
+    enabled: false,
+    video: "/videos/fisiovideo.mp4",
+    renderIcon: (size) => <FisiologiaIcon size={size} />,
+  },
+  {
+    nom: nutricionNom,
+    clave: "nutricion",
+    bg: nutricionBg,
+    txt: nutricionTxt,
+    capturas: [],
+    link: "/espacio/questions/" + nutricionNomLink,
+    enabled: false,
+    video: "/videos/nutrivideo.mp4",
+    renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
+  },
+  {
+    nom: culturaNom,
+    clave: "cultura",
+    bg: culturaBg,
+    txt: culturaTxt,
+    capturas: [],
+    link: "/aprendizaje/cursos/" + culturaNomLink,
+    enabled: false,
+    video: "/videos/culturavideo.mp4",
+    renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
+  },
+  {
+    nom: tcmNom,
+    clave: "tcm",
+    bg: tcmBg,
+    txt: tcmTxt,
+    capturas: [],
+    link: "/espacio/questions/" + tcmNomLink,
+    enabled: false,
+    video: "/videos/tcmvideo.mp4",
+    renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
+  },
   {
     nom: astrologiaNom,
     clave: "astrologia",
@@ -85,36 +166,15 @@ const disciplinas: Disciplina[] = [
     renderIcon: (size) => <AstrologiaIcon size={size} />,
   },
   {
-    nom: neuropsicologiaNom,
-    clave: "psicologia",
-    bg: neuropsicologiaBg,
-    txt: neuropsicologiaTxt,
-    capturas: [
-      { src: "/capturasRecorrido/psico/1.webp",  titulo: { es: "Bienvenido a la segunda disciplina.", en: "Welcome to the second discipline." } },
-      { src: "/capturasRecorrido/psico/2.webp",  titulo: { es: "Introducción", en: "Introduction" } },
-      { src: "/capturasRecorrido/psico/3.webp",  titulo: { es: "Aviso", en: "A note" } },
-      { src: "/capturasRecorrido/psico/20.webp", titulo: { es: "En cualquier momento puedes agendar una llamada.", en: "You can book a call at any time." } },
-      { src: "/capturasRecorrido/psico/4.webp",  titulo: { es: "Tus problemas", en: "Your problems" } },
-      { src: "/capturasRecorrido/psico/5.webp",  titulo: { es: "Tu edad para tu línea de Vida", en: "Your age, for your Life line" } },
-      { src: "/capturasRecorrido/psico/6.webp",  titulo: { es: "Línea de Vida", en: "Life line" } },
-      { src: "/capturasRecorrido/psico/7.webp",  titulo: { es: "Ejemplo de año", en: "A sample year" } },
-      { src: "/capturasRecorrido/psico/8.webp",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
-      { src: "/capturasRecorrido/psico/9.webp",  titulo: { es: "Rellena poco a poco", en: "Fill it in little by little" } },
-      { src: "/capturasRecorrido/psico/10.webp", titulo: { es: "¿Qué experiencia te marcó?", en: "Which experience marked you?" } },
-      { src: "/capturasRecorrido/psico/11.webp", titulo: { es: "Tus nudos", en: "Your knots" } },
-      { src: "/capturasRecorrido/psico/12.webp", titulo: { es: "Las necesidades en la infancia", en: "Childhood needs" } },
-      { src: "/capturasRecorrido/psico/13.webp", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/psico/14.webp", titulo: { es: "Tus heridas", en: "Your wounds" } },
-      { src: "/capturasRecorrido/psico/15.webp", titulo: { es: "Relaciona heridas con tus arquetipos", en: "Link your wounds to your archetypes" } },
-      { src: "/capturasRecorrido/psico/16.webp", titulo: { es: "Ejemplo", en: "Example" } },
-      { src: "/capturasRecorrido/psico/17.webp", titulo: { es: "Intégralas en la persona que eres hoy", en: "Integrate them into the person you are today" } },
-      { src: "/capturasRecorrido/psico/18.webp", titulo: { es: "Comprométete", en: "Commit" } },
-      { src: "/capturasRecorrido/psico/19.webp", titulo: { es: "No te olvides de los cursos", en: "Don't forget the courses" } },
-    ],
-    link: "/espacio/questions/" + neuropsicologiaNom,
-    enabled: true,
-    video: "/videos/psicologiavideo.mp4",
-    renderIcon: (size) => <NeuropsicologiaIcon size={{ base: size, md: size }} />,
+    nom: cabalaNom,
+    clave: "cabala",
+    bg: cabalaBg,
+    txt: cabalaTxt,
+    capturas: [],
+    link: "/espacio/questions/" + cabalaNom,
+    enabled: false,
+    video: "/videos/cabalavideo.mp4",
+    renderIcon: (size) => <CabalaIcon size={size} />,
   },
   {
     nom: ayurvedaNom,
@@ -151,70 +211,14 @@ const disciplinas: Disciplina[] = [
     video: "/videos/ayurvedavideo.mp4",
     renderIcon: (size) => <AyurvedaIcon size={{ base: size, md: size }} />,
   },
-  {
-    nom: tcmNom,
-    clave: "tcm",
-    bg: tcmBg,
-    txt: tcmTxt,
-    capturas: [],
-    link: "/espacio/questions/" + tcmNomLink,
-    enabled: false,
-    video: "/videos/tcmvideo.mp4",
-    renderIcon: (size) => <TCMIcon size={{ base: size, md: size }} />,
-  },
-  {
-    nom: fisiologiaNom,
-    clave: "fisiologia",
-    bg: fisiologiaBg,
-    txt: fisiologiaTxt,
-    capturas: [],
-    link: "/espacio/questions/" + fisiologiaNom,
-    enabled: false,
-    video: "/videos/fisiovideo.mp4",
-    renderIcon: (size) => <FisiologiaIcon size={size} />,
-  },
-  {
-    nom: nutricionNom,
-    clave: "nutricion",
-    bg: nutricionBg,
-    txt: nutricionTxt,
-    capturas: [],
-    link: "/espacio/questions/" + nutricionNomLink,
-    enabled: false,
-    video: "/videos/nutrivideo.mp4",
-    renderIcon: (size) => <NutricionIcon size={{ base: size, md: size }} />,
-  },
-  {
-    nom: cabalaNom,
-    clave: "cabala",
-    bg: cabalaBg,
-    txt: cabalaTxt,
-    capturas: [],
-    link: "/espacio/questions/" + cabalaNom,
-    enabled: false,
-    video: "/videos/cabalavideo.mp4",
-    renderIcon: (size) => <CabalaIcon size={size} />,
-  },
-  {
-    nom: culturaNom,
-    clave: "cultura",
-    bg: culturaBg,
-    txt: culturaTxt,
-    capturas: [],
-    link: "/aprendizaje/cursos/" + culturaNomLink,
-    enabled: false,
-    video: "/videos/culturavideo.mp4",
-    renderIcon: (size) => <CulturaIcon size={{ base: size, md: size }} />,
-  },
 ];
 
 // ── Círculo del mandala ──────────────────────────────────────────────────────
 const MandalaCircle = ({
-  disc, index, step, x, y, circleSize, iconSize, onSelect, isSelected = false,
+  disc, index, x, y, circleSize, iconSize, onSelect, isSelected = false,
 }: {
   disc: Disciplina;
   index: number;
-  step: number;
   x: number;
   y: number;
   circleSize: string;
@@ -241,8 +245,8 @@ const MandalaCircle = ({
       onAnimationComplete={() => { if (!entered) setEntered(true); }}
       whileHover={{ scale: isSelected ? 1.2 : 1.1 }}
       style={{ filter: isSelected ? undefined : "grayscale(0.6)", zIndex: isSelected ? 3 : undefined }}
-      // Los números y el círculo son un control, no texto: no seleccionables
-      // (nunca se pintan de azul al arrastrar el ratón).
+      // El círculo es un control, no texto: no seleccionable (nunca se pinta
+      // de azul al arrastrar el ratón).
       sx={{ userSelect: "none", WebkitUserSelect: "none", WebkitTapHighlightColor: "transparent" }}
     >
       <Box
@@ -268,26 +272,9 @@ const MandalaCircle = ({
         </Box>
       </Box>
 
-      {/* Número de paso del recorrido */}
-      <Box
-        position="absolute"
-        top="-6px"
-        right="-6px"
-        w={{ base: "20px", md: "24px" }}
-        h={{ base: "20px", md: "24px" }}
-        borderRadius="full"
-        bg={disc.bg}
-        border={`1.5px solid ${disc.txt}`}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        zIndex={2}
-        boxShadow={`0 0 8px ${disc.txt}88`}
-      >
-        <Text color={disc.txt} fontWeight="700" fontSize={{ base: "10px", md: "12px" }} lineHeight="1">
-          {step}
-        </Text>
-      </Box>
+      {/* Aquí iba la chapita con el número de paso. Fuera: los círculos ya no
+          van en el orden del Mapa, así que el número decía una cuenta que no
+          era la del recorrido. */}
     </MotionBox>
   );
 };
@@ -859,10 +846,9 @@ const ahorroActivo = () => {
 };
 
 const VideoMuestraCard = ({
-  disc, step, index, onOpen,
+  disc, index, onOpen,
 }: {
   disc: Disciplina;
-  step: number;
   index: number;
   onOpen: () => void;
 }) => {
@@ -954,7 +940,8 @@ const VideoMuestraCard = ({
         pointerEvents="none"
       />
 
-      {/* Rótulo: nº + nombre de la disciplina, abajo a la izquierda. */}
+      {/* Rótulo: el nombre de la disciplina, abajo a la izquierda. Sin número:
+          estas ocho no van en el orden del Mapa. */}
       <Flex
         position="absolute"
         bottom={{ base: 2.5, md: 3.5 }}
@@ -964,10 +951,6 @@ const VideoMuestraCard = ({
         gap={1.5}
         pointerEvents="none"
       >
-        <Text color="white" fontWeight="700" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2" flexShrink={0}
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
-          {step}.
-        </Text>
         <Text color="white" fontWeight="700" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
           {nombreEnMapa(disc.nom, true)}
@@ -1012,9 +995,7 @@ export const RecorridoVideosMuestra = () => {
 
   // Solo las que tienen vídeo. Ahora mismo son las ocho; si a alguna se le
   // quitara, la rejilla se recompone sola en vez de dejar un hueco negro.
-  const conVideo = disciplinas
-    .map((disc, i) => ({ disc, step: i + 1 }))
-    .filter(({ disc }) => !!disc.video);
+  const conVideo = disciplinas.filter((disc) => !!disc.video);
 
   return (
     <>
@@ -1024,11 +1005,10 @@ export const RecorridoVideosMuestra = () => {
         gap={{ base: 3, md: 5 }}
         w="100%"
       >
-        {conVideo.map(({ disc, step }, i) => (
+        {conVideo.map((disc, i) => (
           <VideoMuestraCard
             key={disc.nom}
             disc={disc}
-            step={step}
             index={i}
             onOpen={() => setAbierto(disc)}
           />
@@ -1044,6 +1024,9 @@ export const RecorridoVideosMuestra = () => {
 // Las capturas reales de cada disciplina, en carrusel. No se usa en ninguna
 // página ahora mismo: en /elMetodo, «El Mapa por dentro» enseña los ocho vídeos
 // (RecorridoVideosMuestra), que se ven de un golpe y sin tener que pasar fotos.
+// OJO si algún día se revive: sigue numerando las tarjetas con su posición en el
+// array, y el array ya NO va en el orden del Mapa (ver el comentario de arriba).
+// Habría que quitarle el número, como se hizo con los otros dos bloques.
 export const RecorridoCarruseles = () => {
   const [selected, setSelected] = useState<{ disc: Disciplina; start: number } | null>(null);
 
@@ -1099,7 +1082,7 @@ const VideoMuestraModal = ({ disc, onClose }: { disc: Disciplina; onClose: () =>
 // la presentacion de cada disciplina (/d/:disciplina): es el box donde se decide
 // la compra y tiene que verse igual en los dos sitios. Aqui solo se le pasan los
 // datos de la disciplina seleccionada en el mandala.
-const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; onVerVideo: () => void }) => {
+const VideoBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => void }) => {
   const contenido = useRecorridoContenido();
   // Presentación pública de esta disciplina (/d/:disciplina). La búsqueda acepta
   // el nombre interno, así que «Hinduismo» encuentra su ficha igual.
@@ -1110,7 +1093,8 @@ const VideoBox = ({ disc, step, onVerVideo }: { disc: Disciplina; step: number; 
       bg={disc.bg}
       txt={disc.txt}
       videoIntro={contenido[disc.clave].videoIntro}
-      paso={step}
+      // Sin `paso`: las ocho del mandala ya no van en el orden del Mapa, y un
+      // número aquí contaría una cuenta que no es la del recorrido.
       renderIcon={disc.renderIcon}
       tieneVideo={!!disc.video}
       onVerVideo={onVerVideo}
@@ -1193,8 +1177,7 @@ export const RecorridoMandalaVideo = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const selectedIndex = disciplinas.findIndex((d) => d.nom === selectedNom);
-  const selected = disciplinas[selectedIndex];
+  const selected = disciplinas.find((d) => d.nom === selectedNom) ?? disciplinas[0];
 
   const isXs = windowWidth < 380;
   const isSm = windowWidth < 480;
@@ -1286,7 +1269,6 @@ export const RecorridoMandalaVideo = () => {
                 key={disc.nom}
                 disc={disc}
                 index={index}
-                step={index + 1}
                 x={x}
                 y={y}
                 circleSize={circleSize}
@@ -1310,7 +1292,7 @@ export const RecorridoMandalaVideo = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             w="100%"
           >
-            <VideoBox disc={selected} step={selectedIndex + 1} onVerVideo={() => setVideoModal(selected)} />
+            <VideoBox disc={selected} onVerVideo={() => setVideoModal(selected)} />
           </MotionBox>
         </AnimatePresence>
       </Box>
@@ -1416,7 +1398,6 @@ const MandalaRecorrido = () => {
                 key={disc.nom}
                 disc={disc}
                 index={index}
-                step={index + 1}
                 x={x}
                 y={y}
                 circleSize={circleSize}

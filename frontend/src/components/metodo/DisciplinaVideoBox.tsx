@@ -64,8 +64,10 @@ export function DisciplinaVideoBox({
   bg: string;
   txt: string;
   videoIntro: VideoIntro;
-  /** Número de paso en el Mapa (1..8). Se pinta antes del nombre. */
-  paso: number;
+  /** Número de paso en el Mapa (1..8). Se pinta antes del nombre.
+   *  Opcional: en el mandala de /elMetodo las ocho ya NO van en el orden del
+   *  Mapa, así que allí se omite y el box enseña solo el nombre. */
+  paso?: number;
   renderIcon: (size: string) => React.ReactNode;
   /** Si no hay vídeo, en lugar del botón sale «Vídeo próximamente». */
   tieneVideo: boolean;
@@ -256,17 +258,19 @@ export function DisciplinaVideoBox({
           </Box>
         </Box>
         <Flex align="baseline" gap={2} minW={0} overflow="hidden">
-          <Text
-            color={accent}
-            fontFamily="'EB Garamond', serif"
-            fontWeight="700"
-            fontSize={{ base: "xl", md: "2xl" }}
-            lineHeight="1.1"
-            opacity={0.9}
-            textShadow={textGlow}
-          >
-            {paso}.
-          </Text>
+          {paso !== undefined && (
+            <Text
+              color={accent}
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "xl", md: "2xl" }}
+              lineHeight="1.1"
+              opacity={0.9}
+              textShadow={textGlow}
+            >
+              {paso}.
+            </Text>
+          )}
           <Text
             color={accent}
             fontFamily="'EB Garamond', serif"
