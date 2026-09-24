@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -192,11 +192,20 @@ export default function MaterialesGratuitos() {
         pt={{ base: 20, md: 24 }}
         pb={{ base: 24, md: 32 }}
       >
-        <Grid
+        {/* Fila que se parte y va SIEMPRE centrada. Antes era una rejilla de
+            cuatro columnas fijas, y como «Vídeos» y «Programas» están
+            aparcados solo quedan tres cajitas: la cuarta columna se quedaba
+            vacía y las tres se veían escoradas a la izquierda.
+            Con `wrap` + `justify="center"` el número de cajitas deja de
+            importar: tres van centradas, cuatro llenan la fila, y si en una
+            pantalla estrecha la última se queda sola, se queda sola EN MEDIO
+            (que es lo que una rejilla no sabe hacer). */}
+        <Flex
           ref={cardsReveal.ref}
           w="100%"
           maxW={{ base: "900px", lg: "1120px" }}
-          templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }}
+          wrap="wrap"
+          justify="center"
           gap={{ base: 6, md: 6 }}
         >
           {cajitas.map((c) => (
@@ -207,6 +216,10 @@ export default function MaterialesGratuitos() {
               direction="column"
               align="center"
               justify="center"
+              // Ancho de cada cajita: en móvil una por fila; de ahí arriba, un
+              // ancho de partida fijo que puede encoger pero no crecer, para
+              // que no se estiren a lo ancho cuando son pocas.
+              flex={{ base: "1 1 100%", md: "0 1 300px", lg: "0 1 332px" }}
               gap={{ base: 4, md: 5 }}
               bg="rgba(255,255,255,0.08)"
               border="1px solid rgba(255,255,255,0.28)"
@@ -265,7 +278,7 @@ export default function MaterialesGratuitos() {
               </Text>
             </Flex>
           ))}
-        </Grid>
+        </Flex>
       </Flex>
 
       <SiteFooter />
