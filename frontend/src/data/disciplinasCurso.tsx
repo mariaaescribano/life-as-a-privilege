@@ -26,10 +26,10 @@ export interface DisciplinaCurso {
 export const DISCIPLINAS_CURSO: DisciplinaCurso[] = [
   { slug: astrologiaNom,      nom: astrologiaNom,      bg: astrologiaBg,      color: astrologiaTxt,      Icon: AstrologiaIcon },
   { slug: neuropsicologiaNom, nom: neuropsicologiaNom, bg: neuropsicologiaBg, color: neuropsicologiaTxt, Icon: NeuropsicologiaIcon },
-  { slug: ayurvedaNomLink,    nom: ayurvedaNom,        bg: ayurvedaBg,        color: ayurvedaTxt,        Icon: AyurvedaIcon },
-  { slug: tcmNomLink,         nom: tcmNom,             bg: tcmBg,             color: tcmTxt,             Icon: TCMIcon },
   { slug: fisiologiaNom,      nom: fisiologiaNom,      bg: fisiologiaBg,      color: fisiologiaTxt,      Icon: FisiologiaIcon },
   { slug: nutricionNomLink,   nom: nutricionNom,       bg: nutricionBg,       color: nutricionTxt,       Icon: NutricionIcon },
+  { slug: ayurvedaNomLink,    nom: ayurvedaNom,        bg: ayurvedaBg,        color: ayurvedaTxt,        Icon: AyurvedaIcon },
+  { slug: tcmNomLink,         nom: tcmNom,             bg: tcmBg,             color: tcmTxt,             Icon: TCMIcon },
   { slug: cabalaNom,          nom: cabalaNom,          bg: cabalaBg,          color: cabalaTxt,          Icon: CabalaIcon },
   { slug: culturaNom,         nom: culturaNom,         bg: culturaBg,         color: culturaTxt,         Icon: CulturaIcon },
 ];

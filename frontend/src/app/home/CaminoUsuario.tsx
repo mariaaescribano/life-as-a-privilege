@@ -44,10 +44,10 @@ type IconoDisciplina = React.ComponentType<{ size?: { base: string; md: string }
 const CARA: Record<CaminoKey, { nom: string; bg: string; txt: string; Icon: IconoDisciplina }> = {
   metodo:     { nom: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      Icon: AstrologiaIcon },
   psicologia: { nom: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon },
-  ayurveda:   { nom: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon },
-  tcm:        { nom: tcmNom,             bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon },
   fisiologia: { nom: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon },
   nutricion:  { nom: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon },
+  ayurveda:   { nom: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon },
+  tcm:        { nom: tcmNom,             bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon },
   cabala:     { nom: cabalaNom,          bg: cabalaBg,          txt: cabalaTxt,          Icon: CabalaIcon },
   cultura:    { nom: culturaNom,         bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon },
 };

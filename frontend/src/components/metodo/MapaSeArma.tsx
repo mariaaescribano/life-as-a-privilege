@@ -61,14 +61,18 @@ type Pieza = {
   renderIcon: (size: string) => React.ReactNode;
 };
 
-// Orden del anillo = orden del Mapa (igual que las ocho tarjetas de /elMetodo).
+// Orden del anillo = orden del Mapa (igual que las ocho tarjetas de /elMetodo,
+// y que las viñetas de comicElMapa.ts, que son las que van colocando las piezas).
+// NO es el orden del escaparate: ese, el que abre por Psicología para no espantar
+// a nadie, vive en MandalaRecorrido.tsx y solo lo usan «El Mapa por dentro» y el
+// mandala de /elMetodo.
 const ANILLO: Pieza[] = [
   { nom: astrologiaNom,       bg: astrologiaBg,       txt: astrologiaTxt,       renderIcon: (s) => <AstrologiaIcon size={s} /> },
   { nom: neuropsicologiaNom,  bg: neuropsicologiaBg,  txt: neuropsicologiaTxt,  renderIcon: (s) => <NeuropsicologiaIcon size={{ base: s, md: s }} /> },
-  { nom: ayurvedaNom,         bg: ayurvedaBg,         txt: ayurvedaTxt,         renderIcon: (s) => <AyurvedaIcon size={{ base: s, md: s }} /> },
-  { nom: tcmNom,              bg: tcmBg,              txt: tcmTxt,              renderIcon: (s) => <TCMIcon size={{ base: s, md: s }} /> },
   { nom: fisiologiaNom,       bg: fisiologiaBg,       txt: fisiologiaTxt,       renderIcon: (s) => <FisiologiaIcon size={s} /> },
   { nom: nutricionNom,        bg: nutricionBg,        txt: nutricionTxt,        renderIcon: (s) => <NutricionIcon size={{ base: s, md: s }} /> },
+  { nom: ayurvedaNom,         bg: ayurvedaBg,         txt: ayurvedaTxt,         renderIcon: (s) => <AyurvedaIcon size={{ base: s, md: s }} /> },
+  { nom: tcmNom,              bg: tcmBg,              txt: tcmTxt,              renderIcon: (s) => <TCMIcon size={{ base: s, md: s }} /> },
   { nom: cabalaNom,           bg: cabalaBg,           txt: cabalaTxt,           renderIcon: (s) => <CabalaIcon size={{ base: s, md: s }} /> },
   { nom: culturaNom,          bg: culturaBg,          txt: culturaTxt,          renderIcon: (s) => <CulturaIcon size={{ base: s, md: s }} /> },
 ];

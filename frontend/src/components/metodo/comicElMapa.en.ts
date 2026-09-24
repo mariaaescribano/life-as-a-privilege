@@ -44,20 +44,6 @@ const COMIC_POR_QUE_EXISTE_EN: (VinetaMapaEn | null)[] = [
     ],
   },
   {
-    titulo: "Ayurveda",
-    lineas: [
-      "Maybe balance isn't about doing what everyone else does.",
-      "Maybe it's about understanding my own nature.",
-    ],
-  },
-  {
-    titulo: "Traditional Chinese Medicine",
-    lineas: [
-      "Emotions, body and energy aren't separate things.",
-      "I'm starting to see how some of my emotions and habits were throwing me off balance.",
-    ],
-  },
-  {
     titulo: "Physiology",
     lineas: [
       "I never imagined how extraordinary my body was.",
@@ -69,6 +55,20 @@ const COMIC_POR_QUE_EXISTE_EN: (VinetaMapaEn | null)[] = [
     lineas: [
       "My body is built out of the molecules of the food I choose.",
       "The better I eat, the better I'll feel and the better I'll think.",
+    ],
+  },
+  {
+    titulo: "Ayurveda",
+    lineas: [
+      "Maybe balance isn't about doing what everyone else does.",
+      "Maybe it's about understanding my own nature.",
+    ],
+  },
+  {
+    titulo: "Traditional Chinese Medicine",
+    lineas: [
+      "Emotions, body and energy aren't separate things.",
+      "I'm starting to see how some of my emotions and habits were throwing me off balance.",
     ],
   },
   {

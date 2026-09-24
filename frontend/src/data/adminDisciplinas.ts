@@ -24,10 +24,10 @@ export interface AdminDisciplina {
 export const ADMIN_DISCIPLINAS: AdminDisciplina[] = [
   { key: "astrologia", nombre: astrologiaNom,        bg: astrologiaBg,       txt: astrologiaTxt,       Icon: AstrologiaIcon,      disponible: true  },
   { key: "psicologia", nombre: neuropsicologiaNom,   bg: neuropsicologiaBg,  txt: neuropsicologiaTxt,  Icon: NeuropsicologiaIcon, disponible: true  },
-  { key: "ayurveda",   nombre: ayurvedaNom,          bg: ayurvedaBg,         txt: ayurvedaTxt,         Icon: AyurvedaIcon,        disponible: true  },
-  { key: "tcm",        nombre: tcmNom,               bg: tcmBg,              txt: tcmTxt,              Icon: TCMIcon,             disponible: false },
   { key: "fisiologia", nombre: fisiologiaNom,        bg: fisiologiaBg,       txt: fisiologiaTxt,       Icon: FisiologiaIcon,      disponible: false },
   { key: "nutricion",  nombre: nutricionNom,         bg: nutricionBg,        txt: nutricionTxt,        Icon: NutricionIcon,       disponible: false },
+  { key: "ayurveda",   nombre: ayurvedaNom,          bg: ayurvedaBg,         txt: ayurvedaTxt,         Icon: AyurvedaIcon,        disponible: true  },
+  { key: "tcm",        nombre: tcmNom,               bg: tcmBg,              txt: tcmTxt,              Icon: TCMIcon,             disponible: false },
   { key: "cabala",     nombre: cabalaNom,            bg: cabalaBg,           txt: cabalaTxt,           Icon: CabalaIcon,          disponible: false },
   { key: "cultura",    nombre: culturaNom,           bg: culturaBg,          txt: culturaTxt,          Icon: CulturaIcon,         disponible: false },
 ];

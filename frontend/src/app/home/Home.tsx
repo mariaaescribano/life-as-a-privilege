@@ -40,17 +40,17 @@ const popIn = keyframes`
   to   { opacity: 1; transform: scale(1); }
 `;
 
-// Orden del Método: Astrología → Psicología → Hinduismo → TCM →
-// Fisiología → Nutrición → Cábala → Cultura
+// Orden del Método: Astrología → Psicología → Fisiología → Nutrición →
+// Ayurveda → Medicina Tradicional China → Cábala → Cultura
 // Astrología tiene flujo propio (/metodo/astrologia con aviso_visto). El resto
 // salta directamente a la página del curso correspondiente en aprendizaje.
 const disciplines = [
   { name: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      Icon: AstrologiaIcon,      link: "/metodo/astrologia" },
   { name: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon, link: `/aprendizaje/cursos/${neuropsicologiaNom}` },
-  { name: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon,        link: `/aprendizaje/cursos/${ayurvedaNomLink}` },
-  { name: tcmNom,             bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon,             link: `/aprendizaje/cursos/${tcmNomLink}` },
   { name: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon,      link: `/aprendizaje/cursos/${fisiologiaNom}` },
   { name: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon,       link: `/aprendizaje/cursos/${nutricionNomLink}` },
+  { name: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon,        link: `/aprendizaje/cursos/${ayurvedaNomLink}` },
+  { name: tcmNom,             bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon,             link: `/aprendizaje/cursos/${tcmNomLink}` },
   { name: cabalaNom,          bg: cabalaBg,          txt: cabalaTxt,          Icon: CabalaIcon,          link: `/aprendizaje/cursos/${cabalaNom}` },
   { name: culturaNom,         bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon,         link: `/aprendizaje/cursos/${culturaNom}` },
 ];

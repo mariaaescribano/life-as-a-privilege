@@ -65,10 +65,11 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   },
   // ── LAS OCHO DISCIPLINAS, EN EL ORDEN DEL RECORRIDO ──
   // El mismo orden que las ocho tarjetas de /elMetodo y que el anillo del mapa
-  // (MapaSeArma): Astrología → Psicología → Ayurveda → Medicina China →
-  // Fisiología → Nutrición → Cábala → Cultura. Si aquí se cambia el orden, el
-  // mapa se rellena a saltos y el usuario no entiende el recorrido: este orden
-  // manda.
+  // (MapaSeArma): Astrología → Psicología → Fisiología → Nutrición → Ayurveda →
+  // Medicina Tradicional China → Cábala → Cultura. Si aquí se cambia el orden,
+  // el mapa se rellena a saltos y el usuario no entiende el recorrido: este
+  // orden manda. Y OJO: el guion inglés (comicElMapa.en.ts) es un espejo POR
+  // POSICIÓN, así que hay que moverlo igual o las frases se cruzan de viñeta.
   {
     src: `${P}/comicinicioastro.webp`,
     titulo: "Astrología",
@@ -88,23 +89,6 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     ],
   },
   {
-    src: `${P}/comicinicioayurveda.webp`,
-    titulo: "Ayurveda",
-    disciplina: ayurvedaNom,
-    lineas: [
-      "Quizá el equilibrio no consiste en hacer lo mismo que todos. Quizá consiste en comprender mi propia naturaleza.",
-    ],
-  },
-  {
-    src: `${P}/comiciniciotcm.webp`,
-    titulo: "Medicina Tradicional China",
-    disciplina: tcmNom,
-    lineas: [
-      "Las emociones, el cuerpo y la energía no están separados.",
-      "Empiezo a ver cómo ciertas de mis emociones y hábitos me desequilibraban.",
-    ],
-  },
-  {
     src: `${P}/comiciniciofisio.webp`,
     titulo: "Fisiología",
     disciplina: fisiologiaNom,
@@ -120,6 +104,23 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
     lineas: [
       "Mi cuerpo está hecho con las moléculas de los alimentos que elijo.",
       "Cuanto mejor coma, mejor me sentiré y mejor pensaré.",
+    ],
+  },
+  {
+    src: `${P}/comicinicioayurveda.webp`,
+    titulo: "Ayurveda",
+    disciplina: ayurvedaNom,
+    lineas: [
+      "Quizá el equilibrio no consiste en hacer lo mismo que todos. Quizá consiste en comprender mi propia naturaleza.",
+    ],
+  },
+  {
+    src: `${P}/comiciniciotcm.webp`,
+    titulo: "Medicina Tradicional China",
+    disciplina: tcmNom,
+    lineas: [
+      "Las emociones, el cuerpo y la energía no están separados.",
+      "Empiezo a ver cómo ciertas de mis emociones y hábitos me desequilibraban.",
     ],
   },
   {

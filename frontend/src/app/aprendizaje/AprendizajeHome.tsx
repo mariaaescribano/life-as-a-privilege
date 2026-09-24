@@ -96,17 +96,17 @@ export const AprendizajeHome = () => {
     return () => clearTimeout(t);
   }, [loading, imagesReady]);
 
-  // Orden del Método: Astrología → Psicología → Hinduismo → TCM →
-  // Fisiología → Nutrición → Cábala → Cultura
+  // Orden del Método: Astrología → Psicología → Fisiología → Nutrición →
+  // Ayurveda → Medicina Tradicional China → Cábala → Cultura
   // Cada disciplina expone dos destinos: sus vídeos y sus cursos. El `slug`
   // (nombre canónico o *NomLink) es el mismo para ambas rutas.
   const items = [
     { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size={{ base: "40px", md: "48px" }} />,     slug: astrologiaNom },
     { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "48px" }} />, slug: neuropsicologiaNom },
-    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "40px", md: "48px" }}  />,      slug: ayurvedaNomLink },
-    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "40px", md: "48px" }} />,            slug: tcmNomLink },
     { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "40px", md: "48px" }}/>,     slug: fisiologiaNom },
     { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "40px", md: "48px" }}  />,   slug: nutricionNomLink },
+    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "40px", md: "48px" }}  />,      slug: ayurvedaNomLink },
+    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "40px", md: "48px" }} />,            slug: tcmNomLink },
     { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={{ base: "40px", md: "48px" }} />,         slug: cabalaNom },
     { title: culturaNom,          bgColor: culturaBg,         color: culturaTxt,         icon: <CulturaIcon size={{ base: "40px", md: "48px" }} />,        slug: culturaNom },
   ];

@@ -18,8 +18,8 @@
 // reordena para enseñar primero lo más reconocible, pero el recorrido se anda
 // en este orden).
 export const DISCIPLINAS_CAMINO = [
-  'metodo', 'psicologia', 'ayurveda', 'tcm',
-  'fisiologia', 'nutricion', 'cabala', 'cultura',
+  'metodo', 'psicologia', 'fisiologia', 'nutricion',
+  'ayurveda', 'tcm', 'cabala', 'cultura',
 ] as const;
 export type CaminoKey = (typeof DISCIPLINAS_CAMINO)[number];
 
@@ -42,10 +42,10 @@ export interface CaminoDisciplina {
  * `total` aquí. Los números salen de:
  *   · metodo (astrología) → ASTROLOGIA_TOTAL (astrologiaRecorrido.ts)
  *   · psicologia          → psicologiaIndice() (psicologiaRecorrido.ts)
- *   · ayurveda            → ayurvedaMapa() + ayurvedaDoshaIndice()
- *   · tcm                 → TCM_TOTAL (tcmRecorrido.ts)
  *   · fisiologia          → NIVELES de IndiceFisiologia (materia + vida)
  *   · nutricion           → PASOS de IndiceNutricion
+ *   · ayurveda            → ayurvedaMapa() + ayurvedaDoshaIndice()
+ *   · tcm                 → TCM_TOTAL (tcmRecorrido.ts)
  *   · cabala              → los PASOS de IndiceCabala (2 + 11 sefirot + 2 + 22 senderos + 2; los «10 días» están aparcados)
  *   · cultura             → las Historias de HISTORIAS_CULTURA
  *
@@ -56,10 +56,10 @@ export interface CaminoDisciplina {
 export const CAMINO: Record<CaminoKey, CaminoDisciplina> = {
   metodo:     { total: 9,  ruta: "/metodo/astrologia" },
   psicologia: { total: 27, ruta: "/metodo/psicologia" },
-  ayurveda:   { total: 15, ruta: "/metodo/ayurveda" },
-  tcm:        { total: 12, ruta: "/metodo/tcm" },
   fisiologia: { total: 9,  ruta: "/metodo/fisiologia" },
   nutricion:  { total: 14, ruta: "/metodo/nutricion" },
+  ayurveda:   { total: 15, ruta: "/metodo/ayurveda" },
+  tcm:        { total: 12, ruta: "/metodo/tcm" },
   cabala:     { total: 39, ruta: "/metodo/cabala" },
   cultura:    { total: 6,  ruta: "/metodo/cultura", porPiezas: true },
 };

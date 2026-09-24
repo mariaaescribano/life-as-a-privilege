@@ -126,7 +126,7 @@ const base: Record<string, PresentacionDisciplina> = {
     },
     ilustracionesLabel: "Ayurveda",
     cursosLink: ayurvedaNomLink,
-    paso: 3,
+    paso: 5,
     ordinal: "Tercera disciplina",
     resumenPago:
       "Continúa el Mapa con el Hinduismo: descubre tu Doṣha —tu constitución— y la naturaleza que te define, y aprende a comer, moverte y descansar en equilibrio con lo que de verdad eres.",
@@ -147,7 +147,7 @@ const base: Record<string, PresentacionDisciplina> = {
     },
     ilustracionesLabel: "Medicina China",
     cursosLink: tcmNomLink,
-    paso: 4,
+    paso: 6,
     ordinal: "Cuarta disciplina",
     resumenPago:
       "Continúa el Mapa con la Medicina China: descubre cómo los Cinco Elementos y sus ciclos te habitan, y lee las señales de tu cuerpo —hasta en tu lengua— para volver al equilibrio entre todo lo que nos forma, que es a lo que llamamos salud.",
@@ -168,7 +168,7 @@ const base: Record<string, PresentacionDisciplina> = {
     },
     ilustracionesLabel: "Fisiología",
     cursosLink: fisiologiaNom,
-    paso: 5,
+    paso: 3,
     ordinal: "Quinta disciplina",
     resumenPago:
       "Continúa el Mapa con la Fisiología: viaja desde las partículas que te forman hasta el milagro de ser un cuerpo vivo, conoce tus células y tus sistemas y redescúbrete como el ser complejo y fascinante que eres.",
@@ -188,7 +188,7 @@ const base: Record<string, PresentacionDisciplina> = {
     },
     ilustracionesLabel: "Nutrición",
     cursosLink: nutricionNomLink,
-    paso: 6,
+    paso: 4,
     ordinal: "Sexta disciplina",
     resumenPago:
       "Continúa el Mapa con la Nutrición: descubre qué hay más allá de lo que comes cada día y nútrete con lo que de verdad te reconstruye. Recuerda cómo no destruirte con los alimentos.",
@@ -238,8 +238,8 @@ const base: Record<string, PresentacionDisciplina> = {
 
 /** En el orden del Mapa. */
 export const PRESENTACIONES: PresentacionDisciplina[] = [
-  base.astrologia, base.psicologia, base.ayurveda, base.tcm,
-  base.fisiologia, base.nutricion, base.cabala, base.cultura,
+  base.astrologia, base.psicologia, base.fisiologia, base.nutricion,
+  base.ayurveda, base.tcm, base.cabala, base.cultura,
 ];
 
 // Marcas de acento que deja `normalize("NFD")` al descomponer las vocales. Va
