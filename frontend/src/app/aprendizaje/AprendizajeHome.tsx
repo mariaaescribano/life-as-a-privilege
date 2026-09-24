@@ -96,19 +96,23 @@ export const AprendizajeHome = () => {
     return () => clearTimeout(t);
   }, [loading, imagesReady]);
 
-  // Orden del Método: Astrología → Psicología → Fisiología → Nutrición →
-  // Ayurveda → Medicina Tradicional China → Cábala → Cultura
+  // Orden ESCAPARATE, el MISMO de la portada (app/web/Welcome.tsx): Psicología →
+  // Fisiología → Nutrición → Cultura → Medicina Tradicional China → Astrología →
+  // Cábala → Ayurveda. Aquí NO va el orden del Mapa a propósito: esta página es
+  // una puerta abierta a cualquiera, y abrir por Astrología echa para atrás a
+  // quien llega escéptico. El orden que se propone —ese sí— vive en las ocho
+  // tarjetas de /elMetodo.
   // Cada disciplina expone dos destinos: sus vídeos y sus cursos. El `slug`
   // (nombre canónico o *NomLink) es el mismo para ambas rutas.
   const items = [
-    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size={{ base: "40px", md: "48px" }} />,     slug: astrologiaNom },
     { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "48px" }} />, slug: neuropsicologiaNom },
     { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "40px", md: "48px" }}/>,     slug: fisiologiaNom },
     { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "40px", md: "48px" }}  />,   slug: nutricionNomLink },
-    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "40px", md: "48px" }}  />,      slug: ayurvedaNomLink },
-    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "40px", md: "48px" }} />,            slug: tcmNomLink },
-    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={{ base: "40px", md: "48px" }} />,         slug: cabalaNom },
     { title: culturaNom,          bgColor: culturaBg,         color: culturaTxt,         icon: <CulturaIcon size={{ base: "40px", md: "48px" }} />,        slug: culturaNom },
+    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "40px", md: "48px" }} />,            slug: tcmNomLink },
+    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size={{ base: "40px", md: "48px" }} />,     slug: astrologiaNom },
+    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={{ base: "40px", md: "48px" }} />,         slug: cabalaNom },
+    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "40px", md: "48px" }}  />,      slug: ayurvedaNomLink },
   ];
 
   // Mientras se descargan las portadas (o llegan los datos): fondo teal con la
