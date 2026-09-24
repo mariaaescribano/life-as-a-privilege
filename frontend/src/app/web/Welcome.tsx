@@ -401,6 +401,8 @@ const Welcome = () => {
   const [showEspacioModal, setShowEspacioModal] = useState(false);
   const bienvenidaReveal = useReveal();
   const disciplinasTitleReveal = useReveal(0.2);
+  // El botón «Descubre El Mapa», encima de la tarjeta de la creadora.
+  const mapaReveal = useReveal(0.3);
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(WELCOME_IMGS);
   const [tiempoMin, setTiempoMin] = useState(false);
@@ -620,32 +622,84 @@ const Welcome = () => {
         </Grid>
       </Box>
 
-      {/* ── SEPARADOR CON MANDALA (entre disciplinas y la creadora) ── */}
-      <Flex
-        align="center"
-        justify="center"
-        gap={{ base: 4, md: 6 }}
-        px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 12, md: 16 }}
-      >
-        <Box
-          h="1px"
-          w={{ base: "60px", md: "150px" }}
-          bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))"
-        />
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "26px", md: "34px" }}
-          objectFit="contain"
-          flexShrink={0}
-          style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
-        />
-        <Box
-          h="1px"
-          w={{ base: "60px", md: "150px" }}
-          bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))"
-        />
+      {/* ── BOTÓN «DESCUBRE EL MAPA» ──
+          Aquí había el separador de la flor (dos rayitas finas con el mandala
+          en medio). Se ha ido: el botón ocupa su sitio y hace su trabajo, que
+          es cortar la página entre las disciplinas y la creadora. Y la flor no
+          se pierde, se mete DENTRO del botón, que es lo que lo hace parecer el
+          remate de la portada y no un botón cualquiera pegado al final.
+
+          Va aquí y no en la cabecera: arriba todavía no sabe qué son las ocho
+          disciplinas, y un botón al Mapa antes de verlas no dice nada. Después
+          de las tarjetas sí: ya ha visto de qué va cada una y lo siguiente que
+          se pregunta es cómo encajan, que es justo lo que cuenta /elMetodo.
+
+          Entra al asomar (mapaReveal) y no con `mounted`: está muy por debajo
+          del pliegue y con `mounted` la animación pasaría mientras se mira la
+          cabecera, y al bajar te lo encontrarías ya puesto. */}
+      <Flex justify="center" px={{ base: 5, md: 10 }} pt={{ base: 12, md: 16 }}>
+        <Flex
+          ref={mapaReveal.ref}
+          as="button"
+          onClick={() => navigate("/elMetodo")}
+          align="center"
+          justify="center"
+          gap={{ base: 3, md: 5 }}
+          px={{ base: 6, md: 14 }}
+          py={{ base: "14px", md: "20px" }}
+          // En móvil ocupa el ancho que le dejan los márgenes (nunca de filo a
+          // filo); en escritorio manda el `minW`, para que no se quede canijo
+          // al lado de la cuadrícula de tarjetas que tiene encima.
+          w={{ base: "min(86vw, 400px)", md: "auto" }}
+          minW={{ base: "auto", md: "460px" }}
+          borderRadius="full"
+          border="1.5px solid rgba(255,255,255,0.68)"
+          bg="rgba(255,255,255,0.11)"
+          cursor="pointer"
+          boxShadow="0 0 24px rgba(255,255,255,0.38), 0 0 54px rgba(255,255,255,0.2), 0 0 92px rgba(180,255,245,0.24), 0 6px 20px rgba(0,0,0,0.18)"
+          _hover={{
+            bg: "rgba(255,255,255,0.2)",
+            borderColor: "white",
+            boxShadow: "0 0 34px rgba(255,255,255,0.6), 0 0 72px rgba(180,255,245,0.45), 0 8px 24px rgba(0,0,0,0.22)",
+          }}
+          opacity={mapaReveal.visible ? 1 : 0}
+          sx={{
+            // La respiración es la MISMA idea que el mandala de la cabecera,
+            // pero muy corta (1,5%): un botón que se hincha se lee como un
+            // anuncio. Solo arranca cuando la entrada ha terminado, para que no
+            // pelee con ella, y se apaga si el sistema pide menos movimiento.
+            "@keyframes mapaLatido": {
+              "0%, 100%": { transform: "scale(1)" },
+              "50%": { transform: "scale(1.015)" },
+            },
+            transform: mapaReveal.visible ? "translateY(0)" : "translateY(22px)",
+            animation: mapaReveal.visible ? "mapaLatido 5.5s ease-in-out 1s infinite" : undefined,
+            transition:
+              "opacity 0.9s ease, transform 0.9s cubic-bezier(0.22,1.2,0.36,1), background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease",
+            "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+          }}
+        >
+          <Image
+            src="/img/icono/life.webp"
+            alt=""
+            h={{ base: "28px", md: "38px" }}
+            objectFit="contain"
+            flexShrink={0}
+            style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.56)) drop-shadow(0 0 24px rgba(255,255,255,0.3))" }}
+          />
+          <Text
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="700"
+            fontSize={{ base: "md", md: "2xl" }}
+            letterSpacing={{ base: "0.08em", md: "0.16em" }}
+            textTransform="uppercase"
+            whiteSpace="nowrap"
+            textShadow="0 0 14px rgba(255,255,255,0.5), 0 0 30px rgba(255,255,255,0.28)"
+          >
+            {t("welcome.mapa.cta")}
+          </Text>
+        </Flex>
       </Flex>
 
       {/* ── PRESENTACIÓN (creadora) ── */}

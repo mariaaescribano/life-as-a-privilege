@@ -11,6 +11,10 @@ export const welcome = {
   // (ahí también se lee el rótulo del header): un solo sitio donde cambiarlo.
   "welcome.subtitulo": "La metodología en la que se combinan la ciencia, la psicología y la tradición para ofrecerte una visión integrada de ti, sin fragmentaciones.",
   "welcome.explorar": "Explorar",
+  /** El botón que lleva a /elMetodo, justo encima de la tarjeta de la creadora.
+   *  Va DESPUÉS de las ocho tarjetas a propósito: quien ya ha visto de qué van
+   *  las disciplinas es quien tiene una razón para querer ver El Mapa entero. */
+  "welcome.mapa.cta": "Descubre El Mapa",
   "welcome.explorarDisciplina": "Explorar disciplina",
   "welcome.modal.cuenta": "Crea una cuenta o inicia sesión",
   "welcome.modal.iniciarSesion": "Iniciar sesión →",
