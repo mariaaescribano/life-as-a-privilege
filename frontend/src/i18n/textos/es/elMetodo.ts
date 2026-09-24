@@ -16,7 +16,7 @@ export const elMetodo = {
   "elMetodo.porDentro": "No estudias ocho disciplinas.\nTe descubres a ti desde ocho perspectivas.",
   /** Va justo debajo del título: avisa de que el mandala se puede pinchar. */
   "elMetodo.porDentroPista": "Haz clic en cada círculo para descubrirla",
-  "elMetodo.cadaDisciplina": "Ocho disciplinas. Un orden. Un propósito: entenderte.\nCada disciplina observa una parte distinta de ti. Puedes elegir el orden que quieras, pero este es el que propongo:",
+  "elMetodo.cadaDisciplina": "Puedes elegir el orden que quieras, pero este es el que propongo:",
   /** Cabecera de las cajas de la ficha de disciplina (DisciplinaFicha). */
   "elMetodo.queIncluye": "Qué incluye",
 
@@ -56,7 +56,7 @@ export const elMetodo = {
    *  WhatsApp. En la primera pantalla todavía no hay confianza para meterse en
    *  un grupo de desconocidos, pero sí para preguntar una cosa; la comunidad se
    *  ofrece más abajo, en «¿Por dónde empiezo?», cuando ya sabe qué es esto. */
-  "elMetodo.hero.escribeme": "Escríbeme por WhatsApp",
+  "elMetodo.hero.escribeme": "Hablar con la creadora",
   /** El botón de al lado del de «Empezar por 30 €», en «¿Por dónde empiezo?». */
   "elMetodo.hero.comunidad": "Únete a la comunidad",
   /** Mensaje ya escrito al abrir el chat desde el hero: que no tenga que pensar
