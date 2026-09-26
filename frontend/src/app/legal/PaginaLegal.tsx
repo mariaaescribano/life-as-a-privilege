@@ -21,7 +21,7 @@ export const TITULAR = {
 };
 
 /** Última revisión de los textos legales. Actualízala si cambias el contenido. */
-export const ULTIMA_ACTUALIZACION = "27 de julio de 2026";
+export const ULTIMA_ACTUALIZACION = "26 de septiembre de 2026";
 
 export const Seccion = ({ titulo, children }: { titulo: string; children: React.ReactNode }) => (
   <Box mb={{ base: 8, md: 10 }}>

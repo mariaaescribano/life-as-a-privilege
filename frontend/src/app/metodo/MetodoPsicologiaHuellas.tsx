@@ -462,14 +462,30 @@ const Pagina = ({
                 // dibuja la "franja final vacía" de abajo, así que solo la
                 // añadimos aquí cuando esa franja no se renderiza (listas cortas).
                 borderBottom={i === items.length - 1 && !hayScroll ? `2px solid ${TINTA}55` : undefined}
+                // La franja ENTERA marca/desmarca, no solo el diamante: al pasar
+                // el ratón por cualquier parte ya se enciende el ◈ y la franja se
+                // tiñe un poco, para que se vea qué se va a marcar.
+                role="checkbox"
+                aria-checked={marcado}
+                aria-label={it}
+                tabIndex={0}
+                onClick={() => onToggle(edadAno, it)}
+                onKeyDown={(e: React.KeyboardEvent) => {
+                  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(edadAno, it); }
+                }}
+                cursor="pointer"
+                title={marcado ? t("metodo.psico.dejoHuella") : t("metodo.psico.marcarHuella")}
+                className="group"
+                transition="background 0.2s ease"
+                _hover={{ bg: `${TINTA}0d` }}
+                sx={{ WebkitTapHighlightColor: "transparent" }}
               >
                 {/* "Foto" de esta franja (posición distinta por ítem) */}
                 <FotoFranja posicion={`center ${(i * 29) % 100}%`} />
                 <Flex position="relative" zIndex={1} align="flex-start" gap={3}>
                   {/* ◈ para marcar que dejó huella (color psicología) */}
                   <Box
-                    as="button"
-                    onClick={() => onToggle(edadAno, it)}
+                    as="span"
                     flexShrink={0}
                     mt="2px"
                     display="flex"
@@ -479,12 +495,10 @@ const Pagina = ({
                     fontSize={{ base: "20px", md: "22px" }}
                     color={TINTA}
                     opacity={marcado ? 1 : 0.4}
-                    cursor="pointer"
                     transition="all 0.2s ease"
                     style={{ textShadow: marcado ? `0 1px 2px #fbf4e8, 0 0 9px ${TINTA}99` : `0 1px 2px #fbf4e8` }}
-                    _hover={{ opacity: 1, transform: "scale(1.18)" }}
-                    title={marcado ? t("metodo.psico.dejoHuella") : t("metodo.psico.marcarHuella")}
-                    aria-label={t("metodo.psico.marcarHuella")}
+                    _groupHover={{ opacity: 1, transform: "scale(1.18)" }}
+                    aria-hidden="true"
                   >
                     ◈
                   </Box>

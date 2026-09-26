@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { DatabaseService } from 'src/database.service';
 import { randomString } from 'src/Global';
@@ -11,6 +11,7 @@ import {
   tokenRecuperacionValido,
 } from '../auth/password-reset.util';
 import { isAdminEmail } from '../auth/admin.util';
+import { crearTokenConfirmacion, leerTokenConfirmacion } from '../auth/confirmar-cuenta.util';
 
 
 /** Las ocho disciplinas de «El Recorrido», en el orden en que se desbloquean. */
@@ -37,6 +38,36 @@ async function comparePassword(password: string, hash: string): Promise<boolean>
 function saneaTrato(valor: unknown): 'el' | 'ella' | null {
   return valor === 'el' || valor === 'ella' ? valor : null;
 }
+
+/** Teléfono: solo dígitos y un + delante; lo que no parezca un número, a null. */
+function saneaTelefono(valor: unknown): string | null {
+  if (typeof valor !== 'string') return null;
+  const limpio = valor.replace(/[\s().-]/g, '');
+  return /^\+?\d{6,15}$/.test(limpio) ? limpio : null;
+}
+
+/** Fecha de nacimiento 'YYYY-MM-DD' real, entre 1900 y hoy. Si no, null. */
+function saneaFechaNacimiento(valor: unknown): string | null {
+  if (typeof valor !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(valor)) return null;
+  const [a, m, d] = valor.split('-').map(Number);
+  const f = new Date(Date.UTC(a, m - 1, d));
+  if (f.getUTCFullYear() !== a || f.getUTCMonth() !== m - 1 || f.getUTCDate() !== d) return null;
+  if (a < 1900 || f.getTime() > Date.now()) return null;
+  return valor;
+}
+
+/**
+ * Columnas del registro que pueden no existir todavía (su SQL sin correr). Si
+ * el insert falla nombrando una, se repite sin ella: crear la cuenta importa
+ * más que guardar el dato. Cada una se quita una sola vez.
+ */
+const COLUMNAS_OPCIONALES_REGISTRO = [
+  'trato',              // sql/user-trato.sql
+  'email_confirmado',   // sql/user-email-confirmado.sql
+  'telefono',           // sql/user-telefono-cumple.sql
+  'fecha_nacimiento',
+  'comunidad_popup_visto',
+];
 
 
 @Injectable()
@@ -72,36 +103,39 @@ export class UserService {
       let id = randomString();
       const pass = await hashPassword(data.password);
 
-      // Si la columna `trato` todavía no está creada (sql/user-trato.sql sin
-      // ejecutar), se inserta sin ella: crear la cuenta es más importante que
-      // guardar la preferencia, y sin este respaldo el registro entero fallaría.
-      let conTrato = true;
+      // Sin `email_confirmado` la cuenta se crea igual, solo que no se le
+      // exige confirmar; sin `comunidad_popup_visto`, no le sale el popup.
+      const opcionales: Record<string, unknown> = {
+        trato: saneaTrato(data.trato),
+        email_confirmado: false,
+        telefono: saneaTelefono(data.telefono),
+        fecha_nacimiento: saneaFechaNacimiento(data.fecha_nacimiento),
+        comunidad_popup_visto: false,
+      };
+      const quitadas = new Set<string>();
 
       // Reintentamos solo ante colisión de id (23505), con un tope para no
       // entrar en bucle infinito si el insert nunca devuelve la fila esperada.
       for (let intento = 0; intento < 5; intento++) {
         try {
           const fila: Record<string, unknown> = { id, name: data.name, email: data.email, password: pass };
-          if (conTrato) fila.trato = saneaTrato(data.trato);
+          for (const [col, valor] of Object.entries(opcionales)) {
+            if (!quitadas.has(col)) fila[col] = valor;
+          }
 
-          // El select va con cadena literal en cada rama (el cliente de Supabase
-          // tipa la respuesta a partir de ese texto y no admite un ternario).
-          const insercion = this.databaseService.getClient().from('user').insert(fila);
-          const { data: rows, error } = conTrato
-            ? await insercion.select('id, name, email, img, trato')
-            : await insercion.select('id, name, email, img');
+          const { data: rows, error } = await this.databaseService.getClient()
+            .from('user').insert(fila).select('id, name, email');
 
           if (error) throw error;
 
           if (rows && rows.length === 1) {
             const newUser = rows[0];
-            const token = this.authService.generateToken(newUser.id, data.email);
-            // Correo de bienvenida con el enlace de /logIn guardado. No se espera
-            // ni se deja que reviente el registro: la cuenta ya existe y la
-            // persona ya está dentro, así que un fallo del SMTP no puede
-            // devolverle un error como si no se hubiera registrado.
-            this.enviarBienvenidaSinBloquear(newUser.email, newUser.name);
-            return { token, user: newUser };
+            // Ya NO se devuelve token: la cuenta no se usa hasta confirmar el
+            // email con el enlace del correo de bienvenida. No se espera al
+            // envío (tarda un par de segundos contra Gmail); si falla, desde
+            // /logIn se puede pedir otra vez.
+            this.enviarBienvenidaSinBloquear(newUser.email, newUser.name, false, newUser.id);
+            return { pendienteConfirmar: true as const, email: newUser.email };
           }
           // Insert sin error pero sin fila: no reintentamos a ciegas.
           throw new Error('El insert de usuario no devolvió la fila esperada');
@@ -110,12 +144,14 @@ export class UserService {
             id = randomString();
             continue;
           }
-          // Falta la columna `trato`: repetimos sin ella (una sola vez).
-          if (conTrato && /trato/i.test(String(error?.message ?? ''))) {
-            console.warn(
-              '[createUser] la columna "trato" no existe: ejecuta backend/sql/user-trato.sql. Creo la cuenta sin ella.',
-            );
-            conTrato = false;
+          // Falta una columna opcional: repetimos sin ella.
+          const falta = COLUMNAS_OPCIONALES_REGISTRO.find(
+            (col) => !quitadas.has(col) && String(error?.message ?? '').includes(col),
+          );
+          if (falta) {
+            console.warn(`[createUser] la columna "${falta}" no existe (falta correr su SQL de backend/sql). Creo la cuenta sin ella.`);
+            quitadas.add(falta);
+            intento--; // no cuenta como colisión de id
             continue;
           }
           throw error;
@@ -136,9 +172,11 @@ export class UserService {
    * respuesta del registro. Si el correo falla, la cuenta ya está creada: se
    * anota en el log y nada más.
    */
-  private enviarBienvenidaSinBloquear(email: string, nombre: string, conGoogle = false) {
+  private enviarBienvenidaSinBloquear(email: string, nombre: string, conGoogle = false, userId?: string) {
+    // Con contraseña, el botón del correo lleva el token que confirma la cuenta.
+    const tokenConfirmacion = !conGoogle && userId ? crearTokenConfirmacion(userId) : undefined;
     void this.mailService
-      .enviarBienvenidaCuenta(email, nombre ?? '', { conGoogle })
+      .enviarBienvenidaCuenta(email, nombre ?? '', { conGoogle, tokenConfirmacion })
       .catch((err) => console.error('[createUser] no se pudo enviar la bienvenida:', err));
     void this.mailService
       .enviarAvisoRegistro(email, nombre ?? '', { conGoogle })
@@ -160,6 +198,15 @@ export class UserService {
         const user = rows[0];
         const coinciden = await comparePassword(body.password, user.password);
         if (coinciden) {
+          // Solo `false` bloquea: sin la columna (undefined) o en cuentas
+          // antiguas y de Google (true) se entra como siempre.
+          if (user.email_confirmado === false) {
+            throw new ForbiddenException({
+              statusCode: 403,
+              code: 'EMAIL_SIN_CONFIRMAR',
+              message: 'Antes de entrar tienes que confirmar tu cuenta con el enlace que te hemos enviado al correo.',
+            });
+          }
           const token = this.authService.generateToken(user.id, user.email);
           // No devolver nunca el hash de la contraseña al cliente.
           const { password, ...safeUser } = user;
@@ -174,6 +221,46 @@ export class UserService {
       console.log(error);
       throw error;
     }
+  }
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // CONFIRMACIÓN DE LA CUENTA
+  // ───────────────────────────────────────────────────────────────────────────
+
+  /** Marca la cuenta como confirmada si el token del correo es bueno. */
+  async confirmarCuenta(token: string) {
+    const userId = leerTokenConfirmacion(token);
+    if (!userId) throw new BadRequestException('El enlace de confirmación no es válido o ha caducado');
+
+    const { data: rows, error } = await this.databaseService.getClient()
+      .from('user')
+      .update({ email_confirmado: true })
+      .eq('id', userId)
+      .select('email');
+    if (error) throw error;
+    if (!rows?.length) throw new NotFoundException('Esa cuenta ya no existe');
+
+    return { ok: true as const, email: rows[0].email as string };
+  }
+
+  /**
+   * Vuelve a mandar el correo de bienvenida con el enlace de confirmación.
+   * Como la recuperación, no dice nunca si la cuenta existe.
+   */
+  async reenviarConfirmacion(nombreOEmail: string): Promise<void> {
+    const valor = (nombreOEmail ?? '').trim();
+    if (!valor) return;
+    const db = this.databaseService.getClient();
+    let { data: rows } = await db.from('user').select('id, name, email, email_confirmado').eq('name', valor).limit(1);
+    if (!rows?.length) {
+      ({ data: rows } = await db.from('user').select('id, name, email, email_confirmado').eq('email', valor).limit(1));
+    }
+    const user = rows?.[0] as { id: string; name: string; email: string; email_confirmado?: boolean } | undefined;
+    if (!user || user.email_confirmado !== false) return;
+
+    await this.mailService.enviarBienvenidaCuenta(user.email, user.name ?? '', {
+      tokenConfirmacion: crearTokenConfirmacion(user.id),
+    });
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -236,6 +323,12 @@ export class UserService {
       .update({ password: await hashPassword(pass) })
       .eq('id', user.id);
     if (error) throw error;
+
+    // El enlace llegó a su correo, así que el email queda comprobado. Aparte y
+    // sin romper nada si la columna aún no existe.
+    const { error: errConfirmar } = await this.databaseService.getClient()
+      .from('user').update({ email_confirmado: true }).eq('id', user.id);
+    if (errConfirmar) console.warn('[restablecerPassword] no se pudo confirmar el email:', errConfirmar.message);
 
     return { ok: true as const };
   }
@@ -415,6 +508,9 @@ export class UserService {
   // --------- Actualizar usuario ---------
   async updateUser(id: string, body: UpdateUser) {
     const updates: Record<string, string | null> = {};
+    // Opcionales: vacío = quitarlo (quitar la fecha apaga la felicitación).
+    if ('telefono' in body) updates.telefono = saneaTelefono(body.telefono);
+    if ('fecha_nacimiento' in body) updates.fecha_nacimiento = saneaFechaNacimiento(body.fecha_nacimiento);
     if (body.name) updates.name = body.name;
     if (body.email) updates.email = body.email;
     if (body.password) updates.password = await hashPassword(body.password);
@@ -433,6 +529,44 @@ export class UserService {
     return data;
   }
 
+  /**
+   * Los datos de sql/user-telefono-cumple.sql, aparte de getUserById (que ya
+   * tiene su cascada de respaldos por columnas de disciplina). Si las columnas
+   * no existen todavía, devuelve {} y /me sigue como siempre.
+   */
+  async getPerfilExtra(id: string): Promise<Record<string, unknown>> {
+    const { data, error } = await this.databaseService.getClient()
+      .from('user')
+      .select('telefono, fecha_nacimiento, comunidad_popup_visto')
+      .eq('id', id)
+      .maybeSingle();
+    if (error || !data) return {};
+    return data;
+  }
+
+  /** Apunta que ya ha visto el popup de la comunidad (sale una sola vez). */
+  async marcarComunidadPopupVisto(id: string) {
+    const { error } = await this.databaseService.getClient()
+      .from('user').update({ comunidad_popup_visto: true }).eq('id', id);
+    if (error) console.warn('[comunidad] no se pudo marcar el popup como visto:', error.message);
+    return { ok: true as const };
+  }
+
+  // --------- Regalo de cumpleaños ---------
+
+  /** Año en que ya usó el 50 % (null si nunca, o si la columna no existe aún). */
+  async getCumpleDescuentoUsado(id: string): Promise<number | null> {
+    const { data } = await this.databaseService.getClient()
+      .from('user').select('cumple_descuento_usado_anio').eq('id', id).maybeSingle();
+    return (data as any)?.cumple_descuento_usado_anio ?? null;
+  }
+
+  async marcarCumpleDescuentoUsado(id: string, anio: number) {
+    const { error } = await this.databaseService.getClient()
+      .from('user').update({ cumple_descuento_usado_anio: anio }).eq('id', id);
+    if (error) console.error('[cumple] no se pudo marcar el descuento como usado:', error.message);
+  }
+
   // --------- Login con Google (encontrar o crear) ---------
   async findOrCreateGoogleUser({ email, name, img }: { email: string; name: string; img: string | null }) {
     // Buscar usuario existente por email (sin traer el hash de contraseña)
@@ -443,6 +577,11 @@ export class UserService {
 
     if (existing && existing.length > 0) {
       const user = existing[0];
+      // Google ya ha comprobado el correo: si la cuenta era de contraseña y
+      // estaba sin confirmar, queda confirmada.
+      const { error: errConfirmar } = await this.databaseService.getClient()
+        .from('user').update({ email_confirmado: true }).eq('id', user.id).eq('email_confirmado', false);
+      if (errConfirmar) console.warn('[google] no se pudo confirmar el email:', errConfirmar.message);
       const token = this.authService.generateToken(user.id, user.email);
       return { token, user };
     }
@@ -461,13 +600,15 @@ export class UserService {
     const dummyPass = await hashPassword(randomString());
 
     let id = randomString();
+    // Sin la columna (SQL sin correr) se crea sin ella y no sale el popup.
+    let conPopup = true;
 
     // Reintento acotado solo ante colisión de id (23505).
     for (let intento = 0; intento < 5; intento++) {
       try {
         const { data: rows, error } = await this.databaseService.getClient()
           .from('user')
-          .insert({ id, name: finalName, email, password: dummyPass, img: img ?? null })
+          .insert({ id, name: finalName, email, password: dummyPass, img: img ?? null, ...(conPopup ? { comunidad_popup_visto: false } : {}) })
           .select('id, name, email, img');
 
         if (error) throw error;
@@ -483,6 +624,10 @@ export class UserService {
       } catch (error: any) {
         if (error.code === '23505') {
           id = randomString();
+          continue;
+        }
+        if (conPopup && String(error?.message ?? '').includes('comunidad_popup_visto')) {
+          conPopup = false;
           continue;
         }
         throw error;
@@ -810,6 +955,7 @@ export class UserService {
       { table: 'notas', column: 'user_id' },
       { table: 'diario_sesion', column: 'user_id' },
       { table: 'recorrido_progreso', column: 'user_id' },
+      { table: 'actividad_recurso', column: 'user_id' },
       { table: 'astrologia', column: 'userId' },
       { table: 'ayurveda', column: 'userId' },
       { table: 'ayurveda_respuestas', column: 'user_id' },
@@ -832,6 +978,41 @@ export class UserService {
     if (user?.email) {
       const { error } = await db.from('bookings').delete().eq('email', user.email);
       if (error) console.error('[deleteUser] Error borrando bookings:', error.message);
+
+      // Lo demás que va por email y no por id: suscripción, reseñas y la
+      // participación en el estudio de astrología (primero sus respuestas).
+      for (const table of ['suscriptor', 'opinion']) {
+        const { error: e } = await db.from(table).delete().eq('email', user.email);
+        if (e) console.error(`[deleteUser] Error borrando de "${table}":`, e.message);
+      }
+      const { data: participantes } = await db
+        .from('estudio_participante')
+        .select('id')
+        .eq('email', user.email.trim().toLowerCase());
+      const idsEstudio = (participantes ?? []).map((p: { id: string }) => p.id);
+      if (idsEstudio.length) {
+        await db.from('estudio_respuesta').delete().in('participante_id', idsEstudio);
+        const { error: e } = await db.from('estudio_participante').delete().in('id', idsEstudio);
+        if (e) console.error('[deleteUser] Error borrando estudio_participante:', e.message);
+      }
+    }
+
+    // Fotos del genograma (familiares: datos de terceros). En el bucket se
+    // llaman `genograma/<userId>-<fecha>.<ext>`, así que basta el prefijo.
+    {
+      const bucket = db.storage.from('img');
+      const { data: fotos, error } = await bucket.list('genograma', { search: `${id}-`, limit: 1000 });
+      if (error) {
+        console.error('[deleteUser] Error listando fotos del genograma:', error.message);
+      } else {
+        const rutas = (fotos ?? [])
+          .filter((f) => f.name.startsWith(`${id}-`))
+          .map((f) => `genograma/${f.name}`);
+        if (rutas.length) {
+          const { error: e } = await bucket.remove(rutas);
+          if (e) console.error('[deleteUser] Error borrando fotos del genograma:', e.message);
+        }
+      }
     }
 
     // Foto de perfil en el bucket 'img' (si tiene una subida).

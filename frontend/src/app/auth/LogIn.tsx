@@ -44,8 +44,14 @@ export default function LogIn() {
   const [name, setname] = useState<string>("");
   const [contra, setcontra] = useState<string>("");
   const [message, setmessage] = useState<SuccessErrorMessageDto | null>(null);
+  // Sesión iniciada: redirige en 3 s y bloquea el botón mientras tanto.
+  const [entrando, setEntrando] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // El login ha rebotado porque la cuenta aún no está confirmada: se ofrece
+  // volver a mandar el correo.
+  const [sinConfirmar, setSinConfirmar] = useState(false);
+  const [reenviado, setReenviado] = useState(false);
   const formReveal = useReveal(0.1);
 
   useEffect(() => {
@@ -53,6 +59,42 @@ export default function LogIn() {
     const t = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(t);
   }, []);
+
+  // Llegada desde el enlace del correo de bienvenida: /logIn?confirmar=<token>.
+  // Se confirma la cuenta y se deja el email puesto para que solo falte la
+  // contraseña. El token se quita de la barra para no reenviarlo al recargar.
+  const tokenConfirmar = params.get("confirmar");
+  const confirmadoRef = useRef(false);
+  useEffect(() => {
+    if (!tokenConfirmar || confirmadoRef.current) return;
+    confirmadoRef.current = true;
+    const limpia = new URL(window.location.href);
+    limpia.searchParams.delete("confirmar");
+    window.history.replaceState(null, "", limpia.pathname + limpia.search);
+    axios
+      .post(`${API_URL}/user/confirmar`, { token: tokenConfirmar })
+      .then((res) => {
+        if (res.data?.email) setname(res.data.email);
+        setmessage({ soy: 1, title: t("auth.login.confirmada"), description: t("auth.login.confirmadaTexto") });
+      })
+      .catch((err) => setmessage(gestionaError(err)));
+  }, [tokenConfirmar]);
+
+  // Recién creada la cuenta (viene del popup de /signIn): recordatorio.
+  useEffect(() => {
+    if (params.get("pendiente") === "1") {
+      setmessage({ soy: 1, title: t("auth.signin.miraCorreo"), description: t("auth.login.pendienteTexto") });
+    }
+  }, []);
+
+  const reenviarConfirmacion = async () => {
+    try {
+      await axios.post(`${API_URL}/user/confirmar/reenviar`, { name });
+      setReenviado(true);
+    } catch (err: any) {
+      setmessage(gestionaError(err));
+    }
+  };
 
   const inicioSesion = async () => {
     setLoading(true);
@@ -100,15 +142,21 @@ export default function LogIn() {
           }
         } catch { /* si falla, destino normal */ }
 
+        setSinConfirmar(false);
         setmessage({
           soy: 1,
           title: t("auth.login.bienvenido"),
           description: t("auth.login.preparando"),
         });
+        setEntrando(true);
       }
     } catch (err: any) {
-      let error = gestionaError(err);
-      setmessage(error);
+      const pendiente = err?.response?.data?.code === "EMAIL_SIN_CONFIRMAR";
+      setSinConfirmar(pendiente);
+      setReenviado(false);
+      setmessage(pendiente
+        ? { soy: 2, title: t("auth.login.sinConfirmar"), description: t("auth.login.sinConfirmarTexto") }
+        : gestionaError(err));
     } finally {
       setLoading(false);
     }
@@ -127,16 +175,16 @@ export default function LogIn() {
   };
 
   useEffect(() => {
-    if (message?.soy === 1) {
+    if (entrando) {
       const timer = setTimeout(() => navigate(destinoRef.current, { replace: true }), 3000);
       return () => clearTimeout(timer);
     }
-  }, [message]);
+  }, [entrando]);
 
   // Bloquea el botón "Entrar" mientras carga Y también cuando ya se ha iniciado
   // sesión (mensaje de éxito visible): así no se puede volver a pulsar durante
   // los 3s que tarda en redirigir.
-  const bloqueado = loading || message?.soy === 1;
+  const bloqueado = loading || entrando;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -234,6 +282,29 @@ export default function LogIn() {
               description={message.description}
               onClick={() => setmessage(null)}
             />
+          )}
+
+          {sinConfirmar && (
+            <Flex justify="center">
+              {reenviado ? (
+                <Text color="white" fontSize="sm" letterSpacing="0.04em" textAlign="center">
+                  {t("auth.login.reenviado")}
+                </Text>
+              ) : (
+                <Text
+                  as="button"
+                  onClick={reenviarConfirmacion}
+                  color="white"
+                  fontSize="sm"
+                  letterSpacing="0.06em"
+                  textDecoration="underline"
+                  bg="transparent"
+                  cursor="pointer"
+                >
+                  {t("auth.login.reenviar")}
+                </Text>
+              )}
+            </Flex>
           )}
 
           {/* Botón ENTRAR */}

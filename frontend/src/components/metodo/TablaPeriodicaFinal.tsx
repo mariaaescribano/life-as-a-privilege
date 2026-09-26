@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FlechaBonita } from "../global/FlechaBonita";
 import { useT } from "../../i18n";
 import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -178,13 +179,10 @@ export function TablaPeriodicaFinal({ onClose, onContinue }: TablaPeriodicaFinal
           <Box as="img" src="/img/fondos/fisio.webp" alt="" loading="eager" position="absolute" inset="0"
                w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
           <Box position="absolute" inset="0" bg={`${fisiologiaBg}b3`} />
-          <Box as="span" position="relative" zIndex={1}>
+          <Box as="span" position="relative" zIndex={1} display={{ base: "none", md: "inline" }}>
             {t("metodo.irA", { destino: t("metodo.destino.moleculas") })}
           </Box>
-          <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-               w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
-            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-          </Box>
+          <FlechaBonita position="relative" zIndex={1} size={{ base: "30px", md: "24px" }} />
         </Box>
       </Flex>
     </>

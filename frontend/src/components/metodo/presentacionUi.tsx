@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { astrologiaNom, neuropsicologiaNom, ayurvedaNom, tcmNom, fisiologiaNom, nutricionNom, cabalaNom, culturaNom } from "../../GlobalVariables";
 import { Box, Flex, Grid, SimpleGrid, Text, type BoxProps } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
@@ -598,6 +599,30 @@ function BotonSecundario({
   );
 }
 
+/** Scope de pago de cada disciplina (el de `<scope>_suscrito`), por su nombre interno. */
+const SCOPE_POR_NOM: Record<string, string> = {
+  [astrologiaNom]: "metodo",
+  [neuropsicologiaNom]: "psicologia",
+  [ayurvedaNom]: "ayurveda",
+  [tcmNom]: "tcm",
+  [fisiologiaNom]: "fisiologia",
+  [nutricionNom]: "nutricion",
+  [cabalaNom]: "cabala",
+  [culturaNom]: "cultura",
+};
+
+/**
+ * «Empezar»: a /home con esa disciplina (su box de pago sale allí, antes de
+ * entrar). Sin cuenta, primero a crearla, con la vuelta ya apuntada.
+ */
+function destinoEmpezar(nom: string): string {
+  const scope = SCOPE_POR_NOM[nom];
+  const home = scope ? `/home?entrar=${scope}` : "/home";
+  let conSesion = false;
+  try { conSesion = !!localStorage.getItem("userId"); } catch { /* modo privado */ }
+  return conSesion ? home : `/signIn?next=${encodeURIComponent(home)}`;
+}
+
 export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
   const t = useT();
   const navigate = useNavigate();
@@ -616,7 +641,7 @@ export function CierreCrearCuenta({ d }: { d: PresentacionDisciplina }) {
     {/* La puerta de entrada, ANTES de la caja: quien llega decidido no tiene
         que leerse los dos párrafos para encontrar por dónde se empieza. */}
     <Reveal inView direction="up" distance={20} duration={0.6} w="100%">
-      <BotonEmpezar d={d} onClick={() => navigate("/signIn")} />
+      <BotonEmpezar d={d} onClick={() => navigate(destinoEmpezar(d.nom))} />
     </Reveal>
 
     <Reveal inView direction="up" distance={24} scaleFrom={0.97} duration={0.75} w="100%">

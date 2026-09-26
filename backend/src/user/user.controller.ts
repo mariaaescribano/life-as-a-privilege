@@ -32,6 +32,23 @@ export class UserController {
     return await this.usersService.logIn(body);
   }
 
+  // ── Confirmación de la cuenta (enlace del correo de bienvenida) ──────────
+  @Post("confirmar")
+  @Throttle(LIMITE_AUTH)
+  @HttpCode(HttpStatus.OK)
+  async confirmar(@Body() body: { token?: string }) {
+    if (!body?.token) throw new BadRequestException('Falta el token');
+    return await this.usersService.confirmarCuenta(body.token);
+  }
+
+  @Post("confirmar/reenviar")
+  @Throttle(LIMITE_AUTH)
+  @HttpCode(HttpStatus.OK)
+  async reenviarConfirmacion(@Body() body: { name?: string }) {
+    await this.usersService.reenviarConfirmacion(body?.name ?? '');
+    return { ok: true };
+  }
+
   // ── Recuperación de contraseña ───────────────────────────────────────────
   // Sin guard: quien la pide justamente NO puede iniciar sesión. La seguridad
   // está en que el enlace solo llega al email registrado y el token caduca en
@@ -56,10 +73,21 @@ export class UserController {
     return await this.usersService.restablecerPassword(body.token, body.password);
   }
 
+  // Popup de la comunidad: sale la primera vez que entra y nunca más.
+  @Post("me/comunidad-popup")
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async comunidadPopupVisto(@Req() req: any) {
+    return await this.usersService.marcarComunidadPopupVisto(req.user.userId);
+  }
+
   @Get("me")
   @UseGuards(JwtAuthGuard)
   async getMe(@Req() req: any) {
-    const user = await this.usersService.getUserById(req.user.userId);
+    const [user, extra] = await Promise.all([
+      this.usersService.getUserById(req.user.userId),
+      this.usersService.getPerfilExtra(req.user.userId),
+    ]);
     const email = (user as any)?.email ?? req.user?.email;
     // `admin_email`: el email está en ADMIN_EMAILS (puede pedir la contraseña).
     // `is_admin`: además está DESBLOQUEADO (token emitido tras la contraseña).
@@ -75,6 +103,7 @@ export class UserController {
 
     return {
       ...user,
+      ...extra,
       ...flagsLibres,
       acceso_libre: accesoLibre,
       admin_email: adminEmail,

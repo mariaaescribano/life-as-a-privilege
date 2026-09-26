@@ -29,8 +29,7 @@ const OpinionesSection: React.FC = () => {
     <Box
       ref={reveal.ref}
       px={{ base: 5, md: 10, lg: 16 }}
-      pt={{ base: 24, md: 32 }}
-      pb={{ base: 14, md: 20 }}
+      pt={{ base: 12, md: 16 }}
     >
       <Flex direction="column" align="center" w="100%">
         {/* ── CTA principal → El Recorrido (botón grande con mandala + flecha

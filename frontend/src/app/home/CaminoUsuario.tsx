@@ -34,6 +34,7 @@ import { useT } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { CAMINO, DISCIPLINAS_CAMINO, pasosAndados, porcentajeCamino, type CaminoKey } from "../../data/camino";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import { cacheDeOtraCuenta } from "../../api/sesion";
 
 /** Cara de cada disciplina en el camino (el orden es el del Método). */
 // Los iconos de GlobalVariables no declaran todos el mismo `size` (unos
@@ -67,6 +68,11 @@ export interface CaminoUsuarioProps {
 }
 
 export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
+  // Si se ha cambiado de cuenta en esta pestaña, lo guardado es de la otra.
+  if (cacheDeOtraCuenta("camino")) {
+    progresoCache = null;
+    abiertoCache = false;
+  }
   const t = useT();
   const navigate = useNavigate();
   const nombreDisciplina = useNombreDisciplina();

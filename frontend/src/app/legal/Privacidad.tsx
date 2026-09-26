@@ -49,15 +49,23 @@ export default function Privacidad() {
             <>
               <strong>De tu cuenta:</strong> nombre de usuario, email, contraseña (guardada siempre
               cifrada con bcrypt: nadie, tampoco nosotros, puede leerla) y, si la subes, tu foto de
-              perfil.
-            </>,
-            <>
-              <strong>Si entras con Google:</strong> nombre, email y foto que Google nos comunica.
+              perfil. Si nos los das (los dos son opcionales), también tu teléfono y tu fecha de
+              nacimiento.
             </>,
             <>
               <strong>De tu recorrido:</strong> las respuestas, textos, tests y notas que escribes en
               las distintas disciplinas. Incluye datos que escribes libremente sobre tu bienestar,
               tus hábitos y tus experiencias personales.
+            </>,
+            <>
+              <strong>Del genograma (psicología):</strong> los nombres, los datos y, si las subes,
+              las fotos de tus familiares. Son datos de otras personas: súbelos solo si te parece
+              bien que estén en tu recorrido. Las fotos se guardan con un nombre imposible de
+              adivinar y se borran con tu cuenta.
+            </>,
+            <>
+              <strong>Si dejas una reseña:</strong> tu nombre y tu texto, que se publican en la
+              web, y opcionalmente tu email, que nunca se publica.
             </>,
             <>
               <strong>Para la carta astral:</strong> fecha, hora y lugar de nacimiento.
@@ -82,8 +90,10 @@ export default function Privacidad() {
         <P>
           Parte de lo que escribes en el recorrido puede revelar información sobre tu salud física o
           emocional, que el RGPD considera de categoría especial (artículo 9). Tratamos esos datos{" "}
-          <strong>únicamente sobre la base de tu consentimiento explícito</strong>, que otorgas al
-          decidir escribirlos, y con la única finalidad de mostrarte tu propio recorrido.
+          <strong>únicamente sobre la base de tu consentimiento explícito</strong>, que das al
+          marcar la casilla correspondiente (al pagar o, si no pasas por el pago, al entrar por
+          primera vez en el recorrido), que queda registrada con su fecha, y con la única
+          finalidad de guardarte tu propio recorrido y acompañarte en él.
         </P>
         <P>
           No los usamos para elaborar perfiles, no los cedemos a terceros y no tomamos decisiones
@@ -94,7 +104,8 @@ export default function Privacidad() {
           {TITULAR.nombre}, como única responsable del sitio, puede acceder a lo que escribes dentro
           del recorrido para acompañarte y preparar tus lecturas personalizadas. Es lo que autorizas
           expresamente al comprar cada disciplina, con una casilla aparte de la de las condiciones de
-          compra. Nadie más tiene acceso, y puedes retirar esa autorización en cualquier momento
+          compra. Para resolver incidencias técnicas puede también entrar en tu cuenta tal como tú
+          la ves. Nadie más tiene acceso, y puedes retirar esa autorización en cualquier momento
           escribiendo a {TITULAR.email}.
         </P>
       </Seccion>
@@ -104,6 +115,11 @@ export default function Privacidad() {
           items={[
             <>
               <strong>Gestionar tu cuenta y darte acceso</strong> — ejecución del contrato.
+            </>,
+            <>
+              <strong>Felicitarte por tu cumpleaños con un descuento</strong> — tu consentimiento,
+              que das al escribir tu fecha de nacimiento. Para retirarlo basta con borrarla en «Mi
+              cuenta».
             </>,
             <>
               <strong>Guardar tu progreso en el recorrido</strong> — ejecución del contrato y, para
@@ -118,6 +134,9 @@ export default function Privacidad() {
             </>,
             <>
               <strong>Responder a tus mensajes</strong> — tu consentimiento.
+            </>,
+            <>
+              <strong>Publicar tu reseña</strong> — tu consentimiento, al enviarla.
             </>,
             <>
               <strong>Enviarte novedades, si te suscribes</strong> — tu consentimiento, revocable en
@@ -148,11 +167,12 @@ export default function Privacidad() {
               <strong>Stripe</strong> — procesamiento de los pagos.
             </>,
             <>
-              <strong>Google</strong> — inicio de sesión con Google y, si lo aceptas, Google
-              Analytics.
+              <strong>Google</strong> — envío de los emails del servicio (Gmail) y, solo si lo
+              aceptas, Google Analytics.
             </>,
             <>
-              <strong>Proveedor de correo</strong> — envío de los emails del servicio.
+              <strong>YouTube</strong> — los vídeos de los cursos, incrustados en su modo de
+              privacidad mejorada (youtube-nocookie.com).
             </>,
           ]}
         />
@@ -170,6 +190,7 @@ export default function Privacidad() {
             "Si borras tu cuenta, se eliminan junto con todo tu contenido del recorrido y tu foto de perfil. Puedes hacerlo tú desde tu perfil, sin pedir permiso a nadie.",
             "Los datos de facturación se conservan el plazo que exige la normativa fiscal y mercantil (hasta 6 años).",
             "Los emails de suscripción, hasta que te des de baja.",
+            "Las reseñas, hasta que pidas retirarlas (o borres tu cuenta).",
           ]}
         />
       </Seccion>
@@ -196,8 +217,10 @@ export default function Privacidad() {
         <P>
           Aplicamos medidas técnicas y organizativas para proteger tus datos: cifrado del tráfico
           (HTTPS), contraseñas almacenadas con función de hash bcrypt, acceso a la API mediante
-          tokens firmados y comprobación de que cada persona solo puede leer y modificar su propia
-          información.
+          tokens firmados, comprobación de que cada persona solo puede leer y modificar su propia
+          información, y la base de datos cerrada a cualquier acceso que no sea el de nuestro
+          propio servidor. Las tipografías se sirven desde nuestra propia web, sin llamar a
+          servidores de terceros.
         </P>
       </Seccion>
 

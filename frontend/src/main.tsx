@@ -12,6 +12,13 @@ import { IdiomaProvider } from "./i18n";
 // que ninguna de sus reglas llegaba al navegador (de ahí el cuadrado azul al
 // pulsar en el móvil, que se creía apagado desde hacía meses).
 import "./style.css";
+// EB Garamond servida desde la propia web (antes, de Google Fonts: mandaba la IP
+// de cada visita a Google sin consentimiento). Los mismos pesos que se pedían.
+import "@fontsource/eb-garamond/400.css";
+import "@fontsource/eb-garamond/500.css";
+import "@fontsource/eb-garamond/600.css";
+import "@fontsource/eb-garamond/700.css";
+import "@fontsource/eb-garamond/400-italic.css";
 
 // Rastrea los guardados (PATCH) en vuelo para poder esperarlos (flush) antes de
 // navegar y no perder datos entre páginas del recorrido.

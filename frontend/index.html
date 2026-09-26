@@ -50,9 +50,11 @@
          propia, nunca dejando suelto al navegador. -->
     <meta name="color-scheme" content="only light" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <!--
+      La EB Garamond ya NO viene de fonts.googleapis.com: cada visita mandaba la
+      IP a Google sin consentimiento (RGPD). Se sirve desde la propia web con
+      @fontsource/eb-garamond, importada en src/main.tsx.
+    -->
     <!--
       Google Analytics YA NO se carga aquí. Ponerlo en el <head> hacía que se
       instalasen sus cookies antes de que nadie diera su consentimiento, lo que

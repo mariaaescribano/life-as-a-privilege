@@ -16,6 +16,7 @@ import { listarMias, type EntradaDiario } from "../../api/diario";
 import { caraDeEntrada, fechaCorta } from "./diarioCara";
 import { useT, useIdioma } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
+import { cacheDeOtraCuenta } from "../../api/sesion";
 
 // Igual que el progreso del camino: se guarda a nivel de módulo para que al
 // volver al Home dentro de la misma sesión la tarjeta salga ya puesta, sin
@@ -28,6 +29,8 @@ export const olvidarCacheDiario = () => {
 };
 
 export default function DiarioUsuario() {
+  // Si se ha cambiado de cuenta en esta pestaña, el diario guardado es de otra persona.
+  if (cacheDeOtraCuenta("diario")) diarioCache = null;
   const t = useT();
   const { idioma } = useIdioma();
   const navigate = useNavigate();

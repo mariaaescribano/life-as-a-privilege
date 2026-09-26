@@ -9,6 +9,8 @@ import { salirDeLaSuplantacion, suplantacionActiva } from "../../api/suplantar";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 
+import { inputFechaSx } from "../../components/global/CampoContrasena";
+
 const inputStyles = {
   bg: "rgba(255,255,255,0.06)",
   border: "1px solid rgba(255,255,255,0.28)",
@@ -41,6 +43,8 @@ export default function UserAccount() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [contra, setContra] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [fechaNacimiento, setFechaNacimiento] = useState("");
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -56,7 +60,7 @@ export default function UserAccount() {
   const [mounted, setMounted] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
-  const initialRef = useRef<{ name: string; email: string }>({ name: "", email: "" });
+  const initialRef = useRef({ name: "", email: "", telefono: "", fechaNacimiento: "" });
 
   useEffect(() => {
     if (!userId) { navigate("/welcome"); return; }
@@ -68,7 +72,14 @@ export default function UserAccount() {
         setName(u.name ?? "");
         setEmail(u.email ?? "");
         setIsAdmin(!!u.is_admin);
-        initialRef.current = { name: u.name ?? "", email: u.email ?? "" };
+        setTelefono(u.telefono ?? "");
+        setFechaNacimiento(u.fecha_nacimiento ?? "");
+        initialRef.current = {
+          name: u.name ?? "",
+          email: u.email ?? "",
+          telefono: u.telefono ?? "",
+          fechaNacimiento: u.fecha_nacimiento ?? "",
+        };
       })
       .catch(() => setError(t("cuenta.error.cargar")))
       .finally(() => setLoading(false));
@@ -78,10 +89,13 @@ export default function UserAccount() {
 
   const handleGuardar = async () => {
     setError("");
-    const payload: Record<string, string> = {};
+    const payload: Record<string, string | null> = {};
     if (name.trim() && name !== initialRef.current.name) payload.name = name.trim();
     if (email.trim() && email !== initialRef.current.email) payload.email = email.trim();
     if (contra.trim()) payload.password = contra.trim();
+    // Estos dos se pueden vaciar (vaciar la fecha apaga la felicitación).
+    if (telefono.trim() !== initialRef.current.telefono) payload.telefono = telefono.trim() || null;
+    if (fechaNacimiento !== initialRef.current.fechaNacimiento) payload.fecha_nacimiento = fechaNacimiento || null;
 
     if (Object.keys(payload).length === 0) return;
 
@@ -106,6 +120,8 @@ export default function UserAccount() {
         setEmail(updated.email);
         initialRef.current.email = updated.email;
       }
+      if ("telefono" in payload) initialRef.current.telefono = telefono.trim();
+      if ("fecha_nacimiento" in payload) initialRef.current.fechaNacimiento = fechaNacimiento;
       setContra("");
       setSaved(true);
       setTimeout(() => setSaved(false), 2200);
@@ -203,7 +219,9 @@ export default function UserAccount() {
   const hayCambios =
     (name.trim() && name !== initialRef.current.name) ||
     (email.trim() && email !== initialRef.current.email) ||
-    !!contra.trim();
+    !!contra.trim() ||
+    telefono.trim() !== initialRef.current.telefono ||
+    fechaNacimiento !== initialRef.current.fechaNacimiento;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -349,6 +367,38 @@ export default function UserAccount() {
                 placeholder={t("cuenta.nuevaContrasena")}
                 {...inputStyles}
               />
+            </Box>
+
+            <Box>
+              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                {t("auth.campo.telefono")}
+              </Text>
+              <Input
+                type="tel"
+                autoComplete="tel"
+                placeholder="+34 600 000 000"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+                {...inputStyles}
+              />
+            </Box>
+
+            <Box>
+              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                {t("auth.campo.fechaNacimiento")}
+              </Text>
+              <Input
+                type="date"
+                autoComplete="bday"
+                max={new Date().toISOString().slice(0, 10)}
+                value={fechaNacimiento}
+                onChange={(e) => setFechaNacimiento(e.target.value)}
+                {...inputStyles}
+                sx={inputFechaSx}
+              />
+              <Text color="rgba(255,255,255,0.72)" fontSize="sm" mt={2} textAlign="center" lineHeight="1.5">
+                {t("auth.signin.fechaRegalo")}
+              </Text>
             </Box>
           </VStack>
 

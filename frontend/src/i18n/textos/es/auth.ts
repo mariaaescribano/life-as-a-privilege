@@ -4,6 +4,8 @@ export const auth = {
   "auth.campo.nombreOEmail": "NOMBRE O EMAIL",
   "auth.campo.nombre": "NOMBRE",
   "auth.campo.email": "EMAIL",
+  "auth.campo.telefono": "TELÉFONO (OPCIONAL)",
+  "auth.campo.fechaNacimiento": "FECHA DE NACIMIENTO (OPCIONAL)",
   "auth.campo.contrasena": "CONTRASEÑA",
   "auth.campo.repiteContrasena": "REPITE LA CONTRASEÑA",
   "auth.campo.nuevaContrasena": "NUEVA CONTRASEÑA",
@@ -19,6 +21,13 @@ export const auth = {
   "auth.login.sinCuenta": "¿No tienes cuenta? Crear cuenta",
   "auth.login.bienvenido": "Bienvenido",
   "auth.login.preparando": "Lo estoy preparando para ti",
+  "auth.login.confirmada": "Cuenta confirmada",
+  "auth.login.confirmadaTexto": "Ya puedes iniciar sesión con tu nombre o tu email y tu contraseña.",
+  "auth.login.pendienteTexto": "Pulsa el enlace que te hemos enviado para confirmar tu cuenta, y luego entra aquí con tu nombre o tu email y tu contraseña.",
+  "auth.login.sinConfirmar": "Falta confirmar tu cuenta",
+  "auth.login.sinConfirmarTexto": "Pulsa el enlace del correo que te enviamos al crearla. Mira también en spam o promociones.",
+  "auth.login.reenviar": "¿No te ha llegado? Envíamelo otra vez",
+  "auth.login.reenviado": "Hecho. Si la cuenta está pendiente de confirmar, te acaba de llegar un correo nuevo.",
 
   // ── Crear cuenta ───────────────────────────────────────────────────────
   "auth.signin.titulo": "Crear cuenta",
@@ -30,6 +39,11 @@ export const auth = {
   "auth.signin.yaTienes": "¿Ya tienes cuenta? Iniciar sesión",
   "auth.signin.creada": "¡Cuenta creada!",
   "auth.signin.creadaTexto": "Continuamos en un instante...",
+  "auth.signin.fechaRegalo": "El día de tu cumpleaños te llegará un regalo por email: un 50 % en una disciplina.",
+  "auth.signin.miraCorreo": "Mira tu correo",
+  "auth.signin.miraCorreoTexto": "Tu cuenta está creada. Para activarla, pulsa el enlace que te acabamos de enviar a:",
+  "auth.signin.miraCorreoSpam": "Después ya podrás iniciar sesión con tu nombre o tu email y tu contraseña. Si no lo ves en unos minutos, mira en spam o en promociones.",
+  "auth.signin.entendido": "Entendido",
 
   // ── Recuperar contraseña ───────────────────────────────────────────────
   "auth.recuperar.titulo": "Recuperar contraseña",
@@ -58,6 +72,8 @@ export const auth = {
   "auth.error.noCoincidenTexto": "Repite la misma contraseña en los dos campos",
   "auth.error.noCoincidenCorto": "No coinciden",
   "auth.error.dosIguales": "Las dos contraseñas tienen que ser iguales",
+  "auth.error.telefonoInvalido": "Teléfono no válido",
+  "auth.error.telefonoCorrecto": "Escribe solo números, con el prefijo si quieres (+34…), o déjalo en blanco",
 
   // ── Errores del servidor (gestionaError) ───────────────────────────────
   // OJO: cuando el backend manda su propio `message`, ese texto llega en
@@ -97,4 +113,21 @@ export const auth = {
   "cuenta.borrar.escribe": "ESCRIBE",
   "cuenta.borrar.paraConfirmar": "PARA CONFIRMAR",
   "cuenta.borrar.eliminando": "Eliminando…",
+
+  // ── Popup de la comunidad (primera vez que entra) ─────────────────────
+  "comunidadPopup.titulo": "¿Te unes a la comunidad?",
+  "comunidadPopup.texto": "Tenemos una comunidad de WhatsApp donde compartimos el camino, las dudas y las novedades de El Mapa. Nos encantaría tenerte.",
+  "comunidadPopup.soloUnaVez": "Este aviso no volverá a salir. Si más adelante quieres unirte, ve a Contactar y pulsa en Comunidad.",
+  "comunidadPopup.unirme": "Unirme",
+  "comunidadPopup.ahoraNo": "Ahora no",
+
+  // ── Regalo de cumpleaños (/cumple) ────────────────────────────────────
+  "cumple.titulo": "Feliz cumpleaños",
+  "cumple.subtitulo": "Elige la disciplina que quieras: hoy es tuya a mitad de precio.",
+  "cumple.nota": "El regalo vale para una disciplina.",
+  "cumple.todasTuyas": "¡Ya tienes todas las disciplinas! Gracias por hacer El Mapa entero. Feliz cumpleaños.",
+  "cumple.motivo.invalido": "Este enlace no es válido. Abre el botón del correo de felicitación tal cual te llegó.",
+  "cumple.motivo.otraCuenta": "Este regalo es de otra cuenta. Inicia sesión con la cuenta a la que llegó el correo.",
+  "cumple.motivo.caducado": "Este regalo ha caducado: tenía siete días desde tu cumpleaños.",
+  "cumple.motivo.usado": "Este regalo ya lo has usado. ¡Que disfrutes de tu disciplina!",
 } as const;

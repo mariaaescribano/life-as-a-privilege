@@ -3,6 +3,8 @@ export const auth = {
   "auth.campo.nombreOEmail": "NAME OR EMAIL",
   "auth.campo.nombre": "NAME",
   "auth.campo.email": "EMAIL",
+  "auth.campo.telefono": "PHONE (OPTIONAL)",
+  "auth.campo.fechaNacimiento": "DATE OF BIRTH (OPTIONAL)",
   "auth.campo.contrasena": "PASSWORD",
   "auth.campo.repiteContrasena": "REPEAT PASSWORD",
   "auth.campo.nuevaContrasena": "NEW PASSWORD",
@@ -20,6 +22,13 @@ export const auth = {
   "auth.login.sinCuenta": "No account yet? Create one",
   "auth.login.bienvenido": "Welcome",
   "auth.login.preparando": "I'm getting it ready for you",
+  "auth.login.confirmada": "Account confirmed",
+  "auth.login.confirmadaTexto": "You can now log in with your name or email and your password.",
+  "auth.login.pendienteTexto": "Click the link we've sent you to confirm your account, then log in here with your name or email and your password.",
+  "auth.login.sinConfirmar": "Your account isn't confirmed yet",
+  "auth.login.sinConfirmarTexto": "Click the link in the email we sent you when you signed up. Check your spam or promotions folder too.",
+  "auth.login.reenviar": "Didn't get it? Send it again",
+  "auth.login.reenviado": "Done. If the account is waiting to be confirmed, a new email is on its way.",
 
   // ── Create account ─────────────────────────────────────────────────────
   "auth.signin.titulo": "Create account",
@@ -31,6 +40,11 @@ export const auth = {
   "auth.signin.yaTienes": "Already have an account? Log in",
   "auth.signin.creada": "Account created!",
   "auth.signin.creadaTexto": "We'll carry on in a moment...",
+  "auth.signin.fechaRegalo": "On your birthday you'll get a gift by email: 50% off one discipline.",
+  "auth.signin.miraCorreo": "Check your email",
+  "auth.signin.miraCorreoTexto": "Your account has been created. To activate it, click the link we've just sent to:",
+  "auth.signin.miraCorreoSpam": "After that you can log in with your name or email and your password. If you can't see it in a few minutes, check your spam or promotions folder.",
+  "auth.signin.entendido": "Got it",
 
   // ── Reset password ─────────────────────────────────────────────────────
   "auth.recuperar.titulo": "Reset password",
@@ -59,6 +73,8 @@ export const auth = {
   "auth.error.noCoincidenTexto": "Type the same password in both fields",
   "auth.error.noCoincidenCorto": "They don't match",
   "auth.error.dosIguales": "Both passwords have to be the same",
+  "auth.error.telefonoInvalido": "Invalid phone number",
+  "auth.error.telefonoCorrecto": "Use numbers only, with the country code if you like (+44…), or leave it blank",
 
   // ── Server errors (gestionaError) ──────────────────────────────────────
   "auth.error.generico": "Error",
@@ -91,4 +107,21 @@ export const auth = {
   "cuenta.borrar.escribe": "TYPE",
   "cuenta.borrar.paraConfirmar": "TO CONFIRM",
   "cuenta.borrar.eliminando": "Deleting…",
+
+  // ── Community popup (first time in) ──────────────────────────────────
+  "comunidadPopup.titulo": "Will you join the community?",
+  "comunidadPopup.texto": "We have a WhatsApp community where we share the journey, questions and news about the Map. We'd love to have you.",
+  "comunidadPopup.soloUnaVez": "This message won't appear again. If you want to join later, go to Contact and tap Community.",
+  "comunidadPopup.unirme": "Join",
+  "comunidadPopup.ahoraNo": "Not now",
+
+  // ── Birthday gift (/cumple) ──────────────────────────────────────────
+  "cumple.titulo": "Happy birthday",
+  "cumple.subtitulo": "Choose any discipline: today it's yours at half price.",
+  "cumple.nota": "The gift is valid for one discipline.",
+  "cumple.todasTuyas": "You already have every discipline! Thank you for walking the whole Map. Happy birthday.",
+  "cumple.motivo.invalido": "This link isn't valid. Open the button in your birthday email exactly as it arrived.",
+  "cumple.motivo.otraCuenta": "This gift belongs to another account. Log in with the account the email was sent to.",
+  "cumple.motivo.caducado": "This gift has expired: it lasted seven days from your birthday.",
+  "cumple.motivo.usado": "You've already used this gift. Enjoy your discipline!",
 };

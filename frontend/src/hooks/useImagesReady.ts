@@ -12,25 +12,28 @@ import { useEffect, useState } from "react";
  *
  * - Acepta null/undefined (se ignoran) para poder pasar listas condicionales.
  * - Si la lista queda vacía, devuelve `true` de inmediato (no hay nada que esperar).
+ * - El «listo» va atado a la lista: si la lista cambia (p.ej. llegan los datos
+ *   y con ellos las fotos), vuelve a `false` en ese MISMO render, sin dejar
+ *   pasar un fotograma con las fotos a medias.
  */
 export function useImagesReady(srcs: (string | null | undefined)[]): boolean {
-  const [ready, setReady] = useState(false);
   // Clave estable de la lista para no reejecutar el efecto en cada render.
   const key = srcs.filter((s): s is string => !!s).join("|");
+  // La lista (clave) que ya terminó de cargar.
+  const [listaLista, setListaLista] = useState<string | null>(null);
 
   useEffect(() => {
     const list = key ? key.split("|") : [];
     if (list.length === 0) {
-      setReady(true);
+      setListaLista(key);
       return;
     }
-    setReady(false);
     let cancelled = false;
     let pending = list.length;
     const done = () => {
       if (cancelled) return;
       pending -= 1;
-      if (pending <= 0) setReady(true);
+      if (pending <= 0) setListaLista(key);
     };
     const imgs = list.map((src) => {
       const img = new window.Image();
@@ -48,5 +51,5 @@ export function useImagesReady(srcs: (string | null | undefined)[]): boolean {
     };
   }, [key]);
 
-  return ready;
+  return listaLista === key;
 }

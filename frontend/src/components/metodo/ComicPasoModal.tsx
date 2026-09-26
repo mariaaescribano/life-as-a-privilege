@@ -1,4 +1,5 @@
 import React from "react";
+import { FlechaBonita } from "../global/FlechaBonita";
 import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer, type Vineta } from "./ComicViewer";
 import { astrologiaTxt } from "../../GlobalVariables";
@@ -14,12 +15,9 @@ import { astrologiaTxt } from "../../GlobalVariables";
 //   · onClose → la X / Escape. El padre cierra y se queda donde estaba.
 // ─────────────────────────────────────────────────────────────────────────
 
-// Flecha larga → (material «arrow_forward»), para el botón del siguiente título.
+// La flecha del botón del siguiente título (la fina de la casa).
 const FlechaDerecha = () => (
-  <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-       w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
-    <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-  </Box>
+  <FlechaBonita position="relative" zIndex={1} size={{ base: "30px", md: "24px" }} />
 );
 
 interface ComicPasoModalProps {
@@ -164,7 +162,8 @@ export function ComicPasoModal({
           <Box position="absolute" inset="0" bg={veloBtn} />
           <Box as="span" position="relative" zIndex={1} display="inline-flex" alignItems="center" gap={2}
                style={botonNitido ? { textShadow } : undefined}>
-            {continueLabel}
+            {/* En el móvil, solo la flecha: la frase se esconde. */}
+            <Box as="span" display={{ base: "none", md: "inline" }}>{continueLabel}</Box>
             <FlechaDerecha />
           </Box>
         </Box>

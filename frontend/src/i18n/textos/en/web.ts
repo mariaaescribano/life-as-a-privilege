@@ -65,6 +65,25 @@ export const web = {
   "suscribir.error": "It couldn't be sent. Please try again in a moment.",
   "suscribir.baja": "You can unsubscribe whenever you want",
 
+  "privacidad.infoSuscripcion":
+    "María Escribano will use your email only to tell you about new content, with your consent. It is not shared with anyone. You can access, correct or delete your data by writing to darkcake141@gmail.com. More in the",
+  "privacidad.infoRegistro":
+    "By signing up you confirm you are 18 or older and accept the terms of use. María Escribano processes your data to run your account and your journey; it is not shared with anyone except the providers that keep the site running. You can access, correct or delete your data (and delete your account from your profile). More in the",
+  "privacidad.infoOpinion":
+    "Your name and your review will be published on this page; the email is optional, never published and only used to reply to you. To remove it, write to darkcake141@gmail.com. More in the",
+  "privacidad.enlace": "privacy policy",
+
+  "consentimiento.titulo": "Before you continue",
+  "consentimiento.texto":
+    "In the journey you will write about yourself, and some of it may reveal information about your physical or emotional health. The law requires your express permission to store it. You only need to give it once.",
+  "consentimiento.casilla":
+    "I expressly consent to the storage of the texts and answers I write inside the journey, including any that reveal information about my physical or emotional health, and I authorise María Escribano to read them for the sole purpose of accompanying me and preparing my personalised readings.",
+  "consentimiento.nota":
+    "They are not shared with anyone else or used for anything else. You can withdraw this permission at any time from Contact, and delete your account with everything you wrote from your profile.",
+  "consentimiento.boton": "Give my permission",
+  "consentimiento.volver": "Not now",
+  "consentimiento.error": "It could not be saved. Please try again in a moment.",
+
   // ── Cookie banner (the bar at the bottom, not the legal page) ──────────
   "cookies.aviso":
     "We use our own cookies, the ones the site needs to work and to keep you logged in. We'd also like to use Google Analytics cookies to understand how the site is used and improve it, but **only if you allow it**.",

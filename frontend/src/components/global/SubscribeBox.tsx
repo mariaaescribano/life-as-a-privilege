@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { EnlaceBaja } from "./EnlaceBaja";
+import { InfoPrivacidad } from "./InfoPrivacidad";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -217,6 +218,7 @@ export function SubscribeBox() {
 
         {/* La salida de la lista, a la vista desde el momento de entrar. */}
         <EnlaceBaja mt={6} />
+        <InfoPrivacidad tipo="suscripcion" mt={2} />
       </Box>
     </Flex>
   );

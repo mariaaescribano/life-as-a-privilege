@@ -7,6 +7,7 @@ import { API_URL } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
 import { useT } from "../../i18n";
 import { marcarOpinionEnviada } from "../../components/metodo/PedirOpinion";
+import { InfoPrivacidad } from "../../components/global/InfoPrivacidad";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LA VUELTA — a esta página se puede llegar desde el final de un recorrido
@@ -349,6 +350,9 @@ function DejarOpinion({
               {t("opiniones.error")}
             </Text>
           )}
+
+          {/* Qué se publica y qué no, antes de enviar (art. 13 RGPD). */}
+          <InfoPrivacidad tipo="opinion" mt={0} />
 
           {/* Botón Enviar */}
           <Flex justify="center" pt={{ base: 8, md: 10 }}>

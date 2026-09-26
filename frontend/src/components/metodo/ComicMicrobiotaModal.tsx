@@ -1,4 +1,5 @@
 import React from "react";
+import { FlechaBonita } from "../global/FlechaBonita";
 import { useT } from "../../i18n";
 import { Box, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import { ComicViewer } from "./ComicViewer";
@@ -56,11 +57,8 @@ export function ComicMicrobiotaModal({ isOpen, onClose, onContinue }: ComicMicro
           <Box as="img" src="/img/fondos/nutri.webp" alt="" loading="eager" position="absolute" inset="0"
                w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
           <Box position="absolute" inset="0" bg={`${nutricionBg}b3`} />
-          <Box as="span" position="relative" zIndex={1}>{t("metodo.irA", { destino: t("metodo.destino.microbiota") })}</Box>
-          <Box as="svg" position="relative" zIndex={1} xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-               w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor" flexShrink={0}>
-            <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
-          </Box>
+          <Box as="span" position="relative" zIndex={1} display={{ base: "none", md: "inline" }}>{t("metodo.irA", { destino: t("metodo.destino.microbiota") })}</Box>
+          <FlechaBonita position="relative" zIndex={1} size={{ base: "30px", md: "24px" }} />
         </Box>
       </ModalContent>
     </Modal>

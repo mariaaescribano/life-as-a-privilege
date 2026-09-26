@@ -15,6 +15,10 @@ export type CreateUser = {
   password: string;
   /** Opcional: quien no lo elija se registra igual (ver sql/user-trato.sql). */
   trato?: Trato | null;
+  /** Opcionales (sql/user-telefono-cumple.sql). */
+  telefono?: string | null;
+  /** 'YYYY-MM-DD' */
+  fecha_nacimiento?: string | null;
 };
 
 export type LoginUser = {
@@ -27,5 +31,7 @@ export type UpdateUser = {
   email?: string;
   password?: string;
   trato?: Trato | null;
+  telefono?: string | null;
+  fecha_nacimiento?: string | null;
 };
 

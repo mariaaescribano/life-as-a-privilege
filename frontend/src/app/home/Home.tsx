@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text, Tooltip, useBreakpointValue, useToast } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
@@ -31,9 +31,11 @@ import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import CaminoUsuario from "./CaminoUsuario";
 import DiarioUsuario from "./DiarioUsuario";
+import { ComunidadPrimeraVez } from "../../components/global/ComunidadPrimeraVez";
 import { useT, type ClaveTexto } from "../../i18n";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
+import { cacheDeOtraCuenta } from "../../api/sesion";
 
 const popIn = keyframes`
   from { opacity: 0; transform: scale(0.2); }
@@ -91,6 +93,8 @@ let suscCache: SuscCache | null = null;
 let imagesReadyCache = false;
 
 const Home = () => {
+  // Si se ha cambiado de cuenta en esta pestaña, las compras guardadas son de la otra.
+  if (cacheDeOtraCuenta("home")) suscCache = null;
   const navigate = useNavigate();
   const t = useT();
   const nombreDisciplina = useNombreDisciplina();
@@ -799,6 +803,35 @@ const Home = () => {
   // llegar y no ha comprado nada, no tiene sentido ofrecerle «Continuar».
   // Lo que ha comprado, en la forma que espera «Tu camino» (la columna de la
   // izquierda): mismas claves que los `<key>_suscrito` del usuario.
+  // /home?entrar=<scope>: se llega aquí al intentar entrar en una disciplina
+  // por cualquier otro camino (GuardiaPagoRecorrido, «Empezar» de las
+  // presentaciones…). Hace lo mismo que pulsar su círculo: si está pagada,
+  // entra; si no, abre su box de pago AQUÍ, antes de meterse. Espera a saber
+  // qué tiene pagado para no enseñarle el pago a quien ya pagó.
+  const entrarRef = useRef<string | null>(
+    (() => { try { return new URLSearchParams(window.location.search).get("entrar"); } catch { return null; } })(),
+  );
+  useEffect(() => {
+    const scope = entrarRef.current;
+    if (!scope) return;
+    const estado: Record<string, boolean | null> = {
+      metodo: metodoSuscrito, psicologia: psicologiaSuscrito, ayurveda: ayurvedaSuscrito,
+      tcm: tcmSuscrito, fisiologia: fisiologiaSuscrito, nutricion: nutricionSuscrito,
+      cabala: cabalaSuscrito, cultura: culturaSuscrito,
+    };
+    const ir: Record<string, () => void> = {
+      metodo: () => { void irAstrologia(); }, psicologia: irPsicologia, ayurveda: irAyurveda,
+      tcm: irTcm, fisiologia: irFisiologia, nutricion: irNutricion, cabala: irCabala, cultura: irCultura,
+    };
+    if (!(scope in ir)) { entrarRef.current = null; return; }
+    if (estado[scope] === null) return; // aún cargando
+    entrarRef.current = null;
+    const url = new URL(window.location.href);
+    url.searchParams.delete("entrar");
+    window.history.replaceState(null, "", url.pathname + url.search);
+    ir[scope]();
+  }, [metodoSuscrito, psicologiaSuscrito, ayurvedaSuscrito, tcmSuscrito, fisiologiaSuscrito, nutricionSuscrito, cabalaSuscrito, culturaSuscrito]);
+
   const suscritasCamino = {
     metodo: metodoSuscrito,
     psicologia: psicologiaSuscrito,
@@ -862,6 +895,7 @@ const Home = () => {
       fontFamily="'EB Garamond', serif"
     >
       <SiteHeader variant="private" userImg={img ?? undefined} />
+      <ComunidadPrimeraVez />
 
       {/* Continuar por dónde lo dejé — escritorio: fijo arriba a la derecha,
           bajo el header. En móvil se pinta debajo del mandala (más abajo). */}

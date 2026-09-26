@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 import { useComic } from "../../i18n/comics";
+import { registrarActividad, disciplinaDe } from "../../components/global/RegistroActividad";
 
 // Página /ilustraciones — galería con TODAS las series de viñetas de todas las
 // disciplinas. Al pulsar una, se abre el popup inmersivo con el estilo de su
@@ -58,6 +59,17 @@ export default function Ilustraciones() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
+
+  // Qué cómic abre quien tiene cuenta: lo más fino que sabemos de sus gustos.
+  useEffect(() => {
+    if (!abierta) return;
+    registrarActividad({
+      recurso: `/ilustraciones#${abierta.id}`,
+      tipo: "ilustracion",
+      disciplina: disciplinaDe(abierta.disciplina),
+      titulo: abierta.titulo,
+    });
+  }, [abierta]);
 
   // Precarga de las portadas de la primera pantalla (dos filas de cuatro: el
   // mismo corte que usa la tarjeta para decidir `eager`/`lazy`).

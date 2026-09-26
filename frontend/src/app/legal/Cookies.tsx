@@ -104,7 +104,8 @@ export default function Cookies() {
           items={[
             <>
               <strong>Sesión</strong> (almacenamiento local del navegador) — guarda tu identificador
-              y tu token de acceso mientras navegas. Se borra al cerrar la pestaña.
+              y tu token de acceso para que no tengas que entrar cada vez. Se borra al cerrar
+              sesión.
             </>,
             <>
               <strong>Preferencia de cookies</strong> (almacenamiento local) — recuerda la decisión
@@ -144,7 +145,16 @@ export default function Cookies() {
         />
       </Seccion>
 
-      <Seccion titulo="4. Cómo revocar o eliminar las cookies">
+      <Seccion titulo="4. Vídeos de YouTube">
+        <P>
+          Los vídeos de los cursos se incrustan desde youtube-nocookie.com, el modo de privacidad
+          mejorada de YouTube: no instala cookies para seguirte mientras no reproduzcas el vídeo. Al
+          darle al play, YouTube puede guardar datos en tu navegador según su propia política de
+          privacidad.
+        </P>
+      </Seccion>
+
+      <Seccion titulo="5. Cómo revocar o eliminar las cookies">
         <P>
           Usa el panel del principio de esta página para cambiar tu decisión en cualquier momento.
           Al rechazarlas, borramos también las cookies analíticas que hubiera.

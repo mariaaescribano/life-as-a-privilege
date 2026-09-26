@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { RecorridoProgresoService } from './recorridoProgreso.service';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { CONSENTIMIENTO_SALUD, RecorridoProgresoService } from './recorridoProgreso.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Controller('recorrido-progreso')
@@ -13,6 +13,27 @@ export class RecorridoProgresoController {
   @UseGuards(JwtAuthGuard)
   async getTodo(@Req() req: any) {
     return await this.service.getTodo(req.user.userId);
+  }
+
+  // ── Consentimiento explícito para los datos de salud (art. 9 RGPD) ────────
+  // Van ANTES de las rutas con `:disciplina` para que Nest no confunda
+  // «consentimiento/salud» con «<disciplina>/avanzar».
+  @Get('consentimiento/salud')
+  @UseGuards(JwtAuthGuard)
+  async getConsentimiento(@Req() req: any) {
+    return { fecha: await this.service.getConsentimientoSalud(req.user.userId) };
+  }
+
+  @Post('consentimiento/salud')
+  @UseGuards(JwtAuthGuard)
+  async darConsentimiento(@Req() req: any) {
+    // Desde «entrar como» NO: el consentimiento solo lo puede dar la persona.
+    if (req.user?.suplantadoPor) {
+      throw new ForbiddenException('El consentimiento solo puede darlo la persona titular de la cuenta');
+    }
+    const fecha = await this.service.darConsentimientoSalud(req.user.userId);
+    if (!fecha) throw new BadRequestException('No se ha podido guardar');
+    return { fecha };
   }
 
   @Get(':disciplina')
@@ -29,6 +50,8 @@ export class RecorridoProgresoController {
     @Param('disciplina') disciplina: string,
     @Body() body: { paso?: number },
   ) {
+    // La fila del consentimiento solo se escribe por su propia ruta.
+    if (disciplina === CONSENTIMIENTO_SALUD) throw new BadRequestException('disciplina inválida');
     const paso = Number(body?.paso);
     if (!Number.isFinite(paso) || paso < 1) {
       throw new BadRequestException('paso inválido');

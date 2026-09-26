@@ -36,6 +36,12 @@ export const inputAuthStyles = {
   },
 };
 
+/** Para el <input type="date">: el icono del calendario sale negro sobre el
+ *  turquesa si no se invierte. */
+export const inputFechaSx = {
+  "&::-webkit-calendar-picker-indicator": { filter: "invert(1)", cursor: "pointer" },
+};
+
 interface Props {
   /** Texto de la etiqueta, en mayúsculas: «CONTRASEÑA», «REPETIR CONTRASEÑA»… */
   label: string;

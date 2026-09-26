@@ -68,12 +68,19 @@ const TRAJE: Record<DisciplinaClave, { txt: string; velo: string; saber: string 
 
 @Injectable()
 export class MailService {
+  // El servidor de envío sale del entorno. Sin EMAIL_HOST se sigue usando
+  // Gmail, como siempre; para pasar a un servicio con contrato de encargado
+  // (RGPD art. 28; una cuenta de Gmail personal no lo tiene), p. ej. Brevo:
+  //   EMAIL_HOST=smtp-relay.brevo.com  EMAIL_PORT=587
+  //   EMAIL_USER=<login SMTP de Brevo>  EMAIL_PASS=<clave SMTP de Brevo>
+  //   EMAIL_FROM=<el remitente verificado en Brevo>
   private getTransporter() {
     const pass = (process.env.EMAIL_PASS ?? '').replace(/\s/g, '');
+    const port = Number(process.env.EMAIL_PORT) || 465;
     return nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+      port,
+      secure: port === 465,
       auth: {
         user: process.env.EMAIL_USER,
         pass,
@@ -218,7 +225,7 @@ export class MailService {
           : undefined;
 
       await this.getTransporter().sendMail({
-        from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
+        from: `"Life as a Privilege" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
         to,
         bcc: copia,
         subject,
@@ -249,17 +256,23 @@ export class MailService {
   //     en un correo aparte a propósito: dos correos en el mismo segundo se
   //     leen como spam, y este ya lo abre todo el mundo.
   //
-  // No lleva contraseña ni token: los dos enlaces son públicos (/logIn y
-  // /contacto), así que si el correo se reenvía o se filtra no da acceso a nada.
+  // No lleva contraseña ni token de sesión. El de /logIn?confirmar= solo marca
+  // el email como comprobado: si el correo se filtra, sin la contraseña no da
+  // acceso a nada.
   // ───────────────────────────────────────────────────────────────────────────
   async enviarBienvenidaCuenta(
     email: string,
     nombre: string,
     /** Cuenta creada con Google: ahí no hay contraseña que recordar ni recuperar. */
-    opciones?: { conGoogle?: boolean },
+    opciones?: { conGoogle?: boolean; tokenConfirmacion?: string },
   ): Promise<void> {
     const frontendUrl = this.frontendUrl;
-    const enlace = `${frontendUrl}/logIn`;
+    // Con contraseña, el enlace confirma la cuenta al abrirse y deja a la
+    // persona en /logIn para que entre con su nombre/email y su contraseña.
+    const confirmar = opciones?.tokenConfirmacion;
+    const enlace = confirmar
+      ? `${frontendUrl}/logIn?confirmar=${encodeURIComponent(confirmar)}`
+      : `${frontendUrl}/logIn`;
     // `?conocernos=1` abre el calendario de los veinte minutos sin coste nada
     // más aterrizar, sin tener que buscar la tarjeta en /contacto.
     const enlaceLlamada = `${frontendUrl}/contacto?conocernos=1`;
@@ -279,13 +292,15 @@ export class MailService {
           ${saludo}
         </p>
         <p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">
-          Tu cuenta en <strong>Life as a Privilege</strong> ya está creada, y te espera.
+          ${confirmar
+            ? 'Has creado tu cuenta en <strong>Life as a Privilege</strong>. Solo falta un paso: confirma que este correo es tuyo con el botón de abajo, y ya podrás iniciar sesión.'
+            : 'Tu cuenta en <strong>Life as a Privilege</strong> ya está creada, y te espera.'}
         </p>
         <p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">
-          Te dejo aquí el enlace para entrar:
+          ${confirmar ? 'Te dejo aquí el enlace:' : 'Te dejo aquí el enlace para entrar:'}
         </p>
         <p style="margin: 28px 0;">
-          ${this.pildora(enlace, 'Iniciar sesión')}
+          ${this.pildora(enlace, confirmar ? 'Confirmar e iniciar sesión' : 'Iniciar sesión')}
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no te funciona, puedes copiar esta dirección en tu navegador:<br />
@@ -325,7 +340,7 @@ export class MailService {
     );
     await this.enviar(
       email,
-      'Tu cuenta ya está lista',
+      confirmar ? 'Confirma tu cuenta — Life as a Privilege' : 'Tu cuenta ya está lista',
       html,
       'email de bienvenida',
     );
@@ -536,6 +551,64 @@ export class MailService {
       html,
       'aviso de compra',
     );
+  }
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // CUMPLEAÑOS. Lo dispara el cron diario (cumple.service). A la persona le
+  // llega la felicitación con su enlace personal al 50 %; a la creadora, el
+  // aviso de que hoy es su cumpleaños.
+  // ───────────────────────────────────────────────────────────────────────────
+  async enviarFelicitacionCumple(email: string, nombre: string, enlace: string): Promise<void> {
+    const nombreSeguro = this.escaparHtml(nombre).trim();
+    const saludo = nombreSeguro ? `¡Feliz cumpleaños, <strong>${nombreSeguro}</strong>!` : '¡Feliz cumpleaños!';
+    const html = this.plantilla(
+      'Feliz cumpleaños',
+      `
+        <p style="font-size: 18px; line-height: 1.75; opacity: 0.95;">${saludo}</p>
+        <p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">
+          Hoy es tu día, y quería celebrarlo contigo con un regalo: <strong>un 50 % en la
+          disciplina de El Mapa que tú elijas</strong>. Se queda en <strong>15 €</strong> en
+          lugar de 30 €.
+        </p>
+        <p style="margin: 28px 0;">
+          ${this.pildora(enlace, 'Elegir mi disciplina')}
+        </p>
+        <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
+          Si el botón no te funciona, copia esta dirección en tu navegador:<br />
+          <span style="word-break: break-all;">${enlace}</span>
+        </p>
+        <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
+          El enlace es solo tuyo, vale para una disciplina y tienes siete días para usarlo.
+        </p>
+        <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+          Que tengas un año precioso.<br />Un abrazo,<br />María
+        </p>
+      `,
+    );
+    await this.enviar(email, 'Feliz cumpleaños 🎂 — un regalo para ti', html, 'felicitación de cumpleaños');
+  }
+
+  async enviarAvisoCumple(
+    email: string,
+    nombre: string,
+    datos: { edad: number | null; telefono: string | null; felicitado: boolean },
+  ): Promise<void> {
+    const html = this.plantilla(
+      'Hoy es su cumpleaños',
+      `
+        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
+          Hoy cumple${datos.edad ? ` <strong>${datos.edad}</strong> años` : ' años'}
+          <strong>${this.escaparHtml(nombre) || 'Sin nombre'}</strong>.
+        </p>
+        ${this.fichaPersona([
+          ['Nombre', nombre || '—'],
+          ['Email', email],
+          ['Teléfono', datos.telefono || '—'],
+          ['Felicitación con el 50 %', datos.felicitado ? 'enviada' : 'no (cuenta sin confirmar)'],
+        ])}
+      `,
+    );
+    await this.enviar(this.copiaAdmin, `Cumpleaños: ${nombre || email}`, html, 'aviso de cumpleaños');
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1030,7 +1103,7 @@ export class MailService {
     const to = process.env.NOTIFY_EMAIL || CARTA_ASTRAL_FALLBACK;
     try {
       await this.getTransporter().sendMail({
-        from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
+        from: `"Life as a Privilege" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
         to,
         replyTo: userEmail,
         subject: `${esCorreccion ? 'Datos corregidos' : 'Carta Astral'} de ${userEmail}`,

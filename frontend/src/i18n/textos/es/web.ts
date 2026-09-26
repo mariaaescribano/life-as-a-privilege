@@ -72,6 +72,28 @@ export const web = {
   "suscribir.error": "No se pudo enviar. Inténtalo de nuevo en un momento.",
   "suscribir.baja": "Puedes darte de baja cuando quieras",
 
+  // ── Información básica de protección de datos (art. 13 RGPD) ──────────
+  // Va debajo de cada formulario que recoge datos; el detalle, en /privacidad.
+  "privacidad.infoSuscripcion":
+    "María Escribano usará tu email solo para avisarte de novedades, con tu consentimiento. No se cede a nadie. Puedes acceder, rectificar o borrar tus datos escribiendo a darkcake141@gmail.com. Más en la",
+  "privacidad.infoRegistro":
+    "Al registrarte confirmas que tienes 18 años o más y aceptas los términos de uso. María Escribano trata tus datos para gestionar tu cuenta y tu recorrido; no se ceden a nadie salvo a los proveedores que hacen funcionar la web. Puedes acceder, rectificar o borrar tus datos (también borrar tu cuenta desde tu perfil). Más en la",
+  "privacidad.infoOpinion":
+    "Tu nombre y tu reseña se publicarán en esta página; el email es opcional, nunca se publica y solo sirve para poder contestarte. Si quieres retirarla, escribe a darkcake141@gmail.com. Más en la",
+  "privacidad.enlace": "política de privacidad",
+
+  // ── Consentimiento de salud (PuertaConsentimientoSalud) ────────────────
+  "consentimiento.titulo": "Antes de seguir",
+  "consentimiento.texto":
+    "En el recorrido vas a escribir cosas sobre ti, y algunas pueden revelar datos sobre tu salud física o emocional. La ley exige que des tu permiso de forma expresa para poder guardarlas. Solo hace falta una vez.",
+  "consentimiento.casilla":
+    "Consiento expresamente que se guarden los textos y respuestas que escriba dentro del recorrido, incluidos los que revelen datos sobre mi salud física o emocional, y autorizo a María Escribano a leerlos con la única finalidad de acompañarme y preparar mis lecturas personalizadas.",
+  "consentimiento.nota":
+    "No se comparten con nadie más ni se usan para ninguna otra cosa. Puedes retirar este permiso cuando quieras desde Contacto, y borrar tu cuenta con todo lo escrito desde tu perfil.",
+  "consentimiento.boton": "Dar mi permiso",
+  "consentimiento.volver": "Ahora no",
+  "consentimiento.error": "No se ha podido guardar. Prueba otra vez en un momento.",
+
   // ── Aviso de cookies (la barra de abajo, no la página legal) ───────────
   "cookies.aviso":
     "Usamos cookies propias necesarias para que la web funcione y para mantener tu sesión iniciada. Nos gustaría usar también cookies de Google Analytics para entender cómo se usa el sitio y mejorarlo, pero **solo si tú lo autorizas**.",

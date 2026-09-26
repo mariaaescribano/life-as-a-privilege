@@ -245,6 +245,27 @@ export default function AdminTodosUsuarios() {
                       >
                         Diario
                       </Box>
+                      {/* Qué recursos gratuitos ha abierto: lo que le interesa,
+                          para los emails semanales. */}
+                      <Box
+                        as="button"
+                        onClick={() => navigate(`/admin/actividad/${u.id}`, { state: { name: u.name, email: u.email } })}
+                        px={3}
+                        py="5px"
+                        borderRadius="full"
+                        bg="rgba(255,255,255,0.1)"
+                        border="1px solid rgba(255,255,255,0.4)"
+                        color="white"
+                        fontSize="xs"
+                        fontWeight="600"
+                        whiteSpace="nowrap"
+                        cursor="pointer"
+                        transition="all 0.15s"
+                        _hover={{ bg: "rgba(255,255,255,0.2)", borderColor: "white", transform: "translateY(-1px)" }}
+                        title={`Qué ha visto ${u.name}`}
+                      >
+                        Intereses
+                      </Box>
                       {/* Ver la web como ella: su sesión de verdad, no una copia
                           de solo lectura. Al entrar sale la barra para volver. */}
                       <BotonEntrarComo usuario={u} />

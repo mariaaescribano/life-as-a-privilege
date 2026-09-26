@@ -38,6 +38,23 @@ export class PaymentController {
     return await this.paymentService.verifyDisciplinaLink(sessionId, req.user.userId);
   }
 
+  // ── Regalo de cumpleaños (50 %) ─────────────────────────────────────────
+  // El token es el del enlace del correo de felicitación; el servicio comprueba
+  // que es de esta cuenta, que no ha caducado y que no se ha gastado ya.
+  @Get('cumple/estado')
+  @UseGuards(JwtAuthGuard)
+  async estadoCumple(@Req() req: any, @Query('t') token: string) {
+    if (!token) throw new BadRequestException('Falta el enlace del regalo');
+    return await this.paymentService.estadoCumple(token, req.user.userId);
+  }
+
+  @Post('cumple/checkout')
+  @UseGuards(JwtAuthGuard)
+  async createCumpleCheckout(@Req() req: any, @Body() body: { token?: string; scope?: string }) {
+    if (!body?.token || !body?.scope) throw new BadRequestException('Faltan datos');
+    return await this.paymentService.createCumpleCheckout(body.token, body.scope as any, req.user.userId);
+  }
+
   @Post('metodo/checkout')
   @UseGuards(JwtAuthGuard)
   async createMetodoCheckout(@Req() req: any) {

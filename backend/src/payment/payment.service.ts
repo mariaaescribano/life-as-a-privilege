@@ -5,6 +5,7 @@ import { BookingService } from '../booking/booking.service';
 import { findLibroPago } from './libros-pago.data';
 import { findLlamadaPago } from './llamadas-pago.data';
 import { MailService } from '../mail/mail.service';
+import { leerTokenCumple, PRECIO_CUMPLE_CENTIMOS } from '../auth/cumple.util';
 
 /** Los ocho scopes de «El Recorrido», en orden. */
 export type DisciplinaScope =
@@ -183,6 +184,79 @@ export class PaymentService {
     // cobrado, así que negar el acceso por orden sería lo peor de los dos mundos.
     // El orden se hace cumplir ANTES, al crear el checkout.
     await this.conceder(ref.scope, ref.userId, origen);
+    await this.gastarDescuentoCumple(session);
+  }
+
+  // ═════════════════════════════════════════════════════════════════════════
+  // REGALO DE CUMPLEAÑOS: una disciplina a 15 € en vez de 30 €
+  //
+  // Solo desde el enlace del correo de felicitación: el token va firmado, es de
+  // esa cuenta y caduca en siete días. No hay Payment Link de 15 € a propósito
+  // (una URL fija se podría reenviar). El checkout se crea aquí con el importe
+  // y la vuelta es la misma que la del Payment Link de siempre
+  // (/home?disciplina_pagada=...), porque lleva el mismo client_reference_id.
+  // ═════════════════════════════════════════════════════════════════════════
+
+  /** Comprueba el token para esta cuenta. Devuelve el año o el motivo del no. */
+  private async validarCumple(token: string, userId: string):
+    Promise<{ ok: true; anio: number } | { ok: false; motivo: 'invalido' | 'otra-cuenta' | 'caducado' | 'usado' }> {
+    const p = leerTokenCumple(token);
+    if (!p) return { ok: false, motivo: 'invalido' };
+    if (p.uid !== userId) return { ok: false, motivo: 'otra-cuenta' };
+    if (Date.now() > p.exp) return { ok: false, motivo: 'caducado' };
+    const usado = await this.userService.getCumpleDescuentoUsado(userId);
+    if (usado === p.anio) return { ok: false, motivo: 'usado' };
+    return { ok: true, anio: p.anio };
+  }
+
+  /** Para la página /cumple: si el regalo vale y qué disciplinas le faltan. */
+  async estadoCumple(token: string, userId: string) {
+    const v = await this.validarCumple(token, userId);
+    if (!v.ok) return { valido: false as const, motivo: v.motivo };
+    const user = (await this.userService.getUserById(userId)) as any;
+    const pendientes = (Object.keys(DISCIPLINAS) as DisciplinaScope[]).filter((k) => !user?.[`${k}_suscrito`]);
+    return { valido: true as const, disciplinas: pendientes, precio: PRECIO_CUMPLE_CENTIMOS / 100 };
+  }
+
+  async createCumpleCheckout(token: string, scope: DisciplinaScope, userId: string) {
+    const def = DISCIPLINAS[scope];
+    if (!def) throw new BadRequestException('Disciplina desconocida');
+    const v = await this.validarCumple(token, userId);
+    if (!v.ok) throw new ForbiddenException(`El regalo de cumpleaños no se puede usar (${v.motivo})`);
+    const user = (await this.userService.getUserById(userId)) as any;
+    if (user?.[`${scope}_suscrito`]) throw new ConflictException(`Ya tienes ${def.nombre}`);
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const session = await this.stripe.checkout.sessions.create({
+      mode: 'payment',
+      ...this.metodosDePago(),
+      line_items: [
+        {
+          price_data: {
+            currency: 'eur',
+            product_data: { name: `${def.nombre} — regalo de cumpleaños (50 %)` },
+            unit_amount: PRECIO_CUMPLE_CENTIMOS,
+          },
+          quantity: 1,
+        },
+      ],
+      client_reference_id: `${scope}__${userId}`,
+      metadata: { userId, scope, cumpleAnio: String(v.anio) },
+      // Media hora para pagar: así no quedan checkouts de 15 € abiertos días.
+      expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
+      success_url: `${frontendUrl}/home?disciplina_pagada={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${frontendUrl}/cumple?t=${encodeURIComponent(token)}`,
+    });
+    if (!session.url) throw new BadRequestException('Stripe no devolvió URL de checkout');
+    return { url: session.url };
+  }
+
+  /** Si la sesión pagada era la del cumpleaños, el regalo queda gastado. */
+  private async gastarDescuentoCumple(session: Stripe.Checkout.Session) {
+    const anio = Number(session.metadata?.cumpleAnio);
+    const userId = session.metadata?.userId;
+    if (!anio || !userId || session.payment_status !== 'paid') return;
+    await this.userService.marcarCumpleDescuentoUsado(userId, anio);
   }
 
   /**
@@ -847,6 +921,7 @@ export class PaymentService {
     // Idempotente: si el verify se repite (recarga de /home), solo re-marca el
     // flag — los correos de `conceder` salen una única vez.
     await this.conceder(scope, userId, 'verify:link');
+    await this.gastarDescuentoCumple(session);
     return { ok: true as const, scope, nombre: def.nombre };
   }
 

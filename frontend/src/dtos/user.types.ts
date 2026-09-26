@@ -16,6 +16,10 @@ export type CreateUser = {
   password: string;
   /** Opcional: quien no lo elija se registra igual. */
   trato?: Trato | null;
+  /** Opcionales. */
+  telefono?: string | null;
+  /** 'YYYY-MM-DD' (lo que da un <input type="date">). */
+  fecha_nacimiento?: string | null;
 };
 
 export type LoginUser = {

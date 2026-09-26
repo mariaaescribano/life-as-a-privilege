@@ -15,7 +15,7 @@
 // escribe la ficha de cada persona: los dos leen y escriben data.genograma.
 // El dibujo del mapa es el componente común GenogramaMapa.
 // ─────────────────────────────────────────────────────────────────────────
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -78,7 +78,25 @@ export default function MetodoPsicologiaFamilia() {
   // Las viñetas en el idioma activo (el español manda: fotos y orden salen de él).
   const comicVinetas = useComic("psicologia-herencia", COMIC_HERENCIA);
 
-  if (loading) return <PsicologiaLoading />;
+  // La página no se enseña hasta que estén cargadas TODAS las fotos que pinta
+  // el mapa (si las hay): la suya del centro, la de cada familiar y los
+  // personajes/animales elegidos. Si no, entraban a trozos.
+  const fotosMapa = useImagesReady(
+    loading
+      ? []
+      : [
+          miFoto,
+          ...personas.map((p) => p.foto),
+          ...personas.flatMap((p) => personaSimbolos(p).map((k) => simboloSrc(k))),
+        ],
+  );
+
+  // Solo la PRIMERA vez: si luego añade a alguien o elige un personaje, la
+  // página ya está a la vista y no vuelve a la pantalla de carga.
+  const yaMostrada = useRef(false);
+  if (!loading && fotosMapa) yaMostrada.current = true;
+
+  if (!yaMostrada.current) return <PsicologiaLoading />;
   if (!exp) return null;
 
   const ir = async (ruta: string) => {

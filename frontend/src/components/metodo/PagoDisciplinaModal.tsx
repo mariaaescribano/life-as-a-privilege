@@ -12,6 +12,7 @@ import {
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { PRECIO_DISCIPLINA, PRECIO_DISCIPLINA_ANTES } from "./pagoDisciplinaLink";
 import { PrecioConAntes } from "./PrecioConAntes";
+import { darConsentimientoSalud } from "../../api/consentimientoSalud";
 import {
   ayurvedaNom, AyurvedaIcon,
   tcmNom, TCMIcon,
@@ -70,7 +71,7 @@ interface BaseProps extends PagoDisciplinaModalProps {
  * cualquiera que haya marcado una casilla alguna vez. Los enlaces de dentro
  * paran el clic con `stopPropagation` para no marcarla al abrirlos.
  */
-function Casilla({
+export function Casilla({
   marcada,
   onToggle,
   bg,
@@ -274,7 +275,13 @@ export function PagoDisciplinaModal({
             <Flex justify="center" mt={3} gap={4} wrap="wrap">
               <Box
                 as="button"
-                onClick={loading || !listo ? undefined : onPagar}
+                onClick={loading || !listo ? undefined : async () => {
+                  // Se apunta ANTES de salir hacia Stripe: es la prueba de que
+                  // lo dio (art. 7.1 RGPD). Si falla, se pide otra vez al entrar
+                  // (PuertaConsentimientoSalud), así que no frena el pago.
+                  await darConsentimientoSalud();
+                  onPagar();
+                }}
                 px={10}
                 py={3}
                 borderRadius="full"

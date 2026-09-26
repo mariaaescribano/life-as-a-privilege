@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
+import { FlechaBonita } from "../global/FlechaBonita";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
-import { astrologiaNom, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
+import { astrologiaNom, astrologiaTxt, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { Float } from "../global/Reveal";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
@@ -26,22 +27,23 @@ interface StepButton {
   btnColor?: string;
   /** Fondo sólido propio del botón (p.ej. el bg de la disciplina de destino). */
   btnBg?: string;
+  /** Nombre para lectores de pantalla cuando el botón no lleva texto visible. */
+  ariaLabel?: string;
 }
 
-/** Flecha SVG (chevron) para los botones prev/next del header. */
-const ArrowIcon = ({ dir }: { dir: "prev" | "next" }) => (
-  <Box
-    as="svg"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 -960 960 960"
-    w={{ base: "15px", md: "17px" }}
-    h={{ base: "15px", md: "17px" }}
-    fill="currentColor"
-    flexShrink={0}
-    style={{ transform: dir === "prev" ? "scaleX(-1)" : undefined }}
-  >
-    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+/** El marco de foto de ILUSTRACIONES (el mismo de la portada y /materiales). */
+const IconoIlustraciones = ({ color }: { color: string }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+       w={{ base: "22px", md: "24px" }} h={{ base: "22px", md: "24px" }} fill={color} flexShrink={0} display="block">
+    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z" />
   </Box>
+);
+
+/** Flecha de los botones prev/next del header: SOLO en el móvil, donde el
+ *  botón se queda sin nombre. En el ordenador no sale (el botón ya dice a
+ *  dónde va con su nombre), y nunca es el chevron «‹ ›». */
+const ArrowIcon = ({ dir }: { dir: "prev" | "next" }) => (
+  <FlechaBonita dir={dir} size="24px" grosor={1.8} display={{ base: "block", md: "none" }} />
 );
 
 /** Glow del box del header cuando lleva el fondo de la disciplina (Astrología,
@@ -108,7 +110,7 @@ interface MetodoStepHeaderProps {
   dense?: boolean;
 }
 
-const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, dense, arrow, btnColor, btnBg, soloFlecha }: StepButton & { color: string; bgColor: string; whiteBg?: boolean; soloFlecha?: "prev" | "next" }) => {
+const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, whiteBg, small, dense, arrow, btnColor, btnBg, soloFlecha, ariaLabel }: StepButton & { color: string; bgColor: string; whiteBg?: boolean; soloFlecha?: "prev" | "next" }) => {
   // Colores efectivos: si el botón trae los suyos (p.ej. lleva a otra disciplina),
   // mandan sobre los del header. `c` = texto/borde; `fillBg` = fondo.
   const c = btnColor ?? color;
@@ -171,7 +173,7 @@ const StepBtn = ({ label, color, onClick, disabled, icon, disabledTooltip, white
       }}
       // Sin texto visible, el botón se queda mudo para los lectores de pantalla:
       // se le pone de nombre la etiqueta que llevaba (sin la flecha del texto).
-      aria-label={soloFlecha && typeof label === "string" ? label.replace(/[←→]/g, "").trim() || undefined : undefined}
+      aria-label={ariaLabel ?? (soloFlecha && typeof label === "string" ? label.replace(/[←→]/g, "").trim() || undefined : undefined)}
       whiteSpace="nowrap"
       overflow="hidden"
       textOverflow="ellipsis"
@@ -279,6 +281,13 @@ export function MetodoStepHeader({
   // El botón "Cursos" de Psicología puede ocultarse en páginas concretas.
   const showPsicoCursos = isPsico && !hideCursos;
   const [cursosOpen, setCursosOpen] = useState(false);
+  // Astrología: el botón «Ilustraciones» es solo el icono de la foto, en el
+  // color de letra de la disciplina y centrado. Se reconoce igual en el móvil,
+  // donde la palabra no cabía. Lo decide el header (no cada página), así que
+  // las páginas siguen pasando su `label` de siempre, que queda de aria-label.
+  const extraFinal = extra && headerNom === astrologiaNom && extra.label === t("metodo.ilustraciones")
+    ? { ...extra, label: <IconoIlustraciones color={astrologiaTxt} />, ariaLabel: t("metodo.ilustraciones"), icon: undefined }
+    : extra;
   // ── MÓVIL: los botones de paso van SIN nombre, solo la flecha ──────────
   // En el móvil la fila de botones no cabe: «← Los elementos» + «Planetas →»
   // se estrujaban hasta quedar en dos etiquetas ilegibles pegadas. De md hacia
@@ -476,7 +485,7 @@ export function MetodoStepHeader({
             wrap="nowrap"
           >
             {prev && <StepBtn {...prev} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={prev.arrow ?? "prev"} />}
-            {extra && <StepBtn {...extra} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
+            {extraFinal && <StepBtn {...extraFinal} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {extra2 && <StepBtn {...extra2} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {showPsicoCursos && <StepBtn label={t("header.cursos")} onClick={() => setCursosOpen(true)} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} />}
             {next && <StepBtn {...next} dense={dense} color={color} bgColor={bgColor} whiteBg={btnWhiteBg} soloFlecha={next.arrow ?? "next"} />}

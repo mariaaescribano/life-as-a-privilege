@@ -321,15 +321,15 @@ export const metodo = {
   "metodo.astro.puntosClavePronto": "Tus puntos clave aparecerán aquí muy pronto.",
   "metodo.astro.llamadaIntro":
     "Haz las paces contigo. Agenda una llamada y no te quedes con dudas. Todo lo que has descubierto son partes de ti. Ahora, intégralas.",
-  "metodo.astro.pdfIntro": "Tu lectura entera, en un archivo que ya es tuyo para siempre.",
+  "metodo.astro.pdfIntro": "Tu carta astral entera, en un archivo que ya es tuyo para siempre.",
   "metodo.astro.pdfTitular": "Toda tu carta, página a página",
   "metodo.astro.pdfSinLecturas":
     "Tu carta todavía no tiene lecturas escritas. En cuanto estén, aquí podrás descargarla completa.",
   "metodo.astro.pdfDescargado":
     "Descargado. Si no lo ves, mira en la carpeta de descargas de tu navegador.",
   "metodo.astro.pdfAviso":
-    "Se monta en tu propio dispositivo, así que puede tardar unos segundos y conviene no cerrar la página mientras avanza.",
-  "metodo.astro.releer": "Releer",
+   "No cierres la página hasta que no se haya descargado.",
+   "metodo.astro.releer": "Releer",
 
   // ── Astrología · «Lo primero de tu carta» (Sol · Luna · Ascendente) ────
   "metodo.astro.trioIntro":
@@ -343,9 +343,9 @@ export const metodo = {
 
   // ── Astrología · «Arquetipos» (la rueda de la carta) ───────────────────
   "metodo.astro.arquetiposQueEs1":
-    "Ya sabes qué Planetas viven en tu carta. Aquí los recorres uno a uno, profundizando en lo que cada uno significa en ti.",
+    "Tu carta astral de nacimiento completa.",
   "metodo.astro.arquetiposQueEs2":
-    "Léelos sin prisa: mientras tú avanzas, yo estoy acabando de escribir tu carta.",
+    "Lee cada Planeta sin prisa. Cada uno de ellos es un conjunto de características, capacidades, dones y conflictos que habitan en ti.",
   "metodo.astro.leeTodosLosPlanetas": "Lee todos los planetas antes de continuar",
   "metodo.astro.cartaEnLectura":
     "Estoy leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada.",
@@ -382,7 +382,7 @@ export const metodo = {
   // ── El tercer cómic de la entrada: «¿Qué es una carta astral?» ──
   // ── Volver a los datos desde «Lo primero de tu carta» ──
   "metodo.astro.comicPlanetas": "Planetas",
-  "metodo.astro.corregirAviso": "¿No te reconoces en tu Sol, tu Luna o tu Ascendente? Casi siempre es la hora o el lugar de nacimiento. Corrígelos y tu carta se calcula de nuevo.",
+  "metodo.astro.corregirAviso": "¿Crees que hay algún error? Casi siempre es la hora o el lugar de nacimiento.",
   "metodo.astro.corregirDatos": "Corregir mis datos de nacimiento",
   "metodo.astro.queEsCarta": "¿Qué es una carta astral?",
   "metodo.astro.queEsCartaResumen": "Dónde están tus mayores capacidades, tus dones, tus dificultades y cuál es el propósito de tu Vida. También tus heridas más profundas y dónde fueron creadas.",
@@ -1122,7 +1122,7 @@ export const metodo = {
   "metodo.psico.cerebroContinuar": "Ver qué pasó en tu cerebro",
 
   // ── Paso 7 · El trauma en tu cerebro ──
-  "metodo.psico.cerebroIntro": "Cómo se guardó en tu cerebro lo que viviste.",
+  "metodo.psico.cerebroIntro": "Cómo se guardó lo que viviste.",
   "metodo.psico.cerebroToca": "Toca cada zona para leer qué hace, qué le pasó y qué la cambia.",
   "metodo.psico.cerebroParaQue": "Para qué sirve",
   "metodo.psico.cerebroQueLeHizo": "Qué le hizo lo que viviste",
@@ -1539,7 +1539,7 @@ export const metodo = {
   "metodo.cultura.apuntes.momentos": "{n} momentos",
 
   // ── Pago de una disciplina ─────────────────────────────────────────────
-  "metodo.pago.precioReducido": "Aprovecha que está en un precio reducido",
+  "metodo.pago.precioReducido": "Ahora a precio reducido",
   "metodo.pago.ahoraNo": "Ahora no",
   "metodo.pago.stripe": "Pago seguro a través de Stripe",
   // Las dos casillas del box de pago. La segunda es un permiso aparte: para
@@ -1547,10 +1547,8 @@ export const metodo = {
   // y eso se pide, no se da por supuesto.
   "metodo.pago.acepto": "Acepto las",
   "metodo.pago.condicionesEnlace": "condiciones de compra",
-  "metodo.pago.autorizo":
-    "Autorizo a María Escribano a acceder a los textos y respuestas que escriba dentro del recorrido, con la finalidad de acompañarme y preparar mis lecturas personalizadas.",
-  "metodo.pago.autorizoNota":
-    "No se comparten con nadie más ni se usan para ninguna otra cosa. Puedes retirar esta autorización cuando quieras desde Contacto.",
+  "metodo.pago.autorizo": "Consiento que se guarde lo que escriba en el recorrido, también datos de mi salud, y que María Escribano lo lea solo para acompañarme.",
+  "metodo.pago.autorizoNota": "Nadie más lo ve. Puedes retirarlo cuando quieras desde Contacto.",
   "metodo.pago.realizado": "Pago de {disciplina} realizado",
   "metodo.pago.yaPuedes": "Ya puedes acceder.",
 
@@ -1568,20 +1566,12 @@ export const metodo = {
   "metodo.pago.ordinal.8": "Octava disciplina",
 
   // Resumen de cada disciplina en su box de pago.
-  "metodo.pago.resumen.astrologia":
-    "Empieza el mapa con tu carta natal: descubre tus puntos clave, tus dones y tus conflictos. Encuentra dónde nacieron tus heridas y qué arquetipos te habitan.",
-  "metodo.pago.resumen.psicologia":
-    "Continúa el Mapa con Psicología: reconstruye tu historia y comprende cómo se fue construyendo tu mente, recorriendo tus vínculos, tus etapas y tus heridas.",
-  "metodo.pago.resumen.ayurveda":
-    "Continúa el Mapa con el Hinduismo: descubre tu Doṣha —tu constitución— y la naturaleza que te define, y aprende a comer, moverte y descansar de acuerdo con ella.",
-  "metodo.pago.resumen.tcm":
-    "Continúa el Mapa con la Medicina China: descubre cómo los Cinco Elementos y sus ciclos te habitan, y lee las señales de tu cuerpo antes de que se conviertan en síntoma.",
-  "metodo.pago.resumen.fisiologia":
-    "Continúa el Mapa con la Fisiología: viaja desde las partículas que te forman hasta el milagro de ser un cuerpo vivo, conoce tus células y tus sistemas y redescúbrete como el ser complejo y fascinante que eres.",
-  "metodo.pago.resumen.nutricion":
-    "Continúa el Mapa con la Nutrición: descubre qué hay más allá de lo que comes cada día y nútrete con lo que de verdad te reconstruye. Recuerda cómo no destruirte con los alimentos.",
-  "metodo.pago.resumen.cabala":
-    "Adéntrate en la Cábala y recorre el Árbol de la Vida: descubre las diez sefirot que te habitan, los 22 senderos de la consciencia y aprende a reconocer en ti esas fuerzas para vivir desde tu esencia.",
-  "metodo.pago.resumen.cultura":
-    "Cierra El Mapa recorriendo la Historia de la Filosofía, la Medicina, la Religión y la cultura general: recuerda de dónde venimos para entender dónde estamos y poder crear un futuro más bonito.",
+  "metodo.pago.resumen.astrologia": "Tu carta natal: tus dones, tus conflictos y dónde nacieron tus heridas.",
+  "metodo.pago.resumen.psicologia": "Reconstruye tu historia y entiende cómo se formó tu mente.",
+  "metodo.pago.resumen.ayurveda": "Descubre tu Doṣha y aprende a comer, moverte y descansar según él.",
+  "metodo.pago.resumen.tcm": "Los Cinco Elementos en ti y las señales de tu cuerpo.",
+  "metodo.pago.resumen.fisiologia": "De las partículas a tus células y sistemas: tu cuerpo por dentro.",
+  "metodo.pago.resumen.nutricion": "Qué hay detrás de lo que comes y cómo nutrirte de verdad.",
+  "metodo.pago.resumen.cabala": "Recorre el Árbol de la Vida y reconoce en ti sus sefirot.",
+  "metodo.pago.resumen.cultura": "Filosofía, medicina y religión: de dónde venimos.",
 } as const;

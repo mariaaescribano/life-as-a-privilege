@@ -10,8 +10,10 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { CreateUser, Trato } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
-import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
+import { CampoContrasena, inputAuthStyles, inputFechaSx } from "../../components/global/CampoContrasena";
 import { useT } from "../../i18n";
+import { MiraTuCorreoModal } from "../../components/global/MiraTuCorreoModal";
+import { InfoPrivacidad } from "../../components/global/InfoPrivacidad";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -92,7 +94,6 @@ export default function SignIn() {
   const t = useT();
   const [params] = useSearchParams();
   const next = params.get("next") || "/home";
-  const destinoRef = useRef<string>(next);
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -103,8 +104,13 @@ export default function SignIn() {
   const [contra2, setContra2] = useState<string>("");
   // Cómo prefiere que se le hable. null = no lo ha elegido (es opcional).
   const [trato, setTrato] = useState<Trato | null>(null);
+  // Opcionales: teléfono y fecha de nacimiento (para el regalo de cumpleaños).
+  const [telefono, setTelefono] = useState<string>("");
+  const [fechaNacimiento, setFechaNacimiento] = useState<string>("");
   const [message, setMessage] = useState<SuccessErrorMessageDto | null>(null);
   const [loading, setLoading] = useState(false);
+  // Cuenta creada: ya no se entra directamente, hay que confirmar desde el correo.
+  const [correoEnviadoA, setCorreoEnviadoA] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const formReveal = useReveal(0.1);
 
@@ -117,35 +123,24 @@ export default function SignIn() {
   const registrar = async () => {
     setLoading(true);
     try {
-      const body: CreateUser = { name, email, password: contra, trato };
+      const body: CreateUser = {
+        name,
+        email,
+        password: contra,
+        trato,
+        telefono: telefono.trim() || null,
+        fecha_nacimiento: fechaNacimiento || null,
+      };
 
       const response = await axios.post(`${API_URL}/user/signIn`, body, {
         headers: { "Content-Type": "application/json" },
       });
 
+      // El registro ya no devuelve sesión: la cuenta se activa con el enlace
+      // del correo y luego se entra por /logIn con nombre/email y contraseña.
       if (response.data != null) {
-        localStorage.setItem("userId", response.data.user.id);
-        localStorage.setItem("name", response.data.user.name);
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("img", "/img/icono/noImg.webp");
-
-        // Si el email es de admin, hace falta la contraseña de administración:
-        // lo mandamos a la pantalla de desbloqueo (estar en la lista no basta).
-        try {
-          const me = await axios.get(`${API_URL}/user/me`, {
-            headers: { Authorization: `Bearer ${response.data.token}` },
-          });
-          localStorage.removeItem("isAdmin");
-          if (me.data?.admin_email && next === "/home") {
-            destinoRef.current = "/admin/login";
-          }
-        } catch { /* destino normal */ }
-
-        setMessage({
-          soy: 1,
-          title: t("auth.signin.creada"),
-          description: t("auth.signin.creadaTexto"),
-        });
+        setMessage(null);
+        setCorreoEnviadoA(response.data.email ?? email.trim());
       }
     } catch (err: any) {
       setMessage(gestionaError(err));
@@ -171,6 +166,14 @@ export default function SignIn() {
       });
       return;
     }
+    if (telefono.trim() && !/^\+?\d{6,15}$/.test(telefono.replace(/[\s().-]/g, ""))) {
+      setMessage({
+        soy: 2,
+        title: t("auth.error.telefonoInvalido"),
+        description: t("auth.error.telefonoCorrecto"),
+      });
+      return;
+    }
     if (contra.length < 4) {
       setMessage({
         soy: 2,
@@ -190,16 +193,9 @@ export default function SignIn() {
     registrar();
   };
 
-  useEffect(() => {
-    if (message?.soy === 1) {
-      const timer = setTimeout(() => navigate(destinoRef.current, { replace: true }), 1800);
-      return () => clearTimeout(timer);
-    }
-  }, [message]);
-
   // Bloquea el botón mientras carga Y también cuando ya se ha creado la cuenta
-  // (mensaje de éxito visible): así no se puede volver a pulsar antes de redirigir.
-  const bloqueado = loading || message?.soy === 1;
+  // (popup visible): así no se puede registrar dos veces.
+  const bloqueado = loading || correoEnviadoA !== null;
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -314,6 +310,38 @@ export default function SignIn() {
             />
           </Box>
 
+          <Box>
+            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              {t("auth.campo.telefono")}
+            </Text>
+            <Input
+              type="tel"
+              autoComplete="tel"
+              placeholder="+34 600 000 000"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+              {...inputStyles}
+            />
+          </Box>
+
+          <Box>
+            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+              {t("auth.campo.fechaNacimiento")}
+            </Text>
+            <Input
+              type="date"
+              autoComplete="bday"
+              max={new Date().toISOString().slice(0, 10)}
+              value={fechaNacimiento}
+              onChange={(e) => setFechaNacimiento(e.target.value)}
+              {...inputStyles}
+              sx={inputFechaSx}
+            />
+            <Text color="rgba(255,255,255,0.72)" fontSize="sm" mt={2} textAlign="center" lineHeight="1.5">
+              {t("auth.signin.fechaRegalo")}
+            </Text>
+          </Box>
+
           <CampoContrasena
             label={t("auth.campo.contrasena")}
             value={contra}
@@ -399,6 +427,9 @@ export default function SignIn() {
             </Flex>
           </Flex>
 
+          {/* Información básica de protección de datos (art. 13 RGPD). */}
+          <InfoPrivacidad tipo="registro" mt={0} />
+
           {/* Link a iniciar sesión */}
           <Flex justify="center" pt={2}>
             <Text
@@ -422,6 +453,15 @@ export default function SignIn() {
       </Box>
 
       <SiteFooter />
+
+      <MiraTuCorreoModal
+        isOpen={correoEnviadoA !== null}
+        email={correoEnviadoA ?? ""}
+        onAceptar={() => navigate(
+          `/logIn?pendiente=1${next !== "/home" ? `&next=${encodeURIComponent(next)}` : ""}`,
+          { replace: true },
+        )}
+      />
     </Box>
   );
 }

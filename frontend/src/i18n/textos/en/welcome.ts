@@ -1,7 +1,6 @@
 export const welcome = {
   "welcome.subtitulo": "A map of eight disciplines to understand yourself, weaving science and tradition together.",
   "welcome.explorar": "Explore",
-  "welcome.mapa.cta": "Discover The Map",
   "welcome.explorarDisciplina": "Explore discipline",
   "welcome.modal.cuenta": "Create an account or log in",
   "welcome.modal.iniciarSesion": "Log in →",

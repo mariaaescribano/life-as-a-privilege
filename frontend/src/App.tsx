@@ -47,6 +47,7 @@ const Productos = lazy(() => import("./app/web/Productos"));
 const LibrosPage = lazy(() => import("./app/web/LibrosPage"));
 const DescargarLibroPage = lazy(() => import("./app/web/DescargarLibroPage"));
 const Contacto = lazy(() => import("./app/web/Contacto"));
+const CumpleRegalo = lazy(() => import("./app/web/CumpleRegalo"));
 const ContactoFormulario = lazy(() => import("./app/web/ContactoFormulario"));
 const Opiniones = lazy(() => import("./app/web/Opiniones"));
 const ElMetodo = lazy(() => import("./app/web/ElMetodo"));
@@ -87,6 +88,7 @@ const AdminAccesos = lazy(() => import("./app/admin/AdminAccesos"));
 const AdminVideos = lazy(() => import("./app/admin/AdminVideos"));
 const AdminSuscriptores = lazy(() => import("./app/admin/AdminSuscriptores"));
 const AdminDiario = lazy(() => import("./app/admin/AdminDiario"));
+const AdminActividad = lazy(() => import("./app/admin/AdminActividad"));
 const NoEncontrada = lazy(() => import("./app/web/NoEncontrada"));
 const MetodoPsicologia = lazyConMetodo(() => import("./app/metodo/MetodoPsicologia"));
 const MetodoPsicologiaProblema = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaProblema"));
@@ -219,6 +221,8 @@ import AvisoCookies from "./components/global/AvisoCookies";
 // Solo se pinta si la admin ha «entrado como» otra persona (api/suplantar.ts).
 import BarraSuplantacion from "./components/global/BarraSuplantacion";
 import { MigaDelMapa } from "./components/global/VolverAlMapa";
+import { GuardiaPagoRecorrido } from "./components/global/GuardiaPagoRecorrido";
+import { RegistroActividad } from "./components/global/RegistroActividad";
 // Pantalla de espera mientras se descarga el trozo de código de cada página.
 // Va EAGER a propósito: es justo lo que hay que poder pintar antes de que llegue
 // lo demás.
@@ -231,10 +235,24 @@ function ScrollToTop() {
   return null;
 }
 
+// Consentimiento de salud (art. 9 RGPD) para quien entra al recorrido sin haber
+// pasado por la casilla del pago. Lazy: no tiene que viajar en el paquete de entrada.
+const PuertaConsentimientoSalud = lazy(() => import("./components/global/PuertaConsentimientoSalud"));
+
 function PrivateRoute({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
   const userId = localStorage.getItem("userId");
   if (!userId) return <Navigate to="/welcome" replace />;
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      {pathname.startsWith("/metodo") && (
+        <Suspense fallback={null}>
+          <PuertaConsentimientoSalud />
+        </Suspense>
+      )}
+    </>
+  );
 }
 
 // Todo el panel de administración se ve un 20% más grande. Vive AQUÍ, en el
@@ -286,6 +304,10 @@ export default function App()
     {/* Apunta por dónde va el usuario dentro del Mapa, para que los cursos y
         los materiales puedan devolverle exactamente a ese paso. */}
     <MigaDelMapa />
+    {/* Sin pagar no se entra en una disciplina: vuelve a /home y sale su pago. */}
+    <GuardiaPagoRecorrido />
+    {/* Apunta qué recursos gratuitos abre quien tiene cuenta (para los emails). */}
+    <RegistroActividad />
     <ExitIntentSubscribeModal />
     <MiniDiario />
     <AvisoCookies />
@@ -330,6 +352,9 @@ export default function App()
       <Route path="/libros" element={<LibrosPage />} />
       <Route path="/libros/descargar" element={<DescargarLibroPage />} />
       <Route path="/contacto" element={<Contacto />} />
+      {/* El botón del correo de cumpleaños. Sin PrivateRoute: la página misma
+          manda a /logIn con ?next= para volver aquí con el enlace. */}
+      <Route path="/cumple" element={<CumpleRegalo />} />
       {/* El formulario, en su propia página: se llega desde la tarjeta «Escríbeme». */}
       <Route path="/contacto/escribir" element={<ContactoFormulario />} />
       <Route path="/opiniones" element={<Opiniones />} />
@@ -381,6 +406,7 @@ export default function App()
       <Route path="/admin/suscriptores" element={<AdminRoute><AdminSuscriptores /></AdminRoute>} />
       {/* Antes de /admin/:disciplina/:userId, que si no se tragaria «diario» como disciplina. */}
       <Route path="/admin/diario/:userId" element={<AdminRoute><AdminDiario /></AdminRoute>} />
+      <Route path="/admin/actividad/:userId" element={<AdminRoute><AdminActividad /></AdminRoute>} />
       <Route path="/admin/astrologia/:userId" element={<AdminRoute><AdminAstrologiaEditor /></AdminRoute>} />
       <Route path="/admin/psicologia/:userId" element={<AdminRoute><AdminPsicologiaLectura /></AdminRoute>} />
       <Route path="/admin/ayurveda/:userId" element={<AdminRoute><AdminAyurvedaLectura /></AdminRoute>} />

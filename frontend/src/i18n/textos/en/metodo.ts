@@ -1404,15 +1404,13 @@ export const metodo = {
   "metodo.cultura.apuntes.momentos": "{n} moments",
 
   // ── Paying for a discipline ────────────────────────────────────────────
-  "metodo.pago.precioReducido": "Take advantage — it's at a reduced price",
+  "metodo.pago.precioReducido": "Now at a reduced price",
   "metodo.pago.ahoraNo": "Not now",
   "metodo.pago.stripe": "Secure payment through Stripe",
   "metodo.pago.acepto": "I accept the",
   "metodo.pago.condicionesEnlace": "purchase terms",
-  "metodo.pago.autorizo":
-    "I authorise María Escribano to access the texts and answers I write inside the journey, in order to accompany me and prepare my personalised readings.",
-  "metodo.pago.autorizoNota":
-    "They are not shared with anyone else, nor used for anything else. You can withdraw this authorisation at any time through Contact.",
+  "metodo.pago.autorizo": "I consent to what I write in the journey being stored, including health information, and to María Escribano reading it only to accompany me.",
+  "metodo.pago.autorizoNota": "No one else sees it. You can withdraw this at any time through Contact.",
   "metodo.pago.realizado": "{disciplina} payment complete",
   "metodo.pago.yaPuedes": "You can go in now.",
 
@@ -1425,20 +1423,12 @@ export const metodo = {
   "metodo.pago.ordinal.7": "Seventh discipline",
   "metodo.pago.ordinal.8": "Eighth discipline",
 
-  "metodo.pago.resumen.astrologia":
-    "Start the map with your birth chart: discover your key points, your gifts and your conflicts. Find where your wounds were born and which archetypes live in you.",
-  "metodo.pago.resumen.psicologia":
-    "Carry on with Psychology: rebuild your history and understand how your mind was put together, walking through your bonds, your stages and your wounds.",
-  "metodo.pago.resumen.ayurveda":
-    "Carry on with Hinduism: discover your dosha — your constitution — and the nature that defines you, and learn to eat, move and rest in tune with it.",
-  "metodo.pago.resumen.tcm":
-    "Carry on with Chinese Medicine: discover how the Five Elements and their cycles live in you, and read your body's signals before they turn into symptoms.",
-  "metodo.pago.resumen.fisiologia":
-    "Carry on with Physiology: travel from the particles that make you up to the miracle of being a living body, get to know your cells and your systems, and rediscover yourself as the complex, fascinating being you are.",
-  "metodo.pago.resumen.nutricion":
-    "Carry on with Nutrition: discover what lies beyond what you eat every day, and nourish yourself with what truly rebuilds you. Remember how not to destroy yourself with food.",
-  "metodo.pago.resumen.cabala":
-    "Step into Kabbalah and walk the Tree of Life: discover the ten Sefirot that live in you and the 22 paths of consciousness, and learn to recognize those forces in yourself so you can live from your essence.",
-  "metodo.pago.resumen.cultura":
-    "Close The Map by walking through the history of philosophy, medicine, religion and culture: remember where we come from, so you can understand where we are and build a more beautiful future.",
+  "metodo.pago.resumen.astrologia": "Your birth chart: your gifts, your conflicts and where your wounds began.",
+  "metodo.pago.resumen.psicologia": "Rebuild your story and understand how your mind was shaped.",
+  "metodo.pago.resumen.ayurveda": "Discover your dosha and learn to eat, move and rest in tune with it.",
+  "metodo.pago.resumen.tcm": "The Five Elements in you and the signals of your body.",
+  "metodo.pago.resumen.fisiologia": "From particles to your cells and systems: your body from within.",
+  "metodo.pago.resumen.nutricion": "What lies behind what you eat, and how to truly nourish yourself.",
+  "metodo.pago.resumen.cabala": "Walk the Tree of Life and recognise its Sefirot in yourself.",
+  "metodo.pago.resumen.cultura": "Philosophy, medicine and religion: where we come from.",
 };
