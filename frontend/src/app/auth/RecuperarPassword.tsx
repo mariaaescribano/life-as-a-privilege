@@ -16,7 +16,7 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { SuccessErrorMessageDto } from "../../components/global/SuccessErrorMessage";
 import { API_URL } from "../../GlobalVariables";
 import { gestionaError } from "../../GlobalHelper";
-import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
+import { CampoContrasena, inputAuthStyles, focoAzul } from "../../components/global/CampoContrasena";
 import { useT } from "../../i18n";
 
 // El estilo de los campos vive en CampoContrasena, para que el campo con ojo y
@@ -74,6 +74,7 @@ const BotonPrincipal = ({
               transform: "translateY(-1px)",
             }
       }
+      _focusVisible={focoAzul}
       transition="all 0.25s ease"
     >
       <Image
@@ -276,6 +277,7 @@ export default function RecuperarPassword() {
                   isDisabled={bloqueado}
                   onEnter={() => pass2Ref.current?.focus()}
                   autoComplete="new-password"
+                  autoFocus
                 />
                 <CampoContrasena
                   label={t("auth.campo.repitela")}
@@ -296,6 +298,9 @@ export default function RecuperarPassword() {
                   onChange={(e) => setEmail(e.target.value)}
                   isDisabled={bloqueado}
                   onKeyDown={(e) => { if (e.key === "Enter" && !bloqueado) pedirEnlace(); }}
+                  // El cursor ya está en el primer campo al cargar, como en
+                  // cualquier programa (igual que en iniciar sesión).
+                  autoFocus
                   {...inputStyles}
                 />
               </Box>
@@ -328,8 +333,11 @@ export default function RecuperarPassword() {
                 letterSpacing="0.06em"
                 bg="transparent"
                 cursor="pointer"
+                borderRadius="md"
+                px={2}
                 textShadow="0 0 8px rgba(255,255,255,0.35)"
                 _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
+                _focusVisible={focoAzul}
                 transition="all 0.22s ease"
               >
                 {t("auth.recuperar.volver")}

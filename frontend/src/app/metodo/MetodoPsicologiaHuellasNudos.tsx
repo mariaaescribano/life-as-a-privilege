@@ -29,6 +29,7 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { AutoguardadoIndicador, type EstadoGuardado } from "../../components/global/AutoguardadoIndicador";
 import { HeridaGrid, MandalaDivider, colorHeridaIdx } from "../../components/metodo/HeridaGrid";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
+import { TextoRico } from "../../i18n/TextoRico";
 import {
   experienciaById,
   necesidadesNoCubiertas,
@@ -266,7 +267,7 @@ export default function MetodoPsicologiaHuellasNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 14, total: 27 }}
+              step={{ current: 14, total: 29 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.necesidades")}`, onClick: async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/necesidades`); } }}
@@ -281,7 +282,7 @@ export default function MetodoPsicologiaHuellasNudos() {
 
             {/* Intro */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%" display="flex" justifyContent="center">
-            <IntroRecorrido>{t("metodo.psico.heridasIntro")}</IntroRecorrido>
+            <IntroRecorrido><TextoRico>{t("metodo.psico.heridasIntro")}</TextoRico></IntroRecorrido>
             </Reveal>
 
             {/* ════════ TRES COLUMNAS DE FUENTES · aparecen de izquierda a derecha ════════ */}

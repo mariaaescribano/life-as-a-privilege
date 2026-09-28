@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Input, Text } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -8,15 +8,15 @@ import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
+import { BoxesNombrar } from "../../components/metodo/BoxesNombrar";
 import {
   experienciaById,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { useNudos } from "../../components/metodo/psicologiaRecorrido.en";
-import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { glowHeader } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
@@ -28,9 +28,6 @@ import {
 import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
-const PAPEL = "#fbf4e8";
-// Halo claro (crema + color de la disciplina) para despegar la tinta del fondo.
-const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
 export default function MetodoPsicologiaNudos() {
   const t = useT();
@@ -41,7 +38,6 @@ export default function MetodoPsicologiaNudos() {
 
   const [loading, setLoading] = useState(true);
   const [nudos, setNudos] = useState<string[]>([]);
-  const [entrada, setEntrada] = useState("");
   const [guardando, setGuardando] = useState(false);
   const dataRef = useRef<LineaDeVidaData>({});
 
@@ -93,17 +89,16 @@ export default function MetodoPsicologiaNudos() {
   };
 
   const añadirNudo = (texto: string) => {
-    const t = texto.trim();
-    if (!t) return;
-    if (nudos.some((n) => n.toLowerCase() === t.toLowerCase())) { setEntrada(""); return; }
-    const next = [...nudos, t];
+    const v = texto.trim();
+    if (!v) return;
+    if (nudos.some((n) => n.toLowerCase() === v.toLowerCase())) return;
+    const next = [...nudos, v];
     setNudos(next);
-    setEntrada("");
     void persistir(next);
   };
 
-  const quitarNudo = (i: number) => {
-    const next = nudos.filter((_, idx) => idx !== i);
+  const quitarNudo = (nudo: string) => {
+    const next = nudos.filter((n) => n !== nudo);
     setNudos(next);
     void persistir(next);
   };
@@ -112,10 +107,6 @@ export default function MetodoPsicologiaNudos() {
     return <PsicologiaLoading />;
   }
   if (!exp) return null;
-
-  const ejemplosDisponibles = nudosTxt.ejemplos.filter(
-    (e) => !nudos.some((n) => n.toLowerCase() === e.toLowerCase()),
-  );
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -132,7 +123,7 @@ export default function MetodoPsicologiaNudos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 12, total: 27 }}
+              step={{ current: 12, total: 29 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.huellas")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/huellas`) }}
@@ -148,251 +139,24 @@ export default function MetodoPsicologiaNudos() {
             />
             </Reveal>
 
-
-            {/* Los dos boxes, UNO AL LADO DEL OTRO en escritorio: a la
-                izquierda se escribe o se elige, y el nudo aparece al momento en
-                el de la derecha. Viéndolo a la vez se entiende que una cosa
-                alimenta la otra; apilados, el resultado quedaba fuera de
-                pantalla y parecían dos ejercicios distintos. En móvil, donde no
-                caben dos columnas, siguen uno debajo del otro (y en ese orden:
-                primero se escribe, luego se ve). */}
-            <Flex w="100%" direction={{ base: "column", lg: "row" }} align="stretch"
-                  gap={{ base: 7, md: 9, lg: 6 }}>
-
-            {/* Box principal: pregunta + entrada + ejemplos */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75}
-                    w="100%" flex={{ lg: "1.1" }} minW={0} display="flex">
-            <Box
-              position="relative"
-              w="100%"
-              h="100%"
-              display="flex"
-              flexDirection="column"
-              borderRadius="2xl"
-              overflow="hidden"
-              border={azulBorde}
-              boxShadow={glowPanel}
-            >
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} flex="1" direction="column" align="center"
-                    gap={{ base: 6, md: 7 }} px={{ base: 6, md: 8 }} py={{ base: 8, md: 10 }}>
-
-                {/* Pregunta principal */}
-                <Flex direction="column" align="center" textAlign="center" gap={3} maxW="620px">
-                  <Flex align="center" justify="center" gap={3}>
-                    <NudoEspiralIcon size={30} color={TINTA} strokeWidth={1.7} />
-                    <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                      {nudosTxt.pregunta}
-                    </Text>
-                  </Flex>
-                </Flex>
-
-                {/* Entrada para añadir nudos */}
-                <Flex w="100%" maxW="560px" gap={3} direction={{ base: "column", sm: "row" }}>
-                  <Input
-                    value={entrada}
-                    onChange={(e) => setEntrada(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === "Enter") añadirNudo(entrada); }}
-                    placeholder={t("metodo.psico.escribeNudo")}
-                    flex="1"
-                    bg="rgba(255,251,243,0.72)"
-                    border={`1px solid ${TINTA}33`}
-                    color={TINTA}
-                    borderRadius="xl"
-                    size="lg"
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "md", md: "lg" }}
-                    sx={{ caretColor: TINTA }}
-                    _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                    _hover={{ borderColor: `${TINTA}55` }}
-                    _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.85)" }}
-                  />
-                  <Box
-                    as="button"
-                    onClick={() => añadirNudo(entrada)}
-                    position="relative"
-                    overflow="hidden"
-                    px={8}
-                    borderRadius="xl"
-                    bg={TINTA}
-                    border={`1.5px solid ${TINTA}`}
-                    fontFamily="'EB Garamond', serif"
-                    fontWeight="700"
-                    fontSize={{ base: "md", md: "lg" }}
-                    letterSpacing="0.04em"
-                    cursor="pointer"
-                    py={{ base: 3, sm: 0 }}
-                    boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`}
-                    transition="all 0.2s"
-                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}
-                  >
-                    <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.anadirCorto")}</Box>
-                  </Box>
-                </Flex>
-
-                {/* Ejemplos sugeridos (opcionales) — punteados. Se ven TODOS a la
-                    vez: aquí no hay scroll.
-                    Para que el box no dé un salto cada vez que se elige uno, el
-                    elegido no se quita de la rejilla: se vuelve invisible y deja
-                    su hueco. Así el alto lo fija siempre la lista completa. */}
-                <>
-                  {/* Separador horizontal completo (ancho del box) */}
-                  <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
-                  <Flex direction="column" align="center" gap={3} w="100%" maxW="620px" pt={{ base: 1, md: 2 }}>
-                    <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">{t("metodo.psico.siTeSirven")}</Text>
-                    <Box w="100%" position="relative">
-                      <Flex wrap="wrap" justify="center" gap={2} py={1}>
-                        {nudosTxt.ejemplos.map((e) => {
-                          const usado = !ejemplosDisponibles.includes(e);
-                          return (
-                            <Box
-                              key={e}
-                              as="button"
-                              onClick={() => añadirNudo(e)}
-                              aria-hidden={usado || undefined}
-                              tabIndex={usado ? -1 : undefined}
-                              visibility={usado ? "hidden" : "visible"}
-                              pointerEvents={usado ? "none" : undefined}
-                              px={4}
-                              py={2}
-                              borderRadius="full"
-                              bg="rgba(255,251,243,0.35)"
-                              color={TINTA}
-                              border={`1px dashed ${TINTA}55`}
-                              fontFamily="'EB Garamond', serif"
-                              fontSize={{ base: "sm", md: "md" }}
-                              cursor="pointer"
-                              transition="all 0.18s"
-                              _hover={{ bg: "rgba(255,251,243,0.6)", borderColor: TINTA }}
-                            >
-                              + {e}
-                            </Box>
-                          );
-                        })}
-                      </Flex>
-
-                      {/* Cuando ya no queda ninguno, el aviso va ENCIMA de los
-                          huecos (posición absoluta): si ocupara sitio, el box
-                          cambiaría de alto justo al final. */}
-                      {ejemplosDisponibles.length === 0 && (
-                        <Flex position="absolute" inset={0} align="center" justify="center" pointerEvents="none">
-                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.6} textAlign="center">{t("metodo.psico.todosLosEjemplos")}</Text>
-                        </Flex>
-                      )}
-                    </Box>
-                  </Flex>
-                </>
-
-              </Flex>
-            </Box>
-            </Reveal>
-
-            {/* Box «Mis Nudos»: la selección final del usuario */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75}
-                    w="100%" flex={{ lg: "1" }} minW={0} display="flex">
-            <Box
-              position="relative"
-              w="100%"
-              h="100%"
-              display="flex"
-              flexDirection="column"
-              borderRadius="2xl"
-              overflow="hidden"
-              border={azulBorde}
-              boxShadow={glowPanel}
-            >
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} flex="1" direction="column" align="center"
-                    gap={{ base: 4, md: 5 }} px={{ base: 6, md: 8 }} py={{ base: 7, md: 9 }}>
-                <Flex align="center" justify="center" gap={2.5}>
-                  <NudoEspiralIcon size={28} color={TINTA} strokeWidth={1.8} />
-                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: INK_SHADOW }}>
-                    Mis Nudos
-                    {nudos.length > 0 && (
-                      <Box as="span" ml={2} fontSize={{ base: "sm", md: "md" }} fontWeight="600" opacity={0.7}>({nudos.length})</Box>
-                    )}
-                  </Text>
-                </Flex>
-                <Box h="1px" w="70%" maxW="340px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-
-                {/* Zona de chips con ALTURA FIJA + scroll vertical: al añadir o
-                    borrar nudos el box NO cambia de alto (evita el mareo). */}
-                <Box
-                  w="100%"
-                  maxW="620px"
-                  // Apilados, el alto es fijo para que el box no dé saltos al
-                  // añadir o borrar. En dos columnas, además, se estira hasta
-                  // igualar al box de la izquierda, que es el que manda.
-                  flex={{ lg: "1" }}
-                  h={{ base: "180px", md: "220px", lg: "auto" }}
-                  minH={{ lg: "200px" }}
-                  overflowY="auto"
-                  overflowX="hidden"
-                  sx={{
-                    "&::-webkit-scrollbar": { width: "6px" },
-                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}44`, borderRadius: "9999px" },
-                    scrollbarWidth: "thin",
-                    scrollbarColor: `${TINTA}44 transparent`,
-                  }}
-                >
-                  {nudos.length > 0 ? (
-                    <Flex wrap="wrap" justify="center" gap={2.5} py={1}>
-                      {nudos.map((n, i) => (
-                        <Flex
-                          key={`${n}-${i}`}
-                          align="center"
-                          gap={2}
-                          pl={4}
-                          pr={2}
-                          py={2}
-                          h="fit-content"
-                          borderRadius="full"
-                          bg="rgba(255,251,243,0.6)"
-                          border={`1px solid ${TINTA}66`}
-                          boxShadow={`0 0 10px ${AZUL}26`}
-                        >
-                          <NudoEspiralIcon size={18} color={TINTA} strokeWidth={1.9} />
-                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                            {n}
-                          </Text>
-                          <Box
-                            as="button"
-                            onClick={() => quitarNudo(i)}
-                            w="22px"
-                            h="22px"
-                            borderRadius="full"
-                            bg="rgba(94,45,16,0.1)"
-                            color={TINTA}
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            fontSize="xs"
-                            cursor="pointer"
-                            flexShrink={0}
-                            transition="all 0.18s"
-                            _hover={{ bg: "rgba(94,45,16,0.22)" }}
-                            title={t("metodo.psico.quitar")}
-                          >
-                            ✕
-                          </Box>
-                        </Flex>
-                      ))}
-                    </Flex>
-                  ) : (
-                    <Flex h="100%" align="center" justify="center">
-                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.aquiNudos")}</Text>
-                    </Flex>
-                  )}
-                </Box>
-
-                <Text color={TINTA} fontSize="xs" opacity={0.55} fontStyle="italic" minH="1.2em">
-                  {guardando ? t("comun.guardando") : nudos.length > 0 ? t("metodo.psico.nudosSeGuardan") : ""}
-                </Text>
-              </Flex>
-            </Box>
-            </Reveal>
-            </Flex>
+            {/* Los dos boxes gemelos (pieza común con Miedos): a la izquierda se
+                escribe o se elige, y el nudo aparece al momento en la lista de
+                la derecha, uno debajo de otro en su orden. */}
+            <BoxesNombrar
+              iconoPregunta={<NudoEspiralIcon size={30} color={TINTA} strokeWidth={1.7} />}
+              pregunta={nudosTxt.pregunta}
+              placeholder={t("metodo.psico.escribeNudo")}
+              ejemplos={nudosTxt.ejemplos}
+              tituloLista="Mis Nudos"
+              iconoLista={<NudoEspiralIcon size={28} color={TINTA} strokeWidth={1.8} />}
+              iconoFila={<NudoEspiralIcon size={18} color={TINTA} strokeWidth={1.9} />}
+              items={nudos.map((n) => ({ id: n, texto: n }))}
+              vacioTexto={t("metodo.psico.aquiNudos")}
+              seGuardanTexto={t("metodo.psico.nudosSeGuardan")}
+              guardando={guardando}
+              onAñadir={añadirNudo}
+              onQuitar={quitarNudo}
+            />
           </Flex>
         </Flex>
       </Box>

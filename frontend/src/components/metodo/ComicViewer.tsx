@@ -232,14 +232,21 @@ function BarraScrollTexto({
   contenedorRef,
   color,
   vineta,
+  onMedida,
 }: {
   contenedorRef: React.RefObject<HTMLDivElement | null>;
   color: string;
   /** Índice de la viñeta: al cambiar, el texto es otro y hay que volver a medir. */
   vineta: number;
+  /** Avisa al visor de si hay algo por bajar y si ya se está al final: con eso
+   *  el visor desvanece (o no) el borde de abajo del texto. */
+  onMedida?: (hay: boolean, alFinal: boolean) => void;
 }) {
   // alto y top van en % del alto de la caja; `hay` = hay algo que bajar.
   const [barra, setBarra] = useState({ hay: false, alto: 0, top: 0, alFinal: false });
+  // Vía ref para que un callback nuevo en cada render no reejecute el efecto.
+  const onMedidaRef = useRef(onMedida);
+  onMedidaRef.current = onMedida;
 
   useEffect(() => {
     const el = contenedorRef.current;
@@ -249,13 +256,16 @@ function BarraScrollTexto({
       // Margen de 6px: un par de píxeles de más no es «se puede bajar».
       if (sobra <= 6) {
         setBarra((b) => (b.hay ? { ...b, hay: false } : b));
+        onMedidaRef.current?.(false, true);
         return;
       }
       // El pulgar mide lo que se ve respecto al total, con un mínimo del 14%
       // para que en los textos largos no quede un puntito imposible de ver.
       const alto = Math.max((el.clientHeight / el.scrollHeight) * 100, 14);
       const top = (el.scrollTop / sobra) * (100 - alto);
-      setBarra({ hay: true, alto, top, alFinal: sobra - el.scrollTop < 8 });
+      const alFinal = sobra - el.scrollTop < 8;
+      setBarra({ hay: true, alto, top, alFinal });
+      onMedidaRef.current?.(true, alFinal);
     };
     medir();
     el.addEventListener("scroll", medir, { passive: true });
@@ -409,6 +419,14 @@ export function ComicViewer({
     }
     setImgFailed((s) => (s[i] ? s : { ...s, [i]: true }));
   };
+  // ¿La columna de texto tiene más por bajar, y estamos ya al final? Lo mide la
+  // barrita (BarraScrollTexto) y con ello el texto se DESVANECE en su borde de
+  // abajo mientras quede algo por leer: la señal de «hay más» tiene que verse
+  // siempre, también cuando el corte cae justo entre dos párrafos y nada parece
+  // cortado. Al llegar al final, el texto vuelve a verse nítido hasta la última
+  // línea.
+  const [textoScroll, setTextoScroll] = useState({ hay: false, alFinal: true });
+
   // Espera de la foto de FONDO de la disciplina (solo con `esperarFondo`): hasta
   // que cargue del todo se muestra el loader a pantalla completa y no el box.
   const esperaFondo = !!(esperarFondo && disciplinaBgImage);
@@ -1147,7 +1165,18 @@ export function ComicViewer({
               // quitaron a la fila. El texto queda donde estaba; lo que se ha
               // movido a la derecha es la barra de scroll.
               pr={{ base: 5, md: 14 }}
-              sx={textoSx}
+              sx={{
+                ...textoSx,
+                // Mientras quede texto por bajar, las últimas líneas visibles se
+                // funden hacia transparente: se VE que el texto sigue. Es una
+                // máscara sobre las letras, no un velo sobre la foto.
+                ...(textoScroll.hay && !textoScroll.alFinal
+                  ? {
+                      maskImage: "linear-gradient(to bottom, black calc(100% - 64px), transparent 100%)",
+                      WebkitMaskImage: "linear-gradient(to bottom, black calc(100% - 64px), transparent 100%)",
+                    }
+                  : {}),
+              }}
             >
               {/* Aviso discreto de «ya la habías leído» (tick + LEÍDA), justo
                   encima del antetítulo/título. */}
@@ -1219,7 +1248,14 @@ export function ComicViewer({
             </Box>
             {/* La barra: fuera de la caja que scrollea (si fuera dentro, subiría
                 y bajaría con el texto) y pegada a su borde derecho. */}
-            <BarraScrollTexto contenedorRef={textScrollRef} color={sbColor} vineta={index} />
+            <BarraScrollTexto
+              contenedorRef={textScrollRef}
+              color={sbColor}
+              vineta={index}
+              onMedida={(hay, alFinal) =>
+                setTextoScroll((s) => (s.hay === hay && s.alFinal === alFinal ? s : { hay, alFinal }))
+              }
+            />
             </Box>
             )}
           </Flex>

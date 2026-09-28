@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useT } from "../../i18n";
+import { focoBlanco } from "./foco";
 
 // `motion(Box)` casteado, como en el resto de la casa: Chakra tipa `transition`
 // como cadena CSS y framer como objeto, y sin el casteo chocan.
@@ -107,6 +108,14 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
           borderColor: "rgba(255,255,255,0.55)",
           bg: "rgba(255,255,255,0.12)",
           boxShadow: "0 0 20px rgba(255,255,255,0.34), 0 0 40px rgba(180,255,245,0.26)",
+        }}
+        // El foco de teclado: mismo encendido que el hover más el aro. Sin esto
+        // el tabulador llegaba aquí y no se veía nada (el outline global está
+        // apagado).
+        _focusVisible={{
+          borderColor: "rgba(255,255,255,0.55)",
+          bg: "rgba(255,255,255,0.12)",
+          ...focoBlanco,
         }}
         transition="border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease"
         sx={{ WebkitTapHighlightColor: "transparent" }}
@@ -214,9 +223,11 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                       sx={{
                         WebkitTapHighlightColor: "transparent",
                         // La rayita de la izquierda crece al pasar por encima:
-                        // es la marca de «estás señalando esto».
-                        "&:hover .marca": { transform: "scaleX(1)", opacity: 1 },
-                        "&:hover .texto": { opacity: 1, transform: "translateX(2px)" },
+                        // es la marca de «estás señalando esto». Con el teclado
+                        // (tabulador) se enciende exactamente igual: la misma
+                        // rayita es el foco, sin aros de más.
+                        "&:hover .marca, &:focus-visible .marca": { transform: "scaleX(1)", opacity: 1 },
+                        "&:hover .texto, &:focus-visible .texto": { opacity: 1, transform: "translateX(2px)" },
                       }}
                     >
                       {/* La rayita ocupa SIEMPRE sus 26px y crece con

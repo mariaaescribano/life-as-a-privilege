@@ -919,6 +919,11 @@ const Home = () => {
           debajo (ver más abajo). */}
       <Box position="fixed" top={{ lg: "120px" }} left={{ lg: "22px" }} zIndex={30}
            display={{ base: "none", lg: "block" }}
+           // Ancho fijo: el de la columna más el aire del scroll (pr). Sin él,
+           // el box fijo se encoge a su contenido y el maxW de dentro no llega
+           // a estirarse. En `lg` va estrecha para no pisar el título centrado
+           // del mandala; solo en pantallas anchas (`xl`) se estira a los 320px.
+           w={{ lg: "252px", xl: "332px" }}
            // Con las ocho disciplinas compradas la columna es alta: en una
            // pantalla baja se queda con su propio scroll en vez de salirse por
            // debajo del pie. El `pr` deja aire entre los boxes y la barra de
@@ -961,6 +966,10 @@ const Home = () => {
               lineHeight="1.15"
               textShadow="0 0 18px rgba(255,255,255,0.75), 0 0 38px rgba(255,255,255,0.45), 0 0 70px rgba(180,255,245,0.35)"
               mb={{ base: 10, md: 8 }}
+              // Aire a los lados del ancho de las columnas fijas («Tu mapa» a
+              // la izquierda, «Continuar» a la derecha): el saludo rompe de
+              // línea antes de meterse por debajo de ellas.
+              px={{ lg: "240px", xl: "320px" }}
             >
               {t("home.bienvenida", { coma: name ? `, ${name}` : "" })}
             </Text>

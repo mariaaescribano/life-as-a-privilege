@@ -43,6 +43,8 @@ import {
   GENOGRAMA,
   GENOGRAMA_PREGUNTAS,
   HERIDAS_LISTA,
+  RELACIONES_LISTA,
+  DONES_LISTA,
   INTEGRACION,
   MIEDOS,
   MIEDOS_ENFRENTAR_INTRO,
@@ -191,6 +193,18 @@ const HERIDAS_LISTA_EN = {
   titulo: "Your wounds",
   frase:
     "These are the wounds that have marked your story. Now you can start healing them, until they turn into scars.",
+};
+
+const RELACIONES_LISTA_EN = {
+  titulo: "Your connections",
+  frase:
+    "These are the connections you've found between your wounds and your archetypes. Naming them is the first step to stop repeating them.",
+};
+
+const DONES_LISTA_EN = {
+  titulo: "Your gifts",
+  frase:
+    "These are the gifts you've recognized in yourself. Don't lose sight of them: they're already yours.",
 };
 
 const INTEGRACION_EN = {
@@ -782,6 +796,16 @@ export const useNudos = (): typeof NUDOS => {
 export const useHeridasLista = (): typeof HERIDAS_LISTA => {
   const en = useEn();
   return en ? { ...HERIDAS_LISTA, ...HERIDAS_LISTA_EN } : HERIDAS_LISTA;
+};
+
+export const useRelacionesLista = (): typeof RELACIONES_LISTA => {
+  const en = useEn();
+  return en ? { ...RELACIONES_LISTA, ...RELACIONES_LISTA_EN } : RELACIONES_LISTA;
+};
+
+export const useDonesLista = (): typeof DONES_LISTA => {
+  const en = useEn();
+  return en ? { ...DONES_LISTA, ...DONES_LISTA_EN } : DONES_LISTA;
 };
 
 export const useIntegracion = (): typeof INTEGRACION => {

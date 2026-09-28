@@ -178,7 +178,9 @@ const PopupCondiciones = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             rel="noopener"
             textDecoration="underline"
             textUnderlineOffset="3px"
+            borderRadius="sm"
             _hover={{ color: "white" }}
+            _focusVisible={focoAzul}
           >
             {t("privacidad.enlace")}
           </Text>
@@ -416,6 +418,9 @@ export default function SignIn() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onKeyDown={saltarA(emailRef)}
+                // El cursor ya está en el primer campo al cargar, como en
+                // cualquier programa (igual que en iniciar sesión).
+                autoFocus
                 {...inputStyles}
               />
             </Box>

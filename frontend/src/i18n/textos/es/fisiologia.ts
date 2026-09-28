@@ -45,7 +45,7 @@ export const fisiologia = {
 
   // ── Niveles ────────────────────────────────────────────────────────────
   "fisiologia.niveles.intro":
-    "Descubre poco a poco, de las partículas que te forman hasta el ecosistema complejo y magnífico que eres.",
+    "De las partículas que te forman hasta el ecosistema complejo y magnífico que eres.",
   /** Antetítulo de una tarjeta: «Nivel 1», «Nivel 2»… */
   "fisiologia.niveles.nivel": "Nivel {n}",
   "fisiologia.niveles.avanzado": "Avanzado",
@@ -66,9 +66,9 @@ export const fisiologia = {
   "fisiologia.particulas.uniendose": "…uniéndose…",
   "fisiologia.particulas.hecho": "¡Enhorabuena! Has construido una partícula.",
   "fisiologia.particulas.p1":
-    "Las partículas están formadas por **quarks**, unas partículas fundamentales que aparecen y desaparecen constantemente, y por **gluones**, que los mantienen unidos.",
+    "Las partículas están formadas por **quarks**, unas partículas fundamentales que aparecen y desaparecen constantemente. Se comunican a través de **gluones**.",
   "fisiologia.particulas.p2":
-    "Todo lo que existe, incluido tu cuerpo, está construido a partir de estas partículas.",
+    "Todo lo que existe, tu cuerpo también, está construido a partir de estas partículas.",
   "fisiologia.particulas.protonAlt": "Protón: dos quarks up y un quark down unidos por gluones",
   /** Nombres de las piezas que se arrastran. */
   "fisiologia.pieza.quarkUp": "quark up",

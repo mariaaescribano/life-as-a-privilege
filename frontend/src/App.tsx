@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy as reactLazy, Suspense, useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 // La raíz ahora es la landing de bienvenida (elegir proyecto); la portada de
 // Life as a Privilege sigue viva y sin cambios en /welcome.
@@ -23,6 +23,39 @@ import { cargarTextosMetodo } from "./i18n";
  * Se calcula siguiendo los imports, no a ojo: si una página nueva usa una
  * clave `metodo.*`, tiene que declararse aquí con `lazyConMetodo`.
  */
+/**
+ * `lazy` de la casa: como el de React, pero si el chunk de la página NO llega,
+ * recarga la página UNA vez en lugar de dejar el clic muerto.
+ *
+ * Cuándo pasa eso: tras un deploy, los chunks se renombran y el navegador de
+ * quien ya estaba dentro pide un archivo que ya no existe; o el servidor de
+ * dev se ha reiniciado. El síntoma era el peor posible: pulsas un botón de
+ * navegación y NO CAMBIA DE PÁGINA, sin error a la vista (así se descubrió,
+ * en el paso a Tu familia). Con la recarga, el navegador trae el index nuevo
+ * y la navegación sigue. El candado de sessionStorage evita recargar en bucle
+ * si el fallo es persistente (sin red): a la segunda, el error sube al
+ * ErrorBoundary, que al menos se ve.
+ */
+const lazy = (carga: () => Promise<{ default: React.ComponentType<any> }>) =>
+  reactLazy(() =>
+    carga().then(
+      (modulo) => {
+        sessionStorage.removeItem("chunkRecargado");
+        return modulo;
+      },
+      (err) => {
+        if (!sessionStorage.getItem("chunkRecargado")) {
+          sessionStorage.setItem("chunkRecargado", "1");
+          window.location.reload();
+          // La recarga ya está en camino: dejamos la promesa abierta para no
+          // pintar nada raro en el instante que tarda.
+          return new Promise<never>(() => {});
+        }
+        throw err;
+      },
+    ),
+  );
+
 const lazyConMetodo = <T extends { default: React.ComponentType<any> }>(
   carga: () => Promise<T>,
 ) => lazy(() => Promise.all([carga(), cargarTextosMetodo()]).then(([modulo]) => modulo));
@@ -105,10 +138,12 @@ const MetodoPsicologiaNudos = lazyConMetodo(() => import("./app/metodo/MetodoPsi
 const MetodoPsicologiaHuellasNudos = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaHuellasNudos"));
 const MetodoPsicologiaHeridasLista = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaHeridasLista"));
 const MetodoPsicologiaIntegracion = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaIntegracion"));
+const MetodoPsicologiaRelacionesLista = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaRelacionesLista"));
 const MetodoPsicologiaMapa = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaMapa"));
 const MetodoPsicologiaRegulacion = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaRegulacion"));
 const MetodoPsicologiaDones = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaDones"));
 const MetodoPsicologiaDonesEspejo = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaDonesEspejo"));
+const MetodoPsicologiaDonesLista = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaDonesLista"));
 const MetodoPsicologiaMiedos = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaMiedos"));
 const MetodoPsicologiaMiedosPreguntas = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaMiedosPreguntas"));
 const MetodoPsicologiaCompromiso = lazyConMetodo(() => import("./app/metodo/MetodoPsicologiaCompromiso"));
@@ -423,10 +458,12 @@ export default function App()
       <Route path="/metodo/psicologia/:experienciaId/huellas-nudos" element={<PrivateRoute><MetodoPsicologiaHuellasNudos /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/heridas-lista" element={<PrivateRoute><MetodoPsicologiaHeridasLista /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/integracion" element={<PrivateRoute><MetodoPsicologiaIntegracion /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/relaciones-lista" element={<PrivateRoute><MetodoPsicologiaRelacionesLista /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/mapa" element={<PrivateRoute><MetodoPsicologiaMapa /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/regulacion" element={<PrivateRoute><MetodoPsicologiaRegulacion /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/dones" element={<PrivateRoute><MetodoPsicologiaDones /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/dones-espejo" element={<PrivateRoute><MetodoPsicologiaDonesEspejo /></PrivateRoute>} />
+      <Route path="/metodo/psicologia/:experienciaId/dones-lista" element={<PrivateRoute><MetodoPsicologiaDonesLista /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/miedos" element={<PrivateRoute><MetodoPsicologiaMiedos /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/miedos-preguntas" element={<PrivateRoute><MetodoPsicologiaMiedosPreguntas /></PrivateRoute>} />
       <Route path="/metodo/psicologia/:experienciaId/compromiso" element={<PrivateRoute><MetodoPsicologiaCompromiso /></PrivateRoute>} />

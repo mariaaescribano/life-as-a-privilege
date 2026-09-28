@@ -129,7 +129,7 @@ export default function MetodoPsicologiaFamilia() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title={familia.titulo}
-                step={{ current: 9, total: 27 }}
+                step={{ current: 9, total: 29 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}

@@ -320,21 +320,23 @@ function Estacion({
         {!completo ? (
           // ── FASE A · encadenar (dos boxes: bandeja | piezas) ──
           <MBox key="a" w="100%" initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            {/* Texto FUERA de las cajas: va en blanco, no en el color de la
-                disciplina, para que se lea sobre el turquesa de la página. */}
-            <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center"
-                  style={{ textShadow: INK }}>{t(def.nombre)}</Text>
-            <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.18em"
-                  textTransform="uppercase" textAlign="center" mt={2} opacity={0.75}
-                  style={{ textShadow: INK }}>
-              {t("fisiologia.macro.explicacion")}
-            </Text>
-            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                  textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
-              {heterogenea
-                ? t("fisiologia.macro.instruccionPiezas", { total, monomero: t(def.monomero) })
-                : t("fisiologia.macro.instruccionCadena", { total, monomeros: t(def.monomeroPl) })}
-            </Text>
+            {/* Cabecera de la estación: caja con el fondo de Fisiología (como el
+                header de la página), no texto suelto sobre el turquesa. */}
+            <PanelBox w="100%" mb={5} py={{ base: 5, md: 6 }}>
+              <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center"
+                    style={{ textShadow: INK }}>{t(def.nombre)}</Text>
+              <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.18em"
+                    textTransform="uppercase" textAlign="center" mt={2} opacity={0.75}
+                    style={{ textShadow: INK }}>
+                {t("fisiologia.macro.explicacion")}
+              </Text>
+              <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+                    textAlign="center" mt={1} style={{ textShadow: INK }}>
+                {heterogenea
+                  ? t("fisiologia.macro.instruccionPiezas", { total, monomero: t(def.monomero) })
+                  : t("fisiologia.macro.instruccionCadena", { total, monomeros: t(def.monomeroPl) })}
+              </Text>
+            </PanelBox>
 
             <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 

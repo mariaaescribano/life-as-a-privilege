@@ -44,8 +44,8 @@ export interface ZonaCerebro {
 export const ZONAS: ZonaCerebro[] = [
   {
     key: "alarma",
-    nombre: "La amígdala",
-    apodo: "La alarma",
+    nombre: "La amígdala · La alarma",
+    apodo: "",
     color: "#c5613e",
     foto: `${CEREBRO_DIR}/alarma.webp`,
     paraQueSirve:
@@ -125,4 +125,4 @@ export const zonaPorKey = (key: ZonaKey): ZonaCerebro =>
 
 /** El aviso que sostiene toda la página. Se pinta tal cual, no en letra pequeña. */
 export const CEREBRO_AVISO =
-  "Esto no es tu diagnóstico. Son las conclusiones generales de las investigaciones. Sirve para comprenderte, no para etiquetarte.";
+  "Esto no es tu diagnóstico. Son las conclusiones generales de las investigaciones. Sirve para comprenderte, no para etiquetarte. No te preocupes, ocúpate. Se puede integrar el trauma.";

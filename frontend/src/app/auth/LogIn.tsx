@@ -264,6 +264,9 @@ export default function LogIn() {
               value={name}
               onChange={(e) => setname(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") contraRef.current?.focus(); }}
+              // Al cargar la página el cursor ya está aquí, como en cualquier
+              // programa: se llega para escribir, no para buscar dónde pulsar.
+              autoFocus
               {...inputStyles}
             />
           </Box>

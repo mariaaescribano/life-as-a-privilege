@@ -183,7 +183,7 @@ export default function MetodoPsicologiaDones() {
 
   // Antes de navegar (atrás o adelante) forzamos el guardado del estado actual y
   // esperamos a que termine, para que la página destino lea datos ya escritos.
-  const irARelacion = async () => { guardarAhora(respuestas, sinIdeas); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/integracion`); };
+  const irATusRelaciones = async () => { guardarAhora(respuestas, sinIdeas); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/relaciones-lista`); };
   const irAEspejo = async () => { guardarAhora(respuestas, sinIdeas); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/dones-espejo`); };
 
   return (
@@ -201,10 +201,10 @@ export default function MetodoPsicologiaDones() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 18, total: 27 }}
+              step={{ current: 19, total: 29 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: `← ${t("metodo.psico.paso.relacion")}`, onClick: irARelacion }}
+              prev={{ label: `← ${t("metodo.psico.tusRelaciones")}`, onClick: irATusRelaciones }}
               next={{
                 label: `${t("metodo.psico.paso.dones")} →`,
                 onClick: irAEspejo,

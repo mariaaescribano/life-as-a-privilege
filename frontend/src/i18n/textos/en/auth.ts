@@ -91,6 +91,8 @@ export const auth = {
   "cuenta.foto.tocaParaCambiar": "Tap the photo to change it",
   "cuenta.foto.subiendo": "Uploading…",
   "cuenta.nuevaContrasena": "New password",
+  "cuenta.edad": "AGE",
+  "cuenta.edad.anios": "years old",
   "cuenta.cambiosGuardados": "Changes saved",
   "cuenta.panelAdmin": "Admin panel",
   "cuenta.cerrarSesion": "Log out",

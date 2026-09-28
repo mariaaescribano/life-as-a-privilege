@@ -28,7 +28,6 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { RuedaEmocionesSvg } from "../../components/metodo/RuedaEmocionesSvg";
 import { experienciaById } from "../../components/metodo/psicologiaRecorrido";
 import { EMOCIONES_TOTAL, type EmocionElegida } from "../../hardCoded/metodo/ruedaEmociones";
@@ -94,7 +93,7 @@ export default function MetodoPsicologiaEmociones() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 26, total: 27 }}
+            step={{ current: 28, total: 29 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: `← ${t("metodo.psico.paso.sintesis")}`, onClick: irASintesis }}
@@ -166,10 +165,6 @@ export default function MetodoPsicologiaEmociones() {
             </Box>
           </Box>
           </Reveal>
-
-          {/* Botón de fin de página (adelante, abajo a la derecha) */}
-          <BotonPaso label={t("metodo.psico.paso.cursosCorto")} onClick={irACursos}
-                     nom={neuropsicologiaNom} color={TINTA} bg={neuropsicologiaBg} />
         </Flex>
       </Flex>
 

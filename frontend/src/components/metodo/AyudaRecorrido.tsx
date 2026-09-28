@@ -744,7 +744,7 @@ function BotonAyuda({ children, onClick, icon }: { children: React.ReactNode; on
  *  reserva de llamada para hacer el recorrido acompañado) y «Orientación» (que
  *  abre un popup con un curso de acceso libre). El resto de páginas mantiene los
  *  3 botones informativos de siempre. */
-export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof typeof AYUDA_RECORRIDO; ocultarCompania?: boolean }) {
+export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pagina: keyof typeof AYUDA_RECORRIDO; ocultarCompania?: boolean; ocultarEjemplo?: boolean }) {
   const t = useT();
   const [abierto, setAbierto] = useState<keyof Ayuda | null>(null);
   // Popups especiales de la página inicio.
@@ -815,7 +815,9 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
           </>
         ) : (
           <>
-            <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>{t("metodo.ayuda.ejemplo")}</BotonAyuda>
+            {!ocultarEjemplo && (
+              <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>{t("metodo.ayuda.ejemplo")}</BotonAyuda>
+            )}
             <BotonAyuda onClick={() => {
               if (pagina === "regulacion") setPreparacionOpen(true);   // «Antes de empezar»
               else if (curso) setCursoOpen(true);

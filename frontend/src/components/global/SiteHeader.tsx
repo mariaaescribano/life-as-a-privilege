@@ -5,6 +5,7 @@ import { rutaHome } from "../../api/sesion";
 import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
 import MenuHamburguesa, { type ItemMenu } from "./MenuHamburguesa";
+import { focoBlanco } from "./foco";
 
 type SiteHeaderProps = {
   /**
@@ -149,13 +150,22 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       zIndex={menuAbierto ? 400 : 100}
       borderBottom="1px solid rgba(255,255,255,0.22)"
     >
-      {/* Logo */}
+      {/* Logo. Es un <button> de verdad (antes era un div con onClick): con el
+          tabulador no se podía llegar a él, y es la vuelta a casa. */}
       <Flex
+        as="button"
+        type="button"
+        aria-label={t("header.marca")}
         direction="column"
         align="center"
         cursor="pointer"
         onClick={() => navigate(logoTarget)}
+        bg="transparent"
+        border="none"
+        p="2px"
+        borderRadius="lg"
         _hover={{ opacity: 0.85 }}
+        _focusVisible={focoBlanco}
         transition="opacity 0.2s"
         gap="2px"
       >
@@ -205,6 +215,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
               borderColor: "white",
               boxShadow: "0 0 18px rgba(255,255,255,0.7), 0 0 42px rgba(180,255,245,0.4)",
             }}
+            _focusVisible={{ borderColor: "white", ...focoBlanco }}
             flexShrink={0}
             p={0}
           >

@@ -126,7 +126,7 @@ export default function MetodoPsicologiaNecesidades() {
             bgColor={`${neuropsicologiaBg}f0`}
             color={neuropsicologiaTxt}
             nom={neuropsicologiaNom}
-            step={{ current: 13, total: 27 }}
+            step={{ current: 13, total: 29 }}
             mb={0}
             boxShadow={glowHeader}
             prev={{ label: `← ${t("metodo.psico.paso.nudos")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/nudos`) }}
@@ -275,19 +275,19 @@ export default function MetodoPsicologiaNecesidades() {
             <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
               {abierta && (
                 <Flex direction="column" align="center" textAlign="center" gap={4}>
-                  <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase" opacity={0.65}>{t("metodo.psico.necesidadDelNino")}</Text>
+                  <Text color={TINTA} fontSize="xs" fontWeight="700" letterSpacing="0.22em" textTransform="uppercase" opacity={0.65}>{t("metodo.psico.necesidadDelNino")}</Text>
                   <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK_SHADOW }}>
                     {abierta.necesidad}
                   </Text>
 
                   <Box h="1px" w="55%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" maxW="460px" style={{ textShadow: INK_SHADOW }}>
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" maxW="480px" style={{ textShadow: INK_SHADOW }}>
                     {abierta.respuesta}
                   </Text>
 
                   <Box h="1px" w="55%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} mt={1} />
 
-                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.comoLoViviste")}</Text>
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.comoLoViviste")}</Text>
 
                   <Flex direction={{ base: "column", sm: "row" }} gap={3} w="100%" maxW="460px" justify="center">
                     {estadosNecesidad.map((o) => {
@@ -306,7 +306,7 @@ export default function MetodoPsicologiaNecesidades() {
                           color={elegido ? PAPEL : TINTA}
                           fontFamily="'EB Garamond', serif"
                           fontWeight="700"
-                          fontSize={{ base: "md", md: "md" }}
+                          fontSize="lg"
                           cursor="pointer"
                           boxShadow={elegido ? `0 4px 18px ${o.color}77` : "none"}
                           transition="all 0.18s"
@@ -314,7 +314,7 @@ export default function MetodoPsicologiaNecesidades() {
                           style={elegido ? { textShadow: "0 1px 3px rgba(60,28,10,0.45)" } : undefined}
                         >
                           <Text>{o.label}</Text>
-                          <Text fontSize="2xs" fontWeight="500" opacity={elegido ? 0.92 : 0.7} mt={0.5} lineHeight="1.2">
+                          <Text fontSize="sm" fontWeight="500" opacity={elegido ? 0.92 : 0.7} mt={0.5} lineHeight="1.25">
                             {o.descripcion}
                           </Text>
                         </Box>

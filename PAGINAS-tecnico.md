@@ -671,52 +671,76 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/psicologia/:experienciaId/integracion` — Relación: heridas y arquetipos (Paso 17)
 - **Componente:** `MetodoPsicologiaIntegracion` en `frontend/src/app/metodo/MetodoPsicologiaIntegracion.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
-- **Qué hace:** Cruza dos disciplinas. En una columna, sus heridas; en otra, los arquetipos de su carta astral (planeta + signo/casa, con «Saber más» en `SaberMasModal`). Compone «relaciones» (constelaciones) uniendo nudos y arquetipos, les pone título y escribe su comprensión. Cada relación lleva su color.
-- **Datos:** `GET /user/me`; en paralelo `GET /metodo-psicologia/:userId` y `GET /metodo-astrologia/:userId` (usa `solicitud_enviada_at` y `data.<planeta>.signo/casa`). Guarda `data.constelaciones: Constelacion[]` (`id`, `titulo`, `nudos`, `arquetipos`, `texto`) con `PATCH /metodo-psicologia/:userId` (debounce + indicador «guardado»).
-- **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 relación con contenido.
-- **Botones / a dónde lleva:** prev → `/:exp/regulacion`; next → `/:exp/dones` (los dos hacen flush de lo pendiente). Sin carta astral: el bloque de arquetipos sale con candado y un botón → `/metodo/astrologia`. Sin heridas: un botón → `/:exp/huellas-nudos`. `AyudaRecorrido pagina="integracion"`.
+- **Qué hace:** Cruza dos disciplinas. Funciona como «Heridas»: dos columnas de fuentes (sus heridas y los arquetipos de su carta, planeta + signo/casa con «Saber más» en `SaberMasModal`) y debajo el box «Tu relación en curso». Toca (o arrastra al box) piezas para reunirlas y, con «He terminado esta relación», un popup pide título y (opcional) su comprensión. Al guardar, la relación aparece abajo —tras un separador de mandala— en la rejilla `RelacionGrid` (boxes cuadrados, color por posición, la misma paleta que las heridas).
+- **Datos:** `GET /user/me`; en paralelo `GET /metodo-psicologia/:userId` y `GET /metodo-astrologia/:userId` (usa `solicitud_enviada_at` y `data.<planeta>.signo/casa`). Guarda `data.constelaciones: Constelacion[]` (`id`, `titulo`, `nudos`, `arquetipos`, `texto`) con `PATCH /metodo-psicologia/:userId` al guardar o borrar una relación (indicador «guardado»).
+- **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 relación guardada.
+- **Botones / a dónde lleva:** prev → `/:exp/regulacion`; next → `/:exp/relaciones-lista` (los dos hacen flush). Sin carta astral: el bloque de arquetipos sale con candado y un botón → `/metodo/astrologia`. Sin heridas: un botón → `/:exp/huellas-nudos`. `AyudaRecorrido pagina="integracion"`.
 - **Condiciones y casos raros:** si falla el GET de astrología, se sigue sin arquetipos (`allSettled`). Las constelaciones antiguas se blindan (arrays y strings por defecto). Los arquetipos salen del `data` de astrología, no de la carta calculada, así que pueden estar desfasados tras corregir la fecha.
 - **Tests:** el guardado y la recuperación de `data.constelaciones` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
-## `/metodo/psicologia/:experienciaId/dones` — Recuérdate (Paso 18)
+## `/metodo/psicologia/:experienciaId/relaciones-lista` — Tus relaciones (listado) (Paso 18)
+- **Componente:** `MetodoPsicologiaRelacionesLista` en `frontend/src/app/metodo/MetodoPsicologiaRelacionesLista.tsx`
+- **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
+- **Qué hace:** El reverso de «Relación», igual que «Tus heridas» lo es de «Heridas»: ve reunidas todas las relaciones guardadas en la rejilla `RelacionGrid` (cada una de su color) y puede borrarlas. Tono de reconocimiento, no de análisis.
+- **Datos:** `GET /user/me`, `GET /metodo-psicologia/:userId` (lee `data.constelaciones`, blindada). Borrar hace `PATCH /metodo-psicologia/:userId` con el blob entero.
+- **Desbloqueo:** sin requisito.
+- **Botones / a dónde lleva:** prev → `/:exp/integracion`; next → `/:exp/dones` (flush). Sin relaciones: un botón → `/:exp/integracion`. `AyudaRecorrido pagina="integracion"`.
+- **Condiciones y casos raros:** las constelaciones antiguas se blindan (arrays y strings por defecto).
+- **Tests:** cubierto por los de `data.constelaciones` (misma forma de guardado).
+
+---
+
+## `/metodo/psicologia/:experienciaId/dones` — Recuérdate (Paso 19)
 - **Componente:** `MetodoPsicologiaDones` en `frontend/src/app/metodo/MetodoPsicologiaDones.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Las preguntas de «Dones» de una en una, como páginas con flechas. Cada una se responde con texto o se marca «sin ideas». El botón «Siguiente» guarda y avanza; en la última pone «Guardar».
 - **Datos:** `GET /user/me`, `GET /metodo-psicologia/:userId`. Guarda `data.dones.respuestas[key]` y `data.dones.sinIdeas: string[]` con `PATCH /metodo-psicologia/:userId` (debounce + guardado inmediato al pasar de página).
 - **Desbloqueo:** sin gate de entrada. Next activo cuando todas están respondidas o marcadas «sin ideas».
-- **Botones / a dónde lleva:** prev → `/:exp/integracion`; next → `/:exp/dones-espejo` (guardan + flush). `AyudaRecorrido pagina="dones"`.
+- **Botones / a dónde lleva:** prev → `/:exp/relaciones-lista`; next → `/:exp/dones-espejo` (guardan + flush). `AyudaRecorrido pagina="dones"`.
 - **Condiciones y casos raros:** `sinIdeas` que no sea un array se ignora.
 - **Tests:** el guardado y la recuperación de `data.dones.respuestas` y `data.dones.sinIdeas` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
-## `/metodo/psicologia/:experienciaId/dones-espejo` — Dones: el espejo (Paso 19)
+## `/metodo/psicologia/:experienciaId/dones-espejo` — Dones: el espejo (Paso 20)
 - **Componente:** `MetodoPsicologiaDonesEspejo` en `frontend/src/app/metodo/MetodoPsicologiaDonesEspejo.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
-- **Qué hace:** Le devuelve sus respuestas de «Recuérdate» y los arquetipos de su carta. Con ellos escribe los dones que reconoce en sí misma, y a cada uno le une arquetipos y recuerdos.
-- **Datos:** `GET /user/me`; en paralelo `GET /metodo-psicologia/:userId` y `GET /metodo-astrologia/:userId`. Guarda `data.dones.lista: DonReconocido[]` (`id`, `texto`, `arquetipos`, `recuerdos`) con `PATCH /metodo-psicologia/:userId` (debounce).
-- **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 don escrito.
-- **Botones / a dónde lleva:** prev → `/:exp/dones`; next → `/:exp/miedos` (flush). Sin astrología, los arquetipos salen bloqueados con botón → `/metodo/astrologia`. `SaberMasModal` para cada arquetipo. `AyudaRecorrido pagina="dones-espejo"`.
+- **Qué hace:** Le devuelve sus respuestas de «Recuérdate» y los arquetipos de su carta. Funciona como «Heridas»: dos columnas de fuentes y debajo el box «Tu don en curso». Toca piezas para reunirlas y, con «He terminado este don», un popup pide el nombre. Al guardar, el don aparece abajo —tras un separador de mandala— en la rejilla `DonGrid` (boxes cuadrados, color por posición con la paleta de tonos medios).
+- **Datos:** `GET /user/me`; en paralelo `GET /metodo-psicologia/:userId` y `GET /metodo-astrologia/:userId`. Guarda `data.dones.lista: DonReconocido[]` (`id`, `texto`, `arquetipos`, `recuerdos`) con `PATCH /metodo-psicologia/:userId` al guardar o borrar un don.
+- **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 don guardado.
+- **Botones / a dónde lleva:** prev → `/:exp/dones`; next → `/:exp/dones-lista` (flush). Sin astrología, los arquetipos salen bloqueados con botón → `/metodo/astrologia`. `SaberMasModal` para cada arquetipo. `AyudaRecorrido pagina="dones-espejo"`.
 - **Condiciones y casos raros:** los dones antiguos se normalizan con `coercionarDones`. Aquí la astrología cuenta como hecha también si hay arquetipos en `data`, aunque no haya solicitud (en Relación solo cuenta la solicitud).
 - **Tests:** el guardado y la recuperación de `data.dones.lista` (sin pisar respuestas ni sinIdeas) en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
-## `/metodo/psicologia/:experienciaId/miedos` — Miedos (Paso 20)
+## `/metodo/psicologia/:experienciaId/dones-lista` — Tus dones (listado) (Paso 21)
+- **Componente:** `MetodoPsicologiaDonesLista` en `frontend/src/app/metodo/MetodoPsicologiaDonesLista.tsx`
+- **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
+- **Qué hace:** El reverso del espejo, igual que «Tus heridas» lo es de «Heridas»: ve reunidos todos los dones guardados en la rejilla `DonGrid` (cada uno de su color) y puede borrarlos. Tono de reconocimiento, no de análisis.
+- **Datos:** `GET /user/me`, `GET /metodo-psicologia/:userId` (lee `data.dones.lista`, normalizada con `coercionarDones`). Borrar hace `PATCH /metodo-psicologia/:userId` sin pisar `respuestas` ni `sinIdeas`.
+- **Desbloqueo:** sin requisito.
+- **Botones / a dónde lleva:** prev → `/:exp/dones-espejo`; next → `/:exp/miedos` (flush). Sin dones: un botón → `/:exp/dones-espejo`. `AyudaRecorrido pagina="dones-espejo"`.
+- **Condiciones y casos raros:** los dones antiguos (strings sueltos) se normalizan igual que en el espejo.
+- **Tests:** cubierto por los de `data.dones.lista` (misma forma de guardado).
+
+---
+
+## `/metodo/psicologia/:experienciaId/miedos` — Miedos (Paso 22)
 - **Componente:** `MetodoPsicologiaMiedos` en `frontend/src/app/metodo/MetodoPsicologiaMiedos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Se nombran uno a uno los miedos más profundos (igual que los Nudos), con ejemplos sugeridos. Se pueden añadir y quitar.
 - **Datos:** `GET /user/me`, `GET /metodo-psicologia/:userId`. Guarda `data.miedos: MiedoItem[]` (`id`, `texto`, `respuestas`) con `PATCH /metodo-psicologia/:userId`.
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 miedo.
-- **Botones / a dónde lleva:** prev → `/:exp/dones-espejo` (sin flush). Next hace flush y abre el cómic del miedo → `/:exp/miedos-preguntas`. `AyudaRecorrido pagina="miedos"` (ejemplos).
+- **Botones / a dónde lleva:** prev → `/:exp/dones-lista` (sin flush). Next hace flush y abre el cómic del miedo → `/:exp/miedos-preguntas`. `AyudaRecorrido pagina="miedos"` (ejemplos).
 - **Condiciones y casos raros:** ninguno más.
 - **Tests:** el guardado y la recuperación de `data.miedos` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
-## `/metodo/psicologia/:experienciaId/miedos-preguntas` — Atrévete: enfrenta tus miedos (Paso 21)
+## `/metodo/psicologia/:experienciaId/miedos-preguntas` — Atrévete: enfrenta tus miedos (Paso 23)
 - **Componente:** `MetodoPsicologiaMiedosPreguntas` en `frontend/src/app/metodo/MetodoPsicologiaMiedosPreguntas.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Cada miedo sale en un box. Al abrirlo, un popup va pasando las preguntas para mirarlo de frente (anterior/siguiente, con foco automático en el campo). Se ve el progreso de cada miedo.
@@ -728,7 +752,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/psicologia/:experienciaId/mapa` — Integración (Paso 22)
+## `/metodo/psicologia/:experienciaId/mapa` — Integración (Paso 24)
 - **Componente:** `MetodoPsicologiaMapa` en `frontend/src/app/metodo/MetodoPsicologiaMapa.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Recupera las relaciones del paso 17. Al abrir cada una, un popup pide 4 bloques uno a uno: qué intentaba proteger el patrón, qué coste tiene, qué verdad más sana quiere practicar y una frase recordatorio.
@@ -740,7 +764,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/psicologia/:experienciaId/compromiso` — Compromiso (Paso 23)
+## `/metodo/psicologia/:experienciaId/compromiso` — Compromiso (Paso 25)
 - **Componente:** `MetodoPsicologiaCompromiso` en `frontend/src/app/metodo/MetodoPsicologiaCompromiso.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Dos preguntas de texto libre: «¿Qué necesitaste que nadie pudo darte?» y «¿Cómo puedes empezar a dártelo hoy?», con botón Guardar e indicador de guardado.
@@ -752,7 +776,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/psicologia/:experienciaId/brujula` — Tu carta / brújula (Paso 24)
+## `/metodo/psicologia/:experienciaId/brujula` — Tu carta / brújula (Paso 26)
 - **Componente:** `MetodoPsicologiaBrujula` en `frontend/src/app/metodo/MetodoPsicologiaBrujula.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Un mensaje libre de la persona a su yo del futuro, para los momentos de bloqueo. Botón Guardar con indicador.
@@ -764,7 +788,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/psicologia/:experienciaId/sintesis` — Síntesis del camino (Paso 25)
+## `/metodo/psicologia/:experienciaId/sintesis` — Síntesis del camino (Paso 27)
 - **Componente:** `MetodoPsicologiaSintesis` en `frontend/src/app/metodo/MetodoPsicologiaSintesis.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Resumen de solo lectura de todo el recorrido, en secciones numeradas unidas por flechas: de dónde vengo (problemas), lo que cargué, lo que dejó huella, los nudos, lo que me faltó, mis heridas, cómo me relaciono (con los 4 bloques de integración), mis miedos, mis dones, mi carta y mi compromiso. Al final, dos botones de descarga en PDF: el mapa completo y la Línea de Vida. Tiene un botón flotante para volver arriba.
@@ -776,7 +800,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/psicologia/:experienciaId/emociones` — La rueda de las emociones (Paso 26)
+## `/metodo/psicologia/:experienciaId/emociones` — La rueda de las emociones (Paso 28)
 - **Componente:** `MetodoPsicologiaEmociones` en `frontend/src/app/metodo/MetodoPsicologiaEmociones.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Una herramienta de consulta: una rueda SVG de emociones (`RuedaEmocionesSvg`, datos en `hardCoded/metodo/ruedaEmociones.ts`). Al tocar una palabra, un modal enseña esa emoción y sus 3 características.
@@ -788,7 +812,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/psicologia/:experienciaId/cursos` — Cursos de Psicología (Paso 27)
+## `/metodo/psicologia/:experienciaId/cursos` — Cursos de Psicología (Paso 29)
 - **Componente:** `MetodoPsicologiaCursos` en `frontend/src/app/metodo/MetodoPsicologiaCursos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
 - **Qué hace:** Cuadrícula con los cursos de psicología del catálogo (con uno solo sale una tarjeta grande) y `PedirOpinion` para dejar una reseña al final del recorrido.

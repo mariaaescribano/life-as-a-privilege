@@ -362,7 +362,7 @@ describe('Llamada de acompañamiento', () => {
     await expect(service.createLlamadaCheckout({ nombre: 'Ana' })).rejects.toBeInstanceOf(BadRequestException);
   });
 
-  it.each([[undefined, 1500], ['estandar', 1500], ['compania', 6000]])(
+  it.each([[undefined, 1500], ['estandar', 1500], ['compania', 1500]])(
     'tipo %s cobra %i céntimos (lo fija el servidor)',
     async (tipo, cent) => {
       const { service } = montar();

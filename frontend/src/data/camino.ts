@@ -55,7 +55,7 @@ export interface CaminoDisciplina {
  */
 export const CAMINO: Record<CaminoKey, CaminoDisciplina> = {
   metodo:     { total: 8,  ruta: "/metodo/astrologia" },
-  psicologia: { total: 27, ruta: "/metodo/psicologia" },
+  psicologia: { total: 29, ruta: "/metodo/psicologia" },
   fisiologia: { total: 9,  ruta: "/metodo/fisiologia" },
   nutricion:  { total: 14, ruta: "/metodo/nutricion" },
   ayurveda:   { total: 15, ruta: "/metodo/ayurveda" },

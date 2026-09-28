@@ -1,16 +1,16 @@
 // ─────────────────────────────────────────────────────────────────────────
-// PÁGINA · MIEDOS (nombrarlos)  ·  12/15
+// PÁGINA · MIEDOS (nombrarlos)  ·  20/27
 //
 // Entre «Dones» y «Enfrenta tus miedos». La persona escribe sus miedos más
-// profundos, uno a uno (misma página que «Nudos», hasta la maqueta: los dos
-// boxes en horizontal en escritorio, para ver crecer la lista mientras añade).
+// profundos, uno a uno. Los dos boxes son la MISMA pieza que «Nudos»
+// (BoxesNombrar): cambia el texto y de dónde salen los datos.
 // En la página siguiente los enfrentará respondiendo a unas preguntas.
 //
 // Datos: data.miedos = MiedoItem[]  (cada uno con id, texto y respuestas).
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Input, Text } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -18,10 +18,10 @@ import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
 import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { COMIC_MIEDO } from "../../components/metodo/comicMiedo";
+import { BoxesNombrar } from "../../components/metodo/BoxesNombrar";
 import { useComic } from "../../i18n/comics";
 import { useT } from "../../i18n";
 import {
@@ -30,7 +30,7 @@ import {
   type MiedoItem,
 } from "../../components/metodo/psicologiaRecorrido";
 import { useMiedos } from "../../components/metodo/psicologiaRecorrido.en";
-import { AZUL, glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
+import { glowHeader } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
   API_URL,
@@ -40,7 +40,6 @@ import {
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
 
-const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
 
@@ -58,7 +57,6 @@ export default function MetodoPsicologiaMiedos() {
 
   const [loading, setLoading] = useState(true);
   const [miedos, setMiedos] = useState<MiedoItem[]>([]);
-  const [entrada, setEntrada] = useState("");
   const [guardando, setGuardando] = useState(false);
   // Cómic «El miedo», intercalado antes de pasar a Atrévete.
   const [comicOpen, setComicOpen] = useState(false);
@@ -114,12 +112,11 @@ export default function MetodoPsicologiaMiedos() {
   };
 
   const añadirMiedo = (texto: string) => {
-    const t = texto.trim();
-    if (!t) return;
-    if (miedos.some((m) => m.texto.toLowerCase() === t.toLowerCase())) { setEntrada(""); return; }
-    const next = [...miedos, { id: nuevoId(), texto: t }];
+    const v = texto.trim();
+    if (!v) return;
+    if (miedos.some((m) => m.texto.toLowerCase() === v.toLowerCase())) return;
+    const next = [...miedos, { id: nuevoId(), texto: v }];
     setMiedos(next);
-    setEntrada("");
     void persistir(next);
   };
 
@@ -133,10 +130,6 @@ export default function MetodoPsicologiaMiedos() {
     return <PsicologiaLoading />;
   }
   if (!exp) return null;
-
-  const ejemplosDisponibles = miedosTxt.ejemplos.filter(
-    (e) => !miedos.some((m) => m.texto.toLowerCase() === e.toLowerCase()),
-  );
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -153,10 +146,10 @@ export default function MetodoPsicologiaMiedos() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 20, total: 27 }}
+              step={{ current: 22, total: 29 }}
               mb={0}
               boxShadow={glowHeader}
-              prev={{ label: `← ${t("metodo.psico.paso.dones")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/dones-espejo`) }}
+              prev={{ label: `← ${t("metodo.psico.tusDones")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/dones-lista`) }}
               next={{
                 label: `${t("metodo.psico.paso.atrevete")} →`,
                 onClick: async () => { await flushSaves(); setComicOpen(true); },
@@ -169,248 +162,22 @@ export default function MetodoPsicologiaMiedos() {
             />
             </Reveal>
 
-            {/* Los dos boxes, UNO AL LADO DEL OTRO en escritorio: a la
-                izquierda se escribe o se elige, y el miedo aparece al momento en
-                el de la derecha. Viéndolo a la vez se entiende que una cosa
-                alimenta la otra; apilados, el resultado quedaba fuera de
-                pantalla y parecían dos ejercicios distintos. En móvil, donde no
-                caben dos columnas, siguen uno debajo del otro (y en ese orden:
-                primero se escribe, luego se ve). Igual que «Nudos». */}
-            <Flex w="100%" direction={{ base: "column", lg: "row" }} align="stretch"
-                  gap={{ base: 7, md: 9, lg: 6 }}>
-
-            {/* Box principal: pregunta + entrada + ejemplos */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.12} duration={0.75}
-                    w="100%" flex={{ lg: "1.1" }} minW={0} display="flex">
-            <Box
-              position="relative"
-              w="100%"
-              h="100%"
-              display="flex"
-              flexDirection="column"
-              borderRadius="2xl"
-              overflow="hidden"
-              border={azulBorde}
-              boxShadow={glowPanel}
-            >
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} flex="1" direction="column" align="center"
-                    gap={{ base: 6, md: 7 }} px={{ base: 6, md: 8 }} py={{ base: 8, md: 10 }}>
-
-                {/* Pregunta principal */}
-                <Flex direction="column" align="center" textAlign="center" gap={3} maxW="620px">
-                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                    {miedosTxt.pregunta}
-                  </Text>
-                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" opacity={0.9} style={{ textShadow: INK_SHADOW }}>
-                    {miedosTxt.apoyo}
-                  </Text>
-                </Flex>
-
-                {/* Entrada para añadir miedos */}
-                <Flex w="100%" maxW="560px" gap={3} direction={{ base: "column", sm: "row" }}>
-                  <Input
-                    value={entrada}
-                    onChange={(e) => setEntrada(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === "Enter") añadirMiedo(entrada); }}
-                    placeholder={t("metodo.psico.escribeMiedo")}
-                    flex="1"
-                    bg="rgba(255,251,243,0.72)"
-                    border={`1px solid ${TINTA}33`}
-                    color={TINTA}
-                    borderRadius="xl"
-                    size="lg"
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "md", md: "lg" }}
-                    sx={{ caretColor: TINTA }}
-                    _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                    _hover={{ borderColor: `${TINTA}55` }}
-                    _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.85)" }}
-                  />
-                  <Box
-                    as="button"
-                    onClick={() => añadirMiedo(entrada)}
-                    position="relative"
-                    overflow="hidden"
-                    px={8}
-                    borderRadius="xl"
-                    bg={TINTA}
-                    border={`1.5px solid ${TINTA}`}
-                    fontFamily="'EB Garamond', serif"
-                    fontWeight="700"
-                    fontSize={{ base: "md", md: "lg" }}
-                    letterSpacing="0.04em"
-                    cursor="pointer"
-                    py={{ base: 3, sm: 0 }}
-                    boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`}
-                    transition="all 0.2s"
-                    _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}
-                  >
-                    <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.anadirCorto")}</Box>
-                  </Box>
-                </Flex>
-
-                {/* Ejemplos sugeridos (opcionales). Se ven TODOS a la vez: aquí no
-                    hay scroll.
-                    Para que el box no dé un salto cada vez que se elige uno, el
-                    elegido no se quita de la rejilla: se vuelve invisible y deja su
-                    hueco. Así el alto lo fija siempre la lista completa. */}
-                <>
-                  {/* Separador horizontal completo (ancho del box) */}
-                  <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
-                  <Flex direction="column" align="center" gap={3} w="100%" maxW="620px" pt={{ base: 1, md: 2 }}>
-                    <Text color={TINTA} fontSize="xs" letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} fontWeight="600">{t("metodo.psico.siTeSirven")}</Text>
-                    <Box w="100%" position="relative">
-                      <Flex wrap="wrap" justify="center" gap={2} py={1}>
-                        {miedosTxt.ejemplos.map((e) => {
-                          const usado = !ejemplosDisponibles.includes(e);
-                          return (
-                            <Box
-                              key={e}
-                              as="button"
-                              onClick={() => añadirMiedo(e)}
-                              aria-hidden={usado || undefined}
-                              tabIndex={usado ? -1 : undefined}
-                              visibility={usado ? "hidden" : "visible"}
-                              pointerEvents={usado ? "none" : undefined}
-                              px={4}
-                              py={2}
-                              borderRadius="full"
-                              bg="rgba(255,251,243,0.35)"
-                              color={TINTA}
-                              border={`1px dashed ${TINTA}55`}
-                              fontFamily="'EB Garamond', serif"
-                              fontSize={{ base: "sm", md: "md" }}
-                              cursor="pointer"
-                              transition="all 0.18s"
-                              _hover={{ bg: "rgba(255,251,243,0.6)", borderColor: TINTA }}
-                            >
-                              + {e}
-                            </Box>
-                          );
-                        })}
-                      </Flex>
-
-                      {/* Cuando ya no queda ninguno, el aviso va ENCIMA de los
-                          huecos (posición absoluta): si ocupara sitio, el box
-                          cambiaría de alto justo al final. */}
-                      {ejemplosDisponibles.length === 0 && (
-                        <Flex position="absolute" inset={0} align="center" justify="center" pointerEvents="none">
-                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.6} textAlign="center">{t("metodo.psico.todosLosEjemplos")}</Text>
-                        </Flex>
-                      )}
-                    </Box>
-                  </Flex>
-                </>
-
-              </Flex>
-            </Box>
-            </Reveal>
-
-            {/* Box «Mis Miedos»: la selección final */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75}
-                    w="100%" flex={{ lg: "1" }} minW={0} display="flex">
-            <Box
-              position="relative"
-              w="100%"
-              h="100%"
-              display="flex"
-              flexDirection="column"
-              borderRadius="2xl"
-              overflow="hidden"
-              border={azulBorde}
-              boxShadow={glowPanel}
-            >
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} flex="1" direction="column" align="center"
-                    gap={{ base: 4, md: 5 }} px={{ base: 6, md: 8 }} py={{ base: 7, md: 9 }}>
-                <Flex align="center" justify="center" gap={2.5}>
-                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.04em" style={{ textShadow: INK_SHADOW }}>
-                    Mis Miedos
-                    {miedos.length > 0 && (
-                      <Box as="span" ml={2} fontSize={{ base: "sm", md: "md" }} fontWeight="600" opacity={0.7}>({miedos.length})</Box>
-                    )}
-                  </Text>
-                </Flex>
-                <Box h="1px" w="70%" maxW="340px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-
-                {/* Zona de chips con ALTURA FIJA + scroll vertical: al añadir o
-                    borrar miedos el box NO cambia de alto (evita el mareo). */}
-                <Box
-                  w="100%"
-                  maxW="620px"
-                  // Apilados, el alto es fijo para que el box no dé saltos al
-                  // añadir o borrar. En dos columnas, además, se estira hasta
-                  // igualar al box de la izquierda, que es el que manda.
-                  flex={{ lg: "1" }}
-                  h={{ base: "180px", md: "220px", lg: "auto" }}
-                  minH={{ lg: "200px" }}
-                  overflowY="auto"
-                  overflowX="hidden"
-                  sx={{
-                    "&::-webkit-scrollbar": { width: "6px" },
-                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}44`, borderRadius: "9999px" },
-                    scrollbarWidth: "thin",
-                    scrollbarColor: `${TINTA}44 transparent`,
-                  }}
-                >
-                  {miedos.length > 0 ? (
-                    <Flex wrap="wrap" justify="center" gap={2.5} py={1}>
-                      {miedos.map((m) => (
-                        <Flex
-                          key={m.id}
-                          align="center"
-                          gap={2}
-                          pl={4}
-                          pr={2}
-                          py={2}
-                          h="fit-content"
-                          borderRadius="full"
-                          bg="rgba(255,251,243,0.6)"
-                          border={`1px solid ${TINTA}66`}
-                          boxShadow={`0 0 10px ${AZUL}26`}
-                        >
-                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                            {m.texto}
-                          </Text>
-                          <Box
-                            as="button"
-                            onClick={() => quitarMiedo(m.id)}
-                            w="22px"
-                            h="22px"
-                            borderRadius="full"
-                            bg="rgba(94,45,16,0.1)"
-                            color={TINTA}
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            fontSize="xs"
-                            cursor="pointer"
-                            flexShrink={0}
-                            transition="all 0.18s"
-                            _hover={{ bg: "rgba(94,45,16,0.22)" }}
-                            title={t("metodo.psico.quitar")}
-                          >
-                            ✕
-                          </Box>
-                        </Flex>
-                      ))}
-                    </Flex>
-                  ) : (
-                    <Flex h="100%" align="center" justify="center">
-                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.aquiMiedos")}</Text>
-                    </Flex>
-                  )}
-                </Box>
-
-                <Text color={TINTA} fontSize="xs" opacity={0.55} fontStyle="italic" minH="1.2em">
-                  {guardando ? t("comun.guardando") : miedos.length > 0 ? t("metodo.psico.miedosSeGuardan") : ""}
-                </Text>
-              </Flex>
-            </Box>
-            </Reveal>
-            </Flex>
+            {/* Los dos boxes gemelos (pieza común con Nudos): a la izquierda se
+                escribe o se elige, y el miedo aparece al momento en la lista de
+                la derecha, uno debajo de otro en su orden. */}
+            <BoxesNombrar
+              pregunta={miedosTxt.pregunta}
+              apoyo={miedosTxt.apoyo}
+              placeholder={t("metodo.psico.escribeMiedo")}
+              ejemplos={miedosTxt.ejemplos}
+              tituloLista="Mis Miedos"
+              items={miedos.map((m) => ({ id: m.id, texto: m.texto }))}
+              vacioTexto={t("metodo.psico.aquiMiedos")}
+              seGuardanTexto={t("metodo.psico.miedosSeGuardan")}
+              guardando={guardando}
+              onAñadir={añadirMiedo}
+              onQuitar={quitarMiedo}
+            />
           </Flex>
         </Flex>
       </Box>

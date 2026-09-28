@@ -25,7 +25,10 @@ export const inputAuthStyles = {
   textAlign: "center" as const,
   fontFamily: "'EB Garamond', serif",
   letterSpacing: "0.04em",
-  boxShadow: "0 0 10px rgba(255,255,255,0.12)",
+  // Dos sombras SIEMPRE (la primera con alfa 0): la lista en reposo y la del
+  // foco tienen el mismo largo, y así la animación nunca rellena con sombras
+  // transparentes (= negro con alfa 0), que oscurecían el borde un instante.
+  boxShadow: "0 0 0 1px rgba(150,200,255,0), 0 0 10px rgba(255,255,255,0.12)",
   _placeholder: { color: "rgba(255,255,255,0.4)" },
   _hover: { border: "1px solid rgba(255,255,255,0.55)" },
   // El campo con el foco se marca en AZUL, a propósito: en las pantallas de
@@ -61,8 +64,14 @@ export const inputFechaSx = {
  * el ratón (la regla de «nada azul al pulsar» sigue en pie).
  */
 export const focoAzul = {
-  outline: "none",
-  boxShadow: "0 0 0 2px rgba(150,200,255,0.85), 0 0 18px rgba(150,200,255,0.3)",
+  // Con `outline` y NO con box-shadow, a propósito: los botones llevan
+  // `transition` de sus sombras, y animar de una lista de sombras a otra de
+  // distinto largo hace que el navegador rellene con sombras transparentes
+  // (= NEGRO con alfa 0): el aro pasaba por azul casi negro y en el botón
+  // «Entrar» se veían dos rayas oscuras un instante. El outline no es una
+  // sombra: aparece nítido al momento, como el foco de cualquier programa.
+  outline: "2px solid rgba(150,200,255,0.85)",
+  outlineOffset: "2px",
 } as const;
 
 interface Props {
@@ -78,6 +87,8 @@ interface Props {
   autoComplete?: string;
   /** Para que la página pueda ENFOCAR este campo (el salto con Enter). */
   inputRef?: React.Ref<HTMLInputElement>;
+  /** Cursor puesto al cargar, cuando este campo es el primero de la página. */
+  autoFocus?: boolean;
 }
 
 export function CampoContrasena({
@@ -88,6 +99,7 @@ export function CampoContrasena({
   onEnter,
   autoComplete,
   inputRef,
+  autoFocus,
 }: Props) {
   const [visible, setVisible] = useState(false);
   const t = useT();
@@ -114,6 +126,7 @@ export function CampoContrasena({
           onChange={(e) => onChange(e.target.value)}
           isDisabled={isDisabled}
           autoComplete={autoComplete}
+          autoFocus={autoFocus}
           onKeyDown={(e) => { if (e.key === "Enter" && !isDisabled) onEnter?.(); }}
           {...inputAuthStyles}
           // Hueco IGUAL a los dos lados: el texto va centrado, así que dejar

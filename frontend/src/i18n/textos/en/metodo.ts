@@ -1108,6 +1108,14 @@ export const metodo = {
   "metodo.psico.tusDones": "Your gifts",
   "metodo.psico.nombraTuDon": "Name your gift…",
   "metodo.psico.borrarDon": "Delete gift",
+  "metodo.psico.donEnCurso": "The gift you're gathering",
+  "metodo.psico.tocaParaReunirDon": "Tap memories and archetypes to gather a gift.",
+  "metodo.psico.heTerminadoDon": "I've finished this gift",
+  "metodo.psico.ponleNombreDon": "Give your gift a name",
+  "metodo.psico.guardarDon": "Save gift",
+  "metodo.psico.donSinNombre": "Unnamed gift",
+  "metodo.psico.sinDonesLista": "You haven't saved any gifts yet.",
+  "metodo.psico.crearMisDones": "← Create my gifts",
 
   // ── Psychology · family and genogram ───────────────────────────────────
   "metodo.psico.tocaParaCambiarla": "· tap one you chose to change it",
@@ -1117,6 +1125,7 @@ export const metodo = {
   "metodo.psico.siQuitar": "Yes, remove",
   "metodo.psico.no": "No",
   "metodo.psico.hecho": "Done ✓",
+  "metodo.psico.rellenar": "Fill in",
   "metodo.psico.familiaQuienEs": "Who is it?",
   "metodo.psico.familiaEditar": "Edit",
   "metodo.psico.familiaListo": "Done",
@@ -1132,7 +1141,7 @@ export const metodo = {
   "metodo.psico.sinRecuerdosAnio": "No memories written for this year.",
   "metodo.psico.marcarHuella": "Mark that it left a mark",
   "metodo.psico.heridasIntro":
-    "An experience that leaves a Mark can leave an emotional need uncovered. To make sense of that pain and keep it from happening again, the mind creates a Knot: a protective belief that, however much it was born to help us, ends up limiting how we live. The experience, the uncovered need and that knot together make up an emotional Wound.",
+    "An experience that leaves a **Mark** can leave an emotional need uncovered. To make sense of that pain and keep it from happening again, the mind creates a **Knot**: a protective belief that, however much it was born to help us, ends up limiting how we live. The experience, the uncovered need and that knot together make up an emotional **Wound**.",
   "metodo.psico.heridaEnCurso": "The wound you're working on",
   "metodo.psico.tocaParaReunir": "Tap marks, knots and needs to put a wound together.",
   "metodo.psico.heTerminadoHerida": "I've finished this wound",
@@ -1151,6 +1160,13 @@ export const metodo = {
   "metodo.psico.tituloRelacion": "Title of the connection…",
   "metodo.psico.borrarRelacion": "Delete connection",
   "metodo.psico.queRelacion": "What connection do you find? Write what you see…",
+  "metodo.psico.relacionEnCurso": "The connection you're gathering",
+  "metodo.psico.tocaParaReunirRelacion": "Tap wounds and archetypes to gather a connection.",
+  "metodo.psico.heTerminadoRelacion": "I've finished this connection",
+  "metodo.psico.ponleNombreRelacion": "Give your connection a name",
+  "metodo.psico.guardarRelacion": "Save connection",
+  "metodo.psico.sinRelacionesLista": "You haven't saved any connections yet.",
+  "metodo.psico.crearMisRelaciones": "← Create my connections",
   "metodo.psico.integracionIntro":
     "Nothing you've lived can be changed. But you can change the meaning it has in your story. Give your pain a meaning so it stops turning into suffering.",
   "metodo.psico.sinRelaciones":

@@ -42,9 +42,12 @@ import { cacheDeOtraCuenta } from "../../api/sesion";
 // pide lo mínimo común y se les pasa siempre la forma que todos entienden.
 type IconoDisciplina = React.ComponentType<{ size?: { base: string; md: string } }>;
 
-const CARA: Record<CaminoKey, { nom: string; bg: string; txt: string; Icon: IconoDisciplina }> = {
+// `clara`: acuarela CLARA con tinta oscura (psicología): su box va sin velo
+// oscuro y sin sombra negra en los textos, que sobre fondo claro lo único que
+// hacían era ensuciarlo.
+const CARA: Record<CaminoKey, { nom: string; bg: string; txt: string; Icon: IconoDisciplina; clara?: boolean }> = {
   metodo:     { nom: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      Icon: AstrologiaIcon },
-  psicologia: { nom: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon },
+  psicologia: { nom: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon, clara: true },
   fisiologia: { nom: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon },
   nutricion:  { nom: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon },
   ayurveda:   { nom: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon },
@@ -114,8 +117,11 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
   const pasosTotal = mias.reduce((a, k) => a + CAMINO[k].total, 0);
   const pctTotal = pasosTotal ? Math.round((andadosTotal / pasosTotal) * 100) : 0;
 
+  // En `lg` (columna fija a la izquierda) va estrecha, que a ese ancho de
+  // pantalla los 320px chocaban con el título centrado; en `xl` recupera
+  // su ancho. En móvil (debajo del mandala) sigue a sus anchas.
   return (
-    <Box w="100%" maxW={{ base: "420px", md: "260px" }} fontFamily="'EB Garamond', serif">
+    <Box w="100%" maxW={{ base: "420px", md: "320px", lg: "240px", xl: "320px" }} fontFamily="'EB Garamond', serif">
       {/* ── El botón: lo único que se ve de entrada ── */}
       <Flex
         as="button"
@@ -128,7 +134,9 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
         textAlign="left"
         borderRadius="xl"
         bg="rgba(255,255,255,0.07)"
-        border="1px solid rgba(255,255,255,0.2)"
+        // 2px, como los boxes de las disciplinas de abajo: el mismo trazo en
+        // toda la columna. Aquí en blanco, que es el color de esta caja.
+        border="2px solid rgba(255,255,255,0.32)"
         cursor="pointer"
         transition="background 0.2s ease, border-color 0.2s ease"
         _hover={{ bg: "rgba(255,255,255,0.12)", borderColor: "rgba(255,255,255,0.38)" }}
@@ -166,7 +174,7 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
         transition="grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1)"
       >
         <Box overflow="hidden" minH="0">
-          <Flex direction="column" gap={2} pt={abierto ? 3 : 0} transition="padding-top 0.45s ease">
+          <Flex direction="column" gap={2.5} pt={abierto ? 3 : 0} transition="padding-top 0.45s ease">
             {mias.map((key, i) => {
               const cara = CARA[key];
               const def = CAMINO[key];
@@ -183,14 +191,20 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
                   align="center"
                   gap={3}
                   w="100%"
-                  p={2.5}
+                  p={3}
                   textAlign="left"
                   borderRadius="lg"
                   // La foto de la disciplina hace de fondo; debajo, su color
                   // sólido, que es lo que se ve mientras la acuarela llega (y en
                   // Astrología, que no tiene foto sino cielo estrellado).
                   bg={cara.bg}
-                  border={`1px solid ${cara.txt}3d`}
+                  // El marco de cada box: 2px del Txt de su disciplina, igual en
+                  // todos (antes iba a 1px y casi transparente y cada tarjeta
+                  // parecía de una casa distinta).
+                  border={`2px solid ${cara.txt}`}
+                  // La misma sombra del hover con alfa 0: así el halo es un
+                  // fundido del acento y no cruza por negro (ver foco.ts).
+                  boxShadow={`0 0 14px ${cara.txt}00`}
                   overflow="hidden"
                   position="relative"
                   cursor="pointer"
@@ -200,14 +214,17 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
                   // arriba, y al plegar se van todos a la vez (sin retraso).
                   opacity={abierto ? 1 : 0}
                   transform={abierto ? "translateY(0)" : "translateY(-6px)"}
-                  transition={`opacity 0.35s ease ${abierto ? i * 0.05 : 0}s, transform 0.35s ease ${abierto ? i * 0.05 : 0}s, background 0.2s ease, border-color 0.2s ease`}
-                  _hover={{ borderColor: cara.txt }}
+                  transition={`opacity 0.35s ease ${abierto ? i * 0.05 : 0}s, transform 0.35s ease ${abierto ? i * 0.05 : 0}s, background 0.2s ease, box-shadow 0.2s ease`}
+                  // Al pasar por encima el marco no cambia: se enciende un halo
+                  // suave con el acento de la disciplina (nunca blanco).
+                  _hover={{ boxShadow: `0 0 14px ${cara.txt}59` }}
                 >
                   {/* Fondo: la acuarela de la disciplina, BIEN visible — el velo
                       va muy ligero y la legibilidad la ponen las sombras de los
                       textos, no el oscurecido. */}
                   {hasDisciplinaBg(cara.nom) && (
-                    <DisciplinaBgLayer nom={cara.nom} borderRadius="lg" overlay="rgba(8,13,30,0.22)" />
+                    <DisciplinaBgLayer nom={cara.nom} borderRadius="lg"
+                                       overlay={cara.clara ? "rgba(0,0,0,0)" : "rgba(8,13,30,0.22)"} />
                   )}
 
                   {/* Icono, a la izquierda, suelto sobre la acuarela: sin cajita
@@ -222,26 +239,33 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
                     transition="transform 0.2s ease"
                     _groupHover={{ transform: "scale(1.12)" }}
                   >
-                    <Icon size={{ base: "28px", md: "28px" }} />
+                    <Icon size={{ base: "32px", md: "32px" }} />
                   </Box>
 
                   {/* El nombre arriba y, debajo, su línea de progreso */}
                   <Box position="relative" zIndex={1} flex="1" minW={0}>
+                    {/* Los textos van con el Txt de su disciplina, como dentro
+                        de cualquier box de la casa. La sombra oscura da la
+                        legibilidad sobre las acuarelas oscuras; sobre una clara
+                        (psicología) no hay sombra: la tinta ya se lee sola. */}
                     <Flex align="baseline" justify="space-between" gap={2}>
-                      <Text color="white" fontSize="sm" fontWeight="600" noOfLines={1}
-                            textShadow="0 1px 5px rgba(0,0,0,0.85), 0 0 14px rgba(0,0,0,0.5)">
+                      <Text color={cara.txt} fontSize="sm" fontWeight="600" noOfLines={1}
+                            textShadow={cara.clara ? "none" : "0 1px 5px rgba(0,0,0,0.85), 0 0 14px rgba(0,0,0,0.5)"}>
                         {nombreDisciplina(cara.nom, true)}
                       </Text>
-                      <Text color="rgba(255,255,255,0.85)" fontSize="xs" flexShrink={0}
-                            textShadow="0 1px 5px rgba(0,0,0,0.85)">
+                      <Text color={cara.txt} opacity={0.9} fontSize="xs" flexShrink={0}
+                            textShadow={cara.clara ? "none" : "0 1px 5px rgba(0,0,0,0.85)"}>
                         {pct}%
                       </Text>
                     </Flex>
 
-                    <Barra pct={abierto ? pct : 0} color={cara.txt} pista="rgba(255,255,255,0.24)" mt={1.5} />
+                    {/* Sobre acuarela clara el carril blanco no se veía: va en
+                        la propia tinta, muy tenue. */}
+                    <Barra pct={abierto ? pct : 0} color={cara.txt}
+                           pista={cara.clara ? `${cara.txt}2b` : "rgba(255,255,255,0.24)"} mt={1.5} />
 
-                    <Text color="rgba(255,255,255,0.75)" fontSize="xs" mt="3px" noOfLines={1}
-                          textShadow="0 1px 5px rgba(0,0,0,0.85)">
+                    <Text color={cara.txt} opacity={0.82} fontSize="xs" mt="3px" noOfLines={1}
+                          textShadow={cara.clara ? "none" : "0 1px 5px rgba(0,0,0,0.85)"}>
                       {completa
                         ? t("home.camino.completa")
                         : hechos === 0

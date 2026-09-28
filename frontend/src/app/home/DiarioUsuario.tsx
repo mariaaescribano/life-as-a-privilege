@@ -65,7 +65,9 @@ export default function DiarioUsuario() {
       display="block"
       textAlign="left"
       w="100%"
-      maxW={{ base: "420px", md: "260px" }}
+      // En `lg` va estrecho como «Tu mapa» (la columna fija de la izquierda);
+      // en `xl` recupera su ancho.
+      maxW={{ base: "420px", md: "320px", lg: "240px", xl: "320px" }}
       px={4}
       py={{ base: 4, md: 5 }}
       borderRadius="2xl"

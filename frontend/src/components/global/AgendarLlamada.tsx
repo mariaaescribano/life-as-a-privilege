@@ -342,8 +342,10 @@ export function AgendarLlamada({
           <Flex direction="column" gap={5}>
             {/* Cabecera */}
             <Box textAlign="center">
+              {/* Glow muy contenido: a plena carga el título («Reserva tu
+                  llamada…») se veía borroso, no iluminado. */}
               <Text color={color} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em"
-                    lineHeight="1.2" style={{ textShadow: `0 0 14px ${color}77, 0 0 34px ${color}44` }}>
+                    lineHeight="1.2" style={{ textShadow: `0 0 12px ${color}40` }}>
                 {tituloTxt}
               </Text>
               <Text color={`${color}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}

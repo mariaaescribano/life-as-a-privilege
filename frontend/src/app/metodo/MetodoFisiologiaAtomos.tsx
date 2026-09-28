@@ -30,7 +30,7 @@ const GLOW_BOX = `0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.1
 
 // ── Partículas del átomo ────────────────────────────────────────────────────
 type Tipo = "proton" | "neutron" | "electron";
-const GLOW: Record<Tipo, string> = { proton: "#e08a8a", neutron: "#b7b3c9", electron: "#8ab6e6" };
+const GLOW: Record<Tipo, string> = { proton: "#2e4a9e", neutron: "#b7b3c9", electron: "#8ab6e6" };
 // La CLAVE del diccionario, no el texto: este mapa se calcula al importar.
 const LABEL: Record<Tipo, ClaveTexto> = {
   proton: "fisiologia.pieza.proton",

@@ -330,7 +330,7 @@ export default function MetodoPsicologiaMapa() {
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
-                step={{ current: 22, total: 27 }}
+                step={{ current: 24, total: 29 }}
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.atrevete")}`, onClick: () => ir("miedos-preguntas") }}

@@ -62,14 +62,18 @@ export function CerebroZonaModal({
   return (
     <FichaFisioModal
       foto={zona.foto}
-      alt={zona.apodo}
+      alt={zona.apodo || zona.nombre}
       titulo={
         <>
-          {zona.apodo}
-          <Text as="span" display="block" fontSize={{ base: "md", md: "lg" }} fontWeight={500}
-                fontStyle="italic" opacity={0.85} mt={1}>
-            {zona.nombre}
-          </Text>
+          {/* Título: el apodo, y debajo el nombre. Sin apodo (la alarma), el
+              nombre hace de título y no se repite debajo. */}
+          {zona.apodo || zona.nombre}
+          {zona.apodo && (
+            <Text as="span" display="block" fontSize={{ base: "md", md: "lg" }} fontWeight={500}
+                  fontStyle="italic" opacity={0.85} mt={1}>
+              {zona.nombre}
+            </Text>
+          )}
         </>
       }
       parrafos={[

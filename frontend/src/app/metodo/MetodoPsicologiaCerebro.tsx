@@ -48,7 +48,6 @@ import {
   type ZonaKey,
 } from "../../components/metodo/psicologiaCerebro";
 import { CerebroTrauma } from "../../components/metodo/CerebroTrauma";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { CerebroZonaModal } from "../../components/metodo/CerebroZonaModal";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { Reveal } from "../../components/global/Reveal";
@@ -142,7 +141,7 @@ export default function MetodoPsicologiaCerebro() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 7, total: 27 }}
+              step={{ current: 7, total: 29 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.paso.desResultado")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/des-resultado`) }}
@@ -160,31 +159,22 @@ export default function MetodoPsicologiaCerebro() {
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             <Panel>
               <CerebroTrauma activa={zonaKey} onZona={abrirZona} tinta={TINTA} />
-
-              <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85}
-                    textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                {t("metodo.psico.cerebroToca")}
-              </Text>
             </Panel>
             </Reveal>
 
             {/* ── El aviso, a la vista y no en letra pequeña ── */}
             <Reveal direction="up" distance={20} delay={0.1} duration={0.7} w="100%">
-            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" fontWeight="600"
+            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.7" maxW="620px" mx="auto">
               {CEREBRO_AVISO}
             </Text>
             </Reveal>
 
           </Flex>
-
-          {/* Botón de fin de página (adelante, abajo a la derecha) */}
-          <BotonPaso label={t("metodo.psico.lineaDeVida")} onClick={() => setComicOpen(true)}
-                     nom={neuropsicologiaNom} color={TINTA} bg={neuropsicologiaBg} />
         </Flex>
       </Flex>
 
-      <AyudaRecorrido pagina="cerebro" />
+      <AyudaRecorrido pagina="cerebro" ocultarEjemplo />
 
       {/* La ficha de cada zona: popup con su foto. Las flechas pasan de una a
           otra sin cerrarlo. */}

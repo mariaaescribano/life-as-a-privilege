@@ -215,7 +215,7 @@ export default function MetodoPsicologiaExperiencia() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title={t("metodo.psico.lineaDeVida")}
-                step={{ current: 8, total: 27 }}
+                step={{ current: 8, total: 29 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
@@ -474,7 +474,6 @@ export default function MetodoPsicologiaExperiencia() {
           preguntas={anoAbierto === ANO_GESTACION ? preguntasGestacion : exp.preguntasPorAno}
           inicial={data.anos?.[String(anoAbierto)]}
           onCerrar={() => setAnoAbierto(null)}
-          onGuardar={async (estado) => { await guardarAno(anoAbierto, estado); setAnoAbierto(null); }}
           onGuardarSinCerrar={async (estado) => { await guardarAno(anoAbierto, estado); }}
         />
       )}
@@ -498,7 +497,7 @@ export default function MetodoPsicologiaExperiencia() {
             boxShadow={`0 0 44px ${TINTA}55, 0 0 100px ${TINTA}28`}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 7, md: 10 }} py={{ base: 9, md: 11 }} textAlign="center">
+            <Box position="relative" zIndex={1} px={{ base: 7, md: 10 }} py={{ base: 12, md: 14 }} textAlign="center">
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.3" mb={4} style={{ textShadow: INK_SHADOW }}>
                 {t("metodo.psico.antesDeContinuar")}
               </Text>
@@ -636,7 +635,6 @@ function PaginaDeAno({
   preguntas,
   inicial,
   onCerrar,
-  onGuardar,
   onGuardarSinCerrar,
 }: {
   edadAno: number;
@@ -644,7 +642,6 @@ function PaginaDeAno({
   preguntas: { key: string; pregunta: string; apoyo?: string }[];
   inicial?: { sinRecuerdos?: boolean; respuestas?: Record<string, string[] | string> };
   onCerrar: () => void;
-  onGuardar: (estado: { respuestas: Record<string, string[]>; sinRecuerdos: boolean }) => Promise<void> | void;
   onGuardarSinCerrar: (estado: { respuestas: Record<string, string[]>; sinRecuerdos: boolean }) => Promise<void> | void;
 }) {
   const t = useT();
@@ -657,23 +654,18 @@ function PaginaDeAno({
   // Texto en curso por pregunta (aún no añadido como ítem).
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [sinRecuerdos, setSinRecuerdos] = useState<boolean>(!!inicial?.sinRecuerdos);
-  const [guardando, setGuardando] = useState(false);
-  const [guardadoOk, setGuardadoOk] = useState(false);
 
   const añadirItem = (key: string) => {
     const v = (draft[key] || "").trim();
     if (!v) return;
     setRespuestas((prev) => ({ ...prev, [key]: [...(prev[key] || []), v] }));
     setDraft((prev) => ({ ...prev, [key]: "" }));
-    setGuardadoOk(false);
   };
   const quitarItem = (key: string, i: number) => {
     setRespuestas((prev) => ({ ...prev, [key]: (prev[key] || []).filter((_, idx) => idx !== i) }));
-    setGuardadoOk(false);
   };
   const cambiarDraft = (key: string, v: string) => {
     setDraft((prev) => ({ ...prev, [key]: v }));
-    setGuardadoOk(false);
   };
 
   // Vuelca lo que haya escrito sin pulsar Enter como un ítem más (no se pierde).
@@ -692,31 +684,48 @@ function PaginaDeAno({
     return { respuestas: r, sinRecuerdos: sinRecuerdos && !algo ? true : sinRecuerdos };
   };
 
-  const guardar = async () => {
+  // ── AUTOGUARDADO ──
+  // Ya no hay botón de Guardar: lo escrito se persiste solo, con calma (900ms
+  // tras el último cambio), para que un accidente (cerrar, recargar, quedarse
+  // sin batería) no se lleve nada. El texto a medio escribir (aún sin Enter)
+  // también viaja en el guardado, como un ítem más — solo en lo GUARDADO, no en
+  // la pantalla: aquí sigue siendo un borrador editable.
+  const autosaveRef = useRef<number | null>(null);
+  const primeraMedidaRef = useRef(true);
+  useEffect(() => {
+    if (primeraMedidaRef.current) { primeraMedidaRef.current = false; return; }
+    if (autosaveRef.current) window.clearTimeout(autosaveRef.current);
+    autosaveRef.current = window.setTimeout(() => {
+      const merged: Record<string, string[]> = { ...respuestas };
+      for (const p of preguntas) {
+        const d = (draft[p.key] || "").trim();
+        if (d) merged[p.key] = [...(merged[p.key] || []), d];
+      }
+      void onGuardarSinCerrar(estadoDe(merged));
+    }, 900);
+    return () => { if (autosaveRef.current) window.clearTimeout(autosaveRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [respuestas, draft, sinRecuerdos]);
+
+  // Cerrar (✕ o pinchar fuera) también guarda: vuelca los borradores, dispara
+  // el guardado y cierra al instante — el PATCH sigue su camino por detrás.
+  const cerrarGuardando = () => {
+    if (autosaveRef.current) window.clearTimeout(autosaveRef.current);
     const r = flushDrafts();
-    setGuardando(true);
-    await onGuardar(estadoDe(r));
-    setGuardando(false);
+    void onGuardarSinCerrar(estadoDe(r));
+    onCerrar();
   };
 
-  // Guarda sin cerrar el año, con feedback breve.
-  const guardarSinCerrar = async () => {
-    const r = flushDrafts();
-    setGuardando(true);
-    await onGuardarSinCerrar(estadoDe(r));
-    setGuardando(false);
-    setGuardadoOk(true);
-  };
-
-  // Marcar «Sin recuerdos» guarda y cierra el año directamente (sin tener que
-  // pulsar luego «Guardar y cerrar»). Forzamos sinRecuerdos:true en el estado
-  // porque setSinRecuerdos aún no se habrá aplicado en este mismo tick.
-  const marcarSinRecuerdosYCerrar = async () => {
+  // «Sin recuerdos»: marcarlo guarda y cierra el año (el gesto rápido de
+  // siempre para los años en blanco); si ya estaba marcado, lo desmarca y el
+  // autoguardado lo persiste.
+  const alternarSinRecuerdos = () => {
+    if (sinRecuerdos) { setSinRecuerdos(false); return; }
+    if (autosaveRef.current) window.clearTimeout(autosaveRef.current);
     const r = flushDrafts();
     setSinRecuerdos(true);
-    setGuardando(true);
-    await onGuardar({ respuestas: r, sinRecuerdos: true });
-    setGuardando(false);
+    void onGuardarSinCerrar({ respuestas: r, sinRecuerdos: true });
+    onCerrar();
   };
 
   return (
@@ -731,7 +740,7 @@ function PaginaDeAno({
       py={{ base: 4, md: 10 }}
       bg="rgba(0,0,0,0.82)"
       sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-      onClick={onCerrar}
+      onClick={cerrarGuardando}
       fontFamily="'EB Garamond', serif"
     >
       <Box
@@ -748,10 +757,10 @@ function PaginaDeAno({
       >
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
-        {/* Cerrar */}
+        {/* Cerrar (guardando: aquí nada se pierde por cerrar) */}
         <Box
           as="button"
-          onClick={onCerrar}
+          onClick={cerrarGuardando}
           position="absolute"
           top={3}
           right={3}
@@ -807,6 +816,30 @@ function PaginaDeAno({
               </>
             )}
             <Box mt={3} h="1px" w="120px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+            {/* «Sin recuerdos» — arriba, discreto, junto al título: marca el año
+                en blanco y lo cierra; si ya estaba marcado, lo desmarca. */}
+            <Box
+              as="button"
+              onClick={alternarSinRecuerdos}
+              mt={4}
+              px={5}
+              py="7px"
+              borderRadius="full"
+              bg={sinRecuerdos ? TINTA : "rgba(255,251,243,0.5)"}
+              color={sinRecuerdos ? PAPEL : TINTA}
+              border={`1px solid ${TINTA}${sinRecuerdos ? "" : "66"}`}
+              fontFamily="'EB Garamond', serif"
+              fontWeight="600"
+              fontSize={{ base: "sm", md: "md" }}
+              letterSpacing="0.03em"
+              whiteSpace="nowrap"
+              cursor="pointer"
+              transition="background 0.2s, border-color 0.2s, transform 0.2s"
+              _hover={{ bg: sinRecuerdos ? TINTA : "rgba(255,251,243,0.8)", borderColor: TINTA, transform: "translateY(-1px)" }}
+            >
+              {sinRecuerdos ? t("metodo.psico.sinRecuerdosMarcado") : t("metodo.psico.sinRecuerdosBoton")}
+            </Box>
           </Flex>
 
           {/* Preguntas — cada una en su box; las respuestas son una lista de
@@ -878,86 +911,8 @@ function PaginaDeAno({
             })}
           </Flex>
 
-          {/* Acciones — fila horizontal estable: anchos fijos para que no se
-              reordenen ni cambien de tamaño al guardar. */}
-          <Flex direction="row" wrap="nowrap" align="center" justify="center" gap={{ base: 2, md: 3 }} mt={{ base: 12, md: 20 }} w="100%">
-              <Box
-                as="button"
-                onClick={() => {
-                  if (guardando) return;
-                  // Ya marcado → desmarcar (sin cerrar). Sin marcar → marcar y
-                  // guardar+cerrar directamente.
-                  if (sinRecuerdos) { setSinRecuerdos(false); setGuardadoOk(false); }
-                  else void marcarSinRecuerdosYCerrar();
-                }}
-                flexShrink={0}
-                minW={{ base: "120px", md: "168px" }}
-                px={{ base: 3, md: 5 }}
-                py={3}
-                borderRadius="full"
-                bg={sinRecuerdos ? `${TINTA}` : "transparent"}
-                color={sinRecuerdos ? PAPEL : TINTA}
-                border={`1px solid ${TINTA}66`}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="600"
-                fontSize={{ base: "xs", md: "md" }}
-                letterSpacing="0.03em"
-                whiteSpace="nowrap"
-                textAlign="center"
-                cursor="pointer"
-                transition="background 0.2s, border-color 0.2s, transform 0.2s"
-                _hover={{ bg: sinRecuerdos ? `${TINTA}` : `${TINTA}14`, borderColor: TINTA }}
-              >
-                {sinRecuerdos ? t("metodo.psico.sinRecuerdosMarcado") : t("metodo.psico.sinRecuerdosBoton")}
-              </Box>
-              <Box
-                as="button"
-                onClick={guardando ? undefined : guardarSinCerrar}
-                flexShrink={0}
-                minW={{ base: "104px", md: "134px" }}
-                px={{ base: 3, md: 5 }}
-                py={3}
-                borderRadius="full"
-                bg="transparent"
-                color={TINTA}
-                border={`1.5px solid ${TINTA}`}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "xs", md: "md" }}
-                letterSpacing="0.03em"
-                whiteSpace="nowrap"
-                textAlign="center"
-                cursor={guardando ? "wait" : "pointer"}
-                transition="background 0.2s, transform 0.2s"
-                _hover={guardando ? {} : { bg: `${TINTA}14`, transform: "translateY(-1px)" }}
-              >
-                {guardando ? t("comun.guardando") : guardadoOk ? t("metodo.psico.guardadoOk") : t("comun.guardar")}
-              </Box>
-              <Box
-                as="button"
-                onClick={guardando ? undefined : guardar}
-                flexShrink={0}
-                px={{ base: 4, md: 8 }}
-                py={3}
-                borderRadius="full"
-                bg={TINTA}
-                color={PAPEL}
-                border={`1px solid ${TINTA}`}
-                fontFamily="'EB Garamond', serif"
-                fontWeight="700"
-                fontSize={{ base: "xs", md: "lg" }}
-                letterSpacing="0.04em"
-                whiteSpace="nowrap"
-                textAlign="center"
-                cursor={guardando ? "wait" : "pointer"}
-                opacity={guardando ? 0.7 : 1}
-                boxShadow={`0 0 18px ${TINTA}66, 0 0 44px ${TINTA}33`}
-                transition="transform 0.2s, box-shadow 0.2s, opacity 0.2s"
-                _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 26px ${TINTA}88, 0 0 60px ${TINTA}44` }}
-              >
-                {t("metodo.psico.guardarCerrar")}
-              </Box>
-          </Flex>
+          {/* Sin botones de Guardar: todo se guarda solo (autoguardado de
+              arriba) y cerrar —✕ o pinchar fuera— también guarda. */}
         </Box>
       </Box>
     </Box>

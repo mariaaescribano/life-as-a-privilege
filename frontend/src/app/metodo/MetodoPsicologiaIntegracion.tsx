@@ -1,3 +1,15 @@
+// ─────────────────────────────────────────────────────────────────────────
+// PÁGINA · RELACIÓN (construir)  ·  17/29
+//
+// Funciona como «Heridas»: dos columnas de fuentes (tus heridas y tus
+// arquetipos) y, debajo, el box «Tu relación en curso». La persona toca (o
+// arrastra) piezas para reunirlas y, al pulsar «He terminado esta relación»,
+// le pone nombre (y, si quiere, la frase que ella ve) en un popup. Al guardar,
+// la relación aparece —bajo un separador de mandala— como un box CUADRADO de
+// su propio color, en la misma rejilla que verá en «Tus relaciones».
+//
+// Persistencia: data.constelaciones = Constelacion[].
+// ─────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text, Textarea, Input } from "@chakra-ui/react";
@@ -19,6 +31,9 @@ import { SaberMasModal } from "../../components/metodo/Planetas/SaberMasModal";
 import { ArquetiposBloqueados } from "../../components/metodo/ArquetiposBloqueados";
 import { CUERPOS, cuerpoByKey, type Cuerpo } from "../../components/metodo/astrologiaData";
 import { type CartaData } from "../../components/metodo/Planetas/useCartaPlanetas";
+import { MandalaDivider } from "../../components/metodo/HeridaGrid";
+import { RelacionGrid, colorRelacionIdx } from "../../components/metodo/RelacionGrid";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
   arquetipoKey,
@@ -45,8 +60,8 @@ const PAPEL = "#fbf4e8";
 // Foto de arquetipos (fondo de la columna, su cabecera y cada tarjeta). La página
 // no se muestra hasta que esta imagen esté cargada, para que no aparezca a medias.
 const ARQUETIPOS_IMG = "/img/astrologia/space.webp";
-// Altura máxima común de las tres columnas; el resto se ve con scroll interno.
-const COL_H = { base: "440px", md: "520px", lg: "640px" } as const;
+// Altura máxima común de las dos columnas; el resto se ve con scroll interno.
+const COL_H = { base: "440px", md: "520px", lg: "600px" } as const;
 const SCROLL_SX = {
   scrollbarWidth: "thin" as const,
   scrollbarColor: `${TINTA}66 transparent`,
@@ -73,29 +88,10 @@ const nuevoId = (): string =>
     ? crypto.randomUUID()
     : `c-${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
 
-const relVacia = (): Constelacion => ({ id: nuevoId(), titulo: "", nudos: [], arquetipos: [], texto: "" });
-
 // Etiqueta visible de una herida (reutilizamos el campo `nudos` de la
 // constelación para guardar estas etiquetas, que es lo que el usuario relaciona).
 const heridaLabel = (h: RelacionHuellaNudo): string =>
   (h.titulo || "").trim() || traducir("metodo.psico.heridaSinTitulo");
-
-// Cada box de relación toma un color distinto (misma paleta que las heridas).
-const PALETA_RELACION = [
-  "#e7c4ad", // melocotón
-  "#cfe0d2", // menta suave
-  "#d9cde8", // lavanda
-  "#e8dcb0", // mantequilla
-  "#bfd6e6", // cielo
-  "#ecc7cf", // rosa palo
-  "#cdd9b8", // pistacho
-  "#e3cdbf", // arena rosada
-];
-function colorRelacion(id: string): string {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
-  return PALETA_RELACION[h % PALETA_RELACION.length];
-}
 
 function facetasDe(p: ArqPlaneta): ArqItem[] {
   const out: ArqItem[] = [];
@@ -156,17 +152,25 @@ export default function MetodoPsicologiaIntegracion() {
   const [arquetipos, setArquetipos] = useState<ArqPlaneta[]>([]);
   // ¿Ha pasado ya por Astrología? De eso depende que esta página se abra.
   const [astroHecha, setAstroHecha] = useState(false);
+
+  // Relación en curso (selección) + relaciones guardadas.
+  const [selHeridas, setSelHeridas] = useState<string[]>([]);
+  const [selArqs, setSelArqs] = useState<ArquetipoRef[]>([]);
   const [relaciones, setRelaciones] = useState<Constelacion[]>([]);
-  const [activaId, setActivaId] = useState<string | null>(null);
+
+  const [nombreOpen, setNombreOpen] = useState(false);
+  const [nombre, setNombre] = useState("");
+  const [texto, setTexto] = useState("");
+
   const dataRef = useRef<LineaDeVidaData>({});
+  const relacionesRef = useRef<HTMLDivElement>(null);
 
   const [saberMas, setSaberMas] = useState<{ cuerpo: Cuerpo; signo?: string; casa?: number; facet: "signo" | "casa" } | null>(null);
   const arrastreRef = useRef<Arrastre>(null);
   const [sobreMesa, setSobreMesa] = useState(false);
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendiente = useRef<Constelacion[] | null>(null);
   const okTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const montado = useRef(true);
+  useLockBodyScroll(nombreOpen);
   useEffect(() => () => {
     montado.current = false;
     if (okTimer.current) clearTimeout(okTimer.current);
@@ -217,7 +221,6 @@ export default function MetodoPsicologiaIntegracion() {
               }))
             : [];
           setRelaciones(rels);
-          if (rels.length > 0) setActivaId(rels[rels.length - 1].id);
         }
 
         if (astroRes.status === "fulfilled") {
@@ -270,67 +273,48 @@ export default function MetodoPsicologiaIntegracion() {
     }
   };
 
-  // Guarda en estado y agenda persistencia (debounce) para no llamar en cada tecla.
-  const commit = (next: Constelacion[]) => {
-    setRelaciones(next);
-    setEstadoGuardado("guardando"); // hay un cambio pendiente de guardar
-    pendiente.current = next;
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => {
-      if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
-    }, 900);
-  };
-
-  // Flush al desmontar.
-  useEffect(() => () => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    if (pendiente.current) void persistir(pendiente.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Aplica una mutación a la relación activa (creándola si no hay ninguna).
-  const conActiva = (mut: (c: Constelacion) => Constelacion) => {
-    let id = activaId;
-    let base = relaciones;
-    if (!id || !base.some((c) => c.id === id)) {
-      const nueva = relVacia(); base = [...base, nueva]; id = nueva.id; setActivaId(id);
-    }
-    commit(base.map((c) => (c.id === id ? mut(c) : c)));
-  };
-
-  const toggleNudo = (n: string) =>
-    conActiva((c) => ({ ...c, nudos: c.nudos.includes(n) ? c.nudos.filter((x) => x !== n) : [...c.nudos, n] }));
-  const addNudo = (n: string) =>
-    conActiva((c) => (c.nudos.includes(n) ? c : { ...c, nudos: [...c.nudos, n] }));
+  // ── La relación en curso: tocar (o arrastrar) piezas la reúne ──
+  const toggleHerida = (label: string) =>
+    setSelHeridas((sel) => (sel.includes(label) ? sel.filter((x) => x !== label) : [...sel, label]));
+  const addHerida = (label: string) =>
+    setSelHeridas((sel) => (sel.includes(label) ? sel : [...sel, label]));
   const toggleArq = (a: ArqItem) =>
-    conActiva((c) => ({
-      ...c,
-      arquetipos: c.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a))
-        ? c.arquetipos.filter((x) => arquetipoKey(x) !== arquetipoKey(a))
-        : [...c.arquetipos, { cuerpoKey: a.cuerpoKey, faceta: a.faceta, signo: a.signo, casa: a.casa }],
-    }));
+    setSelArqs((sel) => (sel.some((x) => arquetipoKey(x) === arquetipoKey(a))
+      ? sel.filter((x) => arquetipoKey(x) !== arquetipoKey(a))
+      : [...sel, { cuerpoKey: a.cuerpoKey, faceta: a.faceta, signo: a.signo, casa: a.casa }]));
   const addArq = (a: ArqItem) =>
-    conActiva((c) => (c.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a))
-      ? c
-      : { ...c, arquetipos: [...c.arquetipos, { cuerpoKey: a.cuerpoKey, faceta: a.faceta, signo: a.signo, casa: a.casa }] }));
+    setSelArqs((sel) => (sel.some((x) => arquetipoKey(x) === arquetipoKey(a))
+      ? sel
+      : [...sel, { cuerpoKey: a.cuerpoKey, faceta: a.faceta, signo: a.signo, casa: a.casa }]));
 
-  const updateBox = (id: string, partial: Partial<Constelacion>) =>
-    commit(relaciones.map((c) => (c.id === id ? { ...c, ...partial } : c)));
-  const removeNudo = (id: string, n: string) =>
-    commit(relaciones.map((c) => (c.id === id ? { ...c, nudos: c.nudos.filter((x) => x !== n) } : c)));
-  const removeArq = (id: string, a: ArquetipoRef) =>
-    commit(relaciones.map((c) => (c.id === id ? { ...c, arquetipos: c.arquetipos.filter((x) => arquetipoKey(x) !== arquetipoKey(a)) } : c)));
-  const borrarRelacion = (id: string) => {
+  const totalSel = selHeridas.length + selArqs.length;
+  // Color de la relación en curso = el que le tocará al guardarla (siguiente índice).
+  const colorEnCurso = colorRelacionIdx(relaciones.length);
+
+  const guardarRelacion = async () => {
+    if (totalSel === 0) return;
+    const nueva: Constelacion = {
+      id: nuevoId(),
+      titulo: nombre.trim() || t("metodo.psico.relacionSinTitulo"),
+      nudos: selHeridas,
+      arquetipos: selArqs,
+      texto: texto.trim(),
+    };
+    const next = [...relaciones, nueva];
+    setRelaciones(next);
+    setSelHeridas([]); setSelArqs([]);
+    setNombre(""); setTexto(""); setNombreOpen(false);
+    // La rejilla está abajo del todo: bajamos hasta ella para ver aparecer la
+    // relación nueva (la Reveal tarda 0.42s en montarla).
+    setTimeout(() => { if (montado.current) relacionesRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, 500);
+    await persistir(next);
+  };
+
+  const borrarRelacion = async (id: string) => {
     const next = relaciones.filter((c) => c.id !== id);
-    commit(next);
-    if (activaId === id) setActivaId(next.length ? next[next.length - 1].id : null);
+    setRelaciones(next);
+    await persistir(next);
   };
-  const añadirRelacion = () => {
-    const nueva = relVacia();
-    commit([...relaciones, nueva]);
-    setActivaId(nueva.id);
-  };
-
 
   const abrirSaberMas = (a: ArqItem) => {
     const c = cuerpoByKey(a.cuerpoKey);
@@ -343,31 +327,34 @@ export default function MetodoPsicologiaIntegracion() {
     const a = arrastreRef.current;
     arrastreRef.current = null;
     setSobreMesa(false);
-    if (a?.tipo === "nudo") addNudo(a.nudo);
+    if (a?.tipo === "nudo") addHerida(a.nudo);
     else if (a?.tipo === "arquetipo") addArq(a.arq);
   };
 
   if (loading || !fotoLista) return <PsicologiaLoading />;
   if (!exp) return null;
 
-  // Antes de navegar: dispara el guardado pendiente (debounce) y espera al flush,
-  // para que la página destino lea datos ya escritos.
-  const flushPendiente = () => {
-    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
-    if (pendiente.current) { void persistir(pendiente.current); pendiente.current = null; }
-  };
-  // Tras Relación viene «Recuérdate» (ruta interna /dones). La Integración (/mapa)
-  // llega más adelante, después del bloque de dones.
-  const irARecuerdate = async () => { flushPendiente(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/dones`); };
-  const irANarra = async () => { flushPendiente(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/regulacion`); };
-  // Hay relación (real) si algún box tiene contenido: una herida/arquetipo
-  // reunidos, o un título/texto escrito. Un box recién añadido y vacío no cuenta.
-  const hayRelacion = relaciones.some(
-    (c) => c.nudos.length > 0 || c.arquetipos.length > 0 || (c.titulo || "").trim() !== "" || (c.texto || "").trim() !== "",
+  const irATusRelaciones = async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/relaciones-lista`); };
+  const irANarra = async () => { await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/regulacion`); };
+
+  const heridaEnCurso = (label: string) => selHeridas.includes(label);
+  const arqEnCurso = (a: ArqItem) => selArqs.some((x) => arquetipoKey(x) === arquetipoKey(a));
+
+  // Los chips de la selección, tanto en el box «en curso» como en el popup.
+  const chipsSeleccion = (
+    <Flex wrap="wrap" gap={2} justify="center">
+      {selHeridas.map((label) => (
+        <Chip key={`sh-${label}`} tint={colorEnCurso} icon={<HeridaIcon size={13} color={TINTA} />} label={label}
+              onRemove={() => toggleHerida(label)} />
+      ))}
+      {selArqs.map((a) => (
+        <Chip key={`sa-${arquetipoKey(a)}`} tint={colorEnCurso}
+              icon={<Glifo symbol={cuerpoByKey(a.cuerpoKey)?.symbol || "✦"} color={TINTA} size={14} />}
+              label={arquetipoLabel(a)}
+              onRemove={() => setSelArqs((sel) => sel.filter((x) => arquetipoKey(x) !== arquetipoKey(a)))} />
+      ))}
+    </Flex>
   );
-  const activa = relaciones.find((c) => c.id === activaId) || null;
-  const nudoEnActiva = (n: string) => !!activa?.nudos.includes(n);
-  const arqEnActiva = (a: ArqItem) => !!activa?.arquetipos.some((x) => arquetipoKey(x) === arquetipoKey(a));
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -384,14 +371,14 @@ export default function MetodoPsicologiaIntegracion() {
               bgColor={`${neuropsicologiaBg}f0`}
               color={neuropsicologiaTxt}
               nom={neuropsicologiaNom}
-              step={{ current: 17, total: 27 }}
+              step={{ current: 17, total: 29 }}
               mb={0}
               boxShadow={glowHeader}
               prev={{ label: `← ${t("metodo.psico.narra")}`, onClick: irANarra }}
               next={{
-                label: `${t("metodo.psico.paso.recuerdate")} →`,
-                onClick: irARecuerdate,
-                disabled: !hayRelacion,
+                label: `${t("metodo.psico.tusRelaciones")} →`,
+                onClick: irATusRelaciones,
+                disabled: relaciones.length === 0,
                 disabledTooltip: t("metodo.psico.faltaRelacion"),
               }}
             />
@@ -428,7 +415,7 @@ export default function MetodoPsicologiaIntegracion() {
             <IntroRecorrido>{t("metodo.psico.relacionIntro")}</IntroRecorrido>
             </Reveal>
 
-            {/* ════════ TRES COLUMNAS ════════ */}
+            {/* ════════ DOS COLUMNAS DE FUENTES ════════ */}
             <RevealStagger w="100%" display="flex" flexDirection={{ base: "column", lg: "row" }} gap={{ base: 8, lg: 6 }} alignItems="stretch" stagger={0.16} delayChildren={0.15}>
 
               {/* ── COLUMNA 1 · HERIDAS ── */}
@@ -448,8 +435,8 @@ export default function MetodoPsicologiaIntegracion() {
                           {heridas.map((h) => {
                             const label = heridaLabel(h);
                             return (
-                              <HeridaRect key={h.id} texto={label} activo={nudoEnActiva(label)}
-                                          onTap={() => toggleNudo(label)}
+                              <HeridaRect key={h.id} texto={label} activo={heridaEnCurso(label)}
+                                          onTap={() => toggleHerida(label)}
                                           onDragStart={() => { arrastreRef.current = { tipo: "nudo", nudo: label }; }}
                                           onDragEnd={() => { arrastreRef.current = null; }} />
                             );
@@ -496,7 +483,7 @@ export default function MetodoPsicologiaIntegracion() {
                             <Flex key={p.cuerpoKey} gap={{ base: 3, md: 3.5 }}>
                               {facetasDe(p).map((it) => (
                                 <MiniCard key={arquetipoKey(it)} item={it} color={p.color} symbol={p.symbol}
-                                          activo={arqEnActiva(it)} onTap={() => toggleArq(it)} onLeer={() => abrirSaberMas(it)}
+                                          activo={arqEnCurso(it)} onTap={() => toggleArq(it)} onLeer={() => abrirSaberMas(it)}
                                           onDragStart={() => { arrastreRef.current = { tipo: "arquetipo", arq: it }; }}
                                           onDragEnd={() => { arrastreRef.current = null; }} />
                               ))}
@@ -509,65 +496,131 @@ export default function MetodoPsicologiaIntegracion() {
                 </Box>
               </Flex>
               </RevealItem>
-
-              {/* ── COLUMNA 3 · RELACIONES ── */}
-              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
-              <Flex direction="column" flex="1.05" minW={0}>
-                <Box position="relative" borderRadius="2xl" overflow="hidden" h={COL_H}
-                     border={`1px solid ${sobreMesa ? AZUL : `${AZUL}44`}`}
-                     boxShadow={sobreMesa ? `0 0 0 3px ${AZUL}, 0 0 34px ${AZUL}88, 0 0 70px ${AZUL}44` : glowPanel}
-                     transition="box-shadow 0.18s, border-color 0.18s"
-                     onDragOver={(e: React.DragEvent) => { e.preventDefault(); if (!sobreMesa) setSobreMesa(true); }}
-                     onDragLeave={() => setSobreMesa(false)}
-                     onDrop={soltarEnMesa}>
-                  <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-
-                  <Flex position="relative" zIndex={1} direction="column" h="100%">
-                    <ColumnaHeaderBox icono={<RelacionIcon size={22} color={TINTA} opacity={0.9} />} titulo={t("metodo.psico.tusRelaciones")} apoyo={t("metodo.psico.relacionesApoyo")} />
-                    <Box flex="1" overflowY="auto" px={{ base: 3.5, md: 4 }} pt={{ base: 4, md: 5 }} pb={{ base: 4, md: 5 }} sx={SCROLL_SX}>
-                      {relaciones.length === 0 ? (
-                        <Flex direction="column" align="center" justify="center" h="100%" gap={2} textAlign="center" px={4}>
-                          <RelacionIcon size={26} color={TINTA} opacity={0.45} />
-                          <Text color={TINTA} opacity={0.7} fontStyle="italic" fontSize="sm">{t("metodo.psico.relacionVacio")}</Text>
-                        </Flex>
-                      ) : (
-                        relaciones.map((c) => (
-                          <RelacionBox key={c.id} c={c} activa={c.id === activaId} sobreMesa={sobreMesa && c.id === activaId}
-                                       onActivar={() => setActivaId(c.id)}
-                                       onTitulo={(v) => updateBox(c.id, { titulo: v })}
-                                       onTexto={(v) => updateBox(c.id, { texto: v })}
-                                       onQuitarNudo={(n) => removeNudo(c.id, n)}
-                                       onQuitarArq={(a) => removeArq(c.id, a)}
-                                       onBorrar={() => borrarRelacion(c.id)} />
-                        ))
-                      )}
-                    </Box>
-
-                    {/* Barra inferior: botón Añadir relación (marrón) sobre la imagen */}
-                    <Flex flexShrink={0} align="center" justify="center" gap={3}
-                          px={{ base: 3.5, md: 4 }} pt={6} pb={{ base: 3, md: 4 }}>
-                      <Box as="button" onClick={añadirRelacion} position="relative" overflow="hidden"
-                           px={{ base: 5, md: 6 }} py={2.5} borderRadius="full"
-                           bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
-                           fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
-                           boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
-                           _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                        <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                             style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.anadirRelacion")}</Box>
-                      </Box>
-                      <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
-                    </Flex>
-                  </Flex>
-                </Box>
-              </Flex>
-              </RevealItem>
             </RevealStagger>
+
+            {/* ════════ RELACIÓN EN CURSO · box elegante (con el botón dentro) ════════
+                 También es la «mesa» donde se puede soltar lo arrastrado. */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
+            <Box position="relative" w="100%" maxW="920px" borderRadius="2xl" overflow="hidden"
+                 border={`1px solid ${sobreMesa ? AZUL : `${AZUL}44`}`}
+                 boxShadow={sobreMesa ? `0 0 0 3px ${AZUL}, 0 0 34px ${AZUL}88, 0 0 70px ${AZUL}44` : glowPanel}
+                 transition="box-shadow 0.18s, border-color 0.18s"
+                 onDragOver={(e: React.DragEvent) => { e.preventDefault(); if (!sobreMesa) setSobreMesa(true); }}
+                 onDragLeave={() => setSobreMesa(false)}
+                 onDrop={soltarEnMesa}>
+              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+              <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
+                    px={{ base: 6, md: 9 }} py={{ base: 6, md: 8 }}>
+                {/* Título del box */}
+                <Flex align="center" gap={2.5}>
+                  <RelacionIcon size={20} color={TINTA} opacity={0.9} />
+                  <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.03em"
+                        style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{t("metodo.psico.relacionEnCurso")}</Text>
+                </Flex>
+                <Box h="1px" w="60%" maxW="240px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+                {totalSel === 0 ? (
+                  <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85} textAlign="center"
+                        style={{ textShadow: `0 1px 2px ${PAPEL}` }}>{t("metodo.psico.tocaParaReunirRelacion")}</Text>
+                ) : chipsSeleccion}
+
+                <Flex align="center" justify="center" gap={3} wrap="wrap">
+                  <Box as="button" onClick={totalSel > 0 ? () => setNombreOpen(true) : undefined}
+                       aria-disabled={totalSel === 0}
+                       px={{ base: 6, md: 8 }} py={2.5} borderRadius="full"
+                       bg={totalSel > 0 ? TINTA : `${TINTA}55`} border={`1.5px solid ${TINTA}`}
+                       fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                       letterSpacing="0.04em" cursor={totalSel > 0 ? "pointer" : "not-allowed"} opacity={totalSel > 0 ? 1 : 0.7}
+                       boxShadow={totalSel > 0 ? `0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a` : "none"} transition="all 0.18s"
+                       _hover={totalSel > 0 ? { transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` } : {}}>
+                    <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.heTerminadoRelacion")}</Box>
+                  </Box>
+                  <AutoguardadoIndicador estado={estadoGuardado} color={TINTA} />
+                </Flex>
+              </Flex>
+            </Box>
+            </Reveal>
+
+            {/* ════════ SEPARADOR MANDALA + REJILLA DE RELACIONES ════════ */}
+            {relaciones.length > 0 && (
+              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
+              <>
+                <MandalaDivider />
+                <Flex ref={relacionesRef} direction="column" align="center" gap={4} w="100%" scrollMarginTop="90px">
+                  <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.04em"
+                        style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>{t("metodo.psico.tusRelaciones")}</Text>
+                  <RelacionGrid relaciones={relaciones} onBorrar={(id) => void borrarRelacion(id)} />
+                </Flex>
+              </>
+              </Reveal>
+            )}
             </>
             )}
 
           </Flex>
         </Flex>
       </Box>
+
+      {/* ════════ POPUP · «Ponle nombre a tu relación» ════════ */}
+      {nombreOpen && (
+        <Box position="fixed" inset={0} zIndex={2400} display="flex" alignItems="center" justifyContent="center"
+             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
+             sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+             onClick={() => setNombreOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
+          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="480px" my="auto"
+               borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
+            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 7, md: 9 }} py={{ base: 9, md: 10 }} textAlign="center"
+                 maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto">
+              <Flex align="center" justify="center" gap={2.5} mb={4}>
+                <RelacionIcon size={22} color={TINTA} opacity={0.9} />
+                <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
+                      style={{ textShadow: `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}` }}>{t("metodo.psico.ponleNombreRelacion")}</Text>
+              </Flex>
+
+              {/* Raya horizontal de separación */}
+              <Box h="1px" w="70%" maxW="240px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+              {/* Lo que has seleccionado */}
+              <Box my={6}>{chipsSeleccion}</Box>
+
+              <Input
+                autoFocus value={nombre} onChange={(e) => setNombre(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && totalSel > 0) void guardarRelacion(); }}
+                placeholder={t("metodo.psico.tituloRelacion")}
+                bg="rgba(255,251,243,0.55)" border={`1px solid ${TINTA}44`} color={TINTA} borderRadius="xl"
+                size="lg" textAlign="center" fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }}
+                fontWeight="600" sx={{ caretColor: TINTA }}
+                _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 400 }}
+                _hover={{ borderColor: `${TINTA}66` }}
+                _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.7)" }}
+              />
+              {/* La frase de la persona: su propia comprensión de la relación */}
+              <Textarea value={texto} onChange={(e) => setTexto(e.target.value)}
+                        placeholder={t("metodo.psico.queRelacion")}
+                        mt={4} minH="88px" bg="rgba(255,251,243,0.55)" border={`1px solid ${TINTA}44`} color={TINTA}
+                        borderRadius="xl" px={4} py={3} fontFamily="'EB Garamond', serif"
+                        fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" sx={{ caretColor: TINTA }}
+                        _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                        _hover={{ borderColor: `${TINTA}66` }}
+                        _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.7)" }} />
+              <Flex align="center" justify="center" gap={3} mt={8}>
+                <Box as="button" onClick={() => setNombreOpen(false)} px={6} py={2.5} borderRadius="full"
+                     bg="transparent" color={TINTA} border={`1.5px solid ${TINTA}66`} fontFamily="'EB Garamond', serif"
+                     fontWeight="600" fontSize={{ base: "sm", md: "md" }} cursor="pointer" transition="all 0.18s"
+                     _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>{t("metodo.psico.seguirEligiendo")}</Box>
+                <Box as="button" onClick={() => void guardarRelacion()} px={8} py={2.5} borderRadius="full"
+                     bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif" fontWeight="700"
+                     fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"
+                     boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.18s"
+                     _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+                  <Box as="span" color={neuropsicologiaBg} style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.guardarRelacion")}</Box>
+                </Box>
+              </Flex>
+            </Box>
+          </Box>
+        </Box>
+      )}
 
       <SaberMasModal isOpen={!!saberMas} onClose={() => setSaberMas(null)}
                      cuerpo={saberMas?.cuerpo || null} signo={saberMas?.signo} casa={saberMas?.casa} facet={saberMas?.facet} />
@@ -609,6 +662,7 @@ function HeridaRect({ texto, activo, onTap, onDragStart, onDragEnd }: {
           _active={{ cursor: "grabbing" }}>
       <HeridaIcon size={20} color={PAPEL} />
       <Text fontSize={{ base: "sm", md: "md" }} fontWeight="600" lineHeight="1.3">{texto}</Text>
+      {activo && <Box as="span" color={PAPEL} fontWeight="700" flexShrink={0} ml="auto">✓</Box>}
     </Flex>
   );
 }
@@ -659,85 +713,17 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer, onDragStart, onD
   );
 }
 
-// Box de una relación: título arriba, piezas reunidas, texto. Editable.
-function RelacionBox({ c, activa, sobreMesa, onActivar, onTitulo, onTexto, onQuitarNudo, onQuitarArq, onBorrar }: {
-  c: Constelacion; activa: boolean; sobreMesa: boolean;
-  onActivar: () => void; onTitulo: (v: string) => void; onTexto: (v: string) => void;
-  onQuitarNudo: (n: string) => void; onQuitarArq: (a: ArquetipoRef) => void; onBorrar: () => void;
-}) {
-  const t = useT();
-  const vacio = c.nudos.length === 0 && c.arquetipos.length === 0;
-  const color = colorRelacion(c.id);
-  return (
-    <Box onClick={onActivar} position="relative" mb={4} borderRadius="xl" overflow="hidden"
-         bgGradient={`linear(135deg, ${PAPEL}f2, ${color}66)`}
-         boxShadow={activa ? `0 0 0 2px ${color}, 0 0 24px ${AZUL}55` : `0 0 12px ${AZUL}26`}
-         opacity={activa ? 1 : 0.85} transition="all 0.16s" cursor="pointer">
-      <Box px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
-
-        {/* Box del título (icono en el color de esta relación) */}
-        <Flex align="center" gap={2} mb={3}>
-          <RelacionIcon size={18} color={color} />
-          <Input value={c.titulo} onChange={(e) => onTitulo(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                 placeholder={t("metodo.psico.tituloRelacion")} variant="unstyled" flex="1"
-                 color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700"
-                 fontSize={{ base: "md", md: "lg" }} sx={{ caretColor: TINTA }}
-                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 600 }} />
-          <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onBorrar(); }}
-               w="22px" h="22px" borderRadius="full" bg={`${TINTA}14`} color={TINTA} flexShrink={0}
-               display="flex" alignItems="center" justifyContent="center" fontSize="11px" cursor="pointer"
-               _hover={{ bg: `${TINTA}26` }} title={t("metodo.psico.borrarRelacion")}>✕</Box>
-        </Flex>
-
-        {/* Piezas reunidas */}
-        <Box borderRadius="lg" border={`1.5px dashed ${sobreMesa ? TINTA : `${TINTA}40`}`}
-             bg={sobreMesa ? `${TINTA}10` : `${TINTA}06`} px={3} py={3} mb={3} minH="54px" transition="all 0.16s">
-          {vacio ? (
-            <Flex align="center" justify="center" h="100%" minH="38px" textAlign="center">
-              <Text color={TINTA} opacity={0.6} fontStyle="italic" fontSize="sm">
-                {activa ? t("metodo.psico.relacionArrastra") : t("metodo.psico.relacionActivar")}
-              </Text>
-            </Flex>
-          ) : (
-            <Flex wrap="wrap" gap={2}>
-              {c.nudos.map((n) => (
-                <Chip key={`n-${n}`} fuerte onRemove={() => onQuitarNudo(n)}
-                      icon={<HeridaIcon size={13} color={PAPEL} />} label={n} />
-              ))}
-              {c.arquetipos.map((a) => (
-                <Chip key={`a-${arquetipoKey(a)}`} onRemove={() => onQuitarArq(a)}
-                      icon={<Glifo symbol={cuerpoByKey(a.cuerpoKey)?.symbol || "✦"} color={TINTA} size={14} />}
-                      label={arquetipoLabel(a)} />
-              ))}
-            </Flex>
-          )}
-        </Box>
-
-        <Textarea value={c.texto} onChange={(e) => onTexto(e.target.value)} onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                  placeholder={t("metodo.psico.queRelacion")}
-                  minH="78px" bg="rgba(255,255,255,0.6)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                  borderRadius="lg" px={3} py={2} fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" sx={{ caretColor: TINTA }}
-                  _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                  _hover={{ borderColor: `${TINTA}55` }}
-                  _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,255,255,0.78)" }} />
-      </Box>
-    </Box>
-  );
-}
-
-function Chip({ icon, label, onRemove, fuerte }: {
-  icon: React.ReactNode; label: string; onRemove: () => void; fuerte?: boolean;
+function Chip({ icon, label, onRemove, tint }: {
+  icon: React.ReactNode; label: string; onRemove: () => void; tint?: string;
 }) {
   const t = useT();
   return (
     <Flex align="center" gap={1.5} pl={2.5} pr={1.5} py={1} borderRadius="full"
-          bg={fuerte ? TINTA : `${TINTA}12`} color={fuerte ? PAPEL : TINTA}
-          border={`1px solid ${fuerte ? TINTA : `${TINTA}44`}`} boxShadow="none">
+          bg={tint || `${TINTA}12`} color={TINTA} border={`1px solid ${TINTA}40`} boxShadow="none">
       {icon}
       <Text fontSize="xs" fontWeight="600" lineHeight="1.2">{label}</Text>
       <Box as="button" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemove(); }} w="18px" h="18px" borderRadius="full"
-           bg={fuerte ? `${PAPEL}33` : `${TINTA}1a`} display="flex" alignItems="center" justifyContent="center"
+           bg={`${TINTA}1a`} display="flex" alignItems="center" justifyContent="center"
            fontSize="10px" cursor="pointer" flexShrink={0} _hover={{ opacity: 0.8 }} title={t("metodo.psico.quitar")}>✕</Box>
     </Flex>
   );

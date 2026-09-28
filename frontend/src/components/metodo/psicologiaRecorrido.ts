@@ -108,7 +108,7 @@ export interface PasoRecorrido {
   bloqueado?: boolean;
 }
 
-/** Los 27 pasos del recorrido, con los títulos ya en el idioma activo.
+/** Los 29 pasos del recorrido, con los títulos ya en el idioma activo.
  *  Es una FUNCIÓN y no un array: un array de nivel de módulo se calcula una vez
  *  al importar el fichero y se quedaría con los títulos congelados en el idioma
  *  de arranque. Quien lo pinte tiene que llamar a `useIdioma()` para volver a
@@ -131,16 +131,18 @@ export const psicologiaIndice = (): PasoRecorrido[] => [
   { n: 15, titulo: traducir("metodo.psico.paso.tusHeridas"),    ruta: (id) => `/metodo/psicologia/${id}/heridas-lista` },
   { n: 16, titulo: traducir("metodo.psico.narra"),              ruta: (id) => `/metodo/psicologia/${id}/regulacion` },
   { n: 17, titulo: traducir("metodo.psico.paso.relacion"),      ruta: (id) => `/metodo/psicologia/${id}/integracion` },
-  { n: 18, titulo: traducir("metodo.psico.paso.recuerdate"),    ruta: (id) => `/metodo/psicologia/${id}/dones` },
-  { n: 19, titulo: traducir("metodo.psico.paso.dones"),         ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
-  { n: 20, titulo: traducir("metodo.psico.paso.miedos"),        ruta: (id) => `/metodo/psicologia/${id}/miedos` },
-  { n: 21, titulo: traducir("metodo.psico.paso.atrevete"),      ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
-  { n: 22, titulo: traducir("metodo.psico.paso.integracion"),   ruta: (id) => `/metodo/psicologia/${id}/mapa` },
-  { n: 23, titulo: traducir("metodo.psico.paso.compromiso"),    ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
-  { n: 24, titulo: traducir("metodo.psico.paso.carta"),         ruta: (id) => `/metodo/psicologia/${id}/brujula` },
-  { n: 25, titulo: traducir("metodo.psico.paso.sintesis"),      ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
-  { n: 26, titulo: traducir("metodo.psico.paso.emociones"),     ruta: (id) => `/metodo/psicologia/${id}/emociones` },
-  { n: 27, titulo: traducir("metodo.psico.paso.cursosCorto"),   ruta: (id) => `/metodo/psicologia/${id}/cursos` },
+  { n: 18, titulo: traducir("metodo.psico.tusRelaciones"),      ruta: (id) => `/metodo/psicologia/${id}/relaciones-lista` },
+  { n: 19, titulo: traducir("metodo.psico.paso.recuerdate"),    ruta: (id) => `/metodo/psicologia/${id}/dones` },
+  { n: 20, titulo: traducir("metodo.psico.paso.dones"),         ruta: (id) => `/metodo/psicologia/${id}/dones-espejo` },
+  { n: 21, titulo: traducir("metodo.psico.tusDones"),           ruta: (id) => `/metodo/psicologia/${id}/dones-lista` },
+  { n: 22, titulo: traducir("metodo.psico.paso.miedos"),        ruta: (id) => `/metodo/psicologia/${id}/miedos` },
+  { n: 23, titulo: traducir("metodo.psico.paso.atrevete"),      ruta: (id) => `/metodo/psicologia/${id}/miedos-preguntas` },
+  { n: 24, titulo: traducir("metodo.psico.paso.integracion"),   ruta: (id) => `/metodo/psicologia/${id}/mapa` },
+  { n: 25, titulo: traducir("metodo.psico.paso.compromiso"),    ruta: (id) => `/metodo/psicologia/${id}/compromiso` },
+  { n: 26, titulo: traducir("metodo.psico.paso.carta"),         ruta: (id) => `/metodo/psicologia/${id}/brujula` },
+  { n: 27, titulo: traducir("metodo.psico.paso.sintesis"),      ruta: (id) => `/metodo/psicologia/${id}/sintesis` },
+  { n: 28, titulo: traducir("metodo.psico.paso.emociones"),     ruta: (id) => `/metodo/psicologia/${id}/emociones` },
+  { n: 29, titulo: traducir("metodo.psico.paso.cursosCorto"),   ruta: (id) => `/metodo/psicologia/${id}/cursos` },
 ];
 
 /** Total de pasos del recorrido (para las etiquetas X/total). */
@@ -330,7 +332,7 @@ export const GENOGRAMA = {
   titulo: "Genograma",
   /** Frase bajo el header (sobre el turquesa). */
   intro:
-    "Aquí está tu familia completa. Toca a cada persona y escribe lo que sepas y lo que sientas de ella: lo que te dio, lo que te faltó y lo que crees que cargaba. Puedes seguir añadiendo a quien falte.",
+    "Aquí está tu familia completa. Toca a cada persona y escribe la influencia que tuvo sobre ti.",
   /** Etiqueta bajo la foto de la propia usuaria. */
   yo: "Tú",
   /** Parentescos sugeridos en la ficha (pulsables, también se puede escribir). */
@@ -347,7 +349,7 @@ export const FAMILIA = {
   titulo: "Tu familia",
   /** Frase bajo el header (sobre el turquesa). */
   intro:
-    "Empieza por ti, en el centro, y coloca a tu familia alrededor: hacia arriba quienes te precedieron, a los lados quienes crecieron contigo. Después elige para cada uno el personaje o el animal que se le parece: a veces una imagen dice lo que no sabemos nombrar.",
+    "Empieza por ti, en el centro, y coloca a tu familia alrededor. Después elige para cada uno el personaje o el animal que se le parece: a veces una imagen dice lo que no sabemos nombrar.",
   /** Texto del popup, encima de las imágenes. */
   eligeTitulo: "¿A quién se parece?",
   eligeApoyo:
@@ -591,6 +593,20 @@ export const HERIDAS_LISTA = {
   titulo: "Tus heridas",
   frase:
     "Estas son las heridas que han marcado tu historia. Ahora puedes empezar a sanar hasta que se conviertan en cicatrices.",
+};
+
+// ── «Tus relaciones» (listado, el reverso de «Relación») — textos editables ──
+export const RELACIONES_LISTA = {
+  titulo: "Tus relaciones",
+  frase:
+    "Estas son las relaciones que has encontrado entre tus heridas y tus arquetipos. Nombrarlas es el primer paso para dejar de repetirlas.",
+};
+
+// ── «Tus dones» (listado, el reverso del espejo) — textos editables ──
+export const DONES_LISTA = {
+  titulo: "Tus dones",
+  frase:
+    "Estos son los dones que has reconocido en ti. No los pierdas de vista: ya son tuyos.",
 };
 
 // ── «Los Nudos» — textos editables ──
@@ -1675,17 +1691,17 @@ export function puedeAvanzarPsicologia(data: LineaDeVidaData, n: number): boolea
     case 14: return (data.heridas || []).length > 0;                           // Heridas: ≥1
     case 17: return (data.constelaciones || []).some(                          // Relación: ≥1 con contenido
                (c) => (c?.nudos?.length ?? 0) > 0 || (c?.arquetipos?.length ?? 0) > 0 || t(c?.titulo) !== "" || t(c?.texto) !== "");
-    case 18: return DONES_PREGUNTAS.every(                                      // Recuérdate: todas resueltas
+    case 19: return DONES_PREGUNTAS.every(                                      // Recuérdate: todas resueltas
                (q) => t(data.dones?.respuestas?.[q.key]) !== "" || (data.dones?.sinIdeas || []).includes(q.key));
-    case 19: return (data.dones?.lista || []).some((d) => t(d.texto) !== "");  // Dones: ≥1 don escrito
-    case 20: return (data.miedos || []).length > 0;                            // Miedos: ≥1
-    case 21: return (data.miedos || []).length > 0 &&                          // Atrévete: todos respondidos
+    case 20: return (data.dones?.lista || []).some((d) => t(d.texto) !== "");  // Dones: ≥1 don escrito
+    case 22: return (data.miedos || []).length > 0;                            // Miedos: ≥1
+    case 23: return (data.miedos || []).length > 0 &&                          // Atrévete: todos respondidos
                     (data.miedos || []).every((m) => miedoRespondidas(m) >= MIEDOS_PREGUNTAS.length);
-    case 22: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
-    case 23: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
-    case 24: return t(data.brujula?.mensaje) !== "";                           // Carta
+    case 24: return (data.constelaciones || []).some((c) => constelacionIntegrada(c) > 0); // Integración: ≥1 rellena
+    case 25: return t(data.compromiso?.necesitaste) !== "" && t(data.compromiso?.dartelo) !== ""; // Compromiso
+    case 26: return t(data.brujula?.mensaje) !== "";                           // Carta
     // 7 («Tu cerebro») no pide nada: es una página de lectura.
-    default: return true;  // 1, 4, 6, 7, 15, 16, 25, 26 (la rueda), 27 y cualquier otro: sin requisito
+    default: return true;  // 1, 4, 6, 7, 15, 16, 18 y 21 (los listados), 27, 28 (la rueda), 29 y cualquier otro: sin requisito
   }
 }
 

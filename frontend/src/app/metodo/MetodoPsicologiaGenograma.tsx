@@ -15,7 +15,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Input, Text, Textarea } from "@chakra-ui/react";
+import { Box, Flex, Image, Input, SimpleGrid, Text, Textarea } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
@@ -24,13 +24,14 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { GenogramaMapa } from "../../components/metodo/GenogramaMapa";
 import { FotoPersonaBoton } from "../../components/metodo/FotoPersonaBoton";
+import { simboloSrc, useSimbolosFamilia } from "../../components/metodo/familiaSimbolos";
 import { useMapaFamilia } from "../../hooks/useMapaFamilia";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
   personaLabel,
+  personaSimbolos,
   type PersonaGenograma,
 } from "../../components/metodo/psicologiaRecorrido";
 import { useGenograma, useGenogramaPreguntas } from "../../components/metodo/psicologiaRecorrido.en";
@@ -55,7 +56,7 @@ export default function MetodoPsicologiaGenograma() {
   const exp = experienciaById(experienciaId || "");
   const genograma = useGenograma();
 
-  const { loading, personas, miFoto, añadir, actualizar, actualizarNota, eliminar, flushGuardado } =
+  const { loading, personas, actualizar, actualizarNota, eliminar, flushGuardado } =
     useMapaFamilia(experienciaId);
   const [abiertoId, setAbiertoId] = useState<string | null>(null);
 
@@ -84,7 +85,7 @@ export default function MetodoPsicologiaGenograma() {
               <MetodoStepHeader
                 icon={<NeuropsicologiaIcon size={{ base: "38px", md: "52px" }} />}
                 title={genograma.titulo}
-                step={{ current: 10, total: 27 }}
+                step={{ current: 10, total: 29 }}
                 bgColor={`${neuropsicologiaBg}f0`}
                 color={neuropsicologiaTxt}
                 nom={neuropsicologiaNom}
@@ -104,14 +105,17 @@ export default function MetodoPsicologiaGenograma() {
               <IntroRecorrido>{genograma.intro}</IntroRecorrido>
             </Reveal>
 
+            {/* Las tarjetas de la familia: una por persona, 3-4 por fila en
+                ordenador y de dos en dos en pantallas medianas. Cada una: foto
+                y rol arriba, sus personajes/animales bajo la rayita, y el botón
+                de Rellenar que abre su ficha. (El mapa para COLOCAR a la
+                familia sigue en la página anterior, «Tu familia».) */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
-              <GenogramaMapa
-                personas={personas}
-                miFoto={miFoto}
-                mostrarProgreso
-                onAbrir={(p) => setAbiertoId(p.id)}
-                onAñadir={(fila, col, dir) => setAbiertoId(añadir(fila, col, dir))}
-              />
+              <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={{ base: 3, md: 4 }} w="100%">
+                {personas.map((p) => (
+                  <TarjetaPersona key={p.id} p={p} onRellenar={() => setAbiertoId(p.id)} />
+                ))}
+              </SimpleGrid>
             </Reveal>
 
             {personas.length === 0 && (
@@ -140,6 +144,113 @@ export default function MetodoPsicologiaGenograma() {
 
       <SiteFooter />
     </Box>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// TARJETA de una persona: foto a la izquierda con su rol al lado, la rayita,
+// sus personajes/animales y el botón de Rellenar (abre la ficha).
+// ─────────────────────────────────────────────────────────────────────────
+function TarjetaPersona({ p, onRellenar }: { p: PersonaGenograma; onRellenar: () => void }) {
+  const t = useT();
+  const { nombre: nombreSimbolo } = useSimbolosFamilia();
+  const simbolos = personaSimbolos(p);
+  const rol = (p.parentesco || "").trim();
+  const nombre = (p.nombre || "").trim();
+
+  return (
+    <Flex
+      direction="column"
+      position="relative"
+      overflow="hidden"
+      borderRadius="xl"
+      border={`1.5px solid ${TINTA}66`}
+      boxShadow={`0 0 14px ${TINTA}00`}
+      transition="box-shadow 0.2s ease, transform 0.2s ease"
+      _hover={{ boxShadow: `0 0 14px ${TINTA}59`, transform: "translateY(-2px)" }}
+    >
+      <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="xl" />
+      <Flex position="relative" zIndex={1} direction="column" flex="1" p={{ base: 4, md: 4 }} gap={3}>
+        {/* Foto a la izquierda, rol (y nombre) al lado */}
+        <Flex align="center" gap={3}>
+          <Box
+            w="52px"
+            h="52px"
+            flexShrink={0}
+            borderRadius="full"
+            overflow="hidden"
+            border={`1.5px solid ${TINTA}66`}
+            bg="rgba(255,251,243,0.6)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {p.foto ? (
+              <Image src={p.foto} alt={personaLabel(p)} w="100%" h="100%" objectFit="cover" />
+            ) : (
+              <Text color={TINTA} fontSize="xl" fontWeight="700" lineHeight="1">
+                {personaLabel(p).charAt(0).toUpperCase()}
+              </Text>
+            )}
+          </Box>
+          <Box minW={0}>
+            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.25"
+                  noOfLines={1} style={{ textShadow: INK_SHADOW }}>
+              {rol || personaLabel(p)}
+            </Text>
+            {rol && nombre && (
+              <Text color={TINTA} fontSize="sm" opacity={0.75} noOfLines={1} style={{ textShadow: INK_SHADOW }}>
+                {nombre}
+              </Text>
+            )}
+          </Box>
+        </Flex>
+
+        {/* La rayita de la casa */}
+        <Box h="1px" w="100%" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+        {/* Sus personajes/animales (los eligió en «Tu familia») */}
+        {simbolos.length > 0 && (
+          <Flex justify="center" gap={3}>
+            {simbolos.map((k) => (
+              <Image
+                key={k}
+                src={simboloSrc(k)}
+                alt={nombreSimbolo(k)}
+                title={nombreSimbolo(k)}
+                w="46px"
+                h="46px"
+                borderRadius="lg"
+                objectFit="cover"
+                border={`1px solid ${TINTA}40`}
+              />
+            ))}
+          </Flex>
+        )}
+
+        {/* Rellenar — abre la ficha para escribir sobre su influencia */}
+        <Box
+          as="button"
+          onClick={onRellenar}
+          mt="auto"
+          w="100%"
+          py={2}
+          borderRadius="full"
+          bg={TINTA}
+          color={PAPEL}
+          fontFamily="'EB Garamond', serif"
+          fontWeight="700"
+          fontSize={{ base: "sm", md: "md" }}
+          letterSpacing="0.04em"
+          cursor="pointer"
+          boxShadow={`0 2px 12px rgba(0,0,0,0.2), 0 0 14px ${TINTA}33`}
+          transition="transform 0.18s, box-shadow 0.18s"
+          _hover={{ transform: "translateY(-1px)", boxShadow: `0 4px 16px rgba(0,0,0,0.26), 0 0 20px ${TINTA}55` }}
+        >
+          {t("metodo.psico.rellenar")}
+        </Box>
+      </Flex>
+    </Flex>
   );
 }
 

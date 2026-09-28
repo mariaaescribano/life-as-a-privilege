@@ -2,6 +2,7 @@ import React from "react";
 import { Flex, Text } from "@chakra-ui/react";
 
 import { IDIOMAS, IDIOMA_ETIQUETA, IDIOMA_NOMBRE, useIdioma } from "../../i18n";
+import { focoBlanco } from "./foco";
 
 type Props = {
   /** El header privado es más compacto: baja un punto el tamaño. */
@@ -66,6 +67,15 @@ const SelectorIdioma = ({ compact = false, fondo = "oscuro" }: Props) => {
               cursor={activo ? "default" : "pointer"}
               textShadow={activo ? glowActivo : "none"}
               _hover={{ opacity: 1, textShadow: glowHover }}
+              // El foco de teclado: el aro de la casa (blanco sobre turquesa,
+              // tinta sobre la landing clara). Sin él, el tabulador pasaba por
+              // aquí sin que se viera nada.
+              borderRadius="sm"
+              _focusVisible={
+                claro
+                  ? { opacity: 1, outline: "2px solid #2A262299", outlineOffset: "2px" }
+                  : { opacity: 1, textShadow: glowHover, ...focoBlanco }
+              }
               transition="opacity 0.25s ease, text-shadow 0.25s ease"
             >
               {IDIOMA_ETIQUETA[codigo]}

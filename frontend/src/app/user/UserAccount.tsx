@@ -11,6 +11,18 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 
 import { inputFechaSx } from "../../components/global/CampoContrasena";
 
+/** Años cumplidos a partir de la fecha (ISO), o null si no hay fecha válida.
+ *  El mismo cálculo que la columna «Edad» de /admin/usuarios. */
+const edadDe = (iso: string): number | null => {
+  if (!iso) return null;
+  const [a, m, d] = iso.slice(0, 10).split("-").map(Number);
+  if (!a || !m || !d) return null;
+  const hoy = new Date();
+  let edad = hoy.getFullYear() - a;
+  if (hoy.getMonth() + 1 < m || (hoy.getMonth() + 1 === m && hoy.getDate() < d)) edad -= 1;
+  return edad >= 0 && edad < 130 ? edad : null;
+};
+
 const inputStyles = {
   bg: "rgba(255,255,255,0.06)",
   border: "1px solid rgba(255,255,255,0.28)",
@@ -353,6 +365,9 @@ export default function UserAccount() {
             borderRadius="3xl"
             px={{ base: 5, md: 9 }}
             py={{ base: 7, md: 9 }}
+            // Cristal con algo más de cuerpo: un filo de luz por arriba y una
+            // sombra que lo despega del turquesa, sin halo claro alrededor.
+            boxShadow="inset 0 1px 0 rgba(255,255,255,0.16), 0 18px 44px rgba(0,0,0,0.16)"
             sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
           >
             <Box>
@@ -405,7 +420,12 @@ export default function UserAccount() {
               />
             </Box>
 
-            <GridItem colSpan={{ base: 1, md: 2 }}>
+            {/* La fecha y la edad comparten fila: la fecha a la izquierda y a
+                su lado la edad, que no se escribe: se calcula sola de la fecha
+                y cambia en vivo al elegirla. El rótulo de la fecha es más largo
+                y puede caer en dos líneas, así que las dos celdas se alinean
+                por abajo para que las cajitas queden a la misma altura. */}
+            <Flex direction="column" justify="flex-end">
               <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
                 {t("auth.campo.fechaNacimiento")}
               </Text>
@@ -418,7 +438,41 @@ export default function UserAccount() {
                 {...inputStyles}
                 sx={inputFechaSx}
               />
-              <Text color="rgba(255,255,255,0.72)" fontSize="sm" mt={2} textAlign="center" lineHeight="1.5">
+            </Flex>
+
+            <Flex direction="column" justify="flex-end">
+              <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                {t("cuenta.edad")}
+              </Text>
+              {/* Solo se mira, no se toca: la misma píldora que los campos pero
+                  sin hover ni foco, para que se lea como un dato y no como un
+                  hueco por rellenar. Sin fecha enseña un guion apagado. */}
+              <Flex
+                h="62px"
+                align="center"
+                justify="center"
+                borderRadius="full"
+                bg="rgba(255,255,255,0.06)"
+                border="1px solid rgba(255,255,255,0.28)"
+                boxShadow="0 0 10px rgba(255,255,255,0.12)"
+              >
+                {edadDe(fechaNacimiento) !== null ? (
+                  <Text color="white" fontSize="2xl" fontWeight="600" letterSpacing="0.04em" textShadow="0 0 12px rgba(255,255,255,0.45)">
+                    {edadDe(fechaNacimiento)}{" "}
+                    <Box as="span" fontSize="lg" fontWeight="400" color="rgba(255,255,255,0.6)" letterSpacing="0.06em">
+                      {t("cuenta.edad.anios")}
+                    </Box>
+                  </Text>
+                ) : (
+                  <Text color="rgba(255,255,255,0.35)" fontSize="2xl">
+                    —
+                  </Text>
+                )}
+              </Flex>
+            </Flex>
+
+            <GridItem colSpan={{ base: 1, md: 2 }}>
+              <Text color="rgba(255,255,255,0.62)" fontSize="sm" mt={-1} textAlign="center" lineHeight="1.5" fontStyle="italic" textShadow="0 0 8px rgba(255,255,255,0.2)">
                 {t("auth.signin.fechaRegalo")}
               </Text>
             </GridItem>

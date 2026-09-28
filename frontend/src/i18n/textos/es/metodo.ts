@@ -26,7 +26,7 @@ export const metodo = {
   "metodo.ayuda.ejemplo": "Ejemplo",
   "metodo.ayuda.orientacionLibre": "Orientación de acceso libre",
   "metodo.ayuda.cursoPronto": "El curso estará disponible pronto.",
-  "metodo.ayuda.prefieresCompania": "¿Prefieres compañía?",
+  "metodo.ayuda.prefieresCompania": "Agendando una llamada",
   "metodo.ayuda.recorreConmigo":
     "Recorre el camino conmigo. Agenda una llamada · horario peninsular España",
   /** Rótulos de la ficha de un arquetipo (astrología dentro de psicología). */
@@ -1152,9 +1152,9 @@ export const metodo = {
   "metodo.psico.ruedaMensajeras": "Las emociones son mensajeras",
   "metodo.psico.ruedaMensajerasTexto":
     "Ninguna viene a fastidiarte: todas traen un recado sobre lo que necesitas. La ira avisa de un límite que alguien ha pasado; el miedo, de algo que puedes perder; la tristeza, de algo que se ha ido; la alegría, de que estás en el buen camino. Cuando escuchas el mensaje, la emoción deja de tener que gritar.",
-  "metodo.psico.ruedaTitulo": "La rueda de las emociones",
+  "metodo.psico.ruedaTitulo": "La rueda de las emociones · Pulsa para conocerlas",
   "metodo.psico.ruedaToca":
-    "Empieza por el centro, en la emoción que más se parezca a lo que sientes, y ve hacia fuera. Toca cualquier palabra y te digo cómo se reconoce.",
+    "",
   "metodo.psico.ruedaDesliza": "Desliza la rueda para verla entera.",
   "metodo.psico.ruedaPalabras": "palabras para lo que sientes",
   "metodo.psico.emocionBasica": "Emoción básica",
@@ -1221,6 +1221,16 @@ export const metodo = {
   "metodo.psico.tusDones": "Tus dones",
   "metodo.psico.nombraTuDon": "Nombra tu don…",
   "metodo.psico.borrarDon": "Borrar don",
+  /** El espejo funciona como Heridas: se reúne UN don y se guarda abajo. */
+  "metodo.psico.donEnCurso": "Tu don en curso",
+  "metodo.psico.tocaParaReunirDon": "Toca recuerdos y arquetipos para reunir un don.",
+  "metodo.psico.heTerminadoDon": "He terminado este don",
+  "metodo.psico.ponleNombreDon": "Ponle nombre a tu don",
+  "metodo.psico.guardarDon": "Guardar don",
+  "metodo.psico.donSinNombre": "Don sin nombre",
+  /** El listado «Tus dones» (página propia, tras el espejo). */
+  "metodo.psico.sinDonesLista": "Todavía no has guardado ningún don.",
+  "metodo.psico.crearMisDones": "← Crear mis dones",
 
   // ── Psicología · familia y genograma ───────────────────────────────────
   "metodo.psico.tocaParaCambiarla": "· toca una elegida para cambiarla",
@@ -1230,6 +1240,7 @@ export const metodo = {
   "metodo.psico.siQuitar": "Sí, quitar",
   "metodo.psico.no": "No",
   "metodo.psico.hecho": "Hecho ✓",
+  "metodo.psico.rellenar": "Rellenar",
   "metodo.psico.familiaQuienEs": "¿Quién es?",
   "metodo.psico.familiaEditar": "Editar",
   "metodo.psico.familiaListo": "Listo",
@@ -1245,7 +1256,7 @@ export const metodo = {
   "metodo.psico.sinRecuerdosAnio": "Sin recuerdos escritos este año.",
   "metodo.psico.marcarHuella": "Marcar que dejó huella",
   "metodo.psico.heridasIntro":
-    "Una experiencia que deja Huella puede dejar una necesidad emocional sin cubrir. Para dar sentido a ese dolor y evitar que vuelva a repetirse, la mente crea un Nudo: una creencia protectora que, aunque nace para ayudarnos, acaba limitando nuestra forma de vivir. La unión de la experiencia, la necesidad no cubierta y ese nudo constituye una Herida emocional.",
+    "Una experiencia que deja **Huella** puede dejar una necesidad emocional sin cubrir. Para dar sentido a ese dolor y evitar que vuelva a repetirse, la mente crea un **Nudo**: una creencia protectora que, aunque nace para ayudarnos, acaba limitando nuestra forma de vivir. La unión de la experiencia, la necesidad no cubierta y ese nudo constituye una **Herida** emocional.",
   "metodo.psico.heridaEnCurso": "Tu herida en curso",
   "metodo.psico.tocaParaReunir": "Toca huellas, nudos y necesidades para reunir una herida.",
   "metodo.psico.heTerminadoHerida": "He terminado esta herida",
@@ -1264,8 +1275,17 @@ export const metodo = {
   "metodo.psico.tituloRelacion": "Título de la relación…",
   "metodo.psico.borrarRelacion": "Borrar relación",
   "metodo.psico.queRelacion": "¿Qué relación encuentras? Escribe lo que tú ves…",
+  /** «Relación» funciona como Heridas: se reúne UNA relación y se guarda abajo. */
+  "metodo.psico.relacionEnCurso": "Tu relación en curso",
+  "metodo.psico.tocaParaReunirRelacion": "Toca heridas y arquetipos para reunir una relación.",
+  "metodo.psico.heTerminadoRelacion": "He terminado esta relación",
+  "metodo.psico.ponleNombreRelacion": "Ponle nombre a tu relación",
+  "metodo.psico.guardarRelacion": "Guardar relación",
+  /** El listado «Tus relaciones» (página propia, tras Relación). */
+  "metodo.psico.sinRelacionesLista": "Todavía no has guardado ninguna relación.",
+  "metodo.psico.crearMisRelaciones": "← Crear mis relaciones",
   "metodo.psico.integracionIntro":
-    "Nada de lo que has vivido puede cambiarse. Pero sí puedes cambiar el significado que tiene en tu historia. Dale un sentido a tu dolor para que deje de convertirse en sufrimiento.",
+    "Nada de lo que has vivido puede cambiarse. Pero sí puedes cambiar la relación con la que guardas esa experiencia.",
   "metodo.psico.sinRelaciones":
     "Aún no has compuesto tus relaciones. Vuelve a la página «Relación» para reunirlas y aquí les darás un sentido.",
   "metodo.psico.irARelacion": "Ir a Relación →",

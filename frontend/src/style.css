@@ -42,6 +42,26 @@
   outline: none;
 }
 
+/* EXCEPCIÓN: el foco de TECLADO sí se ve. Los aros de `focoAzul` (pantallas de
+   acceso) y `focoBlanco` (resto) van en `_focusVisible`, que gana a la regla de
+   arriba, así que solo se encienden al llegar con el tabulador.
+   Y esta base invisible es la mitad del truco: muchos botones animan con
+   `transition: all`, que también anima el `outline-color`. Sin base, el aro
+   arrancaba desde el color de foco por defecto del navegador (un azul casi
+   negro) y el botón enseñaba dos filos oscuros un instante — se vio en el
+   «Entrar» de iniciar sesión. Con el mismo trazo ya puesto pero con alfa 0, la
+   animación es solo un fundido del aro, a la ida y a la vuelta. */
+button,
+a,
+input,
+textarea,
+select,
+[role="button"],
+[tabindex] {
+  outline: 2px solid rgba(255, 255, 255, 0);
+  outline-offset: 2px;
+}
+
 /* MÓVIL: nada de rectángulo azul al pulsar.
    Al tocar un botón (o cualquier cosa pulsable), Android y iOS pintan encima un
    rectángulo translúcido —azul clarito— del tamaño exacto del elemento. Se veía
@@ -111,6 +131,26 @@ a,
 }
 ::-moz-selection {
   background: rgba(255, 255, 255, 0.3);
+  color: inherit;
+}
+
+/* DENTRO de los campos de texto la franja blanca no vale: sobre los campos
+   claros (los de psicología: crema con tinta marrón) era invisible y parecía
+   que no se estaba seleccionando nada. Ahí la selección va en el azul suave de
+   la casa (el mismo tono del foco de las pantallas de acceso), que se ve bien
+   sobre claro y sobre oscuro; la letra se queda de su color. */
+input::selection,
+textarea::selection,
+[contenteditable]::selection,
+[contenteditable] *::selection {
+  background: rgba(150, 200, 255, 0.45);
+  color: inherit;
+}
+input::-moz-selection,
+textarea::-moz-selection,
+[contenteditable]::-moz-selection,
+[contenteditable] *::-moz-selection {
+  background: rgba(150, 200, 255, 0.45);
   color: inherit;
 }
 
