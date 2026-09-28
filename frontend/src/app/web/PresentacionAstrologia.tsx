@@ -219,9 +219,9 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
             </Reveal>
 
             {/* Carta de muestra: se dibuja sola (los planetas brotan uno a uno y
-                después se trazan los aspectos). Va dentro de un box con el cielo
-                estrellado, del mismo material que la ficha de al lado, para que
-                pesen igual. */}
+                después se trazan los aspectos). Va dentro de un box con la FOTO
+                del espacio (space.webp) —no el estrellado dibujado—, del mismo
+                material que la ficha de al lado, para que pesen igual. */}
             <Reveal direction="left" distance={26} duration={0.8} delay={0.1} h="100%">
               <Box
                 position="relative"
@@ -233,7 +233,11 @@ export default function PresentacionAstrologia({ d }: { d: PresentacionDisciplin
                 // presentaciones se definen por el halo, no por la línea.
                 boxShadow={`0 0 45px ${d.txt}66, 0 0 90px ${d.txt}33`}
               >
-                <DisciplinaBgLayer nom={astrologiaNom} borderRadius="3xl" />
+                <DisciplinaBgLayer
+                  nom={astrologiaNom}
+                  imageSrc="/img/astrologia/space.webp"
+                  borderRadius="3xl"
+                />
                 <Flex
                   direction="column"
                   align="center"

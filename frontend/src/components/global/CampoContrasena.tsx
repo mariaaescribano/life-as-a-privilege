@@ -75,7 +75,6 @@ export function CampoContrasena({
         mb={2.5}
         fontWeight="600"
         textAlign="center"
-        textShadow="0 0 8px rgba(255,255,255,0.35)"
       >
         {label}
       </Text>

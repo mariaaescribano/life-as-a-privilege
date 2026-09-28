@@ -16,7 +16,7 @@ export const elMetodo = {
   "elMetodo.porDentro": "No estudias ocho disciplinas.\nTe descubres a ti desde ocho perspectivas.",
   /** Va justo debajo del título: avisa de que el mandala se puede pinchar. */
   "elMetodo.porDentroPista": "Haz clic en cada círculo para descubrirla",
-  "elMetodo.cadaDisciplina": "Puedes elegir el orden que quieras, pero este es el que propongo:",
+  "elMetodo.cadaDisciplina": "Elige el orden que quieras. Yo te propongo este:",
   /** Cabecera de las cajas de la ficha de disciplina (DisciplinaFicha). */
   "elMetodo.queIncluye": "Qué incluye",
 
@@ -47,8 +47,9 @@ export const elMetodo = {
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",
   "elMetodo.hero.sub":
-    "El Mapa combina ciencia y tradición para comprender tu mente, tu historia y tu cuerpo.",
-  "elMetodo.hero.cta": "Empezar mi Mapa",
+    "Ciencia y tradición para comprender tu mente, tu historia y tu cuerpo.",
+  // Ya no lleva al pago: abre el TEST de «encuentra tu disciplina».
+  "elMetodo.hero.cta": "Test sin coste",
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).
   "elMetodo.hero.ctaPie": "Desde 30 € · Sin suscripción · Sin compromiso",
@@ -56,7 +57,7 @@ export const elMetodo = {
    *  WhatsApp. En la primera pantalla todavía no hay confianza para meterse en
    *  un grupo de desconocidos, pero sí para preguntar una cosa; la comunidad se
    *  ofrece más abajo, en «¿Por dónde empiezo?», cuando ya sabe qué es esto. */
-  "elMetodo.hero.escribeme": "Hablar con la creadora",
+  "elMetodo.hero.escribeme": "Habla conmigo",
   /** El botón de al lado del de «Empezar por 30 €», en «¿Por dónde empiezo?». */
   "elMetodo.hero.comunidad": "Únete a la comunidad",
   /** Mensaje ya escrito al abrir el chat desde el hero: que no tenga que pensar
@@ -108,12 +109,7 @@ export const elMetodo = {
   // ocho compradas una a una. El nombre y la cuenta escrita lo dejan claro.
   "elMetodo.precio.mapa.nombre": "Las ocho disciplinas",
   "elMetodo.precio.mapa.destacado": "{num} disciplinas · {precio} cada una · {total} en total",
-  "elMetodo.precio.mapa.desc": "Puedes comprarlas cuando quieras.",
-  "elMetodo.precio.llamada.nombre": "Acompañamiento (opcional)",
-  "elMetodo.precio.llamada.desc":
-    "Llamadas conmigo para profundizar. La primera, de 20 minutos, sin coste.",
-  "elMetodo.precio.pie":
-    "Sin suscripción y sin cuota mensual. Acceso durante 1 año a lo que compres; los PDF se quedan contigo para siempre.",
+  "elMetodo.precio.mapa.desc": "No hay pago único. Las compras cuando quieras.",
   /** Botón que se repite tras el precio y tras «¿Por dónde empiezo?». */
   "elMetodo.empezarPor": "Empezar por {precio}",
 
@@ -126,7 +122,7 @@ export const elMetodo = {
     "No hay ningún orden obligatorio, pero sí recomendado.",
   "elMetodo.empiezo.a.titulo": "Si no sabes por dónde",
   "elMetodo.empiezo.a.texto":
-    "Empieza por Astrología, pues se ve claro cómo las circunstancias se han formado para que tengas ciertas características y patrones.",
+    "Empieza por Psicología o Astrología. Compréndete a ti antes que a tu cuerpo, a tu alma o a la Historia.",
   "elMetodo.empiezo.b.titulo": "Si quieres comprender tu historia",
   "elMetodo.empiezo.b.texto":
     "Empieza por Psicología. Reconstruyes tu historia, de dónde vienen tus patrones y por qué los sigues sosteniendo.",
@@ -181,25 +177,38 @@ export const elMetodo = {
   "elMetodo.dudas.asunto": "Consulta — Life as a Privilege",
   "elMetodo.dudas.placeholder": "Escribe aquí tu consulta...",
 
-  // ── Llamada gratuita (botón flotante + popup) ──────────────────────────
-  // Sale solo a los 5 s de entrar (una vez por sesión) y con el botón flotante.
-  "elMetodo.llamada.boton": "Llamada",
-  /** El hermano del botón flotante. «Mensaje» y no «Escríbeme»: al lado de
-   *  «Llamada» las dos palabras nombran el canal, y el glifo de al lado ya dice
-   *  que el canal es WhatsApp. */
+  // ── Botones flotantes + llamada gratuita (popup) ───────────────────────
+  // El popup sale solo: a los 20 s de entrar y, al cerrarse, otra vez a los 70 s.
+  /** El botón flotante del test de «¿por qué disciplina empiezo?». */
+  "elMetodo.test.boton": "Test",
+
+  // ── El test de «encuentra tu disciplina» (TestDisciplina) ───────────────
+  // Las preguntas y respuestas viven con sus puntos en TestDisciplina.tsx
+  // (tipo Texto {es,en}); aquí va solo la carpintería del popup.
+  /** El gemelo de «Empezar por 30 €» (CtaEmpezar). */
+  "elMetodo.test.botonEmpezar": "Test para empezar",
+  "elMetodo.test.titulo": "Encuentra tu disciplina",
+  "elMetodo.test.sub": "8 preguntas · 2 minutos · sin coste",
+  "elMetodo.test.ver": "Ver mi disciplina",
+  "elMetodo.test.faltan": "{n} sin contestar",
+  "elMetodo.test.resultado": "Tu disciplina para empezar",
+  "elMetodo.test.verDisciplina": "Ver disciplina",
+  "elMetodo.test.cerrar": "Cerrar el test",
+  /** Su hermano. «Mensaje» y no «Escríbeme»: nombra el canal, y el glifo de al
+   *  lado ya dice que el canal es WhatsApp. */
   "elMetodo.llamada.botonMensaje": "Mensaje",
   // El título va en DOS líneas: el «sin coste» cae debajo, más pequeño y en
   // cursiva. Por eso son dos claves y no una con salto de línea: cada línea
   // tiene su tipografía, y en inglés el reparto de palabras no es el mismo.
-  "elMetodo.llamada.titulo": "Agenda una llamada",
+  "elMetodo.llamada.titulo": "Hablemos juntos",
   "elMetodo.llamada.tituloSufijo": "sin coste",
-  "elMetodo.llamada.texto": "Descubre cómo puedo acompañarte.",
-  "elMetodo.llamada.remate": "No tienes que hacerlo todo solo/a.",
-  "elMetodo.llamada.whatsapp": "Escribe por WhatsApp",
+  "elMetodo.llamada.texto": "Cuéntame qué estás buscando y vemos por dónde empezar.",
+  "elMetodo.llamada.remate": "",
+  "elMetodo.llamada.whatsapp": "Escríbeme por WhatsApp",
   /** Mensaje ya escrito al abrir el chat: que no tenga que pensar cómo empezar,
    *  que es justo donde la gente se cae. */
   "elMetodo.llamada.whatsappTexto": "¡Hola María! Te escribo desde Life as a Privilege.",
-  "elMetodo.llamada.cta": "Agendar llamada",
+  "elMetodo.llamada.cta": "Agenda una llamada",
   "elMetodo.llamada.cerrar": "Cerrar",
 
   // ── Cómic del origen (ComicPorQueExiste) ───────────────────────────────

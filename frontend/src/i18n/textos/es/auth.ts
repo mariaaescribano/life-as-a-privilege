@@ -39,11 +39,17 @@ export const auth = {
   "auth.signin.yaTienes": "¿Ya tienes cuenta? Iniciar sesión",
   "auth.signin.creada": "¡Cuenta creada!",
   "auth.signin.creadaTexto": "Continuamos en un instante...",
-  "auth.signin.fechaRegalo": "El día de tu cumpleaños te llegará un regalo por email: un 50 % en una disciplina.",
+  "auth.signin.fechaRegalo": "El día de tu cumpleaños tendrás un 50 % en una disciplina.",
   "auth.signin.miraCorreo": "Mira tu correo",
   "auth.signin.miraCorreoTexto": "Tu cuenta está creada. Para activarla, pulsa el enlace que te acabamos de enviar a:",
   "auth.signin.miraCorreoSpam": "Después ya podrás iniciar sesión con tu nombre o tu email y tu contraseña. Si no lo ves en unos minutos, mira en spam o en promociones.",
   "auth.signin.entendido": "Entendido",
+  /** La casilla obligatoria de condiciones. El texto legal completo (el que
+   *  antes iba en letra pequeña bajo el formulario) vive en el popup de
+   *  «saber más», que reutiliza privacidad.infoRegistro. */
+  "auth.signin.aceptar": "Aceptar condiciones",
+  "auth.signin.saberMas": "saber más",
+  "auth.signin.condiciones.titulo": "Condiciones y privacidad",
 
   // ── Recuperar contraseña ───────────────────────────────────────────────
   "auth.recuperar.titulo": "Recuperar contraseña",
@@ -63,6 +69,8 @@ export const auth = {
   // ── Avisos de validación ───────────────────────────────────────────────
   "auth.error.faltanDatos": "Faltan datos",
   "auth.error.rellena": "Rellena todos los campos",
+  "auth.error.condiciones": "Falta aceptar las condiciones",
+  "auth.error.condicionesTexto": "Marca la casilla «Aceptar condiciones» para crear tu cuenta.",
   "auth.error.emailInvalido": "Email no válido",
   "auth.error.emailCorrecto": "Introduce un email correcto",
   "auth.error.contraCorta": "Contraseña muy corta",

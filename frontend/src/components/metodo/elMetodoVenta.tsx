@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Grid, Text, type FlexProps } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text, type FlexProps } from "@chakra-ui/react";
 import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
 import { RecorridoVideosMuestra } from "../global/MandalaRecorrido";
 import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import { PrecioConAntes } from "./PrecioConAntes";
-import { IconoWhatsapp } from "./LlamadaCta";
+import { IconoTest, IconoWhatsapp } from "./LlamadaCta";
 import { WHATSAPP_COMUNIDAD_URL } from "../../GlobalVariables";
 import {
   NUM_DISCIPLINAS,
@@ -256,7 +256,7 @@ const MAPA_ANTES =
     ? `${PRECIO_DISCIPLINA_ANTES_EUR * NUM_DISCIPLINAS} €`
     : null;
 
-export function PrecioBloque({ onAcceder }: { onAcceder?: () => void }) {
+export function PrecioBloque({ onAcceder, onTest }: { onAcceder?: () => void; onTest?: () => void }) {
   const t = useT();
 
   // DOS productos, no tres. El acompañamiento bajó de aquí a una línea suelta
@@ -360,41 +360,9 @@ export function PrecioBloque({ onAcceder }: { onAcceder?: () => void }) {
         ))}
       </Grid>
 
-      {/* El acompañamiento, en una línea. Ni caja ni precio grande: es un extra
-          que se contrata aparte cuando ya estás dentro, no un producto entre los
-          dos de arriba. */}
-      <Reveal inView direction="up" distance={14} delay={0.15} duration={0.7}>
-        <Text
-          color="rgba(255,255,255,0.82)"
-          fontSize={{ base: "sm", md: "md" }}
-          lineHeight="1.75"
-          textAlign="center"
-          maxW="720px"
-        >
-          <Text as="span" color="white" fontWeight="600">
-            {t("elMetodo.precio.llamada.nombre")}
-          </Text>
-          {" · "}
-          {t("elMetodo.precio.llamada.desc")}
-        </Text>
-      </Reveal>
-
-      <Reveal inView direction="up" distance={14} delay={0.2} duration={0.7}>
-        <Text
-          color="rgba(255,255,255,0.85)"
-          fontStyle="italic"
-          fontSize={{ base: "sm", md: "md" }}
-          lineHeight="1.75"
-          textAlign="center"
-          maxW="720px"
-        >
-          {t("elMetodo.precio.pie")}
-        </Text>
-      </Reveal>
-
       {/* Botón AQUÍ MISMO: quien acaba de ver el precio y le cuadra no tiene que
           buscar dónde se compra ni volver arriba. */}
-      {onAcceder && <CtaEmpezar onAcceder={onAcceder} />}
+      {onAcceder && <CtaEmpezar onAcceder={onAcceder} onTest={onTest} />}
     </Flex>
   );
 }
@@ -412,7 +380,17 @@ export function PrecioBloque({ onAcceder }: { onAcceder?: () => void }) {
  * que es cuando entrar en un grupo de desconocidos apetece. En el bloque del
  * precio va solo, porque ahí lo único que se decide es comprar.
  */
-export function CtaEmpezar({ onAcceder, conComunidad = false }: { onAcceder: () => void; conComunidad?: boolean }) {
+export function CtaEmpezar({
+  onAcceder,
+  onTest,
+  conComunidad = false,
+}: {
+  onAcceder: () => void;
+  /** Abre el test de «encuentra tu disciplina». Con él, al lado del botón del
+   *  precio sale su GEMELO «Test para empezar»: mismo tamaño, mismo halo. */
+  onTest?: () => void;
+  conComunidad?: boolean;
+}) {
   const t = useT();
   return (
     <Reveal inView direction="up" distance={16} delay={0.1} duration={0.7}>
@@ -420,10 +398,9 @@ export function CtaEmpezar({ onAcceder, conComunidad = false }: { onAcceder: () 
         {/* Los botones, en fila y centrados: así la letra pequeña de abajo cae
             en el medio de la PAREJA y no debajo del primero. En móvil se
             apilan, que dos pastillas de 84vw no caben una al lado de la otra.
-            Son dos escalones, no dos botones iguales: el de empezar conserva su
-            filo grueso y su halo, y el de la comunidad va con el filo fino, sin
-            halo y con la letra más suave. Si los dos brillaran, el ojo no
-            sabría cuál manda —y el que manda es el de pago—. */}
+            «Empezar por 30 €» y «Test para empezar» son GEMELOS (mismo filo,
+            mismo halo): pagar y orientarse valen lo mismo aquí. El de la
+            comunidad sí queda un escalón por debajo, con el filo fino. */}
         <Flex
           direction={{ base: "column", md: "row" }}
           align="center"
@@ -451,6 +428,16 @@ export function CtaEmpezar({ onAcceder, conComunidad = false }: { onAcceder: () 
           }}
           transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
         >
+          {/* El mandala SIEMPRE a la izquierda cuando el botón habla de El Mapa
+              o de empezar: la misma seña que el botón grande de «Acceder». */}
+          <Image
+            src="/img/icono/life.webp"
+            alt=""
+            h={{ base: "24px", md: "30px" }}
+            objectFit="contain"
+            flexShrink={0}
+            style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.42)) drop-shadow(0 0 20px rgba(255,255,255,0.2))" }}
+          />
           <Text
             color="white"
             fontWeight="700"
@@ -463,6 +450,48 @@ export function CtaEmpezar({ onAcceder, conComunidad = false }: { onAcceder: () 
             {t("elMetodo.empezarPor", { precio: PRECIO_DISCIPLINA })}
           </Text>
         </Flex>
+
+        {/* ── TEST PARA EMPEZAR ──
+            El gemelo del botón del precio: misma pastilla, mismo halo, y el
+            icono del test SIEMPRE a la izquierda del rótulo (como en el hero
+            y en el botón flotante). Para quien ve el precio pero aún no sabe
+            por cuál de las ocho entrar. */}
+        {onTest && (
+          <Flex
+            as="button"
+            onClick={onTest}
+            align="center"
+            justify="center"
+            gap={{ base: "10px", md: "12px" }}
+            px={{ base: 8, md: 12 }}
+            py={{ base: "13px", md: "16px" }}
+            w={{ base: "min(84vw, 380px)", md: "auto" }}
+            borderRadius="full"
+            border="1.5px solid rgba(255,255,255,0.7)"
+            bg="rgba(255,255,255,0.12)"
+            cursor="pointer"
+            boxShadow="0 0 22px rgba(255,255,255,0.36), 0 0 48px rgba(180,255,245,0.22)"
+            _hover={{
+              bg: "rgba(255,255,255,0.22)",
+              borderColor: "white",
+              boxShadow: "0 0 32px rgba(255,255,255,0.58), 0 0 66px rgba(180,255,245,0.38)",
+            }}
+            transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
+          >
+            <IconoTest size={{ base: "18px", md: "22px" }} color="white" />
+            <Text
+              color="white"
+              fontWeight="700"
+              fontSize={{ base: "md", md: "xl" }}
+              letterSpacing="0.12em"
+              textTransform="uppercase"
+              whiteSpace="nowrap"
+              textShadow="0 0 12px rgba(255,255,255,0.45)"
+            >
+              {t("elMetodo.test.botonEmpezar")}
+            </Text>
+          </Flex>
+        )}
 
         {/* ── ÚNETE A LA COMUNIDAD ──
             Es un enlace y no un botón porque lleva FUERA de la web (a
@@ -524,7 +553,7 @@ export function CtaEmpezar({ onAcceder, conComunidad = false }: { onAcceder: () 
 // Ocho puertas idénticas no invitan: paralizan. Aquí se señalan tres caminos
 // según lo que traiga cada uno, y con eso ya no hay que elegir entre ocho.
 
-export function PorDondeEmpiezoBloque({ onAcceder }: { onAcceder?: () => void }) {
+export function PorDondeEmpiezoBloque({ onAcceder, onTest }: { onAcceder?: () => void; onTest?: () => void }) {
   const t = useT();
   const caminos: { titulo: ClaveTexto; texto: ClaveTexto }[] = [
     { titulo: "elMetodo.empiezo.a.titulo", texto: "elMetodo.empiezo.a.texto" },
@@ -561,7 +590,7 @@ export function PorDondeEmpiezoBloque({ onAcceder }: { onAcceder?: () => void })
           que el botón va aquí y no a media página de scroll. Y al lado, la
           comunidad: quien todavía no se decide a pagar tiene una puerta que no
           cuesta nada en vez de cerrar la pestaña. */}
-      {onAcceder && <CtaEmpezar onAcceder={onAcceder} conComunidad />}
+      {onAcceder && <CtaEmpezar onAcceder={onAcceder} onTest={onTest} conComunidad />}
     </Flex>
   );
 }

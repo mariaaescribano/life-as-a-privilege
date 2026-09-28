@@ -163,7 +163,7 @@ const base: Record<string, PresentacionDisciplina> = {
     clave: "fisiologia",
     Icon: FisiologiaIcon,
     gancho: {
-      es: "Eres un ecosistema celular en constante cooperación, segundo a segundo. Comprender tus células también es comprenderte a ti.",
+      es: "Eres un ecosistema celular en constante cooperación, segundo a segundo. Conocer tus células también es conocerte a ti.",
       en: "You are a cellular ecosystem in constant cooperation, second by second. To understand your cells is also to understand yourself.",
     },
     ilustracionesLabel: "Fisiología",
@@ -223,7 +223,7 @@ const base: Record<string, PresentacionDisciplina> = {
     clave: "cultura",
     Icon: CulturaIcon,
     gancho: {
-      es: "¿Cómo hemos llegado hasta aquí? Comprender nuestra historia es comprender el mundo en el que vivimos y apreciar la realidad que hemos heredado.",
+      es: "¿Cómo hemos llegado hasta aquí? Comprender la historia de la humanidad es comprender el mundo en el que vivimos y apreciar la realidad que hemos heredado.",
       en: "How did we get here? To understand our history is to understand the world we live in, and to appreciate the reality we have inherited.",
     },
     ilustracionesLabel: "Cultura",

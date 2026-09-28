@@ -54,8 +54,8 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       titulo: "Las características de cada área de tu vida y cómo se relacionan.",
       puntos: [
         "Una interpretación personal de tu carta, realizada por mí, no por una IA.",
-        "Utiliza tu carta como una herramienta para comprender tu historia, tu forma de sentir y los patrones que se repiten en tu Vida.",
-        "Descubre patrones, contradicciones y potenciales que quizá llevas años experimentando sin saber cómo interpretar.",
+        "Utiliza tu carta como una herramienta para comprender tu historia, tus conflictos y tus dones.",
+        "Sana patrones y heridas que llevas años experimentando.",
       ],
     },
     modalDesc:
@@ -87,7 +87,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 2. PSICOLOGÍA (neuropsicología)
   // ───────────────────────────────────────────────────────────
   psicologia: {
-    desc: "Tu carta dice cómo estás configurado. Tu historia cómo y para qué. Aquí los unimos.",
+    desc: "Tu carta dice cómo estás configurado. Tu historia cómo y por qué. Aquí los unimos.",
     videoIntro: {
       titulo: "Comprende cómo tu historia ha dado forma a la persona que eres hoy.",
       puntos: [
@@ -126,11 +126,11 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   ayurveda: {
     desc: "No todos necesitamos lo mismo. Descubre tu constitución única y aprende a cuidar tu cuerpo y tu mente de acuerdo con tu naturaleza.",
     videoIntro: {
-      titulo: "Descubre tu constitución única y aprende a cuidarte de acuerdo con tu naturaleza.",
+      titulo: "Descubre tu constitución y aprende a cuidarte según tu naturaleza.",
       puntos: [
         "Descubre cuál es tu Doṣha predominante y qué revela sobre ti.",
         "Comprende las tendencias naturales de tu cuerpo y de tu mente.",
-        "Descubre qué favorece tu equilibrio y aprende a adaptar tus hábitos, alimentación y rutinas a tu constitución.",
+        "Adapta tus hábitos, alimentación y rutinas para equilibrar tu cuerpo y mente.",
       ],
     },
     modalDesc:
@@ -237,7 +237,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   nutricion: {
     desc: "Entiende cómo los alimentos que eliges cada día te reconstruyen.",
     videoIntro: {
-      titulo: "Descubre cómo los alimentos que eliges cada día reconstruyen tu cuerpo.",
+      titulo: "Descubre cómo los alimentos que eliges cada día te reconstruyen.",
       puntos: [
         "Comprende qué moléculas contienen los alimentos y cómo las utiliza tu organismo.",
         "Descubre por qué tu microbiota influye mucho más allá de la digestión.",
@@ -279,11 +279,11 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 7. CÁBALA
   // ───────────────────────────────────────────────────────────
   cabala: {
-    desc: "Descubre las dimensiones que viven en tu alma y por extensión en ti. Entiende tus equilibrios y desequilibrios.",
+    desc: "Equilibra las dimensiones que viven en tu alma y por extensión en ti. Entiende tus equilibrios y desequilibrios.",
     videoIntro: {
-      titulo: "Descubre las dimensiones de tu alma.",
+      titulo: "Equilibra las dimensiones de tu alma. Resuelve tus conflictos internos.",
       puntos: [
-        "Recorre el Árbol de la Vida y descubre sus diez Sefirot como un mapa para comprenderte.",
+        "Descubre el Árbol de la Vida y sus diez Sefirot como un mapa para comprenderte.",
         "Explora tus conflictos internos, tus cualidades y tu potencial a través de la mirada de la Cábala.",
         "Lleva estos principios a tu vida cotidiana y conviértelos en herramientas para conocerte y transformarte.",
       ],
@@ -325,8 +325,8 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       titulo: "Las grandes historias que dieron forma al mundo.",
       puntos: [
         "Descubre las historias de las civilizaciones que transformaron nuestra forma de entender el mundo y a nosotros mismos.",
-        "Conoce a los pensadores que se hicieron algunas de las mismas preguntas que tú y descubre cómo intentaron responderlas.",
-        "Recorre la historia universal a través de la ciencia, la filosofía, la religión y la cultura, y comprende cómo hemos llegado a pensar como pensamos hoy.",
+        "Conoce la filosofía de los grandes pensadores.",
+        "Para agradecer el presente, recorre la historia universal a través de la ciencia, el arte, la religión y las culturas.",
       ],
     },
     modalDesc:

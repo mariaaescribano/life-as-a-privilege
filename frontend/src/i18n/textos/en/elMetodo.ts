@@ -14,7 +14,7 @@ export const elMetodo = {
     "These aren't eight separate courses. It's a guided exploration of yourself through eight different perspectives, to find the root of your patterns and understand who you are.",
   "elMetodo.porDentro": "Meet the disciplines",
   "elMetodo.porDentroPista": "Click each circle to discover it",
-  "elMetodo.cadaDisciplina": "Each discipline looks at a different part of the human being.",
+  "elMetodo.cadaDisciplina": "Choose whatever order you like. This is the one I suggest:",
   "elMetodo.queIncluye": "What's included",
 
   // ── Each discipline's video box (DisciplinaVideoBox) ───────────────────
@@ -40,9 +40,9 @@ export const elMetodo = {
   "elMetodo.hero.titulo": "What happened to you?",
   "elMetodo.hero.sub":
     "The Map brings together eight perspectives on you —mind, history, body, nature and culture— to help you understand where your patterns come from and how the pieces fit together.",
-  "elMetodo.hero.cta": "Start my Map",
+  "elMetodo.hero.cta": "Free test - Find your discipline",
   "elMetodo.hero.ctaPie": "From €30 · No subscription · No commitment",
-  "elMetodo.hero.escribeme": "Message me on WhatsApp",
+  "elMetodo.hero.escribeme": "Talk to me",
   "elMetodo.hero.comunidad": "Join the community",
   "elMetodo.hero.escribemeTexto": "Hi María! I'm writing from Life as a Privilege.",
 
@@ -75,11 +75,6 @@ export const elMetodo = {
   "elMetodo.precio.mapa.nombre": "All eight disciplines",
   "elMetodo.precio.mapa.destacado": "{num} disciplines · {precio} each · {total} in total",
   "elMetodo.precio.mapa.desc": "You can buy them whenever you like.",
-  "elMetodo.precio.llamada.nombre": "Support (optional)",
-  "elMetodo.precio.llamada.desc":
-    "Calls with me to go deeper. The first one, 20 minutes, is free.",
-  "elMetodo.precio.pie":
-    "No subscription and no monthly fee. One year of access to whatever you buy; the PDFs stay with you forever.",
   "elMetodo.empezarPor": "Start for {precio}",
 
   // ── 10. Where do I start? ──────────────────────────────────────────────
@@ -139,8 +134,16 @@ export const elMetodo = {
   "elMetodo.dudas.asunto": "Question — Life as a Privilege",
   "elMetodo.dudas.placeholder": "Write your question here...",
 
-  // ── Free call (floating button + popup) ────────────────────────────────
-  "elMetodo.llamada.boton": "Call",
+  // ── Floating buttons + free call popup ─────────────────────────────────
+  "elMetodo.test.boton": "Test",
+  "elMetodo.test.botonEmpezar": "Test to get started",
+  "elMetodo.test.titulo": "Find your discipline",
+  "elMetodo.test.sub": "8 questions · 2 minutes · free",
+  "elMetodo.test.ver": "See my discipline",
+  "elMetodo.test.faltan": "{n} unanswered",
+  "elMetodo.test.resultado": "Your discipline to start with",
+  "elMetodo.test.verDisciplina": "View discipline",
+  "elMetodo.test.cerrar": "Close the test",
   "elMetodo.llamada.botonMensaje": "Message",
   "elMetodo.llamada.titulo": "Book a call",
   "elMetodo.llamada.tituloSufijo": "at no cost",

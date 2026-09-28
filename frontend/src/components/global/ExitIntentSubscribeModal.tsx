@@ -7,7 +7,6 @@ import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { EnlaceBaja } from "./EnlaceBaja";
-import { InfoPrivacidad } from "./InfoPrivacidad";
 
 const SHOWN_KEY = "exitIntentShownAt";
 const DISMISSED_KEY = "exitIntentDismissed";
@@ -295,7 +294,6 @@ export function ExitIntentSubscribeModal() {
               </Box>
 
               <EnlaceBaja mt={0} />
-              <InfoPrivacidad tipo="suscripcion" mt={0} />
             </Flex>
           )}
         </ModalBody>

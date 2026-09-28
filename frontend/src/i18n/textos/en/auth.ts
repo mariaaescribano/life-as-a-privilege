@@ -45,6 +45,9 @@ export const auth = {
   "auth.signin.miraCorreoTexto": "Your account has been created. To activate it, click the link we've just sent to:",
   "auth.signin.miraCorreoSpam": "After that you can log in with your name or email and your password. If you can't see it in a few minutes, check your spam or promotions folder.",
   "auth.signin.entendido": "Got it",
+  "auth.signin.aceptar": "Accept the terms",
+  "auth.signin.saberMas": "learn more",
+  "auth.signin.condiciones.titulo": "Terms and privacy",
 
   // ── Reset password ─────────────────────────────────────────────────────
   "auth.recuperar.titulo": "Reset password",
@@ -64,6 +67,8 @@ export const auth = {
   // ── Validation notices ─────────────────────────────────────────────────
   "auth.error.faltanDatos": "Missing details",
   "auth.error.rellena": "Fill in every field",
+  "auth.error.condiciones": "The terms haven't been accepted",
+  "auth.error.condicionesTexto": "Tick the “Accept the terms” box to create your account.",
   "auth.error.emailInvalido": "Invalid email",
   "auth.error.emailCorrecto": "Enter a valid email address",
   "auth.error.contraCorta": "Password too short",

@@ -199,7 +199,7 @@ export default function LogIn() {
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.42)) drop-shadow(0 0 26px rgba(255,255,255,0.22)) drop-shadow(0 0 52px rgba(180,255,245,0.16))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -222,7 +222,7 @@ export default function LogIn() {
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 18px rgba(255,255,255,0.85), 0 0 38px rgba(255,255,255,0.55), 0 0 70px rgba(180,255,245,0.45)"
+          textShadow="0 0 14px rgba(255,255,255,0.38), 0 0 30px rgba(255,255,255,0.22), 0 0 56px rgba(180,255,245,0.16)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -235,7 +235,6 @@ export default function LogIn() {
           lineHeight="1.7"
           letterSpacing="0.03em"
           maxW={{ base: "100%", md: "560px" }}
-          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
@@ -256,7 +255,7 @@ export default function LogIn() {
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
               {t("auth.campo.nombreOEmail")}
             </Text>
             <Input
@@ -322,11 +321,11 @@ export default function LogIn() {
               bg="rgba(255,255,255,0.10)"
               cursor={bloqueado ? "not-allowed" : "pointer"}
               opacity={bloqueado ? 0.55 : 1}
-              boxShadow="0 0 18px rgba(255,255,255,0.36), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 4px 14px rgba(0,0,0,0.18)"
+              boxShadow="0 0 14px rgba(255,255,255,0.2), 0 0 32px rgba(255,255,255,0.1), 0 4px 14px rgba(0,0,0,0.18)"
               _hover={bloqueado ? {} : {
                 bg: "rgba(255,255,255,0.2)",
                 borderColor: "white",
-                boxShadow: "0 0 28px rgba(255,255,255,0.55), 0 0 58px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
+                boxShadow: "0 0 20px rgba(255,255,255,0.32), 0 0 44px rgba(180,255,245,0.18), 0 6px 18px rgba(0,0,0,0.22)",
                 transform: "translateY(-1px)",
               }}
               transition="all 0.25s ease"
@@ -337,7 +336,7 @@ export default function LogIn() {
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"
                 flexShrink={0}
-                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.35))" }}
+                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.42)) drop-shadow(0 0 20px rgba(255,255,255,0.2))" }}
               />
               <Text
                 color="white"
@@ -346,7 +345,7 @@ export default function LogIn() {
                 fontSize={{ base: "md", md: "xl" }}
                 letterSpacing="0.2em"
                 textTransform="uppercase"
-                textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
+                textShadow="0 0 10px rgba(255,255,255,0.3)"
               >
                 {t("auth.login.entrar")}
               </Text>
@@ -376,8 +375,9 @@ export default function LogIn() {
               letterSpacing="0.06em"
               bg="transparent"
               cursor="pointer"
-              textShadow="0 0 8px rgba(255,255,255,0.35)"
-              _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
+              textDecoration="underline"
+              textUnderlineOffset="3px"
+              _hover={{ color: "white" }}
               transition="all 0.22s ease"
             >
               {t("auth.login.olvidada")}
@@ -394,8 +394,9 @@ export default function LogIn() {
               letterSpacing="0.06em"
               bg="transparent"
               cursor="pointer"
-              textShadow="0 0 8px rgba(255,255,255,0.35)"
-              _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
+              textDecoration="underline"
+              textUnderlineOffset="3px"
+              _hover={{ color: "white" }}
               transition="all 0.22s ease"
             >
               {t("auth.login.sinCuenta")}

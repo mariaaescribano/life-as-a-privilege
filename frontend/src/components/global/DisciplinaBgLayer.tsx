@@ -175,7 +175,10 @@ export const DisciplinaBgLayer = ({
    *  variante (p.ej. TCM vertical en los boxes de los tests). */
   imageSrc?: string;
 }) => {
-  if (nom === astrologiaNom) {
+  // Astrología no tiene imagen por defecto: su fondo es el cielo estrellado.
+  // Pero un `imageSrc` explícito manda (p. ej. space.webp en el resultado del
+  // test): quien lo pasa está pidiendo una foto, no el estrellado.
+  if (nom === astrologiaNom && !imageSrc) {
     return <StarsLayer borderRadius={borderRadius} overlay={overlay} blur={blur} talCual={talCual} />;
   }
   const src = imageSrc ?? DISCIPLINA_BG_IMG[nom];

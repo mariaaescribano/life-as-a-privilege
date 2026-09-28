@@ -346,6 +346,42 @@ export class MailService {
     );
   }
 
+  // ───────────────────────────────────────────────────────────────────────────
+  // Cuenta activada. Sale al pulsar el enlace del correo de bienvenida, SOLO la
+  // primera vez (UserService.confirmarCuenta). Le dice que ya puede entrar y
+  // que lo siguiente es elegir y comprar su primera disciplina en el Mapa.
+  // ───────────────────────────────────────────────────────────────────────────
+  async enviarCuentaActivada(email: string, nombre: string): Promise<void> {
+    const frontendUrl = this.frontendUrl;
+    const nombreSeguro = this.escaparHtml(nombre).trim();
+    const saludo = nombreSeguro ? `Muy buenas, <strong>${nombreSeguro}</strong>.` : 'Muy buenas.';
+    const parrafo = (texto: string) =>
+      `<p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">${texto}</p>`;
+    const html = this.plantilla(
+      'Tu cuenta ya está activa',
+      `
+        ${parrafo(saludo)}
+        ${parrafo('Has confirmado tu correo, así que tu cuenta en <strong>Life as a Privilege</strong> ya está activa.')}
+        ${parrafo(
+          'El siguiente paso es elegir tu primera disciplina. Cuando entres verás tu Mapa con las ocho: ' +
+          'pulsa la que más te llame y la desbloqueas desde ahí.',
+        )}
+        ${parrafo('No hay un orden obligatorio. El Mapa te propone uno, pero puedes empezar por la que te apetezca.')}
+        <p style="margin: 28px 0;">
+          ${this.pildora(`${frontendUrl}/logIn`, 'Entrar y elegir mi disciplina')}
+        </p>
+        <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
+          Si dudas entre una y otra, lo hablamos: son veinte minutos, sin coste y sin compromiso.
+          <a href="${frontendUrl}/contacto?conocernos=1" style="color:#ffffff;">Buscamos un hueco</a>.
+        </p>
+        <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+          Un abrazo,<br />María
+        </p>
+      `,
+    );
+    await this.enviar(email, 'Tu cuenta ya está activa — Life as a Privilege', html, 'email de cuenta activada');
+  }
+
   /**
    * Un botón de los correos que no son de disciplina: blanco tenue sobre el
    * turquesa. En minúsculas y sin apretar las letras, a propósito — un botón en
@@ -372,11 +408,15 @@ export class MailService {
   // caduca en una hora (ver UserService.crearTokenRecuperacion).
   // ───────────────────────────────────────────────────────────────────────────
   async enviarRecuperacionPassword(email: string, nombre: string, enlace: string): Promise<void> {
+    // Como en la bienvenida: el nombre se escapa y, si viene vacío, el saludo
+    // se queda sin él en vez de un «Hola ,».
+    const nombreSeguro = this.escaparHtml(nombre).trim();
+    const hola = nombreSeguro ? `Hola <strong>${nombreSeguro}</strong>, has` : 'Hola, has';
     const html = this.plantilla(
       'Recupera tu contraseña',
       `
         <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
-          Hola <strong>${nombre}</strong>, has pedido restablecer la contraseña de tu cuenta.
+          ${hola} pedido restablecer la contraseña de tu cuenta.
         </p>
         <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
           Pulsa el botón para elegir una nueva. El enlace <strong>caduca en 1 hora</strong> y

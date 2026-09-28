@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text, useBreakpointValue, type BoxProps } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -21,7 +21,8 @@ import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../compone
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
-import { BotonLlamadaFlotante, IconoWhatsapp, PopupLlamada } from "../../components/metodo/LlamadaCta";
+import { BotonesFlotantes, IconoTest, IconoWhatsapp, PopupLlamada } from "../../components/metodo/LlamadaCta";
+import { TestDisciplinaModal } from "../../components/metodo/TestDisciplina";
 import {
   FaqBloque,
   PorDondeEmpiezoBloque,
@@ -52,8 +53,6 @@ import {
  * a partir de este.
  */
 const ZOOM_PAGINA = 1.01;
-/** Marca de sesión: el popup de la llamada se abre solo UNA vez por visita. */
-const LLAMADA_VISTA = "elMetodo.llamadaVista";
 /** El inverso exacto, para las 8 tarjetas: deshace el zoom de la página. */
 const ZOOM_TARJETAS = 1 / ZOOM_PAGINA;
 
@@ -524,9 +523,14 @@ export default function ElMetodo() {
   const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
   const [dudasOpen, setDudasOpen] = useState(false);
   const [bookCallOpen, setBookCallOpen] = useState(false);
-  // Popup de la llamada gratuita: se abre SOLO a los 15 s de entrar (una vez por
-  // sesión) y, a partir de ahí, con el botón flotante.
+  // Popup de la llamada gratuita: sale solo, a los 20 s de entrar; y cada vez
+  // que se cierra vuelve a salir a los 70 s, mientras la persona siga aquí.
   const [llamadaOpen, setLlamadaOpen] = useState(false);
+  // ¿Ya salió alguna vez? Decide si la próxima espera es la de 20 s o la de 70 s.
+  const llamadaYaSalio = useRef(false);
+  // El test de «encuentra tu disciplina»: lo abren el botón grande del hero y
+  // el botón flotante. No guarda nada en ningún sitio.
+  const [testOpen, setTestOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(METODO_IMGS);
@@ -566,23 +570,23 @@ export default function ElMetodo() {
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
   }, [listo]);
 
-  // ── El popup de la llamada, a los 15 segundos ──
+  // ── El popup de la llamada: a los 20 s, y luego cada 70 s ──
   // La cuenta arranca cuando la página ya se VE (`listo`), no cuando se monta:
   // si empezara antes, se comería parte de la espera con la pantalla de carga.
-  // Eran 5 s, y a los 5 s quien acaba de llegar todavía está leyendo el titular:
-  // la tarjeta le caía encima antes de entender dónde está. Con 15 s ya ha leído
-  // la primera pantalla y probablemente ha empezado a bajar.
-  // La marca va en sessionStorage: se ofrece una vez por visita, no en cada
-  // vuelta a la página; al volver otro día se ofrece de nuevo.
+  // La primera vez espera 20 s (que dé tiempo a leer la primera pantalla); al
+  // cerrarse, este efecto se rearma y vuelve a abrirlo a los 70 s, las veces
+  // que haga falta mientras la persona siga en la página. No se relanza con el
+  // calendario de reserva abierto, ni con el test: caería encima de quien ya
+  // está reservando o contestando.
   useEffect(() => {
-    if (!listo) return;
-    if (sessionStorage.getItem(LLAMADA_VISTA) === "1") return;
+    if (!listo || llamadaOpen || bookCallOpen || testOpen) return;
+    const espera = llamadaYaSalio.current ? 70000 : 20000;
     const id = setTimeout(() => {
-      sessionStorage.setItem(LLAMADA_VISTA, "1");
+      llamadaYaSalio.current = true;
       setLlamadaOpen(true);
-    }, 15000);
+    }, espera);
     return () => clearTimeout(id);
-  }, [listo]);
+  }, [listo, llamadaOpen, bookCallOpen, testOpen]);
 
   // ── Los fondos de las tarjetas, en cuanto la página ya se ve ──
   // Fuera del camino crítico: no retienen la pantalla de carga, pero se piden
@@ -783,10 +787,9 @@ export default function ElMetodo() {
             En fila y centrados, para que el pie de abajo caiga en el medio de
             la PAREJA y no debajo del primero. En móvil se apilan: dos pastillas
             de 84vw no caben una al lado de la otra.
-            Son dos escalones, no dos botones iguales. El de empezar conserva su
-            filo grueso y su halo; el de la comunidad va con el filo fino, sin
-            halo y con la letra más suave. Si los dos brillaran, el ojo no
-            sabría cuál manda —y el que manda es el de pago—. */}
+            Son GEMELOS a propósito: el test y hablar conmigo valen lo mismo
+            —los dos son sin coste y los dos convierten—, así que llevan la
+            misma pastilla, el mismo filo y el mismo halo. */}
         <Flex
           direction={{ base: "column", md: "row" }}
           align="center"
@@ -794,13 +797,14 @@ export default function ElMetodo() {
           gap={{ base: 3, md: 4 }}
           mt={{ base: 2, md: 3 }}
         >
-          {/* El MISMO destino que el botón de abajo (handleAcceder). */}
+          {/* Abre el TEST de «encuentra tu disciplina» (el pago vive abajo, en
+              el bloque del precio, con handleAcceder). */}
           <Flex
             as="button"
-            onClick={handleAcceder}
+            onClick={() => setTestOpen(true)}
             align="center"
             justify="center"
-            gap={3}
+            gap={{ base: "10px", md: "12px" }}
             px={{ base: 8, md: 12 }}
             py={{ base: "12px", md: "15px" }}
             w={{ base: "min(84vw, 380px)", md: "auto" }}
@@ -819,13 +823,20 @@ export default function ElMetodo() {
             transform={mounted ? "translateY(0)" : "translateY(16px)"}
             sx={{ transition: "opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
           >
+            {/* El icono del test SIEMPRE a la izquierda del rótulo: es la seña
+                que hermana este botón con el flotante y el del precio. */}
+            <IconoTest size={{ base: "18px", md: "22px" }} color="white" />
             <Text
               color="white"
               fontWeight="700"
               fontSize={{ base: "md", md: "xl" }}
               letterSpacing="0.12em"
               textTransform="uppercase"
-              whiteSpace="nowrap"
+              // El rótulo es largo: en móvil se parte en dos líneas y no se
+              // sale de la pastilla de 84vw.
+              whiteSpace={{ base: "normal", md: "nowrap" }}
+              textAlign="center"
+              lineHeight="1.3"
               textShadow="0 0 12px rgba(255,255,255,0.45)"
             >
               {t("elMetodo.hero.cta")}
@@ -838,8 +849,8 @@ export default function ElMetodo() {
               grupo de desconocidos —todavía no sabe qué es esto—, pero sí
               pregunta una cosa suelta, y preguntar abre una conversación
               conmigo, que es lo que de verdad convierte.
-              Entra 0,13s después que el de empezar: se leen en orden, primero
-              el que manda. Es un enlace y no un botón porque lleva FUERA de la
+              Entra 0,13s después que el del test: se leen en orden, de uno en
+              uno. Es un enlace y no un botón porque lleva FUERA de la
               web (a WhatsApp), y abre en otra pestaña para no perder a quien
               estaba leyendo la página. El mensaje va ya escrito: que no tenga
               que pensar cómo empezar, que es justo donde la gente se cae. */}
@@ -850,33 +861,35 @@ export default function ElMetodo() {
             rel="noopener noreferrer"
             align="center"
             justify="center"
-            gap={{ base: "9px", md: "11px" }}
-            px={{ base: 7, md: 9 }}
+            gap={{ base: "10px", md: "12px" }}
+            px={{ base: 8, md: 12 }}
             py={{ base: "12px", md: "15px" }}
             w={{ base: "min(84vw, 380px)", md: "auto" }}
             borderRadius="full"
-            border="1px solid rgba(255,255,255,0.32)"
-            bg="rgba(255,255,255,0.04)"
-            color="rgba(255,255,255,0.88)"
+            border="1.5px solid rgba(255,255,255,0.65)"
+            bg="rgba(255,255,255,0.10)"
+            color="white"
             cursor="pointer"
             textDecoration="none"
+            boxShadow="0 0 20px rgba(255,255,255,0.34), 0 0 44px rgba(180,255,245,0.2)"
             _hover={{
-              bg: "rgba(255,255,255,0.13)",
-              borderColor: "rgba(255,255,255,0.7)",
-              color: "white",
+              bg: "rgba(255,255,255,0.2)",
+              borderColor: "white",
+              boxShadow: "0 0 30px rgba(255,255,255,0.55), 0 0 62px rgba(180,255,245,0.36)",
             }}
-            transition="background 0.25s ease, border-color 0.25s ease, color 0.25s ease"
+            transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
             opacity={mounted ? 1 : 0}
             transform={mounted ? "translateY(0)" : "translateY(16px)"}
-            sx={{ transition: "opacity 0.8s ease 0.58s, transform 0.8s ease 0.58s, background 0.25s ease, border-color 0.25s ease, color 0.25s ease" }}
+            sx={{ transition: "opacity 0.8s ease 0.58s, transform 0.8s ease 0.58s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
           >
-            <IconoWhatsapp size={{ base: "17px", md: "19px" }} />
+            <IconoWhatsapp size={{ base: "18px", md: "22px" }} />
             <Text
-              fontWeight="600"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.09em"
+              fontWeight="700"
+              fontSize={{ base: "md", md: "xl" }}
+              letterSpacing="0.12em"
               textTransform="uppercase"
               whiteSpace="nowrap"
+              textShadow="0 0 12px rgba(255,255,255,0.45)"
             >
               {t("elMetodo.hero.escribeme")}
             </Text>
@@ -1061,7 +1074,7 @@ export default function ElMetodo() {
               Lleva su propio botón al final (onAcceder): quien ve el precio y
               le cuadra tiene que poder entrar ahí mismo. */}
           <Box mt={{ base: 16, md: 24 }}>
-            <PrecioBloque onAcceder={handleAcceder} />
+            <PrecioBloque onAcceder={handleAcceder} onTest={() => setTestOpen(true)} />
           </Box>
         </Box>
       </Box>
@@ -1107,12 +1120,12 @@ export default function ElMetodo() {
             <Reveal inView direction="up" distance={12} duration={0.8} delay={0.15}>
               <Text
                 color="rgba(255,255,255,0.9)"
-                fontSize={{ base: "sm", md: "lg" }}
+                fontSize={{ base: "lg", md: "2xl" }}
                 fontStyle="italic"
                 textAlign="center"
                 letterSpacing="0.02em"
                 lineHeight="1.6"
-                maxW={{ base: "100%", md: "640px" }}
+                maxW={{ base: "100%", md: "720px" }}
                 textShadow="0 0 10px rgba(255,255,255,0.32), 0 0 22px rgba(255,255,255,0.16)"
               >
                 {t("elMetodo.cadaDisciplina")}
@@ -1191,7 +1204,7 @@ export default function ElMetodo() {
           <SeparadorLinea mt={{ base: 16, md: 24 }} />
 
           <Box mt={{ base: 16, md: 24 }}>
-            <PorDondeEmpiezoBloque onAcceder={handleAcceder} />
+            <PorDondeEmpiezoBloque onAcceder={handleAcceder} onTest={() => setTestOpen(true)} />
           </Box>
 
           {/* ── PRECIO ──
@@ -1746,16 +1759,17 @@ export default function ElMetodo() {
 
       <SiteFooter />
 
-      {/* ══ 13. LA LLAMADA: botón flotante + popup ══
-          Sustituye a la vieja barra fija de móvil («Empezar / desde 30 €»): lo
-          que más importa es que la gente hable conmigo, no el precio. Por eso
-          el botón acompaña ahora también en ordenador, abajo a la derecha.
+      {/* ══ 13. BOTONES FLOTANTES + POPUP DE LA LLAMADA ══
+          Abajo a la derecha van Mensaje (WhatsApp) y el Test de «¿por dónde
+          empiezo?». El popup de la llamada ya no cuelga de ningún botón: sale
+          solo (a los 20 s, y luego cada 70 s).
           Van FUERA del <Box> que lleva el zoom de la página: un `position:fixed`
           dentro de un elemento con `zoom` no se ancla a la ventana sino a él, y
           se quedarían flotando a media página.
           El hueco para que no tapen el final del footer lo pone el `pb` del
           contenedor de esta misma página (más arriba, en el Box exterior). */}
-      <BotonLlamadaFlotante onClick={() => setLlamadaOpen(true)} />
+      <BotonesFlotantes onTest={() => setTestOpen(true)} />
+      <TestDisciplinaModal isOpen={testOpen} onClose={() => setTestOpen(false)} />
       <PopupLlamada
         isOpen={llamadaOpen}
         onClose={() => setLlamadaOpen(false)}

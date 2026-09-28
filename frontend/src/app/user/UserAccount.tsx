@@ -98,6 +98,11 @@ export default function UserAccount() {
     if (fechaNacimiento !== initialRef.current.fechaNacimiento) payload.fecha_nacimiento = fechaNacimiento || null;
 
     if (Object.keys(payload).length === 0) return;
+    // El mismo mínimo que al registrarse y al recuperarla.
+    if (payload.password && payload.password.length < 6) {
+      setError(t("auth.error.contraCorta6"));
+      return;
+    }
 
     setSaving(true);
     try {

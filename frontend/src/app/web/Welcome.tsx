@@ -483,7 +483,7 @@ const Welcome = () => {
               transform: mounted ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)",
               // glow (drop-shadow) siempre + blur solo durante la entrada.
               filter:
-                "drop-shadow(0 0 10px rgba(255,255,255,0.59)) drop-shadow(0 0 24px rgba(255,255,255,0.32)) drop-shadow(0 0 47px rgba(180,255,245,0.24))" +
+                "drop-shadow(0 0 10px rgba(255,255,255,0.38)) drop-shadow(0 0 24px rgba(255,255,255,0.20)) drop-shadow(0 0 47px rgba(180,255,245,0.15))" +
                 (mounted ? "" : " blur(6px)"),
               transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease",
             }}
@@ -512,7 +512,7 @@ const Welcome = () => {
             fontWeight="700"
             letterSpacing="0.1em"
             lineHeight="1.1"
-            textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(255,255,255,0.41), 0 0 56px rgba(180,255,245,0.34)"
+            textShadow="0 0 14px rgba(255,255,255,0.42), 0 0 30px rgba(255,255,255,0.26), 0 0 56px rgba(180,255,245,0.21)"
           >
             {/* El nombre de la casa vive en `header.marca` (una sola clave para
                 el rótulo del header y este titular): así no se cambia en un

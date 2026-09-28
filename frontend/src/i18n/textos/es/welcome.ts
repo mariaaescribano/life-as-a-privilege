@@ -9,7 +9,7 @@
 export const welcome = {
   // El titular de la portada es el nombre de la casa y sale de `header.marca`
   // (ahí también se lee el rótulo del header): un solo sitio donde cambiarlo.
-  "welcome.subtitulo": "La metodología en la que se combinan la ciencia, la psicología y la tradición para ofrecerte una visión integrada de ti, sin fragmentaciones.",
+  "welcome.subtitulo": "Ciencia, psicología y tradición. Una visión integrada de ti.",
   "welcome.explorar": "Explorar",
   "welcome.explorarDisciplina": "Explorar disciplina",
   "welcome.modal.cuenta": "Crea una cuenta o inicia sesión",
@@ -20,9 +20,9 @@ export const welcome = {
   "welcome.lema.psicologia": "Cómo funciona tu mente.",
   "welcome.lema.hinduismo": "Tu constitución única.",
   "welcome.lema.medicinaChina": "El origen de tus desequilibrios.",
-  "welcome.lema.fisiologia": "Eres un cuerpo.",
-  "welcome.lema.nutricion": "Cómo te reconstruyes.",
-  "welcome.lema.cabala": "La arquitectura del alma.",
+  "welcome.lema.fisiologia": "Eres un cuerpo. Conócete.",
+  "welcome.lema.nutricion": "Lo que eliges, te reconstruye.",
+  "welcome.lema.cabala": "La arquitectura de tu alma.",
   "welcome.lema.cultura": "Las historias de la humanidad.",
 
   // ── Descripción del modal de cada disciplina ───────────────────────────

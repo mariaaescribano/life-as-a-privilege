@@ -13,7 +13,6 @@ import { useT } from "../../i18n";
  */
 const TEXTO = {
   registro: "privacidad.infoRegistro",
-  suscripcion: "privacidad.infoSuscripcion",
   opinion: "privacidad.infoOpinion",
 } as const;
 
@@ -21,7 +20,7 @@ export function InfoPrivacidad({
   tipo,
   mt = 4,
 }: {
-  tipo: "registro" | "suscripcion" | "opinion";
+  tipo: "registro" | "opinion";
   mt?: number;
 }) {
   const t = useT();

@@ -56,6 +56,28 @@ function saneaFechaNacimiento(valor: unknown): string | null {
   return valor;
 }
 
+/** El mínimo de caracteres de una contraseña, igual en registro, recuperación y «Mi cuenta». */
+export const PASSWORD_MIN = 6;
+
+/**
+ * Los emails se guardan SIEMPRE en minúsculas y sin espacios: «Ana@Gmail.com» y
+ * «ana@gmail.com» son la misma persona. Antes se guardaba tal cual y la
+ * recuperación buscaba en minúsculas, así que quien se registró con una
+ * mayúscula no recibía nunca el enlace.
+ */
+export function normalizaEmail(email: unknown): string {
+  return typeof email === 'string' ? email.trim().toLowerCase() : '';
+}
+
+/**
+ * Patrón para `.ilike('email', …)`: iguala sin distinguir mayúsculas (así se
+ * encuentran también las cuentas antiguas guardadas con mayúsculas) pero sin
+ * comodines — `_` y `%` son caracteres válidos en un email.
+ */
+function emailExacto(email: string): string {
+  return normalizaEmail(email).replace(/[\\%_]/g, (c) => `\\${c}`);
+}
+
 /**
  * Columnas del registro que pueden no existir todavía (su SQL sin correr). Si
  * el insert falla nombrando una, se repite sin ella: crear la cuenta importa
@@ -85,7 +107,7 @@ export class UserService {
     // interpolar la entrada del usuario en un filtro .or() de PostgREST.
     const [byName, byEmail] = await Promise.all([
       db.from('user').select('name').eq('name', nom).limit(1),
-      db.from('user').select('email').eq('email', email).limit(1),
+      db.from('user').select('email').ilike('email', emailExacto(email)).limit(1),
     ]);
     return {
       nameExists: (byName.data ?? []).length > 0,
@@ -96,6 +118,11 @@ export class UserService {
   // --------- Crear usuario ---------
   async createUser(data: CreateUser) {
     try {
+      data = { ...data, name: (data.name ?? '').trim(), email: normalizaEmail(data.email) };
+      if (!data.name || !data.email) throw new BadRequestException('Faltan el nombre o el email');
+      if ((data.password ?? '').length < PASSWORD_MIN) {
+        throw new BadRequestException(`La contraseña tiene que tener al menos ${PASSWORD_MIN} caracteres`);
+      }
       const { nameExists, emailExists } = await this.getNomEmailExist(data.name, data.email);
       if (nameExists) throw new ConflictException('El nombre ya existe. Elige otro');
       if (emailExists) throw new ConflictException('El email ya está registrado');
@@ -191,7 +218,7 @@ export class UserService {
       // lugar de interpolar la entrada en un filtro .or()).
       let { data: rows } = await db.from('user').select('*').eq('name', body.name).limit(1);
       if (!rows || rows.length === 0) {
-        ({ data: rows } = await db.from('user').select('*').eq('email', body.name).limit(1));
+        ({ data: rows } = await db.from('user').select('*').ilike('email', emailExacto(body.name)).limit(1));
       }
 
       if (rows && rows.length > 0) {
@@ -227,20 +254,37 @@ export class UserService {
   // CONFIRMACIÓN DE LA CUENTA
   // ───────────────────────────────────────────────────────────────────────────
 
-  /** Marca la cuenta como confirmada si el token del correo es bueno. */
+  /**
+   * Marca la cuenta como confirmada si el token del correo es bueno. La primera
+   * vez manda además el correo de «cuenta activada»; volver a pulsar el enlace
+   * no lo repite (el update solo toca filas que seguían sin confirmar).
+   */
   async confirmarCuenta(token: string) {
     const userId = leerTokenConfirmacion(token);
     if (!userId) throw new BadRequestException('El enlace de confirmación no es válido o ha caducado');
 
-    const { data: rows, error } = await this.databaseService.getClient()
+    const db = this.databaseService.getClient();
+    const { data: rows, error } = await db
       .from('user')
       .update({ email_confirmado: true })
       .eq('id', userId)
-      .select('email');
+      .eq('email_confirmado', false)
+      .select('email, name');
     if (error) throw error;
-    if (!rows?.length) throw new NotFoundException('Esa cuenta ya no existe');
 
-    return { ok: true as const, email: rows[0].email as string };
+    if (rows?.length) {
+      const { email, name } = rows[0] as { email: string; name: string };
+      void this.mailService
+        .enviarCuentaActivada(email, name ?? '')
+        .catch((err) => console.error('[confirmarCuenta] no se pudo enviar el correo de cuenta activada:', err));
+      return { ok: true as const, email };
+    }
+
+    // Nada que actualizar: o ya estaba confirmada (enlace pulsado otra vez) o
+    // la cuenta no existe.
+    const { data: existe } = await db.from('user').select('email').eq('id', userId).limit(1);
+    if (!existe?.length) throw new NotFoundException('Esa cuenta ya no existe');
+    return { ok: true as const, email: existe[0].email as string };
   }
 
   /**
@@ -253,7 +297,7 @@ export class UserService {
     const db = this.databaseService.getClient();
     let { data: rows } = await db.from('user').select('id, name, email, email_confirmado').eq('name', valor).limit(1);
     if (!rows?.length) {
-      ({ data: rows } = await db.from('user').select('id, name, email, email_confirmado').eq('email', valor).limit(1));
+      ({ data: rows } = await db.from('user').select('id, name, email, email_confirmado').ilike('email', emailExacto(valor)).limit(1));
     }
     const user = rows?.[0] as { id: string; name: string; email: string; email_confirmado?: boolean } | undefined;
     if (!user || user.email_confirmado !== false) return;
@@ -278,13 +322,13 @@ export class UserService {
    * comprobador de «¿está esta persona registrada aquí?».
    */
   async solicitarRecuperacion(email: string): Promise<void> {
-    const limpio = (email ?? '').trim().toLowerCase();
+    const limpio = normalizaEmail(email);
     if (!limpio) return;
 
     const { data: rows } = await this.databaseService.getClient()
       .from('user')
       .select('id, name, email, password')
-      .eq('email', limpio)
+      .ilike('email', emailExacto(limpio))
       .limit(1);
 
     const user = rows?.[0] as { id: string; name: string; email: string; password: string } | undefined;
@@ -300,8 +344,8 @@ export class UserService {
   /** Cambia la contraseña si el token es válido. El token queda inservible al hacerlo. */
   async restablecerPassword(token: string, nuevaPassword: string) {
     const pass = (nuevaPassword ?? '').trim();
-    if (pass.length < 6) {
-      throw new BadRequestException('La contraseña debe tener al menos 6 caracteres');
+    if (pass.length < PASSWORD_MIN) {
+      throw new BadRequestException(`La contraseña tiene que tener al menos ${PASSWORD_MIN} caracteres`);
     }
 
     const userId = leerUserIdDeToken(token);
@@ -512,8 +556,13 @@ export class UserService {
     if ('telefono' in body) updates.telefono = saneaTelefono(body.telefono);
     if ('fecha_nacimiento' in body) updates.fecha_nacimiento = saneaFechaNacimiento(body.fecha_nacimiento);
     if (body.name) updates.name = body.name;
-    if (body.email) updates.email = body.email;
-    if (body.password) updates.password = await hashPassword(body.password);
+    if (body.email) updates.email = normalizaEmail(body.email);
+    if (body.password) {
+      if (body.password.length < PASSWORD_MIN) {
+        throw new BadRequestException(`La contraseña tiene que tener al menos ${PASSWORD_MIN} caracteres`);
+      }
+      updates.password = await hashPassword(body.password);
+    }
     // `trato`: se acepta también el null (quitar la preferencia), así que se
     // mira si viene la clave, no si el valor es «truthy».
     if ('trato' in body) updates.trato = saneaTrato(body.trato);
@@ -568,12 +617,13 @@ export class UserService {
   }
 
   // --------- Login con Google (encontrar o crear) ---------
-  async findOrCreateGoogleUser({ email, name, img }: { email: string; name: string; img: string | null }) {
+  async findOrCreateGoogleUser({ email: emailGoogle, name, img }: { email: string; name: string; img: string | null }) {
+    const email = normalizaEmail(emailGoogle);
     // Buscar usuario existente por email (sin traer el hash de contraseña)
     const { data: existing } = await this.databaseService.getClient()
       .from('user')
       .select('id, name, email, img')
-      .eq('email', email);
+      .ilike('email', emailExacto(email));
 
     if (existing && existing.length > 0) {
       const user = existing[0];

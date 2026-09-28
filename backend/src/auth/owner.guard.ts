@@ -26,8 +26,10 @@ export class OwnerGuard implements CanActivate {
       throw new ForbiddenException('No autenticado');
     }
 
-    // Los administradores pueden operar sobre cualquier usuario.
-    if (isAdminEmail(req.user?.email)) return true;
+    // Los administradores pueden operar sobre cualquier usuario, con la misma
+    // doble llave que AdminGuard: email en ADMIN_EMAILS Y token desbloqueado
+    // con la contraseña de admin. Solo el email no basta.
+    if (isAdminEmail(req.user?.email) && req.user?.admin === true) return true;
 
     const target =
       req.params?.userId ??

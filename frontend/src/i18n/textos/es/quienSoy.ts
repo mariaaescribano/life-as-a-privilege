@@ -7,7 +7,7 @@
  */
 export const quienSoy = {
   "quienSoy.mision":
-    "Durante siglos hemos acumulado conocimiento sobre el ser humano, pero ese conocimiento ha permanecido disperso. Mi objetivo no es crear más conocimiento, sino ordenarlo y ponerlo al servicio de tu comprensión.",
+    "Deseo ordenar el conocimiento disperso sobre el ser humano.",
 
   // ── Donación ───────────────────────────────────────────────────────────
   "quienSoy.apoya": "Apoya este proyecto",

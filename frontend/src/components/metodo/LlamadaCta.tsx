@@ -10,14 +10,13 @@ import { Reveal } from "../global/Reveal";
  *  LA LLAMADA: botón flotante + popup
  *
  *  El objetivo de /elMetodo no es solo que la gente lea: es que HABLE conmigo.
- *  Por eso la llamada gratuita deja de estar escondida a media página y pasa a
- *  tener dos sitios propios:
  *
- *   · Un botón flotante abajo a la derecha que acompaña siempre (también en
- *     móvil, donde SUSTITUYE a la vieja barra fija de «Empezar / desde 30 €»:
- *     el contacto vale más que el precio).
- *   · Un popup que se abre solo a los 5 segundos de entrar —una vez por
- *     sesión— y, a partir de ahí, cada vez que se pulsa el botón.
+ *   · Dos botones flotantes abajo a la derecha que acompañan siempre (también
+ *     en móvil, donde SUSTITUYEN a la vieja barra fija de «Empezar / desde
+ *     30 €»): Mensaje (WhatsApp) y el Test de «¿por dónde empiezo?».
+ *   · Un popup de la llamada gratuita que se abre solo: a los 20 segundos de
+ *     entrar y, cada vez que se cierra, otra vez a los 70 segundos, mientras
+ *     la persona siga en la página (el temporizador vive en ElMetodo.tsx).
  * ───────────────────────────────────────────────────────────────────────────── */
 
 /** El mármol con el mandala grabado: fondo del popup. */
@@ -59,7 +58,39 @@ const ALTO_MINIMO = "calc(var(--pw) * 1.28)";
 /** Un tamaño proporcional al ancho de la tarjeta. */
 const prop = (factor: number) => `calc(var(--pw) * ${factor})`;
 
-/** Auricular (trazo, estilo feather). Se usa en el botón y en el popup. */
+/** Test (portapapeles con un tick, trazo estilo feather). PROVISIONAL: se
+ *  sustituirá por el icono definitivo cuando llegue. Exportado porque TODO
+ *  botón que diga «Test» lleva este icono a la izquierda (coherencia): el
+ *  flotante, el del hero y el de al lado de «Empezar por 30 €». */
+export function IconoTest({
+  size = "16px",
+  color = "currentColor",
+}: {
+  size?: string | Record<string, string>;
+  color?: string;
+}) {
+  return (
+    <Box
+      as="svg"
+      viewBox="0 0 24 24"
+      w={size}
+      h={size}
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      flexShrink={0}
+      aria-hidden="true"
+    >
+      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+      <rect x="9" y="3" width="6" height="4" rx="1" />
+      <path d="m9 14 2 2 4-4" />
+    </Box>
+  );
+}
+
+/** Auricular (trazo, estilo feather). Se usa en el popup de la llamada. */
 function IconoLlamada({
   size = "16px",
   color = "currentColor",
@@ -180,7 +211,7 @@ const LETRA_PILDORA = {
   whiteSpace: "nowrap",
 } as const;
 
-export function BotonLlamadaFlotante({ onClick }: { onClick: () => void }) {
+export function BotonesFlotantes({ onTest }: { onTest: () => void }) {
   const t = useT();
 
   return (
@@ -220,19 +251,21 @@ export function BotonLlamadaFlotante({ onClick }: { onClick: () => void }) {
         </Text>
       </Flex>
 
-      {/* ── LLAMADA ─────────────────────────────────────────────────────────
-          La misma pastilla, y al pulsarla abre el popup de la llamada. */}
+      {/* ── TEST ────────────────────────────────────────────────────────────
+          La misma pastilla, y al pulsarla abre el test de «¿por qué disciplina
+          empiezo?». (El popup de la llamada ya no cuelga de ningún botón: sale
+          solo con su temporizador, desde la página.) */}
       <Flex
         {...PILDORA_FLOTANTE}
         as="button"
-        onClick={onClick}
-        aria-label={t("elMetodo.llamada.boton")}
+        onClick={onTest}
+        aria-label={t("elMetodo.test.boton")}
       >
         <Box as="span" display="flex">
-          <IconoLlamada size={{ base: "17px", md: "19px" }} color={TINTA} />
+          <IconoTest size={{ base: "17px", md: "19px" }} color={TINTA} />
         </Box>
         <Text {...LETRA_PILDORA}>
-          {t("elMetodo.llamada.boton")}
+          {t("elMetodo.test.boton")}
         </Text>
       </Flex>
     </Flex>
@@ -256,7 +289,7 @@ export function PopupLlamada({ isOpen, onClose, onAgendar }: PopupLlamadaProps) 
   // La tarjeta NO se pinta hasta que el mármol esté cargado: si no, se abre un
   // recuadro vacío con el filo dorado y la foto entra después de golpe, que es
   // justo lo que se ve feo. El hook arranca al montar el componente (no al
-  // abrirlo), así que para cuando el popup salta —a los 5 s de entrar— la foto
+  // abrirlo), así que para cuando el popup salta —a los 20 s de entrar— la foto
   // lleva rato lista y no se espera nada. Nunca se queda colgado: si la imagen
   // falla, cuenta igual como cargada y la tarjeta sale con su color de fondo.
   const fondoListo = usePrecargarImagenes([FONDO]);

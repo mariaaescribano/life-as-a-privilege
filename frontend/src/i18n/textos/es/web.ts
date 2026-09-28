@@ -59,7 +59,7 @@ export const web = {
   // ── Tarjeta de la creadora (CreadoraCard) ──────────────────────────────
   "creadora.accion": "Conocer a la creadora",
   "creadora.bio":
-    "Ingeniera informática. Reconstruí el camino que muchas personas recorremos durante años intentando comprendernos: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.",
+    "Ingeniera informática. Reconstruí el camino que muchas personas recorremos: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.",
 
   // ── Caja de suscripción (SubscribeBox) ─────────────────────────────────
   "suscribir.titulo": "No te pierdas nada.",
@@ -74,8 +74,6 @@ export const web = {
 
   // ── Información básica de protección de datos (art. 13 RGPD) ──────────
   // Va debajo de cada formulario que recoge datos; el detalle, en /privacidad.
-  "privacidad.infoSuscripcion":
-    "María Escribano usará tu email solo para avisarte de novedades, con tu consentimiento. No se cede a nadie. Puedes acceder, rectificar o borrar tus datos escribiendo a darkcake141@gmail.com. Más en la",
   "privacidad.infoRegistro":
     "Al registrarte confirmas que tienes 18 años o más y aceptas los términos de uso. María Escribano trata tus datos para gestionar tu cuenta y tu recorrido; no se ceden a nadie salvo a los proveedores que hacen funcionar la web. Puedes acceder, rectificar o borrar tus datos (también borrar tu cuenta desde tu perfil). Más en la",
   "privacidad.infoOpinion":
@@ -108,7 +106,7 @@ export const web = {
   "error.recargar": "Recargar",
 
   // ── Reservar una llamada (BookCallModal, AgendarLlamada, BotonCompania) ─
-  "llamada.agenda": "Agenda una llamada",
+  "llamada.agenda": "Hablemos",
   "llamada.reserva": "Reserva tu llamada",
   "llamada.gratis": "20 minutos, sin coste · horario peninsular España",
   "llamada.elegirDia": "Elige un día",
@@ -139,7 +137,7 @@ export const web = {
 
   // ── Modal de salida (ExitIntentSubscribeModal) ─────────────────────────
   "salida.titulo": "Antes de irte...",
-  "salida.texto": "Suscríbete y recibe un email cuando haya contenido nuevo.",
+  "salida.texto": "Suscríbete y recibe un email cuando haya contenido.",
   "salida.noGracias": "No, gracias",
 
   // ── Hace falta cuenta (LoginRequiredModal) ─────────────────────────────

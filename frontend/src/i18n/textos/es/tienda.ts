@@ -2,7 +2,7 @@
 export const tienda = {
   // ── Ilustraciones (/ilustraciones) ─────────────────────────────────────
   "ilustraciones.titulo": "Ilustraciones",
-  "ilustraciones.subtitulo": "Todas las ilustraciones del Mapa, reunidas. Pulsa una para leerla.",
+  "ilustraciones.subtitulo": "Algunas de las ilustraciones del Mapa. Pulsa para leer.",
   // Subtítulo cuando la galería va filtrada por una disciplina
   // (/ilustraciones/:disciplina). El titular es el nombre de la disciplina.
   "ilustraciones.deDisciplina": "Las ilustraciones de esta disciplina. Pulsa una para leerla.",
@@ -10,7 +10,7 @@ export const tienda = {
 
   // ── Libros (/libros) ───────────────────────────────────────────────────
   "libros.titulo": "Libros",
-  "libros.subtitulo": "Más de 40 libros para acompañar tu camino",
+  "libros.subtitulo": "Más de 40 libros y apuntes para acompañar tu camino.",
   "libros.pagoError": "No se pudo iniciar el pago",
   "libros.pagoErrorTexto": "Inténtalo de nuevo en un momento.",
 

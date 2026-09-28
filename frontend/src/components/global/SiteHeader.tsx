@@ -156,7 +156,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           src="/img/icono/life.webp"
           h={{ base: compact ? "36px" : "40px", md: compact ? "63px" : "70px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.78)) drop-shadow(0 0 20px rgba(255,255,255,0.38)) drop-shadow(0 0 42px rgba(180,255,245,0.28))" }}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.50)) drop-shadow(0 0 20px rgba(255,255,255,0.24)) drop-shadow(0 0 42px rgba(180,255,245,0.18))" }}
         />
         <Text
           color="rgba(255,255,255,0.85)"
@@ -164,7 +164,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           fontWeight="600"
           fontSize={{ base: "7px", md: "11px" }}
           letterSpacing="0.18em"
-          textShadow="0 0 8px rgba(255,255,255,0.55), 0 0 16px rgba(255,255,255,0.3)"
+          textShadow="0 0 8px rgba(255,255,255,0.36), 0 0 16px rgba(255,255,255,0.19)"
           whiteSpace="nowrap"
         >
           {t("header.marca")}

@@ -65,8 +65,6 @@ export const web = {
   "suscribir.error": "It couldn't be sent. Please try again in a moment.",
   "suscribir.baja": "You can unsubscribe whenever you want",
 
-  "privacidad.infoSuscripcion":
-    "María Escribano will use your email only to tell you about new content, with your consent. It is not shared with anyone. You can access, correct or delete your data by writing to darkcake141@gmail.com. More in the",
   "privacidad.infoRegistro":
     "By signing up you confirm you are 18 or older and accept the terms of use. María Escribano processes your data to run your account and your journey; it is not shared with anyone except the providers that keep the site running. You can access, correct or delete your data (and delete your account from your profile). More in the",
   "privacidad.infoOpinion":

@@ -1,6 +1,6 @@
 // SignIn.tsx
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Image, Input, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Image, Input, SimpleGrid, Spinner, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
@@ -13,7 +13,7 @@ import SiteFooter from "../../components/global/Footer";
 import { CampoContrasena, inputAuthStyles, inputFechaSx } from "../../components/global/CampoContrasena";
 import { useT } from "../../i18n";
 import { MiraTuCorreoModal } from "../../components/global/MiraTuCorreoModal";
-import { InfoPrivacidad } from "../../components/global/InfoPrivacidad";
+import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -73,7 +73,7 @@ const CasillaTrato = ({
     bg={marcada ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.06)"}
     cursor={disabled ? "not-allowed" : "pointer"}
     opacity={disabled ? 0.55 : 1}
-    boxShadow={marcada ? "0 0 16px rgba(255,255,255,0.35)" : "none"}
+    boxShadow={marcada ? "0 0 14px rgba(255,255,255,0.2)" : "none"}
     transition="all 0.2s ease"
     _hover={disabled ? {} : { borderColor: "white", bg: "rgba(255,255,255,0.14)" }}
   >
@@ -82,11 +82,120 @@ const CasillaTrato = ({
       fontSize={{ base: "md", md: "lg" }}
       letterSpacing="0.08em"
       fontWeight={marcada ? "700" : "400"}
-      textShadow="0 0 8px rgba(255,255,255,0.35)"
     >
       {etiqueta}
     </Text>
   </Flex>
+);
+
+/**
+ * Popup de las condiciones: el texto legal completo (art. 13 RGPD) que antes
+ * iba en letra pequeña bajo el formulario. Ahora el formulario solo lleva la
+ * casilla «Aceptar condiciones» y quien quiera el detalle lo abre desde
+ * «saber más»; el detalle largo sigue en /privacidad, enlazada aquí dentro.
+ */
+const PopupCondiciones = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const t = useT();
+  useLockBodyScroll(isOpen, { fijarFondo: true });
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+  if (!isOpen) return null;
+  return (
+    <Flex
+      position="fixed"
+      inset={0}
+      zIndex={2000}
+      align="center"
+      justify="center"
+      px={4}
+      py={5}
+      bg="rgba(0,0,0,0.72)"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <Box
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        position="relative"
+        w="min(94vw, 520px)"
+        maxH="80dvh"
+        overflowY="auto"
+        borderRadius="22px"
+        bg="#008080"
+        border="1px solid rgba(255,255,255,0.35)"
+        boxShadow="0 26px 80px rgba(0,0,0,0.62)"
+        px={{ base: 6, md: 9 }}
+        py={{ base: 8, md: 9 }}
+        fontFamily="'EB Garamond', serif"
+        sx={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgba(255,255,255,0.35) transparent",
+          "&::-webkit-scrollbar": { width: "6px", background: "transparent" },
+          "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "3px" },
+        }}
+      >
+        <Flex
+          as="button"
+          type="button"
+          onClick={onClose}
+          aria-label={t("auth.signin.entendido")}
+          position="absolute"
+          top="12px"
+          right="12px"
+          w="32px"
+          h="32px"
+          align="center"
+          justify="center"
+          borderRadius="full"
+          bg="rgba(255,255,255,0.14)"
+          border="1px solid rgba(255,255,255,0.35)"
+          color="white"
+          fontSize="sm"
+          cursor="pointer"
+          _hover={{ bg: "rgba(255,255,255,0.3)" }}
+          transition="background 0.2s ease"
+        >
+          ✕
+        </Flex>
+        <Text color="white" fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} letterSpacing="0.04em" mb={4} pr={9}>
+          {t("auth.signin.condiciones.titulo")}
+        </Text>
+        <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">
+          {t("privacidad.infoRegistro")}{" "}
+          <Text
+            as="a"
+            href="/privacidad"
+            target="_blank"
+            rel="noopener"
+            textDecoration="underline"
+            textUnderlineOffset="3px"
+            _hover={{ color: "white" }}
+          >
+            {t("privacidad.enlace")}
+          </Text>
+          .
+        </Text>
+      </Box>
+    </Flex>
+  );
+};
+
+/** Etiqueta de campo. Sin brillo: dentro de la caja del formulario se lee sola. */
+const Etiqueta = ({ children }: { children: React.ReactNode }) => (
+  <Text
+    color="rgba(255,255,255,0.78)"
+    fontSize="sm"
+    letterSpacing="0.18em"
+    mb={2.5}
+    fontWeight="600"
+    textAlign="center"
+  >
+    {children}
+  </Text>
 );
 
 export default function SignIn() {
@@ -107,6 +216,9 @@ export default function SignIn() {
   // Opcionales: teléfono y fecha de nacimiento (para el regalo de cumpleaños).
   const [telefono, setTelefono] = useState<string>("");
   const [fechaNacimiento, setFechaNacimiento] = useState<string>("");
+  // Condiciones: casilla obligatoria; el texto completo, en el popup de «saber más».
+  const [acepta, setAcepta] = useState(false);
+  const [condicionesOpen, setCondicionesOpen] = useState(false);
   const [message, setMessage] = useState<SuccessErrorMessageDto | null>(null);
   const [loading, setLoading] = useState(false);
   // Cuenta creada: ya no se entra directamente, hay que confirmar desde el correo.
@@ -150,6 +262,14 @@ export default function SignIn() {
   };
 
   const validarRegistro = () => {
+    if (!acepta) {
+      setMessage({
+        soy: 2,
+        title: t("auth.error.condiciones"),
+        description: t("auth.error.condicionesTexto"),
+      });
+      return;
+    }
     if (name === "" || email === "" || contra === "" || contra2 === "") {
       setMessage({
         soy: 2,
@@ -174,11 +294,11 @@ export default function SignIn() {
       });
       return;
     }
-    if (contra.length < 4) {
+    if (contra.length < 6) {
       setMessage({
         soy: 2,
         title: t("auth.error.contraCorta"),
-        description: t("auth.error.contraCorta4"),
+        description: t("auth.error.contraCorta6"),
       });
       return;
     }
@@ -210,7 +330,7 @@ export default function SignIn() {
           alt=""
           h={{ base: "60px", md: "80px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.78)) drop-shadow(0 0 26px rgba(255,255,255,0.42)) drop-shadow(0 0 52px rgba(180,255,245,0.32))" }}
+          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.42)) drop-shadow(0 0 26px rgba(255,255,255,0.22)) drop-shadow(0 0 52px rgba(180,255,245,0.16))" }}
           opacity={mounted ? 1 : 0}
           transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
           transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
@@ -228,12 +348,12 @@ export default function SignIn() {
       >
         <Text
           color="white"
-          fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }}
+          fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
           fontWeight="700"
-          letterSpacing="0.1em"
+          letterSpacing="0.12em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 18px rgba(255,255,255,0.85), 0 0 38px rgba(255,255,255,0.55), 0 0 70px rgba(180,255,245,0.45)"
+          textShadow="0 0 14px rgba(255,255,255,0.38), 0 0 30px rgba(255,255,255,0.22), 0 0 56px rgba(180,255,245,0.16)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -246,7 +366,6 @@ export default function SignIn() {
           lineHeight="1.7"
           letterSpacing="0.03em"
           maxW={{ base: "100%", md: "560px" }}
-          textShadow="0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
           transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
@@ -255,33 +374,45 @@ export default function SignIn() {
         </Text>
       </Flex>
 
-      {/* ── FORMULARIO (sin caja) ── */}
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 12, md: 16 }} pb={{ base: 24, md: 32 }}>
+      {/* ── FORMULARIO (caja suave; en pantalla ancha, campos a dos columnas) ── */}
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 10, md: 14 }} pb={{ base: 24, md: 32 }}>
         <VStack
           ref={formReveal.ref}
-          w={{ base: "100%", sm: "440px" }}
-          spacing={5}
+          w={{ base: "100%", md: "740px" }}
+          spacing={6}
           align="stretch"
+          bg="rgba(255,255,255,0.05)"
+          border="1px solid rgba(255,255,255,0.16)"
+          borderRadius="28px"
+          px={{ base: 5, md: 10 }}
+          py={{ base: 8, md: 10 }}
+          boxShadow="0 18px 44px rgba(0,0,0,0.16)"
           opacity={formReveal.visible ? 1 : 0}
           transform={formReveal.visible ? "translateY(0)" : "translateY(28px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
-          <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              {t("auth.campo.nombre")}
-            </Text>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              {...inputStyles}
-            />
-          </Box>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
+            <Box>
+              <Etiqueta>{t("auth.campo.nombre")}</Etiqueta>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                {...inputStyles}
+              />
+            </Box>
+            <Box>
+              <Etiqueta>{t("auth.campo.email")}</Etiqueta>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                {...inputStyles}
+              />
+            </Box>
+          </SimpleGrid>
 
           <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" mb={2.5}
-                  fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              {t("auth.signin.trato")}
-            </Text>
+            <Etiqueta>{t("auth.signin.trato")}</Etiqueta>
             <Flex gap={3}>
               <CasillaTrato
                 etiqueta={t("auth.signin.tratoEl")}
@@ -298,66 +429,114 @@ export default function SignIn() {
             </Flex>
           </Box>
 
-          <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              {t("auth.campo.email")}
-            </Text>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              {...inputStyles}
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} alignItems="start">
+            <Box>
+              <Etiqueta>{t("auth.campo.telefono")}</Etiqueta>
+              <Input
+                type="tel"
+                autoComplete="tel"
+                placeholder="+34 600 000 000"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+                {...inputStyles}
+              />
+            </Box>
+            <Box>
+              <Etiqueta>{t("auth.campo.fechaNacimiento")}</Etiqueta>
+              <Input
+                type="date"
+                autoComplete="bday"
+                max={new Date().toISOString().slice(0, 10)}
+                value={fechaNacimiento}
+                onChange={(e) => setFechaNacimiento(e.target.value)}
+                {...inputStyles}
+                sx={inputFechaSx}
+              />
+              <Text color="rgba(255,255,255,0.72)" fontSize="sm" mt={2} textAlign="center" lineHeight="1.5">
+                {t("auth.signin.fechaRegalo")}
+              </Text>
+            </Box>
+          </SimpleGrid>
+
+          {/* Rayita fina: aquí empieza la contraseña. */}
+          <Box h="1px" bg="rgba(255,255,255,0.16)" />
+
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
+            <CampoContrasena
+              label={t("auth.campo.contrasena")}
+              value={contra}
+              onChange={setContra}
+              isDisabled={bloqueado}
+              autoComplete="new-password"
             />
-          </Box>
 
-          <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              {t("auth.campo.telefono")}
-            </Text>
-            <Input
-              type="tel"
-              autoComplete="tel"
-              placeholder="+34 600 000 000"
-              value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
-              {...inputStyles}
+            <CampoContrasena
+              label={t("auth.campo.repiteContrasena")}
+              value={contra2}
+              onChange={setContra2}
+              isDisabled={bloqueado}
+              onEnter={validarRegistro}
+              autoComplete="new-password"
             />
-          </Box>
+          </SimpleGrid>
 
-          <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
-              {t("auth.campo.fechaNacimiento")}
+          {/* ── ACEPTAR CONDICIONES ──
+              La casilla sustituye a la letra pequeña del RGPD: el texto
+              completo se abre en el popup de «saber más» (y el detalle largo
+              sigue viviendo en /privacidad, enlazada dentro del popup). */}
+          <Flex justify="center" align="center" gap={3} pt={1}>
+            <Flex
+              as="button"
+              type="button"
+              onClick={bloqueado ? undefined : () => setAcepta((v) => !v)}
+              aria-pressed={acepta}
+              w="22px"
+              h="22px"
+              flexShrink={0}
+              align="center"
+              justify="center"
+              borderRadius="6px"
+              border={`1.5px solid ${acepta ? "white" : "rgba(255,255,255,0.5)"}`}
+              bg={acepta ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.06)"}
+              cursor={bloqueado ? "not-allowed" : "pointer"}
+              _hover={bloqueado ? {} : { borderColor: "white" }}
+              transition="all 0.2s ease"
+            >
+              {acepta && (
+                <Box as="span" color="#008080" fontWeight="700" fontSize="15px" lineHeight="1">
+                  ✓
+                </Box>
+              )}
+            </Flex>
+            <Text
+              as="button"
+              type="button"
+              onClick={bloqueado ? undefined : () => setAcepta((v) => !v)}
+              color="rgba(255,255,255,0.92)"
+              fontSize={{ base: "md", md: "lg" }}
+              bg="transparent"
+              cursor={bloqueado ? "not-allowed" : "pointer"}
+              userSelect="none"
+            >
+              {t("auth.signin.aceptar")}
             </Text>
-            <Input
-              type="date"
-              autoComplete="bday"
-              max={new Date().toISOString().slice(0, 10)}
-              value={fechaNacimiento}
-              onChange={(e) => setFechaNacimiento(e.target.value)}
-              {...inputStyles}
-              sx={inputFechaSx}
-            />
-            <Text color="rgba(255,255,255,0.72)" fontSize="sm" mt={2} textAlign="center" lineHeight="1.5">
-              {t("auth.signin.fechaRegalo")}
+            <Text
+              as="button"
+              type="button"
+              onClick={() => setCondicionesOpen(true)}
+              color="rgba(255,255,255,0.7)"
+              fontSize="sm"
+              fontStyle="italic"
+              bg="transparent"
+              cursor="pointer"
+              textDecoration="underline"
+              textUnderlineOffset="3px"
+              _hover={{ color: "white" }}
+              transition="color 0.2s ease"
+            >
+              {t("auth.signin.saberMas")}
             </Text>
-          </Box>
-
-          <CampoContrasena
-            label={t("auth.campo.contrasena")}
-            value={contra}
-            onChange={setContra}
-            isDisabled={bloqueado}
-            autoComplete="new-password"
-          />
-
-          <CampoContrasena
-            label={t("auth.campo.repiteContrasena")}
-            value={contra2}
-            onChange={setContra2}
-            isDisabled={bloqueado}
-            onEnter={validarRegistro}
-            autoComplete="new-password"
-          />
+          </Flex>
 
           {message && (
             <SuccessErrorMessage
@@ -369,7 +548,7 @@ export default function SignIn() {
           )}
 
           {/* Botón REGISTRARME */}
-          <Flex justify="center" pt={{ base: 8, md: 10 }}>
+          <Flex justify="center" pt={{ base: 3, md: 4 }}>
             <Flex
               as="button"
               onClick={bloqueado ? undefined : validarRegistro}
@@ -383,11 +562,11 @@ export default function SignIn() {
               bg="rgba(255,255,255,0.10)"
               cursor={bloqueado ? "not-allowed" : "pointer"}
               opacity={bloqueado ? 0.55 : 1}
-              boxShadow="0 0 18px rgba(255,255,255,0.36), 0 0 40px rgba(255,255,255,0.18), 0 0 70px rgba(180,255,245,0.18), 0 4px 14px rgba(0,0,0,0.18)"
+              boxShadow="0 0 14px rgba(255,255,255,0.2), 0 0 32px rgba(255,255,255,0.1), 0 4px 14px rgba(0,0,0,0.18)"
               _hover={bloqueado ? {} : {
                 bg: "rgba(255,255,255,0.2)",
                 borderColor: "white",
-                boxShadow: "0 0 28px rgba(255,255,255,0.55), 0 0 58px rgba(180,255,245,0.35), 0 6px 18px rgba(0,0,0,0.22)",
+                boxShadow: "0 0 20px rgba(255,255,255,0.32), 0 0 44px rgba(180,255,245,0.18), 0 6px 18px rgba(0,0,0,0.22)",
                 transform: "translateY(-1px)",
               }}
               transition="all 0.25s ease"
@@ -398,7 +577,7 @@ export default function SignIn() {
                 h={{ base: "26px", md: "32px" }}
                 objectFit="contain"
                 flexShrink={0}
-                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,255,255,0.35))" }}
+                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.42)) drop-shadow(0 0 20px rgba(255,255,255,0.2))" }}
               />
               <Text
                 color="white"
@@ -407,7 +586,7 @@ export default function SignIn() {
                 fontSize={{ base: "md", md: "xl" }}
                 letterSpacing="0.2em"
                 textTransform="uppercase"
-                textShadow="0 0 12px rgba(255,255,255,0.65), 0 0 26px rgba(255,255,255,0.4)"
+                textShadow="0 0 10px rgba(255,255,255,0.3)"
               >
                 {t("auth.signin.boton")}
               </Text>
@@ -427,9 +606,6 @@ export default function SignIn() {
             </Flex>
           </Flex>
 
-          {/* Información básica de protección de datos (art. 13 RGPD). */}
-          <InfoPrivacidad tipo="registro" mt={0} />
-
           {/* Link a iniciar sesión */}
           <Flex justify="center" pt={2}>
             <Text
@@ -440,8 +616,9 @@ export default function SignIn() {
               letterSpacing="0.06em"
               bg="transparent"
               cursor="pointer"
-              textShadow="0 0 8px rgba(255,255,255,0.35)"
-              _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
+              textDecoration="underline"
+              textUnderlineOffset="3px"
+              _hover={{ color: "white" }}
               transition="all 0.22s ease"
             >
               {t("auth.signin.yaTienes")}
@@ -453,6 +630,8 @@ export default function SignIn() {
       </Box>
 
       <SiteFooter />
+
+      <PopupCondiciones isOpen={condicionesOpen} onClose={() => setCondicionesOpen(false)} />
 
       <MiraTuCorreoModal
         isOpen={correoEnviadoA !== null}
