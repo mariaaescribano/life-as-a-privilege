@@ -123,22 +123,6 @@ export const ZONAS: ZonaCerebro[] = [
 export const zonaPorKey = (key: ZonaKey): ZonaCerebro =>
   ZONAS.find((z) => z.key === key) ?? ZONAS[0];
 
-/** Lo que se lee bajo el dibujo, antes de tocar ninguna zona. */
-export const CEREBRO_INTRO = [
-  "Lo que viviste no se guardó como se guarda un recuerdo cualquiera. Se guardó como se guarda una lección de supervivencia: en el cuerpo, deprisa y sin palabras.",
-  "Por eso hay cosas que no se arreglan entendiéndolas. No están en la parte que entiende.",
-];
-
-/** El cierre. Es imprescindible: nadie se queda mirando su propia herida sin salida. */
-export const CEREBRO_ESPERANZA = {
-  titulo: "Lo que se aprendió con miedo se puede reaprender con seguridad",
-  texto: [
-    "Nada de esto es un daño permanente ni una avería. Es aprendizaje: tu cerebro se configuró así porque así era como podías seguir vivo, y lo hizo bien.",
-    "Y lo que se aprende se puede reaprender. El cerebro sigue cambiando toda la vida — y lo que más lo cambia no es entenderlo, sino vivir lo contrario: repetir, muchas veces, la experiencia de estar a salvo con alguien.",
-    "Eso es exactamente lo que vas a hacer a partir de aquí: recordar con orden, ponerle palabras a lo que no las tuvo y aprender a calmarte por el cuerpo. No es hablar de tu herida: es enseñarle a tu cerebro que ya no estás allí.",
-  ],
-};
-
 /** El aviso que sostiene toda la página. Se pinta tal cual, no en letra pequeña. */
 export const CEREBRO_AVISO =
-  "Esto no es una prueba de imagen ni un diagnóstico. Nadie te ha mirado el cerebro: lo que lees aquí es lo que la investigación ha visto en muchas personas que vivieron algo parecido, no una medida tuya. Sirve para entenderte, no para etiquetarte.";
+  "Esto no es tu diagnóstico. Son las conclusiones generales de las investigaciones. Sirve para comprenderte, no para etiquetarte.";

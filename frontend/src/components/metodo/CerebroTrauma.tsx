@@ -144,7 +144,7 @@ export function CerebroTrauma({ activa, onZona, tinta }: CerebroTraumaProps) {
       </Box>
 
       {/* ── La leyenda: el nombre de cada zona con su color ── */}
-      <Flex wrap="wrap" justify="center" gap={{ base: 2, md: 3 }} mt={3}>
+      <Flex wrap="wrap" justify="center" gap={{ base: 2, md: 3 }} mt={{ base: 7, md: 9 }}>
         {ZONAS.map((zona) => (
           <Flex
             key={zona.key}

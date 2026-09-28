@@ -45,11 +45,10 @@ import {
 } from "../../components/metodo/psicologiaRecorrido";
 import {
   CEREBRO_AVISO,
-  CEREBRO_ESPERANZA,
-  CEREBRO_INTRO,
   type ZonaKey,
 } from "../../components/metodo/psicologiaCerebro";
 import { CerebroTrauma } from "../../components/metodo/CerebroTrauma";
+import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { CerebroZonaModal } from "../../components/metodo/CerebroZonaModal";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { Reveal } from "../../components/global/Reveal";
@@ -160,16 +159,6 @@ export default function MetodoPsicologiaCerebro() {
             {/* ── Qué le pasó a tu cerebro + el dibujo ── */}
             <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
             <Panel>
-              {CEREBRO_INTRO.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-                      textAlign="center" maxW="620px" mx="auto" style={{ textShadow: INK_SHADOW }}>
-                  {p}
-                </Text>
-              ))}
-
-              <Box h="1px" w="55%" maxW="240px" mx="auto"
-                   bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-
               <CerebroTrauma activa={zonaKey} onZona={abrirZona} tinta={TINTA} />
 
               <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.85}
@@ -187,36 +176,11 @@ export default function MetodoPsicologiaCerebro() {
             </Text>
             </Reveal>
 
-            {/* ── El cierre: lo que se aprendió se puede reaprender ── */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.16} duration={0.75} w="100%">
-            <Panel>
-              <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
-                    lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                {CEREBRO_ESPERANZA.titulo}
-              </Text>
-              <Box h="1px" w="55%" maxW="240px" mx="auto"
-                   bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-              {CEREBRO_ESPERANZA.texto.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-                      style={{ textShadow: INK_SHADOW }}>
-                  {p}
-                </Text>
-              ))}
-
-              <Flex justify="center" pt={2}>
-                <Box as="button" onClick={() => setComicOpen(true)}
-                     position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
-                     bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
-                     fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
-                     boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
-                     _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                  <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                       style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.continuarLinea")}</Box>
-                </Box>
-              </Flex>
-            </Panel>
-            </Reveal>
           </Flex>
+
+          {/* Botón de fin de página (adelante, abajo a la derecha) */}
+          <BotonPaso label={t("metodo.psico.lineaDeVida")} onClick={() => setComicOpen(true)}
+                     nom={neuropsicologiaNom} color={TINTA} bg={neuropsicologiaBg} />
         </Flex>
       </Flex>
 
