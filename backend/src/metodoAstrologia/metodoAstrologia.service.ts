@@ -217,6 +217,29 @@ export class MetodoAstrologiaService {
   // las gestiona el backend/administración y NO deben escribirse desde el front.
   private static readonly CAMPOS_PATCH_PERMITIDOS = new Set(['data', 'aviso_visto', 'intro_visto']);
 
+  // Los 15 cuerpos de la rueda de Arquetipos (los mismos que CUERPOS en
+  // frontend/src/components/metodo/astrologiaData.ts; si cambia allí, cambia
+  // aquí). «Leído» = signo con su lectura abierta y, si el cuerpo tiene casa,
+  // también la casa. El ascendente no tiene casa.
+  private static readonly CUERPOS_ARQUETIPOS: { key: CuerpoKey; conCasa: boolean }[] = [
+    { key: 'ascendente', conCasa: false },
+    ...(['sol', 'luna', 'mercurio', 'venus', 'marte', 'jupiter', 'saturno', 'urano',
+        'neptuno', 'pluton', 'quiron', 'lilith', 'nodoNorte', 'nodoSur'] as CuerpoKey[])
+      .map((key) => ({ key, conCasa: true })),
+  ];
+
+  /** ¿Ha leído TODOS los arquetipos? (la condición del botón siguiente de la rueda) */
+  private static arquetiposCompletos(data: Record<string, any> | null | undefined): boolean {
+    if (!data) return false;
+    return MetodoAstrologiaService.CUERPOS_ARQUETIPOS.every(({ key, conCasa }) => {
+      const v = data[key];
+      if (!v || typeof v !== 'object') return false;
+      if (!v.signo || !v.profundizadoSigno) return false;
+      if (conCasa && (v.casa == null || !v.profundizadoCasa)) return false;
+      return true;
+    });
+  }
+
   // ── PATCH parcial (solo campos permitidos) ──
   async actualizar(userId: string, patch: Record<string, any>): Promise<{ success: boolean }> {
     const filtered = Object.fromEntries(
@@ -229,10 +252,29 @@ export class MetodoAstrologiaService {
     // usuario, aspectos/casas leídos para el progreso, etc.). Un upsert lo
     // reemplazaría entero, así que lo FUSIONAMOS a nivel de primer nivel con lo
     // que ya hay guardado para no pisar otras claves.
+    let avisarArquetipos = false;
     if (filtered.data && typeof filtered.data === 'object') {
       const row = await this.getMetodoAstrologia(userId);
       const prev = (row?.data ?? {}) as Record<string, any>;
       filtered.data = { ...prev, ...(filtered.data as Record<string, any>) };
+
+      // ── Aviso a la creadora: acaba de terminar TODOS sus arquetipos ──
+      // Es un paso del recorrido: la persona se queda parada en Puntos clave
+      // esperando la lectura, así que a María le llega un correo que insiste
+      // («le toca su carta astral»). Solo si la lectura aún no está escrita
+      // (sin retos y sin link) y solo UNA vez: queda apuntado en
+      // data.aviso_arquetipos_at, en el mismo upsert que completa el último.
+      const lecturaEscrita =
+        !!row?.link_carta || (Array.isArray(row?.retos) && row.retos.length > 0);
+      if (
+        row?.solicitud_enviada_at &&
+        !lecturaEscrita &&
+        !prev.aviso_arquetipos_at &&
+        MetodoAstrologiaService.arquetiposCompletos(filtered.data as Record<string, any>)
+      ) {
+        avisarArquetipos = true;
+        (filtered.data as Record<string, any>).aviso_arquetipos_at = new Date().toISOString();
+      }
     }
 
     const update = { ...filtered, updated_at: new Date().toISOString() };
@@ -243,6 +285,21 @@ export class MetodoAstrologiaService {
     if (error) {
       console.warn('[metodoAstrologia.actualizar] error:', error.message);
       return { success: false };
+    }
+
+    if (avisarArquetipos) {
+      const user = await this.userService.getUserById(userId).catch(() => null);
+      if (user?.email) {
+        // El guardado ya está hecho: si el correo falla, no rompemos el PATCH.
+        await this.mailService
+          .enviarAvisoArquetiposLeidos(user.email, user.name, userId)
+          .catch((err: unknown) =>
+            console.warn(
+              '[metodoAstrologia.actualizar] no se pudo avisar de arquetipos leídos:',
+              err instanceof Error ? err.message : err,
+            ),
+          );
+      }
     }
     return { success: true };
   }

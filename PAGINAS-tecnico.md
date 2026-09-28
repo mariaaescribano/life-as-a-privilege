@@ -375,7 +375,8 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** requiere solicitud enviada (`useCartaPlanetas` y la página redirigen a `/metodo/astrologia`). Next desactivado hasta que todos los planetas estén leídos (`todoCompletado`) Y la carta esté procesada (`link_carta` o `retos` no vacío). Tooltip distinto para cada caso.
 - **Botones / a dónde lleva:** prev → paso 1; next → `/metodo/astrologia/lectura`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
 - **Condiciones y casos raros:** `EditarCuerpoModal` está montado pero nada lo abre (`setEditOpen(true)` no existe): código muerto. El guardado va con debounce y no se espera con flush al navegar con el botón (sin verificar si `flushSaves` lo cubre, ya que el PATCH puede no haber salido aún).
-- **Tests:** `backend/src/metodoAstrologia/metodoAstrologia.spec.ts` (carta cacheada / calculada al vuelo, recalcular, ajuste manual de nodos a 180°, leídos fusionados en `data`)
+- **Correos:** al marcar como leído el ÚLTIMO arquetipo, el backend manda a la creadora «Le toca su carta astral» (una vez, y solo si la lectura no está escrita) → ver `Correo: Le toca su carta astral` en la sección 8.
+- **Tests:** `backend/src/metodoAstrologia/metodoAstrologia.spec.ts` (carta cacheada / calculada al vuelo, recalcular, ajuste manual de nodos a 180°, leídos fusionados en `data`, aviso «le toca su carta»)
 
 ---
 
@@ -2225,6 +2226,22 @@ Todos salen de `backend/src/mail/mail.service.ts`. El texto es el que se ve en e
 >
 > Un abrazo,
 > María
+
+---
+
+## Correo: Le toca su carta astral (aviso a la creadora)
+- **Cuándo sale:** cuando la persona termina de leer TODOS sus arquetipos (los 15 cuerpos, `PATCH /metodo-astrologia/:userId` completa el último `profundizado*`). Va a `NOTIFY_EMAIL` (por defecto el de la creadora). Solo UNA vez por persona (`data.aviso_arquetipos_at`) y solo si su lectura no está escrita todavía (sin `retos` y sin `link_carta`).
+- **Función:** `enviarAvisoArquetiposLeidos`
+- **Asunto:** Le toca su carta astral: {email}
+- **Tests:** `backend/src/metodoAstrologia/metodoAstrologia.spec.ts` (sección «El aviso a María»)
+
+> **Le toca su carta astral**
+>
+> **{nombre}** ha terminado de leer **todos sus arquetipos**. Su recorrido se ha quedado parado en Puntos clave, esperando tu lectura: **le toca su carta astral**.
+>
+> Nombre: {nombre} · Email: {email} · Cuándo: {fecha y hora}
+>
+> [Escribir su carta →] → `/admin/astrologia/<userId>`
 
 
 # 9. Fallos encontrados

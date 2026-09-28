@@ -52,6 +52,7 @@ function montar(filasAstro: Record<string, any>[] = []) {
     enviarCartaRegistrada: jest.fn().mockResolvedValue(undefined),
     enviarCartaEnProceso: jest.fn().mockResolvedValue(undefined),
     enviarCartaLeida: jest.fn().mockResolvedValue(undefined),
+    enviarAvisoArquetiposLeidos: jest.fn().mockResolvedValue(undefined),
   };
   const userService: any = {
     getUserById: jest.fn(async (id: string) => {
@@ -71,6 +72,17 @@ function montar(filasAstro: Record<string, any>[] = []) {
   };
   const service = new MetodoAstrologiaService(bd.databaseService, mail, userService, cartaNatal);
   return { service, mail, userService, cartaNatal, astro: bd.tablas.metodo_astrologia };
+}
+
+// `data` con TODOS los arquetipos leídos: los 15 cuerpos de la rueda, cada uno
+// con su signo profundizado y (menos el ascendente) su casa profundizada.
+function arquetiposLeidos(): Record<string, any> {
+  const d: Record<string, any> = { ascendente: { signo: 'Aries', profundizadoSigno: true } };
+  for (const k of ['sol', 'luna', 'mercurio', 'venus', 'marte', 'jupiter', 'saturno',
+                   'urano', 'neptuno', 'pluton', 'quiron', 'lilith', 'nodoNorte', 'nodoSur']) {
+    d[k] = { signo: 'Aries', casa: 1, profundizadoSigno: true, profundizadoCasa: true };
+  }
+  return d;
 }
 
 beforeEach(() => {
@@ -371,8 +383,11 @@ describe('4 · ADMIN: la lectura escrita y los avisos a mano', () => {
 //   · Después puede ver Arquetipos, pero NO seguir: los Puntos clave se abren
 //     solo cuando María ha LEÍDO la carta (escribe los puntos clave o sube el
 //     enlace de la lectura desde su panel).
-//   · Por el camino le llegan dos correos: «tu carta está en proceso» (María
-//     ha empezado) y «tu carta ya ha sido leída» (ya está disponible).
+//   · PASO DEL RECORRIDO (añadido 2026-09-28): cuando termina de leer TODOS
+//     sus arquetipos, a María le llega un correo que INSISTE en que le toca
+//     escribir su carta (una sola vez, y solo si aún no está escrita).
+//   · Por el camino a la persona le llegan dos correos: «tu carta está en
+//     proceso» (María ha empezado) y «tu carta ya ha sido leída» (disponible).
 //   · Desde ahí la persona termina sola el recorrido, leyendo lo que hay
 //     escrito; María ya no interviene salvo que quiera una llamada.
 //
@@ -431,14 +446,20 @@ describe('5 · El orden del recorrido (el candado de la carta leída)', () => {
     await service.solicitarCarta(USER, DATOS);
     expect(abiertos(desbloqueoAstrologia(astro[0] as any))).toEqual([1, 2]);
 
-    // 2 · María no puede avisar de «leída» antes de escribir la lectura.
+    // 2 · Lee todos sus arquetipos: sigue sin poder pasar, y a María le llega
+    //     el aviso que insiste en que le toca escribir su carta.
+    await service.actualizar(USER, { data: arquetiposLeidos() });
+    expect(abiertos(desbloqueoAstrologia(astro[0] as any))).toEqual([1, 2]);
+    expect(mail.enviarAvisoArquetiposLeidos).toHaveBeenCalledWith('ana@x.com', 'Ana', USER);
+
+    // 3 · María no puede avisar de «leída» antes de escribir la lectura.
     expect((await service.avisar(USER, 'leida')).success).toBe(false);
 
-    // 3 · Avisa de que ha empezado → correo «tu carta está en proceso».
+    // 4 · Avisa de que ha empezado → correo «tu carta está en proceso».
     await service.avisar(USER, 'proceso');
     expect(mail.enviarCartaEnProceso).toHaveBeenCalledWith('ana@x.com', 'Ana');
 
-    // 4 · Escribe la lectura (sin correo) y avisa de «leída» → segundo correo.
+    // 5 · Escribe la lectura (sin correo) y avisa de «leída» → segundo correo.
     await service.guardarTextos(USER, {
       retos: [{ id: 'r1', titulo: 'Reto', texto: 't' }],
       casas_texto: { '1': 'texto casa 1' },
@@ -448,11 +469,67 @@ describe('5 · El orden del recorrido (el candado de la carta leída)', () => {
     expect(mail.enviarCartaLeida).toHaveBeenCalledWith('ana@x.com', 'Ana');
     expect(abiertos(desbloqueoAstrologia(astro[0] as any))).toEqual([1, 2, 3]);
 
-    // 5 · La persona lee lo escrito (su progreso, por PATCH) y termina sola.
+    // 6 · La persona lee lo escrito (su progreso, por PATCH) y termina sola.
     await service.actualizar(USER, { data: { retosLeidos: ['r1'], casasLeidos: ['1'] } });
     expect(abiertos(desbloqueoAstrologia(astro[0] as any))).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
-    // María no ha tenido que hacer nada más: solo los dos avisos.
+    // María no ha tenido que hacer nada más: la insistencia y los dos avisos.
+    expect(mail.enviarAvisoArquetiposLeidos).toHaveBeenCalledTimes(1);
     expect(mail.enviarCartaEnProceso).toHaveBeenCalledTimes(1);
     expect(mail.enviarCartaLeida).toHaveBeenCalledTimes(1);
+  });
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
+describe('6 · El aviso a María: «le toca su carta astral»', () => {
+  const conSolicitud = (extra: Record<string, any> = {}) => ({
+    user_id: USER,
+    solicitud_enviada_at: '2026-09-28T10:00:00Z',
+    data: {},
+    ...extra,
+  });
+
+  it('al leer el último arquetipo llega el aviso, y queda apuntado para no repetirse', async () => {
+    const { service, mail, astro } = montar([conSolicitud()]);
+    await service.actualizar(USER, { data: arquetiposLeidos() });
+    expect(mail.enviarAvisoArquetiposLeidos).toHaveBeenCalledWith('ana@x.com', 'Ana', USER);
+    expect(astro[0].data.aviso_arquetipos_at).toBeTruthy();
+
+    // Cualquier PATCH posterior (releer, marcar otra cosa) no lo repite.
+    await service.actualizar(USER, { data: { sol: arquetiposLeidos().sol } });
+    expect(mail.enviarAvisoArquetiposLeidos).toHaveBeenCalledTimes(1);
+  });
+
+  it('si todavía le falta un arquetipo por leer, no hay aviso', async () => {
+    const { service, mail } = montar([conSolicitud()]);
+    const casiTodos = arquetiposLeidos();
+    delete casiTodos.luna.profundizadoCasa; // le falta la casa de la Luna
+    await service.actualizar(USER, { data: casiTodos });
+    expect(mail.enviarAvisoArquetiposLeidos).not.toHaveBeenCalled();
+  });
+
+  it('si su carta ya está escrita (retos o enlace), no hay nada que insistir', async () => {
+    const { service, mail } = montar([
+      conSolicitud({ retos: [{ id: 'r1', titulo: 'R', texto: 't' }] }),
+    ]);
+    await service.actualizar(USER, { data: arquetiposLeidos() });
+    expect(mail.enviarAvisoArquetiposLeidos).not.toHaveBeenCalled();
+
+    const m2 = montar([conSolicitud({ link_carta: 'https://drive/pdf' })]);
+    await m2.service.actualizar(USER, { data: arquetiposLeidos() });
+    expect(m2.mail.enviarAvisoArquetiposLeidos).not.toHaveBeenCalled();
+  });
+
+  it('sin solicitud enviada no avisa (no está en el recorrido de verdad)', async () => {
+    const { service, mail } = montar([{ user_id: USER, data: {} }]);
+    await service.actualizar(USER, { data: arquetiposLeidos() });
+    expect(mail.enviarAvisoArquetiposLeidos).not.toHaveBeenCalled();
+  });
+
+  it('si el correo falla, el progreso se guarda igual (el PATCH no revienta)', async () => {
+    const { service, mail, astro } = montar([conSolicitud()]);
+    mail.enviarAvisoArquetiposLeidos.mockRejectedValue(new Error('SMTP caído'));
+    const r = await service.actualizar(USER, { data: arquetiposLeidos() });
+    expect(r).toEqual({ success: true });
+    expect(astro[0].data.sol.profundizadoSigno).toBe(true);
   });
 });

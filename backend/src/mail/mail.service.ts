@@ -593,6 +593,41 @@ export class MailService {
     );
   }
 
+  // Alguien ha terminado de LEER TODOS SUS ARQUETIPOS y su carta aún no está
+  // escrita: su recorrido se queda parado en Puntos clave esperando la lectura.
+  // Este aviso insiste: le toca su carta astral. Sale UNA sola vez por persona
+  // (queda apuntado en metodo_astrologia.data.aviso_arquetipos_at) y solo si
+  // la lectura no está escrita todavía (sin puntos clave y sin enlace).
+  async enviarAvisoArquetiposLeidos(email: string, nombre: string, userId: string): Promise<void> {
+    const html = this.plantilla(
+      'Le toca su carta astral',
+      `
+        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
+          <strong>${nombre || 'Sin nombre'}</strong> ha terminado de leer
+          <strong>todos sus arquetipos</strong>. Su recorrido se ha quedado parado en
+          Puntos clave, esperando tu lectura: <strong>le toca su carta astral</strong>.
+        </p>
+        ${this.fichaPersona([
+          ['Nombre', nombre || '—'],
+          ['Email', email],
+          ['Cuándo', this.ahoraLegible],
+        ])}
+        <p style="font-size: 16px; line-height: 1.7; margin: 20px 0 0;">
+          <a href="${this.frontendUrl}/admin/astrologia/${userId}"
+             style="color: #ffffff; font-weight: bold; text-decoration: underline;">
+            Escribir su carta →
+          </a>
+        </p>
+      `,
+    );
+    await this.enviar(
+      this.copiaAdmin,
+      `Le toca su carta astral: ${email}`,
+      html,
+      'aviso de arquetipos leídos',
+    );
+  }
+
   // ───────────────────────────────────────────────────────────────────────────
   // CUMPLEAÑOS. Lo dispara el cron diario (cumple.service). A la persona le
   // llega la felicitación con su enlace personal al 50 %; a la creadora, el
