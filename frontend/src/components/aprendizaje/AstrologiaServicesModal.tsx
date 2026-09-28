@@ -67,7 +67,7 @@ export function AstrologiaServicesModal({ isOpen, onClose }: Props) {
             border="1px solid rgba(254,255,228,0.18)"
             boxShadow="0 24px 80px rgba(0,0,30,0.85), 0 0 60px rgba(100,100,255,0.15)"
             sx={{
-              backgroundImage: `url('/img/astrologia/space.jpg')`,
+              backgroundImage: `url('/img/astrologia/space.webp')`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}

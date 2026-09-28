@@ -19,7 +19,7 @@ export const home = {
   "home.fotoError": "The photo couldn't be uploaded",
   "home.fotoErrorTexto": "Please try again in a moment.",
 
-  "home.camino.titulo": "Your path",
+  "home.camino.titulo": "Your map",
   "home.camino.andado": "{hechos} of {total} steps",
   "home.camino.paso": "step {paso} of {total}",
   "home.camino.piezas": "{hechos} of {total} histories",

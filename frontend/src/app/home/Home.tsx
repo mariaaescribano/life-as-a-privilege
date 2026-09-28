@@ -914,8 +914,9 @@ const Home = () => {
            display={{ base: "none", lg: "block" }}
            // Con las ocho disciplinas compradas la columna es alta: en una
            // pantalla baja se queda con su propio scroll en vez de salirse por
-           // debajo del pie.
-           maxH="calc(100vh - 150px)" overflowY="auto"
+           // debajo del pie. El `pr` deja aire entre los boxes y la barra de
+           // scroll, que pegada a ellos parecía parte del diseño.
+           maxH="calc(100vh - 150px)" overflowY="auto" pr={3}
            sx={{ "&::-webkit-scrollbar": { width: "6px" },
                  "&::-webkit-scrollbar-track": { background: "transparent" },
                  "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "3px" } }}>

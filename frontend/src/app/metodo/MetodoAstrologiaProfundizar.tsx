@@ -31,7 +31,7 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.65)" }: { overlay?: string }) => (
   >
     <Box
       as="img"
-      src="/img/astrologia/space.jpg"
+      src="/img/astrologia/space.webp"
       alt=""
       loading="eager"
       position="absolute"

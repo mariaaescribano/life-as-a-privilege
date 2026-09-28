@@ -4,7 +4,7 @@ void React;
 
 /** Ruta del fondo espacial, para poder precargarla (useImagesReady) desde las
  *  páginas y no mostrarlas hasta que la foto esté lista. */
-export const SPACE_IMG = "/img/astrologia/space.jpg";
+export const SPACE_IMG = "/img/astrologia/space.webp";
 
 interface SpaceBgProps {
   overlay?: string;

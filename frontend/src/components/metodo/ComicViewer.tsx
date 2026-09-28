@@ -690,7 +690,7 @@ export function ComicViewer({
       >
         <Box
           as="img"
-          src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.jpg"}
+          src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.webp"}
           alt=""
           loading="eager"
           position="absolute"
@@ -871,7 +871,7 @@ export function ComicViewer({
           >
             <Box
               as="img"
-              src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.jpg"}
+              src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.webp"}
               alt=""
               loading="eager"
               position="absolute"

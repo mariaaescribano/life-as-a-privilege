@@ -43,7 +43,7 @@ const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
 // Foto de arquetipos (fondo de la columna, su cabecera y cada tarjeta). La página
 // no se muestra hasta que esta imagen esté cargada, para que no aparezca a medias.
-const ARQUETIPOS_IMG = "/img/astrologia/space.jpg";
+const ARQUETIPOS_IMG = "/img/astrologia/space.webp";
 // Altura máxima común de las tres columnas; el resto se ve con scroll interno.
 const COL_H = { base: "440px", md: "520px", lg: "640px" } as const;
 const SCROLL_SX = {
@@ -118,7 +118,7 @@ function ColumnaHeaderBox({ icono, titulo, apoyo, dark }: { icono: React.ReactNo
     <Box flexShrink={0} position="relative" overflow="hidden" borderBottom={`1px solid ${tinta}55`}>
       {/* Imagen propia de la cabecera (independiente del cuerpo → menos distorsión) */}
       {dark ? (
-        <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
+        <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.webp')"
              bgSize="cover" bgPosition="center" />
       ) : (
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
@@ -467,7 +467,7 @@ export default function MetodoPsicologiaIntegracion() {
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
                   {/* Fondo: imagen de astrología a opacidad completa */}
-                  <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
+                  <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.webp')"
                        bgSize="cover" bgPosition="center" />
                   {/* pb permanente: siempre deja un respiro al fondo del scroll. */}
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={{ base: 3, md: 4 }}>
@@ -629,7 +629,7 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer, onDragStart, onD
       {/* Fondo: la misma imagen de astrología que la columna, a opacidad completa.
           Un velo muy suave mantiene legible la letra blanca sin tapar la imagen. */}
       <Box position="absolute" inset="0" zIndex={0} borderRadius="14px" overflow="hidden">
-        <Box position="absolute" inset="0" bgImage="url('/img/astrologia/space.jpg')" bgSize="cover" bgPosition="center" />
+        <Box position="absolute" inset="0" bgImage="url('/img/astrologia/space.webp')" bgSize="cover" bgPosition="center" />
         <Box position="absolute" inset="0" bg="rgba(8,13,30,0.28)" />
       </Box>
       {/* Ojo: abre el popup de ESTA faceta */}

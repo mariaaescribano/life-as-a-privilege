@@ -318,7 +318,7 @@ export default function AdminCursoEditor() {
               </Flex>
               <Box>
                 <Text fontSize="sm" mb={1} opacity={0.8}>Foto (ruta o URL)</Text>
-                <Input value={curso.foto} onChange={(e) => set({ foto: e.target.value })} placeholder="/img/astrologia/space.jpg" {...fieldStyle} />
+                <Input value={curso.foto} onChange={(e) => set({ foto: e.target.value })} placeholder="/img/astrologia/space.webp" {...fieldStyle} />
               </Box>
               <Box>
                 <Text fontSize="sm" mb={1} opacity={0.8}>Descripción</Text>

@@ -184,7 +184,7 @@ export default function MetodoAstrologiaPdf() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 7, total: 9 }}
+              step={{ current: 6, total: 8 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.aspectos")}`, onClick: () => navigate("/metodo/astrologia/aspectos") }}
               extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}

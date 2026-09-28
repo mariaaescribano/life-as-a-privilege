@@ -368,7 +368,7 @@ export default function AdminCursos() {
                 <Box>
                   <Text fontSize="sm" mb={1} opacity={0.8}>Foto (ruta o URL)</Text>
                   <Input value={form.foto} onChange={(e) => setForm({ ...form, foto: e.target.value })}
-                         placeholder="/img/astrologia/space.jpg" bg="rgba(255,255,255,0.1)" border="1px solid rgba(255,255,255,0.25)" />
+                         placeholder="/img/astrologia/space.webp" bg="rgba(255,255,255,0.1)" border="1px solid rgba(255,255,255,0.25)" />
                 </Box>
                 <Box>
                   <Text fontSize="sm" mb={1} opacity={0.8}>Descripción</Text>

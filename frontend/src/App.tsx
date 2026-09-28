@@ -65,7 +65,6 @@ const MetodoAstrologia = lazyConMetodo(() => import("./app/metodo/MetodoAstrolog
 const MetodoAstrologiaCartaAstral = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
 const MetodoAstrologiaPlanetas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPlanetas"));
 const MetodoAstrologiaProfundizar = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaProfundizar"));
-const MetodoAstrologiaSolAscLuna = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaSolAscLuna"));
 const MetodoAstrologiaLectura = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaLectura"));
 const MetodoAstrologiaCasas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCasas"));
 const MetodoAstrologiaAspectos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaAspectos"));
@@ -235,24 +234,16 @@ function ScrollToTop() {
   return null;
 }
 
-// Consentimiento de salud (art. 9 RGPD) para quien entra al recorrido sin haber
-// pasado por la casilla del pago. Lazy: no tiene que viajar en el paquete de entrada.
-const PuertaConsentimientoSalud = lazy(() => import("./components/global/PuertaConsentimientoSalud"));
+// La puerta de consentimiento de salud está APARCADA: el permiso viene ya de la
+// casilla del pago («Acepto las condiciones de compra», que lo incluye), y a las
+// cuentas de antes se les apuntó con sql/consentimiento-salud-todos.sql. El
+// componente queda intacto por si algún día hay que volver a pedirlo aparte.
+// const PuertaConsentimientoSalud = lazy(() => import("./components/global/PuertaConsentimientoSalud"));
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
-  const { pathname } = useLocation();
   const userId = localStorage.getItem("userId");
   if (!userId) return <Navigate to="/welcome" replace />;
-  return (
-    <>
-      {children}
-      {pathname.startsWith("/metodo") && (
-        <Suspense fallback={null}>
-          <PuertaConsentimientoSalud />
-        </Suspense>
-      )}
-    </>
-  );
+  return <>{children}</>;
 }
 
 // Todo el panel de administración se ve un 20% más grande. Vive AQUÍ, en el
@@ -379,7 +370,10 @@ export default function App()
       <Route path="/d/:disciplina" element={<PresentacionDisciplina />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
-      <Route path="/metodo/astrologia/solascendenteluna" element={<PrivateRoute><MetodoAstrologiaSolAscLuna /></PrivateRoute>} />
+      {/* «Lo primero de tu carta» vive ahora DENTRO de /metodo/astrologia (una
+          sola página: datos + Sol/Luna/Ascendente). La ruta vieja se conserva
+          como redirección: hay migas del Mapa y marcadores apuntándole. */}
+      <Route path="/metodo/astrologia/solascendenteluna" element={<Navigate to="/metodo/astrologia" replace />} />
       <Route path="/metodo/astrologia/cartaAstral" element={<PrivateRoute><MetodoAstrologiaCartaAstral /></PrivateRoute>} />
       <Route path="/metodo/astrologia/lectura" element={<PrivateRoute><MetodoAstrologiaLectura /></PrivateRoute>} />
       <Route path="/metodo/astrologia/planetas" element={<PrivateRoute><MetodoAstrologiaPlanetas /></PrivateRoute>} />

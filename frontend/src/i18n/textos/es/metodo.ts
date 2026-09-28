@@ -319,8 +319,10 @@ export const metodo = {
     "Termina de leer los aspectos de {planeta} para desbloquear este planeta.",
   "metodo.astro.pulsaEstrella": "Pulsa sobre cada estrella para descubrir tus puntos clave.",
   "metodo.astro.puntosClavePronto": "Tus puntos clave aparecerán aquí muy pronto.",
+  /** El lema va aparte: se pinta más fuerte y en blanco encima del resto. */
+  "metodo.astro.llamadaLema": "Haz las paces contigo.",
   "metodo.astro.llamadaIntro":
-    "Haz las paces contigo. Agenda una llamada y no te quedes con dudas. Todo lo que has descubierto son partes de ti. Ahora, intégralas.",
+    "Agenda una llamada y no te quedes con dudas. Todo lo que has descubierto son partes de ti. Ahora, intégralas.",
   "metodo.astro.pdfIntro": "Tu carta astral entera, en un archivo que ya es tuyo para siempre.",
   "metodo.astro.pdfTitular": "Toda tu carta, página a página",
   "metodo.astro.pdfSinLecturas":

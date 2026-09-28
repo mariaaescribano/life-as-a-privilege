@@ -355,108 +355,96 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 # 2. Astrología y Psicología
 
-## `/metodo/astrologia` — Astrología: entrada y datos de nacimiento (Paso 1)
+## `/metodo/astrologia` — Astrología: datos de nacimiento + Sol, Luna y Ascendente (Paso 1)
 - **Componente:** `MetodoAstrologia` en `frontend/src/app/metodo/MetodoAstrologia.tsx`
 - **Acceso:** con sesión (PrivateRoute). Pago de astrología exigido por `GuardiaPagoRecorrido` (scope `metodo`; sin `metodo_suscrito` → `/home?entrar=metodo`).
-- **Qué hace:** Al entrar salen siempre dos cómics de intro seguidos: el Origen (espiritualidad) y «La Historia de la Astrología». Sin datos, muestra un formulario (día, mes, año, hora, país, lugar, región) para pedir la carta; un popup confirma los datos y otro avisa de que «la carta está en proceso». Con solicitud ya enviada, muestra una chapa con los datos guardados (botón «Cambiar» para corregirlos) y un box «¿Qué es una carta astral?» que abre el tercer cómic.
-- **Datos:** `GET /metodo-astrologia/:userId` (estado: `solicitud_enviada_at`, `link_carta`, fecha/hora/lugar). `POST /metodo-astrologia/solicitud/:userId` con `fecha_nacimiento`, `hora_nacimiento`, `pais`, `lugar`, `region` (el backend calcula la carta y manda email). Precarga las viñetas de los cómics.
-- **Desbloqueo:** siempre accesible. Enviar la solicitud desbloquea los pasos 2 y 3.
-- **Botones / a dónde lleva:** prev «← Home» (`rutaHome()`: panel si es admin). Next: sin solicitud (o corrigiendo) «Leer carta →» abre el popup de confirmación (desactivado si faltan campos); con solicitud → `/metodo/astrologia/solascendenteluna`. «Ilustraciones» abre `ComicAstrologiaModal`. Cadena de cómics: Origen → Historia → (si ya hay solicitud) cómic de la carta → al terminar o «Saltar» va al paso 2; la X del cómic de la carta se queda aquí. Tras enviar, «Aceptar» del popup abre el cómic de la carta.
-- **Condiciones y casos raros:** `?corregir=1` (viene del paso 2) abre el formulario prerrellenado y NO lanza cómics. Mientras corrige, el botón siguiente se cierra hasta reenviar. Sin `userId`/`token` → `/welcome`. Validación: día 1-31, año 1900-2100. Los mensajes de error y los nombres de los meses están en español fijo (no pasan por i18n).
+- **Qué hace:** UNA sola página para empezar (antes eran dos). Al entrar salen siempre dos cómics de intro seguidos: el Origen (espiritualidad) y «La Historia de la Astrología» — volver a este paso es volver a verlos. Sin datos, muestra el formulario (día, mes, año, hora, país, lugar, región) para pedir la carta; un popup confirma los datos y otro avisa de que «la carta está en proceso». Con solicitud ya enviada, la MISMA página muestra: la chapa con los datos guardados (botón «Cambiar» para corregirlos aquí mismo), el box «¿Qué es una carta astral?» (tercer cómic) y el trío Sol · Luna · Ascendente: tres tarjetas con su signo y su casa (el Ascendente no lleva casa); pulsar «Leer» abre `SaberMasModal` y lo marca como leído. Bajo el trío, un aviso con enlace para corregir los datos si el trío no le cuadra.
+- **Datos:** `GET /metodo-astrologia/:userId` (estado: `solicitud_enviada_at`, `link_carta`, fecha/hora/lugar, `data`). Con solicitud, también `GET /metodo-astrologia/carta-natal/:userId` (signo y casa salen de la carta calculada, no del `data` guardado). `POST /metodo-astrologia/solicitud/:userId` con `fecha_nacimiento`, `hora_nacimiento`, `pais`, `lugar`, `region` (el backend calcula la carta y manda email). Los leídos del trío se guardan con `PATCH /metodo-astrologia/:userId` `{ data }` (`data.<planeta>.profundizadoSigno` / `profundizadoCasa`; el backend fusiona `data`). Precarga las viñetas de los cómics.
+- **Desbloqueo:** siempre accesible. Enviar la solicitud desbloquea el paso 2 (Arquetipos); el botón siguiente no se activa hasta leer los tres del trío.
+- **Botones / a dónde lleva:** prev «← Home» (`rutaHome()`: panel si es admin). Next: sin solicitud (o corrigiendo) «Leer carta →» abre el popup de confirmación (desactivado si faltan campos); con solicitud, «Arquetipos →» (desactivado hasta leer los tres) abre dos cómics seguidos: signos → planetas → `/metodo/astrologia/cartaAstral`. «Ilustraciones» abre `ComicAstrologiaModal`. Cadena de cómics de entrada: Origen → Historia → (si ya hay solicitud) cómic de la carta, que al terminar se CIERRA y deja la página a la vista (el trío está aquí). Tras enviar, «Aceptar» del popup abre el cómic de la carta.
+- **Condiciones y casos raros:** `?corregir=1` abre el formulario prerrellenado y NO lanza cómics. Mientras corrige, el trío se esconde y el botón siguiente se cierra hasta reenviar; al reenviar se recarga la carta (los signos nuevos, no los de antes). La ruta vieja `/metodo/astrologia/solascendenteluna` redirige aquí (quedan migas y marcadores). Sin `userId`/`token` → `/welcome`. Validación: día 1-31, año 1900-2100. Los mensajes de error y los nombres de los meses están en español fijo (no pasan por i18n).
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/astrologia/solascendenteluna` — Lo primero de tu carta (Paso 2)
-- **Componente:** `MetodoAstrologiaSolAscLuna` en `frontend/src/app/metodo/MetodoAstrologiaSolAscLuna.tsx`
-- **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
-- **Qué hace:** Tres tarjetas (Sol, Luna, Ascendente) con su signo y su casa (el Ascendente no lleva casa). Pulsar «Leer» abre `SaberMasModal` con el texto y lo marca como leído. Debajo hay un box «Corregir mis datos» por si el trío no le cuadra.
-- **Datos:** `GET /metodo-astrologia/:userId` y `GET /metodo-astrologia/carta-natal/:userId` (signo y casa salen de la carta calculada, no del `data` guardado). Guarda con `PATCH /metodo-astrologia/:userId` `{ data }` los flags `data.<planeta>.profundizadoSigno` / `profundizadoCasa` (el backend fusiona `data`).
-- **Desbloqueo:** hace falta `solicitud_enviada_at`; si no, → `/metodo/astrologia`. El botón siguiente se activa al leer los tres.
-- **Botones / a dónde lleva:** prev → `/metodo/astrologia`. Next abre dos cómics seguidos: signos → planetas → `/metodo/astrologia/cartaAstral`. «Corregir mis datos» → `/metodo/astrologia?corregir=1`. «Ilustraciones», `BotonCompania` (¿Qué es esto? + llamada 20 €), `IndiceAstrologia`.
-- **Condiciones y casos raros:** si la carta se recalcula tras corregir la fecha, se usan los datos nuevos de la carta y del `data` solo se conservan los flags de leído. Si falla la carga, falla en silencio.
-- **Tests:** pendiente
-
----
-
-## `/metodo/astrologia/cartaAstral` — Arquetipos: la carta en 3D (Paso 3)
+## `/metodo/astrologia/cartaAstral` — Arquetipos: la carta en 3D (Paso 2)
 - **Componente:** `MetodoAstrologiaCartaAstral` en `frontend/src/app/metodo/MetodoAstrologiaCartaAstral.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
 - **Qué hace:** Muestra la rueda de la carta natal (`CartaAstral3D`). Pulsar un planeta abre «Saber más» (`SaberMasModal`) y lo marca como leído (signo y, si tiene, casa). Los planetas leídos salen como completados.
 - **Datos:** `GET /metodo-astrologia/:userId`, `GET /metodo-astrologia/carta-natal/:userId`. Si la carta no tiene Quirón o no coincide `localStorage["cartaCalcVersion:<userId>"]` con `v3-chiron-m0-28`, llama a `POST /metodo-astrologia/carta-natal/:userId/recalcular` una vez. Los leídos se guardan vía `useCartaPlanetas` (`PATCH /metodo-astrologia/:userId` `{ data }`, con debounce de 1,5 s y guardado al desmontar).
 - **Desbloqueo:** requiere solicitud enviada (`useCartaPlanetas` y la página redirigen a `/metodo/astrologia`). Next desactivado hasta que todos los planetas estén leídos (`todoCompletado`) Y la carta esté procesada (`link_carta` o `retos` no vacío). Tooltip distinto para cada caso.
-- **Botones / a dónde lleva:** prev → paso 2; next → `/metodo/astrologia/lectura`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
+- **Botones / a dónde lleva:** prev → paso 1; next → `/metodo/astrologia/lectura`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
 - **Condiciones y casos raros:** `EditarCuerpoModal` está montado pero nada lo abre (`setEditOpen(true)` no existe): código muerto. El guardado va con debounce y no se espera con flush al navegar con el botón (sin verificar si `flushSaves` lo cubre, ya que el PATCH puede no haber salido aún).
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/astrologia/lectura` — Puntos clave (Paso 4)
+## `/metodo/astrologia/lectura` — Puntos clave (Paso 3)
 - **Componente:** `MetodoAstrologiaLectura` en `frontend/src/app/metodo/MetodoAstrologiaLectura.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
 - **Qué hace:** Un cielo con una estrella por cada «punto clave» (reto) que la admin escribió. Al pulsar una estrella se abre un modal con su texto y queda marcada como leída. Un contador enseña «Has leído X de N».
 - **Datos:** `GET /metodo-astrologia/:userId` (`retos`, `link_carta`). Leídos con `useAstroLeidos("retos")` → `data.retosLeidos` vía `PATCH /metodo-astrologia/:userId`, más una caché en memoria.
 - **Desbloqueo:** necesita `link_carta` o al menos un reto; si no (o si falla el GET) → `/metodo/astrologia`. Next activo cuando todos los retos están leídos (o no hay ninguno).
-- **Botones / a dónde lleva:** prev → paso 3. Next abre el cómic de las Casas (`ComicPasoModal`) → `/metodo/astrologia/casas`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
-- **Condiciones y casos raros:** no comprueba si ya se leyeron los arquetipos del paso 3, así que desde el Índice se puede entrar sin haberlos leído. Textos «Has leído…» y el tooltip están en español fijo.
+- **Botones / a dónde lleva:** prev → paso 2. Next abre el cómic de las Casas (`ComicPasoModal`) → `/metodo/astrologia/casas`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
+- **Condiciones y casos raros:** no comprueba si ya se leyeron los arquetipos del paso 2, así que desde el Índice se puede entrar sin haberlos leído. Textos «Has leído…» y el tooltip están en español fijo.
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/astrologia/casas` — Casas (Paso 5)
+## `/metodo/astrologia/casas` — Casas (Paso 4)
 - **Componente:** `MetodoAstrologiaCasas` en `frontend/src/app/metodo/MetodoAstrologiaCasas.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
 - **Qué hace:** Una rueda de las 12 casas que se gira arrastrando o pulsando. La casa seleccionada muestra su info (según las cúspides) y el texto escrito por la admin; «Leer» la marca como leída.
 - **Datos:** `GET /metodo-astrologia/:userId` (`retos`, `casas_texto`, `link_carta`), `GET /metodo-astrologia/carta-natal/:userId` (`cusps`). Leídos: `useAstroLeidos("casas")` → `data.casasLeidos`. También lee `retosLeidos` para el gate.
 - **Desbloqueo:** necesita `link_carta` o retos (si no → `/metodo/astrologia`), y todos los retos leídos (si no → `/metodo/astrologia/lectura`, con replace). Next activo cuando todas las casas CON texto están leídas (si no hay ninguna escrita, pasa directo).
-- **Botones / a dónde lleva:** prev → paso 4. Next abre el cómic de Aspectos → `/metodo/astrologia/aspectos`. «Ilustraciones», `IndiceAstrologia`.
+- **Botones / a dónde lleva:** prev → paso 3. Next abre el cómic de Aspectos → `/metodo/astrologia/aspectos`. «Ilustraciones», `IndiceAstrologia`.
 - **Condiciones y casos raros:** mientras no está todo cargado o faltan retos, enseña el loader (no se llega a ver la página antes de rebotar).
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/astrologia/aspectos` — Aspectos (Paso 6)
+## `/metodo/astrologia/aspectos` — Aspectos (Paso 5)
 - **Componente:** `MetodoAstrologiaAspectos` en `frontend/src/app/metodo/MetodoAstrologiaAspectos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
 - **Qué hace:** Los aspectos de la carta agrupados por planeta. Cada grupo se desbloquea al terminar el anterior (candado + aviso «termina los aspectos de X»). Al pulsar un aspecto se abre un popup con su texto (o un aviso si no hay lectura) y queda leído.
 - **Datos:** `GET /metodo-astrologia/:userId` (`retos`, `aspectos_texto`, `casas_texto`), `GET /metodo-astrologia/carta-natal/:userId` (`aspectos`). Leídos: `useAstroLeidos("aspectos")` → `data.aspectosLeidos`; lee también `retosLeidos` y `casasLeidos`.
 - **Desbloqueo:** `link_carta` o retos (si no → `/metodo/astrologia`); retos leídos (si no → `/lectura`); casas escritas leídas (si no → `/casas`). El next no pide nada.
-- **Botones / a dónde lleva:** prev → paso 5; next → `/metodo/astrologia/pdf`. «Ilustraciones», `IndiceAstrologia`.
+- **Botones / a dónde lleva:** prev → paso 4; next → `/metodo/astrologia/pdf`. «Ilustraciones», `IndiceAstrologia`.
 - **Condiciones y casos raros:** leer todos los aspectos no es obligatorio para seguir.
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/astrologia/pdf` — Tu carta en PDF (Paso 7)
+## `/metodo/astrologia/pdf` — Tu carta en PDF (Paso 6)
 - **Componente:** `MetodoAstrologiaPdf` en `frontend/src/app/metodo/MetodoAstrologiaPdf.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
 - **Qué hace:** Explica el PDF y enseña un resumen de lo que lleva. El botón genera en el navegador un PDF con la carta, los datos de nacimiento, los puntos clave y los textos de casas y aspectos, con barra de progreso, y lo descarga. Avisa si todavía no hay lecturas escritas.
 - **Datos:** `GET /metodo-astrologia/:userId` (retos, `casas_texto`, `aspectos_texto`, datos de nacimiento), `GET /metodo-astrologia/carta-natal/:userId`. Nombre desde `localStorage["name"]`. PDF con `generarPdfCarta` (`components/metodo/pdf/pdfCartaAstral`). No guarda nada.
-- **Desbloqueo:** `link_carta` o retos; si no → `/metodo/astrologia`. No comprueba haber leído casas ni aspectos (el Índice sí lo exige para el paso 7).
-- **Botones / a dónde lleva:** prev → paso 6; next → `/metodo/astrologia/llamada`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
+- **Desbloqueo:** `link_carta` o retos; si no → `/metodo/astrologia`. No comprueba haber leído casas ni aspectos (el Índice sí lo exige para el paso 6).
+- **Botones / a dónde lleva:** prev → paso 5; next → `/metodo/astrologia/llamada`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
 - **Condiciones y casos raros:** si falla la carga sale un error en la página; si falla el PDF, «Algo se ha torcido…».
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/astrologia/llamada` — Llamada (Paso 8)
+## `/metodo/astrologia/llamada` — Llamada (Paso 7)
 - **Componente:** `MetodoAstrologiaLlamada` en `frontend/src/app/metodo/MetodoAstrologiaLlamada.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
 - **Qué hace:** Un texto de intro y el calendario `AgendarLlamada` para reservar y pagar una llamada de astrología (20 €).
 - **Datos:** los de `AgendarLlamada`: `GET /booking/taken`, `GET /user/me`, `POST /payment/llamada/checkout` (redirige a Stripe con `returnPath`), `GET /payment/llamada/verify?session_id=` al volver.
-- **Desbloqueo:** la página no tiene gate propio (no hay chequeo de sesión ni de carta). En el Índice se abre con el paso 6.
+- **Desbloqueo:** la página no tiene gate propio (no hay chequeo de sesión ni de carta). En el Índice se abre con el paso 5.
 - **Botones / a dónde lleva:** prev → `/metodo/astrologia/pdf`; next → `/metodo/astrologia/cursos`. «Ilustraciones», `IndiceAstrologia`.
 - **Condiciones y casos raros:** al volver de Stripe hay un parámetro de sesión en la URL que `AgendarLlamada` lee y limpia.
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/astrologia/cursos` — Cursos de Astrología (Paso 9)
+## `/metodo/astrologia/cursos` — Cursos de Astrología (Paso 8)
 - **Componente:** `MetodoAstrologiaCursos` en `frontend/src/app/metodo/MetodoAstrologiaCursos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
 - **Qué hace:** Cuadrícula con los cursos de astrología del catálogo, del más nuevo al más viejo (con un solo curso sale una tarjeta grande; sin cursos, «próximamente»). Al final, `PedirOpinion` para dejar una reseña.
 - **Datos:** `GET /cursos` (vía `useCursosData`), `GET /user/me` (`psicologia_suscrito`). Precarga las portadas.
-- **Desbloqueo:** sin gate propio (en el Índice va con el paso 6).
+- **Desbloqueo:** sin gate propio (en el Índice va con el paso 5).
 - **Botones / a dónde lleva:** prev → `/metodo/astrologia/llamada`. Next «Psicología →»: si no tiene psicología pagada abre `PagoPsicologiaModal` (el pago va por el Payment Link de Stripe `irAPagoDisciplina("psicologia")`) y lleva un candado; si la tiene → `/metodo/psicologia`. `PedirOpinion` → `/opiniones?volver=`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
 - **Condiciones y casos raros:** sin token no redirige (solo deja de pedir `/user/me`). Mientras `psicologiaSuscrito` es `null` (no ha cargado), el botón navega directo y el guardia de pago decide.
 - **Tests:** pendiente

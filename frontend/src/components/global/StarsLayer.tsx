@@ -37,7 +37,7 @@ export const StarsLayer = ({
   >
     <Box
       as="img"
-      src="/img/astrologia/space.jpg"
+      src="/img/astrologia/space.webp"
       alt=""
       loading="eager"
       position="absolute"

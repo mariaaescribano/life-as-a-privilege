@@ -265,8 +265,9 @@ export const metodo = {
     "Finish reading the aspects of {planeta} to unlock this planet.",
   "metodo.astro.pulsaEstrella": "Tap each star to discover your key points.",
   "metodo.astro.puntosClavePronto": "Your key points will appear here very soon.",
+  "metodo.astro.llamadaLema": "Make peace with yourself.",
   "metodo.astro.llamadaIntro":
-    "Integrate your archetypes: book a call and don't stay with your doubts.",
+    "Book a call and don't stay with your doubts. Everything you've discovered is part of you. Now, integrate it.",
   "metodo.astro.pdfIntro": "Your whole reading, in a file that's yours for good.",
   "metodo.astro.pdfTitular": "Your entire chart, page by page",
   "metodo.astro.pdfSinLecturas":

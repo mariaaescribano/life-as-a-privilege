@@ -161,9 +161,9 @@ export default function MetodoAstrologiaCartaAstral() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 3, total: 9 }}
+              step={{ current: 2, total: 8 }}
               mb={0}
-              prev={{ label: `← ${t("metodo.astro.paso.loPrimeroCorto")}`, onClick: () => navigate("/metodo/astrologia/solascendenteluna") }}
+              prev={{ label: `← ${t("metodo.introCorto")}`, onClick: () => navigate("/metodo/astrologia") }}
               extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
               next={headerNext}
             />

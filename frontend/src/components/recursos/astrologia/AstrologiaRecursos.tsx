@@ -39,7 +39,7 @@ const SpaceBg = () => (
   <Box position="absolute" inset="0" pointerEvents="none" overflow="hidden" borderRadius="inherit">
     <Box
       as="img"
-      src="/img/astrologia/space.jpg"
+      src="/img/astrologia/space.webp"
       alt=""
       position="absolute" inset="0"
       w="100%" h="100%"

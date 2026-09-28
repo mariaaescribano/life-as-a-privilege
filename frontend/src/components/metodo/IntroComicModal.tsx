@@ -168,7 +168,7 @@ export function IntroComicModal({
           // en TODAS las disciplinas: borde + letra en el color de TEXTO de la
           // disciplina (Txt) y la imagen de la disciplina de fondo con velo para
           // que se lea. Sin rellenos sólidos ni glow de color.
-          const bgImgSrc = continueBgImage ?? disciplinaBgImage ?? "/img/astrologia/space.jpg";
+          const bgImgSrc = continueBgImage ?? disciplinaBgImage ?? "/img/astrologia/space.webp";
           const txtColor = textColor ?? themeColor;
           const velo = disciplinaBgColor ? `${disciplinaBgColor}b3` : "rgba(0,0,0,0.5)";
           return (

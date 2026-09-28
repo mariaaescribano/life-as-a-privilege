@@ -79,7 +79,7 @@ export function ComicPasoModal({
   // Imagen de la disciplina para el fondo del botón del siguiente título.
   // Astrología no pasa disciplinaBgImage → usa el fondo estrellado, igual que
   // hace el propio ComicViewer.
-  const imgFondo = disciplinaBgImage ?? "/img/astrologia/space.jpg";
+  const imgFondo = disciplinaBgImage ?? "/img/astrologia/space.webp";
   // Velo sobre la imagen para que el texto del botón se lea bien. Con
   // `botonNitido` NO es un velo oscuro sino EL MISMO del box del cómic (el
   // color de la disciplina al 33%, ver ComicViewer): la foto se sigue viendo,

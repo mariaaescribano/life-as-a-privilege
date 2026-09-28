@@ -24,7 +24,7 @@ export const home = {
   "home.fotoErrorTexto": "Inténtalo de nuevo en un momento.",
 
   // ── Tu camino (columna de la izquierda: por dónde va en lo que ha comprado) ──
-  "home.camino.titulo": "Tu camino",
+  "home.camino.titulo": "Tu mapa",
   "home.camino.andado": "{hechos} de {total} pasos",
   "home.camino.paso": "paso {paso} de {total}",
   /** Cultura no lleva orden: lo que se cuenta son sus Historias. */

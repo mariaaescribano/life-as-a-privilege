@@ -51,7 +51,7 @@ import {
 } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
-const ARQUETIPOS_IMG = "/img/astrologia/space.jpg";
+const ARQUETIPOS_IMG = "/img/astrologia/space.webp";
 const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
 const ORO = "#caa24a";
@@ -421,7 +421,7 @@ export default function MetodoPsicologiaDonesEspejo() {
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
-                  <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
+                  <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.webp')"
                        bgSize="cover" bgPosition="center" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%" pb={COL_PB}>
                     <ColumnaHeaderBox dark icono={<AstrologiaIcon size={{ base: "24px", md: "24px" }} />}
@@ -598,7 +598,7 @@ function ColumnaHeaderBox({ icono, titulo, apoyo, dark }: { icono: React.ReactNo
     <Box flexShrink={0} position="relative" overflow="hidden" borderBottom={`1px solid ${tinta}55`}>
       {/* Imagen propia de la cabecera (independiente del cuerpo → menos distorsión) */}
       {dark ? (
-        <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.jpg')"
+        <Box position="absolute" inset="0" zIndex={0} bgImage="url('/img/astrologia/space.webp')"
              bgSize="cover" bgPosition="center" />
       ) : (
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="0" />
@@ -652,7 +652,7 @@ function MiniCard({ item, color, symbol, activo, onTap, onLeer }: {
       {/* Fondo: la misma imagen de astrología que la columna, a opacidad completa.
           Un velo muy suave mantiene legible la letra blanca sin tapar la imagen. */}
       <Box position="absolute" inset="0" zIndex={0} borderRadius="14px" overflow="hidden">
-        <Box position="absolute" inset="0" bgImage="url('/img/astrologia/space.jpg')" bgSize="cover" bgPosition="center" />
+        <Box position="absolute" inset="0" bgImage="url('/img/astrologia/space.webp')" bgSize="cover" bgPosition="center" />
         <Box position="absolute" inset="0" bg="rgba(8,13,30,0.28)" />
       </Box>
       {/* Ojo: abre la lectura de esta faceta */}

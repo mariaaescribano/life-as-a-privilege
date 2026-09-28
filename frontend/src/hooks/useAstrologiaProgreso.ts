@@ -9,16 +9,17 @@ import { API_URL } from "../GlobalVariables";
  * permitir (o rebotar) el acceso. Sirve para que el «Índice» muestre con candado
  * —y no deje entrar a— las páginas que aún no están disponibles.
  *
- * Cadena de desbloqueo (acumulativa), según los guardas de las páginas:
+ * Cadena de desbloqueo (acumulativa), según los guardas de las páginas.
+ * («Lo primero de tu carta» ya no es un paso: el trío Sol·Luna·Ascendente vive
+ * dentro de la página 1, debajo del formulario de datos.)
  *   1 Astrología          → siempre
- *   2 Lo primero de tu carta → hay solicitud enviada (solicitud_enviada_at)
- *   3 Arquetipos          → hay solicitud enviada
- *   4 Puntos clave        → la carta está procesada (link_carta O hay retos)
- *   5 Casas               → 4 + todos los puntos clave leídos (retosLeidos)
- *   6 Aspectos            → 5 + todas las casas escritas leídas (casasLeidos)
- *   7 Tu carta en PDF     → 6 (misma puerta que Aspectos: ya lo ha leído todo)
- *   8 Llamada             → 6 (una vez accesible Aspectos, no hay más guardas)
- *   9 Cursos              → 6
+ *   2 Arquetipos          → hay solicitud enviada (solicitud_enviada_at)
+ *   3 Puntos clave        → la carta está procesada (link_carta O hay retos)
+ *   4 Casas               → 3 + todos los puntos clave leídos (retosLeidos)
+ *   5 Aspectos            → 4 + todas las casas escritas leídas (casasLeidos)
+ *   6 Tu carta en PDF     → 5 (misma puerta que Aspectos: ya lo ha leído todo)
+ *   7 Llamada             → 5 (una vez accesible Aspectos, no hay más guardas)
+ *   8 Cursos              → 5
  *
  * Los "leídos" y los textos escritos salen del mismo row de la BD
  * (metodo_astrologia): data.retosLeidos / data.casasLeidos y casas_texto.
@@ -72,13 +73,12 @@ export function useAstrologiaProgreso() {
   const desbloqueado: Record<number, boolean> = {
     1: true,
     2: solicitud,
-    3: solicitud,
-    4: cartaProcesada,
-    5: cartaProcesada && retosCompletos,
+    3: cartaProcesada,
+    4: cartaProcesada && retosCompletos,
+    5: hastaAspectos,
     6: hastaAspectos,
     7: hastaAspectos,
     8: hastaAspectos,
-    9: hastaAspectos,
   };
 
   // Mientras no ha cargado el progreso NO bloqueamos (permisivo), para no marcar

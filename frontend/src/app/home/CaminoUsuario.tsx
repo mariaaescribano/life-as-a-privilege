@@ -203,45 +203,50 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
                   transition={`opacity 0.35s ease ${abierto ? i * 0.05 : 0}s, transform 0.35s ease ${abierto ? i * 0.05 : 0}s, background 0.2s ease, border-color 0.2s ease`}
                   _hover={{ borderColor: cara.txt }}
                 >
-                  {/* Fondo: la acuarela de la disciplina, con un velo oscuro
-                      encima para que el nombre y la barra se lean siempre. */}
+                  {/* Fondo: la acuarela de la disciplina, BIEN visible — el velo
+                      va muy ligero y la legibilidad la ponen las sombras de los
+                      textos, no el oscurecido. */}
                   {hasDisciplinaBg(cara.nom) && (
-                    <DisciplinaBgLayer nom={cara.nom} borderRadius="lg" overlay="rgba(8,13,30,0.5)" />
+                    <DisciplinaBgLayer nom={cara.nom} borderRadius="lg" overlay="rgba(8,13,30,0.22)" />
                   )}
 
-                  {/* Icono, a la izquierda, sobre el color de su disciplina */}
-                  <Flex
+                  {/* Icono, a la izquierda, suelto sobre la acuarela (sin cajita):
+                      lo separa del fondo su propia sombra. */}
+                  <Box
                     position="relative"
                     zIndex={1}
                     flexShrink={0}
-                    align="center"
-                    justify="center"
-                    w="38px"
-                    h="38px"
-                    borderRadius="md"
-                    bg={cara.bg}
-                    border={`1px solid ${completa ? cara.txt : `${cara.txt}66`}`}
-                    transition="transform 0.2s ease, border-color 0.2s ease"
-                    _groupHover={{ transform: "scale(1.06)", borderColor: cara.txt }}
-                    style={{ boxShadow: completa ? `0 0 10px ${cara.txt}66` : "none" }}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    transition="transform 0.2s ease"
+                    _groupHover={{ transform: "scale(1.12)" }}
+                    style={{
+                      filter: completa
+                        ? `drop-shadow(0 1px 3px rgba(0,0,0,0.75)) drop-shadow(0 0 8px ${cara.txt}aa)`
+                        : "drop-shadow(0 1px 3px rgba(0,0,0,0.75))",
+                    }}
                   >
-                    <Icon size={{ base: "22px", md: "22px" }} />
-                  </Flex>
+                    <Icon size={{ base: "28px", md: "28px" }} />
+                  </Box>
 
                   {/* El nombre arriba y, debajo, su línea de progreso */}
                   <Box position="relative" zIndex={1} flex="1" minW={0}>
                     <Flex align="baseline" justify="space-between" gap={2}>
-                      <Text color="white" fontSize="sm" fontWeight="600" noOfLines={1}>
+                      <Text color="white" fontSize="sm" fontWeight="600" noOfLines={1}
+                            textShadow="0 1px 5px rgba(0,0,0,0.85), 0 0 14px rgba(0,0,0,0.5)">
                         {nombreDisciplina(cara.nom, true)}
                       </Text>
-                      <Text color="rgba(255,255,255,0.75)" fontSize="xs" flexShrink={0}>
+                      <Text color="rgba(255,255,255,0.85)" fontSize="xs" flexShrink={0}
+                            textShadow="0 1px 5px rgba(0,0,0,0.85)">
                         {pct}%
                       </Text>
                     </Flex>
 
-                    <Barra pct={abierto ? pct : 0} color={cara.txt} pista="rgba(255,255,255,0.18)" mt={1.5} />
+                    <Barra pct={abierto ? pct : 0} color={cara.txt} pista="rgba(255,255,255,0.24)" mt={1.5} />
 
-                    <Text color="rgba(255,255,255,0.6)" fontSize="xs" mt="3px" noOfLines={1}>
+                    <Text color="rgba(255,255,255,0.75)" fontSize="xs" mt="3px" noOfLines={1}
+                          textShadow="0 1px 5px rgba(0,0,0,0.85)">
                       {completa
                         ? t("home.camino.completa")
                         : hechos === 0

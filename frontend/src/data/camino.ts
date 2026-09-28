@@ -54,7 +54,7 @@ export interface CaminoDisciplina {
  * paso mayor que el total declarado.
  */
 export const CAMINO: Record<CaminoKey, CaminoDisciplina> = {
-  metodo:     { total: 9,  ruta: "/metodo/astrologia" },
+  metodo:     { total: 8,  ruta: "/metodo/astrologia" },
   psicologia: { total: 27, ruta: "/metodo/psicologia" },
   fisiologia: { total: 9,  ruta: "/metodo/fisiologia" },
   nutricion:  { total: 14, ruta: "/metodo/nutricion" },

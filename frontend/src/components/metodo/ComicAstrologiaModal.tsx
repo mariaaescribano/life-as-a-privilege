@@ -19,7 +19,7 @@ import { FUENTE_GLIFOS } from "./glifosAstro";
 import { GlifoSigno } from "./Glifo";
 import { SIGNOS_ORDEN } from "./signosIconos";
 
-const SPACE_IMG = "/img/astrologia/space.jpg";
+const SPACE_IMG = "/img/astrologia/space.webp";
 
 const fadeInScale = keyframes`
   from { opacity: 0; transform: scale(0.95); }
@@ -476,7 +476,7 @@ function SelectorCard({ option, onClick, delay = "0s" }: SelectorCardProps) {
           <>
             <Box
               as="img"
-              src="/img/astrologia/space.jpg"
+              src="/img/astrologia/space.webp"
               alt=""
               loading="eager"
               position="absolute"
@@ -665,7 +665,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             >
               <Box
                 as="img"
-                src="/img/astrologia/space.jpg"
+                src="/img/astrologia/space.webp"
                 alt=""
                 loading="eager"
                 position="absolute"

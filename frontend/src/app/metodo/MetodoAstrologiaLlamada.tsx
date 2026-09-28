@@ -39,7 +39,7 @@ export default function MetodoAstrologiaLlamada() {
               bgColor={`${astrologiaBg}dd`}
               color={astrologiaTxt}
               space
-              step={{ current: 8, total: 9 }}
+              step={{ current: 7, total: 8 }}
               mb={0}
               prev={{ label: `← ${t("metodo.astro.paso.pdf")}`, onClick: () => navigate("/metodo/astrologia/pdf") }}
               extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
@@ -48,6 +48,18 @@ export default function MetodoAstrologiaLlamada() {
           </Reveal>
 
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%">
+            {/* El lema, más fuerte y en blanco; debajo, el resto como siempre. */}
+            <Text
+              color="white"
+              fontSize={{ base: "xl", md: "2xl" }}
+              fontWeight="700"
+              letterSpacing="0.04em"
+              textAlign="center"
+              lineHeight="1.3"
+              mb={2}
+            >
+              {t("metodo.astro.llamadaLema")}
+            </Text>
             <Text
               color={`${astrologiaTxt}ee`}
               fontSize={{ base: "md", md: "lg" }}

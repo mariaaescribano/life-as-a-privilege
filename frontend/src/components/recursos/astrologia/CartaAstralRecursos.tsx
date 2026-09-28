@@ -63,7 +63,7 @@ const PLANET_SUB: Record<string, Submodulo> = {
 const SpaceBg = () => (
   <Box position="absolute" inset="0" pointerEvents="none" overflow="hidden" borderRadius="inherit">
     <Box
-      as="img" src="/img/astrologia/space.jpg" alt=""
+      as="img" src="/img/astrologia/space.webp" alt=""
       position="absolute" inset="0" w="100%" h="100%"
       style={{ objectFit: "cover", objectPosition: "center" }}
     />
