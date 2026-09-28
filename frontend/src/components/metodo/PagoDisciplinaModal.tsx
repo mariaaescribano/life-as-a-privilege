@@ -156,21 +156,17 @@ export function PagoDisciplinaModal({
   errorColor = "#ffb4b4",
 }: BaseProps) {
   const t = useT();
-  // DOS consentimientos, y los dos hacen falta para pagar:
-  //   · `acepta`  — términos + renuncia al desistimiento.
-  //   · `autoriza` — permiso para que María lea lo que se escriba dentro del
-  //     recorrido. Sin él no se puede preparar ninguna lectura personalizada,
-  //     pero es un permiso que se pide, no algo que se dé por supuesto.
-  // Los dos se reinician cada vez que se abre el modal: nunca deben quedar
-  // marcados «de la vez anterior».
+  // UNA sola casilla: «Acepto las condiciones de compra». Las condiciones
+  // (/terminos, apartado 5) incluyen también lo del guardado de datos: se
+  // guardan sin intención comercial y, si hay sesiones con María, ella puede
+  // leerlos solo para individualizar y personalizar la sesión. Se reinicia cada
+  // vez que se abre el modal: nunca debe quedar marcada «de la vez anterior».
   const [acepta, setAcepta] = React.useState(false);
-  const [autoriza, setAutoriza] = React.useState(false);
   React.useEffect(() => {
-    if (isOpen) { setAcepta(false); setAutoriza(false); }
+    if (isOpen) setAcepta(false);
   }, [isOpen]);
 
-  // Las dos casillas tienen que estar marcadas para que el botón se encienda.
-  const listo = acepta && autoriza;
+  const listo = acepta;
 
   return (
     // scrollBehavior="inside": si el contenido es más alto que la pantalla, el
@@ -236,10 +232,11 @@ export function PagoDisciplinaModal({
               )}
             </Flex>
 
-            {/* Las DOS casillas, con texto corto. El detalle de qué se acepta
-                —incluido que el pago no se devuelve— vive en la lista de
-                condiciones de /terminos, no aquí: el box de pago no es sitio
-                para un párrafo jurídico. */}
+            {/* La casilla, con texto corto. El detalle de qué se acepta —el
+                pago no se devuelve, y el guardado de lo que se escriba para
+                personalizar las sesiones— vive en la lista de condiciones de
+                /terminos, que se abre pulsando el enlace: el box de pago no es
+                sitio para un párrafo jurídico. */}
             <Flex direction="column" gap={3} mt={2} maxW="520px" mx="auto" w="100%">
               <Casilla
                 marcada={acepta}
@@ -257,28 +254,17 @@ export function PagoDisciplinaModal({
                   {t("metodo.pago.condicionesEnlace")}
                 </Text>
               </Casilla>
-
-              {/* El permiso para leer lo que escribe. Va aparte y con su letra
-                  pequeña porque no es lo mismo aceptar unas condiciones que
-                  dejar que otra persona lea lo que escribes. */}
-              <Casilla
-                marcada={autoriza}
-                onToggle={() => setAutoriza((v) => !v)}
-                bg={bg}
-                txt={txt}
-                nota={t("metodo.pago.autorizoNota")}
-              >
-                {t("metodo.pago.autorizo")}
-              </Casilla>
             </Flex>
 
             <Flex justify="center" mt={3} gap={4} wrap="wrap">
               <Box
                 as="button"
                 onClick={loading || !listo ? undefined : async () => {
-                  // Se apunta ANTES de salir hacia Stripe: es la prueba de que
-                  // lo dio (art. 7.1 RGPD). Si falla, se pide otra vez al entrar
-                  // (PuertaConsentimientoSalud), así que no frena el pago.
+                  // Aceptar las condiciones incluye el guardado de lo que
+                  // escriba (apartado 5 de /terminos): se apunta ANTES de salir
+                  // hacia Stripe como prueba (art. 7.1 RGPD). Si falla, se pide
+                  // otra vez al entrar (PuertaConsentimientoSalud), así que no
+                  // frena el pago.
                   await darConsentimientoSalud();
                   onPagar();
                 }}

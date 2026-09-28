@@ -34,7 +34,7 @@ import {
 } from "../../components/metodo/presentacionUi";
 import { NeuropsicologiaIcon, neuropsicologiaBg, neuropsicologiaNom } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
-import { useIdioma, useT } from "../../i18n";
+import { useIdioma, useT, type Texto } from "../../i18n";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
@@ -60,16 +60,20 @@ import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
  *  que lo cuentan. */
 // Se enseñan solo las SEIS primeras: la página es el escaparate, no el índice
 // (debajo de la rejilla va «Descubre mucho más dentro…»).
-const HERRAMIENTAS: string[] = [
-  "Test ACE",
-  "Línea de Vida",
-  "Las Huellas",
-  "Los Nudos",
-  "Necesidades del niño",
-  "Heridas",
-  "Narra",
-  "Integración",
-  "Dones",
+// Bilingües: la página es pública y quien llega en inglés debe leerlas en
+// inglés. Los nombres EN son los MISMOS que usan los pasos del recorrido
+// (metodo.psico.paso.* de textos/en/metodo.ts): que el escaparate y el interior
+// llamen a cada herramienta igual.
+const HERRAMIENTAS: Texto[] = [
+  { es: "Test ACE", en: "ACE Test" },
+  { es: "Línea de Vida", en: "Life Line" },
+  { es: "Las Huellas", en: "The Marks" },
+  { es: "Los Nudos", en: "The Knots" },
+  { es: "Necesidades del niño", en: "The child's needs" },
+  { es: "Heridas", en: "Wounds" },
+  { es: "Narra", en: "Narrate" },
+  { es: "Integración", en: "Integration" },
+  { es: "Dones", en: "Gifts" },
 ].slice(0, 6);
 
 /** Los cuatro cursos que se enseñan, por título tal cual está en el catálogo.
@@ -274,7 +278,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
           >
             {HERRAMIENTAS.map((h) => (
               <RevealItem
-                key={h}
+                key={h.es}
                 direction="up"
                 distance={20}
                 scaleFrom={0.94}
@@ -312,7 +316,7 @@ export default function PresentacionPsicologia({ d }: { d: PresentacionDisciplin
                   lineHeight="1.25"
                   textShadow={sombra}
                 >
-                  {h}
+                  {segunIdioma(h)}
                 </Text>
               </RevealItem>
             ))}

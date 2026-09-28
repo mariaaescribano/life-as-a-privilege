@@ -158,17 +158,17 @@ export function AgendarLlamada({
             setConfirmado({ fecha: res.data.fecha, slot: res.data.slot });
             setSent(true);
           } else if (res.data?.reason === "slot-taken") {
-            setErrorMsg("Ese horario se reservó mientras se procesaba el pago. Escríbeme y te reubico la llamada o te devuelvo el importe.");
+            setErrorMsg(t("llamada.error.horarioOcupadoPago"));
           } else if (res.data?.reason === "unpaid") {
-            setErrorMsg("El pago no llegó a completarse. Puedes intentarlo de nuevo.");
+            setErrorMsg(t("llamada.error.pagoIncompleto"));
           } else {
-            setErrorMsg("No se pudo confirmar la reserva. Escríbeme y lo resolvemos.");
+            setErrorMsg(t("llamada.error.confirmar"));
           }
         })
-        .catch(() => setErrorMsg("No se pudo confirmar la reserva. Escríbeme y lo resolvemos."))
+        .catch(() => setErrorMsg(t("llamada.error.confirmar")))
         .finally(() => { setVerificando(false); limpiarUrl(); });
     } else if (cancelada) {
-      setErrorMsg("Has cancelado el pago. Tu llamada no se ha reservado.");
+      setErrorMsg(t("llamada.error.pagoCancelado"));
       limpiarUrl();
     }
   }, []);
@@ -237,17 +237,17 @@ export function AgendarLlamada({
         window.location.href = res.data.url; // → pasarela de Stripe
         return;
       }
-      setErrorMsg("No se pudo iniciar el pago. Inténtalo de nuevo.");
+      setErrorMsg(t("llamada.error.iniciarPago"));
       setPagando(false);
     } catch (err) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       if (status === 409) {
-        setErrorMsg("Ese horario se acaba de reservar. Por favor, elige otro.");
+        setErrorMsg(t("llamada.error.horarioOcupado"));
         setTaken((prev) => new Set(prev).add(`${toIsoDate(selectedDay)}|${selectedSlot}`));
         setSelectedSlot(null);
         setStep(2);
       } else {
-        setErrorMsg("No se pudo iniciar el pago. Inténtalo de nuevo.");
+        setErrorMsg(t("llamada.error.iniciarPago"));
       }
       setPagando(false);
     }

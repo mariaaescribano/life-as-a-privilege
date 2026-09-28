@@ -218,6 +218,22 @@ describe('4 · Activar con el enlace del correo', () => {
     await expect(service.confirmarCuenta(crearTokenConfirmacion('no-existe'))).rejects.toBeInstanceOf(NotFoundException);
   });
 
+  it('sin la columna en la BD (su SQL sin correr) el enlace responde ok, no un error', async () => {
+    // PostgREST devuelve 42703 cuando `email_confirmado` no existe todavía. La
+    // puerta de confirmación no está activa, así que quien llega del correo no
+    // debe ver un error sin haber tocado nada. (La bd falsa nunca da error, por
+    // eso este test monta su propio cliente.)
+    const err42703 = { code: '42703', message: 'column user.email_confirmado does not exist' };
+    const cadenaUpdate: any = { eq: () => cadenaUpdate, select: () => ({ data: null, error: err42703 }) };
+    const cadenaSelect: any = { eq: () => cadenaSelect, limit: () => ({ data: [{ email: 'ana@x.com' }], error: null }) };
+    const cliente = { from: () => ({ update: () => cadenaUpdate, select: () => cadenaSelect }) };
+    const mail: any = { enviarCuentaActivada: jest.fn() };
+    const service = new UserService({} as any, { getClient: () => cliente } as any, mail);
+
+    await expect(service.confirmarCuenta(crearTokenConfirmacion('u1'))).resolves.toEqual({ ok: true, email: 'ana@x.com' });
+    expect(mail.enviarCuentaActivada).not.toHaveBeenCalled();
+  });
+
   it('si el correo de «activada» falla, la cuenta queda confirmada igual', async () => {
     const { service, mail, filas } = montar();
     mail.enviarCuentaActivada.mockRejectedValue(new Error('smtp caído'));

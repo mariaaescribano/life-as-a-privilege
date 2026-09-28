@@ -40,47 +40,71 @@ export function MiraTuCorreoModal({
       sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
       px={{ base: 5, md: 10 }}
     >
+      {/* La caja va en el turquesa de la plataforma (#008080), como el popup de
+          las condiciones y los modales del panel: nada de verdes propios. */}
       <Box
         role="dialog"
         aria-modal="true"
-        bg="rgba(0,90,80,0.92)"
+        bg="#008080"
         border="1px solid rgba(255,255,255,0.3)"
-        sx={{ backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)" }}
         borderRadius="3xl"
-        boxShadow="0 28px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.1)"
-        p={{ base: 8, md: 12 }}
+        boxShadow="0 0 42px rgba(255,255,255,0.1), 0 0 100px rgba(180,255,245,0.06), 0 22px 60px rgba(0,0,0,0.6)"
+        p={{ base: 8, md: 11 }}
         maxW="460px"
         w="100%"
         display="flex"
         flexDirection="column"
         alignItems="center"
-        gap={5}
+        gap={4}
         textAlign="center"
         fontFamily="'EB Garamond', serif"
       >
         <Image
           src="/img/icono/life.webp"
           alt=""
-          w="90px"
+          h={{ base: "44px", md: "52px" }}
           objectFit="contain"
-          filter="drop-shadow(0 4px 12px rgba(255, 255, 255, 0.35))"
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.55)) drop-shadow(0 0 22px rgba(255,255,255,0.28)) drop-shadow(0 0 44px rgba(180,255,245,0.2))" }}
         />
 
-        <Text color="white" fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.06em">
+        <Text
+          color="white"
+          fontSize={{ base: "2xl", md: "3xl" }}
+          fontWeight="700"
+          letterSpacing="0.06em"
+          textShadow="0 0 14px rgba(255,255,255,0.5), 0 0 30px rgba(180,255,245,0.25)"
+        >
           {t("auth.signin.miraCorreo")}
         </Text>
 
-        <Text color="white" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">
+        {/* rayita fina de tinta bajo el título */}
+        <Box
+          w="72px"
+          h="1px"
+          bg="linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)"
+        />
+
+        <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">
           {t("auth.signin.miraCorreoTexto")}
         </Text>
 
+        {/* El email, en su pastilla: es el dato que hay que retener. */}
         {email && (
-          <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" wordBreak="break-all">
-            {email}
-          </Text>
+          <Box
+            px={5}
+            py={2}
+            borderRadius="full"
+            bg="rgba(255,255,255,0.1)"
+            border="1px solid rgba(255,255,255,0.35)"
+            maxW="100%"
+          >
+            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700" wordBreak="break-all">
+              {email}
+            </Text>
+          </Box>
         )}
 
-        <Text color="rgba(255,255,255,0.8)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6">
+        <Text color="rgba(255,255,255,0.7)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" fontStyle="italic">
           {t("auth.signin.miraCorreoSpam")}
         </Text>
 
@@ -90,16 +114,17 @@ export function MiraTuCorreoModal({
           mt={2}
           color="white"
           fontWeight="700"
-          fontSize={{ base: "lg", md: "xl" }}
+          fontSize={{ base: "md", md: "lg" }}
           letterSpacing="0.12em"
+          textTransform="uppercase"
           px={10}
           py={3}
           borderRadius="full"
-          border="2px solid rgba(255,255,255,0.65)"
-          bg="rgba(255,255,255,0.14)"
+          border="1.5px solid rgba(255,255,255,0.65)"
+          bg="rgba(255,255,255,0.12)"
           cursor="pointer"
-          boxShadow="0 0 28px rgba(107,196,200,0.5), 0 2px 12px rgba(0,0,0,0.25)"
-          _hover={{ bg: "rgba(255,255,255,0.26)", borderColor: "white", boxShadow: "0 0 40px rgba(107,196,200,0.8)" }}
+          boxShadow="0 0 16px rgba(255,255,255,0.2), 0 2px 12px rgba(0,0,0,0.25)"
+          _hover={{ bg: "rgba(255,255,255,0.24)", borderColor: "white", boxShadow: "0 0 26px rgba(255,255,255,0.35)", transform: "translateY(-1px)" }}
           transition="all 0.22s ease"
         >
           {t("auth.signin.entendido")}

@@ -75,6 +75,14 @@ export const elMetodo = {
   "elMetodo.precio.mapa.nombre": "All eight disciplines",
   "elMetodo.precio.mapa.destacado": "{num} disciplines · {precio} each · {total} in total",
   "elMetodo.precio.mapa.desc": "You can buy them whenever you like.",
+  // The page's CLOSING block (the two twin cards at the end).
+  "elMetodo.precio.cierre.titulo": "Start whenever you like",
+  "elMetodo.precio.cierre1.nombre": "Single discipline",
+  "elMetodo.precio.cierre1.importe": "€30",
+  "elMetodo.precio.cierre1.desc": "Full access to one discipline.",
+  "elMetodo.precio.cierre2.nombre": "One-to-one session",
+  "elMetodo.precio.cierre2.importe": "€20 / hour",
+  "elMetodo.precio.cierre2.desc": "Optional one-to-one support.",
   "elMetodo.empezarPor": "Start for {precio}",
 
   // ── 10. Where do I start? ──────────────────────────────────────────────

@@ -1409,8 +1409,6 @@ export const metodo = {
   "metodo.pago.stripe": "Secure payment through Stripe",
   "metodo.pago.acepto": "I accept the",
   "metodo.pago.condicionesEnlace": "purchase terms",
-  "metodo.pago.autorizo": "I consent to what I write in the journey being stored, including health information, and to María Escribano reading it only to accompany me.",
-  "metodo.pago.autorizoNota": "No one else sees it. You can withdraw this at any time through Contact.",
   "metodo.pago.realizado": "{disciplina} payment complete",
   "metodo.pago.yaPuedes": "You can go in now.",
 

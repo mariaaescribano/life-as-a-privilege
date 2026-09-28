@@ -13,8 +13,8 @@ import { useT } from "../../i18n";
  * puedan quedar distintos: antes estaba copiado en las tres páginas.
  */
 export const inputAuthStyles = {
-  bg: "rgba(255,255,255,0.06)",
-  border: "1px solid rgba(255,255,255,0.28)",
+  bg: "rgba(255,255,255,0.09)",
+  border: "1px solid rgba(255,255,255,0.34)",
   color: "white",
   borderRadius: "full",
   size: "lg" as const,
@@ -28,10 +28,22 @@ export const inputAuthStyles = {
   boxShadow: "0 0 10px rgba(255,255,255,0.12)",
   _placeholder: { color: "rgba(255,255,255,0.4)" },
   _hover: { border: "1px solid rgba(255,255,255,0.55)" },
+  // El campo con el foco se marca en AZUL, a propósito: en las pantallas de
+  // acceso (iniciar sesión, crear cuenta, recuperar) hay varios campos iguales
+  // y en blanco no se distinguía cuál estaba activo. Es la excepción al «nada
+  // azul al pulsar» del resto de la web, y por eso va suave: un azul cielo
+  // claro con un halo tenue, no el azul eléctrico del navegador.
   _focus: {
-    border: "1px solid rgba(255,255,255,0.85)",
-    boxShadow: "0 0 0 1px rgba(255,255,255,0.25), 0 0 18px rgba(255,255,255,0.3)",
+    border: "1px solid rgba(150,200,255,0.85)",
+    boxShadow: "0 0 0 1px rgba(150,200,255,0.3), 0 0 18px rgba(150,200,255,0.28)",
     bg: "rgba(255,255,255,0.12)",
+    outline: "none",
+  },
+  // También en _focusVisible: es donde Chakra aplica su focusBorderColor (el
+  // `currentColor` global de main.tsx, aquí blanco), y sin esto taparía el azul.
+  _focusVisible: {
+    border: "1px solid rgba(150,200,255,0.85)",
+    boxShadow: "0 0 0 1px rgba(150,200,255,0.3), 0 0 18px rgba(150,200,255,0.28)",
     outline: "none",
   },
 };

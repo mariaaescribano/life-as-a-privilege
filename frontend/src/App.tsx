@@ -83,9 +83,9 @@ const AdminEditorPlaceholder = lazy(() => import("./app/admin/AdminEditorPlaceho
 const AdminCursos = lazy(() => import("./app/admin/AdminCursos"));
 const AdminCursoEditor = lazy(() => import("./app/admin/AdminCursoEditor"));
 const AdminAstrologiaTextos = lazy(() => import("./app/admin/AdminAstrologiaTextos"));
-const AdminAccesos = lazy(() => import("./app/admin/AdminAccesos"));
+// const AdminAccesos = lazy(() => import("./app/admin/AdminAccesos")); // absorbido por /admin/usuarios
 // const AdminEstudio = lazy(() => import("./app/admin/AdminEstudio"));
-const AdminVideos = lazy(() => import("./app/admin/AdminVideos"));
+// const AdminVideos = lazy(() => import("./app/admin/AdminVideos")); // aparcado con la sección Vídeos
 const AdminSuscriptores = lazy(() => import("./app/admin/AdminSuscriptores"));
 const AdminDiario = lazy(() => import("./app/admin/AdminDiario"));
 const AdminActividad = lazy(() => import("./app/admin/AdminActividad"));
@@ -394,14 +394,16 @@ export default function App()
       <Route path="/admin/cursos" element={<AdminRoute><AdminCursos /></AdminRoute>} />
       <Route path="/admin/cursos/:id" element={<AdminRoute><AdminCursoEditor /></AdminRoute>} />
       <Route path="/admin/astrologia-textos" element={<AdminRoute><AdminAstrologiaTextos /></AdminRoute>} />
-      {/* antes de /admin/:disciplina, que si no se traga «accesos» como slug */}
-      <Route path="/admin/accesos" element={<AdminRoute><AdminAccesos /></AdminRoute>} />
+      {/* /admin/accesos está aparcado: regalar, revocar y borrar cuentas viven
+          ahora en la tabla de /admin/usuarios. La página queda intacta. */}
+      {/* <Route path="/admin/accesos" element={<AdminRoute><AdminAccesos /></AdminRoute>} /> */}
       {/* Ojo al orden: «usuarios» tiene que ir ANTES de /admin/:disciplina o la
           ruta de disciplina se lo tragaría como si fuera una novena. */}
       <Route path="/admin/usuarios" element={<AdminRoute><AdminTodosUsuarios /></AdminRoute>} />
       {/* El panel del estudio, aparcado con el resto del estudio. */}
       {/* <Route path="/admin/estudio" element={<AdminRoute><AdminEstudio /></AdminRoute>} /> */}
-      <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} />
+      {/* El panel de vídeos, aparcado como la sección: se quitó del panel. */}
+      {/* <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} /> */}
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/suscriptores" element={<AdminRoute><AdminSuscriptores /></AdminRoute>} />
       {/* Antes de /admin/:disciplina/:userId, que si no se tragaria «diario» como disciplina. */}

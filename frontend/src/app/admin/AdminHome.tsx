@@ -118,53 +118,10 @@ export default function AdminHome() {
             })}
           </Grid>
 
-          {/* Acceso a editores globales (no por usuario) */}
-          <Flex justify="center" mt={{ base: 8, md: 10 }} gap={4} wrap="wrap">
-            <Box as="button" onClick={() => navigate("/admin/astrologia-textos")}
-                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
-                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
-                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
-                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
-              ✦ Interpretaciones de la carta (arquetipos)
-            </Box>
-            <Box as="button" onClick={() => navigate("/admin/accesos")}
-                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
-                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
-                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
-                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
-              ✦ Accesos (regalar el recorrido)
-            </Box>
-            <Box as="button" onClick={() => navigate("/admin/usuarios")}
-                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
-                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
-                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
-                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
-              ✦ Diario de sesiones (elige a quién)
-            </Box>
-            <Box as="button" onClick={() => navigate("/admin/videos")}
-                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
-                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
-                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
-                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
-              Vídeos (shorts de YouTube)
-            </Box>
-            <Box as="button" onClick={() => navigate("/admin/suscriptores")}
-                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
-                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
-                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
-                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
-              Suscriptores (los correos del formulario)
-            </Box>
-            {/* El estudio astrológico está aparcado: su panel también.
-            <Box as="button" onClick={() => navigate("/admin/estudio")}
-                 px={6} py={3} borderRadius="full" bg="rgba(255,255,255,0.1)"
-                 border="1.5px solid rgba(255,255,255,0.45)" color="white" fontWeight="700"
-                 fontSize={{ base: "sm", md: "md" }} letterSpacing="0.03em" cursor="pointer"
-                 transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)", transform: "translateY(-2px)" }}>
-              Estudio (participantes y resultados)
-            </Box>
-            */}
-          </Flex>
+          {/* Los botones sueltos que vivían aquí abajo ya no hacen falta:
+              Arquetipos y Suscriptores están en el menú de la derecha, y lo de
+              las personas (regalar, diario, borrar, entrar como) vive entero en
+              la tabla de Usuarios. Vídeos y el Estudio están aparcados. */}
         </Box>
       </Flex>
 

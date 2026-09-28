@@ -174,6 +174,15 @@ export class UserController {
     return await this.usersService.revocarAcceso(body.userId);
   }
 
+  // Marca (o desmarca) que esa persona está haciendo sesiones: es lo que hace
+  // salir el botón «Diario de terapias» en la tabla de /admin/usuarios.
+  @Post("admin/sesiones")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async marcarEnSesiones(@Body() body: { userId?: string; enSesiones?: boolean }) {
+    if (!body?.userId) throw new BadRequestException('userId requerido');
+    return await this.usersService.setEnSesiones(body.userId, body.enSesiones === true);
+  }
+
   // ── ENTRAR COMO otra persona ─────────────────────────────────────────────
   // Devuelve un token de ESA cuenta, para poder ver la web exactamente como la
   // ve ella: sus disciplinas, por dónde va, lo que ha escrito. No es un modo de

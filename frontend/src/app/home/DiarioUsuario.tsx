@@ -14,6 +14,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { listarMias, type EntradaDiario } from "../../api/diario";
 import { caraDeEntrada, fechaCorta } from "./diarioCara";
+import { sinMarcas } from "../../components/global/TextoMarcado";
 import { useT, useIdioma } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { cacheDeOtraCuenta } from "../../api/sesion";
@@ -124,8 +125,9 @@ export default function DiarioUsuario() {
         </Text>
       )}
 
+      {/* La vista previa va sin las marcas del mini-formato (** * ---). */}
       <Text color="rgba(255,255,255,0.62)" fontSize="xs" mt={1} lineHeight="1.5" noOfLines={2}>
-        {ultima.contenido}
+        {sinMarcas(ultima.contenido)}
       </Text>
 
       <Text

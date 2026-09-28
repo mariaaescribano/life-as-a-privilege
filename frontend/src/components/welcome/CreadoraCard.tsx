@@ -77,7 +77,8 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         panelBorde: "rgba(255,255,255,0.14)",
         panelSombra: "none",
         titulo: "white",
-        tituloGlow: "0 0 13px rgba(255,255,255,0.49), 0 0 27px rgba(255,255,255,0.26), 0 0 54px rgba(180,255,245,0.22)",
+        // Suave a propósito: el nombre debe brillar sin deslumbrar.
+        tituloGlow: "0 0 13px rgba(255,255,255,0.32), 0 0 27px rgba(255,255,255,0.17), 0 0 54px rgba(180,255,245,0.14)",
         texto: "rgba(255,255,255,0.92)",
         textoGlow: "0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.14)",
         lineaBase: "linear(to-r, transparent, rgba(255,255,255,0.6), transparent)",

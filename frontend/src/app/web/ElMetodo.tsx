@@ -1499,7 +1499,7 @@ export default function ElMetodo() {
               textAlign="center"
               textShadow="0 0 12px rgba(255,255,255,0.38), 0 0 26px rgba(180,255,245,0.16)"
             >
-              Empieza cuando quieras
+              {t("elMetodo.precio.cierre.titulo")}
             </Text>
 
             <Flex
@@ -1511,14 +1511,14 @@ export default function ElMetodo() {
             >
               {[
                 {
-                  nombre: "Disciplina individual",
-                  precio: "30 €",
-                  desc: "Acceso completo a una disciplina.",
+                  nombre: t("elMetodo.precio.cierre1.nombre"),
+                  precio: t("elMetodo.precio.cierre1.importe"),
+                  desc: t("elMetodo.precio.cierre1.desc"),
                 },
                 {
-                  nombre: "Sesión individual",
-                  precio: "20 € / hora",
-                  desc: "Acompañamiento opcional.",
+                  nombre: t("elMetodo.precio.cierre2.nombre"),
+                  precio: t("elMetodo.precio.cierre2.importe"),
+                  desc: t("elMetodo.precio.cierre2.desc"),
                 },
               ].map((col, i) => (
                 <Flex

@@ -270,6 +270,16 @@ export class UserService {
       .eq('id', userId)
       .eq('email_confirmado', false)
       .select('email, name');
+    // La columna aún no existe (sql/user-email-confirmado.sql sin correr): la
+    // puerta de confirmación no está activa y el enlace no tiene nada que
+    // hacer. Se responde ok — misma filosofía que el registro, que también
+    // funciona sin la columna — en vez de plantarle un error a quien acaba de
+    // llegar del correo sin haber tocado nada.
+    if (error && (error as { code?: string }).code === '42703') {
+      const { data: existe } = await db.from('user').select('email').eq('id', userId).limit(1);
+      if (!existe?.length) throw new NotFoundException('Esa cuenta ya no existe');
+      return { ok: true as const, email: existe[0].email as string };
+    }
     if (error) throw error;
 
     if (rows?.length) {
@@ -422,16 +432,44 @@ export class UserService {
   async getTodosUsuarios() {
     const client = this.databaseService.getClient();
     const flags = DISCIPLINAS_ORDEN.map((k) => `${k}_suscrito`).join(', ');
+    const fechas = DISCIPLINAS_ORDEN.map((k) => `${k}_fecha_compra`).join(', ');
 
     const consulta = (select: string) =>
       client.from('user').select(select).order('name', { ascending: true }).limit(500);
 
-    // Si alguna columna *_suscrito aún no existe, caemos a los datos básicos.
-    const full = await consulta(`id, name, email, img, ${flags}`);
-    if (!full.error) return full.data ?? [];
+    // La tabla del panel quiere además la edad (fecha_nacimiento), la marca de
+    // «en sesiones» (sql/user-en-sesiones.sql) y las fechas de compra. Si alguna
+    // columna aún no existe, caemos por la cascada en vez de quedarnos sin lista.
+    const conSesiones = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, ${flags}, ${fechas}`);
+    if (!conSesiones.error) return conSesiones.data ?? [];
+
+    const conFechas = await consulta(`id, name, email, img, fecha_nacimiento, ${flags}, ${fechas}`);
+    if (!conFechas.error) return conFechas.data ?? [];
+
+    const soloFlags = await consulta(`id, name, email, img, ${flags}`);
+    if (!soloFlags.error) return soloFlags.data ?? [];
 
     const { data } = await consulta('id, name, email, img');
     return data ?? [];
+  }
+
+  // --------- Marca de «en sesiones conmigo» (panel admin) ---------
+  // Enciende o apaga la marca que hace salir el botón «Diario de terapias» en la
+  // tabla de usuarios. Si la columna no existe todavía (falta correr
+  // sql/user-en-sesiones.sql), se avisa en claro en vez de fallar en silencio.
+  async setEnSesiones(id: string, enSesiones: boolean) {
+    await this.getUserById(id); // 404 si la cuenta no existe
+    const { error } = await this.databaseService.getClient()
+      .from('user')
+      .update({ en_sesiones: enSesiones })
+      .eq('id', id);
+    if (error) {
+      console.warn(`[user.service] setEnSesiones ${enSesiones} falló (¿columna sin crear?):`, error.message);
+      throw new ConflictException(
+        'No se pudo guardar la marca de sesiones (¿falta correr sql/user-en-sesiones.sql?)',
+      );
+    }
+    return { id, en_sesiones: enSesiones };
   }
 
   // --------- Abrir o cerrar acceso a una cuenta (panel admin) ---------

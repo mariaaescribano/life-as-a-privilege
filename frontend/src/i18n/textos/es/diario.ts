@@ -17,6 +17,10 @@ export const diario = {
     "Lo que trabajamos en cada sesión y por qué. Se va escribiendo sobre la marcha, así que vuelve cuando quieras.",
   "diario.pagina.vacio": "Todavía no hay ninguna sesión escrita aquí.",
   "diario.pagina.volver": "Volver al Mapa",
+  /** Bajo el calendario: cómo se usa. */
+  "diario.pagina.leyenda": "Los días con un punto tienen notas: toca uno para leerlas.",
+  /** Al tocar un día del calendario sin notas. */
+  "diario.pagina.diaVacio": "Ese día no tiene ninguna nota.",
 
   /** Encabezado del bloque destacado de cada entrada. */
   "diario.porque": "Por qué te digo esto",

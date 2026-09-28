@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useT } from "../../i18n";
-import { Box, Flex, Image, Input, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, GridItem, Image, Input, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL, turquesa } from "../../GlobalVariables";
@@ -276,7 +276,9 @@ export default function UserAccount() {
       {/* ── CONTENIDO ── */}
       <Flex flex={1} justify="center" px={{ base: 5, md: 10 }} pt={{ base: 12, md: 16 }} pb={{ base: 24, md: 32 }}>
         <VStack
-          w={{ base: "100%", sm: "520px" }}
+          // Ancho para DOS columnas de campos; en móvil ocupa todo y la caja
+          // interior baja a una sola columna.
+          w={{ base: "100%", sm: "520px", md: "780px" }}
           spacing={8}
           align="stretch"
           opacity={mounted ? 1 : 0}
@@ -336,8 +338,23 @@ export default function UserAccount() {
             <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileChange} />
           </Flex>
 
-          {/* ── Campos ── */}
-          <VStack spacing={5} align="stretch">
+          {/* ── Campos, en su cajita ──
+              Panel de cristal (el mismo lenguaje que la tarjeta de la creadora:
+              blanco translúcido + filo fino, sin halo claro sobre el turquesa)
+              con los campos a DOS columnas en ordenador y UNA en móvil. La
+              fecha, al ser la quinta y llevar su nota debajo, cruza las dos
+              columnas: así la rejilla nunca deja un hueco cojo. */}
+          <SimpleGrid
+            columns={{ base: 1, md: 2 }}
+            spacingX={7}
+            spacingY={5}
+            bg="rgba(255,255,255,0.05)"
+            border="1px solid rgba(255,255,255,0.14)"
+            borderRadius="3xl"
+            px={{ base: 5, md: 9 }}
+            py={{ base: 7, md: 9 }}
+            sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
+          >
             <Box>
               <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
                 {t("auth.campo.nombre")}
@@ -388,7 +405,7 @@ export default function UserAccount() {
               />
             </Box>
 
-            <Box>
+            <GridItem colSpan={{ base: 1, md: 2 }}>
               <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
                 {t("auth.campo.fechaNacimiento")}
               </Text>
@@ -404,8 +421,8 @@ export default function UserAccount() {
               <Text color="rgba(255,255,255,0.72)" fontSize="sm" mt={2} textAlign="center" lineHeight="1.5">
                 {t("auth.signin.fechaRegalo")}
               </Text>
-            </Box>
-          </VStack>
+            </GridItem>
+          </SimpleGrid>
 
           {error && (
             <Text color="#ff8a8a" fontSize="sm" textAlign="center" fontStyle="italic" textShadow="0 0 8px rgba(255,140,140,0.4)">
@@ -486,37 +503,82 @@ export default function UserAccount() {
                 {t("cuenta.panelAdmin")}
               </Text>
             )}
-            <Text
-              as="button"
-              onClick={handleLogout}
-              color="rgba(255,255,255,0.78)"
-              fontSize="lg"
-              fontWeight="600"
-              letterSpacing="0.06em"
-              bg="transparent"
-              cursor="pointer"
-              textShadow="0 0 8px rgba(255,255,255,0.35)"
-              _hover={{ color: "white", textShadow: "0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.35)" }}
-              transition="all 0.22s ease"
+            {/* Las dos píldoras GEMELAS: mismo ancho y misma altura, para que
+                ninguna parezca la hermana pequeña. Cambian solo los colores:
+                cerrar sesión habla en blanco y eliminar cuenta en rojo, que es
+                su aviso. En móvil se apilan a lo ancho. */}
+            <Flex
+              w="100%"
+              justify="center"
+              align="center"
+              gap={{ base: 3, sm: 5 }}
+              direction={{ base: "column", sm: "row" }}
+              pt={2}
             >
-              {t("cuenta.cerrarSesion")}
-            </Text>
+              <Flex
+                as="button"
+                onClick={handleLogout}
+                align="center"
+                justify="center"
+                w={{ base: "100%", sm: "250px" }}
+                py="13px"
+                borderRadius="full"
+                border="1.5px solid rgba(255,255,255,0.55)"
+                bg="rgba(255,255,255,0.08)"
+                cursor="pointer"
+                boxShadow="0 0 14px rgba(255,255,255,0.22), 0 4px 12px rgba(0,0,0,0.16)"
+                _hover={{
+                  bg: "rgba(255,255,255,0.18)",
+                  borderColor: "white",
+                  boxShadow: "0 0 20px rgba(255,255,255,0.4), 0 6px 16px rgba(0,0,0,0.2)",
+                  transform: "translateY(-1px)",
+                }}
+                transition="all 0.22s ease"
+              >
+                <Text
+                  color="white"
+                  fontWeight="600"
+                  fontSize="md"
+                  letterSpacing="0.12em"
+                  textTransform="uppercase"
+                  textShadow="0 0 10px rgba(255,255,255,0.4)"
+                >
+                  {t("cuenta.cerrarSesion")}
+                </Text>
+              </Flex>
 
-            <Text
-              as="button"
-              onClick={() => setConfirmDelete(true)}
-              color="rgba(255,160,160,0.75)"
-              fontSize="md"
-              letterSpacing="0.06em"
-              fontStyle="italic"
-              bg="transparent"
-              cursor="pointer"
-              textShadow="0 0 6px rgba(255,140,140,0.3)"
-              _hover={{ color: "rgba(255,200,200,1)", textShadow: "0 0 12px rgba(255,140,140,0.55)" }}
-              transition="all 0.22s ease"
-            >
-              {t("cuenta.eliminarCuenta")}
-            </Text>
+              <Flex
+                as="button"
+                onClick={() => setConfirmDelete(true)}
+                align="center"
+                justify="center"
+                w={{ base: "100%", sm: "250px" }}
+                py="13px"
+                borderRadius="full"
+                border="1.5px solid rgba(255,140,140,0.55)"
+                bg="rgba(255,120,120,0.08)"
+                cursor="pointer"
+                boxShadow="0 0 14px rgba(255,120,120,0.2), 0 4px 12px rgba(0,0,0,0.16)"
+                _hover={{
+                  bg: "rgba(255,120,120,0.18)",
+                  borderColor: "rgba(255,170,170,0.9)",
+                  boxShadow: "0 0 20px rgba(255,120,120,0.38), 0 6px 16px rgba(0,0,0,0.2)",
+                  transform: "translateY(-1px)",
+                }}
+                transition="all 0.22s ease"
+              >
+                <Text
+                  color="rgba(255,180,180,0.95)"
+                  fontWeight="600"
+                  fontSize="md"
+                  letterSpacing="0.12em"
+                  textTransform="uppercase"
+                  textShadow="0 0 10px rgba(255,140,140,0.4)"
+                >
+                  {t("cuenta.eliminarCuenta")}
+                </Text>
+              </Flex>
+            </Flex>
           </Flex>
         </VStack>
       </Flex>

@@ -49,7 +49,7 @@ export const elMetodo = {
   "elMetodo.hero.sub":
     "Ciencia y tradición para comprender tu mente, tu historia y tu cuerpo.",
   // Ya no lleva al pago: abre el TEST de «encuentra tu disciplina».
-  "elMetodo.hero.cta": "Test sin coste",
+  "elMetodo.hero.cta": "Tu test inicial",
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).
   "elMetodo.hero.ctaPie": "Desde 30 € · Sin suscripción · Sin compromiso",
@@ -110,6 +110,14 @@ export const elMetodo = {
   "elMetodo.precio.mapa.nombre": "Las ocho disciplinas",
   "elMetodo.precio.mapa.destacado": "{num} disciplinas · {precio} cada una · {total} en total",
   "elMetodo.precio.mapa.desc": "No hay pago único. Las compras cuando quieras.",
+  // El bloque de CIERRE de la página (las dos tarjetas gemelas del final).
+  "elMetodo.precio.cierre.titulo": "Empieza cuando quieras",
+  "elMetodo.precio.cierre1.nombre": "Disciplina individual",
+  "elMetodo.precio.cierre1.importe": "30 €",
+  "elMetodo.precio.cierre1.desc": "Acceso completo a una disciplina.",
+  "elMetodo.precio.cierre2.nombre": "Sesión individual",
+  "elMetodo.precio.cierre2.importe": "20 € / hora",
+  "elMetodo.precio.cierre2.desc": "Acompañamiento opcional.",
   /** Botón que se repite tras el precio y tras «¿Por dónde empiezo?». */
   "elMetodo.empezarPor": "Empezar por {precio}",
 
@@ -180,7 +188,7 @@ export const elMetodo = {
   // ── Botones flotantes + llamada gratuita (popup) ───────────────────────
   // El popup sale solo: a los 20 s de entrar y, al cerrarse, otra vez a los 70 s.
   /** El botón flotante del test de «¿por qué disciplina empiezo?». */
-  "elMetodo.test.boton": "Test",
+  "elMetodo.test.boton": "Test inicial",
 
   // ── El test de «encuentra tu disciplina» (TestDisciplina) ───────────────
   // Las preguntas y respuestas viven con sus puntos en TestDisciplina.tsx

@@ -28,7 +28,7 @@ import {
   VataIcon, vataColor,
 } from "../../GlobalVariables";
 import type { PresentacionDisciplina } from "../../data/presentacionDisciplinas";
-import { TextoRico, useIdioma, useT } from "../../i18n";
+import { TextoRico, useIdioma, useT, type Texto } from "../../i18n";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 
@@ -51,35 +51,42 @@ const DOSHAS: {
   key: string;
   nombre: string;
   color: string;
-  elementos: string;
-  descripcion: string;
+  /** Bilingües: la página es pública y debe leerse entera en inglés. */
+  elementos: Texto;
+  descripcion: Texto;
   Icon: (p: { size?: string; color?: string }) => React.ReactElement;
 }[] = [
   {
     key: "vata",
     nombre: "Vata",
     color: vataColor,
-    elementos: "Aire · Éter",
-    descripcion:
-      "La energía del movimiento: ligera, rápida, creativa e intuitiva. Entusiasta e imaginativa, tiende a la dispersión y la irregularidad. Se equilibra con rutina, calor y alimentos que anclen.",
+    elementos: { es: "Aire · Éter", en: "Air · Ether" },
+    descripcion: {
+      es: "La energía del movimiento: ligera, rápida, creativa e intuitiva. Entusiasta e imaginativa, tiende a la dispersión y la irregularidad. Se equilibra con rutina, calor y alimentos que anclen.",
+      en: "The energy of movement: light, quick, creative and intuitive. Enthusiastic and imaginative, it tends towards dispersion and irregularity. It is balanced with routine, warmth and grounding foods.",
+    },
     Icon: VataIcon,
   },
   {
     key: "pitta",
     nombre: "Pitta",
     color: pittaColor,
-    elementos: "Fuego · Agua",
-    descripcion:
-      "La energía de la transformación: intensa, decidida y precisa. Con gran capacidad de ejecución, puede caer en la irritabilidad y el exceso de calor. Se equilibra con frescor, moderación y calma.",
+    elementos: { es: "Fuego · Agua", en: "Fire · Water" },
+    descripcion: {
+      es: "La energía de la transformación: intensa, decidida y precisa. Con gran capacidad de ejecución, puede caer en la irritabilidad y el exceso de calor. Se equilibra con frescor, moderación y calma.",
+      en: "The energy of transformation: intense, determined and precise. With a great capacity to get things done, it can fall into irritability and excess heat. It is balanced with coolness, moderation and calm.",
+    },
     Icon: PittaIcon,
   },
   {
     key: "kapha",
     nombre: "Kapha",
     color: kaphaColor,
-    elementos: "Tierra · Agua",
-    descripcion:
-      "La energía de la estructura: estable, resistente y profundamente afectuosa. Constante y paciente, tiende al apego y a la resistencia al cambio. Se equilibra con movimiento, estímulo y ligereza.",
+    elementos: { es: "Tierra · Agua", en: "Earth · Water" },
+    descripcion: {
+      es: "La energía de la estructura: estable, resistente y profundamente afectuosa. Constante y paciente, tiende al apego y a la resistencia al cambio. Se equilibra con movimiento, estímulo y ligereza.",
+      en: "The energy of structure: stable, resilient and deeply affectionate. Steady and patient, it tends towards attachment and resistance to change. It is balanced with movement, stimulation and lightness.",
+    },
     Icon: KaphaIcon,
   },
 ];
@@ -93,6 +100,7 @@ function DoshaCard({
   dosha: (typeof DOSHAS)[number];
   sombra: string;
 }) {
+  const { segunIdioma } = useIdioma();
   const c = dosha.color;
   return (
     <RevealItem
@@ -168,7 +176,7 @@ function DoshaCard({
           opacity={0.95}
           textShadow="0 1px 2px rgba(255,255,255,0.9)"
         >
-          {dosha.elementos}
+          {segunIdioma(dosha.elementos)}
         </Text>
 
         <Box w="54px" h="2px" bgGradient={`linear(to-r, transparent, ${c}, transparent)`} opacity={0.8} />
@@ -179,7 +187,7 @@ function DoshaCard({
           lineHeight={{ base: "1.7", md: "1.75" }}
           textShadow={sombra}
         >
-          {dosha.descripcion}
+          {segunIdioma(dosha.descripcion)}
         </Text>
       </Flex>
     </RevealItem>

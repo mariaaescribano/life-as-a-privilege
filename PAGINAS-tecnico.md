@@ -159,10 +159,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/diario` — El diario de tus sesiones
 - **Componente:** `Diario` en `frontend/src/app/home/Diario.tsx`
 - **Acceso:** con sesión (PrivateRoute)
-- **Qué hace:** Lista de entradas que la admin ha escrito tras las sesiones, de la más reciente a la más antigua. Cada entrada lleva el color y la foto de su disciplina y un bloque «por qué». Al abrirla se marcan todas como leídas.
+- **Qué hace:** Un calendario mensual (`CalendarioDiario`) con un puntito por disciplina en cada día con notas; tocar un día enseña SOLO las notas de ese día (dos días distintos nunca se ven a la vez). Se abre por el último día con notas. Cada nota lleva el color y la foto de su disciplina, el contenido con el mini-formato del diario (`TextoMarcado`: `**negrita**`, `*cursiva*`, `---` rayita separadora) y el bloque «por qué». Al abrir la página se marcan todas como leídas.
 - **Datos:** `GET /diario/:userId` (si falla, lista vacía). `PATCH /diario/:userId/leidas` solo si alguna entrada no tiene `leida_at`. Lee `userId` de localStorage.
-- **Botones / a dónde lleva:** «Volver» → `/home`.
-- **Condiciones y casos raros:** Sin entradas → texto «vacío». Mientras carga → `LifeLoading`. Tras marcar leídas borra la caché del diario del Home.
+- **Botones / a dónde lleva:** flechas ← → del calendario cambian el mes; cada día del calendario selecciona sus notas. «Volver» → `/home`.
+- **Condiciones y casos raros:** Sin entradas → texto «vacío» y el calendario no se pinta. Un día sin notas → texto «ese día no tiene ninguna nota». Mientras carga → `LifeLoading`. Tras marcar leídas borra la caché del diario del Home.
 - **Tests:** pendiente
 
 ---
@@ -2017,10 +2017,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/admin` — Inicio del panel («Administración de El Mapa»)
 - **Componente:** `AdminHome` en `frontend/src/app/admin/AdminHome.tsx`
 - **Acceso:** admin (AdminRoute + `useAdminGuard`). `useAdminGuard` pide `GET /user/me`. Si `is_admin` es false, borra `isAdmin` y manda a `/admin/login` (email de admin sin desbloquear) o a `/home` (no admin). Sin token o userId → `/welcome`; si falla la petición → `/home`.
-- **Qué hace:** muestra una rejilla con las 8 disciplinas de `ADMIN_DISCIPLINAS`. Las que tienen `disponible: false` (fisiología, nutrición, tcm, cábala, cultura) llevan «próximamente». Debajo hay accesos a los editores globales.
+- **Qué hace:** muestra una rejilla con las 8 disciplinas de `ADMIN_DISCIPLINAS`. Las que tienen `disponible: false` (fisiología, nutrición, tcm, cábala, cultura) llevan «próximamente». Los botones sueltos de debajo se quitaron: lo de personas (regalar, diario, borrar, entrar como) vive en la tabla de `/admin/usuarios`, y Arquetipos y Suscriptores están en el menú de la derecha.
 - **Datos:** solo `GET /user/me` (JwtAuthGuard) a través del guard.
-- **Botones / a dónde lleva:** cada disciplina → `/admin/<key>`. «Interpretaciones de la carta» → `/admin/astrologia-textos`. «Accesos» → `/admin/accesos`. «Diario de sesiones (elige a quién)» → `/admin/usuarios`. «Vídeos» → `/admin/videos`. «Suscriptores» → `/admin/suscriptores`. El botón de Estudio está comentado.
-- **Condiciones y casos raros:** el botón de Vídeos sigue visible aunque la sección pública de Vídeos esté aparcada.
+- **Botones / a dónde lleva:** cada disciplina → `/admin/<key>`. El menú de la derecha (SiteHeader, en todo `/admin`): «El Mapa» → `/admin`, «Cursos» → `/admin/cursos`, «Usuarios» → `/admin/usuarios`, «Arquetipos de Astrología» → `/admin/astrologia-textos`, «Suscriptores» → `/admin/suscriptores`.
+- **Condiciones y casos raros:** Vídeos ya no aparece por ningún lado (panel aparcado, como su sección pública).
 - **Tests:** pendiente
 
 ---
@@ -2058,35 +2058,13 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/admin/accesos` — Accesos (regalar el recorrido, borrar cuentas)
-- **Componente:** `AdminAccesos` en `frontend/src/app/admin/AdminAccesos.tsx`
-- **Acceso:** admin (AdminRoute + `useAdminGuard`).
-- **Qué hace:** lista las cuentas con un buscador local y puntitos por disciplina abierta. Al desplegar una cuenta se puede abrir o cerrar cada una de las 8 disciplinas por separado, dar «Todo el recorrido gratis», «Quitar acceso» (cierra las 8), «Entrar como» o «Borrar cuenta». Avisa si la cuenta ya tiene acceso libre por ACCESO_LIBRE_EMAILS.
-- **Datos:** `GET /user/admin/todos` (Jwt + AdminGuard; añade `acceso_libre`). `POST /user/admin/acceso` (Jwt + AdminGuard) con `{ userId, disciplina: <scope>|'all', abierta }`; valida la disciplina contra DISCIPLINAS_ORDEN. `POST /user/admin/acceso/revocar` (Jwt + AdminGuard). `DELETE /user/admin/usuario/:id` (Jwt + AdminGuard). `POST /user/admin/suplantar` (Jwt + AdminGuard) desde `BotonEntrarComo`.
-- **Botones / a dónde lleva:** «Quitar acceso» pide `window.confirm` (también quita lo pagado). «Borrar cuenta» abre un modal donde hay que escribir el email exacto. Borra la cuenta y todos sus datos, no se puede deshacer y no avisa a la persona. «Entrar como» ver `/admin/usuarios`. «Volver» → `/admin`.
-- **Condiciones y casos raros:** el backend se niega a borrar tu propia cuenta o una cuenta de ADMIN_EMAILS (409 con mensaje, que se muestra). Usa el scope `metodo` para Astrología (DISCIPLINAS_PAGO). El comentario del front dice «hasta 200» cuentas, pero el backend limita a 500.
-- **Tests:** pendiente
-
----
-
-## `/admin/usuarios` — Usuarios (vista transversal)
+## `/admin/usuarios` — Usuarios (la tabla del panel)
 - **Componente:** `AdminTodosUsuarios` en `frontend/src/app/admin/AdminTodosUsuarios.tsx`
 - **Acceso:** admin (AdminRoute + `useAdminGuard`).
-- **Qué hace:** muestra todas las cuentas con una pastilla por cada disciplina abierta (y su fecha de compra). Ordena primero a quien más disciplinas tiene y luego por nombre. Arriba, el total de cuentas y cuántas tienen alguna disciplina. Solo lee: los accesos se tocan en `/admin/accesos`.
-- **Datos:** `GET /user/admin/recorrido` (Jwt + AdminGuard; tope de 500 en el backend). Buscador local por nombre/email.
-- **Botones / a dónde lleva:** cada pastilla → `/admin/<adminKey>/:userId`. «Diario» → `/admin/diario/:userId`. «Intereses» → `/admin/actividad/:userId` (pasa nombre y email en `location.state`). «Entrar como» (`BotonEntrarComo` → `api/suplantar.ts`): llama a `POST /user/admin/suplantar` (Jwt + AdminGuard), aparca la sesión de admin en `suplantacionAdmin`, limpia el localStorage, guarda el token de la persona (claim `admin: false`, `sup` = id de la admin, caduca en 12 h) y recarga en `/home`. Todo lo que se escriba se guarda en su recorrido. La persona no se entera. El servidor lo apunta en `console.log`. Para volver está `BarraSuplantacion` (`salirDeLaSuplantacion` → `/admin/usuarios`).
-- **Condiciones y casos raros:** desde una sesión suplantada no se puede entrar al panel (el token no es de admin) ni borrar la cuenta propia (`DELETE /user/:id` lo rechaza si hay `suplantadoPor`). Las pastillas de disciplinas no disponibles llevan al placeholder.
-- **Tests:** pendiente
-
----
-
-## `/admin/videos` — Vídeos (shorts de YouTube)
-- **Componente:** `AdminVideos` en `frontend/src/app/admin/AdminVideos.tsx`
-- **Acceso:** admin (AdminRoute + `useAdminGuard`).
-- **Qué hace:** lista todos los vídeos con su disciplina y su portada. Permite crear y editar un vídeo en un modal (disciplina, título, portada, URL, publicado, orden) y borrarlo. La portada se sube encogida en el navegador (`encogerFoto`, ~600 px).
-- **Datos:** `GET /videos/admin/todos` (Jwt + AdminGuard). `POST /videos`, `PATCH /videos/:id` y `DELETE /videos/:id` (Jwt + AdminGuard). `POST /upload/portada-video` (Jwt + AdminGuard; bucket `img`, carpeta videos/).
-- **Botones / a dónde lleva:** «Nuevo» (el orden va el último); «Ver» abre la URL en otra pestaña; «Editar»; «Borrar» con modal de confirmación.
-- **Condiciones y casos raros:** título y URL son obligatorios. La sección pública `/videos` está aparcada (ruta comentada), pero este panel sigue activo.
+- **Qué hace:** la tabla de TODAS las cuentas, paginada de 15 en 15, con buscador local por nombre/email. Cada fila: nombre y email (sin foto), edad (de `fecha_nacimiento`; «—» si no la dio), un puntito por disciplina abierta con su color (y el total x/8), la marca «Sesiones» (está haciendo sesiones conmigo) y las acciones. Con «Sesiones» encendida aparece el botón «Diario de terapias». Al desplegar la ficha (▸): regalar o cerrar cada una de las 8 disciplinas por separado, «Todo el recorrido gratis», «Quitar acceso» (cierra las 8), «Su información» (pastillas a los paneles de las disciplinas que tiene + «Intereses») y «Borrar cuenta». Avisa si la cuenta tiene acceso libre por ACCESO_LIBRE_EMAILS. Absorbió `/admin/accesos` (aparcada).
+- **Datos:** `GET /user/admin/todos` (Jwt + AdminGuard; tope de 500): añade `acceso_libre`, `fecha_nacimiento`, `en_sesiones` y las fechas de compra. `POST /user/admin/sesiones` con `{ userId, enSesiones }` (optimista; si falla, se revierte y avisa — 409 si falta correr `sql/user-en-sesiones.sql`). `POST /user/admin/acceso` con `{ userId, disciplina: <scope>|'all', abierta }`; valida contra DISCIPLINAS_ORDEN. `POST /user/admin/acceso/revocar`. `DELETE /user/admin/usuario/:id`. `POST /user/admin/suplantar` desde `BotonEntrarComo`.
+- **Botones / a dónde lleva:** «Diario de terapias» → `/admin/diario/:userId`. «Intereses» → `/admin/actividad/:userId` (pasa nombre y email en `location.state`). Pastillas de «Su información» → `/admin/<adminKey>/:userId`. «Quitar acceso» pide `window.confirm` (también quita lo pagado). «Borrar cuenta» abre un modal donde hay que escribir el email exacto; borra la cuenta y todos sus datos, no se puede deshacer y no avisa a la persona. «Entrar como» (`BotonEntrarComo` → `api/suplantar.ts`): llama a `POST /user/admin/suplantar` (Jwt + AdminGuard), aparca la sesión de admin en `suplantacionAdmin`, limpia el localStorage, guarda el token de la persona (claim `admin: false`, `sup` = id de la admin, caduca en 12 h) y recarga en `/home`. Todo lo que se escriba se guarda en su recorrido. La persona no se entera. El servidor lo apunta en `console.log`. Para volver está `BarraSuplantacion` (`salirDeLaSuplantacion` → `/admin/usuarios`). «← Anterior» / «Siguiente →» pasan de página; buscar vuelve a la página 1.
+- **Condiciones y casos raros:** el backend se niega a borrar tu propia cuenta o una cuenta de ADMIN_EMAILS (409 con mensaje, que se muestra). Desde una sesión suplantada no se puede entrar al panel (el token no es de admin) ni borrar la cuenta propia (`DELETE /user/:id` lo rechaza si hay `suplantadoPor`). Usa el scope `metodo` para Astrología (DISCIPLINAS_PAGO). Las pastillas de disciplinas no disponibles llevan al placeholder. Sin correr `sql/user-en-sesiones.sql`, la marca de sesiones sale apagada y al tocarla avisa.
 - **Tests:** pendiente
 
 ---
@@ -2102,13 +2080,13 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/admin/diario/:userId` — Diario de sesiones de una persona
+## `/admin/diario/:userId` — Diario de terapias de una persona
 - **Componente:** `AdminDiario` en `frontend/src/app/admin/AdminDiario.tsx`
 - **Acceso:** admin (AdminRoute + `useAdminGuard`).
-- **Qué hace:** formulario para escribir la nota de una sesión: fecha, disciplina opcional (etiqueta, no ruta), título opcional, «Qué trabajamos» (obligatorio) y «Por qué te digo esto». Se guarda como borrador o se publica. Debajo, la lista de entradas con su estado (BORRADOR / PUBLICADA · LEÍDA / SIN LEER), y opciones para editar, publicar o volver a borrador, y borrar. Lo publicado lo lee la persona en `/diario`.
+- **Qué hace:** el mismo calendario que `/diario` (`CalendarioDiario`), con borradores incluidos: un puntito por disciplina en cada día con notas, y tocar un día enseña SOLO sus notas (con estado BORRADOR / PUBLICADA · LEÍDA / SIN LEER y opciones de editar, publicar o volver a borrador, y borrar). Se abre por el último día con notas. Debajo, el formulario para escribir otra nota más (siempre se puede seguir escribiendo): fecha (sincronizada con el calendario en los dos sentidos), disciplina opcional —que tiñe el formulario y la nota de su color—, título opcional, «Qué trabajamos» (obligatorio, admite `**negrita**`, `*cursiva*` y `---` rayita) y «Por qué te digo esto». Se guarda como borrador o se publica; lo publicado lo lee la persona en `/diario`.
 - **Datos:** `GET /user/:userId` (Jwt + **OwnerGuard**, no AdminGuard) para el nombre y el email. `GET /diario/admin/:userId`, `POST /diario/admin/:userId`, `PATCH /diario/admin/:userId/:entradaId` y `DELETE /diario/admin/:userId/:entradaId` (todos Jwt + AdminGuard), vía `api/diario.ts`.
-- **Botones / a dónde lleva:** «Publicar», «Guardar como borrador», «Cancelar y escribir una nueva». «Borrar» pide `window.confirm`. «← Volver a los usuarios» → `/admin/usuarios`. Publicar no manda correo; solo aparece la marca «nuevo» en su Home.
-- **Condiciones y casos raros:** si el `userId` no existe, la cabecera sale vacía, pero el formulario deja intentar crear entradas (dependerá de la FK, sin verificar). Si falla la carga inicial, la lista sale vacía sin error.
+- **Botones / a dónde lleva:** flechas ← → del calendario cambian el mes; un día del calendario selecciona sus notas y pone esa fecha en el formulario; teclear la fecha en el formulario mueve el calendario. «Publicar», «Guardar como borrador», «Cancelar y escribir una nueva». «Borrar» pide `window.confirm`. «← Volver a los usuarios» → `/admin/usuarios`. Publicar no manda correo; solo aparece la marca «nuevo» en su Home.
+- **Condiciones y casos raros:** si el `userId` no existe, la cabecera sale vacía, pero el formulario deja intentar crear entradas (dependerá de la FK, sin verificar). Si falla la carga inicial, la lista sale vacía sin error. Tras guardar, la vista salta al día de la nota recién guardada.
 - **Tests:** pendiente
 
 ---
@@ -2190,6 +2168,8 @@ El código de estas páginas sigue en el repo, pero hoy no se puede entrar: la U
 - `/metodo/cabala/dias` → `MetodoCabalaDiezDias`: «10 días» de Cábala. Su paso también está comentado en el índice.
 - `/estudio`, `/estudio/datos`, `/estudio/preguntas`, `/estudio/resultados`, `/estudio/estadisticas` → `Estudio*`: el estudio estadístico de astrología.
 - `/admin/estudio` → `AdminEstudio`: su panel en admin.
+- `/admin/videos` → `AdminVideos`: el panel de vídeos, aparcado como su sección pública. Su backend (`/videos/*`) sigue vivo.
+- `/admin/accesos` → `AdminAccesos`: regalar, revocar y borrar cuentas viven ahora dentro de la tabla de `/admin/usuarios`. Los endpoints que usaba siguen vivos (los usa la tabla).
 
 
 # 8. Correos

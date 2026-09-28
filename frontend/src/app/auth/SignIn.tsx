@@ -187,7 +187,7 @@ const PopupCondiciones = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 /** Etiqueta de campo. Sin brillo: dentro de la caja del formulario se lee sola. */
 const Etiqueta = ({ children }: { children: React.ReactNode }) => (
   <Text
-    color="rgba(255,255,255,0.78)"
+    color="rgba(255,255,255,0.85)"
     fontSize="sm"
     letterSpacing="0.18em"
     mb={2.5}
@@ -374,19 +374,19 @@ export default function SignIn() {
         </Text>
       </Flex>
 
-      {/* ── FORMULARIO (caja suave; en pantalla ancha, campos a dos columnas) ── */}
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 10, md: 14 }} pb={{ base: 24, md: 32 }}>
+      {/* ── FORMULARIO (caja con presencia; en pantalla ancha, a dos columnas) ── */}
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 9, md: 12 }} pb={{ base: 16, md: 20 }}>
         <VStack
           ref={formReveal.ref}
           w={{ base: "100%", md: "740px" }}
           spacing={6}
           align="stretch"
-          bg="rgba(255,255,255,0.05)"
-          border="1px solid rgba(255,255,255,0.16)"
+          bg="rgba(255,255,255,0.08)"
+          border="1px solid rgba(255,255,255,0.26)"
           borderRadius="28px"
           px={{ base: 5, md: 10 }}
-          py={{ base: 8, md: 10 }}
-          boxShadow="0 18px 44px rgba(0,0,0,0.16)"
+          py={{ base: 8, md: 11 }}
+          boxShadow="0 24px 60px rgba(0,0,0,0.28)"
           opacity={formReveal.visible ? 1 : 0}
           transform={formReveal.visible ? "translateY(0)" : "translateY(28px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
@@ -452,14 +452,20 @@ export default function SignIn() {
                 {...inputStyles}
                 sx={inputFechaSx}
               />
-              <Text color="rgba(255,255,255,0.72)" fontSize="sm" mt={2} textAlign="center" lineHeight="1.5">
+              <Text color="rgba(255,255,255,0.68)" fontSize="sm" fontStyle="italic" mt={2} textAlign="center" lineHeight="1.5">
                 {t("auth.signin.fechaRegalo")}
               </Text>
             </Box>
           </SimpleGrid>
 
-          {/* Rayita fina: aquí empieza la contraseña. */}
-          <Box h="1px" bg="rgba(255,255,255,0.16)" />
+          {/* Rayita fina de tinta: aquí empieza la contraseña. Se desvanece por
+              los lados, como los separadores del resto de la casa. */}
+          <Box
+            h="1px"
+            mx="auto"
+            w="70%"
+            bg="linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)"
+          />
 
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
             <CampoContrasena

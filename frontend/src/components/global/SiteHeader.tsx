@@ -71,7 +71,9 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // Navegación de administración (pestañas en el header).
   const isAdminPage = path.startsWith("/admin");
   const adminCursosActive = path.startsWith("/admin/cursos");
-  const adminUsuariosActive = path.startsWith("/admin/usuarios");
+  const adminUsuariosActive = path.startsWith("/admin/usuarios") || path.startsWith("/admin/diario") || path.startsWith("/admin/actividad");
+  const adminArquetiposActive = path.startsWith("/admin/astrologia-textos");
+  const adminSuscriptoresActive = path.startsWith("/admin/suscriptores");
 
   // Cambiar de página cierra el menú: si no, al volver navegando el panel
   // seguiría abierto encima de la página nueva.
@@ -95,11 +97,16 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const items: ItemMenu[] = isPrivate
     ? isAdminPage
       ? [
-          { etiqueta: t("header.mapa"),     onSelect: () => navigate("/admin"),          activo: !adminCursosActive && !adminUsuariosActive },
-          { etiqueta: t("header.cursos"),   onSelect: () => navigate("/admin/cursos"),   activo: adminCursosActive },
-          // La vista transversal: todas las cuentas y qué disciplinas tiene
-          // cada una. «El Mapa» mira una disciplina; esta mira una persona.
-          { etiqueta: t("header.usuarios"), onSelect: () => navigate("/admin/usuarios"), activo: adminUsuariosActive },
+          { etiqueta: t("header.mapa"),         onSelect: () => navigate("/admin"),                   activo: !adminCursosActive && !adminUsuariosActive && !adminArquetiposActive && !adminSuscriptoresActive },
+          { etiqueta: t("header.cursos"),       onSelect: () => navigate("/admin/cursos"),            activo: adminCursosActive },
+          // La tabla de las personas: todas las cuentas con sus disciplinas,
+          // sus sesiones, regalar el recorrido y borrar. «El Mapa» mira una
+          // disciplina; esta mira una persona (y su diario y su actividad).
+          { etiqueta: t("header.usuarios"),     onSelect: () => navigate("/admin/usuarios"),          activo: adminUsuariosActive },
+          // Los textos de los arquetipos de la carta astral.
+          { etiqueta: t("header.arquetipos"),   onSelect: () => navigate("/admin/astrologia-textos"), activo: adminArquetiposActive },
+          // Los correos apuntados en el formulario de la portada.
+          { etiqueta: t("header.suscriptores"), onSelect: () => navigate("/admin/suscriptores"),      activo: adminSuscriptoresActive },
         ]
       : [
           // «El Mapa» va también con la sesión abierta. Antes solo salía sin

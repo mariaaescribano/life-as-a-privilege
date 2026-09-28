@@ -83,11 +83,10 @@ export function ComunidadPrimeraVez() {
         role="dialog"
         aria-modal="true"
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        bg="rgba(0,90,80,0.92)"
+        bg="#008080"
         border="1px solid rgba(255,255,255,0.3)"
-        sx={{ backdropFilter: "blur(30px)", WebkitBackdropFilter: "blur(30px)" }}
         borderRadius="3xl"
-        boxShadow="0 28px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.1)"
+        boxShadow="0 0 42px rgba(255,255,255,0.1), 0 22px 60px rgba(0,0,0,0.6)"
         p={{ base: 8, md: 12 }}
         maxW="460px"
         w="100%"

@@ -10,6 +10,9 @@ export const header = {
   "header.estudio": "Estudio astrológico",
   "header.cursos": "Cursos",
   "header.usuarios": "Usuarios",
+  /** Solo en el menú de administración. */
+  "header.arquetipos": "Arquetipos de Astrología",
+  "header.suscriptores": "Suscriptores",
   "header.programas": "Programas",
   "header.contacto": "Contactar",
   "header.miCuenta": "Mi cuenta",

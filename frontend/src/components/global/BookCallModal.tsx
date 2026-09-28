@@ -150,12 +150,12 @@ export function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       if (status === 409) {
         // alguien reservó el mismo slot antes — refrescamos y volvemos al paso 2
-        setErrorMsg("Ese horario se acaba de reservar. Por favor, elige otro.");
+        setErrorMsg(t("llamada.error.horarioOcupado"));
         setTaken((prev) => new Set(prev).add(`${toIsoDate(selectedDay)}|${selectedSlot}`));
         setSelectedSlot(null);
         setStep(2);
       } else {
-        setErrorMsg("Ha ocurrido un error. Por favor, inténtalo de nuevo.");
+        setErrorMsg(t("llamada.error.generico"));
       }
     } finally {
       setSending(false);

@@ -77,7 +77,7 @@ export const web = {
   "privacidad.infoRegistro":
     "Al registrarte confirmas que tienes 18 años o más y aceptas los términos de uso. María Escribano trata tus datos para gestionar tu cuenta y tu recorrido; no se ceden a nadie salvo a los proveedores que hacen funcionar la web. Puedes acceder, rectificar o borrar tus datos (también borrar tu cuenta desde tu perfil). Más en la",
   "privacidad.infoOpinion":
-    "Tu nombre y tu reseña se publicarán en esta página; el email es opcional, nunca se publica y solo sirve para poder contestarte. Si quieres retirarla, escribe a darkcake141@gmail.com. Más en la",
+    "Tu nombre y tu reseña se publicarán en esta página; el email es opcional, nunca se publica y solo sirve para poder contestarte. Si quieres retirarla, escribe a mariaa.escribano.arce@gmail.com. Más en la",
   "privacidad.enlace": "política de privacidad",
 
   // ── Consentimiento de salud (PuertaConsentimientoSalud) ────────────────
@@ -134,6 +134,15 @@ export const web = {
   "llamada.acompanar": "Agenda tu llamada →",
   "llamada.acompanarTexto":
     "Puedes recorrer este tramo conmigo. Agenda una llamada, no hace falta hacerlo todo de forma individual.",
+  // Errores de la reserva y del pago (antes en duro en los componentes).
+  "llamada.error.horarioOcupadoPago":
+    "Ese horario se reservó mientras se procesaba el pago. Escríbeme y te reubico la llamada o te devuelvo el importe.",
+  "llamada.error.pagoIncompleto": "El pago no llegó a completarse. Puedes intentarlo de nuevo.",
+  "llamada.error.confirmar": "No se pudo confirmar la reserva. Escríbeme y lo resolvemos.",
+  "llamada.error.pagoCancelado": "Has cancelado el pago. Tu llamada no se ha reservado.",
+  "llamada.error.iniciarPago": "No se pudo iniciar el pago. Inténtalo de nuevo.",
+  "llamada.error.horarioOcupado": "Ese horario se acaba de reservar. Por favor, elige otro.",
+  "llamada.error.generico": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
 
   // ── Modal de salida (ExitIntentSubscribeModal) ─────────────────────────
   "salida.titulo": "Antes de irte...",

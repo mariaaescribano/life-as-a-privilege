@@ -50,6 +50,13 @@
          propia, nunca dejando suelto al navegador. -->
     <meta name="color-scheme" content="only light" />
 
+    <!-- Dark Reader (la extensión) ignora el color-scheme de arriba: repinta
+         los colores y APAGA los background-image de CSS, así que las tarjetas
+         con foto de fondo (el mármol del popup de la llamada, por ejemplo) se
+         quedaban transparentes. Este meta es su interruptor oficial: con él,
+         Dark Reader deja la página en paz. -->
+    <meta name="darkreader-lock" />
+
     <!--
       La EB Garamond ya NO viene de fonts.googleapis.com: cada visita mandaba la
       IP a Google sin consentimiento (RGPD). Se sirve desde la propia web con

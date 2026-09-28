@@ -1542,13 +1542,11 @@ export const metodo = {
   "metodo.pago.precioReducido": "Ahora a precio reducido",
   "metodo.pago.ahoraNo": "Ahora no",
   "metodo.pago.stripe": "Pago seguro a través de Stripe",
-  // Las dos casillas del box de pago. La segunda es un permiso aparte: para
-  // preparar una lectura personalizada hay que leer lo que la persona escribe,
-  // y eso se pide, no se da por supuesto.
+  // La casilla del box de pago. Es UNA sola: las condiciones (/terminos,
+  // apartado 5) incluyen también el guardado de lo que se escriba para poder
+  // personalizar las sesiones con María.
   "metodo.pago.acepto": "Acepto las",
   "metodo.pago.condicionesEnlace": "condiciones de compra",
-  "metodo.pago.autorizo": "Consiento que se guarde lo que escriba en el recorrido, también datos de mi salud, y que María Escribano lo lea solo para acompañarme.",
-  "metodo.pago.autorizoNota": "Nadie más lo ve. Puedes retirarlo cuando quieras desde Contacto.",
   "metodo.pago.realizado": "Pago de {disciplina} realizado",
   "metodo.pago.yaPuedes": "Ya puedes acceder.",
 
@@ -1566,12 +1564,12 @@ export const metodo = {
   "metodo.pago.ordinal.8": "Octava disciplina",
 
   // Resumen de cada disciplina en su box de pago.
-  "metodo.pago.resumen.astrologia": "Tu carta natal: tus dones, tus conflictos y dónde nacieron tus heridas.",
+  "metodo.pago.resumen.astrologia": "Tu carta natal: tus dones, tus conflictos y tus heridas.",
   "metodo.pago.resumen.psicologia": "Reconstruye tu historia y entiende cómo se formó tu mente.",
-  "metodo.pago.resumen.ayurveda": "Descubre tu Doṣha y aprende a comer, moverte y descansar según él.",
+  "metodo.pago.resumen.ayurveda": "Descubre y cuídate desde tu constitución: tu Doṣha.",
   "metodo.pago.resumen.tcm": "Los Cinco Elementos en ti y las señales de tu cuerpo.",
-  "metodo.pago.resumen.fisiologia": "De las partículas a tus células y sistemas: tu cuerpo por dentro.",
-  "metodo.pago.resumen.nutricion": "Qué hay detrás de lo que comes y cómo nutrirte de verdad.",
-  "metodo.pago.resumen.cabala": "Recorre el Árbol de la Vida y reconoce en ti sus sefirot.",
-  "metodo.pago.resumen.cultura": "Filosofía, medicina y religión: de dónde venimos.",
+  "metodo.pago.resumen.fisiologia": "De las partículas a tu cuerpo entero.",
+  "metodo.pago.resumen.nutricion": "Cómo te reconstruye la comida que eliges.",
+  "metodo.pago.resumen.cabala": "Las dimensiones de tu alma.",
+  "metodo.pago.resumen.cultura": "¿De dónde venimos? Filosofía, historia y cultura en el mismo sitio.",
 } as const;

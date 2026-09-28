@@ -10,6 +10,8 @@ export const diario = {
     "What we worked on in each session, and why. It gets written as we go, so come back whenever you like.",
   "diario.pagina.vacio": "No session has been written here yet.",
   "diario.pagina.volver": "Back to the Map",
+  "diario.pagina.leyenda": "Days with a dot have notes: tap one to read them.",
+  "diario.pagina.diaVacio": "There are no notes on that day.",
 
   "diario.porque": "Why I'm telling you this",
   "diario.sinDisciplina": "Session",

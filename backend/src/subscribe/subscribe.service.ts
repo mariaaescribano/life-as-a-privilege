@@ -19,7 +19,7 @@ const TABLE = 'suscriptor';
 
 // Destinatario por defecto de las notificaciones de nuevos suscriptores
 // (se usa si NOTIFY_EMAIL no está configurado en el entorno).
-const DEFAULT_NOTIFY_EMAIL = 'darkcake141@gmail.com';
+const DEFAULT_NOTIFY_EMAIL = 'mariaa.escribano.arce@gmail.com';
 
 export interface SuscriptorDB {
   id: string;

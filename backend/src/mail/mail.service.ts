@@ -4,7 +4,7 @@ import * as nodemailer from 'nodemailer';
 // Destinatario de las solicitudes de carta astral (lecturas de /metodo/astrologia).
 // Usa NOTIFY_EMAIL (igual que contacto/reservas/suscripción); el hardcode solo
 // como último recurso si la variable no estuviera configurada.
-const CARTA_ASTRAL_FALLBACK = 'darkcake141@gmail.com';
+const CARTA_ASTRAL_FALLBACK = 'mariaa.escribano.arce@gmail.com';
 
 // La web, para los enlaces de los correos. Lo normal es que venga de
 // FRONTEND_URL; esto es el respaldo por si esa variable faltara.

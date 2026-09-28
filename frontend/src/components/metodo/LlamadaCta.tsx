@@ -347,11 +347,31 @@ export function PopupLlamada({ isOpen, onClose, onAgendar }: PopupLlamadaProps) 
           overflow="hidden"
           border={`1px solid ${ORO}99`}
           boxShadow={`0 0 0 1px ${ORO}33, 0 26px 80px rgba(0,0,0,0.62)`}
-          backgroundImage={`url(${FONDO})`}
-          backgroundSize="cover"
-          backgroundPosition="center top"
-          backgroundRepeat="no-repeat"
+          // El crema del mármol como color de VERDAD debajo de la foto: si la
+          // imagen no llega a pintarse, la tarjeta nunca se queda transparente
+          // enseñando la página de detrás.
+          bg={CREMA}
         >
+          {/* El mármol va como <img> de verdad y no como background-image de
+              CSS: los modos oscuros forzados (Dark Reader, el auto-dark de
+              algunos móviles) apagan los fondos CSS —la tarjeta se quedaba
+              transparente— pero a las imágenes reales no las tocan. Con
+              object-fit cover y la foto 2:3, se escala igual que el cover de
+              antes: por el ancho, así que el hueco del mandala sigue valiendo. */}
+          <Box
+            as="img"
+            src={FONDO}
+            alt=""
+            aria-hidden="true"
+            position="absolute"
+            inset={0}
+            w="100%"
+            h="100%"
+            objectFit="cover"
+            objectPosition="center top"
+            pointerEvents="none"
+          />
+
           {/* X */}
           <Flex
             as="button"
@@ -377,8 +397,10 @@ export function PopupLlamada({ isOpen, onClose, onAgendar }: PopupLlamadaProps) 
             ✕
           </Flex>
 
-          {/* El texto arranca por debajo del mandala que ya trae la foto. */}
+          {/* El texto arranca por debajo del mandala que ya trae la foto.
+              (relative: si no, la <img> absoluta del fondo pintaría encima.) */}
           <Flex
+            position="relative"
             flex="1"
             direction="column"
             align="center"

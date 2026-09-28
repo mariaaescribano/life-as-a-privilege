@@ -68,7 +68,7 @@ export const web = {
   "privacidad.infoRegistro":
     "By signing up you confirm you are 18 or older and accept the terms of use. María Escribano processes your data to run your account and your journey; it is not shared with anyone except the providers that keep the site running. You can access, correct or delete your data (and delete your account from your profile). More in the",
   "privacidad.infoOpinion":
-    "Your name and your review will be published on this page; the email is optional, never published and only used to reply to you. To remove it, write to darkcake141@gmail.com. More in the",
+    "Your name and your review will be published on this page; the email is optional, never published and only used to reply to you. To remove it, write to mariaa.escribano.arce@gmail.com. More in the",
   "privacidad.enlace": "privacy policy",
 
   "consentimiento.titulo": "Before you continue",
@@ -123,6 +123,15 @@ export const web = {
   "llamada.acompanar": "Book your call →",
   "llamada.acompanarTexto":
     "You can walk this stretch with me. Book a call — you don't have to do all of it on your own.",
+  // Booking and payment errors.
+  "llamada.error.horarioOcupadoPago":
+    "That time was booked while your payment was processing. Write to me and I'll move your call or refund you.",
+  "llamada.error.pagoIncompleto": "The payment didn't go through. You can try again.",
+  "llamada.error.confirmar": "We couldn't confirm your booking. Write to me and we'll sort it out.",
+  "llamada.error.pagoCancelado": "You cancelled the payment. Your call hasn't been booked.",
+  "llamada.error.iniciarPago": "The payment couldn't be started. Please try again.",
+  "llamada.error.horarioOcupado": "That time has just been booked. Please pick another one.",
+  "llamada.error.generico": "Something went wrong. Please try again.",
 
   // ── Exit modal (ExitIntentSubscribeModal) ──────────────────────────────
   "salida.titulo": "Before you go...",

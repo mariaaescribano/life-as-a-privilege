@@ -118,6 +118,14 @@ export default function Terminos() {
                 cuenta, no se revende y no se difunden los materiales.
               </>,
               <>
+                <strong>Lo que escribas se guarda, sin ninguna intención comercial.</strong> Tus
+                respuestas y textos dentro del recorrido —también los que puedan revelar datos de
+                tu salud— se guardan únicamente para que puedas continuarlo donde lo dejaste y
+                para que, si haces sesiones con María, ella pueda leerlos con el único fin de
+                individualizar y personalizar tus sesiones. No se comparten con nadie más ni se
+                usan para ninguna otra cosa.
+              </>,
+              <>
                 <strong>Aceptas el resto de estos términos</strong> y la política de privacidad.
               </>,
             ]}

@@ -4,7 +4,7 @@ Documento interno. No se publica, pero hay que tenerlo al día y enseñarlo si l
 AEPD lo pide. Es obligatorio aunque no haya empleados, porque se tratan datos de
 salud (art. 30.5).
 
-**Responsable:** María Escribano · NIF 48790731A · Calle Deportista Juan Matos, nº 4, Alicante · darkcake141@gmail.com
+**Responsable:** María Escribano · NIF 48790731A · Calle Deportista Juan Matos, nº 4, Alicante · mariaa.escribano.arce@gmail.com
 **Delegado de protección de datos:** no hay (no es obligatorio a este tamaño).
 **Última revisión:** 26 de septiembre de 2026
 

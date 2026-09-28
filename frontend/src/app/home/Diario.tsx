@@ -1,27 +1,29 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // EL DIARIO DE TUS SESIONES (/diario) — lo que la persona lee.
 //
-// Un hilo vertical de entradas, de la más reciente a la más antigua. Cada una
-// lleva el color y la foto de su disciplina (o va neutra si la sesión no fue de
-// ninguna), y el «por qué» en su propio bloque destacado: es lo que da sentido
-// a lo demás y no puede quedar diluido dentro del texto.
+// Gira alrededor del CALENDARIO, igual que el panel de la admin: los días con
+// notas llevan un puntito con el color de su disciplina y tocar un día enseña
+// SOLO sus notas — dos días distintos nunca se ven a la vez. Se abre por el
+// último día con notas.
 //
-// Es una PÁGINA y no un popup a propósito: el diario crece, y dentro de un año
-// leer treinta entradas en una caja con scroll sería incómodo. Aquí se puede
-// enlazar, volver y leer con calma.
+// Cada nota lleva el color y la foto de su disciplina (o va neutra si la sesión
+// no fue de ninguna), el contenido con el mini-formato del diario (**negrita**,
+// *cursiva*, --- rayita) y el «por qué» en su propio bloque destacado.
 //
 // Al abrirla se marcan todas como leídas, que es lo que apaga la marca de
 // «nuevo» de la tarjeta del Home.
 // ─────────────────────────────────────────────────────────────────────────────
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import { TextoMarcado } from "../../components/global/TextoMarcado";
 import { listarMias, marcarLeidas, type EntradaDiario } from "../../api/diario";
 import { caraDeEntrada, fechaLarga } from "./diarioCara";
+import CalendarioDiario from "./CalendarioDiario";
 import { olvidarCacheDiario } from "./DiarioUsuario";
 import { useT, useIdioma } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
@@ -33,6 +35,8 @@ export default function Diario() {
   const nombreDisciplina = useNombreDisciplina();
 
   const [entradas, setEntradas] = useState<EntradaDiario[] | null>(null);
+  /** El día que se está leyendo («2026-09-28»), o null hasta cargar. */
+  const [dia, setDia] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -41,6 +45,13 @@ export default function Diario() {
       const lista = await listarMias();
       if (cancel) return;
       setEntradas(lista);
+      // Se abre por el último día que tenga notas.
+      const ultimo = lista
+        .map((e) => e.fecha?.slice(0, 10))
+        .filter(Boolean)
+        .sort()
+        .pop();
+      if (ultimo) setDia(ultimo);
       // Ya las ha visto: se apaga la marca del Home. Se hace DESPUÉS de pintar,
       // para que las que llegaban sin leer se vean marcadas esta vez.
       if (lista.some((e) => !e.leida_at)) {
@@ -55,6 +66,15 @@ export default function Diario() {
 
   const locale = idioma === "en" ? "en-GB" : "es-ES";
 
+  /** Las notas del día elegido, de la primera a la última escrita. */
+  const delDia = useMemo(
+    () =>
+      (entradas ?? [])
+        .filter((e) => e.fecha?.slice(0, 10) === dia)
+        .sort((a, b) => (a.created_at ?? "").localeCompare(b.created_at ?? "")),
+    [entradas, dia],
+  );
+
   if (entradas === null) return <LifeLoading variant="private" />;
 
   return (
@@ -64,7 +84,7 @@ export default function Diario() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
         <Box w="100%" maxW="760px">
           {/* ── TÍTULO ── */}
-          <Flex direction="column" align="center" textAlign="center" gap={3} mb={{ base: 8, md: 12 }}>
+          <Flex direction="column" align="center" textAlign="center" gap={3} mb={{ base: 8, md: 10 }}>
             <Text
               color="white"
               fontSize={{ base: "2xl", md: "4xl" }}
@@ -92,37 +112,56 @@ export default function Diario() {
               {t("diario.pagina.vacio")}
             </Text>
           ) : (
-            /* ── EL HILO ──
-               La línea vertical que une las entradas para que se lea como un
-               diario y no como una lista suelta. Solo desde `md`: en móvil la
-               caja ocupa todo el ancho y el hilo no cabe al lado. */
-            <Box position="relative">
-              {entradas.length > 1 && (
-                <Box
-                  display={{ base: "none", md: "block" }}
-                  position="absolute"
-                  left="7px"
-                  top="12px"
-                  bottom="12px"
-                  w="2px"
-                  bg="rgba(255,255,255,0.2)"
-                  borderRadius="full"
+            <>
+              {/* ── EL CALENDARIO ── los días con notas llevan puntitos con el
+                  color de su disciplina; se toca un día y se leen las suyas. */}
+              <Box mb={3}>
+                <CalendarioDiario
+                  entradas={entradas}
+                  seleccionada={dia}
+                  onSeleccionar={setDia}
+                  locale={locale}
                 />
+              </Box>
+              <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontStyle="italic" textAlign="center" mb={{ base: 6, md: 8 }}>
+                {t("diario.pagina.leyenda")}
+              </Text>
+
+              {/* ── LAS NOTAS DEL DÍA ── */}
+              {dia && (
+                <Flex align="center" gap={3} mb={5}>
+                  <Box flex="1" h="1px" bg="rgba(255,255,255,0.25)" />
+                  <Text
+                    color="white"
+                    fontWeight="700"
+                    fontSize={{ base: "md", md: "lg" }}
+                    letterSpacing="0.04em"
+                    whiteSpace="nowrap"
+                  >
+                    {fechaLarga(dia, locale)}
+                  </Text>
+                  <Box flex="1" h="1px" bg="rgba(255,255,255,0.25)" />
+                </Flex>
               )}
 
-              <Flex direction="column" gap={{ base: 6, md: 8 }}>
-                {entradas.map((e) => (
-                  <EntradaDelDiario
-                    key={e.id}
-                    entrada={e}
-                    locale={locale}
-                    etiquetaSin={t("diario.sinDisciplina")}
-                    tituloPorque={t("diario.porque")}
-                    nombreDisciplina={nombreDisciplina}
-                  />
-                ))}
-              </Flex>
-            </Box>
+              {delDia.length === 0 ? (
+                <Text color="rgba(255,255,255,0.6)" fontStyle="italic" textAlign="center" py={6}>
+                  {t("diario.pagina.diaVacio")}
+                </Text>
+              ) : (
+                <Flex direction="column" gap={{ base: 6, md: 8 }}>
+                  {delDia.map((e) => (
+                    <EntradaDelDiario
+                      key={e.id}
+                      entrada={e}
+                      etiquetaSin={t("diario.sinDisciplina")}
+                      tituloPorque={t("diario.porque")}
+                      nombreDisciplina={nombreDisciplina}
+                    />
+                  ))}
+                </Flex>
+              )}
+            </>
           )}
 
           {/* ── VOLVER ── */}
@@ -154,16 +193,14 @@ export default function Diario() {
   );
 }
 
-/** Una entrada: bolita del hilo + caja con el color de su disciplina. */
+/** Una nota: caja con el color y la foto de su disciplina. */
 function EntradaDelDiario({
   entrada,
-  locale,
   etiquetaSin,
   tituloPorque,
   nombreDisciplina,
 }: {
   entrada: EntradaDiario;
-  locale: string;
   etiquetaSin: string;
   tituloPorque: string;
   nombreDisciplina: (nom: string, corto?: boolean) => string;
@@ -174,138 +211,113 @@ function EntradaDelDiario({
   const Icon = cara.Icon;
 
   return (
-    <Flex align="flex-start" gap={{ base: 0, md: 5 }}>
-      {/* la bolita del hilo — solo en escritorio, como el hilo */}
-      <Flex
-        display={{ base: "none", md: "flex" }}
-        flexShrink={0}
-        mt="18px"
-        w="16px"
-        h="16px"
-        borderRadius="full"
-        bg={cara.bg}
-        border={`2px solid ${cara.txt}`}
-        style={{ boxShadow: `0 0 10px ${cara.txt}88` }}
-      />
+    <Box
+      minW={0}
+      position="relative"
+      overflow="hidden"
+      borderRadius="2xl"
+      px={{ base: 5, md: 7 }}
+      py={{ base: 5, md: 6 }}
+      bg={cara.bg}
+      border={`1px solid ${cara.txt}55`}
+      transition="border-color 0.2s"
+      _hover={{ borderColor: `${cara.txt}aa` }}
+    >
+      {/* La foto de la disciplina de fondo, con su velo — la misma capa que
+          usan las cajas del panel. Las entradas sin disciplina van lisas. */}
+      {conFoto && <DisciplinaBgLayer nom={cara.nom} borderRadius="2xl" overlay={`${cara.bg}8c`} />}
 
-      <Box
-        flex="1"
-        minW={0}
-        position="relative"
-        overflow="hidden"
-        borderRadius="2xl"
-        px={{ base: 5, md: 7 }}
-        py={{ base: 5, md: 6 }}
-        bg={cara.bg}
-        border={`1px solid ${cara.txt}55`}
-        transition="border-color 0.2s"
-        _hover={{ borderColor: `${cara.txt}aa` }}
-      >
-        {/* La foto de la disciplina de fondo, con su velo — la misma capa que
-            usan las cajas del panel. Las entradas sin disciplina van lisas. */}
-        {conFoto && <DisciplinaBgLayer nom={cara.nom} borderRadius="2xl" overlay={`${cara.bg}8c`} />}
+      <Box position="relative" zIndex={1}>
+        {/* ── Cabecera: la disciplina ── */}
+        <Flex align="center" gap={2.5} flexWrap="wrap">
+          {Icon && (
+            <Flex
+              align="center"
+              justify="center"
+              flexShrink={0}
+              w="26px"
+              h="26px"
+              borderRadius="full"
+              bg={cara.bg}
+              border={`1.5px solid ${cara.txt}`}
+            >
+              <Box display="flex" style={{ filter: `drop-shadow(0 0 4px ${cara.bg})` }}>
+                <Icon size={{ base: "15px", md: "15px" }} />
+              </Box>
+            </Flex>
+          )}
+          <Text
+            color={cara.txt}
+            fontSize="xs"
+            fontWeight="700"
+            letterSpacing="0.14em"
+            textTransform="uppercase"
+            style={{ textShadow: `0 1px 4px ${cara.bg}, 0 0 12px ${cara.bg}` }}
+          >
+            {etiqueta}
+          </Text>
+          <Box flex="1" h="1px" bg={`${cara.txt}44`} minW="10px" />
+        </Flex>
 
-        <Box position="relative" zIndex={1}>
-          {/* ── Cabecera: disciplina · fecha ── */}
-          <Flex align="center" gap={2.5} flexWrap="wrap">
-            {Icon && (
-              <Flex
-                align="center"
-                justify="center"
-                flexShrink={0}
-                w="26px"
-                h="26px"
-                borderRadius="full"
-                bg={cara.bg}
-                border={`1.5px solid ${cara.txt}`}
-              >
-                <Box display="flex" style={{ filter: `drop-shadow(0 0 4px ${cara.bg})` }}>
-                  <Icon size={{ base: "15px", md: "15px" }} />
-                </Box>
-              </Flex>
-            )}
+        {/* ── Título ── */}
+        {entrada.titulo && (
+          <Text
+            color={cara.txt}
+            fontSize={{ base: "xl", md: "2xl" }}
+            fontWeight="700"
+            lineHeight="1.25"
+            mt={3}
+            style={{ textShadow: `0 1px 5px ${cara.bg}, 0 0 16px ${cara.bg}` }}
+          >
+            {entrada.titulo}
+          </Text>
+        )}
+
+        {/* ── Lo que se trabajó ── */}
+        <Box mt={entrada.titulo ? 3 : 4}>
+          <TextoMarcado
+            texto={entrada.contenido}
+            colorRaya={cara.txt}
+            color={cara.txt}
+            fontSize={{ base: "md", md: "lg" }}
+            lineHeight="1.85"
+            style={{ textShadow: `0 1px 5px ${cara.bg}, 0 0 14px ${cara.bg}` }}
+          />
+        </Box>
+
+        {/* ── El porqué ── */}
+        {entrada.porque && (
+          <Box
+            mt={5}
+            px={{ base: 4, md: 5 }}
+            py={{ base: 4, md: 4 }}
+            borderRadius="xl"
+            bg={`${cara.bg}d9`}
+            borderLeft={`3px solid ${cara.txt}`}
+          >
             <Text
               color={cara.txt}
               fontSize="xs"
               fontWeight="700"
               letterSpacing="0.14em"
               textTransform="uppercase"
-              style={{ textShadow: `0 1px 4px ${cara.bg}, 0 0 12px ${cara.bg}` }}
-            >
-              {etiqueta}
-            </Text>
-            <Box flex="1" h="1px" bg={`${cara.txt}44`} minW="10px" />
-            <Text
-              color={`${cara.txt}cc`}
-              fontSize="xs"
-              flexShrink={0}
+              mb={2}
               style={{ textShadow: `0 1px 4px ${cara.bg}` }}
             >
-              {fechaLarga(entrada.fecha, locale)}
+              {tituloPorque}
             </Text>
-          </Flex>
-
-          {/* ── Título ── */}
-          {entrada.titulo && (
-            <Text
+            <TextoMarcado
+              texto={entrada.porque}
+              colorRaya={cara.txt}
               color={cara.txt}
-              fontSize={{ base: "xl", md: "2xl" }}
-              fontWeight="700"
-              lineHeight="1.25"
-              mt={3}
-              style={{ textShadow: `0 1px 5px ${cara.bg}, 0 0 16px ${cara.bg}` }}
-            >
-              {entrada.titulo}
-            </Text>
-          )}
-
-          {/* ── Lo que se trabajó ── */}
-          <Text
-            color={cara.txt}
-            fontSize={{ base: "md", md: "lg" }}
-            lineHeight="1.85"
-            mt={entrada.titulo ? 3 : 4}
-            whiteSpace="pre-wrap"
-            style={{ textShadow: `0 1px 5px ${cara.bg}, 0 0 14px ${cara.bg}` }}
-          >
-            {entrada.contenido}
-          </Text>
-
-          {/* ── El porqué ── */}
-          {entrada.porque && (
-            <Box
-              mt={5}
-              px={{ base: 4, md: 5 }}
-              py={{ base: 4, md: 4 }}
-              borderRadius="xl"
-              bg={`${cara.bg}d9`}
-              borderLeft={`3px solid ${cara.txt}`}
-            >
-              <Text
-                color={cara.txt}
-                fontSize="xs"
-                fontWeight="700"
-                letterSpacing="0.14em"
-                textTransform="uppercase"
-                mb={2}
-                style={{ textShadow: `0 1px 4px ${cara.bg}` }}
-              >
-                {tituloPorque}
-              </Text>
-              <Text
-                color={cara.txt}
-                fontSize={{ base: "sm", md: "md" }}
-                fontStyle="italic"
-                lineHeight="1.8"
-                whiteSpace="pre-wrap"
-                style={{ textShadow: `0 1px 5px ${cara.bg}, 0 0 14px ${cara.bg}` }}
-              >
-                {entrada.porque}
-              </Text>
-            </Box>
-          )}
-        </Box>
+              fontSize={{ base: "sm", md: "md" }}
+              fontStyle="italic"
+              lineHeight="1.8"
+              style={{ textShadow: `0 1px 5px ${cara.bg}, 0 0 14px ${cara.bg}` }}
+            />
+          </Box>
+        )}
       </Box>
-    </Flex>
+    </Box>
   );
 }

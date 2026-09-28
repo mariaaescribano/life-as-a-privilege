@@ -16,7 +16,7 @@ export const TITULAR = {
   nombre: "María Escribano",
   nif: "48790731A",
   domicilio: "Calle Deportista Juan Matos, nº 4, Alicante",
-  email: "darkcake141@gmail.com",
+  email: "mariaa.escribano.arce@gmail.com",
   web: "https://lifeasaprivilege.onrender.com",
 };
 
