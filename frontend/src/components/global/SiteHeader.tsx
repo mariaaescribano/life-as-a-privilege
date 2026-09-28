@@ -147,7 +147,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
       // ahí convertidas en X — cerrar es volver a pulsar donde acabas de
       // pulsar, sin buscar un aspa en otro sitio.
       zIndex={menuAbierto ? 400 : 100}
-      borderBottom="1px solid rgba(255,255,255,0.12)"
+      borderBottom="1px solid rgba(255,255,255,0.22)"
     >
       {/* Logo */}
       <Flex

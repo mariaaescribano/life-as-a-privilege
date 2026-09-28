@@ -463,7 +463,8 @@ const Welcome = () => {
       {/* ── MANDALA (elemento central, encima del título) ── */}
       {/* Wrapper con flotación + latido perpetuos (vida continua); la imagen
           hace la entrada épica (surge girando desde muy pequeña y se enfoca). */}
-      <Flex justify="center" pt={{ base: 4, md: 9 }}>
+      {/* Un poco de hueco sobre el mandala en móvil, que iba pegado al header. */}
+      <Flex justify="center" pt={{ base: 7, md: 9 }}>
         <Box
           sx={{
             "@keyframes mandalaFloat": {
@@ -492,7 +493,9 @@ const Welcome = () => {
       </Flex>
 
       {/* ── BIENVENIDA (título + subtítulo + frase) ── */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 3, md: 8 }} pb={{ base: 2, md: 6 }}>
+      {/* `pb` base 5: un respiro entre el subtítulo y las tarjetas (ojo, cada
+          píxel de más empuja la segunda fila de tarjetas bajo el pliegue). */}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 3, md: 8 }} pb={{ base: 5, md: 6 }}>
         <Box
           ref={bienvenidaReveal.ref}
           w={{ base: "100%", md: "78%" }}
@@ -512,7 +515,7 @@ const Welcome = () => {
             fontWeight="700"
             letterSpacing="0.1em"
             lineHeight="1.1"
-            textShadow="0 0 14px rgba(255,255,255,0.42), 0 0 30px rgba(255,255,255,0.26), 0 0 56px rgba(180,255,245,0.21)"
+            textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
           >
             {/* El nombre de la casa vive en `header.marca` (una sola clave para
                 el rótulo del header y este titular): así no se cambia en un

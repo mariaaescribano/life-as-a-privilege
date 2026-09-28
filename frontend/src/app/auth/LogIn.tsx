@@ -10,7 +10,7 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { LoginUser } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
-import { CampoContrasena, inputAuthStyles } from "../../components/global/CampoContrasena";
+import { CampoContrasena, inputAuthStyles, focoAzul } from "../../components/global/CampoContrasena";
 import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.15) => {
@@ -224,7 +224,7 @@ export default function LogIn() {
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.38), 0 0 30px rgba(255,255,255,0.22), 0 0 56px rgba(180,255,245,0.16)"
+          textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -303,6 +303,9 @@ export default function LogIn() {
                   textDecoration="underline"
                   bg="transparent"
                   cursor="pointer"
+                  borderRadius="md"
+                  px={2}
+                  _focusVisible={focoAzul}
                 >
                   {t("auth.login.reenviar")}
                 </Text>
@@ -332,6 +335,7 @@ export default function LogIn() {
                 boxShadow: "0 0 20px rgba(255,255,255,0.32), 0 0 44px rgba(180,255,245,0.18), 0 6px 18px rgba(0,0,0,0.22)",
                 transform: "translateY(-1px)",
               }}
+              _focusVisible={focoAzul}
               transition="all 0.25s ease"
             >
               <Image
@@ -381,7 +385,10 @@ export default function LogIn() {
               cursor="pointer"
               textDecoration="underline"
               textUnderlineOffset="3px"
+              borderRadius="md"
+              px={2}
               _hover={{ color: "white" }}
+              _focusVisible={focoAzul}
               transition="all 0.22s ease"
             >
               {t("auth.login.olvidada")}
@@ -400,7 +407,10 @@ export default function LogIn() {
               cursor="pointer"
               textDecoration="underline"
               textUnderlineOffset="3px"
+              borderRadius="md"
+              px={2}
               _hover={{ color: "white" }}
+              _focusVisible={focoAzul}
               transition="all 0.22s ease"
             >
               {t("auth.login.sinCuenta")}

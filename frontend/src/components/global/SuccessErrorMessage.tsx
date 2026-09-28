@@ -31,12 +31,12 @@ export default function SuccessErrorMessage(props:{
 
       <Box flex="1">
         {props.title && (
-          <Text fontWeight="bold" fontSize="md">
+          <Text fontWeight="bold" fontSize="18px">
             {props.title}
           </Text>
         )}
         {props.description && (
-          <Text fontSize="sm" mt={1}>
+          <Text fontSize="15px" mt={1}>
             {props.description}
           </Text>
         )}

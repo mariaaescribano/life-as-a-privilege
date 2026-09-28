@@ -21,7 +21,7 @@ export const welcome = {
   "welcome.lema.hinduismo": "Tu constitución única.",
   "welcome.lema.medicinaChina": "El origen de tus desequilibrios.",
   "welcome.lema.fisiologia": "Eres un cuerpo. Conócete.",
-  "welcome.lema.nutricion": "Lo que eliges, te reconstruye.",
+  "welcome.lema.nutricion": "Lo que eliges te reconstruye.",
   "welcome.lema.cabala": "La arquitectura de tu alma.",
   "welcome.lema.cultura": "Las historias de la humanidad.",
 

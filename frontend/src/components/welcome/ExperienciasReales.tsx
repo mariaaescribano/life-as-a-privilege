@@ -96,7 +96,7 @@ const ExperienciasReales: React.FC = () => {
             fontSize={{ base: "3xl", md: "4xl" }}
             fontWeight="700"
             letterSpacing="0.04em"
-            textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 28px rgba(255,255,255,0.3), 0 0 50px rgba(180,255,245,0.25)"
+            textShadow="0 0 12px rgba(255,255,255,0.6), 0 0 28px rgba(255,255,255,0.39), 0 0 50px rgba(180,255,245,0.32)"
             fontFamily="'EB Garamond', serif"
           >
             {t("experiencias.titulo")}

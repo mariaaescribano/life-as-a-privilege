@@ -28,7 +28,7 @@ export default function NoEncontrada() {
 
         <Text color="white" fontSize={{ base: "5xl", md: "7xl" }} fontWeight="700" lineHeight="1"
               letterSpacing="0.04em"
-              textShadow="0 0 18px rgba(255,255,255,0.45), 0 0 40px rgba(180,255,245,0.22)">
+              textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 40px rgba(180,255,245,0.32)">
           404
         </Text>
 

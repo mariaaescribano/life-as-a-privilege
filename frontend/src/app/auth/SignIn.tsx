@@ -10,7 +10,7 @@ import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { CreateUser, Trato } from "../../dtos/user.types";
 import { gestionaError } from "../../GlobalHelper";
 import SiteFooter from "../../components/global/Footer";
-import { CampoContrasena, inputAuthStyles, inputFechaSx } from "../../components/global/CampoContrasena";
+import { CampoContrasena, inputAuthStyles, inputFechaSx, focoAzul } from "../../components/global/CampoContrasena";
 import { useT } from "../../i18n";
 import { MiraTuCorreoModal } from "../../components/global/MiraTuCorreoModal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
@@ -65,17 +65,21 @@ const CasillaTrato = ({
     aria-pressed={marcada}
     align="center"
     px={5}
-    py={2.5}
+    py={3}
     flex="1"
     justify="center"
     borderRadius="full"
-    border={`1.5px solid ${marcada ? "white" : "rgba(255,255,255,0.4)"}`}
-    bg={marcada ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.06)"}
+    border={`1.5px solid ${marcada ? "white" : "rgba(255,255,255,0.45)"}`}
+    // Fondo algo más opaco a propósito: con el 0.06 de antes cualquier cosa de
+    // detrás (o el auto-oscuro de algún navegador) se transparentaba y las
+    // píldoras se veían raras.
+    bg={marcada ? "rgba(255,255,255,0.24)" : "rgba(255,255,255,0.12)"}
     cursor={disabled ? "not-allowed" : "pointer"}
     opacity={disabled ? 0.55 : 1}
-    boxShadow={marcada ? "0 0 14px rgba(255,255,255,0.2)" : "none"}
+    boxShadow={marcada ? "0 0 16px rgba(255,255,255,0.25)" : "none"}
     transition="all 0.2s ease"
-    _hover={disabled ? {} : { borderColor: "white", bg: "rgba(255,255,255,0.14)" }}
+    _hover={disabled ? {} : { borderColor: "white", bg: "rgba(255,255,255,0.2)" }}
+    _focusVisible={focoAzul}
   >
     <Text
       color="white"
@@ -157,6 +161,7 @@ const PopupCondiciones = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           fontSize="sm"
           cursor="pointer"
           _hover={{ bg: "rgba(255,255,255,0.3)" }}
+          _focusVisible={focoAzul}
           transition="background 0.2s ease"
         >
           ✕
@@ -364,7 +369,7 @@ export default function SignIn() {
           letterSpacing="0.12em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.38), 0 0 30px rgba(255,255,255,0.22), 0 0 56px rgba(180,255,245,0.16)"
+          textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
@@ -389,20 +394,22 @@ export default function SignIn() {
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} pt={{ base: 9, md: 12 }} pb={{ base: 16, md: 20 }}>
         <VStack
           ref={formReveal.ref}
-          w={{ base: "100%", md: "740px" }}
-          spacing={6}
+          w={{ base: "100%", md: "760px" }}
+          spacing={{ base: 7, md: 8 }}
           align="stretch"
           bg="rgba(255,255,255,0.08)"
-          border="1px solid rgba(255,255,255,0.26)"
+          border="1px solid rgba(255,255,255,0.28)"
           borderRadius="28px"
-          px={{ base: 5, md: 10 }}
-          py={{ base: 8, md: 11 }}
-          boxShadow="0 24px 60px rgba(0,0,0,0.28)"
+          px={{ base: 6, md: 12 }}
+          py={{ base: 10, md: 14 }}
+          // Sin sombra oscura detrás: un halo LIGERO, el mismo blanco-menta que
+          // encienden el mandala y el título, bajado de intensidad.
+          boxShadow="0 0 22px rgba(255,255,255,0.1), 0 0 55px rgba(180,255,245,0.08)"
           opacity={formReveal.visible ? 1 : 0}
           transform={formReveal.visible ? "translateY(0)" : "translateY(28px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
             <Box>
               <Etiqueta>{t("auth.campo.nombre")}</Etiqueta>
               <Input
@@ -427,7 +434,7 @@ export default function SignIn() {
 
           <Box>
             <Etiqueta>{t("auth.signin.trato")}</Etiqueta>
-            <Flex gap={3}>
+            <Flex gap={{ base: 3, md: 4 }}>
               <CasillaTrato
                 etiqueta={t("auth.signin.tratoEl")}
                 marcada={trato === "el"}
@@ -443,7 +450,7 @@ export default function SignIn() {
             </Flex>
           </Box>
 
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} alignItems="start">
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} alignItems="start">
             <Box>
               <Etiqueta>{t("auth.campo.telefono")}</Etiqueta>
               <Input
@@ -485,7 +492,7 @@ export default function SignIn() {
             bg="linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)"
           />
 
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
             <CampoContrasena
               label={t("auth.campo.contrasena")}
               value={contra}
@@ -527,6 +534,7 @@ export default function SignIn() {
               bg={acepta ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.06)"}
               cursor={bloqueado ? "not-allowed" : "pointer"}
               _hover={bloqueado ? {} : { borderColor: "white" }}
+              _focusVisible={focoAzul}
               transition="all 0.2s ease"
             >
               {acepta && (
@@ -544,6 +552,9 @@ export default function SignIn() {
               bg="transparent"
               cursor={bloqueado ? "not-allowed" : "pointer"}
               userSelect="none"
+              borderRadius="md"
+              px={1}
+              _focusVisible={focoAzul}
             >
               {t("auth.signin.aceptar")}
             </Text>
@@ -558,7 +569,10 @@ export default function SignIn() {
               cursor="pointer"
               textDecoration="underline"
               textUnderlineOffset="3px"
+              borderRadius="md"
+              px={1}
               _hover={{ color: "white" }}
+              _focusVisible={focoAzul}
               transition="color 0.2s ease"
             >
               {t("auth.signin.saberMas")}
@@ -596,6 +610,7 @@ export default function SignIn() {
                 boxShadow: "0 0 20px rgba(255,255,255,0.32), 0 0 44px rgba(180,255,245,0.18), 0 6px 18px rgba(0,0,0,0.22)",
                 transform: "translateY(-1px)",
               }}
+              _focusVisible={focoAzul}
               transition="all 0.25s ease"
             >
               <Image
@@ -645,7 +660,10 @@ export default function SignIn() {
               cursor="pointer"
               textDecoration="underline"
               textUnderlineOffset="3px"
+              borderRadius="md"
+              px={2}
               _hover={{ color: "white" }}
+              _focusVisible={focoAzul}
               transition="all 0.22s ease"
             >
               {t("auth.signin.yaTienes")}

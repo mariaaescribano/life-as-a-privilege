@@ -94,7 +94,7 @@ export const web = {
 
   // ── Aviso de cookies (la barra de abajo, no la página legal) ───────────
   "cookies.aviso":
-    "Usamos cookies propias necesarias para que la web funcione y para mantener tu sesión iniciada. Nos gustaría usar también cookies de Google Analytics para entender cómo se usa el sitio y mejorarlo, pero **solo si tú lo autorizas**.",
+    "Usamos cookies para que la web funcione y mantener tu sesión iniciada. Nos gustaría usar también cookies de Google Analytics para mejorar el sitio, pero **solo si tú lo autorizas**.",
   "cookies.masInfo": "Más información",
   "cookies.rechazar": "Rechazar",
   "cookies.aceptar": "Aceptar",

@@ -54,6 +54,17 @@ export const inputFechaSx = {
   "&::-webkit-calendar-picker-indicator": { filter: "invert(1)", cursor: "pointer" },
 };
 
+/**
+ * El foco de TECLADO de las pantallas de acceso: el mismo azul suave que ya
+ * encienden los campos, para botones, casillas y enlaces. Va en `_focusVisible`
+ * a propósito: solo se ilumina al llegar con el tabulador, nunca al tocar con
+ * el ratón (la regla de «nada azul al pulsar» sigue en pie).
+ */
+export const focoAzul = {
+  outline: "none",
+  boxShadow: "0 0 0 2px rgba(150,200,255,0.85), 0 0 18px rgba(150,200,255,0.3)",
+} as const;
+
 interface Props {
   /** Texto de la etiqueta, en mayúsculas: «CONTRASEÑA», «REPETIR CONTRASEÑA»… */
   label: string;
@@ -128,6 +139,7 @@ export function CampoContrasena({
             cursor="pointer"
             transition="all 0.2s ease"
             _hover={{ color: "white", bg: "rgba(255,255,255,0.14)" }}
+            _focusVisible={focoAzul}
             style={visible ? { filter: "drop-shadow(0 0 8px rgba(255,255,255,0.5))" } : undefined}
           >
             {visible ? <ViewOffIcon boxSize="20px" /> : <ViewIcon boxSize="20px" />}

@@ -563,6 +563,21 @@ const LOTES = {
     forzar: ["cursos"],
     carpetas: ["cursos"], // los .png que queden sin convertir
   },
+  // El cielo del espacio repintado: `space.png` llegó encima de los DOS
+  // `space.webp` que había (img/astrologia y img/fondos, misma foto) y
+  // borrándolos, y el código lo pide siempre como `.webp` (StarsLayer,
+  // MetodoAstrologia…): en PNG, astrología entera se queda sin cielo. Por eso
+  // van con `forzar`. Lado 1400 y calidad 85, como el lote 16: es un fondo a
+  // pantalla y las estrellas son puntos de un píxel que a calidad 80 se comen.
+  // `saltar` deja fuera lo que NO es de esta tanda: space3 (una candidata que
+  // no se usa) y turquesa, que sigue en PNG a propósito.
+  48: {
+    ladoMax: 1400,
+    calidad: 85,
+    forzar: ["img/astrologia", "img/fondos"],
+    saltar: ["/img/fondos/space3.png", "/img/fondos/turquesa.png"],
+    carpetas: ["img/astrologia", "img/fondos"],
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────
@@ -644,6 +659,14 @@ let antes = 0, despues = 0, saltados = 0, fallos = 0;
 
 for (const abs of archivos) {
   const rel = rutaWeb(abs);
+  // Lo apuntado en `saltar` no se toca (p. ej. el favicon del lote 16, o los
+  // PNG vecinos de una carpeta en la que solo cae un archivo). Hasta ahora la
+  // opción estaba escrita en los lotes pero el bucle no la miraba.
+  if ((config.saltar ?? []).includes(rel)) {
+    saltados++;
+    console.log(`  = ${rel}  (en la lista de saltar)`);
+    continue;
+  }
   try {
     const { size } = await fs.stat(abs);
     // Se lee a memoria y se le pasa el Buffer a sharp: si se le pasa la RUTA,

@@ -30,6 +30,10 @@ const OpinionesSection: React.FC = () => {
       ref={reveal.ref}
       px={{ base: 5, md: 10, lg: 16 }}
       pt={{ base: 12, md: 16 }}
+      // El MISMO aire por debajo que por arriba: encima del botón se suman el
+      // `pb` de las tarjetas (9/13) y este `pt` (12/16); debajo, este `pb` y el
+      // `pt` de la tarjeta de la creadora (10/14). 9+12 = 11+10 y 13+16 = 15+14.
+      pb={{ base: 11, md: 15 }}
     >
       <Flex direction="column" align="center" w="100%">
         {/* ── CTA principal → El Recorrido (botón grande con mandala + flecha
@@ -85,7 +89,7 @@ const OpinionesSection: React.FC = () => {
               fontSize={{ base: "xl", md: "4xl" }}
               letterSpacing={{ base: "0.14em", md: "0.2em" }}
               textTransform="uppercase"
-              textShadow="0 0 16px rgba(255,255,255,0.56), 0 0 34px rgba(255,255,255,0.32), 0 0 66px rgba(180,255,245,0.24)"
+              textShadow="0 0 16px rgba(255,255,255,0.6), 0 0 34px rgba(255,255,255,0.39), 0 0 66px rgba(180,255,245,0.32)"
               whiteSpace="nowrap"
             >
               {t("header.mapa")}
@@ -96,7 +100,7 @@ const OpinionesSection: React.FC = () => {
               fontFamily="'EB Garamond', serif"
               fontWeight="700"
               fontSize={{ base: "xl", md: "4xl" }}
-              style={{ textShadow: "0 0 16px rgba(255,255,255,0.56), 0 0 34px rgba(255,255,255,0.32)" }}
+              style={{ textShadow: "0 0 16px rgba(255,255,255,0.6), 0 0 34px rgba(255,255,255,0.39)" }}
             >
               →
             </Box>

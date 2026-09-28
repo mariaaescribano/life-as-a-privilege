@@ -267,6 +267,59 @@ describe('5 · Entrar ya activada', () => {
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
+// Dos cuentas que se confunden («María» / «maría»): el caso que dejó a la admin
+// fuera tras cambiar su contraseña. El login tiene que probar la contraseña
+// contra TODAS las cuentas que puedan ser esa persona, y el registro y Mi
+// cuenta tienen que impedir que vuelvan a nacer gemelas.
+describe('6 · Cuentas gemelas (mismo nombre con otras mayúsculas)', () => {
+  const gemelas = async () => [
+    { id: 'A', name: 'María', email: 'maria@x.com', password: await bcrypt.hash('claveDeA', 4) },
+    { id: 'B', name: 'maría', email: 'dark@x.com', password: await bcrypt.hash('claveDeB', 4) },
+  ];
+
+  it('entra en la cuenta cuya contraseña casa, teclee el nombre como lo teclee', async () => {
+    const { service, auth } = montar(await gemelas());
+    const r: any = await service.logIn({ name: 'María', password: 'claveDeB' });
+    expect(r.token).toBe('jwt-de-test');
+    expect(auth.generateToken).toHaveBeenCalledWith('B', 'dark@x.com');
+  });
+
+  it('por email va SIEMPRE a esa cuenta, aunque el nombre de la otra se parezca', async () => {
+    const { service, auth } = montar(await gemelas());
+    const r: any = await service.logIn({ name: 'maria@x.com', password: 'claveDeA' });
+    expect(r.token).toBe('jwt-de-test');
+    expect(auth.generateToken).toHaveBeenCalledWith('A', 'maria@x.com');
+  });
+
+  it('si ninguna casa → contraseña errónea', async () => {
+    const { service } = montar(await gemelas());
+    await expect(service.logIn({ name: 'maría', password: 'ninguna' })).rejects.toThrow('La contraseña es errónea');
+  });
+
+  it('registrarse con el mismo nombre en otras mayúsculas → 409', async () => {
+    const { service } = montar(await gemelas());
+    await expect(service.createUser({ name: 'MARÍA', email: 'nueva@x.com', password: 'secreta1' }))
+      .rejects.toThrow('El nombre ya existe. Elige otro');
+  });
+
+  it('Mi cuenta no deja renombrarse al nombre (ni al email) de otra persona', async () => {
+    const { service } = montar(await gemelas());
+    await expect(service.updateUser('B', { name: 'MARÍA' } as any))
+      .rejects.toThrow('El nombre ya existe. Elige otro');
+    await expect(service.updateUser('B', { email: 'maria@x.com' } as any))
+      .rejects.toThrow('El email ya está registrado');
+  });
+
+  it('cambiar la contraseña en Mi cuenta permite entrar con la nueva', async () => {
+    const { service, filas } = montar(await gemelas());
+    await service.updateUser('B', { password: 'nuevaClave' } as any);
+    expect(await bcrypt.compare('nuevaClave', filas[1].password)).toBe(true);
+    const r: any = await service.logIn({ name: 'maría', password: 'nuevaClave' });
+    expect(r.token).toBe('jwt-de-test');
+  });
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
 describe('Textos de los dos correos', () => {
   const frontend = 'https://web.test';
   let enviar: jest.Mock;

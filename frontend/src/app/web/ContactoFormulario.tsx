@@ -145,7 +145,7 @@ const ContactoFormulario = () => {
           letterSpacing="0.1em"
           lineHeight="1.1"
           textTransform="uppercase"
-          textShadow="0 0 18px rgba(255,255,255,0.64), 0 0 38px rgba(255,255,255,0.41), 0 0 70px rgba(180,255,245,0.34)"
+          textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 38px rgba(255,255,255,0.39), 0 0 70px rgba(180,255,245,0.32)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"

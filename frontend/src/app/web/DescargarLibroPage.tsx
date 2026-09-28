@@ -101,7 +101,7 @@ export default function DescargarLibroPage() {
               fontWeight="700"
               letterSpacing="0.1em"
               textTransform="uppercase"
-              textShadow="0 0 14px rgba(255,255,255,0.52), 0 0 30px rgba(180,255,245,0.3)"
+              textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.32)"
             >
               {t("descarga.verificando")}
             </Text>
@@ -119,7 +119,7 @@ export default function DescargarLibroPage() {
               fontWeight="700"
               letterSpacing="0.08em"
               lineHeight="1.2"
-              textShadow="0 0 14px rgba(255,255,255,0.64), 0 0 30px rgba(180,255,245,0.34)"
+              textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(180,255,245,0.32)"
             >
               {t("descarga.gracias")}
             </Text>

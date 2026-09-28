@@ -304,7 +304,7 @@ export class MailService {
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no te funciona, puedes copiar esta dirección en tu navegador:<br />
-          <span style="word-break: break-all;">${enlace}</span>
+          <a href="${enlace}" style="color:#ffffff;text-decoration:underline;word-break:break-all;">${enlace}</a>
         </p>
         <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
           ${comoEntrar}
@@ -372,7 +372,7 @@ export class MailService {
         </p>
         <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
           Si dudas entre una y otra, lo hablamos: son veinte minutos, sin coste y sin compromiso.
-          <a href="${frontendUrl}/contacto?conocernos=1" style="color:#ffffff;">Buscamos un hueco</a>.
+          <a href="${frontendUrl}/contacto?conocernos=1" style="color:#ffffff;text-decoration:underline;">Buscamos un hueco</a>.
         </p>
         <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
           Un abrazo,<br />María
@@ -427,7 +427,7 @@ export class MailService {
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no funciona, copia esta dirección en tu navegador:<br />
-          <span style="word-break: break-all;">${enlace}</span>
+          <a href="${enlace}" style="color:#ffffff;text-decoration:underline;word-break:break-all;">${enlace}</a>
         </p>
         <p style="margin-top: 24px; font-size: 14px; opacity: 0.78;">
           Si no has pedido tú este cambio, puedes ignorar este correo: tu contraseña
@@ -615,7 +615,7 @@ export class MailService {
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no te funciona, copia esta dirección en tu navegador:<br />
-          <span style="word-break: break-all;">${enlace}</span>
+          <a href="${enlace}" style="color:#ffffff;text-decoration:underline;word-break:break-all;">${enlace}</a>
         </p>
         <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
           El enlace es solo tuyo, vale para una disciplina y tienes siete días para usarlo.
@@ -753,7 +753,7 @@ export class MailService {
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;">
         <tr>
           <td align="center" style="padding:20px 24px 0;font-family:${serif};font-size:12px;line-height:1.7;color:${c.pie};">
-            Te escribo desde <a href="${frontendUrl}" style="color:${c.menta};text-decoration:none;">Life as a Privilege</a>.<br />
+            Te escribo desde <a href="${frontendUrl}" style="color:#ffffff;text-decoration:underline;">Life as a Privilege</a>.<br />
             Este correo es solo para ti: nadie más ve tu carta.
           </td>
         </tr>

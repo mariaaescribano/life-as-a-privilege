@@ -79,6 +79,17 @@ function emailExacto(email: string): string {
 }
 
 /**
+ * Patrón para `.ilike('name', …)`: el nombre LITERAL (sin comodines), igualado
+ * sin distinguir mayúsculas. Existe porque «María» y «maría» son la misma
+ * persona a la vista, y tratarlas como nombres distintos ya dejó a la admin
+ * fuera de su cuenta (cambió la contraseña en una y el login comparaba contra
+ * la otra).
+ */
+function textoExacto(texto: string): string {
+  return (texto ?? '').trim().replace(/[\\%_]/g, (c) => `\\${c}`);
+}
+
+/**
  * Columnas del registro que pueden no existir todavía (su SQL sin correr). Si
  * el insert falla nombrando una, se repite sin ella: crear la cuenta importa
  * más que guardar el dato. Cada una se quita una sola vez.
@@ -106,7 +117,10 @@ export class UserService {
     // Dos consultas con .eq() parametrizado (el cliente las escapa) en lugar de
     // interpolar la entrada del usuario en un filtro .or() de PostgREST.
     const [byName, byEmail] = await Promise.all([
-      db.from('user').select('name').eq('name', nom).limit(1),
+      // Sin distinguir mayúsculas: «María» y «maría» son el mismo nombre. Dos
+      // cuentas así solo se diferencian en una tilde de más y luego nadie sabe
+      // en cuál está entrando.
+      db.from('user').select('name').ilike('name', textoExacto(nom)).limit(1),
       db.from('user').select('email').ilike('email', emailExacto(email)).limit(1),
     ]);
     return {
@@ -214,36 +228,45 @@ export class UserService {
   async logIn(body: LoginUser) {
     try {
       const db = this.databaseService.getClient();
-      // Buscar por nombre y, si no hay, por email (con .eq() parametrizado en
-      // lugar de interpolar la entrada en un filtro .or()).
-      let { data: rows } = await db.from('user').select('*').eq('name', body.name).limit(1);
-      if (!rows || rows.length === 0) {
-        ({ data: rows } = await db.from('user').select('*').ilike('email', emailExacto(body.name)).limit(1));
+      // TODAS las cuentas que pueden ser «esta persona»: las que tienen ese
+      // nombre (sin distinguir mayúsculas: pueden ser varias, de antes de que
+      // el registro lo impidiera) y la que tiene ese email. La contraseña
+      // decide cuál es de verdad. Antes se cogía UNA por nombre exacto y, si
+      // había dos «María»/«maría», se comparaba contra la equivocada y la
+      // buena se quedaba fuera.
+      const [porNombre, porEmail] = await Promise.all([
+        db.from('user').select('*').ilike('name', textoExacto(body.name)).limit(5),
+        db.from('user').select('*').ilike('email', emailExacto(body.name)).limit(1),
+      ]);
+      const candidatas: any[] = [...(porNombre.data ?? [])];
+      for (const u of porEmail.data ?? []) {
+        if (!candidatas.some((c) => c.id === u.id)) candidatas.push(u);
       }
 
-      if (rows && rows.length > 0) {
-        const user = rows[0];
-        const coinciden = await comparePassword(body.password, user.password);
-        if (coinciden) {
-          // Solo `false` bloquea: sin la columna (undefined) o en cuentas
-          // antiguas y de Google (true) se entra como siempre.
-          if (user.email_confirmado === false) {
-            throw new ForbiddenException({
-              statusCode: 403,
-              code: 'EMAIL_SIN_CONFIRMAR',
-              message: 'Antes de entrar tienes que confirmar tu cuenta con el enlace que te hemos enviado al correo.',
-            });
-          }
-          const token = this.authService.generateToken(user.id, user.email);
-          // No devolver nunca el hash de la contraseña al cliente.
-          const { password, ...safeUser } = user;
-          return { token, user: safeUser };
-        } else {
-          throw new ConflictException('La contraseña es errónea');
-        }
-      } else {
+      if (candidatas.length === 0) {
         throw new ConflictException('Nombre o email no existen');
       }
+
+      for (const user of candidatas) {
+        if (!user.password) continue;
+        const coinciden = await comparePassword(body.password, user.password);
+        if (!coinciden) continue;
+        // Solo `false` bloquea: sin la columna (undefined) o en cuentas
+        // antiguas y de Google (true) se entra como siempre.
+        if (user.email_confirmado === false) {
+          throw new ForbiddenException({
+            statusCode: 403,
+            code: 'EMAIL_SIN_CONFIRMAR',
+            message: 'Antes de entrar tienes que confirmar tu cuenta con el enlace que te hemos enviado al correo.',
+          });
+        }
+        const token = this.authService.generateToken(user.id, user.email);
+        // No devolver nunca el hash de la contraseña al cliente.
+        const { password, ...safeUser } = user;
+        return { token, user: safeUser };
+      }
+
+      throw new ConflictException('La contraseña es errónea');
     } catch (error) {
       console.log(error);
       throw error;
@@ -595,6 +618,23 @@ export class UserService {
     if ('fecha_nacimiento' in body) updates.fecha_nacimiento = saneaFechaNacimiento(body.fecha_nacimiento);
     if (body.name) updates.name = body.name;
     if (body.email) updates.email = normalizaEmail(body.email);
+
+    // Renombrarse al nombre o al email de OTRA cuenta rompe el login (dos
+    // «María» y la contraseña deja de casar con la que crees ser). El registro
+    // ya lo impide; aquí faltaba.
+    const db = this.databaseService.getClient();
+    if (updates.name) {
+      const { data } = await db.from('user').select('id').ilike('name', textoExacto(updates.name)).limit(5);
+      if ((data ?? []).some((u: any) => u.id !== id)) {
+        throw new ConflictException('El nombre ya existe. Elige otro');
+      }
+    }
+    if (updates.email) {
+      const { data } = await db.from('user').select('id').ilike('email', emailExacto(updates.email)).limit(5);
+      if ((data ?? []).some((u: any) => u.id !== id)) {
+        throw new ConflictException('El email ya está registrado');
+      }
+    }
     if (body.password) {
       if (body.password.length < PASSWORD_MIN) {
         throw new BadRequestException(`La contraseña tiene que tener al menos ${PASSWORD_MIN} caracteres`);
