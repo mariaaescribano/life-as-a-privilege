@@ -508,7 +508,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con las 10 respondidas (`aceCompleto`).
 - **Botones / a dónde lleva:** prev → `/:exp/problema`. Next abre el cómic ACE (`ComicPasoModal`), que espera al guardado + `flushSaves` y lleva a `/:exp/ace-resultado`. `AyudaRecorrido pagina="ace"`.
 - **Condiciones y casos raros:** exp desconocido o sin pago → `/metodo/psicologia`. No comprueba que el paso 2 esté escrito.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.ace.respuestas` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -563,12 +563,12 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/psicologia/:experienciaId` — Línea de Vida (Paso 8)
 - **Componente:** `MetodoPsicologiaExperiencia` en `frontend/src/app/metodo/MetodoPsicologiaExperiencia.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
-- **Qué hace:** Primero pide la edad (1–120) en un popup. Con ella dibuja una línea de tiempo año a año, repartida en tramos con flechas, más un nodo opcional de gestación (−1). Cada año abre una «página de libro» con 8 preguntas evocadoras (listas de ítems) o se marca «Sin recuerdos». Se puede guardar sin cerrar o guardar y cerrar.
+- **Qué hace:** Primero pide la edad (1–120) en un popup. Con ella dibuja una línea de tiempo año a año, repartida en tramos con flechas, más un nodo opcional de gestación (−1). Cada año abre una «página de libro» con 8 preguntas evocadoras (listas de ítems) o se marca «Sin recuerdos» (pastilla bajo el título del año; marcarla guarda y cierra). NO hay botones de Guardar: todo se autoguarda (debounce 900ms, incluidos los borradores a medio escribir) y cerrar el popup (✕ o fuera) también guarda.
 - **Datos:** `GET /user/me`, `GET /metodo-psicologia/:userId`. Guarda con `PATCH /metodo-psicologia/:userId` `data.edad` y `data.anos[edad] = { respuestas: {key: string[]}, sinRecuerdos }` (el blob entero).
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 año recorrido (`aniosRecorridos >= 1`).
 - **Botones / a dónde lleva:** prev → `/:exp/des-resultado` (guarda y hace flush antes). Next: si la línea está completa abre el cómic de la familia; si no, un aviso con la opción «continuar igual» → cómic → `/:exp/familia`. `AyudaRecorrido pagina="linea-de-Vida"`.
 - **Condiciones y casos raros:** el prev salta a des-resultado (paso 6), no a Tu cerebro (paso 7): parece un resto de antes de añadir el cerebro. Las respuestas antiguas en forma de string se normalizan a lista (`itemsDeRespuesta`). La gestación no cuenta para el progreso.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.edad` y `data.anos` (gestación −1, respuestas en listas, «sin recuerdos») en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -580,19 +580,19 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo si al menos una persona tiene símbolo (`familiaConSimbolo`), con un tooltip distinto si el mapa está vacío.
 - **Botones / a dónde lleva:** prev → `/:exp` (Línea de Vida). Next hace flush y abre el cómic de la herencia → `/:exp/genograma`. `AyudaRecorrido pagina="familia"`.
 - **Condiciones y casos raros:** si `experienciaId` no existe devuelve `null` (pantalla vacía, sin redirigir). Espera a que carguen todas las fotos del mapa antes de pintarse.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.genograma` (personas, posición y símbolos) en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
 ## `/metodo/psicologia/:experienciaId/genograma` — Genograma (Paso 10)
 - **Componente:** `MetodoPsicologiaGenograma` en `frontend/src/app/metodo/MetodoPsicologiaGenograma.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + `useMapaFamilia`).
-- **Qué hace:** El mismo mapa de familia, ya completo. Al abrir la ficha de cada persona (`FichaPersona`) se escribe sobre ella con preguntas guía; también deja añadir, editar y eliminar personas.
+- **Qué hace:** La familia como TARJETAS en rejilla (3-4 por fila en ordenador; 1-2 en pantallas pequeñas): foto a la izquierda con el rol al lado (y el nombre debajo), rayita, sus personajes/animales y un botón «Rellenar». Rellenar abre la ficha (`FichaPersona`) con las preguntas guía: todo se autoguarda y el botón «Hecho ✓» abajo a la derecha cierra (control explícito de guardado). Ya no se pintan aquí los «+» del mapa: colocar/añadir familia se hace en «Tu familia»; desde la ficha se puede editar y quitar.
 - **Datos:** `useMapaFamilia` (mismos endpoints que Tu familia). Guarda `data.genograma[i].notas[key]` y la foto vía `POST /upload/genograma/:userId`.
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 persona.
 - **Botones / a dónde lleva:** prev → `/:exp/familia`; next → `/:exp/huellas` (los dos hacen flush). `AyudaRecorrido pagina="genograma"`.
 - **Condiciones y casos raros:** exp desconocido → `null`, sin redirección.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.genograma[i].notas` (y la URL de la foto) en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -604,7 +604,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 huella marcada.
 - **Botones / a dónde lleva:** prev → `/:exp/genograma`. Next abre el cómic de las creencias → flush → `/:exp/nudos`. `AyudaRecorrido pagina="huellas"`.
 - **Condiciones y casos raros:** la huella se guarda por TEXTO del ítem: si luego se edita ese recuerdo en la Línea de Vida, la marca se pierde (sin verificar si se migra).
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.anos[año].huellas` (marcar y desmarcar) en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -616,7 +616,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 nudo.
 - **Botones / a dónde lleva:** prev → `/:exp/huellas`; next (flush) → `/:exp/necesidades`. `AyudaRecorrido pagina="nudos"` (ejemplos en chips).
 - **Condiciones y casos raros:** no acepta duplicados (compara sin mayúsculas). Si `data.nudos` no es un array, se trata como vacío.
-- **Tests:** pendiente
+- **Tests:** el guardado, el borrado y la recuperación de `data.nudos` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -628,7 +628,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Dentro, cada necesidad pide la anterior (`necesidadDesbloqueada`). Next activo con las 18 respondidas.
 - **Botones / a dónde lleva:** prev → `/:exp/nudos`. Next espera al guardado + flush → `/:exp/huellas-nudos`. `AyudaRecorrido pagina="necesidades"` (la Orientación usa `NECESIDADES_INTRO`).
 - **Condiciones y casos raros:** ninguno más.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.necesidades` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -640,7 +640,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** las 18 necesidades respondidas; si no → `/:exp/necesidades` (replace). Next activo con al menos 1 herida.
 - **Botones / a dónde lleva:** prev (flush) → `/:exp/necesidades`; next (flush) → `/:exp/heridas-lista`. Columnas vacías → `/:exp/huellas`, `/:exp/necesidades` o `/:exp/nudos`. `AyudaRecorrido pagina="heridas"` (ejemplo estructurado).
 - **Condiciones y casos raros:** sin nombre, el título cae en «herida sin título» (i18n). Heridas antiguas sin `titulo` se normalizan a `""`. Enter en el campo de nombre guarda.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.heridas` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -652,7 +652,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin requisito (tampoco para seguir).
 - **Botones / a dónde lleva:** prev (flush) → `/:exp/huellas-nudos`. Next abre el cómic «narrar» → `/:exp/regulacion`. Botón del estado vacío → `/:exp/huellas-nudos`. `AyudaRecorrido pagina="heridas"`.
 - **Condiciones y casos raros:** se puede seguir con 0 heridas si se borran todas aquí, aunque el paso 14 las exigía.
-- **Tests:** pendiente
+- **Tests:** que borrar también se guarda (el blob entero) en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -664,7 +664,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin requisito.
 - **Botones / a dónde lleva:** prev → `/:exp/heridas-lista` (su etiqueta dice «Heridas», no «Tus heridas»). Next → `/:exp/integracion`. Los dos guardan y hacen flush antes. `AyudaRecorrido pagina="regulacion"`.
 - **Condiciones y casos raros:** datos antiguos con solo `regulacion.texto` se convierten en un único fragmento. Si el audio falla, se marca `audioError` y se desactivan los controles. El audio se pausa al salir.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.regulacion.fragmentos` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -676,7 +676,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 relación con contenido.
 - **Botones / a dónde lleva:** prev → `/:exp/regulacion`; next → `/:exp/dones` (los dos hacen flush de lo pendiente). Sin carta astral: el bloque de arquetipos sale con candado y un botón → `/metodo/astrologia`. Sin heridas: un botón → `/:exp/huellas-nudos`. `AyudaRecorrido pagina="integracion"`.
 - **Condiciones y casos raros:** si falla el GET de astrología, se sigue sin arquetipos (`allSettled`). Las constelaciones antiguas se blindan (arrays y strings por defecto). Los arquetipos salen del `data` de astrología, no de la carta calculada, así que pueden estar desfasados tras corregir la fecha.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.constelaciones` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -688,7 +688,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo cuando todas están respondidas o marcadas «sin ideas».
 - **Botones / a dónde lleva:** prev → `/:exp/integracion`; next → `/:exp/dones-espejo` (guardan + flush). `AyudaRecorrido pagina="dones"`.
 - **Condiciones y casos raros:** `sinIdeas` que no sea un array se ignora.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.dones.respuestas` y `data.dones.sinIdeas` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -700,7 +700,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 don escrito.
 - **Botones / a dónde lleva:** prev → `/:exp/dones`; next → `/:exp/miedos` (flush). Sin astrología, los arquetipos salen bloqueados con botón → `/metodo/astrologia`. `SaberMasModal` para cada arquetipo. `AyudaRecorrido pagina="dones-espejo"`.
 - **Condiciones y casos raros:** los dones antiguos se normalizan con `coercionarDones`. Aquí la astrología cuenta como hecha también si hay arquetipos en `data`, aunque no haya solicitud (en Relación solo cuenta la solicitud).
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.dones.lista` (sin pisar respuestas ni sinIdeas) en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -712,7 +712,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 miedo.
 - **Botones / a dónde lleva:** prev → `/:exp/dones-espejo` (sin flush). Next hace flush y abre el cómic del miedo → `/:exp/miedos-preguntas`. `AyudaRecorrido pagina="miedos"` (ejemplos).
 - **Condiciones y casos raros:** ninguno más.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.miedos` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -724,7 +724,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo cuando hay miedos y todos tienen todas las preguntas respondidas.
 - **Botones / a dónde lleva:** prev → `/:exp/miedos`; next → `/:exp/mapa` (flush). `AyudaRecorrido pagina="miedos-preguntas"`.
 - **Condiciones y casos raros:** si llega sin miedos, el next queda bloqueado para siempre hasta volver a Miedos.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.miedos[].respuestas` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -736,7 +736,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos una relación con algún bloque relleno.
 - **Botones / a dónde lleva:** prev → `/:exp/miedos-preguntas`. Next abre un popup de felicitación → cómic «compromiso» → `/:exp/compromiso` (flush). `AyudaRecorrido pagina="mapa"`.
 - **Condiciones y casos raros:** si no creó relaciones en el paso 17, aquí no hay nada que rellenar y no puede avanzar (sin verificar si sale un aviso de vacío). Las relaciones antiguas se blindan al cargar.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.constelaciones[].proteger|coste|verdadSana|recordatorio` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -748,7 +748,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con las dos respuestas escritas.
 - **Botones / a dónde lleva:** prev → `/:exp/mapa`; next → `/:exp/brujula` (guardan + flush). `AyudaRecorrido pagina="compromiso" ocultarCompania` (sin el botón de llamada).
 - **Condiciones y casos raros:** ninguno más.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.compromiso` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
@@ -760,7 +760,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada. Next activo con el mensaje escrito.
 - **Botones / a dónde lleva:** prev → `/:exp/compromiso` (guarda + flush). Next guarda y abre el cómic «síntesis» → flush → `/:exp/sintesis`. `AyudaRecorrido pagina="brujula" ocultarCompania`.
 - **Condiciones y casos raros:** en el next, `persistir` se lanza sin esperarlo, pero el cómic hace `flushSaves` antes de navegar.
-- **Tests:** pendiente
+- **Tests:** el guardado y la recuperación de `data.brujula.mensaje` en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` («Página por página»)
 
 ---
 
