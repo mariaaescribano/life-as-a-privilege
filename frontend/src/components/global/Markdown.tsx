@@ -19,6 +19,20 @@ type MarkdownProps = {
   bigger?: boolean | "xl";
 };
 
+/**
+ * Solo dejamos pasar direcciones que una web puede abrir de verdad: http(s),
+ * mailto/tel, rutas del propio sitio (/…) y anclas (#…). Una ruta local pegada
+ * sin querer («C:\…», «file:///…») devolvería null: pintarla como enlace solo
+ * da el «may not load or link to file:///» del navegador. Y de paso se corta
+ * `javascript:`, que en un href es una puerta a ejecutar código.
+ */
+function urlSegura(url: string): string | null {
+  const u = url.trim();
+  if (/^(https?:|mailto:|tel:)/i.test(u)) return u;
+  if (u.startsWith("/") || u.startsWith("#")) return u;
+  return null;
+}
+
 // ── Inline: **negrita** o __negrita__, *cursiva* o _cursiva_, `código`, [texto](url) ──
 function parseInline(str: string, color: string): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
@@ -49,10 +63,17 @@ function parseInline(str: string, color: string): React.ReactNode[] {
         </Box>,
       );
     } else if (m[12] !== undefined) {
+      const destino = urlSegura(m[13]);
+      // Un destino que no es abrible (ruta local, esquema raro) se queda como
+      // texto normal: mejor sin enlace que un enlace que el navegador bloquea.
       nodes.push(
-        <Link key={key++} href={m[13]} isExternal textDecoration="underline" color={color} _hover={{ opacity: 0.8 }}>
-          {m[12]}
-        </Link>,
+        destino ? (
+          <Link key={key++} href={destino} isExternal textDecoration="underline" color={color} _hover={{ opacity: 0.8 }}>
+            {m[12]}
+          </Link>
+        ) : (
+          m[12]
+        ),
       );
     }
     last = regex.lastIndex;
@@ -134,11 +155,11 @@ export function Markdown({ text, color = "white", bigger = false }: MarkdownProp
     // Imagen en su propia línea: ![alt](/ruta-en-public.jpg)
     // El archivo vive en el proyecto (frontend/public/…); aquí solo va la ruta.
     const img = /^!\[([^\]]*)\]\(([^)]+)\)$/.exec(trimmed);
-    if (img) {
+    if (img && urlSegura(img[2])) {
       blocks.push(
         <Box key={key++} my={{ base: 5, md: 7 }} display="flex" justifyContent="center">
           <Image
-            src={img[2]}
+            src={urlSegura(img[2])!}
             alt={img[1]}
             maxW="100%"
             borderRadius="lg"

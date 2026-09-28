@@ -274,7 +274,7 @@ export default function MetodoAstrologiaPdf() {
         </Flex>
       </Flex>
 
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
                      llamadaTitulo="Reserva tu llamada de astrología" />
       <IndiceAstrologia />
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />

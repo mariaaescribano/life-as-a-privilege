@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
@@ -80,9 +81,7 @@ export default function MetodoAyurvedaTarjetas() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
         if (!me.data?.ayurveda_suscrito) { navigate("/metodo/ayurveda"); return; }
 
         const res = await axios.get(`${API_URL}/ayurveda/${userId}`, {
@@ -254,7 +253,7 @@ export default function MetodoAyurvedaTarjetas() {
 
       {ilustracionesModal}
 
-      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
 
       <IndiceAyurveda />
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
@@ -16,7 +16,7 @@ import { ComicModal } from "../../components/metodo/ComicModal";
 import { useLeidos } from "../../hooks/useLeidos";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
-  API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
+  nutricionBg, nutricionNom, nutricionTxt, NutricionIcon,
 } from "../../GlobalVariables";
 import { ORIGEN_NUTRIENTES, ORIGEN_LEIDOS_KEY } from "../../components/metodo/comicsOrigenNutrientes";
 import { useComic } from "../../i18n/comics";
@@ -57,7 +57,7 @@ export default function MetodoNutricionOrigen() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }

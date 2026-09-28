@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -16,7 +16,6 @@ import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
-  API_URL,
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
@@ -60,9 +59,7 @@ export default function MetodoFisiologiaCursos() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
         if (!me.data?.fisiologia_suscrito) { navigate("/metodo/fisiologia"); return; }
         setNutriSuscrito(!!me.data?.nutricion_suscrito);
       } catch {

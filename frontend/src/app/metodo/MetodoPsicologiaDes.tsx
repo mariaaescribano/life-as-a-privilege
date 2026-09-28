@@ -22,6 +22,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
@@ -96,9 +97,7 @@ export default function MetodoPsicologiaDes() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
         if (!me.data?.psicologia_suscrito) { navigate("/metodo/psicologia", { replace: true }); return; }
 
         const psi = await axios.get(`${API_URL}/metodo-psicologia/${userId}`, {

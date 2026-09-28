@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -292,7 +293,7 @@ export default function MetodoCabalaSefira() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
 
         // Cargamos el progreso guardado (sefirot vistas + respuestas del test) y

@@ -471,7 +471,7 @@ export default function MetodoAstrologiaAspectos() {
       })()}
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo="Reserva tu llamada de astrología" />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

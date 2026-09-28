@@ -8,13 +8,13 @@ export interface LlamadaPago {
   tipo: LlamadaTipo;
   /** Nombre del producto tal y como aparece en Stripe. */
   nombre: string;
-  /** EUR en céntimos (20 € → 2000). */
+  /** EUR en céntimos (15 € → 1500). */
   precioCentimos: number;
 }
 
 export const LLAMADAS_PAGO: Record<LlamadaTipo, LlamadaPago> = {
   // La llamada suelta que se ofrece dentro de cada disciplina.
-  estandar: { tipo: 'estandar', nombre: 'Llamada de acompañamiento', precioCentimos: 2000 },
+  estandar: { tipo: 'estandar', nombre: 'Llamada de acompañamiento', precioCentimos: 1500 },
   // La de «¿Prefieres compañía?» del recorrido (AyudaRecorrido).
   compania: { tipo: 'compania', nombre: 'Llamada de acompañamiento del recorrido', precioCentimos: 6000 },
 };

@@ -6,6 +6,6 @@
 export type LlamadaTipo = "estandar" | "compania";
 
 export const PRECIO_LLAMADA: Record<LlamadaTipo, number> = {
-  estandar: 20,
+  estandar: 15,
   compania: 60,
 };

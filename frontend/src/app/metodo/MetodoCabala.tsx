@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { CabalaLoading } from "../../components/metodo/comicLoaders";
@@ -20,7 +20,7 @@ import { CABALA_TOTAL_PAGINAS } from "../../components/metodo/cabalaSefirot";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
@@ -54,9 +54,7 @@ export default function MetodoCabala() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
 
         // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
         // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace

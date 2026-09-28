@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { PedirOpinion } from "../../components/metodo/PedirOpinion";
@@ -17,7 +17,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
@@ -52,8 +52,7 @@ export default function MetodoAstrologiaCursos() {
     window.scrollTo({ top: 0, behavior: "auto" });
     const token = localStorage.getItem("token");
     if (!token) return;
-    axios
-      .get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
+    getUserMe()
       .then((res) => setPsicologiaSuscrito(!!res.data?.psicologia_suscrito))
       .catch(() => {});
   }, []);
@@ -234,7 +233,7 @@ export default function MetodoAstrologiaCursos() {
         error={pagoPsicoError}
       />
 
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
                      llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />

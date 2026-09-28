@@ -13,7 +13,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { PedirOpinion } from "../../components/metodo/PedirOpinion";
@@ -32,7 +32,6 @@ import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { experienciaById } from "../../components/metodo/psicologiaRecorrido";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
-  API_URL,
   neuropsicologiaBg,
   neuropsicologiaNom,
   neuropsicologiaTxt,
@@ -68,7 +67,7 @@ export default function MetodoPsicologiaCursos() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.psicologia_suscrito) { navigate("/metodo/psicologia", { replace: true }); return; }
         setAyurvedaSuscrito(!!me.data?.ayurveda_suscrito);
       } catch {
@@ -209,7 +208,7 @@ export default function MetodoPsicologiaCursos() {
         error={pagoError}
       />
 
-      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} precio={20} llamadaTitulo={t("metodo.psico.reservaLlamada")} />
+      <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} llamadaTitulo={t("metodo.psico.reservaLlamada")} />
 
       <IndiceRecorrido progresoKey="psicologia" registroKey="psicologia" />
       <SiteFooter />

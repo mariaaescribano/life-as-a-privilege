@@ -19,6 +19,7 @@ import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Input, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
@@ -150,7 +151,7 @@ export default function MetodoNutricionPrediabetes() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
         try {
           const r = await axios.get(`${API_URL}/metodo-nutricion/${userId}`, { headers: { Authorization: `Bearer ${token}` } });

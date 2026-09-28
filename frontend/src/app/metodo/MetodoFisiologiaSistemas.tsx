@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import { useReducedMotion } from "framer-motion";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
@@ -72,7 +73,7 @@ export default function MetodoFisiologiaSistemas() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.fisiologia_suscrito) { navigate("/metodo/fisiologia"); return; }
 
         // Cargamos los sistemas ya vistos para retomar el camino (checks).

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
@@ -14,7 +14,7 @@ import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useLeidos } from "../../hooks/useLeidos";
-import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
+import { nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { MITOS_LEIDOS_KEY } from "../../hardCoded/espacio/MitosNutricion";
 import { useMitosNutricion } from "../../hardCoded/espacio/useMitosNutricion";
 
@@ -53,7 +53,7 @@ export default function MetodoNutricionMitos() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
         // No mostramos la página hasta que TODAS las fotos de los mitos estén

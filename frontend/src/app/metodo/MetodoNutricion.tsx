@@ -5,7 +5,7 @@ import {
   Box, Flex, Text,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonAviso } from "../../components/metodo/BotonAviso";
@@ -23,7 +23,6 @@ import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import {
-  API_URL,
   nutricionBg,
   nutricionNom,
   nutricionTxt,
@@ -60,9 +59,7 @@ export default function MetodoNutricion() {
     (async () => {
       try {
 
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
 
         // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
         // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace

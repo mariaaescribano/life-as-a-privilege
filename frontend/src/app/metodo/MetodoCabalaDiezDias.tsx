@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -15,7 +15,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { useSefirot, useTestCabala } from "../../components/metodo/cabalaEn";
 import { useT, TextoRico } from "../../i18n";
-import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
+import { cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
@@ -65,7 +65,7 @@ export default function MetodoCabalaDiezDias() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
       } catch { navigate("/metodo/cabala"); return; }
       finally { setLoading(false); }

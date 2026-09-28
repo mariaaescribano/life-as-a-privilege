@@ -5,7 +5,7 @@ import {
   Box, Flex, Text,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonAviso } from "../../components/metodo/BotonAviso";
@@ -22,7 +22,6 @@ import { useExperiencias } from "../../components/metodo/psicologiaRecorrido.en"
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { Reveal } from "../../components/global/Reveal";
 import {
-  API_URL,
   neuropsicologiaBg,
   neuropsicologiaNom,
   neuropsicologiaTxt,
@@ -57,9 +56,7 @@ export default function MetodoPsicologia() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
         // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
         // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).

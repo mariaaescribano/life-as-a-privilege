@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
@@ -9,7 +9,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
-import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
+import { nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import {
   ORDEN_GRUPOS_MOLECULA, MACRO_COLOR, type Alimento, type Molecula,
@@ -182,7 +182,7 @@ export default function MetodoNutricionAlimento() {
     if (!a) { navigate("/metodo/nutricion/alimentos", { replace: true }); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
       } catch { navigate("/metodo/nutricion"); return; }
       finally { setLoading(false); }

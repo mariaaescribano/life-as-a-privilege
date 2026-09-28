@@ -430,7 +430,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/astrologia/llamada` — Llamada (Paso 7)
 - **Componente:** `MetodoAstrologiaLlamada` en `frontend/src/app/metodo/MetodoAstrologiaLlamada.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
-- **Qué hace:** Un texto de intro y el calendario `AgendarLlamada` para reservar y pagar una llamada de astrología (20 €).
+- **Qué hace:** Un texto de intro y el calendario `AgendarLlamada` para reservar y pagar una llamada de astrología (15 €).
 - **Datos:** los de `AgendarLlamada`: `GET /booking/taken`, `GET /user/me`, `POST /payment/llamada/checkout` (redirige a Stripe con `returnPath`), `GET /payment/llamada/verify?session_id=` al volver.
 - **Desbloqueo:** la página no tiene gate propio (no hay chequeo de sesión ni de carta). En el Índice se abre con el paso 5.
 - **Botones / a dónde lleva:** prev → `/metodo/astrologia/pdf`; next → `/metodo/astrologia/cursos`. «Ilustraciones», `IndiceAstrologia`.
@@ -769,7 +769,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Resumen de solo lectura de todo el recorrido, en secciones numeradas unidas por flechas: de dónde vengo (problemas), lo que cargué, lo que dejó huella, los nudos, lo que me faltó, mis heridas, cómo me relaciono (con los 4 bloques de integración), mis miedos, mis dones, mi carta y mi compromiso. Al final, dos botones de descarga en PDF: el mapa completo y la Línea de Vida. Tiene un botón flotante para volver arriba.
 - **Datos:** `GET /user/me`, `GET /metodo-psicologia/:userId`. Los PDF se generan en el navegador con `generatePsicologiaPdf(data)` y `generateLineaDeVidaPdf(data)`. No guarda nada.
 - **Desbloqueo:** sin gate de entrada ni requisito para seguir.
-- **Botones / a dónde lleva:** prev → `/:exp/brujula`; next → `/:exp/emociones`. Aquí no usa `AyudaRecorrido`: monta `BotonCompania` (llamada 20 €) e `IndiceRecorrido` directamente.
+- **Botones / a dónde lleva:** prev → `/:exp/brujula`; next → `/:exp/emociones`. Aquí no usa `AyudaRecorrido`: monta `BotonCompania` (llamada 15 €) e `IndiceRecorrido` directamente.
 - **Condiciones y casos raros:** los errores al generar el PDF se tragan en silencio. Las heridas o relaciones sin título caen en un texto por defecto.
 - **Tests:** pendiente
 
@@ -793,7 +793,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Cuadrícula con los cursos de psicología del catálogo (con uno solo sale una tarjeta grande) y `PedirOpinion` para dejar una reseña al final del recorrido.
 - **Datos:** `GET /user/me` (`psicologia_suscrito`, `ayurveda_suscrito`), `GET /cursos` (`useCursosData`).
 - **Desbloqueo:** sin requisito.
-- **Botones / a dónde lleva:** prev → `/:exp/emociones`. Next «Ayurveda →»: si no tiene Ayurveda pagada abre `PagoAyurvedaModal` (`irAPagoDisciplina("ayurveda")`, Payment Link de Stripe); si la tiene → `/metodo/ayurveda`. `PedirOpinion` → `/opiniones?volver=`. `BotonCompania` (llamada 20 €) e `IndiceRecorrido` directos.
+- **Botones / a dónde lleva:** prev → `/:exp/emociones`. Next «Ayurveda →»: si no tiene Ayurveda pagada abre `PagoAyurvedaModal` (`irAPagoDisciplina("ayurveda")`, Payment Link de Stripe); si la tiene → `/metodo/ayurveda`. `PedirOpinion` → `/opiniones?volver=`. `BotonCompania` (llamada 15 €) e `IndiceRecorrido` directos.
 - **Condiciones y casos raros:** mientras `ayurvedaSuscrito` no ha cargado, el botón navega directo y decide el guardia de pago.
 - **Tests:** pendiente
 
@@ -803,7 +803,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/ayurveda` — Ayurveda: entrada (Paso 1 del Mapa)
 - **Componente:** `MetodoAyurveda` en `frontend/src/app/metodo/MetodoAyurveda.tsx`
 - **Acceso:** con sesión (PrivateRoute). Exige pago de Ayurveda: GuardiaPagoRecorrido global (si no `ayurveda_suscrito` → `/home?entrar=ayurveda`) y además la página abre `PagoAyurvedaModal` si no está pagada.
-- **Qué hace:** Bienvenida con dos párrafos de introducción en un box con el fondo de la disciplina. Al entrar sale SIEMPRE el cómic del Origen (hinduismo) en `IntroComicModal` (saltable, no persiste). Botón «Aviso importante» abre un modal de aviso. Incluye botón Ilustraciones, BotonCompania (llamada 20 €) e Índice.
+- **Qué hace:** Bienvenida con dos párrafos de introducción en un box con el fondo de la disciplina. Al entrar sale SIEMPRE el cómic del Origen (hinduismo) en `IntroComicModal` (saltable, no persiste). Botón «Aviso importante» abre un modal de aviso. Incluye botón Ilustraciones, BotonCompania (llamada 15 €) e Índice.
 - **Datos:** `GET /user/me` (lee `ayurveda_suscrito`). Pago: `irAPagoDisciplina("ayurveda")` (Payment Link). No guarda nada.
 - **Desbloqueo:** ninguno aparte del pago (orden de disciplinas solo aconsejado). No desbloquea nada.
 - **Botones / a dónde lleva:** prev «← Psicología» → `/metodo/psicologia/linea-de-Vida/cursos`; next → `/metodo/ayurveda/test`. Cerrar el modal de pago → `/home`.

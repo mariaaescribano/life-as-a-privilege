@@ -5,7 +5,7 @@ import {
   Box, Flex, Text,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonAviso } from "../../components/metodo/BotonAviso";
@@ -22,7 +22,6 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import {
-  API_URL,
   ayurvedaBg,
   ayurvedaNom,
   ayurvedaTxt,
@@ -59,9 +58,7 @@ export default function MetodoAyurveda() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
         // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
         // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace
         // falta es tener esta disciplina desbloqueada (si no, sale su pago).
@@ -167,7 +164,7 @@ export default function MetodoAyurveda() {
         </Flex>
       </Flex>
 
-      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
       <IndiceAyurveda />
 
       <SiteFooter />

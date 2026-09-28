@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -17,7 +17,6 @@ import { Reveal } from "../../components/global/Reveal";
 import { useLeidos } from "../../hooks/useLeidos";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
-  API_URL,
   fisiologiaBg,
   fisiologiaNom,
   fisiologiaTxt,
@@ -185,7 +184,7 @@ export default function MetodoFisiologiaSonrisa() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.fisiologia_suscrito) { navigate("/metodo/fisiologia"); return; }
         // El espejo es LA imagen de la página: no se muestra a medio cargar.
         await precargarImagenes([ESPEJO_FOTO, ...ORGANOS_SONRISA.map((o) => o.foto)].map(encodeURI));

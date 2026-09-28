@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { CulturaLoading } from "../../components/metodo/comicLoaders";
@@ -11,7 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { PagoCulturaModal } from "../../components/metodo/PagoCulturaModal";
 import { Reveal } from "../../components/global/Reveal";
-import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
+import { culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 // Halo oscuro (verde profundo) para que el texto se lea sobre el fondo de Cultura.
@@ -35,9 +35,7 @@ export default function MetodoCultura() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
 
         // Sin prerrequisitos: el orden del Mapa es el ACONSEJADO, no obligatorio.
         // Se puede entrar aquí sin haber hecho las anteriores; lo único que hace

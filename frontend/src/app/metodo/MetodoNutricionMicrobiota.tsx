@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
@@ -15,7 +15,7 @@ import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal
 import { ComicHambreModal } from "../../components/metodo/ComicHambreModal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useLeidos } from "../../hooks/useLeidos";
-import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
+import { nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import { MICROBIOTA_BACTERIAS, MICROBIOTA_TARJETAS } from "../../hardCoded/espacio/MicrobiotaNutricion";
 import { useMicrobiotaBacterias, useMicrobiotaTarjetas } from "../../hardCoded/espacio/useMicrobiota";
 
@@ -66,7 +66,7 @@ export default function MetodoNutricionMicrobiota() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
         // No mostramos la página hasta que TODAS las fotos de las tarjetas estén

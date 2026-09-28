@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -14,7 +14,7 @@ import { useHistoriaCultura } from "../../components/metodo/useHistoriaCultura";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { apuntarCamino } from "../../utils/apuntarCamino";
-import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
+import { culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // Página de nivel 1 de una Historia de Cultura: su línea del tiempo de ERAS.
 // Sirve para cualquier Historia (la clave va en la ruta:
@@ -48,7 +48,7 @@ export default function MetodoCulturaHistoria() {
     if (!historia) { navigate(VOLVER_HISTORIAS, { replace: true }); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         // Gate de pago: sin suscripción a Cultura, a la portada (con el popup de pago).
         if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }
 

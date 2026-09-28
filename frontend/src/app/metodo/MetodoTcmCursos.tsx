@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { TcmLoading, TcmLoader } from "../../components/metodo/comicLoaders";
@@ -17,7 +17,7 @@ import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useT } from "../../i18n";
 import {
-  API_URL, tcmBg, tcmNom, tcmNomLink, tcmTxt, TCMIcon,
+  tcmBg, tcmNom, tcmNomLink, tcmTxt, TCMIcon,
 } from "../../GlobalVariables";
 
 export default function MetodoTcmCursos() {
@@ -35,7 +35,7 @@ export default function MetodoTcmCursos() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
       } catch {
         navigate("/metodo/tcm");

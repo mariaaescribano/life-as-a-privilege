@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
@@ -138,7 +139,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.ayurveda_suscrito) { navigate("/metodo/ayurveda"); return; }
 
         const r = await axios.get(`${API_URL}/metodo-ayurveda/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -412,7 +413,7 @@ export default function MetodoAyurvedaDoshaCuerpo() {
       {ilustracionesModal}
 
       <IndiceAyurveda />
-      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
 
       <SiteFooter />
     </Box>

@@ -15,6 +15,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text, Input } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
@@ -148,7 +149,7 @@ export default function MetodoPsicologiaHuellasNudos() {
         // localStorage), así que van EN PARALELO: una sola ida y vuelta en vez
         // de dos encadenadas.
         const [me, psi] = await Promise.all([
-          axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } }),
+          getUserMe(),
           axios.get(`${API_URL}/metodo-psicologia/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
         ]);
         if (!me.data?.psicologia_suscrito) { navigate("/metodo/psicologia", { replace: true }); return; }

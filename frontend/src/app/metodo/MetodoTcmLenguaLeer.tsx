@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useInView, useReducedMotion } from "framer-motion";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { TcmLoading } from "../../components/metodo/comicLoaders";
@@ -44,7 +45,7 @@ export default function MetodoTcmLenguaLeer() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
         const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         setData(res.data?.data ?? {});

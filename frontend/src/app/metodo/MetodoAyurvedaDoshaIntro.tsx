@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text, Textarea } from "@chakra-ui/react";
 import { Brain, HeartPulse, Repeat, Salad, Scale, Sparkles } from "lucide-react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
@@ -147,9 +148,7 @@ export default function MetodoAyurvedaDoshaIntro() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
         if (!me.data?.ayurveda_suscrito) { navigate("/metodo/ayurveda"); return; }
 
         // Prerrelleno: trae lo ya guardado (solo la pregunta final) para este dosha.
@@ -527,7 +526,7 @@ export default function MetodoAyurvedaDoshaIntro() {
       />
 
       <IndiceAyurveda />
-      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
 
       <SiteFooter />
     </Box>

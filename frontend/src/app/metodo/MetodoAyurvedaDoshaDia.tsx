@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { Check, Plus, X, Pencil, Clock, Download, Eye } from "lucide-react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import { generateDiaPdf } from "../../utils/generateDiaPdf";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -124,7 +125,7 @@ export default function MetodoAyurvedaDoshaDia() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.ayurveda_suscrito) { navigate("/metodo/ayurveda"); return; }
         setTienePsicologia(!!me.data?.psicologia_suscrito);
 
@@ -587,7 +588,7 @@ export default function MetodoAyurvedaDoshaDia() {
 
       {ilustracionesModal}
       <IndiceAyurveda />
-      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>
   );

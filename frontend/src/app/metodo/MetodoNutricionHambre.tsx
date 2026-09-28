@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
@@ -15,7 +15,7 @@ import { NutrienteIlustracionModal } from "../../components/metodo/NutrienteIlus
 import { HAMBRE_HOLISTICA, sinNegrita } from "../../components/metodo/hambreHolistica";
 import { useComic } from "../../i18n/comics";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
+import { nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 
 // ═════════════════════════════════════════════════════════════════════════
 // Apartado «El hambre» del recorrido de Nutrición. Va ENTRE la Microbiota y el
@@ -56,7 +56,7 @@ export default function MetodoNutricionHambre() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
         // No mostramos la página hasta que TODAS las fotos de los 4 boxes estén

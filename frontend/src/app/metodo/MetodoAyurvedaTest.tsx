@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
@@ -51,9 +52,7 @@ export default function MetodoAyurvedaTest() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
         // Solo accesible si ya se pagó Ayurveda; si no, de vuelta a la entrada
         // (que abre el pago). El prerrequisito de Psicología ya lo cubre la entrada.
         if (!me.data?.ayurveda_suscrito) { navigate("/metodo/ayurveda"); return; }
@@ -161,7 +160,7 @@ export default function MetodoAyurvedaTest() {
           </Flex>
         </Flex>
         {ilustracionesModal}
-        <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+        <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
         <IndiceAyurveda />
         <SiteFooter />
       </Box>
@@ -179,7 +178,7 @@ export default function MetodoAyurvedaTest() {
           ? { label: `${t("metodo.ayur.paso.resultado")} →`, onClick: () => navigate("/metodo/ayurveda/resultado") }
           : { label: `${t("metodo.ayur.paso.resultado")} →`, onClick: () => {}, disabled: true, disabledTooltip: "Completa el test para ver tu resultado." }}
       />
-      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
       <IndiceAyurveda />
     </>
   );

@@ -19,7 +19,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -36,7 +36,7 @@ import {
 import { tituloHistoria } from "../../components/metodo/culturaHistorias";
 import { disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
+import { culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // Mismo halo que el header de la página (regla de la casa: nada de sombras
 // oscuras propias, el brillo de la disciplina y punto).
@@ -61,7 +61,7 @@ export default function MetodoCulturaApuntes() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         // Gate de pago, igual que el resto del recorrido de Cultura: sin
         // suscripción se vuelve a la portada, donde vive el popup de pago.
         if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
@@ -119,7 +120,7 @@ export default function MetodoFisiologiaTema() {
     if (!tema) { navigate("/metodo/fisiologia/profundiza", { replace: true }); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.fisiologia_suscrito) { navigate("/metodo/fisiologia"); return; }
 
         // Cargamos las fichas ya leídas de este tema (para los checks).

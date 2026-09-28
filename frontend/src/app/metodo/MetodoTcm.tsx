@@ -6,6 +6,7 @@ import {
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { BotonAviso } from "../../components/metodo/BotonAviso";
@@ -61,9 +62,7 @@ export default function MetodoTcm() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
 
         // Resolvemos la última página de Ayurveda a partir del dosha del usuario.
         try {

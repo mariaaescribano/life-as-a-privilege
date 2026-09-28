@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useT } from "../../i18n";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
@@ -161,7 +162,7 @@ export default function MetodoNutricionNutriente() {
     if (!n) { navigate("/metodo/nutricion/macronutrientes", { replace: true }); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
         try {

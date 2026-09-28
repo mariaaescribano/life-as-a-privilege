@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -13,7 +13,7 @@ import { historiaVisual } from "../../components/metodo/culturaPortadas";
 import { tituloHistoria } from "../../components/metodo/culturaHistorias";
 import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { API_URL, culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
+import { culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 
 // Las 6 grandes Historias del recorrido de Cultura, en orden. La portada y el
 // emoji de reserva de cada una salen de `culturaPortadas` (compartido con la
@@ -49,7 +49,7 @@ export default function MetodoCulturaHistorias() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         // Gate de pago: sin suscripción a Cultura se vuelve a la portada (donde
         // vive el popup de pago). Blinda el acceso por URL directa.
         if (!me.data?.cultura_suscrito) { navigate("/metodo/cultura", { replace: true }); return; }

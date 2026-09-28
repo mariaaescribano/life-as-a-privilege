@@ -81,7 +81,7 @@ export const elMetodo = {
   "elMetodo.precio.cierre1.importe": "€30",
   "elMetodo.precio.cierre1.desc": "Full access to one discipline.",
   "elMetodo.precio.cierre2.nombre": "One-to-one session",
-  "elMetodo.precio.cierre2.importe": "€20 / hour",
+  "elMetodo.precio.cierre2.importe": "€15 / hour",
   "elMetodo.precio.cierre2.desc": "Optional one-to-one support.",
   "elMetodo.empezarPor": "Start for {precio}",
 

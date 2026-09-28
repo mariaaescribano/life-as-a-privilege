@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { PedirOpinion } from "../../components/metodo/PedirOpinion";
@@ -18,7 +18,6 @@ import { AppleLoader } from "../../components/metodo/AppleLoader";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
-  API_URL,
   nutricionBg,
   nutricionNom,
   nutricionNomLink,
@@ -62,9 +61,7 @@ export default function MetodoNutricionCursos() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
         setCabalaSuscrito(!!me.data?.cabala_suscrito);
       } catch {

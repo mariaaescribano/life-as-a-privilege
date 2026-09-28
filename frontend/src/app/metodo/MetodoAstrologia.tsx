@@ -243,17 +243,18 @@ export default function MetodoAstrologia() {
       // X, pero vuelve a aparecer). Por eso lo abrimos y precargamos siempre.
       const abrirIntro = true;
       let solicitado = false;
+      let trioPendiente: Promise<void> | null = null;
       try {
         const res = await axios.get(`${API_URL}/metodo-astrologia/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setEstado(res.data ?? null);
         solicitado = !!res.data?.solicitud_enviada_at;
-        // Con solicitud, el trío se pinta en esta misma página: se carga ya.
+        // Con solicitud, el trío se pinta en esta misma página. NO se espera
+        // aquí (sería otro viaje en serie): la petición se lanza ya y se
+        // espera junto a las precargas de las viñetas, que corren a la vez.
         if (solicitado) {
-          const uid = localStorage.getItem("userId")!;
-          const tk = localStorage.getItem("token")!;
-          await cargarTrio(uid, tk, res.data?.data);
+          trioPendiente = cargarTrio(userId, token, res.data?.data);
         }
         // Viene de «Corregir mis datos» en «Lo primero de tu carta»: se abre
         // directamente el formulario con sus datos puestos, y NADA de cómics
@@ -285,6 +286,8 @@ export default function MetodoAstrologia() {
         ...(solicitado
           ? CARTA_MAPA_IMGS.map((src) => precargarImagen(encodeURI(src)))
           : []),
+        // El trío (carta natal) baja a la vez que las viñetas, no después.
+        ...(trioPendiente ? [trioPendiente] : []),
       ]);
       setLoading(false);
       // Quien todavía no ha dado sus datos verá el cómic de la carta al
@@ -1179,7 +1182,7 @@ export default function MetodoAstrologia() {
         </Box>
       )}
 
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
                      llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />

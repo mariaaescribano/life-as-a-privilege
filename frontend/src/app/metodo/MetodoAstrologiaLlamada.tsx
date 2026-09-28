@@ -76,7 +76,6 @@ export default function MetodoAstrologiaLlamada() {
               color={astrologiaTxt}
               bgColor={astrologiaBg}
               disciplinaNom={astrologiaNom}
-              precio={20}
               titulo={t("metodo.astro.reservaLlamada")}
             />
           </Reveal>

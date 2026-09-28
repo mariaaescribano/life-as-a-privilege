@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useT, type ClaveTexto } from "../../i18n";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
@@ -15,7 +15,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
+import { nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
   ALIMENTOS_MACROS, RONDAS, TOPES,
   barajar, tinosDeRonda,
@@ -211,7 +211,7 @@ export default function MetodoNutricionMacros() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
         // Aquí se leía el récord guardado. Ya no hay récord: el juego no guarda
         // nada, así que tampoco hace falta pedir el `data` del recorrido.

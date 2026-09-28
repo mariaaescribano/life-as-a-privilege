@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import { Box, Flex } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -42,7 +43,7 @@ export default function MetodoCabalaArbol() {
     if (!token || !userId) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         // Acceso solo con Cábala pagada; si no, volvemos a la intro (que abre el pago).
         if (!me.data?.cabala_suscrito) { navigate("/metodo/cabala"); return; }
 

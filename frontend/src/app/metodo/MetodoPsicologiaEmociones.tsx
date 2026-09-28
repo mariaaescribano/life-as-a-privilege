@@ -18,7 +18,7 @@ import {
   Box, Flex, Text,
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
 } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import { useT } from "../../i18n";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -34,7 +34,6 @@ import { experienciaById } from "../../components/metodo/psicologiaRecorrido";
 import { EMOCIONES_TOTAL, type EmocionElegida } from "../../hardCoded/metodo/ruedaEmociones";
 import { glowHeader, glowPanel, azulBorde } from "../../components/metodo/psicologiaGlow";
 import {
-  API_URL,
   neuropsicologiaBg,
   neuropsicologiaNom,
   neuropsicologiaTxt,
@@ -64,7 +63,7 @@ export default function MetodoPsicologiaEmociones() {
 
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.psicologia_suscrito) { navigate("/metodo/psicologia", { replace: true }); return; }
       } catch {
         // silencioso

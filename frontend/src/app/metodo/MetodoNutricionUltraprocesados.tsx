@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { useT } from "../../i18n";
@@ -17,7 +17,7 @@ import { ComicIntegralModal } from "../../components/metodo/ComicIntegralModal";
 import { glowHeader, glowSuave, glowSuaveHover } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useLeidos } from "../../hooks/useLeidos";
-import { API_URL, nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
+import { nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
   SENALES_ETIQUETA, ULTRAPROCESADOS, ULTRAPROCESADOS_LEIDOS_KEY,
 } from "../../hardCoded/espacio/UltraprocesadosNutricion";
@@ -64,7 +64,7 @@ export default function MetodoNutricionUltraprocesados() {
     if (!userId || !token) { navigate("/welcome"); return; }
     (async () => {
       try {
-        const me = await axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
 
         // Las tarjetas no salen hasta tener sus fotos: si no, se rellenan a

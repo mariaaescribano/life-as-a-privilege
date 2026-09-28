@@ -62,9 +62,17 @@ export default function MetodoAstrologiaCartaAstral() {
 
     (async () => {
       try {
-        const estadoRes = await axios.get<{ solicitud_enviada_at?: string | null; link_carta?: string | null; retos?: { id: string }[] } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Las dos peticiones A LA VEZ, no una detrás de otra: son independientes
+        // y cada viaje al backend son cientos de ms. Antes esta espera en serie
+        // era la mitad del spinner de la página.
+        const [estadoRes, res] = await Promise.all([
+          axios.get<{ solicitud_enviada_at?: string | null; link_carta?: string | null; retos?: { id: string }[] } | null>(`${API_URL}/metodo-astrologia/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
         // Accesible en cuanto hay solicitud; los retos (o el PDF) desbloquean el "siguiente".
         if (!estadoRes.data?.solicitud_enviada_at) {
           navigate("/metodo/astrologia");
@@ -73,9 +81,6 @@ export default function MetodoAstrologiaCartaAstral() {
         const tieneRetos = Array.isArray(estadoRes.data?.retos) && estadoRes.data!.retos!.length > 0;
         setHayPdf(!!estadoRes.data?.link_carta || tieneRetos);
 
-        const res = await axios.get<CartaNatal | null>(`${API_URL}/metodo-astrologia/carta-natal/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
         let cartaCargada = res.data;
 
         // Cuando cambia el algoritmo (entrada nueva de Quirón, calibración de M0,
@@ -237,7 +242,7 @@ export default function MetodoAstrologiaCartaAstral() {
 
       {/* El popup «¿Qué es esto?» (botón flotante, encima del de la llamada)
           explica esta página del recorrido. Su texto vive en el diccionario. */}
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} precio={20}
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
                      llamadaTitulo={t("metodo.astro.reservaLlamada")}
                      queEsEsto={{ parrafos: [t("metodo.astro.arquetiposQueEs1"), t("metodo.astro.arquetiposQueEs2")] }} />
       <IndiceAstrologia />

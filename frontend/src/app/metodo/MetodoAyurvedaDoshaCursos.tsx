@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyurvedaLoading, AyurvedaLoader } from "../../components/metodo/comicLoaders";
@@ -17,7 +17,7 @@ import { Reveal } from "../../components/global/Reveal";
 import { useCursosData } from "../../data/cursosApi";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
-  API_URL, ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
+  ayurvedaBg, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt, AyurvedaIcon,
 } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import type { DoshaKey } from "../../hardCoded/metodo/doshaIntro";
@@ -59,7 +59,7 @@ export default function MetodoAyurvedaDoshaCursos() {
     const token = localStorage.getItem("token");
     if (!userId || !token) { navigate("/welcome"); return; }
     if (!doshaKey) { navigate("/metodo/ayurveda/tarjetas", { replace: true }); return; }
-    axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
+    getUserMe()
       .then((res) => {
         if (!res.data?.ayurveda_suscrito) navigate("/metodo/ayurveda");
         setTcmSuscrito(!!res.data?.tcm_suscrito);
@@ -200,7 +200,7 @@ export default function MetodoAyurvedaDoshaCursos() {
       />
 
       <IndiceAyurveda />
-      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} precio={20} llamadaTitulo="Reserva tu llamada" />
+      <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
       <SiteFooter />
     </Box>
   );

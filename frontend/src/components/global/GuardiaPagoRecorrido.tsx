@@ -11,10 +11,9 @@
 // Mientras comprueba, tapa la página con la pantalla de carga de la casa: así
 // no llega a verse la disciplina (ni su propio pago) antes de volver a /home.
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
-import { API_URL } from "../../GlobalVariables";
+import { getUserMe } from "../../api/userMe";
 import { LifeLoading } from "./LifeLoading";
 
 /** Prefijo de ruta → scope de la disciplina (el de `<scope>_suscrito`). */
@@ -56,8 +55,10 @@ export function GuardiaPagoRecorrido() {
 
     let vivo = true;
     setComprobando(true);
-    axios
-      .get(`${API_URL}/user/me`)
+    // Siempre FRESCO: un «no pagado» hay que re-preguntarlo (puede que acabe de
+    // pagar). De paso, esta petición deja la caché de getUserMe() recién puesta
+    // y las páginas de la disciplina ya no repiten el viaje.
+    getUserMe({ fresca: true })
       .then(({ data }) => {
         for (const [k, v] of Object.entries(data ?? {})) {
           if (k.endsWith("_suscrito") && v === true) pagadas.scopes.add(k.slice(0, -"_suscrito".length));

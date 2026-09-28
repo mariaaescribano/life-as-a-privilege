@@ -116,7 +116,7 @@ export const elMetodo = {
   "elMetodo.precio.cierre1.importe": "30 €",
   "elMetodo.precio.cierre1.desc": "Acceso completo a una disciplina.",
   "elMetodo.precio.cierre2.nombre": "Sesión individual",
-  "elMetodo.precio.cierre2.importe": "20 € / hora",
+  "elMetodo.precio.cierre2.importe": "15 € / hora",
   "elMetodo.precio.cierre2.desc": "Acompañamiento opcional.",
   /** Botón que se repite tras el precio y tras «¿Por dónde empiezo?». */
   "elMetodo.empezarPor": "Empezar por {precio}",
