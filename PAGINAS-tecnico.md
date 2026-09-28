@@ -483,8 +483,8 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Datos:** `GET /user/me` (`psicologia_suscrito`). El pago va por el Payment Link de Stripe (`irAPagoDisciplina("psicologia")`). No guarda nada.
 - **Desbloqueo:** sin requisito. Abre el paso 2.
 - **Botones / a dónde lleva:** prev «← Astrología» → `/metodo/astrologia/cursos`. Next → `/metodo/psicologia/linea-de-Vida/problema` (si no ha pagado, abre el pago). `AyudaRecorrido pagina="inicio"` (Índice, Orientación con curso, llamada).
-- **Condiciones y casos raros:** si falla `/user/me` → `/home`. La única experiencia es `linea-de-Vida` (el `:experienciaId` de todas las rutas siguientes).
-- **Tests:** pendiente
+- **Condiciones y casos raros:** si falla `/user/me` → `/home`. La única experiencia es `linea-de-Vida` (el `:experienciaId` de todas las rutas siguientes). El cómic sale SIEMPRE al entrar (useIntroComic no persiste nada). Tras pagar, el popup de éxito del Home solo cierra: la entrada aquí es siempre decisión de la persona.
+- **Tests:** el arranque (pagar solo desbloquea, cómic siempre, el problema se guarda) en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` y `backend/src/payment/payment.service.spec.ts`
 
 ---
 
@@ -496,7 +496,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin requisito de entrada. Para seguir hay que escribir algo (`puedeAvanzarPsicologia` caso 2).
 - **Botones / a dónde lleva:** prev → `/metodo/psicologia` (guarda y hace flush antes). Next → `/:exp/ace` (guarda + `flushSaves`), desactivado si el texto está vacío. `AyudaRecorrido pagina="problema"` (ejemplos de problemas).
 - **Condiciones y casos raros:** `experienciaId` desconocido o sin pago → `/metodo/psicologia` (replace). Sin sesión → `/welcome`.
-- **Tests:** pendiente
+- **Tests:** `backend/src/metodoPsicologia/metodoPsicologia.spec.ts` (el problema se guarda y se reencuentra, vale la última versión, contrato del blob entero, solo `data`/`intro_visto` desde fuera)
 
 ---
 
@@ -532,7 +532,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** sin gate de entrada (no comprueba el ACE). Next activo con las 28 respondidas (`desCompleto`).
 - **Botones / a dónde lleva:** prev → `/:exp/ace-resultado`. Next abre el cómic de la disociación (`ComicPasoModal`), que espera al guardado + `flushSaves` → `/:exp/des-resultado`. `AyudaRecorrido pagina="des"`.
 - **Condiciones y casos raros:** al cargar solo acepta respuestas numéricas y las limita a 0–100 (0 cuenta como respondida). Exp desconocido o sin pago → `/metodo/psicologia`.
-- **Tests:** pendiente
+- **Tests:** el guardado del resultado (`PUT /des`: normalizado, banda válida, fecha del resultado) en `backend/src/metodoPsicologia/metodoPsicologia.spec.ts`
 
 ---
 
@@ -2072,7 +2072,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/admin/diario/:userId` — Diario de terapias de una persona
 - **Componente:** `AdminDiario` en `frontend/src/app/admin/AdminDiario.tsx`
 - **Acceso:** admin (AdminRoute + `useAdminGuard`).
-- **Qué hace:** el mismo calendario que `/diario` (`CalendarioDiario`), con borradores incluidos: un puntito por disciplina en cada día con notas, y tocar un día enseña SOLO sus notas (con estado BORRADOR / PUBLICADA · LEÍDA / SIN LEER y opciones de editar, publicar o volver a borrador, y borrar). Se abre por el último día con notas. Debajo, el formulario para escribir otra nota más (siempre se puede seguir escribiendo): fecha (sincronizada con el calendario en los dos sentidos), disciplina opcional —que tiñe el formulario y la nota de su color—, título opcional, «Qué trabajamos» (obligatorio, admite `**negrita**`, `*cursiva*` y `---` rayita) y «Por qué te digo esto». Se guarda como borrador o se publica; lo publicado lo lee la persona en `/diario`.
+- **Qué hace:** el mismo calendario que `/diario` (`CalendarioDiario`), con borradores incluidos: un puntito por disciplina en cada día con notas, y tocar un día enseña SOLO sus notas (con estado BORRADOR / PUBLICADA · LEÍDA / SIN LEER y opciones de editar, publicar o volver a borrador, y borrar). Cada nota (y el formulario al elegir disciplina) lleva de fondo la FOTO de su disciplina con su velo, no el color plano; en Astrología, el cielo con el velo ligero. Se abre por el último día con notas. Debajo, el formulario para escribir otra nota más (siempre se puede seguir escribiendo): fecha (sincronizada con el calendario en los dos sentidos), disciplina opcional —que tiñe el formulario y la nota de su color—, título opcional, «Qué trabajamos» (obligatorio, admite `**negrita**`, `*cursiva*` y `---` rayita) y «Por qué te digo esto». Se guarda como borrador o se publica; lo publicado lo lee la persona en `/diario`.
 - **Datos:** `GET /user/:userId` (Jwt + **OwnerGuard**, no AdminGuard) para el nombre y el email. `GET /diario/admin/:userId`, `POST /diario/admin/:userId`, `PATCH /diario/admin/:userId/:entradaId` y `DELETE /diario/admin/:userId/:entradaId` (todos Jwt + AdminGuard), vía `api/diario.ts`.
 - **Botones / a dónde lleva:** flechas ← → del calendario cambian el mes; un día del calendario selecciona sus notas y pone esa fecha en el formulario; teclear la fecha en el formulario mueve el calendario. «Publicar», «Guardar como borrador», «Cancelar y escribir una nueva». «Borrar» pide `window.confirm`. «← Volver a los usuarios» → `/admin/usuarios`. Publicar no manda correo; solo aparece la marca «nuevo» en su Home.
 - **Condiciones y casos raros:** si el `userId` no existe, la cabecera sale vacía, pero el formulario deja intentar crear entradas (dependerá de la FK, sin verificar). Si falla la carga inicial, la lista sale vacía sin error. Tras guardar, la vista salta al día de la nota recién guardada.

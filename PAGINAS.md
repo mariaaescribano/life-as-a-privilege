@@ -220,6 +220,20 @@ Casos que están cubiertos:
 
 ---
 
+## EMPEZAR PSICOLOGÍA (el cómic y su problema)
+
+1. Paga Psicología (ver COMPRAR DISCIPLINA). El popup de «pago realizado» **solo desbloquea**: se queda en el Mapa, y es libre de entrar en ese momento o no. Entra cuando quiera, pinchando su círculo.
+2. Al entrar sale **siempre** el cómic de introducción. Se puede saltar con la X, pero la próxima vez que entre vuelve a salir.
+3. Detrás del cómic está la primera página, «Vuelve a ti» (paso 1 de 27): la introducción, la recomendación de no hacer este mapa en solitario y el aviso importante. Pulsa «El problema →».
+   - Si llega aquí sin haber pagado (por un enlace guardado), no ve el contenido: se le abre el box de pago de Psicología.
+4. En el paso 2 escribe **su problema actual** en el cuadro de texto, y **se guarda en su recorrido**: si recarga, cambia de página o vuelve otro día, su texto sigue ahí. Corregirlo guarda la última versión.
+   - Sin escribir nada no se puede pasar al ACE (paso 3). Al avanzar, el texto se guarda antes de cambiar de página.
+5. A partir de ahí sigue solo el recorrido de 27 pasos (ACE, línea de la vida, genograma… hasta Cursos).
+
+**Probado** (`backend/src/metodoPsicologia/metodoPsicologia.spec.ts`): el problema se guarda, se reencuentra al volver y vale la última versión; el blob del recorrido se guarda entero tal como lo manda la página (el contrato queda fijado); desde fuera solo se pueden tocar el progreso y el cómic visto, ninguna otra columna; y el resultado del test DES-II (se normaliza, rechaza bandas inventadas, y su fecha dice cuándo salió ese resultado, no cuándo se abrió la página). Que pagar solo desbloquea ya estaba probado en el spec de pagos, y el popup hace igual en las 8 disciplinas.
+
+---
+
 ## RECUPERAR CONTRASEÑA
 
 1. En Iniciar sesión pulsa «¿Has olvidado tu contraseña?».
