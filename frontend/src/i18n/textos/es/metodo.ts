@@ -384,11 +384,7 @@ export const metodo = {
   // ── El tercer cómic de la entrada: «¿Qué es una carta astral?» ──
   // ── Volver a los datos desde «Lo primero de tu carta» ──
   "metodo.astro.comicPlanetas": "Planetas",
-  "metodo.astro.corregirAviso": "¿Crees que hay algún error? Casi siempre es la hora o el lugar de nacimiento.",
-  "metodo.astro.corregirDatos": "Corregir mis datos de nacimiento",
   "metodo.astro.queEsCarta": "¿Qué es una carta astral?",
-  "metodo.astro.queEsCartaResumen": "Dónde están tus mayores capacidades, tus dones, tus dificultades y cuál es el propósito de tu Vida. También tus heridas más profundas y dónde fueron creadas.",
-  "metodo.astro.queEsCartaLeer": "Leerlo de nuevo",
   "metodo.astro.cambiar": "Cambiar",
   "metodo.astro.seguroDatos": "¿Seguro que estos son tus datos?",
   "metodo.astro.volverRevisar": "Volver a revisar",

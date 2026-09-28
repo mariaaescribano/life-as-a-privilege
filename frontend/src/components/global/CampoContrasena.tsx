@@ -60,10 +60,13 @@ interface Props {
   value: string;
   onChange: (valor: string) => void;
   isDisabled?: boolean;
-  /** Qué hacer al pulsar Enter dentro del campo (enviar el formulario). */
+  /** Qué hacer al pulsar Enter dentro del campo (enviar el formulario, o
+   *  saltar al campo siguiente con `inputRef` del otro). */
   onEnter?: () => void;
   /** Pista para el gestor de contraseñas: "current-password" | "new-password". */
   autoComplete?: string;
+  /** Para que la página pueda ENFOCAR este campo (el salto con Enter). */
+  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 export function CampoContrasena({
@@ -73,6 +76,7 @@ export function CampoContrasena({
   isDisabled,
   onEnter,
   autoComplete,
+  inputRef,
 }: Props) {
   const [visible, setVisible] = useState(false);
   const t = useT();
@@ -93,6 +97,7 @@ export function CampoContrasena({
 
       <InputGroup size="lg">
         <Input
+          ref={inputRef}
           type={visible ? "text" : "password"}
           value={value}
           onChange={(e) => onChange(e.target.value)}

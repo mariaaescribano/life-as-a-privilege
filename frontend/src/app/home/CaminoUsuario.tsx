@@ -210,8 +210,8 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
                     <DisciplinaBgLayer nom={cara.nom} borderRadius="lg" overlay="rgba(8,13,30,0.22)" />
                   )}
 
-                  {/* Icono, a la izquierda, suelto sobre la acuarela (sin cajita):
-                      lo separa del fondo su propia sombra. */}
+                  {/* Icono, a la izquierda, suelto sobre la acuarela: sin cajita
+                      y sin sombra, solo el trazo con el color de su disciplina. */}
                   <Box
                     position="relative"
                     zIndex={1}
@@ -221,11 +221,6 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
                     justifyContent="center"
                     transition="transform 0.2s ease"
                     _groupHover={{ transform: "scale(1.12)" }}
-                    style={{
-                      filter: completa
-                        ? `drop-shadow(0 1px 3px rgba(0,0,0,0.75)) drop-shadow(0 0 8px ${cara.txt}aa)`
-                        : "drop-shadow(0 1px 3px rgba(0,0,0,0.75))",
-                    }}
                   >
                     <Icon size={{ base: "28px", md: "28px" }} />
                   </Box>

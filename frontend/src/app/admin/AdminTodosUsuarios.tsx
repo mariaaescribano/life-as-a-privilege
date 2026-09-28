@@ -7,10 +7,12 @@
 //
 //   · «Sesiones» — marcar que está en terapia conmigo. Con la marca encendida
 //     sale el botón «Diario de terapias» (el diario que también lee en /diario).
+//   · «Intereses» — qué recursos gratuitos ha abierto (/admin/actividad).
 //   · «Entrar como» — abrir la web con su sesión de verdad y salir cuando quiera
 //     (la barra de abajo a la derecha).
-//   · Desplegar la ficha (▸) — regalar o cerrar disciplinas, abrir su contenido,
-//     ver sus intereses y borrar la cuenta CON TODOS sus datos.
+//   · Desplegar la ficha (▸) — SOLO regalar o cerrar disciplinas y borrar la
+//     cuenta CON TODOS sus datos. Ver o editar su contenido no vive aquí: eso
+//     se hace desde /admin (la rejilla de disciplinas).
 //
 // Esta página absorbió /admin/accesos (regalar y borrar viven ahora aquí); esa
 // ruta quedó comentada en App.tsx con el código conservado.
@@ -30,7 +32,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
-import { DISCIPLINAS_PAGO, disciplinaByKey } from "../../data/adminDisciplinas";
+import { DISCIPLINAS_PAGO } from "../../data/adminDisciplinas";
 import { API_URL } from "../../GlobalVariables";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 import BotonEntrarComo from "./BotonEntrarComo";
@@ -393,11 +395,33 @@ export default function AdminTodosUsuarios() {
                             </Box>
                           )}
 
+                          {/* Qué recursos gratuitos ha abierto: va en la fila,
+                              como acción propia, no dentro de la ficha. */}
+                          <Box
+                            as="button"
+                            onClick={() => navigate(`/admin/actividad/${u.id}`, { state: { name: u.name, email: u.email } })}
+                            px={3}
+                            py="4px"
+                            borderRadius="full"
+                            bg="rgba(255,255,255,0.06)"
+                            border="1px solid rgba(255,255,255,0.35)"
+                            color="rgba(255,255,255,0.9)"
+                            fontSize="xs"
+                            fontWeight="600"
+                            whiteSpace="nowrap"
+                            cursor="pointer"
+                            transition="all 0.15s"
+                            title={`Qué recursos gratuitos ha abierto ${u.name}`}
+                            _hover={{ bg: "rgba(255,255,255,0.14)", borderColor: "white", transform: "translateY(-1px)" }}
+                          >
+                            Intereses
+                          </Box>
+
                           {/* Ver la web como esa persona: su sesión de verdad, con
                               la barra de abajo a la derecha para volver. */}
                           <BotonEntrarComo usuario={u} />
 
-                          {/* desplegar la ficha: regalar, contenido, intereses, borrar */}
+                          {/* desplegar la ficha: regalar/quitar y borrar */}
                           <Box
                             as="button"
                             onClick={() => setAbierto(desplegado ? null : u.id)}
@@ -410,7 +434,7 @@ export default function AdminTodosUsuarios() {
                             fontSize="sm"
                             cursor="pointer"
                             transition="all 0.15s"
-                            title={desplegado ? "Cerrar la ficha" : "Abrir la ficha (regalar, contenido, borrar)"}
+                            title={desplegado ? "Cerrar la ficha" : "Abrir la ficha (regalar, quitar, borrar)"}
                             _hover={{ bg: "rgba(255,255,255,0.16)", borderColor: "white" }}
                           >
                             {desplegado ? "▾" : "▸"}
@@ -470,56 +494,6 @@ export default function AdminTodosUsuarios() {
                             <BotonFicha ocupado={ocupado} onClick={() => revocar(u)} peligro>
                               Quitar acceso
                             </BotonFicha>
-                          </Flex>
-
-                          {/* su contenido y sus intereses */}
-                          <Flex gap={2} wrap="wrap" align="center" mb={1}>
-                            <Text color="rgba(255,255,255,0.6)" fontSize="xs" letterSpacing="0.1em" textTransform="uppercase" mr={1}>
-                              Su información
-                            </Text>
-                            {suyas.map((d) => {
-                              const admin = disciplinaByKey(d.adminKey);
-                              if (!admin) return null;
-                              return (
-                                <Box
-                                  key={d.scope}
-                                  as="button"
-                                  onClick={() => navigate(`/admin/${d.adminKey}/${u.id}`)}
-                                  px={3}
-                                  py="3px"
-                                  borderRadius="full"
-                                  bg="rgba(255,255,255,0.06)"
-                                  border={`1px solid ${d.txt}88`}
-                                  color={d.txt}
-                                  fontSize="xs"
-                                  fontWeight="600"
-                                  cursor="pointer"
-                                  transition="all 0.15s"
-                                  title={`Abrir ${d.nombre} de ${u.name}`}
-                                  _hover={{ borderColor: d.txt, transform: "translateY(-1px)" }}
-                                >
-                                  {d.nombre}
-                                </Box>
-                              );
-                            })}
-                            <Box
-                              as="button"
-                              onClick={() => navigate(`/admin/actividad/${u.id}`, { state: { name: u.name, email: u.email } })}
-                              px={3}
-                              py="3px"
-                              borderRadius="full"
-                              bg="rgba(255,255,255,0.06)"
-                              border="1px solid rgba(255,255,255,0.4)"
-                              color="white"
-                              fontSize="xs"
-                              fontWeight="600"
-                              cursor="pointer"
-                              transition="all 0.15s"
-                              title={`Qué recursos gratuitos ha abierto ${u.name}`}
-                              _hover={{ borderColor: "white", transform: "translateY(-1px)" }}
-                            >
-                              Intereses
-                            </Box>
                           </Flex>
 
                           {/* Borrar la cuenta: separado del resto, porque no es

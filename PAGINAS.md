@@ -90,6 +90,119 @@ Los textos entre «comillas» son los que ve la persona, tal cual.
 
 ---
 
+## COMPRAR DISCIPLINA
+
+1. En su Mapa (`/home`) las disciplinas sin pagar se ven a media luz. Pulsa el círculo de la que quiere.
+2. Se abre el box de pago, vestido con los colores y la foto de esa disciplina:
+   - El ordinal («Primera disciplina», «Séptima disciplina»…) y un resumen de dos líneas.
+   - El precio, «30 €», con el precio de antes tachado y «Ahora a precio reducido» (solo si hay precio tachado).
+   - La casilla «Acepto las condiciones de compra» (el enlace abre `/terminos` en otra pestaña sin marcar la casilla).
+   - Botones «Pagar» y «Ahora no», y debajo «Pago seguro a través de Stripe».
+   - Sin marcar la casilla, «Pagar» está apagado y no hace nada.
+3. Al pulsar «Pagar» va a la página de pago de Stripe. Todas las disciplinas cuestan lo mismo y pasan por el mismo enlace de pago.
+4. Al terminar el pago vuelve a su Mapa y sale el popup:
+   > **Pago de {disciplina} realizado**
+   > Ya puedes acceder.
+   > [Aceptar]
+   Al pulsar «Aceptar» entra directamente en la disciplina.
+5. Le llega el **correo «{Disciplina} ya te espera en tu Mapa»** (texto abajo). A ti te llega el aviso «Ha pagado {disciplina}: {email}».
+6. La disciplina queda encendida para siempre en su Mapa. Los dos correos salen solo la primera vez: recargar la página o repetir la verificación no los repite.
+
+Casos que están cubiertos:
+- Si intenta entrar en una disciplina sin pagar (por ejemplo con un enlace guardado), no entra: vuelve al Mapa con el box de pago de esa disciplina ya abierto.
+- El desbloqueo llega por dos caminos a la vez (la vuelta a la web y el aviso que Stripe manda al servidor): aunque cierre el navegador justo después de pagar, la disciplina se desbloquea igual.
+- Nadie puede desbloquearse una disciplina con el pago de otra persona, ni con un pago que se quedó pendiente (transferencia sin completar).
+- No hay orden obligatorio: se puede comprar cualquiera, en el orden que se quiera.
+
+**Probado:** todo el flujo de dinero (`backend/src/payment/payment.service.spec.ts`): webhook de Stripe con firma, los dos caminos de verificación, que los correos salen solo la primera vez, el regalo de cumpleaños (15 €, token de 7 días, una vez al año), la llamada de pago y los libros. Y los cierres de puerta (`backend/src/auth/guards.spec.ts`): nadie toca lo de otra persona, la admin solo con la doble llave.
+
+### Correo · «{Disciplina} ya te espera en tu Mapa»
+
+> **Qué bonito que empieces con {disciplina}**
+>
+> Muy buenas, **{nombre}**.
+>
+> Ya está todo listo: **{disciplina}** te espera abierta en tu Mapa.
+>
+> Me hace mucha ilusión que hayas elegido esta, y creo que te va a sentar bien. Ve sin prisa: poco a poco irás notando cómo el conocimiento {de esta disciplina} se te va colando en el día a día — no para saber más, sino para entenderte un poco mejor.
+>
+> Y si en algún momento te apetece que lo hablemos, aquí estoy: una duda, un atasco, o simplemente contarme cómo lo llevas.
+>
+> [Entrar en mi Mapa] [Hablamos cuando quieras]
+>
+> Un abrazo,
+> María
+
+---
+
+## PEDIR LA CARTA ASTRAL (empezar Astrología)
+
+1. Entra en Astrología desde su Mapa (hace falta tenerla pagada). Al entrar salen siempre dos cómics seguidos: el del Origen y «La Historia de la Astrología».
+2. Rellena sus datos de nacimiento: día, mes, año, hora, país, lugar (ciudad) y región/provincia.
+3. Pulsa «Leer carta →». Sale el popup «¿Seguro que estos son tus datos?» con sus datos tal cual y el botón «Volver a revisar» por si algo está mal.
+4. Al confirmar, la carta se calcula al momento y sale el popup:
+   > Tu carta está en proceso. Yo misma leeré tu carta. Mientras tanto, puedes continuar para ver tus arquetipos.
+5. Le llega el **correo «Tu carta ha sido registrada correctamente»** (texto abajo), con la caja de sus datos. A ti te llega la solicitud con sus datos, para escribir la lectura.
+6. En la misma página aparecen: la chapa con sus datos guardados (botón «Cambiar»), el box «¿Qué es una carta astral?» (tercer cómic) y el trío **Sol · Luna · Ascendente**. Hasta que no lee los tres, el botón «Arquetipos →» no se activa («Lee los tres para continuar»).
+7. **Si corrige sus datos** (con «Cambiar») y los reenvía: la carta se recalcula con los nuevos, el popup dice «He recibido tus datos corregidos. Tu carta se ha vuelto a calcular con ellos y yo misma la leeré de nuevo…» y el correo es el de **«Tus datos corregidos han quedado registrados»**. Lo que ya llevaba leído no se pierde.
+8. Tú escribes la lectura en el panel (puntos clave, casas, aspectos) y avisas **a mano** con los botones:
+   - «En proceso» → **correo «Tu carta está en proceso de ser leída»**.
+   - «Leída» → **correo «Tu carta ya ha sido leída»**, que lleva a Puntos clave. El panel se niega a mandarlo si no hay ningún punto clave guardado (llevaría a una puerta cerrada).
+   - Guardar la lectura no manda nada: solo avisan los botones.
+
+Casos que están cubiertos:
+- Si el buscador de lugares falla al corregir solo la hora (mismo lugar), se aprovechan las coordenadas de antes y no se queda sin carta.
+- Si falla con un lugar nuevo, los datos se guardan igual (la carta queda pendiente de calcular).
+- Nadie puede abrirse pasos ni ponerse el enlace de la lectura por su cuenta: desde fuera solo se puede tocar el progreso (leídos y cómics vistos), y siempre se fusiona con lo guardado, nunca se pisa.
+- Corregir el nacimiento desde tu panel recalcula la carta **sin** mandar correos y **sin** tocar la puerta del recorrido.
+- En la rueda, mover a mano el Nodo Norte recoloca el Sur justo enfrente (180°).
+
+**Probado:** todo lo de arriba (`backend/src/metodoAstrologia/metodoAstrologia.spec.ts`, 26 tests).
+
+### Correo · «Tu carta ha sido registrada correctamente»
+
+> **Tu carta ha sido registrada correctamente**
+>
+> Hola **{nombre}**, tus datos de nacimiento ya están guardados y tu carta está calculada. Estos son los datos con los que se ha hecho:
+>
+> | Fecha | {dd-mm-aaaa} |
+> | Hora | {hh:mm} |
+> | Lugar | {lugar, región, país} |
+>
+> Si algo no es exacto —sobre todo la **hora**, que es la que fija tu Ascendente y tus casas— entra en tu recorrido, pulsa **Cambiar** y vuelve a enviarlos. Mientras tu carta no esté escrita, corregirla no cuesta nada.
+>
+> A partir de aquí la leo yo misma, a mano. Te aviso cuando empiece y cuando esté terminada.
+>
+> [Ver mi recorrido]
+
+*(La versión de corrección se titula «Tus datos corregidos han quedado registrados» y empieza: «Hola {nombre}, he recibido tus datos corregidos. Tu carta se ha vuelto a calcular con ellos, y estos son los que valen:».)*
+
+### Correo · «Tu carta está en proceso de ser leída»
+
+> **Tu carta está en proceso de ser leída**
+>
+> Hola **{nombre}**, ya tengo tu carta delante y he empezado a leerla.
+>
+> La escribo a mano, mirando tu carta: los planetas, las casas y las relaciones que forman entre ellos. Eso lleva su tiempo, así que te pido un poco de paciencia, por favor.
+>
+> No hace falta que esperes para seguir: puedes continuar con tu recorrido mientras yo escribo. Te aviso en cuanto esté terminada.
+>
+> [Seguir mi recorrido]
+
+### Correo · «Tu carta ya ha sido leída»
+
+> **Tu carta ya ha sido leída**
+>
+> Hola **{nombre}**, he terminado de leer tu carta. Ya te espera en tu recorrido, en **Puntos clave**.
+>
+> Ahí tienes lo que más me ha llamado la atención de tu cielo: cada punto es una estrella que puedes abrir para leer lo que he escrito sobre ti.
+>
+> Léela sin prisa y sin juzgarte: en tu carta no hay nada bueno ni malo. Si quieres que la recorramos juntos, puedes agendar una llamada desde tu recorrido.
+>
+> [Leer mi carta]
+
+---
+
 ## RECUPERAR CONTRASEÑA
 
 1. En Iniciar sesión pulsa «¿Has olvidado tu contraseña?».

@@ -53,6 +53,8 @@ export default function LogIn() {
   const [sinConfirmar, setSinConfirmar] = useState(false);
   const [reenviado, setReenviado] = useState(false);
   const formReveal = useReveal(0.1);
+  // Enter en «nombre o email» salta a la contraseña (allí Enter ya entra).
+  const contraRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -261,6 +263,7 @@ export default function LogIn() {
             <Input
               value={name}
               onChange={(e) => setname(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") contraRef.current?.focus(); }}
               {...inputStyles}
             />
           </Box>
@@ -272,6 +275,7 @@ export default function LogIn() {
             isDisabled={bloqueado}
             onEnter={validarInicioSesion}
             autoComplete="current-password"
+            inputRef={contraRef}
           />
 
           {message && (

@@ -397,9 +397,9 @@ export function TestDisciplinaModal({
           ) : (
             /* ══ CARA 2: EL RESULTADO (misma tarjeta, fondo de la disciplina) ══
                Habla con la voz de la disciplina: su icono, su nombre y la rayita
-               en SU color (Txt), y el botón con su pareja Bg/Txt, la misma de
-               sus boxes en el resto de la web. La sombra de la letra es negra
-               (regla de legibilidad sobre foto), nunca del color del fondo. */
+               en SU color (Txt). El nombre lleva la sombra del color Bg de la
+               disciplina —la misma de los títulos de sus páginas del recorrido
+               (MetodoStepHeader)— y el botón va transparente: solo el Txt. */
             <Flex
               position="relative"
               zIndex={1}
@@ -432,7 +432,7 @@ export function TestDisciplinaModal({
                 fontSize={{ base: "4xl", md: "5xl" }}
                 lineHeight="1.1"
                 letterSpacing="0.04em"
-                textShadow="0 2px 6px rgba(0,0,0,0.85), 0 0 24px rgba(0,0,0,0.6)"
+                textShadow={`0 1px 3px ${R.bg}f5, 0 0 8px ${R.bg}cc, 0 2px 16px ${R.bg}88`}
                 mt={2}
               >
                 {nombreEnMapa(R.nom)}
@@ -465,19 +465,17 @@ export function TestDisciplinaModal({
                 px={{ base: 10, md: 12 }}
                 py={{ base: "12px", md: "14px" }}
                 borderRadius="full"
-                // La pareja de la casa: el Bg de la disciplina de fondo y su
-                // Txt para la letra, como en sus boxes del recorrido.
-                bg={R.bg}
-                border={`1px solid ${R.txt}66`}
-                boxShadow="0 6px 22px rgba(0,0,0,0.35)"
+                // Transparente a propósito: la foto ya es el fondo y el botón
+                // solo dibuja el Txt de la disciplina (borde y letra).
+                bg="transparent"
+                border={`1.5px solid ${R.txt}`}
                 cursor="pointer"
                 _hover={{
-                  borderColor: R.txt,
+                  bg: `${R.txt}22`,
                   transform: "translateY(-1px)",
-                  boxShadow: "0 8px 26px rgba(0,0,0,0.45)",
                 }}
                 _active={{ transform: "translateY(0)" }}
-                transition="border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease"
+                transition="background 0.22s ease, transform 0.22s ease"
               >
                 <Text
                   color={R.txt}

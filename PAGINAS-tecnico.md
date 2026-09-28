@@ -86,7 +86,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Datos:** `POST /user/password/forgot` con `{ email }`. `POST /user/password/reset` con `{ token, password }`.
 - **Botones / a dónde lleva:** botón de volver → `/logIn`. Tras cambiar la contraseña, redirige solo a `/logIn` a los 2,6 s.
 - **Condiciones y casos raros:** `?token=<token>` decide el modo. El mensaje tras pedir el enlace es el mismo exista o no la cuenta. Contraseña nueva mínimo 6 caracteres (en el registro el mínimo es 4).
-- **Tests:** pendiente
+- **Tests:** `backend/src/user/recuperacion.spec.ts` (enlace de un solo uso, caduca a la hora, no cambia la contraseña de otra persona)
 
 ---
 
@@ -152,7 +152,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Datos:** `GET /user/me` (campos `<scope>_suscrito` de las 8 disciplinas, `comunidad_popup_visto`). `GET /payment/disciplina/verify?session_id=` y `GET /payment/<scope>/verify?session_id=` (metodo, psicologia, ayurveda, tcm, fisiologia, nutricion, cabala, cultura). `POST /upload/profile-pic/:userId` (FormData, foto encogida en el navegador). `GET /recorrido-progreso` (Tu camino). `GET /diario/:userId` (DiarioUsuario). `POST /user/me/comunidad-popup`. localStorage: lee `userId`, `token`, `name`, `img`, `ultimoRecorrido`; escribe `img`, marca de popup de comunidad visto. El pago redirige al Payment Link de Stripe con `client_reference_id=<scope>__<userId>` (`irAPagoDisciplina`).
 - **Botones / a dónde lleva:** círculos → `/metodo/astrologia|psicologia|ayurveda|tcm|fisiologia|nutricion|cabala|cultura` o popup de pago (`Pago*Modal`, con casillas de consentimiento). Tras pagar, `PagoExitoModal` → entra en la disciplina. «Continuar» → `ultimoRecorrido`. Tarjeta del diario → `/diario`. Filas de «Tu camino» → ruta de cada disciplina.
 - **Condiciones y casos raros:** `?disciplina_pagada=<session>`: verifica el pago del Payment Link común y abre el éxito de la disciplina que diga el backend. `?<scope>_pagado=<session>`: verificación por disciplina (Checkout Session propio). `?entrar=<scope>`: espera a saber qué hay pagado y hace lo mismo que pulsar el círculo (entra o abre el pago); llega desde `GuardiaPagoRecorrido`. Todas estas queries se borran de la barra. Sin `userId` → `/` (y PrivateRoute → `/welcome`). Las suscripciones se cachean en memoria (`suscCache`): si no hay query de pago, no se vuelve a pedir `/user/me` en la misma sesión. «Continuar» solo aparece si Astrología (`metodo_suscrito`) está pagada, aunque haya otras disciplinas compradas. El popup de comunidad no sale si falta `WHATSAPP_COMUNIDAD_URL` o si la admin está «entrando como».
-- **Tests:** pendiente
+- **Tests:** parcial: los verify del pago y `conceder` idempotente en `backend/src/payment/payment.service.spec.ts`
 
 ---
 
@@ -363,7 +363,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** siempre accesible. Enviar la solicitud desbloquea el paso 2 (Arquetipos); el botón siguiente no se activa hasta leer los tres del trío.
 - **Botones / a dónde lleva:** prev «← Home» (`rutaHome()`: panel si es admin). Next: sin solicitud (o corrigiendo) «Leer carta →» abre el popup de confirmación (desactivado si faltan campos); con solicitud, «Arquetipos →» (desactivado hasta leer los tres) abre dos cómics seguidos: signos → planetas → `/metodo/astrologia/cartaAstral`. «Ilustraciones» abre `ComicAstrologiaModal`. Cadena de cómics de entrada: Origen → Historia → (si ya hay solicitud) cómic de la carta, que al terminar se CIERRA y deja la página a la vista (el trío está aquí). Tras enviar, «Aceptar» del popup abre el cómic de la carta.
 - **Condiciones y casos raros:** `?corregir=1` abre el formulario prerrellenado y NO lanza cómics. Mientras corrige, el trío se esconde y el botón siguiente se cierra hasta reenviar; al reenviar se recarga la carta (los signos nuevos, no los de antes). La ruta vieja `/metodo/astrologia/solascendenteluna` redirige aquí (quedan migas y marcadores). Sin `userId`/`token` → `/welcome`. Validación: día 1-31, año 1900-2100. Los mensajes de error y los nombres de los meses están en español fijo (no pasan por i18n).
-- **Tests:** pendiente
+- **Tests:** `backend/src/metodoAstrologia/metodoAstrologia.spec.ts` (solicitud: guardado + carta + correos, corrección con esCorreccion, geocoding caído, data fusionada, PATCH solo de campos permitidos)
 
 ---
 
@@ -375,7 +375,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** requiere solicitud enviada (`useCartaPlanetas` y la página redirigen a `/metodo/astrologia`). Next desactivado hasta que todos los planetas estén leídos (`todoCompletado`) Y la carta esté procesada (`link_carta` o `retos` no vacío). Tooltip distinto para cada caso.
 - **Botones / a dónde lleva:** prev → paso 1; next → `/metodo/astrologia/lectura`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
 - **Condiciones y casos raros:** `EditarCuerpoModal` está montado pero nada lo abre (`setEditOpen(true)` no existe): código muerto. El guardado va con debounce y no se espera con flush al navegar con el botón (sin verificar si `flushSaves` lo cubre, ya que el PATCH puede no haber salido aún).
-- **Tests:** pendiente
+- **Tests:** `backend/src/metodoAstrologia/metodoAstrologia.spec.ts` (carta cacheada / calculada al vuelo, recalcular, ajuste manual de nodos a 180°, leídos fusionados en `data`)
 
 ---
 
@@ -387,7 +387,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** necesita `link_carta` o al menos un reto; si no (o si falla el GET) → `/metodo/astrologia`. Next activo cuando todos los retos están leídos (o no hay ninguno).
 - **Botones / a dónde lleva:** prev → paso 2. Next abre el cómic de las Casas (`ComicPasoModal`) → `/metodo/astrologia/casas`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
 - **Condiciones y casos raros:** no comprueba si ya se leyeron los arquetipos del paso 2, así que desde el Índice se puede entrar sin haberlos leído. Textos «Has leído…» y el tooltip están en español fijo.
-- **Tests:** pendiente
+- **Tests:** parcial: el guardado de `retosLeidos` (fusión en `data`) en `backend/src/metodoAstrologia/metodoAstrologia.spec.ts`
 
 ---
 
@@ -399,7 +399,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** necesita `link_carta` o retos (si no → `/metodo/astrologia`), y todos los retos leídos (si no → `/metodo/astrologia/lectura`, con replace). Next activo cuando todas las casas CON texto están leídas (si no hay ninguna escrita, pasa directo).
 - **Botones / a dónde lleva:** prev → paso 3. Next abre el cómic de Aspectos → `/metodo/astrologia/aspectos`. «Ilustraciones», `IndiceAstrologia`.
 - **Condiciones y casos raros:** mientras no está todo cargado o faltan retos, enseña el loader (no se llega a ver la página antes de rebotar).
-- **Tests:** pendiente
+- **Tests:** parcial: el guardado de `casasLeidos` y el merge de `casas_texto` en `backend/src/metodoAstrologia/metodoAstrologia.spec.ts`
 
 ---
 
@@ -411,7 +411,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Desbloqueo:** `link_carta` o retos (si no → `/metodo/astrologia`); retos leídos (si no → `/lectura`); casas escritas leídas (si no → `/casas`). El next no pide nada.
 - **Botones / a dónde lleva:** prev → paso 4; next → `/metodo/astrologia/pdf`. «Ilustraciones», `IndiceAstrologia`.
 - **Condiciones y casos raros:** leer todos los aspectos no es obligatorio para seguir.
-- **Tests:** pendiente
+- **Tests:** parcial: el guardado de `aspectosLeidos` y el merge de `aspectos_texto` en `backend/src/metodoAstrologia/metodoAstrologia.spec.ts`
 
 ---
 
@@ -2049,9 +2049,9 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/admin/usuarios` — Usuarios (la tabla del panel)
 - **Componente:** `AdminTodosUsuarios` en `frontend/src/app/admin/AdminTodosUsuarios.tsx`
 - **Acceso:** admin (AdminRoute + `useAdminGuard`).
-- **Qué hace:** la tabla de TODAS las cuentas, paginada de 15 en 15, con buscador local por nombre/email. Cada fila: nombre y email (sin foto), edad (de `fecha_nacimiento`; «—» si no la dio), un puntito por disciplina abierta con su color (y el total x/8), la marca «Sesiones» (está haciendo sesiones conmigo) y las acciones. Con «Sesiones» encendida aparece el botón «Diario de terapias». Al desplegar la ficha (▸): regalar o cerrar cada una de las 8 disciplinas por separado, «Todo el recorrido gratis», «Quitar acceso» (cierra las 8), «Su información» (pastillas a los paneles de las disciplinas que tiene + «Intereses») y «Borrar cuenta». Avisa si la cuenta tiene acceso libre por ACCESO_LIBRE_EMAILS. Absorbió `/admin/accesos` (aparcada).
+- **Qué hace:** la tabla de TODAS las cuentas, paginada de 15 en 15, con buscador local por nombre/email. Cada fila: nombre y email (sin foto), edad (de `fecha_nacimiento`; «—» si no la dio), un puntito por disciplina abierta con su color (y el total x/8), la marca «Sesiones» (está haciendo sesiones conmigo) y las acciones de la fila: «Intereses», «Entrar como» y, con «Sesiones» encendida, «Diario de terapias». Al desplegar la ficha (▸) SOLO lo de regalar y quitar: cada una de las 8 disciplinas por separado, «Todo el recorrido gratis», «Quitar acceso» (cierra las 8) y «Borrar cuenta». Ver o editar el contenido de un usuario no vive aquí: se hace desde la rejilla de disciplinas de `/admin`. Avisa si la cuenta tiene acceso libre por ACCESO_LIBRE_EMAILS. Absorbió `/admin/accesos` (aparcada).
 - **Datos:** `GET /user/admin/todos` (Jwt + AdminGuard; tope de 500): añade `acceso_libre`, `fecha_nacimiento`, `en_sesiones` y las fechas de compra. `POST /user/admin/sesiones` con `{ userId, enSesiones }` (optimista; si falla, se revierte y avisa — 409 si falta correr `sql/user-en-sesiones.sql`). `POST /user/admin/acceso` con `{ userId, disciplina: <scope>|'all', abierta }`; valida contra DISCIPLINAS_ORDEN. `POST /user/admin/acceso/revocar`. `DELETE /user/admin/usuario/:id`. `POST /user/admin/suplantar` desde `BotonEntrarComo`.
-- **Botones / a dónde lleva:** «Diario de terapias» → `/admin/diario/:userId`. «Intereses» → `/admin/actividad/:userId` (pasa nombre y email en `location.state`). Pastillas de «Su información» → `/admin/<adminKey>/:userId`. «Quitar acceso» pide `window.confirm` (también quita lo pagado). «Borrar cuenta» abre un modal donde hay que escribir el email exacto; borra la cuenta y todos sus datos, no se puede deshacer y no avisa a la persona. «Entrar como» (`BotonEntrarComo` → `api/suplantar.ts`): llama a `POST /user/admin/suplantar` (Jwt + AdminGuard), aparca la sesión de admin en `suplantacionAdmin`, limpia el localStorage, guarda el token de la persona (claim `admin: false`, `sup` = id de la admin, caduca en 12 h) y recarga en `/home`. Todo lo que se escriba se guarda en su recorrido. La persona no se entera. El servidor lo apunta en `console.log`. Para volver está `BarraSuplantacion` (`salirDeLaSuplantacion` → `/admin/usuarios`). «← Anterior» / «Siguiente →» pasan de página; buscar vuelve a la página 1.
+- **Botones / a dónde lleva:** «Diario de terapias» → `/admin/diario/:userId`. «Intereses» (en la fila) → `/admin/actividad/:userId` (pasa nombre y email en `location.state`). «Quitar acceso» pide `window.confirm` (también quita lo pagado). «Borrar cuenta» abre un modal donde hay que escribir el email exacto; borra la cuenta y todos sus datos, no se puede deshacer y no avisa a la persona. «Entrar como» (`BotonEntrarComo` → `api/suplantar.ts`): llama a `POST /user/admin/suplantar` (Jwt + AdminGuard), aparca la sesión de admin en `suplantacionAdmin`, limpia el localStorage, guarda el token de la persona (claim `admin: false`, `sup` = id de la admin, caduca en 12 h) y recarga en `/home`. Todo lo que se escriba se guarda en su recorrido. La persona no se entera. El servidor lo apunta en `console.log`. Para volver está `BarraSuplantacion` (`salirDeLaSuplantacion` → `/admin/usuarios`). «← Anterior» / «Siguiente →» pasan de página; buscar vuelve a la página 1.
 - **Condiciones y casos raros:** el backend se niega a borrar tu propia cuenta o una cuenta de ADMIN_EMAILS (409 con mensaje, que se muestra). Desde una sesión suplantada no se puede entrar al panel (el token no es de admin) ni borrar la cuenta propia (`DELETE /user/:id` lo rechaza si hay `suplantadoPor`). Usa el scope `metodo` para Astrología (DISCIPLINAS_PAGO). Las pastillas de disciplinas no disponibles llevan al placeholder. Sin correr `sql/user-en-sesiones.sql`, la marca de sesiones sale apagada y al tocarla avisa.
 - **Tests:** pendiente
 
@@ -2097,7 +2097,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Datos:** `GET /user/:userId` (Jwt + **OwnerGuard**). `GET /metodo-astrologia/carta-natal/:userId` (Jwt + **OwnerGuard**). `GET /metodo-astrologia/:userId` (Jwt + **OwnerGuard**). `PATCH /metodo-astrologia/admin/:userId/nacimiento` (Jwt + AdminGuard; no manda correos ni toca `solicitud_enviada_at`). `PATCH /metodo-astrologia/admin/:userId/textos` (Jwt + AdminGuard) con casas_texto, aspectos_texto y retos. `POST /metodo-astrologia/admin/:userId/avisar/:tipo` (Jwt + AdminGuard; `tipo` = proceso|leida, validado en el servicio).
 - **Botones / a dónde lleva:** «Guardar» (no manda nada por correo). «Avisar por email»: «En proceso» / «Carta leída» **manda un correo real a la persona**; si ya se mandó, pide `window.confirm` con la fecha. «Leída» falla si no hay puntos clave guardados. «Guardar datos de nacimiento». Volver → `/admin/astrologia`.
 - **Condiciones y casos raros:** sin carta calculada → «Este usuario aún no tiene carta natal calculada». «Avisar» falla si la persona no tiene fila de solicitud. Validaciones de nacimiento: fecha completa, hora `H:MM`, día 1–31, año 1900–2100, ciudad y país. Los errores de carga y de «Guardar» textos se tragan en silencio: si falla el guardado, la admin no ve ningún aviso. Un userId inexistente sale como página vacía, sin error.
-- **Tests:** pendiente
+- **Tests:** `backend/src/metodoAstrologia/metodoAstrologia.spec.ts` (guardarTextos fusiona casas/aspectos y reemplaza retos, guardar no manda correos, avisar «leída» se niega sin retos, corregir nacimiento sin correos ni tocar la puerta, lista del panel)
 
 ---
 

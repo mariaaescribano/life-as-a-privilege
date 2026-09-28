@@ -493,161 +493,9 @@ export default function MetodoAstrologia() {
             />
           </Reveal>
 
-          {/* ── Datos de nacimiento ya enviados ──
-                Chapa compacta y centrada, ENCIMA del cómic. Antes era una barra a
-                todo el ancho colgando debajo, que pesaba visualmente más que el
-                propio cómic siendo un dato secundario. Aquí solo recuerda con qué
-                datos se ha calculado la carta y deja corregirlos. */}
-          {yaSolicitado && !editando && (
-            <Reveal direction="down" distance={14} delay={0.1} duration={0.6}
-                    w="100%" display="flex" justifyContent="center">
-              <Box
-                position="relative"
-                overflow="hidden"
-                maxW="100%"
-                borderRadius="full"
-                // Sin línea de borde y con el MISMO halo que la cabecera (y que
-                // el box de lectura de abajo): las tres piezas de la página
-                // brillan igual, ninguna se recorta contra el turquesa.
-                border="none"
-                boxShadow={glowHeader(astrologiaTxt)}
-              >
-                {/* Fondo espacial de Astrología, el mismo que el header. Antes la
-                    chapa era translúcida y dejaba pasar el turquesa de la página,
-                    así que se veía verdosa y desentonaba con el resto. */}
-                <Box position="absolute" inset={0} bgImage={`url('${SPACE_IMG}')`}
-                     bgSize="cover" bgPosition="center" pointerEvents="none" />
-                {/* Velo: la foto sola no da contraste suficiente para la letra. */}
-                <Box position="absolute" inset={0} bg="rgba(8,13,30,0.62)" pointerEvents="none" />
-
-                <Flex
-                  position="relative"
-                  zIndex={1}
-                  align="center"
-                  justify="center"
-                  gap={{ base: 2.5, md: 3.5 }}
-                  wrap="wrap"
-                  px={{ base: 4, md: 5 }}
-                  py={{ base: 2, md: 2.5 }}
-                >
-                {/* El icono de la disciplina hace de etiqueta: dice «esto es tu
-                    carta» sin gastar una línea de texto en mayúsculas. */}
-                <Box flexShrink={0} opacity={0.85} display="flex" alignItems="center">
-                  <AstrologiaIcon size={{ base: "16px", md: "18px" }} />
-                </Box>
-
-                <Text color={astrologiaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight="600"
-                      whiteSpace="nowrap" style={{ textShadow: `0 0 12px ${astrologiaBg}` }}>
-                  {guardadoFecha || "—"}{guardadoHora ? ` · ${guardadoHora}` : ""}
-                </Text>
-
-                {guardadoLugar && (
-                  <>
-                    <Box w="4px" h="4px" borderRadius="full" bg={`${astrologiaTxt}55`} flexShrink={0} />
-                    <Text color={`${astrologiaTxt}bb`} fontSize={{ base: "xs", md: "sm" }} whiteSpace="nowrap">
-                      {guardadoLugar}
-                    </Text>
-                  </>
-                )}
-
-                <Box
-                  as="button"
-                  onClick={() => {
-                    setError(null);
-                    rellenarDesdeEstado(estado);
-                    setEditando(true);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  flexShrink={0}
-                  display="inline-flex"
-                  alignItems="center"
-                  gap={1.5}
-                  ml={{ base: 0, md: 1 }}
-                  px={3}
-                  py={1}
-                  borderRadius="full"
-                  bg="transparent"
-                  color={`${astrologiaTxt}cc`}
-                  border={`1px solid ${astrologiaTxt}44`}
-                  fontFamily="'EB Garamond', serif"
-                  fontSize="xs"
-                  fontWeight="700"
-                  letterSpacing="0.05em"
-                  cursor="pointer"
-                  transition="all 0.2s"
-                  _hover={{ color: astrologiaTxt, borderColor: astrologiaTxt, boxShadow: `0 0 14px ${astrologiaTxt}44` }}
-                >
-                  {/* Lápiz vectorial (nada de caracteres tipo «✎»). */}
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                       w="13px" h="13px" fill="currentColor" flexShrink={0}>
-                    <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
-                  </Box>
-                  {t("metodo.astro.cambiar")}
-                </Box>
-                </Flex>
-              </Box>
-            </Reveal>
-          )}
-
-          {/* ── Tras enviar la solicitud: la puerta a la lectura ──
-                «¿Qué es una carta astral?» ya no se lee aquí metido en un box:
-                es un cómic a pantalla completa (el tercero de la entrada) que
-                sale solo al entrar y termina en «Lo primero de tu carta». Esta
-                caja es para quien vuelve: relee el cómic o sigue adelante. ── */}
-          {yaSolicitado && !editando && (
-            <Reveal
-              direction="up"
-              distance={34}
-              scaleFrom={0.97}
-              delay={0.12}
-              duration={0.75}
-              position="relative"
-              w="100%"
-              borderRadius="2xl"
-              overflow="hidden"
-              boxShadow={glowHeader(astrologiaTxt)}
-            >
-              <SpaceBg overlay="rgba(8,13,30,0.65)" />
-
-              <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-                <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.09} delayChildren={0.35}>
-                  <RevealItem>
-                    <Text color={astrologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.04em" textAlign="center">
-                      {t("metodo.astro.queEsCarta")}
-                    </Text>
-                  </RevealItem>
-                  <RevealItem>
-                    <Text color={`${astrologiaTxt}dd`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" textAlign="center" maxW="600px" mx="auto">
-                      {t("metodo.astro.queEsCartaResumen")}
-                    </Text>
-                  </RevealItem>
-                  <RevealItem>
-                    <Box h="1px" my={2} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}55, transparent)`} />
-                  </RevealItem>
-                  <RevealItem display="flex" justifyContent="center">
-                    <Box
-                      as="button"
-                      onClick={() => setComicCartaOpen(true)}
-                      px={8}
-                      py={2.5}
-                      borderRadius="full"
-                      bg="transparent"
-                      color={astrologiaTxt}
-                      border={`1px solid ${astrologiaTxt}66`}
-                      fontFamily="'EB Garamond', serif"
-                      fontWeight="700"
-                      letterSpacing="0.06em"
-                      cursor="pointer"
-                      transition="all 0.2s"
-                      _hover={{ borderColor: astrologiaTxt, boxShadow: `0 0 22px ${astrologiaTxt}55` }}
-                    >
-                      {t("metodo.astro.queEsCartaLeer")}
-                    </Box>
-                  </RevealItem>
-                </RevealStagger>
-              </Box>
-            </Reveal>
-          )}
+          {/* El box de «¿Qué es una carta astral?» que iba aquí se ha quitado:
+                el cómic ya sale solo al entrar y se puede reabrir desde el
+                popup de «tu carta está en proceso». */}
 
           {/* ── EL TRÍO: Sol · Luna · Ascendente ──
                 Antes era la página siguiente (/solascendenteluna); ahora vive
@@ -725,51 +573,100 @@ export default function MetodoAstrologia() {
                       );
                     })}
                   </RevealStagger>
+                </Box>
+              </Reveal>
 
-                  {/* Si el Sol, la Luna o el Ascendente no le cuadran, casi
-                      siempre es que la hora o el lugar están mal: la corrección
-                      se hace AQUÍ mismo (el formulario de arriba se reabre).
-                      El botón va COMPACTO y centrado (al ancho de su texto,
-                      nunca de la caja): es una salida secundaria, no debe pesar
-                      como las tarjetas del trío. */}
-                  <Text color={`${astrologiaTxt}bb`} fontSize={{ base: "xs", md: "sm" }} lineHeight="1.7"
-                        textAlign="center" maxW="620px" mx="auto" mt={{ base: 7, md: 8 }}>
-                    {t("metodo.astro.corregirAviso")}
+              {/* ── Datos de nacimiento ya enviados ──
+                    Chapa compacta y centrada, DEBAJO del box del trío: recuerda
+                    con qué datos se ha calculado la carta y deja corregirlos
+                    con «Cambiar» (reabre el formulario de arriba). Es la única
+                    puerta de corrección: el aviso y el botón que iban dentro
+                    del box se han quitado para dejar el trío solo. */}
+              <Reveal direction="up" distance={14} delay={0.24} duration={0.6}
+                      w="100%" display="flex" justifyContent="center">
+                <Box
+                  position="relative"
+                  overflow="hidden"
+                  maxW="100%"
+                  borderRadius="full"
+                  // Sin línea de borde y con el MISMO halo que la cabecera (y que
+                  // el box del trío): las piezas de la página brillan igual,
+                  // ninguna se recorta contra el turquesa.
+                  border="none"
+                  boxShadow={glowHeader(astrologiaTxt)}
+                >
+                  {/* Fondo espacial de Astrología, el mismo que el header. Antes la
+                      chapa era translúcida y dejaba pasar el turquesa de la página,
+                      así que se veía verdosa y desentonaba con el resto. */}
+                  <Box position="absolute" inset={0} bgImage={`url('${SPACE_IMG}')`}
+                       bgSize="cover" bgPosition="center" pointerEvents="none" />
+                  {/* Velo: la foto sola no da contraste suficiente para la letra. */}
+                  <Box position="absolute" inset={0} bg="rgba(8,13,30,0.62)" pointerEvents="none" />
+
+                  <Flex
+                    position="relative"
+                    zIndex={1}
+                    align="center"
+                    justify="center"
+                    gap={{ base: 2.5, md: 3.5 }}
+                    wrap="wrap"
+                    px={{ base: 4, md: 5 }}
+                    py={{ base: 2, md: 2.5 }}
+                  >
+                  {/* El icono de la disciplina hace de etiqueta: dice «esto es tu
+                      carta» sin gastar una línea de texto en mayúsculas. */}
+                  <Box flexShrink={0} opacity={0.85} display="flex" alignItems="center">
+                    <AstrologiaIcon size={{ base: "16px", md: "18px" }} />
+                  </Box>
+
+                  <Text color={astrologiaTxt} fontSize={{ base: "sm", md: "md" }} fontWeight="600"
+                        whiteSpace="nowrap" style={{ textShadow: `0 0 12px ${astrologiaBg}` }}>
+                    {guardadoFecha || "—"}{guardadoHora ? ` · ${guardadoHora}` : ""}
                   </Text>
-                  <Flex justify="center" mt={3.5}>
-                    <Box
-                      as="button"
-                      onClick={() => {
-                        setError(null);
-                        rellenarDesdeEstado(estado);
-                        setEditando(true);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      display="inline-flex"
-                      alignItems="center"
-                      gap={2}
-                      px={5}
-                      py={2}
-                      borderRadius="full"
-                      bg="rgba(8,13,30,0.45)"
-                      color={`${astrologiaTxt}cc`}
-                      border={`1px solid ${astrologiaTxt}55`}
-                      fontFamily="'EB Garamond', serif"
-                      fontSize={{ base: "sm", md: "md" }}
-                      fontWeight="700"
-                      letterSpacing="0.05em"
-                      whiteSpace="nowrap"
-                      cursor="pointer"
-                      transition="all 0.2s"
-                      _hover={{ color: astrologiaTxt, borderColor: astrologiaTxt, boxShadow: `0 0 18px ${astrologiaTxt}44` }}
-                    >
-                      {/* Lápiz vectorial (el mismo de la chapa de datos). */}
-                      <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                           w="15px" h="15px" fill="currentColor" flexShrink={0}>
-                        <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
-                      </Box>
-                      {t("metodo.astro.corregirDatos")}
+
+                  {guardadoLugar && (
+                    <>
+                      <Box w="4px" h="4px" borderRadius="full" bg={`${astrologiaTxt}55`} flexShrink={0} />
+                      <Text color={`${astrologiaTxt}bb`} fontSize={{ base: "xs", md: "sm" }} whiteSpace="nowrap">
+                        {guardadoLugar}
+                      </Text>
+                    </>
+                  )}
+
+                  <Box
+                    as="button"
+                    onClick={() => {
+                      setError(null);
+                      rellenarDesdeEstado(estado);
+                      setEditando(true);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    flexShrink={0}
+                    display="inline-flex"
+                    alignItems="center"
+                    gap={1.5}
+                    ml={{ base: 0, md: 1 }}
+                    px={3}
+                    py={1}
+                    borderRadius="full"
+                    bg="transparent"
+                    color={`${astrologiaTxt}cc`}
+                    border={`1px solid ${astrologiaTxt}44`}
+                    fontFamily="'EB Garamond', serif"
+                    fontSize="xs"
+                    fontWeight="700"
+                    letterSpacing="0.05em"
+                    cursor="pointer"
+                    transition="all 0.2s"
+                    _hover={{ color: astrologiaTxt, borderColor: astrologiaTxt, boxShadow: `0 0 14px ${astrologiaTxt}44` }}
+                  >
+                    {/* Lápiz vectorial (nada de caracteres tipo «✎»). */}
+                    <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                         w="13px" h="13px" fill="currentColor" flexShrink={0}>
+                      <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
                     </Box>
+                    {t("metodo.astro.cambiar")}
+                  </Box>
                   </Flex>
                 </Box>
               </Reveal>

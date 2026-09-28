@@ -398,9 +398,9 @@ export function CtaEmpezar({
         {/* Los botones, en fila y centrados: así la letra pequeña de abajo cae
             en el medio de la PAREJA y no debajo del primero. En móvil se
             apilan, que dos pastillas de 84vw no caben una al lado de la otra.
-            «Empezar por 30 €» y «Test para empezar» son GEMELOS (mismo filo,
-            mismo halo): pagar y orientarse valen lo mismo aquí. El de la
-            comunidad sí queda un escalón por debajo, con el filo fino. */}
+            «Empezar por 30 €», «Test para empezar» y «Únete a la comunidad»
+            son GEMELOS (mismo filo, mismo halo): pagar, orientarse y
+            acompañarse valen lo mismo aquí. */}
         <Flex
           direction={{ base: "column", md: "row" }}
           align="center"
@@ -506,30 +506,32 @@ export function CtaEmpezar({
             rel="noopener noreferrer"
             align="center"
             justify="center"
-            gap={{ base: "9px", md: "11px" }}
-            px={{ base: 7, md: 9 }}
+            gap={{ base: "10px", md: "12px" }}
+            px={{ base: 8, md: 12 }}
             py={{ base: "13px", md: "16px" }}
             w={{ base: "min(84vw, 380px)", md: "auto" }}
             borderRadius="full"
-            border="1px solid rgba(255,255,255,0.32)"
-            bg="rgba(255,255,255,0.04)"
-            color="rgba(255,255,255,0.88)"
+            border="1.5px solid rgba(255,255,255,0.7)"
+            bg="rgba(255,255,255,0.12)"
+            color="white"
             cursor="pointer"
             textDecoration="none"
+            boxShadow="0 0 22px rgba(255,255,255,0.36), 0 0 48px rgba(180,255,245,0.22)"
             _hover={{
-              bg: "rgba(255,255,255,0.13)",
-              borderColor: "rgba(255,255,255,0.7)",
-              color: "white",
+              bg: "rgba(255,255,255,0.22)",
+              borderColor: "white",
+              boxShadow: "0 0 32px rgba(255,255,255,0.58), 0 0 66px rgba(180,255,245,0.38)",
             }}
-            transition="background 0.25s ease, border-color 0.25s ease, color 0.25s ease"
+            transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
           >
-            <IconoWhatsapp size={{ base: "17px", md: "19px" }} />
+            <IconoWhatsapp size={{ base: "18px", md: "22px" }} />
             <Text
-              fontWeight="600"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.09em"
+              fontWeight="700"
+              fontSize={{ base: "md", md: "xl" }}
+              letterSpacing="0.12em"
               textTransform="uppercase"
               whiteSpace="nowrap"
+              textShadow="0 0 12px rgba(255,255,255,0.45)"
             >
               {t("elMetodo.hero.comunidad")}
             </Text>

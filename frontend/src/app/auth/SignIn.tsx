@@ -226,6 +226,17 @@ export default function SignIn() {
   const [mounted, setMounted] = useState(false);
   const formReveal = useReveal(0.1);
 
+  // Enter va saltando de campo en campo (nombre → email → teléfono → fecha →
+  // contraseña → repítela) y en el último ya registra: así se rellena todo sin
+  // soltar el teclado.
+  const emailRef = useRef<HTMLInputElement>(null);
+  const telefonoRef = useRef<HTMLInputElement>(null);
+  const fechaRef = useRef<HTMLInputElement>(null);
+  const contraRef = useRef<HTMLInputElement>(null);
+  const contra2Ref = useRef<HTMLInputElement>(null);
+  const saltarA = (ref: React.RefObject<HTMLInputElement | null>) =>
+    (e: React.KeyboardEvent) => { if (e.key === "Enter") ref.current?.focus(); };
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const t = setTimeout(() => setMounted(true), 60);
@@ -397,15 +408,18 @@ export default function SignIn() {
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                onKeyDown={saltarA(emailRef)}
                 {...inputStyles}
               />
             </Box>
             <Box>
               <Etiqueta>{t("auth.campo.email")}</Etiqueta>
               <Input
+                ref={emailRef}
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={saltarA(telefonoRef)}
                 {...inputStyles}
               />
             </Box>
@@ -433,22 +447,26 @@ export default function SignIn() {
             <Box>
               <Etiqueta>{t("auth.campo.telefono")}</Etiqueta>
               <Input
+                ref={telefonoRef}
                 type="tel"
                 autoComplete="tel"
                 placeholder="+34 600 000 000"
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
+                onKeyDown={saltarA(fechaRef)}
                 {...inputStyles}
               />
             </Box>
             <Box>
               <Etiqueta>{t("auth.campo.fechaNacimiento")}</Etiqueta>
               <Input
+                ref={fechaRef}
                 type="date"
                 autoComplete="bday"
                 max={new Date().toISOString().slice(0, 10)}
                 value={fechaNacimiento}
                 onChange={(e) => setFechaNacimiento(e.target.value)}
+                onKeyDown={saltarA(contraRef)}
                 {...inputStyles}
                 sx={inputFechaSx}
               />
@@ -473,7 +491,9 @@ export default function SignIn() {
               value={contra}
               onChange={setContra}
               isDisabled={bloqueado}
+              onEnter={() => contra2Ref.current?.focus()}
               autoComplete="new-password"
+              inputRef={contraRef}
             />
 
             <CampoContrasena
@@ -483,6 +503,7 @@ export default function SignIn() {
               isDisabled={bloqueado}
               onEnter={validarRegistro}
               autoComplete="new-password"
+              inputRef={contra2Ref}
             />
           </SimpleGrid>
 

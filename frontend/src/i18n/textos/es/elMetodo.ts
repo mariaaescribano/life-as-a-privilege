@@ -49,7 +49,7 @@ export const elMetodo = {
   "elMetodo.hero.sub":
     "Ciencia y tradición para comprender tu mente, tu historia y tu cuerpo.",
   // Ya no lleva al pago: abre el TEST de «encuentra tu disciplina».
-  "elMetodo.hero.cta": "Tu test inicial",
+  "elMetodo.hero.cta": "Test inicial",
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).
   "elMetodo.hero.ctaPie": "Desde 30 € · Sin suscripción · Sin compromiso",
@@ -194,7 +194,7 @@ export const elMetodo = {
   // Las preguntas y respuestas viven con sus puntos en TestDisciplina.tsx
   // (tipo Texto {es,en}); aquí va solo la carpintería del popup.
   /** El gemelo de «Empezar por 30 €» (CtaEmpezar). */
-  "elMetodo.test.botonEmpezar": "Test para empezar",
+  "elMetodo.test.botonEmpezar": "Test antes de empezar",
   "elMetodo.test.titulo": "Encuentra tu disciplina",
   "elMetodo.test.sub": "8 preguntas · 2 minutos · sin coste",
   "elMetodo.test.ver": "Ver mi disciplina",

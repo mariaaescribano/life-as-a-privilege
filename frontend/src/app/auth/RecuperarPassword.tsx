@@ -122,6 +122,8 @@ export default function RecuperarPassword() {
   const [email, setEmail] = useState("");
   const [pass1, setPass1] = useState("");
   const [pass2, setPass2] = useState("");
+  // Enter en la contraseña nueva salta a «repítela» (allí Enter ya envía).
+  const pass2Ref = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<SuccessErrorMessageDto | null>(null);
   const [loading, setLoading] = useState(false);
   const [hecho, setHecho] = useState(false);
@@ -272,6 +274,7 @@ export default function RecuperarPassword() {
                   value={pass1}
                   onChange={setPass1}
                   isDisabled={bloqueado}
+                  onEnter={() => pass2Ref.current?.focus()}
                   autoComplete="new-password"
                 />
                 <CampoContrasena
@@ -281,6 +284,7 @@ export default function RecuperarPassword() {
                   isDisabled={bloqueado}
                   onEnter={cambiarPassword}
                   autoComplete="new-password"
+                  inputRef={pass2Ref}
                 />
               </>
             ) : (
