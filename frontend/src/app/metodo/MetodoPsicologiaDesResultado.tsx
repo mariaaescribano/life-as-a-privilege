@@ -32,15 +32,10 @@ import {
   desCompleto,
   desAlto,
   desResultado,
-  DES_UMBRAL_ALTO,
   type LineaDeVidaData,
 } from "../../components/metodo/psicologiaRecorrido";
 import { guardarDesResultado } from "../../data/psicologiaDesApi";
-import {
-  useDesBanda,
-  useDesEsperanza,
-  useDesSubescalas,
-} from "../../components/metodo/psicologiaRecorrido.en";
+import { useDesBanda } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { Reveal } from "../../components/global/Reveal";
 import {
@@ -71,8 +66,6 @@ export default function MetodoPsicologiaDesResultado() {
   // pueden ir después del `return` del loading.
   const score = desScore(data);
   const banda = useDesBanda(score);
-  const subescalas = useDesSubescalas(data);
-  const desEsperanza = useDesEsperanza();
   const alto = desAlto(data);
 
   useEffect(() => {
@@ -200,61 +193,6 @@ export default function MetodoPsicologiaDesResultado() {
             </Text>
             </Reveal>
 
-            {/* Las tres caras de la desconexión */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.36} duration={0.75} w="100%">
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 border={azulBorde} boxShadow={glowPanel}>
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} direction="column" gap={{ base: 5, md: 6 }}
-                    px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-                <Box>
-                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
-                        lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                    {t("metodo.psico.desTresCaras")}
-                  </Text>
-                  <Box mt={{ base: 3, md: 3.5 }} h="1px" w="55%" maxW="240px" mx="auto"
-                       bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                </Box>
-
-                <Flex direction="column" gap={{ base: 5, md: 6 }}>
-                  {subescalas.map(({ sub, score: s }) => (
-                    <Box key={sub.key}>
-                      <Flex align="baseline" justify="space-between" gap={3} mb={2}>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
-                              style={{ textShadow: INK_SHADOW }}>
-                          {sub.titulo}
-                        </Text>
-                        <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" whiteSpace="nowrap"
-                              style={{ textShadow: INK_SHADOW }}>
-                          {s}
-                        </Text>
-                      </Flex>
-
-                      {/* Barra: el carril lleva marcado el umbral de 30 */}
-                      <Box position="relative" h="10px" borderRadius="full"
-                           bg="rgba(255,251,243,0.55)" border={`1px solid ${TINTA}33`} overflow="hidden">
-                        <Box position="absolute" inset={0} h="100%" borderRadius="full"
-                             w={`${s}%`} bg={sub.color} transition="width 0.5s ease" />
-                        <Box position="absolute" top={0} bottom={0} left={`${DES_UMBRAL_ALTO}%`}
-                             w="1.5px" bg={`${TINTA}77`} />
-                      </Box>
-
-                      <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.65" opacity={0.88}
-                            mt={2} style={{ textShadow: INK_SHADOW }}>
-                        {sub.descripcion}
-                      </Text>
-                    </Box>
-                  ))}
-                </Flex>
-
-                <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.7"
-                      opacity={0.85} style={{ textShadow: INK_SHADOW }}>
-                  {t("metodo.psico.desTresCarasPie")}
-                </Text>
-              </Flex>
-            </Box>
-            </Reveal>
-
             {/* Si la desconexión es alta: no recorrer esto sola */}
             {alto && (
               <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
@@ -280,40 +218,22 @@ export default function MetodoPsicologiaDesResultado() {
               </Reveal>
             )}
 
-            {/* Cierre: irse fue lo que te salvó */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.48} duration={0.75} w="100%">
-            <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-                 border={azulBorde} boxShadow={glowPanel}>
-              <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-              <Flex position="relative" zIndex={1} direction="column" gap={{ base: 4, md: 5 }}
-                    px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
-                <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
-                      lineHeight="1.3" style={{ textShadow: INK_SHADOW }}>
-                  {desEsperanza.titulo}
-                </Text>
-                <Box h="1px" w="55%" maxW="240px" mx="auto"
-                     bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                {desEsperanza.texto.map((p, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" opacity={0.92}
-                        style={{ textShadow: INK_SHADOW }}>
-                    {p}
-                  </Text>
-                ))}
-
-                {/* Seguir el recorrido */}
-                <Flex justify="center" pt={2}>
-                  <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/cerebro`)}
-                       position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
-                       bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
-                       fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
-                       boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
-                       _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                    <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                         style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.cerebroContinuar")}</Box>
-                  </Box>
-                </Flex>
+            {/* Seguir el recorrido — el botón queda suelto: los boxes de las
+                tres caras y del cierre («irse fue lo que te salvó») se
+                quitaron a petición de María, pero la salida de la página se
+                queda. */}
+            <Reveal direction="up" distance={20} delay={0.48} duration={0.7} w="100%">
+              <Flex justify="center" pt={2}>
+                <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/cerebro`)}
+                     position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
+                     bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
+                     fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
+                     boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
+                     _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
+                  <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
+                       style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.cerebroContinuar")}</Box>
+                </Box>
               </Flex>
-            </Box>
             </Reveal>
           </Flex>
         </Flex>

@@ -36,6 +36,7 @@ import { DISCIPLINAS_PAGO } from "../../data/adminDisciplinas";
 import { API_URL } from "../../GlobalVariables";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 import BotonEntrarComo from "./BotonEntrarComo";
+import { IconoDiarioTerapia } from "../../components/global/IconoDiarioTerapia";
 
 const POR_PAGINA = 15;
 
@@ -47,6 +48,8 @@ interface CuentaAdmin {
   acceso_libre?: boolean;
   fecha_nacimiento?: string | null;
   en_sesiones?: boolean;
+  /** null en cuentas de antes de sql/user-created-at.sql («no se sabe»). */
+  created_at?: string | null;
   /** `<scope>_suscrito` y `<scope>_fecha_compra`. */
   [flag: string]: any;
 }
@@ -78,6 +81,8 @@ export default function AdminTodosUsuarios() {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [pagina, setPagina] = useState(1);
+  /** Orden de la tabla: por nombre (el del backend) o las cuentas más nuevas primero. */
+  const [orden, setOrden] = useState<"nombre" | "recientes">("nombre");
   /** id de la fila desplegada (regalar, intereses, borrar), o null. */
   const [abierto, setAbierto] = useState<string | null>(null);
   /** id de la cuenta cuyo acceso se está guardando ahora mismo. */
@@ -107,16 +112,21 @@ export default function AdminTodosUsuarios() {
     cargar();
   }, [verificando, cargar]);
 
-  // Buscar cambia el corte, así que devuelve a la primera página.
-  useEffect(() => setPagina(1), [q]);
+  // Buscar u ordenar cambia el corte, así que devuelve a la primera página.
+  useEffect(() => setPagina(1), [q, orden]);
 
   const filtrados = useMemo(() => {
     const t = q.trim().toLowerCase();
-    if (!t) return usuarios;
-    return usuarios.filter(
-      (u) => (u.name ?? "").toLowerCase().includes(t) || (u.email ?? "").toLowerCase().includes(t),
-    );
-  }, [q, usuarios]);
+    const base = !t
+      ? usuarios
+      : usuarios.filter(
+          (u) => (u.name ?? "").toLowerCase().includes(t) || (u.email ?? "").toLowerCase().includes(t),
+        );
+    if (orden === "nombre") return base;
+    // Más nuevas primero. Las cuentas sin fecha (de antes de la columna
+    // created_at) caen al final: «no se sabe» no puede colarse entre las nuevas.
+    return [...base].sort((a, b) => (b.created_at ?? "").localeCompare(a.created_at ?? ""));
+  }, [q, usuarios, orden]);
 
   const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
   const paginaReal = Math.min(pagina, totalPaginas);
@@ -252,6 +262,36 @@ export default function AdminTodosUsuarios() {
             _focusVisible={{ boxShadow: "none" }}
           />
 
+          {/* ── ORDEN ── por nombre, o las cuentas más nuevas primero */}
+          <Flex align="center" gap={2} mb={4} justify="flex-end">
+            <Text color="rgba(255,255,255,0.55)" fontSize="xs" letterSpacing="0.12em" textTransform="uppercase">
+              Ordenar
+            </Text>
+            {([
+              { valor: "nombre" as const, etiqueta: "Por nombre" },
+              { valor: "recientes" as const, etiqueta: "Nuevas primero" },
+            ]).map((o) => (
+              <Box
+                key={o.valor}
+                as="button"
+                onClick={() => setOrden(o.valor)}
+                px={3}
+                py="4px"
+                borderRadius="full"
+                bg={orden === o.valor ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.06)"}
+                border={`1px solid ${orden === o.valor ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.3)"}`}
+                color={orden === o.valor ? "white" : "rgba(255,255,255,0.7)"}
+                fontSize="xs"
+                fontWeight="600"
+                cursor="pointer"
+                transition="all 0.15s"
+                _hover={{ borderColor: "white", color: "white" }}
+              >
+                {o.etiqueta}
+              </Box>
+            ))}
+          </Flex>
+
           {aviso && (
             <Text color="#ffd9a0" fontSize="sm" fontStyle="italic" textAlign="center" mb={4}>
               {aviso}
@@ -374,9 +414,11 @@ export default function AdminTodosUsuarios() {
 
                           {/* el diario solo sale para quien está en sesiones */}
                           {u.en_sesiones && (
-                            <Box
+                            <Flex
                               as="button"
                               onClick={() => navigate(`/admin/diario/${u.id}`)}
+                              align="center"
+                              gap={1.5}
                               px={3}
                               py="4px"
                               borderRadius="full"
@@ -391,8 +433,9 @@ export default function AdminTodosUsuarios() {
                               _hover={{ bg: "rgba(255,255,255,0.2)", borderColor: "white", transform: "translateY(-1px)" }}
                               title={`Diario de terapias de ${u.name}`}
                             >
+                              <IconoDiarioTerapia size="14px" />
                               Diario de terapias
-                            </Box>
+                            </Flex>
                           )}
 
                           {/* Qué recursos gratuitos ha abierto: va en la fila,

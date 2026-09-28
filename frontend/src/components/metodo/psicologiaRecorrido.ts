@@ -1272,9 +1272,9 @@ export const ACE_CONSECUENCIAS = {
 export const ACE_ESPERANZA = {
   titulo: "Tu historia no termina en una cifra",
   texto: [
-    "El cerebro y el cuerpo tienen una capacidad enorme de sanar. Lo que se aprendió en la adversidad también puede reaprenderse en la seguridad.",
+    "El cerebro y el cuerpo tienen una capacidad enorme de sanar. Lo que no se aprendió en la adversidad, puede ser aprendido en la seguridad.",
     "El factor que más protege, según la propia ciencia, es sencillo: las relaciones seguras y el sostén emocional. Un solo vínculo de confianza puede cambiarlo todo.",
-    "Este mapa —recordar, comprender, integrar— es exactamente ese trabajo. No estás mirando tu herida para quedarte en ella, sino para transformarla.",
+    "Este mapa —recordar, comprender, integrar— es exactamente ese desarrollo. No estás mirando tu herida para quedarte en ella, sino para transformarla.",
   ],
   // Recordatorio honesto (coherente con el «Aviso importante» del inicio).
 };

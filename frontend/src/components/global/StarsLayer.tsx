@@ -6,8 +6,13 @@ import { Box } from "@chakra-ui/react";
 // que reciba. Reutilizable en cards, círculos de icono y modales de Astrología.
 export const StarsLayer = ({
   borderRadius = "2xl",
-  overlay = "rgba(8,13,30,0.62)",
-  blur = false,
+  // Velo LIGERO a propósito: el cielo ya es oscuro de por sí y taparlo al 62%
+  // (como iba antes) se comía las estrellas. La foto es el estilo de
+  // Astrología: tiene que verse.
+  overlay = "rgba(8,13,30,0.25)",
+  // El prop `blur` se acepta (los llamantes lo siguen pasando) pero se ignora:
+  // el cielo de Astrología nunca se difumina.
+  blur: _blur = false,
   talCual = false,
 }: {
   borderRadius?: any;
@@ -48,10 +53,11 @@ export const StarsLayer = ({
       style={{
         objectFit: "cover",
         objectPosition: "center",
-        opacity: talCual ? 1 : 0.85,
-        // Blur opcional: las cards de Astrología no llevan blur, pero los
-        // popups sí — con blur fuerte para que las letras destaquen del fondo.
-        ...(blur ? { filter: "blur(8px)", transform: "scale(1.12)" } : {}),
+        // Siempre a plena opacidad y SIN blur: la foto del espacio no se
+        // apaga ni se difumina (el prop `blur` se conserva por los llamantes,
+        // pero ya no hace nada — la legibilidad la ponen las cajitas de tinta
+        // de cada popup, no estropear el cielo).
+        opacity: 1,
       }}
     />
     {!talCual && (

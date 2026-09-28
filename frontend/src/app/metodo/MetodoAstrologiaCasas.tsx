@@ -247,7 +247,7 @@ export default function MetodoAstrologiaCasas() {
             overflow="hidden"
             boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
           >
-            <SpaceBg overlay="rgba(8,13,30,0.6)" />
+            <SpaceBg overlay="rgba(8,13,30,0.28)" />
 
             <Flex
               position="relative"
@@ -376,7 +376,7 @@ export default function MetodoAstrologiaCasas() {
                     <Text color={todasCasasLeidas ? astrologiaTxt : `${astrologiaTxt}aa`} fontSize="sm" fontWeight="600"
                           textAlign="center" mt={1} letterSpacing="0.04em" style={{ textShadow: `0 0 8px ${astrologiaTxt}44` }}>
                       {todasCasasLeidas
-                        ? "Has leído todas tus Casas. Ya puedes continuar a Aspectos."
+                        ? "Has leído todas tus Casas. Ya puedes continuar."
                         : `Has leído ${casasEscritas.filter((n) => leidos.has(n)).length} de ${casasEscritas.length} Casas.`}
                     </Text>
                   )}
@@ -561,7 +561,7 @@ function CasaBox({
                border={`1px solid ${regenteColor}66`}
                boxShadow={`0 0 32px ${regenteColor}55, 0 0 80px ${regenteColor}28, 0 12px 60px rgba(0,0,0,0.6)`}
                display="flex" flexDirection="column">
-            <SpaceBg overlay="rgba(8,13,30,0.78)" />
+            <SpaceBg overlay="rgba(8,13,30,0.38)" />
             <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={3}
                  w="36px" h="36px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
                  bg="rgba(0,0,0,0.6)" border={`1px solid ${astrologiaTxt}66`} color={astrologiaTxt} cursor="pointer"

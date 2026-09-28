@@ -123,7 +123,7 @@ export const auth = {
   "cuenta.borrar.eliminando": "Eliminando…",
 
   // ── Popup de la comunidad (primera vez que entra) ─────────────────────
-  "comunidadPopup.titulo": "¿Te unes a la comunidad?",
+  "comunidadPopup.titulo": "ÚNETE A LA COMUNIDAD",
   "comunidadPopup.texto": "Tenemos una comunidad de WhatsApp donde compartimos el camino, las dudas y las novedades de El Mapa. Nos encantaría tenerte.",
   "comunidadPopup.soloUnaVez": "Este aviso no volverá a salir. Si más adelante quieres unirte, ve a Contactar y pulsa en Comunidad.",
   "comunidadPopup.unirme": "Unirme",

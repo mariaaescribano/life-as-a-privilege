@@ -258,7 +258,7 @@ export default function MetodoAstrologiaAspectos() {
                   transition="opacity 0.25s, box-shadow 0.25s"
                 >
                   {/* Fondo de astrología (estrellado) sin blur, recortado sin deformar */}
-                  <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" overlay="rgba(8,13,30,0.58)" />
+                  <DisciplinaBgLayer nom={astrologiaNom} borderRadius="2xl" overlay="rgba(8,13,30,0.28)" />
 
                   <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} py={{ base: 5, md: 6 }}>
                     {/* Cabecera del planeta */}
@@ -425,7 +425,7 @@ export default function MetodoAstrologiaAspectos() {
               boxShadow={`0 0 32px ${colorAsp}55, 0 0 80px ${colorAsp}28, 0 12px 60px rgba(0,0,0,0.6)`}
               display="flex" flexDirection="column"
             >
-              <SpaceBg overlay="rgba(8,13,30,0.74)" />
+              <SpaceBg overlay="rgba(8,13,30,0.38)" />
 
               <Box as="button" onClick={() => setAbierto(null)} position="absolute" top={3} right={3} zIndex={3}
                    w="36px" h="36px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"

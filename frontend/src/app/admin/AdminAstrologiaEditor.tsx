@@ -623,7 +623,7 @@ export default function AdminAstrologiaEditor() {
                            onToggle={() => setCartaOpen((o) => !o)}>
                 {/* Rueda. Lleva velo: es el cielo sobre el que se dibuja la carta,
                     no una foto decorativa (ver el prop `velo` de Trozo). */}
-                <Trozo py={{ base: 6, md: 8 }} velo="rgba(8,13,30,0.82)">
+                <Trozo py={{ base: 6, md: 8 }} velo="rgba(8,13,30,0.45)">
                   {/* El `& canvas` es a prueba de ZOOM del navegador, y solo se
                       aplica aquí (el de la página del recorrido no se toca).
                       three.js llama a setSize() con el tamaño MEDIDO y eso

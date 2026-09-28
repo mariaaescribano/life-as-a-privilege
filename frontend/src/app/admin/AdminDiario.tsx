@@ -37,6 +37,14 @@ import {
 import { DISCIPLINAS_DIARIO, caraDeEntrada, fechaLarga } from "../home/diarioCara";
 import CalendarioDiario from "../home/CalendarioDiario";
 import { TextoMarcado } from "../../components/global/TextoMarcado";
+import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
+import { astrologiaNom } from "../../GlobalVariables";
+
+/** Velo sobre la FOTO de la disciplina: teñido con su color, salvo Astrología,
+ *  cuyo cielo va con el velo ligero por defecto (nunca se oscurece). `fuerte`
+ *  para el formulario, que tiene campos y necesita más reposo que una nota. */
+const veloDe = (nom: string, bg: string, fuerte = false): string | undefined =>
+  nom === astrologiaNom ? (fuerte ? "rgba(8,13,30,0.45)" : undefined) : `${bg}${fuerte ? "b3" : "8c"}`;
 
 /** Lo que hay en el formulario mientras se escribe. */
 interface Borrador {
@@ -301,8 +309,12 @@ export default function AdminDiario() {
                 </Flex>
               )}
 
-              {/* ── EL FORMULARIO ── se tiñe del color de la disciplina elegida. */}
+              {/* ── EL FORMULARIO ── al elegir disciplina se pone su FOTO de
+                  fondo (con un velo más cargado que las notas: aquí hay campos
+                  que rellenar). Sin disciplina, la caja neutra de siempre. */}
               <Box
+                position="relative"
+                overflow="hidden"
                 px={{ base: 4, md: 6 }}
                 py={{ base: 5, md: 6 }}
                 borderRadius="2xl"
@@ -310,6 +322,14 @@ export default function AdminDiario() {
                 border={`1px solid ${caraForm.txt}55`}
                 transition="background 0.25s, border-color 0.25s"
               >
+                {caraForm.nom && hasDisciplinaBg(caraForm.nom) && (
+                  <DisciplinaBgLayer
+                    nom={caraForm.nom}
+                    borderRadius="2xl"
+                    overlay={veloDe(caraForm.nom, caraForm.bg, true)}
+                  />
+                )}
+                <Box position="relative" zIndex={1}>
                 <Flex align="center" justify="space-between" gap={3} mb={4} flexWrap="wrap">
                   <Text color={caraForm.txt} fontWeight="700" fontSize="lg" letterSpacing="0.04em">
                     {editando ? "Editar la nota" : "Escribir una nota"}
@@ -420,6 +440,7 @@ export default function AdminDiario() {
                 <Text color={`${caraForm.txt}99`} fontSize="xs" fontStyle="italic" mt={3}>
                   Un borrador no se ve en su diario. Al publicar, le aparece la marca de «nuevo».
                 </Text>
+                </Box>
               </Box>
             </>
           )}
@@ -451,8 +472,11 @@ function NotaDelDia({
   onBorrar: () => void;
 }) {
   const cara = caraDeEntrada(entrada.disciplina);
+  const conFoto = cara.nom ? hasDisciplinaBg(cara.nom) : false;
   return (
     <Box
+      position="relative"
+      overflow="hidden"
       px={{ base: 4, md: 5 }}
       py={4}
       borderRadius="xl"
@@ -461,6 +485,12 @@ function NotaDelDia({
       transition="border-color 0.18s"
       _hover={{ borderColor: `${cara.txt}aa` }}
     >
+      {/* La FOTO de la disciplina de fondo (no el color plano), con su velo —
+          la misma capa que la página /diario del usuario. */}
+      {conFoto && (
+        <DisciplinaBgLayer nom={cara.nom} borderRadius="xl" overlay={veloDe(cara.nom, cara.bg)} />
+      )}
+      <Box position="relative" zIndex={1}>
       <Flex align="center" gap={2} flexWrap="wrap" mb={2}>
         <Text color={cara.txt} fontSize="xs" fontWeight="700" letterSpacing="0.12em" textTransform="uppercase">
           {cara.nom || "Sin disciplina"}
@@ -509,6 +539,7 @@ function NotaDelDia({
         </Enlace>
         <Enlace onClick={onBorrar} peligro>Borrar</Enlace>
       </Flex>
+      </Box>
     </Box>
   );
 }

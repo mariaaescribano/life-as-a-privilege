@@ -461,8 +461,13 @@ export class UserService {
       client.from('user').select(select).order('name', { ascending: true }).limit(500);
 
     // La tabla del panel quiere además la edad (fecha_nacimiento), la marca de
-    // «en sesiones» (sql/user-en-sesiones.sql) y las fechas de compra. Si alguna
-    // columna aún no existe, caemos por la cascada en vez de quedarnos sin lista.
+    // «en sesiones» (sql/user-en-sesiones.sql), la fecha de creación
+    // (sql/user-created-at.sql, para ordenar por recientes) y las fechas de
+    // compra. Si alguna columna aún no existe, caemos por la cascada en vez de
+    // quedarnos sin lista.
+    const conCreado = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, created_at, ${flags}, ${fechas}`);
+    if (!conCreado.error) return conCreado.data ?? [];
+
     const conSesiones = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, ${flags}, ${fechas}`);
     if (!conSesiones.error) return conSesiones.data ?? [];
 

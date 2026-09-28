@@ -244,7 +244,7 @@ export function PlanetaBox({
       pointerEvents={bloqueado ? "none" : "auto"}
       transition="all 0.3s ease"
     >
-      <SpaceBg overlay="rgba(8,13,30,0.65)" />
+      <SpaceBg overlay="rgba(8,13,30,0.28)" />
       {inner}
     </Box>
   );

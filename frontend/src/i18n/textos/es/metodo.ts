@@ -1120,7 +1120,7 @@ export const metodo = {
   "metodo.psico.cerebroContinuar": "Ver qué pasó en tu cerebro",
 
   // ── Paso 7 · El trauma en tu cerebro ──
-  "metodo.psico.cerebroIntro": "Cómo se guardó lo que viviste.",
+  "metodo.psico.cerebroIntro": "Cómo se guardó lo que viviste: el cerebro en trauma.",
   "metodo.psico.cerebroToca": "Toca cada zona para leer qué hace, qué le pasó y qué la cambia.",
   "metodo.psico.cerebroParaQue": "Para qué sirve",
   "metodo.psico.cerebroQueLeHizo": "Qué le hizo lo que viviste",
@@ -1170,7 +1170,7 @@ export const metodo = {
   "metodo.psico.queSignificaAce": "¿Qué significa tu resultado ACE?",
   "metodo.psico.tuPuntuacionAce": "Tu puntuación ACE",
   "metodo.psico.aceRiesgo":
-    "Cuantas más experiencias adversas, mayor es el riesgo de enfermedades y dificultades.",
+    "Cuantas más experiencias adversas, mayor es el riesgo de enfermedades físicas, alteraciones mentales y dificultades para las relaciones.",
   "metodo.psico.continuarLinea": "Continuar a Línea de Vida →",
 
   // ── Psicología · test DES-II (desconexión) ─────────────────────────────

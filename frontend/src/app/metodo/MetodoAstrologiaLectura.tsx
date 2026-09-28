@@ -233,7 +233,7 @@ export default function MetodoAstrologiaLectura() {
             overflow="hidden"
             boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
           >
-            <SpaceBg overlay="rgba(8,13,30,0.66)" />
+            <SpaceBg overlay="rgba(8,13,30,0.28)" />
 
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 5, md: 7 }}>
               {/* Cielo con las estrellas-reto */}
@@ -264,7 +264,7 @@ export default function MetodoAstrologiaLectura() {
           overflow="hidden"
           mx={4}
         >
-          <SpaceBg overlay="rgba(8,13,30,0.8)" />
+          <SpaceBg overlay="rgba(8,13,30,0.38)" />
           <ModalCloseButton color={astrologiaTxt} zIndex={2} />
           <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
             {retoAbierto && (

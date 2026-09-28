@@ -529,7 +529,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                boxShadow={`0 0 40px ${astrologiaTxt}44, 0 24px 70px rgba(0,0,0,0.6)`}
                border={`1px solid ${astrologiaTxt}55`}>
             {/* Velo: la foto sola no da contraste para la letra clara. */}
-            <Box position="absolute" inset={0} bg="rgba(8,13,30,0.72)" pointerEvents="none" />
+            <Box position="absolute" inset={0} bg="rgba(8,13,30,0.38)" pointerEvents="none" />
 
             <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
                   px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }} textAlign="center">

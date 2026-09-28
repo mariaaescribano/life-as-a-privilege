@@ -17,7 +17,7 @@ import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt } from "../../Globa
 import { useT } from "../../i18n";
 
 /* Fondo espacial reutilizado */
-const SpaceBg = ({ overlay = "rgba(8,13,30,0.65)" }: { overlay?: string }) => (
+const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)" }: { overlay?: string }) => (
   <Box
     position="absolute"
     inset="0"
@@ -38,7 +38,7 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.65)" }: { overlay?: string }) => (
       inset="0"
       w="100%"
       h="100%"
-      style={{ objectFit: "cover", objectPosition: "center", opacity: 0.85 }}
+      style={{ objectFit: "cover", objectPosition: "center", opacity: 1 }}
     />
     <Box position="absolute" inset="0" style={{ background: overlay }} />
   </Box>
@@ -172,7 +172,7 @@ export default function MetodoAstrologiaProfundizar() {
             border={`1px solid ${cuerpo.color}55`}
             boxShadow={`0 0 28px ${cuerpo.color}33, 0 0 72px ${cuerpo.color}1f`}
           >
-            <SpaceBg overlay="rgba(8,13,30,0.7)" />
+            <SpaceBg overlay="rgba(8,13,30,0.38)" />
 
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} py={{ base: 9, md: 12 }}>
               {textoMostrado ? (

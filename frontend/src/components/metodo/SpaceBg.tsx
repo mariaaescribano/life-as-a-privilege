@@ -11,7 +11,7 @@ interface SpaceBgProps {
 }
 
 /* Fondo espacial con degradado cósmico de respaldo */
-export const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: SpaceBgProps) => (
+export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)" }: SpaceBgProps) => (
   <Box
     position="absolute"
     inset="0"
@@ -32,7 +32,7 @@ export const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: SpaceBgProps) => (
       inset="0"
       w="100%"
       h="100%"
-      style={{ objectFit: "cover", objectPosition: "center", opacity: 0.85 }}
+      style={{ objectFit: "cover", objectPosition: "center", opacity: 1 }}
     />
     <Box position="absolute" inset="0" style={{ background: overlay }} />
   </Box>

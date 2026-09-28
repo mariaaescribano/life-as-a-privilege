@@ -78,7 +78,7 @@ const precargarImagen = (src: string): Promise<void> =>
   });
 
 /* Fondo espacial con degradado cósmico de respaldo */
-const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: { overlay?: string }) => (
+const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)" }: { overlay?: string }) => (
   <Box
     position="absolute"
     inset="0"
@@ -99,7 +99,7 @@ const SpaceBg = ({ overlay = "rgba(8,13,30,0.55)" }: { overlay?: string }) => (
       inset="0"
       w="100%"
       h="100%"
-      style={{ objectFit: "cover", objectPosition: "center", opacity: 0.85 }}
+      style={{ objectFit: "cover", objectPosition: "center", opacity: 1 }}
     />
     <Box position="absolute" inset="0" style={{ background: overlay }} />
   </Box>
@@ -531,7 +531,7 @@ export default function MetodoAstrologia() {
                 overflow="hidden"
                 boxShadow={glowHeader(astrologiaTxt)}
               >
-                <SpaceBg overlay="rgba(8,13,30,0.62)" />
+                <SpaceBg overlay="rgba(8,13,30,0.28)" />
 
                 <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 9, md: 12 }}>
                   <RevealStagger
@@ -601,7 +601,7 @@ export default function MetodoAstrologia() {
                   <Box position="absolute" inset={0} bgImage={`url('${SPACE_IMG}')`}
                        bgSize="cover" bgPosition="center" pointerEvents="none" />
                   {/* Velo: la foto sola no da contraste suficiente para la letra. */}
-                  <Box position="absolute" inset={0} bg="rgba(8,13,30,0.62)" pointerEvents="none" />
+                  <Box position="absolute" inset={0} bg="rgba(8,13,30,0.28)" pointerEvents="none" />
 
                   <Flex
                     position="relative"
@@ -690,7 +690,7 @@ export default function MetodoAstrologia() {
               overflow="hidden"
               boxShadow={glowHeader(astrologiaTxt)}
             >
-              <SpaceBg overlay="rgba(8,13,30,0.65)" />
+              <SpaceBg overlay="rgba(8,13,30,0.28)" />
 
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
                 <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.09} delayChildren={0.35}>
@@ -991,7 +991,7 @@ export default function MetodoAstrologia() {
             boxShadow={`0 0 32px ${astrologiaTxt}55, 0 0 80px ${astrologiaTxt}28, 0 12px 60px rgba(0,0,0,0.6)`}
             display="flex" flexDirection="column"
           >
-            <SpaceBg overlay="rgba(8,13,30,0.78)" />
+            <SpaceBg overlay="rgba(8,13,30,0.38)" />
 
             <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}>
               <Flex direction="column" align="center" gap={5}>
@@ -1055,7 +1055,7 @@ export default function MetodoAstrologia() {
             border={`1px solid ${astrologiaTxt}66`}
             boxShadow={`0 0 32px ${astrologiaTxt}55, 0 0 80px ${astrologiaTxt}28, 0 12px 60px rgba(0,0,0,0.6)`}
           >
-            <SpaceBg overlay="rgba(8,13,30,0.8)" />
+            <SpaceBg overlay="rgba(8,13,30,0.38)" />
             <Box position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 8, md: 9 }}>
               <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" textAlign="center"
                     style={{ textShadow: `0 0 10px ${astrologiaTxt}44` }}>

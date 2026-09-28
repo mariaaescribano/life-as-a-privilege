@@ -347,7 +347,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         display="flex"
         flexDirection="column"
       >
-        <SpaceBg overlay="rgba(8,13,30,0.72)" />
+        <SpaceBg overlay="rgba(8,13,30,0.38)" />
 
         {/* X cerrar */}
         <Box

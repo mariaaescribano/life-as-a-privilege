@@ -47,7 +47,7 @@ const SpaceBg = () => (
     />
     <Box
       position="absolute" inset="0"
-      style={{ background: "rgba(8,13,30,0.58)" }}
+      style={{ background: "rgba(8,13,30,0.28)" }}
     />
   </Box>
 );

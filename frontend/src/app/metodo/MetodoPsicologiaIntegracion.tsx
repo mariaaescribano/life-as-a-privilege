@@ -409,7 +409,7 @@ export default function MetodoPsicologiaIntegracion() {
                      bgImage={`url('${ARQUETIPOS_IMG}')`} bgSize="cover" bgPosition="center"
                      border={azulBorde} boxShadow={glowPanel}>
                   {/* Velo: la foto sola no da contraste para la letra clara. */}
-                  <Box position="absolute" inset={0} bg="rgba(8,13,30,0.62)" pointerEvents="none" />
+                  <Box position="absolute" inset={0} bg="rgba(8,13,30,0.3)" pointerEvents="none" />
                   <Box position="relative" zIndex={1} flex="1" px={{ base: 5, md: 8 }} py={{ base: 8, md: 10 }}>
                     <ArquetiposBloqueados
                       onIr={() => navigate("/metodo/astrologia")}

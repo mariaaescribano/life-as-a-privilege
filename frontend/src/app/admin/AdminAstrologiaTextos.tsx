@@ -261,7 +261,7 @@ export default function AdminAstrologiaTextos() {
           <Box position="relative" borderRadius="2xl" overflow="hidden"
                border={`1px solid ${color}44`}
                boxShadow={`0 0 22px ${color}1a, 0 0 60px rgba(0,0,0,0.3)`}>
-            <SpaceBg overlay="rgba(8,13,30,0.72)" />
+            <SpaceBg overlay="rgba(8,13,30,0.38)" />
 
             <Flex position="relative" zIndex={1} direction="column" gap={5} p={{ base: 4, md: 7 }}>
 

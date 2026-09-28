@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, Flex, Grid, Text, Input, Textarea } from "@chakra-ui/react";
 import axios from "axios";
-import { API_URL } from "../../GlobalVariables";
+import { API_URL, astrologiaNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { PRECIO_LLAMADA, type LlamadaTipo } from "./llamadaPrecios";
 import { useT } from "../../i18n";
@@ -294,7 +294,17 @@ export function AgendarLlamada({
       boxShadow={`0 0 22px rgba(255,255,255,0.12), 0 0 50px rgba(255,255,255,0.06), 0 0 30px ${color}1a`}
       fontFamily="'EB Garamond', serif"
     >
-      {hasBg && <DisciplinaBgLayer nom={disciplinaNom} borderRadius="2xl" />}
+      {/* En Astrología, el cielo va con un velo intermedio SOLO aquí: este box
+          es un formulario denso (calendario, campos, precio) y con el velo
+          ligero de la disciplina (0.25) quedaba demasiado luminoso para leer.
+          Las demás disciplinas siguen con su fondo de siempre. */}
+      {hasBg && (
+        <DisciplinaBgLayer
+          nom={disciplinaNom}
+          borderRadius="2xl"
+          overlay={disciplinaNom === astrologiaNom ? "rgba(8,13,30,0.45)" : undefined}
+        />
+      )}
       <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}>
         {sent ? (
           <Flex direction="column" align="center" gap={4} py={4} textAlign="center">

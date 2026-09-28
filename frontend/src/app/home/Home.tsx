@@ -31,6 +31,7 @@ import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import CaminoUsuario from "./CaminoUsuario";
 import DiarioUsuario from "./DiarioUsuario";
+import PinesDiario from "./PinesDiario";
 import { ComunidadPrimeraVez } from "../../components/global/ComunidadPrimeraVez";
 import { useT, type ClaveTexto } from "../../i18n";
 import { encogerFoto } from "../../utils/encogerFoto";
@@ -906,6 +907,12 @@ const Home = () => {
         </Box>
       )}
 
+      {/* Los pines del diario (Mis notas + Diario de terapia), abajo a la
+          derecha. Solo salen si la persona tiene diario de terapias. Van a
+          este nivel, FUERA de cualquier box con transform: un position:fixed
+          dentro de un elemento transformado se ancla a él y no a la ventana. */}
+      <PinesDiario />
+
       {/* Tu camino — escritorio: fijo a la IZQUIERDA, a la misma altura que
           «Continuar» (que va a la derecha). Desde `lg`: por debajo de ese ancho
           la columna se comería el sitio del mandala, así que ahí baja y se pinta
@@ -1232,8 +1239,9 @@ const Home = () => {
             )}
 
             {/* Tu camino — en pantallas estrechas no cabe a la izquierda del
-                mandala sin pisarlo, así que ahí se pone debajo. */}
-            <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={8} w="100%">
+                mandala sin pisarlo, así que ahí se pone debajo, con aire por
+                los dos lados: ni pegado al mandala ni al footer. */}
+            <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={14} mb={10} w="100%">
               <CaminoUsuario suscritas={suscritasCamino} />
               <DiarioUsuario />
             </Flex>

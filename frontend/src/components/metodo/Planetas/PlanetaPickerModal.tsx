@@ -52,7 +52,7 @@ export function PlanetaPickerModal({ picker, carta, onClose, onSelect }: Planeta
         boxShadow={`0 0 32px ${color}55, 0 0 80px ${color}22, 0 12px 60px rgba(0,0,0,0.6)`}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
-        <SpaceBg overlay="rgba(8,13,30,0.7)" />
+        <SpaceBg overlay="rgba(8,13,30,0.38)" />
 
         <Box position="absolute" top={3} right={3} zIndex={2}>
           <Box
