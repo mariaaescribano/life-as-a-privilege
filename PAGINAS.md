@@ -104,7 +104,7 @@ Los textos entre «comillas» son los que ve la persona, tal cual.
    > **Pago de {disciplina} realizado**
    > Ya puedes acceder.
    > [Aceptar]
-   Al pulsar «Aceptar» entra directamente en la disciplina.
+   Al pulsar «Aceptar» el popup se cierra y **se queda en el Mapa**, con la disciplina ya encendida. El pago solo desbloquea: no le mete dentro. Entra cuando quiera, pinchando su círculo.
 5. Le llega el **correo «{Disciplina} ya te espera en tu Mapa»** (texto abajo). A ti te llega el aviso «Ha pagado {disciplina}: {email}».
 6. La disciplina queda encendida para siempre en su Mapa. Los dos correos salen solo la primera vez: recargar la página o repetir la verificación no los repite.
 
@@ -144,11 +144,15 @@ Casos que están cubiertos:
    > Tu carta está en proceso. Yo misma leeré tu carta. Mientras tanto, puedes continuar para ver tus arquetipos.
 5. Le llega el **correo «Tu carta ha sido registrada correctamente»** (texto abajo), con la caja de sus datos. A ti te llega la solicitud con sus datos, para escribir la lectura.
 6. En la misma página aparecen: la chapa con sus datos guardados (botón «Cambiar»), el box «¿Qué es una carta astral?» (tercer cómic) y el trío **Sol · Luna · Ascendente**. Hasta que no lee los tres, el botón «Arquetipos →» no se activa («Lee los tres para continuar»).
+   - Desde aquí puede ver sus **Arquetipos** (la rueda de la carta), pero **no puede seguir más allá**: los Puntos clave y todo lo que viene después quedan con candado hasta que tú hayas leído su carta (paso 8). Es el orden del recorrido: datos → arquetipos → *espera a la lectura* → puntos clave → casas → aspectos → PDF → llamada → cursos.
 7. **Si corrige sus datos** (con «Cambiar») y los reenvía: la carta se recalcula con los nuevos, el popup dice «He recibido tus datos corregidos. Tu carta se ha vuelto a calcular con ellos y yo misma la leeré de nuevo…» y el correo es el de **«Tus datos corregidos han quedado registrados»**. Lo que ya llevaba leído no se pierde.
 8. Tú escribes la lectura en el panel (puntos clave, casas, aspectos) y avisas **a mano** con los botones:
    - «En proceso» → **correo «Tu carta está en proceso de ser leída»**.
    - «Leída» → **correo «Tu carta ya ha sido leída»**, que lleva a Puntos clave. El panel se niega a mandarlo si no hay ningún punto clave guardado (llevaría a una puerta cerrada).
    - Guardar la lectura no manda nada: solo avisan los botones.
+9. Con la lectura publicada se le abren los Puntos clave, y a partir de ahí **termina el recorrido por su cuenta**, leyendo lo que has escrito (puntos clave → casas → aspectos → PDF → llamada → cursos). Ya no intervienes más, salvo que reserve una llamada.
+
+**Probado:** el orden entero — pagar solo desbloquea, arquetipos sí pero sin seguir hasta la lectura, los dos avisos, y que termina sola — en la sección «El orden del recorrido» de `backend/src/metodoAstrologia/metodoAstrologia.spec.ts` (la cadena de candados vive en `frontend/src/hooks/astrologiaDesbloqueo.ts` y esos tests son su contrato).
 
 Casos que están cubiertos:
 - Si el buscador de lugares falla al corregir solo la hora (mismo lugar), se aprovechan las coordenadas de antes y no se queda sin carta.

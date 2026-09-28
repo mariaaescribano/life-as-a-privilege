@@ -16,6 +16,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { MetodoAstrologiaService } from './metodoAstrologia.service';
 import { bdFalsa } from '../test-utils/bd-falsa';
+// La cadena de desbloqueo del recorrido es una función pura del frontend (la
+// usa el Índice y las páginas). Se testea AQUÍ porque es el contrato del
+// recorrido: qué se abre con qué. Si cambia allí, estos tests avisan.
+import { desbloqueoAstrologia } from '../../../frontend/src/hooks/astrologiaDesbloqueo';
 
 const USER = '11111111-2222-3333-4444-555555555555';
 
@@ -352,5 +356,103 @@ describe('4 · ADMIN: la lectura escrita y los avisos a mano', () => {
       casas_escritas: 1,
       aspectos_escritos: 1,
     });
+  });
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
+// 5 · EL ORDEN DEL RECORRIDO — la descripción de María (2026-09-28), fijada:
+//
+//   · Pagar solo DESBLOQUEA la disciplina: el popup de «ya puedes acceder» no
+//     te mete dentro; se entra pinchando el círculo del Mapa (Home.tsx hace
+//     como en el resto de disciplinas: cerrar el popup y quedarse en el Mapa).
+//   · Al entrar salen los cómics de intro y se dan los datos de nacimiento; al
+//     guardarlos sale el popup y la MISMA página pasa a enseñar lo primero de
+//     la carta (Sol · Luna · Ascendente).
+//   · Después puede ver Arquetipos, pero NO seguir: los Puntos clave se abren
+//     solo cuando María ha LEÍDO la carta (escribe los puntos clave o sube el
+//     enlace de la lectura desde su panel).
+//   · Por el camino le llegan dos correos: «tu carta está en proceso» (María
+//     ha empezado) y «tu carta ya ha sido leída» (ya está disponible).
+//   · Desde ahí la persona termina sola el recorrido, leyendo lo que hay
+//     escrito; María ya no interviene salvo que quiera una llamada.
+//
+// La cadena vive en frontend/src/hooks/astrologiaDesbloqueo.ts (la usa el
+// Índice y las páginas); estos tests son su contrato.
+// ═════════════════════════════════════════════════════════════════════════════
+describe('5 · El orden del recorrido (el candado de la carta leída)', () => {
+  const abiertos = (d: Record<number, boolean>) =>
+    Object.entries(d).filter(([, v]) => v).map(([n]) => Number(n));
+
+  it('recién desbloqueada, sin datos todavía: solo el paso 1 (dar los datos)', () => {
+    expect(abiertos(desbloqueoAstrologia(null))).toEqual([1]);
+  });
+
+  it('con los datos enviados puede ver Arquetipos (paso 2), pero NO seguir: falta que María lea la carta', () => {
+    const d = desbloqueoAstrologia({ solicitud_enviada_at: '2026-09-28T10:00:00Z' });
+    expect(abiertos(d)).toEqual([1, 2]);
+  });
+
+  it('cuando María escribe los puntos clave, se abre el paso 3 (y no más: primero hay que leerlos)', () => {
+    const d = desbloqueoAstrologia({
+      solicitud_enviada_at: '2026-09-28T10:00:00Z',
+      retos: [{ id: 'r1' }],
+    });
+    expect(abiertos(d)).toEqual([1, 2, 3]);
+  });
+
+  it('el enlace de la lectura también cuenta como carta leída', () => {
+    const d = desbloqueoAstrologia({
+      solicitud_enviada_at: '2026-09-28T10:00:00Z',
+      link_carta: 'https://drive/pdf',
+    });
+    expect(d[3]).toBe(true);
+  });
+
+  it('leyendo lo escrito se abre el resto: retos leídos → Casas; casas leídas → hasta el final', () => {
+    const base = {
+      solicitud_enviada_at: '2026-09-28T10:00:00Z',
+      retos: [{ id: 'r1' }, { id: 'r2' }],
+      casas_texto: { '1': 'texto casa 1' },
+    };
+    // Le falta un reto por leer → Casas sigue cerrado
+    expect(desbloqueoAstrologia({ ...base, data: { retosLeidos: ['r1'] } })[4]).toBe(false);
+    // Todos los retos leídos → Casas abierto, Aspectos aún no
+    const conRetos = desbloqueoAstrologia({ ...base, data: { retosLeidos: ['r1', 'r2'] } });
+    expect(abiertos(conRetos)).toEqual([1, 2, 3, 4]);
+    // También las casas escritas leídas → todo abierto hasta el final (5-8)
+    const todo = desbloqueoAstrologia({ ...base, data: { retosLeidos: ['r1', 'r2'], casasLeidos: ['1'] } });
+    expect(abiertos(todo)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+  });
+
+  it('la historia entera, con el servicio de verdad: datos → arquetipos → María lee → correos → termina sola', async () => {
+    const { service, mail, astro } = montar();
+
+    // 1 · Da sus datos de nacimiento: se abre Arquetipos, pero nada más.
+    await service.solicitarCarta(USER, DATOS);
+    expect(abiertos(desbloqueoAstrologia(astro[0] as any))).toEqual([1, 2]);
+
+    // 2 · María no puede avisar de «leída» antes de escribir la lectura.
+    expect((await service.avisar(USER, 'leida')).success).toBe(false);
+
+    // 3 · Avisa de que ha empezado → correo «tu carta está en proceso».
+    await service.avisar(USER, 'proceso');
+    expect(mail.enviarCartaEnProceso).toHaveBeenCalledWith('ana@x.com', 'Ana');
+
+    // 4 · Escribe la lectura (sin correo) y avisa de «leída» → segundo correo.
+    await service.guardarTextos(USER, {
+      retos: [{ id: 'r1', titulo: 'Reto', texto: 't' }],
+      casas_texto: { '1': 'texto casa 1' },
+    });
+    expect(mail.enviarCartaLeida).not.toHaveBeenCalled(); // guardar no avisa
+    await service.avisar(USER, 'leida');
+    expect(mail.enviarCartaLeida).toHaveBeenCalledWith('ana@x.com', 'Ana');
+    expect(abiertos(desbloqueoAstrologia(astro[0] as any))).toEqual([1, 2, 3]);
+
+    // 5 · La persona lee lo escrito (su progreso, por PATCH) y termina sola.
+    await service.actualizar(USER, { data: { retosLeidos: ['r1'], casasLeidos: ['1'] } });
+    expect(abiertos(desbloqueoAstrologia(astro[0] as any))).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    // María no ha tenido que hacer nada más: solo los dos avisos.
+    expect(mail.enviarCartaEnProceso).toHaveBeenCalledTimes(1);
+    expect(mail.enviarCartaLeida).toHaveBeenCalledTimes(1);
   });
 });

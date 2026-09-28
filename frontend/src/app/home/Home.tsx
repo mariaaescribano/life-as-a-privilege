@@ -1251,7 +1251,9 @@ const Home = () => {
 
       <SiteFooter />
 
-      <PagoExitoModal isOpen={pagoExitoOpen} onAceptar={() => { setPagoExitoOpen(false); navigate("/metodo/astrologia"); }} />
+      {/* Como en el resto de disciplinas: el pago solo DESBLOQUEA. Al aceptar
+          se queda en el Mapa con Astrología encendida, y entra pinchándola. */}
+      <PagoExitoModal isOpen={pagoExitoOpen} onAceptar={() => setPagoExitoOpen(false)} />
       <PagoExitoModal
         isOpen={pagoPsicoExitoOpen}
         onAceptar={() => setPagoPsicoExitoOpen(false)}
