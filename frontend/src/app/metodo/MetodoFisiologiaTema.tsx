@@ -288,15 +288,15 @@ export default function MetodoFisiologiaTema() {
               <Box
                 as="button"
                 onClick={abrirComic}
+                position="relative"
+                overflow="hidden"
                 display="inline-flex"
                 alignItems="center"
                 gap={2.5}
                 px={{ base: 5, md: 7 }}
                 py={{ base: 2.5, md: 3 }}
                 borderRadius="full"
-                bg={fisiologiaTxt}
-                color={fisiologiaBg}
-                border={`1px solid ${fisiologiaTxt}`}
+                color={fisiologiaTxt}
                 fontWeight="700"
                 fontSize={{ base: "sm", md: "md" }}
                 letterSpacing="0.03em"
@@ -305,15 +305,23 @@ export default function MetodoFisiologiaTema() {
                 transition="all 0.2s"
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 28px ${fisiologiaTxt}88, 0 0 58px ${fisiologiaTxt}44` }}
               >
-                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                {/* Fondo con la imagen de Fisiología (como el header) y el texto
+                    en fisiologiaTxt encima. */}
+                <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="full" overlay={`${fisiologiaBg}bb`} />
+                <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" position="relative" zIndex={1}
                      w={{ base: "18px", md: "20px" }} h={{ base: "18px", md: "20px" }} fill="currentColor">
                   <path d="M320-200v-560l440 280-440 280Z" />
                 </Box>
-                Antes de empezar: mira cómo se fabrican
+                <Box as="span" position="relative" zIndex={1}
+                     style={{ textShadow: `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc` }}>
+                  Antes de empezar: mira cómo funcionan
+                </Box>
                 {/* Ya leído: la marquita común, aquí dentro del botón. */}
                 {comicLeido && (
-                  <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg}
-                              size="22px" iconSize="13px" />
+                  <Box position="relative" zIndex={1} display="inline-flex">
+                    <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg}
+                                size="22px" iconSize="13px" />
+                  </Box>
                 )}
               </Box>
             </Reveal>

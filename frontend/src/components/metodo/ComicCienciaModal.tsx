@@ -99,6 +99,7 @@ export function ComicCienciaModal({ isOpen, onClose }: ComicCienciaModalProps) {
           vinetas={vinetas}
           onClose={onClose}
           themeColor={fisiologiaTxt}
+          textColor={fisiologiaTxt}
           disciplinaBgImage="/img/fondos/fisio.webp"
           disciplinaBgColor={fisiologiaBg}
         />

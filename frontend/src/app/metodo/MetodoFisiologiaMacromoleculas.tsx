@@ -14,7 +14,7 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { useT, type ClaveTexto } from "../../i18n";
-import { glowHeader } from "../../components/metodo/FotoBox";
+import { INK, PanelBox, BotonVolverEstacion, CabeceraEstacion } from "../../components/metodo/FisiologiaEstacion";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -27,9 +27,6 @@ import {
   FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 const MBox = motion(Box);
-
-// Halo oscuro para leer el texto claro sobre el fondo morado de Fisiología.
-const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
 
 // ── Definición de las 4 macromoléculas ──────────────────────────────────────
 type MacroId = "proteina" | "adn" | "lipido" | "carbohidrato";
@@ -220,21 +217,6 @@ function posEnBandeja(forma: Forma, i: number, n: number): { x: number; y: numbe
   return { x, y: 50 + (i % 2 === 0 ? -6 : 6) };                        // cadena suave
 }
 
-// ── Caja rectangular con el fondo/brillo de Fisiología (reutilizable) ────────
-function PanelBox({ children, minH, px, py, ...rest }: any) {
-  return (
-    <Box position="relative" borderRadius="2xl" overflow="hidden"
-         boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}
-         {...rest}>
-      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-      <Box position="relative" zIndex={1} h="100%"
-           px={px ?? { base: 5, md: 9 }} py={py ?? { base: 7, md: 9 }} minH={minH}>
-        {children}
-      </Box>
-    </Box>
-  );
-}
-
 // ═════════════════════════════════════════════════════════════════════════
 // Estación de una macromolécula (se remonta al cambiar de estación).
 // ═════════════════════════════════════════════════════════════════════════
@@ -291,29 +273,9 @@ function Estacion({
 
   return (
     <MBox key={def.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} w="100%">
-      {/* Volver */}
+      {/* Volver (componente común de las estaciones de Fisiología) */}
       <Flex mb={4}>
-        {/* Volver: en vez del velo blanco translúcido de antes, lleva el fondo
-            propio de Fisiología (DisciplinaBgLayer), como el header. */}
-        <Box as="button" onClick={onVolver}
-             position="relative" overflow="hidden"
-             display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
-             color={fisiologiaTxt}
-             fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }} cursor="pointer"
-             // El MISMO halo que la cabecera (glowHeader): el botón lleva su
-             // mismo fondo, así que tenía que llevar también su misma sombra.
-             boxShadow={glowHeader(fisiologiaTxt)}
-             transition="all 0.2s"
-             sx={{ "&:hover .volver-velo": { opacity: 0 } }}>
-          <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="full" overlay={`${fisiologiaBg}bb`} />
-          {/* Velo extra que se desvanece al pasar por encima: así el botón
-              "responde" sin cambiar el fondo. */}
-          <Box className="volver-velo" position="absolute" inset={0} borderRadius="full"
-               bg="rgba(0,0,0,0.18)" opacity={1} transition="opacity 0.2s" pointerEvents="none" />
-          <Box position="relative" zIndex={1} style={{ textShadow: INK }}>
-            {`← ${t("fisiologia.macro.volver")}`}
-          </Box>
-        </Box>
+        <BotonVolverEstacion label={`← ${t("fisiologia.macro.volver")}`} onClick={onVolver} />
       </Flex>
 
       <AnimatePresence mode="wait">
@@ -322,21 +284,13 @@ function Estacion({
           <MBox key="a" w="100%" initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {/* Cabecera de la estación: caja con el fondo de Fisiología (como el
                 header de la página), no texto suelto sobre el turquesa. */}
-            <PanelBox w="100%" mb={5} py={{ base: 5, md: 6 }}>
-              <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center"
-                    style={{ textShadow: INK }}>{t(def.nombre)}</Text>
-              <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.18em"
-                    textTransform="uppercase" textAlign="center" mt={2} opacity={0.75}
-                    style={{ textShadow: INK }}>
-                {t("fisiologia.macro.explicacion")}
-              </Text>
-              <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
-                    textAlign="center" mt={1} style={{ textShadow: INK }}>
-                {heterogenea
-                  ? t("fisiologia.macro.instruccionPiezas", { total, monomero: t(def.monomero) })
-                  : t("fisiologia.macro.instruccionCadena", { total, monomeros: t(def.monomeroPl) })}
-              </Text>
-            </PanelBox>
+            <CabeceraEstacion
+              titulo={t(def.nombre)}
+              kicker={t("fisiologia.macro.explicacion")}
+              instruccion={heterogenea
+                ? t("fisiologia.macro.instruccionPiezas", { total, monomero: t(def.monomero) })
+                : t("fisiologia.macro.instruccionCadena", { total, monomeros: t(def.monomeroPl) })}
+            />
 
             <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 

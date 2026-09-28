@@ -66,6 +66,7 @@ export function ComicEstrellaModal({ isOpen, onClose, onContinue }: ComicEstrell
           // El tick de la última viñeta ya no salta a Moléculas: abre la tabla.
           onComplete={() => setTabla(true)}
           themeColor={fisiologiaTxt}
+          textColor={fisiologiaTxt}
           disciplinaBgImage="/img/fondos/fisio.webp"
           disciplinaBgColor={fisiologiaBg}
         />

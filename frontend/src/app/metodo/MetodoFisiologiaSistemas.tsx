@@ -149,7 +149,7 @@ export default function MetodoFisiologiaSistemas() {
           </Reveal>
 
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+            <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
               {t("fisiologia.sistemas.intro")}
             </Text>

@@ -59,6 +59,7 @@ export default function MetodoFisiologiaCelula() {
         vinetas={comicVinetas}
         continueLabel={t("fisiologia.organos.titulo")}
         themeColor={fisiologiaTxt}
+        textColor={fisiologiaTxt}
         disciplinaBgImage="/img/fondos/fisio.webp"
         disciplinaBgColor={fisiologiaBg}
       />

@@ -44,6 +44,7 @@ export function ComicCelulaModal({ isOpen, onClose, onContinue }: ComicCelulaMod
           onClose={onClose}
           onComplete={onContinue}
           themeColor={fisiologiaTxt}
+          textColor={fisiologiaTxt}
           disciplinaBgImage="/img/fondos/fisio.webp"
           disciplinaBgColor={fisiologiaBg}
         />

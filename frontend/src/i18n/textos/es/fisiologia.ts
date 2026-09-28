@@ -137,7 +137,7 @@ export const fisiologia = {
   "fisiologia.macro.intro": "Las grandes moléculas de la Vida.",
   "fisiologia.macro.bloqueo": "Primero forma las cuatro macromoléculas",
   "fisiologia.macro.volver": "Las 4 macromoléculas",
-  "fisiologia.macro.explicacion": "Explicación",
+  "fisiologia.macro.explicacion": "",
   "fisiologia.macro.bandeja": "bandeja de ensamblaje",
   "fisiologia.macro.plegandose": "…plegándose…",
   "fisiologia.macro.formada": "Formada",
@@ -312,7 +312,7 @@ export const fisiologia = {
 
   // ── Sistemas ───────────────────────────────────────────────────────────
   "fisiologia.sistemas.intro":
-    "Varios órganos que colaboran forman un sistema. Pulsa cada sistema para conocerlo.",
+    "Varios órganos que colaboran forman un sistema. Pulsa para conocerlo.",
   "fisiologia.sistemas.bloqueo": "Primero lee todos los sistemas",
   /** Título de la ficha de un sistema. `{sistema}` llega en minúscula y
    *  `{Sistema}` tal cual, porque el inglés abre la frase con el nombre. */

@@ -14,6 +14,7 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { useT, type ClaveTexto } from "../../i18n";
+import { INK, PanelBox, BotonVolverEstacion, CabeceraEstacion } from "../../components/metodo/FisiologiaEstacion";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -27,7 +28,6 @@ import {
   FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 
 const MBox = motion(Box);
-const INK = `0 1px 3px ${fisiologiaBg}f5, 0 0 8px ${fisiologiaBg}cc, 0 2px 16px ${fisiologiaBg}88`;
 const PRE = "/recorrido/fisiologia/pre";
 
 // ── Estilo de cada macromolécula usada como "ladrillo" (colores heredados) ──
@@ -204,21 +204,6 @@ function EstDibujada({ def }: { def: EstDef }) {
   );
 }
 
-// ── Caja rectangular con el fondo/brillo de Fisiología (reutilizable) ────────
-function PanelBox({ children, minH, px, py, ...rest }: any) {
-  return (
-    <Box position="relative" borderRadius="2xl" overflow="hidden"
-         boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}
-         {...rest}>
-      <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
-      <Box position="relative" zIndex={1} h="100%"
-           px={px ?? { base: 5, md: 9 }} py={py ?? { base: 7, md: 9 }} minH={minH}>
-        {children}
-      </Box>
-    </Box>
-  );
-}
-
 // ═════════════════════════════════════════════════════════════════════════
 // Estación de una estructura celular
 // ═════════════════════════════════════════════════════════════════════════
@@ -257,27 +242,22 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
 
   return (
     <MBox key={def.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} w="100%">
+      {/* Volver (componente común de las estaciones de Fisiología: el mismo
+          botón que en /metodo/fisiologia/macromoleculas) */}
       <Flex mb={4}>
-        <Box as="button" onClick={onVolver}
-             display="inline-flex" alignItems="center" gap={2} px={4} py={1.5} borderRadius="full"
-             bg="rgba(255,255,255,0.1)" color={fisiologiaTxt}
-             fontFamily="'EB Garamond', serif" fontWeight="600" fontSize="sm" cursor="pointer"
-             transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.18)" }}>
-          {`← ${t("fisiologia.estructuras.volver")}`}
-        </Box>
+        <BotonVolverEstacion label={`← ${t("fisiologia.estructuras.volver")}`} onClick={onVolver} />
       </Flex>
 
       <AnimatePresence mode="wait">
         {!completo ? (
           <MBox key="a" w="100%" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            {/* Título y frase FUERA del box, arriba (no dentro del panel) */}
-            <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK }}>
-              {t(def.nombre)}
-            </Text>
-            <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
-                  textAlign="center" mt={1} mb={5} style={{ textShadow: INK }}>
-              {t("fisiologia.estructuras.instruccion")}
-            </Text>
+            {/* Cabecera de la estación: la misma caja con el fondo de Fisiología
+                que en /metodo/fisiologia/macromoleculas (componente común). */}
+            <CabeceraEstacion
+              titulo={t(def.nombre)}
+              kicker={t("fisiologia.macro.explicacion")}
+              instruccion={t("fisiologia.estructuras.instruccion")}
+            />
 
             {/* Un poco más alto que antes: los nombres de las piezas pasaron de
                 ir sobre la foto a ir debajo, así que cada pieza ocupa más. */}
@@ -581,7 +561,7 @@ export default function MetodoFisiologiaEstructuras() {
 
           {!activa && (
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
-              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+              <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mt={1}
                     maxW="640px">
                 {t("fisiologia.estructuras.intro")}
               </Text>

@@ -56,6 +56,7 @@ export function ComicTemaModal({
           onComplete={onClose}
           onPageView={onPageView}
           themeColor={fisiologiaTxt}
+          textColor={fisiologiaTxt}
           disciplinaBgImage="/img/fondos/fisio.webp"
           disciplinaBgColor={fisiologiaBg}
           leida={leidaPorIndice ?? (leida ? () => true : undefined)}
