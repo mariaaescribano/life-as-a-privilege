@@ -52,9 +52,16 @@ const PIN = {
   border: "1.5px solid rgba(255,255,255,0.5)",
   color: "white",
   cursor: "pointer",
-  boxShadow: "0 4px 18px rgba(0,0,0,0.28), 0 0 16px rgba(255,255,255,0.12)",
+  // Glow blanco suave, SIN sombra oscura de profundidad (la sombra los hacía
+  // pesados sobre el turquesa; la luz los integra).
+  boxShadow: "0 0 14px rgba(255,255,255,0.3), 0 0 32px rgba(255,255,255,0.14)",
   transition: "all 0.22s ease",
-  _hover: { bg: "rgba(255,255,255,0.2)", borderColor: "white", transform: "translateY(-2px)" },
+  _hover: {
+    bg: "rgba(255,255,255,0.2)",
+    borderColor: "white",
+    transform: "translateY(-2px)",
+    boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 44px rgba(255,255,255,0.2)",
+  },
   _active: { transform: "translateY(0)" },
 } as const;
 
