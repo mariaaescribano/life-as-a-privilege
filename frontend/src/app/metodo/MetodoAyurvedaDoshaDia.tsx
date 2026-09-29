@@ -85,7 +85,7 @@ function Chip({ label, checked, onToggle, color }: { label: string; checked: boo
       _hover={{ borderColor: color, transform: "translateY(-1px)" }}
     >
       {checked && <Check size={12} color="#fff" strokeWidth={3} />}
-      <Text color={checked ? "#fff" : TINTA} fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2"
+      <Text color={checked ? "#fff" : TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.2"
             style={checked ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
         {label}
       </Text>
@@ -238,7 +238,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 {t("metodo.ayurDia.titulo")}
               </Text>
               <Separador />
-              <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" maxW="600px">
+              <Text color={`${TINTA}d0`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" maxW="600px">
                 {t("metodo.ayurDia.intro")}
               </Text>
             </Flex>
@@ -264,7 +264,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 {ordenados.length > 0 && (
                   <Flex as="button" onClick={() => { void generateDiaPdf(doshaKey, meta.label, ordenados); }} align="center" gap={2} px={4} py={2} borderRadius="full"
                         bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}
-                        fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                        fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                         cursor="pointer" transition="all 0.15s"
                         _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
                     <Download size={16} /> PDF
@@ -272,13 +272,13 @@ export default function MetodoAyurvedaDoshaDia() {
                 )}
                 <Flex as="button" onClick={() => setEjemploOpen(true)} align="center" gap={2} px={4} py={2} borderRadius="full"
                       bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}
-                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                       cursor="pointer" transition="all 0.15s"
                       _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
                   <Eye size={16} /> {t("metodo.ayurDia.verEjemplo")}
                 </Flex>
                 <Flex as="button" onClick={abrirAnadir} align="center" gap={2} px={4} py={2} borderRadius="full"
-                      bg={meta.color} color="#fff" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                      bg={meta.color} color="#fff" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                       cursor="pointer" boxShadow={`0 0 14px ${meta.color}66`} transition="all 0.15s"
                       style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                       _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 22px ${meta.color}99` }}>
@@ -290,26 +290,22 @@ export default function MetodoAyurvedaDoshaDia() {
 
             {ordenados.length === 0 ? (
               <Flex direction="column" align="center" textAlign="center" gap={4} py={{ base: 4, md: 6 }}>
-                <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8" maxW="460px">
+                <Text color={`${TINTA}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.8" maxW="460px">
                   {t("metodo.ayurDia.enBlanco")}
                 </Text>
                 <Flex as="button" onClick={() => setEjemploOpen(true)} align="center" gap={2} px={5} py={2.5} borderRadius="full"
                       bg="rgba(255,251,243,0.6)" color={meta.color} border={`1.5px solid ${meta.color}88`}
-                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                      fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                       cursor="pointer" transition="all 0.15s"
                       _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
                   <Eye size={16} /> {t("metodo.ayurDia.verDiaEjemplo")}
                 </Flex>
               </Flex>
             ) : (
-              <RevealStagger
-                inView
+              <Box
                 display="flex"
                 flexDirection="column"
                 gap={3.5}
-                stagger={0.08}
-                delayChildren={0.05}
-                amount={0.1}
                 // Si el usuario añade muchos momentos, la lista no crece sin
                 // límite: se vuelve scrollable dentro del box.
                 maxH={{ base: "460px", md: "560px" }}
@@ -322,21 +318,28 @@ export default function MetodoAyurvedaDoshaDia() {
                   "&::-webkit-scrollbar-thumb": { background: `${ayurvedaTxt}66`, borderRadius: "9999px" },
                 }}
               >
-                {ordenados.map((b) => (
-                  <RevealItem key={b.id} direction="up" distance={16} duration={0.5} w="100%">
+                {/* NADA de RevealStagger aquí: esta lista CRECE. La cascada del
+                    contenedor ya había gastado su disparo (`once`) y el momento
+                    recién añadido nacía en `hidden` sin nadie que le dijera
+                    «show»: se guardaba pero quedaba invisible, como si añadir
+                    no funcionara. Un <Reveal> por fila (con su propio umbral)
+                    entra al montarse, tenga la lista los momentos que tenga. */}
+                {ordenados.map((b, i) => (
+                  <Reveal key={b.id} inView direction="up" distance={16} duration={0.5}
+                          delay={Math.min(i * 0.06, 0.3)} amount={0.1} w="100%" flexShrink={0}>
                   <Flex align="flex-start" gap={{ base: 3, md: 4 }} px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}
                         borderRadius="xl" bg="rgba(255,251,243,0.42)" border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}
                         sx={{ backdropFilter: "blur(4px)" }}>
                     <Flex align="center" gap={1.5} flexShrink={0} minW={{ base: "58px", md: "68px" }} mt="2px">
                       <Clock size={14} color={meta.color} />
-                      <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }}>{b.hora || "—"}</Text>
+                      <Text color={meta.color} fontWeight="700" fontSize={{ base: "md", md: "lg" }}>{b.hora || "—"}</Text>
                     </Flex>
                     <Box flex="1" minW={0}>
-                      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
+                      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
                         {b.actividad || (b.comida ? "Comida" : "Momento")}
                       </Text>
                       {b.comida && (b.alimentos?.length ?? 0) > 0 && (
-                        <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" mt={0.5}>
+                        <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.6" mt={0.5}>
                           {(b.alimentos || []).join(" · ")}
                         </Text>
                       )}
@@ -356,9 +359,9 @@ export default function MetodoAyurvedaDoshaDia() {
                       </Box>
                     </Flex>
                   </Flex>
-                  </RevealItem>
+                  </Reveal>
                 ))}
-              </RevealStagger>
+              </Box>
             )}
           </Panel>
           </Reveal>
@@ -368,7 +371,7 @@ export default function MetodoAyurvedaDoshaDia() {
             <Box
               as="button" onClick={guardando ? undefined : guardar}
               minW="180px" px={9} py={3} borderRadius="full" bg={meta.color} color="#fff"
-              fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
+              fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.05em"
               cursor={guardando ? "wait" : "pointer"} boxShadow={`0 0 18px ${meta.color}55`} transition="all 0.2s"
               style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
               _hover={guardando ? {} : { transform: "translateY(-2px)", boxShadow: `0 0 28px ${meta.color}88` }}
@@ -381,14 +384,14 @@ export default function MetodoAyurvedaDoshaDia() {
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={4}>
-              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7">
+              <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.7">
                 {t("metodo.ayurDia.noPerfecto")}
               </Text>
               <Box
                 as="button" onClick={irRecorrido} mt={1}
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={guardado ? meta.color : `${meta.color}55`} color="#fff"
-                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "xl" }} letterSpacing="0.06em"
                 cursor={guardado ? "pointer" : "not-allowed"} opacity={guardado ? 1 : 0.55}
                 boxShadow={guardado ? `0 0 26px ${meta.color}88` : "none"} transition="all 0.2s"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
@@ -398,7 +401,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 {`${t("metodo.ayur.paso.tuMapa")} →`}
               </Box>
               {!guardado && (
-                <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+                <Text color={`${TINTA}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
                   {t("metodo.ayurDia.guardaParaSeguir")}
                 </Text>
               )}
@@ -448,11 +451,11 @@ export default function MetodoAyurvedaDoshaDia() {
 
               {/* ¿Es una comida? */}
               <Flex align="center" gap={3} mb={draft.comida ? 4 : 5}>
-                <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontWeight="600">{t("metodo.ayurDia.esComida")}</Text>
+                <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="600">{t("metodo.ayurDia.esComida")}</Text>
                 <Flex as="button" onClick={() => setDraft((d) => ({ ...d, comida: !d.comida }))}
                       align="center" gap={1.5} px={3} py={1} borderRadius="full"
                       bg={draft.comida ? meta.color : "rgba(255,251,243,0.6)"} border={`1.5px solid ${draft.comida ? meta.color : TINTA + "33"}`}
-                      color={draft.comida ? "#fff" : TINTA} fontWeight="700" fontSize="sm" cursor="pointer" transition="all 0.15s"
+                      color={draft.comida ? "#fff" : TINTA} fontWeight="700" fontSize="md" cursor="pointer" transition="all 0.15s"
                       style={draft.comida ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}>
                   {draft.comida && <Check size={12} strokeWidth={3} />} {draft.comida ? "Sí" : "No"}
                 </Flex>
@@ -461,7 +464,7 @@ export default function MetodoAyurvedaDoshaDia() {
               {/* Alimentos (si es comida) */}
               {draft.comida && (
                 <Box mb={5}>
-                  <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.06em" textTransform="uppercase" mb={2.5}>
+                  <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.06em" textTransform="uppercase" mb={2.5}>
                     {t("metodo.ayurDia.alimentosEquilibran")}
                   </Text>
                   <Wrap spacing={2}>
@@ -478,10 +481,10 @@ export default function MetodoAyurvedaDoshaDia() {
               {recomendaciones.length > 0 && (
                 <Box>
                   <Box h="1px" w="100%" bgGradient={`linear(to-r, ${ayurvedaTxt}66, transparent)`} mb={3} />
-                  <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontWeight="700" letterSpacing="0.06em" textTransform="uppercase" mb={1}>
+                  <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.06em" textTransform="uppercase" mb={1}>
                     {t("metodo.ayurDia.recomendacionesPara", { dosha: meta.label })}
                   </Text>
-                  <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" mb={3}>
+                  <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mb={3}>
                     {t("metodo.ayurDia.pulsaPuntoPartida")}
                   </Text>
                   <Wrap spacing={2}>
@@ -492,7 +495,7 @@ export default function MetodoAyurvedaDoshaDia() {
                               align="flex-start" gap={1.5} px={3} py={1.5} borderRadius="xl" maxW="100%"
                               bg="rgba(255,251,243,0.6)" border={`1px solid ${meta.color}55`} cursor="pointer" transition="all 0.15s" textAlign="left"
                               _hover={{ bg: `${meta.color}1a`, borderColor: meta.color, transform: "translateY(-1px)" }}>
-                          <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} lineHeight="1.35">
+                          <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} lineHeight="1.35">
                             <Box as="span" fontWeight="700">{r.momento}:</Box> {r.actividad}
                           </Text>
                         </Flex>
@@ -509,12 +512,12 @@ export default function MetodoAyurvedaDoshaDia() {
               <Flex justify="flex-end" gap={3}>
                 <Box as="button" onClick={cerrarModal} px={6} py={2.5} borderRadius="full"
                      bg="transparent" border={`1.5px solid ${TINTA}55`} color={TINTA}
-                     fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
+                     fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "md", md: "lg" }}
                      cursor="pointer" transition="all 0.15s" _hover={{ borderColor: TINTA, bg: "rgba(255,251,243,0.4)" }}>
                   {t("comun.cancelar")}
                 </Box>
                 <Box as="button" onClick={guardarMomento} px={8} py={2.5} borderRadius="full"
-                     bg={meta.color} color="#fff" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                     bg={meta.color} color="#fff" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                      letterSpacing="0.04em" cursor="pointer" boxShadow={`0 0 16px ${meta.color}66`} transition="all 0.15s"
                      style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                      _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 24px ${meta.color}99` }}>
@@ -546,7 +549,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" style={{ textShadow: INK_SHADOW }}>
                   {t("metodo.ayurDia.diaEjemplo")}
                 </Text>
-                <Text color={`${TINTA}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
+                <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center">
                   {t("metodo.ayurDia.soloInspirarte")}
                 </Text>
               </Flex>
@@ -560,9 +563,9 @@ export default function MetodoAyurvedaDoshaDia() {
                         borderRadius="xl" bg="rgba(255,251,243,0.5)" border={`1px solid ${b.comida ? meta.color + "55" : TINTA + "26"}`}>
                     <Flex align="center" gap={1.5} flexShrink={0} minW={{ base: "58px", md: "68px" }}>
                       <Clock size={14} color={meta.color} />
-                      <Text color={meta.color} fontWeight="700" fontSize={{ base: "sm", md: "md" }}>{b.hora}</Text>
+                      <Text color={meta.color} fontWeight="700" fontSize={{ base: "md", md: "lg" }}>{b.hora}</Text>
                     </Flex>
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
+                    <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight={b.comida ? "700" : "500"} lineHeight="1.5">
                       {b.actividad}
                     </Text>
                   </Flex>
@@ -574,7 +577,7 @@ export default function MetodoAyurvedaDoshaDia() {
                 <Box
                   as="button" onClick={() => setEjemploOpen(false)}
                   px={9} py={2.5} borderRadius="full" bg={meta.color} color="#fff"
-                  fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.06em"
+                  fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em"
                   cursor="pointer" boxShadow={`0 4px 20px ${meta.color}55`} style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                   transition="all 0.2s" _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 28px ${meta.color}88` }}
                 >

@@ -112,7 +112,7 @@ export const metodo = {
   "metodo.nutri.paso.mitos": "Questions and myths",
   "metodo.nutri.mitos.intro":
     "These are some of the questions and myths that come up most. Tap each one to find out what the science actually says.",
-  "metodo.nutri.paso.origen": "Where do they come from?",
+  "metodo.nutri.paso.origen": "The creation of food",
   "metodo.nutri.paso.cursos": "Courses",
   "metodo.nutri.paso.prediabetes": "Prevention test",
   "metodo.nutri.paso.cursosProfundizar": "Courses to go deeper",
@@ -143,6 +143,7 @@ export const metodo = {
     "They are measured in grams and they fill the plate: they bring the energy and they build the body. Tap each group to see its types, what they do inside you and where to find them.",
   "metodo.nutri.microIntro":
     "They are measured in milligrams and micrograms, they carry no calories at all and, without them, none of the above works. Tap each group to discover them.",
+  "metodo.nutri.macroCompletado": "Congratulations — you know them all now. You can continue.",
   "metodo.nutri.macroBloqueo": "Go through every macronutrient to unlock",
   "metodo.nutri.microBloqueo": "Discover every micronutrient first",
   "metodo.nutri.quimicosBloqueo": "Discover every chemical first",
@@ -752,7 +753,6 @@ export const metodo = {
   // ── Ayurveda · the chakras (the map and each chakra's page) ─────────────
   "metodo.ayur.paso.chakras": "The chakras",
   "metodo.ayur.chakras.pie": "Your seven points, from root to crown.",
-  "metodo.ayur.chakras.pulsa": "Tap each point to read what it is telling you.",
   "metodo.ayur.chakras.todos": "You have been through all seven.",
 
   // ── Ayurveda · the doṣha pages ─────────────────────────────────────────

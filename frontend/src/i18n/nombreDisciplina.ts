@@ -19,7 +19,9 @@ import { traducir, useIdioma, type ClaveTexto } from "./IdiomaProvider";
 const CLAVE_POR_NOMBRE: Record<string, ClaveTexto> = {
   [astrologiaNom]: "disciplina.astrologia",
   [neuropsicologiaNom]: "disciplina.psicologia",
-  [ayurvedaNom]: "disciplina.hinduismo",
+  // El nombre interno sigue siendo «Hinduismo» (URLs, BD, claves de fondo),
+  // pero EN PANTALLA la disciplina se llama «Ayurveda» en toda la web.
+  [ayurvedaNom]: "disciplina.ayurveda",
   [tcmNom]: "disciplina.medicinaChina",
   [fisiologiaNom]: "disciplina.fisiologia",
   [nutricionNom]: "disciplina.nutricion",
@@ -61,12 +63,13 @@ export const useNombreDisciplina = () => {
 };
 
 /**
- * Igual que `nombreDisciplina`, pero con la excepción de El Mapa: dentro de
- * /elMetodo la disciplina que internamente se llama «Hinduismo» se enseña como
- * «Ayurveda». Sustituye al antiguo `nombreEnMapa` de `data/recorridoContenido`.
+ * Igual que `nombreDisciplina`. Antes tenía una excepción (dentro de /elMetodo
+ * «Hinduismo» se enseñaba como «Ayurveda»); desde que la disciplina se llama
+ * «Ayurveda» en TODA la web ya no hay diferencia, pero se conserva para no
+ * tocar a sus llamadores. Sustituye al antiguo `nombreEnMapa`.
  */
 export const nombreDisciplinaEnMapa = (nom: string, corto = false): string =>
-  nom === ayurvedaNom ? traducir("disciplina.ayurveda") : nombreDisciplina(nom, corto);
+  nombreDisciplina(nom, corto);
 
 export const useNombreDisciplinaEnMapa = () => {
   useIdioma();

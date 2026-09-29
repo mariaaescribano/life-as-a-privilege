@@ -7,7 +7,6 @@ import { getUserMe } from "../../api/userMe";
 import { generateRecorridoPdf } from "../../utils/generateRecorridoPdf";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
@@ -172,7 +171,7 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                 {t("metodo.ayur.mapaTitulo")}
               </Text>
               <Separador />
-              <Text color={`${TINTA}d0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" maxW="600px">
+              <Text color={`${TINTA}d0`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" maxW="600px">
                 {t("metodo.ayur.mapaIntro")}
               </Text>
               <Flex
@@ -180,24 +179,19 @@ export default function MetodoAyurvedaDoshaRecorrido() {
                 align="center" gap={2.5}
                 px={{ base: 8, md: 11 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={meta.color} color="#fff"
-                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.05em"
                 cursor="pointer" boxShadow={`0 0 22px ${meta.color}77`} transition="all 0.2s"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
                 _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${meta.color}aa` }}
               >
                 <Download size={18} /> {t("metodo.ayur.descargarMapa")}
               </Flex>
-              <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic">
+              <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
                 Incluye tus respuestas, tu día ideal y, de regalo, qué equilibra y desequilibra tu {meta.label}.
               </Text>
             </Flex>
           </Panel>
           </Reveal>
-
-
-          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
-              /opiniones y trae de vuelta a esta misma página. */}
-          <PedirOpinion bg={ayurvedaBg} txt={ayurvedaTxt} nom={ayurvedaNom} />
         </Flex>
       </Flex>
 

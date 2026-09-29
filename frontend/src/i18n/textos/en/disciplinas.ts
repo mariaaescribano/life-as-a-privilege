@@ -1,7 +1,6 @@
 export const disciplinas = {
   "disciplina.astrologia": "Astrology",
   "disciplina.psicologia": "Psychology",
-  "disciplina.hinduismo": "Hinduism",
   "disciplina.ayurveda": "Ayurveda",
   "disciplina.medicinaChina": "Chinese Medicine",
   "disciplina.medicinaChina.corto": "Chinese Med.",

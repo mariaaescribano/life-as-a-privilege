@@ -337,7 +337,7 @@ export function HinduismoIlustracionesModal({
                   textAlign="center"
                   lineHeight="1.1"
                 >
-                  {t("metodo.ilustracionesDe", { disciplina: t("disciplina.hinduismo") })}
+                  {t("metodo.ilustracionesDe", { disciplina: t("disciplina.ayurveda") })}
                 </Text>
                 <Text
                   color={`${ayurvedaTxt}cc`}

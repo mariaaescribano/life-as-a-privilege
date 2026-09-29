@@ -129,7 +129,7 @@ export function ChakraBox({
           </Text>
           <Text
             color={`${ayurvedaTxt}bb`}
-            fontSize={{ base: "xs", md: "sm" }}
+            fontSize={{ base: "md", md: "lg" }}
             fontStyle="italic"
             lineHeight="1.35"
             mt="2px"

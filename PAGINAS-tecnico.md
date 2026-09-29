@@ -818,7 +818,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Cuadrícula con los cursos de psicología del catálogo (con uno solo sale una tarjeta grande) y `PedirOpinion` para dejar una reseña al final del recorrido.
 - **Datos:** `GET /user/me` (`psicologia_suscrito`, `ayurveda_suscrito`), `GET /cursos` (`useCursosData`).
 - **Desbloqueo:** sin requisito.
-- **Botones / a dónde lleva:** prev → `/:exp/emociones`. Next «Ayurveda →»: si no tiene Ayurveda pagada abre `PagoAyurvedaModal` (`irAPagoDisciplina("ayurveda")`, Payment Link de Stripe); si la tiene → `/metodo/ayurveda`. `PedirOpinion` → `/opiniones?volver=`. `BotonCompania` (llamada 15 €) e `IndiceRecorrido` directos.
+- **Botones / a dónde lleva:** prev → `/:exp/emociones`. Next «Fisiología →» → `/metodo/fisiologia` (la siguiente del mandala de /home; si no está pagada, la guardia de esa página la manda al pago; el `PagoAyurvedaModal` que había aquí se quitó). `PedirOpinion` → `/opiniones?volver=`. `BotonCompania` (llamada 15 €) e `IndiceRecorrido` directos.
 - **Condiciones y casos raros:** mientras `ayurvedaSuscrito` no ha cargado, el botón navega directo y decide el guardia de pago.
 - **Tests:** pendiente
 
@@ -960,10 +960,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/ayurveda/dosha/:dosha/recorrido` — Tu mapa (Paso 8 del submapa)
 - **Componente:** `MetodoAyurvedaDoshaRecorrido` en `frontend/src/app/metodo/MetodoAyurvedaDoshaRecorrido.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Ayurveda (Guardia global; `!ayurveda_suscrito` → `/metodo/ayurveda`).
-- **Qué hace:** Despedida del submapa: un box con título, intro y botón para descargar el PDF del recorrido del doṣha. Debajo, `PedirOpinion` (reseña).
+- **Qué hace:** Despedida del submapa: un box con título, intro y botón para descargar el PDF del recorrido del doṣha. (La invitación a dejar reseña `PedirOpinion` se quitó de esta página.)
 - **Datos:** `GET /user/me`; `GET /metodo-ayurveda/:userId`. Lee `doshaIntro.cambio`, `doshaDescubre/Cuerpo/Desequilibrio.reflexion`, `doshaCuidarte.reflexion/compromiso`, `doshaDia.bloques`. PDF con `generateRecorridoPdf` (respuestas, compromiso, día, lo que desequilibra, señales…). No guarda nada.
 - **Desbloqueo:** sin gate de entrada en la página (el Índice solo llega si todos los pasos anteriores cumplen). Es el último paso del submapa.
-- **Botones / a dónde lleva:** prev «← Tu día» → `/dia`; next «Doṣhas →» → `/metodo/ayurveda/tarjetas`; botón PDF; reseña → `/opiniones?volver=…`.
+- **Botones / a dónde lleva:** prev «← Tu día» → `/dia`; next «Doṣhas →» → `/metodo/ayurveda/tarjetas`; botón PDF.
 - **Condiciones y casos raros:** `:dosha` inválido → `/metodo/ayurveda/tarjetas`. Bloques del día filtrados y ordenados por hora; `alimentos` blindado con `Array.isArray`. Respuestas vacías no entran en el PDF.
 - **Tests:** pendiente
 
@@ -972,7 +972,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/ayurveda/dosha/:dosha/pranayama` — Prāṇāyāma (Paso 5 del Mapa)
 - **Componente:** `MetodoAyurvedaDoshaPranayama` en `frontend/src/app/metodo/MetodoAyurvedaDoshaPranayama.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Ayurveda (Guardia global; `!ayurveda_suscrito` → `/metodo/ayurveda`).
-- **Qué hace:** Al entrar sale siempre un cómic de teoría (`IntroComicModal`, `ayurveda-pranayama`). La página muestra los tres doṣhas con botones para cambiar. Por cada uno: qué vas a hacer, un guía de respiración animado (`GuiaRespiracion`), precaución y preguntas con caja de texto. Botón Guardar.
+- **Qué hace:** Al entrar sale siempre un cómic de teoría (`IntroComicModal`, `ayurveda-pranayama`). La página muestra los tres doṣhas con botones para cambiar (cada botón con la acuarela de su doṣha de fondo; al cambiar no hay scroll: la página se queda donde está). Por cada uno: qué vas a hacer, un guía de respiración animado (`GuiaRespiracion`), precaución (opcional: kapha no la lleva en español) y preguntas con caja de texto. Botón Guardar. Los boxes llevan la acuarela una sola vez (cover, sin bandas `tile`).
 - **Datos:** `GET /user/me`; `GET /metodo-ayurveda/:userId`; `PATCH /metodo-ayurveda/:userId` con `data.doshaPranayama[dosha] = {respuestas[], compromiso, practicado}`. Se guarda al pulsar Guardar, al terminar la práctica (`practicado: true`, automático), al cambiar de doṣha y al pulsar prev/next.
 - **Desbloqueo:** no pide nada para avanzar. En el Índice, pasos 5-7 del Mapa bloqueados si no hay doṣha (ni en URL ni guardada).
 - **Botones / a dónde lleva:** prev «← Doṣhas» → `/metodo/ayurveda/tarjetas`; next «Los chakras →» → `/metodo/ayurveda/dosha/<sel>/chakras`. Cambiar doṣha → `navigate(.../<k>/pranayama, replace)`.
@@ -1167,7 +1167,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Se eligen los capítulos de todo lo recorrido y se descarga un PDF de apuntes con tu nombre en la portada. Los capítulos personales (diagnóstico y lectura de lengua) salen con candado si faltan esos datos. Debajo, `PedirOpinion`.
 - **Datos:** `GET /user/me` (`name`, `fisiologia_suscrito`); `GET /metodo-tcm/:userId` (todo el blob, blindado si no es objeto). PDF en el navegador desde `CreaTusApuntes`. No guarda nada.
 - **Desbloqueo:** ninguno para entrar. Último paso de TCM.
-- **Botones / a dónde lleva:** prev «← Cursos» → `/metodo/tcm/cursos`; next «Fisiología →» (con candado si no está pagada) y BotonPaso → `/metodo/fisiologia` siempre (allí se ve el pago); reseña → `/opiniones?volver=…`.
+- **Botones / a dónde lleva:** prev «← Cursos» → `/metodo/tcm/cursos`; next «Cábala →» (con candado si no está pagada) y BotonPaso → `/metodo/cabala` siempre (allí se ve el pago; la siguiente del mandala de /home tras MTC); reseña → `/opiniones?volver=…`.
 - **Condiciones y casos raros:** sin datos guardados la página funciona igual, con los capítulos personales bloqueados. `pageLabel` "12/12".
 - **Tests:** pendiente
 
@@ -1429,7 +1429,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/nutrientes/:key` — Detalle de un grupo de nutrientes (dentro de los Pasos 2–4)
 - **Componente:** `MetodoNutricionNutriente` en `frontend/src/app/metodo/MetodoNutricionNutriente.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Al entrar se abre SOLO el cómic del grupo como intro (siempre, saltable con la X; queda apuntado en `nutrientes_comics_leidos`); mientras el cómic está abierto la página NI SE MONTA (debajo solo está el loading de Nutrición: es imposible ver la página antes del cómic); al salir aparece la página: caja grande con la foto a la izquierda (arriba en móvil) y el título+descripción a la derecha, nunca más altos que la foto (scroll propio), y las tarjetas de subtipos. La rejilla se revela progresivamente: solo se ven las tarjetas descubiertas más la siguiente (que «respira» invitando al clic); con el grupo revisado se ven todas. Cada tarjeta abre `NutrienteFichaModal` con flechas. Con todas las fichas vistas, el grupo queda revisado. (Vitaminas, en círculo, no entra en la revelación.)
+- **Qué hace:** Al entrar se abre SOLO el cómic del grupo como intro (siempre, saltable con la X; queda apuntado en `nutrientes_comics_leidos`); mientras el cómic está abierto la página NI SE MONTA (debajo solo está el loading de Nutrición: es imposible ver la página antes del cómic); al salir aparece la página: caja grande con la foto a la izquierda (arriba en móvil) y el título+descripción a la derecha, nunca más altos que la foto (scroll propio), y las tarjetas de subtipos. Las tarjetas se ven TODAS siempre (la revelación progresiva se probó y se descartó: en vitaminas, con 13, parecía una página rota); entran en cascada y la siguiente por descubrir «respira» invitando al clic. Cada tarjeta abre `NutrienteFichaModal` con flechas. Con todas las fichas vistas, el grupo queda revisado.
 - **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId`. `PATCH /metodo-nutricion/:userId` con `nutrientes_fichas[key]` (índices vistos), `nutrientes_explorados` (se añade la key) y `nutrientes_comics_leidos` (al abrir el cómic).
 - **Desbloqueo:** `nutrienteAlcanzable`: si los grupos anteriores de su misma lista no están explorados → `replace` a su rejilla. Marca el grupo como explorado al ver todas las fichas, o nada más entrar si no tiene tarjetas.
 - **Botones / a dónde lleva:** en el header (en móvil, solo flechas), con NOMBRES de la senda: prev «← <grupo anterior>» → su detalle (solo el PRIMERO de cada lista lleva «← Volver» → `rutaListaNutriente(key)`); extra Biblioteca; next «<grupo siguiente> →» (en el último, «Macronutrientes/Micronutrientes →» a su rejilla), deshabilitado hasta que el grupo queda revisado. Dentro del cómic-intro, botón de continuar con el nombre del grupo arriba a la izquierda de la X (patrón ComicPasoModal; en móvil solo la flecha). El Índice flotante (`IndiceNutricion`) da la vuelta a cualquier página. El título del header dice el grupo: «Macro: Carbohidratos» / «Micro: Vitaminas» (claves `macroCorto`/`microCorto` + label del grupo).
@@ -1489,7 +1489,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/microbiota` — La microbiota (Paso 5)
 - **Componente:** `MetodoNutricionMicrobiota` en `frontend/src/app/metodo/MetodoNutricionMicrobiota.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Primero las bacterias más conocidas y, tras un separador con el mandala, las moléculas que fabrican. Cada tarjeta abre su ficha (`NutrienteFichaModal`) y queda marcada, también las que se pasan con las flechas.
+- **Qué hace:** Primero las bacterias más conocidas y, tras un separador con el mandala, las moléculas que fabrican. Las tarjetas entran en cascada al montar (Reveal por tarjeta, sin inView — la regla de Nutrición). Cada tarjeta abre su ficha (`NutrienteFichaModal`) y queda marcada, también las que se pasan con las flechas.
 - **Datos:** `GET /user/me`; `useLeidos("metodo-nutricion")` (`GET` + `PATCH /metodo-nutricion/:userId`) con `microbiota_bacterias_leidas` y `microbiota_moleculas_leidas`.
 - **Desbloqueo:** la página no comprueba que los micronutrientes estén hechos (solo el Índice y el botón de la página anterior). Sin requisito para pasar.
 - **Botones / a dónde lleva:** prev «← Químicos»; extra Biblioteca; next «El hambre →» abre `ComicHambreModal`, que continúa a `/metodo/nutricion/hambre`.
@@ -1525,7 +1525,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/plato` — Crea el plato de Harvard (Paso 8)
 - **Componente:** `MetodoNutricionPlato` en `frontend/src/app/metodo/MetodoNutricionPlato.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Plato circular dividido en sectores (uno por grupo). Al pulsar un sector salen sus alimentos a la derecha y se arrastran al plato, con ratón o dedo. Un alimento se puede recolocar o quitar sacándolo fuera.
+- **Qué hace:** Plato circular dividido en sectores (uno por grupo). Al pulsar un sector salen sus alimentos a la derecha y se arrastran al plato, con ratón o dedo. Un alimento se puede recolocar o quitar sacándolo fuera. La carne de vaca y el cerdo NO están en «Proteína saludable» (en `FUERA_DEL_PLATO`, como el zumo: aparecen entre las trampas y desaparecen de los platos ya guardados vía `sectorDeAlimento`).
 - **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId` → `plato_alimentos` (`{id, foodKey, macroKey, xPct, yPct}`). `PATCH /metodo-nutricion/:userId` en cada cambio con `plato_alimentos` y `plato_hecho` (true si hay al menos un alimento en cada sector).
 - **Desbloqueo:** ninguno para entrar. `plato_hecho` desbloquea Calorías.
 - **Botones / a dónde lleva:** prev «← Ultraprocesados»; extra Biblioteca; next → `/metodo/nutricion/calorias`, deshabilitado hasta completar, y antes de navegar hace flush (espera el PATCH en curso y envía otro final).
@@ -1537,7 +1537,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/calorias` — Tus calorías y macros (Paso 9)
 - **Componente:** `MetodoNutricionCalorias` en `frontend/src/app/metodo/MetodoNutricionCalorias.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Formulario con sexo, edad, peso, altura, actividad base, ejercicio (intensidad, días y minutos) y objetivo (perder, mantener, ganar). El cálculo se hace en el navegador (Mifflin-St Jeor × factor de actividad × objetivo, con suelo mínimo de kcal) y muestra kcal y gramos de proteína, grasa e hidratos. Lleva una nota educativa.
+- **Qué hace:** Formulario con sexo, edad, peso, altura, actividad base, ejercicio (intensidad, días y minutos) y objetivo (perder, mantener, ganar). El cálculo se hace en el navegador (Mifflin-St Jeor × factor de actividad × objetivo) y muestra kcal y gramos de proteína, grasa e hidratos. Suelo mínimo: 2000 kcal para todo el mundo, salvo con objetivo «perder» (definición), donde rige el suelo por sexo (mujer 1500 / hombre 1800). Lleva una nota educativa.
 - **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId` → prerrellena desde `calorias.entrada`. `PATCH /metodo-nutricion/:userId` con debounce de 700 ms y `calorias: {hecho: true, kcal, macros:{prot,carb,fat}, entrada:{…}}`.
 - **Desbloqueo:** gate de entrada: sin `plato_hecho` → `replace` a `/metodo/nutricion/plato`. `calorias.hecho` desbloquea Prediabetes y la cifra que usa Diseña tu día.
 - **Botones / a dónde lleva:** prev «← El plato»; extra Biblioteca; next «Test →» (deshabilitado sin resultado válido): guarda ya, sin debounce, y abre `ComicDiabetesModal`, que continúa a `/metodo/nutricion/prediabetes`.
@@ -1549,7 +1549,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/prediabetes` — ¿Cómo va tu azúcar? (Paso 10)
 - **Componente:** `MetodoNutricionPrediabetes` en `frontend/src/app/metodo/MetodoNutricionPrediabetes.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Test de riesgo FINDRISC. Los datos corporales vienen ya rellenos, se pide la cintura (o «no me la mido») y se responden las preguntas. Da una banda de resultado y señales de alerta. El IMC puntúa pero nunca se muestra.
+- **Qué hace:** Test de riesgo FINDRISC. Los datos corporales vienen ya rellenos, se pide la cintura (o «no me la mido») y se responden las preguntas. El resultado es SOLO la puntuación con su nivel (número /26 + pastilla + línea de riesgo): el texto largo de la banda, el «Qué haría yo ahora» y los desgloses «Lo que no elegiste»/«Lo que está en tu mano» se quitaron (2026-09-30). Debajo siguen las señales de alerta y el cierre de esperanza. El IMC puntúa pero nunca se muestra.
 - **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId` → `prediabetes` y `calorias.entrada`. `PATCH /metodo-nutricion/:userId` con debounce de 700 ms y `prediabetes: {cintura, sinCintura, respuestas, base, hecho, puntos}`.
 - **Desbloqueo:** gate de entrada: sin `calorias.hecho` → `replace` a `/metodo/nutricion/calorias`. No bloquea el paso siguiente.
 - **Botones / a dónde lleva:** prev «← Calorías»; extra Biblioteca; next «Diseña tu día →» → `/metodo/nutricion/dia`.
@@ -1576,7 +1576,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Juego de estimación. Sale un alimento con su ración y hay que adivinar con tres reguladores los gramos de proteína, hidratos y grasa. Al comprobar, cada macro dice si está clavado, cerca o lejos. Son `RONDAS` alimentos barajados, sin puntos: solo el marcador de ronda.
 - **Datos:** `GET /user/me`. No guarda nada.
 - **Desbloqueo:** ninguno.
-- **Botones / a dónde lleva:** prev «← Diseña tu día»; extra Biblioteca; next «Mitos →» → `/metodo/nutricion/mitos` (también desde el final del juego). Un botón único hace «Comprobar» y luego «Siguiente alimento».
+- **Botones / a dónde lleva:** prev «← Diseña tu día»; extra Biblioteca; next «Mitos →» → `/metodo/nutricion/mitos` (SOLO en el header: el BotonPaso del final se quitó). Un botón único hace «Comprobar» y luego «Siguiente alimento».
 - **Condiciones y casos raros:** los textos «Ver el resultado» y «Siguiente alimento →» están escritos a mano en español (sin i18n).
 - **Tests:** pendiente
 
@@ -1594,7 +1594,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/origen` — ¿De dónde vienen los nutrientes? (Paso 14)
+## `/metodo/nutricion/origen` — La creación de los alimentos (Paso 14)
 - **Componente:** `MetodoNutricionOrigen` en `frontend/src/app/metodo/MetodoNutricionOrigen.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Seis lecturas de zoom creciente: ciclos del planeta, suelo y raíz, planta, hoja, fruto, y la rama animal. Cada tarjeta abre su cómic en `ComicModal` y queda marcada.
@@ -1612,7 +1612,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Lista los cursos de Nutrición del catálogo, con el mismo patrón que Fisiología (uno centrado, rejilla o estado vacío). Al pie, `PedirOpinion` para dejar reseña.
 - **Datos:** `GET /user/me` (lee `nutricion_suscrito` y `cabala_suscrito`); `GET /cursos` (`useCursosData`).
 - **Desbloqueo:** ninguno.
-- **Botones / a dónde lleva:** prev «← Origen» → `/metodo/nutricion/origen`; extra Biblioteca; next «Cábala →» → `/metodo/cabala` (con candado si no ha pagado Cábala; entonces la guardia lo manda a `/home?entrar=cabala`). `PedirOpinion` → `/opiniones?volver=…`.
+- **Botones / a dónde lleva:** prev «← La creación de los alimentos» → `/metodo/nutricion/origen`; extra Biblioteca; next «Ayurveda →» → `/metodo/ayurveda` (la siguiente del mandala de /home; con candado si no la ha pagado — la guardia la manda al pago). Las tarjetas de curso van GRANDES, sin maxW de página, como en Materiales/Psicología. `PedirOpinion` → `/opiniones?volver=…`.
 - **Condiciones y casos raros:** —
 - **Tests:** pendiente
 

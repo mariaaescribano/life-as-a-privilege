@@ -133,7 +133,7 @@ export default function MetodoAyurvedaDoshaCursos() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
           <Text
             color="rgba(255,255,255,0.88)"
-            fontSize={{ base: "md", md: "lg" }}
+            fontSize={{ base: "lg", md: "xl" }}
             fontStyle="italic"
             textAlign="center"
             lineHeight="1.8"
@@ -181,7 +181,7 @@ export default function MetodoAyurvedaDoshaCursos() {
             >
               <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
               <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 7, md: 9 }} textAlign="center">
-                <Text color={`${ayurvedaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.8">{t("metodo.cursosPronto", { disciplina: t("disciplina.ayurveda") })}</Text>
+                <Text color={`${ayurvedaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.8">{t("metodo.cursosPronto", { disciplina: t("disciplina.ayurveda") })}</Text>
               </Box>
             </Box>
           )}

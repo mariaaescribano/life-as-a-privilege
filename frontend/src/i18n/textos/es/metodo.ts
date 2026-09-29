@@ -137,7 +137,7 @@ export const metodo = {
   "metodo.nutri.ultra.tesis":
     "",
   "metodo.nutri.ultra.intro":
-    "Un ultraprocesado no es comida con cosas añadidas. Es una formulación industrial hecha con sustancias que ya no reconocerías por separado, diseñada para que sea barata, dure meses y no puedas parar. Vamos a mirar de qué está hecha.",
+    "Un ultraprocesado no es comida con cosas añadidas. Es una formulación industrial hecha con sustancias que ya no reconocerías por separado, diseñada para que sea barata, dure meses y no puedas parar.",
   "metodo.nutri.ultra.ensayoEtiqueta": "El experimento que lo demostró",
   "metodo.nutri.ultra.ensayoDato": "+500 kcal al día",
   "metodo.nutri.ultra.ensayoTexto":
@@ -152,7 +152,7 @@ export const metodo = {
     "Casi todo lo que viene ahora está autorizado a las dosis que se usan, y por eso están agrupadas por lo segura que es la evidencia y no por lo que asustan. Toca cada una para leer qué se sabe, y qué todavía no.",
   "metodo.nutri.ultra.cierre":
     "Cada aditivo se aprueba solo, en su ensayo, a su dosis. Pero tú no te comes uno: te comes quince a la vez, tres veces al día, durante cuarenta años. Esa suma no la ha estudiado nadie.",
-  "metodo.nutri.paso.origen": "¿De dónde vienen?",
+  "metodo.nutri.paso.origen": "La creación de los alimentos",
   "metodo.nutri.paso.cursos": "Cursos",
   /** Los dos nombres largos que solo se ven en el Índice. */
   "metodo.nutri.paso.prediabetes": "Test de prevención",
@@ -185,6 +185,8 @@ export const metodo = {
     "",
   "metodo.nutri.microIntro":
     "No aportan ni una caloría. Sin ellos, nada de lo anterior importa.",
+  /** Bajo el header de macronutrientes cuando YA están los 7 revisados. */
+  "metodo.nutri.macroCompletado": "Enhorabuena, ya los conoces a todos. Puedes continuar.",
   "metodo.nutri.macroBloqueo": "Revisa todos los macronutrientes para desbloquear",
   "metodo.nutri.microBloqueo": "Descubre todos los micronutrientes primero",
   "metodo.nutri.quimicosBloqueo": "Descubre todos los químicos primero",
@@ -207,7 +209,7 @@ export const metodo = {
   /** «Valores nutricionales». */
   "metodo.nutri.macros.lema": "Aprende lo que de verdad te ayudará a ser tu mejor versión...",
   "metodo.nutri.macros.intro":
-    "Nadie te enseñó a mirar un plato y saber lo que lleva. Se aprende como se aprende a calcular distancias: fallando y volviendo a mirar. No hace falta acertar el gramo exacto —basta con no equivocarte de tamaño—.",
+    "Siempre nos han dicho que las calorías es lo importante, pero en verdad lo importante son los valores nutricionales.",
   "metodo.nutri.macros.cuantosGramos": "¿Cuántos gramos crees que lleva esta ración?",
   "metodo.nutri.macros.comprobar": "Comprobar",
   "metodo.nutri.macros.tuApuesta": "Tu apuesta (hueco) y el dato real (macizo)",
@@ -510,7 +512,7 @@ export const metodo = {
     "Para diseñar tu día necesitamos saber cuánta energía necesitas. Calcula tu objetivo y vuelve: repartiremos esas calorías entre tus comidas.",
   "metodo.dia.calcular": "Calcular mis calorías →",
   "metodo.dia.repartePre":
-    "Aprender a comer no es contar: es saber **cuánto** y **cómo**. Reparte tus",
+    "Aprender a comer es saber **cuánto** y **cómo**. Reparte tus",
   "metodo.dia.repartePost":
     "entre las comidas del día y dale a tu cuerpo —es decir, a ti— lo que de verdad necesitas.",
   "metodo.dia.tuDiaSuma": "Tu día suma",
@@ -531,7 +533,7 @@ export const metodo = {
   "metodo.dia.cuantasComidas": "¿Cuántas comidas haces al día?",
   "metodo.dia.verFicha": "Ver ficha",
   "metodo.dia.nombre": "Nombre",
-  "metodo.dia.nombreEj": "p. ej. mi bocadillo",
+  "metodo.dia.nombreEj": "p. ej. fruta, arroz, lentejas…",
   "metodo.dia.kcalRacion": "kcal por ración",
   "metodo.dia.kcalEj": "p. ej. 320",
   "metodo.dia.racionG": "Ración (g)",
@@ -848,7 +850,6 @@ export const metodo = {
   // ── Ayurveda · los chakras (el mapa y la página de cada uno) ────────────
   "metodo.ayur.paso.chakras": "Los chakras",
   "metodo.ayur.chakras.pie": "Tus siete puntos, de la raíz a la corona.",
-  "metodo.ayur.chakras.pulsa": "Pulsa cada punto para leer lo que te está contando.",
   "metodo.ayur.chakras.todos": "Has recorrido los siete.",
 
   // ── Ayurveda · las páginas del doṣha (las seis comparten andamiaje) ─────

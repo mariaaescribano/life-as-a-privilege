@@ -148,11 +148,15 @@ export default function MetodoAyurvedaChakras() {
             </Text>
           </Reveal>
 
-          <Reveal direction="up" distance={14} delay={0.16} duration={0.6} w="100%" display="flex" justifyContent="center">
-            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
-              {todosLeidos ? t("metodo.ayur.chakras.todos") : t("metodo.ayur.chakras.pulsa")}
-            </Text>
-          </Reveal>
+          {/* Solo cuando están los siete leídos: el rótulo de «pulsa cada
+              punto» se quitó (las cajas ya invitan solas a pulsarlas). */}
+          {todosLeidos && (
+            <Reveal direction="up" distance={14} delay={0.16} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
+                {t("metodo.ayur.chakras.todos")}
+              </Text>
+            </Reveal>
+          )}
 
           {/* ── LAS SIETE CAJAS: la corona arriba del todo, y debajo tres
               filas de dos, bajando por el cuerpo hasta la raíz. ──────────── */}

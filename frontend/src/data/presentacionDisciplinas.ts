@@ -129,7 +129,7 @@ const base: Record<string, PresentacionDisciplina> = {
     paso: 5,
     ordinal: "Tercera disciplina",
     resumenPago:
-      "Continúa el Mapa con el Hinduismo: descubre tu Doṣha —tu constitución— y la naturaleza que te define, y aprende a comer, moverte y descansar en equilibrio con lo que de verdad eres.",
+      "Continúa el Mapa con el Ayurveda: descubre tu Doṣha —tu constitución— y la naturaleza que te define, y aprende a comer, moverte y descansar en equilibrio con lo que de verdad eres.",
     video: "/videos/ayurvedavideo.mp4",
     alias: ["hinduismo"],
   },

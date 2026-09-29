@@ -36,16 +36,10 @@ const DOSHA_META: Record<DoshaKey, { label: string; color: string; Icon: any }> 
   kapha: { label: "Kapha", color: kaphaColor, Icon: KaphaIcon },
 };
 
-/** Los boxes de esta página, con la acuarela EN BANDAS (`tile`).
- *
- *  Con `tile` la acuarela se pinta a su tamaño, con su proporción intacta, y se
- *  REPITE hacia abajo: cada vez que se acaba, empieza otra vez. Esas costuras
- *  horizontales son las separaciones que se ven entre banda y banda. Con el
- *  fondo normal («cover», estirado de arriba abajo) una caja alta y estrecha
- *  —el móvil— deformaba la foto en un borrón vertical sin dibujo. */
-const Panel = (p: React.ComponentProps<typeof AyurvedaPanel>) => (
-  <AyurvedaPanel {...p} tile />
-);
+/** Los boxes de esta página: la acuarela UNA sola vez, cubriendo la caja
+ *  entera («cover»). Nada de bandas repetidas (`tile`): las costuras entre
+ *  banda y banda hacían que un solo box pareciera varios apilados. */
+const Panel = AyurvedaPanel;
 
 function parseRich(s: string): React.ReactNode[] {
   const parts = s.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
@@ -194,18 +188,18 @@ function GuiaRespiracion({ fases, ciclos, color, onCompletar, completado }: Guia
         <Flex direction="column" align="center" gap={1} position="relative" zIndex={1} px={4} textAlign="center">
           {activo ? (
             <>
-              <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.3">
+              <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.3">
                 {actual?.texto}
               </Text>
               <Text color={color} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700" lineHeight="1">
                 {restante}
               </Text>
-              <Text color={`${TINTA}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic">
+              <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
                 Ciclo {ciclo} de {ciclos}
               </Text>
             </>
           ) : (
-            <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.5">
+            <Text color={`${TINTA}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" lineHeight="1.5">
               {completado ? "Cuando quieras, otra vez" : `${ciclos} ciclos · unos ${minutos} min`}
             </Text>
           )}
@@ -220,7 +214,7 @@ function GuiaRespiracion({ fases, ciclos, color, onCompletar, completado }: Guia
           bg={activo ? "rgba(255,251,243,0.6)" : color}
           color={activo ? color : "#fff"}
           border={activo ? `1.5px solid ${color}88` : "none"}
-          fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
+          fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.05em"
           cursor="pointer"
           boxShadow={activo ? "none" : `0 0 18px ${color}55`}
           transition="all 0.2s"
@@ -232,7 +226,7 @@ function GuiaRespiracion({ fases, ciclos, color, onCompletar, completado }: Guia
       </Flex>
 
       {completado && !activo && (
-        <Text color={color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
+        <Text color={color} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
           {t("metodo.ayur.practicado")}
         </Text>
       )}
@@ -274,8 +268,18 @@ function leerSlice(raw: any): SlicePranayama {
 const tieneAlgo = (s: SlicePranayama) =>
   s.respuestas.some((r) => r.trim().length > 0) || s.compromiso.trim().length > 0;
 
+/** La acuarela de CADA doṣha (la misma de sus tarjetas y sus PDFs), de fondo
+ *  de su botón del selector. */
+const FONDO_DOSHA: Record<DoshaKey, string> = {
+  vata: "/img/fondos/vata.webp",
+  pitta: "/img/fondos/pitta.webp",
+  kapha: "/img/fondos/kapha.webp",
+};
+
 /** Los tres botones de debajo del header: la página no es de un doṣha, son los
- *  tres, y se cambia de uno a otro cuando se quiera. */
+ *  tres, y se cambia de uno a otro cuando se quiera. Cada botón lleva de fondo
+ *  la acuarela de SU doṣha, con un velo para que el nombre se lea: fino en el
+ *  elegido (su foto luce) y más tupido en los otros dos (quedan en reposo). */
 function SelectorDosha({ sel, onSelect }: { sel: DoshaKey; onSelect: (k: DoshaKey) => void }) {
   return (
     <Flex gap={{ base: 2.5, md: 4 }} wrap="wrap" justify="center" w="100%">
@@ -288,27 +292,38 @@ function SelectorDosha({ sel, onSelect }: { sel: DoshaKey; onSelect: (k: DoshaKe
             as="button"
             key={k}
             onClick={() => onSelect(k)}
+            position="relative"
+            overflow="hidden"
             align="center"
             gap={2}
             px={{ base: 5, md: 8 }}
             py={{ base: 2, md: 2.5 }}
             borderRadius="full"
-            bg={activo ? `${ayurvedaBg}f2` : "rgba(255,255,255,0.14)"}
-            border={`1.5px solid ${activo ? m.color : "rgba(255,255,255,0.55)"}`}
-            color={activo ? m.color : "#fff"}
+            border={`1.5px solid ${activo ? m.color : `${m.color}77`}`}
+            color={activo ? m.color : `${TINTA}cc`}
             fontFamily="'EB Garamond', serif"
-            fontSize={{ base: "md", md: "lg" }}
+            fontSize={{ base: "lg", md: "xl" }}
             fontWeight={activo ? "700" : "400"}
             letterSpacing="0.06em"
             cursor="pointer"
-            transition="background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease"
+            transition="border-color 0.12s ease, color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease"
             boxShadow={activo ? `0 0 14px ${m.color}66, 0 0 30px rgba(255,255,255,0.18)` : "none"}
             sx={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent", userSelect: "none" }}
-            _hover={{ bg: activo ? `${ayurvedaBg}f2` : "rgba(255,255,255,0.24)", transform: "translateY(-2px)" }}
+            _hover={{ borderColor: m.color, transform: "translateY(-2px)" }}
             _active={{ transform: "scale(0.96)" }}
           >
-            <Icon size={{ base: "20px", md: "24px" }} color={activo ? m.color : "#fff"} />
-            {m.label}
+            {/* Su acuarela + el velo (el color de respaldo tapa mientras carga). */}
+            <Box position="absolute" inset="0" zIndex={0} pointerEvents="none"
+                 bgColor={ayurvedaBg} bgImage={`url('${FONDO_DOSHA[k]}')`}
+                 bgSize="cover" bgPosition="center" />
+            <Box position="absolute" inset="0" zIndex={0} pointerEvents="none"
+                 bg={activo ? `${ayurvedaBg}4d` : `${ayurvedaBg}b3`}
+                 transition="background 0.12s ease" />
+            <Flex position="relative" zIndex={1} align="center" gap={2}
+                  style={{ textShadow: INK_SHADOW }}>
+              <Icon size={{ base: "20px", md: "24px" }} color={m.color} />
+              {m.label}
+            </Flex>
           </Flex>
         );
       })}
@@ -342,7 +357,6 @@ export default function MetodoAyurvedaDoshaPranayama() {
   const comicVinetas = useComic("ayurveda-pranayama", COMIC_PRANAYAMA);
   const [guardando, setGuardando] = useState(false);
   const dataRef = useRef<Record<string, any>>({});
-  const practicaRef = useRef<HTMLDivElement | null>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesAyurveda();
 
   // Solo al montar: el doṣha ya no vuelve a recargar la página, se cambia en
@@ -427,16 +441,15 @@ export default function MetodoAyurvedaDoshaPranayama() {
   };
 
   // Cambiar de doṣha: se guarda lo escrito del anterior (que no se pierda por
-  // pulsar otro botón) y la página se queda donde está, mirando la práctica.
+  // pulsar otro botón) y la página se queda EXACTAMENTE donde está: solo cambia
+  // el contenido, sin saltos ni scroll (el scrollIntoView de antes daba un
+  // brinco cada vez que se pulsaba un botón).
   const cambiarDosha = (k: DoshaKey) => {
     if (k === sel) return;
     void persist(sel, datos[sel]);
     setSel(k);
     // La URL acompaña a la selección para que recargar no devuelva al otro.
     navigate(`/metodo/ayurveda/dosha/${k}/pranayama`, { replace: true });
-    window.requestAnimationFrame(() => {
-      practicaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
   };
 
   // El siguiente paso del mapa ya no son los Cursos: son los chakras.
@@ -485,25 +498,23 @@ export default function MetodoAyurvedaDoshaPranayama() {
           {/* 1 · QUÉ VAS A HACER — una caja pequeña, 3-4 líneas y ya. Los
               nombres sánscritos y la teoría los ha contado el cómic de la
               entrada; aquí solo se respira. */}
-          <Box ref={practicaRef} w="100%" scrollMarginTop={{ base: 4, md: 6 }}>
           <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
           <Panel color={meta.color}>
             <Flex align="center" gap={3} mb={4}>
               <DoshaIcon size={{ base: "28px", md: "32px" }} color={meta.color} />
-              <Text color={meta.color} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.14em" textTransform="uppercase">
+              <Text color={meta.color} fontSize={{ base: "md", md: "lg" }} fontWeight="700" letterSpacing="0.14em" textTransform="uppercase">
                 La práctica de {meta.label}
               </Text>
             </Flex>
             <Flex direction="column" gap={2.5}>
               {practica.resumen.map((linea, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">
                   {parseRich(linea)}
                 </Text>
               ))}
             </Flex>
           </Panel>
           </Reveal>
-          </Box>
 
           {/* 2 · EMPEZAR — el guía, solo. El círculo te va diciendo en cada
               momento qué hacer, así que no hace falta nada más en esta caja. */}
@@ -519,9 +530,13 @@ export default function MetodoAyurvedaDoshaPranayama() {
               completado={practicado}
               onCompletar={marcarPracticado}
             />
-            <Text color={`${TINTA}bb`} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" mt={7} textAlign="center" fontStyle="italic">
-              <Box as="span" fontWeight="700" fontStyle="normal">{t("metodo.ayur.cuidado")}</Box>{practica.precaucion}
-            </Text>
+            {/* La precaución es opcional: el doṣha que no la tiene no pinta la
+                línea (antes salía un «Cuidado:» huérfano, sin nada detrás). */}
+            {practica.precaucion && (
+              <Text color={`${TINTA}bb`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" mt={7} textAlign="center" fontStyle="italic">
+                <Box as="span" fontWeight="700" fontStyle="normal">{t("metodo.ayur.cuidado")}</Box>{practica.precaucion}
+              </Text>
+            )}
           </Panel>
           </Reveal>
 
@@ -541,7 +556,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
             <RevealStagger key={sel} inView display="flex" flexDirection="column" gap={6} stagger={0.08} delayChildren={0.05} amount={0.1}>
               {practica.preguntas.map((preg, i) => (
                 <RevealItem key={`${sel}-${i}`} direction="up" distance={14} duration={0.45} w="100%">
-                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={3}>{preg}</Text>
+                  <Text color={TINTA} fontSize={{ base: "xl", md: "xl" }} fontWeight="700" mb={3}>{preg}</Text>
                   <Textarea
                     value={respuestas[i] ?? ""}
                     onChange={(e) => {
@@ -564,7 +579,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
                     px={{ base: 5, md: 6 }}
                     py={{ base: 4, md: 5 }}
                     fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "lg", md: "xl" }}
+                    fontSize={{ base: "xl", md: "xl" }}
                     lineHeight="1.8"
                     sx={{ caretColor: TINTA }}
                     _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
@@ -581,7 +596,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
                 onClick={guardando ? undefined : guardarReflexion}
                 minW="180px" px={9} py={3} borderRadius="full"
                 bg={meta.color} color="#fff"
-                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.05em"
                 cursor={guardando ? "wait" : "pointer"}
                 boxShadow={`0 0 18px ${meta.color}55`} transition="all 0.2s"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
@@ -599,7 +614,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
           <Panel color={ayurvedaTxt}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {PRANAYAMA_CIERRE.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{parseRich(p)}</Text>
               ))}
               <Box
                 as="button"
@@ -607,7 +622,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
                 mt={1}
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={ayurvedaTxt} color="#fff"
-                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "xl" }} letterSpacing="0.06em"
                 cursor="pointer"
                 boxShadow={`0 0 26px ${ayurvedaTxt}88`} transition="all 0.2s"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}

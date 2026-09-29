@@ -3,8 +3,10 @@
 //
 // Va DESPUÉS de la Síntesis: cuando la persona ya ha recorrido su mapa entero
 // y se ha descargado su cuaderno, aquí encuentra por dónde seguir si quiere ir
-// más hondo. Y es el paso que enlaza con Ayurveda (con el pago si aún no está
-// desbloqueado), por ser ahora el verdadero final del recorrido.
+// más hondo. Y es el paso que enlaza con la SIGUIENTE disciplina del mandala de
+// /home (DISCIPLINAS_CAMINO en data/camino.ts): tras Psicología va FISIOLOGÍA
+// (antes apuntaba a Ayurveda, del orden viejo). Si no está pagada, el guarda de
+// /metodo/fisiologia ya la manda al pago.
 //
 // Los cursos NO se escriben aquí: salen del catálogo (tabla `curso`) por
 // `useCursosData`, igual que en el resto de disciplinas. Añadir un curso de
@@ -24,7 +26,6 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceRecorrido } from "../../components/metodo/IndiceRecorrido";
-import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
@@ -38,7 +39,6 @@ import {
   NeuropsicologiaIcon,
 } from "../../GlobalVariables";
 import { useT } from "../../i18n";
-import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
 const TINTA = neuropsicologiaTxt;  // marrón tinta
 const PAPEL = "#fbf4e8";           // crema claro
@@ -51,11 +51,6 @@ export default function MetodoPsicologiaCursos() {
   const exp = experienciaById(experienciaId || "");
 
   const [loading, setLoading] = useState(true);
-  // null = aún no se sabe (ver MetodoAyurvedaDoshaCursos).
-  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState<boolean | null>(null);
-  const [pagoOpen, setPagoOpen] = useState(false);
-  const [pagoLoading, setPagoLoading] = useState(false);
-  const [pagoError, setPagoError] = useState<string | null>(null);
   const { cursosData, loading: cursosLoading } = useCursosData();
 
   useEffect(() => {
@@ -69,7 +64,6 @@ export default function MetodoPsicologiaCursos() {
       try {
         const me = await getUserMe();
         if (!me.data?.psicologia_suscrito) { navigate("/metodo/psicologia", { replace: true }); return; }
-        setAyurvedaSuscrito(!!me.data?.ayurveda_suscrito);
       } catch {
         // silencioso
       } finally {
@@ -78,24 +72,6 @@ export default function MetodoPsicologiaCursos() {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [experienciaId]);
-
-  // Enlace con Ayurveda: abre el pago si aún no está desbloqueado.
-  const onAyurveda = () => {
-    if (ayurvedaSuscrito === false) { setPagoError(null); setPagoOpen(true); }
-    else navigate("/metodo/ayurveda");
-  };
-
-  const pagarAyurveda = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) { navigate("/welcome"); return; }
-    setPagoLoading(true);
-    setPagoError(null);
-    const errPago = irAPagoDisciplina("ayurveda");
-    if (errPago) {
-      setPagoError(errPago);
-      setPagoLoading(false);
-    }
-  };
 
   const cursos = [...(cursosData[neuropsicologiaNom]?.cursos ?? [])].sort(
     (a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""),
@@ -130,7 +106,7 @@ export default function MetodoPsicologiaCursos() {
                 mb={0}
                 boxShadow={glowHeader}
                 prev={{ label: `← ${t("metodo.psico.paso.emociones")}`, onClick: () => navigate(`/metodo/psicologia/${exp.id}/emociones`) }}
-                next={{ label: `${t("disciplina.ayurveda")} →`, onClick: onAyurveda }}
+                next={{ label: `${t("disciplina.fisiologia")} →`, onClick: () => navigate("/metodo/fisiologia") }}
               />
             </Reveal>
 
@@ -199,14 +175,6 @@ export default function MetodoPsicologiaCursos() {
           </Flex>
         </Flex>
       </Box>
-
-      <PagoAyurvedaModal
-        isOpen={pagoOpen}
-        onClose={() => { setPagoOpen(false); setPagoError(null); }}
-        onPagar={pagarAyurveda}
-        loading={pagoLoading}
-        error={pagoError}
-      />
 
       <BotonCompania color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} disciplinaNom={neuropsicologiaNom} llamadaTitulo={t("metodo.psico.reservaLlamada")} />
 

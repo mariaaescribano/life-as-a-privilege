@@ -43,6 +43,10 @@ internacional. Comillas tipográficas dobles `"…"` en las citas.
 Ojo: el nombre INTERNO (`astrologiaNom`, `tcmNomLink`…) no se traduce nunca,
 va en las URLs y en la base de datos. Ver `nombreDisciplina.ts`.
 
+Ojo 2 (2026-09-29): la disciplina cuyo nombre interno es «Hinduismo»
+(`ayurvedaNom`) se muestra **«Ayurveda»** en toda la web, en los dos idiomas.
+*Hinduismo/Hinduism* solo aparece ya como RELIGIÓN, en el contenido de Cultura.
+
 ## Vocabulario del contenido
 
 | Español | Inglés | Nota |

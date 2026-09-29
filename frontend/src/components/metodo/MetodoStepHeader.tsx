@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { FlechaBonita } from "../global/FlechaBonita";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
-import { astrologiaNom, astrologiaTxt, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
+import { astrologiaNom, astrologiaTxt, ayurvedaNom, ayurvedaTxt, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { Float } from "../global/Reveal";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
@@ -281,12 +281,25 @@ export function MetodoStepHeader({
   // El botón "Cursos" de Psicología puede ocultarse en páginas concretas.
   const showPsicoCursos = isPsico && !hideCursos;
   const [cursosOpen, setCursosOpen] = useState(false);
-  // Astrología: el botón «Ilustraciones» es solo el icono de la foto, en el
-  // color de letra de la disciplina y centrado. Se reconoce igual en el móvil,
-  // donde la palabra no cabía. Lo decide el header (no cada página), así que
-  // las páginas siguen pasando su `label` de siempre, que queda de aria-label.
-  const extraFinal = extra && headerNom === astrologiaNom && extra.label === t("metodo.ilustraciones")
-    ? { ...extra, label: <IconoIlustraciones color={astrologiaTxt} />, ariaLabel: t("metodo.ilustraciones"), icon: undefined }
+  // Astrología y Ayurveda: el botón «Ilustraciones» lleva el icono del marco
+  // de foto a la IZQUIERDA del nombre, y en el móvil se queda en el icono solo
+  // (la palabra no cabía). Lo decide el header (no cada página), así que las
+  // páginas siguen pasando su `label` de siempre, que queda de aria-label.
+  const ilusColor = headerNom === astrologiaNom ? astrologiaTxt
+    : headerNom === ayurvedaNom ? ayurvedaTxt
+    : undefined;
+  const extraFinal = extra && ilusColor && extra.label === t("metodo.ilustraciones")
+    ? {
+        ...extra,
+        label: (
+          <>
+            <IconoIlustraciones color={ilusColor} />
+            <Box as="span" display={{ base: "none", md: "inline" }}>{t("metodo.ilustraciones")}</Box>
+          </>
+        ),
+        ariaLabel: t("metodo.ilustraciones"),
+        icon: undefined,
+      }
     : extra;
   // ── MÓVIL: los botones de paso van SIN nombre, solo la flecha ──────────
   // En el móvil la fila de botones no cabe: «← Los elementos» + «Planetas →»

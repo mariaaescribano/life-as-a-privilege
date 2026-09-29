@@ -62,7 +62,10 @@ const SECTOR_POR_ALIMENTO: Record<string, string> = {
 
 // Alimentos que, aun siendo de un grupo saludable, NO van en el plato (trampas
 // que la biblioteca usa como contraste, p.ej. el zumo: fruta sin fibra).
-const FUERA_DEL_PLATO = new Set<string>(["zumo-naranja"]);
+// La carne de vaca y el cerdo salieron de «Proteína saludable» (2026-09-30,
+// pedido de la usuaria): el plato de Harvard pide limitar la carne roja, así
+// que quedan fuera, como el zumo.
+const FUERA_DEL_PLATO = new Set<string>(["zumo-naranja", "vaca", "cerdo"]);
 
 const alimentosDeSector = (sectorKey: string): PlatoAlimento[] =>
   ALIMENTOS

@@ -779,8 +779,13 @@ export default function MetodoNutricionDia() {
         <Flex position="fixed" inset={0} zIndex={5200} align="center" justify="center" px={4}
               bg="rgba(0,0,0,0.55)" onClick={() => setCrearOpen(false)}>
           <Box onClick={(e) => e.stopPropagation()} w="100%" maxW="480px" borderRadius="2xl"
+               position="relative" overflow="hidden"
                px={{ base: 5, md: 7 }} py={{ base: 6, md: 7 }} bg={nutricionBg}
                border={`1px solid ${nutricionTxt}44`} style={{ boxShadow: glowHeader(nutricionTxt) }}>
+            {/* Fondo con la acuarela de Nutrición (nutri.webp) + velo claro,
+                como el resto de cajas de la disciplina: antes iba en verde liso. */}
+            <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}4d`} />
+            <Box position="relative" zIndex={1}>
             <Text color={nutricionTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight={700} textAlign="center">{t("metodo.nutri.crearAlimento")}</Text>
             <Text color={`${nutricionTxt}aa`} fontSize="sm" textAlign="center" mt={1} mb={5}>
               {t("metodo.dia.seAnadiraAlGrupo", { grupo: GRUPOS_DIA.find((g) => g.key === grupoSel)?.label ?? "" })}
@@ -819,6 +824,7 @@ export default function MetodoNutricionDia() {
                 {t("metodo.dia.crearAlimento")}
               </Box>
             </Flex>
+            </Box>
           </Box>
         </Flex>
       )}

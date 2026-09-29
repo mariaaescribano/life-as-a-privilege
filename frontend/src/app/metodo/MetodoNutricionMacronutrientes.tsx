@@ -108,6 +108,18 @@ export default function MetodoNutricionMacronutrientes() {
             </Text>
           </Reveal>
 
+          {/* Con los 7 macro ya revisados, la vuelta a esta página lo dice en
+              blanco bajo el header: enhorabuena, puedes continuar (el botón
+              «Micro →» de arriba ya está encendido). */}
+          {!faltanMacro && (
+            <Reveal direction="up" distance={18} delay={0.15} duration={0.6} w="100%" display="flex" justifyContent="center">
+              <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontStyle="italic"
+                    textAlign="center" lineHeight="1.7" maxW="760px">
+                {t("metodo.nutri.macroCompletado")}
+              </Text>
+            </Reveal>
+          )}
+
           <SendaNutrientes pasos={MACRO} hechos={exploradosSet} onAbrir={abrir} />
         </Flex>
       </Flex>

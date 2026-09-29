@@ -35,8 +35,9 @@ export interface PracticaPranayama {
   /** La explicación entera: 3-4 líneas y ni una más. Qué vas a hacer, cómo se
    *  hace y por qué a este doṣha le viene bien. Sin nombres sánscritos. */
   resumen: string[];
-  /** Cuidado con… Una línea, debajo del botón de empezar. */
-  precaucion: string;
+  /** Cuidado con… Una línea, debajo del botón de empezar. OPCIONAL: si un
+   *  doṣha no la necesita, no se escribe y la página no pinta nada. */
+  precaucion?: string;
   /** Ciclos que propone el guía. */
   ciclos: number;
   fases: FasePranayama[];
@@ -103,7 +104,6 @@ export const PRANAYAMA_PRACTICA: Record<DoshaKey, PracticaPranayama> = {
       "Kapha es pesado y lento, y esto lo mueve, lo calienta y lo despeja.",
       "Después de cada ronda vuelves a tu respiración normal: ahí es donde pasa lo interesante.",
     ],
-    precaucion: "No la hagas embarazada, con la tensión alta, con problemas de corazón, glaucoma, epilepsia ni con la regla. Si te mareas, para: ibas demasiado rápido.",
     ciclos: 3,
     fases: [
       { tipo: "rapida",    texto: "Fuelle: respira rápido por la nariz", segundos: 15 },
@@ -125,5 +125,5 @@ export const PRANAYAMA_REFLEXION = {
 
 export const PRANAYAMA_CIERRE = [
   "Empieza por cinco minutos. Mañana otros cinco.",
-  "*Lo que estás entrenando no es la respiración: es la capacidad de volver.*",
+  "*Lo que estás entrenando no es la respiración: es la capacidad de volver el presente y dirigir tu atención.*",
 ];

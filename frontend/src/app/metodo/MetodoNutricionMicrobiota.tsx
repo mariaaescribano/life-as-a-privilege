@@ -112,18 +112,22 @@ export default function MetodoNutricionMicrobiota() {
             </Text>
           </Reveal>
 
-          <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {bacterias.map((bac, i) => (
-                <TarjetaNutri key={bac.key} titulo={bac.titulo} foto={bac.foto}
+          {/* ⚠ Tarjetas en cascada AL MONTAR, cada una con su Reveal (regla de
+              Nutrición: nada de inView ni de envolver la rejilla entera — con
+              eso había tarjetas que se quedaban a opacidad 0). */}
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+            {bacterias.map((bac, i) => (
+              <Reveal key={bac.key} direction="up" distance={18} scaleFrom={0.94}
+                      duration={0.55} delay={0.16 + Math.min(i * 0.06, 0.5)}>
+                <TarjetaNutri titulo={bac.titulo} foto={bac.foto}
                               visto={leido(CAMPO_BACTERIAS, bac.key)}
                               onClick={() => abrirBacteria(i)} />
-              ))}
-            </SimpleGrid>
-          </Reveal>
+              </Reveal>
+            ))}
+          </SimpleGrid>
 
           {/* ── Separador horizontal con el mandala en medio ── */}
-          <Reveal inView direction="up" distance={12} delay={0.1} duration={0.6} w="100%">
+          <Reveal direction="up" distance={12} delay={0.2} duration={0.6} w="100%">
             <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" py={{ base: 2, md: 3 }}>
               <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.75))" />
               <Image
@@ -139,22 +143,25 @@ export default function MetodoNutricionMicrobiota() {
           </Reveal>
 
           {/* ── Las moléculas que fabrican ── */}
-          <Reveal inView direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal direction="up" distance={18} delay={0.25} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
               {t("metodo.nutri.microbiotaMoleculas")}
             </Text>
           </Reveal>
 
-          <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {moleculas.map((tar, i) => (
-                <TarjetaNutri key={tar.key} titulo={tar.titulo} foto={tar.foto}
+          {/* Misma cascada al montar que las bacterias, arrancando un poco más
+              tarde para que la página se ponga sola de arriba abajo. */}
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
+            {moleculas.map((tar, i) => (
+              <Reveal key={tar.key} direction="up" distance={18} scaleFrom={0.94}
+                      duration={0.55} delay={0.3 + Math.min(i * 0.06, 0.5)}>
+                <TarjetaNutri titulo={tar.titulo} foto={tar.foto}
                               visto={leido(CAMPO_MOLECULAS, tar.key)}
                               onClick={() => abrirMolecula(i)} />
-              ))}
-            </SimpleGrid>
-          </Reveal>
+              </Reveal>
+            ))}
+          </SimpleGrid>
 
         </Flex>
       </Flex>

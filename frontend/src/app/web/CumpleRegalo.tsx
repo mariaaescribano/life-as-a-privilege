@@ -19,7 +19,7 @@ import { useT, type ClaveTexto } from "../../i18n";
 const NOMBRE: Record<string, ClaveTexto> = {
   metodo: "disciplina.astrologia",
   psicologia: "disciplina.psicologia",
-  ayurveda: "disciplina.hinduismo",
+  ayurveda: "disciplina.ayurveda",
   tcm: "disciplina.medicinaChina",
   fisiologia: "disciplina.fisiologia",
   nutricion: "disciplina.nutricion",

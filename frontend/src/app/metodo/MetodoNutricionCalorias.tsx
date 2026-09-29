@@ -59,7 +59,11 @@ const OBJETIVOS: { key: Objetivo; label: ClaveTexto; ajuste: number }[] = [
 
 // Suelo de seguridad: no recomendamos por debajo de un mínimo saludable (comer
 // muy por debajo pasa factura). Evita sugerir cifras peligrosamente bajas.
+// Estos suelos por sexo solo rigen en «perder» (definición): en mantener/ganar
+// el mínimo es SUELO_GENERAL (nadie que no esté en definición debería quedarse
+// por debajo de 2000 kcal — pedido de la usuaria, 2026-09-30).
 const SUELO_KCAL: Record<Sexo, number> = { mujer: 1500, hombre: 1800 };
+const SUELO_GENERAL = 2000;
 
 // ── Botón de un grupo tipo «segmentado» (sexo / actividad / objetivo) ──
 function Opcion({ activo, label, onClick }: { activo: boolean; label: React.ReactNode; onClick: () => void }) {
@@ -262,8 +266,9 @@ export default function MetodoNutricionCalorias() {
     const ajuste = OBJETIVOS.find((x) => x.key === objetivo)?.ajuste ?? 0;
     let kcal = Math.round((tdee * (1 + ajuste)) / 10) * 10;
 
-    // Suelo de seguridad.
-    const suelo = SUELO_KCAL[sexo];
+    // Suelo de seguridad: 2000 kcal para todo el mundo… salvo en «perder»
+    // (definición), donde rige el suelo por sexo de siempre.
+    const suelo = objetivo === "perder" ? SUELO_KCAL[sexo] : SUELO_GENERAL;
     const bajoSuelo = kcal < suelo;
     if (bajoSuelo) kcal = suelo;
 

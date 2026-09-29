@@ -53,7 +53,7 @@ export default function MetodoTcmApuntes() {
   const [datos, setDatos] = useState<DatosTcm>({});
   const [nombre, setNombre] = useState("");
   // ¿Ha pagado ya la Fisiología? (la disciplina que se aconseja después).
-  const [fisioSuscrito, setFisioSuscrito] = useState(false);
+  const [cabalaSuscrito, setCabalaSuscrito] = useState(false);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -68,7 +68,9 @@ export default function MetodoTcmApuntes() {
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
         // Su nombre va en la portada: estos apuntes son suyos.
         setNombre(String(me.data?.name ?? "").trim());
-        setFisioSuscrito(!!me.data?.fisiologia_suscrito);
+        // La siguiente disciplina del mandala de /home tras Medicina China es
+        // CÁBALA (antes apuntaba a Fisiología, del orden viejo).
+        setCabalaSuscrito(!!me.data?.cabala_suscrito);
       } catch {
         navigate("/metodo/tcm");
         return;
@@ -119,9 +121,9 @@ export default function MetodoTcmApuntes() {
             mb={0}
             prev={{ label: `← ${t("metodo.tcm.paso.cursos")}`, onClick: () => navigate("/metodo/tcm/cursos") }}
             extra={ilustracionesBtn}
-            next={fisioSuscrito
-              ? { label: `${t("disciplina.fisiologia")} →`, onClick: () => navigate("/metodo/fisiologia") }
-              : { label: `${t("disciplina.fisiologia")} →`, icon: <Candado size="15px" />, onClick: () => navigate("/metodo/fisiologia") }}
+            next={cabalaSuscrito
+              ? { label: `${t("disciplina.cabala")} →`, onClick: () => navigate("/metodo/cabala") }
+              : { label: `${t("disciplina.cabala")} →`, icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cabala") }}
           />
           </Reveal>
 
@@ -153,8 +155,8 @@ export default function MetodoTcmApuntes() {
           <PedirOpinion bg={tcmBg} txt={tcmTxt} nom={tcmNom} />
 
           {/* Mismo texto que el botón del header, como en todo el recorrido. */}
-          <BotonPaso label={t("disciplina.fisiologia")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
-                     onClick={() => navigate("/metodo/fisiologia")} />
+          <BotonPaso label={t("disciplina.cabala")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
+                     onClick={() => navigate("/metodo/cabala")} />
         </Flex>
       </Flex>
 

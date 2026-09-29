@@ -156,19 +156,19 @@ export function SendaNutrientes({
         return (
           <React.Fragment key={r}>
             {/* La fila: nodo + tarjeta, en el orden del camino.
-                ⚠ SIN RevealStagger: `porFila` cambia de 2 a 3 al resolverse el
-                breakpoint y las tarjetas se REMONTAN en una fila cuya cascada ya
-                se disparó — se quedaban a opacidad 0 (le pasaba a Grasas «a
-                veces»: era una carrera). La receta de la casa (ver el aviso en
-                Reveal.tsx): un <Reveal inView> POR TARJETA, escalonado con
-                `delay`, que al remontarse vuelve a dispararse solo. */}
+                ⚠ ESTAS TARJETAS NO PUEDEN FALLAR: cada Reveal anima AL MONTAR
+                (nada de inView/whileInView). Se probó primero RevealStagger y
+                después un inView por tarjeta, y con los dos había veces en que
+                alguna se quedaba a opacidad 0 (Grasas, y luego más). Al montar,
+                la animación arranca sola y SIEMPRE acaba en visible, también
+                cuando `porFila` cambia de 2 a 3 y la tarjeta se remonta. */}
             <Flex w="100%" flexDirection={direccion} gap={gap} alignItems="stretch">
               {fila.map((idx, c) => {
                 const p = pasos[idx];
                 const e = estados[idx];
                 return (
-                  <Reveal key={p.key} inView direction="up" distance={22} scaleFrom={0.96}
-                          duration={0.55} delay={c * 0.07}
+                  <Reveal key={p.key} direction="up" distance={22} scaleFrom={0.96}
+                          duration={0.55} delay={(r * porFila + c) * 0.07}
                           flex="1" minW={0} display="flex" flexDirection="column">
                     {/* La vía y su nodo. Los tramos se dibujan a los lados del
                         nodo; con la fila invertida, el «anterior» cae a la

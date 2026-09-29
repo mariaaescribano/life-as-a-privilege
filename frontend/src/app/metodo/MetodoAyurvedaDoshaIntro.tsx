@@ -109,7 +109,7 @@ function CheckRow({ label, checked, onToggle, color }: { label: string; checked:
           </Box>
         )}
       </Box>
-      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.5">{label}</Text>
+      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.5">{label}</Text>
     </Flex>
   );
 }
@@ -251,7 +251,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={3} style={{ textShadow: INK_SHADOW }}>
                 {t("metodo.ayur.preparando")}
               </Text>
-              <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
+              <Text color={`${TINTA}cc`} fontSize={{ base: "lg", md: "xl" }} textAlign="center" lineHeight="1.8">
                 La introducción a {meta.label} estará disponible muy pronto.
               </Text>
             </Panel>
@@ -300,7 +300,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               <Separador />
               <Flex direction="column" gap={3.5} maxW="640px">
                 {c.intro.map((p, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">
+                  <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">
                     {parseRich(p)}
                   </Text>
                 ))}
@@ -319,7 +319,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               </Text>
               <Separador />
               {c.principio.slice(1).map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">
                   {parseRich(p)}
                 </Text>
               ))}
@@ -333,7 +333,7 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
               {c.reconoces.titulo}
             </Text>
-            <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>
+            <Text color={`${TINTA}cc`} fontSize={{ base: "lg", md: "xl" }} mb={5}>
               {c.reconoces.intro}
             </Text>
             <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
@@ -350,7 +350,7 @@ export default function MetodoAyurvedaDoshaIntro() {
             </RevealStagger>
             <Flex direction="column" gap={2.5} mt={5}>
               {c.reconoces.cierre.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">
                   {parseRich(p)}
                 </Text>
               ))}
@@ -364,7 +364,7 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" textAlign="center" mb={2} style={{ textShadow: INK_SHADOW }}>
               {c.descubriras.titulo}
             </Text>
-            <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" mb={6}>
+            <Text color={`${TINTA}cc`} fontSize={{ base: "lg", md: "xl" }} textAlign="center" mb={6}>
               {c.descubriras.intro}
             </Text>
             <RevealStagger inView display="flex" flexDirection="column" gap={3.5} stagger={0.08} delayChildren={0.05} amount={0.1}>
@@ -391,7 +391,7 @@ export default function MetodoAyurvedaDoshaIntro() {
                     >
                       <ItemIcon size={22} color={ayurvedaTxt} strokeWidth={1.8} />
                     </Flex>
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{parseRich(it.texto)}</Text>
+                    <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{parseRich(it.texto)}</Text>
                   </Flex>
                   </RevealItem>
                 );
@@ -407,7 +407,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                 {c.preguntaFinal.titulo}
               </Text>
-              <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={4}>
+              <Text color={TINTA} fontSize={{ base: "xl", md: "xl" }} fontWeight="700" mb={4}>
                 {c.preguntaFinal.pregunta}
               </Text>
               <Textarea
@@ -423,14 +423,14 @@ export default function MetodoAyurvedaDoshaIntro() {
                 px={{ base: 5, md: 6 }}
                 py={{ base: 4, md: 5 }}
                 fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "lg", md: "xl" }}
+                fontSize={{ base: "xl", md: "xl" }}
                 lineHeight="1.8"
                 sx={{ caretColor: TINTA }}
                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                 _hover={{ borderColor: `${meta.color}88` }}
                 _focus={{ borderColor: meta.color, boxShadow: `0 0 0 1px ${meta.color}44`, bg: "rgba(255,251,243,0.6)" }}
               />
-              <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={3}>
+              <Text color={`${TINTA}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mt={3}>
                 {c.preguntaFinal.nota}
               </Text>
 
@@ -446,7 +446,7 @@ export default function MetodoAyurvedaDoshaIntro() {
                   color="#fff"
                   fontFamily="'EB Garamond', serif"
                   fontWeight="700"
-                  fontSize={{ base: "md", md: "lg" }}
+                  fontSize={{ base: "lg", md: "xl" }}
                   letterSpacing="0.05em"
                   cursor={guardando ? "wait" : "pointer"}
                   boxShadow={`0 0 18px ${meta.color}55`}
@@ -466,7 +466,7 @@ export default function MetodoAyurvedaDoshaIntro() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.slice(0, -1).map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
                   {parseRich(p)}
                 </Text>
               ))}
@@ -484,7 +484,7 @@ export default function MetodoAyurvedaDoshaIntro() {
                 color="#fff"
                 fontFamily="'EB Garamond', serif"
                 fontWeight="700"
-                fontSize={{ base: "lg", md: "xl" }}
+                fontSize={{ base: "xl", md: "xl" }}
                 letterSpacing="0.06em"
                 cursor={guardado ? "pointer" : "not-allowed"}
                 opacity={guardado ? 1 : 0.55}
@@ -500,7 +500,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               </Box>
 
               {!guardado && (
-                <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+                <Text color={`${TINTA}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
                   {t("metodo.ayur.guardaRespuesta")}
                 </Text>
               )}

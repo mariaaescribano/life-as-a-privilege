@@ -72,7 +72,7 @@ function ListItem({ texto, color }: { texto: string; color: string }) {
   return (
     <Flex align="flex-start" gap={3}>
       <Box flexShrink={0} mt="9px" w="7px" h="7px" borderRadius="full" bg={color} />
-      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{texto}</Text>
+      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{texto}</Text>
     </Flex>
   );
 }
@@ -108,7 +108,7 @@ function CheckRow({ label, checked, onToggle, color }: { label: string; checked:
           </Box>
         )}
       </Box>
-      <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.5">{label}</Text>
+      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.5">{label}</Text>
     </Flex>
   );
 }
@@ -224,7 +224,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" mb={3} style={{ textShadow: INK_SHADOW }}>
                 {t("metodo.ayur.preparando")}
               </Text>
-              <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} textAlign="center" lineHeight="1.8">
+              <Text color={`${TINTA}cc`} fontSize={{ base: "lg", md: "xl" }} textAlign="center" lineHeight="1.8">
                 «¿Qué te desequilibra?» para {meta.label} estará disponible muy pronto.
               </Text>
             </Panel>
@@ -271,7 +271,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
               <Separador />
               <Flex direction="column" gap={3.5} maxW="640px">
                 {c.intro.map((p, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85">{parseRich(p)}</Text>
+                  <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">{parseRich(p)}</Text>
                 ))}
               </Flex>
             </Flex>
@@ -296,7 +296,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           <Reveal inView direction="up" distance={22} duration={0.6} amount={0.15} w="100%">
           <Panel color={meta.color}>
             <SeccionTitulo color={meta.color}>{c.marcado.titulo}</SeccionTitulo>
-            <Text color={`${TINTA}cc`} fontSize={{ base: "md", md: "lg" }} mb={5}>
+            <Text color={`${TINTA}cc`} fontSize={{ base: "lg", md: "xl" }} mb={5}>
               Has marcado <Box as="span" fontWeight="700" color={meta.color}>{count}</Box> de {c.aumenta.opciones.length}.
             </Text>
             <RevealStagger inView display="flex" flexDirection="column" gap={3} stagger={0.07} delayChildren={0.05} amount={0.1}>
@@ -322,12 +322,12 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
                       px={3} borderRadius="full"
                       bg={activo ? meta.color : `${meta.color}22`}
                       color={activo ? "#fff" : TINTA}
-                      fontWeight="700" fontSize={{ base: "sm", md: "md" }}
+                      fontWeight="700" fontSize={{ base: "md", md: "lg" }}
                       style={activo ? { textShadow: "0 1px 2px rgba(0,0,0,0.3)" } : undefined}
                     >
                       {r.label}
                     </Flex>
-                    <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" fontWeight={activo ? "700" : "400"}>
+                    <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" fontWeight={activo ? "700" : "400"}>
                       {r.texto}
                     </Text>
                   </Flex>
@@ -344,7 +344,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
             <SeccionTitulo color={meta.color}>{c.senales.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={4}>
               {c.senales.intro.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">{parseRich(p)}</Text>
               ))}
             </Flex>
             <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
@@ -352,7 +352,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
             </RevealStagger>
-            <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(c.senales.cierre)}</Text>
+            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">{parseRich(c.senales.cierre)}</Text>
           </Panel>
           </Reveal>
 
@@ -362,7 +362,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
             <SeccionTitulo color={meta.color}>{c.equilibrio.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={4}>
               {c.equilibrio.intro.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">{parseRich(p)}</Text>
               ))}
             </Flex>
             <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
@@ -372,7 +372,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
             </RevealStagger>
             <Flex direction="column" gap={2}>
               {c.equilibrio.cierre.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">{parseRich(p)}</Text>
               ))}
             </Flex>
           </Panel>
@@ -383,7 +383,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           <Box ref={reflexionRef} w="100%">
             <Panel color={meta.color}>
               <SeccionTitulo color={meta.color}>{c.reflexion.titulo}</SeccionTitulo>
-              <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={4}>{c.reflexion.pregunta}</Text>
+              <Text color={TINTA} fontSize={{ base: "xl", md: "xl" }} fontWeight="700" mb={4}>{c.reflexion.pregunta}</Text>
               <Textarea
                 value={reflexion}
                 onChange={(e) => { setReflexion(e.target.value); setGuardado(false); }}
@@ -397,21 +397,21 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
                 px={{ base: 5, md: 6 }}
                 py={{ base: 4, md: 5 }}
                 fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "lg", md: "xl" }}
+                fontSize={{ base: "xl", md: "xl" }}
                 lineHeight="1.8"
                 sx={{ caretColor: TINTA }}
                 _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
                 _hover={{ borderColor: `${meta.color}88` }}
                 _focus={{ borderColor: meta.color, boxShadow: `0 0 0 1px ${meta.color}44`, bg: "rgba(255,251,243,0.6)" }}
               />
-              <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={3}>{c.reflexion.nota}</Text>
+              <Text color={`${TINTA}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mt={3}>{c.reflexion.nota}</Text>
               <Flex justify="flex-end" mt={6}>
                 <Box
                   as="button"
                   onClick={guardando ? undefined : guardarReflexion}
                   minW="180px" px={9} py={3} borderRadius="full"
                   bg={meta.color} color="#fff"
-                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em"
+                  fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.05em"
                   cursor={guardando ? "wait" : "pointer"}
                   boxShadow={`0 0 18px ${meta.color}55`} transition="all 0.2s"
                   style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
@@ -429,7 +429,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{parseRich(p)}</Text>
               ))}
               <Box
                 as="button"
@@ -437,7 +437,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
                 mt={1}
                 px={{ base: 10, md: 14 }} py={{ base: 3, md: 3.5 }} borderRadius="full"
                 bg={guardado ? meta.color : `${meta.color}55`} color="#fff"
-                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
+                fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "xl" }} letterSpacing="0.06em"
                 cursor={guardado ? "pointer" : "not-allowed"} opacity={guardado ? 1 : 0.55}
                 boxShadow={guardado ? `0 0 26px ${meta.color}88` : "none"} transition="all 0.2s"
                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
@@ -447,7 +447,7 @@ export default function MetodoAyurvedaDoshaDesequilibrio() {
                 {`${t("metodo.ayur.paso.cuidarte")} →`}
               </Box>
               {!guardado && (
-                <Text color={`${TINTA}aa`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">
+                <Text color={`${TINTA}aa`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
                   {t("metodo.ayur.guardaReflexion")}
                 </Text>
               )}

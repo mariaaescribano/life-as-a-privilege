@@ -13,7 +13,6 @@ import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { glowHeader } from "../../components/metodo/FotoBox";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../GlobalVariables";
 import {
@@ -436,8 +435,8 @@ export default function MetodoNutricionMacros() {
             </Reveal>
           )}
 
-          <BotonPaso label={t("metodo.nutri.paso.mitos")} nom={nutricionNom} color={nutricionTxt} bg={nutricionBg}
-                     onClick={() => navigate("/metodo/nutricion/mitos")} />
+          {/* Sin BotonPaso al final: a Mitos se va con el next del header
+              (pedido de la usuaria; el botón de abajo duplicaba el camino). */}
         </Flex>
       </Flex>
 

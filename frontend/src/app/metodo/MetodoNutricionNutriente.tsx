@@ -39,7 +39,9 @@ import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 //      hasta revisar este. En móvil el header los deja en la flecha sola.
 //   3. Box grande: foto a la izquierda (arriba en móvil) + título y
 //      descripción a la derecha, nunca más altos que la foto (scroll propio).
-//   4. Tarjetas de subtipos, con revelación progresiva.
+//   4. Tarjetas de subtipos: TODAS visibles siempre (una «revelación
+//      progresiva» que las escondía se descartó: parecía una página rota);
+//      entran en cascada y la siguiente por descubrir late suavemente.
 // ═════════════════════════════════════════════════════════════════════════
 
 // Ilustraciones (cómics) de grupo ya leídas, en metodo_nutricion.data: string[]
@@ -321,15 +323,12 @@ export default function MetodoNutricionNutriente() {
       : rutaListaNutriente(n.key));
   };
 
-  // ── Revelación progresiva de la rejilla ─────────────────────────────────
-  // La página no enseña todas las tarjetas de golpe: se ven las YA descubiertas
-  // más UNA (la siguiente por descubrir), y cada ficha leída hace aparecer la
-  // siguiente con su animación de entrada. Quien vuelve con el grupo revisado
-  // (o con datos antiguos donde solo consta `explorado`) lo ve todo del tirón:
-  // ahí manda `grupoRevisado`. Las vitaminas (círculo) no entran en esto.
+  // ⚠ Las tarjetas se ven TODAS, SIEMPRE. Hubo una «revelación progresiva»
+  // (solo las descubiertas + la siguiente) y se DESCARTÓ el mismo día: en
+  // vitaminas (13 tarjetas) la página parecía rota, «no salen todas las
+  // cards». La dinámica queda en la entrada en cascada de cada tarjeta y en
+  // el latido de la siguiente por descubrir, que es la invitación al clic.
   const primeraNoVista = (n.tarjetas ?? []).findIndex((_, i) => !fichasVistas.includes(i));
-  const tarjetaVisible = (idx: number) =>
-    grupoRevisado || fichasVistas.includes(idx) || idx === primeraNoVista;
 
   // Subgrupos de tarjetas (p.ej. «⚡ Electrolitos» / «🧱 Minerales»): agrupamos
   // las tarjetas consecutivas por su `grupo` conservando el índice GLOBAL (el que
@@ -402,7 +401,7 @@ export default function MetodoNutricionNutriente() {
               descripción, que NUNCA son más altos que la foto (si el texto no
               cabe, scroll propio). Sin rayita, líneas de luz arriba/abajo y la
               sombra de la disciplina, para que case 1:1 con el visor. */}
-          <Reveal inView direction="up" distance={20} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             {/* Ancho = el del header (maxW 1000). Sin override de sombra: usa el
                 glow suave por defecto de SeccionBox (el mismo discreto del header). */}
             <SeccionBox
@@ -473,19 +472,13 @@ export default function MetodoNutricionNutriente() {
           {n.tarjetas && n.tarjetas.length > 0 && (
             <Box w="100%">
               {n.tarjetasCirculo ? (
-                <Reveal inView amount={0.1} direction="up" distance={20} duration={0.6}>
+                <Reveal direction="up" distance={20} delay={0.2} duration={0.6}>
                   <NutrienteCirculo tarjetas={n.tarjetas} tituloCentro={n.label}
                                     onSelect={abrirFicha} />
                 </Reveal>
               ) : (
                 <Flex direction="column" w="100%" gap={{ base: 6, md: 8 }}>
                   {subgruposTarjetas.map((g, gi) => {
-                    // Revelación progresiva: del subgrupo solo se pintan las
-                    // tarjetas visibles (descubiertas + la siguiente). Un
-                    // subgrupo al que aún no se ha llegado no existe todavía:
-                    // ni sus tarjetas ni su rótulo.
-                    const visibles = g.items.filter(({ idx }) => tarjetaVisible(idx));
-                    if (visibles.length === 0) return null;
                     return (
                     <Box key={g.grupo ?? gi} w="100%">
                       {/* Encabezado del subgrupo con línea horizontal a los lados
@@ -497,7 +490,7 @@ export default function MetodoNutricionNutriente() {
                         // sustituya —el rótulo se sostiene solo—.
                         const nombre = g.grupo.split(" ").slice(1).join(" ");
                         return (
-                          <Reveal inView direction="right" distance={16} duration={0.5}>
+                          <Reveal direction="right" distance={16} duration={0.5}>
                             <Flex align="center" gap={{ base: 2.5, md: 3 }} w="100%" mb={{ base: 4, md: 5 }}>
                               <Text color="white" fontWeight="800" fontSize={{ base: "md", md: "lg" }}
                                     letterSpacing="0.08em" textTransform="uppercase" whiteSpace="nowrap"
@@ -510,17 +503,20 @@ export default function MetodoNutricionNutriente() {
                         );
                       })()}
                       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
-                        {visibles.map(({ tar, idx }) => {
+                        {g.items.map(({ tar, idx }) => {
                           // La siguiente por descubrir respira despacito: es la
                           // invitación al clic. Las ya vistas se quedan quietas.
                           // El Breathe envuelve SIEMPRE (con amplitud 0 cuando no
-                          // toca) para no remontar la tarjeta al cambiar de rol,
-                          // y cada tarjeta entra con su propio Reveal al aparecer
-                          // (inView: por debajo del pliegue no anima a ciegas).
+                          // toca) para no remontar la tarjeta al cambiar de rol.
+                          // ⚠ El Reveal de cada tarjeta anima AL MONTAR, nada de
+                          // inView: con whileInView había tarjetas que se
+                          // quedaban a opacidad 0. Al montar SIEMPRE acaba
+                          // visible; la cascada la pone el delay por índice.
                           const esLaSiguiente = !grupoRevisado && idx === primeraNoVista;
                           return (
-                            <Reveal key={tar.key} inView direction="up" distance={18}
-                                    scaleFrom={0.94} duration={0.55}>
+                            <Reveal key={tar.key} direction="up" distance={18}
+                                    scaleFrom={0.94} duration={0.55}
+                                    delay={Math.min(idx * 0.06, 0.5)}>
                               <Breathe scale={esLaSiguiente ? 0.02 : 0} duration={3.5}>
                                 <TarjetaNutri titulo={tar.titulo} foto={tar.foto} numero={tar.numero}
                                               visto={fichasVistas.includes(idx)}

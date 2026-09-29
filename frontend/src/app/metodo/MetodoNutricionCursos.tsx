@@ -27,8 +27,10 @@ import {
 } from "../../GlobalVariables";
 
 // ── Cursos para profundizar (Nutrición) ─────────────────────────────────────
-// Página-hub que va DESPUÉS de «¿De dónde vienen los nutrientes?». Su
-// «siguiente» arranca la 7ª disciplina: Cábala.
+// Página-hub que va DESPUÉS de «La creación de los alimentos». Su «siguiente»
+// arranca la disciplina que viene detrás en el MANDALA de /home (el orden de
+// DISCIPLINAS_CAMINO en data/camino.ts): tras Nutrición va AYURVEDA (Hinduismo),
+// no Cábala.
 //
 // Los cursos NO se escriben aquí: salen del CATÁLOGO (tabla `curso`, vía
 // useCursosData), igual que en el resto de disciplinas. Antes había un array
@@ -50,8 +52,8 @@ export default function MetodoNutricionCursos() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  // ¿Ha pagado ya la Cábala? (7ª disciplina, el siguiente paso tras Nutrición).
-  const [cabalaSuscrito, setCabalaSuscrito] = useState(false);
+  // ¿Ha pagado ya Ayurveda? (la disciplina que viene detrás en el mandala).
+  const [ayurvedaSuscrito, setAyurvedaSuscrito] = useState(false);
   const { cursosData, loading: cursosLoading } = useCursosData();
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export default function MetodoNutricionCursos() {
       try {
         const me = await getUserMe();
         if (!me.data?.nutricion_suscrito) { navigate("/metodo/nutricion"); return; }
-        setCabalaSuscrito(!!me.data?.cabala_suscrito);
+        setAyurvedaSuscrito(!!me.data?.ayurveda_suscrito);
       } catch {
         navigate("/metodo/nutricion");
         return;
@@ -88,8 +90,11 @@ export default function MetodoNutricionCursos() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1100px" gap={7}>
+      {/* Mismos márgenes que Materiales (CursosModalidad) y SIN maxW: la rejilla
+          ocupa el ancho de la pantalla y las tarjetas salen GRANDES, igual que
+          en /aprendizaje/cursos/nutricion (y que en los cursos de Psicología). */}
+      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
+        <Flex direction="column" align="center" w="100%" gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
@@ -102,9 +107,9 @@ export default function MetodoNutricionCursos() {
               mb={0}
               prev={{ label: `← ${t("metodo.nutri.paso.origen")}`, onClick: () => navigate("/metodo/nutricion/origen") }}
               extra={{ label: t("metodo.nutri.paso.biblioteca"), onClick: () => navigate("/metodo/nutricion/alimentos") }}
-              next={cabalaSuscrito
-                ? { label: `${t("disciplina.cabala")} →`, onClick: () => navigate("/metodo/cabala") }
-                : { label: `${t("disciplina.cabala")} →`, icon: <Candado size="15px" />, onClick: () => navigate("/metodo/cabala") }}
+              next={ayurvedaSuscrito
+                ? { label: `${t("disciplina.ayurveda")} →`, onClick: () => navigate("/metodo/ayurveda") }
+                : { label: `${t("disciplina.ayurveda")} →`, icon: <Candado size="15px" />, onClick: () => navigate("/metodo/ayurveda") }}
             />
           </Reveal>
 

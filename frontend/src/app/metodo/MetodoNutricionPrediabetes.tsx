@@ -247,10 +247,6 @@ export default function MetodoNutricionPrediabetes() {
   const banda = resultado ? bandaDeLaPuntuacion : null;
   const { intro: PREDIABETES_INTRO, senales: SENALES_INTRO, cintura: CINTURA_AYUDA,
           esperanza: PREDIABETES_ESPERANZA } = textos;
-  // Separamos lo que no se elige de lo que sí está en tu mano: es la diferencia
-  // entre informar y culpabilizar.
-  const heredados = resultado?.desglose.filter((d) => !d.modificable && d.puntos > 0) ?? [];
-  const enTuMano = resultado?.desglose.filter((d) => d.modificable && d.puntos > 0) ?? [];
 
   return (
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
@@ -458,77 +454,11 @@ export default function MetodoNutricionPrediabetes() {
                       </Text>
                     </Flex>
 
-                    <Box h="1px" bg={`${nutricionTxt}22`} my={{ base: 5, md: 6 }} />
-
-                    <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.85">
-                      {banda.texto}
-                    </Text>
-
-                    {/* Siguiente paso */}
-                    <Box mt={4} px={4} py={3.5} borderRadius="xl"
-                         bg={`${banda.color}14`} border={`1px solid ${banda.color}66`}>
-                      <Text color={nutricionTxt} fontSize="2xs" fontWeight={700} letterSpacing="0.14em"
-                            textTransform="uppercase" mb={1.5}>
-                        {t("metodo.nutri.queHariaYo")}
-                      </Text>
-                      <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75">
-                        {banda.paso}
-                      </Text>
-                    </Box>
-
-                    {resultado.sinCintura && (
-                      <Text color={`${nutricionTxt}99`} fontSize="xs" fontStyle="italic" mt={3} lineHeight="1.6">
-                        {t("metodo.nutri.recuerdaSinCintura")}
-                      </Text>
-                    )}
-
-                    {/* ── De dónde sale · lo que no se elige ── */}
-                    {heredados.length > 0 && (
-                      <>
-                        <Box h="1px" bg={`${nutricionTxt}22`} my={{ base: 5, md: 6 }} />
-                        <Rotulo>{t("metodo.nutri.loQueNoElegiste")}</Rotulo>
-                        <Flex gap={2} wrap="wrap" mb={2}>
-                          {heredados.map((d) => (
-                            <Flex key={d.etiqueta} align="center" gap={2} px={3.5} py={1.5} borderRadius="full"
-                                  bg="#ffffff66" border={`1px solid ${nutricionTxt}33`}>
-                              <Text color={nutricionTxt} fontSize="sm" fontWeight={600}>{d.etiqueta}</Text>
-                              <Text color={`${nutricionTxt}88`} fontSize="sm" fontWeight={700}>+{d.puntos}</Text>
-                            </Flex>
-                          ))}
-                        </Flex>
-                        <Text color={`${nutricionTxt}aa`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" lineHeight="1.7">
-                          {t("metodo.nutri.loQueNoElegisteTexto")}
-                        </Text>
-                      </>
-                    )}
-
-                    {/* ── Lo que está en tu mano ── */}
-                    <Box h="1px" bg={`${nutricionTxt}22`} my={{ base: 5, md: 6 }} />
-                    <Rotulo>{t("metodo.nutri.enTuMano")}</Rotulo>
-                    {enTuMano.length === 0 ? (
-                      <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.8">
-                        {t("metodo.nutri.enTuManoNada")}
-                      </Text>
-                    ) : (
-                      <Flex direction="column" gap={3}>
-                        {enTuMano.map((d) => (
-                          <Box key={d.etiqueta} px={4} py={3.5} borderRadius="xl"
-                               bg="#ffffff66" border={`1px solid ${nutricionTxt}33`}>
-                            <Flex align="center" gap={2} mb={1}>
-                              <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={700}>
-                                {d.etiqueta}
-                              </Text>
-                              <Text color={`${nutricionTxt}88`} fontSize="sm" fontWeight={700}>+{d.puntos}</Text>
-                            </Flex>
-                            {d.consejo && (
-                              <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75" opacity={0.9}>
-                                {d.consejo}
-                              </Text>
-                            )}
-                          </Box>
-                        ))}
-                      </Flex>
-                    )}
+                    {/* SOLO el número (pedido de la usuaria, 2026-09-30): aquí
+                        había el texto largo de la banda, el «Qué haría yo
+                        ahora», «Lo que no elegiste» y «Lo que está en tu mano»
+                        con su desglose de puntos. Todo fuera: la puntuación y
+                        su nivel se sostienen solos. */}
                   </Box>
                 </SeccionBox>
               </Box>
