@@ -42,7 +42,7 @@ export function ComicEstrellaModal({ isOpen, onClose, onContinue }: ComicEstrell
   const continuar = () => { setTabla(false); onContinue(); };
 
   return (
-    <Modal isOpen={isOpen} onClose={cerrar} size="full" isCentered scrollBehavior="outside">
+    <Modal isOpen={isOpen} onClose={cerrar} size="full" scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"

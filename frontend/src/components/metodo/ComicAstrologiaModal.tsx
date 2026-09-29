@@ -608,7 +608,6 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
       isOpen={isOpen}
       onClose={onClose}
       size="full"
-      isCentered
       // - Vista cómic: "outside" → la página entera del modal scrollea usando
       //   la scrollbar del navegador (lo que pidió la usuaria).
       // - Vista selector: "inside" → mantiene el layout original con su

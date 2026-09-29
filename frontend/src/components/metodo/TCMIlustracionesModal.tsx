@@ -369,7 +369,7 @@ export function TCMIlustracionesModal({
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"}>
       {/* La foto de fondo va en el OVERLAY (cubre el viewport SIEMPRE). Ponerla
           dentro del ModalContent fallaba: Chakra le aplica un `transform` de
           animación y un `position:fixed` dentro de un ancestro transformado deja

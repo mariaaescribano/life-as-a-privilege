@@ -87,7 +87,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"}>
       {/* La foto de fondo va en el OVERLAY (cubre el viewport SIEMPRE). */}
       <ModalOverlay
         bg={cabalaBg}

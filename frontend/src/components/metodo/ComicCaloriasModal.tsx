@@ -31,7 +31,7 @@ export function ComicCaloriasModal({ isOpen, onClose, onContinue }: ComicCaloria
   // Sus viñetas en el idioma activo.
   const vinetas = useComic("nutricion-calorias", NUTRICION_CALORIAS);
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"

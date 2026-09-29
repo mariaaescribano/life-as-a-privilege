@@ -26,7 +26,7 @@ export function ComicCelulaModal({ isOpen, onClose, onContinue }: ComicCelulaMod
   // Sus viñetas en el idioma activo.
   const vinetas = useComic("fisiologia-celula-viva", CELULA_VIVA);
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"

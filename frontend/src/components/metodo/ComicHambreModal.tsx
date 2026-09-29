@@ -24,7 +24,7 @@ export function ComicHambreModal({ isOpen, onClose, onContinue }: ComicHambreMod
   // Sus viñetas en el idioma activo.
   const vinetas = useComic("nutricion-hambre", NUTRICION_HAMBRE);
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent bg="transparent" border="none" borderRadius="0" boxShadow="none" m={0}
                     fontFamily="'EB Garamond', serif" minH="100dvh">

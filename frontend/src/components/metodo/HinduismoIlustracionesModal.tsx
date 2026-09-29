@@ -230,7 +230,7 @@ export function HinduismoIlustracionesModal({
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior={capitulo ? "outside" : "inside"}>
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"}>
       <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
       <ModalContent
         bg="transparent"

@@ -134,7 +134,7 @@ export function ComicUniversoModal({ isOpen, onClose }: ComicUniversoModalProps)
   // El texto en el idioma activo; las fotos y el orden los manda el español.
   const vinetas = useComic("origen-espiritualidad", ORIGEN_ESPIRITUALIDAD);
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" isCentered scrollBehavior="outside">
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"
