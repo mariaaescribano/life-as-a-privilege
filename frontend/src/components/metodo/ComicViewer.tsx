@@ -855,11 +855,12 @@ export function ComicViewer({
         maxH={{ base: "none", md: "100dvh" }}
         overflow={{ base: "visible", md: "hidden" }}
         // Móvil: px = 5 para que el box quede EXACTAMENTE del ancho del header de
-        // la disciplina (la página usa px base 5). El margen de ARRIBA va un
-        // punto más generoso (48px) que el de abajo: es el aire fijo con el que
-        // arranca siempre la caja y María lo quiso más holgado.
+        // la disciplina (la página usa px base 5). El margen de ARRIBA (el hueco
+        // entre el borde superior de la pantalla y donde empieza la caja) va
+        // holgado a propósito, 64px, y es FIJO: María lo quiere generoso y
+        // siempre igual, mida lo que mida la viñeta.
         px={{ base: 5, md: 24 }}
-        pt={{ base: 12, md: 14 }}
+        pt={{ base: 16, md: 14 }}
         pb={{ base: 8, md: 14 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
