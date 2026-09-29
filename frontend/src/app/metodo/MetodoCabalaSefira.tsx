@@ -529,7 +529,7 @@ export default function MetodoCabalaSefira() {
         }
       `}</style>
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
           {/* Header con botón "Ilustraciones" en el medio */}

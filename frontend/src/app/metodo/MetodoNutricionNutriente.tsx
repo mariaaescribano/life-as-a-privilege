@@ -364,7 +364,7 @@ export default function MetodoNutricionNutriente() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
 
           {/* 1 · Header. El título dice el grupo con su etiqueta corta delante

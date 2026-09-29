@@ -93,7 +93,7 @@ export default function MetodoNutricionCursos() {
       {/* Mismos márgenes que Materiales (CursosModalidad) y SIN maxW: la rejilla
           ocupa el ancho de la pantalla y las tarjetas salen GRANDES, igual que
           en /aprendizaje/cursos/nutricion (y que en los cursos de Psicología). */}
-      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">

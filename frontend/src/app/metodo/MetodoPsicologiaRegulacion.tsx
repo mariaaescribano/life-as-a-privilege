@@ -244,7 +244,7 @@ export default function MetodoPsicologiaRegulacion() {
       />
 
       <Box position="relative" flex="1">
-        <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 14, md: 20 }}>
+        <Flex position="relative" zIndex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
           <Flex direction="column" align="center" w="100%" maxW="820px" gap={{ base: 7, md: 9 }}>
 
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">

@@ -96,7 +96,7 @@ export default function MetodoCabalaSenderos() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
           <Reveal direction="down" distance={22} duration={1.2} w="100%" display="flex" justifyContent="center">

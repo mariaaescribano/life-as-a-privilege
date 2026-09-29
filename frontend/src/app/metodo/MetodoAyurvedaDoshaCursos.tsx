@@ -112,7 +112,7 @@ export default function MetodoAyurvedaDoshaCursos() {
           que había aquí, en pantallas anchas los cursos del recorrido se veían
           bastante más pequeños que los de su página principal. El header no se
           desmadra: MetodoStepHeader lleva su propio maxW de 850px. */}
-      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" gap={6}>
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader

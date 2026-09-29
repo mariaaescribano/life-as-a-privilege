@@ -91,7 +91,7 @@ export default function MetodoTcmLenguaLeer() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         {/* 850px = el ancho del MetodoStepHeader: ninguna caja se sale de la
             cabecera. Las fotos de cada apartado ya no van todas en una fila:
             son más grandes y envuelven en dos. */}

@@ -102,7 +102,7 @@ export default function MetodoAstrologiaCursos() {
       {/* Mismos márgenes y ANCHO SIN TOPE que /aprendizaje/cursos/:disciplina
           (CursosModalidad): allí la cuadrícula ocupa todo el ancho disponible, así
           que las tarjetas salen grandes. Con un maxW aquí salían más pequeñas. */}
-      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" gap={6}>
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader

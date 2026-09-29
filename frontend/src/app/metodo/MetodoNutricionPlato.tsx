@@ -313,7 +313,7 @@ export default function MetodoNutricionPlato() {
          sx={drag ? { userSelect: "none", touchAction: "none" } : undefined}>
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" maxW="1000px" gap={6}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">

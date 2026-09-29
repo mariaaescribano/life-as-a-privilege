@@ -70,7 +70,7 @@ export default function MetodoTcmTaoismo() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         {/* 850px = el ancho del MetodoStepHeader: ninguna caja de la página se
             sale de la cabecera. */}
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
