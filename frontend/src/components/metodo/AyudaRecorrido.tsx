@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useT } from "../../i18n";
-import {
-  Box, Flex, Text,
-  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
-} from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 import { scrollAcuarela } from "./psicologiaGlow";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
@@ -740,18 +737,21 @@ function BotonAyuda({ children, onClick, icon }: { children: React.ReactNode; on
 /** Grupo fijo de botones de ayuda (abajo a la derecha) + sus popups, común a
  *  todo el recorrido de psicología. `pagina` elige el contenido.
  *
+ *  Ya NO hay botón «Ejemplo» (decisión de María, sep-2026): se unificó con
+ *  «Orientación», que abre UN solo popup con la orientación de la página, sus
+ *  ejemplos (el box elegante de EJEMPLOS_BOX si la página lo tiene; si no, la
+ *  sección de texto) y, al final, el curso de acceso libre si le corresponde.
+ *
  *  La página `inicio` es especial: solo muestra «¿Necesitas ayuda?» (que abre la
  *  reserva de llamada para hacer el recorrido acompañado) y «Orientación» (que
- *  abre un popup con un curso de acceso libre). El resto de páginas mantiene los
- *  3 botones informativos de siempre. */
-export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pagina: keyof typeof AYUDA_RECORRIDO; ocultarCompania?: boolean; ocultarEjemplo?: boolean }) {
+ *  abre un popup con un curso de acceso libre). */
+export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof typeof AYUDA_RECORRIDO; ocultarCompania?: boolean }) {
   const t = useT();
-  const [abierto, setAbierto] = useState<keyof Ayuda | null>(null);
-  // Popups especiales de la página inicio.
+  // Popups.
+  const [orientacionOpen, setOrientacionOpen] = useState(false);     // el popup unificado
   const [acompPreguntaOpen, setAcompPreguntaOpen] = useState(false); // paso previo "¿Necesitas ayuda?"
   const [companiaOpen, setCompaniaOpen] = useState(false);           // calendario de reserva
-  const [cursoOpen, setCursoOpen] = useState(false);
-  const [ejemplosOpen, setEjemplosOpen] = useState(false);           // box de ejemplos (págs. con EJEMPLOS_BOX)
+  const [cursoOpen, setCursoOpen] = useState(false);                 // curso suelto (solo la página inicio)
   const [preparacionOpen, setPreparacionOpen] = useState(false);     // box «Antes de empezar» (pág. regulación)
 
   // El texto de esta ayuda se pega encima AL PINTAR: `AYUDA_RECORRIDO` y
@@ -788,14 +788,16 @@ export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pa
   };
 
   // Bloquea el scroll del fondo mientras cualquier popup esté abierto.
-  useLockBodyScroll(!!abierto || acompPreguntaOpen || companiaOpen || cursoOpen || ejemplosOpen || preparacionOpen);
+  useLockBodyScroll(orientacionOpen || acompPreguntaOpen || companiaOpen || cursoOpen || preparacionOpen);
 
   if (!contenido) return null;
-  // El popup abierto, con el inglés pegado encima si esa página lo tiene.
-  const secEs = abierto ? (ayudaEn?.[abierto] ?? contenido[abierto]) : null;
-  const sec = secEs && pagina === "necesidades" && abierto === "orientacion"
-    ? { ...secEs, titulo: necesidadesIntro.titulo, cuerpo: [necesidadesIntro.subtitulo, necesidadesIntro.texto] }
-    : secEs;
+  // Las dos secciones del popup unificado, con el inglés pegado encima si esa
+  // página lo tiene. En Necesidades la orientación es su intro explicativa.
+  const secOrientacionBase = ayudaEn?.orientacion ?? contenido.orientacion;
+  const secOrientacion = pagina === "necesidades"
+    ? { ...secOrientacionBase, titulo: necesidadesIntro.titulo, cuerpo: [necesidadesIntro.subtitulo, necesidadesIntro.texto] }
+    : secOrientacionBase;
+  const secEjemplo = ayudaEn?.ejemplo ?? contenido.ejemplo;
 
   return (
     <>
@@ -806,8 +808,9 @@ export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pa
 
       <Flex position="fixed" bottom={{ base: 4, md: 6 }} right={{ base: 4, md: 6 }} zIndex={20}
             direction="column" align="flex-end" gap={2}>
-        {/* Orden fijo de la columna: Ejemplo arriba, Orientación en medio y
-            «Agenda una llamada» SIEMPRE abajo del todo. */}
+        {/* Orden fijo de la columna: Orientación arriba y «Agenda una llamada»
+            SIEMPRE abajo del todo. (El botón «Ejemplo» ya no existe: sus
+            ejemplos viven dentro del popup de Orientación.) */}
         {esInicio ? (
           <>
             <BotonAyuda onClick={() => setCursoOpen(true)}>{t("metodo.ayuda.orientacion")}</BotonAyuda>
@@ -815,13 +818,9 @@ export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pa
           </>
         ) : (
           <>
-            {!ocultarEjemplo && (
-              <BotonAyuda onClick={() => (ejemplosBox ? setEjemplosOpen(true) : setAbierto("ejemplo"))}>{t("metodo.ayuda.ejemplo")}</BotonAyuda>
-            )}
             <BotonAyuda onClick={() => {
               if (pagina === "regulacion") setPreparacionOpen(true);   // «Antes de empezar»
-              else if (curso) setCursoOpen(true);
-              else setAbierto("orientacion");
+              else setOrientacionOpen(true);
             }}>{t("metodo.ayuda.orientacion")}</BotonAyuda>
             {!ocultarCompania && (
               <BotonAyuda onClick={() => setAcompPreguntaOpen(true)} icon={<LlamadaIcon size={{ base: "14px", md: "16px" }} />}>{t("llamada.agenda")}</BotonAyuda>
@@ -829,38 +828,6 @@ export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pa
           </>
         )}
       </Flex>
-
-      {/* Popup informativo (páginas no-inicio) — estilo acuarela de psicología */}
-      <Modal isOpen={!!sec} onClose={() => setAbierto(null)} isCentered scrollBehavior="inside" size={{ base: "sm", md: "md" }}>
-        <ModalOverlay bg="rgba(0,0,0,0.82)" sx={{ backdropFilter: "blur(5px)" }} />
-        <ModalContent bg="transparent" boxShadow="none" overflow="visible" mx={4} fontFamily="'EB Garamond', serif">
-          <Box position="relative" borderRadius="2xl" overflow="hidden" boxShadow={`0 26px 70px rgba(40,18,4,0.55)`}>
-            <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <ModalCloseButton color={TINTA} zIndex={3} />
-            <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}
-                       sx={SCROLL_ACUARELA}>
-              {sec && (
-                <Flex direction="column" gap={4}>
-                  <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center"
-                        style={{ textShadow: INK_SHADOW }}>
-                    {sec.titulo}
-                  </Text>
-                  <Box h="1px" w="55%" maxW="220px" mx="auto" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
-                  <Flex direction="column" gap={3}>
-                    {sec.cuerpo.map((p, i) => (
-                      <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-                            fontStyle={abierto === "ejemplo" && i >= 1 ? "italic" : "normal"}
-                            style={{ textShadow: INK_SHADOW }}>
-                        {p}
-                      </Text>
-                    ))}
-                  </Flex>
-                </Flex>
-              )}
-            </ModalBody>
-          </Box>
-        </ModalContent>
-      </Modal>
 
       {/* Popup previo «¿Necesitas ayuda?» → invita a hacerlo acompañado */}
       {acompPreguntaOpen && (
@@ -922,33 +889,70 @@ export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pa
         </Box>
       )}
 
-      {/* Popup «Ejemplo» → box elegante con varios ejemplos (págs. con EJEMPLOS_BOX) */}
-      {ejemplosOpen && ejemplosBox && (
+      {/* Popup «Orientación» UNIFICADO (páginas no-inicio): la orientación de la
+          página + sus ejemplos (el box elegante si la página tiene EJEMPLOS_BOX;
+          si no, la sección de texto) + el curso de acceso libre al final, si le
+          corresponde. Antes eran hasta tres popups con un botón cada uno. */}
+      {orientacionOpen && (
         <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
              px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
              sx={{ backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-             onClick={() => setEjemplosOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
+             onClick={() => setOrientacionOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="520px" my="auto"
                borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}
                  maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
                  sx={SCROLL_ACUARELA}>
-              <Box as="button" onClick={() => setEjemplosOpen(false)} position="absolute" top={3} right={3} zIndex={2}
+              <Box as="button" onClick={() => setOrientacionOpen(false)} position="absolute" top={3} right={3} zIndex={2}
                    w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
                    color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"
                    _hover={{ bg: "rgba(255,251,243,0.95)", borderColor: TINTA }}>✕</Box>
+
+              {/* ── La orientación ── */}
               <Text color={TINTA} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" textAlign="center" lineHeight="1.3"
                     pr={6} style={{ textShadow: INK_SHADOW }}>
-                {ejemplosBox.titulo}
+                {secOrientacion.titulo}
               </Text>
-              {ejemplosBox.subtitulo && (
+              <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+              <Flex direction="column" gap={3}>
+                {secOrientacion.cuerpo.map((p, i) => (
+                  <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                        style={{ textShadow: INK_SHADOW }}>
+                    {p}
+                  </Text>
+                ))}
+              </Flex>
+
+              {/* ── Los ejemplos (si esta página tiene) ── */}
+              {(ejemplosBox || secEjemplo) && (
+                <>
+                  <Box h="1px" w="55%" maxW="220px" mx="auto" my={6} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" lineHeight="1.3"
+                        style={{ textShadow: INK_SHADOW }}>
+                    {ejemplosBox ? ejemplosBox.titulo : secEjemplo.titulo}
+                  </Text>
+                </>
+              )}
+              {!ejemplosBox && secEjemplo && (
+                <Flex direction="column" gap={3} mt={4}>
+                  {secEjemplo.cuerpo.map((p, i) => (
+                    <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                          fontStyle={i >= 1 ? "italic" : "normal"} style={{ textShadow: INK_SHADOW }}>
+                      {p}
+                    </Text>
+                  ))}
+                </Flex>
+              )}
+              {ejemplosBox && ejemplosBox.subtitulo && (
                 <Text color={TINTA} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic" textAlign="center"
                       opacity={0.7} mt={1.5}>
                   {ejemplosBox.subtitulo}
                 </Text>
               )}
-              <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+              {ejemplosBox && <Box h={{ base: 4, md: 5 }} />}
+              {ejemplosBox && (<>
+
               {ejemplosBox.variante === "herida" ? (
                 <Flex direction="column" gap={4}>
                   {(ejemplosBox.triadas ?? []).map((t, i) => (
@@ -1032,12 +1036,27 @@ export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pa
                   ))}
                 </Flex>
               )}
+              </>)}
+
+              {/* ── El curso de acceso libre (si esta página lo tiene) ── */}
+              {curso && (
+                <>
+                  <Box h="1px" w="55%" maxW="220px" mx="auto" my={6} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" lineHeight="1.3"
+                        mb={4} style={{ textShadow: INK_SHADOW }}>
+                    {t("metodo.ayuda.orientacionLibre")}
+                  </Text>
+                  <Box borderRadius="2xl" overflow="hidden" boxShadow="0 24px 60px rgba(0,0,0,0.35)">
+                    <CursoCardDetalle curso={curso} color={neuropsicologiaTxt} bgColor={neuropsicologiaBg} nom={neuropsicologiaNom} />
+                  </Box>
+                </>
+              )}
             </Box>
           </Box>
         </Box>
       )}
 
-      {/* Popup «Orientación» → curso de acceso libre */}
+      {/* Popup «Orientación» de la página inicio → curso de acceso libre */}
       {cursoOpen && (
         <Box position="fixed" inset={0} zIndex={2300} display="flex" alignItems="center" justifyContent="center"
              px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
@@ -1093,6 +1112,25 @@ export function AyudaRecorrido({ pagina, ocultarCompania, ocultarEjemplo }: { pa
                 {regulacion.preparacion.titulo}
               </Text>
               <Box h="1px" w="55%" maxW="220px" mx="auto" my={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+
+              {/* «¿Qué es esto?» (era el botón Ejemplo, hoy unificado aquí). */}
+              {secEjemplo && (
+                <>
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center"
+                        style={{ textShadow: INK_SHADOW }}>
+                    {secEjemplo.titulo}
+                  </Text>
+                  <Flex direction="column" gap={3} mt={3} mb={5}>
+                    {secEjemplo.cuerpo.map((p, i) => (
+                      <Text key={i} color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
+                            style={{ textShadow: INK_SHADOW }}>
+                        {p}
+                      </Text>
+                    ))}
+                  </Flex>
+                  <Box h="1px" w="55%" maxW="220px" mx="auto" mb={5} bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
+                </>
+              )}
               <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
                 {regulacion.preparacion.pasos.map((p, i) => (
                   <Flex key={i} align="flex-start" gap={3}>

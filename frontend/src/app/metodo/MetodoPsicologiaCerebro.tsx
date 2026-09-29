@@ -174,7 +174,7 @@ export default function MetodoPsicologiaCerebro() {
         </Flex>
       </Flex>
 
-      <AyudaRecorrido pagina="cerebro" ocultarEjemplo />
+      <AyudaRecorrido pagina="cerebro" />
 
       {/* La ficha de cada zona: popup con su foto. Las flechas pasan de una a
           otra sin cerrarlo. */}
