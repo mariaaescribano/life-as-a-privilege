@@ -290,11 +290,12 @@ export function CartaAstral3D({ carta = cartaDemo, color = "#dcd0ff", onSaberMas
       <Box
         order={0}
         // Antes 80% en desktop: dejaba el círculo pequeño dentro de la caja.
-        // Ahora 90%: la rueda es un 10% más pequeña que el ancho disponible, y
-        // encoge el DISCO ENTERO (fondo + halo + rueda). Ojo: no escalar solo la
-        // rueda por dentro del Canvas — el disco se quedaría del tamaño de antes
-        // y aparecería un aro vacío alrededor (el feo "doble círculo").
-        w="90%"
+        // Ahora 90% (y en MÓVIL al 100%: cada píxel de pantalla cuenta y la
+        // rueda se quedaba pequeña). Esto encoge/estira el DISCO ENTERO
+        // (fondo + halo + rueda). Ojo: no escalar solo la rueda por dentro del
+        // Canvas — el disco se quedaría del tamaño de antes y aparecería un
+        // aro vacío alrededor (el feo "doble círculo").
+        w={{ base: "100%", md: "90%" }}
         maxW="612px"
         mx="auto"
         mt={0}
