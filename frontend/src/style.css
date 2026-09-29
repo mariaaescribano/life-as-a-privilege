@@ -28,6 +28,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* El lienzo del navegador, SIEMPRE turquesa (el fondo de página de la casa).
+   Sin esto, html/body quedan en el blanco por defecto y ese blanco asomaba en
+   el móvil en cuanto un scroll rebotaba en su tope (el popup del Índice, los
+   cómics con scroll de pantalla…). No cambia nada visible: cada página ya
+   pinta su Box #008080 encima; esto solo tapa los huecos del rebote. */
+html,
+body {
+  background-color: #008080;
+}
+
 /* El foco NUNCA se ve. Al abrir un modal, Chakra enfoca el primer botón: eso
    está bien —así basta con pulsar Enter— pero no debe pintarse nada, ni el
    anillo azul del navegador ni ningún cerco. Cada botón se pinta solo con los

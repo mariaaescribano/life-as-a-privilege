@@ -316,6 +316,10 @@ export function IndiceRecorrido({
             <DisciplinaBgLayer nom={nom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}
                  maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
+                 // `contain`: al llegar al tope del scroll del índice, el gesto
+                 // NO se encadena a la página de detrás (en móvil ese arrastre
+                 // extra enseñaba el fondo del navegador).
+                 overscrollBehavior="contain"
                  sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
                        "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
               <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={2}
