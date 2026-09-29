@@ -838,7 +838,11 @@ export function ComicViewer({
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="center"
+        // MÓVIL: la caja SIEMPRE arranca arriba, con el mismo margen (el py de
+        // abajo), pase lo que pase con el alto de la viñeta — centrada en
+        // vertical, cada viñeta corta la dejaba bailando a una altura distinta.
+        // Escritorio: centrada, como siempre.
+        justifyContent={{ base: "flex-start", md: "center" }}
         // ESCRITORIO: exactamente la pantalla, ni un píxel más — la caja se
         // ajusta a lo que quede libre y hace su propio scroll por dentro, así
         // que la página NO necesita barra. `maxH` además de `h`: el
