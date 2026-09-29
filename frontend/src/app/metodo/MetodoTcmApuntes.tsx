@@ -17,14 +17,12 @@ import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { TcmLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { Reveal } from "../../components/global/Reveal";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { CreaTusApuntes } from "../../components/metodo/CreaTusApuntes";
 import { libroApuntesTcm } from "../../components/metodo/apuntes/tcmApuntes";
 import { disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
@@ -152,14 +150,8 @@ export default function MetodoTcmApuntes() {
             glow={CAJA_GLOW}
           />
 
-          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
-              /opiniones y trae de vuelta a esta misma página. Va ANTES del botón
-              de seguir, que es el que cierra la página. */}
-          <PedirOpinion bg={tcmBg} txt={tcmTxt} nom={tcmNom} />
-
-          {/* Mismo texto que el botón del header, como en todo el recorrido. */}
-          <BotonPaso label={t("disciplina.cabala")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
-                     onClick={() => navigate("/metodo/cabala")} />
+          {/* Sin botón de fin de página (decisión de María): a Cábala se pasa
+              desde el botón del header. */}
         </Flex>
       </Flex>
 

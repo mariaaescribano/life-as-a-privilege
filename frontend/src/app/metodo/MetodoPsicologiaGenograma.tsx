@@ -35,7 +35,7 @@ import {
   type PersonaGenograma,
 } from "../../components/metodo/psicologiaRecorrido";
 import { useGenograma, useGenogramaPreguntas } from "../../components/metodo/psicologiaRecorrido.en";
-import { glowHeader } from "../../components/metodo/psicologiaGlow";
+import { glowHeader, scrollAcuarela } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
 import {
   neuropsicologiaBg,
@@ -110,13 +110,16 @@ export default function MetodoPsicologiaGenograma() {
                 y rol arriba, sus personajes/animales bajo la rayita, y el botón
                 de Rellenar que abre su ficha. (El mapa para COLOCAR a la
                 familia sigue en la página anterior, «Tu familia».) */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
-              <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={{ base: 3, md: 4 }} w="100%">
-                {personas.map((p) => (
-                  <TarjetaPersona key={p.id} p={p} onRellenar={() => setAbiertoId(p.id)} />
-                ))}
-              </SimpleGrid>
-            </Reveal>
+            {/* Un <Reveal inView> POR tarjeta (la rejilla crece con la familia:
+                envolverla entera caería en la trampa del `amount`). */}
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={{ base: 3, md: 4 }} w="100%">
+              {personas.map((p, i) => (
+                <Reveal key={p.id} inView once amount={0.2} direction="up" distance={30} scaleFrom={0.97} duration={0.7}
+                        delay={(i % 4) * 0.07} display="flex" flexDirection="column">
+                  <TarjetaPersona p={p} onRellenar={() => setAbiertoId(p.id)} />
+                </Reveal>
+              ))}
+            </SimpleGrid>
 
             {personas.length === 0 && (
               <Reveal direction="up" distance={26} scaleFrom={0.97} delay={0.34} duration={0.7} w="100%">
@@ -161,6 +164,7 @@ function TarjetaPersona({ p, onRellenar }: { p: PersonaGenograma; onRellenar: ()
   return (
     <Flex
       direction="column"
+      flex="1" // llena el alto del <Reveal> que la envuelve (columna de la rejilla)
       position="relative"
       overflow="hidden"
       borderRadius="xl"
@@ -271,6 +275,11 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
   useLockBodyScroll(true);
   const [error, setError] = useState<string | null>(null);
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
+  // A esta ficha se llega con la persona YA definida en «Tu familia», así que
+  // la identidad (foto, nombre, parentesco) sale PLEGADA en una línea: volver
+  // a enseñar las cuatro filas de chapas de parentesco mareaba y no aportaba.
+  // «Editar» la despliega; sin parentesco todavía, sale desplegada.
+  const [identidadAbierta, setIdentidadAbierta] = useState(!(p.parentesco || "").trim());
 
   return (
     <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
@@ -279,7 +288,9 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
          onClick={onClose} fontFamily="'EB Garamond', serif">
       <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}
            position="relative" w="100%" maxW={{ base: "440px", md: "520px" }}
-           maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 120px)" }}
+           // `dvh` en móvil: `vh` no descuenta la barra del navegador y el
+           // popup se comía el margen de abajo.
+           maxH={{ base: "calc(100dvh - 48px)", md: "calc(100vh - 120px)" }}
            borderRadius="2xl" overflow="hidden" display="flex" flexDirection="column"
            boxShadow={`0 0 40px ${TINTA}66, 0 24px 70px rgba(0,0,0,0.5)`}>
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -292,74 +303,135 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
           ✕
         </Box>
 
-        {/* Cabecera: foto + nombre + parentesco */}
-        <Box position="relative" zIndex={1} flexShrink={0} borderBottom={`1px solid ${TINTA}55`}
-             px={{ base: 5, md: 8 }} pt={{ base: 6, md: 7 }} pb={{ base: 4, md: 5 }}>
-          <Flex align="center" gap={{ base: 4, md: 5 }}>
-            {/* Foto (se toca para subirla / cambiarla) */}
-            <FotoPersonaBoton
-              foto={p.foto}
-              alt={personaLabel(p)}
-              onSubida={(url) => onCampo({ foto: url })}
-              onError={setError}
-            />
-
-            {/* Nombre + parentesco */}
-            <Flex direction="column" gap={2} flex="1" minW={0} pr={9}>
-              <Input
-                value={p.nombre}
-                onChange={(e) => onCampo({ nombre: e.target.value })}
-                placeholder={t("metodo.psico.suNombre")}
-                bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                borderRadius="lg" fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                sx={{ caretColor: TINTA }}
-                _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 400 }}
-                _hover={{ borderColor: `${TINTA}55` }}
-                _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
-              />
-              <Input
-                value={p.parentesco || ""}
-                onChange={(e) => onCampo({ parentesco: e.target.value })}
-                placeholder={t("metodo.psico.parentesco")}
-                bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
-                borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
-                sx={{ caretColor: TINTA }}
-                _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
-                _hover={{ borderColor: `${TINTA}55` }}
-                _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.9)" }}
-              />
-            </Flex>
-          </Flex>
-
-          {error && (
-            <Text color="#8c2f13" fontSize="md" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
-              {error}
-            </Text>
-          )}
-
-          {/* Parentescos sugeridos */}
-          <Flex wrap="wrap" gap={1.5} mt={3}>
-            {genograma.parentescos.map((par) => (
-              <Box as="button" key={par} onClick={() => onCampo({ parentesco: par })}
-                   px={3} py={1.5} borderRadius="full"
-                   bg={p.parentesco === par ? TINTA : "rgba(255,251,243,0.72)"}
-                   border={`1px solid ${p.parentesco === par ? TINTA : `${TINTA}33`}`}
-                   cursor="pointer" transition="all 0.15s"
-                   _hover={{ borderColor: TINTA, transform: "translateY(-1px)" }}>
-                <Text color={p.parentesco === par ? PAPEL : TINTA} fontSize="sm" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
-                  {par}
-                </Text>
-              </Box>
-            ))}
-          </Flex>
-        </Box>
-
-        {/* Cuerpo scrollable: lo que quiera escribir de esta persona */}
+        {/* ── UN SOLO scroll vertical para todo el popup (como en «Tu
+            familia»): identidad plegada arriba y las preguntas debajo, todo
+            corriendo junto. ── */}
         <Box position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
-             px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}
-             sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
-                   "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
+             sx={scrollAcuarela(TINTA)}>
+
+          {/* Identidad: quién es. Plegada = una línea; desplegada = foto,
+              nombre, parentesco y sus chapas (al tocar una se vuelve a plegar). */}
+          <Box px={{ base: 5, md: 8 }} pt={{ base: 6, md: 7 }} pb={{ base: 4, md: 5 }}>
+            {identidadAbierta ? (
+              <>
+                <Flex align="center" gap={{ base: 4, md: 5 }} pr={9}>
+                  {/* Foto (se toca para subirla / cambiarla) */}
+                  <FotoPersonaBoton
+                    foto={p.foto}
+                    alt={personaLabel(p)}
+                    onSubida={(url) => onCampo({ foto: url })}
+                    onError={setError}
+                  />
+
+                  {/* Nombre + parentesco */}
+                  <Flex direction="column" gap={2} flex="1" minW={0}>
+                    <Input
+                      value={p.nombre}
+                      onChange={(e) => onCampo({ nombre: e.target.value })}
+                      placeholder={t("metodo.psico.suNombre")}
+                      bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                      borderRadius="lg" fontFamily="'EB Garamond', serif"
+                      fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
+                      sx={{ caretColor: TINTA }}
+                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic", fontWeight: 400 }}
+                      _hover={{ borderColor: `${TINTA}55` }}
+                      _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.92)" }}
+                    />
+                    <Input
+                      value={p.parentesco || ""}
+                      onChange={(e) => onCampo({ parentesco: e.target.value })}
+                      placeholder={t("metodo.psico.parentesco")}
+                      bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}3a`} color={TINTA}
+                      borderRadius="lg" fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }}
+                      sx={{ caretColor: TINTA }}
+                      _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
+                      _hover={{ borderColor: `${TINTA}55` }}
+                      _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.9)" }}
+                    />
+                  </Flex>
+                </Flex>
+
+                {/* Parentescos sugeridos: al tocar uno ya está dicho quién es
+                    y la identidad se pliega sola. */}
+                <Flex wrap="wrap" gap={1.5} mt={3}>
+                  {genograma.parentescos.map((par) => (
+                    <Box as="button" key={par}
+                         onClick={() => { onCampo({ parentesco: par }); setIdentidadAbierta(false); }}
+                         px={3} py={1.5} borderRadius="full"
+                         bg={p.parentesco === par ? TINTA : "rgba(255,251,243,0.72)"}
+                         border={`1px solid ${p.parentesco === par ? TINTA : `${TINTA}33`}`}
+                         cursor="pointer" transition="all 0.15s"
+                         _hover={{ borderColor: TINTA, transform: "translateY(-1px)" }}>
+                      <Text color={p.parentesco === par ? PAPEL : TINTA} fontSize="sm" fontWeight="600" lineHeight="1.2" whiteSpace="nowrap">
+                        {par}
+                      </Text>
+                    </Box>
+                  ))}
+                </Flex>
+
+                {/* Con el parentesco escrito a mano se puede plegar sin tocar
+                    ninguna chapa. */}
+                {!!(p.parentesco || "").trim() && (
+                  <Flex justify="flex-end" mt={3}>
+                    <Box as="button" onClick={() => setIdentidadAbierta(false)}
+                         px={4} py={1.5} borderRadius="full" bg="transparent"
+                         border={`1px solid ${TINTA}55`} color={TINTA}
+                         fontFamily="'EB Garamond', serif" fontSize="sm" fontWeight="700"
+                         cursor="pointer" transition="all 0.18s" _hover={{ bg: `${TINTA}14`, borderColor: TINTA }}>
+                      {t("metodo.psico.familiaListo")}
+                    </Box>
+                  </Flex>
+                )}
+              </>
+            ) : (
+              // ── Plegada: quién es, en una línea, y el lápiz para corregirlo ──
+              <Flex align="center" gap={3} pr={10}>
+                <FotoPersonaBoton
+                  foto={p.foto}
+                  alt={personaLabel(p)}
+                  onSubida={(url) => onCampo({ foto: url })}
+                  onError={setError}
+                  size={{ base: "48px", md: "52px" }}
+                />
+                <Box flex="1" minW={0}>
+                  <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" noOfLines={1}
+                        style={{ textShadow: INK_SHADOW }}>
+                    {personaLabel(p)}
+                  </Text>
+                  {!!(p.parentesco || "").trim() && !!(p.nombre || "").trim() && (
+                    <Text color={TINTA} fontSize="sm" opacity={0.75} noOfLines={1}
+                          style={{ textShadow: INK_SHADOW }}>
+                      {p.parentesco}
+                    </Text>
+                  )}
+                </Box>
+                <Box as="button" onClick={() => setIdentidadAbierta(true)}
+                     flexShrink={0} display="inline-flex" alignItems="center" gap={1.5}
+                     px={3} py={1.5} borderRadius="full" bg="rgba(255,251,243,0.72)"
+                     border={`1px solid ${TINTA}33`} color={TINTA}
+                     fontFamily="'EB Garamond', serif" fontSize="sm" fontWeight="700"
+                     cursor="pointer" transition="all 0.18s"
+                     _hover={{ borderColor: TINTA, transform: "translateY(-1px)" }}>
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                       w="13px" h="13px" fill="currentColor" flexShrink={0}>
+                    <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T846-647L319-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                  </Box>
+                  {t("metodo.psico.familiaEditar")}
+                </Box>
+              </Flex>
+            )}
+
+            {error && (
+              <Text color="#8c2f13" fontSize="md" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
+                {error}
+              </Text>
+            )}
+          </Box>
+
+          <Box h="1px" mx={{ base: 5, md: 8 }} bg={`${TINTA}44`} />
+
+          {/* Lo que quiera escribir de esta persona */}
+          <Box px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
           <Flex direction="column" gap={{ base: 5, md: 6 }}>
             {genogramaPreguntas.map((q) => (
               <Box key={q.key}>
@@ -392,6 +464,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
               </Box>
             ))}
           </Flex>
+          </Box>
         </Box>
 
         {/* Footer: quitar del mapa · hecho */}

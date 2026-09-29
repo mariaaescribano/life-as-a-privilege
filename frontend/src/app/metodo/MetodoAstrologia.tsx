@@ -519,7 +519,11 @@ export default function MetodoAstrologia() {
                 </Text>
               </Reveal>
 
+              {/* En móvil el box queda bajo el pliegue: entra al hacer scroll. */}
               <Reveal
+                inView
+                once
+                amount={0.2}
                 direction="up"
                 distance={34}
                 scaleFrom={0.97}
@@ -535,6 +539,8 @@ export default function MetodoAstrologia() {
 
                 <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 9, md: 12 }}>
                   <RevealStagger
+                    inView
+                    once
                     display="flex"
                     flexDirection={{ base: "column", md: "row" }}
                     alignItems="center"
@@ -582,7 +588,8 @@ export default function MetodoAstrologia() {
                     con «Cambiar» (reabre el formulario de arriba). Es la única
                     puerta de corrección: el aviso y el botón que iban dentro
                     del box se han quitado para dejar el trío solo. */}
-              <Reveal direction="up" distance={14} delay={0.24} duration={0.6}
+              {/* Bajo el pliegue en móvil: entra al hacer scroll. */}
+              <Reveal inView once amount={0.2} direction="up" distance={14} delay={0.24} duration={0.6}
                       w="100%" display="flex" justifyContent="center">
                 <Box
                   position="relative"
@@ -1080,7 +1087,7 @@ export default function MetodoAstrologia() {
       )}
 
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
-                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
+                     llamadaTitulo={t("metodo.astro.reservaLlamada")} queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

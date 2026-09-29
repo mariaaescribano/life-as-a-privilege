@@ -22,7 +22,7 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
 import { arquetipoLabel } from "../../components/metodo/integracionSimbolos";
@@ -364,13 +364,15 @@ export default function MetodoPsicologiaMapa() {
               </Box>
             ) : (
               <>
-                {/* Tarjetas de relación · aparecen de una en una. Al tocar, se abre el popup guiado. */}
-                <RevealStagger display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }} stagger={0.1} delayChildren={0.1}>
-                  {relaciones.map((c) => {
+                {/* Tarjetas de relación · cada una entra al asomar (la lista crece
+                    con los datos: envolverla entera caería en la trampa del `amount`). */}
+                <Flex direction="column" w="100%" gap={{ base: 3.5, md: 4 }}>
+                  {relaciones.map((c, i) => {
                     const hechas = relRespondidas(c);
                     const completo = hechas >= total;
                     return (
-                      <RevealItem key={c.id} direction="up" distance={26} scaleFrom={0.97} duration={0.5} w="100%">
+                      <Reveal key={c.id} inView once amount={0.2} direction="up" distance={26} scaleFrom={0.97} duration={0.5}
+                              delay={Math.min((i % 4) * 0.07, 0.35)} w="100%">
                       <Box as="button" onClick={() => setAbiertoId(c.id)}
                            position="relative" w="100%" borderRadius="2xl" overflow="hidden" textAlign="left"
                            bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}
@@ -408,10 +410,10 @@ export default function MetodoPsicologiaMapa() {
                           )}
                         </Flex>
                       </Box>
-                      </RevealItem>
+                      </Reveal>
                     );
                   })}
-                </RevealStagger>
+                </Flex>
               </>
             )}
             </Reveal>
@@ -475,7 +477,9 @@ function PopupFelicitacion({ onClose, onContinuar }: { onClose: () => void; onCo
       <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="460px"
            borderRadius="2xl" overflow="hidden" boxShadow={`0 0 44px ${TINTA}55, 0 30px 80px rgba(0,0,0,0.55)`}>
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-        <Box position="relative" zIndex={1} px={{ base: 8, md: 12 }} py={{ base: 11, md: 14 }} textAlign="center">
+        {/* py generoso: además de dar aire, el pt deja el título POR DEBAJO de
+            la X de cerrar (top 3 + 34px), que se le montaba encima. */}
+        <Box position="relative" zIndex={1} px={{ base: 8, md: 12 }} py={{ base: 14, md: 16 }} textAlign="center">
           <Box as="button" onClick={onClose} position="absolute" top={3} right={3}
                w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
                color={TINTA} display="flex" alignItems="center" justifyContent="center" fontSize="md" cursor="pointer"

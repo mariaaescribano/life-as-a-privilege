@@ -44,8 +44,8 @@ export interface ZonaCerebro {
 export const ZONAS: ZonaCerebro[] = [
   {
     key: "alarma",
-    nombre: "La amígdala · La alarma",
-    apodo: "",
+    nombre: "La amígdala",
+    apodo: "La alarma",
     color: "#c5613e",
     foto: `${CEREBRO_DIR}/alarma.webp`,
     paraQueSirve:

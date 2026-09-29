@@ -31,8 +31,9 @@ import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useT } from "../../i18n";
 import { Reveal } from "../global/Reveal";
+import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { TarjetaNutri } from "./TarjetaNutri";
-import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
+import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 import { nutrienteAlcanzable, type Nutriente } from "../../hardCoded/espacio/NutrientesNutricion";
 
 // Tick (el mismo dibujo que MarcaLeido) y candado.
@@ -76,12 +77,16 @@ function Nodo({ n, hecho, actual }: { n: number; hecho: boolean; actual: boolean
   const t = useT();
   const size = { base: "30px", md: "34px" };
   if (hecho) {
+    // El fondo del círculo es la acuarela de Nutrición (NutriImg), no el verde
+    // plano: el mismo papel que llevan el header y los botones de la disciplina.
     return (
       <Flex align="center" justify="center" w={size} h={size} borderRadius="full" flexShrink={0}
-            bg={nutricionBg} border={`1px solid ${nutricionTxt}`}
+            position="relative" overflow="hidden" border={`1px solid ${nutricionTxt}`}
             boxShadow={`0 0 12px ${nutricionBg}99, 0 1px 4px rgba(0,0,0,0.45)`}
             title={t("comun.leido")}>
+        <DisciplinaBgLayer nom={nutricionNom} borderRadius="full" />
         <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+             position="relative" zIndex={1}
              w={{ base: "15px", md: "17px" }} h={{ base: "15px", md: "17px" }} fill={nutricionTxt}>
           <path d={TICK} />
         </Box>

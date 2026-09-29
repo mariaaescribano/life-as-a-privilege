@@ -21,7 +21,7 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal, RevealStagger } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 // Check pequeño para marcar un elemento ya leído.
@@ -248,7 +248,10 @@ export default function MetodoAstrologiaAspectos() {
               {gruposPorPlaneta.map(({ cuerpo, items, desbloqueada, completa }, gi) => {
                 const anterior = gi > 0 ? gruposPorPlaneta[gi - 1].cuerpo.label : null;
                 return (
-                <RevealItem key={cuerpo.key} direction="up" distance={28} scaleFrom={0.97} duration={0.65}>
+                // Cada box de planeta entra al asomar en pantalla (bajo el
+                // pliegue en móvil quedaban ya puestos al llegar).
+                <Reveal key={cuerpo.key} inView once amount={0.15}
+                        direction="up" distance={28} scaleFrom={0.97} duration={0.65}>
                 <Box
                   position="relative"
                   borderRadius="2xl"
@@ -388,7 +391,7 @@ export default function MetodoAstrologiaAspectos() {
                     </Flex>
                   </Box>
                 </Box>
-                </RevealItem>
+                </Reveal>
                 );
               })}
             </RevealStagger>
@@ -471,7 +474,7 @@ export default function MetodoAstrologiaAspectos() {
       })()}
 
       <ComicAstrologiaModal isOpen={comicOpen} onClose={() => setComicOpen(false)} />
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo={t("metodo.astro.reservaLlamada")} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

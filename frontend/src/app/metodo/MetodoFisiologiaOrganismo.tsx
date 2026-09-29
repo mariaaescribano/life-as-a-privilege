@@ -16,6 +16,7 @@ import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { RECONSTRUCCION } from "../../components/metodo/comicReconstruccion";
 import { useComic } from "../../i18n/comics";
 import { useT, TextoRico } from "../../i18n";
+import { Reveal } from "../../components/global/Reveal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
@@ -248,9 +249,10 @@ export default function MetodoFisiologiaOrganismo() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 4, md: 5 }}>
 
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<FisiologiaIcon size={{ base: "40px", md: "56px" }} />}
             title={t("fisiologia.organismo.titulo")}
@@ -266,6 +268,7 @@ export default function MetodoFisiologiaOrganismo() {
             next={{ label: `${t("fisiologia.niveles.titulo")} →`, onClick: () => setComicOpen(true),
                     disabled: !completo, disabledTooltip: t("fisiologia.organismo.bloqueo") }}
           />
+          </Reveal>
 
           {/* Instrucción inicial que, al colocar un sistema, se sustituye por su
               frase «memorable» en grande y bien visible. */}
@@ -302,7 +305,9 @@ export default function MetodoFisiologiaOrganismo() {
                 <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
                   {/* IZQUIERDA · el círculo donde se van manifestando */}
-                  <PanelBox flex={{ base: "1 1 auto", md: "0 0 42%" }}>
+                  <Reveal direction="up" distance={26} scaleFrom={0.98} duration={0.65}
+                          flex={{ base: "1 1 auto", md: "0 0 42%" }} display="flex">
+                  <PanelBox w="100%">
                     <Flex direction="column" align="center" justify="center" h="100%"
                           px={{ base: 5, md: 7 }} py={{ base: 7, md: 8 }} gap={5}>
                       {/* Círculo de ensamblaje (zona donde se sueltan los sistemas) */}
@@ -346,10 +351,14 @@ export default function MetodoFisiologiaOrganismo() {
                       </Box>
                     </Flex>
                   </PanelBox>
+                  </Reveal>
 
-                  {/* DERECHA · todos los sistemas (se arrastran al círculo) */}
+                  {/* DERECHA · todos los sistemas (se arrastran al círculo). En
+                      móvil cae bajo el pliegue: entra al llegar con el scroll. */}
                   {/* overflow:visible para que la ficha no se recorte al arrastrarla al otro box. */}
-                  <PanelBox flex="1" overflow="visible">
+                  <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                          duration={0.65} flex="1" display="flex">
+                  <PanelBox w="100%" overflow="visible">
                     <Box px={{ base: 4, md: 6 }} py={{ base: 5, md: 7 }}>
                       <Text color={fisiologiaTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700}
                             letterSpacing="0.12em" textTransform="uppercase" textAlign="center" mb={4}
@@ -381,6 +390,7 @@ export default function MetodoFisiologiaOrganismo() {
                       </Box>
                     </Box>
                   </PanelBox>
+                  </Reveal>
                 </Flex>
               </MBox>
             ) : (
@@ -407,8 +417,11 @@ export default function MetodoFisiologiaOrganismo() {
                     </Flex>
                   </PanelBox>
 
-                  {/* Texto de cierre */}
-                  <PanelBox flex="1">
+                  {/* Texto de cierre. En móvil queda bajo el cuerpo: entra al
+                      llegar con el scroll. */}
+                  <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                          duration={0.65} flex="1" display="flex">
+                  <PanelBox w="100%">
                     <Flex direction="column" justify="center" gap={4} h="100%"
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} textAlign={{ base: "center", md: "left" }}>
                       <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
@@ -431,6 +444,7 @@ export default function MetodoFisiologiaOrganismo() {
                       </Text>
                     </Flex>
                   </PanelBox>
+                  </Reveal>
                 </Flex>
 
                 {/* Volver a hacer — fuera del box, abajo a la derecha del todo

@@ -489,7 +489,9 @@ export default function MetodoFisiologiaMoleculas() {
                    <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
                       {/* Box izquierda · zona de enlace (aquí se llevan las piezas) */}
-                      <PanelBox flex={{ base: "1 1 auto", md: "0 0 46%" }} minH={{ base: "280px", md: "340px" }}>
+                      <Reveal direction="up" distance={26} scaleFrom={0.98} duration={0.65}
+                              flex={{ base: "1 1 auto", md: "0 0 46%" }} display="flex">
+                      <PanelBox w="100%" minH={{ base: "280px", md: "340px" }}>
                         <Flex h="100%" justify="center" align="center">
                           <Box ref={zonaRef} position="relative"
                                w={{ base: "250px", md: "300px" }} h={{ base: "250px", md: "300px" }}
@@ -524,10 +526,14 @@ export default function MetodoFisiologiaMoleculas() {
                           </Box>
                         </Flex>
                       </PanelBox>
+                      </Reveal>
 
-                      {/* Box derecha · piezas a arrastrar (2 por fila) */}
+                      {/* Box derecha · piezas a arrastrar (2 por fila). En móvil
+                          cae bajo el pliegue: entra al llegar con el scroll. */}
                       {/* overflow:visible para que la ficha no se recorte al arrastrarla al otro box. */}
-                      <PanelBox flex="1" overflow="visible" minH={{ base: "auto", md: "340px" }}>
+                      <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                              duration={0.65} flex="1" display="flex">
+                      <PanelBox w="100%" overflow="visible" minH={{ base: "auto", md: "340px" }}>
                         <Flex direction="column" align="center" justify="center" gap={5} h="100%">
                           <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(2, auto)"
                                justifyContent="center" justifyItems="center" alignContent="center"
@@ -554,6 +560,7 @@ export default function MetodoFisiologiaMoleculas() {
                           </Flex>
                         </Flex>
                       </PanelBox>
+                      </Reveal>
                    </Flex>
                   </MBox>
                 )}
@@ -580,8 +587,11 @@ export default function MetodoFisiologiaMoleculas() {
                         </Flex>
                       </PanelBox>
 
-                      {/* Caja 2 · comentario */}
-                      <PanelBox flex="1">
+                      {/* Caja 2 · comentario. En móvil cae bajo la molécula:
+                          entra al llegar con el scroll. */}
+                      <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                              duration={0.65} flex="1" display="flex">
+                      <PanelBox w="100%">
                         <Flex direction="column" gap={4} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
                           <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                                 letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
@@ -611,6 +621,7 @@ export default function MetodoFisiologiaMoleculas() {
                           </AccionesBox>
                         </Flex>
                       </PanelBox>
+                      </Reveal>
                     </Flex>
 
                     <BotonVolverAHacer onClick={reiniciar} />

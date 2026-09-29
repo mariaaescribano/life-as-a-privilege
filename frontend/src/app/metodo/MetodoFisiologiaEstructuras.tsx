@@ -333,8 +333,10 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
                 </Flex>
               </PanelBox>
 
-              {/* Caja 2 · texto */}
-              <PanelBox flex="1">
+              {/* Caja 2 · texto. En móvil cae bajo la foto: entra con el scroll. */}
+              <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                      duration={0.65} flex="1" display="flex">
+              <PanelBox w="100%">
                 <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
                   <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
                     ¡Has construido {def.id === "nucleo" ? "el núcleo" : def.id === "membrana" ? "la membrana celular" : def.id === "mitocondria" ? "la mitocondria" : "el ribosoma"}!
@@ -347,6 +349,7 @@ function Estacion({ def, yaFormada, onFormar, onVolver, onSiguiente }: {
                   ))}
                 </Flex>
               </PanelBox>
+              </Reveal>
             </Flex>
 
             {/* Acciones — fuera del box, abajo a la derecha del todo.

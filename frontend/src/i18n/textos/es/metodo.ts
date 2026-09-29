@@ -326,8 +326,8 @@ export const metodo = {
   /** El lema va aparte: se pinta más fuerte y en blanco encima del resto. */
   "metodo.astro.llamadaLema": "Haz las paces contigo.",
   "metodo.astro.llamadaIntro":
-    "Agenda una llamada y no te quedes con dudas. Todo lo que has descubierto son partes de ti. Ahora, intégralas.",
-  "metodo.astro.pdfIntro": "Tu carta astral entera, en un archivo que ya es tuyo para siempre.",
+    "No te quedes con dudas. Integra todas las partes de ti.",
+  "metodo.astro.pdfIntro": "Tuya para siempre.",
   "metodo.astro.pdfTitular": "Toda tu carta, página a página",
   "metodo.astro.pdfSinLecturas":
     "Tu carta todavía no tiene lecturas escritas. En cuanto estén, aquí podrás descargarla completa.",
@@ -357,7 +357,7 @@ export const metodo = {
     "Estoy leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada.",
 
   // ── Astrología · la llamada ────────────────────────────────────────────
-  "metodo.astro.reservaLlamada": "Reserva tu llamada de astrología",
+  "metodo.astro.reservaLlamada": "Agenda tu llamada de astrología",
 
   // ── Astrología · ajustar a mano un cuerpo de la carta ──────────────────
   // Quirón, Lilith y los Nodos no siempre los da la efemérides: este popup
@@ -518,6 +518,10 @@ export const metodo = {
   "metodo.dia.tuDiaSuma": "Tu día suma",
   "metodo.dia.arrastraAqui": "Arrastra alimentos aquí",
   "metodo.dia.eligeArrastra": "Elige buenos alimentos · arrástralos a cada comida",
+  // En móvil no se arrastra: se toca el alimento y se elige la comida en un popup.
+  "metodo.dia.eligeToca": "Elige buenos alimentos · tócalos para añadirlos",
+  "metodo.dia.tocaParaAnadir": "Toca un alimento de abajo para añadirlo aquí",
+  "metodo.dia.aQueComida": "¿A qué comida lo añades?",
   "metodo.dia.creaAlimento": "Crea tu alimento",
   "metodo.dia.elTuyo": "el tuyo, las veces que quieras",
   "metodo.dia.aOjo": "A ojo:",
@@ -748,7 +752,7 @@ export const metodo = {
   // son contenido y viven en tcmLenguaContenido(.en).ts.
   "metodo.tcm.lengua.titulo": "El diagnóstico de la lengua",
   "metodo.tcm.lengua.intro":
-    "La lengua es el espejo de las vísceras. Se lee por capas: el color, la forma, el movimiento, la saburra, la humedad y los pequeños detalles. Aprende a reconocer cada una y luego mira la tuya.",
+    "La lengua es el espejo de las vísceras.",
   "metodo.tcm.lengua.comoMirar": "Cómo mirar tu lengua",
   "metodo.tcm.lengua.mirar1": "Por la mañana, antes de lavarte los dientes y antes de comer o beber.",
   "metodo.tcm.lengua.mirar2": "Con luz natural siempre que puedas.",
@@ -882,6 +886,8 @@ export const metodo = {
   "metodo.ayur.yaHicisteTest": "Ya hiciste el test",
   "metodo.ayur.verMiResultado": "Ver mi resultado →",
   "metodo.ayur.repetirTest": "Repetir el test",
+  // Solo mientras se repite el test: cancela y conserva el resultado anterior.
+  "metodo.ayur.cancelarRepetir": "Cancelar y conservar mi resultado",
   "metodo.ayur.cuidado": "Cuidado: ",
   "metodo.ayur.sigueElCirculo":
     "Sigue el círculo: crece cuando entra el aire y se encoge cuando sale. Si te agobia, para.",
@@ -1118,7 +1124,6 @@ export const metodo = {
   "metodo.psico.paso.des": "Desconexión",
   "metodo.psico.paso.desResultado": "Tu desconexión",
   "metodo.psico.paso.cerebro": "Tu cerebro",
-  "metodo.psico.cerebroContinuar": "Ver qué pasó en tu cerebro",
 
   // ── Paso 7 · El trauma en tu cerebro ──
   "metodo.psico.cerebroIntro": "Cómo se guardó lo que viviste: el cerebro en trauma.",

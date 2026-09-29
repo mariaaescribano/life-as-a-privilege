@@ -132,8 +132,12 @@ export function BoxesNombrar({
               color={TINTA}
               borderRadius="xl"
               size="lg"
+              // Móvil: la entrada va MÁS GRANDE (más alta y con la letra de
+              // lectura), que es donde se escribe y donde tiene que apetecer
+              // escribir. De `sm` en adelante, el alto normal del size lg.
+              h={{ base: "58px", sm: "3rem" }}
               fontFamily="'EB Garamond', serif"
-              fontSize={{ base: "md", md: "lg" }}
+              fontSize="lg"
               sx={{ caretColor: TINTA }}
               _placeholder={{ color: `${TINTA}66`, fontStyle: "italic" }}
               _hover={{ borderColor: `${TINTA}55` }}
@@ -163,9 +167,13 @@ export function BoxesNombrar({
             </Box>
           </Flex>
 
-          {/* Ejemplos sugeridos (opcionales). Para que el box no dé un salto al
-              elegir uno, el elegido no se quita de la rejilla: se vuelve
-              invisible y deja su hueco (el alto lo fija la lista completa). */}
+          {/* Ejemplos sugeridos (opcionales). En ESCRITORIO, para que el box no
+              dé un salto al elegir uno, el elegido no se quita de la rejilla:
+              se vuelve invisible y deja su hueco (el alto lo fija la lista
+              completa). En MÓVIL es al revés, a propósito: el elegido SÍ
+              desaparece y el box de ejemplos se hace más pequeño — apilado en
+              una columna, los huecos invisibles alargaban la página sin
+              enseñar nada. */}
           <>
             {/* Separador horizontal completo (ancho del box) */}
             <Box w="100%" h="1px" bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
@@ -185,6 +193,7 @@ export function BoxesNombrar({
                         aria-hidden={usado || undefined}
                         tabIndex={usado ? -1 : undefined}
                         visibility={usado ? "hidden" : "visible"}
+                        display={usado ? { base: "none", lg: "inline-block" } : undefined}
                         pointerEvents={usado ? "none" : undefined}
                         w="100%"
                         px={4}
@@ -211,11 +220,14 @@ export function BoxesNombrar({
                   })}
                 </SimpleGrid>
 
-                {/* Cuando ya no queda ninguno, el aviso va ENCIMA de los huecos
-                    (posición absoluta): si ocupara sitio, el box cambiaría de
-                    alto justo al final. */}
+                {/* Cuando ya no queda ninguno, en escritorio el aviso va ENCIMA
+                    de los huecos (posición absoluta): si ocupara sitio, el box
+                    cambiaría de alto justo al final. En móvil los huecos ya no
+                    existen (la rejilla se vació), así que el aviso ocupa su
+                    sitio normal. */}
                 {ejemplosDisponibles.length === 0 && (
-                  <Flex position="absolute" inset={0} align="center" justify="center" pointerEvents="none">
+                  <Flex position={{ base: "static", lg: "absolute" }} inset={0} py={{ base: 3, lg: 0 }}
+                        align="center" justify="center" pointerEvents="none">
                     <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.6} textAlign="center">{t("metodo.psico.todosLosEjemplos")}</Text>
                   </Flex>
                 )}
@@ -227,8 +239,9 @@ export function BoxesNombrar({
       </Box>
       </Reveal>
 
-      {/* Box de la lista: la selección final, en orden */}
-      <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75}
+      {/* Box de la lista: la selección final, en orden. Apilado (móvil) queda
+          bajo el pliegue: entra al llegar con el scroll. */}
+      <Reveal inView once amount={0.15} direction="up" distance={34} scaleFrom={0.97} delay={0.1} duration={0.75}
               w="100%" flex={{ lg: "1" }} minW={0} display="flex">
       <Box
         position="relative"
@@ -255,16 +268,16 @@ export function BoxesNombrar({
           </Flex>
           <Box h="1px" w="70%" maxW="340px" bgGradient={`linear(to-r, transparent, ${TINTA}66, transparent)`} />
 
-          {/* Zona de la lista con ALTURA FIJA + scroll vertical: al añadir o
-              borrar, el box NO cambia de alto (evita el mareo). */}
+          {/* Zona de la lista. En MÓVIL (apilados) crece EN VERTICAL cuan larga
+              sea la lista: nada de altura fija con scroll interno, que escondía
+              lo elegido. En dos columnas (lg) se estira hasta igualar al box de
+              la izquierda y ahí sí scrollea por dentro si hace falta. */}
           <Box
             w="100%"
             maxW="620px"
-            // Apilados, el alto es fijo para que el box no dé saltos. En dos
-            // columnas se estira hasta igualar al box de la izquierda.
             flex={{ lg: "1" }}
-            h={{ base: "180px", md: "220px", lg: "auto" }}
-            minH={{ lg: "200px" }}
+            h="auto"
+            minH={{ base: "140px", lg: "200px" }}
             overflowY="auto"
             overflowX="hidden"
             sx={{
@@ -328,7 +341,9 @@ export function BoxesNombrar({
                 </AnimatePresence>
               </Flex>
             ) : (
-              <Flex h="100%" align="center" justify="center">
+              // `minH` en móvil: el contenedor va con alto auto, así que sin él
+              // el texto del hueco vacío quedaría pegado al separador.
+              <Flex h="100%" minH={{ base: "140px", lg: "0" }} align="center" justify="center">
                 <Text color={TINTA} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" opacity={0.7} textAlign="center" style={{ textShadow: INK_SHADOW }}>{vacioTexto}</Text>
               </Flex>
             )}

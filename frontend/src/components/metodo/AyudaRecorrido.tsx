@@ -902,7 +902,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}
-                 maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
+                 maxH={{ base: "calc(100dvh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
                  sx={SCROLL_ACUARELA}>
               <Box as="button" onClick={() => setOrientacionOpen(false)} position="absolute" top={3} right={3} zIndex={2}
                    w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}
@@ -1101,7 +1101,7 @@ export function AyudaRecorrido({ pagina, ocultarCompania }: { pagina: keyof type
                borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 9, md: 12 }}
-                 maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
+                 maxH={{ base: "calc(100dvh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
                  sx={SCROLL_ACUARELA}>
               <Box as="button" onClick={() => setPreparacionOpen(false)} position="absolute" top={3} right={3} zIndex={2}
                    w="34px" h="34px" borderRadius="full" bg="rgba(255,251,243,0.7)" border={`1px solid ${TINTA}44`}

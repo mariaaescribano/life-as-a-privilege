@@ -269,8 +269,10 @@ export default function MetodoCabalaSendero() {
           )}
 
           {/* ── Significado tradicional ── */}
+          {/* Todas las cajas de aquí abajo quedan bajo el pliegue en móvil:
+              entran al asomar en pantalla (inView), con un delay corto. */}
           {sendero.significadoTradicional && (
-            <Reveal direction="up" distance={20} delay={0.12} duration={0.6} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={20} delay={0.1} duration={0.6} w="100%">
               <Caja>
                 <TituloCaja>{t("metodo.cabala.sendero.significado")}</TituloCaja>
                 <Divisor />
@@ -284,7 +286,7 @@ export default function MetodoCabalaSendero() {
 
           {/* ── Traducción psicológica ── */}
           {sendero.traduccionPsicologica && (
-            <Reveal direction="up" distance={20} delay={0.14} duration={0.6} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={20} delay={0.1} duration={0.6} w="100%">
               <Caja>
                 <TituloCaja>{t("metodo.cabala.sendero.psicologica")}</TituloCaja>
                 <Divisor />
@@ -298,7 +300,7 @@ export default function MetodoCabalaSendero() {
 
           {/* ── Pregunta de reflexión ── */}
           {sendero.pregunta && (
-            <Reveal direction="up" distance={16} delay={0.16} duration={0.6} display="flex" justifyContent="center">
+            <Reveal inView once amount={0.2} direction="up" distance={16} delay={0.1} duration={0.6} display="flex" justifyContent="center">
               <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic" fontWeight="600"
                     textAlign="center" maxW="640px" lineHeight="1.5" style={{ textShadow: INK_SHADOW }}>
                 {sendero.pregunta}
@@ -308,7 +310,7 @@ export default function MetodoCabalaSendero() {
 
           {/* ── ¿Qué une este sendero? ── */}
           {sendero.une.length > 0 && (
-            <Reveal direction="up" distance={20} delay={0.18} duration={0.6} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={20} delay={0.1} duration={0.6} w="100%">
               <Caja>
                 <TituloCaja>{t("metodo.cabala.sendero.queUne")}</TituloCaja>
                 <Divisor />
@@ -319,7 +321,7 @@ export default function MetodoCabalaSendero() {
 
           {/* ── Test ── */}
           {sendero.test.length > 0 && (
-            <Reveal direction="up" distance={22} delay={0.2} duration={0.65} w="100%">
+            <Reveal inView once amount={0.15} direction="up" distance={22} delay={0.1} duration={0.65} w="100%">
               <Caja>
                 <TituloCaja>{t("metodo.cabala.sendero.test")}</TituloCaja>
                 <Divisor />
@@ -398,7 +400,7 @@ export default function MetodoCabalaSendero() {
 
           {/* ── Interpretación ── */}
           {sendero.interpretaciones.length > 0 && (
-            <Reveal direction="up" distance={22} delay={0.24} duration={0.65} w="100%">
+            <Reveal inView once amount={0.15} direction="up" distance={22} delay={0.1} duration={0.65} w="100%">
               <Caja>
                 <Flex align="baseline" justify="space-between" gap={3} wrap="wrap">
                   <TituloCaja>{t("metodo.cabala.sendero.interpretacion")}</TituloCaja>
@@ -440,7 +442,7 @@ export default function MetodoCabalaSendero() {
 
           {/* ── Señales de práctica ── */}
           {sendero.senales.length > 0 && (
-            <Reveal direction="up" distance={20} delay={0.28} duration={0.6} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={20} delay={0.1} duration={0.6} w="100%">
               <Caja>
                 <TituloCaja>{t("metodo.cabala.sendero.senales")}</TituloCaja>
                 <Divisor />
@@ -466,7 +468,7 @@ export default function MetodoCabalaSendero() {
 
           {/* ── Has cruzado este umbral cuando… ── */}
           {sendero.umbral && (
-            <Reveal direction="up" distance={20} delay={0.3} duration={0.6} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={20} delay={0.1} duration={0.6} w="100%">
               <Caja>
                 <TituloCaja>{t("metodo.cabala.sendero.umbral")}</TituloCaja>
                 <Divisor />
@@ -480,7 +482,7 @@ export default function MetodoCabalaSendero() {
 
           {/* ── Frase de integración: directamente sobre el fondo (turquesa), sin box ── */}
           {sendero.integracion && (
-            <Reveal direction="up" distance={18} delay={0.32} duration={0.7} w="100%" display="flex" justifyContent="center">
+            <Reveal inView once amount={0.2} direction="up" distance={18} delay={0.1} duration={0.7} w="100%" display="flex" justifyContent="center">
               <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="600" textAlign="center"
                     maxW="680px" lineHeight="1.7" px={{ base: 2, md: 0 }} mt={{ base: 2, md: 4 }}
                     style={{ textShadow: INK_SHADOW }}>
@@ -500,7 +502,7 @@ export default function MetodoCabalaSendero() {
               ? t("metodo.cabala.sendero.completaEste")
               : t("metodo.cabala.sendero.completaLos22");
             return (
-              <Reveal direction="up" distance={14} delay={0.4} duration={0.6} display="flex" justifyContent="center">
+              <Reveal inView once amount={0.2} direction="up" distance={14} delay={0.15} duration={0.6} display="flex" justifyContent="center">
                 <Box as="button"
                      onClick={bloqueado ? undefined : () => void ir(nextNum ? `/metodo/cabala/sendero/${nextNum}` : "/metodo/cabala/senderos/diagnostico")}
                      disabled={bloqueado}

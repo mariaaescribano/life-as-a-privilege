@@ -11,7 +11,7 @@ import SiteFooter from "../../components/global/Footer";
 import { BotonAviso } from "../../components/metodo/BotonAviso";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { PagoAyurvedaModal } from "../../components/metodo/PagoAyurvedaModal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
@@ -132,27 +132,35 @@ export default function MetodoAyurveda() {
           >
             <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" />
             <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
-              <Text
-                color={TINTA}
-                fontSize={{ base: "md", md: "lg" }}
-                lineHeight="1.85"
-                opacity={1}
-                maxW="600px"
-                mx="auto"
-              >
-                {t("metodo.gate.ayurveda.intro1")}
-              </Text>
-              <Text
-                color={TINTA}
-                fontSize={{ base: "md", md: "lg" }}
-                lineHeight="1.85"
-                opacity={1}
-                maxW="600px"
-                mx="auto"
-                mt={{ base: 4, md: 5 }}
-              >
-                {t("metodo.gate.ayurveda.intro2")}
-              </Text>
+              {/* Cascada interna: los párrafos entran de uno en uno (más
+                  dinámico, sensación premium; igual que en el test). */}
+              <RevealStagger stagger={0.22} delayChildren={0.3}>
+                <RevealItem distance={16} duration={0.6}>
+                  <Text
+                    color={TINTA}
+                    fontSize={{ base: "md", md: "lg" }}
+                    lineHeight="1.85"
+                    opacity={1}
+                    maxW="600px"
+                    mx="auto"
+                  >
+                    {t("metodo.gate.ayurveda.intro1")}
+                  </Text>
+                </RevealItem>
+                <RevealItem distance={16} duration={0.6}>
+                  <Text
+                    color={TINTA}
+                    fontSize={{ base: "md", md: "lg" }}
+                    lineHeight="1.85"
+                    opacity={1}
+                    maxW="600px"
+                    mx="auto"
+                    mt={{ base: 4, md: 5 }}
+                  >
+                    {t("metodo.gate.ayurveda.intro2")}
+                  </Text>
+                </RevealItem>
+              </RevealStagger>
             </Box>
           </Box>
           </Reveal>

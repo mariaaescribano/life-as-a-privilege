@@ -17,7 +17,6 @@ import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { VINETAS_ENFERMEDADES } from "../../components/metodo/comicEnfermedades";
 import { useComic } from "../../i18n/comics";
 import { Reveal } from "../../components/global/Reveal";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, CICLO_SHENG, CICLO_KE,
@@ -275,10 +274,8 @@ export default function MetodoTcmDiagnostico() {
           </Text>
           </Reveal>
 
-          {/* El paso siguiente, abajo a la derecha: mismo texto que el botón
-              del header, que aquí se ha quedado muy arriba. */}
-          <BotonPaso label={t("metodo.tcm.paso.tuLengua")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
-                     onClick={() => setComicOpen(true)} />
+          {/* Sin botón de fin de página (decisión de María): a Tu lengua se
+              pasa desde el botón del header (que abre antes el cómic). */}
         </Flex>
       </Flex>
 

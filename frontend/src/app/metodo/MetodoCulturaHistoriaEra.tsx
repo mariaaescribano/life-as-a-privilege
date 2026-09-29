@@ -22,7 +22,10 @@ import { culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVari
 // sin fecha). Al pulsar un sub-hito se abre su cómic (foto + texto a la derecha).
 // ─────────────────────────────────────────────────────────────────────────
 
-const CULTURA_IMG = "/img/fondos/cultura.webp";
+// Fondo del visor de cómic. La OTRA acuarela (cultura2), no la de los boxes:
+// a pantalla completa, la 1 —oscura y nublada— se lee como una foto borrosa;
+// la 2 tiene el grano y las vetas doradas nítidas y aguanta el viewport entero.
+const CULTURA_IMG = "/img/fondos/cultura2.webp";
 // Nº de fotos de la «primera ronda» de sub-hitos que se precargan antes de
 // mostrar la era (las de más allá se cargan al desplazarse con las flechas).
 const PRIMERA_RONDA = 6;
@@ -117,7 +120,7 @@ export default function MetodoCulturaHistoriaEra() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 40, md: 48 }}>
         {/* 1240 y no 1000: la banda de la línea del tiempo necesita aire para
             que quepan seis círculos decentes. El header no se entera — lleva su
             propio maxW="1000px" ahí abajo. */}
@@ -179,14 +182,21 @@ export default function MetodoCulturaHistoriaEra() {
         // Al terminar la era (avanzar más allá de la última viñeta) se pasa
         // directamente a la era siguiente; si es la última, solo se cierra.
         onComplete={eraSiguiente ? () => irAEra(eraSiguiente.key) : undefined}
-        // Botón siempre visible, junto a la X: saltar a la era siguiente sin
-        // tener que leerse el resto del cómic.
-        continueLabel={eraSiguiente ? eraSiguiente.titulo : undefined}
-        onContinue={eraSiguiente ? () => irAEra(eraSiguiente.key) : undefined}
+        // Botón siempre visible, junto a la X: el nombre de la ERA en la que
+        // estás, y te devuelve a su línea de momentos (orientación: dentro del
+        // cómic siempre sabes dónde estás y cómo volver). A la era siguiente se
+        // pasa al TERMINAR el cómic (onComplete) o con las flechas del header.
+        continueLabel={era.titulo}
+        onContinue={() => setActiveKey(null)}
+        // El nombre de la era se ve también en móvil (es la orientación).
+        continueLabelMovil
         themeColor={culturaTxt}
         textColor={culturaTxt}
         disciplinaBgImage={CULTURA_IMG}
         disciplinaBgColor={culturaBg}
+        // No enseñar el box hasta que la acuarela de fondo esté cargada del
+        // todo: verla llegar a medias rompía la sensación de calidad.
+        esperarFondo
         // Salto de línea después de cada punto (una frase por bloque).
         separarFrases
       />

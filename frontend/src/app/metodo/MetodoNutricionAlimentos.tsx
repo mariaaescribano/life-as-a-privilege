@@ -76,12 +76,16 @@ function BibliotecaCard({
               {icono}
             </Flex>
           </Float>
-          <Text color={nutricionTxt} fontWeight={800} fontSize={{ base: "md", md: "lg" }} lineHeight="1.2"
-                letterSpacing="0.06em" textTransform="uppercase">
+          {/* Halo claro del color de la disciplina alrededor de la tinta: sobre
+              la acuarela (clara pero cargada) el texto se perdía sin él. */}
+          <Text color={nutricionTxt} fontWeight={800} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.2"
+                letterSpacing="0.06em" textTransform="uppercase"
+                style={{ textShadow: `0 1px 2px ${nutricionBg}, 0 0 8px ${nutricionBg}, 0 0 16px ${nutricionBg}` }}>
             {titulo}
           </Text>
-          <Text color={`${nutricionTxt}cc`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"
-                lineHeight="1.45" maxW="240px">
+          <Text color={nutricionTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                lineHeight="1.45" maxW="260px"
+                style={{ textShadow: `0 1px 2px ${nutricionBg}, 0 0 8px ${nutricionBg}` }}>
             {subtitulo}
           </Text>
           <Flex align="center" gap={1} color={nutricionTxt} mt={0.5}

@@ -1,45 +1,27 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// POPUP de una zona del cerebro (paso 7 de psicología).
+// CÓMIC de una zona del cerebro (paso 7 de psicología).
 //
-// Al tocar una zona —en el dibujo, en la leyenda o en su barra— la ficha ya no
-// se abre dentro de la página: sale en un popup con la FOTO de esa zona a la
-// izquierda y su texto a la derecha, como el resto de fichas con ilustración
-// del método. Por eso usa FichaFisioModal, que es el box común: no se duplica
-// el markup, solo cambian los colores (los de psicología) y el contenido.
+// Al tocar una zona —en el dibujo o en su botón— su ficha se lee en el CÓMIC
+// INMERSIVO de siempre (IntroComicModal → ComicViewer), como los chakras de
+// Ayurveda: la foto de la zona con la luz de su color, el fondo de psicología
+// y una viñeta por apartado (para qué sirve · qué le hizo · cómo se nota · lo
+// que la cambia). Antes iba en una ficha aparte (FichaFisioModal) que no era
+// el visor de la casa y en móvil quedaba mal.
 //
-// Las flechas pasan de una zona a otra sin cerrar el popup.
+// Al terminar el cómic de una zona se abre solo el de la SIGUIENTE (cómics
+// encadenados); el de la última cierra. La X cierra en cualquier momento.
 // ─────────────────────────────────────────────────────────────────────────────
-import React from "react";
-import { Box, Text } from "@chakra-ui/react";
-import { FichaFisioModal } from "./celulasUi";
+import React, { useMemo } from "react";
+import { IntroComicModal } from "./IntroComicModal";
+import type { Vineta } from "./ComicViewer";
 import { useT } from "../../i18n";
 import { neuropsicologiaBg, neuropsicologiaTxt } from "../../GlobalVariables";
 import { ZONAS, zonaPorKey, type ZonaKey } from "./psicologiaCerebro";
 
-const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
-const FONDO = "/img/fondos/psciologia.webp";
-/** La misma sombra de la página: resplandor de papel, no mancha negra (el box
- *  de psicología es claro y la tinta oscura). */
+/** La misma sombra del resto de cómics de psicología: resplandor de papel, no
+ *  mancha negra (el box de psicología es claro y la tinta oscura). */
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
-
-/** Un apartado del texto: su antetítulo pequeño y su párrafo.
- *  Va en `span`s de bloque porque FichaFisioModal mete cada párrafo dentro de
- *  un <p>: un <div> ahí dentro sería HTML inválido. */
-function Seccion({ titulo, children }: { titulo: string; children: React.ReactNode }) {
-  return (
-    <Box as="span" display="block">
-      <Text as="span" display="block" color={TINTA} fontSize="2xs" fontWeight="700"
-            letterSpacing="0.22em" textTransform="uppercase" opacity={0.7} mb={2}
-            style={{ textShadow: INK_SHADOW }}>
-        {titulo}
-      </Text>
-      <Text as="span" display="block" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
-        {children}
-      </Text>
-    </Box>
-  );
-}
 
 export function CerebroZonaModal({
   zonaKey,
@@ -48,62 +30,48 @@ export function CerebroZonaModal({
 }: {
   /** La zona abierta, o null si el popup está cerrado. */
   zonaKey: ZonaKey | null;
-  /** Cambia la zona mostrada (lo usan las flechas). */
+  /** Cambia la zona mostrada (lo usa el encadenado al terminar un cómic). */
   onZona: (key: ZonaKey) => void;
   onClose: () => void;
 }) {
   const t = useT();
-  if (!zonaKey) return null;
+  const zona = zonaKey ? zonaPorKey(zonaKey) : null;
 
-  const zona = zonaPorKey(zonaKey);
+  // Una viñeta por apartado, todas con la foto de la zona. El antetítulo lleva
+  // el apodo y el nombre anatómico juntos (la alarma ya los trae en `nombre`).
+  const vinetas = useMemo<Vineta[]>(() => {
+    if (!zona) return [];
+    const eyebrow = zona.apodo ? `${zona.apodo} · ${zona.nombre}` : zona.nombre;
+    return [
+      { src: zona.foto, eyebrow, titulo: t("metodo.psico.cerebroParaQue"), paragraphs: [zona.paraQueSirve] },
+      { src: zona.foto, eyebrow, titulo: t("metodo.psico.cerebroQueLeHizo"), paragraphs: [zona.queLeHizo] },
+      { src: zona.foto, eyebrow, titulo: t("metodo.psico.cerebroComoSeNota"), paragraphs: zona.comoSeNota },
+      { src: zona.foto, eyebrow, titulo: t("metodo.psico.cerebroLoQueLaCambia"), paragraphs: [zona.loQueLaCambia] },
+    ];
+  }, [zona, t]);
+
+  if (!zona) return null;
+
   const idx = ZONAS.findIndex((z) => z.key === zona.key);
-  const salta = (d: number) => onZona(ZONAS[(idx + d + ZONAS.length) % ZONAS.length].key);
+  const siguiente = ZONAS[idx + 1];
 
   return (
-    <FichaFisioModal
-      foto={zona.foto}
-      alt={zona.apodo || zona.nombre}
-      titulo={
-        <>
-          {/* Título: el apodo, y debajo el nombre. Sin apodo (la alarma), el
-              nombre hace de título y no se repite debajo. */}
-          {zona.apodo || zona.nombre}
-          {zona.apodo && (
-            <Text as="span" display="block" fontSize={{ base: "md", md: "lg" }} fontWeight={500}
-                  fontStyle="italic" opacity={0.85} mt={1}>
-              {zona.nombre}
-            </Text>
-          )}
-        </>
-      }
-      parrafos={[
-        <Seccion key="para" titulo={t("metodo.psico.cerebroParaQue")}>{zona.paraQueSirve}</Seccion>,
-        <Seccion key="hizo" titulo={t("metodo.psico.cerebroQueLeHizo")}>{zona.queLeHizo}</Seccion>,
-        <Seccion key="nota" titulo={t("metodo.psico.cerebroComoSeNota")}>
-          {zona.comoSeNota.map((linea, i) => (
-            <Box as="span" key={i} display="flex" alignItems="flex-start" gap={2.5} mb={2}>
-              <Box as="span" flexShrink={0} mt="11px" w="6px" h="6px" borderRadius="full" bg={zona.color} />
-              <Box as="span">{linea}</Box>
-            </Box>
-          ))}
-        </Seccion>,
-        <Seccion key="cambia" titulo={t("metodo.psico.cerebroLoQueLaCambia")}>{zona.loQueLaCambia}</Seccion>,
-      ]}
+    <IntroComicModal
+      // key con la zona: al pasar a la siguiente, el visor se remonta desde su
+      // 1ª viñeta (si no, seguiría en la viñeta donde iba la anterior).
+      key={zona.key}
+      isOpen
+      vinetas={vinetas}
       onClose={onClose}
-      onPrev={() => salta(-1)}
-      onNext={() => salta(1)}
-      contador={`${idx + 1} / ${ZONAS.length}`}
-      accent={zona.color}
-      bgImage={FONDO}
-      bgColor={neuropsicologiaBg}
-      txtColor={TINTA}
+      // Terminar una zona abre la siguiente; la última cierra.
+      onComplete={() => (siguiente ? onZona(siguiente.key) : onClose())}
+      themeColor={neuropsicologiaTxt}
+      // El color de la zona solo tiñe la luz de la ilustración, nunca la letra
+      // (la regla de la casa: la tinta de la disciplina para el texto).
+      luzFoto={zona.color}
+      disciplinaBgImage="/img/fondos/psciologia.webp"
+      disciplinaBgColor={neuropsicologiaBg}
       textShadow={INK_SHADOW}
-      fotoFallback={
-        <Text color={TINTA} fontWeight="800" fontSize={{ base: "4xl", md: "5xl" }}
-              style={{ textShadow: INK_SHADOW }}>
-          {zona.nombre}
-        </Text>
-      }
     />
   );
 }

@@ -16,6 +16,7 @@ import {
 } from "../../components/metodo/Planetas";
 import { CUERPOS } from "../../components/metodo/astrologiaData";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
 import {
   astrologiaBg,
   astrologiaNom,
@@ -43,6 +44,7 @@ export default function MetodoAstrologiaPlanetas() {
 
       {/* ── CABECERA ── */}
       <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }}>
+        <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
         <MetodoStepHeader
           icon={<AstrologiaIcon size={{ base: "28px", md: "38px" }} />}
           title={t("disciplina.astrologia")}
@@ -59,10 +61,11 @@ export default function MetodoAstrologiaPlanetas() {
             disabledTooltip: "Psicología estará disponible próximamente",
           }}
         />
+        </Reveal>
       </Flex>
 
       {/* ── GRID DE PLANETAS ── */}
-      <Box flex="1" px={{ base: 5, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
+      <Box flex="1" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Grid
           templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
           gap={{ base: 5, md: 6 }}
@@ -71,15 +74,30 @@ export default function MetodoAstrologiaPlanetas() {
             const valor = valorOf(carta, c.key);
             const esActual = sigIdx !== -1 && index === sigIdx;
             return (
-              <PlanetaBox
+              // Un Reveal inView POR tarjeta (nunca la rejilla entera: trampa
+              // del `amount`); cascada corta por fila de la rejilla.
+              <Reveal
                 key={c.key}
-                cuerpo={c}
-                valor={valor}
-                destacado={esActual}
-                onAbrirPicker={(campo) => setPicker({ key: c.key, campo })}
-                onProfundizarSigno={() => navigate(`/metodo/astrologia/${c.key}/signo`)}
-                onProfundizarCasa={() => navigate(`/metodo/astrologia/${c.key}/casa`)}
-              />
+                inView
+                once
+                amount={0.2}
+                direction="up"
+                distance={30}
+                scaleFrom={0.97}
+                duration={0.7}
+                delay={Math.min((index % 3) * 0.07, 0.35)}
+                w="100%"
+                display="grid"
+              >
+                <PlanetaBox
+                  cuerpo={c}
+                  valor={valor}
+                  destacado={esActual}
+                  onAbrirPicker={(campo) => setPicker({ key: c.key, campo })}
+                  onProfundizarSigno={() => navigate(`/metodo/astrologia/${c.key}/signo`)}
+                  onProfundizarCasa={() => navigate(`/metodo/astrologia/${c.key}/casa`)}
+                />
+              </Reveal>
             );
           })}
         </Grid>
@@ -106,7 +124,7 @@ export default function MetodoAstrologiaPlanetas() {
         onClose={() => setComicOpen(false)}
       />
 
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo={t("metodo.astro.reservaLlamada")} />
       <SiteFooter />
     </Box>
   );

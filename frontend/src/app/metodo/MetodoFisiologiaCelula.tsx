@@ -35,7 +35,7 @@ export default function MetodoFisiologiaCelula() {
           { tipo: "adn", color: "#9ab6f0", glyph: "N", label: t("fisiologia.pieza.adn"), n: 1, img: `${PRE}/adn.webp` },
           { tipo: "membrana", color: "#f2c86b", glyph: "L", label: t("fisiologia.pieza.membrana"), n: 1, img: `${PRE}/membrana.webp` },
           { tipo: "mitocondria", color: "#e08a8a", glyph: "M", label: t("fisiologia.pieza.mitocondria"), n: 2, img: `${PRE}/mitocondria.webp` },
-          { tipo: "ribosoma", color: "#7fd6c2", glyph: "R", label: t("fisiologia.pieza.ribosoma"), n: 3, img: `${PRE}/ribosoma.webp` },
+          { tipo: "ribosoma", color: "#a884e8", glyph: "R", label: t("fisiologia.pieza.ribosoma"), n: 3, img: `${PRE}/ribosoma.webp` },
         ]}
         resultImg={`${PRE}/celulaentera.webp`}
         resultTitulo={t("fisiologia.celula.hecho")}

@@ -160,8 +160,9 @@ export default function MetodoCabalaSenderos() {
             </Box>
           </Reveal>
 
-          {/* Comenzar por el principio — se desbloquea al ver TODAS las ilustraciones */}
-          <Reveal direction="up" distance={22} delay={1.7} duration={1.3} display="flex" justifyContent="center">
+          {/* Comenzar por el principio — se desbloquea al ver TODAS las ilustraciones.
+              Queda bajo el Árbol (bajo el pliegue): entra al hacer scroll. */}
+          <Reveal inView once amount={0.2} direction="up" distance={22} delay={0.15} duration={0.8} display="flex" justifyContent="center">
             <Box as="button"
                  onClick={todosVistos ? () => void ir(`/metodo/cabala/sendero/${primero.num}`) : undefined}
                  disabled={!todosVistos}

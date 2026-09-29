@@ -314,8 +314,10 @@ export function IndiceRecorrido({
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="640px" my="auto"
                borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={nom} borderRadius="2xl" />
+            {/* `dvh` en móvil: `vh` no descuenta la barra del navegador y la
+                caja quedaba pegada al borde de abajo, sin margen. */}
             <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 7, md: 9 }}
-                 maxH={{ base: "calc(100vh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
+                 maxH={{ base: "calc(100dvh - 64px)", md: "calc(100vh - 96px)" }} overflowY="auto"
                  // `contain`: al llegar al tope del scroll del índice, el gesto
                  // NO se encadena a la página de detrás (en móvil ese arrastre
                  // extra enseñaba el fondo del navegador).

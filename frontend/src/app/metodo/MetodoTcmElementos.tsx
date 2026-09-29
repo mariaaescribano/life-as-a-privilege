@@ -312,7 +312,8 @@ export default function MetodoTcmElementos() {
           </Box>
           </Reveal>
 
-          <Reveal direction="up" distance={14} delay={0.2} duration={0.6} display="flex" justifyContent="center">
+          {/* La nota queda bajo la estrella (bajo el pliegue en móvil): entra al asomar. */}
+          <Reveal inView once amount={0.2} direction="up" distance={14} delay={0.1} duration={0.6} display="flex" justifyContent="center">
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="560px" lineHeight="1.8">
             {t("metodo.tcm.elementos.orden")}
           </Text>

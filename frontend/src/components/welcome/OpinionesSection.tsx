@@ -30,10 +30,13 @@ const OpinionesSection: React.FC = () => {
       ref={reveal.ref}
       px={{ base: 5, md: 10, lg: 16 }}
       pt={{ base: 12, md: 16 }}
-      // El MISMO aire por debajo que por arriba: encima del botón se suman el
-      // `pb` de las tarjetas (9/13) y este `pt` (12/16); debajo, este `pb` y el
-      // `pt` de la tarjeta de la creadora (10/14). 9+12 = 11+10 y 13+16 = 15+14.
-      pb={{ base: 11, md: 15 }}
+      // El MISMO aire por debajo que por arriba. Encima del botón se suman el
+      // `pb` de las tarjetas (9/12 = 36/48px) y este `pt` (12/16 = 48/64px):
+      // 84/112px. Debajo, este `pb` y el `pt` de la tarjeta de la creadora
+      // (10/14 = 40/56px): 44+40 = 84 y 56+56 = 112. En píxeles, no en tokens:
+      // 11/15 NO existen en la escala de Chakra y caían como 11px/15px a secas
+      // — por eso el botón tenía menos aire por abajo que por arriba.
+      pb={{ base: "44px", md: "56px" }}
     >
       <Flex direction="column" align="center" w="100%">
         {/* ── CTA principal → El Recorrido (botón grande con mandala + flecha

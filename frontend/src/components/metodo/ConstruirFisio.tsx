@@ -254,7 +254,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif" sx={noSelectSx}>
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 12, md: 16 }}>
+      <Flex flex="1" justify="center" px={{ base: 4, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
@@ -286,7 +286,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
                 <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
                       style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{props.introTitulo}</Text>
-                <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
+                <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                       maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{props.instruccion}</Text>
               </MBox>
             )}
@@ -298,7 +298,9 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                 <Flex direction={{ base: "column", md: "row" }} align="stretch" gap={{ base: 5, md: 6 }} w="100%">
 
                   {/* ── Box izquierda · zona de ensamblaje (aquí se llevan las piezas) ── */}
-                  <Box position="relative" flex={{ base: "1 1 auto", md: "0 0 46%" }} borderRadius="2xl" overflow="hidden"
+                  <Reveal direction="up" distance={26} scaleFrom={0.98} duration={0.65}
+                          flex={{ base: "1 1 auto", md: "0 0 46%" }} display="flex">
+                  <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                        boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} justify="center" align="center"
@@ -330,10 +332,14 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                       </Box>
                     </Flex>
                   </Box>
+                  </Reveal>
 
-                  {/* ── Box derecha · piezas a arrastrar (2 por fila) ── */}
+                  {/* ── Box derecha · piezas a arrastrar (2 por fila). En móvil
+                      cae bajo el pliegue: entra al llegar con el scroll. ── */}
                   {/* Sin overflow:hidden para que la ficha no se recorte al arrastrarla al otro box. */}
-                  <Box position="relative" flex="1" borderRadius="2xl"
+                  <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                          duration={0.65} flex="1" display="flex">
+                  <Box position="relative" w="100%" borderRadius="2xl"
                        boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" align="center" justify="center" gap={5}
@@ -360,6 +366,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                       </Flex>
                     </Flex>
                   </Box>
+                  </Reveal>
                 </Flex>
               </MBox>
             ) : (
@@ -391,17 +398,19 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                     </Flex>
                   </Box>
 
-                  {/* ── Box texto ── */}
-                  <Box position="relative" flex="1" borderRadius="2xl" overflow="hidden"
+                  {/* ── Box texto. En móvil cae bajo la foto: entra con el scroll. ── */}
+                  <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                          duration={0.65} flex="1" display="flex">
+                  <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                        boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
+                      {/* Sin rayita bajo el título: el box con ilustración va con
+                          la estructura del cómic (foto izq, texto der, sin raya). */}
                       <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25" style={{ textShadow: INK }}>
                         {props.resultTitulo}
                       </Text>
-                      <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
-                           bgGradient={`linear(to-r, ${props.glow}aa, transparent)`} />
                       {props.resultParrafos.map((p, i) => (
                         <Text key={i} color={i === props.resultParrafos.length - 1 ? fisiologiaTxt : fisiologiaTxt}
                               fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
@@ -423,6 +432,7 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
                       )}
                     </Flex>
                   </Box>
+                  </Reveal>
                 </Flex>
               </MBox>
             )}

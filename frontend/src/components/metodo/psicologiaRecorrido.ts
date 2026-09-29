@@ -845,17 +845,19 @@ export function aniosConRecuerdo(data: LineaDeVidaData, edad: number): number[] 
 export const huellaMarcada = (data: LineaDeVidaData, edadAno: number): boolean =>
   !!data?.anos?.[String(edadAno)]?.huella;
 
-/** Tramos de la timeline: el primero es la gestación (−1) + años 0–4 (6 nodos
- *  como mucho), y a partir de ahí de 5 en 5. */
-export function tramosDeAnios(edad: number): number[][] {
+/** Tramos de la timeline: el primero es la gestación (−1) + los primeros años
+ *  (un nodo más que el resto), y a partir de ahí de `porTramo` en `porTramo`.
+ *  En escritorio van de 5 en 5; en móvil la página pide 3 en 3 (no caben más
+ *  círculos sin encoger). */
+export function tramosDeAnios(edad: number, porTramo = 5): number[][] {
   const tramos: number[][] = [];
   // Primer tramo: la gestación abre la línea, luego los primeros años.
   const primero: number[] = [ANO_GESTACION];
-  for (let a = 0; a <= Math.min(4, edad); a++) primero.push(a);
+  for (let a = 0; a <= Math.min(porTramo - 1, edad); a++) primero.push(a);
   tramos.push(primero);
-  let inicio = 5;
+  let inicio = porTramo;
   while (inicio <= edad) {
-    const fin = inicio + 4;
+    const fin = inicio + porTramo - 1;
     const tramo: number[] = [];
     for (let a = inicio; a <= Math.min(fin, edad); a++) tramo.push(a);
     tramos.push(tramo);

@@ -9,6 +9,7 @@ import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
+import { Reveal } from "../../components/global/Reveal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
 import AyurvedaTestPage from "../../components/espacio/components/AyurvedaTestPage";
@@ -86,6 +87,7 @@ export default function MetodoAyurvedaTest() {
         <SiteHeader variant="private" />
         <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
           <Flex direction="column" align="center" w="100%" maxW="760px" gap={{ base: 6, md: 7 }}>
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
               title={t("metodo.ayur.paso.testDoshas")}
@@ -98,7 +100,10 @@ export default function MetodoAyurvedaTest() {
               extra={ilustracionesBtn}
               next={{ label: `${t("metodo.ayur.paso.resultado")} →`, onClick: () => navigate("/metodo/ayurveda/resultado") }}
             />
+            </Reveal>
 
+            {/* Aviso «ya hiciste el test»: primer bloque, entra al montar. */}
+            <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%">
             <Box
               position="relative"
               w="100%"
@@ -157,6 +162,7 @@ export default function MetodoAyurvedaTest() {
                 </Flex>
               </Flex>
             </Box>
+            </Reveal>
           </Flex>
         </Flex>
         {ilustracionesModal}
@@ -177,6 +183,9 @@ export default function MetodoAyurvedaTest() {
         headerNext={doshaGuardada
           ? { label: `${t("metodo.ayur.paso.resultado")} →`, onClick: () => navigate("/metodo/ayurveda/resultado") }
           : { label: `${t("metodo.ayur.paso.resultado")} →`, onClick: () => {}, disabled: true, disabledTooltip: "Completa el test para ver tu resultado." }}
+        // Repitiendo (ya hay resultado): se puede cancelar y volver al aviso,
+        // conservando la Doṣha guardada. La primera vez no hay cancelar.
+        onCancel={doshaGuardada ? () => { setRepetir(false); window.scrollTo({ top: 0, behavior: "auto" }); } : undefined}
       />
       <BotonCompania color={ayurvedaTxt} bgColor={ayurvedaBg} disciplinaNom={ayurvedaNom} llamadaTitulo="Reserva tu llamada" />
       <IndiceAyurveda />

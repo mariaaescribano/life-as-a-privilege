@@ -30,7 +30,7 @@ const GLOW_BOX = `0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.1
 
 // ── Partículas del átomo ────────────────────────────────────────────────────
 type Tipo = "proton" | "neutron" | "electron";
-const GLOW: Record<Tipo, string> = { proton: "#2e4a9e", neutron: "#b7b3c9", electron: "#8ab6e6" };
+const GLOW: Record<Tipo, string> = { proton: "#2e4a9e", neutron: "#e8913f", electron: "#8ab6e6" };
 // La CLAVE del diccionario, no el texto: este mapa se calcula al importar.
 const LABEL: Record<Tipo, ClaveTexto> = {
   proton: "fisiologia.pieza.proton",
@@ -410,9 +410,10 @@ export default function MetodoFisiologiaAtomos() {
                     </Flex>
                   </Reveal>
 
-                  {/* ── Box derecha · piezas a arrastrar (2 por fila) · entra después ── */}
+                  {/* ── Box derecha · piezas a arrastrar (2 por fila) · entra después.
+                      `inView`: en móvil cae bajo el pliegue y entra con el scroll. ── */}
                   {/* Sin overflow:hidden para que la ficha no se recorte al arrastrarla al otro box. */}
-                  <Reveal direction="up" distance={22} duration={0.5} delay={0.18}
+                  <Reveal inView once amount={0.2} direction="up" distance={22} duration={0.5} delay={0.18}
                           position="relative" flex="1" borderRadius="2xl" boxShadow={GLOW_BOX}>
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" align="center" gap={5}
@@ -472,8 +473,10 @@ export default function MetodoFisiologiaAtomos() {
                     </Flex>
                   </Box>
 
-                  {/* ── Box derecha · texto ── */}
-                  <Box position="relative" flex="1" borderRadius="2xl" overflow="hidden" boxShadow={GLOW_BOX}>
+                  {/* ── Box derecha · texto. En móvil cae bajo el átomo: entra con el scroll. ── */}
+                  <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                          duration={0.65} flex="1" display="flex">
+                  <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={GLOW_BOX}>
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
@@ -505,6 +508,7 @@ export default function MetodoFisiologiaAtomos() {
                       )}
                     </Flex>
                   </Box>
+                  </Reveal>
                 </Flex>
 
                 {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}

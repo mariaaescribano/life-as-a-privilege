@@ -265,8 +265,8 @@ export default function MetodoCabalaFinal() {
             </Box>
           </Reveal>
 
-          {/* Dimensiones */}
-          <Reveal direction="up" distance={18} delay={0.2} duration={0.6} w="100%">
+          {/* Dimensiones — caja alta bajo el pliegue: entra al asomar (umbral bajo) */}
+          <Reveal inView once amount={0.08} direction="up" distance={18} delay={0.1} duration={0.6} w="100%">
             <Caja>
               <Titulo>{t("metodo.cabala.final.tusDimensiones")} · {dimsCompletas}/{niveles.length}</Titulo>
               {bloqueoPrincipal && (
@@ -307,8 +307,8 @@ export default function MetodoCabalaFinal() {
             </Caja>
           </Reveal>
 
-          {/* Senderos */}
-          <Reveal direction="up" distance={18} delay={0.26} duration={0.6} w="100%">
+          {/* Senderos — caja alta bajo el pliegue: entra al asomar (umbral bajo) */}
+          <Reveal inView once amount={0.08} direction="up" distance={18} delay={0.1} duration={0.6} w="100%">
             <Caja>
               <Titulo>{t("metodo.cabala.final.tusSenderos")} · {sendCompletos}/{senderoRes.length}</Titulo>
               {senderosPrioritarios.length > 0 && (

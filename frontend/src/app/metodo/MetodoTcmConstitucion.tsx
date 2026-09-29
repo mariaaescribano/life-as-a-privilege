@@ -12,7 +12,6 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { FotoBox, glowHeader } from "../../components/metodo/FotoBox";
 import { focoBlanco } from "../../components/global/foco";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -239,14 +238,17 @@ export default function MetodoTcmConstitucion() {
             </Reveal>
           )}
 
-          {/* ── El test, en la propia página (solo mientras hace falta) ──── */}
+          {/* ── El test, en la propia página (solo mientras hace falta) ────
+              El bloque de frases entra con un leve deslizamiento al montar. */}
           {mostrarTest && (
-            <TestConstitucion
-              data={data}
-              onChangeData={setData}
-              onCompletar={() => { setRepitiendo(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-              onTerminar={() => { setRepitiendo(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-            />
+            <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%">
+              <TestConstitucion
+                data={data}
+                onChangeData={setData}
+                onCompletar={() => { setRepitiendo(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                onTerminar={() => { setRepitiendo(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+              />
+            </Reveal>
           )}
 
           {/* ── Las cinco constituciones: tarjetas 3+2 (columna en móvil) ── */}
@@ -299,11 +301,8 @@ export default function MetodoTcmConstitucion() {
               {t("metodo.tcm.constitucion.bloqueo")}
             </Text>
           )}
-          <Flex w="100%" justify="flex-end">
-            <BotonPaso label={t("metodo.tcm.paso.ciclos")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
-                       disabled={!completo} title={t("metodo.tcm.constitucion.bloqueo")}
-                       onClick={() => void irAlSiguiente()} />
-          </Flex>
+          {/* Sin botón de fin de página (decisión de María): a Los ciclos se
+              pasa desde el botón del header. */}
         </Flex>
       </Flex>
 

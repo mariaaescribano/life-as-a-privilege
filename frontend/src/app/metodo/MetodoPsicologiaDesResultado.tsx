@@ -186,7 +186,7 @@ export default function MetodoPsicologiaDesResultado() {
             </Reveal>
 
             {/* Recordatorio honesto, entre los boxes */}
-            <Reveal direction="up" distance={20} delay={0.3} duration={0.7} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={20} duration={0.7} w="100%">
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" fontWeight="600"
                   textAlign="center" lineHeight="1.7" maxW="560px" mx="auto">
               {t("metodo.psico.desSinEtiqueta")}
@@ -195,7 +195,7 @@ export default function MetodoPsicologiaDesResultado() {
 
             {/* Si la desconexión es alta: no recorrer esto sola */}
             {alto && (
-              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
+              <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                    border={azulBorde} boxShadow={glowPanel}>
                 <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -218,23 +218,6 @@ export default function MetodoPsicologiaDesResultado() {
               </Reveal>
             )}
 
-            {/* Seguir el recorrido — el botón queda suelto: los boxes de las
-                tres caras y del cierre («irse fue lo que te salvó») se
-                quitaron a petición de María, pero la salida de la página se
-                queda. */}
-            <Reveal direction="up" distance={20} delay={0.48} duration={0.7} w="100%">
-              <Flex justify="center" pt={2}>
-                <Box as="button" onClick={() => navigate(`/metodo/psicologia/${exp.id}/cerebro`)}
-                     position="relative" overflow="hidden" px={8} py={3} borderRadius="full"
-                     bg={TINTA} border={`1.5px solid ${TINTA}`} fontFamily="'EB Garamond', serif"
-                     fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.04em" cursor="pointer"
-                     boxShadow={`0 2px 14px rgba(0,0,0,0.22), 0 0 16px ${TINTA}3a`} transition="all 0.2s"
-                     _hover={{ transform: "translateY(-2px)", boxShadow: `0 4px 18px rgba(0,0,0,0.28), 0 0 22px ${TINTA}5a` }}>
-                  <Box as="span" position="relative" zIndex={1} color={neuropsicologiaBg}
-                       style={{ textShadow: `0 1px 2px rgba(0,0,0,0.3)` }}>{t("metodo.psico.cerebroContinuar")}</Box>
-                </Box>
-              </Flex>
-            </Reveal>
           </Flex>
         </Flex>
       </Flex>

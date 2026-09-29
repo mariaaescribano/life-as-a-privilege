@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import type { BoxProps } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
@@ -121,10 +121,13 @@ export default function MetodoPsicologiaHuellas() {
     () => Object.values(data.anos || {}).some((a) => (a?.huellas?.length ?? 0) > 0),
     [data],
   );
-  const totalSpreads = Math.max(1, Math.ceil(anios.length / 2));
+  // En ordenador el cuaderno abre por PARES (dos hojas unidas por la espiral).
+  // En móvil no hay cuaderno: una sola hoja por pantalla y se pasa de año en año.
+  const porPagina = useBreakpointValue({ base: 1, md: 2 }) ?? 2;
+  const totalSpreads = Math.max(1, Math.ceil(anios.length / porPagina));
   const spreadActual = Math.min(spread, totalSpreads - 1);
-  const izquierda = anios[spreadActual * 2];
-  const derecha = anios[spreadActual * 2 + 1];
+  const izquierda = anios[spreadActual * porPagina];
+  const derecha = porPagina === 2 ? anios[spreadActual * porPagina + 1] : undefined;
 
   if (loading) {
     return <PsicologiaLoading />;
@@ -176,7 +179,7 @@ export default function MetodoPsicologiaHuellas() {
           ) : (
             <>
               {/* Cuaderno: dos páginas unidas por la espiral (ordenador) */}
-              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
+              <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
               <Flex
                 w="100%"
                 align="stretch"
@@ -203,22 +206,21 @@ export default function MetodoPsicologiaHuellas() {
                     hojas, así que va maciza y oscura; el volumen se sugiere con
                     un brillo central y sombra a los lados, y los agujeros
                     troquelados se ven CLAROS (el papel de detrás) sobre ella.
-                    Vertical en ordenador, horizontal en móvil (une abajo↔arriba). */}
+                    SOLO en ordenador: en móvil no hay cuaderno (una hoja por
+                    pantalla, sin anillas). */}
                 <Flex
                   position="relative"
-                  direction={{ base: "row", md: "column" }}
-                  justify={{ base: "center", md: "space-evenly" }}
+                  display={{ base: "none", md: "flex" }}
+                  direction="column"
+                  justify="space-evenly"
                   align="center"
                   flexShrink={0}
                   alignSelf="stretch"
                   overflow="hidden"
-                  w={{ base: "100%", md: "42px" }}
-                  h={{ base: "34px", md: "auto" }}
+                  w="42px"
                   bgColor={TINTA}
-                  my={{ base: "-14px", md: 0 }}
-                  mx={{ base: 0, md: "-12px" }}
-                  gap={{ base: 4, md: 0 }}
-                  py={{ base: 0, md: 4 }}
+                  mx="-12px"
+                  py={4}
                   zIndex={3}
                   aria-hidden
                 >
@@ -230,10 +232,7 @@ export default function MetodoPsicologiaHuellas() {
                     position="absolute"
                     inset="0"
                     pointerEvents="none"
-                    bgGradient={{
-                      base: "linear(to-b, #00000059, #ffffff1f 38%, #ffffff1f 62%, #00000059)",
-                      md: "linear(to-r, #00000059, #ffffff1f 38%, #ffffff1f 62%, #00000059)",
-                    }}
+                    bgGradient="linear(to-r, #00000059, #ffffff1f 38%, #ffffff1f 62%, #00000059)"
                   />
                   {Array.from({ length: 7 }).map((_, i) => (
                     <Box
@@ -260,7 +259,7 @@ export default function MetodoPsicologiaHuellas() {
               </Reveal>
 
               {/* Botones para pasar de página */}
-              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
+              <Reveal inView once amount={0.2} direction="up" distance={30} scaleFrom={0.97} duration={0.7} w="100%" display="flex" justifyContent="center">
               <Flex align="center" justify="center" gap={6} mt={1}>
                 <FlechaPagina dir="prev" disabled={spreadActual === 0} onClick={() => setSpread((s) => Math.max(0, s - 1))} />
                 <Text color={CREMA} fontSize="sm" opacity={0.9} letterSpacing="0.06em" minW="60px" textAlign="center">
@@ -402,7 +401,9 @@ const Pagina = ({
         overflowY="auto"
         overscrollBehavior="contain"
         sx={{
-          direction: scrollIzquierda ? "rtl" : "ltr",
+          // La barra al borde IZQUIERDO solo cuando hay cuaderno (ordenador):
+          // en móvil la hoja va sola y la barra se queda a la derecha.
+          direction: scrollIzquierda ? { base: "ltr", md: "rtl" } : "ltr",
           scrollbarWidth: "auto",
           scrollbarColor: `${TINTA} transparent`,
           "&::-webkit-scrollbar": { width: "14px" },

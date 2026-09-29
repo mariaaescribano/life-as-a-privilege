@@ -19,15 +19,8 @@ export const opiniones = {
   "opiniones.otra": "Leave another review",
   "opiniones.error": "There was an error sending your review. Try again.",
 
-  // ── There and back from the end of a journey ──
-  // The box that offers it (PedirOpinion) and the two back buttons that show
-  // up on /opiniones when you arrive from there.
-  "opinion.pedir.titulo": "Has this journey kept you company?",
-  "opinion.pedir.texto":
-    "If you feel like it, tell it in a few lines. For someone who's unsure whether to start, reading someone who has already done it says much more than anything we could write.",
-  "opinion.pedir.boton": "Write my review",
-  "opinion.pedir.ahoraNo": "Not now",
-
+  // ── The way back ── the two back buttons that show up on /opiniones when
+  // you arrive with `?volver=` in the URL.
   "opiniones.volver": "← Back to where I was",
   "opiniones.volverRecorrido": "Back to my journey",
 };

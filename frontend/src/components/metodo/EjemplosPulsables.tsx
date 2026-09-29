@@ -25,19 +25,27 @@ export function EjemplosPulsables({
   respuesta,
   onElegir,
   tope = 4,
+  encogerElegidos,
 }: {
   ejemplos: string[];
   /** Lo que hay escrito ahora: sirve para saber qué ejemplos ya están puestos. */
   respuesta: string;
   onElegir: (ejemplo: string) => void;
   tope?: number;
+  /** Si true, EN MÓVIL el ejemplo elegido desaparece de la lista (el box se
+   *  hace más pequeño, como en las páginas de nombrar); en escritorio se queda
+   *  con su ✓ como siempre. Lo usa el popup de «Enfrenta tus miedos». */
+  encogerElegidos?: boolean;
 }) {
   const t = useT();
   const lista = ejemplos.slice(0, tope);
   if (lista.length === 0) return null;
+  // Con `encogerElegidos`, si ya están todos puestos el bloque entero se oculta
+  // en móvil (el titulito solo, sin pastillas debajo, quedaba colgando).
+  const todosPuestos = lista.every((ej) => respuesta.includes(ej));
 
   return (
-    <Box mt={3.5}>
+    <Box mt={3.5} display={encogerElegidos && todosPuestos ? { base: "none", md: "block" } : "block"}>
       <Text color={TINTA} fontSize={{ base: "2xs", md: "xs" }} fontWeight="700"
             letterSpacing="0.14em" textTransform="uppercase" opacity={0.6} mb={2}
             style={{ textShadow: INK_SHADOW }}>
@@ -51,6 +59,7 @@ export function EjemplosPulsables({
               as="button"
               key={ej}
               onClick={() => { if (!puesto) onElegir(ej); }}
+              display={encogerElegidos && puesto ? { base: "none", md: "flex" } : "flex"}
               align="center"
               gap={1.5}
               textAlign="left"

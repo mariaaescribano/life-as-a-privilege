@@ -18,7 +18,6 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { PsicologiaLoading, PsicologiaLoader } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
@@ -167,11 +166,6 @@ export default function MetodoPsicologiaCursos() {
                 </Box>
               </Reveal>
             )}
-
-
-          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
-              /opiniones y trae de vuelta a esta misma página. */}
-          <PedirOpinion bg={neuropsicologiaBg} txt={neuropsicologiaTxt} nom={neuropsicologiaNom} />
           </Flex>
         </Flex>
       </Box>

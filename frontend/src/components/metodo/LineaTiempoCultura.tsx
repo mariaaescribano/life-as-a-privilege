@@ -113,6 +113,13 @@ function CirculoVisual({
       // convertirse en un marco. Discreto a propósito — 1,5px al 40 %.
       border={`1.5px solid ${tinta}66`}
       boxShadow={`0 0 18px ${tinta}55, 0 0 40px ${tinta}22`}
+      // Al pasar el puntero por el botón que lo envuelve (role="group"), el
+      // filo y el halo se ENCIENDEN: la foto responde, no solo se agranda.
+      transition="box-shadow 0.35s ease, border-color 0.35s ease"
+      _groupHover={{
+        borderColor: `${tinta}dd`,
+        boxShadow: `0 0 26px ${tinta}99, 0 0 60px ${tinta}44`,
+      }}
       display="flex"
       alignItems="center"
       justifyContent="center"
@@ -287,6 +294,17 @@ function TimelineDesktop({
                   from: { opacity: 0, transform: "scale(0.55)" },
                   to: { opacity: 1, transform: "scale(1)" },
                 },
+                // Vida PERPETUA (tras la entrada): cada círculo flota con un
+                // vaivén lento y desfasado del vecino, y por la línea viaja un
+                // destello del acento. Solo transform/opacity (van por GPU).
+                "@keyframes culturaVaiven": {
+                  "0%, 100%": { transform: "translateY(0px)" },
+                  "50%": { transform: "translateY(-7px)" },
+                },
+                "@keyframes culturaDestello": {
+                  from: { transform: "translateX(0)" },
+                  to: { transform: "translateX(440%)" },
+                },
               }}>
           {/* Línea horizontal que une los círculos (solo si hay más de uno).
               Entra dibujándose desde el centro hacia los lados. */}
@@ -299,12 +317,28 @@ function TimelineDesktop({
               h="2px"
               transform="translateY(-50%)"
               zIndex={0}
+              overflow="hidden"
               style={{
                 background: `linear-gradient(90deg, transparent, ${tinta}88 12%, ${tinta}88 88%, transparent)`,
                 animation: "lineaCulturaIn 0.9s ease 0.1s backwards",
                 transformOrigin: "center",
               }}
-            />
+            >
+              {/* Destello que recorre la línea de punta a punta, en bucle: la
+                  línea del tiempo «corre», no es una raya muerta. */}
+              <Box
+                position="absolute"
+                top={0}
+                bottom={0}
+                left="-30%"
+                w="30%"
+                sx={{
+                  background: `linear-gradient(90deg, transparent, ${tinta}e6, transparent)`,
+                  animation: "culturaDestello 5s linear 1.4s infinite",
+                  "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                }}
+              />
+            </Box>
           )}
 
           {visibles.map((hito, i) => (
@@ -312,6 +346,9 @@ function TimelineDesktop({
               as="button"
               key={hito.key}
               onClick={() => onSelect(hito.key)}
+              // `role="group"`: al pasar el puntero se encienden el filo y el
+              // halo del círculo (los `_groupHover` de CirculoVisual).
+              role="group"
               position="relative"
               // Reparto a partes iguales del ancho de la fila, con `size` de
               // tope. `minW={0}` es imprescindible: sin él, el mínimo
@@ -330,9 +367,21 @@ function TimelineDesktop({
               style={{ animation: `hitoCulturaIn 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.15 + i * 0.12}s backwards` }}
             >
               <Etiqueta hito={hito} tinta={tinta} arriba={i % 2 === 0} />
-              {/* `100%`: el círculo llena el hueco que le ha tocado al botón,
-                  que es quien lleva el tope. */}
-              <CirculoVisual hito={hito} tinta={tinta} bg={bg} size="100%" iconSize={iconSize} />
+              {/* Vaivén perpetuo SOLO del círculo (la etiqueta se queda quieta,
+                  que es texto y se lee). Cada uno con su ritmo y su desfase,
+                  para que la fila respire en vez de botar al unísono. Arranca
+                  cuando la coreografía de entrada ya ha terminado. */}
+              <Box
+                w="100%"
+                sx={{
+                  animation: `culturaVaiven ${5.2 + (i % 3) * 0.9}s ease-in-out ${0.9 + i * 0.45}s infinite`,
+                  "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                }}
+              >
+                {/* `100%`: el círculo llena el hueco que le ha tocado al botón,
+                    que es quien lleva el tope. */}
+                <CirculoVisual hito={hito} tinta={tinta} bg={bg} size="100%" iconSize={iconSize} />
+              </Box>
             </Box>
           ))}
         </Flex>
@@ -401,12 +450,21 @@ function TimelineMovil({
               from: { opacity: 0, transform: "translateY(16px)" },
               to: { opacity: 1, transform: "translateY(0)" },
             },
+            // Vaivén perpetuo de los círculos, más corto que en escritorio
+            // (aquí conviven con texto al lado): la lista respira sin marear.
+            "@keyframes culturaVaivenMovil": {
+              "0%, 100%": { transform: "translateY(0px)" },
+              "50%": { transform: "translateY(-4px)" },
+            },
           }}>
       {hitos.slice(0, visibles).map((hito, i) => (
         <Flex
           as="button"
           key={hito.key}
           onClick={() => onSelect(hito.key)}
+          // `role="group"`: el filo y el halo del círculo se encienden al pasar
+          // el puntero, igual que en la vista de escritorio.
+          role="group"
           align="center"
           gap={4}
           w="100%"
@@ -414,12 +472,22 @@ function TimelineMovil({
           borderRadius="2xl"
           p={2.5}
           transition="all 0.2s ease"
-          _hover={{ bg: `${tinta}12` }}
+          _hover={{ bg: `${tinta}12`, transform: "translateX(4px)" }}
           _active={{ transform: "scale(0.99)" }}
           style={{ animation: `filaCulturaIn 0.5s ease ${(i % POR_PAGINA) * 0.09}s backwards` }}
         >
-          <CirculoVisual hito={hito} tinta={tinta} bg={bg}
-                         size={{ base: "137px" }} iconSize={{ base: "48px" }} lazy />
+          {/* El vaivén va en un envoltorio y no en el círculo: su animación no
+              puede pisar el transform del `_active` de la fila. */}
+          <Box
+            flexShrink={0}
+            sx={{
+              animation: `culturaVaivenMovil ${4.6 + (i % 3) * 0.8}s ease-in-out ${0.6 + (i % POR_PAGINA) * 0.4}s infinite`,
+              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+            }}
+          >
+            <CirculoVisual hito={hito} tinta={tinta} bg={bg}
+                           size={{ base: "137px" }} iconSize={{ base: "48px" }} lazy />
+          </Box>
           <Box flex="1" minW={0}>
             <Text color={tinta} fontSize="md" fontWeight="700" lineHeight="1.3"
                   letterSpacing="0.02em" style={{ textShadow: `0 1px 3px #0c3c3cf5, 0 0 10px ${tinta}55` }}>

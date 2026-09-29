@@ -125,7 +125,7 @@ export default function MetodoPsicologiaEmociones() {
           </Reveal>
 
           {/* ── La rueda ── */}
-          <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.3} duration={0.8} w="100%">
+          <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.8} w="100%">
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />

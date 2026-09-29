@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
-import { useReducedMotion } from "framer-motion";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -59,13 +58,6 @@ export default function MetodoFisiologiaSistemas() {
   const [vistos, setVistos] = useState<Set<string>>(new Set());
   const dataRef = useRef<Record<string, any>>({});
   const { extra: celulasBtn, modal: celulasModal } = useTusCelulas();
-  // La rejilla de sistemas aparece UNA A UNA en cuanto la página está lista.
-  // (No usamos useInView porque la rejilla solo se monta tras el loading y el
-  //  observer del nivel superior se engancharía antes de que exista → no se
-  //  vería nada.)
-  const reduce = useReducedMotion();
-  const [gridEnter, setGridEnter] = useState(false);
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const userId = localStorage.getItem("userId");
@@ -112,15 +104,6 @@ export default function MetodoFisiologiaSistemas() {
     }).catch(() => { /* se reintenta la próxima vez */ });
   };
 
-  // En cuanto la página deja de cargar, dejamos que las tarjetas entren
-  // escalonadas (un frame después, para que la transición se aprecie).
-  useEffect(() => {
-    if (loading) return;
-    if (reduce) { setGridEnter(true); return; }
-    const id = requestAnimationFrame(() => setGridEnter(true));
-    return () => cancelAnimationFrame(id);
-  }, [loading, reduce]);
-
   if (loading) return <FisiologiaLoading />;
 
   return (
@@ -155,17 +138,17 @@ export default function MetodoFisiologiaSistemas() {
             </Text>
           </Reveal>
 
-          {/* ── Rejilla de sistemas: 3 por fila (2 en móvil). Las tarjetas
-              aparecen una a una al hacer scroll (fundido + subida escalonada). ── */}
+          {/* ── Rejilla de sistemas: 3 por fila (2 en móvil). Cada tarjeta entra
+              AL ASOMAR en pantalla (Reveal inView POR TARJETA: su observer se
+              engancha al montarse ella, así que el loading previo no lo rompe);
+              el delay escalona solo su fila. En móvil, las filas de abajo entran
+              al llegar con el scroll en vez de haberse animado ya sin verse. ── */}
           <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
             {SISTEMAS.map((s, i) => (
-              <Box key={s.key}
-                   opacity={gridEnter ? 1 : 0}
-                   transform={gridEnter ? "translateY(0) scale(1)" : "translateY(20px) scale(0.96)"}
-                   transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)"
-                   sx={{ transitionDelay: `${i * 0.07}s` }}>
+              <Reveal key={s.key} inView once amount={0.2} direction="up" distance={20}
+                      scaleFrom={0.96} duration={0.55} delay={(i % 3) * 0.07} display="flex">
                 <SistemaBox sistema={s} visto={vistos.has(s.key)} onClick={() => verSistema(s)} />
-              </Box>
+              </Reveal>
             ))}
           </SimpleGrid>
         </Flex>

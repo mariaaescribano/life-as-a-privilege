@@ -53,6 +53,10 @@ const DISCIPLINA_FALLBACK_BG: Record<string, string> = {
 // se usa cuando el llamante NO pasa su propio `overlay`.
 const DISCIPLINA_OVERLAY: Record<string, string> = {
   [cabalaNom]: "rgba(0,0,0,0.4)",
+  // Ayurveda: velo BLANCO al 33% para suavizar el dorado de la acuarela — el
+  // mismo lavado que lleva el fondo del selector de Ilustraciones. Sin él, los
+  // boxes salían mucho más amarillos que el resto de la disciplina.
+  [ayurvedaNom]: "#ffffff55",
 };
 
 const ImageBgLayer = ({

@@ -209,9 +209,9 @@ export function HinduismoIlustracionesModal({
 }: HinduismoIlustracionesModalProps) {
   const t = useT();
   const [capitulo, setCapitulo] = useState<Capitulo | null>(null);
-  // Espera de las portadas del selector: hasta que TODAS estén descargadas se
-  // muestra la animación de Ayurveda (el loto) en vez de la rejilla.
-  const portadasListas = usePrecargarImagenes(PORTADAS);
+  // Espera del fondo y de las portadas del selector: hasta que TODAS estén
+  // descargadas se muestra la animación de Ayurveda (el loto) en vez de la rejilla.
+  const portadasListas = usePrecargarImagenes(["/img/fondos/hinduismo.webp", ...PORTADAS]);
 
   // Al abrir el modal, siempre volvemos al selector de capítulos.
   useEffect(() => {
@@ -230,8 +230,24 @@ export function HinduismoIlustracionesModal({
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"}>
-      <ModalOverlay bg="rgba(0,0,0,0.85)" sx={{ backdropFilter: "blur(20px)" }} />
+    // motionPreset none + transform none en el content: el ComicViewer del
+    // capítulo pinta su fondo en position:fixed y, con el transform de la
+    // animación del ModalContent, se anclaba al contenido en vez del viewport.
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"} motionPreset="none">
+      {/* La foto de fondo va en el OVERLAY (cubre el viewport SIEMPRE), como en
+          TCM y Cábala. Ponerla dentro del ModalContent fallaba: Chakra le
+          aplica un `transform` de animación y un `position:fixed` dentro de un
+          ancestro transformado deja de referirse al viewport → al scrollear en
+          móvil asomaba una franja clara sin foto. */}
+      <ModalOverlay
+        bg={ayurvedaBg}
+        sx={portadasListas ? {
+          backgroundImage: `linear-gradient(${ayurvedaBg}55, ${ayurvedaBg}55), url('/img/fondos/hinduismo.webp')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        } : undefined}
+      />
       <ModalContent
         bg="transparent"
         border="none"
@@ -241,38 +257,8 @@ export function HinduismoIlustracionesModal({
         fontFamily="'EB Garamond', serif"
         minH="100dvh"
         position="relative"
+        sx={{ transform: "none !important" }}
       >
-        {/* Fondo: foto de Hinduismo blureada, presente, ocupando todo el
-            espacio sin hacer zoom obvio. El inset negativo discreto compensa
-            los bordes blandos del blur sin agrandar visiblemente la imagen. */}
-        <Box
-          position="fixed"
-          inset="0"
-          pointerEvents="none"
-          zIndex={0}
-          bg={ayurvedaBg}
-          overflow="hidden"
-        >
-          <Box
-            as="img"
-            src="/img/fondos/hinduismo.webp"
-            alt=""
-            loading="eager"
-            position="absolute"
-            top="-14px"
-            left="-14px"
-            right="-14px"
-            bottom="-14px"
-            w="calc(100% + 28px)"
-            h="calc(100% + 28px)"
-            style={{
-              objectFit: "cover",
-              objectPosition: "center",
-            }}
-          />
-          <Box position="absolute" inset="0" bg={`${ayurvedaBg}55`} />
-        </Box>
-
         {/* X cerrar — siempre visible */}
         <IconButton
           aria-label={t("comun.cerrar")}

@@ -962,7 +962,9 @@ const Home = () => {
               letterSpacing="0.06em"
               textAlign="center"
               lineHeight="1.15"
-              textShadow="0 0 18px rgba(255,255,255,0.75), 0 0 38px rgba(255,255,255,0.45), 0 0 70px rgba(180,255,245,0.35)"
+              // Glow al estándar unificado de títulos (alfas 0.6/0.39/0.32):
+              // llevaba 0.75/0.45/0.35 y brillaba más que el resto de páginas.
+              textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 38px rgba(255,255,255,0.39), 0 0 70px rgba(180,255,245,0.32)"
               mb={{ base: 10, md: 8 }}
               // Aire a los lados del ancho de las columnas fijas («Tu mapa» a
               // la izquierda, «Continuar» a la derecha): el saludo rompe de

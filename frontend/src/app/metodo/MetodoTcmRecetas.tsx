@@ -195,8 +195,10 @@ export default function MetodoTcmRecetas() {
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
             <Box position="absolute" inset={0} bg={`${tcmBg}66`} />
             <Box position="absolute" inset={0} bg="#00000040" />
-            <Flex position="relative" justify="center" wrap="wrap" gap={{ base: 3, md: 6 }}
-                  w="100%" px={{ base: 4, md: 6 }} py={{ base: 5, md: 6 }}>
+            {/* En móvil los CINCO en una sola línea (círculos más pequeños y sin
+                wrap: con el tamaño grande, el Agua se caía a una segunda fila). */}
+            <Flex position="relative" justify="center" wrap={{ base: "nowrap", md: "wrap" }} gap={{ base: 2, md: 6 }}
+                  w="100%" px={{ base: 3, md: 6 }} py={{ base: 5, md: 6 }}>
               {ORDEN_ELEMENTOS.map((el) => (
                 <BotonElemento key={el} elemento={el} activo={el === elActivo} onClick={() => setElActivo(el)} />
               ))}
@@ -432,7 +434,7 @@ function BotonElemento({ elemento, activo, onClick }: {
   return (
     <Flex as="button" onClick={onClick} direction="column" align="center" gap={1.5} cursor="pointer"
           transition="transform 0.2s ease" _hover={{ transform: "translateY(-3px)" }}>
-      <Box w={{ base: "58px", md: "76px" }} h={{ base: "58px", md: "76px" }} borderRadius="full"
+      <Box w={{ base: "50px", md: "76px" }} h={{ base: "50px", md: "76px" }} borderRadius="full"
            overflow="hidden" border={`${activo ? 3 : 2}px solid ${activo ? "#ffffff" : `${E.color}aa`}`}
            opacity={activo ? 1 : 0.62}
            style={{

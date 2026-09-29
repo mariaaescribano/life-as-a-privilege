@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Input, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, Text, useBreakpointValue } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
@@ -132,7 +132,16 @@ export default function MetodoPsicologiaExperiencia() {
   };
 
   const edad = typeof data.edad === "number" ? data.edad : 0;
-  const tramos = useMemo(() => (edad > 0 ? tramosDeAnios(edad) : []), [edad]);
+  // En móvil los años salen de 3 en 3 (de 5 en 5 no caben sin encoger los
+  // círculos); en escritorio, de 5 en 5 como siempre.
+  const porTramo = useBreakpointValue({ base: 3, md: 5 }) ?? 5;
+  const tramos = useMemo(() => (edad > 0 ? tramosDeAnios(edad, porTramo) : []), [edad, porTramo]);
+  // Si al girar el móvil (o estrechar la ventana) cambia el número de tramos,
+  // el índice guardado puede quedarse fuera de rango: se recoloca al último.
+  useEffect(() => {
+    if (tramos.length > 0 && tramoIdx > tramos.length - 1) setTramoIdx(tramos.length - 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tramos.length]);
   const completa = edad > 0 && lineaCompleta(data, edad);
   const recorridos = edad > 0 ? aniosRecorridos(data, edad) : 0;
   // Basta con AL MENOS un año relleno (o marcado sin recuerdos) para poder
@@ -748,7 +757,10 @@ function PaginaDeAno({
         position="relative"
         w="100%"
         maxW="720px"
-        maxH={{ base: "calc(100vh - 32px)", md: "calc(100vh - 80px)" }}
+        // dvh, no vh: en móvil 100vh incluye la barra del navegador y la caja
+        // se salía de la pantalla (sin margen arriba ni abajo). El tope deja
+        // SIEMPRE aire por los dos lados.
+        maxH={{ base: "calc(100dvh - 48px)", md: "calc(100dvh - 80px)" }}
         borderRadius="2xl"
         overflow="hidden"
         boxShadow={`0 0 44px ${TINTA}77, 0 0 100px ${TINTA}33`}
@@ -793,10 +805,14 @@ function PaginaDeAno({
           ✕
         </Box>
 
-        {/* Contenido scrollable — la página del libro */}
+        {/* Contenido scrollable — la página del libro. El minH=0 es
+            OBLIGATORIO: sin él, un hijo de flex-column no puede encoger por
+            debajo de su contenido, el tope de alto de la caja lo recortaba por
+            abajo y el scroll nunca llegaba a activarse. */}
         <Box
           position="relative"
           zIndex={1}
+          minH={0}
           px={{ base: 6, md: 12 }}
           py={{ base: 9, md: 12 }}
           overflowY="auto"

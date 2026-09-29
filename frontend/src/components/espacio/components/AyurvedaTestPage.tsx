@@ -41,6 +41,7 @@ export default function AyurvedaTestPage({
   prevLabel,
   pageLabel,
   headerNext,
+  onCancel,
 }: {
   onComplete?: () => Promise<void>;
   isGuest?: boolean;
@@ -55,6 +56,9 @@ export default function AyurvedaTestPage({
   /** Botón "siguiente" del header (recorrido). Si se pasa, "Ilustraciones" se
    *  mueve al centro (extra) y este botón ocupa la derecha. */
   headerNext?: { label: string; onClick: () => void; disabled?: boolean; disabledTooltip?: string; icon?: React.ReactNode };
+  /** Solo cuando se está REPITIENDO el test (ya hay un resultado guardado):
+   *  pinta un botón discreto para cancelar y conservar el resultado de antes. */
+  onCancel?: () => void;
 }) {
   const t = useT();
   // Las preguntas y los consejos que se PINTAN. Lo que se guarda en la base de
@@ -132,8 +136,9 @@ export default function AyurvedaTestPage({
             gap={{ base: 4, md: 5 }}
             px={{ base: 5, md: 10, lg: 16 }}
             pt={{ base: 10, md: 14 }}
-            pb={{ base: 14, md: 20 }}
+            pb={{ base: 28, md: 36 }}
           >
+            <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
               icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
               title={t("espacio.test.doshas")}
@@ -146,12 +151,14 @@ export default function AyurvedaTestPage({
               extra={headerNext ? { label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)} : undefined}
               next={headerNext ?? { label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
             />
+            </Reveal>
 
             {/* Resultado principal */}
+            <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%" maxW="850px" display="flex" justifyContent="center">
             <Box
               position="relative"
               overflow="hidden"
-              w="100%" maxW="850px"
+              w="100%"
               borderRadius="2xl"
               boxShadow={GLOW}
               textAlign="center"
@@ -186,8 +193,10 @@ export default function AyurvedaTestPage({
                 })}
               </Box>
             </Box>
+            </Reveal>
 
             {/* Botones */}
+            <Reveal direction="up" distance={20} delay={0.26} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Flex gap={4} flexWrap="wrap" justify="center" mt={2}>
               <Box
                 as="button"
@@ -239,6 +248,7 @@ export default function AyurvedaTestPage({
                 {t("espacio.test.recalcular")}
               </Box>
             </Flex>
+            </Reveal>
 
             {/* Consejos personalizados */}
             {(() => {
@@ -252,6 +262,8 @@ export default function AyurvedaTestPage({
               ];
               return (
                 <Box w="100%" maxW="850px" mt={4}>
+                  {/* Bajo el pliegue: cada caja entra al asomar al bajar */}
+                  <Reveal inView once amount={0.2} direction="up" distance={22} duration={0.6}>
                   <Box
                     position="relative"
                     overflow="hidden"
@@ -273,8 +285,10 @@ export default function AyurvedaTestPage({
                       </Text>
                     </Box>
                   </Box>
+                  </Reveal>
 
                   {/* Descripción */}
+                  <Reveal inView once amount={0.2} direction="up" distance={22} duration={0.6}>
                   <Box
                     position="relative"
                     overflow="hidden"
@@ -296,14 +310,15 @@ export default function AyurvedaTestPage({
                       </Text>
                     </Box>
                   </Box>
+                  </Reveal>
 
                   <Flex direction="column" gap={4}>
                     {categories.map(({ key, label }) => {
                       const items = recs[key];
                       if (!items || items.length === 0) return null;
                       return (
+                        <Reveal key={key} inView once amount={0.15} direction="up" distance={22} duration={0.6}>
                         <Box
-                          key={key}
                           position="relative"
                           overflow="hidden"
                           borderRadius="2xl"
@@ -338,11 +353,13 @@ export default function AyurvedaTestPage({
                             </Flex>
                           </Box>
                         </Box>
+                        </Reveal>
                       );
                     })}
                   </Flex>
 
                   {/* Descargar consejos */}
+                  <Reveal inView once amount={0.2} direction="up" distance={20} duration={0.6}>
                   <Flex justify="center" mt={6}>
                     <Box
                       as="button"
@@ -376,6 +393,7 @@ export default function AyurvedaTestPage({
                       </Box>
                     </Box>
                   </Flex>
+                  </Reveal>
                 </Box>
               );
             })()}
@@ -398,24 +416,50 @@ export default function AyurvedaTestPage({
           gap={{ base: 4, md: 5 }}
           px={{ base: 5, md: 10, lg: 16 }}
           pt={{ base: 10, md: 14 }}
-          pb={{ base: 14, md: 20 }}
+          pb={{ base: 28, md: 36 }}
         >
+          {/* Con `headerNext` (recorrido), «Ilustraciones» va en el hueco del
+              CENTRO — nunca desaparece, también mientras se hace o repite el
+              test — y la derecha es el paso siguiente (Resultado). */}
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<AyurvedaIcon size={{ base: "40px", md: "56px" }} />}
             title={t("espacio.test.doshas")}
+            pageLabel={pageLabel}
             bgColor={`${ayurvedaBg}dd`}
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={{ base: 0, md: 0 }}
             prev={{ label: prevLabel ?? `← ${t("comun.volver")}`, onClick: () => navigate(prevTo) }}
-            next={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
+            extra={headerNext ? { label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true) } : undefined}
+            next={headerNext ?? { label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true) }}
           />
+          </Reveal>
+
+          {/* Repitiendo el test: se puede cancelar y conservar el resultado que
+              ya había (solo sale entonces; la primera vez no hay nada que
+              conservar). */}
+          {onCancel && (
+            <Reveal direction="up" distance={14} delay={0.08} duration={0.55} w="100%" maxW="850px">
+            <Flex w="100%" justify="flex-end">
+              <Box as="button" onClick={onCancel}
+                   display="inline-flex" alignItems="center" gap={2} px={4} py={2} borderRadius="full"
+                   bg="rgba(255,255,255,0.08)" color={ayurvedaTxt} border={`1px solid ${ayurvedaTxt}66`}
+                   fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
+                   letterSpacing="0.03em" cursor="pointer" transition="all 0.2s"
+                   _hover={{ bg: "rgba(255,255,255,0.16)", borderColor: ayurvedaTxt }}>
+                ✕ {t("metodo.ayur.cancelarRepetir")}
+              </Box>
+            </Flex>
+            </Reveal>
+          )}
 
           {/* Instrucciones */}
+          <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.12} duration={0.7} w="100%" maxW="850px">
           <Box
             position="relative"
             overflow="hidden"
-            w="100%" maxW="850px"
+            w="100%"
             mt="20px"
             borderRadius="2xl"
             boxShadow={GLOW}
@@ -430,6 +474,7 @@ export default function AyurvedaTestPage({
               </Text>
             </Box>
           </Box>
+          </Reveal>
 
           {/* Preguntas · cada box va apareciendo al bajar (los visibles ya salen al cargar) */}
           {preguntas.map((p, qi) => (
@@ -499,8 +544,9 @@ export default function AyurvedaTestPage({
             </Reveal>
           ))}
 
-          {/* Botón enviar */}
-          <Box w="100%" maxW="850px" textAlign="center" mt={4}>
+          {/* Botón enviar (bajo las preguntas: entra al asomar) */}
+          <Reveal inView direction="up" distance={22} duration={0.6} amount={0.2} w="100%" maxW="850px">
+          <Box w="100%" textAlign="center" mt={4}>
             {!allAnswered && (
               <Text color="rgba(255,255,255,0.4)" fontSize="md" letterSpacing="0.06em" fontStyle="italic" mb={4}>
                 {t("espacio.ayur.responde", { hechas: answered, total: preguntas.length })}
@@ -534,6 +580,7 @@ export default function AyurvedaTestPage({
               </Flex>
             </Box>
           </Box>
+          </Reveal>
         </Flex>
       </Box>
 

@@ -172,7 +172,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
   madera: {
     id: "madera",
     nombre: "Madera",
-    color: "#6f9463",
+    color: "#4e6e53",
     significado:
       "La Madera es el impulso que empuja hacia arriba, como el brote que rompe la tierra en primavera. Es la energía de crecer, decidir, planificar y avanzar. Cuando fluye, hay claridad y capacidad de emprender; cuando se estanca, aparece la frustración.",
     organos: "hígado (yin) y vesícula biliar (yang)",

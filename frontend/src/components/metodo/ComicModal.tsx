@@ -49,8 +49,13 @@ export function ComicModal({
   leida,
   loader,
 }: ComicModalProps) {
+  // motionPreset none + transform none: el fondo del ComicViewer va en
+  // position:fixed, y un fixed dentro de un ancestro con transform (la
+  // animación del ModalContent) se ancla al contenido en vez de al viewport
+  // → en móvil la foto de fondo salía estirada sobre todo el alto del cómic
+  // (mismo apaño que ElementoComicModal y compañía).
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside">
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"
@@ -60,6 +65,7 @@ export function ComicModal({
         m={0}
         fontFamily="'EB Garamond', serif"
         minH="100dvh"
+        sx={{ transform: "none !important" }}
       >
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer

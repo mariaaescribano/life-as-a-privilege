@@ -169,8 +169,9 @@ export default function MetodoTcm() {
           </Box>
           </Reveal>
 
-          {/* ── Disparador del aviso ── */}
-          <Reveal direction="up" distance={18} delay={0.24} duration={0.6} display="flex" justifyContent="center">
+          {/* ── Disparador del aviso ── (en pantallas bajas queda bajo el
+              pliegue: entra al asomar) */}
+          <Reveal inView once amount={0.2} direction="up" distance={18} delay={0.1} duration={0.6} display="flex" justifyContent="center">
           <BotonAviso onClick={() => setAvisoOpen(true)} />
           </Reveal>
         </Flex>

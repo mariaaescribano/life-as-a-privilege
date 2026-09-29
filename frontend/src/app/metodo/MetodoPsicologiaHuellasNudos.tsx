@@ -21,7 +21,7 @@ import SiteFooter from "../../components/global/Footer";
 import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { NudoEspiralIcon } from "../../components/metodo/NudoEspiralIcon";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
 import { AyudaRecorrido } from "../../components/metodo/AyudaRecorrido";
@@ -50,7 +50,10 @@ import { useT } from "../../i18n";
 
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
-const COL_H = { base: "340px", md: "430px", lg: "500px" } as const;
+// Alto de las columnas: fijo SOLO cuando van lado a lado (lg), que es cuando
+// tiene sentido igualarlas y scrollear por dentro. Apiladas (móvil/tablet)
+// crecen hacia abajo con su contenido, sin scroll interno.
+const COL_H = { base: "auto", lg: "500px" } as const;
 const SCROLL_SX = {
   scrollbarWidth: "thin" as const,
   scrollbarColor: `${TINTA}66 transparent`,
@@ -209,8 +212,7 @@ export default function MetodoPsicologiaHuellasNudos() {
     setNombre(""); setNombreOpen(false);
     // Al terminar, la página se actualiza sola: la rejilla de heridas está abajo
     // del todo, así que bajamos hasta ella para que la nueva herida se vea
-    // aparecer (sin recargar ni buscarla a mano). Esperamos a que la Reveal
-    // (delay 0.42s) haya montado la rejilla antes de hacer scroll.
+    // aparecer (sin recargar ni buscarla a mano; el Reveal entra al asomar).
     setTimeout(() => { if (montado.current) heridasRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, 500);
     await persistir(next);
   };
@@ -285,15 +287,18 @@ export default function MetodoPsicologiaHuellasNudos() {
             <IntroRecorrido><TextoRico>{t("metodo.psico.heridasIntro")}</TextoRico></IntroRecorrido>
             </Reveal>
 
-            {/* ════════ TRES COLUMNAS DE FUENTES · aparecen de izquierda a derecha ════════ */}
-            <RevealStagger w="100%" display="flex" flexDirection={{ base: "column", lg: "row" }} gap={{ base: 6, lg: 6 }} alignItems="stretch" stagger={0.16} delayChildren={0.15}>
-              {columnas.map((col) => (
-                <RevealItem key={col.key} direction="up" distance={30} scaleFrom={0.96} duration={0.6} display="flex" flexDirection="column" flex="1" minW={0}>
+            {/* ════════ TRES COLUMNAS DE FUENTES · cada una entra al asomar ════════
+                 Cada columna con su propio <Reveal inView>: crecen con los datos
+                 del usuario y envolver el conjunto caería en la trampa del `amount`. */}
+            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 6, lg: 6 }} align="stretch">
+              {columnas.map((col, i) => (
+                <Reveal key={col.key} inView once amount={0.2} direction="up" distance={30} scaleFrom={0.96} duration={0.6}
+                        delay={(i % 3) * 0.07} display="flex" flexDirection="column" flex="1" minW={0}>
                   <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
                     <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" h="100%">
                       <ColumnaHeaderBox icono={col.icono} titulo={col.titulo} apoyo={col.apoyo} />
-                      <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
+                      <Box flex="1" minH={0} overflowY={{ base: "visible", lg: "auto" }} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                         {col.items.length === 0 ? (
                           <EstadoVacio texto={col.vacio.texto} accion={col.vacio.accion} onClick={() => navigate(col.vacio.ruta)} />
                         ) : (
@@ -307,12 +312,12 @@ export default function MetodoPsicologiaHuellasNudos() {
                       </Box>
                     </Flex>
                   </Box>
-                </RevealItem>
+                </Reveal>
               ))}
-            </RevealStagger>
+            </Flex>
 
             {/* ════════ HERIDA EN CURSO · box elegante (con el botón dentro) ════════ */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
+            <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Box position="relative" w="100%" maxW="920px" borderRadius="2xl" overflow="hidden" border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={4}
@@ -364,7 +369,7 @@ export default function MetodoPsicologiaHuellasNudos() {
 
             {/* ════════ SEPARADOR MANDALA + REJILLA DE HERIDAS ════════ */}
             {heridas.length > 0 && (
-              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
+              <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
               <>
                 <MandalaDivider />
                 <Flex ref={heridasRef} direction="column" align="center" gap={4} w="100%" scrollMarginTop="90px">

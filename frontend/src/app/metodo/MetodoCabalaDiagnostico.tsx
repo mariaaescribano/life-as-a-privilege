@@ -252,8 +252,9 @@ export default function MetodoCabalaDiagnostico() {
           ) : (
             <>
               {/* ── Cuello de botella principal ── */}
+              {/* Boxes del diagnóstico: bajo el pliegue en móvil, entran al hacer scroll. */}
               {principal ? (
-                <Reveal direction="up" distance={22} delay={0.18} duration={0.7} w="100%">
+                <Reveal inView once amount={0.1} direction="up" distance={22} delay={0.1} duration={0.7} w="100%">
                   <Caja px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }}>
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={2}>
                       {t("metodo.cabala.pasoPrioritario")}
@@ -303,7 +304,7 @@ export default function MetodoCabalaDiagnostico() {
                   </Caja>
                 </Reveal>
               ) : (
-                <Reveal direction="up" distance={18} delay={0.18} duration={0.6} w="100%">
+                <Reveal inView once amount={0.15} direction="up" distance={18} delay={0.1} duration={0.6} w="100%">
                   <Caja px={{ base: 6, md: 9 }} py={{ base: 7, md: 8 }} textAlign="center">
                     <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2} style={{ textShadow: INK_SHADOW }}>
                       {t("metodo.cabala.transicionesFluyen")}
@@ -317,7 +318,7 @@ export default function MetodoCabalaDiagnostico() {
 
               {/* ── Otras transiciones a observar ── */}
               {secundarios.length > 0 && (
-                <Reveal direction="up" distance={18} delay={0.22} duration={0.6} w="100%">
+                <Reveal inView once amount={0.15} direction="up" distance={18} delay={0.1} duration={0.6} w="100%">
                   <Box w="100%">
                     <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
                           letterSpacing="0.08em" mb={3} style={{ textShadow: INK_SHADOW }}>
@@ -349,7 +350,7 @@ export default function MetodoCabalaDiagnostico() {
               )}
 
               {/* ── Mapa evolutivo: capacidades ── */}
-              <Reveal direction="up" distance={18} delay={0.26} duration={0.6} w="100%">
+              <Reveal inView once amount={0.15} direction="up" distance={18} delay={0.1} duration={0.6} w="100%">
                 <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 5 }} w="100%">
                   <ListaChips titulo={t("metodo.cabala.desarrolladas")}
                               items={desarrolladas.map((n) => `${n.titulo} · ${n.etiqueta}`)}
@@ -360,8 +361,8 @@ export default function MetodoCabalaDiagnostico() {
                 </Flex>
               </Reveal>
 
-              {/* ── Tus capacidades (niveles + polaridad) ── */}
-              <Reveal direction="up" distance={18} delay={0.3} duration={0.6} w="100%">
+              {/* ── Tus capacidades (niveles + polaridad) ── caja alta: umbral bajo */}
+              <Reveal inView once amount={0.08} direction="up" distance={18} delay={0.1} duration={0.6} w="100%">
                 <Caja px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}>
                   <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.08em" mb={3} style={{ textShadow: INK_SHADOW }}>
                     {t("metodo.cabala.tusCapacidades")}

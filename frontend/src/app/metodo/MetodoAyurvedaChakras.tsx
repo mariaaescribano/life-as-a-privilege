@@ -166,10 +166,12 @@ export default function MetodoAyurvedaChakras() {
                          onClick={() => setAbierto(corona)} />
             </Reveal>
 
+            {/* Las filas de abajo quedan bajo el pliegue en móvil: cada caja
+                entra al asomar, en parejas. */}
             <SimpleGrid columns={2} spacing={{ base: 4, md: 5 }} w="100%">
               {resto.map((ch, i) => (
-                <Reveal key={ch.key} direction="up" distance={20} duration={0.6}
-                        delay={0.32 + i * 0.07} w="100%" display="flex">
+                <Reveal key={ch.key} inView once amount={0.2} direction="up" distance={20} duration={0.6}
+                        delay={(i % 2) * 0.07} w="100%" display="flex">
                   <ChakraBox chakra={ch} leido={leidos.has(ch.key)}
                              onClick={() => setAbierto(ch)} />
                 </Reveal>
@@ -177,8 +179,12 @@ export default function MetodoAyurvedaChakras() {
             </SimpleGrid>
           </Flex>
 
-          <BotonPaso label={t("metodo.nutri.paso.cursos")} onClick={irCursos}
-                     nom={ayurvedaNom} color={ayurvedaTxt} bg={ayurvedaBg} direction="next" />
+          {/* Fin de página: entra al llegar con el scroll. */}
+          <Reveal inView once amount={0.2} direction="up" distance={18} duration={0.6}
+                  w="100%" display="flex" justifyContent="flex-end">
+            <BotonPaso label={t("metodo.nutri.paso.cursos")} onClick={irCursos}
+                       nom={ayurvedaNom} color={ayurvedaTxt} bg={ayurvedaBg} direction="next" />
+          </Reveal>
         </Flex>
       </Flex>
 

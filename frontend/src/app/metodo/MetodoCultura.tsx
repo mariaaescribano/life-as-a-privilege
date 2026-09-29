@@ -75,7 +75,7 @@ export default function MetodoCultura() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 40, md: 48 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
@@ -94,8 +94,8 @@ export default function MetodoCultura() {
             />
           </Reveal>
 
-          {/* ── Introducción ── */}
-          <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+          {/* ── Introducción ── (con `blur`: la caja ENFOCA al entrar, no solo sube) */}
+          <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} blur w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
               <DisciplinaBgLayer nom={culturaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">

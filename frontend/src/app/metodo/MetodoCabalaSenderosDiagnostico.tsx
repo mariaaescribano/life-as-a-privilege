@@ -169,8 +169,8 @@ export default function MetodoCabalaSenderosDiagnostico() {
             </Reveal>
           ) : (
             <>
-              {/* ── Senderos prioritarios ── */}
-              <Reveal direction="up" distance={20} delay={0.18} duration={0.7} w="100%">
+              {/* ── Senderos prioritarios ── (bajo el pliegue: entra al hacer scroll) */}
+              <Reveal inView once amount={0.15} direction="up" distance={20} delay={0.1} duration={0.7} w="100%">
                 {prioritarios.length > 0 ? (
                   <Caja destacado>
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
@@ -210,8 +210,8 @@ export default function MetodoCabalaSenderosDiagnostico() {
                 )}
               </Reveal>
 
-              {/* ── Todos los senderos ── */}
-              <Reveal direction="up" distance={18} delay={0.24} duration={0.6} w="100%">
+              {/* ── Todos los senderos ── (caja larga: umbral bajo para que dispare seguro) */}
+              <Reveal inView once amount={0.1} direction="up" distance={18} delay={0.1} duration={0.6} w="100%">
                 <Caja>
                   <Text color={cabalaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.08em" mb={5} style={{ textShadow: INK_SHADOW }}>
                     {t("metodo.cabala.senderosDiag.los22")}

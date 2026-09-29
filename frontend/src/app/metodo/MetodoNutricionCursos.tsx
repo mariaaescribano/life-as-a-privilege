@@ -5,7 +5,6 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
@@ -159,10 +158,6 @@ export default function MetodoNutricionCursos() {
               </Flex>
             </Reveal>
           )}
-
-          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
-              /opiniones y trae de vuelta a esta misma página. */}
-          <PedirOpinion bg={nutricionBg} txt={nutricionTxt} nom={nutricionNom} />
         </Flex>
       </Flex>
 

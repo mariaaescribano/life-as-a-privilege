@@ -270,8 +270,8 @@ export const metodo = {
   "metodo.astro.puntosClavePronto": "Your key points will appear here very soon.",
   "metodo.astro.llamadaLema": "Make peace with yourself.",
   "metodo.astro.llamadaIntro":
-    "Book a call and don't stay with your doubts. Everything you've discovered is part of you. Now, integrate it.",
-  "metodo.astro.pdfIntro": "Your whole reading, in a file that's yours for good.",
+    "Don't stay with your doubts. Integrate every part of you.",
+  "metodo.astro.pdfIntro": "Yours for good.",
   "metodo.astro.pdfTitular": "Your entire chart, page by page",
   "metodo.astro.pdfSinLecturas":
     "Your chart has no written readings yet. As soon as they're there, you'll be able to download it in full.",
@@ -301,7 +301,7 @@ export const metodo = {
     "I'm reading your chart right now. When it's ready you'll get an email and you'll be able to open your personalized reading.",
 
   // ── Astrología · la llamada ────────────────────────────────────────────
-  "metodo.astro.reservaLlamada": "Book your astrology call",
+  "metodo.astro.reservaLlamada": "Schedule your astrology call",
 
   // ── Astrology · adjusting a body of the chart by hand ──────────────────
   "metodo.astro.ajustar.titulo": "Set the degrees by hand",
@@ -457,6 +457,9 @@ export const metodo = {
   "metodo.dia.tuDiaSuma": "Your day adds up to",
   "metodo.dia.arrastraAqui": "Drag food here",
   "metodo.dia.eligeArrastra": "Pick good food · drag it into each meal",
+  "metodo.dia.eligeToca": "Pick good food · tap it to add it",
+  "metodo.dia.tocaParaAnadir": "Tap a food below to add it here",
+  "metodo.dia.aQueComida": "Which meal will you add it to?",
   "metodo.dia.creaAlimento": "Create your own food",
   "metodo.dia.elTuyo": "yours, as many times as you like",
   "metodo.dia.aOjo": "By eye:",
@@ -780,6 +783,7 @@ export const metodo = {
   "metodo.ayur.yaHicisteTest": "You already took the test",
   "metodo.ayur.verMiResultado": "See my result →",
   "metodo.ayur.repetirTest": "Take the test again",
+  "metodo.ayur.cancelarRepetir": "Cancel and keep my result",
   "metodo.ayur.cuidado": "Careful: ",
   "metodo.ayur.sigueElCirculo":
     "Follow the circle: it grows as the air comes in and shrinks as it goes out. If it feels like too much, stop.",
@@ -1003,7 +1007,6 @@ export const metodo = {
   "metodo.psico.paso.des": "Checking out",
   "metodo.psico.paso.desResultado": "How you check out",
   "metodo.psico.paso.cerebro": "Your brain",
-  "metodo.psico.cerebroContinuar": "See what happened in your brain",
 
   "metodo.psico.cerebroIntro": "How what you lived through was stored in your brain",
   "metodo.psico.cerebroToca": "Tap each area to read what it does, what happened to it and what changes it.",

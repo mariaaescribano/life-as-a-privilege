@@ -259,7 +259,11 @@ export default function MetodoAstrologiaCasas() {
               py={{ base: 7, md: 9 }}
             >
               {/* ── BOX de la casa seleccionada (debajo del círculo en móvil, dcha en desktop) ── */}
+              {/* En móvil queda bajo la rueda (bajo el pliegue): entra al hacer scroll. */}
               <Reveal
+                inView
+                once
+                amount={0.2}
                 direction="left"
                 distance={30}
                 delay={0.3}
@@ -399,7 +403,7 @@ export default function MetodoAstrologiaCasas() {
         themeColor={astrologiaTxt}
       />
       <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom}
-                     llamadaTitulo="Reserva tu llamada de astrología" queEsEsto={QUE_ES_ESTO} />
+                     llamadaTitulo={t("metodo.astro.reservaLlamada")} queEsEsto={QUE_ES_ESTO} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

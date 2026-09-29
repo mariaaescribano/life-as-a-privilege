@@ -271,7 +271,7 @@ export default function MetodoPsicologiaRegulacion() {
                 desde el botón «Orientación» (ver AyudaRecorrido). */}
 
             {/* ── Reproductor del audio de estimulación bilateral ── */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -351,7 +351,7 @@ export default function MetodoPsicologiaRegulacion() {
             </Reveal>
 
             {/* Escritura de descarga */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />

@@ -162,13 +162,13 @@ export default function MetodoPsicologiaAceResultado() {
             </Reveal>
 
             {/* Consecuencias (dosis-respuesta) — una sola frase entre los boxes */}
-            <Reveal direction="up" distance={20} delay={0.32} duration={0.7} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={20} duration={0.7} w="100%">
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" fontWeight="600"
                   textAlign="center" lineHeight="1.7" maxW="560px" mx="auto">{t("metodo.psico.aceRiesgo")}</Text>
             </Reveal>
 
             {/* Esperanza / resiliencia */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                  border={azulBorde} boxShadow={glowPanel}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />

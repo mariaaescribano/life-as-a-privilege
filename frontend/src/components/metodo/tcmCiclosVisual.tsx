@@ -343,6 +343,10 @@ export function RelacionModal({ rel, onClose, onView, textoBorroso }: {
               disciplinaBgImage={FONDO_CICLO[ciclo]}
               disciplinaBgColor={tcmBg}
               fondoNitido
+              // Móvil: la foto del ciclo es apaisada y pequeña; con `cover`
+              // sobre la pantalla vertical salía empastada. Banda horizontal
+              // nítida con su corte de línea, sobre el rojo de TCM.
+              fondoBanda
               // Animación (yin-yang) y scroll en BLANCO, como la letra del cómic.
               loader={<TcmLoader color="#ffffff" />}
               scrollbarColor="#ffffff"

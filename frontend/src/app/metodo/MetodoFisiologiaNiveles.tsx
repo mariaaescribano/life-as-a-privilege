@@ -267,7 +267,8 @@ export default function MetodoFisiologiaNiveles() {
               const locked = reqs.some((f) => !flags[f]);
               const done = !!nivel.superado && !!flags[nivel.superado];
               return (
-                <Reveal key={nivel.n} direction="right" distance={44} delay={0.15 * i} duration={0.6}
+                <Reveal key={nivel.n} inView once amount={0.2} direction="right" distance={44}
+                        delay={0.15 * i} duration={0.6}
                         flex={{ md: 1 }} w="100%" maxW={{ base: "380px", md: "none" }}
                         mx={{ base: "auto", md: 0 }} display="flex">
                   <NivelBox nivel={nivel} locked={locked} done={done}

@@ -289,7 +289,9 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
          onClick={onClose} fontFamily="'EB Garamond', serif">
       <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}
            position="relative" w="100%" maxW={{ base: "440px", md: "560px" }}
-           maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 120px)" }}
+           // `dvh` en móvil: `vh` no descuenta la barra del navegador y el
+           // popup se comía el margen de abajo.
+           maxH={{ base: "calc(100dvh - 48px)", md: "calc(100vh - 120px)" }}
            borderRadius="2xl" overflow="hidden" display="flex" flexDirection="column"
            boxShadow={`0 0 40px ${TINTA}66, 0 24px 70px rgba(0,0,0,0.5)`}>
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />

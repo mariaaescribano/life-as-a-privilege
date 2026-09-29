@@ -2,7 +2,7 @@
 // DonGrid · rejilla de dones (boxes cuadrados), gemela de HeridaGrid.
 //
 // Se usa igual en dos páginas: al reunir los dones (el espejo) y en el listado
-// («Tus dones»). Cada don es un box CUADRADO con su color (tonos medios, los
+// («Tus dones»). Cada don es un box CUADRADO con su color (tonos claros, los
 // mismos de la paleta del espejo), el icono de las manos a la izquierda, el
 // nombre del don con una raya horizontal y debajo las piezas unidas
 // (recuerdos ❝ y arquetipos).
@@ -20,17 +20,17 @@ import { arquetipoKey, type DonReconocido } from "./psicologiaRecorrido";
 const TINTA = neuropsicologiaTxt;
 const PAPEL = "#fbf4e8";
 
-// Cada don toma un color por su posición (tonos medios que destacan sobre el
-// crema; colores contiguos siempre distintos).
+// Cada don toma un color por su posición (tonos CLAROS, como la paleta pastel
+// de las heridas: nada oscuro; colores contiguos siempre distintos).
 export const PALETA_DON = [
-  "#caa24a", // oro
-  "#c67b5c", // terracota
-  "#7ba17d", // verde salvia
-  "#8f7bb0", // lavanda
-  "#5c93b0", // azul sereno
-  "#c77b98", // rosa palo
-  "#9aae6a", // oliva
-  "#b0885c", // ámbar tostado
+  "#e9d7a8", // oro claro
+  "#e6c3b0", // terracota claro
+  "#c6dbc8", // salvia claro
+  "#d7cde8", // lavanda claro
+  "#c1d8e6", // azul sereno claro
+  "#ecccd9", // rosa palo claro
+  "#d6dfb6", // oliva claro
+  "#e4cfb2", // ámbar claro
 ];
 export const colorDonIdx = (i: number): string =>
   PALETA_DON[((i % PALETA_DON.length) + PALETA_DON.length) % PALETA_DON.length];
@@ -74,12 +74,15 @@ export function DonCard({ don, color, onBorrar }: {
   const arquetipos = don.arquetipos || [];
   const vacio = recuerdos.length === 0 && arquetipos.length === 0;
   return (
+    // En móvil el box CRECE hacia abajo con su contenido (sin tope ni scroll
+    // interno); el tope y el scroll de dentro son solo de escritorio.
     <Box position="relative" borderRadius="2xl" overflow="hidden" h="100%"
-         minH={{ base: "180px", md: "210px" }} maxH={{ base: "300px", md: "340px" }}
+         minH={{ base: "180px", md: "210px" }} maxH={{ base: "none", md: "340px" }}
          boxShadow={`0 12px 34px rgba(40,18,4,0.20), 0 2px 8px rgba(40,18,4,0.12)`}
          border={`1px solid ${TINTA}26`}>
-      {/* Lavado de color propio del don (a media tinta: son tonos medios) */}
-      <Box position="absolute" inset={0} bgGradient={`linear(155deg, ${PAPEL}, ${color}88)`} />
+      {/* Lavado de color propio del don (a plena tinta: son tonos claros,
+          como en las heridas) */}
+      <Box position="absolute" inset={0} bgGradient={`linear(155deg, ${PAPEL}, ${color})`} />
       <Box position="absolute" inset={0} bgGradient={`radial(120% 80% at 20% 0%, ${PAPEL}cc, transparent 60%)`} pointerEvents="none" />
       <Box position="absolute" inset={0} boxShadow={`inset 0 0 0 1px ${PAPEL}66, inset 0 1px 0 ${PAPEL}`} pointerEvents="none" />
 
@@ -89,7 +92,9 @@ export function DonCard({ don, color, onBorrar }: {
           <Flex flexShrink={0} align="center" justify="center" w={{ base: "34px", md: "40px" }} h={{ base: "34px", md: "40px" }}
                 borderRadius="full" bg={`${PAPEL}ec`} border={`1px solid ${TINTA}40`}
                 boxShadow={`0 2px 6px rgba(40,18,4,0.18), inset 0 1px 0 ${PAPEL}`}>
-            <DonIcon color={color} size={19} />
+            {/* En TINTA (no en el color del don): con la paleta clara, el
+                icono en su color no se leía sobre el círculo crema. */}
+            <DonIcon color={TINTA} size={19} />
           </Flex>
           <Text flex="1" minW={0} color={TINTA} fontWeight="700" lineHeight="1.2"
                 fontSize={{ base: "md", md: "lg" }} noOfLines={2} style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
@@ -108,7 +113,7 @@ export function DonCard({ don, color, onBorrar }: {
              bgGradient={`linear(to-r, ${TINTA}55, ${TINTA}22, transparent)`} />
 
         {/* Piezas unidas */}
-        <Box flex="1" minH={0} overflowY="auto"
+        <Box flex="1" minH={0} overflowY={{ base: "visible", md: "auto" }}
              sx={{ scrollbarWidth: "thin", scrollbarColor: `${TINTA}55 transparent`,
                    "&::-webkit-scrollbar": { width: "6px" },
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>

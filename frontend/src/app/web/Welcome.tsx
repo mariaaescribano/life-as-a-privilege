@@ -493,9 +493,9 @@ const Welcome = () => {
       </Flex>
 
       {/* ── BIENVENIDA (título + subtítulo + frase) ── */}
-      {/* `pb` base 5: un respiro entre el subtítulo y las tarjetas (ojo, cada
-          píxel de más empuja la segunda fila de tarjetas bajo el pliegue). */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 3, md: 8 }} pb={{ base: 5, md: 6 }}>
+      {/* `pb` base 8: un respiro claro entre el subtítulo y las tarjetas (ojo,
+          cada píxel de más empuja la segunda fila de tarjetas bajo el pliegue). */}
+      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 3, md: 8 }} pb={{ base: 8, md: 6 }}>
         <Box
           ref={bienvenidaReveal.ref}
           w={{ base: "100%", md: "78%" }}
@@ -592,8 +592,12 @@ const Welcome = () => {
           (Las tarjetas ya traen su `mt` propio para el icono que sobresale.) */}
       <Box
         px={{ base: 5, md: 6, lg: 8 }}
-        pt={{ base: 1, md: 4 }}
-        pb={{ base: 9, md: 13 }}
+        // pt base 4: junto al pb del héroe, separa la frase de bienvenida de los
+        // iconos que sobresalen de las primeras tarjetas.
+        pt={{ base: 4, md: 4 }}
+        // OJO: 13 no existe en la escala de Chakra (caía como 13px a secas);
+        // 12 = 48px de verdad.
+        pb={{ base: 9, md: 12 }}
       >
         {/* Hueco corto y padding lateral corto: las tarjetas mandan, así que se
             comen el aire y salen anchas (el texto de dentro sube de tamaño

@@ -129,6 +129,13 @@ interface ComicViewerProps {
    *  disciplina es protagonista (cómic de elementos de TCM). No afecta a las
    *  Ilustraciones (Hinduismo / TCM). */
   fondoNitido?: boolean;
+  /** Solo en modo disciplina y EN MÓVIL: la foto de fondo apaisada NO se estira
+   *  con `cover` sobre la pantalla vertical (la ampliaba ×1,7 y salía empastada
+   *  y borrosa). En su lugar se pinta como BANDA horizontal nítida, a su
+   *  proporción natural y centrada en el viewport, cortada arriba y abajo por
+   *  una línea fina, sobre el color sólido de la disciplina (cómics de los
+   *  ciclos de TCM). En escritorio no cambia nada. */
+  fondoBanda?: boolean;
   /** Viñeta por la que empezar (para abrir directamente en una concreta). */
   initialIndex?: number;
   /** Se llama con el índice de la viñeta cada vez que se muestra una (también al
@@ -332,6 +339,7 @@ export function ComicViewer({
   sinFoto,
   separarFrases,
   fondoNitido,
+  fondoBanda,
   initialIndex = 0,
   loader,
   onPageView,
@@ -718,7 +726,9 @@ export function ComicViewer({
       {/* Fondo a pantalla completa. La foto cubre TODO el viewport sin dejar
           huecos en negro: position:fixed + inset:0 + objectFit:cover. SIEMPRE
           nítida, a plena calidad — lo único que la atenúa es el velo oscuro
-          translúcido de encima (la tinta va en el velo, no en la foto). */}
+          translúcido de encima (la tinta va en el velo, no en la foto).
+          Con `fondoBanda`, en móvil el cover se sustituye por la banda
+          horizontal nítida (ver la prop). */}
       <Box
         position="fixed"
         inset="0"
@@ -732,6 +742,7 @@ export function ComicViewer({
           src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.webp"}
           alt=""
           loading="eager"
+          display={fondoBanda ? { base: "none", md: "block" } : "block"}
           position="absolute"
           inset="0"
           w="100%"
@@ -741,6 +752,31 @@ export function ComicViewer({
             objectPosition: "center",
           }}
         />
+        {fondoBanda && (
+          <Box
+            display={{ base: "block", md: "none" }}
+            position="absolute"
+            left={0}
+            right={0}
+            top="50%"
+            transform="translateY(-50%)"
+          >
+            <Box
+              as="img"
+              src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.webp"}
+              alt=""
+              loading="eager"
+              display="block"
+              w="100%"
+              h="auto"
+            />
+            {/* El corte: una línea fina arriba y abajo de la banda */}
+            <Box position="absolute" top="-1px" left={0} right={0} h="1px"
+                 bgGradient="linear(to-r, transparent, #ffffffb3, transparent)" />
+            <Box position="absolute" bottom="-1px" left={0} right={0} h="1px"
+                 bgGradient="linear(to-r, transparent, #ffffffb3, transparent)" />
+          </Box>
+        )}
         <Box position="absolute" inset="0" bg={bgOverlay} />
       </Box>
 
@@ -855,13 +891,13 @@ export function ComicViewer({
         maxH={{ base: "none", md: "100dvh" }}
         overflow={{ base: "visible", md: "hidden" }}
         // Móvil: px = 5 para que el box quede EXACTAMENTE del ancho del header de
-        // la disciplina (la página usa px base 5). El margen de ARRIBA (el hueco
-        // entre el borde superior de la pantalla y donde empieza la caja) va
-        // holgado a propósito, 64px, y es FIJO: María lo quiere generoso y
-        // siempre igual, mida lo que mida la viñeta.
+        // la disciplina (la página usa px base 5). Los márgenes de ARRIBA y de
+        // ABAJO (el hueco entre los bordes de la pantalla y la caja) van
+        // holgados a propósito, 64px, y son FIJOS: María los quiere generosos y
+        // siempre iguales, mida lo que mida la viñeta.
         px={{ base: 5, md: 24 }}
         pt={{ base: 16, md: 14 }}
-        pb={{ base: 8, md: 14 }}
+        pb={{ base: 16, md: 14 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         sx={{
@@ -903,15 +939,25 @@ export function ComicViewer({
               : `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${themeColor}1a, 0 0 48px ${themeColor}10, inset 0 0 20px rgba(0,0,0,0.35)`
           }
         >
-          {/* Fondo de la caja (foto de disciplina blureada + overlay) */}
+          {/* Fondo de la caja (foto de disciplina + overlay).
+              MÓVIL: sin foto propia. La caja es alta y estrecha (crece con el
+              texto) y el `cover` ampliaba la foto apaisada hasta dejar solo un
+              trocito irreconocible y pixelado. En su lugar, el fondo de la caja
+              va TRANSPARENTE y se ve la MISMA foto de pantalla completa que hay
+              detrás (fixed): en horizontal, con sus proporciones y a su calidad,
+              quieta mientras la caja scrollea por encima. Los velos de color de
+              abajo se quedan, que son los que dan contraste al texto.
+              ESCRITORIO: como siempre (la caja es apaisada y el cover va bien). */}
           <Box
             position="absolute"
             inset="0"
             pointerEvents="none"
             zIndex={0}
-            style={{
-              background:
-                "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
+            sx={{
+              background: {
+                base: "none",
+                md: "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
+              },
             }}
           >
             <Box
@@ -919,6 +965,7 @@ export function ComicViewer({
               src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.webp"}
               alt=""
               loading="eager"
+              display={{ base: "none", md: "block" }}
               position="absolute"
               inset="0"
               w="100%"
@@ -938,9 +985,17 @@ export function ComicViewer({
               inset="0"
               // Velo de color sobre la foto del box. En TCM (fondoNitido) va más
               // suave (~19%) para que la pintura de tinta respire y se vea nítida.
-              bg={isDisciplinaMode && disciplinaBgColor
-                ? `${disciplinaBgColor}${fondoNitido ? "12" : "55"}`
-                : "rgba(8,13,30,0.55)"}
+              // MÓVIL con tinta OSCURA (Nutrición): la foto de detrás llega con
+              // su velo negro de pantalla, así que el velo de color sube a ~80%
+              // para que el box siga siendo un panel claro donde esa letra lea.
+              bg={{
+                base: isDisciplinaMode && disciplinaBgColor
+                  ? `${disciplinaBgColor}${fondoNitido ? "12" : tituloBlanco ? "55" : "cc"}`
+                  : "rgba(8,13,30,0.55)",
+                md: isDisciplinaMode && disciplinaBgColor
+                  ? `${disciplinaBgColor}${fondoNitido ? "12" : "55"}`
+                  : "rgba(8,13,30,0.55)",
+              }}
             />
             {/* Velo oscuro en TODAS las viñetas del cómic de TCM (fondoNitido),
                 para que el texto y las opciones se lean bien sobre la pintura.

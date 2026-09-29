@@ -15,7 +15,7 @@ import { glowHeader } from "../../components/metodo/FotoBox";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useT } from "../../i18n";
 import { claveConsejo, useOrganosCelulas } from "../../components/metodo/todasCelulasEn";
@@ -1143,9 +1143,12 @@ function FichasGrid({ fichas, leidos, onFicha }: {
     <Box display="grid" w="100%"
          gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
          gap={{ base: 3, md: 4 }}>
-      {fichas.map((f) => (
+      {/* Cada ficha entra al asomar en pantalla (en móvil la rejilla queda
+          bajo el pliegue de la ficha del órgano). */}
+      {fichas.map((f, i) => (
+        <Reveal key={claveConsejo(f)} inView once amount={0.2} direction="up" distance={20}
+                scaleFrom={0.97} duration={0.55} delay={(i % 2) * 0.07} display="flex">
         <FotoBox
-          key={claveConsejo(f)}
           titulo={f.nombre}
           foto={f.foto}
           nom={fisiologiaNom}
@@ -1155,6 +1158,7 @@ function FichasGrid({ fichas, leidos, onFicha }: {
           visto={leidos.has(claveConsejo(f))}
           onClick={() => onFicha(f)}
         />
+        </Reveal>
       ))}
     </Box>
   );
@@ -1293,7 +1297,9 @@ function OrganoDetalle({
         </Flex>
       )}
 
-      {/* 3 · Consejos: un titular a la vez (sin título de sección), con flechas */}
+      {/* 3 · Consejos: un titular a la vez (sin título de sección), con flechas.
+          En móvil queda al fondo de la ficha: entra al llegar con el scroll. */}
+      <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98} duration={0.65} w="100%">
       <FisioBox>
         <Box px={{ base: 4, md: 6 }} py={{ base: 6, md: 8 }}>
           {consejoActual && (
@@ -1351,6 +1357,7 @@ function OrganoDetalle({
           )}
         </Box>
       </FisioBox>
+      </Reveal>
     </Flex>
   );
 }
@@ -1536,21 +1543,23 @@ export default function MetodoFisiologiaTodasCelulas() {
                 </Flex>
               </Reveal>
 
-              {/* ── Cuadrícula de tarjetas de órgano (Pokédex) — entran en cascada ── */}
-              <RevealStagger
-                stagger={0.06}
-                delayChildren={0.15}
+              {/* ── Cuadrícula de tarjetas de órgano (Pokédex) — cada tarjeta
+                  entra AL ASOMAR en pantalla (no al montar): la rejilla mide
+                  varias pantallas en móvil y con la cascada al montar todo lo de
+                  abajo llegaba ya quieto. El delay escalona solo la fila. ── */}
+              <Box
                 w="100%"
                 display="grid"
                 gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
                 gap={{ base: 4, md: 6 }}
               >
-                {organos.map((o) => (
-                  <RevealItem key={o.key} direction="up" distance={22} scaleFrom={0.97} display="flex">
+                {organos.map((o, i) => (
+                  <Reveal key={o.key} inView once amount={0.2} direction="up" distance={22}
+                          scaleFrom={0.97} duration={0.6} delay={(i % 3) * 0.07} display="flex">
                     <OrganoCard organo={o} vistas={vistas} onClick={() => abrirOrgano(o)} />
-                  </RevealItem>
+                  </Reveal>
                 ))}
-              </RevealStagger>
+              </Box>
             </>
           ) : (
             /* ── Ficha del órgano a pantalla completa ── */

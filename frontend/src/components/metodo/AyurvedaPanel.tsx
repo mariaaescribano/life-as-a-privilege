@@ -51,10 +51,12 @@ export function AyurvedaPanel({
       bgRepeat="repeat-y"
       bgPosition="top center"
     >
-      <Box position="absolute" inset="0" bg={`${ayurvedaBg}26`} />
+      {/* Velo blanco al 33%: el mismo lavado que el resto de boxes de Ayurveda
+          (ver DISCIPLINA_OVERLAY), para que la acuarela no tire a amarillo. */}
+      <Box position="absolute" inset="0" bg={`${ayurvedaBg}55`} />
     </Box>
   ) : (
-    <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}26`} />
+    <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}55`} />
   );
 
   const contenido = (

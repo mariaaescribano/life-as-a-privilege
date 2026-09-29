@@ -327,9 +327,10 @@ function Estacion({
                 </PanelBox>
               </Reveal>
 
-              {/* ── Box derecha · piezas a arrastrar (2 por fila) · entra después ── */}
+              {/* ── Box derecha · piezas a arrastrar (2 por fila) · entra después.
+                  `inView`: en móvil cae bajo el pliegue y entra con el scroll. ── */}
               {/* overflow:visible para que la ficha no se recorte al arrastrarla al otro box. */}
-              <Reveal direction="up" distance={22} duration={0.5} delay={0.18} flex="1" display="flex">
+              <Reveal inView once amount={0.2} direction="up" distance={22} duration={0.5} delay={0.18} flex="1" display="flex">
                 <PanelBox w="100%" overflow="visible" minH={{ base: "auto", md: "300px" }}>
                   <Flex direction="column" align="center" justify="center" gap={5} h="100%">
                     <Box ref={piezasRef} display="grid" gridTemplateColumns="repeat(2, auto)"
@@ -383,8 +384,10 @@ function Estacion({
                 </Flex>
               </PanelBox>
 
-              {/* Caja 2 · texto */}
-              <PanelBox flex="1">
+              {/* Caja 2 · texto. En móvil cae bajo la foto: entra con el scroll. */}
+              <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                      duration={0.65} flex="1" display="flex">
+              <PanelBox w="100%">
                 <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
                   <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
                         style={{ textShadow: INK }}>{t("fisiologia.macro.hecho", { macro: t(def.nombre).toLowerCase(), Macro: t(def.nombre) })}</Text>
@@ -411,6 +414,7 @@ function Estacion({
                   </Box>
                 </Flex>
               </PanelBox>
+              </Reveal>
             </Flex>
 
             {/* «Volver a hacer» se queda FUERA de la caja, debajo y a la derecha:

@@ -448,9 +448,10 @@ export default function MetodoFisiologiaParticulas() {
                     </Flex>
                   </Reveal>
 
-                  {/* ── Box derecha · piezas a arrastrar (2 por fila) · entra después ── */}
+                  {/* ── Box derecha · piezas a arrastrar (2 por fila) · entra después.
+                      `inView`: en móvil cae bajo el pliegue y entra con el scroll. ── */}
                   {/* Sin overflow:hidden para que la ficha no se recorte al arrastrarla al otro box. */}
-                  <Reveal direction="up" distance={22} duration={0.5} delay={0.18}
+                  <Reveal inView once amount={0.2} direction="up" distance={22} duration={0.5} delay={0.18}
                           position="relative" flex="1" borderRadius="2xl"
                           boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
@@ -520,8 +521,10 @@ export default function MetodoFisiologiaParticulas() {
                     </Flex>
                   </Box>
 
-                  {/* ── Box derecha · texto ── */}
-                  <Box position="relative" flex="1" borderRadius="2xl" overflow="hidden"
+                  {/* ── Box derecha · texto. En móvil cae bajo el protón: entra con el scroll. ── */}
+                  <Reveal inView once amount={0.2} direction="up" distance={26} scaleFrom={0.98}
+                          duration={0.65} flex="1" display="flex">
+                  <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                        boxShadow={`0 0 16px rgba(255,255,255,0.14), 0 0 40px rgba(200,181,209,0.12), 0 0 22px ${fisiologiaTxt}1a`}>
                     <DisciplinaBgLayer nom={fisiologiaNom} borderRadius="2xl" />
                     <Flex position="relative" zIndex={1} direction="column" justify="center" gap={4}
@@ -541,6 +544,7 @@ export default function MetodoFisiologiaParticulas() {
                       </Text>
                     </Flex>
                   </Box>
+                  </Reveal>
                 </Flex>
 
                 {/* Volver a hacer — fuera del box, abajo a la derecha del todo */}

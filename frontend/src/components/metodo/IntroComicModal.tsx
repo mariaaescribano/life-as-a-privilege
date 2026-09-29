@@ -59,6 +59,10 @@ interface IntroComicModalProps {
   continueBgImage?: string;
   /** Acción del botón de continuar (arriba, junto a la X). */
   onContinue?: () => void;
+  /** Si true, la etiqueta del botón de continuar se ve TAMBIÉN en móvil (por
+   *  defecto ahí solo queda la flecha). Cultura la enseña porque el botón lleva
+   *  el nombre de la era y es la orientación de dónde estás. */
+  continueLabelMovil?: boolean;
   /** Si se define, muestra el botón «volver» (flecha atrás, arriba a la
    *  izquierda) que lo llama. Sirve para regresar al cómic anterior de una
    *  cadena (p.ej. desde «Historia de la Astrología» al «Origen»). */
@@ -111,6 +115,7 @@ export function IntroComicModal({
   continueLabel,
   continueBgImage,
   onContinue,
+  continueLabelMovil,
   onComplete,
   onBack,
   mantenerSaltar,
@@ -122,7 +127,12 @@ export function IntroComicModal({
   luzFoto,
 }: IntroComicModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside">
+    // motionPreset none + transform none: el fondo del ComicViewer va en
+    // position:fixed, y un fixed dentro de un ancestro con transform (la
+    // animación del ModalContent) se ancla al contenido en vez de al viewport
+    // → en móvil la foto de fondo salía estirada sobre todo el alto del cómic
+    // (mismo apaño que ElementoComicModal y compañía).
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
       <ModalOverlay bg="rgba(0,0,0,0.95)" sx={{ backdropFilter: "blur(24px)" }} />
       <ModalContent
         bg="transparent"
@@ -132,6 +142,7 @@ export function IntroComicModal({
         m={0}
         fontFamily="'EB Garamond', serif"
         minH="100dvh"
+        sx={{ transform: "none !important" }}
       >
         {/* key={isOpen}: al reabrir, el ComicViewer se remonta desde la 1ª viñeta. */}
         <ComicViewer
@@ -204,7 +215,7 @@ export function IntroComicModal({
             <Box as="img" src={bgImgSrc} alt="" loading="eager" position="absolute" inset="0"
                  w="100%" h="100%" style={{ objectFit: "cover", objectPosition: "center" }} pointerEvents="none" />
             <Box position="absolute" inset="0" bg={velo} />
-            <Box as="span" position="relative" zIndex={1} display={{ base: "none", md: "inline" }}>{continueLabel}</Box>
+            <Box as="span" position="relative" zIndex={1} display={continueLabelMovil ? "inline" : { base: "none", md: "inline" }}>{continueLabel}</Box>
             {/* Flecha larga (→) */}
             <FlechaBonita position="relative" zIndex={1} size={{ base: "30px", md: "24px" }} />
           </Box>

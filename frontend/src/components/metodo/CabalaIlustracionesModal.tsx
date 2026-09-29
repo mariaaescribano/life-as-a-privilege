@@ -13,7 +13,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { cabalaBg, cabalaTxt } from "../../GlobalVariables";
-import { CAJA_GLOW, CAJA_GLOW_HOVER } from "./cabalaGlow";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { CABALA_INTRO } from "./comicCabalaIntro";
@@ -35,6 +34,12 @@ import { barraVisibleSx } from "../global/barraDeScroll";
 // ─────────────────────────────────────────────────────────────────────────
 
 const CABALA_IMG = "/img/fondos/cabala.webp";
+
+// Glow de las tarjetas del selector: SOLO con el ámbar de la disciplina
+// (cabalaTxt) y más bajo que el CAJA_GLOW del recorrido — las capas blancas y
+// menta de aquel halo se veían como una luz azulada sobre el fondo marrón.
+const TARJETA_GLOW = `0 0 16px ${cabalaTxt}33, 0 0 36px ${cabalaTxt}1f`;
+const TARJETA_GLOW_HOVER = `0 0 20px ${cabalaTxt}55, 0 0 44px ${cabalaTxt}2e`;
 
 type Capitulo = "origen" | "historia" | "sefirot" | "senderos";
 
@@ -87,7 +92,10 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"}>
+    // motionPreset none + transform none en el content: el ComicViewer del
+    // capítulo pinta su fondo en position:fixed y, con el transform de la
+    // animación del ModalContent, se anclaba al contenido en vez del viewport.
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"} motionPreset="none">
       {/* La foto de fondo va en el OVERLAY (cubre el viewport SIEMPRE). */}
       <ModalOverlay
         bg={cabalaBg}
@@ -107,6 +115,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
         fontFamily="'EB Garamond', serif"
         minH="100dvh"
         position="relative"
+        sx={{ transform: "none !important" }}
       >
         {!fondosListos && (
           <Flex position="relative" zIndex={2} minH="100dvh" align="center" justify="center">
@@ -173,7 +182,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                   textTransform="uppercase"
                   textAlign="center"
                   lineHeight="1.1"
-                  style={{ textShadow: `0 0 14px ${cabalaTxt}cc, 0 0 32px ${cabalaTxt}77, 0 0 70px ${cabalaTxt}44` }}
+                  style={{ textShadow: `0 0 14px ${cabalaTxt}99, 0 0 30px ${cabalaTxt}63, 0 0 56px ${cabalaTxt}52` }}
                 >
                   {t("metodo.ilustracionesDe", { disciplina: t("disciplina.cabala") })}
                 </Text>
@@ -220,11 +229,11 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                       backdropFilter: "blur(10px)",
                       WebkitBackdropFilter: "blur(10px)",
                       transition: "all 0.25s ease",
-                      boxShadow: CAJA_GLOW,
+                      boxShadow: TARJETA_GLOW,
                       _hover: {
                         transform: "translateY(-4px)",
                         borderColor: cabalaTxt,
-                        boxShadow: CAJA_GLOW_HOVER,
+                        boxShadow: TARJETA_GLOW_HOVER,
                       },
                       _active: { transform: "translateY(-1px)" },
                     }}
@@ -266,7 +275,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                         textTransform="uppercase"
                         textAlign="center"
                         lineHeight="1.1"
-                        style={{ textShadow: `0 0 12px ${cabalaTxt}cc, 0 0 28px ${cabalaTxt}77` }}
+                        style={{ textShadow: `0 0 12px ${cabalaTxt}99, 0 0 28px ${cabalaTxt}52` }}
                       >
                         {t(opt.tituloKey)}
                       </Text>
@@ -278,7 +287,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                         fontSize={{ base: "xs", md: "sm" }}
                         letterSpacing="0.18em"
                         textTransform="uppercase"
-                        style={{ textShadow: `0 0 10px ${cabalaTxt}aa` }}
+                        style={{ textShadow: `0 0 10px ${cabalaTxt}66` }}
                       >
                         <Text as="span">{t("metodo.leer")}</Text>
                         <Box

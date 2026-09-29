@@ -369,7 +369,11 @@ export function TCMIlustracionesModal({
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"}>
+    // motionPreset none + transform none en el content: el ComicViewer del
+    // capítulo pinta su fondo en position:fixed y, con el transform de la
+    // animación del ModalContent, se anclaba al contenido → en móvil la foto
+    // salía estirada sobre todo el alto del cómic.
+    <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior={capitulo ? "outside" : "inside"} motionPreset="none">
       {/* La foto de fondo va en el OVERLAY (cubre el viewport SIEMPRE). Ponerla
           dentro del ModalContent fallaba: Chakra le aplica un `transform` de
           animación y un `position:fixed` dentro de un ancestro transformado deja
@@ -392,6 +396,7 @@ export function TCMIlustracionesModal({
         fontFamily="'EB Garamond', serif"
         minH="100dvh"
         position="relative"
+        sx={{ transform: "none !important" }}
       >
         {/* Mientras la foto de fondo y las portadas no están cargadas, no se
             muestra nada salvo el loader de TCM (aparece todo a la vez). */}
@@ -464,7 +469,7 @@ export function TCMIlustracionesModal({
                   textAlign="center"
                   lineHeight="1.1"
                   style={{
-                    textShadow: `0 0 14px ${tcmTxt}cc, 0 0 32px ${tcmTxt}77, 0 0 70px ${tcmTxt}44`,
+                    textShadow: `0 0 14px ${tcmTxt}99, 0 0 30px ${tcmTxt}63, 0 0 56px ${tcmTxt}52`,
                   }}
                 >
                   {t("metodo.ilustracionesDe", { disciplina: t("disciplina.medicinaChina") })}

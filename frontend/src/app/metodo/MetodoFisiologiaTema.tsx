@@ -238,12 +238,14 @@ export default function MetodoFisiologiaTema() {
     }).catch(() => { /* se reintenta la próxima vez */ });
   };
 
-  // Una rejilla de fichas. `desdeI` es el número de fichas que van antes, para
-  // que la cascada de entrada siga corriendo entre zonas en vez de reiniciarse.
-  const rejilla = (fichas: Ficha[], desdeI = 0) => (
+  // Una rejilla de fichas. Cada ficha entra AL ASOMAR en pantalla (no al montar):
+  // la rejilla mide varias pantallas en móvil y con la cascada al montar todo lo
+  // de abajo llegaba ya quieto. El delay escalona solo su fila.
+  const rejilla = (fichas: Ficha[]) => (
     <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
       {fichas.map((f, i) => (
-        <Reveal key={f.key} direction="up" distance={20} delay={0.05 * (desdeI + i)} duration={0.5} w="100%" display="flex">
+        <Reveal key={f.key} inView once amount={0.2} direction="up" distance={20}
+                delay={(i % 3) * 0.07} duration={0.5} w="100%" display="flex">
           <FichaBox ficha={f} temaColor={tema.color} active={ficha?.key === f.key}
                     leido={leidas.has(f.key)} onClick={() => verFicha(f)} />
         </Reveal>
@@ -341,7 +343,8 @@ export default function MetodoFisiologiaTema() {
               )}
               <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
                 {fichasDelComic.map((f, i) => (
-                  <Reveal key={f.key} direction="up" distance={20} delay={0.05 * i} duration={0.5} w="100%" display="flex">
+                  <Reveal key={f.key} inView once amount={0.2} direction="up" distance={20}
+                          delay={(i % 3) * 0.07} duration={0.5} w="100%" display="flex">
                     <FichaBox ficha={f} temaColor={tema.color}
                               active={comicAbierto && comicDesde === i}
                               leido={leidas.has(f.key)} onClick={() => abrirVineta(i)} />
@@ -373,7 +376,7 @@ export default function MetodoFisiologiaTema() {
               {zonas.length === 0 ? rejilla(tema.fichas) : zonas.map((z) => (
                 <Flex key={z.zona} direction="column" w="100%" gap={{ base: 3, md: 4 }}
                       mt={z.inicio > 0 ? { base: 4, md: 6 } : 0}>
-                  <Reveal direction="up" distance={14} duration={0.55} w="100%">
+                  <Reveal inView once amount={0.3} direction="up" distance={14} duration={0.55} w="100%">
                     <Flex direction="column" align="center" gap={1.5} w="100%">
                       <Flex align="center" gap={{ base: 3, md: 4 }} w="100%">
                         <Box flex="1" h="1px" bg={`${fisiologiaTxt}44`} />
@@ -390,7 +393,7 @@ export default function MetodoFisiologiaTema() {
                       </Text>
                     </Flex>
                   </Reveal>
-                  {rejilla(z.fichas, z.inicio)}
+                  {rejilla(z.fichas)}
                 </Flex>
               ))}
 

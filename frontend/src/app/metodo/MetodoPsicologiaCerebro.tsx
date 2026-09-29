@@ -163,7 +163,7 @@ export default function MetodoPsicologiaCerebro() {
             </Reveal>
 
             {/* ── El aviso, a la vista y no en letra pequeña ── */}
-            <Reveal direction="up" distance={20} delay={0.1} duration={0.7} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={20} duration={0.7} w="100%">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.7" maxW="620px" mx="auto">
               {CEREBRO_AVISO}
@@ -176,8 +176,8 @@ export default function MetodoPsicologiaCerebro() {
 
       <AyudaRecorrido pagina="cerebro" />
 
-      {/* La ficha de cada zona: popup con su foto. Las flechas pasan de una a
-          otra sin cerrarlo. */}
+      {/* Cada zona se lee en el cómic inmersivo de siempre (una viñeta por
+          apartado, con su foto). Al terminar una zona se abre la siguiente. */}
       <CerebroZonaModal zonaKey={zonaKey} onZona={setZonaKey} onClose={() => setZonaKey(null)} />
 
       {/* Cómic antesala de la Línea de Vida — sale al pasar de página, antes de

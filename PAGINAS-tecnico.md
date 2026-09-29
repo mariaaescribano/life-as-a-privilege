@@ -248,9 +248,9 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Componente:** `Opiniones` en `frontend/src/app/web/Opiniones.tsx`
 - **Acceso:** pública
 - **Qué hace:** Lista de reseñas publicadas y, debajo, formulario para dejar una (nombre, texto, email opcional). El nombre viene prerrellenado con el `name` de la sesión.
-- **Datos:** `GET /opinion` (lista). `POST /opinion` con `{ nombre, texto, email? }`. Lee `name` de localStorage. Al enviar guarda la marca de «opinión enviada» en localStorage (`marcarOpinionEnviada`, para que el final de los recorridos deje de pedirla).
+- **Datos:** `GET /opinion` (lista). `POST /opinion` con `{ nombre, texto, email? }`. Lee `name` de localStorage.
 - **Botones / a dónde lleva:** «Enviar». Con `?volver=`: botón de volver arriba y en la pantalla de gracias → esa ruta.
-- **Condiciones y casos raros:** `?volver=<ruta>` (llega desde `PedirOpinion` al final de un recorrido): solo acepta rutas internas (empieza por `/` y no por `//`); si lo hay, baja sola al formulario a los 420 ms. Nombre o texto vacíos → no envía. Las reseñas se publican sin aprobación (según memoria del proyecto; sin verificar en backend).
+- **Condiciones y casos raros:** `?volver=<ruta>`: solo acepta rutas internas (empieza por `/` y no por `//`); si lo hay, baja sola al formulario a los 420 ms. (La caja `PedirOpinion` que enviaba aquí desde el final de los recorridos se eliminó; nada genera ya `?volver=`.) Nombre o texto vacíos → no envía. Las reseñas se publican sin aprobación (según memoria del proyecto; sin verificar en backend).
 - **Tests:** pendiente
 
 ---
@@ -443,10 +443,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/astrologia/cursos` — Cursos de Astrología (Paso 8)
 - **Componente:** `MetodoAstrologiaCursos` en `frontend/src/app/metodo/MetodoAstrologiaCursos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
-- **Qué hace:** Cuadrícula con los cursos de astrología del catálogo, del más nuevo al más viejo (con un solo curso sale una tarjeta grande; sin cursos, «próximamente»). Al final, `PedirOpinion` para dejar una reseña.
+- **Qué hace:** Cuadrícula con los cursos de astrología del catálogo, del más nuevo al más viejo (con un solo curso sale una tarjeta grande; sin cursos, «próximamente»).
 - **Datos:** `GET /cursos` (vía `useCursosData`), `GET /user/me` (`psicologia_suscrito`). Precarga las portadas.
 - **Desbloqueo:** sin gate propio (en el Índice va con el paso 5).
-- **Botones / a dónde lleva:** prev → `/metodo/astrologia/llamada`. Next «Psicología →»: si no tiene psicología pagada abre `PagoPsicologiaModal` (el pago va por el Payment Link de Stripe `irAPagoDisciplina("psicologia")`) y lleva un candado; si la tiene → `/metodo/psicologia`. `PedirOpinion` → `/opiniones?volver=`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
+- **Botones / a dónde lleva:** prev → `/metodo/astrologia/llamada`. Next «Psicología →»: si no tiene psicología pagada abre `PagoPsicologiaModal` (el pago va por el Payment Link de Stripe `irAPagoDisciplina("psicologia")`) y lleva un candado; si la tiene → `/metodo/psicologia`. «Ilustraciones», `BotonCompania`, `IndiceAstrologia`.
 - **Condiciones y casos raros:** sin token no redirige (solo deja de pedir `/user/me`). Mientras `psicologiaSuscrito` es `null` (no ha cargado), el botón navega directo y el guardia de pago decide.
 - **Tests:** pendiente
 
@@ -587,7 +587,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/psicologia/:experienciaId/genograma` — Genograma (Paso 10)
 - **Componente:** `MetodoPsicologiaGenograma` en `frontend/src/app/metodo/MetodoPsicologiaGenograma.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + `useMapaFamilia`).
-- **Qué hace:** La familia como TARJETAS en rejilla (3-4 por fila en ordenador; 1-2 en pantallas pequeñas): foto a la izquierda con el rol al lado (y el nombre debajo), rayita, sus personajes/animales y un botón «Rellenar». Rellenar abre la ficha (`FichaPersona`) con las preguntas guía: todo se autoguarda y el botón «Hecho ✓» abajo a la derecha cierra (control explícito de guardado). Ya no se pintan aquí los «+» del mapa: colocar/añadir familia se hace en «Tu familia»; desde la ficha se puede editar y quitar.
+- **Qué hace:** La familia como TARJETAS en rejilla (3-4 por fila en ordenador; 1-2 en pantallas pequeñas): foto a la izquierda con el rol al lado (y el nombre debajo), rayita, sus personajes/animales y un botón «Rellenar». Rellenar abre la ficha (`FichaPersona`) con las preguntas guía: todo se autoguarda y el botón «Hecho ✓» abajo a la derecha cierra (control explícito de guardado). La ficha va en UN solo scroll vertical y la identidad (foto, nombre, parentesco) sale PLEGADA en una línea —la persona ya se definió en «Tu familia»—, con «Editar» para desplegar las chapas de parentesco (sin parentesco aún, sale desplegada; al tocar una chapa se repliega). Ya no se pintan aquí los «+» del mapa: colocar/añadir familia se hace en «Tu familia»; desde la ficha se puede editar y quitar.
 - **Datos:** `useMapaFamilia` (mismos endpoints que Tu familia). Guarda `data.genograma[i].notas[key]` y la foto vía `POST /upload/genograma/:userId`.
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 persona.
 - **Botones / a dónde lleva:** prev → `/:exp/familia`; next → `/:exp/huellas` (los dos hacen flush). `AyudaRecorrido pagina="genograma"`.
@@ -815,10 +815,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/psicologia/:experienciaId/cursos` — Cursos de Psicología (Paso 29)
 - **Componente:** `MetodoPsicologiaCursos` en `frontend/src/app/metodo/MetodoPsicologiaCursos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo propio).
-- **Qué hace:** Cuadrícula con los cursos de psicología del catálogo (con uno solo sale una tarjeta grande) y `PedirOpinion` para dejar una reseña al final del recorrido.
+- **Qué hace:** Cuadrícula con los cursos de psicología del catálogo (con uno solo sale una tarjeta grande).
 - **Datos:** `GET /user/me` (`psicologia_suscrito`, `ayurveda_suscrito`), `GET /cursos` (`useCursosData`).
 - **Desbloqueo:** sin requisito.
-- **Botones / a dónde lleva:** prev → `/:exp/emociones`. Next «Fisiología →» → `/metodo/fisiologia` (la siguiente del mandala de /home; si no está pagada, la guardia de esa página la manda al pago; el `PagoAyurvedaModal` que había aquí se quitó). `PedirOpinion` → `/opiniones?volver=`. `BotonCompania` (llamada 15 €) e `IndiceRecorrido` directos.
+- **Botones / a dónde lleva:** prev → `/:exp/emociones`. Next «Fisiología →» → `/metodo/fisiologia` (la siguiente del mandala de /home; si no está pagada, la guardia de esa página la manda al pago; el `PagoAyurvedaModal` que había aquí se quitó). `BotonCompania` (llamada 15 €) e `IndiceRecorrido` directos.
 - **Condiciones y casos raros:** mientras `ayurvedaSuscrito` no ha cargado, el botón navega directo y decide el guardia de pago.
 - **Tests:** pendiente
 
@@ -1164,10 +1164,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/tcm/apuntes` — Crea tus propios apuntes (Paso 12)
 - **Componente:** `MetodoTcmApuntes` en `frontend/src/app/metodo/MetodoTcmApuntes.tsx` (+ `CreaTusApuntes`, libro en `components/metodo/apuntes/tcmApuntes.ts`)
 - **Acceso:** con sesión (PrivateRoute) + pago de TCM (Guardia global; `!tcm_suscrito` → `/metodo/tcm`).
-- **Qué hace:** Se eligen los capítulos de todo lo recorrido y se descarga un PDF de apuntes con tu nombre en la portada. Los capítulos personales (diagnóstico y lectura de lengua) salen con candado si faltan esos datos. Debajo, `PedirOpinion`.
+- **Qué hace:** Se eligen los capítulos de todo lo recorrido y se descarga un PDF de apuntes con tu nombre en la portada. Los capítulos personales (diagnóstico y lectura de lengua) salen con candado si faltan esos datos.
 - **Datos:** `GET /user/me` (`name`, `fisiologia_suscrito`); `GET /metodo-tcm/:userId` (todo el blob, blindado si no es objeto). PDF en el navegador desde `CreaTusApuntes`. No guarda nada.
 - **Desbloqueo:** ninguno para entrar. Último paso de TCM.
-- **Botones / a dónde lleva:** prev «← Cursos» → `/metodo/tcm/cursos`; next «Cábala →» (con candado si no está pagada) y BotonPaso → `/metodo/cabala` siempre (allí se ve el pago; la siguiente del mandala de /home tras MTC); reseña → `/opiniones?volver=…`.
+- **Botones / a dónde lleva:** prev «← Cursos» → `/metodo/tcm/cursos`; next «Cábala →» (con candado si no está pagada) y BotonPaso → `/metodo/cabala` siempre (allí se ve el pago; la siguiente del mandala de /home tras MTC).
 - **Condiciones y casos raros:** sin datos guardados la página funciona igual, con los capítulos personales bloqueados. `pageLabel` "12/12".
 - **Tests:** pendiente
 
@@ -1333,10 +1333,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/fisiologia/organismo` — El organismo (Paso 9, cierre del nivel Vida)
 - **Componente:** `MetodoFisiologiaOrganismo` en `frontend/src/app/metodo/MetodoFisiologiaOrganismo.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Fisiología.
-- **Qué hace:** Se arrastran las fotos circulares de los sistemas al círculo del cuerpo. Con cada uno aparece una frase. Con todos colocados, el organismo queda completo y sale «Volver a hacer». Al pie, invitación a dejar reseña (`PedirOpinion`). Header «4/4».
+- **Qué hace:** Se arrastran las fotos circulares de los sistemas al círculo del cuerpo. Con cada uno aparece una frase. Con todos colocados, el organismo queda completo y sale «Volver a hacer». Header «4/4».
 - **Datos:** `GET /user/me`; `GET /metodo-fisiologia/:userId`; al completar `PATCH /metodo-fisiologia/:userId` con `organismo_hecho: true`.
 - **Desbloqueo:** la página no comprueba `sistemas_vistos`. `organismo_hecho` marca el Nivel 2 como superado y, junto a `estructuras_hecho`, abre Profundiza.
-- **Botones / a dónde lleva:** prev «← Sistemas»; next «Niveles →» (bloqueado hasta completar) abre el cómic «Te reconstruyes cada día» (`ComicPasoModal`, `RECONSTRUCCION`), que lleva a `/metodo/fisiologia/niveles`. `PedirOpinion` → `/opiniones?volver=…`.
+- **Botones / a dónde lleva:** prev «← Sistemas»; next «Niveles →» (bloqueado hasta completar) abre el cómic «Te reconstruyes cada día» (`ComicPasoModal`, `RECONSTRUCCION`), que lleva a `/metodo/fisiologia/niveles`.
 - **Condiciones y casos raros:** con `organismo_hecho` ya guardado entra con todo colocado.
 - **Tests:** pendiente
 
@@ -1561,7 +1561,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/dia` — Diseña tu día (Paso 11)
 - **Componente:** `MetodoNutricionDia` en `frontend/src/app/metodo/MetodoNutricionDia.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Primero un popup para elegir el número de comidas. Luego dos columnas: las comidas (zonas donde soltar) y los alimentos por grupo, que se arrastran, con raciones y «a ojo». Cada alimento tiene una ficha (ojo) con ración, kcal, macros y moléculas. Hay «Crea tu alimento» con un formulario propio. Va sumando kcal y macros frente a tu objetivo.
+- **Qué hace:** Primero un popup para elegir el número de comidas. Luego dos columnas: las comidas (zonas donde soltar) y los alimentos por grupo, que se arrastran, con raciones y «a ojo». En MÓVIL (base, apiladas) no se arrastra: se TOCA el alimento y un popup pregunta «¿A qué comida lo añades?» con la lista de comidas (kcal actuales / meta); los textos de instrucción cambian a «tócalos». Cada alimento tiene una ficha (ojo) con ración, kcal, macros y moléculas. Hay «Crea tu alimento» con un formulario propio. Va sumando kcal y macros frente a tu objetivo.
 - **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId` → `calorias.kcal` y `dia` (`numComidas`, `comidas`, `customFoods`). `PATCH /metodo-nutricion/:userId` en cada cambio con `dia: {numComidas, comidas, customFoods}`.
 - **Desbloqueo:** no redirige. Sin `calorias.hecho` + `kcal` numérico sale bloqueada, con un texto y un botón «Calcular» → `/metodo/nutricion/calorias`.
 - **Botones / a dónde lleva:** prev «← Tu azúcar» → `/metodo/nutricion/prediabetes`; extra Biblioteca; next «Valores nutricionales →» → `/metodo/nutricion/macros` (sin bloqueo).
@@ -1609,10 +1609,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/cursos` — Cursos para profundizar (Paso 15, último)
 - **Componente:** `MetodoNutricionCursos` en `frontend/src/app/metodo/MetodoNutricionCursos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Lista los cursos de Nutrición del catálogo, con el mismo patrón que Fisiología (uno centrado, rejilla o estado vacío). Al pie, `PedirOpinion` para dejar reseña.
+- **Qué hace:** Lista los cursos de Nutrición del catálogo, con el mismo patrón que Fisiología (uno centrado, rejilla o estado vacío).
 - **Datos:** `GET /user/me` (lee `nutricion_suscrito` y `cabala_suscrito`); `GET /cursos` (`useCursosData`).
 - **Desbloqueo:** ninguno.
-- **Botones / a dónde lleva:** prev «← La creación de los alimentos» → `/metodo/nutricion/origen`; extra Biblioteca; next «Ayurveda →» → `/metodo/ayurveda` (la siguiente del mandala de /home; con candado si no la ha pagado — la guardia la manda al pago). Las tarjetas de curso van GRANDES, sin maxW de página, como en Materiales/Psicología. `PedirOpinion` → `/opiniones?volver=…`.
+- **Botones / a dónde lleva:** prev «← La creación de los alimentos» → `/metodo/nutricion/origen`; extra Biblioteca; next «Ayurveda →» → `/metodo/ayurveda` (la siguiente del mandala de /home; con candado si no la ha pagado — la guardia la manda al pago). Las tarjetas de curso van GRANDES, sin maxW de página, como en Materiales/Psicología.
 - **Condiciones y casos raros:** —
 - **Tests:** pendiente
 
@@ -1802,10 +1802,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/cultura/apuntes` — Tus apuntes (elegir Historia)
 - **Componente:** `MetodoCulturaApuntes` en `frontend/src/app/metodo/MetodoCulturaApuntes.tsx`
 - **Acceso:** con sesión (PrivateRoute). Exige pago de Cultura.
-- **Qué hace:** Sin clave en la URL: rejilla para elegir la Historia de la que hacer apuntes, con cuántas etapas y momentos trae cada una. Solo salen las que tienen apuntes: Universal, Religiones, Filosofía. Al pie, invitación a dejar reseña (`PedirOpinion`).
+- **Qué hace:** Sin clave en la URL: rejilla para elegir la Historia de la que hacer apuntes, con cuántas etapas y momentos trae cada una. Solo salen las que tienen apuntes: Universal, Religiones, Filosofía.
 - **Datos:** `GET /user/me` (nombre). Precarga portadas. No guarda en BD.
 - **Desbloqueo:** Solo pago.
-- **Botones / a dónde lleva:** prev «Historias» → `/metodo/cultura/historias`; tarjeta → `/metodo/cultura/apuntes/<key>`; `PedirOpinion` → `/opiniones?volver=…`.
+- **Botones / a dónde lleva:** prev «Historias» → `/metodo/cultura/historias`; tarjeta → `/metodo/cultura/apuntes/<key>`.
 - **Condiciones y casos raros:** —
 - **Tests:** pendiente
 
@@ -1814,10 +1814,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/cultura/apuntes/:historiaKey` — Crea tus apuntes de una Historia (PDF)
 - **Componente:** `MetodoCulturaApuntes` (mismo) en `frontend/src/app/metodo/MetodoCulturaApuntes.tsx`, con `CreaTusApuntes`
 - **Acceso:** con sesión (PrivateRoute). Exige pago de Cultura.
-- **Qué hace:** Taller común de apuntes: marcar qué capítulos llevarse, elegir portada, con o sin fotos, ver el peso aproximado en MB, previsualizar y descargar el PDF. Al pie, `PedirOpinion`.
+- **Qué hace:** Taller común de apuntes: marcar qué capítulos llevarse, elegir portada, con o sin fotos, ver el peso aproximado en MB, previsualizar y descargar el PDF.
 - **Datos:** `GET /user/me` (el nombre va en la portada). La selección se recuerda en localStorage `apuntes:<archivo>` ({seleccion, portada, conFotos}). PDF generado en el navegador (`utils/pdf/apuntes`).
 - **Desbloqueo:** Solo pago.
-- **Botones / a dónde lleva:** prev «Tus apuntes» → `/metodo/cultura/apuntes`; previsualizar / descargar PDF; reseña → `/opiniones?volver=…`.
+- **Botones / a dónde lleva:** prev «Tus apuntes» → `/metodo/cultura/apuntes`; previsualizar / descargar PDF.
 - **Condiciones y casos raros:** `:historiaKey` acepta solo `universal, religiones, filosofia`; otra → `/metodo/cultura/apuntes` (replace). Ciencia, Medicina y Arte no tienen apuntes todavía.
 - **Tests:** pendiente
 

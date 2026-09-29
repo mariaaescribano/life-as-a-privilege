@@ -20,7 +20,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { EjemplosPulsables } from "../../components/metodo/EjemplosPulsables";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import {
   experienciaById,
@@ -195,13 +195,15 @@ export default function MetodoPsicologiaMiedosPreguntas() {
             ) : (
               <>
   
-                {/* Tarjetas de miedo · aparecen de una en una. Al tocar, se abre el popup guiado. */}
-                <RevealStagger display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }} stagger={0.1} delayChildren={0.1}>
-                  {miedos.map((m) => {
+                {/* Tarjetas de miedo · cada una entra al asomar (la lista crece
+                    con los datos: envolverla entera caería en la trampa del `amount`). */}
+                <Flex direction="column" w="100%" gap={{ base: 3.5, md: 4 }}>
+                  {miedos.map((m, i) => {
                     const respondidas = miedoRespondidas(m);
                     const completo = respondidas >= total;
                     return (
-                      <RevealItem key={m.id} direction="up" distance={26} scaleFrom={0.97} duration={0.5} w="100%">
+                      <Reveal key={m.id} inView once amount={0.2} direction="up" distance={26} scaleFrom={0.97} duration={0.5}
+                              delay={Math.min((i % 4) * 0.07, 0.35)} w="100%">
                       <Box as="button" onClick={() => setAbiertoId(m.id)}
                            position="relative" w="100%" borderRadius="2xl" overflow="hidden" textAlign="left"
                            bgColor={neuropsicologiaBg} border={azulBorde} boxShadow={glowPanel}
@@ -228,10 +230,10 @@ export default function MetodoPsicologiaMiedosPreguntas() {
                           </Flex>
                         </Flex>
                       </Box>
-                      </RevealItem>
+                      </Reveal>
                     );
                   })}
-                </RevealStagger>
+                </Flex>
               </>
             )}
             </Reveal>
@@ -296,10 +298,12 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
          onClick={onClose} fontFamily="'EB Garamond', serif">
       <Box onClick={(e: React.MouseEvent) => e.stopPropagation()}
            position="relative" w="100%" maxW={{ base: "440px", md: "500px" }}
-           // Altura FIJA: el popup mide siempre lo mismo, no cambia según lo larga
-           // que sea la pregunta (el cuerpo hace scroll interno si hace falta).
-           h={{ base: "calc(100vh - 48px)", md: "600px" }}
-           maxH={{ base: "calc(100vh - 48px)", md: "calc(100vh - 120px)" }}
+           // ESCRITORIO: altura fija (mide siempre lo mismo, el cuerpo scrollea
+           // por dentro si hace falta). MÓVIL: el popup CRECE en vertical según
+           // lo largo que sea su contenido (pregunta + recuadro + ejemplos), con
+           // tope en la pantalla visible (dvh) para no perder los márgenes.
+           h={{ base: "auto", md: "600px" }}
+           maxH={{ base: "calc(100dvh - 48px)", md: "calc(100vh - 120px)" }}
            borderRadius="2xl" overflow="hidden" display="flex" flexDirection="column"
            boxShadow={`0 0 40px ${TINTA}66, 0 24px 70px rgba(0,0,0,0.5)`}>
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -324,7 +328,7 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
         </Box>
 
         {/* Cuerpo scrollable: la conversación con el guía, acumulativa */}
-        <Box ref={cuerpoRef} position="relative" zIndex={1} flex="1" overflowY="auto" overscrollBehavior="contain"
+        <Box ref={cuerpoRef} position="relative" zIndex={1} flex="1" minH={0} overflowY="auto" overscrollBehavior="contain"
              px={{ base: 5, md: 8 }} py={{ base: 5, md: 6 }}
              sx={{ scrollbarWidth: "thin", "&::-webkit-scrollbar": { width: "8px" },
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>
@@ -354,7 +358,9 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
                   onChange={(e) => onUpdate(q.key, e.target.value)}
                   placeholder={q.placeholder || t("metodo.psico.escribeAqui")}
                   mt={4}
-                  minH={{ base: "120px", md: "150px" }}
+                  // En móvil el recuadro va bien GRANDE (aquí se escribe lo
+                  // gordo); el popup crece con él, así que no roba sitio a nadie.
+                  minH={{ base: "200px", md: "150px" }}
                   bg="rgba(255,251,243,0.78)" border={`1px solid ${TINTA}3a`} color={TINTA}
                   borderRadius="lg" px={4} py={3} fontFamily="'EB Garamond', serif"
                   fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
@@ -367,12 +373,14 @@ function PopupEnfrentar({ miedo, onUpdate, onClose }: {
                 />
 
                 {/* Ejemplos: a veces no hay palabras y ayuda que te den opciones.
-                    Van en el hueco que YA queda bajo el recuadro (el popup no
-                    crece: alto y ancho siguen fijos), así que solo se pintan los
-                    que caben. Misma pieza que en «Integración». */}
+                    En escritorio van en el hueco que queda bajo el recuadro (el
+                    popup no crece ahí: solo se pintan los que caben). En móvil
+                    el popup sí crece con ellos y los ELEGIDOS desaparecen, así
+                    su box se hace más pequeño. Misma pieza que en «Integración». */}
                 <EjemplosPulsables
                   ejemplos={q.ejemplos || []}
                   respuesta={respuesta}
+                  encogerElegidos
                   onElegir={(ej) => {
                     const actual = respuesta.trim();
                     onUpdate(q.key, actual ? `${actual}\n${ej}` : ej);

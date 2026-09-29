@@ -652,7 +652,10 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               </Box>
             </Box>
 
-            {/* Fondo espacial del selector */}
+            {/* Fondo espacial del selector: la foto a plena opacidad (como en el
+                resto de disciplinas) y solo un velo oscuro suave para que las
+                tarjetas y el título lean bien. Antes iba al 60% + velo al 65% y
+                el cielo directamente no se veía. */}
             <Box
               position="fixed"
               inset="0"
@@ -660,7 +663,6 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
               zIndex={0}
               bg="#050505"
               overflow="hidden"
-              sx={{ backdropFilter: "blur(20px)" }}
             >
               <Box
                 as="img"
@@ -671,9 +673,9 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
                 inset="0"
                 w="100%"
                 h="100%"
-                style={{ objectFit: "cover", objectPosition: "center", opacity: 0.6 }}
+                style={{ objectFit: "cover", objectPosition: "center" }}
               />
-              <Box position="absolute" inset="0" bg="rgba(0,0,0,0.65)" />
+              <Box position="absolute" inset="0" bg="rgba(0,0,0,0.35)" />
             </Box>
 
             {/* Hasta que el fondo y las portadas carguen: solo la estrella. */}
@@ -723,7 +725,7 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
                     textAlign="center"
                     lineHeight="1.1"
                     style={{
-                      textShadow: `0 0 14px ${astrologiaTxt}cc, 0 0 32px ${astrologiaTxt}77, 0 0 70px ${astrologiaTxt}44`,
+                      textShadow: `0 0 14px ${astrologiaTxt}99, 0 0 30px ${astrologiaTxt}63, 0 0 56px ${astrologiaTxt}52`,
                     }}
                   >
                     {t("metodo.ilustracionesDe", { disciplina: t("disciplina.astrologia") })}

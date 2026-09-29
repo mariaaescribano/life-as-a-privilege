@@ -161,7 +161,7 @@ export function CerebroTrauma({ activa, onZona, tinta }: CerebroTraumaProps) {
               key={zona.key}
               as="button"
               onClick={() => onZona(zona.key)}
-              aria-label={`${zona.apodo || zona.nombre} — ${zona.nombre}`}
+              aria-label={zona.apodo ? `${zona.apodo} — ${zona.nombre}` : zona.nombre}
               position="absolute"
               left={`${pos.x}%`}
               top={`${pos.y}%`}
@@ -237,11 +237,12 @@ export function CerebroTrauma({ activa, onZona, tinta }: CerebroTraumaProps) {
             }}
             _hover={{ bg: "rgba(255,251,243,0.9)", transform: "translateY(-1px)" }}
           >
-            {/* El apodo si lo tiene; si no, el nombre (la alarma va sin apodo
-                y su nombre largo necesita poder partirse en dos líneas). */}
+            {/* Apodo y nombre anatómico JUNTOS, como ya hacía la alarma (que
+                los lleva los dos en `nombre` y va sin apodo). El texto puede
+                partirse en dos líneas. */}
             <Text color={tinta} fontSize={{ base: "sm", md: "md" }} fontWeight="700"
                   textAlign="center" lineHeight="1.25">
-              {zona.apodo || zona.nombre}
+              {zona.apodo ? `${zona.apodo} · ${zona.nombre}` : zona.nombre}
             </Text>
             <FlechaBonita size={{ base: "16px", md: "18px" }} />
           </Flex>

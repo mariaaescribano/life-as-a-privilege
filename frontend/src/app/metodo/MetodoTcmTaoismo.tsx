@@ -12,7 +12,6 @@ import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { Reveal } from "../../components/global/Reveal";
-import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { QigongComicModal } from "../../components/metodo/QigongComicModal";
 import { tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
@@ -137,10 +136,8 @@ export default function MetodoTcmTaoismo() {
           </Text>
           </Reveal>
 
-          {/* El paso siguiente, abajo a la derecha: el header ya se ha quedado
-              muy arriba después de las diez leyes. Mismo texto que su botón. */}
-          <BotonPaso label={t("metodo.tcm.paso.cocina")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
-                     onClick={() => navigate("/metodo/tcm/recetas")} />
+          {/* Sin botón de fin de página (decisión de María): a Tu cocina se
+              pasa desde el botón del header. */}
         </Flex>
       </Flex>
 

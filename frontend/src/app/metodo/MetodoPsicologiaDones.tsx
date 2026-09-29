@@ -271,7 +271,7 @@ export default function MetodoPsicologiaDones() {
 
             {/* Navegación entre preguntas — mismas flechas que en Huellas, con
                 los puntos de progreso en medio (coherencia del programa). */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={30} scaleFrom={0.97} duration={0.7} w="100%">
             <Flex align="center" justify="center" gap={{ base: 3, md: 5 }} w="100%">
               <FlechaPagina dir="prev" disabled={esPrimera} onClick={anterior} />
               <Flex justify="center" align="center" wrap="wrap" gap={2} maxW="520px">

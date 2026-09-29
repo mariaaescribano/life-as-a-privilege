@@ -161,7 +161,7 @@ export default function MetodoAyurvedaResultado() {
           gap={{ base: 4, md: 5 }}
           px={{ base: 5, md: 10, lg: 16 }}
           pt={{ base: 8, md: 12 }}
-          pb={{ base: 14, md: 20 }}
+          pb={{ base: 28, md: 36 }}
         >
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
@@ -189,10 +189,13 @@ export default function MetodoAyurvedaResultado() {
             boxShadow={GLOW}
             textAlign="center"
             mt={{ base: 0, md: 1 }}
-            transform={`scale(${TARJETA_ESCALA})`}
+            // La escala solo en ESCRITORIO (1063×0,8 ≈ los 850px del header).
+            // En móvil el ancho ya lo limita la pantalla y el scale dejaba la
+            // tarjeta más estrecha que el header: ahí va a ancho completo.
+            transform={{ base: "none", md: `scale(${TARJETA_ESCALA})` }}
             transformOrigin="top center"
             ref={tarjetaRef}
-            mb={`-${huecoEscala}px`}
+            mb={{ base: 0, md: `-${huecoEscala}px` }}
           >
             <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" overlay={`${ayurvedaBg}22`} />
             <Box position="relative" zIndex={1} px={{ base: 5, md: 8 }} py={{ base: 6, md: 8 }}>
@@ -263,8 +266,8 @@ export default function MetodoAyurvedaResultado() {
           </Box>
           </Reveal>
 
-          {/* Nota breve, sin consejos todavía */}
-          <Reveal direction="up" distance={22} duration={0.6} amount={0.15} w="100%" display="flex" justifyContent="center">
+          {/* Nota breve, sin consejos todavía (bajo la tarjeta: entra al asomar) */}
+          <Reveal inView once amount={0.2} direction="up" distance={22} duration={0.6} w="100%" display="flex" justifyContent="center">
           <Text
             color="rgba(255,255,255,0.75)"
             fontSize={{ base: "sm", md: "md" }}

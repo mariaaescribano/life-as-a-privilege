@@ -26,7 +26,7 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { Glifo } from "../../components/metodo/Glifo";
 import { SaberMasModal } from "../../components/metodo/Planetas/SaberMasModal";
 import { ArquetiposBloqueados } from "../../components/metodo/ArquetiposBloqueados";
@@ -63,7 +63,9 @@ const TINTA = neuropsicologiaTxt; // marrón tinta
 const PAPEL = "#fbf4e8";          // crema claro
 const ORO = "#caa24a";
 const INK_SHADOW = `0 1px 2px ${PAPEL}, 0 0 6px ${PAPEL}, 0 0 13px ${neuropsicologiaBg}`;
-const COL_H = { base: "440px", md: "520px", lg: "600px" } as const;
+// Alto de las columnas: fijo SOLO cuando van lado a lado (lg). Apiladas
+// (móvil/tablet) crecen hacia abajo con su contenido, sin scroll interno.
+const COL_H = { base: "auto", lg: "600px" } as const;
 const SCROLL_SX_CLARO = {
   scrollbarWidth: "thin" as const,
   scrollbarColor: `${PAPEL}55 transparent`,
@@ -249,7 +251,7 @@ export default function MetodoPsicologiaDonesEspejo() {
     setSelRecuerdos([]); setSelArqs([]);
     setNombre(""); setNombreOpen(false);
     // La rejilla está abajo del todo: bajamos hasta ella para ver aparecer el
-    // don nuevo (la Reveal tarda 0.42s en montarla).
+    // don nuevo (el Reveal entra al asomar en pantalla).
     setTimeout(() => { if (montado.current) donesRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, 500);
     await persistir(next);
   };
@@ -341,11 +343,13 @@ export default function MetodoPsicologiaDonesEspejo() {
             <IntroRecorrido>{donesIntro.espejo}</IntroRecorrido>
             </Reveal>
 
-            {/* ════════ DOS COLUMNAS: lo que escribiste · arquetipos ════════ */}
-            <RevealStagger w="100%" display="flex" flexDirection={{ base: "column", lg: "row" }} gap={{ base: 7, lg: 6 }} alignItems="stretch" stagger={0.16} delayChildren={0.15}>
+            {/* ════════ DOS COLUMNAS: lo que escribiste · arquetipos ════════
+                 Cada columna con su propio <Reveal inView>: crecen con los datos
+                 del usuario y envolver el conjunto caería en la trampa del `amount`. */}
+            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 7, lg: 6 }} align="stretch">
 
               {/* ── COLUMNA 1 · LO QUE ESCRIBISTE (solo respuestas) ── */}
-              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
+              <Reveal inView once amount={0.2} direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
@@ -359,7 +363,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                       <Box mt={3} h="1px" w="82%" maxW="260px" mx="auto"
                            bgGradient={`linear(to-r, transparent, ${TINTA}88, transparent)`} />
                     </Box>
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_TINTA}>
+                    <Box flex="1" minH={0} overflowY={{ base: "visible", lg: "auto" }} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_TINTA}>
                       {respondidas.length > 0 ? (
                         <Flex direction="column" gap={{ base: 3, md: 3.5 }}>
                           {respondidas.map((r, i) => {
@@ -394,10 +398,10 @@ export default function MetodoPsicologiaDonesEspejo() {
                   </Flex>
                 </Box>
               </Flex>
-              </RevealItem>
+              </Reveal>
 
               {/* ── COLUMNA 2 · TUS ARQUETIPOS (fondo de estrellas, como en Relación) ── */}
-              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
+              <Reveal inView once amount={0.2} direction="up" distance={30} scaleFrom={0.96} duration={0.6} delay={0.07} flex="1" minW={0}>
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
@@ -409,7 +413,7 @@ export default function MetodoPsicologiaDonesEspejo() {
                                       apoyo={arquetipos.length === 0
                                         ? t("metodo.psico.arquetiposSinCarta")
                                         : t("metodo.psico.arquetiposUnirDon")} />
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_CLARO}>
+                    <Box flex="1" minH={0} overflowY={{ base: "visible", lg: "auto" }} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX_CLARO}>
                       {arquetipos.length === 0 ? (
                         // Sin carta astral la columna va BLOQUEADA: se explica qué
                         // se hace aquí y que para completarlo hace falta la carta.
@@ -436,11 +440,11 @@ export default function MetodoPsicologiaDonesEspejo() {
                   </Flex>
                 </Box>
               </Flex>
-              </RevealItem>
-            </RevealStagger>
+              </Reveal>
+            </Flex>
 
             {/* ════════ DON EN CURSO · box elegante (con el botón dentro) ════════ */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
+            <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Box position="relative" w="100%" maxW="920px" borderRadius="2xl" overflow="hidden"
                  border={`1px solid ${ORO}66`} boxShadow={`0 0 22px ${ORO}2e, ${glowPanel}`}>
               <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -478,7 +482,7 @@ export default function MetodoPsicologiaDonesEspejo() {
 
             {/* ════════ SEPARADOR MANDALA + REJILLA DE DONES ════════ */}
             {dones.length > 0 && (
-              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
+              <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
               <>
                 <MandalaDivider />
                 <Flex ref={donesRef} direction="column" align="center" gap={4} w="100%" scrollMarginTop="90px">

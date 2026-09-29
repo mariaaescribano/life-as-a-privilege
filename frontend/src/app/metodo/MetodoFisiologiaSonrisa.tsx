@@ -256,7 +256,7 @@ export default function MetodoFisiologiaSonrisa() {
           </Reveal>
 
           {/* ── Los tres pasos ── */}
-          <Reveal direction="up" distance={18} delay={0.2} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal inView once amount={0.15} direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 3, md: 4 }} w="100%" maxW="900px">
               {PASOS.map((p) => (
                 <Flex key={p.n} direction="column" align="center" textAlign="center" gap={2.5}
@@ -296,7 +296,7 @@ export default function MetodoFisiologiaSonrisa() {
               anatómica en modo `screen`: su fondo negro desaparece y el cuerpo
               queda brillando sobre el fondo de Fisiología. Encima, un punto
               pulsable por órgano. ─────────────────────────────────────────── */}
-          <Reveal direction="up" distance={22} delay={0.28} duration={0.7} w="100%" display="flex" justifyContent="center">
+          <Reveal inView once amount={0.15} direction="up" distance={22} delay={0.1} duration={0.7} w="100%" display="flex" justifyContent="center">
             <Box position="relative" w="100%" maxW={{ base: "340px", md: "460px" }}
                  borderRadius="220px 220px 24px 24px" overflow="hidden"
                  border={`1px solid ${fisiologiaTxt}66`} boxShadow={CAJA_GLOW}
@@ -358,7 +358,7 @@ export default function MetodoFisiologiaSonrisa() {
           </Reveal>
 
           {/* ── Lista de órganos (los mismos que los puntos) ── */}
-          <Reveal direction="up" distance={18} delay={0.34} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal inView once amount={0.15} direction="up" distance={18} delay={0.1} duration={0.6} w="100%" display="flex" justifyContent="center">
             <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 3, md: 4 }} w="100%" maxW="900px">
               {ORGANOS_SONRISA.map((o) => (
                 <ChipOrgano key={o.key} organo={o} hecho={leido(SONRISA_CAMPO, o.key)} onClick={() => abrir(o)} />

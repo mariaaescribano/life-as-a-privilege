@@ -307,7 +307,7 @@ export default function MetodoAstrologiaLectura() {
         continueLabel="Casas"
         themeColor={astrologiaTxt}
       />
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo={t("metodo.astro.reservaLlamada")} />
       <IndiceAstrologia />
       <SiteFooter />
     </Box>

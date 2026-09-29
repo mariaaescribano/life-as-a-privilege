@@ -51,8 +51,10 @@ export function RelacionCard({ relacion, color, onBorrar }: {
   const arquetipos = relacion.arquetipos || [];
   const vacia = nudos.length === 0 && arquetipos.length === 0;
   return (
+    // En móvil el box CRECE hacia abajo con su contenido (sin tope ni scroll
+    // interno); el tope y el scroll de dentro son solo de escritorio.
     <Box position="relative" borderRadius="2xl" overflow="hidden" h="100%"
-         minH={{ base: "180px", md: "210px" }} maxH={{ base: "300px", md: "340px" }}
+         minH={{ base: "180px", md: "210px" }} maxH={{ base: "none", md: "340px" }}
          boxShadow={`0 12px 34px rgba(40,18,4,0.20), 0 2px 8px rgba(40,18,4,0.12)`}
          border={`1px solid ${TINTA}26`}>
       {/* Lavado de color propio de la relación + brillo suave arriba */}
@@ -85,7 +87,7 @@ export function RelacionCard({ relacion, color, onBorrar }: {
              bgGradient={`linear(to-r, ${TINTA}55, ${TINTA}22, transparent)`} />
 
         {/* Piezas reunidas + la frase de la persona */}
-        <Box flex="1" minH={0} overflowY="auto"
+        <Box flex="1" minH={0} overflowY={{ base: "visible", md: "auto" }}
              sx={{ scrollbarWidth: "thin", scrollbarColor: `${TINTA}55 transparent`,
                    "&::-webkit-scrollbar": { width: "6px" },
                    "&::-webkit-scrollbar-thumb": { background: `${TINTA}55`, borderRadius: "8px" } }}>

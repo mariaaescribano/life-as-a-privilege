@@ -4,7 +4,6 @@ import { getUserMe } from "../../api/userMe";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { CabalaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
@@ -209,10 +208,6 @@ export default function MetodoCabalaDiezDias() {
               {t("metodo.cabala.dias.cierre")}
             </Text>
           </Reveal>
-
-          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
-              /opiniones y trae de vuelta a esta misma página. */}
-          <PedirOpinion bg={cabalaBg} txt={cabalaTxt} nom={cabalaNom} />
         </Flex>
       </Flex>
 

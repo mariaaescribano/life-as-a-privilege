@@ -38,7 +38,7 @@ import {
 import { useAceIntro, useAcePreguntas } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -185,13 +185,15 @@ export default function MetodoPsicologiaAce() {
           </Flex>
           </Reveal>
 
-          {/* ── Las 10 preguntas · entran EN CASCADA, una tras otra ── */}
-          <RevealStagger stagger={0.12} delayChildren={0.1} amount={0.15}
-                         display="flex" flexDirection="column" w="100%" gap={{ base: 3.5, md: 4 }}>
-            {acePreguntas.map((p) => {
+          {/* ── Las 10 preguntas · cada una entra al asomar en pantalla ──
+               Un <Reveal inView> POR tarjeta (no en la columna entera: la lista
+               mide varias pantallas y caería en la trampa del `amount`). */}
+          <Flex direction="column" w="100%" gap={{ base: 3.5, md: 4 }}>
+            {acePreguntas.map((p, i) => {
               const elegido = respuestas[p.key];
               return (
-                <RevealItem key={p.key} w="100%">
+                <Reveal key={p.key} inView once amount={0.2} direction="up" distance={24} duration={0.65}
+                        delay={Math.min((i % 4) * 0.07, 0.35)} w="100%">
                 <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
@@ -248,10 +250,10 @@ export default function MetodoPsicologiaAce() {
                     </Flex>
                   </Flex>
                 </Box>
-                </RevealItem>
+                </Reveal>
               );
             })}
-          </RevealStagger>
+          </Flex>
 
           {guardando && (
             <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic">{t("metodo.psico.guardando")}</Text>
@@ -259,7 +261,7 @@ export default function MetodoPsicologiaAce() {
 
           {/* ── Al completar las 10: invitación a ver el resultado ── */}
           {completo && (
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%">
+            <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
             <Box ref={resultadoRef} w="100%" scrollMarginTop={{ base: 4, md: 6 }}>
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
                    border={azulBorde} boxShadow={glowPanel}>

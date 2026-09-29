@@ -13,6 +13,7 @@ import { useOverridesRemotos } from "../../data/astrologiaOverridesRemotos";
 import { SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { BotonCompania } from "../../components/global/BotonCompania";
+import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
@@ -153,18 +154,26 @@ export default function MetodoAstrologiaProfundizar() {
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
           {/* ── Header con icono del planeta ── */}
-          <MetodoStepHeader
-            icon={<Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={42} />}
-            title={titulo}
-            bgColor={`${cuerpo.color}1f`}
-            color={cuerpo.color}
-            space
-            mb={0}
-            prev={{ label: "← Volver a planetas", onClick: () => { void volverAPlanetas(); } }}
-          />
+          <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
+            <MetodoStepHeader
+              icon={<Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={42} />}
+              title={titulo}
+              bgColor={`${cuerpo.color}1f`}
+              color={cuerpo.color}
+              space
+              mb={0}
+              prev={{ label: "← Volver a planetas", onClick: () => { void volverAPlanetas(); } }}
+            />
+          </Reveal>
 
-          {/* ── Box con el texto profundo (fondo estrellado) ── */}
-          <Box
+          {/* ── Box con el texto profundo (fondo estrellado) ──
+                Su parte alta ya se ve al cargar: entra al montar. */}
+          <Reveal
+            direction="up"
+            distance={30}
+            scaleFrom={0.97}
+            delay={0.12}
+            duration={0.7}
             position="relative"
             w="100%"
             borderRadius="2xl"
@@ -202,12 +211,12 @@ export default function MetodoAstrologiaProfundizar() {
                 </Text>
               )}
             </Box>
-          </Box>
+          </Reveal>
 
         </Flex>
       </Flex>
 
-      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo="Reserva tu llamada de astrología" />
+      <BotonCompania color={astrologiaTxt} bgColor={astrologiaBg} disciplinaNom={astrologiaNom} llamadaTitulo={t("metodo.astro.reservaLlamada")} />
       <SiteFooter />
     </Box>
   );

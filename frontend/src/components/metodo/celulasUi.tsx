@@ -120,7 +120,8 @@ export function FichaFisioModal({
   const t = useT();
   const [imgErr, setImgErr] = useState(false);
   const puedeNavegar = !!onPrev && !!onNext;
-  // Contenedores con scroll (móvil: el Flex; escritorio: el Box del texto).
+  // Contenedores con scroll (móvil: el VELO entero; escritorio: el Box del texto).
+  const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
 
@@ -130,6 +131,7 @@ export function FichaFisioModal({
   // título), no a media lectura de la anterior.
   useEffect(() => {
     setImgErr(false);
+    if (overlayRef.current) overlayRef.current.scrollTop = 0;
     if (contentRef.current) contentRef.current.scrollTop = 0;
     if (textRef.current) textRef.current.scrollTop = 0;
   }, [foto, titulo]);
@@ -190,15 +192,21 @@ export function FichaFisioModal({
 
   return (
     <Box
+      ref={overlayRef}
       position="fixed"
       inset={0}
       zIndex={1100}
       display="flex"
-      alignItems="center"
+      // MÓVIL: la caja crece hacia abajo cuanto mida su texto y el scroll lo
+      // hace este velo, no la caja — el `py` de aquí es el margen que SIEMPRE
+      // queda arriba y abajo. Escritorio: centrada y con scroll en el texto.
+      alignItems={{ base: "flex-start", md: "center" }}
       justifyContent="center"
+      overflowY={{ base: "auto", md: "visible" }}
       px={{ base: 4, md: 20 }}
       py={{ base: 12, md: 14 }}
       onClick={onClose}
+      sx={{ WebkitOverflowScrolling: "touch" }}
     >
       {/* Fondo a pantalla completa: foto de Fisiología muy difuminada + velo,
           igual que el visor de Ilustraciones. */}
@@ -295,7 +303,10 @@ export function FichaFisioModal({
         w="100%"
         maxW={{ base: "360px", md: "900px" }}
         h={{ base: "auto", md: "500px" }}
-        maxH={{ base: "calc(100dvh - 96px)", md: "500px" }}
+        // Sin tope de alto en móvil: la caja sale cuan larga sea (facilita la
+        // lectura); una ficha corta se queda centrada gracias al my auto.
+        maxH={{ base: "none", md: "500px" }}
+        my={{ base: "auto", md: 0 }}
         display="flex"
         flexDirection="column"
         position="relative"
@@ -341,7 +352,9 @@ export function FichaFisioModal({
           zIndex={2}
           flex="1"
           minH={0}
-          overflowY={{ base: "auto", md: "hidden" }}
+          // En móvil ya no scrollea esto: scrollea el velo de fuera (la caja
+          // crece entera hacia abajo, sin barra propia).
+          overflowY={{ base: "visible", md: "hidden" }}
           overflowX="hidden"
           px={{ base: 5, md: 10 }}
           py={{ base: 9, md: 10 }}

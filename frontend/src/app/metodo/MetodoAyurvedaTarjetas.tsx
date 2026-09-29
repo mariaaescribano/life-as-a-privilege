@@ -11,7 +11,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import {
   API_URL,
   AyurvedaIcon, ayurvedaBg, ayurvedaNom, ayurvedaTxt,
@@ -119,7 +119,7 @@ export default function MetodoAyurvedaTarjetas() {
           gap={{ base: 5, md: 6 }}
           px={{ base: 5, md: 10, lg: 16 }}
           pt={{ base: 8, md: 12 }}
-          pb={{ base: 14, md: 20 }}
+          pb={{ base: 28, md: 36 }}
         >
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
@@ -149,25 +149,25 @@ export default function MetodoAyurvedaTarjetas() {
           </Text>
           </Reveal>
 
-          {/* 3 tarjetas · salen una tras otra empezando por la izquierda */}
-          <RevealStagger
+          {/* 3 tarjetas · cada una entra al asomar en pantalla (en móvil van
+              apiladas y las de abajo quedan bajo el pliegue); en ordenador,
+              escalonadas de izquierda a derecha */}
+          <Flex
             w="100%"
             maxW="1040px"
-            display="flex"
             gap={{ base: 4, md: 5 }}
             flexDirection={{ base: "column", md: "row" }}
             alignItems="stretch"
             justifyContent="center"
             mt={{ base: 1, md: 2 }}
-            stagger={0.18}
-            delayChildren={0.2}
           >
-            {DOSHAS.map((d) => {
+            {DOSHAS.map((d, i) => {
               const cfg = DOSHA_CARD[d];
               const Icon = cfg.Icon;
               const destacada = predomina(d);
               return (
-                <RevealItem key={d} direction="up" distance={30} scaleFrom={0.94} duration={0.6} flex="1" display="flex">
+                <Reveal key={d} inView once amount={0.2} direction="up" distance={30} scaleFrom={0.94}
+                        duration={0.6} delay={(i % 3) * 0.07} flex="1" display="flex">
                 <Box
                   onClick={() => navigate(`/metodo/ayurveda/dosha/${d}`)}
                   cursor="pointer"
@@ -244,10 +244,10 @@ export default function MetodoAyurvedaTarjetas() {
                     </Text>
                   </Box>
                 </Box>
-                </RevealItem>
+                </Reveal>
               );
             })}
-          </RevealStagger>
+          </Flex>
         </Flex>
       </Box>
 

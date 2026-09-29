@@ -23,7 +23,7 @@ import { PsicologiaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { Glifo } from "../../components/metodo/Glifo";
 import { RelacionIcon } from "../../components/metodo/RelacionIcon";
 import { HeridaIcon } from "../../components/metodo/HeridaIcon";
@@ -61,7 +61,9 @@ const PAPEL = "#fbf4e8";
 // no se muestra hasta que esta imagen esté cargada, para que no aparezca a medias.
 const ARQUETIPOS_IMG = "/img/astrologia/space.webp";
 // Altura máxima común de las dos columnas; el resto se ve con scroll interno.
-const COL_H = { base: "440px", md: "520px", lg: "600px" } as const;
+// Alto de las columnas: fijo SOLO cuando van lado a lado (lg). Apiladas
+// (móvil/tablet) crecen hacia abajo con su contenido, sin scroll interno.
+const COL_H = { base: "auto", lg: "600px" } as const;
 const SCROLL_SX = {
   scrollbarWidth: "thin" as const,
   scrollbarColor: `${TINTA}66 transparent`,
@@ -305,7 +307,7 @@ export default function MetodoPsicologiaIntegracion() {
     setSelHeridas([]); setSelArqs([]);
     setNombre(""); setTexto(""); setNombreOpen(false);
     // La rejilla está abajo del todo: bajamos hasta ella para ver aparecer la
-    // relación nueva (la Reveal tarda 0.42s en montarla).
+    // relación nueva (el Reveal entra al asomar en pantalla).
     setTimeout(() => { if (montado.current) relacionesRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, 500);
     await persistir(next);
   };
@@ -415,18 +417,20 @@ export default function MetodoPsicologiaIntegracion() {
             <IntroRecorrido>{t("metodo.psico.relacionIntro")}</IntroRecorrido>
             </Reveal>
 
-            {/* ════════ DOS COLUMNAS DE FUENTES ════════ */}
-            <RevealStagger w="100%" display="flex" flexDirection={{ base: "column", lg: "row" }} gap={{ base: 8, lg: 6 }} alignItems="stretch" stagger={0.16} delayChildren={0.15}>
+            {/* ════════ DOS COLUMNAS DE FUENTES ════════
+                 Cada columna con su propio <Reveal inView>: crecen con los datos
+                 del usuario y envolver el conjunto caería en la trampa del `amount`. */}
+            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 8, lg: 6 }} align="stretch">
 
               {/* ── COLUMNA 1 · HERIDAS ── */}
-              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
+              <Reveal inView once amount={0.2} direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
                   <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
                   <Flex position="relative" zIndex={1} direction="column" h="100%">
                     <ColumnaHeaderBox icono={<HeridaIcon size={22} color={TINTA} />} titulo={t("metodo.psico.paso.tusHeridas")} apoyo={t("metodo.psico.heridasApoyo")} />
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
+                    <Box flex="1" minH={0} overflowY={{ base: "visible", lg: "auto" }} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }} sx={SCROLL_SX}>
                       {heridas.length === 0 ? (
                         <EstadoVacio texto={t("metodo.psico.sinHeridasAun")} accion={t("metodo.psico.irAHeridas")}
                                      onClick={() => navigate(`/metodo/psicologia/${exp.id}/huellas-nudos`)} />
@@ -447,10 +451,10 @@ export default function MetodoPsicologiaIntegracion() {
                   </Flex>
                 </Box>
               </Flex>
-              </RevealItem>
+              </Reveal>
 
               {/* ── COLUMNA 2 · ARQUETIPOS ── */}
-              <RevealItem direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>
+              <Reveal inView once amount={0.2} direction="up" distance={30} scaleFrom={0.96} duration={0.6} delay={0.07} flex="1" minW={0}>
               <Flex direction="column" flex="1" minW={0}>
                 <Box position="relative" h={COL_H} borderRadius="2xl" overflow="hidden"
                      border={azulBorde} boxShadow={glowPanel}>
@@ -463,7 +467,7 @@ export default function MetodoPsicologiaIntegracion() {
                                       apoyo={arquetipos.length === 0
                                         ? t("metodo.psico.arquetiposSinCarta")
                                         : t("metodo.psico.arquetiposRelacionar")} />
-                    <Box flex="1" overflowY="auto" px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }}
+                    <Box flex="1" minH={0} overflowY={{ base: "visible", lg: "auto" }} px={{ base: 4, md: 5 }} pt={{ base: 4, md: 5 }} pb={{ base: 5, md: 6 }}
                          sx={{ ...SCROLL_SX, scrollbarColor: `${PAPEL}55 transparent`,
                                "&::-webkit-scrollbar": { width: "7px" },
                                "&::-webkit-scrollbar-thumb": { background: `${PAPEL}55`, borderRadius: "8px" } }}>
@@ -495,12 +499,12 @@ export default function MetodoPsicologiaIntegracion() {
                   </Flex>
                 </Box>
               </Flex>
-              </RevealItem>
-            </RevealStagger>
+              </Reveal>
+            </Flex>
 
             {/* ════════ RELACIÓN EN CURSO · box elegante (con el botón dentro) ════════
                  También es la «mesa» donde se puede soltar lo arrastrado. */}
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
+            <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Box position="relative" w="100%" maxW="920px" borderRadius="2xl" overflow="hidden"
                  border={`1px solid ${sobreMesa ? AZUL : `${AZUL}44`}`}
                  boxShadow={sobreMesa ? `0 0 0 3px ${AZUL}, 0 0 34px ${AZUL}88, 0 0 70px ${AZUL}44` : glowPanel}
@@ -543,7 +547,7 @@ export default function MetodoPsicologiaIntegracion() {
 
             {/* ════════ SEPARADOR MANDALA + REJILLA DE RELACIONES ════════ */}
             {relaciones.length > 0 && (
-              <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.42} duration={0.75} w="100%">
+              <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%">
               <>
                 <MandalaDivider />
                 <Flex ref={relacionesRef} direction="column" align="center" gap={4} w="100%" scrollMarginTop="90px">

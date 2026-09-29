@@ -6,12 +6,10 @@ import SiteFooter from "../../components/global/Footer";
 import { API_URL } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
 import { useT } from "../../i18n";
-import { marcarOpinionEnviada } from "../../components/metodo/PedirOpinion";
 import { InfoPrivacidad } from "../../components/global/InfoPrivacidad";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LA VUELTA — a esta página se puede llegar desde el final de un recorrido
-// (ver components/metodo/PedirOpinion), que manda en `?volver=` la página
+// LA VUELTA — a esta página se puede llegar con `?volver=` en la URL: la página
 // exacta de la que se salió. Con eso se pintan los botones de vuelta y se baja
 // directamente al formulario: quien viene a escribir su reseña no tiene que
 // buscarla debajo de todas las demás.
@@ -208,8 +206,6 @@ function DejarOpinion({
         }),
       });
       if (!res.ok) throw new Error();
-      // Ya ha dejado la suya: el final de los recorridos deja de pedírsela.
-      marcarOpinionEnviada();
       setStatus("ok");
       // Se limpia lo escrito, pero no quién lo firma: si deja otra, no tiene que
       // volver a teclear su nombre.

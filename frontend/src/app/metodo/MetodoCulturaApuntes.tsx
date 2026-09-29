@@ -23,7 +23,6 @@ import { getUserMe } from "../../api/userMe";
 import { Box, Flex, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { PedirOpinion } from "../../components/metodo/PedirOpinion";
 import { CulturaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
@@ -104,7 +103,7 @@ export default function MetodoCulturaApuntes() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
+      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 40, md: 48 }}>
         <Flex direction="column" align="center" w="100%" maxW={eligiendo ? "1040px" : "850px"} gap={7}>
 
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
@@ -173,10 +172,6 @@ export default function MetodoCulturaApuntes() {
               glow={CAJA_GLOW}
             />
           )}
-
-          {/* Al final del recorrido: la invitación a dejar una reseña. Lleva a
-              /opiniones y trae de vuelta a esta misma página. */}
-          <PedirOpinion bg={culturaBg} txt={culturaTxt} nom={culturaNom} />
         </Flex>
       </Flex>
 

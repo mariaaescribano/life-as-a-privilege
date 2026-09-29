@@ -92,7 +92,9 @@ export default function MetodoTcmQigong() {
           {/* Intro bajo el header · sin sombra (va sobre el turquesa limpio) */}
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Flex direction="column" gap={3} maxW="700px">
-            {[t("metodo.tcm.qigong.intro")].map((p, i) => (
+            {/* Una frase por línea: Qi (氣)… arriba y Gong (功)… debajo (vale
+                para los dos idiomas: se parte por el punto y seguido). */}
+            {t("metodo.tcm.qigong.intro").split(/(?<=\.)\s+/).map((p, i) => (
               <Text key={i} color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                     textAlign="center">
                 {p}
@@ -156,7 +158,7 @@ export default function MetodoTcmQigong() {
                gap={{ base: 4, md: 5 }} w="100%">
             {BROCADOS.map((p, i) => (
               <Reveal key={p.key} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7}
-                      amount={0.12} w="100%" h="100%">
+                      amount={0.12} delay={(i % 3) * 0.07} w="100%" h="100%">
                 <BrocadoBox postura={p} onVer={() => setBrocadoAbierto(i)} />
               </Reveal>
             ))}

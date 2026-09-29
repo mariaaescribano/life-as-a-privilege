@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TextoRico, useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Input, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -133,6 +133,11 @@ export default function MetodoNutricionDia() {
   const [infoKey, setInfoKey] = useState<string | null>(null); // ficha (ojo)
   const [drag, setDrag] = useState<DragState | null>(null);
   const [overMeal, setOverMeal] = useState<string | null>(null);
+  // MÓVIL: las columnas se apilan y arrastrar desde la paleta (abajo) hasta la
+  // comida (pantallas más arriba) es imposible con el dedo. Ahí el alimento se
+  // TOCA y sale un popup para elegir a qué comida va. En escritorio, arrastre.
+  const esMovil = useBreakpointValue({ base: true, md: false }) ?? false;
+  const [elegirKey, setElegirKey] = useState<string | null>(null); // popup «¿a qué comida?»
 
   // Formulario «crea tu alimento».
   const [fNombre, setFNombre] = useState("");
@@ -383,18 +388,22 @@ export default function MetodoNutricionDia() {
 
   const bloqueada = !kcalObjetivo;
   const infoFood = infoKey ? resolveFood(infoKey) : undefined;
+  const elegirFood = elegirKey ? resolveFood(elegirKey) : undefined;
 
-  // Tarjeta de un alimento en la paleta (arrastrable + ojo de ficha).
+  // Tarjeta de un alimento en la paleta. Escritorio: se ARRASTRA a la comida.
+  // Móvil: se TOCA y el popup pregunta a qué comida va (arrastrar no se puede:
+  // las comidas quedan pantallas más arriba). El ojo de la ficha no cambia.
   const ChooserCard = (info: FoodInfo) => {
     const arrastrando = drag?.key === info.key;
     return (
       <Flex key={info.key} direction="column" align="center" gap={1.5} borderRadius="xl" p={3} position="relative"
             bg="#ffffffab" border={`1px solid ${grupoColor}55`}
-            opacity={arrastrando ? 0.4 : 1} cursor="grab"
-            onPointerDown={onFoodPointerDown(info.key)}
-            onPointerMove={onFoodPointerMove}
-            onPointerUp={onFoodPointerUp}
-            sx={{ touchAction: "none", userSelect: "none", WebkitTapHighlightColor: "transparent" }}
+            opacity={arrastrando ? 0.4 : 1} cursor={esMovil ? "pointer" : "grab"}
+            onPointerDown={esMovil ? undefined : onFoodPointerDown(info.key)}
+            onPointerMove={esMovil ? undefined : onFoodPointerMove}
+            onPointerUp={esMovil ? undefined : onFoodPointerUp}
+            onClick={esMovil ? () => setElegirKey(info.key) : undefined}
+            sx={{ touchAction: esMovil ? "manipulation" : "none", userSelect: "none", WebkitTapHighlightColor: "transparent" }}
             _hover={{ borderColor: grupoColor, bg: "#ffffffcc", transform: "translateY(-2px)" }}
             transition="all 0.15s ease">
         {/* Ojo → ficha del alimento */}
@@ -547,7 +556,7 @@ export default function MetodoNutricionDia() {
                             <Flex direction="column" gap={2} mt={4} minH="52px">
                               {foods.length === 0 && (
                                 <Text color={`${nutricionTxt}77`} fontSize="sm" fontStyle="italic" textAlign="center" py={3}>
-                                  {t("metodo.dia.arrastraAqui")}
+                                  {esMovil ? t("metodo.dia.tocaParaAnadir") : t("metodo.dia.arrastraAqui")}
                                 </Text>
                               )}
                               {foods.map((f) => {
@@ -612,7 +621,7 @@ export default function MetodoNutricionDia() {
                     <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} pt={{ base: 5, md: 6 }} pb={2}>
                       <Text color={nutricionTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase" mb={3}
                             textShadow="0 1px 2px #ffffffcc, 0 0 10px #ffffffaa">
-                        {t("metodo.dia.eligeArrastra")}
+                        {esMovil ? t("metodo.dia.eligeToca") : t("metodo.dia.eligeArrastra")}
                       </Text>
                       <Flex gap={2} wrap="wrap">
                         {GRUPOS_DIA.map((g) => {
@@ -769,6 +778,61 @@ export default function MetodoNutricionDia() {
                   {t("metodo.dia.loHasCreado")}
                 </Text>
               )}
+            </Box>
+          </Box>
+        </Flex>
+      )}
+
+      {/* ── POPUP (móvil): ¿a qué comida va este alimento? ──
+          Sustituye al arrastre: se toca el alimento y se elige la comida. */}
+      {elegirFood && (
+        <Flex position="fixed" inset={0} zIndex={5100} align="center" justify="center" px={4}
+              bg="rgba(0,0,0,0.55)" onClick={() => setElegirKey(null)}>
+          <Box onClick={(e) => e.stopPropagation()} position="relative" w="100%" maxW="440px" borderRadius="2xl"
+               overflow="hidden" bg={nutricionBg} border={`1px solid ${nutricionTxt}44`}
+               style={{ boxShadow: glowHeader(nutricionTxt) }}>
+            <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" />
+            <Box position="relative" zIndex={1} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }}>
+              <Flex justify="flex-end">
+                <Box as="button" onClick={() => setElegirKey(null)} w="30px" h="30px" borderRadius="full"
+                     display="flex" alignItems="center" justifyContent="center" fontSize="lg" lineHeight="1"
+                     color={nutricionTxt} bg={`${nutricionTxt}12`} _hover={{ bg: `${nutricionTxt}22` }} cursor="pointer">×</Box>
+              </Flex>
+              <Flex align="center" gap={3.5} mt={-1} mb={4}>
+                <AlimentoFoto info={elegirFood} size="54px" />
+                <Box minW={0}>
+                  <Text color={nutricionTxt} fontSize="lg" fontWeight={700} lineHeight="1.15" noOfLines={1}>
+                    {elegirFood.nombre}
+                  </Text>
+                  <Text color={`${nutricionTxt}aa`} fontSize="sm">
+                    {elegirFood.porcionG} g · {Math.round(elegirFood.kcalRacion)} kcal
+                  </Text>
+                </Box>
+              </Flex>
+              <Text color={nutricionTxt} fontSize={{ base: "md", md: "lg" }} fontWeight={700} textAlign="center" mb={3}>
+                {t("metodo.dia.aQueComida")}
+              </Text>
+              <Flex direction="column" gap={2.5}>
+                {comidasDef.map((c) => {
+                  const kcal = Math.round(kcalComida(c.key));
+                  const meta = targetComida(c.pct);
+                  return (
+                    <Box key={c.key} as="button"
+                         onClick={() => { addFood(c.key, elegirFood.key); setElegirKey(null); }}
+                         textAlign="left" borderRadius="xl" px={4} py={3}
+                         bg={`${nutricionTxt}0f`} border={`1px solid ${nutricionTxt}44`}
+                         cursor="pointer" transition="all 0.15s ease"
+                         _hover={{ bg: `${nutricionTxt}1f`, borderColor: nutricionTxt }}>
+                      <Flex justify="space-between" align="baseline" gap={3}>
+                        <Text color={nutricionTxt} fontSize="md" fontWeight={700}>{c.label}</Text>
+                        <Text color={`${nutricionTxt}aa`} fontSize="xs" whiteSpace="nowrap">
+                          {kcal} / {meta} kcal
+                        </Text>
+                      </Flex>
+                    </Box>
+                  );
+                })}
+              </Flex>
             </Box>
           </Box>
         </Flex>

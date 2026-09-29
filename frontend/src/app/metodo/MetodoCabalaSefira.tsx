@@ -684,9 +684,9 @@ export default function MetodoCabalaSefira() {
             </Reveal>
           )}
 
-          {/* Fila EQUILIBRADO / DESEQUILIBRADO */}
+          {/* Fila EQUILIBRADO / DESEQUILIBRADO — bajo el pliegue: entra al hacer scroll */}
           {(sefira.equilibrado.items.length > 0 || sefira.desequilibrado.items.length > 0) && (
-            <Reveal direction="up" distance={22} delay={0.16} duration={0.65} w="100%">
+            <Reveal inView once amount={0.1} direction="up" distance={30} scaleFrom={0.97} delay={0.1} duration={0.7} w="100%">
               <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 6 }} w="100%" align="stretch">
                 {sefira.equilibrado.items.length > 0 && (
                   <Box flex="1" display="flex">
@@ -756,7 +756,7 @@ export default function MetodoCabalaSefira() {
               porque de él vive la página «Diez días» (una jornada por sefirá). */}
           {/* Autoevaluación (1-10) */}
           {sefira.autoevaluacion.items.length > 0 && (
-            <Reveal direction="up" distance={22} delay={0.24} duration={0.65} w="100%">
+            <Reveal inView once amount={0.15} direction="up" distance={30} scaleFrom={0.97} delay={0.1} duration={0.7} w="100%">
               <Caja>
                 <TituloCaja>{t("metodo.cabala.sefira.autoevaluacion")}</TituloCaja>
                 <Divisor mt={3} mb={4} />
@@ -782,14 +782,14 @@ export default function MetodoCabalaSefira() {
 
           {/* Test de la dimensión (Escala de Equilibrio) */}
           {testCabala[sefira.key] && (
-            <Reveal direction="up" distance={22} delay={0.3} duration={0.65} w="100%">
+            <Reveal inView once amount={0.15} direction="up" distance={30} scaleFrom={0.97} delay={0.1} duration={0.7} w="100%">
               <TestBox dim={testCabala[sefira.key]} answers={testAnswers} onAnswer={guardarTest} />
             </Reveal>
           )}
 
           {/* Clave de desarrollo — SIEMPRE lo último del recorrido de la sefirá */}
           {sefira.clave.length > 0 && (
-            <Reveal direction="up" distance={22} delay={0.34} duration={0.65} w="100%">
+            <Reveal inView once amount={0.15} direction="up" distance={30} scaleFrom={0.97} delay={0.1} duration={0.7} w="100%">
               <Caja>
                 <TituloCaja>{t("metodo.cabala.sefira.clave")}</TituloCaja>
                 <Divisor mt={3} mb={4} />
@@ -814,7 +814,7 @@ export default function MetodoCabalaSefira() {
                 Las respuestas se guardan solas al salir de cada campo, pero eso
                 no se veía en ninguna parte y había que subir hasta la cabecera
                 para pasar a la sefirá siguiente. */}
-          <Reveal direction="up" distance={18} delay={0.38} duration={0.6} w="100%">
+          <Reveal inView once amount={0.2} direction="up" distance={18} delay={0.1} duration={0.6} w="100%">
             <Caja>
               {/* Progreso de la dimensión: cuánto llevas de cada bloque. Las
                   barras crecen a la vez que se responde, así que la página
@@ -856,7 +856,7 @@ export default function MetodoCabalaSefira() {
 
           {/* El botón de seguir vive FUERA del box, abajo a la derecha; a su
               izquierda, solo los avisos (qué falta o un fallo al guardar). */}
-          <Reveal direction="up" distance={14} delay={0.42} duration={0.55} w="100%">
+          <Reveal inView once amount={0.2} direction="up" distance={14} delay={0.15} duration={0.55} w="100%">
             <Flex align="center" justify="space-between" gap={4} wrap="wrap" w="100%">
               <Flex direction="column" gap={1.5} minW={0} flex="1">
                 {errorGuardado && (

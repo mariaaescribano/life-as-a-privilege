@@ -282,7 +282,9 @@ const FONDO_DOSHA: Record<DoshaKey, string> = {
  *  elegido (su foto luce) y más tupido en los otros dos (quedan en reposo). */
 function SelectorDosha({ sel, onSelect }: { sel: DoshaKey; onSelect: (k: DoshaKey) => void }) {
   return (
-    <Flex gap={{ base: 2.5, md: 4 }} wrap="wrap" justify="center" w="100%">
+    // En móvil los tres caben en UNA línea: pastillas más pequeñas y sin
+    // wrap (con el tamaño grande, Kapha se caía a una segunda fila).
+    <Flex gap={{ base: 2, md: 4 }} wrap={{ base: "nowrap", md: "wrap" }} justify="center" w="100%">
       {DOSHAS.map((k) => {
         const m = DOSHA_META[k];
         const Icon = m.Icon;
@@ -295,14 +297,15 @@ function SelectorDosha({ sel, onSelect }: { sel: DoshaKey; onSelect: (k: DoshaKe
             position="relative"
             overflow="hidden"
             align="center"
+            justify="center"
             gap={2}
-            px={{ base: 5, md: 8 }}
-            py={{ base: 2, md: 2.5 }}
+            px={{ base: 3, md: 8 }}
+            py={{ base: 1.5, md: 2.5 }}
             borderRadius="full"
             border={`1.5px solid ${activo ? m.color : `${m.color}77`}`}
             color={activo ? m.color : `${TINTA}cc`}
             fontFamily="'EB Garamond', serif"
-            fontSize={{ base: "lg", md: "xl" }}
+            fontSize={{ base: "md", md: "xl" }}
             fontWeight={activo ? "700" : "400"}
             letterSpacing="0.06em"
             cursor="pointer"
@@ -319,9 +322,9 @@ function SelectorDosha({ sel, onSelect }: { sel: DoshaKey; onSelect: (k: DoshaKe
             <Box position="absolute" inset="0" zIndex={0} pointerEvents="none"
                  bg={activo ? `${ayurvedaBg}4d` : `${ayurvedaBg}b3`}
                  transition="background 0.12s ease" />
-            <Flex position="relative" zIndex={1} align="center" gap={2}
+            <Flex position="relative" zIndex={1} align="center" gap={{ base: 1.5, md: 2 }}
                   style={{ textShadow: INK_SHADOW }}>
-              <Icon size={{ base: "20px", md: "24px" }} color={m.color} />
+              <Icon size={{ base: "16px", md: "24px" }} color={m.color} />
               {m.label}
             </Flex>
           </Flex>

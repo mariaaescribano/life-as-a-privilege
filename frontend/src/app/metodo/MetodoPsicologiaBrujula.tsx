@@ -224,7 +224,7 @@ export default function MetodoPsicologiaBrujula() {
             </Reveal>
 
             {/* Cierre */}
-            <Reveal direction="up" distance={20} delay={0.32} duration={0.75} w="100%" display="flex" justifyContent="center">
+            <Reveal inView once amount={0.2} direction="up" distance={20} duration={0.75} w="100%" display="flex" justifyContent="center">
             <Text color={PAPEL} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.7" maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{t("metodo.psico.cartaGracias")}</Text>
             </Reveal>

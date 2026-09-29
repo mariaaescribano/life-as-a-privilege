@@ -197,11 +197,11 @@ function TestEscalaComic({
   return (
     <Flex direction="column" gap={5} textAlign="left">
       <Box>
-        <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontWeight="800" letterSpacing="0.14em"
+        <Text color="white" fontSize={{ base: "md", md: "2xl" }} fontWeight="800" letterSpacing="0.14em"
               textAlign="center" textTransform="uppercase" style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
           {cabecera}{testTotal > 1 ? ` · ${testNum} de ${testTotal}` : ""}
         </Text>
-        <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
+        <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "lg" }} fontStyle="italic"
               textAlign="center" mt={1.5} style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
           {test.titulo}
         </Text>
@@ -210,7 +210,7 @@ function TestEscalaComic({
 
       {/* Enunciado del cuestionario + la escala, una sola vez arriba */}
       {test.enunciado && (
-        <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.65"
+        <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "lg" }} lineHeight="1.65"
               style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
           {test.enunciado}
         </Text>
@@ -238,23 +238,25 @@ function TestEscalaComic({
         const valor = puntoRespuesta(respuestas[q.key]);
         return (
           <Box key={q.key}>
-            <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="700" mb={2.5}
+            <Text color="white" fontSize={{ base: "md", md: "xl" }} fontWeight="700" mb={2.5}
                   style={{ textShadow: "0 2px 6px rgba(0,0,0,1), 0 0 4px rgba(0,0,0,1)" }}>
               {i + 1}. {q.texto}
             </Text>
-            <Flex align="center" gap={{ base: 2, md: 2.5 }} wrap="wrap">
+            {/* En móvil botones y huecos más pequeños (36px + 6px): los cinco
+                caben en UNA línea dentro de la caja del cómic (~240px útiles). */}
+            <Flex align="center" gap={{ base: 1.5, md: 2.5 }} wrap="wrap">
               {rotulos.map((rotulo, n) => {
                 const sel = valor === n;
                 return (
                   <Box key={n} as="button" title={rotulo}
                        onClick={() => onElegir(q.key, String(n))}
-                       w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }}
+                       w={{ base: "36px", md: "48px" }} h={{ base: "36px", md: "48px" }}
                        flexShrink={0} borderRadius="full"
                        display="flex" alignItems="center" justifyContent="center"
                        bg={sel ? color : "rgba(0,0,0,0.42)"}
                        border={`1px solid ${sel ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.22)"}`}
                        color="white" fontFamily="'EB Garamond', serif"
-                       fontSize={{ base: "lg", md: "xl" }} fontWeight="800"
+                       fontSize={{ base: "md", md: "xl" }} fontWeight="800"
                        // Solo colores y sombra: con `all` la transición animaba
                        // también los cambios de posición y se veía como un salto.
                        cursor="pointer" transition="background-color 0.15s, border-color 0.15s, box-shadow 0.15s"
@@ -272,7 +274,7 @@ function TestEscalaComic({
                 aparecer o cambiar de anchura, el contenido crecía y el scroll
                 anchoring del navegador recolocaba el scroll: todo lo de arriba
                 pegaba un salto con cada respuesta. */}
-            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
+            <Text color="white" fontSize={{ base: "xs", md: "md" }} fontWeight="700" fontStyle="italic"
                   mt={1.5} minH="1.5em"
                   style={{ textShadow: `0 1px 4px rgba(0,0,0,0.95), 0 0 12px ${color}` }}>
               {valor !== null ? rotulos[valor] : " "}
