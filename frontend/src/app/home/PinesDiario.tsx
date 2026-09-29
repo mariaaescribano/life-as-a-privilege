@@ -58,7 +58,12 @@ const PIN = {
   _active: { transform: "translateY(0)" },
 } as const;
 
-export default function PinesDiario() {
+export default function PinesDiario({ estatico = false }: {
+  /** En vez de flotar abajo a la derecha, los pines van EN EL FLUJO de la
+   *  página (los usa el móvil: debajo del box «Tu mapa», así que cuando el
+   *  mapa se despliega, los pines bajan con él). En móvil no flota nada. */
+  estatico?: boolean;
+}) {
   const t = useT();
   const navigate = useNavigate();
   if (cacheDeOtraCuenta("pinesDiario")) {
@@ -116,16 +121,23 @@ export default function PinesDiario() {
 
   return (
     <>
-      {/* ── Los dos pines, apilados abajo a la derecha ── */}
+      {/* ── Los dos pines, apilados. Flotando abajo a la derecha SOLO en
+          escritorio (desde lg); en móvil van estáticos, en el flujo, debajo
+          de «Tu mapa» (instancia con `estatico` que pinta el Home). ── */}
       <Flex
         direction="column"
         align="stretch"
         gap="10px"
-        position="fixed"
-        right={{ base: "14px", md: "26px" }}
-        bottom={{ base: "calc(14px + env(safe-area-inset-bottom))", md: "26px" }}
-        zIndex={150}
         fontFamily="'EB Garamond', serif"
+        {...(estatico
+          ? { w: "100%", maxW: { base: "420px", md: "320px" }, mx: "auto" }
+          : {
+              position: "fixed" as const,
+              right: { base: "14px", md: "26px" },
+              bottom: { base: "calc(14px + env(safe-area-inset-bottom))", md: "26px" },
+              zIndex: 150,
+              display: { base: "none", lg: "flex" },
+            })}
       >
         <Flex {...PIN} onClick={abrirNotas} aria-label={t("home.pin.misNotas")}>
           <DiarioIcon fill="white" size="26px" />

@@ -907,9 +907,10 @@ const Home = () => {
       )}
 
       {/* Los pines del diario (Mis notas + Diario de terapia), abajo a la
-          derecha. Solo salen si la persona tiene diario de terapias. Van a
-          este nivel, FUERA de cualquier box con transform: un position:fixed
-          dentro de un elemento transformado se ancla a él y no a la ventana. */}
+          derecha — SOLO en escritorio (en móvil no flota nada: van estáticos
+          debajo de «Tu mapa», más abajo). Van a este nivel, FUERA de cualquier
+          box con transform: un position:fixed dentro de un elemento
+          transformado se ancla a él y no a la ventana. */}
       <PinesDiario />
 
       {/* Tu camino — escritorio: fijo a la IZQUIERDA, a la misma altura que
@@ -1237,18 +1238,23 @@ const Home = () => {
               })}
             </Box>
 
-            {/* Continuar por dónde lo dejé — móvil: debajo del mandala */}
+            {/* Continuar por dónde lo dejé — móvil: debajo del mandala, con
+                aire de sobra entre medias para que el mandala respire y se
+                lleve el protagonismo. */}
             {continuarBtn && (
-              <Box display={{ base: "flex", md: "none" }} justifyContent="center" mt={8} w="100%">
+              <Box display={{ base: "flex", md: "none" }} justifyContent="center" mt={14} w="100%">
                 {continuarBtn}
               </Box>
             )}
 
             {/* Tu camino — en pantallas estrechas no cabe a la izquierda del
                 mandala sin pisarlo, así que ahí se pone debajo, con aire por
-                los dos lados: ni pegado al mandala ni al footer. */}
+                los dos lados: ni pegado al mandala ni al footer. Debajo van
+                los pines del diario, estáticos (en móvil nada flota): al
+                desplegarse «Tu mapa», los pines bajan con el flujo. */}
             <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={14} mb={10} w="100%">
               <CaminoUsuario suscritas={suscritasCamino} />
+              <PinesDiario estatico />
             </Flex>
           </Flex>
         ) : (

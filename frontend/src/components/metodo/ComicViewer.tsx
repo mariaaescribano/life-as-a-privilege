@@ -393,12 +393,10 @@ export function ComicViewer({
     userSelect: "text" as const,
     WebkitUserSelect: "text",
   };
-  // Fondo a pantalla completa: parámetros según modo. `fondoNitido` (cómic de
-  // elementos de TCM) muestra la foto casi nítida y a plena pantalla; el resto
-  // del modo disciplina la deja muy blureada + pantalla negra para contrastar
-  // con la foto nítida del box del texto.
-  const bgBlurPx = isDisciplinaMode ? (fondoNitido ? 26 : 20) : 0;
-  const bgSpreadPx = bgBlurPx > 0 ? bgBlurPx + 8 : 0; // compensa el sangrado del blur
+  // Fondo a pantalla completa: la foto va SIEMPRE nítida, a su calidad — nada
+  // de blur (lo llevó un tiempo y emborronaba fotos buenas). Lo que la separa
+  // del box del texto es solo el velo oscuro de encima, un punto más cargado
+  // en el modo disciplina normal que en `fondoNitido`.
   const bgOverlay = isDisciplinaMode
     ? (fondoNitido ? "rgba(0,0,0,0.38)" : "rgba(0,0,0,0.45)")
     : "rgba(0,0,0,0.35)";
@@ -454,6 +452,20 @@ export function ComicViewer({
   const bodyRef = useRef<HTMLDivElement>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
+  // ¿Pantalla de móvil? (< md, el mismo corte en el que cambia la maquetación
+  // foto-arriba/texto-debajo). En móvil el visor NO encierra el scroll dentro
+  // de la caja: la caja crece a lo alto que pida el texto y se scrollea la
+  // PANTALLA, como en cualquier página — mucho más natural con el dedo. En
+  // escritorio se mantiene la caja de altura fija con el scroll dentro.
+  const [esMovil, setEsMovil] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 47.99em)");
+    const on = () => setEsMovil(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+
   const total = vinetas.length;
   const current = vinetas[index];
   const isFirst = index === 0;
@@ -485,18 +497,21 @@ export function ComicViewer({
     !textColor || textColor.toLowerCase() === "#ffffff" || textColor.toLowerCase() === "white";
   const tituloShadow = tituloBlanco ? "0 2px 8px rgba(0,0,0,0.9)" : textShadow;
 
-  // ── Nada de barra de scroll fuera de la caja ──────────────────────────────
-  // El visor ocupa la pantalla JUSTA (el ModalBody de abajo va a 100dvh con
-  // overflow hidden) y el texto scrollea DENTRO de la caja, pegado a su borde.
-  // Cualquier barra vertical a pantalla completa es, por tanto, un error.
-  //
-  // Se apaga aquí, en UN sitio, para los ~19 popups que montan este visor (y
-  // sin tocar los que sí necesitan scroll: los MENÚS de las galerías de
+  // ── Nada de barra de scroll fuera de la caja (SOLO escritorio) ────────────
+  // En escritorio el visor ocupa la pantalla JUSTA (el ModalBody de abajo va a
+  // 100dvh con overflow hidden) y el texto scrollea DENTRO de la caja, pegado
+  // a su borde: cualquier barra vertical a pantalla completa es un error, y el
+  // hook la apaga aquí, en UN sitio, para los ~19 popups que montan este visor
+  // (sin tocar los que sí necesitan scroll: los MENÚS de las galerías de
   // Ilustraciones, que vuelven a scrollear al salir del visor). El hook sube
   // hasta <html> apagando el overflow de todo el camino —incluida la página de
   // detrás, que era de donde salía la barra gorda del sistema—; el porqué de
   // cada caso está contado en sinBarraDeScroll.ts.
-  useSinBarraDeScroll(bodyRef);
+  //
+  // En MÓVIL es al revés: la caja crece y lo que scrollea ES la pantalla (el
+  // contenedor del modal, que va con scrollBehavior="outside"), así que el
+  // overflow de arriba tiene que seguir vivo.
+  useSinBarraDeScroll(bodyRef, !esMovil);
 
   // Al cambiar de viñeta, la nueva SIEMPRE empieza desde arriba, aunque en la
   // anterior se hubiera bajado hasta el final. Reseteamos el scroll interno
@@ -701,17 +716,12 @@ export function ComicViewer({
   return (
     <>
       {/* Fondo a pantalla completa. La foto cubre TODO el viewport sin dejar
-          huecos en negro: position:fixed + inset:0 + objectFit:cover.
-          - Astrología: foto espacial nítida.
-          - Disciplina mode (Hinduismo / TCM Ilustraciones): foto de la
-            modalidad con blur fuerte + pantalla negra translúcida para crear
-            distinción con la foto nítida del box del texto. */}
+          huecos en negro: position:fixed + inset:0 + objectFit:cover. SIEMPRE
+          nítida, a plena calidad — lo único que la atenúa es el velo oscuro
+          translúcido de encima (la tinta va en el velo, no en la foto). */}
       <Box
         position="fixed"
-        top="-40px"
-        left="-40px"
-        right="-40px"
-        bottom="-40px"
+        inset="0"
         pointerEvents="none"
         zIndex={0}
         overflow="hidden"
@@ -723,16 +733,12 @@ export function ComicViewer({
           alt=""
           loading="eager"
           position="absolute"
-          top={`-${bgSpreadPx}px`}
-          left={`-${bgSpreadPx}px`}
-          right={`-${bgSpreadPx}px`}
-          bottom={`-${bgSpreadPx}px`}
-          w={`calc(100% + ${bgSpreadPx * 2}px)`}
-          h={`calc(100% + ${bgSpreadPx * 2}px)`}
+          inset="0"
+          w="100%"
+          h="100%"
           style={{
             objectFit: "cover",
             objectPosition: "center",
-            filter: bgBlurPx > 0 ? `blur(${bgBlurPx}px)` : undefined,
           }}
         />
         <Box position="absolute" inset="0" bg={bgOverlay} />
@@ -833,16 +839,17 @@ export function ComicViewer({
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        // Exactamente la pantalla, ni un píxel más: la caja de abajo se ajusta a
-        // lo que quede libre y hace su propio scroll por dentro, así que la
-        // página NO necesita barra de scroll. `dvh` para que en móvil no cuente
-        // de más la franja de la barra del navegador.
-        // `maxH` además de `h`: el ModalContent de algunos popups va con
-        // `minH="100dvh"`, y sin tope el body podía estirarse por encima de la
-        // pantalla y sacarle barra al contenedor del modal.
-        h="100dvh"
-        maxH="100dvh"
-        overflow="hidden"
+        // ESCRITORIO: exactamente la pantalla, ni un píxel más — la caja se
+        // ajusta a lo que quede libre y hace su propio scroll por dentro, así
+        // que la página NO necesita barra. `maxH` además de `h`: el
+        // ModalContent de algunos popups va con `minH="100dvh"` y sin tope el
+        // body podía estirarse y sacarle barra al contenedor del modal.
+        // MÓVIL: al revés — el body crece a lo alto del contenido (la caja ya
+        // no se encierra) y se scrollea la PANTALLA con el dedo.
+        h={{ base: "auto", md: "100dvh" }}
+        minH={{ base: "100dvh", md: "100dvh" }}
+        maxH={{ base: "none", md: "100dvh" }}
+        overflow={{ base: "visible", md: "hidden" }}
         // Móvil: px = 5 para que el box quede EXACTAMENTE del ancho del header de
         // la disciplina (la página usa px base 5). py más corto para que el box +
         // las flechas quepan juntos en el viewport sin scroll.
@@ -864,11 +871,13 @@ export function ComicViewer({
           // caben las flechas fijas al viewport, en vez de que estas se le
           // monten encima. Así la caja es más pequeña y se lee mejor.
           maxW={{ base: "calc(100vw - 104px)", md: "940px" }}
-          // Los 540px de siempre… salvo que la ventana sea baja: entonces la
-          // caja se encoge a lo que hay (descontando el py del ModalBody) en vez
-          // de desbordar y sacarle una barra de scroll a la página entera.
+          // Escritorio: los 540px de siempre… salvo que la ventana sea baja:
+          // entonces la caja se encoge a lo que hay (descontando el py del
+          // ModalBody) en vez de desbordar y sacarle una barra a la página.
+          // Móvil: SIN tope — la caja mide lo que pida la viñeta entera y el
+          // scroll es el de la pantalla.
           h={{ base: "auto", md: "min(540px, calc(100dvh - 112px))" }}
-          maxH={{ base: "calc(100dvh - 72px)", md: "calc(100dvh - 112px)" }}
+          maxH={{ base: "none", md: "calc(100dvh - 112px)" }}
           display="flex"
           flexDirection="column"
           position="relative"
@@ -911,11 +920,10 @@ export function ComicViewer({
                 objectFit: "cover",
                 objectPosition: "center",
                 opacity: isDisciplinaMode ? 1 : 0.75,
-                // TCM ciclos (fondoNitido): un pelín de blur para que la letra se
-                // lea mejor, pero la foto se sigue viendo bonita. El scale evita
-                // que el desenfoque deje ver los bordes del box.
-                filter: fondoNitido ? "saturate(1.05) blur(3px)" : isDisciplinaMode ? "saturate(1.05)" : undefined,
-                transform: fondoNitido ? "scale(1.05)" : undefined,
+                // NADA de blur en la foto del box (llevó 3px en fondoNitido y
+                // se cargaba la calidad): la legibilidad la ponen los velos
+                // oscuros de encima, la foto se queda nítida.
+                filter: isDisciplinaMode ? "saturate(1.05)" : undefined,
               }}
             />
             <Box
@@ -1142,7 +1150,7 @@ export function ComicViewer({
               minW={0}
               w={{ base: "100%", md: "auto" }}
               alignSelf={{ base: "auto", md: "stretch" }}
-              maxH="100%"
+              maxH={{ base: "none", md: "100%" }}
               minH={0}
               display="flex"
             >
@@ -1150,16 +1158,16 @@ export function ComicViewer({
               ref={textScrollRef}
               flex="1"
               minW={0}
-              // Contenedor con su propio scroll vertical (en móvil también: así
-              // la foto se queda quieta arriba, cubriendo la caja de lado a
-              // lado, y lo que corre por debajo es el texto). El texto arranca
-              // arriba (flex-start) con un margen superior constante, así que
-              // empieza siempre en el mismo sitio sin cortarse por arriba.
-              maxH="100%"
+              // ESCRITORIO: contenedor con su propio scroll vertical. El texto
+              // arranca arriba (flex-start) con un margen superior constante,
+              // así que empieza siempre en el mismo sitio sin cortarse.
+              // MÓVIL: sin scroll propio — el texto fluye entero dentro de la
+              // caja (que crece) y se recorre scrolleando la pantalla.
+              maxH={{ base: "none", md: "100%" }}
               minH={0}
               // `scroll` (no `auto`): el carril de la barra está SIEMPRE ahí, así
               // que se ve de un vistazo que la columna de texto es scrollable.
-              overflowY="scroll"
+              overflowY={{ base: "visible", md: "scroll" }}
               overflowX="hidden"
               display="flex"
               flexDirection="column"
