@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import { astrologiaTxt } from "../../GlobalVariables";
+import { astrologiaBg, astrologiaTxt } from "../../GlobalVariables";
 import { ComicViewer } from "./ComicViewer";
 import type { Vineta } from "./ComicViewer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -769,11 +769,17 @@ export function ComicAstrologiaModal({ isOpen, onClose, onComplete }: ComicAstro
             por defecto del ComicViewer (sin la luz de color), como el cómic del
             Origen y el de la Historia de la Astrología.
             Va CON la sombra del box (sin `sinSombra`): sobre el cielo estrellado
-            el panel quedaba plano, sin despegarse del fondo. */}
+            el panel quedaba plano, sin despegarse del fondo.
+            Modo DISCIPLINA con la foto de astrología (el cielo) en los dos
+            fondos: a pantalla completa (con su velo negro encima) y dentro del
+            box del texto, a plena calidad — antes el box la apagaba bajo un
+            degradado morado y un velo azul. */}
         {seccion && (
           <ComicViewer
             key={seccion}
             vinetas={VINETAS_BY_SECCION[seccion]}
+            disciplinaBgImage={SPACE_IMG}
+            disciplinaBgColor={astrologiaBg}
             onClose={onClose}
             onComplete={handleComplete}
             onBack={volverAlSelector}
