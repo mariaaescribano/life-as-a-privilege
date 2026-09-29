@@ -855,10 +855,12 @@ export function ComicViewer({
         maxH={{ base: "none", md: "100dvh" }}
         overflow={{ base: "visible", md: "hidden" }}
         // Móvil: px = 5 para que el box quede EXACTAMENTE del ancho del header de
-        // la disciplina (la página usa px base 5). py más corto para que el box +
-        // las flechas quepan juntos en el viewport sin scroll.
+        // la disciplina (la página usa px base 5). El margen de ARRIBA va un
+        // punto más generoso (48px) que el de abajo: es el aire fijo con el que
+        // arranca siempre la caja y María lo quiso más holgado.
         px={{ base: 5, md: 24 }}
-        py={{ base: 8, md: 14 }}
+        pt={{ base: 12, md: 14 }}
+        pb={{ base: 8, md: 14 }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
         sx={{
