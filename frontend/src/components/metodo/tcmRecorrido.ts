@@ -276,7 +276,7 @@ export const ELEMENTOS: Record<Elemento, ContenidoElemento> = {
   fuego: {
     id: "fuego",
     nombre: "Fuego",
-    color: "#d1495b",
+    color: "#a02237",
     significado:
       "El Fuego es la plenitud del verano: calor, alegría, conexión. Es la energía del corazón, la que nos permite disfrutar, relacionarnos y dar sentido a la Vida. En equilibrio hay entusiasmo sereno; en exceso, agitación; en defecto, apatía.",
     organos: "corazón (yin) e intestino delgado (yang)",
@@ -826,7 +826,7 @@ const c2 = (el: Elemento, textos: string[]): TestElemento => ({
   cuestionario: 2,
   titulo: "Tus rasgos",
   enunciado:
-    "Aunque muchos de estos rasgos no sean agradables de reconocer, responder con sinceridad es lo que hace que el resultado se parezca a ti.",
+    "",
   escala: "acuerdo",
   aporta: "carga",
   preguntas: frases(`${el}-c2`, textos),

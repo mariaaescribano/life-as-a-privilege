@@ -190,7 +190,6 @@ function TestEscalaComic({
   onContinuar: () => void;
 }) {
   const t = useT();
-  const [guardado, setGuardado] = useState(false);
   const rotulos = ESCALAS[test.escala];
   const hechas = respondidasTest(test, respuestas);
   const totalFrases = test.preguntas.length;
@@ -248,7 +247,7 @@ function TestEscalaComic({
                 const sel = valor === n;
                 return (
                   <Box key={n} as="button" title={rotulo}
-                       onClick={() => { setGuardado(false); onElegir(q.key, String(n)); }}
+                       onClick={() => onElegir(q.key, String(n))}
                        w={{ base: "42px", md: "48px" }} h={{ base: "42px", md: "48px" }}
                        flexShrink={0} borderRadius="full"
                        display="flex" alignItems="center" justifyContent="center"
@@ -256,24 +255,28 @@ function TestEscalaComic({
                        border={`1px solid ${sel ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.22)"}`}
                        color="white" fontFamily="'EB Garamond', serif"
                        fontSize={{ base: "lg", md: "xl" }} fontWeight="800"
-                       cursor="pointer" transition="all 0.15s"
+                       // Solo colores y sombra: con `all` la transición animaba
+                       // también los cambios de posición y se veía como un salto.
+                       cursor="pointer" transition="background-color 0.15s, border-color 0.15s, box-shadow 0.15s"
                        boxShadow={sel ? `0 0 16px ${color}` : "none"}
-                       _hover={{ bg: sel ? color : "rgba(0,0,0,0.6)", transform: "translateY(-1px)" }}
-                       sx={{ backdropFilter: "blur(8px)" }}
+                       _hover={{ bg: sel ? color : "rgba(0,0,0,0.6)" }}
                        style={{ textShadow: "0 1px 4px rgba(0,0,0,0.95)" }}>
                     {n}
                   </Box>
                 );
               })}
-              {/* El rótulo de lo elegido, al lado: así la escala no hay que
-                  releerla arriba en cada frase. */}
-              {valor !== null && (
-                <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
-                      ml={1} style={{ textShadow: `0 1px 4px rgba(0,0,0,0.95), 0 0 12px ${color}` }}>
-                  {rotulos[valor]}
-                </Text>
-              )}
             </Flex>
+            {/* El rótulo de lo elegido, debajo y con su altura SIEMPRE reservada:
+                así la escala no hay que releerla arriba en cada frase. Dentro de
+                la fila de botones (como iba antes) el rótulo la re-envolvía al
+                aparecer o cambiar de anchura, el contenido crecía y el scroll
+                anchoring del navegador recolocaba el scroll: todo lo de arriba
+                pegaba un salto con cada respuesta. */}
+            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
+                  mt={1.5} minH="1.5em"
+                  style={{ textShadow: `0 1px 4px rgba(0,0,0,0.95), 0 0 12px ${color}` }}>
+              {valor !== null ? rotulos[valor] : " "}
+            </Text>
             {/* Separador tras cada frase: da aire al test */}
             <Box h="1px" w="100%" mt={5} bgGradient={`linear(to-r, transparent, ${color}55, transparent)`} />
           </Box>
@@ -285,22 +288,18 @@ function TestEscalaComic({
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>
           {hechas} / {totalFrases} {t("metodo.tcm.el.frasesHechas")}
         </Text>
-        {guardado && (
-          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight="700" fontStyle="italic"
-                style={{ textShadow: `0 1px 4px rgba(0,0,0,0.85), 0 0 12px ${color}` }}>
-            {t("metodo.guardadoOk")}
-          </Text>
-        )}
+        {/* Cada respuesta se guarda sola al marcarla, así que el botón único es
+            «Continuar →»: se enciende al completar las frases y avanza el cómic. */}
         <Box as="button"
-          onClick={() => { if (guardado) { onContinuar(); } else if (completo) { setGuardado(true); } }}
-          opacity={!guardado && !completo ? 0.45 : 1}
-          cursor={!guardado && !completo ? "not-allowed" : "pointer"}
+          onClick={() => { if (completo) onContinuar(); }}
+          opacity={completo ? 1 : 0.45}
+          cursor={completo ? "pointer" : "not-allowed"}
           px={{ base: 9, md: 10 }} py={3.5} borderRadius="full" bg={color} border="2px solid rgba(255,255,255,0.85)"
           color="white" fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }} fontWeight="800"
           letterSpacing="0.1em" transition="all 0.18s ease" boxShadow={`0 0 22px ${color}, 0 4px 18px rgba(0,0,0,0.5)`}
-          _hover={!guardado && !completo ? {} : { bg: color, transform: "translateY(-2px)", boxShadow: `0 0 34px ${color}, 0 6px 24px rgba(0,0,0,0.55)` }}
+          _hover={completo ? { bg: color, transform: "translateY(-2px)", boxShadow: `0 0 34px ${color}, 0 6px 24px rgba(0,0,0,0.55)` } : {}}
           style={{ textShadow: "0 1px 5px rgba(0,0,0,0.95), 0 0 3px rgba(0,0,0,0.9)" }}>
-          {guardado ? "Continuar →" : "Guardar"}
+          Continuar →
         </Box>
       </Flex>
     </Flex>

@@ -1,14 +1,13 @@
 // ─────────────────────────────────────────────────────────────────────────
 // TU PAR DE CONTROL · el resultado, dentro del Diagnóstico final (paso 5).
 //
-// El par y su sentido salen de los cuestionarios de los cinco elementos; el
-// test de seis frases de Los ciclos solo dice si ese desajuste se VIVE como un
-// vaivén. Por eso aquí hay tres finales posibles, y los tres son un resultado:
+// El par y su sentido salen SOLO de los cuestionarios de los cinco elementos
+// (`parCandidato`). El test de seis frases de Los ciclos, que decía si el
+// desajuste se vivía como un vaivén, se quitó de la página (aparcado en
+// TestParKe.tsx), así que aquí ya no hay «confirmado / sin confirmar»:
 //
-//   · confirmado   → el par tira, y además lo notas de un lado al otro.
-//   · sin confirmar → los números ven la diferencia, pero tú no la vives como
-//                     balanceo. Se dice tal cual, no se maquilla.
-//   · sin par      → ninguna relación de control destaca sobre las otras.
+//   · con par  → quién empuja, quién cede y su mecanismo.
+//   · sin par  → ninguna relación de control destaca sobre las otras.
 //
 // El mecanismo (乘 agresión / 侮 contradominación) es el del Su Wen 67; ver la
 // cabecera de tcmCicloKe.ts.
@@ -66,22 +65,6 @@ export function ResultadoParKe({ data, color }: { data: DatosTcm; color: string 
       <Text color="white" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="620px" mx="auto">
         {mecanismo.frase}
       </Text>
-
-      {/* Qué dijo el test de las seis frases. */}
-      {res.confirmado ? (
-        <Text color="white" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="620px" mx="auto">
-          Y tus respuestas lo confirman: lo vives como un vaivén de un lado al otro, no como
-          un estado fijo. Ahí está el trabajo — no en elegir uno de los dos polos, sino en que
-          dejen de turnarse.
-        </Text>
-      ) : (
-        <Text color="rgba(255,255,255,0.82)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-              textAlign="center" maxW="620px" mx="auto" fontStyle="italic">
-          Aunque tus respuestas dicen que NO lo vives como un vaivén entre los dos. La
-          diferencia está en los números, pero no en cómo te sientes: puede ser un desajuste
-          reciente, o de un solo lado. Merece la pena mirarlo, no darlo por hecho.
-        </Text>
-      )}
 
       {/* Lo somático: se LEE. No ha puntuado nada y no diagnostica nada. */}
       {par.somaticos.length > 0 && (

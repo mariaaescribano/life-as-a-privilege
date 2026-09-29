@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useInView, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
@@ -11,7 +12,7 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { testCompleto, testsAEscala10 } from "../../components/metodo/cabalaTest";
 import {
@@ -51,11 +52,18 @@ const Titulo = ({ children }: { children: React.ReactNode }) => (
   </Text>
 );
 
+/* La barra CRECE hasta su valor al asomar en pantalla (igual que en el Mapa
+   evolutivo): pintada ya llena, llegar a ella por scroll no movía nada. Con
+   `prefers-reduced-motion` va directa a su valor. */
 function BarraNivel({ nivel }: { nivel: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const visible = useInView(ref, { once: true, amount: 0.6 });
+  const reduce = useReducedMotion();
   const pct = Math.max(0, Math.min(100, (nivel / 10) * 100));
   return (
-    <Box w="100%" h="7px" borderRadius="full" bg={`${cabalaTxt}1c`} overflow="hidden">
-      <Box h="100%" borderRadius="full" bg={cabalaTxt} w={`${pct}%`} boxShadow={`0 0 10px ${cabalaTxt}aa`} />
+    <Box ref={ref} w="100%" h="7px" borderRadius="full" bg={`${cabalaTxt}1c`} overflow="hidden">
+      <Box h="100%" borderRadius="full" bg={cabalaTxt} w={reduce || visible ? `${pct}%` : "0%"}
+           boxShadow={`0 0 10px ${cabalaTxt}aa`} transition="width 0.8s cubic-bezier(0.22,1,0.36,1)" />
     </Box>
   );
 }
@@ -262,7 +270,10 @@ export default function MetodoCabalaFinal() {
             <Caja>
               <Titulo>{t("metodo.cabala.final.tusDimensiones")} · {dimsCompletas}/{niveles.length}</Titulo>
               {bloqueoPrincipal && (
-                <Box mb={5} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 4, md: 5 }}>
+                /* Entra al asomar (queda bajo el pliegue): es el veredicto de la
+                   página y merece llegar con su propia entrada. */
+                <Reveal inView direction="up" distance={16} duration={0.6}
+                        mb={5} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 4, md: 5 }}>
                   <Text color={`${cabalaTxt}99`} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" textTransform="uppercase" mb={1} style={{ textShadow: INK_SHADOW }}>
                     {t("metodo.cabala.pasoPrioritario")}
                   </Text>
@@ -271,11 +282,15 @@ export default function MetodoCabalaFinal() {
                     <Box as="span" color={`${cabalaTxt}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="400"> · {tipoLabel[bloqueoPrincipal.tipo]}</Box>
                   </Text>
                   <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>{narrativa(bloqueoPrincipal)}</Text>
-                </Box>
+                </Reveal>
               )}
               <Flex direction="column" gap={3}>
-                {niveles.map((n) => (
-                  <Box key={n.key}>
+                {/* Fila a fila por scroll (la lista es larga y cae bajo el
+                    pliegue), con un pelín de escalonado entre las que asoman
+                    juntas; la barra de cada una crece al verse. */}
+                {niveles.map((n, i) => (
+                  <Reveal inView key={n.key} direction="up" distance={12} duration={0.55}
+                          delay={(i % 4) * 0.06} amount={0.3}>
                     <Flex justify="space-between" align="baseline" mb={1} gap={2} wrap="wrap">
                       <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} style={{ textShadow: INK_SHADOW }}>
                         <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{n.numero}.</Box>
@@ -286,7 +301,7 @@ export default function MetodoCabalaFinal() {
                         : <Text color={`${cabalaTxt}66`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic">{t("metodo.cabala.sinResponder")}</Text>}
                     </Flex>
                     {n.completo ? <BarraNivel nivel={n.nivel} /> : <Box w="100%" h="7px" borderRadius="full" bg={`${cabalaTxt}12`} />}
-                  </Box>
+                  </Reveal>
                 ))}
               </Flex>
             </Caja>
@@ -301,22 +316,27 @@ export default function MetodoCabalaFinal() {
                   <Text color={`${cabalaTxt}99`} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em" textTransform="uppercase" mb={2} style={{ textShadow: INK_SHADOW }}>
                     {t("metodo.cabala.senderosDiag.prioritarios")}
                   </Text>
-                  <Flex direction="column" gap={3}>
+                  {/* Bajo el pliegue: los prioritarios entran en cascada al asomar. */}
+                  <RevealStagger inView amount={0.1} display="flex" flexDirection="column" gap={3}>
                     {senderosPrioritarios.map(({ s, band }) => (
-                      <Box key={s.num} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 3.5, md: 4 }}>
+                      <RevealItem key={s.num} bg={`${cabalaTxt}0d`} border={`1px solid ${cabalaTxt}33`} borderRadius="xl" p={{ base: 3.5, md: 4 }}>
                         <Text color={cabalaTxt} fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} mb={1} style={{ textShadow: INK_SHADOW }}>
                           {s.letra} · {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}
                           <Box as="span" color={`${cabalaTxt}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="400"> · {band?.titulo}</Box>
                         </Text>
                         <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{band?.texto}</Text>
-                      </Box>
+                      </RevealItem>
                     ))}
-                  </Flex>
+                  </RevealStagger>
                 </Box>
               )}
               <Flex direction="column" gap={2.5}>
-                {senderoRes.map(({ s, band, total }) => (
-                  <Flex key={s.num} align="baseline" justify="space-between" gap={3} wrap="wrap"
+                {/* Los 22, fila a fila por scroll: la lista mide varias pantallas
+                    y una cascada de contenedor no llegaría a dispararse. */}
+                {senderoRes.map(({ s, band, total }, i) => (
+                  <Reveal inView key={s.num} direction="up" distance={12} duration={0.55}
+                          delay={(i % 4) * 0.06} amount={0.3}>
+                  <Flex align="baseline" justify="space-between" gap={3} wrap="wrap"
                         borderBottom={`1px solid ${cabalaTxt}1c`} pb={2}>
                     <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} style={{ textShadow: INK_SHADOW }}>
                       <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{s.orden}.</Box>
@@ -326,6 +346,7 @@ export default function MetodoCabalaFinal() {
                       {band ? `${band.titulo} · ${total}` : t("metodo.cabala.sinResponder")}
                     </Text>
                   </Flex>
+                  </Reveal>
                 ))}
               </Flex>
             </Caja>

@@ -88,12 +88,10 @@ export default function MetodoCabalaDiezDias() {
               pageLabel={`${CABALA_PAG.dias}/${CABALA_TOTAL_PAGINAS}`}
               compact bgColor={`${cabalaBg}dd`} color={cabalaTxt} nom={cabalaNom} mb={0}
               prev={{ label: `← ${t("metodo.cabala.paso.final")}`, onClick: () => navigate("/metodo/cabala/final") }}
-              // "Ilustraciones" nunca falta en los headers de Cábala. En móvil se
-              // queda solo el ojo, para que los botones sigan en una fila.
-              extra={{
-                label: <Box as="span" display={{ base: "none", md: "inline" }}>{t("metodo.ilustraciones")}</Box>,
-                onClick: () => setIlustracionesOpen(true),
-              }}
+              // "Ilustraciones" nunca falta en los headers de Cábala. El label
+              // va tal cual: el header le pone el icono del marco de foto y en
+              // móvil deja solo el icono (mismo tratamiento que Astro/TCM).
+              extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true) }}
               next={{ label: `${t("header.cursos")} →`, onClick: () => navigate("/metodo/cabala/cursos") }}
             />
           </Reveal>

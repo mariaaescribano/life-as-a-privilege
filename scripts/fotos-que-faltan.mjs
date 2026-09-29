@@ -82,15 +82,10 @@ const disciplinaDe = (ruta) => DISCIPLINAS.find(([re]) => re.test(ruta))?.[1] ??
  * puede hacer ese cambio y de que la fila sobra.
  */
 const PENDIENTES_A_MANO = [
-  {
-    rutas: ["madera", "fuego", "tierra", "metal", "agua"].map(
-      (e) => `/recorrido/tcm/constitucion/${e}.webp`,
-    ),
-    porque:
-      "las cinco tarjetas de constitución reutilizan la pintura de fondo de su elemento",
-    alLlegar:
-      "cambiar `FOTO_CONSTITUCION` en `components/metodo/tcmConstitucion.ts` (es el único sitio que las nombra)",
-  },
+  // Las de la constitución de TCM ya NO van aquí: desde el rediseño (tarjetas +
+  // cómic, 29-sep-2026) el código las pide directamente (`FOTO_CONSTITUCION` y
+  // `FOTO_CONSTITUCION_COMIC` en tcmConstitucion.ts) con la pintura del
+  // elemento de reserva, así que salen solas en el barrido.
   {
     rutas: [
       "/recorrido/cultura/portadas/historiamedicina.webp",

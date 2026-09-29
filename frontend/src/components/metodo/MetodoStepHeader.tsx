@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { FlechaBonita } from "../global/FlechaBonita";
 import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
-import { astrologiaNom, astrologiaTxt, ayurvedaNom, ayurvedaTxt, cabalaNom, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom } from "../../GlobalVariables";
+import { astrologiaNom, astrologiaTxt, ayurvedaNom, ayurvedaTxt, cabalaNom, cabalaTxt, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom, tcmTxt } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { Float } from "../global/Reveal";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
@@ -281,12 +281,15 @@ export function MetodoStepHeader({
   // El botón "Cursos" de Psicología puede ocultarse en páginas concretas.
   const showPsicoCursos = isPsico && !hideCursos;
   const [cursosOpen, setCursosOpen] = useState(false);
-  // Astrología y Ayurveda: el botón «Ilustraciones» lleva el icono del marco
-  // de foto a la IZQUIERDA del nombre, y en el móvil se queda en el icono solo
-  // (la palabra no cabía). Lo decide el header (no cada página), así que las
-  // páginas siguen pasando su `label` de siempre, que queda de aria-label.
+  // Astrología, Ayurveda, Medicina China y Cábala: el botón «Ilustraciones»
+  // lleva el icono del marco de foto a la IZQUIERDA del nombre, y en el móvil
+  // se queda en el icono solo (la palabra no cabía). Lo decide el header (no
+  // cada página), así que las páginas siguen pasando su `label` de siempre,
+  // que queda de aria-label.
   const ilusColor = headerNom === astrologiaNom ? astrologiaTxt
     : headerNom === ayurvedaNom ? ayurvedaTxt
+    : headerNom === tcmNom ? tcmTxt
+    : headerNom === cabalaNom ? cabalaTxt
     : undefined;
   const extraFinal = extra && ilusColor && extra.label === t("metodo.ilustraciones")
     ? {

@@ -120,34 +120,21 @@ export default function MetodoTcmTaoismo() {
                gap={{ base: 3.5, md: 4 }} w="100%" alignItems="stretch">
             {LEYES_TAO.map((ley, i) => (
               <Reveal key={ley.key} inView direction="up" distance={20} scaleFrom={0.99} duration={0.6}
-                      amount={0.3} w="100%" h="100%" display="flex">
+                      amount={0.3} delay={(i % 2) * 0.08} w="100%" h="100%" display="flex">
                 <LeyBox ley={ley} nombre={leyes[i]?.titulo ?? ley.nombre}
                         numero={i + 1} onVer={() => setLeyAbierta(i)} />
               </Reveal>
             ))}
           </Box>
 
-          {/* ── CIERRE ── */}
-          <Reveal inView direction="up" distance={24} scaleFrom={0.98} duration={0.7} amount={0.2} w="100%">
-          <Panel titulo={t("metodo.tcm.tao.cierreTitulo")}>
-            <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9"
-                  style={{ textShadow: INK_SHADOW }}>
-              {t("metodo.tcm.tao.cierre")}
-            </Text>
-            <Box h="1px" w="100%" my={{ base: 5, md: 6 }} bgGradient={`linear(to-r, transparent, ${tcmTxt}, transparent)`} />
-            {/* La cita y su autor van en el MISMO párrafo: el autor sigue a la
-                frase y se queda al final de esa línea. Puesto en dos <Text>, en
-                móvil se leía como dos cosas distintas —la frase arriba y una
-                línea suelta debajo— en vez de como una cita firmada. */}
-            <Text color={tcmTxt} fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                  textAlign="center" style={{ textShadow: INK_SHADOW }}>
-              {t("metodo.tcm.tao.cita")}{" "}
-              <Box as="span" fontStyle="normal" fontWeight={600} letterSpacing="0.06em"
-                   fontSize={{ base: "sm", md: "md" }} opacity={0.85}>
-                {t("metodo.tcm.tao.citaAutor")}
-              </Box>
-            </Text>
-          </Panel>
+          {/* ── CIERRE ── El box de «¿qué es curarse?» se quitó (decisión de
+              María): en su lugar, UNA frase blanca, abajo del todo, sobre el
+              turquesa limpio (fuera de caja = sin sombra). */}
+          <Reveal inView direction="up" distance={16} duration={0.6} amount={0.4} display="flex" justifyContent="center">
+          <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                textAlign="center" maxW="680px">
+            {t("metodo.tcm.tao.cierreFrase")}
+          </Text>
           </Reveal>
 
           {/* El paso siguiente, abajo a la derecha: el header ya se ha quedado
@@ -248,27 +235,6 @@ function LeyBox({ ley, nombre, numero, onVer }:
         </Box>
 
       </Flex>
-    </Box>
-  );
-}
-
-// ── Box común de la página (misma caja que el resto del recorrido de TCM) ────
-function Panel({ titulo, children }: { titulo: string; children: React.ReactNode }) {
-  return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
-      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-      <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 6, md: 8 }}>
-        {titulo && (
-          <>
-            <Text color={tcmTxt} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.1em"
-                  textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
-              {titulo}
-            </Text>
-            <Box h="1px" w="100%" mb={4} bg={`${tcmTxt}88`} />
-          </>
-        )}
-        {children}
-      </Box>
     </Box>
   );
 }

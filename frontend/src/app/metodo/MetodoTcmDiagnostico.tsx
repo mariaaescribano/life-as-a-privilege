@@ -13,6 +13,9 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { ElementoComicModal } from "../../components/metodo/ElementoComicModal";
+import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { VINETAS_ENFERMEDADES } from "../../components/metodo/comicEnfermedades";
+import { useComic } from "../../i18n/comics";
 import { Reveal } from "../../components/global/Reveal";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
@@ -78,6 +81,11 @@ export default function MetodoTcmDiagnostico() {
   const [data, setData] = useState<DatosTcm>({});
   const [comicEl, setComicEl] = useState<Elemento | null>(null);
   const [sel, setSel] = useState<Relacion | null>(null);
+  // Cómic «Las enfermedades»: se intercala al pasar de aquí a Tu lengua. Ya
+  // tiene su diagnóstico delante; ahora, qué pasa cuando los ciclos se rompen.
+  const [comicOpen, setComicOpen] = useState(false);
+  // Sus viñetas en el idioma activo.
+  const comicVinetas = useComic("tcm-enfermedades", VINETAS_ENFERMEDADES);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -88,9 +96,12 @@ export default function MetodoTcmDiagnostico() {
 
     (async () => {
       try {
-        const me = await getUserMe();
+        // Las dos peticiones a la vez, no en cascada: la página suelta antes el loader.
+        const [me, res] = await Promise.all([
+          getUserMe(),
+          axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
-        const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: DatosTcm = res.data?.data ?? {};
         // Hacen falta las dos cosas: haber pasado por los cinco elementos y
         // tener sus tests respondidos. Lo segundo NO se deduce de lo primero:
@@ -163,7 +174,9 @@ export default function MetodoTcmDiagnostico() {
             mb={0}
             prev={{ label: `← ${t("metodo.tcm.paso.ciclos")}`, onClick: () => navigate("/metodo/tcm/ciclos") }}
             extra={ilustracionesBtn}
-            next={{ label: `${t("metodo.tcm.paso.tuLengua")} →`, onClick: () => navigate("/metodo/tcm/lengua") }}
+            // No salta a Tu lengua: abre antes el cómic «Las enfermedades»,
+            // que es el puente entre el diagnóstico y la observación.
+            next={{ label: `${t("metodo.tcm.paso.tuLengua")} →`, onClick: () => setComicOpen(true) }}
           />
           </Reveal>
 
@@ -265,7 +278,7 @@ export default function MetodoTcmDiagnostico() {
           {/* El paso siguiente, abajo a la derecha: mismo texto que el botón
               del header, que aquí se ha quedado muy arriba. */}
           <BotonPaso label={t("metodo.tcm.paso.tuLengua")} nom={tcmNom} color={tcmTxt} bg={tcmBg}
-                     onClick={() => navigate("/metodo/tcm/lengua")} />
+                     onClick={() => setComicOpen(true)} />
         </Flex>
       </Flex>
 
@@ -281,6 +294,22 @@ export default function MetodoTcmDiagnostico() {
 
       {/* Popup de la relación (reutiliza el ComicViewer inmersivo) */}
       <RelacionModal rel={sel} onClose={() => setSel(null)} />
+
+      {/* Cómic «Las enfermedades», entre el Diagnóstico y Tu lengua. Al
+          terminarlo (o pulsar «Tu lengua →») avanza; con la X se cierra y se
+          queda en el diagnóstico. */}
+      <ComicPasoModal
+        isOpen={comicOpen}
+        onClose={() => setComicOpen(false)}
+        onContinue={() => navigate("/metodo/tcm/lengua")}
+        vinetas={comicVinetas}
+        continueLabel={t("metodo.tcm.paso.tuLengua")}
+        themeColor={tcmTxt}
+        textColor={tcmTxt}
+        disciplinaBgImage="/img/fondos/tcm.webp"
+        disciplinaBgColor={tcmBg}
+        textShadow={INK_SHADOW}
+      />
 
       <IndiceTcm />
 

@@ -52,6 +52,11 @@ interface ComicPasoModalProps {
    *  izquierda de la X). El único modo de avanzar es recorrer el cómic hasta el
    *  tick final. Lo usa Astrología para que sus ilustraciones no se salten. */
   sinBotonSaltar?: boolean;
+  /** Color de la LUZ que rodea a la ilustración de cada viñeta (ver ComicViewer).
+   *  Sin él, el halo lleva un filo interior BLANCO; Cábala pasa aquí su ámbar
+   *  (cabalaTxt) para que la luz salga dorada y sin esa mancha fría, igual que
+   *  en sus otros cómics (Origen y sefirot). */
+  luzFoto?: string;
   /** Si true, el botón de avanzar lleva la imagen de la disciplina con EL MISMO
    *  tratamiento que el box del cómic: se ve (sin blur), pero rebajada con el
    *  velo suave del color de la disciplina (33%) y el mismo `saturate`, en vez
@@ -73,6 +78,7 @@ export function ComicPasoModal({
   disciplinaBgColor,
   textShadow,
   textColor,
+  luzFoto,
   sinBotonSaltar,
   botonNitido,
 }: ComicPasoModalProps) {
@@ -114,6 +120,7 @@ export function ComicPasoModal({
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}
           textColor={textColor}
+          luzFoto={luzFoto}
           sinSaltar
         />
 

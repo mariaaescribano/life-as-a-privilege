@@ -64,6 +64,8 @@ export const SIMBOLOS_FAMILIA: SimboloFamilia[] = [
   { key: "gigante",   nombre: "Gigante",   grupo: "Personajes" },
   { key: "nina",      nombre: "Niña",      grupo: "Personajes" },
   { key: "sombra",    nombre: "Sombra",    grupo: "Personajes" },
+  { key: "enfermo",   nombre: "Enfermo",   grupo: "Personajes" },
+  { key: "gordo",     nombre: "Gordo",     grupo: "Personajes" },
 ];
 
 export const simboloByKey = (key: string): SimboloFamilia | undefined =>
@@ -89,7 +91,7 @@ const NOMBRES_EN: Record<string, string> = {
   // Personajes
   rey: "King", reina: "Queen", guerrero: "Warrior", sabio: "Sage",
   mago: "Magician", payaso: "Clown", angel: "Angel", gigante: "Giant",
-  nina: "Child", sombra: "Shadow",
+  nina: "Child", sombra: "Shadow", enfermo: "Sick One", gordo: "Fat One",
 };
 
 const GRUPOS_EN: Record<SimboloFamilia["grupo"], string> = {

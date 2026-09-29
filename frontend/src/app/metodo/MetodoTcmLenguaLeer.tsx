@@ -45,9 +45,12 @@ export default function MetodoTcmLenguaLeer() {
 
     (async () => {
       try {
-        const me = await getUserMe();
+        // Las dos peticiones a la vez, no en cascada: la página suelta antes el loader.
+        const [me, res] = await Promise.all([
+          getUserMe(),
+          axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
-        const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         setData(res.data?.data ?? {});
       } catch {
         navigate("/metodo/tcm");

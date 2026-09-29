@@ -454,7 +454,7 @@ export const metodo = {
   "metodo.gate.cultura.ultimoPaso": "El último paso de",
   "metodo.gate.cultura.elMapa": "El Mapa",
   "metodo.gate.cultura.intro1":
-    ". Recorre la historia de la filosofía, la medicina, la religión y del mundo entero. Recordar de dónde venimos es lo que nos permite comprender dónde estamos y sembrar, entre todos, un futuro más hermoso.",
+    ". Recorre la historia de la filosofía, la medicina, la religión y de la humanidad en su mayor parte. Recordar de dónde venimos es lo que nos permite comprender dónde estamos y sembrar, entre todos, un futuro más hermoso.",
   "metodo.gate.cultura.intro2":
     "Quizá casi todo ya fue pensado y dicho alguna vez. A nosotros nos corresponde recordarlo, comprenderlo y traer esa sabiduría de vuelta al presente.",
 
@@ -552,13 +552,9 @@ export const metodo = {
     "El taoísmo no es una religión: es una forma de mirar. Lao-Tse llamó Tao al «camino», el orden natural que rige todo lo que existe. De esa mirada nace lo que ya has recorrido: el Qi que nos une, el Yin y el Yang que se equilibran, los cinco elementos que se generan y se controlan.",
   "metodo.tcm.tao.intro2":
     "No son normas que haya que obedecer, sino cómo funciona la naturaleza. Puedes ignorarlas, igual que puedes ignorar la gravedad: la diferencia la paga tu cuerpo.",
-  "metodo.tcm.tao.cierreTitulo": "Y entonces, ¿qué es curarse?",
-  /** Cierre de la página del taoísmo, con su cita del Tao Te King. */
-  "metodo.tcm.tao.cierre":
-    "El taoísmo no te pide ser mejor que ayer, sino dejar de ir en contra de ti. La salud, desde esta mirada, no es un premio: es lo que ocurre cuando dejas de estorbarte.",
-  "metodo.tcm.tao.cita":
-    "«El hombre sigue a la tierra, la tierra sigue al cielo, el cielo sigue al Tao, y el Tao se sigue a sí mismo.»",
-  "metodo.tcm.tao.citaAutor": "— Lao-Tse, Tao Te King",
+  /** Cierre de la página del taoísmo: una sola frase blanca, abajo del todo
+   *  (el box de «¿qué es curarse?» se quitó). */
+  "metodo.tcm.tao.cierreFrase": "La salud es el resultado natural de dejar de estorbarse.",
   /** Intro y nota al pie de la página del Qigong. */
   "metodo.tcm.qigong.intro": "Qi (氣) es la energía que circula por ti. Gong (功) es el trabajo constante.",
   "metodo.tcm.qigong.nota":
@@ -668,6 +664,8 @@ export const metodo = {
   "metodo.tcm.constitucion.faltan":
     "Te faltan {faltan} frases para ver tu constitución.",
   "metodo.tcm.constitucion.verResultado": "Ver mi resultado ↑",
+  "metodo.tcm.constitucion.resultado": "Has hecho el test y este es tu resultado",
+  "metodo.tcm.constitucion.saberMas": "Saber más →",
   "metodo.tcm.constitucion.tuElemento": "Tu constitución",
   "metodo.tcm.constitucion.segundo": "Y detrás",
   "metodo.tcm.constitucion.laTuya": "La tuya",

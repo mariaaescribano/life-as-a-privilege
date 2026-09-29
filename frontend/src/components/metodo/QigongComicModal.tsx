@@ -22,12 +22,17 @@ export function QigongComicModal({
   vinetas,
   initialIndex = 0,
   onClose,
+  bgImage,
 }: {
   isOpen: boolean;
   vinetas: Vineta[];
   /** Viñeta por la que abrir (el hito que se ha pulsado en la línea del tiempo). */
   initialIndex?: number;
   onClose: () => void;
+  /** Foto de fondo (pantalla completa Y box del texto) en vez de la genérica
+   *  de la disciplina. La cocina la usa para que el cómic de las cocciones
+   *  vaya sobre la acuarela de SU elemento, como el cómic de los elementos. */
+  bgImage?: string;
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
@@ -49,7 +54,7 @@ export function QigongComicModal({
             initialIndex={initialIndex}
             themeColor={tcmTxt}
             textColor={tcmTxt}
-            disciplinaBgImage={TCM_IMG}
+            disciplinaBgImage={bgImage ?? TCM_IMG}
             disciplinaBgColor={tcmBg}
             // Animación de espera y barra de scroll en blanco, como la letra.
             loader={<TcmLoader color="#ffffff" />}

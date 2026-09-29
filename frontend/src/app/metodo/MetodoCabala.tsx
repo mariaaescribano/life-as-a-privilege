@@ -185,6 +185,7 @@ export default function MetodoCabala() {
         themeColor={cabalaTxt}
         textColor={cabalaTxt}
         textShadow={INK_SHADOW}
+        luzFoto={cabalaTxt}
         disciplinaBgImage="/img/fondos/cabala.webp"
         disciplinaBgColor={cabalaBg}
         botonNitido

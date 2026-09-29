@@ -63,27 +63,30 @@ export default function MetodoTcmApuntes() {
     if (!userId || !token) { navigate("/welcome"); return; }
 
     (async () => {
-      try {
-        const me = await getUserMe();
-        if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
-        // Su nombre va en la portada: estos apuntes son suyos.
-        setNombre(String(me.data?.name ?? "").trim());
-        // La siguiente disciplina del mandala de /home tras Medicina China es
-        // CÁBALA (antes apuntaba a Fisiología, del orden viejo).
-        setCabalaSuscrito(!!me.data?.cabala_suscrito);
-      } catch {
+      // Las dos peticiones a la vez, no en cascada (allSettled porque cada una
+      // falla a su manera): la página suelta antes el loader.
+      const [me, res] = await Promise.allSettled([
+        getUserMe(),
+        axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
+      ]);
+
+      if (me.status !== "fulfilled" || !me.value.data?.tcm_suscrito) {
         navigate("/metodo/tcm");
         return;
       }
+      // Su nombre va en la portada: estos apuntes son suyos.
+      setNombre(String(me.value.data?.name ?? "").trim());
+      // La siguiente disciplina del mandala de /home tras Medicina China es
+      // CÁBALA (antes apuntaba a Fisiología, del orden viejo).
+      setCabalaSuscrito(!!me.value.data?.cabala_suscrito);
 
       // Lo guardado del recorrido. Si no hay nada (o viene con otra forma), se
       // sigue: lo único que pasa es que los dos capítulos personales salen con
       // candado en vez de reventar la página.
-      try {
-        const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
-        const d = res.data?.data;
+      if (res.status === "fulfilled") {
+        const d = res.value.data?.data;
         setDatos(d && typeof d === "object" ? (d as DatosTcm) : {});
-      } catch { /* sin datos guardados */ }
+      }
 
       setLoading(false);
     })();

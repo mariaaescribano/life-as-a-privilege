@@ -50,10 +50,38 @@ export interface Constitucion {
   foto: string;
 }
 
-// La foto de cada tarjeta. Hoy se reutiliza la pintura de fondo del elemento;
-// si algún día hay fotos propias de las constituciones, se cambian AQUÍ y toda
-// la página las coge (es el único sitio que las nombra).
-export const FOTO_CONSTITUCION: Record<Elemento, string> = { ...FOTO_ELEMENTO };
+// La ilustración PROPIA de cada constitución: la foto de su tarjeta y la
+// portada de su cómic. Mientras el archivo no exista, tarjeta y cómic caen en
+// la pintura del elemento (FOTO_CONSTITUCION_RESERVA), así que se pueden ir
+// subiendo una a una sin que nada se vea roto.
+export const FOTO_CONSTITUCION: Record<Elemento, string> = {
+  madera: "/recorrido/tcm/constitucion/madera.webp",
+  fuego: "/recorrido/tcm/constitucion/fuego.webp",
+  tierra: "/recorrido/tcm/constitucion/tierra.webp",
+  metal: "/recorrido/tcm/constitucion/metal.webp",
+  agua: "/recorrido/tcm/constitucion/agua.webp",
+};
+
+/** La reserva mientras la ilustración propia no está: la pintura del elemento. */
+export const FOTO_CONSTITUCION_RESERVA: Record<Elemento, string> = { ...FOTO_ELEMENTO };
+
+/** Las secciones del cómic de una constitución (una viñeta por punto). La
+ *  portada (quién es) usa FOTO_CONSTITUCION; cada sección tiene la suya. */
+export type SeccionConstitucion = "atrae" | "incomoda" | "nudos" | "cuerpo" | "luz";
+export const SECCIONES_CONSTITUCION: SeccionConstitucion[] = [
+  "atrae", "incomoda", "nudos", "cuerpo", "luz",
+];
+
+/** La ilustración de cada viñeta del cómic: `<elemento>-<seccion>.webp`. */
+export const FOTO_CONSTITUCION_COMIC: Record<Elemento, Record<SeccionConstitucion, string>> =
+  Object.fromEntries(
+    ORDEN_ELEMENTOS.map((el) => [
+      el,
+      Object.fromEntries(
+        SECCIONES_CONSTITUCION.map((s) => [s, `/recorrido/tcm/constitucion/${el}-${s}.webp`]),
+      ),
+    ]),
+  ) as Record<Elemento, Record<SeccionConstitucion, string>>;
 
 export const CONSTITUCIONES: Record<Elemento, Constitucion> = {
   madera: {
@@ -261,14 +289,14 @@ export const ENUNCIADO: Record<BloqueConstitucion, string> = {
 
 /** El nombre del bloque (la cabecera del test). */
 export const NOMBRE_BLOQUE: Record<BloqueConstitucion, string> = {
-  psicologico: "Cómo eres",
-  fisiologico: "Cómo va tu cuerpo",
+  psicologico: "",
+  fisiologico: "",
 };
 
 /** La letra pequeña de cada bloque, bajo el enunciado. */
 export const PIE_BLOQUE: Record<BloqueConstitucion, string> = {
-  psicologico: "Responde sin pensarlo mucho: lo primero que te salga.",
-  fisiologico: "Responde por lo que te pasa de forma habitual, no por algo puntual.",
+  psicologico: "",
+  fisiologico: "",
 };
 
 export interface FraseConstitucion {

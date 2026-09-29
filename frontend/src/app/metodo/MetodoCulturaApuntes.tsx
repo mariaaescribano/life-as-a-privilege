@@ -20,7 +20,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserMe } from "../../api/userMe";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { PedirOpinion } from "../../components/metodo/PedirOpinion";
@@ -50,6 +50,10 @@ export default function MetodoCulturaApuntes() {
   const [nombre, setNombre] = useState("");
 
   const historias = useMemo(() => historiasParaElegir(), []);
+  // Cascada de entrada de las Historias, UNA DESPUÉS DE OTRA (misma coreografía
+  // que /metodo/cultura/historias): paso marcado en escritorio, corto en móvil,
+  // donde cada caja entra al asomar por scroll.
+  const pasoCascada = useBreakpointValue({ base: 0.1, sm: 0.16, md: 0.3 }) ?? 0.3;
   // Sin clave (o con una que no está publicada) se pinta la pantalla de elegir.
   const libro = useMemo(() => libroApuntesCultura(historiaKey), [historiaKey]);
   const eligiendo = !libro;
@@ -135,7 +139,8 @@ export default function MetodoCulturaApuntes() {
 
               <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 5, md: 7 }} w="100%">
                 {historias.map((h, i) => (
-                  <Reveal key={h.key} direction="up" distance={26} scaleFrom={0.97} delay={0.14 + i * 0.08} duration={0.7}>
+                  <Reveal key={h.key} inView amount={0.2} direction="up" distance={26} scaleFrom={0.95}
+                          delay={0.14 + i * pasoCascada} duration={0.7}>
                     <Box h="100%">
                       <FotoBox
                         titulo={tituloHistoria(h.key)}

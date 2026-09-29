@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -13,32 +13,42 @@ import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
-import { glowHeader } from "../../components/metodo/FotoBox";
+import { FotoBox, glowHeader } from "../../components/metodo/FotoBox";
+import { focoBlanco } from "../../components/global/foco";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { TestConstitucion } from "../../components/metodo/TestConstitucion";
+import { ConstitucionComicModal } from "../../components/metodo/ConstitucionComicModal";
 import { flushSaves } from "../../utils/flushSaves";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
-  ELEMENTOS, ORDEN_ELEMENTOS, type DatosTcm, type Elemento,
+  ORDEN_ELEMENTOS, type DatosTcm, type Elemento,
 } from "../../components/metodo/tcmRecorrido";
 import {
-  CONSTITUCIONES, constitucionCompleta, puntuacionesConstitucion, respuestasConstitucion,
+  CONSTITUCIONES, FOTO_CONSTITUCION, FOTO_CONSTITUCION_RESERVA,
+  constitucionCompleta, puntuacionesConstitucion, respuestasConstitucion,
 } from "../../components/metodo/tcmConstitucion";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { useNombresElementos } from "../../components/metodo/tcmElementosEn";
 import { verticePentagono, idxElemento } from "../../components/metodo/tcmCiclosVisual";
-import { useT } from "../../i18n";
+import { useIdioma, useT } from "../../i18n";
 
 // ─────────────────────────────────────────────────────────────────────────
 // PASO 3 · TU CONSTITUCIÓN
 //
-// El test se responde AQUÍ MISMO, sin popup (como el de Ayurveda): 50 frases
-// de Sí/No que se guardan solas según se marcan. Al terminarlas aparece arriba
-// el resultado —el pentágono con los cinco porcentajes y tu elemento—, el test
-// se pliega y la tarjeta de tu constitución, de las cinco de abajo, se enciende.
+// SIN el test hecho, aquí solo está el test (una frase cada vez, ver
+// TestConstitucion): las cinco constituciones NO se enseñan antes, para no
+// condicionar las respuestas. Al terminar:
+//
+//   · Arriba, el RESULTADO: un box con la pintura de TCM, la frase «Has hecho
+//     el test y este es tu resultado», en grande lo que te ha tocado (con el
+//     pentágono de los cinco porcentajes) y abajo a la derecha «Repetir el
+//     test», que vuelve a abrir las frases.
+//   · Debajo, las CINCO CONSTITUCIONES como tarjetas (3+2 en ordenador, una
+//     bajo otra en móvil): solo la foto y «EL PIONERO · LA MADERA». El
+//     «Saber más» abre el cómic inmersivo del tipo (ConstitucionComicModal),
+//     que lo cuenta punto por punto.
 //
 // Es el «quién eres», NO el «qué te pasa hoy»: ese es el Diagnóstico (paso 5).
-// El texto lo dice en voz alta porque, si no, se confunden.
 // ─────────────────────────────────────────────────────────────────────────
 
 // El velo de las cajas es fino (se quiere ver la pintura de TCM detrás), así
@@ -48,17 +58,31 @@ const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 const R_PENT = 104;      // el mismo radio que la estrella de los ciclos
 const FOTO_R = 24;
 
+// El artículo de cada elemento, para el rótulo «EL PIONERO · LA MADERA».
+const ARTICULO: Record<Elemento, string> = {
+  madera: "la", fuego: "el", tierra: "la", metal: "el", agua: "el",
+};
+
 export default function MetodoTcmConstitucion() {
   const t = useT();
+  const { idioma } = useIdioma();
   const navigate = useNavigate();
   const nombres = useNombresElementos();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DatosTcm>({});
+  // Con el test hecho, «Repetir el test» vuelve a enseñar las frases (y
+  // esconde el resultado y las tarjetas mientras tanto).
+  const [repitiendo, setRepitiendo] = useState(false);
+  // La constitución cuyo cómic está abierto (el «Saber más» de su tarjeta).
+  const [comicEl, setComicEl] = useState<Elemento | null>(null);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   const fondosListos = usePrecargarImagenes([
     disciplinaBgImg(tcmNom),
-    ...ORDEN_ELEMENTOS.map((el) => CONSTITUCIONES[el].foto),
+    // Las pinturas de los elementos son la reserva de tarjetas y cómic: están
+    // seguro. Las ilustraciones propias, si aún no existen, fallan rápido y no
+    // retienen nada (el onerror también cuenta como lista).
+    ...ORDEN_ELEMENTOS.map((el) => FOTO_CONSTITUCION_RESERVA[el]),
   ]);
 
   useEffect(() => {
@@ -69,9 +93,12 @@ export default function MetodoTcmConstitucion() {
 
     (async () => {
       try {
-        const me = await getUserMe();
+        // Las dos peticiones a la vez, no en cascada: la página suelta antes el loader.
+        const [me, res] = await Promise.all([
+          getUserMe(),
+          axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
-        const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         setData(res.data?.data ?? {});
       } catch {
         navigate("/metodo/tcm");
@@ -87,6 +114,15 @@ export default function MetodoTcmConstitucion() {
   const puntos = useMemo(() => puntuacionesConstitucion(respuestas), [respuestas]);
   const tuya: Elemento | null = completo ? puntos[0].elemento : null;
   const segunda: Elemento | null = completo ? puntos[1].elemento : null;
+
+  // Mientras el test no está (o se está repitiendo), NO se enseñan ni el
+  // resultado ni las cinco constituciones: leerlas antes condiciona el test.
+  const mostrarTest = !completo || repitiendo;
+  const mostrarResultado = completo && !repitiendo && !!tuya;
+
+  // «EL PIONERO · LA MADERA» (en inglés sin artículo: «The Pioneer · Wood»).
+  const rotuloDe = (el: Elemento) =>
+    `${CONSTITUCIONES[el].arquetipo} · ${idioma === "en" ? nombres[el] : `${ARTICULO[el]} ${nombres[el]}`}`;
 
   // Los ciclos piden el test hecho: si el último «Sí/No» sigue viajando a la
   // BD, se espera a que llegue o la página de al lado rebotaría.
@@ -142,70 +178,120 @@ export default function MetodoTcmConstitucion() {
           </Reveal>
 
           {/* ── El resultado (solo con el test terminado) ───────────────── */}
-          {completo && tuya && (
-            <Reveal inView direction="up" distance={24} duration={0.7} amount={0.2} w="100%" display="flex">
+          {mostrarResultado && tuya && (
+            <Reveal direction="up" distance={24} duration={0.7} w="100%" display="flex">
               <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={glowHeader(tcmTxt)}>
                 <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-                <Box position="absolute" inset={0} bg={`${tcmBg}9e`} />
-                <Flex position="relative" direction={{ base: "column", md: "row" }}
-                      align="center" gap={{ base: 6, md: 9 }}
+                {/* Velos finos (hex-alpha): que la pintura se vea detrás. */}
+                <Box position="absolute" inset={0} bg={`${tcmBg}66`} />
+                <Box position="absolute" inset={0} bg="#00000040" />
+                <Flex position="relative" direction="column" gap={{ base: 5, md: 6 }}
                       px={{ base: 5, md: 9 }} py={{ base: 6, md: 8 }}
                       style={{ textShadow: INK_SHADOW }}>
 
-                  {/* El pentágono con los cinco porcentajes */}
-                  <Box flexShrink={0} w={{ base: "240px", md: "300px" }}>
-                    <PentagonoConstitucion puntos={puntos} />
-                  </Box>
+                  <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.2em"
+                        textTransform="uppercase" opacity={0.9} textAlign="center">
+                    {t("metodo.tcm.constitucion.resultado")}
+                  </Text>
 
-                  <Flex direction="column" gap={2.5} textAlign={{ base: "center", md: "left" }}>
-                    <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.18em"
-                          textTransform="uppercase" opacity={0.85}>
-                      {t("metodo.tcm.constitucion.tuElemento")}
-                    </Text>
-                    <Text color={tcmTxt} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="800" lineHeight="1.1">
-                      {nombres[tuya]}
-                    </Text>
-                    <Text color={tcmTxt} fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic">
-                      {CONSTITUCIONES[tuya].arquetipo} · {CONSTITUCIONES[tuya].lema}
-                    </Text>
-                    {segunda && (
-                      <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} opacity={0.9} mt={1}>
-                        {t("metodo.tcm.constitucion.segundo")}: {nombres[segunda]} ({CONSTITUCIONES[segunda].arquetipo}).
+                  <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 6, md: 9 }}>
+                    {/* El pentágono con los cinco porcentajes */}
+                    <Box flexShrink={0} w={{ base: "240px", md: "300px" }}>
+                      <PentagonoConstitucion puntos={puntos} />
+                    </Box>
+
+                    <Flex direction="column" gap={2.5} textAlign={{ base: "center", md: "left" }} flex="1">
+                      <Text color={tcmTxt} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="800"
+                            lineHeight="1.1" textTransform="uppercase" letterSpacing="0.04em">
+                        {rotuloDe(tuya)}
                       </Text>
-                    )}
-                    <Box h="1px" w="100%" bg={`${tcmTxt}44`} my={1.5} />
-                    <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" opacity={0.92}>
-                      {t("metodo.tcm.constitucion.noEsDiagnostico")}
-                    </Text>
+                      <Text color={tcmTxt} fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic">
+                        {CONSTITUCIONES[tuya].lema}
+                      </Text>
+                      {segunda && (
+                        <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} opacity={0.9} mt={1}>
+                          {t("metodo.tcm.constitucion.segundo")}: {nombres[segunda]} ({CONSTITUCIONES[segunda].arquetipo}).
+                        </Text>
+                      )}
+                      <Box h="1px" w="100%" bg={`${tcmTxt}44`} my={1.5} />
+                      <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" opacity={0.92}>
+                        {t("metodo.tcm.constitucion.noEsDiagnostico")}
+                      </Text>
+                    </Flex>
+                  </Flex>
+
+                  {/* Repetir el test, abajo a la derecha. */}
+                  <Flex justify="flex-end">
+                    <Box as="button" onClick={() => setRepitiendo(true)}
+                         px={{ base: 6, md: 8 }} py={{ base: 2, md: 2.5 }} borderRadius="full"
+                         bg="transparent" color={tcmTxt} border={`1px solid ${tcmTxt}88`}
+                         fontFamily="'EB Garamond', serif" fontSize={{ base: "sm", md: "md" }}
+                         fontWeight="700" fontStyle="italic" cursor="pointer"
+                         transition="background-color 0.15s, transform 0.18s ease"
+                         _hover={{ bg: `${tcmTxt}22`, transform: "translateY(-1px)" }}
+                         _focusVisible={focoBlanco}
+                         style={{ textShadow: "none" }}>
+                      {t("metodo.tcm.constitucion.repetir")}
+                    </Box>
                   </Flex>
                 </Flex>
               </Box>
             </Reveal>
           )}
 
-          {/* ── El test, en la propia página ─────────────────────────────── */}
-          <TestConstitucion
-            data={data}
-            onChangeData={setData}
-            onCompletar={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          />
+          {/* ── El test, en la propia página (solo mientras hace falta) ──── */}
+          {mostrarTest && (
+            <TestConstitucion
+              data={data}
+              onChangeData={setData}
+              onCompletar={() => { setRepitiendo(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+              onTerminar={() => { setRepitiendo(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+            />
+          )}
 
-          {/* ── Las cinco constituciones ─────────────────────────────────── */}
-          <Flex direction="column" gap={5} w="100%">
-            {ORDEN_ELEMENTOS.map((el, i) => (
-              <Reveal key={el} inView direction={i % 2 === 0 ? "right" : "left"} distance={26}
-                      duration={0.6} amount={0.18} w="100%" display="flex">
-                <TarjetaConstitucion elemento={el} nombre={nombres[el]} esLaTuya={tuya === el} />
+          {/* ── Las cinco constituciones: tarjetas 3+2 (columna en móvil) ── */}
+          {mostrarResultado && (
+            <>
+              <Flex wrap="wrap" justify="center" gap={5} w="100%">
+                {ORDEN_ELEMENTOS.map((el, i) => (
+                  <Reveal key={el} inView direction="up" distance={26} duration={0.6}
+                          delay={(i % 3) * 0.12} amount={0.2}
+                          w={{ base: "100%", md: "calc(33.333% - 14px)" }} display="flex">
+                    <FotoBox
+                      foto={FOTO_CONSTITUCION[el]}
+                      fotoReserva={FOTO_CONSTITUCION_RESERVA[el]}
+                      nom={tcmNom}
+                      tinta={tcmTxt}
+                      bg={tcmBg}
+                      vivo
+                      glow={tuya === el ? glowHeader(tcmTxt) : undefined}
+                      visto={tuya === el}
+                      onClick={() => setComicEl(el)}
+                      titulo={
+                        <>
+                          <Box as="span" display="block" textTransform="uppercase"
+                               letterSpacing="0.06em" fontSize={{ base: "md", md: "lg" }}>
+                            {rotuloDe(el)}
+                          </Box>
+                          <Box as="span" display="block" mt={0.5} fontStyle="italic"
+                               fontWeight="600" fontSize={{ base: "sm", md: "sm" }} opacity={0.85}>
+                            {t("metodo.tcm.constitucion.saberMas")}
+                          </Box>
+                        </>
+                      }
+                    />
+                  </Reveal>
+                ))}
+              </Flex>
+
+              <Reveal inView direction="up" distance={14} duration={0.6} amount={0.3} display="flex" justifyContent="center">
+                <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center"
+                      maxW="640px" lineHeight="1.6">
+                  {t("metodo.tcm.constitucion.aviso")}
+                </Text>
               </Reveal>
-            ))}
-          </Flex>
-
-          <Reveal inView direction="up" distance={14} duration={0.6} amount={0.3} display="flex" justifyContent="center">
-            <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center"
-                  maxW="640px" lineHeight="1.6">
-              {t("metodo.tcm.constitucion.aviso")}
-            </Text>
-          </Reveal>
+            </>
+          )}
 
           {/* El paso siguiente solo se abre con el test hecho. */}
           {!completo && (
@@ -222,6 +308,9 @@ export default function MetodoTcmConstitucion() {
       </Flex>
 
       {ilustracionesModal}
+
+      {/* El cómic de la constitución pulsada (Saber más). */}
+      <ConstitucionComicModal elemento={comicEl} onClose={() => setComicEl(null)} />
 
       <IndiceTcm />
 
@@ -289,140 +378,6 @@ function PentagonoConstitucion({ puntos }: {
           </g>
         );
       })}
-    </Box>
-  );
-}
-
-// El rotulillo de cada apartado dentro de la tarjeta.
-function Rotulo({ texto, acento, mt }: { texto: string; acento: string; mt?: number }) {
-  return (
-    <Text color={acento} fontSize="xs" fontWeight="800" letterSpacing="0.16em"
-          textTransform="uppercase" mt={mt}>
-      {texto}
-    </Text>
-  );
-}
-
-// Una columna de palabras sueltas (afinidades / aversiones), en fichas.
-function ListaFichas({ titulo, palabras, acento }: {
-  titulo: string; palabras: string[]; acento: string;
-}) {
-  return (
-    <Flex direction="column" gap={2} flex="1" minW={0}>
-      <Rotulo texto={titulo} acento={acento} />
-      <Flex wrap="wrap" gap={1.5}>
-        {palabras.map((p) => (
-          <Text key={p} color={tcmTxt} fontSize="xs" lineHeight="1.4"
-                px={2.5} py={1} borderRadius="full"
-                border={`1px solid ${acento}55`} bg={`${acento}1f`}>
-            {p}
-          </Text>
-        ))}
-      </Flex>
-    </Flex>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────
-// Una de las cinco tarjetas: foto a la izquierda, texto a la derecha (la
-// estructura del cómic). La que te ha salido se enciende con el acento del
-// elemento y lleva su marca.
-// ─────────────────────────────────────────────────────────────────────────
-function TarjetaConstitucion({ elemento, nombre, esLaTuya }: {
-  elemento: Elemento;
-  nombre: string;
-  esLaTuya: boolean;
-}) {
-  const t = useT();
-  const c = CONSTITUCIONES[elemento];
-  const acento = ELEMENTOS[elemento].color;
-
-  return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
-         border={esLaTuya ? `2px solid ${acento}` : `1px solid ${tcmTxt}44`}
-         boxShadow={esLaTuya ? glowHeader(acento) : glowHeader(tcmTxt)}>
-      <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-      <Box position="absolute" inset={0} bg={`${tcmBg}9e`} />
-
-      <Flex position="relative" direction={{ base: "column", sm: "row" }} align="stretch">
-        <Box position="relative" flexShrink={0}
-             w={{ base: "100%", sm: "180px", md: "230px" }}
-             h={{ base: "190px", sm: "auto" }} minH={{ sm: "200px" }} bg={`${acento}22`}>
-          <Image src={c.foto} alt={nombre} w="100%" h="100%" objectFit="cover" />
-        </Box>
-
-        <Flex direction="column" gap={2} px={{ base: 5, md: 7 }} py={{ base: 5, md: 6 }} flex="1"
-              style={{ textShadow: INK_SHADOW }}>
-          <Flex align="baseline" gap={3} wrap="wrap">
-            <Text color={tcmTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="800" lineHeight="1.15">
-              {c.arquetipo}
-            </Text>
-            <Text color={acento} fontSize={{ base: "md", md: "lg" }} fontWeight="700"
-                  letterSpacing="0.14em" textTransform="uppercase">
-              {nombre}
-            </Text>
-            {esLaTuya && (
-              <Text color={tcmBg} bg={acento} borderRadius="full" px={3} py={0.5}
-                    fontSize="xs" fontWeight="800" letterSpacing="0.12em" textTransform="uppercase">
-                {t("metodo.tcm.constitucion.laTuya")}
-              </Text>
-            )}
-          </Flex>
-
-          <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.9}>
-            {c.lema}
-          </Text>
-
-          {c.texto.map((p, i) => (
-            <Text key={i} color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.75" mt={i === 0 ? 1.5 : 0}>
-              {p}
-            </Text>
-          ))}
-
-          <Box h="1px" w="100%" bg={`${tcmTxt}33`} my={2} />
-
-          {/* Lo que le atrae y lo que le incomoda: las dos listas del libro,
-              en fichas para que se lean de un vistazo. */}
-          <Flex direction={{ base: "column", md: "row" }} gap={{ base: 3, md: 6 }}>
-            <ListaFichas titulo={t("metodo.tcm.constitucion.leAtrae")} palabras={c.afinidades} acento={acento} />
-            <ListaFichas titulo={t("metodo.tcm.constitucion.leIncomoda")} palabras={c.aversiones} acento={acento} />
-          </Flex>
-
-          {/* Los nudos: las dos mitades son verdad a la vez. */}
-          <Rotulo texto={t("metodo.tcm.constitucion.nudos")} acento={acento} mt={3} />
-          <Text color={tcmTxt} fontSize="xs" opacity={0.75} fontStyle="italic" mb={1}>
-            {t("metodo.tcm.constitucion.nudosPie")}
-          </Text>
-          <Flex direction="column" gap={1.5} borderLeft={`2px solid ${acento}55`} pl={{ base: 3, md: 4 }}>
-            {c.nudos.map((n, i) => (
-              <Text key={i} color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6">
-                <Box as="span" fontWeight="700">{n.quiere}</Box>, {n.pero}
-              </Text>
-            ))}
-          </Flex>
-
-          {/* Por dónde avisa el cuerpo de este tipo. */}
-          <Rotulo texto={t("metodo.tcm.constitucion.cuerpo")} acento={acento} mt={3} />
-          <Flex direction="column" gap={1.5} borderLeft={`2px solid ${acento}55`} pl={{ base: 3, md: 4 }}>
-            {c.cuerpo.map((p, i) => (
-              <Text key={i} color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6">
-                {p}
-              </Text>
-            ))}
-          </Flex>
-
-          <Box h="1px" w="100%" bg={`${tcmTxt}33`} my={2} />
-
-          <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
-            <Box as="span" fontWeight="800" color={acento}>{t("metodo.tcm.constitucion.enSuLuz")}: </Box>
-            {c.luz}
-          </Text>
-          <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7">
-            <Box as="span" fontWeight="800" color={acento}>{t("metodo.tcm.constitucion.enSuSombra")}: </Box>
-            {c.sombra}
-          </Text>
-        </Flex>
-      </Flex>
     </Box>
   );
 }

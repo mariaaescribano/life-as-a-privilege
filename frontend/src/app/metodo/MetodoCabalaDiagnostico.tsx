@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useInView, useReducedMotion } from "framer-motion";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,7 +12,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { CABALA_SEFIROT_ORDEN, CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { testCompleto, testsAEscala10 } from "../../components/metodo/cabalaTest";
 import {
@@ -61,12 +62,19 @@ function Caja({
   );
 }
 
-/* ── Barra de nivel (0-10) ── */
+/* ── Barra de nivel (0-10): CRECE hasta su valor al asomar en pantalla ──
+   Pintada ya llena no se movía nada al llegar a ella por scroll; ahora la
+   barra sube de 0 a su nivel la primera vez que se ve (y ya se queda). Con
+   `prefers-reduced-motion` va directa a su valor. */
 function BarraNivel({ nivel }: { nivel: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const visible = useInView(ref, { once: true, amount: 0.6 });
+  const reduce = useReducedMotion();
   const pct = Math.max(0, Math.min(100, (nivel / 10) * 100));
   return (
-    <Box w="100%" h="7px" borderRadius="full" bg={`${cabalaTxt}1c`} overflow="hidden">
-      <Box h="100%" borderRadius="full" bg={cabalaTxt} w={`${pct}%`} boxShadow={`0 0 10px ${cabalaTxt}aa`} transition="width 0.6s ease" />
+    <Box ref={ref} w="100%" h="7px" borderRadius="full" bg={`${cabalaTxt}1c`} overflow="hidden">
+      <Box h="100%" borderRadius="full" bg={cabalaTxt} w={reduce || visible ? `${pct}%` : "0%"}
+           boxShadow={`0 0 10px ${cabalaTxt}aa`} transition="width 0.8s cubic-bezier(0.22,1,0.36,1)" />
     </Box>
   );
 }
@@ -315,9 +323,12 @@ export default function MetodoCabalaDiagnostico() {
                           letterSpacing="0.08em" mb={3} style={{ textShadow: INK_SHADOW }}>
                       {t("metodo.cabala.otrasTransiciones")}
                     </Text>
-                    <Flex direction="column" gap={3}>
+                    {/* Debajo del pliegue: cada transición entra al asomar por
+                        scroll (la entrada al montar ya habría terminado). */}
+                    <RevealStagger inView amount={0.1} display="flex" flexDirection="column" gap={3}>
                       {secundarios.map((t) => (
-                        <Caja key={`${t.from}-${t.to}`} radius="xl" px={{ base: 5, md: 6 }} py={{ base: 4, md: 5 }}>
+                        <RevealItem key={`${t.from}-${t.to}`}>
+                        <Caja radius="xl" px={{ base: 5, md: 6 }} py={{ base: 4, md: 5 }}>
                           <Flex align="baseline" justify="space-between" gap={3} wrap="wrap" mb={2}>
                             <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
                               {nombre(t.from)} → {nombre(t.to)}
@@ -330,8 +341,9 @@ export default function MetodoCabalaDiagnostico() {
                             {narrativaTransicion(t)}
                           </Text>
                         </Caja>
+                        </RevealItem>
                       ))}
-                    </Flex>
+                    </RevealStagger>
                   </Box>
                 </Reveal>
               )}
@@ -375,9 +387,12 @@ export default function MetodoCabalaDiagnostico() {
                                       texto={t("metodo.cabala.exceso")} />
                   </Flex>
 
-                  <Flex direction="column" gap={3.5}>
+                  {/* Las 11 capacidades entran en cascada al asomar el box por
+                      scroll (amount bajo: el box es alto y con el 15% de serie
+                      el disparo tardaría). Cada fila, con su barra creciendo. */}
+                  <RevealStagger inView amount={0.05} stagger={0.05} display="flex" flexDirection="column" gap={3.5}>
                     {niveles.map((n) => (
-                      <Box key={n.key}>
+                      <RevealItem key={n.key} distance={14}>
                         <Flex justify="space-between" align="baseline" mb={1} gap={2} wrap="wrap">
                           <Text color={`${cabalaTxt}dd`} fontSize={{ base: "md", md: "lg" }} style={{ textShadow: INK_SHADOW }}>
                             <Box as="span" color={`${cabalaTxt}77`} fontWeight="700" mr={1.5}>{n.numero}.</Box>
@@ -394,9 +409,9 @@ export default function MetodoCabalaDiagnostico() {
                         {n.completo ? <BarraNivel nivel={n.nivel} /> : (
                           <Box w="100%" h="7px" borderRadius="full" bg={`${cabalaTxt}12`} />
                         )}
-                      </Box>
+                      </RevealItem>
                     ))}
-                  </Flex>
+                  </RevealStagger>
                 </Caja>
               </Reveal>
             </>
@@ -446,14 +461,18 @@ function ListaChips({ titulo, items, vacio }: { titulo: string; items: string[];
       {items.length === 0 ? (
         <Text color={`${cabalaTxt}88`} fontSize="sm" fontStyle="italic" style={{ textShadow: INK_SHADOW }}>{vacio}</Text>
       ) : (
-        <Flex wrap="wrap" gap={2}>
+        /* Los chips brotan uno a uno al asomar la caja (pop corto con leve
+           zoom): son el resumen del mapa y merecen su pequeña entrada. */
+        <RevealStagger inView amount={0.2} stagger={0.06} display="flex" flexWrap="wrap" gap={2}>
           {items.map((it, i) => (
-            <Text key={i} color={`${cabalaTxt}dd`} fontSize="sm" bg={`${cabalaTxt}24`}
-                  borderRadius="full" px={3} py={1}>
-              {it}
-            </Text>
+            <RevealItem key={i} distance={10} duration={0.5} scaleFrom={0.9}>
+              <Text color={`${cabalaTxt}dd`} fontSize="sm" bg={`${cabalaTxt}24`}
+                    borderRadius="full" px={3} py={1}>
+                {it}
+              </Text>
+            </RevealItem>
           ))}
-        </Flex>
+        </RevealStagger>
       )}
     </Caja>
   );

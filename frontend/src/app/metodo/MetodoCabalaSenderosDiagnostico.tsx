@@ -11,7 +11,7 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   NOMBRE_SEFIRA,
   senderoCompleto,
@@ -176,9 +176,11 @@ export default function MetodoCabalaSenderosDiagnostico() {
                     <Text color={`${cabalaTxt}99`} fontSize="xs" letterSpacing="0.16em" textTransform="uppercase" mb={3} style={{ textShadow: INK_SHADOW }}>
                       {t("metodo.cabala.senderosDiag.prioritarios")}
                     </Text>
-                    <Flex direction="column" gap={4}>
+                    {/* Los prioritarios entran en cascada al asomar (esta caja
+                        cae bajo el pliegue: al montar no se vería nada). */}
+                    <RevealStagger inView amount={0.1} display="flex" flexDirection="column" gap={4}>
                       {prioritarios.map(({ s, band, total }) => (
-                        <Box key={s.num}>
+                        <RevealItem key={s.num}>
                           <Flex align="baseline" justify="space-between" gap={3} wrap="wrap" mb={1}>
                             <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>
                               {s.orden} · {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}
@@ -192,9 +194,9 @@ export default function MetodoCabalaSenderosDiagnostico() {
                           <Text color={cabalaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
                             {band?.texto}
                           </Text>
-                        </Box>
+                        </RevealItem>
                       ))}
-                    </Flex>
+                    </RevealStagger>
                   </Caja>
                 ) : (
                   <Caja>
@@ -215,8 +217,14 @@ export default function MetodoCabalaSenderosDiagnostico() {
                     {t("metodo.cabala.senderosDiag.los22")}
                   </Text>
                   <Flex direction="column" gap={3.5}>
-                    {resultados.map(({ s, band, total }) => (
-                      <Flex key={s.num} align="baseline" justify="space-between" gap={3} wrap="wrap"
+                    {/* La lista mide varias pantallas: nada de cascada de
+                        contenedor (no llegaría a dispararse). Cada fila lleva su
+                        propio reveal por scroll, con un pelín de escalonado para
+                        las que asoman juntas — el patrón de CursosGrid. */}
+                    {resultados.map(({ s, band, total }, i) => (
+                      <Reveal inView key={s.num} direction="up" distance={12} duration={0.55}
+                              delay={(i % 4) * 0.07} amount={0.3}>
+                      <Flex align="baseline" justify="space-between" gap={3} wrap="wrap"
                             borderBottom={`1px solid ${cabalaTxt}33`} pb={3}>
                         {/* Nada por debajo de `aa`: el ámbar a media tinta sobre
                             la acuarela era lo que no se leía. La jerarquía la dan
@@ -236,6 +244,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
                           {band ? `${band.titulo} · ${total}` : t("metodo.cabala.sinResponder")}
                         </Text>
                       </Flex>
+                      </Reveal>
                     ))}
                   </Flex>
                 </Caja>

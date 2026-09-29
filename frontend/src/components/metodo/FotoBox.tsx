@@ -44,6 +44,7 @@ export const glowSuaveVisto = (c: string): string =>
 export function FotoBox({
   titulo,
   foto,
+  fotoReserva,
   nom,
   tinta,
   bg,
@@ -58,6 +59,11 @@ export function FotoBox({
 }: {
   titulo: React.ReactNode;
   foto?: string;
+  /** Ilustración de reserva: si `foto` no existe todavía, se pinta esta en su
+   *  lugar (mismo espíritu que `srcFallback` en las viñetas del ComicViewer).
+   *  Lo usan las tarjetas de constitución de TCM, que estrenan ilustración
+   *  propia una a una y mientras tanto enseñan la pintura de su elemento. */
+  fotoReserva?: string;
   /** Disciplina para el fondo temático del pie (DisciplinaBgLayer). */
   nom: string;
   /** Color del texto y del borde (el <disc>Txt). */
@@ -91,8 +97,11 @@ export function FotoBox({
   // el precio de reintentar es cero. Mismo espíritu que la recarga única de los
   // chunks caídos.
   const [reintento, setReintento] = useState(0);
-  const hayFoto = !!foto && !imgErr;
-  const srcFoto = foto ? encodeURI(foto) + (reintento ? `?reintento=${reintento}` : "") : "";
+  // Foto en reserva: si la principal falla (aún no está subida), se pasa a esta.
+  const [enReserva, setEnReserva] = useState(false);
+  const fotoActiva = enReserva && fotoReserva ? fotoReserva : foto;
+  const hayFoto = !!fotoActiva && !imgErr;
+  const srcFoto = fotoActiva ? encodeURI(fotoActiva) + (reintento ? `?reintento=${reintento}` : "") : "";
   // Sin líneas (ni borde exterior ni raya separadora): solo el glow define la
   // tarjeta. En Nutrición porque el fondo claro hace cantar cualquier línea; en
   // Cultura y Fisiología porque así se pidió (mantener el glow, quitar los
@@ -154,7 +163,11 @@ export function FotoBox({
         {hayFoto ? (
           <Image src={srcFoto} alt={typeof titulo === "string" ? titulo : ""} w="100%" h="100%"
                  objectFit="cover"
-                 onError={() => (reintento === 0 ? setReintento(1) : setImgErr(true))}
+                 onError={() => {
+                   if (fotoReserva && !enReserva) { setEnReserva(true); setReintento(0); return; }
+                   if (reintento === 0) setReintento(1);
+                   else setImgErr(true);
+                 }}
                  transition={vivo ? "transform 0.55s cubic-bezier(0.22,1,0.36,1)" : undefined}
                  _groupHover={vivo ? { transform: "scale(1.07)" } : undefined} />
         ) : emoji ? (

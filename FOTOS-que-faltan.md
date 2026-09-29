@@ -16,8 +16,8 @@ en `CULTURA-fotos-que-faltan.md`, que además trae el título de cada hueco.
 | --- | --- |
 | Cultura | 1 |
 | Fisiología | 3 |
-| Medicina China | 5 |
-| **TOTAL** | **9** |
+| Medicina China | 30 |
+| **TOTAL** | **34** |
 
 ## Cultura — faltan 1
 
@@ -34,15 +34,38 @@ Están una a una, con su momento, en `CULTURA-fotos-que-faltan.md`.
 - `cuerpo.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaOrganismo.tsx`
 - `proteina.png` — la pide `frontend/src/app/metodo/MetodoFisiologiaEstructuras.tsx`
 
-## Medicina China — faltan 5
+## Medicina China — faltan 30
 
 ### `frontend/public/recorrido/tcm/constitucion/`
 
-Todavía no las pide el código: las cinco tarjetas de constitución reutilizan la pintura de fondo de su elemento. Cuando estén, hay que cambiar `FOTO_CONSTITUCION` en `components/metodo/tcmConstitucion.ts` (es el único sitio que las nombra).
-
-- `agua.webp`
-- `fuego.webp`
-- `madera.webp`
-- `metal.webp`
-- `tierra.webp`
+- `agua-atrae.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `agua-cuerpo.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `agua-incomoda.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `agua-luz.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `agua-nudos.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `agua.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `fuego-atrae.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `fuego-cuerpo.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `fuego-incomoda.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `fuego-luz.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `fuego-nudos.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `fuego.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `madera-atrae.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `madera-cuerpo.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `madera-incomoda.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `madera-luz.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `madera-nudos.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `madera.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `metal-atrae.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `metal-cuerpo.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `metal-incomoda.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `metal-luz.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `metal-nudos.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `metal.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `tierra-atrae.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `tierra-cuerpo.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `tierra-incomoda.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `tierra-luz.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `tierra-nudos.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
+- `tierra.webp` — la pide `frontend/src/components/metodo/tcmConstitucion.ts`
 

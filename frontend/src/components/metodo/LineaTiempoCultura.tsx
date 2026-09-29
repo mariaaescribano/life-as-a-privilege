@@ -270,10 +270,26 @@ function TimelineDesktop({
           <EsperaCultura minH={size} />
         ) : (
         /* Hueco y márgenes justos: cada píxel que se quita aquí se lo lleva el
-           diámetro de los círculos, que es lo que se quiere ver. */
-        <Flex position="relative" align="center" justify="center"
-              gap={{ base: 4, md: 4, lg: 4, xl: 5 }} px={{ base: 4, md: 4, lg: 2, xl: 4 }}>
-          {/* Línea horizontal que une los círculos (solo si hay más de uno). */}
+           diámetro de los círculos, que es lo que se quiere ver.
+           `key` por tanda: al pasar de página, la coreografía de entrada (la
+           línea que se dibuja + los círculos brotando uno a uno) se repite. */
+        <Flex key={`tanda-${paginaSeg}`} position="relative" align="center" justify="center"
+              gap={{ base: 4, md: 4, lg: 4, xl: 5 }} px={{ base: 4, md: 4, lg: 2, xl: 4 }}
+              sx={{
+                // Coreografía de entrada. `backwards` y no `both`: al acabar,
+                // la animación suelta el `transform` y el hover (scale) de cada
+                // botón vuelve a mandar.
+                "@keyframes lineaCulturaIn": {
+                  from: { opacity: 0, transform: "translateY(-50%) scaleX(0)" },
+                  to: { opacity: 1, transform: "translateY(-50%) scaleX(1)" },
+                },
+                "@keyframes hitoCulturaIn": {
+                  from: { opacity: 0, transform: "scale(0.55)" },
+                  to: { opacity: 1, transform: "scale(1)" },
+                },
+              }}>
+          {/* Línea horizontal que une los círculos (solo si hay más de uno).
+              Entra dibujándose desde el centro hacia los lados. */}
           {visibles.length > 1 && (
             <Box
               position="absolute"
@@ -283,7 +299,11 @@ function TimelineDesktop({
               h="2px"
               transform="translateY(-50%)"
               zIndex={0}
-              style={{ background: `linear-gradient(90deg, transparent, ${tinta}88 12%, ${tinta}88 88%, transparent)` }}
+              style={{
+                background: `linear-gradient(90deg, transparent, ${tinta}88 12%, ${tinta}88 88%, transparent)`,
+                animation: "lineaCulturaIn 0.9s ease 0.1s backwards",
+                transformOrigin: "center",
+              }}
             />
           )}
 
@@ -306,6 +326,8 @@ function TimelineDesktop({
               transition="transform 0.22s ease"
               _hover={{ transform: "scale(1.06)" }}
               _active={{ transform: "scale(1.02)" }}
+              // Cada círculo brota después del anterior (pop con rebote suave).
+              style={{ animation: `hitoCulturaIn 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.15 + i * 0.12}s backwards` }}
             >
               <Etiqueta hito={hito} tinta={tinta} arriba={i % 2 === 0} />
               {/* `100%`: el círculo llena el hueco que le ha tocado al botón,
@@ -370,8 +392,17 @@ function TimelineMovil({
   }, [visibles, hitos.length, cargando]);
 
   return (
-    <Flex direction="column" w="100%" maxW="520px" mx="auto" gap={3}>
-      {hitos.slice(0, visibles).map((hito) => (
+    <Flex direction="column" w="100%" maxW="520px" mx="auto" gap={3}
+          sx={{
+            // Las filas de cada tanda entran en cascada (una tras otra). Solo
+            // animan al MONTARSE: las ya visibles no se re-animan al añadir la
+            // tanda siguiente. `backwards` para que el hover recupere el mando.
+            "@keyframes filaCulturaIn": {
+              from: { opacity: 0, transform: "translateY(16px)" },
+              to: { opacity: 1, transform: "translateY(0)" },
+            },
+          }}>
+      {hitos.slice(0, visibles).map((hito, i) => (
         <Flex
           as="button"
           key={hito.key}
@@ -385,6 +416,7 @@ function TimelineMovil({
           transition="all 0.2s ease"
           _hover={{ bg: `${tinta}12` }}
           _active={{ transform: "scale(0.99)" }}
+          style={{ animation: `filaCulturaIn 0.5s ease ${(i % POR_PAGINA) * 0.09}s backwards` }}
         >
           <CirculoVisual hito={hito} tinta={tinta} bg={bg}
                          size={{ base: "137px" }} iconSize={{ base: "48px" }} lazy />

@@ -283,8 +283,10 @@ function ordenCiclo(ciclo: Ciclo): Elemento[] {
 }
 
 // ── Popup de una relación: REUTILIZA el ComicViewer (inmersivo, con scroll) ──
-// Muestra TODAS las relaciones del ciclo como viñetas EN ORDEN; las flechas
-// (izq/der) navegan por ellas. Arranca en la relación que pulsó el usuario.
+// Muestra TODAS las relaciones del ciclo como viñetas y va en modo CIRCULAR:
+// la rueda no tiene principio ni final (de la última se sigue a la primera y
+// al revés, sin tick de terminar). Arranca en la relación que pulsó el usuario
+// y se sale con la X cuando se quiera.
 // Fondo (pantalla completa + box) = foto del CICLO (generador / controlador).
 // Foto de la izquierda = la de la pareja de cada relación.
 export function RelacionModal({ rel, onClose, onView, textoBorroso }: {
@@ -345,6 +347,7 @@ export function RelacionModal({ rel, onClose, onView, textoBorroso }: {
               loader={<TcmLoader color="#ffffff" />}
               scrollbarColor="#ffffff"
               sinSaltar
+              circular
               textoBorroso={textoBorroso}
               onClose={onClose}
               onPageView={(idx) => onView?.(ciclo, orden[idx])}

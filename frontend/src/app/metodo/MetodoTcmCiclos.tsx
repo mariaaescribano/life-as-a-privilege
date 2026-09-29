@@ -11,21 +11,13 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { Reveal } from "../../components/global/Reveal";
-import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
-import { VINETAS_ENFERMEDADES } from "../../components/metodo/comicEnfermedades";
-import { useComic } from "../../i18n/comics";
 import { useT } from "../../i18n";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { CICLO_SHENG, CICLO_KE, ORDEN_ELEMENTOS, type Elemento, type DatosTcm } from "../../components/metodo/tcmRecorrido";
 import { constitucionHecha } from "../../components/metodo/tcmConstitucion";
 import { ICONO_ELEMENTO } from "../../components/metodo/tcmElementosContenido";
 import { EstrellaCiclo, RelacionModal, FONDO_CICLO, type Ciclo, type Relacion } from "../../components/metodo/tcmCiclosVisual";
-import { TestParKe } from "../../components/metodo/TestParKe";
-import { testParHecho } from "../../components/metodo/tcmCicloKe";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-
-// Sombra de la letra de los cómics de TCM (la misma que Recetas y Qigong).
-const INK_SHADOW = `0 1px 3px ${tcmBg}f5, 0 0 8px ${tcmBg}cc`;
 
 export default function MetodoTcmCiclos() {
   const t = useT();
@@ -41,15 +33,6 @@ export default function MetodoTcmCiclos() {
   // botón «Diagnóstico final» queda desbloqueado desde el principio, para siempre.
   const datosRef = useRef<DatosTcm>({});
   const [yaLeido, setYaLeido] = useState(false);
-  // Cómic «Las enfermedades»: se intercala al pasar de aquí al Diagnóstico
-  // final. Ya ha visto cómo se generan y se controlan los elementos; ahora,
-  // qué pasa cuando esos ciclos se rompen.
-  const [comicOpen, setComicOpen] = useState(false);
-  // Las seis frases del par de control. Se guardan con el mismo goteo que el
-  // resto del recorrido: se responde y se manda el blob entero (ver `guardarPar`).
-  const [parResp, setParResp] = useState<Record<string, string>>({});
-  // Sus viñetas en el idioma activo.
-  const comicVinetas = useComic("tcm-enfermedades", VINETAS_ENFERMEDADES);
   const { extra: ilustracionesBtn, modal: ilustracionesModal } = useIlustracionesTcm();
 
   useEffect(() => {
@@ -60,18 +43,19 @@ export default function MetodoTcmCiclos() {
 
     (async () => {
       try {
-        const me = await getUserMe();
+        // Las dos peticiones a la vez, no en cascada: la página suelta antes el loader.
+        const [me, res] = await Promise.all([
+          getUserMe(),
+          axios.get(`${API_URL}/metodo-tcm/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
-        const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
         const d: DatosTcm = res.data?.data ?? {};
         // Puerta del paso 3: los ciclos se leen ya sabiendo cuál es tu
         // constitución, así que sin el test hecho se vuelve a por él.
         if (!constitucionHecha(d)) { navigate("/metodo/tcm/constitucion"); return; }
         datosRef.current = d;
-        // Lo ya respondido del test del par (prerrellenado: que no repita).
-        setParResp(d.parKe?.respuestas ?? {});
         // Ya visto antes: desbloqueamos y damos TODAS las relaciones por vistas,
         // para que la página cargue como completada (flechitas marcadas + botón
         // «Diagnóstico final» abierto) y no haya que volver a tocarlas.
@@ -106,22 +90,6 @@ export default function MetodoTcmCiclos() {
       { headers: { Authorization: `Bearer ${token}` } })
       .catch(() => { /* el estado local ya lo refleja; se reintenta al volver a completar */ });
   }, [vistas, yaLeido, TOTAL_FLECHAS]);
-
-  // Guarda una frase del test del par. Igual que el resto del recorrido: se
-  // actualiza el blob COMPLETO y se manda entero, que es lo que el backend
-  // reemplaza (ver persistencia-recorrido-blob-unico).
-  const responderPar = (key: string, valor: string) => {
-    const respuestas = { ...parResp, [key]: valor };
-    setParResp(respuestas);
-    const next: DatosTcm = { ...datosRef.current, parKe: { respuestas } };
-    datosRef.current = next;
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    if (!userId || !token) return;
-    axios.patch(`${API_URL}/metodo-tcm/${userId}`, { data: next },
-      { headers: { Authorization: `Bearer ${token}` } })
-      .catch(() => { /* queda en pantalla; se reintenta al responder la siguiente */ });
-  };
 
   // Marca una relación como vista. Se llama tanto al pulsar su flechita como al
   // pasar por ella dentro del cómic (onView), porque el usuario puede recorrer
@@ -180,16 +148,11 @@ export default function MetodoTcmCiclos() {
             prev={{ label: `← ${t("metodo.tcm.paso.constitucion")}`, onClick: () => navigate("/metodo/tcm/constitucion") }}
             extra={ilustracionesBtn}
             next={{
-              // No salta al Diagnóstico: abre antes el cómic «Las enfermedades»,
-              // que es el puente entre los ciclos y el diagnóstico.
               label: `${t("metodo.tcm.paso.diagnostico")} →`,
-              onClick: () => setComicOpen(true),
-              // Dos puertas: haber tocado las diez flechitas y haber contestado
-              // el test del par. Si no hay par candidato, `testParHecho` da true
-              // y el paso no se bloquea por algo que no existe.
-              disabled:
-                (!yaLeido && vistas.size < TOTAL_FLECHAS) ||
-                !testParHecho({ ...datosRef.current, parKe: { respuestas: parResp } }),
+              onClick: () => navigate("/metodo/tcm/diagnostico"),
+              // Una sola puerta: haber tocado las diez flechitas (en el orden
+              // que sea; la rueda no dicta ninguno).
+              disabled: !yaLeido && vistas.size < TOTAL_FLECHAS,
               disabledTooltip: t("metodo.tcm.ciclos.flechitas"),
             }}
           />
@@ -237,18 +200,10 @@ export default function MetodoTcmCiclos() {
           </Text>
           </Reveal>
 
-          {/* ── TU PAR DE CONTROL ──
-              Va AL FINAL y no arriba: primero se aprenden las diez relaciones
-              en abstracto, y solo después se mira cuál de ellas es la tuya. */}
-          <Reveal inView direction="up" distance={22} duration={0.65} amount={0.05} w="100%" display="flex" justifyContent="center">
-            <TestParKe
-              data={datosRef.current}
-              respuestas={parResp}
-              onElegir={responderPar}
-              color={tcmTxt}
-              bg={tcmBg}
-            />
-          </Reveal>
+          {/* El box «Tu par de control» (TestParKe) se QUITÓ de esta página:
+              mareaba más que aportaba. El par candidato se sigue deduciendo de
+              los cuestionarios ya respondidos y se enseña en el Diagnóstico
+              (ResultadoParKe); el test de las seis frases queda aparcado. */}
         </Flex>
       </Flex>
 
@@ -256,22 +211,6 @@ export default function MetodoTcmCiclos() {
 
       {/* Popup de la relación (reutiliza el ComicViewer inmersivo) */}
       <RelacionModal rel={sel} onClose={() => setSel(null)} onView={verRelacion} />
-
-      {/* Cómic «Las enfermedades», entre los ciclos y el Diagnóstico final. Al
-          terminarlo (o pulsar «Diagnóstico final →») avanza; con la X se cierra
-          y se queda en los ciclos. */}
-      <ComicPasoModal
-        isOpen={comicOpen}
-        onClose={() => setComicOpen(false)}
-        onContinue={() => navigate("/metodo/tcm/diagnostico")}
-        vinetas={comicVinetas}
-        continueLabel={t("metodo.tcm.paso.diagnostico")}
-        themeColor={tcmTxt}
-        textColor={tcmTxt}
-        disciplinaBgImage="/img/fondos/tcm.webp"
-        disciplinaBgColor={tcmBg}
-        textShadow={INK_SHADOW}
-      />
 
       <IndiceTcm />
 

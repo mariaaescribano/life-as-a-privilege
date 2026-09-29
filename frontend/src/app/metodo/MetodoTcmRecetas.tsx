@@ -11,6 +11,7 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
+import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { TcmComicModal } from "../../components/metodo/QigongComicModal";
 import { CINCO_ANIMALES_VINETAS, HISTORIA_QIGONG_VINETAS } from "../../components/metodo/tcmQigongContenido";
 import { useComic } from "../../i18n/comics";
@@ -87,10 +88,13 @@ export default function MetodoTcmRecetas() {
 
     (async () => {
       try {
-        const me = await getUserMe();
-        if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
+        // Las dos peticiones a la vez, no en cascada: la página suelta antes el loader.
         // El recorrido guarda un blob único; si aún no hay datos, se abre en Madera.
-        const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
+        const [me, res] = await Promise.all([
+          getUserMe(),
+          axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+        if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
         const d: DatosTcm = res.data?.data ?? {};
         setDatos(d);
         setElActivo(elementoMasCargado(d));
@@ -182,13 +186,22 @@ export default function MetodoTcmRecetas() {
           </Flex>
           </Reveal>
 
-          {/* ── SELECTOR · los cinco elementos ── */}
+          {/* ── SELECTOR · los cinco elementos ──
+              Dentro de un box con la pintura de TCM de fondo (velos finos,
+              hex-alpha), como el resto de cajas del recorrido: los círculos
+              flotando sobre el turquesa quedaban sueltos. */}
           <Reveal direction="up" distance={22} delay={0.2} duration={0.68} w="100%">
-          <Flex justify="center" wrap="wrap" gap={{ base: 3, md: 6 }} w="100%">
-            {ORDEN_ELEMENTOS.map((el) => (
-              <BotonElemento key={el} elemento={el} activo={el === elActivo} onClick={() => setElActivo(el)} />
-            ))}
-          </Flex>
+          <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+            <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
+            <Box position="absolute" inset={0} bg={`${tcmBg}66`} />
+            <Box position="absolute" inset={0} bg="#00000040" />
+            <Flex position="relative" justify="center" wrap="wrap" gap={{ base: 3, md: 6 }}
+                  w="100%" px={{ base: 4, md: 6 }} py={{ base: 5, md: 6 }}>
+              {ORDEN_ELEMENTOS.map((el) => (
+                <BotonElemento key={el} elemento={el} activo={el === elActivo} onClick={() => setElActivo(el)} />
+              ))}
+            </Flex>
+          </Box>
           </Reveal>
 
           {/* ── UN GESTO PARA HOY ──
@@ -246,14 +259,17 @@ export default function MetodoTcmRecetas() {
 
       {ilustracionesModal}
 
-      {/* Las formas de cocinar del elemento, en el cómic de la disciplina: una
-          viñeta por cocción (foto + el cómo y el por qué). Se abre por la que se
-          ha pulsado y desde ahí se navega adelante y atrás con las flechas. */}
+      {/* Las formas de cocinar del elemento, en el cómic inmersivo: una viñeta
+          por cocción (foto + el cómo y el por qué). Se abre por la que se ha
+          pulsado y desde ahí se navega adelante y atrás con las flechas. El
+          fondo —pantalla completa y box— es la acuarela DEL ELEMENTO activo,
+          como en el cómic de los elementos, no la foto genérica de TCM. */}
       <TcmComicModal
         isOpen={coccionAbierta !== null}
         vinetas={coccionVinetas}
         initialIndex={coccionAbierta ?? 0}
         onClose={() => setCoccionAbierta(null)}
+        bgImage={FOTO_ELEMENTO[elActivo]}
       />
 
       {/* 1 · Cómic del ORIGEN del Qigong: veintitrés siglos en nueve viñetas.
@@ -300,18 +316,16 @@ export default function MetodoTcmRecetas() {
 }
 
 // ── «Un gesto para hoy» ──────────────────────────────────────────────────────
-// La tarjeta de acción de la página: un solo gesto de los cinco que tiene el
-// elemento, con «dame otro» para pasar al siguiente y un tick para marcarlo.
+// La tarjeta de acción de la página: los CINCO gestos del elemento a la vista,
+// en filas finas, y se ELIGE uno (radio). El tick «Lo hago hoy» va compacto en
+// la cabecera. Antes se veía un solo gesto grande con «dame otro» para rotar:
+// la caja era altísima y los otros cuatro no se veían.
 //
 // El tick guarda el DÍA, no un sí/no: mañana vuelve a estar por hacer. Es la
 // diferencia entre un hábito diario y una casilla que se marca una vez y ya.
 //
-// Aquí dentro hubo un tiempo la lista de «Ingredientes que aportar» del
-// elemento. Se ha quitado (de los cinco elementos): la caja es de HACER una
-// cosa hoy, y la lista de la compra la convertía otra vez en algo que leer.
-//
-// Al cambiar de elemento la tarjeta se remonta (`key` en el padre no hace falta:
-// el índice y el «hecho» vienen de `estado`, que ya es del elemento activo).
+// Se persiste igual que siempre (`cocinaGesto[el] = { i, hecho }`): elegir una
+// fila guarda su índice, así que lo ya guardado de cada usuaria sigue valiendo.
 function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
   elemento: Elemento;
   gestos: string[];
@@ -332,68 +346,69 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
            boxShadow={`${CAJA_GLOW}, 0 0 26px ${E.color}44`}>
         <FondoElemento elemento={elemento} />
 
-        <Flex position="relative" zIndex={1} direction="column" gap={4}
-              px={{ base: 6, md: 9 }} py={{ base: 6, md: 7 }}>
-          <Flex align="center" gap={3}>
-            <Rotulo>{t("metodo.tcm.cocina.gestoHoy")}</Rotulo>
-            <Box h="1px" flex="1" mb={2.5} bgGradient={`linear(to-r, ${E.color}88, transparent)`} />
-          </Flex>
-
-          {/* El gesto. `key` para que cada uno entre en escena al rotar. */}
-          <Text key={`${elemento}-${i}`} color="white" fontSize={{ base: "lg", md: "2xl" }}
-                fontStyle="italic" lineHeight="1.7" minH={{ base: "auto", md: "5.1em" }}
-                sx={{ "@keyframes gestoIn": { from: { opacity: 0, transform: "translateY(8px)" }, to: { opacity: 1, transform: "translateY(0)" } } }}
-                style={{ textShadow: "0 1px 8px rgba(0,0,0,0.9)", animation: "gestoIn 0.35s cubic-bezier(0.22,1,0.36,1)" }}>
-            {gestos[i]}
-          </Text>
-
-          <Flex align="center" justify="space-between" gap={4} wrap="wrap">
-            {/* Dame otro */}
-            <Flex as="button" onClick={() => onCambiar({ i: i + 1 })} align="center" gap={2}
-                  px={{ base: 4, md: 5 }} py={2} borderRadius="full"
-                  border={`1.5px solid ${E.color}aa`} bg="rgba(0,0,0,0.28)"
-                  cursor="pointer" transition="all 0.18s"
-                  sx={{ backdropFilter: "blur(4px)" }}
-                  _hover={{ borderColor: E.color, bg: "rgba(0,0,0,0.44)", transform: "translateY(-1px)" }}>
-              <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                   w="17px" h="17px" fill={E.color} flexShrink={0}
-                   style={{ filter: `drop-shadow(0 1px 4px rgba(0,0,0,0.9))` }}>
-                <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z" />
-              </Box>
-              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700}
-                    style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
-                {t("metodo.tcm.cocina.dameOtro")}
-              </Text>
-              <Text color="rgba(255,255,255,0.55)" fontSize="xs" fontWeight={700}>
-                {i + 1}/{gestos.length}
-              </Text>
-            </Flex>
-
-            {/* Hecho hoy */}
+        <Flex position="relative" zIndex={1} direction="column" gap={3}
+              px={{ base: 4, md: 7 }} py={{ base: 4, md: 5 }}>
+          {/* Cabecera: rótulo · línea · tick de hecho, todo en una fila */}
+          <Flex align="center" gap={3} wrap="wrap">
+            <Text color="white" fontSize="xs" fontWeight={700} letterSpacing="0.1em"
+                  textTransform="uppercase" style={{ textShadow: INK_SHADOW }}>
+              {t("metodo.tcm.cocina.gestoHoy")}
+            </Text>
+            <Box h="1px" flex="1" minW="40px" bgGradient={`linear(to-r, ${E.color}88, transparent)`} />
             <Flex as="button"
                   onClick={() => onCambiar({ hecho: hecho ? "" : hoyISO() })}
-                  align="center" gap={2.5}
-                  px={{ base: 4, md: 5 }} py={2} borderRadius="full"
+                  align="center" gap={2}
+                  px={3.5} py={1.5} borderRadius="full"
                   border={`1.5px solid ${hecho ? E.color : "rgba(255,255,255,0.45)"}`}
                   bg={hecho ? `${E.color}55` : "rgba(0,0,0,0.28)"}
                   cursor="pointer" transition="all 0.18s"
                   sx={{ backdropFilter: "blur(4px)" }}
                   _hover={{ borderColor: E.color, transform: "translateY(-1px)" }}
                   aria-pressed={hecho}>
-              <Flex flexShrink={0} align="center" justify="center" w="20px" h="20px" borderRadius="full"
+              <Flex flexShrink={0} align="center" justify="center" w="16px" h="16px" borderRadius="full"
                     border={`2px solid ${hecho ? E.color : "rgba(255,255,255,0.6)"}`}
                     bg={hecho ? E.color : "transparent"} transition="all 0.18s">
                 {hecho && (
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="13px" h="13px" fill="#ffffff">
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="11px" h="11px" fill="#ffffff">
                     <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
                   </Box>
                 )}
               </Flex>
-              <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={700}
+              <Text color="white" fontSize={{ base: "xs", md: "sm" }} fontWeight={700}
                     style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
                 {hecho ? t("metodo.tcm.cocina.hechoHoy") : t("metodo.tcm.cocina.loHagoHoy")}
               </Text>
             </Flex>
+          </Flex>
+
+          {/* Los cinco gestos, en filas finas. Se elige UNO: la fila marcada
+              lleva el color del elemento; el resto esperan, atenuadas. */}
+          <Flex direction="column" gap={1.5}>
+            {gestos.map((g, idx) => {
+              const sel = idx === i;
+              return (
+                <Flex key={idx} as="button" onClick={() => onCambiar({ i: idx })}
+                      align="center" gap={2.5} textAlign="left" w="100%"
+                      px={{ base: 3, md: 3.5 }} py={{ base: 1.5, md: 2 }} borderRadius="lg"
+                      border={`1px solid ${sel ? E.color : "rgba(255,255,255,0.16)"}`}
+                      bg={sel ? "rgba(0,0,0,0.42)" : "rgba(0,0,0,0.2)"}
+                      opacity={sel ? 1 : 0.7}
+                      cursor="pointer" transition="all 0.18s"
+                      _hover={{ opacity: 1, borderColor: `${E.color}aa` }}
+                      aria-pressed={sel}>
+                  <Box flexShrink={0} w="13px" h="13px" borderRadius="full"
+                       border={`2px solid ${sel ? E.color : "rgba(255,255,255,0.5)"}`}
+                       bg={sel ? E.color : "transparent"}
+                       boxShadow={sel ? `0 0 8px ${E.color}` : "none"}
+                       transition="all 0.18s" />
+                  <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                        fontWeight={sel ? 600 : 400} lineHeight="1.5"
+                        style={{ textShadow: "0 1px 6px rgba(0,0,0,0.9)" }}>
+                    {g}
+                  </Text>
+                </Flex>
+              );
+            })}
           </Flex>
 
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic"
@@ -497,20 +512,6 @@ function Seccion({ children }: { children: React.ReactNode }) {
         {children}
       </Text>
     </Reveal>
-  );
-}
-
-// ── Rótulo de apartado dentro de una caja ────────────────────────────────────
-// BLANCO, nunca del color del elemento: en minúsculas de 12px y sobre la
-// acuarela, los colores de los cinco elementos (el ocre de la Tierra, el gris
-// del Metal) se perdían y el rótulo no se leía. Blanco con sombra negra se lee
-// en los cinco.
-function Rotulo({ children, mt }: { children: React.ReactNode; mt?: any }) {
-  return (
-    <Text color="white" fontSize="xs" fontWeight={700} letterSpacing="0.1em" textTransform="uppercase"
-          mt={mt} mb={2.5} style={{ textShadow: INK_SHADOW }}>
-      {children}
-    </Text>
   );
 }
 

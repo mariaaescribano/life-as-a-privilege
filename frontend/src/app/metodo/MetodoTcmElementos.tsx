@@ -94,9 +94,13 @@ export default function MetodoTcmElementos() {
 
     (async () => {
       try {
-        const me = await getUserMe();
+        // Las dos peticiones a la vez: en serie eran dos viajes al servidor
+        // uno detrás de otro y la página tardaba el doble en soltar el loader.
+        const [me, res] = await Promise.all([
+          getUserMe(),
+          axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
         if (!me.data?.tcm_suscrito) { navigate("/metodo/tcm"); return; }
-        const res = await axios.get(`${API_URL}/metodo-tcm/${userId}`, { headers: { Authorization: `Bearer ${token}` } });
         const d: DatosTcm = res.data?.data ?? {};
         setData(d);
       } catch {

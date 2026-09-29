@@ -199,6 +199,11 @@ interface ComicViewerProps {
    *  color aquí, las tres capas del halo se pintan con él y la luz sale del
    *  tono de la disciplina. */
   luzFoto?: string;
+  /** Cómic CIRCULAR (los ciclos de TCM): la rueda no tiene principio ni final.
+   *  Las flechas no se apagan nunca —de la última viñeta se pasa a la primera
+   *  y al revés— y no hay tick de «terminar»: se empieza por donde se quiera
+   *  y se sale cuando se quiera, con la X. */
+  circular?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -341,6 +346,7 @@ export function ComicViewer({
   veloOscuro,
   textoBorroso,
   luzFoto,
+  circular,
 }: ComicViewerProps) {
   const t = useT();
   const isDisciplinaMode = !!disciplinaBgImage;
@@ -452,6 +458,10 @@ export function ComicViewer({
   const current = vinetas[index];
   const isFirst = index === 0;
   const isLast = index === total - 1;
+  // En modo circular no hay «primera» ni «última»: la flecha de atrás nunca se
+  // apaga y la de adelante nunca se convierte en el tick de terminar.
+  const noPrev = isFirst && !circular;
+  const esUltima = isLast && !circular;
   // Página bloqueada: no se puede avanzar hasta cumplir su requisito (p.ej.
   // responder el mini-test embebido). Sí se puede retroceder.
   const blocked = bloqueado ? bloqueado(index) : false;
@@ -553,13 +563,14 @@ export function ComicViewer({
         setIndex((i) => {
           if (bloqueado && bloqueado(i)) return i; // página bloqueada: no avanzar
           if (i >= total - 1) {
+            if (circular) return 0; // la rueda sigue girando
             handleComplete();
             return i;
           }
           return i + 1;
         });
       } else if (e.key === "ArrowLeft") {
-        setIndex((i) => Math.max(i - 1, 0));
+        setIndex((i) => (circular ? (i - 1 + total) % total : Math.max(i - 1, 0)));
       } else if (e.key === "Escape" && onBack) {
         onBack();
       }
@@ -567,10 +578,10 @@ export function ComicViewer({
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [total, onBack, bloqueado]);
+  }, [total, onBack, bloqueado, circular]);
 
-  const goPrev = () => setIndex((i) => Math.max(i - 1, 0));
-  const goNext = () => setIndex((i) => Math.min(i + 1, total - 1));
+  const goPrev = () => setIndex((i) => (circular ? (i - 1 + total) % total : Math.max(i - 1, 0)));
+  const goNext = () => setIndex((i) => (circular ? (i + 1) % total : Math.min(i + 1, total - 1)));
 
   const onTouchStart = (e: React.TouchEvent) => {
     const t = e.touches[0];
@@ -585,7 +596,7 @@ export function ComicViewer({
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
       if (dx > 0) goPrev();
       else if (blocked) return; // página bloqueada: no avanzar con swipe
-      else if (isLast) handleComplete();
+      else if (esUltima) handleComplete();
       else goNext();
     }
   };
@@ -619,26 +630,26 @@ export function ComicViewer({
     <IconButton
       aria-label={t("comun.anterior")}
       onClick={goPrev}
-      isDisabled={isFirst}
+      isDisabled={noPrev}
       {...arrowPos}
       left={flechasEnBox ? { base: 1, md: 1 } : { base: 1, md: 6 }}
       top="50%"
       transform="translateY(-50%)"
       variant="ghost"
       color={themeColor}
-      opacity={isFirst ? 0.3 : 1}
+      opacity={noPrev ? 0.3 : 1}
       bg="rgba(0,0,0,0.5)"
       border={`1px solid ${themeColor}aa`}
       borderRadius="full"
       w={{ base: "40px", md: "60px" }}
       h={{ base: "40px", md: "60px" }}
       minW={{ base: "40px", md: "60px" }}
-      boxShadow={isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
+      boxShadow={noPrev ? "none" : "0 2px 14px rgba(0,0,0,0.45)"}
       sx={sinParcheAlPulsar}
-      _hover={isFirst ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
-      _active={isFirst ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
-      _focus={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
-      _focusVisible={{ boxShadow: isFirst ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
+      _hover={noPrev ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
+      _active={noPrev ? {} : { bg: "rgba(0,0,0,0.72)", borderColor: themeColor }}
+      _focus={{ boxShadow: noPrev ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
+      _focusVisible={{ boxShadow: noPrev ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       icon={
         <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
           style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
@@ -649,8 +660,8 @@ export function ComicViewer({
   );
   const nextArrow = (
     <IconButton
-      aria-label={isLast ? "Terminar" : "Siguiente"}
-      onClick={blocked ? undefined : (isLast ? handleComplete : goNext)}
+      aria-label={esUltima ? "Terminar" : "Siguiente"}
+      onClick={blocked ? undefined : (esUltima ? handleComplete : goNext)}
       isDisabled={blocked}
       {...arrowPos}
       right={flechasEnBox ? { base: 1, md: 1 } : { base: 1, md: 6 }}
@@ -672,7 +683,7 @@ export function ComicViewer({
       _focus={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       _focusVisible={{ boxShadow: blocked ? "none" : "0 2px 14px rgba(0,0,0,0.45)" }}
       icon={
-        isLast ? (
+        esUltima ? (
           <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "24px", md: "32px" }} h={{ base: "24px", md: "32px" }} fill="#ffffff"
             style={{ filter: `drop-shadow(0 0 6px ${themeColor}) drop-shadow(0 1px 2px rgba(0,0,0,0.85))` }}>
             <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />

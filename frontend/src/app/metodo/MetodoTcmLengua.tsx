@@ -150,15 +150,18 @@ export default function MetodoTcmLengua() {
           </Text>
           </Reveal>
 
-          {/* ── Cómo mirar (práctico) ── */}
+          {/* ── Cómo mirar (práctico) ──
+              Mismo ancho que el header (850px) y letra en tcmTxt: estos dos
+              primeros boxes solo INTRODUCEN el significado — nada se pulsa ni
+              se ilumina aquí. */}
           <Reveal direction="up" distance={26} scaleFrom={0.98} delay={0.2} duration={0.7} w="100%">
-          <Panel titulo={t("metodo.tcm.lengua.comoMirar")} color={tcmTxt}>
+          <Panel titulo={t("metodo.tcm.lengua.comoMirar")} color={tcmTxt} maxW="850px">
             <Flex direction="column" gap={2.5}>
               {COMO_MIRAR.map((clave) => (
                 <Flex key={clave} gap={2.5} align="flex-start">
                   <Box flexShrink={0} mt={{ base: "9px", md: "11px" }} w="5px" h="5px" borderRadius="full"
                        bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
-                  <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                  <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                         style={{ textShadow: INK_SHADOW }}>{t(clave)}</Text>
                 </Flex>
               ))}
@@ -168,7 +171,7 @@ export default function MetodoTcmLengua() {
 
           {/* ── Mapa de las zonas (primero: foto a la izquierda + zonas a la derecha) ── */}
           <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
-          <Panel titulo={t("metodo.tcm.lengua.mapa")} color={tcmTxt}>
+          <Panel titulo={t("metodo.tcm.lengua.mapa")} color={tcmTxt} maxW="850px">
             <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 7 }} align={{ base: "stretch", md: "flex-start" }}>
               {/* Los rótulos del mapa son diminutos a este tamaño: se puede
                   pulsar la foto para verla a pantalla completa. */}
@@ -182,7 +185,7 @@ export default function MetodoTcmLengua() {
                 />
               </Box>
               <Box flex="1" minW={0}>
-                <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
+                <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                       lineHeight="1.7" mb={4} style={{ textShadow: INK_SHADOW }}>
                   {t("metodo.tcm.lengua.mapaTexto")}
                 </Text>
@@ -191,9 +194,9 @@ export default function MetodoTcmLengua() {
                     <Flex key={z.key} gap={2.5} align="flex-start">
                       <Box flexShrink={0} mt={{ base: "9px", md: "11px" }} w="5px" h="5px" borderRadius="full"
                            bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
-                      <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+                      <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                             style={{ textShadow: INK_SHADOW }}>
-                        <Text as="span" fontWeight={700} color="white">{z.zona}:</Text> {z.organos}.
+                        <Text as="span" fontWeight={700}>{z.zona}:</Text> {z.organos}.
                       </Text>
                     </Flex>
                   ))}
@@ -294,8 +297,10 @@ function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: n
     <Flex direction="column"
           w={{ base: "100%", sm: "calc(50% - 8px)", md: "calc(33.333% - 11px)" }}
           borderRadius="xl" overflow="hidden" bg="rgba(0,0,0,0.28)"
+          // Nada se ilumina en esta página: las cajitas solo INTRODUCEN el
+          // significado (la variante sana se distingue por el rótulo «Sana»
+          // y su borde, sin glow). Seleccionar es cosa de «Lee tu lengua».
           border={`1px solid ${opcion.equilibrio ? `${tcmTxt}88` : "rgba(255,255,255,0.16)"}`}
-          boxShadow={opcion.equilibrio ? `0 0 16px ${tcmTxt}44` : "none"}
           opacity={enter ? 1 : 0}
           transform={enter ? "translateY(0) scale(1)" : "translateY(18px) scale(0.97)"}
           transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)"
@@ -334,11 +339,13 @@ function LenguaImg({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-function Panel({ titulo, color, children }: {
+function Panel({ titulo, color, children, maxW }: {
   titulo: string; color: string; children: React.ReactNode;
+  /** Tope de ancho (los dos primeros boxes van al del header, 850px). */
+  maxW?: string;
 }) {
   return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+    <Box position="relative" w="100%" maxW={maxW} mx="auto" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
       <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 5, md: 6 }}>
         {titulo && (

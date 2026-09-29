@@ -754,6 +754,18 @@ function PaginaDeAno({
         boxShadow={`0 0 44px ${TINTA}77, 0 0 100px ${TINTA}33`}
         display="flex"
         flexDirection="column"
+        // Entrada del popup (pop suave) y cascada de sus tarjetas de preguntas.
+        sx={{
+          "@keyframes libroIn": {
+            from: { opacity: 0, transform: "translateY(12px) scale(0.965)" },
+            to: { opacity: 1, transform: "translateY(0) scale(1)" },
+          },
+          "@keyframes preguntaIn": {
+            from: { opacity: 0, transform: "translateY(14px)" },
+            to: { opacity: 1, transform: "translateY(0)" },
+          },
+        }}
+        style={{ animation: "libroIn 0.4s cubic-bezier(0.22,1,0.36,1) both" }}
       >
         <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
 
@@ -843,9 +855,10 @@ function PaginaDeAno({
           </Flex>
 
           {/* Preguntas — cada una en su box; las respuestas son una lista de
-              ítems: escribe y pulsa Enter para añadir cada recuerdo. */}
+              ítems: escribe y pulsa Enter para añadir cada recuerdo. Entran en
+              cascada, una tras otra, detrás del pop del popup. */}
           <Flex direction="column" gap={{ base: 5, md: 6 }}>
-            {preguntas.map((p) => {
+            {preguntas.map((p, iPregunta) => {
               const items = respuestas[p.key] || [];
               return (
                 <Box
@@ -855,6 +868,7 @@ function PaginaDeAno({
                   py={{ base: 4, md: 5 }}
                   bg="rgba(255,251,243,0.42)"
                   border={`1px solid ${TINTA}26`}
+                  style={{ animation: `preguntaIn 0.5s ease ${0.12 + iPregunta * 0.1}s backwards` }}
                 >
                   <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.5" mb={items.length ? 3 : 2} style={{ textShadow: INK_SHADOW }}>
                     {p.pregunta}

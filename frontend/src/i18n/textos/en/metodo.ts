@@ -492,12 +492,7 @@ export const metodo = {
     "Taoism isn't a religion: it's a way of looking. Lao Tzu called the Tao the «way», the natural order that runs everything there is. Out of that way of looking comes everything you've already been through: the Qi that connects us, the Yin and Yang that balance each other, the Five Elements that generate and control one another.",
   "metodo.tcm.tao.intro2":
     "They aren't rules to be obeyed, they're how nature works. You can ignore them, the same way you can ignore gravity: your body is the one that pays the difference.",
-  "metodo.tcm.tao.cierreTitulo": "So then, what is healing?",
-  "metodo.tcm.tao.cierre":
-    "Taoism doesn't ask you to be better than you were yesterday, but to stop going against yourself. Health, seen this way, isn't a prize: it's what happens when you stop getting in your own way.",
-  "metodo.tcm.tao.cita":
-    "«Man follows the earth, the earth follows heaven, heaven follows the Tao, and the Tao follows itself.»",
-  "metodo.tcm.tao.citaAutor": "— Lao Tzu, Tao Te Ching",
+  "metodo.tcm.tao.cierreFrase": "Health is the natural result of no longer getting in your own way.",
   "metodo.tcm.qigong.intro": "Qi (氣) is the energy that circulates through you. Gong (功) is steady work.",
   "metodo.tcm.qigong.nota":
     "Qigong is a health practice, not a treatment: it goes alongside, it doesn't replace. If you're pregnant, or you have uncontrolled high blood pressure, a hernia, vertigo or a recent injury, adapt the postures with someone who knows how before doing them on your own.",
@@ -591,6 +586,8 @@ export const metodo = {
   "metodo.tcm.constitucion.faltan":
     "{faltan} statements to go before you see your constitution.",
   "metodo.tcm.constitucion.verResultado": "See my result ↑",
+  "metodo.tcm.constitucion.resultado": "You've taken the test and this is your result",
+  "metodo.tcm.constitucion.saberMas": "Learn more →",
   "metodo.tcm.constitucion.tuElemento": "Your constitution",
   "metodo.tcm.constitucion.segundo": "And behind it",
   "metodo.tcm.constitucion.laTuya": "Yours",

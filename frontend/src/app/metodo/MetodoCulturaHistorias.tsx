@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { getUserMe } from "../../api/userMe";
-import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { CulturaLoading } from "../../components/metodo/comicLoaders";
@@ -41,6 +41,11 @@ export default function MetodoCulturaHistorias() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // Cascada de entrada de las Historias: UNA DESPUÉS DE OTRA. En escritorio
+  // (rejilla de 3, las seis a la vista) el paso es marcado; en móvil, donde
+  // cada caja entra al asomar por scroll, el paso se acorta para que ninguna
+  // se haga esperar ya visible.
+  const pasoCascada = useBreakpointValue({ base: 0.1, sm: 0.16, md: 0.3 }) ?? 0.3;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -98,10 +103,13 @@ export default function MetodoCulturaHistorias() {
           </Reveal>
 
           {/* ── Las 6 Historias. Foto 1:1; las que aún no tienen portada
-                 muestran su emoji hasta que se suba. ── */}
+                 muestran su emoji hasta que se suba. Entran en cascada, una
+                 después de otra, y solo al asomar en pantalla (`inView`): con
+                 el delay a secas, las de bajo el pliegue animaban sin público. ── */}
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 5, md: 7 }} w="100%">
             {HISTORIAS.map((h, i) => (
-              <Reveal key={h.key} direction="up" distance={26} scaleFrom={0.97} delay={0.1 + i * 0.08} duration={0.7}>
+              <Reveal key={h.key} inView amount={0.2} direction="up" distance={26} scaleFrom={0.95}
+                      delay={0.1 + i * pasoCascada} duration={0.7}>
                 <Box h="100%">
                   <FotoBox
                     titulo={tituloHistoria(h.key).toUpperCase()}
