@@ -7,6 +7,6 @@ export const footer = {
   "footer.avisoLegal": "Legal notice",
   "footer.privacidad": "Privacy",
   "footer.cookies": "Cookies",
-  "footer.terminos": "Terms of service",
+  "footer.terminos": "Terms of purchase",
   "footer.baja": "Unsubscribe",
 };

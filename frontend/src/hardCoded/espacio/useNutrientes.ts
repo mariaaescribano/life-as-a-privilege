@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useIdioma } from "../../i18n";
 import {
-  NUTRIENTES, NUTRIENTES_MACRO, NUTRIENTES_MICRO, type Nutriente,
+  NUTRIENTES, NUTRIENTES_MACRO, NUTRIENTES_MICRO, NUTRIENTES_QUIMICOS, type Nutriente,
 } from "./NutrientesNutricion";
 import { nutrientesTraducidos } from "./NutrientesNutricion.en";
 
@@ -30,11 +30,17 @@ export const useNutrientesMacro = (): Nutriente[] => {
   return useMemo(() => nutrientesTraducidos(NUTRIENTES_MACRO, idioma), [idioma]);
 };
 
-/** Micronutrientes (vitaminas, minerales, fitoquímicos, edulcorantes, drogas):
- *  los de la segunda página. */
+/** Micronutrientes (vitaminas, minerales, fitoquímicos): los de la segunda
+ *  página. */
 export const useNutrientesMicro = (): Nutriente[] => {
   const { idioma } = useIdioma();
   return useMemo(() => nutrientesTraducidos(NUTRIENTES_MICRO, idioma), [idioma]);
+};
+
+/** Químicos (edulcorantes y drogas): los de la tercera página. */
+export const useNutrientesQuimicos = (): Nutriente[] => {
+  const { idioma } = useIdioma();
+  return useMemo(() => nutrientesTraducidos(NUTRIENTES_QUIMICOS, idioma), [idioma]);
 };
 
 /** Un grupo suelto por su `key`, en el idioma activo. */

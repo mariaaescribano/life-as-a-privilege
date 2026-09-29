@@ -124,6 +124,25 @@ export const NUTRIENTES: Nutriente[] = [
           "Una vez absorbida, la galactosa suele transformarse en glucosa para que el organismo pueda utilizarla.",
         ],
       },
+      // OJO: las fichas leídas se guardan por ÍNDICE (nutrientes_fichas), así
+      // que las tarjetas nuevas van AL FINAL: insertarlas en medio descolocaría
+      // lo que cada usuario ya tiene marcado como leído.
+      {
+        key: "almidon",
+        titulo: "Almidón",
+        foto: "/recorrido/nutricion/moleculas/almidon.webp",
+        claves: [
+          "Cadenas largas de glucosa: la despensa de las plantas",
+          "Se corta eslabón a eslabón: energía más sostenida",
+          "El resistente no se digiere: es comida para tu microbiota",
+        ],
+        parrafos: [
+          "El almidón es la forma en que las plantas guardan su glucosa: cientos o miles de moléculas unidas formando cadenas, unas lineales (amilosa) y otras ramificadas (amilopectina). Es el carbohidrato complejo por excelencia: está en la patata, el arroz, el pan, la pasta, el maíz y las legumbres.",
+          "Como es glucosa encadenada, tu cuerpo sabe usarlo, pero antes tiene que cortarlo. La amilasa, una enzima de la saliva y del intestino, va rompiendo las cadenas eslabón a eslabón hasta liberar la glucosa. Por eso, en general, sube el azúcar en sangre más despacio que un azúcar simple. Aunque no siempre: cuanto más refinado está el alimento (pan blanco, purés, harinas finas), más accesibles quedan las cadenas y más rápido se digiere. Entero y con su fibra, la subida es lenta y sostenida.",
+          "Y hay una parte que no se digiere: el almidón resistente. Se llama así porque se resiste a la amilasa y llega intacto al intestino grueso, donde se comporta como la fibra fermentable: tus bacterias lo fermentan y producen ácidos grasos de cadena corta, como el butirato, que alimenta a las células de la pared intestinal y ayuda a calmar la inflamación.",
+          "Lo tienen de forma natural las legumbres, la avena y el plátano poco maduro. Y hay un truco de cocina: al cocer y luego enfriar la patata, el arroz o la pasta, parte del almidón se recristaliza (es la retrogradación) y se vuelve resistente; un recalentado suave no lo deshace del todo. La misma ración, enfriada de un día para otro, le da un poco menos a tu glucosa y un poco más a tu microbiota.",
+        ],
+      },
     ],
   },
   {
@@ -1318,18 +1337,22 @@ export const NUTRIENTES: Nutriente[] = [
 // puede mover un grupo de página (o cambiarlo de sitio) tocando una sola línea,
 // sin mover cientos de líneas de contenido.
 //
-// Los tres últimos del micro (etanol vive en macro) no son nutrientes de
-// verdad: etanol da calorías y se cuenta en gramos, por eso va con los macro;
-// edulcorantes y drogas se toman en dosis mínimas, por eso van con los micro.
-// Si prefieres otro reparto, mueve la `key` de una lista a la otra.
+// Etanol no es un nutriente de verdad, pero da calorías y se cuenta en gramos:
+// por eso va con los macro. Edulcorantes y drogas tampoco lo son, y desde el
+// 2026-09-29 tienen su PROPIA página («Químicos», la tercera): no se comen como
+// alimento, se toman como sustancia. Si prefieres otro reparto, mueve la `key`
+// de una lista a otra.
 // La página de detalle sigue buscando en NUTRIENTES (la lista completa), así que
-// ambos grupos funcionan igual al abrir una tarjeta.
+// los tres grupos funcionan igual al abrir una tarjeta.
 // ─────────────────────────────────────────────────────────────────────────
 const MACRO_KEYS = [
   "carbohidratos", "fibra", "grasas", "colesterol", "proteinas", "agua", "etanol",
 ];
 const MICRO_KEYS = [
-  "vitaminas", "minerales", "fitoquimicos", "edulcorantes", "drogas",
+  "vitaminas", "minerales", "fitoquimicos",
+];
+const QUIMICOS_KEYS = [
+  "edulcorantes", "drogas",
 ];
 
 const porKeys = (keys: string[]): Nutriente[] =>
@@ -1339,10 +1362,22 @@ const porKeys = (keys: string[]): Nutriente[] =>
 export const NUTRIENTES_MACRO = porKeys(MACRO_KEYS);
 /** Página 2 · Micronutrientes (mg/µg: sin calorías, imprescindibles). */
 export const NUTRIENTES_MICRO = porKeys(MICRO_KEYS);
+/** Página 3 · Químicos (edulcorantes y drogas: sustancias, no alimentos). */
+export const NUTRIENTES_QUIMICOS = porKeys(QUIMICOS_KEYS);
 
 /** ¿Este grupo se ve en la página de micronutrientes? */
 export const esMicronutriente = (key: string): boolean =>
   NUTRIENTES_MICRO.some((n) => n.key === key);
+
+/** ¿Este grupo se ve en la página de Químicos? */
+export const esQuimico = (key: string): boolean =>
+  NUTRIENTES_QUIMICOS.some((n) => n.key === key);
+
+/** La lista (senda) a la que pertenece un grupo. */
+const listaDe = (key: string): Nutriente[] =>
+  esQuimico(key) ? NUTRIENTES_QUIMICOS
+  : esMicronutriente(key) ? NUTRIENTES_MICRO
+  : NUTRIENTES_MACRO;
 
 /** ¿Se puede entrar ya a este grupo? Dentro de su página los grupos se andan en
  *  FILA (ver SendaNutrientes): uno se abre si ya está leído —lo andado no se
@@ -1350,15 +1385,17 @@ export const esMicronutriente = (key: string): boolean =>
 export const nutrienteAlcanzable = (key: string, explorados: Iterable<string>): boolean => {
   const vistos = new Set(explorados);
   if (vistos.has(key)) return true;
-  const lista = esMicronutriente(key) ? NUTRIENTES_MICRO : NUTRIENTES_MACRO;
+  const lista = listaDe(key);
   const i = lista.findIndex((n) => n.key === key);
-  if (i < 0) return true; // grupo fuera de las dos páginas: sin camino que respetar
+  if (i < 0) return true; // grupo fuera de las páginas: sin camino que respetar
   return lista.slice(0, i).every((n) => vistos.has(n.key));
 };
 
 // Dado un key de nutriente, indica a qué página de la rejilla pertenece (para
 // que el botón «Volver» del detalle regrese a la página correcta).
 export const rutaListaNutriente = (key: string): string =>
-  esMicronutriente(key)
+  esQuimico(key)
+    ? "/metodo/nutricion/quimicos"
+    : esMicronutriente(key)
     ? "/metodo/nutricion/micronutrientes"
     : "/metodo/nutricion/macronutrientes";

@@ -14,7 +14,7 @@ export const diario = {
   // ── Página /diario ──────────────────────────────────────────────────────
   "diario.pagina.titulo": "El diario de tus sesiones",
   "diario.pagina.subtitulo":
-    "Lo que trabajamos en cada sesión y por qué. Se va escribiendo sobre la marcha, así que vuelve cuando quieras.",
+    "Lo que trabajamos en cada sesión y por qué.",
   "diario.pagina.vacio": "Todavía no hay ninguna sesión escrita aquí.",
   "diario.pagina.volver": "Volver al Mapa",
   /** Bajo el calendario: cómo se usa. */

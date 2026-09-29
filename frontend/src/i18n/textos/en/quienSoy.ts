@@ -1,6 +1,6 @@
 export const quienSoy = {
   "quienSoy.mision":
-    "For centuries we have been piling up knowledge about the human being, but that knowledge has stayed scattered. My aim is not to create more of it — it is to put it in order, at the service of your understanding.",
+    "I want to bring order to the scattered knowledge about the human being.",
 
   // ── Donation ───────────────────────────────────────────────────────────
   "quienSoy.apoya": "Support this project",
@@ -14,7 +14,7 @@ export const quienSoy = {
   "quienSoy.testimonio":
     "\"Brilliant, collaborative, productive and ethical. I couldn't recommend her highly enough.\"",
   "quienSoy.testimonioCargo": "CEO of Savimbo",
-  "quienSoy.linkedin": "Read the full letter on LinkedIn",
+  "quienSoy.linkedin": "See the full letter on LinkedIn",
 
   // ── Certificates ───────────────────────────────────────────────────────
   "quienSoy.certificados": "My Certificates",

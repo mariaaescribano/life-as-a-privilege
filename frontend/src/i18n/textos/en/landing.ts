@@ -14,7 +14,7 @@ export const landing = {
   // Empty since the brand sits above: two headlines in a row weakened each other.
   "landing.intro.titulo": "",
   "landing.intro.sub":
-    "Understanding yourself from the inside, and being accompanied when life moves you somewhere new. Choose where you want to come in.",
+    "Getting to know yourself from the inside, and being accompanied when life moves you somewhere new. Choose where you want to come in.",
 
   "landing.entrar": "Enter",
   "landing.muyPronto": "Coming soon",
@@ -25,20 +25,20 @@ export const landing = {
     "The eight disciplines I study and work from. Both projects are born of this same way of looking.",
 
   // ── Closing (the two buttons again) ────────────────────────────────────
-  "landing.cierre": "Where would you like to start?",
+  "landing.cierre": "Where do you want to start?",
 
   "landing.derechos": "© 2026 María Escribano · All rights reserved",
 
   // ── The Map ────────────────────────────────────────────────────────────
   "landing.nombre.elMapa": "The Map",
-  "landing.lema.elMapa": "Know yourself so you can care for yourself.",
+  "landing.lema.elMapa": "Pain is inevitable, suffering is optional. Give your Life meaning.",
   "landing.desc.elMapa":
-    "Eight disciplines —astrology, psychology, ayurveda, Chinese medicine, physiology, nutrition, kabbalah and history— to understand how you work and stop fighting yourself.",
+    "An interactive journey through 8 disciplines to understand your mind, your body, and your story.",
 
   // ── A Mother Is Born ───────────────────────────────────────────────────
   // DRAFT, same as the Spanish: rewrite once the project is defined.
   "landing.nombre.naceUnaMadre": "A Mother Is Born",
-  "landing.lema.naceUnaMadre": "When a child is born, a mother is born too.",
+  "landing.lema.naceUnaMadre": "When a child is born, a mother is born.",
   "landing.desc.naceUnaMadre":
-    "The other birth, the one almost nobody tells: that of the woman who becomes a mother. Support for the body, the mind and the identity that change as well.",
+    "The other birth, the one that almost never gets told: that of the woman who becomes a mother. Support for the body, the mind, and the identity that change too.",
 } as const;

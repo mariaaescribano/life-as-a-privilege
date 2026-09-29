@@ -42,15 +42,15 @@ import { cacheDeOtraCuenta } from "../../api/sesion";
 // pide lo mínimo común y se les pasa siempre la forma que todos entienden.
 type IconoDisciplina = React.ComponentType<{ size?: { base: string; md: string } }>;
 
-// `clara`: acuarela CLARA con tinta oscura (psicología): su box va sin velo
-// oscuro y sin sombra negra en los textos, que sobre fondo claro lo único que
-// hacían era ensuciarlo.
+// `clara`: acuarela CLARA con tinta oscura (psicología, nutrición, ayurveda):
+// su box va sin velo oscuro y sin sombra negra en los textos, que sobre fondo
+// claro lo único que hacían era ensuciarlo.
 const CARA: Record<CaminoKey, { nom: string; bg: string; txt: string; Icon: IconoDisciplina; clara?: boolean }> = {
   metodo:     { nom: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      Icon: AstrologiaIcon },
   psicologia: { nom: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon, clara: true },
   fisiologia: { nom: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon },
-  nutricion:  { nom: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon },
-  ayurveda:   { nom: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon },
+  nutricion:  { nom: nutricionNom,       bg: nutricionBg,       txt: nutricionTxt,       Icon: NutricionIcon, clara: true },
+  ayurveda:   { nom: ayurvedaNom,        bg: ayurvedaBg,        txt: ayurvedaTxt,        Icon: AyurvedaIcon, clara: true },
   tcm:        { nom: tcmNom,             bg: tcmBg,             txt: tcmTxt,             Icon: TCMIcon },
   cabala:     { nom: cabalaNom,          bg: cabalaBg,          txt: cabalaTxt,          Icon: CabalaIcon },
   cultura:    { nom: culturaNom,         bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon },

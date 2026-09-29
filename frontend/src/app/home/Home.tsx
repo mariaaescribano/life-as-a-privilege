@@ -30,7 +30,6 @@ import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../compo
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import CaminoUsuario from "./CaminoUsuario";
-import DiarioUsuario from "./DiarioUsuario";
 import PinesDiario from "./PinesDiario";
 import { ComunidadPrimeraVez } from "../../components/global/ComunidadPrimeraVez";
 import { useT, type ClaveTexto } from "../../i18n";
@@ -934,8 +933,6 @@ const Home = () => {
                  "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "3px" } }}>
         <Flex direction="column" gap={4}>
           <CaminoUsuario suscritas={suscritasCamino} />
-          {/* Las notas de sus sesiones. Si no tiene ninguna no pinta nada. */}
-          <DiarioUsuario />
         </Flex>
       </Box>
 
@@ -1252,7 +1249,6 @@ const Home = () => {
                 los dos lados: ni pegado al mandala ni al footer. */}
             <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={14} mb={10} w="100%">
               <CaminoUsuario suscritas={suscritasCamino} />
-              <DiarioUsuario />
             </Flex>
           </Flex>
         ) : (

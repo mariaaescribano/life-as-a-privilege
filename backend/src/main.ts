@@ -15,6 +15,9 @@ dotenv.config();
 function origenesPermitidos(): string[] {
   const fijos = [
     'https://lifeasaprivilege.onrender.com',
+    // el dev server del frontend corre siempre en el 5199 (5173 es el puerto
+    // por defecto de Vite, se conserva por si acaso)
+    'http://localhost:5199',
     'http://localhost:5173',
     'http://localhost:3001',
     'http://localhost:3000',

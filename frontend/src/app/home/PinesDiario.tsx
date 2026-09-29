@@ -8,11 +8,13 @@
 //     botón flotante de /metodo). Aquí solo se LEEN (y se pueden borrar);
 //     para escribir está el recorrido.
 //   · «Diario de terapia» — lleva a /diario, con su icono propio (el
-//     marcapáginas con corazón, el mismo del panel de admin).
+//     marcapáginas con corazón, el mismo del panel de admin). Si hay notas
+//     publicadas SIN LEER, encima del pin sale un numerito con cuántas son
+//     (antes eso era una tarjeta entera en la columna de la izquierda;
+//     ahora todo el aviso es este numerito).
 //
 // Si la persona no tiene ninguna entrada publicada en el diario, no se pinta
-// nada: el /home no cambia ni un píxel (la misma regla que la tarjeta del
-// diario y que «Tu camino»).
+// nada: el /home no cambia ni un píxel (la misma regla que «Tu camino»).
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Modal, ModalBody, ModalContent, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
@@ -26,18 +28,25 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { cacheDeOtraCuenta } from "../../api/sesion";
 import { useT } from "../../i18n";
 
-// Igual que la tarjeta del diario: se recuerda a nivel de módulo si esta
-// cuenta tiene diario, para que al volver al home no haya parpadeo.
+// Se recuerda a nivel de módulo si esta cuenta tiene diario (y cuántas notas
+// le quedan sin leer), para que al volver al home no haya parpadeo.
 let tieneDiarioCache: boolean | null = null;
+let sinLeerCache = 0;
+
+/** Para que la página /diario pueda apagar el numerito de «sin leer» sin recargar. */
+export const olvidarCacheDiario = () => {
+  tieneDiarioCache = null;
+  sinLeerCache = 0;
+};
 
 /** El estilo común de los dos pines: rectangulares, apilados, mismo material. */
 const PIN = {
   as: "button",
   display: "flex",
   alignItems: "center",
-  gap: "10px",
-  px: "16px",
-  py: "12px",
+  gap: "12px",
+  px: "20px",
+  py: "14px",
   borderRadius: "xl",
   bg: "rgba(255,255,255,0.1)",
   border: "1.5px solid rgba(255,255,255,0.5)",
@@ -52,8 +61,12 @@ const PIN = {
 export default function PinesDiario() {
   const t = useT();
   const navigate = useNavigate();
-  if (cacheDeOtraCuenta("pinesDiario")) tieneDiarioCache = null;
+  if (cacheDeOtraCuenta("pinesDiario")) {
+    tieneDiarioCache = null;
+    sinLeerCache = 0;
+  }
   const [tieneDiario, setTieneDiario] = useState<boolean>(tieneDiarioCache === true);
+  const [sinLeer, setSinLeer] = useState<number>(sinLeerCache);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Visor de «Mis notas»
@@ -66,7 +79,11 @@ export default function PinesDiario() {
     let cancel = false;
     listarMias().then((lista) => {
       tieneDiarioCache = lista.length > 0;
-      if (!cancel) setTieneDiario(tieneDiarioCache);
+      sinLeerCache = lista.filter((e) => !e.leida_at).length;
+      if (!cancel) {
+        setTieneDiario(tieneDiarioCache);
+        setSinLeer(sinLeerCache);
+      }
     });
     return () => { cancel = true; };
   }, []);
@@ -111,15 +128,38 @@ export default function PinesDiario() {
         fontFamily="'EB Garamond', serif"
       >
         <Flex {...PIN} onClick={abrirNotas} aria-label={t("home.pin.misNotas")}>
-          <DiarioIcon fill="white" size="22px" />
-          <Text fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.05em" whiteSpace="nowrap">
+          <DiarioIcon fill="white" size="26px" />
+          <Text fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" whiteSpace="nowrap">
             {t("home.pin.misNotas")}
           </Text>
         </Flex>
 
-        <Flex {...PIN} onClick={() => navigate("/diario")} aria-label={t("home.pin.diarioTerapia")}>
-          <IconoDiarioTerapia fill="#FFFFFF" size="22px" />
-          <Text fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.05em" whiteSpace="nowrap">
+        <Flex {...PIN} position="relative" onClick={() => navigate("/diario")} aria-label={t("home.pin.diarioTerapia")}>
+          {/* El numerito de notas sin leer, montado sobre la esquina del pin. */}
+          {sinLeer > 0 && (
+            <Flex
+              position="absolute"
+              top="-9px"
+              right="-9px"
+              minW="22px"
+              h="22px"
+              px="6px"
+              align="center"
+              justify="center"
+              borderRadius="full"
+              bg="white"
+              color="#008080"
+              fontSize="xs"
+              fontWeight="800"
+              lineHeight="1"
+              boxShadow="0 2px 8px rgba(0,0,0,0.35)"
+              pointerEvents="none"
+            >
+              {sinLeer}
+            </Flex>
+          )}
+          <IconoDiarioTerapia fill="#FFFFFF" size="26px" />
+          <Text fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" whiteSpace="nowrap">
             {t("home.pin.diarioTerapia")}
           </Text>
         </Flex>

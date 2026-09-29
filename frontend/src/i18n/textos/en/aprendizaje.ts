@@ -1,8 +1,8 @@
 export const aprendizaje = {
   "aprendizaje.titulo": "COURSES AND DISCIPLINES",
-  "aprendizaje.lema": "Eight perspectives. One human being.",
+  "aprendizaje.lema": "Eight ways of looking. One human being.",
 
-  "aprendizaje.enConstruccion": "This discipline is under construction.",
+  "aprendizaje.enConstruccion": "Discipline under construction.",
   "aprendizaje.cursoNoEncontrado": "Course not found.",
   "aprendizaje.leccionNoEncontrada": "Lesson not found.",
   "aprendizaje.sinContenido": "This course doesn't have any content yet.",
@@ -10,7 +10,7 @@ export const aprendizaje = {
 
   "aprendizaje.btn.ilustraciones": "Illustrations",
   "aprendizaje.btn.testDoshas": "Doṣha test",
-  "aprendizaje.btn.cartasHistoricas": "Charts of historical figures",
+  "aprendizaje.btn.cartasHistoricas": "Birth Charts of Historical Figures",
   "aprendizaje.btn.herbario": "Herbarium",
   "aprendizaje.btn.alimentos": "Foods",
   "aprendizaje.btn.calcularNecesidades": "Calculate your needs",
@@ -37,7 +37,7 @@ export const aprendizaje = {
   "test.elige": "Choose…",
 
   "tcmTests.titulo": "Chinese Medicine tests",
-  "tcmTests.subtitulo": "Pick the test you want to take.",
+  "tcmTests.subtitulo": "Choose the test you want to take.",
   "tcmTests.constitucion": "Constitution",
   "tcmTests.elemento": "Element",
   "tcmTests.desequilibrio": "Imbalance",
@@ -52,13 +52,13 @@ export const aprendizaje = {
 
   // ── Astrology services modal (chart readings) ──────────────────────────
   "astroServicios.titulo": "✦ Astrology Services ✦",
-  "astroServicios.ascSolLuna": "Getting to know my Ascendant, Sun and Moon in depth",
+  "astroServicios.ascSolLuna": "Get to know my Ascendant, Sun, and Moon in depth",
   "astroServicios.lectura": "Birth chart reading",
   "astroServicios.lecturaProfunda": "In-depth birth chart reading",
   "astroServicios.tuEmail": "Your email",
   "astroServicios.enviado": "Message sent!",
   "astroServicios.enviadoPie": "I'll get in touch with you very soon.",
-  "astroServicios.error": "Something went wrong. Please try again.",
+  "astroServicios.error": "There was an error. Please try again.",
 
   "ficha.beneficios": "Benefits",
   "ficha.formaDeUso": "How to use it",

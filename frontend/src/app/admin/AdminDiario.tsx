@@ -76,16 +76,21 @@ const deEntrada = (e: EntradaDiario): Borrador => ({
   porque: e.porque ?? "",
 });
 
-const campoSx = {
-  bg: "rgba(0,0,0,0.25)",
-  border: "1px solid rgba(255,255,255,0.3)",
-  color: "white",
-  fontFamily: "'EB Garamond', serif",
-  _placeholder: { color: "rgba(255,255,255,0.45)" },
-  _hover: { borderColor: "rgba(255,255,255,0.55)" },
-  _focus: { borderColor: "white", boxShadow: "none" },
-  _focusVisible: { boxShadow: "none" },
-} as const;
+/** Los campos del formulario se visten con el Txt de la disciplina elegida:
+ *  lo que se teclea, el placeholder y los bordes van de su color. */
+const campoSx = (txt: string) =>
+  ({
+    bg: "rgba(0,0,0,0.25)",
+    border: `1px solid ${txt}4d`,
+    color: txt,
+    caretColor: txt,
+    fontFamily: "'EB Garamond', serif",
+    transition: "color 0.25s, border-color 0.25s",
+    _placeholder: { color: `${txt}73` },
+    _hover: { borderColor: `${txt}8c` },
+    _focus: { borderColor: txt, boxShadow: "none" },
+    _focusVisible: { boxShadow: "none" },
+  }) as const;
 
 export default function AdminDiario() {
   const navigate = useNavigate();
@@ -274,7 +279,8 @@ export default function AdminDiario() {
 
               {/* ── LAS NOTAS DEL DÍA ── */}
               <Flex align="center" gap={3} mb={4}>
-                <Box flex="1" h="1px" bg="rgba(255,255,255,0.25)" />
+                {/* Las rayitas se desvanecen hacia fuera: la fecha queda arropada. */}
+                <Box flex="1" h="1px" bgGradient="linear(to-r, #ffffff00, #ffffff40)" />
                 <Text
                   color="white"
                   fontWeight="700"
@@ -284,7 +290,7 @@ export default function AdminDiario() {
                 >
                   {fechaLarga(dia)}
                 </Text>
-                <Box flex="1" h="1px" bg="rgba(255,255,255,0.25)" />
+                <Box flex="1" h="1px" bgGradient="linear(to-l, #ffffff00, #ffffff40)" />
               </Flex>
 
               {delDia.length === 0 ? (
@@ -320,7 +326,9 @@ export default function AdminDiario() {
                 borderRadius="2xl"
                 bg={caraForm.nom ? caraForm.bg : "rgba(255,255,255,0.07)"}
                 border={`1px solid ${caraForm.txt}55`}
-                transition="background 0.25s, border-color 0.25s"
+                // Con disciplina, un halo suave de su acento envuelve el formulario.
+                boxShadow={caraForm.nom ? `0 0 26px ${caraForm.txt}33` : undefined}
+                transition="background 0.25s, border-color 0.25s, box-shadow 0.35s"
               >
                 {caraForm.nom && hasDisciplinaBg(caraForm.nom) && (
                   <DisciplinaBgLayer
@@ -363,7 +371,7 @@ export default function AdminDiario() {
                       }}
                       borderRadius="lg"
                       sx={{ "&::-webkit-calendar-picker-indicator": { filter: "invert(1)" } }}
-                      {...campoSx}
+                      {...campoSx(caraForm.txt)}
                     />
                   </Box>
                   <Box flex="1" minW={0}>
@@ -399,7 +407,7 @@ export default function AdminDiario() {
                   placeholder="Una frase que resuma la sesión"
                   borderRadius="lg"
                   mb={3}
-                  {...campoSx}
+                  {...campoSx(caraForm.txt)}
                 />
 
                 <Etiqueta color={caraForm.txt}>Qué trabajamos</Etiqueta>
@@ -411,7 +419,7 @@ export default function AdminDiario() {
                   borderRadius="lg"
                   mb={1.5}
                   lineHeight="1.8"
-                  {...campoSx}
+                  {...campoSx(caraForm.txt)}
                 />
                 <Text color={`${caraForm.txt}99`} fontSize="xs" fontStyle="italic" mb={3}>
                   Se puede marcar: **negrita**, *cursiva* y una línea con --- pinta una rayita separadora.
@@ -426,7 +434,7 @@ export default function AdminDiario() {
                   borderRadius="lg"
                   mb={4}
                   lineHeight="1.8"
-                  {...campoSx}
+                  {...campoSx(caraForm.txt)}
                 />
 
                 <Flex gap={3} flexWrap="wrap">
@@ -482,8 +490,13 @@ function NotaDelDia({
       borderRadius="xl"
       bg={cara.bg}
       border={`1px solid ${editandoEsta ? cara.txt : `${cara.txt}55`}`}
-      transition="border-color 0.18s"
-      _hover={{ borderColor: `${cara.txt}aa` }}
+      transition="border-color 0.18s, box-shadow 0.25s"
+      // El halo, solo con el acento de la disciplina: la nota neutra no brilla.
+      boxShadow={editandoEsta && cara.nom ? `0 0 18px ${cara.txt}40` : undefined}
+      _hover={{
+        borderColor: `${cara.txt}aa`,
+        boxShadow: cara.nom ? `0 0 18px ${cara.txt}40` : undefined,
+      }}
     >
       {/* La FOTO de la disciplina de fondo (no el color plano), con su velo —
           la misma capa que la página /diario del usuario. */}
@@ -576,8 +589,9 @@ const Pastilla = ({
     cursor="pointer"
     transition="all 0.15s"
     opacity={activa ? 1 : 0.65}
+    transform={activa ? "scale(1.05)" : undefined}
     style={activa ? { boxShadow: `0 0 12px ${txt}66` } : undefined}
-    _hover={{ opacity: 1, borderColor: txt }}
+    _hover={{ opacity: 1, borderColor: txt, transform: "scale(1.05)" }}
   >
     <Text color={txt} fontSize="xs" fontWeight="600" whiteSpace="nowrap">
       {children}

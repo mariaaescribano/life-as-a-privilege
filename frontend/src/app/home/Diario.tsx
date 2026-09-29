@@ -24,7 +24,7 @@ import { TextoMarcado } from "../../components/global/TextoMarcado";
 import { listarMias, marcarLeidas, type EntradaDiario } from "../../api/diario";
 import { caraDeEntrada, fechaLarga } from "./diarioCara";
 import CalendarioDiario from "./CalendarioDiario";
-import { olvidarCacheDiario } from "./DiarioUsuario";
+import { olvidarCacheDiario } from "./PinesDiario";
 import { useT, useIdioma } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 

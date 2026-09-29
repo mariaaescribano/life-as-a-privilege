@@ -1,5 +1,5 @@
 export const diario = {
-  // ── Home card (under «Your path») ───────────────────────────────────────
+  // ── Home card (under «Your map») ─────────────────────────────────────────
   "diario.titulo": "Your sessions",
   "diario.nuevas": "{n} unread",
   "diario.verTodas": "See all ({n})",
@@ -7,11 +7,11 @@ export const diario = {
   // ── /diario page ────────────────────────────────────────────────────────
   "diario.pagina.titulo": "The diary of your sessions",
   "diario.pagina.subtitulo":
-    "What we worked on in each session, and why. It gets written as we go, so come back whenever you like.",
-  "diario.pagina.vacio": "No session has been written here yet.",
-  "diario.pagina.volver": "Back to the Map",
+    "What we work on in each session and why. It gets written as we go, so come back whenever you want.",
+  "diario.pagina.vacio": "There's no session written here yet.",
+  "diario.pagina.volver": "Back to The Map",
   "diario.pagina.leyenda": "Days with a dot have notes: tap one to read them.",
-  "diario.pagina.diaVacio": "There are no notes on that day.",
+  "diario.pagina.diaVacio": "That day has no notes.",
 
   "diario.porque": "Why I'm telling you this",
   "diario.sinDisciplina": "Session",

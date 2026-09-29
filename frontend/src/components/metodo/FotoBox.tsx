@@ -85,7 +85,14 @@ export function FotoBox({
   vivo?: boolean;
 }) {
   const [imgErr, setImgErr] = useState(false);
+  // Si la foto no llega (un corte puntual de red, o una respuesta cacheada
+  // mala), se reintenta UNA vez con la caché puenteada antes de rendirse: una
+  // tarjeta sin foto «a veces» (pasó con la portada de Grasas) queda muy mal y
+  // el precio de reintentar es cero. Mismo espíritu que la recarga única de los
+  // chunks caídos.
+  const [reintento, setReintento] = useState(0);
   const hayFoto = !!foto && !imgErr;
+  const srcFoto = foto ? encodeURI(foto) + (reintento ? `?reintento=${reintento}` : "") : "";
   // Sin líneas (ni borde exterior ni raya separadora): solo el glow define la
   // tarjeta. En Nutrición porque el fondo claro hace cantar cualquier línea; en
   // Cultura y Fisiología porque así se pidió (mantener el glow, quitar los
@@ -145,8 +152,9 @@ export function FotoBox({
            flexShrink={0} bg={colorTint ?? `${tinta}12`}
            display="flex" alignItems="center" justifyContent="center">
         {hayFoto ? (
-          <Image src={encodeURI(foto!)} alt={typeof titulo === "string" ? titulo : ""} w="100%" h="100%"
-                 objectFit="cover" onError={() => setImgErr(true)}
+          <Image src={srcFoto} alt={typeof titulo === "string" ? titulo : ""} w="100%" h="100%"
+                 objectFit="cover"
+                 onError={() => (reintento === 0 ? setReintento(1) : setImgErr(true))}
                  transition={vivo ? "transform 0.55s cubic-bezier(0.22,1,0.36,1)" : undefined}
                  _groupHover={vivo ? { transform: "scale(1.07)" } : undefined} />
         ) : emoji ? (

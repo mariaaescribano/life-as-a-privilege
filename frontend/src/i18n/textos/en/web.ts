@@ -7,9 +7,11 @@ export const web = {
   "web.404.recorrido": "See The Map",
 
   // ── Legal pages ────────────────────────────────────────────────────────
+  // The body of the legal texts is NOT translated (see the notice below):
+  // they are binding documents that cite Spanish law (LSSI, RGPD, TRLGDCU).
   "legal.ultimaActualizacion": "Last updated: {fecha}",
   "legal.soloEspanol":
-    "The legal texts on this site are available in Spanish only, which is their binding version.",
+    "The legal texts on this site are available only in Spanish, which is their valid version.",
 
   // ── Materials (/materiales) ────────────────────────────────────────────
   "materiales.subtitulo": "Content created and curated by María",
@@ -18,7 +20,9 @@ export const web = {
   "materiales.programas": "Programs",
 
   // ── Programs (/programas) ──────────────────────────────────────────────
-  "programas.subtitulo": "Each idea, as a slide and as its podcast",
+  // Each program is a slide (or several) plus its podcast: the same thing,
+  // seen and heard. They're numbered within their discipline.
+  "programas.subtitulo": "Each idea, in a slide and in its podcast",
   "programas.vacio": "No programs published yet. Come back soon.",
   "programas.numero": "Program {n}",
   "programas.cuenta": "{n} programs",
@@ -27,7 +31,7 @@ export const web = {
   "programas.podcast": "The podcast",
   "programas.verDiapositivas": "See the slides",
   "programas.escucharPodcast": "Listen to the podcast",
-  "programas.enPreparacion": "In preparation: neither the slides nor the podcast are ready yet.",
+  "programas.enPreparacion": "In preparation: neither the slides nor the podcast are here yet.",
   "programas.sinPodcast": "The podcast for this program isn't published yet.",
   "programas.sinDiapositivas": "The slides for this program aren't published yet.",
   "programas.volver": "All programs",
@@ -36,68 +40,72 @@ export const web = {
   "programas.noExiste": "This program doesn't exist",
 
   // ── Discipline landing (/disciplina/:disciplina) ───────────────────────
+  // The three doors, the same for all eight disciplines.
   "portada.ilustraciones": "Illustrations",
   "portada.cursos": "Courses",
-  "portada.recorrido": "The Journey",
+  "portada.recorrido": "The Map",
   "portada.recorridoPack": "The pack",
 
   // ── Videos (/videos) ───────────────────────────────────────────────────
-  "videos.subtitulo": "Short ideas you can watch in a minute, one for each discipline on the map",
+  "videos.subtitulo": "",
   "videos.vacio": "No videos published yet. Come back soon.",
-  "videos.fuera": "This video can't be played here.",
+  "videos.fuera": "This video can't be watched in here.",
   "videos.abrirEn": "Open on {red}",
 
   // ── Creator card (CreadoraCard) ────────────────────────────────────────
   "creadora.accion": "Meet the creator",
-  // «Ingeniera informática» es la titulación: se traduce como el título, no como
-  // el puesto («software engineer» diría otra cosa sobre ella).
+  // «Ingeniera informática» is the degree: translate it as the title, not the
+  // job («software engineer» would say something else about her).
   "creadora.bio":
-    "Computer engineer. I rebuilt the path so many of us walk for years trying to understand ourselves: a map where psychology, biology and traditional knowledge work together instead of fighting each other. Now they are allies in the service of your growth.",
+    "Computer engineer. I rebuilt the path so many of us walk: a map where psychology, biology, and traditional knowledge combine instead of fighting each other. Now they're allies in the service of your growth.",
 
   // ── Subscribe box (SubscribeBox) ───────────────────────────────────────
   "suscribir.titulo": "Don't miss a thing.",
-  "suscribir.texto": "Whenever I publish something new, you'll be the first to know.",
+  "suscribir.texto": "When I publish new content, you'll be the first to know.",
   "suscribir.placeholder": "Your email",
   "suscribir.boton": "Subscribe",
-  "suscribir.ok": "You're on the list",
+  "suscribir.ok": "Registered successfully",
   "suscribir.gracias": "Thank you for wanting to learn",
-  "suscribir.invalido": "Enter a valid email address",
-  "suscribir.error": "It couldn't be sent. Please try again in a moment.",
+  "suscribir.invalido": "Enter a valid email",
+  "suscribir.error": "It couldn't be sent. Try again in a moment.",
   "suscribir.baja": "You can unsubscribe whenever you want",
 
+  // ── Basic data-protection information (art. 13 GDPR) ───────────────────
+  // Goes under every form that collects data; the details, in /privacidad.
   "privacidad.infoRegistro":
-    "By signing up you confirm you are 18 or older and accept the terms of use. María Escribano processes your data to run your account and your journey; it is not shared with anyone except the providers that keep the site running. You can access, correct or delete your data (and delete your account from your profile). More in the",
+    "By signing up you confirm that you're 18 or older and accept the terms of use. María Escribano processes your data to manage your account and your journey; it isn't shared with anyone except the providers that keep the site running. You can access, correct, or delete your data (and also delete your account from your profile). More in the",
   "privacidad.infoOpinion":
-    "Your name and your review will be published on this page; the email is optional, never published and only used to reply to you. To remove it, write to mariaa.escribano.arce@gmail.com. More in the",
+    "Your name and your review will be published on this page; the email is optional, is never published, and is only used to be able to reply to you. If you want to take it down, write to mariaa.escribano.arce@gmail.com. More in the",
   "privacidad.enlace": "privacy policy",
 
+  // ── Health consent (PuertaConsentimientoSalud) ─────────────────────────
   "consentimiento.titulo": "Before you continue",
   "consentimiento.texto":
-    "In the journey you will write about yourself, and some of it may reveal information about your physical or emotional health. The law requires your express permission to store it. You only need to give it once.",
+    "Along the journey you're going to write things about yourself, and some of them may reveal information about your physical or emotional health. The law requires you to give your express permission before they can be stored. You only need to do it once.",
   "consentimiento.casilla":
-    "I expressly consent to the storage of the texts and answers I write inside the journey, including any that reveal information about my physical or emotional health, and I authorise María Escribano to read them for the sole purpose of accompanying me and preparing my personalised readings.",
+    "I expressly consent to the storage of the texts and answers I write inside the journey, including those that reveal information about my physical or emotional health, and I authorize María Escribano to read them for the sole purpose of accompanying me and preparing my personalized readings.",
   "consentimiento.nota":
-    "They are not shared with anyone else or used for anything else. You can withdraw this permission at any time from Contact, and delete your account with everything you wrote from your profile.",
+    "They aren't shared with anyone else or used for anything else. You can withdraw this permission whenever you want from Contact, and delete your account with everything you've written from your profile.",
   "consentimiento.boton": "Give my permission",
   "consentimiento.volver": "Not now",
-  "consentimiento.error": "It could not be saved. Please try again in a moment.",
+  "consentimiento.error": "It couldn't be saved. Try again in a moment.",
 
   // ── Cookie banner (the bar at the bottom, not the legal page) ──────────
   "cookies.aviso":
-    "We use our own cookies, the ones the site needs to work and to keep you logged in. We'd also like to use Google Analytics cookies to understand how the site is used and improve it, but **only if you allow it**.",
+    "We use cookies so the site works and to keep you logged in. We'd also like to use Google Analytics cookies to improve the site, but **only if you allow it**.",
   "cookies.masInfo": "More information",
   "cookies.rechazar": "Decline",
   "cookies.aceptar": "Accept",
 
   // ── Error screen (ErrorBoundary) ───────────────────────────────────────
   "error.titulo": "Something went sideways for a moment",
-  "error.texto": "Don't worry: your data is saved. Reload the page to carry on.",
+  "error.texto": "Don't worry: your data is saved. Reload the page to continue.",
   "error.recargar": "Reload",
 
   // ── Booking a call (BookCallModal, AgendarLlamada, BotonCompania) ──────
-  "llamada.agenda": "Book a call",
+  "llamada.agenda": "Let's talk",
   "llamada.reserva": "Book your call",
-  "llamada.gratis": "20 minutes, free · mainland Spain time",
+  "llamada.gratis": "20 minutes, no cost · mainland Spain time",
   "llamada.elegirDia": "Pick a day",
   "llamada.elegirHora": "Pick a time",
   "llamada.cambiarDia": "← Change day",
@@ -119,23 +127,23 @@ export const web = {
   "llamada.cambiarHora": "← Change time",
   "llamada.volver": "← Back",
   "llamada.entendido": "Got it",
-  "llamada.queEsEsto": "What is this?",
+  "llamada.queEsEsto": "What's this?",
   "llamada.acompanar": "Book your call →",
   "llamada.acompanarTexto":
-    "You can walk this stretch with me. Book a call — you don't have to do all of it on your own.",
-  // Booking and payment errors.
+    "You can walk this stretch with me. Book a call — you don't have to do it all on your own.",
+  // Booking and payment errors (previously hard-coded in the components).
   "llamada.error.horarioOcupadoPago":
-    "That time was booked while your payment was processing. Write to me and I'll move your call or refund you.",
+    "That time slot got booked while the payment was processing. Write to me and I'll move your call or refund you.",
   "llamada.error.pagoIncompleto": "The payment didn't go through. You can try again.",
-  "llamada.error.confirmar": "We couldn't confirm your booking. Write to me and we'll sort it out.",
-  "llamada.error.pagoCancelado": "You cancelled the payment. Your call hasn't been booked.",
-  "llamada.error.iniciarPago": "The payment couldn't be started. Please try again.",
-  "llamada.error.horarioOcupado": "That time has just been booked. Please pick another one.",
+  "llamada.error.confirmar": "The booking couldn't be confirmed. Write to me and we'll sort it out.",
+  "llamada.error.pagoCancelado": "You canceled the payment. Your call hasn't been booked.",
+  "llamada.error.iniciarPago": "The payment couldn't be started. Try again.",
+  "llamada.error.horarioOcupado": "That time slot was just booked. Please pick another.",
   "llamada.error.generico": "Something went wrong. Please try again.",
 
   // ── Exit modal (ExitIntentSubscribeModal) ──────────────────────────────
   "salida.titulo": "Before you go...",
-  "salida.texto": "Subscribe and get an email whenever there's something new.",
+  "salida.texto": "Subscribe and get an email when there's content.",
   "salida.noGracias": "No, thanks",
 
   // ── Account needed (LoginRequiredModal) ────────────────────────────────
@@ -147,7 +155,7 @@ export const web = {
   "diario.abrir": "Open my notes",
   "diario.borrarNota": "Delete note",
   "diario.volverEscribir": "← Back to writing",
-  "diario.escribir": "What would you like to write?",
+  "diario.escribir": "What do you want to write?",
   "diario.verNotas": "← See my notes",
   "diario.vacio": "You haven't written any notes yet.",
 
@@ -160,20 +168,20 @@ export const web = {
 
   // ── Buying access (SubscribeModal) ─────────────────────────────────────
   "acceso.email":
-    "Enter the email you want to use for the courses. We'll take you to the secure payment, and once it goes through you'll get your access code by email.",
-  "acceso.apuntarme": "I want in",
-  "acceso.preparando": "Getting it ready…",
+    "Enter the email you want to use to access the courses. Then we'll take you to the secure payment and, once it's confirmed, you'll receive your access code by email.",
+  "acceso.apuntarme": "I want to sign up",
+  "acceso.preparando": "Preparing…",
   "acceso.continuarPago": "Continue to payment",
-  "acceso.recibidos": "We got your details",
+  "acceso.recibidos": "Details received",
   "acceso.irPago": "Go to payment →",
   "acceso.pack": "Full pack",
-  "acceso.incluye": "1 year of access to courses and materials · consultations separate",
+  "acceso.incluye": "1-year access to courses and materials · consultations separate",
   "acceso.pagarTexto":
-    "Press the button to complete the payment of **{precio}** in Stripe. Once it's confirmed, you'll get your access code by email.",
+    "Press the button to complete the **{precio}** payment in Stripe. Once it's confirmed, you'll receive your access code by email.",
 
   // ── Waitlist (WaitlistModal) ───────────────────────────────────────────
   "espera.texto":
-    "It's still being built. Leave your email and you'll be among the first to know.",
+    "It's currently under development. Leave your email to be among the first to know.",
   "espera.gracias": "Thank you!",
   "espera.aviso": "I'll let you know as soon as The Map is available.",
 

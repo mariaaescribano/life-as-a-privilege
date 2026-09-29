@@ -49,8 +49,10 @@ export const esIdioma = (v: unknown): v is Idioma =>
  * Idioma con el que arranca la web, por orden de prioridad:
  *   1. `?lang=en` en la URL (para compartir un enlace ya en inglés)
  *   2. lo que el usuario eligió la última vez (localStorage)
- *   3. el idioma del navegador
- *   4. español
+ *   3. español
+ *
+ * A propósito NO se mira el idioma del navegador: la web empieza SIEMPRE en
+ * español (es el original y la fuente de verdad); el inglés se elige a mano.
  */
 export const detectarIdioma = (): Idioma => {
   try {
@@ -61,11 +63,6 @@ export const detectarIdioma = (): Idioma => {
   try {
     const guardado = localStorage.getItem(CLAVE_IDIOMA);
     if (esIdioma(guardado)) return guardado;
-  } catch { /* noop */ }
-
-  try {
-    const navegador = (navigator.language || "").slice(0, 2).toLowerCase();
-    if (esIdioma(navegador)) return navegador;
   } catch { /* noop */ }
 
   return IDIOMA_ORIGINAL;

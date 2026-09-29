@@ -92,6 +92,20 @@ export const NUTRIENTES_EN: Record<string, NutrienteTexto> = {
           "Once absorbed, galactose is usually turned into glucose so the body can use it.",
         ],
       },
+      almidon: {
+        titulo: "Starch",
+        claves: [
+          "Long chains of glucose: the plant's pantry",
+          "It's cut link by link: slower, steadier energy",
+          "The resistant kind isn't digested: it's food for your microbiome",
+        ],
+        parrafos: [
+          "Starch is how plants store their glucose: hundreds or thousands of molecules joined into chains, some straight (amylose) and some branched (amylopectin). It's the complex carbohydrate par excellence: it's in potatoes, rice, bread, pasta, corn and legumes.",
+          "Since it's glucose in chains, your body knows how to use it — but it has to cut it up first. Amylase, an enzyme in your saliva and your intestine, breaks the chains apart link by link until the glucose comes free. That's why, in general, it raises blood sugar more slowly than a simple sugar. Not always, though: the more refined the food (white bread, purées, fine flours), the more exposed the chains are and the faster it digests. Whole, with its fiber, the rise is slow and steady.",
+          "And there's a part that isn't digested at all: resistant starch. It gets its name because it resists amylase and reaches the large intestine intact, where it behaves like fermentable fiber: your bacteria ferment it and produce short-chain fatty acids, like butyrate, which feeds the cells of the intestinal wall and helps calm inflammation.",
+          "Legumes, oats and barely ripe bananas have it naturally. And there's a kitchen trick: when you cook and then cool potatoes, rice or pasta, part of the starch recrystallizes (that's retrogradation) and becomes resistant; gentle reheating doesn't fully undo it. The same portion, cooled overnight, gives a little less to your glucose and a little more to your microbiome.",
+        ],
+      },
     },
   },
 

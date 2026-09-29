@@ -196,6 +196,7 @@ const MetodoFisiologiaTema = lazyConMetodo(() => import("./app/metodo/MetodoFisi
 const MetodoNutricion = lazyConMetodo(() => import("./app/metodo/MetodoNutricion"));
 const MetodoNutricionMacronutrientes = lazyConMetodo(() => import("./app/metodo/MetodoNutricionMacronutrientes"));
 const MetodoNutricionMicronutrientes = lazyConMetodo(() => import("./app/metodo/MetodoNutricionMicronutrientes"));
+const MetodoNutricionQuimicos = lazyConMetodo(() => import("./app/metodo/MetodoNutricionQuimicos"));
 const MetodoNutricionPlato = lazyConMetodo(() => import("./app/metodo/MetodoNutricionPlato"));
 const MetodoNutricionCalorias = lazyConMetodo(() => import("./app/metodo/MetodoNutricionCalorias"));
 const MetodoNutricionPrediabetes = lazyConMetodo(() => import("./app/metodo/MetodoNutricionPrediabetes"));
@@ -532,6 +533,7 @@ export default function App()
       <Route path="/metodo/nutricion" element={<PrivateRoute><MetodoNutricion /></PrivateRoute>} />
       <Route path="/metodo/nutricion/macronutrientes" element={<PrivateRoute><MetodoNutricionMacronutrientes /></PrivateRoute>} />
       <Route path="/metodo/nutricion/micronutrientes" element={<PrivateRoute><MetodoNutricionMicronutrientes /></PrivateRoute>} />
+      <Route path="/metodo/nutricion/quimicos" element={<PrivateRoute><MetodoNutricionQuimicos /></PrivateRoute>} />
       {/* Los nutrientes se partieron en Macro y Micro: las rutas de antes siguen
           respondiendo para no romper enlaces guardados ni el historial. */}
       <Route path="/metodo/nutricion/nutrientes" element={<Navigate to="/metodo/nutricion/macronutrientes" replace />} />

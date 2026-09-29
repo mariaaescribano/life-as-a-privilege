@@ -10,7 +10,7 @@
 //    con lo que se puede hacer.
 // ─────────────────────────────────────────────────────────────────────────
 import { traducir, type ClaveTexto } from "../../i18n";
-import { NUTRIENTES_MACRO, NUTRIENTES_MICRO } from "../../hardCoded/espacio/NutrientesNutricion";
+import { NUTRIENTES_MACRO, NUTRIENTES_MICRO, NUTRIENTES_QUIMICOS } from "../../hardCoded/espacio/NutrientesNutricion";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 
 // Todas las páginas del recorrido, en orden. El nombre de cada paso NO se
@@ -21,6 +21,7 @@ const PASOS: { clave: ClaveTexto; path: string }[] = [
   { clave: "metodo.nutri.paso.nutricion",          path: "/metodo/nutricion" },
   { clave: "metodo.nutri.paso.macro",              path: "/metodo/nutricion/macronutrientes" },
   { clave: "metodo.nutri.paso.micro",              path: "/metodo/nutricion/micronutrientes" },
+  { clave: "metodo.nutri.paso.quimicos",           path: "/metodo/nutricion/quimicos" },
   { clave: "metodo.nutri.paso.microbiotaTitulo",   path: "/metodo/nutricion/microbiota" },
   { clave: "metodo.nutri.paso.hambre",             path: "/metodo/nutricion/hambre" },
   { clave: "metodo.nutri.paso.ultraCorto",         path: "/metodo/nutricion/ultraprocesados" },
@@ -45,7 +46,8 @@ export const nutricionIndice = (): PasoRecorrido[] =>
 // ─────────────────────────────────────────────────────────────────────────
 // REQUISITOS · los mismos guardas que tienen las páginas (metodo_nutricion.data):
 //   · Micronutrientes         → hasta revisar todos los macronutrientes.
-//   · La microbiota           → hasta revisar todos los micronutrientes.
+//   · Químicos                → hasta revisar todos los micronutrientes.
+//   · La microbiota           → hasta revisar todos los químicos.
 //   · Tus calorías            → hasta crear el plato de Harvard.
 //   · ¿Cómo va tu azúcar?     → hasta tener el cálculo de calorías (de ahí saca
 //                               edad, peso y altura, para no volver a pedirlos).
@@ -59,12 +61,13 @@ export function puedeAvanzarNutricion(data: any, n: number): boolean {
   const explorados = (): string[] =>
     Array.isArray(d.nutrientes_explorados) ? d.nutrientes_explorados : [];
   switch (n) {
-    // Los dos pasos de nutrientes: cada grupo se marca revisado al abrir su
+    // Los tres pasos de nutrientes: cada grupo se marca revisado al abrir su
     // ficha, y no se pasa de página hasta tenerlos todos.
     case 2: return NUTRIENTES_MACRO.every((x) => explorados().includes(x.key));
     case 3: return NUTRIENTES_MICRO.every((x) => explorados().includes(x.key));
-    case 7: return !!d.plato_hecho;                            // El plato: montado
-    case 8: return !!d.calorias?.hecho;                        // Tus calorías: calculadas
+    case 4: return NUTRIENTES_QUIMICOS.every((x) => explorados().includes(x.key));
+    case 8: return !!d.plato_hecho;                            // El plato: montado
+    case 9: return !!d.calorias?.hecho;                        // Tus calorías: calculadas
     default: return true;                                      // el resto: sin requisito
   }
 }

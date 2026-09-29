@@ -6,7 +6,7 @@ export const header = {
   "header.estudio": "Astrology study",
   "header.cursos": "Courses",
   "header.usuarios": "Users",
-  "header.arquetipos": "Astrology archetypes",
+  "header.arquetipos": "Archetypes",
   "header.suscriptores": "Subscribers",
   "header.programas": "Programs",
   "header.contacto": "Contact",

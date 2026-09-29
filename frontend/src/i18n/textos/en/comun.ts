@@ -18,7 +18,7 @@ export const comun = {
   "comun.leido": "Read",
   "comun.si": "Yes",
   "comun.no": "No",
-  "comun.error": "Something went wrong. Please try again.",
+  "comun.error": "Something went wrong. Try again.",
   "comun.reintentar": "Try again",
   "comun.proximamente": "Coming soon",
 };

@@ -578,6 +578,17 @@ const LOTES = {
     saltar: ["/img/fondos/space3.png", "/img/fondos/turquesa.png"],
     carpetas: ["img/astrologia", "img/fondos"],
   },
+  // Las DOCE portadas de Nutrición repintadas (tanda del 28 de septiembre):
+  // llegaron en PNG encima de sus WebP (y borrándolas), como en los lotes 11 y
+  // 25. La ruta de una portada es literal `.webp` (NutrientesNutricion.ts), así
+  // que en PNG las rejillas de macro y micronutrientes se quedan SIN FOTOS —la
+  // de Grasas era la que más se notaba—. Van con `forzar` porque aquí el WebP
+  // no es opcional: aunque alguno no adelgazara, en PNG no se vería.
+  49: {
+    ladoMax: 1000,
+    forzar: ["recorrido/nutricion/portadas"],
+    carpetas: ["recorrido/nutricion/portadas"],  // 12 repintadas · 33 MB
+  },
 };
 
 // ── Utilidades ───────────────────────────────────────────────────────────────

@@ -27,10 +27,10 @@
 // ilumina cuando el primero de los dos está leído.
 // ─────────────────────────────────────────────────────────────────────────
 import React from "react";
-import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useT } from "../../i18n";
-import { RevealItem, RevealStagger } from "../global/Reveal";
+import { Reveal } from "../global/Reveal";
 import { TarjetaNutri } from "./TarjetaNutri";
 import { nutricionBg, nutricionTxt } from "../../GlobalVariables";
 import { nutrienteAlcanzable, type Nutriente } from "../../hardCoded/espacio/NutrientesNutricion";
@@ -52,6 +52,10 @@ const VIA_ANDADA = `${nutricionBg}d9`;
 /** Tramo de la senda a un lado del nodo (mitad izquierda o derecha). */
 function Tramo({ lado, encendido, visible }: { lado: "left" | "right"; encendido: boolean; visible: boolean }) {
   if (!visible) return null;
+  // La vía se CORTA antes de llegar al círculo del número (radio + un pelín de
+  // aire): sin este margen la raya cruzaba por dentro de los círculos
+  // translúcidos (el del candado y el del «aquí estás»).
+  const bordeCirculo = { base: "calc(50% + 19px)", md: "calc(50% + 21px)" };
   return (
     <Box
       position="absolute"
@@ -59,8 +63,8 @@ function Tramo({ lado, encendido, visible }: { lado: "left" | "right"; encendido
       h="3px"
       mt="-1.5px"
       borderRadius="full"
-      left={lado === "left" ? 0 : "50%"}
-      right={lado === "left" ? "50%" : 0}
+      left={lado === "left" ? 0 : bordeCirculo}
+      right={lado === "left" ? bordeCirculo : 0}
       bg={encendido ? VIA_ANDADA : VIA_APAGADA}
       transition="background 0.4s ease"
     />
@@ -140,48 +144,44 @@ export function SendaNutrientes({
     filas.push(pasos.map((_, k) => k).slice(i, i + porFila));
   }
 
-  const hechosN = estados.filter((e) => e.hecho).length;
   const gap = { base: 4, md: 6 };
 
   return (
     <Flex direction="column" w="100%" gap={0}>
-      {/* Cuánto llevas andado del camino: una línea fina y su cuenta. */}
-      <Flex direction="column" w="100%" gap={2} mb={{ base: 5, md: 6 }} align="center">
-        <Box w="100%" maxW="420px" h="4px" borderRadius="full" bg="rgba(255,255,255,0.2)" overflow="hidden">
-          <Box h="100%" borderRadius="full" bg={VIA_ANDADA} transition="width 0.5s ease"
-               w={`${Math.round((hechosN / Math.max(1, pasos.length)) * 100)}%`} />
-        </Box>
-        <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.06em">
-          {t("metodo.nutri.senda.progreso", { hechos: hechosN, total: pasos.length })}
-        </Text>
-      </Flex>
-
+      {/* Aquí hubo una barra de progreso («1/7») sobre la senda: se quitó
+          porque los nodos ya cuentan el camino solos y la barra lo repetía. */}
       {filas.map((fila, r) => {
         const invertida = r % 2 === 1;
         const direccion = invertida ? "row-reverse" : "row";
         return (
           <React.Fragment key={r}>
-            {/* La fila: nodo + tarjeta, en el orden del camino. */}
-            <RevealStagger inView stagger={0.07} amount={0.12} w="100%"
-                           display="flex" flexDirection={direccion} gap={gap} alignItems="stretch">
+            {/* La fila: nodo + tarjeta, en el orden del camino.
+                ⚠ SIN RevealStagger: `porFila` cambia de 2 a 3 al resolverse el
+                breakpoint y las tarjetas se REMONTAN en una fila cuya cascada ya
+                se disparó — se quedaban a opacidad 0 (le pasaba a Grasas «a
+                veces»: era una carrera). La receta de la casa (ver el aviso en
+                Reveal.tsx): un <Reveal inView> POR TARJETA, escalonado con
+                `delay`, que al remontarse vuelve a dispararse solo. */}
+            <Flex w="100%" flexDirection={direccion} gap={gap} alignItems="stretch">
               {fila.map((idx, c) => {
                 const p = pasos[idx];
                 const e = estados[idx];
                 return (
-                  <RevealItem key={p.key} direction="up" distance={22} scaleFrom={0.96} duration={0.55}
-                              flex="1" minW={0} display="flex" flexDirection="column">
+                  <Reveal key={p.key} inView direction="up" distance={22} scaleFrom={0.96}
+                          duration={0.55} delay={c * 0.07}
+                          flex="1" minW={0} display="flex" flexDirection="column">
                     {/* La vía y su nodo. Los tramos se dibujan a los lados del
                         nodo; con la fila invertida, el «anterior» cae a la
-                        derecha, así que los lados se cambian. */}
-                    <Box position="relative" w="100%" h={{ base: "34px", md: "38px" }}>
-                      {/* El primero de cada fila recibe la senda por ARRIBA (el
-                          giro que baja de la fila anterior): media vía vertical
-                          hasta el nodo, para que el tramo no quede en el aire. */}
-                      {c === 0 && r > 0 && (
-                        <Box position="absolute" left="50%" ml="-1.5px" top={0} h="50%" w="3px"
-                             borderRadius="full" transition="background 0.4s ease"
-                             bg={estados[idx - 1].hecho ? VIA_ANDADA : VIA_APAGADA} />
-                      )}
+                        derecha, así que los lados se cambian. El margen de abajo
+                        deja aire entre el círculo del número y su tarjeta. */}
+                    <Box position="relative" w="100%" h={{ base: "34px", md: "38px" }}
+                         mb={{ base: 3, md: 4 }}>
+                      {/* El primero de cada fila recibía aquí media vía vertical
+                          hasta el nodo (el giro que baja de la fila anterior).
+                          Se quitó: ese palo se METÍA en el círculo del número.
+                          El giro de arriba ya llega hasta el borde de esta caja
+                          y el hueco que queda es el mismo aire que dejan los
+                          tramos horizontales. */}
                       <Tramo lado={invertida ? "right" : "left"} visible={c > 0}
                              encendido={c > 0 && estados[fila[c - 1]].hecho} />
                       <Tramo lado={invertida ? "left" : "right"} visible={c < fila.length - 1}
@@ -200,7 +200,7 @@ export function SendaNutrientes({
                       <TarjetaNutri titulo={p.label} foto={p.img} visto={e.hecho}
                                     onClick={() => e.abierto && onAbrir(p)} />
                     </Box>
-                  </RevealItem>
+                  </Reveal>
                 );
               })}
               {/* Huecos para que la última fila, si está a medias, no estire
@@ -208,7 +208,7 @@ export function SendaNutrientes({
               {Array.from({ length: porFila - fila.length }).map((_, k) => (
                 <Box key={`hueco-${k}`} flex="1" minW={0} />
               ))}
-            </RevealStagger>
+            </Flex>
 
             {/* El giro de la senda hacia la fila siguiente: un tramo vertical
                 bajo el último grupo de la fila. Va en una fila con la MISMA

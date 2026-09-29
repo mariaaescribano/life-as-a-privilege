@@ -113,6 +113,7 @@ export const metodo = {
   "metodo.nutri.paso.macroCorto": "Macro",
   "metodo.nutri.paso.micro": "Micronutrientes",
   "metodo.nutri.paso.microCorto": "Micro",
+  "metodo.nutri.paso.quimicos": "Químicos",
   "metodo.nutri.paso.microbiota": "Microbiota",
   "metodo.nutri.paso.hambre": "El hambre",
   "metodo.nutri.paso.ultraprocesados": "Los ultraprocesados",
@@ -181,15 +182,16 @@ export const metodo = {
   "metodo.nutri.tocaMolecula": "Toca cada molécula para ver qué hace dentro de ti.",
   // Entradilla de cada una de las dos páginas de nutrientes.
   "metodo.nutri.macroIntro":
-    "Se miden en gramos y son los que llenan el plato: de ellos sale la energía y con ellos se construye el cuerpo. Toca cada grupo para ver sus tipos, qué hacen dentro de ti y dónde encontrarlo.",
+    "",
   "metodo.nutri.microIntro":
-    "Se miden en miligramos y microgramos, no aportan ni una caloría y, sin ellos, nada de lo anterior funciona. Toca cada grupo para descubrirlos.",
+    "No aportan ni una caloría. Sin ellos, nada de lo anterior importa.",
   "metodo.nutri.macroBloqueo": "Revisa todos los macronutrientes para desbloquear",
   "metodo.nutri.microBloqueo": "Descubre todos los micronutrientes primero",
+  "metodo.nutri.quimicosBloqueo": "Descubre todos los químicos primero",
   // La senda de los nutrientes (SendaNutrientes): se andan en fila.
   "metodo.nutri.senda.progreso": "{hechos} de {total} del camino",
   "metodo.nutri.senda.bloqueado": "Lee el grupo anterior para abrir este",
-  "metodo.nutri.verIlustracion": "Ver ilustración",
+  "metodo.nutri.verIlustracion": "Ver explicación",
   "metodo.nutri.foto": "Foto",
   "metodo.nutri.crearAlimento": "Crea tu alimento",
   "metodo.nutri.microbiotaIntro":

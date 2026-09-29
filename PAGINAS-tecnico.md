@@ -1417,7 +1417,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/macronutrientes` — Macronutrientes (Paso 2)
 - **Componente:** `MetodoNutricionMacronutrientes` en `frontend/src/app/metodo/MetodoNutricionMacronutrientes.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición (guardia + propia → `/metodo/nutricion`).
-- **Qué hace:** Senda serpenteante (`SendaNutrientes`) con 7 grupos: carbohidratos, fibra, grasas, colesterol, proteínas, agua y etanol. Solo se abre el siguiente cuando el anterior está revisado. Cada nodo va a su página de detalle.
+- **Qué hace:** Senda serpenteante (`SendaNutrientes`) con 7 grupos: carbohidratos, fibra, grasas, colesterol, proteínas, agua y etanol. Solo se abre el siguiente cuando el anterior está revisado. Cada nodo va a su página de detalle. Sin barra de progreso arriba (se quitó: los nodos 1,2,3… ya cuentan el camino), con aire entre el círculo del número y su tarjeta.
 - **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId` → `nutrientes_explorados`. Aquí no guarda (el tick lo pone el detalle).
 - **Desbloqueo:** entrada libre. Para pasar hay que tener los 7 macro en `nutrientes_explorados`.
 - **Botones / a dónde lleva:** prev «← Nutrición» → `/metodo/nutricion`; extra Biblioteca; next «Micronutrientes →» → `/metodo/nutricion/micronutrientes`, deshabilitado si falta algún macro; cada nodo → `/metodo/nutricion/nutrientes/:key`.
@@ -1426,13 +1426,13 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/nutrientes/:key` — Detalle de un grupo de nutrientes (dentro de los Pasos 2–3)
+## `/metodo/nutricion/nutrientes/:key` — Detalle de un grupo de nutrientes (dentro de los Pasos 2–4)
 - **Componente:** `MetodoNutricionNutriente` en `frontend/src/app/metodo/MetodoNutricionNutriente.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Caja grande con la foto y la descripción del grupo, una caja de ilustración (cómic del grupo) y tarjetas de subtipos. Cada tarjeta abre `NutrienteFichaModal` con flechas. Con todas las fichas vistas, el grupo queda revisado.
+- **Qué hace:** Al entrar se abre SOLO el cómic del grupo como intro (siempre, saltable con la X; queda apuntado en `nutrientes_comics_leidos`); mientras el cómic está abierto la página NI SE MONTA (debajo solo está el loading de Nutrición: es imposible ver la página antes del cómic); al salir aparece la página: caja grande con la foto a la izquierda (arriba en móvil) y el título+descripción a la derecha, nunca más altos que la foto (scroll propio), y las tarjetas de subtipos. La rejilla se revela progresivamente: solo se ven las tarjetas descubiertas más la siguiente (que «respira» invitando al clic); con el grupo revisado se ven todas. Cada tarjeta abre `NutrienteFichaModal` con flechas. Con todas las fichas vistas, el grupo queda revisado. (Vitaminas, en círculo, no entra en la revelación.)
 - **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId`. `PATCH /metodo-nutricion/:userId` con `nutrientes_fichas[key]` (índices vistos), `nutrientes_explorados` (se añade la key) y `nutrientes_comics_leidos` (al abrir el cómic).
 - **Desbloqueo:** `nutrienteAlcanzable`: si los grupos anteriores de su misma lista no están explorados → `replace` a su rejilla. Marca el grupo como explorado al ver todas las fichas, o nada más entrar si no tiene tarjetas.
-- **Botones / a dónde lleva:** prev «← Volver» y botón `VolverNutri` al final → `rutaListaNutriente(key)` (macro o micro); extra Biblioteca.
+- **Botones / a dónde lleva:** en el header (en móvil, solo flechas), con NOMBRES de la senda: prev «← <grupo anterior>» → su detalle (solo el PRIMERO de cada lista lleva «← Volver» → `rutaListaNutriente(key)`); extra Biblioteca; next «<grupo siguiente> →» (en el último, «Macronutrientes/Micronutrientes →» a su rejilla), deshabilitado hasta que el grupo queda revisado. Dentro del cómic-intro, botón de continuar con el nombre del grupo arriba a la izquierda de la X (patrón ComicPasoModal; en móvil solo la flecha). El Índice flotante (`IndiceNutricion`) da la vuelta a cualquier página. El título del header dice el grupo: «Macro: Carbohidratos» / «Micro: Vitaminas» (claves `macroCorto`/`microCorto` + label del grupo).
 - **Condiciones y casos raros:** `:key` acepta `carbohidratos`, `fibra`, `grasas`, `colesterol`, `proteinas`, `agua`, `etanol`, `vitaminas`, `minerales`, `fitoquimicos`, `edulcorantes` y `drogas`. Si no existe → `replace` a `/metodo/nutricion/macronutrientes`. Autorreparación: si tiene todas las fichas vistas pero el grupo no quedó marcado, lo marca al entrar. Cambios de fichas y del explorado van en el mismo PATCH.
 - **Tests:** pendiente
 
@@ -1465,28 +1465,40 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/nutricion/micronutrientes` — Micronutrientes (Paso 3)
 - **Componente:** `MetodoNutricionMicronutrientes` en `frontend/src/app/metodo/MetodoNutricionMicronutrientes.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
-- **Qué hace:** Senda con 5 grupos: vitaminas, minerales, fitoquímicos, edulcorantes y drogas. Cada nodo abre su detalle.
+- **Qué hace:** Senda con 3 grupos: vitaminas, minerales y fitoquímicos (edulcorantes y drogas se mudaron a «Químicos»). La frase «No aportan ni una caloría…» va GRANDE bajo el header. Cada nodo abre su detalle.
 - **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId` → `nutrientes_explorados`.
-- **Desbloqueo:** gate de entrada: si no están los 7 macro explorados → `replace` a `/metodo/nutricion/macronutrientes`. Para pasar hay que tener los 5 micro explorados.
-- **Botones / a dónde lleva:** prev «← Macronutrientes»; extra Biblioteca; next «Microbiota →» (bloqueado hasta los 5) abre `ComicMicrobiotaModal`, que continúa a `/metodo/nutricion/microbiota`.
+- **Desbloqueo:** gate de entrada: si no están los 7 macro explorados → `replace` a `/metodo/nutricion/macronutrientes`. Para pasar hay que tener los 3 micro explorados.
+- **Botones / a dónde lleva:** prev «← Macro»; extra Biblioteca; next «Químicos →» (bloqueado hasta los 3) → `/metodo/nutricion/quimicos`.
 - **Condiciones y casos raros:** —
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/nutricion/microbiota` — La microbiota (Paso 4)
+## `/metodo/nutricion/quimicos` — Químicos (Paso 4)
+- **Componente:** `MetodoNutricionQuimicos` en `frontend/src/app/metodo/MetodoNutricionQuimicos.tsx`
+- **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
+- **Qué hace:** Senda con 2 grupos: edulcorantes y drogas (sustancias, no alimentos). Cada nodo abre su detalle.
+- **Datos:** `GET /user/me`; `GET /metodo-nutricion/:userId` → `nutrientes_explorados`.
+- **Desbloqueo:** gate de entrada: si no están los 3 micro explorados → `replace` a `/metodo/nutricion/micronutrientes`. Para pasar hay que tener los 2 químicos explorados.
+- **Botones / a dónde lleva:** prev «← Micro»; extra Biblioteca; next «Microbiota →» (bloqueado hasta los 2) abre `ComicMicrobiotaModal`, que continúa a `/metodo/nutricion/microbiota`.
+- **Condiciones y casos raros:** —
+- **Tests:** pendiente
+
+---
+
+## `/metodo/nutricion/microbiota` — La microbiota (Paso 5)
 - **Componente:** `MetodoNutricionMicrobiota` en `frontend/src/app/metodo/MetodoNutricionMicrobiota.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Primero las bacterias más conocidas y, tras un separador con el mandala, las moléculas que fabrican. Cada tarjeta abre su ficha (`NutrienteFichaModal`) y queda marcada, también las que se pasan con las flechas.
 - **Datos:** `GET /user/me`; `useLeidos("metodo-nutricion")` (`GET` + `PATCH /metodo-nutricion/:userId`) con `microbiota_bacterias_leidas` y `microbiota_moleculas_leidas`.
 - **Desbloqueo:** la página no comprueba que los micronutrientes estén hechos (solo el Índice y el botón de la página anterior). Sin requisito para pasar.
-- **Botones / a dónde lleva:** prev «← Micronutrientes»; extra Biblioteca; next «El hambre →» abre `ComicHambreModal`, que continúa a `/metodo/nutricion/hambre`.
-- **Condiciones y casos raros:** por URL directa se entra aunque el Paso 3 esté sin hacer.
+- **Botones / a dónde lleva:** prev «← Químicos»; extra Biblioteca; next «El hambre →» abre `ComicHambreModal`, que continúa a `/metodo/nutricion/hambre`.
+- **Condiciones y casos raros:** por URL directa se entra aunque los pasos 3-4 estén sin hacer.
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/nutricion/hambre` — El hambre (Paso 5)
+## `/metodo/nutricion/hambre` — El hambre (Paso 6)
 - **Componente:** `MetodoNutricionHambre` en `frontend/src/app/metodo/MetodoNutricionHambre.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Cuatro tarjetas con foto («El hambre, una mirada holística»). Cada una abre el visor inmersivo (`NutrienteIlustracionModal`) por esa lectura, con flechas a las otras. Al final, una frase sobre el turquesa.
@@ -1498,7 +1510,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/ultraprocesados` — Los ultraprocesados (Paso 6)
+## `/metodo/nutricion/ultraprocesados` — Los ultraprocesados (Paso 7)
 - **Componente:** `MetodoNutricionUltraprocesados` en `frontend/src/app/metodo/MetodoNutricionUltraprocesados.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Primero el ensayo del NIH, luego cómo leer una etiqueta (señales), después fichas agrupadas por nivel de certeza del dato, y un cierre. Cada ficha abre `NutrienteFichaModal` (sin «Saltar») y queda marcada.
@@ -1510,7 +1522,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/plato` — Crea el plato de Harvard (Paso 7)
+## `/metodo/nutricion/plato` — Crea el plato de Harvard (Paso 8)
 - **Componente:** `MetodoNutricionPlato` en `frontend/src/app/metodo/MetodoNutricionPlato.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Plato circular dividido en sectores (uno por grupo). Al pulsar un sector salen sus alimentos a la derecha y se arrastran al plato, con ratón o dedo. Un alimento se puede recolocar o quitar sacándolo fuera.
@@ -1522,7 +1534,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/calorias` — Tus calorías y macros (Paso 8)
+## `/metodo/nutricion/calorias` — Tus calorías y macros (Paso 9)
 - **Componente:** `MetodoNutricionCalorias` en `frontend/src/app/metodo/MetodoNutricionCalorias.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Formulario con sexo, edad, peso, altura, actividad base, ejercicio (intensidad, días y minutos) y objetivo (perder, mantener, ganar). El cálculo se hace en el navegador (Mifflin-St Jeor × factor de actividad × objetivo, con suelo mínimo de kcal) y muestra kcal y gramos de proteína, grasa e hidratos. Lleva una nota educativa.
@@ -1534,7 +1546,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/prediabetes` — ¿Cómo va tu azúcar? (Paso 9)
+## `/metodo/nutricion/prediabetes` — ¿Cómo va tu azúcar? (Paso 10)
 - **Componente:** `MetodoNutricionPrediabetes` en `frontend/src/app/metodo/MetodoNutricionPrediabetes.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Test de riesgo FINDRISC. Los datos corporales vienen ya rellenos, se pide la cintura (o «no me la mido») y se responden las preguntas. Da una banda de resultado y señales de alerta. El IMC puntúa pero nunca se muestra.
@@ -1546,7 +1558,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/dia` — Diseña tu día (Paso 10)
+## `/metodo/nutricion/dia` — Diseña tu día (Paso 11)
 - **Componente:** `MetodoNutricionDia` en `frontend/src/app/metodo/MetodoNutricionDia.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Primero un popup para elegir el número de comidas. Luego dos columnas: las comidas (zonas donde soltar) y los alimentos por grupo, que se arrastran, con raciones y «a ojo». Cada alimento tiene una ficha (ojo) con ración, kcal, macros y moléculas. Hay «Crea tu alimento» con un formulario propio. Va sumando kcal y macros frente a tu objetivo.
@@ -1558,7 +1570,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/macros` — Valores nutricionales (Paso 11)
+## `/metodo/nutricion/macros` — Valores nutricionales (Paso 12)
 - **Componente:** `MetodoNutricionMacros` en `frontend/src/app/metodo/MetodoNutricionMacros.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Juego de estimación. Sale un alimento con su ración y hay que adivinar con tres reguladores los gramos de proteína, hidratos y grasa. Al comprobar, cada macro dice si está clavado, cerca o lejos. Son `RONDAS` alimentos barajados, sin puntos: solo el marcador de ronda.
@@ -1570,7 +1582,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/mitos` — Preguntas y mitos (Paso 12)
+## `/metodo/nutricion/mitos` — Preguntas y mitos (Paso 13)
 - **Componente:** `MetodoNutricionMitos` en `frontend/src/app/metodo/MetodoNutricionMitos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Una tarjeta por pregunta o mito. Cada una abre la respuesta en `NutrienteFichaModal` (con flechas, sin «Saltar») y queda marcada como leída.
@@ -1582,7 +1594,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/origen` — ¿De dónde vienen los nutrientes? (Paso 13)
+## `/metodo/nutricion/origen` — ¿De dónde vienen los nutrientes? (Paso 14)
 - **Componente:** `MetodoNutricionOrigen` en `frontend/src/app/metodo/MetodoNutricionOrigen.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Seis lecturas de zoom creciente: ciclos del planeta, suelo y raíz, planta, hoja, fruto, y la rama animal. Cada tarjeta abre su cómic en `ComicModal` y queda marcada.
@@ -1594,7 +1606,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/metodo/nutricion/cursos` — Cursos para profundizar (Paso 14, último)
+## `/metodo/nutricion/cursos` — Cursos para profundizar (Paso 15, último)
 - **Componente:** `MetodoNutricionCursos` en `frontend/src/app/metodo/MetodoNutricionCursos.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de Nutrición.
 - **Qué hace:** Lista los cursos de Nutrición del catálogo, con el mismo patrón que Fisiología (uno centrado, rejilla o estado vacío). Al pie, `PedirOpinion` para dejar reseña.
@@ -2292,7 +2304,7 @@ Las entradas con «(sin verificar)» son lo que vio un agente al leer el código
 El pago se comprueba siempre. Lo que no se comprueba al entrar en cada página es el paso anterior: solo lo frenan el botón «siguiente» y el Índice.
 
 - **FALLO-08 · a decidir.** Pasa en Fisiología, Nutrición, Ayurveda (también en el submapa del doṣha), Medicina China (Constitución y Ciclos) y Cábala (sefirá, senderos y sendero/:num).
-- **FALLO-09 · pendiente.** Nutrición: `/nutrientes/<micronutriente>` se abre sin los macro (`nutrienteAlcanzable` solo mira su propia lista), y Microbiota no mira los micronutrientes.
+- **FALLO-09 · pendiente.** Nutrición: `/nutrientes/<micronutriente o químico>` se abre sin los macro (`nutrienteAlcanzable` solo mira su propia lista), y Microbiota no mira ni los micronutrientes ni los químicos.
 - **FALLO-10 · pendiente.** Astrología: el Índice abre el paso 3 solo con la solicitud enviada y el 4 solo con la carta procesada, sin haber hecho las lecturas. PDF, Llamada y Cursos no tienen gate propio.
 - **FALLO-11 · pendiente.** Fisiología: Profundiza no exige `estructuras_hecho` + `organismo_hecho` (solo lo pide la tarjeta de Niveles). Sistemas cuenta `vistos.size` y el Índice cuenta las keys reales, así que una key vieja las descuadra.
 
