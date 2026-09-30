@@ -16,6 +16,7 @@ import { MEDITACION_CEREBRO } from "../../components/metodo/comicMeditacion";
 import { useComic } from "../../i18n/comics";
 import { useT, type ClaveTexto } from "../../i18n";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import {
   API_URL,
   fisiologiaBg,
@@ -251,7 +252,7 @@ export default function MetodoFisiologiaNiveles() {
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
-              {t("fisiologia.niveles.intro")}
+              <PalabrasVivas texto={t("fisiologia.niveles.intro")} />
             </Text>
           </Reveal>
 

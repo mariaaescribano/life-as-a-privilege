@@ -51,7 +51,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   astrologia: {
     desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
     videoIntro: {
-      titulo: "Las características de cada área de tu vida y cómo se relacionan.",
+      titulo: "Conoce las características de cada área de tu vida y cómo se relacionan.",
       puntos: [
         "Una interpretación personal de tu carta, realizada por mí, no por una IA.",
         "Utiliza tu carta como una herramienta para comprender tu historia, tus conflictos y tus dones.",
@@ -322,7 +322,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
 
 
     videoIntro: {
-      titulo: "Las grandes historias que dieron forma al mundo.",
+      titulo: "Fascínate con las grandes historias que dieron forma al mundo.",
       puntos: [
         "Descubre las historias de las civilizaciones que transformaron nuestra forma de entender el mundo y a nosotros mismos.",
         "Conoce la filosofía de los grandes pensadores.",

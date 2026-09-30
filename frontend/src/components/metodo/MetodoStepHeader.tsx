@@ -4,6 +4,7 @@ import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { astrologiaNom, astrologiaTxt, ayurvedaNom, ayurvedaTxt, cabalaNom, cabalaTxt, culturaNom, fisiologiaNom, neuropsicologiaNom, nutricionNom, tcmNom, tcmTxt } from "../../GlobalVariables";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { Float } from "../global/Reveal";
+import { LetrasVivas } from "../global/LetrasVivas";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 import { useT } from "../../i18n";
 
@@ -326,6 +327,23 @@ export function MetodoStepHeader({
   // guarda estado: así no hay re-render por cada píxel ni el bucle infinito de
   // «mido → cambio tamaño → el observer vuelve a medir» que hubo antes.
   const titleWrapperRef = useRef<HTMLDivElement>(null);
+  // TÍTULO CON MAGIA: en TODOS los recorridos (/metodo/…) salvo Cultura, que va
+  // por su cuenta, el título no aparece puesto: sus letras suben, se enfocan y se
+  // encienden en cadena, y una luz las recorre una vez. La luz va pegada a la entrada (cada letra se ilumina al aparecer), así que
+  // todo dura poco. Arranca cuando el header ya casi ha entrado (0,25 s). Astrología no pasa `nom` (usa `space`).
+  // Fuera del recorrido (portadas públicas, cursos, materiales) el título sigue
+  // como siempre.
+  const enRecorrido = typeof window !== "undefined" && window.location.pathname.startsWith("/metodo/");
+  const tituloMagico = typeof title === "string" && enRecorrido && nom !== culturaNom && (!!nom || !!space);
+  // Se activa PARA un título concreto: si el header sigue montado y cambia de
+  // título (p. ej. de una sefirá a la siguiente), el nuevo entra de cero.
+  const [tituloActivoPara, setTituloActivoPara] = useState<string | null>(null);
+  const tituloActivo = typeof title === "string" && tituloActivoPara === title;
+  React.useEffect(() => {
+    if (!tituloMagico || typeof title !== "string") return;
+    const id = setTimeout(() => setTituloActivoPara(title), 250);
+    return () => clearTimeout(id);
+  }, [tituloMagico, title]);
   const headerBoxRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const wrapper = titleWrapperRef.current;
@@ -467,7 +485,10 @@ export function MetodoStepHeader({
                     : `0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.3), 0 0 60px ${color}55`,
                 }}
               >
-                {title}
+                {tituloMagico
+                  ? <LetrasVivas key={title as string} texto={title as string} entrada activo={tituloActivo} retraso={0.3} paso={0.035}
+                                 pasoEntrada={0.035} periodo={1} altura={0} repetir={false} />
+                  : title}
               </Text>
             </Box>
             {step && step.total > 1 && (

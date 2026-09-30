@@ -15,6 +15,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import {
   fisiologiaBg,
   fisiologiaNom,
@@ -127,7 +128,7 @@ export default function MetodoFisiologia() {
                   mb={4}
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  {t("metodo.gate.fisio.intro1")}
+                  <PalabrasVivas texto={t("metodo.gate.fisio.intro1")} />
                 </Text>
                 <Text
                   color={fisiologiaTxt}
@@ -138,7 +139,7 @@ export default function MetodoFisiologia() {
                   mx="auto"
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  {t("metodo.gate.fisio.intro2")}
+                  <PalabrasVivas texto={t("metodo.gate.fisio.intro2")} />
                 </Text>
               </Box>
             </Box>

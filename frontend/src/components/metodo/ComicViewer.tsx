@@ -1,4 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { LetrasVivas } from "../global/LetrasVivas";
+import { PalabrasVivas } from "../global/PalabrasVivas";
 import { useT } from "../../i18n";
 import {
   Box,
@@ -1270,14 +1272,14 @@ export function ComicViewer({
                 <Text color={tituloColor} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.14em"
                       textTransform="uppercase" mb={2} textAlign={{ base: "center", md: "left" }}
                       style={{ textShadow: tituloShadow }}>
-                  {current.eyebrow}
+                  {textoBorroso ? current.eyebrow : <LetrasVivas key={`e${index}`} texto={current.eyebrow} entrada onda={false} pasoEntrada={0.012} />}
                 </Text>
               )}
               {current.titulo && (
                 <Text color={tituloColor} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.2"
                       mb={{ base: 4, md: 5 }} textAlign={{ base: "center", md: "left" }}
                       style={{ textShadow: tituloShadow }}>
-                  {current.titulo}
+                  {textoBorroso ? current.titulo : <LetrasVivas key={`t${index}`} texto={current.titulo} entrada onda={false} pasoEntrada={0.018} />}
                 </Text>
               )}
 
@@ -1318,7 +1320,13 @@ export function ComicViewer({
                       : { textShadow }
                   }
                 >
-                  {bloque}
+                  {/* Las palabras entran en un visto y no visto (≈0,9 s de cascada
+                      por bloque, sea cual sea su largo, cada palabra se desvela
+                      con calma en ~1 s y se solapa con la siguiente): la
+                      sensación es de paz, no de prisa. El texto ya se lee a media
+                      luz desde el principio, así que no hace esperar. Con el cuerpo borroso (escaparate)
+                      no se anima. */}
+                  {textoBorroso ? bloque : <PalabrasVivas key={`${index}-${i}`} texto={bloque} total={0.9} duracion={1} retraso={i * 0.3} />}
                 </Text>
               ))}
               {/* Contenido extra de la página (p.ej. el mini-test del elemento). */}

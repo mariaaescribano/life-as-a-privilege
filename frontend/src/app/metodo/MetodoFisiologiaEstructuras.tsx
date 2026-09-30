@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -17,6 +18,7 @@ import { useT, type ClaveTexto } from "../../i18n";
 import { INK, PanelBox, BotonVolverEstacion, CabeceraEstacion } from "../../components/metodo/FisiologiaEstacion";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import { ComicCelulaModal } from "../../components/metodo/ComicCelulaModal";
@@ -436,8 +438,8 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
           {/* Texto */}
           <Box flex="1" minW={0}>
             <Flex align="center" gap={2.5}>
-              <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700"
-                    style={{ textShadow: INK }}>{t(e.nombre)}</Text>
+              <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
+                    style={{ textShadow: INK }}><LetrasVivas texto={t(e.nombre)} entrada pasoEntrada={0.035} repetir={false} altura={0} periodo={1} paso={0.035} retraso={0.3} /></Text>
               {/* Marca común del recorrido (MarcaLeido), con el color de la
                   estructura: misma forma que el resto de marcas. */}
               {hecha && <MarcaLeido inline tinta={e.glow} bg={fisiologiaBg} title={t("fisiologia.estructuras.construida")} />}
@@ -566,7 +568,7 @@ export default function MetodoFisiologiaEstructuras() {
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
               <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mt={1}
                     maxW="640px">
-                {t("fisiologia.estructuras.intro")}
+                <PalabrasVivas texto={t("fisiologia.estructuras.intro")} />
               </Text>
             </MBox>
           )}

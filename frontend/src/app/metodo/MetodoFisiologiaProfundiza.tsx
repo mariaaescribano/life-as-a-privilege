@@ -11,6 +11,7 @@ import { FotoBox } from "../../components/metodo/FotoBox";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { useT } from "../../i18n";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -107,7 +108,7 @@ export default function MetodoFisiologiaProfundiza() {
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
-              {t("fisiologia.profundiza.intro")}
+              <PalabrasVivas texto={t("fisiologia.profundiza.intro")} />
             </Text>
           </Reveal>
 

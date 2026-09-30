@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -17,6 +18,7 @@ import { RECONSTRUCCION } from "../../components/metodo/comicReconstruccion";
 import { useComic } from "../../i18n/comics";
 import { useT, TextoRico } from "../../i18n";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
@@ -289,7 +291,7 @@ export default function MetodoFisiologiaOrganismo() {
                         textAlign="center">
                     <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
                           maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                      {t("fisiologia.organismo.instruccion")}
+                      <PalabrasVivas texto={t("fisiologia.organismo.instruccion")} />
                     </Text>
                   </MBox>
                 )}
@@ -426,7 +428,7 @@ export default function MetodoFisiologiaOrganismo() {
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} textAlign={{ base: "center", md: "left" }}>
                       <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" lineHeight="1.25"
                             style={{ textShadow: INK }}>
-                        {t("fisiologia.organismo.hecho")}
+                        <LetrasVivas texto={t("fisiologia.organismo.hecho")} entrada pasoEntrada={0.035} repetir={false} altura={0} periodo={1} paso={0.035} retraso={0.3} />
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}aa, transparent)`} />

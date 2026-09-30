@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -14,6 +15,7 @@ import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
@@ -472,7 +474,7 @@ export default function MetodoFisiologiaMoleculas() {
                     textAlign="center" maxW="640px">
                 <Text color="white" fontSize={{ base: "lg", md: "xl" }} fontWeight="400" fontStyle="italic"
                       letterSpacing="0.02em" lineHeight="1.35" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                  {t("fisiologia.moleculas.intro")}
+                  <PalabrasVivas texto={t("fisiologia.moleculas.intro")} />
                 </Text>
               </MBox>
             )}
@@ -595,7 +597,7 @@ export default function MetodoFisiologiaMoleculas() {
                         <Flex direction="column" gap={4} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
                           <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                                 letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
-                            {t(mol.titulo)}
+                            <LetrasVivas texto={t(mol.titulo)} entrada onda={false} pasoEntrada={0.035} />
                           </Text>
                           <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                                bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />

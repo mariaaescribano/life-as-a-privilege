@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -482,7 +483,7 @@ export default function MetodoFisiologiaAtomos() {
                           px={{ base: 7, md: 10 }} py={{ base: 8, md: 10 }} h="100%" textAlign={{ base: "center", md: "left" }}>
                       <Text color={fisiologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                             letterSpacing="0.02em" lineHeight="1.25" style={{ textShadow: INK }}>
-                        {t(def.titulo)}
+                        <LetrasVivas texto={t(def.titulo)} entrada onda={false} pasoEntrada={0.035} />
                       </Text>
                       <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                            bgGradient={`linear(to-r, ${fisiologiaTxt}88, transparent)`} />

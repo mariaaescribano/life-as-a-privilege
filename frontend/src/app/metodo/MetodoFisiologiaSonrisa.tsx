@@ -14,6 +14,7 @@ import { FichaFisioModal } from "../../components/metodo/celulasUi";
 import { glowHeader, glowSuave, glowSuaveHover, glowSuaveVisto } from "../../components/metodo/FotoBox";
 import { MarcaLeido } from "../../components/metodo/MarcaLeido";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { useLeidos } from "../../hooks/useLeidos";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
@@ -250,7 +251,7 @@ export default function MetodoFisiologiaSonrisa() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
             <Flex direction="column" align="center" gap={3} maxW="760px" textAlign="center">
               <Text color="white" fontSize={{ base: "md", md: "xl" }} fontStyle="italic" lineHeight="1.8">
-                {t("fisiologia.sonrisa.intro")}
+                <PalabrasVivas texto={t("fisiologia.sonrisa.intro")} />
               </Text>
             </Flex>
           </Reveal>

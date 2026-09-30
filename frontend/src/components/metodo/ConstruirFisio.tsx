@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { LetrasVivas } from "../global/LetrasVivas";
+import { PalabrasVivas } from "../global/PalabrasVivas";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
@@ -285,9 +287,9 @@ export default function ConstruirFisio(props: ConstruirFisioProps) {
             {!completo && (
               <MBox key="instr" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} textAlign="center">
                 <Text color={fisiologiaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="600"
-                      style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{props.introTitulo}</Text>
+                      style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{props.introTitulo ? <LetrasVivas texto={props.introTitulo} entrada onda={false} pasoEntrada={0.035} /> : props.introTitulo}</Text>
                 <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" mt={1}
-                      maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>{props.instruccion}</Text>
+                      maxW="620px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}><PalabrasVivas texto={props.instruccion} retraso={0.35} /></Text>
               </MBox>
             )}
           </AnimatePresence>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -1252,7 +1253,7 @@ function OrganoDetalle({
             <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
                   letterSpacing="0.03em" lineHeight="1.15"
                   style={{ textShadow: `0 0 14px ${fisiologiaBg}cc, 0 2px 6px rgba(0,0,0,0.55)` }}>
-              {organo.label}
+              <LetrasVivas key={organo.label} texto={organo.label} entrada onda={false} pasoEntrada={0.035} />
             </Text>
             {organo.celulas.length > 0 && (
               <Text color={`${fisiologiaTxt}cc`} fontSize={{ base: "xs", md: "sm" }} fontStyle="italic"

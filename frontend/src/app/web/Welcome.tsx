@@ -203,7 +203,7 @@ function TarjetaDisciplina({
   // margen positivo arrancaba fuera de pantalla y al llegar ya estaba puesta.) Con el -25% había
   // que bajar un cuarto de pantalla —unos 200px— antes de que se dignaran a
   // aparecer, y se sentía como que la página no reaccionaba.
-  const enPantalla = useVistoConEspera("0px 0px -14% 0px", 1.7);
+  const enPantalla = useVistoConEspera("0px 0px -30% 0px", 1.7);
   // La primera fila queda justo en el pliegue: con el observador nunca llegaba a
   // «asomar» y el usuario se encontraba un hueco turquesa vacío donde deberían
   // estar las tarjetas. Esa fila entra con la página; las siguientes, al bajar.
@@ -439,6 +439,9 @@ const Welcome = () => {
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(WELCOME_IMGS);
   const [tiempoMin, setTiempoMin] = useState(false);
+  // Tipografías listas: sin esto el titular y el subtítulo se pintan con la
+  // fuente de respaldo (más ancha) y, al llegar la EB Garamond, encogen de golpe.
+  const [fuentesListas, setFuentesListas] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
   // Tarjetas por fila (2 en móvil, 4 en escritorio): define la cascada y cuáles
   // son «la primera fila», la que tiene que verse sin hacer scroll.
@@ -449,12 +452,25 @@ const Welcome = () => {
   // La página no se revela hasta que las fotos estén cargadas Y haya pasado un
   // tiempo mínimo (para que se vea la animación de carga aunque las fotos vengan
   // de caché). Mientras, se muestra <LifeLoading/>.
-  const listo = imagenesListas && tiempoMin;
+  const listo = imagenesListas && tiempoMin && fuentesListas;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const t = setTimeout(() => setTiempoMin(true), 550);
-    return () => clearTimeout(t);
+    // Red de seguridad: si las fuentes no llegan en 2,5 s se sigue igualmente.
+    const tope = setTimeout(() => setFuentesListas(true), 2500);
+    const fuentes = (document as any).fonts;
+    if (fuentes?.load) {
+      Promise.all([
+        fuentes.load('400 1em "EB Garamond"'),
+        fuentes.load('italic 400 1em "EB Garamond"'),
+        fuentes.load('700 1em "EB Garamond"'),
+        fuentes.ready,
+      ]).catch(() => {}).then(() => setFuentesListas(true));
+    } else {
+      setFuentesListas(true);
+    }
+    return () => { clearTimeout(t); clearTimeout(tope); };
   }, []);
 
   // Cuando la página está lista, disparamos la entrada de la primera pantalla
@@ -551,20 +567,11 @@ const Welcome = () => {
             letterSpacing="0.1em"
             lineHeight="1.1"
             textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
-            // El brillo del titular respira despacio, ya colocado.
-            sx={{
-              "@keyframes tituloRespira": {
-                "0%, 100%": { textShadow: "0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)" },
-                "50%": { textShadow: "0 0 20px rgba(255,255,255,0.75), 0 0 42px rgba(255,255,255,0.5), 0 0 76px rgba(180,255,245,0.42)" },
-              },
-              animation: "tituloRespira 7s ease-in-out 2s infinite",
-              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-            }}
           >
             {/* El nombre de la casa vive en `header.marca` (una sola clave para
                 el rótulo del header y este titular): así no se cambia en un
                 sitio y se olvida el otro. */}
-            <LetrasVivas texto={t("header.marca")} entrada activo={mounted} retraso={1.8} />
+            <LetrasVivas texto={t("header.marca")} entrada activo={mounted} repetir={false} altura={0} periodo={1} paso={0.035} pasoEntrada={0.035} retraso={0.3} />
           </Text>
 
           {/* Subtítulo (estructura de Materiales) */}
@@ -660,7 +667,7 @@ const Welcome = () => {
               // le suma un hueco para que vaya DETRÁS de la primera, no a la vez.
               // Las de abajo (las que entran al asomar) tardan un poco más
               // que las de la primera pantalla, para que se vea cada una.
-              delay={(i < filasAlCargar * columnas ? 0.9 : 0.1) + (i % columnas) * 0.2 + (isMobile && i >= columnas && i < filasAlCargar * columnas ? 0.3 : 0) + (i >= filasAlCargar * columnas ? 0.3 : 0)}
+              delay={(i < filasAlCargar * columnas ? 0.9 : 0.1) + (i % columnas) * 0.2 + (isMobile && i >= columnas && i < filasAlCargar * columnas ? 0.3 : 0) + (i >= filasAlCargar * columnas ? 0.05 : 0)}
               // Lo que se ve sin hacer scroll entra con la página: la primera fila
               // en escritorio y las DOS primeras en móvil (las cuatro disciplinas).
               // De ahí hacia abajo, cada tarjeta entra al asomar.

@@ -12,7 +12,7 @@ const OpinionesSection: React.FC = () => {
   const t = useT();
   // Espera de 1,4 s tras cargar: en ordenador el botón ya está en pantalla al
   // entrar, y sin espera su animación se gastaba a la vez que el titular.
-  const reveal = useVistoConEspera("0px 0px -25% 0px", 1.4);
+  const reveal = useVistoConEspera("0px 0px -30% 0px", 1.4);
 
   return (
     <Box

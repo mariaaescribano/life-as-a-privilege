@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text, Tooltip, useBreakpointValue, useToast } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { Reveal } from "../../components/global/Reveal";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -62,6 +63,13 @@ const giraLento = keyframes`
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 `;
+// El saludo se anima UNA sola vez por sesión: al volver a /home desde otra
+// página sale ya puesto, sin repetir la entrada.
+let saludoAnimado = false;
+// Segundos que el mandala espera tras el título (solo cuando el saludo se
+// escribe): que el titular llegue primero y el mandala entre después, sin
+// dejar la pantalla vacía.
+const ESPERA_MANDALA = 0.9;
 const SIN_MOVIMIENTO = { "@media (prefers-reduced-motion: reduce)": { animation: "none !important" } };
 
 // Orden del Método: Astrología → Psicología → Fisiología → Nutrición →
@@ -124,6 +132,8 @@ const Home = () => {
   const t = useT();
   const nombreDisciplina = useNombreDisciplina();
   const toast = useToast();
+  const [animarSaludo] = useState(() => !saludoAnimado);
+  useEffect(() => { saludoAnimado = true; }, []);
 
   // Iniciamos la foto ya desde localStorage: así, al volver a /home con la
   // caché caliente, el mandala se pinta en el primer render (sin un frame con
@@ -986,7 +996,7 @@ const Home = () => {
             w="100%"
           >
             {/* ── SALUDO ── */}
-            <Reveal direction="up" distance={18} duration={0.9} blur>
+            <Reveal direction="up" distance={animarSaludo ? 18 : 0} duration={animarSaludo ? 0.9 : 0.01} blur={animarSaludo}>
             <Text
               color="white"
               fontSize={{ base: "3xl", md: "5xl" }}
@@ -1003,7 +1013,18 @@ const Home = () => {
               // línea antes de meterse por debajo de ellas.
               px={{ lg: "240px", xl: "320px" }}
             >
-              {t("home.bienvenida", { coma: name ? `, ${name}` : "" })}
+              {(() => {
+                const saludo = t("home.bienvenida", { coma: name ? `, ${name}` : "" });
+                if (!animarSaludo) return saludo;
+                // El rayo de luz recorre el NOMBRE mientras se escribe: se cuenta
+                // cuántas letras (sin espacios) hay antes de él.
+                const pos = name ? saludo.lastIndexOf(name) : -1;
+                const rayoDesde = pos >= 0 ? saludo.slice(0, pos).replace(/\s/g, "").length : undefined;
+                return (
+                  <LetrasVivas key={saludo} texto={saludo} entrada onda={false} pasoEntrada={0.03}
+                               rayoDesde={rayoDesde} paso={0.03} retraso={0.25} periodo={1.1} />
+                );
+              })()}
             </Text>
             </Reveal>
 
@@ -1058,7 +1079,7 @@ const Home = () => {
                 boxShadow="0 0 24px rgba(255,255,255,0.45), 0 0 56px rgba(255,255,255,0.2), 0 0 90px rgba(180,255,245,0.14)"
                 border="2px solid rgba(255,255,255,0.9)"
                 zIndex={10}
-                animation={`${entraFoto} 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both, ${respiraFoto} 6s ease-in-out 1.2s infinite`}
+                animation={`${entraFoto} 1.1s cubic-bezier(0.22,1,0.36,1) ${0.1 + (animarSaludo ? ESPERA_MANDALA : 0)}s both, ${respiraFoto} 6s ease-in-out ${1.4 + (animarSaludo ? ESPERA_MANDALA : 0)}s infinite`}
                 sx={SIN_MOVIMIENTO}
               >
                 <Image src={img} alt={t("home.foto")} w="100%" h="100%" objectFit="cover" />
@@ -1260,7 +1281,7 @@ const Home = () => {
                     <Box
                       w="100%"
                       h="100%"
-                      animation={`${entraCirculo} 0.8s cubic-bezier(0.22,1,0.36,1) ${0.3 + index * 0.13}s both`}
+                      animation={`${entraCirculo} 0.95s cubic-bezier(0.22,1,0.36,1) ${0.45 + (animarSaludo ? ESPERA_MANDALA : 0) + index * 0.16}s both`}
                       sx={SIN_MOVIMIENTO}
                     >
                     {abierta ? (

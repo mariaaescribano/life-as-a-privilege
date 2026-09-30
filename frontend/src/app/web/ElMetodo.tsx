@@ -998,7 +998,7 @@ export default function ElMetodo() {
           textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
           ref={porDentro.ref}
         >
-          <LetrasVivas texto={t("elMetodo.porDentro")} entrada activo={porDentro.visible} retraso={1.4} paso={0.07} altura={4} pasoEntrada={0.025} />
+          <LetrasVivas texto={t("elMetodo.porDentro")} entrada activo={porDentro.visible} repetir={false} altura={0} periodo={1} paso={0.025} pasoEntrada={0.025} retraso={0.3} />
         </Text>
 
         {/* Pista de que el mandala se pincha: sin ella, los ocho círculos

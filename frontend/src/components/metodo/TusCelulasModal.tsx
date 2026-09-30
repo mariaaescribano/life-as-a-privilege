@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useSyncExternalStore } from "react";
+import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { traducir, useT } from "../../i18n";
 import { Box, Flex, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import { CelulaCard, CelulaModal } from "./celulasUi";
 import { FisiologiaLoader } from "./comicLoaders";
@@ -64,6 +64,10 @@ export function TusCelulasModal({
   const todas = useCelulas();
   const celulas = celulasProp ?? todas;
   const [selected, setSelected] = useState<Celula | null>(null);
+  // El scroll del popup es SU contenedor (no la ventana): las células se
+  // revelan al entrar en ESE visor, según el usuario baja.
+  const visorRef = useRef<HTMLDivElement>(null);
+  const reducir = useReducedMotion();
   // Células que el usuario ya ha visto (para pintar el tick arriba a la derecha).
   const [vistas, setVistas] = useState<Set<string>>(new Set());
 
@@ -176,7 +180,7 @@ export function TusCelulasModal({
           <FisiologiaLoader />
         </Flex>
       ) : (
-      <Box position="absolute" inset={0} zIndex={2} overflowY="auto"
+      <Box ref={visorRef} position="absolute" inset={0} zIndex={2} overflowY="auto"
            px={{ base: 5, md: 10, lg: 16 }} py={{ base: 14, md: 16 }}>
         <Flex direction="column" align="center" gap={{ base: 8, md: 10 }} w="100%">
           {/* Título: icono a la IZQUIERDA + "Tus células" */}
@@ -202,13 +206,15 @@ export function TusCelulasModal({
               spacing={{ base: 5, md: 6 }}
             >
               {celulas.map((celula, i) => (
-                // Cada célula entra una tras otra con un pop (escala + rebote):
-                // el stagger por índice crea el «van apareciendo de una en una».
+                // Cada célula se revela al llegar al visor mientras el usuario
+                // baja: sube, se enfoca y se enciende, con un leve retraso según
+                // su columna para que cada fila entre en abanico. Sin rebote.
                 <MBox
                   key={celula.id}
-                  initial={{ opacity: 0, scale: 0.55, y: 28 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ delay: i * 0.07, type: "spring", stiffness: 320, damping: 17 }}
+                  initial={reducir ? false : { opacity: 0, y: 56, scale: 0.92, filter: "blur(10px)" }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                  viewport={{ root: visorRef, once: true, amount: 0.15, margin: "0px 0px -8% 0px" }}
+                  transition={{ delay: (i % 4) * 0.09, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <CelulaCard celula={celula} visto={vistas.has(celula.id)}
                               onClick={() => setSelected(celula)} />

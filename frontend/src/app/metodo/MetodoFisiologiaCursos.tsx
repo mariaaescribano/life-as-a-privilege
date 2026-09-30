@@ -11,6 +11,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { useTusCelulas } from "../../components/metodo/TusCelulasModal";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { CursoCardDetalle } from "../../components/aprendizaje/CursoCardDetalle";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
@@ -112,7 +113,7 @@ export default function MetodoFisiologiaCursos() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="680px">
-              {t("fisiologia.cursos.intro")}
+              <PalabrasVivas texto={t("fisiologia.cursos.intro")} />
             </Text>
           </Reveal>
 

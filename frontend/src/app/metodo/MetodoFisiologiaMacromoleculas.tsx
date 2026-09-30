@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -17,6 +18,7 @@ import { useT, type ClaveTexto } from "../../i18n";
 import { INK, PanelBox, BotonVolverEstacion, CabeceraEstacion } from "../../components/metodo/FisiologiaEstacion";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useReservarAltura } from "../../hooks/useReservarAltura";
 import {
@@ -390,7 +392,7 @@ function Estacion({
               <PanelBox w="100%">
                 <Flex direction="column" gap={3.5} h="100%" justify="center" textAlign={{ base: "center", md: "left" }}>
                   <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
-                        style={{ textShadow: INK }}>{t("fisiologia.macro.hecho", { macro: t(def.nombre).toLowerCase(), Macro: t(def.nombre) })}</Text>
+                        style={{ textShadow: INK }}><LetrasVivas texto={t("fisiologia.macro.hecho", { macro: t(def.nombre).toLowerCase(), Macro: t(def.nombre) })} entrada pasoEntrada={0.035} repetir={false} altura={0} periodo={1} paso={0.035} retraso={0.3} /></Text>
                   <Box h="1px" w={{ base: "60%", md: "70%" }} mx={{ base: "auto", md: 0 }}
                        bgGradient={`linear(to-r, ${def.glow}aa, transparent)`} />
                   {def.resultado.map((clave) => (
@@ -512,7 +514,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
           <Box flex="1" minW={0}>
             <Flex align="center" gap={2.5}>
               <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700"
-                    style={{ textShadow: INK }}>{t(m.nombre)}</Text>
+                    style={{ textShadow: INK }}><LetrasVivas texto={t(m.nombre)} entrada pasoEntrada={0.035} repetir={false} altura={0} periodo={1} paso={0.035} retraso={0.3} /></Text>
               {/* Marca común del recorrido (MarcaLeido), con el color de la
                   macromolécula: misma forma que el resto de marcas. */}
               {hecha && <MarcaLeido inline tinta={m.glow} bg={fisiologiaBg} title={t("fisiologia.macro.formada")} />}
@@ -656,7 +658,7 @@ export default function MetodoFisiologiaMacromoleculas() {
             <MBox initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} textAlign="center">
               <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="400" fontStyle="italic" mt={1}
                     letterSpacing="0.02em" maxW="640px" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.35)" }}>
-                {t("fisiologia.macro.intro")}
+                <PalabrasVivas texto={t("fisiologia.macro.intro")} />
               </Text>
             </MBox>
           )}

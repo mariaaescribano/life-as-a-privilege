@@ -1265,7 +1265,6 @@ const CEREBRO: Ficha[] = [
   // ── La corteza ──
   {
     key: "corteza", nombre: "Corteza cerebral", zona: "corteza", color: "#c9a7ff", foto: SUB("cerebro", "corteza"),
-    eyebrow: "El pequeño espacio donde aparece lo consciente",
     claves: ["La capa exterior, arrugada", "Unos 16.000 millones de neuronas", "Solo una pequeña parte de lo que ocurre llega a la conciencia"],
     explicacion: [
       "Es la capa exterior del cerebro, de apenas unos milímetros de grosor, y está llena de pliegues. No son adorno: permiten meter una superficie enorme dentro de un cráneo pequeño. Si la extendieras, ocuparía aproximadamente lo mismo que una servilleta grande.",
@@ -1277,7 +1276,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "frontal", nombre: "Lóbulo frontal", zona: "corteza", color: "#b79cff", foto: SUB("cerebro", "frontal"),
-    eyebrow: "Planificar, decidir, frenar",
     claves: ["Planifica y toma decisiones", "Frena impulsos", "Controla el movimiento voluntario"],
     explicacion: [
       "Está justo detrás de la frente y participa en planificar, decidir, mantener la atención y frenar impulsos: es una de las partes que permite pensar «quiero hacerlo, pero mejor no».",
@@ -1288,7 +1286,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "parietal", nombre: "Lóbulo parietal", zona: "corteza", color: "#9fb8f2", foto: SUB("cerebro", "parietal"),
-    eyebrow: "El mapa de tu cuerpo",
     claves: ["Recibe el tacto y el dolor", "Sabe dónde está tu cuerpo", "Orienta en el espacio"],
     explicacion: [
       "Recibe información de la piel: tacto, presión, temperatura y dolor. La junta y la convierte en una sensación con sentido.",
@@ -1298,7 +1295,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "temporal", nombre: "Lóbulo temporal", zona: "corteza", color: "#8fd0e6", foto: SUB("cerebro", "temporal"),
-    eyebrow: "Oír, reconocer, recordar",
     claves: ["Oye y entiende el lenguaje", "Reconoce caras y voces", "Participa en la memoria"],
     explicacion: [
       "Está a los lados del cerebro, a la altura de las orejas. Procesa los sonidos y les da significado: no solo oyes sonidos, entiendes una frase o reconoces una canción.",
@@ -1308,7 +1304,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "occipital", nombre: "Lóbulo occipital", zona: "corteza", color: "#7fc9c2", foto: SUB("cerebro", "occipital"),
-    eyebrow: "Aquí se construye lo que ves",
     claves: ["Procesa la información visual", "Está en la nuca", "Construye la imagen que ves"],
     explicacion: [
       "Está en la parte de atrás del cerebro, en la nuca. Los ojos captan la luz, pero es aquí donde el cerebro empieza a construir lo que vemos.",
@@ -1318,7 +1313,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "cuerpo-calloso", nombre: "Cuerpo calloso", zona: "corteza", color: "#e8e0cf", foto: SUB("cerebro", "cuerpo-calloso"),
-    eyebrow: "El puente entre los dos cerebros",
     claves: ["Une los dos hemisferios", "Millones de fibras nerviosas", "Hace que compartan información"],
     explicacion: [
       "Es un enorme puente de fibras nerviosas que conecta el hemisferio izquierdo con el derecho.",
@@ -1330,7 +1324,6 @@ const CEREBRO: Ficha[] = [
   // ── El centro profundo ──
   {
     key: "talamo", nombre: "Tálamo", zona: "centro", color: "#a7d9f2", foto: SUB("cerebro", "talamo"),
-    eyebrow: "La centralita de los sentidos",
     claves: ["Recibe casi toda la información sensorial", "La filtra antes de llegar a la corteza", "El olfato es la gran excepción"],
     explicacion: [
       "Está en el centro del cerebro y recibe casi toda la información que llega de los sentidos antes de enviarla a la corteza.",
@@ -1341,7 +1334,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "hipotalamo", nombre: "Hipotálamo", zona: "centro", color: "#e6a7d9", foto: SUB("cerebro", "hipotalamo"),
-    eyebrow: "El que mantiene el cuerpo en equilibrio",
     claves: ["Hambre, sed, sueño y temperatura", "Controla muchas hormonas", "Es diminuto"],
     explicacion: [
       "Es muy pequeño, pero controla funciones básicas: hambre, sed, temperatura, sueño y respuesta sexual.",
@@ -1351,7 +1343,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "hipofisis", nombre: "Hipófisis", zona: "centro", color: "#f2b48f", foto: SUB("cerebro", "hipofisis"),
-    eyebrow: "La central de mando hormonal",
     claves: ["Controla otras glándulas", "Depende del hipotálamo", "Pesa alrededor de medio gramo"],
     explicacion: [
       "Es una glándula diminuta, del tamaño de un guisante, situada justo debajo del hipotálamo.",
@@ -1361,7 +1352,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "amigdala", nombre: "Amígdala", zona: "centro", color: "#f28b8b", foto: SUB("cerebro", "amigdala"),
-    eyebrow: "La alarma emocional",
     claves: ["Detecta posibles amenazas", "Puede reaccionar antes de que entiendas", "Da valor emocional a los recuerdos"],
     explicacion: [
       "La amígdala ayuda a detectar amenazas y prepara al cuerpo para reaccionar. Puede hacerlo muy rápido, antes de que hayas entendido qué está pasando.",
@@ -1372,7 +1362,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "hipocampo", nombre: "Hipocampo", zona: "centro", color: "#9fe6b8", foto: SUB("cerebro", "hipocampo"),
-    eyebrow: "El que convierte experiencias en recuerdos",
     claves: ["Forma nuevos recuerdos", "Ayuda a orientarte", "Es sensible al estrés"],
     explicacion: [
       "Tiene forma de caballito de mar, de ahí su nombre. Es fundamental para formar nuevos recuerdos y para recordar dónde y cuándo ocurrieron las cosas.",
@@ -1382,7 +1371,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "ganglios-basales", nombre: "Ganglios basales", zona: "centro", color: "#f2c86b", foto: SUB("cerebro", "ganglios-basales"),
-    eyebrow: "El piloto automático",
     claves: ["Automatizan movimientos y hábitos", "Facilitan lo que repites", "Funcionan con dopamina"],
     explicacion: [
       "Son grupos de núcleos profundos que ayudan a convertir acciones repetidas en hábitos.",
@@ -1394,7 +1382,6 @@ const CEREBRO: Ficha[] = [
   // ── La base ──
   {
     key: "cerebelo", nombre: "Cerebelo", zona: "base", color: "#b8d98f", foto: SUB("cerebro", "cerebelo"),
-    eyebrow: "El que afina tus movimientos",
     claves: ["Equilibrio y precisión", "Más de la mitad de las neuronas del cerebro", "Corrige el movimiento mientras ocurre"],
     explicacion: [
       "Está detrás y abajo del cerebro. Es pequeño, pero contiene más de la mitad de sus neuronas.",
@@ -1405,7 +1392,6 @@ const CEREBRO: Ficha[] = [
   },
   {
     key: "tronco", nombre: "Tronco encefálico", zona: "base", color: "#e3a6a6", foto: SUB("cerebro", "tronco"),
-    eyebrow: "Lo que mantiene el cuerpo en marcha",
     claves: ["Controla funciones vitales automáticas", "Regula el estado de alerta", "Une el cerebro con la médula"],
     explicacion: [
       "Es la parte que conecta el cerebro con la médula espinal. Controla funciones que no puedes dejar de hacer: respirar, mantener los latidos, regular la presión, tragar y toser.",

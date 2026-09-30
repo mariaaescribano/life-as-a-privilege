@@ -57,6 +57,9 @@ const DISCIPLINA_OVERLAY: Record<string, string> = {
   // mismo lavado que lleva el fondo del selector de Ilustraciones. Sin él, los
   // boxes salían mucho más amarillos que el resto de la disciplina.
   [ayurvedaNom]: "#ffffff55",
+  // Psicología: el mismo lavado blanco pero más suave (20% en vez de 33%): su
+  // acuarela es menos amarilla, solo hace falta bajarle un punto la intensidad.
+  [neuropsicologiaNom]: "#ffffff33",
 };
 
 const ImageBgLayer = ({

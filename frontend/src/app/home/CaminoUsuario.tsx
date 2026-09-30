@@ -210,11 +210,15 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
                   cursor="pointer"
                   role="group"
                   title={nombreDisciplina(cara.nom)}
-                  // La cascada: cada box entra un pelín después que el de
-                  // arriba, y al plegar se van todos a la vez (sin retraso).
+                  // La cascada: al desplegar, cada box entra DESPUÉS del anterior
+                  // (0,11 s de por medio, tras dejar abrirse el hueco): sube desde
+                  // la izquierda, se enfoca y asienta con un leve zoom. Al plegar
+                  // se van todos a la vez, sin retraso.
                   opacity={abierto ? 1 : 0}
-                  transform={abierto ? "translateY(0)" : "translateY(-6px)"}
-                  transition={`opacity 0.35s ease ${abierto ? i * 0.05 : 0}s, transform 0.35s ease ${abierto ? i * 0.05 : 0}s, background 0.2s ease, box-shadow 0.2s ease`}
+                  transform={abierto ? "translate(0, 0) scale(1)" : "translate(-18px, -10px) scale(0.94)"}
+                  filter={abierto ? "blur(0px)" : "blur(6px)"}
+                  transition={`opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${abierto ? 0.12 + i * 0.11 : 0}s, transform 0.75s cubic-bezier(0.22,1,0.36,1) ${abierto ? 0.12 + i * 0.11 : 0}s, filter 0.6s ease ${abierto ? 0.12 + i * 0.11 : 0}s, background 0.2s ease, box-shadow 0.2s ease`}
+                  sx={{ "@media (prefers-reduced-motion: reduce)": { transition: "none !important" } }}
                   // Al pasar por encima el marco no cambia: se enciende un halo
                   // suave con el acento de la disciplina (nunca blanco).
                   _hover={{ boxShadow: `0 0 14px ${cara.txt}59` }}
@@ -261,7 +265,7 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
 
                     {/* Sobre acuarela clara el carril blanco no se veía: va en
                         la propia tinta, muy tenue. */}
-                    <Barra pct={abierto ? pct : 0} color={cara.txt}
+                    <Barra pct={abierto ? pct : 0} retraso={0.35 + i * 0.11} color={cara.txt}
                            pista={cara.clara ? `${cara.txt}2b` : "rgba(255,255,255,0.24)"} mt={1.5} />
 
                     <Text color={cara.txt} opacity={0.82} fontSize="xs" mt="3px" noOfLines={1}
@@ -296,7 +300,10 @@ function Barra({
   color,
   pista,
   mt,
+  retraso = 0,
 }: {
+  /** Segundos hasta que la barra empieza a llenarse (tras entrar su box). */
+  retraso?: number;
   pct: number;
   color: string;
   pista: string;
@@ -315,7 +322,7 @@ function Barra({
         w={`${ancho}%`}
         borderRadius="full"
         bg={color}
-        transition="width 0.9s cubic-bezier(0.22, 1, 0.36, 1)"
+        transition={`width 1s cubic-bezier(0.22, 1, 0.36, 1) ${retraso}s`}
         style={{ boxShadow: `0 0 10px ${color}99` }}
       />
     </Box>

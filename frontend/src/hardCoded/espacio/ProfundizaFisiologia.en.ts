@@ -51,7 +51,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
     fichas: {
       corteza: {
         nombre: "Cerebral cortex",
-        eyebrow: "The small space where the conscious appears",
         claves: [
           "The outer layer, wrinkled",
           "Some 16 billion neurons",
@@ -67,7 +66,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       frontal: {
         nombre: "Frontal lobe",
-        eyebrow: "Planning, deciding, holding back",
         claves: ["Plans and makes decisions", "Holds back impulses", "Controls voluntary movement"],
         explicacion: [
           "It sits just behind your forehead and takes part in planning, deciding, holding attention and holding back impulses: it's one of the parts that lets you think “I want to, but better not.”",
@@ -78,7 +76,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       parietal: {
         nombre: "Parietal lobe",
-        eyebrow: "The map of your body",
         claves: ["Receives touch and pain", "Knows where your body is", "Orients you in space"],
         explicacion: [
           "It receives information from the skin: touch, pressure, temperature and pain. It puts it together and turns it into a sensation that makes sense.",
@@ -88,7 +85,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       temporal: {
         nombre: "Temporal lobe",
-        eyebrow: "Hearing, recognizing, remembering",
         claves: ["Hears and understands language", "Recognizes faces and voices", "Takes part in memory"],
         explicacion: [
           "It sits on the sides of the brain, level with your ears. It processes sounds and gives them meaning: you don't just hear sounds, you understand a sentence or recognize a song.",
@@ -98,7 +94,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       occipital: {
         nombre: "Occipital lobe",
-        eyebrow: "Where what you see is built",
         claves: ["Processes visual information", "It's at the back of your head", "Builds the image you see"],
         explicacion: [
           "It's at the back of the brain, at the nape. The eyes catch the light, but this is where the brain starts building what we see.",
@@ -108,7 +103,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       "cuerpo-calloso": {
         nombre: "Corpus callosum",
-        eyebrow: "The bridge between the two brains",
         claves: ["Joins the two hemispheres", "Millions of nerve fibers", "Makes them share information"],
         explicacion: [
           "It's an enormous bridge of nerve fibers connecting the left hemisphere to the right.",
@@ -118,7 +112,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       talamo: {
         nombre: "Thalamus",
-        eyebrow: "The switchboard of the senses",
         claves: [
           "Receives almost all sensory information",
           "Filters it before it reaches the cortex",
@@ -133,7 +126,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       hipotalamo: {
         nombre: "Hypothalamus",
-        eyebrow: "The one that keeps the body in balance",
         claves: ["Hunger, thirst, sleep and temperature", "Controls many hormones", "It's tiny"],
         explicacion: [
           "It's very small, but it controls the basics: hunger, thirst, temperature, sleep and sexual response.",
@@ -143,7 +135,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       hipofisis: {
         nombre: "Pituitary gland",
-        eyebrow: "Hormonal command center",
         claves: ["Controls other glands", "It depends on the hypothalamus", "Weighs about half a gram"],
         explicacion: [
           "It's a tiny gland, the size of a pea, sitting just below the hypothalamus.",
@@ -153,7 +144,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       amigdala: {
         nombre: "Amygdala",
-        eyebrow: "The emotional alarm",
         claves: [
           "Detects possible threats",
           "It can react before you understand",
@@ -168,7 +158,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       hipocampo: {
         nombre: "Hippocampus",
-        eyebrow: "The one that turns experience into memory",
         claves: ["Forms new memories", "Helps you find your way", "It's sensitive to stress"],
         explicacion: [
           "It's shaped like a seahorse, which is where its name comes from. It's essential for forming new memories and for remembering where and when things happened.",
@@ -178,7 +167,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       "ganglios-basales": {
         nombre: "Basal ganglia",
-        eyebrow: "The autopilot",
         claves: ["Automate movements and habits", "Make what you repeat easier", "They run on dopamine"],
         explicacion: [
           "They're groups of deep nuclei that help turn repeated actions into habits.",
@@ -188,7 +176,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       cerebelo: {
         nombre: "Cerebellum",
-        eyebrow: "The one that fine-tunes your movements",
         claves: [
           "Balance and precision",
           "More than half the brain's neurons",
@@ -203,7 +190,6 @@ export const temasProfundizaEn: Record<string, TemaTexto> = {
       },
       tronco: {
         nombre: "Brainstem",
-        eyebrow: "What keeps the body running",
         claves: [
           "Controls automatic vital functions",
           "Regulates how alert you are",

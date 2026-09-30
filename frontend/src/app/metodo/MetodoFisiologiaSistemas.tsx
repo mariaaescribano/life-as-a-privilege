@@ -13,6 +13,7 @@ import { IndiceFisiologia } from "../../components/metodo/IndiceFisiologia";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { SistemaModal } from "../../components/metodo/SistemaModal";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { API_URL, fisiologiaBg, fisiologiaNom, fisiologiaTxt, FisiologiaIcon, noSelectSx} from "../../GlobalVariables";
 import { type Sistema } from "../../hardCoded/espacio/SistemasFisiologia";
@@ -134,7 +135,7 @@ export default function MetodoFisiologiaSistemas() {
           <Reveal direction="up" distance={18} delay={0.12} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="640px">
-              {t("fisiologia.sistemas.intro")}
+              <PalabrasVivas texto={t("fisiologia.sistemas.intro")} />
             </Text>
           </Reveal>
 
