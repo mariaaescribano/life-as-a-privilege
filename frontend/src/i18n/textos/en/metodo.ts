@@ -561,7 +561,7 @@ export const metodo = {
 
   // ── Chinese Medicine · step names (the buttons out of a comic) ──────────
   "metodo.tcm.paso.elementos": "The 5 elements",
-  "metodo.tcm.paso.diagnostico": "Final diagnosis",
+  "metodo.tcm.paso.diagnostico": "Final assessment",
   "metodo.tcm.paso.taoismo": "Taoism",
   "metodo.tcm.paso.cocina": "Your kitchen",
   "metodo.tcm.paso.qigong": "Qigong",
@@ -577,7 +577,7 @@ export const metodo = {
     "The three questionnaires of each element measure what weighs on you today. Your constitution is something else: the element underneath, the one that barely changes over the years. Read all five and take the test to find out which one is yours.",
   "metodo.tcm.constitucion.repetir": "Retake the test",
   "metodo.tcm.constitucion.bloqueo":
-    "Take the test to move on: the cycles and the diagnosis are read already knowing your constitution.",
+    "Take the test to move on: the cycles and the assessment are read already knowing your constitution.",
   "metodo.tcm.constitucion.hecho": "Test completed",
   "metodo.tcm.constitucion.hechoTexto":
     "Your constitution is already worked out: it is up there, with the five percentages. You can retake the test whenever you like.",
@@ -602,8 +602,6 @@ export const metodo = {
   "metodo.tcm.constitucion.cuerpo": "Where its body speaks first",
   "metodo.tcm.constitucion.enSuLuz": "At its best",
   "metodo.tcm.constitucion.enSuSombra": "At its worst",
-  "metodo.tcm.constitucion.noEsDiagnostico":
-    "This is who you are, not what is happening to you today. Today's reading is the Final Diagnosis: if they match, your own element is the one giving you a hard time; if they don't, what weighs on you comes from somewhere else.",
   "metodo.tcm.constitucion.aviso":
     "No element is better than another, and nobody is a pure element: you are all five, with one ringing louder.",
   "metodo.tcm.paso.tuLengua": "Your tongue",
@@ -628,7 +626,7 @@ export const metodo = {
   "metodo.tcm.ciclos.genera": "generates",
   "metodo.tcm.ciclos.controla": "controls",
 
-  // ── Chinese Medicine · Final diagnosis (step 4) ─────────────────────────
+  // ── Chinese Medicine · Final assessment (step 4) ────────────────────────
   "metodo.tcm.diag.cita":
     "«Before you heal someone, ask him if he's willing to give up the things that make him sick.»",
   "metodo.tcm.diag.citaAutor": "— Hippocrates",
@@ -639,7 +637,7 @@ export const metodo = {
   "metodo.tcm.diag.tipoPrimario": "Primary",
   "metodo.tcm.diag.tipoSecundario": "Secondary",
   "metodo.tcm.diag.tiposTexto":
-    "These are the two elements your way of adapting runs through: the ones that take the strain when life presses.",
+    "When life makes demands on you, your body and your mood respond above all through these two elements: they are the ones carrying the most weight today.",
   "metodo.tcm.diag.barras":
     "Each element pulls to one side: up if what weighs on you outruns your resources, down if your resources win and that element holds you up. The closer to the line, the more in balance.",
   "metodo.tcm.diag.constitucion": "And underneath, your constitution",
@@ -657,8 +655,8 @@ export const metodo = {
   "metodo.tcm.diag.sinDatos": "no data",
   "metodo.tcm.diag.sinDatosSuficientes": "not enough data yet",
 
-  // ── Chinese Medicine · Tongue diagnosis (step 5) ────────────────────────
-  "metodo.tcm.lengua.titulo": "Tongue diagnosis",
+  // ── Chinese Medicine · Reading the tongue (step 5) ──────────────────────
+  "metodo.tcm.lengua.titulo": "Reading the tongue",
   "metodo.tcm.lengua.intro":
     "The tongue is the mirror of the organs. You read it in layers: the color, the shape, the movement, the coating, the moisture and the small details. Learn to recognize each one, then look at your own.",
   "metodo.tcm.lengua.comoMirar": "How to look at your tongue",
@@ -676,7 +674,7 @@ export const metodo = {
   "metodo.tcm.lengua.grupoSuperficie": "The surface · moisture and details",
   "metodo.tcm.lengua.sana": "· healthy",
   "metodo.tcm.lengua.aviso":
-    "Educational material. Tongue diagnosis is a tool of Traditional Chinese Medicine; it is not a medical diagnosis and does not replace the judgment of a qualified health professional.",
+    "Educational material. Tongue reading is a tool of Traditional Chinese Medicine; it is not a medical diagnosis and does not replace the judgment of a qualified health professional.",
 
   // ── Chinese Medicine · Read your tongue (step 6) ────────────────────────
   "metodo.tcm.leer.intro":
@@ -698,7 +696,7 @@ export const metodo = {
 
   // ── Chinese Medicine · Create your notes (step 11) ──────────────────────
   "metodo.tcm.apuntes.intro1":
-    "You've walked the whole of Chinese Medicine. Now decide what you take with you: check whatever you want —your diagnosis, the reading of your tongue, the kitchens, the laws of the Tao, the practices— and we'll put it together as a notebook you can read away from a screen.",
+    "You've walked the whole of Chinese Medicine. Now decide what you take with you: check whatever you want —your assessment, the reading of your tongue, the kitchens, the laws of the Tao, the practices— and we'll put it together as a notebook you can read away from a screen.",
   "metodo.tcm.apuntes.intro2":
     "It's made right here, in your browser. You can come back and put it together again as many times as you like.",
 
@@ -866,12 +864,12 @@ export const metodo = {
   "metodo.cabala.paso.intro": "Introduction",
   "metodo.cabala.paso.arbol": "The Tree of Life",
   "metodo.cabala.paso.arbolCorto": "The Tree",
-  "metodo.cabala.paso.diagnostico": "Diagnosis",
+  "metodo.cabala.paso.diagnostico": "Assessment",
   "metodo.cabala.paso.senderos": "The Paths",
   "metodo.cabala.paso.senderos22": "The 22 Paths",
-  "metodo.cabala.paso.senderosDiag": "Diagnosis of the Paths",
+  "metodo.cabala.paso.senderosDiag": "Assessment of the Paths",
   "metodo.cabala.paso.senderosDiagCorto": "Paths",
-  "metodo.cabala.paso.final": "Final diagnosis",
+  "metodo.cabala.paso.final": "Final assessment",
   "metodo.cabala.paso.cursos": "Courses",
   "metodo.cabala.paso.dias": "10 days with your dimensions",
   "metodo.cabala.paso.diasCorto": "10 days",
@@ -895,11 +893,11 @@ export const metodo = {
   "metodo.cabala.sefira.faltaAutoeval": "the self-assessment",
   "metodo.cabala.sefira.faltaEscala": "the balance scale",
   "metodo.cabala.sefira.faltaOtra":
-    "Another Sefirah is still missing its content before you can see your Diagnosis.",
+    "Another Sefirah is still missing its content before you can see your Assessment.",
   "metodo.cabala.sefira.completaDimension":
     "Complete everything this dimension asks for to continue",
   "metodo.cabala.sefira.rellenaTodas":
-    "Fill in the content of every Sefirah to see your Diagnosis",
+    "Fill in the content of every Sefirah to see your Assessment",
 
   // ── Kabbalah · The 22 Paths (the Tree in paths mode) ───────────────────
   "metodo.cabala.senderos.intro":
@@ -923,30 +921,30 @@ export const metodo = {
   "metodo.cabala.sendero.observaSi": "This week, notice whether…",
   "metodo.cabala.sendero.umbral": "You've crossed this threshold when…",
   "metodo.cabala.sendero.siguiente": "Next path",
-  "metodo.cabala.sendero.verDiagnostico": "See diagnosis",
+  "metodo.cabala.sendero.verDiagnostico": "See assessment",
   "metodo.cabala.sendero.respuestaN": "Answer to question {n} (1 to 5)",
   "metodo.cabala.sendero.completaEste":
     "Complete this path's test to move on to the next letter",
   "metodo.cabala.sendero.completaLos22":
-    "Complete the test of the 22 paths to see your Diagnosis",
+    "Complete the test of the 22 paths to see your Assessment",
 
-  // ── Kabbalah · Diagnosis of the Paths ──────────────────────────────────
+  // ── Kabbalah · Assessment of the Paths ─────────────────────────────────
   "metodo.cabala.senderosDiag.intro":
     "Each path is a transition between two capacities. Here your 22 tests come together to show which roads flow and which ones ask for more work.",
   "metodo.cabala.senderosDiag.completados": "{n}/{total} paths completed",
   "metodo.cabala.senderosDiag.faltan": "There are still paths to walk",
   "metodo.cabala.senderosDiag.faltanTexto":
-    "Complete the test of the 22 paths to receive your final diagnosis. Every answer is saved automatically; you can carry on whenever you like.",
+    "Complete the test of the 22 paths to receive your final assessment. Every answer is saved automatically; you can carry on whenever you like.",
   "metodo.cabala.senderosDiag.prioritarios": "Your priority paths",
   "metodo.cabala.senderosDiag.fluyen": "Your transitions are flowing",
   "metodo.cabala.senderosDiag.fluyenTexto":
     "No path shows marked resistance. Keep watching yourself: balance is held by practicing it.",
   "metodo.cabala.senderosDiag.los22": "The 22 paths",
 
-  // ── Kabbalah · Final diagnosis ─────────────────────────────────────────
+  // ── Kabbalah · Final assessment ────────────────────────────────────────
   "metodo.cabala.final.intro":
     "Your whole journey comes together here: your dimensions (the Sefirot) and your transitions (the paths). You can download it to keep it and come back to it whenever you want.",
-  "metodo.cabala.final.descargar": "Download my diagnosis",
+  "metodo.cabala.final.descargar": "Download my assessment",
   "metodo.cabala.final.preparando": "Preparing your PDF…",
   "metodo.cabala.final.tusDimensiones": "Your dimensions",
   "metodo.cabala.final.tusSenderos": "Your paths",

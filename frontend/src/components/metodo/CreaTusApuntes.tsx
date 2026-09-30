@@ -18,7 +18,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
-import { Reveal } from "../global/Reveal";
+import { Reveal, Pop } from "../global/Reveal";
 import {
   capitulosElegidos, fotosDeSeleccion, type ApuntesLibro,
 } from "../../utils/pdf/apuntesTipos";
@@ -236,13 +236,17 @@ export function CreaTusApuntes({
         <Box h="1px" w="100%" mb={4} bg={`${txt}66`} />
 
         <Flex direction="column" gap={2.5}>
-          {libro.capitulos.map((c) => {
+          {libro.capitulos.map((c, ci) => {
             const marcado = seleccion.includes(c.key);
             const bloqueado = !!c.bloqueado;
             return (
+              // Un Reveal POR FILA (no un stagger de toda la lista, que es
+              // larga): cada capítulo entra al asomar, con un pequeño escalón.
+              <Reveal key={c.key} inView direction="up" distance={14} duration={0.5}
+                      amount={0.3} delay={(ci % 4) * 0.05} w="100%">
               <Flex
-                key={c.key}
                 as={bloqueado ? "div" : "button"}
+                w="100%"
                 onClick={bloqueado ? undefined : () => alternar(c.key)}
                 align="flex-start"
                 gap={3.5}
@@ -266,7 +270,16 @@ export function CreaTusApuntes({
                       <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z" />
                     </Box>
                   ) : marcado ? (
-                    <Box as="svg" viewBox="0 -960 960 960" w="15px" h="15px" fill={bg}>
+                    // El tick brota al marcar (giro + rebote).
+                    <Box as="svg" viewBox="0 -960 960 960" w="15px" h="15px" fill={bg}
+                         sx={{
+                           "@keyframes tickBrota": {
+                             "0%": { transform: "scale(0) rotate(-50deg)", opacity: 0 },
+                             "65%": { transform: "scale(1.35) rotate(6deg)", opacity: 1 },
+                             "100%": { transform: "scale(1) rotate(0)", opacity: 1 },
+                           },
+                           animation: "tickBrota 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+                         }}>
                       <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                     </Box>
                   ) : null}
@@ -288,6 +301,7 @@ export function CreaTusApuntes({
                   </Text>
                 )}
               </Flex>
+              </Reveal>
             );
           })}
         </Flex>
@@ -356,6 +370,7 @@ export function CreaTusApuntes({
         )}
 
         <Flex gap={3} wrap="wrap">
+          <Pop levanta={nada || trabajando ? 0 : 3} hunde={nada || trabajando ? 1 : 0.96}>
           <Box
             as="button"
             onClick={descargar}
@@ -375,6 +390,8 @@ export function CreaTusApuntes({
           >
             {t("metodo.apuntes.descargar")}
           </Box>
+          </Pop>
+          <Pop levanta={nada || trabajando ? 0 : 3} hunde={nada || trabajando ? 1 : 0.96}>
           <Box
             as="button"
             onClick={previsualizar}
@@ -393,6 +410,7 @@ export function CreaTusApuntes({
           >
             {t("metodo.apuntes.verlo")}
           </Box>
+          </Pop>
         </Flex>
       </Caja>
       </Reveal>

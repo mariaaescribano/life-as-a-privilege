@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -11,7 +12,7 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem, Pop } from "../../components/global/Reveal";
 import { FotoBox, glowHeader } from "../../components/metodo/FotoBox";
 import { focoBlanco } from "../../components/global/foco";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -188,39 +189,52 @@ export default function MetodoTcmConstitucion() {
                       px={{ base: 5, md: 9 }} py={{ base: 6, md: 8 }}
                       style={{ textShadow: INK_SHADOW }}>
 
-                  <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.2em"
-                        textTransform="uppercase" opacity={0.9} textAlign="center">
-                    {t("metodo.tcm.constitucion.resultado")}
-                  </Text>
-
                   <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 6, md: 9 }}>
-                    {/* El pentágono con los cinco porcentajes */}
+                    {/* El pentágono con los cinco porcentajes, SOLO, a la
+                        izquierda (arriba en móvil): equilibra el rectángulo. */}
                     <Box flexShrink={0} w={{ base: "240px", md: "300px" }}>
                       <PentagonoConstitucion puntos={puntos} />
                     </Box>
 
-                    <Flex direction="column" gap={2.5} textAlign={{ base: "center", md: "left" }} flex="1">
+                    {/* Cascada: el pentágono se dibuja y, a su lado, el rótulo,
+                        el nombre, el lema y «y detrás» van entrando en orden.
+                        `key={tuya}`: si al repetir el test cambia el resultado,
+                        la cascada se vuelve a lanzar. */}
+                    <RevealStagger key={tuya} stagger={0.16} delayChildren={0.7}
+                                   display="flex" flexDirection="column" gap={2.5}
+                                   textAlign={{ base: "center", md: "left" }} flex="1">
+                      {/* El «has hecho el test…» abre la columna del resultado,
+                          no el box entero. */}
+                      <RevealItem direction="up" distance={12}>
+                      <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} letterSpacing="0.2em"
+                            textTransform="uppercase" opacity={0.9} mb={1}>
+                        {t("metodo.tcm.constitucion.resultado")}
+                      </Text>
+                      </RevealItem>
+                      <RevealItem direction="up" distance={22} scaleFrom={0.96} blur>
                       <Text color={tcmTxt} fontSize={{ base: "3xl", md: "5xl" }} fontWeight="800"
                             lineHeight="1.1" textTransform="uppercase" letterSpacing="0.04em">
                         {rotuloDe(tuya)}
                       </Text>
+                      </RevealItem>
+                      <RevealItem direction="up" distance={14}>
                       <Text color={tcmTxt} fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic">
                         {CONSTITUCIONES[tuya].lema}
                       </Text>
+                      </RevealItem>
                       {segunda && (
+                        <RevealItem direction="up" distance={12}>
                         <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} opacity={0.9} mt={1}>
                           {t("metodo.tcm.constitucion.segundo")}: {nombres[segunda]} ({CONSTITUCIONES[segunda].arquetipo}).
                         </Text>
+                        </RevealItem>
                       )}
-                      <Box h="1px" w="100%" bg={`${tcmTxt}44`} my={1.5} />
-                      <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.7" opacity={0.92}>
-                        {t("metodo.tcm.constitucion.noEsDiagnostico")}
-                      </Text>
-                    </Flex>
+                    </RevealStagger>
                   </Flex>
 
                   {/* Repetir el test, abajo a la derecha. */}
                   <Flex justify="flex-end">
+                    <Pop levanta={2}>
                     <Box as="button" onClick={() => setRepitiendo(true)}
                          px={{ base: 6, md: 8 }} py={{ base: 2, md: 2.5 }} borderRadius="full"
                          bg="transparent" color={tcmTxt} border={`1px solid ${tcmTxt}88`}
@@ -232,6 +246,7 @@ export default function MetodoTcmConstitucion() {
                          style={{ textShadow: "none" }}>
                       {t("metodo.tcm.constitucion.repetir")}
                     </Box>
+                    </Pop>
                   </Flex>
                 </Flex>
               </Box>
@@ -325,6 +340,38 @@ export default function MetodoTcmConstitucion() {
 // tus cinco porcentajes. Cada vértice lleva el icono de su elemento y su %.
 // (Es el Self-Assessment Profile del libro, dibujado a la manera de la casa.)
 // ─────────────────────────────────────────────────────────────────────────
+const MotionG = motion.g as any;
+const MotionPolygon = motion.polygon as any;
+const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
+
+/** Porcentaje que CUENTA hasta su valor (dentro de un <text> de SVG, donde el
+ *  `Contador` de Reveal —que pinta un <span>— no vale). */
+function PctSvg({ valor, activo, delay, x, y }: {
+  valor: number; activo: boolean; delay: number; x: number; y: number;
+}) {
+  const reduce = useReducedMotion();
+  const [n, setN] = useState(reduce ? valor : 0);
+  useEffect(() => {
+    if (reduce) { setN(valor); return; }
+    if (!activo) return;
+    let raf = 0;
+    const t0 = performance.now() + delay * 1000;
+    const paso = (t: number) => {
+      const p = Math.min(1, Math.max(0, (t - t0) / 1100));
+      setN(Math.round(valor * (1 - Math.pow(1 - p, 3)))); // easeOutCubic
+      if (p < 1) raf = requestAnimationFrame(paso);
+    };
+    raf = requestAnimationFrame(paso);
+    return () => cancelAnimationFrame(raf);
+  }, [valor, activo, delay, reduce]);
+  return (
+    <text x={x} y={y} textAnchor="middle" fill={tcmTxt}
+          fontFamily="'EB Garamond', serif" fontSize="15" fontWeight="700">
+      {n}%
+    </text>
+  );
+}
+
 function PentagonoConstitucion({ puntos }: {
   puntos: { elemento: Elemento; pct: number }[];
 }) {
@@ -340,29 +387,58 @@ function PentagonoConstitucion({ puntos }: {
     return `${v.x},${v.y}`;
   }).join(" ");
 
+  // Coreografía (al asomar el pentágono): los anillos se DIBUJAN de fuera a
+  // dentro, tu perfil BROTA desde el centro con rebote, los cinco iconos
+  // florecen y los porcentajes cuentan. Después, el perfil respira despacio.
+  const reduce = useReducedMotion();
+  const ref = useRef<any>(null);
+  const visto = useInView(ref, { once: true, amount: 0.3 });
+  const enter = reduce || visto;
+
   return (
-    <Box as="svg" viewBox="0 0 300 300" w="100%" h="auto">
+    <Box as="svg" ref={ref} viewBox="0 0 300 300" w="100%" h="auto">
       {/* Contorno (el 100%) y dos anillos de referencia */}
-      {[1, 0.66, 0.33].map((f) => (
-        <polygon key={f} points={ORDEN_ELEMENTOS.map((el) => {
+      {[1, 0.66, 0.33].map((f, k) => (
+        <MotionPolygon key={f} points={ORDEN_ELEMENTOS.map((el) => {
           const v = verticePentagono(idxElemento(el), R_PENT * f);
           return `${v.x},${v.y}`;
         }).join(" ")}
-          fill="none" stroke={`${tcmTxt}${f === 1 ? "88" : "33"}`} strokeWidth={f === 1 ? 1.4 : 1} />
+          fill="none" stroke={`${tcmTxt}${f === 1 ? "88" : "33"}`} strokeWidth={f === 1 ? 1.4 : 1}
+          strokeLinejoin="round"
+          initial={reduce ? false : { pathLength: 0, opacity: 0 }}
+          animate={reduce ? {} : (enter ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 })}
+          transition={{ duration: 0.9, delay: 0.1 + k * 0.14, ease: "easeInOut" }} />
       ))}
 
-      {/* Tu perfil */}
-      <polygon points={radar} fill={`${tcmTxt}3a`} stroke={tcmTxt} strokeWidth={2}
-               strokeLinejoin="round" />
+      {/* Tu perfil: brota desde el centro y luego respira */}
+      <MotionG
+        style={{ transformBox: "view-box", transformOrigin: "150px 150px" }}
+        initial={reduce ? false : { opacity: 0, scale: 0.05 }}
+        animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.05 })}
+        transition={{ delay: 0.75, duration: 0.9, ease: EASE_POP }}>
+        <MotionG
+          style={{ transformBox: "view-box", transformOrigin: "150px 150px" }}
+          animate={reduce || !enter ? {} : { scale: [1, 1.03, 1] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2.2 }}>
+          <polygon points={radar} fill={`${tcmTxt}3a`} stroke={tcmTxt} strokeWidth={2}
+                   strokeLinejoin="round"
+                   style={{ filter: `drop-shadow(0 0 6px ${tcmTxt}66)` }} />
+        </MotionG>
+      </MotionG>
 
       {/* Los cinco vértices: icono + porcentaje */}
-      {ORDEN_ELEMENTOS.map((el) => {
+      {ORDEN_ELEMENTOS.map((el, i) => {
         const v = verticePentagono(idxElemento(el), R_PENT);
         const pct = Math.round((porElemento.get(el) ?? 0) * 100);
         // La etiqueta, un poco más afuera que el icono, siguiendo el radio.
         const fuera = verticePentagono(idxElemento(el), R_PENT + 34);
+        const delay = 0.5 + i * 0.12;
         return (
-          <g key={el}>
+          <MotionG key={el}
+            style={{ transformBox: "view-box", transformOrigin: `${v.x}px ${v.y}px` }}
+            initial={reduce ? false : { opacity: 0, scale: 0.3 }}
+            animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.3 })}
+            transition={{ delay, duration: 0.55, ease: EASE_POP }}>
             <clipPath id={`cons-clip-${el}`}>
               <circle cx={v.x} cy={v.y} r={FOTO_R} />
             </clipPath>
@@ -370,11 +446,8 @@ function PentagonoConstitucion({ puntos }: {
             <image href={ICONO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
                    width={FOTO_R * 2} height={FOTO_R * 2}
                    clipPath={`url(#cons-clip-${el})`} preserveAspectRatio="xMidYMid slice" />
-            <text x={fuera.x} y={fuera.y + 4} textAnchor="middle" fill={tcmTxt}
-                  fontFamily="'EB Garamond', serif" fontSize="15" fontWeight="700">
-              {pct}%
-            </text>
-          </g>
+            <PctSvg valor={pct} activo={enter} delay={delay + 0.3} x={fuera.x} y={fuera.y + 4} />
+          </MotionG>
         );
       })}
     </Box>

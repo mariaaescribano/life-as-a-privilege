@@ -14,7 +14,7 @@ import { ElementoComicModal } from "../../components/metodo/ElementoComicModal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Pop } from "../../components/global/Reveal";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { TcmLoader } from "../../components/metodo/comicLoaders";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
@@ -50,6 +50,8 @@ const INTRO_TEXT_SHADOW = "0 2px 5px rgba(0,0,0,1), 0 0 3px rgba(0,0,0,0.98), 0 
 // Entrada épica de la estrella: los 5 elementos «florecen» uno a uno desde su
 // sitio, con un leve rebote (mismo espíritu que las 12 casas de Astrología).
 const MotionG = motion.g as any;
+const MotionCircle = motion.circle as any;
+const MotionPolygon = motion.polygon as any;
 const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
 const ESTRELLA_APPEAR_BASE = 0.45; // arranca tras asentarse el box
 const ESTRELLA_APPEAR_STEP = 0.12; // separación entre un elemento y el siguiente
@@ -194,6 +196,7 @@ export default function MetodoTcmElementos() {
               aquí. Estilo de botón de la casa: imagen de la disciplina + velo y
               letra en el color de TCM. */}
           <Reveal direction="down" distance={12} delay={0.08} duration={0.6} display="flex" justifyContent="center">
+            <Pop levanta={2}>
             <Box
               as="button"
               onClick={intro.openNow}
@@ -232,6 +235,7 @@ export default function MetodoTcmElementos() {
               </Box>
               <Box as="span" position="relative" zIndex={1}>{t("metodo.tcm.elementos.queSon")}</Box>
             </Box>
+            </Pop>
           </Reveal>
 
           {/* La estrella interactiva */}
@@ -250,10 +254,23 @@ export default function MetodoTcmElementos() {
                     );
                   })}
                 </defs>
-                {/* pentágono de referencia */}
-                <polygon
+                {/* Anillo de puntos que gira MUY despacio detrás de la estrella:
+                    vida de fondo, sin robar atención a los elementos. */}
+                {!reduce && (
+                  <MotionCircle cx={CX} cy={CY} r={R + 26} fill="none" stroke={`${tcmTxt}55`}
+                    strokeWidth={1.4} strokeDasharray="1.5 9" strokeLinecap="round"
+                    style={{ transformBox: "view-box", transformOrigin: `${CX}px ${CY}px` }}
+                    initial={{ opacity: 0 }} animate={{ opacity: 1, rotate: 360 }}
+                    transition={{ opacity: { duration: 1.2, delay: 0.4 },
+                                  rotate: { duration: 120, repeat: Infinity, ease: "linear" } }} />
+                )}
+                {/* pentágono de referencia: se DIBUJA solo, trazo a trazo */}
+                <MotionPolygon
                   points={ORDEN_ELEMENTOS.map((_, i) => { const v = vertice(i, R); return `${v.x},${v.y}`; }).join(" ")}
-                  fill="none" stroke={`${tcmTxt}33`} strokeWidth={1}
+                  fill="none" stroke={`${tcmTxt}55`} strokeWidth={1.2} strokeLinejoin="round"
+                  initial={reduce ? false : { pathLength: 0, opacity: 0 }}
+                  animate={reduce ? {} : { pathLength: 1, opacity: 1 }}
+                  transition={{ duration: 1.5, delay: 0.35, ease: "easeInOut" }}
                 />
                 {estados.map(({ el, desbloqueado, leido, disponible }, i) => {
                   const v = vertice(i, R);
@@ -270,8 +287,25 @@ export default function MetodoTcmElementos() {
                                transformBox: "view-box", transformOrigin: `${v.x}px ${v.y}px` }}
                        initial={reduce ? false : { opacity: 0, scale: 0.3 }}
                        animate={reduce ? {} : { opacity: 1, scale: 1 }}
+                       whileHover={reduce || !activo ? undefined : { scale: 1.14 }}
+                       whileTap={reduce || !activo ? undefined : { scale: 0.94 }}
                        transition={{ delay: ESTRELLA_APPEAR_BASE + i * ESTRELLA_APPEAR_STEP, duration: 0.6, ease: EASE_POP }}
                        onClick={() => abrir(el, desbloqueado, disponible)}>
+                      {/* Ondas del elemento al que TOCA ir (desbloqueado y aún sin
+                          leer): dos anillos que se abren y se desvanecen, a
+                          contratiempo, para que el ojo sepa por dónde seguir. */}
+                      {!reduce && activo && !leido && [0, 1].map((k) => (
+                        <MotionCircle key={k} cx={v.x} cy={v.y} r={FOTO_R + 2} fill="none"
+                          stroke={color} strokeWidth={2} pointerEvents="none"
+                          initial={{ r: FOTO_R + 2, opacity: 0 }}
+                          animate={{ r: [FOTO_R + 2, FOTO_R + 20], opacity: [0.75, 0] }}
+                          transition={{ duration: 2.4, repeat: Infinity, delay: 1.6 + k * 1.2, ease: "easeOut" }} />
+                      ))}
+                      {/* Flotación propia de cada elemento (fase distinta): el
+                          conjunto respira sin moverse en bloque. */}
+                      <MotionG
+                        animate={reduce ? {} : { y: [0, -3.5, 0] }}
+                        transition={{ duration: 4.4 + i * 0.55, repeat: Infinity, ease: "easeInOut", delay: 1.4 + i * 0.3 }}>
                       {/* base + icono del elemento */}
                       <circle cx={v.x} cy={v.y} r={FOTO_R + 2} fill={tcmBg} opacity={0.55} />
                       <image href={ICONO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
@@ -304,6 +338,7 @@ export default function MetodoTcmElementos() {
                             style={{ textShadow: "0 1px 4px rgba(58,10,10,0.95)" }}>
                         {nombres[el]}
                       </text>
+                      </MotionG>
                     </MotionG>
                   );
                 })}

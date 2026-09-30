@@ -23,7 +23,9 @@ import {
 function SeccionBox({ children, ...rest }: React.ComponentProps<typeof Box>) {
   return (
     <Box position="relative" overflow="hidden" w="100%" borderRadius="2xl"
-         boxShadow="0 6px 24px rgba(0,0,0,0.22), 0 0 16px rgba(255,255,255,0.1)" {...rest}>
+         // Glow claro (blanco + menta), nunca sombra negra: es el mismo halo de
+         // los paneles del resto de la disciplina.
+         boxShadow="0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09)" {...rest}>
       <DisciplinaBgLayer nom={nutricionNom} borderRadius="2xl" overlay={`${nutricionBg}66`} />
       <Box position="relative" zIndex={1}>{children}</Box>
     </Box>
@@ -39,7 +41,7 @@ function VolverNutri({ onClick }: { onClick: () => void }) {
          px={{ base: 4, md: 5 }} py={{ base: 2, md: 2.5 }} borderRadius="full"
          bg={`${nutricionBg}e6`} border={`1px solid ${nutricionTxt}55`} color={nutricionTxt}
          fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "sm", md: "md" }}
-         letterSpacing="0.03em" cursor="pointer" boxShadow="0 2px 12px rgba(0,0,0,0.2)"
+         letterSpacing="0.03em" cursor="pointer" boxShadow="0 0 12px rgba(255,255,255,0.18)"
          transition="all 0.18s" _hover={{ bg: nutricionBg, transform: "translateY(-1px)" }}>
       <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
            w={{ base: "16px", md: "18px" }} h={{ base: "16px", md: "18px" }} fill="currentColor" flexShrink={0}>
@@ -100,8 +102,8 @@ function MoleculaCard({ m, onClick }: { m: Molecula; onClick: () => void }) {
     <Box as="button" onClick={onClick} textAlign="left" w="100%" borderRadius="xl"
          bg={`${nutricionBg}e6`}
          px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}
-         boxShadow="0 2px 10px rgba(0,0,0,0.14)" cursor="pointer" transition="all 0.18s"
-         _hover={{ transform: "translateY(-2px)", boxShadow: "0 6px 18px rgba(0,0,0,0.2)" }}>
+         boxShadow="0 0 10px rgba(255,255,255,0.16)" cursor="pointer" transition="all 0.18s"
+         _hover={{ transform: "translateY(-2px)", boxShadow: "0 0 16px rgba(255,255,255,0.26)" }}>
       <Flex align="center" justify="space-between" gap={3}>
         <Text color={nutricionTxt} fontWeight={700} fontSize={{ base: "sm", md: "md" }} lineHeight="1.2">
           {m.nombre}
@@ -228,7 +230,7 @@ export default function MetodoNutricionAlimento() {
             <SeccionBox>
               <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 5, md: 8 }} p={{ base: 5, md: 8 }}>
                 <Flex w={{ base: "120px", md: "180px" }} flexShrink={0} aspectRatio={1} borderRadius="2xl"
-                      align="center" justify="center" bg={`${nutricionTxt}12`} boxShadow="0 4px 18px rgba(0,0,0,0.2)"
+                      align="center" justify="center" bg={`${nutricionTxt}12`} boxShadow="0 0 14px rgba(255,255,255,0.18)"
                       fontSize={{ base: "68px", md: "104px" }} lineHeight="1">
                   <span role="img" aria-label={a.nombre}>{a.emoji ?? a.nombre.charAt(0)}</span>
                 </Flex>

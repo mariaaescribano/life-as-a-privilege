@@ -10,7 +10,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal } from "../../components/global/Reveal";
+import { Contador, Reveal } from "../../components/global/Reveal";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { glowHeader } from "../../components/metodo/FotoBox";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -506,8 +506,10 @@ export default function MetodoNutricionDia() {
                           sx={{ backdropFilter: "blur(3px)", WebkitBackdropFilter: "blur(3px)" }}>
                       <Flex align="baseline" gap={2} wrap="wrap">
                         <Text color={`${nutricionTxt}cc`} fontSize="sm">{t("metodo.dia.tuDiaSuma")}</Text>
+                        {/* El total CUENTA hasta su valor cada vez que se coloca
+                            o quita un alimento (Contador), en vez de dar el salto. */}
                         <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1">
-                          {Math.round(totalDia)}
+                          <Contador valor={Math.round(totalDia)} duracion={0.7} enPantalla={false} />
                         </Text>
                         <Text color={`${nutricionTxt}aa`} fontSize="sm">de {kcalObjetivo} kcal</Text>
                         <Text color={nutricionTxt} fontSize="xs" fontStyle="italic">
@@ -545,7 +547,10 @@ export default function MetodoNutricionDia() {
                               <Text color={`${nutricionTxt}aa`} fontSize="xs" fontWeight={600}>{c.pct}%</Text>
                             </Flex>
                             <Flex align="baseline" gap={1.5} mt={0.5}>
-                              <Text color={estado} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.1">{kcal}</Text>
+                              {/* También cuenta al soltar un alimento en ESTA comida. */}
+                              <Text color={estado} fontSize={{ base: "2xl", md: "3xl" }} fontWeight={700} lineHeight="1.1">
+                                <Contador valor={kcal} duracion={0.6} enPantalla={false} />
+                              </Text>
                               <Text color={`${nutricionTxt}99`} fontSize="sm">/ {meta} kcal</Text>
                             </Flex>
                             <Box h="6px" borderRadius="full" bg={`${nutricionTxt}1a`} overflow="hidden" mt={2}>

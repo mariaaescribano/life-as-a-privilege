@@ -140,7 +140,7 @@ export const recorridoContenidoEn: Record<DisciplinaClave, DisciplinaContenido> 
       ],
     },
     modalDesc:
-      "Traditional Chinese Medicine reads the body through five elements (wood, fire, earth, metal, water) and the organs that govern them. This is not a poetic metaphor: it is a diagnostic system with thousands of years of evidence behind it. Here we identify which element you have in excess or in deficiency, and how that shows up in what is happening to you.",
+      "Traditional Chinese Medicine reads the body through five elements (wood, fire, earth, metal, water) and the organs that govern them. This is not a poetic metaphor: it is an assessment system with thousands of years of evidence behind it. Here we identify which element you have in excess or in deficiency, and how that shows up in what is happening to you.",
     contenido: [
       {
         titulo: "The Five Elements",

@@ -81,9 +81,9 @@ export const espacio = {
   "espacio.tcm.rehacer": "Rehacer test",
   "espacio.tcm.evaluacion": "Evaluación personalizada",
   "espacio.tcm.evaluacion.placeholder": "¿Te gustaría contarme algo por adelantado?",
-  "espacio.tcm.diagnostico": "Diagnóstico completo",
+  "espacio.tcm.diagnostico": "Valoración completa",
   "espacio.tcm.diagnostico.sub":
-    "Déjame tus datos y me pondré en contacto contigo para ofrecerte un diagnóstico personalizado de Medicina China.",
+    "Déjame tus datos y me pondré en contacto contigo para ofrecerte una valoración personalizada de Medicina China.",
 
   // Los tres test: el rótulo de la tarjeta y el título de su sección.
   "espacio.tcm.t1.tarjeta": "Conoce tu constitución",

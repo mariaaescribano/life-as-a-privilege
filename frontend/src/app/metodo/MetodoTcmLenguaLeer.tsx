@@ -171,7 +171,7 @@ export default function MetodoTcmLenguaLeer() {
           {lenguaCompleta(data.observarte) && <LecturaLengua observarte={data.observarte} />}
 
           <Reveal inView direction="up" distance={14} duration={0.6} amount={0.5} display="flex" justifyContent="center">
-          <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center" maxW="640px"
+          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center" maxW="680px"
                 lineHeight="1.6">
             {t("metodo.tcm.leer.aviso")}
           </Text>
@@ -238,8 +238,28 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
          boxShadow={seleccionada ? `0 0 18px ${tcmTxt}88` : "none"}
          opacity={enter ? 1 : 0}
          transform={enter ? "translateY(0) scale(1)" : "translateY(16px) scale(0.96)"}
-         _hover={{ borderColor: seleccionada ? tcmTxt : `${tcmTxt}88`, bg: seleccionada ? `${tcmTxt}33` : "rgba(255,255,255,0.08)" }}
-         sx={{ backdropFilter: "blur(6px)", transitionDelay: `${index * 0.05}s` }}
+         _hover={{
+           borderColor: seleccionada ? tcmTxt : `${tcmTxt}88`,
+           bg: seleccionada ? `${tcmTxt}33` : "rgba(255,255,255,0.08)",
+           // Al pasar el puntero la tarjeta se levanta un poco (solo ya entrada).
+           transform: enter ? "translateY(-4px) scale(1)" : undefined,
+         }}
+         sx={{
+           backdropFilter: "blur(6px)",
+           transitionDelay: `${index * 0.05}s`,
+           // La foto hace un zoom lento dentro de su marco (invita a pulsar).
+           "& img": { transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1)" },
+           "&:hover img": { transform: "scale(1.07)" },
+           // Al ELEGIRLA, rebota: la respuesta se nota.
+           ...(seleccionada ? {
+             "@keyframes seleccionPop": {
+               "0%": { transform: "scale(0.96)" },
+               "60%": { transform: "scale(1.045)" },
+               "100%": { transform: "scale(1)" },
+             },
+             animation: "seleccionPop 0.45s cubic-bezier(0.34,1.56,0.64,1)",
+           } : {}),
+         }}
          transition="opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.15s, background 0.15s">
       <LenguaImg src={opcion.src} alt={opcion.nombre} />
       {/* El nombre sube de tamaño con la tarjeta: en 246px de ancho, el `xs` de
@@ -257,7 +277,7 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
 // ── Imagen de lengua con marco cuadrado (funciona aunque falte el PNG) ───────
 function LenguaImg({ src, alt }: { src: string; alt: string }) {
   return (
-    <Box w="100%" sx={{ aspectRatio: "1 / 1" }} bg="rgba(255,255,255,0.04)"
+    <Box w="100%" sx={{ aspectRatio: "1 / 1" }} bg="rgba(255,255,255,0.04)" overflow="hidden"
          display="flex" alignItems="center" justifyContent="center">
       <img src={encodeURI(src)} alt={alt}
            style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -386,8 +406,8 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
       {/* Nota final */}
       {!sano && (
         <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
-          <Text color="rgba(255,255,255,0.7)" fontSize="xs" fontStyle="italic" lineHeight="1.6" textAlign="center"
-                maxW="640px" style={{ textShadow: INK_SHADOW }}>
+          <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" textAlign="center"
+                maxW="680px">
             {t("metodo.tcm.leer.vuelve")}
           </Text>
         </Reveal>

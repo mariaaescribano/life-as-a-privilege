@@ -10,7 +10,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { PagoCulturaModal } from "../../components/metodo/PagoCulturaModal";
-import { Reveal } from "../../components/global/Reveal";
+import { Breathe, Reveal } from "../../components/global/Reveal";
 import { culturaBg, culturaNom, culturaTxt, CulturaIcon } from "../../GlobalVariables";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
@@ -96,6 +96,9 @@ export default function MetodoCultura() {
 
           {/* ── Introducción ── (con `blur`: la caja ENFOCA al entrar, no solo sube) */}
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} blur w="100%">
+            {/* El box respira muy despacio (Breathe): vida continua sin moverse
+                de sitio, como los paneles grandes de /elMetodo. */}
+            <Breathe scale={0.008} duration={7} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
               <DisciplinaBgLayer nom={culturaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
@@ -127,6 +130,7 @@ export default function MetodoCultura() {
                 </Text>
               </Box>
             </Box>
+            </Breathe>
           </Reveal>
         </Flex>
       </Flex>

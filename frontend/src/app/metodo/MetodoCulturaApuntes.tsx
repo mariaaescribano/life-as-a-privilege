@@ -150,6 +150,9 @@ export default function MetodoCulturaApuntes() {
                         bg={culturaBg}
                         aspect={1}
                         onClick={() => navigate(`/metodo/cultura/apuntes/${h.key}`)}
+                        // Tarjeta VIVA, como en Historias: zoom lento de la foto,
+                        // barrido de brillo y el título desplazándose al pasar el puntero.
+                        vivo
                       />
                       {/* Cuánto trae dentro, para decidir sin entrar. */}
                       <Text color="white" fontSize="sm" textAlign="center" mt={2.5} opacity={0.9}>

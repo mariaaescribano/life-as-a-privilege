@@ -1009,14 +1009,14 @@ export function ComicViewer({
             )}
 
             {/* Velo negro que pide el cómic (`veloOscuro`), sobre el velo de
-                color. En las páginas de test (sin foto) el texto ocupa todo el
-                ancho del box y cae sobre la parte más clara de la pintura, así
-                que ahí va un punto más cargado. */}
+                color. Las páginas de test (sin foto) llevaban un extra de +0.12
+                y la pintura quedaba demasiado oscura: ahora el velo es el MISMO
+                en todas las viñetas. */}
             {!!veloOscuro && (
               <Box
                 position="absolute"
                 inset="0"
-                bg={`rgba(0,0,0,${Math.min(hideFoto ? veloOscuro + 0.12 : veloOscuro, 1)})`}
+                bg={`rgba(0,0,0,${Math.min(veloOscuro, 1)})`}
               />
             )}
           </Box>

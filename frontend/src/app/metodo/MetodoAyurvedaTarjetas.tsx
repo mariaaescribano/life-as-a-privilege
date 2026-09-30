@@ -177,13 +177,15 @@ export default function MetodoAyurvedaTarjetas() {
                   borderRadius="2xl"
                   border={destacada ? `2px solid ${cfg.color}` : `1px solid ${ayurvedaTxt}26`}
                   opacity={destacada ? 1 : 0.78}
+                  // Solo GLOW (el halo del color del dosha + un blanco suave),
+                  // sin la sombra negra de remate que ensuciaba las tarjetas.
                   boxShadow={destacada
-                    ? `0 0 0 1px ${cfg.color}55, 0 0 22px ${cfg.color}88, 0 0 50px ${cfg.color}44, 0 8px 30px rgba(0,0,0,0.3)`
-                    : "0 4px 18px rgba(0,0,0,0.22)"}
+                    ? `0 0 0 1px ${cfg.color}55, 0 0 22px ${cfg.color}88, 0 0 50px ${cfg.color}44`
+                    : "0 0 14px rgba(255,255,255,0.14), 0 0 30px rgba(255,255,255,0.07)"}
                   transition="all 0.25s ease"
                   _hover={{ transform: "translateY(-4px)", opacity: 1, boxShadow: destacada
-                    ? `0 0 0 1px ${cfg.color}66, 0 0 28px ${cfg.color}aa, 0 0 60px ${cfg.color}55, 0 12px 36px rgba(0,0,0,0.34)`
-                    : `0 0 18px ${cfg.color}55, 0 8px 26px rgba(0,0,0,0.28)` }}
+                    ? `0 0 0 1px ${cfg.color}66, 0 0 28px ${cfg.color}aa, 0 0 60px ${cfg.color}55`
+                    : `0 0 18px ${cfg.color}55, 0 0 36px ${cfg.color}2b` }}
                 >
                   <DisciplinaBgLayer nom={ayurvedaNom} borderRadius="2xl" imageSrc={cfg.bgImg} overlay={`${ayurvedaBg}${destacada ? "1a" : "33"}`} />
 

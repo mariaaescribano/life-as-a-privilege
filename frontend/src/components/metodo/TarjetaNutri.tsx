@@ -1,5 +1,5 @@
 import React from "react";
-import { FotoBox } from "./FotoBox";
+import { FotoBox, glowHeader } from "./FotoBox";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
 
 // Tarjeta con foto de Nutrición (moléculas/tipos de un grupo, mitos…). Usa el box
@@ -29,6 +29,11 @@ export function TarjetaNutri({
       visto={visto}
       emoji={emoji}
       onClick={onClick}
+      // Glow CLARO de la cabecera, no el glowSuave por defecto: el acento de
+      // Nutrición (#2b362a) es casi negro y con él el "glow" salía como una
+      // sombra oscura alrededor de cada tarjeta. El halo blanco+menta es el
+      // mismo de los paneles y la Biblioteca de la disciplina.
+      glow={glowHeader(nutricionTxt)}
       vivo
     />
   );

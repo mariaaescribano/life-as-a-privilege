@@ -357,7 +357,7 @@ export const metodo = {
     "Estoy leyendo tu carta. Cuando esté lista se te hará saber a través de un email y podrás acceder a tu lectura especializada.",
 
   // ── Astrología · la llamada ────────────────────────────────────────────
-  "metodo.astro.reservaLlamada": "Agenda tu llamada de astrología",
+  "metodo.astro.reservaLlamada": "Agenda tu llamada de Astrología",
 
   // ── Astrología · ajustar a mano un cuerpo de la carta ──────────────────
   // Quirón, Lilith y los Nodos no siempre los da la efemérides: este popup
@@ -609,7 +609,7 @@ export const metodo = {
   "metodo.tcm.el.equilibrio": "En equilibrio",
   "metodo.tcm.el.exceso": "En exceso",
   "metodo.tcm.el.deficiencia": "En deficiencia",
-  /** Los tres veredictos del diagnóstico (carga contra recursos). «En
+  /** Los tres veredictos de la valoración (carga contra recursos). «En
    *  equilibrio» comparte rótulo con la sección de arriba. */
   "metodo.tcm.el.enCarga": "En carga",
   "metodo.tcm.el.teSostiene": "Te sostiene",
@@ -635,7 +635,7 @@ export const metodo = {
 
   // ── Medicina China · nombres de paso (los botones de los cómics) ────────
   "metodo.tcm.paso.elementos": "Los 5 elementos",
-  "metodo.tcm.paso.diagnostico": "Diagnóstico final",
+  "metodo.tcm.paso.diagnostico": "Valoración final",
   "metodo.tcm.paso.taoismo": "Taoísmo",
   "metodo.tcm.paso.cocina": "Tu cocina",
   "metodo.tcm.paso.qigong": "Qigong",
@@ -656,7 +656,7 @@ export const metodo = {
     "Los cuestionarios de cada elemento miden tu estado actual. Tu constitución es el elemento de fondo, el que casi no cambia con los años.",
   "metodo.tcm.constitucion.repetir": "Repetir el test",
   "metodo.tcm.constitucion.bloqueo":
-    "Haz el test para seguir: los ciclos y el diagnóstico se leen sabiendo ya cuál es tu constitución.",
+    "Haz el test para seguir: los ciclos y la valoración se leen sabiendo ya cuál es tu constitución.",
   "metodo.tcm.constitucion.hecho": "Test completado",
   "metodo.tcm.constitucion.hechoTexto":
     "Tu constitución ya está calculada: la tienes arriba, con los cinco porcentajes. Puedes repetir el test cuando quieras.",
@@ -681,8 +681,6 @@ export const metodo = {
   "metodo.tcm.constitucion.cuerpo": "Por dónde avisa su cuerpo",
   "metodo.tcm.constitucion.enSuLuz": "En su luz",
   "metodo.tcm.constitucion.enSuSombra": "En su sombra",
-  "metodo.tcm.constitucion.noEsDiagnostico":
-    "Esto es quién eres, no lo que te pasa hoy. Lo de hoy sale en el Diagnóstico final: si coinciden, tu propio elemento se te está haciendo cuesta arriba; si no coinciden, lo que te pesa viene de otro sitio.",
   "metodo.tcm.constitucion.aviso":
     "Ningún elemento es mejor que otro, y nadie es un elemento puro: eres los cinco, con uno que suena más fuerte.",
   /** Paso 5 (aprender a leer una lengua). El 6, donde se lee la propia, es
@@ -698,7 +696,7 @@ export const metodo = {
   "metodo.tcm.elementos.testsPendientes": "Rellena los tests de los cinco elementos para continuar",
 
   // ── Medicina China · Los ciclos (paso 3) ───────────────────────────────
-  // Los dos ciclos salen también en el Diagnóstico final, con los mismos
+  // Los dos ciclos salen también en la Valoración final, con los mismos
   // rótulos: de ahí que no vivan en la página.
   "metodo.tcm.ciclos.titulo": "Los Ciclos",
   "metodo.tcm.ciclos.intro":
@@ -713,7 +711,7 @@ export const metodo = {
   "metodo.tcm.ciclos.genera": "genera",
   "metodo.tcm.ciclos.controla": "controla a",
 
-  // ── Medicina China · Diagnóstico final (paso 4) ─────────────────────────
+  // ── Medicina China · Valoración final (paso 4) ──────────────────────────
   "metodo.tcm.diag.cita":
     "«Antes de sanar a alguien, pregúntale si está dispuesto a renunciar a las cosas que lo enferman.»",
   "metodo.tcm.diag.citaAutor": "— Hipócrates",
@@ -728,7 +726,7 @@ export const metodo = {
   "metodo.tcm.diag.tipoPrimario": "Principal",
   "metodo.tcm.diag.tipoSecundario": "Secundario",
   "metodo.tcm.diag.tiposTexto":
-    "Estos son los dos elementos por los que hoy pasa tu forma de adaptarte: los que más se cargan cuando la Vida aprieta.",
+    "Cuando la Vida te exige, tu cuerpo y tu ánimo responden sobre todo a través de estos dos elementos: son los que hoy soportan más carga.",
   /** Box de la constitución: quién eres de fondo, cruzado con la carga de hoy.
    *  {el}, {fondo} y {hoy} se sustituyen por el nombre del elemento. */
   "metodo.tcm.diag.constitucion": "Y de fondo, tu constitución",
@@ -747,10 +745,10 @@ export const metodo = {
   "metodo.tcm.diag.sinDatos": "sin datos",
   "metodo.tcm.diag.sinDatosSuficientes": "sin datos suficientes",
 
-  // ── Medicina China · El diagnóstico de la lengua (paso 5) ───────────────
+  // ── Medicina China · La lectura de la lengua (paso 5) ───────────────────
   // Las variantes de lengua (el color, la forma, la saburra…) NO van aquí:
   // son contenido y viven en tcmLenguaContenido(.en).ts.
-  "metodo.tcm.lengua.titulo": "El diagnóstico de la lengua",
+  "metodo.tcm.lengua.titulo": "La lectura de la lengua",
   "metodo.tcm.lengua.intro":
     "La lengua es el espejo de las vísceras.",
   "metodo.tcm.lengua.comoMirar": "Cómo mirar tu lengua",
@@ -771,7 +769,7 @@ export const metodo = {
   /** Marca de la variante de referencia (la lengua sana de cada capa). */
   "metodo.tcm.lengua.sana": "· sana",
   "metodo.tcm.lengua.aviso":
-    "Material con fin formativo. El diagnóstico por la lengua es una herramienta propia de la Medicina Tradicional China; no constituye un diagnóstico médico ni sustituye la valoración de un profesional sanitario cualificado.",
+    "Material con fin formativo. La lectura de la lengua es una herramienta propia de la Medicina Tradicional China; no constituye un diagnóstico médico ni sustituye la valoración de un profesional sanitario cualificado.",
 
   // ── Medicina China · Lee tu lengua (paso 6) ─────────────────────────────
   "metodo.tcm.leer.intro":
@@ -794,7 +792,7 @@ export const metodo = {
 
   // ── Medicina China · Crea tus apuntes (paso 11) ─────────────────────────
   "metodo.tcm.apuntes.intro1":
-    "Has recorrido la Medicina China entera. Ahora decide qué te llevas: marca lo que quieras —tu diagnóstico, la lectura de tu lengua, las cocinas, las leyes del Tao, las prácticas— y te lo montamos en un cuaderno para leer sin pantalla.",
+    "Has recorrido la Medicina China entera. Ahora decide qué te llevas: marca lo que quieras —tu valoración, la lectura de tu lengua, las cocinas, las leyes del Tao, las prácticas— y te lo montamos en un cuaderno para leer sin pantalla.",
   "metodo.tcm.apuntes.intro2":
     "Se prepara aquí mismo, en tu navegador. Puedes volver y montarlo otra vez cuantas veces quieras.",
 
@@ -976,12 +974,12 @@ export const metodo = {
   "metodo.cabala.paso.intro": "Introducción",
   "metodo.cabala.paso.arbol": "El Árbol de la Vida",
   "metodo.cabala.paso.arbolCorto": "El Árbol",
-  "metodo.cabala.paso.diagnostico": "Diagnóstico",
+  "metodo.cabala.paso.diagnostico": "Valoración",
   "metodo.cabala.paso.senderos": "Los Senderos",
   "metodo.cabala.paso.senderos22": "Los 22 Senderos",
-  "metodo.cabala.paso.senderosDiag": "Diagnóstico de los Senderos",
+  "metodo.cabala.paso.senderosDiag": "Valoración de los Senderos",
   "metodo.cabala.paso.senderosDiagCorto": "Senderos",
-  "metodo.cabala.paso.final": "Diagnóstico final",
+  "metodo.cabala.paso.final": "Valoración final",
   "metodo.cabala.paso.cursos": "Cursos",
   "metodo.cabala.paso.dias": "10 días con tus dimensiones",
   "metodo.cabala.paso.diasCorto": "10 días",
@@ -1007,11 +1005,11 @@ export const metodo = {
   "metodo.cabala.sefira.faltaAutoeval": "la autoevaluación",
   "metodo.cabala.sefira.faltaEscala": "la escala de equilibrio",
   "metodo.cabala.sefira.faltaOtra":
-    "Para ver tu Diagnóstico falta el contenido de alguna otra sefirá.",
+    "Para ver tu Valoración falta el contenido de alguna otra sefirá.",
   "metodo.cabala.sefira.completaDimension":
     "Completa todo lo que se pide en esta dimensión para continuar",
   "metodo.cabala.sefira.rellenaTodas":
-    "Rellena el contenido de todas las sefirot para ver tu Diagnóstico",
+    "Rellena el contenido de todas las sefirot para ver tu Valoración",
 
   // ── Cábala · Los 22 Senderos (el Árbol en modo senderos) ───────────────
   "metodo.cabala.senderos.intro":
@@ -1037,30 +1035,30 @@ export const metodo = {
   "metodo.cabala.sendero.observaSi": "Durante esta semana observa si…",
   "metodo.cabala.sendero.umbral": "Has cruzado este umbral cuando…",
   "metodo.cabala.sendero.siguiente": "Siguiente sendero",
-  "metodo.cabala.sendero.verDiagnostico": "Ver diagnóstico",
+  "metodo.cabala.sendero.verDiagnostico": "Ver valoración",
   "metodo.cabala.sendero.respuestaN": "Respuesta pregunta {n} (1 a 5)",
   "metodo.cabala.sendero.completaEste":
     "Completa el test de este sendero para pasar a la siguiente letra",
   "metodo.cabala.sendero.completaLos22":
-    "Completa el test de los 22 senderos para ver tu Diagnóstico",
+    "Completa el test de los 22 senderos para ver tu Valoración",
 
-  // ── Cábala · Diagnóstico de los Senderos ───────────────────────────────
+  // ── Cábala · Valoración de los Senderos ────────────────────────────────
   "metodo.cabala.senderosDiag.intro":
     "Cada sendero es una transición entre dos capacidades. Aquí se reúne el resultado de tus 22 tests para mostrar qué caminos fluyen y cuáles piden más trabajo.",
   "metodo.cabala.senderosDiag.completados": "{n}/{total} senderos completados",
   "metodo.cabala.senderosDiag.faltan": "Aún faltan senderos por recorrer",
   "metodo.cabala.senderosDiag.faltanTexto":
-    "Completa el test de los 22 senderos para recibir tu diagnóstico final. Cada respuesta se guarda automáticamente; puedes continuar cuando quieras.",
+    "Completa el test de los 22 senderos para recibir tu valoración final. Cada respuesta se guarda automáticamente; puedes continuar cuando quieras.",
   "metodo.cabala.senderosDiag.prioritarios": "Tus senderos prioritarios",
   "metodo.cabala.senderosDiag.fluyen": "Tus transiciones fluyen",
   "metodo.cabala.senderosDiag.fluyenTexto":
     "No aparece ningún sendero con una resistencia marcada. Sigue observándote: el equilibrio se sostiene practicándolo.",
   "metodo.cabala.senderosDiag.los22": "Los 22 senderos",
 
-  // ── Cábala · Diagnóstico final ─────────────────────────────────────────
+  // ── Cábala · Valoración final ──────────────────────────────────────────
   "metodo.cabala.final.intro":
     "Aquí se reúne todo tu recorrido: tus dimensiones (las sefirot) y tus transiciones (los senderos). Puedes descargarlo para guardarlo y volver a él cuando quieras.",
-  "metodo.cabala.final.descargar": "Descargar mi diagnóstico",
+  "metodo.cabala.final.descargar": "Descargar mi valoración",
   "metodo.cabala.final.preparando": "Preparando tu PDF…",
   "metodo.cabala.final.tusDimensiones": "Tus dimensiones",
   "metodo.cabala.final.tusSenderos": "Tus senderos",
@@ -1083,10 +1081,10 @@ export const metodo = {
   "metodo.psico.miLinea": "Mi línea de tiempo",
   "metodo.psico.antesDeContinuar": "Antes de continuar",
   "metodo.psico.cuantoMasCompletes":
-    "Cuanto más completes tu línea de Vida, más claro verás después tus huellas, tus nudos y tus heridas.",
+    "Cuanto más completes tu línea de Vida, más fácil será el proceso después.",
   "metodo.psico.rellenaEntera": "Rellénala entera, o todo lo que puedas.",
   "metodo.psico.siRemueve":
-    "Y si te resulta muy difícil recordar o remueve demasiado, no tienes que hacerlo solo: puedes pedir una llamada y lo hacemos juntos.",
+    "Si te resulta muy difícil, no tienes que hacerlo solo: puedes pedir una llamada y lo hacemos juntos.",
   "metodo.psico.seguirRellenando": "Seguir rellenando",
   "metodo.psico.pedirLlamada": "Pedir una llamada",
   "metodo.psico.continuarIgual": "Continuar de todas formas →",

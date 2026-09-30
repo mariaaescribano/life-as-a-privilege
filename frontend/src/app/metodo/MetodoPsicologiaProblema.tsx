@@ -16,7 +16,7 @@ import {
 import { useExperiencia } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
 import { flushSaves } from "../../utils/flushSaves";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -146,24 +146,34 @@ export default function MetodoPsicologiaProblema() {
             boxShadow={glowPanel}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <Flex
+            {/* Dentro del box, cada pieza entra en cascada (pregunta → apoyo →
+                hueco de escribir → guardar): la página se coloca, no aparece. */}
+            <RevealStagger
+              stagger={0.14}
+              delayChildren={0.35}
               position="relative"
               zIndex={1}
-              direction="column"
-              align="center"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
               textAlign="center"
               px={{ base: 7, md: 12 }}
               py={{ base: 9, md: 12 }}
               gap={{ base: 6, md: 7 }}
             >
+              <RevealItem direction="up" distance={18}>
               <Text color={TINTA} fontSize={{ base: "2xl", md: "4xl" }} fontWeight="700" lineHeight="1.3" maxW="620px" style={{ textShadow: INK_SHADOW }}>
                 {exp.problemaInicial.pregunta}
               </Text>
+              </RevealItem>
               {exp.problemaInicial.apoyo && (
+                <RevealItem direction="up" distance={18}>
                 <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" opacity={0.85} maxW="520px" style={{ textShadow: INK_SHADOW }}>
                   {exp.problemaInicial.apoyo}
                 </Text>
+                </RevealItem>
               )}
+              <RevealItem direction="up" distance={22} scaleFrom={0.985} w="100%" display="flex" justifyContent="center">
               <Textarea
                 value={problema}
                 onChange={(e) => setProblema(e.target.value)}
@@ -185,10 +195,13 @@ export default function MetodoPsicologiaProblema() {
                 _hover={{ borderColor: `${TINTA}55` }}
                 _focus={{ borderColor: TINTA, boxShadow: `0 0 0 1px ${TINTA}66`, bg: "rgba(255,251,243,0.52)" }}
               />
+              </RevealItem>
 
               {/* Guardado manual (no se guarda al escribir) */}
+              <RevealItem direction="up" distance={16}>
               <BotonGuardar onSave={guardarSiCambio} bg={TINTA} fg={neuropsicologiaBg} />
-            </Flex>
+              </RevealItem>
+            </RevealStagger>
           </Box>
           </Reveal>
         </Flex>

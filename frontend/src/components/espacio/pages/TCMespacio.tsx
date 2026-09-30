@@ -834,7 +834,7 @@ export default function TCMespacio() {
         subtitle={t("espacio.tcm.diagnostico.sub")}
         bgColor={tcmBg}
         color={tcmTxt}
-        emailSubject="Solicitud de diagnóstico completo TCM"
+        emailSubject="Solicitud de valoración completa TCM"
         showDescription={false}
       />
     </Box>

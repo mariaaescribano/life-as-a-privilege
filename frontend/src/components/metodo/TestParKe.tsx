@@ -130,7 +130,7 @@ export function TestParKe({
 
       <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic" textAlign="center">
         {res.respondidas} de {par.frases.length}
-        {res.intensidad !== null && " · lo verás en tu diagnóstico"}
+        {res.intensidad !== null && " · lo verás en tu valoración"}
       </Text>
     </Caja>
   );

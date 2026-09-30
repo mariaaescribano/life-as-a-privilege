@@ -1021,7 +1021,7 @@ const TriTablesCard = ({ onSelect }: { onSelect: (opt: TCMTableOption) => void }
       {/* ── Título ── */}
       <Text color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} fontWeight="700"
         fontFamily="'EB Garamond', serif" letterSpacing="0.04em" mb={0.5}>
-        El diagnóstico de la lengua
+        La lectura de la lengua
       </Text>
       <Text color={`${tcmTxt}80`} fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic"
         letterSpacing="0.08em" fontFamily="'EB Garamond', serif">

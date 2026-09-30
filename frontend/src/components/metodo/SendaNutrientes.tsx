@@ -20,7 +20,8 @@
 //     apagada, en blanco y negro, y no se puede pulsar.
 //   · aquí estás → círculo perfilado en verde claro con el número, latiendo.
 //   · leído      → círculo verde relleno con el tick: es MarcaLeido, la misma
-//     marca de lectura de todo el recorrido (no se inventa otra).
+//     marca de lectura de todo el recorrido (no se inventa otra). El tick va
+//     SOLO en el nodo: la tarjeta no repite la marca dentro (se veía doble).
 // El «verde» es el propio color de Nutrición (nutricionBg), no un verde suelto.
 //
 // La línea de la senda se enciende por tramos: el tramo entre dos grupos se
@@ -196,13 +197,15 @@ export function SendaNutrientes({
                       </Flex>
                     </Box>
 
-                    {/* La tarjeta. Bloqueada: apagada, en gris y sin pulsar. */}
+                    {/* La tarjeta. Bloqueada: apagada, en gris y sin pulsar.
+                        SIN marca de leído dentro: el tick ya lo enseña su nodo
+                        de la senda, y con los dos se veía doble. */}
                     <Box position="relative" w="100%" flex="1" display="flex"
                          title={e.abierto ? undefined : t("metodo.nutri.senda.bloqueado")}
                          opacity={e.abierto ? 1 : 0.42}
                          transition="opacity 0.35s ease, filter 0.35s ease"
                          sx={e.abierto ? undefined : { filter: "grayscale(1)", pointerEvents: "none" }}>
-                      <TarjetaNutri titulo={p.label} foto={p.img} visto={e.hecho}
+                      <TarjetaNutri titulo={p.label} foto={p.img}
                                     onClick={() => e.abierto && onAbrir(p)} />
                     </Box>
                   </Reveal>

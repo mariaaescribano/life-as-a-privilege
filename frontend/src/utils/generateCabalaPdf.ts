@@ -167,7 +167,7 @@ export async function generarPdfCabala(d: CabalaPdfDatos): Promise<void> {
 
   /* ═══════════ PORTADA ═══════════ */
   taller.portada({
-    titulo: "Diagnóstico Final",
+    titulo: "Valoración Final",
     subtitulo: "El Árbol de la Vida",
     nombre: d.nombre,
     pieLamina: "Cada dimensión se llena según tu nivel; las líneas son tus 22 senderos.",
@@ -343,5 +343,5 @@ export async function generarPdfCabala(d: CabalaPdfDatos): Promise<void> {
       "distinto, porque quien mira ya no es el mismo.»",
   );
 
-  taller.guardar("diagnostico-cabala.pdf");
+  taller.guardar("valoracion-cabala.pdf");
 }

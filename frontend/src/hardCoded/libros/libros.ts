@@ -43,7 +43,7 @@ export const libros: Libro[] = [
   { id: "tcm-coursera",               titulo: "Medicina China (Coursera)",                link: drivePdf("1lBu9ACzSrZ-4WTav8ELpjfkz0spFZePc"), img: "/libros/img/medicina-tradicional-china.jpg" },
   { id: "la-tierra",                  titulo: "La Tierra",                                link: drivePdf("1pzT529GXniv74tqXLDoUvMzeG41koIcN"), img: "/libros/img/earth.jpg" },
   { id: "cuerpo-humano",              titulo: "El cuerpo humano",                         link: drivePdf("1dRlUlB9yz9hyWGVV0HH7AZeBe9-xT-Nv"), img: "/libros/img/cuerpohumano.jpg" },
-  { id: "diagnostico-lengua",         titulo: "Diagnóstico de lengua",                    link: drivePdf("1AXPL-rOx5HbAMFAnGDsvMbYtw-mXsN4S"), img: "/libros/img/tonguediagnosis.jpg" },
+  { id: "diagnostico-lengua",         titulo: "Lectura de la lengua",                  link: drivePdf("1AXPL-rOx5HbAMFAnGDsvMbYtw-mXsN4S"), img: "/libros/img/tonguediagnosis.jpg" },
   { id: "trauma",                     titulo: "Las heridas que no vemos (Begoña Aznárez)",                                   link: drivePdf("1_AjmAmh1otjLjfwrcRaLUGPl6mAyFNQ-"), img: "/libros/img/traumas.webp" },
   { id: "virginia-blanes",            titulo: "Virginia Blanes",                          link: drivePdf("1bmWpebgVLlX_5E5yVfA5-GbxaPUMnhFU"), img: "/libros/img/virginiablanes.jpg" },
   { id: "el-cerebro",                 titulo: "El cerebro",                               link: drivePdf("1p5ki_-AumpW-a06zbkk_PHDyZMGdXiIE"), img: "/libros/img/brain.jpg" },

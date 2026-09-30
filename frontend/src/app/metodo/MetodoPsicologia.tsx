@@ -20,7 +20,7 @@ import { useComic } from "../../i18n/comics";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { useExperiencias } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem, Pop } from "../../components/global/Reveal";
 import {
   neuropsicologiaBg,
   neuropsicologiaNom,
@@ -136,7 +136,9 @@ export default function MetodoPsicologia() {
             boxShadow={glowPanel}
           >
             <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
+            {/* La intro y la recomendación entran en cascada, no de golpe. */}
+            <RevealStagger stagger={0.22} delayChildren={0.4} position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
+              <RevealItem direction="up" distance={16}>
               <Text
                 color={TINTA}
                 fontSize={{ base: "md", md: "lg" }}
@@ -147,8 +149,10 @@ export default function MetodoPsicologia() {
               >
                 {t("metodo.gate.psico.intro")}
               </Text>
+              </RevealItem>
 
               {/* ── Recomendación: no hacerlo en solitario ── */}
+              <RevealItem direction="up" distance={20}>
               <Box mt={{ base: 7, md: 9 }} mx="auto" maxW="560px">
                 <Box h="1px" w="55%" maxW="220px" mx="auto" mb={{ base: 6, md: 7 }} bgGradient={`linear(to-r, transparent, ${TINTA}55, transparent)`} />
                 <Text
@@ -171,13 +175,16 @@ export default function MetodoPsicologia() {
                   {t("metodo.gate.psico.noIndividualTexto")}
                 </Text>
               </Box>
-            </Box>
+              </RevealItem>
+            </RevealStagger>
           </Box>
           </Reveal>
 
           {/* ── Disparador del aviso: abre el popup en mitad de la página ── */}
           <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%" display="flex" justifyContent="center">
+          <Pop>
           <BotonAviso onClick={() => setAvisoOpen(true)} />
+          </Pop>
           </Reveal>
         </Flex>
       </Flex>

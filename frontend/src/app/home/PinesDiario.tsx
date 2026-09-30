@@ -54,13 +54,13 @@ const PIN = {
   cursor: "pointer",
   // Glow blanco suave, SIN sombra oscura de profundidad (la sombra los hacía
   // pesados sobre el turquesa; la luz los integra).
-  boxShadow: "0 0 14px rgba(255,255,255,0.3), 0 0 32px rgba(255,255,255,0.14)",
+  boxShadow: "0 0 10px rgba(255,255,255,0.18), 0 0 24px rgba(255,255,255,0.08)",
   transition: "all 0.22s ease",
   _hover: {
     bg: "rgba(255,255,255,0.2)",
     borderColor: "white",
     transform: "translateY(-2px)",
-    boxShadow: "0 0 20px rgba(255,255,255,0.45), 0 0 44px rgba(255,255,255,0.2)",
+    boxShadow: "0 0 14px rgba(255,255,255,0.3), 0 0 32px rgba(255,255,255,0.14)",
   },
   _active: { transform: "translateY(0)" },
 } as const;
@@ -171,7 +171,7 @@ export default function PinesDiario({ estatico = false }: {
               fontSize="xs"
               fontWeight="800"
               lineHeight="1"
-              boxShadow="0 2px 8px rgba(0,0,0,0.35)"
+              boxShadow="0 0 8px rgba(255,255,255,0.4)"
               pointerEvents="none"
             >
               {sinLeer}

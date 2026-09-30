@@ -219,37 +219,6 @@ export default function MetodoTcmLengua() {
             {t("metodo.tcm.lengua.aviso")}
           </Text>
           </Reveal>
-
-          {/* Acceso discreto a «Lee tu lengua» abajo a la derecha, para no tener
-              que volver a subir al header. */}
-          <Reveal inView direction="up" distance={12} duration={0.5} amount={0.5} w="100%" display="flex" justifyContent="flex-end">
-          <Box
-            as="button"
-            onClick={() => navigate("/metodo/tcm/lengua/leer")}
-            position="relative"
-            overflow="hidden"
-            display="inline-flex"
-            alignItems="center"
-            gap={2}
-            px={5}
-            py={2.5}
-            borderRadius="full"
-            color={tcmTxt}
-            border={`1px solid ${tcmTxt}55`}
-            fontFamily="'EB Garamond', serif"
-            fontWeight={600}
-            fontSize={{ base: "sm", md: "md" }}
-            letterSpacing="0.04em"
-            cursor="pointer"
-            transition="all 0.2s"
-            _hover={{ borderColor: tcmTxt, transform: "translateY(-1px)" }}
-            style={{ textShadow: INK_SHADOW }}
-          >
-            {/* Fondo de la disciplina (imagen TCM) + velo para que se lea el texto. */}
-            <DisciplinaBgLayer nom={tcmNom} borderRadius="full" overlay={`${tcmBg}a6`} />
-            <Box as="span" position="relative" zIndex={1}>{t("metodo.tcm.paso.lengua")} →</Box>
-          </Box>
-          </Reveal>
         </Flex>
       </Flex>
 
@@ -303,8 +272,15 @@ function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: n
           border={`1px solid ${opcion.equilibrio ? `${tcmTxt}88` : "rgba(255,255,255,0.16)"}`}
           opacity={enter ? 1 : 0}
           transform={enter ? "translateY(0) scale(1)" : "translateY(18px) scale(0.97)"}
-          transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)"
-          sx={{ backdropFilter: "blur(6px)", transitionDelay: `${index * 0.07}s` }}>
+          transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1), border-color 0.2s"
+          _hover={{ borderColor: enter ? `${tcmTxt}aa` : undefined }}
+          sx={{
+            backdropFilter: "blur(6px)",
+            transitionDelay: `${index * 0.07}s`,
+            // La foto respira con un zoom lento al pasar el puntero.
+            "& img": { transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1)" },
+            "&:hover img": { transform: "scale(1.07)" },
+          }}>
       <LenguaImg src={opcion.src} alt={opcion.nombre} />
       {/* flex=1 para que el bloque de texto rellene la altura estirada de la fila */}
       <Flex direction="column" flex="1" px={4} py={3.5}>
@@ -331,7 +307,7 @@ function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: n
 // ── Imagen de lengua con marco cuadrado (funciona aunque falte el PNG) ───────
 function LenguaImg({ src, alt }: { src: string; alt: string }) {
   return (
-    <Box w="100%" sx={{ aspectRatio: "1 / 1" }} bg="rgba(255,255,255,0.04)"
+    <Box w="100%" sx={{ aspectRatio: "1 / 1" }} bg="rgba(255,255,255,0.04)" overflow="hidden"
          display="flex" alignItems="center" justifyContent="center">
       <img src={encodeURI(src)} alt={alt}
            style={{ width: "100%", height: "100%", objectFit: "cover" }} />

@@ -37,10 +37,12 @@ function IlustracionCard({ entry: entrada, leida, onOpen }: {
     <Box as="button" onClick={onOpen} position="relative" w="100%" h="100%" display="flex"
          flexDirection="column" borderRadius="2xl" overflow="hidden" cursor="pointer"
          fontFamily="'EB Garamond', serif" border={`1px solid ${nutricionTxt}33`}
-         boxShadow={`0 4px 18px rgba(0,0,0,0.22), 0 0 16px ${nutricionTxt}22`}
+         // Glow claro, no sombra negra: la tinta de Nutrición es casi negra y
+         // cualquier sombra/halo con ella ensucia la tarjeta.
+         boxShadow="0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08)"
          transition="all 0.22s ease"
          _hover={{ transform: "translateY(-4px)", borderColor: `${nutricionTxt}88`,
-                   boxShadow: `0 10px 30px rgba(0,0,0,0.3), 0 0 26px ${nutricionTxt}55` }}
+                   boxShadow: "0 0 22px rgba(255,255,255,0.24), 0 0 44px rgba(180,255,245,0.14)" }}
          _active={{ transform: "translateY(-1px)" }}>
       {/* Marca de «ya leído» (la misma que en las tarjetas del recorrido) */}
       {leida && <MarcaLeido tinta={nutricionTxt} bg={nutricionBg} />}

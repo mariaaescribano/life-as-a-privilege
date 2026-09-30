@@ -15,8 +15,15 @@
 //
 // Todo el sector es pulsable (path + palabra): al pulsar, `onSelect` con la
 // emoción, su nivel, su básica y el camino desde el centro.
+//
+// ENTRADA: la rueda FLORECE al asomar en pantalla — cada trozo brota desde el
+// centro, primero la corona de las básicas y luego las dos de fuera, con un
+// barrido por ángulo (useEnPantalla + keyframes; se apaga con
+// prefers-reduced-motion). Al pasar el ratón, el sector se agranda un pelín
+// sobre sí mismo además de iluminarse.
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useState } from "react";
+import { useEnPantalla } from "../../hooks/useEnPantalla";
 import {
   RUEDA_EMOCIONES,
   type EmocionBasica,
@@ -92,6 +99,9 @@ export function RuedaEmocionesSvg({
   papel: string;
 }) {
   const [encima, setEncima] = useState<string | null>(null);
+  // La floración espera a que la rueda asome de verdad (suele quedar bajo el
+  // pliegue): si brotara al montar, nadie la vería florecer.
+  const { ref: enPantallaRef, visto } = useEnPantalla();
 
   // ── Se resuelven las tres coronas de una pasada ──
   const piezas: Pieza[] = [];
@@ -152,11 +162,26 @@ export function RuedaEmocionesSvg({
   const HALO = `0 0 3px ${papel}`;
 
   return (
+    <div ref={enPantallaRef} style={{ width: "100%" }}>
+      <style>{`
+        @keyframes ruedaBrota {
+          from { opacity: 0; transform: scale(0.55); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .rueda-brota { animation: none !important; opacity: 1 !important; }
+        }
+      `}</style>
       <svg viewBox="0 0 1000 1000" width="100%" height="auto" role="group"
            aria-label="Rueda de las emociones" style={{ display: "block", overflow: "visible" }}>
         {piezas.map((p) => {
           const activo = encima === p.id;
           const nombre = p.elegida.emocion.nombre.toUpperCase();
+
+          // Floración: cada trozo brota desde el centro de la rueda, corona a
+          // corona y barriendo el círculo (el retraso crece con el ángulo).
+          const ang = ((p.medio % 360) + 360) % 360;
+          const brote = 0.05 + (p.nivel - 1) * 0.22 + (ang / 360) * 0.3;
 
           // Dónde y cómo va la palabra: horizontal en el centro, radial en los
           // dos anillos (y del revés en la mitad izquierda, para poder leerla).
@@ -169,10 +194,20 @@ export function RuedaEmocionesSvg({
 
           return (
             <g key={p.id}
+               className="rueda-brota"
                onClick={() => onSelect(p.elegida)}
                onMouseEnter={() => setEncima(p.id)}
                onMouseLeave={() => setEncima((k) => (k === p.id ? null : k))}
-               style={{ cursor: "pointer" }}
+               style={{
+                 cursor: "pointer",
+                 transformBox: "view-box",
+                 transformOrigin: "500px 500px",
+                 // `backwards`: durante su retraso el trozo espera invisible.
+                 opacity: visto ? undefined : 0,
+                 animation: visto
+                   ? `ruedaBrota 0.65s cubic-bezier(0.22,1,0.36,1) ${brote}s backwards`
+                   : "none",
+               }}
                role="button"
                tabIndex={0}
                aria-label={p.elegida.emocion.nombre}
@@ -185,8 +220,12 @@ export function RuedaEmocionesSvg({
                 stroke={tinta}
                 strokeWidth={p.nivel === 1 ? 2.6 : 2}
                 style={{
-                  transition: "filter 0.18s ease, opacity 0.18s ease",
-                  filter: activo ? "brightness(1.09)" : undefined,
+                  transition: "filter 0.18s ease, opacity 0.18s ease, transform 0.18s ease",
+                  filter: activo ? "brightness(1.09) drop-shadow(0 0 5px rgba(40,18,4,0.25))" : undefined,
+                  // El sector crece un pelín SOBRE SÍ MISMO (no hacia fuera).
+                  transformBox: "fill-box",
+                  transformOrigin: "center",
+                  transform: activo ? "scale(1.045)" : "scale(1)",
                 }}
               />
               {/* La palabra no intercepta el ratón: manda el sector de debajo. */}
@@ -226,5 +265,6 @@ export function RuedaEmocionesSvg({
           );
         })}
       </svg>
+    </div>
   );
 }

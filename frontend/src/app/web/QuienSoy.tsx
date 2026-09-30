@@ -244,7 +244,7 @@ const QuienSoy = () => {
             transition="all 0.25s ease"
             textDecoration="none"
           >
-            {t("footer.contactar")}
+            {t("contacto.titulo")}
           </Flex>
           <Box
             h="1px"

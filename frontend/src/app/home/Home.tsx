@@ -867,9 +867,11 @@ const Home = () => {
       letterSpacing="0.03em"
       whiteSpace="nowrap"
       cursor="pointer"
-      boxShadow={`0 4px 18px rgba(0,0,0,0.28), 0 0 16px ${contDisc.txt}3a`}
+      // Solo glow suave del color de la disciplina, sin sombra negra: elegante,
+      // no llamativo.
+      boxShadow={`0 0 10px ${contDisc.txt}33, 0 0 24px ${contDisc.txt}1a`}
       transition="all 0.2s"
-      _hover={{ transform: "translateY(-1px)", boxShadow: `0 6px 22px rgba(0,0,0,0.34), 0 0 24px ${contDisc.txt}5a` }}
+      _hover={{ transform: "translateY(-1px)", boxShadow: `0 0 14px ${contDisc.txt}55, 0 0 30px ${contDisc.txt}2b` }}
     >
       {/* Fondo de la disciplina NÍTIDO: velo muy suave para que la IMAGEN se vea
           de verdad. */}
@@ -962,9 +964,9 @@ const Home = () => {
               letterSpacing="0.06em"
               textAlign="center"
               lineHeight="1.15"
-              // Glow al estándar unificado de títulos (alfas 0.6/0.39/0.32):
-              // llevaba 0.75/0.45/0.35 y brillaba más que el resto de páginas.
-              textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 38px rgba(255,255,255,0.39), 0 0 70px rgba(180,255,245,0.32)"
+              // Glow un punto POR DEBAJO del estándar de títulos (0.6/0.39/0.32),
+              // a propósito: el saludo brillaba un pelín de más.
+              textShadow="0 0 18px rgba(255,255,255,0.5), 0 0 38px rgba(255,255,255,0.32), 0 0 70px rgba(180,255,245,0.26)"
               mb={{ base: 10, md: 8 }}
               // Aire a los lados del ancho de las columnas fijas («Tu mapa» a
               // la izquierda, «Continuar» a la derecha): el saludo rompe de
@@ -1020,7 +1022,7 @@ const Home = () => {
                 h={centerSize}
                 borderRadius="full"
                 overflow="hidden"
-                boxShadow="0 8px 32px rgba(0,0,0,0.4), 0 0 32px rgba(255,255,255,0.7), 0 0 70px rgba(255,255,255,0.35), 0 0 110px rgba(180,255,245,0.3)"
+                boxShadow="0 0 24px rgba(255,255,255,0.45), 0 0 56px rgba(255,255,255,0.2), 0 0 90px rgba(180,255,245,0.14)"
                 border="2px solid rgba(255,255,255,0.9)"
                 zIndex={10}
               >
@@ -1135,8 +1137,8 @@ const Home = () => {
                       overflow="hidden"
                       border={`4px solid ${abierta ? d.txt : "#ffffff"}`}
                       boxShadow={abierta
-                        ? `0 0 22px rgba(255,255,255,0.55), 0 0 50px rgba(255,255,255,0.3), 0 0 90px rgba(180,255,245,0.28), 0 0 60px ${d.txt}88, 0 2px 30px ${d.txt}55`
-                        : `0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12), 0 0 40px ${d.txt}55, 0 2px 24px ${d.txt}33`}
+                        ? `0 0 16px rgba(255,255,255,0.38), 0 0 38px rgba(255,255,255,0.17), 0 0 44px ${d.txt}55`
+                        : `0 0 10px rgba(255,255,255,0.16), 0 0 26px rgba(255,255,255,0.08), 0 0 28px ${d.txt}33`}
                       bg={hasBg ? "transparent" : d.bg}
                       display="flex"
                       alignItems="center"
@@ -1167,7 +1169,7 @@ const Home = () => {
                             w={{ base: "30px", md: "42px", lg: "50px" }}
                             h={{ base: "30px", md: "42px", lg: "50px" }}
                             fill="#ffffff"
-                            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.6)) drop-shadow(0 0 16px rgba(0,0,0,0.4))" }}
+                            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.5))" }}
                           >
                             <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z" />
                           </Box>
@@ -1185,7 +1187,7 @@ const Home = () => {
                       borderRadius="full"
                       bg="white"
                       border={`2px solid ${badgeColor}`}
-                      boxShadow={`0 2px 6px rgba(0,0,0,0.2)`}
+                      boxShadow={`0 0 8px rgba(255,255,255,0.4)`}
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
@@ -1229,7 +1231,7 @@ const Home = () => {
                         maxW="260px"
                         textAlign="center"
                         borderRadius="lg"
-                        boxShadow="0 0 18px rgba(255,255,255,0.25), 0 6px 20px rgba(0,0,0,0.35)"
+                        boxShadow="0 0 14px rgba(255,255,255,0.2)"
                         openDelay={150}
                       >
                         {disciplinaCircle}

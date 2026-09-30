@@ -21,7 +21,7 @@ import { useIntroComic } from "../../hooks/useIntroComic";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Breathe, Reveal } from "../../components/global/Reveal";
 import {
   nutricionBg,
   nutricionNom,
@@ -127,7 +127,10 @@ export default function MetodoNutricion() {
           </Reveal>
 
           {/* ── Bienvenida contemplativa ── */}
+          {/* El box respira muy despacio (Breathe): vida continua sin moverse
+              de sitio, el mismo latido que los paneles grandes de /elMetodo. */}
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+            <Breathe scale={0.008} duration={7} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
               {/* La foto de la disciplina se ve tal cual, sin velo oscuro: nutri.png
                   es clara y el texto va en nutricionTxt (verde oscuro). */}
@@ -167,6 +170,7 @@ export default function MetodoNutricion() {
                 ))}
               </Box>
             </Box>
+            </Breathe>
           </Reveal>
 
           {/* ── Disparador del aviso (botón discreto, centrado) ── */}

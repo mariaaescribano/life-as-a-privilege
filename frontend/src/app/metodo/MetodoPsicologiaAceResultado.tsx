@@ -34,7 +34,7 @@ import {
 } from "../../components/metodo/psicologiaRecorrido";
 import { useAceBanda, useAceEsperanza } from "../../components/metodo/psicologiaRecorrido.en";
 import { glowPanel, glowHeader, azulBorde } from "../../components/metodo/psicologiaGlow";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Breathe, Contador } from "../../components/global/Reveal";
 import {
   API_URL,
   neuropsicologiaBg,
@@ -135,19 +135,23 @@ export default function MetodoPsicologiaAceResultado() {
                 <Text color={TINTA} fontSize="2xs" fontWeight="700" letterSpacing="0.22em"
                       textTransform="uppercase" opacity={0.65} style={{ textShadow: INK_SHADOW }}>{t("metodo.psico.tuPuntuacionAce")}</Text>
 
-                {/* Círculo con la cifra — siempre en marrón oscuro (neutro) */}
+                {/* Círculo con la cifra — siempre en marrón oscuro (neutro).
+                    Respira muy leve, y la cifra CUENTA hasta su valor en vez de
+                    aparecer puesta. */}
+                <Breathe scale={0.02} duration={4.5}>
                 <Flex align="center" justify="center" w={{ base: "116px", md: "134px" }} h={{ base: "116px", md: "134px" }}
                       borderRadius="full" bg="rgba(255,251,243,0.72)" border={`3px solid ${TINTA}`}
                       boxShadow={`0 0 26px ${TINTA}55`} sx={{ backdropFilter: "blur(4px)" }}>
                   <Text color={TINTA} fontSize={{ base: "5xl", md: "6xl" }} fontWeight="700" lineHeight="1"
                         style={{ textShadow: `0 1px 2px ${PAPEL}` }}>
-                    {score}
+                    <Contador valor={score} />
                   </Text>
                   <Text color={`${TINTA}cc`} fontSize={{ base: "xl", md: "2xl" }} fontWeight="600"
                         alignSelf="flex-end" mb={{ base: 4, md: 5 }}>
                     /10
                   </Text>
                 </Flex>
+                </Breathe>
 
                 <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.25"
                       style={{ textShadow: INK_SHADOW }}>

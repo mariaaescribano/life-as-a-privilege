@@ -10,7 +10,7 @@ import { useIlustracionesTcm } from "../../components/metodo/IlustracionesTcm";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Breathe } from "../../components/global/Reveal";
 import { tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { ELEMENTOS } from "../../components/metodo/tcmRecorrido";
 import { QigongComicModal } from "../../components/metodo/QigongComicModal";
@@ -90,18 +90,19 @@ export default function MetodoTcmQigong() {
           </Reveal>
 
           {/* Intro bajo el header · sin sombra (va sobre el turquesa limpio) */}
-          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Flex direction="column" gap={3} maxW="700px">
             {/* Una frase por línea: Qi (氣)… arriba y Gong (功)… debajo (vale
-                para los dos idiomas: se parte por el punto y seguido). */}
+                para los dos idiomas: se parte por el punto y seguido). Cada
+                una entra con su retraso, como respirando: una, y luego otra. */}
             {t("metodo.tcm.qigong.intro").split(/(?<=\.)\s+/).map((p, i) => (
-              <Text key={i} color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
+              <Reveal key={i} direction="up" distance={16} blur delay={0.12 + i * 0.4} duration={0.8}>
+              <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                     textAlign="center">
                 {p}
               </Text>
+              </Reveal>
             ))}
           </Flex>
-          </Reveal>
 
           {/* Fuera de aquí: «La cuarta rama de esta medicina», «Las tres
               regulaciones» y «De dónde viene» (con su línea del tiempo). La
@@ -128,11 +129,13 @@ export default function MetodoTcmQigong() {
                   direction={{ base: "column", md: "row" }}
                   gap={{ base: 2, md: 5 }} textAlign={{ base: "center", md: "left" }}
                   px={{ base: 5, md: 8 }} py={{ base: 5, md: 4 }}>
+              <Breathe scale={0.07} duration={4.2} flexShrink={0}>
               <Text color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} lineHeight="1" fontWeight={700}
-                    letterSpacing="0.08em" flexShrink={0}
+                    letterSpacing="0.08em"
                     style={{ textShadow: `${INK_SHADOW}, 0 0 22px ${tcmTxt}55` }}>
                 {DAO_YIN.hanzi}
               </Text>
+              </Breathe>
               <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.3em" flexShrink={0}
                     textTransform="uppercase" opacity={0.8} style={{ textShadow: INK_SHADOW }}>
                 Dao Yin

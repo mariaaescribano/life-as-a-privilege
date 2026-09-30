@@ -431,7 +431,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/astrologia/llamada` — Llamada (Paso 7)
 - **Componente:** `MetodoAstrologiaLlamada` en `frontend/src/app/metodo/MetodoAstrologiaLlamada.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de astrología (`GuardiaPagoRecorrido`).
-- **Qué hace:** Un texto de intro y el calendario `AgendarLlamada` para reservar y pagar una llamada de astrología (15 €).
+- **Qué hace:** Un texto de intro y el calendario `AgendarLlamada` para reservar y pagar una llamada de Astrología (15 €).
 - **Datos:** los de `AgendarLlamada`: `GET /booking/taken`, `GET /user/me`, `POST /payment/llamada/checkout` (redirige a Stripe con `returnPath`), `GET /payment/llamada/verify?session_id=` al volver.
 - **Desbloqueo:** la página no tiene gate propio (no hay chequeo de sesión ni de carta). En el Índice se abre con el paso 5.
 - **Botones / a dónde lleva:** prev → `/metodo/astrologia/pdf`; next → `/metodo/astrologia/cursos`. «Ilustraciones», `IndiceAstrologia`.
@@ -1036,7 +1036,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Datos:** `GET /user/me`; `GET /metodo-tcm/:userId`; `PATCH /metodo-tcm/:userId` en cada respuesta (autoguardado) con `data.elementos[el].miniTest = {respuestas, puntos}` y, al acabar el cómic, `leido: true`.
 - **Desbloqueo:** desbloqueo secuencial Madera→Fuego→Tierra→Metal→Agua (el siguiente se abre cuando el anterior está `leido`). Next exige los tests de los 5 elementos completos (`elementosTestsCompletos`). En el Índice, sin esto solo se llega al paso 2.
 - **Botones / a dónde lleva:** prev «← Medicina China» → `/metodo/tcm`; next «Tu Constitución →» → `/metodo/tcm/constitucion` (deshabilitado con tooltip de tests pendientes).
-- **Condiciones y casos raros:** elementos sin contenido no se pueden pulsar. El next NO exige que los 5 estén `leido`: con los tests de Agua hechos y el cómic cerrado con la X antes del final, se pasa, pero Diagnóstico luego rebota aquí. Loader hasta precargar fondo e iconos. `pageLabel` "2/12".
+- **Condiciones y casos raros:** elementos sin contenido no se pueden pulsar. El next NO exige que los 5 estén `leido`: con los tests de Agua hechos y el cómic cerrado con la X antes del final, se pasa, pero la Valoración luego rebota aquí. Loader hasta precargar fondo e iconos. `pageLabel` "2/12".
 - **Tests:** pendiente
 
 ---
@@ -1046,7 +1046,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Acceso:** con sesión (PrivateRoute) + pago de TCM (Guardia global; `!tcm_suscrito` → `/metodo/tcm`).
 - **Qué hace:** Test de 50 frases Sí/No en la propia página, en dos bloques (psicológico y fisiológico), con barra de progreso. Al completarlo sube arriba y muestra un pentágono con tus cinco porcentajes, tu elemento de fondo, su arquetipo y el segundo. Debajo, las cinco tarjetas de constitución (la tuya destacada). Con el test hecho se pliega y se puede «Repetir» (reabre sin borrar).
 - **Datos:** `GET /user/me`; `GET /metodo-tcm/:userId`; `PATCH /metodo-tcm/:userId` en cada respuesta con `data.constitucion.respuestas` (`"1"`/`"0"`). El resultado no se guarda: se calcula al vuelo.
-- **Desbloqueo:** la página no comprueba el paso 2 al entrar (solo el Índice). Es la puerta obligatoria antes de Los ciclos: next y BotonPaso deshabilitados hasta las 50 frases; Ciclos y Diagnóstico redirigen aquí si falta (4 sitios: esta página, Ciclos, Diagnóstico e `IndiceTcm`).
+- **Desbloqueo:** la página no comprueba el paso 2 al entrar (solo el Índice). Es la puerta obligatoria antes de Los ciclos: next y BotonPaso deshabilitados hasta las 50 frases; Ciclos y Valoración redirigen aquí si falta (4 sitios: esta página, Ciclos, Valoración e `IndiceTcm`).
 - **Botones / a dónde lleva:** prev «← Los Cinco Elementos» → `/metodo/tcm/elementos`; next «Los ciclos →» y BotonPaso abajo → `flushSaves()` y después `/metodo/tcm/ciclos`.
 - **Condiciones y casos raros:** respuestas guardadas con forma rara (no objeto) se tratan como vacías. `pageLabel` "3/12".
 - **Tests:** pendiente
@@ -1059,8 +1059,8 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Dos estrellas: Sheng (generación) y Ke (control). Cada flechita abre un popup-cómic con la relación (`RelacionModal`). Al final, el test del «par de control» (`TestParKe`): seis frases 0-4 sobre el par Ke que proponen tus cuestionarios.
 - **Datos:** `GET /user/me`; `GET /metodo-tcm/:userId`; `PATCH /metodo-tcm/:userId` con `data.ciclosLeidos = true` (al ver las 10 relaciones) y `data.parKe.respuestas` (en cada respuesta).
 - **Desbloqueo:** entrar exige `constitucionHecha` (si no → `/metodo/tcm/constitucion`). No comprueba los tests de elementos. Para avanzar: haber visto las 10 relaciones (o `ciclosLeidos` ya guardado) y el test del par hecho (`testParHecho`, da true si no hay par candidato).
-- **Botones / a dónde lleva:** prev «← Tu Constitución» → `/constitucion`; next «Diagnóstico final →» abre el cómic intercalado «Las enfermedades» (`tcm-enfermedades`); su continuar → `/metodo/tcm/diagnostico`.
-- **Condiciones y casos raros:** con `ciclosLeidos` todas las flechas se dan por vistas. Una relación cuenta como vista al pulsarla o al pasar por ella dentro del cómic. Los PATCH no se esperan antes de navegar (no hay `flushSaves`), aunque Diagnóstico no depende de estos flags. `pageLabel` "4/12".
+- **Botones / a dónde lleva:** prev «← Tu Constitución» → `/constitucion`; next «Valoración final →» abre el cómic intercalado «Las enfermedades» (`tcm-enfermedades`); su continuar → `/metodo/tcm/diagnostico`.
+- **Condiciones y casos raros:** con `ciclosLeidos` todas las flechas se dan por vistas. Una relación cuenta como vista al pulsarla o al pasar por ella dentro del cómic. Los PATCH no se esperan antes de navegar (no hay `flushSaves`), aunque la Valoración no depende de estos flags. `pageLabel` "4/12".
 - **Tests:** pendiente
 
 ---
@@ -1068,16 +1068,16 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/tcm/perfil` — Redirección antigua («Tu equilibrio»)
 - **Componente:** ninguno: `<Navigate to="/metodo/tcm/diagnostico" replace />` en `frontend/src/App.tsx`
 - **Acceso:** pública en el router (la redirección se hace sin PrivateRoute); el destino sí exige sesión y pago.
-- **Qué hace:** Redirige a `/metodo/tcm/diagnostico`. «Tu equilibrio» se fusionó en el Diagnóstico.
+- **Qué hace:** Redirige a `/metodo/tcm/diagnostico`. «Tu equilibrio» se fusionó en la Valoración.
 - **Datos:** Ninguno.
-- **Desbloqueo:** los del Diagnóstico.
+- **Desbloqueo:** los de la Valoración.
 - **Botones / a dónde lleva:** ninguno.
 - **Condiciones y casos raros:** usa `replace`: no queda en el historial.
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/tcm/diagnostico` — Diagnóstico final (Paso 5)
+## `/metodo/tcm/diagnostico` — Valoración final (Paso 5)
 - **Componente:** `MetodoTcmDiagnostico` en `frontend/src/app/metodo/MetodoTcmDiagnostico.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de TCM (Guardia global; `!tcm_suscrito` → `/metodo/tcm`).
 - **Qué hace:** Estrella-perfil con los 5 elementos iluminados según su estado (pulsar uno abre su cómic y deja cambiar respuestas). Métricas de balance por elemento (CARGA − RECURSOS, umbral 15 %: equilibrio / en carga / te sostiene) y Tipos de Adaptación primario y secundario. Resultado del par de control, tu constitución cruzada con lo de hoy, la estrella detallada con tu mensaje, y las dos estrellas Sheng/Ke para repasar relaciones.
@@ -1095,7 +1095,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Página de lectura: cómo mirarse la lengua, el mapa de zonas (foto ampliable a pantalla completa) y unas 30 cajitas con fotos agrupadas por color, forma, movimiento, superficie… Las cajitas aparecen una a una al hacer scroll.
 - **Datos:** `GET /user/me`. No guarda nada. Precarga el mapa y las fotos.
 - **Desbloqueo:** la página no tiene gate (solo el Índice, que exige tests de elementos y constitución).
-- **Botones / a dónde lleva:** prev «← Diagnóstico final» → `/diagnostico`; next «Lee tu lengua →» y botón abajo a la derecha → `/metodo/tcm/lengua/leer`.
+- **Botones / a dónde lleva:** prev «← Valoración final» → `/diagnostico`; next «Lee tu lengua →» y botón abajo a la derecha → `/metodo/tcm/lengua/leer`.
 - **Condiciones y casos raros:** error en `/user/me` → `/metodo/tcm`. `pageLabel` "6/12".
 - **Tests:** pendiente
 
@@ -1164,7 +1164,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/metodo/tcm/apuntes` — Crea tus propios apuntes (Paso 12)
 - **Componente:** `MetodoTcmApuntes` en `frontend/src/app/metodo/MetodoTcmApuntes.tsx` (+ `CreaTusApuntes`, libro en `components/metodo/apuntes/tcmApuntes.ts`)
 - **Acceso:** con sesión (PrivateRoute) + pago de TCM (Guardia global; `!tcm_suscrito` → `/metodo/tcm`).
-- **Qué hace:** Se eligen los capítulos de todo lo recorrido y se descarga un PDF de apuntes con tu nombre en la portada. Los capítulos personales (diagnóstico y lectura de lengua) salen con candado si faltan esos datos.
+- **Qué hace:** Se eligen los capítulos de todo lo recorrido y se descarga un PDF de apuntes con tu nombre en la portada. Los capítulos personales (valoración y lectura de lengua) salen con candado si faltan esos datos.
 - **Datos:** `GET /user/me` (`name`, `fisiologia_suscrito`); `GET /metodo-tcm/:userId` (todo el blob, blindado si no es objeto). PDF en el navegador desde `CreaTusApuntes`. No guarda nada.
 - **Desbloqueo:** ninguno para entrar. Último paso de TCM.
 - **Botones / a dónde lleva:** prev «← Cursos» → `/metodo/tcm/cursos`; next «Cábala →» (con candado si no está pagada) y BotonPaso → `/metodo/cabala` siempre (allí se ve el pago; la siguiente del mandala de /home tras MTC).
@@ -1672,14 +1672,14 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Acceso:** con sesión (PrivateRoute). Exige pago de Cábala.
 - **Qué hace:** Página de una de las 11 dimensiones (Keter…Malkhut, con Daat). Frase, carrusel de introducción (flechas, teclado, swipe) con la foto de la sefirá (abre su ilustración), nota (popup `CabalaNotaModal`), columnas Equilibrado/Desequilibrado, autoevaluación 1-10, «Escala de Equilibrio» (5 preguntas 1-10) y clave de desarrollo. Al pie, barras de progreso y qué falta por nombre.
 - **Datos:** `GET /user/me`; `GET /metodo-cabala/:userId`; `PATCH /metodo-cabala/:userId` en cada respuesta. Campos del blob: `test[key]` (5 números), `autoeval[key]`, `sefirotVistas` (se añade la actual al entrar), `escalaTest: 10`.
-- **Desbloqueo:** Entrar por URL: solo pago (la página NO comprueba las anteriores; el bloqueo secuencial solo lo aplica el Índice: ilustraciones del Árbol vistas + sefirot anteriores completas, o ya visitada). Para pasar a la siguiente hay que completar autoevaluación Y escala de esta (`SEFIROT_GATE = true`). En Malkuth, «Diagnóstico →» exige además todas las sefirot rellenas.
+- **Desbloqueo:** Entrar por URL: solo pago (la página NO comprueba las anteriores; el bloqueo secuencial solo lo aplica el Índice: ilustraciones del Árbol vistas + sefirot anteriores completas, o ya visitada). Para pasar a la siguiente hay que completar autoevaluación Y escala de esta (`SEFIROT_GATE = true`). En Malkuth, «Valoración →» exige además todas las sefirot rellenas.
 - **Botones / a dónde lleva:** prev → sefirá anterior (en Keter, → `/metodo/cabala/arbol`). next y botón del pie → siguiente sefirá o, en la última, `/metodo/cabala/diagnostico`. «Ilustraciones» → galería.
 - **Condiciones y casos raros:** `:key` acepta `kether, chokmah, binah, daat, chesed, geburah, tipharet, netzach, hod, yesod, malkuth`; otra clave → `/metodo/cabala/arbol`. Datos antiguos: si el test estaba en escala 1-5 se reescala entero a 1-10 y se guarda al entrar. Si falla el guardado sale un aviso de error. El número de paso es `numero + 2`.
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/cabala/diagnostico` — Diagnóstico / Mapa evolutivo (Paso 14/39)
+## `/metodo/cabala/diagnostico` — Valoración / Mapa evolutivo (Paso 14/39)
 - **Componente:** `MetodoCabalaDiagnostico` en `frontend/src/app/metodo/MetodoCabalaDiagnostico.tsx`
 - **Acceso:** con sesión (PrivateRoute). Exige pago de Cábala.
 - **Qué hace:** Calcula el nivel de cada sefirá (escala + autoevaluación) y su polaridad (déficit/equilibrio/exceso). Muestra el cuello de botella principal entre sefirot con narrativa y botones para repasar una y trabajar la otra, otras transiciones a observar, capacidades desarrolladas (nivel ≥7) y por fortalecer (≤4).
@@ -1708,29 +1708,29 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Acceso:** con sesión (PrivateRoute). Exige pago de Cábala.
 - **Qué hace:** Cabecera con la foto y la letra hebrea (la foto abre su ilustración), significado tradicional, traducción psicológica, pregunta de reflexión, qué une el sendero, test 1-5, interpretación según la suma, señales de práctica, «has cruzado este umbral cuando…» y frase de integración.
 - **Datos:** `GET /user/me`; `GET /metodo-cabala/:userId` (lee `senderos[num]`); `PATCH` en cada respuesta con `senderos[num]` actualizado.
-- **Desbloqueo:** Entrar por URL: solo pago (el Índice exige todas las ilustraciones de senderos vistas y los anteriores completos). Para pasar al siguiente hay que completar este test. En el último (Tav), «Diagnóstico →» exige los 22 completos.
+- **Desbloqueo:** Entrar por URL: solo pago (el Índice exige todas las ilustraciones de senderos vistas y los anteriores completos). Para pasar al siguiente hay que completar este test. En el último (Tav), «Valoración →» exige los 22 completos.
 - **Botones / a dónde lleva:** prev → sendero anterior (en el primero, `/metodo/cabala/senderos`); next y botón del pie → siguiente sendero o `/metodo/cabala/senderos/diagnostico`; todos esperan flushSaves. «Ilustraciones».
 - **Condiciones y casos raros:** `:num` va de 11 a 32 (numeración cabalística; Aleph = 11). Otro valor → `/metodo/cabala/senderos`. Paso = 15 + orden.
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/cabala/senderos/diagnostico` — Diagnóstico de los Senderos (Paso 38/39)
+## `/metodo/cabala/senderos/diagnostico` — Valoración de los Senderos (Paso 38/39)
 - **Componente:** `MetodoCabalaSenderosDiagnostico` en `frontend/src/app/metodo/MetodoCabalaSenderosDiagnostico.tsx`
 - **Acceso:** con sesión (PrivateRoute). Exige pago de Cábala.
 - **Qué hace:** Muestra los senderos prioritarios y la lista de los 22 con su interpretación según la puntuación.
 - **Datos:** `GET /user/me`; `GET /metodo-cabala/:userId` (lee `senderos`). No guarda.
-- **Desbloqueo:** Gate: los 22 tests completos (`senderosContenidoCompleto`); si no → `/metodo/cabala/senderos`. Abre el Diagnóstico final (que además pide las sefirot).
+- **Desbloqueo:** Gate: los 22 tests completos (`senderosContenidoCompleto`); si no → `/metodo/cabala/senderos`. Abre la Valoración final (que además pide las sefirot).
 - **Botones / a dónde lleva:** prev → `/metodo/cabala/senderos`; next → `/metodo/cabala/final`; «Ilustraciones».
 - **Condiciones y casos raros:** Acepta claves de `senderos` como string o número.
 - **Tests:** pendiente
 
 ---
 
-## `/metodo/cabala/final` — Diagnóstico final (Paso 39/39)
+## `/metodo/cabala/final` — Valoración final (Paso 39/39)
 - **Componente:** `MetodoCabalaFinal` en `frontend/src/app/metodo/MetodoCabalaFinal.tsx`
 - **Acceso:** con sesión (PrivateRoute). Exige pago de Cábala.
-- **Qué hace:** Resumen de las 11 dimensiones (nivel y estado) y de los 22 senderos, con los prioritarios marcados. Botón para descargar el PDF del diagnóstico.
+- **Qué hace:** Resumen de las 11 dimensiones (nivel y estado) y de los 22 senderos, con los prioritarios marcados. Botón para descargar el PDF de la valoración.
 - **Datos:** `GET /user/me` (también el nombre para el PDF); `GET /metodo-cabala/:userId` (lee `test`, `autoeval`, `escalaTest`, `senderos`). No guarda. PDF generado en el navegador con `generarPdfCabala` (utils/generateCabalaPdf.ts): portada con cabala.webp y su Árbol dibujado.
 - **Desbloqueo:** Gate: sefirot completas (si no → `/metodo/cabala/arbol`) y 22 senderos completos (si no → `/metodo/cabala/senderos`). Es el último paso del índice.
 - **Botones / a dónde lleva:** prev → `/metodo/cabala/senderos/diagnostico`; next «Cursos →» → `/metodo/cabala/cursos`; «Descargar» → PDF; «Ilustraciones».
@@ -2310,8 +2310,8 @@ El pago se comprueba siempre. Lo que no se comprueba al entrar en cada página e
 
 ## Criterios que no coinciden
 
-- **FALLO-12 · pendiente.** Medicina China: el paso de Los Cinco Elementos deja avanzar con los tests hechos, sin haber leído los 5 elementos. Luego el Diagnóstico te devuelve atrás.
-- **FALLO-13 · pendiente.** Cábala: el Diagnóstico acepta el test **o** la autoevaluación, pero el botón de cada sefirá pide **los dos**.
+- **FALLO-12 · pendiente.** Medicina China: el paso de Los Cinco Elementos deja avanzar con los tests hechos, sin haber leído los 5 elementos. Luego la Valoración te devuelve atrás.
+- **FALLO-13 · pendiente.** Cábala: la Valoración acepta el test **o** la autoevaluación, pero el botón de cada sefirá pide **los dos**.
 - **FALLO-14 · pendiente.** Psicología: Tus heridas (paso 15) deja borrarlas todas y seguir, aunque el paso 14 exige al menos una.
 - **FALLO-15 · pendiente.** Psicología: Relación (17) y Dones espejo (19) leen el `data` de astrología, no la carta recalculada, y cada una decide de una forma distinta si la astrología está hecha.
 

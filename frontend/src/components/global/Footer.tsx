@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { API_URL, INSTAGRAM_URL } from "../../GlobalVariables";
+import { INSTAGRAM_URL } from "../../GlobalVariables";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -45,82 +45,12 @@ const SiteFooter = () => {
           _hover={{ color: "white" }}
           _focusVisible={focoEnlace}
           transition="color 0.2s"
-          onClick={() => navigate("/contacto")}
-        >
-          {/* Sobre: el corazón se queda solo para «Donar». */}
-          <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="currentColor">
-            <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280 320-200v-80L480-520 160-720v80l320 200Z"/>
-          </svg>
-          {t("footer.contactar")}
-        </Flex>
-        <Flex
-          as="button"
-          type="button"
-          align="center"
-          gap="6px"
-          bg="transparent"
-          border="none"
-          p={0}
-          borderRadius="md"
-          color="rgba(255,255,255,0.65)"
-          fontSize="sm"
-          letterSpacing="0.05em"
-          cursor="pointer"
-          _hover={{ color: "white" }}
-          _focusVisible={focoEnlace}
-          transition="color 0.2s"
           onClick={() => navigate("/quienSoy")}
         >
           {/* Géminis DIBUJADO (el carácter ♊ salía como emoji morado). */}
           <GlifoSigno nombre="Géminis" color="white" size={16} glow={false} />
           {t("footer.quienSoy")}
         </Flex>
-        <Flex
-          as="button"
-          type="button"
-          align="center"
-          gap="6px"
-          bg="transparent"
-          border="none"
-          p={0}
-          borderRadius="md"
-          color="rgba(255,255,255,0.65)"
-          fontSize="sm"
-          letterSpacing="0.05em"
-          cursor="pointer"
-          _hover={{ color: "white" }}
-          _focusVisible={focoEnlace}
-          transition="color 0.2s"
-          onClick={() => navigate("/opiniones")}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="currentColor">
-            <path d="M240-400h122l200-200q9-9 13.5-20.5T580-643q0-11-5-21.5T562-684l-36-38q-9-9-20-13.5t-23-4.5q-11 0-22.5 4.5T440-722L240-522v122ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Z"/>
-          </svg>
-          {t("footer.experiencias")}
-        </Flex>
-        <Box
-          as="a"
-          href="https://www.tiktok.com/@lifeasaprivilege"
-          target="_blank"
-          rel="noopener noreferrer"
-          display="inline-flex"
-          alignItems="center"
-          gap="6px"
-          color="rgba(255,255,255,0.65)"
-          fontSize="sm"
-          letterSpacing="0.05em"
-          cursor="pointer"
-          textDecoration="none"
-          borderRadius="md"
-          transition="color 0.2s"
-          _hover={{ color: "white" }}
-          _focusVisible={focoEnlace}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" height="15px" width="15px" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
-          </svg>
-          TikTok
-        </Box>
         <Box
           as="a"
           href={INSTAGRAM_URL}
@@ -183,16 +113,11 @@ const SiteFooter = () => {
           { texto: t("footer.privacidad"), ruta: "/privacidad" },
           { texto: t("footer.cookies"), ruta: "/cookies" },
           { texto: t("footer.terminos"), ruta: "/terminos" },
-          // Baja de la lista de correo: siempre a mano, sin tener que buscar un
-          // correo viejo. La página la pinta el backend (subscribe/baja.pagina).
-          { texto: t("footer.baja"), ruta: "/subscribe/baja", externo: true },
         ].map((l) => (
           <Text
             key={l.ruta}
-            as={l.externo ? "a" : "button"}
-            {...(l.externo
-              ? { href: `${API_URL}${l.ruta}`, rel: "nofollow" }
-              : { onClick: () => navigate(l.ruta) })}
+            as="button"
+            onClick={() => navigate(l.ruta)}
             color="rgba(255,255,255,0.45)"
             fontSize="xs"
             letterSpacing="0.06em"

@@ -145,9 +145,18 @@ function CirculoVisual({
   );
 }
 
+// Los textos de la línea van sobre el turquesa de la página (fuera de cajas), así
+// que van en BLANCO con glow blanco: la sombra oscura ensuciaba, y el menta del
+// acento apenas contrasta con el turquesa. Al pasar el puntero por su círculo
+// (role="group") el glow se enciende y el texto se levanta un pelo.
+const GLOW_TEXTO = "0 0 10px rgba(255,255,255,0.45), 0 0 22px rgba(255,255,255,0.22)";
+const GLOW_TEXTO_HOVER = "0 0 14px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.45)";
+const GLOW_ANIO = "0 0 8px rgba(255,255,255,0.3)";
+
 // Etiqueta (título + año) de un círculo en la vista de ESCRITORIO: va fuera del
-// círculo, alternando arriba/abajo de la línea para que respire.
-function Etiqueta({ hito, tinta, arriba }: { hito: TimelineHito; tinta: string; arriba: boolean }) {
+// círculo, alternando arriba/abajo de la línea para que respire. Entra un rato
+// DESPUÉS de su círculo (), subiendo y enfocándose.
+function Etiqueta({ hito, arriba, delay }: { hito: TimelineHito; arriba: boolean; delay: number }) {
   return (
     <Box
       position="absolute"
@@ -158,28 +167,39 @@ function Etiqueta({ hito, tinta, arriba }: { hito: TimelineHito; tinta: string; 
       pointerEvents="none"
       {...(arriba ? { bottom: "calc(100% + 16px)" } : { top: "calc(100% + 16px)" })}
     >
-      <Text
-        color={tinta}
-        fontSize={{ md: "sm", lg: "md" }}
-        fontWeight="700"
-        lineHeight="1.25"
-        letterSpacing="0.02em"
-        style={{ textShadow: `0 1px 3px #0c3c3cf5, 0 0 10px ${tinta}55` }}
+      <Box
+        transition="transform 0.3s cubic-bezier(0.22,1,0.36,1)"
+        _groupHover={{ transform: "translateY(-2px) scale(1.04)" }}
+        sx={{
+          animation: `etiquetaCulturaIn 0.6s cubic-bezier(0.22,1,0.36,1) ${delay}s backwards`,
+          "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+        }}
       >
-        {hito.titulo}
-      </Text>
-      {hito.anio && (
         <Text
-          color={`${tinta}bb`}
-          fontSize={{ md: "xs", lg: "sm" }}
-          fontStyle="italic"
-          letterSpacing="0.04em"
-          mt={0.5}
-          style={{ textShadow: `0 1px 3px #0c3c3cf5` }}
+          color="white"
+          fontSize={{ md: "sm", lg: "md" }}
+          fontWeight="700"
+          lineHeight="1.25"
+          letterSpacing="0.02em"
+          textShadow={GLOW_TEXTO}
+          transition="text-shadow 0.3s ease"
+          _groupHover={{ textShadow: GLOW_TEXTO_HOVER }}
         >
-          {hito.anio}
+          {hito.titulo}
         </Text>
-      )}
+        {hito.anio && (
+          <Text
+            color="rgba(255,255,255,0.85)"
+            fontSize={{ md: "xs", lg: "sm" }}
+            fontStyle="italic"
+            letterSpacing="0.04em"
+            mt={0.5}
+            textShadow={GLOW_ANIO}
+          >
+            {hito.anio}
+          </Text>
+        )}
+      </Box>
     </Box>
   );
 }
@@ -290,6 +310,10 @@ function TimelineDesktop({
                   from: { opacity: 0, transform: "translateY(-50%) scaleX(0)" },
                   to: { opacity: 1, transform: "translateY(-50%) scaleX(1)" },
                 },
+                "@keyframes etiquetaCulturaIn": {
+                  from: { opacity: 0, transform: "translateY(8px)", filter: "blur(4px)" },
+                  to: { opacity: 1, transform: "translateY(0)", filter: "blur(0px)" },
+                },
                 "@keyframes hitoCulturaIn": {
                   from: { opacity: 0, transform: "scale(0.55)" },
                   to: { opacity: 1, transform: "scale(1)" },
@@ -366,7 +390,7 @@ function TimelineDesktop({
               // Cada círculo brota después del anterior (pop con rebote suave).
               style={{ animation: `hitoCulturaIn 0.55s cubic-bezier(0.34,1.56,0.64,1) ${0.15 + i * 0.12}s backwards` }}
             >
-              <Etiqueta hito={hito} tinta={tinta} arriba={i % 2 === 0} />
+              <Etiqueta hito={hito} arriba={i % 2 === 0} delay={0.5 + i * 0.12} />
               {/* Vaivén perpetuo SOLO del círculo (la etiqueta se queda quieta,
                   que es texto y se lee). Cada uno con su ritmo y su desfase,
                   para que la fila respire en vez de botar al unísono. Arranca
@@ -489,13 +513,15 @@ function TimelineMovil({
                            size={{ base: "137px" }} iconSize={{ base: "48px" }} lazy />
           </Box>
           <Box flex="1" minW={0}>
-            <Text color={tinta} fontSize="md" fontWeight="700" lineHeight="1.3"
-                  letterSpacing="0.02em" style={{ textShadow: `0 1px 3px #0c3c3cf5, 0 0 10px ${tinta}55` }}>
+            <Text color="white" fontSize="md" fontWeight="700" lineHeight="1.3"
+                  letterSpacing="0.02em" textShadow={GLOW_TEXTO}
+                  transition="text-shadow 0.3s ease"
+                  _groupHover={{ textShadow: GLOW_TEXTO_HOVER }}>
               {hito.titulo}
             </Text>
             {hito.anio && (
-              <Text color={`${tinta}bb`} fontSize="sm" fontStyle="italic" mt={0.5}
-                    style={{ textShadow: `0 1px 3px #0c3c3cf5` }}>
+              <Text color="rgba(255,255,255,0.85)" fontSize="sm" fontStyle="italic" mt={0.5}
+                    textShadow={GLOW_ANIO}>
                 {hito.anio}
               </Text>
             )}

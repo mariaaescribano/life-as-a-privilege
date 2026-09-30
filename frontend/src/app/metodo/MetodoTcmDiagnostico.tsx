@@ -16,7 +16,7 @@ import { ElementoComicModal } from "../../components/metodo/ElementoComicModal";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { VINETAS_ENFERMEDADES } from "../../components/metodo/comicEnfermedades";
 import { useComic } from "../../i18n/comics";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Breathe } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
   ELEMENTOS, ORDEN_ELEMENTOS, CICLO_SHENG, CICLO_KE,
@@ -67,6 +67,7 @@ const R = 104, FOTO_R = 25; // mismos que la geometría compartida del pentágon
 // 1) florecen los 5 elementos, 2) salen una a una las flechas de FUERA (Sheng,
 // el perímetro), 3) luego las de DENTRO (Ke, las que cruzan la estrella).
 const MotionG = motion.g as any;
+const MotionCircle = motion.circle as any;
 const EASE_POP = [0.34, 1.56, 0.64, 1] as const;
 const DP_ELEM_BASE = 0.12, DP_ELEM_STEP = 0.12, DP_ELEM_DUR = 0.5;
 const DP_SHENG_BASE = 1.0, DP_KE_BASE = 2.0, DP_ARROW_STEP = 0.18, DP_ARROW_DUR = 0.45;
@@ -179,18 +180,22 @@ export default function MetodoTcmDiagnostico() {
           />
           </Reveal>
 
-          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Flex direction="column" align="center" gap={2} maxW="660px">
+            <Reveal direction="up" distance={20} blur delay={0.12} duration={0.8}>
             <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                   textAlign="center">
               {t("metodo.tcm.diag.cita")}
             </Text>
-            <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontWeight={600} letterSpacing="0.06em"
+            </Reveal>
+            {/* El autor también en blanco: fuera de los boxes no va el color
+                de la disciplina. Llega un instante después de la cita. */}
+            <Reveal direction="up" distance={12} delay={0.55} duration={0.65}>
+            <Text color="white" fontSize={{ base: "sm", md: "md" }} fontWeight={600} letterSpacing="0.06em"
                   textAlign="center">
               {t("metodo.tcm.diag.citaAutor")}
             </Text>
+            </Reveal>
           </Flex>
-          </Reveal>
 
           {/* ── BOX 1 · Estrella-perfil (lo que ocurre en ti ahora mismo) ──
               Box contenido (no a todo el ancho de la página): la estrella se lee
@@ -219,18 +224,25 @@ export default function MetodoTcmDiagnostico() {
               Va DESPUÉS de las métricas porque se apoya en ellas (el par sale de
               la carga neta de sus dos elementos) y antes de la constitución, que
               ya es otra pregunta: esto es lo de hoy, aquella es el fondo. */}
-          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
-          <Panel titulo="" color={tcmTxt}>
-            <ResultadoParKe data={data} color={tcmTxt} />
-          </Panel>
-          </Reveal>
+          {/* Par de control + constitución: en ordenador, uno al lado del otro y
+              del mismo alto, sin pasar del ancho del header (el contenedor). En
+              móvil y tablet se apilan. */}
+          <Flex direction={{ base: "column", lg: "row" }} gap={{ base: 7, lg: 5 }} w="100%" align="stretch">
+            <Reveal inView direction="right" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15}
+                    w="100%" flex={{ lg: "1" }} minW={0} display="flex">
+            <Panel titulo="" color={tcmTxt} centrado>
+              <ResultadoParKe data={data} color={tcmTxt} />
+            </Panel>
+            </Reveal>
 
-          {/* ── BOX CONSTITUCIÓN · quién eres de fondo, cruzado con lo de hoy ── */}
-          <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
-          <Panel titulo="" color={tcmTxt}>
-            <TuConstitucion data={data} cargado={tipos.primario} />
-          </Panel>
-          </Reveal>
+            {/* ── BOX CONSTITUCIÓN · quién eres de fondo, cruzado con lo de hoy ── */}
+            <Reveal inView direction="left" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15}
+                    w="100%" flex={{ lg: "1" }} minW={0} display="flex">
+            <Panel titulo="" color={tcmTxt} centrado>
+              <TuConstitucion data={data} cargado={tipos.primario} />
+            </Panel>
+            </Reveal>
+          </Flex>
 
           {/* ── BOX 2 · La estrella de los cinco elementos + tu mensaje (de Equilibrio) ── */}
           <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.15} w="100%">
@@ -419,10 +431,23 @@ function EstrellaPerfil({ estados, onElemento }: {
             <MotionG key={el}
                initial={reduce ? false : { opacity: 0, scale: 0.3 }}
                animate={reduce ? {} : (enter ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.3 })}
+               whileHover={reduce ? undefined : { scale: 1.12 }}
+               whileTap={reduce ? undefined : { scale: 0.94 }}
                transition={{ delay: DP_ELEM_BASE + i * DP_ELEM_STEP, duration: DP_ELEM_DUR, ease: EASE_POP }}
                style={{ cursor: "pointer", transformBox: "view-box", transformOrigin: `${v.x}px ${v.y}px` }}
                onClick={() => onElemento(el)}
                onMouseEnter={() => setHover(el)} onMouseLeave={() => setHover(null)}>
+              {/* Los elementos EN CARGA laten: dos ondas del color del elemento
+                  que se abren desde el aro, más rápidas cuanto más carga. Es
+                  lo que dice «mírame» sin ponerle una etiqueta. */}
+              {!reduce && enter && deseq && [0, 1].map((k) => (
+                <MotionCircle key={k} cx={v.x} cy={v.y} r={FOTO_R + 2} fill="none"
+                  stroke={E.color} strokeWidth={2.2} pointerEvents="none"
+                  initial={{ r: FOTO_R + 2, opacity: 0 }}
+                  animate={{ r: [FOTO_R + 2, FOTO_R + 12 + nivel * 10], opacity: [0.8, 0] }}
+                  transition={{ duration: 2.6 - nivel * 0.8, repeat: Infinity,
+                                delay: 1.8 + i * 0.15 + k * 1.1, ease: "easeOut" }} />
+              ))}
               <circle cx={v.x} cy={v.y} r={FOTO_R + 2} fill={tcmBg} opacity={0.55} />
               <image href={ICONO_ELEMENTO[el]} x={v.x - FOTO_R} y={v.y - FOTO_R}
                      width={FOTO_R * 2} height={FOTO_R * 2}
@@ -449,13 +474,19 @@ function EstrellaPerfil({ estados, onElemento }: {
   );
 }
 
-function Panel({ titulo, color, children }: {
+function Panel({ titulo, color, children, centrado }: {
   titulo: string; color: string; children: React.ReactNode;
+  /** Para boxes que van en fila con otro: se estira al alto de la fila y
+   *  centra su contenido en vertical. */
+  centrado?: boolean;
 }) {
   return (
-    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
+    <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}
+         display={centrado ? "flex" : undefined} flexDirection={centrado ? "column" : undefined}>
       <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-      <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 5, md: 6 }}>
+      <Box position="relative" zIndex={1} px={{ base: 6, md: 8 }} py={{ base: 5, md: 6 }}
+           flex={centrado ? "1" : undefined} display={centrado ? "flex" : undefined}
+           flexDirection={centrado ? "column" : undefined} justifyContent={centrado ? "center" : undefined}>
         {titulo && (
           <>
             <Text color={color} fontSize={{ base: "xs", md: "sm" }} fontWeight={700} letterSpacing="0.1em"
@@ -653,12 +684,16 @@ function TuConstitucion({ data, cargado }: {
         <Flex align="center" gap={{ base: 3, md: 5 }} px={{ base: 4, md: 6 }} py={4} borderRadius="xl"
               bg="rgba(0,0,0,0.32)" border={`1px solid ${E.color}88`} maxW="620px"
               style={{ boxShadow: `0 0 18px ${E.color}55` }}>
+          {/* Respira con calma: es «quién eres», lo estable, así que el
+              movimiento es lento y mínimo. */}
+          <Breathe scale={0.05} duration={4.2} flexShrink={0}>
           <Box w={{ base: "58px", md: "76px" }} h={{ base: "58px", md: "76px" }} flexShrink={0}
                borderRadius="full" overflow="hidden" border={`2px solid ${E.color}`}
                style={{ boxShadow: `0 0 10px ${E.color}88` }}>
             <img src={ICONO_ELEMENTO[primaria]} alt={nombres[primaria]}
                  style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </Box>
+          </Breathe>
           <Box>
             <Text color="rgba(255,255,255,0.72)" fontSize={{ base: "2xs", md: "xs" }} fontWeight={700}
                   letterSpacing="0.1em" textTransform="uppercase">
@@ -681,10 +716,10 @@ function TuConstitucion({ data, cargado }: {
       <Text color="white" fontSize={{ base: "sm", md: "md" }} lineHeight="1.75" textAlign="center"
             maxW="680px" mx="auto" mt={4} style={{ textShadow: INK_SHADOW }}>
         {coincide
-          ? t("metodo.tcm.diag.constMismo").replace("{el}", nombres[primaria])
+          ? t("metodo.tcm.diag.constMismo").replace(/\{el\}/g, nombres[primaria])
           : t("metodo.tcm.diag.constDistinto")
-              .replace("{fondo}", nombres[primaria])
-              .replace("{hoy}", nombres[cargado])}
+              .replace(/\{fondo\}/g, nombres[primaria])
+              .replace(/\{hoy\}/g, nombres[cargado])}
       </Text>
     </>
   );

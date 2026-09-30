@@ -112,10 +112,13 @@ export default function MetodoPsicologiaGenograma() {
                 familia sigue en la página anterior, «Tu familia».) */}
             {/* Un <Reveal inView> POR tarjeta (la rejilla crece con la familia:
                 envolverla entera caería en la trampa del `amount`). */}
-            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={{ base: 3, md: 4 }} w="100%">
+            {/* TRES por fila (no cuatro) y la rejilla capada al mismo ancho que
+                el header (MetodoStepHeader capa en 850px; la columna mide 900):
+                así las filas cierran a plomo con el box de arriba. */}
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 3, md: 4 }} w="100%" maxW="850px">
               {personas.map((p, i) => (
                 <Reveal key={p.id} inView once amount={0.2} direction="up" distance={30} scaleFrom={0.97} duration={0.7}
-                        delay={(i % 4) * 0.07} display="flex" flexDirection="column">
+                        delay={(i % 3) * 0.07} display="flex" flexDirection="column">
                   <TarjetaPersona p={p} onRellenar={() => setAbiertoId(p.id)} />
                 </Reveal>
               ))}

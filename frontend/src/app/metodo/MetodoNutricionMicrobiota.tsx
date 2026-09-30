@@ -9,7 +9,7 @@ import { NutricionLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal } from "../../components/global/Reveal";
+import { Float, Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { NutrienteFichaModal } from "../../components/metodo/NutrienteFichaModal";
 import { ComicHambreModal } from "../../components/metodo/ComicHambreModal";
@@ -130,14 +130,17 @@ export default function MetodoNutricionMicrobiota() {
           <Reveal direction="up" distance={12} delay={0.2} duration={0.6} w="100%">
             <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" py={{ base: 2, md: 3 }}>
               <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.75))" />
-              <Image
-                src="/img/icono/life.webp"
-                alt=""
-                h={{ base: "44px", md: "56px" }}
-                objectFit="contain"
-                flexShrink={0}
-                style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 0 24px rgba(180,255,245,0.28))" }}
-              />
+              {/* El mandala flota despacio, como en las cesuras de /elMetodo. */}
+              <Float amplitude={4} duration={6.5} flexShrink={0}>
+                <Image
+                  src="/img/icono/life.webp"
+                  alt=""
+                  h={{ base: "44px", md: "56px" }}
+                  objectFit="contain"
+                  flexShrink={0}
+                  style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 0 24px rgba(180,255,245,0.28))" }}
+                />
+              </Float>
               <Box flex="1" h="1px" bg="linear-gradient(to left, transparent, rgba(255,255,255,0.75))" />
             </Flex>
           </Reveal>

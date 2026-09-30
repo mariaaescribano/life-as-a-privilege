@@ -1000,7 +1000,7 @@ export const MIEDOS = {
   titulo: "Miedos",
   pregunta: "¿Cuáles son tus miedos más profundos?",
   apoyo:
-    "Un miedo no siempre es racional, y no hace falta que lo sea. Escribe lo que de verdad te da miedo, tal y como aparece, sin justificarlo ni suavizarlo. Nadie más lo va a leer.",
+    "Un miedo no siempre es racional, y no hace falta que lo sea. Escribe lo que necesites, nadie más lo va a leer.",
   ejemplos: [
     "A quedarme solo/a",
     "A no ser suficiente",

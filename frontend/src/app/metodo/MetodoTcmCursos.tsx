@@ -60,8 +60,11 @@ export default function MetodoTcmCursos() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
-      <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
-        <Flex direction="column" align="center" w="100%" maxW="1280px" gap={6}>
+      {/* Mismos márgenes y MISMO ancho que la página de cursos de Materiales
+          (CursosModalidad): sin tope de 1280px, la rejilla ocupa todo el ancho
+          disponible y las tarjetas salen del mismo tamaño en las dos páginas. */}
+      <Flex flex="1" justify="center" px={{ base: 5, md: 8, lg: 10 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
+        <Flex direction="column" align="center" w="100%" gap={6}>
           <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
           <MetodoStepHeader
             icon={<TCMIcon size={{ base: "40px", md: "56px" }} />}

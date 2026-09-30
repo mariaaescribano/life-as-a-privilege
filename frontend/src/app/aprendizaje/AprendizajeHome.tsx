@@ -1,5 +1,5 @@
-import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, Flex, Image, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
@@ -7,6 +7,8 @@ import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
+import { Float } from "../../components/global/Reveal";
+import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { useT } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import {
@@ -21,26 +23,29 @@ import {
   nutricionNomLink,
 } from "../../GlobalVariables";
 
-// `enabled` re-dispara el efecto cuando el contenido observado se monta de
-// verdad. Sin él, el observer se creaba mientras la página aún mostraba el
-// loader (ref = null → early return) y NUNCA se re-adjuntaba al montar el grid,
-// dejando las cajitas atascadas en opacity 0.
-const useReveal = (threshold = 0.05, enabled = true) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    if (!enabled) return;
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold, enabled]);
-  return { ref, visible };
-};
+// Cada caja de disciplina con SU propio observador: no se coloca hasta que
+// ella misma asoma en pantalla. Con un único observador para toda la
+// cuadrícula, al llegar a la primera fila arrancaban las ocho y las filas de
+// abajo (en móvil son cuatro) se colocaban fuera de la vista, así que el que
+// bajaba se las encontraba ya puestas y no veía la animación. El retraso lo
+// marca la COLUMNA, para que las de una misma fila entren de izquierda a
+// derecha. Mismo patrón que las tarjetas de Welcome y /elMetodo.
+// (useEnPantalla usa callback ref, así que da igual que el nodo aparezca
+// tarde, cuando el loader deja paso al contenido.)
+function CeldaDisciplina({ delay, children }: { delay: number; children: React.ReactNode }) {
+  const enPantalla = useEnPantalla("0px 0px -6% 0px");
+  return (
+    <Box
+      ref={enPantalla.ref}
+      opacity={enPantalla.visto ? 1 : 0}
+      transform={enPantalla.visto ? "translateY(0) scale(1)" : "translateY(28px) scale(0.95)"}
+      filter={enPantalla.visto ? "blur(0px)" : "blur(6px)"}
+      transition={`opacity 0.4s ease ${delay}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s, filter 0.4s ease ${delay}s`}
+    >
+      {children}
+    </Box>
+  );
+}
 
 // Cuántas portadas de curso se piden por adelantado: las dos primeras filas de
 // la cuadrícula (3 columnas en escritorio). El resto baja al acercarse.
@@ -55,9 +60,10 @@ export const AprendizajeHome = () => {
   // ocho boxes de disciplina, que son iconos y no tienen foto que esperar.
   const [imagesReady, setImagesReady] = useState(false);
   const { cursosData, loading } = useCursosData();
-  // El reveal solo se arma cuando la página real ya está en pantalla (datos +
-  // portadas listas); antes el nodo observado no existe.
-  const cardsReveal = useReveal(0.04, !loading && imagesReady);
+  // Cajas por fila (2 en móvil, 4 en escritorio): marca el orden de la cascada
+  // de entrada (las de una misma fila entran de izquierda a derecha).
+  const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
+  const columnas = esMovil ? 2 : 4;
 
   // Todos los cursos de todas las disciplinas, en una sola lista mezclada,
   // ordenada por fecha de creación descendente (los más nuevos, primero).
@@ -136,17 +142,35 @@ export const AprendizajeHome = () => {
       <SiteHeader variant="auto" />
 
       {/* ── MANDALA SEPARADOR ── */}
+      {/* Wrapper con flotación perpetua (vida continua, como en Welcome y
+          /elMetodo); la imagen hace la entrada épica (surge girando desde muy
+          pequeña y se enfoca). */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "48px", md: "64px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
+        <Box
+          sx={{
+            "@keyframes mandalaFloat": {
+              "0%, 100%": { transform: "translateY(0) scale(1)" },
+              "50%": { transform: "translateY(-9px) scale(1.03)" },
+            },
+            animation: "mandalaFloat 5.5s ease-in-out infinite",
+          }}
+        >
+          <Image
+            src="/img/icono/life.webp"
+            alt=""
+            h={{ base: "48px", md: "64px" }}
+            objectFit="contain"
+            style={{
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)",
+              // glow (drop-shadow) siempre + blur solo durante la entrada.
+              filter:
+                "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" +
+                (mounted ? "" : " blur(6px)"),
+              transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease",
+            }}
+          />
+        </Box>
       </Flex>
 
       {/* ── TÍTULO ── */}
@@ -197,18 +221,13 @@ export const AprendizajeHome = () => {
         pt={{ base: 20, md: 24 }}
         pb={{ base: 24, md: 32 }}
       >
-        <Box ref={cardsReveal.ref} w="100%" maxW="960px">
+        <Box w="100%" maxW="960px">
           <SimpleGrid
             columns={{ base: 2, md: 4 }}
             spacing={{ base: 5, md: 6 }}
           >
             {items.map((item, i) => (
-              <Box
-                key={i}
-                opacity={cardsReveal.visible ? 1 : 0}
-                transform={cardsReveal.visible ? "translateY(0) scale(1)" : "translateY(28px) scale(0.95)"}
-                transition={`opacity 0.6s ease ${i * 0.08}s, transform 0.6s ease ${i * 0.08}s`}
-              >
+              <CeldaDisciplina key={i} delay={(i % columnas) * 0.12}>
                 <ThemeCard
                   title={item.title}
                   label={nombreDisciplina(item.title)}
@@ -218,7 +237,7 @@ export const AprendizajeHome = () => {
                   link={"/aprendizaje/cursos/" + item.slug}
                   cursor="pointer"
                 />
-              </Box>
+              </CeldaDisciplina>
             ))}
           </SimpleGrid>
         </Box>
@@ -228,13 +247,18 @@ export const AprendizajeHome = () => {
           <Box w="100%">
             <Flex align="center" gap={{ base: 4, md: 6 }} my={{ base: 12, md: 16 }}>
               <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
-              <Image
-                src="/img/icono/life.webp"
-                alt=""
-                h={{ base: "40px", md: "52px" }}
-                objectFit="contain"
-                style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.55)) drop-shadow(0 0 21px rgba(180,255,245,0.3))" }}
-              />
+              {/* El mandala del separador flota despacio, como el de las
+                  cesuras de /elMetodo: la pausa entre secciones también respira. */}
+              <Float amplitude={4} duration={6.5}>
+                <Image
+                  src="/img/icono/life.webp"
+                  alt=""
+                  h={{ base: "40px", md: "52px" }}
+                  objectFit="contain"
+                  flexShrink={0}
+                  style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.55)) drop-shadow(0 0 21px rgba(180,255,245,0.3))" }}
+                />
+              </Float>
               <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
             </Flex>
 

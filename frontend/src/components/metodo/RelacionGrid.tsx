@@ -18,6 +18,7 @@ import { colorHeridaIdx } from "./HeridaGrid";
 import { cuerpoByKey } from "./astrologiaData";
 import { arquetipoLabel } from "./integracionSimbolos";
 import { neuropsicologiaTxt } from "../../GlobalVariables";
+import { glowPanel } from "./psicologiaGlow";
 import { arquetipoKey, type Constelacion } from "./psicologiaRecorrido";
 
 const TINTA = neuropsicologiaTxt;
@@ -55,7 +56,9 @@ export function RelacionCard({ relacion, color, onBorrar }: {
     // interno); el tope y el scroll de dentro son solo de escritorio.
     <Box position="relative" borderRadius="2xl" overflow="hidden" h="100%"
          minH={{ base: "180px", md: "210px" }} maxH={{ base: "none", md: "340px" }}
-         boxShadow={`0 12px 34px rgba(40,18,4,0.20), 0 2px 8px rgba(40,18,4,0.12)`}
+         // Glow ligero de la casa (glowPanel), no sombra oscura de profundidad:
+         // sobre el turquesa, la sombra negra hacía flotar el box como un modal.
+         boxShadow={glowPanel}
          border={`1px solid ${TINTA}26`}>
       {/* Lavado de color propio de la relación + brillo suave arriba */}
       <Box position="absolute" inset={0} bgGradient={`linear(155deg, ${PAPEL}, ${color})`} />

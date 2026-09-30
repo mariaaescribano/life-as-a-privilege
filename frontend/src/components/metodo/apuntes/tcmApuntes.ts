@@ -80,14 +80,14 @@ export function libroApuntesTcm(data: DatosTcm | null | undefined): ApuntesLibro
   const testsHechos = elementosTestsCompletos(data);
   const lenguaHecha = lenguaCompleta(data?.observarte);
 
-  /* ── 1 · TU DIAGNÓSTICO ───────────────────────────────────────────────── */
+  /* ── 1 · TU VALORACIÓN ────────────────────────────────────────────────── */
   const protagonista: Elemento = elementoMasCargado(data);
   const diagnostico: ApuntesCapitulo = {
     key: "diagnostico",
-    titulo: "Tu diagnóstico",
+    titulo: "Tu valoración",
     resumen: "tus cinco elementos, con su rueda dibujada, y lo que te toca cuidar",
     pordefecto: true,
-    bloqueado: testsHechos ? undefined : "Termina los tests de los cinco elementos y aquí tendrás tu diagnóstico.",
+    bloqueado: testsHechos ? undefined : "Termina los tests de los cinco elementos y aquí tendrás tu valoración.",
     fotos: [FOTO_ELEMENTO[protagonista]],
     pintar: (t, fotos, conFotos) => {
       const tema = TEMA_TCM;
@@ -97,7 +97,7 @@ export function libroApuntesTcm(data: DatosTcm | null | undefined): ApuntesLibro
       }));
 
       t.capitulo(
-        "Tu diagnóstico",
+        "Tu valoración",
         "Un elemento muy cargado tira del que genera y ahoga al que controla: por eso se lee la rueda entera y no el pico más alto.",
       );
 

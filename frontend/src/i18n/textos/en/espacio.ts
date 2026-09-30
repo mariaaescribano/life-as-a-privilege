@@ -72,9 +72,9 @@ export const espacio = {
   "espacio.tcm.rehacer": "Retake the test",
   "espacio.tcm.evaluacion": "Personalized assessment",
   "espacio.tcm.evaluacion.placeholder": "Would you like to tell me anything in advance?",
-  "espacio.tcm.diagnostico": "Full diagnosis",
+  "espacio.tcm.diagnostico": "Full assessment",
   "espacio.tcm.diagnostico.sub":
-    "Leave me your details and I'll get in touch with you to offer you a personalized Chinese Medicine diagnosis.",
+    "Leave me your details and I'll get in touch with you to offer you a personalized Chinese Medicine assessment.",
 
   // The three tests: the card label and the title of its section.
   "espacio.tcm.t1.tarjeta": "Get to know your constitution",

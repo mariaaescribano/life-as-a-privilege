@@ -133,8 +133,11 @@ export function FotoBox({
       _hover={{
         transform: vivo ? "translateY(-6px)" : "translateY(-4px)",
         ...(sinLineas ? {} : { borderColor: `${tinta}88` }),
+        // El refuerzo del hover en modo vivo va en BLANCO, no con la tinta: la
+        // tinta de Nutrición (#2b362a) es casi negra y su halo salía como una
+        // sombra oscura alrededor de la tarjeta.
         boxShadow: vivo
-          ? `${glow ?? glowSuaveHover(tinta)}, 0 0 28px ${tinta}2e`
+          ? `${glow ?? glowSuaveHover(tinta)}, 0 0 28px rgba(255,255,255,0.2)`
           : (glow ?? glowSuaveHover(tinta)),
       }}
       _active={{ transform: vivo ? "translateY(-2px) scale(0.985)" : "translateY(-1px)" }}

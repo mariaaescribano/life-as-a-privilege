@@ -23,6 +23,7 @@ export function QigongComicModal({
   initialIndex = 0,
   onClose,
   bgImage,
+  color,
 }: {
   isOpen: boolean;
   vinetas: Vineta[];
@@ -33,10 +34,15 @@ export function QigongComicModal({
    *  de la disciplina. La cocina la usa para que el cómic de las cocciones
    *  vaya sobre la acuarela de SU elemento, como el cómic de los elementos. */
   bgImage?: string;
+  /** Color del ELEMENTO (madera = verde…): el brillo del box, los botones y el
+   *  acento salen de él en vez del rojo de TCM, y la letra va en blanco con
+   *  sombra oscura, igual que el cómic de los elementos. Sin él, todo queda
+   *  con el color de la disciplina. */
+  color?: string;
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full" scrollBehavior="outside" motionPreset="none">
-      <ModalOverlay bg={tcmBg} sx={{ backdropFilter: "blur(20px)" }} />
+      <ModalOverlay bg={color ?? tcmBg} sx={{ backdropFilter: "blur(20px)" }} />
       <ModalContent
         bg="transparent"
         border="none"
@@ -52,10 +58,13 @@ export function QigongComicModal({
           <ComicViewer
             vinetas={vinetas}
             initialIndex={initialIndex}
-            themeColor={tcmTxt}
-            textColor={tcmTxt}
+            themeColor={color ?? tcmTxt}
+            textColor={color ? "#ffffff" : tcmTxt}
+            textShadow={color
+              ? "0 2px 5px rgba(0,0,0,1), 0 0 3px rgba(0,0,0,0.98), 0 6px 20px rgba(0,0,0,0.85)"
+              : undefined}
             disciplinaBgImage={bgImage ?? TCM_IMG}
-            disciplinaBgColor={tcmBg}
+            disciplinaBgColor={color ?? tcmBg}
             // Animación de espera y barra de scroll en blanco, como la letra.
             loader={<TcmLoader color="#ffffff" />}
             scrollbarColor="#ffffff"

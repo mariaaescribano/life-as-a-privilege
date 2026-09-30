@@ -11,7 +11,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Breathe } from "../../components/global/Reveal";
 import { QigongComicModal } from "../../components/metodo/QigongComicModal";
 import { tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import {
@@ -91,18 +91,21 @@ export default function MetodoTcmTaoismo() {
           </Reveal>
 
           {/* Cita de apertura (sin sombra: va sobre el turquesa limpio) */}
-          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
+          {/* La cita entra con un enfoque suave y el autor llega después. */}
           <Flex direction="column" align="center" gap={2} maxW="680px">
+            <Reveal direction="up" distance={20} blur delay={0.12} duration={0.8}>
             <Text color="white" fontStyle="italic" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8"
                   textAlign="center">
               {t("metodo.tcm.tao.citaApertura")}
             </Text>
+            </Reveal>
+            <Reveal direction="up" distance={12} delay={0.55} duration={0.65}>
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight={600} letterSpacing="0.06em"
                   textAlign="center" opacity={0.85}>
               {t("metodo.tcm.tao.citaAperturaAutor")}
             </Text>
+            </Reveal>
           </Flex>
-          </Reveal>
 
           {/* ── LAS LEYES · DE DOS EN DOS ──
               Cada box: la ilustración de la ley arriba, y debajo, en una sola
@@ -214,11 +217,13 @@ function LeyBox({ ley, nombre, numero, onVer }:
           una, los dos boxes queden igual de altos. */}
       <Flex position="relative" zIndex={1} flex="1" align="center" gap={{ base: 3, md: 3.5 }}
             px={{ base: 4, md: 5 }} py={{ base: 3.5, md: 4 }}>
-        <Text flexShrink={0} color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} lineHeight="1"
+        <Breathe scale={0.06} duration={4.5 + (numero % 3) * 0.6} delay={numero * 0.25} flexShrink={0}>
+        <Text color={tcmTxt} fontSize={{ base: "3xl", md: "4xl" }} lineHeight="1"
               fontWeight={700} textAlign="center"
               style={{ textShadow: `${INK_SHADOW}, 0 0 20px ${tcmTxt}44` }}>
           {ley.hanzi}
         </Text>
+        </Breathe>
 
         <Box flex="1" minW={0}>
           <Text color={tcmTxt} fontSize="xs" fontWeight={700} letterSpacing="0.14em" textTransform="uppercase"

@@ -22,7 +22,7 @@ import { VINETAS_ORIGEN as ORIGEN_TAOISMO, VINETAS_ELEMENTOS } from "../../compo
 import { useComic } from "../../i18n/comics";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem, Pop } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 
@@ -145,7 +145,10 @@ export default function MetodoTcm() {
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
           <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
             <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
-            <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
+            {/* Los dos párrafos entran uno tras otro, como se leen. */}
+            <RevealStagger stagger={0.3} delayChildren={0.45} position="relative" zIndex={1}
+                           px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
+              <RevealItem direction="up" distance={16} blur>
               <Text
                 color={tcmTxt}
                 fontSize={{ base: "md", md: "lg" }}
@@ -156,6 +159,8 @@ export default function MetodoTcm() {
               >
                 {t("metodo.gate.tcm.intro1")}
               </Text>
+              </RevealItem>
+              <RevealItem direction="up" distance={16} blur>
               <Text
                 color={tcmTxt}
                 fontSize={{ base: "md", md: "lg" }}
@@ -165,14 +170,17 @@ export default function MetodoTcm() {
               >
                 {t("metodo.gate.tcm.intro2")}
               </Text>
-            </Box>
+              </RevealItem>
+            </RevealStagger>
           </Box>
           </Reveal>
 
           {/* ── Disparador del aviso ── (en pantallas bajas queda bajo el
               pliegue: entra al asomar) */}
           <Reveal inView once amount={0.2} direction="up" distance={18} delay={0.1} duration={0.6} display="flex" justifyContent="center">
+          <Pop>
           <BotonAviso onClick={() => setAvisoOpen(true)} />
+          </Pop>
           </Reveal>
         </Flex>
       </Flex>

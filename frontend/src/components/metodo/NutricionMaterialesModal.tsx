@@ -155,7 +155,7 @@ function AlimentoDetalle({ a, onVolver }: { a: Alimento; onVolver: () => void })
             {a.foto ? (
               <Box w={{ base: "64px", md: "80px" }} h={{ base: "64px", md: "80px" }} borderRadius="full"
                    overflow="hidden" flexShrink={0} border={`2px solid ${nutricionTxt}55`}
-                   boxShadow={`0 4px 14px rgba(0,0,0,0.25)`}>
+                   boxShadow="0 0 14px rgba(255,255,255,0.2)">
                 <Image src={encodeURI(a.foto)} alt={a.nombre} w="100%" h="100%" objectFit="cover" />
               </Box>
             ) : (

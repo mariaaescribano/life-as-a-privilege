@@ -17,6 +17,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { ELEMENTOS, type DatosTcm } from "./tcmRecorrido";
 import { resultadoPar } from "./tcmCicloKe";
 import { ICONO_ELEMENTO } from "./tcmElementosContenido";
+import { RevealStagger, RevealItem, Breathe } from "../global/Reveal";
 
 export function ResultadoParKe({ data, color }: { data: DatosTcm; color: string }) {
   const res = resultadoPar(data);
@@ -24,11 +25,13 @@ export function ResultadoParKe({ data, color }: { data: DatosTcm; color: string 
   if (!res) {
     return (
       <Bloque color={color}>
+        <RevealItem direction="up" distance={16}>
         <Text color="white" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center">
           Ninguna de las cinco relaciones de control destaca hoy sobre las otras: tus
           elementos se frenan entre sí de forma bastante pareja. No es poca cosa — es
           justo lo que el ciclo Ke busca.
         </Text>
+        </RevealItem>
       </Bloque>
     );
   }
@@ -44,30 +47,42 @@ export function ResultadoParKe({ data, color }: { data: DatosTcm; color: string 
 
   return (
     <Bloque color={color}>
-      {/* Quién empuja y quién cede. */}
+      {/* Quién empuja y quién cede: la flecha late (empuja) y cada cara respira
+          a su ritmo. */}
+      <RevealItem direction="up" distance={18} scaleFrom={0.96}>
       <Flex align="center" justify="center" gap={{ base: 3, md: 5 }} flexWrap="wrap">
-        <Cara el={empuja} color={color} pie="empuja" />
-        <Text color={color} fontSize={{ base: "2xl", md: "4xl" }} lineHeight="1">→</Text>
-        <Cara el={cede} color={color} pie="cede" />
+        <Cara el={empuja} color={color} pie="empuja" fase={0} />
+        <Breathe scale={0.16} duration={1.8}>
+          <Text color={color} fontSize={{ base: "2xl", md: "4xl" }} lineHeight="1">→</Text>
+        </Breathe>
+        <Cara el={cede} color={color} pie="cede" fase={0.9} />
       </Flex>
+      </RevealItem>
 
+      <RevealItem direction="up" distance={14}>
       <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
         {par.organos}
         {par.patron && ` · ${par.patron.hanzi} ${par.patron.pinyin}`}
       </Text>
+      </RevealItem>
 
       {/* El mecanismo, con su nombre clásico. */}
+      <RevealItem direction="up" distance={14}>
       <Text color={color} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.16em" textTransform="uppercase"
             textAlign="center" fontWeight="700">
         {mecanismo.hanzi} {mecanismo.pinyin} · {mecanismo.nombre}
       </Text>
+      </RevealItem>
 
+      <RevealItem direction="up" distance={14}>
       <Text color="white" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" textAlign="center" maxW="620px" mx="auto">
         {mecanismo.frase}
       </Text>
+      </RevealItem>
 
       {/* Lo somático: se LEE. No ha puntuado nada y no diagnostica nada. */}
       {par.somaticos.length > 0 && (
+        <RevealItem direction="up" distance={14} w="100%">
         <Box w="100%" maxW="620px" mx="auto">
           <Text color={color} fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.14em"
                 textTransform="uppercase" fontWeight="700" mb={2} textAlign="center">
@@ -87,6 +102,7 @@ export function ResultadoParKe({ data, color }: { data: DatosTcm; color: string 
             explorarte.
           </Text>
         </Box>
+        </RevealItem>
       )}
     </Bloque>
   );
@@ -94,30 +110,39 @@ export function ResultadoParKe({ data, color }: { data: DatosTcm; color: string 
 
 // ── Piezas ────────────────────────────────────────────────────────────────
 function Bloque({ children, color }: { children: React.ReactNode; color: string }) {
+  // Cascada al asomar en pantalla (el box va bajo el pliegue). Contenedor corto,
+  // así que el disparo por `inView` es seguro.
   return (
-    <Flex direction="column" gap={4} w="100%" align="center">
+    <RevealStagger inView amount={0.15} stagger={0.13} delayChildren={0.1}
+                   display="flex" flexDirection="column" gap={4} w="100%" alignItems="center">
+      <RevealItem direction="up" distance={12}>
       <Text color={color} fontSize={{ base: "lg", md: "xl" }} fontWeight="800" letterSpacing="0.16em"
             textTransform="uppercase" textAlign="center">
         Tu par de control
       </Text>
+      </RevealItem>
       {children}
-    </Flex>
+    </RevealStagger>
   );
 }
 
-function Cara({ el, color, pie }: { el: keyof typeof ICONO_ELEMENTO; color: string; pie: string }) {
+function Cara({ el, color, pie, fase = 0 }: { el: keyof typeof ICONO_ELEMENTO; color: string; pie: string; fase?: number }) {
   return (
     <Flex direction="column" align="center" gap={1.5}>
+      {/* El icono respira, cada cara a su ritmo (`fase`), con el halo de su elemento. */}
+      <Breathe scale={0.05} duration={3.4} delay={fase}>
       <Box
         w={{ base: "62px", md: "80px" }}
         h={{ base: "62px", md: "80px" }}
         borderRadius="full"
         overflow="hidden"
         border={`1px solid ${color}aa`}
+        boxShadow={`0 0 16px ${ELEMENTOS[el].color}66`}
         backgroundImage={`url('${ICONO_ELEMENTO[el]}')`}
         backgroundSize="cover"
         backgroundPosition="center"
       />
+      </Breathe>
       <Text color={color} fontSize={{ base: "sm", md: "md" }} fontWeight="700" letterSpacing="0.1em"
             textTransform="uppercase">
         {ELEMENTOS[el].nombre}

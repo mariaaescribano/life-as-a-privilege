@@ -41,11 +41,12 @@ export default function MetodoCulturaHistorias() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  // Cascada de entrada de las Historias: UNA DESPUÉS DE OTRA. En escritorio
-  // (rejilla de 3, las seis a la vista) el paso es marcado; en móvil, donde
-  // cada caja entra al asomar por scroll, el paso se acorta para que ninguna
-  // se haga esperar ya visible.
-  const pasoCascada = useBreakpointValue({ base: 0.1, sm: 0.16, md: 0.3 }) ?? 0.3;
+  // Cascada de entrada de las Historias: UNA DESPUÉS DE OTRA, pero ágil. En
+  // escritorio (rejilla de 3, las seis a la vista) la última empieza a los
+  // ~0,5 s; con 0,3 s de paso tardaba 1,6 s en arrancar y la página parecía
+  // lenta. En móvil, donde cada caja entra al asomar por scroll, el paso es
+  // aún más corto para que ninguna se haga esperar ya visible.
+  const pasoCascada = useBreakpointValue({ base: 0.06, sm: 0.08, md: 0.09 }) ?? 0.09;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -109,7 +110,7 @@ export default function MetodoCulturaHistorias() {
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 5, md: 7 }} w="100%">
             {HISTORIAS.map((h, i) => (
               <Reveal key={h.key} inView amount={0.2} direction="up" distance={26} scaleFrom={0.95}
-                      delay={0.1 + i * pasoCascada} duration={0.7}>
+                      delay={0.05 + i * pasoCascada} duration={0.55}>
                 <Box h="100%">
                   <FotoBox
                     titulo={tituloHistoria(h.key).toUpperCase()}

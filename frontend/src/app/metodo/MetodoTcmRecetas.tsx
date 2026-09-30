@@ -15,7 +15,7 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { TcmComicModal } from "../../components/metodo/QigongComicModal";
 import { CINCO_ANIMALES_VINETAS, HISTORIA_QIGONG_VINETAS } from "../../components/metodo/tcmQigongContenido";
 import { useComic } from "../../i18n/comics";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem, Pop } from "../../components/global/Reveal";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
@@ -32,7 +32,9 @@ import { useT } from "../../i18n";
 // una sombra de color no separaba la letra del fondo: se leía a medias. Negra
 // funciona con las cinco.
 const INK_SHADOW = "0 1px 3px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.8)";
-const CAJA_GLOW = `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${tcmTxt}1a, 0 0 48px ${tcmTxt}10`;
+// Glow discreto: un halo blanco corto y nada más (antes sumaba cinco capas, con
+// menta y tinta, y las cajas se veían envueltas en una nube turquesa).
+const CAJA_GLOW = `0 0 12px rgba(255,255,255,0.10), 0 0 28px rgba(255,255,255,0.05)`;
 
 // Toda la página vive dentro del mismo ancho que el header del recorrido
 // (MetodoStepHeader va a 850px): ningún box se sale de esa columna.
@@ -174,17 +176,20 @@ export default function MetodoTcmRecetas() {
           </Reveal>
 
           {/* Cita bajo el header · sin sombra (va sobre el turquesa limpio) */}
-          <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
+          {/* La cita entra primero y el autor llega un instante después. */}
           <Flex direction="column" align="center" gap={2} maxW="700px">
+            <Reveal direction="up" distance={20} blur delay={0.12} duration={0.75}>
             <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                   textAlign="center">
               {t("metodo.tcm.cocina.cita")}
             </Text>
+            </Reveal>
+            <Reveal direction="up" distance={12} delay={0.5} duration={0.65}>
             <Text color="white" fontSize={{ base: "sm", md: "md" }} textAlign="center" opacity={0.85}>
               {t("metodo.tcm.cocina.citaAutor")} <Box as="span" fontStyle="italic">{t("metodo.tcm.cocina.citaObra")}</Box>
             </Text>
+            </Reveal>
           </Flex>
-          </Reveal>
 
           {/* ── SELECTOR · los cinco elementos ──
               Dentro de un box con la pintura de TCM de fondo (velos finos,
@@ -197,12 +202,16 @@ export default function MetodoTcmRecetas() {
             <Box position="absolute" inset={0} bg="#00000040" />
             {/* En móvil los CINCO en una sola línea (círculos más pequeños y sin
                 wrap: con el tamaño grande, el Agua se caía a una segunda fila). */}
-            <Flex position="relative" justify="center" wrap={{ base: "nowrap", md: "wrap" }} gap={{ base: 2, md: 6 }}
+            {/* Los cinco florecen uno tras otro (pop con rebote). */}
+            <RevealStagger stagger={0.1} delayChildren={0.35} position="relative"
+                  display="flex" justifyContent="center" flexWrap={{ base: "nowrap", md: "wrap" }} gap={{ base: 2, md: 6 }}
                   w="100%" px={{ base: 3, md: 6 }} py={{ base: 5, md: 6 }}>
               {ORDEN_ELEMENTOS.map((el) => (
-                <BotonElemento key={el} elemento={el} activo={el === elActivo} onClick={() => setElActivo(el)} />
+                <RevealItem key={el} direction="up" distance={18} scaleFrom={0.6}>
+                  <BotonElemento elemento={el} activo={el === elActivo} onClick={() => setElActivo(el)} />
+                </RevealItem>
               ))}
-            </Flex>
+            </RevealStagger>
           </Box>
           </Reveal>
 
@@ -243,7 +252,7 @@ export default function MetodoTcmRecetas() {
                gap={{ base: 5, md: 6 }} w="100%">
             {cocina.cocciones.map((c, i) => (
               <Reveal key={`${elActivo}-${c.key}`} inView direction="up" distance={24} scaleFrom={0.98}
-                      duration={0.68} amount={0.12} w="100%" h="100%">
+                      duration={0.68} amount={0.12} delay={(i % 2) * 0.1} w="100%" h="100%">
                 <CoccionBox coccion={c} elemento={elActivo} numero={i} onVer={() => setCoccionAbierta(i)} />
               </Reveal>
             ))}
@@ -272,6 +281,7 @@ export default function MetodoTcmRecetas() {
         initialIndex={coccionAbierta ?? 0}
         onClose={() => setCoccionAbierta(null)}
         bgImage={FOTO_ELEMENTO[elActivo]}
+        color={ELEMENTOS[elActivo].color}
       />
 
       {/* 1 · Cómic del ORIGEN del Qigong: veintitrés siglos en nueve viñetas.
@@ -342,10 +352,12 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
   const hecho = estado?.hecho === hoyISO();
 
   return (
-    <Reveal direction="up" distance={22} delay={0.26} duration={0.68} w="100%">
+    // `key={elemento}`: al cambiar de elemento, la caja y sus filas VUELVEN a
+    // entrar en cascada, en vez de cambiar de texto de golpe.
+    <Reveal key={elemento} direction="up" distance={22} delay={0.26} duration={0.68} w="100%">
       <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden"
            border={`1.5px solid ${E.color}`}
-           boxShadow={`${CAJA_GLOW}, 0 0 26px ${E.color}44`}>
+           boxShadow={CAJA_GLOW}>
         <FondoElemento elemento={elemento} />
 
         <Flex position="relative" zIndex={1} direction="column" gap={3}
@@ -357,6 +369,7 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
               {t("metodo.tcm.cocina.gestoHoy")}
             </Text>
             <Box h="1px" flex="1" minW="40px" bgGradient={`linear(to-r, ${E.color}88, transparent)`} />
+            <Pop levanta={2}>
             <Flex as="button"
                   onClick={() => onCambiar({ hecho: hecho ? "" : hoyISO() })}
                   align="center" gap={2}
@@ -371,7 +384,17 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
                     border={`2px solid ${hecho ? E.color : "rgba(255,255,255,0.6)"}`}
                     bg={hecho ? E.color : "transparent"} transition="all 0.18s">
                 {hecho && (
-                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="11px" h="11px" fill="#ffffff">
+                  // El tick BROTA al marcarlo (giro + rebote): es el momento de
+                  // recompensa de la página.
+                  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="11px" h="11px" fill="#ffffff"
+                       sx={{
+                         "@keyframes tickBrota": {
+                           "0%": { transform: "scale(0) rotate(-50deg)", opacity: 0 },
+                           "65%": { transform: "scale(1.35) rotate(6deg)", opacity: 1 },
+                           "100%": { transform: "scale(1) rotate(0)", opacity: 1 },
+                         },
+                         animation: "tickBrota 0.45s cubic-bezier(0.34,1.56,0.64,1)",
+                       }}>
                     <path d="M382-200 154-428l57-57 171 171 367-367 57 57-424 424Z" />
                   </Box>
                 )}
@@ -381,15 +404,17 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
                 {hecho ? t("metodo.tcm.cocina.hechoHoy") : t("metodo.tcm.cocina.loHagoHoy")}
               </Text>
             </Flex>
+            </Pop>
           </Flex>
 
           {/* Los cinco gestos, en filas finas. Se elige UNO: la fila marcada
               lleva el color del elemento; el resto esperan, atenuadas. */}
-          <Flex direction="column" gap={1.5}>
+          <RevealStagger stagger={0.08} delayChildren={0.5} display="flex" flexDirection="column" gap={1.5}>
             {gestos.map((g, idx) => {
               const sel = idx === i;
               return (
-                <Flex key={idx} as="button" onClick={() => onCambiar({ i: idx })}
+                <RevealItem key={idx} direction="left" distance={16}>
+                <Flex as="button" onClick={() => onCambiar({ i: idx })}
                       align="center" gap={2.5} textAlign="left" w="100%"
                       px={{ base: 3, md: 3.5 }} py={{ base: 1.5, md: 2 }} borderRadius="lg"
                       border={`1px solid ${sel ? E.color : "rgba(255,255,255,0.16)"}`}
@@ -409,9 +434,10 @@ function GestoDeHoy({ elemento, gestos, estado, onCambiar }: {
                     {g}
                   </Text>
                 </Flex>
+                </RevealItem>
               );
             })}
-          </Flex>
+          </RevealStagger>
 
           <Text color="rgba(255,255,255,0.6)" fontSize="xs" fontStyle="italic"
                 style={{ textShadow: INK_SHADOW }}>
@@ -432,15 +458,22 @@ function BotonElemento({ elemento, activo, onClick }: {
 }) {
   const E = ELEMENTOS[elemento];
   return (
-    <Flex as="button" onClick={onClick} direction="column" align="center" gap={1.5} cursor="pointer"
-          transition="transform 0.2s ease" _hover={{ transform: "translateY(-3px)" }}>
+    <Pop levanta={4} hunde={0.94}>
+    <Flex as="button" onClick={onClick} direction="column" align="center" gap={1.5} cursor="pointer">
+      {/* El elegido late con el color de SU elemento (halo que se abre y se
+          recoge); los demás esperan, atenuados, y se encienden al pasar. */}
       <Box w={{ base: "50px", md: "76px" }} h={{ base: "50px", md: "76px" }} borderRadius="full"
            overflow="hidden" border={`${activo ? 3 : 2}px solid ${activo ? "#ffffff" : `${E.color}aa`}`}
            opacity={activo ? 1 : 0.62}
-           style={{
-             boxShadow: activo ? `0 0 20px ${E.color}, 0 0 34px ${E.color}66` : `0 0 8px ${E.color}66`,
-             transition: "all 0.25s ease",
-           }}>
+           transition="opacity 0.25s ease, border-color 0.25s ease"
+           _hover={{ opacity: 1 }}
+           sx={activo ? {
+             "@keyframes elementoLatido": {
+               "0%, 100%": { boxShadow: `0 0 10px ${E.color}99, 0 0 0 0 ${E.color}55` },
+               "50%": { boxShadow: `0 0 22px ${E.color}, 0 0 0 8px ${E.color}00` },
+             },
+             animation: "elementoLatido 2.6s ease-in-out infinite",
+           } : undefined}>
         <img src={ICONO_ELEMENTO[elemento]} alt={E.nombre}
              style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       </Box>
@@ -449,6 +482,7 @@ function BotonElemento({ elemento, activo, onClick }: {
         {E.nombre}
       </Text>
     </Flex>
+    </Pop>
   );
 }
 
@@ -468,14 +502,13 @@ function CoccionBox({ coccion, elemento, numero, onVer }: {
   coccion: Coccion; elemento: Elemento; numero: number; onVer: () => void;
 }) {
   const [sinFoto, setSinFoto] = useState(false);
-  const E = ELEMENTOS[elemento];
 
   return (
     <Box as="button" onClick={onVer} textAlign="left" position="relative" w="100%" h="100%"
          display="flex" flexDirection="column" borderRadius="2xl" overflow="hidden" cursor="pointer"
          fontFamily="'EB Garamond', serif" boxShadow={CAJA_GLOW} transition="all 0.22s ease"
          role="group"
-         _hover={{ transform: "translateY(-4px)", boxShadow: `${CAJA_GLOW}, 0 0 26px ${E.color}44` }}
+         _hover={{ transform: "translateY(-4px)" }}
          _active={{ transform: "translateY(-1px)" }}>
       <FondoElemento elemento={elemento} />
 

@@ -5,6 +5,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LibrosIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
+import { Float } from "../../components/global/Reveal";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -131,17 +132,35 @@ export default function MaterialesGratuitos() {
       <SiteHeader variant="auto" />
 
       {/* ── MANDALA SEPARADOR ── */}
+      {/* Wrapper con flotación perpetua (vida continua, como en Welcome y
+          /elMetodo); la imagen hace la entrada épica (surge girando desde muy
+          pequeña y se enfoca). */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "48px", md: "64px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
+        <Box
+          sx={{
+            "@keyframes mandalaFloat": {
+              "0%, 100%": { transform: "translateY(0) scale(1)" },
+              "50%": { transform: "translateY(-9px) scale(1.03)" },
+            },
+            animation: "mandalaFloat 5.5s ease-in-out infinite",
+          }}
+        >
+          <Image
+            src="/img/icono/life.webp"
+            alt=""
+            h={{ base: "48px", md: "64px" }}
+            objectFit="contain"
+            style={{
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)",
+              // glow (drop-shadow) siempre + blur solo durante la entrada.
+              filter:
+                "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" +
+                (mounted ? "" : " blur(6px)"),
+              transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease",
+            }}
+          />
+        </Box>
       </Flex>
 
       {/* ── TÍTULO ── */}
@@ -208,18 +227,32 @@ export default function MaterialesGratuitos() {
           justify="center"
           gap={{ base: 6, md: 6 }}
         >
-          {cajitas.map((c) => (
-            <Flex
+          {cajitas.map((c, i) => (
+            // La ENTRADA va en este wrapper y el hover en el botón de dentro,
+            // para que sus `transform` no se pisen (el de la entrada lleva el
+            // retraso de la cascada y dejaría el hover perezoso).
+            <Box
               key={c.link}
+              display="flex"
+              flexDirection="column"
+              // Ancho de cada cajita: en móvil una por fila; de ahí arriba, un
+              // ancho de partida fijo que puede encoger pero no crecer, para
+              // que no se estiren a lo ancho cuando son pocas.
+              flex={{ base: "1 1 100%", md: "0 1 300px", lg: "0 1 332px" }}
+              opacity={cardsReveal.visible ? 1 : 0}
+              transform={cardsReveal.visible ? "translateY(0) scale(1)" : "translateY(26px) scale(0.95)"}
+              filter={cardsReveal.visible ? "blur(0px)" : "blur(6px)"}
+              // Sube a su sitio y se enfoca, con la curva del sistema Reveal.
+              transition={`opacity 0.5s ease ${c.delay}s, transform 0.65s cubic-bezier(0.22,1,0.36,1) ${c.delay}s, filter 0.5s ease ${c.delay}s`}
+            >
+            <Flex
               as="button"
               onClick={() => navigate(c.link)}
               direction="column"
               align="center"
               justify="center"
-              // Ancho de cada cajita: en móvil una por fila; de ahí arriba, un
-              // ancho de partida fijo que puede encoger pero no crecer, para
-              // que no se estiren a lo ancho cuando son pocas.
-              flex={{ base: "1 1 100%", md: "0 1 300px", lg: "0 1 332px" }}
+              flex="1"
+              w="100%"
               gap={{ base: 4, md: 5 }}
               bg="rgba(255,255,255,0.08)"
               border="1px solid rgba(255,255,255,0.28)"
@@ -230,29 +263,31 @@ export default function MaterialesGratuitos() {
               sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
               boxShadow="0 0 16px rgba(255,255,255,0.28), 0 0 40px rgba(255,255,255,0.14), 0 0 72px rgba(180,255,245,0.16), 0 5px 16px rgba(0,0,0,0.18)"
               cursor="pointer"
-              opacity={cardsReveal.visible ? 1 : 0}
-              transform={cardsReveal.visible ? "translateY(0) scale(1)" : "translateY(22px) scale(0.95)"}
-              transition={`opacity 0.75s ease ${c.delay}s, transform 0.75s ease ${c.delay}s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease`}
+              transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.28s ease"
               _hover={{
                 bg: "rgba(255,255,255,0.16)",
                 borderColor: "rgba(255,255,255,0.9)",
                 boxShadow: "0 0 24px rgba(255,255,255,0.5), 0 0 52px rgba(180,255,245,0.32), 0 0 88px rgba(255,255,255,0.18), 0 6px 19px rgba(0,0,0,0.22)",
+                transform: "translateY(-6px)",
               }}
             >
-              {/* Icono superior */}
-              <Box
-                w={{ base: "74px", md: "86px" }}
-                h={{ base: "74px", md: "86px" }}
-                borderRadius="full"
-                bg="rgba(255,255,255,0.08)"
-                border="1px solid rgba(255,255,255,0.35)"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                boxShadow="0 0 13px rgba(255,255,255,0.35), 0 0 29px rgba(255,255,255,0.18)"
-              >
-                {c.renderIcon()}
-              </Box>
+              {/* Icono superior — con un vaivén perpetuo muy leve (cada cajita
+                  al suyo, desfasadas, para que no suban y bajen a la vez). */}
+              <Float amplitude={5} duration={5 + i * 0.6} delay={i * 0.5}>
+                <Box
+                  w={{ base: "74px", md: "86px" }}
+                  h={{ base: "74px", md: "86px" }}
+                  borderRadius="full"
+                  bg="rgba(255,255,255,0.08)"
+                  border="1px solid rgba(255,255,255,0.35)"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  boxShadow="0 0 13px rgba(255,255,255,0.35), 0 0 29px rgba(255,255,255,0.18)"
+                >
+                  {c.renderIcon()}
+                </Box>
+              </Float>
 
               {/* Línea decorativa */}
               <Box
@@ -277,6 +312,7 @@ export default function MaterialesGratuitos() {
                 {c.titulo}
               </Text>
             </Flex>
+            </Box>
           ))}
         </Flex>
       </Flex>

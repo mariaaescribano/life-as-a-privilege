@@ -152,7 +152,10 @@ export default function MetodoPsicologiaFamilia() {
               <IntroRecorrido>{familia.intro}</IntroRecorrido>
             </Reveal>
 
-            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%">
+            {/* Mismo ancho que el header (MetodoStepHeader capa en 850px por
+                defecto; la columna mide 900): sin el tope, el box del mapa
+                sobresalía por los dos lados. */}
+            <Reveal direction="up" distance={34} scaleFrom={0.97} delay={0.22} duration={0.75} w="100%" maxW="850px">
               <GenogramaMapa
                 personas={personas}
                 miFoto={miFoto}

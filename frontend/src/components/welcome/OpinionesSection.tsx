@@ -3,6 +3,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 import { useT } from "../../i18n";
+import { Breathe } from "../global/Reveal";
 
 const useReveal = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,6 +56,9 @@ const OpinionesSection: React.FC = () => {
             bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
             boxShadow="0 0 8px rgba(255,255,255,0.5)"
           />
+          {/* El botón respira muy despacio (latido de escala), como el botón
+              grande de acceder de /elMetodo: vida continua sin moverse de sitio. */}
+          <Breathe scale={0.014} duration={5.5} flexShrink={0} display="flex" justifyContent="center">
           <Flex
             as="button"
             onClick={() => navigate("/elMetodo")}
@@ -108,6 +112,7 @@ const OpinionesSection: React.FC = () => {
               →
             </Box>
           </Flex>
+          </Breathe>
           <Box
             h="1px"
             w={{ base: "24px", md: "110px" }}

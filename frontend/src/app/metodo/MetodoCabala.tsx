@@ -19,7 +19,7 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { CABALA_TOTAL_PAGINAS } from "../../components/metodo/cabalaSefirot";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
-import { Reveal } from "../../components/global/Reveal";
+import { Breathe, Reveal } from "../../components/global/Reveal";
 import { cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
@@ -126,6 +126,9 @@ export default function MetodoCabala() {
 
           {/* ── Bienvenida contemplativa ── */}
           <Reveal direction="up" distance={28} scaleFrom={0.97} delay={0.12} duration={0.75} w="100%">
+            {/* El box respira muy despacio (Breathe): vida continua sin moverse
+                de sitio, como los paneles grandes de /elMetodo. */}
+            <Breathe scale={0.008} duration={7} w="100%">
             <Box position="relative" w="100%" borderRadius="2xl" overflow="hidden" boxShadow={CAJA_GLOW}>
               <DisciplinaBgLayer nom={cabalaNom} borderRadius="2xl" />
               <Box position="relative" zIndex={1} px={{ base: 7, md: 12 }} pt={{ base: 6, md: 8 }} pb={{ base: 10, md: 14 }} textAlign="center">
@@ -156,6 +159,7 @@ export default function MetodoCabala() {
                 </Text>
               </Box>
             </Box>
+            </Breathe>
           </Reveal>
         </Flex>
       </Flex>

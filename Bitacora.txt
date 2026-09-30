@@ -4,17 +4,6 @@ USAR OBJ+ID : userId
 ---------------------------------------------
 
 
-- Poner enfermo en familia en genograma (añadir mas) 
-- Revisar fotos de psicología, no me gustan
-- Cambiar fotos nutri portada
-- Asegurate de probar lo de diario de terapia
-
-
-
-
-
-
-
 
 
 

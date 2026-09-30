@@ -162,7 +162,7 @@ export const modulostcmFundamentos: ModuloContenido[] = [
     ],
   },
   {
-    title: "3. El diagnóstico de la lengua",
+    title: "3. La lectura de la lengua",
     icon: MouthIcon,
     floatingButton: conocerMiDesequilibrio,
     submodules: [
