@@ -83,6 +83,7 @@ export function CursoCardDetalle({
 
   return (
     <Flex
+      role="group"
       direction="column"
       position="relative"
       w="100%"
@@ -112,7 +113,9 @@ export function CursoCardDetalle({
                    loading={prioritaria ? "eager" : "lazy"}
                    onLoad={() => setFotoOk(true)}
                    onError={() => setFotoFallo(true)}
-                   opacity={fotoOk ? 1 : 0} transition="opacity 0.5s ease" />
+                   opacity={fotoOk ? 1 : 0}
+                   transition="opacity 0.5s ease, transform 0.9s cubic-bezier(0.22,1,0.36,1)"
+                   _groupHover={{ transform: "scale(1.05)" }} />
             {!fotoOk && (
               <Box position="absolute" inset="0" display="flex" alignItems="center" justifyContent="center">
                 <LifeLoader color={color} size={{ base: "52px", md: "60px" }} />

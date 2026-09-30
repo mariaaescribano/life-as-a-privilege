@@ -22,6 +22,7 @@ import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } f
 import { useT } from "../../i18n";
 
 const MotionBox = motion(Box) as any;
+const MotionLine = motion.line as any;
 
 interface Reto { id: string; titulo: string; texto: string; }
 
@@ -100,7 +101,18 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
         },
       }}
     >
-      <Box position="relative" display="inline-flex">
+      <Box position="relative" display="inline-flex"
+           // Deriva: cada estrella se mece unos píxeles, con ritmo y fase
+           // propios, para que el cielo no sea una lámina.
+           sx={leido ? undefined : {
+             "@keyframes retoDeriva": {
+               "0%, 100%": { transform: "translate(0, 0)" },
+               "33%": { transform: "translate(3px, -4px)" },
+               "66%": { transform: "translate(-3px, 2px)" },
+             },
+             animation: `retoDeriva ${7 + (index % 4)}s ease-in-out ${(index % 6) * 0.7}s infinite`,
+             "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+           }}>
         <Box
           as="svg"
           xmlns="http://www.w3.org/2000/svg"
@@ -239,6 +251,28 @@ export default function MetodoAstrologiaLectura() {
               {/* Cielo con las estrellas-reto */}
               {retos.length > 0 ? (
                 <Box position="relative" w="100%" h={{ base: "220px", md: "300px" }} px={{ base: 4, md: 8 }} py={{ base: 4, md: 6 }}>
+                  {/* Constelación: hilos finos que unen las estrellas y se
+                      DIBUJAN una vez colocadas (después de encenderse). */}
+                  {starPositions.length > 1 && (
+                    <Box as="svg" viewBox="0 0 100 100" preserveAspectRatio="none" position="absolute" inset={0}
+                         w="100%" h="100%" pointerEvents="none" aria-hidden>
+                      {starPositions.slice(1).map((p, i) => {
+                        const a = starPositions[i];
+                        return (
+                          <MotionLine
+                            key={i}
+                            x1={parseFloat(a.left)} y1={parseFloat(a.top)}
+                            x2={parseFloat(p.left)} y2={parseFloat(p.top)}
+                            stroke={astrologiaTxt} strokeWidth={1} vectorEffect="non-scaling-stroke"
+                            strokeLinecap="round"
+                            initial={{ pathLength: 0, opacity: 0 }}
+                            animate={{ pathLength: 1, opacity: 0.22 }}
+                            transition={{ delay: 1.4 + i * 0.18, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                          />
+                        );
+                      })}
+                    </Box>
+                  )}
                   {retos.map((r, i) => (
                     <EstrellaReto key={r.id} index={i} pos={starPositions[i]} leido={retosLeidos.has(r.id)} onOpen={() => abrirReto(r)} />
                   ))}

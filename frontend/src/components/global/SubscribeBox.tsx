@@ -1,30 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { EnlaceBaja } from "./EnlaceBaja";
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 
-const useReveal = (threshold = 0.15) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-};
-
-export function SubscribeBox() {
+export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } = {}) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "invalid" | "error">("idle");
-  const reveal = useReveal(0.15);
+  const reveal = useVistoConEspera("0px 0px -18% 0px", esperaInicial);
   const t = useT();
 
   const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);

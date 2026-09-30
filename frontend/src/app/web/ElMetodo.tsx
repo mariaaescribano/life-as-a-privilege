@@ -15,6 +15,8 @@ import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
 import { precargarImagenes, usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 import { BloqueDiferido } from "../../components/global/BloqueDiferido";
 import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
 // Para reactivar el mandala en el futuro: añade `MandalaRecorrido` (default) al import.
@@ -533,6 +535,21 @@ export default function ElMetodo() {
   const [testOpen, setTestOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
+  // El titular «No estudias ocho disciplinas…» queda bajo el pliegue: sus letras
+  // entran SOLO cuando el usuario ha bajado y el texto está bien metido en
+  // pantalla (margen -25%: que se pueda ver y apreciar la entrada, no que
+  // arranque en el borde). Red de seguridad a los 15 s (la trae el hook).
+  const porDentro = useVistoConEspera("0px 0px -25% 0px", 0);
+  // En MÓVIL el hero es más alto que la pantalla: la bajada, los dos botones, el
+  // pie y la pista quedan bajo el pliegue. Si entraran con `mounted` (al cargar)
+  // la animación se gastaría fuera de vista. Cada uno espera a estar metido en
+  // pantalla (margen -6%); los que ya se ven al cargar entran al momento, como
+  // antes. `mounted` sigue mandando (no entran antes de que la página esté lista).
+  const llegaSub = useVistoConEspera("0px 0px -6% 0px", 0);
+  const llegaBtn1 = useVistoConEspera("0px 0px -6% 0px", 0);
+  const llegaBtn2 = useVistoConEspera("0px 0px -6% 0px", 0);
+  const llegaPie = useVistoConEspera("0px 0px -6% 0px", 0);
+  const llegaPista = useVistoConEspera("0px 0px -6% 0px", 0);
   const imagenesListas = usePrecargarImagenes(METODO_IMGS);
   const [tiempoMin, setTiempoMin] = useState(false);
   // La página no se revela hasta que las fotos estén cargadas Y haya pasado un
@@ -766,7 +783,7 @@ export default function ElMetodo() {
               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
             }}
           >
-            {t("elMetodo.hero.titulo")}
+            <LetrasVivas texto={t("elMetodo.hero.titulo")} entrada activo={mounted} />
           </Text>
         </Flex>
 
@@ -776,9 +793,10 @@ export default function ElMetodo() {
           lineHeight="1.8"
           letterSpacing="0.015em"
           maxW="860px"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(16px)"}
-          transition="opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s"
+          ref={llegaSub.ref}
+          opacity={mounted && llegaSub.visible ? 1 : 0}
+          transform={mounted && llegaSub.visible ? "translateY(0)" : "translateY(16px)"}
+          transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
         >
           <TextoRico>{t("elMetodo.hero.sub")}</TextoRico>
         </Text>
@@ -819,9 +837,10 @@ export default function ElMetodo() {
               boxShadow: "0 0 30px rgba(255,255,255,0.55), 0 0 62px rgba(180,255,245,0.36)",
             }}
             transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
-            opacity={mounted ? 1 : 0}
-            transform={mounted ? "translateY(0)" : "translateY(16px)"}
-            sx={{ transition: "opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
+            ref={llegaBtn1.ref}
+            opacity={mounted && llegaBtn1.visible ? 1 : 0}
+            transform={mounted && llegaBtn1.visible ? "translateY(0)" : "translateY(16px)"}
+            sx={{ transition: "opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
           >
             {/* El icono del test SIEMPRE a la izquierda del rótulo: es la seña
                 que hermana este botón con el flotante y el del precio. */}
@@ -878,9 +897,10 @@ export default function ElMetodo() {
               boxShadow: "0 0 30px rgba(255,255,255,0.55), 0 0 62px rgba(180,255,245,0.36)",
             }}
             transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
-            opacity={mounted ? 1 : 0}
-            transform={mounted ? "translateY(0)" : "translateY(16px)"}
-            sx={{ transition: "opacity 0.8s ease 0.58s, transform 0.8s ease 0.58s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
+            ref={llegaBtn2.ref}
+            opacity={mounted && llegaBtn2.visible ? 1 : 0}
+            transform={mounted && llegaBtn2.visible ? "translateY(0)" : "translateY(16px)"}
+            sx={{ transition: "opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
           >
             <IconoWhatsapp size={{ base: "18px", md: "22px" }} />
             <Text
@@ -906,9 +926,10 @@ export default function ElMetodo() {
           letterSpacing="0.04em"
           textAlign="center"
           mt={{ base: 1, md: 2 }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(12px)"}
-          transition="opacity 0.8s ease 0.72s, transform 0.8s ease 0.72s"
+          ref={llegaPie.ref}
+          opacity={mounted && llegaPie.visible ? 1 : 0}
+          transform={mounted && llegaPie.visible ? "translateY(0)" : "translateY(12px)"}
+          transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
         >
           {t("elMetodo.hero.ctaPie")}
         </Text>
@@ -975,11 +996,9 @@ export default function ElMetodo() {
           // salto dejaria renglones cojos.
           whiteSpace={{ base: "normal", md: "pre-line" }}
           textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(14px)"}
-          transition="opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s"
+          ref={porDentro.ref}
         >
-          {t("elMetodo.porDentro")}
+          <LetrasVivas texto={t("elMetodo.porDentro")} entrada activo={porDentro.visible} retraso={1.4} paso={0.07} altura={4} pasoEntrada={0.025} />
         </Text>
 
         {/* Pista de que el mandala se pincha: sin ella, los ocho círculos
@@ -995,9 +1014,10 @@ export default function ElMetodo() {
           letterSpacing="0.02em"
           textAlign="center"
           mt={{ base: 3, md: 4 }}
-          opacity={mounted ? 0.9 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(10px)"}
-          transition="opacity 0.8s ease 0.45s, transform 0.8s ease 0.45s"
+          ref={llegaPista.ref}
+          opacity={mounted && llegaPista.visible ? 0.9 : 0}
+          transform={mounted && llegaPista.visible ? "translateY(0)" : "translateY(10px)"}
+          transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
         >
           {t("elMetodo.porDentroPista")}
         </Text>
@@ -1021,7 +1041,7 @@ export default function ElMetodo() {
       >
         <Box maxW="1200px" mx="auto">
           <BloqueDiferido minH={{ base: "760px", md: "560px" }}>
-            <Reveal direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
+            <Reveal inView amount={0.06} direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
               <RecorridoMandalaVideo />
             </Reveal>
           </BloqueDiferido>

@@ -7,6 +7,7 @@ import { type DisciplinaClave } from "../../data/recorridoContenido";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
 import { useIdioma, useT, type Texto } from "../../i18n";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 import { DisciplinaVideoBox } from "../metodo/DisciplinaVideoBox";
 import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 import {
@@ -215,8 +216,11 @@ const disciplinas: Disciplina[] = [
 
 // ── Círculo del mandala ──────────────────────────────────────────────────────
 const MandalaCircle = ({
-  disc, index, x, y, circleSize, iconSize, onSelect, isSelected = false,
+  disc, index, x, y, circleSize, iconSize, onSelect, isSelected = false, activo = true,
 }: {
+  /** false = espera fuera (a que el usuario llegue a la altura del mandala);
+   *  true = se coloca. Por defecto true (el otro mandala no lo gobierna). */
+  activo?: boolean;
   disc: Disciplina;
   index: number;
   x: number;
@@ -235,14 +239,14 @@ const MandalaCircle = ({
       cursor="pointer"
       onClick={onSelect}
       initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
-      animate={{ scale: isSelected ? 1.14 : 1, opacity: 1, x, y }}
+      animate={activo ? { scale: isSelected ? 1.14 : 1, opacity: 1, x, y } : { scale: 0, opacity: 0, x: 0, y: 0 }}
       // Los ocho salen del centro y se colocan UNO DETRÁS DE OTRO, girando el
       // círculo. Con 0.06s de hueco los ocho estaban puestos en medio segundo y
       // se leía como un bloque; con 0.18s se sigue el recorrido de uno en uno.
       // (Al terminar la entrada, `entered` deja los cambios de selección en
       // 0.25s, sin arrastrar este retraso a cada clic.)
-      transition={entered ? { duration: 0.25 } : { duration: 0.65, delay: index * 0.18 }}
-      onAnimationComplete={() => { if (!entered) setEntered(true); }}
+      transition={entered ? { duration: 0.25 } : { duration: 0.55, delay: activo ? index * 0.11 : 0 }}
+      onAnimationComplete={() => { if (activo && !entered) setEntered(true); }}
       whileHover={{ scale: isSelected ? 1.2 : 1.1 }}
       style={{ filter: isSelected ? undefined : "grayscale(0.6)", zIndex: isSelected ? 3 : undefined }}
       // El círculo es un control, no texto: no seleccionable (nunca se pinta
@@ -906,9 +910,11 @@ const VideoMuestraCard = ({
       cursor="pointer"
       bg={disc.bg}
       sx={{ aspectRatio: "1 / 1" }}
-      boxShadow={`0 6px 22px rgba(0,0,0,0.28), 0 0 18px ${disc.txt}33`}
+      // Sin glow: solo una sombra negra mínima, la justa para que se vea la
+      // separación entre una caja y la siguiente.
+      boxShadow="0 2px 8px rgba(0,0,0,0.18)"
       transition="transform 0.3s ease, box-shadow 0.3s ease"
-      _hover={{ transform: "translateY(-4px)", boxShadow: `0 12px 30px rgba(0,0,0,0.34), 0 0 28px ${disc.txt}66` }}
+      _hover={{ transform: "translateY(-4px)", boxShadow: "0 4px 12px rgba(0,0,0,0.22)" }}
     >
       {/* Debajo del vídeo, el fondo de la disciplina: es lo que se ve mientras
           el clip carga, en vez de un cuadro negro. */}
@@ -931,15 +937,6 @@ const VideoMuestraCard = ({
         preload={ahorro ? "metadata" : "auto"}
       />
 
-      {/* Velo de abajo: sin él, el rótulo se pierde en cuanto el vídeo tiene un
-          fotograma claro. */}
-      <Box
-        position="absolute"
-        inset={0}
-        bgGradient="linear(to-t, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.22) 34%, transparent 62%)"
-        pointerEvents="none"
-      />
-
       {/* Rótulo: el nombre de la disciplina, abajo a la izquierda. Sin número:
           estas ocho no van en el orden del Mapa. */}
       <Flex
@@ -952,7 +949,7 @@ const VideoMuestraCard = ({
         pointerEvents="none"
       >
         <Text color="white" fontWeight="700" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2"
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>
+              style={{ textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}>
           {nombreEnMapa(disc.nom, true)}
         </Text>
       </Flex>
@@ -1127,6 +1124,11 @@ export const RecorridoMandalaVideo = () => {
     disciplinas.find((d) => d.enabled && d.video) ??
     disciplinas[0];
   const [selectedNom, setSelectedNom] = useState(inicial.nom);
+  // La entrada del mandala (los círculos saliendo del centro uno tras otro)
+  // espera a que el usuario haya llegado a la altura: solo cuando el mandala
+  // está metido en pantalla. Sin espera de reloj: si ya está a la vista, arranca
+  // al momento. (Red de seguridad de 15 s en el hook.)
+  const mandalaVisto = useVistoConEspera("0px 0px -18% 0px", 0);
   // Disciplina cuyo vídeo de muestra está abierto en el popup (null = cerrado).
   const [videoModal, setVideoModal] = useState<Disciplina | null>(null);
 
@@ -1149,7 +1151,7 @@ export const RecorridoMandalaVideo = () => {
   };
 
   useEffect(() => {
-    if (!autoRota) return;
+    if (!autoRota || !mandalaVisto.visible) return;
     // Con el vídeo de muestra abierto no rota: el cambio no se ve detrás del
     // popup, y al cerrarlo te encontrarías en otra disciplina.
     if (videoModal) return;
@@ -1164,7 +1166,7 @@ export const RecorridoMandalaVideo = () => {
       });
     }, 3000);
     return () => window.clearInterval(id);
-  }, [autoRota, videoModal]);
+  }, [autoRota, videoModal, mandalaVisto.visible]);
 
   useEffect(() => {
     document.body.style.overflow = videoModal ? "hidden" : "";
@@ -1215,7 +1217,7 @@ export const RecorridoMandalaVideo = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Box position="relative" w={`${size}px`} h={`${size}px`} display="flex" justifyContent="center" alignItems="center">
+        <Box ref={mandalaVisto.ref} position="relative" w={`${size}px`} h={`${size}px`} display="flex" justifyContent="center" alignItems="center">
           {/* life.png de fondo del mandala */}
           <Box
             position="absolute"
@@ -1246,8 +1248,8 @@ export const RecorridoMandalaVideo = () => {
             bg="rgba(255,255,255,0.06)"
             sx={{ backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
             initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.7 }}
+            animate={mandalaVisto.visible ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+            transition={{ duration: 0.6 }}
           >
             <Image
               src="/img/icono/life.webp"
@@ -1273,6 +1275,7 @@ export const RecorridoMandalaVideo = () => {
                 y={y}
                 circleSize={circleSize}
                 iconSize={iconSize}
+                activo={mandalaVisto.visible}
                 isSelected={disc.nom === selectedNom}
                 onSelect={() => elegir(disc.nom)}
               />

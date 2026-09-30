@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text, Tooltip, useBreakpointValue, useToast } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
+import { Reveal } from "../../components/global/Reveal";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -37,10 +38,31 @@ import { encogerFoto } from "../../utils/encogerFoto";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { cacheDeOtraCuenta } from "../../api/sesion";
 
-const popIn = keyframes`
-  from { opacity: 0; transform: scale(0.2); }
-  to   { opacity: 1; transform: scale(1); }
+// Entrada de cada círculo del mandala: sube desde algo más pequeño y desenfocado
+// hasta colocarse, con la curva del sistema Reveal (sin rebote ni giro: un
+// aterrizaje que se pasa de largo se lee poco profesional).
+const entraCirculo = keyframes`
+  from { opacity: 0; transform: scale(0.55); filter: blur(8px); }
+  to   { opacity: 1; transform: scale(1);    filter: none; }
 `;
+// Vida DESPUÉS de la entrada: el halo de cada disciplina abierta respira, cada
+// una con su fase, y el de la foto central late más despacio.
+
+const entraFoto = keyframes`
+  from { opacity: 0; transform: scale(0.6); filter: blur(10px); }
+  to   { opacity: 1; transform: scale(1);   filter: none; }
+`;
+const respiraFoto = keyframes`
+  0%, 100% { box-shadow: 0 0 24px rgba(255,255,255,0.45), 0 0 56px rgba(255,255,255,0.2), 0 0 90px rgba(180,255,245,0.14); }
+  50%      { box-shadow: 0 0 34px rgba(255,255,255,0.65), 0 0 80px rgba(255,255,255,0.32), 0 0 120px rgba(180,255,245,0.24); }
+`;
+// El mandala de fondo gira tan despacio que no se ve girar: solo se nota que
+// está vivo.
+const giraLento = keyframes`
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+`;
+const SIN_MOVIMIENTO = { "@media (prefers-reduced-motion: reduce)": { animation: "none !important" } };
 
 // Orden del Método: Astrología → Psicología → Fisiología → Nutrición →
 // Ayurveda → Medicina Tradicional China → Cábala → Cultura
@@ -56,6 +78,9 @@ const disciplines = [
   { name: cabalaNom,          bg: cabalaBg,          txt: cabalaTxt,          Icon: CabalaIcon,          link: `/aprendizaje/cursos/${cabalaNom}` },
   { name: culturaNom,         bg: culturaBg,         txt: culturaTxt,         Icon: CulturaIcon,         link: `/aprendizaje/cursos/${culturaNom}` },
 ];
+
+// Color del BRILLO de cada disciplina: siempre su `txt`, el mismo del marco.
+const colorBrillo = (d: { name: string; bg: string; txt: string }) => d.txt;
 
 // SIN ORDEN OBLIGATORIO: el número de cada círculo es el orden que ACONSEJAMOS,
 // no una condición. Los ocho círculos son clicables siempre: si la disciplina ya
@@ -904,7 +929,9 @@ const Home = () => {
       {continuarBtn && (
         <Box position="fixed" top={{ md: "120px" }} right={{ md: "22px" }} zIndex={30}
              display={{ base: "none", md: "block" }}>
-          {continuarBtn}
+          <Reveal direction="left" distance={28} duration={0.85} delay={0.9}>
+            {continuarBtn}
+          </Reveal>
         </Box>
       )}
 
@@ -935,7 +962,9 @@ const Home = () => {
                  "&::-webkit-scrollbar-track": { background: "transparent" },
                  "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "3px" } }}>
         <Flex direction="column" gap={4}>
-          <CaminoUsuario suscritas={suscritasCamino} />
+          <Reveal direction="right" distance={28} duration={0.85} delay={0.9}>
+            <CaminoUsuario suscritas={suscritasCamino} />
+          </Reveal>
         </Flex>
       </Box>
 
@@ -957,6 +986,7 @@ const Home = () => {
             w="100%"
           >
             {/* ── SALUDO ── */}
+            <Reveal direction="up" distance={18} duration={0.9} blur>
             <Text
               color="white"
               fontSize={{ base: "3xl", md: "5xl" }}
@@ -975,6 +1005,7 @@ const Home = () => {
             >
               {t("home.bienvenida", { coma: name ? `, ${name}` : "" })}
             </Text>
+            </Reveal>
 
             {/* <Text
               color="rgba(255,255,255,0.92)"
@@ -1012,7 +1043,9 @@ const Home = () => {
                   backgroundRepeat: "no-repeat",
                   opacity: 0.1,
                   zIndex: 0,
+                  animation: `${giraLento} 240s linear infinite`,
                 },
+                "@media (prefers-reduced-motion: reduce)": { "&::before": { animation: "none" } },
               }}
             >
               {/* Centro: foto del usuario, clic para cambiarla */}
@@ -1025,6 +1058,8 @@ const Home = () => {
                 boxShadow="0 0 24px rgba(255,255,255,0.45), 0 0 56px rgba(255,255,255,0.2), 0 0 90px rgba(180,255,245,0.14)"
                 border="2px solid rgba(255,255,255,0.9)"
                 zIndex={10}
+                animation={`${entraFoto} 0.9s cubic-bezier(0.22,1,0.36,1) 0.1s both, ${respiraFoto} 6s ease-in-out 1.2s infinite`}
+                sx={SIN_MOVIMIENTO}
               >
                 <Image src={img} alt={t("home.foto")} w="100%" h="100%" objectFit="cover" />
                 <input
@@ -1058,7 +1093,6 @@ const Home = () => {
                 const angle = angleStep * index - Math.PI / 2;
                 const x = Math.cos(angle) * (radius ?? 200);
                 const y = Math.sin(angle) * (radius ?? 200);
-                const delay = `${index * 0.18}s`;
                 const number = index + 1;
                 const Icon = d.Icon;
                 // Astrología tiene txt muy claro → usar bg para el badge solo en ese caso.
@@ -1119,15 +1153,14 @@ const Home = () => {
                     borderRadius="full"
                     overflow="visible"
                     position="relative"
-                    opacity={abierta ? 1 : 0.5}
-                    animation={`${popIn} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) ${delay} both`}
                     filter={abierta ? "none" : "grayscale(0.35)"}
-                    transition="transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease"
+                    transition="transform 0.35s cubic-bezier(0.22,1,0.36,1), filter 0.3s ease"
                     // La bloqueada también crece un poco al pasar por encima (ya
                     // no es un círculo muerto: se puede desbloquear cuando quiera).
                     _hover={abierta
-                      ? { transform: "scale(1.06)" }
-                      : { opacity: 0.8, transform: "scale(1.04)" }}
+                      ? { transform: "scale(1.07)" }
+                      : { transform: "scale(1.04)", filter: "grayscale(0)" }}
+                    _active={{ transform: "scale(0.97)" }}
                   >
                     {/* Círculo principal con icono */}
                     <Box
@@ -1137,8 +1170,18 @@ const Home = () => {
                       overflow="hidden"
                       border={`4px solid ${abierta ? d.txt : "#ffffff"}`}
                       boxShadow={abierta
-                        ? `0 0 16px rgba(255,255,255,0.38), 0 0 38px rgba(255,255,255,0.17), 0 0 44px ${d.txt}55`
-                        : `0 0 10px rgba(255,255,255,0.16), 0 0 26px rgba(255,255,255,0.08), 0 0 28px ${d.txt}33`}
+                        ? `0 0 10px ${colorBrillo(d)}e6, 0 0 26px ${colorBrillo(d)}99`
+                        : `0 0 12px ${colorBrillo(d)}44, 0 0 28px ${colorBrillo(d)}22`}
+                      // Sin aro ni círculo aparte: el brillo de la propia
+                      // disciplina respira (solo las abiertas, cada una con su fase).
+                      sx={abierta ? {
+                        [`@keyframes brilloRespira${index}`]: {
+                          "0%, 100%": { boxShadow: `0 0 10px ${colorBrillo(d)}cc, 0 0 24px ${colorBrillo(d)}80` },
+                          "50%": { boxShadow: `0 0 14px ${colorBrillo(d)}f2, 0 0 34px ${colorBrillo(d)}b3` },
+                        },
+                        animation: `brilloRespira${index} 5s ease-in-out ${1.6 + index * 0.45}s infinite`,
+                        "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                      } : undefined}
                       bg={hasBg ? "transparent" : d.bg}
                       display="flex"
                       alignItems="center"
@@ -1214,6 +1257,12 @@ const Home = () => {
                     w={circleSize}
                     h={circleSize}
                   >
+                    <Box
+                      w="100%"
+                      h="100%"
+                      animation={`${entraCirculo} 0.8s cubic-bezier(0.22,1,0.36,1) ${0.3 + index * 0.13}s both`}
+                      sx={SIN_MOVIMIENTO}
+                    >
                     {abierta ? (
                       disciplinaCircle
                     ) : (
@@ -1237,6 +1286,7 @@ const Home = () => {
                         {disciplinaCircle}
                       </Tooltip>
                     )}
+                    </Box>
                   </Box>
                 );
               })}
@@ -1246,9 +1296,9 @@ const Home = () => {
                 aire de sobra entre medias para que el mandala respire y se
                 lleve el protagonismo. */}
             {continuarBtn && (
-              <Box display={{ base: "flex", md: "none" }} justifyContent="center" mt={14} w="100%">
+              <Reveal inView amount={0.3} direction="up" distance={20} display={{ base: "flex", md: "none" }} justifyContent="center" mt={14} w="100%">
                 {continuarBtn}
-              </Box>
+              </Reveal>
             )}
 
             {/* Tu camino — en pantallas estrechas no cabe a la izquierda del
@@ -1257,7 +1307,9 @@ const Home = () => {
                 los pines del diario, estáticos (en móvil nada flota): al
                 desplegarse «Tu mapa», los pines bajan con el flujo. */}
             <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={14} mb={10} w="100%">
-              <CaminoUsuario suscritas={suscritasCamino} />
+              <Reveal inView amount={0.2} direction="up" distance={22} w="100%" display="flex" justifyContent="center">
+                <CaminoUsuario suscritas={suscritasCamino} />
+              </Reveal>
               <PinesDiario estatico />
             </Flex>
           </Flex>

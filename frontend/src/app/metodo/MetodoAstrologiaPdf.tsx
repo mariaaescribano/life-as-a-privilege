@@ -21,7 +21,7 @@ import { MetodoStepHeader, glowHeaderDisciplina } from "../../components/metodo/
 import { SpaceBg, SPACE_IMG } from "../../components/metodo/SpaceBg";
 import { useImagesReady } from "../../hooks/useImagesReady";
 import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaModal";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Breathe } from "../../components/global/Reveal";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
 import {
@@ -218,6 +218,7 @@ export default function MetodoAstrologiaPdf() {
                 {sinTextos ? (
                   <Text color="#ffd9a0" fontSize="sm" fontStyle="italic" maxW="560px">{t("metodo.astro.pdfSinLecturas")}</Text>
                 ) : (
+                  <Breathe scale={generando ? 0 : 0.016} duration={4.8} delay={1.2}>
                   <Flex
                     as="button"
                     onClick={generando ? undefined : descargar}
@@ -246,6 +247,7 @@ export default function MetodoAstrologiaPdf() {
                       {generando ? `Montando tu PDF… ${avance}%` : "Descargar toda mi carta en PDF"}
                     </Text>
                   </Flex>
+                  </Breathe>
                 )}
 
                 {generando && (

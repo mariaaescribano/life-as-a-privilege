@@ -364,7 +364,7 @@ export default function MetodoPsicologiaIntegracion() {
 
       <Box position="relative" flex="1">
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
-          <Flex direction="column" align="center" w="100%" maxW="1240px" gap={{ base: 8, md: 10 }}>
+          <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 8, md: 10 }}>
 
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
@@ -505,7 +505,7 @@ export default function MetodoPsicologiaIntegracion() {
             {/* ════════ RELACIÓN EN CURSO · box elegante (con el botón dentro) ════════
                  También es la «mesa» donde se puede soltar lo arrastrado. */}
             <Reveal inView once amount={0.2} direction="up" distance={34} scaleFrom={0.97} duration={0.75} w="100%" display="flex" justifyContent="center">
-            <Box position="relative" w="100%" maxW="920px" borderRadius="2xl" overflow="hidden"
+            <Box position="relative" w="100%" maxW="820px" borderRadius="2xl" overflow="hidden"
                  border={`1px solid ${sobreMesa ? AZUL : `${AZUL}44`}`}
                  boxShadow={sobreMesa ? `0 0 0 3px ${AZUL}, 0 0 34px ${AZUL}88, 0 0 70px ${AZUL}44` : glowPanel}
                  transition="box-shadow 0.18s, border-color 0.18s"

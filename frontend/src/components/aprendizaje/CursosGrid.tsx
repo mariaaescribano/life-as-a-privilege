@@ -32,7 +32,10 @@ const useReveal = (threshold = 0.15) => {
       { threshold, rootMargin: "0px 0px -8% 0px" }
     );
     obs.observe(el);
-    return () => obs.disconnect();
+    // Red de seguridad: si el observador no dispara, se coloca solo a los 15 s
+    // (que nunca se pierda un bloque).
+    const rescate = setTimeout(() => setVisible(true), 15000);
+    return () => { obs.disconnect(); clearTimeout(rescate); };
   }, [threshold]);
   return { ref, visible };
 };
@@ -49,9 +52,19 @@ function CursoRevealCell({ it, i }: { it: CursoGridItem; i: number }) {
       h="100%"
       opacity={visible ? 1 : 0}
       transform={visible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)"}
-      transition={`opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.1}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.1}s`}
+      filter={visible ? "none" : "blur(6px)"}
+      transition={`opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.12}s, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.12}s, filter 0.7s cubic-bezier(0.22,1,0.36,1) ${(i % 3) * 0.12}s`}
     >
-      <CursoCardDetalle curso={it.curso} bgColor={it.bgColor} color={it.color} nom={it.nom} prioritaria={i < FILAS_PRIORITARIAS * 3} />
+      {/* El levantar al pasar el ratón va en un envoltorio propio, para que no
+          se pise con el transform de la entrada. */}
+      <Box
+        h="100%"
+        borderRadius="2xl"
+        transition="transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease"
+        _hover={{ transform: "translateY(-6px)", boxShadow: "0 18px 40px rgba(0,0,0,0.22)" }}
+      >
+        <CursoCardDetalle curso={it.curso} bgColor={it.bgColor} color={it.color} nom={it.nom} prioritaria={i < FILAS_PRIORITARIAS * 3} />
+      </Box>
     </Box>
   );
 }

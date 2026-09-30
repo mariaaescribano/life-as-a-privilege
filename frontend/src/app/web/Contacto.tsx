@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import ViasDeContacto from "../../components/contacto/ViasDeContacto";
-import { Reveal } from "../../components/global/Reveal";
+import { Reveal, Breathe } from "../../components/global/Reveal";
 import { useT } from "../../i18n";
 
 const Contacto = () => {
@@ -34,16 +34,18 @@ const Contacto = () => {
 
       {/* MANDALA SEPARADOR */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "60px", md: "80px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.59)) drop-shadow(0 0 26px rgba(255,255,255,0.32)) drop-shadow(0 0 52px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
+        {/* Entra sin girar (subir + enfocar) y, ya colocado, respira muy despacio. */}
+        <Reveal direction="none" scaleFrom={0.7} blur duration={1.1} delay={0.1}>
+          <Breathe scale={0.035} duration={6} delay={1.3}>
+            <Image
+              src="/img/icono/life.webp"
+              alt=""
+              h={{ base: "60px", md: "80px" }}
+              objectFit="contain"
+              style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.59)) drop-shadow(0 0 26px rgba(255,255,255,0.32)) drop-shadow(0 0 52px rgba(180,255,245,0.24))" }}
+            />
+          </Breathe>
+        </Reveal>
       </Flex>
 
       {/* TITULO */}
@@ -65,7 +67,8 @@ const Contacto = () => {
           textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 38px rgba(255,255,255,0.39), 0 0 70px rgba(180,255,245,0.32)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(24px)"}
-          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
+          filter={mounted ? "blur(0)" : "blur(8px)"}
+          transition="opacity 0.95s cubic-bezier(0.22,1,0.36,1) 0.3s, transform 0.95s cubic-bezier(0.22,1,0.36,1) 0.3s, filter 0.95s cubic-bezier(0.22,1,0.36,1) 0.3s"
         >
           {t("contacto.titulo")}
         </Text>
@@ -78,7 +81,7 @@ const Contacto = () => {
           textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0)" : "translateY(16px)"}
-          transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
+          transition="opacity 0.9s cubic-bezier(0.22,1,0.36,1) 0.6s, transform 0.9s cubic-bezier(0.22,1,0.36,1) 0.6s"
         >
           {t("contacto.subtitulo")}
         </Text>
@@ -103,6 +106,8 @@ const Contacto = () => {
             objectFit="cover"
             border="1px solid rgba(255,255,255,0.5)"
             boxShadow="0 8px 26px rgba(0,0,0,0.28)"
+            transition="transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s ease"
+            _hover={{ transform: "scale(1.05)", boxShadow: "0 12px 34px rgba(0,0,0,0.34)" }}
           />
         </Reveal>
       </Flex>

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Input, Select, Text } from "@chakra-ui/react";
+import { Box, Flex, Input, Select, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -24,7 +24,7 @@ import { glowHeader } from "../../components/metodo/FotoBox";
 import { useIntroComic } from "../../hooks/useIntroComic";
 import { VINETAS_CARTA, CARTA_MAPA_IMGS } from "../../components/metodo/comicCartaAstral";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, RevealItem, Float } from "../../components/global/Reveal";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { rutaHome } from "../../api/sesion";
 import {
@@ -131,6 +131,7 @@ type TrioData = Partial<Record<CuerpoKey, TrioValor>>;
 
 export default function MetodoAstrologia() {
   const t = useT();
+  const esMovilTrio = useBreakpointValue({ base: true, md: false }) ?? true;
   // El cómic del Origen, en el idioma activo (mismo cómic que ComicUniversoModal).
   const origenVinetas = useComic("origen-espiritualidad", ORIGEN_ESPIRITUALIDAD);
   // El segundo cómic de intro, «La Historia de la Astrología», también traducido.
@@ -435,6 +436,22 @@ export default function MetodoAstrologia() {
     return !!v.profundizadoSigno && (!cuerpo.conCasa || !!v.profundizadoCasa);
   };
 
+  // Las animaciones de entrada de la página (header, cajas, tarjetas del trío…)
+  // NO arrancan mientras hay un cómic de entrada abierto: se gastarían detrás
+  // del cómic y al cerrarlo lo encontrarías todo ya colocado. Se montan cuando
+  // el último cómic de la cadena se ha cerrado (con un respiro de 0,38 s para
+  // que el velo del cómic termine de irse) y entonces entran de verdad.
+  const hayComicEntrada = intro.open || historiaOpen || comicCartaOpen;
+  const huboComicEntrada = useRef(false);
+  const [paginaViva, setPaginaViva] = useState(false);
+  useEffect(() => {
+    if (loading) return;
+    if (hayComicEntrada) { huboComicEntrada.current = true; return; }
+    if (paginaViva) return;
+    const id = setTimeout(() => setPaginaViva(true), huboComicEntrada.current ? 380 : 0);
+    return () => clearTimeout(id);
+  }, [loading, hayComicEntrada, paginaViva]);
+
   if (loading) {
     return <RecorridoLoading />;
   }
@@ -474,6 +491,7 @@ export default function MetodoAstrologia() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="private" />
 
+      {!paginaViva ? <Box flex="1" /> : (
       <Flex flex="1" justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
         <Flex direction="column" align="center" w="100%" maxW="850px" gap={6}>
 
@@ -538,31 +556,33 @@ export default function MetodoAstrologia() {
                 <SpaceBg overlay="rgba(8,13,30,0.28)" />
 
                 <Box position="relative" zIndex={1} px={{ base: 5, md: 9 }} py={{ base: 9, md: 12 }}>
-                  <RevealStagger
-                    inView
-                    once
-                    display="flex"
-                    flexDirection={{ base: "column", md: "row" }}
+                  <Flex
+                    direction={{ base: "column", md: "row" }}
                     alignItems="center"
                     mt="5px"
                     justifyContent="center"
                     gap={{ base: 7, md: 6 }}
-                    stagger={0.14}
-                    delayChildren={0.3}
-                    amount={0.2}
                   >
-                    {TRIO.map((key) => {
+                    {TRIO.map((key, i) => {
                       const cuerpo = cuerpoByKey(key);
                       if (!cuerpo) return null;
                       const v = trio[key] ?? {};
                       const esSol = key === "sol";
                       return (
-                        <RevealItem
+                        // Una detrás de otra, con calma: en ordenador se encadenan
+                        // (0,32 s de hueco); en móvil van apiladas y cada una entra
+                        // cuando le toca por scroll, sin esperar a las demás.
+                        <Reveal
                           key={key}
+                          inView
+                          once
+                          amount={0.3}
                           direction="up"
-                          distance={30}
-                          scaleFrom={0.9}
-                          duration={0.7}
+                          distance={46}
+                          scaleFrom={0.88}
+                          blur
+                          duration={0.9}
+                          delay={esMovilTrio ? 0 : 0.3 + i * 0.32}
                           w={{ base: "100%", md: "auto" }}
                           display="flex"
                           justifyContent="center"
@@ -575,10 +595,10 @@ export default function MetodoAstrologia() {
                             leido={esLeido(key)}
                             onLeer={() => abrirLectura(key)}
                           />
-                        </RevealItem>
+                        </Reveal>
                       );
                     })}
-                  </RevealStagger>
+                  </Flex>
                 </Box>
               </Reveal>
 
@@ -899,6 +919,7 @@ export default function MetodoAstrologia() {
           )}
         </Flex>
       </Flex>
+      )}
 
       <ComicAstrologiaModal
         isOpen={comicAstroOpen}
@@ -1136,11 +1157,24 @@ function TrioCard({
       bg="rgba(8,13,30,0.45)"
       border={`1px solid ${c}${destacado ? "66" : "33"}`}
       boxShadow={destacado ? `0 0 26px ${c}44, 0 0 60px ${c}22` : `0 0 16px ${c}22`}
+      position="relative"
     >
-      {/* icono */}
-      <Box style={{ filter: `drop-shadow(0 0 6px ${c}55)` }}>
-        <Glifo symbol={cuerpo.symbol} color={c} size={destacado ? 64 : 52} />
-      </Box>
+      {/* Halo que respira alrededor de la tarjeta (capa aparte: no pisa el
+          hover ni el transform de la tarjeta). */}
+      <Box aria-hidden position="absolute" inset="-1px" borderRadius="2xl" pointerEvents="none"
+           boxShadow={`0 0 30px 4px ${c}`}
+           sx={{
+             opacity: 0.08,
+             [`@keyframes trioHalo${destacado ? "D" : "N"}`]: { "0%, 100%": { opacity: 0.06 }, "50%": { opacity: destacado ? 0.42 : 0.3 } },
+             animation: `trioHalo${destacado ? "D" : "N"} ${destacado ? 4.4 : 5.4}s ease-in-out ${destacado ? 0.8 : 1.6}s infinite`,
+             "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+           }} />
+      {/* icono: flota con fase propia */}
+      <Float amplitude={destacado ? 5 : 4} duration={destacado ? 5.2 : 6} delay={destacado ? 0 : 1.1}>
+        <Box style={{ filter: `drop-shadow(0 0 6px ${c}55)` }}>
+          <Glifo symbol={cuerpo.symbol} color={c} size={destacado ? 64 : 52} />
+        </Box>
+      </Float>
       <Text color={c} fontSize={{ base: "lg", md: destacado ? "2xl" : "xl" }} fontWeight="700" letterSpacing="0.04em"
             style={{ textShadow: `0 0 12px ${c}66` }}>
         {n.cuerpo(cuerpo.key)}
@@ -1160,11 +1194,20 @@ function TrioCard({
         )}
       </Flex>
 
-      {/* botón leer */}
+      {/* botón leer: si aún no se ha leído, un anillo late invitando a pulsarlo */}
+      <Box position="relative" mt={1} display="inline-flex">
+      {!leido && (
+        <Box aria-hidden position="absolute" inset="0" borderRadius="full" pointerEvents="none"
+             border={`1.5px solid ${c}`}
+             sx={{
+               "@keyframes leerOnda": { "0%": { transform: "scale(1)", opacity: 0.55 }, "70%, 100%": { transform: "scale(1.35, 1.7)", opacity: 0 } },
+               animation: "leerOnda 3s ease-out 1.5s infinite",
+               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+             }} />
+      )}
       <Box
         as="button"
         onClick={onLeer}
-        mt={1}
         px={6}
         py={2}
         borderRadius="full"
@@ -1184,6 +1227,7 @@ function TrioCard({
         _hover={{ boxShadow: `0 0 18px ${c}88`, transform: "translateY(-1px)" }}
       >
         {leido ? <><CheckIcon color={c} /> {t("metodo.astro.releer")}</> : t("metodo.astro.leer")}
+      </Box>
       </Box>
     </Flex>
   );

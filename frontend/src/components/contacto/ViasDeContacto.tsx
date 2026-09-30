@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
+import { Reveal } from "../global/Reveal";
 import { AgendarLlamada } from "../global/AgendarLlamada";
 import { BookCallModal } from "../global/BookCallModal";
 import { IconoWhatsapp } from "../metodo/LlamadaCta";
@@ -67,8 +68,10 @@ const IconoComunidad = (
 
 /** Una tarjeta: icono, título y una línea de para qué sirve. */
 function Via({
-  icono, titulo, texto, href, onClick, apagada, nota,
+  icono, titulo, texto, href, onClick, apagada, nota, i = 0,
 }: {
+  /** Posición en la rejilla: marca el retraso de entrada de la tarjeta. */
+  i?: number;
   icono: React.ReactNode;
   titulo: string;
   texto: string;
@@ -94,8 +97,11 @@ function Via({
     sx: { backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" },
     opacity: apagada ? 0.45 : 1,
     cursor: apagada ? "not-allowed" : "pointer",
-    transition: "all 0.25s ease",
+    role: "group",
+    transition: "all 0.35s cubic-bezier(0.22,1,0.36,1)",
+    _active: apagada ? {} : { transform: "translateY(0) scale(0.985)" },
     _hover: apagada ? {} : {
+      transform: "translateY(-4px)",
       bg: "rgba(255,255,255,0.16)",
       borderColor: "rgba(255,255,255,0.9)",
       boxShadow: "0 0 24px rgba(255,255,255,0.45), 0 0 52px rgba(180,255,245,0.3), 0 6px 18px rgba(0,0,0,0.2)",
@@ -104,7 +110,9 @@ function Via({
 
   const dentro = (
     <>
-      <Box mt="2px" flexShrink={0} style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.35))" }}>
+      <Box mt="2px" flexShrink={0} style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.35))" }}
+           transition="transform 0.4s cubic-bezier(0.22,1,0.36,1)"
+           _groupHover={apagada ? undefined : { transform: "scale(1.14)" }}>
         {icono}
       </Box>
       <Box>
@@ -124,16 +132,25 @@ function Via({
     </>
   );
 
-  if (apagada) return <Flex {...comun}>{dentro}</Flex>;
+  // Cada tarjeta entra sola al asomar (sube + enfoca); la segunda columna
+  // llega un pelín después. La entrada va en el envoltorio para no pisar el
+  // transform del hover de la tarjeta.
+  const entra = (nodo: React.ReactNode) => (
+    <Reveal inView amount={0.1} direction="up" distance={26} scaleFrom={0.97} duration={0.75}
+            delay={(i % 2) * 0.12} h="100%">
+      {nodo}
+    </Reveal>
+  );
+  if (apagada) return entra(<Flex {...comun} h="100%">{dentro}</Flex>);
   if (href) {
-    return (
-      <Flex as="a" href={href} target="_blank" rel="noopener noreferrer" {...comun}>
+    return entra(
+      <Flex as="a" href={href} target="_blank" rel="noopener noreferrer" {...comun} h="100%">
         {dentro}
       </Flex>
     );
   }
-  return (
-    <Flex as="button" onClick={onClick} {...comun}>
+  return entra(
+    <Flex as="button" onClick={onClick} {...comun} h="100%">
       {dentro}
     </Flex>
   );
@@ -177,36 +194,42 @@ export function ViasDeContacto({ onEscribir }: { onEscribir: () => void }) {
           gap={{ base: 4, md: 5 }}
         >
           <Via
+            i={0}
             icono={IconoLlamada}
             titulo={t("contacto.via.llamada")}
             texto={t("contacto.via.llamadaTexto")}
             onClick={() => setLlamadaAbierta(true)}
           />
           <Via
+            i={1}
             icono={IconoConocernos}
             titulo={t("contacto.via.conocernos")}
             texto={t("contacto.via.conocernosTexto")}
             onClick={() => setConocernosAbierta(true)}
           />
           <Via
+            i={2}
             icono={IconoEmail}
             titulo={t("contacto.via.email")}
             texto={t("contacto.via.emailTexto")}
             onClick={onEscribir}
           />
           <Via
+            i={3}
             icono={<IconoWhatsapp size="30px" />}
             titulo={t("contacto.via.whatsapp")}
             texto={t("contacto.via.whatsappTexto")}
             href={whatsappUrl(t("contacto.via.whatsappMensaje"))}
           />
           <Via
+            i={4}
             icono={IconoInstagram}
             titulo={t("contacto.via.instagram")}
             texto={t("contacto.via.instagramTexto")}
             href={INSTAGRAM_URL}
           />
           <Via
+            i={5}
             icono={IconoComunidad}
             titulo={t("contacto.via.comunidad")}
             texto={t("contacto.via.comunidadTexto")}

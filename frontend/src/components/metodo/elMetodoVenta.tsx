@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Grid, Image, Text, type FlexProps } from "@chakra-ui/react";
 import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
+import { LetrasVivas } from "../global/LetrasVivas";
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 import { RecorridoVideosMuestra } from "../global/MandalaRecorrido";
 import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import { PrecioConAntes } from "./PrecioConAntes";
@@ -74,7 +76,11 @@ function TituloBloque({
   children,
   sub,
   sinRaya,
+  vivo,
 }: {
+  /** Texto con la entrada de letras (título y bajada, si son cadenas). Arranca
+   *  cuando el usuario llega a la altura, sin espera de reloj. */
+  vivo?: boolean;
   children: React.ReactNode;
   sub?: React.ReactNode;
   /** Sin la rayita entre el título y la frase. La lleva por defecto —es la que
@@ -83,8 +89,10 @@ function TituloBloque({
    *  líneas tan seguidas se leían como un tropiezo. */
   sinRaya?: boolean;
 }) {
+  const visto = useVistoConEspera("0px 0px -20% 0px", 0);
+  const conLetras = vivo && typeof children === "string";
   return (
-    <Flex direction="column" align="center" gap={{ base: 3, md: 4 }} textAlign="center">
+    <Flex ref={visto.ref} direction="column" align="center" gap={{ base: 3, md: 4 }} textAlign="center">
       <Text
         color="white"
         fontWeight="700"
@@ -93,7 +101,9 @@ function TituloBloque({
         lineHeight="1.25"
         textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
       >
-        {children}
+        {conLetras
+          ? <LetrasVivas texto={children as string} entrada activo={visto.visible} retraso={1.2} paso={0.09} pasoEntrada={0.035} altura={4} />
+          : children}
       </Text>
       {!sinRaya && <Box w={{ base: "70px", md: "90px" }} h="1px" bg="rgba(255,255,255,0.35)" />}
       {sub && (
@@ -104,7 +114,9 @@ function TituloBloque({
           lineHeight="1.65"
           maxW="680px"
         >
-          {sub}
+          {conLetras && typeof sub === "string"
+            ? <LetrasVivas texto={sub} entrada activo={visto.visible} onda={false} pasoEntrada={0.012} />
+            : sub}
         </Text>
       )}
     </Flex>
@@ -233,7 +245,7 @@ export function PruebasBloque() {
   const t = useT();
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
-      <TituloBloque sinRaya sub={t("elMetodo.pruebas.sub")}>{t("elMetodo.pruebas.titulo")}</TituloBloque>
+      <TituloBloque vivo sinRaya sub={t("elMetodo.pruebas.sub")}>{t("elMetodo.pruebas.titulo")}</TituloBloque>
 
       <Reveal inView direction="up" distance={24} duration={0.8} w="100%">
         <RecorridoVideosMuestra />

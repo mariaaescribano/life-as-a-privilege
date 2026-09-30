@@ -21,7 +21,7 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
-import { Reveal, RevealStagger } from "../../components/global/Reveal";
+import { Reveal, RevealStagger, Float } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 
 // Check pequeño para marcar un elemento ya leído.
@@ -266,7 +266,9 @@ export default function MetodoAstrologiaAspectos() {
                   <Box position="relative" zIndex={1} px={{ base: 4, md: 5 }} py={{ base: 5, md: 6 }}>
                     {/* Cabecera del planeta */}
                     <Flex align="center" justify="center" gap={3} mb={2}>
-                      <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={36} />
+                      <Float amplitude={3} duration={5 + (gi % 3)} delay={gi * 0.6}>
+                        <Glifo symbol={cuerpo.symbol} color={cuerpo.color} size={36} />
+                      </Float>
                       <Text color={cuerpo.color} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"
                             letterSpacing="0.03em" style={{ textShadow: `0 0 12px ${cuerpo.color}66` }}>
                         {n.cuerpo(cuerpo.key)}
@@ -363,7 +365,17 @@ export default function MetodoAstrologiaAspectos() {
                               <Flex align="center" gap={2} justify="center" flex="1" minW={0}>
                                 <Text w="28px" textAlign="center" flexShrink={0} fontSize={{ base: "xl", md: "2xl" }}
                                       color={colorAsp} fontFamily="'Times New Roman', serif"
-                                      style={{ filter: `drop-shadow(0 0 6px ${colorAsp}aa)`, lineHeight: 1 }}>
+                                      style={{ filter: `drop-shadow(0 0 6px ${colorAsp}aa)`, lineHeight: 1 }}
+                                      // El símbolo de un aspecto por leer late (invita a abrirlo);
+                                      // el ya leído se queda quieto.
+                                      sx={desbloqueada && !leido && escrito ? {
+                                        [`@keyframes aspectoLate${String(colorAsp).replace(/[^0-9a-zA-Z]/g, "")}`]: {
+                                          "0%, 100%": { filter: `drop-shadow(0 0 4px ${colorAsp}88)` },
+                                          "50%": { filter: `drop-shadow(0 0 12px ${colorAsp}) drop-shadow(0 0 22px ${colorAsp}88)` },
+                                        },
+                                        animation: `aspectoLate${String(colorAsp).replace(/[^0-9a-zA-Z]/g, "")} ${3.2 + (idx % 3) * 0.5}s ease-in-out ${(idx % 5) * 0.4}s infinite`,
+                                        "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                                      } : undefined}>
                                   {ASPECTO_SYMBOL[aspecto.tipo]}
                                 </Text>
                                 <Text w={{ md: "110px" }} flexShrink={0} fontSize={{ base: "2xs", md: "sm" }}

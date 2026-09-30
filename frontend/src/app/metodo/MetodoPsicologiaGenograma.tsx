@@ -171,10 +171,8 @@ function TarjetaPersona({ p, onRellenar }: { p: PersonaGenograma; onRellenar: ()
       position="relative"
       overflow="hidden"
       borderRadius="xl"
-      border={`1.5px solid ${TINTA}66`}
-      boxShadow={`0 0 14px ${TINTA}00`}
-      transition="box-shadow 0.2s ease, transform 0.2s ease"
-      _hover={{ boxShadow: `0 0 14px ${TINTA}59`, transform: "translateY(-2px)" }}
+      transition="transform 0.2s ease"
+      _hover={{ transform: "translateY(-2px)" }}
     >
       <DisciplinaBgLayer nom={neuropsicologiaNom} borderRadius="xl" />
       <Flex position="relative" zIndex={1} direction="column" flex="1" p={{ base: 4, md: 4 }} gap={3}>

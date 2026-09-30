@@ -74,6 +74,7 @@ export function Reveal({
   once = true,
   amount = 0.2,
   inView = false,
+  activo,
   ...rest
 }: EntradaBase & {
   delay?: number;
@@ -83,12 +84,18 @@ export function Reveal({
    *  de ruta). true: entra al asomar en pantalla (whileInView) — úsalo solo para
    *  contenido claramente por debajo del pliegue en páginas largas. */
   inView?: boolean;
+  /** Control externo: false = se queda oculto, true = entra. Si se pasa,
+   *  manda sobre `inView` (el que decide CUÁNDO es el padre, p. ej. con
+   *  `useVistoConEspera`). */
+  activo?: boolean;
   children?: React.ReactNode;
 } & BoxProps) {
   const reduce = useReducedMotion();
   if (reduce) return <Box {...rest}>{children}</Box>;
 
-  const trigger = inView
+  const trigger = activo !== undefined
+    ? { animate: activo ? finalDe(blur) : initialDe(direction, distance, scaleFrom, blur) }
+    : inView
     ? { whileInView: finalDe(blur), viewport: { once, amount } }
     : { animate: finalDe(blur) };
 
@@ -274,8 +281,11 @@ export function RevealStagger({
   once = true,
   amount = 0.15,
   inView = false,
+  activo,
   ...rest
 }: {
+  /** Control externo (ver `Reveal`): false = oculto, true = arranca la cascada. */
+  activo?: boolean;
   stagger?: number;
   delayChildren?: number;
   once?: boolean;
@@ -292,7 +302,9 @@ export function RevealStagger({
     hidden: {},
     show: { transition: { staggerChildren: stagger, delayChildren } },
   };
-  const trigger = inView
+  const trigger = activo !== undefined
+    ? { animate: activo ? "show" : "hidden" }
+    : inView
     ? { whileInView: "show", viewport: { once, amount } }
     : { animate: "show" };
 

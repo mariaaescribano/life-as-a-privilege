@@ -3,6 +3,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
 import { useT } from "../../i18n";
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 
 /**
  * Tarjeta de la creadora — panel glass horizontal: texto a la izquierda
@@ -34,6 +35,9 @@ type CreadoraCardProps = {
    * sin pasar nada y se ven exactamente igual que antes.
    */
   fondo?: "oscuro" | "claro";
+  /** Segundos que espera tras cargar la página antes de entrar, aunque ya se
+   *  vea (Welcome: que no aparezca a la vez que el titular). 0 = como siempre. */
+  esperaInicial?: number;
 };
 
 const CreadoraCard: React.FC<CreadoraCardProps> = ({
@@ -42,7 +46,12 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
   extraParagraph,
   sinMargenes = false,
   fondo = "oscuro",
+  esperaInicial = 0,
 }) => {
+  const espera = useVistoConEspera("0px 0px -8% 0px", esperaInicial);
+  // Con espera, quien decide cuándo entra es el hook; sin ella, `inView` de
+  // siempre (mismo comportamiento que antes en las demás páginas).
+  const control = esperaInicial > 0 ? { activo: espera.visible } : { inView: true };
   const navigate = useNavigate();
   const t = useT();
   // El valor por defecto no puede ir en la firma: depende del idioma activo.
@@ -109,8 +118,12 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           apareciendo de golpe. Tampoco lleva `blur`: sobre un panel de cristal
           tan grande, el salto de desenfoque a nítido se percibe como un fogonazo.
           Duración generosa (1s) para que se vea llegar, no aparecer. */}
+      <Box ref={espera.ref} w="100%">
       <Reveal
-        inView
+        {...control}
+        // Con espera (Welcome), un respiro extra tras el botón de «El Mapa»:
+        // que el ojo llegue al botón antes de que se anime la tarjeta.
+        delay={esperaInicial > 0 ? 0.7 : 0}
         amount={0.02}
         direction="up"
         distance={26}
@@ -121,7 +134,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         mx="auto"
       >
       <RevealStagger
-        inView
+        {...control}
         amount={0.02}
         stagger={0.22}
         delayChildren={0.18}
@@ -251,6 +264,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         </RevealItem>
       </RevealStagger>
       </Reveal>
+      </Box>
     </Box>
   );
 };

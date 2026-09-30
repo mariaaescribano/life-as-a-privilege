@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Flex, Portal, Text } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
+import { keyframes } from "@emotion/react";
 import axios from "axios";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -57,6 +58,21 @@ function renderConNegritas(texto: string, color: string): React.ReactNode {
 }
 
 const MotionG = motion.g as any;
+
+// Vida de la rueda, DESPUÉS de que florezca: un anillo de puntos que gira muy
+// despacio, la casa activa que late y el signo central que respira.
+const giroAnillo = keyframes`
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+`;
+const latidoSector = keyframes`
+  0%, 100% { opacity: 0.05; }
+  50%      { opacity: 0.32; }
+`;
+const respiraSigno = keyframes`
+  0%, 100% { opacity: 0.78; }
+  50%      { opacity: 1; }
+`;
 const EASE_POP = [0.34, 1.56, 0.64, 1] as const; // rebote suave al aparecer cada casa
 // Entrada épica: las 12 casas «florecen» una a una desde el centro de la rueda.
 const CASA_APPEAR_BASE = 0.5;   // arranca tras asentarse la rueda
@@ -293,11 +309,20 @@ export default function MetodoAstrologiaCasas() {
                     onPointerDown={onPointerDown}
                     onPointerMove={onPointerMove}
                     onPointerUp={onPointerUp}
+                    sx={{
+                      "& .anillo-vivo": { transformOrigin: `${CX}px ${CY}px`, transformBox: "view-box", animation: `${giroAnillo} 140s linear infinite` },
+                      "& .sector-latido": { pointerEvents: "none", animation: `${latidoSector} 3.6s ease-in-out infinite` },
+                      "& .signo-vivo": { animation: `${respiraSigno} 4.5s ease-in-out infinite` },
+                      "@media (prefers-reduced-motion: reduce)": { "& .anillo-vivo, & .sector-latido, & .signo-vivo": { animation: "none" } },
+                    }}
                   >
                     {/* aro exterior con glow */}
                     <circle cx={CX} cy={CY} r={R_OUT} fill="none" stroke={`${astrologiaTxt}55`} strokeWidth={1.5}
                             style={{ filter: `drop-shadow(0 0 6px ${astrologiaTxt}66)` }} />
                     <circle cx={CX} cy={CY} r={R_OUT * 0.62} fill="none" stroke={`${astrologiaTxt}22`} strokeWidth={1} />
+                    {/* anillo de puntos que gira lentísimo */}
+                    <circle className="anillo-vivo" cx={CX} cy={CY} r={R_OUT * 0.81} fill="none"
+                            stroke={`${astrologiaTxt}44`} strokeWidth={1.4} strokeDasharray="1.5 9" strokeLinecap="round" />
 
                     {/* grupo rotatorio */}
                     <g transform={`rotate(${rot} ${CX} ${CY})`} style={{ transition: dragRef.current ? "none" : "transform 0.55s cubic-bezier(.22,.68,.36,1)" }}>
@@ -323,6 +348,7 @@ export default function MetodoAstrologiaCasas() {
                               style={{ cursor: "pointer", transition: "fill 0.3s" }}
                               onClick={() => { if (!dragRef.current?.moved) seleccionarCasa(casaNum); }}
                             />
+                            {activa && <path className="sector-latido" d={sectorPath(i)} fill={astrologiaTxt} />}
                             {/* número (se mantiene en pie con rotación inversa) */}
                             <g transform={`rotate(${-rot} ${lp.x} ${lp.y})`}
                                style={{ transition: dragRef.current ? "none" : "transform 0.55s cubic-bezier(.22,.68,.36,1)", pointerEvents: "none" }}>
@@ -363,7 +389,7 @@ export default function MetodoAstrologiaCasas() {
                         sistemas pintan como emoji morado): escalamos el lienzo
                         de 24×24 del icono a 40 px. */}
                     {info && (
-                      <g transform={`translate(${CX - 20} ${CY - 20}) scale(${40 / 24})`}
+                      <g className="signo-vivo" transform={`translate(${CX - 20} ${CY - 20}) scale(${40 / 24})`}
                          fill="none" stroke={info.regente?.color ?? astrologiaTxt}
                          strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round"
                          style={{ filter: `drop-shadow(0 0 8px ${(info.regente?.color ?? astrologiaTxt)}aa)` }}>

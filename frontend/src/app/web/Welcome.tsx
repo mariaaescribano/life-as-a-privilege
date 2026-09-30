@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -21,7 +21,8 @@ import { useT, type ClaveTexto } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { precargarImagenes, usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { useEnPantalla } from "../../hooks/useEnPantalla";
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { LifeLoading } from "../../components/global/LifeLoading";
 
 type Discipline = {
@@ -197,15 +198,38 @@ function TarjetaDisciplina({
   onSelect: () => void;
   onExplorar: () => void;
 }) {
-  // Margen suave (-6% en vez del -25% por defecto): la fila de abajo entra en
-  // cuanto asoma por el borde inferior, con un scroll corto. Con el -25% había
+  // Margen -14%: la tarjeta entra cuando ya se ve de verdad (metida un 14% de
+  // la pantalla), no antes: la entrada tiene que poder verla quien baja. (Con un
+  // margen positivo arrancaba fuera de pantalla y al llegar ya estaba puesta.) Con el -25% había
   // que bajar un cuarto de pantalla —unos 200px— antes de que se dignaran a
   // aparecer, y se sentía como que la página no reaccionaba.
-  const enPantalla = useEnPantalla("0px 0px -6% 0px");
+  const enPantalla = useVistoConEspera("0px 0px -14% 0px", 1.7);
   // La primera fila queda justo en el pliegue: con el observador nunca llegaba a
   // «asomar» y el usuario se encontraba un hueco turquesa vacío donde deberían
   // estar las tarjetas. Esa fila entra con la página; las siguientes, al bajar.
-  const visto = entraAlCargar ? cargado : enPantalla.visto;
+  //
+  // Red de seguridad: si por lo que sea el observador no llega a disparar (una
+  // pestaña en segundo plano, un navegador raro), la tarjeta se coloca sola a
+  // los 15 s de cargar la página. Puede que entonces no se vea la animación,
+  // pero nunca se pierde una disciplina.
+  const [rescate, setRescate] = useState(false);
+  useEffect(() => {
+    if (!cargado) return;
+    const id = setTimeout(() => setRescate(true), 15000);
+    return () => clearTimeout(id);
+  }, [cargado]);
+  //
+  // La primera pantalla también espera a ASOMAR (aunque sea un píxel): en un
+  // móvil pequeño la segunda fila queda bajo el pliegue, y si entrara solo con
+  // la página se animaría sin que nadie la vea. Si la ve al cargar, entra con la
+  // página como siempre; si tiene que bajar, entra al llegar y sin la espera
+  // inicial (`tardio`), para no hacerle esperar con el dedo en el aire.
+  const asoma = useVistoConEspera("0px 0px 0px 0px", 0);
+  const t0 = useRef(performance.now());
+  const tardio = useRef<boolean | null>(null);
+  if (asoma.visible && tardio.current === null) tardio.current = performance.now() - t0.current > 1800;
+  const visto = entraAlCargar ? (cargado && asoma.visible) : (enPantalla.visible || rescate);
+  const delayFinal = entraAlCargar && tardio.current ? Math.max(0.1, delay - 0.8) : delay;
   const hasBg = hasDisciplinaBg(d.name);
   const t = useT();
   const nombreDe = useNombreDisciplina();
@@ -233,7 +257,7 @@ function TarjetaDisciplina({
       // Dispara cuando ESTA tarjeta asoma en pantalla, no al cargar la página ni
       // cuando asoma la cuadrícula: así también se ve colocarse a las de las
       // filas de abajo, en vez de encontrarlas ya puestas al bajar.
-      ref={enPantalla.ref}
+      ref={(el: HTMLElement | null) => { enPantalla.ref(el); asoma.ref(el); }}
       opacity={visto ? 1 : 0}
       transform={visto ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
       filter={visto ? "blur(0px)" : "blur(6px)"}
@@ -244,7 +268,7 @@ function TarjetaDisciplina({
       // curva que se pasaba de largo, así que aterrizaban torcidas y se
       // enderezaban dando un tumbo. Ahora suben limpias y se enfocan,
       // con la curva del sistema Reveal. Mismos números que /elMetodo.
-      transition={`opacity 0.4s ease ${delay}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s, filter 0.4s ease ${delay}s`}
+      transition={`opacity 0.6s ease ${delayFinal}s, transform 0.85s cubic-bezier(0.22,1,0.36,1) ${delayFinal}s, filter 0.6s ease ${delayFinal}s`}
     >
       {/* Tarjeta visual — el hover (elevación/sombra) vive aquí, separado
           del reveal de entrada para que no se pisen los transforms. */}
@@ -262,11 +286,12 @@ function TarjetaDisciplina({
         textAlign="center"
         overflow={hasBg ? "visible" : undefined}
         boxShadow="0 4px 20px rgba(0,0,0,0.16)"
-        transition="transform 0.28s ease, box-shadow 0.28s ease"
+        transition="transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease"
         _groupHover={{
-          transform: "translateY(-6px)",
-          boxShadow: "0 14px 38px rgba(0,0,0,0.26)",
+          transform: "translateY(-8px) scale(1.012)",
+          boxShadow: "0 18px 44px rgba(0,0,0,0.28)",
         }}
+        _groupActive={{ transform: "translateY(-2px) scale(0.995)" }}
       >
         {/* Fondo propio de la disciplina (estrellas o imagen) — en su
             propia capa con overflow:hidden, para que el icono que
@@ -307,6 +332,16 @@ function TarjetaDisciplina({
             justifyContent="center"
             transition="filter 0.28s ease"
             _groupHover={{ filter: "brightness(1.12)" }}
+            // Vida tras la entrada: el icono flota unos píxeles, con la fase de
+            // su tarjeta para que no suban y bajen las ocho a la vez.
+            sx={visto ? {
+              "@keyframes iconoFlota": {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-3px)" },
+              },
+              animation: `iconoFlota 5s ease-in-out ${delay + 1.2}s infinite`,
+              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+            } : undefined}
           >
             {d.renderIcon(isMobile ? "32px" : "42px")}
           </Box>
@@ -516,11 +551,20 @@ const Welcome = () => {
             letterSpacing="0.1em"
             lineHeight="1.1"
             textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
+            // El brillo del titular respira despacio, ya colocado.
+            sx={{
+              "@keyframes tituloRespira": {
+                "0%, 100%": { textShadow: "0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)" },
+                "50%": { textShadow: "0 0 20px rgba(255,255,255,0.75), 0 0 42px rgba(255,255,255,0.5), 0 0 76px rgba(180,255,245,0.42)" },
+              },
+              animation: "tituloRespira 7s ease-in-out 2s infinite",
+              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+            }}
           >
             {/* El nombre de la casa vive en `header.marca` (una sola clave para
                 el rótulo del header y este titular): así no se cambia en un
                 sitio y se olvida el otro. */}
-            {t("header.marca")}
+            <LetrasVivas texto={t("header.marca")} entrada activo={mounted} retraso={1.8} />
           </Text>
 
           {/* Subtítulo (estructura de Materiales) */}
@@ -614,7 +658,9 @@ const Welcome = () => {
               // La columna dentro de su fila: 2 columnas en móvil, 4 en escritorio.
               // En móvil la segunda fila también entra con la página, así que se
               // le suma un hueco para que vaya DETRÁS de la primera, no a la vez.
-              delay={0.1 + (i % columnas) * 0.15 + (isMobile && i >= columnas ? 0.3 : 0)}
+              // Las de abajo (las que entran al asomar) tardan un poco más
+              // que las de la primera pantalla, para que se vea cada una.
+              delay={(i < filasAlCargar * columnas ? 0.9 : 0.1) + (i % columnas) * 0.2 + (isMobile && i >= columnas && i < filasAlCargar * columnas ? 0.3 : 0) + (i >= filasAlCargar * columnas ? 0.3 : 0)}
               // Lo que se ve sin hacer scroll entra con la página: la primera fila
               // en escritorio y las DOS primeras en móvil (las cuatro disciplinas).
               // De ahí hacia abajo, cada tarjeta entra al asomar.
@@ -634,7 +680,7 @@ const Welcome = () => {
       <OpinionesSection />
 
       {/* ── PRESENTACIÓN (creadora) ── */}
-      <CreadoraCard />
+      <CreadoraCard esperaInicial={3.2} />
 
       {/* ── SEPARADOR DE ZONAS ── */}
       {/* <Flex justify="center" pt={{ base: 12, md: 16 }}>

@@ -1,30 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 import { useT } from "../../i18n";
 import { Breathe } from "../global/Reveal";
-
-const useReveal = (threshold = 0.15) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-};
+import { LetrasVivas } from "../global/LetrasVivas";
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 
 const OpinionesSection: React.FC = () => {
   const navigate = useNavigate();
   const t = useT();
-  const reveal = useReveal(0.1);
+  // Espera de 1,4 s tras cargar: en ordenador el botón ya está en pantalla al
+  // entrar, y sin espera su animación se gastaba a la vez que el titular.
+  const reveal = useVistoConEspera("0px 0px -25% 0px", 1.4);
 
   return (
     <Box
@@ -87,6 +75,11 @@ const OpinionesSection: React.FC = () => {
               h={{ base: "42px", md: "60px" }}
               objectFit="contain"
               flexShrink={0}
+              // El mandala entra GIRANDO al asomar el botón (surge pequeño,
+              // desenfocado y girando hasta colocarse), y luego se queda quieto.
+              opacity={reveal.visible ? 1 : 0}
+              transform={reveal.visible ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-90deg)"}
+              transition="opacity 0.9s ease 0.35s, transform 1.4s cubic-bezier(0.22,1.35,0.36,1) 0.35s, filter 0.9s ease 0.35s"
               style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.6)) drop-shadow(0 0 26px rgba(255,255,255,0.32))" }}
             />
             <Text
@@ -99,7 +92,7 @@ const OpinionesSection: React.FC = () => {
               textShadow="0 0 16px rgba(255,255,255,0.6), 0 0 34px rgba(255,255,255,0.39), 0 0 66px rgba(180,255,245,0.32)"
               whiteSpace="nowrap"
             >
-              {t("header.mapa")}
+              <LetrasVivas texto={t("header.mapa")} entrada activo={reveal.visible} retraso={2.2} paso={0.12} altura={4} />
             </Text>
             <Box
               as="span"
