@@ -955,7 +955,7 @@ export function ComicViewer({
             zIndex={0}
             sx={{
               background: {
-                base: "none",
+                base: "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
                 md: "radial-gradient(ellipse at 30% 20%, #2a1b5c 0%, #14143a 45%, #050816 100%)",
               },
             }}
@@ -965,7 +965,7 @@ export function ComicViewer({
               src={isDisciplinaMode ? disciplinaBgImage : "/img/astrologia/space.webp"}
               alt=""
               loading="eager"
-              display={{ base: "none", md: "block" }}
+              display="block"
               position="absolute"
               inset="0"
               w="100%"
