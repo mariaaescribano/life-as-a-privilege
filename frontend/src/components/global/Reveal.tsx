@@ -17,6 +17,7 @@
 import React from "react";
 import { Box, type BoxProps } from "@chakra-ui/react";
 import { motion, useInView, useReducedMotion, type Variants } from "framer-motion";
+import { cuandoSinComic } from "../../hooks/cuandoSinComic";
 
 // `motion(Box)`: Chakra tipa `transition` como string CSS y framer como objeto,
 // lo que choca al pasarle transiciones/variants. Casteamos para evitar el
@@ -73,12 +74,18 @@ const finalDe = (blur?: boolean) => ({
 // 0,5 s; lo que aparece más tarde (un popup, algo que asoma al hacer scroll)
 // no espera nada: el resto del tiempo ya ha pasado.
 const RETRASO_CUERPO = 0.5;
+/** Páginas con cabecera de disciplina donde la cabecera entra primero y el cuerpo
+ *  después: los recorridos, los cursos de cada disciplina y sus presentaciones
+ *  públicas. */
+export const rutaConCabecera = (ruta: string) =>
+  ruta.startsWith("/metodo/") || ruta.startsWith("/aprendizaje/cursos/") || ruta.startsWith("/d/");
+
 let rutaReloj = "";
 let inicioReloj = 0;
 function esperaDelCuerpo(direction: string): number {
   if (typeof window === "undefined") return 0;
   const ruta = window.location.pathname;
-  if (!ruta.startsWith("/metodo/")) return 0;
+  if (!rutaConCabecera(ruta)) return 0;
   if (ruta !== rutaReloj) { rutaReloj = ruta; inicioReloj = performance.now(); }
   if (direction === "down") return 0; // la cabecera
   return Math.max(0, RETRASO_CUERPO - (performance.now() - inicioReloj) / 1000);
@@ -94,8 +101,10 @@ function useEsperaCuerpo(direction: string, once: boolean, amount: number) {
   const [pasado, setPasado] = React.useState(espera.current <= 0.001);
   React.useEffect(() => {
     if (pasado) return;
-    const id = window.setTimeout(() => setPasado(true), (espera.current ?? 0) * 1000);
-    return () => window.clearTimeout(id);
+    // Espera lo que falte hasta los 0,5 s DESDE QUE NO HAY CÓMIC delante: en las
+    // portadas de disciplina el cómic de entrada tapa la página, y el cuerpo no
+    // debe animarse detrás (ver cuandoSinComic).
+    return cuandoSinComic(() => setPasado(true), (espera.current ?? 0) * 1000);
   }, [pasado]);
   return { ref, espera: espera.current, visto, pasado };
 }
@@ -142,13 +151,15 @@ export function Reveal({
     ? (conEspera
         ? { ref: cuerpo.ref, animate: cuerpo.visto && cuerpo.pasado ? finalDe(blur) : initialDe(direction, distance, scaleFrom, blur) }
         : { whileInView: finalDe(blur), viewport: { once, amount } })
-    : { animate: finalDe(blur) };
+    : (conEspera
+        ? { animate: cuerpo.pasado ? finalDe(blur) : initialDe(direction, distance, scaleFrom, blur) }
+        : { animate: finalDe(blur) });
 
   return (
     <MotionBox
       initial={initialDe(direction, distance, scaleFrom, blur)}
       {...trigger}
-      transition={{ duration, delay: delay + (inView ? 0 : cuerpo.espera), ease: EASE }}
+      transition={{ duration, delay, ease: EASE }}
       {...rest}
     >
       {children}
@@ -347,7 +358,7 @@ export function RevealStagger({
   const conEspera = cuerpo.espera > 0.001;
   const variants: Variants = {
     hidden: {},
-    show: { transition: { staggerChildren: stagger, delayChildren: delayChildren + (inView ? 0 : cuerpo.espera) } },
+    show: { transition: { staggerChildren: stagger, delayChildren } },
   };
   const trigger = activo !== undefined
     ? { animate: activo ? "show" : "hidden" }
@@ -355,7 +366,7 @@ export function RevealStagger({
     ? (conEspera
         ? { ref: cuerpo.ref, animate: cuerpo.visto && cuerpo.pasado ? "show" : "hidden" }
         : { whileInView: "show", viewport: { once, amount } })
-    : { animate: "show" };
+    : (conEspera ? { animate: cuerpo.pasado ? "show" : "hidden" } : { animate: "show" });
 
   return (
     <MotionBox initial="hidden" {...trigger} variants={variants} {...rest}>

@@ -5,6 +5,7 @@ import { astrologiaNom, astrologiaTxt, ayurvedaNom, ayurvedaTxt, cabalaNom, caba
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { Float } from "../global/Reveal";
 import { LetrasVivas } from "../global/LetrasVivas";
+import { cuandoSinComic } from "../../hooks/cuandoSinComic";
 import { CursosPsicologiaModal } from "./CursosPsicologiaModal";
 import { useT } from "../../i18n";
 
@@ -333,16 +334,21 @@ export function MetodoStepHeader({
   // todo dura poco. Arranca cuando el header ya casi ha entrado (0,25 s). Astrología no pasa `nom` (usa `space`).
   // Fuera del recorrido (portadas públicas, cursos, materiales) el título sigue
   // como siempre.
-  const enRecorrido = typeof window !== "undefined" && window.location.pathname.startsWith("/metodo/");
-  const tituloMagico = typeof title === "string" && enRecorrido && nom !== culturaNom && (!!nom || !!space);
+  const ruta = typeof window !== "undefined" ? window.location.pathname : "";
+  const enRecorrido = ruta.startsWith("/metodo/");
+  // Los cursos de cada disciplina (/aprendizaje/cursos/…) y sus presentaciones
+  // públicas (/d/…) llevan la misma magia, en TODAS las disciplinas.
+  const enPublica = ruta.startsWith("/aprendizaje/cursos/") || ruta.startsWith("/d/");
+  const tituloMagico = typeof title === "string" && ((enRecorrido && nom !== culturaNom) || enPublica) && (!!nom || !!space);
   // Se activa PARA un título concreto: si el header sigue montado y cambia de
   // título (p. ej. de una sefirá a la siguiente), el nuevo entra de cero.
   const [tituloActivoPara, setTituloActivoPara] = useState<string | null>(null);
   const tituloActivo = typeof title === "string" && tituloActivoPara === title;
   React.useEffect(() => {
     if (!tituloMagico || typeof title !== "string") return;
-    const id = setTimeout(() => setTituloActivoPara(title), 250);
-    return () => clearTimeout(id);
+    // Si hay un cómic de entrada delante (portadas de disciplina), el título
+    // espera a que se cierre: si no, se animaría detrás y nadie lo vería.
+    return cuandoSinComic(() => setTituloActivoPara(title), 250);
   }, [tituloMagico, title]);
   const headerBoxRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
