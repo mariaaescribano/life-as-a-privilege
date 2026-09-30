@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -49,6 +49,8 @@ function SistemaBox({
 const SISTEMAS_VISTOS_KEY = "sistemas_vistos";
 
 export default function MetodoFisiologiaSistemas() {
+  // Columnas de la rejilla (2 en móvil, 3 desde md): reinicia la cascada en cada fila.
+  const columnas = useBreakpointValue({ base: 2, md: 3 }) ?? 2;
   const t = useT();
   const SISTEMAS = useSistemas();
   const navigate = useNavigate();
@@ -146,8 +148,8 @@ export default function MetodoFisiologiaSistemas() {
               al llegar con el scroll en vez de haberse animado ya sin verse. ── */}
           <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
             {SISTEMAS.map((s, i) => (
-              <Reveal key={s.key} inView once amount={0.2} direction="up" distance={20}
-                      scaleFrom={0.96} duration={0.55} delay={(i % 3) * 0.07} display="flex">
+              <Reveal key={s.key} inView once amount={0.25} direction="up" distance={30}
+                      scaleFrom={0.96} duration={0.8} delay={0.1 + (i % columnas) * 0.14} display="flex">
                 <SistemaBox sistema={s} visto={vistos.has(s.key)} onClick={() => verSistema(s)} />
               </Reveal>
             ))}

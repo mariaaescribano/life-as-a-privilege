@@ -120,7 +120,7 @@ export default function MetodoPsicologiaCursos() {
                 alrededor, que metía las fotos dentro de una caja y las apagaba. */}
             {cursosLoading || !fotosListas ? (
               <Flex minH={{ base: "220px", md: "300px" }} w="100%" align="center" justify="center">
-                <PsicologiaLoader />
+                <PsicologiaLoader color="#ffffff" />
               </Flex>
             ) : cursos.length === 1 ? (
               <Flex

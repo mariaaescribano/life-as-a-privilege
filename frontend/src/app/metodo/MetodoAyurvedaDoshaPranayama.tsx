@@ -11,6 +11,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { AyurvedaPanel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { IntroComicModal } from "../../components/metodo/IntroComicModal";
 import { COMIC_PRANAYAMA } from "../../components/metodo/comicPranayama";
@@ -40,15 +41,6 @@ const DOSHA_META: Record<DoshaKey, { label: string; color: string; Icon: any }> 
  *  entera («cover»). Nada de bandas repetidas (`tile`): las costuras entre
  *  banda y banda hacían que un solo box pareciera varios apilados. */
 const Panel = AyurvedaPanel;
-
-function parseRich(s: string): React.ReactNode[] {
-  const parts = s.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
-  return parts.map((p, i) => {
-    if (p.startsWith("**") && p.endsWith("**")) return <Box as="span" key={i} fontWeight="700">{p.slice(2, -2)}</Box>;
-    if (p.startsWith("*") && p.endsWith("*")) return <Box as="span" key={i} fontStyle="italic">{p.slice(1, -1)}</Box>;
-    return <React.Fragment key={i}>{p}</React.Fragment>;
-  });
-}
 
 function SeccionTitulo({ children, color }: { children: React.ReactNode; color: string }) {
   return (
@@ -512,8 +504,7 @@ export default function MetodoAyurvedaDoshaPranayama() {
             <Flex direction="column" gap={2.5}>
               {practica.resumen.map((linea, i) => (
                 <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">
-                  {parseRich(linea)}
-                </Text>
+<PalabrasVivas texto={linea} cursivas retraso={0.1} /></Text>
               ))}
             </Flex>
           </Panel>
@@ -617,7 +608,8 @@ export default function MetodoAyurvedaDoshaPranayama() {
           <Panel color={ayurvedaTxt}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {PRANAYAMA_CIERRE.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
               <Box
                 as="button"

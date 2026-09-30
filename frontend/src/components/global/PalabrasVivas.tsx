@@ -34,6 +34,7 @@ export function PalabrasVivas({
   colorNegrita,
   /** Sombra de las palabras en **negrita**. */
   sombraNegrita,
+  cursivas = false,
 }: {
   texto: string;
   retraso?: number;
@@ -42,18 +43,22 @@ export function PalabrasVivas({
   lineaPaso?: number;
   colorNegrita?: string;
   sombraNegrita?: string;
+  /** Entiende también *cursivas* (un solo asterisco), como los textos de Ayurveda. */
+  cursivas?: boolean;
 }) {
   const visto = useVistoConEspera("0px 0px -12% 0px", 0);
 
-  // Trozos de texto (palabras y espacios) marcados como negrita o no.
-  const trozos: { p: string; negrita: boolean }[] = [];
-  for (const seg of texto.split(/(\*\*[^*]+\*\*)/g)) {
+  // Trozos de texto (palabras y espacios) marcados como negrita/cursiva o no.
+  const trozos: { p: string; negrita: boolean; cursiva: boolean }[] = [];
+  const corte = cursivas ? /(\*\*[^*]+\*\*|\*[^*]+\*)/g : /(\*\*[^*]+\*\*)/g;
+  for (const seg of texto.split(corte)) {
     if (seg === "") continue;
     const negrita = seg.startsWith("**") && seg.endsWith("**") && seg.length > 4;
-    const limpio = negrita ? seg.slice(2, -2) : seg;
-    for (const p of limpio.split(/(\s+)/)) if (p !== "") trozos.push({ p, negrita });
+    const cursiva = cursivas && !negrita && seg.startsWith("*") && seg.endsWith("*") && seg.length > 2;
+    const limpio = negrita ? seg.slice(2, -2) : cursiva ? seg.slice(1, -1) : seg;
+    for (const p of limpio.split(/(\s+)/)) if (p !== "") trozos.push({ p, negrita, cursiva });
   }
-  const textoLimpio = texto.replace(/\*\*/g, "");
+  const textoLimpio = cursivas ? texto.replace(/\*/g, "") : texto.replace(/\*\*/g, "");
 
   // El paso se calcula con la línea MÁS LARGA (las líneas corren en paralelo).
   const lineas = textoLimpio.split("\n").map((l) => l.split(/\s+/).filter(Boolean).length);
@@ -65,7 +70,7 @@ export function PalabrasVivas({
     <span ref={visto.ref} style={{ display: "inline" }}>
       <style>{`@media (prefers-reduced-motion: reduce){.pv-palabra{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}}`}</style>
       <span aria-hidden>
-        {trozos.map(({ p, negrita }, k) => {
+        {trozos.map(({ p, negrita, cursiva }, k) => {
           if (/^\s+$/.test(p)) {
             const saltos = p.split("\n").length - 1;
             if (saltos) { linea += saltos; local = 0; }
@@ -86,6 +91,7 @@ export function PalabrasVivas({
                 transform: visto.visible ? "translateY(0)" : "translateY(5px)",
                 filter: visto.visible ? "blur(0)" : "blur(3px)",
                 transition: `opacity ${duracion}s cubic-bezier(0.4,0,0.2,1) ${d}s, transform ${duracion + 0.2}s cubic-bezier(0.25,0.8,0.25,1) ${d}s, filter ${duracion}s cubic-bezier(0.4,0,0.2,1) ${d}s`,
+                ...(cursiva ? { fontStyle: "italic" } : {}),
                 ...(negrita ? { fontWeight: 700, ...(colorNegrita ? { color: colorNegrita } : {}), ...(sombraNegrita ? { textShadow: sombraNegrita } : {}) } : {}),
               }}
             >

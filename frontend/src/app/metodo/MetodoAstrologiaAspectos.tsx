@@ -228,7 +228,7 @@ export default function MetodoAstrologiaAspectos() {
             {/* Sin sombra: el texto de debajo del header va sobre el fondo limpio. */}
             <Text color={astrologiaTxt} fontSize={{ base: "md", md: "lg" }} mb={2} fontStyle="italic"
                   letterSpacing="0.04em">
-              {t("metodo.astro.aspectosPulsa")}
+              <LetrasVivas texto={t("metodo.astro.aspectosPulsa")} entrada onda={false} pasoEntrada={0.02} retraso={0.2} />
             </Text>
             {/* <Text color={`${astrologiaTxt}cc`} fontSize={{ base: "sm", md: "md" }} maxW="560px">
               Cada aspecto es una conversación entre dos planetas. Pulsa para leer.
@@ -247,8 +247,8 @@ export default function MetodoAstrologiaAspectos() {
                 return (
                 // Cada box de planeta entra al asomar en pantalla (bajo el
                 // pliegue en móvil quedaban ya puestos al llegar).
-                <Reveal key={cuerpo.key} inView once amount={0.15}
-                        direction="up" distance={28} scaleFrom={0.97} duration={0.65}>
+                <Reveal key={cuerpo.key} inView once amount={0.1}
+                        direction="up" distance={36} scaleFrom={0.96} duration={0.8}>
                 <Box
                   position="relative"
                   borderRadius="2xl"
@@ -307,10 +307,15 @@ export default function MetodoAstrologiaAspectos() {
                               key={`${aspectoKey(aspecto)}-${idx}`}
                               inView
                               direction="up"
-                              distance={24}
-                              duration={0.55}
-                              delay={esMovil ? 0 : idx * 0.05}
-                              amount={0.3}
+                              distance={26}
+                              scaleFrom={0.975}
+                              duration={0.7}
+                              // De uno en uno: los que asoman a la vez lo hacen en
+                              // cascada (0,11 s entre cada uno; el ciclo de 6 evita
+                              // esperas largas en cajas con muchos aspectos), y los
+                              // que quedan más abajo entran solos al llegar el usuario.
+                              delay={0.15 + (idx % 6) * 0.11}
+                              amount={esMovil ? 0.5 : 0.3}
                               w="100%"
                             >
                             <Flex

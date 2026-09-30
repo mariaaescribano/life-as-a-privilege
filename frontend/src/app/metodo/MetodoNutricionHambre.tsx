@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -36,6 +36,8 @@ import { nutricionBg, nutricionNom, nutricionTxt, NutricionIcon } from "../../Gl
 // ═════════════════════════════════════════════════════════════════════════
 
 export default function MetodoNutricionHambre() {
+  // Columnas de la rejilla: reinicia la cascada en cada fila.
+  const columnas = useBreakpointValue({ base: 1, sm: 2, md: 4 }) ?? 1;
   const t = useT();
   // Las cuatro lecturas en el idioma activo. NO se pueden resolver al importar el
   // módulo (como antes): el texto se quedaría congelado en el idioma con el que
@@ -103,14 +105,15 @@ export default function MetodoNutricionHambre() {
           {/* Las cuatro lecturas, en la tarjeta de la Microbiota: foto arriba y
               título abajo. Una fila de cuatro en escritorio, dos en tablet y una
               sola columna en móvil. */}
-          <Reveal inView direction="up" distance={20} delay={0.16} duration={0.6} w="100%">
-            <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={{ base: 4, md: 6 }} w="100%">
-              {lecturas.map((v, i) => (
-                <TarjetaNutri key={v.src} titulo={v.titulo} foto={v.src}
+          <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={{ base: 4, md: 6 }} w="100%">
+            {lecturas.map((v, i) => (
+              <Reveal inView once key={v.src} amount={0.25} direction="up" distance={30} scaleFrom={0.96}
+                      duration={0.8} delay={0.1 + (i % columnas) * 0.14} w="100%" display="flex">
+                <TarjetaNutri titulo={v.titulo} foto={v.src}
                               onClick={() => setLecturaAbierta(i)} />
-              ))}
-            </SimpleGrid>
-          </Reveal>
+              </Reveal>
+            ))}
+          </SimpleGrid>
 
           {/* Frase de cierre, directamente sobre el fondo turquesa (sin box) */}
           <Reveal inView direction="up" distance={18} delay={0.2} duration={0.7} w="100%" display="flex" justifyContent="center">

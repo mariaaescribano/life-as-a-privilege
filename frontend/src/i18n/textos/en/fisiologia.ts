@@ -199,7 +199,7 @@ export const fisiologia = {
     "The DNA coils around itself and packs tight inside a membrane envelope: that's how the nucleus is born.",
   "fisiologia.est.nucleo.r2":
     "It's the cell's control room: the instructions for making every one of your proteins are kept there, letter by letter — it's where your manual of Life lives.",
-  "fisiologia.est.membrana": "Cell membrane",
+  "fisiologia.est.membrana": "Membrane",
   "fisiologia.est.membrana.desc": "It wraps the cell and decides what goes in and what goes out.",
   "fisiologia.est.membrana.r1":
     "The phospholipids arrange themselves into a double layer, and the proteins embed in it like doors and sensors.",

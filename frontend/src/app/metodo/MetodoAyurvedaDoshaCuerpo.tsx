@@ -7,6 +7,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
@@ -31,15 +32,6 @@ const DOSHA_META: Record<DoshaKey, { label: string; color: string; Icon: any }> 
   pitta: { label: "Pitta", color: pittaColor, Icon: PittaIcon },
   kapha: { label: "Kapha", color: kaphaColor, Icon: KaphaIcon },
 };
-
-function parseRich(s: string): React.ReactNode[] {
-  const parts = s.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
-  return parts.map((p, i) => {
-    if (p.startsWith("**") && p.endsWith("**")) return <Box as="span" key={i} fontWeight="700">{p.slice(2, -2)}</Box>;
-    if (p.startsWith("*") && p.endsWith("*")) return <Box as="span" key={i} fontStyle="italic">{p.slice(1, -1)}</Box>;
-    return <React.Fragment key={i}>{p}</React.Fragment>;
-  });
-}
 
 function Separador() {
   return (
@@ -73,7 +65,7 @@ function ListItem({ texto, color }: { texto: string; color: string }) {
   return (
     <Flex align="flex-start" gap={3}>
       <Box flexShrink={0} mt="9px" w="7px" h="7px" borderRadius="full" bg={color} />
-      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{texto}</Text>
+      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7"><PalabrasVivas texto={texto} cursivas retraso={0.1} /></Text>
     </Flex>
   );
 }
@@ -269,7 +261,8 @@ export default function MetodoAyurvedaDoshaCuerpo() {
               <Separador />
               <Flex direction="column" gap={3.5} maxW="640px">
                 {c.intro.map((p, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">{parseRich(p)}</Text>
+                  <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
                 ))}
               </Flex>
             </Flex>
@@ -283,7 +276,8 @@ export default function MetodoAyurvedaDoshaCuerpo() {
               <SeccionTitulo color={meta.color}>{sec.titulo}</SeccionTitulo>
               <Flex direction="column" gap={3}>
                 {sec.parrafos.map((p, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">{parseRich(p)}</Text>
+                  <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
                 ))}
               </Flex>
             </Panel>
@@ -300,7 +294,8 @@ export default function MetodoAyurvedaDoshaCuerpo() {
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
             </RevealStagger>
-            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">{parseRich(c.cuerpo.cierre)}</Text>
+            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">
+<PalabrasVivas texto={c.cuerpo.cierre} cursivas retraso={0.1} /></Text>
           </Panel>
           </Reveal>
 
@@ -325,7 +320,8 @@ export default function MetodoAyurvedaDoshaCuerpo() {
             <SeccionTitulo color={meta.color}>{c.recuerda.titulo}</SeccionTitulo>
             <Flex direction="column" gap={3}>
               {c.recuerda.parrafos.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
             </Flex>
           </Panel>
@@ -382,7 +378,8 @@ export default function MetodoAyurvedaDoshaCuerpo() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
               <Box
                 as="button"

@@ -134,8 +134,8 @@ export function BoxesNombrar({
               size="lg"
               // Móvil: la entrada va MÁS GRANDE (más alta y con la letra de
               // lectura), que es donde se escribe y donde tiene que apetecer
-              // escribir. De `sm` en adelante, el alto normal del size lg.
-              h={{ base: "58px", sm: "3rem" }}
+              // escribir. De `sm` en adelante, algo más alta que el size lg.
+              h={{ base: "72px", sm: "4rem" }}
               fontFamily="'EB Garamond', serif"
               fontSize="lg"
               sx={{ caretColor: TINTA }}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -10,7 +10,7 @@ import { AppleLoader } from "../../components/metodo/AppleLoader";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceNutricion } from "../../components/metodo/IndiceNutricion";
-import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
 import { TarjetaNutri } from "../../components/metodo/TarjetaNutri";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { useLeidos } from "../../hooks/useLeidos";
@@ -33,6 +33,8 @@ import { useComic } from "../../i18n/comics";
 // marquita de leída (useLeidos → metodo_nutricion.data.origen_leidos).
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionOrigen() {
+  // Columnas de la rejilla: reinicia la cascada en cada fila.
+  const columnas = useBreakpointValue({ base: 1, sm: 2, md: 3 }) ?? 1;
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -113,12 +115,11 @@ export default function MetodoNutricionOrigen() {
             </Text>
           </Reveal>
 
-          <RevealStagger inView stagger={0.07} amount={0.1} w="100%"
-                         display="grid" gap={{ base: 4, md: 6 }}
+          <Box w="100%" display="grid" gap={{ base: 4, md: 6 }}
                          gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}>
             {ORIGEN_NUTRIENTES.map((l, i) => (
-              <RevealItem key={l.key} direction="up" distance={22} scaleFrom={0.96} duration={0.55}
-                          w="100%" display="flex">
+              <Reveal inView once key={l.key} amount={0.25} direction="up" distance={30} scaleFrom={0.96}
+                      duration={0.8} delay={0.1 + (i % columnas) * 0.14} w="100%" display="flex">
                 <TarjetaNutri
                   numero={i + 1}
                   foto={l.cover}
@@ -137,9 +138,9 @@ export default function MetodoNutricionOrigen() {
                     </Flex>
                   }
                 />
-              </RevealItem>
+              </Reveal>
             ))}
-          </RevealStagger>
+          </Box>
 
           {/* Aquí iba la caja de cierre «Y así llega hasta ti», con el viaje
               entero resumido en una frase. Retirada: el paso ya se cierra con

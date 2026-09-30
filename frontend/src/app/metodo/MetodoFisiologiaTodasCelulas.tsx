@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -1140,6 +1140,7 @@ function FichasGrid({ fichas, leidos, onFicha }: {
   leidos: Set<string>;
   onFicha: (f: FichaOrgano) => void;
 }) {
+  const columnas = useBreakpointValue({ base: 2, md: 4 }) ?? 2;
   return (
     <Box display="grid" w="100%"
          gridTemplateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
@@ -1147,8 +1148,8 @@ function FichasGrid({ fichas, leidos, onFicha }: {
       {/* Cada ficha entra al asomar en pantalla (en móvil la rejilla queda
           bajo el pliegue de la ficha del órgano). */}
       {fichas.map((f, i) => (
-        <Reveal key={claveConsejo(f)} inView once amount={0.2} direction="up" distance={20}
-                scaleFrom={0.97} duration={0.55} delay={(i % 2) * 0.07} display="flex">
+        <Reveal key={claveConsejo(f)} inView once amount={0.25} direction="up" distance={30}
+                scaleFrom={0.96} duration={0.8} delay={0.1 + (i % columnas) * 0.14} display="flex">
         <FotoBox
           titulo={f.nombre}
           foto={f.foto}

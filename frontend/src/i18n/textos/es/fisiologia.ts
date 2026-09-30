@@ -218,7 +218,7 @@ export const fisiologia = {
     "El ADN se enrolla sobre sí mismo y se compacta dentro de una envoltura de membrana: así nace el núcleo.",
   "fisiologia.est.nucleo.r2":
     "Es la sala de control de la célula: ahí se guardan, letra a letra, las instrucciones para fabricar cada una de tus proteínas: es donde vive tu manual de la Vida.",
-  "fisiologia.est.membrana": "Membrana celular",
+  "fisiologia.est.membrana": "Membrana",
   "fisiologia.est.membrana.desc": "Envuelve la célula y decide qué entra y qué sale.",
   "fisiologia.est.membrana.r1":
     "Los fosfolípidos se ordenan solos en una doble capa, y las proteínas se incrustan como puertas y sensores.",

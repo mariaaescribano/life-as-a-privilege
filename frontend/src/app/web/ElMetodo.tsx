@@ -779,11 +779,14 @@ export default function ElMetodo() {
                     "0 0 24px rgba(255,255,255,0.64), 0 0 50px rgba(255,255,255,0.35), 0 0 92px rgba(180,255,245,0.32)",
                 },
               },
-              animation: "tituloBrilla 7s ease-in-out infinite",
+              // En móvil el resplandor animado del padre + la ola de luz por
+              // letra (cada una con su filtro) se repintan a la vez y el
+              // titular parpadea: allí se queda la entrada y la luz fija.
+              animation: esMovil ? "none" : "tituloBrilla 7s ease-in-out infinite",
               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
             }}
           >
-            <LetrasVivas texto={t("elMetodo.hero.titulo")} entrada activo={mounted} />
+            <LetrasVivas texto={t("elMetodo.hero.titulo")} entrada activo={mounted} onda={!esMovil} />
           </Text>
         </Flex>
 

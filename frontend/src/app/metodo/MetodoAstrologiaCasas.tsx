@@ -17,7 +17,7 @@ import { ComicAstrologiaModal } from "../../components/metodo/ComicAstrologiaMod
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { VINETAS_ASPECTOS } from "../../components/metodo/comicAspectos";
 import type { CartaNatal } from "../../components/metodo/CartaAstral3D/types";
-import { infoCasa, NUMEROS_ROMANOS } from "../../components/metodo/casasAspectos";
+import { infoCasa, NUMEROS_ROMANOS, COLOR_SIGNO } from "../../components/metodo/casasAspectos";
 import { useNombresAstro } from "../../components/metodo/astrologiaNombres";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useAstroLeidos } from "../../hooks/useAstroLeidos";
@@ -216,6 +216,9 @@ export default function MetodoAstrologiaCasas() {
 
   const cusps = carta?.cusps ?? [];
   const info = cusps.length ? infoCasa(cusps, sel) : null;
+  // Color del signo de la casa seleccionada: tiñe el glow del box y el sector
+  // activo de la rueda.
+  const colorSigno = (info && COLOR_SIGNO[info.signo.name]) || astrologiaTxt;
   const textoSel = (casasTexto[String(sel)] ?? "").trim();
 
   // Para pasar a Aspectos hay que haber leído TODAS las casas con lectura escrita.
@@ -293,7 +296,7 @@ export default function MetodoAstrologiaCasas() {
                 justifyContent="center"
                 minH={{ lg: "253px" }}
               >
-                <CasaBox info={info} textoSel={textoSel} sel={sel}
+                <CasaBox info={info} colorSigno={colorSigno} textoSel={textoSel} sel={sel}
                          leida={leidos.has(String(sel))} onLeer={() => marcarLeido(String(sel))} />
               </Reveal>
 
@@ -306,14 +309,14 @@ export default function MetodoAstrologiaCasas() {
                     ref={svgRef as any}
                     viewBox={`0 0 ${VB} ${VB}`}
                     width="100%"
-                    style={{ touchAction: "none", cursor: "grab", userSelect: "none" }}
+                    style={{ touchAction: "none", cursor: "grab", userSelect: "none", transform: "translateZ(0)", willChange: "transform" }}
                     onPointerDown={onPointerDown}
                     onPointerMove={onPointerMove}
                     onPointerUp={onPointerUp}
                     sx={{
                       "& .anillo-vivo": { transformOrigin: `${CX}px ${CY}px`, transformBox: "view-box", animation: `${giroAnillo} 140s linear infinite` },
                       "& .sector-latido": { pointerEvents: "none", animation: `${latidoSector} 3.6s ease-in-out infinite` },
-                      "& .signo-vivo": { animation: `${respiraSigno} 4.5s ease-in-out infinite` },
+                      "& .signo-vivo": { animation: `${respiraSigno} 6s ease-in-out infinite` },
                       "@media (prefers-reduced-motion: reduce)": { "& .anillo-vivo, & .sector-latido, & .signo-vivo": { animation: "none" } },
                     }}
                   >
@@ -343,13 +346,13 @@ export default function MetodoAstrologiaCasas() {
                           >
                             <path
                               d={sectorPath(i)}
-                              fill={activa ? `${astrologiaTxt}33` : `${astrologiaTxt}0a`}
+                              fill={activa ? `${colorSigno}44` : `${astrologiaTxt}0a`}
                               stroke={`${astrologiaTxt}33`}
                               strokeWidth={1}
                               style={{ cursor: "pointer", transition: "fill 0.3s" }}
                               onClick={() => { if (!dragRef.current?.moved) seleccionarCasa(casaNum); }}
                             />
-                            {activa && <path className="sector-latido" d={sectorPath(i)} fill={astrologiaTxt} />}
+                            {activa && <path className="sector-latido" d={sectorPath(i)} fill={colorSigno} />}
                             {/* número (se mantiene en pie con rotación inversa) */}
                             <g transform={`rotate(${-rot} ${lp.x} ${lp.y})`}
                                style={{ transition: dragRef.current ? "none" : "transform 0.55s cubic-bezier(.22,.68,.36,1)", pointerEvents: "none" }}>
@@ -440,12 +443,14 @@ export default function MetodoAstrologiaCasas() {
 /* ── Box lateral con la info + texto de la casa ── */
 function CasaBox({
   info,
+  colorSigno,
   textoSel,
   sel,
   leida,
   onLeer,
 }: {
   info: ReturnType<typeof infoCasa>;
+  colorSigno: string;
   textoSel: string;
   sel: number;
   leida: boolean;
@@ -514,11 +519,14 @@ function CasaBox({
         display="flex"
         flexDirection="column"
         borderRadius="xl"
-        border={`1px solid ${astrologiaTxt}33`}
-        bg="rgba(8,13,30,0.45)"
+        border={`1px solid ${colorSigno}aa`}
+        bg={`linear-gradient(160deg, ${colorSigno}22 0%, rgba(8,13,30,0.62) 55%)`}
         px={{ base: 5, md: 7 }}
         py={{ base: 6, md: 7 }}
-        boxShadow={`0 0 18px ${astrologiaTxt}22`}
+        // Glow del color del signo (Escorpio morado, Aries rojo…): un halo
+        // cerrado y vivo para que el box se distinga del cielo, y otro amplio.
+        boxShadow={`0 0 14px ${colorSigno}99, 0 0 34px ${colorSigno}66, 0 0 64px ${colorSigno}33, inset 0 0 26px ${colorSigno}22`}
+        transition="border-color 0.6s ease, box-shadow 0.6s ease"
       >
         {cabecera()}
         <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />

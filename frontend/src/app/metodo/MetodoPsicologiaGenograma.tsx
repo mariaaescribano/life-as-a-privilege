@@ -200,11 +200,11 @@ function TarjetaPersona({ p, onRellenar }: { p: PersonaGenograma; onRellenar: ()
           </Box>
           <Box minW={0}>
             <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.25"
-                  noOfLines={1} style={{ textShadow: INK_SHADOW }}>
+                  noOfLines={1}>
               {rol || personaLabel(p)}
             </Text>
             {rol && nombre && (
-              <Text color={TINTA} fontSize="sm" opacity={0.75} noOfLines={1} style={{ textShadow: INK_SHADOW }}>
+              <Text color={TINTA} fontSize="sm" opacity={0.75} noOfLines={1}>
                 {nombre}
               </Text>
             )}
@@ -248,9 +248,8 @@ function TarjetaPersona({ p, onRellenar }: { p: PersonaGenograma; onRellenar: ()
           fontSize={{ base: "sm", md: "md" }}
           letterSpacing="0.04em"
           cursor="pointer"
-          boxShadow={`0 2px 12px rgba(0,0,0,0.2), 0 0 14px ${TINTA}33`}
-          transition="transform 0.18s, box-shadow 0.18s"
-          _hover={{ transform: "translateY(-1px)", boxShadow: `0 4px 16px rgba(0,0,0,0.26), 0 0 20px ${TINTA}55` }}
+          transition="transform 0.18s"
+          _hover={{ transform: "translateY(-1px)" }}
         >
           {t("metodo.psico.rellenar")}
         </Box>

@@ -33,9 +33,9 @@ const ESTRELLAS = Array.from({ length: 26 }, (_, i) => {
 
 /** Capa de estrellas que titilan + estrella fugaz. Se puede poner encima de
  *  cualquier fondo de cielo (SpaceBg ya la incluye). */
-export const CieloVivo = () => (
+export const CieloVivo = ({ sinEstrellas = false, estrellas = ESTRELLAS.length }: { sinEstrellas?: boolean; estrellas?: number }) => (
   <Box position="absolute" inset="0" pointerEvents="none" overflow="hidden" borderRadius="inherit" aria-hidden>
-    {ESTRELLAS.map((e, i) => (
+    {!sinEstrellas && ESTRELLAS.slice(0, estrellas).map((e, i) => (
       <Box
         key={i}
         position="absolute"
@@ -78,10 +78,15 @@ interface SpaceBgProps {
    *  foto. Para los popups de LECTURA: quien lee sobre sí mismo tiene que poder
    *  centrarse, y nada debe moverse en los bordes de su atención. */
   quieto?: boolean;
+  /** Sin los puntitos que titilan (solo queda la estrella fugaz): para cielos
+   *  donde las únicas estrellas visibles deben ser las pulsables. */
+  sinEstrellas?: boolean;
+  /** Cuántos puntitos que titilan (de 26). Pocos = cielo sobrio y elegante. */
+  estrellas?: number;
 }
 
 /* Fondo espacial con degradado cósmico de respaldo */
-export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)", quieto = false }: SpaceBgProps) => (
+export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)", quieto = false, sinEstrellas = false, estrellas }: SpaceBgProps) => (
   <Box
     position="absolute"
     inset="0"
@@ -107,6 +112,6 @@ export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)", quieto = false }: Spac
       sx={SIN_MOV}
     />
     <Box position="absolute" inset="0" style={{ background: overlay }} />
-    {!quieto && <CieloVivo />}
+    {!quieto && <CieloVivo sinEstrellas={sinEstrellas} estrellas={estrellas} />}
   </Box>
 );

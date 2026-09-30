@@ -8,6 +8,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { AyurvedaLoading } from "../../components/metodo/comicLoaders";
 import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesAyurveda";
 import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
@@ -47,19 +48,6 @@ const DESCUBRE_ICON: Record<DescubreIcon, any> = {
 };
 
 // Mini-parser de **negrita** y *cursiva* dentro de un texto plano.
-function parseRich(s: string): React.ReactNode[] {
-  const parts = s.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
-  return parts.map((p, i) => {
-    if (p.startsWith("**") && p.endsWith("**")) {
-      return <Box as="span" key={i} fontWeight="700">{p.slice(2, -2)}</Box>;
-    }
-    if (p.startsWith("*") && p.endsWith("*")) {
-      return <Box as="span" key={i} fontStyle="italic">{p.slice(1, -1)}</Box>;
-    }
-    return <React.Fragment key={i}>{p}</React.Fragment>;
-  });
-}
-
 // Separador horizontal elegante (rombo central + líneas degradadas), en marrón.
 function Separador() {
   return (
@@ -301,8 +289,7 @@ export default function MetodoAyurvedaDoshaIntro() {
               <Flex direction="column" gap={3.5} maxW="640px">
                 {c.intro.map((p, i) => (
                   <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">
-                    {parseRich(p)}
-                  </Text>
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
                 ))}
               </Flex>
             </Flex>
@@ -315,13 +302,11 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Flex direction="column" gap={3.5}>
               <Text color={TINTA} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.3" textAlign="center"
                     style={{ textShadow: INK_SHADOW }}>
-                {parseRich(c.principio[0])}
-              </Text>
+<PalabrasVivas texto={c.principio[0]} cursivas retraso={0.1} /></Text>
               <Separador />
               {c.principio.slice(1).map((p, i) => (
                 <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">
-                  {parseRich(p)}
-                </Text>
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
             </Flex>
           </Panel>
@@ -351,8 +336,7 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Flex direction="column" gap={2.5} mt={5}>
               {c.reconoces.cierre.map((p, i) => (
                 <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">
-                  {parseRich(p)}
-                </Text>
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
             </Flex>
           </Panel>
@@ -391,7 +375,8 @@ export default function MetodoAyurvedaDoshaIntro() {
                     >
                       <ItemIcon size={22} color={ayurvedaTxt} strokeWidth={1.8} />
                     </Flex>
-                    <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{parseRich(it.texto)}</Text>
+                    <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
+<PalabrasVivas texto={it.texto} cursivas retraso={0.1} /></Text>
                   </Flex>
                   </RevealItem>
                 );
@@ -467,8 +452,7 @@ export default function MetodoAyurvedaDoshaIntro() {
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.cierre.slice(0, -1).map((p, i) => (
                 <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
-                  {parseRich(p)}
-                </Text>
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
 
               {/* "Comencemos." como botón: bloqueado hasta guardar la pregunta final.

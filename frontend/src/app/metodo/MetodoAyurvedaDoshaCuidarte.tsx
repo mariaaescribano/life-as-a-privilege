@@ -12,6 +12,7 @@ import { useIlustracionesAyurveda } from "../../components/metodo/IlustracionesA
 import { AyurvedaPanel as Panel } from "../../components/metodo/AyurvedaPanel";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceAyurveda } from "../../components/metodo/IndiceAyurveda";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
 import {
   API_URL,
@@ -32,15 +33,6 @@ const DOSHA_META: Record<DoshaKey, { label: string; color: string; Icon: any }> 
   pitta: { label: "Pitta", color: pittaColor, Icon: PittaIcon },
   kapha: { label: "Kapha", color: kaphaColor, Icon: KaphaIcon },
 };
-
-function parseRich(s: string): React.ReactNode[] {
-  const parts = s.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
-  return parts.map((p, i) => {
-    if (p.startsWith("**") && p.endsWith("**")) return <Box as="span" key={i} fontWeight="700">{p.slice(2, -2)}</Box>;
-    if (p.startsWith("*") && p.endsWith("*")) return <Box as="span" key={i} fontStyle="italic">{p.slice(1, -1)}</Box>;
-    return <React.Fragment key={i}>{p}</React.Fragment>;
-  });
-}
 
 function Separador() {
   return (
@@ -73,7 +65,8 @@ function ListItem({ texto, color }: { texto: string; color: string }) {
   return (
     <Flex align="flex-start" gap={3}>
       <Box flexShrink={0} mt="9px" w="7px" h="7px" borderRadius="full" bg={color} />
-      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{parseRich(texto)}</Text>
+      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
+<PalabrasVivas texto={texto} cursivas retraso={0.1} /></Text>
     </Flex>
   );
 }
@@ -86,7 +79,7 @@ function SaborRow({ texto, tipo, color }: { texto: string; tipo: "favorable" | "
             bg={`${tono}1f`} border={`1px solid ${tono}66`}>
         {tipo === "favorable" ? <Check size={15} color={tono} strokeWidth={2.6} /> : <AlertTriangle size={14} color={tono} strokeWidth={2.2} />}
       </Flex>
-      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6">{texto}</Text>
+      <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6"><PalabrasVivas texto={texto} cursivas retraso={0.1} /></Text>
     </Flex>
   );
 }
@@ -277,7 +270,8 @@ export default function MetodoAyurvedaDoshaCuidarte() {
               <Separador />
               <Flex direction="column" gap={3.5} maxW="640px">
                 {c.alimIntro.map((p, i) => (
-                  <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">{parseRich(p)}</Text>
+                  <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
                 ))}
               </Flex>
             </Flex>
@@ -290,7 +284,8 @@ export default function MetodoAyurvedaDoshaCuidarte() {
             <SeccionTitulo color={meta.color}>{c.sabores.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={5}>
               {c.sabores.intro.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
             </Flex>
             <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={5} stagger={0.07} delayChildren={0.05} amount={0.1}>
@@ -350,7 +345,8 @@ export default function MetodoAyurvedaDoshaCuidarte() {
             <SeccionTitulo color={meta.color}>{c.comoComes.titulo}</SeccionTitulo>
             <Flex direction="column" gap={2} mb={4}>
               {c.comoComes.intro.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
             </Flex>
             <RevealStagger inView display="flex" flexDirection="column" gap={2.5} mb={4} stagger={0.07} delayChildren={0.05} amount={0.1}>
@@ -358,7 +354,8 @@ export default function MetodoAyurvedaDoshaCuidarte() {
                 <RevealItem key={i} direction="up" distance={14} duration={0.45} w="100%"><ListItem texto={it} color={meta.color} /></RevealItem>
               ))}
             </RevealStagger>
-            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">{parseRich(c.comoComes.cierre)}</Text>
+            <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8">
+<PalabrasVivas texto={c.comoComes.cierre} cursivas retraso={0.1} /></Text>
           </Panel>
           </Reveal>
 
@@ -387,7 +384,7 @@ export default function MetodoAyurvedaDoshaCuidarte() {
                     {m.momento}
                   </Text>
                   {m.texto.map((t, j) => (
-                    <Text key={j} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">{t}</Text>
+                    <Text key={j} color={TINTA} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7"><PalabrasVivas texto={t} cursivas retraso={0.1} /></Text>
                   ))}
                 </Box>
                 </RevealItem>
@@ -423,7 +420,8 @@ export default function MetodoAyurvedaDoshaCuidarte() {
           <Panel color={meta.color}>
             <Flex direction="column" align="center" textAlign="center" gap={5}>
               {c.alimCierre.map((p, i) => (
-                <Text key={i} color={TINTA} fontSize={{ base: "xl", md: "xl" }} lineHeight="1.6">{parseRich(p)}</Text>
+                <Text key={i} color={TINTA} fontSize={{ base: "xl", md: "xl" }} lineHeight="1.6">
+<PalabrasVivas texto={p} cursivas retraso={0.1} /></Text>
               ))}
               <Box
                 as="button"

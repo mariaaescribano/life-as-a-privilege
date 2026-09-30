@@ -207,7 +207,7 @@ export default function MetodoAstrologiaPdf() {
                 header de la página (glowHeaderDisciplina), no con una sombra propia. */}
             <Box position="relative" borderRadius="2xl" overflow="hidden" w="100%"
                  boxShadow={glowHeaderDisciplina(astrologiaTxt)}>
-              <SpaceBg />
+              <SpaceBg estrellas={5} />
               <Flex position="relative" zIndex={1} direction="column" align="center" gap={5}
                     px={{ base: 5, md: 10 }} py={{ base: 8, md: 10 }} textAlign="center">
                 <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700"

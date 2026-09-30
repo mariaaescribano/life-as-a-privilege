@@ -52,12 +52,31 @@ export function IlustracionCard({
   // presentación) y porque el array se calcula al importar el módulo.
   const entry = useIlustracionTraducida(entrada);
   const [coverFailed, setCoverFailed] = useState(false);
-  const { ref, visible } = useReveal();
+  const { ref, visible: enPantalla } = useReveal();
+  // La tarjeta solo se enciende cuando su portada y el fondo del pie YA están
+  // descargados: si brotara antes, la foto aparecería a tirones dentro de una
+  // caja vacía. Así cada tarjeta entra completa, una tras otra.
+  const [portadaLista, setPortadaLista] = useState(false);
+  const [fondoListo, setFondoListo] = useState(!entrada.disciplinaBgImage);
+  const imgRef = useRef<HTMLImageElement>(null);
+  useEffect(() => {
+    if (imgRef.current?.complete) setPortadaLista(true);
+  }, []);
+  useEffect(() => {
+    const src = entrada.disciplinaBgImage;
+    if (!src) { setFondoListo(true); return; }
+    const im = new window.Image();
+    im.onload = im.onerror = () => setFondoListo(true);
+    im.src = encodeURI(src);
+    const seguro = setTimeout(() => setFondoListo(true), 6000);
+    return () => clearTimeout(seguro);
+  }, [entrada.disciplinaBgImage]);
+  const visible = enPantalla && (portadaLista || coverFailed) && fondoListo;
   // Color del texto/borde de la tarjeta: `cardColor` si la entrada lo define
   // (p.ej. Nutrición, cuyo acento de cómic es claro e ilegible aquí), si no el
   // acento del cómic (themeColor).
   const c = entry.cardColor ?? entry.themeColor;
-  const retraso = (i % columnas) * 0.08;
+  const retraso = (i % columnas) * 0.14;
   // Las dos primeras filas son lo que se ve sin bajar: sus portadas se piden ya.
   // El resto espera a acercarse (`loading="lazy"`), que además es justo cuando
   // la tarjeta se enciende con su reveal — para cuando llegas, la foto está.
@@ -68,7 +87,7 @@ export function IlustracionCard({
       h="100%"
       opacity={visible ? 1 : 0}
       transform={visible ? "translateY(0)" : "translateY(24px)"}
-      transition={`opacity 0.7s ease ${retraso}s, transform 0.7s ease ${retraso}s`}
+      transition={`opacity 0.8s cubic-bezier(0.22,1,0.36,1) ${retraso}s, transform 0.8s cubic-bezier(0.22,1,0.36,1) ${retraso}s`}
     >
     <Box
       as="button"
@@ -103,7 +122,9 @@ export function IlustracionCard({
           <Box
             as="img"
             src={encodeURI(entry.cover)}
+            ref={imgRef}
             alt={entry.titulo}
+            onLoad={() => setPortadaLista(true)}
             loading={portadaPrioritaria ? "eager" : "lazy"}
             position="absolute"
             inset="0"

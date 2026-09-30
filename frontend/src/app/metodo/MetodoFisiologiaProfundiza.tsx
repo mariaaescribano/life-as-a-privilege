@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, useBreakpointValue, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -26,7 +26,11 @@ import { useTemasProfundiza } from "../../hardCoded/espacio/useTemaProfundiza";
 // Tarjeta de un tema: box por defecto (FotoBox), imagen arriba + nombre abajo.
 function TemaBox({ tema, onClick, delay, completo = false }: { tema: TemaProfundiza; onClick: () => void; delay: number; completo?: boolean }) {
   return (
-    <Reveal direction="up" distance={20} delay={delay} duration={0.55} w="100%" display="flex">
+    // Cada caja se enciende al asomar en pantalla (no todas al cargar): las que
+    // caen bajo el pliegue esperan a que el usuario baje, y las que asoman a la
+    // vez lo hacen de una en una, por columnas.
+    <Reveal inView once amount={0.25} direction="up" distance={30} scaleFrom={0.96}
+            delay={delay} duration={0.8} w="100%" display="flex">
       <FotoBox
         titulo={tema.label}
         foto={tema.foto}
@@ -42,6 +46,8 @@ function TemaBox({ tema, onClick, delay, completo = false }: { tema: TemaProfund
 }
 
 export default function MetodoFisiologiaProfundiza() {
+  // Columnas de la rejilla (2 en móvil, 3 desde md): reinicia la cascada en cada fila.
+  const columnas = useBreakpointValue({ base: 2, md: 3 }) ?? 2;
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -115,7 +121,7 @@ export default function MetodoFisiologiaProfundiza() {
           {/* Todos los temas en una sola rejilla (sin rótulos de bloque). */}
           <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
             {temas.map((tema, i) => (
-              <TemaBox key={tema.key} tema={tema} delay={0.05 * i} completo={temaCompleto(tema)}
+              <TemaBox key={tema.key} tema={tema} delay={0.1 + (i % columnas) * 0.14} completo={temaCompleto(tema)}
                        onClick={() => navigate(`/metodo/fisiologia/profundiza/${tema.key}`)} />
             ))}
           </SimpleGrid>

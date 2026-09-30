@@ -531,8 +531,8 @@ export default function MetodoNutricionNutriente() {
                           const esLaSiguiente = !grupoRevisado && idx === primeraNoVista;
                           return (
                             <Reveal key={tar.key} direction="up" distance={18}
-                                    scaleFrom={0.94} duration={0.55}
-                                    delay={Math.min(idx * 0.06, 0.5)}>
+                                    scaleFrom={0.94} duration={0.75}
+                                    delay={Math.min(idx * 0.11, 0.7)}>
                               <Breathe scale={esLaSiguiente ? 0.02 : 0} duration={3.5}>
                                 <TarjetaNutri titulo={tar.titulo} foto={tar.foto} numero={tar.numero}
                                               visto={fichasVistas.includes(idx)}

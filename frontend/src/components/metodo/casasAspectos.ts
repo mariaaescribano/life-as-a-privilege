@@ -20,6 +20,23 @@ export const REGENTE_MODERNO: CuerpoKey[] = [
   "neptuno",  // Piscis
 ];
 
+/** Color propio de cada signo (por su nombre en español), pensado para brillar
+ *  sobre el cielo oscuro: Escorpio morado, Aries rojo, Acuario cian… */
+export const COLOR_SIGNO: Record<string, string> = {
+  Aries: "#ff5a4d",
+  Tauro: "#7ddf7a",
+  "Géminis": "#ffe066",
+  "Cáncer": "#cfe3ff",
+  Leo: "#ffc21a",
+  Virgo: "#b5cf6a",
+  Libra: "#ff9ec7",
+  Escorpio: "#b46bff",
+  Sagitario: "#ff8a3d",
+  Capricornio: "#c9a27a",
+  Acuario: "#3fe0ff",
+  Piscis: "#5aa9ff",
+};
+
 function norm360(deg: number): number {
   return ((deg % 360) + 360) % 360;
 }

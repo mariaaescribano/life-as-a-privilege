@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -27,6 +27,8 @@ import { useMitosNutricion } from "../../hardCoded/espacio/useMitosNutricion";
 // pasando con las flechas dentro del visor).
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoNutricionMitos() {
+  // Columnas de la rejilla: reinicia la cascada en cada fila.
+  const columnas = useBreakpointValue({ base: 1, sm: 2, md: 3 }) ?? 1;
   // Los mitos en el idioma activo (el orden, la foto y la `key` con la que se
   // guarda lo leído siguen saliendo del español).
   const MITOS_NUTRICION = useMitosNutricion();
@@ -111,8 +113,8 @@ export default function MetodoNutricionMitos() {
           <Box display="grid" gap={{ base: 4, md: 6 }} w="100%"
                gridTemplateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}>
             {MITOS_NUTRICION.map((m, i) => (
-              <Reveal inView key={m.key} direction="up" distance={22} scaleFrom={0.96} duration={0.55}
-                      amount={0.2} delay={(i % 3) * 0.06} w="100%" display="flex">
+              <Reveal inView once key={m.key} direction="up" distance={30} scaleFrom={0.96} duration={0.8}
+                      amount={0.25} delay={0.1 + (i % columnas) * 0.14} w="100%" display="flex">
                 <TarjetaNutri titulo={m.titulo} foto={m.foto}
                               visto={leido(MITOS_LEIDOS_KEY, m.key)}
                               onClick={() => abrir(i)} />

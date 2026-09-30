@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, useBreakpointValue, SimpleGrid, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -68,15 +68,9 @@ function FichaBox({ ficha, temaColor, active, leido = false, onClick }: {
       {/* Línea separadora a todo el ancho. */}
       <Box position="relative" zIndex={1} h="1px" bg={`${accent}55`} flexShrink={0} />
 
-      {/* Pie: antetítulo + nombre. */}
+      {/* Pie: solo el nombre (sin antetítulo). */}
       <Flex position="relative" zIndex={1} direction="column" justify="center" flex="1" gap={1}
             px={{ base: 3.5, md: 4 }} py={{ base: 3, md: 3.5 }}>
-        {ficha.eyebrow && (
-          <Text color={accent} fontSize="3xs" fontWeight={700} letterSpacing="0.12em" textTransform="uppercase"
-                textAlign="center" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}>
-            {ficha.eyebrow}
-          </Text>
-        )}
         <Text color={fisiologiaTxt} fontWeight="700" lineHeight="1.2" textAlign="center"
               fontSize={{ base: "md", md: "lg" }} letterSpacing="0.02em"
               style={{ textShadow: "0 1px 4px rgba(0,0,0,0.65)" }}>
@@ -88,6 +82,8 @@ function FichaBox({ ficha, temaColor, active, leido = false, onClick }: {
 }
 
 export default function MetodoFisiologiaTema() {
+  // Columnas de la rejilla (2 en móvil, 3 desde md): reinicia la cascada en cada fila.
+  const columnas = useBreakpointValue({ base: 2, md: 3 }) ?? 2;
   const navigate = useNavigate();
   const { temaKey } = useParams<{ temaKey: string }>();
   const [loading, setLoading] = useState(true);
@@ -244,8 +240,8 @@ export default function MetodoFisiologiaTema() {
   const rejilla = (fichas: Ficha[]) => (
     <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
       {fichas.map((f, i) => (
-        <Reveal key={f.key} inView once amount={0.2} direction="up" distance={20}
-                delay={(i % 3) * 0.07} duration={0.5} w="100%" display="flex">
+        <Reveal key={f.key} inView once amount={0.25} direction="up" distance={30} scaleFrom={0.96}
+                delay={0.1 + (i % columnas) * 0.14} duration={0.8} w="100%" display="flex">
           <FichaBox ficha={f} temaColor={tema.color} active={ficha?.key === f.key}
                     leido={leidas.has(f.key)} onClick={() => verFicha(f)} />
         </Reveal>
@@ -343,8 +339,8 @@ export default function MetodoFisiologiaTema() {
               )}
               <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
                 {fichasDelComic.map((f, i) => (
-                  <Reveal key={f.key} inView once amount={0.2} direction="up" distance={20}
-                          delay={(i % 3) * 0.07} duration={0.5} w="100%" display="flex">
+                  <Reveal key={f.key} inView once amount={0.25} direction="up" distance={30} scaleFrom={0.96}
+                          delay={0.1 + (i % columnas) * 0.14} duration={0.8} w="100%" display="flex">
                     <FichaBox ficha={f} temaColor={tema.color}
                               active={comicAbierto && comicDesde === i}
                               leido={leidas.has(f.key)} onClick={() => abrirVineta(i)} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { MarcaLeido } from "./MarcaLeido";
@@ -91,6 +91,10 @@ export function FotoBox({
   vivo?: boolean;
 }) {
   const [imgErr, setImgErr] = useState(false);
+  // La foto se enciende con un fundido cuando llega (no aparece de golpe dentro
+  // de la caja ya puesta). Con la foto en caché `complete` ya viene a true.
+  const [fotoLista, setFotoLista] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
   // Si la foto no llega (un corte puntual de red, o una respuesta cacheada
   // mala), se reintenta UNA vez con la caché puenteada antes de rendirse: una
   // tarjeta sin foto «a veces» (pasó con la portada de Grasas) queda muy mal y
@@ -102,6 +106,9 @@ export function FotoBox({
   const fotoActiva = enReserva && fotoReserva ? fotoReserva : foto;
   const hayFoto = !!fotoActiva && !imgErr;
   const srcFoto = fotoActiva ? encodeURI(fotoActiva) + (reintento ? `?reintento=${reintento}` : "") : "";
+  useEffect(() => {
+    setFotoLista(!!imgRef.current?.complete && (imgRef.current?.naturalWidth ?? 0) > 0);
+  }, [srcFoto]);
   // Sin líneas (ni borde exterior ni raya separadora): solo el glow define la
   // tarjeta. En Nutrición porque el fondo claro hace cantar cualquier línea; en
   // Cultura y Fisiología porque así se pidió (mantener el glow, quitar los
@@ -164,14 +171,16 @@ export function FotoBox({
            flexShrink={0} bg={colorTint ?? `${tinta}12`}
            display="flex" alignItems="center" justifyContent="center">
         {hayFoto ? (
-          <Image src={srcFoto} alt={typeof titulo === "string" ? titulo : ""} w="100%" h="100%"
+          <Image ref={imgRef} src={srcFoto} alt={typeof titulo === "string" ? titulo : ""} w="100%" h="100%"
                  objectFit="cover"
+                 onLoad={() => setFotoLista(true)}
+                 opacity={fotoLista ? 1 : 0}
                  onError={() => {
                    if (fotoReserva && !enReserva) { setEnReserva(true); setReintento(0); return; }
                    if (reintento === 0) setReintento(1);
                    else setImgErr(true);
                  }}
-                 transition={vivo ? "transform 0.55s cubic-bezier(0.22,1,0.36,1)" : undefined}
+                 transition={vivo ? "opacity 0.7s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1)" : "opacity 0.7s ease"}
                  _groupHover={vivo ? { transform: "scale(1.07)" } : undefined} />
         ) : emoji ? (
           <Box as="span" fontSize={{ base: "44px", md: "60px" }} lineHeight="1"

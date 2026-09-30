@@ -1003,11 +1003,11 @@ export function ComicViewer({
               // Velo de color sobre la foto del box. En TCM (fondoNitido) va más
               // suave (~19%) para que la pintura de tinta respire y se vea nítida.
               // MÓVIL con tinta OSCURA (Nutrición): la foto de detrás llega con
-              // su velo negro de pantalla, así que el velo de color sube a ~80%
+              // su velo negro de pantalla, así que el velo de color sube a ~55%
               // para que el box siga siendo un panel claro donde esa letra lea.
               bg={{
                 base: isDisciplinaMode && disciplinaBgColor
-                  ? `${disciplinaBgColor}${fondoNitido ? "12" : tituloBlanco ? "55" : "cc"}`
+                  ? `${disciplinaBgColor}${fondoNitido ? "12" : tituloBlanco ? "55" : "8c"}`
                   : "rgba(8,13,30,0.55)",
                 md: isDisciplinaMode && disciplinaBgColor
                   ? `${disciplinaBgColor}${fondoNitido ? "12" : "55"}`

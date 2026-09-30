@@ -91,10 +91,10 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
       // Entrada: la estrella "se enciende" (aparece con un pequeño estallido de
       // escala) en cascada según su índice; conserva el centrado y el hover.
       // Al MONTAR (no whileInView) para que siempre ocurra al cambiar de página.
-      initial={{ opacity: 0, scale: 0.15 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, scale: 0.1, rotate: -45 }}
+      animate={{ opacity: 1, scale: 1, rotate: 0 }}
       whileHover={{ scale: 1.18 }}
-      transition={{ delay: 0.35 + (index % 10) * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ delay: 0.7 + index * 0.22, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       transformTemplate={(_: any, generated: string) => `translate(-50%, -50%) ${generated}`}
       sx={{
         "@keyframes retoTwinkle": {
@@ -115,6 +115,26 @@ function EstrellaReto({ index, pos, leido, onOpen }: { index: number; pos: { top
              animation: `retoDeriva ${7 + (index % 4)}s ease-in-out ${(index % 6) * 0.7}s infinite`,
              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
            }}>
+        {/* Onda de luz: al encenderse, un anillo se abre desde la estrella
+            (una vez) y, mientras falte por leer, vuelve a latir despacio para
+            decir «púlsame». */}
+        <Box
+          position="absolute" top="50%" left="50%"
+          w={{ base: "38px", md: "50px" }} h={{ base: "38px", md: "50px" }}
+          borderRadius="full" pointerEvents="none"
+          border={`1px solid ${astrologiaTxt}`}
+          opacity={0}
+          sx={{
+            "@keyframes retoOnda": {
+              "0%": { transform: "translate(-50%, -50%) scale(0.6)", opacity: 0.8 },
+              "100%": { transform: "translate(-50%, -50%) scale(2.6)", opacity: 0 },
+            },
+            animation: leido
+              ? `retoOnda 1.6s ease-out ${0.9 + index * 0.22}s 1`
+              : `retoOnda 1.6s ease-out ${0.9 + index * 0.22}s 1, retoOnda 4.5s ease-out ${(4 + index * 0.9).toFixed(1)}s infinite`,
+            "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+          }}
+        />
         <Box
           as="svg"
           xmlns="http://www.w3.org/2000/svg"
@@ -247,7 +267,7 @@ export default function MetodoAstrologiaLectura() {
             overflow="hidden"
             boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
           >
-            <SpaceBg overlay="rgba(8,13,30,0.28)" />
+            <SpaceBg overlay="rgba(8,13,30,0.28)" sinEstrellas />
 
             <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 5, md: 7 }}>
               {/* Cielo con las estrellas-reto */}
@@ -269,7 +289,7 @@ export default function MetodoAstrologiaLectura() {
                             strokeLinecap="round"
                             initial={{ pathLength: 0, opacity: 0 }}
                             animate={{ pathLength: 1, opacity: 0.22 }}
-                            transition={{ delay: 1.4 + i * 0.18, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                            transition={{ delay: 0.7 + (i + 1) * 0.22 + 0.5, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
                           />
                         );
                       })}
