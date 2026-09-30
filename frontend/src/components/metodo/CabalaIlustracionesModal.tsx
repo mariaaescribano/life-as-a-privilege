@@ -22,6 +22,21 @@ import { CABALA_SENDERO_VINETAS } from "./cabalaSenderoIlustraciones";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { comicLoaderPorColor } from "./comicLoaders";
 import { barraVisibleSx } from "../global/barraDeScroll";
+import { keyframes } from "@emotion/react";
+import { LetrasVivas } from "../global/LetrasVivas";
+import { PalabrasVivas } from "../global/PalabrasVivas";
+
+// Las tarjetas del selector no aparecen de golpe: brotan una a una, cada una
+// desde una bruma y subiendo un poco. Fill `backwards` (no `both`) para que, al
+// terminar, el hover (transform) siga mandando.
+const tarjetaBrota = keyframes`
+  from { opacity: 0; transform: translateY(26px) scale(0.97); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0) scale(1);       filter: blur(0); }
+`;
+const portadaBrota = keyframes`
+  from { opacity: 0; filter: blur(14px) brightness(1.4); transform: scale(1.08); }
+  to   { opacity: 1; filter: blur(0) brightness(1);      transform: scale(1); }
+`;
 
 // ─────────────────────────────────────────────────────────────────────────
 // Popup "Ilustraciones de Cábala". Se abre desde el botón "Ilustraciones" del
@@ -184,7 +199,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                   lineHeight="1.1"
                   style={{ textShadow: `0 0 14px ${cabalaTxt}99, 0 0 30px ${cabalaTxt}63, 0 0 56px ${cabalaTxt}52` }}
                 >
-                  {t("metodo.ilustracionesDe", { disciplina: t("disciplina.cabala") })}
+                  <LetrasVivas texto={t("metodo.ilustracionesDe", { disciplina: t("disciplina.cabala") })} entrada onda={false} pasoEntrada={0.03} />
                 </Text>
                 <Text
                   color={`${cabalaTxt}cc`}
@@ -194,7 +209,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                   textAlign="center"
                   maxW="520px"
                 >
-                  {t("metodo.ilustracionesElige")}
+                  <PalabrasVivas texto={t("metodo.ilustracionesElige")} retraso={0.5} total={0.8} />
                 </Text>
               </Flex>
 
@@ -206,7 +221,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                 align={{ base: "center", md: "stretch" }}
                 wrap="wrap"
               >
-                {SELECTOR_OPTIONS.map((opt) => (
+                {SELECTOR_OPTIONS.map((opt, oi) => (
                   <Box
                     key={opt.key}
                     as="button"
@@ -229,6 +244,8 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                       backdropFilter: "blur(10px)",
                       WebkitBackdropFilter: "blur(10px)",
                       transition: "all 0.25s ease",
+                      animation: `${tarjetaBrota} 1s cubic-bezier(0.25,0.8,0.25,1) ${0.9 + oi * 0.5}s backwards`,
+                      "@media (prefers-reduced-motion: reduce)": { animation: "none" },
                       boxShadow: TARJETA_GLOW,
                       _hover: {
                         transform: "translateY(-4px)",
@@ -256,7 +273,11 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
                           inset="0"
                           w="100%"
                           h="100%"
-                          style={{ objectFit: "cover", objectPosition: "center" }}
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "center",
+                            animation: `${portadaBrota} 1.4s cubic-bezier(0.25,0.8,0.25,1) ${1.1 + oi * 0.5}s backwards`,
+                          }}
                         />
                       </Box>
                     )}
@@ -317,6 +338,7 @@ export function CabalaIlustracionesModal({ isOpen, onClose, onComplete }: Cabala
             themeColor={cabalaTxt}
             textColor={cabalaTxt}
             luzFoto={cabalaTxt}
+            fotoMagica
             disciplinaBgImage={CABALA_IMG}
             disciplinaBgColor={cabalaBg}
             onClose={onClose}

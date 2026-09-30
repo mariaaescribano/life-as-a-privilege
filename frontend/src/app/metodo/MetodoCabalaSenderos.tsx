@@ -22,6 +22,7 @@ import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { useT } from "../../i18n";
 import { flushSaves } from "../../utils/flushSaves";
+import { Vivo } from "../../components/metodo/CabalaVivo";
 
 export default function MetodoCabalaSenderos() {
   const t = useT();
@@ -124,7 +125,7 @@ export default function MetodoCabalaSenderos() {
             {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.8" maxW="600px">
-              {t("metodo.cabala.senderos.intro")}
+              <Vivo>{t("metodo.cabala.senderos.intro")}</Vivo>
             </Text>
           </Reveal>
 

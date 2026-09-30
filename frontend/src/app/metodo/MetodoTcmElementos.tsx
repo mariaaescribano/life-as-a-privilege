@@ -254,16 +254,6 @@ export default function MetodoTcmElementos() {
                     );
                   })}
                 </defs>
-                {/* Anillo de puntos que gira MUY despacio detrás de la estrella:
-                    vida de fondo, sin robar atención a los elementos. */}
-                {!reduce && (
-                  <MotionCircle cx={CX} cy={CY} r={R + 26} fill="none" stroke={`${tcmTxt}55`}
-                    strokeWidth={1.4} strokeDasharray="1.5 9" strokeLinecap="round"
-                    style={{ transformBox: "view-box", transformOrigin: `${CX}px ${CY}px` }}
-                    initial={{ opacity: 0 }} animate={{ opacity: 1, rotate: 360 }}
-                    transition={{ opacity: { duration: 1.2, delay: 0.4 },
-                                  rotate: { duration: 120, repeat: Infinity, ease: "linear" } }} />
-                )}
                 {/* pentágono de referencia: se DIBUJA solo, trazo a trazo */}
                 <MotionPolygon
                   points={ORDEN_ELEMENTOS.map((_, i) => { const v = vertice(i, R); return `${v.x},${v.y}`; }).join(" ")}
@@ -360,6 +350,7 @@ export default function MetodoTcmElementos() {
 
       {/* Cómic del elemento: fondo y box con la foto del elemento; cerrable en cualquier momento. */}
       <ElementoComicModal
+        sinGlow
         elemento={comicEl}
         data={data}
         onChangeData={setData}

@@ -29,6 +29,14 @@ const fadeIn = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
+// Entrada «mágica» de la ilustración (`fotoMagica`): sale de una bruma, se enfoca
+// y se asienta, sin golpe. Es una animación de montaje (no una transición) para
+// que también se vea cuando la foto ya estaba precargada.
+const fotoBrota = keyframes`
+  from { opacity: 0; filter: blur(14px) brightness(1.4); transform: scale(1.05); }
+  to   { opacity: 1; filter: blur(0) brightness(1);      transform: scale(1); }
+`;
+
 const twinkle = keyframes`
   0%, 100% { opacity: 0.35; }
   50%      { opacity: 1; }
@@ -219,6 +227,10 @@ interface ComicViewerProps {
    *  y al revés— y no hay tick de «terminar»: se empieza por donde se quiera
    *  y se sale cuando se quiera, con la X. */
   circular?: boolean;
+  /** Entrada «mágica»: la ilustración surge de una bruma y se enfoca, y el texto
+   *  espera ~0,6 s y se desvela palabra a palabra DESPUÉS de ella (foto primero,
+   *  luego las palabras). Cábala. */
+  fotoMagica?: boolean;
 }
 
 const DEFAULT_TEXT_SHADOW =
@@ -364,6 +376,7 @@ export function ComicViewer({
   textoBorroso,
   luzFoto,
   circular,
+  fotoMagica,
 }: ComicViewerProps) {
   const t = useT();
   const isDisciplinaMode = !!disciplinaBgImage;
@@ -452,7 +465,14 @@ export function ComicViewer({
 
   // Espera de la foto de FONDO de la disciplina (solo con `esperarFondo`): hasta
   // que cargue del todo se muestra el loader a pantalla completa y no el box.
-  const esperaFondo = !!(esperarFondo && disciplinaBgImage);
+  // TCM y Cábala SIEMPRE esperan su foto (las de /img/fondos/tcm|cabala y las
+  // pinturas de /recorrido/tcm/fondos): sin ella el visor se abría sobre el
+  // granate liso del color de la disciplina mientras la foto aún bajaba, y eso
+  // no debe verse nunca. Si el cómic lo pide expresamente (`esperarFondo`),
+  // manda su valor.
+  const fondoObligatorio = !!disciplinaBgImage &&
+    /\/img\/fondos\/(tcm|cabala)|\/recorrido\/tcm\/fondos\//.test(disciplinaBgImage);
+  const esperaFondo = !!((esperarFondo ?? fondoObligatorio) && disciplinaBgImage);
   const [bgReady, setBgReady] = useState(false);
   const fondoListo = !esperaFondo || bgReady;
   useEffect(() => {
@@ -1186,6 +1206,10 @@ export function ComicViewer({
                     borderRadius={{ base: "none", md: "lg" }}
                     opacity={imgLoaded[index] ? 1 : 0}
                     transition="opacity 0.4s ease"
+                    sx={imgLoaded[index] && fotoMagica ? {
+                      animation: `${fotoBrota} 1.4s cubic-bezier(0.25,0.8,0.25,1) both`,
+                      "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                    } : undefined}
                     onLoad={() => setImgLoaded((s) => ({ ...s, [index]: true }))}
                     onError={() => fotoFallo(index)}
                   />
@@ -1341,7 +1365,7 @@ export function ComicViewer({
                       sensación es de paz, no de prisa. El texto ya se lee a media
                       luz desde el principio, así que no hace esperar. Con el cuerpo borroso (escaparate)
                       no se anima. */}
-                  {textoBorroso ? bloque : <PalabrasVivas key={`${index}-${i}`} texto={bloque} total={0.9} duracion={1} retraso={i * 0.3} />}
+                  {textoBorroso ? bloque : <PalabrasVivas key={`${index}-${i}`} texto={bloque} total={0.9} duracion={1} retraso={(fotoMagica ? 0.6 : 0) + i * 0.3} />}
                 </Text>
               ))}
               {/* Contenido extra de la página (p.ej. el mini-test del elemento). */}

@@ -24,6 +24,7 @@ import { useT } from "../../i18n";
 import { CABALA_TOTAL_PAGINAS, CABALA_PAG } from "../../components/metodo/cabalaSefirot";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW, CAJA_GLOW_FUERTE } from "../../components/metodo/cabalaGlow";
+import { Vivo } from "../../components/metodo/CabalaVivo";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
@@ -145,7 +146,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
                 las cajas. */}
             <Text color="white" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
-              {t("metodo.cabala.senderosDiag.intro")}
+              <Vivo>{t("metodo.cabala.senderosDiag.intro")}</Vivo>
             </Text>
           </Reveal>
 
@@ -163,7 +164,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
                   {t("metodo.cabala.senderosDiag.faltan")}
                 </Text>
                 <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" textAlign="center" style={{ textShadow: INK_SHADOW }}>
-                  {t("metodo.cabala.senderosDiag.faltanTexto")}
+                  <Vivo>{t("metodo.cabala.senderosDiag.faltanTexto")}</Vivo>
                 </Text>
               </Caja>
             </Reveal>

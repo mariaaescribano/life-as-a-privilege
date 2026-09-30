@@ -23,6 +23,7 @@ import { Breathe, Reveal } from "../../components/global/Reveal";
 import { cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
+import { Vivo } from "../../components/metodo/CabalaVivo";
 
 // Halo oscuro (marrón profundo) para leer el texto sobre el fondo de Cábala
 // (nebulosa con destellos).
@@ -142,7 +143,7 @@ export default function MetodoCabala() {
                   mb={4}
                   style={{ textShadow: INK_SHADOW }}
                 >
-                  {t("metodo.gate.cabala.intro1")}
+                  <Vivo>{t("metodo.gate.cabala.intro1")}</Vivo>
                 </Text>
                 <Text
                   color={cabalaTxt}
@@ -171,6 +172,7 @@ export default function MetodoCabala() {
         themeColor={cabalaTxt}
         textColor={cabalaTxt}
         luzFoto={cabalaTxt}
+        fotoMagica
         disciplinaBgImage="/img/fondos/cabala.webp"
         disciplinaBgColor={cabalaBg}
         continueLabel={t("disciplina.cabala")}
@@ -190,6 +192,7 @@ export default function MetodoCabala() {
         textColor={cabalaTxt}
         textShadow={INK_SHADOW}
         luzFoto={cabalaTxt}
+        fotoMagica
         disciplinaBgImage="/img/fondos/cabala.webp"
         disciplinaBgColor={cabalaBg}
         botonNitido

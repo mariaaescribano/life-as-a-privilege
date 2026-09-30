@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useInView, useReducedMotion } from "framer-motion";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -12,6 +12,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { FotoAmpliable } from "../../components/global/FotoAmpliable";
 import { tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
@@ -146,7 +147,7 @@ export default function MetodoTcmLengua() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="680px">
-            {t("metodo.tcm.lengua.intro")}
+            <PalabrasVivas texto={t("metodo.tcm.lengua.intro")} retraso={0.2} />
           </Text>
           </Reveal>
 
@@ -162,7 +163,7 @@ export default function MetodoTcmLengua() {
                   <Box flexShrink={0} mt={{ base: "9px", md: "11px" }} w="5px" h="5px" borderRadius="full"
                        bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
                   <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
-                        style={{ textShadow: INK_SHADOW }}>{t(clave)}</Text>
+                        style={{ textShadow: INK_SHADOW }}><PalabrasVivas texto={t(clave)} retraso={0.1} /></Text>
                 </Flex>
               ))}
             </Flex>
@@ -187,7 +188,7 @@ export default function MetodoTcmLengua() {
               <Box flex="1" minW={0}>
                 <Text color={tcmTxt} fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                       lineHeight="1.7" mb={4} style={{ textShadow: INK_SHADOW }}>
-                  {t("metodo.tcm.lengua.mapaTexto")}
+                  <PalabrasVivas texto={t("metodo.tcm.lengua.mapaTexto")} retraso={0.1} total={1.4} />
                 </Text>
                 <Flex direction="column" gap={2.5}>
                   {zonas.map((z) => (
@@ -196,7 +197,7 @@ export default function MetodoTcmLengua() {
                            bg={tcmTxt} boxShadow={`0 0 6px ${tcmTxt}`} />
                       <Text color={tcmTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                             style={{ textShadow: INK_SHADOW }}>
-                        <Text as="span" fontWeight={700}>{z.zona}:</Text> {z.organos}.
+                        <Text as="span" fontWeight={700}>{z.zona}:</Text> <PalabrasVivas texto={`${z.organos}.`} retraso={0.1} />
                       </Text>
                     </Flex>
                   ))}
@@ -238,21 +239,18 @@ export default function MetodoTcmLengua() {
 // parecidos caigan juntas en la misma fila → alturas uniformes.
 function DimensionBloque({ grupo }: { grupo: GrupoLengua }) {
   const opciones = [...grupo.opciones].sort((a, b) => a.lectura.length - b.lectura.length);
-  // Las cajitas de lengua aparecen UNA A UNA cuando la fila asoma en pantalla.
-  const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
-  const enter = reduce || inView;
+  // Columnas de las cajitas (1 móvil, 2 tablet, 3 escritorio): reinicia la cascada por fila.
+  const columnas = useBreakpointValue({ base: 1, sm: 2, md: 3 }) ?? 1;
   return (
     <Panel titulo={grupo.titulo} color={tcmTxt}>
       <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8" mb={5}
             maxW="700px" style={{ textShadow: INK_SHADOW }}>
-        {grupo.subtitulo}
+        <PalabrasVivas texto={grupo.subtitulo} retraso={0.1} total={1.4} />
       </Text>
       {/* align=stretch → todas las cajitas de una fila comparten la misma altura */}
-      <Flex ref={ref} wrap="wrap" gap={{ base: 3, md: 4 }} justify="center" align="stretch">
+      <Flex wrap="wrap" gap={{ base: 3, md: 4 }} justify="center" align="stretch">
         {opciones.map((op, i) => (
-          <VarianteCard key={op.key} opcion={op} index={i} enter={enter} />
+          <VarianteCard key={op.key} opcion={op} index={i % columnas} />
         ))}
       </Flex>
     </Panel>
@@ -260,10 +258,24 @@ function DimensionBloque({ grupo }: { grupo: GrupoLengua }) {
 }
 
 // ── Cajita ilustrada: foto + título · separador · texto (todas mismo alto/ancho) ─
-function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: number; enter: boolean }) {
+function VarianteCard({ opcion, index }: { opcion: OpcionLengua; index: number }) {
   const t = useT();
+  // Cada cajita se enciende cuando ELLA asoma en pantalla (no toda la fila a la
+  // vez): las de abajo esperan a que el usuario baje; las que asoman juntas
+  // salen en cascada por columnas.
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(ref, { once: true, amount: 0.25 });
+  const enter = reduce || inView;
+  // El retraso de la cascada solo vale para la entrada (luego el hover responde al instante).
+  const [asentada, setAsentada] = useState(false);
+  useEffect(() => {
+    if (!enter) return;
+    const id = setTimeout(() => setAsentada(true), 1400);
+    return () => clearTimeout(id);
+  }, [enter]);
   return (
-    <Flex direction="column"
+    <Flex ref={ref} direction="column"
           w={{ base: "100%", sm: "calc(50% - 8px)", md: "calc(33.333% - 11px)" }}
           borderRadius="xl" overflow="hidden" bg="rgba(0,0,0,0.28)"
           // Nada se ilumina en esta página: las cajitas solo INTRODUCEN el
@@ -271,12 +283,12 @@ function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: n
           // y su borde, sin glow). Seleccionar es cosa de «Lee tu lengua».
           border={`1px solid ${opcion.equilibrio ? `${tcmTxt}88` : "rgba(255,255,255,0.16)"}`}
           opacity={enter ? 1 : 0}
-          transform={enter ? "translateY(0) scale(1)" : "translateY(18px) scale(0.97)"}
-          transition="opacity 0.55s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1), border-color 0.2s"
+          transform={enter ? "translateY(0) scale(1)" : "translateY(30px) scale(0.96)"}
+          transition="opacity 0.8s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1), border-color 0.2s"
           _hover={{ borderColor: enter ? `${tcmTxt}aa` : undefined }}
           sx={{
             backdropFilter: "blur(6px)",
-            transitionDelay: `${index * 0.07}s`,
+            transitionDelay: enter && !asentada ? `${0.1 + index * 0.14}s` : "0s",
             // La foto respira con un zoom lento al pasar el puntero.
             "& img": { transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1)" },
             "&:hover img": { transform: "scale(1.07)" },
@@ -297,7 +309,7 @@ function VarianteCard({ opcion, index, enter }: { opcion: OpcionLengua; index: n
         <Box h="1px" w="100%" my={2.5} bgGradient={`linear(to-r, ${tcmTxt}aa, transparent)`} />
         <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.6"
               style={{ textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}>
-          {opcion.lectura}
+          <PalabrasVivas texto={opcion.lectura} retraso={0.35} total={1.2} />
         </Text>
       </Flex>
     </Flex>

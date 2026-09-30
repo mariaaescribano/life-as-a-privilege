@@ -34,6 +34,7 @@ import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../Globa
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
 import { useT } from "../../i18n";
 import { flushSaves } from "../../utils/flushSaves";
+import { Vivo, TituloVivo } from "../../components/metodo/CabalaVivo";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
@@ -67,7 +68,7 @@ const Caja = ({ children }: { children: React.ReactNode }) => (
 const TituloCaja = ({ children }: { children: React.ReactNode }) => (
   <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.14em"
         textTransform="uppercase" style={{ textShadow: `0 0 18px ${cabalaTxt}55` }}>
-    {children}
+    <TituloVivo>{children}</TituloVivo>
   </Text>
 );
 
@@ -76,7 +77,7 @@ const Parrafos = ({ items }: { items: string[] }) => (
     {items.map((p, i) => (
       <RevealItem key={i}>
         <Text color={`${cabalaTxt}f2`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85"
-              style={{ textShadow: INK_SHADOW }}>{p}</Text>
+              style={{ textShadow: INK_SHADOW }}><Vivo>{p}</Vivo></Text>
       </RevealItem>
     ))}
   </RevealStagger>
@@ -243,7 +244,7 @@ export default function MetodoCabalaSendero() {
                   </Text>
                   <Text color={cabalaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1.15" mt={1}
                         style={{ textShadow: `0 0 20px ${cabalaTxt}55` }}>
-                    {sendero.titulo || `De ${NOMBRE_SEFIRA[sendero.from]} a ${NOMBRE_SEFIRA[sendero.to]}`}
+                    <Vivo retraso={0.6}>{sendero.titulo || `De ${NOMBRE_SEFIRA[sendero.from]} a ${NOMBRE_SEFIRA[sendero.to]}`}</Vivo>
                   </Text>
                   <Flex align="center" gap={3} mt={3} justify={{ base: "center", sm: "flex-start" }} wrap="wrap">
                     <Text color={`${cabalaTxt}ee`} fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.06em"
@@ -278,7 +279,7 @@ export default function MetodoCabalaSendero() {
                 <Divisor />
                 <Text color={`${cabalaTxt}f2`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" whiteSpace="pre-line"
                       style={{ textShadow: INK_SHADOW }}>
-                  {sendero.significadoTradicional}
+                  <Vivo>{sendero.significadoTradicional}</Vivo>
                 </Text>
               </Caja>
             </Reveal>
@@ -292,7 +293,7 @@ export default function MetodoCabalaSendero() {
                 <Divisor />
                 <Text color={`${cabalaTxt}f2`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.85" whiteSpace="pre-line"
                       style={{ textShadow: INK_SHADOW }}>
-                  {sendero.traduccionPsicologica}
+                  <Vivo>{sendero.traduccionPsicologica}</Vivo>
                 </Text>
               </Caja>
             </Reveal>
@@ -303,7 +304,7 @@ export default function MetodoCabalaSendero() {
             <Reveal inView once amount={0.2} direction="up" distance={16} delay={0.1} duration={0.6} display="flex" justifyContent="center">
               <Text color="white" fontSize={{ base: "lg", md: "2xl" }} fontStyle="italic" fontWeight="600"
                     textAlign="center" maxW="640px" lineHeight="1.5" style={{ textShadow: INK_SHADOW }}>
-                {sendero.pregunta}
+                <Vivo>{sendero.pregunta}</Vivo>
               </Text>
             </Reveal>
           )}
@@ -327,7 +328,7 @@ export default function MetodoCabalaSendero() {
                 <Divisor />
                 {sendero.testTitulo && (
                   <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" lineHeight="1.5" mb={2} style={{ textShadow: INK_SHADOW }}>
-                    {sendero.testTitulo}
+                    <Vivo>{sendero.testTitulo}</Vivo>
                   </Text>
                 )}
                 {/* Leyenda de la escala (qué significa cada número 1–5) */}
@@ -351,7 +352,7 @@ export default function MetodoCabalaSendero() {
                           <Text flex="1" color={`${cabalaTxt}f0`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.55"
                                 style={{ textShadow: INK_SHADOW }}>
                             <Box as="span" color={cabalaTxt} fontWeight="700" mr={1.5}>{qi + 1}.</Box>
-                            {preg.texto}
+                            <Vivo>{preg.texto}</Vivo>
                           </Text>
                           <Box
                             as="input"
@@ -412,7 +413,7 @@ export default function MetodoCabalaSendero() {
                 {!completo && (
                   <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={4}
                         style={{ textShadow: INK_SHADOW }}>
-                    {t("metodo.cabala.sendero.responde5")}
+                    <Vivo>{t("metodo.cabala.sendero.responde5")}</Vivo>
                   </Text>
                 )}
                 <RevealStagger inView display="flex" flexDirection="column" gap={3}>
@@ -430,7 +431,7 @@ export default function MetodoCabalaSendero() {
                           <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" style={{ textShadow: INK_SHADOW }}>{b.titulo}</Text>
                         </Flex>
                         <Text color={`${cabalaTxt}e8`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-                              style={{ textShadow: INK_SHADOW }}>{b.texto}</Text>
+                              style={{ textShadow: INK_SHADOW }}><Vivo>{b.texto}</Vivo></Text>
                       </Box>
                       </RevealItem>
                     );
@@ -448,7 +449,7 @@ export default function MetodoCabalaSendero() {
                 <Divisor />
                 <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" mb={3.5}
                       style={{ textShadow: INK_SHADOW }}>
-                  {t("metodo.cabala.sendero.observaSi")}
+                  <Vivo>{t("metodo.cabala.sendero.observaSi")}</Vivo>
                 </Text>
                 <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
                   {sendero.senales.map((s, i) => (
@@ -457,7 +458,7 @@ export default function MetodoCabalaSendero() {
                       <Box flexShrink={0} mt="10px" w="6px" h="6px" borderRadius="full" bg={cabalaTxt}
                            boxShadow={`0 0 8px ${cabalaTxt}aa`} />
                       <Text color={`${cabalaTxt}f2`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7"
-                            style={{ textShadow: INK_SHADOW }}>{s}</Text>
+                            style={{ textShadow: INK_SHADOW }}><Vivo>{s}</Vivo></Text>
                     </Flex>
                     </RevealItem>
                   ))}
@@ -474,7 +475,7 @@ export default function MetodoCabalaSendero() {
                 <Divisor />
                 <Text color={`${cabalaTxt}ff`} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.8"
                       style={{ textShadow: INK_SHADOW }}>
-                  {sendero.umbral}
+                  <Vivo>{sendero.umbral}</Vivo>
                 </Text>
               </Caja>
             </Reveal>
@@ -486,7 +487,7 @@ export default function MetodoCabalaSendero() {
               <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontStyle="italic" fontWeight="600" textAlign="center"
                     maxW="680px" lineHeight="1.7" px={{ base: 2, md: 0 }} mt={{ base: 2, md: 4 }}
                     style={{ textShadow: INK_SHADOW }}>
-                “{sendero.integracion}”
+                “<Vivo>{sendero.integracion}</Vivo>”
               </Text>
             </Reveal>
           )}

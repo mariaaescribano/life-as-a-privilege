@@ -31,6 +31,7 @@ import {
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../GlobalVariables";
 import { CAJA_GLOW } from "../../components/metodo/cabalaGlow";
+import { Vivo } from "../../components/metodo/CabalaVivo";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
@@ -226,7 +227,7 @@ export default function MetodoCabalaDiagnostico() {
             {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
-              {t("metodo.cabala.diagIntro")}
+              <Vivo>{t("metodo.cabala.diagIntro")}</Vivo>
             </Text>
           </Reveal>
 
@@ -245,7 +246,7 @@ export default function MetodoCabalaDiagnostico() {
                   {t("metodo.cabala.faltanRespuestas")}
                 </Text>
                 <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                  {t("metodo.cabala.faltanRespuestasTexto")}
+                  <Vivo>{t("metodo.cabala.faltanRespuestasTexto")}</Vivo>
                 </Text>
               </Caja>
             </Reveal>
@@ -289,7 +290,7 @@ export default function MetodoCabalaDiagnostico() {
                     <Caja radius="xl" px={{ base: 4, md: 5 }} py={{ base: 4, md: 5 }}>
                       <Text color="rgba(255,255,255,0.95)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9"
                             style={{ textShadow: INK_SHADOW }}>
-                        {narrativaTransicion(principal)}
+                        <Vivo>{narrativaTransicion(principal)}</Vivo>
                       </Text>
                     </Caja>
 
@@ -310,7 +311,7 @@ export default function MetodoCabalaDiagnostico() {
                       {t("metodo.cabala.transicionesFluyen")}
                     </Text>
                     <Text color={`${cabalaTxt}bb`} fontSize={{ base: "md", md: "lg" }} fontStyle="italic" lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>
-                      {t("metodo.cabala.transicionesFluyenTexto")}
+                      <Vivo>{t("metodo.cabala.transicionesFluyenTexto")}</Vivo>
                     </Text>
                   </Caja>
                 </Reveal>
@@ -339,7 +340,7 @@ export default function MetodoCabalaDiagnostico() {
                             </Text>
                           </Flex>
                           <Text color={`${cabalaTxt}cc`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
-                            {narrativaTransicion(t)}
+                            <Vivo>{narrativaTransicion(t)}</Vivo>
                           </Text>
                         </Caja>
                         </RevealItem>

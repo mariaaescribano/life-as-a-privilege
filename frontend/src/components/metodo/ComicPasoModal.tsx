@@ -57,6 +57,8 @@ interface ComicPasoModalProps {
    *  (cabalaTxt) para que la luz salga dorada y sin esa mancha fría, igual que
    *  en sus otros cómics (Origen y sefirot). */
   luzFoto?: string;
+  /** Entrada «mágica» de la foto y texto que espera a la foto (ver ComicViewer). */
+  fotoMagica?: boolean;
   /** Si true, el botón de avanzar lleva la imagen de la disciplina con EL MISMO
    *  tratamiento que el box del cómic: se ve (sin blur), pero rebajada con el
    *  velo suave del color de la disciplina (33%) y el mismo `saturate`, en vez
@@ -79,6 +81,7 @@ export function ComicPasoModal({
   textShadow,
   textColor,
   luzFoto,
+  fotoMagica,
   sinBotonSaltar,
   botonNitido,
 }: ComicPasoModalProps) {
@@ -127,6 +130,7 @@ export function ComicPasoModal({
           textShadow={textShadow}
           textColor={textColor}
           luzFoto={luzFoto}
+          fotoMagica={fotoMagica}
           sinSaltar
         />
 

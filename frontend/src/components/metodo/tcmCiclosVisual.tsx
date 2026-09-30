@@ -53,13 +53,13 @@ export const FONDO_CICLO: Record<Ciclo, string> = {
   ke: "/recorrido/tcm/fondos/controlador.webp",
 };
 
-// Latido de brillo de las flechas: pulsan de un glow suave a uno intenso, para
-// que se note que son clicables. El glow va en BLANCO (no en el color de la
+// Latido de brillo de las flechas: un respiro MUY suave (5,5 s, casi imperceptible)
+// para que se note que son clicables sin marear. El glow va en BLANCO (no en el color de la
 // flecha): sobre la foto oscura del ciclo, el halo del propio color se fundía
 // con la flecha y algunas casi no se veían; el blanco las despega sí o sí.
 const FLECHA_GLOW_CSS = `@keyframes flechaGlowPulse {
-  0%, 100% { filter: drop-shadow(0 0 3px rgba(255,255,255,0.85)); }
-  50%      { filter: drop-shadow(0 0 8px rgba(255,255,255,0.95)) drop-shadow(0 0 17px rgba(255,255,255,0.7)); }
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+  50%      { filter: drop-shadow(0 0 4px rgba(255,255,255,0.65)); }
 }`;
 
 // Foto propia de CADA relación (fondo del popup RelacionBox). Cada ciclo tiene
@@ -214,13 +214,13 @@ export function EstrellaCiclo({ titulo, pinyin, hanzi, subtitulo, ciclo, onEdge,
                         strokeDasharray={ciclo === "ke" ? "6 5" : undefined}
                         opacity={activo ? 1 : 0.95}
                         style={activo
-                          ? { filter: "drop-shadow(0 0 9px rgba(255,255,255,0.95)) drop-shadow(0 0 16px rgba(255,255,255,0.7))", transition: "all 0.15s" }
-                          : { color, transition: "all 0.15s", animation: `flechaGlowPulse 1.9s ease-in-out ${walk.indexOf(origen) * 0.3}s infinite` }} />
+                          ? { filter: "drop-shadow(0 0 5px rgba(255,255,255,0.8))", transition: "all 0.15s" }
+                          : { color, transition: "all 0.15s", animation: `flechaGlowPulse 5.5s ease-in-out ${walk.indexOf(origen) * 0.6}s infinite` }} />
                   <polygon points={`${fin.x},${fin.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`}
                            fill={color} opacity={1}
                            style={activo
-                             ? { filter: "drop-shadow(0 0 9px rgba(255,255,255,0.95)) drop-shadow(0 0 15px rgba(255,255,255,0.7))" }
-                             : { color, animation: `flechaGlowPulse 1.9s ease-in-out ${walk.indexOf(origen) * 0.3}s infinite` }} />
+                             ? { filter: "drop-shadow(0 0 5px rgba(255,255,255,0.8))" }
+                             : { color, animation: `flechaGlowPulse 5.5s ease-in-out ${walk.indexOf(origen) * 0.6}s infinite` }} />
                 </MotionG>
               );
             })}

@@ -98,6 +98,8 @@ interface IntroComicModalProps {
    *  (se pasa tal cual a ComicViewer). Cábala la usa para que el halo salga
    *  ámbar y no blanco. */
   luzFoto?: string;
+  /** Entrada «mágica» de la foto y texto que espera a la foto (ver ComicViewer). */
+  fotoMagica?: boolean;
 }
 
 export function IntroComicModal({
@@ -125,6 +127,7 @@ export function IntroComicModal({
   flechasEnBox,
   esperarFondo,
   luzFoto,
+  fotoMagica,
 }: IntroComicModalProps) {
   return (
     // motionPreset none + transform none: el fondo del ComicViewer va en
@@ -154,6 +157,7 @@ export function IntroComicModal({
           onBack={onBack}
           themeColor={themeColor}
           luzFoto={luzFoto}
+          fotoMagica={fotoMagica}
           disciplinaBgImage={disciplinaBgImage}
           disciplinaBgColor={disciplinaBgColor}
           textShadow={textShadow}

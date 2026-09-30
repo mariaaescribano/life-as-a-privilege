@@ -30,6 +30,7 @@ import { API_URL, cabalaBg, cabalaNom, cabalaTxt, CabalaIcon } from "../../Globa
 import { CAJA_GLOW, CAJA_GLOW_HOVER } from "../../components/metodo/cabalaGlow";
 import { disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { generarPdfCabala } from "../../utils/generateCabalaPdf";
+import { Vivo } from "../../components/metodo/CabalaVivo";
 
 // Sombra OSCURA (casi negra), no del color del fondo: da contraste real al
 // texto ámbar (cabalaTxt) sobre el fondo marrón, para que se lea bien.
@@ -235,7 +236,7 @@ export default function MetodoCabalaFinal() {
             {/* Sin sombra: el texto de debajo del header va sobre el turquesa limpio. */}
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic" textAlign="center"
                   lineHeight="1.85" maxW="660px">
-              {t("metodo.cabala.final.intro")}
+              <Vivo>{t("metodo.cabala.final.intro")}</Vivo>
             </Text>
           </Reveal>
 
@@ -281,7 +282,7 @@ export default function MetodoCabalaFinal() {
                     {sefirotMap[bloqueoPrincipal.from].titulo} → {sefirotMap[bloqueoPrincipal.to].titulo}
                     <Box as="span" color={`${cabalaTxt}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="400"> · {tipoLabel[bloqueoPrincipal.tipo]}</Box>
                   </Text>
-                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}>{narrativa(bloqueoPrincipal)}</Text>
+                  <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" style={{ textShadow: INK_SHADOW }}><Vivo>{narrativa(bloqueoPrincipal)}</Vivo></Text>
                 </Reveal>
               )}
               <Flex direction="column" gap={3}>
@@ -324,7 +325,7 @@ export default function MetodoCabalaFinal() {
                           {s.letra} · {NOMBRE_SEFIRA[s.from]} → {NOMBRE_SEFIRA[s.to]}
                           <Box as="span" color={`${cabalaTxt}88`} fontSize={{ base: "sm", md: "md" }} fontWeight="400"> · {band?.titulo}</Box>
                         </Text>
-                        <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}>{band?.texto}</Text>
+                        <Text color={cabalaTxt} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7" style={{ textShadow: INK_SHADOW }}><Vivo>{band?.texto}</Vivo></Text>
                       </RevealItem>
                     ))}
                   </RevealStagger>

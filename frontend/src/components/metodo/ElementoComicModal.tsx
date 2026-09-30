@@ -31,6 +31,7 @@ export function ElementoComicModal({
   onChangeData,
   onClose,
   onComplete,
+  sinGlow = false,
 }: {
   elemento: Elemento | null;
   data: DatosTcm;
@@ -38,6 +39,8 @@ export function ElementoComicModal({
   onClose: () => void;
   /** Se llama al terminar el cómic (además de marcar el elemento como leído). */
   onComplete?: (el: Elemento) => void;
+  /** Sin el halo/sombra alrededor del box de texto (solo la página de los Cinco Elementos). */
+  sinGlow?: boolean;
 }) {
   const { idioma } = useIdioma();
   // Respuestas del mini-test embebido en el cómic del elemento abierto.
@@ -110,6 +113,7 @@ export function ElementoComicModal({
           return (
             <ComicViewer
               key={elemento}
+              sinSombra={sinGlow}
               vinetas={vinetas}
               themeColor={ELEMENTOS[elemento].color}
               textColor="#ffffff"

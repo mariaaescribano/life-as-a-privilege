@@ -139,6 +139,7 @@ export function IndiceCabala() {
       nom={cabalaNom}
       registroKey="cabala"
       luz={false}
+      glow={cabalaTxt}
       onOpen={alAbrir}
       cargando={!cargado || releyendo}
     />

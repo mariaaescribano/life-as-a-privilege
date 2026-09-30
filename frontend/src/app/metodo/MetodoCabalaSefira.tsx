@@ -11,6 +11,7 @@ import { IndiceCabala } from "../../components/metodo/IndiceCabala";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal, RevealStagger, RevealItem } from "../../components/global/Reveal";
+import { Vivo, TituloVivo } from "../../components/metodo/CabalaVivo";
 import { CabalaNotaModal } from "../../components/metodo/CabalaNotaModal";
 import { CabalaIlustracionesModal } from "../../components/metodo/CabalaIlustracionesModal";
 import { CabalaSefiraIlustracionModal } from "../../components/metodo/CabalaSefiraIlustracionModal";
@@ -81,7 +82,7 @@ const TituloCaja = ({ children }: { children: React.ReactNode }) => (
     textTransform="uppercase"
     style={{ textShadow: `0 0 18px ${cabalaTxt}55` }}
   >
-    {children}
+    <TituloVivo>{children}</TituloVivo>
   </Text>
 );
 
@@ -105,7 +106,7 @@ const ItemLista = ({ children }: { children: React.ReactNode }) => (
         lineHeight="1.7"
         style={{ textShadow: INK_SHADOW }}
       >
-        {children}
+        <Vivo>{children}</Vivo>
       </Text>
     </Flex>
   </RevealItem>
@@ -119,7 +120,7 @@ function EscalaAutoeval({ statement, value, onChange, max = 10 }: { statement: s
     <Flex align="center" gap={{ base: 3, md: 5 }}>
       <Box flex="1" minW={0}>
         <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-          {statement}
+          <Vivo>{statement}</Vivo>
         </Text>
         {/* La nota se VE, no solo se lee en la casilla: la barra crece hasta la
             puntuación dada. Es el feedback que faltaba al responder (antes se
@@ -567,7 +568,7 @@ export default function MetodoCabalaSefira() {
                 maxW="640px"
                 lineHeight="1.5"
               >
-                {sefira.frase}
+                <Vivo total={1.2}>{sefira.frase}</Vivo>
                 {sefira.nota && (
                   <Box
                     as="button"
@@ -655,7 +656,7 @@ export default function MetodoCabalaSefira() {
                           animation: `${carruselDir === 1 ? "cabalaEntraDer" : "cabalaEntraIzq"} 0.42s cubic-bezier(0.22,1,0.36,1)`,
                         }}
                       >
-                        {sefira.intro[carruselIdx]}
+                        <Vivo total={1.2} retraso={carruselIdx === 0 ? 0.7 : 0}>{sefira.intro[carruselIdx]}</Vivo>
                       </Text>
                       <Flex align="center" gap={{ base: 4, md: 5 }}>
                         <FlechaCarrusel dir="left" onClick={() => pasarIntro(-1)} />
@@ -695,7 +696,7 @@ export default function MetodoCabalaSefira() {
                       <Divisor mt={3} mb={4} />
                       {sefira.equilibrado.intro && (
                         <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                          {sefira.equilibrado.intro}
+                          <Vivo>{sefira.equilibrado.intro}</Vivo>
                         </Text>
                       )}
                       <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
@@ -706,7 +707,7 @@ export default function MetodoCabalaSefira() {
                           <Divisor mt={5} mb={4} />
                           {sefira.equilibrado.extra.intro && (
                             <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                              {sefira.equilibrado.extra.intro}
+                              <Vivo>{sefira.equilibrado.extra.intro}</Vivo>
                             </Text>
                           )}
                           <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
@@ -724,7 +725,7 @@ export default function MetodoCabalaSefira() {
                       <Divisor mt={3} mb={4} />
                       {sefira.desequilibrado.intro && (
                         <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                          {sefira.desequilibrado.intro}
+                          <Vivo>{sefira.desequilibrado.intro}</Vivo>
                         </Text>
                       )}
                       <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
@@ -735,7 +736,7 @@ export default function MetodoCabalaSefira() {
                           <Divisor mt={5} mb={4} />
                           {sefira.desequilibrado.extra.intro && (
                             <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={3.5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                              {sefira.desequilibrado.extra.intro}
+                              <Vivo>{sefira.desequilibrado.extra.intro}</Vivo>
                             </Text>
                           )}
                           <RevealStagger inView display="flex" flexDirection="column" gap={2.5}>
@@ -762,7 +763,7 @@ export default function MetodoCabalaSefira() {
                 <Divisor mt={3} mb={4} />
                 {sefira.autoevaluacion.intro && (
                   <Text color={`${cabalaTxt}cc`} fontSize={{ base: "lg", md: "xl" }} fontStyle="italic" mb={5} lineHeight="1.6" style={{ textShadow: INK_SHADOW }}>
-                    {sefira.autoevaluacion.intro}
+                    <Vivo>{sefira.autoevaluacion.intro}</Vivo>
                   </Text>
                 )}
                 <RevealStagger inView display="flex" flexDirection="column" gap={5}>
@@ -801,7 +802,7 @@ export default function MetodoCabalaSefira() {
                   {sefira.clave.map((p, i) => (
                     <RevealItem key={i}>
                       <Text color={`${cabalaTxt}dd`} fontSize={{ base: "lg", md: "xl" }} lineHeight="1.75" style={{ textShadow: INK_SHADOW }}>
-                        {p}
+                        <Vivo>{p}</Vivo>
                       </Text>
                     </RevealItem>
                   ))}

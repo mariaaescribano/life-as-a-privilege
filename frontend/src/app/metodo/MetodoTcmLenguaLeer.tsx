@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useInView, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
@@ -13,6 +13,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { IndiceTcm } from "../../components/metodo/IndiceTcm";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import { API_URL, tcmBg, tcmNom, tcmTxt, TCMIcon } from "../../GlobalVariables";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { ELEMENTOS, type DatosTcm } from "../../components/metodo/tcmRecorrido";
@@ -116,7 +117,7 @@ export default function MetodoTcmLenguaLeer() {
           <Reveal direction="up" distance={20} delay={0.12} duration={0.65} display="flex" justifyContent="center">
           <Text color="white" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
                 textAlign="center" maxW="680px">
-            {t("metodo.tcm.leer.intro")}
+            <PalabrasVivas texto={t("metodo.tcm.leer.intro")} retraso={0.2} />
           </Text>
           </Reveal>
 
@@ -135,7 +136,7 @@ export default function MetodoTcmLenguaLeer() {
               </Text>
               <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                     lineHeight="1.7" maxW="720px" style={{ textShadow: INK_SHADOW }}>
-                {t("metodo.tcm.leer.elige")}
+                <PalabrasVivas texto={t("metodo.tcm.leer.elige")} retraso={0.15} />
               </Text>
             </Banda>
             <Separador />
@@ -194,10 +195,8 @@ export default function MetodoTcmLenguaLeer() {
 function SelectoresLengua({ opciones, elegidaKey, onElegir }: {
   opciones: OpcionLengua[]; elegidaKey?: string; onElegir: (key: string) => void;
 }) {
-  const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 });
-  const enter = reduce || inView;
+  // Columnas (2 en móvil, 3 desde md): reinicia la cascada en cada fila.
+  const columnas = useBreakpointValue({ base: 2, md: 3 }) ?? 2;
   return (
     // Las tarjetas llenan el ANCHO del apartado (2 columnas en móvil, 3 de md
     // hacia arriba): nada de anchos fijos, que dejaban un pasillo muerto a la
@@ -205,13 +204,12 @@ function SelectoresLengua({ opciones, elegidaKey, onElegir }: {
     // `justify="center"`: las filas completas ocupan el ancho entero y la
     // última, si va coja (los apartados tienen 4, 5, 6 o 7 variantes), queda
     // centrada en vez de dejar el hueco pegado a un lado.
-    <Flex ref={ref} wrap="wrap" justify="center" gap={{ base: 2.5, md: 4 }}>
+    <Flex wrap="wrap" justify="center" gap={{ base: 2.5, md: 4 }}>
       {opciones.map((op, i) => (
         <SelectorCard
           key={op.key}
           opcion={op}
-          index={i}
-          enter={enter}
+          index={i % columnas}
           seleccionada={elegidaKey === op.key}
           onClick={() => onElegir(op.key)}
         />
@@ -221,11 +219,25 @@ function SelectoresLengua({ opciones, elegidaKey, onElegir }: {
 }
 
 // ── Tarjeta seleccionable (ilustración + nombre) ─────────────────────────────
-function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
-  opcion: OpcionLengua; seleccionada: boolean; onClick: () => void; index: number; enter: boolean;
+function SelectorCard({ opcion, seleccionada, onClick, index }: {
+  opcion: OpcionLengua; seleccionada: boolean; onClick: () => void; index: number;
 }) {
+  // Cada tarjeta se enciende cuando ELLA asoma en pantalla: las de abajo esperan
+  // a que el usuario baje y las que asoman juntas salen en cascada por columnas.
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLButtonElement | null>(null);
+  const inView = useInView(ref, { once: true, amount: 0.25 });
+  const enter = reduce || inView;
+  // El retraso de la cascada solo vale para la entrada: después se quita para
+  // que el hover y la selección respondan al instante.
+  const [asentada, setAsentada] = useState(false);
+  useEffect(() => {
+    if (!enter) return;
+    const id = setTimeout(() => setAsentada(true), 1400);
+    return () => clearTimeout(id);
+  }, [enter]);
   return (
-    <Box as="button" onClick={onClick} textAlign="center"
+    <Box as="button" ref={ref} onClick={onClick} textAlign="center"
          // Tarjetas grandes: la foto de una lengua se tiene que poder comparar
          // con la tuya, y a 150px no se distinguía el matiz. Dos por fila en
          // móvil y tres de md en adelante, repartiéndose TODO el ancho útil del
@@ -237,7 +249,7 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
          border={`2px solid ${seleccionada ? tcmTxt : "rgba(255,255,255,0.18)"}`}
          boxShadow={seleccionada ? `0 0 18px ${tcmTxt}88` : "none"}
          opacity={enter ? 1 : 0}
-         transform={enter ? "translateY(0) scale(1)" : "translateY(16px) scale(0.96)"}
+         transform={enter ? "translateY(0) scale(1)" : "translateY(30px) scale(0.95)"}
          _hover={{
            borderColor: seleccionada ? tcmTxt : `${tcmTxt}88`,
            bg: seleccionada ? `${tcmTxt}33` : "rgba(255,255,255,0.08)",
@@ -246,7 +258,7 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
          }}
          sx={{
            backdropFilter: "blur(6px)",
-           transitionDelay: `${index * 0.05}s`,
+           transitionDelay: asentada ? "0s" : `${0.1 + index * 0.14}s`,
            // La foto hace un zoom lento dentro de su marco (invita a pulsar).
            "& img": { transition: "transform 0.6s cubic-bezier(0.22,1,0.36,1)" },
            "&:hover img": { transform: "scale(1.07)" },
@@ -260,7 +272,7 @@ function SelectorCard({ opcion, seleccionada, onClick, index, enter }: {
              animation: "seleccionPop 0.45s cubic-bezier(0.34,1.56,0.64,1)",
            } : {}),
          }}
-         transition="opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1), border-color 0.15s, background 0.15s">
+         transition="opacity 0.8s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1), border-color 0.15s, background 0.15s">
       <LenguaImg src={opcion.src} alt={opcion.nombre} />
       {/* El nombre sube de tamaño con la tarjeta: en 246px de ancho, el `xs` de
           antes se quedaba en un pie de foto perdido. */}
@@ -287,6 +299,7 @@ function LenguaImg({ src, alt }: { src: string; alt: string }) {
 
 // ── Síntesis: reúne las elecciones del usuario en una lectura ────────────────
 function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
+  const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
   const t = useT();
   const nombres = useNombresElementos();
   // El resumen («pálida · fina · amarilla…») se arma con las capas traducidas;
@@ -327,12 +340,12 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
             {sano ? (
               <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.9" mt={5}
                     style={{ textShadow: INK_SHADOW }}>
-                {t("metodo.tcm.leer.sano")}
+                <PalabrasVivas texto={t("metodo.tcm.leer.sano")} retraso={0.2} total={1.4} />
               </Text>
             ) : (
               <Text color="rgba(255,255,255,0.9)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic"
                     lineHeight="1.7" mt={4} style={{ textShadow: INK_SHADOW }}>
-                {t("metodo.tcm.leer.sugiere")}
+                <PalabrasVivas texto={t("metodo.tcm.leer.sugiere")} retraso={0.2} total={1.4} />
               </Text>
             )}
           </Box>
@@ -342,10 +355,11 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
       {/* Un box por desequilibrio, en rejilla de 2 columnas (menos extendidos) */}
       {!sano && (
       <Box display="grid" gridTemplateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={{ base: 5, md: 6 }} w="100%">
-      {patrones.map(({ patron, info, veces }) => {
+      {patrones.map(({ patron, info, veces }, pi) => {
         const E = ELEMENTOS[info.elemento];
         return (
-          <Reveal key={patron} inView direction="up" distance={26} scaleFrom={0.98} duration={0.7} amount={0.2} w="100%" h="100%">
+          <Reveal key={patron} inView once direction="up" distance={34} scaleFrom={0.97} duration={0.85} amount={0.2}
+                  delay={0.1 + (pi % (esMovil ? 1 : 2)) * 0.18} w="100%" h="100%">
             <Box position="relative" w="100%" h="100%" borderRadius="2xl" overflow="hidden"
                  boxShadow={`${CAJA_GLOW}, 0 0 34px ${E.color}44`}>
               <DisciplinaBgLayer nom={tcmNom} borderRadius="2xl" />
@@ -377,7 +391,7 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
                 {/* Qué significa */}
                 <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "md", md: "lg" }} lineHeight="1.85"
                       style={{ textShadow: INK_SHADOW }}>
-                  {info.senal}
+                  <PalabrasVivas texto={info.senal} retraso={0.3} total={1.5} />
                 </Text>
 
                 {/* Cómo equilibrarlo — en el color del elemento (el de los puntos) */}
@@ -391,7 +405,7 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
                       <Box flexShrink={0} mt={{ base: "9px", md: "10px" }} w="5px" h="5px"
                            borderRadius="full" bg={E.color} boxShadow={`0 0 6px ${E.color}`} />
                       <Text color="rgba(255,255,255,0.94)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.7"
-                            style={{ textShadow: INK_SHADOW }}>{c}</Text>
+                            style={{ textShadow: INK_SHADOW }}><PalabrasVivas texto={c} retraso={0.1} /></Text>
                     </Flex>
                   ))}
                 </Flex>
@@ -408,7 +422,7 @@ function LecturaLengua({ observarte }: { observarte: DatosTcm["observarte"] }) {
         <Reveal inView direction="up" distance={14} duration={0.6} amount={0.4} display="flex" justifyContent="center">
           <Text color="white" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" lineHeight="1.6" textAlign="center"
                 maxW="680px">
-            {t("metodo.tcm.leer.vuelve")}
+            <PalabrasVivas texto={t("metodo.tcm.leer.vuelve")} retraso={0.1} />
           </Text>
         </Reveal>
       )}

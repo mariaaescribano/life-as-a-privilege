@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { Box, Flex, Image } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { cabalaTxt } from "../../GlobalVariables";
+import { useVistoConEspera } from "../../hooks/useVistoConEspera";
+
+// La foto surge de una bruma, se enfoca y se asienta (la misma entrada que las
+// palabras: sin golpe). Solo arranca cuando la imagen YA ha cargado y está en
+// pantalla, así que en móvil se ve al bajar hasta ella y en ordenador al abrir.
+const brota = keyframes`
+  from { opacity: 0; filter: blur(14px) brightness(1.4); transform: scale(1.06); }
+  to   { opacity: 1; filter: blur(0) brightness(1);      transform: scale(1); }
+`;
 
 // ─────────────────────────────────────────────────────────────────────────
 // La foto que representa a una sefirá o a un sendero, DENTRO de su página.
@@ -20,6 +30,7 @@ export function CabalaFotoIlustracion({
   onClick,
   size = { base: "100%", md: "240px" },
   maxW = { base: "300px", md: "240px" },
+  retraso = 0,
 }: {
   src: string;
   alt: string;
@@ -27,9 +38,12 @@ export function CabalaFotoIlustracion({
   onClick?: () => void;
   size?: any;
   maxW?: any;
+  /** Segundos de espera antes de que la foto surja. */
+  retraso?: number;
 }) {
   const [cargada, setCargada] = useState(false);
   const [fallo, setFallo] = useState(false);
+  const visto = useVistoConEspera("0px 0px -8% 0px", 0);
   if (fallo) return null; // sin foto, la página se queda como estaba (solo texto)
 
   return (
@@ -38,6 +52,7 @@ export function CabalaFotoIlustracion({
       onClick={onClick}
       aria-label={onClick ? `Ver la ilustración de ${alt}` : undefined}
       title={onClick ? "Ver la ilustración" : undefined}
+      ref={visto.ref}
       position="relative"
       flexShrink={0}
       w={size}
@@ -66,8 +81,11 @@ export function CabalaFotoIlustracion({
         h="100%"
         objectFit="cover"
         borderRadius="lg"
-        opacity={cargada ? 1 : 0}
-        transition="opacity 0.45s ease"
+        opacity={cargada && visto.visible ? 1 : 0}
+        sx={cargada && visto.visible ? {
+          animation: `${brota} 1.5s cubic-bezier(0.25,0.8,0.25,1) ${retraso}s backwards`,
+          "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+        } : undefined}
         onLoad={() => setCargada(true)}
         onError={() => setFallo(true)}
       />

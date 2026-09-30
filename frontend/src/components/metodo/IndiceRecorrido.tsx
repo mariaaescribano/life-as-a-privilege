@@ -61,6 +61,7 @@ export function IndiceRecorrido({
   paramKey = "experienciaId",
   acento,
   luz = true,
+  glow,
   progresoKey,
   registroKey,
   registroOffset = 0,
@@ -89,6 +90,9 @@ export function IndiceRecorrido({
   /** Si es false, el texto del botón «Índice» no lleva halo claro: usa una
    *  sombra tenue con el color de fondo (como «Mis notas»). Astrología lo pide. */
   luz?: boolean;
+  /** Si se pasa un color, la caja del Índice lleva un halo suave de ese color en
+   *  vez de la sombra oscura (Cábala: con la sombra se veía demasiado oscuro). */
+  glow?: string;
   /** Clave de disciplina para el bloqueo SECUENCIAL persistido en BD (p.ej.
    *  «psicologia»). Si se pasa, el Índice bloquea los pasos posteriores al máximo
    *  desbloqueado y va desbloqueando cada paso al llegar al siguiente. Si NO se
@@ -312,7 +316,7 @@ export function IndiceRecorrido({
              sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
              onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif" overflowY="auto">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="640px" my="auto"
-               borderRadius="2xl" overflow="hidden" boxShadow={`0 30px 80px rgba(40,18,4,0.55)`}>
+               borderRadius="2xl" overflow="hidden" boxShadow={glow ? `0 0 22px ${glow}33, 0 0 54px ${glow}1a` : `0 30px 80px rgba(40,18,4,0.55)`}>
             <DisciplinaBgLayer nom={nom} borderRadius="2xl" />
             {/* `dvh` en móvil: `vh` no descuenta la barra del navegador y la
                 caja quedaba pegada al borde de abajo, sin margen. */}
