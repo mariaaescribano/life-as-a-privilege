@@ -116,7 +116,7 @@ export default function MetodoCabala() {
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: `← ${t("disciplina.nutricion")}`, onClick: () => navigate("/metodo/nutricion/cursos") }}
+              prev={{ label: `← ${t("disciplina.medicinaChina")}`, onClick: () => navigate("/metodo/tcm/apuntes") }}
               // Ilustraciones de Cábala: abre el popup con la galería (de momento,
               // estado vacío con las ilustraciones que llegarán).
               extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}

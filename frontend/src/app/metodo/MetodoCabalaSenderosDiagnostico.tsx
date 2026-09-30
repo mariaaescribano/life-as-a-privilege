@@ -132,7 +132,7 @@ export default function MetodoCabalaSenderosDiagnostico() {
               color={cabalaTxt}
               nom={cabalaNom}
               mb={0}
-              prev={{ label: `← ${t("metodo.cabala.paso.senderos")}`, onClick: () => navigate("/metodo/cabala/senderos") }}
+              prev={{ label: `← ${senderos22[senderos22.length - 1]?.letra ?? t("comun.anterior")}`, onClick: () => navigate(`/metodo/cabala/sendero/${senderos22[senderos22.length - 1]?.num ?? ""}`) }}
               extra={{ label: t("metodo.ilustraciones"), onClick: () => setIlustracionesOpen(true)}}
               next={{ label: `${t("metodo.cabala.paso.final")} →`, onClick: () => navigate("/metodo/cabala/final") }}
             />

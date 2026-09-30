@@ -112,7 +112,7 @@ export default function MetodoAyurveda() {
             color={ayurvedaTxt}
             nom={ayurvedaNom}
             mb={0}
-            prev={{ label: "← Psicología", onClick: () => navigate("/metodo/psicologia/linea-de-Vida/cursos") }}
+            prev={{ label: `← ${t("disciplina.nutricion")}`, onClick: () => navigate("/metodo/nutricion/cursos") }}
             extra={ilustracionesBtn}
             next={{
               label: "Test →",

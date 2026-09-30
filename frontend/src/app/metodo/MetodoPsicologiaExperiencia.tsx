@@ -230,7 +230,7 @@ export default function MetodoPsicologiaExperiencia() {
                 nom={neuropsicologiaNom}
                 mb={0}
                 boxShadow={glowHeader}
-                prev={{ label: `← ${t("metodo.psico.paso.desResultado")}`, onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/des-resultado`); } }}
+                prev={{ label: `← ${t("metodo.psico.paso.cerebro")}`, onClick: async () => { await guardarSiCambio(); await flushSaves(); navigate(`/metodo/psicologia/${exp.id}/cerebro`); } }}
                 next={{
                   label: puedeAvanzar ? `${t("metodo.psico.paso.familia")} →` : t("metodo.psico.faltaAnioCorto"),
                   onClick: irAFamilia,

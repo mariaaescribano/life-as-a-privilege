@@ -106,7 +106,7 @@ export default function MetodoFisiologia() {
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: `← ${t("disciplina.medicinaChina.corto")}`, onClick: () => navigate("/metodo/tcm/apuntes") }}
+            prev={{ label: `← ${t("disciplina.psicologia")}`, onClick: () => navigate("/metodo/psicologia/linea-de-Vida/cursos") }}
             extra={celulasBtn}
             next={{ label: `${t("fisiologia.comenzar")} →`, onClick: comenzar }}
           />
