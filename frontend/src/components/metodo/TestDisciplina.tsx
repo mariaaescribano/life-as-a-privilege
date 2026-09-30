@@ -7,6 +7,8 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { PRESENTACIONES, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { Reveal } from "../global/Reveal";
+import { LetrasVivas } from "../global/LetrasVivas";
+import { PalabrasVivas } from "../global/PalabrasVivas";
 
 /* ─────────────────────────────────────────────────────────────────────────────
  *  EL TEST DE «¿POR DÓNDE EMPIEZO?»
@@ -212,8 +214,14 @@ export function TestDisciplinaModal({
       onClick={onClose}
       role="dialog"
       aria-modal="true"
+      // El velo entra con un fundido suave; la tarjeta sube y se enfoca encima.
+      sx={{
+        "@keyframes testVelo": { from: { opacity: 0 }, to: { opacity: 1 } },
+        animation: "testVelo 0.35s ease-out both",
+        "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+      }}
     >
-      <Reveal direction="up" distance={20} scaleFrom={0.96} duration={0.5} display="flex" justifyContent="center">
+      <Reveal blur direction="up" distance={24} scaleFrom={0.955} duration={0.65} display="flex" justifyContent="center">
         <Flex
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
           position="relative"
@@ -278,7 +286,8 @@ export function TestDisciplinaModal({
                   letterSpacing="0.04em"
                   lineHeight="1.2"
                 >
-                  {t("elMetodo.test.titulo")}
+                  <LetrasVivas texto={t("elMetodo.test.titulo")} entrada activo={isOpen} repetir={false} altura={0}
+                               periodo={1} paso={0.035} pasoEntrada={0.035} retraso={0.35} />
                 </Text>
                 <Text
                   color="rgba(255,255,255,0.8)"
@@ -287,9 +296,23 @@ export function TestDisciplinaModal({
                   fontSize={{ base: "sm", md: "md" }}
                   mt={1.5}
                 >
-                  {t("elMetodo.test.sub")}
+                  <PalabrasVivas texto={t("elMetodo.test.sub")} retraso={0.6} total={0.7} />
                 </Text>
-                <Box w="56px" h="1px" bg="rgba(255,255,255,0.4)" mx="auto" mt={4} />
+                {/* La rayita de siempre hace de BARRA DE AVANCE: nace en el centro
+                    al abrir y se llena hacia los lados según se contesta. */}
+                <Box mx="auto" mt={4} h="1px" bg="rgba(255,255,255,0.22)" borderRadius="full" position="relative"
+                     w={{ base: "150px", md: "190px" }}
+                     sx={{
+                       "@keyframes testRayaNace": { from: { transform: "scaleX(0)", opacity: 0 }, to: { transform: "scaleX(1)", opacity: 1 } },
+                       animation: "testRayaNace 0.7s cubic-bezier(0.22,1,0.36,1) 0.5s both",
+                       "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                     }}>
+                  <Box position="absolute" left="50%" top="-0.5px" h="2px" borderRadius="full" bg="white"
+                       w={`${((PREGUNTAS.length - sinContestar) / PREGUNTAS.length) * 100}%`}
+                       transform="translateX(-50%)"
+                       boxShadow="0 0 8px rgba(255,255,255,0.7)"
+                       transition="width 0.6s cubic-bezier(0.22,1,0.36,1)" />
+                </Box>
               </Box>
 
               {/* Las preguntas. La barra de scroll, pegada al borde derecho y
@@ -307,7 +330,12 @@ export function TestDisciplinaModal({
                 }}
               >
                 {PREGUNTAS.map((p, i) => (
-                  <Box key={i} mt={i === 0 ? 0 : 7}>
+                  // Cada pregunta entra al llegar a ella (sube y se enfoca); la
+                  // tres primeras (las que se ven al abrir) van en cascada tras el título;
+                  // el resto entra al llegar a ellas, sin espera.
+                  <Reveal key={i} inView amount={0.15} blur direction="up" distance={16} duration={0.6}
+                          delay={i < 3 ? 0.5 + i * 0.15 : 0} mt={i === 0 ? 0 : 7}>
+                  <Box>
                     <Text
                       color="white"
                       fontFamily="'EB Garamond', serif"
@@ -326,10 +354,12 @@ export function TestDisciplinaModal({
                         // hacia dónde apunta cada respuesta. El color es del
                         // RESULTADO, no del camino.
                         return (
+                          <Reveal key={j} inView amount={0.2} direction="up" distance={10} duration={0.5}
+                                  delay={(i < 3 ? 0.6 + i * 0.15 : 0.05) + j * 0.06}>
                           <Flex
-                            key={j}
                             as="button"
                             type="button"
+                            w="100%"
                             onClick={() => elegir(i, j)}
                             aria-pressed={marcada}
                             align="center"
@@ -340,8 +370,12 @@ export function TestDisciplinaModal({
                             border={`1px solid ${marcada ? "white" : "rgba(255,255,255,0.3)"}`}
                             bg={marcada ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.05)"}
                             cursor="pointer"
-                            transition="all 0.18s ease"
-                            _hover={{ borderColor: "white", bg: marcada ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.14)" }}
+                            // Al marcarla, un brillo blanco suave (neutro: el color es del
+                            // resultado) y al pulsar se hunde un pelín.
+                            boxShadow={marcada ? "0 0 16px rgba(255,255,255,0.28)" : "none"}
+                            transition="all 0.28s cubic-bezier(0.22,1,0.36,1)"
+                            _hover={{ borderColor: "white", bg: marcada ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.14)", transform: "translateX(3px)" }}
+                            _active={{ transform: "scale(0.99)" }}
                           >
                             <Text
                               color="white"
@@ -353,10 +387,12 @@ export function TestDisciplinaModal({
                               {segunIdioma(o.texto)}
                             </Text>
                           </Flex>
+                          </Reveal>
                         );
                       })}
                     </Flex>
                   </Box>
+                  </Reveal>
                 ))}
 
                 {/* El botón de terminar, al final del propio scroll: cuando se
@@ -377,6 +413,16 @@ export function TestDisciplinaModal({
                     opacity={completo ? 1 : 0.75}
                     _hover={completo ? { bg: "rgba(255,255,255,0.24)" } : {}}
                     transition="all 0.2s ease"
+                    // Al contestar la última, el botón lo dice con un latido
+                    // de luz (3 veces, no más: avisa, no insiste).
+                    sx={completo ? {
+                      "@keyframes testListo": {
+                        "0%, 100%": { boxShadow: "0 0 0 rgba(255,255,255,0)" },
+                        "50%": { boxShadow: "0 0 22px rgba(255,255,255,0.55)" },
+                      },
+                      animation: "testListo 1.8s ease-in-out 0.2s 3",
+                      "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                    } : undefined}
                   >
                     <Text
                       color="white"
@@ -410,8 +456,11 @@ export function TestDisciplinaModal({
               py={{ base: 12, md: 14 }}
               gap={0}
             >
-              <R.Icon size={{ base: "60px", md: "76px" }} />
+              <Reveal blur direction="none" scaleFrom={0.7} duration={0.9}>
+                <R.Icon size={{ base: "60px", md: "76px" }} />
+              </Reveal>
 
+              <Reveal direction="up" distance={10} duration={0.7} delay={0.35}>
               <Text
                 color="rgba(255,255,255,0.82)"
                 fontFamily="'EB Garamond', serif"
@@ -424,6 +473,7 @@ export function TestDisciplinaModal({
               >
                 {t("elMetodo.test.resultado")}
               </Text>
+              </Reveal>
 
               <Text
                 color={R.txt}
@@ -435,11 +485,18 @@ export function TestDisciplinaModal({
                 textShadow={`0 1px 3px ${R.bg}f5, 0 0 8px ${R.bg}cc, 0 2px 16px ${R.bg}88`}
                 mt={2}
               >
-                {nombreEnMapa(R.nom)}
+                <LetrasVivas key={R.nom} texto={nombreEnMapa(R.nom)} entrada repetir={false} altura={0}
+                             periodo={1} paso={0.05} pasoEntrada={0.05} retraso={0.3} />
               </Text>
 
-              {/* Rayita fina en el acento de la disciplina: separa sin adornar. */}
-              <Box w="56px" h="1px" bg={R.txt} opacity={0.8} my={{ base: 4, md: 5 }} />
+              {/* Rayita fina en el acento de la disciplina: separa sin adornar.
+                  Se dibuja desde el centro al salir el nombre. */}
+              <Box w="56px" h="1px" bg={R.txt} opacity={0.8} my={{ base: 4, md: 5 }}
+                   sx={{
+                     "@keyframes testRayaResultado": { from: { transform: "scaleX(0)", opacity: 0 }, to: { transform: "scaleX(1)", opacity: 0.8 } },
+                     animation: "testRayaResultado 0.7s cubic-bezier(0.22,1,0.36,1) 1s both",
+                     "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+                   }} />
 
               {/* La frase del cartel de esa disciplina: su gancho. */}
               <Text
@@ -451,9 +508,10 @@ export function TestDisciplinaModal({
                 maxW="420px"
                 textShadow="0 1px 4px rgba(0,0,0,0.85)"
               >
-                {segunIdioma(R.gancho)}
+                <PalabrasVivas texto={segunIdioma(R.gancho)} retraso={1.1} total={0.9} />
               </Text>
 
+              <Reveal direction="up" distance={12} duration={0.7} delay={1.9}>
               <Flex
                 as="button"
                 type="button"
@@ -488,6 +546,7 @@ export function TestDisciplinaModal({
                   {t("elMetodo.test.verDisciplina")}
                 </Text>
               </Flex>
+              </Reveal>
             </Flex>
           )}
         </Flex>

@@ -1,3 +1,5 @@
+import { BotonCerrarDisciplina } from "./BotonCerrarDisciplina";
+import { fondoDeDisciplina, txtDeDisciplina } from "../../utils/fondoDisciplina";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { LetrasVivas } from "../global/LetrasVivas";
 import { PalabrasVivas } from "../global/PalabrasVivas";
@@ -788,6 +790,11 @@ export function ComicViewer({
           continuar que lleva al lado.
           zIndex 12: por encima del loader de espera de fondo (11) para poder
           cerrar aunque la foto aún no haya cargado. */}
+      {fondoDeDisciplina(disciplinaBgColor) && txtDeDisciplina(disciplinaBgColor) ? (
+        // Fisiología y Nutrición: la X de la casa (acuarela de la disciplina,
+        // borde y X en su Txt).
+        <BotonCerrarDisciplina onClose={onClose} bg={disciplinaBgColor!} txt={cerrarColor ?? txtDeDisciplina(disciplinaBgColor)!} zIndex={12} />
+      ) : (
       <IconButton
         aria-label={t("comun.cerrar")}
         onClick={onClose}
@@ -821,6 +828,7 @@ export function ComicViewer({
           </Box>
         }
       />
+      )}
 
       {/* Espera de la foto de fondo (`esperarFondo`): loader a pantalla completa
           sobre un fondo del color de la disciplina, hasta que la foto cargue del

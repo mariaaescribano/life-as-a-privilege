@@ -12,6 +12,7 @@ import { useComic } from "../../i18n/comics";
 import { useLeidos } from "../../hooks/useLeidos";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
+import { BotonCerrarDisciplina } from "./BotonCerrarDisciplina";
 import { barraVisibleSx } from "../global/barraDeScroll";
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -64,7 +65,7 @@ function IlustracionCard({ entry: entrada, leida, onOpen }: {
       {/* Pie: título + «Ver →» */}
       <Flex direction="column" align="center" justify="center" flex="1" gap={1.5}
             px={3} py={{ base: 3.5, md: 4 }} position="relative">
-        <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay={`${nutricionBg}cc`} />
+        <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay={`${nutricionBg}55`} />
         <Text position="relative" zIndex={1} color={nutricionTxt} fontSize={{ base: "sm", md: "md" }}
               fontWeight={700} letterSpacing="0.03em" textAlign="center" lineHeight="1.2">
           {entry.titulo}
@@ -134,20 +135,12 @@ export function NutricionIlustracionesModal({ isOpen, onClose }: { isOpen: boole
             mediría el alto del viewport y, al hacer scroll, se vería la página de
             detrás (el bug del footer turquesa asomando bajo las tarjetas). */}
         <Box position="fixed" inset={0} zIndex={0} pointerEvents="none">
-          <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay={`${nutricionBg}e6`} />
+          <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay={`${nutricionBg}44`} />
         </Box>
 
         <Box position="relative" zIndex={1} minH="100%" px={{ base: 4, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
           {/* Cerrar */}
-          <Box as="button" onClick={onClose} position="fixed" top={{ base: 3, md: 5 }} right={{ base: 3, md: 5 }}
-               zIndex={2} w="42px" h="42px" borderRadius="full" display="flex" alignItems="center"
-               justifyContent="center" bg={`${nutricionTxt}18`} border={`1px solid ${nutricionTxt}44`}
-               color={nutricionTxt} cursor="pointer" sx={{ backdropFilter: "blur(4px)" }}
-               transition="all 0.18s" _hover={{ bg: `${nutricionTxt}2e` }}>
-            <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill="currentColor">
-              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-            </Box>
-          </Box>
+          <BotonCerrarDisciplina onClose={onClose} bg={nutricionBg} txt={nutricionTxt} zIndex={2} />
 
           <Flex direction="column" align="center" w="100%" maxW="1100px" mx="auto" gap={{ base: 6, md: 8 }}>
             <Flex direction="column" align="center" gap={2} textAlign="center">

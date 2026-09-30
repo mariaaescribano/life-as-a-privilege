@@ -20,6 +20,8 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 
 const MotionBox = motion(Box) as any;
 const MotionLine = motion.line as any;
@@ -292,13 +294,21 @@ export default function MetodoAstrologiaLectura() {
         <ModalOverlay bg="rgba(5,8,22,0.7)" sx={{ backdropFilter: "blur(6px)" }} />
         <ModalContent
           bg={astrologiaBg}
+          sx={{
+            "@keyframes astroPopup": {
+              from: { opacity: 0, transform: "translateY(18px) scale(0.965)", filter: "blur(6px)" },
+              to: { opacity: 1, transform: "none", filter: "none" },
+            },
+            animation: "astroPopup 0.6s cubic-bezier(0.22,1,0.36,1) both",
+            "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+          }}
           borderRadius="2xl"
           border={`1px solid ${astrologiaTxt}55`}
           boxShadow={`0 20px 60px rgba(0,0,0,0.6), 0 0 30px ${astrologiaTxt}44`}
           overflow="hidden"
           mx={4}
         >
-          <SpaceBg overlay="rgba(8,13,30,0.38)" />
+          <SpaceBg overlay="rgba(8,13,30,0.38)" quieto />
           <ModalCloseButton color={astrologiaTxt} zIndex={2} />
           <ModalBody position="relative" zIndex={1} px={{ base: 6, md: 9 }} py={{ base: 7, md: 9 }}>
             {retoAbierto && (
@@ -307,7 +317,7 @@ export default function MetodoAstrologiaLectura() {
                   <>
                     <Text color={astrologiaTxt} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.03em" textAlign="center"
                           style={{ textShadow: `0 0 14px rgba(255,255,255,0.5), 0 0 30px ${astrologiaTxt}55` }}>
-                      {retoAbierto.titulo}
+                      <LetrasVivas key={retoAbierto.id} texto={retoAbierto.titulo} entrada onda={false} pasoEntrada={0.03} retraso={0.2} />
                     </Text>
                     {/* Separador horizontal elegante: línea con degradado que se desvanece en los bordes */}
                     <Box
@@ -322,7 +332,7 @@ export default function MetodoAstrologiaLectura() {
                 )}
                 <Text color={`${astrologiaTxt}ee`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.9" whiteSpace="pre-line"
                       style={{ textShadow: `0 0 10px rgba(255,255,255,0.35)` }}>
-                  {retoAbierto.texto}
+                  <PalabrasVivas key={retoAbierto.id} texto={retoAbierto.texto} retraso={0.6} total={1.1} />
                 </Text>
               </Flex>
             )}

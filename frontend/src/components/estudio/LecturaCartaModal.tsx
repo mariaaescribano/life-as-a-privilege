@@ -355,7 +355,7 @@ export function BotonLecturaCarta({
           boxShadow: `0 0 24px rgba(255,255,255,0.3), 0 0 56px ${astrologiaTxt}3a`,
         }}
       >
-        <SpaceBg overlay="rgba(8,13,30,0.55)" />
+        <SpaceBg overlay="rgba(8,13,30,0.55)" quieto />
 
         {/* El icono de astrología SIEMPRE a la izquierda del texto. */}
         <Flex position="relative" zIndex={1} align="center" justify="center" gap={3}>

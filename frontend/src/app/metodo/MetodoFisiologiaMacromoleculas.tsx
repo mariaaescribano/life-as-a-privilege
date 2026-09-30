@@ -517,7 +517,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
                     style={{ textShadow: INK }}><LetrasVivas texto={t(m.nombre)} entrada pasoEntrada={0.035} repetir={false} altura={0} periodo={1} paso={0.035} retraso={0.3} /></Text>
               {/* Marca común del recorrido (MarcaLeido), con el color de la
                   macromolécula: misma forma que el resto de marcas. */}
-              {hecha && <MarcaLeido inline tinta={m.glow} bg={fisiologiaBg} title={t("fisiologia.macro.formada")} />}
+              {hecha && <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} title={t("fisiologia.macro.formada")} />}
             </Flex>
             <Text color={fisiologiaTxt} fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" mt={1.5}
                   style={{ textShadow: INK }}>{t(m.desc)}</Text>

@@ -442,7 +442,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
                     style={{ textShadow: INK }}><LetrasVivas texto={t(e.nombre)} entrada pasoEntrada={0.035} repetir={false} altura={0} periodo={1} paso={0.035} retraso={0.3} /></Text>
               {/* Marca común del recorrido (MarcaLeido), con el color de la
                   estructura: misma forma que el resto de marcas. */}
-              {hecha && <MarcaLeido inline tinta={e.glow} bg={fisiologiaBg} title={t("fisiologia.estructuras.construida")} />}
+              {hecha && <MarcaLeido inline tinta={fisiologiaTxt} bg={fisiologiaBg} title={t("fisiologia.estructuras.construida")} />}
             </Flex>
             <Text color={fisiologiaTxt} fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" mt={1}
                   style={{ textShadow: INK }}>{t(e.desc)}</Text>

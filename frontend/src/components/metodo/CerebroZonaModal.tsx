@@ -14,7 +14,6 @@
 import React, { useMemo } from "react";
 import { IntroComicModal } from "./IntroComicModal";
 import type { Vineta } from "./ComicViewer";
-import { useT } from "../../i18n";
 import { neuropsicologiaBg, neuropsicologiaTxt } from "../../GlobalVariables";
 import { ZONAS, zonaPorKey, type ZonaKey } from "./psicologiaCerebro";
 
@@ -34,21 +33,19 @@ export function CerebroZonaModal({
   onZona: (key: ZonaKey) => void;
   onClose: () => void;
 }) {
-  const t = useT();
   const zona = zonaKey ? zonaPorKey(zonaKey) : null;
 
-  // Una viñeta por apartado, todas con la foto de la zona. El antetítulo lleva
-  // el apodo y el nombre anatómico juntos (la alarma ya los trae en `nombre`).
+  // Una viñeta por apartado, todas con la foto de la zona. Sin antetítulo ni
+  // título: como el resto de cómics de psicología, solo el texto.
   const vinetas = useMemo<Vineta[]>(() => {
     if (!zona) return [];
-    const eyebrow = zona.apodo ? `${zona.apodo} · ${zona.nombre}` : zona.nombre;
     return [
-      { src: zona.foto, eyebrow, titulo: t("metodo.psico.cerebroParaQue"), paragraphs: [zona.paraQueSirve] },
-      { src: zona.foto, eyebrow, titulo: t("metodo.psico.cerebroQueLeHizo"), paragraphs: [zona.queLeHizo] },
-      { src: zona.foto, eyebrow, titulo: t("metodo.psico.cerebroComoSeNota"), paragraphs: zona.comoSeNota },
-      { src: zona.foto, eyebrow, titulo: t("metodo.psico.cerebroLoQueLaCambia"), paragraphs: [zona.loQueLaCambia] },
+      { src: zona.foto, titulo: "", paragraphs: [zona.paraQueSirve] },
+      { src: zona.foto, titulo: "", paragraphs: [zona.queLeHizo] },
+      { src: zona.foto, titulo: "", paragraphs: zona.comoSeNota },
+      { src: zona.foto, titulo: "", paragraphs: [zona.loQueLaCambia] },
     ];
-  }, [zona, t]);
+  }, [zona]);
 
   if (!zona) return null;
 

@@ -25,6 +25,7 @@ import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 
 // Contenido del popup «¿Qué es esto?» (botón flotante, encima del de la
 // llamada): explica esta página del recorrido. Edítalo libremente.
@@ -581,9 +582,23 @@ function CasaBox({
         <Portal>
         <Box position="fixed" inset={0} zIndex={2000} display="flex" alignItems="center" justifyContent="center"
              px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }} bg="rgba(0,0,0,0.82)"
-             sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+             sx={{
+               backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+               "@keyframes astroVelo": { from: { opacity: 0 }, to: { opacity: 1 } },
+               animation: "astroVelo 0.35s ease-out both",
+               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+             }}
              onClick={() => setOpen(false)} fontFamily="'EB Garamond', serif">
           <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} position="relative" w="100%" maxW="620px"
+               sx={{
+               "@keyframes astroPopup": {
+                 from: { opacity: 0, transform: "translateY(18px) scale(0.965)", filter: "blur(6px)" },
+                 to: { opacity: 1, transform: "none", filter: "none" },
+               },
+               animation: "astroPopup 0.6s cubic-bezier(0.22,1,0.36,1) both",
+               "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+        }}
+
                // Mismo tamaño fijo que el resto de popups del recorrido (620×560
                // en escritorio); scroll vertical dentro. Móvil (sin h base) igual.
                h={{ md: "560px" }}
@@ -591,7 +606,7 @@ function CasaBox({
                border={`1px solid ${regenteColor}66`}
                boxShadow={`0 0 32px ${regenteColor}55, 0 0 80px ${regenteColor}28, 0 12px 60px rgba(0,0,0,0.6)`}
                display="flex" flexDirection="column">
-            <SpaceBg overlay="rgba(8,13,30,0.38)" />
+            <SpaceBg overlay="rgba(8,13,30,0.38)" quieto />
             <Box as="button" onClick={() => setOpen(false)} position="absolute" top={3} right={3} zIndex={3}
                  w="36px" h="36px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
                  bg="rgba(0,0,0,0.6)" border={`1px solid ${astrologiaTxt}66`} color={astrologiaTxt} cursor="pointer"
@@ -608,7 +623,8 @@ function CasaBox({
               <Box h="1px" mb={4} bgGradient={`linear(to-r, transparent, ${astrologiaTxt}44, transparent)`} />
               <Text color={`${astrologiaTxt}e6`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.85" letterSpacing="0.015em"
                     style={{ whiteSpace: "pre-wrap", textShadow: `0 0 8px ${astrologiaTxt}44` }}>
-                {renderConNegritas(textoSel, astrologiaTxt)}
+                {/* Misma entrada que el texto de los cómics: palabra a palabra, con calma. */}
+                <PalabrasVivas texto={textoSel} colorNegrita={astrologiaTxt} retraso={0.5} total={1.1} />
               </Text>
             </Box>
           </Box>

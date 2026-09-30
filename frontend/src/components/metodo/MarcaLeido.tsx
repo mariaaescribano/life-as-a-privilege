@@ -1,6 +1,7 @@
 import React from "react";
 import { useT } from "../../i18n";
 import { Box, Flex, Text } from "@chakra-ui/react";
+import { fondoDeDisciplina } from "../../utils/fondoDisciplina";
 
 // El tick (mismo dibujo en la marquita de las tarjetas y en el aviso de los
 // popups de lectura: es LA misma marca).
@@ -54,6 +55,9 @@ export function MarcaLeido({
       h={size}
       borderRadius="full"
       bg={bg}
+      backgroundImage={fondoDeDisciplina(bg) ? `url('${fondoDeDisciplina(bg)}')` : undefined}
+      backgroundSize="cover"
+      backgroundPosition="center"
       border={`1px solid ${tinta}`}
       boxShadow={`0 0 10px ${tinta}66, 0 1px 4px rgba(0,0,0,0.5)`}
       position={inline ? "relative" : "absolute"}

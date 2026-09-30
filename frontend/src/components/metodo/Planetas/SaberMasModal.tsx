@@ -6,6 +6,8 @@ import { Glifo, GlifoSigno } from "../Glifo";
 import { SpaceBg } from "../SpaceBg";
 import { fetchAstroTexto } from "../../../data/astrologiaTextosApi";
 import { useT } from "../../../i18n";
+import { LetrasVivas } from "../../global/LetrasVivas";
+import { PalabrasVivas } from "../../global/PalabrasVivas";
 void React;
 
 interface SaberMasModalProps {
@@ -44,27 +46,6 @@ function RayaFina({ color, ...rest }: { color: string } & BoxProps) {
   );
 }
 
-/** Renderiza el contenido inline de un párrafo, aplicando **negritas** del color del cuerpo. */
-function renderInline(texto: string, color: string): React.ReactNode {
-  const partes = texto.split(/(\*\*[^*]+\*\*)/g);
-  return partes.map((parte, i) => {
-    if (parte.startsWith("**") && parte.endsWith("**")) {
-      return (
-        <span
-          key={i}
-          style={{
-            fontWeight: 700,
-            color,
-          }}
-        >
-          {parte.slice(2, -2)}
-        </span>
-      );
-    }
-    return <React.Fragment key={i}>{parte}</React.Fragment>;
-  });
-}
-
 /**
  * Renderiza un texto largo como bloque de párrafos. Cada línea en blanco
  * (\n\n) separa párrafos con un margen tight controlado, en vez del enorme
@@ -83,7 +64,9 @@ function renderTextoLargo(texto: string, color: string): React.ReactNode {
       textAlign="center"
       mt={pi === 0 ? 0 : { base: 2.5, md: 3 }}
     >
-      {renderInline(parrafo, color)}
+      {/* Misma entrada que el texto de los cómics: cada palabra se desvela con
+          calma; las **negritas** conservan su color. */}
+      <PalabrasVivas texto={parrafo} colorNegrita={color} retraso={pi * 0.3} total={0.9} />
     </Text>
   ));
 }
@@ -115,7 +98,7 @@ function renderResumen(resumen: string, color: string): React.ReactNode {
       textAlign="center"
       mt={i === 0 ? 0 : { base: 2, md: 2.5 }}
     >
-      {renderInline(linea, color)}
+      <PalabrasVivas texto={linea} colorNegrita={color} retraso={0.35 + i * 0.25} total={0.7} />
     </Text>
   ));
 }
@@ -226,7 +209,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontWeight="700"
           letterSpacing="0.04em"
         >
-          {n.cuerpo(cuerpo.key)} {n.idioma === "en" ? "in" : "en"}
+          <LetrasVivas texto={`${n.cuerpo(cuerpo.key)} ${n.idioma === "en" ? "in" : "en"}`} entrada onda={false} pasoEntrada={0.03} retraso={0.15} />
         </Text>
         <GlifoSigno nombre={signoData.name} color={color} size={28} />
         <Text
@@ -235,7 +218,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontWeight="700"
           letterSpacing="0.04em"
         >
-          {n.signo(signoData.name)}
+          <LetrasVivas texto={n.signo(signoData.name)} entrada onda={false} pasoEntrada={0.03} retraso={0.15} />
         </Text>
       </Flex>
 
@@ -274,7 +257,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
           fontWeight="700"
           letterSpacing="0.04em"
         >
-          {n.enCasa(cuerpo.key, casa)}
+          <LetrasVivas texto={n.enCasa(cuerpo.key, casa)} entrada onda={false} pasoEntrada={0.03} retraso={0.15} />
         </Text>
       </Flex>
 
@@ -325,7 +308,12 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
       px={{ base: 4, md: 10 }}
       py={{ base: 6, md: 10 }}
       bg="rgba(0,0,0,0.82)"
-      sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+      sx={{
+        backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+        "@keyframes astroVelo": { from: { opacity: 0 }, to: { opacity: 1 } },
+        animation: "astroVelo 0.35s ease-out both",
+        "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+      }}
       onClick={onClose}
     >
       <Box
@@ -333,6 +321,15 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         position="relative"
         w="100%"
         maxW="620px"
+        sx={{
+          "@keyframes astroPopup": {
+            from: { opacity: 0, transform: "translateY(18px) scale(0.965)", filter: "blur(6px)" },
+            to: { opacity: 1, transform: "none", filter: "none" },
+          },
+          animation: "astroPopup 0.6s cubic-bezier(0.22,1,0.36,1) both",
+          "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+        }}
+
         // Tamaño FIJO e igual para TODOS los popups del recorrido (arquetipos,
         // sol/luna/ascendente, planetas, casas, aspectos): misma anchura (620) y
         // misma altura (560) en escritorio, pase lo que pase con el contenido;
@@ -347,7 +344,7 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         display="flex"
         flexDirection="column"
       >
-        <SpaceBg overlay="rgba(8,13,30,0.38)" />
+        <SpaceBg overlay="rgba(8,13,30,0.38)" quieto />
 
         {/* X cerrar */}
         <Box
@@ -398,7 +395,9 @@ export function SaberMasModal({ isOpen, onClose, cuerpo, signo, casa, facet }: S
         >
 
           {/* Slide actual del carrusel (signo o casa) */}
-          {slides[idx]?.node}
+          <React.Fragment key={`${cuerpo.key}-${signo ?? ""}-${casa ?? ""}-${slides[idx]?.key}`}>
+            {slides[idx]?.node}
+          </React.Fragment>
 
           {/* Navegación del carrusel — solo cuando hay dos facetas (signo + casa).
               Se lee una, y con el botón se pasa a la siguiente (y se puede volver). */}

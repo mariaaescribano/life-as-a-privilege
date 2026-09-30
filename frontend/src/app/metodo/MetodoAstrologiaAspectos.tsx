@@ -23,6 +23,8 @@ import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { BotonCompania } from "../../components/global/BotonCompania";
 import { Reveal, RevealStagger, Float } from "../../components/global/Reveal";
 import { API_URL, astrologiaBg, astrologiaNom, astrologiaTxt, AstrologiaIcon } from "../../GlobalVariables";
+import { LetrasVivas } from "../../components/global/LetrasVivas";
+import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 
 // Check pequeño para marcar un elemento ya leído.
 const CheckIcon = ({ color, size = 14 }: { color: string; size?: number }) => (
@@ -48,13 +50,8 @@ function renderParrafos(texto: string, color: string): React.ReactNode {
     .map((parrafo, pi) => (
       <Text key={pi} color={`${color}ee`} fontSize={{ base: "md", md: "lg" }} lineHeight="1.8"
             whiteSpace="pre-wrap" mt={pi === 0 ? 0 : 3} style={{ textShadow: `0 0 8px ${color}33` }}>
-        {parrafo.split(/(\*\*[^*]+\*\*)/g).map((parte, i) =>
-          parte.startsWith("**") && parte.endsWith("**") ? (
-            <span key={i} style={{ fontWeight: 700, color, textShadow: `0 0 8px ${color}55` }}>{parte.slice(2, -2)}</span>
-          ) : (
-            <React.Fragment key={i}>{parte}</React.Fragment>
-          ),
-        )}
+        {/* Misma entrada que el texto de los cómics (palabra a palabra, con calma). */}
+        <PalabrasVivas texto={parrafo} colorNegrita={color} sombraNegrita={`0 0 8px ${color}55`} retraso={0.5 + pi * 0.3} total={0.9} />
       </Text>
     ));
 }
@@ -423,13 +420,27 @@ export default function MetodoAstrologiaAspectos() {
             display="flex" alignItems="center" justifyContent="center"
             px={{ base: 4, md: 10 }} py={{ base: 6, md: 10 }}
             bg="rgba(0,0,0,0.82)"
-            sx={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" }}
+            sx={{
+              backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+              "@keyframes astroVelo": { from: { opacity: 0 }, to: { opacity: 1 } },
+              animation: "astroVelo 0.35s ease-out both",
+              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+            }}
             onClick={() => setAbierto(null)}
             fontFamily="'EB Garamond', serif"
           >
             <Box
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
               position="relative" w="100%" maxW="620px"
+              sx={{
+          "@keyframes astroPopup": {
+            from: { opacity: 0, transform: "translateY(18px) scale(0.965)", filter: "blur(6px)" },
+            to: { opacity: 1, transform: "none", filter: "none" },
+          },
+          animation: "astroPopup 0.6s cubic-bezier(0.22,1,0.36,1) both",
+          "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+        }}
+
               // Mismo tamaño fijo que el resto de popups del recorrido (620×560
               // en escritorio); el contenido que sobra hace scroll dentro. Móvil
               // (sin h en base) igual que antes: crece con el contenido hasta maxH.
@@ -440,7 +451,7 @@ export default function MetodoAstrologiaAspectos() {
               boxShadow={`0 0 32px ${colorAsp}55, 0 0 80px ${colorAsp}28, 0 12px 60px rgba(0,0,0,0.6)`}
               display="flex" flexDirection="column"
             >
-              <SpaceBg overlay="rgba(8,13,30,0.38)" />
+              <SpaceBg overlay="rgba(8,13,30,0.38)" quieto />
 
               <Box as="button" onClick={() => setAbierto(null)} position="absolute" top={3} right={3} zIndex={3}
                    w="36px" h="36px" borderRadius="full" display="flex" alignItems="center" justifyContent="center"
@@ -465,14 +476,18 @@ export default function MetodoAstrologiaAspectos() {
                 </Flex>
                 <Text color={colorAsp} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" textAlign="center" mb={4}
                       letterSpacing="0.04em" style={{ textShadow: `0 0 12px ${colorAsp}66` }}>
-                  {cuerpoA && n.cuerpo(cuerpoA.key)} {n.aspecto(abierto.tipo).toLowerCase()} {cuerpoB && n.cuerpo(cuerpoB.key)}
+                  <LetrasVivas key={`${abierto.a}-${abierto.b}-${abierto.tipo}`}
+                               texto={`${cuerpoA ? n.cuerpo(cuerpoA.key) : ""} ${n.aspecto(abierto.tipo).toLowerCase()} ${cuerpoB ? n.cuerpo(cuerpoB.key) : ""}`.trim()}
+                               entrada onda={false} pasoEntrada={0.03} retraso={0.2} />
                 </Text>
 
                 {/* línea separadora con el color del aspecto */}
                 <Box h="1px" mb={5} bgGradient={`linear(to-r, transparent, ${colorAsp}66, transparent)`} />
 
                 {textoAbierto ? (
-                  renderParrafos(textoAbierto, astrologiaTxt)
+                  <React.Fragment key={`${abierto.a}-${abierto.b}-${abierto.tipo}`}>
+                    {renderParrafos(textoAbierto, astrologiaTxt)}
+                  </React.Fragment>
                 ) : (
                   <Text color={`${astrologiaTxt}aa`} fontStyle="italic" textAlign="center" fontSize={{ base: "md", md: "lg" }}>
                     {t("metodo.astro.aspectoSinLectura")}

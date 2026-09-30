@@ -316,7 +316,7 @@ export default function MetodoPsicologiaDonesEspejo() {
            aria-hidden={astroHecha ? undefined : true}
            transition="filter 0.4s ease">
         <Flex position="relative" zIndex={1} justify="center" px={{ base: 4, md: 8, lg: 12 }} pt={{ base: 8, md: 12 }} pb={{ base: 28, md: 36 }}>
-          <Flex direction="column" align="center" w="100%" maxW="1240px" gap={{ base: 7, md: 9 }}>
+          <Flex direction="column" align="center" w="100%" maxW="1000px" gap={{ base: 7, md: 9 }}>
 
             <Reveal direction="down" distance={16} duration={0.6} w="100%" display="flex" justifyContent="center">
             <MetodoStepHeader
@@ -346,7 +346,7 @@ export default function MetodoPsicologiaDonesEspejo() {
             {/* ════════ DOS COLUMNAS: lo que escribiste · arquetipos ════════
                  Cada columna con su propio <Reveal inView>: crecen con los datos
                  del usuario y envolver el conjunto caería en la trampa del `amount`. */}
-            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 7, lg: 6 }} align="stretch">
+            <Flex w="100%" direction={{ base: "column", lg: "row" }} gap={{ base: 8, lg: 6 }} align="stretch">
 
               {/* ── COLUMNA 1 · LO QUE ESCRIBISTE (solo respuestas) ── */}
               <Reveal inView once amount={0.2} direction="up" distance={30} scaleFrom={0.96} duration={0.6} flex="1" minW={0}>

@@ -7,6 +7,7 @@ import { FotoBox } from "./FotoBox";
 import { AvisoLeida } from "./MarcaLeido";
 import { ClavesRapidas } from "./ClavesRapidas";
 import { fisiologiaTxt, fisiologiaBg, fisiologiaNom } from "../../GlobalVariables";
+import { BotonCerrarDisciplina } from "./BotonCerrarDisciplina";
 import type { Celula } from "../../hardCoded/espacio/CelulasCuerpoData";
 
 const TXT = fisiologiaTxt;
@@ -238,33 +239,8 @@ export function FichaFisioModal({
         <Box position="absolute" inset="0" bg="rgba(0,0,0,0.45)" />
       </Box>
 
-      {/* X cerrar — chip oscuro para que resalte sobre cualquier fondo */}
-      <IconButton
-        aria-label={t("comun.cerrar")}
-        onClick={(e) => { e.stopPropagation(); onClose(); }}
-        position="fixed"
-        top={{ base: 3, md: 5 }}
-        right={{ base: 3, md: 5 }}
-        zIndex={10}
-        variant="ghost"
-        borderRadius="full"
-        w={{ base: "42px", md: "48px" }}
-        h={{ base: "42px", md: "48px" }}
-        minW={{ base: "42px", md: "48px" }}
-        bg="rgba(0,0,0,0.5)"
-        border={`1px solid ${accent}aa`}
-        boxShadow="0 2px 12px rgba(0,0,0,0.45)"
-        sx={{ backdropFilter: "blur(4px)" }}
-        _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: accent }}
-        _focus={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
-        _focusVisible={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
-        icon={
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill="#ffffff"
-            style={{ filter: `drop-shadow(0 0 5px ${accent}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))` }}>
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-          </Box>
-        }
-      />
+      {/* X cerrar: la de la casa, con la acuarela de Fisiología */}
+      <BotonCerrarDisciplina onClose={(e) => { e.stopPropagation(); onClose(); }} bg={fisiologiaBg} txt={fisiologiaTxt} zIndex={10} />
 
       {/* Flechas para pasar de una ficha a otra (por encima del box) */}
       {puedeNavegar && (

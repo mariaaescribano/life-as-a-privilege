@@ -395,6 +395,22 @@ export default function MetodoNutricionNutriente() {
             />
           </Reveal>
 
+          {/* Atajo a la rejilla: quien va de grupo en grupo solo tiene en el
+              header el anterior y el siguiente, así que aquí tiene la vuelta
+              directa a la lista («← Macronutrientes»). En el primer grupo no
+              se pinta: su «← Volver» del header ya hace exactamente eso. */}
+          {anteriorNutriente && (
+            <Reveal direction="right" distance={12} duration={0.5} delay={0.06} w="100%">
+              <Box as="button" type="button" onClick={() => navigate(rutaListaNutriente(n.key))}
+                   color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="700"
+                   letterSpacing="0.04em" mt={-2}
+                   _hover={{ opacity: 0.8 }}
+                   _focusVisible={{ outline: "2px solid white", outlineOffset: "3px", borderRadius: "md" }}>
+                {`← ${t(claveRejilla)}`}
+              </Box>
+            </Reveal>
+          )}
+
           {/* 2 · Box de lectura con la MISMA estética que las ilustraciones
               (ComicViewer en modo disciplina): foto grande `contain` con glow a
               la izquierda (arriba en móvil); a la derecha el título y la

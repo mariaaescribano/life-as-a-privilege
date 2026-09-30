@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { traducir, useT } from "../../i18n";
-import { Box, Flex, IconButton, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import { CelulaCard, CelulaModal } from "./celulasUi";
+import { BotonCerrarDisciplina } from "./BotonCerrarDisciplina";
 import { FisiologiaLoader } from "./comicLoaders";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import {
@@ -147,31 +148,7 @@ export function TusCelulasModal({
       </Box>
 
       {/* ── X cerrar ── */}
-      <IconButton
-        aria-label={t("comun.cerrar")}
-        onClick={onClose}
-        position="fixed"
-        top={{ base: 3, md: 5 }}
-        right={{ base: 3, md: 5 }}
-        zIndex={3}
-        variant="ghost"
-        borderRadius="full"
-        w={{ base: "42px", md: "48px" }}
-        h={{ base: "42px", md: "48px" }}
-        minW={{ base: "42px", md: "48px" }}
-        bg="rgba(0,0,0,0.4)"
-        border={`1px solid ${TXT}aa`}
-        sx={{ backdropFilter: "blur(4px)" }}
-        _hover={{ bg: "rgba(0,0,0,0.62)", borderColor: TXT }}
-        _focus={{ boxShadow: "none" }}
-        _focusVisible={{ boxShadow: "none" }}
-        icon={
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="24px" h="24px" fill="#ffffff"
-            style={{ filter: `drop-shadow(0 0 5px ${TXT}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))` }}>
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-          </Box>
-        }
-      />
+      <BotonCerrarDisciplina onClose={onClose} bg={BG} txt={TXT} zIndex={3} />
 
       {/* ── Contenido: hasta que TODAS las fotos estén cargadas, la animación de
           espera de Fisiología (el corazón latiendo). Luego, título + rejilla. ── */}

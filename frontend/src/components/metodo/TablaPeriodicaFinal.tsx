@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FlechaBonita } from "../global/FlechaBonita";
 import { useT } from "../../i18n";
-import { Box, Flex, IconButton, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { CIERRE_TABLA } from "./comicEstrellaAtomos";
 import { fisiologiaBg, fisiologiaTxt } from "../../GlobalVariables";
+import { BotonCerrarDisciplina } from "./BotonCerrarDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────
 // EL CIERRE del cómic «Cómo una estrella forma los átomos». Se abre al terminar
@@ -72,32 +73,7 @@ export function TablaPeriodicaFinal({ onClose, onContinue }: TablaPeriodicaFinal
       </Box>
 
       {/* X de cerrar, en el mismo sitio que la del visor. */}
-      <IconButton
-        aria-label={t("comun.cerrar")}
-        onClick={onClose}
-        position="fixed"
-        top={{ base: 3, md: 5 }}
-        right={{ base: 3, md: 5 }}
-        zIndex={12}
-        variant="ghost"
-        borderRadius="full"
-        w={{ base: "42px", md: "48px" }}
-        h={{ base: "42px", md: "48px" }}
-        minW={{ base: "42px", md: "48px" }}
-        bg="rgba(0,0,0,0.5)"
-        border={`1px solid ${fisiologiaTxt}aa`}
-        boxShadow="0 2px 12px rgba(0,0,0,0.45)"
-        sx={{ backdropFilter: "blur(4px)" }}
-        _hover={{ bg: "rgba(0,0,0,0.7)", borderColor: fisiologiaTxt }}
-        _focus={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
-        _focusVisible={{ boxShadow: "0 2px 12px rgba(0,0,0,0.45)" }}
-        icon={
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="26px" h="26px" fill="#ffffff"
-               style={{ filter: `drop-shadow(0 0 5px ${fisiologiaTxt}) drop-shadow(0 1px 2px rgba(0,0,0,0.8))` }}>
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-          </Box>
-        }
-      />
+      <BotonCerrarDisciplina onClose={onClose} bg={fisiologiaBg} txt={fisiologiaTxt} />
 
       {/* La pantalla ocupa el viewport justo y no lo desborda: nada de barra de
           scroll en un cierre que cabe entero. */}

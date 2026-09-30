@@ -74,10 +74,14 @@ export const SPACE_IMG = "/img/astrologia/space.webp";
 
 interface SpaceBgProps {
   overlay?: string;
+  /** Sin vida: ni estrellas que titilan, ni estrella fugaz, ni deriva de la
+   *  foto. Para los popups de LECTURA: quien lee sobre sí mismo tiene que poder
+   *  centrarse, y nada debe moverse en los bordes de su atención. */
+  quieto?: boolean;
 }
 
 /* Fondo espacial con degradado cósmico de respaldo */
-export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)" }: SpaceBgProps) => (
+export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)", quieto = false }: SpaceBgProps) => (
   <Box
     position="absolute"
     inset="0"
@@ -99,10 +103,10 @@ export const SpaceBg = ({ overlay = "rgba(8,13,30,0.25)" }: SpaceBgProps) => (
       w="100%"
       h="100%"
       style={{ objectFit: "cover", objectPosition: "center", opacity: 1 }}
-      animation={`${deriva} 46s ease-in-out infinite alternate`}
+      animation={quieto ? undefined : `${deriva} 46s ease-in-out infinite alternate`}
       sx={SIN_MOV}
     />
     <Box position="absolute" inset="0" style={{ background: overlay }} />
-    <CieloVivo />
+    {!quieto && <CieloVivo />}
   </Box>
 );

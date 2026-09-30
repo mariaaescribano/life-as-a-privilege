@@ -6,6 +6,7 @@ import { FotoBox, glowSuave } from "./FotoBox";
 import { AppleLoader } from "./AppleLoader";
 import { usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { nutricionBg, nutricionNom, nutricionTxt } from "../../GlobalVariables";
+import { BotonCerrarDisciplina } from "./BotonCerrarDisciplina";
 import {
   ORDEN_GRUPOS_MOLECULA, MACRO_COLOR, type Alimento, type Molecula,
 } from "../../hardCoded/espacio/AlimentosNutricion";
@@ -259,19 +260,13 @@ export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean;
           cubre SIEMPRE toda la pantalla (por encima del header sticky). */}
       <Box position="fixed" inset={0} w="100vw" h="100dvh" zIndex={2000} overflowY="auto"
            bg={nutricionBg} fontFamily="'EB Garamond', serif">
-      <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay={`${nutricionBg}e6`} />
+      {/* Acuarela de Nutrición con un velo NEGRO encima: que no se coma la
+          pantalla pero que la presencia siga. Los títulos van en blanco. */}
+      <DisciplinaBgLayer nom={nutricionNom} borderRadius="0" overlay="rgba(0,0,0,0.6)" />
 
       <Box position="relative" zIndex={1} minH="100%" px={{ base: 4, md: 10, lg: 16 }} py={{ base: 8, md: 12 }}>
         {/* Cerrar */}
-        <Box as="button" onClick={onClose} position="fixed" top={{ base: 3, md: 5 }} right={{ base: 3, md: 5 }}
-             zIndex={2} w="42px" h="42px" borderRadius="full" display="flex" alignItems="center"
-             justifyContent="center" bg={`${nutricionTxt}18`} border={`1px solid ${nutricionTxt}44`}
-             color={nutricionTxt} cursor="pointer" sx={{ backdropFilter: "blur(4px)" }}
-             transition="all 0.18s" _hover={{ bg: `${nutricionTxt}2e` }}>
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w="22px" h="22px" fill="currentColor">
-            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
-          </Box>
-        </Box>
+        <BotonCerrarDisciplina onClose={onClose} bg={nutricionBg} txt={nutricionTxt} zIndex={2} />
 
         {sel ? (
           <AlimentoDetalle a={sel} onVolver={() => setSel(null)} />
@@ -283,11 +278,11 @@ export function NutricionMaterialesModal({ isOpen, onClose }: { isOpen: boolean;
         ) : (
           <Flex direction="column" align="center" w="100%" maxW="1100px" mx="auto" gap={{ base: 6, md: 8 }}>
             <Flex direction="column" align="center" gap={2} textAlign="center">
-              <Text color={nutricionTxt} fontSize={{ base: "2xl", md: "4xl" }} fontWeight={800}
+              <Text color="white" fontSize={{ base: "2xl", md: "4xl" }} fontWeight={800}
                     letterSpacing="0.04em" lineHeight="1.1">
                 {t("metodo.alimentos.materiales")}
               </Text>
-              <Text color={`${nutricionTxt}cc`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" maxW="560px">
+              <Text color="whiteAlpha.800" fontSize={{ base: "sm", md: "md" }} fontStyle="italic" maxW="560px">
                 {t("metodo.alimentos.elige")}
               </Text>
             </Flex>
