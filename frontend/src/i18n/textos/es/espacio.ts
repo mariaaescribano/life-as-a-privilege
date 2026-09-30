@@ -240,7 +240,7 @@ export const espacio = {
   // ── Los dos test guardados (Doṣhas y Medicina China) ───────────────────
   "espacio.test.doshas": "Test de los Doṣhas",
   "espacio.test.descubreDosha": "Descubre tu Doṣha",
-  "espacio.test.doshaPrincipal": "Tu Doṣha principal es",
+  "espacio.test.doshaPrincipal": "Tu Doṣha predominante es",
   "espacio.test.eligeOpcion":
     "Para cada pregunta, elige la opción que mejor te describa. No hay respuestas correctas ni incorrectas: confía en tu primera intuición.",
   "espacio.test.recalcular": "Recalcular",

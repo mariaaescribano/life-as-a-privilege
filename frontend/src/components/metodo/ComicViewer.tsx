@@ -198,6 +198,10 @@ interface ComicViewerProps {
    *  quitaría contraste en vez de dárselo. En las páginas SIN foto (los tests,
    *  donde el texto ocupa todo el ancho del box) se aplica un punto más fuerte. */
   veloOscuro?: number;
+  /** Velo NEGRO (0–1) del FONDO a pantalla completa, el de detrás del box. Si no
+   *  se pasa, manda el de serie del modo. Sirve para oscurecer el fondo sin
+   *  tocar el box (ese lo regula `veloOscuro`). */
+  veloFondo?: number;
   /** ESCAPARATE: el cuerpo del texto sale difuminado (ilegible) y solo se leen
    *  el antetítulo y el título. Es para las páginas públicas de presentación:
    *  se ve que ahí hay una lectura entera, pero no se regala. Se desactiva la
@@ -356,6 +360,7 @@ export function ComicViewer({
   esperarFondo,
   clavesTinta,
   veloOscuro,
+  veloFondo,
   textoBorroso,
   luzFoto,
   circular,
@@ -409,7 +414,9 @@ export function ComicViewer({
   // de blur (lo llevó un tiempo y emborronaba fotos buenas). Lo que la separa
   // del box del texto es solo el velo oscuro de encima, un punto más cargado
   // en el modo disciplina normal que en `fondoNitido`.
-  const bgOverlay = isDisciplinaMode
+  const bgOverlay = veloFondo != null
+    ? `rgba(0,0,0,${Math.min(veloFondo, 1)})`
+    : isDisciplinaMode
     ? (fondoNitido ? "rgba(0,0,0,0.38)" : "rgba(0,0,0,0.45)")
     : "rgba(0,0,0,0.35)";
   const [index, setIndex] = useState(() =>

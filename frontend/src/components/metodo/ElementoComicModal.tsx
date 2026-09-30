@@ -129,7 +129,12 @@ export function ElementoComicModal({
               // La tinta china es muy clara (niebla casi blanca) y aquí se
               // escribe en blanco: sin apagar un poco la foto, el texto y los
               // enunciados del test se pierden contra el cuadro.
-              veloOscuro={0.4}
+              // El velo del BOX baja (0,4 → 0,2: la pintura respira) y el del
+              // FONDO de detrás sube (0,45 → 0,7): el box destaca sobre un
+              // fondo apagado, y la letra blanca sigue leyéndose gracias a
+              // su sombra y a los paneles oscuros de las opciones.
+              veloOscuro={0.2}
+              veloFondo={0.7}
               // Sin `fondoNitido`: usamos EXACTAMENTE el mismo box, estructura y
               // fondo que las Ilustraciones de TCM (mismo glow de color, mismo
               // velo y desenfoque), por coherencia. Solo cambian la foto y el

@@ -66,10 +66,6 @@ const giraLento = keyframes`
 // El saludo se anima UNA sola vez por sesión: al volver a /home desde otra
 // página sale ya puesto, sin repetir la entrada.
 let saludoAnimado = false;
-// Segundos que el mandala espera tras el título (solo cuando el saludo se
-// escribe): que el titular llegue primero y el mandala entre después, sin
-// dejar la pantalla vacía.
-const ESPERA_MANDALA = 0.9;
 const SIN_MOVIMIENTO = { "@media (prefers-reduced-motion: reduce)": { animation: "none !important" } };
 
 // Orden del Método: Astrología → Psicología → Fisiología → Nutrición →
@@ -830,6 +826,14 @@ const Home = () => {
   // bloqueados y luego «saltarían» a desbloqueados (el doble render).
   const suscripcionesCargadas = metodoSuscrito !== null;
   const mandalaListo = img != null && imagesReady && suscripcionesCargadas;
+  // El mandala espera a que el saludo casi haya terminado de escribirse: entra
+  // cuando el saludo está en sus últimas letras (0,03 s por letra), no antes
+  // (se pisarían y habría que elegir a cuál mirar) ni cuando ya ha acabado del
+  // todo (dejaría la pantalla vacía de más). Depende de lo largo que sea el
+  // saludo (nombre incluido). Si el saludo no se anima (ya se vio en la sesión),
+  // no espera nada.
+  const letrasSaludo = t("home.bienvenida", { coma: name ? `, ${name}` : "" }).replace(/\s/g, "").length;
+  const esperaMandala = animarSaludo ? Math.max(0.5, letrasSaludo * 0.03 - 0.1) : 0;
 
   // Botón «Continuar por dónde lo dejé»: lleva a la última página del Mapa que
   // el usuario visitó (guardada en localStorage por SiteHeader) y se pinta con
@@ -1079,7 +1083,7 @@ const Home = () => {
                 boxShadow="0 0 24px rgba(255,255,255,0.45), 0 0 56px rgba(255,255,255,0.2), 0 0 90px rgba(180,255,245,0.14)"
                 border="2px solid rgba(255,255,255,0.9)"
                 zIndex={10}
-                animation={`${entraFoto} 1.1s cubic-bezier(0.22,1,0.36,1) ${0.1 + (animarSaludo ? ESPERA_MANDALA : 0)}s both, ${respiraFoto} 6s ease-in-out ${1.4 + (animarSaludo ? ESPERA_MANDALA : 0)}s infinite`}
+                animation={`${entraFoto} 1.1s cubic-bezier(0.22,1,0.36,1) ${0.1 + esperaMandala}s both, ${respiraFoto} 6s ease-in-out ${1.4 + esperaMandala}s infinite`}
                 sx={SIN_MOVIMIENTO}
               >
                 <Image src={img} alt={t("home.foto")} w="100%" h="100%" objectFit="cover" />
@@ -1281,7 +1285,7 @@ const Home = () => {
                     <Box
                       w="100%"
                       h="100%"
-                      animation={`${entraCirculo} 0.95s cubic-bezier(0.22,1,0.36,1) ${0.45 + (animarSaludo ? ESPERA_MANDALA : 0) + index * 0.16}s both`}
+                      animation={`${entraCirculo} 0.95s cubic-bezier(0.22,1,0.36,1) ${0.45 + esperaMandala + index * 0.16}s both`}
                       sx={SIN_MOVIMIENTO}
                     >
                     {abierta ? (

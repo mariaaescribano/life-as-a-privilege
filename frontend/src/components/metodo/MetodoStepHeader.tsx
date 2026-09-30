@@ -328,8 +328,7 @@ export function MetodoStepHeader({
   // guarda estado: así no hay re-render por cada píxel ni el bucle infinito de
   // «mido → cambio tamaño → el observer vuelve a medir» que hubo antes.
   const titleWrapperRef = useRef<HTMLDivElement>(null);
-  // TÍTULO CON MAGIA: en TODOS los recorridos (/metodo/…) salvo Cultura, que va
-  // por su cuenta, el título no aparece puesto: sus letras suben, se enfocan y se
+  // TÍTULO CON MAGIA: en TODOS los recorridos (/metodo/…), Cultura incluida, el título no aparece puesto: sus letras suben, se enfocan y se
   // encienden en cadena, y una luz las recorre una vez. La luz va pegada a la entrada (cada letra se ilumina al aparecer), así que
   // todo dura poco. Arranca cuando el header ya casi ha entrado (0,25 s). Astrología no pasa `nom` (usa `space`).
   // Fuera del recorrido (portadas públicas, cursos, materiales) el título sigue
@@ -339,7 +338,7 @@ export function MetodoStepHeader({
   // Los cursos de cada disciplina (/aprendizaje/cursos/…) y sus presentaciones
   // públicas (/d/…) llevan la misma magia, en TODAS las disciplinas.
   const enPublica = ruta.startsWith("/aprendizaje/cursos/") || ruta.startsWith("/d/");
-  const tituloMagico = typeof title === "string" && ((enRecorrido && nom !== culturaNom) || enPublica) && (!!nom || !!space);
+  const tituloMagico = typeof title === "string" && (enRecorrido || enPublica) && (!!nom || !!space);
   // Se activa PARA un título concreto: si el header sigue montado y cambia de
   // título (p. ej. de una sefirá a la siguiente), el nuevo entra de cero.
   const [tituloActivoPara, setTituloActivoPara] = useState<string | null>(null);
@@ -479,7 +478,10 @@ export function MetodoStepHeader({
                 // Salvo en `multiline`, donde el título es una frase y lo que
                 // queremos es justo lo contrario: que baje de línea.
                 whiteSpace={multiline ? "normal" : "nowrap"}
-                overflow={multiline ? "visible" : "hidden"}
+                // Con el título mágico también visible: la luz que recorre las letras
+                // lleva un halo (drop-shadow) y con `hidden` se cortaba en seco contra
+                // el borde de la caja del texto — un filo cuadrado muy visible.
+                overflow={multiline || tituloMagico ? "visible" : "hidden"}
                 // El rabito de la "g" (descendente) baja por debajo de la línea
                 // base; con overflow:hidden se recortaría. Este padding inferior
                 // entra dentro de la zona visible y deja espacio para que se vea

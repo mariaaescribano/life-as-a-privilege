@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "../../i18n";
-import { Box, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
 import { getUserMe } from "../../api/userMe";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -40,6 +40,9 @@ export default function MetodoNutricionMicrobiota() {
   const bacterias = useMicrobiotaBacterias();
   const moleculas = useMicrobiotaTarjetas();
   const [loading, setLoading] = useState(true);
+  // Columnas de las rejillas: el retraso de cada tarjeta lo marca su COLUMNA, no
+  // su índice global (si no, las de abajo esperarían segundos ya a la vista).
+  const columnas = useBreakpointValue({ base: 1, md: 3 }) ?? 1;
   const [fichaIdx, setFichaIdx] = useState<number | null>(null);
   const [bacteriaIdx, setBacteriaIdx] = useState<number | null>(null);
   const { leido, marcarLeido, snapshot } = useLeidos("metodo-nutricion");
@@ -112,13 +115,12 @@ export default function MetodoNutricionMicrobiota() {
             </Text>
           </Reveal>
 
-          {/* ⚠ Tarjetas en cascada AL MONTAR, cada una con su Reveal (regla de
-              Nutrición: nada de inView ni de envolver la rejilla entera — con
-              eso había tarjetas que se quedaban a opacidad 0). */}
+          {/* Cada tarjeta lleva SU Reveal con inView (nunca uno para la rejilla
+              entera): sale al asomar al bajar, con el retraso de su columna. */}
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
             {bacterias.map((bac, i) => (
-              <Reveal key={bac.key} direction="up" distance={18} scaleFrom={0.94}
-                      duration={0.55} delay={0.16 + Math.min(i * 0.06, 0.5)}>
+              <Reveal key={bac.key} inView amount={0.15} direction="up" distance={26} scaleFrom={0.92}
+                      duration={0.65} delay={(i % columnas) * 0.14}>
                 <TarjetaNutri titulo={bac.titulo} foto={bac.foto}
                               visto={leido(CAMPO_BACTERIAS, bac.key)}
                               onClick={() => abrirBacteria(i)} />
@@ -127,7 +129,7 @@ export default function MetodoNutricionMicrobiota() {
           </SimpleGrid>
 
           {/* ── Separador horizontal con el mandala en medio ── */}
-          <Reveal direction="up" distance={12} delay={0.2} duration={0.6} w="100%">
+          <Reveal inView amount={0.3} direction="up" distance={12} duration={0.6} w="100%">
             <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" py={{ base: 2, md: 3 }}>
               <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.75))" />
               {/* El mandala flota despacio, como en las cesuras de /elMetodo. */}
@@ -146,19 +148,18 @@ export default function MetodoNutricionMicrobiota() {
           </Reveal>
 
           {/* ── Las moléculas que fabrican ── */}
-          <Reveal direction="up" distance={18} delay={0.25} duration={0.6} w="100%" display="flex" justifyContent="center">
+          <Reveal inView amount={0.3} direction="up" distance={18} duration={0.6} w="100%" display="flex" justifyContent="center">
             <Text color="rgba(255,255,255,0.92)" fontSize={{ base: "sm", md: "md" }} fontStyle="italic"
                   textAlign="center" lineHeight="1.8" maxW="620px">
               {t("metodo.nutri.microbiotaMoleculas")}
             </Text>
           </Reveal>
 
-          {/* Misma cascada al montar que las bacterias, arrancando un poco más
-              tarde para que la página se ponga sola de arriba abajo. */}
+          {/* Misma entrada por tarjeta que las bacterias. */}
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 4, md: 6 }} w="100%">
             {moleculas.map((tar, i) => (
-              <Reveal key={tar.key} direction="up" distance={18} scaleFrom={0.94}
-                      duration={0.55} delay={0.3 + Math.min(i * 0.06, 0.5)}>
+              <Reveal key={tar.key} inView amount={0.15} direction="up" distance={26} scaleFrom={0.92}
+                      duration={0.65} delay={(i % columnas) * 0.14}>
                 <TarjetaNutri titulo={tar.titulo} foto={tar.foto}
                               visto={leido(CAMPO_MOLECULAS, tar.key)}
                               onClick={() => abrirMolecula(i)} />
