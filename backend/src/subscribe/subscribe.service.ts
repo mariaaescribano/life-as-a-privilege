@@ -43,7 +43,23 @@ export class SubscribeService {
       console.error('[subscribe] no se pudo guardar el suscriptor', email, error.message);
     }
 
+    this.anadirAlFichero(email);
+
     await this.sendNotification(email, origen);
+  }
+
+  /** Copia en backend/data/subscribers.txt (la BD manda; el fichero es solo copia). */
+  private anadirAlFichero(email: string): void {
+    const ruta = path.join(process.cwd(), 'data', 'subscribers.txt');
+    try {
+      if (!fs.existsSync(ruta)) return;
+      const contenido = fs.readFileSync(ruta, 'utf-8');
+      const ya = contenido.split(/\r?\n/).some((l) => l.trim().toLowerCase() === email.toLowerCase());
+      if (ya) return;
+      fs.appendFileSync(ruta, (contenido.endsWith('\n') ? '' : '\n') + email + '\n', 'utf-8');
+    } catch (err) {
+      console.warn('[subscribe.addEmail] no se pudo tocar subscribers.txt:', err);
+    }
   }
 
   // ───────────────────────────────────────────────────────────────────────────

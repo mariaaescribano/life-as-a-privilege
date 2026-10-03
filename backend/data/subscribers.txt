@@ -1,24 +1,23 @@
-# YA NO SE USA. Los suscriptores estan en la tabla 'suscriptor' de Supabase
-# y se leen en /admin/suscriptores. Esto es la copia vieja (hasta sept. 2026).
+# Copia de los suscriptores de la tabla 'suscriptor' de Supabase (la BD manda;
+# se leen en /admin/suscriptores). Cada alta nueva se apunta tambien aqui.
 SUSCRIBERS
 
-mariaescribanoarce3@gmail.com
-nickreal03@gmail.com
-xeniags.2007@gmail.com
-alessandro20rlchess@gmail.com
-valentunaandrade08@gmail.com
-maanllpl@gmail.com
-andllor055@gmail.com
-derekmartroz@gmail.com
-asunarce@gmail.com
-evelynmontano20@gmail.com
-susana.izquierdo.danot@gmail.com
-ekaterina.artamonova.korneeva@gmail.com
-mariagb71@hotmail.com
-antoniogolmar@yahoo.com
-lmengibarmartinez@gmail.com
-jmr.vadillo@gmail.com
 miscomprasyolanda@gmail.com
-
-
+jmr.vadillo@gmail.com
+lmengibarmartinez@gmail.com
+antoniogolmar@yahoo.com
 cristianburgos2004@gmail.com
+mariagb71@hotmail.com
+ekaterina.artamonova.korneeva@gmail.com
+susana.izquierdo.danot@gmail.com
+evelynmontano20@gmail.com
+asunarce@gmail.com
+derekmartroz@gmail.com
+andllor055@gmail.com
+maanllpl@gmail.com
+valentunaandrade08@gmail.com
+alessandro20rlchess@gmail.com
+xeniags.2007@gmail.com
+nickreal03@gmail.com
+celeste_izelaar@hotmail.com
+irenefg22@gmail.com

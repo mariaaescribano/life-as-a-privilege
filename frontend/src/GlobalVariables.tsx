@@ -42,9 +42,8 @@ export const INSTAGRAM_URL = "https://www.instagram.com/maria_escribano_arce/";
 // cambia AQUÍ y los dos sitios se enteran. Vacío = los dos salen apagados.
 export const WHATSAPP_COMUNIDAD_URL = "https://chat.whatsapp.com/G4UeoaKrrSoLrAi6vfAaVF";
 
-/** Enlace de WhatsApp con el mensaje ya escrito (opcional). */
-export const whatsappUrl = (texto?: string): string =>
-  `https://wa.me/${WHATSAPP_TELEFONO}${texto ? `?text=${encodeURIComponent(texto)}` : ""}`;
+/** Enlace de WhatsApp al chat vacío: sin mensaje escrito, que lo escriba cada persona. */
+export const whatsappUrl = (): string => `https://wa.me/${WHATSAPP_TELEFONO}`;
 
 // COLORES
 export const turquesa = "#48C0B5";

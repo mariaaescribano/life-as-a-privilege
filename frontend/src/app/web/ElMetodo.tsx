@@ -878,7 +878,7 @@ export default function ElMetodo() {
               que pensar cómo empezar, que es justo donde la gente se cae. */}
           <Flex
             as="a"
-            href={whatsappUrl(t("elMetodo.hero.escribemeTexto"))}
+            href={whatsappUrl()}
             target="_blank"
             rel="noopener noreferrer"
             align="center"

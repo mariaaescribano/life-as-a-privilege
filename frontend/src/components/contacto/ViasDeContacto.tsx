@@ -219,7 +219,7 @@ export function ViasDeContacto({ onEscribir }: { onEscribir: () => void }) {
             icono={<IconoWhatsapp size="30px" />}
             titulo={t("contacto.via.whatsapp")}
             texto={t("contacto.via.whatsappTexto")}
-            href={whatsappUrl(t("contacto.via.whatsappMensaje"))}
+            href={whatsappUrl()}
           />
           <Via
             i={4}

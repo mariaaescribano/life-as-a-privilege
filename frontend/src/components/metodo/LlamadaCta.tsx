@@ -237,7 +237,7 @@ export function BotonesFlotantes({ onTest }: { onTest: () => void }) {
       <Flex
         {...PILDORA_FLOTANTE}
         as="a"
-        href={whatsappUrl(t("elMetodo.llamada.whatsappTexto"))}
+        href={whatsappUrl()}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={t("elMetodo.llamada.whatsapp")}
@@ -478,7 +478,7 @@ export function PopupLlamada({ isOpen, onClose, onAgendar }: PopupLlamadaProps) 
                 una ilustración, no un color liso, y tapársela es perderla. */}
             <Flex
               as="a"
-              href={whatsappUrl(t("elMetodo.llamada.whatsappTexto"))}
+              href={whatsappUrl()}
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
