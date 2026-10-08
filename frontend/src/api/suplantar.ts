@@ -104,7 +104,9 @@ export async function entrarComo(userId: string): Promise<UsuarioSuplantado> {
   // las de esta persona y se vería lo que no es.
   cerrarSesionLocal();
 
-  escribirSesion({ token, userId: user.id, name: user.name, img: user.img ?? null, isAdmin: null });
+  // Sin foto, la misma por defecto que pone el login normal: Home espera a que
+  // `img` exista para pintar el mandala y, sin ella, se quedaría cargando siempre.
+  escribirSesion({ token, userId: user.id, name: user.name, img: user.img || "/img/icono/noImg.webp", isAdmin: null });
   try {
     localStorage.setItem(CLAVE_SUPLANTACION, JSON.stringify(user));
     localStorage.setItem(CLAVE_ADMIN, JSON.stringify(admin));
