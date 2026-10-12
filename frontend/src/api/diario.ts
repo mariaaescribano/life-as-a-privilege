@@ -1,13 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// DIARIO DE SESIONES — las notas que María escribe tras una sesión y que la
-// persona lee en /diario.
+// DIARIO DE SESIONES — las notas que María escribe sobre una persona tras una
+// sesión. Solo las ve la admin: la persona NO tiene acceso (ni ruta ni API).
 //
 // No confundir con `notas` (el mini-diario que escribe el propio usuario dentro
 // del recorrido, en /metodo/...): aquello lo escribe él, esto se lo escriben.
-//
-// Dos caras del mismo recurso:
-//   · listarMias()  → lo que lee la persona. Solo entradas publicadas.
-//   · listarDe()    → lo que ve la admin. Todo, borradores incluidos.
 // ─────────────────────────────────────────────────────────────────────────────
 import axios from "axios";
 import { API_URL } from "../GlobalVariables";
@@ -64,32 +60,6 @@ const saneada = (e: any): EntradaDiario | null => {
 
 const lista = (data: any): EntradaDiario[] =>
   (Array.isArray(data) ? data : []).map(saneada).filter((e): e is EntradaDiario => e !== null);
-
-// ── LA PERSONA ───────────────────────────────────────────────────────────────
-
-/** Las entradas publicadas de la sesión abierta. */
-export async function listarMias(): Promise<EntradaDiario[]> {
-  const userId = localStorage.getItem("userId");
-  if (!userId) return [];
-  try {
-    const res = await axios.get(`${API_URL}/diario/${userId}`, { headers: auth() });
-    return lista(res.data);
-  } catch {
-    // Sin diario no se pinta nada: mejor nada que una caja rota.
-    return [];
-  }
-}
-
-/** Apaga la marca de «nuevo». Si falla, da igual: se reintenta al volver a entrar. */
-export async function marcarLeidas(): Promise<void> {
-  const userId = localStorage.getItem("userId");
-  if (!userId) return;
-  try {
-    await axios.patch(`${API_URL}/diario/${userId}/leidas`, {}, { headers: auth() });
-  } catch {
-    /* silencioso */
-  }
-}
 
 // ── LA ADMIN ─────────────────────────────────────────────────────────────────
 

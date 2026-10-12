@@ -297,9 +297,9 @@ export interface LineaDeVidaData {
 //   fila  −1, −2…  → una y dos generaciones por encima     |  +1 → por debajo
 //   col   −1, −2…  → a su izquierda                        |  +1… → a su derecha
 //
-// Persistencia: data.genograma = PersonaGenograma[]. Las fotos NO van en el
-// blob: se suben al bucket (POST /upload/genograma/:userId) y aquí se guarda
-// solo su URL — si no, el `data` reventaría el límite de tamaño del body.
+// Persistencia: data.genograma = PersonaGenograma[]. Los familiares no llevan
+// foto (se dibuja su inicial, ver AvatarPersona): no se guardan fotos de
+// terceros. Una `foto` que venga de datos antiguos se descarta al cargar.
 //
 // ✍️  No cambies las `key` de las preguntas tras publicar (se perderían las
 //     respuestas guardadas con esa clave).
@@ -312,8 +312,6 @@ export interface PersonaGenograma {
   nombre: string;
   /** Parentesco (Madre, Padre, Hermana, Abuela materna…). Libre. */
   parentesco?: string;
-  /** URL pública de su foto (bucket). Sin foto se dibuja su inicial. */
-  foto?: string;
   /** Fila relativa a la usuaria: negativa hacia arriba, positiva hacia abajo. */
   fila: number;
   /** Columna relativa a la usuaria: negativa a la izquierda, positiva a la derecha. */
@@ -379,7 +377,6 @@ export function personasGenograma(data: LineaDeVidaData): PersonaGenograma[] {
       id: typeof p.id === "string" && p.id ? p.id : `persona-${i}`,
       nombre: typeof p.nombre === "string" ? p.nombre : "",
       parentesco: typeof p.parentesco === "string" ? p.parentesco : "",
-      foto: typeof p.foto === "string" ? p.foto : undefined,
       fila: Number.isFinite(p.fila) ? Number(p.fila) : -1,
       col: Number.isFinite(p.col) ? Number(p.col) : 0,
       simbolos: (Array.isArray(p.simbolos) ? p.simbolos : [])

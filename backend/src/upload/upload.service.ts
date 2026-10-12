@@ -55,31 +55,6 @@ export class UploadService {
     return { url: publicURL };
   }
 
-  // Foto de un familiar del genograma. A diferencia de la foto de perfil, aquí
-  // NO se toca la tabla `user` ni se borra nada: son varias fotos por usuaria
-  // (una por familiar) y quien decide qué se guarda es el propio recorrido, que
-  // conserva la URL devuelta en su columna `data`.
-  async uploadGenogramaPic(userId: string, file: Express.Multer.File) {
-    if (!file) throw new Error('No se ha recibido ninguna foto');
-    const extension = (file.originalname.split('.').pop() || 'jpg').toLowerCase();
-    // Nombre único por subida: la URL pública siempre cambia y ninguna caché
-    // (navegador o CDN de Supabase) puede servir una foto antigua.
-    const fileName = `${userId}-${Date.now()}.${extension}`;
-    const bucket = this.databaseService.getClient().storage.from('img');
-
-    const { error: uploadError } = await bucket.upload(
-      `genograma/${fileName}`,
-      file.buffer,
-      { contentType: file.mimetype, upsert: true }
-    );
-    if (uploadError) {
-      console.log('Error al subir la foto del genograma:', uploadError);
-      throw new Error(uploadError.message);
-    }
-
-    return { url: bucket.getPublicUrl(`genograma/${fileName}`).data.publicUrl };
-  }
-
   // Portada de un vídeo de la sección «Vídeos». Como el genograma, no toca
   // ninguna tabla: sube el archivo y devuelve la URL, y quien la guarda es la
   // fila de `video` que se está creando o editando en /admin/videos.

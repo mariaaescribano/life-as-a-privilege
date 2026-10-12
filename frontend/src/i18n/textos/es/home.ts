@@ -34,7 +34,6 @@ export const home = {
 
   // ── Pines del diario (abajo a la derecha, solo con diario de terapias) ──
   "home.pin.misNotas": "Mis notas",
-  "home.pin.diarioTerapia": "Diario de terapia",
 
   "home.pago.titulo": "Pago de {disciplina} realizado",
   "home.pago.puedesEmpezar": "Ya puedes empezar la {ordinal} disciplina del Mapa.",

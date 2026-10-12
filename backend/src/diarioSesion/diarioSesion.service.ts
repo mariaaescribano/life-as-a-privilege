@@ -41,42 +41,6 @@ const limpiar = (v?: string | null): string | null => {
 export class DiarioSesionService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  // ── LO QUE VE LA PERSONA ────────────────────────────────────────────────
-  // Solo lo publicado: un borrador a medias no puede asomarse a su Home.
-  async listarPublicadas(userId: string) {
-    const { data, error } = await this.databaseService
-      .getClient()
-      .from(TABLA)
-      .select('*')
-      .eq('user_id', userId)
-      .eq('publicada', true)
-      .order('fecha', { ascending: false })
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.warn('[diarioSesion.listarPublicadas] error:', error.message);
-      return [];
-    }
-    return data ?? [];
-  }
-
-  /** Marca como leídas las entradas publicadas que aún no lo estaban. */
-  async marcarLeidas(userId: string) {
-    const { error } = await this.databaseService
-      .getClient()
-      .from(TABLA)
-      .update({ leida_at: new Date().toISOString() })
-      .eq('user_id', userId)
-      .eq('publicada', true)
-      .is('leida_at', null);
-
-    if (error) {
-      console.warn('[diarioSesion.marcarLeidas] error:', error.message);
-      return { success: false };
-    }
-    return { success: true };
-  }
-
   // ── LO QUE VE LA ADMIN ──────────────────────────────────────────────────
   // Todo, incluidos los borradores.
   async listarTodas(userId: string) {

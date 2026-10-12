@@ -87,21 +87,6 @@ export class UploadController {
     return this.uploadService.getProfilePic(userId);
   }
 
-  // Fotos del GENOGRAMA («Tu familia», recorrido de psicología). Cada familiar
-  // que la usuaria añade puede llevar su foto. NO se guardan en la columna
-  // `data` del recorrido (el JSON tiene un límite de tamaño y unas pocas fotos
-  // en base64 lo reventarían): se suben al bucket y en `data` va solo la URL.
-  // Mismos guards que la foto de perfil: solo el dueño (o un admin) sube.
-  @Post('genograma/:userId')
-  @UseGuards(JwtAuthGuard, OwnerGuard)
-  @UseInterceptors(FileInterceptor('file', OPCIONES_FOTO))
-  async uploadGenogramaPic(
-    @UploadedFile() file: Express.Multer.File,
-    @Param('userId') userId: string
-  ) {
-    return this.uploadService.uploadGenogramaPic(userId, file);
-  }
-
   // Portada de un VÍDEO (sección «Vídeos»). Solo la admin: es contenido del
   // sitio, no del usuario, así que aquí no vale OwnerGuard sino AdminGuard.
   @Post('portada-video')

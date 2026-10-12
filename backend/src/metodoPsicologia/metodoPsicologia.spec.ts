@@ -117,7 +117,7 @@ describe('1 · Su problema (paso 2): se guarda y se vuelve a encontrar', () => {
 //                            respuestas por pregunta como LISTAS de recuerdos, o sinRecuerdos)
 //   9  Tu familia          → data.genograma           (personas con fila/col y símbolos)
 //   10 Genograma           → data.genograma           (las MISMAS personas + notas por pregunta;
-//                            las fotos van al bucket, aquí solo la URL)
+//                            sin fotos: el familiar se dibuja con su inicial)
 //   11 Huellas             → data.anos[año].huellas   (los recuerdos marcados, por texto)
 //   12 Nudos               → data.nudos               (string[])
 //   13 Necesidades         → data.necesidades         ({key: "recibida"|"a-veces"|"falto"})
@@ -174,11 +174,10 @@ describe('2 · Página por página: todo lo que contesta se guarda y se recupera
       genograma: [{ id: 'p-1', nombre: 'Mamá', parentesco: 'Madre', fila: -1, col: 0, simbolos: ['loba'] }],
     });
 
-    // 10 · Genograma: la MISMA persona, ahora con su ficha escrita y su foto (URL del bucket)
+    // 10 · Genograma: la MISMA persona, ahora con su ficha escrita
     await contesta(service, {
       genograma: [{
         id: 'p-1', nombre: 'Mamá', parentesco: 'Madre', fila: -1, col: 0, simbolos: ['loba'],
-        foto: 'https://bucket/img/genograma/p-1.webp',
         notas: { quien: 'Mi refugio y mi juez', aprendi: 'Que el cariño había que ganárselo' },
       }],
     });
@@ -262,7 +261,6 @@ describe('2 · Página por página: todo lo que contesta se guarda y se recupera
     expect(d.anos['6']).toEqual({ sinRecuerdos: true });
     expect(d.genograma).toEqual([{
       id: 'p-1', nombre: 'Mamá', parentesco: 'Madre', fila: -1, col: 0, simbolos: ['loba'],
-      foto: 'https://bucket/img/genograma/p-1.webp',
       notas: { quien: 'Mi refugio y mi juez', aprendi: 'Que el cariño había que ganárselo' },
     }]);
     expect(d.nudos).toEqual(['No sé decir que no', 'Necesito aprobación']);

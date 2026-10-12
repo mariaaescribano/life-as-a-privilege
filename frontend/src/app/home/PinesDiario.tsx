@@ -1,45 +1,29 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// PINES DEL DIARIO · abajo a la derecha del /home, SOLO para quien tiene
-// diario de terapias (entradas publicadas por María).
+// PIN DE «MIS NOTAS» · abajo a la derecha del /home, SOLO para quien ya ha
+// escrito alguna nota dentro del recorrido (la tabla `notas`, las mismas del
+// botón flotante de /metodo). Aquí solo se LEEN (y se pueden borrar); para
+// escribir está el recorrido.
 //
-// Dos botones rectangulares apilados:
-//   · «Mis notas» — abre un visor con las notas que el usuario ha ido
-//     escribiendo dentro del recorrido (la tabla `notas`, las mismas del
-//     botón flotante de /metodo). Aquí solo se LEEN (y se pueden borrar);
-//     para escribir está el recorrido.
-//   · «Diario de terapia» — lleva a /diario, con su icono propio (el
-//     marcapáginas con corazón, el mismo del panel de admin). Si hay notas
-//     publicadas SIN LEER, encima del pin sale un numerito con cuántas son
-//     (antes eso era una tarjeta entera en la columna de la izquierda;
-//     ahora todo el aviso es este numerito).
+// El diario de sesiones que escribe María NO aparece aquí ni en ninguna parte
+// del lado de la persona: solo lo ve la admin.
 //
-// Si la persona no tiene ninguna entrada publicada en el diario, no se pinta
-// nada: el /home no cambia ni un píxel (la misma regla que «Tu camino»).
+// Si no tiene ninguna nota, no se pinta nada: el /home no cambia ni un píxel
+// (la misma regla que «Tu camino»).
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Modal, ModalBody, ModalContent, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
-import { listarMias } from "../../api/diario";
 import { DiarioIcon, NotaCard, type Nota } from "../../components/global/MiniDiario";
-import { IconoDiarioTerapia } from "../../components/global/IconoDiarioTerapia";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { cacheDeOtraCuenta } from "../../api/sesion";
 import { useT } from "../../i18n";
 
-// Se recuerda a nivel de módulo si esta cuenta tiene diario (y cuántas notas
-// le quedan sin leer), para que al volver al home no haya parpadeo.
-let tieneDiarioCache: boolean | null = null;
-let sinLeerCache = 0;
+// Se recuerda a nivel de módulo si esta cuenta tiene notas, para que al volver
+// al home no haya parpadeo.
+let tieneNotasCache: boolean | null = null;
 
-/** Para que la página /diario pueda apagar el numerito de «sin leer» sin recargar. */
-export const olvidarCacheDiario = () => {
-  tieneDiarioCache = null;
-  sinLeerCache = 0;
-};
-
-/** El estilo común de los dos pines: rectangulares, apilados, mismo material. */
+/** El estilo del pin: rectangular, mismo material que el resto del home. */
 const PIN = {
   as: "button",
   display: "flex",
@@ -72,13 +56,8 @@ export default function PinesDiario({ estatico = false }: {
   estatico?: boolean;
 }) {
   const t = useT();
-  const navigate = useNavigate();
-  if (cacheDeOtraCuenta("pinesDiario")) {
-    tieneDiarioCache = null;
-    sinLeerCache = 0;
-  }
-  const [tieneDiario, setTieneDiario] = useState<boolean>(tieneDiarioCache === true);
-  const [sinLeer, setSinLeer] = useState<number>(sinLeerCache);
+  if (cacheDeOtraCuenta("pinesDiario")) tieneNotasCache = null;
+  const [tieneNotas, setTieneNotas] = useState<boolean>(tieneNotasCache === true);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Visor de «Mis notas»
@@ -87,18 +66,14 @@ export default function PinesDiario({ estatico = false }: {
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    if (tieneDiarioCache !== null) return;
+    if (tieneNotasCache !== null || !userId) return;
     let cancel = false;
-    listarMias().then((lista) => {
-      tieneDiarioCache = lista.length > 0;
-      sinLeerCache = lista.filter((e) => !e.leida_at).length;
-      if (!cancel) {
-        setTieneDiario(tieneDiarioCache);
-        setSinLeer(sinLeerCache);
-      }
-    });
+    axios.get(`${API_URL}/notas/${userId}`)
+      .then(({ data }) => { tieneNotasCache = Array.isArray(data) && data.length > 0; })
+      .catch(() => { tieneNotasCache = false; })
+      .finally(() => { if (!cancel) setTieneNotas(tieneNotasCache === true); });
     return () => { cancel = true; };
-  }, []);
+  }, [userId]);
 
   const abrirNotas = async () => {
     onOpen();
@@ -124,11 +99,11 @@ export default function PinesDiario({ estatico = false }: {
     }
   };
 
-  if (!userId || !tieneDiario) return null;
+  if (!userId || !tieneNotas) return null;
 
   return (
     <>
-      {/* ── Los dos pines, apilados. Flotando abajo a la derecha SOLO en
+      {/* ── El pin. Flotando abajo a la derecha SOLO en
           escritorio (desde lg); en móvil van estáticos, en el flujo, debajo
           de «Tu mapa» (instancia con `estatico` que pinta el Home). ── */}
       <Flex
@@ -150,36 +125,6 @@ export default function PinesDiario({ estatico = false }: {
           <DiarioIcon fill="white" size="26px" />
           <Text fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" whiteSpace="nowrap">
             {t("home.pin.misNotas")}
-          </Text>
-        </Flex>
-
-        <Flex {...PIN} position="relative" onClick={() => navigate("/diario")} aria-label={t("home.pin.diarioTerapia")}>
-          {/* El numerito de notas sin leer, montado sobre la esquina del pin. */}
-          {sinLeer > 0 && (
-            <Flex
-              position="absolute"
-              top="-9px"
-              right="-9px"
-              minW="22px"
-              h="22px"
-              px="6px"
-              align="center"
-              justify="center"
-              borderRadius="full"
-              bg="white"
-              color="#008080"
-              fontSize="xs"
-              fontWeight="800"
-              lineHeight="1"
-              boxShadow="0 0 8px rgba(255,255,255,0.4)"
-              pointerEvents="none"
-            >
-              {sinLeer}
-            </Flex>
-          )}
-          <IconoDiarioTerapia fill="#FFFFFF" size="26px" />
-          <Text fontWeight="700" fontSize={{ base: "md", md: "lg" }} letterSpacing="0.05em" whiteSpace="nowrap">
-            {t("home.pin.diarioTerapia")}
           </Text>
         </Flex>
       </Flex>

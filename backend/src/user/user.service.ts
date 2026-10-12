@@ -1130,7 +1130,8 @@ export class UserService {
       }
     }
 
-    // Fotos del genograma (familiares: datos de terceros). En el bucket se
+    // Fotos del genograma que subieron usuarias antes de que se quitaran (ya no
+    // se aceptan nuevas; familiares = datos de terceros). En el bucket se
     // llaman `genograma/<userId>-<fecha>.<ext>`, así que basta el prefijo.
     {
       const bucket = db.storage.from('img');

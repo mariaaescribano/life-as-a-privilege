@@ -27,7 +27,6 @@ export const home = {
   "home.camino.sinEmpezar": "not started",
 
   "home.pin.misNotas": "My notes",
-  "home.pin.diarioTerapia": "Therapy diary",
 
   "home.pago.titulo": "{disciplina} payment complete",
   "home.pago.puedesEmpezar": "You can now start the {ordinal} discipline of The Map.",

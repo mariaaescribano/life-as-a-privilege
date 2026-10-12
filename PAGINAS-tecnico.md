@@ -576,7 +576,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Componente:** `MetodoPsicologiaFamilia` en `frontend/src/app/metodo/MetodoPsicologiaFamilia.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + chequeo en `useMapaFamilia`).
 - **Qué hace:** Un mapa en rejilla (`GenogramaMapa`) con la persona en el centro («Tú», con su foto de perfil). Va añadiendo familiares arriba, a los lados o abajo. Al abrir cada uno (`PopupPersonaje`) le pone nombre, parentesco, foto y hasta 2 personajes o animales simbólicos.
-- **Datos:** `useMapaFamilia`: `GET /user/me` (foto `img`), `GET /metodo-psicologia/:userId`, `PATCH /metodo-psicologia/:userId` con `data.genograma` (debounce de 900 ms y guardado al cerrar el popup o desmontar). Las fotos suben a `POST /upload/genograma/:userId` (`FotoPersonaBoton`) y en el blob solo queda la URL.
+- **Datos:** `useMapaFamilia`: `GET /user/me` (foto `img`), `GET /metodo-psicologia/:userId`, `PATCH /metodo-psicologia/:userId` con `data.genograma` (debounce de 900 ms y guardado al cerrar el popup o desmontar). Los familiares no llevan foto: `AvatarPersona` dibuja su inicial (no se suben ni se guardan fotos de terceros).
 - **Desbloqueo:** sin gate de entrada. Next activo si al menos una persona tiene símbolo (`familiaConSimbolo`), con un tooltip distinto si el mapa está vacío.
 - **Botones / a dónde lleva:** prev → `/:exp` (Línea de Vida). Next hace flush y abre el cómic de la herencia → `/:exp/genograma`. `AyudaRecorrido pagina="familia"`.
 - **Condiciones y casos raros:** si `experienciaId` no existe devuelve `null` (pantalla vacía, sin redirigir). Espera a que carguen todas las fotos del mapa antes de pintarse.
@@ -588,7 +588,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Componente:** `MetodoPsicologiaGenograma` en `frontend/src/app/metodo/MetodoPsicologiaGenograma.tsx`
 - **Acceso:** con sesión (PrivateRoute) + pago de psicología (guardia + `useMapaFamilia`).
 - **Qué hace:** La familia como TARJETAS en rejilla (3-4 por fila en ordenador; 1-2 en pantallas pequeñas): foto a la izquierda con el rol al lado (y el nombre debajo), rayita, sus personajes/animales y un botón «Rellenar». Rellenar abre la ficha (`FichaPersona`) con las preguntas guía: todo se autoguarda y el botón «Hecho ✓» abajo a la derecha cierra (control explícito de guardado). La ficha va en UN solo scroll vertical y la identidad (foto, nombre, parentesco) sale PLEGADA en una línea —la persona ya se definió en «Tu familia»—, con «Editar» para desplegar las chapas de parentesco (sin parentesco aún, sale desplegada; al tocar una chapa se repliega). Ya no se pintan aquí los «+» del mapa: colocar/añadir familia se hace en «Tu familia»; desde la ficha se puede editar y quitar.
-- **Datos:** `useMapaFamilia` (mismos endpoints que Tu familia). Guarda `data.genograma[i].notas[key]` y la foto vía `POST /upload/genograma/:userId`.
+- **Datos:** `useMapaFamilia` (mismos endpoints que Tu familia). Guarda `data.genograma[i].notas[key]`.
 - **Desbloqueo:** sin gate de entrada. Next activo con al menos 1 persona.
 - **Botones / a dónde lleva:** prev → `/:exp/familia`; next → `/:exp/huellas` (los dos hacen flush). `AyudaRecorrido pagina="genograma"`.
 - **Condiciones y casos raros:** exp desconocido → `null`, sin redirección.

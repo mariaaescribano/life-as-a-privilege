@@ -2,14 +2,10 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@n
 import { DiarioSesionService } from './diarioSesion.service';
 import type { EntradaInput } from './diarioSesion.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
-import { OwnerGuard } from '../auth/owner.guard';
 import { AdminGuard } from '../auth/admin.guard';
 
-// El diario que la admin escribe para una persona. Dos caras:
-//   · /diario/:userId          → lo que lee la persona (solo lo publicado)
-//   · /diario/admin/:userId    → lo que escribe la admin (todo, con borradores)
-// Las rutas `admin/...` van ANTES que `:userId`, o Nest se tragaría «admin»
-// como si fuera un id de usuario.
+// El diario que la admin escribe sobre una persona. SOLO lo ve la admin: la
+// persona no tiene ninguna ruta de lectura (ni lo lee ni sabe que existe).
 @Controller('diario')
 export class DiarioSesionController {
   constructor(private readonly service: DiarioSesionService) {}
@@ -41,19 +37,5 @@ export class DiarioSesionController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   async eliminar(@Param('userId') userId: string, @Param('entradaId') entradaId: string) {
     return await this.service.eliminar(userId, entradaId);
-  }
-
-  // ── LA PERSONA ──────────────────────────────────────────────────────────
-  @Get(':userId')
-  @UseGuards(JwtAuthGuard, OwnerGuard)
-  async listar(@Param('userId') userId: string) {
-    return await this.service.listarPublicadas(userId);
-  }
-
-  // Se llama al abrir /diario: apaga la marca de «nuevo».
-  @Patch(':userId/leidas')
-  @UseGuards(JwtAuthGuard, OwnerGuard)
-  async marcarLeidas(@Param('userId') userId: string) {
-    return await this.service.marcarLeidas(userId);
   }
 }

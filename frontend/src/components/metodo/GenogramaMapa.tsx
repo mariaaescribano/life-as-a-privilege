@@ -15,6 +15,7 @@ import React from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { simboloSrc, useSimbolosFamilia } from "./familiaSimbolos";
+import { AvatarPersona } from "./AvatarPersona";
 import {
   ocupacionFamilia,
   personaEscritas,
@@ -134,7 +135,8 @@ function Celda({
   const esYo = quien === "yo";
   const p = esYo ? null : (quien as PersonaGenograma);
   const nombre = esYo ? genograma.yo : personaLabel(p!);
-  const foto = esYo ? miFoto : p!.foto;
+  // Solo la usuaria lleva foto (su perfil); los familiares, su inicial.
+  const foto = esYo ? miFoto : "";
   const simbolos = p ? personaSimbolos(p) : [];
   const escritas = p ? personaEscritas(p) : 0;
 
@@ -160,20 +162,17 @@ function Celda({
            cursor={esYo ? "default" : "pointer"} transition="transform 0.16s, filter 0.16s"
            _hover={esYo ? {} : { transform: "translateY(-2px)", filter: "brightness(1.05)" }}>
         <Box position="relative" w={{ base: "64px", md: "84px" }} h={{ base: "64px", md: "84px" }} flexShrink={0}>
-          <Box w="100%" h="100%" borderRadius="full" overflow="hidden"
-               border={esYo ? `2.5px solid ${TINTA}` : `1.5px solid ${TINTA}88`}
-               bg="rgba(255,251,243,0.82)"
-               boxShadow={esYo ? `0 0 0 4px ${TINTA}22, 0 4px 16px ${TINTA}44` : `0 3px 12px ${TINTA}33`}>
-            {foto ? (
+          {esYo && foto ? (
+            <Box w="100%" h="100%" borderRadius="full" overflow="hidden"
+                 border={`2.5px solid ${TINTA}`} bg="rgba(255,251,243,0.82)"
+                 boxShadow={`0 0 0 4px ${TINTA}22, 0 4px 16px ${TINTA}44`}>
               <Image src={foto} alt={nombre} w="100%" h="100%" objectFit="cover" />
-            ) : (
-              <Flex w="100%" h="100%" align="center" justify="center">
-                <Text color={`${TINTA}99`} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1">
-                  {(nombre.trim()[0] || "?").toUpperCase()}
-                </Text>
-              </Flex>
-            )}
-          </Box>
+            </Box>
+          ) : (
+            <AvatarPersona nombre={nombre} size="100%"
+                           borde={esYo ? `2.5px solid ${TINTA}` : undefined}
+                           sombra={esYo ? `0 0 0 4px ${TINTA}22, 0 4px 16px ${TINTA}44` : undefined} />
+          )}
 
           {/* Personaje/animal asociado (hasta dos): pegados a la foto, como si
               esa persona «fuera» también esa imagen. */}

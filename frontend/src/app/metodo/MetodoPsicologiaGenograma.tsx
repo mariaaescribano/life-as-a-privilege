@@ -3,15 +3,13 @@
 //
 // El mapa de la familia YA COMPUESTO en la página anterior («Tu familia», paso
 // 6), ahora para escribir sobre cada persona. Al tocar una tarjeta se abre su
-// FICHA (popup): foto, nombre, parentesco y las preguntas de
-// genogramaPreguntas. También se puede seguir colocando a quien falte con los
-// «+» que rodean cada foto.
+// FICHA (popup): nombre, parentesco y las preguntas de genogramaPreguntas.
+// También se puede seguir colocando a quien falte con los «+» que rodean cada
+// tarjeta.
 //
 // El dibujo del mapa vive en GenogramaMapa (común con «Tu familia») y la carga /
 // guardado en el hook useMapaFamilia. Datos: data.genograma (compartido con la
-// página anterior). Las fotos se suben al bucket
-// (POST /upload/genograma/:userId) y aquí solo se guarda su URL: en el blob no
-// caben fotos.
+// página anterior). Los familiares no llevan foto: AvatarPersona (su inicial).
 // ─────────────────────────────────────────────────────────────────────────
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,7 +22,7 @@ import { MetodoStepHeader } from "../../components/metodo/MetodoStepHeader";
 import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
-import { FotoPersonaBoton } from "../../components/metodo/FotoPersonaBoton";
+import { AvatarPersona } from "../../components/metodo/AvatarPersona";
 import { simboloSrc, useSimbolosFamilia } from "../../components/metodo/familiaSimbolos";
 import { useMapaFamilia } from "../../hooks/useMapaFamilia";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
@@ -178,26 +176,7 @@ function TarjetaPersona({ p, onRellenar }: { p: PersonaGenograma; onRellenar: ()
       <Flex position="relative" zIndex={1} direction="column" flex="1" p={{ base: 4, md: 4 }} gap={3}>
         {/* Foto a la izquierda, rol (y nombre) al lado */}
         <Flex align="center" gap={3}>
-          <Box
-            w="52px"
-            h="52px"
-            flexShrink={0}
-            borderRadius="full"
-            overflow="hidden"
-            border={`1.5px solid ${TINTA}66`}
-            bg="rgba(255,251,243,0.6)"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            {p.foto ? (
-              <Image src={p.foto} alt={personaLabel(p)} w="100%" h="100%" objectFit="cover" />
-            ) : (
-              <Text color={TINTA} fontSize="xl" fontWeight="700" lineHeight="1">
-                {personaLabel(p).charAt(0).toUpperCase()}
-              </Text>
-            )}
-          </Box>
+          <AvatarPersona nombre={personaLabel(p)} size="52px" fontSize="xl" borde={`1.5px solid ${TINTA}66`} />
           <Box minW={0}>
             <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} fontWeight="700" lineHeight="1.25"
                   noOfLines={1}>
@@ -273,7 +252,6 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
   const genograma = useGenograma();
   const genogramaPreguntas = useGenogramaPreguntas();
   useLockBodyScroll(true);
-  const [error, setError] = useState<string | null>(null);
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
   // A esta ficha se llega con la persona YA definida en «Tu familia», así que
   // la identidad (foto, nombre, parentesco) sale PLEGADA en una línea: volver
@@ -315,13 +293,8 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
             {identidadAbierta ? (
               <>
                 <Flex align="center" gap={{ base: 4, md: 5 }} pr={9}>
-                  {/* Foto (se toca para subirla / cambiarla) */}
-                  <FotoPersonaBoton
-                    foto={p.foto}
-                    alt={personaLabel(p)}
-                    onSubida={(url) => onCampo({ foto: url })}
-                    onError={setError}
-                  />
+                  <AvatarPersona nombre={personaLabel(p)} size={{ base: "76px", md: "92px" }}
+                                 fontSize={{ base: "3xl", md: "4xl" }} />
 
                   {/* Nombre + parentesco */}
                   <Flex direction="column" gap={2} flex="1" minW={0}>
@@ -386,13 +359,7 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
             ) : (
               // ── Plegada: quién es, en una línea, y el lápiz para corregirlo ──
               <Flex align="center" gap={3} pr={10}>
-                <FotoPersonaBoton
-                  foto={p.foto}
-                  alt={personaLabel(p)}
-                  onSubida={(url) => onCampo({ foto: url })}
-                  onError={setError}
-                  size={{ base: "48px", md: "52px" }}
-                />
+                <AvatarPersona nombre={personaLabel(p)} size={{ base: "48px", md: "52px" }} fontSize="xl" />
                 <Box flex="1" minW={0}>
                   <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" noOfLines={1}
                         style={{ textShadow: INK_SHADOW }}>
@@ -419,12 +386,6 @@ function FichaPersona({ p, onCampo, onNota, onEliminar, onClose }: {
                   {t("metodo.psico.familiaEditar")}
                 </Box>
               </Flex>
-            )}
-
-            {error && (
-              <Text color="#8c2f13" fontSize="md" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
-                {error}
-              </Text>
             )}
           </Box>
 

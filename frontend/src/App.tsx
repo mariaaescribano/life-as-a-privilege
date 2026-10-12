@@ -63,7 +63,6 @@ const LogIn = lazy(() => import("./app/auth/LogIn"));
 const SignIn = lazy(() => import("./app/auth/SignIn"));
 const GoogleAuthCallback = lazy(() => import("./app/auth/GoogleAuthCallback"));
 const Home = lazyConMetodo(() => import("./app/home/Home"));
-const Diario = lazy(() => import("./app/home/Diario"));
 const AprendizajeHome = lazy(() => import("./app/aprendizaje/AprendizajeHome").then((m) => ({ default: m.AprendizajeHome })));
 const ModulosPage = lazyConMetodo(() => import("./app/aprendizaje/ModulosPage"));
 const VideoLessonPage = lazy(() => import("./app/aprendizaje/VideoLessonPage"));
@@ -370,8 +369,6 @@ export default function App()
       <Route path="/cookies" element={<Cookies />} />
       <Route path="/terminos" element={<Terminos />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
-      {/* El diario de sus sesiones: lo escribe la admin en /admin/diario/:userId. */}
-      <Route path="/diario" element={<PrivateRoute><Diario /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
 
       <Route path="/productos" element={<Productos />} />

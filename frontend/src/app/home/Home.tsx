@@ -949,7 +949,7 @@ const Home = () => {
         </Box>
       )}
 
-      {/* Los pines del diario (Mis notas + Diario de terapia), abajo a la
+      {/* El pin de «Mis notas», abajo a la
           derecha — SOLO en escritorio (en móvil no flota nada: van estáticos
           debajo de «Tu mapa», más abajo). Van a este nivel, FUERA de cualquier
           box con transform: un position:fixed dentro de un elemento
@@ -1329,7 +1329,7 @@ const Home = () => {
             {/* Tu camino — en pantallas estrechas no cabe a la izquierda del
                 mandala sin pisarlo, así que ahí se pone debajo, con aire por
                 los dos lados: ni pegado al mandala ni al footer. Debajo van
-                los pines del diario, estáticos (en móvil nada flota): al
+                el pin de «Mis notas», estático (en móvil nada flota): al
                 desplegarse «Tu mapa», los pines bajan con el flujo. */}
             <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={14} mb={10} w="100%">
               <Reveal inView amount={0.2} direction="up" distance={22} w="100%" display="flex" justifyContent="center">

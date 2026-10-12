@@ -27,7 +27,7 @@ import { IntroRecorrido } from "../../components/metodo/IntroRecorrido";
 import { DisciplinaBgLayer } from "../../components/global/DisciplinaBgLayer";
 import { Reveal } from "../../components/global/Reveal";
 import { GenogramaMapa, SimboloImg } from "../../components/metodo/GenogramaMapa";
-import { FotoPersonaBoton } from "../../components/metodo/FotoPersonaBoton";
+import { AvatarPersona } from "../../components/metodo/AvatarPersona";
 import { useMapaFamilia } from "../../hooks/useMapaFamilia";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
@@ -86,7 +86,6 @@ export default function MetodoPsicologiaFamilia() {
       ? []
       : [
           miFoto,
-          ...personas.map((p) => p.foto),
           ...personas.flatMap((p) => personaSimbolos(p).map((k) => simboloSrc(k))),
         ],
   );
@@ -238,10 +237,8 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
   const familia = useFamilia();
   const genograma = useGenograma();
   useLockBodyScroll(true);
-  const [error, setError] = useState<string | null>(null);
   const [confirmarBorrado, setConfirmarBorrado] = useState(false);
-  // Solo el catálogo: la foto de la persona NO entra aquí a propósito, o al
-  // subir una nueva el popup entero se iría al loader en mitad de la edición.
+  // Solo el catálogo de personajes/animales.
   const fotosListas = useImagesReady(SIMBOLOS_SRCS);
 
   const elegidos = personaSimbolos(p);
@@ -330,12 +327,8 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
                 </Box>
 
                 <Flex align="center" gap={{ base: 4, md: 5 }} mt={4}>
-                  <FotoPersonaBoton
-                    foto={p.foto}
-                    alt={personaLabel(p)}
-                    onSubida={(url) => onCampo({ foto: url })}
-                    onError={setError}
-                  />
+                  <AvatarPersona nombre={personaLabel(p)} size={{ base: "76px", md: "92px" }}
+                                 fontSize={{ base: "3xl", md: "4xl" }} />
                   <Flex direction="column" gap={2} flex="1" minW={0}>
                     <Input
                       value={p.nombre}
@@ -362,12 +355,6 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
                     />
                   </Flex>
                 </Flex>
-
-                {error && (
-                  <Text color="#8c2f13" fontSize="md" fontStyle="italic" mt={2.5} style={{ textShadow: INK_SHADOW }}>
-                    {error}
-                  </Text>
-                )}
 
                 {/* Parentescos sugeridos: al tocar uno ya sabemos a quién
                     estamos definiendo, así que el paso se pliega solo. */}
@@ -404,13 +391,7 @@ function PopupPersonaje({ p, onCampo, onEliminar, onClose }: {
             ) : (
               // ── Plegado: quién es, en una línea, y el lápiz para corregirlo ──
               <Flex align="center" gap={3} pr={10}>
-                <FotoPersonaBoton
-                  foto={p.foto}
-                  alt={personaLabel(p)}
-                  onSubida={(url) => onCampo({ foto: url })}
-                  onError={setError}
-                  size={{ base: "48px", md: "52px" }}
-                />
+                <AvatarPersona nombre={personaLabel(p)} size={{ base: "48px", md: "52px" }} fontSize="xl" />
                 <Box flex="1" minW={0}>
                   <Text color={TINTA} fontSize={{ base: "lg", md: "xl" }} fontWeight="700" noOfLines={1}
                         style={{ textShadow: INK_SHADOW }}>
