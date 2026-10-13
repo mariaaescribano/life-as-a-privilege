@@ -1,7 +1,10 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { focoBlanco } from "./foco";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
+import { sombraTexto } from "./disciplinaSombras";
 import { VideoLargoModal } from "./VideoLargo";
 import { type DisciplinaClave } from "../../data/recorridoContenido";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
@@ -865,6 +868,7 @@ const VideoMuestraCard = ({
   const [pedir, setPedir] = useState(false);
   const [ahorro] = useState(ahorroActivo);
   const clip = `/videos/muestra/${disc.clave}.mp4`;
+  const presentacion = presentacionPorKey(disc.nom);
 
   useEffect(() => {
     const nodo = ref.current;
@@ -909,49 +913,79 @@ const VideoMuestraCard = ({
       overflow="hidden"
       cursor="pointer"
       bg={disc.bg}
-      sx={{ aspectRatio: "1 / 1" }}
-      // Sin glow: solo una sombra negra mínima, la justa para que se vea la
-      // separación entre una caja y la siguiente.
-      boxShadow="0 2px 8px rgba(0,0,0,0.18)"
+      display="flex"
+      flexDirection="column"
+      gap={{ base: 2, md: 2.5 }}
+      p={{ base: 2, md: 3 }}
+      // Luz, no sombra: la caja se define con el halo de su propia disciplina.
+      boxShadow={`0 0 16px ${disc.txt}33`}
       transition="transform 0.3s ease, box-shadow 0.3s ease"
-      _hover={{ transform: "translateY(-4px)", boxShadow: "0 4px 12px rgba(0,0,0,0.22)" }}
+      _hover={{ transform: "translateY(-4px)", boxShadow: `0 0 24px ${disc.txt}55` }}
     >
-      {/* Debajo del vídeo, el fondo de la disciplina: es lo que se ve mientras
-          el clip carga, en vez de un cuadro negro. */}
+      {/* La caja es de la disciplina (su foto de fondo); el vídeo va dentro,
+          como una pantalla enmarcada, y el nombre debajo. */}
       <DisciplinaBgLayer nom={disc.nom} borderRadius="2xl" />
 
       <Box
-        as="video"
-        ref={videoRef as React.RefObject<HTMLVideoElement>}
-        src={pedir ? clip : undefined}
-        position="absolute"
-        inset={0}
+        position="relative"
+        zIndex={1}
         w="100%"
-        h="100%"
-        objectFit="cover"
-        // `muted` y `playsInline` son obligatorios para que el móvil deje
-        // reproducir sin pedir permiso (y sin ponerse a pantalla completa).
-        muted
-        loop
-        playsInline
-        preload={ahorro ? "metadata" : "auto"}
-      />
+        borderRadius="xl"
+        overflow="hidden"
+        bg={disc.bg}
+        border={`1px solid ${disc.txt}55`}
+        sx={{ aspectRatio: "16 / 10" }}
+      >
+        <Box
+          as="video"
+          ref={videoRef as React.RefObject<HTMLVideoElement>}
+          src={pedir ? clip : undefined}
+          position="absolute"
+          inset={0}
+          w="100%"
+          h="100%"
+          objectFit="cover"
+          // `muted` y `playsInline` son obligatorios para que el móvil deje
+          // reproducir sin pedir permiso (y sin ponerse a pantalla completa).
+          muted
+          loop
+          playsInline
+          preload={ahorro ? "metadata" : "auto"}
+        />
+      </Box>
 
       {/* Rótulo: el nombre de la disciplina, abajo a la izquierda. Sin número:
           estas ocho no van en el orden del Mapa. */}
-      <Flex
-        position="absolute"
-        bottom={{ base: 2.5, md: 3.5 }}
-        left={{ base: 3, md: 4 }}
-        right={{ base: 3, md: 4 }}
-        align="baseline"
-        gap={1.5}
-        pointerEvents="none"
-      >
-        <Text color="white" fontWeight="700" fontSize={{ base: "xs", md: "sm" }} lineHeight="1.2"
-              style={{ textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}>
+      <Flex position="relative" zIndex={1} align="center" justify="space-between" gap={2} px={{ base: 1, md: 1.5 }} pb={{ base: 0.5, md: 1 }}>
+        <Text color={disc.txt} fontWeight="700" fontSize={{ base: "sm", md: "md" }} lineHeight="1.2" noOfLines={1}
+              pointerEvents="none" style={{ textShadow: sombraTexto(disc.nom, disc.bg) }}>
           {nombreEnMapa(disc.nom, true)}
         </Text>
+        {/* La flecha lleva a la presentación de la disciplina; el resto de la
+            caja sigue abriendo el vídeo. */}
+        {presentacion && (
+          <Box
+            as="a"
+            href={`/d/${presentacion.key}`}
+            aria-label={nombreEnMapa(disc.nom, true)}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexShrink={0}
+            w={{ base: "28px", md: "32px" }}
+            h={{ base: "28px", md: "32px" }}
+            borderRadius="full"
+            color={disc.txt}
+            border={`1px solid ${disc.txt}88`}
+            bg="rgba(0,0,0,0.25)"
+            transition="background 0.25s ease, transform 0.25s ease"
+            _hover={{ bg: "rgba(0,0,0,0.45)", transform: "translateX(2px)" }}
+            _focusVisible={focoBlanco}
+          >
+            <ArrowRight size={16} />
+          </Box>
+        )}
       </Flex>
 
       {/* Que la baldosa se abre: un ▶ arriba a la derecha, discreto, que se
@@ -959,8 +993,9 @@ const VideoMuestraCard = ({
           siempre a media luz. */}
       <Flex
         position="absolute"
-        top={{ base: 2.5, md: 3 }}
-        right={{ base: 2.5, md: 3 }}
+        zIndex={2}
+        top={{ base: 3.5, md: 5 }}
+        right={{ base: 3.5, md: 5 }}
         align="center"
         gap={1.5}
         px={2}

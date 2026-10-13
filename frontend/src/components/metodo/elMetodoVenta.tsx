@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Grid, Image, Text, type FlexProps } from "@chakra-ui/react";
+import {
+  Box, Flex, Grid, Image, Text, Input, Textarea, useDisclosure, type FlexProps,
+  Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
+} from "@chakra-ui/react";
+import axios from "axios";
+import { UserRound, Search, Sprout, Compass, ArrowRight } from "lucide-react";
+import { focoBlanco } from "../global/foco";
 import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
 import { LetrasVivas } from "../global/LetrasVivas";
 import { useVistoConEspera } from "../../hooks/useVistoConEspera";
@@ -7,7 +13,7 @@ import { RecorridoVideosMuestra } from "../global/MandalaRecorrido";
 import { useT, TextoRico, type ClaveTexto } from "../../i18n";
 import { PrecioConAntes } from "./PrecioConAntes";
 import { IconoTest, IconoWhatsapp } from "./LlamadaCta";
-import { WHATSAPP_COMUNIDAD_URL } from "../../GlobalVariables";
+import { WHATSAPP_COMUNIDAD_URL, API_URL } from "../../GlobalVariables";
 import {
   NUM_DISCIPLINAS,
   PRECIO_DISCIPLINA,
@@ -77,7 +83,10 @@ function TituloBloque({
   sub,
   sinRaya,
   vivo,
+  dosLineas,
 }: {
+  /** Parte el titular en dos líneas a partir del primer punto. */
+  dosLineas?: boolean;
   /** Texto con la entrada de letras (título y bajada, si son cadenas). Arranca
    *  cuando el usuario llega a la altura, sin espera de reloj. */
   vivo?: boolean;
@@ -91,6 +100,13 @@ function TituloBloque({
 }) {
   const visto = useVistoConEspera("0px 0px -20% 0px", 0);
   const conLetras = vivo && typeof children === "string";
+  // `dosLineas`: el titular se parte en el primer punto, una frase arriba y otra abajo.
+  const partes = dosLineas && typeof children === "string"
+    ? (children.match(/^(.*?\.)\s+(.*)$/)?.slice(1, 3) ?? null)
+    : null;
+  const letras = (texto: string, retraso: number) => (
+    <LetrasVivas texto={texto} entrada activo={visto.visible} retraso={retraso} paso={0.09} pasoEntrada={0.035} altura={4} />
+  );
   return (
     <Flex ref={visto.ref} direction="column" align="center" gap={{ base: 3, md: 4 }} textAlign="center">
       <Text
@@ -101,8 +117,13 @@ function TituloBloque({
         lineHeight="1.25"
         textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
       >
-        {conLetras
-          ? <LetrasVivas texto={children as string} entrada activo={visto.visible} retraso={1.2} paso={0.09} pasoEntrada={0.035} altura={4} />
+        {partes && partes.length === 2 ? (
+          <>
+            <Box as="span" display="block">{conLetras ? letras(partes[0], 1.2) : partes[0]}</Box>
+            <Box as="span" display="block">{conLetras ? letras(partes[1], 1.2 + partes[0].length * 0.035) : partes[1]}</Box>
+          </>
+        ) : conLetras
+          ? letras(children as string, 1.2)
           : children}
       </Text>
       {!sinRaya && <Box w={{ base: "70px", md: "90px" }} h="1px" bg="rgba(255,255,255,0.35)" />}
@@ -245,10 +266,342 @@ export function PruebasBloque() {
   const t = useT();
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
-      <TituloBloque vivo sinRaya sub={t("elMetodo.pruebas.sub")}>{t("elMetodo.pruebas.titulo")}</TituloBloque>
+      <TituloBloque vivo sinRaya dosLineas sub={t("elMetodo.pruebas.sub")}>{t("elMetodo.pruebas.titulo")}</TituloBloque>
 
       <Reveal inView direction="up" distance={24} duration={0.8} w="100%">
         <RecorridoVideosMuestra />
+      </Reveal>
+    </Flex>
+  );
+}
+
+// ── Popup «Quiero este» ─────────────────────────────────────────────────────
+// Email + mensaje opcional al mismo endpoint de contacto que el resto de la
+// web. Lo que llega a la bandeja de María va siempre en español.
+function QuieroEsteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const t = useT();
+  const [nombre, setNombre] = useState("");
+  const [email, setEmail] = useState("");
+  const [mensaje, setMensaje] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [enviado, setEnviado] = useState(false);
+  const [error, setError] = useState(false);
+
+  const cerrar = () => {
+    setNombre(""); setEmail(""); setMensaje(""); setEnviado(false); setError(false);
+    onClose();
+  };
+  const valido = nombre.trim() !== "" && /\S+@\S+\.\S+/.test(email.trim());
+
+  const enviar = async () => {
+    if (!valido || enviando) return;
+    setEnviando(true); setError(false);
+    try {
+      await axios.post(`${API_URL}/contact`, {
+        nombre: nombre.trim(),
+        email: email.trim(),
+        titulo: "El Mapa: quiere avanzar con acompañamiento",
+        mensaje: mensaje.trim() || "—",
+      });
+      setEnviado(true);
+    } catch {
+      setError(true);
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  const campo = {
+    bg: "rgba(255,255,255,0.1)",
+    border: "1px solid rgba(255,255,255,0.4)",
+    color: "white",
+    borderRadius: "xl",
+    fontFamily: "inherit",
+    fontSize: { base: "md", md: "lg" },
+    _placeholder: { color: "rgba(255,255,255,0.65)" },
+    _hover: { borderColor: "rgba(255,255,255,0.7)" },
+    _focusVisible: { borderColor: "white", boxShadow: "0 0 12px rgba(255,255,255,0.3)" },
+  } as const;
+
+  return (
+    <Modal isOpen={isOpen} onClose={cerrar} size="md" isCentered>
+      <ModalOverlay bg="rgba(0,0,0,0.55)" />
+      <ModalContent
+        bg="#008080"
+        borderRadius="2xl"
+        boxShadow="0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09)"
+        mx={{ base: 4, md: 0 }}
+        fontFamily="'EB Garamond', serif"
+        color="white"
+      >
+        <ModalCloseButton color="white" top={4} right={4} _focusVisible={focoBlanco} />
+        <ModalBody px={{ base: 6, md: 8 }} py={{ base: 8, md: 10 }}>
+          {enviado ? (
+            <Flex direction="column" align="center" gap={5} py={4} textAlign="center">
+              <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="700" letterSpacing="0.03em">
+                {t("contacto.enviado")}
+              </Text>
+              <Text fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" opacity={0.92}>
+                {t("elMetodo.como.modal.gracias")}
+              </Text>
+              <Box
+                as="button"
+                type="button"
+                onClick={cerrar}
+                px={7}
+                py={2.5}
+                borderRadius="full"
+                border="1.5px solid rgba(255,255,255,0.7)"
+                fontWeight="600"
+                letterSpacing="0.05em"
+                cursor="pointer"
+                _hover={{ bg: "rgba(255,255,255,0.15)" }}
+                _focusVisible={focoBlanco}
+              >
+                {t("comun.cerrar")}
+              </Box>
+            </Flex>
+          ) : (
+            <Flex direction="column" gap={4}>
+              <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" letterSpacing="0.03em" lineHeight="1.2">
+                {t("elMetodo.como.modal.titulo")}
+              </Text>
+              <Text fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" opacity={0.92}>
+                {t("elMetodo.como.modal.texto")}
+              </Text>
+              <Box h="1px" bg="rgba(255,255,255,0.3)" />
+              <Input autoFocus placeholder={t("contacto.ph.nombre")} value={nombre} onChange={(e) => setNombre(e.target.value)} {...campo} />
+              <Input type="email" placeholder={t("contactoModal.ph.email")} value={email} onChange={(e) => setEmail(e.target.value)} {...campo} />
+              <Textarea
+                placeholder={t("elMetodo.como.modal.ph.mensaje")}
+                value={mensaje}
+                onChange={(e) => setMensaje(e.target.value)}
+                rows={3}
+                resize="none"
+                {...campo}
+              />
+              <Text fontSize="sm" fontStyle="italic" opacity={0.85}>
+                {t("elMetodo.como.modal.nota")}
+              </Text>
+              {error && <Text fontSize="sm" textAlign="center">{t("comun.error")}</Text>}
+              <Box
+                as="button"
+                type="button"
+                onClick={enviar}
+                disabled={!valido || enviando}
+                alignSelf="center"
+                mt={2}
+                px={10}
+                py="14px"
+                borderRadius="full"
+                border="1.5px solid rgba(255,255,255,0.7)"
+                bg="rgba(255,255,255,0.12)"
+                color="white"
+                fontFamily="inherit"
+                fontSize={{ base: "md", md: "xl" }}
+                fontWeight="700"
+                letterSpacing="0.12em"
+                textTransform="uppercase"
+                cursor={!valido || enviando ? "not-allowed" : "pointer"}
+                opacity={!valido || enviando ? 0.55 : 1}
+                boxShadow="0 0 22px rgba(255,255,255,0.36), 0 0 48px rgba(180,255,245,0.22)"
+                _hover={valido && !enviando ? { bg: "rgba(255,255,255,0.22)", borderColor: "white" } : undefined}
+                _focusVisible={focoBlanco}
+              >
+                {enviando ? t("comun.enviando") : t("comun.enviar")}
+              </Box>
+            </Flex>
+          )}
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+}
+
+// ── CÓMO FUNCIONA ───────────────────────────────────────────────────────────
+// Va justo antes de «Qué obtienes», ya del lado del dinero: dice qué pasa
+// después de comprar. Dos tarjetas gemelas (mismo alto, mismo vidrio): son DOS
+// caminos que se pueden combinar, no dos pasos seguidos; por eso la segunda se
+// lee como «si quieres» y los números no llevan flecha entre ellos.
+// La frase del objetivo cae FUERA de las cajas, sobre el turquesa: blanca y sin
+// sombra.
+export function ComoFuncionaBloque() {
+  const t = useT();
+  const caminos = [
+    { n: "1", titulo: t("elMetodo.como.1.titulo"), textos: [t("elMetodo.como.1.texto")], badge: t("elMetodo.como.1.badge"), destacada: false },
+    {
+      n: "2",
+      titulo: t("elMetodo.como.2.titulo"),
+      textos: [t("elMetodo.como.2.texto"), t("elMetodo.como.2.texto2")],
+      badge: t("elMetodo.como.2.badge"),
+      destacada: true,
+    },
+  ];
+  const modal = useDisclosure();
+  const pasos = [
+    { Icono: UserRound, n: "1" },
+    { Icono: Search, n: "2" },
+    { Icono: Sprout, n: "3" },
+    { Icono: Compass, n: "4" },
+  ] as const;
+
+  return (
+    <Flex direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
+      <TituloBloque sub={t("elMetodo.como.intro")}>{t("elMetodo.como.titulo")}</TituloBloque>
+
+      {/* Los cuatro pasos: círculo con icono, el número de cada uno sobre la
+          línea que lo une con el siguiente. En móvil, en dos columnas y sin línea. */}
+      <Grid
+        w="100%"
+        maxW="940px"
+        templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
+        columnGap={{ base: 4, md: 6 }}
+        rowGap={{ base: 8, md: 0 }}
+      >
+        {pasos.map(({ Icono, n }, i) => (
+          <Reveal key={n} inView direction="up" distance={18} duration={0.7} delay={i * 0.1}>
+            <Flex direction="column" align="center" textAlign="center" gap={3} position="relative">
+              <Flex
+                w={{ base: "64px", md: "76px" }}
+                h={{ base: "64px", md: "76px" }}
+                borderRadius="full"
+                align="center"
+                justify="center"
+                border="1.5px solid rgba(255,255,255,0.7)"
+                bg="rgba(255,255,255,0.06)"
+                color="white"
+                boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 44px rgba(180,255,245,0.22)"
+              >
+                <Icono size={30} strokeWidth={1.3} />
+              </Flex>
+              {i < pasos.length - 1 && (
+                <Flex
+                  display={{ base: "none", md: "flex" }}
+                  position="absolute"
+                  top={{ md: "38px" }}
+                  left="calc(50% + 50px)"
+                  w="calc(100% - 100px + 24px)"
+                  align="center"
+                  gap={2}
+                  color="rgba(255,255,255,0.75)"
+                  fontSize="sm"
+                  aria-hidden
+                >
+                  <Box flex="1" h="1px" bg="rgba(255,255,255,0.35)" />
+                  <Text as="span">{pasos[i + 1].n}</Text>
+                  <Box flex="1" h="1px" bg="rgba(255,255,255,0.35)" />
+                </Flex>
+              )}
+              <Text color="white" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} letterSpacing="0.02em">
+                {t(`elMetodo.como.paso.${n}.titulo` as ClaveTexto)}
+              </Text>
+              <Text color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.6" maxW="210px">
+                {t(`elMetodo.como.paso.${n}.texto` as ClaveTexto)}
+              </Text>
+            </Flex>
+          </Reveal>
+        ))}
+      </Grid>
+
+      <Grid
+        w="100%"
+        maxW="940px"
+        templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+        gap={{ base: 5, md: 6 }}
+        alignItems="stretch"
+      >
+        {caminos.map((c, i) => (
+          <Reveal key={c.n} inView direction="up" distance={22} duration={0.7} delay={i * 0.1} h="100%">
+            <CajaCristal
+              h="100%"
+              align="flex-start"
+              textAlign="left"
+              gap={{ base: 3, md: 4 }}
+              px={{ base: 6, md: 8 }}
+              py={{ base: 7, md: 9 }}
+              // La segunda es la que se recomienda: borde y halo más claros.
+              border={c.destacada ? "1.5px solid rgba(255,255,255,0.7)" : undefined}
+              boxShadow={
+                c.destacada
+                  ? "0 0 18px rgba(255,255,255,0.28), 0 0 44px rgba(180,255,245,0.22)"
+                  : "0 0 24px rgba(180,255,245,0.10)"
+              }
+            >
+              <Text
+                color="rgba(255,255,255,0.92)"
+                fontStyle="italic"
+                fontSize={{ base: "md", md: "lg" }}
+                letterSpacing="0.02em"
+                lineHeight="1.4"
+              >
+                {c.badge}
+              </Text>
+              <Box w="100%" h="1px" bg="rgba(255,255,255,0.35)" />
+              <Text
+                color="white"
+                fontWeight="700"
+                fontSize={{ base: "lg", md: "2xl" }}
+                lineHeight="1.3"
+                letterSpacing="0.02em"
+              >
+                {c.titulo}
+              </Text>
+              {c.textos.map((texto) => (
+                <Text key={texto} color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.75">
+                  {texto}
+                </Text>
+              ))}
+              {c.destacada && (
+                <Box
+                  as="button"
+                  type="button"
+                  onClick={modal.onOpen}
+                  mt="auto"
+                  alignSelf="flex-end"
+                  px={{ base: 6, md: 7 }}
+                  py={{ base: "8px", md: "9px" }}
+                  borderRadius="full"
+                  border="1.5px solid rgba(255,255,255,0.7)"
+                  bg="rgba(255,255,255,0.12)"
+                  color="white"
+                  fontFamily="inherit"
+                  fontSize={{ base: "sm", md: "md" }}
+                  fontWeight="700"
+                  letterSpacing="0.1em"
+                  textTransform="uppercase"
+                  cursor="pointer"
+                  boxShadow="0 0 22px rgba(255,255,255,0.36), 0 0 48px rgba(180,255,245,0.22)"
+                  transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
+                  _hover={{
+                    bg: "rgba(255,255,255,0.22)",
+                    borderColor: "white",
+                    boxShadow: "0 0 32px rgba(255,255,255,0.58), 0 0 66px rgba(180,255,245,0.38)",
+                  }}
+                  _focusVisible={focoBlanco}
+                >
+                  <Flex as="span" align="center" gap={3}>
+                    {t("elMetodo.como.2.boton")}
+                    <ArrowRight size={18} />
+                  </Flex>
+                </Box>
+              )}
+            </CajaCristal>
+          </Reveal>
+        ))}
+      </Grid>
+      <QuieroEsteModal isOpen={modal.isOpen} onClose={modal.onClose} />
+
+      <Reveal inView direction="up" distance={16} delay={0.1} duration={0.8}>
+        <Text
+          color="white"
+          fontSize={{ base: "lg", md: "2xl" }}
+          lineHeight="1.5"
+          letterSpacing="0.02em"
+          textAlign="center"
+          maxW="760px"
+        >
+          <TextoRico>{t("elMetodo.como.objetivo")}</TextoRico>
+        </Text>
       </Reveal>
     </Flex>
   );
@@ -567,7 +920,7 @@ export function CtaEmpezar({
 // Ocho puertas idénticas no invitan: paralizan. Aquí se señalan tres caminos
 // según lo que traiga cada uno, y con eso ya no hay que elegir entre ocho.
 
-export function PorDondeEmpiezoBloque({ onAcceder, onTest }: { onAcceder?: () => void; onTest?: () => void }) {
+export function PorDondeEmpiezoBloque({ onAcceder }: { onAcceder?: () => void; onTest?: () => void }) {
   const t = useT();
   const caminos: { titulo: ClaveTexto; texto: ClaveTexto }[] = [
     { titulo: "elMetodo.empiezo.a.titulo", texto: "elMetodo.empiezo.a.texto" },
@@ -604,7 +957,7 @@ export function PorDondeEmpiezoBloque({ onAcceder, onTest }: { onAcceder?: () =>
           que el botón va aquí y no a media página de scroll. Y al lado, la
           comunidad: quien todavía no se decide a pagar tiene una puerta que no
           cuesta nada en vez de cerrar la pestaña. */}
-      {onAcceder && <CtaEmpezar onAcceder={onAcceder} onTest={onTest} conComunidad />}
+      {onAcceder && <CtaEmpezar onAcceder={onAcceder} />}
     </Flex>
   );
 }

@@ -75,11 +75,11 @@ const OpinionesSection: React.FC = () => {
               h={{ base: "42px", md: "60px" }}
               objectFit="contain"
               flexShrink={0}
-              // El mandala entra GIRANDO al asomar el botón (surge pequeño,
-              // desenfocado y girando hasta colocarse), y luego se queda quieto.
+              // El mandala surge al asomar el botón (pequeño y transparente
+              // hasta su tamaño), sin girar ni rebotar, y luego se queda quieto.
               opacity={reveal.visible ? 1 : 0}
-              transform={reveal.visible ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-90deg)"}
-              transition="opacity 0.9s ease 0.35s, transform 1.4s cubic-bezier(0.22,1.35,0.36,1) 0.35s, filter 0.9s ease 0.35s"
+              transform={reveal.visible ? "scale(1)" : "scale(0.4)"}
+              transition="opacity 0.9s ease 0.35s, transform 1.2s cubic-bezier(0.22,1,0.36,1) 0.35s"
               style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.6)) drop-shadow(0 0 26px rgba(255,255,255,0.32))" }}
             />
             <Text

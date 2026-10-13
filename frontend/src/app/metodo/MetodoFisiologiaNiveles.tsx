@@ -15,6 +15,7 @@ import { ComicPasoModal } from "../../components/metodo/ComicPasoModal";
 import { MEDITACION_CEREBRO } from "../../components/metodo/comicMeditacion";
 import { useComic } from "../../i18n/comics";
 import { useT, type ClaveTexto } from "../../i18n";
+import { desarrolloHeredado } from "../../hardCoded/espacio/VideosDesarrollo";
 import { Reveal } from "../../components/global/Reveal";
 import { PalabrasVivas } from "../../components/global/PalabrasVivas";
 import {
@@ -49,16 +50,22 @@ interface Nivel {
   /** Antetítulo (por defecto «Nivel {n}»). P.ej. la práctica usa «Práctica». */
   eyebrow?: ClaveTexto;
   /** Icono del círculo en vez del número: "avanzado" (PROFUNDIZA). */
-  iconKind?: "avanzado";
+  iconKind?: "avanzado" | "bebe";
 }
 
 const NIVELES: Nivel[] = [
   { n: 1, titulo: "fisiologia.niveles.materia", sub: "fisiologia.niveles.materia.sub", ruta: "/metodo/fisiologia/particulas", superado: "estructuras_hecho" },
-  // VIDA absorbe Sistemas: célula → todas-tus-células → sistemas → organismo.
-  { n: 2, titulo: "fisiologia.niveles.vida", sub: "fisiologia.niveles.vida.sub", ruta: "/metodo/fisiologia/celula", requiere: "estructuras_hecho", superado: "organismo_hecho" },
-  // 3ª tarjeta · contenido avanzado: bloqueado hasta superar los dos primeros niveles.
-  { n: 3, titulo: "fisiologia.niveles.profundiza", sub: "fisiologia.niveles.profundiza.sub", ruta: "/metodo/fisiologia/profundiza", requiere: ["estructuras_hecho", "organismo_hecho"], eyebrow: "fisiologia.niveles.avanzado", iconKind: "avanzado" },
+  // DESARROLLO: los seis vídeos, el cómic, el juego de la célula y los órganos.
+  { n: 2, titulo: "fisiologia.niveles.desarrollo", sub: "fisiologia.niveles.desarrollo.sub", ruta: "/metodo/fisiologia/desarrollo", requiere: "estructuras_hecho", superado: "desarrollo_hecho", iconKind: "bebe" },
+  // VIDA absorbe Sistemas: todas-tus-células → cuerpo → organismo. Se abre al acabar Desarrollo.
+  { n: 3, titulo: "fisiologia.niveles.vida", sub: "fisiologia.niveles.vida.sub", ruta: "/metodo/fisiologia/vida", requiere: "desarrollo_hecho", superado: "organismo_hecho" },
+  // 4ª tarjeta · contenido avanzado: bloqueado hasta superar los tres primeros niveles.
+  { n: 4, titulo: "fisiologia.niveles.profundiza", sub: "fisiologia.niveles.profundiza.sub", ruta: "/metodo/fisiologia/profundiza", requiere: ["estructuras_hecho", "organismo_hecho"], eyebrow: "fisiologia.niveles.avanzado", iconKind: "avanzado" },
 ];
+
+// Quien ya andaba VIDA antes de que existiera DESARROLLO no se queda fuera.
+const flagCumplido = (flags: Record<string, any>, f: string) =>
+  !!flags[f] || (f === "desarrollo_hecho" && desarrolloHeredado(flags));
 
 // SVG candado (mismo que usa la caja de disciplina bloqueada).
 const Candado = ({ size }: { size: any }) => (
@@ -75,6 +82,19 @@ const Profundiza = ({ size }: { size: any }) => (
        w={size} h={size} fill={fisiologiaTxt}
        style={{ filter: `drop-shadow(0 1px 3px ${fisiologiaBg})` }}>
     <path d="M200-120v-80h200v-80q-83 0-141.5-58.5T200-480q0-61 33.5-111t90.5-73q8-34 35.5-55t62.5-21l-22-62 38-14-14-36 76-28 12 38 38-14 110 300-38 14 14 38-76 28-12-38-38 14-24-66q-15 14-34.5 21t-39.5 5q-22-2-41-13.5T338-582q-27 16-42.5 43T280-480q0 50 35 85t85 35h320v80H520v80h240v80H200Zm346-458 36-14-68-188-38 14 70 188Zm-97.5-33.5Q460-623 460-640t-11.5-28.5Q437-680 420-680t-28.5 11.5Q380-657 380-640t11.5 28.5Q403-600 420-600t28.5-11.5ZM546-578Zm-126-62Zm0 0Z" />
+  </Box>
+);
+
+// SVG «bebé» (cara con rizo) para la tarjeta de Desarrollo.
+const Bebe = ({ size }: { size: any }) => (
+  <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" w={size} h={size}
+       fill="none" stroke={fisiologiaTxt} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+       style={{ filter: `drop-shadow(0 1px 3px ${fisiologiaBg})` }}>
+    <circle cx="12" cy="13" r="7.5" />
+    <path d="M12 5.5c0-1.6 1.2-2.6 2.6-2.4" />
+    <circle cx="9.2" cy="12.2" r="0.6" fill={fisiologiaTxt} />
+    <circle cx="14.8" cy="12.2" r="0.6" fill={fisiologiaTxt} />
+    <path d="M9.6 15.6c1.4 1.2 3.4 1.2 4.8 0" />
   </Box>
 );
 
@@ -129,6 +149,8 @@ function NivelBox({ nivel, locked, done, onEnter }: { nivel: Nivel; locked: bool
                bg={`${fisiologiaBg}cc`} display="flex" alignItems="center" justifyContent="center">
             {nivel.iconKind === "avanzado" ? (
               <Profundiza size={{ base: "28px", md: "32px" }} />
+            ) : nivel.iconKind === "bebe" ? (
+              <Bebe size={{ base: "30px", md: "36px" }} />
             ) : (
               <Text color={fisiologiaTxt} fontSize={{ base: "2xl", md: "3xl" }} fontWeight="700" lineHeight="1"
                     style={{ textShadow: `0 1px 6px ${fisiologiaBg}` }}>
@@ -265,8 +287,8 @@ export default function MetodoFisiologiaNiveles() {
               const reqs = nivel.requiere
                 ? (Array.isArray(nivel.requiere) ? nivel.requiere : [nivel.requiere])
                 : [];
-              const locked = reqs.some((f) => !flags[f]);
-              const done = !!nivel.superado && !!flags[nivel.superado];
+              const locked = reqs.some((f) => !flagCumplido(flags, f));
+              const done = !!nivel.superado && flagCumplido(flags, nivel.superado);
               return (
                 <Reveal key={nivel.n} inView once amount={0.2} direction="right" distance={44}
                         delay={0.15 * i} duration={0.6}

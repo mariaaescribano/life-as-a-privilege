@@ -186,10 +186,15 @@ const MetodoFisiologiaAtomos = lazyConMetodo(() => import("./app/metodo/MetodoFi
 const MetodoFisiologiaMoleculas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaMoleculas"));
 const MetodoFisiologiaMacromoleculas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaMacromoleculas"));
 const MetodoFisiologiaEstructuras = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaEstructuras"));
+const MetodoFisiologiaDesarrollo = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaDesarrollo"));
+const MetodoFisiologiaOrganos = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaOrganos"));
+const MetodoFisiologiaVida = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaVida"));
 const MetodoFisiologiaCelula = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaCelula"));
 const MetodoFisiologiaTodasCelulas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaTodasCelulas"));
 const MetodoFisiologiaSistemas = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaSistemas"));
 const MetodoFisiologiaOrganismo = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaOrganismo"));
+const MetodoFisiologiaCuerpo = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaCuerpo"));
+const MetodoFisiologiaCuerpoEstacion = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaCuerpoEstacion"));
 const MetodoFisiologiaProfundiza = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaProfundiza"));
 const MetodoFisiologiaTema = lazyConMetodo(() => import("./app/metodo/MetodoFisiologiaTema"));
 const MetodoNutricion = lazyConMetodo(() => import("./app/metodo/MetodoNutricion"));
@@ -516,8 +521,15 @@ export default function App()
       <Route path="/metodo/fisiologia/moleculas" element={<PrivateRoute><MetodoFisiologiaMoleculas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/macromoleculas" element={<PrivateRoute><MetodoFisiologiaMacromoleculas /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/estructuras" element={<PrivateRoute><MetodoFisiologiaEstructuras /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/desarrollo" element={<PrivateRoute><MetodoFisiologiaDesarrollo /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/organos" element={<PrivateRoute><MetodoFisiologiaOrganos /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/vida" element={<PrivateRoute><MetodoFisiologiaVida /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/celula" element={<PrivateRoute><MetodoFisiologiaCelula /></PrivateRoute>} />
       <Route path="/metodo/fisiologia/todas-tus-celulas" element={<PrivateRoute><MetodoFisiologiaTodasCelulas /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/cuerpo" element={<PrivateRoute><MetodoFisiologiaCuerpo /></PrivateRoute>} />
+      <Route path="/metodo/fisiologia/cuerpo/:key" element={<PrivateRoute><MetodoFisiologiaCuerpoEstacion /></PrivateRoute>} />
+      {/* Sistemas (la rejilla de los 12) dejó de ser un paso: lo sustituye el camino
+          «Tu cuerpo». La ruta sigue viva, fuera del recorrido y del Índice. */}
       <Route path="/metodo/fisiologia/sistemas" element={<PrivateRoute><MetodoFisiologiaSistemas /></PrivateRoute>} />
       {/* El cerebro dejó de ser un paso del recorrido: ahora es un apartado de
           Profundiza. La ruta vieja sigue viva para no romper enlaces guardados. */}

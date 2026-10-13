@@ -267,6 +267,10 @@ Una sola pieza para casi todo: **`FotoBox`** (con `TarjetaNutri` como ejemplo de
   ~33 % (`scrollAcuarela(tinta)`), pegada al borde derecho; en el cómic, `BarraScrollTexto`
   dibujada a mano (la del navegador no se ve en móvil). En escritorio, los visores sin barra
   (`useSinBarraDeScroll`).
+- **Vídeo de María en popup inmersivo** (`VideoMateriaModal` + `useVideoMateria`, Fisiología «La
+  materia»): pantalla completa, foto de la disciplina a resolución completa sin velo ni blur, reel
+  de YouTube vertical 9:16 en medio con `glowHeader`, X de la casa. Los enlaces viven en
+  `hardCoded/espacio/VideosMateria.ts`; sin enlace, el popup no sale.
 - El cómic de entrada de cada disciplina sale **siempre** al entrar (no persiste) y es saltable
   con la X.
 

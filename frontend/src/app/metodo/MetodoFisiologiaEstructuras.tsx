@@ -6,6 +6,7 @@ import { keyframes } from "@emotion/react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
+import { useVideoMateria } from "../../components/metodo/VideoMateriaModal";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
@@ -460,6 +461,7 @@ function EstCard({ e, hecha, onClick }: { e: EstDef; hecha: boolean; onClick: ()
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaEstructuras() {
   const t = useT();
+  const video = useVideoMateria("cooperacion");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [formadas, setFormadas] = useState<EstId[]>([]);
@@ -471,7 +473,7 @@ export default function MetodoFisiologiaEstructuras() {
   // Al terminar las 4 estructuras se pasa por un cómic-puente y de ahí, a
   // «Crea la célula» (sin volver a la página de Niveles).
   const irSiguiente = () => setComicOpen(true);
-  const comicContinuar = () => { setComicOpen(false); navigate("/metodo/fisiologia/celula"); };
+  const comicContinuar = () => { setComicOpen(false); navigate("/metodo/fisiologia/desarrollo"); };
   const comicCerrar = () => setComicOpen(false);
 
   useEffect(() => {
@@ -603,6 +605,7 @@ export default function MetodoFisiologiaEstructuras() {
       </Flex>
 
       {celulasModal}
+      {video}
       <ComicCelulaModal isOpen={comicOpen} onContinue={comicContinuar} onClose={comicCerrar} />
       <IndiceFisiologia />
       <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />

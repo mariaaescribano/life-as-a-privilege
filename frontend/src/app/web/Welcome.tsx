@@ -537,7 +537,7 @@ const Welcome = () => {
               filter:
                 "drop-shadow(0 0 10px rgba(255,255,255,0.38)) drop-shadow(0 0 24px rgba(255,255,255,0.20)) drop-shadow(0 0 47px rgba(180,255,245,0.15))" +
                 (mounted ? "" : " blur(6px)"),
-              transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1.5,0.36,1), filter 1s ease",
+              transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1,0.36,1), filter 1s ease",
             }}
           />
         </Box>
@@ -558,7 +558,7 @@ const Welcome = () => {
           opacity={mounted ? 1 : 0}
           transform={mounted ? "translateY(0) scale(1)" : "translateY(30px) scale(0.94)"}
           filter={mounted ? "blur(0px)" : "blur(8px)"}
-          transition="opacity 0.9s ease 0.15s, transform 1.1s cubic-bezier(0.22,1.35,0.36,1) 0.15s, filter 0.9s ease 0.15s"
+          transition="opacity 0.9s ease 0.15s, transform 1.1s cubic-bezier(0.22,1,0.36,1) 0.15s, filter 0.9s ease 0.15s"
         >
           <Text
             color="white"

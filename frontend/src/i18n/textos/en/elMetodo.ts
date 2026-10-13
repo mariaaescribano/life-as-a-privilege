@@ -14,7 +14,7 @@ export const elMetodo = {
   "elMetodo.lema": "Eight disciplines. One order. One purpose: to understand yourself.",
   "elMetodo.intro":
     "These aren't eight independent courses.\nIt's a guided exploration of yourself through eight different perspectives, to find the root of your patterns and understand yourself.",
-  "elMetodo.porDentro": "You don't study eight disciplines.\nYou discover yourself from eight perspectives.",
+  "elMetodo.porDentro": "Understand yourself, so you can stop hurting yourself without knowing why and learn to take care of yourself the way you deserve",
   /** Right under the title: tells you the mandala is clickable. */
   "elMetodo.porDentroPista": "Click each circle to discover it",
   "elMetodo.cadaDisciplina": "Pick whatever order you want. I suggest this one:",
@@ -25,6 +25,39 @@ export const elMetodo = {
   "elMetodo.saberMas": "Learn more",
   "elMetodo.muestra": "Preview",
   "elMetodo.videoProximamente": "Video coming soon",
+
+  // ── How it works (ComoFuncionaBloque) ──────────────────────────────────
+  "elMetodo.como.titulo": "How does The Map work?",
+  "elMetodo.como.intro":
+    "Pick the discipline that interests you most and step into a journey designed to help you understand yourself better and treat yourself with the respect you deserve.",
+  "elMetodo.como.1.titulo": "Go through The Map at your own pace",
+  "elMetodo.como.1.texto":
+    "Explore the content, connect ideas and discover new ways of understanding yourself. Move at your own pace and go deeper into whatever resonates most with you.",
+  "elMetodo.como.2.titulo": "Integrate what you've learned with me",
+  "elMetodo.como.2.texto":
+    "If you want to take it further, we can have one-to-one sessions to connect what you've learned with your own life.",
+  "elMetodo.como.2.texto2":
+    "We'll explore your conflicts, difficulties, patterns and desires from different perspectives to find ways of understanding and addressing them.",
+  "elMetodo.como.paso.1.titulo": "I listen",
+  "elMetodo.como.paso.1.texto": "We talk about what brings you here and your questions.",
+  "elMetodo.como.paso.2.titulo": "We explore",
+  "elMetodo.como.paso.2.texto": "We use different disciplines to look at your story from new perspectives.",
+  "elMetodo.como.paso.3.titulo": "We integrate",
+  "elMetodo.como.paso.3.texto": "We connect what you discover with your current life and your needs.",
+  "elMetodo.como.paso.4.titulo": "You take action",
+  "elMetodo.como.paso.4.texto": "You leave with a deeper understanding of yourself and tools to look after yourself and decide with more clarity.",
+  "elMetodo.como.1.badge": "Lower rate of lasting change",
+  "elMetodo.como.2.badge": "Higher rate of change achieved",
+  "elMetodo.como.2.boton": "I want this support",
+  "elMetodo.como.modal.titulo": "Let's move forward together",
+  "elMetodo.como.modal.texto":
+    "Leave me your email and tell me briefly what you'd like to work on. I'll get in touch to explain how we would do it. No commitment on your part.",
+  "elMetodo.como.modal.ph.mensaje": "Tell me whatever you like (optional)",
+  "elMetodo.como.modal.nota": "Only I will write to you, to answer your questions. You decide whether we continue.",
+  "elMetodo.como.modal.gracias":
+    "I've received your message. I'll be in touch very soon, with no commitment on your part.",
+  "elMetodo.como.objetivo":
+    "**The goal isn't only for you to learn new things about yourself, but for you to be able to apply them to your life and make more conscious decisions.**",
 
   // ── What you get ───────────────────────────────────────────────────────
   "elMetodo.queObtienes": "What do you get when you access The Map?",
@@ -88,7 +121,7 @@ export const elMetodo = {
 
   // ── 7. The proof (the eight videos) ────────────────────────────────────
   // Right before the price: up to here the page promises, here it shows.
-  "elMetodo.pruebas.titulo": "The Map from the inside",
+  "elMetodo.pruebas.titulo": "Understand why you do what you do. Stop fighting yourself and learn to take care of yourself",
   "elMetodo.pruebas.sub":
     "The eight disciplines from the inside, just as you'll see them. Tap any one to watch it.",
 

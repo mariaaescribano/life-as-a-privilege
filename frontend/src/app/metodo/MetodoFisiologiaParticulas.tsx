@@ -6,6 +6,7 @@ import { keyframes } from "@emotion/react";
 import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
+import { useVideoMateria } from "../../components/metodo/VideoMateriaModal";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { FisiologiaLoading, FisiologiaLoader } from "../../components/metodo/comicLoaders";
@@ -258,6 +259,7 @@ function PiezaInterna({ tipo, x, y }: { tipo: Tipo; x: number; y: number }) {
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaParticulas() {
   const t = useT();
+  const video = useVideoMateria("atomo");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   // La página no se muestra hasta que las fotos del dinamismo estén cargadas.
@@ -567,6 +569,7 @@ export default function MetodoFisiologiaParticulas() {
       </Flex>
 
       {celulasModal}
+      {video}
       <IndiceFisiologia />
       <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />

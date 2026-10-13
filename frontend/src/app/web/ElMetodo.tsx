@@ -30,6 +30,7 @@ import {
   PorDondeEmpiezoBloque,
   PrecioBloque,
   PruebasBloque,
+  ComoFuncionaBloque,
 } from "../../components/metodo/elMetodoVenta";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
@@ -1082,11 +1083,20 @@ export default function ElMetodo() {
               Mismo hueco arriba y abajo, para que caiga justo en el medio. */}
           <SeparadorLinea mt={{ base: 16, md: 24 }} mb={{ base: 16, md: 24 }} />
 
+          {/* ── CÓMO FUNCIONA ──
+              Qué pasa tras comprar: recorrerlo solo o con llamadas. Va antes
+              de «Qué obtienes» y no más arriba: primero hay que haber visto
+              qué es y qué hay dentro (mandala y vídeos) para que «cómo
+              funciona» tenga a qué referirse. */}
+          <Box mt={{ base: 12, md: 16 }}>
+            <ComoFuncionaBloque />
+          </Box>
+
           {/* ── QUÉ OBTIENES ──
               Abre la parte del dinero: es la letra pequeña de la compra
               (acceso, PDF, sin suscripción), así que va pegada al precio y no
               suelta a media página. */}
-          <Box mt={{ base: 12, md: 16 }}>
+          <Box mt={{ base: 16, md: 24 }}>
             <QueObtienesBox />
           </Box>
 

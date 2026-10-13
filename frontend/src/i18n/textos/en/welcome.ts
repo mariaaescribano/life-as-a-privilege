@@ -1,19 +1,19 @@
 export const welcome = {
-  "welcome.subtitulo": "Science, psychology, and tradition. An integrated vision of you.",
+  "welcome.subtitulo": "Science, psychology, and tradition to build an integrated vision of you.",
   "welcome.explorar": "Explore",
   "welcome.explorarDisciplina": "Explore discipline",
   "welcome.modal.cuenta": "Create an account or log in",
   "welcome.modal.iniciarSesion": "Log in →",
 
   // ── Card taglines ──────────────────────────────────────────────────────
-  "welcome.lema.astrologia": "The patterns that shape you.",
+  "welcome.lema.astrologia": "The tendencies that shape you.",
   "welcome.lema.psicologia": "How your mind works.",
   "welcome.lema.hinduismo": "Your unique constitution.",
-  "welcome.lema.medicinaChina": "The origin of your imbalances.",
-  "welcome.lema.fisiologia": "You are a body. Know yourself.",
-  "welcome.lema.nutricion": "What you choose rebuilds you.",
+  "welcome.lema.medicinaChina": "Find your balance.",
+  "welcome.lema.fisiologia": "Discover the life that lives in you.",
+  "welcome.lema.nutricion": "Enjoy without harming yourself.",
   "welcome.lema.cabala": "The architecture of your soul.",
-  "welcome.lema.cultura": "The stories of humanity.",
+  "welcome.lema.cultura": "History and philosophy.",
 
   // ── Modal description for each discipline ──────────────────────────────
   "welcome.desc.astrologia":
@@ -31,5 +31,5 @@ export const welcome = {
   "welcome.desc.cabala":
     "The map of the human soul. Ten Sefirot to understand what balances you and what throws you off balance.",
   "welcome.desc.cultura":
-    "The stories of humanity that marked a before and an after. Understand them and create your own.",
+    "History and philosophy, in chronological order.",
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
@@ -1406,7 +1406,13 @@ export default function MetodoFisiologiaTodasCelulas() {
     setOrganoLoading(false);
     window.scrollTo({ top: 0, behavior: "auto" });
   };
+  // Si se llega desde «Tu recorrido» (?organo=…), la ficha se abre sola y volver
+  // lleva de vuelta allí.
+  const [params] = useSearchParams();
+  const organoPedido = params.get("organo");
+  const viaVida = !!organoPedido && ORGANOS.some((o) => o.key === organoPedido);
   const volverGaleria = () => {
+    if (viaVida) { navigate("/metodo/fisiologia/vida"); return; }
     setVista("galeria");
     window.scrollTo({ top: 0, behavior: "auto" });
   };
@@ -1436,6 +1442,8 @@ export default function MetodoFisiologiaTodasCelulas() {
         // No mostramos la página hasta que TODAS las fotos de los órganos estén
         // descargadas, para que la cuadrícula no se rellene de golpe después.
         await precargarImagenes(ORGANOS.map((o) => encodeURI(o.foto)));
+        const pedido = ORGANOS.find((o) => o.key === organoPedido);
+        if (pedido) await abrirOrgano(pedido);
       } catch {
         navigate("/metodo/fisiologia");
         return;
@@ -1511,9 +1519,9 @@ export default function MetodoFisiologiaTodasCelulas() {
               color={fisiologiaTxt}
               nom={fisiologiaNom}
               mb={0}
-              prev={{ label: `← ${t("fisiologia.celula.titulo")}`, onClick: () => navigate("/metodo/fisiologia/celula") }}
+              prev={{ label: `← ${t("fisiologia.vida.titulo")}`, onClick: () => navigate("/metodo/fisiologia/vida") }}
               extra={celulasBtn}
-              next={{ label: `${t("fisiologia.sistemas.titulo")} →`, onClick: () => navigate("/metodo/fisiologia/sistemas") }}
+              next={{ label: `${t("fisiologia.cuerpo.titulo")} →`, onClick: () => navigate("/metodo/fisiologia/cuerpo") }}
             />
           </Reveal>
 

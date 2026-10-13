@@ -27,7 +27,8 @@ export function IndiceFisiologia() {
   const tusCelulasAbierto = useTusCelulasAbierto();
 
   // Fuera de un paso del recorrido (intro, niveles…) no hay índice que enseñar.
-  const enUnPaso = fisiologiaRutas().includes(clean);
+  // Las páginas de cada estación (/cuerpo/ojos…) cuelgan del paso «Tu cuerpo».
+  const enUnPaso = fisiologiaRutas().includes(clean) || clean.startsWith("/metodo/fisiologia/cuerpo/");
   if (!enUnPaso || tusCelulasAbierto) return null;
 
   const secciones: SeccionIndice[] = fisiologiaNiveles().map((g) => ({

@@ -9,21 +9,21 @@
 export const welcome = {
   // El titular de la portada es el nombre de la casa y sale de `header.marca`
   // (ahí también se lee el rótulo del header): un solo sitio donde cambiarlo.
-  "welcome.subtitulo": "Ciencia, psicología y tradición. Una visión integrada de ti.",
+  "welcome.subtitulo": "Ciencia, psicología y tradición para construir una visión integrada de ti.",
   "welcome.explorar": "Explorar",
   "welcome.explorarDisciplina": "Explorar disciplina",
   "welcome.modal.cuenta": "Crea una cuenta o inicia sesión",
   "welcome.modal.iniciarSesion": "Iniciar sesión →",
 
   // ── Lemas de las tarjetas ──────────────────────────────────────────────
-  "welcome.lema.astrologia": "Los patrones que te forman.",
+  "welcome.lema.astrologia": "Las tendencias que te forman.",
   "welcome.lema.psicologia": "Cómo funciona tu mente.",
   "welcome.lema.hinduismo": "Tu constitución única.",
-  "welcome.lema.medicinaChina": "El origen de tus desequilibrios.",
-  "welcome.lema.fisiologia": "Eres un cuerpo. Conócete.",
-  "welcome.lema.nutricion": "Lo que eliges te reconstruye.",
+  "welcome.lema.medicinaChina": "Encuentra tu equilibrio.",
+  "welcome.lema.fisiologia": "Descubre la vida que te habita.",
+  "welcome.lema.nutricion": "Disfruta sin dañarte.",
   "welcome.lema.cabala": "La arquitectura de tu alma.",
-  "welcome.lema.cultura": "Las historias de la humanidad.",
+  "welcome.lema.cultura": "Historia y filosofía.",
 
   // ── Descripción del modal de cada disciplina ───────────────────────────
   "welcome.desc.astrologia":
@@ -41,5 +41,5 @@ export const welcome = {
   "welcome.desc.cabala":
     "El mapa del alma humana. Diez Sefirot para entender qué te equilibra y qué te desequilibra.",
   "welcome.desc.cultura":
-    "Las historias de la humanidad que marcaron un antes y un después. Entiéndelas y crea la tuya propia.",
+    "Historia y filosofía cronológicamente.",
 } as const;

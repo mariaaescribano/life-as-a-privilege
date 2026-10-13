@@ -6,6 +6,7 @@ import { keyframes } from "@emotion/react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
+import { useVideoMateria } from "../../components/metodo/VideoMateriaModal";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
@@ -317,6 +318,7 @@ function PanelBox({ children, minH, px, py, ...rest }: any) {
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaMoleculas() {
   const t = useT();
+  const video = useVideoMateria("molecula");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [indice, setIndice] = useState(0);
@@ -674,6 +676,7 @@ export default function MetodoFisiologiaMoleculas() {
       </Flex>
 
       {celulasModal}
+      {video}
       <IndiceFisiologia />
       <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />

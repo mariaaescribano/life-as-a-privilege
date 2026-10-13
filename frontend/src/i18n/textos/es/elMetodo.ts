@@ -13,9 +13,9 @@ export const elMetodo = {
   "elMetodo.lema": "Ocho disciplinas. Un orden. Un propósito: entenderte.",
   "elMetodo.intro":
     "No son ocho cursos independientes.\nEs una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.",
-  "elMetodo.porDentro": "No estudias ocho disciplinas.\nTe descubres a ti desde ocho perspectivas.",
+  "elMetodo.porDentro": "Ocho disciplinas. Una mirada más amplia sobre ti.",
   /** Va justo debajo del título: avisa de que el mandala se puede pinchar. */
-  "elMetodo.porDentroPista": "Haz clic en cada círculo para descubrirla",
+  "elMetodo.porDentroPista": "Cada disciplina aporta una perspectiva única. Juntas, te ayudan a comprenderte de forma más completa.",
   "elMetodo.cadaDisciplina": "Elige el orden que quieras. Yo te propongo este:",
   /** Cabecera de las cajas de la ficha de disciplina (DisciplinaFicha). */
   "elMetodo.queIncluye": "Qué incluye",
@@ -24,6 +24,39 @@ export const elMetodo = {
   "elMetodo.saberMas": "Saber más",
   "elMetodo.muestra": "Muestra",
   "elMetodo.videoProximamente": "Vídeo próximamente",
+
+  // ── Cómo funciona (ComoFuncionaBloque) ─────────────────────────────────
+  "elMetodo.como.titulo": "¿Cómo funciona El Mapa?",
+  "elMetodo.como.intro":
+    "Elige la disciplina que más te interese y accede a un recorrido diseñado para ayudarte a comprenderte mejor y a tratarte con el respeto que te mereces.",
+  "elMetodo.como.1.titulo": "Recorre El Mapa a tu ritmo",
+  "elMetodo.como.1.texto":
+    "Explora el contenido, conecta conocimientos y descubre nuevas formas de entenderte. Avanza a tu ritmo y profundiza en aquello que más resuene contigo.",
+  "elMetodo.como.2.titulo": "Recorre El Mapa conmigo",
+  "elMetodo.como.2.texto":
+    "Interpretamos juntos tus preguntas, conflictos, profundizamos en tus descurbimientos y los conectamos con tu vida.",
+  "elMetodo.como.2.texto2":
+    "",
+  "elMetodo.como.paso.1.titulo": "Te escucho",
+  "elMetodo.como.paso.1.texto": "Hablamos de lo que te trae hasta aquí y de tus problemas.",
+  "elMetodo.como.paso.2.titulo": "Exploramos",
+  "elMetodo.como.paso.2.texto": "Utilizamos distintas disciplinas para mirarte desde nuevas perspectivas.",
+  "elMetodo.como.paso.3.titulo": "Integramos",
+  "elMetodo.como.paso.3.texto": "Conectamos lo que vas descubriendo con tu vida actual y tus necesidades.",
+  "elMetodo.como.paso.4.titulo": "Tomas acción",
+  "elMetodo.como.paso.4.texto": "Usa los nuevos recursos para cuidarte y decidir con más claridad desde quién eres de verdad.",
+  "elMetodo.como.1.badge": "Menor porcentaje de cambios permanentes",
+  "elMetodo.como.2.badge": "Mayor porcentaje de cambios conseguidos",
+  "elMetodo.como.2.boton": "Quiero este",
+  "elMetodo.como.modal.titulo": "Avancemos juntos",
+  "elMetodo.como.modal.texto":
+    "Déjame tu email y cuéntame brevemente qué te gustaría trabajar. Me pondré en contacto contigo para explicarte cómo lo haríamos. Sin ningún compromiso por tu parte.",
+  "elMetodo.como.modal.ph.mensaje": "Cuéntame lo que quieras (opcional)",
+  "elMetodo.como.modal.nota": "Solo te escribiré yo, para resolver tus dudas. Tú decides si seguimos.",
+  "elMetodo.como.modal.gracias":
+    "He recibido tu mensaje. Me pondré en contacto contigo muy pronto, sin ningún compromiso por tu parte.",
+  "elMetodo.como.objetivo":
+    "**El objetivo no es solo que aprendas cosas nuevas sobre ti, sino que puedas aplicarlas a tu vida y tomar decisiones más conscientes.**",
 
   // ── Qué obtienes ───────────────────────────────────────────────────────
   "elMetodo.queObtienes": "¿Qué obtienes al acceder a El Mapa?",
@@ -47,9 +80,9 @@ export const elMetodo = {
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",
   "elMetodo.hero.sub":
-    "Ciencia y tradición para comprender tu mente, tu historia y tu cuerpo.",
+    "Conócete desde la ciencia y la tradición para descubrir cómo de verdad quieres vivir.",
   // Ya no lleva al pago: abre el TEST de «encuentra tu disciplina».
-  "elMetodo.hero.cta": "Test inicial",
+  "elMetodo.hero.cta": "¿Por dónde empiezo?",
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).
   "elMetodo.hero.ctaPie": "Desde 30 € · Sin suscripción · Sin compromiso",
@@ -93,9 +126,9 @@ export const elMetodo = {
 
   // ── 7. LA PRUEBA (los ocho vídeos) ─────────────────────────────────────
   // Justo antes del precio: hasta ahí la página promete, y aquí se enseña.
-  "elMetodo.pruebas.titulo": "El Mapa por dentro",
+  "elMetodo.pruebas.titulo": "Entiende por qué haces lo que haces. Deja de luchar contra ti y aprende a cuidarte.",
   "elMetodo.pruebas.sub":
-    "Las ocho disciplinas por dentro, tal y como las verás. Pulsa cualquiera para verla.",
+    "Explora los diferentes recorridos de El Mapa. Cada uno te ofrece conocimientos y recursos para conocerte mejor.",
 
   // ── 8. PRECIO ──────────────────────────────────────────────────────────
   "elMetodo.precio.titulo": "Cuánto cuesta, sin misterio",
@@ -188,7 +221,7 @@ export const elMetodo = {
   // ── Botones flotantes + llamada gratuita (popup) ───────────────────────
   // El popup sale solo: a los 20 s de entrar y, al cerrarse, otra vez a los 70 s.
   /** El botón flotante del test de «¿por qué disciplina empiezo?». */
-  "elMetodo.test.boton": "Test inicial",
+  "elMetodo.test.boton": "¿Por dónde empiezo?",
 
   // ── El test de «encuentra tu disciplina» (TestDisciplina) ───────────────
   // Las preguntas y respuestas viven con sus puntos en TestDisciplina.tsx
@@ -210,7 +243,7 @@ export const elMetodo = {
   // tiene su tipografía, y en inglés el reparto de palabras no es el mismo.
   "elMetodo.llamada.titulo": "Hablemos juntos",
   "elMetodo.llamada.tituloSufijo": "sin coste",
-  "elMetodo.llamada.texto": "Cuéntame qué estás buscando y vemos por dónde empezar.",
+  "elMetodo.llamada.texto": "Cuéntame qué te ha pasado y vemos por dónde empezar.",
   "elMetodo.llamada.remate": "",
   "elMetodo.llamada.whatsapp": "Escríbeme por WhatsApp",
   /** Mensaje ya escrito al abrir el chat: que no tenga que pensar cómo empezar,

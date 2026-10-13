@@ -265,7 +265,7 @@ export default function MetodoFisiologiaOrganismo() {
             color={fisiologiaTxt}
             nom={fisiologiaNom}
             mb={0}
-            prev={{ label: `← ${t("fisiologia.sistemas.titulo")}`, onClick: () => navigate("/metodo/fisiologia/sistemas") }}
+            prev={{ label: `← ${t("fisiologia.cuerpo.titulo")}`, onClick: () => navigate("/metodo/fisiologia/cuerpo") }}
             extra={celulasBtn}
             next={{ label: `${t("fisiologia.niveles.titulo")} →`, onClick: () => setComicOpen(true),
                     disabled: !completo, disabledTooltip: t("fisiologia.organismo.bloqueo") }}

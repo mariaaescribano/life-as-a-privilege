@@ -5,9 +5,9 @@
 // que psicologiaRecorrido / tcmRecorrido. Alimenta el botón «Índice»
 // (IndiceFisiologia) y su bloqueo secuencial.
 //
-// Los pasos van numerados SEGUIDOS (1..9) aunque el recorrido se ande por
-// niveles (La materia, La Vida): así el Índice puede desbloquear paso a paso y
-// el camino de /home cuenta una sola vez (ver data/camino.ts: fisiologia = 9).
+// Los pasos van numerados SEGUIDOS (1..12) aunque el recorrido se ande por
+// niveles (La materia, Desarrollo, La Vida): así el Índice puede desbloquear paso a paso y
+// el camino de /home cuenta una sola vez (ver data/camino.ts: fisiologia = 12).
 // El «x/y» del header de cada página sigue contando dentro de su nivel: eso es
 // lo que la usuaria ve mientras anda ese tramo.
 //
@@ -15,7 +15,8 @@
 //    aquí para que el Índice siga coincidiendo con lo que se puede hacer.
 // ─────────────────────────────────────────────────────────────────────────
 import { traducir, type ClaveTexto } from "../../i18n";
-import { SISTEMAS } from "../../hardCoded/espacio/SistemasFisiologia";
+import { ESTACIONES, leerCuerpo } from "../../hardCoded/espacio/EstacionesCuerpo";
+import { desarrolloHeredado, desarrolloVideosCompleto } from "../../hardCoded/espacio/VideosDesarrollo";
 import type { PasoRecorrido } from "./psicologiaRecorrido";
 
 /** Un nivel del recorrido (el título del bloque en el Índice y sus pasos). */
@@ -34,9 +35,12 @@ const PASOS: { clave: ClaveTexto; path: string; nivel: string }[] = [
   { nivel: "MATERIA", clave: "fisiologia.moleculas.titulo",      path: "/metodo/fisiologia/moleculas" },
   { nivel: "MATERIA", clave: "fisiologia.macromoleculas.titulo", path: "/metodo/fisiologia/macromoleculas" },
   { nivel: "MATERIA", clave: "fisiologia.estructuras.corto",     path: "/metodo/fisiologia/estructuras" },
-  { nivel: "VIDA",    clave: "fisiologia.celula.titulo",         path: "/metodo/fisiologia/celula" },
+  { nivel: "DESARROLLO", clave: "fisiologia.desarrollo.titulo",  path: "/metodo/fisiologia/desarrollo" },
+  { nivel: "DESARROLLO", clave: "fisiologia.celula.titulo",      path: "/metodo/fisiologia/celula" },
+  { nivel: "DESARROLLO", clave: "fisiologia.organos.titulo",     path: "/metodo/fisiologia/organos" },
+  { nivel: "VIDA",    clave: "fisiologia.vida.titulo",           path: "/metodo/fisiologia/vida" },
   { nivel: "VIDA",    clave: "fisiologia.lasCelulas.corto",      path: "/metodo/fisiologia/todas-tus-celulas" },
-  { nivel: "VIDA",    clave: "fisiologia.sistemas.titulo",       path: "/metodo/fisiologia/sistemas" },
+  { nivel: "VIDA",    clave: "fisiologia.cuerpo.titulo",         path: "/metodo/fisiologia/cuerpo" },
   { nivel: "VIDA",    clave: "fisiologia.organismo.titulo",      path: "/metodo/fisiologia/organismo" },
 ];
 
@@ -72,21 +76,23 @@ export const fisiologiaIndice = (): PasoRecorrido[] =>
  *  siguiente. Los pasos sin requisito devuelven true. */
 export function puedeAvanzarFisiologia(data: any, n: number): boolean {
   const d = data || {};
-  const lista = (v: unknown): string[] => (Array.isArray(v) ? v.map(String) : []);
   switch (n) {
     case 1: return !!d.particulas_hecho;                              // Partículas: átomo montado
     case 2: return !!d.atomos_hecho;                                  // Átomos: los tres montados
     case 3: return !!d.moleculas_hecho;                               // Moléculas: todas formadas
     case 4: return !!d.macromoleculas_hecho;                          // Macromoléculas: las cuatro
     case 5: return !!d.estructuras_hecho;                             // Estructuras: todas
-    case 6: return !!d.celula_hecho;                                  // La célula: montada
-    case 8: {                                                         // Sistemas: los 12 abiertos
-      const vistos = new Set(lista(d.sistemas_vistos));
-      return SISTEMAS.every((s) => vistos.has(s.key));
+    case 6: return desarrolloHeredado(d) || desarrolloVideosCompleto(d);  // Desarrollo: los seis vídeos vistos
+    case 7: return desarrolloHeredado(d) || !!d.celula_hecho;           // La célula: montada
+    case 8: return desarrolloHeredado(d);                             // Órganos: hecho al pasar a «Las células»
+    case 9: return desarrolloHeredado(d) || !!d.vida_test_hecho;       // Tu recorrido: test hecho
+    case 11: {                                                        // Tu cuerpo: todas las estaciones hechas
+      const hechas = new Set(leerCuerpo(d).hechas);
+      return ESTACIONES.every((e) => hechas.has(e.key));
     }
-    // 7 («Todas tus células») no pide nada para pasar: se puede seguir cuando se
+    // 10 («Todas tus células») no pide nada para pasar: se puede seguir cuando se
     // quiera, aunque queden células por abrir.
-    default: return true;                                             // 7, 9 y cualquier otro
+    default: return true;                                             // 10, 12 y cualquier otro
   }
 }
 

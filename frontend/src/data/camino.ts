@@ -42,7 +42,7 @@ export interface CaminoDisciplina {
  * `total` aquí. Los números salen de:
  *   · metodo (astrología) → ASTROLOGIA_TOTAL (astrologiaRecorrido.ts)
  *   · psicologia          → psicologiaIndice() (psicologiaRecorrido.ts)
- *   · fisiologia          → NIVELES de IndiceFisiologia (materia + vida)
+ *   · fisiologia          → NIVELES de IndiceFisiologia (materia + desarrollo + vida)
  *   · nutricion           → PASOS de IndiceNutricion
  *   · ayurveda            → ayurvedaMapa() + ayurvedaDoshaIndice()
  *   · tcm                 → TCM_TOTAL (tcmRecorrido.ts)
@@ -56,7 +56,7 @@ export interface CaminoDisciplina {
 export const CAMINO: Record<CaminoKey, CaminoDisciplina> = {
   metodo:     { total: 8,  ruta: "/metodo/astrologia" },
   psicologia: { total: 29, ruta: "/metodo/psicologia" },
-  fisiologia: { total: 9,  ruta: "/metodo/fisiologia" },
+  fisiologia: { total: 12,  ruta: "/metodo/fisiologia" },
   nutricion:  { total: 15, ruta: "/metodo/nutricion" },
   ayurveda:   { total: 15, ruta: "/metodo/ayurveda" },
   tcm:        { total: 12, ruta: "/metodo/tcm" },

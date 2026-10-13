@@ -1227,7 +1227,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Acceso:** con sesión (PrivateRoute) + pago de Fisiología (GuardiaPagoRecorrido; además la página comprueba `fisiologia_suscrito` y si no → `/metodo/fisiologia`).
 - **Qué hace:** Tres tarjetas en fila: Nivel 1 «La materia», Nivel 2 «La vida» y «Profundiza» (avanzado). Las bloqueadas salen con candado y apagadas; las superadas llevan `MarcaLeido`. Pulsar una abierta lleva a su primera página.
 - **Datos:** `GET /user/me`; `GET /metodo-fisiologia/:userId` → lee `estructuras_hecho` y `organismo_hecho`. No guarda.
-- **Desbloqueo:** Materia siempre abierta (→ `/metodo/fisiologia/particulas`, superada con `estructuras_hecho`). Vida exige `estructuras_hecho` (→ `/metodo/fisiologia/celula`, superada con `organismo_hecho`). Profundiza exige `estructuras_hecho` + `organismo_hecho` (→ `/metodo/fisiologia/profundiza`).
+- **Desbloqueo:** Materia siempre abierta (→ `/metodo/fisiologia/particulas`, superada con `estructuras_hecho`). Desarrollo (nivel 2, icono de bebé) exige `estructuras_hecho` (→ `/metodo/fisiologia/desarrollo`, superado con `desarrollo_hecho`, que se guarda en `/organos` al pasar a «Las células»). Vida exige `desarrollo_hecho` (o rastro de haber pasado antes: `desarrolloHeredado`) (→ `/metodo/fisiologia/todas-tus-celulas`, superada con `organismo_hecho`). Profundiza exige `estructuras_hecho` + `organismo_hecho` (→ `/metodo/fisiologia/profundiza`).
 - **Botones / a dónde lleva:** prev «← Introducción» → `/metodo/fisiologia`; next «La sonrisa interior →» abre el cómic intercalado «La meditación y el cerebro» (`ComicPasoModal`, `MEDITACION_CEREBRO`) y al continuar → `/metodo/fisiologia/sonrisa`. Botón Tus células.
 - **Condiciones y casos raros:** el next a La sonrisa NO está bloqueado: se puede ir sin hacer ningún nivel. Sin fila en BD → todo bloqueado salvo Nivel 1. No pinta el botón flotante Índice.
 - **Tests:** pendiente
@@ -1300,7 +1300,18 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Se arrastran núcleo, ADN, membrana, 2 mitocondrias y 3 ribosomas a la zona hasta montar una célula entera. Al completarla salen la foto y el texto del resultado, y «Volver a hacer». Header «1/4» (nivel Vida).
 - **Datos:** `GET /user/me`; `GET /metodo-fisiologia/:userId`; al completar `PATCH /metodo-fisiologia/:userId` con `celula_hecho: true`.
 - **Desbloqueo:** la página no comprueba `estructuras_hecho` (sí lo hacen la tarjeta de Niveles y el Índice). `celula_hecho` abre el Paso 7.
-- **Botones / a dónde lleva:** prev «← Estructuras» → `/metodo/fisiologia/estructuras`; next «Órganos →» (bloqueado hasta completar) abre el cómic «De una célula a un órgano» (`ComicPasoModal`, `CELULAS_ORGANOS`), que continúa a `/metodo/fisiologia/todas-tus-celulas`.
+- **Botones / a dónde lleva:** prev «← Estructuras» → `/metodo/fisiologia/estructuras`; next «Órganos →» (bloqueado hasta completar) → `/metodo/fisiologia/organos`. La célula es ahora el paso 2/3 del nivel Desarrollo; prev «← Desarrollo». El cómic `CELULAS_ORGANOS` se partió: viñetas 1-5 (con la pregunta delante) abren Desarrollo, 6-7 son la página Órganos.
+
+## `/metodo/fisiologia/desarrollo` — Desarrollo (nivel 2, paso 1/3)
+- Popup inmersivo con 6 vídeos (3+3), abiertos en orden (`VideosDesarrollo.ts`; sin enlace = visto). Visto = `data.desarrollo_videos`. Al acabar: cómic de la pregunta + historia → `/celula`. Vídeo de entrada `celulas` (`VideosMateria.ts`).
+
+## `/metodo/fisiologia/vida` — Tu recorrido (nivel 3, paso 1/4)
+- Flujo: cómic de entrada (`comicVida.ts`, vacío = se salta) → test de 3 preguntas (`TestVidaModal`, datos en `OrganosVida.ts`) → «Preparando tu recorrido individualizado» (mín. 3,2 s) → figura humana (`FiguraHumana`, SVG) + 3 cajas plegables (Imprescindible · Te puede interesar · No obligatorio…).
+- Datos: `data.vida` = `{ respuestas, ranking }` y `vida_test_hecho` (lo lee `leerVida`, blindado). El ranking es determinista (`rankingVida`).
+- Un órgano: vídeo de María (`OrganosVida.video`, 1ª vez, localStorage) → ficha: `/todas-tus-celulas?organo=<key>` (ORGANOS de esa página) o `/cuerpo/<key>?libre=1` (ojos, orejas, nariz). Intestino aún sin ficha («próximamente»).
+
+## `/metodo/fisiologia/organos` — Órganos (nivel 2, paso 3/3)
+- Viñetas 6-7 del cómic de células + vídeo `reconstruyen`. Guarda `desarrollo_hecho` al seguir a «Tu recorrido» (`/vida`).
 - **Condiciones y casos raros:** con `celula_hecho` ya guardado entra completa.
 - **Tests:** pendiente
 

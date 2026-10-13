@@ -6,6 +6,7 @@ import { keyframes } from "@emotion/react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { getUserMe } from "../../api/userMe";
+import { useVideoMateria } from "../../components/metodo/VideoMateriaModal";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { FisiologiaLoading } from "../../components/metodo/comicLoaders";
@@ -537,6 +538,7 @@ function MacroCard({ m, hecha, onClick }: { m: MacroDef; hecha: boolean; onClick
 // ═════════════════════════════════════════════════════════════════════════
 export default function MetodoFisiologiaMacromoleculas() {
   const t = useT();
+  const video = useVideoMateria("se-juntan");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [formadas, setFormadas] = useState<MacroId[]>([]);
@@ -694,6 +696,7 @@ export default function MetodoFisiologiaMacromoleculas() {
       </Flex>
 
       {celulasModal}
+      {video}
       <IndiceFisiologia />
       <BotonCompania color={fisiologiaTxt} bgColor={fisiologiaBg} disciplinaNom={fisiologiaNom} />
       <SiteFooter />
