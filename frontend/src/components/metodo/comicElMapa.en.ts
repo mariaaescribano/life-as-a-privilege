@@ -37,21 +37,21 @@ const COMIC_POR_QUE_EXISTE_EN: (VinetaMapaEn | null)[] = [
     ],
   },
   {
-    titulo: "Psychology",
+    titulo: "Self-Knowledge",
     lineas: [
       "Now I understand a lot of things about my history.",
       "But I feel there's still a piece missing.",
     ],
   },
   {
-    titulo: "Physiology",
+    titulo: "Human Body",
     lineas: [
       "I never imagined how extraordinary my body was.",
       "Understanding how it works is also a way of understanding myself.",
     ],
   },
   {
-    titulo: "Nutrition",
+    titulo: "Food",
     lineas: [
       "My body is built out of the molecules of the food I choose.",
       "The better I eat, the better I'll feel and the better I'll think.",
@@ -65,7 +65,7 @@ const COMIC_POR_QUE_EXISTE_EN: (VinetaMapaEn | null)[] = [
     ],
   },
   {
-    titulo: "Traditional Chinese Medicine",
+    titulo: "Chinese Tradition",
     lineas: [
       "Emotions, body and energy aren't separate things.",
       "I'm starting to see how some of my emotions and habits were throwing me off balance.",

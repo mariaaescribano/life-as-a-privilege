@@ -55,10 +55,10 @@ export default function MetodoAstrologiaPlanetas() {
           prev={{ label: `← ${t("metodo.astro.paso.arquetipos")}`, onClick: () => navigate("/metodo/astrologia/cartaAstral") }}
           extra={{ label: t("metodo.ilustraciones"), onClick: () => setComicOpen(true)}}
           next={{
-            label: todoCompletado ? "Psicología →" : "Completa primero la carta",
+            label: todoCompletado ? "Autoconocimiento →" : "Completa primero la carta",
             onClick: () => navigate("/metodo/psicologia"),
             disabled: true, // Psicología bloqueada por ahora
-            disabledTooltip: "Psicología estará disponible próximamente",
+            disabledTooltip: "Autoconocimiento estará disponible próximamente",
           }}
         />
         </Reveal>

@@ -34,7 +34,7 @@ export const fisiologia = {
   "fisiologia.sonrisa.titulo": "La sonrisa interior",
   "fisiologia.sonrisa.corto": "Sonrisa",
   "fisiologia.profundiza.titulo": "Profundiza",
-  "fisiologia.cursos.titulo": "Cursos de Fisiología",
+  "fisiologia.cursos.titulo": "Cursos de Cuerpo Humano",
   "fisiologia.introduccion": "Introducción",
   /** Botón de avance de la portada de la disciplina. */
   "fisiologia.comenzar": "Comenzar",
@@ -463,8 +463,8 @@ export const fisiologia = {
 
   // ── Cursos ─────────────────────────────────────────────────────────────
   "fisiologia.cursos.intro":
-    "Si quieres profundizar en la Fisiología, estos cursos te acompañan paso a paso.",
+    "Si quieres profundizar en el Cuerpo Humano, estos cursos te acompañan paso a paso.",
   "fisiologia.cursos.pronto":
-    "Pronto podrás profundizar aquí con cursos avanzados de Fisiología. Mientras tanto, sigue explorando el recorrido.",
+    "Pronto podrás profundizar aquí con cursos avanzados de Cuerpo Humano. Mientras tanto, sigue explorando el recorrido.",
   "fisiologia.cursos.entrar": "Entrar →",
 } as const;

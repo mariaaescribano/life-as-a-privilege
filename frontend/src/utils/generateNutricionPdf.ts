@@ -141,7 +141,7 @@ export async function generateNutricionPdf(
   /* ── PORTADA ── */
   taller.portada({
     titulo: "Tus necesidades",
-    subtitulo: "Nutrición · Gasto y reparto diario",
+    subtitulo: "Alimentación · Gasto y reparto diario",
     pieLamina:
       "Las calorías dicen cuánto. La corona dice de qué. Lo segundo importa más que lo primero.",
     cierre: "Tu punto de partida",

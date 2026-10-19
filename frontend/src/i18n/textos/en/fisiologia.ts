@@ -25,7 +25,7 @@ export const fisiologia = {
   "fisiologia.sonrisa.titulo": "The inner smile",
   "fisiologia.sonrisa.corto": "Smile",
   "fisiologia.profundiza.titulo": "Go deeper",
-  "fisiologia.cursos.titulo": "Physiology courses",
+  "fisiologia.cursos.titulo": "Human Body courses",
   "fisiologia.introduccion": "Introduction",
   "fisiologia.comenzar": "Start",
 
@@ -399,8 +399,8 @@ export const fisiologia = {
 
   // ── Courses ────────────────────────────────────────────────────────────
   "fisiologia.cursos.intro":
-    "If you want to go deeper into Physiology, these courses walk with you step by step.",
+    "If you want to go deeper into the Human Body, these courses walk with you step by step.",
   "fisiologia.cursos.pronto":
-    "Soon you'll be able to go deeper here with advanced Physiology courses. In the meantime, keep exploring the journey.",
+    "Soon you'll be able to go deeper here with advanced Human Body courses. In the meantime, keep exploring the journey.",
   "fisiologia.cursos.entrar": "Enter →",
 };

@@ -42,7 +42,7 @@ export const metodo = {
   "metodo.compromiso.mio": "Mi compromiso",
   "metodo.compromiso.noLoOlvides": "No lo olvides",
   "metodo.compromiso.recordatorio":
-    "Esto es lo que te comprometiste a vivir en Psicología. Que te acompañe mientras diseñas tu día.",
+    "Esto es lo que te comprometiste a vivir en Autoconocimiento. Que te acompañe mientras diseñas tu día.",
   "metodo.compromiso.presente": "Lo tengo presente",
   "metodo.compromiso.ver": "Ver mi compromiso",
 
@@ -53,7 +53,7 @@ export const metodo = {
   "metodo.ilustracionesPronto": "Las ilustraciones de {disciplina} llegarán muy pronto.",
   "metodo.leer": "Leer",
   "metodo.ver": "Ver",
-  "metodo.nutriIlustraciones": "Todos los cómics de Nutrición reunidos. Pulsa uno para leerlo.",
+  "metodo.nutriIlustraciones": "Todos los cómics de Alimentación reunidos. Pulsa uno para leerlo.",
 
   // ── Cursos de la disciplina ────────────────────────────────────────────
   "metodo.cursosOrientativos": "Cursos orientativos de {disciplina}",
@@ -108,7 +108,7 @@ export const metodo = {
   // El NOMBRE del paso va suelto, sin flecha: el mismo nombre sirve para el
   // botón de ir (`Nombre →`) y para el de volver (`← Nombre`), que es como
   // aparece en cada página vecina. Así un paso se escribe una vez.
-  "metodo.nutri.paso.nutricion": "Nutrición",
+  "metodo.nutri.paso.nutricion": "Alimentación",
   "metodo.nutri.paso.macro": "Macronutrientes",
   "metodo.nutri.paso.macroCorto": "Macro",
   "metodo.nutri.paso.micro": "Micronutrientes",
@@ -158,7 +158,7 @@ export const metodo = {
   "metodo.nutri.paso.prediabetes": "Test de prevención",
   "metodo.nutri.paso.cursosProfundizar": "Cursos para profundizar",
   "metodo.nutri.paso.biblioteca": "Biblioteca",
-  "metodo.nutri.paso.bibliotecaTitulo": "Biblioteca de Nutrición",
+  "metodo.nutri.paso.bibliotecaTitulo": "Biblioteca de Alimentación",
   "metodo.nutri.paso.hambreTitulo": "El hambre: una mirada holística",
   "metodo.nutri.paso.microbiotaTitulo": "La microbiota",
   "metodo.nutri.paso.platoTitulo": "Crea el plato de Harvard",
@@ -172,7 +172,7 @@ export const metodo = {
   "metodo.nutri.biblioteca.molecularPie":
     "Elige y descubre las moléculas con las que está hecho.",
   "metodo.nutri.biblioteca.ilustracionesPie":
-    "Todos los cómics de Nutrición reunidos.",
+    "Todos los cómics de Alimentación reunidos.",
   "metodo.nutri.biblioteca.respuestas": "Respuestas",
   "metodo.nutri.biblioteca.respuestasPie":
     "Las preguntas y mitos más frecuentes.",
@@ -792,7 +792,7 @@ export const metodo = {
 
   // ── Medicina China · Crea tus apuntes (paso 11) ─────────────────────────
   "metodo.tcm.apuntes.intro1":
-    "Has recorrido la Medicina China entera. Ahora decide qué te llevas: marca lo que quieras —tu valoración, la lectura de tu lengua, las cocinas, las leyes del Tao, las prácticas— y te lo montamos en un cuaderno para leer sin pantalla.",
+    "Has recorrido la Tradición China entera. Ahora decide qué te llevas: marca lo que quieras —tu valoración, la lectura de tu lengua, las cocinas, las leyes del Tao, las prácticas— y te lo montamos en un cuaderno para leer sin pantalla.",
   "metodo.tcm.apuntes.intro2":
     "Se prepara aquí mismo, en tu navegador. Puedes volver y montarlo otra vez cuantas veces quieras.",
 
@@ -1467,7 +1467,7 @@ export const metodo = {
   // digan lo mismo. Aquí va solo lo que es del cuaderno.
   // OJO al traducir: la Garamond embebida se come «→» y «✓» sin avisar.
   "metodo.psico.pdf.miMapa": "Mi mapa",
-  "metodo.psico.pdf.subtitulo": "Psicología · Tu historia, contada por ti",
+  "metodo.psico.pdf.subtitulo": "Autoconocimiento · Tu historia, contada por ti",
   "metodo.psico.pdf.pieLamina": "Cada punto es uno de los {n} pasos que dejaste escritos.",
   "metodo.psico.pdf.miRecorrido": "Mi recorrido",
   "metodo.psico.pdf.deUnVistazo": "De un vistazo",
@@ -1488,7 +1488,7 @@ export const metodo = {
 
   // ── Psicología · el cuaderno «Mi línea de Vida» (PDF) ──────────────────
   "metodo.psico.pdfLinea.titulo": "Mi línea de Vida",
-  "metodo.psico.pdfLinea.subtitulo": "Psicología · Año a año, contado por ti",
+  "metodo.psico.pdfLinea.subtitulo": "Autoconocimiento · Año a año, contado por ti",
   "metodo.psico.pdfLinea.recorridos": "{n} de {total} años recorridos",
   "metodo.psico.pdfLinea.huellaUna": ". {n} recuerdo dejó huella.",
   "metodo.psico.pdfLinea.huellaVarias": ". {n} recuerdos dejaron huella.",

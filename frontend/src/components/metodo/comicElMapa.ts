@@ -81,7 +81,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   },
   {
     src: `${P}/comiciniciopsico.webp`,
-    titulo: "Psicología",
+    titulo: "Autoconocimiento",
     disciplina: neuropsicologiaNom,
     lineas: [
       "Ahora comprendo muchas cosas de mi historia.",
@@ -90,7 +90,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   },
   {
     src: `${P}/comiciniciofisio.webp`,
-    titulo: "Fisiología",
+    titulo: "Cuerpo Humano",
     disciplina: fisiologiaNom,
     lineas: [
       "Nunca imaginé lo extraordinario que era mi cuerpo.",
@@ -99,7 +99,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   },
   {
     src: `${P}/comicinicionutri.webp`,
-    titulo: "Nutrición",
+    titulo: "Alimentación",
     disciplina: nutricionNom,
     lineas: [
       "Mi cuerpo está hecho con las moléculas de los alimentos que elijo.",
@@ -116,7 +116,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   },
   {
     src: `${P}/comiciniciotcm.webp`,
-    titulo: "Medicina Tradicional China",
+    titulo: "Tradición China",
     disciplina: tcmNom,
     lineas: [
       "Las emociones, el cuerpo y la energía no están separados.",

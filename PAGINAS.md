@@ -97,8 +97,10 @@ Los textos entre «comillas» son los que ve la persona, tal cual.
    - El ordinal («Primera disciplina», «Séptima disciplina»…) y un resumen de dos líneas.
    - El precio, «30 €», con el precio de antes tachado y «Ahora a precio reducido» (solo si hay precio tachado).
    - La casilla «Acepto las condiciones de compra» (el enlace abre `/terminos` en otra pestaña sin marcar la casilla).
+   - Debajo, una SEGUNDA casilla aparte, con el consentimiento expreso para guardar los datos de salud que escriba en el recorrido (art. 9 RGPD). No va mezclada con las condiciones de compra.
    - Botones «Pagar» y «Ahora no», y debajo «Pago seguro a través de Stripe».
-   - Sin marcar la casilla, «Pagar» está apagado y no hace nada.
+   - Sin marcar LAS DOS casillas, «Pagar» está apagado y no hace nada.
+   - Quien entra en /metodo sin haber dado ese consentimiento (cuentas regaladas o anteriores) ve la ventana «Antes de seguir» y no puede cerrarla sin decidir; mientras no lo dé, el servidor no guarda nada de su recorrido.
 3. Al pulsar «Pagar» va a la página de pago de Stripe. Todas las disciplinas cuestan lo mismo y pasan por el mismo enlace de pago.
 4. Al terminar el pago vuelve a su Mapa y sale el popup:
    > **Pago de {disciplina} realizado**

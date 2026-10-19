@@ -163,13 +163,13 @@ export const elMetodo = {
     "No hay ningún orden obligatorio, pero sí recomendado.",
   "elMetodo.empiezo.a.titulo": "Si no sabes por dónde",
   "elMetodo.empiezo.a.texto":
-    "Empieza por Psicología o Astrología. Compréndete a ti antes que a tu cuerpo, a tu alma o a la Historia.",
+    "Empieza por Autoconocimiento o Astrología. Compréndete a ti antes que a tu cuerpo, a tu alma o a la Historia.",
   "elMetodo.empiezo.b.titulo": "Si quieres comprender tu historia",
   "elMetodo.empiezo.b.texto":
-    "Empieza por Psicología. Reconstruyes tu historia, de dónde vienen tus patrones y por qué los sigues sosteniendo.",
+    "Empieza por Autoconocimiento. Reconstruyes tu historia, de dónde vienen tus patrones y por qué los sigues sosteniendo.",
   "elMetodo.empiezo.c.titulo": "Si lo tuyo es el cuerpo",
   "elMetodo.empiezo.c.texto":
-    "Empieza por Fisiología o Nutrición. Expande lo que ya te es familiar y acaba entendiendo lo demás.",
+    "Empieza por Cuerpo Humano o Alimentación. Expande lo que ya te es familiar y acaba entendiendo lo demás.",
 
   // ── 12. PREGUNTAS ──────────────────────────────────────────────────────
   // La primera es a propósito la incómoda: mezclar astrología con fisiología

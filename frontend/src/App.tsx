@@ -274,16 +274,25 @@ function ScrollToTop() {
   return null;
 }
 
-// La puerta de consentimiento de salud está APARCADA: el permiso viene ya de la
-// casilla del pago («Acepto las condiciones de compra», que lo incluye), y a las
-// cuentas de antes se les apuntó con sql/consentimiento-salud-todos.sql. El
-// componente queda intacto por si algún día hay que volver a pedirlo aparte.
-// const PuertaConsentimientoSalud = lazy(() => import("./components/global/PuertaConsentimientoSalud"));
+// Consentimiento de salud (art. 9 RGPD) para quien entra al recorrido sin haberlo
+// dado en la casilla (aparte) del pago: cuentas regaladas o anteriores a esa casilla.
+// Lazy: no tiene que viajar en el paquete de entrada.
+const PuertaConsentimientoSalud = lazy(() => import("./components/global/PuertaConsentimientoSalud"));
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation();
   const userId = localStorage.getItem("userId");
   if (!userId) return <Navigate to="/welcome" replace />;
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      {pathname.startsWith("/metodo") && (
+        <Suspense fallback={null}>
+          <PuertaConsentimientoSalud />
+        </Suspense>
+      )}
+    </>
+  );
 }
 
 // Todo el panel de administración se ve un 20% más grande. Vive AQUÍ, en el

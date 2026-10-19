@@ -2,9 +2,10 @@ import { Body, Controller, Get, Param, Patch, Put, UseGuards } from '@nestjs/com
 import { MetodoPsicologiaService } from './metodoPsicologia.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { OwnerGuard } from '../auth/owner.guard';
+import { ConsentimientoSaludGuard } from '../auth/consentimiento-salud.guard';
 
 @Controller('metodo-psicologia')
-@UseGuards(JwtAuthGuard, OwnerGuard)
+@UseGuards(JwtAuthGuard, OwnerGuard, ConsentimientoSaludGuard)
 export class MetodoPsicologiaController {
   constructor(private readonly service: MetodoPsicologiaService) {}
 

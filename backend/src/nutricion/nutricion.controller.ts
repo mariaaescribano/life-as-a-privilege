@@ -3,9 +3,10 @@ import { NutricionService } from './nutricion.service';
 import type { NutricionData } from './nutricion.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { OwnerGuard } from '../auth/owner.guard';
+import { ConsentimientoSaludGuard } from '../auth/consentimiento-salud.guard';
 
 @Controller('nutricion')
-@UseGuards(JwtAuthGuard, OwnerGuard)
+@UseGuards(JwtAuthGuard, OwnerGuard, ConsentimientoSaludGuard)
 export class NutricionController {
   constructor(private readonly nutricionService: NutricionService) {}
 

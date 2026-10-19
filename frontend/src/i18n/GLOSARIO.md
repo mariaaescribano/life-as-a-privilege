@@ -30,12 +30,12 @@ internacional. Comillas tipográficas dobles `"…"` en las citas.
 | Español | Inglés |
 |---|---|
 | Astrología | Astrology |
-| Psicología | Psychology |
+| Autoconocimiento | Self-Knowledge |
 | Hinduismo | Hinduism |
 | Ayurveda | Ayurveda |
-| Medicina China | Chinese Medicine |
-| Fisiología | Physiology |
-| Nutrición | Nutrition |
+| Tradición China (Trad. China) | Chinese Tradition (Chinese Trad.) |
+| Cuerpo Humano | Human Body |
+| Alimentación | Food |
 | Cultura | Culture |
 | Cábala | Kabbalah |
 | Fitoterapia | Phytotherapy |

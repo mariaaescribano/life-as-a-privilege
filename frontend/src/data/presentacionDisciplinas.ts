@@ -107,7 +107,7 @@ const base: Record<string, PresentacionDisciplina> = {
     paso: 2,
     ordinal: "Segunda disciplina",
     resumenPago:
-      "Continúa el Mapa con Psicología: reconstruye tu historia y comprende cómo se fue construyendo tu mente, recorriendo tus huellas, tus miedos y tus heridas para habitarte con más libertad y coherencia.",
+      "Continúa el Mapa con Autoconocimiento: reconstruye tu historia y comprende cómo se fue construyendo tu mente, recorriendo tus huellas, tus miedos y tus heridas para habitarte con más libertad y coherencia.",
     video: "/videos/psicologiavideo.mp4",
     alias: ["neuropsicologia"],
   },
@@ -150,7 +150,7 @@ const base: Record<string, PresentacionDisciplina> = {
     paso: 6,
     ordinal: "Cuarta disciplina",
     resumenPago:
-      "Continúa el Mapa con la Medicina China: descubre cómo los Cinco Elementos y sus ciclos te habitan, y lee las señales de tu cuerpo —hasta en tu lengua— para volver al equilibrio entre todo lo que nos forma, que es a lo que llamamos salud.",
+      "Continúa el Mapa con la Tradición China: descubre cómo los Cinco Elementos y sus ciclos te habitan, y lee las señales de tu cuerpo —hasta en tu lengua— para volver al equilibrio entre todo lo que nos forma, que es a lo que llamamos salud.",
     video: "/videos/tcmvideo.mp4",
     alias: ["tcm"],
   },
@@ -171,7 +171,7 @@ const base: Record<string, PresentacionDisciplina> = {
     paso: 3,
     ordinal: "Quinta disciplina",
     resumenPago:
-      "Continúa el Mapa con la Fisiología: viaja desde las partículas que te forman hasta el milagro de ser un cuerpo vivo, conoce tus células y tus sistemas y redescúbrete como el ser complejo y fascinante que eres.",
+      "Continúa el Mapa con el Cuerpo Humano: viaja desde las partículas que te forman hasta el milagro de ser un cuerpo vivo, conoce tus células y tus sistemas y redescúbrete como el ser complejo y fascinante que eres.",
     video: "/videos/fisiovideo.mp4",
   },
   nutricion: {
@@ -191,7 +191,7 @@ const base: Record<string, PresentacionDisciplina> = {
     paso: 4,
     ordinal: "Sexta disciplina",
     resumenPago:
-      "Continúa el Mapa con la Nutrición: descubre qué hay más allá de lo que comes cada día y nútrete con lo que de verdad te reconstruye. Recuerda cómo no destruirte con los alimentos.",
+      "Continúa el Mapa con la Alimentación: descubre qué hay más allá de lo que comes cada día y nútrete con lo que de verdad te reconstruye. Recuerda cómo no destruirte con los alimentos.",
     video: "/videos/nutrivideo.mp4",
   },
   cabala: {

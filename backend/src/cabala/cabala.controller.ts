@@ -1,8 +1,13 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { OwnerGuard } from '../auth/owner.guard';
+import { ConsentimientoSaludGuard } from '../auth/consentimiento-salud.guard';
 import type { Respuesta } from 'src/dtos/respuesta.types';
 import { CabalaService } from './cabala.service';
 
+// Antes estaba abierto a cualquiera (leer y escribir respuestas de otra persona).
 @Controller('cabala')
+@UseGuards(JwtAuthGuard, OwnerGuard, ConsentimientoSaludGuard)
 export class CabalaController {
   constructor(private readonly cabalaService: CabalaService) {}
 

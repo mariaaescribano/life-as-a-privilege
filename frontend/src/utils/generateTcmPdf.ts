@@ -387,7 +387,7 @@ export async function generateTcmConsejosPdf(
   /* ── PORTADA ── */
   taller.portada({
     titulo: "Cuidarte",
-    subtitulo: `Medicina China · ${info.title}`,
+    subtitulo: `Tradición China · ${info.title}`,
     nombre: resultado,
     pieLamina: "Infusiones, plantas, mesa y ritmo — lo que la tradición asocia a tu patrón.",
     cierre: "Tu vademécum",

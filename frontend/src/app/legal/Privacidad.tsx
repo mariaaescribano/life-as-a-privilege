@@ -58,10 +58,10 @@ export default function Privacidad() {
               tus hábitos y tus experiencias personales.
             </>,
             <>
-              <strong>Del genograma (psicología):</strong> los nombres, los datos y, si las subes,
-              las fotos de tus familiares. Son datos de otras personas: súbelos solo si te parece
-              bien que estén en tu recorrido. Las fotos se guardan con un nombre imposible de
-              adivinar y se borran con tu cuenta.
+              <strong>Del genograma (psicología):</strong> los nombres y los datos de tus
+              familiares. Son datos de otras personas: escríbelos solo si te parece bien que estén
+              en tu recorrido, y eres tú quien responde de ellos. Si subiste fotos de familiares en
+              su día, se guardan con un nombre imposible de adivinar y se borran con tu cuenta.
             </>,
             <>
               <strong>Si dejas una reseña:</strong> tu nombre y tu texto, que se publican en la

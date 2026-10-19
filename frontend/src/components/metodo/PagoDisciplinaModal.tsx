@@ -156,17 +156,17 @@ export function PagoDisciplinaModal({
   errorColor = "#ffb4b4",
 }: BaseProps) {
   const t = useT();
-  // UNA sola casilla: «Acepto las condiciones de compra». Las condiciones
-  // (/terminos, apartado 5) incluyen también lo del guardado de datos: se
-  // guardan sin intención comercial y, si hay sesiones con María, ella puede
-  // leerlos solo para individualizar y personalizar la sesión. Se reinicia cada
-  // vez que se abre el modal: nunca debe quedar marcada «de la vez anterior».
+  // DOS casillas, separadas a propósito (art. 7.2 y 9.2.a RGPD): las condiciones
+  // de compra y, aparte, el consentimiento explícito para guardar datos de salud.
+  // Se reinician cada vez que se abre el modal: nunca deben quedar marcadas «de
+  // la vez anterior».
   const [acepta, setAcepta] = React.useState(false);
+  const [consienteSalud, setConsienteSalud] = React.useState(false);
   React.useEffect(() => {
-    if (isOpen) setAcepta(false);
+    if (isOpen) { setAcepta(false); setConsienteSalud(false); }
   }, [isOpen]);
 
-  const listo = acepta;
+  const listo = acepta && consienteSalud;
 
   return (
     // scrollBehavior="inside": si el contenido es más alto que la pantalla, el
@@ -254,17 +254,24 @@ export function PagoDisciplinaModal({
                   {t("metodo.pago.condicionesEnlace")}
                 </Text>
               </Casilla>
+              <Casilla
+                marcada={consienteSalud}
+                onToggle={() => setConsienteSalud((v) => !v)}
+                bg={bg}
+                txt={txt}
+                nota={t("consentimiento.nota")}
+              >
+                {t("consentimiento.casilla")}
+              </Casilla>
             </Flex>
 
             <Flex justify="center" mt={3} gap={4} wrap="wrap">
               <Box
                 as="button"
                 onClick={loading || !listo ? undefined : async () => {
-                  // Aceptar las condiciones incluye el guardado de lo que
-                  // escriba (apartado 5 de /terminos): se apunta ANTES de salir
-                  // hacia Stripe como prueba (art. 7.1 RGPD). Si falla, se pide
-                  // otra vez al entrar (PuertaConsentimientoSalud), así que no
-                  // frena el pago.
+                  // El consentimiento de salud se apunta ANTES de salir hacia
+                  // Stripe como prueba (art. 7.1 RGPD). Si falla, se pide otra
+                  // vez al entrar (PuertaConsentimientoSalud).
                   await darConsentimientoSalud();
                   onPagar();
                 }}

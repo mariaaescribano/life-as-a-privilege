@@ -112,11 +112,10 @@ const CLAVE_DISCIPLINA: Record<string, ClaveTexto> = {
  *  hook, para poder usarla dentro de un `.map` (la presentación de Astrología
  *  pinta sus cómics con otra tarjeta). */
 export function ilustracionTraducida(entry: IlustracionEntry, idioma: Idioma): IlustracionEntry {
-  if (idioma === "es") return entry;
   const clave = CLAVE_DISCIPLINA[entry.disciplina];
   return {
     ...entry,
-    titulo: TITULO_ILUSTRACION_EN[entry.id] ?? entry.titulo,
+    titulo: idioma === "es" ? entry.titulo : (TITULO_ILUSTRACION_EN[entry.id] ?? entry.titulo),
     disciplina: clave ? traducir(clave, undefined, idioma) : entry.disciplina,
   };
 }

@@ -3,6 +3,7 @@ import { MetodoNotasService } from './metodoNotas.service';
 import type { NuevaNota } from './metodoNotas.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { OwnerGuard } from '../auth/owner.guard';
+import { ConsentimientoSaludGuard } from '../auth/consentimiento-salud.guard';
 
 @Controller('notas')
 export class MetodoNotasController {
@@ -17,7 +18,7 @@ export class MetodoNotasController {
 
   // Crear una nota nueva
   @Post(':userId')
-  @UseGuards(JwtAuthGuard, OwnerGuard)
+  @UseGuards(JwtAuthGuard, OwnerGuard, ConsentimientoSaludGuard)
   async crear(@Param('userId') userId: string, @Body() body: NuevaNota) {
     return await this.service.crear(userId, body);
   }

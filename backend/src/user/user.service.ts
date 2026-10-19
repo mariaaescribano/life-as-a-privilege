@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { DatabaseService } from 'src/database.service';
 import { randomString } from 'src/Global';
@@ -1100,23 +1100,33 @@ export class UserService {
       { table: 'neuroPsicologia', column: 'userid' },
     ];
 
-    for (const { table, column } of relatedTables) {
-      const { error } = await db.from(table).delete().eq(column, id);
-      if (error) {
-        console.error(`[deleteUser] Error borrando de "${table}" (${column}=${id}):`, error.message);
+    // Borrar de verdad o no borrar: si falla CUALQUIER tabla (salvo que la tabla
+    // ni exista, que es una tabla antigua ya retirada) se corta antes de tocar la
+    // cuenta, para no dejar datos huérfanos ni decirle a nadie que se borró lo que
+    // no se borró (art. 17 RGPD). Es seguro repetirlo: borrar lo ya borrado no falla.
+    const fallos: string[] = [];
+    const tablaNoExiste = (e: { code?: string; message?: string }) =>
+      e.code === '42P01' || e.code === 'PGRST205' || /does not exist|could not find the table/i.test(e.message ?? '');
+    const borrar = async (table: string, q: PromiseLike<{ error: any }>) => {
+      const { error } = await q;
+      if (error && !tablaNoExiste(error)) {
+        console.error(`[deleteUser] Error borrando de "${table}" (cuenta ${id}):`, error.message);
+        fallos.push(table);
       }
+    };
+
+    for (const { table, column } of relatedTables) {
+      await borrar(table, db.from(table).delete().eq(column, id));
     }
 
     // Reservas de llamada: se relacionan por email, no por id de usuario.
     if (user?.email) {
-      const { error } = await db.from('bookings').delete().eq('email', user.email);
-      if (error) console.error('[deleteUser] Error borrando bookings:', error.message);
+      await borrar('bookings', db.from('bookings').delete().eq('email', user.email));
 
       // Lo demás que va por email y no por id: suscripción, reseñas y la
       // participación en el estudio de astrología (primero sus respuestas).
       for (const table of ['suscriptor', 'opinion']) {
-        const { error: e } = await db.from(table).delete().eq('email', user.email);
-        if (e) console.error(`[deleteUser] Error borrando de "${table}":`, e.message);
+        await borrar(table, db.from(table).delete().eq('email', user.email));
       }
       const { data: participantes } = await db
         .from('estudio_participante')
@@ -1124,10 +1134,15 @@ export class UserService {
         .eq('email', user.email.trim().toLowerCase());
       const idsEstudio = (participantes ?? []).map((p: { id: string }) => p.id);
       if (idsEstudio.length) {
-        await db.from('estudio_respuesta').delete().in('participante_id', idsEstudio);
-        const { error: e } = await db.from('estudio_participante').delete().in('id', idsEstudio);
-        if (e) console.error('[deleteUser] Error borrando estudio_participante:', e.message);
+        await borrar('estudio_respuesta', db.from('estudio_respuesta').delete().in('participante_id', idsEstudio));
+        await borrar('estudio_participante', db.from('estudio_participante').delete().in('id', idsEstudio));
       }
+    }
+
+    if (fallos.length) {
+      throw new InternalServerErrorException(
+        'No se ha podido borrar todo (' + fallos.join(', ') + '). La cuenta sigue activa: inténtalo de nuevo en un momento.',
+      );
     }
 
     // Fotos del genograma que subieron usuarias antes de que se quitaran (ya no
@@ -1138,13 +1153,14 @@ export class UserService {
       const { data: fotos, error } = await bucket.list('genograma', { search: `${id}-`, limit: 1000 });
       if (error) {
         console.error('[deleteUser] Error listando fotos del genograma:', error.message);
+        fallos.push('storage');
       } else {
         const rutas = (fotos ?? [])
           .filter((f) => f.name.startsWith(`${id}-`))
           .map((f) => `genograma/${f.name}`);
         if (rutas.length) {
           const { error: e } = await bucket.remove(rutas);
-          if (e) console.error('[deleteUser] Error borrando fotos del genograma:', e.message);
+          if (e) { console.error('[deleteUser] Error borrando fotos del genograma:', e.message); fallos.push('storage'); }
         }
       }
     }
@@ -1155,8 +1171,14 @@ export class UserService {
       const path = user.img.split('?')[0].split('/public/img/')[1];
       if (path) {
         const { error } = await db.storage.from('img').remove([path]);
-        if (error) console.error('[deleteUser] Error borrando foto de perfil:', error.message);
+        if (error) { console.error('[deleteUser] Error borrando foto de perfil:', error.message); fallos.push('storage'); }
       }
+    }
+
+    if (fallos.length) {
+      throw new InternalServerErrorException(
+        'No se ha podido borrar todo (' + fallos.join(', ') + '). La cuenta sigue activa: inténtalo de nuevo en un momento.',
+      );
     }
 
     // Por último, la propia cuenta.

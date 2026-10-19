@@ -31,7 +31,7 @@ export const metodo = {
   "metodo.compromiso.mio": "My commitment",
   "metodo.compromiso.noLoOlvides": "Don't forget it",
   "metodo.compromiso.recordatorio":
-    "This is what you committed to living back in Psychology. Let it keep you company while you design your day.",
+    "This is what you committed to living back in Self-Knowledge. Let it keep you company while you design your day.",
   "metodo.compromiso.presente": "I'm keeping it in mind",
   "metodo.compromiso.ver": "See my commitment",
 
@@ -42,7 +42,7 @@ export const metodo = {
   "metodo.ilustracionesPronto": "The {disciplina} illustrations are coming very soon.",
   "metodo.leer": "Read",
   "metodo.ver": "View",
-  "metodo.nutriIlustraciones": "Every Nutrition comic in one place. Press one to read it.",
+  "metodo.nutriIlustraciones": "Every Food comic in one place. Press one to read it.",
 
   // ── Courses for the discipline ─────────────────────────────────────────
   "metodo.cursosOrientativos": "{disciplina} courses to guide you",
@@ -94,7 +94,7 @@ export const metodo = {
   // ── Buttons of the NUTRITION path ──────────────────────────────────────
   // The step NAME on its own, without the arrow: the same name serves the
   // forward button (`Name →`) and the back one (`← Name`).
-  "metodo.nutri.paso.nutricion": "Nutrition",
+  "metodo.nutri.paso.nutricion": "Food",
   "metodo.nutri.paso.macro": "Macronutrients",
   "metodo.nutri.paso.macroCorto": "Macro",
   "metodo.nutri.paso.micro": "Micronutrients",
@@ -117,7 +117,7 @@ export const metodo = {
   "metodo.nutri.paso.prediabetes": "Prevention test",
   "metodo.nutri.paso.cursosProfundizar": "Courses to go deeper",
   "metodo.nutri.paso.biblioteca": "Library",
-  "metodo.nutri.paso.bibliotecaTitulo": "Nutrition library",
+  "metodo.nutri.paso.bibliotecaTitulo": "Food library",
   "metodo.nutri.paso.hambreTitulo": "Hunger: a holistic look",
   "metodo.nutri.paso.microbiotaTitulo": "The microbiome",
   "metodo.nutri.paso.platoTitulo": "Build the Harvard plate",
@@ -126,12 +126,12 @@ export const metodo = {
 
   // ── Nutrition · the Library ────────────────────────────────────────────
   "metodo.nutri.biblioteca.intro":
-    "Everything you've discovered in Nutrition, gathered in one place. Choose where to go in.",
+    "Everything you've discovered in Food, gathered in one place. Choose where to go in.",
   "metodo.nutri.biblioteca.molecular": "Food at the molecular level",
   "metodo.nutri.biblioteca.molecularPie":
     "Pick a food and discover what molecules it's made of.",
   "metodo.nutri.biblioteca.ilustracionesPie":
-    "Every Nutrition comic gathered here to read again.",
+    "Every Food comic gathered here to read again.",
   "metodo.nutri.biblioteca.respuestas": "Answers",
   "metodo.nutri.biblioteca.respuestasPie":
     "The most common questions and myths, one by one.",
@@ -696,7 +696,7 @@ export const metodo = {
 
   // ── Chinese Medicine · Create your notes (step 11) ──────────────────────
   "metodo.tcm.apuntes.intro1":
-    "You've walked the whole of Chinese Medicine. Now decide what you take with you: check whatever you want —your assessment, the reading of your tongue, the kitchens, the laws of the Tao, the practices— and we'll put it together as a notebook you can read away from a screen.",
+    "You've walked the whole of Chinese Tradition. Now decide what you take with you: check whatever you want —your assessment, the reading of your tongue, the kitchens, the laws of the Tao, the practices— and we'll put it together as a notebook you can read away from a screen.",
   "metodo.tcm.apuntes.intro2":
     "It's made right here, in your browser. You can come back and put it together again as many times as you like.",
 
@@ -1335,7 +1335,7 @@ export const metodo = {
   // ── Psychology · the “My map” notebook (PDF) ───────────────────────────
   // No arrows and no ✓ in here: the embedded Garamond drops them silently.
   "metodo.psico.pdf.miMapa": "My map",
-  "metodo.psico.pdf.subtitulo": "Psychology · Your story, told by you",
+  "metodo.psico.pdf.subtitulo": "Self-Knowledge · Your story, told by you",
   "metodo.psico.pdf.pieLamina": "Each dot is one of the {n} steps you left written down.",
   "metodo.psico.pdf.miRecorrido": "My journey",
   "metodo.psico.pdf.deUnVistazo": "At a glance",
@@ -1356,7 +1356,7 @@ export const metodo = {
 
   // ── Psychology · the “My Life Line” notebook (PDF) ─────────────────────
   "metodo.psico.pdfLinea.titulo": "My Life Line",
-  "metodo.psico.pdfLinea.subtitulo": "Psychology · Year by year, told by you",
+  "metodo.psico.pdfLinea.subtitulo": "Self-Knowledge · Year by year, told by you",
   "metodo.psico.pdfLinea.recorridos": "{n} of {total} years walked",
   "metodo.psico.pdfLinea.huellaUna": ". {n} memory left a mark.",
   "metodo.psico.pdfLinea.huellaVarias": ". {n} memories left a mark.",

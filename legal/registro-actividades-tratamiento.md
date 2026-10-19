@@ -6,7 +6,7 @@ salud (art. 30.5).
 
 **Responsable:** María Escribano · NIF 48790731A · Calle Deportista Juan Matos, nº 4, Alicante · mariaa.escribano.arce@gmail.com
 **Delegado de protección de datos:** no hay (no es obligatorio a este tamaño).
-**Última revisión:** 26 de septiembre de 2026
+**Última revisión:** 19 de octubre de 2026
 
 ---
 
@@ -31,8 +31,9 @@ salud (art. 30.5).
 | Interesados | Usuarios con alguna disciplina comprada o regalada |
 | Datos | Respuestas y textos libres; tests de salud emocional (p. ej. DES-II); constitución (TCM, Ayurveda); datos de nacimiento para la carta astral; genograma (**datos y fotos de familiares: terceros**) |
 | Destinatarios | Supabase, Render |
-| Conservación | Mientras la cuenta exista |
-| Prueba del consentimiento | Fila `consentimiento-salud` de `recorrido_progreso` con su fecha (`updated_at`). Se apunta al marcar la casilla del pago o, para cuentas regaladas/antiguas, en la ventana que sale al entrar en /metodo. Desde «entrar como» no se puede dar |
+| Conservación | Mientras la cuenta exista. Borrado de cuenta: todo o nada (si falla una tabla o el almacenamiento, la cuenta no se borra y se avisa, para no dejar datos huérfanos). **Pendiente decidir** un plazo por inactividad (ver `evaluacion-impacto.md`) |
+| Prueba del consentimiento | Fila `consentimiento-salud` de `recorrido_progreso` con su fecha (`updated_at`). Se apunta al marcar la casilla de salud del pago (**casilla aparte** de las condiciones de compra) o, para cuentas regaladas/antiguas, en la ventana «Antes de seguir» que sale al entrar en /metodo. Desde «entrar como» no se puede dar. El servidor **rechaza** (403) cualquier escritura del recorrido sin esa fila (`ConsentimientoSaludGuard`); leer y borrar siempre se puede |
+| Histórico | Hasta el 19-oct-2026 la casilla iba mezclada con las condiciones y a las cuentas existentes se les apuntó un «sí» en bloque: ese consentimiento NO era válido y se reinicia con `sql/consentimiento-salud-reset.sql` |
 
 ## 3. Pagos y facturación
 
@@ -96,6 +97,8 @@ salud (art. 30.5).
 
 ## Medidas de seguridad
 
+- Revisión de octubre de 2026: `/cabala` estaba abierto sin sesión; ahora exige sesión, dueño y consentimiento como el resto.
+- Brechas de seguridad: procedimiento y registro en `registro-brechas.md`. Evaluación de impacto en `evaluacion-impacto.md`.
 - HTTPS en todo el tráfico; contraseñas con bcrypt; API con JWT y comprobación de que cada cual solo toca lo suyo.
 - Supabase con RLS activado en todas las tablas de `public` y sin políticas (solo entra el backend con `service_role`). Tabla nueva ⇒ activarle RLS.
 - Fotos del genograma con nombre no adivinable (`<userId>-<fecha>`); se borran al eliminar la cuenta.

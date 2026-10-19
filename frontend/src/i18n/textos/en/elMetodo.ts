@@ -155,13 +155,13 @@ export const elMetodo = {
     "There's no required order, but there is a recommended one.",
   "elMetodo.empiezo.a.titulo": "If you don't know where to start",
   "elMetodo.empiezo.a.texto":
-    "Start with Psychology or Astrology. Understand yourself before your body, your soul or History.",
+    "Start with Self-Knowledge or Astrology. Understand yourself before your body, your soul or History.",
   "elMetodo.empiezo.b.titulo": "If you want to understand your history",
   "elMetodo.empiezo.b.texto":
-    "Start with Psychology. You rebuild your history, where your patterns come from and why you keep holding onto them.",
+    "Start with Self-Knowledge. You rebuild your history, where your patterns come from and why you keep holding onto them.",
   "elMetodo.empiezo.c.titulo": "If the body is your thing",
   "elMetodo.empiezo.c.texto":
-    "Start with Physiology or Nutrition. Expand what's already familiar to you and end up understanding the rest.",
+    "Start with Human Body or Food. Expand what's already familiar to you and end up understanding the rest.",
 
   // ── 12. Questions ──────────────────────────────────────────────────────
   // The first one is deliberately the uncomfortable one: mixing astrology with

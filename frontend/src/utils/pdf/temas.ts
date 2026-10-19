@@ -62,7 +62,7 @@ export const TEMA_AYURVEDA: Tema = {
 
 /* ── Psicología ───────────────────────────────────────────────────────────── */
 export const TEMA_PSICOLOGIA: Tema = {
-  disciplina: "Psicología",
+  disciplina: "Autoconocimiento",
   oscuro: false,
   papel: [252, 247, 240],
   papelVeta: [233, 214, 192],
@@ -79,7 +79,7 @@ export const TEMA_PSICOLOGIA: Tema = {
 
 /* ── Nutrición ────────────────────────────────────────────────────────────── */
 export const TEMA_NUTRICION: Tema = {
-  disciplina: "Nutrición",
+  disciplina: "Alimentación",
   oscuro: false,
   papel: [250, 251, 246],
   papelVeta: [219, 234, 214],
@@ -96,7 +96,7 @@ export const TEMA_NUTRICION: Tema = {
 
 /* ── Medicina China (papel oscuro) ────────────────────────────────────────── */
 export const TEMA_TCM: Tema = {
-  disciplina: "Medicina China",
+  disciplina: "Tradición China",
   oscuro: true,
   papel: [34, 12, 12],
   papelVeta: [58, 20, 20],
