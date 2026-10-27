@@ -223,7 +223,7 @@ const Welcome = () => {
 
       <Box flex="1">
       {/* ── CABECERA: frase + nombre/email a la izquierda, foto a la derecha ── */}
-      <WelcomeHero activo={mounted} />
+      <WelcomeHero activo={mounted} iconos={disciplines} />
 
       {/* ── SEPARACIÓN CON LA FLOR (mismo aire arriba que abajo) ── */}
       <SeparadorFlor />

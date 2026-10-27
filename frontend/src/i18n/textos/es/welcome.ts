@@ -28,7 +28,7 @@ export const welcome = {
   "welcome.modal.iniciarSesion": "Iniciar sesión →",
 
   // ── Lemas de las tarjetas ──────────────────────────────────────────────
-  "welcome.lema.astrologia": "Las características de tu vida y tu esencia.",
+  "welcome.lema.astrologia": "La manifestación de tu esencia.",
   "welcome.lema.psicologia": "Comprende tu historia y su influencia.",
   "welcome.lema.hinduismo": "Explora tu constitución personal.",
   "welcome.lema.medicinaChina": "Reconecta con tu equilibrio.",

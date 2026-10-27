@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
@@ -9,6 +9,7 @@ import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { AprendizajeIcon } from "../../GlobalVariables";
+import { getUserMe } from "../../api/userMe";
 import { useIdioma, useT } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 
@@ -24,6 +25,11 @@ import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 //     pagado, la guardia de pago lo devuelve al Mapa con su box de pago.
 //   · Teoría: /disciplina/<slug>/teoria, la misma cabecera con dos puertas
 //     —Ilustraciones y Cursos— y un botón para volver.
+//
+// SIN PAGAR (o sin sesión) la portada es la de siempre: Ilustraciones · Cursos ·
+// El Recorrido («El pack», que lleva a la presentación /d/<disciplina>, donde se
+// compra). Reels, El Recorrido de verdad y Teoría solo existen una vez pagada la
+// disciplina.
 //
 // Lo único que cambia entre una y otra sale de `presentacionDisciplinas.ts`
 // (colores, icono, frase y a dónde van sus cursos): aquí no hay nada escrito
@@ -74,6 +80,39 @@ const RECORRIDO_RUTA: Record<string, string> = {
   cabala: "/metodo/cabala",
   cultura: "/metodo/cultura",
 };
+
+/** Clave de la portada → scope de pago (el de `<scope>_suscrito` en /user/me). */
+const SCOPE_PAGO: Record<string, string> = {
+  astrologia: "metodo",
+  psicologia: "psicologia",
+  ayurveda: "ayurveda",
+  medicinachina: "tcm",
+  fisiologia: "fisiologia",
+  nutricion: "nutricion",
+  cabala: "cabala",
+  cultura: "cultura",
+};
+
+/** ¿Tiene pagada esta disciplina? null = todavía comprobando. */
+function usePagada(key: string): boolean | null {
+  const [pagada, setPagada] = useState<boolean | null>(null);
+  useEffect(() => {
+    let vivo = true;
+    let uid: string | null = null;
+    try { uid = localStorage.getItem("userId"); } catch { /* modo privado */ }
+    // Sin sesión: no hay nada pagado.
+    if (!uid) { setPagada(false); return; }
+    // Fresca: puede que acabe de pagar y la caché de 5 min diga que no.
+    getUserMe({ fresca: true })
+      .then(({ data }) => {
+        if (vivo) setPagada(data?.[`${SCOPE_PAGO[key] ?? key}_suscrito`] === true);
+      })
+      // Sin red: se enseña la de siempre; el pago lo vigila el guardia aparte.
+      .catch(() => { if (vivo) setPagada(false); });
+    return () => { vivo = false; };
+  }, [key]);
+  return pagada;
+}
 
 function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "portada" | "teoria" }) {
   const navigate = useNavigate();
@@ -131,7 +170,25 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       renderIcon: (color) => <AprendizajeIcon color={color} size="52px" shadow={false} />,
     },
   ];
-  const puertas = modo === "teoria" ? puertasTeoria : puertasPortada;
+  // La de siempre, para quien no ha pagado: Ilustraciones · Cursos · El Recorrido.
+  const puertasSinPagar: Puerta[] = [
+    { ...puertasTeoria[0], delay: 0.05 },
+    { ...puertasTeoria[1], delay: 0.15 },
+    {
+      clave: "recorrido",
+      titulo: t("portada.recorrido"),
+      pie: t("portada.recorridoPack"),
+      link: `/d/${d.key}`,
+      delay: 0.25,
+      renderIcon: () => <d.Icon size="52px" />,
+    },
+  ];
+  const pagada = usePagada(d.key);
+  // La Teoría solo se ve pagada: si alguien llega por la URL sin pagar, vuelve a la portada.
+  useEffect(() => {
+    if (modo === "teoria" && pagada === false) navigate(`/disciplina/${d.key}`, { replace: true });
+  }, [modo, pagada, d.key, navigate]);
+  const puertas = pagada === false ? puertasSinPagar : modo === "teoria" ? puertasTeoria : puertasPortada;
 
   return (
     // minH + columna + contenido flex=1: el footer se queda abajo aunque la
@@ -195,11 +252,11 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       <Flex flex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }} pb={{ base: 20, md: 28 }}>
         <Grid
           w="100%"
-          maxW={modo === "teoria" ? "640px" : "960px"}
+          maxW={modo === "teoria" && pagada ? "640px" : "960px"}
           templateColumns={{ base: "1fr", md: `repeat(${puertas.length}, 1fr)` }}
           gap={{ base: 6, md: 7 }}
         >
-          {puertas.map((p) => (
+          {pagada !== null && puertas.map((p) => (
             <Reveal key={p.clave} delay={p.delay} scaleFrom={0.96} h="100%">
               <Flex
                 as="button"
@@ -290,7 +347,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       </Flex>
 
       {/* Dentro de Teoría: volver a la portada (abajo a la izquierda, fuera de las cajas). */}
-      {modo === "teoria" && (
+      {modo === "teoria" && pagada && (
         <Flex px={{ base: 5, md: 10, lg: 16 }} pb={{ base: 10, md: 14 }} justify="flex-start">
           <BotonPaso
             direction="prev"

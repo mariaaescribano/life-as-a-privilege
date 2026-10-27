@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { Reveal } from "../global/Reveal";
+import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { EnlaceBaja } from "../global/EnlaceBaja";
 import { focoBlanco } from "../global/foco";
 
@@ -42,7 +43,15 @@ const campo = (invalido: boolean) => ({
   _focusVisible: { borderColor: "white", boxShadow: HALO_BOTON },
 });
 
-const WelcomeHero = ({ activo }: { activo: boolean }) => {
+/** Los iconos de las ocho disciplinas: solo para dar estilo, no se pulsan. */
+export type IconoDisciplina = {
+  name: string;
+  bg: string;
+  txt: string;
+  renderIcon: (size: string) => React.ReactNode;
+};
+
+const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoDisciplina[] }) => {
   const t = useT();
   const navigate = useNavigate();
   const [nombre, setNombre] = useState("");
@@ -90,6 +99,53 @@ const WelcomeHero = ({ activo }: { activo: boolean }) => {
     >
       {/* ── Izquierda: frase + formulario ── */}
       <Flex direction="column" align={{ base: "center", lg: "stretch" }} textAlign={{ base: "center", lg: "left" }} flex={{ base: "1", lg: "0 1 620px" }} minW={0} gap={{ base: 8, md: 10 }}>
+        {/* ── Los ocho iconos en una línea: círculo con la foto de su disciplina y
+            su halo. Decorativo (aria-hidden): entran de uno en uno, de izquierda
+            a derecha. */}
+        {iconos.length > 0 && (
+          <Flex
+            aria-hidden="true"
+            justify={{ base: "center", lg: "flex-start" }}
+            gap={{ base: "7px", sm: "10px", md: "12px" }}
+            flexWrap="nowrap"
+          >
+            {iconos.map((d, i) => {
+              const conFondo = hasDisciplinaBg(d.name);
+              return (
+                <Reveal key={d.name} activo={activo} direction="up" distance={14} scaleFrom={0.7} duration={0.7} delay={0.1 + i * 0.09}>
+                  <Box
+                    position="relative"
+                    w={{ base: "34px", sm: "40px", md: "50px" }}
+                    h={{ base: "34px", sm: "40px", md: "50px" }}
+                    borderRadius="full"
+                    border={`2px solid ${d.txt}`}
+                    bg={conFondo ? "transparent" : d.bg}
+                    boxShadow={`0 0 10px ${d.txt}66, 0 0 22px ${d.txt}33`}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    overflow="hidden"
+                    flexShrink={0}
+                  >
+                    {conFondo && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
+                    {/* El icono se pinta a 30 px y se escala con el círculo. */}
+                    <Box
+                      position="relative"
+                      zIndex={1}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      transform={{ base: "scale(0.62)", sm: "scale(0.78)", md: "scale(1)" }}
+                    >
+                      {d.renderIcon("30px")}
+                    </Box>
+                  </Box>
+                </Reveal>
+              );
+            })}
+          </Flex>
+        )}
+
         <Flex direction="column" align={{ base: "center", lg: "stretch" }} gap={{ base: 4, md: 5 }}>
           <Reveal activo={activo} direction="up" distance={22} duration={0.9} delay={0.1}>
             <Text
@@ -135,7 +191,7 @@ const WelcomeHero = ({ activo }: { activo: boolean }) => {
           </Reveal>
         </Flex>
 
-        <Reveal activo={activo} direction="up" distance={18} duration={0.8} delay={0.6} w="100%" maxW="400px">
+        <Reveal activo={activo} direction="up" distance={18} duration={0.8} delay={0.6} w="100%" maxW={{ base: "400px", md: "540px" }}>
           {estado === "ok" ? (
             <Flex direction="column" gap={2} w="100%" minH="200px" justify="center" textAlign={{ base: "center", lg: "left" }}>
               <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700">
@@ -154,6 +210,8 @@ const WelcomeHero = ({ activo }: { activo: boolean }) => {
               onSubmit={(e: React.FormEvent) => { e.preventDefault(); void enviar(); }}
               noValidate
             >
+              {/* Nombre y email en la misma línea (en móvil, uno bajo otro). */}
+              <Flex direction={{ base: "column", md: "row" }} gap={4}>
               <Input
                 {...campo(false)}
                 value={nombre}
@@ -172,6 +230,7 @@ const WelcomeHero = ({ activo }: { activo: boolean }) => {
                 type="email"
                 autoComplete="email"
               />
+              </Flex>
               {estado === "invalid" && (
                 <Text color="rgba(255,190,190,0.95)" fontSize="sm">{t("suscribir.invalido")}</Text>
               )}

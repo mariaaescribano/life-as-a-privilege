@@ -278,7 +278,7 @@ const QuienSoy = () => {
         ref={certifReveal.ref}
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 10, md: 12 }}
-        pb={{ base: 4, md: 6 }}
+        pb={0}
       >
         <Flex direction="column" gap={{ base: 12, md: 16 }} maxW="1100px" mx="auto">
           {secciones.filter((s) => s.items.length > 0).map((seccion, idx) => (
@@ -330,13 +330,6 @@ const QuienSoy = () => {
                   >
                     {t(seccion.tituloKey)}
                   </Text>
-                  <Box
-                    mt={3}
-                    h="1px"
-                    w={{ base: "90px", md: "120px" }}
-                    bg="linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent)"
-                    boxShadow="0 0 6px rgba(255,255,255,0.4)"
-                  />
                 </Flex>
                 </Reveal>
               )}
@@ -410,6 +403,11 @@ const QuienSoy = () => {
         </Flex>
       </Box>
 
+      {/* ── SEPARACIÓN antes de «Apoya este proyecto» (mismo aire arriba que abajo) ── */}
+      <Flex justify="center" px={{ base: 5, md: 10 }} py={{ base: 10, md: 14 }}>
+        <Box w="100%" maxW="500px" h="1px" bg="rgba(255,255,255,0.22)" />
+      </Flex>
+
       {/* ── DONACIÓN + TESTIMONIO ──
           Dos cajas en la misma fila (en móvil, una bajo la otra), del mismo
           alto. Sin sombra ni filo: se definen por el halo, como el resto de
@@ -423,7 +421,6 @@ const QuienSoy = () => {
         w="100%"
         mx="auto"
         px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 14, md: 20 }}
       >
         {/* ── DONACIÓN ── */}
         <Flex
