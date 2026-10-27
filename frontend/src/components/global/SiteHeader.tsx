@@ -49,7 +49,13 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // mandala de dentro del proyecto no puede echarte fuera de él.
   const homeTarget = isPrivate ? rutaHome() : "/";
   const logoTarget = homeTarget;
-  const avatarSrc  = userImg ?? sessionImg ?? "/img/icono/noImg.webp";
+  // Solo se pinta una foto que el navegador pueda cargar de verdad (http/https,
+  // una ruta del propio sitio o una imagen embebida). Una ruta local guardada
+  // por error en la sesión («file:///…», «C:\…») no se puede abrir desde una web:
+  // el navegador la rechaza con «Content … may not load or link to file:///».
+  const fotoValida = (u: string | null | undefined) =>
+    u && /^(https?:\/\/|\/|data:image\/|blob:)/i.test(u.trim()) ? u.trim() : null;
+  const avatarSrc  = fotoValida(userImg) ?? fotoValida(sessionImg) ?? "/img/icono/noImg.webp";
 
   const path = location.pathname.toLowerCase();
   const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
