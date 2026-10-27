@@ -13,7 +13,7 @@ import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
 import * as path from 'path';
 import { DatabaseService } from '../database.service';
-import { firmaBajaValida, normalizarEmail } from './baja.util';
+import { enlaceBaja, firmaBajaValida, normalizarEmail } from './baja.util';
 
 const TABLE = 'suscriptor';
 
@@ -32,7 +32,12 @@ export interface SuscriptorDB {
 export class SubscribeService {
   constructor(private readonly db: DatabaseService) {}
 
-  async addEmail(email: string, origen?: string, nombre?: string): Promise<void> {
+  async addEmail(email: string, origen?: string, nombre?: string, idioma?: string): Promise<void> {
+    // ¿Ya estaba apuntado? Solo a quien llega nuevo se le manda la bienvenida:
+    // volver a pulsar el botón no puede llenarle el buzón.
+    const { data: previo } = await this.db.getClient().from(TABLE).select(email).eq(email, email).maybeSingle();
+    const esNuevo = !previo;
+
     // upsert por email: si vuelve a apuntarse, no se duplica ni da error.
     const fila: Record<string, unknown> = { email, origen: origen ?? null };
     // Solo se toca `nombre` si llega: volver a apuntarse sin él no borra el que ya había.
@@ -55,7 +60,11 @@ export class SubscribeService {
 
     this.anadirAlFichero(email);
 
-    await this.sendNotification(email, origen);
+    await this.sendNotification(email, origen, nombre, esNuevo);
+    // La bienvenida solo sale de la portada (la «introducción gratuita»).
+    if (esNuevo && !error && origen === 'portada') {
+      await this.sendBienvenida(email, nombre, idioma === 'en' ? 'en' : 'es');
+    }
   }
 
   /** Copia en backend/data/subscribers.txt (la BD manda; el fichero es solo copia). */
@@ -128,38 +137,89 @@ export class SubscribeService {
     return (data ?? []) as SuscriptorDB[];
   }
 
-  private async sendNotification(email: string, origen?: string): Promise<void> {
-    const pass = (process.env.EMAIL_PASS ?? '').replace(/\s/g, '');
-
-    const transporter = nodemailer.createTransport({
+  /** Transporte SMTP común; null si el correo no está configurado. */
+  private transporte() {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.warn('[SubscribeService] EMAIL_USER / EMAIL_PASS no configurados — no se envía correo');
+      return null;
+    }
+    return nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
       secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass,
-      },
+      auth: { user: process.env.EMAIL_USER, pass: (process.env.EMAIL_PASS ?? '').replace(/s/g, '') },
     });
+  }
 
+  private esc(v: string): string {
+    return v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /** Aviso a María: quién se ha apuntado y cuántos hay ya en la lista. */
+  private async sendNotification(email: string, origen?: string, nombre?: string, esNuevo = true): Promise<void> {
+    const transporter = this.transporte();
+    if (!transporter) return;
     const notifyEmail = process.env.NOTIFY_EMAIL || DEFAULT_NOTIFY_EMAIL;
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.warn('[SubscribeService] EMAIL_USER / EMAIL_PASS no configurados — no se envía notificación');
-      return;
-    }
 
     const esVoluntario = origen === 'voluntario';
-    const subject = esVoluntario ? 'Nuevo voluntario' : 'Nuevo suscriptor';
-    const etiqueta = esVoluntario ? 'Nuevo voluntario' : 'Nuevo suscriptor';
+    const etiqueta = esVoluntario ? 'Nuevo voluntario' : esNuevo ? 'Nuevo suscriptor' : 'Suscriptor que vuelve a apuntarse';
+
+    const { count } = await this.db.getClient().from(TABLE).select('*', { count: 'exact', head: true });
+    const total = typeof count === 'number' ? `<p>Ya son <strong>${count}</strong> en la lista.</p>` : '';
+    const quien = nombre ? `${this.esc(nombre)} · ` : '';
+    const desde = origen ? `<p>Desde: ${this.esc(origen)}</p>` : '';
 
     try {
       await transporter.sendMail({
         from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
         to: notifyEmail,
-        subject,
-        html: `<p>${etiqueta}: <strong>${email}</strong></p>`,
+        subject: etiqueta,
+        html: `<p>${etiqueta}: <strong>${quien}${this.esc(email)}</strong></p>${desde}${total}`,
       });
     } catch (err) {
       console.error('Error enviando notificación de suscripción:', err);
+    }
+  }
+
+  /**
+   * Correo a la persona que acaba de dejar sus datos para la introducción gratuita.
+   * BORRADOR de texto: lo aprueba María antes de darlo por bueno (ver TEXTOS abajo).
+   */
+  private async sendBienvenida(email: string, nombre: string | undefined, idioma: 'es' | 'en'): Promise<void> {
+    const transporter = this.transporte();
+    if (!transporter) return;
+
+    const TEXTOS = {
+      es: {
+        asunto: 'Tu introducción gratuita',
+        hola: nombre ? `Hola, ${this.esc(nombre)}` : 'Hola',
+        cuerpo: 'Gracias por apuntarte. Descubre nuevas perspectivas de ti a través de una mirada multidisciplinar.',
+        firma: 'María Escribano',
+        baja: 'Darme de baja',
+      },
+      en: {
+        asunto: 'Your free introduction',
+        hola: nombre ? `Hello, ${this.esc(nombre)}` : 'Hello',
+        cuerpo: 'Thank you for signing up. Discover new perspectives of yourself through a multidisciplinary lens.',
+        firma: 'María Escribano',
+        baja: 'Unsubscribe',
+      },
+    }[idioma];
+
+    try {
+      await transporter.sendMail({
+        from: `"María Escribano · Life as a Privilege" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: TEXTOS.asunto,
+        html: `<div style="font-family:Georgia,'EB Garamond',serif;color:#2a2622;font-size:17px;line-height:1.7;max-width:520px">
+<p><strong>${TEXTOS.hola}</strong></p>
+<p>${TEXTOS.cuerpo}</p>
+<p>${TEXTOS.firma}</p>
+<p style="font-size:12px;color:#8a8278"><a href="${enlaceBaja(email)}" style="color:#8a8278">${TEXTOS.baja}</a></p>
+</div>`,
+      });
+    } catch (err) {
+      console.error('Error enviando la bienvenida:', email, err);
     }
   }
 }

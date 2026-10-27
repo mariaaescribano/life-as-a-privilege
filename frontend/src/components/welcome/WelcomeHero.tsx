@@ -3,11 +3,12 @@ import { Box, Flex, Image, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../GlobalVariables";
-import { useT } from "../../i18n";
+import { useIdioma } from "../../i18n";
 import { Reveal } from "../global/Reveal";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { EnlaceBaja } from "../global/EnlaceBaja";
 import { focoBlanco } from "../global/foco";
+import { arenaBg, arenaTinta } from "../../data/landingProyectos";
 
 /**
  * Cabecera de la portada: a la izquierda la frase (una sola línea, sin caja, para
@@ -18,17 +19,17 @@ import { focoBlanco } from "../global/foco";
  * además manda el nombre. Fuera de cajas todo el texto es blanco y sin sombra;
  * la luz la ponen el halo de los campos, el del botón y el de la foto.
  */
-const HALO_CAMPO = "0 0 14px rgba(255,255,255,0.10), 0 0 32px rgba(180,255,245,0.06)";
-const HALO_BOTON = "0 0 16px rgba(255,255,255,0.15), 0 0 36px rgba(180,255,245,0.10)";
-const HALO_BOTON_HOVER = "0 0 22px rgba(255,255,255,0.24), 0 0 48px rgba(180,255,245,0.15)";
+const HALO_CAMPO = "0 0 10px rgba(255,255,255,0.04)";
+const HALO_BOTON = "0 0 10px rgba(255,255,255,0.10), 0 0 22px rgba(180,255,245,0.05)";
+const HALO_BOTON_HOVER = "0 0 14px rgba(255,255,255,0.16), 0 0 30px rgba(180,255,245,0.08)";
 const HALO_FOTO = "0 0 16px rgba(255,255,255,0.11), 0 0 34px rgba(255,255,255,0.06), 0 0 60px rgba(180,255,245,0.06)";
 
 type Estado = "idle" | "loading" | "ok" | "invalid" | "error";
 
 const campo = (invalido: boolean) => ({
   w: "100%",
-  bg: "rgba(255,255,255,0.08)",
-  border: invalido ? "1px solid rgba(255,150,150,0.7)" : "1px solid rgba(255,255,255,0.3)",
+  bg: "rgba(0,40,40,0.28)",
+  border: invalido ? "1px solid rgba(255,150,150,0.7)" : "1px solid rgba(255,255,255,0.32)",
   borderRadius: "full",
   color: "white",
   fontFamily: "'EB Garamond', serif",
@@ -52,7 +53,7 @@ export type IconoDisciplina = {
 };
 
 const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoDisciplina[] }) => {
-  const t = useT();
+  const { t, idioma } = useIdioma();
   const navigate = useNavigate();
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -68,7 +69,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
     }
     setEstado("loading");
     try {
-      await axios.post(`${API_URL}/subscribe`, { email: email.trim(), nombre: nombre.trim(), origen: "portada" });
+      await axios.post(`${API_URL}/subscribe`, { email: email.trim(), nombre: nombre.trim(), origen: "portada", idioma });
       setEstado("ok");
       setNombre("");
       setEmail("");
@@ -152,9 +153,9 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
               color="white"
               fontFamily="'EB Garamond', serif"
               fontWeight="700"
-              fontSize={{ base: "2xl", md: "3xl", lg: "clamp(1.5rem, 2.2vw, 2.3rem)" }}
-              letterSpacing="0.04em"
-              lineHeight="1.25"
+              fontSize={{ base: "3xl", md: "4xl", lg: "clamp(2rem, 3.1vw, 3.1rem)" }}
+              letterSpacing="0.01em"
+              lineHeight="1.2"
               maxW="640px"
               textAlign={{ base: "center", lg: "left" }}
             >
@@ -246,9 +247,9 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 px={{ base: 8, md: 10 }}
                 py="12px"
                 borderRadius="full"
-                bg="rgba(255,255,255,0.12)"
-                border="1.5px solid rgba(255,255,255,0.55)"
-                color="white"
+                bg={arenaBg}
+                border="1.5px solid rgba(255,255,255,0.9)"
+                color={arenaTinta}
                 fontFamily="'EB Garamond', serif"
                 fontSize={{ base: "md", md: "lg" }}
                 fontWeight="700"
@@ -258,7 +259,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 cursor={estado === "loading" ? "not-allowed" : "pointer"}
                 opacity={estado === "loading" ? 0.6 : 1}
                 boxShadow={HALO_BOTON}
-                _hover={estado === "loading" ? {} : { bg: "rgba(255,255,255,0.22)", borderColor: "white", boxShadow: HALO_BOTON_HOVER }}
+                _hover={estado === "loading" ? {} : { bg: "white", boxShadow: HALO_BOTON_HOVER, transform: "translateY(-2px)" }}
                 _focusVisible={focoBlanco}
                 transition="all 0.25s ease"
                 sx={estado === "idle" && activo ? {
@@ -267,7 +268,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                   "@media (prefers-reduced-motion: reduce)": { animation: "none" },
                 } : undefined}
               >
-                {estado === "loading" ? t("comun.enviando") : t("comun.enviar")}
+                {estado === "loading" ? t("comun.enviando") : (<>{t("comun.enviar")}<Box as="span" ml={3} fontSize="1.15em" display="inline-block" transition="transform 0.25s ease" sx={{ "button:hover > &": { transform: "translateX(4px)" } }}>→</Box></>)}
               </Box>
               <Box w="fit-content" alignSelf={{ base: "center", lg: "flex-start" }}>
                 <EnlaceBaja mt={1} />
