@@ -35,7 +35,7 @@ export class SubscribeService {
   async addEmail(email: string, origen?: string, nombre?: string, idioma?: string): Promise<void> {
     // ¿Ya estaba apuntado? Solo a quien llega nuevo se le manda la bienvenida:
     // volver a pulsar el botón no puede llenarle el buzón.
-    const { data: previo } = await this.db.getClient().from(TABLE).select(email).eq(email, email).maybeSingle();
+    const { data: previo } = await this.db.getClient().from(TABLE).select('email').eq('email', email).maybeSingle();
     const esNuevo = !previo;
 
     // upsert por email: si vuelve a apuntarse, no se duplica ni da error.
@@ -60,10 +60,14 @@ export class SubscribeService {
 
     this.anadirAlFichero(email);
 
-    await this.sendNotification(email, origen, nombre, esNuevo);
+    // Los correos salen POR DETRÁS: la respuesta a quien se apunta no puede
+    // depender de que el servidor de correo conteste (si tardaba, la web se
+    // quedaba en «Enviando…» y la persona no veía nada). Cada envío ya recoge
+    // sus propios errores y los deja en el log.
+    void this.sendNotification(email, origen, nombre, esNuevo);
     // La bienvenida solo sale de la portada (la «introducción gratuita»).
     if (esNuevo && !error && origen === 'portada') {
-      await this.sendBienvenida(email, nombre, idioma === 'en' ? 'en' : 'es');
+      void this.sendBienvenida(email, nombre, idioma === 'en' ? 'en' : 'es');
     }
   }
 
@@ -143,11 +147,17 @@ export class SubscribeService {
       console.warn('[SubscribeService] EMAIL_USER / EMAIL_PASS no configurados — no se envía correo');
       return null;
     }
+    const port = Number(process.env.EMAIL_PORT) || 465;
     return nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: { user: process.env.EMAIL_USER, pass: (process.env.EMAIL_PASS ?? '').replace(/s/g, '') },
+      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+      port,
+      secure: port === 465,
+      auth: { user: process.env.EMAIL_USER, pass: (process.env.EMAIL_PASS ?? '').replace(/\s/g, '') },
+      // Plazos cortos: sin ellos, un servidor de correo que no contesta deja la
+      // conexión abierta dos minutos.
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 20_000,
     });
   }
 
@@ -171,7 +181,7 @@ export class SubscribeService {
 
     try {
       await transporter.sendMail({
-        from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
+        from: `"María Escribano" <${process.env.EMAIL_USER}>`,
         to: notifyEmail,
         subject: etiqueta,
         html: `<p>${etiqueta}: <strong>${quien}${this.esc(email)}</strong></p>${desde}${total}`,
@@ -182,40 +192,55 @@ export class SubscribeService {
   }
 
   /**
-   * Correo a la persona que acaba de dejar sus datos para la introducción gratuita.
-   * BORRADOR de texto: lo aprueba María antes de darlo por bueno (ver TEXTOS abajo).
+   * Correo de bienvenida a quien acaba de dejar sus datos en la portada (la
+   * «introducción gratuita»). El texto es de María, tal cual; el inglés es una
+   * traducción. Lleva el enlace para darse de baja (obligatorio).
    */
   private async sendBienvenida(email: string, nombre: string | undefined, idioma: 'es' | 'en'): Promise<void> {
     const transporter = this.transporte();
     if (!transporter) return;
 
+    const n = nombre ? this.esc(nombre) : '';
     const TEXTOS = {
       es: {
-        asunto: 'Tu introducción gratuita',
-        hola: nombre ? `Hola, ${this.esc(nombre)}` : 'Hola',
-        cuerpo: 'Gracias por apuntarte. Descubre nuevas perspectivas de ti a través de una mirada multidisciplinar.',
-        firma: 'María Escribano',
+        asunto: nombre ? `Bienvenido, ${nombre.replace(/[\r\n]+/g, ' ')}` : 'Bienvenido',
+        hola: n ? `Bienvenido, ${n}` : 'Bienvenido',
+        parrafos: [
+          'Conocerse desde distintos ángulos es fundamental para poder crecer.',
+          'Tú no solo quieres conocer más, quieres <em>conocerte</em> más y eso es exactamente lo que conseguirás aquí.',
+          'Lamento decirte que el vídeo todavía no está en producción, pero en cuanto lo haga, serás el primero en verlo.',
+          'Mientras disfruta del material gratuito.',
+        ],
+        despedida: 'Un abrazo, nos vemos pronto',
         baja: 'Darme de baja',
       },
       en: {
-        asunto: 'Your free introduction',
-        hola: nombre ? `Hello, ${this.esc(nombre)}` : 'Hello',
-        cuerpo: 'Thank you for signing up. Discover new perspectives of yourself through a multidisciplinary lens.',
-        firma: 'María Escribano',
+        asunto: nombre ? `Welcome, ${nombre.replace(/[\r\n]+/g, ' ')}` : 'Welcome',
+        hola: n ? `Welcome, ${n}` : 'Welcome',
+        parrafos: [
+          'Getting to know yourself from different angles is essential in order to grow.',
+          "You don't just want to know more, you want to know <em>yourself</em> more, and that is exactly what you will achieve here.",
+          "I'm sorry to say the video is not in production yet, but as soon as it is, you will be the first to see it.",
+          'In the meantime, enjoy the free material.',
+        ],
+        despedida: 'A hug, see you soon',
         baja: 'Unsubscribe',
       },
     }[idioma];
 
+    const cuerpo = TEXTOS.parrafos.map((t) => `<p style="margin:0 0 16px">${t}</p>`).join('\n');
+
     try {
       await transporter.sendMail({
-        from: `"María Escribano · Life as a Privilege" <${process.env.EMAIL_USER}>`,
+        from: `"María Escribano" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: TEXTOS.asunto,
         html: `<div style="font-family:Georgia,'EB Garamond',serif;color:#2a2622;font-size:17px;line-height:1.7;max-width:520px">
-<p><strong>${TEXTOS.hola}</strong></p>
-<p>${TEXTOS.cuerpo}</p>
-<p>${TEXTOS.firma}</p>
-<p style="font-size:12px;color:#8a8278"><a href="${enlaceBaja(email)}" style="color:#8a8278">${TEXTOS.baja}</a></p>
+<p style="margin:0 0 16px"><strong>${TEXTOS.hola}</strong></p>
+${cuerpo}
+<p style="margin:24px 0 4px">${TEXTOS.despedida}</p>
+<p style="margin:0 0 28px"><strong>María Escribano</strong></p>
+<p style="font-size:12px;color:#8a8278;margin:0"><a href="${enlaceBaja(email)}" style="color:#8a8278">${TEXTOS.baja}</a></p>
 </div>`,
       });
     } catch (err) {

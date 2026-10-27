@@ -15,9 +15,10 @@ export class SubscribeController {
   @Throttle(LIMITE_FORMULARIO)
   @HttpCode(HttpStatus.OK)
   async subscribe(@Body() body: { email: string; origen?: string; nombre?: string; idioma?: string }) {
-    if (!body.email) return { success: false };
+    const correo = (body.email ?? '').trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo) || correo.length > 254) return { success: false };
     await this.subscribeService.addEmail(
-      body.email.trim().toLowerCase(),
+      correo,
       body.origen,
       typeof body.nombre === 'string' ? body.nombre.trim().slice(0, 120) : undefined,
       body.idioma,

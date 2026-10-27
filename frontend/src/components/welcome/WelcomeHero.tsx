@@ -69,7 +69,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
     }
     setEstado("loading");
     try {
-      await axios.post(`${API_URL}/subscribe`, { email: email.trim(), nombre: nombre.trim(), origen: "portada", idioma });
+      await axios.post(`${API_URL}/subscribe`, { email: email.trim(), nombre: nombre.trim(), origen: "portada", idioma }, { timeout: 15000 });
       setEstado("ok");
       setNombre("");
       setEmail("");
