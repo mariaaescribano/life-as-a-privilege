@@ -2,6 +2,7 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { Reveal } from "./Reveal";
 import { focoBlanco } from "./foco";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import { sombraTexto } from "./disciplinaSombras";
@@ -1038,12 +1039,25 @@ export const RecorridoVideosMuestra = () => {
         w="100%"
       >
         {conVideo.map((disc, i) => (
-          <VideoMuestraCard
+          // Un Reveal por baldosa: cada una entra al asomar ella, y las de una
+          // misma fila lo hacen de izquierda a derecha, de una en una.
+          <Reveal
             key={disc.nom}
-            disc={disc}
-            index={i}
-            onOpen={() => setAbierto(disc)}
-          />
+            inView
+            amount={0.2}
+            direction="up"
+            distance={26}
+            scaleFrom={0.95}
+            duration={0.75}
+            delay={(i % 4) * 0.12}
+            h="100%"
+          >
+            <VideoMuestraCard
+              disc={disc}
+              index={i}
+              onOpen={() => setAbierto(disc)}
+            />
+          </Reveal>
         ))}
       </Box>
 

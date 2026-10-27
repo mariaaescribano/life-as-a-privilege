@@ -6,7 +6,7 @@ import {
 import axios from "axios";
 import { UserRound, Search, Sprout, Compass, ArrowRight } from "lucide-react";
 import { focoBlanco } from "../global/foco";
-import { Reveal, RevealItem, RevealStagger } from "../global/Reveal";
+import { Breathe, Reveal, RevealItem, RevealStagger } from "../global/Reveal";
 import { LetrasVivas } from "../global/LetrasVivas";
 import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 import { RecorridoVideosMuestra } from "../global/MandalaRecorrido";
@@ -105,7 +105,7 @@ function TituloBloque({
     ? (children.match(/^(.*?\.)\s+(.*)$/)?.slice(1, 3) ?? null)
     : null;
   const letras = (texto: string, retraso: number) => (
-    <LetrasVivas texto={texto} entrada activo={visto.visible} retraso={retraso} paso={0.09} pasoEntrada={0.035} altura={4} />
+    <LetrasVivas texto={texto} entrada activo={visto.visible} retraso={retraso} paso={0.09} pasoEntrada={0.035} altura={0} repetir={false} />
   );
   return (
     <Flex ref={visto.ref} direction="column" align="center" gap={{ base: 3, md: 4 }} textAlign="center">
@@ -266,7 +266,7 @@ export function PruebasBloque() {
   const t = useT();
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
-      <TituloBloque vivo sinRaya dosLineas sub={t("elMetodo.pruebas.sub")}>{t("elMetodo.pruebas.titulo")}</TituloBloque>
+      <TituloBloque sinRaya dosLineas sub={t("elMetodo.pruebas.sub")}>{t("elMetodo.pruebas.titulo")}</TituloBloque>
 
       <Reveal inView direction="up" distance={24} duration={0.8} w="100%">
         <RecorridoVideosMuestra />
@@ -427,16 +427,6 @@ function QuieroEsteModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 // sombra.
 export function ComoFuncionaBloque() {
   const t = useT();
-  const caminos = [
-    { n: "1", titulo: t("elMetodo.como.1.titulo"), textos: [t("elMetodo.como.1.texto")], badge: t("elMetodo.como.1.badge"), destacada: false },
-    {
-      n: "2",
-      titulo: t("elMetodo.como.2.titulo"),
-      textos: [t("elMetodo.como.2.texto"), t("elMetodo.como.2.texto2")],
-      badge: t("elMetodo.como.2.badge"),
-      destacada: true,
-    },
-  ];
   const modal = useDisclosure();
   const pasos = [
     { Icono: UserRound, n: "1" },
@@ -447,7 +437,9 @@ export function ComoFuncionaBloque() {
 
   return (
     <Flex direction="column" align="center" w="100%" gap={{ base: 8, md: 10 }}>
-      <TituloBloque sub={t("elMetodo.como.intro")}>{t("elMetodo.como.titulo")}</TituloBloque>
+      {/* Sin la frase de bajada («Elige la disciplina que más te interese…») ni la
+          rayita debajo del título. */}
+      <TituloBloque sinRaya>{t("elMetodo.como.titulo")}</TituloBloque>
 
       {/* Los cuatro pasos: círculo con icono, el número de cada uno sobre la
           línea que lo une con el siguiente. En móvil, en dos columnas y sin línea. */}
@@ -461,19 +453,21 @@ export function ComoFuncionaBloque() {
         {pasos.map(({ Icono, n }, i) => (
           <Reveal key={n} inView direction="up" distance={18} duration={0.7} delay={i * 0.1}>
             <Flex direction="column" align="center" textAlign="center" gap={3} position="relative">
-              <Flex
-                w={{ base: "64px", md: "76px" }}
-                h={{ base: "64px", md: "76px" }}
-                borderRadius="full"
-                align="center"
-                justify="center"
-                border="1.5px solid rgba(255,255,255,0.7)"
-                bg="rgba(255,255,255,0.06)"
-                color="white"
-                boxShadow="0 0 18px rgba(255,255,255,0.28), 0 0 44px rgba(180,255,245,0.22)"
-              >
-                <Icono size={30} strokeWidth={1.3} />
-              </Flex>
+              <Breathe scale={0.04} duration={6 + i * 0.6} delay={1.2 + i * 0.4}>
+                <Flex
+                  w={{ base: "64px", md: "76px" }}
+                  h={{ base: "64px", md: "76px" }}
+                  borderRadius="full"
+                  align="center"
+                  justify="center"
+                  border="1.5px solid rgba(255,255,255,0.7)"
+                  bg="rgba(255,255,255,0.06)"
+                  color="white"
+                  boxShadow="0 0 14px rgba(255,255,255,0.2), 0 0 34px rgba(180,255,245,0.16)"
+                >
+                  <Icono size={30} strokeWidth={1.3} />
+                </Flex>
+              </Breathe>
               {i < pasos.length - 1 && (
                 <Flex
                   display={{ base: "none", md: "flex" }}
@@ -503,91 +497,150 @@ export function ComoFuncionaBloque() {
         ))}
       </Grid>
 
+      {/* ── LA ASESORÍA 1:1 ──
+          Una sola caja, centrada y tranquila (la de «a tu ritmo» se retiró).
+          Todo entra de uno en uno al llegar a ella: primero la caja, y dentro la
+          frase de arriba, la raya (que se abre desde el centro), el título, el
+          texto, el precio y el botón. */}
       <Grid
         w="100%"
-        maxW="940px"
-        templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
-        gap={{ base: 5, md: 6 }}
+        maxW="1040px"
+        templateColumns={{ base: "1fr", md: "minmax(0, 7fr) minmax(0, 5fr)" }}
+        gap={{ base: 5, md: 7 }}
         alignItems="stretch"
       >
-        {caminos.map((c, i) => (
-          <Reveal key={c.n} inView direction="up" distance={22} duration={0.7} delay={i * 0.1} h="100%">
-            <CajaCristal
-              h="100%"
-              align="flex-start"
-              textAlign="left"
-              gap={{ base: 3, md: 4 }}
-              px={{ base: 6, md: 8 }}
-              py={{ base: 7, md: 9 }}
-              // La segunda es la que se recomienda: borde y halo más claros.
-              border={c.destacada ? "1.5px solid rgba(255,255,255,0.7)" : undefined}
-              boxShadow={
-                c.destacada
-                  ? "0 0 18px rgba(255,255,255,0.28), 0 0 44px rgba(180,255,245,0.22)"
-                  : "0 0 24px rgba(180,255,245,0.10)"
-              }
-            >
+      <Reveal inView amount={0.2} direction="up" distance={26} scaleFrom={0.97} duration={0.9} w="100%" h="100%">
+        <CajaCristal
+          h="100%"
+          align="center"
+          textAlign="center"
+          px={{ base: 7, md: 14 }}
+          py={{ base: 9, md: 12 }}
+          border="1.5px solid rgba(255,255,255,0.55)"
+          boxShadow="0 0 18px rgba(255,255,255,0.2), 0 0 44px rgba(180,255,245,0.14)"
+        >
+          <RevealStagger inView amount={0.25} stagger={0.16} delayChildren={0.25} display="flex" flexDirection="column" alignItems="center" w="100%" my="auto">
+            <RevealItem direction="up" distance={14}>
               <Text
-                color="rgba(255,255,255,0.92)"
+                color="rgba(255,255,255,0.88)"
                 fontStyle="italic"
                 fontSize={{ base: "md", md: "lg" }}
-                letterSpacing="0.02em"
+                letterSpacing="0.04em"
                 lineHeight="1.4"
               >
-                {c.badge}
+                {t("elMetodo.como.2.badge")}
               </Text>
-              <Box w="100%" h="1px" bg="rgba(255,255,255,0.35)" />
+            </RevealItem>
+
+            <RevealItem direction="none" scaleFrom={0.2}>
+              <Box mt={{ base: 4, md: 5 }} w={{ base: "70px", md: "100px" }} h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7), transparent)" />
+            </RevealItem>
+
+            <RevealItem direction="up" distance={16}>
               <Text
+                mt={{ base: 5, md: 6 }}
                 color="white"
                 fontWeight="700"
-                fontSize={{ base: "lg", md: "2xl" }}
-                lineHeight="1.3"
-                letterSpacing="0.02em"
+                fontSize={{ base: "2xl", md: "4xl" }}
+                lineHeight="1.2"
+                letterSpacing="0.03em"
               >
-                {c.titulo}
+                {t("elMetodo.como.2.titulo")}
               </Text>
-              {c.textos.map((texto) => (
-                <Text key={texto} color="rgba(255,255,255,0.88)" fontSize={{ base: "sm", md: "md" }} lineHeight="1.75">
-                  {texto}
-                </Text>
-              ))}
-              {c.destacada && (
-                <Box
-                  as="button"
-                  type="button"
-                  onClick={modal.onOpen}
-                  mt="auto"
-                  alignSelf="flex-end"
-                  px={{ base: 6, md: 7 }}
-                  py={{ base: "8px", md: "9px" }}
-                  borderRadius="full"
-                  border="1.5px solid rgba(255,255,255,0.7)"
-                  bg="rgba(255,255,255,0.12)"
-                  color="white"
-                  fontFamily="inherit"
-                  fontSize={{ base: "sm", md: "md" }}
-                  fontWeight="700"
-                  letterSpacing="0.1em"
-                  textTransform="uppercase"
-                  cursor="pointer"
-                  boxShadow="0 0 22px rgba(255,255,255,0.36), 0 0 48px rgba(180,255,245,0.22)"
-                  transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
-                  _hover={{
-                    bg: "rgba(255,255,255,0.22)",
-                    borderColor: "white",
-                    boxShadow: "0 0 32px rgba(255,255,255,0.58), 0 0 66px rgba(180,255,245,0.38)",
-                  }}
-                  _focusVisible={focoBlanco}
-                >
-                  <Flex as="span" align="center" gap={3}>
-                    {t("elMetodo.como.2.boton")}
-                    <ArrowRight size={18} />
-                  </Flex>
-                </Box>
-              )}
-            </CajaCristal>
-          </Reveal>
-        ))}
+            </RevealItem>
+
+            <RevealItem direction="up" distance={14}>
+              <Text
+                mt={{ base: 4, md: 5 }}
+                color="rgba(255,255,255,0.9)"
+                fontSize={{ base: "md", md: "xl" }}
+                lineHeight="1.75"
+                letterSpacing="0.01em"
+                maxW="520px"
+              >
+                {t("elMetodo.como.2.texto")}
+              </Text>
+            </RevealItem>
+
+            <RevealItem direction="up" distance={12} scaleFrom={0.92}>
+              <Text
+                mt={{ base: 6, md: 7 }}
+                color="white"
+                fontWeight="600"
+                fontSize={{ base: "2xl", md: "3xl" }}
+                letterSpacing="0.06em"
+                lineHeight="1.2"
+              >
+                {t("elMetodo.como.2.precio")}
+              </Text>
+            </RevealItem>
+
+            <RevealItem direction="up" distance={12}>
+              <Box
+                as="button"
+                type="button"
+                onClick={modal.onOpen}
+                mt={{ base: 6, md: 7 }}
+                px={{ base: 8, md: 10 }}
+                py={{ base: "10px", md: "12px" }}
+                borderRadius="full"
+                border="1.5px solid rgba(255,255,255,0.7)"
+                bg="rgba(255,255,255,0.1)"
+                color="white"
+                fontFamily="inherit"
+                fontSize={{ base: "sm", md: "md" }}
+                fontWeight="700"
+                letterSpacing="0.12em"
+                textTransform="uppercase"
+                cursor="pointer"
+                boxShadow="0 0 16px rgba(255,255,255,0.22), 0 0 36px rgba(180,255,245,0.14)"
+                transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease"
+                _hover={{
+                  bg: "rgba(255,255,255,0.2)",
+                  borderColor: "white",
+                  boxShadow: "0 0 24px rgba(255,255,255,0.4), 0 0 52px rgba(180,255,245,0.26)",
+                  transform: "translateY(-2px)",
+                }}
+                _focusVisible={focoBlanco}
+              >
+                <Flex as="span" align="center" gap={3}>
+                  {t("elMetodo.como.2.boton")}
+                  <ArrowRight size={18} />
+                </Flex>
+              </Box>
+            </RevealItem>
+          </RevealStagger>
+        </CajaCristal>
+      </Reveal>
+
+      {/* La foto, a la derecha (debajo de la caja en móvil): para hacerlo más
+          humano. Ocupa el alto de la caja; solo halo, sin sombra negra. */}
+      <Reveal inView amount={0.2} direction="left" distance={30} scaleFrom={0.96} duration={0.9} delay={0.15} w="100%" h="100%">
+        <Box
+          position="relative"
+          w="100%"
+          h="100%"
+          minH={{ base: "320px", md: "440px" }}
+          borderRadius="2xl"
+          overflow="hidden"
+          boxShadow="0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09)"
+          role="group"
+        >
+          <Image
+            src="/img/me/escribiendo.webp"
+            alt="María escribiendo"
+            position="absolute"
+            inset={0}
+            w="100%"
+            h="100%"
+            objectFit="cover"
+            objectPosition="center"
+            display="block"
+            transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)"
+            _groupHover={{ transform: "scale(1.04)" }}
+          />
+        </Box>
+      </Reveal>
       </Grid>
       <QuieroEsteModal isOpen={modal.isOpen} onClose={modal.onClose} />
 

@@ -26,7 +26,7 @@ export const elMetodo = {
   "elMetodo.videoProximamente": "Vídeo próximamente",
 
   // ── Cómo funciona (ComoFuncionaBloque) ─────────────────────────────────
-  "elMetodo.como.titulo": "¿Cómo funciona El Mapa?",
+  "elMetodo.como.titulo": "¿Cómo funcionan las asesorías 1:1?",
   "elMetodo.como.intro":
     "Elige la disciplina que más te interese y accede a un recorrido diseñado para ayudarte a comprenderte mejor y a tratarte con el respeto que te mereces.",
   "elMetodo.como.1.titulo": "Recorre El Mapa a tu ritmo",
@@ -47,6 +47,8 @@ export const elMetodo = {
   "elMetodo.como.paso.4.texto": "Usa los nuevos recursos para cuidarte y decidir con más claridad desde quién eres de verdad.",
   "elMetodo.como.1.badge": "Menor porcentaje de cambios permanentes",
   "elMetodo.como.2.badge": "Mayor porcentaje de cambios conseguidos",
+  /** Precio de la asesoría 1:1. */
+  "elMetodo.como.2.precio": "15 € por sesión",
   "elMetodo.como.2.boton": "Quiero este",
   "elMetodo.como.modal.titulo": "Avancemos juntos",
   "elMetodo.como.modal.texto":
@@ -76,6 +78,9 @@ export const elMetodo = {
   /** Entradilla del titular, en dos golpes: el primero en letra normal y el
    *  segundo en cursiva (es el que deja caer la pregunta grande de debajo).
    *  Van en dos claves porque se pintan con estilos distintos. */
+  /** Cabecera de El Mapa: la frase principal y la secundaria, en cursiva. */
+  "elMetodo.hero.principal": "Metodología única de autoconocimiento multidimensional",
+  "elMetodo.hero.secundaria": "Ocho perspectivas para reinterpretar tu experiencia y tu persona.",
   "elMetodo.hero.tituloAntes": "Para cambiar,",
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",
@@ -126,7 +131,11 @@ export const elMetodo = {
 
   // ── 7. LA PRUEBA (los ocho vídeos) ─────────────────────────────────────
   // Justo antes del precio: hasta ahí la página promete, y aquí se enseña.
-  "elMetodo.pruebas.titulo": "Entiende por qué haces lo que haces. Comprenderte no significa justificarte.",
+  "elMetodo.pruebas.titulo": "No pretende decirte quién eres, qué debes cambiar ni cómo debes vivir. Te ofrece herramientas para que puedas descubrirlo por ti mismo.",
+  /** Frase grande que cierra los vídeos. */
+  "elMetodo.pruebas.interior": "Estos contenidos y reels exclusivos te esperan en el interior",
+  /** Lo que cuesta el acceso a los contenidos: debajo de la frase de los vídeos. */
+  "elMetodo.pruebas.precio": "5 € al mes por el acceso a cada disciplina. Es una suscripción.",
   "elMetodo.pruebas.sub":
     "Explora los diferentes recorridos de El Mapa. Cada uno te ofrece conocimientos y recursos para conocerte mejor.",
 

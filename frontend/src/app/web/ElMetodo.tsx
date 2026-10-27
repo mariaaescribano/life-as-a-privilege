@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Box, Flex, Grid, Image, Text, useBreakpointValue, type BoxProps } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Image, Text, useBreakpointValue, type BoxProps } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -7,23 +7,20 @@ import { ContactModal } from "../../components/global/ContactModal";
 import { BookCallModal } from "../../components/global/BookCallModal";
 import { type DisciplinaClave } from "../../data/recorridoContenido";
 import { useRecorridoContenido } from "../../data/useRecorridoContenido";
-import { useT, TextoRico, type ClaveTexto } from "../../i18n";
-import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
+import { useT, type ClaveTexto } from "../../i18n";
 import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { DisciplinaFicha } from "../../components/metodo/DisciplinaFicha";
 // Aparcado con su bloque, más abajo: import { ComicPorQueExiste } from "../../components/metodo/ComicPorQueExiste";
 import { precargarImagenes, usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
-import { useVistoConEspera } from "../../hooks/useVistoConEspera";
 import { BloqueDiferido } from "../../components/global/BloqueDiferido";
-import { Breathe, Float, Reveal, RevealItem, RevealStagger } from "../../components/global/Reveal";
+import { Breathe, Float, Reveal } from "../../components/global/Reveal";
 // Para reactivar el mandala en el futuro: añade `MandalaRecorrido` (default) al import.
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import ExperienciasReales from "../../components/welcome/ExperienciasReales";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
-import { BotonesFlotantes, IconoTest, IconoWhatsapp, PopupLlamada } from "../../components/metodo/LlamadaCta";
+import BotonContactame from "../../components/global/BotonContactame";
 import { TestDisciplinaModal } from "../../components/metodo/TestDisciplina";
 import {
   FaqBloque,
@@ -41,7 +38,6 @@ import {
   cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
   fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
   neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  whatsappUrl,
 } from "../../GlobalVariables";
 // Descomentar junto con el párrafo de PRECIO (más abajo, ahora comentado):
 // sin él, estos tres no se usan y noUnusedLocals rompe la compilación.
@@ -56,8 +52,6 @@ import {
  * a partir de este.
  */
 const ZOOM_PAGINA = 1.01;
-/** El inverso exacto, para las 8 tarjetas: deshace el zoom de la página. */
-const ZOOM_TARJETAS = 1 / ZOOM_PAGINA;
 
 /**
  * Parte VISUAL de cada disciplina: lo que no depende del idioma (colores, icono,
@@ -175,96 +169,6 @@ const METODO_IMGS_DIFERIDAS: string[] = modalidades
 // DisciplinaFicha (mismo criterio: natural / negra en Fisiología-Cábala-Cultura /
 // granate en Medicina China).
 
-// ── QUÉ OBTIENES ─────────────────────────────────────────────────────────────
-// Lo que se lleva quien accede a El Mapa. Va en DOS columnas a propósito: son
-// siete líneas y en una sola columna el box se hacía una lista larguísima que
-// obligaba a bajar; en dos entra de un vistazo y queda horizontal, del ancho del
-// resto de la página. En móvil se apila a una columna, que dos no caben.
-const QUE_OBTIENES: ClaveTexto[] = [
-  "elMetodo.obtienes.1",
-  "elMetodo.obtienes.2",
-  "elMetodo.obtienes.3",
-  "elMetodo.obtienes.4",
-  "elMetodo.obtienes.5",
-  "elMetodo.obtienes.6",
-  "elMetodo.obtienes.7",
-  "elMetodo.obtienes.8",
-];
-
-function QueObtienesBox() {
-  const t = useT();
-  return (
-    <Reveal inView direction="up" distance={26} scaleFrom={0.98} duration={0.8} w="100%">
-      <Flex
-        direction="column"
-        w="100%"
-        px={{ base: 6, md: 12 }}
-        py={{ base: 7, md: 10 }}
-        borderRadius="2xl"
-        border="1px solid rgba(255,255,255,0.28)"
-        bg="rgba(255,255,255,0.07)"
-        sx={{ backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
-        boxShadow="0 4px 20px rgba(0,0,0,0.14), 0 0 24px rgba(180,255,245,0.10)"
-        gap={{ base: 5, md: 7 }}
-      >
-        <Flex direction="column" align="center" gap={{ base: 3, md: 4 }}>
-          <Text
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="700"
-            fontSize={{ base: "xl", md: "3xl" }}
-            letterSpacing="0.03em"
-            lineHeight="1.25"
-            textAlign="center"
-            textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
-          >
-            {t("elMetodo.queObtienes")}
-          </Text>
-          {/* Rayita corta bajo el título: cierra la cabecera del box sin meter
-              otra línea a todo el ancho, que competiría con el borde. */}
-          <Box w={{ base: "70px", md: "90px" }} h="1px" bg="rgba(255,255,255,0.35)" />
-        </Flex>
-
-        <RevealStagger
-          inView
-          stagger={0.07}
-          delayChildren={0.1}
-          display="grid"
-          gridTemplateColumns={{ base: "1fr", md: "1fr 1fr" }}
-          gap={{ base: 3.5, md: "18px 44px" }}
-        >
-          {QUE_OBTIENES.map((clave) => (
-            <RevealItem key={clave} direction="up" distance={14}>
-              <Flex align="flex-start" gap={3}>
-                <Text
-                  color="white"
-                  fontWeight="700"
-                  fontSize={{ base: "sm", md: "md" }}
-                  lineHeight="1.7"
-                  flexShrink={0}
-                  textShadow="0 0 10px rgba(255,255,255,0.45)"
-                >
-                  ✓
-                </Text>
-                <Text
-                  color="rgba(255,255,255,0.92)"
-                  fontFamily="'EB Garamond', serif"
-                  fontSize={{ base: "sm", md: "md" }}
-                  lineHeight="1.7"
-                  letterSpacing="0.01em"
-                  textShadow="0 0 10px rgba(255,255,255,0.2)"
-                >
-                  {t(clave)}
-                </Text>
-              </Flex>
-            </RevealItem>
-          ))}
-        </RevealStagger>
-      </Flex>
-    </Reveal>
-  );
-}
-
 // ── Separador de mandala ────────────────────────────────────────────────────
 // Las tres cesuras de la página (antes de «Así es El Mapa», antes de la creadora
 // y después de ella) eran el MISMO bloque copiado tres veces, y la tercera ni se
@@ -321,199 +225,6 @@ function SeparadorLinea({ mt, mb }: { mt?: BoxProps["mt"]; mb?: BoxProps["mb"] }
   );
 }
 
-type MetodoCardProps = {
-  data: ModalidadData;
-  /** Retraso de entrada, en segundos. Lo marca la COLUMNA, no el índice global. */
-  delay: number;
-  index: number;
-  onClick: () => void;
-};
-
-function MetodoCard({ data, delay, index, onClick }: MetodoCardProps) {
-  // Cada tarjeta con SU propio observador: no se coloca hasta que ella misma
-  // asoma. Con un único observador para la cuadrícula, al llegar a la primera
-  // fila arrancaban las ocho y la segunda (en móvil, las filas 2, 3 y 4) se
-  // colocaba fuera de la vista.
-  const enPantalla = useEnPantalla();
-  const hasBg = hasDisciplinaBg(data.name);
-  const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
-  const t = useT();
-  const nombreEnMapa = useNombreDisciplinaEnMapa();
-  // En El Mapa, "Hinduismo" se muestra como "Ayurveda".
-  //
-  // El nombre va SIEMPRE en una línea: si salta a dos, la tarjeta crece de alto
-  // y descuadra la fila. Se pide la versión corta en móvil y también cuando el
-  // idioma alarga el nombre («Chinese Medicine» → «Chinese Med.»); en español
-  // «Medicina China» cabe entera y se queda como está. Solo Medicina China
-  // tiene versión corta: el resto devuelve su nombre largo tal cual. Mismo
-  // criterio que en las tarjetas de Welcome.
-  const nombreLargo = nombreEnMapa(data.name);
-  const displayName =
-    isMobile || nombreLargo.length > 14 ? nombreEnMapa(data.name, true) : nombreLargo;
-  // Entrada: la tarjeta sube a su sitio y se enfoca, y las de una misma fila lo
-  // hacen UNA DETRÁS DE OTRA, de izquierda a derecha.
-  //
-  // NADA de giro ni de rebote. Antes entraba con rotate(-5deg) y una curva que
-  // se pasaba de largo (el 1.5 de cubic-bezier(0.22,1.5,0.36,1)): la tarjeta
-  // aterrizaba torcida y se enderezaba dando un tumbo, que es justo lo que
-  // quedaba poco profesional. Ahora usa la curva del sistema Reveal —fuerte al
-  // frenar, sin pasarse— y solo desplazamiento + escala + enfoque.
-  //
-  // La entrada va en el wrapper exterior y el hover en la tarjeta interior, para
-  // que sus `transform` no se pisen.
-  const entradaDelay = 0.1 + delay;
-  return (
-    <Box
-      mt="42px"
-      mb={{ base: 3, md: 5 }}
-      // Las tarjetas de una misma fila miden lo MISMO: la rejilla estira este
-      // envoltorio hasta el alto de la fila y la tarjeta de dentro lo ocupa
-      // entero (`flex: 1`), así la del lema corto crece hasta igualar a la del
-      // lema largo en vez de quedarse a media altura.
-      display="flex"
-      flexDirection="column"
-      ref={enPantalla.ref}
-      opacity={enPantalla.visto ? 1 : 0}
-      transform={enPantalla.visto ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
-      filter={enPantalla.visto ? "blur(0px)" : "blur(6px)"}
-      transition={`opacity 0.4s ease ${entradaDelay}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${entradaDelay}s, filter 0.4s ease ${entradaDelay}s`}
-      sx={{ willChange: "transform, opacity, filter" }}
-    >
-    <Box
-      role="group"
-      position="relative"
-      // `flex: 1` = ocupa todo el alto que le da la fila (ver arriba).
-      flex="1"
-      pt="46px"
-      pb={{ base: 5, md: 7 }}
-      px={{ base: 3, md: 5 }}
-      bg={hasBg ? "transparent" : data.bg}
-      borderRadius="2xl"
-      cursor="pointer"
-      onClick={onClick}
-      textAlign="center"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      transition="transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease"
-      _hover={{
-        transform: "translateY(-6px)",
-        boxShadow: `0 12px 32px rgba(0,0,0,0.28), 0 0 30px ${data.txt}55`,
-        filter: "brightness(1.06)",
-      }}
-    >
-      {/* Fondo propio de la disciplina — capa absoluta clipeada al borderRadius
-          del card, para no recortar el icono que sobresale arriba (top:-36px). */}
-      {hasBg && <DisciplinaBgLayer nom={data.name} borderRadius="2xl" />}
-
-      {/* Icono flotante */}
-      <Box
-        position="absolute"
-        top="-36px"
-        left="50%"
-        transform="translateX(-50%)"
-        bg={hasBg ? "transparent" : data.bg}
-        borderRadius="full"
-        p="8px"
-        border={`4px solid ${data.txt}`}
-        boxShadow={`0 0 20px ${data.txt}bb, 0 2px 14px ${data.txt}77`}
-        w="72px"
-        h="72px"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        zIndex={2}
-        overflow={hasBg ? "hidden" : undefined}
-      >
-        {hasBg && <DisciplinaBgLayer nom={data.name} borderRadius="full" />}
-        <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
-          {data.renderIcon("42px")}
-        </Box>
-      </Box>
-
-      {/* Número + título */}
-      <Flex mb="10px" align="baseline" justify="center" gap={2} position="relative" zIndex={1}>
-        <Text
-          color={data.txt}
-          fontWeight="700"
-          fontSize={{ base: "xl", md: "3xl", lg: "4xl" }}
-          letterSpacing="0.03em"
-          lineHeight="short"
-          textShadow={hasBg
-            ? `0 1px 3px ${data.bg}f5, 0 0 6px ${data.bg}cc, 0 2px 14px ${data.bg}88`
-            : undefined}
-        >
-          {index}.
-        </Text>
-        <Text
-          color={data.txt}
-          fontWeight="700"
-          fontSize={{ base: "xl", md: "3xl", lg: "4xl" }}
-          letterSpacing="0.03em"
-          lineHeight="short"
-          textShadow={hasBg
-            ? `0 1px 3px ${data.bg}f5, 0 0 6px ${data.bg}cc, 0 2px 14px ${data.bg}88`
-            : undefined}
-        >
-          {displayName}
-        </Text>
-      </Flex>
-
-      {/* Frase corta bajo el nombre (misma que las cajas de home) */}
-      {data.lemaKey && (
-        <Text
-          position="relative"
-          zIndex={1}
-          mb={{ base: 2, md: 3 }}
-          minH="2em"
-          color={data.txt}
-          fontWeight="500"
-          fontSize={{ base: "sm", md: "lg" }}
-          lineHeight="1.45"
-          letterSpacing="0.01em"
-          opacity={0.96}
-          textShadow={hasBg
-            ? `0 1px 3px ${data.bg}f5, 0 1px 6px ${data.bg}cc, 0 0 12px ${data.bg}dd`
-            : undefined}
-        >
-          {t(data.lemaKey)}
-        </Text>
-      )}
-
-      {/* Flecha dinámica — invita a abrir la disciplina. Va en posición
-          absoluta dentro del espacio inferior que ya existe, así NO cambia
-          la altura de la tarjeta. Rebota de forma continua (dinámica) y se
-          enciende al pasar el ratón por la tarjeta. */}
-      <Box
-        position="absolute"
-        bottom={{ base: "8px", md: "12px" }}
-        right={{ base: "12px", md: "16px" }}
-        zIndex={1}
-        color={data.txt}
-        fontSize={{ base: "lg", md: "2xl" }}
-        lineHeight="1"
-        opacity={0.55}
-        pointerEvents="none"
-        textShadow={hasBg
-          ? `0 1px 3px ${data.bg}f5, 0 0 6px ${data.bg}cc, 0 2px 14px ${data.bg}88`
-          : `0 0 10px ${data.txt}66`}
-        transition="opacity 0.3s ease"
-        _groupHover={{ opacity: 1 }}
-        sx={{
-          "@keyframes metodoArrowBounce": {
-            "0%, 100%": { transform: "translateX(0)" },
-            "50%": { transform: "translateX(5px)" },
-          },
-          animation: "metodoArrowBounce 1.8s ease-in-out infinite",
-        }}
-      >
-        →
-      </Box>
-    </Box>
-    </Box>
-  );
-}
-
 export default function ElMetodo() {
   const navigate = useNavigate();
   const t = useT();
@@ -526,30 +237,11 @@ export default function ElMetodo() {
   const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
   const [dudasOpen, setDudasOpen] = useState(false);
   const [bookCallOpen, setBookCallOpen] = useState(false);
-  // Popup de la llamada gratuita: sale solo, una única vez, a los 30 s.
-  const [llamadaOpen, setLlamadaOpen] = useState(false);
-  // ¿Ya salió? Si sí, no se vuelve a armar.
-  const llamadaYaSalio = useRef(false);
-  // El test de «encuentra tu disciplina»: lo abren el botón grande del hero y
-  // el botón flotante. No guarda nada en ningún sitio.
+  // El test de «encuentra tu disciplina»: lo abre el botón grande del hero. No
+  // guarda nada en ningún sitio.
   const [testOpen, setTestOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<ModalidadData | null>(null);
   const [mounted, setMounted] = useState(false);
-  // El titular «No estudias ocho disciplinas…» queda bajo el pliegue: sus letras
-  // entran SOLO cuando el usuario ha bajado y el texto está bien metido en
-  // pantalla (margen -25%: que se pueda ver y apreciar la entrada, no que
-  // arranque en el borde). Red de seguridad a los 15 s (la trae el hook).
-  const porDentro = useVistoConEspera("0px 0px -25% 0px", 0);
-  // En MÓVIL el hero es más alto que la pantalla: la bajada, los dos botones, el
-  // pie y la pista quedan bajo el pliegue. Si entraran con `mounted` (al cargar)
-  // la animación se gastaría fuera de vista. Cada uno espera a estar metido en
-  // pantalla (margen -6%); los que ya se ven al cargar entran al momento, como
-  // antes. `mounted` sigue mandando (no entran antes de que la página esté lista).
-  const llegaSub = useVistoConEspera("0px 0px -6% 0px", 0);
-  const llegaBtn1 = useVistoConEspera("0px 0px -6% 0px", 0);
-  const llegaBtn2 = useVistoConEspera("0px 0px -6% 0px", 0);
-  const llegaPie = useVistoConEspera("0px 0px -6% 0px", 0);
-  const llegaPista = useVistoConEspera("0px 0px -6% 0px", 0);
   const imagenesListas = usePrecargarImagenes(METODO_IMGS);
   const [tiempoMin, setTiempoMin] = useState(false);
   // La página no se revela hasta que las fotos estén cargadas Y haya pasado un
@@ -586,23 +278,6 @@ export default function ElMetodo() {
     const r1 = requestAnimationFrame(() => { r2 = requestAnimationFrame(() => setMounted(true)); });
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
   }, [listo]);
-
-  // ── El popup de la llamada: UNA sola vez, a los 30 s ──
-  // La cuenta arranca cuando la página ya se VE (`listo`), no cuando se monta:
-  // si empezara antes, se comería parte de la espera con la pantalla de carga.
-  // Espera 30 s (que dé tiempo a leer) y sale una única vez por visita: al
-  // cerrarlo no vuelve. Si en la espera se abre el calendario de reserva o el
-  // test, la cuenta se cancela y se rearma al cerrarlos: no caería encima de
-  // quien ya está reservando o contestando.
-  useEffect(() => {
-    if (!listo || llamadaYaSalio.current || llamadaOpen || bookCallOpen || testOpen) return;
-    const espera = 30000;
-    const id = setTimeout(() => {
-      llamadaYaSalio.current = true;
-      setLlamadaOpen(true);
-    }, espera);
-    return () => clearTimeout(id);
-  }, [listo, llamadaOpen, bookCallOpen, testOpen]);
 
   // ── Los fondos de las tarjetas, en cuanto la página ya se ve ──
   // Fuera del camino crítico: no retienen la pantalla de carga, pero se piden
@@ -681,350 +356,54 @@ export default function ElMetodo() {
         </Box>
       </Flex>
 
-      {/* ══ 1. HERO ══
-          Antes esto era «EL MAPA / de Life as a Privilege»: el nombre del
-          producto y nada más. Quien llega de fuera no sabe todavía qué es El
-          Mapa, así que un nombre no le dice nada y no se queda.
-          Ahora el titular nombra lo que le PASA a quien lee, el subtítulo dice
-          qué se lleva puesto (no qué contiene el curso) y hay un botón aquí
-          mismo: convencido en la primera pantalla, ya puede entrar.
-          La marca no se pierde: se queda arriba, en pequeño, de sombrerete. */}
+      {/* ══ 1. CABECERA ══
+          Debajo de la flor, dos frases: la principal (metodología única de
+          autoconocimiento multidimensional) y, más pequeña y en cursiva, la que
+          la explica. Sustituye al titular «¿Qué te ha pasado?» con sus dos
+          botones; los textos viejos siguen en el diccionario. */}
       <Flex
         direction="column"
         align="center"
         textAlign="center"
         px={{ base: 5, md: 10, lg: 16 }}
         pt={{ base: 7, md: 9 }}
-        mb="10px"
-        gap={{ base: 4, md: 5 }}
+        gap={{ base: 3, md: 4 }}
       >
-        <Text
-          color="rgba(255,255,255,0.8)"
-          fontSize={{ base: "2xs", md: "xs" }}
-          fontWeight="600"
-          letterSpacing="0.22em"
-          textTransform="uppercase"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(10px)"}
-          transition="opacity 0.7s ease, transform 0.7s ease"
-        >
-          {t("elMetodo.hero.marca")}
-        </Text>
-
-        {/* El titular es una sola frase en dos alturas: arriba la entradilla
-            («Para cambiar, pregúntate», con la última palabra en cursiva) y
-            debajo la pregunta a la que lleva.
-            La entradilla va en UNA línea y a un tamaño que se sostenga solo
-            (la mitad larga de la pregunta): partida en dos renglones diminutos
-            se leía como una nota al pie de un titular gigante, y el salto de
-            tamaño rompía la frase en vez de encadenarla. */}
-        <Flex direction="column" align="center">
-          <Text
-            color="rgba(255,255,255,0.95)"
-            fontSize={{ base: "23px", md: "30px", lg: "36px" }}
-            fontWeight="400"
-            letterSpacing="0.05em"
-            lineHeight="1.35"
-            textShadow="0 0 14px rgba(255,255,255,0.34)"
-            opacity={mounted ? 1 : 0}
-            transform={mounted ? "translateY(0)" : "translateY(14px)"}
-            transition="opacity 0.85s ease, transform 0.85s ease"
-          >
-            {t("elMetodo.hero.tituloAntes")}{" "}
-            {/* La única cursiva del titular: la palabra que hace de bisagra
-                entre la entradilla y la pregunta. Va un puntito más clara que
-                el resto, como quien baja la voz justo antes de preguntar. */}
-            <Box as="span" fontStyle="italic" color="rgba(255,255,255,0.86)">
-              {t("elMetodo.hero.tituloPide")}
-            </Box>
-          </Text>
-
-          {/* La pregunta manda, pero sin dejar sola a la entradilla: va en
-              medidas escritas a mano (no en los pasos de Chakra) para afinar
-              esa proporción sin que se salga de la pantalla en las anchuras
-              justas. Los huecos de arriba y abajo son los que la separan de la
-              entradilla y del párrafo; sin ellos se apelotona.
-              A este tamaño la letra pide lo contrario que en un párrafo: las
-              letras MÁS juntas (letterSpacing negativo) y las líneas pegadas,
-              que es lo que hace que una frase enorme se lea como una pieza y no
-              como palabras sueltas.
-              El resplandor respira muy despacio (7 s) en vez de quedarse fijo:
-              es la misma luz del mandala de arriba. Con `prefers-reduced-motion`
-              se queda quieto en su punto medio. */}
-          <Text
-            color="white"
-            fontSize={{ base: "50px", md: "66px", lg: "80px" }}
-            fontWeight="700"
-            letterSpacing={{ base: "-0.015em", md: "-0.022em" }}
-            /* En móvil la pregunta cae en dos renglones: se les deja un pelín
-               más de aire que en escritorio para que no se toquen. */
-            lineHeight={{ base: "1.12", md: "1.05" }}
-            maxW="1100px"
-            mt={{ base: 3, md: "18px" }}
-            mb={{ base: 5, md: 8 }}
-            whiteSpace={{ base: "normal", md: "pre-line" }}
-            textShadow="0 0 18px rgba(255,255,255,0.48), 0 0 38px rgba(255,255,255,0.27), 0 0 70px rgba(180,255,245,0.24)"
-            opacity={mounted ? 1 : 0}
-            transform={mounted ? "translateY(0)" : "translateY(22px)"}
-            transition="opacity 0.9s ease 0.18s, transform 0.9s ease 0.18s"
-            sx={{
-              "@keyframes tituloBrilla": {
-                "0%, 100%": {
-                  textShadow:
-                    "0 0 14px rgba(255,255,255,0.38), 0 0 32px rgba(255,255,255,0.21), 0 0 60px rgba(180,255,245,0.19)",
-                },
-                "50%": {
-                  textShadow:
-                    "0 0 24px rgba(255,255,255,0.64), 0 0 50px rgba(255,255,255,0.35), 0 0 92px rgba(180,255,245,0.32)",
-                },
-              },
-              // En móvil el resplandor animado del padre + la ola de luz por
-              // letra (cada una con su filtro) se repintan a la vez y el
-              // titular parpadea: allí se queda la entrada y la luz fija.
-              animation: esMovil ? "none" : "tituloBrilla 7s ease-in-out infinite",
-              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-            }}
-          >
-            <LetrasVivas texto={t("elMetodo.hero.titulo")} entrada activo={mounted} onda={!esMovil} />
-          </Text>
-        </Flex>
-
-        <Text
-          color="rgba(255,255,255,0.92)"
-          fontSize={{ base: "sm", md: "xl" }}
-          lineHeight="1.8"
-          letterSpacing="0.015em"
-          maxW="860px"
-          ref={llegaSub.ref}
-          opacity={mounted && llegaSub.visible ? 1 : 0}
-          transform={mounted && llegaSub.visible ? "translateY(0)" : "translateY(16px)"}
-          transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
-        >
-          <TextoRico>{t("elMetodo.hero.sub")}</TextoRico>
-        </Text>
-
-        {/* ── LOS DOS BOTONES DE LA PRIMERA PANTALLA ─────────────────────
-            En fila y centrados, para que el pie de abajo caiga en el medio de
-            la PAREJA y no debajo del primero. En móvil se apilan: dos pastillas
-            de 84vw no caben una al lado de la otra.
-            Son GEMELOS a propósito: el test y hablar conmigo valen lo mismo
-            —los dos son sin coste y los dos convierten—, así que llevan la
-            misma pastilla, el mismo filo y el mismo halo. */}
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          align="center"
-          justify="center"
-          gap={{ base: 3, md: 4 }}
-          mt={{ base: 2, md: 3 }}
-        >
-          {/* Abre el TEST de «encuentra tu disciplina» (el pago vive abajo, en
-              el bloque del precio, con handleAcceder). */}
-          <Flex
-            as="button"
-            onClick={() => setTestOpen(true)}
-            align="center"
-            justify="center"
-            gap={{ base: "10px", md: "12px" }}
-            px={{ base: 8, md: 12 }}
-            py={{ base: "12px", md: "15px" }}
-            w={{ base: "min(84vw, 380px)", md: "auto" }}
-            borderRadius="full"
-            border="1.5px solid rgba(255,255,255,0.65)"
-            bg="rgba(255,255,255,0.10)"
-            cursor="pointer"
-            boxShadow="0 0 20px rgba(255,255,255,0.34), 0 0 44px rgba(180,255,245,0.2)"
-            _hover={{
-              bg: "rgba(255,255,255,0.2)",
-              borderColor: "white",
-              boxShadow: "0 0 30px rgba(255,255,255,0.55), 0 0 62px rgba(180,255,245,0.36)",
-            }}
-            transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
-            ref={llegaBtn1.ref}
-            opacity={mounted && llegaBtn1.visible ? 1 : 0}
-            transform={mounted && llegaBtn1.visible ? "translateY(0)" : "translateY(16px)"}
-            sx={{ transition: "opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
-          >
-            {/* El icono del test SIEMPRE a la izquierda del rótulo: es la seña
-                que hermana este botón con el flotante y el del precio. */}
-            <IconoTest size={{ base: "18px", md: "22px" }} color="white" />
-            <Text
-              color="white"
-              fontWeight="700"
-              fontSize={{ base: "md", md: "xl" }}
-              letterSpacing="0.12em"
-              textTransform="uppercase"
-              // El rótulo es largo: en móvil se parte en dos líneas y no se
-              // sale de la pastilla de 84vw.
-              whiteSpace={{ base: "normal", md: "nowrap" }}
-              textAlign="center"
-              lineHeight="1.3"
-              textShadow="0 0 12px rgba(255,255,255,0.45)"
-            >
-              {t("elMetodo.hero.cta")}
-            </Text>
-          </Flex>
-
-          {/* ── ESCRÍBEME POR WHATSAPP ──
-              Aquí estaba el botón de «Únete a la comunidad»; se ha bajado a
-              «¿Por dónde empiezo?». En la primera pantalla nadie se mete en un
-              grupo de desconocidos —todavía no sabe qué es esto—, pero sí
-              pregunta una cosa suelta, y preguntar abre una conversación
-              conmigo, que es lo que de verdad convierte.
-              Entra 0,13s después que el del test: se leen en orden, de uno en
-              uno. Es un enlace y no un botón porque lleva FUERA de la
-              web (a WhatsApp), y abre en otra pestaña para no perder a quien
-              estaba leyendo la página. El mensaje va ya escrito: que no tenga
-              que pensar cómo empezar, que es justo donde la gente se cae. */}
-          <Flex
-            as="a"
-            href={whatsappUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            align="center"
-            justify="center"
-            gap={{ base: "10px", md: "12px" }}
-            px={{ base: 8, md: 12 }}
-            py={{ base: "12px", md: "15px" }}
-            w={{ base: "min(84vw, 380px)", md: "auto" }}
-            borderRadius="full"
-            border="1.5px solid rgba(255,255,255,0.65)"
-            bg="rgba(255,255,255,0.10)"
-            color="white"
-            cursor="pointer"
-            textDecoration="none"
-            boxShadow="0 0 20px rgba(255,255,255,0.34), 0 0 44px rgba(180,255,245,0.2)"
-            _hover={{
-              bg: "rgba(255,255,255,0.2)",
-              borderColor: "white",
-              boxShadow: "0 0 30px rgba(255,255,255,0.55), 0 0 62px rgba(180,255,245,0.36)",
-            }}
-            transition="background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease"
-            ref={llegaBtn2.ref}
-            opacity={mounted && llegaBtn2.visible ? 1 : 0}
-            transform={mounted && llegaBtn2.visible ? "translateY(0)" : "translateY(16px)"}
-            sx={{ transition: "opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease" }}
-          >
-            <IconoWhatsapp size={{ base: "18px", md: "22px" }} />
-            <Text
-              fontWeight="700"
-              fontSize={{ base: "md", md: "xl" }}
-              letterSpacing="0.12em"
-              textTransform="uppercase"
-              whiteSpace="nowrap"
-              textShadow="0 0 12px rgba(255,255,255,0.45)"
-            >
-              {t("elMetodo.hero.escribeme")}
-            </Text>
-          </Flex>
-        </Flex>
-
-        {/* Letra pequeña del botón de empezar: entra la última, para que se lea
-            como el pie de la pareja y no como una línea más del hero. Va
-            centrada bajo las DOS pastillas —el contenedor de arriba está
-            centrado—, que es lo que deja el conjunto a plomo. */}
-        <Text
-          color="rgba(255,255,255,0.8)"
-          fontSize={{ base: "xs", md: "sm" }}
-          letterSpacing="0.04em"
-          textAlign="center"
-          mt={{ base: 1, md: 2 }}
-          ref={llegaPie.ref}
-          opacity={mounted && llegaPie.visible ? 1 : 0}
-          transform={mounted && llegaPie.visible ? "translateY(0)" : "translateY(12px)"}
-          transition="opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s"
-        >
-          {t("elMetodo.hero.ctaPie")}
-        </Text>
-
-      </Flex>
-
-      {/* El hero cierra sin cesura. Tenía la del mandala, y con los tres
-          bloques de texto retirados se quedaba pegada a la línea del título de
-          abajo: dos separadores seguidos con nada en medio. El aire ya lo pone
-          el `pt` del bloque siguiente. */}
-
-      {/* Aquí vivían tres bloques de texto seguidos, y se han retirado los
-          tres: «EL ESPEJO» (las cuatro frases de «Sabes que te pasa algo…» y su
-          remate), las dos frases de «Ocho disciplinas. Un orden…» / «No son
-          ocho cursos independientes…», y «LA FRASE DEL MÉTODO» («No estudias la
-          disciplina, te estudias a ti con ella»).
-          Eran cuatro pantallas de argumentario antes de que se viera nada, y
-          decían tres veces lo mismo con distintas palabras. Ahora el mandala de
-          las ocho disciplinas —que es lo que la gente viene a ver— llega justo
-          detrás de la cabecera.
-          Los componentes siguen enteros en components/metodo/elMetodoVenta.tsx
-          (EspejoBloque y MecanismoBloque) y sus textos en el diccionario, por si
-          alguno vuelve. */}
-
-      {/* ── SEPARADOR + TÍTULO DEL MANDALA ──
-          Las frases van con su bloque: este título encabeza el mandala de las
-          ocho disciplinas (que es «El Mapa por dentro»), y la frase «Cada
-          disciplina observa una parte distinta…» bajó con las fichas. */}
-      <Flex
-        direction="column"
-        align="center"
-        px={{ base: 5, md: 10, lg: 16 }}
-        // Sin `pt` propio: el aire de arriba lo pone el separador de aquí
-        // debajo, con el MISMO hueco por arriba que por abajo. Así la línea cae
-        // exactamente en el centro del vacío entre el botón del hero y el
-        // titular, y para mover el conjunto se toca un solo sitio (si el aire
-        // viniera de un padding por un lado y de un margen por el otro, nunca
-        // cuadran).
-      >
-        {/* La cesura entre el hero y el mapa. La línea fina y NO el separador
-            con el mandala: arriba está el mandala de la cabecera y justo debajo
-            el de las ocho disciplinas, y un tercero en medio serían tres
-            mandalas casi seguidos.
-            En px y no en tokens de Chakra: 67 no existe en la escala de
-            espaciado, y un token que no existe NO cae en 268px sino en 67px
-            (se cuela como valor crudo). Con px se ve lo que mide. */}
-        <SeparadorLinea
-          mt={{ base: "48px", md: "67px" }}
-          mb={{ base: "48px", md: "67px" }}
-        />
-
         <Text
           color="white"
-          fontFamily="'EB Garamond', serif"
+          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
           fontWeight="700"
-          fontSize={{ base: "3xl", md: "5xl" }}
-          letterSpacing="0.04em"
-          lineHeight="1.2"
-          textAlign="center"
-          // El titular va en DOS frases: el salto de linea del diccionario solo
-          // se respeta con `pre-line` (si no, el navegador lo convierte en un
-          // espacio y las dos frases salen seguidas).
-          // En movil no: ahi el ancho ya parte la frase donde toca, y forzar el
-          // salto dejaria renglones cojos.
-          whiteSpace={{ base: "normal", md: "pre-line" }}
-          textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(180,255,245,0.18)"
-          ref={porDentro.ref}
+          letterSpacing="0.03em"
+          lineHeight="1.15"
+          maxW="1000px"
+          textShadow="0 0 12px rgba(255,255,255,0.26), 0 0 26px rgba(180,255,245,0.12)"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(18px)"}
+          transition="opacity 0.9s ease 0.15s, transform 0.9s ease 0.15s"
         >
-          <LetrasVivas texto={t("elMetodo.porDentro")} entrada activo={porDentro.visible} repetir={false} altura={0} periodo={1} paso={0.025} pasoEntrada={0.025} retraso={0.3} />
+          <LetrasVivas texto={t("elMetodo.hero.principal")} entrada activo={mounted} onda={!esMovil} altura={0} repetir={false} />
         </Text>
 
-        {/* Pista de que el mandala se pincha: sin ella, los ocho círculos
-            parecen un dibujo y nadie los toca. Entra un pelín después que el
-            título (0,45s frente a 0,15s) para que se lea primero el titular y
-            luego la instrucción, no las dos de golpe.
-            Blanco y SIN textShadow: está fuera de caja, sobre el turquesa. */}
         <Text
-          color="white"
-          fontFamily="'EB Garamond', serif"
+          color="rgba(255,255,255,0.9)"
           fontSize={{ base: "md", md: "xl" }}
           fontStyle="italic"
-          letterSpacing="0.02em"
-          textAlign="center"
-          mt={{ base: 3, md: 4 }}
-          ref={llegaPista.ref}
-          opacity={mounted && llegaPista.visible ? 0.9 : 0}
-          transform={mounted && llegaPista.visible ? "translateY(0)" : "translateY(10px)"}
-          transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
+          letterSpacing="0.03em"
+          lineHeight="1.6"
+          maxW="720px"
+          opacity={mounted ? 1 : 0}
+          transform={mounted ? "translateY(0)" : "translateY(14px)"}
+          transition="opacity 0.9s ease 0.5s, transform 0.9s ease 0.5s"
         >
-          {t("elMetodo.porDentroPista")}
+          {t("elMetodo.hero.secundaria")}
         </Text>
       </Flex>
-      
+
+      {/* ── SEPARADOR con el mandala (mismo aire arriba que abajo) ── */}
+      <SeparadorMandala
+        mt={{ base: "48px", md: "67px" }}
+        mb={{ base: "48px", md: "67px" }}
+      />
 
       {/* ── LAS 8 DISCIPLINAS (mandala + vídeo) ──
           Va lo primero tras la cabecera: a la izquierda el mandala interactivo
@@ -1033,14 +412,7 @@ export default function ElMetodo() {
           antes que las fichas de detalle.
           Montaje diferido: los círculos del mandala hacen su «pop» justo cuando
           llegas a ellos, y no antes en una zona que no ves. */}
-      <Box
-        px={{ base: 5, md: 10, lg: 16 }}
-        pt={{ base: 12, md: 16 }}
-        // Poco `pb`: el separador de abajo tiene que quedar cerca del box de la
-        // disciplina, no a media pantalla. El aire entre los dos lo reparten este
-        // `pb` y el `pt` del separador, y nada más.
-        pb={{ base: 4, md: 6 }}
-      >
+      <Box px={{ base: 5, md: 10, lg: 16 }}>
         <Box maxW="1200px" mx="auto">
           <BloqueDiferido minH={{ base: "760px", md: "560px" }}>
             <Reveal inView amount={0.06} direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
@@ -1071,32 +443,65 @@ export default function ElMetodo() {
               tarjeta roja). Contando eso, la línea cae en el centro real del
               hueco. La suma de los dos márgenes se mantiene, así que el aire
               entre secciones es el mismo: solo se ha bajado la línea. */}
-          <SeparadorLinea mt={{ base: 16, md: 28 }} mb={{ base: 12, md: 14 }} />
+          <SeparadorMandala
+          mt={{ base: "48px", md: "67px" }}
+          mb={{ base: "48px", md: "67px" }}
+          />
           <PruebasBloque />
+
+          {/* La frase que cierra los vídeos: grande y tranquila. */}
+          <Reveal inView amount={0.4} direction="up" distance={22} duration={0.9}>
+            <Text
+              mt={{ base: 10, md: 14 }}
+              color="white"
+              fontSize={{ base: "2xl", md: "4xl" }}
+              fontWeight="500"
+              fontStyle="italic"
+              letterSpacing="0.03em"
+              lineHeight="1.4"
+              textAlign="center"
+              maxW="900px"
+              mx="auto"
+              textShadow="0 0 12px rgba(255,255,255,0.24), 0 0 26px rgba(180,255,245,0.1)"
+            >
+              {t("elMetodo.pruebas.interior")}
+            </Text>
+          </Reveal>
+          <Reveal inView amount={0.5} direction="up" distance={16} duration={0.8} delay={0.15}>
+            <Text
+              mt={{ base: 4, md: 5 }}
+              color="rgba(255,255,255,0.95)"
+              fontSize={{ base: "lg", md: "2xl" }}
+              fontWeight="600"
+              letterSpacing="0.03em"
+              lineHeight="1.4"
+              textAlign="center"
+              maxW="760px"
+              mx="auto"
+            >
+              {t("elMetodo.pruebas.precio")}
+            </Text>
+          </Reveal>
 
           {/* LA CESURA DEL DINERO. De aquí para arriba la página explica y
               enseña; de aquí para abajo cobra. Ha subido con sus dos bloques:
               el precio va pegado a la prueba, que es cuando de verdad se está
               decidiendo, y no cinco pantallas más abajo.
               Mismo hueco arriba y abajo, para que caiga justo en el medio. */}
-          <SeparadorLinea mt={{ base: 16, md: 24 }} mb={{ base: 16, md: 24 }} />
+          <SeparadorMandala
+          mt={{ base: "48px", md: "67px" }}
+          mb={{ base: "48px", md: "67px" }}
+          />
 
           {/* ── CÓMO FUNCIONA ──
               Qué pasa tras comprar: recorrerlo solo o con llamadas. Va antes
               de «Qué obtienes» y no más arriba: primero hay que haber visto
               qué es y qué hay dentro (mandala y vídeos) para que «cómo
               funciona» tenga a qué referirse. */}
-          <Box mt={{ base: 12, md: 16 }}>
+          <Box>
             <ComoFuncionaBloque />
           </Box>
 
-          {/* ── QUÉ OBTIENES ──
-              Abre la parte del dinero: es la letra pequeña de la compra
-              (acceso, PDF, sin suscripción), así que va pegada al precio y no
-              suelta a media página. */}
-          <Box mt={{ base: 16, md: 24 }}>
-            <QueObtienesBox />
-          </Box>
 
           {/* ══ EL PRECIO ══
               Un precio escondido no evita la objeción del dinero: la empeora,
@@ -1133,83 +538,8 @@ export default function ElMetodo() {
           separador, en un solo sitio, para poder ajustarlo sin sumar tres
           paddings distintos. */}
       <Box w="100%" px={{ base: 5, md: 10, lg: 16 }}>
-        <Box maxW="1200px" mx="auto">
-          {/* Separador de mandala + la frase que introduce las fichas de
-              disciplina. Lleva el separador con el mandala en medio (no la línea
-              fina): es el que marca los cortes de sección en esta página.
-              La frase entra al asomar (inView) y no con `mounted`: este bloque
-              está muy por debajo del pliegue y con `mounted` la animación pasaba
-              mientras se miraba la cabecera. */}
-          <Flex
-            direction="column"
-            align="center"
-            pt={{ base: 6, md: 8 }}
-            gap={{ base: 5, md: 7 }}
-          >
-            <SeparadorMandala />
-
-            <Reveal inView direction="up" distance={12} duration={0.8} delay={0.15}>
-              <Text
-                color="rgba(255,255,255,0.9)"
-                fontSize={{ base: "lg", md: "2xl" }}
-                fontStyle="italic"
-                textAlign="center"
-                letterSpacing="0.02em"
-                lineHeight="1.6"
-                maxW={{ base: "100%", md: "720px" }}
-                textShadow="0 0 10px rgba(255,255,255,0.32), 0 0 22px rgba(255,255,255,0.16)"
-              >
-                {t("elMetodo.cadaDisciplina")}
-              </Text>
-            </Reveal>
-          </Flex>
-
-          {/* Mandala interactivo — resumen visual de la estructura del recorrido.
-              Retirado de momento: los carruseles de abajo ya enseñan las capturas
-              de cada disciplina sin necesidad de abrir el popup. Se deja comentado
-              por si en el futuro se le quiere dar uso (p.ej. como cabecera-resumen).
-          <Box mt={{ base: 2, md: 4 }}>
-            <MandalaRecorrido />
-          </Box>
-          */}
-
-        </Box>
-
-        {/* ── LOS 8 BOXES DE DETALLE ──
-            Las fichas de cada disciplina, que abren el modal con «Qué incluye».
-            Van aquí abajo, tras el mandala: quien ya se ha hecho una idea con él
-            baja a mirar el detalle.
-            FUERA del contenedor de 1200px a propósito: estas tarjetas van a todo
-            el ancho de la página (solo con el px del margen), que es el ancho que
-            tenían antes de bajarlas aquí. Si se meten dentro, se estrechan.
-            La cascada NO arranca al cargar la página: espera a que la cuadrícula
-            asome (useEnPantalla). Antes iba con `mounted` y, como las tarjetas
-            quedan por debajo del pliegue, entraban con la pantalla en la
-            cabecera: al bajar te las encontrabas ya puestas y no veías la
-            animación. */}
-        <Box mt={{ base: 12, md: 20 }}>
-          <Grid
-            templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-            gap={{ base: 4, md: 18 }}
-            // Zoom inverso: el `zoom` de la página es heredado y se MULTIPLICA
-            // al anidarlo, así que 1,01 × (1/1,01) = 1. Las ocho tarjetas se
-            // quedan exactamente del tamaño que tenían.
-            sx={{ zoom: ZOOM_TARJETAS }}
-          >
-            {modalidades.map((m, i) => (
-              <MetodoCard
-                key={m.name}
-                data={m}
-                // La columna dentro de su fila (2 columnas en móvil, 4 en
-                // escritorio) con 0.15s de hueco: cada fila entra de izquierda a
-                // derecha cuando le toca, sin arrastrar el retraso de las de arriba.
-                delay={(i % (esMovil ? 2 : 4)) * 0.15}
-                index={i + 1}
-                onClick={() => setSelectedCard(m)}
-              />
-            ))}
-          </Grid>
-        </Box>
+        {/* Aquí iban «Elige el orden que quieras. Yo te propongo este:» y las ocho
+            fichas de disciplina con su número y su frase. Retirado. */}
 
         <Box maxW="1200px" mx="auto">
 
@@ -1790,22 +1120,12 @@ export default function ElMetodo() {
 
       <SiteFooter />
 
-      {/* ══ 13. BOTONES FLOTANTES + POPUP DE LA LLAMADA ══
-          Abajo a la derecha van Mensaje (WhatsApp) y el Test de «¿por dónde
-          empiezo?». El popup de la llamada ya no cuelga de ningún botón: sale
-          solo (una única vez, a los 30 s).
-          Van FUERA del <Box> que lleva el zoom de la página: un `position:fixed`
-          dentro de un elemento con `zoom` no se ancla a la ventana sino a él, y
-          se quedarían flotando a media página.
-          El hueco para que no tapen el final del footer lo pone el `pb` del
-          contenedor de esta misma página (más arriba, en el Box exterior). */}
-      <BotonesFlotantes onTest={() => setTestOpen(true)} />
+      {/* ══ 13. BOTÓN FLOTANTE «CONTÁCTAME» ══
+          El mismo de la portada (abajo a la derecha): al pulsarlo sale el popup
+          de «Hablemos juntos». Ya no hay popup que salga solo ni los botones de
+          Mensaje y del Test; el test se abre desde el botón grande del hero. */}
+      <BotonContactame />
       <TestDisciplinaModal isOpen={testOpen} onClose={() => setTestOpen(false)} />
-      <PopupLlamada
-        isOpen={llamadaOpen}
-        onClose={() => setLlamadaOpen(false)}
-        onAgendar={() => setBookCallOpen(true)}
-      />
     </Box>
   );
 }

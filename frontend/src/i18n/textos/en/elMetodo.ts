@@ -27,7 +27,7 @@ export const elMetodo = {
   "elMetodo.videoProximamente": "Video coming soon",
 
   // ── How it works (ComoFuncionaBloque) ──────────────────────────────────
-  "elMetodo.como.titulo": "How does The Map work?",
+  "elMetodo.como.titulo": "How do 1:1 advisory sessions work?",
   "elMetodo.como.intro":
     "Pick the discipline that interests you most and step into a journey designed to help you understand yourself better and treat yourself with the respect you deserve.",
   "elMetodo.como.1.titulo": "Go through The Map at your own pace",
@@ -48,6 +48,8 @@ export const elMetodo = {
   "elMetodo.como.paso.4.texto": "You leave with a deeper understanding of yourself and tools to look after yourself and decide with more clarity.",
   "elMetodo.como.1.badge": "Lower rate of lasting change",
   "elMetodo.como.2.badge": "Higher rate of change achieved",
+  /** Price of the 1:1 session. */
+  "elMetodo.como.2.precio": "€15 per session",
   "elMetodo.como.2.boton": "I want this support",
   "elMetodo.como.modal.titulo": "Let's move forward together",
   "elMetodo.como.modal.texto":
@@ -77,6 +79,9 @@ export const elMetodo = {
   /** The headline lead-in, in two beats: the first in regular type and the
    *  second in italics (it's the one that drops the big question below).
    *  Two keys because they're painted with different styles. */
+  /** The Map header: the main phrase and the secondary one, in italics. */
+  "elMetodo.hero.principal": "A unique methodology of multidimensional self-knowledge",
+  "elMetodo.hero.secundaria": "Eight perspectives to reinterpret your experience and yourself.",
   "elMetodo.hero.tituloAntes": "To change,",
   "elMetodo.hero.tituloPide": "ask yourself",
   "elMetodo.hero.titulo": "What happened to you?",
@@ -121,7 +126,11 @@ export const elMetodo = {
 
   // ── 7. The proof (the eight videos) ────────────────────────────────────
   // Right before the price: up to here the page promises, here it shows.
-  "elMetodo.pruebas.titulo": "Understand why you do what you do. Understanding yourself doesn't mean justifying yourself.",
+  "elMetodo.pruebas.titulo": "It doesn't claim to tell you who you are, what you should change or how you should live. It gives you tools so you can discover it for yourself.",
+  /** Big phrase that closes the videos. */
+  "elMetodo.pruebas.interior": "These exclusive contents and reels are waiting for you inside",
+  /** What access to the contents costs: under the videos phrase. */
+  "elMetodo.pruebas.precio": "€5 a month for access to each discipline. It is a subscription.",
   "elMetodo.pruebas.sub":
     "The eight disciplines from the inside, just as you'll see them. Tap any one to watch it.",
 
