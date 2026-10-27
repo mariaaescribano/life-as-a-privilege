@@ -71,11 +71,11 @@ describe('SubscribeService · bienvenida', () => {
     expect(m.subject).not.toMatch(/[\r\n]/);
   });
 
-  it('solo se manda a quien llega nuevo, y solo desde la portada', async () => {
+  it('se manda SIEMPRE desde la portada, aunque ya estuviera apuntado; desde otros formularios, no', async () => {
     const yaEstaba = crear(true);
     await yaEstaba.svc.addEmail('ana@ejemplo.com', 'portada', 'Ana', 'es');
     await espera();
-    expect(alUsuario(yaEstaba.enviados)).toHaveLength(0);
+    expect(alUsuario(yaEstaba.enviados)).toHaveLength(1);
 
     const otroOrigen = crear(false);
     await otroOrigen.svc.addEmail('ana@ejemplo.com', 'voluntario', 'Ana', 'es');

@@ -33,8 +33,8 @@ export class SubscribeService {
   constructor(private readonly db: DatabaseService) {}
 
   async addEmail(email: string, origen?: string, nombre?: string, idioma?: string): Promise<void> {
-    // ¿Ya estaba apuntado? Solo a quien llega nuevo se le manda la bienvenida:
-    // volver a pulsar el botón no puede llenarle el buzón.
+    // ¿Ya estaba apuntado? Solo cambia la etiqueta del aviso a María («Nuevo
+    // suscriptor» / «vuelve a apuntarse»); la bienvenida sale siempre.
     const { data: previo } = await this.db.getClient().from(TABLE).select('email').eq('email', email).maybeSingle();
     const esNuevo = !previo;
 
@@ -65,8 +65,12 @@ export class SubscribeService {
     // quedaba en «Enviando…» y la persona no veía nada). Cada envío ya recoge
     // sus propios errores y los deja en el log.
     void this.sendNotification(email, origen, nombre, esNuevo);
-    // La bienvenida solo sale de la portada (la «introducción gratuita»).
-    if (esNuevo && !error && origen === 'portada') {
+    // La bienvenida sale SIEMPRE que alguien deja sus datos en la portada (la
+    // «introducción gratuita»), aunque ya estuviera apuntado: quien pide el
+    // correo tiene que recibirlo. Desde otros formularios no sale. El límite de
+    // envíos por IP del controlador es lo que evita que se use para llenar un
+    // buzón ajeno.
+    if (origen === 'portada') {
       void this.sendBienvenida(email, nombre, idioma === 'en' ? 'en' : 'es');
     }
   }
