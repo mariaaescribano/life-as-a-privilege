@@ -1,11 +1,16 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Box, Flex, Grid, Image, Text, useBreakpointValue } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
 import OpinionesSection from "../../components/welcome/OpinionesSection";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
+import WelcomeHero from "../../components/welcome/WelcomeHero";
+import WelcomePilares from "../../components/welcome/WelcomePilares";
+import SeparadorFlor from "../../components/welcome/SeparadorFlor";
+import WelcomeDisciplinas from "../../components/welcome/WelcomeDisciplinas";
+import BotonContactame from "../../components/global/BotonContactame";
 import {
   astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
   ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaTxt,
@@ -18,11 +23,8 @@ import {
   // AprendizajeIcon, // comentado: el botón APRENDER está desactivado para v1
 } from "../../GlobalVariables";
 import { useT, type ClaveTexto } from "../../i18n";
-import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
-import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
+import { disciplinaBgImg } from "../../components/global/DisciplinaBgLayer";
 import { precargarImagenes, usePrecargarImagenes } from "../../hooks/usePrecargarImagenes";
-import { useVistoConEspera } from "../../hooks/useVistoConEspera";
-import { LetrasVivas } from "../../components/global/LetrasVivas";
 import { LifeLoading } from "../../components/global/LifeLoading";
 
 type Discipline = {
@@ -148,307 +150,16 @@ const WELCOME_IMGS_DIFERIDAS: string[] = disciplines
   .map((d) => disciplinaBgImg(d.name))
   .filter(Boolean) as string[];
 
-// callback ref: el observer se engancha en cuanto el nodo aparece en el DOM.
-// (Importante porque la página se monta primero mostrando <LifeLoading/> y el
-// contenido —con estos refs— aparece después; con un ref normal el efecto
-// correría una vez con el ref vacío y nunca volvería a observar.)
-const useReveal = (threshold = 0.15) => {
-  const [visible, setVisible] = useState(false);
-  const [node, setNode] = useState<HTMLElement | null>(null);
-  const ref = useCallback((el: HTMLElement | null) => setNode(el), []);
-  useEffect(() => {
-    if (!node) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(node);
-    return () => obs.disconnect();
-  }, [node, threshold]);
-  return { ref, visible };
-};
-
-// ── Tarjeta de disciplina ────────────────────────────────────────────────────
-// Va en su propio componente para que CADA UNA tenga su propio observador: así
-// una tarjeta no se coloca hasta que ella misma asoma en pantalla. Con un único
-// observador para toda la cuadrícula, al llegar a la primera fila arrancaban las
-// ocho, y la segunda (en móvil, las filas 2, 3 y 4) se colocaba fuera de vista.
-//
-// El retraso lo marca la COLUMNA, no el índice global: las de una misma fila
-// entran de izquierda a derecha, y cada fila empieza su cuenta cuando aparece.
-// Si usáramos el índice global, la última esperaría más de un segundo desde que
-// ya se está viendo.
-function TarjetaDisciplina({
-  d,
-  delay,
-  isMobile,
-  entraAlCargar = false,
-  cargado = false,
-  onSelect,
-  onExplorar,
-}: {
-  d: Discipline;
-  delay: number;
-  isMobile: boolean;
-  /** Tarjeta de la PRIMERA fila: entra al cargar la página, sin esperar a asomar
-   *  en pantalla. Las de abajo sí esperan (ver `useEnPantalla`). */
-  entraAlCargar?: boolean;
-  /** Con `entraAlCargar`: el momento en que el padre dispara la entrada. */
-  cargado?: boolean;
-  onSelect: () => void;
-  onExplorar: () => void;
-}) {
-  // Margen -14%: la tarjeta entra cuando ya se ve de verdad (metida un 14% de
-  // la pantalla), no antes: la entrada tiene que poder verla quien baja. (Con un
-  // margen positivo arrancaba fuera de pantalla y al llegar ya estaba puesta.) Con el -25% había
-  // que bajar un cuarto de pantalla —unos 200px— antes de que se dignaran a
-  // aparecer, y se sentía como que la página no reaccionaba.
-  const enPantalla = useVistoConEspera("0px 0px -30% 0px", 1.7);
-  // La primera fila queda justo en el pliegue: con el observador nunca llegaba a
-  // «asomar» y el usuario se encontraba un hueco turquesa vacío donde deberían
-  // estar las tarjetas. Esa fila entra con la página; las siguientes, al bajar.
-  //
-  // Red de seguridad: si por lo que sea el observador no llega a disparar (una
-  // pestaña en segundo plano, un navegador raro), la tarjeta se coloca sola a
-  // los 15 s de cargar la página. Puede que entonces no se vea la animación,
-  // pero nunca se pierde una disciplina.
-  const [rescate, setRescate] = useState(false);
-  useEffect(() => {
-    if (!cargado) return;
-    const id = setTimeout(() => setRescate(true), 15000);
-    return () => clearTimeout(id);
-  }, [cargado]);
-  //
-  // La primera pantalla también espera a ASOMAR (aunque sea un píxel): en un
-  // móvil pequeño la segunda fila queda bajo el pliegue, y si entrara solo con
-  // la página se animaría sin que nadie la vea. Si la ve al cargar, entra con la
-  // página como siempre; si tiene que bajar, entra al llegar y sin la espera
-  // inicial (`tardio`), para no hacerle esperar con el dedo en el aire.
-  const asoma = useVistoConEspera("0px 0px 0px 0px", 0);
-  const t0 = useRef(performance.now());
-  const tardio = useRef<boolean | null>(null);
-  if (asoma.visible && tardio.current === null) tardio.current = performance.now() - t0.current > 1800;
-  const visto = entraAlCargar ? (cargado && asoma.visible) : (enPantalla.visible || rescate);
-  const delayFinal = entraAlCargar && tardio.current ? Math.max(0.1, delay - 0.8) : delay;
-  const hasBg = hasDisciplinaBg(d.name);
-  const t = useT();
-  const nombreDe = useNombreDisciplina();
-  // El nombre va SIEMPRE en una línea: si salta a dos, esa tarjeta crece de alto
-  // y rompe la fila. Se pide la versión corta en móvil y también cuando el
-  // idioma alarga el nombre («Chinese Medicine» → «Chinese Med.»); en español
-  // «Medicina China» cabe entera y se queda como está. Solo Medicina China tiene
-  // versión corta: el resto devuelve su nombre largo tal cual.
-  const nombreLargo = nombreDe(d.name);
-  const displayName = isMobile || nombreLargo.length > 14 ? nombreDe(d.name, true) : nombreLargo;
-
-  return (
-    <Box
-      role="group"
-      mt={{ base: "30px", md: "42px" }}
-      // Las tarjetas de una misma fila miden lo MISMO: la rejilla estira este
-      // envoltorio hasta el alto de la fila (align-items: stretch) y la tarjeta
-      // de dentro lo ocupa entero (`flex: 1`). Así, si un lema ocupa dos líneas
-      // y el de al lado una, la corta crece hasta igualar a la larga en vez de
-      // dejar un escalón entre las dos.
-      display="flex"
-      flexDirection="column"
-      cursor="pointer"
-      onClick={onSelect}
-      // Dispara cuando ESTA tarjeta asoma en pantalla, no al cargar la página ni
-      // cuando asoma la cuadrícula: así también se ve colocarse a las de las
-      // filas de abajo, en vez de encontrarlas ya puestas al bajar.
-      ref={(el: HTMLElement | null) => { enPantalla.ref(el); asoma.ref(el); }}
-      opacity={visto ? 1 : 0}
-      transform={visto ? "translateY(0) scale(1)" : "translateY(32px) scale(0.94)"}
-      filter={visto ? "blur(0px)" : "blur(6px)"}
-      // Las ocho entran UNA DETRÁS DE OTRA, con 0.15s de hueco: se ve
-      // la secuencia pero es ágil (antes 0.09s, que se solapaba tanto
-      // que parecían entrar de golpe).
-      // Sin giro y sin rebote: antes entraban con rotate(-4deg) y una
-      // curva que se pasaba de largo, así que aterrizaban torcidas y se
-      // enderezaban dando un tumbo. Ahora suben limpias y se enfocan,
-      // con la curva del sistema Reveal. Mismos números que /elMetodo.
-      transition={`opacity 0.6s ease ${delayFinal}s, transform 0.85s cubic-bezier(0.22,1,0.36,1) ${delayFinal}s, filter 0.6s ease ${delayFinal}s`}
-    >
-      {/* Tarjeta visual — el hover (elevación/sombra) vive aquí, separado
-          del reveal de entrada para que no se pisen los transforms. */}
-      <Box
-        position="relative"
-        // `flex: 1` = ocupa todo el alto que le da la fila (ver arriba).
-        flex="1"
-        display="flex"
-        flexDirection="column"
-        pt={{ base: "36px", md: "46px" }}
-        pb={{ base: 3.5, md: 7 }}
-        px={{ base: 3, md: 5, lg: 6 }}
-        bg={hasBg ? "transparent" : d.bg}
-        borderRadius="2xl"
-        textAlign="center"
-        overflow={hasBg ? "visible" : undefined}
-        boxShadow="0 4px 20px rgba(0,0,0,0.16)"
-        transition="transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease"
-        _groupHover={{
-          transform: "translateY(-8px) scale(1.012)",
-          boxShadow: "0 18px 44px rgba(0,0,0,0.28)",
-        }}
-        _groupActive={{ transform: "translateY(-2px) scale(0.995)" }}
-      >
-        {/* Fondo propio de la disciplina (estrellas o imagen) — en su
-            propia capa con overflow:hidden, para que el icono que
-            sobresale por arriba (top:-36px) no quede recortado. */}
-        {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="2xl" />}
-  
-        {/* Icono que sobresale por arriba — único elemento con glow
-            fuerte; en hover crece un 5% y aumenta su brillo. */}
-        <Box
-          position="absolute"
-          top={{ base: "-27px", md: "-36px" }}
-          left="50%"
-          transform="translateX(-50%)"
-          bg={hasBg ? "transparent" : d.bg}
-          borderRadius="full"
-          p={{ base: "6px", md: "8px" }}
-          border={"4px solid "+ d.txt}
-          boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
-          w={{ base: "56px", md: "72px" }}
-          h={{ base: "56px", md: "72px" }}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          zIndex={2}
-          overflow={hasBg ? "hidden" : undefined}
-          transition="transform 0.28s ease, box-shadow 0.28s ease"
-          _groupHover={{
-            transform: "translateX(-50%) scale(1.05)",
-            boxShadow: `0 0 30px ${d.txt}dd, 0 2px 20px ${d.txt}aa`,
-          }}
-        >
-          {hasBg && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
-          <Box
-            position="relative"
-            zIndex={1}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            transition="filter 0.28s ease"
-            _groupHover={{ filter: "brightness(1.12)" }}
-            // Vida tras la entrada: el icono flota unos píxeles, con la fase de
-            // su tarjeta para que no suban y bajen las ocho a la vez.
-            sx={visto ? {
-              "@keyframes iconoFlota": {
-                "0%, 100%": { transform: "translateY(0)" },
-                "50%": { transform: "translateY(-3px)" },
-              },
-              animation: `iconoFlota 5s ease-in-out ${delay + 1.2}s infinite`,
-              "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-            } : undefined}
-          >
-            {d.renderIcon(isMobile ? "32px" : "42px")}
-          </Box>
-        </Box>
-  
-        {/* Nombre — protagonista tras el icono. Sombra reforzada en
-            el color de la disciplina para despegarlo del fondo. */}
-        <Text
-          position="relative"
-          zIndex={1}
-          color={d.txt}
-          fontWeight="700"
-          fontSize={{ base: "19px", md: "30px", lg: "38px" }}
-          letterSpacing="0.04em"
-          lineHeight="short"
-          textShadow={hasBg
-            ? `0 1px 3px ${d.bg}, 0 2px 8px ${d.bg}, 0 0 16px ${d.bg}dd, 0 2px 14px ${d.bg}aa`
-            : "2px 2px 4px rgba(0,0,0,0.55)"}
-        >
-          {displayName}
-        </Text>
-  
-        {/* Subtítulo — el verdadero protagonista: responde
-            "¿qué voy a descubrir aquí?". minH fija para que la fila
-            "Explorar disciplina" quede alineada en todas las tarjetas. */}
-        {d.lemaKey && (
-          <Text
-            position="relative"
-            zIndex={1}
-            mt={{ base: 1.5, md: 3 }}
-            minH="2em"
-            color={d.txt}
-            fontWeight="500"
-            fontSize={{ base: "sm", md: "lg", lg: "xl" }}
-            lineHeight="1.45"
-            letterSpacing="0.01em"
-            opacity={0.96}
-            textShadow={hasBg
-              ? `0 1px 3px ${d.bg}, 0 1px 6px ${d.bg}, 0 0 12px ${d.bg}dd`
-              : "1px 1px 3px rgba(0,0,0,0.5)"}
-          >
-            {t(d.lemaKey)}
-          </Text>
-        )}
-  
-        {/* Indicador de interacción — invita a explorar; tenue en
-            reposo, se enciende y la flecha avanza en hover. Enlaza
-            directamente con la página de la disciplina (sin abrir el
-            popup, de ahí el stopPropagation). */}
-        <Flex
-          position="relative"
-          zIndex={1}
-          align="center"
-          justify="center"
-          gap={1.5}
-          // `auto`: la fila de «Explorar» se va SIEMPRE al fondo de la tarjeta,
-          // así queda a la misma altura en las dos de la fila aunque una tenga
-          // el lema más largo. El `pt` es el aire mínimo con el texto de arriba.
-          mt="auto"
-          pt={{ base: 2, md: 3 }}
-          color={d.txt}
-          fontSize={{ base: "10px", md: "xs", lg: "sm" }}
-          fontWeight="600"
-          letterSpacing={{ base: "0.08em", md: "0.14em" }}
-          textTransform="uppercase"
-          whiteSpace="nowrap"
-          cursor="pointer"
-          userSelect="none"
-          opacity={0.75}
-          transition="opacity 0.28s ease"
-          _groupHover={{ opacity: 1 }}
-          _hover={{ opacity: 1 }}
-          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onExplorar(); }}
-        >
-          <Box as="span">{t("welcome.explorar")}</Box>
-          <Box
-            as="span"
-            transition="transform 0.28s ease"
-            _groupHover={{ transform: "translateX(4px)" }}
-          >
-            →
-          </Box>
-        </Flex>
-      </Box>
-    </Box>
-  );
-}
-
 const Welcome = () => {
   const navigate = useNavigate();
   const t = useT();
   const [showEspacioModal, setShowEspacioModal] = useState(false);
-  const bienvenidaReveal = useReveal();
-  const disciplinasTitleReveal = useReveal(0.2);
   const [mounted, setMounted] = useState(false);
   const imagenesListas = usePrecargarImagenes(WELCOME_IMGS);
   const [tiempoMin, setTiempoMin] = useState(false);
   // Tipografías listas: sin esto el titular y el subtítulo se pintan con la
   // fuente de respaldo (más ancha) y, al llegar la EB Garamond, encogen de golpe.
   const [fuentesListas, setFuentesListas] = useState(false);
-  const isMobile = useBreakpointValue({ base: true, md: false }) ?? true;
-  // Tarjetas por fila (2 en móvil, 4 en escritorio): define la cascada y cuáles
-  // son «la primera fila», la que tiene que verse sin hacer scroll.
-  const columnas = isMobile ? 2 : 4;
-  // Filas que se ven sin hacer scroll (y que por tanto entran con la página):
-  // en móvil dos —las cuatro primeras disciplinas—, en escritorio una de cuatro.
-  const filasAlCargar = isMobile ? 2 : 1;
   // La página no se revela hasta que las fotos estén cargadas Y haya pasado un
   // tiempo mínimo (para que se vea la animación de carga aunque las fotos vengan
   // de caché). Mientras, se muestra <LifeLoading/>.
@@ -511,85 +222,17 @@ const Welcome = () => {
       <SiteHeader variant="public" />
 
       <Box flex="1">
-      {/* ── MANDALA (elemento central, encima del título) ── */}
-      {/* Wrapper con flotación + latido perpetuos (vida continua); la imagen
-          hace la entrada épica (surge girando desde muy pequeña y se enfoca). */}
-      {/* Un poco de hueco sobre el mandala en móvil, que iba pegado al header. */}
-      <Flex justify="center" pt={{ base: 7, md: 9 }}>
-        <Box
-          sx={{
-            "@keyframes mandalaFloat": {
-              "0%, 100%": { transform: "translateY(0) scale(1)" },
-              "50%": { transform: "translateY(-9px) scale(1.03)" },
-            },
-            animation: "mandalaFloat 5.5s ease-in-out infinite",
-          }}
-        >
-          <Image
-            src="/img/icono/life.webp"
-            alt=""
-            h={{ base: "44px", md: "72px" }}
-            objectFit="contain"
-            style={{
-              opacity: mounted ? 1 : 0,
-              transform: mounted ? "scale(1) rotate(0deg)" : "scale(0.25) rotate(-45deg)",
-              // glow (drop-shadow) siempre + blur solo durante la entrada.
-              filter:
-                "drop-shadow(0 0 10px rgba(255,255,255,0.38)) drop-shadow(0 0 24px rgba(255,255,255,0.20)) drop-shadow(0 0 47px rgba(180,255,245,0.15))" +
-                (mounted ? "" : " blur(6px)"),
-              transition: "opacity 1.1s ease, transform 1.3s cubic-bezier(0.22,1,0.36,1), filter 1s ease",
-            }}
-          />
-        </Box>
-      </Flex>
+      {/* ── CABECERA: frase + nombre/email a la izquierda, foto a la derecha ── */}
+      <WelcomeHero activo={mounted} />
 
-      {/* ── BIENVENIDA (título + subtítulo + frase) ── */}
-      {/* `pb` base 8: un respiro claro entre el subtítulo y las tarjetas (ojo,
-          cada píxel de más empuja la segunda fila de tarjetas bajo el pliegue). */}
-      <Flex justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 3, md: 8 }} pb={{ base: 8, md: 6 }}>
-        <Box
-          ref={bienvenidaReveal.ref}
-          w={{ base: "100%", md: "78%" }}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          textAlign="center"
-          gap={{ base: 2, md: 4 }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0) scale(1)" : "translateY(30px) scale(0.94)"}
-          filter={mounted ? "blur(0px)" : "blur(8px)"}
-          transition="opacity 0.9s ease 0.15s, transform 1.1s cubic-bezier(0.22,1,0.36,1) 0.15s, filter 0.9s ease 0.15s"
-        >
-          <Text
-            color="white"
-            fontSize={{ base: "2xl", md: "5xl", lg: "6xl" }}
-            fontWeight="700"
-            letterSpacing="0.1em"
-            lineHeight="1.1"
-            textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
-          >
-            {/* El nombre de la casa vive en `header.marca` (una sola clave para
-                el rótulo del header y este titular): así no se cambia en un
-                sitio y se olvida el otro. */}
-            <LetrasVivas texto={t("header.marca")} entrada activo={mounted} repetir={false} altura={0} periodo={1} paso={0.035} pasoEntrada={0.035} retraso={0.3} />
-          </Text>
+      {/* ── SEPARACIÓN CON LA FLOR (mismo aire arriba que abajo) ── */}
+      <SeparadorFlor />
 
-          {/* Subtítulo (estructura de Materiales) */}
-          <Text
-            color="rgba(255,255,255,0.88)"
-            fontSize={{ base: "sm", md: "xl" }}
-            fontStyle="italic"
-            fontWeight="400"
-            letterSpacing="0.05em"
-            lineHeight="1.5"
-            textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 21px rgba(255,255,255,0.22)"
-            fontFamily="'EB Garamond', serif"
-            maxW={{ base: "100%", md: "640px" }}
-          >
-            {t("welcome.subtitulo")}
-          </Text>
-        </Box>
-      </Flex>
+      {/* ── SEGUNDA SECCIÓN: tres ideas en tres cajas + tu foto ── */}
+      <WelcomePilares />
+
+      {/* ── SEPARACIÓN CON LA FLOR (mismo aire arriba que abajo) ── */}
+      <SeparadorFlor />
 
       {/* ── BANNERS PRODUCTOS & REELS ── */}
       {/* <Flex
@@ -607,78 +250,8 @@ const Welcome = () => {
         </Flex>
       </Flex> */}
 
-      {/* ── TÍTULO DISCIPLINAS ── */}
-      {/* El texto está comentado, así que este bloque no pinta nada: sin `pt`
-          para que no deje 40px de hueco muerto empujando las tarjetas por
-          debajo del pliegue. Si se vuelve a poner el título, devuélvele el
-          padding. */}
-      <Flex
-        ref={disciplinasTitleReveal.ref}
-        direction="column"
-        align="center"
-      >
-        {/* <Text
-          color="rgba(255,255,255,0.85)"
-          fontFamily="'EB Garamond', serif"
-          fontStyle="italic"
-          fontWeight="400"
-          fontSize={{ base: "md", md: "xl" }}
-          letterSpacing="0.12em"
-          textShadow="0 0 9px rgba(255,255,255,0.34), 0 0 20px rgba(255,255,255,0.17)"
-          textAlign="center"
-          px={{ base: 5, md: 10 }}
-          opacity={disciplinasTitleReveal.visible ? 1 : 0}
-          transform={disciplinasTitleReveal.visible ? "translateY(0)" : "translateY(18px)"}
-          transition="opacity 0.7s ease 0.25s, transform 0.7s ease 0.25s"
-        >
-          Las 8 disciplinas…
-        </Text> */}
-      </Flex>
-
-      {/* ── CARDS DE DISCIPLINAS ── */}
-      {/* `pt` corto a propósito: en móvil tienen que entrar LAS CUATRO PRIMERAS
-          sin hacer scroll (dos filas de dos), si no parece que la web se acaba en
-          Psicología y Fisiología. Ojo al subirlo: cada píxel de aquí —y del héroe
-          de arriba— empuja la segunda fila por debajo del pliegue.
-          (Las tarjetas ya traen su `mt` propio para el icono que sobresale.) */}
-      <Box
-        px={{ base: 5, md: 6, lg: 8 }}
-        // pt base 4: junto al pb del héroe, separa la frase de bienvenida de los
-        // iconos que sobresalen de las primeras tarjetas.
-        pt={{ base: 4, md: 4 }}
-        // OJO: 13 no existe en la escala de Chakra (caía como 13px a secas);
-        // 12 = 48px de verdad.
-        pb={{ base: 9, md: 12 }}
-      >
-        {/* Hueco corto y padding lateral corto: las tarjetas mandan, así que se
-            comen el aire y salen anchas (el texto de dentro sube de tamaño
-            en consecuencia). */}
-        <Grid
-          templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(4, 1fr)" }}
-          gap={{ base: 2, md: 5 }}
-        >
-          {disciplines.map((d, i) => (
-            <TarjetaDisciplina
-              key={i}
-              d={d}
-              isMobile={isMobile}
-              // La columna dentro de su fila: 2 columnas en móvil, 4 en escritorio.
-              // En móvil la segunda fila también entra con la página, así que se
-              // le suma un hueco para que vaya DETRÁS de la primera, no a la vez.
-              // Las de abajo (las que entran al asomar) tardan un poco más
-              // que las de la primera pantalla, para que se vea cada una.
-              delay={(i < filasAlCargar * columnas ? 0.9 : 0.1) + (i % columnas) * 0.2 + (isMobile && i >= columnas && i < filasAlCargar * columnas ? 0.3 : 0) + (i >= filasAlCargar * columnas ? 0.05 : 0)}
-              // Lo que se ve sin hacer scroll entra con la página: la primera fila
-              // en escritorio y las DOS primeras en móvil (las cuatro disciplinas).
-              // De ahí hacia abajo, cada tarjeta entra al asomar.
-              entraAlCargar={i < filasAlCargar * columnas}
-              cargado={mounted}
-              onSelect={() => navigate(d.link)}
-              onExplorar={() => navigate(d.link)}
-            />
-          ))}
-        </Grid>
-      </Box>
+      {/* ── LAS OCHO DISCIPLINAS: líneas con el icono delante, 4 + 4 ── */}
+      <WelcomeDisciplinas disciplinas={disciplines} />
 
       {/* ── BOTÓN «EL MAPA» ──
           Corta la página entre las disciplinas y la creadora. Va después de las
@@ -711,6 +284,9 @@ const Welcome = () => {
       {/* ── FOOTER ── */}
       <SiteFooter />
 
+      {/* ── BOTÓN FLOTANTE «CONTÁCTAME» ── (fuera del contenedor con zoom) */}
+      <BotonContactame />
+
       {/* ── MODAL ESPACIO (login requerido) ── */}
       {showEspacioModal && (
         <Box
@@ -729,7 +305,7 @@ const Welcome = () => {
             bg="#008080"
             border="1px solid rgba(255,255,255,0.3)"
             borderRadius="3xl"
-            boxShadow="0 0 42px rgba(255,255,255,0.1), 0 22px 60px rgba(0,0,0,0.6)"
+            boxShadow="0 0 42px rgba(255,255,255,0.07), 0 22px 60px rgba(0,0,0,0.6)"
             p={{ base: 10, md: 14 }}
             maxW="420px"
             w="100%"
@@ -768,7 +344,7 @@ const Welcome = () => {
             {/* Logo */}
             <Image
               src="/img/icono/life.webp"
-              alt="Life as a Privilege"
+              alt="María Escribano"
               w="110px"
               objectFit="contain"
               filter="drop-shadow(0 4px 12px rgba(255, 255, 255, 0.26))"
@@ -803,8 +379,8 @@ const Welcome = () => {
               border="2px solid rgba(255,255,255,0.65)"
               bg="rgba(255,255,255,0.14)"
               cursor="pointer"
-              boxShadow="0 0 28px rgba(107,196,200,0.5), 0 2px 12px rgba(0,0,0,0.25)"
-              _hover={{ bg: "rgba(255,255,255,0.26)", borderColor: "white", boxShadow: "0 0 40px rgba(107,196,200,0.8)" }}
+              boxShadow="0 0 28px rgba(107,196,200,0.35), 0 2px 12px rgba(0,0,0,0.25)"
+              _hover={{ bg: "rgba(255,255,255,0.26)", borderColor: "white", boxShadow: "0 0 40px rgba(107,196,200,0.56)" }}
               transition="all 0.22s ease"
             >
               {t("welcome.modal.iniciarSesion")}

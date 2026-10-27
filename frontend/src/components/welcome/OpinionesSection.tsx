@@ -42,7 +42,7 @@ const OpinionesSection: React.FC = () => {
             h="1px"
             w={{ base: "24px", md: "110px" }}
             bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
-            boxShadow="0 0 8px rgba(255,255,255,0.5)"
+            boxShadow="0 0 8px rgba(255,255,255,0.35)"
           />
           {/* El botón respira muy despacio (latido de escala), como el botón
               grande de acceder de /elMetodo: vida continua sin moverse de sitio. */}
@@ -60,11 +60,11 @@ const OpinionesSection: React.FC = () => {
             border="1.5px solid rgba(255,255,255,0.65)"
             bg="rgba(255,255,255,0.11)"
             cursor="pointer"
-            boxShadow="0 0 28px rgba(255,255,255,0.48), 0 0 62px rgba(255,255,255,0.26), 0 0 112px rgba(180,255,245,0.28), 0 6px 22px rgba(0,0,0,0.22)"
+            boxShadow="0 0 28px rgba(255,255,255,0.34), 0 0 62px rgba(255,255,255,0.18), 0 0 112px rgba(180,255,245,0.20), 0 6px 22px rgba(0,0,0,0.22)"
             _hover={{
               bg: "rgba(255,255,255,0.22)",
               borderColor: "white",
-              boxShadow: "0 0 40px rgba(255,255,255,0.66), 0 0 84px rgba(180,255,245,0.5), 0 8px 26px rgba(0,0,0,0.26)",
+              boxShadow: "0 0 40px rgba(255,255,255,0.46), 0 0 84px rgba(180,255,245,0.35), 0 8px 26px rgba(0,0,0,0.26)",
               transform: "translateY(-2px)",
             }}
             transition="all 0.25s ease"
@@ -80,7 +80,7 @@ const OpinionesSection: React.FC = () => {
               opacity={reveal.visible ? 1 : 0}
               transform={reveal.visible ? "scale(1)" : "scale(0.4)"}
               transition="opacity 0.9s ease 0.35s, transform 1.2s cubic-bezier(0.22,1,0.36,1) 0.35s"
-              style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.6)) drop-shadow(0 0 26px rgba(255,255,255,0.32))" }}
+              style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.42)) drop-shadow(0 0 26px rgba(255,255,255,0.22))" }}
             />
             <Text
               color="white"
@@ -89,7 +89,7 @@ const OpinionesSection: React.FC = () => {
               fontSize={{ base: "xl", md: "4xl" }}
               letterSpacing={{ base: "0.14em", md: "0.2em" }}
               textTransform="uppercase"
-              textShadow="0 0 16px rgba(255,255,255,0.6), 0 0 34px rgba(255,255,255,0.39), 0 0 66px rgba(180,255,245,0.32)"
+              textShadow="0 0 16px rgba(255,255,255,0.42), 0 0 34px rgba(255,255,255,0.27), 0 0 66px rgba(180,255,245,0.22)"
               whiteSpace="nowrap"
             >
               <LetrasVivas texto={t("header.mapa")} entrada activo={reveal.visible} retraso={2.2} paso={0.12} altura={4} />
@@ -100,7 +100,7 @@ const OpinionesSection: React.FC = () => {
               fontFamily="'EB Garamond', serif"
               fontWeight="700"
               fontSize={{ base: "xl", md: "4xl" }}
-              style={{ textShadow: "0 0 16px rgba(255,255,255,0.6), 0 0 34px rgba(255,255,255,0.39)" }}
+              style={{ textShadow: "0 0 16px rgba(255,255,255,0.42), 0 0 34px rgba(255,255,255,0.27)" }}
             >
               →
             </Box>
@@ -110,7 +110,7 @@ const OpinionesSection: React.FC = () => {
             h="1px"
             w={{ base: "24px", md: "110px" }}
             bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
-            boxShadow="0 0 8px rgba(255,255,255,0.5)"
+            boxShadow="0 0 8px rgba(255,255,255,0.35)"
           />
         </Flex>
       </Flex>

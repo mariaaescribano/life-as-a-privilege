@@ -33,4 +33,4 @@ Disallow: /signIn
 Disallow: /recuperar
 Disallow: /auth/
 
-Sitemap: https://lifeasaprivilege.onrender.com/sitemap.xml
+Sitemap: https://mariaescribano.onrender.com/sitemap.xml

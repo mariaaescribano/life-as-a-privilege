@@ -22,7 +22,12 @@ export const quienSoy = {
 
   // ── Certificados ───────────────────────────────────────────────────────
   "quienSoy.certificados": "Mis Certificados",
-  "quienSoy.certif.especializaciones": "Especializaciones",
+  "quienSoy.certif.acompanar": "Para acompañarte",
+  "quienSoy.certif.mente": "Para comprender tu mente",
+  "quienSoy.certif.cuerpo": "Para comprender tu cuerpo",
+  "quienSoy.certif.comes": "Para comprender la alimentación",
+  "quienSoy.certif.salud": "Para entender las tradiciones",
+  "quienSoy.certif.venimos": "Para entender de dónde venimos",
 
   "quienSoy.cierre": "Esto es solo el principio…",
 } as const;

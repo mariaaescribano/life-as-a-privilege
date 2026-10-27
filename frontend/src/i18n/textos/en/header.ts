@@ -1,5 +1,5 @@
 export const header = {
-  "header.marca": "LIFE AS A PRIVILEGE",
+  "header.marca": "MARÍA ESCRIBANO",
   "header.mapa": "The Map",
   "header.materiales": "Materials",
   "header.videos": "Videos",

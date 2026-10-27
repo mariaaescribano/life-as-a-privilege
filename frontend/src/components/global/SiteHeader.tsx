@@ -173,7 +173,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           src="/img/icono/life.webp"
           h={{ base: compact ? "36px" : "40px", md: compact ? "63px" : "70px" }}
           objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.50)) drop-shadow(0 0 20px rgba(255,255,255,0.24)) drop-shadow(0 0 42px rgba(180,255,245,0.18))" }}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.35)) drop-shadow(0 0 20px rgba(255,255,255,0.17)) drop-shadow(0 0 42px rgba(180,255,245,0.13))" }}
         />
         <Text
           color="rgba(255,255,255,0.85)"
@@ -181,7 +181,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           fontWeight="600"
           fontSize={{ base: "7px", md: "11px" }}
           letterSpacing="0.18em"
-          textShadow="0 0 8px rgba(255,255,255,0.36), 0 0 16px rgba(255,255,255,0.19)"
+          textShadow="0 0 8px rgba(255,255,255,0.25), 0 0 16px rgba(255,255,255,0.13)"
           whiteSpace="nowrap"
         >
           {t("header.marca")}
@@ -209,11 +209,11 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
             border="2px solid rgba(255,255,255,0.7)"
             bg="rgba(255,255,255,0.08)"
             cursor="pointer"
-            boxShadow="0 0 12px rgba(255,255,255,0.45), 0 0 28px rgba(255,255,255,0.22), 0 0 50px rgba(180,255,245,0.2)"
+            boxShadow="0 0 12px rgba(255,255,255,0.32), 0 0 28px rgba(255,255,255,0.15), 0 0 50px rgba(180,255,245,0.14)"
             transition="border-color 0.25s ease, box-shadow 0.25s ease"
             _hover={{
               borderColor: "white",
-              boxShadow: "0 0 18px rgba(255,255,255,0.7), 0 0 42px rgba(180,255,245,0.4)",
+              boxShadow: "0 0 18px rgba(255,255,255,0.49), 0 0 42px rgba(180,255,245,0.28)",
             }}
             _focusVisible={{ borderColor: "white", ...focoBlanco }}
             flexShrink={0}

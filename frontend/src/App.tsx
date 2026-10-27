@@ -409,6 +409,7 @@ export default function App()
       {/* Portada COMÚN de una disciplina: Ilustraciones · Cursos · El Recorrido.
           Es a donde lleva pulsar una disciplina en la página de bienvenida. */}
       <Route path="/disciplina/:disciplina" element={<DisciplinaPortada />} />
+      <Route path="/disciplina/:disciplina/teoria" element={<DisciplinaPortada modo="teoria" />} />
       {/* Vídeos: shorts de YouTube, con su portada y su disciplina (los gestiona
           /admin/videos). Apartado aparcado: la ruta pública queda comentada. */}
       {/* <Route path="/videos" element={<VideosPage />} /> */}

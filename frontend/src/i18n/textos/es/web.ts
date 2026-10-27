@@ -45,6 +45,8 @@ export const web = {
 
   // ── Portada de disciplina (/disciplina/:disciplina) ────────────────────
   // Las tres puertas, iguales para las ocho disciplinas.
+  "portada.reels": "Reels",
+  "portada.teoria": "Teoría",
   "portada.ilustraciones": "Ilustraciones",
   "portada.cursos": "Cursos",
   "portada.recorrido": "El Recorrido",
@@ -57,9 +59,11 @@ export const web = {
   "videos.abrirEn": "Abrir en {red}",
 
   // ── Tarjeta de la creadora (CreadoraCard) ──────────────────────────────
-  "creadora.accion": "Conocer a la creadora",
+  "creadora.accion": "Conocer a María",
   "creadora.bio":
-    "Ingeniera informática. Reconstruí el camino que muchas personas recorremos: un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.",
+    "Ingeniera informática. Para facilitarte tu desarrollo personal, conecto conocimientos que suelen estudiarse por separado para descubrir nuevas perspectivas de ti mismo.",
+  "creadora.bio2":
+    "Diseñé un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.",
 
   // ── Caja de suscripción (SubscribeBox) ─────────────────────────────────
   "suscribir.titulo": "No te pierdas nada.",

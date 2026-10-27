@@ -41,6 +41,8 @@ export const web = {
 
   // ── Discipline landing (/disciplina/:disciplina) ───────────────────────
   // The three doors, the same for all eight disciplines.
+  "portada.reels": "Reels",
+  "portada.teoria": "Theory",
   "portada.ilustraciones": "Illustrations",
   "portada.cursos": "Courses",
   "portada.recorrido": "The Map",
@@ -57,7 +59,9 @@ export const web = {
   // «Ingeniera informática» is the degree: translate it as the title, not the
   // job («software engineer» would say something else about her).
   "creadora.bio":
-    "Computer engineer. I rebuilt the path so many of us walk: a map where psychology, biology, and traditional knowledge combine instead of fighting each other. Now they're allies in the service of your growth.",
+    "Computer engineer. To make your personal growth easier, I connect fields of knowledge that are usually studied separately, to discover new perspectives on yourself.",
+  "creadora.bio2":
+    "I designed a map where psychology, biology and traditional knowledge combine instead of fighting each other. Now they are allies at the service of your growth.",
 
   // ── Subscribe box (SubscribeBox) ───────────────────────────────────────
   "suscribir.titulo": "Don't miss a thing.",

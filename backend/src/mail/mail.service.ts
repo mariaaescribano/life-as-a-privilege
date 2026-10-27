@@ -13,7 +13,7 @@ const CARTA_ASTRAL_FALLBACK = 'mariaa.escribano.arce@gmail.com';
 // correo con enlaces a localhost no lo puede abrir nadie, y el fallo no se ve
 // hasta que a alguien le llega. Al cambiar de dominio, cámbialo aquí también
 // (ver la lista de sitios en index.html).
-const WEB = 'https://lifeasaprivilege.onrender.com';
+const WEB = 'https://mariaescribano.onrender.com';
 
 /**
  * La letra de todos los correos.

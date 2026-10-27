@@ -1,19 +1,30 @@
 export const welcome = {
-  "welcome.subtitulo": "Science, psychology, and tradition to build an integrated vision of you.",
+  "welcome.subtitulo": "Science, psychology, and tradition to discover new perspectives from which to understand yourself.",
+  "welcome.hero.frase": "Discover new perspectives of yourself through a multidisciplinary lens",
+  "welcome.hero.gratis": "Free introduction",
+  "welcome.hero.foto": "I guide you in mind, body and tradition to build an integrated vision of yourself.",
+  "welcome.hero.nombre": "Your name",
+  // The three core ideas (second section, WelcomePilares)
+  "welcome.pilar.1.titulo": "Self-knowledge",
+  "welcome.pilar.1.texto": "Explore your own story, identify your patterns and understand how certain ways of thinking or acting may have made sense in the past but are no longer useful in the present.",
+  "welcome.pilar.2.titulo": "Self-acceptance",
+  "welcome.pilar.2.texto": "Learn to see yourself from different perspectives, without reducing your identity to a label, a flaw or a difficulty.",
+  "welcome.pilar.3.titulo": "Self-improvement",
+  "welcome.pilar.3.texto": "Don't justify yourself with what seems negative. Use it to know where to put your focus and improve your quality of life, getting better every day as a human being.",
   "welcome.explorar": "Explore",
   "welcome.explorarDisciplina": "Explore discipline",
   "welcome.modal.cuenta": "Create an account or log in",
   "welcome.modal.iniciarSesion": "Log in →",
 
   // ── Card taglines ──────────────────────────────────────────────────────
-  "welcome.lema.astrologia": "The tendencies that shape you.",
-  "welcome.lema.psicologia": "How your mind works.",
-  "welcome.lema.hinduismo": "Your unique constitution.",
-  "welcome.lema.medicinaChina": "Find your balance.",
-  "welcome.lema.fisiologia": "Discover the life that lives in you.",
-  "welcome.lema.nutricion": "Enjoy without harming yourself.",
-  "welcome.lema.cabala": "The architecture of your soul.",
-  "welcome.lema.cultura": "History and philosophy.",
+  "welcome.lema.astrologia": "Give your tendencies another meaning.",
+  "welcome.lema.psicologia": "Understand your story and its mark.",
+  "welcome.lema.hinduismo": "Explore your personal constitution.",
+  "welcome.lema.medicinaChina": "Connect balance and well-being.",
+  "welcome.lema.fisiologia": "Understand your body to care for yourself.",
+  "welcome.lema.nutricion": "Discover how food becomes your body.",
+  "welcome.lema.cabala": "Explore a system of interpretation.",
+  "welcome.lema.cultura": "Discover how history shaped us.",
 
   // ── Modal description for each discipline ──────────────────────────────
   "welcome.desc.astrologia":

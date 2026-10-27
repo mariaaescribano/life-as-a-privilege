@@ -13,6 +13,15 @@ export const ThemeCard = (props:{
   const navigate = useNavigate();
   const hasBg = hasDisciplinaBg(props.title);
 
+  // El título nunca se sale de la tarjeta. Una palabra sola larga («Autoconocimiento»)
+  // no tiene dónde saltar, así que se le pone un guion suave tras «auto» (y tras «alimen»): solo se ve
+  // el guion si hace falta partir (AUTO- / CONOCIMIENTO). En móvil, además, las
+  // palabras de 12+ letras bajan de cuerpo para que la mitad más larga quepa.
+  const texto = (props.label ?? props.title)
+    .replace(/^(auto)(?=[a-záéíóúñ]{6,})/i, "$1­")
+    .replace(/^(alimen)(?=taci[oó]n$)/i, "$1­");
+  const palabraLarga = Math.max(...texto.split(/[\s\-­]+/).map((w) => w.length)) >= 12;
+
   return (
     <Box
       bg={hasBg ? "transparent" : props.bgColor}
@@ -66,17 +75,22 @@ export const ThemeCard = (props:{
         <Text
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
-          fontSize={{ base: "lg", md: "2xl" }}
-          letterSpacing="0.08em"
+          fontSize={{ base: palabraLarga ? "13px" : "lg", md: palabraLarga ? "xl" : "2xl" }}
+          letterSpacing={{ base: palabraLarga ? "0.04em" : "0.08em", md: palabraLarga ? "0.05em" : "0.08em" }}
           textTransform="uppercase"
           color={props.color}
           textAlign="center"
           lineHeight="1.2"
+          maxW="100%"
+          // Nunca se parte una palabra por la mitad: solo salta donde hay un
+          // espacio o el guion suave de «auto». Por eso las palabras largas bajan
+          // de cuerpo (arriba) en vez de dejar que el navegador las corte.
+          sx={{ hyphens: "manual", overflowWrap: "normal", wordBreak: "normal" }}
           textShadow={hasBg
             ? `0 1px 3px ${props.bgColor}f5, 0 0 6px ${props.bgColor}cc, 0 2px 14px ${props.bgColor}88`
             : `0 0 10px ${props.color}cc, 0 0 21px ${props.color}88, 0 0 40px ${props.color}55`}
         >
-          {props.label ?? props.title}
+          {texto}
         </Text>
       </Flex>
     </Box>

@@ -9,21 +9,33 @@
 export const welcome = {
   // El titular de la portada es el nombre de la casa y sale de `header.marca`
   // (ahí también se lee el rótulo del header): un solo sitio donde cambiarlo.
-  "welcome.subtitulo": "Ciencia, psicología y tradición para construir una visión integrada de ti.",
+  "welcome.subtitulo": "Ciencia, psicología y tradición para descubrir nuevas perspectivas desde las que comprenderte.",
+  // ── Cabecera de la portada (frase + formulario + foto) ──
+  "welcome.hero.frase": "Descubre nuevas perspectivas de ti a través de una mirada multidisciplinar",
+  "welcome.hero.gratis": "Introducción gratuita",
+  "welcome.hero.foto": "Te asesoro en mente, cuerpo y tradición para construir una visión integrada de ti.",
+  "welcome.hero.nombre": "Tu nombre",
+  // Las tres ideas de fondo (segunda sección, WelcomePilares)
+  "welcome.pilar.1.titulo": "Autoconocimiento",
+  "welcome.pilar.1.texto": "Explora tu propia historia, identifica tus patrones y comprende cómo determinadas formas de pensar o actuar pudieron tener sentido en el pasado pero ya no son útiles en el presente.",
+  "welcome.pilar.2.titulo": "Autoaceptación",
+  "welcome.pilar.2.texto": "Aprende a observarte desde perspectivas diferentes, sin reducir la propia identidad a una etiqueta, un defecto o una dificultad.",
+  "welcome.pilar.3.titulo": "Automejora",
+  "welcome.pilar.3.texto": "No te justifiques con lo que parece negativo. Úsalo para saber dónde poner el foco y mejorar la calidad de vida, mejorando cada día como ser humano.",
   "welcome.explorar": "Explorar",
   "welcome.explorarDisciplina": "Explorar disciplina",
   "welcome.modal.cuenta": "Crea una cuenta o inicia sesión",
   "welcome.modal.iniciarSesion": "Iniciar sesión →",
 
   // ── Lemas de las tarjetas ──────────────────────────────────────────────
-  "welcome.lema.astrologia": "Las tendencias que te forman.",
-  "welcome.lema.psicologia": "Cómo funciona tu mente.",
-  "welcome.lema.hinduismo": "Tu constitución única.",
-  "welcome.lema.medicinaChina": "Encuentra tu equilibrio.",
-  "welcome.lema.fisiologia": "Descubre la vida que te habita.",
-  "welcome.lema.nutricion": "Disfruta sin dañarte.",
-  "welcome.lema.cabala": "La arquitectura de tu alma.",
-  "welcome.lema.cultura": "Historia y filosofía.",
+  "welcome.lema.astrologia": "Las características de tu vida y tu esencia.",
+  "welcome.lema.psicologia": "Comprende tu historia y su influencia.",
+  "welcome.lema.hinduismo": "Explora tu constitución personal.",
+  "welcome.lema.medicinaChina": "Reconecta con tu equilibrio.",
+  "welcome.lema.fisiologia": "Conoce tu cuerpo para cuidarte.",
+  "welcome.lema.nutricion": "Descubre cómo el alimento se hace tu cuerpo.",
+  "welcome.lema.cabala": "La estructura del alma humana.",
+  "welcome.lema.cultura": "Valora tu realidad aprendiendo filosofía e historia.",
 
   // ── Descripción del modal de cada disciplina ───────────────────────────
   "welcome.desc.astrologia":

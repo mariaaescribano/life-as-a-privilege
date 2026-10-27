@@ -3,7 +3,7 @@ export const header = {
   /** El nombre de la casa. UNA sola clave para los dos sitios donde se escribe:
    *  el rótulo bajo el mandala del header y el titular de la portada. NO se
    *  traduce: es un nombre propio y se escribe igual en los dos idiomas. */
-  "header.marca": "LIFE AS A PRIVILEGE",
+  "header.marca": "MARÍA ESCRIBANO",
   "header.mapa": "El Mapa",
   "header.materiales": "Materiales",
   "header.videos": "Vídeos",

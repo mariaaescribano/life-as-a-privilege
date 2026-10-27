@@ -7,6 +7,7 @@
  *
  * Entre el subtitulo y las puertas va el retrato: aqui es donde alguien decide
  * si escribe a una desconocida, y es la unica foto de la pagina a proposito.
+ * La foto y el boton de debajo llevan a «Quien soy» (/quienSoy).
  */
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
@@ -15,6 +16,7 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import ViasDeContacto from "../../components/contacto/ViasDeContacto";
 import { Reveal, Breathe } from "../../components/global/Reveal";
+import { focoBlanco } from "../../components/global/foco";
 import { useT } from "../../i18n";
 
 const Contacto = () => {
@@ -95,20 +97,57 @@ const Contacto = () => {
           retratos las convertirían en un álbum.
           Anillo fino y sombra baja, sin halo blanco: sobre el turquesa un halo
           claro se lee como una caja detrás de la foto. */}
-      <Flex justify="center" pt={{ base: 8, md: 10 }}>
+      <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} pt={{ base: 8, md: 10 }}>
         <Reveal inView amount={0.02} direction="up" distance={20} scaleFrom={0.94} duration={0.7}>
-          <Image
-            src="/img/me/me.webp"
-            alt=""
-            w={{ base: "104px", md: "132px" }}
-            h={{ base: "104px", md: "132px" }}
+          {/* La foto lleva a «Quién soy», igual que el botón de debajo. */}
+          <Box
+            as="button"
+            type="button"
+            onClick={() => navigate("/quienSoy")}
+            aria-label={t("footer.quienSoy")}
+            display="block"
             borderRadius="full"
-            objectFit="cover"
-            border="1px solid rgba(255,255,255,0.5)"
-            boxShadow="0 8px 26px rgba(0,0,0,0.28)"
-            transition="transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s ease"
-            _hover={{ transform: "scale(1.05)", boxShadow: "0 12px 34px rgba(0,0,0,0.34)" }}
-          />
+            cursor="pointer"
+            _focusVisible={focoBlanco}
+          >
+            <Image
+              src="/img/me/me.webp"
+              alt=""
+              w={{ base: "104px", md: "132px" }}
+              h={{ base: "104px", md: "132px" }}
+              borderRadius="full"
+              objectFit="cover"
+              border="1px solid rgba(255,255,255,0.5)"
+              boxShadow="0 8px 26px rgba(0,0,0,0.28)"
+              transition="transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s ease"
+              _hover={{ transform: "scale(1.05)", boxShadow: "0 12px 34px rgba(0,0,0,0.34)" }}
+            />
+          </Box>
+        </Reveal>
+
+        <Reveal inView amount={0.02} direction="up" distance={14} duration={0.7} delay={0.15}>
+          <Box
+            as="button"
+            type="button"
+            onClick={() => navigate("/quienSoy")}
+            color="white"
+            fontFamily="'EB Garamond', serif"
+            fontWeight="600"
+            fontSize={{ base: "md", md: "lg" }}
+            letterSpacing="0.06em"
+            px={{ base: 7, md: 9 }}
+            py="10px"
+            borderRadius="full"
+            border="1px solid rgba(255,255,255,0.55)"
+            bg="rgba(255,255,255,0.08)"
+            boxShadow="0 0 14px rgba(255,255,255,0.28), 0 0 30px rgba(180,255,245,0.18)"
+            cursor="pointer"
+            transition="background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease"
+            _hover={{ bg: "rgba(255,255,255,0.16)", boxShadow: "0 0 18px rgba(255,255,255,0.4), 0 0 38px rgba(180,255,245,0.26)", transform: "translateY(-1px)" }}
+            _focusVisible={focoBlanco}
+          >
+            {t("footer.quienSoy")}
+          </Box>
         </Reveal>
       </Flex>
 

@@ -16,7 +16,7 @@
 //
 // IMPORTANTE: para que esto funcione, el enlace tiene que tener configurado en
 // Stripe → «Después del pago» → «Redirigir a tu sitio web»:
-//     https://lifeasaprivilege.onrender.com/home?disciplina_pagada={CHECKOUT_SESSION_ID}
+//     https://mariaescribano.onrender.com/home?disciplina_pagada={CHECKOUT_SESSION_ID}
 // Sin esa redirección se cobra el dinero pero la disciplina NO se desbloquea.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -29,15 +29,31 @@ export const STRIPE_LINK_DISCIPLINAS =
 // de arriba. Todo lo que enseñe un precio en la app (el box de pago, la página
 // pública de El Método…) sale de aquí, para que no haya dos cifras distintas.
 
-/** Precio de UNA disciplina, en euros. */
+/** Lo que costó la disciplina de pago ÚNICO (30 €). Ya no es lo que se anuncia
+ *  (ahora son suscripciones), pero sigue valiendo para lo que se cobra todavía
+ *  así: el checkout del backend y el regalo de cumpleaños. */
 export const PRECIO_DISCIPLINA_EUR = 30;
+
+/** Suscripción mensual a UNA disciplina, y la de las ocho juntas. */
+export const PRECIO_SUSCRIPCION_EUR = 5;
+export const PRECIO_PACK_EUR = 20;
+
+/**
+ * La lectura de la carta astral en PDF (la escribe María a mano): 30 € de pago
+ * único, SIEMPRE, aunque las disciplinas pasen a suscripción. Por eso tiene su
+ * propio precio y su propio enlace en vez de colgar de los de una disciplina:
+ * hoy el enlace es el mismo, pero si el de las disciplinas se cambia por uno de
+ * suscripción, este tiene que seguir cobrando 30 € una vez.
+ */
+export const PRECIO_CARTA_EUR = 30;
+export const STRIPE_LINK_CARTA = "https://buy.stripe.com/28E14g9TpeXy2bBb6I2VG04";
 
 /** Las disciplinas que forman El Mapa (se pagan una a una; el orden es el
  *  aconsejado, se puede desbloquear cualquiera cuando se quiera). */
 export const NUM_DISCIPLINAS = 8;
 
 /** Precio de una disciplina, tal y como se muestra en el box de pago. */
-export const PRECIO_DISCIPLINA = `${PRECIO_DISCIPLINA_EUR} €`;
+export const PRECIO_DISCIPLINA = `${PRECIO_SUSCRIPCION_EUR} €/mes`;
 
 /**
  * PRECIO DE REFERENCIA (el que va tachado al lado, más pequeño).
@@ -51,13 +67,13 @@ export const PRECIO_DISCIPLINA = `${PRECIO_DISCIPLINA_EUR} €`;
  * precio. Para quitarlo de TODA la web —box de pago y mandala— se pone a `null`
  * aquí y no hay que tocar nada más.
  */
-export const PRECIO_DISCIPLINA_ANTES_EUR: number | null = 50;
+export const PRECIO_DISCIPLINA_ANTES_EUR: number | null = null;
 
 export const PRECIO_DISCIPLINA_ANTES =
   PRECIO_DISCIPLINA_ANTES_EUR != null ? `${PRECIO_DISCIPLINA_ANTES_EUR} €` : null;
 
-/** Lo que cuesta El Mapa entero si se completan las ocho disciplinas. */
-export const PRECIO_MAPA_COMPLETO = `${PRECIO_DISCIPLINA_EUR * NUM_DISCIPLINAS} €`;
+/** Lo que cuesta la suscripción a las ocho disciplinas. */
+export const PRECIO_MAPA_COMPLETO = `${PRECIO_PACK_EUR} €/mes`;
 
 export type DisciplinaScope =
   | "metodo"

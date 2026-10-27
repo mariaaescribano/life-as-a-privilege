@@ -17,7 +17,7 @@ export const TITULAR = {
   nif: "48790731A",
   domicilio: "Calle Deportista Juan Matos, nº 4, Alicante",
   email: "mariaa.escribano.arce@gmail.com",
-  web: "https://lifeasaprivilege.onrender.com",
+  web: "https://mariaescribano.onrender.com",
 };
 
 /** Última revisión de los textos legales. Actualízala si cambias el contenido. */

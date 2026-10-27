@@ -4,7 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { SpaceBg } from "../metodo/SpaceBg";
 import { EstudioPopup } from "./EstudioPopup";
-import { PRECIO_DISCIPLINA_EUR, STRIPE_LINK_DISCIPLINAS } from "../metodo/pagoDisciplinaLink";
+import { PRECIO_CARTA_EUR, PRECIO_DISCIPLINA_EUR, STRIPE_LINK_CARTA } from "../metodo/pagoDisciplinaLink";
 import { API_URL, AstrologiaIcon, astrologiaTxt } from "../../GlobalVariables";
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -22,10 +22,10 @@ import { API_URL, AstrologiaIcon, astrologiaTxt } from "../../GlobalVariables";
  *  enlace de pago y la carta.
  * ───────────────────────────────────────────────────────────────────────────── */
 
-/** Precio del PDF: el mismo que una disciplina, porque se cobra por el mismo
- *  Payment Link. Sale de `pagoDisciplinaLink` para que no haya dos cifras
- *  distintas; el importe real lo fija ese enlace en el panel de Stripe. */
-const PRECIO_PDF = PRECIO_DISCIPLINA_EUR;
+/** Precio del PDF: 30 € de pago único, con su propio precio y enlace en
+ *  `pagoDisciplinaLink` (no cuelga del de las disciplinas, que pasan a
+ *  suscripción); el importe real lo fija ese enlace en el panel de Stripe. */
+const PRECIO_PDF = PRECIO_CARTA_EUR;
 /** Debe coincidir con `unit_amount: 3000` de createMetodoCheckout. */
 const PRECIO_MAPA = PRECIO_DISCIPLINA_EUR;
 
@@ -48,7 +48,7 @@ const PRECIO_MAPA = PRECIO_DISCIPLINA_EUR;
  *
  * Vacío = no se enseña ningún botón de pago.
  */
-const LECTURA_PDF_LINK = STRIPE_LINK_DISCIPLINAS;
+const LECTURA_PDF_LINK = STRIPE_LINK_CARTA;
 
 /**
  * El enlace, con quién paga colgado detrás. Sirve para lo que iba a servir la

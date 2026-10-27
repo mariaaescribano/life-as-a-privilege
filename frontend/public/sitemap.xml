@@ -8,123 +8,123 @@
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/</loc>
+    <loc>https://mariaescribano.onrender.com/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/elMetodo</loc>
+    <loc>https://mariaescribano.onrender.com/elMetodo</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/quienSoy</loc>
+    <loc>https://mariaescribano.onrender.com/quienSoy</loc>
     <priority>0.8</priority>
   </url>
   <!-- Presentación de cada disciplina (destino de los QR de los carteles). -->
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/d/astrologia</loc>
+    <loc>https://mariaescribano.onrender.com/d/astrologia</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/d/psicologia</loc>
+    <loc>https://mariaescribano.onrender.com/d/psicologia</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/d/ayurveda</loc>
+    <loc>https://mariaescribano.onrender.com/d/ayurveda</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/d/medicinachina</loc>
+    <loc>https://mariaescribano.onrender.com/d/medicinachina</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/d/fisiologia</loc>
+    <loc>https://mariaescribano.onrender.com/d/fisiologia</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/d/nutricion</loc>
+    <loc>https://mariaescribano.onrender.com/d/nutricion</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/d/cabala</loc>
+    <loc>https://mariaescribano.onrender.com/d/cabala</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/d/cultura</loc>
+    <loc>https://mariaescribano.onrender.com/d/cultura</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/productos</loc>
+    <loc>https://mariaescribano.onrender.com/productos</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/libros</loc>
+    <loc>https://mariaescribano.onrender.com/libros</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones</loc>
     <priority>0.6</priority>
   </url>
   <!-- La galería filtrada por disciplina (puerta izquierda de cada portada). -->
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/astrologia</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones/astrologia</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/psicologia</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones/psicologia</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/ayurveda</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones/ayurveda</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/medicinachina</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones/medicinachina</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/fisiologia</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones/fisiologia</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/nutricion</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones/nutricion</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/cabala</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones/cabala</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/ilustraciones/cultura</loc>
+    <loc>https://mariaescribano.onrender.com/ilustraciones/cultura</loc>
     <priority>0.6</priority>
   </url>
   <!-- Estudio estadístico de astrología: apartado aparcado, sus rutas están
        comentadas en App.tsx. Se saca del sitemap para no mandar a Google a una
        página que ya no existe.
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/estudio</loc>
+    <loc>https://mariaescribano.onrender.com/estudio</loc>
     <priority>0.5</priority>
   </url>
   -->
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/materiales</loc>
+    <loc>https://mariaescribano.onrender.com/materiales</loc>
     <priority>0.6</priority>
   </url>
   <!-- Vídeos: apartado aparcado, la ruta /videos está comentada en App.tsx.
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/videos</loc>
+    <loc>https://mariaescribano.onrender.com/videos</loc>
     <priority>0.6</priority>
   </url>
   -->
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/aprendizaje/aprendizajeHome</loc>
+    <loc>https://mariaescribano.onrender.com/aprendizaje/aprendizajeHome</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/opiniones</loc>
+    <loc>https://mariaescribano.onrender.com/opiniones</loc>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://lifeasaprivilege.onrender.com/contacto</loc>
+    <loc>https://mariaescribano.onrender.com/contacto</loc>
     <priority>0.4</priority>
   </url>
 </urlset>

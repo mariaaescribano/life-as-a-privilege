@@ -32,11 +32,21 @@ export interface SuscriptorDB {
 export class SubscribeService {
   constructor(private readonly db: DatabaseService) {}
 
-  async addEmail(email: string, origen?: string): Promise<void> {
+  async addEmail(email: string, origen?: string, nombre?: string): Promise<void> {
     // upsert por email: si vuelve a apuntarse, no se duplica ni da error.
-    const { error } = await this.db.getClient()
+    const fila: Record<string, unknown> = { email, origen: origen ?? null };
+    // Solo se toca `nombre` si llega: volver a apuntarse sin él no borra el que ya había.
+    if (nombre) fila.nombre = nombre;
+    let { error } = await this.db.getClient()
       .from(TABLE)
-      .upsert({ email, origen: origen ?? null }, { onConflict: 'email' });
+      .upsert(fila, { onConflict: 'email' });
+
+    // Hasta que se corra backend/sql/suscriptor-nombre.sql la columna no existe:
+    // se guarda el correo igualmente en vez de perderlo.
+    if (error && nombre) {
+      delete fila.nombre;
+      ({ error } = await this.db.getClient().from(TABLE).upsert(fila, { onConflict: 'email' }));
+    }
 
     if (error) {
       // Que no se pierda aunque la tabla falle: queda en el log del servidor.

@@ -3,6 +3,7 @@ export const contacto = {
   "contacto.subtitulo": "Choose where you'd rather we talk.",
   "contacto.formSubtitulo": "Write whatever you want and I'll reply to the email you leave me.",
 
+  "contactame.boton": "Contact me",
   "contacto.via.llamada": "A call",
   "contacto.via.llamadaTexto": "Tell me what's on your mind and we'll look at it together.",
   "contacto.via.conocernos": "Let's get to know each other",

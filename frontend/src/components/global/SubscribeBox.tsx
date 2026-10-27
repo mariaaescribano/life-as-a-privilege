@@ -61,7 +61,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
             h={{ base: "26px", md: "34px" }}
             objectFit="contain"
             flexShrink={0}
-            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
+            style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.32)) drop-shadow(0 0 18px rgba(255,255,255,0.15))" }}
           />
           <Box
             h="1px"
@@ -81,7 +81,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
         py={{ base: 8, md: 10 }}
         sx={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
         textAlign="center"
-        boxShadow="0 0 16px rgba(255,255,255,0.22), 0 0 38px rgba(255,255,255,0.12), 0 0 70px rgba(180,255,245,0.12)"
+        boxShadow="0 0 16px rgba(255,255,255,0.15), 0 0 38px rgba(255,255,255,0.08), 0 0 70px rgba(180,255,245,0.08)"
         opacity={reveal.visible ? 1 : 0}
         transform={reveal.visible ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)"}
         transition="opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
@@ -93,7 +93,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
           mx="auto"
           mb={4}
           opacity={0.9}
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.6)) drop-shadow(0 0 22px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.22))" }}
+          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.42)) drop-shadow(0 0 22px rgba(255,255,255,0.22)) drop-shadow(0 0 42px rgba(180,255,245,0.15))" }}
         />
         <Text
           color="white"
@@ -102,7 +102,7 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
           fontFamily="'EB Garamond', serif"
           letterSpacing="0.08em"
           mb={2}
-          textShadow="0 0 12px rgba(255,255,255,0.55), 0 0 26px rgba(255,255,255,0.3), 0 0 50px rgba(180,255,245,0.22)"
+          textShadow="0 0 12px rgba(255,255,255,0.39), 0 0 26px rgba(255,255,255,0.21), 0 0 50px rgba(180,255,245,0.15)"
         >
           {t("suscribir.titulo")}
         </Text>
@@ -185,12 +185,12 @@ export function SubscribeBox({ esperaInicial = 0 }: { esperaInicial?: number } =
               textTransform="uppercase"
               cursor={status === "loading" ? "not-allowed" : "pointer"}
               opacity={status === "loading" ? 0.6 : 1}
-              boxShadow="0 0 14px rgba(255,255,255,0.28), 0 0 30px rgba(255,255,255,0.15)"
-              textShadow="0 0 10px rgba(255,255,255,0.5), 0 0 22px rgba(255,255,255,0.28)"
+              boxShadow="0 0 14px rgba(255,255,255,0.20), 0 0 30px rgba(255,255,255,0.10)"
+              textShadow="0 0 10px rgba(255,255,255,0.35), 0 0 22px rgba(255,255,255,0.20)"
               _hover={status === "loading" ? {} : {
                 bg: "rgba(255,255,255,0.22)",
                 borderColor: "white",
-                boxShadow: "0 0 22px rgba(255,255,255,0.45), 0 0 44px rgba(180,255,245,0.25)",
+                boxShadow: "0 0 22px rgba(255,255,255,0.32), 0 0 44px rgba(180,255,245,0.17)",
               }}
               transition="all 0.2s"
               whiteSpace="nowrap"

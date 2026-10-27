@@ -49,7 +49,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 1. ASTROLOGÍA
   // ───────────────────────────────────────────────────────────
   astrologia: {
-    desc: "Tu carta natal como punto de partida. Entiéndete sin juzgarte antes de intentar cambiarte.",
+    desc: "Dar otro significado a las tendencias personales.",
     videoIntro: {
       titulo: "Conoce las características de cada área de tu vida y cómo se relacionan.",
       puntos: [
@@ -87,7 +87,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 2. PSICOLOGÍA (neuropsicología)
   // ───────────────────────────────────────────────────────────
   psicologia: {
-    desc: "Tu carta dice cómo estás configurado. Tu historia cómo y por qué. Aquí los unimos.",
+    desc: "Comprender la propia historia y cómo el pasado influye en el presente.",
     videoIntro: {
       titulo: "Comprende cómo tu historia ha dado forma a la persona que eres hoy.",
       puntos: [
@@ -124,7 +124,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 3. HINDUISMO (ayurveda)
   // ───────────────────────────────────────────────────────────
   ayurveda: {
-    desc: "No todos necesitamos lo mismo. Descubre tu constitución única y aprende a cuidar tu cuerpo y tu mente de acuerdo con tu naturaleza.",
+    desc: "Explorar una visión integral de la constitución personal.",
     videoIntro: {
       titulo: "Descubre tu constitución y aprende a cuidarte según tu naturaleza.",
       puntos: [
@@ -161,7 +161,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 4. MEDICINA CHINA (tcm)
   // ───────────────────────────────────────────────────────────
   tcm: {
-    desc: "Los órganos están interconectados. Todo desequilibrio deja huellas. Tu cuerpo habla antes de enfermar. Aprende su lenguaje.",
+    desc: "Explorar una visión integral del equilibrio y el bienestar.",
     videoIntro: {
       titulo: "Aprende el lenguaje de tu cuerpo.",
       puntos: [
@@ -198,7 +198,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 5. FISIOLOGÍA
   // ───────────────────────────────────────────────────────────
   fisiologia: {
-    desc: "No tenemos un cuerpo. Somos un cuerpo. Entiéndete.",
+    desc: "Comprender el cuerpo para cuidarlo mejor.",
     videoIntro: {
       titulo: "Comprende el complejo sistema celular que te forma.",
       puntos: [
@@ -235,7 +235,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 6. NUTRICIÓN
   // ───────────────────────────────────────────────────────────
   nutricion: {
-    desc: "Entiende cómo los alimentos que eliges cada día te reconstruyen.",
+    desc: "Entender la transformación de los alimentos a nuestro cuerpo.",
     videoIntro: {
       titulo: "Descubre cómo los alimentos que eliges cada día te reconstruyen.",
       puntos: [
@@ -279,7 +279,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 7. CÁBALA
   // ───────────────────────────────────────────────────────────
   cabala: {
-    desc: "Equilibra las dimensiones que viven en tu alma y por extensión en ti. Entiende tus equilibrios y desequilibrios.",
+    desc: "Explorar un sistema tradicional de interpretación.",
     videoIntro: {
       titulo: "Equilibra las dimensiones de tu alma. Resuelve tus conflictos internos.",
       puntos: [
@@ -317,7 +317,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   // 8. CULTURA
   // ───────────────────────────────────────────────────────────
   cultura: {
-    desc: "Has conocido siete maneras de interpretar la realidad. Ahora te toca construir la tuya.",
+    desc: "Descubrir cómo la historia de la humanidad ha dado forma a la realidad actual y la síntesis de los grandes pensadores.",
 
 
 

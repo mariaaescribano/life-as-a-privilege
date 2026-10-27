@@ -87,20 +87,20 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         panelSombra: "none",
         titulo: "white",
         // Suave a propósito: el nombre debe brillar sin deslumbrar.
-        tituloGlow: "0 0 13px rgba(255,255,255,0.32), 0 0 27px rgba(255,255,255,0.17), 0 0 54px rgba(180,255,245,0.14)",
+        tituloGlow: "0 0 13px rgba(255,255,255,0.22), 0 0 27px rgba(255,255,255,0.12), 0 0 54px rgba(180,255,245,0.10)",
         texto: "rgba(255,255,255,0.92)",
-        textoGlow: "0 0 10px rgba(255,255,255,0.28), 0 0 22px rgba(255,255,255,0.14)",
+        textoGlow: "0 0 10px rgba(255,255,255,0.20), 0 0 22px rgba(255,255,255,0.10)",
         lineaBase: "linear(to-r, transparent, rgba(255,255,255,0.6), transparent)",
         lineaMd: "linear(to-r, rgba(255,255,255,0.6), transparent)",
         btnTexto: "rgba(255,255,255,0.85)",
         btnBorde: "rgba(255,255,255,0.35)",
         btnBg: "rgba(255,255,255,0.05)",
-        btnSombra: "0 0 12px rgba(255,255,255,0.2), 0 0 24px rgba(180,255,245,0.16), 0 2px 10px rgba(0,0,0,0.16)",
+        btnSombra: "0 0 12px rgba(255,255,255,0.14), 0 0 24px rgba(180,255,245,0.11), 0 2px 10px rgba(0,0,0,0.16)",
         btnHoverBg: "rgba(255,255,255,0.12)",
         btnHoverBorde: "rgba(255,255,255,0.6)",
         btnHoverTexto: "white",
-        btnHoverSombra: "0 0 16px rgba(255,255,255,0.3), 0 0 32px rgba(180,255,245,0.26), 0 2px 12px rgba(0,0,0,0.18)",
-        fotoSombra: "0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.25), 0 0 54px rgba(180,255,245,0.2)",
+        btnHoverSombra: "0 0 16px rgba(255,255,255,0.21), 0 0 32px rgba(180,255,245,0.18), 0 2px 12px rgba(0,0,0,0.18)",
+        fotoSombra: "0 18px 45px rgba(0,0,0,0.35), 0 0 27px rgba(255,255,255,0.17), 0 0 54px rgba(180,255,245,0.14)",
       };
 
   return (
@@ -191,6 +191,7 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
             textShadow={c.textoGlow}
           >
             {t("creadora.bio")}
+            <Box as="span" display="block" mt={{ base: 3, md: 4 }}>{t("creadora.bio2")}</Box>
           </Text>
 
           {extraParagraph && (

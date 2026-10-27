@@ -12,7 +12,7 @@ export const elMetodo = {
   "elMetodo.subtitulo": "de 'Life as a Privilege'",
   "elMetodo.lema": "Ocho disciplinas. Un orden. Un propósito: entenderte.",
   "elMetodo.intro":
-    "No son ocho cursos independientes.\nEs una exploración guiada de ti mismo a través de ocho perspectivas diferentes para encontrar la raíz de tus patrones y comprenderte.",
+    "No son ocho cursos independientes.\nEs una exploración guiada de ti mismo a través de ocho perspectivas diferentes para comprenderte mejor y explorar nuevas formas de mirarte.",
   "elMetodo.porDentro": "Ocho disciplinas. Una mirada más amplia sobre ti.",
   /** Va justo debajo del título: avisa de que el mandala se puede pinchar. */
   "elMetodo.porDentroPista": "Cada disciplina aporta una perspectiva única. Juntas, te ayudan a comprenderte de forma más completa.",
@@ -56,18 +56,18 @@ export const elMetodo = {
   "elMetodo.como.modal.gracias":
     "He recibido tu mensaje. Me pondré en contacto contigo muy pronto, sin ningún compromiso por tu parte.",
   "elMetodo.como.objetivo":
-    "**El objetivo no es solo que aprendas cosas nuevas sobre ti, sino que puedas aplicarlas a tu vida y tomar decisiones más conscientes.**",
+    "**El objetivo no es acumular conocimientos, sino hacerlos accesibles, comprensibles y relevantes para tu vida cotidiana.**",
 
   // ── Qué obtienes ───────────────────────────────────────────────────────
   "elMetodo.queObtienes": "¿Qué obtienes al acceder a El Mapa?",
   "elMetodo.obtienes.1": "Una lectura personalizada de tu carta astral, realizada por mí.",
   "elMetodo.obtienes.2": "Un recorrido guiado, con un orden coherente y concreto.",
-  "elMetodo.obtienes.3": "Materiales de lectura, ilustraciones y explicaciones paso a paso.",
+  "elMetodo.obtienes.3": "Teoría: materiales de lectura, ilustraciones y explicaciones paso a paso.",
   "elMetodo.obtienes.4": "Ejercicios prácticos para integrar lo aprendido en tu día a día.",
-  "elMetodo.obtienes.5": "Acceso durante 1 año. Los PDF serán tuyos para siempre.",
-  "elMetodo.obtienes.6": "Compra por disciplina. Avanza a tu ritmo, sin suscripciones ni compromisos.",
+  "elMetodo.obtienes.5": "Acceso mientras estés suscrito. Los PDF serán tuyos para siempre.",
+  "elMetodo.obtienes.6": "Suscripción mensual por disciplina (5 €/mes) o a todas (20 €/mes). Cancela cuando quieras.",
   "elMetodo.obtienes.7": "Posibilidad de llamadas para resolver dudas o profundizar en tu proceso.",
-  "elMetodo.obtienes.8": "Acceso a todos los cursos e ilustraciones.",
+  "elMetodo.obtienes.8": "Reels de cada disciplina y acceso a todos los cursos e ilustraciones.",
 
   // ── 1. HERO ────────────────────────────────────────────────────────────
   // Lo primero que lee un desconocido. El titular NO nombra el producto: nombra
@@ -80,12 +80,12 @@ export const elMetodo = {
   "elMetodo.hero.tituloPide": "pregúntate",
   "elMetodo.hero.titulo": "¿Qué te ha pasado?",
   "elMetodo.hero.sub":
-    "Conócete desde la ciencia y la tradición para descubrir cómo de verdad quieres vivir.",
+    "Ocho espejos para descubrir nuevas perspectivas de ti mismo.",
   // Ya no lleva al pago: abre el TEST de «encuentra tu disciplina».
   "elMetodo.hero.cta": "¿Por dónde empiezo?",
   // Bajo el botón, la única letra pequeña del hero: quita el miedo a pulsar
   // (no hay suscripción detrás ni nada que cancelar después).
-  "elMetodo.hero.ctaPie": "Desde 30 € · Sin suscripción · Sin compromiso",
+  "elMetodo.hero.ctaPie": "Desde 5 €/mes por disciplina · Cancela cuando quieras",
   /** El botón de al lado del de empezar. Ya no lleva a la comunidad: lleva a MI
    *  WhatsApp. En la primera pantalla todavía no hay confianza para meterse en
    *  un grupo de desconocidos, pero sí para preguntar una cosa; la comunidad se
@@ -100,12 +100,12 @@ export const elMetodo = {
   // ── 2. EL ESPEJO ───────────────────────────────────────────────────────
   // Cuatro frases para que quien lee se reconozca antes de que le contemos
   // nada. Van de menos a más y la cuarta gira la pregunta entera.
-  "elMetodo.espejo.1": "Sabes que te pasa algo, pero no por qué te pasa.",
-  "elMetodo.espejo.2": "Te dicen que deberías de alegrarte, de relajarte y ser feliz.",
-  "elMetodo.espejo.3": "Por eso, has intentado salir, distraerte, pasarlo bien, reír…pero al día siguiente, vuelves al mismo sitio.",
+  "elMetodo.espejo.1": "A veces lo que consideras un defecto, una limitación o un problema…",
+  "elMetodo.espejo.2": "…cambia de significado cuando lo miras desde otro marco de conocimiento.",
+  "elMetodo.espejo.3": "No existe una única manera de mirarte.",
   "elMetodo.espejo.4": "La pregunta no es qué te pasa, sino qué te ha pasado.",
   "elMetodo.espejo.cierre":
-    "El Mapa no te da otra técnica más.\nTe acompaña a **descubrir tu mente, tu historia, tus heridas y tu cuerpo**.",
+    "Life as a Privilege no te dice quién eres, qué debes cambiar ni cómo debes vivir.\nTe ofrece herramientas para que lo **descubras tú mismo**.",
 
   // Debajo del mandala que va justo antes del cómic del origen: quien está en el
   // centro de las ocho disciplinas.
@@ -118,15 +118,15 @@ export const elMetodo = {
   // Dos frases sueltas, una debajo de otra y las dos centradas: la primera dice
   // lo que NO es y la segunda lo que sí. Separadas de verdad (no con un \n
   // dentro de la misma línea) para que ninguna herede la sangría de la otra.
-  "elMetodo.mecanismo.clave":"**No estudias la disciplina, te estudias a ti con ella.**",
-  "elMetodo.mecanismo.clave2": "",
+  "elMetodo.mecanismo.clave":"**La metodología más eficaz para el desarrollo personal.**",
+  "elMetodo.mecanismo.clave2": "No estudias la disciplina, te estudias a ti con ella.",
 
   // Aquí vivía el bloque 4, «Al terminar no tienes apuntes. Tienes esto.»: una
   // tarjeta por disciplina con lo que se lleva puesto de cada una. Retirado.
 
   // ── 7. LA PRUEBA (los ocho vídeos) ─────────────────────────────────────
   // Justo antes del precio: hasta ahí la página promete, y aquí se enseña.
-  "elMetodo.pruebas.titulo": "Entiende por qué haces lo que haces. Deja de luchar contra ti y aprende a cuidarte.",
+  "elMetodo.pruebas.titulo": "Entiende por qué haces lo que haces. Comprenderte no significa justificarte.",
   "elMetodo.pruebas.sub":
     "Explora los diferentes recorridos de El Mapa. Cada uno te ofrece conocimientos y recursos para conocerte mejor.",
 
@@ -135,18 +135,18 @@ export const elMetodo = {
   "elMetodo.precio.una.nombre": "Una disciplina",
   /** La línea de tres golpes bajo el precio. {precio} lo pone
    *  pagoDisciplinaLink: la cifra NUNCA se escribe a mano aquí. */
-  "elMetodo.precio.una.destacado": "{precio} · Una disciplina completa · Sin suscripción",
+  "elMetodo.precio.una.destacado": "{precio} · Una disciplina completa · Cancela cuando quieras",
   "elMetodo.precio.una.desc":
-    "El recorrido entero de esa disciplina, con sus ilustraciones, sus ejercicios y lo que te llevas de ella.",
+    "Tu espacio de esa disciplina: Teoría, Ejercicios y Reels, con su recorrido entero y sus ilustraciones.",
   // No se llama «El Mapa entero»: no es un pack que se pague de golpe, son las
   // ocho compradas una a una. El nombre y la cuenta escrita lo dejan claro.
   "elMetodo.precio.mapa.nombre": "Las ocho disciplinas",
-  "elMetodo.precio.mapa.destacado": "{num} disciplinas · {precio} cada una · {total} en total",
-  "elMetodo.precio.mapa.desc": "No hay pago único. Las compras cuando quieras.",
+  "elMetodo.precio.mapa.destacado": "{num} disciplinas · {total} · Cancela cuando quieras",
+  "elMetodo.precio.mapa.desc": "Todas las disciplinas con una sola suscripción.",
   // El bloque de CIERRE de la página (las dos tarjetas gemelas del final).
   "elMetodo.precio.cierre.titulo": "Empieza cuando quieras",
-  "elMetodo.precio.cierre1.nombre": "Disciplina individual",
-  "elMetodo.precio.cierre1.importe": "30 €",
+  "elMetodo.precio.cierre1.nombre": "Suscripción por disciplina",
+  "elMetodo.precio.cierre1.importe": "5 €/mes",
   "elMetodo.precio.cierre1.desc": "Acceso completo a una disciplina.",
   "elMetodo.precio.cierre2.nombre": "Sesión individual",
   "elMetodo.precio.cierre2.importe": "15 € / hora",
@@ -186,7 +186,7 @@ export const elMetodo = {
     "Ninguna. Todo empieza desde cero y está ilustrado. Si algo necesita un concepto previo, ese concepto se explica antes.",
   "elMetodo.faq.4.p": "¿Es una suscripción?",
   "elMetodo.faq.4.r":
-    "No. Se paga una vez por disciplina y ya está. No hay cuota mensual ni renovación automática, y crear la cuenta no cuesta nada ni pide tarjeta.",
+    "Sí, mensual y por disciplina: 5 € al mes cada una, o 20 € al mes por las ocho. Sin permanencia: la cancelas cuando quieras. Quien ya pagó los 30 € de una disciplina la conserva. Crear la cuenta no cuesta nada ni pide tarjeta.",
   "elMetodo.faq.5.p": "¿Puedo hacer solo una disciplina?",
   "elMetodo.faq.5.r":
     "Sí. Cada una es un recorrido completo en sí mismo. El Mapa entero da la imagen completa, pero se puede recorrer una sola y sacarle todo el partido.",
@@ -219,7 +219,7 @@ export const elMetodo = {
   "elMetodo.dudas.placeholder": "Escribe aquí tu consulta...",
 
   // ── Botones flotantes + llamada gratuita (popup) ───────────────────────
-  // El popup sale solo: a los 20 s de entrar y, al cerrarse, otra vez a los 70 s.
+  // El popup sale solo: una única vez, a los 30 s de entrar.
   /** El botón flotante del test de «¿por qué disciplina empiezo?». */
   "elMetodo.test.boton": "¿Por dónde empiezo?",
 

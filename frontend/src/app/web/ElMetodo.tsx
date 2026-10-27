@@ -526,10 +526,9 @@ export default function ElMetodo() {
   const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
   const [dudasOpen, setDudasOpen] = useState(false);
   const [bookCallOpen, setBookCallOpen] = useState(false);
-  // Popup de la llamada gratuita: sale solo, a los 20 s de entrar; y cada vez
-  // que se cierra vuelve a salir a los 70 s, mientras la persona siga aquí.
+  // Popup de la llamada gratuita: sale solo, una única vez, a los 30 s.
   const [llamadaOpen, setLlamadaOpen] = useState(false);
-  // ¿Ya salió alguna vez? Decide si la próxima espera es la de 20 s o la de 70 s.
+  // ¿Ya salió? Si sí, no se vuelve a armar.
   const llamadaYaSalio = useRef(false);
   // El test de «encuentra tu disciplina»: lo abren el botón grande del hero y
   // el botón flotante. No guarda nada en ningún sitio.
@@ -588,17 +587,16 @@ export default function ElMetodo() {
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
   }, [listo]);
 
-  // ── El popup de la llamada: a los 20 s, y luego cada 70 s ──
+  // ── El popup de la llamada: UNA sola vez, a los 30 s ──
   // La cuenta arranca cuando la página ya se VE (`listo`), no cuando se monta:
   // si empezara antes, se comería parte de la espera con la pantalla de carga.
-  // La primera vez espera 20 s (que dé tiempo a leer la primera pantalla); al
-  // cerrarse, este efecto se rearma y vuelve a abrirlo a los 70 s, las veces
-  // que haga falta mientras la persona siga en la página. No se relanza con el
-  // calendario de reserva abierto, ni con el test: caería encima de quien ya
-  // está reservando o contestando.
+  // Espera 30 s (que dé tiempo a leer) y sale una única vez por visita: al
+  // cerrarlo no vuelve. Si en la espera se abre el calendario de reserva o el
+  // test, la cuenta se cancela y se rearma al cerrarlos: no caería encima de
+  // quien ya está reservando o contestando.
   useEffect(() => {
-    if (!listo || llamadaOpen || bookCallOpen || testOpen) return;
-    const espera = llamadaYaSalio.current ? 70000 : 20000;
+    if (!listo || llamadaYaSalio.current || llamadaOpen || bookCallOpen || testOpen) return;
+    const espera = 30000;
     const id = setTimeout(() => {
       llamadaYaSalio.current = true;
       setLlamadaOpen(true);
@@ -1795,7 +1793,7 @@ export default function ElMetodo() {
       {/* ══ 13. BOTONES FLOTANTES + POPUP DE LA LLAMADA ══
           Abajo a la derecha van Mensaje (WhatsApp) y el Test de «¿por dónde
           empiezo?». El popup de la llamada ya no cuelga de ningún botón: sale
-          solo (a los 20 s, y luego cada 70 s).
+          solo (una única vez, a los 30 s).
           Van FUERA del <Box> que lleva el zoom de la página: un `position:fixed`
           dentro de un elemento con `zoom` no se ancla a la ventana sino a él, y
           se quedarían flotando a media página.

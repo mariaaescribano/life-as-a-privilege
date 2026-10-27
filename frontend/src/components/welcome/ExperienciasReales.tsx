@@ -34,7 +34,7 @@ const ArrowButton: React.FC<{ dir: "left" | "right"; onClick: () => void }> = ({
     border="1px solid rgba(255,255,255,0.4)"
     bg="rgba(255,255,255,0.08)"
     cursor="pointer"
-    boxShadow="0 0 10px rgba(255,255,255,0.12)"
+    boxShadow="0 0 10px rgba(255,255,255,0.08)"
     _hover={{ bg: "rgba(255,255,255,0.18)", borderColor: "rgba(255,255,255,0.7)" }}
     transition="all 0.2s ease"
   >
@@ -88,7 +88,7 @@ const ExperienciasReales: React.FC = () => {
           gap={3}
           mb={{ base: 8, md: 10 }}
         >
-          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "28px", md: "36px" }} h={{ base: "28px", md: "36px" }} fill="white" flexShrink={0} style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.55)) drop-shadow(0 0 18px rgba(255,255,255,0.3))" }}>
+          <Box as="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" w={{ base: "28px", md: "36px" }} h={{ base: "28px", md: "36px" }} fill="white" flexShrink={0} style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.39)) drop-shadow(0 0 18px rgba(255,255,255,0.21))" }}>
             <path d="M240-400h122l200-200q9-9 13.5-20.5T580-643q0-11-5-21.5T562-684l-36-38q-9-9-20-13.5t-23-4.5q-11 0-22.5 4.5T440-722L240-522v122Zm280-243-37-37 37 37ZM300-460v-38l101-101 20 18 18 20-101 101h-38Zm121-121 18 20-38-38 20 18Zm26 181h273v-80H527l-80 80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/>
           </Box>
           <Text
@@ -96,7 +96,7 @@ const ExperienciasReales: React.FC = () => {
             fontSize={{ base: "3xl", md: "4xl" }}
             fontWeight="700"
             letterSpacing="0.04em"
-            textShadow="0 0 12px rgba(255,255,255,0.6), 0 0 28px rgba(255,255,255,0.39), 0 0 50px rgba(180,255,245,0.32)"
+            textShadow="0 0 12px rgba(255,255,255,0.42), 0 0 28px rgba(255,255,255,0.27), 0 0 50px rgba(180,255,245,0.22)"
             fontFamily="'EB Garamond', serif"
           >
             {t("experiencias.titulo")}
@@ -127,7 +127,7 @@ const ExperienciasReales: React.FC = () => {
               border="1px solid rgba(255,255,255,0.4)"
               sx={{ backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)" }}
               borderRadius="2xl"
-              boxShadow="0 0 10px rgba(255,255,255,0.08), 0 6px 24px rgba(107,196,200,0.4)"
+              boxShadow="0 0 10px rgba(255,255,255,0.06), 0 6px 24px rgba(107,196,200,0.4)"
               px={{ base: 6, md: 10 }}
               py={{ base: 8, md: 10 }}
               minH={{ base: "220px", md: "240px" }}
@@ -206,7 +206,7 @@ const ExperienciasReales: React.FC = () => {
           letterSpacing="0.02em"
           lineHeight="1.6"
           maxW="640px"
-          textShadow="0 0 10px rgba(255,255,255,0.3)"
+          textShadow="0 0 10px rgba(255,255,255,0.21)"
         >
           {t("experiencias.cierre")}
         </Text>

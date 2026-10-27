@@ -194,7 +194,7 @@ const Home = () => {
   const [imagesReady, setImagesReady] = useState(imagesReadyCache);
 
   const continuarAstrologia = async () => {
-    navigate("/metodo/astrologia");
+    navigate("/disciplina/astrologia");
   };
 
   const irAstrologia = async () => {
@@ -254,7 +254,7 @@ const Home = () => {
   // Psicología (2ª disciplina): clic en su círculo del mandala.
   const irPsicologia = () => {
     if (psicologiaSuscrito) {
-      navigate("/metodo/psicologia");
+      navigate("/disciplina/psicologia");
     } else {
       setPagoPsicoError(null);
       setPagoPsicoOpen(true);
@@ -279,7 +279,7 @@ const Home = () => {
   // Ayurveda (3ª disciplina): clic en su círculo del mandala.
   const irAyurveda = () => {
     if (ayurvedaSuscrito) {
-      navigate("/metodo/ayurveda");
+      navigate("/disciplina/ayurveda");
     } else {
       setPagoAyurError(null);
       setPagoAyurOpen(true);
@@ -304,7 +304,7 @@ const Home = () => {
   // Medicina China (4ª disciplina): clic en su círculo del mandala.
   const irTcm = () => {
     if (tcmSuscrito) {
-      navigate("/metodo/tcm");
+      navigate("/disciplina/medicinachina");
     } else {
       setPagoTcmError(null);
       setPagoTcmOpen(true);
@@ -329,7 +329,7 @@ const Home = () => {
   // Fisiología (5ª disciplina): clic en su círculo del mandala.
   const irFisiologia = () => {
     if (fisiologiaSuscrito) {
-      navigate("/metodo/fisiologia");
+      navigate("/disciplina/fisiologia");
     } else {
       setPagoFisioError(null);
       setPagoFisioOpen(true);
@@ -354,7 +354,7 @@ const Home = () => {
   // Nutrición (6ª disciplina): clic en su círculo del mandala.
   const irNutricion = () => {
     if (nutricionSuscrito) {
-      navigate("/metodo/nutricion");
+      navigate("/disciplina/nutricion");
     } else {
       setPagoNutriError(null);
       setPagoNutriOpen(true);
@@ -379,7 +379,7 @@ const Home = () => {
   // Cábala (7ª disciplina): clic en su círculo del mandala.
   const irCabala = () => {
     if (cabalaSuscrito) {
-      navigate("/metodo/cabala");
+      navigate("/disciplina/cabala");
     } else {
       setPagoCabalaError(null);
       setPagoCabalaOpen(true);
@@ -404,7 +404,7 @@ const Home = () => {
   // Cultura (8ª disciplina): clic en su círculo del mandala.
   const irCultura = () => {
     if (culturaSuscrito) {
-      navigate("/metodo/cultura");
+      navigate("/disciplina/cultura");
     } else {
       setPagoCulturaError(null);
       setPagoCulturaOpen(true);

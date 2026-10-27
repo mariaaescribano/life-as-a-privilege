@@ -14,7 +14,7 @@ export const disciplinas = {
   "disciplina.ayurveda": "Ayurveda",
   "disciplina.medicinaChina": "Tradición China",
   /** Versión corta para móvil, donde «Tradición China» no cabe en la tarjeta. */
-  "disciplina.medicinaChina.corto": "Trad. China",
+  "disciplina.medicinaChina.corto": "Tradición China",
   "disciplina.fisiologia": "Cuerpo Humano",
   "disciplina.nutricion": "Alimentación",
   "disciplina.cultura": "Cultura",

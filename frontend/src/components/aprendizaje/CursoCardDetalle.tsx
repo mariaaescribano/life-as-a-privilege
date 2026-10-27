@@ -11,7 +11,6 @@ import {
   ModalCloseButton,
   Divider,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import type { Curso } from "../../hardCoded/cursos";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 import { recordarOrigenCurso } from "../global/VolverAlMapa";
@@ -42,7 +41,6 @@ export function CursoCardDetalle({
    *  (`loading="lazy"`) en vez de bajar con las demás. */
   prioritaria?: boolean;
 }) {
-  const navigate = useNavigate();
   const t = useT();
   const { idioma } = useIdioma();
   const [leccionesOpen, setLeccionesOpen] = useState(false);
@@ -59,8 +57,10 @@ export function CursoCardDetalle({
     if (curso.precio === null) {
       // Si entramos desde el Mapa (/metodo/...), recordamos el origen para el
       // botón flotante «Volver al Mapa».
+      // El curso se abre en una pestaña nueva. Sin `noopener` a propósito: así
+      // la pestaña hereda el sessionStorage y conserva ese origen.
       recordarOrigenCurso();
-      navigate(curso.cursoLink);
+      window.open(curso.cursoLink, "_blank");
     } else window.open(STRIPE_PAYMENT_LINK, "_blank");
   };
   // El precio se muestra con la convención de cada idioma: «19,90 €» en español,

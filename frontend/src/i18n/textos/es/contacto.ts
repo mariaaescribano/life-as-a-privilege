@@ -6,6 +6,8 @@ export const contacto = {
   "contacto.formSubtitulo": "Escribe lo que quieras y te respondo al correo que me dejes.",
 
   // ── Las vías (tarjetas de arriba) ────────────────────────────────────
+  // Botón flotante «Contáctame» (su popup es el de «Hablemos juntos», elMetodo.llamada.*)
+  "contactame.boton": "Contáctame",
   "contacto.via.llamada": "Una llamada",
   "contacto.via.llamadaTexto": "Cuéntame qué tienes en mente y lo vemos juntos.",
   "contacto.via.conocernos": "Conozcámonos",

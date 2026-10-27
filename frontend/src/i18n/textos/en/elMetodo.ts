@@ -13,7 +13,7 @@ export const elMetodo = {
   "elMetodo.subtitulo": "by 'Life as a Privilege'",
   "elMetodo.lema": "Eight disciplines. One order. One purpose: to understand yourself.",
   "elMetodo.intro":
-    "These aren't eight independent courses.\nIt's a guided exploration of yourself through eight different perspectives, to find the root of your patterns and understand yourself.",
+    "These aren't eight independent courses.\nIt's a guided exploration of yourself through eight different perspectives, to understand yourself better and explore new ways of seeing yourself.",
   "elMetodo.porDentro": "Understand yourself, so you can stop hurting yourself without knowing why and learn to take care of yourself the way you deserve",
   /** Right under the title: tells you the mandala is clickable. */
   "elMetodo.porDentroPista": "Click each circle to discover it",
@@ -57,18 +57,18 @@ export const elMetodo = {
   "elMetodo.como.modal.gracias":
     "I've received your message. I'll be in touch very soon, with no commitment on your part.",
   "elMetodo.como.objetivo":
-    "**The goal isn't only for you to learn new things about yourself, but for you to be able to apply them to your life and make more conscious decisions.**",
+    "**The goal isn't to accumulate knowledge, but to make it accessible, understandable and relevant to your everyday life.**",
 
   // ── What you get ───────────────────────────────────────────────────────
   "elMetodo.queObtienes": "What do you get when you access The Map?",
   "elMetodo.obtienes.1": "A personalized reading of your birth chart, done by me.",
   "elMetodo.obtienes.2": "A guided journey, with a coherent, concrete order.",
-  "elMetodo.obtienes.3": "Reading materials, illustrations and step-by-step explanations.",
+  "elMetodo.obtienes.3": "Theory: reading materials, illustrations and step-by-step explanations.",
   "elMetodo.obtienes.4": "Practical exercises to integrate what you learn into your everyday life.",
-  "elMetodo.obtienes.5": "Access for 1 year. The PDFs will be yours forever.",
-  "elMetodo.obtienes.6": "Buy by discipline. Move at your own pace, with no subscriptions and no commitments.",
+  "elMetodo.obtienes.5": "Access while you are subscribed. The PDFs will be yours forever.",
+  "elMetodo.obtienes.6": "Monthly subscription per discipline (€5/month) or to all of them (€20/month). Cancel whenever you want.",
   "elMetodo.obtienes.7": "The option of calls to clear up questions or go deeper into your process.",
-  "elMetodo.obtienes.8": "Access to all the courses and illustrations.",
+  "elMetodo.obtienes.8": "Reels for each discipline and access to all the courses and illustrations.",
 
   // ── 1. Hero ────────────────────────────────────────────────────────────
   // The first thing a stranger reads. The headline does NOT name the product:
@@ -81,12 +81,12 @@ export const elMetodo = {
   "elMetodo.hero.tituloPide": "ask yourself",
   "elMetodo.hero.titulo": "What happened to you?",
   "elMetodo.hero.sub":
-    "Science and tradition to understand your mind, your history and your body.",
+    "Eight mirrors to discover new perspectives on yourself.",
   // No longer goes to checkout: it opens the «find your discipline» TEST.
   "elMetodo.hero.cta": "Initial test",
   // Under the button, the hero's only fine print: takes the fear out of
   // clicking (no subscription behind it, nothing to cancel later).
-  "elMetodo.hero.ctaPie": "From €30 · No subscription · No commitment",
+  "elMetodo.hero.ctaPie": "From €5/month per discipline · Cancel whenever you want",
   /** The button next to the start one. It no longer goes to the community: it
    *  goes to MY WhatsApp. On the first screen there's not enough trust yet to
    *  join a group of strangers, but there is enough to ask one thing; the
@@ -101,12 +101,12 @@ export const elMetodo = {
   // ── 2. The mirror ──────────────────────────────────────────────────────
   // Four lines so the reader recognizes themselves before we explain anything.
   // They build up, and the fourth turns the whole question around.
-  "elMetodo.espejo.1": "You know something's going on with you, but not why.",
-  "elMetodo.espejo.2": "People tell you you should cheer up, relax and be happy.",
-  "elMetodo.espejo.3": "So you've tried going out, distracting yourself, having fun, laughing… but the next day, you're back in the same place.",
+  "elMetodo.espejo.1": "Sometimes what you consider a flaw, a limitation or a problem…",
+  "elMetodo.espejo.2": "…takes on a different meaning when you look at it from another framework of knowledge.",
+  "elMetodo.espejo.3": "There is no single way of looking at yourself.",
   "elMetodo.espejo.4": "The question isn't what's wrong with you, but what happened to you.",
   "elMetodo.espejo.cierre":
-    "The Map doesn't give you one more technique.\nIt walks with you to **discover your mind, your history, your wounds and your body**.",
+    "Life as a Privilege doesn't tell you who you are, what you should change or how you should live.\nIt gives you tools so you can **discover it for yourself**.",
 
   // Under the mandala that comes right before the origin comic: the one at the
   // center of the eight disciplines.
@@ -116,12 +116,12 @@ export const elMetodo = {
   // Two standalone lines, one under the other, both centered: the first says
   // what this is NOT and the second what it is. Separate keys (not one \n) so
   // neither inherits the other's indent.
-  "elMetodo.mecanismo.clave": "**You don't study the discipline — you study yourself with it.**",
-  "elMetodo.mecanismo.clave2": "",
+  "elMetodo.mecanismo.clave": "**The most effective methodology for personal development.**",
+  "elMetodo.mecanismo.clave2": "You don't study the discipline — you study yourself with it.",
 
   // ── 7. The proof (the eight videos) ────────────────────────────────────
   // Right before the price: up to here the page promises, here it shows.
-  "elMetodo.pruebas.titulo": "Understand why you do what you do. Stop fighting yourself and learn to take care of yourself",
+  "elMetodo.pruebas.titulo": "Understand why you do what you do. Understanding yourself doesn't mean justifying yourself.",
   "elMetodo.pruebas.sub":
     "The eight disciplines from the inside, just as you'll see them. Tap any one to watch it.",
 
@@ -130,18 +130,18 @@ export const elMetodo = {
   "elMetodo.precio.una.nombre": "One discipline",
   /** The three-beat line under the price. {precio} comes from
    *  pagoDisciplinaLink: the figure is NEVER written by hand here. */
-  "elMetodo.precio.una.destacado": "{precio} · One complete discipline · No subscription",
+  "elMetodo.precio.una.destacado": "{precio} · One complete discipline · Cancel whenever you want",
   "elMetodo.precio.una.desc":
-    "The entire journey of that discipline, with its illustrations, its exercises and what you take away from it.",
+    "Your space for that discipline: Theory, Exercises and Reels, with its entire journey and its illustrations.",
   // Not called «The whole Map»: it's not a pack paid in one go, it's the eight
   // bought one by one. The name and the written math make that clear.
   "elMetodo.precio.mapa.nombre": "All eight disciplines",
-  "elMetodo.precio.mapa.destacado": "{num} disciplines · {precio} each · {total} in total",
-  "elMetodo.precio.mapa.desc": "There's no single payment. You buy them whenever you want.",
+  "elMetodo.precio.mapa.destacado": "{num} disciplines · {total} · Cancel whenever you want",
+  "elMetodo.precio.mapa.desc": "All the disciplines with a single subscription.",
   // The page's CLOSING block (the two twin cards at the end).
   "elMetodo.precio.cierre.titulo": "Start whenever you want",
-  "elMetodo.precio.cierre1.nombre": "Single discipline",
-  "elMetodo.precio.cierre1.importe": "€30",
+  "elMetodo.precio.cierre1.nombre": "Subscription per discipline",
+  "elMetodo.precio.cierre1.importe": "€5/month",
   "elMetodo.precio.cierre1.desc": "Full access to one discipline.",
   "elMetodo.precio.cierre2.nombre": "One-on-one session",
   "elMetodo.precio.cierre2.importe": "€15 / hour",
@@ -179,7 +179,7 @@ export const elMetodo = {
     "None. Everything starts from zero and is illustrated. If something needs a prior concept, that concept gets explained first.",
   "elMetodo.faq.4.p": "Is it a subscription?",
   "elMetodo.faq.4.r":
-    "No. You pay once per discipline and that's it. There's no monthly fee and no auto-renewal, and creating your account costs nothing and doesn't ask for a card.",
+    "Yes, monthly and per discipline: €5 a month each, or €20 a month for all eight. No lock-in: cancel whenever you want. Anyone who already paid the €30 for a discipline keeps it. Creating your account costs nothing and doesn't ask for a card.",
   "elMetodo.faq.5.p": "Can I do just one discipline?",
   "elMetodo.faq.5.r":
     "Yes. Each one is a complete journey in itself. The whole Map gives you the full picture, but you can walk just one and get everything out of it.",
@@ -212,7 +212,7 @@ export const elMetodo = {
   "elMetodo.dudas.placeholder": "Write your question here...",
 
   // ── Floating buttons + free call popup ─────────────────────────────────
-  // The popup opens on its own: 20 s after landing and, once closed, again at 70 s.
+  // The popup opens on its own: once only, 30 s after landing.
   /** The floating button for the «which discipline do I start with?» test. */
   "elMetodo.test.boton": "Initial test",
 

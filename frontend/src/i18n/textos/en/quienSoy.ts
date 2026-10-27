@@ -18,7 +18,12 @@ export const quienSoy = {
 
   // ── Certificates ───────────────────────────────────────────────────────
   "quienSoy.certificados": "My Certificates",
-  "quienSoy.certif.especializaciones": "Specializations",
+  "quienSoy.certif.acompanar": "To accompany you",
+  "quienSoy.certif.mente": "To understand your mind",
+  "quienSoy.certif.cuerpo": "To understand your body",
+  "quienSoy.certif.comes": "To understand nutrition",
+  "quienSoy.certif.salud": "To understand the traditions",
+  "quienSoy.certif.venimos": "To understand where we come from",
 
   "quienSoy.cierre": "This is only the beginning…",
 };

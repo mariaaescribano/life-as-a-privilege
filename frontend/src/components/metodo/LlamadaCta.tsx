@@ -14,9 +14,9 @@ import { Reveal } from "../global/Reveal";
  *   · Dos botones flotantes abajo a la derecha que acompañan siempre (también
  *     en móvil, donde SUSTITUYEN a la vieja barra fija de «Empezar / desde
  *     30 €»): Mensaje (WhatsApp) y el Test de «¿por dónde empiezo?».
- *   · Un popup de la llamada gratuita que se abre solo: a los 20 segundos de
- *     entrar y, cada vez que se cierra, otra vez a los 70 segundos, mientras
- *     la persona siga en la página (el temporizador vive en ElMetodo.tsx).
+ *   · Un popup de la llamada gratuita que se abre solo, una única vez, a los
+ *     30 segundos de entrar; al cerrarlo no vuelve a salir (el temporizador
+ *     vive en ElMetodo.tsx).
  * ───────────────────────────────────────────────────────────────────────────── */
 
 /** El mármol con el mandala grabado: fondo del popup. */
@@ -289,7 +289,7 @@ export function PopupLlamada({ isOpen, onClose, onAgendar }: PopupLlamadaProps) 
   // La tarjeta NO se pinta hasta que el mármol esté cargado: si no, se abre un
   // recuadro vacío con el filo dorado y la foto entra después de golpe, que es
   // justo lo que se ve feo. El hook arranca al montar el componente (no al
-  // abrirlo), así que para cuando el popup salta —a los 20 s de entrar— la foto
+  // abrirlo), así que para cuando el popup salta —a los 30 s de entrar— la foto
   // lleva rato lista y no se espera nada. Nunca se queda colgado: si la imagen
   // falla, cuenta igual como cargada y la tarjeta sale con su color de fondo.
   const fondoListo = usePrecargarImagenes([FONDO]);

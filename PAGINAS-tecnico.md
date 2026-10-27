@@ -261,7 +261,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Página de presentación del recorrido de las 8 disciplinas: portada con dos botones (test «¿por dónde empiezo?» y escribir por WhatsApp), mandala con las disciplinas y vídeo, qué obtienes, qué recibirás, 8 cajas de detalle, precio, la creadora y botón de empezar. Textos desde `useRecorridoContenido()`. Hasta que cargan las fotos (y 550 ms mínimo) se ve `LifeLoading`.
 - **Datos:** Ningún endpoint propio. Lee `userId` y `token` de localStorage. `ContactModal` («Tengo dudas») hace `POST /contact`. `BookCallModal` hace `GET /booking/taken` y `POST /booking`. El test (`TestDisciplinaModal`) no guarda nada.
 - **Botones / a dónde lleva:** «Acceder/Empezar» → `/home` con sesión, o `/signIn?next=/home` sin ella. Test → popup `TestDisciplinaModal`, cuyo resultado lleva a `/d/<disciplina>`. WhatsApp → `whatsappUrl(...)`. Cada caja de detalle → popup de la modalidad. «Reservar llamada» → `BookCallModal`. «Tengo dudas» → `ContactModal`. Creadora → `/quienSoy`. Botones flotantes (mensaje + test).
-- **Condiciones y casos raros:** El popup de la llamada gratuita (`PopupLlamada`) sale solo a los 20 s y, tras cerrarlo, cada 70 s mientras siga en la página (no sale si hay otro popup abierto).
+- **Condiciones y casos raros:** El popup de la llamada gratuita (`PopupLlamada`) sale solo, una única vez, a los 30 s de entrar (no vuelve tras cerrarlo; no sale si hay otro popup abierto).
 - **Tests:** pendiente
 
 ---
@@ -302,10 +302,10 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 ## `/disciplina/:disciplina` — Portada de una disciplina (tres puertas)
 - **Componente:** `DisciplinaPortada` en `frontend/src/app/web/DisciplinaPortada.tsx`
 - **Acceso:** pública
-- **Qué hace:** Portada común de cada disciplina con su color, icono y fondo. Tres puertas: Ilustraciones, Cursos y El Recorrido. Se llega pulsando una tarjeta de la portada (`/`).
+- **Qué hace:** Portada común de cada disciplina con su color, icono y fondo. Tres puertas: Reels, El Recorrido y Teoría. Se llega pulsando una tarjeta de la portada (`/`) o el círculo de una disciplina ya desbloqueada en el Mapa (`/home`).
 - **Datos:** Ninguno. Los datos de cada disciplina salen de `frontend/src/data/presentacionDisciplinas.ts` (`presentacionPorKey`).
-- **Botones / a dónde lleva:** Ilustraciones → `/ilustraciones/<key>`. Cursos → `/aprendizaje/cursos/<cursosLink>`. El Recorrido → `/d/<key>`.
-- **Condiciones y casos raros:** Slug desconocido → redirige a `/elMetodo` (replace), sin 404. El slug casa por key, título o nombre normalizados. Al cambiar de disciplina la página se remonta (`key={d.key}`) para repetir las animaciones.
+- **Botones / a dónde lleva:** Reels → apagada («Próximamente»), sin destino. El Recorrido → `/metodo/<disciplina>` (mapa `RECORRIDO_RUTA`; medicinachina → `/metodo/tcm`). Teoría → `/disciplina/<key>/teoria`, que es la misma página con dos puertas: Ilustraciones → `/ilustraciones/<key>` y Cursos → `/aprendizaje/cursos/<cursosLink>`, más «Volver» abajo a la izquierda.
+- **Condiciones y casos raros:** Slug desconocido → redirige a `/elMetodo` (replace), sin 404. El slug casa por key, título o nombre normalizados. Al cambiar de disciplina o de portada a Teoría la página se remonta (`key`) para repetir las animaciones. Sin pagar, El Recorrido lo para la guardia de pago (`GuardiaPagoRecorrido`) y devuelve a `/home?entrar=<scope>`.
 - **Tests:** pendiente
 
 ---

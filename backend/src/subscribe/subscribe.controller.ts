@@ -14,11 +14,12 @@ export class SubscribeController {
   @Post()
   @Throttle(LIMITE_FORMULARIO)
   @HttpCode(HttpStatus.OK)
-  async subscribe(@Body() body: { email: string; origen?: string }) {
+  async subscribe(@Body() body: { email: string; origen?: string; nombre?: string }) {
     if (!body.email) return { success: false };
     await this.subscribeService.addEmail(
       body.email.trim().toLowerCase(),
       body.origen,
+      typeof body.nombre === 'string' ? body.nombre.trim().slice(0, 120) : undefined,
     );
     return { success: true };
   }
