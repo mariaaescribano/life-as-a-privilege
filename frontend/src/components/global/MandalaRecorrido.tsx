@@ -1155,11 +1155,137 @@ const VideoBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => vo
   );
 };
 
+// ── Variante «resumen» del box (la de Asesorías 1:1) ──────────────────────────
+// Misma caja de la disciplina, pero sin la lista de puntos con ✓: una sola frase
+// resumen (la que ya abre el texto introductorio de la disciplina), debajo su
+// vídeo y, al pie, un «Saber más» que lleva a su presentación. El vídeo es el
+// clip corto y mudo de `VideoMuestraCard` (~100 KB), no el entero; al pulsarlo se
+// abre el largo en su popup.
+const ResumenBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => void }) => {
+  const t = useT();
+  const nombreEnMapa = useNombreDisciplinaEnMapa();
+  const contenido = useRecorridoContenido();
+  const presentacion = presentacionPorKey(disc.nom);
+  const [ahorro] = useState(ahorroActivo);
+  const conFondo = hasDisciplinaBg(disc.nom);
+  const brillo = `0 1px 3px ${disc.bg}, 0 0 10px ${disc.bg}, 0 0 20px ${disc.bg}`;
+
+  return (
+    <Flex
+      direction="column"
+      position="relative"
+      borderRadius="2xl"
+      overflow="hidden"
+      bg={disc.bg}
+      boxShadow={`0 0 26px ${disc.txt}44`}
+    >
+      <DisciplinaBgLayer nom={disc.nom} borderRadius="2xl" />
+
+      <Flex align="center" gap={3} px={{ base: 5, md: 6 }} pt={{ base: 4, md: 5 }} pb={3} position="relative" zIndex={1}>
+        <Box
+          position="relative"
+          w={{ base: "40px", md: "46px" }}
+          h={{ base: "40px", md: "46px" }}
+          borderRadius="full"
+          overflow="hidden"
+          flexShrink={0}
+          bg={conFondo ? "transparent" : disc.bg}
+          border={`2px solid ${disc.txt}`}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {conFondo && <DisciplinaBgLayer nom={disc.nom} borderRadius="full" />}
+          <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
+            {disc.renderIcon("28px")}
+          </Box>
+        </Box>
+        <Text color={disc.txt} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.35" letterSpacing="0.02em" whiteSpace="nowrap" textShadow={brillo}>
+          {nombreEnMapa(disc.nom)}
+        </Text>
+      </Flex>
+
+      <Box mx={{ base: 5, md: 6 }} h="1px" position="relative" zIndex={1} bg={`linear-gradient(to right, transparent, ${disc.txt}bb, transparent)`} />
+
+      <Flex direction="column" position="relative" zIndex={1} px={{ base: 5, md: 7 }} pt={{ base: 5, md: 6 }} pb={{ base: 5, md: 6 }} gap={{ base: 4, md: 5 }}>
+        <Text color={disc.txt} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.35" textShadow={brillo}>
+          {contenido[disc.clave].videoIntro.titulo}
+        </Text>
+
+        {disc.video && (
+          <Box
+            as="button"
+            type="button"
+            onClick={onVerVideo}
+            aria-label={nombreEnMapa(disc.nom)}
+            position="relative"
+            w="100%"
+            borderRadius="xl"
+            overflow="hidden"
+            bg={disc.bg}
+            border={`1px solid ${disc.txt}55`}
+            boxShadow={`0 0 20px ${disc.txt}40`}
+            _focusVisible={focoBlanco}
+            sx={{ aspectRatio: "16 / 10", WebkitTapHighlightColor: "transparent" }}
+          >
+            <Box
+              as="video"
+              src={`/videos/muestra/${disc.clave}.mp4`}
+              position="absolute"
+              inset={0}
+              w="100%"
+              h="100%"
+              objectFit="cover"
+              autoPlay={!ahorro}
+              muted
+              loop
+              playsInline
+              preload={ahorro ? "metadata" : "auto"}
+            />
+          </Box>
+        )}
+
+        {presentacion && (
+          <Flex
+            as="a"
+            href={`/d/${presentacion.key}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            role="group"
+            alignSelf="flex-end"
+            align="center"
+            justify="center"
+            gap={2}
+            px={{ base: 4, md: 5 }}
+            py="6px"
+            borderRadius="full"
+            border={`1px solid ${disc.txt}66`}
+            bg="transparent"
+            color={disc.txt}
+            opacity={0.85}
+            textDecoration="none"
+            sx={{ WebkitTapHighlightColor: "transparent", transition: "all 0.3s ease" }}
+            _hover={{ opacity: 1, borderColor: disc.txt, textDecoration: "none" }}
+            _focusVisible={focoBlanco}
+          >
+            <Text fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.16em" textTransform="uppercase" whiteSpace="nowrap" textShadow={brillo}>
+              {t("elMetodo.saberMas")}
+            </Text>
+            <Box as="span" display="inline-flex" transition="transform 0.3s ease" _groupHover={{ transform: "translateX(4px)" }}>
+              <ArrowRight size={13} />
+            </Box>
+          </Flex>
+        )}
+      </Flex>
+    </Flex>
+  );
+};
+
 // ── Mandala + vídeo en fila ───────────────────────────────────────────────────
 // A la izquierda el mandala interactivo; a la derecha el box de la disciplina
 // seleccionada con su vídeo. Al pulsar un círculo (solo las disciplinas
 // disponibles), el box de la derecha se actualiza.
-export const RecorridoMandalaVideo = () => {
+export const RecorridoMandalaVideo = ({ resumen = false }: { resumen?: boolean } = {}) => {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1024
   );
@@ -1213,9 +1339,10 @@ export const RecorridoMandalaVideo = () => {
         const i = disciplinas.findIndex((d) => d.nom === nom);
         return disciplinas[(i + 1) % disciplinas.length].nom;
       });
-    }, 3000);
+    // En la variante «resumen» (hay una frase y un vídeo que leer) se deja más tiempo.
+    }, resumen ? 8000 : 3000);
     return () => window.clearInterval(id);
-  }, [autoRota, videoModal, mandalaVisto.visible]);
+  }, [autoRota, videoModal, mandalaVisto.visible, resumen]);
 
   useEffect(() => {
     document.body.style.overflow = videoModal ? "hidden" : "";
@@ -1344,7 +1471,9 @@ export const RecorridoMandalaVideo = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             w="100%"
           >
-            <VideoBox disc={selected} onVerVideo={() => setVideoModal(selected)} />
+            {resumen
+              ? <ResumenBox disc={selected} onVerVideo={() => setVideoModal(selected)} />
+              : <VideoBox disc={selected} onVerVideo={() => setVideoModal(selected)} />}
           </MotionBox>
         </AnimatePresence>
       </Box>

@@ -70,6 +70,7 @@ const Premium = () => {
     { texto: t("premium.acceso.videos"), mandala: false },
     { texto: t("premium.acceso.plataforma"), mandala: true },
     { texto: t("premium.acceso.precio"), mandala: false },
+    { texto: t("premium.acceso.aviso"), mandala: false },
   ];
 
   return (
@@ -137,7 +138,7 @@ const Premium = () => {
             </Text>
           </Reveal>
 
-          <Grid templateColumns={{ base: "1fr", md: "1fr 1px 1fr 1px 1fr" }} alignItems="stretch" rowGap={{ base: 8, md: 0 }}>
+          <Grid templateColumns={{ base: "1fr", md: afirmaciones.map(() => "1fr").join(" 1px ") }} alignItems="stretch" rowGap={{ base: 8, md: 0 }}>
             {afirmaciones.map((a, i) => (
               <React.Fragment key={i}>
                 {i > 0 && (
@@ -207,7 +208,7 @@ const Premium = () => {
                   _hover={{ bg: "#006b6b" }}
                   _focusVisible={focoBlanco}
                 >
-                  {t("header.iniciarSesion")}
+                  {t("comun.empezar")}
                 </Box>
               </Reveal>
               <Reveal activo={visible} direction="up" distance={14} duration={0.9} delay={0.7}>

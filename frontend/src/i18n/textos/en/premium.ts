@@ -8,6 +8,7 @@ export const premium = {
   "premium.acceso.videos": "20 new videos every month.",
   "premium.acceso.plataforma": "Exclusive access through the platform.",
   "premium.acceso.precio": "For only €5 a month.",
+  "premium.acceso.aviso": "I'll let you know when there's new content. You won't miss a thing.",
   "premium.cta.titulo": "Start discovering today",
   "premium.cta.pensamiento": "I want to know myself better, by knowing more",
 };

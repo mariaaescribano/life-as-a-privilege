@@ -17,5 +17,7 @@ export const asesoria = {
   "asesoria.titulo": "Asesorías 1:1",
   "asesoria.subtitulo": "Te asesoro en mente, cuerpo y tradición para construir una visión integrada de ti.",
   "asesoria.comoTrabajo": "¿Cómo trabajo?",
+  "asesoria.sistema.titulo": "El sistema paso a paso que seguiremos juntos.",
+  "asesoria.sistema.aviso": "Tendrás acceso a contenido exclusivo teórico y práctico para acompañar tu proceso.",
   "asesoria.formacion": "La formación que tengo para acompañarte",
 } as const;

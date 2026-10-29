@@ -69,6 +69,10 @@ export function LetrasVivas({
   // pantalla (margen -10%), sin espera de reloj.
   const auto = useVistoConEspera("0px 0px -10% 0px", 0);
   const act = activo ?? auto.visible;
+  // El nombre del keyframe lleva la altura: los @keyframes son GLOBALES y, con el
+  // mismo nombre, el último LetrasVivas pintado (p. ej. el de las cajas, altura 5)
+  // pisaba la ola «quieta» de los titulares (altura 0) y los hacía botar.
+  const ondaNombre = `letraOnda${String(altura).replace(/\W/g, "_")}`;
   let n = 0;      // nº de letra en todo el texto (para el rayo)
   let linea = 0;  // nº de salto de línea recorrido
   let local = 0;  // nº de letra dentro de su línea (para el desfase)
@@ -77,7 +81,7 @@ export function LetrasVivas({
       as="span"
       ref={activo === undefined ? auto.ref : undefined}
       sx={{
-        "@keyframes letraOnda": {
+        [`@keyframes ${ondaNombre}`]: {
           "0%, 62%, 100%": { transform: "translateY(0)", filter: "brightness(1)" },
           "31%": {
             transform: `translateY(-${altura}px)`,
@@ -89,7 +93,7 @@ export function LetrasVivas({
           "30%": { filter: "brightness(2.2) drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 24px rgba(255,255,255,0.9))" },
         },
         "& .letra-rayo": { animation: `letraRayo ${periodo}s ease-out 1` },
-        "& .letra-onda": { animation: `letraOnda ${periodo}s ease-in-out ${repetir ? "infinite" : "1"}` },
+        "& .letra-onda": { animation: `${ondaNombre} ${periodo}s ease-in-out ${repetir ? "infinite" : "1"}` },
         "@media (prefers-reduced-motion: reduce)": {
           "& .letra-onda, & .letra-rayo": { animation: "none" },
           "& .letra-entra": { transition: "none !important", opacity: "1 !important", transform: "none !important", filter: "none !important" },

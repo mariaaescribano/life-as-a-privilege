@@ -8,6 +8,8 @@ import BandaMarmol from "../../components/global/BandaMarmol";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
 import FormularioAsesoria from "../../components/web/FormularioAsesoria";
 import MapaDisciplinas from "../../components/web/MapaDisciplinas";
+import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
+import { BloqueDiferido } from "../../components/global/BloqueDiferido";
 import BotonContactame from "../../components/global/BotonContactame";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { useT, type ClaveTexto } from "../../i18n";
@@ -55,8 +57,10 @@ const HALO_CAJA = "0 0 16px rgba(255,255,255,0.14), 0 0 34px rgba(255,255,255,0.
  *  el texto el que desenfoca la foto que tiene detrás (`backdrop-filter`), no la
  *  foto entera. El cristal lleva un blanco muy ligero y ningún velo oscuro.
  *
- *  Dinamismo: las cajas llegan de una en una; luego el cristal se abre desde el
- *  centro y la frase se enciende letra a letra (`LetrasVivas`), sin ola después. */
+ *  Dinamismo: las cajas llegan de una en una con la foto asentándose (zoom lento
+ *  de 1,14 a 1); luego el cristal se abre desde el centro, una pasada de luz lo
+ *  cruza, una rayita fina se dibuja debajo y la frase se enciende letra a letra
+ *  (`LetrasVivas`). Ya quieto, la foto respira muy despacio. */
 const CajaFoto = ({ foto, texto, i }: { foto: string; texto: string; i: number }) => {
   const [on, setOn] = useState(false);
   const [el, setEl] = useState<HTMLDivElement | null>(null);
@@ -96,12 +100,36 @@ const CajaFoto = ({ foto, texto, i }: { foto: string; texto: string; i: number }
         <Image src={foto} alt="" aria-hidden="true" position="absolute" inset={0} w="100%" h="100%" objectFit="cover" />
         <Reveal activo={on} direction="none" scaleFrom={0.88} duration={0.8} position="relative" zIndex={1}>
           <Box
+            position="relative"
+            overflow="hidden"
             borderRadius="xl"
             px={{ base: 5, md: 7 }}
             py={{ base: 5, md: 6 }}
             bg="rgba(255,255,255,0.12)"
+            border="1px solid rgba(255,255,255,0.28)"
             sx={{ backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
           >
+            {/* Una pasada de luz cruza el cristal al abrirse. */}
+            <Box
+              position="absolute"
+              top={0}
+              bottom={0}
+              left={0}
+              w="40%"
+              pointerEvents="none"
+              bgGradient="linear(to-r, #ffffff00, #ffffff55, #ffffff00)"
+              sx={{
+                opacity: 0,
+                transform: "translateX(-130%) skewX(-18deg)",
+                "@keyframes cristalPasa": {
+                  "0%": { transform: "translateX(-130%) skewX(-18deg)", opacity: 0 },
+                  "20%": { opacity: 1 },
+                  "100%": { transform: "translateX(330%) skewX(-18deg)", opacity: 0 },
+                },
+                animation: on ? "cristalPasa 1.6s ease-out 0.3s 1 both" : "none",
+                "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+              }}
+            />
             <Text
               color="white"
               fontFamily="'EB Garamond', serif"
@@ -113,6 +141,20 @@ const CajaFoto = ({ foto, texto, i }: { foto: string; texto: string; i: number }
             >
               <LetrasVivas texto={texto} entrada activo={on} onda={false} pasoEntrada={0.018} />
             </Text>
+            {/* Rayita fina que se dibuja del centro hacia los lados. */}
+            <Box
+              mx="auto"
+              mt={{ base: 4, md: 5 }}
+              h="1px"
+              w={{ base: "64px", md: "92px" }}
+              bgGradient="linear(to-r, #ffffff00, #ffffffcc, #ffffff00)"
+              sx={{
+                transform: on ? undefined : "scaleX(0)",
+                "@keyframes rayitaCaja": { from: { transform: "scaleX(0)" }, to: { transform: "scaleX(1)" } },
+                animation: on ? "rayitaCaja 1.1s cubic-bezier(0.22,1,0.36,1) 1s both" : "none",
+                "@media (prefers-reduced-motion: reduce)": { animation: "none", transform: "none" },
+              }}
+            />
           </Box>
         </Reveal>
       </Box>
@@ -202,6 +244,19 @@ const Asesoria = () => {
               </Box>
             ))}
           </Flex>
+        </Box>
+
+        {/* ── 2b · EL MANDALA CON LAS OCHO DISCIPLINAS, debajo de las cuatro cajas ── */}
+        <SeparadorFlor />
+
+        <Box px={{ base: 5, md: 10, lg: 16 }}>
+          <Box maxW="1200px" mx="auto">
+            <BloqueDiferido minH={{ base: "900px", md: "560px" }}>
+              <Reveal inView amount={0.06} direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
+                <RecorridoMandalaVideo resumen />
+              </Reveal>
+            </BloqueDiferido>
+          </Box>
         </Box>
 
         <SeparadorFlor />
@@ -322,6 +377,35 @@ const Asesoria = () => {
 
         {/* ── 3b · MAPA DE DISCIPLINAS (se despliegan al pulsar). Mientras María no pase
             los textos (mapaDisciplinasData.tsx) no se pinta; `?mapaDemo` lo enseña. ── */}
+        <Box w="100%" maxW="1100px" mx="auto" px={{ base: 5, md: 10, lg: 16 }} mb={{ base: 8, md: 12 }}>
+          <Reveal inView amount={0.5} direction="up" distance={20} duration={0.9}>
+            <Text
+              textAlign="center"
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "2xl", md: "4xl" }}
+              letterSpacing="0.03em"
+              lineHeight="1.25"
+            >
+              {t("asesoria.sistema.titulo")}
+            </Text>
+          </Reveal>
+          <Reveal inView amount={0.5} direction="up" distance={14} duration={0.9} delay={0.35}>
+            <Text
+              textAlign="center"
+              color="rgba(255,255,255,0.9)"
+              fontFamily="'EB Garamond', serif"
+              fontStyle="italic"
+              fontSize={{ base: "lg", md: "2xl" }}
+              lineHeight="1.5"
+              mt={{ base: 3, md: 4 }}
+            >
+              {t("asesoria.sistema.aviso")}
+            </Text>
+          </Reveal>
+        </Box>
+
         <MapaDisciplinas />
 
         <SeparadorFlor />

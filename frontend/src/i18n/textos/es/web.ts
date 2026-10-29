@@ -61,7 +61,7 @@ export const web = {
   // ── Tarjeta de la creadora (CreadoraCard) ──────────────────────────────
   "creadora.accion": "Conocer a María",
   "creadora.bio":
-    "Ingeniera informática. Para facilitarte tu desarrollo personal, conecto conocimientos que suelen estudiarse por separado para descubrir nuevas perspectivas de ti mismo.",
+    "Ingeniera informática. Conecto conocimientos que suelen estudiarse por separado para descubrir nuevas perspectivas de uno mismo.",
   "creadora.bio2":
     "Diseñé un mapa donde la psicología, la biología y los conocimientos tradicionales se combinan en vez de pelearse. Ahora son aliados al servicio de tu crecimiento.",
 
