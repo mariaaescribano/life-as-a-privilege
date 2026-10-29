@@ -326,18 +326,10 @@ export default function ElMetodo() {
           y por eso siguen midiendo lo mismo. */}
       <Box flex="1" sx={{ zoom: ZOOM_PAGINA }}>
       {/* ── MANDALA SEPARADOR ── */}
-      {/* Wrapper con flotación + latido perpetuos; la imagen hace la entrada
-          épica (surge girando desde muy pequeña y se enfoca). */}
+      {/* La imagen hace la entrada épica (surge girando desde muy pequeña y se
+          enfoca) y después se queda QUIETA: ya no flota. */}
       <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Box
-          sx={{
-            "@keyframes mandalaFloat": {
-              "0%, 100%": { transform: "translateY(0) scale(1)" },
-              "50%": { transform: "translateY(-9px) scale(1.03)" },
-            },
-            animation: "mandalaFloat 5.5s ease-in-out infinite",
-          }}
-        >
+        <Box>
           <Image
             src="/img/icono/life.webp"
             alt=""
@@ -381,7 +373,7 @@ export default function ElMetodo() {
           transform={mounted ? "translateY(0)" : "translateY(18px)"}
           transition="opacity 0.9s ease 0.15s, transform 0.9s ease 0.15s"
         >
-          <LetrasVivas texto={t("elMetodo.hero.principal")} entrada activo={mounted} onda={!esMovil} altura={0} repetir={false} />
+          <LetrasVivas texto={t("elMetodo.hero.principal")} entrada sinSubida activo={mounted} onda={!esMovil} altura={0} />
         </Text>
 
         <Text

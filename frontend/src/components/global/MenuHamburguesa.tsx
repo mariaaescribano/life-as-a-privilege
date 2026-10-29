@@ -29,7 +29,7 @@ type Props = {
 /** Alto que ocupa la cabecera. El panel entra POR DEBAJO del header (que se
  *  queda encendido por encima del velo), así que su contenido arranca aquí.
  *  Generoso a propósito: cubre el header normal y el compacto sin medir nada. */
-const HUECO_HEADER = { base: "92px", md: "148px" };
+const HUECO_HEADER = { base: "92px", md: "133px" };
 
 /**
  * Menú de hamburguesa del header — el trigger va a la derecha del todo y el
@@ -170,12 +170,13 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                 direction="column"
                 // 420 y no 380 en escritorio: es lo que hace falta para que
                 // «ESTUDIO ASTROLÓGICO» quepa en una línea con su rayita.
-                w={{ base: "min(86vw, 340px)", md: "420px" }}
+                // En escritorio, al 90%: 378 en lugar de 420.
+                w={{ base: "min(86vw, 340px)", md: "378px" }}
                 // `100dvh` y no `100vh`: en el móvil la barra del navegador se
                 // esconde al hacer scroll y con `vh` el panel quedaba cortado.
                 h="100dvh"
                 pt={HUECO_HEADER}
-                pb={{ base: 8, md: 10 }}
+                pb={{ base: 8, md: 9 }}
                 // Turquesa de la casa, apenas oscurecido hacia abajo para que el
                 // panel se despegue de la página sin cambiar de color.
                 bgGradient="linear(to-b, #008080, #00696b)"
@@ -200,7 +201,7 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                   pointerEvents="none"
                 />
 
-                <Flex direction="column" px={{ base: 7, md: 9 }} overflowY="auto">
+                <Flex direction="column" px={{ base: 7, md: 8 }} overflowY="auto">
                   {items.map((item, i) => (
                     <MotionFlex
                       key={item.etiqueta}
@@ -210,7 +211,7 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                       align="center"
                       gap={3}
                       w="100%"
-                      py={{ base: 4, md: "18px" }}
+                      py={{ base: 4, md: "16px" }}
                       bg="transparent"
                       border="none"
                       borderBottom="1px solid rgba(255,255,255,0.12)"
@@ -254,8 +255,8 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                         color="white"
                         fontFamily="'EB Garamond', serif"
                         fontWeight="600"
-                        fontSize={{ base: "md", md: "lg" }}
-                        letterSpacing="0.18em"
+                        fontSize={{ base: "md", md: "1.0125rem" }}
+                        letterSpacing={{ base: "0.18em", md: "0.16em" }}
                         textTransform="uppercase"
                         // En escritorio, SIEMPRE una línea: la etiqueta más
                         // larga («ESTUDIO ASTROLÓGICO») cabe de sobra en el
@@ -288,8 +289,8 @@ const MenuHamburguesa = ({ abierto, onToggle, onClose, items }: Props) => {
                     as="img"
                     src="/img/icono/life.webp"
                     alt=""
-                    w="64px"
-                    h="64px"
+                    w={{ base: "64px", md: "58px" }}
+                    h={{ base: "64px", md: "58px" }}
                     objectFit="contain"
                     sx={{ filter: "drop-shadow(0 0 14px rgba(255,255,255,0.6))" }}
                   />

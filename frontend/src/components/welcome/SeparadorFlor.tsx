@@ -11,28 +11,27 @@ import { Reveal } from "../global/Reveal";
  * secciones de alrededor NO ponen su propio padding junto a este separador: todo
  * el hueco lo pone él, en un solo sitio.
  */
-const SeparadorFlor = () => (
+const SeparadorFlor = ({ icono = "/img/icono/life.webp" }: { icono?: string }) => (
   <Reveal inView amount={0.5} direction="none" scaleFrom={0.7} duration={0.9} w="100%">
     <Flex
       align="center"
       justify="center"
-      gap={{ base: 3, md: 4 }}
+      gap={{ base: 4, md: 6 }}
       w="100%"
-      maxW="520px"
-      mx="auto"
-      px={{ base: 5, md: 0 }}
       py={{ base: 10, md: 14 }}
     >
-      <Box flex="1" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))" boxShadow="0 0 6px rgba(255,255,255,0.24)" />
+      {/* Mismo tamaño que la separación de debajo del titular (WelcomeCabecera):
+          mandala de 26/34 px y rayas de 60/150 px. */}
+      <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))" />
       <Image
-        src="/img/icono/life.webp"
+        src={icono}
         alt=""
-        h={{ base: "34px", md: "44px" }}
+        h={{ base: "26px", md: "34px" }}
         objectFit="contain"
         flexShrink={0}
-        style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.42)) drop-shadow(0 0 22px rgba(255,255,255,0.24))" }}
+        style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
       />
-      <Box flex="1" h="1px" bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))" boxShadow="0 0 6px rgba(255,255,255,0.24)" />
+      <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))" />
     </Flex>
   </Reveal>
 );

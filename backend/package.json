@@ -25,7 +25,7 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/passport": "^11.0.5",
-    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-express": "^11.2.8",
     "@nestjs/serve-static": "^5.0.4",
     "@nestjs/throttler": "^6.5.0",
     "@resvg/resvg-js": "^2.6.2",
@@ -40,7 +40,7 @@
     "geo-tz": "^8.1.7",
     "helmet": "^8.3.0",
     "luxon": "^3.7.2",
-    "multer": "^2.3.0",
+    "multer": "^2.5.0",
     "nodemailer": "^10.0.9",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
@@ -106,5 +106,8 @@
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
     }
+  },
+  "overrides": {
+    "multer": "^2.5.0"
   }
 }

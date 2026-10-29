@@ -5,6 +5,11 @@ export const header = {
    *  traduce: es un nombre propio y se escribe igual en los dos idiomas. */
   "header.marca": "MARÍA ESCRIBANO",
   "header.mapa": "El Mapa",
+  "header.asesoria": "Asesorías 1:1",
+  "header.premium": "Premium",
+  "header.disciplinas": "Disciplinas",
+  "header.material": "Material",
+  "header.sobreMi": "Sobre mí",
   "header.materiales": "Materiales",
   "header.videos": "Vídeos",
   "header.estudio": "Estudio astrológico",

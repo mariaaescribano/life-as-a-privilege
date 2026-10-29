@@ -1,9 +1,11 @@
 import { aprendizaje } from "./aprendizaje";
+import { asesoria } from "./asesoria";
 import { auth } from "./auth";
 import { comun } from "./comun";
 import { contacto } from "./contacto";
 import { diario } from "./diario";
 import { disciplinas } from "./disciplinas";
+import { disciplinasPagina } from "./disciplinasPagina";
 import { elMetodo } from "./elMetodo";
 import { espacio } from "./espacio";
 import { fisiologia } from "./fisiologia";
@@ -12,6 +14,7 @@ import { home } from "./home";
 import { landing } from "./landing";
 import { footer } from "./footer";
 import { opiniones } from "./opiniones";
+import { premium } from "./premium";
 import { presentacion } from "./presentacion";
 import { quienSoy } from "./quienSoy";
 import { tienda } from "./tienda";
@@ -40,11 +43,13 @@ type TextosMetodo = typeof import("./metodo")["metodo"];
  */
 const TEXTOS_BASE = {
   ...aprendizaje,
+  ...asesoria,
   ...auth,
   ...comun,
   ...contacto,
   ...diario,
   ...disciplinas,
+  ...disciplinasPagina,
   ...elMetodo,
   ...espacio,
   ...fisiologia,
@@ -53,6 +58,7 @@ const TEXTOS_BASE = {
   ...landing,
   ...footer,
   ...opiniones,
+  ...premium,
   ...presentacion,
   ...quienSoy,
   ...tienda,

@@ -266,6 +266,32 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
+## `/asesoria` — Asesorías 1:1
+- **Componente:** `Asesoria` en `frontend/src/app/web/Asesoria.tsx`
+- **Acceso:** pública
+- **Qué hace:** Cabecera (mandala + «Asesorías 1:1» + frase), foto y texto sobre mármol, «Al acabar mi asesoramiento sabrás…» con 4 cajas (foto nítida + frase sobre cristal), «¿Cómo trabajo?» (2 cajas, mármol), **mapa de disciplinas desplegable** (`MapaDisciplinas`) y, lo último, el formulario sobre mármol. Botón flotante «Contáctame».
+- **Datos:** el formulario hace `POST /contact` (mismo endpoint que `/contacto/escribir`; el asunto lo pone la página: «Asesorías 1:1»). Textos en `i18n/textos/{es,en}/asesoria.ts`.
+- **Pendiente (próximo Claude):** el mapa NO se pinta hasta que María pase los textos de las cajitas; ver las instrucciones al principio de `components/web/mapaDisciplinasData.tsx`. `/asesoria?mapaDemo` lo enseña con cajitas de ejemplo.
+- **Tests:** pendiente
+
+---
+
+## `/disciplinas` — Disciplinas
+- **Componente:** `Disciplinas` en `frontend/src/app/web/Disciplinas.tsx`
+- **Acceso:** pública
+- **Qué hace:** Encabezado «Con acceso a contenido exclusivo…», el mandala de las 8 disciplinas con la caja de la elegida (`RecorridoMandalaVideo`), los vídeos de cada disciplina (`PruebasBloque`, los de El Mapa) y, al final, el formulario sobre mármol.
+- **Datos:** `POST /contact` con asunto «Disciplinas».
+- **Tests:** pendiente
+
+---
+
+## `/premium` — Premium
+- **Componente:** `Premium` en `frontend/src/app/web/Premium.tsx` (cáscara vacía: header, footer y fondo; falta todo el contenido).
+- **Acceso:** pública
+- **Tests:** pendiente
+
+---
+
 ## `/materiales` — Materiales gratuitos
 - **Componente:** `MaterialesGratuitos` en `frontend/src/app/web/MaterialesGratuitos.tsx`
 - **Acceso:** pública

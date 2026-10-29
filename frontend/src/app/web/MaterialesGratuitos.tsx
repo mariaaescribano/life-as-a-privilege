@@ -131,7 +131,7 @@ export default function MaterialesGratuitos() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
-      {/* ── MANDALA SEPARADOR ── */}
+      {/* ── FLOR DE LA VIDA sobre el título ── */}
       {/* Wrapper con flotación perpetua (vida continua, como en Welcome y
           /elMetodo); la imagen hace la entrada épica (surge girando desde muy
           pequeña y se enfoca). */}
@@ -146,7 +146,7 @@ export default function MaterialesGratuitos() {
           }}
         >
           <Image
-            src="/img/icono/life.webp"
+            src="/img/icono/flordelavida.png"
             alt=""
             h={{ base: "48px", md: "64px" }}
             objectFit="contain"

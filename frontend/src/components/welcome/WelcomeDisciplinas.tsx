@@ -1,10 +1,8 @@
 import React from "react";
 import { Box, Flex, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import { useT, type ClaveTexto } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { Reveal, Breathe } from "../global/Reveal";
-import { focoBlanco } from "../global/foco";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 
 /**
@@ -17,7 +15,7 @@ import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer"
  *  · entran al bajar, una a una; las de la columna izquierda llegan desde la
  *    izquierda y las de la derecha desde la derecha (en móvil, desde abajo);
  *  · el icono respira muy despacio, cada uno con su fase;
- *  · al pasar por encima la línea sube, el icono crece y la flecha avanza.
+ *  · NO se pulsan y no reaccionan al ratón (sin flecha, sin hover de ningún tipo).
  */
 export type DisciplinaFila = {
   /** Nombre INTERNO (GlobalVariables): da el fondo, no se traduce. */
@@ -25,7 +23,7 @@ export type DisciplinaFila = {
   bg: string;
   txt: string;
   renderIcon: (size: string) => React.ReactNode;
-  /** Su portada común: /disciplina/<slug>. */
+  /** Su portada común: /disciplina/<slug> (ya no se usa aquí: las líneas no se pulsan). */
   link: string;
   lemaKey?: ClaveTexto;
 };
@@ -41,7 +39,6 @@ const Fila = ({
   columna: 0 | 1;
   movil: boolean;
 }) => {
-  const navigate = useNavigate();
   const t = useT();
   const nombreDe = useNombreDisciplina();
   const conFondo = hasDisciplinaBg(d.name);
@@ -60,10 +57,6 @@ const Fila = ({
       w="100%"
     >
       <Flex
-        as="button"
-        type="button"
-        onClick={() => navigate(d.link)}
-        role="group"
         w="100%"
         align="center"
         gap={{ base: 4, md: 5 }}
@@ -77,14 +70,6 @@ const Fila = ({
         bg={conFondo ? "transparent" : d.bg}
         // Solo halo del color de la disciplina: sin sombra negra ni filo.
         boxShadow={`0 0 18px ${d.txt}28, 0 0 40px ${d.txt}12`}
-        cursor="pointer"
-        transition="transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease"
-        _hover={{
-          transform: "translateY(-4px)",
-          boxShadow: `0 0 24px ${d.txt}40, 0 0 52px ${d.txt}1c`,
-        }}
-        _active={{ transform: "translateY(-1px)" }}
-        _focusVisible={focoBlanco}
       >
         {conFondo && <DisciplinaBgLayer nom={d.name} borderRadius="2xl" />}
 
@@ -104,8 +89,6 @@ const Fila = ({
             alignItems="center"
             justifyContent="center"
             overflow="hidden"
-            transition="transform 0.3s ease, box-shadow 0.3s ease"
-            _groupHover={{ transform: "scale(1.07)", boxShadow: `0 0 18px ${d.txt}99, 0 0 36px ${d.txt}50` }}
           >
             {conFondo && <DisciplinaBgLayer nom={d.name} borderRadius="full" />}
             <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
@@ -141,21 +124,6 @@ const Fila = ({
             </Text>
           )}
         </Flex>
-
-        {/* Flecha: avanza al pasar por encima */}
-        <Box
-          position="relative"
-          zIndex={1}
-          flexShrink={0}
-          color={d.txt}
-          fontSize={{ base: "xl", md: "2xl" }}
-          opacity={0.8}
-          transition="transform 0.3s ease, opacity 0.3s ease"
-          _groupHover={{ transform: "translateX(5px)", opacity: 1 }}
-          aria-hidden="true"
-        >
-          →
-        </Box>
       </Flex>
     </Reveal>
   );

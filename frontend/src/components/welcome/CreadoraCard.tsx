@@ -34,10 +34,13 @@ type CreadoraCardProps = {
    * (letra blanca sobre fondo claro). Todas las páginas que ya la usaban siguen
    * sin pasar nada y se ven exactamente igual que antes.
    */
-  fondo?: "oscuro" | "claro";
+  fondo?: "oscuro" | "claro" | "marmol";
   /** Segundos que espera tras cargar la página antes de entrar, aunque ya se
    *  vea (Welcome: que no aparezca a la vez que el titular). 0 = como siempre. */
   esperaInicial?: number;
+  /** Control externo de la entrada (para cuando va dentro de una BandaMarmol:
+   *  espera a que el mármol esté puesto). Si se pasa, manda sobre todo lo demás. */
+  activo?: boolean;
 };
 
 const CreadoraCard: React.FC<CreadoraCardProps> = ({
@@ -47,11 +50,12 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
   sinMargenes = false,
   fondo = "oscuro",
   esperaInicial = 0,
+  activo,
 }) => {
   const espera = useVistoConEspera("0px 0px -8% 0px", esperaInicial);
   // Con espera, quien decide cuándo entra es el hook; sin ella, `inView` de
   // siempre (mismo comportamiento que antes en las demás páginas).
-  const control = esperaInicial > 0 ? { activo: espera.visible } : { inView: true };
+  const control = activo !== undefined ? { activo } : esperaInicial > 0 ? { activo: espera.visible } : { inView: true };
   const navigate = useNavigate();
   const t = useT();
   // El valor por defecto no puede ir en la firma: depende del idioma activo.
@@ -60,7 +64,31 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
   // Los dos juegos de color de la tarjeta. Todo lo que cambia entre fondo
   // oscuro y claro vive aquí, para que el markup de abajo sea uno solo.
   const claro = fondo === "claro";
-  const c = claro
+  const marmol = fondo === "marmol";
+  // Sobre el mármol: caja TRANSPARENTE (se ve el mármol), letra turquesa oscuro.
+  const TQ = "#004f4f";
+  const c = marmol
+    ? {
+        panelBg: "transparent",
+        panelBorde: `${TQ}55`,
+        panelSombra: "0 0 18px #b08d3f22, 0 0 40px #b08d3f12",
+        titulo: TQ,
+        tituloGlow: "none",
+        texto: TQ,
+        textoGlow: "none",
+        lineaBase: `linear(to-r, transparent, ${TQ}99, transparent)`,
+        lineaMd: `linear(to-r, ${TQ}99, transparent)`,
+        btnTexto: TQ,
+        btnBorde: `${TQ}66`,
+        btnBg: "transparent",
+        btnSombra: "none",
+        btnHoverBg: `${TQ}14`,
+        btnHoverBorde: TQ,
+        btnHoverTexto: TQ,
+        btnHoverSombra: "0 0 14px #b08d3f33",
+        fotoSombra: "0 0 18px #b08d3f33, 0 0 40px #b08d3f1a",
+      }
+    : claro
     ? {
         panelBg: "#FFFFFF8C",
         panelBorde: "#2A262218",
@@ -149,7 +177,8 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         bg={c.panelBg}
         border={`1px solid ${c.panelBorde}`}
         boxShadow={c.panelSombra}
-        sx={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
+        // Sobre el mármol no hay cristal esmerilado: se tiene que ver el mármol.
+        sx={marmol ? undefined : { backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
       >
         {/* ── Texto (izquierda) ── */}
         <RevealItem

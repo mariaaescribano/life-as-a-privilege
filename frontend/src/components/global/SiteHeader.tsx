@@ -58,7 +58,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const avatarSrc  = fotoValida(userImg) ?? fotoValida(sessionImg) ?? "/img/icono/noImg.webp";
 
   const path = location.pathname.toLowerCase();
-  const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
+  // «El Mapa» ya no está en el menú, así que no hace falta saber si estás en él.
+  // const isRecorridoPage = path.startsWith("/elmetodo") || path.startsWith("/checkoutmetodo") || path.startsWith("/metodo/");
   const isMaterialesPage = path.startsWith("/materiales") || path.startsWith("/aprendizaje") || path.startsWith("/libros");
   // Programas: fuera del menú (ver más abajo, en los destinos). La sección
   // sigue existiendo como cuarta caja de Materiales.
@@ -101,6 +102,19 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   //
   // Mi cuenta va también en el menú aunque el avatar lleve al mismo sitio: el
   // avatar es un icono sin rótulo y no todo el mundo lo lee como un botón.
+  //
+  // Las opciones de la web, iguales con sesión y sin ella (cambia solo la
+  // última). «El Mapa» y «Materiales» salieron del menú mientras esas páginas
+  // no se usan; las rutas /elMetodo y /materiales siguen vivas.
+  const itemsWeb: ItemMenu[] = [
+    { etiqueta: t("header.asesoria"),    onSelect: () => navigate("/asesoria"),    activo: path.startsWith("/asesoria") },
+    { etiqueta: t("header.premium"),     onSelect: () => navigate("/premium"),     activo: path.startsWith("/premium") },
+    { etiqueta: t("header.disciplinas"), onSelect: () => navigate("/disciplinas"), activo: path.startsWith("/disciplinas") },
+    { etiqueta: t("header.material"),    onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
+    { etiqueta: t("header.sobreMi"),     onSelect: () => navigate("/quienSoy"),     activo: path.startsWith("/quiensoy") },
+    { etiqueta: t("header.contacto"),    onSelect: () => navigate("/contacto"),     activo: isContactoPage },
+  ];
+
   const items: ItemMenu[] = isPrivate
     ? isAdminPage
       ? [
@@ -116,25 +130,11 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           { etiqueta: t("header.suscriptores"), onSelect: () => navigate("/admin/suscriptores"),      activo: adminSuscriptoresActive },
         ]
       : [
-          // «El Mapa» va también con la sesión abierta. Antes solo salía sin
-          // ella, y quien entraba a su cuenta perdía la única puerta del menú a
-          // /elMetodo: para volver a la casa del recorrido había que adivinar
-          // la URL. Es la primera opción en los dos lados de la puerta.
-          { etiqueta: t("header.mapa"),       onSelect: () => navigate("/elMetodo"),     activo: isRecorridoPage },
-          { etiqueta: t("header.materiales"), onSelect: () => navigate("/materiales"),   activo: isMaterialesPage },
-          // { etiqueta: t("header.programas"),  onSelect: () => navigate("/programas"),    activo: isProgramasPage },
-          // { etiqueta: t("header.videos"),     onSelect: () => navigate("/videos"),       activo: isVideosPage },
-          // { etiqueta: t("header.estudio"),    onSelect: () => navigate("/estudio"),      activo: isEstudioPage },
-          { etiqueta: t("header.contacto"),   onSelect: () => navigate("/contacto"),     activo: isContactoPage },
-          { etiqueta: t("header.miCuenta"),   onSelect: () => navigate("/user/account"), activo: isCuentaPage },
+          ...itemsWeb,
+          { etiqueta: t("header.miCuenta"), onSelect: () => navigate("/user/account"), activo: isCuentaPage },
         ]
     : [
-        { etiqueta: t("header.mapa"),          onSelect: () => navigate("/elMetodo"),   activo: isRecorridoPage },
-        { etiqueta: t("header.materiales"),    onSelect: () => navigate("/materiales"), activo: isMaterialesPage },
-        // { etiqueta: t("header.programas"),     onSelect: () => navigate("/programas"),  activo: isProgramasPage },
-        // { etiqueta: t("header.videos"),        onSelect: () => navigate("/videos"),     activo: isVideosPage },
-        // { etiqueta: t("header.estudio"),       onSelect: () => navigate("/estudio"),    activo: isEstudioPage },
-        { etiqueta: t("header.contacto"),      onSelect: () => navigate("/contacto"),   activo: isContactoPage },
+        ...itemsWeb,
         { etiqueta: t("header.iniciarSesion"), onSelect: () => navigate("/logIn") },
       ];
 
@@ -162,7 +162,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         as="button"
         type="button"
         aria-label={t("header.marca")}
-        direction="column"
+        direction="row"
         align="center"
         cursor="pointer"
         onClick={() => navigate(logoTarget)}
@@ -173,26 +173,78 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
         _hover={{ opacity: 0.85 }}
         _focusVisible={focoBlanco}
         transition="opacity 0.2s"
-        gap="2px"
+        gap={{ base: 2, md: 3 }}
       >
         <Image
           src="/img/icono/life.webp"
+          alt=""
           h={{ base: compact ? "36px" : "40px", md: compact ? "63px" : "70px" }}
           objectFit="contain"
           style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.35)) drop-shadow(0 0 20px rgba(255,255,255,0.17)) drop-shadow(0 0 42px rgba(180,255,245,0.13))" }}
         />
-        <Text
-          color="rgba(255,255,255,0.85)"
-          fontFamily="'EB Garamond', serif"
-          fontWeight="600"
-          fontSize={{ base: "7px", md: "11px" }}
-          letterSpacing="0.18em"
-          textShadow="0 0 8px rgba(255,255,255,0.25), 0 0 16px rgba(255,255,255,0.13)"
-          whiteSpace="nowrap"
-        >
-          {t("header.marca")}
-        </Text>
+        {/* La marca es «MARÍA ESCRIBANO»: el nombre arriba y el apellido debajo,
+            los dos empezando en el mismo borde izquierdo. */}
+        <Flex direction="column" align="flex-start" lineHeight="1.15">
+          {t("header.marca").split(" ").map((palabra) => (
+            <Text
+              key={palabra}
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="600"
+              fontSize={{ base: "12px", md: "20px" }}
+              letterSpacing="0.18em"
+              // El mismo halo que lleva el mandala de al lado.
+              textShadow="0 0 9px rgba(255,255,255,0.35), 0 0 20px rgba(255,255,255,0.17)"
+              whiteSpace="nowrap"
+            >
+              {palabra}
+            </Text>
+          ))}
+        </Flex>
       </Flex>
+
+      {/* ── CENTRO ──
+          Las cuatro primeras opciones del menú (Asesorías, Premium, Disciplinas, Material), a la vista y en medio (solo en
+          pantallas anchas; en las demás viven dentro de la hamburguesa, que se
+          queda siempre a la derecha). No hay admin: ahí el menú es otro. */}
+      {!isAdminPage && (
+        <Flex
+          as="nav"
+          // Con cuatro opciones hacen falta ~1180 px para que no pisen el nombre
+          // de la izquierda; por debajo, viven dentro de la hamburguesa.
+          display="none"
+          sx={{ "@media (min-width: 1180px)": { display: "flex" } }}
+          position="absolute"
+          left="50%"
+          top="50%"
+          transform="translate(-50%, -50%)"
+          align="center"
+          gap={{ lg: 6, xl: 10 }}
+        >
+          {itemsWeb.slice(0, 4).map((it) => (
+            <Box
+              key={it.etiqueta}
+              as="button"
+              type="button"
+              onClick={it.onSelect}
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="600"
+              fontSize="md"
+              letterSpacing="0.14em"
+              textTransform="uppercase"
+              whiteSpace="nowrap"
+              pb="3px"
+              borderBottom={it.activo ? "1px solid rgba(255,255,255,0.85)" : "1px solid transparent"}
+              _hover={{ borderBottomColor: "rgba(255,255,255,0.55)" }}
+              _focusVisible={focoBlanco}
+              transition="border-color 0.2s"
+            >
+              {it.etiqueta}
+            </Box>
+          ))}
+        </Flex>
+      )}
 
       {/* ── LADO DERECHO ──
           Ya no lleva los enlaces escritos uno detrás de otro: todos viven

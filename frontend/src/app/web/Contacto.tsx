@@ -15,7 +15,8 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import ViasDeContacto from "../../components/contacto/ViasDeContacto";
-import { Reveal, Breathe } from "../../components/global/Reveal";
+import { Reveal } from "../../components/global/Reveal";
+import FlorTitulo from "../../components/global/FlorTitulo";
 import { focoBlanco } from "../../components/global/foco";
 import { useT } from "../../i18n";
 
@@ -34,21 +35,8 @@ const Contacto = () => {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
-      {/* MANDALA SEPARADOR */}
-      <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        {/* Entra sin girar (subir + enfocar) y, ya colocado, respira muy despacio. */}
-        <Reveal direction="none" scaleFrom={0.7} blur duration={1.1} delay={0.1}>
-          <Breathe scale={0.035} duration={6} delay={1.3}>
-            <Image
-              src="/img/icono/life.webp"
-              alt=""
-              h={{ base: "60px", md: "80px" }}
-              objectFit="contain"
-              style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.59)) drop-shadow(0 0 26px rgba(255,255,255,0.32)) drop-shadow(0 0 52px rgba(180,255,245,0.24))" }}
-            />
-          </Breathe>
-        </Reveal>
-      </Flex>
+      {/* FLOR DE LA VIDA sobre el título */}
+      <FlorTitulo />
 
       {/* TITULO */}
       <Flex

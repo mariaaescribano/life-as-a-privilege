@@ -43,4 +43,10 @@ export const welcome = {
     "The map of the human soul. Ten Sefirot to understand what balances you and what throws you off balance.",
   "welcome.desc.cultura":
     "History and philosophy, in chronological order.",
+  "welcome.cuatro.cuerpo": "Body",
+  "welcome.cuatro.mente": "Mind",
+  "welcome.cuatro.tradicion": "Tradition",
+  "welcome.cuatro.cultura": "Culture",
+  "welcome.boton.asesoria": "I want a 1:1 coaching session",
+  "welcome.boton.premium": "I want the premium content",
 };

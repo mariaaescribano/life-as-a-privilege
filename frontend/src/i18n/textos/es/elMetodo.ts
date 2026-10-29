@@ -252,7 +252,7 @@ export const elMetodo = {
   // tiene su tipografía, y en inglés el reparto de palabras no es el mismo.
   "elMetodo.llamada.titulo": "Hablemos juntos",
   "elMetodo.llamada.tituloSufijo": "sin coste",
-  "elMetodo.llamada.texto": "Cuéntame qué te ha pasado y vemos por dónde empezar.",
+  "elMetodo.llamada.texto": "Cuéntame qué buscas y veamos si mi asesoría encaja contigo.",
   "elMetodo.llamada.remate": "",
   "elMetodo.llamada.whatsapp": "Escríbeme por WhatsApp",
   /** Mensaje ya escrito al abrir el chat: que no tenga que pensar cómo empezar,

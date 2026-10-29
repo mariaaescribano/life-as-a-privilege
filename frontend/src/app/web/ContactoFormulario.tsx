@@ -12,6 +12,7 @@ import {
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
 import SiteFooter from "../../components/global/Footer";
+import FlorTitulo from "../../components/global/FlorTitulo";
 import { useT } from "../../i18n";
 
 const useReveal = (threshold = 0.15) => {
@@ -115,19 +116,8 @@ const ContactoFormulario = () => {
       {/* ── HEADER ── */}
       <SiteHeader variant="auto" />
 
-      {/* ── MANDALA SEPARADOR ── */}
-      <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "60px", md: "80px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.59)) drop-shadow(0 0 26px rgba(255,255,255,0.32)) drop-shadow(0 0 52px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
-      </Flex>
+      {/* ── FLOR DE LA VIDA sobre el título ── */}
+      <FlorTitulo activo={mounted} />
 
       {/* ── TÍTULO ── */}
       <Flex

@@ -39,7 +39,11 @@ export function LetrasVivas({
   lineaPaso = 0.3,
   /** false = sin ola de luz tras la entrada (para bajadas largas de texto). */
   onda = true,
+  /** true = las letras NO suben al entrar: solo se enfocan y se encienden, sin
+   *  moverse del sitio (la luz pasa, el texto no se mueve). */
+  sinSubida = false,
 }: {
+  sinSubida?: boolean;
   pasoEntrada?: number;
   onda?: boolean;
   /** false = la luz recorre las letras UNA sola vez (títulos de página). */
@@ -113,7 +117,7 @@ export function LetrasVivas({
                     ...(entrada
                       ? {
                           opacity: act ? 1 : 0,
-                          transform: act ? "translateY(0)" : "translateY(14px)",
+                          transform: sinSubida ? "none" : act ? "translateY(0)" : "translateY(14px)",
                           filter: act ? "blur(0)" : "blur(6px)",
                           transition: `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${base + li * pasoEntrada}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${base + li * pasoEntrada}s, filter 0.6s cubic-bezier(0.22,1,0.36,1) ${base + li * pasoEntrada}s`,
                         }

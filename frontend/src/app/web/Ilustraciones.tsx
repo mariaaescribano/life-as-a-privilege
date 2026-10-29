@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import FlorTitulo from "../../components/global/FlorTitulo";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { ComicModal } from "../../components/metodo/ComicModal";
 import { ILUSTRACIONES, ILUSTRACIONES_GALERIA, type IlustracionEntry } from "../../components/metodo/ilustracionesGaleria";
@@ -130,19 +131,8 @@ export default function Ilustraciones() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
-      {/* Mandala separador */}
-      <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "48px", md: "64px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
-      </Flex>
+      {/* Flor de la vida sobre el título */}
+      <FlorTitulo />
 
       {/* Título */}
       <Flex direction="column" align="center" textAlign="center" px={{ base: 5, md: 10 }} pt={{ base: 6, md: 8 }} gap={{ base: 3, md: 4 }}>

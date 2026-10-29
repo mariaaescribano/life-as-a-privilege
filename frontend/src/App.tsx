@@ -76,6 +76,9 @@ const EspacioHome = lazy(() => import("./app/espacio/main/EspacioHome"));
 const ExpandablePage = lazyConMetodo(() => import("./app/espacio/main/ThemePreguntas"));
 const QuienSoy = lazy(() => import("./app/web/QuienSoy"));
 const Productos = lazy(() => import("./app/web/Productos"));
+const Asesoria = lazy(() => import("./app/web/Asesoria"));
+const Premium = lazy(() => import("./app/web/Premium"));
+const Disciplinas = lazy(() => import("./app/web/Disciplinas"));
 const LibrosPage = lazy(() => import("./app/web/LibrosPage"));
 const DescargarLibroPage = lazy(() => import("./app/web/DescargarLibroPage"));
 const Contacto = lazy(() => import("./app/web/Contacto"));
@@ -384,6 +387,9 @@ export default function App()
       <Route path="/terminos" element={<Terminos />} />
       <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/quienSoy" element={<QuienSoy />} />
+      <Route path="/asesoria" element={<Asesoria />} />
+      <Route path="/premium" element={<Premium />} />
+      <Route path="/disciplinas" element={<Disciplinas />} />
 
       <Route path="/productos" element={<Productos />} />
 

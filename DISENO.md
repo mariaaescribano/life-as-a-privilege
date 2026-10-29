@@ -47,6 +47,17 @@ corrige este documento):
   fondo de página (ni oscurecida, ni con velo). `html, body` también van en `#008080`
   (`style.css`), para que el rebote del scroll en móvil no enseñe blanco. Única excepción
   histórica: la landing de la casa (ver memoria `landing-dos-proyectos`).
+  **Bandas de mármol:** una página puede intercalar bandas a todo el ancho con el mármol
+  de María (`/img/fondos/marmolfondo.webp`, 1536×1024, a resolución completa). Sobre el
+  mármol la letra no es blanca: turquesa oscuro `#004f4f` (el de la casa, más hondo), oro `#b08d3f` en los filos y crema `#f2e9d9` (los de
+  `LlamadaCta`). Todas las bandas usan `components/global/BandaMarmol.tsx`: bordes arriba y abajo
+  desvanecidos (máscara de 70 px) y, REGLA DE ORO, **el mármol sale PRIMERO**: no se ve al cargar,
+  aparece (0,5 s) con el primer scroll en cuanto la banda asoma y su contenido entra 0,45 s después
+  (los hijos reciben `visible`). Cajas sobre mármol: transparentes, filo turquesa oscuro, halo dorado.
+  Usos: portada, `/asesoria`, `/disciplinas`.
+- **Mapa de disciplinas desplegable** (`/asesoria`, `components/web/MapaDisciplinas.tsx`): ocho
+  disciplinas en vertical con flechas blancas que se dibujan; una abierta a la vez; cajitas con
+  flechas y texto en pastilla. Sin hover. Datos y pendientes en `mapaDisciplinasData.tsx`.
 - **Sin modo oscuro.** `color-scheme: only light` en `index.html` y `style.css`, y
   `darkreader-lock`. La paleta son hex fijos; si algún día hay modo oscuro será una capa propia.
 - **Esqueleto de una página de recorrido** (copiar de `MetodoNutricionMitos.tsx`):
@@ -163,6 +174,9 @@ mismo** que el de la caja.
 ### 5.3 Fotos (la regla más estricta)
 - **NUNCA `filter: blur` en una foto de fondo** (ni en Astrología ni en el ComicViewer ni en
   ningún visor). La calidad manda; lo que se atenúa es solo con un velo encima.
+  **Excepción pedida por María:** las cuatro cajas de `/asesoria` llevan la foto NÍTIDA y, detrás
+  de cada frase, un cristal esmerilado (`backdrop-filter: blur(12px)` + blanco al 12 %): es el
+  texto el que desenfoca lo que tiene detrás, no la foto entera (`CajaFoto` en `Asesoria.tsx`).
 - **Resolución completa** en `public/img/fondos/*` y `recorrido/tcm/fondos`: `adelgazar.mjs` no
   debe volver a encogerlas (en móvil con `cover` se ven borrosas).
 - **Velos:** el cielo de Astrología va a `opacity 1` con velo `rgba(8,13,30,0.25)` por defecto

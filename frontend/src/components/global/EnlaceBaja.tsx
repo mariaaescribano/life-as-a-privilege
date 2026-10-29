@@ -14,7 +14,7 @@ import { useT } from "../../i18n";
  * página; con API_URL el dominio se resuelve solo y no hay nada que tocar al
  * cambiar de dominio.
  */
-export function EnlaceBaja({ mt = 4 }: { mt?: number }) {
+export function EnlaceBaja({ mt = 4, color = "rgba(255,255,255,0.45)", colorHover = "rgba(255,255,255,0.85)" }: { mt?: number; color?: string; colorHover?: string }) {
   const t = useT();
   return (
     <Text
@@ -23,14 +23,14 @@ export function EnlaceBaja({ mt = 4 }: { mt?: number }) {
       rel="nofollow"
       display="block"
       mt={mt}
-      color="rgba(255,255,255,0.45)"
+      color={color}
       fontSize="xs"
       fontFamily="'EB Garamond', serif"
       letterSpacing="0.04em"
       textAlign="center"
       textDecoration="none"
       transition="color 0.2s"
-      _hover={{ color: "rgba(255,255,255,0.85)", textDecoration: "underline" }}
+      _hover={{ color: colorHover, textDecoration: "underline" }}
     >
       {t("suscribir.baja")}
     </Text>

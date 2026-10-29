@@ -1,6 +1,11 @@
 export const header = {
   "header.marca": "MARÍA ESCRIBANO",
   "header.mapa": "The Map",
+  "header.asesoria": "1:1 Coaching",
+  "header.premium": "Premium",
+  "header.disciplinas": "Disciplines",
+  "header.material": "Material",
+  "header.sobreMi": "About me",
   "header.materiales": "Materials",
   "header.videos": "Videos",
   "header.estudio": "Astrology study",

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Flex, Image, Input, SimpleGrid, Text, Textarea } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
+import FlorTitulo from "../../components/global/FlorTitulo";
 import { API_URL } from "../../GlobalVariables";
 import type { Opinion } from "../../dtos/opinion.type";
 import { useT } from "../../i18n";
@@ -456,19 +457,8 @@ export default function Opiniones() {
         </Flex>
       )}
 
-      {/* ── MANDALA SEPARADOR ── */}
-      <Flex justify="center" pt={{ base: 10, md: 14 }}>
-        <Image
-          src="/img/icono/life.webp"
-          alt=""
-          h={{ base: "48px", md: "64px" }}
-          objectFit="contain"
-          style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.59)) drop-shadow(0 0 21px rgba(255,255,255,0.32)) drop-shadow(0 0 42px rgba(180,255,245,0.24))" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "scale(1) rotate(0deg)" : "scale(0.7) rotate(-12deg)"}
-          transition="opacity 1s ease 0.1s, transform 1s ease 0.1s"
-        />
-      </Flex>
+      {/* ── FLOR DE LA VIDA sobre el título ── */}
+      <FlorTitulo activo={mounted} />
 
       {/* ── TÍTULO ── */}
       <Flex

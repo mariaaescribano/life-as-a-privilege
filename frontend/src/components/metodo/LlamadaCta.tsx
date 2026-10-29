@@ -21,8 +21,8 @@ import { Reveal } from "../global/Reveal";
 
 /** El mármol con el mandala grabado: fondo del popup. */
 const FONDO = "/img/fondos/llamada.webp";
-/** El azul del mandala de la ilustración: la letra dentro de la tarjeta. */
-const TINTA = "#16305e";
+/** El turquesa oscuro de la casa: la letra dentro de la tarjeta (antes azul). */
+const TINTA = "#004f4f";
 /** El dorado de las vetas: los filos. */
 const ORO = "#b08d3f";
 /** El MISMO oro, bajado de tono para que se lea sobre el crema del mármol.
@@ -499,7 +499,7 @@ export function PopupLlamada({ isOpen, onClose, onAgendar }: PopupLlamadaProps) 
                 color: CREMA,
                 borderColor: TINTA,
                 transform: "translateY(-2px)",
-                boxShadow: "0 10px 24px rgba(22,48,94,0.3)",
+                boxShadow: "0 10px 24px rgba(0,79,79,0.3)",
               }}
               _active={{ transform: "translateY(0)" }}
               transition="background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease"
@@ -545,7 +545,7 @@ export function PopupLlamada({ isOpen, onClose, onAgendar }: PopupLlamadaProps) 
                 color: CREMA,
                 borderColor: TINTA,
                 transform: "translateY(-2px)",
-                boxShadow: "0 10px 24px rgba(22,48,94,0.3)",
+                boxShadow: "0 10px 24px rgba(0,79,79,0.3)",
               }}
               _active={{ transform: "translateY(0)" }}
               transition="background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease"

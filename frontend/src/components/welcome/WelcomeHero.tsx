@@ -26,22 +26,41 @@ const HALO_FOTO = "0 0 16px rgba(255,255,255,0.11), 0 0 34px rgba(255,255,255,0.
 
 type Estado = "idle" | "loading" | "ok" | "invalid" | "error";
 
-const campo = (invalido: boolean) => ({
+/** Los colores de la cabecera: sobre el turquesa (letra blanca) o sobre el mármol
+ *  (letra tinta, oro y crema: los de LlamadaCta). */
+const PALETA = {
+  turquesa: {
+    titulo: "white", gratis: "white", raya: "linear(to-r, rgba(255,255,255,0.8), rgba(255,255,255,0))",
+    campoBg: "rgba(0,40,40,0.28)", campoBorde: "rgba(255,255,255,0.32)", campoBordeHover: "rgba(255,255,255,0.5)", campoBordeFoco: "white",
+    campoColor: "white", placeholder: "rgba(255,255,255,0.55)", invalido: "rgba(255,150,150,0.7)", aviso: "rgba(255,190,190,0.95)",
+    ok: "white", okSec: "rgba(255,255,255,0.85)", pie: "white", filo: "rgba(255,255,255,0.35)",
+    baja: "rgba(255,255,255,0.45)", bajaHover: "rgba(255,255,255,0.85)",
+  },
+  marmol: {
+    titulo: "#004f4f", gratis: "#004f4f", raya: "linear(to-r, #004f4fcc, #004f4f00)",
+    campoBg: "#ffffffb3", campoBorde: "#004f4f55", campoBordeHover: "#004f4f99", campoBordeFoco: "#004f4f",
+    campoColor: "#004f4f", placeholder: "#004f4f8c", invalido: "#b3261e", aviso: "#b3261e",
+    ok: "#004f4f", okSec: "#004f4fd9", pie: "#004f4f", filo: "#004f4f40",
+    baja: "#004f4f99", bajaHover: "#004f4f",
+  },
+};
+
+const campo = (invalido: boolean, c: typeof PALETA.turquesa) => ({
   w: "100%",
-  bg: "rgba(0,40,40,0.28)",
-  border: invalido ? "1px solid rgba(255,150,150,0.7)" : "1px solid rgba(255,255,255,0.32)",
+  bg: c.campoBg,
+  border: invalido ? `1px solid ${c.invalido}` : `1px solid ${c.campoBorde}`,
   borderRadius: "full",
-  color: "white",
+  color: c.campoColor,
   fontFamily: "'EB Garamond', serif",
   fontSize: { base: "md", md: "lg" },
   px: 6,
   py: 3,
   h: "auto",
   boxShadow: HALO_CAMPO,
-  _placeholder: { color: "rgba(255,255,255,0.55)" },
-  _hover: { borderColor: "rgba(255,255,255,0.5)" },
-  _focus: { borderColor: "white", boxShadow: HALO_BOTON },
-  _focusVisible: { borderColor: "white", boxShadow: HALO_BOTON },
+  _placeholder: { color: c.placeholder },
+  _hover: { borderColor: c.campoBordeHover },
+  _focus: { borderColor: c.campoBordeFoco, boxShadow: HALO_BOTON },
+  _focusVisible: { borderColor: c.campoBordeFoco, boxShadow: HALO_BOTON },
 });
 
 /** Los iconos de las ocho disciplinas: solo para dar estilo, no se pulsan. */
@@ -52,8 +71,9 @@ export type IconoDisciplina = {
   renderIcon: (size: string) => React.ReactNode;
 };
 
-const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoDisciplina[] }) => {
+const WelcomeHero = ({ activo, iconos = [], marmol = false, compacto = false }: { activo: boolean; iconos?: IconoDisciplina[]; marmol?: boolean; compacto?: boolean }) => {
   const { t, idioma } = useIdioma();
+  const c = marmol ? PALETA.marmol : PALETA.turquesa;
   const navigate = useNavigate();
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -91,7 +111,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
       maxW="1240px"
       mx="auto"
       px={{ base: 6, md: 10, lg: 16 }}
-      pt={{ base: 10, md: 14, lg: 20 }}
+      pt={compacto ? { base: 4, md: 6 } : { base: 10, md: 14, lg: 20 }}
       pb={0}
       direction={{ base: "column", lg: "row" }}
       align={{ base: "stretch", lg: "center" }}
@@ -150,7 +170,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
         <Flex direction="column" align={{ base: "center", lg: "stretch" }} gap={{ base: 4, md: 5 }}>
           <Reveal activo={activo} direction="up" distance={22} duration={0.9} delay={0.1}>
             <Text
-              color="white"
+              color={c.titulo}
               fontFamily="'EB Garamond', serif"
               fontWeight="700"
               fontSize={{ base: "3xl", md: "4xl", lg: "clamp(2rem, 3.1vw, 3.1rem)" }}
@@ -169,7 +189,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
               <Box
                 h="1px"
                 w={{ base: "44px", md: "64px" }}
-                bgGradient="linear(to-r, rgba(255,255,255,0.8), rgba(255,255,255,0))"
+                bgGradient={c.raya}
                 sx={{
                   transformOrigin: "left center",
                   "@keyframes rayaCrece": { from: { transform: "scaleX(0)" }, to: { transform: "scaleX(1)" } },
@@ -178,7 +198,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 }}
               />
               <Text
-                color="white"
+                color={c.gratis}
                 opacity={0.9}
                 fontFamily="'EB Garamond', serif"
                 fontStyle="italic"
@@ -195,10 +215,10 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
         <Reveal activo={activo} direction="up" distance={18} duration={0.8} delay={0.6} w="100%" maxW={{ base: "400px", md: "540px" }}>
           {estado === "ok" ? (
             <Flex direction="column" gap={2} w="100%" minH="200px" justify="center" textAlign={{ base: "center", lg: "left" }}>
-              <Text color="white" fontSize={{ base: "xl", md: "2xl" }} fontWeight="700">
+              <Text color={c.ok} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700">
                 {t("suscribir.ok")}
               </Text>
-              <Text color="rgba(255,255,255,0.85)" fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
+              <Text color={c.okSec} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
                 {t("suscribir.gracias")}
               </Text>
             </Flex>
@@ -214,7 +234,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
               {/* Nombre y email en la misma línea (en móvil, uno bajo otro). */}
               <Flex direction={{ base: "column", md: "row" }} gap={4}>
               <Input
-                {...campo(false)}
+                {...campo(false, c)}
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 placeholder={t("welcome.hero.nombre")}
@@ -223,7 +243,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 maxLength={120}
               />
               <Input
-                {...campo(estado === "invalid")}
+                {...campo(estado === "invalid", c)}
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); if (estado === "invalid") setEstado("idle"); }}
                 placeholder={t("suscribir.placeholder")}
@@ -233,10 +253,10 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
               />
               </Flex>
               {estado === "invalid" && (
-                <Text color="rgba(255,190,190,0.95)" fontSize="sm">{t("suscribir.invalido")}</Text>
+                <Text color={c.aviso} fontSize="sm">{t("suscribir.invalido")}</Text>
               )}
               {estado === "error" && (
-                <Text color="rgba(255,190,190,0.95)" fontSize="sm">{t("suscribir.error")}</Text>
+                <Text color={c.aviso} fontSize="sm">{t("suscribir.error")}</Text>
               )}
               <Box
                 as="button"
@@ -247,9 +267,10 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 px={{ base: 8, md: 10 }}
                 py="12px"
                 borderRadius="full"
-                bg={arenaBg}
-                border="1.5px solid rgba(255,255,255,0.9)"
-                color={arenaTinta}
+                // Sobre el mármol: turquesa oscuro con la letra blanca; sobre el turquesa, como siempre.
+                bg={marmol ? "#004f4f" : arenaBg}
+                border={marmol ? "1.5px solid #004f4f" : "1.5px solid rgba(255,255,255,0.9)"}
+                color={marmol ? "white" : arenaTinta}
                 fontFamily="'EB Garamond', serif"
                 fontSize={{ base: "md", md: "lg" }}
                 fontWeight="700"
@@ -259,7 +280,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 cursor={estado === "loading" ? "not-allowed" : "pointer"}
                 opacity={estado === "loading" ? 0.6 : 1}
                 boxShadow={HALO_BOTON}
-                _hover={estado === "loading" ? {} : { bg: "white", boxShadow: HALO_BOTON_HOVER, transform: "translateY(-2px)" }}
+                _hover={estado === "loading" ? {} : marmol ? { bg: "#006b6b", boxShadow: "0 0 14px #b08d3f44" } : { bg: "white", boxShadow: HALO_BOTON_HOVER, transform: "translateY(-2px)" }}
                 _focusVisible={focoBlanco}
                 transition="all 0.25s ease"
                 sx={estado === "idle" && activo ? {
@@ -271,7 +292,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 {estado === "loading" ? t("comun.enviando") : (<>{t("comun.enviar")}<Box as="span" ml={3} fontSize="1.15em" display="inline-block" transition="transform 0.25s ease" sx={{ "button:hover > &": { transform: "translateX(4px)" } }}>→</Box></>)}
               </Box>
               <Box w="fit-content" alignSelf={{ base: "center", lg: "flex-start" }}>
-                <EnlaceBaja mt={1} />
+                <EnlaceBaja mt={1} color={c.baja} colorHover={c.bajaHover} />
               </Box>
             </Flex>
           )}
@@ -308,7 +329,7 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 }}
               />
               {/* Filo fino desplazado: da elegancia al marco */}
-              <Box position="absolute" inset="-9px" borderRadius="30px" border="1px solid rgba(255,255,255,0.35)" pointerEvents="none" />
+              <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${c.filo}`} pointerEvents="none" />
               <Box
                 position="relative"
                 borderRadius="22px"
@@ -317,12 +338,12 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
                 sx={{ aspectRatio: "1 / 1" }}
               >
                 <Image
-                  src="/img/me/me.webp"
+                  src="/img/me/asesoria.webp"
                   alt="María Escribano"
                   w="100%"
                   h="100%"
                   objectFit="cover"
-                  objectPosition="center 18%"
+                  objectPosition="center 28%"
                   display="block"
                   transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)"
                   _groupHover={{ transform: "scale(1.06)" }}
@@ -332,14 +353,15 @@ const WelcomeHero = ({ activo, iconos = [] }: { activo: boolean; iconos?: IconoD
         </Reveal>
         <Reveal activo={activo} direction="up" distance={14} duration={0.8} delay={0.8}>
           <Text
-            color="white"
+            color={c.pie}
             fontFamily="'EB Garamond', serif"
             fontStyle="italic"
-            fontSize={{ base: "md", md: "lg" }}
-            lineHeight="1.6"
-            letterSpacing="0.03em"
+            fontWeight="700"
+            fontSize={{ base: "lg", md: "xl" }}
+            lineHeight="1.55"
+            letterSpacing="0.02em"
             textAlign="center"
-            maxW="320px"
+            maxW="360px"
           >
             {t("welcome.hero.foto")}
           </Text>

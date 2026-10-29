@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { SubscribeBox } from "../../components/global/SubscribeBox";
-import OpinionesSection from "../../components/welcome/OpinionesSection";
 import CreadoraCard from "../../components/welcome/CreadoraCard";
 import WelcomeHero from "../../components/welcome/WelcomeHero";
+import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
+import WelcomeCuatro from "../../components/welcome/WelcomeCuatro";
+import BandaMarmol from "../../components/global/BandaMarmol";
 import WelcomePilares from "../../components/welcome/WelcomePilares";
 import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import WelcomeDisciplinas from "../../components/welcome/WelcomeDisciplinas";
@@ -222,14 +224,32 @@ const Welcome = () => {
       <SiteHeader variant="public" />
 
       <Box flex="1">
-      {/* ── CABECERA: frase + nombre/email a la izquierda, foto a la derecha ── */}
-      <WelcomeHero activo={mounted} iconos={disciplines} />
+      {/* ── LO PRIMERO: mandala + titular + frase (la cabecera de El Mapa) ── */}
+      <WelcomeCabecera activo={mounted} />
 
-      {/* ── SEPARACIÓN CON LA FLOR (mismo aire arriba que abajo) ── */}
+      {/* ── CABECERA: frase + nombre/email a la izquierda, foto a la derecha ── */}
+      {/* Segundo apartado: «Descubre nuevas perspectivas de ti…» sobre el mármol,
+          en banda a todo el ancho. */}
+      {/* El mármol (BandaMarmol) no asoma hasta que el usuario baja, y su contenido
+          tampoco: entra en cuanto el bloque asoma. */}
+      <BandaMarmol mt={{ base: 2, md: 4 }}>
+        {(visible) => (
+          // Sin `iconos`: la fila de los ocho círculos ya no se pinta aquí.
+          <WelcomeHero activo={visible} marmol compacto />
+        )}
+      </BandaMarmol>
+
+      {/* ── SEPARACIÓN con el mandala en medio, bajo «Descubre nuevas perspectivas…» ── */}
+      <SeparadorFlor />
+
+      {/* ── TERCER APARTADO: cuatro cajas en la misma línea (Cuerpo, Mente, Tradición, Cultura) ── */}
+      <WelcomeCuatro />
+
+      {/* ── SEPARACIÓN CON LA FLOR ── */}
       <SeparadorFlor />
 
       {/* ── SEGUNDA SECCIÓN: tres ideas en tres cajas + tu foto ── */}
-      <WelcomePilares />
+      <BandaMarmol>{(visible) => <WelcomePilares activo={visible} />}</BandaMarmol>
 
       {/* ── SEPARACIÓN CON LA FLOR (mismo aire arriba que abajo) ── */}
       <SeparadorFlor />
@@ -253,14 +273,11 @@ const Welcome = () => {
       {/* ── LAS OCHO DISCIPLINAS: líneas con el icono delante, 4 + 4 ── */}
       <WelcomeDisciplinas disciplinas={disciplines} />
 
-      {/* ── BOTÓN «EL MAPA» ──
-          Corta la página entre las disciplinas y la creadora. Va después de las
-          tarjetas a propósito: arriba todavía no se sabe qué son las ocho
-          disciplinas, y un botón al Mapa antes de verlas no dice nada. */}
-      <OpinionesSection />
+      {/* ── SEPARACIÓN CON EL MANDALA ── */}
+      <SeparadorFlor />
 
-      {/* ── PRESENTACIÓN (creadora) ── */}
-      <CreadoraCard esperaInicial={3.2} />
+      {/* ── MARÍA, sobre el mármol: caja transparente y letra turquesa oscuro ── */}
+      <BandaMarmol>{(visible) => <CreadoraCard fondo="marmol" activo={visible} />}</BandaMarmol>
 
       {/* ── SEPARADOR DE ZONAS ── */}
       {/* <Flex justify="center" pt={{ base: 12, md: 16 }}>

@@ -1,0 +1,18 @@
+export const asesoria = {
+  "asesoria.contacto.titulo": "Contact me",
+  "asesoria.contacto.subtitulo": "I will reply to you personally",
+  "asesoria.paso1.titulo": "A designed methodology",
+  "asesoria.paso1.texto": "I have a structured coaching plan and a methodology of my own, designed to guide you throughout the whole process.",
+  "asesoria.paso2.titulo": "Every session has a purpose",
+  "asesoria.paso2.texto": "We work in sessions, each one focused on a specific goal. We follow a path designed to move forward step by step, with content and meaning in every meeting.",
+  "asesoria.logros.intro": "By the end of my coaching you will know...",
+  "asesoria.logro.cuerpo": "How to take care of yourself, and you will be aware of the miracle that your body is.",
+  "asesoria.logro.mente": "How your mind was built and how to re-educate it so that your past stops influencing your present.",
+  "asesoria.logro.tradicion": "How different traditions interpret you and what they say about the purpose of your life.",
+  "asesoria.logro.cultura": "How to create your own philosophy and learn to adapt it to every moment of your life.",
+  "asesoria.intro": "I accompany you in exploring new ways of understanding yourself, of relating to yourself and of facing life's challenges.\n\nThe methodology is a path of self-knowledge that integrates ancestral wisdom and scientific knowledge to discover new possibilities and expand your awareness.",
+  "asesoria.titulo": "1:1 Coaching",
+  "asesoria.subtitulo": "I advise you on mind, body and tradition to build an integrated view of yourself.",
+  "asesoria.comoTrabajo": "How do I work?",
+  "asesoria.formacion": "The training I have to support you",
+};
