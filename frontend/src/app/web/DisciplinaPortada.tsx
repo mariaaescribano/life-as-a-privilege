@@ -214,7 +214,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
       {/* ── BANDA CON LA FOTO DE LA DISCIPLINA DE FONDO (como el mármol, pero con su foto) ──
           A la izquierda, su foto cuadrada; a la derecha, las puertas apiladas con el mismo
           alto que la foto. */}
-      <Box flex={1} position="relative" mt={{ base: 2, md: 4 }} pt={{ base: "104px", md: "110px" }} pb={{ base: "116px", md: "120px" }}>
+      <Box flex={1} position="relative" mt={{ base: 2, md: 4 }} mb={{ base: "56px", md: "88px" }} pt={{ base: "104px", md: "110px" }} pb={{ base: "116px", md: "120px" }}>
         <Box
           position="absolute"
           inset={0}
