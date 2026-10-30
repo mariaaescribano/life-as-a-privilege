@@ -3,6 +3,7 @@ import { Box, Flex, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useT } from "../../i18n";
 import { Reveal } from "../global/Reveal";
 import { LetrasVivas } from "../global/LetrasVivas";
+import { marcarCabeceraEscribiendo } from "../global/cabeceraEntrada";
 
 /**
  * Lo primero que se ve en la portada: el mandala (entra girando desde muy
@@ -15,7 +16,13 @@ const WelcomeCabecera = ({
   titulo: tituloTexto,
   subtitulo,
   mayusculas = false,
+  sinFrase = false,
+  sinSeparador = false,
 }: {
+  /** Sin la frase en cursiva de debajo del titular. */
+  sinFrase?: boolean;
+  /** Sin la separación horizontal con el mandala pequeño. */
+  sinSeparador?: boolean;
   activo: boolean;
   /** Titular. Por defecto, el de El Mapa (`elMetodo.hero.principal`). */
   titulo?: string;
@@ -28,19 +35,36 @@ const WelcomeCabecera = ({
   const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
 
   // La entrada es una secuencia: primero el mandala, luego el titular, luego la
-  // frase en cursiva y, al final, la separación. Cada paso espera al anterior.
+  // frase en cursiva y, al final, la separación. Cada paso espera al anterior, y
+  // la frase NO sale hasta que el titular se ha escrito ENTERO: se calcula lo que
+  // tarda su última letra (0,05 s por letra, 0,3 s de desfase por línea, 0,6 s de
+  // transición de la letra).
+  const textoTitulo = tituloTexto ?? t("elMetodo.hero.principal");
+  const segTitulo = Math.max(
+    ...textoTitulo.split("\n").map((l, i) => i * 0.3 + Array.from(l.replace(/\s+/g, "")).length * 0.05),
+  ) + 0.6;
   const [tituloListo, setTitulo] = useState(false);
   const [frase, setFrase] = useState(false);
   const [separador, setSeparador] = useState(false);
+  // Mientras el titular se escribe, el resto de la página espera (ver cabeceraEntrada).
+  useEffect(() => {
+    marcarCabeceraEscribiendo(true);
+    return () => marcarCabeceraEscribiendo(false);
+  }, []);
+
   useEffect(() => {
     if (!activo) return;
+    const ms = 800 + segTitulo * 1000 + 150;
+    // Red de seguridad: pase lo que pase, a los 8 s la página queda libre.
+    const libre = [setTimeout(() => marcarCabeceraEscribiendo(false), ms), setTimeout(() => marcarCabeceraEscribiendo(false), 8000)];
+    const limpiaLibre = () => libre.forEach(clearTimeout);
     const ids = [
       setTimeout(() => setTitulo(true), 800),
-      setTimeout(() => setFrase(true), 1700),
-      setTimeout(() => setSeparador(true), 2400),
+      setTimeout(() => setFrase(true), ms),
+      setTimeout(() => setSeparador(true), ms + 700),
     ];
-    return () => ids.forEach(clearTimeout);
-  }, [activo]);
+    return () => { ids.forEach(clearTimeout); limpiaLibre(); };
+  }, [activo, segTitulo]);
 
   return (
     <Box>
@@ -82,9 +106,10 @@ const WelcomeCabecera = ({
           {/* El titular NO se mueve: ni sube al entrar ni se ondula. Se enfoca al
               entrar y después se queda quieto: SOLO la luz lo repasa, una y otra
               vez (`altura={0}` = ninguna letra se eleva; `sinSubida`). */}
-          <LetrasVivas texto={tituloTexto ?? t("elMetodo.hero.principal")} entrada sinSubida activo={tituloListo} onda={!esMovil} altura={0} />
+          <LetrasVivas texto={textoTitulo} entrada sinSubida activo={tituloListo} onda={!esMovil} altura={0} />
         </Text>
 
+        {!sinFrase && (
         <Text
           color="rgba(255,255,255,0.9)"
           fontFamily="'EB Garamond', serif"
@@ -99,8 +124,11 @@ const WelcomeCabecera = ({
         >
           {subtitulo ?? t("elMetodo.hero.secundaria")}
         </Text>
+        )}
       </Flex>
 
+      {!sinSeparador && (
+        <>
       {/* Separación con el mandala pequeño, mismo aire arriba que abajo. */}
       <Reveal activo={separador} direction="none" scaleFrom={0.86} duration={0.9} mt={{ base: "48px", md: "67px" }}>
         <Flex align="center" justify="center" gap={{ base: 4, md: 6 }}>
@@ -118,6 +146,8 @@ const WelcomeCabecera = ({
           <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))" />
         </Flex>
       </Reveal>
+        </>
+      )}
     </Box>
   );
 };

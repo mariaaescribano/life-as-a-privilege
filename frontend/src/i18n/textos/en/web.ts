@@ -14,7 +14,12 @@ export const web = {
     "The legal texts on this site are available only in Spanish, which is their valid version.",
 
   // ── Materials (/materiales) ────────────────────────────────────────────
-  "materiales.subtitulo": "Content created and curated by María",
+  "materiales.audiolibros": "Audiobooks",
+  "quienSoy.proposito.1": "My passion for learning and sharing",
+  "quienSoy.proposito.2": "My commitment to constant improvement",
+  "quienSoy.proposito.3": "My interest in understanding beyond what we have been told",
+  "quienSoy.subtitulo": "My training, my goal and my purpose",
+  "materiales.subtitulo": "Free content created to make your path easier",
   "materiales.ilustraciones": "Illustrations",
   "materiales.libros": "Books",
   "materiales.programas": "Programs",

@@ -338,12 +338,12 @@ const WelcomeHero = ({ activo, iconos = [], marmol = false, compacto = false }: 
                 sx={{ aspectRatio: "1 / 1" }}
               >
                 <Image
-                  src="/img/me/asesoria.webp"
+                  src="/img/me/trajegrisconmapa.webp"
                   alt="María Escribano"
                   w="100%"
                   h="100%"
                   objectFit="cover"
-                  objectPosition="center 28%"
+                  objectPosition="center 30%"
                   display="block"
                   transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)"
                   _groupHover={{ transform: "scale(1.06)" }}

@@ -17,7 +17,7 @@ export const quienSoy = {
   "quienSoy.linkedin": "See the full letter on LinkedIn",
 
   // ── Certificates ───────────────────────────────────────────────────────
-  "quienSoy.certificados": "My Certificates",
+  "quienSoy.certificados": "My training and tools to advise you",
   "quienSoy.certif.acompanar": "To accompany you",
   "quienSoy.certif.mente": "To understand your mind",
   "quienSoy.certif.cuerpo": "To understand your body",

@@ -16,6 +16,8 @@ export const auth = {
   // ── Iniciar sesión ─────────────────────────────────────────────────────
   "auth.login.titulo": "Iniciar sesión",
   "auth.login.subtitulo": "Entra a tu cuenta de El Mapa",
+  "auth.login.opcion.asesoria": "Estoy recibiendo asesoramiento",
+  "auth.login.opcion.premium": "Quiero acceder al contenido premium",
   "auth.login.entrar": "Entrar",
   "auth.login.olvidada": "¿Has olvidado tu contraseña?",
   "auth.login.sinCuenta": "¿No tienes cuenta? Crear cuenta",

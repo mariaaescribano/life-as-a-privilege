@@ -8,7 +8,7 @@ import BandaMarmol from "../../components/global/BandaMarmol";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
 import FormularioAsesoria from "../../components/web/FormularioAsesoria";
 import MapaDisciplinas from "../../components/web/MapaDisciplinas";
-import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
+import { RecorridoMandalaVideo, precargarClipsMuestra } from "../../components/global/MandalaRecorrido";
 import { BloqueDiferido } from "../../components/global/BloqueDiferido";
 import BotonContactame from "../../components/global/BotonContactame";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
@@ -30,7 +30,9 @@ import { useT, type ClaveTexto } from "../../i18n";
  * de María; los diplomas siguen en `Certificaciones` y en «Sobre mí».)
  */
 
-const FOTO_MARIA = "/img/me/asesoria.webp";
+/** La foto de la presentación (foto + texto) y la del formulario de contacto. */
+const FOTO_MARIA = "/img/me/asesora.webp";
+const FOTO_CONTACTO = "/img/me/asesoria.webp";
 /** El mármol horizontal de María (`marmolfondo`, 1536 × 1024, a resolución completa). */
 
 // Los colores del mármol, los mismos que LlamadaCta (el popup «Hablamos»).
@@ -170,7 +172,9 @@ const Asesoria = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const id = setTimeout(() => setMounted(true), 60);
-    return () => clearTimeout(id);
+    // Los vídeos del mandala, descargándose desde el principio.
+    const pre = setTimeout(precargarClipsMuestra, 400);
+    return () => { clearTimeout(id); clearTimeout(pre); };
   }, []);
 
   return (
@@ -415,7 +419,7 @@ const Asesoria = () => {
             formulario. Los campos van enmarcados en turquesa oscuro. */}
         <BandaMarmol>
           {(visible) => (
-            <Box w="100%" maxW="900px" mx="auto" px={{ base: 5, md: 10 }}>
+            <Box w="100%" maxW="1100px" mx="auto" px={{ base: 5, md: 10 }}>
               <Reveal activo={visible} direction="up" distance={20} duration={0.8}>
                 <Text
                   textAlign="center"
@@ -443,7 +447,20 @@ const Asesoria = () => {
                   {t("asesoria.contacto.subtitulo")}
                 </Text>
               </Reveal>
-              <FormularioAsesoria marmol activo={visible} asunto={t("asesoria.titulo")} />
+              <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 12, md: 14, lg: 20 }}>
+                {/* La foto ENTERA (sin recortar), con un filo fino desplazado que la enmarca. */}
+                <Reveal activo={visible} direction="right" distance={30} scaleFrom={0.94} duration={1} delay={0.3} w={{ base: "250px", md: "300px", lg: "340px" }} flexShrink={0}>
+                  <Box position="relative">
+                    <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
+                    <Box borderRadius="22px" overflow="hidden" boxShadow={`0 0 22px ${ORO}55, 0 0 48px ${ORO}28`}>
+                      <Image src={FOTO_CONTACTO} alt="María Escribano" w="100%" h="auto" display="block" />
+                    </Box>
+                  </Box>
+                </Reveal>
+                <Box flex="1" minW={0} w="100%">
+                  <FormularioAsesoria marmol activo={visible} asunto={t("asesoria.titulo")} />
+                </Box>
+              </Flex>
             </Box>
           )}
         </BandaMarmol>

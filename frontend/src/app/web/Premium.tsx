@@ -28,6 +28,15 @@ const TINTA = "#004f4f";
 const ORO = "#b08d3f";
 /** El móvil con el reel de María, recortado del fondo negro (transparente). */
 const FOTO = "/img/premium/telefono.webp";
+/** El móvil con el aviso «¡Nuevo reel!», recortado del fondo negro. */
+const FOTO_AVISO = "/img/premium/telefono-aviso.webp";
+
+/** Iconos de las afirmaciones (Material Symbols, trazo blanco). Se dibujan a la altura del
+ *  mandala. El de «Por solo 5 € al mes.» llega después. */
+const ICONOS: Record<string, string> = {
+  video: "M12,13.5l6-4l-6-4v8ZM12.7,19h5.6q-0.18,0.65-0.6,1.05q-0.42,0.4-1.1,0.5L5.7,21.88Q4.88,22 4.21,21.49T3.45,20.15L2.13,9.23Q2.03,8.4 2.53,7.75T3.85,7L5,6.85v2L4.1,8.98L5.45,19.9L12.7,19ZM9,17q-0.82,0-1.41-0.59T7,15V4Q7,3.17 7.59,2.59T9,2H20q0.83,0 1.41,0.59T22,4V15q0,0.82-0.59,1.41T20,17H9Zm0-2H20V4H9V15Zm5.5-5.5ZM5.45,19.9Z",
+  correo: "M4,20q-0.82,0-1.41-0.59T2,18V6Q2,5.18 2.59,4.59T4,4H20q0.83,0 1.41,0.59Q22,5.18 22,6V18q0,0.82-0.59,1.41T20,20H4Zm8-7L4,8V18H20V8l-8,5Zm0-2l8-5H4l8,5ZM4,8V6V8V18V8Z",
+};
 
 /** Texto con el número (20, 5 €) más grande y con luz; el resto, normal. No toca el texto. */
 const ConNumero = ({ texto }: { texto: string }) => (
@@ -67,10 +76,10 @@ const Premium = () => {
   }, []);
 
   const afirmaciones = [
-    { texto: t("premium.acceso.videos"), mandala: false },
-    { texto: t("premium.acceso.plataforma"), mandala: true },
-    { texto: t("premium.acceso.precio"), mandala: false },
-    { texto: t("premium.acceso.aviso"), mandala: false },
+    { texto: t("premium.acceso.videos"), mandala: false, icono: "video" },
+    { texto: t("premium.acceso.plataforma"), mandala: true, icono: undefined },
+    { texto: t("premium.acceso.precio"), mandala: false, icono: undefined },
+    { texto: t("premium.acceso.aviso"), mandala: false, icono: "correo" },
   ];
 
   return (
@@ -94,7 +103,7 @@ const Premium = () => {
               align="center"
               gap={{ base: 8, md: 12, lg: 16 }}
             >
-              <Reveal activo={visible} direction="right" distance={36} scaleFrom={0.94} duration={1} w={{ base: "260px", md: "360px", lg: "440px" }} flexShrink={0}>
+              <Reveal activo={visible} direction="right" distance={36} scaleFrom={0.94} duration={1} w={{ base: "170px", md: "230px", lg: "280px" }} flexShrink={0}>
                 {/* Sin marco: el móvil ya es la forma. Un halo dorado suave lo despega del mármol. */}
                 <Image src={FOTO} alt="" w="100%" h="auto" display="block" style={{ filter: "drop-shadow(0 0 22px #b08d3f66) drop-shadow(0 0 48px #b08d3f33)" }} />
               </Reveal>
@@ -138,47 +147,79 @@ const Premium = () => {
             </Text>
           </Reveal>
 
-          <Grid templateColumns={{ base: "1fr", md: afirmaciones.map(() => "1fr").join(" 1px ") }} alignItems="stretch" rowGap={{ base: 8, md: 0 }}>
-            {afirmaciones.map((a, i) => (
-              <React.Fragment key={i}>
-                {i > 0 && (
-                  // El hilo de luz entre afirmaciones: vertical en escritorio, horizontal en móvil.
-                  <Reveal inView amount={0.5} direction="none" scaleFrom={0.4} duration={0.9} delay={i * 0.25 - 0.1} display="flex" justifyContent="center">
-                    <Box
-                      w={{ base: "60%", md: "1px" }}
-                      h={{ base: "1px", md: "100%" }}
-                      bg={{ base: "linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent)", md: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.6), transparent)" }}
-                      boxShadow="0 0 8px rgba(255,255,255,0.3)"
-                    />
-                  </Reveal>
-                )}
-                <Reveal inView amount={0.35} direction="up" distance={26} scaleFrom={0.97} duration={0.9} delay={i * 0.25}>
-                  <Flex direction="column" align="center" justify="center" textAlign="center" gap={4} px={{ base: 2, md: 8 }} py={{ base: 2, md: 6 }} h="100%">
-                    {a.mandala && (
-                      <Image
-                        src="/img/icono/life.webp"
-                        alt=""
-                        aria-hidden="true"
-                        h={{ base: "56px", md: "68px" }}
-                        objectFit="contain"
-                        style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.5)) drop-shadow(0 0 22px rgba(255,255,255,0.28))" }}
-                      />
+          {/* Las cuatro afirmaciones de dos en dos, con hilos de luz en cruz, y a la derecha
+              el móvil con el aviso (debajo en móvil). */}
+          <Flex direction={{ base: "column", lg: "row" }} align="center" gap={{ base: 10, lg: 14 }}>
+            <Grid
+              flex="1"
+              w="100%"
+              templateColumns={{ base: "1fr", md: "1fr 1px 1fr" }}
+              alignItems="stretch"
+              rowGap={{ base: 8, md: 0 }}
+            >
+              {afirmaciones.map((a, i) => {
+                const col = i % 2;
+                const fila = (i - col) / 2;
+                return (
+                  <React.Fragment key={i}>
+                    {i === 2 && (
+                      // Hilo horizontal entre las dos filas.
+                      <Reveal inView amount={0.5} direction="none" scaleFrom={0.4} duration={0.9} delay={0.35} display="flex" justifyContent="center" gridColumn="1 / -1" py={{ base: 0, md: 2 }}>
+                        <Box w={{ base: "60%", md: "70%" }} h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent)" boxShadow="0 0 8px rgba(255,255,255,0.3)" />
+                      </Reveal>
                     )}
-                    <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.4" letterSpacing="0.02em" sx={{ textWrap: "balance" }}>
-                      <ConNumero texto={a.texto} />
-                    </Text>
-                  </Flex>
-                </Reveal>
-              </React.Fragment>
-            ))}
-          </Grid>
+                    {col === 1 && (
+                      // Hilo vertical entre las dos columnas (solo en escritorio).
+                      <Reveal inView amount={0.5} direction="none" scaleFrom={0.4} duration={0.9} delay={fila * 0.5 + 0.15} display={{ base: "none", md: "flex" }} justifyContent="center">
+                        <Box w="1px" h="100%" bg="linear-gradient(to bottom, transparent, rgba(255,255,255,0.6), transparent)" boxShadow="0 0 8px rgba(255,255,255,0.3)" />
+                      </Reveal>
+                    )}
+                    <Reveal inView amount={0.35} direction="up" distance={26} scaleFrom={0.97} duration={0.9} delay={fila * 0.5 + col * 0.25}>
+                      <Flex direction="column" align="center" justify="center" textAlign="center" gap={4} px={{ base: 2, md: 6 }} py={{ base: 2, md: 6 }} h="100%">
+                        {a.mandala && (
+                          <Image
+                            src="/img/icono/life.webp"
+                            alt=""
+                            aria-hidden="true"
+                            h={{ base: "44px", md: "54px" }}
+                            objectFit="contain"
+                            style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.5)) drop-shadow(0 0 22px rgba(255,255,255,0.28))" }}
+                          />
+                        )}
+                        {a.icono && (
+                          <Box
+                            as="svg"
+                            aria-hidden="true"
+                            viewBox="0 0 24 24"
+                            fill="#FFFFFF"
+                            h={{ base: "44px", md: "54px" }}
+                            w={{ base: "44px", md: "54px" }}
+                            style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.5)) drop-shadow(0 0 22px rgba(255,255,255,0.28))" }}
+                          >
+                            <path d={ICONOS[a.icono]} />
+                          </Box>
+                        )}
+                        <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.4" letterSpacing="0.02em" sx={{ textWrap: "balance" }}>
+                          <ConNumero texto={a.texto} />
+                        </Text>
+                      </Flex>
+                    </Reveal>
+                  </React.Fragment>
+                );
+              })}
+            </Grid>
+
+            <Reveal inView amount={0.25} direction="left" distance={36} scaleFrom={0.95} duration={1} delay={0.3} w={{ base: "250px", md: "300px", lg: "340px" }} flexShrink={0}>
+              <Image src={FOTO_AVISO} alt="" w="100%" h="auto" display="block" style={{ filter: "drop-shadow(0 0 22px rgba(255,255,255,0.22)) drop-shadow(0 0 48px rgba(180,255,245,0.18))" }} />
+            </Reveal>
+          </Flex>
         </Box>
 
         <SeparadorFlor />
 
         {/* ── 4 · LLAMADA A LA ACCIÓN, SOBRE EL MÁRMOL ──
             El mármol sale primero; luego el título, el botón y el pensamiento. */}
-        <BandaMarmol>
+        <BandaMarmol pt={{ base: "104px", md: "136px" }} pb={{ base: "116px", md: "148px" }}>
           {(visible) => (
             <Flex direction="column" align="center" textAlign="center" w="100%" maxW="900px" mx="auto" px={{ base: 5, md: 10 }} gap={{ base: 6, md: 8 }}>
               <Reveal activo={visible} direction="up" distance={22} duration={0.9}>

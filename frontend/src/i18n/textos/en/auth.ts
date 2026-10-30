@@ -18,6 +18,8 @@ export const auth = {
   // «Entrar» is shorter than the title in Spanish; in English the natural
   // thing is to repeat "Log in" on the button — "Enter" sounds like a door,
   // not a session.
+  "auth.login.opcion.asesoria": "I'm receiving coaching",
+  "auth.login.opcion.premium": "I want to access the premium content",
   "auth.login.entrar": "Log in",
   "auth.login.olvidada": "Forgot your password?",
   "auth.login.sinCuenta": "Don't have an account? Create account",

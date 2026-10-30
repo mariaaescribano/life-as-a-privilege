@@ -1,6 +1,6 @@
 export const contacto = {
-  "contacto.titulo": "Contact",
-  "contacto.subtitulo": "Choose where you'd rather we talk.",
+  "contacto.titulo": "Contact me",
+  "contacto.subtitulo": "Do you have any questions, or would you like to get in touch? Write to me, no strings attached! I'll be happy to help :)",
   "contacto.formSubtitulo": "Write whatever you want and I'll reply to the email you leave me.",
 
   "contactame.boton": "Contact me",

@@ -14,7 +14,7 @@ export const header = {
   "header.arquetipos": "Archetypes",
   "header.suscriptores": "Subscribers",
   "header.programas": "Programs",
-  "header.contacto": "Contact",
+  "header.contacto": "Contact me",
   "header.miCuenta": "My account",
   "header.iniciarSesion": "Log in",
   "header.idioma": "Change language",

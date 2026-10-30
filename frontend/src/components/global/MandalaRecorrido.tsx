@@ -1161,6 +1161,26 @@ const VideoBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => vo
 // vídeo y, al pie, un «Saber más» que lleva a su presentación. El vídeo es el
 // clip corto y mudo de `VideoMuestraCard` (~100 KB), no el entero; al pulsarlo se
 // abre el largo en su popup.
+/** Pide los ocho clips mudos (~100 KB cada uno) por adelantado, para que al pasar de
+ *  una disciplina a otra el vídeo salga al instante y no tenga que bajarse entonces.
+ *  Los elementos se guardan a nivel de módulo para que no se los lleve el recolector. */
+/** Velocidad de reproducción de los clips del box resumen. */
+const VELOCIDAD_CLIP = 1.6;
+
+const clipsPrecargados: HTMLVideoElement[] = [];
+export const precargarClipsMuestra = () => {
+  if (typeof document === "undefined" || clipsPrecargados.length) return;
+  if ((navigator as { connection?: { saveData?: boolean } }).connection?.saveData) return;
+  disciplinas.forEach((d) => {
+    const v = document.createElement("video");
+    v.preload = "auto";
+    v.muted = true;
+    v.src = `/videos/muestra/${d.clave}.mp4`;
+    v.load();
+    clipsPrecargados.push(v);
+  });
+};
+
 const ResumenBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => void }) => {
   const t = useT();
   const nombreEnMapa = useNombreDisciplinaEnMapa();
@@ -1231,6 +1251,8 @@ const ResumenBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => 
             <Box
               as="video"
               src={`/videos/muestra/${disc.clave}.mp4`}
+              // Se reproduce más deprisa (x1,6): se ve de un vistazo.
+              ref={(v: HTMLVideoElement | null) => { if (v) { v.defaultPlaybackRate = VELOCIDAD_CLIP; v.playbackRate = VELOCIDAD_CLIP; } }}
               position="absolute"
               inset={0}
               w="100%"

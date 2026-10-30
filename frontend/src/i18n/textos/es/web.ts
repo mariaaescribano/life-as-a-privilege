@@ -18,7 +18,12 @@ export const web = {
     "Los textos legales de este sitio están disponibles únicamente en español, que es su versión válida.",
 
   // ── Materiales (/materiales) ───────────────────────────────────────────
-  "materiales.subtitulo": "Contenido creado y seleccionado por María",
+  "materiales.audiolibros": "Audiolibros",
+  "quienSoy.proposito.1": "Mi pasión por aprender y compartir",
+  "quienSoy.proposito.2": "Mi compromiso con la mejora constante",
+  "quienSoy.proposito.3": "Mi interés por comprender más allá de lo que nos han contado",
+  "quienSoy.subtitulo": "Mi formación, mi objetivo y mi propósito",
+  "materiales.subtitulo": "Contenido gratuito creado personalmente para facilitar tu camino",
   "materiales.ilustraciones": "Ilustraciones",
   "materiales.libros": "Libros",
   "materiales.programas": "Programas",

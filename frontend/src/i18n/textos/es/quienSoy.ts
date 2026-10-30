@@ -7,7 +7,7 @@
  */
 export const quienSoy = {
   "quienSoy.mision":
-    "Deseo ordenar el conocimiento disperso sobre el ser humano.",
+    "",
 
   // ── Donación ───────────────────────────────────────────────────────────
   "quienSoy.apoya": "Apoya este proyecto",
@@ -21,7 +21,7 @@ export const quienSoy = {
   "quienSoy.linkedin": "Ver carta completa en LinkedIn",
 
   // ── Certificados ───────────────────────────────────────────────────────
-  "quienSoy.certificados": "Mis Certificados",
+  "quienSoy.certificados": "Mi formación y herramientas para asesorarte",
   "quienSoy.certif.acompanar": "Para acompañarte",
   "quienSoy.certif.mente": "Para comprender tu mente",
   "quienSoy.certif.cuerpo": "Para comprender tu cuerpo",

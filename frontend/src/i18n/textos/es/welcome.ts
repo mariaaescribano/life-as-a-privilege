@@ -21,7 +21,7 @@ export const welcome = {
   "welcome.pilar.2.titulo": "Autoaceptación",
   "welcome.pilar.2.texto": "Aprende a observarte desde perspectivas diferentes, sin reducir la propia identidad a una etiqueta, un defecto o una dificultad.",
   "welcome.pilar.3.titulo": "Automejora",
-  "welcome.pilar.3.texto": "No te justifiques con lo que parece negativo. Úsalo para saber dónde poner el foco y mejorar tu calidad de vida, mejorando cada día como ser humano.",
+  "welcome.pilar.3.texto": "No te justifiques con lo que parece negativo. Úsalo para saber dónde poner el foco e incrementar tu calidad de vida, mejorando cada día como ser humano.",
   "welcome.explorar": "Explorar",
   "welcome.explorarDisciplina": "Explorar disciplina",
   "welcome.modal.cuenta": "Crea una cuenta o inicia sesión",

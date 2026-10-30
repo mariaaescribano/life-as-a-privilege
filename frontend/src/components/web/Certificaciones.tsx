@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { Reveal } from "../global/Reveal";
+import { focoBlanco } from "../global/foco";
 import { useT, type ClaveTexto } from "../../i18n";
 
 /**
@@ -46,109 +47,156 @@ const secciones: { tituloKey: ClaveTexto; items: Certificado[] }[] = GRUPOS.map(
 // Lista plana para el visor (mismo orden que se muestran)
 const certificados: Certificado[] = secciones.flatMap((s) => s.items);
 
-const Certificaciones = ({ iconoSeparador = "/img/icono/life.webp" }: { iconoSeparador?: string }) => {
+/** Diplomas de una sección en una fila que se desliza (deslizar con el dedo o con las flechas). */
+const FILA_ALTO = { base: "190px", md: "250px" };
+
+const Certificaciones = () => {
   const t = useT();
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [activa, setActiva] = useState(0);
+  const filaRef = useRef<HTMLDivElement>(null);
 
   const closeLightbox = () => setLightboxIdx(null);
   const prevCert = () => setLightboxIdx((i) => (i !== null ? (i - 1 + certificados.length) % certificados.length : null));
   const nextCert = () => setLightboxIdx((i) => (i !== null ? (i + 1) % certificados.length : null));
 
+  const visibles = secciones.filter((s) => s.items.length > 0);
+  const seccion = visibles[Math.min(activa, visibles.length - 1)];
+
+  const elegir = (i: number) => {
+    setActiva(i);
+    filaRef.current?.scrollTo({ left: 0, behavior: "auto" });
+  };
+  const deslizar = (dir: 1 | -1) => {
+    const el = filaRef.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
+  };
+
   return (
     <>
-      {/* ── SECCIONES DE CERTIFICADOS ── */}
-      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 10, md: 12 }} pb={0}>
-        <Flex direction="column" gap={{ base: 12, md: 16 }} maxW="1100px" mx="auto">
-          {secciones.filter((s) => s.items.length > 0).map((seccion, idx) => (
-            <Box key={seccion.tituloKey}>
-              {/* Separador horizontal con la flor en medio, encima del título.
-                  El contenedor de secciones ya deja `gap` por arriba; con este mb
-                  igual, el espacio por arriba y por abajo de la flor es el mismo. */}
-              {idx > 0 && (
-                <Reveal inView amount={0.5} direction="none" scaleFrom={0.7} duration={0.9} w="100%">
-                  <Flex align="center" justify="center" gap={{ base: 4, md: 6 }} w="100%" mx="auto" mb={{ base: 12, md: 16 }}>
-                    <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to right, transparent, rgba(255,255,255,0.55))" />
-                    <Image
-                      src={iconoSeparador}
-                      alt=""
-                      h={{ base: "26px", md: "34px" }}
-                      objectFit="contain"
-                      flexShrink={0}
-                      style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.45)) drop-shadow(0 0 18px rgba(255,255,255,0.22))" }}
-                    />
-                    <Box h="1px" w={{ base: "60px", md: "150px" }} bg="linear-gradient(to left, transparent, rgba(255,255,255,0.55))" />
-                  </Flex>
-                </Reveal>
-              )}
+      {/* ── MIS CERTIFICADOS: un título, seis temas para elegir y, debajo, los diplomas del tema
+          elegido en una sola fila que se desliza (en vez de seis rejillas una debajo de otra). ── */}
+      <Box px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 4, md: 6 }}>
+        <Box maxW="1100px" mx="auto">
+          <Reveal inView amount={0.5} direction="up" distance={18} duration={0.8}>
+            <Text
+              textAlign="center"
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "2xl", md: "4xl" }}
+              letterSpacing="0.03em"
+              lineHeight="1.25"
+            >
+              {t("quienSoy.certificados")}
+            </Text>
+          </Reveal>
 
-              {/* Subtítulo de la sección */}
-              <Reveal inView amount={0.5} direction="up" distance={18} duration={0.8} delay={0.1}>
-                <Flex direction="column" align="center" mb={{ base: 6, md: 8 }}>
-                  <Text
-                    color="white"
-                    fontSize={{ base: "xl", md: "2xl" }}
-                    fontWeight="600"
-                    letterSpacing="0.08em"
-                    textTransform="uppercase"
-                    textAlign="center"
-                    textShadow="0 0 12px rgba(255,255,255,0.4), 0 0 26px rgba(255,255,255,0.2)"
+          {/* Los temas, como pastillas. El activo se rellena con luz. */}
+          <Reveal inView amount={0.3} direction="up" distance={14} duration={0.8} delay={0.15}>
+            <Flex wrap="wrap" justify="center" gap={{ base: 2, md: 3 }} mt={{ base: 6, md: 8 }}>
+              {visibles.map((sec, i) => {
+                const on = i === activa;
+                return (
+                  <Box
+                    key={sec.tituloKey}
+                    as="button"
+                    type="button"
+                    onClick={() => elegir(i)}
+                    aria-pressed={on}
+                    px={{ base: 4, md: 5 }}
+                    py="8px"
+                    borderRadius="full"
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight={on ? "700" : "500"}
+                    fontSize={{ base: "sm", md: "md" }}
+                    letterSpacing="0.06em"
+                    color={on ? "#004f4f" : "white"}
+                    bg={on ? "rgba(255,255,255,0.92)" : "transparent"}
+                    border={`1px solid ${on ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.45)"}`}
+                    boxShadow={on ? "0 0 16px rgba(255,255,255,0.4), 0 0 36px rgba(180,255,245,0.22)" : "none"}
+                    transition="all 0.3s ease"
+                    _focusVisible={focoBlanco}
                   >
-                    {t(seccion.tituloKey)}
-                  </Text>
-                </Flex>
-              </Reveal>
+                    {t(sec.tituloKey)}
+                  </Box>
+                );
+              })}
+            </Flex>
+          </Reveal>
 
-              {/* Rejilla de la sección · 2 por fila en móvil, 4 en ordenador.
-                  Va con flex-wrap CENTRADO y no con una rejilla de columnas
-                  fijas: el número de diplomas de cada sección cambia cada vez
-                  que se añade uno y casi nunca es múltiplo de 4, así que con
-                  columnas la última fila se quedaba pegada a la izquierda con
-                  el resto del ancho vacío.
-                  Centrando, una fila incompleta parece querida. El ancho de la
-                  tarjeta se calcula descontando su parte del hueco, para que
-                  sea EXACTAMENTE el mismo que tendría en la rejilla —así todas
-                  las secciones siguen teniendo el diploma del mismo tamaño. */}
-              <Flex
-                wrap="wrap"
-                justify="center"
-                gap={{ base: 4, md: 6 }}
-                sx={{
-                  "& > *": {
-                    flex: "0 0 auto",
-                    // 2 por fila (1 hueco de 16 px → 8 px por tarjeta)
-                    width: "calc(50% - 8px)",
-                    // 4 por fila (3 huecos de 24 px → 18 px por tarjeta)
-                    "@media (min-width: 48em)": { width: "calc(25% - 18px)" },
-                  },
-                }}
+          {/* La fila de diplomas del tema elegido. Cambia con un fundido; los diplomas se ven
+              ENTEROS (sin recortar), cada uno a su proporción. */}
+          <Box position="relative" mt={{ base: 6, md: 8 }}>
+            <Flex
+              key={seccion.tituloKey}
+              ref={filaRef}
+              gap={{ base: 4, md: 6 }}
+              overflowX="auto"
+              px={{ base: 1, md: 2 }}
+              py={4}
+              align="center"
+              sx={{
+                scrollSnapType: "x proximity",
+                scrollbarWidth: "none",
+                "&::-webkit-scrollbar": { display: "none" },
+                "@keyframes diplomasEntran": { from: { opacity: 0, transform: "translateY(14px)" }, to: { opacity: 1, transform: "translateY(0)" } },
+                animation: "diplomasEntran 0.6s cubic-bezier(0.22,1,0.36,1) both",
+                "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+              }}
+            >
+              {seccion.items.map((cert, i) => (
+                <Box
+                  key={cert.name}
+                  as="button"
+                  type="button"
+                  flexShrink={0}
+                  onClick={() => setLightboxIdx(certificados.indexOf(cert))}
+                  aria-label={`${t(seccion.tituloKey)} ${i + 1}`}
+                  borderRadius="lg"
+                  overflow="hidden"
+                  boxShadow="0 0 14px rgba(255,255,255,0.2), 0 0 32px rgba(255,255,255,0.1)"
+                  sx={{ scrollSnapAlign: "start" }}
+                  transition="transform 0.3s ease, box-shadow 0.3s ease"
+                  _hover={{ transform: "translateY(-4px)", boxShadow: "0 0 22px rgba(255,255,255,0.4), 0 0 50px rgba(180,255,245,0.25)" }}
+                  _focusVisible={focoBlanco}
+                >
+                  <Image src={cert.img} alt="" h={FILA_ALTO} w="auto" maxW="none" display="block" />
+                </Box>
+              ))}
+            </Flex>
+
+            {/* Flechas (en móvil se desliza con el dedo). */}
+            {(["izq", "dcha"] as const).map((lado) => (
+              <Box
+                key={lado}
+                as="button"
+                type="button"
+                onClick={() => deslizar(lado === "izq" ? -1 : 1)}
+                aria-label={lado === "izq" ? "‹" : "›"}
+                display={{ base: "none", md: "flex" }}
+                position="absolute"
+                top="50%"
+                {...(lado === "izq" ? { left: "-14px" } : { right: "-14px" })}
+                transform="translateY(-50%)"
+                w="40px"
+                h="40px"
+                borderRadius="full"
+                alignItems="center"
+                justifyContent="center"
+                color="white"
+                fontSize="2xl"
+                lineHeight="1"
+                bg="rgba(0,128,128,0.85)"
+                border="1px solid rgba(255,255,255,0.6)"
+                boxShadow="0 0 14px rgba(255,255,255,0.3)"
+                _focusVisible={focoBlanco}
               >
-                {seccion.items.map((cert, i) => {
-                  const globalIdx = certificados.indexOf(cert);
-                  return (
-                    // Un Reveal por diploma (no uno para toda la rejilla): cada
-                    // uno entra al asomar él, así que al bajar van saliendo de
-                    // uno en uno. El retraso (según su sitio en la fila) hace
-                    // que, cuando asoma una fila entera, caiga de izquierda a
-                    // derecha en cascada y no de golpe.
-                    <Reveal key={cert.name} inView amount={0.25} direction="up" distance={28} scaleFrom={0.94} duration={0.75} delay={(i % 4) * 0.14}>
-                      <Box
-                        borderRadius="xl"
-                        overflow="hidden"
-                        boxShadow="0 0 14px rgba(255,255,255,0.22), 0 0 32px rgba(255,255,255,0.12)"
-                        transition="transform 0.25s ease, box-shadow 0.25s ease"
-                        _hover={{ transform: "translateY(-4px)", boxShadow: "0 0 22px rgba(255,255,255,0.4), 0 0 50px rgba(180,255,245,0.25)" }}
-                        cursor="pointer"
-                        onClick={() => setLightboxIdx(globalIdx)}
-                      >
-                        <Image src={cert.img} alt={`${t(seccion.tituloKey)} ${i + 1}`} w="100%" h={{ base: "130px", md: "170px" }} objectFit="cover" display="block" />
-                      </Box>
-                    </Reveal>
-                  );
-                })}
-              </Flex>
-            </Box>
-          ))}
-        </Flex>
+                {lado === "izq" ? "‹" : "›"}
+              </Box>
+            ))}
+          </Box>
+        </Box>
       </Box>
 
       {/* ── VISOR ── */}

@@ -1,24 +1,24 @@
 /**
- * CONTACTAR (/contacto).
+ * CONTÁCTAME (/contacto).
  *
- * Las cinco puertas: la llamada, escribirme, WhatsApp, Instagram y la
- * comunidad. El formulario tiene su propia pagina (/contacto/escribir), a la
- * que lleva la tarjeta de escribirme.
- *
- * Entre el subtitulo y las puertas va el retrato: aqui es donde alguien decide
- * si escribe a una desconocida, y es la unica foto de la pagina a proposito.
- * La foto y el boton de debajo llevan a «Quien soy» (/quienSoy).
+ * Mandala, título y frase; después, sobre el mármol, mi foto a la izquierda y a la
+ * derecha las cuatro vías: la llamada, escribirme, WhatsApp e Instagram. El
+ * formulario tiene su propia página (/contacto/escribir), a la que lleva la tarjeta
+ * de escribirme.
  */
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import ViasDeContacto from "../../components/contacto/ViasDeContacto";
 import { Reveal } from "../../components/global/Reveal";
-import FlorTitulo from "../../components/global/FlorTitulo";
-import { focoBlanco } from "../../components/global/foco";
+import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
+import BandaMarmol from "../../components/global/BandaMarmol";
 import { useT } from "../../i18n";
+
+const TINTA = "#004f4f";
+const ORO = "#b08d3f";
 
 const Contacto = () => {
   const t = useT();
@@ -35,113 +35,38 @@ const Contacto = () => {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
-      {/* FLOR DE LA VIDA sobre el título */}
-      <FlorTitulo />
+      {/* ── MANDALA + TÍTULO + FRASE (la misma cabecera de la portada) ── */}
+      <WelcomeCabecera activo={mounted} titulo={t("contacto.titulo")} subtitulo={t("contacto.subtitulo")} mayusculas />
 
-      {/* TITULO */}
-      <Flex
-        direction="column"
-        align="center"
-        textAlign="center"
-        px={{ base: 5, md: 10 }}
-        pt={{ base: 8, md: 10 }}
-        gap={{ base: 3, md: 4 }}
-      >
-        <Text
-          color="white"
-          fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }}
-          fontWeight="700"
-          letterSpacing="0.1em"
-          lineHeight="1.1"
-          textTransform="uppercase"
-          textShadow="0 0 18px rgba(255,255,255,0.6), 0 0 38px rgba(255,255,255,0.39), 0 0 70px rgba(180,255,245,0.32)"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(24px)"}
-          filter={mounted ? "blur(0)" : "blur(8px)"}
-          transition="opacity 0.95s cubic-bezier(0.22,1,0.36,1) 0.3s, transform 0.95s cubic-bezier(0.22,1,0.36,1) 0.3s, filter 0.95s cubic-bezier(0.22,1,0.36,1) 0.3s"
-        >
-          {t("contacto.titulo")}
-        </Text>
-        <Text
-          color="rgba(255,255,255,0.88)"
-          fontSize={{ base: "md", md: "lg" }}
-          lineHeight="1.7"
-          letterSpacing="0.03em"
-          maxW={{ base: "100%", md: "560px" }}
-          textShadow="0 0 10px rgba(255,255,255,0.34), 0 0 22px rgba(255,255,255,0.17)"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(16px)"}
-          transition="opacity 0.9s cubic-bezier(0.22,1,0.36,1) 0.6s, transform 0.9s cubic-bezier(0.22,1,0.36,1) 0.6s"
-        >
-          {t("contacto.subtitulo")}
-        </Text>
-      </Flex>
-
-      {/* LA CARA ──
-          Una sola foto, y aquí: esta es la página en la que alguien decide si
-          le escribe a una desconocida o no, y saber con quién va a hablar quita
-          más reparo que cualquier frase. UNA, no una por tarjeta: los iconos
-          son lo que hace las seis puertas legibles de un vistazo, y seis
-          retratos las convertirían en un álbum.
-          Anillo fino y sombra baja, sin halo blanco: sobre el turquesa un halo
-          claro se lee como una caja detrás de la foto. */}
-      <Flex direction="column" align="center" gap={{ base: 4, md: 5 }} pt={{ base: 8, md: 10 }}>
-        <Reveal inView amount={0.02} direction="up" distance={20} scaleFrom={0.94} duration={0.7}>
-          {/* La foto lleva a «Quién soy», igual que el botón de debajo. */}
-          <Box
-            as="button"
-            type="button"
-            onClick={() => navigate("/quienSoy")}
-            aria-label={t("footer.quienSoy")}
-            display="block"
-            borderRadius="full"
-            cursor="pointer"
-            _focusVisible={focoBlanco}
-          >
-            <Image
-              src="/img/me/me.webp"
-              alt=""
-              w={{ base: "104px", md: "132px" }}
-              h={{ base: "104px", md: "132px" }}
-              borderRadius="full"
-              objectFit="cover"
-              border="1px solid rgba(255,255,255,0.5)"
-              boxShadow="0 8px 26px rgba(0,0,0,0.28)"
-              transition="transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s ease"
-              _hover={{ transform: "scale(1.05)", boxShadow: "0 12px 34px rgba(0,0,0,0.34)" }}
-            />
-          </Box>
-        </Reveal>
-
-        <Reveal inView amount={0.02} direction="up" distance={14} duration={0.7} delay={0.15}>
-          <Box
-            as="button"
-            type="button"
-            onClick={() => navigate("/quienSoy")}
-            color="white"
-            fontFamily="'EB Garamond', serif"
-            fontWeight="600"
-            fontSize={{ base: "md", md: "lg" }}
-            letterSpacing="0.06em"
-            px={{ base: 7, md: 9 }}
-            py="10px"
-            borderRadius="full"
-            border="1px solid rgba(255,255,255,0.55)"
-            bg="rgba(255,255,255,0.08)"
-            boxShadow="0 0 14px rgba(255,255,255,0.28), 0 0 30px rgba(180,255,245,0.18)"
-            cursor="pointer"
-            transition="background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease"
-            _hover={{ bg: "rgba(255,255,255,0.16)", boxShadow: "0 0 18px rgba(255,255,255,0.4), 0 0 38px rgba(180,255,245,0.26)", transform: "translateY(-1px)" }}
-            _focusVisible={focoBlanco}
-          >
-            {t("footer.quienSoy")}
-          </Box>
-        </Reveal>
-      </Flex>
-
-      {/* LAS VIAS: llamada, escribirme, WhatsApp, Instagram y la comunidad */}
-      <Box flex="1" pb={{ base: 20, md: 28 }}>
-        <ViasDeContacto onEscribir={() => navigate("/contacto/escribir")} />
+      {/* ── SOBRE EL MÁRMOL: mi foto a la izquierda y, a la derecha, las cuatro vías
+          (llamada, escribirme, WhatsApp e Instagram). ── */}
+      <Box flex="1">
+        <BandaMarmol>
+          {(visible) => (
+            <Flex
+              w="100%"
+              maxW="1100px"
+              mx="auto"
+              px={{ base: 5, md: 10, lg: 16 }}
+              direction={{ base: "column", md: "row" }}
+              align="center"
+              gap={{ base: 12, md: 14, lg: 20 }}
+            >
+              {/* La foto ENTERA, con un filo fino desplazado que la enmarca. */}
+              <Reveal activo={visible} direction="right" distance={30} scaleFrom={0.94} duration={1} w={{ base: "250px", md: "300px", lg: "340px" }} flexShrink={0}>
+                <Box position="relative">
+                  <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
+                  <Box borderRadius="22px" overflow="hidden" boxShadow={`0 0 22px ${ORO}55, 0 0 48px ${ORO}28`}>
+                    <Image src="/img/me/asesoria.webp" alt="María Escribano" w="100%" h="auto" display="block" />
+                  </Box>
+                </Box>
+              </Reveal>
+              <Box flex="1" minW={0} w="100%">
+                <ViasDeContacto onEscribir={() => navigate("/contacto/escribir")} activo={visible} />
+              </Box>
+            </Flex>
+          )}
+        </BandaMarmol>
       </Box>
 
       <SiteFooter />

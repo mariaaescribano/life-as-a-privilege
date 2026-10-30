@@ -6,7 +6,7 @@ import { AgendarLlamada } from "../global/AgendarLlamada";
 import { BookCallModal } from "../global/BookCallModal";
 import { IconoWhatsapp } from "../metodo/LlamadaCta";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
-import { INSTAGRAM_URL, WHATSAPP_COMUNIDAD_URL, whatsappUrl } from "../../GlobalVariables";
+import { INSTAGRAM_URL, whatsappUrl } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -41,13 +41,6 @@ const IconoLlamada = (
   </Icono>
 );
 
-/** Dos personas con un corazón: los veinte minutos de conocernos. */
-const IconoConocernos = (
-  <Icono>
-    <path d="M40-120v-160q0-34 23.5-57t56.5-23h131q20 0 38 10t29 27q29 39 71.5 61t90.5 22q49 0 91.5-22t70.5-61q13-17 30.5-27t36.5-10h131q34 0 57 23t23 57v160H640v-91q-35 25-75.5 38T480-160q-43 0-84-13.5T320-212v92H40Zm120-280q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T280-520q0 50-34.5 85T160-400Zm640 0q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T920-520q0 50-34.5 85T800-400Zm-320-80q-68-62-111-104.5T302-658q-24-31-33-54.5t-9-47.5q0-50 35-85t86-35q28 0 54 12.5t45 33.5q19-21 45-33.5t54-12.5q51 0 86 35t35 85q0 24-9 47.5T658-658q-24 31-67 73.5T480-480Zm0-108q72-66 106-107.5t34-64.5q0-17-12-28.5T579-800q-12 0-23.5 7T532-772l-51 59-51-57q-14-16-25.5-23t-23.5-7q-17 0-29 11.5T340-760q0 23 34 64.5T480-588Zm0 0Z" />
-  </Icono>
-);
-
 const IconoEmail = (
   <Icono>
     <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z" />
@@ -60,16 +53,16 @@ const IconoInstagram = (
   </Icono>
 );
 
-const IconoComunidad = (
-  <Icono>
-    <path d="M40-160v-160q0-34 23.5-57t56.5-23h131q20 0 38 10t29 27q29 39 71.5 61t90.5 22q49 0 91.5-22t70.5-61q13-17 30.5-27t36.5-10h131q34 0 57 23t23 57v160H640v-91q-35 25-75.5 38T480-200q-43 0-84-13.5T320-252v92H40Zm440-160q-38 0-72-17.5T351-386q-17-25-42.5-39.5T253-440q22-37 93-58.5T480-520q63 0 134 21.5t93 58.5q-29 0-55 14.5T609-386q-22 32-56 49t-73 17ZM160-440q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T280-560q0 50-34.5 85T160-440Zm640 0q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T920-560q0 50-34.5 85T800-440ZM480-560q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-680q0 50-34.5 85T480-560Z" />
-  </Icono>
-);
+const TINTA = "#004f4f";
+const ORO = "#b08d3f";
 
-/** Una tarjeta: icono, título y una línea de para qué sirve. */
+/** Una tarjeta: icono, título y una línea de para qué sirve. Va sobre el mármol:
+ *  transparente, con filo y letra turquesa oscuro y un halo dorado muy suave. */
 function Via({
-  icono, titulo, texto, href, onClick, apagada, nota, i = 0,
+  icono, titulo, texto, href, onClick, apagada, nota, i = 0, activo,
 }: {
+  /** Con valor, la entrada la manda la banda de mármol; sin él, al asomar. */
+  activo?: boolean;
   /** Posición en la rejilla: marca el retraso de entrada de la tarjeta. */
   i?: number;
   icono: React.ReactNode;
@@ -89,12 +82,11 @@ function Via({
     w: "100%",
     textAlign: "left" as const,
     borderRadius: "2xl",
-    border: "1px solid rgba(255,255,255,0.28)",
-    bg: "rgba(255,255,255,0.08)",
-    color: "white",
+    border: `1.5px solid ${TINTA}55`,
+    bg: "transparent",
+    color: TINTA,
     textDecoration: "none",
-    boxShadow: "0 0 16px rgba(255,255,255,0.22), 0 0 40px rgba(180,255,245,0.12), 0 4px 14px rgba(0,0,0,0.16)",
-    sx: { backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" },
+    boxShadow: `0 0 16px ${ORO}22, 0 0 36px ${ORO}12`,
     opacity: apagada ? 0.45 : 1,
     cursor: apagada ? "not-allowed" : "pointer",
     role: "group",
@@ -102,15 +94,14 @@ function Via({
     _active: apagada ? {} : { transform: "translateY(0) scale(0.985)" },
     _hover: apagada ? {} : {
       transform: "translateY(-4px)",
-      bg: "rgba(255,255,255,0.16)",
-      borderColor: "rgba(255,255,255,0.9)",
-      boxShadow: "0 0 24px rgba(255,255,255,0.45), 0 0 52px rgba(180,255,245,0.3), 0 6px 18px rgba(0,0,0,0.2)",
+      bg: `${TINTA}12`,
+      borderColor: `${TINTA}aa`,
     },
   };
 
   const dentro = (
     <>
-      <Box mt="2px" flexShrink={0} style={{ filter: "drop-shadow(0 0 8px rgba(255,255,255,0.35))" }}
+      <Box mt="2px" flexShrink={0}
            transition="transform 0.4s cubic-bezier(0.22,1,0.36,1)"
            _groupHover={apagada ? undefined : { transform: "scale(1.14)" }}>
         {icono}
@@ -125,7 +116,7 @@ function Via({
         >
           {titulo}
         </Text>
-        <Text fontSize={{ base: "sm", md: "md" }} lineHeight="1.5" mt={1} color="rgba(255,255,255,0.85)">
+        <Text fontSize={{ base: "sm", md: "md" }} lineHeight="1.5" mt={1} color={TINTA}>
           {apagada && nota ? nota : texto}
         </Text>
       </Box>
@@ -136,8 +127,8 @@ function Via({
   // llega un pelín después. La entrada va en el envoltorio para no pisar el
   // transform del hover de la tarjeta.
   const entra = (nodo: React.ReactNode) => (
-    <Reveal inView amount={0.1} direction="up" distance={26} scaleFrom={0.97} duration={0.75}
-            delay={(i % 2) * 0.12} h="100%">
+    <Reveal {...(activo === undefined ? { inView: true, amount: 0.1 } : { activo })} direction="up" distance={26} scaleFrom={0.97} duration={0.75}
+            delay={activo === undefined ? i * 0.1 : 0.1 + i * 0.15} h="100%">
       {nodo}
     </Reveal>
   );
@@ -156,7 +147,7 @@ function Via({
   );
 }
 
-export function ViasDeContacto({ onEscribir }: { onEscribir: () => void }) {
+export function ViasDeContacto({ onEscribir, activo }: { onEscribir: () => void; activo?: boolean }) {
   const t = useT();
   const [params, setParams] = useSearchParams();
   const [llamadaAbierta, setLlamadaAbierta] = useState(false);
@@ -186,15 +177,11 @@ export function ViasDeContacto({ onEscribir }: { onEscribir: () => void }) {
 
   return (
     <>
-      <Box px={{ base: 5, md: 10 }} pt={{ base: 12, md: 16 }}>
-        <Grid
-          maxW="900px"
-          mx="auto"
-          templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
-          gap={{ base: 4, md: 5 }}
-        >
+      <Box>
+        <Grid templateColumns="1fr" gap={{ base: 4, md: 5 }}>
           <Via
             i={0}
+            activo={activo}
             icono={IconoLlamada}
             titulo={t("contacto.via.llamada")}
             texto={t("contacto.via.llamadaTexto")}
@@ -202,40 +189,27 @@ export function ViasDeContacto({ onEscribir }: { onEscribir: () => void }) {
           />
           <Via
             i={1}
-            icono={IconoConocernos}
-            titulo={t("contacto.via.conocernos")}
-            texto={t("contacto.via.conocernosTexto")}
-            onClick={() => setConocernosAbierta(true)}
-          />
-          <Via
-            i={2}
+            activo={activo}
             icono={IconoEmail}
             titulo={t("contacto.via.email")}
             texto={t("contacto.via.emailTexto")}
             onClick={onEscribir}
           />
           <Via
-            i={3}
+            i={2}
+            activo={activo}
             icono={<IconoWhatsapp size="30px" />}
             titulo={t("contacto.via.whatsapp")}
             texto={t("contacto.via.whatsappTexto")}
             href={whatsappUrl()}
           />
           <Via
-            i={4}
+            i={3}
+            activo={activo}
             icono={IconoInstagram}
             titulo={t("contacto.via.instagram")}
             texto={t("contacto.via.instagramTexto")}
             href={INSTAGRAM_URL}
-          />
-          <Via
-            i={5}
-            icono={IconoComunidad}
-            titulo={t("contacto.via.comunidad")}
-            texto={t("contacto.via.comunidadTexto")}
-            href={WHATSAPP_COMUNIDAD_URL || undefined}
-            apagada={!WHATSAPP_COMUNIDAD_URL}
-            nota={t("contacto.via.comunidadPendiente")}
           />
         </Grid>
       </Box>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
+import { useCabeceraEscribiendo } from "./cabeceraEntrada";
 
 /**
  * Banda a todo el ancho con el mármol de María (`marmolfondo`) de fondo.
@@ -12,6 +13,10 @@ import { Box } from "@chakra-ui/react";
  *   hecho scroll. NUNCA sale al cargar la página, aunque la banda ya asome por
  *   abajo de la primera pantalla: sin scroll no hay mármol. El contenido (los hijos reciben `visible`) arranca sus
  *   entradas un instante DESPUÉS, cuando el mármol ya está ahí.
+ * · El contenido NO arranca cuando asoma la banda (que es alta y con 90 px de
+ *   relleno): arranca cuando el propio contenido ha subido por encima del 80 % de
+ *   la pantalla. Así la entrada se VE siempre mientras se baja, en vez de
+ *   consumirse fuera de pantalla.
  * · Sobre el mármol la letra va en turquesa oscuro (#004f4f); ver DISENO.md.
  */
 const BandaMarmol = ({
@@ -28,13 +33,15 @@ const BandaMarmol = ({
   const [marmol, setMarmol] = useState(false);
   const [visible, setVisible] = useState(false);
   const [el, setEl] = useState<HTMLDivElement | null>(null);
+  // Hasta que la cabecera no ha escrito su titular, ni el mármol ni nada de la banda entra.
+  const cabeceraEscribiendo = useCabeceraEscribiendo();
 
   useEffect(() => {
     if (!el) return;
     let asoma = false;
     let scroll = window.scrollY > 0;
     const evaluar = () => {
-      if (asoma && scroll) {
+      if (asoma && scroll && !cabeceraEscribiendo) {
         setMarmol(true);
         obs.disconnect();
         window.removeEventListener("scroll", alScroll);
@@ -48,14 +55,31 @@ const BandaMarmol = ({
     obs.observe(el);
     window.addEventListener("scroll", alScroll, { passive: true });
     return () => { obs.disconnect(); window.removeEventListener("scroll", alScroll); };
-  }, [el]);
+  }, [el, cabeceraEscribiendo]);
 
-  // El contenido espera a que el mármol esté puesto.
+  // El contenido arranca cuando (1) el mármol está puesto y (2) el contenido mismo
+  // ha entrado en pantalla (su borde superior por encima del 80 % de la altura).
+  const [cuerpo, setCuerpo] = useState<HTMLDivElement | null>(null);
+  const [entra, setEntra] = useState(false);
+  const [marmolDesde, setMarmolDesde] = useState(0);
+  useEffect(() => { if (marmol) setMarmolDesde(Date.now()); }, [marmol]);
+
   useEffect(() => {
-    if (!marmol) return;
-    const id = setTimeout(() => setVisible(true), 450);
+    if (!cuerpo) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setEntra(true); obs.disconnect(); } },
+      { threshold: 0, rootMargin: "0px 0px -20% 0px" },
+    );
+    obs.observe(cuerpo);
+    return () => obs.disconnect();
+  }, [cuerpo]);
+
+  useEffect(() => {
+    if (!marmol || !entra) return;
+    // Mínimo 450 ms desde que el mármol está puesto: el mármol sale primero.
+    const id = setTimeout(() => setVisible(true), Math.max(0, 450 - (Date.now() - marmolDesde)));
     return () => clearTimeout(id);
-  }, [marmol]);
+  }, [marmol, entra, marmolDesde]);
 
   return (
     <Box ref={setEl} position="relative" mt={mt} pt={pt} pb={pb}>
@@ -74,7 +98,7 @@ const BandaMarmol = ({
           maskImage: "linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%)",
         }}
       />
-      <Box position="relative" zIndex={1}>
+      <Box ref={setCuerpo} position="relative" zIndex={1}>
         {children(visible)}
       </Box>
     </Box>

@@ -19,7 +19,7 @@ export const header = {
   "header.arquetipos": "Arquetipos",
   "header.suscriptores": "Suscriptores",
   "header.programas": "Programas",
-  "header.contacto": "Contactar",
+  "header.contacto": "Contáctame",
   "header.miCuenta": "Mi cuenta",
   /** Última opción del menú SIN sesión. Es una acción, no un sitio: quien no ha
    *  entrado todavía no tiene ninguna «cuenta» que visitar. */

@@ -1,7 +1,7 @@
 /** Página de contacto (/contacto). */
 export const contacto = {
-  "contacto.titulo": "Contactar",
-  "contacto.subtitulo": "Elige por dónde prefieres que hablemos.",
+  "contacto.titulo": "Contáctame",
+  "contacto.subtitulo": "¿Tienes alguna duda o te gustaría ponerte en contacto conmigo? ¡Escríbeme sin compromiso! Estaré encantada de ayudarte :)",
   // Subtítulo de la página del formulario (/contacto/escribir).
   "contacto.formSubtitulo": "Escribe lo que quieras y te respondo al correo que me dejes.",
 
