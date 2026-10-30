@@ -10,14 +10,13 @@ dotenv.config();
 // variable de entorno FRONTEND_ORIGINS (separados por comas) se añaden más SIN
 // tocar el código ni volver a desplegar — que es lo que hará falta el día que
 // se estrene dominio propio:
-//     FRONTEND_ORIGINS="https://lifeasaprivilege.com, https://www.lifeasaprivilege.com"
+//     FRONTEND_ORIGINS="https://tudominio.com, https://www.tudominio.com"
 // Sin eso, la web nueva carga pero TODAS sus peticiones fallan por CORS.
 function origenesPermitidos(): string[] {
   const fijos = [
     // La web, con el nombre nuevo.
     'https://mariaescribano.onrender.com',
-    // La web de antes (y la del propio backend): se conservan por si algo aún las usa.
-    'https://lifeasaprivilege.onrender.com',
+    // La del propio backend (el servicio de Render sigue llamándose así).
     'https://life-as-a-privilege.onrender.com',
     // el dev server del frontend corre siempre en el 5199 (5173 es el puerto
     // por defecto de Vite, se conserva por si acaso)

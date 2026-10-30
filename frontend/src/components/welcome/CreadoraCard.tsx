@@ -172,11 +172,12 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         justifyContent="center"
         gap={{ base: 7, md: 14, lg: 20 }}
         w="100%"
-        p={{ base: 7, md: 12, lg: 16 }}
+        p={{ base: marmol ? 0 : 7, md: 12, lg: 16 }}
         borderRadius="3xl"
         bg={c.panelBg}
-        border={`1px solid ${c.panelBorde}`}
-        boxShadow={c.panelSombra}
+        // Sobre el mármol, en móvil, sin el marco que enmarcaba los elementos.
+        border={marmol ? { base: "none", md: `1px solid ${c.panelBorde}` } : `1px solid ${c.panelBorde}`}
+        boxShadow={marmol ? { base: "none", md: c.panelSombra } : c.panelSombra}
         // Sobre el mármol no hay cristal esmerilado: se tiene que ver el mármol.
         sx={marmol ? undefined : { backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
       >

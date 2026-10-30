@@ -32,7 +32,6 @@ export type ItemOrbita = {
 };
 
 const BLANCO = "rgba(255,255,255,0.92)";
-const ORO = "#e3c27a";
 
 const R_NODO = 24.5;      // donde nace cada línea (aro de puntos)
 const R_MEDALLON = 41;    // centro de los medallones
@@ -145,11 +144,14 @@ export default function MandalaOrbita({
           return (
             <Box key={i} position="absolute" left={`${p.x}%`} top={`${p.y}%`} w="2.4%" sx={{ aspectRatio: "1 / 1", transform: "translate(-50%, -50%)" }}>
               <motion.div
-                style={{ width: "100%", height: "100%", borderRadius: "50%", background: ORO, border: "1px solid rgba(0,60,60,0.6)", boxShadow: on ? `0 0 10px ${ORO}` : "none" }}
+                // La bolita lleva la foto de SU disciplina (y el color de su letra en el filo).
+                style={{ position: "relative", overflow: "hidden", width: "100%", height: "100%", borderRadius: "50%", background: hasDisciplinaBg(items[i].nom) ? "transparent" : items[i].bg, border: `1px solid ${items[i].txt}`, boxShadow: on ? `0 0 10px ${items[i].txt}` : "none" }}
                 initial={reducir ? false : { opacity: 0, scale: 0 }}
                 animate={{ opacity: activo ? 1 : 0, scale: activo ? (on ? 1.5 : 1) : 0 }}
                 transition={{ duration: 0.4, delay: activo ? 0.85 + i * 0.12 : 0 }}
-              />
+              >
+                {hasDisciplinaBg(items[i].nom) && <DisciplinaBgLayer nom={items[i].nom} borderRadius="full" talCual />}
+              </motion.div>
             </Box>
           );
         })}

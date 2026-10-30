@@ -30,7 +30,7 @@ export default function SelectorPerspectivas() {
   if (!d) return null;
 
   return (
-    <Box w="100%" maxW="900px" mx="auto" px={{ base: 5, md: 10 }}>
+    <Box w="100%" maxW="1000px" mx="auto" px={{ base: 5, md: 10 }}>
       <Reveal inView amount={0.5} direction="up" distance={20} duration={0.9}>
         <Text
           textAlign="center"
@@ -47,101 +47,113 @@ export default function SelectorPerspectivas() {
         </Text>
       </Reveal>
 
-      <Reveal inView amount={0.2} direction="up" distance={26} scaleFrom={0.97} duration={0.9} delay={0.2}>
-        <Box position="relative" mt={{ base: 6, md: 8 }}>
-          {/* El mandala de fondo: grande, centrado detrás de la foto y muy tenue. */}
-          <Box
-            position="absolute"
-            top="50%"
-            left="50%"
-            w={{ base: "105%", md: "500px" }}
-            maxW="none"
-            aria-hidden="true"
-            pointerEvents="none"
-            opacity={0.14}
-            sx={{
-              transform: "translate(-50%, -50%)",
-              aspectRatio: "1 / 1",
-              backgroundImage: "url('/img/icono/life.webp')",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              filter: "drop-shadow(0 0 14px rgba(255,255,255,0.4))",
-            }}
-          />
+      {/* Escritorio: la foto a la izquierda y las ocho disciplinas de dos en dos a la derecha, con
+          el mismo alto que la foto. Móvil: foto, nombre y una fila con los ocho iconos. */}
+      <Flex direction={{ base: "column", md: "row" }} align="stretch" justify="center" gap={{ base: 0, md: 8 }} mt={{ base: 6, md: 10 }}>
+        <Reveal inView amount={0.2} direction="up" distance={26} scaleFrom={0.97} duration={0.9} delay={0.2} w={{ base: "58%", md: "340px" }} maxW="340px" mx={{ base: "auto", md: 0 }} flexShrink={0}>
+          <AnimatePresence mode="wait">
+            <MotionBox
+              key={d.key}
+              initial={reducir ? false : { opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={reducir ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.35 }}
+            >
+              <FotoDisciplina d={d} />
+            </MotionBox>
+          </AnimatePresence>
+        </Reveal>
 
-          <Box position="relative" w={{ base: "58%", md: "290px" }} maxW="290px" mx="auto">
-            <AnimatePresence mode="wait">
-              <MotionBox
-                key={d.key}
-                initial={reducir ? false : { opacity: 0, scale: 0.97 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={reducir ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.35 }}
-              >
-                <FotoDisciplina d={d} />
-              </MotionBox>
-            </AnimatePresence>
-          </Box>
-        </Box>
-      </Reveal>
+        {/* El nombre de la elegida, en blanco, encima de los iconos (solo móvil: en escritorio
+            cada disciplina lleva su nombre). */}
+        <Flex display={{ base: "flex", md: "none" }} justify="center" align="center" mt={5} minH="30px" aria-live="polite">
+          <AnimatePresence mode="wait">
+            <MotionBox
+              key={d.key}
+              initial={reducir ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reducir ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize="xl" letterSpacing="0.04em" textAlign="center">
+                {nombreDe(d.nom)}
+              </Text>
+            </MotionBox>
+          </AnimatePresence>
+        </Flex>
 
-      {/* El nombre de la disciplina elegida, en blanco, justo encima de los iconos. */}
-      <Flex justify="center" align="center" mt={{ base: 5, md: 6 }} minH={{ base: "30px", md: "36px" }} aria-live="polite">
-        <AnimatePresence mode="wait">
-          <MotionBox
-            key={d.key}
-            initial={reducir ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reducir ? { opacity: 0 } : { opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} letterSpacing="0.04em" textAlign="center">
-              {nombreDe(d.nom)}
-            </Text>
-          </MotionBox>
-        </AnimatePresence>
-      </Flex>
-
-      {/* Los ocho iconos, en una sola línea: se pulsan para cambiar la foto. Cada círculo lleva
-          de fondo la foto de su disciplina. */}
-      <Flex justify="center" flexWrap="nowrap" gap={{ base: "6px", md: 3 }} mt={{ base: 2, md: 3 }} role="tablist">
-        {lista.map((p, i) => {
-          const activo = i === actual;
-          return (
-            <Reveal key={p.key} inView amount={0.5} direction="up" distance={14} duration={0.6} delay={0.3 + i * 0.06}>
-              <Box
-                as="button"
-                type="button"
-                role="tab"
-                aria-selected={activo}
-                aria-label={nombreDe(p.nom)}
-                title={nombreDe(p.nom)}
-                onClick={() => setActual(i)}
-                position="relative"
-                overflow="hidden"
-                w={{ base: "38px", md: "48px" }}
-                h={{ base: "38px", md: "48px" }}
-                borderRadius="full"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                bg={p.bg}
-                border={`2px solid ${p.txt}${activo ? "" : "66"}`}
-                boxShadow={activo ? `0 0 14px ${p.txt}99, 0 0 28px ${p.txt}44` : "none"}
-                opacity={activo ? 1 : 0.75}
-                transform={activo ? "scale(1.1)" : "scale(1)"}
-                transition="all 0.3s ease"
-                _focusVisible={focoBlanco}
-              >
-                <DisciplinaBgLayer nom={p.nom} borderRadius="full" talCual />
-                <Box position="relative" zIndex={1} display="flex">
-                  <p.Icon size={{ base: "22px", md: "27px" }} />
+        {/* Las ocho: se pulsan para cambiar la foto. Cada círculo lleva de fondo la foto de su
+            disciplina. */}
+        <Box
+          role="tablist"
+          mt={{ base: 7, md: 0 }}
+          flex={{ md: 1 }}
+          minW={0}
+          display="grid"
+          // Móvil: cuatro y cuatro. Escritorio: de dos en dos, con el alto de la foto.
+          gridTemplateColumns={{ base: "repeat(4, 56px)", md: "repeat(2, minmax(0, 1fr))" }}
+          gridTemplateRows={{ base: "none", md: "repeat(4, minmax(0, 1fr))" }}
+          justifyContent="center"
+          justifyItems={{ base: "center", md: "stretch" }}
+          gap={{ base: "18px 22px", md: 4 }}
+        >
+          {lista.map((p, i) => {
+            const activo = i === actual;
+            return (
+              <Reveal key={p.key} inView amount={0.3} direction="up" distance={14} duration={0.6} delay={0.3 + i * 0.06} h={{ md: "100%" }}>
+                <Box
+                  as="button"
+                  type="button"
+                  role="tab"
+                  aria-selected={activo}
+                  aria-label={nombreDe(p.nom)}
+                  title={nombreDe(p.nom)}
+                  onClick={() => setActual(i)}
+                  display="flex"
+                  alignItems="center"
+                  gap={3}
+                  w={{ md: "100%" }}
+                  h={{ md: "100%" }}
+                  px={{ md: 4 }}
+                  borderRadius={{ base: "full", md: "2xl" }}
+                  border={{ base: "none", md: `1.5px solid ${p.txt}${activo ? "" : "55"}` }}
+                  bg={{ base: "transparent", md: activo ? `${p.txt}1f` : "transparent" }}
+                  boxShadow={{ base: "none", md: activo ? `0 0 16px ${p.txt}55` : "none" }}
+                  textAlign="left"
+                  transition="all 0.3s ease"
+                  _hover={{ bg: `${p.txt}14` }}
+                  _focusVisible={focoBlanco}
+                >
+                  <Box
+                    position="relative"
+                    overflow="hidden"
+                    flexShrink={0}
+                    w={{ base: "56px", md: "48px" }}
+                    h={{ base: "56px", md: "48px" }}
+                    borderRadius="full"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    bg={p.bg}
+                    border={`2px solid ${p.txt}${activo ? "" : "66"}`}
+                    boxShadow={activo ? `0 0 14px ${p.txt}99, 0 0 28px ${p.txt}44` : "none"}
+                    opacity={activo ? 1 : 0.75}
+                    transform={{ base: activo ? "scale(1.1)" : "scale(1)", md: "none" }}
+                    transition="all 0.3s ease"
+                  >
+                    <DisciplinaBgLayer nom={p.nom} borderRadius="full" talCual />
+                    <Box position="relative" zIndex={1} display="flex">
+                      <p.Icon size={{ base: "32px", md: "27px" }} />
+                    </Box>
+                  </Box>
+                  <Text display={{ base: "none", md: "block" }} color="white" fontFamily="'EB Garamond', serif" fontWeight={activo ? "700" : "600"} fontSize="lg" letterSpacing="0.03em" lineHeight="1.2" opacity={activo ? 1 : 0.85}>
+                    {nombreDe(p.nom)}
+                  </Text>
                 </Box>
-              </Box>
-            </Reveal>
-          );
-        })}
+              </Reveal>
+            );
+          })}
+        </Box>
       </Flex>
     </Box>
   );
