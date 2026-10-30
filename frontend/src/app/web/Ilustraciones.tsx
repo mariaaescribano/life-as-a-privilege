@@ -136,7 +136,7 @@ export default function Ilustraciones() {
           <DisciplinaHeader d={disciplina} />
         </Box>
       ) : (
-        <FlorTitulo />
+        <FlorTitulo mandala />
       )}
 
       {/* Título */}

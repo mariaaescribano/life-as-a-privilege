@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -6,7 +6,7 @@ import { Reveal } from "./Reveal";
 import { focoBlanco } from "./foco";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
 import MandalaOrbita from "./MandalaOrbita";
-import { SESIONES } from "../../data/asesoriaRecorrido";
+import { SESIONES, BOTON_SESION } from "../../data/asesoriaRecorrido";
 import { sombraTexto } from "./disciplinaSombras";
 import { VideoLargoModal } from "./VideoLargo";
 import { type DisciplinaClave } from "../../data/recorridoContenido";
@@ -1200,6 +1200,8 @@ const ResumenBox = ({ disc }: { disc: Disciplina }) => {
   const presentacion = presentacionPorKey(disc.nom);
   const sombra = sombraTexto(disc.nom, disc.bg);
   const [sesion, setSesion] = useState(0);
+  const [reel, setReel] = useState<string | null>(null);
+  const boton = BOTON_SESION[disc.clave];
   // `?sesionesDemo`: textos de ejemplo SOLO para ver el diseño (no salen en producción).
   const demo = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("sesionesDemo");
   const textos: string[] = demo
@@ -1260,6 +1262,28 @@ const ResumenBox = ({ disc }: { disc: Disciplina }) => {
               <Text color={disc.txt} fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" textAlign="center" textShadow={sombra}>
                 {textos[actual] ?? ""}
               </Text>
+              {boton && boton.sesion === actual && !demo && (
+                <Flex justify="center" mt={4}>
+                  <Box
+                    as="button"
+                    type="button"
+                    onClick={() => boton.video && setReel(boton.video)}
+                    px={4}
+                    py={1.5}
+                    borderRadius="full"
+                    bg={`${disc.bg}99`}
+                    border={`1.5px solid ${disc.txt}aa`}
+                    boxShadow={`0 0 10px ${disc.txt}44`}
+                    color={disc.txt}
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "md", md: "lg" }}
+                    textShadow={sombra}
+                    _focusVisible={focoBlanco}
+                  >
+                    {t(boton.texto)}
+                  </Box>
+                </Flex>
+              )}
             </MotionBox>
           </AnimatePresence>
         </Box>
@@ -1319,6 +1343,15 @@ const ResumenBox = ({ disc }: { disc: Disciplina }) => {
           </Flex>
         )}
       </Flex>
+      <Modal isOpen={!!reel} onClose={() => setReel(null)} isCentered size="sm">
+        <ModalOverlay />
+        <ModalContent bg={disc.bg} borderRadius="2xl" overflow="hidden">
+          <ModalCloseButton color={disc.txt} zIndex={2} />
+          <ModalBody p={0}>
+            {reel ? <iframe src={reel} title="reel" style={{ width: "100%", aspectRatio: "9 / 16", border: 0 }} allow="autoplay; encrypted-media; fullscreen" allowFullScreen /> : null}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };
@@ -1373,7 +1406,8 @@ export const RecorridoMandalaVideo = ({ resumen = false }: { resumen?: boolean }
   };
 
   useEffect(() => {
-    if (!autoRota || !mandalaVisto.visible) return;
+    // En Asesorías (`resumen`) no rota: el box tiene sesiones que leer, y manda la persona.
+    if (resumen || !autoRota || !mandalaVisto.visible) return;
     // Con el vídeo de muestra abierto no rota: el cambio no se ve detrás del
     // popup, y al cerrarlo te encontrarías en otra disciplina.
     if (videoModal) return;

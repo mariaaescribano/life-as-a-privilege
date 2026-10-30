@@ -4,7 +4,6 @@ import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LibrosIcon } from "../../GlobalVariables";
 import { useT } from "../../i18n";
-import { Float } from "../../components/global/Reveal";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import BandaMarmol from "../../components/global/BandaMarmol";
 import { Reveal } from "../../components/global/Reveal";
@@ -156,7 +155,7 @@ export default function MaterialesGratuitos() {
               gap={{ base: 8, lg: 14 }}
             >
               <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 4, md: 6 }} w="100%" maxW={{ base: "420px", md: "640px" }} flex={FOTO_AUDIOLIBROS ? 1 : undefined}>
-                {cajitas.map((c, i) => (
+                {cajitas.map((c) => (
                   <Reveal key={c.link} activo={visible} direction="up" distance={30} scaleFrom={0.96} duration={0.9} delay={c.delay} h="100%" display="flex">
                     <Flex
                       as="a"
@@ -184,11 +183,9 @@ export default function MaterialesGratuitos() {
                       _hover={{ bg: `${TINTA}12`, borderColor: `${TINTA}aa`, transform: "translateY(-5px)", textDecoration: "none" }}
                       _focusVisible={focoBlanco}
                     >
-                      <Float amplitude={5} duration={5 + i * 0.6} delay={i * 0.5}>
-                        <Flex w={{ base: "72px", md: "84px" }} h={{ base: "72px", md: "84px" }} borderRadius="full" border={`1px solid ${TINTA}66`} align="center" justify="center">
-                          {c.renderIcon()}
-                        </Flex>
-                      </Float>
+                      <Flex w={{ base: "72px", md: "84px" }} h={{ base: "72px", md: "84px" }} borderRadius="full" border={`1px solid ${TINTA}66`} align="center" justify="center">
+                        {c.renderIcon()}
+                      </Flex>
                       <Box w="40px" h="1px" bg={`linear-gradient(to right, transparent, ${TINTA}, transparent)`} />
                       <Text color={TINTA} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "md", md: "xl" }} letterSpacing="0.16em" textTransform="uppercase" textAlign="center" lineHeight="1.2">
                         {c.titulo}

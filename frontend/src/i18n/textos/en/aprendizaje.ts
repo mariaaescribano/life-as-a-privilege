@@ -1,5 +1,5 @@
 export const aprendizaje = {
-  "aprendizaje.titulo": "COURSES AND DISCIPLINES",
+  "aprendizaje.titulo": "COURSES",
   "aprendizaje.lema": "Eight ways of looking. One human being.",
 
   "aprendizaje.enConstruccion": "Discipline under construction.",

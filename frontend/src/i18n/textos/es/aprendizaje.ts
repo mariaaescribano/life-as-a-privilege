@@ -10,7 +10,7 @@ export const aprendizaje = {
   // ── Portada de cursos (/aprendizaje/aprendizajeHome) ────────────────────
   // En mayúsculas porque el título va con `textTransform: uppercase`; se deja
   // así en el diccionario para que se vea igual que en pantalla.
-  "aprendizaje.titulo": "CURSOS Y DISCIPLINAS",
+  "aprendizaje.titulo": "CURSOS",
   "aprendizaje.lema": "Ocho miradas. Un ser humano.",
 
   // ── Cursos de una disciplina (/aprendizaje/cursos/:disciplina) ──────────

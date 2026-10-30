@@ -1,70 +1,25 @@
-import { Box, Flex, Image, SimpleGrid, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import { ThemeCard } from "../../components/aprendizaje/ThemeCard";
 import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { Float } from "../../components/global/Reveal";
-import { useEnPantalla } from "../../hooks/useEnPantalla";
 import { useT } from "../../i18n";
-import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
-import {
-  astrologiaBg, AstrologiaIcon, astrologiaNom, astrologiaTxt,
-  ayurvedaBg, AyurvedaIcon, ayurvedaNom, ayurvedaNomLink, ayurvedaTxt,
-  culturaBg, CulturaIcon, culturaNom, culturaTxt,
-  cabalaBg, CabalaIcon, cabalaNom, cabalaTxt,
-  fisiologiaBg, FisiologiaIcon, fisiologiaNom, fisiologiaTxt,
-  neuropsicologiaBg, NeuropsicologiaIcon, neuropsicologiaNom, neuropsicologiaTxt,
-  nutricionBg, NutricionIcon, nutricionNom, nutricionTxt,
-  tcmBg, TCMIcon, tcmNom, tcmNomLink, tcmTxt,
-  nutricionNomLink,
-} from "../../GlobalVariables";
-
-// Cada caja de disciplina con SU propio observador: no se coloca hasta que
-// ella misma asoma en pantalla. Con un único observador para toda la
-// cuadrícula, al llegar a la primera fila arrancaban las ocho y las filas de
-// abajo (en móvil son cuatro) se colocaban fuera de la vista, así que el que
-// bajaba se las encontraba ya puestas y no veía la animación. El retraso lo
-// marca la COLUMNA, para que las de una misma fila entren de izquierda a
-// derecha. Mismo patrón que las tarjetas de Welcome y /elMetodo.
-// (useEnPantalla usa callback ref, así que da igual que el nodo aparezca
-// tarde, cuando el loader deja paso al contenido.)
-function CeldaDisciplina({ delay, children }: { delay: number; children: React.ReactNode }) {
-  const enPantalla = useEnPantalla("0px 0px -6% 0px");
-  return (
-    <Box
-      ref={enPantalla.ref}
-      opacity={enPantalla.visto ? 1 : 0}
-      transform={enPantalla.visto ? "translateY(0) scale(1)" : "translateY(28px) scale(0.95)"}
-      filter={enPantalla.visto ? "blur(0px)" : "blur(6px)"}
-      transition={`opacity 0.4s ease ${delay}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${delay}s, filter 0.4s ease ${delay}s`}
-    >
-      {children}
-    </Box>
-  );
-}
-
 // Cuántas portadas de curso se piden por adelantado: las dos primeras filas de
 // la cuadrícula (3 columnas en escritorio). El resto baja al acercarse.
 const PORTADAS_PRIMERA_PANTALLA = 6;
 
 export const AprendizajeHome = () => {
   const t = useT();
-  const nombreDisciplina = useNombreDisciplina();
   const [mounted, setMounted] = useState(false);
   // La página entra en cuanto llegan los datos de los cursos. Las portadas ya
   // no la retienen (ver la precarga de abajo): lo primero que se ve son los
   // ocho boxes de disciplina, que son iconos y no tienen foto que esperar.
   const [imagesReady, setImagesReady] = useState(false);
   const { cursosData, loading } = useCursosData();
-  // Cajas por fila (2 en móvil, 4 en escritorio): marca el orden de la cascada
-  // de entrada (las de una misma fila entran de izquierda a derecha).
-  const esMovil = useBreakpointValue({ base: true, md: false }) ?? true;
-  const columnas = esMovil ? 2 : 4;
-
   // Todos los cursos de todas las disciplinas, en una sola lista mezclada,
   // ordenada por fecha de creación descendente (los más nuevos, primero).
   // El tipo se deduce del propio `cursosData`; antes venía de NuevosCursosPage
@@ -101,25 +56,6 @@ export const AprendizajeHome = () => {
     const t = setTimeout(() => setMounted(true), 40);
     return () => clearTimeout(t);
   }, [loading, imagesReady]);
-
-  // Orden ESCAPARATE, el MISMO de la portada (app/web/Welcome.tsx): Psicología →
-  // Fisiología → Nutrición → Cultura → Medicina Tradicional China → Astrología →
-  // Cábala → Ayurveda. Aquí NO va el orden del Mapa a propósito: esta página es
-  // una puerta abierta a cualquiera, y abrir por Astrología echa para atrás a
-  // quien llega escéptico. El orden que se propone —ese sí— vive en las ocho
-  // tarjetas de /elMetodo.
-  // Cada disciplina expone dos destinos: sus vídeos y sus cursos. El `slug`
-  // (nombre canónico o *NomLink) es el mismo para ambas rutas.
-  const items = [
-    { title: neuropsicologiaNom,  bgColor: neuropsicologiaBg, color: neuropsicologiaTxt, icon: <NeuropsicologiaIcon size={{ base: "40px", md: "48px" }} />, slug: neuropsicologiaNom },
-    { title: fisiologiaNom,       bgColor: fisiologiaBg,      color: fisiologiaTxt,      icon: <FisiologiaIcon size={{ base: "40px", md: "48px" }}/>,     slug: fisiologiaNom },
-    { title: nutricionNom,        bgColor: nutricionBg,       color: nutricionTxt,       icon: <NutricionIcon size={{ base: "40px", md: "48px" }}  />,   slug: nutricionNomLink },
-    { title: culturaNom,          bgColor: culturaBg,         color: culturaTxt,         icon: <CulturaIcon size={{ base: "40px", md: "48px" }} />,        slug: culturaNom },
-    { title: tcmNom,              bgColor: tcmBg,             color: tcmTxt,             icon: <TCMIcon size={{ base: "40px", md: "48px" }} />,            slug: tcmNomLink },
-    { title: astrologiaNom,       bgColor: astrologiaBg,      color: astrologiaTxt,      icon: <AstrologiaIcon size={{ base: "40px", md: "48px" }} />,     slug: astrologiaNom },
-    { title: cabalaNom,           bgColor: cabalaBg,          color: cabalaTxt,          icon: <CabalaIcon size={{ base: "40px", md: "48px" }} />,         slug: cabalaNom },
-    { title: ayurvedaNom,         bgColor: ayurvedaBg,        color: ayurvedaTxt,        icon: <AyurvedaIcon size={{ base: "40px", md: "48px" }}  />,      slug: ayurvedaNomLink },
-  ];
 
   // Mientras se descargan las portadas (o llegan los datos): fondo teal con la
   // animación del MANDALA del logo de la web en blanco, centrada (el loader "de
@@ -212,37 +148,15 @@ export const AprendizajeHome = () => {
         </Text>
       </Flex>
 
-      {/* ── GRID DE DISCIPLINAS ── */}
+      {/* ── SEPARADOR CON MANDALA + TODOS LOS CURSOS ── */}
       <Flex
         flex={1}
         direction="column"
         align="center"
         px={{ base: 5, md: 8, lg: 10 }}
-        pt={{ base: 20, md: 24 }}
+        pt={{ base: 4, md: 6 }}
         pb={{ base: 24, md: 32 }}
       >
-        <Box w="100%" maxW="960px">
-          <SimpleGrid
-            columns={{ base: 2, md: 4 }}
-            spacing={{ base: 5, md: 6 }}
-          >
-            {items.map((item, i) => (
-              <CeldaDisciplina key={i} delay={(i % columnas) * 0.12}>
-                <ThemeCard
-                  title={item.title}
-                  label={nombreDisciplina(item.title)}
-                  bgColor={item.bgColor}
-                  color={item.color}
-                  icon={item.icon}
-                  link={"/aprendizaje/cursos/" + item.slug}
-                  cursor="pointer"
-                />
-              </CeldaDisciplina>
-            ))}
-          </SimpleGrid>
-        </Box>
-
-        {/* ── SEPARADOR CON MANDALA + TODOS LOS CURSOS (ancho completo) ── */}
         {allCourses.length > 0 && (
           <Box w="100%">
             <Flex align="center" gap={{ base: 4, md: 6 }} my={{ base: 12, md: 16 }}>

@@ -338,7 +338,7 @@ const WelcomeHero = ({ activo, iconos = [], marmol = false, compacto = false }: 
                 sx={{ aspectRatio: "1 / 1" }}
               >
                 <Image
-                  src="/img/me/trajegrisconmapa.webp"
+                  src="/img/me/trajegrisconmapazoomcara.webp"
                   alt="María Escribano"
                   w="100%"
                   h="100%"

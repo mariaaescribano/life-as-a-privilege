@@ -2,7 +2,7 @@
 export const tienda = {
   // ── Ilustraciones (/ilustraciones) ─────────────────────────────────────
   "ilustraciones.titulo": "Ilustraciones",
-  "ilustraciones.subtitulo": "Algunas de las ilustraciones del Mapa. Pulsa para leer.",
+  "ilustraciones.subtitulo": "Algunas de las ilustraciones del contenido exclusivo del asesoramiento. Pulsa para leer.",
   // Subtítulo cuando la galería va filtrada por una disciplina
   // (/ilustraciones/:disciplina). El titular es el nombre de la disciplina.
   "ilustraciones.deDisciplina": "Las ilustraciones de esta disciplina. Pulsa una para leerla.",

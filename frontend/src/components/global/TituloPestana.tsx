@@ -6,7 +6,7 @@ import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 
 /**
  * El nombre de la pestaña del navegador sigue a la persona: en cada página dice en qué
- * recurso está («Ilustraciones · María Escribano», «Astrología · María Escribano»…),
+ * recurso está («Ilustraciones», «Astrología»…; solo la portada dice «María Escribano»),
  * para que, con varias pestañas abiertas, no se pierda nunca.
  *
  * Es UNA sola pieza, montada en App: mira la ruta y decide el nombre. Una página
@@ -53,7 +53,7 @@ export default function TituloPestana() {
     };
 
     const r = recurso();
-    document.title = r ? `${r} · ${MARCA}` : MARCA;
+    document.title = r ?? MARCA;
   }, [pathname, t]);
 
   return null;

@@ -7,7 +7,6 @@ import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import BandaMarmol from "../../components/global/BandaMarmol";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
 import FormularioAsesoria from "../../components/web/FormularioAsesoria";
-import MapaDisciplinas from "../../components/web/MapaDisciplinas";
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import { BloqueDiferido } from "../../components/global/BloqueDiferido";
 import BotonContactame from "../../components/global/BotonContactame";
@@ -31,7 +30,7 @@ import { useT, type ClaveTexto } from "../../i18n";
  */
 
 /** La foto de la presentación (foto + texto) y la del formulario de contacto. */
-const FOTO_MARIA = "/img/me/asesora.webp";
+const FOTO_MARIA = "/img/me/contrajenegrocorto.webp";
 const FOTO_CONTACTO = "/img/me/asesoria.webp";
 /** El mármol horizontal de María (`marmolfondo`, 1536 × 1024, a resolución completa). */
 
@@ -368,21 +367,7 @@ const Asesoria = () => {
 
         {/* ── 2b · EL MANDALA CON LAS OCHO DISCIPLINAS, debajo de «¿Cómo trabajo?» ── */}
 
-        <Box px={{ base: 5, md: 10, lg: 16 }}>
-          <Box maxW="1200px" mx="auto">
-            <BloqueDiferido minH={{ base: "900px", md: "560px" }}>
-              <Reveal inView amount={0.06} direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
-                <RecorridoMandalaVideo resumen />
-              </Reveal>
-            </BloqueDiferido>
-          </Box>
-        </Box>
-
-        <SeparadorFlor />
-
-        {/* ── 3b · MAPA DE DISCIPLINAS (se despliegan al pulsar). Mientras María no pase
-            los textos (mapaDisciplinasData.tsx) no se pinta; `?mapaDemo` lo enseña. ── */}
-        <Box w="100%" maxW="1100px" mx="auto" px={{ base: 5, md: 10, lg: 16 }} mb={{ base: 8, md: 12 }}>
+        <Box w="100%" maxW="1100px" mx="auto" px={{ base: 5, md: 10, lg: 16 }} mb={{ base: 6, md: 8 }}>
           <Reveal inView amount={0.5} direction="up" distance={20} duration={0.9}>
             <Text
               textAlign="center"
@@ -411,7 +396,16 @@ const Asesoria = () => {
           </Reveal>
         </Box>
 
-        <MapaDisciplinas />
+
+        <Box px={{ base: 5, md: 10, lg: 16 }}>
+          <Box maxW="1200px" mx="auto">
+            <BloqueDiferido minH={{ base: "900px", md: "560px" }}>
+              <Reveal inView amount={0.06} direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
+                <RecorridoMandalaVideo resumen />
+              </Reveal>
+            </BloqueDiferido>
+          </Box>
+        </Box>
 
         <SeparadorFlor />
 
@@ -482,6 +476,8 @@ const Asesoria = () => {
             </Flex>
           )}
         </BandaMarmol>
+        {/* Hueco turquesa de la página entre el formulario y el pie. */}
+        <Box h={{ base: "56px", md: "88px" }} />
       </Box>
 
       <SiteFooter />

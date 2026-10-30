@@ -3,12 +3,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box, Flex, Grid, Image, Text, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
-import FlorTitulo from "../../components/global/FlorTitulo";
+import BandaMarmol from "../../components/global/BandaMarmol";
+import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
+import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { apuntes, libros, librosPago, type Apunte, type Libro, type LibroPago } from "../../hardCoded/libros/libros";
 import { API_URL } from "../../GlobalVariables";
 
 const PRECIO_LIBRO_PAGO = "5 €";
+
+// Los cuatro libros de pago van sobre el mármol: letra turquesa oscuro (ver DISENO.md).
+const TINTA = "#004f4f";
+const ORO = "#b08d3f";
 
 // Portadas que se esperan antes de pintar la página (las de la primera
 // pantalla). Las demás cargan al bajar.
@@ -39,16 +45,29 @@ function DescargarBtn({
   disabled = false,
   label,
   icon = "↓",
+  marmol = false,
 }: {
   href?: string;
   onClick?: () => void;
   disabled?: boolean;
   label?: string;
   icon?: string;
+  /** Sobre el mármol: píldora en turquesa oscuro. */
+  marmol?: boolean;
 }) {
   const t = useT();
   const labelTxt = label ?? t("libros.descargarPdf");
   const isLink = !onClick && !!href;
+  const estiloMarmol = marmol
+    ? {
+        border: `1px solid ${TINTA}`,
+        bg: `${TINTA}10`,
+        color: TINTA,
+        boxShadow: `0 0 12px ${ORO}33`,
+        textShadow: "none",
+        _hover: disabled ? {} : { bg: `${TINTA}22`, borderColor: TINTA, boxShadow: `0 0 20px ${ORO}55` },
+      }
+    : {};
   const commonProps = {
     align: "center" as const,
     justify: "center" as const,
@@ -83,6 +102,7 @@ function DescargarBtn({
     whiteSpace: { base: "normal", md: "nowrap" },
     textAlign: "center" as const,
     opacity: disabled ? 0.6 : 1,
+    ...estiloMarmol,
   };
 
   if (isLink) {
@@ -110,6 +130,7 @@ type Item = { id: string; img?: string; titulo: string; link: string };
 type PaidItem = Item & { descripcion: string };
 
 const LINE = "1px solid rgba(255,255,255,0.22)";
+const LINE_MARMOL = `1px solid ${TINTA}44`;
 
 function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: number }) {
   const lastRowStart2 = total - ((total % 2) || 2);
@@ -156,31 +177,31 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
       // texto se quedaba en ~110px —con la portada comiéndose media pantalla— y
       // ni el botón de comprar ni la línea del consentimiento cabían.
       direction={{ base: "column", md: "row" }}
-      align="center"
-      gap={{ base: 4, md: 7 }}
-      px={{ base: 4, md: 8 }}
-      py={{ base: 7, md: 10 }}
+      align={{ base: "center", md: "flex-start" }}
+      gap={{ base: 4, md: 5 }}
+      px={{ base: 4, md: 5 }}
+      py={{ base: 6, md: 7 }}
       opacity={visible ? 1 : 0}
       transform={visible ? "translateY(0)" : "translateY(24px)"}
       transition={`opacity 0.7s ease ${(i % 2) * 0.12}s, transform 0.7s ease ${(i % 2) * 0.12}s`}
       sx={{
         "@media (max-width: 767px)": {
-          borderBottom: i < total - 1 ? LINE : "none",
+          borderBottom: i < total - 1 ? LINE_MARMOL : "none",
         },
         "@media (min-width: 768px)": {
-          borderRight: i % 2 === 0 ? LINE : "none",
-          borderBottom: i < lastRowStart2 ? LINE : "none",
+          borderRight: i % 2 === 0 ? LINE_MARMOL : "none",
+          borderBottom: i < lastRowStart2 ? LINE_MARMOL : "none",
         },
       }}
     >
       {item.img && (
         <Box
           flexShrink={0}
-          w={{ base: "180px", md: "210px" }}
+          w={{ base: "150px", md: "128px" }}
           aspectRatio={1}
           borderRadius="lg"
           overflow="hidden"
-          boxShadow="0 0 22px rgba(255,255,255,0.34), 0 0 48px rgba(255,255,255,0.18), 0 6px 22px rgba(0,0,0,0.3)"
+          boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}
         >
           <Image
             src={item.img}
@@ -197,7 +218,7 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
 
       <Flex
         direction="column"
-        gap={{ base: 2, md: 3 }}
+        gap={{ base: 2, md: 2 }}
         flex="1"
         minW={0}
         // En móvil todo centrado bajo la portada; en escritorio, a la izquierda
@@ -207,23 +228,21 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
         textAlign={{ base: "center", md: "left" }}
       >
         <Text
-          color="white"
+          color={TINTA}
           fontFamily="'EB Garamond', serif"
-          fontSize={{ base: "lg", md: "xl" }}
+          fontSize={{ base: "lg", md: "lg" }}
           fontWeight="700"
-          letterSpacing="0.04em"
+          letterSpacing="0.03em"
           lineHeight="1.25"
-          textShadow="0 0 12px rgba(255,255,255,0.34), 0 0 26px rgba(255,255,255,0.17)"
         >
           {item.titulo}
         </Text>
         <Text
-          color="rgba(255,255,255,0.82)"
+          color={TINTA}
           fontFamily="'EB Garamond', serif"
-          fontSize={{ base: "sm", md: "md" }}
+          fontSize={{ base: "sm", md: "sm" }}
           fontStyle="italic"
           lineHeight="1.5"
-          textShadow="0 0 6px rgba(255,255,255,0.14)"
         >
           {item.descripcion}
         </Text>
@@ -235,12 +254,11 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
           flexWrap="wrap"
         >
           <Text
-            color="white"
+            color={TINTA}
             fontFamily="'EB Garamond', serif"
             fontSize={{ base: "md", md: "lg" }}
             fontWeight="700"
             letterSpacing="0.08em"
-            textShadow="0 0 10px rgba(255,255,255,0.41), 0 0 22px rgba(255,255,255,0.21)"
           >
             {PRECIO_LIBRO_PAGO}
           </Text>
@@ -249,6 +267,7 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
             disabled={loading || !acepta}
             label={loading ? "Cargando…" : "Comprar"}
             icon="→"
+            marmol
           />
         </Flex>
 
@@ -270,20 +289,20 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
             w="18px"
             h="18px"
             borderRadius="4px"
-            border={`1.5px solid rgba(255,255,255,${acepta ? 0.9 : 0.45})`}
-            bg={acepta ? "rgba(255,255,255,0.9)" : "transparent"}
+            border={`1.5px solid ${TINTA}${acepta ? "" : "99"}`}
+            bg={acepta ? TINTA : "transparent"}
             align="center"
             justify="center"
             transition="all 0.18s"
           >
             {acepta && (
-              <Box as="svg" viewBox="0 0 24 24" w="12px" h="12px" fill="none" stroke="#008080" strokeWidth="3.5">
+              <Box as="svg" viewBox="0 0 24 24" w="12px" h="12px" fill="none" stroke="#ffffff" strokeWidth="3.5">
                 <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
               </Box>
             )}
           </Flex>
           <Text
-            color="rgba(255,255,255,0.72)"
+            color={TINTA}
             fontFamily="'EB Garamond', serif"
             fontSize="xs"
             lineHeight="1.55"
@@ -293,7 +312,7 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
               as="span"
               textDecoration="underline"
               onClick={(e) => { e.stopPropagation(); window.open("/terminos", "_blank"); }}
-              _hover={{ color: "white" }}
+              _hover={{ color: "#003838" }}
             >
               {t("libros.condiciones")}
             </Text>
@@ -498,89 +517,26 @@ export default function LibrosPage() {
     >
       <SiteHeader variant="auto" />
 
-      {/* ── FLOR DE LA VIDA sobre el título ── */}
-      <FlorTitulo activo={mounted} />
+      {/* ── MANDALA + TÍTULO + FRASE + separación con el mandala (la cabecera de la portada) ── */}
+      <WelcomeCabecera activo={mounted} titulo={t("libros.titulo")} subtitulo={t("libros.subtitulo")} mayusculas />
 
-      {/* ── TÍTULO ── */}
-      <Flex
-        direction="column"
-        align="center"
-        textAlign="center"
-        px={{ base: 5, md: 10 }}
-        pt={{ base: 6, md: 8 }}
-        gap={{ base: 3, md: 4 }}
-      >
-        <Text
-          color="white"
-          fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
-          fontWeight="700"
-          letterSpacing="0.1em"
-          lineHeight="1.1"
-          textTransform="uppercase"
-          textShadow="0 0 14px rgba(255,255,255,0.6), 0 0 30px rgba(255,255,255,0.39), 0 0 56px rgba(180,255,245,0.32)"
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(20px)"}
-          transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
-        >
-          {t("libros.titulo")}
-        </Text>
-        <Text
-          color="rgba(255,255,255,0.88)"
-          fontSize={{ base: "sm", md: "lg" }}
-          fontStyle="italic"
-          letterSpacing="0.05em"
-          lineHeight="1.5"
-          textShadow="0 0 8px rgba(255,255,255,0.38), 0 0 18px rgba(255,255,255,0.21)"
-          maxW={{ base: "100%", md: "512px" }}
-          opacity={mounted ? 1 : 0}
-          transform={mounted ? "translateY(0)" : "translateY(13px)"}
-          transition="opacity 0.85s ease 0.5s, transform 0.85s ease 0.5s"
-        >
-          {t("libros.subtitulo")}
-        </Text>
-      </Flex>
-
-      {/* ── SECCIÓN LIBROS DE PAGO ── */}
+      {/* ── LOS LIBROS DE PAGO, sobre el mármol; luego otra separación con el mandala ── */}
       {paidItems.length > 0 && (
         <>
-          <Flex
-            justify="center"
-            w="100%"
-            px={{ base: 5, md: 10, lg: 16 }}
-            pt={{ base: 12, md: 28 }}
-            pb={{ base: 4, md: 6 }}
-          >
-            <Box w="100%" maxW="1080px" mx="auto">
-              {/* Línea superior — cierra el tablero por arriba */}
-              <Box
-                w="100%"
-                h="1px"
-                bg="rgba(255,255,255,0.45)"
-                boxShadow="0 0 10px rgba(255,255,255,0.35), 0 0 22px rgba(180,255,245,0.22)"
-              />
-              <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
-                {paidItems.map((item, i) => (
-                  <PaidBookCell
-                    key={item.id}
-                    item={item}
-                    i={i}
-                    total={paidItems.length}
-                  />
-                ))}
-              </Grid>
-            </Box>
-          </Flex>
-
-          {/* Separador horizontal blanco */}
-          <Flex justify="center" w="100%" px={{ base: 5, md: 10, lg: 16 }} mt={{ base: 4, md: 6 }}>
-            <Box
-              w="100%"
-              maxW="1080px"
-              h="1px"
-              bg="rgba(255,255,255,0.45)"
-              boxShadow="0 0 10px rgba(255,255,255,0.35), 0 0 22px rgba(180,255,245,0.22)"
-            />
-          </Flex>
+          <Box mt={{ base: 8, md: 12 }}>
+            <BandaMarmol pt={{ base: "56px", md: "72px" }} pb={{ base: "64px", md: "72px" }}>
+              {() => (
+                <Box w="100%" maxW="820px" mx="auto" px={{ base: 5, md: 6 }}>
+                  <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
+                    {paidItems.map((item, i) => (
+                      <PaidBookCell key={item.id} item={item} i={i} total={paidItems.length} />
+                    ))}
+                  </Grid>
+                </Box>
+              )}
+            </BandaMarmol>
+          </Box>
+          <SeparadorFlor />
         </>
       )}
 
@@ -590,7 +546,7 @@ export default function LibrosPage() {
         justify="center"
         w="100%"
         px={{ base: 3, md: 10, lg: 16 }}
-        pt={{ base: 11, md: 16 }}
+        pt={{ base: 2, md: 4 }}
         pb={{ base: 24, md: 32 }}
       >
         <Box w="100%" maxW="880px" mx="auto">
