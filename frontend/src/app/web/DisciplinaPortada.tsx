@@ -233,7 +233,8 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
           {pagada !== null && (
             <Grid templateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }} gap={{ base: 6, md: 9 }} alignItems="stretch">
               <Reveal activo={banda} direction="right" distance={30} scaleFrom={0.95} duration={0.9} delay={0.45}>
-                <Box maxW={{ base: "420px", md: "none" }} mx="auto">
+                {/* Misma anchura que las puertas de debajo (en móvil, todo el ancho de la columna). */}
+                <Box w="100%">
                   <FotoDisciplina d={d} />
                 </Box>
               </Reveal>

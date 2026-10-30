@@ -162,11 +162,6 @@ export default function TextLessonPage() {
               disabled: !anterior,
               disabledTooltip: t("leccion.esLaPrimera"),
             }}
-            extra={{
-              label: t("leccion.volverAlCurso"),
-              onClick: () => navigate(`/aprendizaje/modulosPage/${modalidadId}/${cursoId}`),
-              small: true,
-            }}
             // Los laterales son las flechas de lección anterior/siguiente, así
             // que la vuelta al Mapa va en medio: ahí conserva su nombre también
             // en el móvil.

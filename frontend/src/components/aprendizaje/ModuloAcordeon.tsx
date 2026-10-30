@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ChevronDown, Play } from "lucide-react";
 import React from "react";
 import type { Submodulo } from "../../dtos/aprendizaje.type";
-import { useNavigate } from "react-router-dom";
+import { focoBlanco } from "../global/foco";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
 
 export function ModuloAcordeon(props:{
@@ -16,7 +16,6 @@ export function ModuloAcordeon(props:{
 
   // Todos los módulos empiezan cerrados, incluido el del podcast.
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   const disc = props.disciplina;
   const hasBg = !!disc && hasDisciplinaBg(disc);
   const tShadow = `0 1px 4px ${props.bgColor}, 0 0 10px ${props.bgColor}, 0 0 20px ${props.bgColor}`;
@@ -69,14 +68,22 @@ export function ModuloAcordeon(props:{
           {props.submodules.map((sub, i) => (
             <Box
               key={i}
+              as="a"
+              // Cada lección se abre en una PESTAÑA NUEVA: el curso se queda donde está y la
+              // lección va en la suya (dos ventanas, sin botón de «volver al curso»).
+              href={sub.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              display="block"
+              textDecoration="none"
               position="relative"
               overflow="hidden"
               borderRadius="2xl"
               bg={props.bgColor ?? "white"}
               cursor="pointer"
-              onClick={() => navigate(sub.link)}
               transition="all 0.25s"
-              _hover={{ transform: "translateY(-2px)" }}
+              _hover={{ transform: "translateY(-2px)", textDecoration: "none" }}
+              _focusVisible={focoBlanco}
             >
               {hasBg && <DisciplinaBgLayer nom={disc!} borderRadius="2xl" />}
               <Flex position="relative" zIndex={1} align="center" justify="space-between" color={props.color} p={4} gap={3}>

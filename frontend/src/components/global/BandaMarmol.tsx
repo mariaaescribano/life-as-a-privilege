@@ -92,19 +92,12 @@ const BandaMarmol = ({
         // Con `tapas` (bandas con letra suelta sobre el mármol, como los nombres del mandala): el
         // turquesa con oro va SOLO en dos tapas, arriba y abajo, que se funden hacia el crema; el
         // cuerpo es crema liso. La banda lleva más relleno para que el texto empiece bajo la tapa.
-        bgImage={
-          tapas
-            ? {
-                base: "url('/img/fondos/marmol-tapa-arriba.webp'), url('/img/fondos/marmol-tapa-abajo.webp'), url('/img/fondos/marmolfondo-crema.webp')",
-                md: "url('/img/fondos/marmol-tapa-arriba.webp'), url('/img/fondos/marmol-tapa-abajo.webp'), url('/img/fondos/marmolfondo-crema-ancho.webp')",
-              }
-            : {
-                base: "url('/img/fondos/marmolfondo-crema.webp')",
-                md: "url('/img/fondos/marmolfondo.webp')",
-              }
-        }
-        bgSize={tapas ? { base: "auto 340px, auto 340px, cover", md: "100% auto, 100% auto, cover" } : "cover"}
-        bgPosition={tapas ? { base: "right top, right bottom, center", md: "top, bottom, center" } : "center"}
+        bgImage={{
+          base: "url('/img/fondos/marmolfondo-crema.webp')",
+          md: tapas ? "url('/img/fondos/marmolfondo-crema-ancho.webp')" : "url('/img/fondos/marmolfondo.webp')",
+        }}
+        bgSize="cover"
+        bgPosition="center"
         bgRepeat="no-repeat"
         pointerEvents="none"
         opacity={marmol ? 1 : 0}
@@ -116,7 +109,16 @@ const BandaMarmol = ({
           WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 var(--fundido), #000 calc(100% - var(--fundido)), transparent 100%)",
           maskImage: "linear-gradient(to bottom, transparent 0, #000 var(--fundido), #000 calc(100% - var(--fundido)), transparent 100%)",
         }}
-      />
+      >
+        {/* Con `tapas`: el turquesa con oro va solo en dos tapas (arriba y abajo) que se funden
+            hacia el crema del cuerpo. Una imagen por capa. */}
+        {tapas && (
+          <>
+            <Box position="absolute" top={0} left={0} right={0} h={{ base: "240px", md: "200px" }} bgImage="url('/img/fondos/marmol-tapa-arriba.webp')" bgRepeat="no-repeat" bgSize={{ base: "auto 100%", md: "100% 100%" }} bgPosition="right top" />
+            <Box position="absolute" bottom={0} left={0} right={0} h={{ base: "240px", md: "200px" }} bgImage="url('/img/fondos/marmol-tapa-abajo.webp')" bgRepeat="no-repeat" bgSize={{ base: "auto 100%", md: "100% 100%" }} bgPosition="right bottom" />
+          </>
+        )}
+      </Box>
       <Box ref={setCuerpo} position="relative" zIndex={1}>
         {children(visible)}
       </Box>

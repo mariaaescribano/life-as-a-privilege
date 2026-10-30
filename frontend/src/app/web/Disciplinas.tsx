@@ -102,7 +102,7 @@ const Disciplinas = () => {
 
         {/* ── 1 · LAS OCHO DISCIPLINAS EN SU MANDALA, sobre el mármol ──
             Solo para mostrarlas: cada una con su nombre y su frase. */}
-        <BandaMarmol mt={{ base: 2, md: 4 }} tapas pt={{ base: "280px", md: "270px" }} pb={{ base: "290px", md: "280px" }}>
+        <BandaMarmol mt={{ base: 2, md: 4 }} tapas pt={{ base: "170px", md: "110px" }} pb={{ base: "180px", md: "120px" }}>
           {(visible) => <WelcomeMandala disciplinas={DISCIPLINAS_MANDALA} activo={visible} />}
         </BandaMarmol>
 

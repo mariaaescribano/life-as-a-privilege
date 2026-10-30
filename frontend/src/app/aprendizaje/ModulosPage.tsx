@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
@@ -9,14 +9,11 @@ import { ModuloAcordeon } from "../../components/aprendizaje/ModuloAcordeon";
 import { VolverAlMapa, useVolverAlMapa } from "../../components/global/VolverAlMapa";
 import { useCursosData } from "../../data/cursosApi";
 import { useT } from "../../i18n";
-import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 
 export default function ModulosPage() {
   const { modalidadId, cursoId } = useParams<{ modalidadId: string; cursoId: string }>();
   const { cursosData, loading } = useCursosData();
   const t = useT();
-  const nombreDisciplina = useNombreDisciplina();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   // De dónde se vino. Dos maneras de llegar desde El Recorrido y las dos valen:
   //  · `?volver=` en la URL (el modal de Cursos de Psicología, la presentación),
@@ -66,11 +63,6 @@ export default function ModulosPage() {
               //    venía de ahí. Va en medio a propósito: los botones laterales
               //    se quedan en flecha suelta en el móvil y «volver al Mapa» no
               //    se adivina por una flecha.
-              prev={{
-                label: `← ${t("aprendizaje.cursosDe", { disciplina: nombreDisciplina(modalidad.nom) })}`,
-                onClick: () => navigate(`/aprendizaje/cursos/${modalidadId}`),
-                small: true,
-              }}
               extra={botonMapa}
             />
 
