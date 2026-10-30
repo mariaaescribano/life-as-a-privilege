@@ -9,9 +9,9 @@ import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { AprendizajeIcon } from "../../GlobalVariables";
+import DisciplinaHeader from "../../components/web/DisciplinaHeader";
 import { getUserMe } from "../../api/userMe";
 import { useIdioma, useT } from "../../i18n";
-import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // /disciplina/:disciplina — PORTADA COMÚN de una disciplina.
@@ -118,7 +118,6 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
   const navigate = useNavigate();
   const t = useT();
   const { segunIdioma } = useIdioma();
-  const nombreDe = useNombreDisciplina();
   const conFondo = hasDisciplinaBg(d.nom);
 
   useEffect(() => {
@@ -196,42 +195,10 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
-      {/* ── CABECERA: icono + nombre de la disciplina + su frase ── */}
-      <Flex direction="column" align="center" textAlign="center" px={{ base: 5, md: 10 }} pt={{ base: 10, md: 14 }} gap={{ base: 4, md: 5 }}>
-        <Reveal direction="down" distance={18} delay={0.05}>
-          <Box
-            w={{ base: "92px", md: "112px" }}
-            h={{ base: "92px", md: "112px" }}
-            borderRadius="full"
-            bg={conFondo ? "transparent" : d.bg}
-            border={`3px solid ${d.txt}`}
-            boxShadow={`0 0 20px ${d.txt}bb, 0 2px 14px ${d.txt}77`}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            position="relative"
-            overflow="hidden"
-          >
-            {conFondo && <DisciplinaBgLayer nom={d.nom} borderRadius="full" />}
-            <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
-              <d.Icon size={{ base: "50px", md: "58px" }} />
-            </Box>
-          </Box>
-        </Reveal>
-
-        {/* El nombre va en blanco y sin sombra: fuera de las cajas, sobre el
-            turquesa, el color de la disciplina no se lee. */}
-        <Reveal delay={0.15}>
-          <Text
-            color="white"
-            fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
-            fontWeight="700"
-            letterSpacing="0.1em"
-            lineHeight="1.1"
-            textTransform="uppercase"
-          >
-            {nombreDe(d.nom)}
-          </Text>
+      {/* ── CABECERA: el header de la disciplina (foto de fondo, icono a la izquierda del nombre) + su frase ── */}
+      <Flex direction="column" align="center" textAlign="center" pt={{ base: 10, md: 14 }} gap={{ base: 5, md: 6 }}>
+        <Reveal direction="down" distance={18} delay={0.05} w="100%">
+          <DisciplinaHeader d={d} />
         </Reveal>
 
         <Reveal delay={0.25}>
@@ -242,6 +209,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
             letterSpacing="0.04em"
             lineHeight="1.6"
             maxW={{ base: "100%", md: "640px" }}
+            px={{ base: 5, md: 10 }}
           >
             {segunIdioma(d.gancho)}
           </Text>
@@ -259,9 +227,10 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
           {pagada !== null && puertas.map((p) => (
             <Reveal key={p.clave} delay={p.delay} scaleFrom={0.96} h="100%">
               <Flex
-                as="button"
-                onClick={() => { if (!p.apagada) navigate(p.link); }}
-                disabled={p.apagada}
+                // Cada puerta se abre en una PESTAÑA NUEVA (la disciplina se queda donde está
+                // y la persona no se pierde). La apagada (Reels) no lleva enlace.
+                {...(p.apagada ? {} : { as: "a" as const, href: p.link, target: "_blank", rel: "noopener noreferrer" })}
+                textDecoration="none"
                 role="group"
                 w="100%"
                 h="100%"
@@ -286,7 +255,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
                 _hover={
                   p.apagada
                     ? {}
-                    : { transform: "translateY(-6px)", boxShadow: `0 0 48px ${d.txt}88, 0 0 90px ${d.txt}33` }
+                    : { transform: "translateY(-6px)", boxShadow: `0 0 48px ${d.txt}88, 0 0 90px ${d.txt}33`, textDecoration: "none" }
                 }
                 _focusVisible={focoBlanco}
               >

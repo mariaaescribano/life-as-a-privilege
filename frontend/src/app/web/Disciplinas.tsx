@@ -36,15 +36,18 @@ const ORO = "#b08d3f";
 
 /** Una disciplina como tarjeta con su foto: icono arriba, rayita fina y el nombre. */
 const TarjetaDisciplina = ({ d }: { d: (typeof DISCIPLINAS_MANDALA)[number] }) => {
-  const navigate = useNavigate();
   const nombreDe = useNombreDisciplina();
   const conFondo = hasDisciplinaBg(d.name);
   const sombra = sombraTexto(d.name, d.bg);
   return (
     <Box
-      as="button"
-      type="button"
-      onClick={() => navigate(d.link)}
+      as="a"
+      href={d.link}
+      // En una PESTAÑA NUEVA: Disciplinas se queda donde está.
+      target="_blank"
+      rel="noopener noreferrer"
+      display="block"
+      textDecoration="none"
       role="group"
       position="relative"
       overflow="hidden"
@@ -53,6 +56,7 @@ const TarjetaDisciplina = ({ d }: { d: (typeof DISCIPLINAS_MANDALA)[number] }) =
       bg={d.bg}
       boxShadow={`0 0 18px ${d.txt}33, 0 0 40px ${d.txt}14`}
       cursor="pointer"
+      _hover={{ textDecoration: "none" }}
       _focusVisible={focoBlanco}
       sx={{ aspectRatio: "1 / 1", WebkitTapHighlightColor: "transparent" }}
     >
@@ -158,9 +162,13 @@ const Disciplinas = () => {
               align="center"
               gap={{ base: 8, md: 12, lg: 16 }}
             >
-              <Reveal activo={visible} direction="right" distance={36} scaleFrom={0.94} duration={1} w={{ base: "100%", md: "46%" }} maxW={{ base: "420px", md: "none" }} flexShrink={0}>
-                <Box borderRadius="22px" overflow="hidden" boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}>
-                  <Image src="/img/me/trajegrisconmapa.webp" alt="María Escribano" w="100%" h="auto" display="block" />
+              <Reveal activo={visible} direction="right" distance={36} scaleFrom={0.94} duration={1} w={{ base: "250px", md: "300px", lg: "340px" }} flexShrink={0}>
+                {/* Doble borde: la foto y, por fuera, un filo fino turquesa oscuro desplazado. */}
+                <Box position="relative">
+                  <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
+                  <Box borderRadius="22px" overflow="hidden" border={`1.5px solid ${TINTA}`} boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}>
+                    <Image src="/img/me/trajegrisconmapa.webp" alt="María Escribano" w="100%" h="auto" display="block" />
+                  </Box>
                 </Box>
               </Reveal>
               <Flex direction="column" gap={{ base: 5, md: 6 }} flex="1" minW={0} align={{ base: "center", md: "flex-start" }} textAlign={{ base: "center", md: "left" }}>

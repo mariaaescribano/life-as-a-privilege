@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, SimpleGrid, Image, Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LibrosIcon } from "../../GlobalVariables";
@@ -25,7 +24,6 @@ type Cajita = {
 };
 
 export default function MaterialesGratuitos() {
-  const navigate = useNavigate();
   const t = useT();
   const [mounted, setMounted] = useState(false);
 
@@ -145,7 +143,7 @@ export default function MaterialesGratuitos() {
 
       {/* ── LAS CUATRO CAJAS, sobre el mármol, de dos en dos; a la derecha, una foto ── */}
       <Box flex="1">
-        <BandaMarmol mt={{ base: 2, md: 4 }}>
+        <BandaMarmol mt={{ base: 2, md: 4 }} pt={{ base: "104px", md: "140px" }} pb={{ base: "116px", md: "150px" }}>
           {(visible) => (
             <Flex
               w="100%"
@@ -161,9 +159,13 @@ export default function MaterialesGratuitos() {
                 {cajitas.map((c, i) => (
                   <Reveal key={c.link} activo={visible} direction="up" distance={30} scaleFrom={0.96} duration={0.9} delay={c.delay} h="100%" display="flex">
                     <Flex
-                      as="button"
-                      type="button"
-                      onClick={() => navigate(c.link)}
+                      as="a"
+                      href={c.link}
+                      // Cada recurso se abre en una PESTAÑA NUEVA: Materiales se queda donde está
+                      // y la persona no se pierde entre páginas.
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      textDecoration="none"
                       direction="column"
                       align="center"
                       justify="center"
@@ -179,7 +181,7 @@ export default function MaterialesGratuitos() {
                       boxShadow={`0 0 16px ${ORO}22, 0 0 36px ${ORO}12`}
                       cursor="pointer"
                       transition="background 0.25s ease, border-color 0.25s ease, transform 0.28s ease"
-                      _hover={{ bg: `${TINTA}12`, borderColor: `${TINTA}aa`, transform: "translateY(-5px)" }}
+                      _hover={{ bg: `${TINTA}12`, borderColor: `${TINTA}aa`, transform: "translateY(-5px)", textDecoration: "none" }}
                       _focusVisible={focoBlanco}
                     >
                       <Float amplitude={5} duration={5 + i * 0.6} delay={i * 0.5}>

@@ -9,7 +9,7 @@ import { ILUSTRACIONES, ILUSTRACIONES_GALERIA, type IlustracionEntry } from "../
 import { IlustracionCard } from "../../components/metodo/IlustracionCard";
 import { useT } from "../../i18n";
 import { useParams } from "react-router-dom";
-import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
+import DisciplinaHeader from "../../components/web/DisciplinaHeader";
 import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 import { useComic } from "../../i18n/comics";
 import { registrarActividad, disciplinaDe } from "../../components/global/RegistroActividad";
@@ -32,7 +32,6 @@ export default function Ilustraciones() {
   const t = useT();
   // Slug de la URL (/ilustraciones/astrologia). Sin slug → la galería entera.
   const { disciplina: slug } = useParams<{ disciplina?: string }>();
-  const nombreDe = useNombreDisciplina();
   const disciplina = presentacionPorKey(slug);
   // Con disciplina: TODAS las suyas, en su orden (el filtro casa por la
   // ETIQUETA de la galería, que no siempre es el nombre interno: Hinduismo se
@@ -131,11 +130,18 @@ export default function Ilustraciones() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
-      {/* Flor de la vida sobre el título */}
-      <FlorTitulo />
+      {/* Con disciplina: su header (foto de fondo, icono + nombre, sin botones). Sin ella: la flor y el título de siempre. */}
+      {disciplina ? (
+        <Box pt={{ base: 10, md: 14 }}>
+          <DisciplinaHeader d={disciplina} />
+        </Box>
+      ) : (
+        <FlorTitulo />
+      )}
 
       {/* Título */}
       <Flex direction="column" align="center" textAlign="center" px={{ base: 5, md: 10 }} pt={{ base: 6, md: 8 }} gap={{ base: 3, md: 4 }}>
+        {!disciplina && (
         <Text
           color="white"
           fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
@@ -148,8 +154,9 @@ export default function Ilustraciones() {
           transform={mounted ? "translateY(0)" : "translateY(20px)"}
           transition="opacity 0.85s ease 0.25s, transform 0.85s ease 0.25s"
         >
-          {disciplina ? nombreDe(disciplina.nom) : t("ilustraciones.titulo")}
+          {t("ilustraciones.titulo")}
         </Text>
+        )}
         <Text
           color="rgba(255,255,255,0.88)"
           fontSize={{ base: "md", md: "xl" }}

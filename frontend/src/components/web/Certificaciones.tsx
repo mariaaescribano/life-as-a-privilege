@@ -50,6 +50,34 @@ const certificados: Certificado[] = secciones.flatMap((s) => s.items);
 /** Diplomas de una sección en una fila que se desliza (deslizar con el dedo o con las flechas). */
 const FILA_ALTO = { base: "190px", md: "250px" };
 
+/** Flecha a un lado de la fila de diplomas (en móvil no se pinta: se desliza con el dedo). */
+const Flecha = ({ lado, onClick }: { lado: "izq" | "dcha"; onClick: () => void }) => (
+  <Box
+    as="button"
+    type="button"
+    onClick={onClick}
+    aria-label={lado === "izq" ? "‹" : "›"}
+    display={{ base: "none", md: "flex" }}
+    flexShrink={0}
+    w="42px"
+    h="42px"
+    borderRadius="full"
+    alignItems="center"
+    justifyContent="center"
+    color="white"
+    fontSize="2xl"
+    lineHeight="1"
+    border="1px solid rgba(255,255,255,0.6)"
+    bg="rgba(255,255,255,0.08)"
+    boxShadow="0 0 14px rgba(255,255,255,0.25)"
+    transition="background 0.25s ease"
+    _hover={{ bg: "rgba(255,255,255,0.2)" }}
+    _focusVisible={focoBlanco}
+  >
+    {lado === "izq" ? "‹" : "›"}
+  </Box>
+);
+
 const Certificaciones = () => {
   const t = useT();
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
@@ -127,8 +155,12 @@ const Certificaciones = () => {
 
           {/* La fila de diplomas del tema elegido. Cambia con un fundido; los diplomas se ven
               ENTEROS (sin recortar), cada uno a su proporción. */}
-          <Box position="relative" mt={{ base: 6, md: 8 }}>
+          <Flex align="center" gap={{ base: 0, md: 4 }} mt={{ base: 6, md: 8 }}>
+            {/* Flecha izquierda, FUERA de la fila: a un lado, sin tapar ningún diploma. */}
+            <Flecha lado="izq" onClick={() => deslizar(-1)} />
             <Flex
+              flex="1"
+              minW={0}
               key={seccion.tituloKey}
               ref={filaRef}
               gap={{ base: 4, md: 6 }}
@@ -166,36 +198,8 @@ const Certificaciones = () => {
               ))}
             </Flex>
 
-            {/* Flechas (en móvil se desliza con el dedo). */}
-            {(["izq", "dcha"] as const).map((lado) => (
-              <Box
-                key={lado}
-                as="button"
-                type="button"
-                onClick={() => deslizar(lado === "izq" ? -1 : 1)}
-                aria-label={lado === "izq" ? "‹" : "›"}
-                display={{ base: "none", md: "flex" }}
-                position="absolute"
-                top="50%"
-                {...(lado === "izq" ? { left: "-14px" } : { right: "-14px" })}
-                transform="translateY(-50%)"
-                w="40px"
-                h="40px"
-                borderRadius="full"
-                alignItems="center"
-                justifyContent="center"
-                color="white"
-                fontSize="2xl"
-                lineHeight="1"
-                bg="rgba(0,128,128,0.85)"
-                border="1px solid rgba(255,255,255,0.6)"
-                boxShadow="0 0 14px rgba(255,255,255,0.3)"
-                _focusVisible={focoBlanco}
-              >
-                {lado === "izq" ? "‹" : "›"}
-              </Box>
-            ))}
-          </Box>
+            <Flecha lado="dcha" onClick={() => deslizar(1)} />
+          </Flex>
         </Box>
       </Box>
 

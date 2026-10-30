@@ -1,12 +1,11 @@
 import React from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { motion, useReducedMotion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../global/DisciplinaBgLayer";
-import { astrologiaNom } from "../../GlobalVariables";
+import { astrologiaNom, cabalaNom, culturaNom, fisiologiaNom, tcmNom } from "../../GlobalVariables";
 import type { DisciplinaFila } from "./WelcomeDisciplinas";
 
 /**
@@ -34,6 +33,9 @@ const ORO = "#b08d3f";
 const RADIO_NODO = 25.5;     // donde nace cada línea (aro de puntos)
 const RADIO_MEDALLON = 41;   // centro de los medallones
 const TAM_MEDALLON = 15;     // diámetro del medallón
+/** Disciplinas cuya letra clara no se lee sobre el mármol: el nombre va con el color oscuro de su fondo. */
+const NOMBRE_CON_FONDO = new Set<string>([astrologiaNom, tcmNom, culturaNom, cabalaNom, fisiologiaNom]);
+
 const TAM_NODO = 3.6;        // diámetro del enganche con la foto de la disciplina
 const TAM_MANDALA = 36;      // ancho del mandala que gira
 
@@ -43,7 +45,6 @@ const punto = (grados: number, r: number) => {
 };
 
 const Medallon = ({ d, i, angulo, activo }: { d: DisciplinaFila; i: number; angulo: number; activo: boolean }) => {
-  const navigate = useNavigate();
   const nombreDe = useNombreDisciplina();
   const conFondo = hasDisciplinaBg(d.name);
   const { x, y } = punto(angulo, RADIO_MEDALLON);
@@ -53,9 +54,12 @@ const Medallon = ({ d, i, angulo, activo }: { d: DisciplinaFila; i: number; angu
     <Box position="absolute" left={`${x}%`} top={`${y}%`} w={`${TAM_MEDALLON}%`} sx={{ aspectRatio: "1 / 1", transform: "translate(-50%, -50%)" }}>
       <Reveal activo={activo} direction="none" scaleFrom={0.5} duration={0.7} delay={1.15 + i * 0.12} w="100%" h="100%">
         <Box
-          as="button"
-          type="button"
-          onClick={() => navigate(d.link)}
+          as="a"
+          href={d.link}
+          // En una PESTAÑA NUEVA, igual que su tarjeta de más abajo.
+          target="_blank"
+          rel="noopener noreferrer"
+          display="block"
           aria-label={nombreDe(d.name)}
           position="relative"
           w="100%"
@@ -91,7 +95,7 @@ const Medallon = ({ d, i, angulo, activo }: { d: DisciplinaFila; i: number; angu
         </Box>
       </Reveal>
       {/* El nombre, flojito y en cursiva: encima del medallón si está en la mitad de arriba,
-          debajo en el resto. Del color de la disciplina (Astrología, azul oscuro de su fondo). */}
+          debajo en el resto. Del color de la disciplina; las de letra clara usan el color oscuro de su fondo. */}
       <Box
         position="absolute"
         left="50%"
@@ -102,7 +106,7 @@ const Medallon = ({ d, i, angulo, activo }: { d: DisciplinaFila; i: number; angu
       >
         <Reveal activo={activo} direction="none" duration={0.9} delay={1.5 + i * 0.12}>
           <Text
-            color={d.name === astrologiaNom ? d.bg : d.txt}
+            color={NOMBRE_CON_FONDO.has(d.name) ? d.bg : d.txt}
             opacity={0.8}
             fontFamily="'EB Garamond', serif"
             fontStyle="italic"

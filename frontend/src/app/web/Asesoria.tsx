@@ -419,49 +419,62 @@ const Asesoria = () => {
             formulario. Los campos van enmarcados en turquesa oscuro. */}
         <BandaMarmol>
           {(visible) => (
-            <Box w="100%" maxW="1100px" mx="auto" px={{ base: 5, md: 10 }}>
-              <Reveal activo={visible} direction="up" distance={20} duration={0.8}>
-                <Text
-                  textAlign="center"
-                  color="#004f4f"
-                  fontFamily="'EB Garamond', serif"
-                  fontWeight="700"
-                  fontSize={{ base: "3xl", md: "5xl" }}
-                  letterSpacing="0.05em"
-                  lineHeight="1.15"
-                >
-                  {t("asesoria.contacto.titulo")}
-                </Text>
+            <Flex
+              w="100%"
+              maxW="1180px"
+              mx="auto"
+              px={{ base: 5, md: 10, lg: 16 }}
+              direction={{ base: "column", md: "row" }}
+              align="center"
+              gap={{ base: 10, md: 12, lg: 16 }}
+            >
+              {/* A la izquierda SOLO la foto, entera (sin recortar). */}
+              <Reveal activo={visible} direction="right" distance={30} scaleFrom={0.94} duration={1} w={{ base: "250px", md: "300px", lg: "340px" }} flexShrink={0}>
+                <Box borderRadius="22px" overflow="hidden" boxShadow={`0 0 22px ${ORO}55, 0 0 48px ${ORO}28`}>
+                  <Image src={FOTO_CONTACTO} alt="María Escribano" w="100%" h="auto" display="block" />
+                </Box>
               </Reveal>
-              <Reveal activo={visible} direction="up" distance={16} duration={0.8} delay={0.2}>
-                <Text
-                  textAlign="center"
-                  color="#004f4f"
-                  fontFamily="'EB Garamond', serif"
-                  fontStyle="italic"
-                  fontSize={{ base: "lg", md: "2xl" }}
-                  lineHeight="1.5"
-                  mt={{ base: 2, md: 3 }}
-                  mb={{ base: 8, md: 12 }}
+
+              {/* A la derecha, todo lo demás, enmarcado en un box transparente: título, frase y formulario. */}
+              <Reveal activo={visible} direction="left" distance={30} scaleFrom={0.97} duration={1} delay={0.3} flex="1" minW={0} w="100%">
+                <Box
+                  borderRadius="3xl"
+                  border={`1.5px solid ${TINTA}66`}
+                  bg="rgba(255,255,255,0.14)"
+                  boxShadow={`0 0 20px ${ORO}2a, 0 0 44px ${ORO}14`}
+                  px={{ base: 5, md: 8, lg: 10 }}
+                  py={{ base: 7, md: 9, lg: 10 }}
                 >
-                  {t("asesoria.contacto.subtitulo")}
-                </Text>
-              </Reveal>
-              <Flex direction={{ base: "column", md: "row" }} align="center" gap={{ base: 12, md: 14, lg: 20 }}>
-                {/* La foto ENTERA (sin recortar), con un filo fino desplazado que la enmarca. */}
-                <Reveal activo={visible} direction="right" distance={30} scaleFrom={0.94} duration={1} delay={0.3} w={{ base: "250px", md: "300px", lg: "340px" }} flexShrink={0}>
-                  <Box position="relative">
-                    <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
-                    <Box borderRadius="22px" overflow="hidden" boxShadow={`0 0 22px ${ORO}55, 0 0 48px ${ORO}28`}>
-                      <Image src={FOTO_CONTACTO} alt="María Escribano" w="100%" h="auto" display="block" />
-                    </Box>
-                  </Box>
-                </Reveal>
-                <Box flex="1" minW={0} w="100%">
+                  <Reveal activo={visible} direction="up" distance={16} duration={0.8} delay={0.6}>
+                    <Text
+                      textAlign={{ base: "center", md: "left" }}
+                      color={TINTA}
+                      fontFamily="'EB Garamond', serif"
+                      fontWeight="700"
+                      fontSize={{ base: "3xl", md: "4xl" }}
+                      letterSpacing="0.04em"
+                      lineHeight="1.15"
+                    >
+                      {t("asesoria.contacto.titulo")}
+                    </Text>
+                    <Text
+                      textAlign={{ base: "center", md: "left" }}
+                      color={TINTA}
+                      fontFamily="'EB Garamond', serif"
+                      fontStyle="italic"
+                      fontSize={{ base: "lg", md: "xl" }}
+                      lineHeight="1.5"
+                      mt={2}
+                    >
+                      {t("asesoria.contacto.subtitulo")}
+                    </Text>
+                    {/* Rayita fina que separa la cabecera del formulario. */}
+                    <Box h="1px" w="100%" mt={{ base: 5, md: 6 }} mb={{ base: 6, md: 7 }} bg={`linear-gradient(to right, ${TINTA}77, ${TINTA}11)`} />
+                  </Reveal>
                   <FormularioAsesoria marmol activo={visible} asunto={t("asesoria.titulo")} />
                 </Box>
-              </Flex>
-            </Box>
+              </Reveal>
+            </Flex>
           )}
         </BandaMarmol>
       </Box>

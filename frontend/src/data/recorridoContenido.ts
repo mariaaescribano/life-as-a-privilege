@@ -51,7 +51,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   astrologia: {
     desc: "Dar otro significado a las tendencias personales.",
     videoIntro: {
-      titulo: "Conoce las características de cada área de tu vida y cómo se relacionan.",
+      titulo: "Conoce las características de cada área de tu vida, cómo se relacionan y cómo te influyen.",
       puntos: [
         "Una interpretación personal de tu carta, realizada por mí, no por una IA.",
         "Utiliza tu carta como una herramienta para comprender tu historia, tus conflictos y tus dones.",
@@ -163,7 +163,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   tcm: {
     desc: "Explorar una visión integral del equilibrio y el bienestar.",
     videoIntro: {
-      titulo: "Aprende el lenguaje de tu cuerpo.",
+      titulo: "Descubre la forma única de mirar la naturaleza y ti mismo. El sistema en el que se basa la Medicina Tradicional China.",
       puntos: [
         "Descubre los cinco elementos y cómo se relacionan con tu cuerpo, tu forma de ser y tus ciclos naturales.",
         "Identifica qué elementos pueden estar pidiendo más atención y comprende cómo se manifiestan sus desequilibrios en ti.",
@@ -200,7 +200,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
   fisiologia: {
     desc: "Comprender el cuerpo para cuidarlo mejor.",
     videoIntro: {
-      titulo: "Comprende el complejo sistema celular que te forma.",
+      titulo: "No tienes un cuerpo, eres un cuerpo. Descubre a tus células para cuidarte con coherencia.",
       puntos: [
         "Descubre las moléculas, células, órganos y sistemas que hacen posible que seas quien eres.",
         "Entiende qué ocurre dentro de ti a nivel celular y cómo trabajan juntos los sistemas que mantienen tu organismo en equilibrio.",
@@ -322,7 +322,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
 
 
     videoIntro: {
-      titulo: "Fascínate con las grandes historias que dieron forma al mundo.",
+      titulo: "Las grandes filosofías e historias que dieron forma al mundo.",
       puntos: [
         "Descubre las historias de las civilizaciones que transformaron nuestra forma de entender el mundo y a nosotros mismos.",
         "Conoce la filosofía de los grandes pensadores.",

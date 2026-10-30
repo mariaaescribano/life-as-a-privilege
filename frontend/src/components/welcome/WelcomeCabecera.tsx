@@ -54,14 +54,16 @@ const WelcomeCabecera = ({
 
   useEffect(() => {
     if (!activo) return;
-    const ms = 800 + segTitulo * 1000 + 150;
+    // La frase sale ENSEGUIDA: cuando la última letra ya está casi encendida (el último
+    // tramo de su transición apenas se nota), sin esperar a que acabe del todo.
+    const ms = 800 + (segTitulo - 0.35) * 1000;
     // Red de seguridad: pase lo que pase, a los 8 s la página queda libre.
     const libre = [setTimeout(() => marcarCabeceraEscribiendo(false), ms), setTimeout(() => marcarCabeceraEscribiendo(false), 8000)];
     const limpiaLibre = () => libre.forEach(clearTimeout);
     const ids = [
       setTimeout(() => setTitulo(true), 800),
       setTimeout(() => setFrase(true), ms),
-      setTimeout(() => setSeparador(true), ms + 700),
+      setTimeout(() => setSeparador(true), ms + 600),
     ];
     return () => { ids.forEach(clearTimeout); limpiaLibre(); };
   }, [activo, segTitulo]);
