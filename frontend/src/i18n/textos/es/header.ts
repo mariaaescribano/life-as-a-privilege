@@ -23,7 +23,7 @@ export const header = {
   "header.miCuenta": "Mi cuenta",
   /** Última opción del menú SIN sesión. Es una acción, no un sitio: quien no ha
    *  entrado todavía no tiene ninguna «cuenta» que visitar. */
-  "header.iniciarSesion": "Iniciar sesión",
+  "header.iniciarSesion": "Entra a tu cuenta",
   "header.idioma": "Cambiar idioma",
   "header.menu": "Menú",
   "header.cerrarMenu": "Cerrar menú",

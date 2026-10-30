@@ -482,9 +482,6 @@ export default function SignIn() {
                 {...inputStyles}
                 sx={inputFechaSx}
               />
-              <Text color="rgba(255,255,255,0.68)" fontSize="sm" fontStyle="italic" mt={2} textAlign="center" lineHeight="1.5">
-                {t("auth.signin.fechaRegalo")}
-              </Text>
             </Box>
           </SimpleGrid>
 

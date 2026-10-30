@@ -14,10 +14,12 @@ export const auth = {
   "auth.contrasena.ocultar": "Ocultar contraseña",
 
   // ── Iniciar sesión ─────────────────────────────────────────────────────
-  "auth.login.titulo": "Iniciar sesión",
+  "auth.login.titulo": "Entra a tu cuenta",
   "auth.login.subtitulo": "Entra a tu cuenta de El Mapa",
-  "auth.login.opcion.asesoria": "Estoy recibiendo asesoramiento",
-  "auth.login.opcion.premium": "Quiero acceder al contenido premium",
+  "auth.login.soloYo": "Solo yo creo tu cuenta. Te llegará un correo para activarla.",
+  "auth.login.frase": "Dos puertas hacia dos mundos complementarios",
+  "auth.login.opcion.asesoria": "Estoy siendo asesorado",
+  "auth.login.opcion.premium": "Acceso al contenido premium",
   "auth.login.entrar": "Entrar",
   "auth.login.olvidada": "¿Has olvidado tu contraseña?",
   "auth.login.sinCuenta": "¿No tienes cuenta? Crear cuenta",
@@ -41,7 +43,6 @@ export const auth = {
   "auth.signin.yaTienes": "¿Ya tienes cuenta? Iniciar sesión",
   "auth.signin.creada": "¡Cuenta creada!",
   "auth.signin.creadaTexto": "Continuamos en un instante...",
-  "auth.signin.fechaRegalo": "El día de tu cumpleaños tendrás un 50 % en una disciplina.",
   "auth.signin.miraCorreo": "Mira tu correo",
   "auth.signin.miraCorreoTexto": "Tu cuenta está creada. Para activarla, pulsa el enlace que te acabamos de enviar a:",
   "auth.signin.miraCorreoSpam": "Después ya podrás iniciar sesión con tu nombre o tu email y tu contraseña. Si no lo ves en unos minutos, mira en spam o en promociones.",

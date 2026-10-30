@@ -10,9 +10,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
-import { PRECIO_DISCIPLINA, PRECIO_DISCIPLINA_ANTES } from "./pagoDisciplinaLink";
-import { PrecioConAntes } from "./PrecioConAntes";
-import { darConsentimientoSalud } from "../../api/consentimientoSalud";
 import {
   ayurvedaNom, AyurvedaIcon,
   tcmNom, TCMIcon,
@@ -56,9 +53,9 @@ interface BaseProps extends PagoDisciplinaModalProps {
   ordinal: string;
   /** Resumen de 2 líneas de lo que hace el recorrido. */
   descripcion: React.ReactNode;
-  /** Precio mostrado (por defecto, el de una disciplina: PRECIO_DISCIPLINA). */
+  /** Sin uso desde que ya no se cobra; los wrappers aún lo pasan. */
   precio?: string;
-  /** Color del texto de error (según el fondo sea claro u oscuro). */
+  /** Sin uso desde que ya no se cobra; los wrappers aún lo pasan. */
   errorColor?: string;
 }
 
@@ -135,38 +132,28 @@ export function Casilla({
 }
 
 /**
- * Box de pago común a todas las disciplinas. Se pinta con los colores de cada
- * disciplina (disciplinaBg de fondo, disciplinaTxt para texto y acentos), de
- * modo que el estilo coincide con el recorrido que se va a desbloquear.
- * Los wrappers por disciplina (PagoCabalaModal, PagoNutricionModal, …) solo le
- * pasan sus colores, su ordinal y su resumen.
+ * Lo que sale al pulsar una disciplina que aún no está abierta. Ya NO se cobra por
+ * disciplina: María abre cada una a mano desde /admin/usuarios, a medida que avanzan
+ * las sesiones. Por eso este box no pide nada ni lleva precio: solo avisa y se cierra.
+ *
+ * Conserva el nombre, las props y los wrappers por disciplina (PagoCabalaModal,
+ * PagoNutricionModal, …) porque Home y todas las páginas de disciplina lo montan con
+ * `onPagar`/`loading`/`error`: esas props ya no se usan, pero así no hubo que tocar
+ * cincuenta sitios, y el cobro por Stripe sigue en el código por si algún día vuelve.
+ *
+ * Se pinta con los colores de cada disciplina (disciplinaBg de fondo, disciplinaTxt
+ * para texto y acentos).
  */
 export function PagoDisciplinaModal({
   isOpen,
   onClose,
-  onPagar,
-  loading,
-  error,
   bg,
   txt,
   nom,
   ordinal,
   descripcion,
-  precio = PRECIO_DISCIPLINA,
-  errorColor = "#ffb4b4",
 }: BaseProps) {
   const t = useT();
-  // DOS casillas, separadas a propósito (art. 7.2 y 9.2.a RGPD): las condiciones
-  // de compra y, aparte, el consentimiento explícito para guardar datos de salud.
-  // Se reinician cada vez que se abre el modal: nunca deben quedar marcadas «de
-  // la vez anterior».
-  const [acepta, setAcepta] = React.useState(false);
-  const [consienteSalud, setConsienteSalud] = React.useState(false);
-  React.useEffect(() => {
-    if (isOpen) { setAcepta(false); setConsienteSalud(false); }
-  }, [isOpen]);
-
-  const listo = acepta && consienteSalud;
 
   return (
     // scrollBehavior="inside": si el contenido es más alto que la pantalla, el
@@ -219,62 +206,21 @@ export function PagoDisciplinaModal({
               {descripcion}
             </Text>
 
-            <Flex direction="column" align="center" gap={1.5} mt={1}>
-              <PrecioConAntes
-                precio={precio}
-                color={txt}
-                sombra={`0 0 20px ${txt}80, 0 0 42px ${txt}55`}
-              />
-              {PRECIO_DISCIPLINA_ANTES && (
-                <Text color={`${txt}bb`} fontSize={{ base: "sm", md: "md" }} fontStyle="italic" textAlign="center">
-                  {t("metodo.pago.precioReducido")}
-                </Text>
-              )}
-            </Flex>
+            <Text
+              color={txt}
+              fontSize={{ base: "lg", md: "xl" }}
+              fontWeight="700"
+              lineHeight="1.6"
+              textAlign="center"
+              style={{ textShadow: `0 0 20px ${txt}80` }}
+            >
+              {t("metodo.pago.laAbroYo")}
+            </Text>
 
-            {/* La casilla, con texto corto. El detalle de qué se acepta —el
-                pago no se devuelve, y el guardado de lo que se escriba para
-                personalizar las sesiones— vive en la lista de condiciones de
-                /terminos, que se abre pulsando el enlace: el box de pago no es
-                sitio para un párrafo jurídico. */}
-            <Flex direction="column" gap={3} mt={2} maxW="520px" mx="auto" w="100%">
-              <Casilla
-                marcada={acepta}
-                onToggle={() => setAcepta((v) => !v)}
-                bg={bg}
-                txt={txt}
-              >
-                {t("metodo.pago.acepto")}{" "}
-                <Text
-                  as="span"
-                  textDecoration="underline"
-                  onClick={(e) => { e.stopPropagation(); window.open("/terminos", "_blank"); }}
-                  _hover={{ color: txt }}
-                >
-                  {t("metodo.pago.condicionesEnlace")}
-                </Text>
-              </Casilla>
-              <Casilla
-                marcada={consienteSalud}
-                onToggle={() => setConsienteSalud((v) => !v)}
-                bg={bg}
-                txt={txt}
-                nota={t("consentimiento.nota")}
-              >
-                {t("consentimiento.casilla")}
-              </Casilla>
-            </Flex>
-
-            <Flex justify="center" mt={3} gap={4} wrap="wrap">
+            <Flex justify="center" mt={2}>
               <Box
                 as="button"
-                onClick={loading || !listo ? undefined : async () => {
-                  // El consentimiento de salud se apunta ANTES de salir hacia
-                  // Stripe como prueba (art. 7.1 RGPD). Si falla, se pide otra
-                  // vez al entrar (PuertaConsentimientoSalud).
-                  await darConsentimientoSalud();
-                  onPagar();
-                }}
+                onClick={onClose}
                 px={10}
                 py={3}
                 borderRadius="full"
@@ -284,58 +230,15 @@ export function PagoDisciplinaModal({
                 fontSize={{ base: "lg", md: "xl" }}
                 fontWeight="700"
                 letterSpacing="0.08em"
-                cursor={loading || !listo ? "not-allowed" : "pointer"}
-                opacity={loading || !listo ? 0.5 : 1}
+                cursor="pointer"
                 boxShadow={`0 4px 24px ${txt}47`}
                 transition="all 0.22s"
-                _hover={loading || !listo ? {} : { transform: "translateY(-2px)", boxShadow: `0 8px 32px ${txt}66` }}
+                _hover={{ transform: "translateY(-2px)", boxShadow: `0 8px 32px ${txt}66` }}
+                _focusVisible={{ outline: `2px solid ${txt}`, outlineOffset: "3px" }}
               >
-                {loading ? "Conectando…" : "Pagar"}
-              </Box>
-              <Box
-                as="button"
-                onClick={loading ? undefined : onClose}
-                px={8}
-                py={3}
-                borderRadius="full"
-                bg="transparent"
-                color={`${txt}d9`}
-                border={`1px solid ${txt}80`}
-                fontFamily="'EB Garamond', serif"
-                fontSize={{ base: "md", md: "lg" }}
-                fontWeight="600"
-                letterSpacing="0.06em"
-                cursor={loading ? "not-allowed" : "pointer"}
-                opacity={loading ? 0.5 : 1}
-                transition="all 0.22s"
-                _hover={loading ? {} : { borderColor: txt, color: txt }}
-              >
-                {t("metodo.pago.ahoraNo")}
+                {t("metodo.pago.entendido")}
               </Box>
             </Flex>
-
-            {error && (
-              <Text
-                color={errorColor}
-                fontSize="sm"
-                textAlign="center"
-                fontStyle="italic"
-                mt={1}
-              >
-                {error}
-              </Text>
-            )}
-
-            <Text
-              color={`${txt}8c`}
-              fontSize="xs"
-              letterSpacing="0.06em"
-              fontStyle="italic"
-              textAlign="center"
-              mt={1}
-            >
-              {t("metodo.pago.stripe")}
-            </Text>
           </Flex>
         </ModalBody>
       </ModalContent>

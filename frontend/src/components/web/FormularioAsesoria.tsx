@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Flex, Input, Text, Textarea } from "@chakra-ui/react";
+import { Box, Flex, Input, Modal, ModalBody, ModalContent, ModalOverlay, Text, Textarea } from "@chakra-ui/react";
 import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { Reveal } from "../global/Reveal";
@@ -92,33 +92,45 @@ const FormularioAsesoria = ({ asunto, marmol = false, activo }: { asunto: string
 
   return (
     <Box w="100%" maxW="760px" mx="auto" px={{ base: 5, md: 10 }}>
-      {estado === "ok" ? (
-        <Reveal direction="up" distance={16} duration={0.7}>
-          <Flex direction="column" align="center" textAlign="center" gap={2} py={{ base: 10, md: 14 }}>
-            <Text color={c.texto} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "2xl", md: "3xl" }}>
-              {t("contacto.enviado")}
-            </Text>
-            <Text color={c.suave} fontFamily="'EB Garamond', serif" fontStyle="italic" fontSize={{ base: "md", md: "xl" }}>
-              {t("contacto.responder")}
-            </Text>
-            <Box
-              as="button"
-              type="button"
-              onClick={() => setEstado("idle")}
-              mt={4}
-              color={c.suave}
-              fontFamily="'EB Garamond', serif"
-              fontSize={{ base: "sm", md: "md" }}
-              letterSpacing="0.14em"
-              textTransform="uppercase"
-              _hover={{ color: c.texto, textDecoration: "underline" }}
-              _focusVisible={focoBlanco}
-            >
-              {t("contacto.otro")}
-            </Box>
-          </Flex>
-        </Reveal>
-      ) : (
+      {/* Aviso de envío: popup con tick, no depende de ninguna animación de entrada. */}
+      <Modal isOpen={estado === "ok"} onClose={() => setEstado("idle")} isCentered size="sm">
+        <ModalOverlay bg="rgba(0,0,0,0.45)" />
+        <ModalContent bg="#008080" borderRadius="2xl" border="2px solid rgba(255,255,255,0.6)" mx={{ base: 4, md: 0 }}>
+          <ModalBody px={8} py={9}>
+            <Flex direction="column" align="center" textAlign="center" gap={3}>
+              <Flex w="64px" h="64px" borderRadius="full" border="2px solid white" align="center" justify="center" boxShadow="0 0 18px rgba(255,255,255,0.3)">
+                <Text color="white" fontSize="3xl" lineHeight="1">✓</Text>
+              </Flex>
+              <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "2xl", md: "3xl" }}>
+                {t("contacto.enviado")}
+              </Text>
+              <Text color="rgba(255,255,255,0.9)" fontFamily="'EB Garamond', serif" fontStyle="italic" fontSize={{ base: "md", md: "xl" }}>
+                {t("contacto.responder")}
+              </Text>
+              <Box
+                as="button"
+                type="button"
+                onClick={() => setEstado("idle")}
+                mt={3}
+                px={8}
+                py="10px"
+                borderRadius="full"
+                border="1.5px solid rgba(255,255,255,0.85)"
+                color="white"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                letterSpacing="0.14em"
+                textTransform="uppercase"
+                _hover={{ bg: "rgba(255,255,255,0.15)" }}
+                _focusVisible={focoBlanco}
+              >
+                {t("comun.cerrar")}
+              </Box>
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      {(
         <Flex as="form" direction="column" gap={{ base: 5, md: 6 }} onSubmit={enviar} noValidate>
           <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 6 }}>
             <Reveal {...control} direction="up" distance={20} duration={0.7} flex="1">

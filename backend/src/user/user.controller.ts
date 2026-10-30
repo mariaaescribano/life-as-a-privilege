@@ -181,6 +181,26 @@ export class UserController {
     return await this.usersService.revocarAcceso(body.userId);
   }
 
+  // ── Cuentas de asesoría: las crea la admin ───────────────────────────────
+  // «Estoy siendo asesorado» no tiene registro: María da de alta a la persona,
+  // le llega un correo para elegir contraseña y no tiene nada abierto hasta que
+  // se lo abra desde la ficha (`admin/acceso`).
+  @Post("admin/crear")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async crearCuentaAsesorada(
+    @Body() body: { name?: string; email?: string; telefono?: string; fecha_nacimiento?: string },
+  ) {
+    return await this.usersService.crearCuentaAsesorada(body);
+  }
+
+  @Post("admin/reenviar-invitacion")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  async reenviarInvitacion(@Body() body: { userId?: string }) {
+    if (!body?.userId) throw new BadRequestException('userId requerido');
+    return await this.usersService.reenviarInvitacion(body.userId);
+  }
+
   // Marca (o desmarca) que esa persona está haciendo sesiones: es lo que hace
   // salir el botón «Diario de terapias» en la tabla de /admin/usuarios.
   @Post("admin/sesiones")

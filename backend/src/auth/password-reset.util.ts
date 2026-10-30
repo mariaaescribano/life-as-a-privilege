@@ -15,6 +15,9 @@ import * as crypto from 'crypto';
 // Formato: "<payload en base64url>.<firma en base64url>"
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** Una cuenta creada por la admin: el enlace para elegir contraseña vale dos semanas. */
+export const INVITACION_TTL_MS = 14 * 24 * 60 * 60 * 1000;
+
 /** Una hora de validez: suficiente para ir al correo, corto para que no se quede vivo. */
 export const RECUPERACION_TTL_MS = 60 * 60 * 1000;
 
@@ -39,8 +42,8 @@ function firmar(payloadB64: string, passwordHash: string): string {
 }
 
 /** Genera el token que viaja en el enlace del email. */
-export function crearTokenRecuperacion(userId: string, passwordHash: string): string {
-  const payload: PayloadRecuperacion = { uid: userId, exp: Date.now() + RECUPERACION_TTL_MS };
+export function crearTokenRecuperacion(userId: string, passwordHash: string, ttlMs: number = RECUPERACION_TTL_MS): string {
+  const payload: PayloadRecuperacion = { uid: userId, exp: Date.now() + ttlMs };
   const payloadB64 = b64url(Buffer.from(JSON.stringify(payload), 'utf8'));
   return `${payloadB64}.${firmar(payloadB64, passwordHash)}`;
 }

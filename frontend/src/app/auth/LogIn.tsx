@@ -13,7 +13,7 @@ import SiteFooter from "../../components/global/Footer";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { Reveal } from "../../components/global/Reveal";
 import { focoBlanco } from "../../components/global/foco";
-import { MessagesSquare, CirclePlay } from "lucide-react";
+import BandaMarmol from "../../components/global/BandaMarmol";
 import { CampoContrasena, inputAuthStyles, focoAzul } from "../../components/global/CampoContrasena";
 import { useT } from "../../i18n";
 
@@ -21,10 +21,14 @@ import { useT } from "../../i18n";
 // los normales no puedan quedar distintos.
 const inputStyles = inputAuthStyles;
 
-/** Los dos inicios de sesión entre los que se elige primero. */
+const TINTA = "#004f4f";
+const ORO = "#b08d3f";
+
+/** Los dos inicios de sesión entre los que se elige primero: asesoría con la foto de María,
+ *  premium con el mandala sobre turquesa. */
 const OPCIONES = [
-  { modo: "asesoria" as const, texto: "auth.login.opcion.asesoria" as const, Icono: MessagesSquare },
-  { modo: "premium" as const, texto: "auth.login.opcion.premium" as const, Icono: CirclePlay },
+  { modo: "asesoria" as const, texto: "auth.login.opcion.asesoria" as const },
+  { modo: "premium" as const, texto: "auth.login.opcion.premium" as const },
 ];
 
 export default function LogIn() {
@@ -47,9 +51,10 @@ export default function LogIn() {
   const [sinConfirmar, setSinConfirmar] = useState(false);
   const [reenviado, setReenviado] = useState(false);
   // Qué inicio de sesión se ha elegido (null = todavía se está eligiendo).
-  const [modo, setModo] = useState<"asesoria" | "premium" | null>(null);
-  // Las dos cajas entran cuando el titular ya está escrito.
-  const [cajas, setCajas] = useState(false);
+  // `?modo=premium` (el botón EMPEZAR de Premium) llega con la puerta ya elegida.
+  const [modo, setModo] = useState<"asesoria" | "premium" | null>(
+    params.get("modo") === "premium" ? "premium" : params.get("modo") === "asesoria" ? "asesoria" : null,
+  );
   const [formVisible, setFormVisible] = useState(false);
   // Enter en «nombre o email» salta a la contraseña (allí Enter ya entra).
   const contraRef = useRef<HTMLInputElement>(null);
@@ -57,8 +62,7 @@ export default function LogIn() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const t = setTimeout(() => setMounted(true), 60);
-    const c = setTimeout(() => setCajas(true), 2300);
-    return () => { clearTimeout(t); clearTimeout(c); };
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
@@ -197,77 +201,115 @@ export default function LogIn() {
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="public" />
 
-      <Box flex="1" display="flex" flexDirection="column" transform="scale(0.8)" transformOrigin="top center">
+      <Box flex="1" display="flex" flexDirection="column">
 
-      {/* ── MANDALA + «INICIAR SESIÓN» (sin frase ni separación horizontal) ── */}
+      {/* ── MANDALA + «ENTRA A TU CUENTA» + frase en cursiva + separación ──
+          Ya elegida una puerta, la frase pasa a ser la elegida y no hay separación. */}
       <WelcomeCabecera
         activo={mounted}
         titulo={t("auth.login.titulo")}
-        subtitulo={modo ? t(modo === "asesoria" ? "auth.login.opcion.asesoria" : "auth.login.opcion.premium") : undefined}
-        sinFrase={!modo}
-        sinSeparador
+        subtitulo={modo ? t(modo === "asesoria" ? "auth.login.opcion.asesoria" : "auth.login.opcion.premium") : t("auth.login.frase")}
+        sinSeparador={!!modo}
         mayusculas
       />
 
-      {/* ── PRIMERO, ELEGIR: dos cajas, una por cada inicio de sesión ── */}
+      {/* ── PRIMERO, ELEGIR: dos puertas sobre el mármol, cada una con su foto ── */}
       {!modo && (
-        <Flex justify="center" px={{ base: 5, md: 10 }} pt={{ base: 12, md: 16 }} pb={{ base: 24, md: 32 }}>
-          <Flex direction={{ base: "column", md: "row" }} gap={{ base: 5, md: 8 }} w="100%" maxW="860px">
-            {OPCIONES.map((o, i) => (
-              <Reveal key={o.modo} activo={cajas} direction="up" distance={30} scaleFrom={0.95} duration={0.9} delay={i * 0.25} flex="1" display="flex">
-                <Flex
-                  as="button"
-                  type="button"
-                  onClick={() => setModo(o.modo)}
-                  direction="column"
-                  align="center"
-                  justify="center"
-                  flex="1"
-                  gap={{ base: 5, md: 6 }}
-                  px={{ base: 6, md: 8 }}
-                  py={{ base: 9, md: 12 }}
-                  minH={{ base: "200px", md: "260px" }}
-                  borderRadius="3xl"
-                  bg="rgba(255,255,255,0.06)"
-                  border="1px solid rgba(255,255,255,0.3)"
-                  boxShadow="0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09)"
-                  cursor="pointer"
-                  role="group"
-                  transition="background 0.3s ease, border-color 0.3s ease, transform 0.3s ease"
-                  _hover={{ bg: "rgba(255,255,255,0.12)", borderColor: "rgba(255,255,255,0.85)", transform: "translateY(-5px)" }}
-                  _focusVisible={focoBlanco}
-                >
-                  <Flex
-                    align="center"
-                    justify="center"
-                    w={{ base: "76px", md: "92px" }}
-                    h={{ base: "76px", md: "92px" }}
-                    borderRadius="full"
-                    border="1.5px solid rgba(255,255,255,0.7)"
-                    color="white"
-                    boxShadow="0 0 16px rgba(255,255,255,0.32), 0 0 36px rgba(255,255,255,0.14)"
-                    transition="transform 0.4s cubic-bezier(0.22,1,0.36,1)"
-                    _groupHover={{ transform: "scale(1.08)" }}
-                  >
-                    <o.Icono size={40} strokeWidth={1.4} />
-                  </Flex>
-                  <Box h="1px" w="44px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7), transparent)" />
-                  <Text
-                    color="white"
-                    fontFamily="'EB Garamond', serif"
-                    fontWeight="700"
-                    fontSize={{ base: "xl", md: "2xl" }}
-                    letterSpacing="0.04em"
-                    lineHeight="1.25"
-                    textAlign="center"
-                  >
-                    {t(o.texto)}
-                  </Text>
-                </Flex>
-              </Reveal>
-            ))}
-          </Flex>
-        </Flex>
+        <BandaMarmol>
+          {(visible) => (
+            <Flex justify="center" px={{ base: 5, md: 10 }}>
+              <Flex direction={{ base: "column", md: "row" }} align={{ base: "center", md: "stretch" }} gap={{ base: 12, md: 14 }} w="100%" maxW="860px">
+                {OPCIONES.map((o, i) => (
+                  <Reveal key={o.modo} activo={visible} direction="up" distance={30} scaleFrom={0.95} duration={0.9} delay={i * 0.25} flex="1" display="flex" w="100%" maxW={{ base: "320px", md: "none" }}>
+                    <Flex
+                      as="button"
+                      type="button"
+                      onClick={() => setModo(o.modo)}
+                      direction="column"
+                      align="center"
+                      flex="1"
+                      gap={{ base: 5, md: 6 }}
+                      bg="transparent"
+                      cursor="pointer"
+                      role="group"
+                      borderRadius="30px"
+                      _focusVisible={focoBlanco}
+                      sx={{ WebkitTapHighlightColor: "transparent" }}
+                    >
+                      {/* Doble borde: la foto y, por fuera, un filo fino turquesa oscuro desplazado. */}
+                      <Box position="relative" w="100%">
+                        <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
+                        <Box
+                          position="relative"
+                          overflow="hidden"
+                          borderRadius="22px"
+                          border={`1.5px solid ${TINTA}`}
+                          boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}
+                          sx={{ aspectRatio: "1 / 1" }}
+                        >
+                          {o.modo === "asesoria" ? (
+                            <Image
+                              src="/img/me/asesora.webp"
+                              alt="María Escribano"
+                              w="100%"
+                              h="100%"
+                              objectFit="cover"
+                              objectPosition="45% 30%"
+                              transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)"
+                              _groupHover={{ transform: "scale(1.06)" }}
+                            />
+                          ) : (
+                            <Flex w="100%" h="100%" align="center" justify="center">
+                              {/* El mandala (blanco, con transparencia) usado como máscara: se pinta en turquesa oscuro. */}
+                              <Box
+                                w="62%"
+                                bg={TINTA}
+                                transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)"
+                                _groupHover={{ transform: "scale(1.08)" }}
+                                sx={{
+                                  aspectRatio: "1 / 1",
+                                  WebkitMaskImage: "url('/img/icono/life.webp')",
+                                  maskImage: "url('/img/icono/life.webp')",
+                                  WebkitMaskSize: "contain",
+                                  maskSize: "contain",
+                                  WebkitMaskRepeat: "no-repeat",
+                                  maskRepeat: "no-repeat",
+                                  WebkitMaskPosition: "center",
+                                  maskPosition: "center",
+                                }}
+                              />
+                            </Flex>
+                          )}
+                        </Box>
+                      </Box>
+                      {/* Un solo renglón: el nombre de la puerta ES el botón. */}
+                      <Flex
+                        align="center"
+                        justify="center"
+                        gap={3}
+                        mt={2}
+                        px={{ base: 6, md: 7 }}
+                        py="12px"
+                        borderRadius="full"
+                        border={`1.5px solid ${TINTA}`}
+                        color={TINTA}
+                        fontFamily="'EB Garamond', serif"
+                        fontWeight="700"
+                        fontSize={{ base: "lg", md: "xl" }}
+                        letterSpacing="0.03em"
+                        transition="background 0.3s ease"
+                        _groupHover={{ bg: `${TINTA}14` }}
+                      >
+                        {t(o.texto)}
+                        <Box as="span" display="inline-block" transition="transform 0.3s ease" sx={{ "button:hover &": { transform: "translateX(5px)" } }}>→</Box>
+                      </Flex>
+                    </Flex>
+                  </Reveal>
+                ))}
+              </Flex>
+            </Flex>
+          )}
+        </BandaMarmol>
       )}
 
       {/* ── FORMULARIO (sin caja) ── */}
@@ -281,8 +323,14 @@ export default function LogIn() {
           transform={formVisible ? "translateY(0)" : "translateY(28px)"}
           transition="opacity 0.8s ease, transform 0.8s ease"
         >
-          <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
+          {modo === "asesoria" && (
+            <Text color="rgba(255,255,255,0.88)" fontStyle="italic" fontSize={{ base: "md", md: "lg" }} lineHeight="1.6" textAlign="center">
+              {t("auth.login.soloYo")}
+            </Text>
+          )}
+
+          <Box>
+            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
               {t("auth.campo.nombreOEmail")}
             </Text>
             <Input
@@ -423,7 +471,9 @@ export default function LogIn() {
             </Text>
           </Flex>
 
-          {/* Link a registrarse */}
+          {/* Link a registrarse: solo en Premium. Las personas asesoradas no se registran,
+              su cuenta la crea María. */}
+          {modo === "premium" && (
           <Flex justify="center" pt={2}>
             <Text
               as="button"
@@ -444,6 +494,7 @@ export default function LogIn() {
               {t("auth.login.sinCuenta")}
             </Text>
           </Flex>
+          )}
           {/* Volver a elegir el tipo de inicio de sesión. */}
           <Flex justify="center" pt={2}>
             <Text

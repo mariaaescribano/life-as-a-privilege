@@ -6,7 +6,6 @@ import { CursosGrid } from "../../components/aprendizaje/CursosGrid";
 import { useCursosData } from "../../data/cursosApi";
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
-import { Float } from "../../components/global/Reveal";
 import { useT } from "../../i18n";
 // Cuántas portadas de curso se piden por adelantado: las dos primeras filas de
 // la cuadrícula (3 columnas en escritorio). El resto baja al acercarse.
@@ -148,7 +147,7 @@ export const AprendizajeHome = () => {
         </Text>
       </Flex>
 
-      {/* ── SEPARADOR CON MANDALA + TODOS LOS CURSOS ── */}
+      {/* ── TODOS LOS CURSOS ── */}
       <Flex
         flex={1}
         direction="column"
@@ -159,22 +158,7 @@ export const AprendizajeHome = () => {
       >
         {allCourses.length > 0 && (
           <Box w="100%">
-            <Flex align="center" gap={{ base: 4, md: 6 }} my={{ base: 12, md: 16 }}>
-              <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
-              {/* El mandala del separador flota despacio, como el de las
-                  cesuras de /elMetodo: la pausa entre secciones también respira. */}
-              <Float amplitude={4} duration={6.5}>
-                <Image
-                  src="/img/icono/life.webp"
-                  alt=""
-                  h={{ base: "40px", md: "52px" }}
-                  objectFit="contain"
-                  flexShrink={0}
-                  style={{ filter: "drop-shadow(0 0 9px rgba(255,255,255,0.55)) drop-shadow(0 0 21px rgba(180,255,245,0.3))" }}
-                />
-              </Float>
-              <Box flex="1" h="1px" bg="rgba(255,255,255,0.28)" />
-            </Flex>
+            <Box h={{ base: 6, md: 8 }} />
 
             <CursosGrid
               items={allCourses.map((entry) => ({

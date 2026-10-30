@@ -1563,6 +1563,8 @@ export const metodo = {
   // ── Pago de una disciplina ─────────────────────────────────────────────
   "metodo.pago.precioReducido": "Ahora a precio reducido",
   "metodo.pago.ahoraNo": "Ahora no",
+  "metodo.pago.laAbroYo": "Esta disciplina la abro yo cuando sea el momento.",
+  "metodo.pago.entendido": "Entendido",
   "metodo.pago.stripe": "Pago seguro a través de Stripe",
   // La casilla del box de pago. Es UNA sola: las condiciones (/terminos,
   // apartado 5) incluyen también el guardado de lo que se escriba para poder

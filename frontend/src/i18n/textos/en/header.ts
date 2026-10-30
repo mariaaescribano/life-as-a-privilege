@@ -16,7 +16,7 @@ export const header = {
   "header.programas": "Programs",
   "header.contacto": "Contact me",
   "header.miCuenta": "My account",
-  "header.iniciarSesion": "Log in",
+  "header.iniciarSesion": "Sign in to your account",
   "header.idioma": "Change language",
   "header.menu": "Menu",
   "header.cerrarMenu": "Close menu",

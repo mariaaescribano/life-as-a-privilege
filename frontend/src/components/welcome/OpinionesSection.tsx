@@ -1,121 +1,124 @@
-import React from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+// [APARCADO] Archivo comentado entero: ninguna ruta ni pantalla lo usa ya. Para revivirlo, quita el `// ` de cada línea y recupera su ruta en App.tsx.
+export {};
 
-import { useT } from "../../i18n";
-import { Breathe } from "../global/Reveal";
-import { LetrasVivas } from "../global/LetrasVivas";
-import { useVistoConEspera } from "../../hooks/useVistoConEspera";
-
-const OpinionesSection: React.FC = () => {
-  const navigate = useNavigate();
-  const t = useT();
-  // Espera de 1,4 s tras cargar: en ordenador el botón ya está en pantalla al
-  // entrar, y sin espera su animación se gastaba a la vez que el titular.
-  const reveal = useVistoConEspera("0px 0px -30% 0px", 1.4);
-
-  return (
-    <Box
-      ref={reveal.ref}
-      px={{ base: 5, md: 10, lg: 16 }}
-      pt={{ base: 12, md: 16 }}
-      // El MISMO aire por debajo que por arriba. Encima del botón se suman el
-      // `pb` de las tarjetas (9/12 = 36/48px) y este `pt` (12/16 = 48/64px):
-      // 84/112px. Debajo, este `pb` y el `pt` de la tarjeta de la creadora
-      // (10/14 = 40/56px): 44+40 = 84 y 56+56 = 112. En píxeles, no en tokens:
-      // 11/15 NO existen en la escala de Chakra y caían como 11px/15px a secas
-      // — por eso el botón tenía menos aire por abajo que por arriba.
-      pb={{ base: "44px", md: "56px" }}
-    >
-      <Flex direction="column" align="center" w="100%">
-        {/* ── CTA principal → El Recorrido (botón grande con mandala + flecha
-              + líneas, versión destacada). ── */}
-        <Flex
-          justify="center"
-          align="center"
-          gap={{ base: 4, md: 7 }}
-          opacity={reveal.visible ? 1 : 0}
-          transform={reveal.visible ? "translateY(0)" : "translateY(18px)"}
-          transition="opacity 0.7s ease, transform 0.7s ease"
-        >
-          <Box
-            h="1px"
-            w={{ base: "24px", md: "110px" }}
-            bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
-            boxShadow="0 0 8px rgba(255,255,255,0.35)"
-          />
-          {/* El botón respira muy despacio (latido de escala), como el botón
-              grande de acceder de /elMetodo: vida continua sin moverse de sitio. */}
-          <Breathe scale={0.014} duration={5.5} flexShrink={0} display="flex" justifyContent="center">
-          <Flex
-            as="button"
-            onClick={() => navigate("/elMetodo")}
-            align="center"
-            justify="center"
-            gap={{ base: 3, md: 5 }}
-            px={{ base: 9, md: 24 }}
-            py={{ base: "18px", md: "28px" }}
-            flexShrink={0}
-            borderRadius="full"
-            border="1.5px solid rgba(255,255,255,0.65)"
-            bg="rgba(255,255,255,0.11)"
-            cursor="pointer"
-            boxShadow="0 0 28px rgba(255,255,255,0.34), 0 0 62px rgba(255,255,255,0.18), 0 0 112px rgba(180,255,245,0.20), 0 6px 22px rgba(0,0,0,0.22)"
-            _hover={{
-              bg: "rgba(255,255,255,0.22)",
-              borderColor: "white",
-              boxShadow: "0 0 40px rgba(255,255,255,0.46), 0 0 84px rgba(180,255,245,0.35), 0 8px 26px rgba(0,0,0,0.26)",
-              transform: "translateY(-2px)",
-            }}
-            transition="all 0.25s ease"
-          >
-            <Image
-              src="/img/icono/life.webp"
-              alt=""
-              h={{ base: "42px", md: "60px" }}
-              objectFit="contain"
-              flexShrink={0}
-              // El mandala surge al asomar el botón (pequeño y transparente
-              // hasta su tamaño), sin girar ni rebotar, y luego se queda quieto.
-              opacity={reveal.visible ? 1 : 0}
-              transform={reveal.visible ? "scale(1)" : "scale(0.4)"}
-              transition="opacity 0.9s ease 0.35s, transform 1.2s cubic-bezier(0.22,1,0.36,1) 0.35s"
-              style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.42)) drop-shadow(0 0 26px rgba(255,255,255,0.22))" }}
-            />
-            <Text
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="700"
-              fontSize={{ base: "xl", md: "4xl" }}
-              letterSpacing={{ base: "0.14em", md: "0.2em" }}
-              textTransform="uppercase"
-              textShadow="0 0 16px rgba(255,255,255,0.42), 0 0 34px rgba(255,255,255,0.27), 0 0 66px rgba(180,255,245,0.22)"
-              whiteSpace="nowrap"
-            >
-              <LetrasVivas texto={t("header.mapa")} entrada activo={reveal.visible} retraso={2.2} paso={0.12} altura={4} />
-            </Text>
-            <Box
-              as="span"
-              color="white"
-              fontFamily="'EB Garamond', serif"
-              fontWeight="700"
-              fontSize={{ base: "xl", md: "4xl" }}
-              style={{ textShadow: "0 0 16px rgba(255,255,255,0.42), 0 0 34px rgba(255,255,255,0.27)" }}
-            >
-              →
-            </Box>
-          </Flex>
-          </Breathe>
-          <Box
-            h="1px"
-            w={{ base: "24px", md: "110px" }}
-            bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
-            boxShadow="0 0 8px rgba(255,255,255,0.35)"
-          />
-        </Flex>
-      </Flex>
-    </Box>
-  );
-};
-
-export default OpinionesSection;
+// import React from "react";
+// import { Box, Flex, Image, Text } from "@chakra-ui/react";
+// import { useNavigate } from "react-router-dom";
+//
+// import { useT } from "../../i18n";
+// import { Breathe } from "../global/Reveal";
+// import { LetrasVivas } from "../global/LetrasVivas";
+// import { useVistoConEspera } from "../../hooks/useVistoConEspera";
+//
+// const OpinionesSection: React.FC = () => {
+//   const navigate = useNavigate();
+//   const t = useT();
+//   // Espera de 1,4 s tras cargar: en ordenador el botón ya está en pantalla al
+//   // entrar, y sin espera su animación se gastaba a la vez que el titular.
+//   const reveal = useVistoConEspera("0px 0px -30% 0px", 1.4);
+//
+//   return (
+//     <Box
+//       ref={reveal.ref}
+//       px={{ base: 5, md: 10, lg: 16 }}
+//       pt={{ base: 12, md: 16 }}
+//       // El MISMO aire por debajo que por arriba. Encima del botón se suman el
+//       // `pb` de las tarjetas (9/12 = 36/48px) y este `pt` (12/16 = 48/64px):
+//       // 84/112px. Debajo, este `pb` y el `pt` de la tarjeta de la creadora
+//       // (10/14 = 40/56px): 44+40 = 84 y 56+56 = 112. En píxeles, no en tokens:
+//       // 11/15 NO existen en la escala de Chakra y caían como 11px/15px a secas
+//       // — por eso el botón tenía menos aire por abajo que por arriba.
+//       pb={{ base: "44px", md: "56px" }}
+//     >
+//       <Flex direction="column" align="center" w="100%">
+//         {/* ── CTA principal → El Recorrido (botón grande con mandala + flecha
+//               + líneas, versión destacada). ── */}
+//         <Flex
+//           justify="center"
+//           align="center"
+//           gap={{ base: 4, md: 7 }}
+//           opacity={reveal.visible ? 1 : 0}
+//           transform={reveal.visible ? "translateY(0)" : "translateY(18px)"}
+//           transition="opacity 0.7s ease, transform 0.7s ease"
+//         >
+//           <Box
+//             h="1px"
+//             w={{ base: "24px", md: "110px" }}
+//             bg="linear-gradient(to right, transparent, rgba(255,255,255,0.7))"
+//             boxShadow="0 0 8px rgba(255,255,255,0.35)"
+//           />
+//           {/* El botón respira muy despacio (latido de escala), como el botón
+//               grande de acceder de /elMetodo: vida continua sin moverse de sitio. */}
+//           <Breathe scale={0.014} duration={5.5} flexShrink={0} display="flex" justifyContent="center">
+//           <Flex
+//             as="button"
+//             onClick={() => navigate("/elMetodo")}
+//             align="center"
+//             justify="center"
+//             gap={{ base: 3, md: 5 }}
+//             px={{ base: 9, md: 24 }}
+//             py={{ base: "18px", md: "28px" }}
+//             flexShrink={0}
+//             borderRadius="full"
+//             border="1.5px solid rgba(255,255,255,0.65)"
+//             bg="rgba(255,255,255,0.11)"
+//             cursor="pointer"
+//             boxShadow="0 0 28px rgba(255,255,255,0.34), 0 0 62px rgba(255,255,255,0.18), 0 0 112px rgba(180,255,245,0.20), 0 6px 22px rgba(0,0,0,0.22)"
+//             _hover={{
+//               bg: "rgba(255,255,255,0.22)",
+//               borderColor: "white",
+//               boxShadow: "0 0 40px rgba(255,255,255,0.46), 0 0 84px rgba(180,255,245,0.35), 0 8px 26px rgba(0,0,0,0.26)",
+//               transform: "translateY(-2px)",
+//             }}
+//             transition="all 0.25s ease"
+//           >
+//             <Image
+//               src="/img/icono/life.webp"
+//               alt=""
+//               h={{ base: "42px", md: "60px" }}
+//               objectFit="contain"
+//               flexShrink={0}
+//               // El mandala surge al asomar el botón (pequeño y transparente
+//               // hasta su tamaño), sin girar ni rebotar, y luego se queda quieto.
+//               opacity={reveal.visible ? 1 : 0}
+//               transform={reveal.visible ? "scale(1)" : "scale(0.4)"}
+//               transition="opacity 0.9s ease 0.35s, transform 1.2s cubic-bezier(0.22,1,0.36,1) 0.35s"
+//               style={{ filter: "drop-shadow(0 0 11px rgba(255,255,255,0.42)) drop-shadow(0 0 26px rgba(255,255,255,0.22))" }}
+//             />
+//             <Text
+//               color="white"
+//               fontFamily="'EB Garamond', serif"
+//               fontWeight="700"
+//               fontSize={{ base: "xl", md: "4xl" }}
+//               letterSpacing={{ base: "0.14em", md: "0.2em" }}
+//               textTransform="uppercase"
+//               textShadow="0 0 16px rgba(255,255,255,0.42), 0 0 34px rgba(255,255,255,0.27), 0 0 66px rgba(180,255,245,0.22)"
+//               whiteSpace="nowrap"
+//             >
+//               <LetrasVivas texto={t("header.mapa")} entrada activo={reveal.visible} retraso={2.2} paso={0.12} altura={4} />
+//             </Text>
+//             <Box
+//               as="span"
+//               color="white"
+//               fontFamily="'EB Garamond', serif"
+//               fontWeight="700"
+//               fontSize={{ base: "xl", md: "4xl" }}
+//               style={{ textShadow: "0 0 16px rgba(255,255,255,0.42), 0 0 34px rgba(255,255,255,0.27)" }}
+//             >
+//               →
+//             </Box>
+//           </Flex>
+//           </Breathe>
+//           <Box
+//             h="1px"
+//             w={{ base: "24px", md: "110px" }}
+//             bg="linear-gradient(to left, transparent, rgba(255,255,255,0.7))"
+//             boxShadow="0 0 8px rgba(255,255,255,0.35)"
+//           />
+//         </Flex>
+//       </Flex>
+//     </Box>
+//   );
+// };
+//
+// export default OpinionesSection;

@@ -1419,6 +1419,8 @@ export const metodo = {
   // ── Paying for a discipline ────────────────────────────────────────────
   "metodo.pago.precioReducido": "Now at a reduced price",
   "metodo.pago.ahoraNo": "Not now",
+  "metodo.pago.laAbroYo": "I'll open this discipline when the time is right.",
+  "metodo.pago.entendido": "Got it",
   "metodo.pago.stripe": "Secure payment through Stripe",
   "metodo.pago.acepto": "I accept the",
   "metodo.pago.condicionesEnlace": "purchase terms",

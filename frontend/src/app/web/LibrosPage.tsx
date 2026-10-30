@@ -4,6 +4,7 @@ import { Box, Flex, Grid, Image, Text, useToast } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import BandaMarmol from "../../components/global/BandaMarmol";
+import { useCabeceraEscribiendo } from "../../components/global/cabeceraEntrada";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
@@ -23,19 +24,20 @@ const PORTADAS_PRECARGA = 9;
 // Reveal por scroll: cada tarjeta se enciende al entrar en el viewport.
 // rootMargin negativo abajo → aparece un pelín antes de estar del todo dentro,
 // que es lo que da la sensación de que los libros van "brotando" al bajar.
-const useReveal = (threshold = 0.15) => {
+// `puerta`: hasta que no es true no se observa nada (los libros salen DESPUÉS del título y del mármol).
+const useReveal = (threshold = 0.15, puerta = true) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !puerta) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
       { threshold, rootMargin: "0px 0px -8% 0px" }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [threshold]);
+  }, [threshold, puerta]);
   return { ref, visible };
 };
 
@@ -132,14 +134,25 @@ type PaidItem = Item & { descripcion: string };
 const LINE = "1px solid rgba(255,255,255,0.22)";
 const LINE_MARMOL = `1px solid ${TINTA}44`;
 
-function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: number }) {
+/** Avisa al padre cuando la banda de mármol ya ha dejado entrar su contenido (con un respiro
+ *  para que los libros de pago asomen antes que el resto). */
+function AvisaVisible({ visible, onVisible }: { visible: boolean; onVisible: () => void }) {
+  useEffect(() => {
+    if (!visible) return;
+    const id = setTimeout(onVisible, 900);
+    return () => clearTimeout(id);
+  }, [visible]);
+  return null;
+}
+
+function PaidBookCell({ item, i, total, puerta }: { item: PaidItem; i: number; total: number; puerta: boolean }) {
   const lastRowStart2 = total - ((total % 2) || 2);
   const [loading, setLoading] = useState(false);
   // Igual que en el pago de las disciplinas: el PDF se entrega al instante, así
   // que hay que recoger el consentimiento expreso y la renuncia al desistimiento
   // ANTES de cobrar (art. 103.m TRLGDCU). Sin marcar, no se puede comprar.
   const [acepta, setAcepta] = useState(false);
-  const { ref, visible } = useReveal();
+  const { ref, visible } = useReveal(0.15, puerta);
   const toast = useToast();
   const t = useT();
 
@@ -323,10 +336,10 @@ function PaidBookCell({ item, i, total }: { item: PaidItem; i: number; total: nu
   );
 }
 
-function BookCell({ item, i, total }: { item: Item; i: number; total: number }) {
+function BookCell({ item, i, total, puerta }: { item: Item; i: number; total: number; puerta: boolean }) {
   const lastRowStart3 = total - ((total % 3) || 3);
   const lastRowStart2 = total - ((total % 2) || 2);
-  const { ref, visible } = useReveal();
+  const { ref, visible } = useReveal(0.15, puerta);
 
   return (
     <Flex
@@ -413,6 +426,9 @@ function BookCell({ item, i, total }: { item: Item; i: number; total: number }) 
 export default function LibrosPage() {
   const t = useT();
   const [mounted, setMounted] = useState(false);
+  // Orden de entrada: título y cabecera → mármol → libros de pago → el resto de los libros.
+  const escribiendo = useCabeceraEscribiendo();
+  const [marmolListo, setMarmolListo] = useState(false);
   // La página no se muestra hasta que TODAS las portadas están descargadas:
   // así entra ya completa (nada de imágenes cargando a trozos) y transmite
   // que el material está cuidado.
@@ -525,11 +541,12 @@ export default function LibrosPage() {
         <>
           <Box mt={{ base: 8, md: 12 }}>
             <BandaMarmol pt={{ base: "104px", md: "72px" }} pb={{ base: "116px", md: "72px" }}>
-              {() => (
+              {(visibleBanda) => (
                 <Box w="100%" maxW="820px" mx="auto" px={{ base: 5, md: 6 }}>
+                  <AvisaVisible visible={visibleBanda} onVisible={() => setMarmolListo(true)} />
                   <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
                     {paidItems.map((item, i) => (
-                      <PaidBookCell key={item.id} item={item} i={i} total={paidItems.length} />
+                      <PaidBookCell key={item.id} item={item} i={i} total={paidItems.length} puerta={visibleBanda} />
                     ))}
                   </Grid>
                 </Box>
@@ -557,6 +574,7 @@ export default function LibrosPage() {
                 item={item}
                 i={i}
                 total={allItems.length}
+                puerta={!escribiendo && (paidItems.length === 0 || marmolListo)}
               />
             ))}
           </Grid>

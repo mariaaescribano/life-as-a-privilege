@@ -122,7 +122,18 @@ const Certificaciones = () => {
 
           {/* Los temas, como pastillas. El activo se rellena con luz. */}
           <Reveal inView amount={0.3} direction="up" distance={14} duration={0.8} delay={0.15}>
-            <Flex wrap="wrap" justify="center" gap={{ base: 2, md: 3 }} mt={{ base: 6, md: 8 }}>
+            <Flex
+              wrap={{ base: "nowrap", md: "wrap" }}
+              justify={{ base: "flex-start", md: "center" }}
+              gap={{ base: 2, md: 3 }}
+              mt={{ base: 6, md: 8 }}
+              // Móvil: una sola fila que se desliza con el dedo, sin barra.
+              overflowX={{ base: "auto", md: "visible" }}
+              mx={{ base: -5, md: 0 }}
+              px={{ base: 5, md: 0 }}
+              py={{ base: 1, md: 0 }}
+              sx={{ scrollbarWidth: "none", "&::-webkit-scrollbar": { display: "none" } }}
+            >
               {visibles.map((sec, i) => {
                 const on = i === activa;
                 return (
@@ -132,6 +143,8 @@ const Certificaciones = () => {
                     type="button"
                     onClick={() => elegir(i)}
                     aria-pressed={on}
+                    flexShrink={0}
+                    whiteSpace="nowrap"
                     px={{ base: 4, md: 5 }}
                     py="8px"
                     borderRadius="full"
@@ -163,11 +176,13 @@ const Certificaciones = () => {
               minW={0}
               key={seccion.tituloKey}
               ref={filaRef}
-              gap={{ base: 4, md: 6 }}
-              overflowX="auto"
-              px={{ base: 1, md: 2 }}
+              gap={{ base: 3, md: 6 }}
+              // Móvil: rejilla de dos columnas con todos los diplomas a la vista. Ordenador: una fila que se desliza.
+              wrap={{ base: "wrap", md: "nowrap" }}
+              overflowX={{ base: "visible", md: "auto" }}
+              px={{ base: 0, md: 2 }}
               py={4}
-              align="center"
+              align={{ base: "flex-start", md: "center" }}
               sx={{
                 scrollSnapType: "x proximity",
                 scrollbarWidth: "none",
@@ -183,6 +198,7 @@ const Certificaciones = () => {
                   as="button"
                   type="button"
                   flexShrink={0}
+                  w={{ base: "calc(50% - 6px)", md: "auto" }}
                   onClick={() => setLightboxIdx(certificados.indexOf(cert))}
                   aria-label={`${t(seccion.tituloKey)} ${i + 1}`}
                   borderRadius="lg"
@@ -193,7 +209,7 @@ const Certificaciones = () => {
                   _hover={{ transform: "translateY(-4px)", boxShadow: "0 0 22px rgba(255,255,255,0.4), 0 0 50px rgba(180,255,245,0.25)" }}
                   _focusVisible={focoBlanco}
                 >
-                  <Image src={cert.img} alt="" h={FILA_ALTO} w="auto" maxW="none" display="block" />
+                  <Image src={cert.img} alt="" h={{ base: "auto", md: FILA_ALTO.md }} w={{ base: "100%", md: "auto" }} maxW="none" display="block" />
                 </Box>
               ))}
             </Flex>

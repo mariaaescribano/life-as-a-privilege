@@ -13,7 +13,7 @@ Los textos entre «comillas» son los que ve la persona, tal cual.
    - Opcionales:
      - «¿Cómo prefieres que me dirija hacia ti?»: Él / Ella.
      - Teléfono.
-     - Fecha de nacimiento, con la nota «El día de tu cumpleaños tendrás un 50 % en una disciplina.»
+     - Fecha de nacimiento
    - Marca «Aceptar condiciones».
 3. Pulsa «Registrarme». Si algo está mal, sale un aviso y no se crea nada:
    - «Faltan datos — Rellena todos los campos»

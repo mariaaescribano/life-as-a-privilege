@@ -149,6 +149,23 @@ const QuienSoy = () => {
       {/* ── 3 · MI PROPÓSITO, sobre el turquesa, sin mármol: tres fotos mías, cada una con su frase ──
           Las tres cajas entran una tras otra al asomar. */}
       <Box w="100%" maxW="1180px" mx="auto" px={{ base: 5, md: 10, lg: 16 }}>
+            {/* La frase que presenta las tres fotos: blanca, sin sombra, fuera de las cajas. */}
+            <Reveal inView amount={0.5} direction="up" distance={20} duration={0.9}>
+              <Text
+                textAlign="center"
+                color="white"
+                fontFamily="'EB Garamond', serif"
+                fontWeight="700"
+                fontSize={{ base: "xl", md: "3xl" }}
+                letterSpacing="0.03em"
+                lineHeight="1.3"
+                maxW="760px"
+                mx="auto"
+                mb={{ base: 7, md: 10 }}
+              >
+                {t("quienSoy.frasePresentadora")}
+              </Text>
+            </Reveal>
             <Flex direction={{ base: "column", md: "row" }} gap={{ base: 6, md: 7 }}>
               {PROPOSITO.map((p, i) => (
                 <Reveal key={p.texto} inView amount={0.2} direction="up" distance={36} scaleFrom={0.95} duration={1} delay={0.2 + i * 0.35} flex="1" minW={0}>

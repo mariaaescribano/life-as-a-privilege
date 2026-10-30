@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUser, LoginUser, UpdateUser } from '../dtos/user.types';
 import { MailService } from '../mail/mail.service';
 import {
+  INVITACION_TTL_MS,
   crearTokenRecuperacion,
   leerUserIdDeToken,
   tokenRecuperacionValido,
@@ -410,6 +411,88 @@ export class UserService {
     return { ok: true as const };
   }
 
+  // ───────────────────────────────────────────────────────────────────────────
+  // CUENTAS DE ASESORÍA (las crea la admin)
+  //
+  // «Estoy siendo asesorado» no tiene registro propio: la cuenta la crea María
+  // desde /admin/usuarios. Nace sin nada abierto (ninguna `*_suscrito`) y marcada
+  // «en sesiones»; la persona recibe un correo, elige su contraseña con el enlace
+  // (que además confirma el email: ver restablecerPassword) y entra. Las
+  // disciplinas se abren después, una a una, desde la ficha. No se cobra nada.
+  //
+  // La contraseña inicial es aleatoria y nadie la conoce: el único camino a la
+  // cuenta es el enlace del correo.
+  // ───────────────────────────────────────────────────────────────────────────
+  async crearCuentaAsesorada(data: { name?: string; email?: string; telefono?: string; fecha_nacimiento?: string }) {
+    const name = (data?.name ?? '').trim();
+    const email = normalizaEmail(data?.email);
+    if (!name || !email) throw new BadRequestException('Faltan el nombre o el email');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new BadRequestException('El email no es válido');
+    const { nameExists, emailExists } = await this.getNomEmailExist(name, email);
+    if (nameExists) throw new ConflictException('Ya hay una cuenta con ese nombre. Usa otro (por ejemplo, con el apellido)');
+    if (emailExists) throw new ConflictException('Ya hay una cuenta con ese email');
+
+    const passwordHash = await hashPassword(`${randomString()}${randomString()}${randomString()}`);
+    const opcionales: Record<string, unknown> = {
+      email_confirmado: false,
+      en_sesiones: true,
+      telefono: saneaTelefono(data?.telefono),
+      fecha_nacimiento: saneaFechaNacimiento(data?.fecha_nacimiento),
+      comunidad_popup_visto: false,
+    };
+    const quitadas = new Set<string>();
+    let id = randomString();
+
+    for (let intento = 0; intento < 6; intento++) {
+      const fila: Record<string, unknown> = { id, name, email, password: passwordHash };
+      for (const [col, valor] of Object.entries(opcionales)) {
+        if (!quitadas.has(col)) fila[col] = valor;
+      }
+      const { data: rows, error } = await this.databaseService.getClient()
+        .from('user').insert(fila).select('id, name, email');
+      if (!error && rows?.length === 1) {
+        const creada = rows[0] as { id: string; name: string; email: string };
+        const correoEnviado = await this.mandarInvitacion(creada.id, creada.email, creada.name, passwordHash);
+        return { id: creada.id, name: creada.name, email: creada.email, correoEnviado };
+      }
+      if (error?.code === '23505') { id = randomString(); continue; }
+      const falta = Object.keys(opcionales).find((col) => !quitadas.has(col) && String(error?.message ?? '').includes(col));
+      if (falta) {
+        console.warn(`[crearCuentaAsesorada] la columna "${falta}" no existe (falta correr su SQL de backend/sql). Creo la cuenta sin ella.`);
+        quitadas.add(falta);
+        intento--;
+        continue;
+      }
+      throw error ?? new Error('El insert de usuario no devolvió la fila esperada');
+    }
+    throw new ConflictException('No se pudo generar un id de usuario único');
+  }
+
+  /** Vuelve a mandar el correo para elegir contraseña (por si caducó o no llegó). Solo si aún no la ha activado. */
+  async reenviarInvitacion(userId: string) {
+    const { data: rows } = await this.databaseService.getClient()
+      .from('user').select('id, name, email, password, email_confirmado').eq('id', userId).limit(1);
+    const u = rows?.[0] as { id: string; name: string; email: string; password: string; email_confirmado?: boolean } | undefined;
+    if (!u) throw new NotFoundException('Esa cuenta no existe');
+    if (u.email_confirmado !== false) throw new ConflictException('Esa cuenta ya está activada');
+    const correoEnviado = await this.mandarInvitacion(u.id, u.email, u.name, u.password);
+    return { id: u.id, correoEnviado };
+  }
+
+  /** El correo de la invitación; devuelve si salió (un fallo se anota y no tumba la creación de la cuenta). */
+  private async mandarInvitacion(userId: string, email: string, nombre: string, passwordHash: string): Promise<boolean> {
+    const token = crearTokenRecuperacion(userId, passwordHash, INVITACION_TTL_MS);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const enlace = `${frontendUrl}/recuperar?token=${encodeURIComponent(token)}`;
+    try {
+      await this.mailService.enviarInvitacionAsesoria(email, nombre ?? '', enlace);
+      return true;
+    } catch (err) {
+      console.error('[invitacion] no se pudo enviar el correo:', err);
+      return false;
+    }
+  }
+
   // --------- Obtener todos los usuarios ---------
   async getUser() {
     const { data } = await this.databaseService.getClient()
@@ -465,6 +548,9 @@ export class UserService {
     // (sql/user-created-at.sql, para ordenar por recientes) y las fechas de
     // compra. Si alguna columna aún no existe, caemos por la cascada en vez de
     // quedarnos sin lista.
+    const conConfirmado = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, created_at, email_confirmado, ${flags}, ${fechas}`);
+    if (!conConfirmado.error) return conConfirmado.data ?? [];
+
     const conCreado = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, created_at, ${flags}, ${fechas}`);
     if (!conCreado.error) return conCreado.data ?? [];
 

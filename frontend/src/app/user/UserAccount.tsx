@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useT } from "../../i18n";
-import { Box, Flex, GridItem, Image, Input, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Image, Input, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL, turquesa } from "../../GlobalVariables";
@@ -470,12 +470,6 @@ export default function UserAccount() {
                 )}
               </Flex>
             </Flex>
-
-            <GridItem colSpan={{ base: 1, md: 2 }}>
-              <Text color="rgba(255,255,255,0.62)" fontSize="sm" mt={-1} textAlign="center" lineHeight="1.5" fontStyle="italic" textShadow="0 0 8px rgba(255,255,255,0.2)">
-                {t("auth.signin.fechaRegalo")}
-              </Text>
-            </GridItem>
           </SimpleGrid>
 
           {error && (

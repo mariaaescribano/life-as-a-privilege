@@ -14,6 +14,11 @@
 //     cuenta CON TODOS sus datos. Ver o editar su contenido no vive aquí: eso
 //     se hace desde /admin (la rejilla de disciplinas).
 //
+//   · «+ Crear cuenta» — las personas asesoradas NO se registran: las das de alta
+//     tú (POST /user/admin/crear). Reciben un correo para elegir contraseña, que
+//     activa la cuenta (hasta entonces sale «Pendiente de activar», y la ficha
+//     ofrece reenviar el correo). Empiezan sin nada abierto.
+//
 // Esta página absorbió /admin/accesos (regalar y borrar viven ahora aquí); esa
 // ruta quedó comentada en App.tsx con el código conservado.
 //
@@ -92,6 +97,11 @@ export default function AdminTodosUsuarios() {
   const [aBorrar, setABorrar] = useState<CuentaAdmin | null>(null);
   const [confirmEmail, setConfirmEmail] = useState("");
   const [borrando, setBorrando] = useState(false);
+  // Alta de una cuenta de asesoría («Crear cuenta»): el formulario y su estado.
+  const [creando, setCreando] = useState(false);
+  const [nuevo, setNuevo] = useState({ name: "", email: "", telefono: "", fecha_nacimiento: "" });
+  const [errorCrear, setErrorCrear] = useState<string | null>(null);
+  const [enviandoCrear, setEnviandoCrear] = useState(false);
 
   const cargar = useCallback(async () => {
     try {
@@ -187,6 +197,67 @@ export default function AdminTodosUsuarios() {
     }
   };
 
+  // ── Crear la cuenta de una persona asesorada ───────────────────────────────
+  // La cuenta nace sin nada abierto; a la persona le llega un correo para elegir
+  // su contraseña (eso la activa). Las disciplinas se abren luego desde la ficha.
+  const cerrarCrear = () => {
+    if (enviandoCrear) return;
+    setCreando(false);
+    setErrorCrear(null);
+    setNuevo({ name: "", email: "", telefono: "", fecha_nacimiento: "" });
+  };
+
+  const crearCuenta = async () => {
+    if (!nuevo.name.trim() || !nuevo.email.trim()) {
+      setErrorCrear("Faltan el nombre o el email.");
+      return;
+    }
+    setEnviandoCrear(true);
+    setErrorCrear(null);
+    try {
+      const { data } = await axios.post<{ email: string; correoEnviado: boolean }>(
+        `${API_URL}/user/admin/crear`,
+        {
+          name: nuevo.name,
+          email: nuevo.email,
+          telefono: nuevo.telefono || undefined,
+          fecha_nacimiento: nuevo.fecha_nacimiento || undefined,
+        },
+        { headers: adminHeaders() },
+      );
+      setOrden("recientes");
+      await cargar();
+      setAviso(
+        data.correoEnviado
+          ? `Cuenta creada. Le he mandado a ${data.email} el correo para que elija su contraseña.`
+          : `Cuenta creada, pero el correo a ${data.email} NO ha salido. Ábrele la ficha y pulsa «Reenviar correo de activación».`,
+      );
+      setCreando(false);
+      setNuevo({ name: "", email: "", telefono: "", fecha_nacimiento: "" });
+    } catch (e: any) {
+      setErrorCrear(e?.response?.data?.message ?? "No se pudo crear la cuenta.");
+    } finally {
+      setEnviandoCrear(false);
+    }
+  };
+
+  const reenviarActivacion = async (u: CuentaAdmin) => {
+    setGuardando(u.id);
+    setAviso(null);
+    try {
+      const { data } = await axios.post<{ correoEnviado: boolean }>(
+        `${API_URL}/user/admin/reenviar-invitacion`,
+        { userId: u.id },
+        { headers: adminHeaders() },
+      );
+      setAviso(data.correoEnviado ? `Correo de activación reenviado a ${u.email}.` : `El correo a ${u.email} no ha salido. Inténtalo otra vez.`);
+    } catch (e: any) {
+      setAviso(e?.response?.data?.message ?? "No se pudo reenviar el correo.");
+    } finally {
+      setGuardando(null);
+    }
+  };
+
   // ── Borrado definitivo ──────────────────────────────────────────────────────
   // El backend además se niega a borrar tu propia cuenta o una de administración,
   // así que aquí basta con confirmar el email exacto.
@@ -243,6 +314,13 @@ export default function AdminTodosUsuarios() {
                 ? "Todas las cuentas, con sus disciplinas y sus sesiones."
                 : `${filtrados.length} ${filtrados.length === 1 ? "cuenta" : "cuentas"} · página ${paginaReal} de ${totalPaginas}`}
             </Text>
+          </Flex>
+
+          {/* ── CREAR CUENTA: las personas asesoradas no se registran, las das de alta tú ── */}
+          <Flex justify="center" mb={5}>
+            <BotonFicha ocupado={false} onClick={() => setCreando(true)} principal>
+              + Crear cuenta
+            </BotonFicha>
           </Flex>
 
           {/* ── BUSCADOR ── */}
@@ -348,6 +426,9 @@ export default function AdminTodosUsuarios() {
                         <Box minW={{ md: "230px" }} maxW={{ md: "230px" }}>
                           <Text color="white" fontWeight="600" noOfLines={1}>{u.name || "(sin nombre)"}</Text>
                           <Text color="rgba(255,255,255,0.6)" fontSize="sm" noOfLines={1}>{u.email}</Text>
+                          {u.email_confirmado === false && (
+                            <Text color="#ffd9a0" fontSize="xs" fontStyle="italic">Pendiente de activar</Text>
+                          )}
                         </Box>
 
                         {/* edad */}
@@ -531,6 +612,11 @@ export default function AdminTodosUsuarios() {
                           </Flex>
 
                           <Flex gap={3} wrap="wrap" mb={4}>
+                            {u.email_confirmado === false && (
+                              <BotonFicha ocupado={ocupado} onClick={() => reenviarActivacion(u)}>
+                                Reenviar correo de activación
+                              </BotonFicha>
+                            )}
                             <BotonFicha ocupado={ocupado} onClick={() => cambiarAcceso(u.id, "all", true)} principal>
                               Todo el recorrido gratis
                             </BotonFicha>
@@ -605,6 +691,90 @@ export default function AdminTodosUsuarios() {
           )}
         </Box>
       </Flex>
+
+      {/* ── Crear cuenta de asesoría ── */}
+      <Modal isOpen={creando} onClose={cerrarCrear} isCentered size="md">
+        <ModalOverlay bg="rgba(0,0,0,0.8)" sx={{ backdropFilter: "blur(8px)" }} />
+        <ModalContent
+          bg="#008080"
+          color="white"
+          fontFamily="'EB Garamond', serif"
+          border="1px solid rgba(255,255,255,0.22)"
+          borderRadius="2xl"
+          boxShadow="0 0 42px rgba(255,255,255,0.12), 0 0 100px rgba(255,255,255,0.08), 0 22px 60px rgba(0,0,0,0.6)"
+          mx={4}
+          overflow="hidden"
+        >
+          <ModalCloseButton color="white" />
+          <Box p={{ base: 6, md: 8 }} textAlign="center">
+            <Image src="/img/icono/life.webp" alt="" h="34px" mx="auto" mb={4} objectFit="contain"
+                   style={{ filter: "drop-shadow(0 0 7px rgba(255,255,255,0.5)) drop-shadow(0 0 16px rgba(180,255,245,0.3))" }} />
+            <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="700" letterSpacing="0.06em" mb={2}
+                  textShadow="0 0 12px rgba(255,255,255,0.45)">
+              Crear cuenta
+            </Text>
+            <Text fontSize="sm" opacity={0.75} mb={5} fontStyle="italic">
+              Le llegará un correo para elegir su contraseña y activarla. Empieza sin nada abierto:
+              se lo abres tú desde su ficha.
+            </Text>
+            {([
+              { k: "name", ph: "Nombre", tipo: "text" },
+              { k: "email", ph: "Email", tipo: "email" },
+              { k: "telefono", ph: "Teléfono (opcional)", tipo: "tel" },
+              { k: "fecha_nacimiento", ph: "Fecha de nacimiento (opcional)", tipo: "date" },
+            ] as const).map((c, i) => (
+              <Input
+                key={c.k}
+                type={c.tipo}
+                value={nuevo[c.k]}
+                onChange={(e) => setNuevo((n) => ({ ...n, [c.k]: e.target.value }))}
+                onKeyDown={(e) => { if (e.key === "Enter") crearCuenta(); }}
+                placeholder={c.ph}
+                autoFocus={i === 0}
+                mb={3}
+                textAlign="center"
+                bg="rgba(255,255,255,0.08)"
+                border="1px solid rgba(255,255,255,0.28)"
+                color="white"
+                borderRadius="full"
+                fontFamily="'EB Garamond', serif"
+                _placeholder={{ color: "rgba(255,255,255,0.45)" }}
+                _focus={{ borderColor: "white", boxShadow: "0 0 0 1px rgba(255,255,255,0.3)" }}
+                sx={c.tipo === "date" ? { colorScheme: "dark" } : undefined}
+              />
+            ))}
+            {errorCrear && (
+              <Text color="#ffd9a0" fontSize="sm" fontStyle="italic" mb={3}>{errorCrear}</Text>
+            )}
+            <Flex justify="center" gap={3} mt={2}>
+              <Box as="button" onClick={cerrarCrear} px={6} py="9px" borderRadius="full"
+                   border="1px solid rgba(255,255,255,0.45)" color="white" fontWeight="600" fontSize="sm"
+                   cursor="pointer" transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.1)" }}>
+                Cancelar
+              </Box>
+              <Box
+                as="button"
+                onClick={enviandoCrear ? undefined : crearCuenta}
+                disabled={enviandoCrear}
+                px={6}
+                py="9px"
+                borderRadius="full"
+                bg="rgba(255,255,255,0.14)"
+                border="1.5px solid rgba(255,255,255,0.7)"
+                color="white"
+                fontWeight="700"
+                fontSize="sm"
+                cursor={enviandoCrear ? "wait" : "pointer"}
+                opacity={enviandoCrear ? 0.6 : 1}
+                transition="all 0.2s"
+                _hover={enviandoCrear ? undefined : { bg: "rgba(255,255,255,0.24)" }}
+              >
+                {enviandoCrear ? "Creando…" : "Crear y mandar correo"}
+              </Box>
+            </Flex>
+          </Box>
+        </ModalContent>
+      </Modal>
 
       {/* ── Confirmar borrado: hay que teclear el email exacto ── */}
       <Modal isOpen={!!aBorrar} onClose={cerrarBorrado} isCentered size="md">

@@ -15,6 +15,7 @@ export const web = {
 
   // ── Materials (/materiales) ────────────────────────────────────────────
   "materiales.audiolibros": "Audiobooks",
+  "quienSoy.frasePresentadora": "Some things never change...",
   "quienSoy.proposito.1": "My passion for learning and sharing",
   "quienSoy.proposito.2": "My commitment to constant improvement",
   "quienSoy.proposito.3": "My interest in understanding beyond what we have been told",

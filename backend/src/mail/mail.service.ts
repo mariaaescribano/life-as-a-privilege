@@ -382,6 +382,40 @@ export class MailService {
     await this.enviar(email, 'Tu cuenta ya está activa — Life as a Privilege', html, 'email de cuenta activada');
   }
 
+  // ───────────────────────────────────────────────────────────────────────────
+  // Invitación de asesoría. La cuenta la crea María; este correo es el único
+  // camino a ella: el botón lleva a elegir contraseña (y eso activa la cuenta).
+  // Caduca a las dos semanas; si pasa, se reenvía desde el panel.
+  // ───────────────────────────────────────────────────────────────────────────
+  async enviarInvitacionAsesoria(email: string, nombre: string, enlace: string): Promise<void> {
+    const nombreSeguro = this.escaparHtml(nombre).trim();
+    const saludo = nombreSeguro ? `Muy buenas, <strong>${nombreSeguro}</strong>.` : 'Muy buenas.';
+    const parrafo = (texto: string) =>
+      `<p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">${texto}</p>`;
+    const html = this.plantilla(
+      'Tu cuenta está lista',
+      `
+        ${parrafo(saludo)}
+        ${parrafo('He creado tu cuenta en <strong>Life as a Privilege</strong>. Para activarla, solo tienes que elegir tu contraseña con el botón de abajo.')}
+        <p style="margin: 28px 0;">
+          ${this.pildora(enlace, 'Elegir mi contraseña')}
+        </p>
+        <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
+          Si el botón no te funciona, copia esta dirección en tu navegador:<br />
+          <a href="${enlace}" style="color:#ffffff;text-decoration:underline;word-break:break-all;">${enlace}</a>
+        </p>
+        ${parrafo('Al entrar no verás nada abierto: iré abriéndote cada parte a medida que avancemos en las sesiones.')}
+        <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
+          Un abrazo,<br />María
+        </p>
+        <p style="margin-top: 24px; font-size: 13px; line-height: 1.6; opacity: 0.7;">
+          El enlace dura dos semanas. Si caduca, avísame y te mando otro.
+        </p>
+      `,
+    );
+    await this.enviar(email, 'Tu cuenta está lista — Life as a Privilege', html, 'email de invitación de asesoría');
+  }
+
   /**
    * Un botón de los correos que no son de disciplina: blanco tenue sobre el
    * turquesa. En minúsculas y sin apretar las letras, a propósito — un botón en

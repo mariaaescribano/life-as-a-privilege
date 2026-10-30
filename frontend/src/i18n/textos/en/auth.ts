@@ -13,13 +13,15 @@ export const auth = {
   "auth.contrasena.ocultar": "Hide password",
 
   // ── Log in ─────────────────────────────────────────────────────────────
-  "auth.login.titulo": "Log in",
+  "auth.login.titulo": "Sign in to your account",
   "auth.login.subtitulo": "Log in to your account on The Map",
+  "auth.login.soloYo": "Only I create your account. You'll get an email to activate it.",
+  "auth.login.frase": "Two doors into two complementary worlds",
   // «Entrar» is shorter than the title in Spanish; in English the natural
   // thing is to repeat "Log in" on the button — "Enter" sounds like a door,
   // not a session.
-  "auth.login.opcion.asesoria": "I'm receiving coaching",
-  "auth.login.opcion.premium": "I want to access the premium content",
+  "auth.login.opcion.asesoria": "I'm being coached",
+  "auth.login.opcion.premium": "Access to premium content",
   "auth.login.entrar": "Log in",
   "auth.login.olvidada": "Forgot your password?",
   "auth.login.sinCuenta": "Don't have an account? Create account",
@@ -43,7 +45,6 @@ export const auth = {
   "auth.signin.yaTienes": "Already have an account? Log in",
   "auth.signin.creada": "Account created!",
   "auth.signin.creadaTexto": "We'll continue in a moment...",
-  "auth.signin.fechaRegalo": "On your birthday you'll get 50% off one discipline.",
   "auth.signin.miraCorreo": "Check your email",
   "auth.signin.miraCorreoTexto": "Your account is created. To activate it, click the link we just sent to:",
   "auth.signin.miraCorreoSpam": "After that you'll be able to log in with your name or your email and your password. If you don't see it within a few minutes, check spam or promotions.",
