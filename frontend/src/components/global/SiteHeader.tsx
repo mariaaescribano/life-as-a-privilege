@@ -82,6 +82,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const adminUsuariosActive = path.startsWith("/admin/usuarios") || path.startsWith("/admin/diario") || path.startsWith("/admin/actividad");
   const adminArquetiposActive = path.startsWith("/admin/astrologia-textos");
   const adminSuscriptoresActive = path.startsWith("/admin/suscriptores");
+  const adminPremiumActive = path.startsWith("/admin/premium");
 
   // Cambiar de página cierra el menú: si no, al volver navegando el panel
   // seguiría abierto encima de la página nueva.
@@ -118,7 +119,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   const items: ItemMenu[] = isPrivate
     ? isAdminPage
       ? [
-          { etiqueta: t("header.mapa"),         onSelect: () => navigate("/admin"),                   activo: !adminCursosActive && !adminUsuariosActive && !adminArquetiposActive && !adminSuscriptoresActive },
+          { etiqueta: t("header.mapa"),         onSelect: () => navigate("/admin"),                   activo: !adminCursosActive && !adminUsuariosActive && !adminArquetiposActive && !adminSuscriptoresActive && !adminPremiumActive },
           { etiqueta: t("header.cursos"),       onSelect: () => navigate("/admin/cursos"),            activo: adminCursosActive },
           // La tabla de las personas: todas las cuentas con sus disciplinas,
           // sus sesiones, regalar el recorrido y borrar. «El Mapa» mira una
@@ -128,6 +129,8 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           { etiqueta: t("header.arquetipos"),   onSelect: () => navigate("/admin/astrologia-textos"), activo: adminArquetiposActive },
           // Los correos apuntados en el formulario de la portada.
           { etiqueta: t("header.suscriptores"), onSelect: () => navigate("/admin/suscriptores"),      activo: adminSuscriptoresActive },
+          // Subir podcasts y reels del contenido premium (desde el móvil).
+          { etiqueta: t("header.premium"),      onSelect: () => navigate("/admin/premium"),            activo: adminPremiumActive },
         ]
       : [
           ...itemsWeb,

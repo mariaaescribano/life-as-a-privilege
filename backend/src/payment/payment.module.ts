@@ -4,9 +4,10 @@ import { PaymentService } from './payment.service';
 import { UsersModule } from '../user/user.module';
 import { BookingModule } from '../booking/booking.module';
 import { MailModule } from '../mail/mail.module';
+import { PremiumModule } from '../premium/premium.module';
 
 @Module({
-  imports: [UsersModule, BookingModule, MailModule],
+  imports: [UsersModule, BookingModule, MailModule, PremiumModule],
   controllers: [PaymentController],
   providers: [PaymentService],
 })

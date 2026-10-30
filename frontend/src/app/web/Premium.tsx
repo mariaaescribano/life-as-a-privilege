@@ -10,6 +10,7 @@ import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
 import { useNavigate } from "react-router-dom";
 import { focoBlanco } from "../../components/global/foco";
 import { useT } from "../../i18n";
+import { abrirPagoPremium } from "../../api/premium";
 
 /**
  * Contenido premium. De arriba abajo:
@@ -74,6 +75,21 @@ const Premium = () => {
     const id = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(id);
   }, []);
+
+  // «Empezar»: primero se paga un mes; la cuenta se crea al volver de Stripe.
+  const [pagando, setPagando] = useState(false);
+  const [errorPago, setErrorPago] = useState(false);
+  const pagar = async () => {
+    if (pagando) return;
+    setPagando(true);
+    setErrorPago(false);
+    try {
+      await abrirPagoPremium(); // navega a Stripe: no hace falta soltar el botón
+    } catch {
+      setErrorPago(true);
+      setPagando(false);
+    }
+  };
 
   const afirmaciones = [
     { texto: t("premium.acceso.videos"), mandala: false, icono: "video" },
@@ -237,7 +253,9 @@ const Premium = () => {
                 <Box
                   as="button"
                   type="button"
-                  onClick={() => navigate("/logIn")}
+                  onClick={pagar}
+                  disabled={pagando}
+                  opacity={pagando ? 0.7 : 1}
                   px={{ base: 10, md: 16 }}
                   py={{ base: "16px", md: "20px" }}
                   borderRadius="full"
@@ -258,6 +276,36 @@ const Premium = () => {
                   {t("comun.empezar")}
                 </Box>
               </Reveal>
+              {/* Lo que hay que saber antes de pagar: un mes, sin tarjeta guardada. */}
+              <Reveal activo={visible} direction="up" distance={14} duration={0.9} delay={0.55}>
+                <Flex direction="column" align="center" gap={3} maxW="640px">
+                  <Text color={TINTA} fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
+                    {t("premium.cta.mensualidad")}
+                  </Text>
+                  {errorPago && (
+                    <Text color={TINTA} fontFamily="'EB Garamond', serif" fontStyle="italic" fontSize={{ base: "md", md: "lg" }}>
+                      {t("premium.cta.error")}
+                    </Text>
+                  )}
+                  <Box
+                    as="button"
+                    type="button"
+                    onClick={() => navigate("/logIn?modo=premium&next=%2Fpremium%2Fespacio")}
+                    bg="transparent"
+                    color={TINTA}
+                    fontFamily="'EB Garamond', serif"
+                    fontSize={{ base: "md", md: "lg" }}
+                    textDecoration="underline"
+                    textUnderlineOffset="4px"
+                    borderRadius="md"
+                    px={2}
+                    _hover={{ opacity: 0.75 }}
+                    _focusVisible={focoBlanco}
+                  >
+                    {t("premium.cta.yaTengoCuenta")}
+                  </Box>
+                </Flex>
+              </Reveal>
               <Reveal activo={visible} direction="up" distance={14} duration={0.9} delay={0.7}>
                 <Text color={TINTA} fontFamily="'EB Garamond', serif" fontStyle="italic" fontSize={{ base: "lg", md: "2xl" }} lineHeight="1.5">
                   {t("premium.cta.pensamiento")}
@@ -266,6 +314,8 @@ const Premium = () => {
             </Flex>
           )}
         </BandaMarmol>
+        {/* Hueco turquesa de la página entre el mármol y el pie. */}
+        <Box h={{ base: "56px", md: "88px" }} />
       </Box>
 
       <SiteFooter />

@@ -84,9 +84,10 @@ export class UserController {
   @Get("me")
   @UseGuards(JwtAuthGuard)
   async getMe(@Req() req: any) {
-    const [user, extra] = await Promise.all([
+    const [user, extra, premium] = await Promise.all([
       this.usersService.getUserById(req.user.userId),
       this.usersService.getPerfilExtra(req.user.userId),
+      this.usersService.getPremium(req.user.userId),
     ]);
     const email = (user as any)?.email ?? req.user?.email;
     // `admin_email`: el email está en ADMIN_EMAILS (puede pedir la contraseña).
@@ -105,6 +106,12 @@ export class UserController {
       ...user,
       ...extra,
       ...flagsLibres,
+      // Contenido premium: pagado, o cuenta de acceso libre.
+      premium_suscrito: premium.activo || accesoLibre,
+      premium_hasta: premium.hasta,
+      premium_avisos_elegidos: premium.avisosElegidos,
+      premium_aviso_email: premium.avisoEmail,
+      premium_aviso_whatsapp: premium.avisoWhatsapp,
       acceso_libre: accesoLibre,
       admin_email: adminEmail,
       is_admin: adminEmail && req.user?.admin === true,

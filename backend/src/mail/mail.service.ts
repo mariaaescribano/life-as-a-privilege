@@ -465,6 +465,43 @@ export class MailService {
   }
 
   // ───────────────────────────────────────────────────────────────────────────
+  // Contenido premium. Aviso de que hay un podcast o un reel nuevo: el texto lo
+  // escribe María al subirlo (si lo deja en blanco, sale uno de respaldo).
+  // ───────────────────────────────────────────────────────────────────────────
+  async enviarAvisoPremium(email: string, nombre: string, titulo: string, mensaje: string): Promise<boolean> {
+    const texto = this.escaparHtml(mensaje).replace(/\r?\n/g, '<br />');
+    const html = this.plantilla(
+      titulo,
+      `
+        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">${nombre ? `${this.escaparHtml(nombre)}, ` : ''}${texto}</p>
+        <p style="margin: 28px 0;">
+          ${this.pildora(`${this.frontendUrl}/premium/espacio`, 'Entrar')}
+        </p>
+      `,
+    );
+    return await this.enviar(email, titulo, html, 'aviso de contenido premium');
+  }
+
+  // Aviso de renovación: no se guarda ninguna tarjeta, así que cada mes hay que
+  // pagar a mano. Se manda unos días antes de que se acabe el mes.
+  async enviarRenovacionPremium(email: string, nombre: string, hasta: Date): Promise<boolean> {
+    const fecha = hasta.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    const html = this.plantilla(
+      'Renueva tu acceso premium',
+      `
+        <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
+          ${nombre ? `${this.escaparHtml(nombre)}, tu` : 'Tu'} acceso al contenido premium termina el <strong>${fecha}</strong>.
+          No guardamos tu tarjeta ni tu método de pago, así que cada mes te enviamos este correo para que, si quieres seguir, vuelvas a pagar.
+        </p>
+        <p style="margin: 28px 0;">
+          ${this.pildora(`${this.frontendUrl}/premium`, 'Renovar por 5 €')}
+        </p>
+      `,
+    );
+    return await this.enviar(email, 'Renueva tu acceso premium', html, 'aviso de renovación premium');
+  }
+
+  // ───────────────────────────────────────────────────────────────────────────
   // Confirmación de que una disciplina de El Recorrido ha quedado desbloqueada.
   // También la dispara el webhook, por el mismo motivo.
   //

@@ -273,3 +273,16 @@ Casos que están cubiertos:
 > Si no has pedido tú este cambio, puedes ignorar este correo: tu contraseña seguirá siendo la misma.
 
 ---
+
+## Contenido premium (Podcasts y Reels)
+
+**Para quien lo contrata**
+1. En `/premium` pulsa **Empezar** y **paga 5 € por un mes** (antes de crear la cuenta). Bajo el botón se avisa de que no guardamos la tarjeta ni el método de pago y de que cada mes llegará un email para volver a pagar.
+2. Al volver del pago crea su cuenta (o entra con la que ya tiene).
+3. Elige cómo quiere recibir los avisos: **email**, **mensaje al teléfono** o **las dos**.
+4. Entra en `/premium/espacio`: dos puertas, **Podcasts** y **Reels**. Puede ver y escuchar todo lo publicado.
+5. Sin pago vigente no se entra: vuelve a `/premium`. Unos 3 días antes de acabar el mes recibe un email para renovar.
+
+**Para María** — `/admin/premium`: elige Reel o Podcast, pega el **enlace de YouTube**, escribe el título y el mensaje que recibirá la gente. Si deja el mensaje vacío sale uno de respaldo («Hay un reel nuevo: «título». Ya puedes verlo.»). Al publicar, el email sale solo a quien tiene el mes al día; los WhatsApp los manda ella con los botones de la lista (cada uno abre su WhatsApp con el mensaje escrito).
+
+---

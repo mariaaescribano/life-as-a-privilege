@@ -40,6 +40,7 @@ import { EstudioModule } from './estudio/estudio.module';
 import { VideosModule } from './videos/videos.module';
 import { ActividadModule } from './actividad/actividad.module';
 import { CumpleModule } from './cumple/cumple.module';
+import { PremiumModule } from './premium/premium.module';
 
 export const uploadFolder = join(process.cwd(), 'img');
 
@@ -88,6 +89,7 @@ export const uploadFolder = join(process.cwd(), 'img');
     VideosModule,
     ActividadModule,
     CumpleModule,
+    PremiumModule,
   ],
   providers: [
     DatabaseService,

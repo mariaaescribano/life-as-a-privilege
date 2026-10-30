@@ -548,6 +548,30 @@ export class UserService {
     }
   }
 
+  // --------- Contenido premium (Podcasts y Reels) ---------
+  // Aparte de las disciplinas: lo premium va en su propia consulta para que, si las columnas aún
+  // no existen (sql/user-premium.sql sin correr), el resto de /user/me no se rompa.
+  // El acceso lo da `premium_hasta`: cada pago de 5 € lo alarga un mes.
+  async getPremium(id: string) {
+    const { data, error } = await this.databaseService.getClient()
+      .from('user')
+      .select('premium_hasta, premium_avisos_elegidos, premium_aviso_email, premium_aviso_whatsapp')
+      .eq('id', id)
+      .single();
+    if (error || !data) {
+      console.warn('[user.service] premium_* no se pudo leer (¿columnas no creadas?):', error?.message);
+      return { activo: false, hasta: null as string | null, avisosElegidos: false, avisoEmail: true, avisoWhatsapp: false };
+    }
+    const d = data as any;
+    return {
+      activo: !!d.premium_hasta && new Date(d.premium_hasta).getTime() > Date.now(),
+      hasta: (d.premium_hasta ?? null) as string | null,
+      avisosElegidos: d.premium_avisos_elegidos === true,
+      avisoEmail: d.premium_aviso_email !== false,
+      avisoWhatsapp: d.premium_aviso_whatsapp === true,
+    };
+  }
+
   // --------- Obtener usuario por ID ---------
   async getUserById(id: string) {
     // Intento 1: con las columnas de todas las disciplinas (cabala_*/nutricion_*/

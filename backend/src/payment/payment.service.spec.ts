@@ -42,7 +42,7 @@ function montar(user: Record<string, any> = { email: 'ana@x.com', name: 'Ana' })
     enviarAvisoCompra: jest.fn().mockResolvedValue(undefined),
     enviarLibroComprado: jest.fn().mockResolvedValue(undefined),
   };
-  const service = new PaymentService(userService, bookingService, mailService);
+  const service = new PaymentService(userService, bookingService, mailService, {} as any);
   return { service, userService, bookingService, mailService };
 }
 
@@ -117,6 +117,19 @@ describe('Webhook de Stripe', () => {
       expect(userService.marcarSuscritoTcm).toHaveBeenCalledWith(USER);
     },
   );
+
+  it('una sesión de contenido premium va al servicio premium y NO toca ninguna disciplina', async () => {
+    const { service, userService } = montar();
+    const premium = { registrarPago: jest.fn().mockResolvedValue(undefined) };
+    (service as any).premiumService = premium;
+    const session = sesionPagada({ metadata: { scope: 'premium' } });
+    stripeMock.webhooks.constructEvent.mockReturnValue({ type: 'checkout.session.completed', data: { object: session } });
+    await service.handleWebhook(Buffer.from('{}'), 'f');
+    expect(premium.registrarPago).toHaveBeenCalledWith(session);
+    for (const s of ['Metodo', 'Psicologia', 'Ayurveda', 'Tcm', 'Fisiologia', 'Nutricion', 'Cabala', 'Cultura']) {
+      expect(userService[`marcarSuscrito${s}`]).not.toHaveBeenCalled();
+    }
+  });
 
   it('Payment Link común: saca scope y userId del client_reference_id', async () => {
     const { service, userService } = montar();

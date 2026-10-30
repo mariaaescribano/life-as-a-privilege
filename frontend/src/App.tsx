@@ -78,6 +78,11 @@ const QuienSoy = lazy(() => import("./app/web/QuienSoy"));
 const Productos = lazy(() => import("./app/web/Productos"));
 const Asesoria = lazy(() => import("./app/web/Asesoria"));
 const Premium = lazy(() => import("./app/web/Premium"));
+const PremiumEspacio = lazy(() => import("./app/web/PremiumEspacio"));
+const PremiumRegistro = lazy(() => import("./app/web/PremiumRegistro"));
+const PremiumAvisos = lazy(() => import("./app/web/PremiumAvisos"));
+const PremiumContenido = lazy(() => import("./app/web/PremiumContenido"));
+const AdminPremium = lazy(() => import("./app/admin/AdminPremium"));
 const Disciplinas = lazy(() => import("./app/web/Disciplinas"));
 const LibrosPage = lazy(() => import("./app/web/LibrosPage"));
 const DescargarLibroPage = lazy(() => import("./app/web/DescargarLibroPage"));
@@ -392,6 +397,13 @@ export default function App()
       <Route path="/quienSoy" element={<QuienSoy />} />
       <Route path="/asesoria" element={<Asesoria />} />
       <Route path="/premium" element={<Premium />} />
+      {/* Home del contenido premium: dos puertas, Podcasts y Reels. */}
+      <Route path="/premium/espacio" element={<PrivateRoute><PremiumEspacio /></PrivateRoute>} />
+      {/* Pagar primero, luego crear la cuenta: Stripe vuelve a /registro; /avisos reclama el pago. */}
+      <Route path="/premium/registro" element={<PremiumRegistro />} />
+      <Route path="/premium/avisos" element={<PrivateRoute><PremiumAvisos /></PrivateRoute>} />
+      <Route path="/premium/podcasts" element={<PrivateRoute><PremiumContenido tipo="podcast" /></PrivateRoute>} />
+      <Route path="/premium/reels" element={<PrivateRoute><PremiumContenido tipo="reel" /></PrivateRoute>} />
       <Route path="/disciplinas" element={<Disciplinas />} />
 
       <Route path="/productos" element={<Productos />} />
@@ -457,6 +469,8 @@ export default function App()
       {/* <Route path="/admin/videos" element={<AdminRoute><AdminVideos /></AdminRoute>} /> */}
       {/* Antes de /admin/:disciplina, que si no se lo tragaría como disciplina. */}
       <Route path="/admin/suscriptores" element={<AdminRoute><AdminSuscriptores /></AdminRoute>} />
+      {/* Subir podcasts y reels (desde el móvil) del contenido premium. */}
+      <Route path="/admin/premium" element={<AdminRoute><AdminPremium /></AdminRoute>} />
       {/* Antes de /admin/:disciplina/:userId, que si no se tragaria «diario» como disciplina. */}
       <Route path="/admin/diario/:userId" element={<AdminRoute><AdminDiario /></AdminRoute>} />
       <Route path="/admin/actividad/:userId" element={<AdminRoute><AdminActividad /></AdminRoute>} />

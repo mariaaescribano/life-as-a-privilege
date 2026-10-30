@@ -22,6 +22,10 @@ export function bdFalsa(inicial: Record<string, Fila[]> | Fila[] = []) {
     const q: any = {
       eq: (c: string, v: any) => { filtros.push((f) => f[c] === v); return q; },
       in: (c: string, vs: any[]) => { filtros.push((f) => vs.includes(f[c])); return q; },
+      // `.is(col, null)` → col vacía; `.gt` / `.lte` comparan (fechas ISO = texto ordenable).
+      is: (c: string, v: any) => { filtros.push((f) => (v === null ? f[c] == null : f[c] === v)); return q; },
+      gt: (c: string, v: any) => { filtros.push((f) => f[c] != null && f[c] > v); return q; },
+      lte: (c: string, v: any) => { filtros.push((f) => f[c] != null && f[c] <= v); return q; },
       not: (c: string, operador: string, v: any) => {
         // Solo lo que usa el código: .not(col, 'is', null) → col != null
         if (operador === 'is' && v === null) filtros.push((f) => f[c] != null);

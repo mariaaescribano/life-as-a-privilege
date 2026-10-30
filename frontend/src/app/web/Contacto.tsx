@@ -67,6 +67,8 @@ const Contacto = () => {
             </Flex>
           )}
         </BandaMarmol>
+        {/* Hueco turquesa de la página entre el mármol y el pie. */}
+        <Box h={{ base: "56px", md: "88px" }} />
       </Box>
 
       <SiteFooter />

@@ -5,6 +5,7 @@ import { BookingService } from '../booking/booking.service';
 import { findLibroPago } from './libros-pago.data';
 import { findLlamadaPago } from './llamadas-pago.data';
 import { MailService } from '../mail/mail.service';
+import { PremiumService } from '../premium/premium.service';
 import { leerTokenCumple, PRECIO_CUMPLE_CENTIMOS } from '../auth/cumple.util';
 
 /** Los ocho scopes de «El Recorrido», en orden. */
@@ -50,6 +51,7 @@ export class PaymentService {
     private readonly userService: UserService,
     private readonly bookingService: BookingService,
     private readonly mailService: MailService,
+    private readonly premiumService: PremiumService,
   ) {
     const key = process.env.STRIPE_SECRET_KEY;
     if (!key) {
@@ -161,6 +163,14 @@ export class PaymentService {
     if (session.metadata?.scope === 'llamada') {
       const res = await this.guardarReservaDeSesion(session);
       console.log(`[${origen}] llamada → ${res}`);
+      return;
+    }
+
+    // 1b. Contenido premium (un mes por 5 €). Puede llegar sin cuenta: se guarda el pago
+    //     y la cuenta lo reclama después.
+    if (session.metadata?.scope === 'premium') {
+      await this.premiumService.registrarPago(session);
+      console.log(`[${origen}] premium registrado (${session.id})`);
       return;
     }
 
