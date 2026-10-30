@@ -104,7 +104,7 @@ const BandaMarmol = ({
         transition="opacity 0.5s ease"
         sx={{
           // Móvil: fundido de 96 px (el contenido empieza a 104). Escritorio: 70 px.
-          "--fundido": "96px",
+          "--fundido": tapas ? "96px" : "24px",
           "@media (min-width: 48em)": { "--fundido": "70px" },
           WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 var(--fundido), #000 calc(100% - var(--fundido)), transparent 100%)",
           maskImage: "linear-gradient(to bottom, transparent 0, #000 var(--fundido), #000 calc(100% - var(--fundido)), transparent 100%)",
@@ -112,12 +112,10 @@ const BandaMarmol = ({
       >
         {/* Con `tapas`: el turquesa con oro va solo en dos tapas (arriba y abajo) que se funden
             hacia el crema del cuerpo. Una imagen por capa. */}
-        {tapas && (
-          <>
-            <Box position="absolute" top={0} left={0} right={0} h={{ base: "240px", md: "200px" }} bgImage="url('/img/fondos/marmol-tapa-arriba.webp')" bgRepeat="no-repeat" bgSize={{ base: "auto 100%", md: "100% 100%" }} bgPosition="right top" />
-            <Box position="absolute" bottom={0} left={0} right={0} h={{ base: "240px", md: "200px" }} bgImage="url('/img/fondos/marmol-tapa-abajo.webp')" bgRepeat="no-repeat" bgSize={{ base: "auto 100%", md: "100% 100%" }} bgPosition="right bottom" />
-          </>
-        )}
+        {/* En móvil todas las bandas llevan las tapas (bajas, para no llegar al texto); en
+            escritorio solo las del mandala (`tapas`), el resto usa el mármol entero. */}
+        <Box position="absolute" top={0} left={0} right={0} h={tapas ? { base: "240px", md: "200px" } : { base: "170px", md: "0" }} display={tapas ? "block" : { base: "block", md: "none" }} bgImage="url('/img/fondos/marmol-tapa-arriba.webp')" bgRepeat="no-repeat" bgSize={{ base: "auto 100%", md: "100% 100%" }} bgPosition="right top" />
+        <Box position="absolute" bottom={0} left={0} right={0} h={tapas ? { base: "240px", md: "200px" } : { base: "170px", md: "0" }} display={tapas ? "block" : { base: "block", md: "none" }} bgImage="url('/img/fondos/marmol-tapa-abajo.webp')" bgRepeat="no-repeat" bgSize={{ base: "auto 100%", md: "100% 100%" }} bgPosition="right bottom" />
       </Box>
       <Box ref={setCuerpo} position="relative" zIndex={1}>
         {children(visible)}

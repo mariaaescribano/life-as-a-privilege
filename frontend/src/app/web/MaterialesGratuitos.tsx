@@ -142,7 +142,7 @@ export default function MaterialesGratuitos() {
 
       {/* ── LAS CUATRO CAJAS, sobre el mármol, de dos en dos; a la derecha, una foto ── */}
       <Box flex="1">
-        <BandaMarmol mt={{ base: 2, md: 4 }} pt={{ base: "104px", md: "140px" }} pb={{ base: "116px", md: "150px" }}>
+        <BandaMarmol mt={{ base: 2, md: 4 }} pt={{ base: "150px", md: "140px" }} pb={{ base: "160px", md: "150px" }}>
           {(visible) => (
             <Flex
               w="100%"
@@ -196,7 +196,7 @@ export default function MaterialesGratuitos() {
               </SimpleGrid>
 
               {FOTO_AUDIOLIBROS && (
-                <Reveal activo={visible} direction="left" distance={36} scaleFrom={0.94} duration={1} delay={0.4} w={{ base: "260px", md: "320px", lg: "340px" }} h={{ base: "auto", lg: "auto" }} flexShrink={0} display="flex">
+                <Reveal activo={visible} direction="left" distance={36} scaleFrom={0.94} duration={1} delay={0.4} w={{ base: "100%", md: "320px", lg: "340px" }} maxW={{ base: "420px", md: "none" }} h={{ base: "auto", lg: "auto" }} flexShrink={0} display="flex">
                   {/* En escritorio la foto ocupa EXACTAMENTE el alto de las cuatro cajas (se recorta con
                       encuadre); en móvil, debajo, con su proporción. */}
                   {/* Doble marco: la foto con su borde y, por fuera, un filo fino turquesa oscuro desplazado. */}
