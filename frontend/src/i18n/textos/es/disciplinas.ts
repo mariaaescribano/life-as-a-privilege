@@ -12,9 +12,9 @@ export const disciplinas = {
   /** El nombre interno sigue siendo «Hinduismo» (URLs, BD), pero en pantalla
    *  la disciplina se llama «Ayurveda» en toda la web (2026-09-29). */
   "disciplina.ayurveda": "Ayurveda",
-  "disciplina.medicinaChina": "Tradición China",
-  /** Versión corta para móvil, donde «Tradición China» no cabe en la tarjeta. */
-  "disciplina.medicinaChina.corto": "Tradición China",
+  "disciplina.medicinaChina": "Tradición Oriental",
+  /** Versión corta para móvil, donde «Tradición Oriental» no cabe en la tarjeta. */
+  "disciplina.medicinaChina.corto": "Tradición Oriental",
   "disciplina.fisiologia": "Cuerpo Humano",
   "disciplina.nutricion": "Alimentación",
   "disciplina.cultura": "Cultura",

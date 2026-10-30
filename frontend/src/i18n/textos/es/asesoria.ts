@@ -8,6 +8,8 @@ export const asesoria = {
   "asesoria.paso1.texto": "Cuento con un plan de asesoramiento estructurado y una metodología propia, diseñados para guiarte a lo largo de todo el proceso.",
   "asesoria.paso2.titulo": "Cada sesión tiene un propósito",
   "asesoria.paso2.texto": "Trabajamos por sesiones, cada una centrada en un objetivo concreto. Seguimos un recorrido pensado para avanzar paso a paso, con contenido y sentido en cada encuentro.",
+  "asesoria.paso3.titulo": "Un precio asequible",
+  "asesoria.paso3.texto": "He establecido un precio de 15 € por hora para que mi asesoramiento esté al alcance de quien desee realizarlo. Esto no implica una menor calidad: mantengo siempre el mismo rigor, dedicación y compromiso.",
   "asesoria.logros.intro": "Al acabar mi asesoramiento sabrás...",
   "asesoria.logro.cuerpo": "Cómo cuidarte y tendrás consciencia de el milagro que es tu cuerpo.",
   "asesoria.logro.mente": "Cómo se ha construido tu mente y cómo re-educarla para que tu pasado deje de influir en tu presente.",

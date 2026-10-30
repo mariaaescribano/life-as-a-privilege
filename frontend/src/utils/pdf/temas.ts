@@ -96,7 +96,7 @@ export const TEMA_NUTRICION: Tema = {
 
 /* ── Medicina China (papel oscuro) ────────────────────────────────────────── */
 export const TEMA_TCM: Tema = {
-  disciplina: "Tradición China",
+  disciplina: "Tradición Oriental",
   oscuro: true,
   papel: [34, 12, 12],
   papelVeta: [58, 20, 20],

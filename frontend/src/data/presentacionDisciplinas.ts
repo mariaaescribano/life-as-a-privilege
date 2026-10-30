@@ -150,7 +150,7 @@ const base: Record<string, PresentacionDisciplina> = {
     paso: 6,
     ordinal: "Cuarta disciplina",
     resumenPago:
-      "Continúa el Mapa con la Tradición China: descubre cómo los Cinco Elementos y sus ciclos te habitan, y lee las señales de tu cuerpo —hasta en tu lengua— para volver al equilibrio entre todo lo que nos forma, que es a lo que llamamos salud.",
+      "Continúa el Mapa con la Tradición Oriental: descubre cómo los Cinco Elementos y sus ciclos te habitan, y lee las señales de tu cuerpo —hasta en tu lengua— para volver al equilibrio entre todo lo que nos forma, que es a lo que llamamos salud.",
     video: "/videos/tcmvideo.mp4",
     alias: ["tcm"],
   },

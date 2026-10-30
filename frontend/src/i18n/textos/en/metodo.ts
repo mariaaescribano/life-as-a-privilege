@@ -696,7 +696,7 @@ export const metodo = {
 
   // ── Chinese Medicine · Create your notes (step 11) ──────────────────────
   "metodo.tcm.apuntes.intro1":
-    "You've walked the whole of Chinese Tradition. Now decide what you take with you: check whatever you want —your assessment, the reading of your tongue, the kitchens, the laws of the Tao, the practices— and we'll put it together as a notebook you can read away from a screen.",
+    "You've walked the whole of Oriental Tradition. Now decide what you take with you: check whatever you want —your assessment, the reading of your tongue, the kitchens, the laws of the Tao, the practices— and we'll put it together as a notebook you can read away from a screen.",
   "metodo.tcm.apuntes.intro2":
     "It's made right here, in your browser. You can come back and put it together again as many times as you like.",
 

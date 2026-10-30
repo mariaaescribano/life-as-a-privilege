@@ -167,7 +167,7 @@ export const recorridoContenido: Record<DisciplinaClave, DisciplinaContenido> = 
       puntos: [
         "Descubre los cinco elementos y cómo se relacionan con tu cuerpo, tu forma de ser y tus ciclos naturales.",
         "Identifica qué elementos pueden estar pidiendo más atención y comprende cómo se manifiestan sus desequilibrios en ti.",
-        "Aprende formas de recuperar el equilibrio y cuidar tu cuerpo y tu mente en el día a día desde la mirada de la Tradición China.",
+        "Aprende formas de recuperar el equilibrio y cuidar tu cuerpo y tu mente en el día a día desde la mirada de la Tradición Oriental.",
       ],
     },
     modalDesc:

@@ -792,7 +792,7 @@ export const metodo = {
 
   // ── Medicina China · Crea tus apuntes (paso 11) ─────────────────────────
   "metodo.tcm.apuntes.intro1":
-    "Has recorrido la Tradición China entera. Ahora decide qué te llevas: marca lo que quieras —tu valoración, la lectura de tu lengua, las cocinas, las leyes del Tao, las prácticas— y te lo montamos en un cuaderno para leer sin pantalla.",
+    "Has recorrido la Tradición Oriental entera. Ahora decide qué te llevas: marca lo que quieras —tu valoración, la lectura de tu lengua, las cocinas, las leyes del Tao, las prácticas— y te lo montamos en un cuaderno para leer sin pantalla.",
   "metodo.tcm.apuntes.intro2":
     "Se prepara aquí mismo, en tu navegador. Puedes volver y montarlo otra vez cuantas veces quieras.",
 

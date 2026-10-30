@@ -116,7 +116,7 @@ export const COMIC_POR_QUE_EXISTE: VinetaMapa[] = [
   },
   {
     src: `${P}/comiciniciotcm.webp`,
-    titulo: "Tradición China",
+    titulo: "Tradición Oriental",
     disciplina: tcmNom,
     lineas: [
       "Las emociones, el cuerpo y la energía no están separados.",

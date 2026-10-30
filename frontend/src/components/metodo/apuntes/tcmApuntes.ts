@@ -245,7 +245,7 @@ export function libroApuntesTcm(data: DatosTcm | null | undefined): ApuntesLibro
     pintar: (t, fotos, conFotos) => {
       t.capitulo(
         "Las cinco cocinas",
-        "En la Tradición China el alimento se elige por su sabor, su naturaleza y el órgano al que entra; y la cocción es la mitad del remedio.",
+        "En la Tradición Oriental el alimento se elige por su sabor, su naturaleza y el órgano al que entra; y la cocción es la mitad del remedio.",
       );
       ORDEN_ELEMENTOS.forEach((el, i) => {
         const E = ELEMENTOS[el];
@@ -337,9 +337,9 @@ export function libroApuntesTcm(data: DatosTcm | null | undefined): ApuntesLibro
   });
 
   return {
-    disciplina: "Tradición China",
+    disciplina: "Tradición Oriental",
     tema: TEMA_TCM,
-    titulo: "Mis apuntes de Tradición China",
+    titulo: "Mis apuntes de Tradición Oriental",
     subtitulo: "El Mapa · lo que me llevo",
     pieLamina: "Estos apuntes los has elegido tú, capítulo a capítulo.",
     archivo: "mis-apuntes-medicina-china",

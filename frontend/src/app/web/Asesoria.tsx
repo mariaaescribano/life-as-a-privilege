@@ -8,7 +8,7 @@ import BandaMarmol from "../../components/global/BandaMarmol";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
 import FormularioAsesoria from "../../components/web/FormularioAsesoria";
 import MapaDisciplinas from "../../components/web/MapaDisciplinas";
-import { RecorridoMandalaVideo, precargarClipsMuestra } from "../../components/global/MandalaRecorrido";
+import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import { BloqueDiferido } from "../../components/global/BloqueDiferido";
 import BotonContactame from "../../components/global/BotonContactame";
 import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
@@ -47,10 +47,11 @@ const CAJAS: { foto: string; texto: ClaveTexto }[] = [
   { foto: "/img/welcome/tradicion.webp", texto: "asesoria.logro.tradicion" },
   { foto: "/img/welcome/cultura.webp", texto: "asesoria.logro.cultura" },
 ];
-/** Las dos cajas de «¿Cómo trabajo?». */
+/** Las tres cajas de «¿Cómo trabajo?». */
 const PASOS: { titulo: ClaveTexto; texto: ClaveTexto }[] = [
   { titulo: "asesoria.paso1.titulo", texto: "asesoria.paso1.texto" },
   { titulo: "asesoria.paso2.titulo", texto: "asesoria.paso2.texto" },
+  { titulo: "asesoria.paso3.titulo", texto: "asesoria.paso3.texto" },
 ];
 
 const HALO_CAJA = "0 0 16px rgba(255,255,255,0.14), 0 0 34px rgba(255,255,255,0.07), 0 0 60px rgba(180,255,245,0.08)";
@@ -172,9 +173,7 @@ const Asesoria = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     const id = setTimeout(() => setMounted(true), 60);
-    // Los vídeos del mandala, descargándose desde el principio.
-    const pre = setTimeout(precargarClipsMuestra, 400);
-    return () => { clearTimeout(id); clearTimeout(pre); };
+    return () => clearTimeout(id);
   }, []);
 
   return (
@@ -248,19 +247,6 @@ const Asesoria = () => {
               </Box>
             ))}
           </Flex>
-        </Box>
-
-        {/* ── 2b · EL MANDALA CON LAS OCHO DISCIPLINAS, debajo de las cuatro cajas ── */}
-        <SeparadorFlor />
-
-        <Box px={{ base: 5, md: 10, lg: 16 }}>
-          <Box maxW="1200px" mx="auto">
-            <BloqueDiferido minH={{ base: "900px", md: "560px" }}>
-              <Reveal inView amount={0.06} direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
-                <RecorridoMandalaVideo resumen />
-              </Reveal>
-            </BloqueDiferido>
-          </Box>
         </Box>
 
         <SeparadorFlor />
@@ -364,7 +350,7 @@ const Asesoria = () => {
                           }}
                         />
                         <Reveal activo={visible} direction="up" distance={14} duration={0.8} delay={B + 0.7}>
-                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.65" letterSpacing="0.01em">
+                          <Text color={TINTA} fontSize={{ base: "md", md: "lg" }} lineHeight="1.65" letterSpacing="0.01em" whiteSpace="pre-line">
                             {t(p.texto)}
                           </Text>
                         </Reveal>
@@ -376,6 +362,21 @@ const Asesoria = () => {
             </Box>
           )}
         </BandaMarmol>
+
+
+        <SeparadorFlor />
+
+        {/* ── 2b · EL MANDALA CON LAS OCHO DISCIPLINAS, debajo de «¿Cómo trabajo?» ── */}
+
+        <Box px={{ base: 5, md: 10, lg: 16 }}>
+          <Box maxW="1200px" mx="auto">
+            <BloqueDiferido minH={{ base: "900px", md: "560px" }}>
+              <Reveal inView amount={0.06} direction="up" distance={26} scaleFrom={0.98} duration={0.8}>
+                <RecorridoMandalaVideo resumen />
+              </Reveal>
+            </BloqueDiferido>
+          </Box>
+        </Box>
 
         <SeparadorFlor />
 
@@ -430,8 +431,12 @@ const Asesoria = () => {
             >
               {/* A la izquierda SOLO la foto, entera (sin recortar). */}
               <Reveal activo={visible} direction="right" distance={30} scaleFrom={0.94} duration={1} w={{ base: "250px", md: "300px", lg: "340px" }} flexShrink={0}>
-                <Box borderRadius="22px" overflow="hidden" boxShadow={`0 0 22px ${ORO}55, 0 0 48px ${ORO}28`}>
-                  <Image src={FOTO_CONTACTO} alt="María Escribano" w="100%" h="auto" display="block" />
+                {/* Doble marco: la foto con su borde y, por fuera, un filo fino turquesa oscuro desplazado. */}
+                <Box position="relative">
+                  <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
+                  <Box borderRadius="22px" overflow="hidden" border={`1.5px solid ${TINTA}`} boxShadow={`0 0 22px ${ORO}55, 0 0 48px ${ORO}28`}>
+                    <Image src={FOTO_CONTACTO} alt="María Escribano" w="100%" h="auto" display="block" />
+                  </Box>
                 </Box>
               </Reveal>
 

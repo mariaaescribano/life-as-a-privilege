@@ -36,7 +36,7 @@ export const aprendizaje = {
   "test.falso": "False",
   "test.elige": "Choose…",
 
-  "tcmTests.titulo": "Chinese Tradition tests",
+  "tcmTests.titulo": "Oriental Tradition tests",
   "tcmTests.subtitulo": "Choose the test you want to take.",
   "tcmTests.constitucion": "Constitution",
   "tcmTests.elemento": "Element",

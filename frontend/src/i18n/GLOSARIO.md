@@ -33,7 +33,7 @@ internacional. Comillas tipográficas dobles `"…"` en las citas.
 | Autoconocimiento | Self-Knowledge |
 | Hinduismo | Hinduism |
 | Ayurveda | Ayurveda |
-| Tradición China (Trad. China) | Chinese Tradition (Chinese Trad.) |
+| Tradición Oriental (Trad. China) | Oriental Tradition (Chinese Trad.) |
 | Cuerpo Humano | Human Body |
 | Alimentación | Food |
 | Cultura | Culture |

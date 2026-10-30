@@ -65,7 +65,7 @@ const COMIC_POR_QUE_EXISTE_EN: (VinetaMapaEn | null)[] = [
     ],
   },
   {
-    titulo: "Chinese Tradition",
+    titulo: "Oriental Tradition",
     lineas: [
       "Emotions, body and energy aren't separate things.",
       "I'm starting to see how some of my emotions and habits were throwing me off balance.",

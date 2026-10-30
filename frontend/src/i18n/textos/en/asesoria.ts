@@ -5,6 +5,8 @@ export const asesoria = {
   "asesoria.paso1.texto": "I have a structured coaching plan and a methodology of my own, designed to guide you throughout the whole process.",
   "asesoria.paso2.titulo": "Every session has a purpose",
   "asesoria.paso2.texto": "We work in sessions, each one focused on a specific goal. We follow a path designed to move forward step by step, with content and meaning in every meeting.",
+  "asesoria.paso3.titulo": "An affordable price",
+  "asesoria.paso3.texto": "I have set a price of €15 per hour so that my coaching is within reach of anyone who wishes to do it. This does not mean lower quality: I always keep the same rigour, dedication and commitment.",
   "asesoria.logros.intro": "By the end of my coaching you will know...",
   "asesoria.logro.cuerpo": "How to take care of yourself, and you will be aware of the miracle that your body is.",
   "asesoria.logro.mente": "How your mind was built and how to re-educate it so that your past stops influencing your present.",

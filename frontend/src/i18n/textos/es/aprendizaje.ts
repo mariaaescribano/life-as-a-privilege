@@ -55,7 +55,7 @@ export const aprendizaje = {
   "test.elige": "Elige…",
 
   // ── Popup de los tests de Medicina China ────────────────────────────────
-  "tcmTests.titulo": "Tests de Tradición China",
+  "tcmTests.titulo": "Tests de Tradición Oriental",
   "tcmTests.subtitulo": "Elige el test que quieras hacer.",
   "tcmTests.constitucion": "Constitución",
   "tcmTests.elemento": "Elemento",

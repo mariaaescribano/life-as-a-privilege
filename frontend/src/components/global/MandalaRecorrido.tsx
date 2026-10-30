@@ -5,6 +5,8 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { focoBlanco } from "./foco";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "./DisciplinaBgLayer";
+import MandalaOrbita from "./MandalaOrbita";
+import { SESIONES } from "../../data/asesoriaRecorrido";
 import { sombraTexto } from "./disciplinaSombras";
 import { VideoLargoModal } from "./VideoLargo";
 import { type DisciplinaClave } from "../../data/recorridoContenido";
@@ -26,6 +28,9 @@ import {
 } from "../../GlobalVariables";
 
 const MotionBox = motion(Box);
+
+/** El orden del mandala de Asesorías 1:1. */
+const ORDEN_ASESORIA: DisciplinaClave[] = ["astrologia", "psicologia", "fisiologia", "nutricion", "ayurveda", "tcm", "cultura", "cabala"];
 
 /**
  * Una captura real de la plataforma + su mini texto descriptivo.
@@ -1155,40 +1160,52 @@ const VideoBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => vo
   );
 };
 
-// ── Variante «resumen» del box (la de Asesorías 1:1) ──────────────────────────
-// Misma caja de la disciplina, pero sin la lista de puntos con ✓: una sola frase
-// resumen (la que ya abre el texto introductorio de la disciplina), debajo su
-// vídeo y, al pie, un «Saber más» que lleva a su presentación. El vídeo es el
-// clip corto y mudo de `VideoMuestraCard` (~100 KB), no el entero; al pulsarlo se
-// abre el largo en su popup.
-/** Pide los ocho clips mudos (~100 KB cada uno) por adelantado, para que al pasar de
- *  una disciplina a otra el vídeo salga al instante y no tenga que bajarse entonces.
- *  Los elementos se guardan a nivel de módulo para que no se los lleve el recolector. */
-/** Velocidad de reproducción de los clips del box resumen. */
-const VELOCIDAD_CLIP = 1.6;
+// ── Variante «recorrido» del box (la de Asesorías 1:1) ───────────────────────
+// Arriba, la disciplina: su icono a la izquierda del nombre y una línea horizontal. En medio,
+// un box con el fondo apenas borroso (solo un poco, para que la letra de encima se lea) con el
+// texto de lo que se hace en la sesión elegida. Abajo, un circulito por sesión (se pulsan para
+// cambiar de sesión) y, a la derecha, un «Saber más» discreto. Las sesiones y sus textos viven
+// en `data/asesoriaRecorrido.ts`.
+/** Flecha a un lado del texto de la sesión: círculo con filo del color de la disciplina. */
+const FlechaSesion = ({ lado, color, bg, onClick }: { lado: "izq" | "dcha"; color: string; bg: string; onClick: () => void }) => (
+  <Box
+    as="button"
+    type="button"
+    onClick={onClick}
+    aria-label={lado === "izq" ? "‹" : "›"}
+    flexShrink={0}
+    w={{ base: "32px", md: "38px" }}
+    h={{ base: "32px", md: "38px" }}
+    borderRadius="full"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    color={color}
+    fontSize="xl"
+    lineHeight="1"
+    bg={`${bg}99`}
+    border={`1.5px solid ${color}aa`}
+    boxShadow={`0 0 10px ${color}44`}
+    transition="background 0.25s ease, border-color 0.25s ease"
+    _hover={{ bg: `${bg}`, borderColor: color }}
+    _focusVisible={focoBlanco}
+  >
+    {lado === "izq" ? "‹" : "›"}
+  </Box>
+);
 
-const clipsPrecargados: HTMLVideoElement[] = [];
-export const precargarClipsMuestra = () => {
-  if (typeof document === "undefined" || clipsPrecargados.length) return;
-  if ((navigator as { connection?: { saveData?: boolean } }).connection?.saveData) return;
-  disciplinas.forEach((d) => {
-    const v = document.createElement("video");
-    v.preload = "auto";
-    v.muted = true;
-    v.src = `/videos/muestra/${d.clave}.mp4`;
-    v.load();
-    clipsPrecargados.push(v);
-  });
-};
-
-const ResumenBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => void }) => {
+const ResumenBox = ({ disc }: { disc: Disciplina }) => {
   const t = useT();
   const nombreEnMapa = useNombreDisciplinaEnMapa();
-  const contenido = useRecorridoContenido();
   const presentacion = presentacionPorKey(disc.nom);
-  const [ahorro] = useState(ahorroActivo);
-  const conFondo = hasDisciplinaBg(disc.nom);
-  const brillo = `0 1px 3px ${disc.bg}, 0 0 10px ${disc.bg}, 0 0 20px ${disc.bg}`;
+  const sombra = sombraTexto(disc.nom, disc.bg);
+  const [sesion, setSesion] = useState(0);
+  // `?sesionesDemo`: textos de ejemplo SOLO para ver el diseño (no salen en producción).
+  const demo = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("sesionesDemo");
+  const textos: string[] = demo
+    ? ["Texto de ejemplo de la primera sesión.", "Texto de ejemplo de la segunda sesión.", "Texto de ejemplo de la tercera sesión.", "Texto de ejemplo de la cuarta sesión."]
+    : SESIONES[disc.clave].map((k) => t(k));
+  const actual = Math.min(sesion, Math.max(0, textos.length - 1));
 
   return (
     <Flex
@@ -1198,75 +1215,79 @@ const ResumenBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => 
       overflow="hidden"
       bg={disc.bg}
       boxShadow={`0 0 26px ${disc.txt}44`}
+      minH={{ base: "420px", md: "460px" }}
     >
       <DisciplinaBgLayer nom={disc.nom} borderRadius="2xl" />
 
-      <Flex align="center" gap={3} px={{ base: 5, md: 6 }} pt={{ base: 4, md: 5 }} pb={3} position="relative" zIndex={1}>
-        <Box
-          position="relative"
-          w={{ base: "40px", md: "46px" }}
-          h={{ base: "40px", md: "46px" }}
-          borderRadius="full"
-          overflow="hidden"
-          flexShrink={0}
-          bg={conFondo ? "transparent" : disc.bg}
-          border={`2px solid ${disc.txt}`}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          {conFondo && <DisciplinaBgLayer nom={disc.nom} borderRadius="full" />}
-          <Box position="relative" zIndex={1} display="flex" alignItems="center" justifyContent="center">
-            {disc.renderIcon("28px")}
-          </Box>
+      {/* Arriba: icono (sin círculo) a la izquierda del nombre, y una línea horizontal. */}
+      <Flex align="center" gap={3} px={{ base: 5, md: 7 }} pt={{ base: 5, md: 6 }} pb={3} position="relative" zIndex={1}>
+        <Box display="flex" alignItems="center" justifyContent="center" flexShrink={0}>
+          {disc.renderIcon("38px")}
         </Box>
-        <Text color={disc.txt} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.35" letterSpacing="0.02em" whiteSpace="nowrap" textShadow={brillo}>
+        <Text color={disc.txt} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.35" letterSpacing="0.02em" whiteSpace="nowrap" textShadow={sombra}>
           {nombreEnMapa(disc.nom)}
         </Text>
       </Flex>
+      <Box mx={{ base: 5, md: 7 }} h="1px" position="relative" zIndex={1} bg={`linear-gradient(to right, ${disc.txt}, ${disc.txt}00)`} />
 
-      <Box mx={{ base: 5, md: 6 }} h="1px" position="relative" zIndex={1} bg={`linear-gradient(to right, transparent, ${disc.txt}bb, transparent)`} />
-
-      <Flex direction="column" position="relative" zIndex={1} px={{ base: 5, md: 7 }} pt={{ base: 5, md: 6 }} pb={{ base: 5, md: 6 }} gap={{ base: 4, md: 5 }}>
-        <Text color={disc.txt} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.35" textShadow={brillo}>
-          {contenido[disc.clave].videoIntro.titulo}
-        </Text>
-
-        {disc.video && (
-          <Box
-            as="button"
-            type="button"
-            onClick={onVerVideo}
-            aria-label={nombreEnMapa(disc.nom)}
-            position="relative"
-            w="100%"
-            borderRadius="xl"
-            overflow="hidden"
-            bg={disc.bg}
-            border={`1px solid ${disc.txt}55`}
-            boxShadow={`0 0 20px ${disc.txt}40`}
-            _focusVisible={focoBlanco}
-            sx={{ aspectRatio: "16 / 10", WebkitTapHighlightColor: "transparent" }}
-          >
-            <Box
-              as="video"
-              src={`/videos/muestra/${disc.clave}.mp4`}
-              // Se reproduce más deprisa (x1,6): se ve de un vistazo.
-              ref={(v: HTMLVideoElement | null) => { if (v) { v.defaultPlaybackRate = VELOCIDAD_CLIP; v.playbackRate = VELOCIDAD_CLIP; } }}
-              position="absolute"
-              inset={0}
+      {/* En medio: el box con el fondo un poco borroso y el texto de la sesión, con una flecha a cada
+          lado (anterior / siguiente). Los circulitos de abajo hacen lo mismo. */}
+      <Flex flex="1" align="center" justify="center" gap={{ base: 1.5, md: 3 }} px={{ base: 3, md: 5 }} py={{ base: 5, md: 6 }} position="relative" zIndex={1}>
+        {textos.length > 1 && <FlechaSesion lado="izq" color={disc.txt} bg={disc.bg} onClick={() => setSesion((actual - 1 + textos.length) % textos.length)} />}
+        <Box
+          flex="1"
+          minW={0}
+          minH={{ base: "170px", md: "200px" }}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius="xl"
+          px={{ base: 4, md: 7 }}
+          py={{ base: 6, md: 8 }}
+          bg={`${disc.bg}33`}
+          border={`1px solid ${disc.txt}55`}
+          sx={{ backdropFilter: "blur(5px)", WebkitBackdropFilter: "blur(5px)" }}
+        >
+          <AnimatePresence mode="wait">
+            <MotionBox
+              key={actual}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
               w="100%"
-              h="100%"
-              objectFit="cover"
-              autoPlay={!ahorro}
-              muted
-              loop
-              playsInline
-              preload={ahorro ? "metadata" : "auto"}
-            />
-          </Box>
-        )}
+            >
+              <Text color={disc.txt} fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.6" textAlign="center" textShadow={sombra}>
+                {textos[actual] ?? ""}
+              </Text>
+            </MotionBox>
+          </AnimatePresence>
+        </Box>
+        {textos.length > 1 && <FlechaSesion lado="dcha" color={disc.txt} bg={disc.bg} onClick={() => setSesion((actual + 1) % textos.length)} />}
+      </Flex>
 
+      {/* Abajo: un circulito por sesión y el «Saber más» discreto a la derecha. */}
+      <Flex position="relative" zIndex={1} align="center" justify="center" px={{ base: 5, md: 7 }} pb={{ base: 5, md: 6 }} minH="44px">
+        <Flex gap={3} align="center" justify="center">
+          {textos.map((_, i) => (
+            <Box
+              key={i}
+              as="button"
+              type="button"
+              onClick={() => setSesion(i)}
+              aria-label={`${i + 1}`}
+              aria-current={i === actual}
+              w={i === actual ? "14px" : "11px"}
+              h={i === actual ? "14px" : "11px"}
+              borderRadius="full"
+              bg={i === actual ? disc.txt : "transparent"}
+              border={`1.5px solid ${disc.txt}`}
+              boxShadow={i === actual ? `0 0 10px ${disc.txt}99` : "none"}
+              transition="all 0.3s ease"
+              _focusVisible={focoBlanco}
+            />
+          ))}
+        </Flex>
         {presentacion && (
           <Flex
             as="a"
@@ -1274,15 +1295,14 @@ const ResumenBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => 
             target="_blank"
             rel="noopener noreferrer"
             role="group"
-            alignSelf="flex-end"
+            position="absolute"
+            right={{ base: 5, md: 7 }}
             align="center"
-            justify="center"
             gap={2}
-            px={{ base: 4, md: 5 }}
-            py="6px"
+            px={{ base: 3, md: 4 }}
+            py="5px"
             borderRadius="full"
             border={`1px solid ${disc.txt}66`}
-            bg="transparent"
             color={disc.txt}
             opacity={0.85}
             textDecoration="none"
@@ -1290,11 +1310,11 @@ const ResumenBox = ({ disc, onVerVideo }: { disc: Disciplina; onVerVideo: () => 
             _hover={{ opacity: 1, borderColor: disc.txt, textDecoration: "none" }}
             _focusVisible={focoBlanco}
           >
-            <Text fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "xs", md: "sm" }} letterSpacing="0.16em" textTransform="uppercase" whiteSpace="nowrap" textShadow={brillo}>
+            <Text fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "2xs", md: "xs" }} letterSpacing="0.14em" textTransform="uppercase" whiteSpace="nowrap" textShadow={sombra}>
               {t("elMetodo.saberMas")}
             </Text>
             <Box as="span" display="inline-flex" transition="transform 0.3s ease" _groupHover={{ transform: "translateX(4px)" }}>
-              <ArrowRight size={13} />
+              <ArrowRight size={12} />
             </Box>
           </Flex>
         )}
@@ -1321,6 +1341,11 @@ export const RecorridoMandalaVideo = ({ resumen = false }: { resumen?: boolean }
     disciplinas.find((d) => d.enabled && d.video) ??
     disciplinas[0];
   const [selectedNom, setSelectedNom] = useState(inicial.nom);
+  // En Asesorías (`resumen`) las ocho van en SU orden: Astrología, Autoconocimiento (Psicología),
+  // Cuerpo Humano, Alimentación, Ayurveda, Tradición Oriental, Cultura y Cábala.
+  const lista = resumen
+    ? ORDEN_ASESORIA.map((c) => disciplinas.find((d) => d.clave === c)!).filter(Boolean)
+    : disciplinas;
   // La entrada del mandala (los círculos saliendo del centro uno tras otro)
   // espera a que el usuario haya llegado a la altura: solo cuando el mandala
   // está metido en pantalla. Sin espera de reloj: si ya está a la vista, arranca
@@ -1358,13 +1383,13 @@ export const RecorridoMandalaVideo = ({ resumen = false }: { resumen?: boolean }
 
     const id = window.setInterval(() => {
       setSelectedNom((nom) => {
-        const i = disciplinas.findIndex((d) => d.nom === nom);
-        return disciplinas[(i + 1) % disciplinas.length].nom;
+        const i = lista.findIndex((d) => d.nom === nom);
+        return lista[(i + 1) % lista.length].nom;
       });
     // En la variante «resumen» (hay una frase y un vídeo que leer) se deja más tiempo.
     }, resumen ? 8000 : 3000);
     return () => window.clearInterval(id);
-  }, [autoRota, videoModal, mandalaVisto.visible, resumen]);
+  }, [autoRota, videoModal, mandalaVisto.visible, resumen, lista]);
 
   useEffect(() => {
     document.body.style.overflow = videoModal ? "hidden" : "";
@@ -1406,6 +1431,17 @@ export const RecorridoMandalaVideo = ({ resumen = false }: { resumen?: boolean }
       w="100%"
     >
       {/* ── Mandala (izquierda) ── */}
+      {resumen ? (
+        <Box ref={mandalaVisto.ref} w={{ base: "100%", lg: "auto" }} flexShrink={0}>
+          <MandalaOrbita
+            items={lista.map((d) => ({ nom: d.nom, bg: d.bg, txt: d.txt, renderIcon: d.renderIcon }))}
+            selectedNom={selectedNom}
+            onSelect={elegir}
+            activo={mandalaVisto.visible}
+          />
+        </Box>
+      ) : (
+      <>
       <Box
         position="relative"
         w={{ base: "100%", lg: "auto" }}
@@ -1481,6 +1517,8 @@ export const RecorridoMandalaVideo = ({ resumen = false }: { resumen?: boolean }
           })}
         </Box>
       </Box>
+      </>
+      )}
 
       {/* ── Box de al lado del mandala (derecha) ── */}
       <Box w={{ base: "100%", lg: "auto" }} flex={{ lg: 1 }} maxW={{ base: "396px", lg: "450px" }}>
@@ -1494,7 +1532,7 @@ export const RecorridoMandalaVideo = ({ resumen = false }: { resumen?: boolean }
             w="100%"
           >
             {resumen
-              ? <ResumenBox disc={selected} onVerVideo={() => setVideoModal(selected)} />
+              ? <ResumenBox key={selected.nom} disc={selected} />
               : <VideoBox disc={selected} onVerVideo={() => setVideoModal(selected)} />}
           </MotionBox>
         </AnimatePresence>
