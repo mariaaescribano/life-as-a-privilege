@@ -1,4 +1,6 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
+import { copyFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 
 // Configuración del empaquetador. Hasta ahora NO había ninguna: Vite usaba sus
 // valores por defecto y metía React, Chakra, framer-motion, axios y el código
@@ -52,7 +54,22 @@ function nombrePaquete(id: string): string {
   return partes[0].startsWith("@") ? partes.slice(0, 2).join("/") : partes[0];
 }
 
+// Enlaces directos (/disciplina/psicologia, /asesoria…): la web es de una sola página y el servidor
+// estático de Render solo conoce `/`; para cualquier otra ruta contesta «Not Found». Render sirve
+// `404.html` cuando no encuentra el archivo, así que se deja ahí una copia de `index.html`: el
+// navegador la carga y el router de la web muestra la página que toca. (Lo limpio es además la
+// regla de Render «/* → /index.html, Rewrite» en su panel, pero esto funciona sin tocar nada.)
+const copia404: Plugin = {
+  name: "copia-index-como-404",
+  apply: "build",
+  closeBundle() {
+    const dist = resolve(__dirname, "dist");
+    if (existsSync(resolve(dist, "index.html"))) copyFileSync(resolve(dist, "index.html"), resolve(dist, "404.html"));
+  },
+};
+
 export default defineConfig({
+  plugins: [copia404],
   build: {
     rollupOptions: {
       output: {
