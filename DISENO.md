@@ -48,13 +48,21 @@ corrige este documento):
   (`style.css`), para que el rebote del scroll en móvil no enseñe blanco. Única excepción
   histórica: la landing de la casa (ver memoria `landing-dos-proyectos`).
   **Bandas de mármol:** una página puede intercalar bandas a todo el ancho con el mármol
-  de María (`/img/fondos/marmolfondo.webp`, 1536×1024, a resolución completa). Sobre el
+  de María (`/img/fondos/marmolfondo.webp`, 1536×1024, a resolución completa; en móvil
+  `marmolfondo-crema.webp`, solo crema: el turquesa de los extremos lo pone el fundido de la máscara, 96 px). Sobre el
   mármol la letra no es blanca: turquesa oscuro `#004f4f` (el de la casa, más hondo), oro `#b08d3f` en los filos y crema `#f2e9d9` (los de
   `LlamadaCta`). Todas las bandas usan `components/global/BandaMarmol.tsx`: bordes arriba y abajo
   desvanecidos (máscara de 70 px) y, REGLA DE ORO, **el mármol sale PRIMERO**: es el movimiento que
   sigue a la cabecera (mandala, titular, frase y línea con mandala), sin hacer scroll; si la banda aún no se
   ve, aparece (0,5 s) en cuanto asoma, y su contenido entra 0,45 s después
   (los hijos reciben `visible`). Cajas sobre mármol: transparentes, filo turquesa oscuro, halo dorado.
+  Con la prop `tapas` (el mandala de `/disciplinas`) el turquesa con oro va solo en dos tapas,
+  arriba y abajo (`marmol-tapa-arriba/abajo.webp`, fundidas hacia el crema), y el relleno de la
+  banda es mayor para que el texto empiece bajo la tapa.
+  **Fotos de María sobre mármol: doble marco.** Borde de la foto (1,5 px `#004f4f`, radio 22 px,
+  halo dorado) y, por fuera, un filo fino desplazado 9 px (`inset="-9px"`, radio 30 px, 1 px
+  `#004f4f66`). Lo llevan Disciplinas, Asesoría, Contacto, Materiales, Quién soy, Pilares y la
+  tarjeta de la creadora; las fotos sobre turquesa liso (las tres de «Mi propósito», la de Mapa) no.
   Usos: portada, `/asesoria`, `/disciplinas`.
 - **Mapa de disciplinas desplegable** (`/asesoria`, `components/web/MapaDisciplinas.tsx`): ocho
   disciplinas en vertical con flechas blancas que se dibujan; una abierta a la vez; cajitas con

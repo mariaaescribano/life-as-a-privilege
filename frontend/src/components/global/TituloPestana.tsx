@@ -8,8 +8,8 @@ import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 
 /**
  * El nombre de la pestaña del navegador sigue a la persona: en cada página dice en qué
- * recurso está («Ilustraciones», «Astrología»…; solo la portada dice «María Escribano»),
- * para que, con varias pestañas abiertas, no se pierda nunca.
+ * recurso está y, detrás, la marca: «Cursos · María Escribano», «Disciplinas · María Escribano»…
+ * (la portada dice solo «María Escribano»), para que, con varias pestañas abiertas, no se pierda nunca.
  *
  * Es UNA sola pieza, montada en App: mira la ruta y decide el nombre. Una página
  * nueva que merezca su propio nombre se añade en `recursoDeRuta`; las que no están
@@ -68,10 +68,10 @@ export default function TituloPestana() {
     };
 
     const r = recurso();
-    document.title = r ?? MARCA;
+    document.title = r ? `${r} · ${MARCA}` : MARCA;
 
-    // Curso o lección concretos: la pestaña dice cuál es. Si el nombre no cabe, el navegador lo
-    // corta con puntos suspensivos; por eso va lo más específico primero y sin marca detrás.
+    // Curso o lección concretos: la pestaña dice cuál es y, al final, la marca. Si no cabe, el
+    // navegador corta por detrás; por eso va lo más específico primero.
     const partes = pathname.split("/").filter(Boolean);
     if (partes[0] !== "aprendizaje") return;
     const [, tipo, , p2, p3] = partes;
@@ -86,7 +86,7 @@ export default function TituloPestana() {
           if (cursoId && c.id !== cursoId) continue;
           const l = leccionId ? (c.modulos ?? []).flatMap((x) => x.submodules).find((x) => x.id === leccionId) : undefined;
           if (leccionId && !l) continue;
-          document.title = l ? `${c.titulo} · ${l.nom}` : c.titulo;
+          document.title = `${l ? `${c.titulo} · ${l.nom}` : c.titulo} · ${MARCA}`;
           return;
         }
       }

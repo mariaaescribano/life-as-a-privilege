@@ -162,6 +162,12 @@ const Premium = () => {
                 const fila = (i - col) / 2;
                 return (
                   <React.Fragment key={i}>
+                    {(i === 1 || i === 3) && (
+                      // Raya horizontal entre afirmaciones: solo en móvil, donde van una bajo otra.
+                      <Reveal inView amount={0.5} direction="none" scaleFrom={0.4} duration={0.9} delay={0.2} display={{ base: "flex", md: "none" }} justifyContent="center">
+                        <Box w="60%" h="1px" bg="linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent)" boxShadow="0 0 8px rgba(255,255,255,0.3)" />
+                      </Reveal>
+                    )}
                     {i === 2 && (
                       // Hilo horizontal entre las dos filas.
                       <Reveal inView amount={0.5} direction="none" scaleFrom={0.4} duration={0.9} delay={0.35} display="flex" justifyContent="center" gridColumn="1 / -1" py={{ base: 0, md: 2 }}>

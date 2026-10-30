@@ -277,20 +277,32 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           scaleFrom={0.94}
           flexShrink={0}
           w={{ base: "240px", md: "340px", lg: "430px" }}
-          borderRadius="2xl"
-          overflow="hidden"
-          boxShadow={c.fotoSombra}
+          position="relative"
+          borderRadius={marmol ? undefined : "2xl"}
+          overflow={marmol ? "visible" : "hidden"}
+          boxShadow={marmol ? undefined : c.fotoSombra}
           sx={{ aspectRatio: "4 / 3" }}
         >
-          <Image
-            src="/img/me/fotoclasica.webp"
-            alt="María Escribano"
+          {/* Sobre el mármol: doble marco turquesa oscuro (el filo por fuera y el borde de la foto). */}
+          {marmol && <Box position="absolute" inset="-9px" borderRadius="30px" border="1px solid #004f4f66" pointerEvents="none" />}
+          <Box
             w="100%"
             h="100%"
-            objectFit="cover"
-            objectPosition="center top"
-            display="block"
-          />
+            overflow="hidden"
+            borderRadius={marmol ? "22px" : undefined}
+            border={marmol ? "1.5px solid #004f4f" : undefined}
+            boxShadow={marmol ? c.fotoSombra : undefined}
+          >
+            <Image
+              src="/img/me/fotoclasica.webp"
+              alt="María Escribano"
+              w="100%"
+              h="100%"
+              objectFit="cover"
+              objectPosition="center top"
+              display="block"
+            />
+          </Box>
         </RevealItem>
       </RevealStagger>
       </Reveal>

@@ -26,7 +26,9 @@ const BandaMarmol = ({
   pt = { base: "104px", md: "92px" },
   pb = { base: "116px", md: "96px" },
   mt,
+  tapas = false,
 }: {
+  tapas?: boolean;
   children: (visible: boolean) => React.ReactNode;
   pt?: { base: string; md: string };
   pb?: { base: string; md: string };
@@ -84,18 +86,35 @@ const BandaMarmol = ({
       <Box
         position="absolute"
         inset={0}
-        bgImage="url('/img/fondos/marmolfondo.webp')"
-        bgSize="cover"
-        // En móvil la banda es alta y estrecha: el mármol se ve por una rendija. Se ancla a la
-        // derecha, donde la esquina de abajo es crema; el verde queda arriba, bajo el relleno.
-        bgPosition={{ base: "right center", md: "center" }}
+        // En móvil la banda es alta y estrecha: se usa un mármol SOLO CREMA (sin turquesa ni
+        // vetas fuertes), así la letra cae siempre sobre lo claro, sea cual sea el alto de la
+        // banda. El turquesa del principio y del final lo pone el fundido de la máscara.
+        // Con `tapas` (bandas con letra suelta sobre el mármol, como los nombres del mandala): el
+        // turquesa con oro va SOLO en dos tapas, arriba y abajo, que se funden hacia el crema; el
+        // cuerpo es crema liso. La banda lleva más relleno para que el texto empiece bajo la tapa.
+        bgImage={
+          tapas
+            ? {
+                base: "url('/img/fondos/marmol-tapa-arriba.webp'), url('/img/fondos/marmol-tapa-abajo.webp'), url('/img/fondos/marmolfondo-crema.webp')",
+                md: "url('/img/fondos/marmol-tapa-arriba.webp'), url('/img/fondos/marmol-tapa-abajo.webp'), url('/img/fondos/marmolfondo-crema-ancho.webp')",
+              }
+            : {
+                base: "url('/img/fondos/marmolfondo-crema.webp')",
+                md: "url('/img/fondos/marmolfondo.webp')",
+              }
+        }
+        bgSize={tapas ? { base: "auto 340px, auto 340px, cover", md: "100% auto, 100% auto, cover" } : "cover"}
+        bgPosition={tapas ? { base: "right top, right bottom, center", md: "top, bottom, center" } : "center"}
         bgRepeat="no-repeat"
         pointerEvents="none"
         opacity={marmol ? 1 : 0}
         transition="opacity 0.5s ease"
         sx={{
-          WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%)",
-          maskImage: "linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%)",
+          // Móvil: fundido de 96 px (el contenido empieza a 104). Escritorio: 70 px.
+          "--fundido": "96px",
+          "@media (min-width: 48em)": { "--fundido": "70px" },
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 var(--fundido), #000 calc(100% - var(--fundido)), transparent 100%)",
+          maskImage: "linear-gradient(to bottom, transparent 0, #000 var(--fundido), #000 calc(100% - var(--fundido)), transparent 100%)",
         }}
       />
       <Box ref={setCuerpo} position="relative" zIndex={1}>

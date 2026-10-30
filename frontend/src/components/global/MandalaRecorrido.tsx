@@ -1194,7 +1194,7 @@ const FlechaSesion = ({ lado, color, bg, onClick }: { lado: "izq" | "dcha"; colo
   </Box>
 );
 
-const ResumenBox = ({ disc }: { disc: Disciplina }) => {
+const ResumenBox = ({ disc, numero }: { disc: Disciplina; numero: number }) => {
   const t = useT();
   const nombreEnMapa = useNombreDisciplinaEnMapa();
   const presentacion = presentacionPorKey(disc.nom);
@@ -1227,7 +1227,7 @@ const ResumenBox = ({ disc }: { disc: Disciplina }) => {
           {disc.renderIcon("38px")}
         </Box>
         <Text color={disc.txt} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} lineHeight="1.35" letterSpacing="0.02em" whiteSpace="nowrap" textShadow={sombra}>
-          {nombreEnMapa(disc.nom)}
+          {numero}. {nombreEnMapa(disc.nom)}
         </Text>
       </Flex>
       <Box mx={{ base: 5, md: 7 }} h="1px" position="relative" zIndex={1} bg={`linear-gradient(to right, ${disc.txt}, ${disc.txt}00)`} />
@@ -1290,9 +1290,9 @@ const ResumenBox = ({ disc }: { disc: Disciplina }) => {
         {textos.length > 1 && <FlechaSesion lado="dcha" color={disc.txt} bg={disc.bg} onClick={() => setSesion((actual + 1) % textos.length)} />}
       </Flex>
 
-      {/* Abajo: un circulito por sesión y el «Saber más» discreto a la derecha. */}
-      <Flex position="relative" zIndex={1} align="center" justify="center" px={{ base: 5, md: 7 }} pb={{ base: 5, md: 6 }} minH="44px">
-        <Flex gap={3} align="center" justify="center">
+      {/* Abajo: un circulito por sesión y, debajo, el «Saber más» a todo el ancho del box. */}
+      <Flex position="relative" zIndex={1} direction="column" align="stretch" px={{ base: 5, md: 7 }} pb={{ base: 5, md: 6 }}>
+        <Flex gap={3} align="center" justify="center" minH="30px">
           {textos.map((_, i) => (
             <Box
               key={i}
@@ -1319,22 +1319,28 @@ const ResumenBox = ({ disc }: { disc: Disciplina }) => {
             target="_blank"
             rel="noopener noreferrer"
             role="group"
-            position="absolute"
-            right={{ base: 5, md: 7 }}
+            position="relative"
             align="center"
+            justify="center"
             gap={2}
-            px={{ base: 3, md: 4 }}
-            py="5px"
+            mt={{ base: 5, md: 6 }}
+            px={{ base: 12, md: 14 }}
+            py={{ base: "11px", md: "13px" }}
             borderRadius="full"
-            border={`1px solid ${disc.txt}66`}
+            bg={`${disc.bg}66`}
+            border={`1.5px solid ${disc.txt}aa`}
+            boxShadow={`0 0 12px ${disc.txt}33`}
             color={disc.txt}
-            opacity={0.85}
             textDecoration="none"
             sx={{ WebkitTapHighlightColor: "transparent", transition: "all 0.3s ease" }}
-            _hover={{ opacity: 1, borderColor: disc.txt, textDecoration: "none" }}
+            _hover={{ borderColor: disc.txt, boxShadow: `0 0 16px ${disc.txt}66`, textDecoration: "none" }}
             _focusVisible={focoBlanco}
           >
-            <Text fontFamily="'EB Garamond', serif" fontWeight="600" fontSize={{ base: "2xs", md: "xs" }} letterSpacing="0.14em" textTransform="uppercase" whiteSpace="nowrap" textShadow={sombra}>
+            {/* El icono de la disciplina, a la izquierda. */}
+            <Box position="absolute" left={{ base: 4, md: 5 }} top="50%" transform="translateY(-50%)" display="flex" alignItems="center" aria-hidden="true">
+              {disc.renderIcon("24px")}
+            </Box>
+            <Text fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "sm", md: "md" }} letterSpacing="0.16em" textTransform="uppercase" whiteSpace="nowrap" textShadow={sombra}>
               {t("elMetodo.saberMas")}
             </Text>
             <Box as="span" display="inline-flex" transition="transform 0.3s ease" _groupHover={{ transform: "translateX(4px)" }}>
@@ -1566,7 +1572,7 @@ export const RecorridoMandalaVideo = ({ resumen = false }: { resumen?: boolean }
             w="100%"
           >
             {resumen
-              ? <ResumenBox key={selected.nom} disc={selected} />
+              ? <ResumenBox key={selected.nom} disc={selected} numero={lista.findIndex((d) => d.nom === selected.nom) + 1} />
               : <VideoBox disc={selected} onVerVideo={() => setVideoModal(selected)} />}
           </MotionBox>
         </AnimatePresence>

@@ -199,7 +199,10 @@ export default function MaterialesGratuitos() {
                 <Reveal activo={visible} direction="left" distance={36} scaleFrom={0.94} duration={1} delay={0.4} w={{ base: "260px", md: "320px", lg: "340px" }} h={{ base: "auto", lg: "auto" }} flexShrink={0} display="flex">
                   {/* En escritorio la foto ocupa EXACTAMENTE el alto de las cuatro cajas (se recorta con
                       encuadre); en móvil, debajo, con su proporción. */}
-                  <Box position="relative" w="100%" borderRadius="22px" overflow="hidden" boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}>
+                  {/* Doble marco: la foto con su borde y, por fuera, un filo fino turquesa oscuro desplazado. */}
+                  <Flex position="relative" w="100%">
+                  <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
+                  <Box position="relative" w="100%" borderRadius="22px" overflow="hidden" border={`1.5px solid ${TINTA}`} boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}>
                     <Image
                       src={FOTO_AUDIOLIBROS}
                       alt=""
@@ -212,6 +215,7 @@ export default function MaterialesGratuitos() {
                       objectPosition="center 25%"
                     />
                   </Box>
+                  </Flex>
                 </Reveal>
               )}
             </Flex>

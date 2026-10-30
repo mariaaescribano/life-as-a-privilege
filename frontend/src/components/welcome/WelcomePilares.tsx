@@ -60,12 +60,16 @@ const WelcomePilares = ({ activo }: { activo: boolean }) => {
           maxW={{ base: "340px", md: "none" }}
           mx={{ base: "auto", md: 0 }}
         >
+          {/* Doble marco: un filo fino turquesa oscuro por fuera de la foto. */}
+          <Box position="relative" h="100%" minH={{ base: "420px", md: "460px" }}>
+          <Box position="absolute" inset="-9px" borderRadius="30px" border="1px solid #004f4f66" pointerEvents="none" />
           <Box
             position="relative"
             h="100%"
             minH={{ base: "420px", md: "460px" }}
-            borderRadius="2xl"
+            borderRadius="22px"
             overflow="hidden"
+            border="1.5px solid #004f4f"
             boxShadow={CAJA_GLOW}
             role="group"
           >
@@ -85,6 +89,7 @@ const WelcomePilares = ({ activo }: { activo: boolean }) => {
                 "@media (prefers-reduced-motion: reduce)": { animation: "none" },
               }}
             />
+          </Box>
           </Box>
         </Reveal>
 

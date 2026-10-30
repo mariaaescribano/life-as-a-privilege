@@ -3,6 +3,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
+import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import FotoDisciplina from "./FotoDisciplina";
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { useT } from "../../i18n";
@@ -36,10 +37,10 @@ export default function SelectorPerspectivas() {
           color="white"
           fontFamily="'EB Garamond', serif"
           fontWeight="700"
-          fontSize={{ base: "2xl", md: "4xl" }}
+          fontSize={{ base: "xl", md: "3xl" }}
           letterSpacing="0.03em"
           lineHeight="1.3"
-          maxW="800px"
+          maxW="700px"
           mx="auto"
         >
           {t("asesoria.perspectivas")}
@@ -47,13 +48,13 @@ export default function SelectorPerspectivas() {
       </Reveal>
 
       <Reveal inView amount={0.2} direction="up" distance={26} scaleFrom={0.97} duration={0.9} delay={0.2}>
-        <Box position="relative" mt={{ base: 8, md: 12 }}>
+        <Box position="relative" mt={{ base: 6, md: 8 }}>
           {/* El mandala de fondo: grande, centrado detrás de la foto y muy tenue. */}
           <Box
             position="absolute"
             top="50%"
             left="50%"
-            w={{ base: "130%", md: "700px" }}
+            w={{ base: "105%", md: "500px" }}
             maxW="none"
             aria-hidden="true"
             pointerEvents="none"
@@ -69,7 +70,7 @@ export default function SelectorPerspectivas() {
             }}
           />
 
-          <Box position="relative" w={{ base: "78%", md: "420px" }} maxW="420px" mx="auto">
+          <Box position="relative" w={{ base: "58%", md: "290px" }} maxW="290px" mx="auto">
             <AnimatePresence mode="wait">
               <MotionBox
                 key={d.key}
@@ -85,8 +86,26 @@ export default function SelectorPerspectivas() {
         </Box>
       </Reveal>
 
-      {/* Los ocho iconos: se pulsan para cambiar la foto. */}
-      <Flex justify="center" flexWrap="wrap" gap={{ base: 3, md: 4 }} mt={{ base: 8, md: 10 }} role="tablist">
+      {/* El nombre de la disciplina elegida, en blanco, justo encima de los iconos. */}
+      <Flex justify="center" align="center" mt={{ base: 5, md: 6 }} minH={{ base: "30px", md: "36px" }} aria-live="polite">
+        <AnimatePresence mode="wait">
+          <MotionBox
+            key={d.key}
+            initial={reducir ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reducir ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Text color="white" fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "xl", md: "2xl" }} letterSpacing="0.04em" textAlign="center">
+              {nombreDe(d.nom)}
+            </Text>
+          </MotionBox>
+        </AnimatePresence>
+      </Flex>
+
+      {/* Los ocho iconos, en una sola línea: se pulsan para cambiar la foto. Cada círculo lleva
+          de fondo la foto de su disciplina. */}
+      <Flex justify="center" flexWrap="nowrap" gap={{ base: "6px", md: 3 }} mt={{ base: 2, md: 3 }} role="tablist">
         {lista.map((p, i) => {
           const activo = i === actual;
           return (
@@ -99,21 +118,26 @@ export default function SelectorPerspectivas() {
                 aria-label={nombreDe(p.nom)}
                 title={nombreDe(p.nom)}
                 onClick={() => setActual(i)}
-                w={{ base: "52px", md: "62px" }}
-                h={{ base: "52px", md: "62px" }}
+                position="relative"
+                overflow="hidden"
+                w={{ base: "38px", md: "48px" }}
+                h={{ base: "38px", md: "48px" }}
                 borderRadius="full"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
                 bg={p.bg}
                 border={`2px solid ${p.txt}${activo ? "" : "66"}`}
-                boxShadow={activo ? `0 0 16px ${p.txt}99, 0 0 34px ${p.txt}44` : "none"}
+                boxShadow={activo ? `0 0 14px ${p.txt}99, 0 0 28px ${p.txt}44` : "none"}
                 opacity={activo ? 1 : 0.75}
                 transform={activo ? "scale(1.1)" : "scale(1)"}
                 transition="all 0.3s ease"
                 _focusVisible={focoBlanco}
               >
-                <p.Icon size={{ base: "28px", md: "34px" }} />
+                <DisciplinaBgLayer nom={p.nom} borderRadius="full" talCual />
+                <Box position="relative" zIndex={1} display="flex">
+                  <p.Icon size={{ base: "22px", md: "27px" }} />
+                </Box>
               </Box>
             </Reveal>
           );
