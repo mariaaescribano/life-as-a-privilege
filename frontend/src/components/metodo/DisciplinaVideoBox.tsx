@@ -5,6 +5,8 @@ import { type VideoIntro } from "../../data/recorridoContenido";
 import { useT } from "../../i18n";
 import { useNombreDisciplinaEnMapa } from "../../i18n/nombreDisciplina";
 import { PrecioConAntes } from "./PrecioConAntes";
+import { PRESENTACIONES } from "../../data/presentacionDisciplinas";
+import { SESIONES } from "../../data/asesoriaRecorrido";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BOX DE LA DISCIPLINA con su precio — el que va al lado del mandala en
@@ -23,6 +25,13 @@ import { PrecioConAntes } from "./PrecioConAntes";
  *  Los puntos van a este tamaño y el título a 1,5 veces. Subirlo hace el box más
  *  aparatoso, no más lleno: el hueco que sobra se rellena con aire entre líneas. */
 const MAX_LETRA = 20;
+
+/** Tope del cuerpo de letra en modo sesiones: son frases largas dentro de cajitas y el box tiene
+ *  que quedar lleno, así que la letra sube más que en el modo de los puntos. */
+const MAX_SESIONES = 26;
+
+/** Precio de una sesión de asesoramiento (el mismo que dice la página de Asesorías). */
+const PRECIO_SESION = "15 €";
 
 /** Envoltura del bloque de texto. Con `activa` (las presentaciones) es la zona
  *  MEDIDA: ocupa el hueco libre del box y recorta lo que sobre, para que el
@@ -101,6 +110,12 @@ export function DisciplinaVideoBox({
   const nombreEnMapa = useNombreDisciplinaEnMapa();
   const accent = txt;
   const hasBg = hasDisciplinaBg(nom);
+  // MODO SESIONES (las presentaciones /d/:disciplina, las que llevan precio): en lugar de los
+  // puntos con ✓ salen las sesiones del asesoramiento, cada una en su cajita, y abajo a la
+  // derecha el precio por sesión. El contenido de la plataforma queda como apoyo.
+  const clave = PRESENTACIONES.find((p) => p.nom === nom)?.clave;
+  const sesiones = !sinPrecio && clave ? SESIONES[clave].map((k) => t(k)) : [];
+  const modoSesiones = sesiones.length > 0;
   const textGlow = `0 1px 3px ${bg}, 0 0 10px ${bg}, 0 0 20px ${bg}`;
 
   // ── LA LETRA LLENA EL BOX (solo en `textoGrande`) ──────────────────────
@@ -144,7 +159,7 @@ export function DisciplinaVideoBox({
       if (ancho < 992) {
         setAire(0);
         zona.style.justifyContent = "flex-start";
-        zona.style.fontSize = ancho >= 768 ? "17px" : "15px";
+        zona.style.fontSize = modoSesiones ? (ancho >= 768 ? "20px" : "17px") : ancho >= 768 ? "17px" : "15px";
         const r0 = zona.getBoundingClientRect();
         anchoPrev = r0.width;
         altoPrev = r0.height;
@@ -156,7 +171,7 @@ export function DisciplinaVideoBox({
       // enorme). Lo que sobre se reparte más abajo como aire entre líneas. El
       // suelo es el punto por debajo del cual preferimos que quede justo antes
       // que ilegible.
-      const max = MAX_LETRA;
+      const max = modoSesiones ? MAX_SESIONES : MAX_LETRA;
       const min = 13;
       // HOLGURA: el texto no llena el hueco a ras, se le deja un 12 % de aire.
       // Sin esto la letra crecía hasta tocar los bordes y el box quedaba
@@ -184,7 +199,7 @@ export function DisciplinaVideoBox({
       // centrado vertical, así el aire queda arriba Y abajo, no todo al final.
       const huecos = Math.max(1, zona.querySelectorAll("[data-punto]").length);
       const sobra = hueco - bloque.scrollHeight;
-      setAire(sobra > 0 ? Math.min(sobra / huecos, mejor * 1.6) : 0);
+      setAire(sobra > 0 ? Math.min(sobra / huecos, mejor * (modoSesiones ? 3 : 1.6)) : 0);
       zona.style.justifyContent = sobra > 0 ? "center" : "flex-start";
 
       const r = zona.getBoundingClientRect();
@@ -213,7 +228,7 @@ export function DisciplinaVideoBox({
     // alto: se mide otra vez cuando la tipografía está lista.
     document.fonts?.ready.then(ajustar).catch(() => {});
     return () => { cancelAnimationFrame(raf); window.clearTimeout(tardia); ro.disconnect(); };
-  }, [textoGrande, videoIntro]);
+  }, [textoGrande, videoIntro, modoSesiones]);
 
   // Tamaños del bloque de texto. Con `textoGrande` van en `em` (los manda el
   // ajuste de arriba); sin él, tokens fijos.
@@ -382,6 +397,9 @@ export function DisciplinaVideoBox({
           <Flex
             direction="column"
             gap={textoGrande ? "calc(0.75em + var(--aire, 0px))" : { base: 4, md: 5 }}
+            // Modo sesiones, por debajo de `lg` (no hay hueco que medir): el bloque y las cajitas se
+            // estiran para llenar el box. En ordenador no, que ahí se mide el bloque.
+            flex={modoSesiones ? { base: "1", lg: "none" } : undefined}
           >
             {/* Título (puede ser una frase larga que introduce el recorrido) */}
             <Text
@@ -396,7 +414,47 @@ export function DisciplinaVideoBox({
               {videoIntro.titulo}
             </Text>
 
-            {/* Puntos con ✓ */}
+            {modoSesiones ? (
+              // Las sesiones: una cajita transparente por sesión, con el filo del color de la disciplina.
+              <Flex
+                direction="column"
+                gap={textoGrande ? "calc(0.6em + var(--aire, 0px) * 0.4)" : { base: 2.5, md: 3 }}
+                flex={{ base: "1", lg: "none" }}
+              >
+                {sesiones.map((txt_, i) => (
+                  <Flex
+                    key={i}
+                    data-punto
+                    align="center"
+                    flex={{ base: "1", lg: "none" }}
+                    gap={textoGrande ? "0.7em" : { base: 3, md: 4 }}
+                    px={textoGrande ? "0.9em" : { base: 3.5, md: 4 }}
+                    py={textoGrande ? "calc(0.65em + var(--aire, 0px) * 0.2)" : { base: 2.5, md: 3 }}
+                    borderRadius="xl"
+                    border={`1.5px solid ${accent}80`}
+                    bg={`${bg}33`}
+                  >
+                    <Text
+                      color={accent}
+                      fontFamily="'EB Garamond', serif"
+                      fontWeight="700"
+                      fontSize={fsPunto}
+                      lineHeight="1.4"
+                      letterSpacing="0.1em"
+                      flexShrink={0}
+                      opacity={0.85}
+                      textShadow={textGlow}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </Text>
+                    <Text color={accent} fontFamily="'EB Garamond', serif" fontSize={fsPunto} lineHeight="1.4" textShadow={textGlow}>
+                      {txt_}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
+            ) : (
+              <>
             <Flex
               direction="column"
               gap={textoGrande ? "calc(0.6em + var(--aire, 0px))" : { base: 2.5, md: 3 }}
@@ -427,6 +485,8 @@ export function DisciplinaVideoBox({
                 </Flex>
               ))}
             </Flex>
+              </>
+            )}
           </Flex>
         </ZonaTexto>
 
@@ -552,12 +612,18 @@ export function DisciplinaVideoBox({
                del que bebe el box de pago: web y cobro no se desincronizan). */
             <Flex direction="column" align={{ base: "center", md: "flex-end" }} gap={0.5} flexShrink={0}>
               <Flex align="baseline" gap={2}>
-                <PrecioConAntes
-                  color={accent}
-                  sombra={textGlow}
-                  tamano={{ base: "3xl", md: "4xl" }}
-                  tamanoAntes={{ base: "md", md: "lg" }}
-                />
+                {modoSesiones ? (
+                  <Text color={accent} fontFamily="'EB Garamond', serif" fontWeight="700" fontSize={{ base: "3xl", md: "4xl" }} lineHeight="1.1" textShadow={textGlow}>
+                    {PRECIO_SESION}
+                  </Text>
+                ) : (
+                  <PrecioConAntes
+                    color={accent}
+                    sombra={textGlow}
+                    tamano={{ base: "3xl", md: "4xl" }}
+                    tamanoAntes={{ base: "md", md: "lg" }}
+                  />
+                )}
                 <Text
                   color={accent}
                   fontFamily="'EB Garamond', serif"
@@ -566,7 +632,7 @@ export function DisciplinaVideoBox({
                   opacity={0.9}
                   textShadow={textGlow}
                 >
-                  por disciplina
+                  {modoSesiones ? t("presentacion.precioSesion") : "por disciplina"}
                 </Text>
               </Flex>
             </Flex>

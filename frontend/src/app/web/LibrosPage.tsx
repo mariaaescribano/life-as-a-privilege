@@ -524,7 +524,7 @@ export default function LibrosPage() {
       {paidItems.length > 0 && (
         <>
           <Box mt={{ base: 8, md: 12 }}>
-            <BandaMarmol pt={{ base: "56px", md: "72px" }} pb={{ base: "64px", md: "72px" }}>
+            <BandaMarmol pt={{ base: "104px", md: "72px" }} pb={{ base: "116px", md: "72px" }}>
               {() => (
                 <Box w="100%" maxW="820px" mx="auto" px={{ base: 5, md: 6 }}>
                   <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>

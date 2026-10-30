@@ -55,6 +55,8 @@ export const web = {
   "portada.ilustraciones": "Ilustraciones",
   "portada.cursos": "Cursos",
   "portada.recorrido": "El Recorrido",
+  "portada.contenidoAsesoramiento": "El contenido del asesoramiento",
+  "presentacion.precioSesion": "por sesión",
   "portada.recorridoPack": "El pack",
 
   // ── Vídeos (/videos) ───────────────────────────────────────────────────

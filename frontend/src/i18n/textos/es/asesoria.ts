@@ -22,6 +22,7 @@ export const asesoria = {
   "asesoria.sistema.titulo": "El sistema paso a paso que seguiremos juntos.",
   "asesoria.sistema.aviso": "Tendrás acceso a contenido exclusivo teórico y práctico para acompañar tu proceso.",
   "asesoria.formacion": "La formación que tengo para acompañarte",
+  "asesoria.perspectivas": "Cada disciplina es una nueva perspectiva. Todas aportan, pero tú eliges con cuáles te quedas.",
   "asesoria.sesion.astrologia.1": "Me facilitas tus datos para comenzar la lectura de tu carta astral.",
   "asesoria.sesion.astrologia.2": "Tendrás acceso a la lectura realizada por mí para que puedas leerla tranquilamente y a tu propio ritmo.",
   "asesoria.sesion.astrologia.3": "Tendremos una sesión para comentar la lectura, profundizar en ella y resolver todas tus dudas.",

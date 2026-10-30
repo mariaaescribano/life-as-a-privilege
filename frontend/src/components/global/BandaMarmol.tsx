@@ -8,21 +8,23 @@ import { useCabeceraEscribiendo } from "./cabeceraEntrada";
  * · El mármol es una capa propia con los bordes de arriba y abajo desvanecidos
  *   (máscara de 70 px), para que la banda se funda con el turquesa de la página
  *   en vez de cortar en seco. El contenido queda fuera de esos 70 px.
- * · NO asoma hasta que el usuario baja, y cuando baja es LO PRIMERO que sale: el
- *   mármol aparece (fundido rápido) en cuanto la banda asoma Y el usuario ha
- *   hecho scroll. NUNCA sale al cargar la página, aunque la banda ya asome por
- *   abajo de la primera pantalla: sin scroll no hay mármol. El contenido (los hijos reciben `visible`) arranca sus
- *   entradas un instante DESPUÉS, cuando el mármol ya está ahí.
+ * · Es LO PRIMERO que sale tras la cabecera: el mármol aparece (fundido rápido) cuando la
+ *   banda asoma Y la cabecera ha terminado su secuencia (mandala, titular, frase y la
+ *   línea horizontal con el mandala pequeño). No hace falta hacer scroll: si la banda
+ *   ya se ve, el mármol es el siguiente movimiento de la página. El contenido (los
+ *   hijos reciben `visible`) arranca sus entradas un instante DESPUÉS, cuando el
+ *   mármol ya está ahí.
  * · El contenido NO arranca cuando asoma la banda (que es alta y con 90 px de
  *   relleno): arranca cuando el propio contenido ha subido por encima del 80 % de
  *   la pantalla. Así la entrada se VE siempre mientras se baja, en vez de
  *   consumirse fuera de pantalla.
+ * · En móvil el relleno es de 104/116 px: así el contenido queda fuera de los 70 px del fundido.
  * · Sobre el mármol la letra va en turquesa oscuro (#004f4f); ver DISENO.md.
  */
 const BandaMarmol = ({
   children,
-  pt = { base: "64px", md: "92px" },
-  pb = { base: "80px", md: "96px" },
+  pt = { base: "104px", md: "92px" },
+  pb = { base: "116px", md: "96px" },
   mt,
 }: {
   children: (visible: boolean) => React.ReactNode;
@@ -39,22 +41,18 @@ const BandaMarmol = ({
   useEffect(() => {
     if (!el) return;
     let asoma = false;
-    let scroll = window.scrollY > 0;
     const evaluar = () => {
-      if (asoma && scroll && !cabeceraEscribiendo) {
+      if (asoma && !cabeceraEscribiendo) {
         setMarmol(true);
         obs.disconnect();
-        window.removeEventListener("scroll", alScroll);
       }
     };
-    const alScroll = () => { scroll = true; evaluar(); };
     const obs = new IntersectionObserver(
       ([e]) => { asoma = e.isIntersecting; evaluar(); },
       { threshold: 0 },
     );
     obs.observe(el);
-    window.addEventListener("scroll", alScroll, { passive: true });
-    return () => { obs.disconnect(); window.removeEventListener("scroll", alScroll); };
+    return () => obs.disconnect();
   }, [el, cabeceraEscribiendo]);
 
   // El contenido arranca cuando (1) el mármol está puesto y (2) el contenido mismo
@@ -88,7 +86,9 @@ const BandaMarmol = ({
         inset={0}
         bgImage="url('/img/fondos/marmolfondo.webp')"
         bgSize="cover"
-        bgPosition="center"
+        // En móvil la banda es alta y estrecha: el mármol se ve por una rendija. Se ancla a la
+        // derecha, donde la esquina de abajo es crema; el verde queda arriba, bajo el relleno.
+        bgPosition={{ base: "right center", md: "center" }}
         bgRepeat="no-repeat"
         pointerEvents="none"
         opacity={marmol ? 1 : 0}

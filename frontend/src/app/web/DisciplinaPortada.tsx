@@ -9,7 +9,10 @@ import { BotonPaso } from "../../components/metodo/BotonPaso";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { AprendizajeIcon } from "../../GlobalVariables";
-import DisciplinaHeader from "../../components/web/DisciplinaHeader";
+import FotoDisciplina from "../../components/web/FotoDisciplina";
+import WelcomeCabecera from "../../components/welcome/WelcomeCabecera";
+import { useCabeceraEscribiendo } from "../../components/global/cabeceraEntrada";
+import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
 import { getUserMe } from "../../api/userMe";
 import { useIdioma, useT } from "../../i18n";
 
@@ -119,6 +122,16 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
   const t = useT();
   const { segunIdioma } = useIdioma();
   const conFondo = hasDisciplinaBg(d.nom);
+  const nombreDe = useNombreDisciplina();
+  // Secuencia de entrada: mandala, título, frase, línea con mandala... y DESPUÉS la banda con
+  // la foto de la disciplina de fondo (la cabecera avisa cuando termina), y luego su contenido.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(id);
+  }, []);
+  const cabeceraEscribiendo = useCabeceraEscribiendo();
+  const banda = mounted && !cabeceraEscribiendo;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -175,7 +188,7 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
     { ...puertasTeoria[1], delay: 0.15 },
     {
       clave: "recorrido",
-      titulo: t("portada.recorrido"),
+      titulo: t("portada.contenidoAsesoramiento"),
       pie: t("portada.recorridoPack"),
       link: `/d/${d.key}`,
       delay: 0.25,
@@ -195,125 +208,125 @@ function Portada({ d, modo = "portada" }: { d: PresentacionDisciplina; modo?: "p
     <Box minH="100vh" display="flex" flexDirection="column" bg="#008080" fontFamily="'EB Garamond', serif">
       <SiteHeader variant="auto" />
 
-      {/* ── CABECERA: el header de la disciplina (foto de fondo, icono a la izquierda del nombre) + su frase ── */}
-      <Flex direction="column" align="center" textAlign="center" pt={{ base: 10, md: 14 }} gap={{ base: 5, md: 6 }}>
-        <Reveal direction="down" distance={18} delay={0.05} w="100%">
-          <DisciplinaHeader d={d} />
-        </Reveal>
+      {/* ── CABECERA: mandala, nombre de la disciplina, su frase y la línea con el mandala pequeño ── */}
+      <WelcomeCabecera activo={mounted} titulo={nombreDe(d.nom)} subtitulo={segunIdioma(d.gancho)} mayusculas />
 
-        <Reveal delay={0.25}>
-          <Text
-            color="rgba(255,255,255,0.88)"
-            fontSize={{ base: "md", md: "xl" }}
-            fontStyle="italic"
-            letterSpacing="0.04em"
-            lineHeight="1.6"
-            maxW={{ base: "100%", md: "640px" }}
-            px={{ base: 5, md: 10 }}
-          >
-            {segunIdioma(d.gancho)}
-          </Text>
-        </Reveal>
-      </Flex>
-
-      {/* ── LAS PUERTAS ── */}
-      <Flex flex={1} justify="center" px={{ base: 5, md: 10, lg: 16 }} pt={{ base: 12, md: 16 }} pb={{ base: 20, md: 28 }}>
-        <Grid
-          w="100%"
-          maxW={modo === "teoria" && pagada ? "640px" : "960px"}
-          templateColumns={{ base: "1fr", md: `repeat(${puertas.length}, 1fr)` }}
-          gap={{ base: 6, md: 7 }}
+      {/* ── BANDA CON LA FOTO DE LA DISCIPLINA DE FONDO (como el mármol, pero con su foto) ──
+          A la izquierda, su foto cuadrada; a la derecha, las puertas apiladas con el mismo
+          alto que la foto. */}
+      <Box flex={1} position="relative" mt={{ base: 2, md: 4 }} pt={{ base: "104px", md: "110px" }} pb={{ base: "116px", md: "120px" }}>
+        <Box
+          position="absolute"
+          inset={0}
+          pointerEvents="none"
+          opacity={banda ? 1 : 0}
+          transition="opacity 0.5s ease"
+          sx={{
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%)",
+            maskImage: "linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%)",
+          }}
         >
-          {pagada !== null && puertas.map((p) => (
-            <Reveal key={p.clave} delay={p.delay} scaleFrom={0.96} h="100%">
-              <Flex
-                // Cada puerta se abre en una PESTAÑA NUEVA (la disciplina se queda donde está
-                // y la persona no se pierde). La apagada (Reels) no lleva enlace.
-                {...(p.apagada ? {} : { as: "a" as const, href: p.link, target: "_blank", rel: "noopener noreferrer" })}
-                textDecoration="none"
-                role="group"
-                w="100%"
-                h="100%"
-                direction="column"
-                align="center"
-                justify="center"
-                gap={{ base: 4, md: 5 }}
-                position="relative"
-                overflow="hidden"
-                bg={conFondo ? "transparent" : d.bg}
-                borderRadius="2xl"
-                px={{ base: 5, md: 6 }}
-                py={{ base: 8, md: 11 }}
-                minH={{ base: "190px", md: "240px" }}
-                // Solo halo (luz, no sombra): ni filo ni sombra negra. Del color
-                // de la disciplina; sobre el turquesa un halo blanco parece una
-                // caja despintada.
-                boxShadow={`0 0 34px ${d.txt}55, 0 0 70px ${d.txt}22`}
-                cursor={p.apagada ? "default" : "pointer"}
-                opacity={p.apagada ? 0.6 : 1}
-                transition="transform 0.28s ease, box-shadow 0.28s ease"
-                _hover={
-                  p.apagada
-                    ? {}
-                    : { transform: "translateY(-6px)", boxShadow: `0 0 48px ${d.txt}88, 0 0 90px ${d.txt}33`, textDecoration: "none" }
-                }
-                _focusVisible={focoBlanco}
-              >
-                {conFondo && <DisciplinaBgLayer nom={d.nom} borderRadius="2xl" />}
+          <DisciplinaBgLayer nom={d.nom} borderRadius="0" />
+        </Box>
 
-                {/* Icono */}
-                <Box
-                  position="relative"
-                  zIndex={1}
-                  w={{ base: "76px", md: "88px" }}
-                  h={{ base: "76px", md: "88px" }}
-                  borderRadius="full"
-                  border={`1px solid ${d.txt}66`}
-                  bg={`${d.txt}14`}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  transition="transform 0.28s ease"
-                  _groupHover={p.apagada ? {} : { transform: "scale(1.05)" }}
-                >
-                  {p.renderIcon(d.txt)}
+        <Box position="relative" zIndex={1} w="100%" maxW="1040px" mx="auto" px={{ base: 5, md: 10, lg: 16 }}>
+          {pagada !== null && (
+            <Grid templateColumns={{ base: "1fr", md: "repeat(2, minmax(0, 1fr))" }} gap={{ base: 6, md: 9 }} alignItems="stretch">
+              <Reveal activo={banda} direction="right" distance={30} scaleFrom={0.95} duration={0.9} delay={0.45}>
+                <Box maxW={{ base: "420px", md: "none" }} mx="auto">
+                  <FotoDisciplina d={d} />
                 </Box>
+              </Reveal>
 
-                {/* Rayita fina */}
-                <Box position="relative" zIndex={1} w="40px" h="1px" bg={`${d.txt}88`} />
-
-                {/* Título */}
-                <Flex position="relative" zIndex={1} direction="column" align="center" gap={1}>
-                  <Text
-                    color={d.txt}
-                    fontWeight="700"
-                    fontSize={{ base: "lg", md: "xl" }}
-                    letterSpacing="0.16em"
-                    textTransform="uppercase"
-                    textAlign="center"
-                    lineHeight="1.2"
-                    textShadow={conFondo ? `0 1px 3px ${d.bg}, 0 0 14px ${d.bg}dd` : "1px 1px 3px rgba(0,0,0,0.45)"}
-                  >
-                    {p.titulo}
-                  </Text>
-                  {p.pie && (
-                    <Text
-                      color={d.txt}
-                      opacity={0.82}
-                      fontStyle="italic"
-                      fontSize={{ base: "sm", md: "md" }}
-                      letterSpacing="0.04em"
-                      textShadow={conFondo ? `0 1px 3px ${d.bg}, 0 0 12px ${d.bg}dd` : "1px 1px 3px rgba(0,0,0,0.45)"}
+              <Grid templateRows={{ md: `repeat(${puertas.length}, minmax(0, 1fr))` }} gap={{ base: 4, md: 5 }}>
+                {puertas.map((p, i) => (
+                  <Reveal key={p.clave} activo={banda} direction="left" distance={30} scaleFrom={0.97} duration={0.8} delay={0.7 + i * 0.15} h="100%">
+                    <Flex
+                      // Cada puerta se abre en una PESTAÑA NUEVA (la disciplina se queda donde está
+                      // y la persona no se pierde). La apagada (Reels) no lleva enlace.
+                      {...(p.apagada ? {} : { as: "a" as const, href: p.link, target: "_blank", rel: "noopener noreferrer" })}
+                      textDecoration="none"
+                      role="group"
+                      w="100%"
+                      h="100%"
+                      direction="row"
+                      align="center"
+                      gap={{ base: 4, md: 5 }}
+                      position="relative"
+                      overflow="hidden"
+                      bg="transparent"
+                      border={`2px solid ${d.txt}80`}
+                      borderRadius="2xl"
+                      px={{ base: 5, md: 6 }}
+                      py={{ base: 5, md: 4 }}
+                      minH={{ base: "104px", md: "0" }}
+                      // Transparente: se ve la foto de la banda. Solo el filo del color de la disciplina y,
+                      // al pasar el ratón, un velito de ese color y una subida mínima.
+                      cursor={p.apagada ? "default" : "pointer"}
+                      opacity={p.apagada ? 0.6 : 1}
+                      transition="transform 0.28s ease, background 0.28s ease"
+                      _hover={
+                        p.apagada
+                          ? {}
+                          : { transform: "translateY(-3px)", bg: `${d.txt}1a`, borderColor: `${d.txt}b3`, textDecoration: "none" }
+                      }
+                      _focusVisible={focoBlanco}
                     >
-                      {p.pie}
-                    </Text>
-                  )}
-                </Flex>
-              </Flex>
-            </Reveal>
-          ))}
-        </Grid>
-      </Flex>
+                      {/* Icono */}
+                      <Box
+                        position="relative"
+                        zIndex={1}
+                        flexShrink={0}
+                        w={{ base: "64px", md: "72px" }}
+                        h={{ base: "64px", md: "72px" }}
+                        borderRadius="full"
+                        border={`1px solid ${d.txt}66`}
+                        bg={`${d.txt}14`}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        transition="transform 0.28s ease"
+                        _groupHover={p.apagada ? {} : { transform: "scale(1.05)" }}
+                        sx={{ "& svg": { width: "38px", height: "38px" } }}
+                      >
+                        {p.renderIcon(d.txt)}
+                      </Box>
+
+                      {/* Título */}
+                      <Flex position="relative" zIndex={1} direction="column" align="flex-start" gap={1} minW={0}>
+                        <Text
+                          color={d.txt}
+                          fontWeight="700"
+                          fontSize={{ base: "md", md: "lg" }}
+                          letterSpacing="0.12em"
+                          textTransform="uppercase"
+                          textAlign="left"
+                          lineHeight="1.25"
+                          textShadow={conFondo ? `0 1px 3px ${d.bg}, 0 0 14px ${d.bg}dd` : "1px 1px 3px rgba(0,0,0,0.45)"}
+                        >
+                          {p.titulo}
+                        </Text>
+                        {p.pie && (
+                          <Text
+                            color={d.txt}
+                            opacity={0.82}
+                            fontStyle="italic"
+                            fontSize={{ base: "sm", md: "md" }}
+                            letterSpacing="0.04em"
+                            textShadow={conFondo ? `0 1px 3px ${d.bg}, 0 0 12px ${d.bg}dd` : "1px 1px 3px rgba(0,0,0,0.45)"}
+                          >
+                            {p.pie}
+                          </Text>
+                        )}
+                      </Flex>
+                    </Flex>
+                  </Reveal>
+                ))}
+              </Grid>
+            </Grid>
+          )}
+        </Box>
+      </Box>
 
       {/* Dentro de Teoría: volver a la portada (abajo a la izquierda, fuera de las cajas). */}
       {modo === "teoria" && pagada && (

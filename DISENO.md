@@ -51,8 +51,9 @@ corrige este documento):
   de María (`/img/fondos/marmolfondo.webp`, 1536×1024, a resolución completa). Sobre el
   mármol la letra no es blanca: turquesa oscuro `#004f4f` (el de la casa, más hondo), oro `#b08d3f` en los filos y crema `#f2e9d9` (los de
   `LlamadaCta`). Todas las bandas usan `components/global/BandaMarmol.tsx`: bordes arriba y abajo
-  desvanecidos (máscara de 70 px) y, REGLA DE ORO, **el mármol sale PRIMERO**: no se ve al cargar,
-  aparece (0,5 s) con el primer scroll en cuanto la banda asoma y su contenido entra 0,45 s después
+  desvanecidos (máscara de 70 px) y, REGLA DE ORO, **el mármol sale PRIMERO**: es el movimiento que
+  sigue a la cabecera (mandala, titular, frase y línea con mandala), sin hacer scroll; si la banda aún no se
+  ve, aparece (0,5 s) en cuanto asoma, y su contenido entra 0,45 s después
   (los hijos reciben `visible`). Cajas sobre mármol: transparentes, filo turquesa oscuro, halo dorado.
   Usos: portada, `/asesoria`, `/disciplinas`.
 - **Mapa de disciplinas desplegable** (`/asesoria`, `components/web/MapaDisciplinas.tsx`): ocho

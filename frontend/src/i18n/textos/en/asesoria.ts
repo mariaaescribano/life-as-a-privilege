@@ -19,6 +19,7 @@ export const asesoria = {
   "asesoria.sistema.titulo": "The step-by-step system we will follow together.",
   "asesoria.sistema.aviso": "You will have access to exclusive theoretical and practical content to support your process.",
   "asesoria.formacion": "The training I have to support you",
+  "asesoria.perspectivas": "Each discipline is a new perspective. All of them contribute, but you choose which ones to keep.",
   "asesoria.sesion.astrologia.1": "You give me your details so I can begin reading your birth chart.",
   "asesoria.sesion.astrologia.2": "You will have access to the reading I have prepared so you can read it calmly and at your own pace.",
   "asesoria.sesion.astrologia.3": "We will have a session to discuss the reading, go deeper into it and answer all your questions.",

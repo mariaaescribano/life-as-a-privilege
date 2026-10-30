@@ -480,6 +480,9 @@ export function BotonEmpezar({ d, onClick }: { d: PresentacionDisciplina; onClic
  * y se encaja en consecuencia: cuadrado → `cover` (encaje exacto); cualquier
  * otra proporción → `contain`, para verlo entero en lugar de recortarlo.
  */
+/** Velocidad del vídeo de muestra de las presentaciones (/d/:disciplina). 1 = la original. */
+const VELOCIDAD_VIDEO = 1.25;
+
 export function VideoMuestra({
   d,
   onAbrir,
@@ -542,6 +545,8 @@ export function VideoMuestra({
         onError={onError}
         onLoadedMetadata={(e: React.SyntheticEvent<HTMLVideoElement>) => {
           const v = e.currentTarget;
+          // Más rápido: el recorrido en marcha de las presentaciones se ve a VELOCIDAD_VIDEOx.
+          v.playbackRate = VELOCIDAD_VIDEO;
           if (!v.videoWidth || !v.videoHeight) return;
           // Margen del 2% para no descartar un 1080×1081 por un píxel.
           setCuadrado(Math.abs(v.videoWidth / v.videoHeight - 1) < 0.02);

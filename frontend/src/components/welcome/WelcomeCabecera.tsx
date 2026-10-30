@@ -58,7 +58,9 @@ const WelcomeCabecera = ({
     // tramo de su transición apenas se nota), sin esperar a que acabe del todo.
     const ms = 800 + (segTitulo - 0.35) * 1000;
     // Red de seguridad: pase lo que pase, a los 8 s la página queda libre.
-    const libre = [setTimeout(() => marcarCabeceraEscribiendo(false), ms), setTimeout(() => marcarCabeceraEscribiendo(false), 8000)];
+    // Se libera cuando la línea con el mandala pequeño ya está puesta (ms + 600 + ~0,9 s): el mármol
+    // de la página es el movimiento siguiente.
+    const libre = [setTimeout(() => marcarCabeceraEscribiendo(false), sinSeparador ? ms : ms + 1500), setTimeout(() => marcarCabeceraEscribiendo(false), 8000)];
     const limpiaLibre = () => libre.forEach(clearTimeout);
     const ids = [
       setTimeout(() => setTitulo(true), 800),

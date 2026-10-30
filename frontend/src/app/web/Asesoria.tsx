@@ -6,6 +6,7 @@ import { Reveal } from "../../components/global/Reveal";
 import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import BandaMarmol from "../../components/global/BandaMarmol";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
+import SelectorPerspectivas from "../../components/web/SelectorPerspectivas";
 import FormularioAsesoria from "../../components/web/FormularioAsesoria";
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
 import { BloqueDiferido } from "../../components/global/BloqueDiferido";
@@ -198,8 +199,12 @@ const Asesoria = () => {
               gap={{ base: 8, md: 12, lg: 16 }}
             >
               <Reveal activo={visible} direction="right" distance={36} scaleFrom={0.94} duration={1} w={{ base: "260px", md: "340px", lg: "400px" }} flexShrink={0}>
-                <Box borderRadius="22px" overflow="hidden" boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`} sx={{ aspectRatio: "1 / 1" }}>
-                  <Image src={FOTO_MARIA} alt="María Escribano" w="100%" h="100%" objectFit="cover" objectPosition="center 18%" display="block" />
+                {/* Doble marco: la foto con su borde y, por fuera, un filo fino turquesa oscuro desplazado. */}
+                <Box position="relative">
+                  <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
+                  <Box borderRadius="22px" overflow="hidden" border={`1.5px solid ${TINTA}`} boxShadow={`0 0 22px ${ORO}55, 0 0 48px ${ORO}28`} sx={{ aspectRatio: "1 / 1" }}>
+                    <Image src={FOTO_MARIA} alt="María Escribano" w="100%" h="100%" objectFit="cover" objectPosition="center 18%" display="block" />
+                  </Box>
                 </Box>
               </Reveal>
               <Reveal activo={visible} direction="left" distance={36} duration={1} delay={0.35} flex="1" minW={0}>
@@ -406,6 +411,12 @@ const Asesoria = () => {
             </BloqueDiferido>
           </Box>
         </Box>
+
+        <SeparadorFlor />
+
+        {/* ── 3c · «Cada disciplina es una nueva perspectiva»: la foto de la disciplina elegida y,
+            debajo, los ocho iconos para cambiarla. Justo encima del formulario. ── */}
+        <SelectorPerspectivas />
 
         <SeparadorFlor />
 
