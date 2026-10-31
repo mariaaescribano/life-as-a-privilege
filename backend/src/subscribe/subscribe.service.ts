@@ -32,7 +32,8 @@ export interface SuscriptorDB {
 export class SubscribeService {
   constructor(private readonly db: DatabaseService) {}
 
-  async addEmail(email: string, origen?: string, nombre?: string, idioma?: string): Promise<void> {
+  /** Devuelve si la bienvenida SALIÓ (solo se intenta desde la portada): la web solo dice «Enviado» si es cierto. */
+  async addEmail(email: string, origen?: string, nombre?: string, idioma?: string): Promise<{ enviado: boolean }> {
     // ¿Ya estaba apuntado? Solo cambia la etiqueta del aviso a María («Nuevo
     // suscriptor» / «vuelve a apuntarse»); la bienvenida sale siempre.
     const { data: previo } = await this.db.getClient().from(TABLE).select('email').eq('email', email).maybeSingle();
@@ -70,9 +71,14 @@ export class SubscribeService {
     // correo tiene que recibirlo. Desde otros formularios no sale. El límite de
     // envíos por IP del controlador es lo que evita que se use para llenar un
     // buzón ajeno.
-    if (origen === 'portada') {
-      void this.sendBienvenida(email, nombre, idioma === 'en' ? 'en' : 'es');
-    }
+    if (origen !== 'portada') return { enviado: false };
+    // Aquí SÍ se espera: quien se apunta ve «Enviado correctamente» y tiene que ser cierto. Con
+    // tope, para que un servidor de correo que no contesta no deje la web esperando.
+    const enviado = await Promise.race([
+      this.sendBienvenida(email, nombre, idioma === 'en' ? 'en' : 'es'),
+      new Promise<boolean>((r) => setTimeout(() => r(false), 22_000)),
+    ]);
+    return { enviado };
   }
 
   /** Copia en backend/data/subscribers.txt (la BD manda; el fichero es solo copia). */
@@ -165,6 +171,12 @@ export class SubscribeService {
     });
   }
 
+  /** El remitente: el verificado (EMAIL_FROM, p. ej. en Brevo) y, sin él, el login de siempre. Con un
+   *  servicio como Brevo, enviar «desde» el login SMTP lo rechaza el servidor y el correo no sale. */
+  private remitente(): string {
+    return process.env.EMAIL_FROM || process.env.EMAIL_USER || '';
+  }
+
   private esc(v: string): string {
     return v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
@@ -185,7 +197,7 @@ export class SubscribeService {
 
     try {
       await transporter.sendMail({
-        from: `"María Escribano" <${process.env.EMAIL_USER}>`,
+        from: `"María Escribano" <${this.remitente()}>`,
         to: notifyEmail,
         subject: etiqueta,
         html: `<p>${etiqueta}: <strong>${quien}${this.esc(email)}</strong></p>${desde}${total}`,
@@ -200,9 +212,9 @@ export class SubscribeService {
    * «introducción gratuita»). El texto es de María, tal cual; el inglés es una
    * traducción. Lleva el enlace para darse de baja (obligatorio).
    */
-  private async sendBienvenida(email: string, nombre: string | undefined, idioma: 'es' | 'en'): Promise<void> {
+  private async sendBienvenida(email: string, nombre: string | undefined, idioma: 'es' | 'en'): Promise<boolean> {
     const transporter = this.transporte();
-    if (!transporter) return;
+    if (!transporter) return false;
 
     const n = nombre ? this.esc(nombre) : '';
     const TEXTOS = {
@@ -216,6 +228,7 @@ export class SubscribeService {
           'Mientras disfruta del material gratuito.',
         ],
         despedida: 'Un abrazo, nos vemos pronto',
+        boton: 'Ir al Material',
         baja: 'Darme de baja',
       },
       en: {
@@ -228,27 +241,52 @@ export class SubscribeService {
           'In the meantime, enjoy the free material.',
         ],
         despedida: 'A hug, see you soon',
+        boton: 'Go to the material',
         baja: 'Unsubscribe',
       },
     }[idioma];
 
-    const cuerpo = TEXTOS.parrafos.map((t) => `<p style="margin:0 0 16px">${t}</p>`).join('\n');
+    const T = '#004f4f';
+    const web = (process.env.FRONTEND_URL || 'https://mariaescribano.onrender.com').replace(/\/+$/, '');
+    // Garamond que sí tiene la gente (Gmail no carga tipografías de la web).
+    const SERIF = "'EB Garamond',Garamond,'Hoefler Text',Baskerville,Palatino,Georgia,serif";
+    const cuerpo = TEXTOS.parrafos
+      .map((t) => `<p style="margin:0 0 16px;font-size:18px;line-height:1.75;color:${T};">${t}</p>`)
+      .join('');
+    // Mármol de la web (con sus zonas turquesas) de fondo, y la cabecera de la web: el mandala y
+    // MARÍA / ESCRIBANO al lado. Debajo va el `bgcolor` beige por si el cliente no pinta imágenes.
+    const fondo = `${web}/img/correo/marmol-bienvenida.jpg`;
+    const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#efe5cf" background="${fondo}" style="max-width:600px;margin:0 auto;border-radius:16px;background-color:#efe5cf;background-image:url('${fondo}');background-size:cover;background-position:center;">
+<tr><td style="padding:44px 40px 12px;font-family:${SERIF};">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+    <td style="padding-right:14px;vertical-align:middle;"><img src="${web}/img/correo/mandala-turquesa.png" width="58" height="58" alt="" style="display:block;border:0;"></td>
+    <td style="vertical-align:middle;font-family:${SERIF};color:${T};font-size:20px;font-weight:600;letter-spacing:0.18em;line-height:1.2;">MARÍA<br>ESCRIBANO</td>
+  </tr></table>
+  <div style="height:1px;background:${T};opacity:0.45;margin:26px 0 0;"></div>
+</td></tr>
+<tr><td style="padding:22px 40px 40px;font-family:${SERIF};color:${T};">
+<h1 style="margin:0 0 20px;font-size:30px;line-height:1.25;letter-spacing:0.03em;font-weight:700;color:${T};">${TEXTOS.hola}</h1>
+${cuerpo}
+<p style="margin:6px 0 0;"><a href="${web}/materiales" style="display:inline-block;padding:14px 28px;border-radius:999px;background:${T};color:#ffffff;font-family:${SERIF};font-size:16px;line-height:1;font-weight:600;text-decoration:none;">${TEXTOS.boton}</a></p>
+<p style="margin:28px 0 4px;font-size:18px;color:${T};">${TEXTOS.despedida}</p>
+<p style="margin:0 0 22px;font-size:18px;color:${T};"><strong>María Escribano</strong></p>
+<p style="margin:0 0 84px;font-size:13px;"><a href="${enlaceBaja(email)}" style="color:${T};">${TEXTOS.baja}</a></p>
+</td></tr></table>`;
 
     try {
       await transporter.sendMail({
-        from: `"María Escribano" <${process.env.EMAIL_USER}>`,
+        from: `"María Escribano" <${this.remitente()}>`,
         to: email,
+        // Copia oculta para María: el mismo correo que recibe quien se apunta.
+        bcc: process.env.NOTIFY_EMAIL || DEFAULT_NOTIFY_EMAIL,
         subject: TEXTOS.asunto,
-        html: `<div style="font-family:Georgia,'EB Garamond',serif;color:#2a2622;font-size:17px;line-height:1.7;max-width:520px">
-<p style="margin:0 0 16px"><strong>${TEXTOS.hola}</strong></p>
-${cuerpo}
-<p style="margin:24px 0 4px">${TEXTOS.despedida}</p>
-<p style="margin:0 0 28px"><strong>María Escribano</strong></p>
-<p style="font-size:12px;color:#8a8278;margin:0"><a href="${enlaceBaja(email)}" style="color:#8a8278">${TEXTOS.baja}</a></p>
-</div>`,
+        html,
       });
+      console.log('[subscribe] bienvenida enviada a', email);
+      return true;
     } catch (err) {
       console.error('Error enviando la bienvenida:', email, err);
+      return false;
     }
   }
 }

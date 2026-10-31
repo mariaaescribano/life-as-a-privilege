@@ -90,7 +90,7 @@ export default function AdminSuscriptores() {
     }
   };
 
-  const enlaceBajaGenerico = `${API_URL}/subscribe/baja`;
+  const enlaceBajaGenerico = `${window.location.origin}/baja`;
 
   const descargar = () => {
     const filas = [

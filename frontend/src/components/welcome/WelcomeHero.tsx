@@ -89,16 +89,21 @@ const WelcomeHero = ({ activo, iconos = [], marmol = false, compacto = false }: 
     }
     setEstado("loading");
     try {
-      await axios.post(`${API_URL}/subscribe`, { email: email.trim(), nombre: nombre.trim(), origen: "portada", idioma }, { timeout: 15000 });
-      setEstado("ok");
-      setNombre("");
-      setEmail("");
+      const r = await axios.post(`${API_URL}/subscribe`, { email: email.trim(), nombre: nombre.trim(), origen: "portada", idioma }, { timeout: 25000 });
+      // Solo se dice «Enviado» si el servidor confirma que el correo ha salido.
+      if (r.data?.enviado === true) {
+        setEstado("ok");
+        setNombre("");
+        setEmail("");
+      } else {
+        setEstado("error");
+      }
     } catch {
       setEstado("error");
     }
   };
 
-  // Tras el «Registrado correctamente», el formulario vuelve a los 4 s.
+  // Tras el «Enviado correctamente», el formulario vuelve a los 4 s.
   useEffect(() => {
     if (estado !== "ok") return;
     const id = setTimeout(() => setEstado("idle"), 4000);
@@ -216,7 +221,7 @@ const WelcomeHero = ({ activo, iconos = [], marmol = false, compacto = false }: 
           {estado === "ok" ? (
             <Flex direction="column" gap={2} w="100%" minH="200px" justify="center" textAlign={{ base: "center", lg: "left" }}>
               <Text color={c.ok} fontSize={{ base: "xl", md: "2xl" }} fontWeight="700">
-                {t("suscribir.ok")}
+                {t("suscribir.enviado")}
               </Text>
               <Text color={c.okSec} fontSize={{ base: "md", md: "lg" }} fontStyle="italic">
                 {t("suscribir.gracias")}

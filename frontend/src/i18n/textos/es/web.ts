@@ -79,10 +79,21 @@ export const web = {
   "suscribir.placeholder": "Tu email",
   "suscribir.boton": "Suscribirme",
   "suscribir.ok": "Registrado correctamente",
+  "suscribir.enviado": "Enviado correctamente, mira tu email",
   "suscribir.gracias": "Gracias por querer aprender",
   "suscribir.invalido": "Introduce un email válido",
   "suscribir.error": "No se pudo enviar. Inténtalo de nuevo en un momento.",
   "suscribir.baja": "Puedes darte de baja cuando quieras",
+  "baja.titulo": "Darse de baja",
+  "baja.procesando": "Un momento…",
+  "baja.hechaTitulo": "Ya estás fuera de la lista",
+  "baja.hechaTexto": "Hemos borrado {email} de la lista de correo. No volverás a recibir novedades.",
+  "baja.hechaVolver": "Si algún día te apetece volver, puedes apuntarte otra vez desde la web.",
+  "baja.formulario": "Escribe el correo con el que te apuntaste y lo borramos de la lista.",
+  "baja.errorTitulo": "No hemos podido darte de baja",
+  "baja.errorTexto": "No hemos encontrado ese correo en la lista, o el enlace está incompleto. Puedes intentarlo aquí:",
+  "baja.boton": "Darme de baja",
+  "baja.web": "Volver a la web",
 
   // ── Información básica de protección de datos (art. 13 RGPD) ──────────
   // Va debajo de cada formulario que recoge datos; el detalle, en /privacidad.

@@ -80,6 +80,7 @@ const Asesoria = lazy(() => import("./app/web/Asesoria"));
 const Premium = lazy(() => import("./app/web/Premium"));
 const PremiumEspacio = lazy(() => import("./app/web/PremiumEspacio"));
 const PremiumRegistro = lazy(() => import("./app/web/PremiumRegistro"));
+const BajaLista = lazy(() => import("./app/web/BajaLista"));
 const PremiumAvisos = lazy(() => import("./app/web/PremiumAvisos"));
 const PremiumContenido = lazy(() => import("./app/web/PremiumContenido"));
 const AdminPremium = lazy(() => import("./app/admin/AdminPremium"));
@@ -401,6 +402,7 @@ export default function App()
       <Route path="/premium/espacio" element={<PrivateRoute><PremiumEspacio /></PrivateRoute>} />
       {/* Pagar primero, luego crear la cuenta: Stripe vuelve a /registro; /avisos reclama el pago. */}
       <Route path="/premium/registro" element={<PremiumRegistro />} />
+      <Route path="/baja" element={<BajaLista />} />
       <Route path="/premium/avisos" element={<PrivateRoute><PremiumAvisos /></PrivateRoute>} />
       <Route path="/premium/podcasts" element={<PrivateRoute><PremiumContenido tipo="podcast" /></PrivateRoute>} />
       <Route path="/premium/reels" element={<PrivateRoute><PremiumContenido tipo="reel" /></PrivateRoute>} />

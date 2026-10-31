@@ -17,13 +17,13 @@ export class SubscribeController {
   async subscribe(@Body() body: { email: string; origen?: string; nombre?: string; idioma?: string }) {
     const correo = (body.email ?? '').trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo) || correo.length > 254) return { success: false };
-    await this.subscribeService.addEmail(
+    const { enviado } = await this.subscribeService.addEmail(
       correo,
       body.origen,
       typeof body.nombre === 'string' ? body.nombre.trim().slice(0, 120) : undefined,
       body.idioma,
     );
-    return { success: true };
+    return { success: true, enviado };
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -53,6 +53,18 @@ export class SubscribeController {
     const email = (body?.email ?? '').trim();
     const hecho = await this.subscribeService.darDeBaja(email, '', { sinFirma: true });
     return paginaBaja(hecho ? 'hecha' : 'error', email);
+  }
+
+  // La baja que usa la página /baja de la web: responde JSON. Con firma `t` (enlace del correo) la
+  // exige; sin ella es el formulario de «escribe tu correo».
+  @Post('baja/confirmar')
+  @Throttle(LIMITE_FORMULARIO)
+  @HttpCode(HttpStatus.OK)
+  async bajaConfirmar(@Body() body: { email?: string; t?: string }) {
+    const email = (body?.email ?? '').trim();
+    const token = typeof body?.t === 'string' ? body.t : '';
+    const ok = await this.subscribeService.darDeBaja(email, token, { sinFirma: !token });
+    return { ok };
   }
 
   // ── Admin: la lista entera, para /admin/suscriptores ──

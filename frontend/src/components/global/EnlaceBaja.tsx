@@ -1,6 +1,5 @@
 import React from "react";
 import { Text } from "@chakra-ui/react";
-import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 
 /**
@@ -10,16 +9,15 @@ import { useT } from "../../i18n";
  * Va aquí y no solo en el pie de los correos a propósito: quien deja su correo
  * tiene que ver, en ese mismo momento, que la salida existe y dónde está.
  *
- * El enlace apunta al BACKEND (`/subscribe/baja`), que es quien pinta la
- * página; con API_URL el dominio se resuelve solo y no hay nada que tocar al
- * cambiar de dominio.
+ * El enlace apunta a la página /baja de la propia web (la misma que abren los
+ * correos), así que no depende del dominio del backend.
  */
 export function EnlaceBaja({ mt = 4, color = "rgba(255,255,255,0.45)", colorHover = "rgba(255,255,255,0.85)" }: { mt?: number; color?: string; colorHover?: string }) {
   const t = useT();
   return (
     <Text
       as="a"
-      href={`${API_URL}/subscribe/baja`}
+      href="/baja"
       rel="nofollow"
       display="block"
       mt={mt}

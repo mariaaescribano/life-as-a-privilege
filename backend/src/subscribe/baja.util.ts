@@ -35,24 +35,14 @@ export function firmaBajaValida(email: string, token: string): boolean {
   }
 }
 
-/** Dirección pública de ESTE servidor (la del propio backend, no la de la web).
- *  Se saca de BACKEND_URL; si no está, del callback de Google, que ya la lleva. */
-function urlBackend(): string {
-  const directa = process.env.BACKEND_URL;
-  if (directa) return directa.replace(/\/$/, '');
-  const callback = process.env.GOOGLE_CALLBACK_URL;
-  if (callback) {
-    try {
-      return new URL(callback).origin;
-    } catch {
-      /* mal formada: se sigue al valor de desarrollo */
-    }
-  }
-  return 'http://localhost:3000';
+/** Dirección pública de la WEB (FRONTEND_URL). La página de baja vive en la web, no en el
+ *  backend: el dominio del servicio de Render ya no es el que se enseña a la gente. */
+function urlWeb(): string {
+  return (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
 }
 
-/** El enlace que se pega en los correos. */
+/** El enlace que se pega en los correos: la página /baja de la web, con la firma. */
 export function enlaceBaja(email: string): string {
   const e = normalizarEmail(email);
-  return `${urlBackend()}/subscribe/baja?email=${encodeURIComponent(e)}&t=${firmaBaja(e)}`;
+  return `${urlWeb()}/baja?email=${encodeURIComponent(e)}&t=${firmaBaja(e)}`;
 }

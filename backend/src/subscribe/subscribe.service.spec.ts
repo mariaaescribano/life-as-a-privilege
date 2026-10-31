@@ -46,7 +46,7 @@ describe('SubscribeService · bienvenida', () => {
     expect(m.html).toContain('Mientras disfruta del material gratuito.');
     expect(m.html).toContain('Un abrazo, nos vemos pronto');
     expect(m.html).toContain('María Escribano');
-    expect(m.html).toContain('/subscribe/baja?email='); // el enlace de baja
+    expect(m.html).toContain('/baja?email='); // el enlace de baja
   });
 
   it('sin nombre, saluda sin él; en inglés, en inglés', async () => {
@@ -83,7 +83,7 @@ describe('SubscribeService · bienvenida', () => {
     expect(alUsuario(otroOrigen.enviados)).toHaveLength(0);
   });
 
-  it('contesta sin esperar a los correos (si el servidor de correo tarda, la web no se cuelga)', async () => {
+  const servicioConCorreo = (sendMail: () => Promise<unknown>) => {
     const consulta: any = {
       select: () => consulta,
       eq: () => consulta,
@@ -93,14 +93,27 @@ describe('SubscribeService · bienvenida', () => {
     };
     const svc: any = new SubscribeService({ getClient: () => ({ from: () => consulta }) } as any);
     svc.anadirAlFichero = () => undefined;
-    // Un servidor de correo que no contesta nunca.
-    svc.transporte = () => ({ sendMail: () => new Promise(() => undefined) });
+    svc.transporte = () => ({ sendMail });
+    return svc;
+  };
 
-    const resultado = await Promise.race([
-      svc.addEmail('ana@ejemplo.com', 'portada', 'Ana', 'es').then(() => 'contestó'),
-      new Promise((r) => setTimeout(() => r('colgado'), 1000)),
-    ]);
-    expect(resultado).toBe('contestó');
+  it('desde la portada dice que se ha enviado solo si el correo ha salido', async () => {
+    const ok = await servicioConCorreo(async () => ({})).addEmail('ana@ejemplo.com', 'portada', 'Ana', 'es');
+    expect(ok.enviado).toBe(true);
+    const roto = await servicioConCorreo(async () => { throw new Error('rechazado'); }).addEmail('ana@ejemplo.com', 'portada', 'Ana', 'es');
+    expect(roto.enviado).toBe(false);
+  });
+
+  it('si el servidor de correo no contesta, responde «no enviado» tras el tope y no se cuelga', async () => {
+    jest.useFakeTimers();
+    try {
+      const svc = servicioConCorreo(() => new Promise(() => undefined));
+      const p = svc.addEmail('ana@ejemplo.com', 'portada', 'Ana', 'es');
+      await jest.advanceTimersByTimeAsync(22_000);
+      expect((await p).enviado).toBe(false);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   it('la contraseña de correo pierde los espacios pero conserva todas sus letras', () => {

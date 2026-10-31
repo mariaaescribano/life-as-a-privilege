@@ -77,10 +77,21 @@ export const web = {
   "suscribir.placeholder": "Your email",
   "suscribir.boton": "Subscribe",
   "suscribir.ok": "Registered successfully",
+  "suscribir.enviado": "Sent successfully, check your email",
   "suscribir.gracias": "Thank you for wanting to learn",
   "suscribir.invalido": "Enter a valid email",
   "suscribir.error": "It couldn't be sent. Try again in a moment.",
   "suscribir.baja": "You can unsubscribe whenever you want",
+  "baja.titulo": "Unsubscribe",
+  "baja.procesando": "One moment…",
+  "baja.hechaTitulo": "You're off the list",
+  "baja.hechaTexto": "We've removed {email} from the mailing list. You won't receive any more news.",
+  "baja.hechaVolver": "If you ever feel like coming back, you can sign up again from the website.",
+  "baja.formulario": "Type the email you signed up with and we'll remove it from the list.",
+  "baja.errorTitulo": "We couldn't unsubscribe you",
+  "baja.errorTexto": "We couldn't find that email on the list, or the link is incomplete. You can try here:",
+  "baja.boton": "Unsubscribe me",
+  "baja.web": "Back to the website",
 
   // ── Basic data-protection information (art. 13 GDPR) ───────────────────
   // Goes under every form that collects data; the details, in /privacidad.
