@@ -113,6 +113,12 @@ export class UserController {
       premium_aviso_email: premium.avisoEmail,
       premium_aviso_whatsapp: premium.avisoWhatsapp,
       acceso_libre: accesoLibre,
+      // Cuenta SOLO de Premium: ha tenido el mes pagado y no es asesorada (ni «en
+      // sesiones», ni con disciplinas, ni admin, ni acceso libre). Esa cuenta solo ve
+      // Podcasts y Reels; la asesorada, el recorrido.
+      solo_premium: !!premium.hasta && !accesoLibre && !adminEmail
+        && (user as any)?.en_sesiones !== true
+        && !DISCIPLINAS_ORDEN.some((k) => (user as any)?.[`${k}_suscrito`] === true),
       admin_email: adminEmail,
       is_admin: adminEmail && req.user?.admin === true,
     };

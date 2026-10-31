@@ -77,6 +77,7 @@ const Premium = () => {
   }, []);
 
   // «Empezar»: primero se paga un mes; la cuenta se crea al volver de Stripe.
+  const [infoAbierta, setInfoAbierta] = useState(false);
   const [pagando, setPagando] = useState(false);
   const [errorPago, setErrorPago] = useState(false);
   const pagar = async () => {
@@ -253,9 +254,7 @@ const Premium = () => {
                 <Box
                   as="button"
                   type="button"
-                  onClick={pagar}
-                  disabled={pagando}
-                  opacity={pagando ? 0.7 : 1}
+                  onClick={() => setInfoAbierta(true)}
                   px={{ base: 10, md: 16 }}
                   py={{ base: "16px", md: "20px" }}
                   borderRadius="full"
@@ -276,37 +275,7 @@ const Premium = () => {
                   {t("comun.empezar")}
                 </Box>
               </Reveal>
-              {/* Lo que hay que saber antes de pagar: un mes, sin tarjeta guardada. */}
               <Reveal activo={visible} direction="up" distance={14} duration={0.9} delay={0.55}>
-                <Flex direction="column" align="center" gap={3} maxW="640px">
-                  <Text color={TINTA} fontFamily="'EB Garamond', serif" fontSize={{ base: "md", md: "lg" }} lineHeight="1.6">
-                    {t("premium.cta.mensualidad")}
-                  </Text>
-                  {errorPago && (
-                    <Text color={TINTA} fontFamily="'EB Garamond', serif" fontStyle="italic" fontSize={{ base: "md", md: "lg" }}>
-                      {t("premium.cta.error")}
-                    </Text>
-                  )}
-                  <Box
-                    as="button"
-                    type="button"
-                    onClick={() => navigate("/logIn?modo=premium&next=%2Fpremium%2Fespacio")}
-                    bg="transparent"
-                    color={TINTA}
-                    fontFamily="'EB Garamond', serif"
-                    fontSize={{ base: "md", md: "lg" }}
-                    textDecoration="underline"
-                    textUnderlineOffset="4px"
-                    borderRadius="md"
-                    px={2}
-                    _hover={{ opacity: 0.75 }}
-                    _focusVisible={focoBlanco}
-                  >
-                    {t("premium.cta.yaTengoCuenta")}
-                  </Box>
-                </Flex>
-              </Reveal>
-              <Reveal activo={visible} direction="up" distance={14} duration={0.9} delay={0.7}>
                 <Text color={TINTA} fontFamily="'EB Garamond', serif" fontStyle="italic" fontSize={{ base: "lg", md: "2xl" }} lineHeight="1.5">
                   {t("premium.cta.pensamiento")}
                 </Text>
@@ -317,6 +286,94 @@ const Premium = () => {
         {/* Hueco turquesa de la página entre el mármol y el pie. */}
         <Box h={{ base: "56px", md: "88px" }} />
       </Box>
+
+      {/* «Empezar»: antes de pagar, lo que hay que saber (un mes, sin tarjeta guardada) y la
+          salida para quien ya tiene cuenta. */}
+      {infoAbierta && (
+        <Box position="fixed" inset={0} zIndex={1100} display="flex" alignItems="center" justifyContent="center" bg="#008080" px={{ base: 5, md: 10 }} onClick={() => !pagando && setInfoAbierta(false)}>
+          <Flex
+            direction="column"
+            align="center"
+            gap={6}
+            textAlign="center"
+            maxW="560px"
+            w="100%"
+            p={{ base: 8, md: 12 }}
+            borderRadius="3xl"
+            border="1px solid rgba(255,255,255,0.3)"
+            position="relative"
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          >
+            <Box
+              as="button"
+              type="button"
+              aria-label={t("comun.cerrar")}
+              onClick={() => setInfoAbierta(false)}
+              position="absolute"
+              top="14px"
+              right="14px"
+              w="32px"
+              h="32px"
+              borderRadius="full"
+              bg="rgba(255,255,255,0.1)"
+              color="white"
+              fontSize="18px"
+              _hover={{ bg: "rgba(255,255,255,0.22)" }}
+              _focusVisible={focoBlanco}
+            >
+              ✕
+            </Box>
+            <Text color="white" fontFamily="'EB Garamond', serif" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.7">
+              {t("premium.cta.mensualidad")}
+            </Text>
+            {errorPago && (
+              <Text color="white" fontFamily="'EB Garamond', serif" fontStyle="italic" fontSize={{ base: "md", md: "lg" }}>
+                {t("premium.cta.error")}
+              </Text>
+            )}
+            <Box
+              as="button"
+              type="button"
+              onClick={pagar}
+              disabled={pagando}
+              opacity={pagando ? 0.7 : 1}
+              px={10}
+              py={3}
+              borderRadius="full"
+              border="1.5px solid rgba(255,255,255,0.65)"
+              bg="rgba(255,255,255,0.14)"
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontWeight="700"
+              fontSize={{ base: "lg", md: "xl" }}
+              letterSpacing="0.12em"
+              textTransform="uppercase"
+              boxShadow="0 0 28px rgba(107,196,200,0.5)"
+              _hover={{ bg: "rgba(255,255,255,0.26)", borderColor: "white" }}
+              _focusVisible={focoBlanco}
+            >
+              {t("comun.continuar")}
+            </Box>
+            <Box
+              as="button"
+              type="button"
+              onClick={() => navigate("/logIn?modo=premium&next=%2Fpremium%2Fespacio")}
+              bg="transparent"
+              color="white"
+              fontFamily="'EB Garamond', serif"
+              fontSize={{ base: "md", md: "lg" }}
+              textDecoration="underline"
+              textUnderlineOffset="4px"
+              borderRadius="md"
+              px={2}
+              _hover={{ opacity: 0.75 }}
+              _focusVisible={focoBlanco}
+            >
+              {t("premium.cta.yaTengoCuenta")}
+            </Box>
+          </Flex>
+        </Box>
+      )}
 
       <SiteFooter />
       <BotonContactame />

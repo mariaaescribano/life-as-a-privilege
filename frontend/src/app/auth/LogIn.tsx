@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL } from "../../GlobalVariables";
 import type { SuccessErrorMessageDto } from "../../components/global/SuccessErrorMessage";
+import { recordarSoloPremium } from "../../api/sesion";
 import axios from "axios";
 import SuccessErrorMessage from "../../components/global/SuccessErrorMessage";
 import type { LoginUser } from "../../dtos/user.types";
@@ -66,6 +67,8 @@ export default function LogIn() {
   }, []);
 
   useEffect(() => {
+    // Al elegir una puerta (o volver a elegir) la página empieza por arriba.
+    window.scrollTo({ top: 0, behavior: "auto" });
     if (!modo) { setFormVisible(false); return; }
     const id = setTimeout(() => setFormVisible(true), 40);
     return () => clearTimeout(id);
@@ -151,6 +154,14 @@ export default function LogIn() {
           if (me.data?.admin_email && next === "/home") {
             destinoRef.current = "/admin/login";
           }
+          // Cuenta solo de Premium: su espacio se abre en una pestaña nueva (si el navegador
+          // la bloquea, en esta). Si venía a reclamar un pago (/premium/avisos), sigue aquí.
+          const solo = me.data?.solo_premium === true;
+          recordarSoloPremium(solo);
+          if (solo && !next.startsWith("/premium/avisos")) {
+            const nueva = window.open("/premium/espacio", "_blank");
+            destinoRef.current = nueva ? "/premium" : "/premium/espacio";
+          }
         } catch { /* si falla, destino normal */ }
 
         setSinConfirmar(false);
@@ -227,78 +238,77 @@ export default function LogIn() {
                       onClick={() => setModo(o.modo)}
                       direction="column"
                       align="center"
+                      justify="center"
                       flex="1"
                       gap={{ base: 5, md: 6 }}
+                      px={{ base: 6, md: 8 }}
+                      py={{ base: 9, md: 12 }}
                       bg="transparent"
                       cursor="pointer"
                       role="group"
                       borderRadius="30px"
+                      border={`1px solid ${TINTA}66`}
+                      transition="border-color 0.3s ease, background 0.3s ease"
+                      _hover={{ borderColor: TINTA, bg: `${TINTA}0d` }}
                       _focusVisible={focoBlanco}
                       sx={{ WebkitTapHighlightColor: "transparent" }}
                     >
-                      {/* Doble borde: la foto y, por fuera, un filo fino turquesa oscuro desplazado. */}
-                      <Box position="relative" w="100%">
-                        <Box position="absolute" inset="-9px" borderRadius="30px" border={`1px solid ${TINTA}66`} pointerEvents="none" />
-                        <Box
-                          position="relative"
-                          overflow="hidden"
-                          borderRadius="22px"
-                          border={`1.5px solid ${TINTA}`}
-                          boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}
-                          sx={{ aspectRatio: "1 / 1" }}
-                        >
-                          {o.modo === "asesoria" ? (
-                            <Image
-                              src="/img/me/asesora.webp"
-                              alt="María Escribano"
-                              w="100%"
-                              h="100%"
-                              objectFit="cover"
-                              objectPosition="45% 30%"
+                      {/* Círculo grande, arriba y centrado: mi foto o el mandala. */}
+                      <Box
+                        position="relative"
+                        overflow="hidden"
+                        w={{ base: "168px", md: "200px" }}
+                        borderRadius="full"
+                        border={`1.5px solid ${TINTA}`}
+                        boxShadow={`0 0 18px ${ORO}44, 0 0 40px ${ORO}22`}
+                        sx={{ aspectRatio: "1 / 1" }}
+                      >
+                        {o.modo === "asesoria" ? (
+                          <Image
+                            src="/img/me/asesora.webp"
+                            alt="María Escribano"
+                            w="100%"
+                            h="100%"
+                            objectFit="cover"
+                            objectPosition="45% 30%"
+                            transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)"
+                            _groupHover={{ transform: "scale(1.06)" }}
+                          />
+                        ) : (
+                          <Flex w="100%" h="100%" align="center" justify="center">
+                            {/* El mandala (blanco, con transparencia) usado como máscara: se pinta en turquesa oscuro. */}
+                            <Box
+                              w="62%"
+                              bg={TINTA}
                               transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)"
-                              _groupHover={{ transform: "scale(1.06)" }}
+                              _groupHover={{ transform: "scale(1.08)" }}
+                              sx={{
+                                aspectRatio: "1 / 1",
+                                WebkitMaskImage: "url('/img/icono/life.webp')",
+                                maskImage: "url('/img/icono/life.webp')",
+                                WebkitMaskSize: "contain",
+                                maskSize: "contain",
+                                WebkitMaskRepeat: "no-repeat",
+                                maskRepeat: "no-repeat",
+                                WebkitMaskPosition: "center",
+                                maskPosition: "center",
+                              }}
                             />
-                          ) : (
-                            <Flex w="100%" h="100%" align="center" justify="center">
-                              {/* El mandala (blanco, con transparencia) usado como máscara: se pinta en turquesa oscuro. */}
-                              <Box
-                                w="62%"
-                                bg={TINTA}
-                                transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)"
-                                _groupHover={{ transform: "scale(1.08)" }}
-                                sx={{
-                                  aspectRatio: "1 / 1",
-                                  WebkitMaskImage: "url('/img/icono/life.webp')",
-                                  maskImage: "url('/img/icono/life.webp')",
-                                  WebkitMaskSize: "contain",
-                                  maskSize: "contain",
-                                  WebkitMaskRepeat: "no-repeat",
-                                  maskRepeat: "no-repeat",
-                                  WebkitMaskPosition: "center",
-                                  maskPosition: "center",
-                                }}
-                              />
-                            </Flex>
-                          )}
-                        </Box>
+                          </Flex>
+                        )}
                       </Box>
-                      {/* Un solo renglón: el nombre de la puerta ES el botón. */}
+                      {/* Separación horizontal pequeña. */}
+                      <Box h="1px" w="56px" bgGradient={`linear(to-r, transparent, ${TINTA}99, transparent)`} />
+                      {/* El nombre de la puerta con su flecha. */}
                       <Flex
                         align="center"
                         justify="center"
                         gap={3}
-                        mt={2}
-                        px={{ base: 6, md: 7 }}
-                        py="12px"
-                        borderRadius="full"
-                        border={`1.5px solid ${TINTA}`}
                         color={TINTA}
                         fontFamily="'EB Garamond', serif"
                         fontWeight="700"
                         fontSize={{ base: "lg", md: "xl" }}
                         letterSpacing="0.03em"
-                        transition="background 0.3s ease"
-                        _groupHover={{ bg: `${TINTA}14` }}
                       >
                         {t(o.texto)}
                         <Box as="span" display="inline-block" transition="transform 0.3s ease" sx={{ "button:hover &": { transform: "translateX(5px)" } }}>→</Box>
@@ -329,8 +339,10 @@ export default function LogIn() {
             </Text>
           )}
 
-          <Box>
-            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
+          <Box>
+
+            <Text color="rgba(255,255,255,0.78)" fontSize="sm" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center">
+
               {t("auth.campo.nombreOEmail")}
             </Text>
             <Input

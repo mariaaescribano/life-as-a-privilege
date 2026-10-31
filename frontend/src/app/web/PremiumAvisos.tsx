@@ -70,6 +70,8 @@ const PremiumAvisos = () => {
   const entrar = async () => {
     if (guardando) return;
     if (!email && !whatsapp) { setError(t("premium.avisos.elegirUna")); return; }
+    // Por WhatsApp, el teléfono es obligatorio.
+    if (whatsapp && !/^\+?\d{6,15}$/.test(telefono.replace(/[\s().-]/g, ""))) { setError(t("auth.error.telefonoInvalido")); return; }
     setGuardando(true);
     setError(null);
     try {

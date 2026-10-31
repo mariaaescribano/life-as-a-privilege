@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Reveal } from "../global/Reveal";
 import { focoBlanco } from "../global/foco";
 import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
+import { sombraTexto } from "../global/disciplinaSombras";
 import FotoDisciplina from "./FotoDisciplina";
 import { presentacionPorKey, type PresentacionDisciplina } from "../../data/presentacionDisciplinas";
 import { useT } from "../../i18n";
@@ -117,36 +118,56 @@ export default function SelectorPerspectivas() {
                   px={{ md: 4 }}
                   borderRadius={{ base: "full", md: "2xl" }}
                   border={{ base: "none", md: `1.5px solid ${p.txt}${activo ? "" : "55"}` }}
-                  bg={{ base: "transparent", md: activo ? `${p.txt}1f` : "transparent" }}
+                  position="relative"
+                  overflow={{ base: "visible", md: "hidden" }}
+                  bg="transparent"
                   boxShadow={{ base: "none", md: activo ? `0 0 16px ${p.txt}55` : "none" }}
                   textAlign="left"
                   transition="all 0.3s ease"
-                  _hover={{ bg: `${p.txt}14` }}
                   _focusVisible={focoBlanco}
                 >
+                  {/* Escritorio: la foto de la disciplina es el fondo de todo el botón. */}
+                  <Box display={{ base: "none", md: "contents" }}>
+                    <DisciplinaBgLayer nom={p.nom} borderRadius="2xl" />
+                  </Box>
+                  {/* Móvil: círculo con la foto. Escritorio: sin círculo, solo el icono. */}
                   <Box
                     position="relative"
-                    overflow="hidden"
+                    overflow={{ base: "hidden", md: "visible" }}
                     flexShrink={0}
-                    w={{ base: "56px", md: "48px" }}
-                    h={{ base: "56px", md: "48px" }}
+                    zIndex={1}
+                    w={{ base: "56px", md: "auto" }}
+                    h={{ base: "56px", md: "auto" }}
                     borderRadius="full"
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    bg={p.bg}
-                    border={`2px solid ${p.txt}${activo ? "" : "66"}`}
-                    boxShadow={activo ? `0 0 14px ${p.txt}99, 0 0 28px ${p.txt}44` : "none"}
-                    opacity={activo ? 1 : 0.75}
+                    bg={{ base: p.bg, md: "transparent" }}
+                    border={{ base: `2px solid ${p.txt}${activo ? "" : "66"}`, md: "none" }}
+                    boxShadow={{ base: activo ? `0 0 14px ${p.txt}99, 0 0 28px ${p.txt}44` : "none", md: "none" }}
+                    opacity={{ base: activo ? 1 : 0.75, md: 1 }}
                     transform={{ base: activo ? "scale(1.1)" : "scale(1)", md: "none" }}
                     transition="all 0.3s ease"
                   >
-                    <DisciplinaBgLayer nom={p.nom} borderRadius="full" talCual />
+                    <Box display={{ base: "contents", md: "none" }}>
+                      <DisciplinaBgLayer nom={p.nom} borderRadius="full" talCual />
+                    </Box>
                     <Box position="relative" zIndex={1} display="flex">
                       <p.Icon size={{ base: "32px", md: "27px" }} />
                     </Box>
                   </Box>
-                  <Text display={{ base: "none", md: "block" }} color="white" fontFamily="'EB Garamond', serif" fontWeight={activo ? "700" : "600"} fontSize="lg" letterSpacing="0.03em" lineHeight="1.2" opacity={activo ? 1 : 0.85}>
+                  <Text
+                    display={{ base: "none", md: "block" }}
+                    position="relative"
+                    zIndex={1}
+                    color={p.txt}
+                    textShadow={sombraTexto(p.nom, p.bg)}
+                    fontFamily="'EB Garamond', serif"
+                    fontWeight={activo ? "700" : "600"}
+                    fontSize="lg"
+                    letterSpacing="0.03em"
+                    lineHeight="1.2"
+                  >
                     {nombreDe(p.nom)}
                   </Text>
                 </Box>

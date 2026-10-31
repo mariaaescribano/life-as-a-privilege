@@ -17,6 +17,8 @@ export type CreateUser = {
   trato?: Trato | null;
   /** Opcionales (sql/user-telefono-cumple.sql). */
   telefono?: string | null;
+  /** Alta desde Premium: ruta a la que volver tras confirmar el email (solo /premium/…). */
+  next?: string | null;
   /** 'YYYY-MM-DD' */
   fecha_nacimiento?: string | null;
 };

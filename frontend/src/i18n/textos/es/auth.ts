@@ -16,7 +16,7 @@ export const auth = {
   // ── Iniciar sesión ─────────────────────────────────────────────────────
   "auth.login.titulo": "Entra a tu cuenta",
   "auth.login.subtitulo": "Entra a tu cuenta de El Mapa",
-  "auth.login.soloYo": "Solo yo creo tu cuenta. Te llegará un correo para activarla.",
+  "auth.login.soloYo": "Solo María puede crear tu cuenta. Si estás siendo asesorado, te llegará un correo para activarla.",
   "auth.login.frase": "Dos puertas hacia dos mundos complementarios",
   "auth.login.opcion.asesoria": "Estoy siendo asesorado",
   "auth.login.opcion.premium": "Acceso al contenido premium",

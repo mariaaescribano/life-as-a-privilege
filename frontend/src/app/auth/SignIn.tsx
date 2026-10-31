@@ -210,6 +210,9 @@ export default function SignIn() {
   const t = useT();
   const [params] = useSearchParams();
   const next = params.get("next") || "/home";
+  // Alta desde Premium: solo nombre, email, teléfono y contraseña (el teléfono es obligatorio,
+  // por si elige los avisos por WhatsApp). Sin trato ni fecha de nacimiento.
+  const esPremium = next.startsWith("/premium");
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -257,9 +260,10 @@ export default function SignIn() {
         name,
         email,
         password: contra,
-        trato,
+        trato: esPremium ? null : trato,
         telefono: telefono.trim() || null,
-        fecha_nacimiento: fechaNacimiento || null,
+        fecha_nacimiento: esPremium ? null : fechaNacimiento || null,
+        next: esPremium ? next : null,
       };
 
       const response = await axios.post(`${API_URL}/user/signIn`, body, {
@@ -288,7 +292,7 @@ export default function SignIn() {
       });
       return;
     }
-    if (name === "" || email === "" || contra === "" || contra2 === "") {
+    if (name === "" || email === "" || contra === "" || contra2 === "" || (esPremium && telefono.trim() === "")) {
       setMessage({
         soy: 2,
         title: t("auth.error.faltanDatos"),
@@ -437,6 +441,7 @@ export default function SignIn() {
             </Box>
           </SimpleGrid>
 
+          {!esPremium && (
           <Box>
             <Etiqueta>{t("auth.signin.trato")}</Etiqueta>
             <Flex gap={{ base: 3, md: 4 }}>
@@ -454,6 +459,7 @@ export default function SignIn() {
               />
             </Flex>
           </Box>
+          )}
 
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} alignItems="start">
             <Box>
@@ -465,10 +471,11 @@ export default function SignIn() {
                 placeholder="+34 600 000 000"
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
-                onKeyDown={saltarA(fechaRef)}
+                onKeyDown={saltarA(esPremium ? contraRef : fechaRef)}
                 {...inputStyles}
               />
             </Box>
+            {!esPremium && (
             <Box>
               <Etiqueta>{t("auth.campo.fechaNacimiento")}</Etiqueta>
               <Input
@@ -483,6 +490,7 @@ export default function SignIn() {
                 sx={inputFechaSx}
               />
             </Box>
+            )}
           </SimpleGrid>
 
           {/* Rayita fina de tinta: aquí empieza la contraseña. Se desvanece por

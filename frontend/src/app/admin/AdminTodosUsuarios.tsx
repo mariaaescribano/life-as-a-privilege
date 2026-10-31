@@ -42,6 +42,7 @@ import { API_URL } from "../../GlobalVariables";
 import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 import BotonEntrarComo from "./BotonEntrarComo";
 import { IconoDiarioTerapia } from "../../components/global/IconoDiarioTerapia";
+import { focoBlanco } from "../../components/global/foco";
 
 const POR_PAGINA = 15;
 
@@ -53,6 +54,8 @@ interface CuentaAdmin {
   acceso_libre?: boolean;
   fecha_nacimiento?: string | null;
   en_sesiones?: boolean;
+  /** Fin del mes de Premium pagado (null/pasado = sin Premium vigente). */
+  premium_hasta?: string | null;
   /** null en cuentas de antes de sql/user-created-at.sql («no se sabe»). */
   created_at?: string | null;
   /** `<scope>_suscrito` y `<scope>_fecha_compra`. */
@@ -87,6 +90,8 @@ export default function AdminTodosUsuarios() {
   const [q, setQ] = useState("");
   const [pagina, setPagina] = useState(1);
   /** Orden de la tabla: por nombre (el del backend) o las cuentas más nuevas primero. */
+  // Dos tablas: quien está siendo asesorado (en sesiones) y quien tiene Premium vigente.
+  const [tabla, setTabla] = useState<"asesoria" | "premium">("asesoria");
   const [orden, setOrden] = useState<"nombre" | "recientes">("nombre");
   /** id de la fila desplegada (regalar, intereses, borrar), o null. */
   const [abierto, setAbierto] = useState<string | null>(null);
@@ -123,20 +128,25 @@ export default function AdminTodosUsuarios() {
   }, [verificando, cargar]);
 
   // Buscar u ordenar cambia el corte, así que devuelve a la primera página.
-  useEffect(() => setPagina(1), [q, orden]);
+  useEffect(() => setPagina(1), [q, orden, tabla]);
 
   const filtrados = useMemo(() => {
     const t = q.trim().toLowerCase();
+    const deLaTabla = usuarios.filter((u) =>
+      tabla === "asesoria"
+        ? u.en_sesiones === true
+        : u.acceso_libre === true || (!!u.premium_hasta && new Date(u.premium_hasta).getTime() > Date.now()),
+    );
     const base = !t
-      ? usuarios
-      : usuarios.filter(
+      ? deLaTabla
+      : deLaTabla.filter(
           (u) => (u.name ?? "").toLowerCase().includes(t) || (u.email ?? "").toLowerCase().includes(t),
         );
     if (orden === "nombre") return base;
     // Más nuevas primero. Las cuentas sin fecha (de antes de la columna
     // created_at) caen al final: «no se sabe» no puede colarse entre las nuevas.
     return [...base].sort((a, b) => (b.created_at ?? "").localeCompare(a.created_at ?? ""));
-  }, [q, usuarios, orden]);
+  }, [q, usuarios, orden, tabla]);
 
   const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
   const paginaReal = Math.min(pagina, totalPaginas);
@@ -321,6 +331,34 @@ export default function AdminTodosUsuarios() {
             <BotonFicha ocupado={false} onClick={() => setCreando(true)} principal>
               + Crear cuenta
             </BotonFicha>
+          </Flex>
+
+          {/* ── LAS DOS TABLAS ── */}
+          <Flex justify="center" gap={2} mb={5}>
+            {([
+              { valor: "asesoria" as const, etiqueta: "Asesoría" },
+              { valor: "premium" as const, etiqueta: "Premium" },
+            ]).map((o) => (
+              <Box
+                key={o.valor}
+                as="button"
+                type="button"
+                onClick={() => setTabla(o.valor)}
+                px={6}
+                py="8px"
+                borderRadius="full"
+                bg={tabla === o.valor ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.06)"}
+                border={`1px solid ${tabla === o.valor ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.3)"}`}
+                color={tabla === o.valor ? "white" : "rgba(255,255,255,0.7)"}
+                fontWeight="600"
+                cursor="pointer"
+                transition="all 0.15s"
+                _hover={{ borderColor: "white", color: "white" }}
+                _focusVisible={focoBlanco}
+              >
+                {o.etiqueta}
+              </Box>
+            ))}
           </Flex>
 
           {/* ── BUSCADOR ── */}

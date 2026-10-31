@@ -264,14 +264,14 @@ export class MailService {
     email: string,
     nombre: string,
     /** Cuenta creada con Google: ahí no hay contraseña que recordar ni recuperar. */
-    opciones?: { conGoogle?: boolean; tokenConfirmacion?: string },
+    opciones?: { conGoogle?: boolean; tokenConfirmacion?: string; next?: string },
   ): Promise<void> {
     const frontendUrl = this.frontendUrl;
     // Con contraseña, el enlace confirma la cuenta al abrirse y deja a la
     // persona en /logIn para que entre con su nombre/email y su contraseña.
     const confirmar = opciones?.tokenConfirmacion;
     const enlace = confirmar
-      ? `${frontendUrl}/logIn?confirmar=${encodeURIComponent(confirmar)}`
+      ? `${frontendUrl}/logIn?confirmar=${encodeURIComponent(confirmar)}${opciones?.next ? `&modo=premium&next=${encodeURIComponent(opciones.next)}` : ''}`
       : `${frontendUrl}/logIn`;
     // `?conocernos=1` abre el calendario de los veinte minutos sin coste nada
     // más aterrizar, sin tener que buscar la tarjeta en /contacto.

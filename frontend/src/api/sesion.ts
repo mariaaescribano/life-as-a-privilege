@@ -63,7 +63,28 @@ export function esAdminDesbloqueado(): boolean {
  * "/home" a mano, o vuelve a aparecer la incoherencia.
  */
 export function rutaHome(): string {
-  return esAdminDesbloqueado() ? "/admin" : "/home";
+  if (esAdminDesbloqueado()) return "/admin";
+  return esSoloPremium() ? "/premium/espacio" : "/home";
+}
+
+/**
+ * ¿Es una cuenta SOLO de Premium (sin asesoría ni recorrido)? Lo decide el servidor
+ * (`solo_premium` en /user/me) y aquí se recuerda para pintar el menú sin esperar.
+ * Se borra con el resto de la sesión al cerrarla.
+ */
+export function esSoloPremium(): boolean {
+  try {
+    return localStorage.getItem("soloPremium") === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function recordarSoloPremium(si: boolean): void {
+  try {
+    if (si) localStorage.setItem("soloPremium", "1");
+    else localStorage.removeItem("soloPremium");
+  } catch { /* modo privado */ }
 }
 
 /**

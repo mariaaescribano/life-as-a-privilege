@@ -176,7 +176,7 @@ export class UserService {
             // email con el enlace del correo de bienvenida. No se espera al
             // envío (tarda un par de segundos contra Gmail); si falla, desde
             // /logIn se puede pedir otra vez.
-            this.enviarBienvenidaSinBloquear(newUser.email, newUser.name, false, newUser.id);
+            this.enviarBienvenidaSinBloquear(newUser.email, newUser.name, false, newUser.id, data.next);
             return { pendienteConfirmar: true as const, email: newUser.email };
           }
           // Insert sin error pero sin fila: no reintentamos a ciegas.
@@ -214,11 +214,11 @@ export class UserService {
    * respuesta del registro. Si el correo falla, la cuenta ya está creada: se
    * anota en el log y nada más.
    */
-  private enviarBienvenidaSinBloquear(email: string, nombre: string, conGoogle = false, userId?: string) {
+  private enviarBienvenidaSinBloquear(email: string, nombre: string, conGoogle = false, userId?: string, next?: string | null) {
     // Con contraseña, el botón del correo lleva el token que confirma la cuenta.
     const tokenConfirmacion = !conGoogle && userId ? crearTokenConfirmacion(userId) : undefined;
     void this.mailService
-      .enviarBienvenidaCuenta(email, nombre ?? '', { conGoogle, tokenConfirmacion })
+      .enviarBienvenidaCuenta(email, nombre ?? '', { conGoogle, tokenConfirmacion, next: typeof next === 'string' && /^\/premium\/[\w\-/?=&%.]*$/.test(next) ? next : undefined })
       .catch((err) => console.error('[createUser] no se pudo enviar la bienvenida:', err));
     void this.mailService
       .enviarAvisoRegistro(email, nombre ?? '', { conGoogle })
@@ -548,6 +548,10 @@ export class UserService {
     // (sql/user-created-at.sql, para ordenar por recientes) y las fechas de
     // compra. Si alguna columna aún no existe, caemos por la cascada en vez de
     // quedarnos sin lista.
+    // `premium_hasta` (sql/user-premium.sql) separa la pestaña Premium de la de Asesoría.
+    const conPremium = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, created_at, email_confirmado, premium_hasta, ${flags}, ${fechas}`);
+    if (!conPremium.error) return conPremium.data ?? [];
+
     const conConfirmado = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, created_at, email_confirmado, ${flags}, ${fechas}`);
     if (!conConfirmado.error) return conConfirmado.data ?? [];
 

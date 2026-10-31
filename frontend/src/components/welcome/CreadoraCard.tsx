@@ -175,9 +175,9 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
         p={{ base: marmol ? 0 : 7, md: 12, lg: 16 }}
         borderRadius="3xl"
         bg={c.panelBg}
-        // Sobre el mármol, en móvil, sin el marco que enmarcaba los elementos.
-        border={marmol ? { base: "none", md: `1px solid ${c.panelBorde}` } : `1px solid ${c.panelBorde}`}
-        boxShadow={marmol ? { base: "none", md: c.panelSombra } : c.panelSombra}
+        // Sobre el mármol, sin marco ni halo alrededor (móvil y ordenador).
+        border={marmol ? "none" : `1px solid ${c.panelBorde}`}
+        boxShadow={marmol ? "none" : c.panelSombra}
         // Sobre el mármol no hay cristal esmerilado: se tiene que ver el mármol.
         sx={marmol ? undefined : { backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
       >
@@ -186,6 +186,9 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           direction="right"
           distance={26}
           flex="1"
+          // Sobre el mármol, columna más estrecha: el texto turquesa cae sobre
+          // el beige y no se acerca a las esquinas de acuarela turquesa.
+          maxW={marmol ? { base: "80%", md: "86%", lg: "84%" } : undefined}
           display="flex"
           flexDirection="column"
           alignItems={{ base: "center", md: "flex-start" }}
@@ -284,14 +287,12 @@ const CreadoraCard: React.FC<CreadoraCardProps> = ({
           boxShadow={marmol ? undefined : c.fotoSombra}
           sx={{ aspectRatio: "4 / 3" }}
         >
-          {/* Sobre el mármol: doble marco turquesa oscuro (el filo por fuera y el borde de la foto). */}
-          {marmol && <Box position="absolute" inset="-9px" borderRadius="30px" border="1px solid #004f4f66" pointerEvents="none" />}
+          {/* Sobre el mármol: foto sin marco turquesa. */}
           <Box
             w="100%"
             h="100%"
             overflow="hidden"
             borderRadius={marmol ? "22px" : undefined}
-            border={marmol ? "1.5px solid #004f4f" : undefined}
             boxShadow={marmol ? c.fotoSombra : undefined}
           >
             <Image

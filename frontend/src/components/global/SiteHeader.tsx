@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { rutaHome } from "../../api/sesion";
+import { esSoloPremium, recordarSoloPremium, rutaHome } from "../../api/sesion";
+import { getUserMe } from "../../api/userMe";
 import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
 import MenuHamburguesa, { type ItemMenu } from "./MenuHamburguesa";
@@ -39,6 +40,21 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   }, [location.pathname, location.search]);
 
   const hasSession = !!localStorage.getItem("userId");
+  // Cuenta solo de Premium: el menú se reduce a Podcasts y Reels. Se recuerda en el
+  // navegador para no parpadear y se confirma con /user/me.
+  const [soloPremium, setSoloPremium] = useState<boolean>(() => hasSession && esSoloPremium());
+  useEffect(() => {
+    if (!hasSession) return;
+    let vivo = true;
+    getUserMe()
+      .then(({ data }) => {
+        const es = data?.solo_premium === true;
+        recordarSoloPremium(es);
+        if (vivo) setSoloPremium(es);
+      })
+      .catch(() => { /* sin red: se queda lo recordado */ });
+    return () => { vivo = false; };
+  }, [hasSession]);
   const isPrivate  = variant === "private" || (variant === "auto" && hasSession);
   // En el área privada (logueado: /home, /metodo, …) el header es ~10% más compacto.
   const compact = isPrivate;
@@ -116,7 +132,15 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
     { etiqueta: t("header.contacto"),    onSelect: () => navigate("/contacto"),     activo: isContactoPage },
   ];
 
-  const items: ItemMenu[] = isPrivate
+  const itemsPremium: ItemMenu[] = [
+    { etiqueta: t("premium.espacio.podcasts"), onSelect: () => navigate("/premium/podcasts"), activo: path.startsWith("/premium/podcasts") },
+    { etiqueta: t("premium.espacio.reels"),    onSelect: () => navigate("/premium/reels"),    activo: path.startsWith("/premium/reels") },
+  ];
+  const premiumSolo = isPrivate && soloPremium && !isAdminPage;
+
+  const items: ItemMenu[] = premiumSolo
+    ? itemsPremium
+    : isPrivate
     ? isAdminPage
       ? [
           { etiqueta: t("header.mapa"),         onSelect: () => navigate("/admin"),                   activo: !adminCursosActive && !adminUsuariosActive && !adminArquetiposActive && !adminSuscriptoresActive && !adminPremiumActive },
@@ -224,7 +248,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           align="center"
           gap={{ lg: 6, xl: 10 }}
         >
-          {itemsWeb.slice(0, 4).map((it) => (
+          {(premiumSolo ? itemsPremium : itemsWeb.slice(0, 4)).map((it) => (
             <Box
               key={it.etiqueta}
               as="button"

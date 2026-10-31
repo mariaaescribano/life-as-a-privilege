@@ -18,6 +18,8 @@ export type CreateUser = {
   trato?: Trato | null;
   /** Opcionales. */
   telefono?: string | null;
+  /** Alta desde Premium: adónde volver tras confirmar el email. */
+  next?: string | null;
   /** 'YYYY-MM-DD' (lo que da un <input type="date">). */
   fecha_nacimiento?: string | null;
 };

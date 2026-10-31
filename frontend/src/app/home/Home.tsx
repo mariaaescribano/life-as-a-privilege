@@ -37,7 +37,8 @@ import { ComunidadPrimeraVez } from "../../components/global/ComunidadPrimeraVez
 import { useT, type ClaveTexto } from "../../i18n";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
-import { cacheDeOtraCuenta } from "../../api/sesion";
+import { cacheDeOtraCuenta, recordarSoloPremium } from "../../api/sesion";
+import { getUserMe } from "../../api/userMe";
 
 // Entrada de cada círculo del mandala: sube desde algo más pequeño y desenfocado
 // hasta colocarse, con la curva del sistema Reveal (sin rebote ni giro: un
@@ -122,6 +123,13 @@ let suscCache: SuscCache | null = null;
 let imagesReadyCache = false;
 
 const Home = () => {
+  // /home es de las personas asesoradas: una cuenta solo de Premium va a su espacio.
+  const irA = useNavigate();
+  useEffect(() => {
+    getUserMe().then(({ data }) => {
+      if (data?.solo_premium === true) { recordarSoloPremium(true); irA("/premium/espacio", { replace: true }); }
+    }).catch(() => { /* sin red: se queda */ });
+  }, [irA]);
   // Si se ha cambiado de cuenta en esta pestaña, las compras guardadas son de la otra.
   if (cacheDeOtraCuenta("home")) suscCache = null;
   const navigate = useNavigate();
