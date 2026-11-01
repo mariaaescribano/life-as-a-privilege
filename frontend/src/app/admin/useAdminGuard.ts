@@ -11,7 +11,7 @@ export function useAdminGuard() {
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    if (!userId || !token) { navigate("/welcome"); return; }
+    if (!userId || !token) { navigate("/admin/login"); return; }
     (async () => {
       try {
         const me = await axios.get(`${API_URL}/user/me`, {

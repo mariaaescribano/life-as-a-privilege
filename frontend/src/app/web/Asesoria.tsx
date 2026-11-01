@@ -6,6 +6,7 @@ import { Reveal } from "../../components/global/Reveal";
 import SeparadorFlor from "../../components/welcome/SeparadorFlor";
 import BandaMarmol from "../../components/global/BandaMarmol";
 import { LetrasVivas } from "../../components/global/LetrasVivas";
+import OpinionesMarmol from "../../components/web/OpinionesMarmol";
 import SelectorPerspectivas from "../../components/web/SelectorPerspectivas";
 import FormularioAsesoria from "../../components/web/FormularioAsesoria";
 import { RecorridoMandalaVideo } from "../../components/global/MandalaRecorrido";
@@ -411,6 +412,11 @@ const Asesoria = () => {
             </BloqueDiferido>
           </Box>
         </Box>
+
+        <SeparadorFlor />
+
+        {/* ── 3b · Experiencias reales: las tres últimas opiniones, en una fila, sobre mármol ── */}
+        <OpinionesMarmol />
 
         <SeparadorFlor />
 

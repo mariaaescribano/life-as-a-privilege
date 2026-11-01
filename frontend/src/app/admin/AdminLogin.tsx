@@ -7,64 +7,53 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { API_URL } from "../../GlobalVariables";
 
-// Pantalla de desbloqueo del panel de administración. Estar en ADMIN_EMAILS ya
-// NO basta: además hay que introducir la contraseña de admin (ADMIN_PASSWORD en
-// el backend). Al acertarla, el backend devuelve un token NUEVO con el permiso
-// de admin activado, que reemplaza al de la sesión.
+// Entrada propia de administración (/admin/login), sin pasar por el login normal:
+// usuario o email + contraseña de admin (ADMIN_PASSWORD en el backend). El
+// backend comprueba que la cuenta esté en ADMIN_EMAILS y devuelve la sesión ya
+// con el permiso de admin, así que se entra directo al panel.
 export default function AdminLogin() {
   const navigate = useNavigate();
   const [verificando, setVerificando] = useState(true);
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
 
-  const token = localStorage.getItem("token") ?? "";
-
-  // Al entrar: si no está logueado → welcome; si el email NO es de admin → home;
-  // si ya está desbloqueado → directo al panel.
+  // Si ya hay una sesión de admin desbloqueada, directo al panel.
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (!userId || !token) { navigate("/welcome"); return; }
-    (async () => {
-      try {
-        const me = await axios.get(`${API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (me.data?.is_admin) { navigate("/admin"); return; }
-        if (!me.data?.admin_email) { navigate("/home"); return; }
-      } catch {
-        navigate("/home");
-        return;
-      } finally {
-        setVerificando(false);
-      }
-    })();
-  }, [navigate, token]);
+    const token = localStorage.getItem("token");
+    if (!token) { setVerificando(false); return; }
+    axios.get(`${API_URL}/user/me`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((me) => { if (me.data?.is_admin) navigate("/admin"); })
+      .catch(() => {})
+      .finally(() => setVerificando(false));
+  }, [navigate]);
+
+  const puede = !!name.trim() && !!password.trim() && !enviando;
 
   const desbloquear = async () => {
-    if (!password.trim() || enviando) return;
+    if (!puede) return;
     setError("");
     setEnviando(true);
     try {
-      const res = await axios.post(
-        `${API_URL}/user/admin/verify`,
-        { password: password.trim() },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      if (res.data?.token) {
-        // El nuevo token lleva el permiso de admin: reemplaza al de la sesión.
+      const res = await axios.post(`${API_URL}/user/admin/entrar`, {
+        name: name.trim(),
+        password: password.trim(),
+      });
+      if (res.data?.token && res.data?.user?.id) {
+        localStorage.setItem("userId", res.data.user.id);
+        localStorage.setItem("name", res.data.user.name ?? "");
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("isAdmin", "1");
         navigate("/admin");
         return;
       }
-      setError("No se pudo desbloquear. Inténtalo de nuevo.");
-      setEnviando(false);
+      setError("No se pudo entrar. Inténtalo de nuevo.");
     } catch {
-      setError("Contraseña de administración incorrecta.");
+      setError("Usuario o contraseña de administración incorrectos.");
       setPassword("");
-      setEnviando(false);
     }
+    setEnviando(false);
   };
 
   if (verificando) {
@@ -109,13 +98,33 @@ export default function AdminLogin() {
 
           <Box w="100%">
             <Input
+              value={name}
+              onChange={(e) => { setName(e.target.value); setError(""); }}
+              onKeyDown={(e) => { if (e.key === "Enter") desbloquear(); }}
+              placeholder="Usuario o email"
+              autoComplete="username"
+              autoFocus
+              textAlign="center"
+              color="white"
+              bg="rgba(0,0,0,0.22)"
+              border="1px solid rgba(255,255,255,0.32)"
+              borderRadius="full"
+              h="52px"
+              fontSize="md"
+              _placeholder={{ color: "rgba(255,255,255,0.55)" }}
+              _hover={{ borderColor: "rgba(255,255,255,0.5)" }}
+              _focus={{ borderColor: "white", boxShadow: "0 0 0 1px rgba(255,255,255,0.6)" }}
+            />
+          </Box>
+
+          <Box w="100%">
+            <Input
               type="password"
               value={password}
               onChange={(e) => { setPassword(e.target.value); setError(""); }}
               onKeyDown={(e) => { if (e.key === "Enter") desbloquear(); }}
               placeholder="Contraseña de administración"
-              autoComplete="off"
-              autoFocus
+              autoComplete="current-password"
               textAlign="center"
               color="white"
               bg="rgba(0,0,0,0.22)"
@@ -139,7 +148,7 @@ export default function AdminLogin() {
             <Box
               as="button"
               onClick={desbloquear}
-              disabled={!password.trim() || enviando}
+              disabled={!puede}
               px={9}
               py={3}
               borderRadius="full"
@@ -150,11 +159,11 @@ export default function AdminLogin() {
               fontWeight="700"
               letterSpacing="0.08em"
               textTransform="uppercase"
-              cursor={!password.trim() || enviando ? "not-allowed" : "pointer"}
-              opacity={!password.trim() || enviando ? 0.45 : 1}
+              cursor={!puede ? "not-allowed" : "pointer"}
+              opacity={!puede ? 0.45 : 1}
               boxShadow="0 0 22px rgba(255,255,255,0.35)"
               transition="all 0.2s ease"
-              _hover={!password.trim() || enviando ? undefined : { bg: "rgba(255,255,255,0.3)", transform: "translateY(-1px)" }}
+              _hover={!puede ? undefined : { bg: "rgba(255,255,255,0.3)", transform: "translateY(-1px)" }}
             >
               {enviando ? "Verificando…" : "Entrar"}
             </Box>

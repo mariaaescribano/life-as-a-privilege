@@ -141,6 +141,29 @@ export class UserController {
     return { token };
   }
 
+  // Entrada propia de administración (/admin/login): usuario o email + contraseña
+  // de admin, sin pasar por el login normal. La cuenta tiene que existir y su email
+  // estar en ADMIN_EMAILS. Mismo error para todo, para no revelar qué falló.
+  @Post("admin/entrar")
+  @Throttle(LIMITE_AUTH)
+  @HttpCode(HttpStatus.OK)
+  async entrarAdmin(@Body() body: { name?: string; password?: string }) {
+    const cuenta = body?.name?.trim() ? await this.usersService.buscarCuentaAdmin(body.name.trim()) : null;
+    // TEMPORAL (diagnóstico): quitar cuando el login de admin funcione.
+    console.log('[admin/entrar]', {
+      cuentaEncontrada: !!cuenta,
+      emailEnADMIN_EMAILS: cuenta ? isAdminEmail(cuenta.email) : null,
+      ADMIN_EMAILS_definida: !!process.env.ADMIN_EMAILS?.trim(),
+      ADMIN_PASSWORD_definida: !!process.env.ADMIN_PASSWORD?.trim(),
+      contrasenaCoincide: verifyAdminPassword(body?.password),
+    });
+    if (!cuenta || !isAdminEmail(cuenta.email) || !verifyAdminPassword(body?.password)) {
+      throw new ForbiddenException('Credenciales de administración incorrectas');
+    }
+    const token = this.authService.generateToken(cuenta.id, cuenta.email, true);
+    return { token, user: { id: cuenta.id, name: cuenta.name } };
+  }
+
   // Usuarios del recorrido para el panel admin (antes de :id para no colisionar)
   @Get("admin/recorrido")
   @UseGuards(JwtAuthGuard, AdminGuard)

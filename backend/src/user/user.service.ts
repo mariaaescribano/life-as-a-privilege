@@ -274,6 +274,30 @@ export class UserService {
     }
   }
 
+  // Acceso propio de administración: localiza la cuenta por nombre o email. No
+  // mira la contraseña de la cuenta ni la confirmación por correo: la llave es
+  // ADMIN_PASSWORD, que el controlador comprueba antes de llamar aquí.
+  async buscarCuentaAdmin(valor: string) {
+    const db = this.databaseService.getClient();
+    const [porEmail, porNombre] = await Promise.all([
+      db.from('user').select('id, name, email').ilike('email', emailExacto(valor)).limit(1),
+      db.from('user').select('id, name, email').ilike('name', textoExacto(valor)).limit(5),
+    ]);
+    // TEMPORAL (diagnóstico): quitar cuando el login de admin funcione.
+    const parecidas = await db.from('user').select('name, email').or('email.ilike.%escribano%,email.ilike.%maria%,name.ilike.%maria%').limit(10);
+    console.log('[buscarCuentaAdmin] cuentas parecidas:', parecidas.data, parecidas.error?.message ?? null);
+    console.log('[buscarCuentaAdmin]', {
+      longitudEscrita: valor.length,
+      porEmail: { filas: porEmail.data?.length ?? 0, error: porEmail.error?.message ?? null },
+      porNombre: {
+        filas: porNombre.data?.length ?? 0,
+        conEmailAdmin: (porNombre.data ?? []).filter((u: any) => isAdminEmail(u.email)).length,
+        error: porNombre.error?.message ?? null,
+      },
+    });
+    return porEmail.data?.[0] ?? (porNombre.data ?? []).find((u: any) => isAdminEmail(u.email)) ?? null;
+  }
+
   // ───────────────────────────────────────────────────────────────────────────
   // CONFIRMACIÓN DE LA CUENTA
   // ───────────────────────────────────────────────────────────────────────────

@@ -454,7 +454,7 @@ export default function App()
       <Route path="/metodo/astrologia/llamada" element={<PrivateRoute><MetodoAstrologiaLlamada /></PrivateRoute>} />
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
-      <Route path="/admin/login" element={<AdminRoute><AdminLogin /></AdminRoute>} />
+      <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminRoute><AdminHome /></AdminRoute>} />
       <Route path="/admin/cursos" element={<AdminRoute><AdminCursos /></AdminRoute>} />
       <Route path="/admin/cursos/:id" element={<AdminRoute><AdminCursoEditor /></AdminRoute>} />
