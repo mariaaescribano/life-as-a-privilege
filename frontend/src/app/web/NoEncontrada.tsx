@@ -50,7 +50,7 @@ export default function NoEncontrada() {
                transition="all 0.2s" _hover={{ bg: "rgba(255,255,255,0.2)", transform: "translateY(-2px)" }}>
             {t("web.404.inicio")}
           </Box>
-          <Box as="button" onClick={() => navigate("/elMetodo")}
+          <Box as="button" onClick={() => navigate("/welcome")}
                px={7} py={3} borderRadius="full" bg="transparent"
                border="1.5px solid rgba(255,255,255,0.35)" color="rgba(255,255,255,0.9)" fontWeight="600"
                fontSize={{ base: "sm", md: "md" }} letterSpacing="0.04em" cursor="pointer"

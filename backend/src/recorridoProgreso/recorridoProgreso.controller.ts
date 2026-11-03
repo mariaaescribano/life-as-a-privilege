@@ -1,6 +1,7 @@
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { CONSENTIMIENTO_SALUD, RecorridoProgresoService } from './recorridoProgreso.service';
+import { CONSENTIMIENTO_SALUD, DISCIPLINAS_MAPA_ADMIN, RecorridoProgresoService } from './recorridoProgreso.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { AdminGuard } from '../auth/admin.guard';
 
 @Controller('recorrido-progreso')
 export class RecorridoProgresoController {
@@ -36,6 +37,28 @@ export class RecorridoProgresoController {
     return { fecha };
   }
 
+  // ── El mapa lo abre la admin ───────────────────────────────────────────────
+  // Progreso de UNA usuaria (para el panel) y fijar hasta qué paso llega.
+  @Get('admin/:userId')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async getDeUsuaria(@Param('userId') userId: string) {
+    return await this.service.getTodo(userId);
+  }
+
+  @Post('admin/:userId/:disciplina')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async fijar(
+    @Param('userId') userId: string,
+    @Param('disciplina') disciplina: string,
+    @Body() body: { paso?: number },
+  ) {
+    if (!DISCIPLINAS_MAPA_ADMIN.includes(disciplina)) throw new BadRequestException('disciplina inválida');
+    const paso = Number(body?.paso);
+    if (!Number.isFinite(paso) || paso < 1) throw new BadRequestException('paso inválido');
+    const pasoMax = await this.service.fijar(userId, disciplina, paso);
+    return { pasoMax };
+  }
+
   @Get(':disciplina')
   @UseGuards(JwtAuthGuard)
   async get(@Req() req: any, @Param('disciplina') disciplina: string) {
@@ -52,6 +75,10 @@ export class RecorridoProgresoController {
   ) {
     // La fila del consentimiento solo se escribe por su propia ruta.
     if (disciplina === CONSENTIMIENTO_SALUD) throw new BadRequestException('disciplina inválida');
+    // El mapa de estas disciplinas solo lo abre la admin: la usuaria no lo sube.
+    if (DISCIPLINAS_MAPA_ADMIN.includes(disciplina)) {
+      return { pasoMax: await this.service.getPasoMax(req.user.userId, disciplina) };
+    }
     const paso = Number(body?.paso);
     if (!Number.isFinite(paso) || paso < 1) {
       throw new BadRequestException('paso inválido');

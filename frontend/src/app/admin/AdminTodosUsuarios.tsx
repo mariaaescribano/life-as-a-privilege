@@ -43,8 +43,12 @@ import { adminHeaders, useAdminGuard } from "./useAdminGuard";
 import BotonEntrarComo from "./BotonEntrarComo";
 import { IconoDiarioTerapia } from "../../components/global/IconoDiarioTerapia";
 import { focoBlanco } from "../../components/global/foco";
+import { CAMINO, type CaminoKey } from "../../data/camino";
 
 const POR_PAGINA = 15;
+
+/** Disciplinas cuyo mapa abre solo la admin (mismas claves que el backend). */
+const MAPA_ADMIN = ["psicologia", "fisiologia", "nutricion", "ayurveda", "tcm"] as const;
 
 interface CuentaAdmin {
   id: string;
@@ -186,6 +190,41 @@ export default function AdminTodosUsuarios() {
       setAviso(abierta ? "No se pudo conceder el acceso." : "No se pudo cerrar la disciplina.");
     } finally {
       setGuardando(null);
+    }
+  };
+
+  // ── El mapa lo abre la admin ───────────────────────────────────────────────
+  // Hasta qué paso llega cada disciplina de la persona desplegada. Se lee al
+  // abrir la ficha y se guarda al pulsar − / +.
+  const [mapaDe, setMapaDe] = useState<{ id: string; pasos: Record<string, number> } | null>(null);
+  const [guardandoMapa, setGuardandoMapa] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!abierto) { setMapaDe(null); return; }
+    let cancel = false;
+    axios
+      .get<Record<string, number>>(`${API_URL}/recorrido-progreso/admin/${abierto}`, { headers: adminHeaders() })
+      .then((r) => { if (!cancel) setMapaDe({ id: abierto, pasos: r.data ?? {} }); })
+      .catch(() => { if (!cancel) setMapaDe({ id: abierto, pasos: {} }); });
+    return () => { cancel = true; };
+  }, [abierto]);
+
+  const fijarPaso = async (userId: string, disciplina: string, paso: number) => {
+    setGuardandoMapa(disciplina);
+    setAviso(null);
+    try {
+      const { data } = await axios.post<{ pasoMax: number }>(
+        `${API_URL}/recorrido-progreso/admin/${userId}/${disciplina}`,
+        { paso },
+        { headers: adminHeaders() },
+      );
+      setMapaDe((prev) =>
+        prev && prev.id === userId ? { ...prev, pasos: { ...prev.pasos, [disciplina]: data.pasoMax } } : prev,
+      );
+    } catch {
+      setAviso("No se pudo guardar hasta dónde llega el mapa.");
+    } finally {
+      setGuardandoMapa(null);
     }
   };
 
@@ -645,6 +684,60 @@ export default function AdminTodosUsuarios() {
                                 >
                                   {abiertaYa ? "✓ " : ""}{d.nombre}
                                 </Box>
+                              );
+                            })}
+                          </Flex>
+
+                          {/* el mapa: hasta qué paso llega cada disciplina */}
+                          <Text color="rgba(255,255,255,0.7)" fontSize="sm" mb={2}>
+                            Mapa: el paso hasta el que puede entrar. Solo lo abres tú; ella no lo
+                            desbloquea haciendo los ejercicios.
+                          </Text>
+                          <Flex wrap="wrap" gap={2} mb={4}>
+                            {MAPA_ADMIN.map((clave) => {
+                              const d = DISCIPLINAS_PAGO.find((x) => x.scope === clave);
+                              if (!d) return null;
+                              const total = CAMINO[clave as CaminoKey].total;
+                              const cargadoMapa = mapaDe?.id === u.id;
+                              const paso = Math.max(1, mapaDe?.pasos?.[clave] ?? 1);
+                              const ocupadoMapa = ocupado || guardandoMapa === clave || !cargadoMapa;
+                              const botonPaso = (texto: string, nuevo: number, titulo: string) => (
+                                <Box
+                                  as="button"
+                                  onClick={() => fijarPaso(u.id, clave, nuevo)}
+                                  disabled={ocupadoMapa || nuevo < 1 || nuevo > total}
+                                  title={titulo}
+                                  w="26px"
+                                  h="26px"
+                                  borderRadius="full"
+                                  border={`1px solid ${d.txt}`}
+                                  color={d.txt}
+                                  fontWeight="700"
+                                  cursor={ocupadoMapa ? "wait" : "pointer"}
+                                  opacity={ocupadoMapa || nuevo < 1 || nuevo > total ? 0.4 : 1}
+                                  _focusVisible={focoBlanco}
+                                >
+                                  {texto}
+                                </Box>
+                              );
+                              return (
+                                <Flex
+                                  key={clave}
+                                  align="center"
+                                  gap={2}
+                                  px={3}
+                                  py={1}
+                                  borderRadius="full"
+                                  bg="rgba(255,255,255,0.06)"
+                                  border={`1px solid ${d.txt}`}
+                                >
+                                  <Text color={d.txt} fontSize="sm" fontWeight="600">{d.nombre}</Text>
+                                  {botonPaso("−", paso - 1, "Cerrar el último paso abierto")}
+                                  <Text color="white" fontSize="sm" minW="48px" textAlign="center">
+                                    {cargadoMapa ? `${paso} / ${total}` : "…"}
+                                  </Text>
+                                  {botonPaso("+", paso + 1, "Abrir el siguiente paso")}
+                                </Flex>
                               );
                             })}
                           </Flex>

@@ -353,10 +353,10 @@ export default function DisciplinaPortada({ modo = "portada" }: { modo?: "portad
   const navigate = useNavigate();
   const d = presentacionPorKey(disciplina);
 
-  // Slug desconocido: al Mapa, que es donde están las ocho (mismo criterio que
+  // Slug desconocido: a la portada (mismo criterio que
   // /d/:disciplina, para no dejar un 404 seco).
   useEffect(() => {
-    if (!d) navigate("/elMetodo", { replace: true });
+    if (!d) navigate("/welcome", { replace: true });
   }, [d, navigate]);
   if (!d) return null;
 

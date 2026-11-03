@@ -14,12 +14,11 @@ import { DisciplinaBgLayer } from "../global/DisciplinaBgLayer";
 import { comicLoaderPorColor } from "./comicLoaders";
 import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
-import { useRecorridoAlcanzable } from "../../hooks/useRecorridoAlcanzable";
-import { psicologiaIndice, RECORRIDO_TOTAL, pasoAlcanzablePsicologia, type PasoRecorrido } from "./psicologiaRecorrido";
+import { psicologiaIndice, RECORRIDO_TOTAL, type PasoRecorrido } from "./psicologiaRecorrido";
 import { flushSaves } from "../../utils/flushSaves";
 import { apuntarCamino } from "../../utils/apuntarCamino";
 import { CAMINO, type CaminoKey } from "../../data/camino";
-import { API_URL, neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
+import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
 
 const PAPEL = "#fbf4e8";
 
@@ -65,8 +64,6 @@ export function IndiceRecorrido({
   progresoKey,
   registroKey,
   registroOffset = 0,
-  alcanzableUrl = (userId: string) => `${API_URL}/metodo-psicologia/${userId}`,
-  alcanzableDe = pasoAlcanzablePsicologia,
   cargando = false,
   onOpen,
   secciones,
@@ -98,11 +95,9 @@ export function IndiceRecorrido({
    *  desbloqueado y va desbloqueando cada paso al llegar al siguiente. Si NO se
    *  pasa, se usa el flag `bloqueado` de cada entrada del índice (astrología). */
   progresoKey?: string;
-  /** Endpoint (por userId) del que leer los datos del recorrido para calcular la
-   *  alcanzabilidad. Por defecto, el de psicología. */
+  /** @deprecated Ya no se usa: el mapa lo abre solo la admin (pasoMax). */
   alcanzableUrl?: (userId: string) => string;
-  /** Dado el `data` del recorrido y el id de recorrido, devuelve el paso máximo
-   *  ALCANZABLE (respetando los requisitos de cada paso). Por defecto, psicología. */
+  /** @deprecated Ya no se usa: el mapa lo abre solo la admin (pasoMax). */
   alcanzableDe?: (data: any, expId: string) => number;
   /** SOLO modo por flags (sin `progresoKey`): true mientras el padre aún está
    *  averiguando qué páginas están bloqueadas. Mientras es true (y el índice está
@@ -183,37 +178,15 @@ export function IndiceRecorrido({
       ? actual
       : null;
 
-  // Bloqueo secuencial persistido en BD (solo si se pasa `progresoKey`).
-  const { pasoMax, cargado: progresoCargado, avanzar } = useRecorridoProgreso(progresoKey);
+  // Bloqueo secuencial persistido en BD (solo si se pasa `progresoKey`). El mapa
+  // NO se abre andando: `pasoMax` lo fija la admin desde /admin/usuarios.
+  const { pasoMax, cargado: progresoCargado } = useRecorridoProgreso(progresoKey);
 
-  // «Hasta dónde puede llegar»: al abrir el Índice, leemos los datos del recorrido
-  // y calculamos el paso máximo ALCANZABLE respetando los requisitos de cada paso.
-  // Así el Índice abre las páginas a las que el usuario YA PUEDE llegar (no solo
-  // las que ya ha visitado). Se carga perezosamente (solo con el popup abierto).
-  const { maxAlcanzable, cargado: alcanzableCargado } = useRecorridoAlcanzable(
-    open && !!progresoKey,
-    alcanzableUrl,
-    alcanzableDe,
-    expId,
-  );
-
-  // ¿Seguimos AVERIGUANDO a qué páginas se puede llegar? Mientras sea así (y el
-  // índice esté abierto), no enseñamos la lista con los candados a medio calcular:
-  // mostramos la animación de espera de la disciplina.
-  //   · Con `progresoKey` (psicología, ayurveda): hay que esperar al progreso
-  //     secuencial (pasoMax) Y a la consulta de alcanzabilidad (perezosa, al abrir).
-  //   · Sin él (astrología, cábala, nutrición…): lo dice el padre con `cargando`.
-  const revisando = progresoKey ? (!progresoCargado || !alcanzableCargado) : cargando;
-
-  // Al LLEGAR a una página (vía la navegación de la app), desbloquea ese paso y
-  // todos los anteriores. Así la página actual nunca queda bloqueada, y el Índice
-  // sigue bloqueando los pasos a los que aún no se ha llegado. La navegación
-  // adelante de la app es la que va abriendo pasos; el Índice nunca deja saltar a
-  // uno bloqueado (ir() lo impide).
-  useEffect(() => {
-    if (!progresoKey || !progresoCargado || actualSecuencial == null) return;
-    if (actualSecuencial > pasoMax) avanzar(actualSecuencial);
-  }, [progresoKey, progresoCargado, actualSecuencial, pasoMax, avanzar]);
+  // ¿Seguimos esperando datos? Con `progresoKey` (psicología, ayurveda…): al
+  // progreso de la BD. Sin él (astrología, cábala…): lo dice el padre con
+  // `cargando`. Mientras sea así no enseñamos la lista con los candados a medio
+  // calcular: mostramos la animación de espera de la disciplina.
+  const revisando = progresoKey ? !progresoCargado : cargando;
 
   // ── EL CAMINO de /home ────────────────────────────────────────────────────
   // Cada vez que se llega a una página del recorrido se apunta su número, para
@@ -252,11 +225,11 @@ export function IndiceRecorrido({
     // Modo por flags: la página en la que ESTÁS nunca sale con candado (estás
     // en ella; enseñarla bloqueada es mentir y además impide volver a ella).
     if (!progresoKey) return !!p.bloqueado && !esActual(p, gi);
-    // Aún sin datos de progreso NI de alcanzabilidad: solo la actual abierta.
-    if (!progresoCargado && maxAlcanzable == null) return !esActual(p, gi);
-    // Techo abierto = lo más lejos entre: lo que YA PUEDE alcanzar por requisitos
-    // (maxAlcanzable), lo ya visitado (pasoMax, para no re-bloquear) y la actual.
-    const techo = Math.max(pasoMax, maxAlcanzable ?? 0, actualSecuencial ?? 0);
+    // Aún sin datos de progreso: solo la actual abierta.
+    if (!progresoCargado) return !esActual(p, gi);
+    // Techo abierto = lo que la admin ha fijado (pasoMax) y la página en la que
+    // estás (nunca se te cierra la que tienes delante).
+    const techo = Math.max(pasoMax, actualSecuencial ?? 0);
     return p.n > techo;
   };
 

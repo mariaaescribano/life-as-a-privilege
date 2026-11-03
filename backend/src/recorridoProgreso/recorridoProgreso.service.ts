@@ -16,6 +16,14 @@ import { DatabaseService } from '../database.service';
  */
 export const CONSENTIMIENTO_SALUD = 'consentimiento-salud';
 
+/**
+ * Disciplinas cuyo MAPA (el Índice del recorrido) solo abre la admin. Su
+ * `paso_max` lo fija ella desde /admin/usuarios; la usuaria ya no lo sube
+ * andando por las páginas. Las filas `camino-*` (lo que mide «Tu camino» de la
+ * Home) siguen subiendo solas: no abren nada.
+ */
+export const DISCIPLINAS_MAPA_ADMIN = ['psicologia', 'fisiologia', 'nutricion', 'ayurveda', 'tcm'];
+
 @Injectable()
 export class RecorridoProgresoService {
   constructor(private readonly databaseService: DatabaseService) {}
@@ -95,6 +103,25 @@ export class RecorridoProgresoService {
     if (error) {
       console.error('Error avanzando recorrido_progreso:', error);
       return actual;
+    }
+    return nuevo;
+  }
+
+  /**
+   * La admin FIJA el paso máximo de una usuaria (sube o baja: es el único sitio
+   * donde puede bajar). Con 1 queda cerrado todo salvo el primer paso.
+   */
+  async fijar(userId: string, disciplina: string, paso: number): Promise<number> {
+    const nuevo = Math.max(Math.floor(paso) || 1, 1);
+    const { error } = await this.databaseService.getClient()
+      .from('recorrido_progreso')
+      .upsert(
+        { user_id: userId, disciplina, paso_max: nuevo, updated_at: new Date().toISOString() },
+        { onConflict: 'user_id,disciplina' },
+      );
+    if (error) {
+      console.error('Error fijando recorrido_progreso:', error);
+      throw new Error('No se ha podido guardar');
     }
     return nuevo;
   }

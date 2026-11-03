@@ -91,7 +91,6 @@ const Contacto = lazy(() => import("./app/web/Contacto"));
 const CumpleRegalo = lazy(() => import("./app/web/CumpleRegalo"));
 const ContactoFormulario = lazy(() => import("./app/web/ContactoFormulario"));
 const Opiniones = lazy(() => import("./app/web/Opiniones"));
-const ElMetodo = lazy(() => import("./app/web/ElMetodo"));
 const MaterialesGratuitos = lazy(() => import("./app/web/MaterialesGratuitos"));
 // const ProgramasPage = lazy(() => import("./app/web/ProgramasPage"));
 // const ProgramaPage = lazyConMetodo(() => import("./app/web/ProgramaPage"));
@@ -419,7 +418,9 @@ export default function App()
       {/* El formulario, en su propia página: se llega desde la tarjeta «Escríbeme». */}
       <Route path="/contacto/escribir" element={<ContactoFormulario />} />
       <Route path="/opiniones" element={<Opiniones />} />
-      <Route path="/elMetodo" element={<ElMetodo />} />
+      {/* /elMetodo ya no existe (la página se borró), pero hay QR impresos que apuntan
+          aquí: llevan a la portada. */}
+      <Route path="/elMetodo" element={<Navigate to="/welcome" replace />} />
       <Route path="/materiales" element={<MaterialesGratuitos />} />
       {/* Programas: aparcado, como «Vídeos». Las tres rutas y la caja de
           Materiales quedan comentadas; las páginas siguen en el repositorio. */}

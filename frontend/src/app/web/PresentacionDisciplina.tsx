@@ -42,9 +42,9 @@ export default function PresentacionDisciplina() {
   }, [disciplina]);
 
   // Slug desconocido (cartel mal impreso, enlace escrito a mano): en vez de un
-  // 404 seco, al Mapa completo, que es donde están las ocho.
+  // 404 seco, a la portada.
   useEffect(() => {
-    if (!d) navigate("/elMetodo", { replace: true });
+    if (!d) navigate("/welcome", { replace: true });
   }, [d, navigate]);
   if (!d) return null;
 
