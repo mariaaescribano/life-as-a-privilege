@@ -16,6 +16,7 @@ import { useLockBodyScroll } from "../../hooks/useLockBodyScroll";
 import { useRecorridoProgreso } from "../../hooks/useRecorridoProgreso";
 import { psicologiaIndice, RECORRIDO_TOTAL, type PasoRecorrido } from "./psicologiaRecorrido";
 import { flushSaves } from "../../utils/flushSaves";
+import { esMariaMirando } from "../../api/persona";
 import { apuntarCamino } from "../../utils/apuntarCamino";
 import { CAMINO, type CaminoKey } from "../../data/camino";
 import { neuropsicologiaBg, neuropsicologiaNom, neuropsicologiaTxt } from "../../GlobalVariables";
@@ -218,6 +219,8 @@ export function IndiceRecorrido({
   // todos los pasos salvo la página actual, para no permitir saltar por el índice
   // (y romper el recorrido) en ese instante previo a conocer `pasoMax`.
   const estaBloqueado = (p: PasoRecorrido, sec: SeccionIndice, gi: number): boolean => {
+    // María (el panel desbloqueado, o dentro de la cuenta de una persona) entra a donde quiera: los candados son para la persona.
+    if (esMariaMirando()) return false;
     // Sección entera cerrada (el submapa de un doṣha visto desde fuera).
     if (sec.habilitada === false) return true;
     // Sección libre (el mapa común): solo su propio flag por paso.

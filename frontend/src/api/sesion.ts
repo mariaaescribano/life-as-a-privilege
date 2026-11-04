@@ -21,11 +21,11 @@
  * Varias partes de /home guardan datos a nivel de módulo (progreso del camino,
  * disciplinas compradas, diario…) para no parpadear al volver. Pero el módulo
  * sobrevive a cerrar sesión y entrar con otra cuenta en la misma pestaña (o a
- * «entrar como»), y entonces la cuenta nueva veía los datos de la anterior.
+ * el camino de otra persona), y entonces la cuenta nueva veía los datos de la anterior.
  *
  * Quien tenga una caché así la consulta ANTES de leerla y, si devuelve `true`,
  * la vacía. Se mira el `userId` guardado, así que vale para cualquier vía de
- * entrada (login, registro, suplantación) sin tener que avisar desde cada una.
+ * entrada (login, registro, camino de una persona) sin tener que avisar desde cada una.
  */
 const duenosDeCache = new Map<string, string | null>();
 export function cacheDeOtraCuenta(clave: string): boolean {

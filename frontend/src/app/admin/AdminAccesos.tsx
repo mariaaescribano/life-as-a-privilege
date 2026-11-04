@@ -32,7 +32,6 @@ export {};
 // import { DISCIPLINAS_PAGO } from "../../data/adminDisciplinas";
 // import { API_URL } from "../../GlobalVariables";
 // import { useAdminGuard, adminHeaders } from "./useAdminGuard";
-// import BotonEntrarComo from "./BotonEntrarComo";
 //
 // /** scope de pago ↔ disciplina del panel, en el orden del recorrido.
 //  *  Vive en data/adminDisciplinas.ts porque /admin/usuarios necesita la misma
@@ -334,9 +333,6 @@ export {};
 //                           >
 //                             Quitar acceso
 //                           </Box>
-//                           {/* Ver la web desde dentro de su cuenta (sale una barra
-//                               abajo a la derecha para volver a ser admin). */}
-//                           <BotonEntrarComo usuario={u} variante="boton" />
 //                         </Flex>
 //
 //                         {/* Borrar la cuenta: separado del resto, porque no es

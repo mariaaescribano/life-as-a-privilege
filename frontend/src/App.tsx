@@ -5,7 +5,7 @@ import { Box } from "@chakra-ui/react";
 // La landing de dos proyectos está aparcada (ver la nota en la ruta «/»).
 // import Landing from "./app/web/Landing";
 import Welcome from "./app/web/Welcome";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { cargarTextosMetodo } from "./i18n";
 
 /**
@@ -102,6 +102,9 @@ const DisciplinaPortada = lazy(() => import("./app/web/DisciplinaPortada"));
 const PresentacionDisciplina = lazyConMetodo(() => import("./app/web/PresentacionDisciplina"));
 const CheckoutMetodo = lazy(() => import("./app/web/CheckoutMetodo"));
 const MetodoAstrologia = lazyConMetodo(() => import("./app/metodo/MetodoAstrologia"));
+// El camino de cada disciplina (sus páginas como cajitas con flechas): usa los
+// títulos del recorrido (`metodo.*`), por eso lleva el diccionario del recorrido.
+const CaminoPagina = lazyConMetodo(() => import("./app/metodo/CaminoPagina"));
 const MetodoAstrologiaCartaAstral = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCartaAstral"));
 const MetodoAstrologiaPlanetas = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaPlanetas"));
 const MetodoAstrologiaProfundizar = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaProfundizar"));
@@ -112,9 +115,11 @@ const MetodoAstrologiaPdf = lazyConMetodo(() => import("./app/metodo/MetodoAstro
 const MetodoAstrologiaLlamada = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaLlamada"));
 const MetodoAstrologiaCursos = lazyConMetodo(() => import("./app/metodo/MetodoAstrologiaCursos"));
 const AdminHome = lazy(() => import("./app/admin/AdminHome"));
+const AdminInicio = lazy(() => import("./app/admin/AdminInicio"));
+const AdminDatosUsuario = lazy(() => import("./app/admin/AdminDatosUsuario"));
+const AdminCrearCuenta = lazy(() => import("./app/admin/AdminCrearCuenta"));
 const AdminLogin = lazy(() => import("./app/admin/AdminLogin"));
 const AdminUsuarios = lazyConMetodo(() => import("./app/admin/AdminUsuarios"));
-const AdminTodosUsuarios = lazy(() => import("./app/admin/AdminTodosUsuarios"));
 const AdminAstrologiaEditor = lazyConMetodo(() => import("./app/admin/AdminAstrologiaEditor"));
 const AdminPsicologiaLectura = lazyConMetodo(() => import("./app/admin/AdminPsicologiaLectura"));
 const AdminAyurvedaLectura = lazyConMetodo(() => import("./app/admin/AdminAyurvedaLectura"));
@@ -265,10 +270,11 @@ const Privacidad = lazy(() => import("./app/legal/Privacidad"));
 const Cookies = lazy(() => import("./app/legal/Cookies"));
 const Terminos = lazy(() => import("./app/legal/Terminos"));
 import AvisoCookies from "./components/global/AvisoCookies";
-// Solo se pinta si la admin ha «entrado como» otra persona (api/suplantar.ts).
-import BarraSuplantacion from "./components/global/BarraSuplantacion";
+// Solo se pinta si la admin ha «entrado como» otra persona (api/persona.ts).
+import BarraPersona from "./components/global/BarraPersona";
 import { MigaDelMapa } from "./components/global/VolverAlMapa";
 import { GuardiaPagoRecorrido } from "./components/global/GuardiaPagoRecorrido";
+import { NotaPagina } from "./components/global/NotaPagina";
 import { RegistroActividad } from "./components/global/RegistroActividad";
 // Pantalla de espera mientras se descarga el trozo de código de cada página.
 // Va EAGER a propósito: es justo lo que hay que poder pintar antes de que llegue
@@ -321,6 +327,12 @@ const ADMIN_ZOOM = 1.2;
  *     Se compensa en el hijo directo (la raíz de cada página admin).
  *   · Los modales de Chakra se pintan en un portal colgado de <body>, o sea
  *     FUERA de este contenedor, así que esos no se agrandan. */
+/** /admin/asesorias/:userId ya no es una página: lleva a sus «Datos» (por si queda algún enlace). */
+function IrADatosDe() {
+  const { userId } = useParams();
+  return <Navigate to={`/admin/asesorias/${userId}/datos`} replace />;
+}
+
 function AdminRoute({ children }: { children: React.ReactNode }) {
   return (
     <PrivateRoute>
@@ -357,12 +369,14 @@ export default function App()
     <MigaDelMapa />
     {/* Sin pagar no se entra en una disciplina: vuelve a /home y sale su pago. */}
     <GuardiaPagoRecorrido />
+    {/* La nota de María en cada página del recorrido: pestaña en el borde derecho. */}
+    <NotaPagina />
     {/* Apunta qué recursos gratuitos abre quien tiene cuenta (para los emails). */}
     <RegistroActividad />
     <ExitIntentSubscribeModal />
     <MiniDiario />
     <AvisoCookies />
-    <BarraSuplantacion />
+    <BarraPersona />
     {/* Suspense: cada pagina viaja en su propio fichero y se descarga solo
         cuando se entra en ella. Mientras llega, se ve la pantalla de carga de la
         casa. Antes todo iba en un unico bundle de 6 MB que habia que bajar
@@ -441,6 +455,7 @@ export default function App()
           Ruta corta porque va impresa: /d/cabala, /d/nutricion, … */}
       <Route path="/d/:disciplina" element={<PresentacionDisciplina />} />
       <Route path="/checkoutMetodo" element={<CheckoutMetodo />} />
+      <Route path="/camino/:disciplina" element={<PrivateRoute><CaminoPagina /></PrivateRoute>} />
       <Route path="/metodo/astrologia" element={<PrivateRoute><MetodoAstrologia /></PrivateRoute>} />
       {/* «Lo primero de tu carta» vive ahora DENTRO de /metodo/astrologia (una
           sola página: datos + Sol/Luna/Ascendente). La ruta vieja se conserva
@@ -456,16 +471,22 @@ export default function App()
       <Route path="/metodo/astrologia/cursos" element={<PrivateRoute><MetodoAstrologiaCursos /></PrivateRoute>} />
       <Route path="/metodo/astrologia/:planetaKey/:campo" element={<PrivateRoute><MetodoAstrologiaProfundizar /></PrivateRoute>} />
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin" element={<AdminRoute><AdminHome /></AdminRoute>} />
+      <Route path="/admin" element={<AdminRoute><AdminInicio /></AdminRoute>} />
+      <Route path="/admin/asesorias" element={<AdminRoute><AdminHome /></AdminRoute>} />
+      <Route path="/admin/asesorias/nueva" element={<AdminRoute><AdminCrearCuenta /></AdminRoute>} />
+      <Route path="/admin/asesorias/:userId/datos" element={<AdminRoute><AdminDatosUsuario /></AdminRoute>} />
+      {/* La página de «una persona» se fue: el mandala te mete en su home y todo lo suyo está en «Datos». */}
+      <Route path="/admin/asesorias/:userId" element={<AdminRoute><IrADatosDe /></AdminRoute>} />
       <Route path="/admin/cursos" element={<AdminRoute><AdminCursos /></AdminRoute>} />
       <Route path="/admin/cursos/:id" element={<AdminRoute><AdminCursoEditor /></AdminRoute>} />
       <Route path="/admin/astrologia-textos" element={<AdminRoute><AdminAstrologiaTextos /></AdminRoute>} />
       {/* /admin/accesos está aparcado: regalar, revocar y borrar cuentas viven
-          ahora en la tabla de /admin/usuarios. La página queda intacta. */}
+          ahora en la página de cada persona (/admin/asesorias/:userId). */}
       {/* <Route path="/admin/accesos" element={<AdminRoute><AdminAccesos /></AdminRoute>} /> */}
-      {/* Ojo al orden: «usuarios» tiene que ir ANTES de /admin/:disciplina o la
-          ruta de disciplina se lo tragaría como si fuera una novena. */}
-      <Route path="/admin/usuarios" element={<AdminRoute><AdminTodosUsuarios /></AdminRoute>} />
+      {/* La tabla de usuarios ya no existe: todo lo de una persona está en Asesorías.
+          Se queda la redirección (y va ANTES de /admin/:disciplina, que si no se
+          la tragaría como si fuera una disciplina) por si queda algún enlace. */}
+      <Route path="/admin/usuarios" element={<Navigate to="/admin/asesorias" replace />} />
       {/* El panel del estudio, aparcado con el resto del estudio. */}
       {/* <Route path="/admin/estudio" element={<AdminRoute><AdminEstudio /></AdminRoute>} /> */}
       {/* El panel de vídeos, aparcado como la sección: se quitó del panel. */}

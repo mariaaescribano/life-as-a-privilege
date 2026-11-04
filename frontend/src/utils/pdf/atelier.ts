@@ -282,7 +282,7 @@ export class Taller {
     }
 
     // Cabecera.
-    this.versalitas("Life as a Privilege", MARGEN, 15, 7.4, t.apagado);
+    this.versalitas("María Escribano", MARGEN, 15, 7.4, t.apagado);
     this.fuente("italic", 9.5, t.acento);
     doc.text(this.titulo, A4_W - MARGEN, 15, { align: "right" });
     doc.setDrawColor(...t.acento);
@@ -333,7 +333,7 @@ export class Taller {
     filigranaEsquina(doc, 11, A4_H - 11, 1, -1, t.acentoSuave);
     filigranaEsquina(doc, A4_W - 11, A4_H - 11, -1, -1, t.acentoSuave);
 
-    this.versalitas(o.antetitulo ?? "Life as a Privilege", cx, 30, 9, t.acentoSuave, "center");
+    this.versalitas(o.antetitulo ?? "María Escribano", cx, 30, 9, t.acentoSuave, "center");
     filete(doc, cx, 34.5, 34, t.acentoSuave, 0.25);
 
     // Sobre la acuarela no vale el acento del tema: en las disciplinas de

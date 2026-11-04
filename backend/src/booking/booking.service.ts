@@ -90,7 +90,7 @@ export class BookingService {
       : '';
 
     await transporter.sendMail({
-      from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
+      from: `"María Escribano" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
       to: notifyEmail,
       replyTo: dto.email,
       subject: `Nueva reserva — ${dto.fecha} ${dto.slot}`,

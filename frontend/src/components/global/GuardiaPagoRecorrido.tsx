@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { getUserMe } from "../../api/userMe";
 import { LifeLoading } from "./LifeLoading";
+import { esMariaMirando } from "../../api/persona";
 
 /** Prefijo de ruta → scope de la disciplina (el de `<scope>_suscrito`). */
 const SCOPE_POR_RUTA: [string, string][] = [
@@ -26,6 +27,15 @@ const SCOPE_POR_RUTA: [string, string][] = [
   ["/metodo/nutricion", "nutricion"],
   ["/metodo/cabala", "cabala"],
   ["/metodo/cultura", "cultura"],
+  // El camino de cada disciplina (/camino/<slug>) se guarda igual que la disciplina.
+  ["/camino/astrologia", "metodo"],
+  ["/camino/psicologia", "psicologia"],
+  ["/camino/ayurveda", "ayurveda"],
+  ["/camino/tcm", "tcm"],
+  ["/camino/fisiologia", "fisiologia"],
+  ["/camino/nutricion", "nutricion"],
+  ["/camino/cabala", "cabala"],
+  ["/camino/cultura", "cultura"],
 ];
 
 function scopeDeRuta(pathname: string): string | null {
@@ -46,6 +56,8 @@ export function GuardiaPagoRecorrido() {
 
   useEffect(() => {
     if (!scope) { setComprobando(false); return; }
+    // María (el panel desbloqueado, o dentro de la cuenta de una persona) entra a donde quiera, sin «pagar» nada.
+    if (esMariaMirando()) { setComprobando(false); return; }
     let uid: string | null = null;
     try { uid = localStorage.getItem("userId"); } catch { /* modo privado */ }
     // Sin sesión: de eso ya se encargan las propias páginas (→ /welcome).

@@ -17,12 +17,14 @@ import { DatabaseService } from '../database.service';
 export const CONSENTIMIENTO_SALUD = 'consentimiento-salud';
 
 /**
- * Disciplinas cuyo MAPA (el Índice del recorrido) solo abre la admin. Su
- * `paso_max` lo fija ella desde /admin/usuarios; la usuaria ya no lo sube
- * andando por las páginas. Las filas `camino-*` (lo que mide «Tu camino» de la
- * Home) siguen subiendo solas: no abren nada.
+ * Disciplinas cuyo MAPA (el Índice del recorrido) solo abre la admin: las OCHO.
+ * Su `paso_max` lo fija ella desde el /home de la persona (o desde su camino); la
+ * persona no lo sube andando por las páginas, solo ve lo que María ha abierto.
+ * Las claves son las de `<key>_suscrito` (astrología = `metodo`). Las filas
+ * `camino-*` (lo que mide «Tu camino» de la Home) siguen subiendo solas: no abren
+ * nada.
  */
-export const DISCIPLINAS_MAPA_ADMIN = ['psicologia', 'fisiologia', 'nutricion', 'ayurveda', 'tcm'];
+export const DISCIPLINAS_MAPA_ADMIN = ['metodo', 'psicologia', 'fisiologia', 'nutricion', 'ayurveda', 'tcm', 'cabala', 'cultura'];
 
 @Injectable()
 export class RecorridoProgresoService {

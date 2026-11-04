@@ -2,6 +2,7 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CABECERA_PERSONA, resolverPersona } from './persona.util';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -13,18 +14,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: secret,
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: any) {
-    return {
-      userId: payload.sub,
-      email: payload.email,
-      // Solo es true si el token se emitió tras verificar la contraseña de admin.
-      admin: payload.admin === true,
-      // Si la sesión la abrió una admin «entrando como» esta persona, aquí viene
-      // su id. En una sesión normal es undefined.
-      suplantadoPor: typeof payload.sup === 'string' ? payload.sup : undefined,
-    };
+  async validate(req: any, payload: any) {
+    // Si es María en el camino de una persona, `req.user` es esa persona (ver
+    // persona.util.ts). En cualquier otro caso, la sesión tal cual.
+    return resolverPersona(payload, req?.headers?.[CABECERA_PERSONA]);
   }
 }

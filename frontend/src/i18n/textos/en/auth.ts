@@ -104,6 +104,8 @@ export const auth = {
   "cuenta.nuevaContrasena": "New password",
   /** The box next to the date: you don't type it, it's calculated from the date. */
   "cuenta.edad": "AGE",
+  "cuenta.horaNacimiento": "TIME OF BIRTH",
+  "cuenta.lugarNacimiento": "PLACE OF BIRTH",
   "cuenta.edad.anios": "years old",
   "cuenta.cambiosGuardados": "Changes saved",
   "cuenta.panelAdmin": "Admin panel",

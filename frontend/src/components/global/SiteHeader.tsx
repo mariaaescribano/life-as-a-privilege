@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { esSoloPremium, recordarSoloPremium, rutaHome } from "../../api/sesion";
+import { cerrarSesionLocal, esAdminDesbloqueado, esSoloPremium, recordarSoloPremium, rutaHome } from "../../api/sesion";
+import { salirDeLaPersona, personaActiva } from "../../api/persona";
 import { getUserMe } from "../../api/userMe";
 import { useT } from "../../i18n";
 import SelectorIdioma from "./SelectorIdioma";
@@ -95,7 +96,6 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   // Navegación de administración (pestañas en el header).
   const isAdminPage = path.startsWith("/admin");
   const adminCursosActive = path.startsWith("/admin/cursos");
-  const adminUsuariosActive = path.startsWith("/admin/usuarios") || path.startsWith("/admin/diario") || path.startsWith("/admin/actividad");
   const adminArquetiposActive = path.startsWith("/admin/astrologia-textos");
   const adminSuscriptoresActive = path.startsWith("/admin/suscriptores");
   const adminPremiumActive = path.startsWith("/admin/premium");
@@ -138,23 +138,40 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
   ];
   const premiumSolo = isPrivate && soloPremium && !isAdminPage;
 
-  const items: ItemMenu[] = premiumSolo
-    ? itemsPremium
+  // Cerrar sesión desde el menú, para que nadie se quede sin salida. Dentro del
+  // camino de una persona (María en el de ella) cerrar sesión la echaría del
+  // todo: lo que toca es volver a Asesorías, que cierra ese camino.
+  const enCaminoDePersona = personaActiva() !== null;
+  const itemSalir: ItemMenu = enCaminoDePersona
+    ? { etiqueta: t("header.volverAsesorias"), onSelect: () => salirDeLaPersona() }
+    : { etiqueta: t("cuenta.cerrarSesion"), onSelect: () => { cerrarSesionLocal(); navigate("/welcome"); } };
+
+  // DENTRO: la persona en su espacio, o María en el de ella. Ahí el menú se
+  // queda en lo justo —Home, Mi cuenta y salir— y la cabecera no lleva las
+  // opciones de la web pública. María con el panel de admin sin entrar en el
+  // espacio de nadie no cuenta: tiene el suyo.
+  const dentro = isPrivate && !isAdminPage && !premiumSolo && !esAdminDesbloqueado();
+
+  const items: ItemMenu[] = dentro
+    ? [
+        { etiqueta: t("header.home"),     onSelect: () => navigate(homeTarget),     activo: path === "/home" },
+        { etiqueta: t("header.miCuenta"), onSelect: () => navigate("/user/account"), activo: isCuentaPage },
+        itemSalir,
+      ]
+    : premiumSolo
+    ? [...itemsPremium, itemSalir]
     : isPrivate
     ? isAdminPage
       ? [
-          { etiqueta: t("header.mapa"),         onSelect: () => navigate("/admin"),                   activo: !adminCursosActive && !adminUsuariosActive && !adminArquetiposActive && !adminSuscriptoresActive && !adminPremiumActive },
+          { etiqueta: t("header.asesorias"),    onSelect: () => navigate("/admin/asesorias"),          activo: path.startsWith("/admin/asesorias") || path.startsWith("/admin/diario") || path.startsWith("/admin/actividad") },
           { etiqueta: t("header.cursos"),       onSelect: () => navigate("/admin/cursos"),            activo: adminCursosActive },
-          // La tabla de las personas: todas las cuentas con sus disciplinas,
-          // sus sesiones, regalar el recorrido y borrar. «El Mapa» mira una
-          // disciplina; esta mira una persona (y su diario y su actividad).
-          { etiqueta: t("header.usuarios"),     onSelect: () => navigate("/admin/usuarios"),          activo: adminUsuariosActive },
           // Los textos de los arquetipos de la carta astral.
           { etiqueta: t("header.arquetipos"),   onSelect: () => navigate("/admin/astrologia-textos"), activo: adminArquetiposActive },
           // Los correos apuntados en el formulario de la portada.
           { etiqueta: t("header.suscriptores"), onSelect: () => navigate("/admin/suscriptores"),      activo: adminSuscriptoresActive },
           // Subir podcasts y reels del contenido premium (desde el móvil).
           { etiqueta: t("header.premium"),      onSelect: () => navigate("/admin/premium"),            activo: adminPremiumActive },
+          itemSalir,
         ]
       : [
           ...itemsWeb,
@@ -234,7 +251,7 @@ const SiteHeader = ({ variant, userImg }: SiteHeaderProps) => {
           Las cuatro primeras opciones del menú (Asesorías, Premium, Disciplinas, Material), a la vista y en medio (solo en
           pantallas anchas; en las demás viven dentro de la hamburguesa, que se
           queda siempre a la derecha). No hay admin: ahí el menú es otro. */}
-      {!isAdminPage && (
+      {!isAdminPage && !dentro && (
         <Flex
           as="nav"
           // Con cuatro opciones hacen falta ~1180 px para que no pisen el nombre

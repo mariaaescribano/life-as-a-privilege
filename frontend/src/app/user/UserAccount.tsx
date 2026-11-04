@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import SiteHeader from "../../components/global/SiteHeader";
 import { API_URL, turquesa } from "../../GlobalVariables";
 import { cerrarSesionLocal } from "../../api/sesion";
-import { salirDeLaSuplantacion, suplantacionActiva } from "../../api/suplantar";
+import { salirDeLaPersona, personaActiva, cabeceraPersona } from "../../api/persona";
 import { encogerFoto } from "../../utils/encogerFoto";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 
 import { inputFechaSx } from "../../components/global/CampoContrasena";
+import { fechaDMA } from "../../utils/fechas";
 
 /** Años cumplidos a partir de la fecha (ISO), o null si no hay fecha válida.
  *  El mismo cálculo que la columna «Edad» de /admin/usuarios. */
@@ -21,6 +22,13 @@ const edadDe = (iso: string): number | null => {
   let edad = hoy.getFullYear() - a;
   if (hoy.getMonth() + 1 < m || (hoy.getMonth() + 1 === m && hoy.getDate() < d)) edad -= 1;
   return edad >= 0 && edad < 130 ? edad : null;
+};
+
+/** Un dato que se mira y no se toca: sin hover, sin halo de foco y con el cursor quieto. */
+const SOLO_LECTURA = {
+  cursor: "default",
+  _hover: { border: "1px solid rgba(255,255,255,0.28)" },
+  _focus: { border: "1px solid rgba(255,255,255,0.28)", boxShadow: "0 0 10px rgba(255,255,255,0.12)", outline: "none" },
 };
 
 const inputStyles = {
@@ -57,6 +65,9 @@ export default function UserAccount() {
   const [contra, setContra] = useState("");
   const [telefono, setTelefono] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
+  // Cuenta de asesoría: sus datos personales los fija María; aquí solo se ven.
+  const [soloLectura, setSoloLectura] = useState(false);
+  const [nacCarta, setNacCarta] = useState<{ hora: string; lugar: string }>({ hora: "", lugar: "" });
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -77,7 +88,7 @@ export default function UserAccount() {
   useEffect(() => {
     if (!userId) { navigate("/welcome"); return; }
     fetch(`${API_URL}/user/me`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}`, ...cabeceraPersona() },
     })
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(u => {
@@ -86,6 +97,7 @@ export default function UserAccount() {
         setIsAdmin(!!u.is_admin);
         setTelefono(u.telefono ?? "");
         setFechaNacimiento(u.fecha_nacimiento ?? "");
+        setSoloLectura(u.en_sesiones === true);
         initialRef.current = {
           name: u.name ?? "",
           email: u.email ?? "",
@@ -95,6 +107,17 @@ export default function UserAccount() {
       })
       .catch(() => setError(t("cuenta.error.cargar")))
       .finally(() => setLoading(false));
+    // La hora y el lugar de nacimiento de su carta astral (si ya los hay).
+    fetch(`${API_URL}/metodo-astrologia/${userId}`, { headers: { Authorization: `Bearer ${token}`, ...cabeceraPersona() } })
+      .then(r => (r.ok ? r.json() : null))
+      .then(c => {
+        if (!c) return;
+        setNacCarta({
+          hora: (c.hora_nacimiento ?? "").slice(0, 5),
+          lugar: [c.lugar, c.region, c.pais].filter(Boolean).join(", "),
+        });
+      })
+      .catch(() => {});
     const temporizador = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(temporizador);
   }, []);
@@ -122,7 +145,7 @@ export default function UserAccount() {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, ...cabeceraPersona(),
         },
         body: JSON.stringify(payload),
       });
@@ -150,11 +173,10 @@ export default function UserAccount() {
   };
 
   const handleLogout = () => {
-    // Si la sesión es prestada (una admin «entrando como» otra persona), cerrar
-    // sesión aquí cerraría la de ELLA y la dejaría fuera del panel. Lo que toca
-    // es devolverle la suya.
-    if (suplantacionActiva()) {
-      salirDeLaSuplantacion();
+    // Si María está en el camino de una persona, cerrar sesión aquí la echaría
+    // del todo en vez de devolverla a Asesorías. Lo que toca es cerrar el camino.
+    if (personaActiva()) {
+      salirDeLaPersona();
       return;
     }
     cerrarSesionLocal();
@@ -186,7 +208,7 @@ export default function UserAccount() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, ...cabeceraPersona(),
         },
         body: JSON.stringify({ password: delPassword.trim() }),
       });
@@ -213,7 +235,7 @@ export default function UserAccount() {
     try {
       const res = await fetch(`${API_URL}/upload/profile-pic/${userId}`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}`, ...cabeceraPersona() },
         body: formData,
       });
       const data = await res.json();
@@ -378,6 +400,8 @@ export default function UserAccount() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 {...inputStyles}
+                isReadOnly={soloLectura}
+                {...(soloLectura ? SOLO_LECTURA : {})}
               />
             </Box>
 
@@ -390,6 +414,8 @@ export default function UserAccount() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 {...inputStyles}
+                isReadOnly={soloLectura}
+                {...(soloLectura ? SOLO_LECTURA : {})}
               />
             </Box>
 
@@ -417,6 +443,8 @@ export default function UserAccount() {
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
                 {...inputStyles}
+                isReadOnly={soloLectura}
+                {...(soloLectura ? SOLO_LECTURA : {})}
               />
             </Box>
 
@@ -429,15 +457,20 @@ export default function UserAccount() {
               <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
                 {t("auth.campo.fechaNacimiento")}
               </Text>
-              <Input
-                type="date"
-                autoComplete="bday"
-                max={new Date().toISOString().slice(0, 10)}
-                value={fechaNacimiento}
-                onChange={(e) => setFechaNacimiento(e.target.value)}
-                {...inputStyles}
-                sx={inputFechaSx}
-              />
+              {soloLectura ? (
+                // Solo se mira: en día/mes/año y como texto (un campo de fecha dejaría abrir el calendario).
+                <Input value={fechaDMA(fechaNacimiento) ?? ""} {...inputStyles} isReadOnly {...SOLO_LECTURA} />
+              ) : (
+                <Input
+                  type="date"
+                  autoComplete="bday"
+                  max={new Date().toISOString().slice(0, 10)}
+                  value={fechaNacimiento}
+                  onChange={(e) => setFechaNacimiento(e.target.value)}
+                  {...inputStyles}
+                  sx={inputFechaSx}
+                />
+              )}
             </Flex>
 
             <Flex direction="column" justify="flex-end">
@@ -470,6 +503,24 @@ export default function UserAccount() {
                 )}
               </Flex>
             </Flex>
+
+            {/* Los datos de nacimiento de su carta astral: solo se ven. */}
+            {nacCarta.hora && (
+              <Flex direction="column" justify="flex-end">
+                <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                  {t("cuenta.horaNacimiento")}
+                </Text>
+                <Input value={nacCarta.hora} {...inputStyles} isReadOnly {...SOLO_LECTURA} />
+              </Flex>
+            )}
+            {nacCarta.lugar && (
+              <Flex direction="column" justify="flex-end">
+                <Text color="rgba(255,255,255,0.78)" fontSize="md" letterSpacing="0.18em" mb={2.5} fontWeight="600" textAlign="center" textShadow="0 0 8px rgba(255,255,255,0.35)">
+                  {t("cuenta.lugarNacimiento")}
+                </Text>
+                <Input value={nacCarta.lugar} {...inputStyles} isReadOnly {...SOLO_LECTURA} />
+              </Flex>
+            )}
           </SimpleGrid>
 
           {error && (

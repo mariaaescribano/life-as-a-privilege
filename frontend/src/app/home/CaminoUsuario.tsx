@@ -32,7 +32,7 @@ import {
 } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { useNombreDisciplina } from "../../i18n/nombreDisciplina";
-import { CAMINO, DISCIPLINAS_CAMINO, pasosAndados, porcentajeCamino, type CaminoKey } from "../../data/camino";
+import { CAMINO, DISCIPLINAS_CAMINO, pasosAndados, porcentajeCamino, rutaCamino, type CaminoKey } from "../../data/camino";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { cacheDeOtraCuenta } from "../../api/sesion";
 
@@ -45,7 +45,7 @@ type IconoDisciplina = React.ComponentType<{ size?: { base: string; md: string }
 // `clara`: acuarela CLARA con tinta oscura (psicología, nutrición, ayurveda):
 // su box va sin velo oscuro y sin sombra negra en los textos, que sobre fondo
 // claro lo único que hacían era ensuciarlo.
-const CARA: Record<CaminoKey, { nom: string; bg: string; txt: string; Icon: IconoDisciplina; clara?: boolean }> = {
+export const CARA: Record<CaminoKey, { nom: string; bg: string; txt: string; Icon: IconoDisciplina; clara?: boolean }> = {
   metodo:     { nom: astrologiaNom,      bg: astrologiaBg,      txt: astrologiaTxt,      Icon: AstrologiaIcon },
   psicologia: { nom: neuropsicologiaNom, bg: neuropsicologiaBg, txt: neuropsicologiaTxt, Icon: NeuropsicologiaIcon, clara: true },
   fisiologia: { nom: fisiologiaNom,      bg: fisiologiaBg,      txt: fisiologiaTxt,      Icon: FisiologiaIcon },
@@ -187,7 +187,7 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
                 <Flex
                   key={key}
                   as="button"
-                  onClick={() => navigate(def.ruta)}
+                  onClick={() => navigate(rutaCamino(key))}
                   align="center"
                   gap={3}
                   w="100%"
@@ -295,7 +295,7 @@ export default function CaminoUsuario({ suscritas }: CaminoUsuarioProps) {
  * fotograma a cero no habría transición que animar, porque el ancho ya vendría
  * puesto desde el primer render.
  */
-function Barra({
+export function Barra({
   pct,
   color,
   pista,

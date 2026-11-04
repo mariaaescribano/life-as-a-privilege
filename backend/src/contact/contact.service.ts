@@ -24,7 +24,7 @@ export class ContactService {
 
     try {
       await transporter.sendMail({
-        from: `"Life as a Privilege" <${process.env.EMAIL_USER}>`,
+        from: `"María Escribano" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
         to: notifyEmail,
         replyTo: dto.email,
         subject: `[Contacto web] ${dto.titulo}`,

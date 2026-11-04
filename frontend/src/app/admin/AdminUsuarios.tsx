@@ -9,6 +9,7 @@ import { disciplinaByKey } from "../../data/adminDisciplinas";
 import { AdminDisciplinaHeader } from "./AdminDisciplinaHeader";
 import { DisciplinaBgLayer, hasDisciplinaBg } from "../../components/global/DisciplinaBgLayer";
 import { API_URL, astrologiaNom } from "../../GlobalVariables";
+import { fechaDMA } from "../../utils/fechas";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 
 interface RecorridoUser {
@@ -25,12 +26,10 @@ interface RecorridoUser {
 const SCOPE_POR_KEY: Record<string, string> = { astrologia: "metodo" };
 const scopeDe = (key: string) => SCOPE_POR_KEY[key] ?? key;
 
-/** «12 sept 2026», o null si no hay fecha guardada (accesos antiguos o regalados). */
+/** «12/09/2026», o null si no hay fecha guardada (accesos antiguos o regalados). */
 const fechaCorta = (iso?: string | null) => {
   if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });
+  return fechaDMA(iso);
 };
 
 export default function AdminUsuarios() {

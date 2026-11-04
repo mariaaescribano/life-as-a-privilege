@@ -12,7 +12,7 @@
 // el viaje.
 //
 // La caché caduca a los 5 minutos y se invalida sola si cambia la sesión
-// (login, logout o «entrar como»: la clave lleva userId y token). El guardia
+// (login, logout o abrir el camino de una persona: la clave lleva userId y token). El guardia
 // de pago pide siempre `fresca: true` —un «no pagado» hay que re-preguntarlo,
 // puede que acabe de pagar— y de paso deja la caché recién puesta para todos.
 //

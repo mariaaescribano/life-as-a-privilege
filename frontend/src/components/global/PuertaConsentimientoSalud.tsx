@@ -16,7 +16,7 @@ import { API_URL } from "../../GlobalVariables";
 import { useT } from "../../i18n";
 import { Casilla } from "../metodo/PagoDisciplinaModal";
 import { darConsentimientoSalud, tieneConsentimientoSalud } from "../../api/consentimientoSalud";
-import { suplantacionActiva } from "../../api/suplantar";
+import { personaActiva } from "../../api/persona";
 
 const BG = "#004a4a";
 const TXT = "#ffffff";
@@ -30,9 +30,9 @@ export function PuertaConsentimientoSalud() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    // Desde «entrar como» no se pregunta: el consentimiento solo puede darlo la
+    // En el camino de María no se pregunta: el consentimiento solo puede darlo la
     // propia persona (el servidor también lo rechaza).
-    if (suplantacionActiva()) return;
+    if (personaActiva()) return;
     let vivo = true;
     (async () => {
       const ya = await tieneConsentimientoSalud();

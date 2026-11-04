@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../GlobalVariables";
 import { presentacionPorKey } from "../../data/presentacionDisciplinas";
-import { suplantacionActiva } from "../../api/suplantar";
+import { personaActiva } from "../../api/persona";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Qué recursos GRATUITOS abre cada persona con cuenta (tabla
@@ -16,7 +16,7 @@ import { suplantacionActiva } from "../../api/suplantar";
 //
 // Reglas:
 //  · Sin sesión, nada: no hay a quién escribirle y no hace falta cookie.
-//  · Con la admin «entrando como» alguien, nada: no son sus visitas.
+//  · Con María en el camino de alguien, nada: no son sus visitas.
 //  · Una vez por recurso y visita (sessionStorage); el backend además solo
 //    suma una visita si la anterior fue hace más de 30 minutos.
 //  · Nunca molesta: sin await, y si falla, se calla.
@@ -82,7 +82,7 @@ export function clasificarRuta(pathname: string): Actividad | null {
 export function registrarActividad(a: Actividad): void {
   let token: string | null = null;
   try { token = localStorage.getItem("token"); } catch { return; }
-  if (!token || suplantacionActiva()) return;
+  if (!token || personaActiva()) return;
 
   try {
     const hechos: string[] = JSON.parse(sessionStorage.getItem(YA_APUNTADO) || "[]");

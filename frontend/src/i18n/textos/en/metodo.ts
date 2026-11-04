@@ -1419,7 +1419,7 @@ export const metodo = {
   // ── Paying for a discipline ────────────────────────────────────────────
   "metodo.pago.precioReducido": "Now at a reduced price",
   "metodo.pago.ahoraNo": "Not now",
-  "metodo.pago.laAbroYo": "I'll open this discipline when the time is right.",
+  "metodo.pago.laAbroYo": "María opens this discipline when the time is right.",
   "metodo.pago.entendido": "Got it",
   "metodo.pago.stripe": "Secure payment through Stripe",
   "metodo.pago.acepto": "I accept the",
@@ -1444,4 +1444,6 @@ export const metodo = {
   "metodo.pago.resumen.nutricion": "What lies behind what you eat, and how to truly nourish yourself.",
   "metodo.pago.resumen.cabala": "Walk the Tree of Life and recognise its Sefirot in yourself.",
   "metodo.pago.resumen.cultura": "Philosophy, medicine and religion: where we come from.",
+  "metodo.notaMaria.titulo": "Note from María",
+  "metodo.notaMaria.cerrar": "Close",
 };

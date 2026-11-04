@@ -25,6 +25,7 @@ function montar(filas?: Record<string, any>[]) {
     enviarBienvenidaCuenta: jest.fn().mockResolvedValue(undefined),
     enviarAvisoRegistro: jest.fn().mockResolvedValue(undefined),
     enviarCuentaActivada: jest.fn().mockResolvedValue(undefined),
+    enviarInvitacionAsesoria: jest.fn().mockResolvedValue(undefined),
   };
   const auth: any = { generateToken: jest.fn().mockReturnValue('jwt-de-test') };
   const service = new UserService(auth, bd.databaseService, mail);
@@ -116,10 +117,10 @@ describe('1 · Registro: lo que llega a la BD', () => {
     expect(filas).toHaveLength(0);
   });
 
-  it('nombre repetido → 409 y no crea nada', async () => {
+  it('nombre repetido → se crea igual (los nombres se pueden repetir)', async () => {
     const { service, filas } = montar([{ id: '1', name: 'ana', email: 'otra@x.com' }]);
-    await expect(service.createUser(datos)).rejects.toThrow(new ConflictException('El nombre ya existe. Elige otro'));
-    expect(filas).toHaveLength(1);
+    await expect(service.createUser(datos)).resolves.toEqual({ pendienteConfirmar: true, email: 'ana@x.com' });
+    expect(filas).toHaveLength(2);
   });
 
   it('email repetido → 409 y no crea nada', async () => {
@@ -173,6 +174,69 @@ describe('3 · Entrar sin confirmar', () => {
     const { service, mail } = montar([{ id: '1', name: 'bea', email: 'bea@x.com', email_confirmado: true }]);
     await expect(service.reenviarConfirmacion('bea')).resolves.toBeUndefined();
     await expect(service.reenviarConfirmacion('nadie@x.com')).resolves.toBeUndefined();
+    expect(mail.enviarBienvenidaCuenta).not.toHaveBeenCalled();
+  });
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
+describe('3b · Cuenta de asesoría creada por la admin, sin activar', () => {
+  const alta = { name: 'eva', email: 'eva@x.com', telefono: '+34 600 11 22 33' };
+
+  it('dos asesoradas con el mismo nombre y distinto email → se crean; con el mismo email, no', async () => {
+    const { service, filas } = montar();
+    await service.crearCuentaAsesorada(alta);
+    await expect(service.crearCuentaAsesorada({ ...alta, email: 'otra@x.com' })).resolves.toMatchObject({ name: 'eva' });
+    expect(filas).toHaveLength(2);
+    await expect(service.crearCuentaAsesorada({ ...alta, name: 'otra eva' })).rejects.toBeInstanceOf(ConflictException);
+  });
+
+  it('la admin puede sacar el enlace de activación (y solo mientras esté sin activar)', async () => {
+    const { service, filas } = montar();
+    const { id } = await service.crearCuentaAsesorada(alta);
+    const { enlace } = await service.enlaceActivacion(id);
+    expect(enlace).toContain('/recuperar?token=');
+    filas[0].email_confirmado = true;
+    await expect(service.enlaceActivacion(id)).rejects.toBeInstanceOf(ConflictException);
+    await expect(service.enlaceActivacion('no-existe')).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('la persona asesorada no puede cambiar sus datos personales, la admin sí; la contraseña es suya', async () => {
+    const { service } = montar();
+    const { id } = await service.crearCuentaAsesorada(alta);
+    await expect(service.updateUser(id, { telefono: '+34 611 11 11 11' })).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(service.updateUser(id, { name: 'otra' })).rejects.toBeInstanceOf(ForbiddenException);
+    await expect(service.updateUser(id, { password: 'nueva-clave-1' })).resolves.toBeDefined();
+    await expect(service.updateUser(id, { telefono: '+34 611 11 11 11' }, true)).resolves.toBeDefined();
+  });
+
+  it('sin teléfono no se crea', async () => {
+    const { service, filas } = montar();
+    const err: any = await service.crearCuentaAsesorada({ name: 'eva', email: 'eva@x.com' }).catch((e) => e);
+    expect(err).toBeInstanceOf(BadRequestException);
+    expect(filas).toHaveLength(0);
+  });
+
+  it('el teléfono tiene que llevar el prefijo del país', async () => {
+    const { service, filas } = montar();
+    const err: any = await service.crearCuentaAsesorada({ ...alta, telefono: '600 11 22 33' }).catch((e) => e);
+    expect(err).toBeInstanceOf(BadRequestException);
+    expect(filas).toHaveLength(0);
+  });
+
+  it('al entrar antes de activar se le dice que la active (no «contraseña errónea»)', async () => {
+    const { service } = montar();
+    await service.crearCuentaAsesorada(alta);
+    const err: any = await service.logIn({ name: 'eva', password: 'lo-que-sea' }).catch((e) => e);
+    expect(err).toBeInstanceOf(ForbiddenException);
+    expect(err.getResponse().code).toBe('EMAIL_SIN_CONFIRMAR');
+  });
+
+  it('«envíamelo otra vez» manda la invitación para elegir contraseña, no la bienvenida del registro', async () => {
+    const { service, mail } = montar();
+    await service.crearCuentaAsesorada(alta);
+    mail.enviarInvitacionAsesoria.mockClear();
+    await service.reenviarConfirmacion('eva@x.com');
+    expect(mail.enviarInvitacionAsesoria).toHaveBeenCalledTimes(1);
     expect(mail.enviarBienvenidaCuenta).not.toHaveBeenCalled();
   });
 });
@@ -296,16 +360,15 @@ describe('6 · Cuentas gemelas (mismo nombre con otras mayúsculas)', () => {
     await expect(service.logIn({ name: 'maría', password: 'ninguna' })).rejects.toThrow('La contraseña es errónea');
   });
 
-  it('registrarse con el mismo nombre en otras mayúsculas → 409', async () => {
+  it('registrarse con el mismo nombre en otras mayúsculas → se crea (los nombres se repiten)', async () => {
     const { service } = montar(await gemelas());
     await expect(service.createUser({ name: 'MARÍA', email: 'nueva@x.com', password: 'secreta1' }))
-      .rejects.toThrow('El nombre ya existe. Elige otro');
+      .resolves.toEqual({ pendienteConfirmar: true, email: 'nueva@x.com' });
   });
 
-  it('Mi cuenta no deja renombrarse al nombre (ni al email) de otra persona', async () => {
+  it('Mi cuenta deja renombrarse al nombre de otra persona, pero no a su email', async () => {
     const { service } = montar(await gemelas());
-    await expect(service.updateUser('B', { name: 'MARÍA' } as any))
-      .rejects.toThrow('El nombre ya existe. Elige otro');
+    await expect(service.updateUser('B', { name: 'MARÍA' } as any)).resolves.toBeDefined();
     await expect(service.updateUser('B', { email: 'maria@x.com' } as any))
       .rejects.toThrow('El email ya está registrado');
   });
@@ -335,7 +398,7 @@ describe('Textos de los dos correos', () => {
     await mail.enviarBienvenidaCuenta('ana@x.com', 'Ana', { tokenConfirmacion: 'TOK' });
     const [para, asunto, html] = enviar.mock.calls[0];
     expect(para).toBe('ana@x.com');
-    expect(asunto).toBe('Confirma tu cuenta — Life as a Privilege');
+    expect(asunto).toBe('Confirma tu cuenta');
     expect(html).toContain('Muy buenas, <strong>Ana</strong>.');
     expect(html).toContain(`${frontend}/logIn?confirmar=TOK`);
     expect(html).toContain('Confirmar e iniciar sesión');
@@ -350,7 +413,7 @@ describe('Textos de los dos correos', () => {
     await mail.enviarCuentaActivada('ana@x.com', 'Ana');
     const [para, asunto, html] = enviar.mock.calls[0];
     expect(para).toBe('ana@x.com');
-    expect(asunto).toBe('Tu cuenta ya está activa — Life as a Privilege');
+    expect(asunto).toBe('Tu cuenta ya está activa');
     expect(html).toContain('Muy buenas, <strong>Ana</strong>.');
     expect(html).toContain('El siguiente paso es elegir tu primera disciplina');
     expect(html).toContain(`href="${frontend}/logIn"`);

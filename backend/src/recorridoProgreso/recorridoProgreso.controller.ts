@@ -28,7 +28,7 @@ export class RecorridoProgresoController {
   @Post('consentimiento/salud')
   @UseGuards(JwtAuthGuard)
   async darConsentimiento(@Req() req: any) {
-    // Desde «entrar como» NO: el consentimiento solo lo puede dar la persona.
+    // Desde el camino de María NO: el consentimiento solo lo puede dar la persona.
     if (req.user?.suplantadoPor) {
       throw new ForbiddenException('El consentimiento solo puede darlo la persona titular de la cuenta');
     }

@@ -61,7 +61,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Qué hace:** Formulario de nombre o email + contraseña. Al entrar muestra «Bienvenido» y redirige a los 3 s (el botón queda bloqueado mientras). Si la cuenta no está confirmada, ofrece reenviar el correo de confirmación.
 - **Datos:** `POST /user/logIn` con `{ name, password }`. Guarda en localStorage `userId`, `name`, `token`. Luego `GET /upload/profile-pic/:userId` y guarda `img` (o `/img/icono/noImg.webp`). Luego `GET /user/me` (Bearer) para saber si es admin; borra `isAdmin` de localStorage. `POST /user/confirmar` con `{ token }`. `POST /user/confirmar/reenviar` con `{ name }`.
 - **Botones / a dónde lleva:** «Entrar» → destino (`?next=` o `/home`; `/admin/login` si `me.admin_email` y no hay `next`). «¿Olvidaste la contraseña?» → `/recuperar`. «No tengo cuenta» → `/signIn` (conserva `?next=`).
-- **Condiciones y casos raros:** `?confirmar=<token>`: confirma la cuenta, quita el token de la barra, rellena el email y muestra «cuenta confirmada». `?pendiente=1`: aviso «mira tu correo» (viene de `/signIn`). `?next=<ruta>`: destino tras entrar. Error con `code === "EMAIL_SIN_CONFIRMAR"` → mensaje propio + botón de reenviar. Campos vacíos → error sin llamar al backend. No hay botón de Google en esta página (sin verificar si está en otro sitio).
+- **Condiciones y casos raros:** `?confirmar=<token>`: confirma la cuenta, quita el token de la barra, rellena el email y muestra «cuenta confirmada». `?pendiente=1`: aviso «mira tu correo» (viene de `/signIn`). `?next=<ruta>`: destino tras entrar. Error con `code === "EMAIL_SIN_CONFIRMAR"` → mensaje propio + botón de reenviar. Lo devuelve también una cuenta de asesoría (creada por la admin) aún sin activar cuando prueba a entrar con cualquier contraseña, y entonces el botón de reenviar manda la invitación para elegir contraseña. Campos vacíos → error sin llamar al backend. No hay botón de Google en esta página (sin verificar si está en otro sitio).
 - **Correos:** al confirmar con `?confirmar=` sale «Tu cuenta ya está activa» (solo la primera vez) → ver `Correo: Tu cuenta ya está activa` en la sección 8.
 - **Tests:** `backend/src/user/registro.spec.ts` (confirmar, reenviar, entrar por nombre/email, 403 sin confirmar)
 
@@ -142,6 +142,14 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Botones / a dónde lleva:** enlaces internos → `/aviso-legal` y `/privacidad`.
 - **Condiciones y casos raros:** Solo en español (aviso en inglés).
 - **Tests:** pendiente
+
+---
+
+## Cabecera y menú de la derecha (`SiteHeader`)
+- **Componente:** `frontend/src/components/global/SiteHeader.tsx` (con `MenuHamburguesa`).
+- **DENTRO** (la persona en su espacio, o María en el camino de ella: sesión iniciada, fuera de `/admin`, no cuenta solo Premium y no es la admin con el panel desbloqueado): la cabecera **no lleva las opciones de la web pública** en el centro y el menú de la derecha se queda en **Home**, **Mi cuenta** y **Cerrar sesión**. El logo, el idioma y el avatar siguen. Si es María en el camino de una persona, la última opción es **«Volver a Asesorías»** (cierra ese camino y le devuelve lo suyo; cerrar sesión la echaría del todo).
+- **Fuera de dentro:** sin sesión, las opciones de la web de siempre. Cuentas solo Premium: Podcasts, Reels y Cerrar sesión. Panel de admin: Asesorías, Cursos, Arquetipos, Suscriptores, Premium y Cerrar sesión.
+- **Cerrar sesión:** `cerrarSesionLocal()` y a `/welcome` (conserva las preferencias del navegador).
 
 ---
 
@@ -307,7 +315,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Componente:** `Ilustraciones` en `frontend/src/app/web/Ilustraciones.tsx`
 - **Acceso:** pública
 - **Qué hace:** Rejilla de portadas de cómics (4 por fila en escritorio, 2 en tablet, 1 en móvil) con la selección barajada `ILUSTRACIONES_GALERIA` (alterna disciplinas). Pulsar una portada abre el cómic a pantalla completa con el estilo de su disciplina (`ComicModal`), en el idioma activo.
-- **Datos:** Con sesión, al abrir un cómic hace `POST /actividad` con `{ recurso: "/ilustraciones#<id>", tipo: "ilustracion", disciplina, titulo }` (`registrarActividad`; no si la admin está «entrando como» ni si ya se registró). Lee `token` de localStorage.
+- **Datos:** Con sesión, al abrir un cómic hace `POST /actividad` con `{ recurso: "/ilustraciones#<id>", tipo: "ilustracion", disciplina, titulo }` (`registrarActividad`; no si María está en el camino de una persona ni si ya se registró). Lee `token` de localStorage.
 - **Botones / a dónde lleva:** cada portada → popup `ComicModal`.
 - **Condiciones y casos raros:** Espera a precargar solo las portadas de la primera pantalla; el resto en lazy.
 - **Tests:** pendiente
@@ -363,7 +371,8 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Acceso:** con sesión (PrivateRoute)
 - **Qué hace:** Muestra y deja editar nombre, email, teléfono, fecha de nacimiento, contraseña y foto de perfil. Permite cerrar sesión y borrar la cuenta (pide contraseña + escribir la palabra «BORRAR»/«DELETE»). Si es admin desbloqueada, enseña botón al panel.
 - **Datos:** `GET /user/me` (name, email, is_admin, telefono, fecha_nacimiento). `PATCH /user/:id` solo con los campos cambiados (teléfono y fecha se pueden vaciar → `null`; vaciar la fecha apaga la felicitación). `POST /upload/profile-pic/:userId` (FormData, foto encogida). `DELETE /user/:id` con `{ password }`. localStorage: lee `userId`, `token`; escribe `name`, `img`; `cerrarSesionLocal()` limpia la sesión.
-- **Botones / a dónde lleva:** «Guardar». «Cerrar sesión» → `/welcome` (si la admin está «entrando como», en vez de cerrar sesión le devuelve la suya). «Eliminar cuenta» → popup de confirmación → `/welcome`. «Panel de admin» → `/admin` (solo si `is_admin`).
+- **Botones / a dónde lleva:** «Guardar». «Cerrar sesión» → `/welcome` (si María está en el camino de una persona, en vez de cerrar sesión lo cierra y vuelve a Asesorías). «Eliminar cuenta» → popup de confirmación → `/welcome`. «Panel de admin» → `/admin` (solo si `is_admin`).
+- **Cuentas de asesoría (`en_sesiones`):** nombre, email, teléfono y fecha de nacimiento (dd/mm/aaaa) salen solo de lectura, junto con la hora y el lugar de nacimiento de su carta astral si ya existen; solo la contraseña es suya. `PATCH /user/:id` responde 403 si intenta cambiar esos datos. Los edita María en `/admin/asesorias/:userId/datos`.
 - **Condiciones y casos raros:** Sin `userId` → `/welcome`. Si no hay cambios, «Guardar» no llama al backend. Error al cargar → mensaje de error. El mensaje de error del borrado que manda el backend llega en español aunque la web esté en inglés.
 - **Tests:** pendiente
 
@@ -499,6 +508,30 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Botones / a dónde lleva:** prev → `/metodo/astrologia/cartaAstral`. Next «Psicología →» siempre desactivado («estará disponible próximamente»). Cada planeta → `/metodo/astrologia/<key>/signo|casa`.
 - **Condiciones y casos raros:** ninguna página del recorrido enlaza aquí (solo Profundizar); no tiene Índice. Parece código viejo.
 - **Tests:** pendiente
+
+---
+
+## `/camino/:disciplina` — El camino de una disciplina
+- **Componente:** `CaminoPagina` en `frontend/src/app/metodo/CaminoPagina.tsx`; la vista es `CaminoVista` y los pasos y candados los pone `CaminoDisciplina` (`frontend/src/components/metodo/`).
+- **Acceso:** sesión iniciada (PrivateRoute) y la disciplina abierta: `GuardiaPagoRecorrido` vigila también `/camino/<slug>` (si no está abierta, vuelve a `/home?entrar=<scope>`). María (admin desbloqueado, o dentro de la cuenta de la persona) pasa siempre. Slugs: `astrologia`, `psicologia`, `fisiologia`, `nutricion`, `ayurveda`, `tcm` (`medicinachina` también vale), `cabala`, `cultura`.
+- **Qué hace:** pinta todas las páginas de la disciplina como cajitas con su fondo, unidas por flechas (escritorio: serpentea; móvil: columna). Los pasos son los mismos del botón «Índice» de cada disciplina (`astrologiaIndice`, `psicologiaIndice`, `fisiologiaNiveles`, `nutricionIndice`, `tcmIndice`, `ayurvedaMapa` + `ayurvedaDoshaIndice`, Cábala vía `useCabalaIndice`, Cultura = sus Historias). Candados: psicología, fisiología, nutrición, medicina china y el submapa de ayurveda por `pasoMax`; astrología y cábala por su progreso; cultura sin candados.
+- **Datos:** `GET /recorrido-progreso/:disciplina` (su `pasoMax`); `GET /metodo-astrologia/:userId`; `GET /metodo-cabala/:userId`; `GET /ayurveda/:userId` (su doṣha).
+- **Botones / a dónde lleva:** cada caja abierta → la página de ese paso (`/metodo/...`); «Volver» → su home (`rutaHome()`). Se llega desde «Tu camino» de `/home` y desde «El Recorrido» de la portada de la disciplina (`/disciplina/<slug>`).
+- **María, en el camino de la persona** (`esMariaMirando()`): entra a cualquier caja aunque esté cerrada. **El mapa de la persona se decide desde su `/home`** (`MapaDePersona`, solo María, junto a «Tu camino»): las OCHO disciplinas con «Abrir/Cerrar» (`POST /user/admin/acceso`) y, si está abierta, «Pasos abiertos: X de N» con − / + (`usePasoMax` con `userId` → `POST /recorrido-progreso/admin/:userId/:disciplina`). El techo `pasoMax` es el MISMO mecanismo en las ocho (claves `metodo`, `psicologia`, `fisiologia`, `nutricion`, `ayurveda` —solo el submapa del doṣha—, `tcm`, `cabala`, `cultura`; `DISCIPLINAS_MAPA_ADMIN`): la persona no sube pasos andando, solo ve lo que María abre. En astrología y cábala el techo sustituye a la cadena antigua de «leer/rellenar abre lo siguiente» (`useAstrologiaProgreso`, `useCabalaIndice`; la cadena sigue en `astrologiaDesbloqueo.ts` por los tests). En cultura cierra las Historias en la página `MetodoCulturaHistorias`. Lo propio de cada disciplina (escribir la carta astral…) se hace dentro de ella. `/camino/<slug>` conserva los mismos controles. La persona NUNCA ve nada de esto.
+- **Condiciones y casos raros:** `IndiceRecorrido` y `GuardiaPagoRecorrido` no ponen candados ni pago a María. Slug desconocido → home.
+- **Tests:** pendiente
+
+---
+
+## Nota de María en cada página del recorrido (`/metodo/...`)
+- **Componente:** `NotaPagina` en `frontend/src/components/global/NotaPagina.tsx`, montado una vez en `App.tsx`; solo se pinta en rutas `/metodo/*`.
+- **Qué hace:** una pestaña en el borde derecho («Nota de María» para la persona, «Nota» para María) que despliega un panel lateral (en móvil, una hoja desde abajo). La clave de la nota es la ruta de la página, sin barra final.
+  - **María** ve la pestaña siempre. Escribe en un **borrador** (se guarda solo, un momento después de dejar de escribir) que la persona NO ve. «Publicar» copia el borrador a lo que ve la persona; «Quitar de su vista» lo retira (el borrador se queda). Estados: «Borrador: no la ve», «Publicada», «Cambios sin publicar».
+  - **La persona** solo ve la pestaña si hay algo publicado en esa página, con un puntito hasta que la abre (se recuerda en `localStorage`, `notaVista:<userId>:<ruta>`). No puede modificarla.
+- **Quién es María aquí:** la sesión de admin desbloqueada, para la persona que eligió en su panel (`sessionStorage.notasPersona`, lo fija `/admin/asesorias/:userId/<slug>`), o dentro del camino de esa persona (`personaActiva()`). Una admin sin persona elegida no ve la pestaña.
+- **Datos:** tabla `nota_pagina` (`backend/sql/nota-pagina.sql`; **hay que correrlo una vez en Supabase**, con RLS activado y sin políticas). `GET /notas-pagina/:userId?pagina=` (Jwt + OwnerGuard: María recibe la nota entera; la persona, solo lo publicado), `PUT /notas-pagina/:userId`, `POST /notas-pagina/:userId/publicar` y `/retirar` (además `MariaGuard`: admin desbloqueada o token con `sup`). Se borra con la cuenta (`relatedTables`).
+- **Condiciones y casos raros:** sin la tabla, María ve el aviso «Falta crear la tabla…» y no se guarda nada; la persona no ve nada. Una nota publicada no se puede publicar vacía. Máx. 8000 caracteres.
+- **Tests:** `backend/src/notasPagina/notasPagina.spec.ts`.
 
 ---
 
@@ -2076,14 +2109,46 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/admin` — Inicio del panel («Administración de El Mapa»)
-- **Componente:** `AdminHome` en `frontend/src/app/admin/AdminHome.tsx`
-- **Acceso:** admin (AdminRoute + `useAdminGuard`). `useAdminGuard` pide `GET /user/me`. Si `is_admin` es false, borra `isAdmin` y manda a `/admin/login` (email de admin sin desbloquear) o a `/home` (no admin). Sin token o userId → `/welcome`; si falla la petición → `/home`.
-- **Qué hace:** muestra una rejilla con las 8 disciplinas de `ADMIN_DISCIPLINAS`. Las que tienen `disponible: false` (fisiología, nutrición, tcm, cábala, cultura) llevan «próximamente». Los botones sueltos de debajo se quitaron: lo de personas (regalar, diario, borrar, entrar como) vive en la tabla de `/admin/usuarios`, y Arquetipos y Suscriptores están en el menú de la derecha.
-- **Datos:** solo `GET /user/me` (JwtAuthGuard) a través del guard.
-- **Botones / a dónde lleva:** cada disciplina → `/admin/<key>`. El menú de la derecha (SiteHeader, en todo `/admin`): «El Mapa» → `/admin`, «Cursos» → `/admin/cursos`, «Usuarios» → `/admin/usuarios`, «Arquetipos de Astrología» → `/admin/astrologia-textos`, «Suscriptores» → `/admin/suscriptores`.
-- **Condiciones y casos raros:** Vídeos ya no aparece por ningún lado (panel aparcado, como su sección pública).
+## `/admin` — Inicio del panel
+- **Componente:** `AdminInicio` en `frontend/src/app/admin/AdminInicio.tsx`
+- **Acceso:** admin (AdminRoute + `useAdminGuard`). `useAdminGuard` pide `GET /user/me`. Si `is_admin` es false, borra `isAdmin` y manda a `/admin/login` (email de admin sin desbloquear) o a `/home` (no admin). Sin token o userId → `/welcome`; si falla la petición → `/home`. La sesión de admin no es una fila de `user` (ver `admin/entrar`): `/user/me` responde con lo que dice el token.
+- **Qué hace:** el mandala de la casa y una tarjeta por cada sitio del menú de la derecha (lista `SITIOS`; una entrada nueva en el menú de admin va también ahí). Entran en cascada con `Reveal`.
+- **Datos:** solo `GET /user/me` a través del guard.
+- **Botones / a dónde lleva:** «Asesorías» → `/admin/asesorias`, «Cursos» → `/admin/cursos`, «Arquetipos de Astrología» → `/admin/astrologia-textos`, «Suscriptores» → `/admin/suscriptores`, «Premium» → `/admin/premium`. El menú de la derecha (SiteHeader) tiene las mismas entradas.
 - **Tests:** pendiente
+
+---
+
+## `/admin/asesorias` — Asesorías (lista de personas)
+- **Componente:** `AdminHome` en `frontend/src/app/admin/AdminHome.tsx`
+- **Acceso:** admin (AdminRoute + `useAdminGuard`). `useAdminGuard` (ver `/admin`) pide `GET /user/me`. Si `is_admin` es false, borra `isAdmin` y manda a `/admin/login` (email de admin sin desbloquear) o a `/home` (no admin). Sin token o userId → `/welcome`; si falla la petición → `/home`. La sesión de admin no es una fila de `user` (ver `admin/entrar`): `/user/me` responde con lo que dice el token.
+- **Qué hace:** lista las personas asesoradas (las de `en_sesiones: true`): nombre a la izquierda y, a la derecha, dos botones: «Datos» y el del mandala turquesa con flecha. Arriba a la derecha, «CREAR USUARIO». Sale «Pendiente de activar» bajo el nombre mientras no haya elegido contraseña. No hay botones de borrar aquí, a propósito.
+- **Datos:** `GET /user/admin/todos` (Jwt + AdminGuard; incluye `telefono`, `fecha_nacimiento`, `created_at`, `email_confirmado`). `POST /user/admin/crear` y `POST /user/admin/reenviar-invitacion` (Jwt + AdminGuard).
+- **Botones / a dónde lleva:** «CREAR USUARIO» → `/admin/asesorias/nueva`. «Datos» → `/admin/asesorias/:userId/datos`. **El mandala = abrir el camino de esa persona, su `/home`** (`abrirCaminoDe()` de `api/persona.ts` + recarga entera). Hay dos caminos, el de María y el de la persona, que llegan al mismo sitio con posibilidades distintas. María NO cambia de sesión ni recibe ningún token ajeno: conserva su token de admin y el navegador añade a cada petición la cabecera `X-Persona: <id>`; el servidor la acepta solo si el token es de admin desbloqueado (`backend/src/auth/persona.util.ts`, usado por `JwtStrategy`) y entonces `req.user` es esa persona (con `admin: true` y `suplantadoPor` = id de María). `userId`/`name`/`img` de localStorage pasan a ser los de la persona (así las ~160 páginas no cambian) y lo de María se aparta en `personaAdmin`. Los `fetch` sueltos añaden `cabeceraPersona()` a mano. Lo escrito en las páginas se guarda en el recorrido de la persona. La barra de abajo a la derecha (`BarraPersona`: «Camino de X» y «Volver a Asesorías») lo deja a la vista y es solo suya. Datos básicos de la persona: `GET /user/admin/persona/:id`. **Abrir disciplinas desde su `/home`:** al pulsar una disciplina cerrada sale el aviso `PagoDisciplinaModal` (el mismo en `/home` y en las páginas de disciplina); si María está en el camino de una persona, el aviso lleva además un botón **«Abrir»** (`POST /user/admin/acceso` con la clave de la disciplina; recarga la página). La persona no lo ve, y el servidor solo lo admite con token de admin. Los pasos del Mapa se abren desde `/camino/<slug>` (− / + y «Abrir hasta aquí»). El aviso de cuenta creada o eliminada llega por `location.state.aviso`.
+- **Condiciones y casos raros:** Tras crear, vuelve aquí con el aviso en el estado de la ruta (`location.state.aviso`). Vídeos ya no aparece por ningún lado (panel aparcado, como su sección pública).
+- **Tests:** pendiente
+
+---
+
+## `/admin/asesorias/nueva` — Crear usuario
+- **Componente:** `AdminCrearCuenta` en `frontend/src/app/admin/AdminCrearCuenta.tsx`
+- **Acceso:** admin (AdminRoute + `useAdminGuard`, ver `/admin`).
+- **Qué hace:** formulario de página (no popup) para dar de alta a una persona asesorada: nombre, email y teléfono obligatorios (el teléfono con prefijo, `+34…`), fecha de nacimiento opcional en dd/mm/aaaa. Es un `<form>` con etiquetas, para recorrerlo con el tabulador; Enter envía.
+- **Datos:** `POST /user/admin/crear` (Jwt + AdminGuard). A la persona le llega un correo con enlace a `/recuperar?token=` para elegir contraseña, que activa la cuenta (14 días). La cuenta nace sin nada abierto y con `en_sesiones: true`.
+- **Botones / a dónde lleva:** «Crear y mandar correo» → `/admin/asesorias` con el aviso de si el correo salió. «Cancelar» → `/admin/asesorias`.
+- **Condiciones y casos raros:** faltan datos, teléfono sin prefijo o fecha mal escrita → aviso sin llamar al backend; el servidor repite las comprobaciones. Email ya existente → 409 con su mensaje (el nombre se puede repetir).
+- **Tests:** `registro.spec.ts` (§3b) cubre el servidor.
+
+---
+
+## `/admin/asesorias/:userId/datos` — Datos de una persona
+- **Componente:** `AdminDatosUsuario` en `frontend/src/app/admin/AdminDatosUsuario.tsx`
+- **Acceso:** admin (AdminRoute + `useAdminGuard`).
+- **Qué hace:** los datos personales y generales de la persona. María los edita (nombre, teléfono con prefijo, fecha de nacimiento en dd/mm/aaaa) y los guarda; el email es solo lectura. Sobre fotos de la web: el mármol crema (datos y activación) y el cielo estrellado de Astrología (carta astral). Debajo, los datos de nacimiento de su **carta astral** (fecha, hora, lugar; solo lectura, se editan en su carta), la **activación** (solo mientras esté sin activar), **Acceso** (abrir y cerrar disciplinas y hasta qué paso llega el Mapa de cada una: `AccesoPersona`), **Su contenido** (las lecturas/editores por disciplina `/admin/<slug>/:userId`, el Diario de terapias y los Intereses) y **eliminar cuenta**. La persona ve estos datos en «Mi cuenta» pero no puede modificarlos.
+- **Datos:** `GET /user/admin/todos`; `GET /metodo-astrologia/:userId` (fecha, hora, lugar, región, país); `POST /user/admin/acceso` y `/acceso/revocar`; `GET`/`POST /recorrido-progreso/admin/:userId…`. `PATCH /user/:id` con el token de admin (el servidor solo deja a la admin cambiar nombre, email, teléfono y fecha de nacimiento de una cuenta de asesoría). `POST /user/admin/reenviar-invitacion`. `GET /user/admin/usuario/:id/activacion` (enlace nuevo de 14 días y un solo uso; 409 si ya está activada). `DELETE /user/admin/usuario/:id`.
+- **Botones / a dónde lleva:** «Guardar»; «Abrir su carta astral» → `/admin/astrologia/:userId`; «Reenviar correo de activación»; «Copiar enlace de activación» (lo copia y lo enseña en un cuadro por si no deja copiar); «Eliminar cuenta» abre un bloque donde hay que teclear el email de la cuenta y solo entonces se activa «Eliminar para siempre» (vuelve a `/admin/asesorias` con el aviso); «Volver» → `/admin/asesorias`.
+- **Condiciones y casos raros:** teléfono vacío o sin prefijo, o fecha mal escrita → aviso sin llamar al backend. El backend se niega a borrar una cuenta de ADMIN_EMAILS.
+- **Tests:** `registro.spec.ts` (§3b): enlace de activación y datos personales bloqueados a la persona asesorada.
 
 ---
 
@@ -2120,34 +2185,12 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 
 ---
 
-## `/admin/usuarios` — Usuarios (la tabla del panel)
-- **Componente:** `AdminTodosUsuarios` en `frontend/src/app/admin/AdminTodosUsuarios.tsx`
-- **Acceso:** admin (AdminRoute + `useAdminGuard`).
-- **Qué hace:** la tabla de TODAS las cuentas, paginada de 15 en 15, con buscador local por nombre/email. Cada fila: nombre y email (sin foto), edad (de `fecha_nacimiento`; «—» si no la dio), un puntito por disciplina abierta con su color (y el total x/8), la marca «Sesiones» (está haciendo sesiones conmigo) y las acciones de la fila: «Intereses», «Entrar como» y, con «Sesiones» encendida, «Diario de terapias». Al desplegar la ficha (▸) SOLO lo de regalar y quitar: cada una de las 8 disciplinas por separado, «Todo el recorrido gratis», «Quitar acceso» (cierra las 8) y «Borrar cuenta». Ver o editar el contenido de un usuario no vive aquí: se hace desde la rejilla de disciplinas de `/admin`. Avisa si la cuenta tiene acceso libre por ACCESO_LIBRE_EMAILS. Absorbió `/admin/accesos` (aparcada).
-- **Datos:** `GET /user/admin/todos` (Jwt + AdminGuard; tope de 500): añade `acceso_libre`, `fecha_nacimiento`, `en_sesiones` y las fechas de compra. `POST /user/admin/sesiones` con `{ userId, enSesiones }` (optimista; si falla, se revierte y avisa — 409 si falta correr `sql/user-en-sesiones.sql`). `POST /user/admin/acceso` con `{ userId, disciplina: <scope>|'all', abierta }`; valida contra DISCIPLINAS_ORDEN. `POST /user/admin/acceso/revocar`. `DELETE /user/admin/usuario/:id`. `POST /user/admin/suplantar` desde `BotonEntrarComo`.
-- **Botones / a dónde lleva:** «Diario de terapias» → `/admin/diario/:userId`. «Intereses» (en la fila) → `/admin/actividad/:userId` (pasa nombre y email en `location.state`). «Quitar acceso» pide `window.confirm` (también quita lo pagado). «Borrar cuenta» abre un modal donde hay que escribir el email exacto; borra la cuenta y todos sus datos, no se puede deshacer y no avisa a la persona. «Entrar como» (`BotonEntrarComo` → `api/suplantar.ts`): llama a `POST /user/admin/suplantar` (Jwt + AdminGuard), aparca la sesión de admin en `suplantacionAdmin`, limpia el localStorage, guarda el token de la persona (claim `admin: false`, `sup` = id de la admin, caduca en 12 h) y recarga en `/home`. Todo lo que se escriba se guarda en su recorrido. La persona no se entera. El servidor lo apunta en `console.log`. Para volver está `BarraSuplantacion` (`salirDeLaSuplantacion` → `/admin/usuarios`). «← Anterior» / «Siguiente →» pasan de página; buscar vuelve a la página 1.
-- **Condiciones y casos raros:** el backend se niega a borrar tu propia cuenta o una cuenta de ADMIN_EMAILS (409 con mensaje, que se muestra). Desde una sesión suplantada no se puede entrar al panel (el token no es de admin) ni borrar la cuenta propia (`DELETE /user/:id` lo rechaza si hay `suplantadoPor`). Usa el scope `metodo` para Astrología (DISCIPLINAS_PAGO). Las pastillas de disciplinas no disponibles llevan al placeholder. Sin correr `sql/user-en-sesiones.sql`, la marca de sesiones sale apagada y al tocarla avisa.
-- **Tests:** pendiente
-
----
-
-## `/admin/suscriptores` — Suscriptores
-- **Componente:** `AdminSuscriptores` en `frontend/src/app/admin/AdminSuscriptores.tsx`
-- **Acceso:** admin (AdminRoute + `useAdminGuard`).
-- **Qué hace:** lista los correos de la tabla `suscriptor` (formulario y voluntarios, campo `origen`) del más nuevo al más antiguo, con un buscador por email/origen. Permite copiar todos los correos filtrados separados por comas, copiar el enlace de baja genérico o el enlace de baja firmado de una persona, y descargar un CSV.
-- **Datos:** `GET /subscribe/admin/todos` (Jwt + AdminGuard). El enlace genérico es `${API_URL}/subscribe/baja`.
-- **Botones / a dónde lleva:** «Copiar correos», «Copiar enlace de baja», «Descargar CSV» (`suscriptores.csv`), copiar la baja por fila, «Volver» → `/admin`. No borra nada.
-- **Condiciones y casos raros:** el CSV no escapa comas ni comillas.
-- **Tests:** pendiente
-
----
-
 ## `/admin/diario/:userId` — Diario de terapias de una persona
 - **Componente:** `AdminDiario` en `frontend/src/app/admin/AdminDiario.tsx`
 - **Acceso:** admin (AdminRoute + `useAdminGuard`).
 - **Qué hace:** el mismo calendario que `/diario` (`CalendarioDiario`), con borradores incluidos: un puntito por disciplina en cada día con notas, y tocar un día enseña SOLO sus notas (con estado BORRADOR / PUBLICADA · LEÍDA / SIN LEER y opciones de editar, publicar o volver a borrador, y borrar). Cada nota (y el formulario al elegir disciplina) lleva de fondo la FOTO de su disciplina con su velo, no el color plano; en Astrología, el cielo con el velo ligero. Se abre por el último día con notas. Debajo, el formulario para escribir otra nota más (siempre se puede seguir escribiendo): fecha (sincronizada con el calendario en los dos sentidos), disciplina opcional —que tiñe el formulario y la nota de su color—, título opcional, «Qué trabajamos» (obligatorio, admite `**negrita**`, `*cursiva*` y `---` rayita) y «Por qué te digo esto». Se guarda como borrador o se publica; lo publicado lo lee la persona en `/diario`.
 - **Datos:** `GET /user/:userId` (Jwt + **OwnerGuard**, no AdminGuard) para el nombre y el email. `GET /diario/admin/:userId`, `POST /diario/admin/:userId`, `PATCH /diario/admin/:userId/:entradaId` y `DELETE /diario/admin/:userId/:entradaId` (todos Jwt + AdminGuard), vía `api/diario.ts`.
-- **Botones / a dónde lleva:** flechas ← → del calendario cambian el mes; un día del calendario selecciona sus notas y pone esa fecha en el formulario; teclear la fecha en el formulario mueve el calendario. «Publicar», «Guardar como borrador», «Cancelar y escribir una nueva». «Borrar» pide `window.confirm`. «← Volver a los usuarios» → `/admin/usuarios`. Publicar no manda correo; solo aparece la marca «nuevo» en su Home.
+- **Botones / a dónde lleva:** flechas ← → del calendario cambian el mes; un día del calendario selecciona sus notas y pone esa fecha en el formulario; teclear la fecha en el formulario mueve el calendario. «Publicar», «Guardar como borrador», «Cancelar y escribir una nueva». «Borrar» pide `window.confirm`. «← Volver a los usuarios» → `/admin/asesorias`. Publicar no manda correo; solo aparece la marca «nuevo» en su Home.
 - **Condiciones y casos raros:** si el `userId` no existe, la cabecera sale vacía, pero el formulario deja intentar crear entradas (dependerá de la FK, sin verificar). Si falla la carga inicial, la lista sale vacía sin error. Tras guardar, la vista salta al día de la nota recién guardada.
 - **Tests:** pendiente
 
@@ -2158,7 +2201,7 @@ Qué hace cada página, una por título. Las rutas salen de `frontend/src/App.ts
 - **Acceso:** admin (AdminRoute + `useAdminGuard`).
 - **Qué hace:** muestra un ranking de visitas por disciplina (barras) y la lista de recursos gratuitos que ha abierto la persona (tipo, disciplina, veces, última vez). Resuelve el título de cursos y lecciones con el catálogo. Es la base para los emails semanales.
 - **Datos:** `GET /actividad/admin/:userId` (Jwt + AdminGuard; tabla `actividad_recurso`). `useCursosData` (catálogo público `/cursos`) para poner nombre a los cursos.
-- **Botones / a dónde lleva:** «← Todas las cuentas» → `/admin/usuarios`. Solo lectura.
+- **Botones / a dónde lleva:** «← Todas las cuentas» → `/admin/asesorias`. Solo lectura.
 - **Condiciones y casos raros:** el nombre y el email salen solo del `location.state`. Si se entra pegando la URL, no se ve de quién es. Si el usuario no existe o no tiene actividad → «Todavía no ha abierto ningún recurso…».
 - **Tests:** pendiente
 
@@ -2231,7 +2274,7 @@ El código de estas páginas sigue en el repo, pero hoy no se puede entrar: la U
 - `/estudio`, `/estudio/datos`, `/estudio/preguntas`, `/estudio/resultados`, `/estudio/estadisticas` → `Estudio*`: el estudio estadístico de astrología.
 - `/admin/estudio` → `AdminEstudio`: su panel en admin.
 - `/admin/videos` → `AdminVideos`: el panel de vídeos, aparcado como su sección pública. Su backend (`/videos/*`) sigue vivo.
-- `/admin/accesos` → `AdminAccesos`: regalar, revocar y borrar cuentas viven ahora dentro de la tabla de `/admin/usuarios`. Los endpoints que usaba siguen vivos (los usa la tabla).
+- `/admin/accesos` → `AdminAccesos`: regalar, revocar y borrar cuentas viven ahora dentro de la página de cada persona (`/admin/asesorias/:userId`). Los endpoints que usaba siguen vivos (los usa la tabla).
 
 
 # 8. Correos
@@ -2329,7 +2372,7 @@ Las entradas con «(sin verificar)» son lo que vio un agente al leer el código
 - **FALLO-02 · pendiente.** `GET /cursos/:id` es público y devuelve cualquier curso completo, oculto o de pago.
 - **FALLO-03 · pendiente.** `/libros/descargar` no pide sesión: cualquiera con el `session_id` vuelve a bajar el PDF.
 - **FALLO-04 · pendiente.** `/auth/google/callback`: el token llega en la URL y queda en el historial del navegador.
-- **FALLO-05 · pendiente.** «Entrar como» solo deja rastro en un `console.log` del servidor, que se pierde.
+- **FALLO-05 · pendiente.** Abrir el camino de una persona (`GET /user/admin/persona/:id`) solo deja rastro en un `console.log` del servidor, que se pierde.
 
 ## Cuenta
 

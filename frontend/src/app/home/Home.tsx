@@ -32,6 +32,8 @@ import { DisciplinaBgLayer, hasDisciplinaBg, disciplinaBgImg } from "../../compo
 import { precargarImagenes } from "../../hooks/usePrecargarImagenes";
 import { irAPagoDisciplina } from "../../components/metodo/pagoDisciplinaLink";
 import CaminoUsuario from "./CaminoUsuario";
+import MapaDePersona from "./MapaDePersona";
+import { personaActiva } from "../../api/persona";
 import PinesDiario from "./PinesDiario";
 import { ComunidadPrimeraVez } from "../../components/global/ComunidadPrimeraVez";
 import { useT, type ClaveTexto } from "../../i18n";
@@ -890,6 +892,21 @@ const Home = () => {
     cultura: culturaSuscrito,
   };
 
+  // Solo María, en el camino de una persona: el panel donde decide qué tiene abierto.
+  const personaMaria = personaActiva();
+  const mapaMaria = personaMaria
+    ? <MapaDePersona personaId={personaMaria.id} nombre={personaMaria.name} suscritas={suscritasCamino} />
+    : null;
+
+  const columnaCamino = mapaMaria
+    ? (
+      <Flex direction="column" align="center" gap={8} w="100%">
+        {mapaMaria}
+        <CaminoUsuario suscritas={suscritasCamino} />
+      </Flex>
+    )
+    : <CaminoUsuario suscritas={suscritasCamino} />;
+
   const ultimoRecorrido = (() => { try { return localStorage.getItem("ultimoRecorrido"); } catch { return null; } })();
   const contDisc = ultimoRecorrido ? disciplinaDeRuta(ultimoRecorrido) : null;
   const ContIcon = contDisc?.Icon;
@@ -985,7 +1002,7 @@ const Home = () => {
                  "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.35)", borderRadius: "3px" } }}>
         <Flex direction="column" gap={4}>
           <Reveal direction="right" distance={28} duration={0.85} delay={0.9}>
-            <CaminoUsuario suscritas={suscritasCamino} />
+            {columnaCamino}
           </Reveal>
         </Flex>
       </Box>
@@ -1341,7 +1358,7 @@ const Home = () => {
                 desplegarse «Tu mapa», los pines bajan con el flujo. */}
             <Flex display={{ base: "flex", lg: "none" }} direction="column" align="center" gap={4} mt={14} mb={10} w="100%">
               <Reveal inView amount={0.2} direction="up" distance={22} w="100%" display="flex" justifyContent="center">
-                <CaminoUsuario suscritas={suscritasCamino} />
+                {columnaCamino}
               </Reveal>
               <PinesDiario estatico />
             </Flex>

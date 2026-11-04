@@ -1,6 +1,6 @@
 import axios from "axios";
 import { cerrarSesionLocal } from "./sesion";
-import { salirDeLaSuplantacion, suplantacionActiva } from "./suplantar";
+import { personaActiva } from "./persona";
 
 /**
  * DÓNDE VIVE LA SESIÓN — token, userId, name, img e isAdmin se guardan en
@@ -41,6 +41,14 @@ axios.interceptors.request.use((config) => {
     config.headers = config.headers ?? {};
     config.headers.Authorization = `Bearer ${token}`;
   }
+  // María en el camino de una persona: la petición va sobre ELLA. El token sigue
+  // siendo el de María; el servidor solo hace caso a la cabecera si lo es (ver
+  // api/persona.ts y backend/src/auth/persona.util.ts).
+  const persona = personaActiva();
+  if (persona) {
+    config.headers = config.headers ?? {};
+    config.headers["X-Persona"] = persona.id;
+  }
   return config;
 });
 
@@ -57,12 +65,7 @@ axios.interceptors.response.use(
     if (error?.response?.status === 401) {
       const path = window.location.pathname;
       const enAuth = AUTH_PATHS.some((p) => path.toLowerCase().startsWith(p.toLowerCase()));
-      // Si la sesión era prestada (una admin «entrando como» otra persona), lo
-      // que ha caducado es ESE token, no el suyo: se le devuelve su sesión de
-      // admin en vez de echarla al login y hacerle empezar de cero.
-      if (!enAuth && suplantacionActiva()) {
-        salirDeLaSuplantacion();
-      } else if (!enAuth) {
+      if (!enAuth) {
         cerrarSesionLocal();
         window.location.assign("/logIn");
       }

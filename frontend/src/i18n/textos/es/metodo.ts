@@ -1563,7 +1563,7 @@ export const metodo = {
   // ── Pago de una disciplina ─────────────────────────────────────────────
   "metodo.pago.precioReducido": "Ahora a precio reducido",
   "metodo.pago.ahoraNo": "Ahora no",
-  "metodo.pago.laAbroYo": "Esta disciplina la abro yo cuando sea el momento.",
+  "metodo.pago.laAbroYo": "Esta disciplina la abre María cuando sea el momento.",
   "metodo.pago.entendido": "Entendido",
   "metodo.pago.stripe": "Pago seguro a través de Stripe",
   // La casilla del box de pago. Es UNA sola: las condiciones (/terminos,
@@ -1596,4 +1596,7 @@ export const metodo = {
   "metodo.pago.resumen.nutricion": "Cómo te reconstruye la comida que eliges.",
   "metodo.pago.resumen.cabala": "Las dimensiones de tu alma.",
   "metodo.pago.resumen.cultura": "¿De dónde venimos? Filosofía, historia y cultura en el mismo sitio.",
+  // La nota que María escribe para la persona en cada página (pestaña lateral).
+  "metodo.notaMaria.titulo": "Nota de María",
+  "metodo.notaMaria.cerrar": "Cerrar",
 } as const;

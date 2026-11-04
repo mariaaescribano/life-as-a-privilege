@@ -15,6 +15,7 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { API_URL } from "../../GlobalVariables";
+import { fechaDMA } from "../../utils/fechas";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 
 interface Suscriptor {
@@ -27,9 +28,7 @@ interface Suscriptor {
 }
 
 const fecha = (iso: string) => {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
+  return fechaDMA(iso) ?? "";
 };
 
 export default function AdminSuscriptores() {

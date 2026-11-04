@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { API_URL, WHATSAPP_COMUNIDAD_URL } from "../../GlobalVariables";
-import { suplantacionActiva } from "../../api/suplantar";
+import { personaActiva } from "../../api/persona";
 import { useT } from "../../i18n";
 
 const VISTO_KEY = "comunidadPopupVisto";
@@ -20,8 +20,8 @@ export function ComunidadPrimeraVez() {
 
   useEffect(() => {
     if (!WHATSAPP_COMUNIDAD_URL) return;
-    // Una admin «entrando como» otra persona no debe gastarle su popup.
-    if (suplantacionActiva()) return;
+    // María en el camino de una persona no debe gastarle su popup.
+    if (personaActiva()) return;
     try { if (localStorage.getItem(VISTO_KEY)) return; } catch { /* sin storage */ }
     let cancelado = false;
     axios

@@ -138,8 +138,8 @@ export class UserService {
       if ((data.password ?? '').length < PASSWORD_MIN) {
         throw new BadRequestException(`La contraseña tiene que tener al menos ${PASSWORD_MIN} caracteres`);
       }
-      const { nameExists, emailExists } = await this.getNomEmailExist(data.name, data.email);
-      if (nameExists) throw new ConflictException('El nombre ya existe. Elige otro');
+      // Los NOMBRES se pueden repetir (dos «María»); el EMAIL no: es lo que identifica a la cuenta.
+      const { emailExists } = await this.getNomEmailExist(data.name, data.email);
       if (emailExists) throw new ConflictException('El email ya está registrado');
 
       let id = randomString();
@@ -248,10 +248,18 @@ export class UserService {
         throw new ConflictException('Nombre o email no existen');
       }
 
+      // Cuenta de asesoría creada por la admin y aún sin activar: su contraseña es
+      // una aleatoria que nadie conoce, así que entrar «con la contraseña» no
+      // puede salir bien. En vez de «contraseña errónea» (que la deja sin saber
+      // qué hacer), se le dice que le falta activarla y se le ofrece otro correo.
+      let pendienteDeActivar = false;
       for (const user of candidatas) {
         if (!user.password) continue;
         const coinciden = await comparePassword(body.password, user.password);
-        if (!coinciden) continue;
+        if (!coinciden) {
+          if (user.email_confirmado === false && user.en_sesiones === true) pendienteDeActivar = true;
+          continue;
+        }
         // Solo `false` bloquea: sin la columna (undefined) o en cuentas
         // antiguas y de Google (true) se entra como siempre.
         if (user.email_confirmado === false) {
@@ -267,35 +275,18 @@ export class UserService {
         return { token, user: safeUser };
       }
 
+      if (pendienteDeActivar) {
+        throw new ForbiddenException({
+          statusCode: 403,
+          code: 'EMAIL_SIN_CONFIRMAR',
+          message: 'Tu cuenta aún no está activada: elige tu contraseña con el enlace que te enviamos al correo.',
+        });
+      }
       throw new ConflictException('La contraseña es errónea');
     } catch (error) {
       console.log(error);
       throw error;
     }
-  }
-
-  // Acceso propio de administración: localiza la cuenta por nombre o email. No
-  // mira la contraseña de la cuenta ni la confirmación por correo: la llave es
-  // ADMIN_PASSWORD, que el controlador comprueba antes de llamar aquí.
-  async buscarCuentaAdmin(valor: string) {
-    const db = this.databaseService.getClient();
-    const [porEmail, porNombre] = await Promise.all([
-      db.from('user').select('id, name, email').ilike('email', emailExacto(valor)).limit(1),
-      db.from('user').select('id, name, email').ilike('name', textoExacto(valor)).limit(5),
-    ]);
-    // TEMPORAL (diagnóstico): quitar cuando el login de admin funcione.
-    const parecidas = await db.from('user').select('name, email').or('email.ilike.%escribano%,email.ilike.%maria%,name.ilike.%maria%').limit(10);
-    console.log('[buscarCuentaAdmin] cuentas parecidas:', parecidas.data, parecidas.error?.message ?? null);
-    console.log('[buscarCuentaAdmin]', {
-      longitudEscrita: valor.length,
-      porEmail: { filas: porEmail.data?.length ?? 0, error: porEmail.error?.message ?? null },
-      porNombre: {
-        filas: porNombre.data?.length ?? 0,
-        conEmailAdmin: (porNombre.data ?? []).filter((u: any) => isAdminEmail(u.email)).length,
-        error: porNombre.error?.message ?? null,
-      },
-    });
-    return porEmail.data?.[0] ?? (porNombre.data ?? []).find((u: any) => isAdminEmail(u.email)) ?? null;
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -353,12 +344,20 @@ export class UserService {
     const valor = (nombreOEmail ?? '').trim();
     if (!valor) return;
     const db = this.databaseService.getClient();
-    let { data: rows } = await db.from('user').select('id, name, email, email_confirmado').eq('name', valor).limit(1);
+    const columnas = 'id, name, email, password, email_confirmado, en_sesiones';
+    let { data: rows } = await db.from('user').select(columnas).eq('name', valor).limit(1);
     if (!rows?.length) {
-      ({ data: rows } = await db.from('user').select('id, name, email, email_confirmado').ilike('email', emailExacto(valor)).limit(1));
+      ({ data: rows } = await db.from('user').select(columnas).ilike('email', emailExacto(valor)).limit(1));
     }
-    const user = rows?.[0] as { id: string; name: string; email: string; email_confirmado?: boolean } | undefined;
+    const user = rows?.[0] as { id: string; name: string; email: string; password: string; email_confirmado?: boolean; en_sesiones?: boolean } | undefined;
     if (!user || user.email_confirmado !== false) return;
+
+    // Cuenta creada por la admin: lo que le falta es ELEGIR contraseña, así que
+    // el correo es el de la invitación (no el de bienvenida del registro).
+    if (user.en_sesiones === true) {
+      await this.mandarInvitacion(user.id, user.email, user.name, user.password);
+      return;
+    }
 
     await this.mailService.enviarBienvenidaCuenta(user.email, user.name ?? '', {
       tokenConfirmacion: crearTokenConfirmacion(user.id),
@@ -452,8 +451,12 @@ export class UserService {
     const email = normalizaEmail(data?.email);
     if (!name || !email) throw new BadRequestException('Faltan el nombre o el email');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new BadRequestException('El email no es válido');
-    const { nameExists, emailExists } = await this.getNomEmailExist(name, email);
-    if (nameExists) throw new ConflictException('Ya hay una cuenta con ese nombre. Usa otro (por ejemplo, con el apellido)');
+    // El teléfono es obligatorio al dar de alta una cuenta de asesoría, y con prefijo de país (+34…).
+    const telefono = saneaTelefono(data?.telefono);
+    if (!telefono) throw new BadRequestException('Falta el teléfono, o no es válido');
+    if (!telefono.startsWith('+')) throw new BadRequestException('El teléfono tiene que llevar el prefijo del país, por ejemplo +34');
+    // Los nombres se pueden repetir; el email no.
+    const { emailExists } = await this.getNomEmailExist(name, email);
     if (emailExists) throw new ConflictException('Ya hay una cuenta con ese email');
 
     const passwordHash = await hashPassword(`${randomString()}${randomString()}${randomString()}`);
@@ -503,11 +506,30 @@ export class UserService {
     return { id: u.id, correoEnviado };
   }
 
-  /** El correo de la invitación; devuelve si salió (un fallo se anota y no tumba la creación de la cuenta). */
-  private async mandarInvitacion(userId: string, email: string, nombre: string, passwordHash: string): Promise<boolean> {
+  /** El enlace para elegir contraseña (el del correo de invitación): 14 días y un solo uso. */
+  private enlaceInvitacion(userId: string, passwordHash: string): string {
     const token = crearTokenRecuperacion(userId, passwordHash, INVITACION_TTL_MS);
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-    const enlace = `${frontendUrl}/recuperar?token=${encodeURIComponent(token)}`;
+    return `${frontendUrl}/recuperar?token=${encodeURIComponent(token)}`;
+  }
+
+  /**
+   * El enlace de activación de una cuenta aún sin activar, para que la admin se lo
+   * pase a la persona por otra vía (WhatsApp) si el correo no llega. Cada vez sale
+   * uno nuevo de 14 días; sigue valiendo uno solo (al elegir contraseña se invalida).
+   */
+  async enlaceActivacion(userId: string) {
+    const { data: rows } = await this.databaseService.getClient()
+      .from('user').select('id, password, email_confirmado').eq('id', userId).limit(1);
+    const u = rows?.[0] as { id: string; password: string; email_confirmado?: boolean } | undefined;
+    if (!u) throw new NotFoundException('Esa cuenta no existe');
+    if (u.email_confirmado !== false) throw new ConflictException('Esa cuenta ya está activada');
+    return { enlace: this.enlaceInvitacion(u.id, u.password) };
+  }
+
+  /** El correo de la invitación; devuelve si salió (un fallo se anota y no tumba la creación de la cuenta). */
+  private async mandarInvitacion(userId: string, email: string, nombre: string, passwordHash: string): Promise<boolean> {
+    const enlace = this.enlaceInvitacion(userId, passwordHash);
     try {
       await this.mailService.enviarInvitacionAsesoria(email, nombre ?? '', enlace);
       return true;
@@ -561,36 +583,33 @@ export class UserService {
   // enorme; si algún día se pasa de ahí, habrá que buscar en servidor).
   async getTodosUsuarios() {
     const client = this.databaseService.getClient();
-    const flags = DISCIPLINAS_ORDEN.map((k) => `${k}_suscrito`).join(', ');
-    const fechas = DISCIPLINAS_ORDEN.map((k) => `${k}_fecha_compra`).join(', ');
 
     const consulta = (select: string) =>
       client.from('user').select(select).order('name', { ascending: true }).limit(500);
 
-    // La tabla del panel quiere además la edad (fecha_nacimiento), la marca de
-    // «en sesiones» (sql/user-en-sesiones.sql), la fecha de creación
-    // (sql/user-created-at.sql, para ordenar por recientes) y las fechas de
-    // compra. Si alguna columna aún no existe, caemos por la cascada en vez de
-    // quedarnos sin lista.
-    // `premium_hasta` (sql/user-premium.sql) separa la pestaña Premium de la de Asesoría.
-    const conPremium = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, created_at, email_confirmado, premium_hasta, ${flags}, ${fechas}`);
-    if (!conPremium.error) return conPremium.data ?? [];
-
-    const conConfirmado = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, created_at, email_confirmado, ${flags}, ${fechas}`);
-    if (!conConfirmado.error) return conConfirmado.data ?? [];
-
-    const conCreado = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, created_at, ${flags}, ${fechas}`);
-    if (!conCreado.error) return conCreado.data ?? [];
-
-    const conSesiones = await consulta(`id, name, email, img, fecha_nacimiento, en_sesiones, ${flags}, ${fechas}`);
-    if (!conSesiones.error) return conSesiones.data ?? [];
-
-    const conFechas = await consulta(`id, name, email, img, fecha_nacimiento, ${flags}, ${fechas}`);
-    if (!conFechas.error) return conFechas.data ?? [];
-
-    const soloFlags = await consulta(`id, name, email, img, ${flags}`);
-    if (!soloFlags.error) return soloFlags.data ?? [];
-
+    // La tabla del panel quiere además el teléfono, la edad (fecha_nacimiento), la
+    // marca de «en sesiones» (sql/user-en-sesiones.sql), la fecha de creación
+    // (sql/user-created-at.sql, para ordenar por recientes), si la cuenta está
+    // activada (email_confirmado), `premium_hasta` (sql/user-premium.sql) y las
+    // fechas de compra. Si alguna columna aún no existe, se quita SOLA esa y se
+    // repite con las demás: antes una cascada de consultas fijas hacía que faltar
+    // `created_at` tirara también `telefono` y `email_confirmado`, y entonces el
+    // panel enseñaba como «Activada» una cuenta que no lo estaba.
+    let opcionales = [
+      'telefono', 'fecha_nacimiento', 'en_sesiones', 'created_at', 'email_confirmado', 'premium_hasta',
+      ...DISCIPLINAS_ORDEN.map((k) => `${k}_suscrito`),
+      ...DISCIPLINAS_ORDEN.map((k) => `${k}_fecha_compra`),
+    ];
+    for (let intento = 0; intento <= opcionales.length; intento++) {
+      const r = await consulta(['id', 'name', 'email', 'img', ...opcionales].join(', '));
+      if (!r.error) return r.data ?? [];
+      const mensaje = String(r.error.message ?? '');
+      // La columna que nombra el error (la más larga, por si una contiene a otra).
+      const falta = opcionales.filter((c) => mensaje.includes(c)).sort((x, y) => y.length - x.length)[0];
+      if (!falta) break;
+      console.warn(`[user.service] getTodosUsuarios: la columna "${falta}" no existe (falta correr su SQL de backend/sql). La lista sale sin ella.`);
+      opcionales = opcionales.filter((c) => c !== falta);
+    }
     const { data } = await consulta('id, name, email, img');
     return data ?? [];
   }
@@ -754,7 +773,17 @@ export class UserService {
   }
 
   // --------- Actualizar usuario ---------
-  async updateUser(id: string, body: UpdateUser) {
+  async updateUser(id: string, body: UpdateUser, esAdmin = false) {
+    // En una cuenta de asesoría (`en_sesiones`) los datos personales los escribe y
+    // los cambia María: la persona los ve en «Mi cuenta» pero no puede modificarlos.
+    // La contraseña sí es suya.
+    if (!esAdmin && ['name', 'email', 'telefono', 'fecha_nacimiento'].some((k) => k in body)) {
+      const { data } = await this.databaseService.getClient()
+        .from('user').select('en_sesiones').eq('id', id).maybeSingle();
+      if ((data as { en_sesiones?: boolean } | null)?.en_sesiones === true) {
+        throw new ForbiddenException('Tus datos personales los modifica María. Escríbele si hay que cambiar alguno.');
+      }
+    }
     const updates: Record<string, string | null> = {};
     // Opcionales: vacío = quitarlo (quitar la fecha apaga la felicitación).
     if ('telefono' in body) updates.telefono = saneaTelefono(body.telefono);
@@ -762,16 +791,9 @@ export class UserService {
     if (body.name) updates.name = body.name;
     if (body.email) updates.email = normalizaEmail(body.email);
 
-    // Renombrarse al nombre o al email de OTRA cuenta rompe el login (dos
-    // «María» y la contraseña deja de casar con la que crees ser). El registro
-    // ya lo impide; aquí faltaba.
+    // El nombre puede coincidir con el de otra cuenta (el login prueba la
+    // contraseña contra todas las que lo tienen); el EMAIL no: identifica a la cuenta.
     const db = this.databaseService.getClient();
-    if (updates.name) {
-      const { data } = await db.from('user').select('id').ilike('name', textoExacto(updates.name)).limit(5);
-      if ((data ?? []).some((u: any) => u.id !== id)) {
-        throw new ConflictException('El nombre ya existe. Elige otro');
-      }
-    }
     if (updates.email) {
       const { data } = await db.from('user').select('id').ilike('email', emailExacto(updates.email)).limit(5);
       if ((data ?? []).some((u: any) => u.id !== id)) {
@@ -805,13 +827,19 @@ export class UserService {
    * no existen todavía, devuelve {} y /me sigue como siempre.
    */
   async getPerfilExtra(id: string): Promise<Record<string, unknown>> {
-    const { data, error } = await this.databaseService.getClient()
-      .from('user')
+    const db = this.databaseService.getClient();
+    // `en_sesiones` (sql/user-en-sesiones.sql) dice si es una cuenta de asesoría: sus
+    // datos personales los fija María y la persona solo los ve. Si esa columna aún
+    // no existe, se pide sin ella para no perder el resto.
+    const con = await db.from('user')
+      .select('telefono, fecha_nacimiento, comunidad_popup_visto, en_sesiones')
+      .eq('id', id).maybeSingle();
+    if (!con.error && con.data) return con.data;
+    const sin = await db.from('user')
       .select('telefono, fecha_nacimiento, comunidad_popup_visto')
-      .eq('id', id)
-      .maybeSingle();
-    if (error || !data) return {};
-    return data;
+      .eq('id', id).maybeSingle();
+    if (sin.error || !sin.data) return {};
+    return sin.data;
   }
 
   /** Apunta que ya ha visto el popup de la comunidad (sale una sola vez). */
@@ -1224,6 +1252,7 @@ export class UserService {
       { table: 'metodo_nutricion', column: 'user_id' },
       { table: 'metodo_cabala', column: 'user_id' },
       { table: 'notas', column: 'user_id' },
+      { table: 'nota_pagina', column: 'user_id' },
       { table: 'diario_sesion', column: 'user_id' },
       { table: 'recorrido_progreso', column: 'user_id' },
       { table: 'actividad_recurso', column: 'user_id' },

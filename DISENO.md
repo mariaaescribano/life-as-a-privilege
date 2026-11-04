@@ -359,10 +359,29 @@ El sistema entero vive en `Reveal.tsx`. Se **reutiliza**, no se reescribe.
 | Visor de ilustración / lectura | `ComicViewer`, `NutrienteFichaModal`, `FichaFisioModal` |
 | Botón al final de página | `BotonPaso` |
 | Pop-up de pago de una disciplina | `Pago<Disciplina>Modal.tsx` más cercano |
+| Un recorrido como camino (cajitas + flechas) | `CaminoVista` (`components/metodo/CaminoVista.tsx`) |
 
 Cuando haya duda, **la página hermana de la misma disciplina manda**.
 
 ---
+
+### 12.0 El mapa de una persona en /home (`MapaDePersona`, solo María)
+
+Una caja por disciplina, **copiada de las de «Tu camino»** (`CaminoUsuario`): fondo = su color,
+la foto de la disciplina dentro (`DisciplinaBgLayer`, velo `rgba(8,13,30,0.22)` solo en las
+oscuras, ninguno en las claras), marco de 2px `<disc>Txt`, halo suave del acento, icono a la
+izquierda, textos con `<disc>Txt` + `sombraTexto()` (sin sombra en las claras). Los botones
+(Abrir/Cerrar, − / +) son píldoras con marco `<disc>Txt` y fondo `<disc>Bg` al 85%. Cerrada = la
+caja al 70% de opacidad (nunca un velo oscuro). Barra de avance = la de «Tu camino» (`Barra`).
+Entrada con `Reveal inView` por caja; el título, fuera de las cajas: blanco y sin sombra.
+
+### 12.1 El camino de una disciplina (`CaminoVista`)
+
+Cada página de dentro de una disciplina es una **cajita con la foto y el color de SU disciplina** (la misma receta que las cajas de §5.1: `DisciplinaBgLayer` + `overlay` `${bg}59`, texto `<disc>Txt` con `sombraTexto`, halo del color de la letra, sin sombras negras). Van unidas por **flechas blancas**: en escritorio el camino **serpentea** (fila de izquierda a derecha, la siguiente de derecha a izquierda, y una flecha baja en cada extremo) para que se lea como UN camino partido en filas; en móvil es una **columna** con flechas hacia abajo. Cajas por fila: 1 / 3 / 4 (móvil / tablet / escritorio).
+
+- **Dinamismo:** cada caja entra con `Reveal inView` en cascada (tope 0,45 s); la foto hace zoom al hover; el paso actual (el último abierto) respira con `Breathe`; cada flecha lleva una chispa que la recorre (se apaga con `prefers-reduced-motion`).
+- **Candado:** lo cerrado sale apagado, con candado y sin pulsar. Lo ve la persona; María (`esAdminDesbloqueado()`) entra a donde quiera.
+- **Controles de María** (`admin` en `CaminoVista`): pastilla «Abierto hasta el paso X de N» con − / + y «Abrir hasta aquí» bajo cada caja cerrada. NUNCA los ve la persona.
 
 ## 13. Checklist antes de dar algo por terminado
 

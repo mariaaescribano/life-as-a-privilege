@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { useT } from "../../i18n";
+import { personaActiva } from "../../api/persona";
 import {
   Box,
   Flex,
@@ -19,7 +21,20 @@ import {
   neuropsicologiaNom, NeuropsicologiaIcon,
   astrologiaNom, AstrologiaIcon,
   culturaNom, CulturaIcon,
+  API_URL,
 } from "../../GlobalVariables";
+
+/** Nombre de la disciplina → clave con la que el servidor guarda su acceso. */
+const SCOPE_POR_NOM: Record<string, string> = {
+  [astrologiaNom]: "metodo",
+  [neuropsicologiaNom]: "psicologia",
+  [ayurvedaNom]: "ayurveda",
+  [tcmNom]: "tcm",
+  [fisiologiaNom]: "fisiologia",
+  [nutricionNom]: "nutricion",
+  [cabalaNom]: "cabala",
+  [culturaNom]: "cultura",
+};
 
 // Icono propio de cada disciplina, por su nombre. Se muestra a la izquierda del
 // ordinal en la cabecera del box de pago (en lugar del logo/mandala genérico).
@@ -49,8 +64,8 @@ interface BaseProps extends PagoDisciplinaModalProps {
   txt: string;
   /** Nombre de la disciplina, para pintar SIEMPRE su imagen de fondo. */
   nom: string;
-  /** Ordinal de la disciplina, p.ej. "Séptima disciplina". */
-  ordinal: string;
+  /** Sin uso desde que el título es el nombre de la disciplina; los wrappers aún lo pasan. */
+  ordinal?: string;
   /** Resumen de 2 líneas de lo que hace el recorrido. */
   descripcion: React.ReactNode;
   /** Sin uso desde que ya no se cobra; los wrappers aún lo pasan. */
@@ -150,10 +165,29 @@ export function PagoDisciplinaModal({
   bg,
   txt,
   nom,
-  ordinal,
   descripcion,
 }: BaseProps) {
   const t = useT();
+  // María en el camino de una persona: aquí, además de leer el aviso, abre la
+  // disciplina (la persona NO tiene este botón). Es el mismo POST /user/admin/acceso
+  // del panel; el servidor solo lo admite con token de admin.
+  const persona = personaActiva();
+  const scope = SCOPE_POR_NOM[nom];
+  const [abriendo, setAbriendo] = useState(false);
+  const [errorAbrir, setErrorAbrir] = useState(false);
+  const abrir = async () => {
+    if (!persona || !scope || abriendo) return;
+    setAbriendo(true);
+    setErrorAbrir(false);
+    try {
+      await axios.post(`${API_URL}/user/admin/acceso`, { userId: persona.id, disciplina: scope, abierta: true });
+      // Recarga entera: Home guarda las disciplinas abiertas en una caché de módulo.
+      window.location.reload();
+    } catch {
+      setErrorAbrir(true);
+      setAbriendo(false);
+    }
+  };
 
   return (
     // scrollBehavior="inside": si el contenido es más alto que la pantalla, el
@@ -190,7 +224,9 @@ export function PagoDisciplinaModal({
                 textAlign="center"
                 style={{ textShadow: `1px 2px 12px ${txt}4d` }}
               >
-                {ordinal}
+                {/* El nombre de la disciplina (Astrología…), no «Primera disciplina»: el
+                    ordinal ya no se pinta, aunque los wrappers siguen pasándolo. */}
+                {nom}
               </Text>
             </Flex>
 
@@ -217,7 +253,31 @@ export function PagoDisciplinaModal({
               {t("metodo.pago.laAbroYo")}
             </Text>
 
-            <Flex justify="center" mt={2}>
+            <Flex justify="center" mt={2} gap={3} wrap="wrap">
+              {persona && scope && (
+                <Box
+                  as="button"
+                  onClick={abrir}
+                  px={10}
+                  py={3}
+                  borderRadius="full"
+                  bg="transparent"
+                  border={`1.5px solid ${txt}`}
+                  color={txt}
+                  fontFamily="'EB Garamond', serif"
+                  fontSize={{ base: "lg", md: "xl" }}
+                  fontWeight="700"
+                  letterSpacing="0.08em"
+                  cursor={abriendo ? "wait" : "pointer"}
+                  opacity={abriendo ? 0.6 : 1}
+                  boxShadow={`0 0 24px ${txt}47`}
+                  transition="all 0.22s"
+                  _hover={{ transform: "translateY(-2px)", boxShadow: `0 0 32px ${txt}66` }}
+                  _focusVisible={{ outline: `2px solid ${txt}`, outlineOffset: "3px" }}
+                >
+                  {errorAbrir ? "No se pudo abrir" : abriendo ? "Abriendo…" : "Abrir"}
+                </Box>
+              )}
               <Box
                 as="button"
                 onClick={onClose}

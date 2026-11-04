@@ -21,7 +21,6 @@ Los textos entre «comillas» son los que ve la persona, tal cual.
    - «Email no válido — Introduce un email correcto»
    - «Contraseña muy corta — Tiene que tener al menos 6 caracteres»
    - «Las contraseñas no coinciden — Repite la misma contraseña en los dos campos»
-   - «El nombre ya existe. Elige otro»
    - «El email ya está registrado» (da igual que lo escriba con mayúsculas: Ana@gmail.com y ana@gmail.com son el mismo)
 4. La cuenta se guarda, pero todavía no puede entrar. Le sale el popup:
    > **Mira tu correo**

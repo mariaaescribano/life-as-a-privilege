@@ -174,7 +174,7 @@ describe('Texto del correo', () => {
     await mail.enviarRecuperacionPassword('ana@x.com', 'Ana', 'https://web.test/recuperar?token=T');
     const [para, asunto, html] = enviar.mock.calls[0];
     expect(para).toBe('ana@x.com');
-    expect(asunto).toBe('Recupera tu contraseña — Life as a Privilege');
+    expect(asunto).toBe('Recupera tu contraseña');
     expect(html).toContain('Hola <strong>Ana</strong>, has pedido restablecer la contraseña de tu cuenta.');
     expect(html).toContain('href="https://web.test/recuperar?token=T"');
     expect(html).toContain('caduca en 1 hora');

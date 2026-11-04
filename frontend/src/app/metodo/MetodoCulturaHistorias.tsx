@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useT } from "../../i18n";
 import { useNavigate } from "react-router-dom";
 import { getUserMe } from "../../api/userMe";
+import { esMariaMirando } from "../../api/persona";
+import { usePasoMax } from "../../hooks/usePasoMax";
 import { Box, Flex, SimpleGrid, useBreakpointValue } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
@@ -41,6 +43,9 @@ export default function MetodoCulturaHistorias() {
   const t = useT();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  // Las Historias las abre María (techo de pasos): la persona ve cerradas las que aún no.
+  const { pasoMax, cargado: techoCargado } = usePasoMax("cultura");
+  const maria = esMariaMirando();
   // Cascada de entrada de las Historias: UNA DESPUÉS DE OTRA, pero ágil. En
   // escritorio (rejilla de 3, las seis a la vista) la última empieza a los
   // ~0,5 s; con 0,3 s de paso tardaba 1,6 s en arrancar y la página parecía
@@ -108,10 +113,12 @@ export default function MetodoCulturaHistorias() {
                  después de otra, y solo al asomar en pantalla (`inView`): con
                  el delay a secas, las de bajo el pliegue animaban sin público. ── */}
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={{ base: 5, md: 7 }} w="100%">
-            {HISTORIAS.map((h, i) => (
+            {HISTORIAS.map((h, i) => {
+              const cerrada = !maria && techoCargado && i + 1 > pasoMax;
+              return (
               <Reveal key={h.key} inView amount={0.2} direction="up" distance={26} scaleFrom={0.95}
                       delay={0.05 + i * pasoCascada} duration={0.55}>
-                <Box h="100%">
+                <Box h="100%" opacity={cerrada ? 0.45 : 1} pointerEvents={cerrada ? "none" : "auto"} aria-disabled={cerrada}>
                   <FotoBox
                     titulo={tituloHistoria(h.key).toUpperCase()}
                     emoji={h.emoji}
@@ -127,7 +134,8 @@ export default function MetodoCulturaHistorias() {
                   />
                 </Box>
               </Reveal>
-            ))}
+              );
+            })}
           </SimpleGrid>
         </Flex>
       </Flex>

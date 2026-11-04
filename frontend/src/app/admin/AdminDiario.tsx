@@ -454,7 +454,7 @@ export default function AdminDiario() {
           )}
 
           <Flex justify="center" mt={{ base: 8, md: 10 }}>
-            <Enlace onClick={() => navigate("/admin/usuarios")}>← Volver a los usuarios</Enlace>
+            <Enlace onClick={() => navigate("/admin/asesorias")}>← Volver a Asesorías</Enlace>
           </Flex>
         </Box>
       </Flex>

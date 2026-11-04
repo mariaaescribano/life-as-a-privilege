@@ -64,6 +64,21 @@ export const CAMINO: Record<CaminoKey, CaminoDisciplina> = {
   cultura:    { total: 6,  ruta: "/metodo/cultura", porPiezas: true },
 };
 
+/**
+ * El CAMINO visual de una disciplina (/camino/<slug>): sus páginas como cajitas
+ * unidas por flechas. El slug es el del panel de admin (`astrologia`, no `metodo`).
+ */
+const SLUG_CAMINO: Record<CaminoKey, string> = {
+  metodo: 'astrologia', psicologia: 'psicologia', fisiologia: 'fisiologia', nutricion: 'nutricion',
+  ayurveda: 'ayurveda', tcm: 'tcm', cabala: 'cabala', cultura: 'cultura',
+};
+export const rutaCamino = (key: CaminoKey): string => `/camino/${SLUG_CAMINO[key]}`;
+export const claveDeSlug = (slug?: string): CaminoKey | null => {
+  if (slug === 'medicinachina') return 'tcm';
+  const hit = (Object.keys(SLUG_CAMINO) as CaminoKey[]).find((k) => SLUG_CAMINO[k] === slug);
+  return hit ?? null;
+};
+
 /** La fila de `recorrido_progreso` donde se apunta el camino de una disciplina. */
 export const claveCamino = (key: string, pieza?: string): string =>
   pieza ? `camino-${key}-${pieza}` : `camino-${key}`;

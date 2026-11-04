@@ -72,16 +72,16 @@ const IconoTeoria = (color: string) => (
   </Box>
 );
 
-/** A dónde lleva «El Recorrido» de cada disciplina: su recorrido de siempre. */
+/** A dónde lleva «El Recorrido» de cada disciplina: su camino, con todas sus páginas. */
 const RECORRIDO_RUTA: Record<string, string> = {
-  astrologia: "/metodo/astrologia",
-  psicologia: "/metodo/psicologia",
-  ayurveda: "/metodo/ayurveda",
-  medicinachina: "/metodo/tcm",
-  fisiologia: "/metodo/fisiologia",
-  nutricion: "/metodo/nutricion",
-  cabala: "/metodo/cabala",
-  cultura: "/metodo/cultura",
+  astrologia: "/camino/astrologia",
+  psicologia: "/camino/psicologia",
+  ayurveda: "/camino/ayurveda",
+  medicinachina: "/camino/tcm",
+  fisiologia: "/camino/fisiologia",
+  nutricion: "/camino/nutricion",
+  cabala: "/camino/cabala",
+  cultura: "/camino/cultura",
 };
 
 /** Clave de la portada → scope de pago (el de `<scope>_suscrito` en /user/me). */

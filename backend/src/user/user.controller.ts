@@ -7,7 +7,7 @@ import { AdminGuard } from '../auth/admin.guard';
 import { OwnerGuard } from '../auth/owner.guard';
 import { AuthService } from '../auth/auth.service';
 import { Throttle } from '@nestjs/throttler';
-import { isAdminEmail, isAccesoLibreEmail, verifyAdminPassword } from '../auth/admin.util';
+import { getAdminEmails, isAdminEmail, isAccesoLibreEmail, verifyAdminPassword } from '../auth/admin.util';
 import { LIMITE_AUTH } from '../rate-limit';
 
 // #region user
@@ -84,6 +84,17 @@ export class UserController {
   @Get("me")
   @UseGuards(JwtAuthGuard)
   async getMe(@Req() req: any) {
+    // La sesión de admin no es una cuenta de la base de datos (ver admin/entrar):
+    // no hay fila que leer, solo lo que dice su token.
+    if (req.user?.userId === 'admin' && isAdminEmail(req.user?.email)) {
+      return {
+        id: 'admin',
+        name: 'Admin',
+        email: req.user.email,
+        admin_email: true,
+        is_admin: req.user.admin === true,
+      };
+    }
     const [user, extra, premium] = await Promise.all([
       this.usersService.getUserById(req.user.userId),
       this.usersService.getPerfilExtra(req.user.userId),
@@ -141,27 +152,23 @@ export class UserController {
     return { token };
   }
 
-  // Entrada propia de administración (/admin/login): usuario o email + contraseña
-  // de admin, sin pasar por el login normal. La cuenta tiene que existir y su email
-  // estar en ADMIN_EMAILS. Mismo error para todo, para no revelar qué falló.
+  // Entrada propia de administración (/admin/login): email de ADMIN_EMAILS (o la
+  // palabra «admin») + contraseña de admin. La admin NO es una cuenta de la base
+  // de datos: no se busca ni se comprueba que exista, solo que las credenciales
+  // sean válidas. Su sesión lleva un id propio («admin»). Mismo error para todo,
+  // para no revelar qué falló.
   @Post("admin/entrar")
   @Throttle(LIMITE_AUTH)
   @HttpCode(HttpStatus.OK)
   async entrarAdmin(@Body() body: { name?: string; password?: string }) {
-    const cuenta = body?.name?.trim() ? await this.usersService.buscarCuentaAdmin(body.name.trim()) : null;
-    // TEMPORAL (diagnóstico): quitar cuando el login de admin funcione.
-    console.log('[admin/entrar]', {
-      cuentaEncontrada: !!cuenta,
-      emailEnADMIN_EMAILS: cuenta ? isAdminEmail(cuenta.email) : null,
-      ADMIN_EMAILS_definida: !!process.env.ADMIN_EMAILS?.trim(),
-      ADMIN_PASSWORD_definida: !!process.env.ADMIN_PASSWORD?.trim(),
-      contrasenaCoincide: verifyAdminPassword(body?.password),
-    });
-    if (!cuenta || !isAdminEmail(cuenta.email) || !verifyAdminPassword(body?.password)) {
+    const escrito = (body?.name ?? '').trim().toLowerCase();
+    const emails = getAdminEmails();
+    const email = escrito === 'admin' ? emails[0] : emails.find((e) => e === escrito);
+    if (!email || !verifyAdminPassword(body?.password)) {
       throw new ForbiddenException('Credenciales de administración incorrectas');
     }
-    const token = this.authService.generateToken(cuenta.id, cuenta.email, true);
-    return { token, user: { id: cuenta.id, name: cuenta.name } };
+    const token = this.authService.generateToken('admin', email, true);
+    return { token, user: { id: 'admin', name: 'Admin' } };
   }
 
   // Usuarios del recorrido para el panel admin (antes de :id para no colisionar)
@@ -222,6 +229,14 @@ export class UserController {
     return await this.usersService.crearCuentaAsesorada(body);
   }
 
+  // El enlace de activación de una cuenta sin activar, para dárselo a mano.
+  @Get("admin/usuario/:id/activacion")
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async enlaceActivacion(@Param("id") id: string) {
+    if (!id?.trim()) throw new BadRequestException('id requerido');
+    return await this.usersService.enlaceActivacion(id);
+  }
+
   @Post("admin/reenviar-invitacion")
   @UseGuards(JwtAuthGuard, AdminGuard)
   @HttpCode(HttpStatus.OK)
@@ -239,37 +254,20 @@ export class UserController {
     return await this.usersService.setEnSesiones(body.userId, body.enSesiones === true);
   }
 
-  // ── ENTRAR COMO otra persona ─────────────────────────────────────────────
-  // Devuelve un token de ESA cuenta, para poder ver la web exactamente como la
-  // ve ella: sus disciplinas, por dónde va, lo que ha escrito. No es un modo de
-  // lectura aparte (eso obligaría a duplicar cada página): es su sesión de
-  // verdad, así que lo que se escriba aquí se guarda en su recorrido.
-  //
-  // Tres cosas lo mantienen a raya:
-  //   · Exige token de admin DESBLOQUEADO (email en ADMIN_EMAILS + contraseña).
-  //   · El token que sale NO es de admin (`admin: false`), así que desde dentro
-  //     de la cuenta no se puede volver a tocar el panel ni suplantar en cadena.
-  //   · Lleva el claim `sup` con el id de quien está mirando y caduca en 12h,
-  //     no en 30 días como una sesión normal.
-  @Post("admin/suplantar")
+  // ── El camino de una persona, visto por María ────────────────────────────
+  // Datos básicos de la persona (nombre y foto) para pintar la barra y el header
+  // cuando María abre su camino. NO da ningún token: María sigue con el suyo y el
+  // navegador manda `X-Persona` (ver auth/persona.util.ts). Va antes de
+  // @Get(":id"). Queda en el registro del servidor.
+  @Get("admin/persona/:id")
   @UseGuards(JwtAuthGuard, AdminGuard)
-  async suplantar(@Req() req: any, @Body() body: { userId?: string }) {
-    if (!body?.userId?.trim()) throw new BadRequestException('userId requerido');
-
-    const user: any = await this.usersService.getUserById(body.userId.trim());
+  async persona(@Req() req: any, @Param("id") id: string) {
+    const user: any = await this.usersService.getUserById(id?.trim());
     if (!user?.id) throw new BadRequestException('Esa cuenta no existe');
-
-    // Queda en el registro del servidor: entrar en la cuenta de alguien no
-    // debería poder hacerse sin dejar rastro.
     console.log(
-      `[suplantacion] ${req.user?.email} entra como ${user.email} (${user.id}) — ${new Date().toISOString()}`,
+      `[persona] ${req.user?.email} abre el camino de ${user.email} (${user.id}) — ${new Date().toISOString()}`,
     );
-
-    const token = this.authService.generateToken(user.id, user.email, false, {
-      suplantadoPor: req.user.userId,
-      duracionSegundos: 12 * 60 * 60, // 12 horas
-    });
-    return { token, user: { id: user.id, name: user.name, email: user.email, img: user.img ?? null } };
+    return { user: { id: user.id, name: user.name, email: user.email, img: user.img ?? null } };
   }
 
   // Borrar una cuenta entera desde el panel (irreversible: se va la cuenta y
@@ -290,14 +288,16 @@ export class UserController {
 
   @Patch(":id")
   @UseGuards(JwtAuthGuard, OwnerGuard)
-  async update(@Param("id") id: string, @Body() body: UpdateUser) {
-    return await this.usersService.updateUser(id, body);
+  async update(@Param("id") id: string, @Body() body: UpdateUser, @Req() req: any) {
+    // La admin (desbloqueada) edita los datos de cualquiera; la persona asesorada no los suyos.
+    const esAdmin = req.user?.admin === true && isAdminEmail(req.user?.email);
+    return await this.usersService.updateUser(id, body, esAdmin);
   }
 
   @Delete(":id")
   @UseGuards(JwtAuthGuard, OwnerGuard)
   async remove(@Param("id") id: string, @Body() body: { password?: string }, @Req() req: any) {
-    // Desde una sesión prestada (admin «entrando como») no se borra la cuenta:
+    // Desde el camino de María en el de una persona no se borra la cuenta:
     // es lo único de aquí que no tiene vuelta atrás. Para eso está
     // DELETE /user/admin/usuario/:id, que se hace a cara descubierta.
     if (req.user?.suplantadoPor) {

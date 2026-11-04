@@ -15,6 +15,7 @@ import { LifeLoader } from "../../components/metodo/comicLoaders";
 import { API_URL } from "../../GlobalVariables";
 import { presentacionPorKey } from "../../data/presentacionDisciplinas";
 import { useCursosData } from "../../data/cursosApi";
+import { fechaDMA } from "../../utils/fechas";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 
 interface Fila {
@@ -47,9 +48,7 @@ const nombreDisciplina = (key: string | null) =>
   !key ? "General" : key === "fitoterapia" ? "Fitoterapia" : presentacionPorKey(key)?.titulo ?? key;
 
 const fecha = (iso: string) => {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
+  return fechaDMA(iso) ?? "";
 };
 
 const decode = (s: string) => { try { return decodeURIComponent(s); } catch { return s; } };
@@ -104,7 +103,7 @@ export default function AdminActividad() {
 
       <Flex flex="1" justify="center" px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }}>
         <Box w="100%" maxW="760px">
-          <Box as="button" onClick={() => navigate("/admin/usuarios")} color="white" fontSize="sm" mb={4}
+          <Box as="button" onClick={() => navigate("/admin/asesorias")} color="white" fontSize="sm" mb={4}
                opacity={0.8} _hover={{ opacity: 1 }}>
             ← Todas las cuentas
           </Box>

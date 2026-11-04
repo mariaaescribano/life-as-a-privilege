@@ -6,6 +6,7 @@ import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
 import { focoBlanco } from "../../components/global/foco";
 import { API_URL } from "../../GlobalVariables";
+import { fechaDMA } from "../../utils/fechas";
 import { useAdminGuard, adminHeaders } from "./useAdminGuard";
 
 /**
@@ -249,7 +250,7 @@ ${window.location.origin}/premium/espacio` : ultimoTexto;
                 <Box minW={0}>
                   <Text color="white" fontSize="lg" noOfLines={1}>{f.titulo}</Text>
                   <Text color="rgba(255,255,255,0.7)" fontSize="sm">
-                    {f.tipo === "reel" ? "Reel" : "Podcast"} · {new Date(f.created_at).toLocaleDateString("es-ES")} · {f.avisados} avisos
+                    {f.tipo === "reel" ? "Reel" : "Podcast"} · {fechaDMA(f.created_at)} · {f.avisados} avisos
                   </Text>
                 </Box>
                 <Box as="button" type="button" onClick={() => borrar(f)} color="white" textDecoration="underline" fontSize="md" flexShrink={0} _focusVisible={focoBlanco}>

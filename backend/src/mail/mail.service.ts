@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import { marcoMarmol, TINTA_MARMOL, webParaImagenes } from './marco-marmol';
 
 // Destinatario de las solicitudes de carta astral (lecturas de /metodo/astrologia).
 // Usa NOTIFY_EMAIL (igual que contacto/reservas/suscripción); el hardcode solo
@@ -128,10 +129,13 @@ export class MailService {
     `;
   }
 
-  /** El sobre de los correos que no son de ninguna disciplina (bienvenida,
-   *  contraseña, libro): el turquesa de la marca, liso, y letra blanca. */
+  /** El marco de los correos que no son de ninguna disciplina (bienvenida,
+   *  contraseña, activación, avisos): el mármol de la web con la cabecera del
+   *  mandala y MARÍA / ESCRIBANO, y letra turquesa oscura. Es el mismo de la
+   *  bienvenida de la intro gratuita (ver marco-marmol.ts). Los de disciplina y
+   *  los de Astrología siguen con su propio diseño. */
   private plantilla(titulo: string, cuerpo: string): string {
-    return this.sobre({ titulo, cuerpo, fondo: '#008080', tinta: '#ffffff' });
+    return marcoMarmol({ web: this.frontendUrl, titulo, cuerpo });
   }
 
   /**
@@ -157,7 +161,7 @@ export class MailService {
       cuerpo,
       fondo: velo,
       tinta: txt,
-      foto: `${this.frontendUrl}/img/correo/${clave}.jpg`,
+      foto: `${webParaImagenes(this.frontendUrl)}/img/correo/${clave}.jpg`,
     });
   }
 
@@ -225,7 +229,7 @@ export class MailService {
           : undefined;
 
       await this.getTransporter().sendMail({
-        from: `"Life as a Privilege" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
+        from: `"María Escribano" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
         to,
         bcc: copia,
         subject,
@@ -293,8 +297,8 @@ export class MailService {
         </p>
         <p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">
           ${confirmar
-            ? 'Has creado tu cuenta en <strong>Life as a Privilege</strong>. Solo falta un paso: confirma que este correo es tuyo con el botón de abajo, y ya podrás iniciar sesión.'
-            : 'Tu cuenta en <strong>Life as a Privilege</strong> ya está creada, y te espera.'}
+            ? 'Has creado tu cuenta. Solo falta un paso: confirma que este correo es tuyo con el botón de abajo, y ya podrás iniciar sesión.'
+            : 'Tu cuenta ya está creada, y te espera.'}
         </p>
         <p style="font-size: 16px; line-height: 1.75; opacity: 0.92;">
           ${confirmar ? 'Te dejo aquí el enlace:' : 'Te dejo aquí el enlace para entrar:'}
@@ -304,13 +308,13 @@ export class MailService {
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no te funciona, puedes copiar esta dirección en tu navegador:<br />
-          <a href="${enlace}" style="color:#ffffff;text-decoration:underline;word-break:break-all;">${enlace}</a>
+          <a href="${enlace}" style="color:${TINTA_MARMOL};text-decoration:underline;word-break:break-all;">${enlace}</a>
         </p>
         <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
           ${comoEntrar}
         </p>
 
-        <div style="margin: 34px 0 0; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.25);">
+        <div style="margin: 34px 0 0; padding-top: 28px; border-top: 1px solid rgba(0,79,79,0.25);">
           <p style="margin: 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
             Déjame decirte una cosa: abrir esta cuenta no es poca cosa. Querer
             conocerte es un acto que requiere valor, y me alegra mucho que quieras
@@ -325,7 +329,7 @@ export class MailService {
           <p style="margin: 28px 0;">
             <a href="${enlaceLlamada}"
                style="display:inline-block;padding:14px 28px;border-radius:999px;
-                      background:#ffffff;color:#008080;text-decoration:none;
+                      background:#004f4f;color:#ffffff;text-decoration:none;
                       font-size:16px;font-weight:600;">Buscamos un hueco</a>
           </p>
           <p style="margin: 0; font-size: 14px; line-height: 1.7; opacity: 0.78;">
@@ -340,7 +344,7 @@ export class MailService {
     );
     await this.enviar(
       email,
-      confirmar ? 'Confirma tu cuenta — Life as a Privilege' : 'Tu cuenta ya está lista',
+      confirmar ? 'Confirma tu cuenta' : 'Tu cuenta ya está lista',
       html,
       'email de bienvenida',
     );
@@ -361,7 +365,7 @@ export class MailService {
       'Tu cuenta ya está activa',
       `
         ${parrafo(saludo)}
-        ${parrafo('Has confirmado tu correo, así que tu cuenta en <strong>Life as a Privilege</strong> ya está activa.')}
+        ${parrafo('Has confirmado tu correo, así que tu cuenta ya está activa.')}
         ${parrafo(
           'El siguiente paso es elegir tu primera disciplina. Cuando entres verás tu Mapa con las ocho: ' +
           'pulsa la que más te llame y la desbloqueas desde ahí.',
@@ -372,14 +376,14 @@ export class MailService {
         </p>
         <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
           Si dudas entre una y otra, lo hablamos: son veinte minutos, sin coste y sin compromiso.
-          <a href="${frontendUrl}/contacto?conocernos=1" style="color:#ffffff;text-decoration:underline;">Buscamos un hueco</a>.
+          <a href="${frontendUrl}/contacto?conocernos=1" style="color:${TINTA_MARMOL};text-decoration:underline;">Buscamos un hueco</a>.
         </p>
         <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
           Un abrazo,<br />María
         </p>
       `,
     );
-    await this.enviar(email, 'Tu cuenta ya está activa — Life as a Privilege', html, 'email de cuenta activada');
+    await this.enviar(email, 'Tu cuenta ya está activa', html, 'email de cuenta activada');
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -396,13 +400,13 @@ export class MailService {
       'Tu cuenta está lista',
       `
         ${parrafo(saludo)}
-        ${parrafo('He creado tu cuenta en <strong>Life as a Privilege</strong>. Para activarla, solo tienes que elegir tu contraseña con el botón de abajo.')}
+        ${parrafo('He creado tu cuenta. Para activarla, solo tienes que elegir tu contraseña con el botón de abajo.')}
         <p style="margin: 28px 0;">
           ${this.pildora(enlace, 'Elegir mi contraseña')}
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no te funciona, copia esta dirección en tu navegador:<br />
-          <a href="${enlace}" style="color:#ffffff;text-decoration:underline;word-break:break-all;">${enlace}</a>
+          <a href="${enlace}" style="color:${TINTA_MARMOL};text-decoration:underline;word-break:break-all;">${enlace}</a>
         </p>
         ${parrafo('Al entrar no verás nada abierto: iré abriéndote cada parte a medida que avancemos en las sesiones.')}
         <p style="margin: 22px 0 0; font-size: 16px; line-height: 1.75; opacity: 0.92;">
@@ -413,18 +417,18 @@ export class MailService {
         </p>
       `,
     );
-    await this.enviar(email, 'Tu cuenta está lista — Life as a Privilege', html, 'email de invitación de asesoría');
+    await this.enviar(email, 'Tu cuenta está lista', html, 'email de invitación de asesoría');
   }
 
   /**
-   * Un botón de los correos que no son de disciplina: blanco tenue sobre el
-   * turquesa. En minúsculas y sin apretar las letras, a propósito — un botón en
+   * Un botón de los correos que no son de disciplina: turquesa oscuro con
+   * letra blanca, sobre el mármol. En minúsculas y sin apretar las letras, a propósito — un botón en
    * mayúsculas se lee como una orden, y estos son invitaciones.
    */
   private pildora(href: string, label: string): string {
     return `<a href="${href}"
              style="display:inline-block;padding:14px 28px;border-radius:999px;
-                    border:1px solid rgba(255,255,255,0.45);background:rgba(255,255,255,0.12);
+                    border:1px solid #004f4f;background:#004f4f;
                     color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;">${label}</a>`;
   }
 
@@ -461,7 +465,7 @@ export class MailService {
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no funciona, copia esta dirección en tu navegador:<br />
-          <a href="${enlace}" style="color:#ffffff;text-decoration:underline;word-break:break-all;">${enlace}</a>
+          <a href="${enlace}" style="color:${TINTA_MARMOL};text-decoration:underline;word-break:break-all;">${enlace}</a>
         </p>
         <p style="margin-top: 24px; font-size: 14px; opacity: 0.78;">
           Si no has pedido tú este cambio, puedes ignorar este correo: tu contraseña
@@ -469,7 +473,7 @@ export class MailService {
         </p>
       `,
     );
-    await this.enviar(email, 'Recupera tu contraseña — Life as a Privilege', html, 'email de recuperación');
+    await this.enviar(email, 'Recupera tu contraseña', html, 'email de recuperación');
   }
 
   // ───────────────────────────────────────────────────────────────────────────
@@ -593,7 +597,7 @@ export class MailService {
   /** Ficha con los datos de la persona, igual en los dos avisos. */
   private fichaPersona(filas: [string, string][]): string {
     return `
-      <div style="margin-top: 20px; padding: 16px 20px; background: rgba(255,255,255,0.12); border-radius: 12px;">
+      <div style="margin-top: 20px; padding: 16px 20px; background: rgba(0,79,79,0.08); border-radius: 12px;">
         ${filas
           .map(
             ([etiqueta, valor]) =>
@@ -625,7 +629,7 @@ export class MailService {
       `
         <p style="font-size: 16px; line-height: 1.7; opacity: 0.92;">
           <strong>${nombre || 'Sin nombre'}</strong> se ha registrado en
-          <strong>Life as a Privilege</strong>. Todavía no ha pagado nada.
+          <strong>María Escribano</strong>. Todavía no ha pagado nada.
         </p>
         ${this.fichaPersona([
           ['Nombre', nombre || '—'],
@@ -685,7 +689,7 @@ export class MailService {
         ])}
         <p style="font-size: 16px; line-height: 1.7; margin: 20px 0 0;">
           <a href="${this.frontendUrl}/admin/astrologia/${userId}"
-             style="color: #ffffff; font-weight: bold; text-decoration: underline;">
+             style="color: #004f4f; font-weight: bold; text-decoration: underline;">
             Escribir su carta →
           </a>
         </p>
@@ -721,7 +725,7 @@ export class MailService {
         </p>
         <p style="font-size: 13px; line-height: 1.6; opacity: 0.75;">
           Si el botón no te funciona, copia esta dirección en tu navegador:<br />
-          <a href="${enlace}" style="color:#ffffff;text-decoration:underline;word-break:break-all;">${enlace}</a>
+          <a href="${enlace}" style="color:${TINTA_MARMOL};text-decoration:underline;word-break:break-all;">${enlace}</a>
         </p>
         <p style="margin-top: 24px; font-size: 14px; line-height: 1.7; opacity: 0.78;">
           El enlace es solo tuyo, vale para una disciplina y tienes siete días para usarlo.
@@ -821,7 +825,7 @@ export class MailService {
           <td align="center" style="padding:40px 44px 0;">
             <img src="${logo}" width="52" height="52" alt="" style="display:block;border:0;outline:none;text-decoration:none;" />
             <div style="font-family:${serif};font-size:11px;line-height:1.2;letter-spacing:0.3em;text-transform:uppercase;color:${c.menta};padding-top:16px;">
-              Life as a Privilege
+              María Escribano
             </div>
           </td>
         </tr>
@@ -859,7 +863,7 @@ export class MailService {
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;">
         <tr>
           <td align="center" style="padding:20px 24px 0;font-family:${serif};font-size:12px;line-height:1.7;color:${c.pie};">
-            Te escribo desde <a href="${frontendUrl}" style="color:#ffffff;text-decoration:underline;">Life as a Privilege</a>.<br />
+            Te escribo desde <a href="${frontendUrl}" style="color:#ffffff;text-decoration:underline;">María Escribano</a>.<br />
             Este correo es solo para ti: nadie más ve tu carta.
           </td>
         </tr>
@@ -1249,7 +1253,7 @@ export class MailService {
     const to = process.env.NOTIFY_EMAIL || CARTA_ASTRAL_FALLBACK;
     try {
       await this.getTransporter().sendMail({
-        from: `"Life as a Privilege" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
+        from: `"María Escribano" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
         to,
         replyTo: userEmail,
         subject: `${esCorreccion ? 'Datos corregidos' : 'Carta Astral'} de ${userEmail}`,

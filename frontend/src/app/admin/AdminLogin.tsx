@@ -5,6 +5,7 @@ import { Box, Flex, Input, Text } from "@chakra-ui/react";
 import SiteHeader from "../../components/global/SiteHeader";
 import SiteFooter from "../../components/global/Footer";
 import { LifeLoading } from "../../components/global/LifeLoading";
+import { CampoContrasena, focoAzul, inputAuthStyles } from "../../components/global/CampoContrasena";
 import { API_URL } from "../../GlobalVariables";
 
 // Entrada propia de administración (/admin/login), sin pasar por el login normal:
@@ -104,37 +105,17 @@ export default function AdminLogin() {
               placeholder="Usuario o email"
               autoComplete="username"
               autoFocus
-              textAlign="center"
-              color="white"
-              bg="rgba(0,0,0,0.22)"
-              border="1px solid rgba(255,255,255,0.32)"
-              borderRadius="full"
-              h="52px"
-              fontSize="md"
-              _placeholder={{ color: "rgba(255,255,255,0.55)" }}
-              _hover={{ borderColor: "rgba(255,255,255,0.5)" }}
-              _focus={{ borderColor: "white", boxShadow: "0 0 0 1px rgba(255,255,255,0.6)" }}
+              {...inputAuthStyles}
             />
           </Box>
 
           <Box w="100%">
-            <Input
-              type="password"
+            <CampoContrasena
+              label="CONTRASEÑA DE ADMINISTRACIÓN"
               value={password}
-              onChange={(e) => { setPassword(e.target.value); setError(""); }}
-              onKeyDown={(e) => { if (e.key === "Enter") desbloquear(); }}
-              placeholder="Contraseña de administración"
+              onChange={(v) => { setPassword(v); setError(""); }}
+              onEnter={desbloquear}
               autoComplete="current-password"
-              textAlign="center"
-              color="white"
-              bg="rgba(0,0,0,0.22)"
-              border="1px solid rgba(255,255,255,0.32)"
-              borderRadius="full"
-              h="52px"
-              fontSize="md"
-              _placeholder={{ color: "rgba(255,255,255,0.55)" }}
-              _hover={{ borderColor: "rgba(255,255,255,0.5)" }}
-              _focus={{ borderColor: "white", boxShadow: "0 0 0 1px rgba(255,255,255,0.6)" }}
             />
           </Box>
 
@@ -164,6 +145,7 @@ export default function AdminLogin() {
               boxShadow="0 0 22px rgba(255,255,255,0.35)"
               transition="all 0.2s ease"
               _hover={!puede ? undefined : { bg: "rgba(255,255,255,0.3)", transform: "translateY(-1px)" }}
+              _focusVisible={focoAzul}
             >
               {enviando ? "Verificando…" : "Entrar"}
             </Box>
@@ -183,6 +165,7 @@ export default function AdminLogin() {
               cursor="pointer"
               transition="all 0.2s ease"
               _hover={{ color: "white", borderColor: "rgba(255,255,255,0.6)" }}
+              _focusVisible={focoAzul}
             >
               Volver
             </Box>

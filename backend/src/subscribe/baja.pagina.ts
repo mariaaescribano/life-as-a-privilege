@@ -62,13 +62,13 @@ export function paginaBaja(estado: EstadoBaja, email: string): string {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="color-scheme" content="only light" />
 <meta name="robots" content="noindex" />
-<title>${titulo} — Life as a Privilege</title>
+<title>${titulo} — María Escribano</title>
 </head>
 <body style="margin:0;background:#006b6b;font-family:'EB Garamond',Garamond,Georgia,'Times New Roman',serif;">
   <div style="max-width:600px;margin:0 auto;padding:36px 16px 44px;">
     <div style="background:#008080;border-radius:20px;padding:40px 36px;">
       <div style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#a9e6df;">
-        Life as a Privilege
+        María Escribano
       </div>
       <div style="height:1px;background:#4fada6;margin:22px 0 0;"></div>
       <h1 style="margin:24px 0 0;font-size:29px;line-height:1.28;font-weight:400;color:#ffffff;">

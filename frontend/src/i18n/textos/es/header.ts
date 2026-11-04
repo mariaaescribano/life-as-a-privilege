@@ -6,6 +6,8 @@ export const header = {
   "header.marca": "MARÍA ESCRIBANO",
   "header.mapa": "El Mapa",
   "header.asesoria": "Asesorías 1:1",
+  /** Menú de administración: la lista de personas asesoradas. */
+  "header.asesorias": "Asesorías",
   "header.premium": "Premium",
   "header.disciplinas": "Disciplinas",
   "header.material": "Material",
@@ -21,6 +23,8 @@ export const header = {
   "header.programas": "Programas",
   "header.contacto": "Contáctame",
   "header.miCuenta": "Mi cuenta",
+  "header.home": "Home",
+  "header.volverAsesorias": "Volver a Asesorías",
   /** Última opción del menú SIN sesión. Es una acción, no un sitio: quien no ha
    *  entrado todavía no tiene ninguna «cuenta» que visitar. */
   "header.iniciarSesion": "Entra a tu cuenta",
