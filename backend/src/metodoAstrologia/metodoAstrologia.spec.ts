@@ -158,6 +158,8 @@ describe('1 · Solicitud de carta (el formulario del paso 1)', () => {
       carta_natal_json: null,
     });
     expect(astro[0].solicitud_enviada_at).toBeTruthy();
+    // `data` es NOT NULL en la tabla: sin carta ni datos previos va vacío, nunca null.
+    expect(astro[0].data).toEqual({});
   });
 
   it('lo que la persona ya tenía en `data` (progreso) NO se pierde al reenviar la solicitud', async () => {

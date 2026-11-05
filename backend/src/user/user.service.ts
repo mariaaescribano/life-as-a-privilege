@@ -531,8 +531,9 @@ export class UserService {
   private async mandarInvitacion(userId: string, email: string, nombre: string, passwordHash: string): Promise<boolean> {
     const enlace = this.enlaceInvitacion(userId, passwordHash);
     try {
-      await this.mailService.enviarInvitacionAsesoria(email, nombre ?? '', enlace);
-      return true;
+      // Lo que cuenta es lo que dice el servicio de correo: antes se daba por enviado
+      // siempre, aunque el envío hubiera fallado, y la admin no se enteraba.
+      return (await this.mailService.enviarInvitacionAsesoria(email, nombre ?? '', enlace)) === true;
     } catch (err) {
       console.error('[invitacion] no se pudo enviar el correo:', err);
       return false;

@@ -3,7 +3,7 @@
 // elegir su contraseña (eso activa la cuenta). Empieza sin nada abierto; las
 // disciplinas se abren luego. Es una página (no un popup) para poder recorrerla
 // con el tabulador: campos y botones van en el orden en que se leen.
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Box, Flex, Input, Text } from "@chakra-ui/react";
@@ -36,8 +36,10 @@ export default function AdminCrearCuenta() {
   const [nuevo, setNuevo] = useState(VACIO);
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
-
-  const volver = () => navigate("/admin/asesorias");
+  // Con la cuenta ya creada: el texto de la confirmación y si el correo salió.
+  const [creada, setCreada] = useState<{ texto: string; ok: boolean } | null>(null);
+  const salida = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(salida.current), []);
 
   const crear = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -67,7 +69,11 @@ export default function AdminCrearCuenta() {
       const aviso = data.correoEnviado
         ? `Cuenta creada. Le he mandado a ${data.email} el correo para que elija su contraseña.`
         : `Cuenta creada, pero el correo a ${data.email} NO ha salido. Ábrele «Datos personales» y pulsa «Reenviar correo de activación».`;
-      navigate("/admin/asesorias", { state: { aviso } });
+      // La confirmación sale AQUÍ, a la vista, y no se va hasta que se ha podido leer: antes
+      // saltaba directo a la lista y el aviso (una línea pequeña) pasaba sin verse.
+      setCreada({ texto: aviso, ok: data.correoEnviado });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      salida.current = window.setTimeout(() => navigate("/admin/asesorias", { state: { aviso } }), 5000);
     } catch (err: any) {
       setError(err?.response?.data?.message ?? "No se pudo crear la cuenta.");
       setEnviando(false);
@@ -96,7 +102,36 @@ export default function AdminCrearCuenta() {
             </Text>
           </Reveal>
 
-          <Reveal direction="up" distance={22} delay={0.3}>
+          {creada && (
+            <Reveal direction="up" distance={18} duration={0.7}>
+              <Box
+                role="status"
+                aria-live="polite"
+                mb={6}
+                px={{ base: 5, md: 8 }}
+                py={{ base: 6, md: 7 }}
+                borderRadius="28px"
+                bg="rgba(255,255,255,0.14)"
+                border="1px solid rgba(255,255,255,0.6)"
+                boxShadow="0 0 30px rgba(255,255,255,0.28), 0 0 70px rgba(180,255,245,0.16)"
+                textAlign="center"
+              >
+                <Flex justify="center" mb={3}>
+                  <Flex align="center" justify="center" w="44px" h="44px" borderRadius="full" bg="white" color="#008080"
+                        boxShadow="0 0 20px rgba(255,255,255,0.5)" aria-hidden>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12.5l4.5 4.5L19 7.5" />
+                    </svg>
+                  </Flex>
+                </Flex>
+                <Text color={creada.ok ? "white" : "#ffe7bd"} fontSize={{ base: "lg", md: "xl" }} fontWeight="600" lineHeight="1.6">
+                  {creada.texto}
+                </Text>
+              </Box>
+            </Reveal>
+          )}
+
+          <Reveal direction="up" distance={22} delay={0.3} display={creada ? "none" : undefined}>
             <Box
               as="form"
               onSubmit={crear}
@@ -150,25 +185,7 @@ export default function AdminCrearCuenta() {
                 </Text>
               )}
 
-              <Flex justify="space-between" align="center" gap={3} wrap="wrap" pt={2}>
-                <Box
-                  as="button"
-                  type="button"
-                  onClick={volver}
-                  px={7}
-                  py="10px"
-                  borderRadius="full"
-                  border="1px solid rgba(255,255,255,0.45)"
-                  color="white"
-                  fontWeight="600"
-                  fontSize="md"
-                  cursor="pointer"
-                  transition="all 0.2s"
-                  _hover={{ bg: "rgba(255,255,255,0.1)" }}
-                  _focusVisible={focoBlanco}
-                >
-                  Cancelar
-                </Box>
+              <Flex justify="flex-end" align="center" gap={3} wrap="wrap" pt={2}>
                 <Box
                   as="button"
                   type="submit"

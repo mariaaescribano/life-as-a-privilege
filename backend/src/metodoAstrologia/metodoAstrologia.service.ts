@@ -394,7 +394,8 @@ export class MetodoAstrologiaService {
           longitud,
           timezone,
           carta_natal_json,
-          data,
+          // `data` es NOT NULL en la tabla: sin carta calculada ni datos previos, va vacío (no null).
+          data: data ?? {},
           solicitud_enviada_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },
@@ -467,7 +468,7 @@ export class MetodoAstrologiaService {
       latitud,
       longitud,
       timezone,
-      data,
+      data: data ?? {}, // NOT NULL en la tabla
       updated_at: new Date().toISOString(),
     };
     // Si el cálculo falló, NO se pisa la carta que ya hubiera: es mejor dejar la

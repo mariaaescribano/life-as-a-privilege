@@ -69,6 +69,7 @@ export function FormularioNacimiento({
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [popupError, setPopupError] = useState<string | null>(null);
   useLockBodyScroll(confirmOpen);
+  const envioRef = React.useRef(false); // evita enviar dos veces (Enter + clic)
 
   // Con datos ya guardados (corregir), el formulario sale rellenado.
   useEffect(() => {
@@ -100,6 +101,7 @@ export function FormularioNacimiento({
   };
 
   const confirmarEnvio = async () => {
+    if (envioRef.current) return;
     const fecha = validarFecha();
     if (!fecha) { setConfirmOpen(false); return; }
     const userId = localStorage.getItem("userId");
@@ -132,9 +134,22 @@ export function FormularioNacimiento({
       const msg = err?.response?.data?.message || err?.message || "Error desconocido";
       setPopupError(`No se pudo enviar (${status || "?"}): ${msg}`);
     } finally {
+      envioRef.current = false;
       setEnviando(false);
     }
   };
+
+  // Con el aviso de «¿seguro?» abierto, Enter = «Sí, confirmar» (y Escape = volver a revisar).
+  useEffect(() => {
+    if (!confirmOpen) return;
+    const alTeclear = (e: KeyboardEvent) => {
+      if (e.repeat) return;
+      if (e.key === "Enter") { e.preventDefault(); void confirmarEnvio(); }
+      else if (e.key === "Escape" && !envioRef.current) setConfirmOpen(false);
+    };
+    window.addEventListener("keydown", alTeclear);
+    return () => window.removeEventListener("keydown", alTeclear);
+  });
 
   const fechaLegible = dia && mes && anio
     ? `${parseInt(dia, 10)} de ${MESES.find((m) => m.num === mes.padStart(2, "0"))?.nombre.toLowerCase() ?? mes} de ${anio}`
@@ -157,7 +172,12 @@ export function FormularioNacimiento({
       >
         <SpaceBg overlay="rgba(8,13,30,0.28)" />
 
-        <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}>
+        <Box position="relative" zIndex={1} px={{ base: 6, md: 10 }} py={{ base: 8, md: 10 }}
+             onKeyDown={(e: React.KeyboardEvent) => {
+               // Enter en cualquier campo = «Recibir mi lectura» (si está todo relleno).
+               const el = e.target as HTMLElement;
+               if (e.key === "Enter" && el.tagName === "INPUT" && camposCompletos && !confirmOpen) { e.preventDefault(); abrirConfirmacion(); }
+             }}>
           <RevealStagger display="flex" flexDirection="column" gap={5} stagger={0.09} delayChildren={0.35}>
             {!sinTitulo && (
               <>

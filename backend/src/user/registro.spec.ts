@@ -25,7 +25,7 @@ function montar(filas?: Record<string, any>[]) {
     enviarBienvenidaCuenta: jest.fn().mockResolvedValue(undefined),
     enviarAvisoRegistro: jest.fn().mockResolvedValue(undefined),
     enviarCuentaActivada: jest.fn().mockResolvedValue(undefined),
-    enviarInvitacionAsesoria: jest.fn().mockResolvedValue(undefined),
+    enviarInvitacionAsesoria: jest.fn().mockResolvedValue(true),
   };
   const auth: any = { generateToken: jest.fn().mockReturnValue('jwt-de-test') };
   const service = new UserService(auth, bd.databaseService, mail);
@@ -229,6 +229,14 @@ describe('3b · Cuenta de asesoría creada por la admin, sin activar', () => {
     const err: any = await service.logIn({ name: 'eva', password: 'lo-que-sea' }).catch((e) => e);
     expect(err).toBeInstanceOf(ForbiddenException);
     expect(err.getResponse().code).toBe('EMAIL_SIN_CONFIRMAR');
+  });
+
+  it('si el correo de invitación NO sale, la respuesta lo dice (correoEnviado false) y la cuenta se crea igual', async () => {
+    const { service, mail } = montar();
+    mail.enviarInvitacionAsesoria.mockResolvedValueOnce(false);
+    const r: any = await service.crearCuentaAsesorada(alta);
+    expect(r.correoEnviado).toBe(false);
+    expect(r.email).toBe('eva@x.com');
   });
 
   it('«envíamelo otra vez» manda la invitación para elegir contraseña, no la bienvenida del registro', async () => {

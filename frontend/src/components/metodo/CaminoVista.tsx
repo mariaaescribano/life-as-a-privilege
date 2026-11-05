@@ -73,15 +73,21 @@ const anchoCaja = (columnas: number): string =>
 const ANCHO_MAX_CAMINO = 1000;
 
 /** Una flecha del camino: línea de puntos, punta y una chispa que va por ella. */
-function Flecha({ dir, retraso = 0 }: { dir: "right" | "left" | "down"; retraso?: number }) {
+function Flecha({ dir, retraso = 0, entrada = 0 }: { dir: "right" | "left" | "down"; retraso?: number; entrada?: number }) {
   const reduce = useReducedMotion();
   const vertical = dir === "down";
   const giro = dir === "left" ? "scaleX(-1)" : vertical ? "rotate(90deg)" : "";
   return (
-    <Flex
+    // Entra tras la caja de la que sale: el camino se va dibujando casilla a casilla.
+    <Reveal
+      inView
+      direction="none"
+      duration={0.7}
+      delay={entrada}
+      display="flex"
       flexShrink={0}
-      align="center"
-      justify="center"
+      alignItems="center"
+      justifyContent="center"
       position="relative"
       w={vertical ? "28px" : `${ANCHO_FLECHA}px`}
       h={vertical ? `${ANCHO_FLECHA}px` : "28px"}
@@ -103,7 +109,7 @@ function Flecha({ dir, retraso = 0 }: { dir: "right" | "left" | "down"; retraso?
           )}
         </svg>
       </Box>
-    </Flex>
+    </Reveal>
   );
 }
 
@@ -149,14 +155,40 @@ function Caja({
       bg={bg}
       boxShadow={actual ? `0 0 12px ${txt}33` : `0 0 8px ${txt}1f`}
       cursor={pulsable ? "pointer" : "not-allowed"}
-      transition="transform 0.3s ease, box-shadow 0.3s ease"
-      _hover={pulsable ? { boxShadow: `0 0 14px ${txt}3d` } : undefined}
+      transition="transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease"
+      _hover={pulsable ? { boxShadow: `0 0 22px ${txt}55, 0 0 46px ${txt}22`, transform: "translateY(-4px)" } : undefined}
+      _active={pulsable ? { transform: "translateY(-1px) scale(0.985)" } : undefined}
       _focusVisible={focoBlanco}
     >
       {hasDisciplinaBg(nom) && (
         <Box position="absolute" inset={0} transition="transform 0.9s cubic-bezier(0.22,1,0.36,1)" _groupHover={pulsable ? { transform: "scale(1.07)" } : undefined}>
           <DisciplinaBgLayer nom={nom} borderRadius="24px" overlay={`${bg}59`} />
         </Box>
+      )}
+      {/* Luz que cruza la casilla al pasar el ratón (luz, no sombra). */}
+      {pulsable && (
+        <Box
+          position="absolute" top={0} bottom={0} left={0} w="55%" zIndex={1} pointerEvents="none"
+          bgGradient="linear(to-r, #ffffff00, #ffffff2e, #ffffff00)"
+          transform="translateX(-130%) skewX(-18deg)"
+          transition="transform 1s cubic-bezier(0.22,1,0.36,1)"
+          _groupHover={{ transform: "translateX(260%) skewX(-18deg)" }}
+          sx={{ "@media (prefers-reduced-motion: reduce)": { display: "none" } }}
+        />
+      )}
+      {/* La casilla en la que vas: un aro de luz que late despacio. */}
+      {actual && !cerrado && (
+        <Box
+          position="absolute" inset={0} borderRadius="24px" zIndex={1} pointerEvents="none"
+          sx={{
+            animation: "cajaLatido 3.6s ease-in-out infinite",
+            "@keyframes cajaLatido": {
+              "0%, 100%": { boxShadow: `inset 0 0 12px ${txt}1f, inset 0 0 34px ${txt}0f` },
+              "50%": { boxShadow: `inset 0 0 22px ${txt}55, inset 0 0 52px ${txt}26` },
+            },
+            "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+          }}
+        />
       )}
       <Flex
         position="relative"
@@ -325,7 +357,7 @@ export function CaminoVista({ nom, bg, txt, secciones: seccionesDe, conInicio, e
                         return (
                           <React.Fragment key={p.n}>
                             {caja}
-                            {ci < fila.length - 1 && <Flecha dir={invertida ? "left" : "right"} retraso={(ci % 4) * 0.35} />}
+                            {ci < fila.length - 1 && <Flecha dir={invertida ? "left" : "right"} retraso={(ci % 4) * 0.35} entrada={Math.min(orden * 0.05 + 0.12, 0.6)} />}
                           </React.Fragment>
                         );
                       })}
@@ -333,7 +365,7 @@ export function CaminoVista({ nom, bg, txt, secciones: seccionesDe, conInicio, e
                     {fi < filas.length - 1 && (
                       <Flex justify={columnas === 1 ? "center" : invertida ? "flex-start" : "flex-end"}>
                         <Flex w={anchoCaja(columnas)} justify="center">
-                          <Flecha dir="down" retraso={0.2} />
+                          <Flecha dir="down" retraso={0.2} entrada={Math.min(orden * 0.05 + 0.12, 0.6)} />
                         </Flex>
                       </Flex>
                     )}

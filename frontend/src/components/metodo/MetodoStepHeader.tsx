@@ -434,7 +434,8 @@ export function MetodoStepHeader({
   const enRecorrido = ruta.startsWith("/metodo/");
   // Los cursos de cada disciplina (/aprendizaje/cursos/…) y sus presentaciones
   // públicas (/d/…) llevan la misma magia, en TODAS las disciplinas.
-  const enPublica = ruta.startsWith("/aprendizaje/cursos/") || ruta.startsWith("/d/");
+  // El camino de cada disciplina (/camino/<slug>) también: su nombre entra igual que en el recorrido.
+  const enPublica = ruta.startsWith("/aprendizaje/cursos/") || ruta.startsWith("/d/") || ruta.startsWith("/camino/");
   const tituloMagico = typeof title === "string" && (enRecorrido || enPublica) && (!!nom || !!space);
   // Se activa PARA un título concreto: si el header sigue montado y cambia de
   // título (p. ej. de una sefirá a la siguiente), el nuevo entra de cero.

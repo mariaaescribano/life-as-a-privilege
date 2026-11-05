@@ -39,7 +39,8 @@ const Pildora = ({ children, onClick, desactivado, titulo, cara }: {
     px={4}
     borderRadius="full"
     border={`1.5px solid ${cara.txt}`}
-    bg={`${cara.bg}d9`}
+    // Sin relleno: transparente, que se vea la foto de la disciplina a través.
+    bg="transparent"
     color={cara.txt}
     fontWeight="700"
     fontSize="md"
@@ -50,7 +51,7 @@ const Pildora = ({ children, onClick, desactivado, titulo, cara }: {
     cursor={desactivado ? "not-allowed" : "pointer"}
     opacity={desactivado ? 0.45 : 1}
     transition="all 0.2s"
-    _hover={desactivado ? undefined : { boxShadow: `0 0 18px ${cara.txt}66`, transform: "translateY(-1px)" }}
+    _hover={desactivado ? undefined : { boxShadow: `0 0 18px ${cara.txt}66`, transform: "translateY(-1px)", bg: `${cara.txt}1a` }}
     _focusVisible={focoBlanco}
   >
     {children}

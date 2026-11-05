@@ -34,3 +34,6 @@ scripts/webp/descartes/
 presentaciones-entrada/
 scripts/pdf/muestra/
 scripts/pdf/entradas-para-programas.txt
+
+# Copias de datos de cuentas borradas (datos personales y de salud: NUNCA a git)
+copias-datos-borrados/

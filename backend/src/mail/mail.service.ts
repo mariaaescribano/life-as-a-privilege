@@ -391,7 +391,8 @@ export class MailService {
   // camino a ella: el botón lleva a elegir contraseña (y eso activa la cuenta).
   // Caduca a las dos semanas; si pasa, se reenvía desde el panel.
   // ───────────────────────────────────────────────────────────────────────────
-  async enviarInvitacionAsesoria(email: string, nombre: string, enlace: string): Promise<void> {
+  // Devuelve si el correo ha salido de verdad (`enviar` no lanza: anota el error y dice false).
+  async enviarInvitacionAsesoria(email: string, nombre: string, enlace: string): Promise<boolean> {
     const nombreSeguro = this.escaparHtml(nombre).trim();
     const saludo = nombreSeguro ? `Muy buenas, <strong>${nombreSeguro}</strong>.` : 'Muy buenas.';
     const parrafo = (texto: string) =>
@@ -417,7 +418,7 @@ export class MailService {
         </p>
       `,
     );
-    await this.enviar(email, 'Tu cuenta está lista', html, 'email de invitación de asesoría');
+    return await this.enviar(email, 'Tu cuenta está lista', html, 'email de invitación de asesoría');
   }
 
   /**

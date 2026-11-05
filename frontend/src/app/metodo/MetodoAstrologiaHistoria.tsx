@@ -62,7 +62,7 @@ export default function MetodoAstrologiaHistoria() {
           </Reveal>
 
           {/* Fuera de las cajas: blanco y sin sombra. */}
-          <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%" maxW="680px">
+          <Reveal direction="up" distance={18} delay={0.4} duration={1} blur w="100%" maxW="680px">
             <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
               {t("metodo.astro.historia.intro")}
             </Text>
@@ -70,7 +70,7 @@ export default function MetodoAstrologiaHistoria() {
 
           {/* Con reel: dos tarjetas lado a lado. Sin reel: el cómic solo, centrado. */}
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 6, md: 8 }} w="100%" maxW="720px">
-            <Reveal direction="up" distance={26} scaleFrom={0.95} delay={0.15} duration={0.65}>
+            <Reveal inView direction="up" distance={30} scaleFrom={0.95} delay={0.5} duration={0.9}>
               <Box h="100%">
                 <FotoBox
                   titulo={t("metodo.astro.historia.leer")}
@@ -86,7 +86,7 @@ export default function MetodoAstrologiaHistoria() {
             </Reveal>
             {/* Las dos opciones salen siempre. Sin enlace de reel aún, la tarjeta queda
                 apagada y no hace nada. */}
-            <Reveal direction="up" distance={26} scaleFrom={0.95} delay={0.28} duration={0.65}>
+            <Reveal inView direction="up" distance={30} scaleFrom={0.95} delay={0.68} duration={0.9}>
               <Box h="100%" opacity={reel ? 1 : 0.55} cursor={reel ? "pointer" : "not-allowed"}>
                 <FotoBox
                   titulo={t("metodo.astro.historia.reel")}

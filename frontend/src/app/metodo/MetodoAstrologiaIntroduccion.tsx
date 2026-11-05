@@ -131,7 +131,7 @@ export default function MetodoAstrologiaIntroduccion() {
             <>
               {/* Primera vez: lo que María le dice antes de pedirle la hora y el lugar. */}
               {!editando && (
-                <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%">
+                <Reveal direction="up" distance={18} delay={0.4} duration={1} blur w="100%">
                   <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
                     {t("metodo.astro.intro.datosTexto", { nombre })}
                   </Text>
@@ -149,7 +149,7 @@ export default function MetodoAstrologiaIntroduccion() {
           ) : (
             <>
             {/* Fuera de las cajas: blanco y sin sombra. */}
-            <Reveal direction="up" distance={18} delay={0.15} duration={0.7} w="100%">
+            <Reveal direction="up" distance={18} delay={0.4} duration={1} blur w="100%">
               <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center" fontStyle="italic">
                 {t("metodo.astro.intro.cartaTexto", { nombre })}
               </Text>
@@ -171,6 +171,15 @@ export default function MetodoAstrologiaIntroduccion() {
               borderRadius="2xl"
               overflow="hidden"
               boxShadow={`0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10`}
+              // Tras entrar, el halo de la caja respira muy despacio (luz, no sombra).
+              sx={{
+                animation: "cartaHalo 7s ease-in-out 1.6s infinite",
+                "@keyframes cartaHalo": {
+                  "0%, 100%": { boxShadow: `0 0 16px rgba(255,255,255,0.16), 0 0 34px rgba(255,255,255,0.08), 0 0 60px rgba(180,255,245,0.09), 0 0 20px ${astrologiaTxt}1a, 0 0 48px ${astrologiaTxt}10` },
+                  "50%": { boxShadow: `0 0 22px rgba(255,255,255,0.24), 0 0 48px rgba(255,255,255,0.12), 0 0 84px rgba(180,255,245,0.14), 0 0 30px ${astrologiaTxt}2e, 0 0 70px ${astrologiaTxt}1a` },
+                },
+                "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+              }}
             >
               <SpaceBg overlay="rgba(8,13,30,0.28)" />
               <Flex ref={setCajaCarta} position="relative" zIndex={1} direction="column" align="center" px={{ base: 5, md: 12 }} py={{ base: 10, md: 14 }}>
@@ -198,7 +207,7 @@ export default function MetodoAstrologiaIntroduccion() {
             </Reveal>
             )}
 
-            <Reveal direction="up" distance={18} delay={0.3} duration={0.7} w="100%">
+            <Reveal inView amount={0.6} direction="up" distance={18} duration={0.9} blur w="100%">
               {/* Estirada, en UNA sola línea (en móvil, si no cabe, baja). */}
               <Text color="white" fontSize={{ base: "lg", md: "xl" }} lineHeight="1.8" textAlign="center"
                     whiteSpace={{ base: "normal", md: "nowrap" }}>
